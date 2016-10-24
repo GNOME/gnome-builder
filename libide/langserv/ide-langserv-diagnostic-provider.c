@@ -26,13 +26,13 @@
 
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
+#include "diagnostics/ide-diagnostics.h"
 #include "files/ide-file.h"
 #include "langserv/ide-langserv-diagnostic-provider.h"
 
 typedef struct
 {
   IdeLangservClient *client;
-  EggSignalGroup *signals;
 } IdeLangservDiagnosticProviderPrivate;
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -41,105 +41,23 @@ G_DEFINE_TYPE_EXTENDED (IdeLangservDiagnosticProvider, ide_langserv_diagnostic_p
                         G_ADD_PRIVATE (IdeLangservDiagnosticProvider)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER, diagnostic_provider_iface_init))
 
-enum {
-  PROP_0,
-  PROP_CLIENT,
-  N_PROPS
-};
-
-static GParamSpec *properties [N_PROPS];
-
 static void
-ide_langserv_diagnostic_provider_finalize (GObject *object)
+ide_langserv_diagnostic_provider_get_diagnostics_cb (GObject      *object,
+                                                     GAsyncResult *result,
+                                                     gpointer      user_data)
 {
-  IdeLangservDiagnosticProvider *self = (IdeLangservDiagnosticProvider *)object;
-  IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
+  IdeLangservClient *client = (IdeLangservClient *)object;
+  g_autoptr(IdeDiagnostics) diagnostics = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
 
-  g_clear_object (&priv->client);
-  g_clear_object (&priv->signals);
+  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (G_IS_TASK (task));
 
-  G_OBJECT_CLASS (ide_langserv_diagnostic_provider_parent_class)->finalize (object);
-}
-
-static void
-ide_langserv_diagnostic_provider_get_property (GObject    *object,
-                                               guint       prop_id,
-                                               GValue     *value,
-                                               GParamSpec *pspec)
-{
-  IdeLangservDiagnosticProvider *self = IDE_LANGSERV_DIAGNOSTIC_PROVIDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_CLIENT:
-      g_value_set_object (value, ide_langserv_diagnostic_provider_get_client (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_langserv_diagnostic_provider_set_property (GObject      *object,
-                                               guint         prop_id,
-                                               const GValue *value,
-                                               GParamSpec   *pspec)
-{
-  IdeLangservDiagnosticProvider *self = IDE_LANGSERV_DIAGNOSTIC_PROVIDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_CLIENT:
-      ide_langserv_diagnostic_provider_set_client (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_langserv_diagnostic_provider_class_init (IdeLangservDiagnosticProviderClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_langserv_diagnostic_provider_finalize;
-  object_class->get_property = ide_langserv_diagnostic_provider_get_property;
-  object_class->set_property = ide_langserv_diagnostic_provider_set_property;
-
-  properties [PROP_CLIENT] =
-    g_param_spec_object ("client",
-                         "Client",
-                         "Client",
-                         IDE_TYPE_LANGSERV_CLIENT,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, N_PROPS, properties);
-}
-
-static void
-ide_langserv_diagnostic_provider_init (IdeLangservDiagnosticProvider *self)
-{
-  IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
-
-  priv->signals = egg_signal_group_new (IDE_TYPE_LANGSERV_CLIENT);;
-
-}
-
-static void
-ide_langserv_diagnostic_provider_diagnose_cb (GObject      *object,
-                                              GAsyncResult *result,
-                                              gpointer      user_data)
-{
-  IdeLangservDiagnosticProvider *self = (IdeLangservDiagnosticProvider *)object;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_LANGSERV_CLIENT (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  IDE_EXIT;
+  if (!ide_langserv_client_get_diagnostics_finish (client, result, &diagnostics, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, g_steal_pointer (&diagnostics), (GDestroyNotify)ide_diagnostics_unref);
 }
 
 static void
@@ -151,10 +69,7 @@ ide_langserv_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider
 {
   IdeLangservDiagnosticProvider *self = (IdeLangservDiagnosticProvider *)provider;
   IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
-  g_autoptr(JsonObject) object = NULL;
   g_autoptr(GTask) task = NULL;
-  IdeUnsavedFiles *unsaved_files;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -172,11 +87,14 @@ ide_langserv_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider
                                G_IO_ERROR_NOT_SUPPORTED,
                                "Improperly configured %s is missing IdeLangservClient",
                                G_OBJECT_TYPE_NAME (self));
-      return;
+      IDE_EXIT;
     }
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  unsaved_files = ide_context_get_unsaved_files (context);
+  ide_langserv_client_get_diagnostics_async (priv->client,
+                                             ide_file_get_file (file),
+                                             cancellable,
+                                             ide_langserv_diagnostic_provider_get_diagnostics_cb,
+                                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -186,12 +104,11 @@ ide_langserv_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provid
                                                   GAsyncResult           *result,
                                                   GError                **error)
 {
-  IdeLangservDiagnosticProvider *self = (IdeLangservDiagnosticProvider *)provider;
   IdeDiagnostics *ret;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_DIAGNOSTIC_PROVIDER (self));
+  g_assert (IDE_IS_LANGSERV_DIAGNOSTIC_PROVIDER (provider));
   g_assert (G_IS_TASK (result));
 
   ret = g_task_propagate_pointer (G_TASK (result), error);
@@ -204,6 +121,30 @@ diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface)
 {
   iface->diagnose_async = ide_langserv_diagnostic_provider_diagnose_async;
   iface->diagnose_finish = ide_langserv_diagnostic_provider_diagnose_finish;
+}
+
+static void
+ide_langserv_diagnostic_provider_finalize (GObject *object)
+{
+  IdeLangservDiagnosticProvider *self = (IdeLangservDiagnosticProvider *)object;
+  IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
+
+  g_clear_object (&priv->client);
+
+  G_OBJECT_CLASS (ide_langserv_diagnostic_provider_parent_class)->finalize (object);
+}
+
+static void
+ide_langserv_diagnostic_provider_class_init (IdeLangservDiagnosticProviderClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_langserv_diagnostic_provider_finalize;
+}
+
+static void
+ide_langserv_diagnostic_provider_init (IdeLangservDiagnosticProvider *self)
+{
 }
 
 IdeLangservDiagnosticProvider *
@@ -238,9 +179,5 @@ ide_langserv_diagnostic_provider_set_client (IdeLangservDiagnosticProvider *self
   g_return_if_fail (IDE_IS_LANGSERV_DIAGNOSTIC_PROVIDER (self));
   g_return_if_fail (!client || IDE_IS_LANGSERV_CLIENT (client));
 
-  if (g_set_object (&priv->client, client))
-    {
-      egg_signal_group_set_target (priv->signals, client);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
-    }
+  g_set_object (&priv->client, client);
 }
