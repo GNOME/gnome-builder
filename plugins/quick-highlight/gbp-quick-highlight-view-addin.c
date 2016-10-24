@@ -306,8 +306,8 @@ gbp_quick_highlight_view_addin_unload (IdeEditorViewAddin *addin,
 
   ide_clear_signal_handler (buffer, &self->notify_style_scheme_handler);
   ide_clear_signal_handler (buffer, &self->mark_set_handler);
-  ide_clear_signal_handler (buffer, &self->changed_enabled_handler);
   ide_clear_signal_handler (buffer, &self->delete_range_handler);
+  ide_clear_signal_handler (self->settings, &self->changed_enabled_handler);
 
   g_clear_object (&self->search_settings);
   g_clear_object (&self->search_context);
