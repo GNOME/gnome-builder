@@ -18,8 +18,10 @@
 
 #define G_LOG_DOMAIN "ide-subproces-supervisor"
 
-#include "ide-subprocess.h"
-#include "ide-subprocess-supervisor.h"
+#include "ide-debug.h"
+
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-supervisor.h"
 
 typedef struct
 {
@@ -112,11 +114,12 @@ ide_subprocess_supervisor_class_init (IdeSubprocessSupervisorClass *klass)
   object_class->finalize = ide_subprocess_supervisor_finalize;
 
   signals [SPAWNED] =
-    g_signal_new_class_handler ("spawned",
-                                G_TYPE_FROM_CLASS (klass),
-                                G_SIGNAL_RUN_LAST,
-                                NULL, NULL, NULL, NULL,
-                                G_TYPE_NONE, 1, G_TYPE_SUBPROCESS);
+    g_signal_new ("spawned",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeSubprocessSupervisorClass, spawned),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_SUBPROCESS);
 
   signals [SUPERVISE] =
     g_signal_new_class_handler ("supervise",
@@ -248,6 +251,9 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
 
   if (!ide_subprocess_wait_finish (subprocess, result, &error))
     g_warning ("%s", error->message);
+
+  IDE_TRACE_MSG ("process exited with code: %u",
+                 ide_subprocess_get_exit_status (subprocess));
 
   if (priv->subprocess == subprocess)
     {

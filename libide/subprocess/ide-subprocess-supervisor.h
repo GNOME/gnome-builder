@@ -19,6 +19,7 @@
 #ifndef IDE_SUBPROCESS_SUPERVISOR_H
 #define IDE_SUBPROCESS_SUPERVISOR_H
 
+#include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
 
 G_BEGIN_DECLS
@@ -30,6 +31,9 @@ G_DECLARE_DERIVABLE_TYPE (IdeSubprocessSupervisor, ide_subprocess_supervisor, ID
 struct _IdeSubprocessSupervisorClass
 {
   GObjectClass parent_class;
+
+  void (*spawned) (IdeSubprocessSupervisor *self,
+                   IdeSubprocess           *subprocess);
 
   gpointer _reserved1;
   gpointer _reserved2;
