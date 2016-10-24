@@ -879,7 +879,7 @@ ide_langserv_client_call_cb (GObject      *object,
 
   if (!jsonrpc_client_call_finish (client, result, &return_value, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
