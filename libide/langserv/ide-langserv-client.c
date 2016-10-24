@@ -81,12 +81,50 @@ ide_langserv_client_clear_diagnostics (IdeLangservClient *self,
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(GFile) file = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (uri != NULL);
 
-  file = g_file_new_for_uri (uri);
+  IDE_TRACE_MSG ("Clearing diagnostics for %s", uri);
 
+  file = g_file_new_for_uri (uri);
   g_hash_table_remove (priv->diagnostics_by_file, file);
+
+  IDE_EXIT;
+}
+
+static void
+ide_langserv_client_buffer_saved (IdeLangservClient *self,
+                                  IdeBuffer         *buffer,
+                                  IdeBufferManager  *buffer_manager)
+{
+  g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *uri = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  uri = ide_buffer_get_uri (buffer);
+
+  params = JCON_NEW (
+    "changes", "[",
+      "{",
+        "uri", JCON_STRING (uri),
+        "type", JCON_INT (FILE_CHANGE_TYPE_CHANGED),
+      "}",
+    "]"
+  );
+
+  ide_langserv_client_notification_async (self,
+                                          "workspace/didChangeWatchedFiles",
+                                          g_steal_pointer (&params),
+                                          NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -97,6 +135,8 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *uri = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -114,6 +154,8 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
                                      "textDocument/didOpen",
                                      g_steal_pointer (&params),
                                      NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -124,6 +166,8 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *uri = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -141,6 +185,8 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
                                      "textDocument/didClose",
                                      g_steal_pointer (&params),
                                      NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -533,6 +579,11 @@ ide_langserv_client_init (IdeLangservClient *self)
   egg_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-loaded",
                                    G_CALLBACK (ide_langserv_client_buffer_loaded),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->buffer_manager_signals,
+                                   "buffer-saved",
+                                   G_CALLBACK (ide_langserv_client_buffer_saved),
                                    self,
                                    G_CONNECT_SWAPPED);
   egg_signal_group_connect_object (priv->buffer_manager_signals,
