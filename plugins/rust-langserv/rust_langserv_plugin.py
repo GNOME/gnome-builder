@@ -155,6 +155,7 @@ class RustSymbolResolver(Ide.LangservSymbolResolver):
 
 """
 class RustHighlighter(Ide.LangservHighlighter):
-    def do_set_context(self, context):
-        RustService.bind_client(self);
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.connect('notify::context', lambda *_: RustService.bind_client(self))
 """
