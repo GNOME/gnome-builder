@@ -57,6 +57,7 @@ class RustService(Ide.Object, Ide.Service):
         """
         # Setup a launcher to spawn the rust language server
         launcher = self._create_launcher()
+        launcher.set_clear_env(False)
         launcher.setenv("SYS_ROOT", self._discover_sysroot(), True)
 
         # If rls was installed with Cargo, try to discover that
