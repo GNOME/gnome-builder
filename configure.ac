@@ -309,6 +309,7 @@ m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
 m4_include([plugins/python-pack/configure.ac])
 m4_include([plugins/quick-highlight/configure.ac])
+m4_include([plugins/rust-langserv/configure.ac])
 m4_include([plugins/support/configure.ac])
 m4_include([plugins/symbol-tree/configure.ac])
 m4_include([plugins/sysmon/configure.ac])
@@ -615,6 +616,7 @@ echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_comp
 echo "  Python Jedi Autocompletion ........... : ${enable_jedi_plugin}"
 echo "  Python Language Pack ................. : ${enable_python_pack_plugin}"
 echo "  Quick Highlight ...................... : ${enable_quick_highlight_plugin}"
+echo "  Rust Language Server ................. : ${enable_rust_langserv_plugin}"
 echo "  Support .............................. : ${enable_support_plugin}"
 echo "  System Monitor ....................... : ${enable_sysmon_plugin}"
 echo "  Sysprof System Profiler .............. : ${enable_sysprof_plugin}"

@@ -28,6 +28,7 @@ SUBDIRS = \
 	python-gi-imports-completion \
 	python-pack \
 	quick-highlight \
+	rust-langserv \
 	support \
 	symbol-tree \
 	sysmon \
