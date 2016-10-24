@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-internal.h"
 
@@ -207,6 +208,8 @@ ide_diagnostician_constructed (GObject *object)
     lang_id = gtk_source_language_get_id (self->language);
 
   context = ide_object_get_context (IDE_OBJECT (object));
+
+  g_assert (IDE_IS_CONTEXT (context));
 
   self->extensions = ide_extension_set_adapter_new (context,
                                                     peas_engine_get_default (),
