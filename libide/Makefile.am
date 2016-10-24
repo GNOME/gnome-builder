@@ -682,6 +682,7 @@ libide_1_0_vapi_DEPS =    \
 	panel-gtk         \
 	template-glib-1.0 \
 	egg-private       \
+	json-glib-1.0     \
         $(NULL)
 
 libide_1_0_vapi_METADATADIRS = $(srcdir)
