@@ -9,5 +9,5 @@ Builtin=true
 X-Completion-Provider-Languages=rust
 X-Diagnostic-Provider-Languages=rust
 X-Highlighter-Languages=rust
-X-Symbol-Resolver-Provider-Languages=rust
+X-Symbol-Resolver-Languages=rust
 
