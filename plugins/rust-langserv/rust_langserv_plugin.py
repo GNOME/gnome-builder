@@ -35,7 +35,7 @@ from gi.repository import GObject
 from gi.repository import GtkSource
 from gi.repository import Ide
 
-class RustService(Ide.Service):
+class RustService(Ide.Object, Ide.Service):
     client = None
 
     __gsignals__ = {
@@ -57,7 +57,7 @@ class RustService(Ide.Service):
         """
         # Setup a launcher to spawn the rust language server
         launcher = self._create_launcher()
-        launcher.setenv("SYS_ROOT", self._discover_sysroot())
+        launcher.setenv("SYS_ROOT", self._discover_sysroot(), True)
 
         # If rls was installed with Cargo, try to discover that
         # to save the user having to update PATH.
@@ -65,9 +65,9 @@ class RustService(Ide.Service):
         if not os.path.exists(path_to_rls):
             path_to_rls = "rls"
 
-        # Setup our Argv. We need to let RLS know we want to communicate
-        # with http. It will start a server on port 9000 by default.
-        launcher.push_args([path_to_rls, "--http"])
+        # Setup our Argv. We want to communicate over STDIN/STDOUT,
+        # so it does not require any command line options.
+        launcher.push_argv(path_to_rls)
 
         # Spawn our peer process and monitor it for
         # crashes. We may need to restart it occasionally.
@@ -82,15 +82,17 @@ class RustService(Ide.Service):
         We can use the stdin/stdout to create a channel for our
         LangservClient.
         """
-        stdin = subprocess.get_stdin_stream()
-        stdout = subprocess.get_stdout_stream()
-        io_stream = Gio.SimpleStream.new(stdout, stdin)
+        stdin = subprocess.get_stdin_pipe()
+        stdout = subprocess.get_stdout_pipe()
+        io_stream = Gio.SimpleIOStream.new(stdout, stdin)
 
         if self.client:
             self.client.stop()
 
         self.client = Ide.LangservClient.new(self.get_context(), io_stream)
         self.client.start()
+
+        self.emit('client-changed', self.client)
 
     def _create_launcher(self):
         """
@@ -117,10 +119,10 @@ class RustService(Ide.Service):
         get, by using `rust --print sysroot` as the rust-language-server
         documentation suggests.
         """
-        launcher = self._create_launcher()()
+        launcher = self._create_launcher()
         launcher.push_args(['rustc', '--print', 'sysroot'])
         subprocess = launcher.spawn_sync()
-        stdout = subprocess.communicate_utf8()
+        _, stdout, _ = subprocess.communicate_utf8()
         return stdout.strip()
 
     @classmethod
@@ -129,16 +131,19 @@ class RustService(Ide.Service):
         This helper tracks changes to our client as it might happen when
         our `rls` process has crashed.
         """
-        self = context.get_service_typed(type(RustService))
-        self.connect('client-changed': lambda _,client: provider.set_client(provider))
-        if self.client:
+        context = provider.get_context()
+        self = context.get_service_typed(RustService)
+        self.connect('client-changed', lambda _,client: provider.set_client(client))
+        if self.client is not None:
             provider.set_client(self.client)
 
-class RustCompletionProvider(Ide.LangservCompletionProvider):
-    def do_set_context(self, context):
-        RustService.bind_client(self);
-
 class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.connect('notify::context', lambda *_: RustService.bind_client(self))
+
+"""
+class RustCompletionProvider(Ide.LangservCompletionProvider):
     def do_set_context(self, context):
         RustService.bind_client(self);
 
@@ -149,4 +154,4 @@ class RustSymbolResolver(Ide.LangservSymbolResolver):
 class RustHighlighter(Ide.LangservHighlighter):
     def do_set_context(self, context):
         RustService.bind_client(self);
-
+"""
