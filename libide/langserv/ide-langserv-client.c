@@ -525,8 +525,6 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
 
   IDE_ENTRY;
 
-  g_print ("================================================== diagnostics\n");
-
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (params != NULL);
 
