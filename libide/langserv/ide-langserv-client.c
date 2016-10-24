@@ -30,6 +30,8 @@
 #include "buffers/ide-buffer-manager.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-diagnostics.h"
+#include "diagnostics/ide-source-location.h"
+#include "diagnostics/ide-source-range.h"
 #include "langserv/ide-langserv-client.h"
 #include "projects/ide-project.h"
 #include "vcs/ide-vcs.h"
@@ -40,7 +42,7 @@ typedef struct
   EggSignalGroup *project_signals;
   JsonrpcClient  *rpc_client;
   GIOStream      *io_stream;
-  GHashTable     *diagnostics_by_uri;
+  GHashTable     *diagnostics_by_file;
 } IdeLangservClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservClient, ide_langserv_client, IDE_TYPE_OBJECT)
@@ -49,6 +51,13 @@ enum {
   FILE_CHANGE_TYPE_CREATED = 1,
   FILE_CHANGE_TYPE_CHANGED = 2,
   FILE_CHANGE_TYPE_DELETED = 3,
+};
+
+enum {
+  SEVERITY_ERROR       = 1,
+  SEVERITY_WARNING     = 2,
+  SEVERITY_INFORMATION = 3,
+  SEVERITY_HINT        = 4,
 };
 
 enum {
@@ -64,6 +73,21 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+ide_langserv_client_clear_diagnostics (IdeLangservClient *self,
+                                       const gchar       *uri)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(GFile) file = NULL;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (uri != NULL);
+
+  file = g_file_new_for_uri (uri);
+
+  g_hash_table_remove (priv->diagnostics_by_file, file);
+}
 
 static void
 ide_langserv_client_buffer_loaded (IdeLangservClient *self,
@@ -86,7 +110,10 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
     "}"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client, "textDocument/didOpen", params, NULL, NULL, NULL);
+  jsonrpc_client_notification_async (priv->rpc_client,
+                                     "textDocument/didOpen",
+                                     g_steal_pointer (&params),
+                                     NULL, NULL, NULL);
 }
 
 static void
@@ -110,7 +137,10 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
     "}"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client, "textDocument/didClose", params, NULL, NULL, NULL);
+  jsonrpc_client_notification_async (priv->rpc_client,
+                                     "textDocument/didClose",
+                                     g_steal_pointer (&params),
+                                     NULL, NULL, NULL);
 }
 
 static void
@@ -173,7 +203,12 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
     "]"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client, "workspace/didChangeWatchedFiles", params, NULL, NULL, NULL);
+  jsonrpc_client_notification_async (priv->rpc_client,
+                                     "workspace/didChangeWatchedFiles",
+                                     g_steal_pointer (&params),
+                                     NULL, NULL, NULL);
+
+  ide_langserv_client_clear_diagnostics (self, uri);
 
   IDE_EXIT;
 }
@@ -212,33 +247,140 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
     "]"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client, "workspace/didChangeWatchedFiles", params, NULL, NULL, NULL);
+  jsonrpc_client_notification_async (priv->rpc_client,
+                                     "workspace/didChangeWatchedFiles",
+                                     g_steal_pointer (&params),
+                                     NULL, NULL, NULL);
+
+  ide_langserv_client_clear_diagnostics (self, src_uri);
 
   IDE_EXIT;
+}
+
+static IdeDiagnostics *
+ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
+                                           IdeFile           *file,
+                                           JsonArray         *diagnostics)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  guint length;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (diagnostics != NULL);
+
+  length = json_array_get_length (diagnostics);
+
+  ar = g_ptr_array_sized_new (length);
+  g_ptr_array_set_free_func (ar, (GDestroyNotify)ide_diagnostic_unref);
+
+  for (guint i = 0; i < length; i++)
+    {
+      JsonNode *node = json_array_get_element (diagnostics, i);
+      g_autoptr(IdeSourceLocation) begin_loc = NULL;
+      g_autoptr(IdeSourceLocation) end_loc = NULL;
+      g_autoptr(IdeDiagnostic) diag = NULL;
+      const gchar *message = NULL;
+      const gchar *source = NULL;
+      JsonNode *range = NULL;
+      gint severity = 0;
+      gboolean success;
+      struct {
+        gint line;
+        gint column;
+      } begin, end;
+
+      /* Mandatory fields */
+      if (!JCON_EXTRACT (node,
+                         "range", JCONE_NODE (range),
+                         "message", JCONE_STRING (message)))
+        continue;
+
+      /* Optional Fields */
+      JCON_EXTRACT (node, "severity", JCONE_INT (severity));
+      JCON_EXTRACT (node, "source", JCONE_STRING (source));
+
+      /* Extract location information */
+      success = JCON_EXTRACT (range,
+        "start", "{",
+          "line", JCONE_INT (begin.line),
+          "character", JCONE_INT (begin.column),
+        "}",
+        "end", "{",
+          "line", JCONE_INT (end.line),
+          "character", JCONE_INT (end.column),
+        "}"
+      );
+
+      if (!success)
+        continue;
+
+      begin_loc = ide_source_location_new (file, begin.line, begin.column, 0);
+      end_loc = ide_source_location_new (file, end.line, end.column, 0);
+
+      switch (severity)
+        {
+        case SEVERITY_ERROR:
+          severity = IDE_DIAGNOSTIC_ERROR;
+          break;
+
+        case SEVERITY_WARNING:
+          severity = IDE_DIAGNOSTIC_WARNING;
+          break;
+
+        case SEVERITY_INFORMATION:
+        case SEVERITY_HINT:
+        default:
+          severity = IDE_DIAGNOSTIC_NOTE;
+          break;
+        }
+
+      diag = ide_diagnostic_new (severity, message, begin_loc);
+      ide_diagnostic_take_range (diag, ide_source_range_new (begin_loc, end_loc));
+
+      g_ptr_array_add (ar, g_steal_pointer (&diag));
+    }
+
+  return ide_diagnostics_new (g_steal_pointer (&ar));
 }
 
 static void
 ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
                                                        JsonNode          *params)
 {
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  JsonArray *json_diagnostics = NULL;
   const gchar *uri = NULL;
-  JsonArray *diagnostics = NULL;
   gboolean success;
 
   IDE_ENTRY;
+
+  g_print ("================================================== diagnostics\n");
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (params != NULL);
 
   success = JCON_EXTRACT (params,
     "uri", JCONE_STRING (uri),
-    "diagnostics", JCONE_ARRAY (diagnostics)
+    "diagnostics", JCONE_ARRAY (json_diagnostics)
   );
 
-  if (!success)
-    IDE_EXIT;
+  if (success)
+    {
+      g_autoptr(IdeFile) ifile = NULL;
+      g_autoptr(GFile) file = NULL;
 
-  IDE_TRACE_MSG ("Diagnostics received for %s", uri);
+      IDE_TRACE_MSG ("Diagnostics received for %s", uri);
+
+      file = g_file_new_for_uri (uri);
+      ifile = g_object_new (IDE_TYPE_FILE,
+                            "file", file,
+                            "context", ide_object_get_context (IDE_OBJECT (self)),
+                            NULL);
+
+      g_hash_table_insert (priv->diagnostics_by_file,
+                           g_file_new_for_uri (uri),
+                           ide_langserv_client_translate_diagnostics (self, ifile, json_diagnostics));
+    }
 
   IDE_EXIT;
 }
@@ -296,7 +438,7 @@ ide_langserv_client_finalize (GObject *object)
   IdeLangservClient *self = (IdeLangservClient *)object;
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
 
-  g_clear_pointer (&priv->diagnostics_by_uri, g_hash_table_unref);
+  g_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);
@@ -381,10 +523,10 @@ ide_langserv_client_init (IdeLangservClient *self)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
 
-  priv->diagnostics_by_uri = g_hash_table_new_full (g_str_hash,
-                                                    g_str_equal,
-                                                    g_free,
-                                                    (GDestroyNotify)ide_diagnostics_unref);
+  priv->diagnostics_by_file = g_hash_table_new_full ((GHashFunc)g_file_hash,
+                                                     (GEqualFunc)g_file_equal,
+                                                     g_object_unref,
+                                                     (GDestroyNotify)ide_diagnostics_unref);
 
   priv->buffer_manager_signals = egg_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
@@ -516,7 +658,10 @@ ide_langserv_client_start (IdeLangservClient *self)
     "capabilities", "{", "}"
   );
 
-  jsonrpc_client_call_async (priv->rpc_client, "initialize", params, NULL,
+  jsonrpc_client_call_async (priv->rpc_client,
+                             "initialize",
+                             g_steal_pointer (&params),
+                             NULL,
                              ide_langserv_client_initialize_cb,
                              g_object_ref (self));
 
@@ -567,6 +712,17 @@ ide_langserv_client_call_cb (GObject      *object,
   IDE_EXIT;
 }
 
+/**
+ * ide_langserv_client_call_async:
+ * @self: An #IdeLangservClient
+ * @method: the method to call
+ * @params: (nullable) (transfer full): An #JsonNode or %NULL
+ * @cancellable: (nullable): A cancellable or %NULL
+ * @callback: the callback to receive the result, or %NULL
+ * @user_data: user data for @callback
+ *
+ * Asynchronously queries the Language Server using the JSON-RPC protocol.
+ */
 void
 ide_langserv_client_call_async (IdeLangservClient   *self,
                                 const gchar         *method,
@@ -623,4 +779,72 @@ ide_langserv_client_call_finish (IdeLangservClient  *self,
     *return_value = g_steal_pointer (&local_return_value);
 
   IDE_RETURN (ret);
+}
+
+void
+ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
+                                           GFile               *file,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  IdeDiagnostics *diagnostics;
+
+  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_langserv_client_get_diagnostics_async);
+
+  diagnostics = g_hash_table_lookup (priv->diagnostics_by_file, file);
+
+  if (diagnostics != NULL)
+    g_task_return_pointer (task,
+                           ide_diagnostics_ref (diagnostics),
+                           (GDestroyNotify)ide_diagnostics_unref);
+  else
+    g_task_return_pointer (task, NULL, NULL);
+}
+
+/**
+ * ide_langserv_client_get_diagnostics_finish:
+ * @self: A #IdeLangservClient
+ * @result: A #GAsyncResult
+ * @diagnostics: (nullable) (out): A location for a #IdeDiagnostics or %NULL
+ * @error: A location for a #GError or %NULL
+ *
+ * Completes a request to ide_langserv_client_get_diagnostics_async().
+ *
+ * Returns: %TRUE if successful and @diagnostics is set, otherwise %FALSE
+ *   and @error is set.
+ */
+gboolean
+ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,
+                                            GAsyncResult       *result,
+                                            IdeDiagnostics    **diagnostics,
+                                            GError            **error)
+{
+  g_autoptr(IdeDiagnostics) local_diagnostics = NULL;
+  g_autoptr(GError) local_error = NULL;
+  gboolean ret;
+
+  g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  local_diagnostics = g_task_propagate_pointer (G_TASK (result), &local_error);
+  ret = local_error == NULL;
+
+  if (ret == TRUE && local_diagnostics == NULL)
+    local_diagnostics = ide_diagnostics_new (NULL);
+
+  if (local_diagnostics != NULL && diagnostics != NULL)
+    *diagnostics = g_steal_pointer (&local_diagnostics);
+
+  if (local_error)
+    g_propagate_error (error, local_error);
+
+  return ret;
 }
