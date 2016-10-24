@@ -111,16 +111,12 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
   uri = ide_buffer_get_uri (buffer);
 
   params = JCON_NEW (
-    "changes", "[",
-      "{",
-        "uri", JCON_STRING (uri),
-        "type", JCON_INT (FILE_CHANGE_TYPE_CHANGED),
-      "}",
-    "]"
+    "textDocument", "{",
+      "uri", JCON_STRING (uri),
+    "}"
   );
 
-  ide_langserv_client_notification_async (self,
-                                          "workspace/didChangeWatchedFiles",
+  ide_langserv_client_notification_async (self, "textDocument/didSave",
                                           g_steal_pointer (&params),
                                           NULL, NULL, NULL);
 
