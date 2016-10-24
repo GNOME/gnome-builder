@@ -155,6 +155,8 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
   context = ide_object_get_context (IDE_OBJECT (self));
   plugins = peas_engine_get_plugin_list (self->engine);
 
+  g_assert (IDE_IS_CONTEXT (context));
+
   for (; plugins; plugins = plugins->next)
     {
       PeasPluginInfo *plugin_info = plugins->data;
