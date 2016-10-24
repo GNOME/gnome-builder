@@ -781,6 +781,89 @@ ide_langserv_client_call_finish (IdeLangservClient  *self,
   IDE_RETURN (ret);
 }
 
+static void
+ide_langserv_client_notification_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  JsonrpcClient *client = (JsonrpcClient *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  if (!jsonrpc_client_notification_finish (client, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_langserv_client_notification_async:
+ * @self: An #IdeLangservClient
+ * @method: the method to notification
+ * @params: (nullable) (transfer full): An #JsonNode or %NULL
+ * @cancellable: (nullable): A cancellable or %NULL
+ * @notificationback: the notificationback to receive the result, or %NULL
+ * @user_data: user data for @notificationback
+ *
+ * Asynchronously sends a notification to the Language Server.
+ */
+void
+ide_langserv_client_notification_async (IdeLangservClient   *self,
+                                        const gchar         *method,
+                                        JsonNode            *params,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  notificationback,
+                                        gpointer             user_data)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  task = g_task_new (self, cancellable, notificationback, user_data);
+  g_task_set_source_tag (task, ide_langserv_client_notification_async);
+
+  if (priv->rpc_client == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_CONNECTED,
+                               "No connection to language server");
+      IDE_EXIT;
+    }
+
+  jsonrpc_client_notification_async (priv->rpc_client,
+                                     method,
+                                     params,
+                                     cancellable,
+                                     ide_langserv_client_notification_cb,
+                                     g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_langserv_client_notification_finish (IdeLangservClient  *self,
+                                         GAsyncResult       *result,
+                                         GError            **error)
+{
+  g_autoptr(JsonNode) local_return_value = NULL;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
 void
 ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
                                            GFile               *file,

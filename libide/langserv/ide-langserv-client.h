@@ -61,6 +61,15 @@ gboolean           ide_langserv_client_call_finish            (IdeLangservClient
                                                                GAsyncResult         *result,
                                                                JsonNode            **return_value,
                                                                GError              **error);
+void               ide_langserv_client_notification_async     (IdeLangservClient    *self,
+                                                               const gchar          *method,
+                                                               JsonNode             *params,
+                                                               GCancellable         *cancellable,
+                                                               GAsyncReadyCallback   notificationback,
+                                                               gpointer              user_data);
+gboolean           ide_langserv_client_notification_finish    (IdeLangservClient    *self,
+                                                               GAsyncResult         *result,
+                                                               GError              **error);
 void               ide_langserv_client_get_diagnostics_async  (IdeLangservClient    *self,
                                                                GFile                *file,
                                                                GCancellable         *cancellable,
