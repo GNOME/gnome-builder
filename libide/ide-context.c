@@ -460,7 +460,7 @@ ide_context_get_search_engine (IdeContext *self)
  * service type could be found, then an instance of the service will be
  * created, started, and returned.
  *
- * Returns: (transfer none) (nullable): An #IdeService or %NULL.
+ * Returns: (type Ide.Service) (transfer none) (nullable): An #IdeService or %NULL.
  */
 gpointer
 ide_context_get_service_typed (IdeContext *self,
