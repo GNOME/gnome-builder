@@ -26,8 +26,43 @@
 G_DEFINE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE_TYPE_OBJECT)
 
 static void
+ide_symbol_resolver_real_get_symbol_tree_async (IdeSymbolResolver   *self,
+                                                GFile               *file,
+                                                GCancellable        *cancellable,
+                                                GAsyncReadyCallback  callback,
+                                                gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_SYMBOL_RESOLVER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_symbol_resolver_get_symbol_tree_async);
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Symbol tree is not supported on this symbol resolver");
+}
+
+static IdeSymbolTree *
+ide_symbol_resolver_real_get_symbol_tree_finish (IdeSymbolResolver  *self,
+                                                 GAsyncResult       *result,
+                                                 GError            **error)
+{
+  g_assert (IDE_IS_SYMBOL_RESOLVER (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
 ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
 {
+  iface->get_symbol_tree_async = ide_symbol_resolver_real_get_symbol_tree_async;
+  iface->get_symbol_tree_finish = ide_symbol_resolver_real_get_symbol_tree_finish;
+
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("context",
                                                             "Context",
