@@ -137,6 +137,7 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
 {
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *uri = NULL;
+  g_autofree gchar *copy = NULL;
   gint line;
   gint column;
   gint version;
@@ -144,6 +145,8 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
+
+  copy = g_strndup (new_text, len);
 
   uri = ide_buffer_get_uri (buffer);
   version = (gint)ide_buffer_get_change_count (buffer);
@@ -169,7 +172,7 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
           "}",
         "}",
         "rangeLength", JCON_INT (0),
-        "text", JCON_STRING (new_text),
+        "text", JCON_STRING (copy),
       "}",
     "]");
 
