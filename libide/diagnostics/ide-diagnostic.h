@@ -36,19 +36,19 @@ typedef enum
   IDE_DIAGNOSTIC_FATAL      = 5,
 } IdeDiagnosticSeverity;
 
-IdeSourceLocation     *ide_diagnostic_get_location         (IdeDiagnostic *self);
-guint                  ide_diagnostic_get_num_fixits       (IdeDiagnostic *self);
-IdeFixit              *ide_diagnostic_get_fixit            (IdeDiagnostic *self,
-                                                            guint          index);
-guint                  ide_diagnostic_get_num_ranges       (IdeDiagnostic *self);
-IdeSourceRange        *ide_diagnostic_get_range            (IdeDiagnostic *self,
-                                                            guint          index);
-IdeDiagnosticSeverity  ide_diagnostic_get_severity         (IdeDiagnostic *self);
-const gchar           *ide_diagnostic_get_text             (IdeDiagnostic *self);
-gchar                 *ide_diagnostic_get_text_for_display (IdeDiagnostic *self);
+IdeSourceLocation     *ide_diagnostic_get_location         (IdeDiagnostic         *self);
+guint                  ide_diagnostic_get_num_fixits       (IdeDiagnostic         *self);
+IdeFixit              *ide_diagnostic_get_fixit            (IdeDiagnostic         *self,
+                                                            guint                  index);
+guint                  ide_diagnostic_get_num_ranges       (IdeDiagnostic         *self);
+IdeSourceRange        *ide_diagnostic_get_range            (IdeDiagnostic         *self,
+                                                            guint                  index);
+IdeDiagnosticSeverity  ide_diagnostic_get_severity         (IdeDiagnostic         *self);
+const gchar           *ide_diagnostic_get_text             (IdeDiagnostic         *self);
+gchar                 *ide_diagnostic_get_text_for_display (IdeDiagnostic         *self);
 GType                  ide_diagnostic_get_type             (void);
-IdeDiagnostic         *ide_diagnostic_ref                  (IdeDiagnostic *self);
-void                   ide_diagnostic_unref                (IdeDiagnostic *self);
+IdeDiagnostic         *ide_diagnostic_ref                  (IdeDiagnostic         *self);
+void                   ide_diagnostic_unref                (IdeDiagnostic         *self);
 IdeDiagnostic         *ide_diagnostic_new                  (IdeDiagnosticSeverity  severity,
                                                             const gchar           *text,
                                                             IdeSourceLocation     *location);
