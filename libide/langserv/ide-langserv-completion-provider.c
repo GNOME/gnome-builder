@@ -38,10 +38,10 @@ typedef struct
 
 static void source_completion_provider_iface_init (GtkSourceCompletionProviderIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeLangservCompletionProvider, ide_langserv_completion_provider, IDE_TYPE_OBJECT, 0,
-                        G_ADD_PRIVATE (IdeLangservCompletionProvider)
-                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, source_completion_provider_iface_init)
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLangservCompletionProvider, ide_langserv_completion_provider, IDE_TYPE_OBJECT,
+                                  G_ADD_PRIVATE (IdeLangservCompletionProvider)
+                                  G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, source_completion_provider_iface_init)
+                                  G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
 
 static void
 completion_state_free (CompletionState *state)

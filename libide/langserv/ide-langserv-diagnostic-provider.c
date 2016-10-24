@@ -37,9 +37,9 @@ typedef struct
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeLangservDiagnosticProvider, ide_langserv_diagnostic_provider, IDE_TYPE_OBJECT, 0,
-                        G_ADD_PRIVATE (IdeLangservDiagnosticProvider)
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER, diagnostic_provider_iface_init))
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLangservDiagnosticProvider, ide_langserv_diagnostic_provider, IDE_TYPE_OBJECT,
+                                  G_ADD_PRIVATE (IdeLangservDiagnosticProvider)
+                                  G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER, diagnostic_provider_iface_init))
 
 static void
 ide_langserv_diagnostic_provider_get_diagnostics_cb (GObject      *object,
