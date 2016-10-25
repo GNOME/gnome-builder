@@ -25,7 +25,6 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
                                      const gchar          *style_name,
                                      GtkTextTag           *tag)
 {
-  g_autofree gchar *tag_name = NULL;
   g_autofree gchar *foreground = NULL;
   g_autofree gchar *background = NULL;
   g_autofree gchar *underline_color = NULL;
