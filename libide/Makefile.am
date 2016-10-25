@@ -492,12 +492,14 @@ libide_1_0_la_includes =                             \
 	-DBUILDDIR=\""${abs_top_builddir}"\"         \
 	-DSRCDIR=\""${abs_top_srcdir}"\"             \
 	-I$(srcdir)                                  \
+	-I$(top_builddir)/contrib/jsonrpc-glib       \
 	-I$(top_builddir)/contrib/pnl                \
 	-I$(top_builddir)/contrib/tmpl               \
 	-I$(top_builddir)/data/icons/hicolor         \
 	-I$(top_builddir)/libide                     \
 	-I$(top_srcdir)/contrib/egg                  \
 	-I$(top_srcdir)/contrib/gd                   \
+	-I$(top_srcdir)/contrib/jsonrpc-glib         \
 	-I$(top_srcdir)/contrib/nautilus             \
 	-I$(top_srcdir)/contrib/pnl                  \
 	-I$(top_srcdir)/contrib/search               \
@@ -532,18 +534,19 @@ libide_1_0_la_LDFLAGS =                         \
 	-export-symbols-regex '^(ide_|_ide_).*' \
 	$(NULL)
 
-libide_1_0_la_LIBADD =                                       \
-	$(LIBIDE_LIBS)                                       \
-	$(SHM_LIB)                                           \
-	-lm                                                  \
-	$(top_builddir)/data/icons/hicolor/libicons.la       \
-	$(top_builddir)/contrib/egg/libegg-private.la        \
-	$(top_builddir)/contrib/gd/libgd.la                  \
-	$(top_builddir)/contrib/nautilus/libnautilus.la      \
-	$(top_builddir)/contrib/pnl/libpanel-gtk.la          \
-	$(top_builddir)/contrib/search/libsearch.la          \
-	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la \
-	$(top_builddir)/contrib/xml/libxml.la                \
+libide_1_0_la_LIBADD =                                          \
+	$(LIBIDE_LIBS)                                          \
+	$(SHM_LIB)                                              \
+	-lm                                                     \
+	$(top_builddir)/data/icons/hicolor/libicons.la          \
+	$(top_builddir)/contrib/egg/libegg-private.la           \
+	$(top_builddir)/contrib/gd/libgd.la                     \
+	$(top_builddir)/contrib/jsonrpc-glib/libjsonrpc-glib.la \
+	$(top_builddir)/contrib/nautilus/libnautilus.la         \
+	$(top_builddir)/contrib/pnl/libpanel-gtk.la             \
+	$(top_builddir)/contrib/search/libsearch.la             \
+	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la    \
+	$(top_builddir)/contrib/xml/libxml.la                   \
 	$(NULL)
 
 if ENABLE_WEBKIT

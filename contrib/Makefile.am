@@ -2,6 +2,7 @@ SUBDIRS = \
 	egg \
 	gd \
 	libeditorconfig \
+	jsonrpc-glib \
 	nautilus \
 	pnl \
 	rg \
