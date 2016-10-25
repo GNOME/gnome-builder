@@ -842,6 +842,24 @@ ide_langserv_client_start (IdeLangservClient *self)
   IDE_EXIT;
 }
 
+static void
+ide_langserv_client_shutdown_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  JsonrpcClient *client = (JsonrpcClient *)object;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  if (!jsonrpc_client_call_finish (client, result, NULL, &error))
+    g_warning ("%s", error->message);
+
+  jsonrpc_client_close_async (client, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
 void
 ide_langserv_client_stop (IdeLangservClient *self)
 {
@@ -853,7 +871,12 @@ ide_langserv_client_stop (IdeLangservClient *self)
 
   if (priv->rpc_client != NULL)
     {
-      jsonrpc_client_close_async (priv->rpc_client, NULL, NULL, NULL);
+      jsonrpc_client_call_async (priv->rpc_client,
+                                 "shutdown",
+                                 NULL,
+                                 NULL,
+                                 ide_langserv_client_shutdown_cb,
+                                 NULL);
       g_clear_object (&priv->rpc_client);
     }
 
