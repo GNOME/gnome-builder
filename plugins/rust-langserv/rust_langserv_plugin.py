@@ -91,6 +91,7 @@ class RustService(Ide.Object, Ide.Service):
             self.client.stop()
 
         self.client = Ide.LangservClient.new(self.get_context(), io_stream)
+        self.client.add_language('rust')
         self.client.start()
 
         self.emit('client-changed', self.client)
