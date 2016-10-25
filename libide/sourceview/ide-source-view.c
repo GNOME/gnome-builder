@@ -2358,6 +2358,13 @@ ide_source_view_key_press_event (GtkWidget   *widget,
         }
     }
 
+  if (priv->completion_visible && event->state == GDK_MOD1_MASK)
+    {
+      if ((event->keyval >= GDK_KEY_0 && event->keyval <= GDK_KEY_9) ||
+          (event->keyval >= GDK_KEY_KP_0 && event->keyval <= GDK_KEY_KP_9))
+        return TRUE;
+    }
+
   /*
    * Allow the Input Method Context to potentially filter this keystroke.
    */
