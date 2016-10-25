@@ -1071,9 +1071,12 @@ ide_buffer_notify_style_scheme (IdeBuffer  *self,
                      "underline-rgba", &warning_rgba,
                      NULL);
 
-      ide_source_style_scheme_apply_style (style_scheme,
-                                           TAG_SNIPPET_TAB_STOP,
-                                           GET_TAG (TAG_SNIPPET_TAB_STOP));
+      if (!ide_source_style_scheme_apply_style (style_scheme,
+                                                TAG_SNIPPET_TAB_STOP,
+                                                GET_TAG (TAG_SNIPPET_TAB_STOP)))
+        apply_style (GET_TAG (TAG_SNIPPET_TAB_STOP),
+                     "underline", PANGO_UNDERLINE_SINGLE,
+                     NULL);
 
       if (!ide_source_style_scheme_apply_style (style_scheme,
                                                 TAG_DEFINITION,
