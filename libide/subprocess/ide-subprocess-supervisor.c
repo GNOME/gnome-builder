@@ -23,11 +23,19 @@
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-supervisor.h"
 
+/*
+ * We will rate limit supervision to once per RATE_LIMIT_THRESHOLD_SECONDS
+ * so that we don't allow ourself to flap the worker process in case it is
+ * buggy and crashing/exiting too frequently.
+ */
+#define RATE_LIMIT_THRESHOLD_SECONDS 5
+
 typedef struct
 {
   IdeSubprocessLauncher *launcher;
   IdeSubprocess *subprocess;
   guint supervising : 1;
+  GTimeVal last_spawn_time;
 } IdeSubprocessSupervisorPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSubprocessSupervisor, ide_subprocess_supervisor, G_TYPE_OBJECT)
@@ -197,6 +205,33 @@ ide_subprocess_supervisor_start (IdeSubprocessSupervisor *self)
   g_signal_emit (self, signals [SUPERVISE], 0, priv->launcher, &ret);
 }
 
+static gboolean
+ide_subprocess_supervisor_start_in_usec_cb (gpointer data)
+{
+  g_autoptr(IdeSubprocessSupervisor) self = data;
+
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
+
+  ide_subprocess_supervisor_start (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_subprocess_supervisor_start_in_usec (IdeSubprocessSupervisor *self,
+                                         gint64                   usec)
+{
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
+
+  /* Wait to re-start the supervisor until our RATE_LIMIT_THRESHOLD_SECONDS
+   * have elapsed since our last spawn time. The amount of time required
+   * will be given to us in the @usec parameter.
+   */
+  g_timeout_add (usec / 1000L,
+                 ide_subprocess_supervisor_start_in_usec_cb,
+                 g_object_ref (self));
+}
+
 void
 ide_subprocess_supervisor_stop (IdeSubprocessSupervisor *self)
 {
@@ -236,6 +271,34 @@ ide_subprocess_supervisor_get_subprocess (IdeSubprocessSupervisor *self)
   return priv->subprocess;
 }
 
+static gboolean
+ide_subprocess_supervisor_needs_rate_limit (IdeSubprocessSupervisor *self,
+                                            gint64                  *required_sleep)
+{
+  IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
+  GTimeVal now;
+  gint64 now_usec;
+  gint64 last_usec;
+  gint64 span;
+
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
+  g_assert (required_sleep != NULL);
+
+  g_get_current_time (&now);
+
+  now_usec = (now.tv_sec * G_USEC_PER_SEC) + now.tv_usec;
+  last_usec = (priv->last_spawn_time.tv_sec * G_USEC_PER_SEC) + priv->last_spawn_time.tv_usec;
+  span = now_usec - last_usec;
+
+  if (span < (RATE_LIMIT_THRESHOLD_SECONDS * G_USEC_PER_SEC))
+    {
+      *required_sleep = (RATE_LIMIT_THRESHOLD_SECONDS * G_USEC_PER_SEC) - span;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_subprocess_supervisor_wait_cb (GObject      *object,
                                    GAsyncResult *result,
@@ -258,8 +321,16 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
   if (priv->subprocess == subprocess)
     {
       g_clear_object (&priv->subprocess);
+
       if (priv->supervising)
-        ide_subprocess_supervisor_start (self);
+        {
+          gint64 sleep_usec;
+
+          if (ide_subprocess_supervisor_needs_rate_limit (self, &sleep_usec))
+            ide_subprocess_supervisor_start_in_usec (self, sleep_usec);
+          else
+            ide_subprocess_supervisor_start (self);
+        }
     }
 }
 
@@ -276,6 +347,7 @@ ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
     {
       if (subprocess != NULL)
         {
+          g_get_current_time (&priv->last_spawn_time);
           g_signal_emit (self, signals [SPAWNED], 0, subprocess);
           ide_subprocess_wait_async (priv->subprocess,
                                      NULL,
