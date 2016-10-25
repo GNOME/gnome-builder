@@ -4947,6 +4947,9 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
                      filename, line+1, line_offset+1);
 #endif
 
+      /* Stash our current position for jump-back */
+      ide_source_view_jump (self, NULL);
+
       /*
        * If we are navigating within this file, just stay captive instead of
        * potentially allowing jumping to the file in another editor.
@@ -7256,9 +7259,18 @@ ide_source_view_jump (IdeSourceView     *self,
                       const GtkTextIter *location)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextIter iter;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (location);
+
+  if (location == NULL)
+    {
+      GtkTextMark *mark;
+
+      mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &iter, mark);
+      location = &iter;
+    }
 
   if (priv->buffer && !_ide_buffer_get_loading (priv->buffer))
     g_signal_emit (self, signals [JUMP], 0, location);
