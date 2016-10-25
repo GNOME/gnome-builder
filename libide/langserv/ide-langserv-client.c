@@ -43,6 +43,7 @@ typedef struct
   JsonrpcClient  *rpc_client;
   GIOStream      *io_stream;
   GHashTable     *diagnostics_by_file;
+  GPtrArray      *languages;
 } IdeLangservClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservClient, ide_langserv_client, IDE_TYPE_OBJECT)
@@ -68,11 +69,32 @@ enum {
 
 enum {
   NOTIFICATION,
+  SUPPORTS_LANGUAGE,
   N_SIGNALS
 };
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static gboolean
+ide_langserv_client_supports_buffer (IdeLangservClient *self,
+                                     IdeBuffer         *buffer)
+{
+  GtkSourceLanguage *language;
+  const gchar *language_id = "text/plain";
+  gboolean ret = FALSE;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  if (language != NULL)
+    language_id = gtk_source_language_get_id (language);
+
+  g_signal_emit (self, signals [SUPPORTS_LANGUAGE], 0, language_id, &ret);
+
+  return ret;
+}
 
 static void
 ide_langserv_client_clear_diagnostics (IdeLangservClient *self,
@@ -107,6 +129,9 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  if (!ide_langserv_client_supports_buffer (self, buffer))
+    IDE_EXIT;
 
   uri = ide_buffer_get_uri (buffer);
 
@@ -255,6 +280,9 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
+  if (!ide_langserv_client_supports_buffer (self, buffer))
+    IDE_EXIT;
+
   g_signal_connect_object (buffer,
                            "insert-text",
                            G_CALLBACK (ide_langserv_client_buffer_insert_text),
@@ -297,6 +325,9 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  if (!ide_langserv_client_supports_buffer (self, buffer))
+    IDE_EXIT;
 
   uri = ide_buffer_get_uri (buffer);
 
@@ -608,11 +639,32 @@ ide_langserv_client_finalize (GObject *object)
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
 
   g_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
+  g_clear_pointer (&priv->languages, g_ptr_array_unref);
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);
 
   G_OBJECT_CLASS (ide_langserv_client_parent_class)->finalize (object);
+}
+
+static gboolean
+ide_langserv_client_real_supports_language (IdeLangservClient *self,
+                                            const gchar       *language_id)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+  g_assert (language_id != NULL);
+
+  for (guint i = 0; i < priv->languages->len; i++)
+    {
+      const gchar *id = g_ptr_array_index (priv->languages, i);
+
+      if (g_strcmp0 (language_id, id) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -665,6 +717,7 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
   object_class->set_property = ide_langserv_client_set_property;
 
   klass->notification = ide_langserv_client_real_notification;
+  klass->supports_language = ide_langserv_client_real_supports_language;
 
   properties [PROP_IO_STREAM] =
     g_param_spec_object ("io-stream",
@@ -685,12 +738,25 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
                   JSON_TYPE_NODE);
+
+  signals [SUPPORTS_LANGUAGE] =
+    g_signal_new ("supports-language",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeLangservClientClass, supports_language),
+                  g_signal_accumulator_true_handled, NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN,
+                  1,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
 ide_langserv_client_init (IdeLangservClient *self)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+
+  priv->languages = g_ptr_array_new_with_free_func (g_free);
 
   priv->diagnostics_by_file = g_hash_table_new_full ((GHashFunc)g_file_hash,
                                                      (GEqualFunc)g_file_equal,
@@ -1127,4 +1193,16 @@ ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,
     g_propagate_error (error, local_error);
 
   return ret;
+}
+
+void
+ide_langserv_client_add_language (IdeLangservClient *self,
+                                  const gchar       *language_id)
+{
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (language_id != NULL);
+
+  g_ptr_array_add (priv->languages, g_strdup (language_id));
 }

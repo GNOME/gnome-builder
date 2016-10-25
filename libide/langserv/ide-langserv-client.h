@@ -33,9 +33,11 @@ struct _IdeLangservClientClass
 {
   IdeObjectClass parent_class;
 
-  void (*notification) (IdeLangservClient *self,
-                        const gchar       *method,
-                        JsonNode          *params);
+  void     (*notification)      (IdeLangservClient *self,
+                                 const gchar       *method,
+                                 JsonNode          *params);
+  gboolean (*supports_language) (IdeLangservClient *self,
+                                 const gchar       *language_id);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -48,7 +50,9 @@ struct _IdeLangservClientClass
 };
 
 IdeLangservClient *ide_langserv_client_new                    (IdeContext           *context,
-                                                              GIOStream            *io_stream);
+                                                               GIOStream            *io_stream);
+void               ide_langserv_client_add_language           (IdeLangservClient    *self,
+                                                               const gchar          *language_id);
 void               ide_langserv_client_start                  (IdeLangservClient    *self);
 void               ide_langserv_client_stop                   (IdeLangservClient    *self);
 void               ide_langserv_client_call_async             (IdeLangservClient    *self,
