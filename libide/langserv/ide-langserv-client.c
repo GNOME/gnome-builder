@@ -270,7 +270,6 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
                                    IdeBuffer         *buffer,
                                    IdeBufferManager  *buffer_manager)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *uri = NULL;
 
@@ -303,10 +302,10 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
     "}"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client,
-                                     "textDocument/didOpen",
-                                     g_steal_pointer (&params),
-                                     NULL, NULL, NULL);
+  ide_langserv_client_notification_async (self,
+                                          "textDocument/didOpen",
+                                          g_steal_pointer (&params),
+                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -316,7 +315,6 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
                                      IdeBuffer         *buffer,
                                      IdeBufferManager  *buffer_manager)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *uri = NULL;
 
@@ -337,10 +335,10 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
     "}"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client,
-                                     "textDocument/didClose",
-                                     g_steal_pointer (&params),
-                                     NULL, NULL, NULL);
+  ide_langserv_client_notification_async (self,
+                                          "textDocument/didClose",
+                                          g_steal_pointer (&params),
+                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -384,7 +382,6 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
                                           GFile             *file,
                                           IdeProject        *project)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *uri = NULL;
 
@@ -405,10 +402,10 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
     "]"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client,
-                                     "workspace/didChangeWatchedFiles",
-                                     g_steal_pointer (&params),
-                                     NULL, NULL, NULL);
+  ide_langserv_client_notification_async (self,
+                                          "workspace/didChangeWatchedFiles",
+                                          g_steal_pointer (&params),
+                                          NULL, NULL, NULL);
 
   ide_langserv_client_clear_diagnostics (self, uri);
 
@@ -421,7 +418,6 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
                                           GFile             *dst,
                                           IdeProject        *project)
 {
-  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *src_uri = NULL;
   g_autofree gchar *dst_uri = NULL;
@@ -449,10 +445,10 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
     "]"
   );
 
-  jsonrpc_client_notification_async (priv->rpc_client,
-                                     "workspace/didChangeWatchedFiles",
-                                     g_steal_pointer (&params),
-                                     NULL, NULL, NULL);
+  ide_langserv_client_notification_async (self,
+                                          "workspace/didChangeWatchedFiles",
+                                          g_steal_pointer (&params),
+                                          NULL, NULL, NULL);
 
   ide_langserv_client_clear_diagnostics (self, src_uri);
 
