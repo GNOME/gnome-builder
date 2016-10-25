@@ -72,7 +72,9 @@ libide_1_0_la_public_headers =                            \
 	langserv/ide-langserv-client.h                    \
 	langserv/ide-langserv-completion-provider.h       \
 	langserv/ide-langserv-diagnostic-provider.h       \
+	langserv/ide-langserv-symbol-node.h               \
 	langserv/ide-langserv-symbol-resolver.h           \
+	langserv/ide-langserv-symbol-tree.h               \
 	local/ide-local-device.h                          \
 	logging/ide-log.h                                 \
 	plugins/ide-extension-adapter.h                   \
@@ -245,7 +247,11 @@ libide_1_0_la_public_sources =                            \
 	langserv/ide-langserv-client.c                    \
 	langserv/ide-langserv-completion-provider.c       \
 	langserv/ide-langserv-diagnostic-provider.c       \
+	langserv/ide-langserv-symbol-node.c               \
+	langserv/ide-langserv-symbol-node-private.h       \
 	langserv/ide-langserv-symbol-resolver.c           \
+	langserv/ide-langserv-symbol-tree.c               \
+	langserv/ide-langserv-symbol-tree-private.h       \
 	local/ide-local-device.c                          \
 	logging/ide-log.c                                 \
 	plugins/ide-extension-adapter.c                   \

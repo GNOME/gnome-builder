@@ -24,7 +24,11 @@
 
 #include "diagnostics/ide-source-location.h"
 #include "files/ide-file.h"
+#include "langserv/ide-langserv-symbol-node.h"
+#include "langserv/ide-langserv-symbol-node-private.h"
 #include "langserv/ide-langserv-symbol-resolver.h"
+#include "langserv/ide-langserv-symbol-tree.h"
+#include "langserv/ide-langserv-symbol-tree-private.h"
 
 typedef struct
 {
@@ -283,8 +287,171 @@ ide_langserv_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
 }
 
 static void
+ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeLangservClient *client = (IdeLangservClient *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeLangservSymbolTree) tree = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(JsonNode) return_value = NULL;
+  g_autoptr(GPtrArray) symbols = NULL;
+  JsonArray *array;
+  guint length;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (!JSON_NODE_HOLDS_ARRAY (return_value) ||
+      NULL == (array = json_node_get_array (return_value)))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               "Invalid result for textDocument/documentSymbol");
+      IDE_EXIT;
+    }
+
+  length = json_array_get_length (array);
+
+  symbols = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (guint i = 0; i < length; i++)
+    {
+      JsonNode *node = json_array_get_element (array, i);
+      g_autoptr(IdeLangservSymbolNode) symbol = NULL;
+      g_autoptr(GFile) file = NULL;
+      const gchar *name = NULL;
+      const gchar *container_name = NULL;
+      const gchar *uri = NULL;
+      gboolean success;
+      gint kind = -1;
+      struct {
+        gint line;
+        gint column;
+      } begin, end;
+
+      /* Mandatory fields */
+      success = JCON_EXTRACT (node,
+        "name", JCONE_STRING (name),
+        "kind", JCONE_INT (kind),
+        "location", "{",
+          "uri", JCONE_STRING (uri),
+          "range", "{",
+            "start", "{",
+              "line", JCONE_INT (begin.line),
+              "character", JCONE_INT (begin.column),
+            "}",
+            "end", "{",
+              "line", JCONE_INT (end.line),
+              "character", JCONE_INT (end.column),
+            "}",
+          "}",
+        "}"
+      );
+
+      if (!success)
+        continue;
+
+      /* Optional fields */
+      JCON_EXTRACT (node, "containerName", &container_name);
+
+      file = g_file_new_for_uri (uri);
+
+      symbol = ide_langserv_symbol_node_new (file, name, container_name, kind,
+                                             begin.line, begin.column,
+                                             end.line, end.column);
+
+      g_ptr_array_add (symbols, g_steal_pointer (&symbol));
+    }
+
+  tree = ide_langserv_symbol_tree_new (g_steal_pointer (&symbols));
+
+  g_task_return_pointer (task, g_steal_pointer (&tree), g_object_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
+                                                    GFile               *file,
+                                                    GCancellable        *cancellable,
+                                                    GAsyncReadyCallback  callback,
+                                                    gpointer             user_data)
+{
+  IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
+  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(JsonNode) params = NULL;
+  g_autofree gchar *uri = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_langserv_symbol_resolver_get_symbol_tree_async);
+
+  if (priv->client == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_CONNECTED,
+                               "Cannot query language server, not connected");
+      IDE_EXIT;
+    }
+
+  uri = g_file_get_uri (file);
+
+  params = JCON_NEW (
+    "textDocument", "{",
+      "uri", JCON_STRING (uri),
+    "}"
+  );
+
+  ide_langserv_client_call_async (priv->client,
+                                  "textDocument/documentSymbol",
+                                  g_steal_pointer (&params),
+                                  cancellable,
+                                  ide_langserv_symbol_resolver_document_symbol_cb,
+                                  g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static IdeSymbolTree *
+ide_langserv_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
+                                                     GAsyncResult       *result,
+                                                     GError            **error)
+{
+  IdeSymbolTree *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (resolver), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
 symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
 {
   iface->lookup_symbol_async = ide_langserv_symbol_resolver_lookup_symbol_async;
   iface->lookup_symbol_finish = ide_langserv_symbol_resolver_lookup_symbol_finish;
+  iface->get_symbol_tree_async = ide_langserv_symbol_resolver_get_symbol_tree_async;
+  iface->get_symbol_tree_finish = ide_langserv_symbol_resolver_get_symbol_tree_finish;
 }

@@ -1,0 +1,171 @@
+/* ide-langserv-symbol-node.c
+ *
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#define G_LOG_DOMAIN "ide-langserv-symbol-node"
+
+#include "ide-debug.h"
+
+#include "diagnostics/ide-source-location.h"
+#include "files/ide-file.h"
+#include "langserv/ide-langserv-symbol-node.h"
+
+typedef struct
+{
+  GFile *file;
+  gchar *parent_name;
+  IdeSymbolKind kind;
+  struct {
+    guint line;
+    guint column;
+  } begin, end;
+} IdeLangservSymbolNodePrivate;
+
+struct _IdeLangservSymbolNode
+{
+  IdeSymbolNode parent_instance;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservSymbolNode, ide_langserv_symbol_node, IDE_TYPE_SYMBOL_NODE)
+
+static void
+ide_langserv_symbol_node_get_location_async (IdeSymbolNode       *node,
+                                             GCancellable        *cancellable,
+                                             GAsyncReadyCallback  callback,
+                                             gpointer             user_data)
+{
+  IdeLangservSymbolNode *self = (IdeLangservSymbolNode *)node;
+  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(IdeSourceLocation) location = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_NODE (node));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_langserv_symbol_node_get_location_async);
+
+  ifile = ide_file_new (NULL, priv->file);
+  location = ide_source_location_new (ifile, priv->begin.line, priv->begin.column, 0);
+
+  g_task_return_pointer (task, g_steal_pointer (&location), (GDestroyNotify)ide_source_location_unref);
+
+  IDE_EXIT;
+}
+
+static IdeSourceLocation *
+ide_langserv_symbol_node_get_location_finish (IdeSymbolNode  *node,
+                                              GAsyncResult   *result,
+                                              GError        **error)
+{
+  IdeSourceLocation *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_NODE (node));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+ide_langserv_symbol_node_finalize (GObject *object)
+{
+  IdeLangservSymbolNode *self = (IdeLangservSymbolNode *)object;
+  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
+
+  g_clear_pointer (&priv->parent_name, g_free);
+  g_clear_object (&priv->file);
+
+  G_OBJECT_CLASS (ide_langserv_symbol_node_parent_class)->finalize (object);
+}
+
+static void
+ide_langserv_symbol_node_class_init (IdeLangservSymbolNodeClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeSymbolNodeClass *symbol_node_class = IDE_SYMBOL_NODE_CLASS (klass);
+
+  object_class->finalize = ide_langserv_symbol_node_finalize;
+
+  symbol_node_class->get_location_async = ide_langserv_symbol_node_get_location_async;
+  symbol_node_class->get_location_finish = ide_langserv_symbol_node_get_location_finish;
+}
+
+static void
+ide_langserv_symbol_node_init (IdeLangservSymbolNode *self)
+{
+}
+
+IdeLangservSymbolNode *
+ide_langserv_symbol_node_new (GFile       *file,
+                              const gchar *name,
+                              const gchar *parent_name,
+                              gint         kind,
+                              guint        begin_line,
+                              guint        begin_column,
+                              guint        end_line,
+                              guint        end_column)
+{
+  IdeLangservSymbolNode *self;
+  IdeLangservSymbolNodePrivate *priv;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  switch (kind)
+    {
+    case 1:   kind = IDE_SYMBOL_FILE;         break;
+    case 2:   kind = IDE_SYMBOL_MODULE;       break;
+    case 3:   kind = IDE_SYMBOL_NAMESPACE;    break;
+    case 4:   kind = IDE_SYMBOL_PACKAGE;      break;
+    case 5:   kind = IDE_SYMBOL_CLASS;        break;
+    case 6:   kind = IDE_SYMBOL_METHOD;       break;
+    case 7:   kind = IDE_SYMBOL_PROPERTY;     break;
+    case 8:   kind = IDE_SYMBOL_FIELD;        break;
+    case 9:   kind = IDE_SYMBOL_CONSTRUCTOR;  break;
+    case 10:  kind = IDE_SYMBOL_ENUM;         break;
+    case 11:  kind = IDE_SYMBOL_INTERFACE;    break;
+    case 12:  kind = IDE_SYMBOL_FUNCTION;     break;
+    case 13:  kind = IDE_SYMBOL_VARIABLE;     break;
+    case 14:  kind = IDE_SYMBOL_CONSTANT;     break;
+    case 15:  kind = IDE_SYMBOL_STRING;       break;
+    case 16:  kind = IDE_SYMBOL_NUMBER;       break;
+    case 17:  kind = IDE_SYMBOL_BOOLEAN;      break;
+    case 18:  kind = IDE_SYMBOL_ARRAY;        break;
+    default:  kind = IDE_SYMBOL_NONE;         break;
+    }
+
+  self = g_object_new (IDE_TYPE_LANGSERV_SYMBOL_NODE,
+                       "flags", 0,
+                       "kind", kind,
+                       "name", name,
+                       NULL);
+  priv = ide_langserv_symbol_node_get_instance_private (self);
+
+  priv->file = g_object_ref (file);
+  priv->parent_name = g_strdup (parent_name);
+  priv->begin.line = begin_line;
+  priv->begin.column = begin_column;
+  priv->end.line = end_line;
+  priv->end.column = end_column;
+
+  return self;
+}
