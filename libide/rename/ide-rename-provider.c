@@ -72,7 +72,7 @@ ide_rename_provider_default_init (IdeRenameProviderInterface *iface)
                                                             "Context",
                                                             "The context for the IdeObject",
                                                             IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
+                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 /**
