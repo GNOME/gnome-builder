@@ -76,6 +76,14 @@ IdeBuffer                *ide_buffer_manager_find_buffer         (IdeBufferManag
 gsize                     ide_buffer_manager_get_max_file_size   (IdeBufferManager     *self);
 void                      ide_buffer_manager_set_max_file_size   (IdeBufferManager     *self,
                                                                   gsize                 max_file_size);
+void                      ide_buffer_manager_apply_edits_async   (IdeBufferManager     *self,
+                                                                  GPtrArray            *edits,
+                                                                  GCancellable         *cancellable,
+                                                                  GAsyncReadyCallback   callback,
+                                                                  gpointer              user_data);
+gboolean                  ide_buffer_manager_apply_edits_finish  (IdeBufferManager     *self,
+                                                                  GAsyncResult         *result,
+                                                                  GError              **error);
 
 G_END_DECLS
 

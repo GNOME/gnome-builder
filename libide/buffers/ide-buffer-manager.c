@@ -31,11 +31,14 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-unsaved-files.h"
 #include "diagnostics/ide-source-location.h"
+#include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
 #include "history/ide-back-forward-item.h"
 #include "history/ide-back-forward-list-private.h"
 #include "history/ide-back-forward-list.h"
+#include "projects/ide-project-edit.h"
+#include "projects/ide-project-edit-private.h"
 #include "util/ide-doc-seq.h"
 #include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
@@ -83,6 +86,14 @@ typedef struct
   IdeProgress *progress;
 } SaveState;
 
+typedef struct
+{
+  GPtrArray  *edits;
+  GHashTable *buffers;
+  guint       count;
+  guint       failed : 1;
+} EditState;
+
 static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeBufferManager, ide_buffer_manager, IDE_TYPE_OBJECT, 0,
@@ -124,6 +135,19 @@ static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
 
 static void
+edit_state_free (gpointer data)
+{
+  EditState *state = data;
+
+  if (state != NULL)
+    {
+      g_clear_pointer (&state->edits, g_ptr_array_unref);
+      g_clear_pointer (&state->buffers, g_hash_table_unref);
+      g_slice_free (EditState, state);
+    }
+}
+
+static void
 save_state_free (gpointer data)
 {
   SaveState *state = data;
@@ -150,6 +174,13 @@ load_state_free (gpointer data)
       g_clear_object (&state->loader);
       g_slice_free (LoadState, state);
     }
+}
+
+static void
+unref_if_non_null (gpointer data)
+{
+  if (data != NULL)
+    g_object_unref (data);
 }
 
 /**
@@ -732,14 +763,14 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
  * See ide_buffer_manager_load_file_finish() for how to complete this asynchronous request.
  */
 void
-ide_buffer_manager_load_file_async (IdeBufferManager     *self,
-                                    IdeFile              *file,
-                                    gboolean              force_reload,
-                                    IdeWorkbenchOpenFlags flags,
-                                    IdeProgress         **progress,
-                                    GCancellable         *cancellable,
-                                    GAsyncReadyCallback   callback,
-                                    gpointer              user_data)
+ide_buffer_manager_load_file_async (IdeBufferManager       *self,
+                                    IdeFile                *file,
+                                    gboolean                force_reload,
+                                    IdeWorkbenchOpenFlags   flags,
+                                    IdeProgress           **progress,
+                                    GCancellable           *cancellable,
+                                    GAsyncReadyCallback     callback,
+                                    gpointer                user_data)
 {
   g_autoptr(GTask) task = NULL;
   IdeContext *context;
@@ -1868,4 +1899,269 @@ ide_buffer_manager_save_all_finish (IdeBufferManager  *self,
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+ide_buffer_manager_do_apply_edits (IdeBufferManager *self,
+                                   GHashTable       *buffers,
+                                   GPtrArray        *edits)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (buffers != NULL);
+  g_assert (edits != NULL);
+
+  /* Allow each project edit to stage its GtkTextMarks */
+  for (guint i = 0; i < edits->len; i++)
+    {
+      IdeProjectEdit *edit = g_ptr_array_index (edits, i);
+      IdeSourceLocation *location;
+      IdeSourceRange *range;
+      IdeBuffer *buffer;
+      IdeFile *file;
+
+      if (NULL == (range = ide_project_edit_get_range (edit)) ||
+          NULL == (location = ide_source_range_get_begin (range)) ||
+          NULL == (file = ide_source_location_get_file (location)) ||
+          NULL == (buffer = g_hash_table_lookup (buffers, file)))
+        {
+          g_warning ("Impluasible failure to access buffer");
+          continue;
+        }
+
+      gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (buffer));
+
+      _ide_project_edit_prepare (edit, buffer);
+    }
+
+  /* Now actually perform the replacement between the text marks */
+  for (guint i = 0; i < edits->len; i++)
+    {
+      IdeProjectEdit *edit = g_ptr_array_index (edits, i);
+      IdeSourceLocation *location;
+      IdeSourceRange *range;
+      IdeBuffer *buffer;
+      IdeFile *file;
+
+      if (NULL == (range = ide_project_edit_get_range (edit)) ||
+          NULL == (location = ide_source_range_get_begin (range)) ||
+          NULL == (file = ide_source_location_get_file (location)) ||
+          NULL == (buffer = g_hash_table_lookup (buffers, file)))
+        {
+          g_warning ("Impluasible failure to access buffer");
+          continue;
+        }
+
+      _ide_project_edit_apply (edit, buffer);
+    }
+
+  /* Complete all of our undo groups */
+  for (guint i = 0; i < edits->len; i++)
+    {
+      IdeProjectEdit *edit = g_ptr_array_index (edits, i);
+      IdeSourceLocation *location;
+      IdeSourceRange *range;
+      IdeBuffer *buffer;
+      IdeFile *file;
+
+      if (NULL == (range = ide_project_edit_get_range (edit)) ||
+          NULL == (location = ide_source_range_get_begin (range)) ||
+          NULL == (file = ide_source_location_get_file (location)) ||
+          NULL == (buffer = g_hash_table_lookup (buffers, file)))
+        {
+          g_warning ("Impluasible failure to access buffer");
+          continue;
+        }
+
+      gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_buffer_manager_apply_edits_save_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IdeBufferManager *self = (IdeBufferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_buffer_manager_save_all_finish (self, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdeBufferManager *self = (IdeBufferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeBuffer) buffer = NULL;
+  EditState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+  state->count--;
+
+  /* Get our buffer, if we failed, we won't proceed with edits */
+  if (NULL == (buffer = ide_buffer_manager_load_file_finish (self, result, &error)))
+    {
+      if (state->failed == FALSE)
+        {
+          state->failed = TRUE;
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+
+  /* Nothing to do if we already failed */
+  if (state->failed)
+    IDE_EXIT;
+
+  /* If this is the last buffer to load, then we can go apply the edits. */
+  if (state->count == 0)
+    {
+      GCancellable *cancellable = g_task_get_cancellable (task);
+
+      ide_buffer_manager_do_apply_edits (self, state->buffers, state->edits);
+
+      ide_buffer_manager_save_all_async (self,
+                                         cancellable,
+                                         ide_buffer_manager_apply_edits_save_cb,
+                                         g_steal_pointer (&task));
+    }
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_buffer_manager_apply_edits_async:
+ * @self: An #IdeBufferManager
+ * @edits: (transfer container) (element-type Ide.ProjectEdit): An #GPtrArray of #IdeProjectEdit
+ * @cancellable: (allow-none): A #GCancellable or %NULL
+ * @callback: the callback to complete the request
+ * @user_data: user data for @callback
+ *
+ * Asynchronously requests that all of @edits are applied to the buffers
+ * in the project. If the buffer has not been loaded for a particular edit,
+ * it will be loaded.
+ */
+void
+ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
+                                      GPtrArray           *edits,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  EditState *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
+  g_return_if_fail (edits != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_buffer_manager_apply_edits_async);
+
+  state = g_slice_new0 (EditState);
+  state->buffers = g_hash_table_new_full ((GHashFunc)ide_file_hash,
+                                          (GEqualFunc)ide_file_equal,
+                                          g_object_unref,
+                                          unref_if_non_null);
+  state->edits = g_steal_pointer (&edits);
+  state->count = 1;
+
+  g_task_set_task_data (task, state, edit_state_free);
+
+  for (guint i = 0; i < state->edits->len; i++)
+    {
+      IdeProjectEdit *edit = g_ptr_array_index (state->edits, i);
+      IdeSourceLocation *location;
+      IdeSourceRange *range;
+      IdeBuffer *buffer;
+      IdeFile *file;
+
+      if (NULL == (range = ide_project_edit_get_range (edit)) ||
+          NULL == (location = ide_source_range_get_begin (range)) ||
+          NULL == (file = ide_source_location_get_file (location)))
+        continue;
+
+      if (g_hash_table_contains (state->buffers, file))
+        continue;
+
+      buffer = ide_buffer_manager_find_buffer (self, ide_file_get_file (file));
+
+      if (buffer != NULL)
+        {
+          g_hash_table_insert (state->buffers, g_object_ref (file), g_object_ref (buffer));
+          continue;
+        }
+
+      g_hash_table_insert (state->buffers, g_object_ref (file), NULL);
+
+      state->count++;
+
+      ide_buffer_manager_load_file_async (self,
+                                          file,
+                                          FALSE,
+                                          IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND,
+                                          NULL,
+                                          cancellable,
+                                          ide_buffer_manager_apply_edits_buffer_loaded,
+                                          g_object_ref (task));
+    }
+
+  state->count--;
+
+  IDE_TRACE_MSG ("Waiting for %d buffers to load", state->count);
+
+  if (state->count == 0)
+    {
+      ide_buffer_manager_do_apply_edits (self, state->buffers, state->edits);
+      ide_buffer_manager_save_all_async (self,
+                                         cancellable,
+                                         ide_buffer_manager_apply_edits_save_cb,
+                                         g_steal_pointer (&task));
+    }
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_buffer_manager_apply_edits_finish (IdeBufferManager  *self,
+                                       GAsyncResult      *result,
+                                       GError           **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
