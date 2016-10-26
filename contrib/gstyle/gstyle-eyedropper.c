@@ -77,8 +77,6 @@ struct _GstyleEyedropper
   gint               offset_y;
   gint               pixbuf_offset_x;
   gint               pixbuf_offset_y;
-  gint               screen_width;
-  gint               screen_height;
 
   guint              button_pressed : 1;
 };
@@ -99,6 +97,25 @@ enum {
 
 static guint signals [LAST_SIGNAL];
 static GParamSpec *properties [N_PROPS];
+
+static gboolean
+get_monitor_geometry_at_point (gint          x_root,
+                               gint          y_root,
+                               GdkRectangle *geometry)
+{
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+
+  if (NULL != (display = gdk_display_get_default ()))
+    {
+      monitor = gdk_display_get_monitor_at_point (display, x_root, y_root);
+      gdk_monitor_get_geometry (monitor, geometry);
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
 
 static void
 get_rgba_at_cursor (GstyleEyedropper *self,
@@ -225,6 +242,7 @@ gstyle_eyedropper_event_get_root_coords (GstyleEyedropper *self,
 static void
 gstyle_eyedropper_calculate_window_position (GstyleEyedropper *self,
                                              GtkWindow        *window,
+                                             GdkRectangle     *monitor_rect,
                                              gint              cursor_root_x,
                                              gint              cursor_root_y,
                                              gint             *x,
@@ -239,8 +257,8 @@ gstyle_eyedropper_calculate_window_position (GstyleEyedropper *self,
 
   gtk_widget_get_allocated_size (GTK_WIDGET (window), &alloc, NULL);
 
-  if ((spot_x < 0 && cursor_root_x > self->screen_width - alloc.width + spot_x * 2) ||
-      (spot_x > 0 && cursor_root_x < alloc.width + spot_x * 2))
+  if ((spot_x < 0 && cursor_root_x > monitor_rect->x + monitor_rect->width - alloc.width + spot_x * 2) ||
+      (spot_x > 0 && cursor_root_x < monitor_rect->x + alloc.width + spot_x * 2))
     spot_x = -spot_x;
 
   if (spot_x > 0)
@@ -248,8 +266,8 @@ gstyle_eyedropper_calculate_window_position (GstyleEyedropper *self,
   else
     *x = cursor_root_x - spot_x;
 
-  if ((spot_y < 0 && cursor_root_y > self->screen_height - alloc.height + spot_y * 2) ||
-      (spot_y > 0 && cursor_root_y < alloc.height + spot_y + 2))
+  if ((spot_y < 0 && cursor_root_y > monitor_rect->y + monitor_rect->height - alloc.height + spot_y * 2) ||
+      (spot_y > 0 && cursor_root_y < monitor_rect->y + spot_y + 2))
     spot_y = -spot_y;
 
   if (spot_y > 0)
@@ -260,11 +278,14 @@ gstyle_eyedropper_calculate_window_position (GstyleEyedropper *self,
 
 static void
 gstyle_eyedropper_draw_zoom_area (GstyleEyedropper *self,
+                                  GdkRectangle     *monitor_rect,
                                   gint              cursor_x,
                                   gint              cursor_y)
 {
   GdkWindow *window;
   GdkPixbuf *root_pixbuf;
+  gint monitor_right;
+  gint monitor_bottom;
   gint dst_width;
   gint dst_height;
   gint src_width;
@@ -289,12 +310,14 @@ gstyle_eyedropper_draw_zoom_area (GstyleEyedropper *self,
   self->pixbuf_offset_y = (dst_height - ZOOM_AREA_HEIGHT) / 2;
 
   start_x = MAX (cursor_x - src_width / 2, 0);
-  if (start_x + src_width > self->screen_width)
-    start_x = self->screen_width - src_width;
+  monitor_right = monitor_rect->x + monitor_rect->width;
+  if (start_x + src_width > monitor_right)
+    start_x = monitor_right - src_width;
 
   start_y = MAX (cursor_y - src_height / 2, 0);
-  if (start_y + src_height > self->screen_height)
-    start_y = self->screen_height - src_height;
+  monitor_bottom = monitor_rect->y + monitor_rect->height;
+  if (start_y + src_height > monitor_bottom)
+    start_y = monitor_bottom - src_height;
 
   window = gdk_screen_get_root_window (self->screen);
   root_pixbuf = gdk_pixbuf_get_from_window (window, start_x, start_y, src_width, src_height);
@@ -316,6 +339,7 @@ gstyle_eyedropper_pointer_motion_notify_cb (GstyleEyedropper *self,
                                             GdkEventMotion   *event,
                                             GtkWindow        *window)
 {
+  GdkRectangle monitor_rect;
   GdkRGBA rgba;
   gint x_root, y_root;
   gint x, y;
@@ -326,18 +350,25 @@ gstyle_eyedropper_pointer_motion_notify_cb (GstyleEyedropper *self,
   g_assert (self->screen == gdk_event_get_screen ((GdkEvent *) event));
 
   gstyle_eyedropper_event_get_root_coords (self, (GdkEvent *)event, &x_root, &y_root);
-  gstyle_eyedropper_calculate_window_position (self, GTK_WINDOW (self->window), event->x_root, event->y_root, &x, &y);
-  gtk_window_move (GTK_WINDOW (self->window), x, y);
+  if (get_monitor_geometry_at_point (x_root, y_root, &monitor_rect))
+    {
+      gstyle_eyedropper_calculate_window_position (self,
+                                                   GTK_WINDOW (self->window),
+                                                   &monitor_rect,
+                                                   event->x_root, event->y_root, &x, &y);
 
-  gstyle_eyedropper_draw_zoom_area (self, event->x_root, event->y_root);
-  get_rgba_at_cursor (self,
-                      self->screen,
-                      gdk_event_get_device ((GdkEvent *) event),
-                      event->x_root, event->y_root, &rgba);
+      gtk_window_move (GTK_WINDOW (self->window), x, y);
 
-  gstyle_color_set_rgba (self->color, &rgba);
-  if (self->button_pressed)
-    g_signal_emit (self, signals [COLOR_PICKED], 0, &rgba);
+      gstyle_eyedropper_draw_zoom_area (self, &monitor_rect, event->x_root, event->y_root);
+      get_rgba_at_cursor (self,
+                          self->screen,
+                          gdk_event_get_device ((GdkEvent *) event),
+                          event->x_root, event->y_root, &rgba);
+
+      gstyle_color_set_rgba (self->color, &rgba);
+      if (self->button_pressed)
+        g_signal_emit (self, signals [COLOR_PICKED], 0, &rgba);
+    }
 }
 
 static gboolean
@@ -414,6 +445,8 @@ gstyle_eyedropper_pointer_wheel_cb (GstyleEyedropper *self,
                                     GdkEventScroll   *event,
                                     GtkWindow        *window)
 {
+  GdkRectangle monitor_rect;
+
   g_assert (GSTYLE_IS_EYEDROPPER (self));
   g_assert (event != NULL);
   g_assert (GTK_IS_WINDOW (window));
@@ -431,7 +464,9 @@ gstyle_eyedropper_pointer_wheel_cb (GstyleEyedropper *self,
   else
     return GDK_EVENT_PROPAGATE;
 
-  gstyle_eyedropper_draw_zoom_area (self, event->x_root, event->y_root);
+  if (get_monitor_geometry_at_point (event->x_root, event->y_root, &monitor_rect))
+    gstyle_eyedropper_draw_zoom_area (self, &monitor_rect, event->x_root, event->y_root);
+
   return GDK_EVENT_STOP;
 }
 
@@ -521,6 +556,7 @@ static void
 gstyle_eyedropper_screen_size_changed_cb (GstyleEyedropper *self,
                                           GdkScreen        *screen)
 {
+  GdkRectangle monitor_rect;
   GdkDevice *pointer;
   gint x;
   gint y;
@@ -528,12 +564,11 @@ gstyle_eyedropper_screen_size_changed_cb (GstyleEyedropper *self,
   g_assert (GSTYLE_IS_EYEDROPPER (self));
   g_assert (GDK_IS_SCREEN (screen));
 
-  self->screen_width = gdk_screen_get_width (screen);
-  self->screen_height = gdk_screen_get_height (screen);
-
   pointer = gdk_seat_get_pointer (self->seat);
   gdk_device_get_position (pointer, NULL, &x, &y);
-  gstyle_eyedropper_draw_zoom_area (self, x, y);
+
+  if (get_monitor_geometry_at_point (x, y, &monitor_rect))
+    gstyle_eyedropper_draw_zoom_area (self, &monitor_rect, x, y);
 }
 
 static void
@@ -582,6 +617,7 @@ gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
 {
   GtkWidget *source;
   GtkStyleContext *context;
+  GdkRectangle monitor_rect;
   GtkWidget *box;
   GtkWidget *swatch;
   GdkGrabStatus status;
@@ -625,11 +661,17 @@ gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->screen_width = gdk_screen_get_width (self->screen);
-  self->screen_height = gdk_screen_get_height (self->screen);
   gstyle_eyedropper_event_get_root_coords (self, event, &x_root, &y_root);
-  gstyle_eyedropper_calculate_window_position (self, GTK_WINDOW (self->window), x_root, y_root, &x, &y);
-  gtk_window_move (GTK_WINDOW (self->window), x, y);
+  if (get_monitor_geometry_at_point (x_root, y_root, &monitor_rect))
+    {
+      gstyle_eyedropper_calculate_window_position (self,
+                                                   GTK_WINDOW (self->window),
+                                                   &monitor_rect,
+                                                   x_root, y_root, &x, &y);
+
+      gtk_window_move (GTK_WINDOW (self->window), x, y);
+    }
+
   gtk_widget_show_all (self->window);
 
   gtk_widget_add_events (self->window,
