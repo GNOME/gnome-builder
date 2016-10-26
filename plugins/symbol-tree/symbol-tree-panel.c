@@ -324,6 +324,45 @@ symbol_tree__search_entry_changed (SymbolTreePanel *self,
 }
 
 static void
+symbol_tree_panel_buffer_saved (SymbolTreePanel  *self,
+                                IdeBuffer        *buffer,
+                                IdeBufferManager *buffer_manager)
+{
+  g_assert (SYMBOL_IS_TREE_PANEL (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  /* Pop the cache if our current file was saved */
+  if (buffer == self->last_document)
+    {
+      egg_task_cache_evict (self->symbols_cache, buffer);
+      refresh_tree (self);
+    }
+}
+
+static void
+symbol_tree_panel_context_set (GtkWidget  *widget,
+                               IdeContext *context)
+{
+  SymbolTreePanel *self = (SymbolTreePanel *)widget;
+  IdeBufferManager *buffer_manager;
+
+  g_assert (SYMBOL_IS_TREE_PANEL (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  if (context == NULL)
+    return;
+
+  buffer_manager = ide_context_get_buffer_manager (context);
+
+  g_signal_connect_object (buffer_manager,
+                           "buffer-saved",
+                           G_CALLBACK (symbol_tree_panel_buffer_saved),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 symbol_tree_panel_finalize (GObject *object)
 {
   SymbolTreePanel *self = (SymbolTreePanel *)object;
@@ -385,6 +424,9 @@ symbol_tree_panel_init (SymbolTreePanel *self)
                            G_CALLBACK (symbol_tree__search_entry_changed),
                            self,
                            G_CONNECT_SWAPPED);
+
+  ide_widget_set_context_handler (GTK_WIDGET (self),
+                                  symbol_tree_panel_context_set);
 }
 
 void
