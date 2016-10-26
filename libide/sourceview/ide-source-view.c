@@ -24,6 +24,7 @@
 #include <egg-animation.h>
 #include <egg-binding-group.h>
 #include <egg-counter.h>
+#include <egg-simple-popover.h>
 #include <egg-signal-group.h>
 #include <egg-widget-action-group.h>
 
@@ -45,6 +46,7 @@
 #include "history/ide-back-forward-list.h"
 #include "plugins/ide-extension-adapter.h"
 #include "plugins/ide-extension-set-adapter.h"
+#include "rename/ide-rename-provider.h"
 #include "snippets/ide-source-snippet-chunk.h"
 #include "snippets/ide-source-snippet-completion-provider.h"
 #include "snippets/ide-source-snippet-context.h"
@@ -241,6 +243,7 @@ enum {
   APPEND_TO_COUNT,
   AUTO_INDENT,
   BEGIN_MACRO,
+  BEGIN_RENAME,
   BEGIN_USER_ACTION,
   CAPTURE_MODIFIER,
   CLEAR_COUNT,
@@ -5532,6 +5535,187 @@ ide_source_view_real_select_all (IdeSourceView *self,
 }
 
 static void
+ide_source_view_rename_changed (IdeSourceView    *self,
+                                EggSimplePopover *popover)
+{
+  const gchar *text;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
+
+  text = egg_simple_popover_get_text (popover);
+  egg_simple_popover_set_ready (popover, text != NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_rename_edits_applied (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  g_autoptr(IdeSourceView) self = user_data;
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  /*
+   * The completion window can sometimes popup when performing the replacements
+   * so we manually hide that window here.
+   */
+  ide_source_view_real_hide_completion (self);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_rename_edits_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  IdeRenameProvider *provider = (IdeRenameProvider *)object;
+  g_autoptr(IdeSourceView) self = user_data;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(GPtrArray) edits = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RENAME_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (!ide_rename_provider_rename_finish (provider, result, &edits, &error))
+    {
+      /* TODO: Propagate error to UI */
+      g_warning ("%s", error->message);
+      IDE_EXIT;
+    }
+
+  g_assert (edits != NULL);
+
+  context = ide_buffer_get_context (priv->buffer);
+  buffer_manager = ide_context_get_buffer_manager (context);
+
+  ide_buffer_manager_apply_edits_async (buffer_manager,
+                                        g_steal_pointer (&edits),
+                                        NULL,
+                                        ide_source_view_rename_edits_applied,
+                                        g_steal_pointer (&self));
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_rename_activate (IdeSourceView    *self,
+                                 const gchar      *text,
+                                 EggSimplePopover *popover)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(IdeSourceLocation) location = NULL;
+  IdeRenameProvider *provider;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (text != NULL);
+  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
+
+  if (NULL == (provider = ide_buffer_get_rename_provider (priv->buffer)))
+    IDE_EXIT;
+
+  location = ide_buffer_get_insert_location (priv->buffer);
+
+  ide_rename_provider_rename_async (provider,
+                                    location,
+                                    text,
+                                    NULL,
+                                    ide_source_view_rename_edits_cb,
+                                    g_object_ref (self));
+
+  /*
+   * TODO: We should probably lock all buffers so that we can ensure
+   *       that our edit points are correct by time we get called back.
+   */
+
+  gtk_popover_popdown (GTK_POPOVER (popover));
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_begin_rename (IdeSourceView *self)
+{
+  IdeRenameProvider *provider;
+  EggSimplePopover *popover;
+  g_autofree gchar *uri = NULL;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GdkRectangle loc;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  provider = ide_buffer_get_rename_provider (IDE_BUFFER (buffer));
+
+  if (provider == NULL)
+    {
+      g_message ("Cannot rename, operation requires an IdeRenameProvider");
+      return;
+    }
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  uri = ide_buffer_get_uri (IDE_BUFFER (buffer));
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  IDE_TRACE_MSG ("Renaming symbol found at %s: %d:%d",
+                 uri,
+                 gtk_text_iter_get_line (&iter) + 1,
+                 gtk_text_iter_get_line_offset (&iter) + 1);
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &loc);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (self),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         loc.x, loc.y, &loc.x, &loc.y);
+
+  popover = g_object_new (EGG_TYPE_SIMPLE_POPOVER,
+                          "title", _("Rename symbol"),
+                          "button-text", _("Rename"),
+                          "relative-to", self,
+                          "pointing-to", &loc,
+                          NULL);
+
+  g_signal_connect_object (popover,
+                           "changed",
+                           G_CALLBACK (ide_source_view_rename_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (popover,
+                           "activate",
+                           G_CALLBACK (ide_source_view_rename_activate),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_popover_popup (GTK_POPOVER (popover));
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -5838,6 +6022,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->begin_macro = ide_source_view_real_begin_macro;
+  klass->begin_rename = ide_source_view_real_begin_rename;
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
   klass->clear_modifier = ide_source_view_real_clear_modifier;
@@ -6097,6 +6282,21 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  /**
+   * IdeSourceView::begin-rename:
+   *
+   * This signal is emitted when the source view should begin a rename
+   * operation using the #IdeRenameProvider from the underlying buffer. The
+   * cursor position will be used as the location when sending the request to
+   * the provider.
+   */
+  signals [BEGIN_RENAME] =
+    g_signal_new ("begin-rename",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, begin_rename),
+                  NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   signals [BEGIN_USER_ACTION] =
     g_signal_new_class_handler ("begin-user-action",
@@ -6632,6 +6832,12 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  binding_set = gtk_binding_set_by_class (klass);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_r,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "begin-rename", 0);
 
   /*
    * <Return> while the completion window is displayed is actually really easy

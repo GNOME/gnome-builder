@@ -297,6 +297,32 @@ struct _IdeSourceViewClass
   void (*increase_font_size)          (IdeSourceView           *self);
   void (*decrease_font_size)          (IdeSourceView           *self);
   void (*reset_font_size)             (IdeSourceView           *self);
+  void (*begin_rename)                (IdeSourceView           *self);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
+  gpointer _reserved9;
+  gpointer _reserved10;
+  gpointer _reserved11;
+  gpointer _reserved12;
+  gpointer _reserved13;
+  gpointer _reserved14;
+  gpointer _reserved15;
+  gpointer _reserved16;
+  gpointer _reserved17;
+  gpointer _reserved18;
+  gpointer _reserved19;
+  gpointer _reserved20;
+  gpointer _reserved21;
+  gpointer _reserved22;
+  gpointer _reserved23;
+  gpointer _reserved24;
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
