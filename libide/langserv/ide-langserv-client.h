@@ -33,11 +33,11 @@ struct _IdeLangservClientClass
 {
   IdeObjectClass parent_class;
 
-  void     (*notification)      (IdeLangservClient *self,
-                                 const gchar       *method,
-                                 JsonNode          *params);
-  gboolean (*supports_language) (IdeLangservClient *self,
-                                 const gchar       *language_id);
+  void     (*notification)          (IdeLangservClient *self,
+                                     const gchar       *method,
+                                     JsonNode          *params);
+  gboolean (*supports_language)     (IdeLangservClient *self,
+                                     const gchar       *language_id);
 
   gpointer _reserved1;
   gpointer _reserved2;
