@@ -187,8 +187,6 @@ symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
 
   if (IDE_IS_SYMBOL_NODE (item))
     {
-      g_autoptr(IdeSourceLocation) location = NULL;
-
       ide_symbol_node_get_location_async (IDE_SYMBOL_NODE (item),
                                           NULL,
                                           symbol_tree_builder_get_location_cb,
