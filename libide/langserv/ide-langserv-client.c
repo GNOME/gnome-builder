@@ -394,7 +394,7 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
   uri = g_file_get_uri (file);
 
   params = JCON_NEW (
-    "changes", "["
+    "changes", "[",
       "{",
         "uri", JCON_STRING (uri),
         "type", JCON_INT (FILE_CHANGE_TYPE_DELETED),
