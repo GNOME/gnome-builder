@@ -574,7 +574,7 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
                             NULL);
 
       g_hash_table_insert (priv->diagnostics_by_file,
-                           g_file_new_for_uri (uri),
+                           g_steal_pointer (&file),
                            ide_langserv_client_translate_diagnostics (self, ifile, json_diagnostics));
     }
 
