@@ -285,6 +285,14 @@
                 <property name="title" translatable="yes" context="shortcut window">Reindent line</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;r</property>
+                <property name="title" translatable="yes" context="shortcut window">Rename symbol</property>
+                <property name="subtitle" translatable="yes" context="shortcut window">Requires semantic language support</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
