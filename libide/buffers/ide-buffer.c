@@ -2745,3 +2745,47 @@ ide_buffer_get_uri (IdeBuffer *self)
 
   return g_file_get_uri (gfile);
 }
+
+/**
+ * ide_buffer_get_iter_location:
+ *
+ * Gets the location of the iter as an #IdeSourceLocation.
+ *
+ * Returns: (transfer full): An #IdeSourceLocation
+ */
+IdeSourceLocation *
+ide_buffer_get_iter_location (IdeBuffer         *self,
+                              const GtkTextIter *iter)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+  g_return_val_if_fail (iter != NULL, NULL);
+  g_return_val_if_fail (gtk_text_iter_get_buffer (iter) == GTK_TEXT_BUFFER (self), NULL);
+
+  return ide_source_location_new (priv->file,
+                                  gtk_text_iter_get_line (iter),
+                                  gtk_text_iter_get_line_offset (iter),
+                                  gtk_text_iter_get_offset (iter));
+}
+
+/**
+ * ide_buffer_get_insert_location:
+ *
+ * Gets the location of the insert mark as an #IdeSourceLocation.
+ *
+ * Returns: (transfer full): An #IdeSourceLocation
+ */
+IdeSourceLocation *
+ide_buffer_get_insert_location (IdeBuffer *self)
+{
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), &iter, mark);
+
+  return ide_buffer_get_iter_location (self, &iter);
+}
