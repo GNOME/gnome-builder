@@ -90,6 +90,7 @@ libide_1_0_la_public_headers =                            \
 	preferences/ide-preferences-spin-button.h         \
 	preferences/ide-preferences-switch.h              \
 	preferences/ide-preferences.h                     \
+	projects/ide-project-edit.h                       \
 	projects/ide-project-file.h                       \
 	projects/ide-project-files.h                      \
 	projects/ide-project-info.h                       \
@@ -97,6 +98,7 @@ libide_1_0_la_public_headers =                            \
 	projects/ide-project-miner.h                      \
 	projects/ide-project.h                            \
 	projects/ide-recent-projects.h                    \
+	rename/ide-rename-provider.h                      \
 	runner/ide-run-button.h                           \
 	runner/ide-run-manager.h                          \
 	runner/ide-runner.h                               \
@@ -266,6 +268,7 @@ libide_1_0_la_public_sources =                            \
 	preferences/ide-preferences-spin-button.c         \
 	preferences/ide-preferences-switch.c              \
 	preferences/ide-preferences.c                     \
+	projects/ide-project-edit.c                       \
 	projects/ide-project-file.c                       \
 	projects/ide-project-files.c                      \
 	projects/ide-project-info.c                       \
@@ -273,6 +276,7 @@ libide_1_0_la_public_sources =                            \
 	projects/ide-project-miner.c                      \
 	projects/ide-project.c                            \
 	projects/ide-recent-projects.c                    \
+	rename/ide-rename-provider.c                      \
 	runner/ide-run-button.c                           \
 	runner/ide-run-manager.c                          \
 	runner/ide-runner.c                               \
@@ -405,6 +409,7 @@ libide_1_0_la_SOURCES =                                   \
 	modelines/modeline-parser.h                       \
 	plugins/ide-extension-util.c                      \
 	plugins/ide-extension-util.h                      \
+	projects/ide-project-edit-private.h               \
 	preferences/ide-preferences-bin-private.h         \
 	preferences/ide-preferences-bin.c                 \
 	preferences/ide-preferences-builtin.c             \
