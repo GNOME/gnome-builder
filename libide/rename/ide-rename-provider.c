@@ -134,7 +134,7 @@ ide_rename_provider_rename_finish (IdeRenameProvider  *self,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_RENAME_PROVIDER (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   ret = IDE_RENAME_PROVIDER_GET_IFACE (self)->rename_finish (self, result, edits, error);
