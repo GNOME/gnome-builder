@@ -106,8 +106,20 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
           icon_name = "lang-variable-symbolic";
           break;
 
+        case IDE_SYMBOL_ARRAY:
+        case IDE_SYMBOL_BOOLEAN:
+        case IDE_SYMBOL_CONSTANT:
+        case IDE_SYMBOL_CONSTRUCTOR:
+        case IDE_SYMBOL_FILE:
         case IDE_SYMBOL_HEADER:
+        case IDE_SYMBOL_INTERFACE:
+        case IDE_SYMBOL_MODULE:
+        case IDE_SYMBOL_NAMESPACE:
+        case IDE_SYMBOL_NUMBER:
         case IDE_SYMBOL_NONE:
+        case IDE_SYMBOL_PACKAGE:
+        case IDE_SYMBOL_PROPERTY:
+        case IDE_SYMBOL_STRING:
         default:
           icon_name = NULL;
           break;
