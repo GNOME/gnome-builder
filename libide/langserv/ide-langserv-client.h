@@ -38,6 +38,9 @@ struct _IdeLangservClientClass
                                      JsonNode          *params);
   gboolean (*supports_language)     (IdeLangservClient *self,
                                      const gchar       *language_id);
+  void     (*published_diagnostics) (IdeLangservClient *self,
+                                     GFile             *file,
+                                     IdeDiagnostics    *diagnostics);
 
   gpointer _reserved1;
   gpointer _reserved2;

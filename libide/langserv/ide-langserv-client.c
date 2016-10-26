@@ -68,6 +68,7 @@ enum {
 };
 
 enum {
+  PUBLISHED_DIAGNOSTICS,
   NOTIFICATION,
   SUPPORTS_LANGUAGE,
   N_SIGNALS
@@ -564,6 +565,7 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
     {
       g_autoptr(IdeFile) ifile = NULL;
       g_autoptr(GFile) file = NULL;
+      g_autoptr(IdeDiagnostics) diagnostics = NULL;
 
       IDE_TRACE_MSG ("Diagnostics received for %s", uri);
 
@@ -572,10 +574,13 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
                             "file", file,
                             "context", ide_object_get_context (IDE_OBJECT (self)),
                             NULL);
+      diagnostics = ide_langserv_client_translate_diagnostics (self, ifile, json_diagnostics);
+
+      g_signal_emit (self, signals [PUBLISHED_DIAGNOSTICS], 0, file, diagnostics);
 
       g_hash_table_insert (priv->diagnostics_by_file,
                            g_steal_pointer (&file),
-                           ide_langserv_client_translate_diagnostics (self, ifile, json_diagnostics));
+                           g_steal_pointer (&diagnostics));
     }
 
   IDE_EXIT;
@@ -745,6 +750,18 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
                   G_TYPE_BOOLEAN,
                   1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  signals [PUBLISHED_DIAGNOSTICS] =
+    g_signal_new ("published-diagnostics",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeLangservClientClass, published_diagnostics),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_FILE,
+                  IDE_TYPE_DIAGNOSTICS);
+
 }
 
 static void
