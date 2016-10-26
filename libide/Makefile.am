@@ -72,6 +72,7 @@ libide_1_0_la_public_headers =                            \
 	langserv/ide-langserv-client.h                    \
 	langserv/ide-langserv-completion-provider.h       \
 	langserv/ide-langserv-diagnostic-provider.h       \
+	langserv/ide-langserv-rename-provider.h           \
 	langserv/ide-langserv-symbol-node.h               \
 	langserv/ide-langserv-symbol-resolver.h           \
 	langserv/ide-langserv-symbol-tree.h               \
@@ -249,6 +250,7 @@ libide_1_0_la_public_sources =                            \
 	langserv/ide-langserv-client.c                    \
 	langserv/ide-langserv-completion-provider.c       \
 	langserv/ide-langserv-diagnostic-provider.c       \
+	langserv/ide-langserv-rename-provider.c           \
 	langserv/ide-langserv-symbol-node.c               \
 	langserv/ide-langserv-symbol-node-private.h       \
 	langserv/ide-langserv-symbol-resolver.c           \

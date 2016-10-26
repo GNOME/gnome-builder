@@ -80,6 +80,7 @@ G_BEGIN_DECLS
 #include "langserv/ide-langserv-client.h"
 #include "langserv/ide-langserv-completion-provider.h"
 #include "langserv/ide-langserv-diagnostic-provider.h"
+#include "langserv/ide-langserv-rename-provider.h"
 #include "langserv/ide-langserv-symbol-resolver.h"
 #include "local/ide-local-device.h"
 #include "logging/ide-log.h"
