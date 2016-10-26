@@ -149,10 +149,16 @@ class RustCompletionProvider(Ide.LangservCompletionProvider):
         super().__init__(*args, **kwargs)
         self.connect('notify::context', lambda *_: RustService.bind_client(self))
 
+class RustRenameProvider(Ide.LangservRenameProvider):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.connect('notify::context', lambda *_: RustService.bind_client(self))
+
 class RustSymbolResolver(Ide.LangservSymbolResolver):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.connect('notify::context', lambda *_: RustService.bind_client(self))
+
 
 """
 class RustHighlighter(Ide.LangservHighlighter):
