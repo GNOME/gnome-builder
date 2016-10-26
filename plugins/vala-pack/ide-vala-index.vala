@@ -477,7 +477,7 @@ namespace Ide
 					Vala.CodeContext.pop ();
 				}
 
-				this.find_symbol_at.callback ();
+				GLib.Idle.add (this.find_symbol_at.callback);
 			});
 
 			yield;
