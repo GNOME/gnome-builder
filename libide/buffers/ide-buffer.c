@@ -39,6 +39,7 @@
 #include "highlighting/ide-highlight-engine.h"
 #include "highlighting/ide-highlighter.h"
 #include "plugins/ide-extension-adapter.h"
+#include "rename/ide-rename-provider.h"
 #include "sourceview/ide-source-iter.h"
 #include "sourceview/ide-source-style-scheme.h"
 #include "symbols/ide-symbol-resolver.h"
@@ -74,6 +75,7 @@ typedef struct
   IdeBufferChangeMonitor *change_monitor;
   IdeDiagnostician       *diagnostician;
   IdeHighlightEngine     *highlight_engine;
+  IdeExtensionAdapter    *rename_provider_adapter;
   IdeExtensionAdapter    *symbol_resolver_adapter;
   gchar                  *title;
 
@@ -985,7 +987,10 @@ ide_buffer_notify_language (IdeBuffer  *self,
   if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self))))
     lang_id = gtk_source_language_get_id (language);
 
-  if (priv->symbol_resolver_adapter)
+  if (priv->rename_provider_adapter != NULL)
+    ide_extension_adapter_set_value (priv->rename_provider_adapter, lang_id);
+
+  if (priv->symbol_resolver_adapter != NULL)
     ide_extension_adapter_set_value (priv->symbol_resolver_adapter, lang_id);
 
   ide_diagnostician_set_language (priv->diagnostician, language);
@@ -1227,6 +1232,12 @@ ide_buffer_constructed (GObject *object)
 
   priv->highlight_engine = ide_highlight_engine_new (self);
 
+  priv->rename_provider_adapter = ide_extension_adapter_new (priv->context,
+                                                             NULL,
+                                                             IDE_TYPE_RENAME_PROVIDER,
+                                                             "Rename-Provider-Languages",
+                                                             NULL);
+
   priv->symbol_resolver_adapter = ide_extension_adapter_new (priv->context,
                                                              NULL,
                                                              IDE_TYPE_SYMBOL_RESOLVER,
@@ -1294,6 +1305,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_object (&priv->diagnostician);
   g_clear_object (&priv->file);
   g_clear_object (&priv->highlight_engine);
+  g_clear_object (&priv->rename_provider_adapter);
   g_clear_object (&priv->symbol_resolver_adapter);
 
   if (priv->context != NULL)
@@ -2540,6 +2552,7 @@ ide_buffer_reclaim_timeout (gpointer data)
 
   priv->reclamation_handler = 0;
 
+  g_clear_object (&priv->rename_provider_adapter);
   g_clear_object (&priv->symbol_resolver_adapter);
 
   buffer_manager = ide_context_get_buffer_manager (priv->context);
@@ -2635,6 +2648,27 @@ ide_buffer_get_selection_bounds (IdeBuffer   *self,
       mark = gtk_text_buffer_get_selection_bound (GTK_TEXT_BUFFER (self));
       gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), selection, mark);
     }
+}
+
+/**
+ * ide_buffer_get_rename_provider:
+ *
+ * Gets the #IdeRenameProvider for this buffer, or %NULL.
+ *
+ * Returns: (nullable) (transfer none): An #IdeRenameProvider or %NULL if there
+ *   is no #IdeRenameProvider that can statisfy the buffer.
+ */
+IdeRenameProvider *
+ide_buffer_get_rename_provider (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  if (priv->rename_provider_adapter != NULL)
+    return ide_extension_adapter_get_extension (priv->rename_provider_adapter);
+
+  return NULL;
 }
 
 /**
