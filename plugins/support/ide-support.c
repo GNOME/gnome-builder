@@ -54,6 +54,7 @@ ide_get_support_log (void)
   gchar *tmp;
   gchar **env;
   guint i;
+  GdkDisplay *display;
   guint n_monitors;
 
   str = g_string_new (NULL);
@@ -106,17 +107,20 @@ ide_get_support_log (void)
   /*
    * Log display server information.
    */
+  display = gdk_display_get_default ();
+
   g_string_append (str, "[runtime.display]\n");
-  g_string_append_printf (str, "name = \"%s\"\n",
-                          gdk_display_get_name (gdk_display_get_default ()));
-  n_monitors = gdk_screen_get_n_monitors (gdk_screen_get_default ());
+  g_string_append_printf (str, "name = \"%s\"\n", gdk_display_get_name (display));
+
+  n_monitors = gdk_display_get_n_monitors (display);
   g_string_append_printf (str, "n_monitors = %u\n", n_monitors);
   for (i = 0; i < n_monitors; i++)
     {
+      GdkMonitor *monitor;
       GdkRectangle geom;
 
-      gdk_screen_get_monitor_geometry (gdk_screen_get_default (),
-                                       i, &geom);
+      monitor = gdk_display_get_monitor (display, i);
+      gdk_monitor_get_geometry (monitor, &geom);
       g_string_append_printf (str, "geometry[%u] = [%u,%u]\n",
                               i, geom.width, geom.height);
     }
