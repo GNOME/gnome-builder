@@ -213,15 +213,13 @@ ide_tree_menu_position_func (GtkMenu  *menu,
   GdkPoint *loc = user_data;
   GtkRequisition req;
   GdkRectangle rect;
-  GdkScreen *screen;
-  gint monitor;
+  GdkMonitor *monitor;
 
   g_return_if_fail (loc != NULL);
 
   gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &req);
-  screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor = gdk_screen_get_monitor_at_point (screen, *x, *y);
-  gdk_screen_get_monitor_geometry (screen, monitor, &rect);
+  monitor = gdk_display_get_monitor_at_point (gdk_display_get_default (), *x, *y);
+  gdk_monitor_get_geometry (monitor, &rect);
 
   if ((loc->x != -1) && (loc->y != -1))
     {
