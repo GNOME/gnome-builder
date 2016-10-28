@@ -302,9 +302,12 @@ ide_editor_perspective_finalize (GObject *object)
 }
 
 static void
-ide_editor_perspective_view_weak_cb (IdeEditorPerspective *self,
-                                     IdeLayoutView        *view)
+ide_editor_perspective_view_destroyed (IdeEditorPerspective *self,
+                                       IdeLayoutView        *view)
 {
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (IDE_IS_EDITOR_VIEW (view));
+
   g_signal_emit (self, signals [VIEW_REMOVED], 0, view);
 }
 
@@ -323,10 +326,11 @@ ide_editor_perspective_add (GtkContainer *container,
 
       last_focus = ide_layout_grid_get_last_focus (self->grid);
       gtk_container_add (GTK_CONTAINER (last_focus), widget);
-      g_object_weak_ref (G_OBJECT (widget),
-                         (GWeakNotify)ide_editor_perspective_view_weak_cb,
-                         container);
-
+      g_signal_connect_object (widget,
+                               "destroy",
+                               G_CALLBACK (ide_editor_perspective_view_destroyed),
+                               self,
+                               G_CONNECT_SWAPPED);
       g_signal_emit (self, signals [VIEW_ADDED], 0, widget);
       return;
     }
