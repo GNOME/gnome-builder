@@ -20,10 +20,12 @@
 
 #include "egg-counter.h"
 
-#include "ide-diagnostic.h"
 #include "ide-internal.h"
-#include "ide-source-location.h"
-#include "ide-source-range.h"
+
+#include "files/ide-file.h"
+#include "diagnostics/ide-diagnostic.h"
+#include "diagnostics/ide-source-location.h"
+#include "diagnostics/ide-source-range.h"
 
 G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic, ide_diagnostic_ref, ide_diagnostic_unref)
 
@@ -363,4 +365,29 @@ ide_diagnostic_compare (const IdeDiagnostic *a,
     }
 
   return g_strcmp0 (a->text, b->text);
+}
+
+/**
+ * ide_diagnostic_get_file:
+ *
+ * This is a helper to simplify the process of determining what file
+ * the diagnostic is within. It is equivalent to getting the source
+ * location and looking at the file.
+ *
+ * Returns: (nullable) (transfer none): A #GFile or %NULL.
+ */
+GFile *
+ide_diagnostic_get_file (IdeDiagnostic *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+
+  if (self->location != NULL)
+    {
+      IdeFile *file = ide_source_location_get_file (self->location);
+
+      if (file != NULL)
+        return ide_file_get_file (file);
+    }
+
+  return NULL;
 }
