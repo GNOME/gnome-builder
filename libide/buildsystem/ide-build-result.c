@@ -212,6 +212,13 @@ ide_build_result_log_stdout (IdeBuildResult *self,
 }
 
 void
+ide_build_result_log_stdout_literal (IdeBuildResult *self,
+                                     const gchar    *str)
+{
+  ide_build_result_log_stdout (self, "%s", str);
+}
+
+void
 ide_build_result_log_stderr (IdeBuildResult *self,
                              const gchar    *format,
                              ...)
@@ -235,6 +242,13 @@ ide_build_result_log_stderr (IdeBuildResult *self,
                              args);
       va_end (args);
     }
+}
+
+void
+ide_build_result_log_stderr_literal (IdeBuildResult *self,
+                                     const gchar    *str)
+{
+  ide_build_result_log_stderr (self, "%s", str);
 }
 
 /**

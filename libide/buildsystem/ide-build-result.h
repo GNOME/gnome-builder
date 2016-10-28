@@ -79,6 +79,10 @@ void           ide_build_result_log_stdout        (IdeBuildResult *result,
 void           ide_build_result_log_stderr        (IdeBuildResult *result,
                                                    const gchar    *format,
                                                    ...) G_GNUC_PRINTF (2, 3);
+void           ide_build_result_log_stdout_literal(IdeBuildResult *result,
+                                                   const gchar    *str);
+void           ide_build_result_log_stderr_literal(IdeBuildResult *result,
+                                                   const gchar    *str);
 
 G_END_DECLS
 
