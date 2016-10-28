@@ -34,8 +34,8 @@ typedef struct
 {
   IdeSubprocessLauncher *launcher;
   IdeSubprocess *subprocess;
-  guint supervising : 1;
   GTimeVal last_spawn_time;
+  guint supervising : 1;
 } IdeSubprocessSupervisorPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSubprocessSupervisor, ide_subprocess_supervisor, G_TYPE_OBJECT)
