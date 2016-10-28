@@ -139,8 +139,7 @@ class RustService(Ide.Object, Ide.Service):
         self.bind_property('client', provider, 'client', GObject.BindingFlags.DEFAULT)
 
 class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def do_load(self):
         RustService.bind_client(self)
 
 class RustCompletionProvider(Ide.LangservCompletionProvider):

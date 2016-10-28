@@ -732,6 +732,8 @@ ide_diagnostics_manager_extension_added (IdeExtensionSetAdapter *adapter,
                            self,
                            G_CONNECT_SWAPPED);
 
+  ide_diagnostic_provider_load (provider);
+
   ide_diagnostics_group_queue_diagnose (group, self);
 
   IDE_EXIT;
@@ -991,6 +993,10 @@ ide_diagnostics_manager_buffer_loaded (IdeDiagnosticsManager *self,
                            G_CALLBACK (ide_diagnostics_manager_extension_removed),
                            self,
                            0);
+
+  ide_extension_set_adapter_foreach (group->adapter,
+                                     ide_diagnostics_manager_extension_added,
+                                     self);
 
   ide_diagnostics_group_queue_diagnose (group, self);
 

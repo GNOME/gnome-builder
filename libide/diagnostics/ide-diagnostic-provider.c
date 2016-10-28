@@ -95,3 +95,12 @@ ide_diagnostic_provider_emit_invalidated (IdeDiagnosticProvider *self)
 
   g_signal_emit (self, signals [INVALIDATED], 0);
 }
+
+void
+ide_diagnostic_provider_load (IdeDiagnosticProvider *self)
+{
+  g_return_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (self));
+
+  if (IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->load)
+    IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->load (self);
+}
