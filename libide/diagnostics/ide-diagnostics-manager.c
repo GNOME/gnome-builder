@@ -491,7 +491,7 @@ ide_diagnostics_manager_begin_diagnose (gpointer data)
     {
       IdeDiagnosticsGroup *group = value;
 
-      if (group->needs_diagnose)
+      if (group->needs_diagnose && group->adapter != NULL)
         ide_diagnostics_group_diagnose (group, self);
     }
 
