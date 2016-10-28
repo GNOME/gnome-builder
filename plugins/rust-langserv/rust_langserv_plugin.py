@@ -136,7 +136,7 @@ class RustService(Ide.Object, Ide.Service):
         """
         context = provider.get_context()
         self = context.get_service_typed(RustService)
-        self.bind_property('client', provider, 'client', GObject.BindingFlags.DEFAULT)
+        self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
 class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
     def do_load(self):
