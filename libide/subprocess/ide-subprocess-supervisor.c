@@ -371,11 +371,11 @@ ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
       if (subprocess != NULL)
         {
           g_get_current_time (&priv->last_spawn_time);
-          g_signal_emit (self, signals [SPAWNED], 0, subprocess);
           ide_subprocess_wait_async (priv->subprocess,
                                      NULL,
                                      ide_subprocess_supervisor_wait_cb,
                                      g_object_ref (self));
+          g_signal_emit (self, signals [SPAWNED], 0, subprocess);
         }
     }
 }
