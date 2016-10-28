@@ -1405,6 +1405,8 @@ ide_source_view__completion_provider_added (IdeExtensionSetAdapter *adapter,
   gtk_source_completion_add_provider (completion,
                                       GTK_SOURCE_COMPLETION_PROVIDER (extension),
                                       NULL);
+
+  ide_completion_provider_load (IDE_COMPLETION_PROVIDER (extension));
 }
 
 static void

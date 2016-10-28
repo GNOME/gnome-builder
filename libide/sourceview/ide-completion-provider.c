@@ -113,3 +113,12 @@ ide_completion_provider_context_current_word (GtkSourceCompletionContext *contex
 
   return gtk_text_iter_get_slice (&begin, &end);
 }
+
+void
+ide_completion_provider_load (IdeCompletionProvider *self)
+{
+  g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (self));
+
+  if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load)
+    IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load (self);
+}

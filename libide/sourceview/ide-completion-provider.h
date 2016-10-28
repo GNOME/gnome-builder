@@ -25,10 +25,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_COMPLETION_PROVIDER             (ide_completion_provider_get_type())
-#define IDE_COMPLETION_PROVIDER(o)               (G_TYPE_CHECK_INSTANCE_CAST((o),    IDE_TYPE_COMPLETION_PROVIDER, IdeCompletionProvider))
-#define IDE_IS_COMPLETION_PROVIDER(o)            (G_TYPE_CHECK_INSTANCE_TYPE((o),    IDE_TYPE_COMPLETION_PROVIDER))
-#define IDE_COMPLETION_PROVIDER_GET_INTERFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE((o), IDE_TYPE_COMPLETION_PROVIDER, IdeCompletionProviderIface))
+#define IDE_TYPE_COMPLETION_PROVIDER         (ide_completion_provider_get_type())
+#define IDE_COMPLETION_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST((o),    IDE_TYPE_COMPLETION_PROVIDER, IdeCompletionProvider))
+#define IDE_IS_COMPLETION_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE((o),    IDE_TYPE_COMPLETION_PROVIDER))
+#define IDE_COMPLETION_PROVIDER_GET_IFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE((o), IDE_TYPE_COMPLETION_PROVIDER, IdeCompletionProviderInterface))
 
 typedef struct _IdeCompletionProvider          IdeCompletionProvider;
 typedef struct _IdeCompletionProviderInterface IdeCompletionProviderInterface;
@@ -40,12 +40,15 @@ struct _IdeCompletionProviderInterface
   /* Pacify Vala */
   void (*set_context) (IdeCompletionProvider *self,
                        IdeContext            *context);
+
+  void (*load)        (IdeCompletionProvider *self);
 };
 
 GType     ide_completion_provider_get_type                     (void);
 gboolean  ide_completion_provider_context_in_comment           (GtkSourceCompletionContext *context);
 gboolean  ide_completion_provider_context_in_comment_or_string (GtkSourceCompletionContext *context);
 gchar    *ide_completion_provider_context_current_word         (GtkSourceCompletionContext *context);
+void      ide_completion_provider_load                         (IdeCompletionProvider      *self);
 
 G_END_DECLS
 

@@ -143,8 +143,7 @@ class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
         RustService.bind_client(self)
 
 class RustCompletionProvider(Ide.LangservCompletionProvider):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def do_load(self):
         RustService.bind_client(self)
 
 class RustRenameProvider(Ide.LangservRenameProvider):
