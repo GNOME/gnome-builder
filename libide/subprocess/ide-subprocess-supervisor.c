@@ -60,6 +60,12 @@ ide_subprocess_supervisor_reset (IdeSubprocessSupervisor *self)
     {
       g_autoptr(IdeSubprocess) subprocess = g_steal_pointer (&priv->subprocess);
 
+      /*
+       * We steal the subprocess first before possibly forcing exit from the
+       * subprocess so that when ide_subprocess_supervisor_wait_cb() is called
+       * it will not be able to match on (priv->subprocess == subprocess).
+       */
+
       if (!ide_subprocess_get_if_exited (subprocess) &&
           !ide_subprocess_get_if_signaled (subprocess))
         ide_subprocess_force_exit (subprocess);
@@ -326,6 +332,14 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
                      ide_subprocess_get_term_signal (subprocess));
   }
 #endif
+
+  /*
+   * If we end up here in response to ide_subprocess_supervisor_reset() force
+   * exiting the process, we won't successfully match
+   * (priv->subprocess==subprocess) and therefore will not restart the process
+   * immediately (allowing the caller of ide_subprocess_supervisor_reset() to
+   * complete the operation.
+   */
 
   if (priv->subprocess == subprocess)
     {
