@@ -103,7 +103,18 @@ ide_builder_real_build_finish (IdeBuilder    *self,
 
 /**
  * ide_builder_build_async:
- * @result: (out) (transfer none): A location for an #IdeBuildResult.
+ * @self: An #IdeBuilder
+ * @flags: build flags for the build
+ * @result: (out) (transfer full) (nullable): A location for an #IdeBuildResult
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: A callback to complete the async operation
+ * @user_data: user data for @callback
+ *
+ * This function requests the #IdeBuilder to asynchronously begin building
+ * the project using the flags specified. By default, the builders will try
+ * to perform incremental builds.
+ *
+ * See ide_builder_build_finish() to complete the request.
  */
 void
 ide_builder_build_async (IdeBuilder           *builder,
@@ -222,6 +233,19 @@ ide_builder_init (IdeBuilder *self)
 {
 }
 
+/**
+ * ide_builder_install_async:
+ * @self: An #IdeBuilder
+ * @result: (out) (transfer full) (nullable): A location for an #IdeBuildResult
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: A callback to complete the async operation
+ * @user_data: user data for @callback
+ *
+ * This function requests the #IdeBuilder to asynchronously begin installing
+ * the project.
+ *
+ * See ide_builder_install_finish() to complete the request.
+ */
 void
 ide_builder_install_async (IdeBuilder           *self,
                            IdeBuildResult      **result,
