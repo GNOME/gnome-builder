@@ -89,7 +89,9 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # can be navigated to quickly.
         self.mine(file, prepend=True)
 
-    def post(self, items, prepend=False):
+    def _post_from_main(self, args):
+        items, prepend = args
+
         context = self.workbench.get_context()
         vcs = context.get_vcs()
 
@@ -162,7 +164,7 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
             if item.props.file and not skip:
                 items.append(item)
 
-            GLib.timeout_add(0, lambda: self.post(items, prepend=prepend))
+            GLib.idle_add(self._post_from_main, (items, prepend))
 
         threading.Thread(target=communicate, args=[p], name='todo-thread').start()
 
