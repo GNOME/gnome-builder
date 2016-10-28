@@ -138,18 +138,22 @@ class RustService(Ide.Object, Ide.Service):
         self.bind_property('client', provider, 'client', GObject.BindingFlags.DEFAULT)
 
 class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
-    def do_set_context(self, context):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         RustService.bind_client(self)
 
 class RustCompletionProvider(Ide.LangservCompletionProvider):
-    def do_set_context(self, context):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         RustService.bind_client(self)
 
 class RustRenameProvider(Ide.LangservRenameProvider):
-    def do_set_context(self, context):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         RustService.bind_client(self)
 
 class RustSymbolResolver(Ide.LangservSymbolResolver):
-    def do_set_context(self, context):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         RustService.bind_client(self)
 
