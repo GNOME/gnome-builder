@@ -36,14 +36,15 @@ from gi.repository import GtkSource
 from gi.repository import Ide
 
 class RustService(Ide.Object, Ide.Service):
-    client = None
 
-    __gsignals__ = {
-        # This signal is emitted whenever the `rls` has restarted. This happens
-        # at the start of the process as well as when the rls process crashes
-        # and we need to reload things.
-        'client-changed': (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (Ide.LangservClient,)),
-    }
+    @GObject.Property(type=Ide.LangservClient)
+    def client(self):
+        return self._client
+
+    @client.setter
+    def client(self, value):
+        self._client = value
+        self.notify('client')
 
     def do_start(self):
         """
@@ -87,14 +88,13 @@ class RustService(Ide.Object, Ide.Service):
         stdout = subprocess.get_stdout_pipe()
         io_stream = Gio.SimpleIOStream.new(stdout, stdin)
 
-        if self.client:
-            self.client.stop()
+        if self._client:
+            self._client.stop()
 
-        self.client = Ide.LangservClient.new(self.get_context(), io_stream)
-        self.client.add_language('rust')
-        self.client.start()
-
-        self.emit('client-changed', self.client)
+        self._client = Ide.LangservClient.new(self.get_context(), io_stream)
+        self._client.add_language('rust')
+        self._client.start()
+        self.notify('client')
 
     def _create_launcher(self):
         """
@@ -135,34 +135,21 @@ class RustService(Ide.Object, Ide.Service):
         """
         context = provider.get_context()
         self = context.get_service_typed(RustService)
-        self.connect('client-changed', lambda _,client: provider.set_client(client))
-        if self.client is not None:
-            provider.set_client(self.client)
+        self.bind_property('client', provider, 'client', GObject.BindingFlags.DEFAULT)
 
 class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.connect('notify::context', lambda *_: RustService.bind_client(self))
+    def do_set_context(self, context):
+        RustService.bind_client(self)
 
 class RustCompletionProvider(Ide.LangservCompletionProvider):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.connect('notify::context', lambda *_: RustService.bind_client(self))
+    def do_set_context(self, context):
+        RustService.bind_client(self)
 
 class RustRenameProvider(Ide.LangservRenameProvider):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.connect('notify::context', lambda *_: RustService.bind_client(self))
+    def do_set_context(self, context):
+        RustService.bind_client(self)
 
 class RustSymbolResolver(Ide.LangservSymbolResolver):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.connect('notify::context', lambda *_: RustService.bind_client(self))
+    def do_set_context(self, context):
+        RustService.bind_client(self)
 
-
-"""
-class RustHighlighter(Ide.LangservHighlighter):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.connect('notify::context', lambda *_: RustService.bind_client(self))
-"""
