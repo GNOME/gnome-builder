@@ -276,7 +276,12 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
           else
             full_label = g_strdup (label);
 
-          item = gtk_source_completion_item_new (full_label, label, NULL, NULL);
+          //item = gtk_source_completion_item_new (full_label, label, NULL, NULL);
+          item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
+                               "label", full_label,
+                               "text", label,
+                               NULL);
+
           list = g_list_prepend (list, g_steal_pointer (&item));
         }
     }
