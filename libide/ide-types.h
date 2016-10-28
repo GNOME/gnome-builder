@@ -53,12 +53,9 @@ typedef struct _IdeDeviceManager               IdeDeviceManager;
 typedef struct _IdeDeviceProvider              IdeDeviceProvider;
 
 typedef struct _IdeDiagnostic                  IdeDiagnostic;
-
-typedef struct _IdeDiagnostics                 IdeDiagnostics;
-
-typedef struct _IdeDiagnostician               IdeDiagnostician;
-
 typedef struct _IdeDiagnosticProvider          IdeDiagnosticProvider;
+typedef struct _IdeDiagnostics                 IdeDiagnostics;
+typedef struct _IdeDiagnosticsManager          IdeDiagnosticsManager;
 
 typedef struct _IdeEnvironment                 IdeEnvironment;
 typedef struct _IdeEnvironmentVariable         IdeEnvironmentVariable;

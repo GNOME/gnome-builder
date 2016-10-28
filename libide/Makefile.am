@@ -47,7 +47,7 @@ libide_1_0_la_public_headers =                            \
 	devices/ide-device.h                              \
 	diagnostics/ide-diagnostic-provider.h             \
 	diagnostics/ide-diagnostic.h                      \
-	diagnostics/ide-diagnostician.h                   \
+	diagnostics/ide-diagnostics-manager.h             \
 	diagnostics/ide-diagnostics.h                     \
 	diagnostics/ide-fixit.h                           \
 	diagnostics/ide-source-location.h                 \
@@ -219,7 +219,7 @@ libide_1_0_la_public_sources =                            \
 	devices/ide-device.c                              \
 	diagnostics/ide-diagnostic-provider.c             \
 	diagnostics/ide-diagnostic.c                      \
-	diagnostics/ide-diagnostician.c                   \
+	diagnostics/ide-diagnostics-manager.c             \
 	diagnostics/ide-diagnostics.c                     \
 	diagnostics/ide-fixit.c                           \
 	diagnostics/ide-source-location.c                 \

@@ -34,6 +34,7 @@
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-configuration-manager.h"
+#include "diagnostics/ide-diagnostics-manager.h"
 #include "devices/ide-device-manager.h"
 #include "doap/ide-doap.h"
 #include "history/ide-back-forward-list-private.h"
@@ -65,6 +66,7 @@ struct _IdeContext
   IdeBuildManager          *build_manager;
   IdeBuildSystem           *build_system;
   IdeConfigurationManager  *configuration_manager;
+  IdeDiagnosticsManager    *diagnostics_manager;
   IdeDeviceManager         *device_manager;
   IdeDoap                  *doap;
   GtkRecentManager         *recent_manager;
@@ -835,6 +837,10 @@ ide_context_init (IdeContext *self)
                                       "context", self,
                                       NULL);
 
+  self->diagnostics_manager = g_object_new (IDE_TYPE_DIAGNOSTICS_MANAGER,
+                                            "context", self,
+                                            NULL);
+
   self->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
                                        "context", self,
                                        NULL);
@@ -1515,6 +1521,27 @@ ide_context_init_configuration_manager (gpointer             source_object,
 }
 
 static void
+ide_context_init_diagnostics_manager (gpointer             source_object,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = NULL;
+  IdeContext *self = source_object;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  if (!g_initable_init (G_INITABLE (self->diagnostics_manager), cancellable, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_loaded (gpointer             source_object,
                          GCancellable        *cancellable,
                          GAsyncReadyCallback  callback,
@@ -1560,6 +1587,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_search_engine,
                         ide_context_init_runtimes,
                         ide_context_init_configuration_manager,
+                        ide_context_init_diagnostics_manager,
                         ide_context_init_loaded,
                         NULL);
 }
@@ -2238,4 +2266,19 @@ ide_context_get_transfer_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->transfer_manager;
+}
+
+/**
+ * ide_context_get_diagnostics_manager:
+ *
+ * Gets the #IdeDiagnosticsManager for the context.
+ *
+ * Returns: (transfer none): An #IdeDiagnosticsManager.
+ */
+IdeDiagnosticsManager *
+ide_context_get_diagnostics_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->diagnostics_manager;
 }

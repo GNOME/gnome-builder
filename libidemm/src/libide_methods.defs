@@ -2047,47 +2047,6 @@
 
 
 
-;; From ide-diagnostician.h
-
-(define-method get_language
-  (of-object "IdeDiagnostician")
-  (c-name "ide_diagnostician_get_language")
-  (return-type "GtkSourceLanguage*")
-)
-
-(define-method set_language
-  (of-object "IdeDiagnostician")
-  (c-name "ide_diagnostician_set_language")
-  (return-type "none")
-  (parameters
-    '("GtkSourceLanguage*" "language")
-  )
-)
-
-(define-method diagnose_async
-  (of-object "IdeDiagnostician")
-  (c-name "ide_diagnostician_diagnose_async")
-  (return-type "none")
-  (parameters
-    '("IdeFile*" "file")
-    '("GCancellable*" "cancellable")
-    '("GAsyncReadyCallback" "callback")
-    '("gpointer" "user_data")
-  )
-)
-
-(define-method diagnose_finish
-  (of-object "IdeDiagnostician")
-  (c-name "ide_diagnostician_diagnose_finish")
-  (return-type "IdeDiagnostics*")
-  (parameters
-    '("GAsyncResult*" "result")
-    '("GError**" "error")
-  )
-)
-
-
-
 ;; From ide-diagnostic-provider.h
 
 (define-method diagnose_async

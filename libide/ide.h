@@ -52,7 +52,7 @@ G_BEGIN_DECLS
 #include "devices/ide-device.h"
 #include "diagnostics/ide-diagnostic-provider.h"
 #include "diagnostics/ide-diagnostic.h"
-#include "diagnostics/ide-diagnostician.h"
+#include "diagnostics/ide-diagnostics-manager.h"
 #include "diagnostics/ide-diagnostics.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"

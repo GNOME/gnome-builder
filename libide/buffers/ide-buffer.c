@@ -30,8 +30,8 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-unsaved-files.h"
 #include "diagnostics/ide-diagnostic.h"
-#include "diagnostics/ide-diagnostician.h"
 #include "diagnostics/ide-diagnostics.h"
+#include "diagnostics/ide-diagnostics-manager.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
@@ -70,10 +70,10 @@ typedef struct
   IdeContext             *context;
   IdeDiagnostics         *diagnostics;
   GHashTable             *diagnostics_line_cache;
+  EggSignalGroup         *diagnostics_manager_signals;
   IdeFile                *file;
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
-  IdeDiagnostician       *diagnostician;
   IdeHighlightEngine     *highlight_engine;
   IdeExtensionAdapter    *rename_provider_adapter;
   IdeExtensionAdapter    *symbol_resolver_adapter;
@@ -85,8 +85,9 @@ typedef struct
 
   gulong                  change_monitor_changed_handler;
 
-  guint                   diagnose_timeout;
   guint                   check_modified_timeout;
+
+  guint                   diagnostics_sequence;
 
   GTimeVal                mtime;
 
@@ -96,13 +97,10 @@ typedef struct
   gsize                   change_count;
 
   guint                   changed_on_volume : 1;
-  guint                   diagnostics_dirty : 1;
   guint                   highlight_diagnostics : 1;
-  guint                   in_diagnose : 1;
   guint                   loading : 1;
   guint                   mtime_set : 1;
   guint                   read_only : 1;
-  guint                   has_done_diagnostics_once : 1;
 } IdeBufferPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
@@ -132,8 +130,6 @@ enum {
   LAST_SIGNAL
 };
 
-static void ide_buffer_queue_diagnose (IdeBuffer *self);
-
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
 
@@ -150,39 +146,11 @@ gboolean
 ide_buffer_get_has_diagnostics (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  guint size;
-  guint i;
 
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
-  if (priv->diagnostics == NULL)
-    return FALSE;
-
-  /*
-   * The diagnostics set might include warnings for files other than
-   * our own. So we need to verify they are for this file. As long as
-   * this is usually just used via bindings, its not expensive enough
-   * to matter much.
-   */
-
-  size = ide_diagnostics_get_size (priv->diagnostics);
-
-  for (i = 0; i < size; i++)
-    {
-      IdeDiagnostic *diag = ide_diagnostics_index (priv->diagnostics, i);
-      IdeSourceLocation *loc = ide_diagnostic_get_location (diag);
-      IdeFile *file;
-
-      if (loc == NULL)
-        continue;
-
-      file = ide_source_location_get_file (loc);
-
-      if (priv->file && file && ide_file_equal (priv->file, file))
-        return TRUE;
-    }
-
-  return FALSE;
+  return (priv->diagnostics != NULL) &&
+         (ide_diagnostics_get_size (priv->diagnostics) > 0);
 }
 
 /**
@@ -197,11 +165,11 @@ ide_buffer_get_has_diagnostics (IdeBuffer *self)
 gboolean
 ide_buffer_get_busy (IdeBuffer *self)
 {
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
-  return priv->in_diagnose;
+  /* TODO: This should be deprecated */
+
+  return FALSE;
 }
 
 static void
@@ -267,6 +235,7 @@ ide_buffer_set_context (IdeBuffer  *self,
                         IdeContext *context)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  IdeDiagnosticsManager *diagnostics_manager;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
@@ -277,6 +246,10 @@ ide_buffer_set_context (IdeBuffer  *self,
   g_object_weak_ref (G_OBJECT (context),
                      ide_buffer_release_context,
                      self);
+
+  diagnostics_manager = ide_context_get_diagnostics_manager (context);
+
+  egg_signal_group_set_target (priv->diagnostics_manager_signals, diagnostics_manager);
 }
 
 void
@@ -302,7 +275,7 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
 
   g_assert (IDE_IS_BUFFER (self));
 
-  if (priv->diagnostics_line_cache)
+  if (priv->diagnostics_line_cache != NULL)
     g_hash_table_remove_all (priv->diagnostics_line_cache);
 
   gtk_text_buffer_get_bounds (buffer, &begin, &end);
@@ -398,7 +371,7 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
       return;
     }
 
-  if ((location = ide_diagnostic_get_location (diagnostic)))
+  if (NULL != (location = ide_diagnostic_get_location (diagnostic)))
     {
       IdeFile *file;
       GtkTextIter iter1;
@@ -407,9 +380,7 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
       file = ide_source_location_get_file (location);
 
       if (file && priv->file && !ide_file_equal (file, priv->file))
-        {
-          /* Ignore? */
-        }
+        return;
 
       ide_buffer_cache_diagnostic_line (self, location, location, severity);
 
@@ -490,7 +461,10 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER (self));
+  g_assert (diagnostics != NULL);
 
   if (diagnostics != priv->diagnostics)
     {
@@ -507,6 +481,41 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
       g_signal_emit (self, signals [LINE_FLAGS_CHANGED], 0);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
     }
+
+  IDE_EXIT;
+}
+
+static void
+ide_buffer__diagnostics_manager__changed (IdeBuffer             *self,
+                                          IdeDiagnosticsManager *diagnostics_manager)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_autoptr(IdeDiagnostics) diagnostics = NULL;
+  GFile *file;
+  guint sequence;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_DIAGNOSTICS_MANAGER (diagnostics_manager));
+
+  /*
+   * To avoid updating diagnostics on every change event (which could happen a
+   * lot) we check the sequence number with our last one to see if anything has
+   * changed in this specific buffer.
+   */
+
+  file = ide_file_get_file (priv->file);
+  sequence = ide_diagnostics_manager_get_sequence_for_file (diagnostics_manager, file);
+
+  if (sequence != priv->diagnostics_sequence)
+    {
+      diagnostics = ide_diagnostics_manager_get_diagnostics_for_file (diagnostics_manager, file);
+      ide_buffer_set_diagnostics (self, diagnostics);
+      priv->diagnostics_sequence = sequence;
+    }
+
+  IDE_EXIT;
 }
 
 static void
@@ -531,127 +540,6 @@ ide_buffer__file_load_settings_cb (GObject      *object,
       gtk_source_buffer_set_implicit_trailing_newline (GTK_SOURCE_BUFFER (self),
                                                        insert_trailing_newline);
     }
-}
-
-static void
-ide_buffer__diagnostician_diagnose_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
-{
-  IdeDiagnostician *diagnostician = (IdeDiagnostician *)object;
-  g_autoptr(IdeBuffer) self = user_data;
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  g_autoptr(IdeDiagnostics) diagnostics = NULL;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_DIAGNOSTICIAN (diagnostician));
-  g_assert (IDE_IS_BUFFER (self));
-
-  priv->in_diagnose = FALSE;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-
-  diagnostics = ide_diagnostician_diagnose_finish (diagnostician, result, &error);
-
-  if (error)
-    g_message ("%s", error->message);
-
-  ide_buffer_set_diagnostics (self, diagnostics);
-
-  if (priv->diagnostics_dirty)
-    ide_buffer_queue_diagnose (self);
-
-  if (!priv->has_done_diagnostics_once)
-    {
-      priv->has_done_diagnostics_once = TRUE;
-      ide_buffer_rehighlight (self);
-    }
-}
-
-static gboolean
-ide_buffer_is_system_file (IdeBuffer *self,
-                           IdeFile   *file)
-{
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  GFile *gfile;
-
-  g_assert (IDE_IS_BUFFER (self));
-  g_assert (IDE_IS_FILE (file));
-
-  if (NULL != (gfile = ide_file_get_file (file)))
-    {
-      IdeVcs *vcs;
-      GFile *workdir;
-
-      vcs = ide_context_get_vcs (priv->context);
-      workdir = ide_vcs_get_working_directory (vcs);
-
-      if (gfile != NULL && !g_file_has_prefix (gfile, workdir))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-ide_buffer__diagnose_timeout_cb (gpointer user_data)
-{
-  IdeBuffer *self = user_data;
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-
-  g_assert (IDE_IS_BUFFER (self));
-
-  priv->diagnose_timeout = 0;
-
-  if (priv->file != NULL && !ide_buffer_is_system_file (self, priv->file))
-    {
-      priv->diagnostics_dirty = FALSE;
-      priv->in_diagnose = TRUE;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-
-      ide_buffer_sync_to_unsaved_files (self);
-      ide_diagnostician_diagnose_async (priv->diagnostician,
-                                        priv->file,
-                                        NULL,
-                                        ide_buffer__diagnostician_diagnose_cb,
-                                        g_object_ref (self));
-    }
-
-  return G_SOURCE_REMOVE;
-}
-
-static guint
-ide_buffer_get_diagnose_timeout_msec (void)
-{
-  guint timeout_msec = DEFAULT_DIAGNOSE_TIMEOUT_MSEC;
-
-  if (ide_battery_monitor_get_should_conserve ())
-    timeout_msec = DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC;
-
-  return timeout_msec;
-}
-
-static void
-ide_buffer_queue_diagnose (IdeBuffer *self)
-{
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  guint timeout_msec;
-
-  g_assert (IDE_IS_BUFFER (self));
-
-  priv->diagnostics_dirty = TRUE;
-
-  if (priv->diagnose_timeout != 0)
-    {
-      g_source_remove (priv->diagnose_timeout);
-      priv->diagnose_timeout = 0;
-    }
-
-  /*
-   * Try to real in how often we parse when on battery.
-   */
-  timeout_msec = ide_buffer_get_diagnose_timeout_msec ();
-
-  priv->diagnose_timeout = g_timeout_add (timeout_msec, ide_buffer__diagnose_timeout_cb, self);
 }
 
 static void
@@ -750,12 +638,8 @@ ide_buffer_changed (GtkTextBuffer *buffer)
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->changed (buffer);
 
   priv->change_count++;
-  priv->diagnostics_dirty = TRUE;
 
   g_clear_pointer (&priv->content, g_bytes_unref);
-
-  if (priv->highlight_diagnostics && !priv->in_diagnose)
-    ide_buffer_queue_diagnose (self);
 }
 
 static void
@@ -992,8 +876,6 @@ ide_buffer_notify_language (IdeBuffer  *self,
 
   if (priv->symbol_resolver_adapter != NULL)
     ide_extension_adapter_set_value (priv->symbol_resolver_adapter, lang_id);
-
-  ide_diagnostician_set_language (priv->diagnostician, language);
 }
 
 static void
@@ -1244,10 +1126,6 @@ ide_buffer_constructed (GObject *object)
                                                              "Symbol-Resolver-Languages",
                                                              NULL);
 
-  priv->diagnostician = g_object_new (IDE_TYPE_DIAGNOSTICIAN,
-                                      "context", priv->context,
-                                      NULL);
-
   g_signal_connect (self,
                     "notify::language",
                     G_CALLBACK (ide_buffer_notify_language),
@@ -1286,23 +1164,18 @@ ide_buffer_dispose (GObject *object)
   if (priv->highlight_engine != NULL)
     g_object_run_dispose (G_OBJECT (priv->highlight_engine));
 
-  if (priv->diagnose_timeout)
-    {
-      g_source_remove (priv->diagnose_timeout);
-      priv->diagnose_timeout = 0;
-    }
-
   if (priv->change_monitor)
     {
       ide_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
       g_clear_object (&priv->change_monitor);
     }
 
+  egg_signal_group_set_target (priv->diagnostics_manager_signals, NULL);
+
   g_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
   g_clear_pointer (&priv->content, g_bytes_unref);
   g_clear_pointer (&priv->title, g_free);
-  g_clear_object (&priv->diagnostician);
   g_clear_object (&priv->file);
   g_clear_object (&priv->highlight_engine);
   g_clear_object (&priv->rename_provider_adapter);
@@ -1608,6 +1481,13 @@ ide_buffer_init (IdeBuffer *self)
 
   priv->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 
+  priv->diagnostics_manager_signals = egg_signal_group_new (IDE_TYPE_DIAGNOSTICS_MANAGER);
+  egg_signal_group_connect_object (priv->diagnostics_manager_signals,
+                                   "changed",
+                                   G_CALLBACK (ide_buffer__diagnostics_manager__changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
   EGG_COUNTER_INC (instances);
 
   IDE_EXIT;
@@ -1830,10 +1710,6 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
   if (highlight_diagnostics != priv->highlight_diagnostics)
     {
       priv->highlight_diagnostics = highlight_diagnostics;
-      if (!highlight_diagnostics)
-        ide_buffer_clear_diagnostics (self);
-      else
-        ide_buffer_queue_diagnose (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HIGHLIGHT_DIAGNOSTICS]);
     }
 }
@@ -1883,6 +1759,8 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
           location = ide_diagnostic_get_location (diag);
           if (!location)
             continue;
+
+          /* TODO: This should look at the range for the diagnostic */
 
           ide_buffer_get_iter_at_location (self, &pos, location);
 
