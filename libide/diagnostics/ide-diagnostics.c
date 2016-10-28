@@ -35,7 +35,7 @@ struct _IdeDiagnostics
 
 /**
  * ide_diagnostics_new:
- * @ar: (transfer full) (element-type Ide.Diagnostic) (allow-none): an array of #IdeDiagnostic.
+ * @ar: (transfer container) (element-type Ide.Diagnostic) (allow-none): an array of #IdeDiagnostic.
  *
  * Creates a new #IdeDiagnostics container structure for @ar.
  * Ownership of @ar is transfered to the resulting structure.
