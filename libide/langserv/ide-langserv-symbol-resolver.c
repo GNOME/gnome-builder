@@ -41,6 +41,14 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLangservSymbolResolver, ide_langserv_symbol
                                   G_ADD_PRIVATE (IdeLangservSymbolResolver)
                                   G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
+enum {
+  PROP_0,
+  PROP_CLIENT,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
 static void
 ide_langserv_symbol_resolver_finalize (GObject *object)
 {
@@ -53,11 +61,60 @@ ide_langserv_symbol_resolver_finalize (GObject *object)
 }
 
 static void
+ide_langserv_symbol_resolver_get_property (GObject    *object,
+                                           guint       prop_id,
+                                           GValue     *value,
+                                           GParamSpec *pspec)
+{
+  IdeLangservSymbolResolver *self = IDE_LANGSERV_SYMBOL_RESOLVER (object);
+
+  switch (prop_id)
+    {
+    case PROP_CLIENT:
+      g_value_set_object (value, ide_langserv_symbol_resolver_get_client (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_langserv_symbol_resolver_set_property (GObject      *object,
+                                           guint         prop_id,
+                                           const GValue *value,
+                                           GParamSpec   *pspec)
+{
+  IdeLangservSymbolResolver *self = IDE_LANGSERV_SYMBOL_RESOLVER (object);
+
+  switch (prop_id)
+    {
+    case PROP_CLIENT:
+      ide_langserv_symbol_resolver_set_client (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_langserv_symbol_resolver_class_init (IdeLangservSymbolResolverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_langserv_symbol_resolver_finalize;
+  object_class->get_property = ide_langserv_symbol_resolver_get_property;
+  object_class->set_property = ide_langserv_symbol_resolver_set_property;
+
+  properties [PROP_CLIENT] =
+    g_param_spec_object ("client",
+                         "Client",
+                         "The Language Server client",
+                         IDE_TYPE_LANGSERV_CLIENT,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -91,7 +148,8 @@ ide_langserv_symbol_resolver_set_client (IdeLangservSymbolResolver *self,
   g_return_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
   g_return_if_fail (!client || IDE_IS_LANGSERV_CLIENT (client));
 
-  g_set_object (&priv->client, client);
+  if (g_set_object (&priv->client, client))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
 }
 
 static void
