@@ -36,6 +36,7 @@ from gi.repository import GtkSource
 from gi.repository import Ide
 
 class RustService(Ide.Object, Ide.Service):
+    _client = None
 
     @GObject.Property(type=Ide.LangservClient)
     def client(self):
