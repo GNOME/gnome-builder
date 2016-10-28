@@ -34,6 +34,8 @@ IdeDiagnostic  *ide_diagnostics_index    (IdeDiagnostics *self,
 void            ide_diagnostics_merge    (IdeDiagnostics *self,
                                           IdeDiagnostics *other);
 IdeDiagnostics *ide_diagnostics_new      (GPtrArray      *ar);
+void            ide_diagnostics_add      (IdeDiagnostics *self,
+                                          IdeDiagnostic  *diagnostic);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostics, ide_diagnostics_unref)
 

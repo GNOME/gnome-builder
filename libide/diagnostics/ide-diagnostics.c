@@ -153,3 +153,13 @@ ide_diagnostics_index (IdeDiagnostics *self,
 
   return g_ptr_array_index (self->diagnostics, index);
 }
+
+void
+ide_diagnostics_add (IdeDiagnostics *self,
+                     IdeDiagnostic  *diagnostic)
+{
+  g_assert (self != NULL);
+  g_assert (diagnostic != NULL);
+
+  g_ptr_array_add (self->diagnostics, ide_diagnostic_ref (diagnostic));
+}
