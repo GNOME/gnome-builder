@@ -47,6 +47,9 @@ ide_diagnostics_new (GPtrArray *ar)
 {
   IdeDiagnostics *ret;
 
+  if (ar == NULL)
+    ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+
   ret = g_slice_new0 (IdeDiagnostics);
   ret->ref_count = 1;
   ret->diagnostics = ar;
