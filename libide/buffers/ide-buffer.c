@@ -1031,6 +1031,46 @@ ide_buffer_loaded (IdeBuffer *self)
 }
 
 static void
+ide_buffer_load_rename_provider (IdeBuffer           *self,
+                                 GParamSpec          *pspec,
+                                 IdeExtensionAdapter *adapter)
+{
+  IdeRenameProvider *provider;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
+
+  provider = ide_extension_adapter_get_extension (adapter);
+
+  if (provider != NULL)
+    ide_rename_provider_load (provider);
+
+  IDE_EXIT;
+}
+
+static void
+ide_buffer_load_symbol_resolver (IdeBuffer           *self,
+                                 GParamSpec          *pspec,
+                                 IdeExtensionAdapter *adapter)
+{
+  IdeSymbolResolver *resolver;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
+
+  resolver = ide_extension_adapter_get_extension (adapter);
+
+  if (resolver != NULL)
+    ide_symbol_resolver_load (resolver);
+
+  IDE_EXIT;
+}
+
+static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
@@ -1120,11 +1160,23 @@ ide_buffer_constructed (GObject *object)
                                                              "Rename-Provider-Languages",
                                                              NULL);
 
+  g_signal_connect_object (priv->rename_provider_adapter,
+                           "notify::extension",
+                           G_CALLBACK (ide_buffer_load_rename_provider),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   priv->symbol_resolver_adapter = ide_extension_adapter_new (priv->context,
                                                              NULL,
                                                              IDE_TYPE_SYMBOL_RESOLVER,
                                                              "Symbol-Resolver-Languages",
                                                              NULL);
+
+  g_signal_connect_object (priv->symbol_resolver_adapter,
+                           "notify::extension",
+                           G_CALLBACK (ide_buffer_load_symbol_resolver),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect (self,
                     "notify::language",

@@ -159,3 +159,12 @@ ide_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *self,
 
   return IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbol_tree_finish (self, result, error);
 }
+
+void
+ide_symbol_resolver_load (IdeSymbolResolver *self)
+{
+  g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
+
+  if (IDE_SYMBOL_RESOLVER_GET_IFACE (self)->load)
+    IDE_SYMBOL_RESOLVER_GET_IFACE (self)->load (self);
+}

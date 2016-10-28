@@ -46,8 +46,11 @@ struct _IdeRenameProviderInterface
   /* Silence Vala */
   void     (*set_context)   (IdeRenameProvider    *self,
                              IdeContext           *context);
+
+  void     (*load)          (IdeRenameProvider    *self);
 };
 
+void      ide_rename_provider_load          (IdeRenameProvider     *self);
 void      ide_rename_provider_rename_async  (IdeRenameProvider     *self,
                                              IdeSourceLocation     *location,
                                              const gchar           *new_name,

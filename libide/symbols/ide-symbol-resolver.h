@@ -50,8 +50,10 @@ struct _IdeSymbolResolverInterface
   IdeSymbolTree *(*get_symbol_tree_finish) (IdeSymbolResolver    *self,
                                             GAsyncResult         *result,
                                             GError              **error);
+  void           (*load)                   (IdeSymbolResolver    *self);
 };
 
+void           ide_symbol_resolver_load                   (IdeSymbolResolver    *self);
 void           ide_symbol_resolver_lookup_symbol_async    (IdeSymbolResolver    *self,
                                                            IdeSourceLocation    *location,
                                                            GCancellable         *cancellable,

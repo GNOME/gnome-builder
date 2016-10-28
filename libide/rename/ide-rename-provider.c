@@ -141,3 +141,12 @@ ide_rename_provider_rename_finish (IdeRenameProvider  *self,
 
   IDE_RETURN (ret);
 }
+
+void
+ide_rename_provider_load (IdeRenameProvider *self)
+{
+  g_return_if_fail (IDE_IS_RENAME_PROVIDER (self));
+
+  if (IDE_RENAME_PROVIDER_GET_IFACE (self)->load)
+    IDE_RENAME_PROVIDER_GET_IFACE (self)->load (self);
+}
