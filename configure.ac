@@ -283,6 +283,7 @@ m4_include([plugins/autotools/configure.ac])
 m4_include([plugins/autotools-templates/configure.ac])
 m4_include([plugins/build-tools/configure.ac])
 m4_include([plugins/c-pack/configure.ac])
+m4_include([plugins/cargo/configure.ac])
 m4_include([plugins/clang/configure.ac])
 m4_include([plugins/color-picker/configure.ac])
 m4_include([plugins/command-bar/configure.ac])
@@ -593,6 +594,7 @@ echo ""
 echo "  Autotools ............................ : ${enable_autotools_plugin}"
 echo "  Build Tools .......................... : ${enable_build_tools_plugin}"
 echo "  C Language Pack ...................... : ${enable_c_pack_plugin}"
+echo "  Cargo ................................ : ${enable_cargo_plugin}"
 echo "  Clang ................................ : ${enable_clang_plugin}"
 echo "  Color picker.......................... : ${enable_color_picker_plugin}"
 echo "  Command Bar .......................... : ${enable_command_bar_plugin}"

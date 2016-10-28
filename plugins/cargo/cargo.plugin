@@ -1,0 +1,11 @@
+[Plugin]
+Module=cargo_plugin
+Name=Cargo
+Loader=python3
+Description=Provides integration with the Cargo build system
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2016 Christian Hergert
+Builtin=true
+Hidden=true
+X-Project-File-Filter-Pattern=Cargo.toml
+X-Project-File-Filter-Name=Cargo (Cargo.toml)
