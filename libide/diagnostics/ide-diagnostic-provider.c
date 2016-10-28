@@ -25,6 +25,13 @@
 
 G_DEFINE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE_TYPE_OBJECT)
 
+enum {
+  INVALIDATED,
+  N_SIGNALS
+};
+
+static guint signals [N_SIGNALS];
+
 static void
 ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
 {
@@ -34,6 +41,19 @@ ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
                                                             "Context",
                                                             IDE_TYPE_CONTEXT,
                                                             (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
+
+  /**
+   * IdeDiagnosticProvider::invlaidated:
+   *
+   * This signal should be emitted by diagnostic providers when they know their
+   * diagnostics have been invalidated out-of-band.
+   */
+  signals [INVALIDATED] =
+    g_signal_new ("invalidated",
+                  G_TYPE_FROM_INTERFACE (iface),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+
 }
 
 void
@@ -66,4 +86,12 @@ ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   return IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_finish (self, result, error);
+}
+
+void
+ide_diagnostic_provider_emit_invalidated (IdeDiagnosticProvider *self)
+{
+  g_return_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (self));
+
+  g_signal_emit (self, signals [INVALIDATED], 0);
 }

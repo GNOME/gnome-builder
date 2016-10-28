@@ -43,14 +43,15 @@ struct _IdeDiagnosticProviderInterface
                                       GError                **error);
 };
 
-void            ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider  *self,
-                                                         IdeFile                *file,
-                                                         GCancellable           *cancellable,
-                                                         GAsyncReadyCallback     callback,
-                                                         gpointer                user_data);
-IdeDiagnostics *ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,
-                                                         GAsyncResult           *result,
-                                                         GError                **error);
+void            ide_diagnostic_provider_diagnose_async   (IdeDiagnosticProvider  *self,
+                                                          IdeFile                *file,
+                                                          GCancellable           *cancellable,
+                                                          GAsyncReadyCallback     callback,
+                                                          gpointer                user_data);
+IdeDiagnostics *ide_diagnostic_provider_diagnose_finish  (IdeDiagnosticProvider  *self,
+                                                          GAsyncResult           *result,
+                                                          GError                **error);
+void            ide_diagnostic_provider_emit_invalidated (IdeDiagnosticProvider  *self);
 
 G_END_DECLS
 
