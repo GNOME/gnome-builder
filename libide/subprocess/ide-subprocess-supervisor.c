@@ -60,7 +60,8 @@ ide_subprocess_supervisor_reset (IdeSubprocessSupervisor *self)
     {
       g_autoptr(IdeSubprocess) subprocess = g_steal_pointer (&priv->subprocess);
 
-      if (ide_subprocess_get_if_exited (subprocess))
+      if (!ide_subprocess_get_if_exited (subprocess) &&
+          !ide_subprocess_get_if_signaled (subprocess))
         ide_subprocess_force_exit (subprocess);
     }
 }
