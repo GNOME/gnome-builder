@@ -34,5 +34,7 @@ namespace Ide
 			var results = yield service.index.get_diagnostics (file.file, cancellable);
 			return results;
 		}
+
+		public void load () {}
 	}
 }

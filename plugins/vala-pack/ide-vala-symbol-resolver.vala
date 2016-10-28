@@ -108,6 +108,8 @@ namespace Ide
 				return ((Vala.Property)sym).binding;
 			return null;
 		}
+
+		public void load () {}
 	}
 }
 

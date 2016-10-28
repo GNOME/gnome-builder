@@ -138,5 +138,7 @@ namespace Ide
 		{
 			return 200;
 		}
+
+		public void load () {}
 	}
 }
