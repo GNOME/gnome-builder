@@ -47,7 +47,7 @@ main (gint   argc,
   g_menu_append_submenu (top, "menu-4", G_MENU_MODEL (menu));
 
   widget = gtk_menu_new_from_model (G_MENU_MODEL (top));
-  gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, 0, GDK_CURRENT_TIME);
+  gtk_menu_popup_at_pointer (GTK_MENU (widget), NULL);
 
   gtk_main ();
 
