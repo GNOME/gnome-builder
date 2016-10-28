@@ -23,7 +23,6 @@
 
 #include "ide-types.h"
 
-#include "diagnostics/ide-diagnostic.h"
 #include "highlighting/ide-highlight-engine.h"
 #include "history/ide-back-forward-item.h"
 #include "history/ide-back-forward-list.h"
