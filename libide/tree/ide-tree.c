@@ -175,73 +175,6 @@ ide_tree_select (IdeTree     *self,
   IDE_EXIT;
 }
 
-static guint
-ide_tree_get_row_height (IdeTree *self)
-{
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  guint extra_padding;
-  gint pix_min_height;
-  gint pix_nat_height;
-  gint text_min_height;
-  gint text_nat_height;
-
-  g_assert (IDE_IS_TREE (self));
-
-  gtk_widget_style_get (GTK_WIDGET (self),
-                        "vertical-separator", &extra_padding,
-                        NULL);
-
-  gtk_cell_renderer_get_preferred_height (priv->cell_pixbuf,
-                                          GTK_WIDGET (self),
-                                          &pix_min_height,
-                                          &pix_nat_height);
-  gtk_cell_renderer_get_preferred_height (priv->cell_text,
-                                          GTK_WIDGET (self),
-                                          &text_min_height,
-                                          &text_nat_height);
-
-  return MAX (pix_nat_height, text_nat_height) + extra_padding;
-}
-
-static void
-ide_tree_menu_position_func (GtkMenu  *menu,
-                             gint     *x,
-                             gint     *y,
-                             gboolean *push_in,
-                             gpointer  user_data)
-{
-  GdkPoint *loc = user_data;
-  GtkRequisition req;
-  GdkRectangle rect;
-  GdkMonitor *monitor;
-
-  g_return_if_fail (loc != NULL);
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &req);
-  monitor = gdk_display_get_monitor_at_point (gdk_display_get_default (), *x, *y);
-  gdk_monitor_get_geometry (monitor, &rect);
-
-  if ((loc->x != -1) && (loc->y != -1))
-    {
-      if ((loc->y + req.height) <= (rect.y + rect.height))
-        {
-          *x = loc->x;
-          *y = loc->y;
-        }
-      else
-        {
-          GtkWidget *attached;
-          guint row_height;
-
-          attached = gtk_menu_get_attach_widget (menu);
-          row_height = ide_tree_get_row_height (IDE_TREE (attached));
-
-          *x = loc->x;
-          *y = loc->y + row_height - req.height;
-        }
-    }
-}
-
 static void
 check_visible_foreach (GtkWidget *widget,
                        gpointer   user_data)
@@ -260,11 +193,8 @@ ide_tree_popup (IdeTree        *self,
                 gint            target_y)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  GdkPoint loc = { -1, -1 };
   gboolean at_least_one_visible = FALSE;
   GtkWidget *menu_widget;
-  gint button;
-  gint event_time;
 
   IDE_ENTRY;
 
@@ -288,28 +218,9 @@ ide_tree_popup (IdeTree        *self,
 
   g_signal_emit (self, signals [POPULATE_POPUP], 0, menu_widget);
 
-  if ((target_x >= 0) && (target_y >= 0))
-    {
-      gdk_window_get_root_coords (gtk_widget_get_window (GTK_WIDGET (self)),
-                                  target_x, target_y, &loc.x, &loc.y);
-      loc.x -= 12;
-      loc.y -= 3;
-    }
-
   gtk_container_foreach (GTK_CONTAINER (menu_widget),
                          check_visible_foreach,
                          &at_least_one_visible);
-
-  if (event != NULL)
-    {
-      button = event->button;
-      event_time = event->time;
-    }
-  else
-    {
-      button = 0;
-      event_time = gtk_get_current_event_time ();
-    }
 
   if (at_least_one_visible)
     {
@@ -320,9 +231,16 @@ ide_tree_popup (IdeTree        *self,
                               "selection-done",
                               G_CALLBACK (gtk_widget_destroy),
                               NULL);
-      gtk_menu_popup (GTK_MENU (menu_widget), NULL, NULL,
-                      ide_tree_menu_position_func, &loc,
-                      button, event_time);
+
+      g_object_set (G_OBJECT (menu_widget),
+                    "rect-anchor-dx", target_x - 12,
+                    "rect-anchor-dy", target_y + 3,
+                    NULL);
+      gtk_menu_popup_at_widget (GTK_MENU (menu_widget),
+                                GTK_WIDGET (self),
+                                GDK_GRAVITY_NORTH_WEST,
+                                GDK_GRAVITY_NORTH_WEST,
+                                (GdkEvent *)event);
     }
   else
     {
