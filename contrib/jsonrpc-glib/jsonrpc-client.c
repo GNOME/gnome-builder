@@ -876,7 +876,6 @@ jsonrpc_client_notification (JsonrpcClient  *self,
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
   g_autoptr(JsonObject) object = NULL;
   g_autoptr(JsonNode) node = NULL;
-  g_autoptr(GTask) task = NULL;
 
   g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
   g_return_val_if_fail (method != NULL, FALSE);
