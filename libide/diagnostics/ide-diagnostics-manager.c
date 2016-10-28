@@ -250,6 +250,8 @@ ide_diagnostics_group_has_diagnostics (IdeDiagnosticsGroup *group)
 static gboolean
 ide_diagnostics_group_can_dispose (IdeDiagnosticsGroup *group)
 {
+  g_autoptr(IdeBuffer) buffer = NULL;
+
   g_assert (group != NULL);
 
   /*
@@ -258,7 +260,9 @@ ide_diagnostics_group_can_dispose (IdeDiagnosticsGroup *group)
    * registered for the group.
    */
 
-  return (g_weak_ref_get (&group->buffer_wr) == NULL) &&
+  buffer = g_weak_ref_get (&group->buffer_wr);
+
+  return (buffer == NULL) &&
          (group->adapter == NULL) &&
          (group->has_diagnostics == FALSE);
 }
@@ -443,7 +447,7 @@ static void
 ide_diagnostics_group_diagnose (IdeDiagnosticsGroup   *group,
                                 IdeDiagnosticsManager *self)
 {
-  IdeBuffer *buffer;
+  g_autoptr(IdeBuffer) buffer = NULL;
 
   IDE_ENTRY;
 
@@ -892,8 +896,9 @@ ide_diagnostics_manager_buffer_notify_file (IdeDiagnosticsManager *self,
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
       IdeDiagnosticsGroup *group = value;
+      g_autoptr(IdeBuffer) group_buffer = g_weak_ref_get (&group->buffer_wr);
 
-      if (buffer == g_weak_ref_get (&group->buffer_wr))
+      if (buffer == group_buffer)
         {
           g_hash_table_steal (self->groups_by_file, group->file);
           g_set_object (&group->file, gfile);
