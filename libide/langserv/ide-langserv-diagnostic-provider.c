@@ -33,6 +33,7 @@
 typedef struct
 {
   IdeLangservClient *client;
+  EggSignalGroup    *client_signals;
 } IdeLangservDiagnosticProviderPrivate;
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -129,6 +130,7 @@ ide_langserv_diagnostic_provider_finalize (GObject *object)
   IdeLangservDiagnosticProvider *self = (IdeLangservDiagnosticProvider *)object;
   IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
 
+  g_clear_object (&priv->client_signals);
   g_clear_object (&priv->client);
 
   G_OBJECT_CLASS (ide_langserv_diagnostic_provider_parent_class)->finalize (object);
@@ -145,6 +147,15 @@ ide_langserv_diagnostic_provider_class_init (IdeLangservDiagnosticProviderClass 
 static void
 ide_langserv_diagnostic_provider_init (IdeLangservDiagnosticProvider *self)
 {
+  IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
+
+  priv->client_signals = egg_signal_group_new (IDE_TYPE_LANGSERV_CLIENT);
+
+  egg_signal_group_connect_object (priv->client_signals,
+                                   "published-diagnostics",
+                                   G_CALLBACK (ide_diagnostic_provider_emit_invalidated),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
 
 IdeLangservDiagnosticProvider *
@@ -179,5 +190,6 @@ ide_langserv_diagnostic_provider_set_client (IdeLangservDiagnosticProvider *self
   g_return_if_fail (IDE_IS_LANGSERV_DIAGNOSTIC_PROVIDER (self));
   g_return_if_fail (!client || IDE_IS_LANGSERV_CLIENT (client));
 
-  g_set_object (&priv->client, client);
+  if (g_set_object (&priv->client, client))
+    egg_signal_group_set_target (priv->client_signals, client);
 }
