@@ -761,10 +761,12 @@ ide_subprocess_launcher_pop_argv (IdeSubprocessLauncher *self)
 
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
 
-  if (priv->argv->len > 0)
+  if (priv->argv->len > 1)
     {
-      ret = g_ptr_array_index (priv->argv, priv->argv->len - 1);
-      g_ptr_array_index (priv->argv, priv->argv->len - 1) = NULL;
+      g_assert (g_ptr_array_index (priv->argv, priv->argv->len - 1) == NULL);
+
+      ret = g_ptr_array_index (priv->argv, priv->argv->len - 2);
+      g_ptr_array_index (priv->argv, priv->argv->len - 2) = NULL;
       g_ptr_array_set_size (priv->argv, priv->argv->len - 1);
     }
 
