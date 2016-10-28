@@ -26,9 +26,7 @@
 typedef struct
 {
   GbTerminal *terminal;
-  guint       button;
-  guint       time;
-  GdkDevice  *device;
+  GdkEvent   *event;
 } PopupInfo;
 
 struct _GbTerminal
@@ -102,18 +100,8 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       g_signal_emit (terminal, signals[POPULATE_POPUP], 0, terminal->popup_menu);
 
-      if (popup_info->device)
-        gtk_menu_popup_for_device (GTK_MENU (terminal->popup_menu),
-                                   popup_info->device, NULL, NULL, NULL, NULL, NULL,
-                                   popup_info->button, popup_info->time);
-      else
-        {
-          gtk_menu_popup (GTK_MENU (terminal->popup_menu), NULL, NULL,
-                          NULL, terminal,
-                          0, gtk_get_current_event_time ());
-
-          gtk_menu_shell_select_first (GTK_MENU_SHELL (terminal->popup_menu), FALSE);
-        }
+      gtk_menu_popup_at_pointer (GTK_MENU (terminal->popup_menu), popup_info->event);
+      gdk_event_free (popup_info->event);
     }
 
   g_object_unref (terminal);
@@ -126,20 +114,10 @@ gb_terminal_do_popup (GbTerminal     *terminal,
 {
   PopupInfo *popup_info = g_slice_new (PopupInfo);
 
-  popup_info->terminal = g_object_ref (terminal);
+  popup_info->event = (event != NULL) ? gdk_event_copy (event)
+                                      : gtk_get_current_event ();
 
-  if (event != NULL)
-    {
-      gdk_event_get_button (event, &popup_info->button);
-      popup_info->time = gdk_event_get_time (event);
-      popup_info->device = gdk_event_get_device (event);
-    }
-  else
-    {
-      popup_info->button = 0;
-      popup_info->time = gtk_get_current_event_time ();
-      popup_info->device = NULL;
-    }
+  popup_info->terminal = g_object_ref (terminal);
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (terminal), GDK_SELECTION_CLIPBOARD),
                                   gdk_atom_intern_static_string ("TARGETS"),
