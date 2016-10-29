@@ -826,8 +826,14 @@ ide_langserv_client_initialize_cb (GObject      *object,
 {
   JsonrpcClient *rpc_client = (JsonrpcClient *)object;
   g_autoptr(IdeLangservClient) self = user_data;
+  IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) reply = NULL;
   g_autoptr(GError) error = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeProject *project;
+  IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (JSONRPC_IS_CLIENT (rpc_client));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -837,10 +843,26 @@ ide_langserv_client_initialize_cb (GObject      *object,
     {
       g_warning ("Failed to initialize language server: %s", error->message);
       ide_langserv_client_stop (self);
-      return;
+      IDE_EXIT;
     }
 
   /* TODO: Check for server capabilities */
+
+  /*
+   * Now that we are connected and have initialized the peer, setup our
+   * buffer_manager and project signals so that we can notify the peer
+   * of open documents and such.
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  buffer_manager = ide_context_get_buffer_manager (context);
+  egg_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
+
+  project = ide_context_get_project (context);
+  egg_signal_group_set_target (priv->project_signals, project);
+
+  IDE_EXIT;
 }
 
 IdeLangservClient *
@@ -861,9 +883,7 @@ ide_langserv_client_start (IdeLangservClient *self)
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(JsonNode) params = NULL;
   g_autofree gchar *root_path = NULL;
-  IdeBufferManager *buffer_manager;
   IdeContext *context;
-  IdeProject *project;
   IdeVcs *vcs;
   GFile *workdir;
 
@@ -887,13 +907,6 @@ ide_langserv_client_start (IdeLangservClient *self)
                            G_CALLBACK (ide_langserv_client_notification),
                            self,
                            G_CONNECT_SWAPPED);
-
-
-  buffer_manager = ide_context_get_buffer_manager (context);
-  egg_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
-
-  project = ide_context_get_project (context);
-  egg_signal_group_set_target (priv->project_signals, project);
 
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
