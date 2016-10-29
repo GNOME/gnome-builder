@@ -38,6 +38,7 @@ from gi.repository import Ide
 class RustService(Ide.Object, Ide.Service):
     _client = None
     _has_started = False
+    _supervisor = None
 
     @GObject.Property(type=Ide.LangservClient)
     def client(self):
@@ -47,6 +48,15 @@ class RustService(Ide.Object, Ide.Service):
     def client(self, value):
         self._client = value
         self.notify('client')
+
+    def do_stop(self):
+        """
+        Stops the Rust Language Server upon request to shutdown the
+        RustService.
+        """
+        if self._supervisor:
+            supervisor, self._supervisor = self._supervisor, None
+            supervisor.stop()
 
     def _ensure_started(self):
         """
