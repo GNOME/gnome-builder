@@ -90,11 +90,10 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   GbpFlatpakRuntime *self = source_object;
   g_autofree gchar *build_path = NULL;
   g_autoptr(GFile) build_dir = NULL;
-  g_autoptr(GSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GFile) parent = NULL;
-  GError *error = NULL;
-  GPtrArray *args;
+  g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
@@ -115,38 +114,46 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
     {
       if (!g_file_make_directory_with_parents (parent, cancellable, &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           return;
         }
     }
 
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
-  args = g_ptr_array_new ();
-  g_ptr_array_add (args, "flatpak");
-  g_ptr_array_add (args, "build-init");
-  g_ptr_array_add (args, build_path);
+  launcher = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
+
+  if (launcher == NULL)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+
+  ide_subprocess_launcher_push_argv (launcher, "flatpak");
+  ide_subprocess_launcher_push_argv (launcher, "build-init");
+  ide_subprocess_launcher_push_argv (launcher, build_path);
   /* XXX: Fake name, probably okay, but can be proper once we get
    * IdeConfiguration in place.
    */
-  g_ptr_array_add (args, "org.gnome.Builder.FlatpakApp.Build");
-  g_ptr_array_add (args, self->sdk);
-  g_ptr_array_add (args, self->platform);
-  g_ptr_array_add (args, self->branch);
-  g_ptr_array_add (args, NULL);
+  ide_subprocess_launcher_push_argv (launcher, "org.gnome.Builder.FlatpakApp.Build");
+  ide_subprocess_launcher_push_argv (launcher, self->sdk);
+  ide_subprocess_launcher_push_argv (launcher, self->platform);
+  ide_subprocess_launcher_push_argv (launcher, self->branch);
 
-#ifdef IDE_ENABLE_TRACE
-  {
-    g_autofree gchar *str = NULL;
-    str = g_strjoinv (" ", (gchar **)args->pdata);
-    IDE_TRACE_MSG ("Launching '%s'", str);
-  }
-#endif
+  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error);
 
-  subprocess = g_subprocess_launcher_spawnv (launcher,
-                                             (const gchar * const *)args->pdata,
-                                             &error);
+  if (subprocess == NULL)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
-  g_ptr_array_free (args, TRUE);
+  if (!ide_subprocess_wait_check (subprocess, cancellable, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
   g_task_return_boolean (task, TRUE);
 }
@@ -200,6 +207,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, build_path);
 
       ide_subprocess_launcher_set_run_on_host (ret, TRUE);
+      ide_subprocess_launcher_set_clear_env (ret, FALSE);
     }
 
   return ret;
