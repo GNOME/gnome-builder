@@ -267,7 +267,7 @@ ide_builder_install_async (IdeBuilder           *self,
  *
  * Completes an asynchronous call to ide_builder_install_async().
  *
- * Returns: (transfer none): An #IdeBuildResult.
+ * Returns: (transfer full): An #IdeBuildResult.
  */
 IdeBuildResult *
 ide_builder_install_finish (IdeBuilder    *self,
