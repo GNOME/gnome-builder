@@ -109,6 +109,7 @@ plugins/build-tools/gbp-build-panel.ui
 plugins/build-tools/gbp-build-perspective.c
 plugins/build-tools/gbp-build-tool.c
 plugins/build-tools/ide-environment-editor.c
+plugins/cargo/cargo_plugin.py
 plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
