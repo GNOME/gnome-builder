@@ -226,17 +226,10 @@ static void
 ide_autotools_build_task_set_configuration (IdeAutotoolsBuildTask *self,
                                             IdeConfiguration      *configuration)
 {
-  g_autoptr(IdeConfiguration) copy = NULL;
-
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  /* Work on a duplication of the configuration so that we don't need to
-   * synchronize with other threads. */
-  if (configuration != NULL)
-    copy = ide_configuration_duplicate (configuration);
-
-  if (g_set_object (&self->configuration, copy))
+  if (g_set_object (&self->configuration, configuration))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIGURATION]);
 }
 
