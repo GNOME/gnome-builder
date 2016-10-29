@@ -37,6 +37,7 @@ from gi.repository import Ide
 
 class RustService(Ide.Object, Ide.Service):
     _client = None
+    _has_started = False
 
     @GObject.Property(type=Ide.LangservClient)
     def client(self):
@@ -47,7 +48,7 @@ class RustService(Ide.Object, Ide.Service):
         self._client = value
         self.notify('client')
 
-    def do_start(self):
+    def _ensure_started(self):
         """
         Start the rust service which provides communication with the
         Rust Language Server. We supervise our own instance of the
@@ -57,27 +58,33 @@ class RustService(Ide.Object, Ide.Service):
         Various extension points (diagnostics, symbol providers, etc) use
         the RustService to access the rust components they need.
         """
-        # Setup a launcher to spawn the rust language server
-        launcher = self._create_launcher()
-        launcher.set_clear_env(False)
-        launcher.setenv("SYS_ROOT", self._discover_sysroot(), True)
+        # To avoid starting the `rls` process unconditionally at startup,
+        # we lazily start it when the first provider tries to bind a client
+        # to it's :client property.
+        if not self._has_started:
+            self._has_started = True
 
-        # If rls was installed with Cargo, try to discover that
-        # to save the user having to update PATH.
-        path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
-        if not os.path.exists(path_to_rls):
-            path_to_rls = "rls"
+            # Setup a launcher to spawn the rust language server
+            launcher = self._create_launcher()
+            launcher.set_clear_env(False)
+            launcher.setenv("SYS_ROOT", self._discover_sysroot(), True)
 
-        # Setup our Argv. We want to communicate over STDIN/STDOUT,
-        # so it does not require any command line options.
-        launcher.push_argv(path_to_rls)
+            # If rls was installed with Cargo, try to discover that
+            # to save the user having to update PATH.
+            path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
+            if not os.path.exists(path_to_rls):
+                path_to_rls = "rls"
 
-        # Spawn our peer process and monitor it for
-        # crashes. We may need to restart it occasionally.
-        supervisor = Ide.SubprocessSupervisor()
-        supervisor.connect('spawned', self._rls_spawned)
-        supervisor.set_launcher(launcher)
-        supervisor.start()
+            # Setup our Argv. We want to communicate over STDIN/STDOUT,
+            # so it does not require any command line options.
+            launcher.push_argv(path_to_rls)
+
+            # Spawn our peer process and monitor it for
+            # crashes. We may need to restart it occasionally.
+            supervisor = Ide.SubprocessSupervisor()
+            supervisor.connect('spawned', self._rls_spawned)
+            supervisor.set_launcher(launcher)
+            supervisor.start()
 
     def _rls_spawned(self, supervisor, subprocess):
         """
@@ -136,6 +143,7 @@ class RustService(Ide.Object, Ide.Service):
         """
         context = provider.get_context()
         self = context.get_service_typed(RustService)
+        self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
 class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
