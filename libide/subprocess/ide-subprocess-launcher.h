@@ -63,6 +63,8 @@ void                   ide_subprocess_launcher_set_clear_env       (IdeSubproces
 const gchar * const   *ide_subprocess_launcher_get_environ         (IdeSubprocessLauncher  *self);
 void                   ide_subprocess_launcher_set_environ         (IdeSubprocessLauncher  *self,
                                                                     const gchar * const    *environ_);
+const gchar           *ide_subprocess_launcher_getenv              (IdeSubprocessLauncher  *self,
+                                                                    const gchar            *key);
 void                   ide_subprocess_launcher_setenv              (IdeSubprocessLauncher  *self,
                                                                     const gchar            *key,
                                                                     const gchar            *value,

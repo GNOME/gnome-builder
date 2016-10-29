@@ -40,7 +40,7 @@ typedef struct
 
   GPtrArray        *argv;
   gchar            *cwd;
-  GPtrArray        *environ;
+  gchar           **environ;
 
   gint              stdin_fd;
   gint              stdout_fd;
@@ -166,7 +166,7 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
     g_autofree gchar *str = NULL;
     g_autofree gchar *env = NULL;
     str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
-    env = g_strjoinv (" ", (gchar **)priv->environ->pdata);
+    env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
     IDE_TRACE_MSG ("Launching '%s' with environment %s %s parent environment",
                    str, env, priv->clear_env ? "clearing" : "inheriting");
   }
@@ -174,7 +174,7 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
 
   process = _ide_breakout_subprocess_new (priv->cwd,
                                           (const gchar * const *)priv->argv->pdata,
-                                          (const gchar * const *)priv->environ->pdata,
+                                          (const gchar * const *)priv->environ,
                                           priv->flags,
                                           priv->clear_env,
                                           priv->stdin_fd,
@@ -225,7 +225,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
     g_autofree gchar *str = NULL;
     g_autofree gchar *env = NULL;
     str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
-    env = g_strjoinv (" ", (gchar **)priv->environ->pdata);
+    env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
     IDE_TRACE_MSG ("Launching '%s' with environment %s %s parent environment",
                    str, env, priv->clear_env ? "clearing" : "inheriting");
   }
@@ -253,27 +253,28 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
       priv->stderr_fd = -1;
     }
 
-  if (priv->environ->len > 1)
+  /*
+   * GSubprocessLauncher starts by inheriting the current environment.
+   * So if clear-env is set, we need to unset those environment variables.
+   */
+  if (priv->clear_env)
+    g_subprocess_launcher_set_environ (launcher, NULL);
+
+  /*
+   * Now override any environment variables that were set using
+   * ide_subprocess_launcher_setenv() or ide_subprocess_launcher_set_environ().
+   */
+  if (priv->environ != NULL)
     {
-      g_auto(GStrv) env = NULL;
-
-      if (!priv->clear_env)
-        env = g_get_environ ();
-
-      for (guint i = 0; i < (priv->environ->len - 1); i++)
+      for (guint i = 0; priv->environ[i] != NULL; i++)
         {
-          const gchar *pair = g_ptr_array_index (priv->environ, i);
+          const gchar *pair = priv->environ[i];
           const gchar *eq = strchr (pair, '=');
+          g_autofree gchar *key = g_strndup (pair, eq - pair);
           const gchar *val = eq ? eq + 1 : NULL;
 
-          if (pair && eq && val)
-            {
-              g_autofree gchar *key = g_strndup (pair, eq - pair);
-              env = g_environ_setenv (env, key, val, TRUE);
-            }
+          g_subprocess_launcher_setenv (launcher, key, val, TRUE);
         }
-
-      g_subprocess_launcher_set_environ (launcher, env);
     }
 
   real = g_subprocess_launcher_spawnv (launcher,
@@ -331,7 +332,7 @@ ide_subprocess_launcher_finalize (GObject *object)
 
   g_clear_pointer (&priv->argv, g_ptr_array_unref);
   g_clear_pointer (&priv->cwd, g_free);
-  g_clear_pointer (&priv->environ, g_ptr_array_unref);
+  g_clear_pointer (&priv->environ, g_strfreev);
 
   if (priv->stdin_fd != -1)
     close (priv->stdin_fd);
@@ -476,9 +477,6 @@ ide_subprocess_launcher_init (IdeSubprocessLauncher *self)
   priv->stdout_fd = -1;
   priv->stderr_fd = -1;
 
-  priv->environ = g_ptr_array_new_with_free_func (g_free);
-  g_ptr_array_add (priv->environ, NULL);
-
   priv->argv = g_ptr_array_new_with_free_func (g_free);
   g_ptr_array_add (priv->argv, NULL);
 
@@ -517,7 +515,7 @@ ide_subprocess_launcher_get_environ (IdeSubprocessLauncher *self)
 
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
 
-  return (const gchar * const *)priv->environ->pdata;
+  return (const gchar * const *)priv->environ;
 }
 
 void
@@ -525,19 +523,26 @@ ide_subprocess_launcher_set_environ (IdeSubprocessLauncher *self,
                                      const gchar * const   *environ_)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  guint i;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  g_ptr_array_remove_range (priv->environ, 0, priv->environ->len);
-
-  if (environ_ != NULL)
+  if (priv->environ != (gchar **)environ_)
     {
-      for (i = 0; environ_ [i]; i++)
-        g_ptr_array_add (priv->environ, g_strdup (environ_ [i]));
+      g_strfreev (priv->environ);
+      priv->environ = g_strdupv ((gchar **)environ_);
     }
+}
 
-  g_ptr_array_add (priv->environ, NULL);
+const gchar *
+ide_subprocess_launcher_getenv (IdeSubprocessLauncher *self,
+                                const gchar           *key)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  return g_environ_getenv (priv->environ, key);
 }
 
 void
@@ -547,40 +552,11 @@ ide_subprocess_launcher_setenv (IdeSubprocessLauncher *self,
                                 gboolean               replace)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  gchar *str;
-  guint i;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_return_if_fail (key != NULL);
 
-  if (value == NULL)
-    value = "";
-
-  for (i = 0; i < priv->environ->len; i++)
-    {
-      gchar *item_key = g_ptr_array_index (priv->environ, i);
-      const gchar *eq;
-
-      if (item_key == NULL)
-        break;
-
-      if (NULL == (eq = strchr (item_key, '=')))
-        continue;
-
-      if (strncmp (item_key, key, eq - item_key) == 0)
-        {
-          if (replace)
-            {
-              g_free (item_key);
-              g_ptr_array_index (priv->environ, i) = g_strdup_printf ("%s=%s", key, value);
-            }
-          return;
-        }
-    }
-
-  str = g_strdup_printf ("%s=%s", key, value);
-  g_ptr_array_index (priv->environ, priv->environ->len - 1) = str;
-  g_ptr_array_add (priv->environ, NULL);
+  priv->environ = g_environ_setenv (priv->environ, key, value, replace);
 }
 
 void
@@ -605,8 +581,8 @@ ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
  */
 IdeSubprocess *
 ide_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
-                                    GCancellable           *cancellable,
-                                    GError                **error)
+                               GCancellable           *cancellable,
+                               GError                **error)
 {
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
