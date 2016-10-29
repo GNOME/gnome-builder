@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-flatpak-runtime"
+
 #include "gbp-flatpak-runtime.h"
+#include "gbp-flatpak-subprocess-launcher.h"
 
 struct _GbpFlatpakRuntime
 {
@@ -196,7 +199,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
 
-  ret = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (runtime, error);
+  ret = gbp_flatpak_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
   if (ret != NULL)
     {
@@ -207,7 +210,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, build_path);
 
       ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-      ide_subprocess_launcher_set_clear_env (ret, FALSE);
     }
 
   return ret;
