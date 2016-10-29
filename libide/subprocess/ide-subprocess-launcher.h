@@ -36,13 +36,6 @@ struct _IdeSubprocessLauncherClass
   IdeSubprocess *(*spawn_sync)   (IdeSubprocessLauncher  *self,
                                   GCancellable           *cancellable,
                                   GError                **error);
-  void           (*spawn_async)  (IdeSubprocessLauncher  *self,
-                                  GCancellable           *cancellable,
-                                  GAsyncReadyCallback     callback,
-                                  gpointer                user_data);
-  IdeSubprocess *(*spawn_finish) (IdeSubprocessLauncher  *self,
-                                  GAsyncResult           *result,
-                                  GError                **error);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -83,13 +76,6 @@ void                   ide_subprocess_launcher_push_argv           (IdeSubproces
 gchar                 *ide_subprocess_launcher_pop_argv            (IdeSubprocessLauncher  *self) G_GNUC_WARN_UNUSED_RESULT;
 IdeSubprocess         *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher  *self,
                                                                     GCancellable           *cancellable,
-                                                                    GError                **error);
-void                   ide_subprocess_launcher_spawn_async         (IdeSubprocessLauncher  *self,
-                                                                    GCancellable           *cancellable,
-                                                                    GAsyncReadyCallback     callback,
-                                                                    gpointer                user_data);
-IdeSubprocess         *ide_subprocess_launcher_spawn_finish        (IdeSubprocessLauncher  *self,
-                                                                    GAsyncResult           *result,
                                                                     GError                **error);
 void                   ide_subprocess_launcher_take_stdin_fd       (IdeSubprocessLauncher  *self,
                                                                     gint                    stdin_fd);

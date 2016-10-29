@@ -5972,27 +5972,6 @@
   )
 )
 
-(define-method spawn_async
-  (of-object "IdeSubprocessLauncher")
-  (c-name "ide_subprocess_launcher_spawn_async")
-  (return-type "none")
-  (parameters
-    '("GCancellable*" "cancellable")
-    '("GAsyncReadyCallback" "callback")
-    '("gpointer" "user_data")
-  )
-)
-
-(define-method spawn_finish
-  (of-object "IdeSubprocessLauncher")
-  (c-name "ide_subprocess_launcher_spawn_finish")
-  (return-type "GSubprocess*")
-  (parameters
-    '("GAsyncResult*" "result")
-    '("GError**" "error")
-  )
-)
-
 
 
 ;; From ide-symbol.h

@@ -324,42 +324,6 @@ ide_subprocess_launcher_real_spawn_sync (IdeSubprocessLauncher  *self,
 }
 
 static void
-ide_subprocess_launcher_real_spawn_async (IdeSubprocessLauncher *self,
-                                          GCancellable          *cancellable,
-                                          GAsyncReadyCallback    callback,
-                                          gpointer               user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  /*
-   * TODO: Adding threads here doesn't really make things any easier.
-   *       We should just spawn synchronously in the current thread.
-   */
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn_async);
-
-  if (should_use_breakout_process (self))
-    g_task_run_in_thread (task, ide_subprocess_launcher_spawn_host_worker);
-  else
-    g_task_run_in_thread (task, ide_subprocess_launcher_spawn_worker);
-}
-
-static IdeSubprocess *
-ide_subprocess_launcher_real_spawn_finish (IdeSubprocessLauncher  *self,
-                                           GAsyncResult           *result,
-                                           GError                **error)
-{
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
-  g_assert (G_IS_TASK (result));
-
-  return g_task_propagate_pointer (G_TASK (result), error);
-}
-
-static void
 ide_subprocess_launcher_finalize (GObject *object)
 {
   IdeSubprocessLauncher *self = (IdeSubprocessLauncher *)object;
@@ -461,8 +425,6 @@ ide_subprocess_launcher_class_init (IdeSubprocessLauncherClass *klass)
   object_class->set_property = ide_subprocess_launcher_set_property;
 
   klass->spawn_sync = ide_subprocess_launcher_real_spawn_sync;
-  klass->spawn_async = ide_subprocess_launcher_real_spawn_async;
-  klass->spawn_finish = ide_subprocess_launcher_real_spawn_finish;
 
   properties [PROP_CLEAR_ENV] =
     g_param_spec_boolean ("clean-env",
@@ -632,36 +594,6 @@ ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
 
   g_ptr_array_index (priv->argv, priv->argv->len - 1) = g_strdup (argv);
   g_ptr_array_add (priv->argv, NULL);
-}
-
-void
-ide_subprocess_launcher_spawn_async (IdeSubprocessLauncher *self,
-                                     GCancellable          *cancellable,
-                                     GAsyncReadyCallback    callback,
-                                     gpointer               user_data)
-{
-  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_SUBPROCESS_LAUNCHER_GET_CLASS (self)->spawn_async (self, cancellable, callback, user_data);
-}
-
-/**
- * ide_subprocess_launcher_spawn_finish:
- *
- * Complete a request to asynchronously spawn a process.
- *
- * Returns: (transfer full): A #IdeSubprocess or %NULL upon error.
- */
-IdeSubprocess *
-ide_subprocess_launcher_spawn_finish (IdeSubprocessLauncher  *self,
-                                      GAsyncResult           *result,
-                                      GError                **error)
-{
-  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
-
-  return IDE_SUBPROCESS_LAUNCHER_GET_CLASS (self)->spawn_finish (self, result, error);
 }
 
 /**
