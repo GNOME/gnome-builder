@@ -1984,7 +1984,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        * Spawn make, waiting for our stdin input which will add our debug
        * printf target.
        */
-      if (NULL == (subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error)))
+      if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
         {
           g_task_return_error (task, error);
           IDE_GOTO (failure);

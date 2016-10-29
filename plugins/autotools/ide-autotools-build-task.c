@@ -931,7 +931,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
   pair->message = g_string_free (log, FALSE);
   g_timeout_add (0, log_in_main, pair);
 
-  ret = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &local_error);
+  ret = ide_subprocess_launcher_spawn (launcher, cancellable, &local_error);
 
   if (ret == NULL)
     {
@@ -1040,9 +1040,10 @@ step_autogen (GTask                 *task,
     }
 
   ide_subprocess_launcher_set_cwd (launcher, state->project_path);
+
+  apply_environment (self, launcher);
   ide_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
   ide_subprocess_launcher_setenv (launcher, "NOCONFIGURE", "1", TRUE);
-  apply_environment (self, launcher);
 
   process = log_and_spawn (self, launcher, cancellable, &error, autogen_sh_path, NULL);
 
@@ -1116,7 +1117,7 @@ step_configure (GTask                 *task,
   ide_build_result_log_stdout (IDE_BUILD_RESULT (self), "%s", config_log);
   ide_subprocess_launcher_push_args (launcher, (const gchar * const *)state->configure_argv);
 
-  if (NULL == (process = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error)))
+  if (NULL == (process = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
       g_task_return_error (task, error);
       return FALSE;
@@ -1167,9 +1168,11 @@ step_make_all  (GTask                 *task,
   ide_subprocess_launcher_set_flags (launcher,
                                      (G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                       G_SUBPROCESS_FLAGS_STDOUT_PIPE));
+
   ide_subprocess_launcher_set_cwd (launcher, state->directory_path);
-  ide_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
+
   apply_environment (self, launcher);
+  ide_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
 
   /*
    * Try to locate GNU make within the runtime.

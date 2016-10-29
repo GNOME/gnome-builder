@@ -303,7 +303,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
 }
 
 static IdeSubprocess *
-ide_subprocess_launcher_real_spawn_sync (IdeSubprocessLauncher  *self,
+ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
                                          GCancellable           *cancellable,
                                          GError                **error)
 {
@@ -313,7 +313,7 @@ ide_subprocess_launcher_real_spawn_sync (IdeSubprocessLauncher  *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, NULL, NULL);
-  g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn_sync);
+  g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn);
 
   if (should_use_breakout_process (self))
     g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_host_worker);
@@ -424,7 +424,7 @@ ide_subprocess_launcher_class_init (IdeSubprocessLauncherClass *klass)
   object_class->get_property = ide_subprocess_launcher_get_property;
   object_class->set_property = ide_subprocess_launcher_set_property;
 
-  klass->spawn_sync = ide_subprocess_launcher_real_spawn_sync;
+  klass->spawn = ide_subprocess_launcher_real_spawn;
 
   properties [PROP_CLEAR_ENV] =
     g_param_spec_boolean ("clean-env",
@@ -597,21 +597,21 @@ ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
 }
 
 /**
- * ide_subprocess_launcher_spawn_sync:
+ * ide_subprocess_launcher_spawn:
  *
  * Synchronously spawn a process using the internal state.
  *
  * Returns: (transfer full): A #IdeSubprocess or %NULL upon error.
  */
 IdeSubprocess *
-ide_subprocess_launcher_spawn_sync (IdeSubprocessLauncher  *self,
+ide_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
                                     GCancellable           *cancellable,
                                     GError                **error)
 {
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
 
-  return IDE_SUBPROCESS_LAUNCHER_GET_CLASS (self)->spawn_sync (self, cancellable, error);
+  return IDE_SUBPROCESS_LAUNCHER_GET_CLASS (self)->spawn (self, cancellable, error);
 }
 
 void

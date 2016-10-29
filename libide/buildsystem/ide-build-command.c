@@ -138,7 +138,7 @@ ide_build_command_real_run (IdeBuildCommand  *self,
   if (launcher == NULL)
     IDE_RETURN (FALSE);
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, error);
   if (subprocess == NULL)
     return FALSE;
 
@@ -188,7 +188,7 @@ ide_build_command_real_run_async (IdeBuildCommand     *self,
       IDE_EXIT;
     }
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
   if (subprocess == NULL)
     {

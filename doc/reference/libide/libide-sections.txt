@@ -1934,7 +1934,7 @@ ide_subprocess_launcher_setenv
 ide_subprocess_launcher_overlay_environment
 ide_subprocess_launcher_push_args
 ide_subprocess_launcher_push_argv
-ide_subprocess_launcher_spawn_sync
+ide_subprocess_launcher_spawn
 IdeSubprocessLauncher
 </SECTION>
 

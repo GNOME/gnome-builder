@@ -221,7 +221,7 @@ ide_runner_real_run_async (IdeRunner           *self,
    */
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
   g_assert (subprocess == NULL || IDE_IS_SUBPROCESS (subprocess));
 

@@ -84,7 +84,7 @@ ide_subprocess_supervisor_real_supervise (IdeSubprocessSupervisor *self,
 
   ide_subprocess_supervisor_reset (self);
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error);
 
   if (subprocess != NULL)
     ide_subprocess_supervisor_set_subprocess (self, subprocess);

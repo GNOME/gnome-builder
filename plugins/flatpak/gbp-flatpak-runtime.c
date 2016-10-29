@@ -76,7 +76,7 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   ide_subprocess_launcher_push_argv (launcher, "which");
   ide_subprocess_launcher_push_argv (launcher, program);
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, NULL);
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL);
 
   return (subprocess != NULL) && ide_subprocess_wait_check (subprocess, cancellable, NULL);
 }
@@ -141,7 +141,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher, self->platform);
   ide_subprocess_launcher_push_argv (launcher, self->branch);
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
   if (subprocess == NULL)
     {

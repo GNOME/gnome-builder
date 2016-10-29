@@ -5962,9 +5962,9 @@
   )
 )
 
-(define-method spawn_sync
+(define-method spawn
   (of-object "IdeSubprocessLauncher")
-  (c-name "ide_subprocess_launcher_spawn_sync")
+  (c-name "ide_subprocess_launcher_spawn")
   (return-type "GSubprocess*")
   (parameters
     '("GCancellable*" "cancellable")

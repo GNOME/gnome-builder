@@ -100,7 +100,7 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
   ide_subprocess_launcher_push_args (launcher, (const gchar * const *)argv);
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, error);
 
   if (subprocess == NULL)
     return NULL;
@@ -272,7 +272,7 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
   ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
 
-  subprocess = ide_subprocess_launcher_spawn_sync (launcher, NULL, &error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error);
   if (subprocess == NULL)
     IDE_GOTO (failure);
 

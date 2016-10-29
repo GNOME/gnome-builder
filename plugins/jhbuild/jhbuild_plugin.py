@@ -70,7 +70,7 @@ class JhbuildRuntime(Ide.Runtime):
         prefix = None
         try:
             # FIXME: Async
-            subprocess = launcher.spawn_sync (None)
+            subprocess = launcher.spawn (None)
             success, output, err_output = subprocess.communicate_utf8 (None, None)
             if success:
                 prefix = output.strip()
@@ -88,7 +88,7 @@ class JhbuildRuntime(Ide.Runtime):
         launcher.push_argv(program)
 
         try:
-            subprocess = launcher.spawn_sync (cancellable)
+            subprocess = launcher.spawn (cancellable)
             return subprocess.wait_check (cancellable)
         except GLib.Error:
             return False

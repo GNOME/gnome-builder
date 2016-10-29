@@ -124,7 +124,7 @@ class RustService(Ide.Object, Ide.Service):
         """
         launcher = self._create_launcher()
         launcher.push_args(['rustc', '--print', 'sysroot'])
-        subprocess = launcher.spawn_sync()
+        subprocess = launcher.spawn()
         _, stdout, _ = subprocess.communicate_utf8()
         return stdout.strip()
 

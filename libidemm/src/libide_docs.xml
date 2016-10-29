@@ -5217,7 +5217,7 @@ Complete a request to asynchronously spawn a process.
 </return>
 </function>
 
-<function name="ide_subprocess_launcher_spawn_sync">
+<function name="ide_subprocess_launcher_spawn">
 <description>
 Synchronously spawn a process using the internal state.
 

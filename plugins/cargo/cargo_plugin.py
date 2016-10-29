@@ -181,7 +181,7 @@ class CargoBuildResult(Ide.BuildResult):
         for arg in args:
             launcher.push_argv(arg)
 
-        subprocess = launcher.spawn_sync()
+        subprocess = launcher.spawn()
 
         self.log_subprocess(subprocess)
 

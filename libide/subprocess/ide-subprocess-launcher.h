@@ -33,7 +33,7 @@ struct _IdeSubprocessLauncherClass
 {
   GObjectClass parent_class;
 
-  IdeSubprocess *(*spawn_sync)   (IdeSubprocessLauncher  *self,
+  IdeSubprocess *(*spawn)   (IdeSubprocessLauncher  *self,
                                   GCancellable           *cancellable,
                                   GError                **error);
 
@@ -74,7 +74,7 @@ void                   ide_subprocess_launcher_push_args           (IdeSubproces
 void                   ide_subprocess_launcher_push_argv           (IdeSubprocessLauncher  *self,
                                                                     const gchar            *argv);
 gchar                 *ide_subprocess_launcher_pop_argv            (IdeSubprocessLauncher  *self) G_GNUC_WARN_UNUSED_RESULT;
-IdeSubprocess         *ide_subprocess_launcher_spawn_sync          (IdeSubprocessLauncher  *self,
+IdeSubprocess         *ide_subprocess_launcher_spawn          (IdeSubprocessLauncher  *self,
                                                                     GCancellable           *cancellable,
                                                                     GError                **error);
 void                   ide_subprocess_launcher_take_stdin_fd       (IdeSubprocessLauncher  *self,

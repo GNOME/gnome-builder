@@ -1001,7 +1001,7 @@ simple_make_command (GFile            *directory,
   if (g_task_return_error_if_cancelled (task))
     return;
 
-  if (NULL == (subprocess = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error)))
+  if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
       g_task_return_error (task, error);
       return;
