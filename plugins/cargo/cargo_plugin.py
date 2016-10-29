@@ -47,7 +47,7 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
                 return
 
             # Maybe this is a directory with a Cargo.toml
-            if self.props.project_file.query_file_type() == Gio.FileType.DIRECTORY:
+            if self.props.project_file.query_file_type(0) == Gio.FileType.DIRECTORY:
                 child = self.props.project_file.get_child('Cargo.toml')
                 if child.query_exists(None):
                     self.props.project_file = child
