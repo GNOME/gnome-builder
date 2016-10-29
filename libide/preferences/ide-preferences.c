@@ -139,17 +139,27 @@ ide_preferences_add_list_group (IdePreferences   *self,
   return IDE_PREFERENCES_GET_IFACE (self)->add_list_group  (self, page_name, group_name, title, mode, priority);
 }
 
-guint ide_preferences_add_radio (IdePreferences *self,
-                                 const gchar    *page_name,
-                                 const gchar    *group_name,
-                                 const gchar    *schema_id,
-                                 const gchar    *key,
-                                 const gchar    *path,
-                                 const gchar    *variant_string,
-                                 const gchar    *title,
-                                 const gchar    *subtitle,
-                                 const gchar    *keywords,
-                                 gint            priority)
+/**
+ * ide_preferences_add_radio:
+ * @path: (nullable): An optional path
+ * @variant_string: (nullable): An optional gvariant string
+ * @title: (nullable): An optional title
+ * @subtitle: (nullable): An optional subtitle
+ * @keywords: (nullable): Optional keywords for search
+ *
+ */
+guint
+ide_preferences_add_radio (IdePreferences *self,
+                           const gchar    *page_name,
+                           const gchar    *group_name,
+                           const gchar    *schema_id,
+                           const gchar    *key,
+                           const gchar    *path,
+                           const gchar    *variant_string,
+                           const gchar    *title,
+                           const gchar    *subtitle,
+                           const gchar    *keywords,
+                           gint            priority)
 {
   g_return_val_if_fail (IDE_IS_PREFERENCES (self), 0);
   g_return_val_if_fail (page_name != NULL, 0);
