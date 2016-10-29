@@ -305,8 +305,8 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
 
 static IdeSubprocess *
 ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
-                                         GCancellable           *cancellable,
-                                         GError                **error)
+                                    GCancellable           *cancellable,
+                                    GError                **error)
 {
   g_autoptr(GTask) task = NULL;
 
