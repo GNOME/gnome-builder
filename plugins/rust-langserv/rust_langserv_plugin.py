@@ -91,10 +91,10 @@ class RustService(Ide.Object, Ide.Service):
 
             # Spawn our peer process and monitor it for
             # crashes. We may need to restart it occasionally.
-            supervisor = Ide.SubprocessSupervisor()
-            supervisor.connect('spawned', self._rls_spawned)
-            supervisor.set_launcher(launcher)
-            supervisor.start()
+            self._supervisor = Ide.SubprocessSupervisor()
+            self._supervisor.connect('spawned', self._rls_spawned)
+            self._supervisor.set_launcher(launcher)
+            self._supervisor.start()
 
     def _rls_spawned(self, supervisor, subprocess):
         """
