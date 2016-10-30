@@ -322,14 +322,14 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
   if (!ide_subprocess_wait_finish (subprocess, result, &error))
     g_warning ("%s", error->message);
 
-#ifdef IDE_TRACE_ENABLED
+#ifdef IDE_ENABLE_TRACE
   {
     if (ide_subprocess_get_if_exited (subprocess))
       IDE_TRACE_MSG ("process exited with code: %u",
                      ide_subprocess_get_exit_status (subprocess));
     else
       IDE_TRACE_MSG ("process terminated due to signal: %u",
-                     ide_subprocess_get_term_signal (subprocess));
+                     ide_subprocess_get_term_sig (subprocess));
   }
 #endif
 
