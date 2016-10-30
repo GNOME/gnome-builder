@@ -51,6 +51,7 @@
 
 #include <glib.h>
 
+#include "jcon.h"
 #include "jsonrpc-client.h"
 #include "jsonrpc-input-stream.h"
 #include "jsonrpc-output-stream.h"
@@ -723,8 +724,7 @@ jsonrpc_client_call_async (JsonrpcClient       *self,
                            gpointer             user_data)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonObject) object = NULL;
-  g_autoptr(JsonNode) node = NULL;
+  g_autoptr(JsonNode) message = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GError) error = NULL;
   gint id;
@@ -754,20 +754,17 @@ jsonrpc_client_call_async (JsonrpcClient       *self,
   if (params == NULL)
     params = json_node_new (JSON_NODE_NULL);
 
-  object = json_object_new ();
-
-  json_object_set_string_member (object, "jsonrpc", "2.0");
-  json_object_set_int_member (object, "id", id);
-  json_object_set_string_member (object, "method", method);
-  json_object_set_member (object, "params", params);
-
-  node = json_node_new (JSON_NODE_OBJECT);
-  json_node_take_object (node, g_steal_pointer (&object));
+  message = JCON_NEW (
+    "jsonrpc", "2.0",
+    "id", JCON_INT (id),
+    "method", JCON_STRING (method),
+    "params", JCON_NODE (params)
+  );
 
   g_hash_table_insert (priv->invocations, GINT_TO_POINTER (id), g_object_ref (task));
 
   jsonrpc_output_stream_write_message_async (priv->output_stream,
-                                             node,
+                                             message,
                                              cancellable,
                                              jsonrpc_client_call_write_cb,
                                              g_steal_pointer (&task));
@@ -874,8 +871,8 @@ jsonrpc_client_notification (JsonrpcClient  *self,
                              GError        **error)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonObject) object = NULL;
-  g_autoptr(JsonNode) node = NULL;
+  g_autoptr(JsonNode) message = NULL;
+  gboolean ret;
 
   g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
   g_return_val_if_fail (method != NULL, FALSE);
@@ -887,16 +884,17 @@ jsonrpc_client_notification (JsonrpcClient  *self,
   if (params == NULL)
     params = json_node_new (JSON_NODE_NULL);
 
-  object = json_object_new ();
+  message = JCON_NEW (
+    "jsonrpc", "2.0",
+    "method", JCON_STRING (method),
+    "params", JCON_NODE (params)
+  );
 
-  json_object_set_string_member (object, "jsonrpc", "2.0");
-  json_object_set_string_member (object, "method", method);
-  json_object_set_member (object, "params", params);
+  ret = jsonrpc_output_stream_write_message (priv->output_stream, message, cancellable, error);
 
-  node = json_node_new (JSON_NODE_OBJECT);
-  json_node_take_object (node, g_steal_pointer (&object));
+  json_node_unref (params);
 
-  return jsonrpc_output_stream_write_message (priv->output_stream, node, cancellable, error);
+  return ret;
 }
 
 /**
@@ -924,8 +922,7 @@ jsonrpc_client_notification_async (JsonrpcClient       *self,
                                    gpointer             user_data)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonObject) object = NULL;
-  g_autoptr(JsonNode) node = NULL;
+  g_autoptr(JsonNode) message = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -945,20 +942,19 @@ jsonrpc_client_notification_async (JsonrpcClient       *self,
   if (params == NULL)
     params = json_node_new (JSON_NODE_NULL);
 
-  object = json_object_new ();
-
-  json_object_set_string_member (object, "jsonrpc", "2.0");
-  json_object_set_string_member (object, "method", method);
-  json_object_set_member (object, "params", params);
-
-  node = json_node_new (JSON_NODE_OBJECT);
-  json_node_take_object (node, g_steal_pointer (&object));
+  message = JCON_NEW (
+    "jsonrpc", "2.0",
+    "method", JCON_STRING (method),
+    "params", JCON_NODE (params)
+  );
 
   jsonrpc_output_stream_write_message_async (priv->output_stream,
-                                             node,
+                                             message,
                                              cancellable,
                                              jsonrpc_client_notification_write_cb,
                                              g_steal_pointer (&task));
+
+  json_node_unref (params);
 }
 
 /**
