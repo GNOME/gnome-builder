@@ -567,8 +567,6 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
       g_autoptr(GFile) file = NULL;
       g_autoptr(IdeDiagnostics) diagnostics = NULL;
 
-      IDE_TRACE_MSG ("Diagnostics received for %s", uri);
-
       file = g_file_new_for_uri (uri);
       ifile = g_object_new (IDE_TYPE_FILE,
                             "file", file,
@@ -576,11 +574,20 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
                             NULL);
       diagnostics = ide_langserv_client_translate_diagnostics (self, ifile, json_diagnostics);
 
-      g_signal_emit (self, signals [PUBLISHED_DIAGNOSTICS], 0, file, diagnostics);
+      IDE_TRACE_MSG ("%"G_GSIZE_FORMAT" diagnostics received for %s",
+                     diagnostics ? ide_diagnostics_get_size (diagnostics) : 0,
+                     uri);
 
+      /*
+       * Insert the diagnostics into our cache before emit any signals
+       * so that we have up to date information incase the signal causes
+       * a callback to query back.
+       */
       g_hash_table_insert (priv->diagnostics_by_file,
-                           g_steal_pointer (&file),
-                           g_steal_pointer (&diagnostics));
+                           g_object_ref (file),
+                           ide_diagnostics_ref (diagnostics));
+
+      g_signal_emit (self, signals [PUBLISHED_DIAGNOSTICS], 0, file, diagnostics);
     }
 
   IDE_EXIT;
