@@ -64,7 +64,7 @@ ide_langserv_diagnostic_provider_get_diagnostics_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   if (!ide_langserv_client_get_diagnostics_finish (client, result, &diagnostics, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, g_steal_pointer (&diagnostics), (GDestroyNotify)ide_diagnostics_unref);
 }
