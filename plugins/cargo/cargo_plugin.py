@@ -56,7 +56,7 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         except Exception as ex:
             task.return_error(ex)
 
-        raise NotImplemented
+        task.return_error(Ide.NotSupportedError())
 
     def do_init_finish(self, task):
         return task.propagate_boolean()
