@@ -547,7 +547,7 @@ ide_clang_service_start (IdeService *service)
   IdeClangService *self = (IdeClangService *)service;
 
   g_return_if_fail (IDE_IS_CLANG_SERVICE (self));
-  g_return_if_fail (!self->index);
+  g_return_if_fail (self->index == NULL);
 
   self->cancellable = g_cancellable_new ();
 
@@ -575,7 +575,7 @@ ide_clang_service_stop (IdeService *service)
   IdeClangService *self = (IdeClangService *)service;
 
   g_return_if_fail (IDE_IS_CLANG_SERVICE (self));
-  g_return_if_fail (!self->index);
+  g_return_if_fail (self->index != NULL);
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->units_cache);
