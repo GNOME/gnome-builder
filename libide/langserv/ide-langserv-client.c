@@ -1226,7 +1226,7 @@ ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,
     *diagnostics = g_steal_pointer (&local_diagnostics);
 
   if (local_error)
-    g_propagate_error (error, local_error);
+    g_propagate_error (error, g_steal_pointer (&local_error));
 
   return ret;
 }
