@@ -108,6 +108,11 @@ ide_preferences_add_spin_button (IdePreferences *self,
   return IDE_PREFERENCES_GET_IFACE (self)->add_spin_button (self, page_name, group_name, schema_id, key, path, title, subtitle, keywords, priority);
 }
 
+/**
+ * ide_preferences_add_custom:
+ * @keywords: (nullable): Optional keywords for search
+ *
+ */
 guint
 ide_preferences_add_custom (IdePreferences *self,
                             const gchar    *page_name,
