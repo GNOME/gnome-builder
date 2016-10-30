@@ -157,5 +157,9 @@ class DBusService:
         error = GLib.Error.new_literal(GLib.io_channel_error_quark(), 1, 'Not implemented yet')
         return False
 
+def NotSupportedError():
+    return GLib.Error.new_literal(Gio.io_error_quark(), 'not supported', Gio.IOErrorEnum.NOT_SUPPORTED)
+
+Ide.NotSupportedError = NotSupportedError
 Ide.DBusService = DBusService
 Ide.DBusMethod = DBusMethod
