@@ -631,7 +631,6 @@ jcon_extract_va_list (JsonNode *node,
           JsonNode *target = get_stack_node (node, keys[sp], indexes[sp]);
           if (target == NULL || !JSON_NODE_HOLDS_ARRAY (target))
             return FALSE;
-          g_assert (node == json_node_get_parent (target));
           node = target;
           PUSH_STACK();
           continue;
@@ -642,7 +641,6 @@ jcon_extract_va_list (JsonNode *node,
           JsonNode *target = get_stack_node (node, keys[sp], indexes[sp]);
           if (target == NULL || !JSON_NODE_HOLDS_OBJECT (target))
             return FALSE;
-          g_assert (node == json_node_get_parent (target));
           node = target;
           PUSH_STACK();
           continue;
