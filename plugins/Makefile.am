@@ -25,6 +25,7 @@ SUBDIRS = \
 	jedi \
 	jhbuild \
 	mingw \
+	meson \
 	project-tree \
 	python-gi-imports-completion \
 	python-pack \
