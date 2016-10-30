@@ -1151,7 +1151,6 @@ ide_langserv_client_notification_finish (IdeLangservClient  *self,
                                          GAsyncResult       *result,
                                          GError            **error)
 {
-  g_autoptr(JsonNode) local_return_value = NULL;
   gboolean ret;
 
   IDE_ENTRY;
