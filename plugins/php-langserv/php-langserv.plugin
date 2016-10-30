@@ -1,0 +1,13 @@
+[Plugin]
+Module=php_langserv_plugin
+Loader=python3
+Name=PHP Language Server Integration
+Description=Provides auto-completion, diagnostics, and other IDE features
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2016 Christian Hergert
+Builtin=true
+X-Completion-Provider-Languages=php
+X-Diagnostic-Provider-Languages=php
+X-Highlighter-Languages=php
+X-Rename-Provider-Languages=php
+X-Symbol-Resolver-Languages=php

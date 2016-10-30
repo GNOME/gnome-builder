@@ -26,6 +26,7 @@ SUBDIRS = \
 	jhbuild \
 	mingw \
 	meson \
+	php-langserv \
 	project-tree \
 	python-gi-imports-completion \
 	python-pack \

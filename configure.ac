@@ -306,6 +306,7 @@ m4_include([plugins/jedi/configure.ac])
 m4_include([plugins/jhbuild/configure.ac])
 m4_include([plugins/meson/configure.ac])
 m4_include([plugins/mingw/configure.ac])
+m4_include([plugins/php-langserv/configure.ac])
 m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
 m4_include([plugins/python-pack/configure.ac])
@@ -615,6 +616,7 @@ echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
 echo "  JHBuild .............................. : ${enable_jhbuild_plugin}"
 echo "  Meson ................................ : ${enable_meson_plugin}"
 echo "  MinGW ................................ : ${enable_mingw_plugin}"
+echo "  PHP Language Server .................. : ${enable_php_langserv_plugin}"
 echo "  Project Creation ..................... : ${enable_create_project_plugin}"
 echo "  Project Tree ......................... : ${enable_project_tree_plugin}"
 echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_completion_plugin}"
