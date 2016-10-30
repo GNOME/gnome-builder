@@ -229,7 +229,7 @@ ide_application_activate_worker (IdeApplication *self)
 
 #ifdef __linux
   /* Ensure we are killed with our parent */
-  prctl (PR_SET_PDEATHSIG, 15);
+  prctl (PR_SET_PDEATHSIG, SIGKILL);
 #endif
 
   IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);

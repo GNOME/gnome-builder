@@ -82,7 +82,7 @@ child_setup_func (gpointer data)
 
 #ifdef __linux
   /* Ensure we are killed with our parent */
-  prctl (PR_SET_PDEATHSIG, 15);
+  prctl (PR_SET_PDEATHSIG, SIGKILL);
 #endif
 }
 
