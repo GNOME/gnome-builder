@@ -623,7 +623,7 @@ ide_langserv_client_notification (IdeLangservClient *self,
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (method != NULL);
   g_assert (params != NULL);
-  g_assert (rpc_client != NULL);
+  g_assert (JSONRPC_IS_CLIENT (rpc_client));
 
   IDE_TRACE_MSG ("Notification: %s", method);
 
@@ -946,10 +946,14 @@ ide_langserv_client_shutdown_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
+  g_autoptr(IdeLangservClient) self = user_data;
   JsonrpcClient *client = (JsonrpcClient *)object;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
+
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
 
   if (!jsonrpc_client_call_finish (client, result, NULL, &error))
     g_warning ("%s", error->message);
@@ -975,7 +979,7 @@ ide_langserv_client_stop (IdeLangservClient *self)
                                  NULL,
                                  NULL,
                                  ide_langserv_client_shutdown_cb,
-                                 NULL);
+                                 g_object_ref (self));
       g_clear_object (&priv->rpc_client);
     }
 
