@@ -556,7 +556,7 @@ ide_context_finalize (GObject *object)
 
   IDE_ENTRY;
 
-  g_clear_pointer (&self->services, g_hash_table_unref);
+  g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
   g_clear_pointer (&self->root_build_dir, g_free);
   g_clear_pointer (&self->recent_projects_path, g_free);
 
@@ -568,6 +568,7 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
   g_clear_object (&self->runtime_manager);
+  g_clear_object (&self->services);
   g_clear_object (&self->transfer_manager);
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
@@ -1841,6 +1842,28 @@ ide_context_unload_unsaved_files (gpointer             source_object,
 }
 
 static void
+ide_context_unload_services (gpointer             source_object,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  g_clear_object (&self->services);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
 ide_context_unload_cb (GObject      *object,
                        GAsyncResult *result,
                        gpointer      user_data)
@@ -1880,6 +1903,7 @@ ide_context_do_unload_locked (IdeContext *self)
                         ide_context_unload_back_forward_list,
                         ide_context_unload_buffer_manager,
                         ide_context_unload_unsaved_files,
+                        ide_context_unload_services,
                         NULL);
 }
 
