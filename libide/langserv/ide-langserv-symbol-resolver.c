@@ -421,7 +421,7 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
         continue;
 
       /* Optional fields */
-      JCON_EXTRACT (node, "containerName", &container_name);
+      JCON_EXTRACT (node, "containerName", JCONE_STRING (container_name));
 
       file = g_file_new_for_uri (uri);
 
