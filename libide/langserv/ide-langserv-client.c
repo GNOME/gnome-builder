@@ -1188,7 +1188,9 @@ ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
                            ide_diagnostics_ref (diagnostics),
                            (GDestroyNotify)ide_diagnostics_unref);
   else
-    g_task_return_pointer (task, NULL, NULL);
+    g_task_return_pointer (task,
+                           ide_diagnostics_new (NULL),
+                           (GDestroyNotify)ide_diagnostics_unref);
 }
 
 /**
@@ -1217,10 +1219,7 @@ ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   local_diagnostics = g_task_propagate_pointer (G_TASK (result), &local_error);
-  ret = local_error == NULL;
-
-  if (ret == TRUE && local_diagnostics == NULL)
-    local_diagnostics = ide_diagnostics_new (NULL);
+  ret = local_diagnostics != NULL;
 
   if (local_diagnostics != NULL && diagnostics != NULL)
     *diagnostics = g_steal_pointer (&local_diagnostics);
