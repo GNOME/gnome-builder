@@ -9,4 +9,6 @@ dist_plugin_DATA = \
 
 endif
 
+include $(top_srcdir)/plugins/Makefile.plugin
+
 -include $(top_srcdir)/git.mk
