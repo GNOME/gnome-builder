@@ -65,10 +65,7 @@ ide_subprocess_supervisor_reset (IdeSubprocessSupervisor *self)
        * subprocess so that when ide_subprocess_supervisor_wait_cb() is called
        * it will not be able to match on (priv->subprocess == subprocess).
        */
-
-      if (!ide_subprocess_get_if_exited (subprocess) &&
-          !ide_subprocess_get_if_signaled (subprocess))
-        ide_subprocess_force_exit (subprocess);
+      ide_subprocess_force_exit (subprocess);
     }
 }
 
@@ -112,11 +109,18 @@ ide_subprocess_supervisor_finalize (GObject *object)
   IdeSubprocessSupervisor *self = (IdeSubprocessSupervisor *)object;
   IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
 
-  if (priv->subprocess != NULL && !ide_subprocess_get_if_exited (priv->subprocess))
-    ide_subprocess_force_exit (priv->subprocess);
+  /*
+   * Subprocess will have completed a wait by this point (or cancelled). It is
+   * safe to call force_exit() either way as it will drop the signal delivery
+   * on the floor if the process has exited.
+   */
+  if (priv->subprocess != NULL)
+    {
+      ide_subprocess_force_exit (priv->subprocess);
+      g_clear_object (&priv->subprocess);
+    }
 
   g_clear_object (&priv->launcher);
-  g_clear_object (&priv->subprocess);
 
   G_OBJECT_CLASS (ide_subprocess_supervisor_parent_class)->finalize (object);
 }
