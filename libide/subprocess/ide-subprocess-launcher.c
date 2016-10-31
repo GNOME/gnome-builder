@@ -23,10 +23,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef __linux
-# include <sys/prctl.h>
-#endif
-
 #include "ide-debug.h"
 #include "ide-macros.h"
 
@@ -78,11 +74,6 @@ child_setup_func (gpointer data)
    *       as expected.
    */
   setsid ();
-#endif
-
-#ifdef __linux
-  /* Ensure we are killed with our parent */
-  prctl (PR_SET_PDEATHSIG, SIGKILL);
 #endif
 }
 
