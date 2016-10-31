@@ -288,7 +288,11 @@ provider_get_interactive_delay (GtkSourceCompletionProvider *provider)
 static gint
 provider_get_priority (GtkSourceCompletionProvider *provider)
 {
-  return 100;
+  /* We want snippets at highest priority because they are
+   * used for quick hacking without having to think to much
+   * about whether they are active or not.
+   */
+  return IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_PRIORITY;
 }
 
 static gchar *

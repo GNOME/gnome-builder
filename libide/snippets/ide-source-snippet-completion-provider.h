@@ -26,7 +26,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER (ide_source_snippet_completion_provider_get_type())
+#define IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_PRIORITY 1000
+#define IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER     (ide_source_snippet_completion_provider_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeSourceSnippetCompletionProvider, ide_source_snippet_completion_provider, IDE, SOURCE_SNIPPET_COMPLETION_PROVIDER, GObject)
 
