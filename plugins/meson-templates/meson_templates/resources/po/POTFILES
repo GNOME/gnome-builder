@@ -1,0 +1,1 @@
+src/{{if language == "c"}}main.c{{else if language == "cpp"}}main.cpp{{end}}

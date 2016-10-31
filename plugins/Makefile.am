@@ -26,6 +26,7 @@ SUBDIRS = \
 	jhbuild \
 	mingw \
 	meson \
+	meson-templates \
 	project-tree \
 	python-gi-imports-completion \
 	python-pack \

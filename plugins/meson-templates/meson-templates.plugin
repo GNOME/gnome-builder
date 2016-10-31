@@ -1,0 +1,9 @@
+[Plugin]
+Name=Meson Templates
+Description=Provides templates for creating meson projects
+Authors=Patrick Griffis <tingping@tingping.se>
+Copyright=Copyright © 2016 Patrick Griffis
+Builtin=true
+Hidden=true
+Loader=python3
+Module=meson_templates
