@@ -429,4 +429,6 @@ gb_project_tree_reveal (GbProjectTree *self,
   ide_tree_expand_to_node (IDE_TREE (self), node);
   ide_tree_scroll_to_node (IDE_TREE (self), node);
   ide_tree_node_select (node);
+
+  ide_workbench_focus (ide_widget_get_workbench (GTK_WIDGET (self)), GTK_WIDGET (self));
 }
