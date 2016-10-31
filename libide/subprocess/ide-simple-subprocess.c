@@ -18,7 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-simple-subprocess"
 
-#include "ide-simple-subprocess.h"
+#include "ide-debug.h"
+
+#include "subprocess/ide-simple-subprocess.h"
 
 struct _IdeSimpleSubprocess
 {
@@ -36,9 +38,13 @@ ide_simple_subprocess_finalize (GObject *object)
 {
   IdeSimpleSubprocess *self = (IdeSimpleSubprocess *)object;
 
+  IDE_ENTRY;
+
   g_clear_object (&self->subprocess);
 
   G_OBJECT_CLASS (ide_simple_subprocess_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -98,10 +104,17 @@ ide_simple_subprocess_wait_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
+  g_assert (G_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_TASK (task));
+
   if (!g_subprocess_wait_finish (subprocess, result, &error))
     g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -111,8 +124,22 @@ ide_simple_subprocess_wait_async (IdeSubprocess       *subprocess,
                                   gpointer             user_data)
 {
   IdeSimpleSubprocess *self = (IdeSimpleSubprocess *)subprocess;
-  GTask *task = g_task_new (self, cancellable, callback, user_data);
-  g_subprocess_wait_async (self->subprocess, cancellable, ide_simple_subprocess_wait_cb, task);
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SIMPLE_SUBPROCESS (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_simple_subprocess_wait_async);
+
+  g_subprocess_wait_async (self->subprocess,
+                           cancellable,
+                           ide_simple_subprocess_wait_cb,
+                           g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -120,7 +147,16 @@ ide_simple_subprocess_wait_finish (IdeSubprocess  *subprocess,
                                    GAsyncResult   *result,
                                    GError        **error)
 {
-  return g_task_propagate_boolean (G_TASK (result), error);
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SIMPLE_SUBPROCESS (subprocess));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static gboolean
@@ -163,13 +199,17 @@ static void
 ide_simple_subprocess_send_signal (IdeSubprocess *subprocess,
                                    gint           signal_num)
 {
-  return WRAP_INTERFACE_METHOD (send_signal, signal_num);
+  IDE_ENTRY;
+  WRAP_INTERFACE_METHOD (send_signal, signal_num);
+  IDE_EXIT;
 }
 
 static void
 ide_simple_subprocess_force_exit (IdeSubprocess *subprocess)
 {
-  return WRAP_INTERFACE_METHOD (force_exit);
+  IDE_ENTRY;
+  WRAP_INTERFACE_METHOD (force_exit);
+  IDE_EXIT;
 }
 
 static gboolean

@@ -18,7 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-subprocess"
 
-#include "ide-subprocess.h"
+#include "ide-debug.h"
+
+#include "subprocess/ide-subprocess.h"
 
 G_DEFINE_INTERFACE (IdeSubprocess, ide_subprocess, G_TYPE_OBJECT)
 
@@ -46,7 +48,7 @@ ide_subprocess_get_identifier (IdeSubprocess *self)
  * Returns: (transfer none): A #GInputStream or %NULL.
  */
 GInputStream *
-ide_subprocess_get_stdout_pipe  (IdeSubprocess *self)
+ide_subprocess_get_stdout_pipe (IdeSubprocess *self)
 {
   g_return_val_if_fail (IDE_IS_SUBPROCESS (self), NULL);
 
@@ -133,22 +135,26 @@ ide_subprocess_wait_check_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SUBPROCESS (self));
   g_assert (G_IS_TASK (task));
 
   if (!ide_subprocess_wait_finish (self, result, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
-      return;
+      IDE_EXIT;
     }
 
   if (!ide_subprocess_check_exit_status (self, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
-      return;
+      IDE_EXIT;
     }
 
   g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -158,6 +164,8 @@ ide_subprocess_wait_check_async (IdeSubprocess       *self,
                                  gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SUBPROCESS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -169,6 +177,8 @@ ide_subprocess_wait_check_async (IdeSubprocess       *self,
                              cancellable,
                              ide_subprocess_wait_check_cb,
                              g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 gboolean
