@@ -194,6 +194,8 @@ gb_terminal_respawn (GbTerminalView *self,
   int master_fd = -1;
   int tty_fd = -1;
   char name[PATH_MAX + 1];
+  gint stdout_fd = -1;
+  gint stderr_fd = -1;
 
   IDE_ENTRY;
 
@@ -259,21 +261,28 @@ gb_terminal_respawn (GbTerminalView *self,
   if (-1 == (tty_fd = open (name, O_RDWR | O_CLOEXEC)))
     IDE_GOTO (failure);
 
+  /* dup() is safe as it will inherit O_CLOEXEC */
+  if (-1 == (stdout_fd = dup (tty_fd)) || -1 == (stderr_fd = dup (tty_fd)))
+    IDE_GOTO (failure);
+
   /* XXX: It would be nice to allow using the runtimes launcher */
   launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_cwd (launcher, workpath);
   ide_subprocess_launcher_push_args (launcher, (const gchar * const *)args->pdata);
-  ide_subprocess_launcher_take_stdin_fd (launcher, dup (tty_fd));
-  ide_subprocess_launcher_take_stdout_fd (launcher, dup (tty_fd));
-  ide_subprocess_launcher_take_stderr_fd (launcher, dup (tty_fd));
+  ide_subprocess_launcher_take_stdin_fd (launcher, tty_fd);
+  ide_subprocess_launcher_take_stdout_fd (launcher, stdout_fd);
+  ide_subprocess_launcher_take_stderr_fd (launcher, stderr_fd);
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
   ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
   ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
 
-  subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error);
-  if (subprocess == NULL)
+  tty_fd = -1;
+  stdout_fd = -1;
+  stderr_fd = -1;
+
+  if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     IDE_GOTO (failure);
 
   ide_subprocess_wait_async (subprocess,
@@ -284,6 +293,12 @@ gb_terminal_respawn (GbTerminalView *self,
 failure:
   if (tty_fd != -1)
     close (tty_fd);
+
+  if (stdout_fd != -1)
+    close (stdout_fd);
+
+  if (stderr_fd != -1)
+    close (stderr_fd);
 
   g_clear_object (&pty);
 
