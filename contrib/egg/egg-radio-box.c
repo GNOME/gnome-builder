@@ -270,6 +270,13 @@ egg_radio_box_add_item (EggRadioBox *self,
 
   precount = priv->items->len;
 
+  for (guint i = 0; i < precount; ++i)
+    {
+      /* Avoid duplicate items */
+      if (!g_strcmp0 (g_array_index (priv->items, EggRadioBoxItem, i).id, id))
+        return;
+    }
+
   item.id = g_strdup (id);
   item.text = g_strdup (text);
   item.button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
