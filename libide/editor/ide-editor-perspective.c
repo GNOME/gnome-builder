@@ -305,10 +305,14 @@ static void
 ide_editor_perspective_view_destroyed (IdeEditorPerspective *self,
                                        IdeLayoutView        *view)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_assert (IDE_IS_LAYOUT_VIEW (view));
 
   g_signal_emit (self, signals [VIEW_REMOVED], 0, view);
+
+  IDE_EXIT;
 }
 
 static void
