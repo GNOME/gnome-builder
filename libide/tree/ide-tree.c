@@ -234,7 +234,7 @@ ide_tree_popup (IdeTree        *self,
 
       g_object_set (G_OBJECT (menu_widget),
                     "rect-anchor-dx", target_x - 12,
-                    "rect-anchor-dy", target_y + 3,
+                    "rect-anchor-dy", target_y - 3,
                     NULL);
       gtk_menu_popup_at_widget (GTK_MENU (menu_widget),
                                 GTK_WIDGET (self),
