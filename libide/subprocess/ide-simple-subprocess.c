@@ -109,6 +109,15 @@ ide_simple_subprocess_wait_cb (GObject      *object,
   g_assert (G_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_TASK (task));
 
+#ifdef IDE_ENABLE_TRACE
+  if (g_subprocess_get_if_exited (subprocess))
+    IDE_TRACE_MSG ("subprocess exited with exit status: %d",
+                   g_subprocess_get_exit_status (subprocess));
+  else
+    IDE_TRACE_MSG ("subprocess exited due to signal: %d",
+                   g_subprocess_get_term_sig (subprocess));
+#endif
+
   if (!g_subprocess_wait_finish (subprocess, result, &error))
     g_task_return_error (task, g_steal_pointer (&error));
   else
