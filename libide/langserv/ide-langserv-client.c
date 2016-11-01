@@ -142,9 +142,9 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_notification_async (self, "textDocument/didSave",
-                                          g_steal_pointer (&params),
-                                          NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self, "textDocument/didSave",
+                                               g_steal_pointer (&params),
+                                               NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -202,9 +202,9 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
       "}",
     "]");
 
-  ide_langserv_client_notification_async (self, "textDocument/didChange",
-                                          g_steal_pointer (&params),
-                                          NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self, "textDocument/didChange",
+                                               g_steal_pointer (&params),
+                                               NULL, NULL, NULL);
 }
 
 static void
@@ -261,9 +261,9 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
       "}",
     "]");
 
-  ide_langserv_client_notification_async (self, "textDocument/didChange",
-                                          g_steal_pointer (&params),
-                                          NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self, "textDocument/didChange",
+                                               g_steal_pointer (&params),
+                                               NULL, NULL, NULL);
 }
 
 static void
@@ -303,10 +303,10 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_notification_async (self,
-                                          "textDocument/didOpen",
-                                          g_steal_pointer (&params),
-                                          NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self,
+                                               "textDocument/didOpen",
+                                               g_steal_pointer (&params),
+                                               NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -336,10 +336,10 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_notification_async (self,
-                                          "textDocument/didClose",
-                                          g_steal_pointer (&params),
-                                          NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self,
+                                               "textDocument/didClose",
+                                               g_steal_pointer (&params),
+                                               NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -403,10 +403,10 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
     "]"
   );
 
-  ide_langserv_client_notification_async (self,
-                                          "workspace/didChangeWatchedFiles",
-                                          g_steal_pointer (&params),
-                                          NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self,
+                                               "workspace/didChangeWatchedFiles",
+                                               g_steal_pointer (&params),
+                                               NULL, NULL, NULL);
 
   ide_langserv_client_clear_diagnostics (self, uri);
 
@@ -446,10 +446,10 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
     "]"
   );
 
-  ide_langserv_client_notification_async (self,
-                                          "workspace/didChangeWatchedFiles",
-                                          g_steal_pointer (&params),
-                                          NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self,
+                                               "workspace/didChangeWatchedFiles",
+                                               g_steal_pointer (&params),
+                                               NULL, NULL, NULL);
 
   ide_langserv_client_clear_diagnostics (self, src_uri);
 
@@ -611,10 +611,10 @@ ide_langserv_client_real_notification (IdeLangservClient *self,
 }
 
 static void
-ide_langserv_client_notification (IdeLangservClient *self,
-                                  const gchar       *method,
-                                  JsonNode          *params,
-                                  JsonrpcClient     *rpc_client)
+ide_langserv_client_send_notification (IdeLangservClient *self,
+                                       const gchar       *method,
+                                       JsonNode          *params,
+                                       JsonrpcClient     *rpc_client)
 {
   GQuark detail;
 
@@ -911,7 +911,7 @@ ide_langserv_client_start (IdeLangservClient *self)
 
   g_signal_connect_object (priv->rpc_client,
                            "notification",
-                           G_CALLBACK (ide_langserv_client_notification),
+                           G_CALLBACK (ide_langserv_client_send_notification),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -1082,9 +1082,9 @@ ide_langserv_client_call_finish (IdeLangservClient  *self,
 }
 
 static void
-ide_langserv_client_notification_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+ide_langserv_client_send_notification_cb (GObject      *object,
+                                          GAsyncResult *result,
+                                          gpointer      user_data)
 {
   JsonrpcClient *client = (JsonrpcClient *)object;
   g_autoptr(GTask) task = user_data;
@@ -1101,7 +1101,7 @@ ide_langserv_client_notification_cb (GObject      *object,
 }
 
 /**
- * ide_langserv_client_notification_async:
+ * ide_langserv_client_send_notification_async:
  * @self: An #IdeLangservClient
  * @method: the method to notification
  * @params: (nullable) (transfer full): An #JsonNode or %NULL
@@ -1112,12 +1112,12 @@ ide_langserv_client_notification_cb (GObject      *object,
  * Asynchronously sends a notification to the Language Server.
  */
 void
-ide_langserv_client_notification_async (IdeLangservClient   *self,
-                                        const gchar         *method,
-                                        JsonNode            *params,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  notificationback,
-                                        gpointer             user_data)
+ide_langserv_client_send_notification_async (IdeLangservClient   *self,
+                                             const gchar         *method,
+                                             JsonNode            *params,
+                                             GCancellable        *cancellable,
+                                             GAsyncReadyCallback  notificationback,
+                                             gpointer             user_data)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
@@ -1125,7 +1125,7 @@ ide_langserv_client_notification_async (IdeLangservClient   *self,
   IDE_ENTRY;
 
   task = g_task_new (self, cancellable, notificationback, user_data);
-  g_task_set_source_tag (task, ide_langserv_client_notification_async);
+  g_task_set_source_tag (task, ide_langserv_client_send_notification_async);
 
   if (priv->rpc_client == NULL)
     {
@@ -1140,16 +1140,16 @@ ide_langserv_client_notification_async (IdeLangservClient   *self,
                                           method,
                                           params,
                                           cancellable,
-                                          ide_langserv_client_notification_cb,
+                                          ide_langserv_client_send_notification_cb,
                                           g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 gboolean
-ide_langserv_client_notification_finish (IdeLangservClient  *self,
-                                         GAsyncResult       *result,
-                                         GError            **error)
+ide_langserv_client_send_notification_finish (IdeLangservClient  *self,
+                                              GAsyncResult       *result,
+                                              GError            **error)
 {
   gboolean ret;
 
