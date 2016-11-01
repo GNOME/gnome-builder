@@ -79,20 +79,20 @@ gboolean       jsonrpc_client_call_finish         (JsonrpcClient        *self,
                                                    GAsyncResult         *result,
                                                    JsonNode            **return_value,
                                                    GError              **error);
-gboolean       jsonrpc_client_notification        (JsonrpcClient        *self,
-                                                   const gchar          *method,
-                                                   JsonNode             *params,
-                                                   GCancellable         *cancellable,
-                                                   GError              **error);
-void           jsonrpc_client_notification_async  (JsonrpcClient        *self,
-                                                   const gchar          *method,
-                                                   JsonNode             *params,
-                                                   GCancellable         *cancellable,
-                                                   GAsyncReadyCallback   callback,
-                                                   gpointer              user_data);
-gboolean       jsonrpc_client_notification_finish (JsonrpcClient        *self,
-                                                   GAsyncResult         *result,
-                                                   GError              **error);
+gboolean       jsonrpc_client_send_notification        (JsonrpcClient        *self,
+                                                        const gchar          *method,
+                                                        JsonNode             *params,
+                                                        GCancellable         *cancellable,
+                                                        GError              **error);
+void           jsonrpc_client_send_notification_async  (JsonrpcClient        *self,
+                                                        const gchar          *method,
+                                                        JsonNode             *params,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+gboolean       jsonrpc_client_send_notification_finish (JsonrpcClient        *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
 gboolean       jsonrpc_client_reply               (JsonrpcClient        *self,
                                                    JsonNode             *id,
                                                    JsonNode             *result,

@@ -1092,7 +1092,7 @@ ide_langserv_client_notification_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  if (!jsonrpc_client_notification_finish (client, result, &error))
+  if (!jsonrpc_client_send_notification_finish (client, result, &error))
     g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
@@ -1136,12 +1136,12 @@ ide_langserv_client_notification_async (IdeLangservClient   *self,
       IDE_EXIT;
     }
 
-  jsonrpc_client_notification_async (priv->rpc_client,
-                                     method,
-                                     params,
-                                     cancellable,
-                                     ide_langserv_client_notification_cb,
-                                     g_steal_pointer (&task));
+  jsonrpc_client_send_notification_async (priv->rpc_client,
+                                          method,
+                                          params,
+                                          cancellable,
+                                          ide_langserv_client_notification_cb,
+                                          g_steal_pointer (&task));
 
   IDE_EXIT;
 }
