@@ -201,22 +201,39 @@ is_jsonrpc_result (JsonNode *node)
  * Check to see if this looks like a proper method call for an RPC.
  */
 static gboolean
-is_jsonrpc_call (JsonNode *node)
+is_jsonrpc_call (JsonNode     *node,
+                 JsonNode    **id,
+                 JsonNode    **params,
+                 const gchar **method)
 {
-  JsonNode *id = NULL;
-  JsonNode *params = NULL;
-  const gchar *method = NULL;
+  JsonNode *tmp_id = NULL;
+  JsonNode *tmp_params = NULL;
+  const gchar *tmp_method = NULL;
   gboolean success;
 
   g_assert (JSON_NODE_HOLDS_OBJECT (node));
 
   success = JCON_EXTRACT (node,
-    "id", JCONE_NODE (id),
-    "method", JCONE_STRING (method),
-    "params", JCONE_NODE (params)
+    "id", JCONE_NODE (tmp_id),
+    "method", JCONE_STRING (tmp_method),
+    "params", JCONE_NODE (tmp_params)
   );
 
-  return success && id != NULL && method != NULL && params != NULL;
+  if (success && tmp_id != NULL && tmp_method != NULL && tmp_params != NULL)
+    {
+      if (id != NULL)
+        *id = tmp_id;
+
+      if (method != NULL)
+        *method = tmp_method;
+
+      if (params != NULL)
+        *params = tmp_params;
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 /*
@@ -558,6 +575,9 @@ jsonrpc_client_call_read_cb (GObject      *object,
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
   g_autoptr(JsonNode) node = NULL;
   g_autoptr(GError) error = NULL;
+  JsonNode *id_node = NULL;
+  JsonNode *params_node = NULL;
+  const gchar *method = NULL;
   gint id = -1;
 
   g_assert (JSONRPC_IS_INPUT_STREAM (stream));
@@ -647,23 +667,14 @@ jsonrpc_client_call_read_cb (GObject      *object,
   /*
    * If this is a method call, emit the handle-call signal.
    */
-  if (is_jsonrpc_call (node))
+  if (is_jsonrpc_call (node,
+                       &id_node,
+                       &params_node,
+                       &method))
     {
-      JsonNode *id_node = NULL;
-      JsonNode *params = NULL;
-      const gchar *method = NULL;
       gboolean ret = FALSE;
-      gboolean success;
 
-      success = JCON_EXTRACT (node,
-        "id", JCONE_NODE (id_node),
-        "method", JCONE_STRING (method),
-        "params", JCONE_NODE (params)
-      );
-
-      g_assert (success);
-
-      g_signal_emit (self, signals [HANDLE_CALL], 0, method, id_node, params, &ret);
+      g_signal_emit (self, signals [HANDLE_CALL], 0, method, id_node, params_node, &ret);
 
       if (ret == FALSE)
         {
