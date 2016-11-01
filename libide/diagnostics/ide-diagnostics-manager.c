@@ -348,10 +348,13 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
           IdeDiagnostic *diagnostic = ide_diagnostics_index (diagnostics, i);
           GFile *file = ide_diagnostic_get_file (diagnostic);
 
-          if G_LIKELY (g_file_equal (file, group->file))
-            ide_diagnostics_group_add (group, provider, diagnostic);
-          else
-            ide_diagnostics_manager_add_diagnostic (self, provider, diagnostic);
+          if G_LIKELY (file != NULL)
+            {
+              if G_LIKELY (g_file_equal (file, group->file))
+                ide_diagnostics_group_add (group, provider, diagnostic);
+              else
+                ide_diagnostics_manager_add_diagnostic (self, provider, diagnostic);
+            }
         }
 
       if (length > 0)
