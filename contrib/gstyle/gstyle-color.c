@@ -242,7 +242,14 @@ gstyle_color_to_string (GstyleColor     *self,
         string = g_strdup (predefined_colors_table [self->name_index].name);
       else
         {
-          /* TODO: get similar color using cie2000 */
+          /* TODO: search for a corresponding name in the predefined_colors_table
+           * or fallback to rgba syntax
+           */
+          red = (guint)(0.5 + CLAMP (self->rgba.red, 0.0, 1.0) * 255.0);
+          green = (guint)(0.5 + CLAMP (self->rgba.green, 0.0, 1.0) * 255.0);
+          blue = (guint)(0.5 + CLAMP (self->rgba.blue, 0.0, 1.0) * 255.0);
+
+          string = g_strdup_printf ("rgba(%i, %i, %i, %s)", red, green, blue, alpha_str);
         }
       break;
 
