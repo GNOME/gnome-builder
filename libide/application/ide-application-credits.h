@@ -32,6 +32,7 @@ static const gchar *ide_application_credits_artists[] = {
 
 static const gchar *ide_application_credits_authors[] = {
   "Akshaya Kakkilaya",
+  "Alberto Fanjul",
   "Alex285",
   "Alexander Larsson",
   "Alexandre Franke",
@@ -73,6 +74,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Fran Dieguez",
   "Gábor Kelemen",
   "Garrett Regier",
+  "Gautier Pelloux-Prayer",
   "Giovanni Campagna",
   "Hashem Nasarat",
   "heroin",
