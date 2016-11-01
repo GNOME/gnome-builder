@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 # include "jsonrpc-client.h"
 # include "jsonrpc-input-stream.h"
 # include "jsonrpc-output-stream.h"
+# include "jsonrpc-server.h"
 # include "jsonrpc-version.h"
 # include "jcon.h"
 #undef JSONRPC_GLIB_INSIDE

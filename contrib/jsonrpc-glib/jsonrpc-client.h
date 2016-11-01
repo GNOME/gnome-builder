@@ -33,9 +33,13 @@ struct _JsonrpcClientClass
 {
   GObjectClass parent_class;
 
-  void (*notification) (JsonrpcClient *self,
-                        const gchar   *method_name,
-                        JsonNode      *params);
+  void     (*notification) (JsonrpcClient *self,
+                            const gchar   *method_name,
+                            JsonNode      *params);
+  gboolean (*handle_call)  (JsonrpcClient *self,
+                            const gchar   *method,
+                            JsonNode      *id,
+                            JsonNode      *params);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -89,6 +93,21 @@ void           jsonrpc_client_notification_async  (JsonrpcClient        *self,
 gboolean       jsonrpc_client_notification_finish (JsonrpcClient        *self,
                                                    GAsyncResult         *result,
                                                    GError              **error);
+gboolean       jsonrpc_client_reply               (JsonrpcClient        *self,
+                                                   JsonNode             *id,
+                                                   JsonNode             *result,
+                                                   GCancellable         *cancellable,
+                                                   GError              **error);
+void           jsonrpc_client_reply_async         (JsonrpcClient        *self,
+                                                   JsonNode             *id,
+                                                   JsonNode             *result,
+                                                   GCancellable         *cancellable,
+                                                   GAsyncReadyCallback   callback,
+                                                   gpointer              user_data);
+gboolean       jsonrpc_client_reply_finish        (JsonrpcClient        *self,
+                                                   GAsyncResult         *result,
+                                                   GError              **error);
+void           jsonrpc_client_start_listening     (JsonrpcClient        *self);
 
 G_END_DECLS
 

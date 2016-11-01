@@ -10,6 +10,8 @@ libjsonrpc_glib_la_SOURCES = \
 	jsonrpc-input-stream.h \
 	jsonrpc-output-stream.c \
 	jsonrpc-output-stream.h \
+	jsonrpc-server.c \
+	jsonrpc-server.h \
 	jsonrpc-version.h \
 	$(NULL)
 

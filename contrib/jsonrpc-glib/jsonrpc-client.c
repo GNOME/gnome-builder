@@ -133,6 +133,7 @@ enum {
 };
 
 enum {
+  HANDLE_CALL,
   NOTIFICATION,
   N_SIGNALS
 };
@@ -193,6 +194,29 @@ is_jsonrpc_result (JsonNode *node)
          JSON_NODE_HOLDS_VALUE (field) &&
          json_node_get_int (field) > 0 &&
          json_object_has_member (object, "result");
+}
+
+
+/*
+ * Check to see if this looks like a proper method call for an RPC.
+ */
+static gboolean
+is_jsonrpc_call (JsonNode *node)
+{
+  JsonNode *id = NULL;
+  JsonNode *params = NULL;
+  const gchar *method = NULL;
+  gboolean success;
+
+  g_assert (JSON_NODE_HOLDS_OBJECT (node));
+
+  success = JCON_EXTRACT (node,
+    "id", JCONE_NODE (id),
+    "method", JCONE_STRING (method),
+    "params", JCONE_NODE (params)
+  );
+
+  return success && id != NULL && method != NULL && params != NULL;
 }
 
 /*
@@ -397,6 +421,45 @@ jsonrpc_client_class_init (JsonrpcClientClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  /**
+   * JsonrpcClient::handle-call:
+   * @self: A #JsonrpcClient
+   * @method: the method name
+   * @id: The "id" field of the JSONRPC message
+   * @params: The "params" field of the JSONRPC message
+   *
+   * This signal is emitted when an RPC has been received from
+   * the peer we are connected to. Return %TRUE if you have handled
+   * this message, even asynchronously. If no handler has returned
+   * %TRUE an error will be synthesized.
+   *
+   * If you handle the message, you are responsible for replying to
+   * the peer in a timely manner using jsonrpc_client_reply() or
+   * jsonrpc_client_reply_async().
+   */
+  signals [HANDLE_CALL] =
+    g_signal_new ("handle-call",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (JsonrpcClientClass, handle_call),
+                  g_signal_accumulator_true_handled, NULL, NULL,
+                  G_TYPE_BOOLEAN,
+                  3,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  JSON_TYPE_NODE,
+                  JSON_TYPE_NODE);
+
+  /**
+   * JsonrpcClient::notification:
+   * @self: A #JsonrpcClient
+   * @method: the method name of the notification
+   * @params: params for the notification
+   *
+   * This signal is emitted when a notification has been received
+   * from a peer. Unlike #JsonrpcClient::handle-call, this does
+   * not have an "id" parameter because notifications do not have
+   * ids. They do not round trip.
+   */
   signals [NOTIFICATION] =
     g_signal_new ("notification",
                   G_TYPE_FROM_CLASS (klass),
@@ -578,6 +641,48 @@ jsonrpc_client_call_read_cb (GObject      *object,
                                    G_IO_ERROR_INVALID_DATA,
                                    "Reply to missing or invalid task");
       jsonrpc_client_panic (self, error);
+      return;
+    }
+
+  /*
+   * If this is a method call, emit the handle-call signal.
+   */
+  if (is_jsonrpc_call (node))
+    {
+      JsonNode *id_node = NULL;
+      JsonNode *params = NULL;
+      const gchar *method = NULL;
+      gboolean ret = FALSE;
+      gboolean success;
+
+      success = JCON_EXTRACT (node,
+        "id", JCONE_NODE (id_node),
+        "method", JCONE_STRING (method),
+        "params", JCONE_NODE (params)
+      );
+
+      g_assert (success);
+
+      g_signal_emit (self, signals [HANDLE_CALL], 0, method, id_node, params, &ret);
+
+      if (ret == FALSE)
+        {
+          g_autoptr(JsonNode) reply = NULL;
+
+          reply = JCON_NEW (
+            "jsonrpc", "2.0",
+            "id", JCON_NODE (id_node),
+            "error", "{",
+              "code", JCON_INT (-32601),
+              "message", "The method does not exist or is not available",
+            "}"
+          );
+
+          jsonrpc_output_stream_write_message_async (priv->output_stream,
+                                                     g_steal_pointer (&reply),
+                                                     NULL, NULL, NULL);
+        }
+
       return;
     }
 
@@ -769,27 +874,8 @@ jsonrpc_client_call_async (JsonrpcClient       *self,
                                              jsonrpc_client_call_write_cb,
                                              g_steal_pointer (&task));
 
-  /*
-   * If this is our very first message, then we need to start our
-   * async read loop. This will allow us to receive notifications
-   * out-of-band and intermixed with RPC calls.
-   */
-
   if (priv->is_first_call)
-    {
-      priv->is_first_call = FALSE;
-
-      /*
-       * Because we take a reference here in our read loop, it is important
-       * that the user calls jsonrpc_client_close() or
-       * jsonrpc_client_close_async() so that we can cancel the operation and
-       * allow it to cleanup any outstanding references.
-       */
-      jsonrpc_input_stream_read_message_async (priv->input_stream,
-                                               priv->read_loop_cancellable,
-                                               jsonrpc_client_call_read_cb,
-                                               g_object_ref (self));
-    }
+    jsonrpc_client_start_listening (self);
 }
 
 /**
@@ -1090,4 +1176,172 @@ jsonrpc_client_close_finish (JsonrpcClient  *self,
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+/**
+ * jsonrpc_client_reply:
+ * @id: (transfer full) (not nullable): the id of the message to reply
+ * result: (transfer full) (nullable): the return value or %NULL
+ *
+ * Synchronous variant of jsonrpc_client_reply_async().
+ */
+gboolean
+jsonrpc_client_reply (JsonrpcClient  *self,
+                      JsonNode       *id,
+                      JsonNode       *result,
+                      GCancellable   *cancellable,
+                      GError        **error)
+{
+  JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
+  g_autoptr(JsonNode) message = NULL;
+  gboolean ret;
+
+  g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (id != NULL, FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  if (!jsonrpc_client_check_ready (self, error))
+    return FALSE;
+
+  if (result == NULL)
+    result = json_node_new (JSON_NODE_NULL);
+
+  message = JCON_NEW (
+    "jsonrpc", "2.0",
+    "id", JCON_NODE (id),
+    "result", JCON_NODE (result)
+  );
+
+  ret = jsonrpc_output_stream_write_message (priv->output_stream, message, cancellable, error);
+
+  json_node_unref (id);
+  json_node_unref (result);
+
+  return ret;
+}
+
+static void
+jsonrpc_client_reply_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  JsonrpcOutputStream *stream = (JsonrpcOutputStream *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (JSONRPC_IS_OUTPUT_STREAM (stream));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!jsonrpc_output_stream_write_message_finish (stream, result, &error))
+    g_task_return_error (task, g_steal_pointer (&task));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+/**
+ * jsonrcp_client_reply_async:
+ * @id: (transfer full) (not nullable): the id of the message to reply
+ * result: (transfer full) (nullable): the return value or %NULL
+ *
+ * This function will reply to a method call identified by @id with the
+ * result provided. If @result is %NULL, then a null JSON node is returned
+ * for the "result" field of the JSONRPC message.
+ *
+ * JSONRPC allows either peer to call methods on each other, so this
+ * method is provided allowing #JsonrpcClient to be used for either
+ * side of communications.
+ *
+ * If no signal handler has handled #JsonrpcClient::handle-call then
+ * an error will be synthesized to the peer.
+ *
+ * Call jsonrpc_client_reply_finish() to complete the operation. Note
+ * that since the peer does not reply to replies, completion of this
+ * asynchronous message does not indicate that the peer has received
+ * the message.
+ */
+void
+jsonrpc_client_reply_async (JsonrpcClient       *self,
+                            JsonNode            *id,
+                            JsonNode            *result,
+                            GCancellable        *cancellable,
+                            GAsyncReadyCallback  callback,
+                            gpointer             user_data)
+{
+  JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(JsonNode) message = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (JSONRPC_IS_CLIENT (self));
+  g_return_if_fail (id != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, jsonrpc_client_reply_async);
+
+  if (!jsonrpc_client_check_ready (self, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (result == NULL)
+    result = json_node_new (JSON_NODE_NULL);
+
+  message = JCON_NEW (
+    "jsonrpc", "2.0",
+    "id", JCON_NODE (id),
+    "result", JCON_NODE (result)
+  );
+
+  jsonrpc_output_stream_write_message_async (priv->output_stream,
+                                             message,
+                                             cancellable,
+                                             jsonrpc_client_reply_cb,
+                                             g_steal_pointer (&task));
+
+  json_node_unref (id);
+  json_node_unref (result);
+}
+
+gboolean
+jsonrpc_client_reply_finish (JsonrpcClient  *self,
+                             GAsyncResult   *result,
+                             GError        **error)
+{
+  g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+void
+jsonrpc_client_start_listening (JsonrpcClient *self)
+{
+  JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
+
+  g_return_if_fail (JSONRPC_IS_CLIENT (self));
+
+  /*
+   * If this is our very first message, then we need to start our
+   * async read loop. This will allow us to receive notifications
+   * out-of-band and intermixed with RPC calls.
+   */
+
+  if (priv->is_first_call)
+    {
+      priv->is_first_call = FALSE;
+
+      /*
+       * Because we take a reference here in our read loop, it is important
+       * that the user calls jsonrpc_client_close() or
+       * jsonrpc_client_close_async() so that we can cancel the operation and
+       * allow it to cleanup any outstanding references.
+       */
+      jsonrpc_input_stream_read_message_async (priv->input_stream,
+                                               priv->read_loop_cancellable,
+                                               jsonrpc_client_call_read_cb,
+                                               g_object_ref (self));
+    }
 }
