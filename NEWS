@@ -1,4 +1,56 @@
 ==============
+Version 3.22.2
+==============
+
+Summary of changes since 3.22.1
+
+ * Flatpak builds of Builder can now target a Flatpak runtime when building
+   the project. More work is ongoing to support running your project with
+   flatpak runtimes.
+ * Translation improvements
+ * More RTL improvements
+ * Lots of memory leak fixes found with ASAN
+ * Builder will now cleanup the makecache directory for old temporary files
+   that could have been left behind.
+ * Flatpak breakout subprocess fixes to allow synchronous use from main
+   loop. This fixes potential lockups in Flatpak'd versions of Builder.
+ * The diagnostic engine has been restructured to allow out-of-band
+   updates to diagnostics.
+ * Create-project now depends on git, as it uses git to initialize a
+   new project.
+ * GObject Introspection improvements.
+ * Improve performance of diagnostic creation under heavy use. This fixes
+   a main-loop stall when extracting thousands of diagnostics from a
+   project.
+ * Diagnostics panel has been changed to use GtkTreeView to support larger
+   lists of diagnostics as found in some projects.
+ * Add empty-state views for symbols and diagnostic panels.
+ * Sysprof support includes visualizers, zoom, and selectable ranges.
+ * Ctags can now be used to build symbol trees, including Python
+ * IdeSubprocessSupervisor has been added to allow plugins to easily
+   manage an external process.
+ * A client has been added for "Language Server Protocol" to make writing
+   language-server based plugins easy.
+ * Support for the Meson and Cargo build systems have been added.
+   Run support with Meson will require 0.36.0 of Meson.
+ * Deprecation fixes for various deprecated gtk+ API.
+ * Runtimes have been improved to hook into the application build process.
+ * Vim support has been improved to better support counts to change operations.
+ * Build and runtime improvements for editorconfig.
+ * Handle alt+0..n properly during auto-completion.
+ * Builder now depends on json-glib-1.0. This was already likely required
+   via dependencies before, but now is explicit.
+
+3.22.2 also includes a technology preview for Rust support. You can try
+this out by installing Rust nightly and the “rustls” package for integrated
+diagnostics, auto-completion, and sybmol-tree support.
+
+There have also been a bunch of translation updates this cycle. Thanks to all
+of our translators since 3.22.1:  Dušan Kazik, Aurimas Černius, Balázs Meskó,
+Benedikt M. Thoma, ChenYang Li, Kjartan Maraas, Marek Černocký, Mario
+Blättermann, Piotr Drąg, Rafael Fontenelle
+
+==============
 Version 3.22.1
 ==============
 

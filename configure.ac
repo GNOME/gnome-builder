@@ -6,7 +6,7 @@ dnl Define Versioning Information
 dnl ***********************************************************************
 m4_define([builder_major_version],[3])
 m4_define([builder_minor_version],[22])
-m4_define([builder_micro_version],[1])
+m4_define([builder_micro_version],[2])
 m4_define([builder_version],[builder_major_version.builder_minor_version.builder_micro_version])
 m4_define([builder_interface_age],[0])
 m4_define([builder_bugreport_url],
@@ -182,11 +182,11 @@ AC_SUBST(BUGREPORT_URL)
 dnl ***********************************************************************
 dnl Check for Required Packages
 dnl ***********************************************************************
-m4_define([gtk_required_version], [3.21.5])
-m4_define([glib_required_version], [2.49.0])
-m4_define([gtksourceview_required_version], [3.21.2])
+m4_define([gtk_required_version], [3.22.1])
+m4_define([glib_required_version], [2.50.0])
+m4_define([gtksourceview_required_version], [3.22.0])
 m4_define([gobject_introspection_version], [1.48.0])
-m4_define([pygobject_required_version], [3.21.0])
+m4_define([pygobject_required_version], [3.22.0])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([pangoft2_required_version], [1.38.0])
 m4_define([peas_required_version], [1.18.0])
