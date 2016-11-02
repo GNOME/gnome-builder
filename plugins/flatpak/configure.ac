@@ -1,4 +1,4 @@
-m4_define([flatpak_required_version], [0.6.0])
+m4_define([flatpak_required_version], [0.6.9])
 
 # --enable-flatpak-plugin=yes/no/auto
 AC_ARG_ENABLE([flatpak-plugin],
