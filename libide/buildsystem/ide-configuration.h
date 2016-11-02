@@ -76,6 +76,26 @@ IdeConfiguration     *ide_configuration_duplicate        (IdeConfiguration  *sel
 guint                 ide_configuration_get_sequence     (IdeConfiguration  *self);
 IdeBuildCommandQueue *ide_configuration_get_prebuild     (IdeConfiguration  *self);
 IdeBuildCommandQueue *ide_configuration_get_postbuild    (IdeConfiguration  *self);
+const gchar          *ide_configuration_get_internal_string  (IdeConfiguration  *self,
+                                                              const gchar       *key);
+void                  ide_configuration_set_internal_string  (IdeConfiguration  *self,
+                                                              const gchar       *key,
+                                                              const gchar       *value);
+gboolean              ide_configuration_get_internal_boolean (IdeConfiguration  *self,
+                                                              const gchar       *key);
+void                  ide_configuration_set_internal_boolean (IdeConfiguration  *self,
+                                                              const gchar       *key,
+                                                              gboolean           value);
+gint                  ide_configuration_get_internal_int     (IdeConfiguration  *self,
+                                                              const gchar       *key);
+void                  ide_configuration_set_internal_int     (IdeConfiguration  *self,
+                                                              const gchar       *key,
+                                                              gint               value);
+gint64                ide_configuration_get_internal_int64   (IdeConfiguration  *self,
+                                                              const gchar       *key);
+void                  ide_configuration_set_internal_int64   (IdeConfiguration  *self,
+                                                              const gchar       *key,
+                                                              gint64             value);
 
 G_END_DECLS
 

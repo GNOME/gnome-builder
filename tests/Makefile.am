@@ -91,6 +91,13 @@ test_ide_context_LDADD = $(tests_libs)
 test_ide_context_LDFLAGS = $(tests_ldflags)
 
 
+TESTS = test-ide-configuration
+test_ide_configuration_SOURCES = test-ide-configuration.c
+test_ide_configuration_CFLAGS = $(tests_cflags)
+test_ide_configuration_LDADD = $(tests_libs)
+test_ide_configuration_LDFLAGS = $(tests_ldflags)
+
+
 TESTS += test-ide-back-forward-list
 test_ide_back_forward_list_SOURCES = test-ide-back-forward-list.c
 test_ide_back_forward_list_CFLAGS = $(tests_cflags)

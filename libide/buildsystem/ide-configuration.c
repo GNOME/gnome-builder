@@ -48,6 +48,8 @@ struct _IdeConfiguration
   IdeBuildCommandQueue *prebuild;
   IdeBuildCommandQueue *postbuild;
 
+  GHashTable     *internal;
+
   gint            parallelism;
   guint           sequence;
 
@@ -81,6 +83,29 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [LAST_SIGNAL];
+
+static void
+_value_free (gpointer data)
+{
+  GValue *value = data;
+
+  if (value != NULL)
+    {
+      g_value_unset (value);
+      g_slice_free (GValue, value);
+    }
+}
+
+static GValue *
+_value_new (GType type)
+{
+  GValue *value;
+
+  value = g_slice_new0 (GValue);
+  g_value_init (value, type);
+
+  return value;
+}
 
 static void
 ide_configuration_emit_changed (IdeConfiguration *self)
@@ -168,24 +193,27 @@ ide_configuration_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_configuration_parent_class)->constructed (object);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  device_manager = ide_context_get_device_manager (context);
-  runtime_manager = ide_context_get_runtime_manager (context);
+  /* Allow ourselves to be run from unit tests without a valid context */
+  if (NULL != (context = ide_object_get_context (IDE_OBJECT (self))))
+    {
+      device_manager = ide_context_get_device_manager (context);
+      runtime_manager = ide_context_get_runtime_manager (context);
 
-  g_signal_connect_object (device_manager,
-                           "items-changed",
-                           G_CALLBACK (ide_configuration_device_manager_items_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+      g_signal_connect_object (device_manager,
+                               "items-changed",
+                               G_CALLBACK (ide_configuration_device_manager_items_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (runtime_manager,
-                           "items-changed",
-                           G_CALLBACK (ide_configuration_runtime_manager_items_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+      g_signal_connect_object (runtime_manager,
+                               "items-changed",
+                               G_CALLBACK (ide_configuration_runtime_manager_items_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
 
-  ide_configuration_device_manager_items_changed (self, 0, 0, 0, device_manager);
-  ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
+      ide_configuration_device_manager_items_changed (self, 0, 0, 0, device_manager);
+      ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
+    }
 }
 
 static void
@@ -197,6 +225,7 @@ ide_configuration_finalize (GObject *object)
   g_clear_object (&self->prebuild);
   g_clear_object (&self->postbuild);
 
+  g_clear_pointer (&self->internal, g_hash_table_unref);
   g_clear_pointer (&self->config_opts, g_free);
   g_clear_pointer (&self->device_id, g_free);
   g_clear_pointer (&self->display_name, g_free);
@@ -438,6 +467,8 @@ ide_configuration_init (IdeConfiguration *self)
   self->debug = TRUE;
   self->environment = ide_environment_new ();
   self->parallelism = -1;
+
+  self->internal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _value_free);
 
   g_signal_connect_object (self->environment,
                            "items-changed",
@@ -936,6 +967,9 @@ void
 _ide_configuration_set_prebuild (IdeConfiguration     *self,
                                  IdeBuildCommandQueue *prebuild)
 {
+  g_assert (IDE_IS_CONFIGURATION (self));
+  g_assert (!prebuild || IDE_IS_BUILD_COMMAND_QUEUE (prebuild));
+
   g_set_object (&self->prebuild, prebuild);
 }
 
@@ -943,5 +977,157 @@ void
 _ide_configuration_set_postbuild (IdeConfiguration     *self,
                                   IdeBuildCommandQueue *postbuild)
 {
+  g_assert (IDE_IS_CONFIGURATION (self));
+  g_assert (!postbuild || IDE_IS_BUILD_COMMAND_QUEUE (postbuild));
+
   g_set_object (&self->postbuild, postbuild);
+}
+
+static GValue *
+ide_configuration_reset_internal_value (IdeConfiguration *self,
+                                        const gchar      *key,
+                                        GType             type)
+{
+  GValue *v;
+
+  g_assert (IDE_IS_CONFIGURATION (self));
+  g_assert (key != NULL);
+  g_assert (type != G_TYPE_INVALID);
+
+  v = g_hash_table_lookup (self->internal, key);
+
+  if (v == NULL)
+    {
+      v = _value_new (type);
+      g_hash_table_insert (self->internal, g_strdup (key), v);
+    }
+  else
+    {
+      g_value_unset (v);
+      g_value_init (v, type);
+    }
+
+  return v;
+}
+
+const gchar *
+ide_configuration_get_internal_string (IdeConfiguration *self,
+                                       const gchar      *key)
+{
+  const GValue *v;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  v = g_hash_table_lookup (self->internal, key);
+
+  if (v != NULL && G_VALUE_HOLDS_STRING (v))
+    return g_value_get_string (v);
+
+  return NULL;
+}
+
+void
+ide_configuration_set_internal_string (IdeConfiguration *self,
+                                       const gchar      *key,
+                                       const gchar      *value)
+{
+  GValue *v;
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (key != NULL);
+
+  v = ide_configuration_reset_internal_value (self, key, G_TYPE_STRING);
+  g_value_set_string (v, value);
+}
+
+gboolean
+ide_configuration_get_internal_boolean (IdeConfiguration *self,
+                                        const gchar      *key)
+{
+  const GValue *v;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), FALSE);
+  g_return_val_if_fail (key != NULL, FALSE);
+
+  v = g_hash_table_lookup (self->internal, key);
+
+  if (v != NULL && G_VALUE_HOLDS_BOOLEAN (v))
+    return g_value_get_boolean (v);
+
+  return FALSE;
+}
+
+void
+ide_configuration_set_internal_boolean (IdeConfiguration  *self,
+                                        const gchar       *key,
+                                        gboolean           value)
+{
+  GValue *v;
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (key != NULL);
+
+  v = ide_configuration_reset_internal_value (self, key, G_TYPE_BOOLEAN);
+  g_value_set_boolean (v, value);
+}
+
+gint
+ide_configuration_get_internal_int (IdeConfiguration *self,
+                                    const gchar      *key)
+{
+  const GValue *v;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), -1);
+  g_return_val_if_fail (key != NULL, -1);
+
+  v = g_hash_table_lookup (self->internal, key);
+
+  if (v != NULL && G_VALUE_HOLDS_INT (v))
+    return g_value_get_int (v);
+
+  return 0;
+}
+
+void
+ide_configuration_set_internal_int (IdeConfiguration *self,
+                                    const gchar      *key,
+                                    gint              value)
+{
+  GValue *v;
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (key != NULL);
+
+  v = ide_configuration_reset_internal_value (self, key, G_TYPE_INT);
+  g_value_set_int (v, value);
+}
+
+gint64
+ide_configuration_get_internal_int64 (IdeConfiguration *self,
+                                      const gchar      *key)
+{
+  const GValue *v;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), -1);
+  g_return_val_if_fail (key != NULL, -1);
+
+  if (v != NULL && G_VALUE_HOLDS_INT64 (v))
+    return g_value_get_int64 (v);
+
+  return 0;
+}
+
+void
+ide_configuration_set_internal_int64 (IdeConfiguration *self,
+                                      const gchar      *key,
+                                      gint64            value)
+{
+  GValue *v;
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (key != NULL);
+
+  v = ide_configuration_reset_internal_value (self, key, G_TYPE_INT64);
+  g_value_set_int64 (v, value);
 }
