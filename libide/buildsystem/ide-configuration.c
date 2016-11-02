@@ -107,6 +107,20 @@ _value_new (GType type)
   return value;
 }
 
+static GValue *
+_value_copy (const GValue *value)
+{
+  GValue *dst;
+
+  g_assert (value != NULL);
+
+  dst = g_slice_new0 (GValue);
+  g_value_init (dst, G_VALUE_TYPE (value));
+  g_value_copy (value, dst);
+
+  return dst;
+}
+
 static void
 ide_configuration_emit_changed (IdeConfiguration *self)
 {
@@ -857,10 +871,13 @@ IdeConfiguration *
 ide_configuration_duplicate (IdeConfiguration *self)
 {
   static gint next_counter = 2;
+  GHashTableIter iter;
   IdeConfiguration *copy;
   IdeContext *context;
   g_autofree gchar *id = NULL;
   g_autofree gchar *name = NULL;
+  const gchar *key;
+  const GValue *value;
 
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
 
@@ -885,6 +902,10 @@ ide_configuration_duplicate (IdeConfiguration *self)
 
   if (self->postbuild)
     copy->postbuild = ide_build_command_queue_copy (self->postbuild);
+
+  g_hash_table_iter_init (&iter, self->internal);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+    g_hash_table_insert (copy->internal, g_strdup (key), _value_copy (value));
 
   return copy;
 }

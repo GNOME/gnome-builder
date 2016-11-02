@@ -22,6 +22,7 @@ static void
 test_internal (void)
 {
   g_autoptr(IdeConfiguration) configuration = NULL;
+  g_autoptr(IdeConfiguration) copy = NULL;
 
   configuration = g_object_new (IDE_TYPE_CONFIGURATION,
                                 "id", "my-configuration",
@@ -56,6 +57,14 @@ test_internal (void)
   g_assert_cmpint (ide_configuration_get_internal_int (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_int64 (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_boolean (configuration, "foo-string"), ==, TRUE);
+
+  copy = ide_configuration_duplicate (configuration);
+  g_assert (copy != NULL);
+  g_assert_cmpint (ide_configuration_get_internal_boolean (copy, "foo-string"), ==, TRUE);
+
+  g_object_add_weak_pointer (G_OBJECT (copy), (gpointer *)&copy);
+  g_object_unref (copy);
+  g_assert (copy == NULL);
 
   g_object_add_weak_pointer (G_OBJECT (configuration), (gpointer *)&configuration);
   g_object_unref (configuration);
