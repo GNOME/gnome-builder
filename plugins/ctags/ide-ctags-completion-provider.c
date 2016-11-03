@@ -284,16 +284,23 @@ ide_ctags_completion_provider_match (GtkSourceCompletionProvider *provider,
 
   if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
     {
-      if (gtk_text_iter_starts_line (&iter) ||
-          !gtk_text_iter_backward_char (&iter) ||
-          g_unichar_isspace (gtk_text_iter_get_char (&iter)))
+      gunichar ch;
+
+      if (gtk_text_iter_starts_line (&iter))
+        return FALSE;
+
+      gtk_text_iter_backward_char (&iter);
+
+      ch = gtk_text_iter_get_char (&iter);
+
+      if (g_unichar_isalnum (ch))
         return FALSE;
     }
 
-  if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
+  if (ide_completion_provider_context_in_comment_or_string (context))
     return FALSE;
 
-  if (ide_completion_provider_context_in_comment (context))
+  if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
     return FALSE;
 
   return TRUE;
