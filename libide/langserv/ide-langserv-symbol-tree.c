@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-langserv-symbol-tree"
 
+#include "ide-langserv-symbol-node.h"
 #include "ide-langserv-symbol-tree.h"
 
 typedef struct
@@ -42,16 +43,31 @@ ide_langserv_symbol_tree_get_n_children (IdeSymbolTree *tree,
 {
   IdeLangservSymbolTree *self = (IdeLangservSymbolTree *)tree;
   IdeLangservSymbolTreePrivate *priv = ide_langserv_symbol_tree_get_instance_private (self);
+  const gchar *parent_name = NULL;
+  guint n_children = 0;
 
   g_assert (IDE_IS_LANGSERV_SYMBOL_TREE (self));
   g_assert (!parent || IDE_IS_SYMBOL_NODE (parent));
 
-  /* TODO: FIXME: XXX: Take symbol parent into account */
+  if (IDE_IS_LANGSERV_SYMBOL_NODE (parent))
+    parent_name = ide_symbol_node_get_name (parent);
 
-  if (parent != NULL)
-    return 0;
+  /*
+   * This is all O(n) below, but with the size of trees we are working with
+   * its not all that bad. If it becomes an issue, we can move to something
+   * like a hashtable.
+   */
 
-  return priv->symbols->len;
+  for (guint i = 0; i < priv->symbols->len; i++)
+    {
+      IdeLangservSymbolNode *node = g_ptr_array_index (priv->symbols, i);
+      const gchar *node_parent_name = ide_langserv_symbol_node_get_parent_name (node);
+
+      if (g_strcmp0 (node_parent_name, parent_name) == 0)
+        n_children++;
+    }
+
+  return n_children;
 }
 
 static IdeSymbolNode *
@@ -61,12 +77,29 @@ ide_langserv_symbol_tree_get_nth_child (IdeSymbolTree *tree,
 {
   IdeLangservSymbolTree *self = (IdeLangservSymbolTree *)tree;
   IdeLangservSymbolTreePrivate *priv = ide_langserv_symbol_tree_get_instance_private (self);
+  const gchar *parent_name = NULL;
 
   g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_TREE (self), NULL);
   g_return_val_if_fail (!parent || IDE_IS_SYMBOL_NODE (parent), NULL);
   g_return_val_if_fail (nth < priv->symbols->len, NULL);
 
-  return g_object_ref (g_ptr_array_index (priv->symbols, nth));
+  if (IDE_IS_LANGSERV_SYMBOL_NODE (parent))
+    parent_name = ide_symbol_node_get_name (parent);
+
+  for (guint i = 0; i < priv->symbols->len; i++)
+    {
+      IdeLangservSymbolNode *node = g_ptr_array_index (priv->symbols, i);
+      const gchar *node_parent_name = ide_langserv_symbol_node_get_parent_name (node);
+
+      if (g_strcmp0 (node_parent_name, parent_name) == 0)
+        {
+          if (nth == 0)
+            return g_object_ref (node);
+          nth--;
+        }
+    }
+
+  return NULL;
 }
 
 static void
