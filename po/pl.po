@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-29 23:30+0000\n"
-"PO-Revision-Date: 2016-10-30 01:40+0200\n"
+"POT-Creation-Date: 2016-11-03 20:25+0000\n"
+"PO-Revision-Date: 2016-11-03 21:28+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1068,20 +1068,16 @@ msgstr "Nie ma takiego wątku roboczego"
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie ma mechanizmu rozwiązywania symboli."
 
-#: libide/buffers/ide-buffer-manager.c:671
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "Plik jest za duży, aby go otworzyć."
 
-#: libide/buffers/ide-buffer-manager.c:1536
-msgid "Words"
-msgstr "Wyrazy"
-
-#: libide/buffers/ide-buffer-manager.c:1748
+#: libide/buffers/ide-buffer-manager.c:1749
 #, c-format
 msgid "unsaved document %u"
 msgstr "niezapisywany dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1782
+#: libide/buffers/ide-buffer-manager.c:1783
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 
@@ -1207,7 +1203,7 @@ msgstr "Przejście do wiersza"
 msgid "Go"
 msgstr "Przejdź"
 
-#: libide/editor/ide-editor-perspective.c:452
+#: libide/editor/ide-editor-perspective.c:456
 #: libide/preferences/ide-preferences-builtin.c:109
 #: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
@@ -1370,11 +1366,11 @@ msgstr "Zainicjowanie wartości domyślnych się nie powiodło."
 msgid "You must call %s() before using libide."
 msgstr "Należy wywołać funkcję %s() przed użyciem biblioteki libide."
 
-#: libide/ide-context.c:1920
+#: libide/ide-context.c:1944
 msgid "An unload request is already pending"
 msgstr "Żądanie usunięcia z pamięci jest już wykonywane"
 
-#: libide/ide-context.c:2039
+#: libide/ide-context.c:2063
 msgid "Context has already been restored."
 msgstr "Kontekst został już przywrócony."
 
@@ -1970,7 +1966,7 @@ msgid "Diagnostics"
 msgstr "Diagnostyka"
 
 #: libide/preferences/ide-preferences-builtin.c:204
-#: libide/snippets/ide-source-snippet-completion-provider.c:297
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Wstawki"
 
@@ -3361,6 +3357,18 @@ msgstr "Sugerowanie uzupełnień języka Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Użycie biblioteki Jedi do uzupełniania w języku Python"
 
+#: plugins/meson/meson_plugin/__init__.py:321
+msgid "Configuring…"
+msgstr "Konfigurowanie…"
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+msgid "Empty Meson Project"
+msgstr "Pusty projekt Meson"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+msgid "Create a new empty meson project"
+msgstr "Utworzenie nowego pustego projektu Meson"
+
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "64-bitowe MinGW"
@@ -3368,10 +3376,6 @@ msgstr "64-bitowe MinGW"
 #: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "32-bitowe MinGW"
-
-#: plugins/meson/meson_plugin/__init__.py:321
-msgid "Configuring…"
-msgstr "Konfigurowanie…"
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -3551,13 +3555,13 @@ msgstr "Wykonaj za pomocą profilera"
 msgid "Open Profile…"
 msgstr "Otwórz profil…"
 
-#: plugins/terminal/gb-terminal-view.c:444
-msgid "Untitled terminal"
-msgstr "Terminal bez tytułu"
-
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Zapis zawartości terminala jako"
+
+#: plugins/terminal/gb-terminal-view.c:459
+msgid "Untitled terminal"
+msgstr "Terminal bez tytułu"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
