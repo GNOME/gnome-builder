@@ -23,6 +23,7 @@ test_internal (void)
 {
   g_autoptr(IdeConfiguration) configuration = NULL;
   g_autoptr(IdeConfiguration) copy = NULL;
+  g_autoptr(GObject) dummy = NULL;
 
   configuration = g_object_new (IDE_TYPE_CONFIGURATION,
                                 "id", "my-configuration",
@@ -33,30 +34,35 @@ test_internal (void)
   g_assert_cmpint (ide_configuration_get_internal_int (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_int64 (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_boolean (configuration, "foo-string"), ==, FALSE);
+  g_assert (ide_configuration_get_internal_object (configuration, "foo-string") == NULL);
 
   ide_configuration_set_internal_string (configuration, "foo-string", "foo");
   g_assert_cmpstr (ide_configuration_get_internal_string (configuration, "foo-string"), ==, "foo");
   g_assert_cmpint (ide_configuration_get_internal_int (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_int64 (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_boolean (configuration, "foo-string"), ==, FALSE);
+  g_assert (ide_configuration_get_internal_object (configuration, "foo-string") == NULL);
 
   ide_configuration_set_internal_int (configuration, "foo-string", 123);
   g_assert_cmpstr (ide_configuration_get_internal_string (configuration, "foo-string"), ==, NULL);
   g_assert_cmpint (ide_configuration_get_internal_int (configuration, "foo-string"), ==, 123);
   g_assert_cmpint (ide_configuration_get_internal_int64 (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_boolean (configuration, "foo-string"), ==, FALSE);
+  g_assert (ide_configuration_get_internal_object (configuration, "foo-string") == NULL);
 
   ide_configuration_set_internal_int64 (configuration, "foo-string", 123);
   g_assert_cmpstr (ide_configuration_get_internal_string (configuration, "foo-string"), ==, NULL);
   g_assert_cmpint (ide_configuration_get_internal_int (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_int64 (configuration, "foo-string"), ==, 123);
   g_assert_cmpint (ide_configuration_get_internal_boolean (configuration, "foo-string"), ==, FALSE);
+  g_assert (ide_configuration_get_internal_object (configuration, "foo-string") == NULL);
 
   ide_configuration_set_internal_boolean (configuration, "foo-string", TRUE);
   g_assert_cmpstr (ide_configuration_get_internal_string (configuration, "foo-string"), ==, NULL);
   g_assert_cmpint (ide_configuration_get_internal_int (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_int64 (configuration, "foo-string"), ==, 0);
   g_assert_cmpint (ide_configuration_get_internal_boolean (configuration, "foo-string"), ==, TRUE);
+  g_assert (ide_configuration_get_internal_object (configuration, "foo-string") == NULL);
 
   copy = ide_configuration_duplicate (configuration);
   g_assert (copy != NULL);
@@ -65,6 +71,16 @@ test_internal (void)
   g_object_add_weak_pointer (G_OBJECT (copy), (gpointer *)&copy);
   g_object_unref (copy);
   g_assert (copy == NULL);
+
+  dummy = g_object_new (G_TYPE_OBJECT, NULL);
+  g_object_add_weak_pointer (G_OBJECT (dummy), (gpointer *)&dummy);
+
+  ide_configuration_set_internal_object (configuration, "foo-object", dummy);
+  g_assert (ide_configuration_get_internal_object (configuration, "foo-object") == dummy);
+  g_object_unref (dummy);
+  g_assert (dummy != NULL);
+  ide_configuration_set_internal_object (configuration, "foo-object", NULL);
+  g_assert (dummy == NULL);
 
   g_object_add_weak_pointer (G_OBJECT (configuration), (gpointer *)&configuration);
   g_object_unref (configuration);

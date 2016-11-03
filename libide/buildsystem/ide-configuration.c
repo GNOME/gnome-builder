@@ -1152,3 +1152,55 @@ ide_configuration_set_internal_int64 (IdeConfiguration *self,
   v = ide_configuration_reset_internal_value (self, key, G_TYPE_INT64);
   g_value_set_int64 (v, value);
 }
+
+/**
+ * ide_configuration_get_internal_object:
+ * @self: An #IdeConfiguration
+ * @key: The key to get
+ *
+ * Gets the value associated with @key if it is a #GObject.
+ *
+ * Returns: (nullable) (transfer none) (type GObject.Object): A #GObject or %NULL.
+ */
+gpointer
+ide_configuration_get_internal_object (IdeConfiguration *self,
+                                       const gchar      *key)
+{
+  const GValue *v;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  if (v != NULL && G_VALUE_HOLDS_OBJECT (v))
+    return g_value_get_object (v);
+
+  return NULL;
+}
+
+/**
+ * ide_configuration_set_internal_object:
+ * @self: A #IdeConfiguration
+ * @key: the key to set
+ * @instance: (type GObject.Object) (nullable): A #GObject or %NULL
+ *
+ * Sets the value for @key to @instance.
+ */
+void
+ide_configuration_set_internal_object (IdeConfiguration *self,
+                                       const gchar      *key,
+                                       gpointer          instance)
+{
+  GValue *v;
+  GType type;
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (key != NULL);
+
+  if (instance != NULL)
+    type = G_OBJECT_TYPE (instance);
+  else
+    type = G_TYPE_OBJECT;
+
+  v = ide_configuration_reset_internal_value (self, key, type);
+  g_value_set_object (v, instance);
+}

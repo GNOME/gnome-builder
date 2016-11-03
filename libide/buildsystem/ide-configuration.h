@@ -96,6 +96,11 @@ gint64                ide_configuration_get_internal_int64   (IdeConfiguration  
 void                  ide_configuration_set_internal_int64   (IdeConfiguration  *self,
                                                               const gchar       *key,
                                                               gint64             value);
+gpointer              ide_configuration_get_internal_object  (IdeConfiguration  *self,
+                                                              const gchar       *key);
+void                  ide_configuration_set_internal_object  (IdeConfiguration  *self,
+                                                              const gchar       *key,
+                                                              gpointer           instance);
 
 G_END_DECLS
 
