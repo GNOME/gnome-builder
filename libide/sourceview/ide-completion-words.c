@@ -51,14 +51,22 @@ ide_completion_words_match (GtkSourceCompletionProvider *provider,
   g_assert (IDE_IS_COMPLETION_WORDS (provider));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
-  if (!gtk_source_completion_context_get_iter (context, &iter))
-    return FALSE;
-
   activation = gtk_source_completion_context_get_activation (context);
 
   if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
     {
       if (ide_completion_provider_context_in_comment (context))
+        return FALSE;
+    }
+
+  if (!gtk_source_completion_context_get_iter (context, &iter))
+    return FALSE;
+
+  if (gtk_text_iter_backward_char (&iter))
+    {
+      gunichar ch = gtk_text_iter_get_char (&iter);
+
+      if (!g_unichar_isalnum (ch))
         return FALSE;
     }
 
