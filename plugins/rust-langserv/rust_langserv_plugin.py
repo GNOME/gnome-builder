@@ -171,3 +171,7 @@ class RustRenameProvider(Ide.LangservRenameProvider):
 class RustSymbolResolver(Ide.LangservSymbolResolver):
     def do_load(self):
         RustService.bind_client(self)
+
+class RustHighlighter(Ide.LangservHighlighter):
+    def do_load(self):
+        RustService.bind_client(self)
