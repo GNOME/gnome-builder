@@ -58,7 +58,7 @@ goto_line_activate (GSimpleAction *action,
 
   g_assert (IDE_IS_EDITOR_LAYOUT_STACK_ADDIN (self));
 
-  gtk_widget_activate (GTK_WIDGET (self->controls->goto_line_button));
+  gtk_widget_show (GTK_WIDGET (self->controls->goto_line_popover));
 }
 
 static void
