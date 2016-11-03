@@ -466,6 +466,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   IdeClangCompletionState *state;
   GtkSourceCompletionActivation activation;
   g_autoptr(GtkSourceCompletion) completion = NULL;
+  g_autoptr(IdeClangTranslationUnit) tu = NULL;
   g_autofree gchar *line = NULL;
   g_autofree gchar *prefix = NULL;
   GtkTextIter stop;
@@ -554,14 +555,35 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
       IDE_EXIT;
     }
 
+  service = ide_context_get_service_typed (ide_object_get_context (IDE_OBJECT (self)),
+                                           IDE_TYPE_CLANG_SERVICE);
+
+  /*
+   * If we are completed interactively, we only want to activate the clang
+   * completion provider if a translation unit is immediatley available.
+   * Otherwise, we delay the other completion providers from being visible
+   * until after this one has completed. Instead, we'll just queue the load
+   * of translation unit for a follow use.
+   */
+  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
+    {
+      IdeFile *file = ide_buffer_get_file (IDE_BUFFER (buffer));
+
+      tu = ide_clang_service_get_cached_translation_unit (service, file);
+
+      if (tu == NULL)
+        {
+          ide_clang_service_get_translation_unit_async (service, file, 0, NULL, NULL, NULL);
+          gtk_source_completion_context_add_proposals (context, provider, NULL, TRUE);
+          IDE_EXIT;
+        }
+    }
+
   /* Save the view so we can push a snippet later */
   g_object_get (context, "completion", &completion, NULL);
   self->view = IDE_SOURCE_VIEW (gtk_source_completion_get_view (completion));
 
   ide_buffer_sync_to_unsaved_files (IDE_BUFFER (buffer));
-
-  service = ide_context_get_service_typed (ide_object_get_context (IDE_OBJECT (self)),
-                                           IDE_TYPE_CLANG_SERVICE);
 
   state = g_slice_new0 (IdeClangCompletionState);
   state->self = g_object_ref (self);
@@ -576,6 +598,25 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
                            G_CALLBACK (g_cancellable_cancel),
                            state->cancellable,
                            G_CONNECT_SWAPPED);
+
+  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
+    {
+      g_assert (tu != NULL);
+
+      /*
+       * Shortcut if we are interactive to query against the
+       * previous clang translation unit. If this is insufficient
+       * the user can force a completion with ctrl+space.
+       */
+      gtk_source_completion_context_get_iter (context, &iter);
+      ide_clang_translation_unit_code_complete_async (tu,
+                                                      ide_file_get_file (state->file),
+                                                      &iter,
+                                                      NULL,
+                                                      ide_clang_completion_provider_code_complete_cb,
+                                                      state);
+      IDE_EXIT;
+    }
 
   ide_clang_service_get_translation_unit_async (service,
                                                 state->file,
