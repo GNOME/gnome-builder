@@ -1072,7 +1072,7 @@ ide_diagnostics_manager_buffer_unloaded (IdeDiagnosticsManager *self,
                                         G_CALLBACK (ide_diagnostics_manager_buffer_notify_language),
                                         self);
 
-  g_weak_ref_clear (&group->buffer_wr);
+  g_weak_ref_set (&group->buffer_wr, NULL);
 
   group->has_diagnostics = has_diagnostics;
 
