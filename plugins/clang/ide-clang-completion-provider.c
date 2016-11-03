@@ -157,9 +157,14 @@ ide_clang_completion_provider_match (GtkSourceCompletionProvider *provider,
       if (ide_completion_provider_context_in_comment_or_string (context))
         return FALSE;
 
+      if (gtk_text_iter_starts_line (&iter))
+        return FALSE;
+
+      gtk_text_iter_backward_char (&iter);
+
       ch = gtk_text_iter_get_char (&iter);
 
-      if (gtk_text_iter_starts_line (&iter) || !g_unichar_isalnum (ch))
+      if (!g_unichar_isalnum (ch))
         return FALSE;
     }
 
