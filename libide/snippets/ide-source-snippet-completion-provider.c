@@ -19,8 +19,9 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
-#include "ide-source-snippet-completion-item.h"
-#include "ide-source-snippet-completion-provider.h"
+#include "snippets/ide-source-snippet-completion-item.h"
+#include "snippets/ide-source-snippet-completion-provider.h"
+#include "sourceview/ide-completion-provider.h"
 
 struct _IdeSourceSnippetCompletionProvider
 {
@@ -93,10 +94,37 @@ ide_source_snippet_completion_provider_match (GtkSourceCompletionProvider *provi
                                               GtkSourceCompletionContext  *context)
 {
   IdeSourceSnippetCompletionProvider *self = (IdeSourceSnippetCompletionProvider *)provider;
+  GtkSourceCompletionActivation activation;
+  GtkTextIter iter;
 
   g_assert (IDE_IS_SOURCE_SNIPPET_COMPLETION_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
-  return self->enabled;
+  if (!self->enabled)
+    return FALSE;
+
+  if (ide_completion_provider_context_in_comment_or_string (context))
+    return FALSE;
+
+  if (!gtk_source_completion_context_get_iter (context, &iter))
+    return FALSE;
+
+  activation = gtk_source_completion_context_get_activation (context);
+
+  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
+    {
+      gunichar ch;
+
+      if (!gtk_text_iter_starts_line (&iter))
+        gtk_text_iter_backward_char (&iter);
+
+      ch = gtk_text_iter_get_char (&iter);
+
+      if (!g_unichar_isalnum (ch))
+        return FALSE;
+    }
+
+  return TRUE;
 }
 
 static void
