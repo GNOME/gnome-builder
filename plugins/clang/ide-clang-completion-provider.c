@@ -151,9 +151,15 @@ ide_clang_completion_provider_match (GtkSourceCompletionProvider *provider,
 
   if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
     {
-      if (gtk_text_iter_starts_line (&iter) ||
-          !gtk_text_iter_backward_char (&iter) ||
-          g_unichar_isspace (gtk_text_iter_get_char (&iter)))
+      gunichar ch;
+
+      /* avoid auto completion while in comments, strings, etc */
+      if (ide_completion_provider_context_in_comment_or_string (context))
+        return FALSE;
+
+      ch = gtk_text_iter_get_char (&iter);
+
+      if (gtk_text_iter_starts_line (&iter) || !g_unichar_isalnum (ch))
         return FALSE;
     }
 
