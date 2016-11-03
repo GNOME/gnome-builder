@@ -39,6 +39,7 @@
 #include "history/ide-back-forward-list.h"
 #include "projects/ide-project-edit.h"
 #include "projects/ide-project-edit-private.h"
+#include "sourceview/ide-completion-words.h"
 #include "util/ide-doc-seq.h"
 #include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
@@ -1533,7 +1534,7 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->buffers = g_ptr_array_new ();
   self->max_file_size = MAX_FILE_SIZE_BYTES_DEFAULT;
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
-  self->word_completion = gtk_source_completion_words_new (_("Words"), NULL);
+  self->word_completion = g_object_new (IDE_TYPE_COMPLETION_WORDS, NULL);
   self->settings = g_settings_new ("org.gnome.builder.editor");
 }
 

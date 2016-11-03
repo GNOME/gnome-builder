@@ -117,6 +117,7 @@ G_BEGIN_DECLS
 #include "sourceview/ide-completion-item.h"
 #include "sourceview/ide-completion-provider.h"
 #include "sourceview/ide-completion-results.h"
+#include "sourceview/ide-completion-words.h"
 #include "sourceview/ide-indenter.h"
 #include "sourceview/ide-language.h"
 #include "sourceview/ide-source-map.h"
