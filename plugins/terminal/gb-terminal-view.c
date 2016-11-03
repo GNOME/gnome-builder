@@ -193,9 +193,13 @@ gb_terminal_respawn (GbTerminalView *self,
   gint64 now;
   int master_fd = -1;
   int tty_fd = -1;
-  char name[PATH_MAX + 1];
   gint stdout_fd = -1;
   gint stderr_fd = -1;
+#ifdef HAVE_PTSNAME_R
+  char name[PATH_MAX + 1];
+#else
+  const char *name;
+#endif
 
   IDE_ENTRY;
 
@@ -255,8 +259,13 @@ gb_terminal_respawn (GbTerminalView *self,
   if (unlockpt (master_fd) != 0)
     IDE_GOTO (failure);
 
+#ifdef HAVE_PTSNAME_R
   if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
     IDE_GOTO (failure);
+#else
+  if (NULL == (name = ptsname (master_fd)))
+    IDE_GOTO (failure);
+#endif
 
   if (-1 == (tty_fd = open (name, O_RDWR | O_CLOEXEC)))
     IDE_GOTO (failure);

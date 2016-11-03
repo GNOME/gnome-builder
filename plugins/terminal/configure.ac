@@ -10,6 +10,18 @@ AS_IF([test x$enable_terminal_plugin = xyes && test x$have_vte = xno],[
 	AC_MSG_ERROR([Failed to locate vte dependencies. Try installing vte291-devel.])
 ])
 
+dnl We prefer ptsname_r(), but will settle for ptsname() if necessary
+AC_TRY_LINK([#ifndef _XOPEN_SOURCE
+             #define _XOPEN_SOURCE
+             #endif
+             #ifndef _GNU_SOURCE
+             #define _GNU_SOURCE
+             #endif
+             #include <stdlib.h>],
+	    [char buf[10]; ptsname_r(0, buf, sizeof(buf));],
+	    [AC_DEFINE(HAVE_PTSNAME_R, 1,
+	               Define to 1 if you have a re-entrant version of ptsname)])
+
 # for if ENABLE_CLANG_PLUGIN in Makefile.am
 AM_CONDITIONAL(ENABLE_TERMINAL_PLUGIN, test x$enable_terminal_plugin = xyes)
 
