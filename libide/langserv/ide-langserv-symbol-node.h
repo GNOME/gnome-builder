@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeLangservSymbolNode, ide_langserv_symbol_node, IDE, LANGSERV_SYMBOL_NODE, IdeSymbolNode)
 
+const gchar *ide_langserv_symbol_node_get_parent_name (IdeLangservSymbolNode *self);
+
 G_END_DECLS
 
 #endif /* IDE_LANGSERV_SYMBOL_NODE_H */

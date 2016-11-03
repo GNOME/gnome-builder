@@ -169,3 +169,13 @@ ide_langserv_symbol_node_new (GFile       *file,
 
   return self;
 }
+
+const gchar *
+ide_langserv_symbol_node_get_parent_name (IdeLangservSymbolNode *self)
+{
+  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (self), NULL);
+
+  return priv->parent_name;
+}
