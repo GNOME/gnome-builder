@@ -68,8 +68,11 @@ struct _IdeHighlighterInterface
 
   void (*set_engine) (IdeHighlighter       *self,
                       IdeHighlightEngine   *engine);
+
+  void (*load)       (IdeHighlighter       *self);
 };
 
+void ide_highlighter_load   (IdeHighlighter       *self);
 void ide_highlighter_update (IdeHighlighter       *self,
                              IdeHighlightCallback  callback,
                              const GtkTextIter    *range_begin,

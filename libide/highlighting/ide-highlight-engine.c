@@ -494,7 +494,11 @@ ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
   if (g_set_object (&self->highlighter, highlighter))
     {
       if (highlighter != NULL)
-        IDE_HIGHLIGHTER_GET_IFACE (highlighter)->set_engine (highlighter, self);
+        {
+          IDE_HIGHLIGHTER_GET_IFACE (highlighter)->set_engine (highlighter, self);
+          ide_highlighter_load (highlighter);
+        }
+
       ide_highlight_engine_reload (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HIGHLIGHTER]);
     }

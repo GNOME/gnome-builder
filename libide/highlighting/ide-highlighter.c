@@ -83,3 +83,12 @@ ide_highlighter_update (IdeHighlighter       *self,
 
   IDE_HIGHLIGHTER_GET_IFACE (self)->update (self, callback, range_begin, range_end, location);
 }
+
+void
+ide_highlighter_load (IdeHighlighter *self)
+{
+  g_return_if_fail (IDE_IS_HIGHLIGHTER (self));
+
+  if (IDE_HIGHLIGHTER_GET_IFACE (self)->load)
+    IDE_HIGHLIGHTER_GET_IFACE (self)->load (self);
+}
