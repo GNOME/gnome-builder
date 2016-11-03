@@ -405,7 +405,6 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                   G_TYPE_NONE,
                   1, IDE_TYPE_CONTEXT);
 
-  gtk_widget_class_set_css_name (widget_class, "workbench");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_size_group);

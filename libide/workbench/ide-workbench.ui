@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.21 -->
+  <!-- interface-requires gtk+ 3.22 -->
   <template class="IdeWorkbench" parent="GtkApplicationWindow">
+    <style>
+      <class name="workbench"/>
+    </style>
     <child type="titlebar">
       <object class="GtkStack" id="header_stack">
         <property name="visible">true</property>

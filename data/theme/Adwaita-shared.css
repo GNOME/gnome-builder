@@ -9,19 +9,19 @@
  * stack. We were seeing black edges around the header bar, and
  * improper radius on the headerbar.
  */
-workbench stack.titlebar {
+window.workbench stack.titlebar {
   border-bottom: none;
   border-radius: 6px 6px 0 0;
   box-shadow: none;
   padding: 0;
 }
-workbench stack.titlebar headerbar {
+window.workbench stack.titlebar headerbar {
   border-radius: 6px 6px 0 0;
   margin: 0;
   border-bottom: none;
   box-shadow: 0 -1px 0 @borders inset;
 }
-workbench stack.titlebar headerbar:backdrop {
+window.workbench stack.titlebar headerbar:backdrop {
   box-shadow: 0 -1px 0 alpha(@borders, 0.6) inset;
 }
 

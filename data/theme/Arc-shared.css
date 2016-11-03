@@ -122,14 +122,14 @@ layoutpane > box.vertical:first-child > box.horizontal {
 
 
 /* Builder pane */
-workbench buildperspective list {
+window.workbench buildperspective list {
   border-right: 1px solid @borders;
   background-color: @theme_base_color;
 }
-workbench buildperspective list row {
+window.workbench buildperspective list row {
   padding: 10px;
   border-bottom: 1px solid alpha(@borders, 0.50);
 }
-workbench buildperspective list row:last-child {
+window.workbench buildperspective list row:last-child {
   border-bottom: none;
 }

@@ -2774,6 +2774,6 @@ list {
   -gtk-key-bindings: builder-vim-list-box;
 }
 
-workbench {
+window.workbench {
   -gtk-key-bindings: builder-vim-workbench;
 }

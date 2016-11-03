@@ -192,14 +192,14 @@ omnisearchdisplay omnisearchgroup omnisearchrow:selected {
  * preferences perspective, including groups, rows,
  * sidebar, etc.
  */
-workbench preferences preferencesgroup list row {
+window.workbench preferences preferencesgroup list row {
   padding: 10px;
   border-bottom: 1px solid alpha(@borders, 0.2);
 }
-workbench preferences preferencesgroup list row:last-child {
+window.workbench preferences preferencesgroup list row:last-child {
   border-bottom: none;
 }
-workbench preferences preferencesgroup list entry {
+window.workbench preferences preferencesgroup list entry {
   background: none;
   min-height: 0px;
 }

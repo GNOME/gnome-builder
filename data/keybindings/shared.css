@@ -25,6 +25,6 @@ entry.gb-command-bar-entry {
   -gtk-key-bindings: builder-command-bar-entry;
 }
 
-workbench {
+window.workbench {
   -gtk-key-bindings: builder-workbench-bindings;
 }
