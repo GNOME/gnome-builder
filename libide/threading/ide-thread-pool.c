@@ -65,7 +65,7 @@ ide_thread_pool_get_pool (IdeThreadPoolKind kind)
  * @func: (scope async): The thread worker to execute for @task.
  *
  * This pushes a task to be executed on a worker thread based on the task kind as denoted by
- * @kind. Some tasks will be placed on special work queues or throttled based on proirity.
+ * @kind. Some tasks will be placed on special work queues or throttled based on priority.
  */
 void
 ide_thread_pool_push_task (IdeThreadPoolKind  kind,
@@ -199,7 +199,7 @@ _ide_thread_pool_init (gboolean is_worker)
 
   /*
    * Create our thread pool exclusive to compiler tasks (such as those from Clang).
-   * We don't want to consume threads fro other GTask's such as those regarding IO so we manage
+   * We don't want to consume threads from other GTask's such as those regarding IO so we manage
    * these work items exclusively.
    */
   thread_pools [IDE_THREAD_POOL_COMPILER] = g_thread_pool_new (ide_thread_pool_worker,
