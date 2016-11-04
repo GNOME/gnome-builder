@@ -188,13 +188,13 @@ _ide_thread_pool_init (gboolean is_worker)
 {
   gint compiler = COMPILER_MAX_THREADS;
   gint indexer = INDEXER_MAX_THREADS;
-  gboolean shared = FALSE;
+  gboolean exclusive = FALSE;
 
   if (is_worker)
     {
       compiler = 1;
       indexer = 1;
-      shared = TRUE;
+      exclusive = TRUE;
     }
 
   /*
@@ -205,7 +205,7 @@ _ide_thread_pool_init (gboolean is_worker)
   thread_pools [IDE_THREAD_POOL_COMPILER] = g_thread_pool_new (ide_thread_pool_worker,
                                                                NULL,
                                                                compiler,
-                                                               shared,
+                                                               exclusive,
                                                                NULL);
 
   /*
@@ -215,6 +215,6 @@ _ide_thread_pool_init (gboolean is_worker)
   thread_pools [IDE_THREAD_POOL_INDEXER] = g_thread_pool_new (ide_thread_pool_worker,
                                                               NULL,
                                                               indexer,
-                                                              shared,
+                                                              exclusive,
                                                               NULL);
 }
