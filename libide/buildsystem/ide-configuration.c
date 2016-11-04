@@ -1133,6 +1133,8 @@ ide_configuration_get_internal_int64 (IdeConfiguration *self,
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), -1);
   g_return_val_if_fail (key != NULL, -1);
 
+  v = g_hash_table_lookup (self->internal, key);
+
   if (v != NULL && G_VALUE_HOLDS_INT64 (v))
     return g_value_get_int64 (v);
 
@@ -1170,6 +1172,8 @@ ide_configuration_get_internal_object (IdeConfiguration *self,
 
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
+
+  v = g_hash_table_lookup (self->internal, key);
 
   if (v != NULL && G_VALUE_HOLDS_OBJECT (v))
     return g_value_get_object (v);
