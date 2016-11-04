@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-26 06:30+0000\n"
-"PO-Revision-Date: 2016-10-26 11:24+0200\n"
+"POT-Creation-Date: 2016-11-03 00:26+0000\n"
+"PO-Revision-Date: 2016-11-03 13:27+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -303,7 +303,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5696
+#: libide/sourceview/ide-source-view.c:5698
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Átnevezés"
@@ -1069,24 +1069,20 @@ msgstr "Adja meg a D-Bus címet"
 msgid "No such worker"
 msgstr "Nincs ilyen építő"
 
-#: libide/buffers/ide-buffer.c:2488
+#: libide/buffers/ide-buffer.c:2418
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
-#: libide/buffers/ide-buffer-manager.c:671
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "A fájl túl nagy a megnyitáshoz."
 
-#: libide/buffers/ide-buffer-manager.c:1536
-msgid "Words"
-msgstr "Szavak"
-
-#: libide/buffers/ide-buffer-manager.c:1748
+#: libide/buffers/ide-buffer-manager.c:1749
 #, c-format
 msgid "unsaved document %u"
 msgstr "mentetlen dokumentum %u"
 
-#: libide/buffers/ide-buffer-manager.c:1782
+#: libide/buffers/ide-buffer-manager.c:1783
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
 
@@ -1103,11 +1099,11 @@ msgstr "Egy összeállítás már folyamatban van"
 msgid "Ready"
 msgstr "Kész"
 
-#: libide/buildsystem/ide-build-result.c:262
+#: libide/buildsystem/ide-build-result.c:276
 msgid "Failed to open stderr stream."
 msgstr "Az stderr hibafolyam megnyitása meghiúsult."
 
-#: libide/buildsystem/ide-build-result.c:292
+#: libide/buildsystem/ide-build-result.c:306
 msgid "Failed to open stdout stream."
 msgstr "Az stdout adatfolyam megnyitása meghiúsult."
 
@@ -1212,7 +1208,7 @@ msgstr "Ugrás sorra"
 msgid "Go"
 msgstr "Ugrás"
 
-#: libide/editor/ide-editor-perspective.c:448
+#: libide/editor/ide-editor-perspective.c:456
 #: libide/preferences/ide-preferences-builtin.c:109
 #: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
@@ -1379,11 +1375,11 @@ msgstr "Az alapbeállítások előkészítése meghiúsult."
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: libide/ide-context.c:1892
+#: libide/ide-context.c:1944
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: libide/ide-context.c:2011
+#: libide/ide-context.c:2063
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
@@ -1977,7 +1973,7 @@ msgid "Diagnostics"
 msgstr "Diagnosztika"
 
 #: libide/preferences/ide-preferences-builtin.c:204
-#: libide/snippets/ide-source-snippet-completion-provider.c:297
+#: libide/snippets/ide-source-snippet-completion-provider.c:301
 msgid "Snippets"
 msgstr "Töredékek"
 
@@ -2208,21 +2204,21 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: libide/sourceview/ide-source-view.c:5152
+#: libide/sourceview/ide-source-view.c:5154
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: libide/sourceview/ide-source-view.c:5154
+#: libide/sourceview/ide-source-view.c:5156
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: libide/sourceview/ide-source-view.c:5268
+#: libide/sourceview/ide-source-view.c:5270
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: libide/sourceview/ide-source-view.c:5695
+#: libide/sourceview/ide-source-view.c:5697
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
@@ -2381,7 +2377,9 @@ msgstr "Összeállítási profil"
 msgid "Last build"
 msgstr "Legutóbbi összeállítás"
 
-#: libide/workbench/ide-omni-bar.ui:325
+#: libide/workbench/ide-omni-bar.ui:325 plugins/cargo/cargo_plugin.py:113
+#: plugins/cargo/cargo_plugin.py:140 plugins/meson/meson_plugin/__init__.py:214
+#: plugins/meson/meson_plugin/__init__.py:244
 msgid "Failed"
 msgstr "Sikertelen"
 
@@ -2432,7 +2430,8 @@ msgstr "Összeállítás sikeres"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:241
-#: plugins/autotools/ide-autotools-build-task.c:1202
+#: plugins/autotools/ide-autotools-build-task.c:1205
+#: plugins/cargo/cargo_plugin.py:198 plugins/meson/meson_plugin/__init__.py:349
 msgid "Building…"
 msgstr "Összeállítás…"
 
@@ -2496,16 +2495,17 @@ msgstr "Az autogen.sh nem futtatható."
 msgid "Running autogen…"
 msgstr "Az Autogen futtatása…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1068
+#: plugins/autotools/ide-autotools-build-task.c:1069
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Az autogen.sh nem tudta létrehozni a configure-t (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:1103
+#: plugins/autotools/ide-autotools-build-task.c:1104
 msgid "Running configure…"
 msgstr "A Configure futtatása…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1200
+#: plugins/autotools/ide-autotools-build-task.c:1203
+#: plugins/cargo/cargo_plugin.py:195 plugins/meson/meson_plugin/__init__.py:342
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
@@ -2746,6 +2746,17 @@ msgstr "Útvonal a projektfájlhoz, alapértelmezésben az aktuális könyvtár"
 #: plugins/build-tools/ide-environment-editor.c:65
 msgid "New variable…"
 msgstr "Új változó…"
+
+#: plugins/cargo/cargo_plugin.py:108 plugins/cargo/cargo_plugin.py:135
+#: plugins/cargo/cargo_plugin.py:200 plugins/cargo/cargo_plugin.py:210
+#: plugins/meson/meson_plugin/__init__.py:210
+#: plugins/meson/meson_plugin/__init__.py:240
+msgid "Successful"
+msgstr "Sikeres"
+
+#: plugins/cargo/cargo_plugin.py:208
+msgid "Installing…"
+msgstr "Telepítés…"
 
 #: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -3371,6 +3382,10 @@ msgstr "MinGW 64 bit"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32 bit"
 
+#: plugins/meson/meson_plugin/__init__.py:321
+msgid "Configuring…"
+msgstr "Konfigurálás…"
+
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
 msgid "A folder with that name already exists."
@@ -3494,7 +3509,7 @@ msgstr ""
 msgid "Current language does not support symbol resolvers"
 msgstr "Az aktuális nyelv nem támogatja a szimbólumfeloldókat"
 
-#: plugins/symbol-tree/symbol-tree-panel.c:375
+#: plugins/symbol-tree/symbol-tree-panel.c:414
 msgid "Symbols"
 msgstr "Szimbólumok"
 
@@ -3547,7 +3562,7 @@ msgstr "Futtatás profilozóval"
 msgid "Open Profile…"
 msgstr "Profil megnyitása…"
 
-#: plugins/terminal/gb-terminal-view.c:444
+#: plugins/terminal/gb-terminal-view.c:459
 msgid "Untitled terminal"
 msgstr "Névtelen terminál"
 
@@ -3559,7 +3574,7 @@ msgstr "Terminál tartalmának mentése más néven"
 msgid "_New Terminal"
 msgstr "Új _terminál"
 
-#: plugins/todo/todo_plugin/__init__.py:188
+#: plugins/todo/todo_plugin/__init__.py:190
 msgid "Todo"
 msgstr "Tennivalók"
 
@@ -3575,6 +3590,9 @@ msgstr "A Vala hibák és figyelmeztetések megjelenítése"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnosztika figyelmeztetések hibák"
+
+#~ msgid "Words"
+#~ msgstr "Szavak"
 
 #~ msgid "Errors"
 #~ msgstr "Hibák"
