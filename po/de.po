@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-30 04:46+0000\n"
-"PO-Revision-Date: 2016-10-30 18:12+0100\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2016-11-04 19:53+0000\n"
+"PO-Revision-Date: 2016-11-04 21:01+0100\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -887,7 +887,7 @@ msgstr "_Schließen"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:498
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:561
+#: libide/workbench/ide-workbench.c:560
 msgid "Builder"
 msgstr "Builder"
 
@@ -1084,20 +1084,16 @@ msgstr "Kein solcher Worker"
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
-#: libide/buffers/ide-buffer-manager.c:671
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: libide/buffers/ide-buffer-manager.c:1536
-msgid "Words"
-msgstr "Wörter"
-
-#: libide/buffers/ide-buffer-manager.c:1748
+#: libide/buffers/ide-buffer-manager.c:1749
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1782
+#: libide/buffers/ide-buffer-manager.c:1783
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Konnte Puffer nicht speichern, ignoriere Beschwerde."
 
@@ -1224,7 +1220,7 @@ msgstr "Gehe zu Zeile"
 msgid "Go"
 msgstr "Navigieren"
 
-#: libide/editor/ide-editor-perspective.c:452
+#: libide/editor/ide-editor-perspective.c:456
 #: libide/preferences/ide-preferences-builtin.c:109
 #: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
@@ -2006,7 +2002,7 @@ msgid "Diagnostics"
 msgstr "Fehlerdiagnose"
 
 #: libide/preferences/ide-preferences-builtin.c:204
-#: libide/snippets/ide-source-snippet-completion-provider.c:297
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Schnipsel"
 
@@ -2433,7 +2429,7 @@ msgstr "Aufräumen"
 msgid "Open File"
 msgstr "Datei öffnen"
 
-#: libide/workbench/ide-workbench.c:559
+#: libide/workbench/ide-workbench.c:558
 #, c-format
 msgid "%s - Builder"
 msgstr "%s - Builder"
@@ -3423,6 +3419,18 @@ msgstr "Python-Vervollständigungen vorschlagen"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Jedi für die Vervollständigung von Python verwenden."
 
+#: plugins/meson/meson_plugin/__init__.py:321
+msgid "Configuring…"
+msgstr "Konfiguration läuft …"
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+msgid "Empty Meson Project"
+msgstr "Leeres Meson-Projekt"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+msgid "Create a new empty meson project"
+msgstr "Ein neues, leeres Meson-Projekt anlegen"
+
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW (64-bit)"
@@ -3430,10 +3438,6 @@ msgstr "MinGW (64-bit)"
 #: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW (32-bit)"
-
-#: plugins/meson/meson_plugin/__init__.py:321
-msgid "Configuring…"
-msgstr "Konfiguration läuft …"
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -3611,13 +3615,13 @@ msgstr "Mit Profiler ausführen"
 msgid "Open Profile…"
 msgstr "Profil öffnen …"
 
-#: plugins/terminal/gb-terminal-view.c:444
-msgid "Untitled terminal"
-msgstr "Unbenanntes Terminal"
-
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Terminalinhalt speichern unter"
+
+#: plugins/terminal/gb-terminal-view.c:468
+msgid "Untitled terminal"
+msgstr "Unbenanntes Terminal"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
@@ -3639,6 +3643,9 @@ msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "Vala Fehlerdiagnose Warnungen Fehler"
+
+#~ msgid "Words"
+#~ msgstr "Wörter"
 
 #~ msgid "Errors"
 #~ msgstr "Fehler"
