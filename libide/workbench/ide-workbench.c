@@ -340,7 +340,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   /**
    * IdeWorkbench:disable-greeter:
    *
-   * This property is used internall by Builder to avoid creating the
+   * This property is used internally by Builder to avoid creating the
    * greeter when opening a new workspace that is only for loading a
    * project.
    *
