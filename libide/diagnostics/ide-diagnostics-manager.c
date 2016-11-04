@@ -645,6 +645,12 @@ ide_diagnostics_manager_find_group_from_buffer (IdeDiagnosticsManager *self,
   gfile = ide_file_get_file (ifile);
   group = g_hash_table_lookup (self->groups_by_file, gfile);
 
+  if (group == NULL)
+    {
+      group = ide_diagnostics_group_new (gfile);
+      g_hash_table_insert (self->groups_by_file, group->file, group);
+    }
+
   g_assert (group != NULL);
 
   return group;
