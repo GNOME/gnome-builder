@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-11-03 00:26+0000\n"
-"PO-Revision-Date: 2016-11-03 13:27+0100\n"
+"POT-Creation-Date: 2016-11-04 06:21+0000\n"
+"PO-Revision-Date: 2016-11-04 10:12+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -878,7 +878,7 @@ msgstr "_Bezárás"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:498
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:561
+#: libide/workbench/ide-workbench.c:560
 msgid "Builder"
 msgstr "Építő"
 
@@ -1973,7 +1973,7 @@ msgid "Diagnostics"
 msgstr "Diagnosztika"
 
 #: libide/preferences/ide-preferences-builtin.c:204
-#: libide/snippets/ide-source-snippet-completion-provider.c:301
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Töredékek"
 
@@ -2399,7 +2399,7 @@ msgstr "Tisztítás"
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
-#: libide/workbench/ide-workbench.c:559
+#: libide/workbench/ide-workbench.c:558
 #, c-format
 msgid "%s - Builder"
 msgstr "%s – Építő"
@@ -3374,6 +3374,18 @@ msgstr "Python kiegészítési javaslatok"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Használja a Jedit kiegészítésre a Python nyelv esetén."
 
+#: plugins/meson/meson_plugin/__init__.py:321
+msgid "Configuring…"
+msgstr "Konfigurálás…"
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+msgid "Empty Meson Project"
+msgstr "Üres Meson projekt"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+msgid "Create a new empty meson project"
+msgstr "Új üres meson projekt létrehozása"
+
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW 64 bit"
@@ -3381,10 +3393,6 @@ msgstr "MinGW 64 bit"
 #: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32 bit"
-
-#: plugins/meson/meson_plugin/__init__.py:321
-msgid "Configuring…"
-msgstr "Konfigurálás…"
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -3562,13 +3570,13 @@ msgstr "Futtatás profilozóval"
 msgid "Open Profile…"
 msgstr "Profil megnyitása…"
 
-#: plugins/terminal/gb-terminal-view.c:459
-msgid "Untitled terminal"
-msgstr "Névtelen terminál"
-
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Terminál tartalmának mentése más néven"
+
+#: plugins/terminal/gb-terminal-view.c:468
+msgid "Untitled terminal"
+msgstr "Névtelen terminál"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
