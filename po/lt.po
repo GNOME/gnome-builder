@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-29 23:30+0000\n"
-"PO-Revision-Date: 2016-10-31 14:05+0200\n"
+"POT-Creation-Date: 2016-11-03 20:25+0000\n"
+"PO-Revision-Date: 2016-11-06 20:44+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -1061,20 +1061,16 @@ msgstr "Nėra tokio darbininko"
 msgid "The current language lacks a symbol resolver."
 msgstr "Dabartinei kalbai trūksta simbolių gavėjo."
 
-#: libide/buffers/ide-buffer-manager.c:671
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "Failas per didelis atvėrimui."
 
-#: libide/buffers/ide-buffer-manager.c:1536
-msgid "Words"
-msgstr "Žodžiai"
-
-#: libide/buffers/ide-buffer-manager.c:1748
+#: libide/buffers/ide-buffer-manager.c:1749
 #, c-format
 msgid "unsaved document %u"
 msgstr "neįrašytas dokumentas %u"
 
-#: libide/buffers/ide-buffer-manager.c:1782
+#: libide/buffers/ide-buffer-manager.c:1783
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nepavyko įrašyti buferio, nepaisoma įspėjimo."
 
@@ -1198,7 +1194,7 @@ msgstr "Eiti į eilutę"
 msgid "Go"
 msgstr "Eiti"
 
-#: libide/editor/ide-editor-perspective.c:452
+#: libide/editor/ide-editor-perspective.c:456
 #: libide/preferences/ide-preferences-builtin.c:109
 #: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
@@ -1364,11 +1360,11 @@ msgstr "Nepavyko inicializuotų numatytųjų nustatymų."
 msgid "You must call %s() before using libide."
 msgstr "Turite iškviesti %s() prie naudodami libide."
 
-#: libide/ide-context.c:1920
+#: libide/ide-context.c:1944
 msgid "An unload request is already pending"
 msgstr "Atlaisvinimo užklausa jau yra"
 
-#: libide/ide-context.c:2039
+#: libide/ide-context.c:2063
 msgid "Context has already been restored."
 msgstr "Kontekstas jau buvo atkurtas."
 
@@ -1601,13 +1597,11 @@ msgid "Reindent line"
 msgstr "Pakartotinai įtraukti eilutę"
 
 #: libide/keybindings/ide-shortcuts-window.ui:292
-#| msgid "Rename %s"
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Pervadinti simbolį"
 
 #: libide/keybindings/ide-shortcuts-window.ui:293
-#| msgid "The target language (if supported)"
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Reikalauja semantinio kalbos palaikymo"
@@ -1965,7 +1959,7 @@ msgid "Diagnostics"
 msgstr "Diagnostika"
 
 #: libide/preferences/ide-preferences-builtin.c:204
-#: libide/snippets/ide-source-snippet-completion-provider.c:297
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Iškarpos"
 
@@ -2209,7 +2203,6 @@ msgid "Apply Fix-It"
 msgstr "Pritaikyti pataisymą"
 
 #: libide/sourceview/ide-source-view.c:5697
-#| msgid "Rename %s"
 msgid "Rename symbol"
 msgstr "Pervadinti simbolį"
 
@@ -2742,7 +2735,6 @@ msgstr "Naujas kintamasis…"
 #: plugins/cargo/cargo_plugin.py:200 plugins/cargo/cargo_plugin.py:210
 #: plugins/meson/meson_plugin/__init__.py:210
 #: plugins/meson/meson_plugin/__init__.py:240
-#| msgid "Success"
 msgid "Successful"
 msgstr "Sėkminga"
 
@@ -3362,6 +3354,20 @@ msgstr "Siūlyti Python užbaigimą"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Naudoti Jedi užbaigimams Python kalboje"
 
+#: plugins/meson/meson_plugin/__init__.py:321
+msgid "Configuring…"
+msgstr "Konfigūruojama…"
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+#| msgid "Empty Project"
+msgid "Empty Meson Project"
+msgstr "Tuščias Meson projektas"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+#| msgid "Create a new empty autotools project"
+msgid "Create a new empty meson project"
+msgstr "Sukurti naują tuščią meson projektą"
+
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bitų"
@@ -3369,11 +3375,6 @@ msgstr "MinGW 64-bitų"
 #: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bitų"
-
-#: plugins/meson/meson_plugin/__init__.py:321
-#| msgid "Configure Options"
-msgid "Configuring…"
-msgstr "Konfigūruojama…"
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -3552,13 +3553,13 @@ msgstr "Vykdyti su profiliatoriumi"
 msgid "Open Profile…"
 msgstr "Atverti profilį…"
 
-#: plugins/terminal/gb-terminal-view.c:444
-msgid "Untitled terminal"
-msgstr "Nepavadintas terminalas"
-
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Įrašyti terminalo turinį taip"
+
+#: plugins/terminal/gb-terminal-view.c:459
+msgid "Untitled terminal"
+msgstr "Nepavadintas terminalas"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
@@ -3580,6 +3581,9 @@ msgstr "Rodyti Vala pateiktas klaidas"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika įspėjimai klaidos"
+
+#~ msgid "Words"
+#~ msgstr "Žodžiai"
 
 #~ msgid "Errors"
 #~ msgstr "Klaidos"
