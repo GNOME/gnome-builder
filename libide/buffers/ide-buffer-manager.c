@@ -1927,7 +1927,7 @@ ide_buffer_manager_do_apply_edits (IdeBufferManager *self,
           NULL == (file = ide_source_location_get_file (location)) ||
           NULL == (buffer = g_hash_table_lookup (buffers, file)))
         {
-          g_warning ("Impluasible failure to access buffer");
+          g_warning ("Implausible failure to access buffer");
           continue;
         }
 
@@ -1950,7 +1950,7 @@ ide_buffer_manager_do_apply_edits (IdeBufferManager *self,
           NULL == (file = ide_source_location_get_file (location)) ||
           NULL == (buffer = g_hash_table_lookup (buffers, file)))
         {
-          g_warning ("Impluasible failure to access buffer");
+          g_warning ("Implausible failure to access buffer");
           continue;
         }
 
@@ -1971,7 +1971,7 @@ ide_buffer_manager_do_apply_edits (IdeBufferManager *self,
           NULL == (file = ide_source_location_get_file (location)) ||
           NULL == (buffer = g_hash_table_lookup (buffers, file)))
         {
-          g_warning ("Impluasible failure to access buffer");
+          g_warning ("Implausible failure to access buffer");
           continue;
         }
 
