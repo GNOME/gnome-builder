@@ -24,6 +24,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "buffers/ide-buffer-manager.h"
 #include "buildsystem/ide-builder.h"
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-result.h"
@@ -43,7 +44,14 @@ struct _IdeBuildManager
   GSimpleActionGroup   *actions;
 
   guint                 has_diagnostics : 1;
+  guint                 saving : 1;
 };
+
+typedef struct
+{
+  IdeBuilder *builder;
+  IdeBuilderBuildFlags build_flags;
+} BuildState;
 
 static void action_group_iface_init (GActionGroupInterface *iface);
 
@@ -69,6 +77,18 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+build_state_free (gpointer data)
+{
+  BuildState *state = data;
+
+  if (state != NULL)
+    {
+      g_clear_object (&state->builder);
+      g_slice_free (BuildState, state);
+    }
+}
 
 static void
 ide_build_manager__build_result__notify_mode (IdeBuildManager *self,
@@ -541,6 +561,57 @@ failure:
   IDE_EXIT;
 }
 
+static void
+ide_build_manager_build_save_all_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(IdeBuildResult) build_result = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeBuildManager *self;
+  GCancellable *cancellable;
+  BuildState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_buffer_manager_save_all_finish (buffer_manager, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_GOTO (failure);
+    }
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (IDE_IS_BUILDER (state->builder));
+
+  cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_builder_build_async (state->builder,
+                           state->build_flags,
+                           &build_result,
+                           cancellable,
+                           ide_build_manager_build_cb,
+                           g_steal_pointer (&task));
+
+  ide_build_manager_set_build_result (self, build_result);
+
+failure:
+  self->saving = FALSE;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+
+  IDE_EXIT;
+}
+
 void
 ide_build_manager_build_async (IdeBuildManager      *self,
                                IdeBuildTarget       *build_target,
@@ -550,10 +621,12 @@ ide_build_manager_build_async (IdeBuildManager      *self,
                                gpointer              user_data)
 {
   g_autoptr(GTask) task = NULL;
-  g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(IdeBuildResult) build_result = NULL;
   g_autoptr(GCancellable) local_cancellable = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeBuilder) builder = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+  BuildState *state;
 
   IDE_ENTRY;
 
@@ -569,33 +642,35 @@ ide_build_manager_build_async (IdeBuildManager      *self,
 
   if (ide_build_manager_check_busy (self, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (NULL == (builder = ide_build_manager_get_builder (self, &error)))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
+
+  state = g_slice_new0 (BuildState);
+  state->builder = g_steal_pointer (&builder);
+  state->build_flags = build_flags;
+  g_task_set_task_data (task, state, build_state_free);
 
   g_set_object (&self->cancellable, cancellable);
 
   /*
-   * TODO: We need to add support to IdeBuilder to allow specifying what
-   *       build target we want to ensure is built. That way, we can possibly
-   *       reduce how much we build in the future. Probably something like:
-   *       ide_builder_add_build_target(builder, build_target);
+   * Before we start any builds, we want to ensure that all of our buffers
+   * have been saved. So first request that the buffer manager take care
+   * of that for us.
    */
-
-  ide_builder_build_async (builder,
-                           build_flags,
-                           &build_result,
-                           cancellable,
-                           ide_build_manager_build_cb,
-                           g_object_ref (task));
-
-  ide_build_manager_set_build_result (self, build_result);
+  self->saving = TRUE;
+  context = ide_object_get_context (IDE_OBJECT (self));
+  buffer_manager = ide_context_get_buffer_manager (context);
+  ide_buffer_manager_save_all_async (buffer_manager,
+                                     cancellable,
+                                     ide_build_manager_build_save_all_cb,
+                                     g_steal_pointer (&task));
 
   /*
    * Update our last build time.
@@ -741,6 +816,9 @@ gboolean
 ide_build_manager_get_busy (IdeBuildManager *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), FALSE);
+
+  if (self->saving)
+    return TRUE;
 
   if (self->build_result != NULL)
     return ide_build_result_get_running (self->build_result);
