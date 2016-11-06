@@ -879,7 +879,7 @@ ide_buffer_notify_language (IdeBuffer  *self,
 }
 
 static void
-apply_style (GtkTextTag *tag,
+apply_style (GtkTextTag  *tag,
              const gchar *first_property,
              ...)
 {
@@ -1370,17 +1370,17 @@ ide_buffer_class_init (IdeBufferClass *klass)
 
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
-                         "Busy",
-                         "If the buffer is performing background work.",
-                         FALSE,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                          "Busy",
+                          "If the buffer is performing background work.",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CHANGED_ON_VOLUME] =
     g_param_spec_boolean ("changed-on-volume",
-                         "Changed on Volume",
-                         "If the file has changed on disk and the buffer is not in sync.",
-                         FALSE,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                          "Changed on Volume",
+                          "If the file has changed on disk and the buffer is not in sync.",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -1400,10 +1400,10 @@ ide_buffer_class_init (IdeBufferClass *klass)
 
   properties [PROP_HAS_DIAGNOSTICS] =
     g_param_spec_boolean ("has-diagnostics",
-                         "Has Diagnostics",
-                         "If the buffer contains diagnostic messages.",
-                         FALSE,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                          "Has Diagnostics",
+                          "If the buffer contains diagnostic messages.",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_HIGHLIGHT_DIAGNOSTICS] =
     g_param_spec_boolean ("highlight-diagnostics",
