@@ -769,19 +769,15 @@ ide_buffer__file_monitor_changed (IdeBuffer         *self,
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_DELETED:
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
-#if GLIB_CHECK_VERSION(2,45,0)
     case G_FILE_MONITOR_EVENT_RENAMED:
-#endif
       IDE_TRACE_MSG ("buffer change event = %d", (int)event);
       ide_buffer_queue_modify_check (self);
       break;
 
     case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
     case G_FILE_MONITOR_EVENT_UNMOUNTED:
-#if GLIB_CHECK_VERSION(2,45,0)
     case G_FILE_MONITOR_EVENT_MOVED_IN:
     case G_FILE_MONITOR_EVENT_MOVED_OUT:
-#endif
     default:
       break;
     }
