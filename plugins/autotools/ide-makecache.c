@@ -1872,6 +1872,9 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   gchar *line;
   gsize line_len;
   IdeLineReader reader;
+  const gchar * const * partial_argv;
+  guint num_args;
+  gboolean first_subdir = TRUE;
 
   IDE_ENTRY;
 
@@ -1921,6 +1924,11 @@ ide_makecache_get_build_targets_worker (GTask        *task,
     make_name = GNU_MAKE_NAME;
 
   ide_subprocess_launcher_push_argv (launcher, make_name);
+
+  /* Find the argv index so we can insert arguments on each run */
+  partial_argv = ide_subprocess_launcher_get_argv (launcher);
+  for (num_args = 0; partial_argv[num_args] != NULL; num_args++) ;
+
   ide_subprocess_launcher_push_argv (launcher, "-f");
   ide_subprocess_launcher_push_argv (launcher, "-");
   ide_subprocess_launcher_push_argv (launcher, "print-bindir");
@@ -1969,16 +1977,36 @@ ide_makecache_get_build_targets_worker (GTask        *task,
     {
       g_autoptr(IdeSubprocess) subprocess = NULL;
       g_autoptr(GHashTable) amdirs = NULL;
-      g_autofree gchar *path = NULL;
+      g_autofree gchar *rel_path = NULL;
       GFile *makedir;
 
       /*
        * Make sure we are running within the directory containing the
-       * Makefile that we care about.
+       * Makefile that we care about. We use make's -C option because
+       * for runtimes such as flatpak make doesn't necessarily run in
+       * the same directory as the process.
        */
       makedir = g_ptr_array_index (makedirs, j);
-      path = g_file_get_path (makedir);
-      ide_subprocess_launcher_set_cwd (launcher, path);
+      rel_path = g_file_get_relative_path (build_dir, makedir);
+      if (rel_path == NULL)
+        {
+          g_autofree gchar *path = NULL;
+          path = g_file_get_path (makedir);
+          ide_subprocess_launcher_set_cwd (launcher, path);
+        }
+      else
+        {
+          if (first_subdir)
+            {
+              ide_subprocess_launcher_insert_argv (launcher, num_args, "-C");
+              ide_subprocess_launcher_insert_argv (launcher, (num_args + 1), rel_path);
+              first_subdir = FALSE;
+            }
+          else
+            {
+              ide_subprocess_launcher_replace_argv (launcher, (num_args + 1), rel_path);
+            }
+        }
 
       /*
        * Spawn make, waiting for our stdin input which will add our debug

@@ -72,6 +72,9 @@ void                   ide_subprocess_launcher_setenv              (IdeSubproces
 void                   ide_subprocess_launcher_insert_argv         (IdeSubprocessLauncher  *self,
                                                                     guint                   index,
                                                                     const gchar            *arg);
+void                   ide_subprocess_launcher_replace_argv        (IdeSubprocessLauncher  *self,
+                                                                    guint                   index,
+                                                                    const gchar            *arg);
 void                   ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher  *self,
                                                                     IdeEnvironment         *environment);
 const gchar * const   *ide_subprocess_launcher_get_argv            (IdeSubprocessLauncher  *self);
