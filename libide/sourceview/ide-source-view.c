@@ -2331,7 +2331,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   /*
    * Handle movement through the tab stops of the current snippet if needed.
    */
-  if ((snippet = g_queue_peek_head (priv->snippets)))
+  if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
     {
       switch ((gint) event->keyval)
         {
