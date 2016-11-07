@@ -180,16 +180,18 @@ ide_clang_completion_provider_can_replay (IdeClangCompletionProvider *self,
 {
   const gchar *suffix;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
 
   if (self->last_results == NULL)
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   if (line == NULL || *line == '\0' || self->last_line == NULL)
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   if (!g_str_has_prefix (line, self->last_line))
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   suffix = line + strlen (self->last_line);
 
@@ -201,11 +203,11 @@ ide_clang_completion_provider_can_replay (IdeClangCompletionProvider *self,
       if (!g_unichar_isalnum (ch) && (ch != '_'))
         {
           IDE_TRACE_MSG ("contains invaliding characters");
-          return FALSE;
+          IDE_RETURN (FALSE);
         }
     }
 
-  return TRUE;
+  IDE_RETURN (TRUE);
 }
 
 static void
@@ -250,13 +252,15 @@ ide_clang_completion_provider_update_links (IdeClangCompletionProvider *self,
   IdeClangCompletionItem *prev;
   guint i;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (results != NULL);
 
-  if (results->len == 0)
+  if G_UNLIKELY (results->len == 0)
     {
       self->head = NULL;
-      return;
+      IDE_EXIT;
     }
 
   /* Unrolling loops for the gentoo crowd */
@@ -286,6 +290,8 @@ ide_clang_completion_provider_update_links (IdeClangCompletionProvider *self,
       item->link.prev = &((IdeClangCompletionItem*)g_ptr_array_index (results, results->len-2))->link;
       item->link.next = NULL;
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -295,12 +301,14 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
 {
   g_autofree gchar *lower = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (results != NULL);
   g_assert (query != NULL);
 
   if (results->len == 0)
-    return;
+    IDE_EXIT;
 
   IDE_TRACE_MSG ("Filtering with query \"%s\"", query);
 
@@ -318,7 +326,7 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
   if (!g_str_is_ascii (lower))
     {
       g_warning ("Item filtering requires ascii input.");
-      return;
+      IDE_EXIT;
     }
 
   for (GList *iter = self->head; iter; iter = iter->next)
@@ -339,6 +347,8 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
 
   g_free (self->last_query);
   self->last_query = g_strdup (query);
+
+  IDE_EXIT;
 }
 
 static void
