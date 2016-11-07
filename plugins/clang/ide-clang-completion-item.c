@@ -297,6 +297,8 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self)
         default:
           break;
         }
+
+      clang_disposeString (cxstr);
     }
 
   return snippet;
