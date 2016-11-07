@@ -113,13 +113,33 @@ ide_completion_item_fuzzy_match (const gchar *haystack,
        * works relatively well since we are usually dealing with ASCII
        * for function names and symbols.
        */
+
       tmp = strchr (haystack, ch);
+
       if (tmp == NULL)
-        tmp = strchr (haystack, g_unichar_toupper (ch));
-      if (tmp == NULL)
-        return FALSE;
-      real_score += (tmp - haystack);
-      haystack = tmp;
+        {
+          tmp = strchr (haystack, g_unichar_toupper (ch));
+          if (tmp == NULL)
+            return FALSE;
+        }
+
+      /*
+       * Here we calculate the cost of this character into the score.
+       * If we matched exactly on the next character, the cost is ZERO.
+       * However, if we had to skip some characters, we have a cost
+       * of 2*distance to the character. This is necessary so that
+       * when we add the cost of the remaining haystack, strings which
+       * exhausted @casefold_needle score lower (higher priority) than
+       * strings which had to skip characters but matched the same
+       * number of characters in the string.
+       */
+      real_score += (tmp - haystack) * 2;
+
+      /*
+       * Now move past our matching character so we cannot match
+       * it a second time.
+       */
+      haystack = tmp + 1;
     }
 
   if (priority != NULL)
