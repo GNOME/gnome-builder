@@ -570,7 +570,7 @@ ide_build_manager_build_save_all_cb (GObject      *object,
   g_autoptr(IdeBuildResult) build_result = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
-  IdeBuildManager *self;
+  IdeBuildManager *self = NULL;
   GCancellable *cancellable;
   BuildState *state;
 
@@ -606,8 +606,11 @@ ide_build_manager_build_save_all_cb (GObject      *object,
   ide_build_manager_set_build_result (self, build_result);
 
 failure:
-  self->saving = FALSE;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  if (self != NULL)
+    {
+      self->saving = FALSE;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+    }
 
   IDE_EXIT;
 }
