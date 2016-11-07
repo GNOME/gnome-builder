@@ -106,7 +106,7 @@ sort_by_priority (gconstpointer a,
 }
 
 static void
-ide_clang_completion_provider_sort (IdeClangCompletionProvider *self)
+ide_clang_completion_provider_sort_by_priority (IdeClangCompletionProvider *self)
 {
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
 
@@ -390,7 +390,7 @@ ide_clang_completion_provider_code_complete_cb (GObject      *object,
         {
           if (state->query && *state->query)
             ide_clang_completion_provider_refilter (state->self, results, state->query);
-          ide_clang_completion_provider_sort (state->self);
+          ide_clang_completion_provider_sort_by_priority (state->self);
           IDE_TRACE_MSG ("%d results returned from clang", results->len);
           gtk_source_completion_context_add_proposals (state->context,
                                                        GTK_SOURCE_COMPLETION_PROVIDER (state->self),
@@ -559,7 +559,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
        * linked list instead of all items.
        */
       ide_clang_completion_provider_refilter (self, self->last_results, prefix);
-      ide_clang_completion_provider_sort (self);
+      ide_clang_completion_provider_sort_by_priority (self);
       gtk_source_completion_context_add_proposals (context, provider, self->head, TRUE);
 
       IDE_EXIT;
