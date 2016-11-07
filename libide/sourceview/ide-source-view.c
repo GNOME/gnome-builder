@@ -2363,6 +2363,22 @@ ide_source_view_key_press_event (GtkWidget   *widget,
         }
     }
 
+  /*
+   * We have stolen ownership of Tab from GtkSourceCompletion so that we can
+   * move between snippets at a higher priority than the completion window.
+   * If we don't have a snippet active
+   */
+  if (priv->completion_visible && event->keyval == GDK_KEY_Tab)
+    {
+      GtkSourceCompletion *completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+      g_signal_emit_by_name (completion, "activate-proposal");
+      return TRUE;
+    }
+
+  /*
+   * Avoid conflicts with global <alt>+N perspective movements.
+   * We might want to adjust those keybindings at somepoint.
+   */
   if (priv->completion_visible && event->state == GDK_MOD1_MASK)
     {
       if ((event->keyval >= GDK_KEY_0 && event->keyval <= GDK_KEY_9) ||
@@ -6846,10 +6862,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * keybindings may want to control that manually (such as Vim). Vim needs to
    * go back to normal mode upon Escape to more closely match the traditional
    * environment.
+   *
+   * We remove the Tab activation from the completion class so that we can
+   * activate it ourselves. Otherwise, it might fire before we have a chance
+   * to steal it to move to the next completion item.
    */
   completion_class = g_type_class_ref (GTK_SOURCE_TYPE_COMPLETION);
   binding_set = gtk_binding_set_by_class (completion_class);
   gtk_binding_entry_remove (binding_set, GDK_KEY_Escape, 0);
+  gtk_binding_entry_remove (binding_set, GDK_KEY_Tab, 0);
   g_type_class_unref (completion_class);
 }
 
