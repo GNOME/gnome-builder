@@ -306,9 +306,6 @@ failure:
   if (stdout_fd != -1)
     close (stdout_fd);
 
-  if (stderr_fd != -1)
-    close (stderr_fd);
-
   g_clear_object (&pty);
 
   if (error != NULL)
