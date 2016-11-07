@@ -53,7 +53,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
     return;
 
   result = ide_clang_completion_item_get_result (self);
-  num_chunks = clang_getNumCompletionChunks (result);
+  num_chunks = clang_getNumCompletionChunks (result->CompletionString);
   markup = g_string_new (NULL);
 
   g_assert (result);
@@ -207,7 +207,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self)
 
   result = ide_clang_completion_item_get_result (self);
   snippet = ide_source_snippet_new (NULL, NULL);
-  num_chunks = clang_getNumCompletionChunks (result);
+  num_chunks = clang_getNumCompletionChunks (result->CompletionString);
 
   for (i = 0; i < num_chunks; i++)
     {
@@ -481,7 +481,7 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
       guint num_chunks;
       guint i;
 
-      num_chunks = clang_getNumCompletionChunks (result);
+      num_chunks = clang_getNumCompletionChunks (result->CompletionString);
 
       for (i = 0; i < num_chunks; i++)
         {
