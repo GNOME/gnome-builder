@@ -321,7 +321,7 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
   if ((self->last_query != NULL) && g_str_has_prefix (query, self->last_query))
     ide_clang_completion_provider_update_links (self, results);
 
-  lower = g_utf8_strdown (query, -1);
+  lower = g_utf8_casefold (query, -1);
 
   if (!g_str_is_ascii (lower))
     {
@@ -332,8 +332,12 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
   for (GList *iter = self->head; iter; iter = iter->next)
     {
       IdeClangCompletionItem *item = iter->data;
+      const gchar *typed_text;
+      guint priority;
 
-      if (!ide_clang_completion_item_match (item, lower))
+      typed_text = ide_clang_completion_item_get_typed_text (item);
+
+      if (!ide_completion_item_fuzzy_match (typed_text, lower, &priority))
         {
           if (iter->prev != NULL)
             iter->prev->next = iter->next;
@@ -342,7 +346,12 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
 
           if (iter->next != NULL)
             iter->next->prev = iter->prev;
+
+          continue;
         }
+
+      /* Save the generated priority for further sorting */
+      item->priority = priority;
     }
 
   g_free (self->last_query);

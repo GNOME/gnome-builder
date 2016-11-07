@@ -563,14 +563,10 @@ ide_clang_completion_item_new (IdeRefPtr *results,
                                guint      index)
 {
   IdeClangCompletionItem *ret;
-  CXCompletionResult *result;
 
   ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM, NULL);
   ret->results = ide_ref_ptr_ref (results);
   ret->index = index;
-
-  result = ide_clang_completion_item_get_result (ret);
-  ret->priority = clang_getCompletionPriority (result->CompletionString);
 
   return ret;
 }
