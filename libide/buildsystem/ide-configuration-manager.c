@@ -762,7 +762,7 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
  * Gets the current configuration to use for building.
  *
  * Many systems allow you to pass a configuration in instead of relying on the
- * default configuration. This sets the default configuration that various
+ * default configuration. This gets the default configuration that various
  * background items might use, such as tags builders which need to discover
  * settings.
  *
