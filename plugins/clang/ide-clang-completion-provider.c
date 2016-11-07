@@ -138,6 +138,9 @@ ide_clang_completion_provider_match (GtkSourceCompletionProvider *provider,
   g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_PROVIDER (self), FALSE);
   g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), FALSE);
 
+  if (!g_settings_get_boolean (self->settings, "clang-autocompletion"))
+    return FALSE;
+
   if (!gtk_source_completion_context_get_iter (context, &iter))
     return FALSE;
 
@@ -167,9 +170,6 @@ ide_clang_completion_provider_match (GtkSourceCompletionProvider *provider,
       if (!g_unichar_isalnum (ch))
         return FALSE;
     }
-
-  if (!g_settings_get_boolean (self->settings, "clang-autocompletion"))
-    return FALSE;
 
   return TRUE;
 }
