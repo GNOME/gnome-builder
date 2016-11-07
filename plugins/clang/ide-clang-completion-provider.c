@@ -95,14 +95,19 @@ static gint
 sort_by_priority (gconstpointer a,
                   gconstpointer b)
 {
-  IdeClangCompletionItem *itema = (IdeClangCompletionItem *)a;
-  IdeClangCompletionItem *itemb = (IdeClangCompletionItem *)b;
+  const IdeClangCompletionItem *itema = (const IdeClangCompletionItem *)a;
+  const IdeClangCompletionItem *itemb = (const IdeClangCompletionItem *)b;
 
   if (itema->priority < itemb->priority)
     return -1;
   else if (itema->priority > itemb->priority)
     return 1;
-  return 0;
+
+  /* If the item is in the result set here, we should have a valid
+   * typed_text field because we already scored the completion item.
+   */
+
+  return g_strcmp0 (itema->typed_text, itemb->typed_text);
 }
 
 static void
