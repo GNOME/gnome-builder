@@ -572,7 +572,7 @@ jcon_extract_va_list (JsonNode *node,
   keys[0] = NULL;
   indexes[0] = 0;
 
-  while (node != NULL && sp >= 0 && sp < STACK_DEPTH)
+  while (node != NULL && sp >= 0 && sp < STACK_DEPTH - 1)
     {
       JconExtract val = { 0 };
       JconType type;
