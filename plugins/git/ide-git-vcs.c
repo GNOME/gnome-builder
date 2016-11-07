@@ -148,6 +148,10 @@ ide_git_vcs_discover (IdeGitVcs  *self,
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (G_IS_FILE (file));
 
+  /*
+   * TODO: Switch to using the new discover_full().
+   */
+
   if (!g_file_is_native (file))
     {
       g_set_error (error,
