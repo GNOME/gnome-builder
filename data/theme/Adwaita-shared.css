@@ -3,30 +3,6 @@
 
 
 /*
- * Titlebar adjustments for workbench
- *
- * This is needed due to our placement of headerbar inside of a
- * stack. We were seeing black edges around the header bar, and
- * improper radius on the headerbar.
- */
-window.workbench stack.titlebar {
-  border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  box-shadow: none;
-  padding: 0;
-}
-window.workbench stack.titlebar headerbar {
-  border-radius: 6px 6px 0 0;
-  margin: 0;
-  border-bottom: none;
-  box-shadow: 0 -1px 0 @borders inset;
-}
-window.workbench stack.titlebar headerbar:backdrop {
-  box-shadow: 0 -1px 0 alpha(@borders, 0.6) inset;
-}
-
-
-/*
  * Layout tab and tab bar tweaks
  *
  * The following makes the layout stack header look similar to a tab bar.
