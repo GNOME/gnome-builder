@@ -162,6 +162,12 @@ test_vim_CFLAGS = $(tests_cflags)
 test_vim_LDADD = $(tests_libs)
 
 
+TESTS += test-snippet
+test_snippet_SOURCES = test-snippet.c
+test_snippet_CFLAGS = $(tests_cflags)
+test_snippet_LDADD = $(tests_libs)
+
+
 misc_programs += test-cpu-graph
 test_cpu_graph_SOURCES = test-cpu-graph.c
 test_cpu_graph_CFLAGS = $(rg_cflags)
