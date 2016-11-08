@@ -35,7 +35,6 @@ G_GNUC_INTERNAL
 gboolean	_ide_source_iter_forward_visible_word_ends		(GtkTextIter *iter,
 									 gint         count);
 
-G_GNUC_INTERNAL
 gboolean	_ide_source_iter_backward_visible_word_start		(GtkTextIter *iter);
 
 G_GNUC_INTERNAL
