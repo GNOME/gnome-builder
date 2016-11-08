@@ -585,7 +585,6 @@ ide_buffer_reload_change_monitor (IdeBuffer *self)
                                      G_CONNECT_SWAPPED);
         }
     }
-
 }
 
 static void
