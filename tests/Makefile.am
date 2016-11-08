@@ -135,6 +135,12 @@ test_ide_indenter_CFLAGS = $(tests_cflags)
 test_ide_indenter_LDADD = $(tests_libs)
 
 
+TESTS += test-ide-subprocess-launcher
+test_ide_subprocess_launcher_SOURCES = test-ide-subprocess-launcher.c
+test_ide_subprocess_launcher_CFLAGS = $(tests_cflags)
+test_ide_subprocess_launcher_LDADD = $(tests_libs)
+test_ide_subprocess_launcher_LDFLAGS = $(tests_ldflags)
+
 TESTS += test-ide-vcs-uri
 test_ide_vcs_uri_SOURCES = test-ide-vcs-uri.c
 test_ide_vcs_uri_CFLAGS = $(tests_cflags)
