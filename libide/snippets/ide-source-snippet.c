@@ -369,7 +369,7 @@ ide_source_snippet_get_chunk_range (IdeSourceSnippet      *self,
         }
     }
 
-  g_warning (_("Chunk does not belong to snippet."));
+  g_warning ("Chunk does not belong to snippet.");
 }
 
 static void
