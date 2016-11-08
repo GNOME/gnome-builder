@@ -44,6 +44,31 @@ main (gint   argc,
           g_printerr ("%s\n", error->message);
           return EXIT_FAILURE;
         }
+
+      {
+        for (GList *iter = ide_source_snippet_parser_get_snippets (parser);
+             iter != NULL;
+             iter = iter->next)
+          {
+            IdeSourceSnippet *snippet = iter->data;
+
+            g_print ("=====================================\n");
+            g_print ("Snippet: %s with language %s\n",
+                     ide_source_snippet_get_trigger (snippet),
+                     ide_source_snippet_get_language (snippet));
+
+            for (guint j = 0; j < ide_source_snippet_get_n_chunks (snippet); j++)
+              {
+                IdeSourceSnippetChunk *chunk = ide_source_snippet_get_nth_chunk (snippet, j);
+                gint tab_stop = ide_source_snippet_chunk_get_tab_stop (chunk);
+
+                if (tab_stop > 0)
+                  g_print ("TAB STOP %02d (%02d): %s\n", tab_stop, j, ide_source_snippet_chunk_get_spec (chunk));
+                else
+                  g_print ("TEXT        (%02d): %s\n", j, ide_source_snippet_chunk_get_spec (chunk));
+              }
+          }
+      }
     }
 
   g_option_context_free (context);
