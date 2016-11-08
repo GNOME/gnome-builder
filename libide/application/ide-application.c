@@ -346,6 +346,23 @@ ide_application_activate (GApplication *application)
 }
 
 static void
+ide_application_language_defaults_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  GError *error = NULL;
+  G_GNUC_UNUSED gboolean ret;
+
+  ret = ide_language_defaults_init_finish (result, &error);
+
+  if (error != NULL)
+    {
+      g_warning ("%s\n", error->message);
+      g_clear_error (&error);
+    }
+}
+
+static void
 ide_application_startup (GApplication *application)
 {
   IdeApplication *self = (IdeApplication *)application;
@@ -365,6 +382,7 @@ ide_application_startup (GApplication *application)
   if ((self->mode == IDE_APPLICATION_MODE_PRIMARY) || (self->mode == IDE_APPLICATION_MODE_TESTS))
     {
       ide_application_make_skeleton_dirs (self);
+      ide_language_defaults_init_async (NULL, ide_application_language_defaults_cb, NULL);
       ide_application_register_theme_overrides (self);
       ide_application_register_keybindings (self);
       ide_application_actions_init (self);

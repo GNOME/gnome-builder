@@ -24,6 +24,7 @@
 #include <libpeas/peas.h>
 
 #include "application/ide-application.h"
+#include "gsettings/ide-language-defaults.h"
 #include "keybindings/ide-keybindings.h"
 #include "projects/ide-recent-projects.h"
 #include "theming/ide-theme-manager.h"
