@@ -91,7 +91,7 @@ test_ide_context_LDADD = $(tests_libs)
 test_ide_context_LDFLAGS = $(tests_ldflags)
 
 
-TESTS = test-ide-configuration
+TESTS += test-ide-configuration
 test_ide_configuration_SOURCES = test-ide-configuration.c
 test_ide_configuration_CFLAGS = $(tests_cflags)
 test_ide_configuration_LDADD = $(tests_libs)
