@@ -111,12 +111,12 @@ ide_buffer_change_monitor_class_init (IdeBufferChangeMonitorClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   signals [CHANGED] = g_signal_new ("changed",
-                                     G_TYPE_FROM_CLASS (klass),
-                                     G_SIGNAL_RUN_LAST,
-                                     0,
-                                     NULL, NULL, NULL,
-                                     G_TYPE_NONE,
-                                     0);
+                                    G_TYPE_FROM_CLASS (klass),
+                                    G_SIGNAL_RUN_LAST,
+                                    0,
+                                    NULL, NULL, NULL,
+                                    G_TYPE_NONE,
+                                    0);
 }
 
 static void
