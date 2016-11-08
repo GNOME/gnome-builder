@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-10-29 23:30+0000\n"
-"PO-Revision-Date: 2016-10-31 08:26+0100\n"
+"POT-Creation-Date: 2016-11-03 20:25+0000\n"
+"PO-Revision-Date: 2016-11-08 08:22+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1065,20 +1065,16 @@ msgstr "Takový sestavovací proces neexistuje"
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
-#: libide/buffers/ide-buffer-manager.c:671
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: libide/buffers/ide-buffer-manager.c:1536
-msgid "Words"
-msgstr "Slova"
-
-#: libide/buffers/ide-buffer-manager.c:1748
+#: libide/buffers/ide-buffer-manager.c:1749
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1782
+#: libide/buffers/ide-buffer-manager.c:1783
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Selhalo uložení vyrovnávací paměti, ignoruje se opětovné použití."
 
@@ -1204,7 +1200,7 @@ msgstr "Přejít na řádek"
 msgid "Go"
 msgstr "Přejít"
 
-#: libide/editor/ide-editor-perspective.c:452
+#: libide/editor/ide-editor-perspective.c:456
 #: libide/preferences/ide-preferences-builtin.c:109
 #: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
@@ -1369,11 +1365,11 @@ msgstr "Selhala inicializace výchozích hodnot."
 msgid "You must call %s() before using libide."
 msgstr "Před použitím libide musíte zavolat %s()."
 
-#: libide/ide-context.c:1920
+#: libide/ide-context.c:1944
 msgid "An unload request is already pending"
 msgstr "Nějaký požadavek na odstranění z paměti již probíhá"
 
-#: libide/ide-context.c:2039
+#: libide/ide-context.c:2063
 msgid "Context has already been restored."
 msgstr "Kontext již byl obnoven."
 
@@ -1970,7 +1966,7 @@ msgid "Diagnostics"
 msgstr "Diagnostika"
 
 #: libide/preferences/ide-preferences-builtin.c:204
-#: libide/snippets/ide-source-snippet-completion-provider.c:297
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Úryvky"
 
@@ -3365,6 +3361,18 @@ msgstr "Navrhovat dokončování pro Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
+#: plugins/meson/meson_plugin/__init__.py:321
+msgid "Configuring…"
+msgstr "Konfiguruje se…"
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+msgid "Empty Meson Project"
+msgstr "Prázdný projekt Meson"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+msgid "Create a new empty meson project"
+msgstr "Vytvořit nový prázdný projekt s meson"
+
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW 64bitový"
@@ -3372,10 +3380,6 @@ msgstr "MinGW 64bitový"
 #: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32bitový"
-
-#: plugins/meson/meson_plugin/__init__.py:321
-msgid "Configuring…"
-msgstr "Konfiguruje se…"
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -3553,13 +3557,13 @@ msgstr "Spustit s profilerem"
 msgid "Open Profile…"
 msgstr "Otevřít záznam profilování…"
 
-#: plugins/terminal/gb-terminal-view.c:444
-msgid "Untitled terminal"
-msgstr "Nepojmenovaný terminál"
-
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Uložení obsahu terminálu jako"
+
+#: plugins/terminal/gb-terminal-view.c:459
+msgid "Untitled terminal"
+msgstr "Nepojmenovaný terminál"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
@@ -3581,3 +3585,4 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
+
