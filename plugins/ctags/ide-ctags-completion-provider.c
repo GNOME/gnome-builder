@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "sourceview/ide-source-iter.h"
+
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-completion-provider-private.h"
@@ -306,6 +308,60 @@ ide_ctags_completion_provider_match (GtkSourceCompletionProvider *provider,
   return TRUE;
 }
 
+static gboolean
+ide_ctags_completion_provider_activate_proposal (GtkSourceCompletionProvider *provider,
+                                                 GtkSourceCompletionProposal *proposal,
+                                                 GtkTextIter                 *iter)
+{
+  IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
+  IdeCtagsCompletionItem *item = (IdeCtagsCompletionItem *)proposal;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_CTAGS_COMPLETION_ITEM (item));
+  g_assert (iter != NULL);
+
+  begin = *iter;
+
+  buffer = gtk_text_iter_get_buffer (iter);
+
+  if (_ide_source_iter_backward_visible_word_start (&begin))
+    {
+      g_autofree gchar *current_text = gtk_text_iter_get_slice (&begin, iter);
+      g_autofree gchar *proposal_text = gtk_source_completion_proposal_get_text (proposal);
+      const gchar *c_iter = current_text;
+      const gchar *p_iter = proposal_text;
+      gint n_chars = 0;
+
+      /*
+       * Work our way through the common substring to see if we can reduce
+       * how much we replace in the final target;
+       */
+      while (*c_iter != '\0' && g_utf8_get_char (c_iter) == g_utf8_get_char (p_iter))
+        {
+          n_chars++;
+          c_iter = g_utf8_next_char (c_iter);
+          p_iter = g_utf8_next_char (p_iter);
+        }
+
+      begin = *iter;
+
+      gtk_text_iter_backward_chars (&begin, n_chars);
+
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_buffer_delete (buffer, &begin, iter);
+      gtk_text_buffer_insert (buffer, &begin, p_iter, strlen (p_iter));
+      gtk_text_buffer_end_user_action (buffer);
+
+      *iter = begin;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
@@ -313,6 +369,7 @@ provider_iface_init (GtkSourceCompletionProviderIface *iface)
   iface->get_priority = ide_ctags_completion_provider_get_priority;
   iface->match = ide_ctags_completion_provider_match;
   iface->populate = ide_ctags_completion_provider_populate;
+  iface->activate_proposal = ide_ctags_completion_provider_activate_proposal;
 }
 
 void
