@@ -19,8 +19,10 @@
 #define G_LOG_DOMAIN "ide-diagnostic-provider"
 
 #include "ide-context.h"
+#include "ide-debug.h"
 
 #include "diagnostics/ide-diagnostic-provider.h"
+#include "diagnostics/ide-diagnostics.h"
 #include "files/ide-file.h"
 
 G_DEFINE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE_TYPE_OBJECT)
@@ -63,11 +65,15 @@ ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider *self,
                                          GAsyncReadyCallback    callback,
                                          gpointer               user_data)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (self));
   g_return_if_fail (IDE_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_async (self, file, cancellable, callback, user_data);
+
+  IDE_EXIT;
 }
 
 /**
@@ -82,10 +88,21 @@ ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,
                                          GAsyncResult           *result,
                                          GError                **error)
 {
+  IdeDiagnostics *ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (self), NULL);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  return IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_finish (self, result, error);
+  ret = IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_finish (self, result, error);
+
+  IDE_TRACE_MSG ("%s diagnosis completed (%p) with %"G_GSIZE_FORMAT" diagnostics",
+                 G_OBJECT_TYPE_NAME (self),
+                 ret,
+                 ret ? ide_diagnostics_get_size (ret) : 0);
+
+  IDE_RETURN (ret);
 }
 
 void
