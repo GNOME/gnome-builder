@@ -1,4 +1,4 @@
-/* test-context.c
+/* test-ide-context.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *

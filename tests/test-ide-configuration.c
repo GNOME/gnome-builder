@@ -1,4 +1,4 @@
-/* test-configuration.c
+/* test-ide-configuration.c
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *

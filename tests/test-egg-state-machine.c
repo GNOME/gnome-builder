@@ -1,4 +1,4 @@
-/* test-egg-state-machine.h
+/* test-egg-state-machine.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
