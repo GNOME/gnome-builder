@@ -29,8 +29,8 @@ gboolean         ide_source_snippet_begin              (IdeSourceSnippet  *snipp
 void             ide_source_snippet_pause              (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
 void             ide_source_snippet_unpause            (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
 void             ide_source_snippet_finish             (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
-gboolean         ide_source_snippet_move_next          (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
-gboolean         ide_source_snippet_move_previous      (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
+gboolean         ide_source_snippet_move_next          (IdeSourceSnippet  *snippet);
+gboolean         ide_source_snippet_move_previous      (IdeSourceSnippet  *snippet);
 void             ide_source_snippet_before_insert_text (IdeSourceSnippet  *snippet,
                                                        GtkTextBuffer    *buffer,
                                                        GtkTextIter      *iter,
