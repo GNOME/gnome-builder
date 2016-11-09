@@ -23,34 +23,35 @@
 
 G_BEGIN_DECLS
 
-gboolean         ide_source_snippet_begin              (IdeSourceSnippet  *snippet,
-                                                       GtkTextBuffer    *buffer,
-                                                       GtkTextIter      *iter)    G_GNUC_INTERNAL;
-void             ide_source_snippet_pause              (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
-void             ide_source_snippet_unpause            (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
-void             ide_source_snippet_finish             (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
-gboolean         ide_source_snippet_move_next          (IdeSourceSnippet  *snippet);
-gboolean         ide_source_snippet_move_previous      (IdeSourceSnippet  *snippet);
-void             ide_source_snippet_before_insert_text (IdeSourceSnippet  *snippet,
-                                                       GtkTextBuffer    *buffer,
-                                                       GtkTextIter      *iter,
-                                                       gchar            *text,
-                                                       gint              len)     G_GNUC_INTERNAL;
-void             ide_source_snippet_after_insert_text  (IdeSourceSnippet  *snippet,
-                                                       GtkTextBuffer    *buffer,
-                                                       GtkTextIter      *iter,
-                                                       gchar            *text,
-                                                       gint              len)     G_GNUC_INTERNAL;
-void             ide_source_snippet_before_delete_range (IdeSourceSnippet *snippet,
-                                                       GtkTextBuffer    *buffer,
-                                                       GtkTextIter      *begin,
-                                                       GtkTextIter      *end)     G_GNUC_INTERNAL;
-void             ide_source_snippet_after_delete_range (IdeSourceSnippet  *snippet,
-                                                       GtkTextBuffer    *buffer,
-                                                       GtkTextIter      *begin,
-                                                       GtkTextIter      *end)     G_GNUC_INTERNAL;
-gboolean         ide_source_snippet_insert_set         (IdeSourceSnippet  *snippet,
-                                                       GtkTextMark      *mark)    G_GNUC_INTERNAL;
+gboolean         ide_source_snippet_begin               (IdeSourceSnippet  *snippet,
+                                                         GtkTextBuffer     *buffer,
+                                                         GtkTextIter       *iter)    G_GNUC_INTERNAL;
+void             ide_source_snippet_pause               (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
+void             ide_source_snippet_unpause             (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
+void             ide_source_snippet_finish              (IdeSourceSnippet  *snippet) G_GNUC_INTERNAL;
+gboolean         ide_source_snippet_move_next           (IdeSourceSnippet  *snippet);
+gboolean         ide_source_snippet_move_previous       (IdeSourceSnippet  *snippet);
+void             ide_source_snippet_before_insert_text  (IdeSourceSnippet  *snippet,
+                                                         GtkTextBuffer     *buffer,
+                                                         GtkTextIter       *iter,
+                                                         gchar             *text,
+                                                         gint               len)     G_GNUC_INTERNAL;
+void             ide_source_snippet_after_insert_text   (IdeSourceSnippet  *snippet,
+                                                         GtkTextBuffer     *buffer,
+                                                         GtkTextIter       *iter,
+                                                         gchar             *text,
+                                                         gint               len)     G_GNUC_INTERNAL;
+void             ide_source_snippet_before_delete_range (IdeSourceSnippet  *snippet,
+                                                         GtkTextBuffer     *buffer,
+                                                         GtkTextIter       *begin,
+                                                         GtkTextIter       *end)     G_GNUC_INTERNAL;
+void             ide_source_snippet_after_delete_range  (IdeSourceSnippet  *snippet,
+                                                         GtkTextBuffer     *buffer,
+                                                         GtkTextIter       *begin,
+                                                         GtkTextIter       *end)     G_GNUC_INTERNAL;
+gboolean         ide_source_snippet_insert_set          (IdeSourceSnippet  *snippet,
+                                                         GtkTextMark       *mark)    G_GNUC_INTERNAL;
+
 
 G_END_DECLS
 
