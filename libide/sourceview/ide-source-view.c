@@ -7139,8 +7139,7 @@ ide_source_view_set_show_line_diagnostics (IdeSourceView *self,
 
       if ((priv->buffer != NULL) && (priv->line_diagnostics_renderer != NULL))
         {
-          visible = ((priv->buffer != NULL) &&
-                     priv->show_line_diagnostics &&
+          visible = (priv->show_line_diagnostics &&
                      ide_buffer_get_highlight_diagnostics (priv->buffer));
           gtk_source_gutter_renderer_set_visible (priv->line_diagnostics_renderer, visible);
         }
