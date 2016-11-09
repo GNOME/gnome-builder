@@ -1184,7 +1184,7 @@ setup_ui (GstyleColorPanel *self)
  * @self: A #GstyleColorPanel.
  * @palette: A GstylePalette.
  *
- * Show the @palette and update it's name in the bar.
+ * Show the @palette and update its name in the bar.
  *
  */
 void

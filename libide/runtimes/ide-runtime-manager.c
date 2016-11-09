@@ -227,7 +227,7 @@ ide_runtime_manager_remove (IdeRuntimeManager *self,
  * @self: An #IdeRuntimeManager
  * @id: the identifier of the runtime
  *
- * Gets the runtime by it's internal identifier.
+ * Gets the runtime by its internal identifier.
  *
  * Returns: (transfer none): An #IdeRuntime.
  */

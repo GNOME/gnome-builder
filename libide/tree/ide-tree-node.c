@@ -805,7 +805,7 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * This property allows for more lazy loading of nodes.
    *
-   * When a node becomes visible, we normally build it's children nodes
+   * When a node becomes visible, we normally build its children nodes
    * so that we know if we need an expansion arrow. However, that can
    * be expensive when rendering directories with lots of subdirectories.
    *

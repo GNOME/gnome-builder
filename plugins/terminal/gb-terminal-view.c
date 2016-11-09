@@ -373,7 +373,7 @@ gb_terminal_get_preferred_width (GtkWidget *widget,
   /*
    * Since we are placing the terminal in a GtkStack, we need
    * to fake the size a bit. Otherwise, GtkStack tries to keep the
-   * widget at it's natural size (which prevents us from getting
+   * widget at its natural size (which prevents us from getting
    * appropriate size requests.
    */
   GTK_WIDGET_CLASS (gb_terminal_view_parent_class)->get_preferred_width (widget, min_width, nat_width);
@@ -388,7 +388,7 @@ gb_terminal_get_preferred_height (GtkWidget *widget,
   /*
    * Since we are placing the terminal in a GtkStack, we need
    * to fake the size a bit. Otherwise, GtkStack tries to keep the
-   * widget at it's natural size (which prevents us from getting
+   * widget at its natural size (which prevents us from getting
    * appropriate size requests.
    */
   GTK_WIDGET_CLASS (gb_terminal_view_parent_class)->get_preferred_height (widget, min_height, nat_height);

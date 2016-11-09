@@ -1060,7 +1060,7 @@ ide_diagnostics_manager_buffer_unloaded (IdeDiagnosticsManager *self,
    * diagnostics that were created from other files (this could happen when
    * one diagnostic is created for a header from a source file). So we don't
    * want to wipe out the hashtable unless everything was unloaded. The other
-   * provider will cleanup during it's own destruction.
+   * provider will cleanup during its own destruction.
    */
   if (group->diagnostics_by_provider != NULL &&
       g_hash_table_size (group->diagnostics_by_provider) == 0)

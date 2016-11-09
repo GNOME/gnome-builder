@@ -330,7 +330,7 @@ symbol underneath the line/column for the cursor.
 
 Using the `IdeSymbolResolver` for the `IdeFile`, the IDE would call the method
 to get the location of a particular symbol by name. Then it can open that file
-using it's file loading subsystem.
+using its file loading subsystem.
 
 ### How would a user add a breakpoint to the active debugging process.
 

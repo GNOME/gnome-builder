@@ -1397,7 +1397,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
 
   /*
    * Connect to the HostCommandExited signal so that we can make progress
-   * on all tasks waiting on ide_subprocess_wait() and it's async variants.
+   * on all tasks waiting on ide_subprocess_wait() and its async variants.
    * We need to do this before spawning the process to avoid the race.
    */
   self->exited_subscription = g_dbus_connection_signal_subscribe (self->connection,

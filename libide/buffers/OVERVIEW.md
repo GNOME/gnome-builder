@@ -1,6 +1,6 @@
 ## Buffer Manager
 
-Libide has a buffer manager per-project context (each context has it's own
+Libide has a buffer manager per-project context (each context has its own
 workbench window). Buffers exist within the buffer manager, and can be
 autosaved when it is appropriate.
 

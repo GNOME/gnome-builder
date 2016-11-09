@@ -23,7 +23,7 @@
  *   - duration coded in hard.
  *
  * although not perfect because we don't control the container and children position,
- * it's very aceptable solution.
+ * it's a very aceptable solution.
  */
 
 #include "gstyle-animation.h"

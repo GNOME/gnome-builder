@@ -70,7 +70,7 @@ class RustService(Ide.Object, Ide.Service):
         """
         # To avoid starting the `rls` process unconditionally at startup,
         # we lazily start it when the first provider tries to bind a client
-        # to it's :client property.
+        # to its :client property.
         if not self._has_started:
             self._has_started = True
 

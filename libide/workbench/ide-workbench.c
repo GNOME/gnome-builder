@@ -736,7 +736,7 @@ ide_workbench_remove_perspective (IdeWorkbench   *self,
 /**
  * ide_workbench_get_perspective_by_name:
  *
- * Gets the perspective by it's registered name as defined in
+ * Gets the perspective by its registered name as defined in
  * ide_perspective_get_id().
  *
  * Returns: (nullable) (transfer none): An #IdePerspective or %NULL.

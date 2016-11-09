@@ -540,7 +540,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
           /*
            * A file that get's updated is the most likely to get updated on
            * the next attempt. Therefore, we will simply move this entry to
-           * the beginning of the array to increase it's chances of being the
+           * the beginning of the array to increase its chances of being the
            * first entry we check.
            */
           if (i != 0)
@@ -569,7 +569,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
  * Call g_ptr_array_unref() on the resulting #GPtrArray when no longer in use.
  *
  * If you would like to hold onto an unsaved file instance, call
- * ide_unsaved_file_ref() to increment it's reference count.
+ * ide_unsaved_file_ref() to increment its reference count.
  *
  * Returns: (transfer container) (element-type IdeUnsavedFile*): A #GPtrArray
  *   containing #IdeUnsavedFile elements.

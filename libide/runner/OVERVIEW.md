@@ -5,7 +5,7 @@ to plumb components. For example, Builder supports runtimes which might
 be different than the current host (such as org.gnome.Platform 3.22).
 Additionally, we might need to attach a debugger. The build system might
 also need to perform an installation of the application bits into a
-runtime so that the project can run as it's "installed state".
+runtime so that the project can run as its "installed state".
 
 All of these complexities results in project execution being abstracted
 into an “IdeRunner” object and series of “IdeRunnerAddin” extensions.

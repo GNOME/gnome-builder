@@ -878,7 +878,7 @@ pnl_animation_class_init (PnlAnimationClass *klass)
   /**
    * PnlAnimation:target:
    *
-   * The "target" property is the #GObject that should have it's properties
+   * The "target" property is the #GObject that should have its properties
    * animated.
    */
   properties[PROP_TARGET] =
@@ -1044,7 +1044,7 @@ pnl_object_animatev (gpointer          object,
       /*
        * First check for the property on the object. If that does not exist
        * then check if the object has a parent and look at its child
-       * properties (if its a GtkWidget).
+       * properties (if it's a GtkWidget).
        */
       if (!(pspec = g_object_class_find_property (klass, name)))
         {

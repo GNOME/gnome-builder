@@ -399,7 +399,7 @@ trie_node_remove_fast (TrieNode      *node,
  * trie_node_unlink:
  * @node: A #TrieNode.
  *
- * Unlinks @node from the Trie. The parent node has it's pointer to @node
+ * Unlinks @node from the Trie. The parent node has its pointer to @node
  * removed.
  */
 static void

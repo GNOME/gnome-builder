@@ -1609,7 +1609,7 @@ See ide_buffer_manager_load_file_finish() for how to complete this asynchronous 
 <description>
 Completes an asynchronous request to load a file via ide_buffer_manager_load_file_async().
 If the buffer was already loaded, this function will return a reference to the previous buffer
-with it's reference count incremented by one.
+with its reference count incremented by one.
 
 
 </description>
@@ -4538,7 +4538,7 @@ side effects.
 
 <function name="ide_runtime_manager_get_runtime">
 <description>
-Gets the runtime by it's internal identifier.
+Gets the runtime by its internal identifier.
 
 
 </description>
@@ -6099,7 +6099,7 @@ clang.
 Call g_ptr_array_unref() on the resulting #GPtrArray when no longer in use.
 
 If you would like to hold onto an unsaved file instance, call
-ide_unsaved_file_ref() to increment it's reference count.
+ide_unsaved_file_ref() to increment its reference count.
 
 
 </description>
@@ -6923,7 +6923,7 @@ Gets the context associated with the workbench, or %NULL.
 
 <function name="ide_workbench_get_perspective_by_name">
 <description>
-Gets the perspective by it's registered name as defined in
+Gets the perspective by its registered name as defined in
 ide_perspective_get_id().
 
 

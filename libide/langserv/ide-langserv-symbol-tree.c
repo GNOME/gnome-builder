@@ -54,7 +54,7 @@ ide_langserv_symbol_tree_get_n_children (IdeSymbolTree *tree,
 
   /*
    * This is all O(n) below, but with the size of trees we are working with
-   * its not all that bad. If it becomes an issue, we can move to something
+   * it's not all that bad. If it becomes an issue, we can move to something
    * like a hashtable.
    */
 
