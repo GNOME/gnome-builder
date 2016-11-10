@@ -1186,7 +1186,7 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   ide_source_view_block_handlers (self);
-  if ((snippet = g_queue_peek_head (priv->snippets)))
+  if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
     ide_source_snippet_before_insert_text (snippet, buffer, iter, text, len);
   ide_source_view_unblock_handlers (self);
 
@@ -1290,7 +1290,7 @@ ide_source_view__buffer_mark_set_cb (IdeSourceView *self,
   if (mark == insert)
     {
       ide_source_view_block_handlers (self);
-      while ((snippet = g_queue_peek_head (priv->snippets)) &&
+      while (NULL != (snippet = g_queue_peek_head (priv->snippets)) &&
              !ide_source_snippet_insert_set (snippet, mark))
         ide_source_view_pop_snippet (self);
       ide_source_view_unblock_handlers (self);
