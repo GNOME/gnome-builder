@@ -456,11 +456,6 @@ static void
 ide_source_snippet_update_context (IdeSourceSnippet *self)
 {
   IdeSourceSnippetContext *context;
-  IdeSourceSnippetChunk *chunk;
-  const gchar *text;
-  gchar key[12];
-  guint i;
-  gint tab_stop;
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
 
@@ -468,16 +463,25 @@ ide_source_snippet_update_context (IdeSourceSnippet *self)
 
   ide_source_snippet_context_emit_changed (context);
 
-  for (i = 0; i < self->chunks->len; i++)
+  for (guint i = 0; i < self->chunks->len; i++)
     {
+      IdeSourceSnippetChunk *chunk;
+      gint tab_stop;
+
       chunk = g_ptr_array_index (self->chunks, i);
       tab_stop = ide_source_snippet_chunk_get_tab_stop (chunk);
+
       if (tab_stop > 0)
         {
-          if ((text = ide_source_snippet_chunk_get_text (chunk)))
+          const gchar *text;
+
+          if (NULL != (text = ide_source_snippet_chunk_get_text (chunk)))
             {
+              gchar key[12];
+
               g_snprintf (key, sizeof key, "%d", tab_stop);
               key[sizeof key - 1] = '\0';
+
               ide_source_snippet_context_add_variable (context, key, text);
             }
         }
