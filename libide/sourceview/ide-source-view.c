@@ -154,12 +154,16 @@ typedef struct
 
   guint                        font_scale;
 
+  gint                         overscroll_num_lines;
+
   guint                        delay_size_allocate_chainup;
   GtkAllocation                delay_size_allocation;
 
   IdeSourceLocation           *definition_src_location;
   GtkTextMark                 *definition_highlight_start_mark;
   GtkTextMark                 *definition_highlight_end_mark;
+
+  GRegex                      *include_regex;
 
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
@@ -180,9 +184,6 @@ typedef struct
   guint                        show_search_shadow : 1;
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
-  gint                         overscroll_num_lines;
-
-  GRegex                      *include_regex;
 } IdeSourceViewPrivate;
 
 typedef struct
