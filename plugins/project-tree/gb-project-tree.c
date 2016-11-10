@@ -146,7 +146,6 @@ gb_project_tree_vcs_changed (GbProjectTree *self,
         g_object_ref (file);
     }
 
-
   ide_tree_rebuild (IDE_TREE (self));
 
   if (file != NULL)
