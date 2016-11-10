@@ -79,7 +79,7 @@ get_boolean_param (IdeSourceViewMode *self,
 
 gchar *
 get_string_param (IdeSourceViewMode *self,
-                   const gchar       *param)
+                  const gchar       *param)
 {
   GValue value = { 0 };
   gchar *ret;
