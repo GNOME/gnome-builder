@@ -2371,13 +2371,16 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
         case GDK_KEY_KP_Tab:
         case GDK_KEY_Tab:
-          ide_source_view_block_handlers (self);
-          if (!ide_source_snippet_move_next (snippet))
-            ide_source_view_pop_snippet (self);
-          ide_source_view_scroll_to_insert (self);
-          ide_source_view_unblock_handlers (self);
-          return TRUE;
-
+          if ((event->state & GDK_SHIFT_MASK) == 0)
+            {
+              ide_source_view_block_handlers (self);
+              if (!ide_source_snippet_move_next (snippet))
+                ide_source_view_pop_snippet (self);
+              ide_source_view_scroll_to_insert (self);
+              ide_source_view_unblock_handlers (self);
+              return TRUE;
+            }
+          /* Fallthrough */
         case GDK_KEY_ISO_Left_Tab:
           ide_source_view_block_handlers (self);
           ide_source_snippet_move_previous (snippet);
