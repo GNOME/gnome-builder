@@ -152,6 +152,37 @@ gb_project_tree_vcs_changed (GbProjectTree *self,
     gb_project_tree_reveal (self, file);
 }
 
+static void
+gb_project_tree_buffer_saved_cb (GbProjectTree    *self,
+                                 IdeBuffer        *buffer,
+                                 IdeBufferManager *buffer_manager)
+{
+  IdeContext *context;
+  IdeVcs *vcs;
+  IdeTreeNode *node;
+  IdeFile *ifile;
+  GFile *gfile;
+  GFile *workdir;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  ifile = ide_buffer_get_file (buffer);
+  gfile = ide_file_get_file (ifile);
+
+  context = gb_project_tree_get_context (self);
+  vcs = ide_context_get_vcs (context);
+  if (NULL != (workdir = ide_vcs_get_working_directory (vcs)) &&
+      g_file_has_prefix (gfile, workdir))
+    {
+      if (NULL == (node = ide_tree_find_custom (IDE_TREE (self), compare_to_file, gfile)))
+        ide_tree_rebuild (IDE_TREE (self));
+
+      gb_project_tree_reveal (self, gfile);
+    }
+}
+
 void
 gb_project_tree_set_context (GbProjectTree *self,
                              IdeContext    *context)
@@ -160,6 +191,7 @@ gb_project_tree_set_context (GbProjectTree *self,
   GtkTreeIter iter;
   IdeTreeNode *root;
   IdeProject *project;
+  IdeBufferManager *buffer_manager;
   IdeVcs *vcs;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
@@ -184,6 +216,13 @@ gb_project_tree_set_context (GbProjectTree *self,
   g_signal_connect_object (project,
                            "file-trashed",
                            G_CALLBACK (gb_project_tree_project_file_trashed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  buffer_manager = ide_context_get_buffer_manager (context);
+  g_signal_connect_object (buffer_manager,
+                           "buffer-saved",
+                           G_CALLBACK (gb_project_tree_buffer_saved_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
