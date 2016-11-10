@@ -20,10 +20,12 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-source-snippet.h"
-#include "ide-source-snippet-private.h"
-#include "ide-source-snippet-chunk.h"
-#include "ide-source-snippet-context.h"
+#include "ide-debug.h"
+
+#include "snippets/ide-source-snippet.h"
+#include "snippets/ide-source-snippet-private.h"
+#include "snippets/ide-source-snippet-chunk.h"
+#include "snippets/ide-source-snippet-context.h"
 
 #define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
 
