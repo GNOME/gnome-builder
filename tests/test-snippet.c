@@ -23,6 +23,22 @@
 #include "snippets/ide-source-snippet-private.h"
 #include "util/ide-gdk.h"
 
+static void
+dump_selection (IdeSourceView *view)
+{
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  g_message ("Selection: %d:%d to %d:%d\n",
+             gtk_text_iter_get_line (&begin) + 1,
+             gtk_text_iter_get_line_offset (&begin) + 1,
+             gtk_text_iter_get_line (&end) + 1,
+             gtk_text_iter_get_line_offset (&end) + 1);
+}
+
 static gboolean
 mark_done (gpointer data)
 {
@@ -67,6 +83,70 @@ emit_and_pump_loop (gpointer     instance,
   va_start (args, name);
   g_signal_emit_valist (instance, signal_id, 0, args);
   va_end (args);
+
+  pump_loop ();
+}
+
+static void
+on_event (GdkFrameClock *clock,
+          gpointer       data)
+{
+  *(gint *)data += 1;
+}
+
+static void
+send_event_and_wait_for_flush (GdkEventKey *event)
+{
+  GdkFrameClock *clock = gdk_window_get_frame_clock (event->window);
+  gint events = 0;
+
+  g_signal_connect (clock, "after-paint", G_CALLBACK (on_event), &events);
+  g_signal_connect (clock, "before-paint", G_CALLBACK (on_event), &events);
+
+  gtk_main_do_event ((GdkEvent *)event);
+
+  while (events < 2 || gtk_events_pending ())
+    gtk_main_iteration ();
+
+  g_signal_handlers_disconnect_by_func (clock, on_event, &events);
+}
+
+static void
+move_next (IdeSourceView *view)
+{
+  GdkWindow *window;
+  GdkEventKey *event;
+
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (view), GTK_TEXT_WINDOW_TEXT);
+  event = ide_gdk_synthesize_event_key (window, '\t');
+  event->keyval = GDK_KEY_Tab;
+  send_event_and_wait_for_flush (event);
+  gdk_event_free ((GdkEvent *)event);
+
+  pump_loop ();
+}
+
+static void
+move_previous (IdeSourceView *view)
+{
+  GdkWindow *window;
+  GdkEventKey *event;
+
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (view), GTK_TEXT_WINDOW_TEXT);
+  event = ide_gdk_synthesize_event_key (window, '\t');
+  event->keyval = GDK_KEY_ISO_Left_Tab;
+  send_event_and_wait_for_flush (event);
+  gdk_event_free ((GdkEvent *)event);
 
   pump_loop ();
 }
@@ -145,9 +225,13 @@ new_context_cb (GObject      *object,
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (view));
   gtk_window_present (GTK_WINDOW (window));
 
+  gtk_source_completion_block_interactive (gtk_source_view_get_completion (GTK_SOURCE_VIEW (view)));
+
   ide_source_view_push_snippet (view, snippet, NULL);
 
   pump_loop ();
+
+  ide_source_snippet_dump (snippet);
 
   g_assert_cmpstr ("this is\nchunk 1 ", ==, ide_source_snippet_chunk_get_text (chunk1));
   g_assert_cmpstr ("this is tab stop 1", ==, ide_source_snippet_chunk_get_text (chunk2));
@@ -166,6 +250,8 @@ new_context_cb (GObject      *object,
   emit_and_pump_loop (view, "backspace");
   emit_and_pump_loop (view, "insert-at-cursor", "this is tab stop 1, edit 1");
 
+  ide_source_snippet_dump (snippet);
+
   g_assert_cmpstr ("this is\nchunk 1 ", ==, ide_source_snippet_chunk_get_text (chunk1));
   g_assert_cmpstr ("this is tab stop 1, edit 1", ==, ide_source_snippet_chunk_get_text (chunk2));
   g_assert_cmpstr (",\nthis is chunk 3", ==, ide_source_snippet_chunk_get_text (chunk3));
@@ -173,21 +259,27 @@ new_context_cb (GObject      *object,
   g_assert_cmpstr ("this is tab stop 2", ==, ide_source_snippet_chunk_get_text (chunk5));
 
   /* Now move to our second tab stop, but exercise forward/backward/forward */
-  g_assert (ide_source_snippet_move_next (snippet));
-  g_assert (ide_source_snippet_move_previous (snippet));
-  g_assert (ide_source_snippet_move_next (snippet));
-  g_assert (ide_source_snippet_move_previous (snippet));
-  g_assert (ide_source_snippet_move_next (snippet));
+  move_next (view);
+  move_previous (view);
+  move_next (view);
+  move_previous (view);
+  move_next (view);
+
+  ide_source_snippet_dump (snippet);
+
+  dump_selection (view);
 
   /* Now tweak tab stop 2 values, and see what happens */
-  //emit_and_pump_loop (view, "backspace");
-  //emit_and_pump_loop (view, "insert-at-cursor", "this is tab stop 2, edit 1");
+  emit_and_pump_loop (view, "backspace");
+  emit_and_pump_loop (view, "insert-at-cursor", "this is tab stop 2, edit 1");
 
-  //g_assert_cmpstr ("this is\nchunk 1 ", ==, ide_source_snippet_chunk_get_text (chunk1));
-  //g_assert_cmpstr ("this is tab stop 1, edit 1", ==, ide_source_snippet_chunk_get_text (chunk2));
-  //g_assert_cmpstr (",\nthis is chunk 3", ==, ide_source_snippet_chunk_get_text (chunk3));
-  //g_assert_cmpstr ("this is tab stop 1, edit 1", ==, ide_source_snippet_chunk_get_text (chunk4));
-  //g_assert_cmpstr ("this is tab stop 2, edit 1", ==, ide_source_snippet_chunk_get_text (chunk5));
+  ide_source_snippet_dump (snippet);
+
+  g_assert_cmpstr ("this is\nchunk 1 ", ==, ide_source_snippet_chunk_get_text (chunk1));
+  g_assert_cmpstr ("this is tab stop 1, edit 1", ==, ide_source_snippet_chunk_get_text (chunk2));
+  g_assert_cmpstr (",\nthis is chunk 3", ==, ide_source_snippet_chunk_get_text (chunk3));
+  g_assert_cmpstr ("this is tab stop 1, edit 1", ==, ide_source_snippet_chunk_get_text (chunk4));
+  g_assert_cmpstr ("this is tab stop 2, edit 1", ==, ide_source_snippet_chunk_get_text (chunk5));
 
   g_task_return_boolean (task, TRUE);
 }
@@ -198,7 +290,11 @@ test_snippets_basic (GCancellable        *cancellable,
                      gpointer             user_data)
 {
   g_autoptr(GFile) project_file = NULL;
+  g_autoptr(GSettings) settings = NULL;
   GTask *task;
+
+  settings = g_settings_new ("org.gnome.builder.code-insight");
+  g_settings_set_boolean (settings, "semantic-highlighting", FALSE);
 
   task = g_task_new (NULL, cancellable, callback, user_data);
   project_file = g_file_new_for_path (TEST_DATA_DIR"/project1/configure.ac");
