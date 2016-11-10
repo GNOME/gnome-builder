@@ -696,11 +696,15 @@ ide_source_view_scroll_to_insert (IdeSourceView *self)
   GtkTextBuffer *buffer;
   GtkTextMark *mark;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   mark = gtk_text_buffer_get_insert (buffer);
   ide_source_view_scroll_mark_onscreen (self, mark, TRUE, 0.5, 0.5);
+
+  IDE_EXIT;
 }
 
 static void
@@ -1183,6 +1187,8 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   ide_source_view_block_handlers (self);
@@ -1190,6 +1196,7 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
     ide_source_snippet_before_insert_text (snippet, buffer, iter, text, len);
   ide_source_view_unblock_handlers (self);
 
+  IDE_EXIT;
 }
 
 static void
@@ -1229,6 +1236,8 @@ ide_source_view__buffer_delete_range_cb (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
@@ -1246,6 +1255,7 @@ ide_source_view__buffer_delete_range_cb (IdeSourceView *self,
       ide_source_view_invalidate_range_mark (self, begin_mark, end_mark);
     }
 
+  IDE_EXIT;
 }
 
 static void
@@ -1293,6 +1303,24 @@ ide_source_view__buffer_mark_set_cb (IdeSourceView *self,
         ide_source_view_pop_snippet (self);
       ide_source_view_unblock_handlers (self);
     }
+
+#ifdef IDE_ENABLE_TRACE
+  if (mark == insert || mark == gtk_text_buffer_get_selection_bound (buffer))
+      {
+        GtkTextIter begin;
+        GtkTextIter end;
+
+        if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
+          {
+            gtk_text_iter_order (&begin, &end);
+            IDE_TRACE_MSG ("Selection is now %d:%d to %d:%d",
+                           gtk_text_iter_get_line (&begin),
+                           gtk_text_iter_get_line_offset (&begin),
+                           gtk_text_iter_get_line (&end),
+                           gtk_text_iter_get_line_offset (&end));
+          }
+      }
+#endif
 }
 
 static void
@@ -3232,6 +3260,11 @@ ide_source_view_real_jump (IdeSourceView     *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (location);
 
+  line = gtk_text_iter_get_line (location);
+  line_offset = gtk_text_iter_get_line_offset (location);
+
+  IDE_TRACE_MSG ("Jump to %d:%d", line + 1, line_offset + 1);
+
   if (priv->back_forward_list == NULL)
     IDE_EXIT;
 
@@ -3247,9 +3280,7 @@ ide_source_view_real_jump (IdeSourceView     *self,
     IDE_EXIT;
 
   uri = ide_uri_new_from_file (ide_file_get_file (file));
-  line = gtk_text_iter_get_line (location);
-  line_offset = gtk_text_iter_get_line_offset (location);
-  fragment = g_strdup_printf ("L%u_%u", line, line_offset);
+  fragment = g_strdup_printf ("L%u_%u", line + 1, line_offset + 1);
   ide_uri_set_fragment (uri, fragment);
   item = ide_back_forward_item_new (context, uri);
   ide_back_forward_list_push (priv->back_forward_list, item);
@@ -4939,6 +4970,8 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeSourceLocation *srcloc;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
@@ -4947,7 +4980,7 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
   if (symbol == NULL)
     {
       g_warning ("%s", error->message);
-      return;
+      IDE_EXIT;
     }
 
   srcloc = ide_symbol_get_definition_location (symbol);
@@ -4982,11 +5015,13 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
                                                    &iter, line, line_offset);
           gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
           ide_source_view_scroll_to_insert (self);
-          return;
+          IDE_EXIT;
         }
 
       g_signal_emit (self, signals [FOCUS_LOCATION], 0, srcloc);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -7482,6 +7517,8 @@ ide_source_view_jump (IdeSourceView     *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextIter iter;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
   if (location == NULL)
@@ -7495,6 +7532,8 @@ ide_source_view_jump (IdeSourceView     *self,
 
   if (priv->buffer && !_ide_buffer_get_loading (priv->buffer))
     g_signal_emit (self, signals [JUMP], 0, location);
+
+  IDE_EXIT;
 }
 
 /**
@@ -7748,7 +7787,6 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
   if (!ide_source_view_can_animate (self))
     animate_scroll = FALSE;
 
-
   buffer = gtk_text_view_get_buffer (text_view);
   gtk_text_buffer_move_mark (buffer, priv->scroll_mark, iter);
 
@@ -7951,6 +7989,8 @@ ide_source_view_scroll_to_mark (IdeSourceView *self,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
   g_return_if_fail (GTK_IS_TEXT_MARK (mark));
   g_return_if_fail (xalign >= 0.0);
@@ -7962,6 +8002,18 @@ ide_source_view_scroll_to_mark (IdeSourceView *self,
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
   ide_source_view_scroll_to_iter (self, &iter, within_margin, use_align, xalign, yalign,
                                   animate_scroll);
+
+#if IDE_ENABLE_TRACE
+  {
+    const gchar *name = gtk_text_mark_get_name (mark);
+    IDE_TRACE_MSG ("Scrolling to mark \"%s\" at %d:%d",
+                   name ? name : "unnamed",
+                   gtk_text_iter_get_line (&iter),
+                   gtk_text_iter_get_line_offset (&iter));
+  }
+#endif
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -7969,13 +8021,18 @@ ide_source_view_place_cursor_onscreen (IdeSourceView *self)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  gboolean ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
 
-  return ide_source_view_move_mark_onscreen (self, insert);
+  ret = ide_source_view_move_mark_onscreen (self, insert);
+
+  IDE_RETURN (ret);
 }
 
 gboolean
