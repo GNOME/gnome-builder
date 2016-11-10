@@ -18,8 +18,8 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-source-snippet-chunk.h"
-#include "ide-source-snippet-context.h"
+#include "snippets/ide-source-snippet-chunk.h"
+#include "snippets/ide-source-snippet-context.h"
 
 struct _IdeSourceSnippetChunk
 {
