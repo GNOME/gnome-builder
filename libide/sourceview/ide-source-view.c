@@ -1190,7 +1190,6 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
     ide_source_snippet_before_insert_text (snippet, buffer, iter, text, len);
   ide_source_view_unblock_handlers (self);
 
-  ide_source_view_jump (self, iter);
 }
 
 static void
@@ -1247,7 +1246,6 @@ ide_source_view__buffer_delete_range_cb (IdeSourceView *self,
       ide_source_view_invalidate_range_mark (self, begin_mark, end_mark);
     }
 
-  ide_source_view_jump (self, begin);
 }
 
 static void
