@@ -397,10 +397,12 @@ ide_source_snippet_move_next (IdeSourceSnippet *self)
   GtkTextIter iter;
   gint i;
 
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET (self), FALSE);
 
   if (self->tab_stop > self->max_tab_stop)
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   self->tab_stop++;
 
@@ -410,7 +412,7 @@ ide_source_snippet_move_next (IdeSourceSnippet *self)
       if (ide_source_snippet_chunk_get_tab_stop (chunk) == self->tab_stop)
         {
           ide_source_snippet_select_chunk (self, i);
-          return TRUE;
+          IDE_RETURN (TRUE);
         }
     }
 
@@ -420,7 +422,7 @@ ide_source_snippet_move_next (IdeSourceSnippet *self)
       if (!ide_source_snippet_chunk_get_tab_stop (chunk))
         {
           ide_source_snippet_select_chunk (self, i);
-          return FALSE;
+          IDE_RETURN (FALSE);
         }
     }
 
@@ -428,7 +430,7 @@ ide_source_snippet_move_next (IdeSourceSnippet *self)
   gtk_text_buffer_select_range (self->buffer, &iter, &iter);
   self->current_chunk = self->chunks->len - 1;
 
-  return FALSE;
+  IDE_RETURN (FALSE);
 }
 
 gboolean
@@ -436,6 +438,8 @@ ide_source_snippet_move_previous (IdeSourceSnippet *self)
 {
   IdeSourceSnippetChunk *chunk = NULL;
   gint i;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET (self), FALSE);
 
@@ -447,17 +451,19 @@ ide_source_snippet_move_previous (IdeSourceSnippet *self)
       if (ide_source_snippet_chunk_get_tab_stop (chunk) == self->tab_stop)
         {
           ide_source_snippet_select_chunk (self, i);
-          return TRUE;
+          IDE_RETURN (TRUE);
         }
     }
 
-  return FALSE;
+  IDE_RETURN (FALSE);
 }
 
 static void
 ide_source_snippet_update_context (IdeSourceSnippet *self)
 {
   IdeSourceSnippetContext *context;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
 
@@ -490,6 +496,8 @@ ide_source_snippet_update_context (IdeSourceSnippet *self)
     }
 
   ide_source_snippet_context_emit_changed (context);
+
+  IDE_EXIT;
 }
 
 static void
