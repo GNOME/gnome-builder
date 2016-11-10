@@ -51,6 +51,7 @@ void             ide_source_snippet_after_delete_range  (IdeSourceSnippet  *snip
                                                          GtkTextIter       *end)     G_GNUC_INTERNAL;
 gboolean         ide_source_snippet_insert_set          (IdeSourceSnippet  *snippet,
                                                          GtkTextMark       *mark)    G_GNUC_INTERNAL;
+void             ide_source_snippet_dump                (IdeSourceSnippet  *self);
 
 
 G_END_DECLS

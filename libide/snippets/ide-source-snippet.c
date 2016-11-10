@@ -1117,3 +1117,45 @@ ide_source_snippet_init (IdeSourceSnippet *self)
   self->chunks = g_ptr_array_new_with_free_func (g_object_unref);
   self->runs = g_array_new (FALSE, FALSE, sizeof (gint));
 }
+
+void
+ide_source_snippet_dump (IdeSourceSnippet *self)
+{
+  guint offset = 0;
+
+  g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
+
+  /* For debugging purposes */
+
+  g_printerr ("Snippet(trigger=%s, language=%s, tab_stop=%d, current_chunk=%d)\n",
+              self->trigger, self->language ?: "none", self->tab_stop, self->current_chunk);
+
+  g_assert (self->chunks->len == self->runs->len);
+
+  for (guint i = 0; i < self->chunks->len; i++)
+    {
+      IdeSourceSnippetChunk *chunk = g_ptr_array_index (self->chunks, i);
+      g_autofree gchar *spec_escaped = NULL;
+      g_autofree gchar *text_escaped = NULL;
+      const gchar *spec;
+      const gchar *text;
+      gint run_length = g_array_index (self->runs, gint, i);
+
+      g_assert (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
+
+      text = ide_source_snippet_chunk_get_text (chunk);
+      text_escaped = g_strescape (text, NULL);
+
+      spec = ide_source_snippet_chunk_get_spec (chunk);
+      spec_escaped = g_strescape (spec, NULL);
+
+      g_printerr ("  Chunk(nth=%d, tab_stop=%d, position=%d (%d), spec=%s, text=%s)\n",
+                  i,
+                  ide_source_snippet_chunk_get_tab_stop (chunk),
+                  offset, run_length,
+                  spec_escaped,
+                  text_escaped);
+
+      offset += run_length;
+    }
+}
