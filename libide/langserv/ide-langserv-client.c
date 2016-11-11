@@ -168,6 +168,8 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   gint column;
   gint version;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
@@ -205,6 +207,8 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   ide_langserv_client_send_notification_async (self, "textDocument/didChange",
                                                g_steal_pointer (&params),
                                                NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -222,6 +226,8 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
   } begin, end;
   gint version;
   gint length;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (begin_iter != NULL);
@@ -264,6 +270,8 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
   ide_langserv_client_send_notification_async (self, "textDocument/didChange",
                                                g_steal_pointer (&params),
                                                NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
