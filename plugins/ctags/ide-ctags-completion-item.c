@@ -72,7 +72,13 @@ ide_ctags_completion_item_match (IdeCompletionItem *item,
 {
   IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)item;
 
-  return ide_completion_item_fuzzy_match (self->entry->name, casefold, &item->priority);
+  if (ide_completion_item_fuzzy_match (self->entry->name, casefold, &item->priority))
+    {
+      if (!ide_str_equal0 (self->entry->name, query))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
