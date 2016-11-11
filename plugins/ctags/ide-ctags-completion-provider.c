@@ -326,38 +326,32 @@ ide_ctags_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
 
   buffer = gtk_text_iter_get_buffer (iter);
 
+  /*
+   * NOTE:
+   *
+   * Try to reduce our insertion to just the new text. This avoids a delete
+   * which can be troublesome when we are working on a snippet. Ideally we
+   * would improve snippets, but due to various limitations in GtkTextBuffer
+   * and GtkTextView, we don't have an answer for that yet.
+   */
   if (_ide_source_iter_backward_visible_word_start (&begin))
     {
       g_autofree gchar *current_text = gtk_text_iter_get_slice (&begin, iter);
       g_autofree gchar *proposal_text = gtk_source_completion_proposal_get_text (proposal);
-      const gchar *c_iter = current_text;
-      const gchar *p_iter = proposal_text;
-      gint n_chars = 0;
 
-      /*
-       * Work our way through the common substring to see if we can reduce
-       * how much we replace in the final target;
-       */
-      while (*c_iter != '\0' && g_utf8_get_char (c_iter) == g_utf8_get_char (p_iter))
+      if (g_str_has_prefix (proposal_text, current_text))
         {
-          n_chars++;
-          c_iter = g_utf8_next_char (c_iter);
-          p_iter = g_utf8_next_char (p_iter);
+          gtk_text_buffer_begin_user_action (buffer);
+          gtk_text_buffer_insert (buffer,
+                                  iter,
+                                  proposal_text + strlen (current_text),
+                                  -1);
+          gtk_text_buffer_end_user_action (buffer);
+          return TRUE;
         }
-
-      begin = *iter;
-
-      gtk_text_iter_backward_chars (&begin, n_chars);
-
-      gtk_text_buffer_begin_user_action (buffer);
-      gtk_text_buffer_delete (buffer, &begin, iter);
-      gtk_text_buffer_insert (buffer, &begin, p_iter, strlen (p_iter));
-      gtk_text_buffer_end_user_action (buffer);
-
-      *iter = begin;
-
-      return TRUE;
     }
+
+  /* Fallback and let the default handler take care of things */
 
   return FALSE;
 }
