@@ -7394,10 +7394,12 @@ ide_source_view_push_snippet (IdeSourceView     *self,
 
   g_signal_emit (self, signals [PUSH_SNIPPET], 0, snippet, &iter);
 
+  gtk_text_buffer_begin_user_action (buffer);
   ide_source_view_block_handlers (self);
   has_more_tab_stops = ide_source_snippet_begin (snippet, buffer, &iter);
   ide_source_view_scroll_to_insert (self);
   ide_source_view_unblock_handlers (self);
+  gtk_text_buffer_end_user_action (buffer);
 
   {
     GtkTextMark *mark_begin;
