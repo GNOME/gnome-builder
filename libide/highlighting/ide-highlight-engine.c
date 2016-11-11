@@ -521,6 +521,9 @@ ide_highlight_engine__buffer_insert_text_cb (IdeHighlightEngine *self,
   g_assert (text);
   g_assert (IDE_IS_BUFFER (buffer));
 
+  if (!self->enabled)
+    IDE_EXIT;
+
   /*
    * Backward the begin iter len characters from location
    * (location points to the end of the string) in order to get
@@ -550,6 +553,9 @@ ide_highlight_engine__buffer_delete_range_cb (IdeHighlightEngine *self,
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (range_begin);
   g_assert (IDE_IS_BUFFER (buffer));
+
+  if (!self->enabled)
+    IDE_EXIT;
 
   /*
    * No need to use the range_end since everything that
