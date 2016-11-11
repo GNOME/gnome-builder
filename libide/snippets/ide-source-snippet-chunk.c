@@ -81,8 +81,8 @@ on_context_changed (IdeSourceSnippetContext *context,
 {
   gchar *text;
 
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_assert (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
+  g_assert (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
 
   if (!chunk->text_set)
     {
