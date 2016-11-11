@@ -274,6 +274,8 @@ ide_git_buffer_change_monitor__buffer_delete_range_after_cb (IdeGitBufferChangeM
                                                              GtkTextIter               *end,
                                                              IdeBuffer                 *buffer)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (begin);
   g_assert (end);
@@ -284,6 +286,8 @@ ide_git_buffer_change_monitor__buffer_delete_range_after_cb (IdeGitBufferChangeM
       self->delete_range_requires_recalculation = FALSE;
       ide_git_buffer_change_monitor_recalculate (self);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -293,6 +297,8 @@ ide_git_buffer_change_monitor__buffer_delete_range_cb (IdeGitBufferChangeMonitor
                                                        IdeBuffer                 *buffer)
 {
   IdeBufferLineChange change;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (begin);
@@ -311,13 +317,13 @@ ide_git_buffer_change_monitor__buffer_delete_range_cb (IdeGitBufferChangeMonitor
    */
 
   if (gtk_text_iter_get_line (begin) != gtk_text_iter_get_line (end))
-    goto recalculate;
+    IDE_GOTO (recalculate);
 
   change = ide_git_buffer_change_monitor_get_change (IDE_BUFFER_CHANGE_MONITOR (self), begin);
   if (change == IDE_BUFFER_LINE_CHANGE_NONE)
-    goto recalculate;
+    IDE_GOTO (recalculate);
 
-  return;
+  IDE_EXIT;
 
 recalculate:
   /*
@@ -325,6 +331,8 @@ recalculate:
    * ide_git_buffer_change_monitor__buffer_delete_range_after_cb perform the operation.
    */
   self->delete_range_requires_recalculation = TRUE;
+
+  IDE_EXIT;
 }
 
 static void
@@ -335,6 +343,8 @@ ide_git_buffer_change_monitor__buffer_insert_text_after_cb (IdeGitBufferChangeMo
                                                             IdeBuffer                 *buffer)
 {
   IdeBufferLineChange change;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (location);
@@ -353,16 +363,18 @@ ide_git_buffer_change_monitor__buffer_insert_text_after_cb (IdeGitBufferChangeMo
    */
 
   if (NULL != memmem (text, len, "\n", 1))
-    goto recalculate;
+    IDE_GOTO (recalculate);
 
   change = ide_git_buffer_change_monitor_get_change (IDE_BUFFER_CHANGE_MONITOR (self), location);
   if (change == IDE_BUFFER_LINE_CHANGE_NONE)
-    goto recalculate;
+    IDE_GOTO (recalculate);
 
-  return;
+  IDE_EXIT;
 
 recalculate:
   ide_git_buffer_change_monitor_recalculate (self);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -370,23 +382,27 @@ ide_git_buffer_change_monitor__changed_timeout_cb (gpointer user_data)
 {
   IdeGitBufferChangeMonitor *self = user_data;
 
+  IDE_ENTRY;
+
   ide_git_buffer_change_monitor_recalculate (self);
   self->changed_timeout = 0;
 
-  return G_SOURCE_REMOVE;
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
 ide_git_buffer_change_monitor__buffer_changed_after_cb (IdeGitBufferChangeMonitor *self,
                                                         IdeBuffer                 *buffer)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   self->state_dirty = TRUE;
 
   if (self->in_calculation)
-    return;
+    IDE_EXIT;
 
   if (self->changed_timeout)
     g_source_remove (self->changed_timeout);
@@ -394,6 +410,8 @@ ide_git_buffer_change_monitor__buffer_changed_after_cb (IdeGitBufferChangeMonito
   self->changed_timeout = g_timeout_add_seconds (1,
                                                  ide_git_buffer_change_monitor__changed_timeout_cb,
                                                  self);
+
+  IDE_EXIT;
 }
 
 static void
@@ -436,6 +454,8 @@ ide_git_buffer_change_monitor_set_buffer (IdeBufferChangeMonitor *monitor,
   IdeContext *context;
   IdeVcs *vcs;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!self->buffer);
@@ -447,6 +467,8 @@ ide_git_buffer_change_monitor_set_buffer (IdeBufferChangeMonitor *monitor,
 
   egg_signal_group_set_target (self->signal_group, buffer);
   egg_signal_group_set_target (self->vcs_signal_group, vcs);
+
+  IDE_EXIT;
 }
 
 static gint
