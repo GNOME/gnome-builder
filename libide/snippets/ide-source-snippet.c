@@ -721,15 +721,41 @@ ide_source_snippet_replace_chunk_text (IdeSourceSnippet *self,
 {
   GtkTextIter begin;
   GtkTextIter end;
+  gint diff = 0;
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
   g_return_if_fail (n >= 0);
   g_return_if_fail (text);
 
+  /*
+   * This replaces the text for the snippet. We insert new text before
+   * we delete the old text to ensure things are more stable as we
+   * manipulate the runs. Avoiding zero-length runs, even temporarily
+   * can be helpful.
+   */
+
   ide_source_snippet_get_nth_chunk_range (self, n, &begin, &end);
-  gtk_text_buffer_delete (self->buffer, &begin, &end);
-  gtk_text_buffer_insert (self->buffer, &end, text, -1);
-  g_array_index (self->runs, gint, n) = g_utf8_strlen (text, -1);
+
+  if (!gtk_text_iter_equal (&begin, &end))
+    {
+      gtk_text_iter_order (&begin, &end);
+      diff = gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin);
+    }
+
+  g_array_index (self->runs, gint, n) += g_utf8_strlen (text, -1);
+  gtk_text_buffer_insert (self->buffer, &begin, text, -1);
+
+  /* At this point, begin should be updated to the end of where we inserted
+   * our new text. If `diff` is non-zero, then we need to remove those
+   * characters immediately after `begin`.
+   */
+  if (diff != 0)
+    {
+      end = begin;
+      gtk_text_iter_forward_chars (&end, diff);
+      g_array_index (self->runs, gint, n) -= diff;
+      gtk_text_buffer_delete (self->buffer, &begin, &end);
+    }
 }
 
 static void
@@ -819,7 +845,7 @@ ide_source_snippet_after_insert_text (IdeSourceSnippet *self,
 
   ide_source_snippet_update_tags (self);
 
-#if 0
+#if 1
   ide_source_snippet_context_dump (self->snippet_context);
 #endif
 
@@ -919,7 +945,7 @@ ide_source_snippet_after_delete_range (IdeSourceSnippet *self,
 
   ide_source_snippet_update_tags (self);
 
-#if 0
+#if 1
   ide_source_snippet_context_dump (self->snippet_context);
 #endif
 
