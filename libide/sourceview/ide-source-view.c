@@ -1190,6 +1190,9 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (iter != NULL);
+  g_assert (text != NULL);
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
   ide_source_view_block_handlers (self);
   if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
@@ -1209,10 +1212,14 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (iter != NULL);
+  g_assert (text != NULL);
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
-  if ((snippet = g_queue_peek_head (priv->snippets)))
+  if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
     {
       GtkTextMark *begin;
       GtkTextMark *end;
@@ -1225,6 +1232,8 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
       end = ide_source_snippet_get_mark_end (snippet);
       ide_source_view_invalidate_range_mark (self, begin, end);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -1241,7 +1250,7 @@ ide_source_view__buffer_delete_range_cb (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
-  if ((snippet = g_queue_peek_head (priv->snippets)))
+  if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
     {
       GtkTextMark *begin_mark;
       GtkTextMark *end_mark;
@@ -1267,15 +1276,19 @@ ide_source_view__buffer_delete_range_after_cb (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
   ide_source_view_block_handlers (self);
 
-  if ((snippet = g_queue_peek_head (priv->snippets)))
+  if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
     ide_source_snippet_after_delete_range (snippet, buffer, begin, end);
 
   ide_source_view_unblock_handlers (self);
+
+  IDE_EXIT;
 }
 
 static void
