@@ -386,42 +386,44 @@ provider_activate_proposal (GtkSourceCompletionProvider *provider,
                             GtkSourceCompletionProposal *proposal,
                             GtkTextIter                 *iter)
 {
-  IdeSourceSnippetCompletionItem *item;
-  IdeSourceSnippet *snippet;
-  GtkTextBuffer *buffer;
-  GtkTextIter end;
-  gchar *word;
-  IdeSourceSnippetCompletionProvider *self = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (provider);
+  IdeSourceSnippetCompletionProvider *self = (IdeSourceSnippetCompletionProvider *)provider;
+  IdeSourceSnippetCompletionItem *item = (IdeSourceSnippetCompletionItem *)proposal;
+
+  g_assert (IDE_IS_SOURCE_SNIPPET_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_SOURCE_SNIPPET_COMPLETION_ITEM (item));
 
   if (self->source_view)
     {
-      item = IDE_SOURCE_SNIPPET_COMPLETION_ITEM (proposal);
-      snippet = ide_source_snippet_completion_item_get_snippet (item);
-      if (snippet)
-        {
-          /*
-           * Fetching the word will move us back to the beginning of it.
-           */
-          gtk_text_iter_assign (&end, iter);
-          word = get_word (provider, iter);
-          g_free (word);
+      IdeSourceSnippet *snippet;
+      GtkTextBuffer *buffer;
+      GtkTextIter begin;
+      gchar *word;
 
-          /*
-           * Now delete the current word since it will get overwritten
-           * by the insertion of the snippet.
-           */
-          buffer = gtk_text_iter_get_buffer (iter);
-          gtk_text_buffer_delete (buffer, iter, &end);
+      if (NULL == (snippet = ide_source_snippet_completion_item_get_snippet (item)))
+        return FALSE;
 
-          /*
-           * Now push snippet onto the snippet stack of the view.
-           */
-          snippet = ide_source_snippet_copy (snippet);
-          ide_source_view_push_snippet (IDE_SOURCE_VIEW (self->source_view), snippet, NULL);
-          g_object_unref (snippet);
+      /*
+       * Fetching the word will move us back to the beginning of it.
+       */
+      begin = *iter;
+      word = get_word (provider, &begin);
+      g_free (word);
 
-          return TRUE;
-        }
+      /*
+       * Now delete the current word since it will get overwritten
+       * by the insertion of the snippet.
+       */
+      buffer = gtk_text_iter_get_buffer (iter);
+      gtk_text_buffer_delete (buffer, &begin, iter);
+
+      /*
+       * Now push snippet onto the snippet stack of the view.
+       */
+      snippet = ide_source_snippet_copy (snippet);
+      ide_source_view_push_snippet (IDE_SOURCE_VIEW (self->source_view), snippet, NULL);
+      g_object_unref (snippet);
+
+      return TRUE;
     }
 
   return FALSE;
