@@ -190,7 +190,7 @@ ide_language_defaults_get_current_version (const gchar  *path,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_INVALID_DATA,
-                   _("Failed to parse integer from \"%s\""),
+                   _("Failed to parse integer from “%s”"),
                    path);
       return -1;
     }

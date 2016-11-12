@@ -102,7 +102,7 @@ tmpl_template_locator_real_locate (TmplTemplateLocator  *self,
       g_set_error (error,
                    TMPL_ERROR,
                    TMPL_ERROR_TEMPLATE_NOT_FOUND,
-                   _("Failed to locate template \"%s\""),
+                   _("Failed to locate template “%s”"),
                    path);
       return NULL;
     }

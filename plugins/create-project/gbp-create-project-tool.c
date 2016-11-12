@@ -139,7 +139,7 @@ gbp_create_project_tool_parse (GbpCreateProjectTool  *self,
     { "language", 'g', 0, G_OPTION_ARG_STRING, &self->language,
       N_("The target language (if supported)") },
     { "vcs", 'v', 0, G_OPTION_ARG_STRING, &self->vcs,
-      N_("The version control to use or \"none\" to disable"),
+      N_("The version control to use or “none” to disable"),
       N_("git") },
     { NULL }
   };

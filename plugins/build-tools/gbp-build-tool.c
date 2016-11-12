@@ -209,7 +209,7 @@ gbp_build_tool_new_context_cb (GObject      *object,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_FOUND,
-                               _("Failed to locate device \"%s\""),
+                               _("Failed to locate device “%s”"),
                                device_id);
       return;
     }
@@ -219,7 +219,7 @@ gbp_build_tool_new_context_cb (GObject      *object,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_FOUND,
-                               _("Failed to locate runtime \"%s\""),
+                               _("Failed to locate runtime “%s”"),
                                runtime_id);
       return;
     }

@@ -144,7 +144,7 @@ ide_device_manager__provider_device_removed (IdeDeviceManager  *self,
         }
     }
 
-  g_warning (_("The device \"%s\" could not be found."),
+  g_warning (_("The device “%s” could not be found."),
              ide_device_get_id (device));
 }
 

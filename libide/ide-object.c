@@ -285,7 +285,7 @@ ide_object_new_async_try_next (InitAsyncState *state)
       g_task_return_new_error (state->task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("No implementations of extension point \"%s\"."),
+                               _("No implementations of extension point “%s”."),
                                state->extension_point);
       g_object_unref (state->task);
       return;
