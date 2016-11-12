@@ -30,6 +30,7 @@
 #include "buffers/ide-buffer-manager.h"
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-unsaved-files.h"
+#include "diagnostics/ide-diagnostics-manager.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
@@ -926,8 +927,10 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   IdeBufferManager *self;
   IdeUnsavedFiles *unsaved_files;
   IdeContext *context;
+  IdeDiagnosticsManager *diagnostics_manager;
   IdeFile *file;
   GFile *gfile;
+  GFile *old_gfile;
   SaveState *state;
   GError *error = NULL;
 
@@ -958,8 +961,16 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   /* Remove the unsaved files state */
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
+  old_gfile = ide_file_get_file (file);
+  ide_unsaved_files_remove (unsaved_files, old_gfile);
+
+  /* Update the buffer and the diagnostics manager with the backing file
+   * so that there are in sync before signals and properties dispatch.
+   */
   gfile = ide_file_get_file (state->file);
-  ide_unsaved_files_remove (unsaved_files, gfile);
+  diagnostics_manager = ide_context_get_diagnostics_manager (context);
+  ide_diagnostics_manager_update_group_by_file (diagnostics_manager, state->buffer, gfile);
+  ide_buffer_set_file (state->buffer, state->file);
 
   /* Notify signal handlers that the file is saved */
   g_signal_emit (self, signals [BUFFER_SAVED], 0, state->buffer);
@@ -1408,6 +1419,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * This signal is emitted when a request has been made to save a buffer. Connect to this signal
    * if you'd like to perform mutation of the buffer before it is persisted to storage.
+   * Till the "buffer-saved" signal is emmited, the buffer:file property point to the current file.
    */
   signals [SAVE_BUFFER] = g_signal_new ("save-buffer",
                                          G_TYPE_FROM_CLASS (klass),
@@ -1426,6 +1438,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when a buffer has finished saving to storage. You might connect to
    * this signal if you want to know when the modifications have successfully been written to
    * storage.
+   * The buffer:file property point to the saved file.
    */
   signals [BUFFER_SAVED] = g_signal_new ("buffer-saved",
                                           G_TYPE_FROM_CLASS (klass),

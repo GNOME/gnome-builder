@@ -45,7 +45,7 @@ typedef struct
   /*
    * This is our identifier for the diagnostics. We use this as the key in
    * the hash table so that we can quickly find the target buffer. If the
-   * IdeBuffer:file property changes, we will have to fallback to a the
+   * IdeBuffer:file property changes, we will have to fallback to the
    * buffer to clear old entries.
    */
   GFile *file;
@@ -868,27 +868,34 @@ ide_diagnostics_manager_buffer_notify_language (IdeDiagnosticsManager *self,
   if (language != NULL)
     language_id = gtk_source_language_get_id (language);
   group = ide_diagnostics_manager_find_group_from_buffer (self, buffer);
-  ide_extension_set_adapter_set_value (group->adapter, language_id);
+  IdeFile *ifile;
+  GFile *gfile;
+
+  g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  ifile = ide_buffer_get_file (buffer);
+  gfile = ide_file_get_file (ifile);
+
+  if (group->adapter != NULL)
+    ide_extension_set_adapter_set_value (group->adapter, language_id);
 
   IDE_EXIT;
 }
 
-static void
-ide_diagnostics_manager_buffer_notify_file (IdeDiagnosticsManager *self,
-                                            GParamSpec            *pspec,
-                                            IdeBuffer             *buffer)
+void
+ide_diagnostics_manager_update_group_by_file (IdeDiagnosticsManager *self,
+                                              IdeBuffer             *buffer,
+                                              GFile                 *new_file)
 {
   GHashTableIter iter;
-  IdeFile *ifile;
-  GFile *gfile;
   gpointer value;
 
-  IDE_ENTRY;
-
   g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self));
-  g_assert (pspec != NULL);
-  g_assert (g_str_equal (pspec->name, "file"));
   g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_FILE (new_file));
+
+  IDE_ENTRY;
 
   /*
    * The goal here is to steal the group that is in the hash table using
@@ -896,10 +903,6 @@ ide_diagnostics_manager_buffer_notify_file (IdeDiagnosticsManager *self,
    * the group from the hashtable, changing the file field, and then
    * reinserting with our new file key.
    */
-
-  ifile = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (ifile);
-
   g_hash_table_iter_init (&iter, self->groups_by_file);
 
   while (g_hash_table_iter_next (&iter, NULL, &value))
@@ -909,9 +912,13 @@ ide_diagnostics_manager_buffer_notify_file (IdeDiagnosticsManager *self,
 
       if (buffer == group_buffer)
         {
-          g_hash_table_steal (self->groups_by_file, group->file);
-          g_set_object (&group->file, gfile);
-          g_hash_table_insert (self->groups_by_file, group->file, group);
+          if (!g_file_equal (new_file, group->file))
+            {
+              g_hash_table_steal (self->groups_by_file, group->file);
+              g_set_object (&group->file, new_file);
+              g_hash_table_insert (self->groups_by_file, group->file, group);
+            }
+
           IDE_EXIT;
         }
     }
@@ -919,6 +926,25 @@ ide_diagnostics_manager_buffer_notify_file (IdeDiagnosticsManager *self,
   g_assert_not_reached ();
 
   IDE_EXIT;
+}
+
+static void
+ide_diagnostics_manager_buffer_notify_file (IdeDiagnosticsManager *self,
+                                            GParamSpec            *pspec,
+                                            IdeBuffer             *buffer)
+{
+  IdeFile *ifile;
+  GFile *gfile;
+
+  g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (pspec != NULL);
+  g_assert (g_str_equal (pspec->name, "file"));
+
+  ifile = ide_buffer_get_file (buffer);
+  gfile = ide_file_get_file (ifile);
+
+  ide_diagnostics_manager_update_group_by_file (self, buffer, gfile);
 }
 
 static void

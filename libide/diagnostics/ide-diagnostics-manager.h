@@ -34,6 +34,9 @@ IdeDiagnostics *ide_diagnostics_manager_get_diagnostics_for_file (IdeDiagnostics
                                                                   GFile                 *file);
 guint           ide_diagnostics_manager_get_sequence_for_file    (IdeDiagnosticsManager *self,
                                                                   GFile                 *file);
+void            ide_diagnostics_manager_update_group_by_file     (IdeDiagnosticsManager *self,
+                                                                  IdeBuffer             *buffer,
+                                                                  GFile                 *new_file);
 
 G_END_DECLS
 

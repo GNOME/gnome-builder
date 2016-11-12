@@ -257,8 +257,6 @@ save_temp_response (GtkWidget *widget,
       buffer_manager = ide_context_get_buffer_manager (context);
       file = ide_project_get_project_file (project, target);
 
-      ide_buffer_set_file (buffer, file);
-
       ide_buffer_manager_save_file_async (buffer_manager,
                                           buffer,
                                           file,
