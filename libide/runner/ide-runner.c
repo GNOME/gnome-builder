@@ -18,9 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-runner"
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -36,9 +38,14 @@
 typedef struct
 {
   PeasExtensionSet *addins;
-  GQueue argv;
   IdeEnvironment *env;
+
+  GQueue argv;
+
   GSubprocessFlags flags;
+
+  int tty_fd;
+
   guint clear_env : 1;
   guint run_on_host : 1;
 } IdeRunnerPrivate;
@@ -162,7 +169,6 @@ ide_runner_real_run_async (IdeRunner           *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_auto(GStrv) environ = NULL;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *config;
   const gchar *identifier;
@@ -191,6 +197,18 @@ ide_runner_real_run_async (IdeRunner           *self,
     launcher = ide_subprocess_launcher_new (0);
 
   ide_subprocess_launcher_set_flags (launcher, priv->flags);
+
+  /*
+   * If we have a tty_fd set, then we want to override our stdin,
+   * stdout, and stderr fds with our TTY.
+   */
+  if (priv->tty_fd != -1)
+    {
+      IDE_TRACE_MSG ("Setting TTY fd to %d\n", priv->tty_fd);
+      ide_subprocess_launcher_take_stdin_fd (launcher, dup (priv->tty_fd));
+      ide_subprocess_launcher_take_stdout_fd (launcher, dup (priv->tty_fd));
+      ide_subprocess_launcher_take_stderr_fd (launcher, dup (priv->tty_fd));
+    }
 
   /*
    * We want the runners to run on the host so that we aren't captive to
@@ -255,6 +273,32 @@ ide_runner_real_run_finish (IdeRunner     *self,
   g_assert (g_task_get_source_tag (G_TASK (result)) == ide_runner_real_run_async);
 
   return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+ide_runner_real_set_tty (IdeRunner *self,
+                         int        tty_fd)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_assert (IDE_IS_RUNNER (self));
+  g_assert (tty_fd >= -1);
+
+  if (tty_fd != priv->tty_fd)
+    {
+      if (priv->tty_fd != -1)
+        {
+          close (priv->tty_fd);
+          priv->tty_fd = -1;
+        }
+
+      if (tty_fd != -1)
+        {
+          priv->tty_fd = dup (tty_fd);
+          if (priv->tty_fd == -1)
+            g_warning ("Failed to dup() tty_fd: %s", g_strerror (errno));
+        }
+    }
 }
 
 static void
@@ -327,6 +371,12 @@ ide_runner_finalize (GObject *object)
   g_queue_foreach (&priv->argv, (GFunc)g_free, NULL);
   g_queue_clear (&priv->argv);
   g_clear_object (&priv->env);
+
+  if (priv->tty_fd != -1)
+    {
+      close (priv->tty_fd);
+      priv->tty_fd = -1;
+    }
 
   G_OBJECT_CLASS (ide_runner_parent_class)->finalize (object);
 }
@@ -401,6 +451,7 @@ ide_runner_class_init (IdeRunnerClass *klass)
 
   klass->run_async = ide_runner_real_run_async;
   klass->run_finish = ide_runner_real_run_finish;
+  klass->set_tty = ide_runner_real_set_tty;
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv",
@@ -462,8 +513,11 @@ ide_runner_init (IdeRunner *self)
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
 
   g_queue_init (&priv->argv);
+
   priv->env = ide_environment_new ();
+
   priv->flags = 0;
+  priv->tty_fd = -1;
 }
 
 /**
@@ -868,4 +922,25 @@ ide_runner_set_clear_env (IdeRunner *self,
       priv->clear_env = clear_env;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAR_ENV]);
     }
+}
+
+void
+ide_runner_set_tty (IdeRunner *self,
+                    int        tty_fd)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+  g_return_if_fail (tty_fd >= -1);
+
+  if (IDE_RUNNER_GET_CLASS (self)->set_tty)
+    {
+      IDE_RUNNER_GET_CLASS (self)->set_tty (self, tty_fd);
+      return;
+    }
+
+  g_warning ("%s does not support setting a TTY fd",
+             G_OBJECT_TYPE_NAME (self));
+
+  IDE_EXIT;
 }

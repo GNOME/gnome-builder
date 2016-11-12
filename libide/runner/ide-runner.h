@@ -45,6 +45,8 @@ struct _IdeRunnerClass
   gboolean       (*run_finish) (IdeRunner            *self,
                                 GAsyncResult         *result,
                                 GError              **error);
+  void           (*set_tty)    (IdeRunner            *self,
+                                int                   tty_fd);
 };
 
 IdeRunner      *ide_runner_new             (IdeContext           *context);
@@ -75,6 +77,8 @@ GOutputStream  *ide_runner_get_stderr      (IdeRunner            *self);
 gboolean        ide_runner_get_run_on_host (IdeRunner            *self);
 void            ide_runner_set_run_on_host (IdeRunner            *self,
                                             gboolean              run_on_host);
+void            ide_runner_set_tty         (IdeRunner            *self,
+                                            int                   tty_fd);
 
 G_END_DECLS
 
