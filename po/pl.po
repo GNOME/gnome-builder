@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-11-03 20:25+0000\n"
-"PO-Revision-Date: 2016-11-03 21:28+0100\n"
+"POT-Creation-Date: 2016-11-12 05:32+0000\n"
+"PO-Revision-Date: 2016-11-12 11:25+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -302,7 +302,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Można wczytać lub utworzyć paletę za pomocą preferencji"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5698
+#: libide/sourceview/ide-source-view.c:5764
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Zmień nazwę"
@@ -869,9 +869,9 @@ msgstr "Za_mknij"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:498
+#: libide/application/ide-application.c:516
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:561
+#: libide/workbench/ide-workbench.c:560
 msgid "Builder"
 msgstr "Builder"
 
@@ -1064,7 +1064,7 @@ msgstr "Proszę podać adres usługi D-Bus"
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: libide/buffers/ide-buffer.c:2418
+#: libide/buffers/ide-buffer.c:2413
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie ma mechanizmu rozwiązywania symboli."
 
@@ -1086,11 +1086,11 @@ msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 msgid "%s does not support building"
 msgstr "%s nie obsługuje budowania"
 
-#: libide/buildsystem/ide-build-manager.c:478
+#: libide/buildsystem/ide-build-manager.c:498
 msgid "A build is already in progress"
 msgstr "Trwa budowanie"
 
-#: libide/buildsystem/ide-build-manager.c:772
+#: libide/buildsystem/ide-build-manager.c:853
 msgid "Ready"
 msgstr "Gotowe"
 
@@ -1751,7 +1751,7 @@ msgstr "edytor czcionka font stałej szerokości monospace"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:111
-#: plugins/terminal/gb-terminal-workbench-addin.c:90
+#: plugins/terminal/gb-terminal-workbench-addin.c:183
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -2161,7 +2161,7 @@ msgstr "Nie można wykonać celu, inny jest wykonywany"
 msgid "Failed to locate runtime"
 msgstr "Ustalenie położenia środowiska wykonawczego się nie powiodło"
 
-#: libide/runner/ide-runner.c:150
+#: libide/runner/ide-runner.c:157
 msgid "Process quit unexpectedly"
 msgstr "Proces nieoczekiwanie zakończył działanie"
 
@@ -2182,10 +2182,6 @@ msgstr "Nie można dodać dostawcy więcej niż raz."
 msgid "The provider could not be found."
 msgstr "Nie można odnaleźć dostawcy."
 
-#: libide/snippets/ide-source-snippet.c:372
-msgid "Chunk does not belong to snippet."
-msgstr "Fragment nie należy do wstawki."
-
 #: libide/snippets/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
@@ -2196,21 +2192,21 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5154
+#: libide/sourceview/ide-source-view.c:5220
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: libide/sourceview/ide-source-view.c:5156
+#: libide/sourceview/ide-source-view.c:5222
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: libide/sourceview/ide-source-view.c:5270
+#: libide/sourceview/ide-source-view.c:5336
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: libide/sourceview/ide-source-view.c:5697
+#: libide/sourceview/ide-source-view.c:5763
 msgid "Rename symbol"
 msgstr "Zmiana nazwy symbolu"
 
@@ -2391,7 +2387,7 @@ msgstr "Wyczyść"
 msgid "Open File"
 msgstr "Otwarcie pliku"
 
-#: libide/workbench/ide-workbench.c:559
+#: libide/workbench/ide-workbench.c:558
 #, c-format
 msgid "%s - Builder"
 msgstr "%s — Builder"
@@ -3248,15 +3244,15 @@ msgstr "Następujący adres URL został skopiowany do schowka"
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Nie można dostarczyć różnicy, nie podano pliku na dysku."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:546
+#: plugins/git/ide-git-buffer-change-monitor.c:568
 msgid "Repository does not have a working directory."
 msgstr "Repozytorium nie ma katalogu roboczego."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:557
+#: plugins/git/ide-git-buffer-change-monitor.c:579
 msgid "File is not under control of git working directory."
 msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:623
+#: plugins/git/ide-git-buffer-change-monitor.c:645
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
 
@@ -3559,9 +3555,13 @@ msgstr "Otwórz profil…"
 msgid "Save Terminal Content As"
 msgstr "Zapis zawartości terminala jako"
 
-#: plugins/terminal/gb-terminal-view.c:459
+#: plugins/terminal/gb-terminal-view.c:448
 msgid "Untitled terminal"
 msgstr "Terminal bez tytułu"
+
+#: plugins/terminal/gb-terminal-workbench-addin.c:120
+msgid "Run Output"
+msgstr "Wyjście uruchamiania"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
