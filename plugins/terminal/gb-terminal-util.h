@@ -1,6 +1,6 @@
-/* gb-terminal-view.h
+/* gb-terminal-util.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_VIEW_H
-#define GB_TERMINAL_VIEW_H
+#ifndef GB_TERMINAL_UTIL_H
+#define GB_TERMINAL_UTIL_H
 
-#include <ide.h>
 #include <vte/vte.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TERMINAL_VIEW (gb_terminal_view_get_type())
-
-G_DECLARE_FINAL_TYPE (GbTerminalView, gb_terminal_view, GB, TERMINAL_VIEW, IdeLayoutView)
-
-void gb_terminal_view_set_pty (GbTerminalView *self,
-                               VtePty         *pty);
+int gb_vte_pty_create_slave (VtePty *pty);
 
 G_END_DECLS
 
-#endif /* GB_TERMINAL_VIEW_H */
+#endif /* GB_TERMINAL_UTIL_H */

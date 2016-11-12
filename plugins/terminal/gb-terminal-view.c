@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 #include "gb-terminal.h"
+#include "gb-terminal-util.h"
 #include "gb-terminal-view.h"
 #include "gb-terminal-view-private.h"
 #include "gb-terminal-view-actions.h"
@@ -37,6 +38,8 @@ G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, IDE_TYPE_LAYOUT_VIEW)
 enum {
   PROP_0,
   PROP_FONT_NAME,
+  PROP_MANAGE_SPAWN,
+  PROP_PTY,
   LAST_PROP
 };
 
@@ -191,15 +194,9 @@ gb_terminal_respawn (GbTerminalView *self,
   VtePty *pty = NULL;
   GFile *workdir;
   gint64 now;
-  int master_fd = -1;
   int tty_fd = -1;
   gint stdout_fd = -1;
   gint stderr_fd = -1;
-#ifdef HAVE_PTSNAME_R
-  char name[PATH_MAX + 1];
-#else
-  const char *name;
-#endif
 
   IDE_ENTRY;
 
@@ -250,24 +247,7 @@ gb_terminal_respawn (GbTerminalView *self,
 
   vte_terminal_set_pty (terminal, pty);
 
-  if (-1 == (master_fd = vte_pty_get_fd (pty)))
-    IDE_GOTO (failure);
-
-  if (grantpt (master_fd) != 0)
-    IDE_GOTO (failure);
-
-  if (unlockpt (master_fd) != 0)
-    IDE_GOTO (failure);
-
-#ifdef HAVE_PTSNAME_R
-  if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
-    IDE_GOTO (failure);
-#else
-  if (NULL == (name = ptsname (master_fd)))
-    IDE_GOTO (failure);
-#endif
-
-  if (-1 == (tty_fd = open (name, O_RDWR | O_CLOEXEC)))
+  if (-1 == (tty_fd = gb_vte_pty_create_slave (pty)))
     IDE_GOTO (failure);
 
   /* dup() is safe as it will inherit O_CLOEXEC */
@@ -326,11 +306,14 @@ gb_terminal_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gb_terminal_view_parent_class)->realize (widget);
 
-  if (!self->top_has_spawned)
+  if (self->manage_spawn && !self->top_has_spawned)
     {
       self->top_has_spawned = TRUE;
       gb_terminal_respawn (self, self->terminal_top);
     }
+
+  if (!self->manage_spawn && self->pty != NULL)
+    vte_terminal_set_pty (self->terminal_top, self->pty);
 }
 
 static void
@@ -691,8 +674,32 @@ gb_terminal_view_finalize (GObject *object)
   g_clear_object (&self->save_as_file_top);
   g_clear_object (&self->save_as_file_bottom);
   g_clear_pointer (&self->selection_buffer, g_free);
+  g_clear_object (&self->pty);
 
   G_OBJECT_CLASS (gb_terminal_view_parent_class)->finalize (object);
+}
+
+static void
+gb_terminal_view_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GbTerminalView *self = GB_TERMINAL_VIEW (object);
+
+  switch (prop_id)
+    {
+    case PROP_MANAGE_SPAWN:
+      g_value_set_boolean (value, self->manage_spawn);
+      break;
+
+    case PROP_PTY:
+      g_value_set_object (value, self->pty);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -709,6 +716,14 @@ gb_terminal_view_set_property (GObject      *object,
       gb_terminal_view_set_font_name (self, g_value_get_string (value));
       break;
 
+    case PROP_MANAGE_SPAWN:
+      self->manage_spawn = g_value_get_boolean (value);
+      break;
+
+    case PROP_PTY:
+      self->pty = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -722,6 +737,7 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   IdeLayoutViewClass *view_class = IDE_LAYOUT_VIEW_CLASS (klass);
 
   object_class->finalize = gb_terminal_view_finalize;
+  object_class->get_property = gb_terminal_view_get_property;
   object_class->set_property = gb_terminal_view_set_property;
 
   widget_class->realize = gb_terminal_realize;
@@ -748,6 +764,20 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_MANAGE_SPAWN] =
+    g_param_spec_boolean ("manage-spawn",
+                          "Manage Spawn",
+                          "Manage Spawn",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PTY] =
+    g_param_spec_object ("pty",
+                         "Pty",
+                         "The psuedo terminal to use",
+                         VTE_TYPE_PTY,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   g_type_ensure (GB_TYPE_TERMINAL);
@@ -758,6 +788,8 @@ gb_terminal_view_init (GbTerminalView *self)
 {
   GtkStyleContext *style_context;
   g_autoptr(GSettings) settings = NULL;
+
+  self->manage_spawn = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -777,4 +809,24 @@ gb_terminal_view_init (GbTerminalView *self)
   style_context_changed (style_context, self);
 
   gtk_widget_set_can_focus (GTK_WIDGET (self->terminal_top), TRUE);
+}
+
+void
+gb_terminal_view_set_pty (GbTerminalView *self,
+                          VtePty         *pty)
+{
+  g_return_if_fail (GB_IS_TERMINAL_VIEW (self));
+  g_return_if_fail (VTE_IS_PTY (pty));
+
+  if (self->manage_spawn)
+    {
+      g_warning ("Cannot set pty when GbTerminalView manages tty");
+      return;
+    }
+
+  if (self->terminal_top)
+    {
+      vte_terminal_reset (self->terminal_top, TRUE, TRUE);
+      vte_terminal_set_pty (self->terminal_top, pty);
+    }
 }

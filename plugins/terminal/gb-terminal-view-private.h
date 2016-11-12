@@ -41,12 +41,14 @@ struct _GbTerminalView
 
   GtkWidget           *bottom_container;
 
+  VtePty              *pty;
+
   gint64               last_respawn;
 
+  guint                manage_spawn : 1;
   guint                top_has_spawned : 1;
   guint                bottom_has_spawned : 1;
   guint                bottom_has_focus : 1;
-
   guint                top_has_needs_attention : 1;
   guint                bottom_has_needs_attention : 1;
 };
