@@ -73,7 +73,7 @@ gb_project_tree_project_file_renamed (GbProjectTree *self,
   g_assert (IDE_IS_PROJECT (project));
 
   ide_tree_rebuild (IDE_TREE (self));
-  gb_project_tree_reveal (self, dst_file);
+  gb_project_tree_reveal (self, dst_file, FALSE);
 
   IDE_EXIT;
 }
@@ -149,7 +149,7 @@ gb_project_tree_vcs_changed (GbProjectTree *self,
   ide_tree_rebuild (IDE_TREE (self));
 
   if (file != NULL)
-    gb_project_tree_reveal (self, file);
+    gb_project_tree_reveal (self, file, FALSE);
 }
 
 static void
@@ -179,7 +179,7 @@ gb_project_tree_buffer_saved_cb (GbProjectTree    *self,
       if (NULL == (node = ide_tree_find_custom (IDE_TREE (self), compare_to_file, gfile)))
         ide_tree_rebuild (IDE_TREE (self));
 
-      gb_project_tree_reveal (self, gfile);
+      gb_project_tree_reveal (self, gfile, FALSE);
     }
 }
 
@@ -425,7 +425,8 @@ find_files_node (IdeTree     *tree,
 
 void
 gb_project_tree_reveal (GbProjectTree *self,
-                        GFile         *file)
+                        GFile         *file,
+                        gboolean       focus_tree_view)
 {
   g_autofree gchar *relpath = NULL;
   g_auto(GStrv) parts = NULL;
@@ -468,5 +469,6 @@ gb_project_tree_reveal (GbProjectTree *self,
   ide_tree_scroll_to_node (IDE_TREE (self), node);
   ide_tree_node_select (node);
 
-  ide_workbench_focus (ide_widget_get_workbench (GTK_WIDGET (self)), GTK_WIDGET (self));
+  if (focus_tree_view)
+    ide_workbench_focus (ide_widget_get_workbench (GTK_WIDGET (self)), GTK_WIDGET (self));
 }
