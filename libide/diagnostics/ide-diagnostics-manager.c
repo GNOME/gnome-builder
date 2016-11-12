@@ -868,14 +868,9 @@ ide_diagnostics_manager_buffer_notify_language (IdeDiagnosticsManager *self,
   if (language != NULL)
     language_id = gtk_source_language_get_id (language);
   group = ide_diagnostics_manager_find_group_from_buffer (self, buffer);
-  IdeFile *ifile;
-  GFile *gfile;
 
   g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self));
   g_assert (IDE_IS_BUFFER (buffer));
-
-  ifile = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (ifile);
 
   if (group->adapter != NULL)
     ide_extension_set_adapter_set_value (group->adapter, language_id);
