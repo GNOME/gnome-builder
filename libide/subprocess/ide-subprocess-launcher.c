@@ -77,6 +77,7 @@ child_setup_func (gpointer data)
    *       as expected.
    */
   setsid ();
+  setpgid (0, 0);
 
   if (isatty (priv->stdin_fd))
     ioctl (priv->stdin_fd, TIOCSCTTY, 0);
