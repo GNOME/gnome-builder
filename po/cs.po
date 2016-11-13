@@ -1,6 +1,7 @@
 # Czech translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
+#
 # Marek Černocký <marek@manet.cz>, 2015, 2016.
 #
 msgid ""
@@ -8,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-11-12 05:32+0000\n"
-"PO-Revision-Date: 2016-11-12 11:20+0100\n"
+"POT-Creation-Date: 2016-11-12 19:53+0000\n"
+"PO-Revision-Date: 2016-11-13 14:55+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -83,8 +84,8 @@ msgid "Create"
 msgstr "Vytvořit"
 
 #: contrib/egg/egg-file-chooser-entry.c:112
-#: libide/editor/ide-editor-view-actions.c:317
-#: libide/editor/ide-editor-view-actions.c:448
+#: libide/editor/ide-editor-view-actions.c:315
+#: libide/editor/ide-editor-view-actions.c:446
 #: plugins/color-picker/gb-color-picker-prefs.c:237
 #: plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: plugins/terminal/gb-terminal-view-actions.c:306
@@ -96,8 +97,8 @@ msgid "Browse…"
 msgstr "Procházet…"
 
 #: contrib/egg/egg-file-chooser-entry.c:488
-#: libide/editor/ide-editor-view-actions.c:316
-#: libide/editor/ide-editor-view-actions.c:447
+#: libide/editor/ide-editor-view-actions.c:314
+#: libide/editor/ide-editor-view-actions.c:445
 #: libide/greeter/ide-greeter-perspective.c:672
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
@@ -336,7 +337,7 @@ msgstr "Před rozbalením je šablonu zapotřebí zpracovat"
 
 #: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
-msgid "Failed to locate template \"%s\""
+msgid "Failed to locate template “%s”"
 msgstr "Selhalo vyhledání šablony „%s“"
 
 #: contrib/xml/xml-reader.c:327
@@ -1065,16 +1066,16 @@ msgstr "Takový sestavovací proces neexistuje"
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
-#: libide/buffers/ide-buffer-manager.c:672
+#: libide/buffers/ide-buffer-manager.c:673
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: libide/buffers/ide-buffer-manager.c:1749
+#: libide/buffers/ide-buffer-manager.c:1762
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1783
+#: libide/buffers/ide-buffer-manager.c:1796
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Selhalo uložení vyrovnávací paměti, ignoruje se opětovné použití."
 
@@ -1112,7 +1113,7 @@ msgstr "Výchozí"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
-msgid "The device \"%s\" could not be found."
+msgid "The device “%s” could not be found."
 msgstr "Zařízení „%s“ se nezdařilo najít."
 
 #: libide/directory/ide-directory-vcs.c:55
@@ -1261,11 +1262,11 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: libide/editor/ide-editor-view-actions.c:310
+#: libide/editor/ide-editor-view-actions.c:308
 msgid "Save Document"
 msgstr "Uložení dokumentu"
 
-#: libide/editor/ide-editor-view-actions.c:436
+#: libide/editor/ide-editor-view-actions.c:434
 msgid "Save Document As"
 msgstr "Uložení dokumentu jako"
 
@@ -1349,7 +1350,7 @@ msgstr "%s obsahuje neplatné ASCII"
 
 #: libide/gsettings/ide-language-defaults.c:193
 #, c-format
-msgid "Failed to parse integer from \"%s\""
+msgid "Failed to parse integer from “%s”"
 msgstr "Selhalo zpracování celého čísla z „%s“"
 
 #: libide/gsettings/ide-language-defaults.c:271
@@ -1375,8 +1376,8 @@ msgstr "Kontext již byl obnoven."
 
 #: libide/ide-object.c:288
 #, c-format
-msgid "No implementations of extension point \"%s\"."
-msgstr "Není žádná implementace rozšiřujícího bodu „%s“."
+msgid "No implementations of extension point “%s”."
+msgstr "Neexistuje žádná implementace rozšiřujícího bodu „%s“."
 
 #: libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
@@ -2144,7 +2145,7 @@ msgstr "Skript se musí nacházet na místním souborovém systému."
 
 #: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
-msgid "The script \"%s\" is not a PyGObject file."
+msgid "The script “%s” is not a PyGObject file."
 msgstr "Skript „%s“ není soubor PyGObject."
 
 #: libide/runner/ide-run-manager.c:225
@@ -2684,12 +2685,12 @@ msgstr "      Sestavení běželo: %"
 
 #: plugins/build-tools/gbp-build-tool.c:212
 #, c-format
-msgid "Failed to locate device \"%s\""
+msgid "Failed to locate device “%s”"
 msgstr "Selhalo vyhledání zařízení „%s“"
 
 #: plugins/build-tools/gbp-build-tool.c:222
 #, c-format
-msgid "Failed to locate runtime \"%s\""
+msgid "Failed to locate runtime “%s”"
 msgstr "Selhalo vyhledání běhového prostředí „%s“"
 
 #: plugins/build-tools/gbp-build-tool.c:286
@@ -3126,8 +3127,8 @@ msgid "The target language (if supported)"
 msgstr "Cílový jazyk (když je tato možnost podporována)"
 
 #: plugins/create-project/gbp-create-project-tool.c:142
-msgid "The version control to use or \"none\" to disable"
-msgstr "Správa verzí, která bude použita. Pro deaktivaci vyplňte \"none\""
+msgid "The version control to use or “none” to disable"
+msgstr "Správa verzí, která bude použita. Pro deaktivaci vyplňte „none“"
 
 #: plugins/create-project/gbp-create-project-tool.c:143
 msgid "git"
