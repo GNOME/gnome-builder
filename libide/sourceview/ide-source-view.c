@@ -1999,6 +1999,7 @@ ide_source_view_maybe_delete_match (IdeSourceView *self,
     case '(':  match = ')';  break;
     case '"':  match = '"';  break;
     case '\'': match = '\''; break;
+    case '<':  match = '>';  break;
     default:   match = 0;    break;
     }
 
