@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-selection-section">
+      <submenu id="ide-source-view-popup-menu-selection-submenu">
+        <section id="gb-beautify-section">
+          <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
+          <submenu id="gb-beautify-submenu">
+            <attribute name="label" translatable="yes">Beautify</attribute>
+            <section id="gb-beautify-default-section">
+            </section>
+            <section id="gb-beautify-profiles-section">
+            </section>
+          </submenu>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>

@@ -277,6 +277,7 @@ dnl Check for supported plugins
 dnl ***********************************************************************
 m4_include([plugins/autotools/configure.ac])
 m4_include([plugins/autotools-templates/configure.ac])
+m4_include([plugins/beautifier/configure.ac])
 m4_include([plugins/build-tools/configure.ac])
 m4_include([plugins/c-pack/configure.ac])
 m4_include([plugins/cargo/configure.ac])
@@ -593,6 +594,7 @@ echo " Plugins"
 echo ""
 echo "  Autotools ............................ : ${enable_autotools_plugin}"
 echo "  Build Tools .......................... : ${enable_build_tools_plugin}"
+echo "  Beautifier  .......................... : ${enable_beautifier_plugin}"
 echo "  C Language Pack ...................... : ${enable_c_pack_plugin}"
 echo "  Cargo ................................ : ${enable_cargo_plugin}"
 echo "  Clang ................................ : ${enable_clang_plugin}"
