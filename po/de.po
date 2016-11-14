@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-11-04 19:53+0000\n"
-"PO-Revision-Date: 2016-11-04 21:01+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2016-11-12 19:53+0000\n"
+"PO-Revision-Date: 2016-11-14 10:45+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -86,8 +86,8 @@ msgid "Create"
 msgstr "Anlegen"
 
 #: contrib/egg/egg-file-chooser-entry.c:112
-#: libide/editor/ide-editor-view-actions.c:317
-#: libide/editor/ide-editor-view-actions.c:448
+#: libide/editor/ide-editor-view-actions.c:315
+#: libide/editor/ide-editor-view-actions.c:446
 #: plugins/color-picker/gb-color-picker-prefs.c:237
 #: plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: plugins/terminal/gb-terminal-view-actions.c:306
@@ -99,8 +99,8 @@ msgid "Browse…"
 msgstr "Durchsuchen …"
 
 #: contrib/egg/egg-file-chooser-entry.c:488
-#: libide/editor/ide-editor-view-actions.c:316
-#: libide/editor/ide-editor-view-actions.c:447
+#: libide/editor/ide-editor-view-actions.c:314
+#: libide/editor/ide-editor-view-actions.c:445
 #: libide/greeter/ide-greeter-perspective.c:672
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
@@ -308,7 +308,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5698
+#: libide/sourceview/ide-source-view.c:5764
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Umbenennen"
@@ -344,12 +344,12 @@ msgstr "Vorlage muss vor dem Erweitern verarbeitet werden"
 
 #: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
-msgid "Failed to locate template \"%s\""
+msgid "Failed to locate template “%s”"
 msgstr "Vorlage »%s« konnte nicht gefunden werden"
 
 #: contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
-msgstr "Konnte XML nicht aus dem Stream parsen"
+msgstr "XML aus dem Datenstrom konnte nicht ausgewertet werden"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -410,7 +410,7 @@ msgid ""
 "based on information extracted from the source code."
 msgstr ""
 "Legt fest, ob zusätzliche Hervorhebung für unterstützte Sprachen geleistet "
-"wird, basierend auf aus dem Quellcode gewonnen Informationen."
+"wird, basierend auf aus dem Quellcode gewonnenen Informationen."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
 msgid "Path to ctags executable"
@@ -457,7 +457,7 @@ msgstr "Zusammengehörige Klammern hervorheben"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr "Legt fest, ob übereinstimmende Klammern automatisch gesetzt werden."
+msgstr "Legt fest, ob übereinstimmende Klammern hervorgehoben werden."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
@@ -622,7 +622,7 @@ msgstr "Projekt-Seitenleiste anzeigen"
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgstr ""
-"Legt fest, ob die Seitenleiste sichtbar in der Arbeitsfläche des Editors ist."
+"Legt fest, ob die Seitenleiste in der Arbeitsfläche des Editors sichtbar ist."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:84
@@ -853,7 +853,7 @@ msgstr "Dokument rechts teilen"
 
 #: data/gtk/menus.ui:272
 msgid "Split Down"
-msgstr "Dokument unten Teilen"
+msgstr "Dokument unten teilen"
 
 #: data/gtk/menus.ui:279
 msgid "Move"
@@ -885,7 +885,7 @@ msgstr "_Schließen"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:498
+#: libide/application/ide-application.c:516
 #: libide/preferences/ide-preferences-builtin.c:144
 #: libide/workbench/ide-workbench.c:560
 msgid "Builder"
@@ -1080,33 +1080,33 @@ msgstr "Bitte geben Sie eine D-Bus-Adresse an"
 msgid "No such worker"
 msgstr "Kein solcher Worker"
 
-#: libide/buffers/ide-buffer.c:2418
+#: libide/buffers/ide-buffer.c:2413
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
-#: libide/buffers/ide-buffer-manager.c:672
+#: libide/buffers/ide-buffer-manager.c:673
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: libide/buffers/ide-buffer-manager.c:1749
+#: libide/buffers/ide-buffer-manager.c:1762
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1783
+#: libide/buffers/ide-buffer-manager.c:1796
 msgid "Failed to save buffer, ignoring reclamation."
-msgstr "Konnte Puffer nicht speichern, ignoriere Beschwerde."
+msgstr "Puffer konnte nicht gespeichert werden, Beschwerde wird ignoriert."
 
 #: libide/buildsystem/ide-builder.c:89
 #, c-format
 msgid "%s does not support building"
 msgstr "%s unterstützt keine Erstellung"
 
-#: libide/buildsystem/ide-build-manager.c:478
+#: libide/buildsystem/ide-build-manager.c:498
 msgid "A build is already in progress"
 msgstr "Eine Erstellung wird bereits ausgeführt"
 
-#: libide/buildsystem/ide-build-manager.c:772
+#: libide/buildsystem/ide-build-manager.c:853
 msgid "Ready"
 msgstr "Bereit"
 
@@ -1131,8 +1131,8 @@ msgstr "Vorgabe"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
-msgid "The device \"%s\" could not be found."
-msgstr "Das Gerät \"%s\" konnte nicht gefunden werden."
+msgid "The device “%s” could not be found."
+msgstr "Das Gerät »%s« konnte nicht gefunden werden."
 
 #: libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
@@ -1283,11 +1283,11 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: libide/editor/ide-editor-view-actions.c:310
+#: libide/editor/ide-editor-view-actions.c:308
 msgid "Save Document"
 msgstr "Dokument speichern"
 
-#: libide/editor/ide-editor-view-actions.c:436
+#: libide/editor/ide-editor-view-actions.c:434
 msgid "Save Document As"
 msgstr "Dokument speichern unter"
 
@@ -1307,7 +1307,7 @@ msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr ""
-"Builder hat festgestellt, dass diese Datei anderweitig modifiziert wurde. "
+"Builder hat festgestellt, dass diese Datei anderweitig geändert wurde. "
 "Wollen Sie die Datei neu laden?"
 
 #: libide/greeter/ide-greeter-perspective.c:451
@@ -1373,8 +1373,8 @@ msgstr "%s beinhaltet ungültiges ASCII"
 
 #: libide/gsettings/ide-language-defaults.c:193
 #, c-format
-msgid "Failed to parse integer from \"%s\""
-msgstr "Konnte Ganzzahl von \"%s\" nicht parsen"
+msgid "Failed to parse integer from “%s”"
+msgstr "Ganzzahl von »%s« konnte nicht ausgewertet werden"
 
 #: libide/gsettings/ide-language-defaults.c:271
 msgid "language defaults missing version in [global] group."
@@ -1382,7 +1382,7 @@ msgstr "Fehlende Versionen in [globaler] Gruppe der Sprachstandards."
 
 #: libide/gsettings/ide-language-defaults.c:363
 msgid "Failed to initialize defaults."
-msgstr "Konnte Standardwerte nicht initialisieren."
+msgstr "Standardwerte konnten nicht initialisiert werden."
 
 #: libide/ide.c:62
 #, c-format
@@ -1399,12 +1399,12 @@ msgstr "Der Kontext wurde bereits wiederhergestellt."
 
 #: libide/ide-object.c:288
 #, c-format
-msgid "No implementations of extension point \"%s\"."
-msgstr "Keine Implementationen des Erweiterungspunkt \"%s\"."
+msgid "No implementations of extension point “%s”."
+msgstr "Keine Implementationen des Erweiterungspunkts »%s«."
 
 #: libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
-msgstr "Konnte die Buildsystem-Erweiterung nicht laden."
+msgstr "Buildsystem-Erweiterung konnte nicht geladen werden."
 
 #: libide/ide-object.c:467
 msgid "No such extension point."
@@ -1774,7 +1774,7 @@ msgstr "Monospace-Schrift für Editor"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:111
-#: plugins/terminal/gb-terminal-workbench-addin.c:90
+#: plugins/terminal/gb-terminal-workbench-addin.c:183
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1991,7 +1991,7 @@ msgstr ""
 #: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest completions using Clang (Experimental)"
 msgstr ""
-"Vervollständigungen unter Benutzung von Clang vorschlagen (Experimentell)"
+"Vervollständigungen unter Benutzung von Clang vorschlagen (experimentell)"
 
 #: libide/preferences/ide-preferences-builtin.c:196
 msgid "Use Clang to suggest completions for C and C++ languages"
@@ -2174,16 +2174,16 @@ msgstr "Versuch, ein PyGObject-Script ohne Dateiname zu laden."
 
 #: libide/pygobject/ide-pygobject-script.c:254
 msgid "The filename for the script was not provided."
-msgstr "Der Dateiname für das Script war nicht angegeben."
+msgstr "Der Dateiname für das Skript war nicht angegeben."
 
 #: libide/pygobject/ide-pygobject-script.c:265
 msgid "The script must be on a local filesystem."
-msgstr "Das Script muss im lokalen Dateisystem sein."
+msgstr "Das Skript muss im lokalen Dateisystem sein."
 
 #: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
-msgid "The script \"%s\" is not a PyGObject file."
-msgstr "Das Script \"%s\" ist keine PyGObject-Datei"
+msgid "The script “%s” is not a PyGObject file."
+msgstr "Das Skript »%s« ist keine PyGObject-Datei."
 
 #: libide/runner/ide-run-manager.c:225
 msgid "Run"
@@ -2199,7 +2199,7 @@ msgstr ""
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
-#: libide/runner/ide-runner.c:150
+#: libide/runner/ide-runner.c:157
 msgid "Process quit unexpectedly"
 msgstr "Prozess wurde unerwartet beendet"
 
@@ -2220,10 +2220,6 @@ msgstr "Anbieter kann nicht mehrmals hinzugefügt werden."
 msgid "The provider could not be found."
 msgstr "Anbieter konnte nicht gefunden werden."
 
-#: libide/snippets/ide-source-snippet.c:372
-msgid "Chunk does not belong to snippet."
-msgstr "Stück gehört nicht zum Schnipsel."
-
 #: libide/snippets/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
@@ -2234,21 +2230,21 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5154
+#: libide/sourceview/ide-source-view.c:5220
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: libide/sourceview/ide-source-view.c:5156
+#: libide/sourceview/ide-source-view.c:5222
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: libide/sourceview/ide-source-view.c:5270
+#: libide/sourceview/ide-source-view.c:5336
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: libide/sourceview/ide-source-view.c:5697
+#: libide/sourceview/ide-source-view.c:5763
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
@@ -2271,7 +2267,7 @@ msgstr "ILCreateFromPath() fehlgeschlagen"
 #: libide/util/ide-file-manager.c:129
 #, c-format
 msgid "Cannot convert '%s' into a valid NSURL."
-msgstr "'%s' kann nicht in gültiges NSURL konvertiert werden."
+msgstr "»%s« kann nicht in gültiges NSURL konvertiert werden."
 
 #: libide/util/ide-file-manager.c:157
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
@@ -2308,7 +2304,7 @@ msgstr "Ungültiger Nicht-ASCII-Rechnername »%s« in Adresse"
 #: libide/util/ide-uri.c:434
 #, c-format
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
-msgstr "Nicht-ASCII-Rechnername »%s« ist in dieser Adresse"
+msgstr "Nicht-ASCII-Rechnername »%s« ist in dieser Adresse nicht erlaubt"
 
 #: libide/util/ide-uri.c:457
 #, c-format
@@ -2432,7 +2428,7 @@ msgstr "Datei öffnen"
 #: libide/workbench/ide-workbench.c:558
 #, c-format
 msgid "%s - Builder"
-msgstr "%s - Builder"
+msgstr "%s – Builder"
 
 #: libide/workbench/ide-workbench-header-bar.ui:43
 msgid "Transfers"
@@ -2725,12 +2721,12 @@ msgstr "   Erstellung lief seit: %"
 
 #: plugins/build-tools/gbp-build-tool.c:212
 #, c-format
-msgid "Failed to locate device \"%s\""
+msgid "Failed to locate device “%s”"
 msgstr "Gerät »%s« konnte nicht gefunden werden"
 
 #: plugins/build-tools/gbp-build-tool.c:222
 #, c-format
-msgid "Failed to locate runtime \"%s\""
+msgid "Failed to locate runtime “%s”"
 msgstr "Laufzeit »%s« konnte nicht gefunden werden"
 
 #: plugins/build-tools/gbp-build-tool.c:286
@@ -3180,7 +3176,7 @@ msgid "The target language (if supported)"
 msgstr "Die Zielsprache (falls unterstützt)"
 
 #: plugins/create-project/gbp-create-project-tool.c:142
-msgid "The version control to use or \"none\" to disable"
+msgid "The version control to use or “none” to disable"
 msgstr "Die zu verwendende Versionskontrolle oder »keine« zum Abschalten."
 
 #: plugins/create-project/gbp-create-project-tool.c:143
@@ -3306,15 +3302,15 @@ msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 "Erstellung des Vergleichs nicht möglich, keine Sicherungsdatei vorhanden."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:546
+#: plugins/git/ide-git-buffer-change-monitor.c:568
 msgid "Repository does not have a working directory."
 msgstr "Das Archiv hat keinen Arbeitsordner."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:557
+#: plugins/git/ide-git-buffer-change-monitor.c:579
 msgid "File is not under control of git working directory."
 msgstr "Die Datei ist nicht unter der Kontrolle des git-Arbeitsordners"
 
-#: plugins/git/ide-git-buffer-change-monitor.c:623
+#: plugins/git/ide-git-buffer-change-monitor.c:645
 msgid "The requested file does not exist within the git index."
 msgstr "Die angeforderte Datei existiert nicht im git-Index."
 
@@ -3619,9 +3615,13 @@ msgstr "Profil öffnen …"
 msgid "Save Terminal Content As"
 msgstr "Terminalinhalt speichern unter"
 
-#: plugins/terminal/gb-terminal-view.c:468
+#: plugins/terminal/gb-terminal-view.c:448
 msgid "Untitled terminal"
 msgstr "Unbenanntes Terminal"
+
+#: plugins/terminal/gb-terminal-workbench-addin.c:120
+msgid "Run Output"
+msgstr "Erstellungs-Ausgabe"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
@@ -3643,6 +3643,9 @@ msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "Vala Fehlerdiagnose Warnungen Fehler"
+
+#~ msgid "Chunk does not belong to snippet."
+#~ msgstr "Stück gehört nicht zum Schnipsel."
 
 #~ msgid "Words"
 #~ msgstr "Wörter"
