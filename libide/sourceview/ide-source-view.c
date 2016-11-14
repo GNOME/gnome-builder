@@ -2370,6 +2370,16 @@ ide_source_view_key_press_event (GtkWidget   *widget,
     return TRUE;
 
   /*
+   * Allow the Input Method Context to potentially filter this keystroke.
+   * We have to do this after the IdeSourceViewMode has had a chance to
+   * intercept this as it might want to change states. Since calling
+   * filter_keypress will potentially call 'commit-text', we need to
+   * steal things.
+   */
+  if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (self), event))
+    return TRUE;
+
+  /*
    * Handle movement through the tab stops of the current snippet if needed.
    */
   if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
@@ -2429,13 +2439,6 @@ ide_source_view_key_press_event (GtkWidget   *widget,
           (event->keyval >= GDK_KEY_KP_0 && event->keyval <= GDK_KEY_KP_9))
         return TRUE;
     }
-
-  /*
-   * Allow the Input Method Context to potentially filter this keystroke.
-   */
-  if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
-    if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (self), event))
-      return TRUE;
 
   /*
    * If we are going to insert the same character as the next character in the
