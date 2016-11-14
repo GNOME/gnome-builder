@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-subprocess-launcher"
 
+#include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
@@ -69,18 +70,21 @@ static void
 child_setup_func (gpointer data)
 {
 #ifdef G_OS_UNIX
-  IdeSubprocessLauncherPrivate *priv = data;
-
   /*
    * TODO: Check on FreeBSD to see if the process group id is the same as
    *       the owning process. If not, our kill() signal might not work
    *       as expected.
    */
+
   setsid ();
   setpgid (0, 0);
 
-  if (isatty (priv->stdin_fd))
-    ioctl (priv->stdin_fd, TIOCSCTTY, 0);
+  if (isatty (STDIN_FILENO))
+    {
+      if (ioctl (STDIN_FILENO, TIOCSCTTY, 0) != 0)
+        g_warning ("Failed to setup TIOCSCTTY on stdin: %s",
+                   g_strerror (errno));
+    }
 #endif
 }
 
@@ -239,7 +243,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
 #endif
 
   launcher = g_subprocess_launcher_new (priv->flags);
-  g_subprocess_launcher_set_child_setup (launcher, child_setup_func, priv, NULL);
+  g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
 
   if (priv->stdin_fd)
