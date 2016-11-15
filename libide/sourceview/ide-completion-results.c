@@ -183,6 +183,8 @@ ide_completion_results_replay (IdeCompletionResults *self,
   g_return_val_if_fail (priv->query != NULL, FALSE);
   g_return_val_if_fail (query != NULL, FALSE);
 
+  IDE_TRACE_MSG ("Checking if we can reply results: query=%s, last_query=%s", query, priv->query);
+
   if (g_str_has_prefix (query, priv->query))
     {
       const gchar *suffix = query + strlen (priv->query);
