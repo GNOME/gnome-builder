@@ -9,7 +9,8 @@ AC_ARG_ENABLE([flatpak-plugin],
 
 AS_IF([test "$enable_flatpak_plugin" != no],[
 	PKG_CHECK_MODULES(FLATPAK,
-	                  [flatpak >= flatpak_required_version],
+	                  [flatpak >= flatpak_required_version
+	                   json-glib-1.0 >= json_glib_required_version],
 	                  [have_flatpak=yes],
 	                  [have_flatpak=no])
 

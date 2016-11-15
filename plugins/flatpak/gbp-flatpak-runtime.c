@@ -28,6 +28,9 @@ struct _GbpFlatpakRuntime
   gchar *sdk;
   gchar *platform;
   gchar *branch;
+  gchar *primary_module;
+  gchar *app_id;
+  GFile *manifest;
 };
 
 G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
@@ -37,6 +40,9 @@ enum {
   PROP_BRANCH,
   PROP_PLATFORM,
   PROP_SDK,
+  PROP_PRIMARY_MODULE,
+  PROP_APP_ID,
+  PROP_MANIFEST,
   LAST_PROP
 };
 
@@ -219,9 +225,13 @@ static void
 gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
                                            IdeConfiguration *configuration)
 {
-  g_assert (IDE_IS_RUNTIME (runtime));
+  GbpFlatpakRuntime* self = (GbpFlatpakRuntime *)runtime;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
+  if (!ide_str_empty0 (self->app_id))
+    ide_configuration_set_app_id (configuration, self->app_id);
   ide_configuration_set_prefix (configuration, "/app");
 }
 
@@ -245,6 +255,18 @@ gbp_flatpak_runtime_get_property (GObject    *object,
 
     case PROP_SDK:
       g_value_set_string (value, self->sdk);
+      break;
+
+    case PROP_PRIMARY_MODULE:
+      g_value_set_string (value, self->primary_module);
+      break;
+
+    case PROP_APP_ID:
+      g_value_set_string (value, self->app_id);
+      break;
+
+    case PROP_MANIFEST:
+      g_value_set_object (value, self->manifest);
       break;
 
     default:
@@ -274,6 +296,18 @@ gbp_flatpak_runtime_set_property (GObject      *object,
       self->sdk = g_value_dup_string (value);
       break;
 
+    case PROP_PRIMARY_MODULE:
+      self->primary_module = g_value_dup_string (value);
+      break;
+
+    case PROP_APP_ID:
+      self->app_id = g_value_dup_string (value);
+      break;
+
+    case PROP_MANIFEST:
+      self->manifest = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -287,6 +321,9 @@ gbp_flatpak_runtime_finalize (GObject *object)
   g_clear_pointer (&self->sdk, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->branch, g_free);
+  g_clear_pointer (&self->primary_module, g_free);
+  g_clear_pointer (&self->app_id, g_free);
+  g_clear_object (&self->manifest);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
 }
@@ -330,6 +367,33 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
                          "Sdk",
                          "Sdk",
                          "org.gnome.Sdk",
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PRIMARY_MODULE] =
+    g_param_spec_string ("primary-module",
+                         "Primary module",
+                         "Primary module",
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_APP_ID] =
+    g_param_spec_string ("app-id",
+                         "App ID",
+                         "App ID",
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_MANIFEST] =
+    g_param_spec_object ("manifest",
+                         "Manifest",
+                         "Manifest file for use with flatpak-builder",
+                         G_TYPE_FILE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT |
                           G_PARAM_STATIC_STRINGS));
