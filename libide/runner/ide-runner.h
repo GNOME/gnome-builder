@@ -59,6 +59,8 @@ void            ide_runner_run_async       (IdeRunner            *self,
 gboolean        ide_runner_run_finish      (IdeRunner            *self,
                                             GAsyncResult         *result,
                                             GError              **error);
+GSubprocessFlags
+                ide_runner_get_flags       (IdeRunner            *self);
 void            ide_runner_set_flags       (IdeRunner            *self,
                                             GSubprocessFlags      flags);
 gboolean        ide_runner_get_clear_env   (IdeRunner            *self);

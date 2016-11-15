@@ -886,6 +886,16 @@ ide_runner_set_run_on_host (IdeRunner *self,
     }
 }
 
+GSubprocessFlags
+ide_runner_get_flags (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), 0);
+
+  return priv->flags;
+}
+
 void
 ide_runner_set_flags (IdeRunner        *self,
                       GSubprocessFlags  flags)

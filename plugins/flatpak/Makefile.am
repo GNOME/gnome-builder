@@ -17,6 +17,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-subprocess-launcher.c \
 	gbp-flatpak-subprocess-launcher.h \
 	gbp-flatpak-plugin.c \
+	gbp-flatpak-runner.c \
+	gbp-flatpak-runner.h \
 	$(NULL)
 
 libflatpak_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(FLATPAK_CFLAGS)
