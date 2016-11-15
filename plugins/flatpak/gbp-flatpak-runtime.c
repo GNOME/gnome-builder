@@ -100,6 +100,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
                                      GCancellable *cancellable)
 {
   GbpFlatpakRuntime *self = source_object;
+  IdeBuildResult *build_result = (IdeBuildResult *)task_data;
   IdeContext *context;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *configuration;
@@ -118,6 +119,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_BUILD_RESULT (build_result));
 
   build_path = get_build_directory (self);
   build_dir = g_file_new_for_path (build_path);
@@ -169,7 +171,13 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher, flatpak_repo_path);
   process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
-  if (!process || !ide_subprocess_wait_check (process, cancellable, &error))
+  if (!process)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+  ide_build_result_log_subprocess (build_result, process);
+  if (!ide_subprocess_wait_check (process, cancellable, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -227,7 +235,13 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
           ide_subprocess_launcher_push_argv (launcher3, manifest_path);
           process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, &error);
 
-          if (!process3 || !ide_subprocess_wait_check (process3, cancellable, &error))
+          if (!process3)
+            {
+              g_task_return_error (task, g_steal_pointer (&error));
+              return;
+            }
+          ide_build_result_log_subprocess (build_result, process3);
+          if (!ide_subprocess_wait_check (process3, cancellable, &error))
             {
               g_task_return_error (task, g_steal_pointer (&error));
               return;
@@ -260,6 +274,12 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher2, self->branch);
   process2 = ide_subprocess_launcher_spawn (launcher2, cancellable, &error);
 
+  if (!process2)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+  ide_build_result_log_subprocess (build_result, process2);
   /* If the directory is already initialized, don't fail */
   ide_subprocess_wait_check (process2, cancellable, NULL);
 
@@ -268,6 +288,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
 
 static void
 gbp_flatpak_runtime_prebuild_async (IdeRuntime          *runtime,
+                                    IdeBuildResult      *build_result,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
@@ -276,9 +297,11 @@ gbp_flatpak_runtime_prebuild_async (IdeRuntime          *runtime,
   g_autoptr(GTask) task = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_BUILD_RESULT (build_result));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (build_result), (GDestroyNotify)g_object_unref);
   g_task_run_in_thread (task, gbp_flatpak_runtime_prebuild_worker);
 }
 
@@ -302,6 +325,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
                                         GCancellable *cancellable)
 {
   GbpFlatpakRuntime *self = source_object;
+  IdeBuildResult *build_result = (IdeBuildResult *)task_data;
   IdeContext *context;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *configuration;
@@ -325,6 +349,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
 
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_BUILD_RESULT (build_result));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -394,7 +419,13 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
   /* Don't fail if the directory was already finished */
-  ide_subprocess_wait_check (process, cancellable, NULL);
+  if (!process)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+  ide_build_result_log_subprocess (build_result, process);
+  ide_subprocess_wait (process, cancellable, NULL);
 
   /* Export the build to the repo */
   launcher2 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
@@ -410,7 +441,13 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher2, build_path);
   process2 = ide_subprocess_launcher_spawn (launcher2, cancellable, &error);
 
-  if (!process2 || !ide_subprocess_wait_check (process2, cancellable, &error))
+  if (!process2)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+  ide_build_result_log_subprocess (build_result, process2);
+  if (!ide_subprocess_wait_check (process2, cancellable, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -435,7 +472,13 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher3, app_id);
   process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, NULL);
 
-  ide_subprocess_wait_check (process3, cancellable, NULL);
+  if (!process3)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+  ide_build_result_log_subprocess (build_result, process3);
+  ide_subprocess_wait (process3, cancellable, NULL);
 
   /* Finally install the app */
   launcher4 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
@@ -453,7 +496,13 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
 
   process4 = ide_subprocess_launcher_spawn (launcher4, cancellable, &error);
 
-  if (!process4 || !ide_subprocess_wait_check (process4, cancellable, &error))
+  if (!process4)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+  ide_build_result_log_subprocess (build_result, process4);
+  if (!ide_subprocess_wait_check (process4, cancellable, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -464,6 +513,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
 
 static void
 gbp_flatpak_runtime_postinstall_async (IdeRuntime          *runtime,
+                                       IdeBuildResult      *build_result,
                                        GCancellable        *cancellable,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
@@ -472,9 +522,11 @@ gbp_flatpak_runtime_postinstall_async (IdeRuntime          *runtime,
   g_autoptr(GTask) task = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_BUILD_RESULT (build_result));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (build_result), (GDestroyNotify)g_object_unref);
   g_task_run_in_thread (task, gbp_flatpak_runtime_postinstall_worker);
 }
 

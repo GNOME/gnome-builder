@@ -726,6 +726,7 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
 
   /* Execute the pre-hook for the runtime before we start building. */
   ide_runtime_prebuild_async (state->runtime,
+                              IDE_BUILD_RESULT (self),
                               cancellable,
                               ide_autotools_build_task_runtime_prebuild_cb,
                               g_steal_pointer (&task));
@@ -831,11 +832,13 @@ ide_autotools_build_task_execute_with_postbuild_cb (GObject      *object,
 
   if (self->install)
     ide_runtime_postinstall_async (runtime,
+                                   IDE_BUILD_RESULT (self),
                                    cancellable,
                                    ide_autotools_build_task_postbuild_runtime_cb,
                                    g_steal_pointer (&task));
   else
     ide_runtime_postbuild_async (runtime,
+                                 IDE_BUILD_RESULT (self),
                                  cancellable,
                                  ide_autotools_build_task_postbuild_runtime_cb,
                                  g_steal_pointer (&task));

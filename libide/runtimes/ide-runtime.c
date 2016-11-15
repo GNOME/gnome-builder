@@ -45,6 +45,7 @@ static GParamSpec *properties [N_PROPS];
 
 static void
 ide_runtime_real_prebuild_async (IdeRuntime          *self,
+                                 IdeBuildResult      *build_result,
                                  GCancellable        *cancellable,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
@@ -71,6 +72,7 @@ ide_runtime_real_prebuild_finish (IdeRuntime    *self,
 
 static void
 ide_runtime_real_postbuild_async (IdeRuntime          *self,
+                                  IdeBuildResult      *build_result,
                                   GCancellable        *cancellable,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
@@ -97,6 +99,7 @@ ide_runtime_real_postbuild_finish (IdeRuntime    *self,
 
 static void
 ide_runtime_real_postinstall_async (IdeRuntime          *self,
+                                    IdeBuildResult      *build_result,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
@@ -439,6 +442,7 @@ ide_runtime_new (IdeContext  *context,
 
 void
 ide_runtime_prebuild_async (IdeRuntime          *self,
+                            IdeBuildResult      *build_result,
                             GCancellable        *cancellable,
                             GAsyncReadyCallback  callback,
                             gpointer             user_data)
@@ -446,7 +450,7 @@ ide_runtime_prebuild_async (IdeRuntime          *self,
   g_return_if_fail (IDE_IS_RUNTIME (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_RUNTIME_GET_CLASS (self)->prebuild_async (self, cancellable, callback, user_data);
+  IDE_RUNTIME_GET_CLASS (self)->prebuild_async (self, build_result, cancellable, callback, user_data);
 }
 
 gboolean
@@ -461,6 +465,7 @@ ide_runtime_prebuild_finish (IdeRuntime    *self,
 
 void
 ide_runtime_postbuild_async (IdeRuntime          *self,
+                             IdeBuildResult      *build_result,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
                              gpointer             user_data)
@@ -468,7 +473,7 @@ ide_runtime_postbuild_async (IdeRuntime          *self,
   g_return_if_fail (IDE_IS_RUNTIME (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_RUNTIME_GET_CLASS (self)->postbuild_async (self, cancellable, callback, user_data);
+  IDE_RUNTIME_GET_CLASS (self)->postbuild_async (self, build_result, cancellable, callback, user_data);
 }
 
 gboolean
@@ -483,6 +488,7 @@ ide_runtime_postbuild_finish (IdeRuntime    *self,
 
 void
 ide_runtime_postinstall_async (IdeRuntime          *self,
+                               IdeBuildResult      *build_result,
                                GCancellable        *cancellable,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
@@ -490,7 +496,7 @@ ide_runtime_postinstall_async (IdeRuntime          *self,
   g_return_if_fail (IDE_IS_RUNTIME (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_RUNTIME_GET_CLASS (self)->postinstall_async (self, cancellable, callback, user_data);
+  IDE_RUNTIME_GET_CLASS (self)->postinstall_async (self, build_result, cancellable, callback, user_data);
 }
 
 gboolean
