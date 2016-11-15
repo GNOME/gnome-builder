@@ -55,13 +55,13 @@ test_new_async (GCancellable        *cancellable,
 {
   g_autofree gchar *path = NULL;
   g_autoptr(GFile) project_file = NULL;
-  const gchar *builddir;
+  const gchar *srcdir;
   GTask *task;
 
-  builddir = g_getenv ("G_TEST_BUILDDIR");
+  srcdir = g_getenv ("G_TEST_SRCDIR");
 
   task = g_task_new (NULL, cancellable, callback, user_data);
-  path = g_build_filename (builddir, "data", "project1", "configure.ac", NULL);
+  path = g_build_filename (srcdir, "data", "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
   ide_context_new_async (project_file,

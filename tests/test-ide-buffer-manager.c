@@ -155,12 +155,12 @@ test_buffer_manager_basic (GCancellable        *cancellable,
 {
   g_autoptr(GFile) project_file = NULL;
   g_autofree gchar *path = NULL;
-  const gchar *builddir = g_getenv ("G_TEST_BUILDDIR");
+  const gchar *srcdir = g_getenv ("G_TEST_SRCDIR");
   g_autoptr(GTask) task = NULL;
 
   task = g_task_new (NULL, cancellable, callback, user_data);
 
-  path = g_build_filename (builddir, "data", "project1", "configure.ac", NULL);
+  path = g_build_filename (srcdir, "data", "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
   ide_context_new_async (project_file,
