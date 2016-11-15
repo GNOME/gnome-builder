@@ -133,7 +133,7 @@ test_basic (GCancellable        *cancellable,
   GFile *project_file;
   GTask *task;
 
-  path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
+  path = g_build_filename (TEST_DATA_DIR, "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
   task = g_task_new (NULL, cancellable, callback, user_data);
   ide_context_new_async (project_file, cancellable, test_basic_cb, task);

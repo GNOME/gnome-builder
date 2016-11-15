@@ -4,7 +4,7 @@ egg_cflags = \
 	$(DEBUG_CFLAGS) \
 	$(LIBIDE_CFLAGS) \
 	-I$(top_srcdir)/contrib/egg \
-	-DTEST_DATA_DIR="\"$(srcdir)/data\"" \
+	-DTEST_DATA_DIR="\"$(abs_srcdir)/data\"" \
 	$(NULL)
 
 egg_libs = \

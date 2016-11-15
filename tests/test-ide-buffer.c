@@ -122,7 +122,7 @@ test_buffer_basic (GCancellable        *cancellable,
   IDE_ENTRY;
 
   task = g_task_new (NULL, cancellable, callback, user_data);
-  path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
+  path = g_build_filename (TEST_DATA_DIR, "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
   ide_context_new_async (project_file, cancellable, test_buffer_basic_cb1, task);
 

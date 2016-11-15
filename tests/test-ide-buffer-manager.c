@@ -133,7 +133,7 @@ test_buffer_manager_basic_cb1 (GObject      *object,
 
   project = ide_context_get_project (context);
 
-  path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
+  path = g_build_filename (TEST_DATA_DIR, "project1", "configure.ac", NULL);
   file = ide_project_get_file_for_path (project, path);
 
   ide_buffer_manager_load_file_async (buffer_manager,
