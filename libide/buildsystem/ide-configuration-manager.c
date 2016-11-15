@@ -172,6 +172,7 @@ ide_configuration_manager_load (IdeConfigurationManager  *self,
   load_string (configuration, key_file, group, "name", "display-name");
   load_string (configuration, key_file, group, "runtime", "runtime-id");
   load_string (configuration, key_file, group, "prefix", "prefix");
+  load_string (configuration, key_file, group, "app-id", "app-id");
 
   if (g_key_file_has_key (key_file, group, "prebuild", NULL))
     {
@@ -350,6 +351,7 @@ ide_configuration_manager_save_async (IdeConfigurationManager *self,
       PERSIST_STRING_KEY ("runtime", get_runtime_id);
       PERSIST_STRING_KEY ("config-opts", get_config_opts);
       PERSIST_STRING_KEY ("prefix", get_prefix);
+      PERSIST_STRING_KEY ("app-id", get_app_id);
 #undef PERSIST_STRING_KEY
 
       if (configuration == self->current)
