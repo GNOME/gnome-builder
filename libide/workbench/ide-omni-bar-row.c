@@ -20,9 +20,11 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-context.h"
 #include "devices/ide-device.h"
 #include "runtimes/ide-runtime.h"
 #include "workbench/ide-omni-bar-row.h"
+#include "runtimes/ide-runtime-manager.h"
 
 struct _IdeOmniBarRow
 {
@@ -108,6 +110,20 @@ on_device_changed (IdeOmniBarRow    *self,
 }
 
 static void
+on_runtime_manager_items_changed (IdeOmniBarRow     *self,
+                                  guint              position,
+                                  guint              added,
+                                  guint              removed,
+                                  IdeRuntimeManager *runtime_manager)
+{
+  g_assert (IDE_IS_OMNI_BAR_ROW (self));
+  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+
+  if (self->item)
+    on_runtime_changed (self, NULL, self->item);
+}
+
+static void
 ide_omni_bar_row_set_item (IdeOmniBarRow    *self,
                            IdeConfiguration *item)
 {
@@ -116,6 +132,14 @@ ide_omni_bar_row_set_item (IdeOmniBarRow    *self,
 
   if (g_set_object (&self->item, item))
     {
+      IdeContext *context;
+      IdeRuntimeManager *runtime_manager;
+
+      context = ide_object_get_context (IDE_OBJECT (item));
+      g_assert (IDE_IS_CONTEXT (context));
+      runtime_manager = ide_context_get_runtime_manager (context);
+      g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+
       g_object_bind_property (self->item, "display-name",
                               self->title, "label",
                               G_BINDING_SYNC_CREATE);
@@ -132,7 +156,13 @@ ide_omni_bar_row_set_item (IdeOmniBarRow    *self,
                                self,
                                G_CONNECT_SWAPPED);
 
-      on_runtime_changed (self, NULL, item);
+      g_signal_connect_object (runtime_manager,
+                               "items-changed",
+                               G_CALLBACK (on_runtime_manager_items_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      on_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
       on_device_changed (self, NULL, item);
     }
 }
