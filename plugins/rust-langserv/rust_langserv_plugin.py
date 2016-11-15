@@ -78,6 +78,7 @@ class RustService(Ide.Object, Ide.Service):
             launcher = self._create_launcher()
             launcher.set_clear_env(False)
             launcher.setenv("SYS_ROOT", self._discover_sysroot(), True)
+            launcher.setenv("LD_LIBRARY_PATH", os.path.join(self._discover_sysroot(), "lib"), True)
 
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
