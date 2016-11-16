@@ -477,7 +477,6 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
       g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
-  ide_build_result_log_subprocess (build_result, process3);
   ide_subprocess_wait (process3, cancellable, NULL);
 
   /* Finally install the app */
