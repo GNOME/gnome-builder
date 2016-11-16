@@ -281,7 +281,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
     }
   ide_build_result_log_subprocess (build_result, process2);
   /* If the directory is already initialized, don't fail */
-  ide_subprocess_wait_check (process2, cancellable, NULL);
+  ide_subprocess_wait (process2, cancellable, NULL);
 
   g_task_return_boolean (task, TRUE);
 }
