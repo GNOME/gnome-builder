@@ -46,13 +46,6 @@ fatal_log_handler (const gchar    *log_domain,
       (g_strcmp0 (log_domain, "Gtk") == 0))
     return FALSE;
 
-  /* Xdg-App can give us a warning when loading.
-   * Switch this to log_domain once it gets G_LOG_DOMAIN
-   * setup in the build system.
-   */
-  if (strstr (message, "xdg-app") != NULL)
-    return FALSE;
-
   return TRUE;
 }
 
