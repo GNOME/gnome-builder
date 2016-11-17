@@ -391,9 +391,28 @@ gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
   for (guint i = 0; i < ar->len; i++)
     {
       FlatpakManifest *manifest = g_ptr_array_index (ar, i);
-      gchar *id;
+      gchar *filename;
+      g_autofree gchar *hash = NULL;
+      g_autofree gchar *id = NULL;
+      g_autofree gchar *manifest_data = NULL;
+      GChecksum *checksum;
 
-      id = g_file_get_basename (manifest->file);
+      if (g_file_get_contents (g_file_get_path (manifest->file),
+                               &manifest_data,
+                               NULL, NULL))
+        {
+          checksum = g_checksum_new (G_CHECKSUM_SHA1);
+          g_checksum_update (checksum, (guchar *)manifest_data, -1);
+          hash = g_strdup (g_checksum_get_string (checksum));
+          g_checksum_free (checksum);
+        }
+
+      filename = g_file_get_basename (manifest->file);
+      if (hash != NULL)
+        id = g_strdup_printf ("%s@%s", filename, hash);
+      else
+        id = g_strdup (filename);
+
       if (contains_id (runtimes, id))
         continue;
 
@@ -407,7 +426,7 @@ gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
                                      "app-id", manifest->app_id,
                                      "context", context,
                                      "id", id,
-                                     "display-name", id,
+                                     "display-name", filename,
                                      NULL));
     }
 
