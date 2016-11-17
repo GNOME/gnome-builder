@@ -110,6 +110,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   g_autofree gchar *flatpak_repo_path = NULL;
   g_autoptr(GFile) build_dir = NULL;
   g_autoptr(GFile) flatpak_repo_dir = NULL;
+  g_autoptr(GFile) metadata_file = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher2 = NULL;
   g_autoptr(IdeSubprocess) process = NULL;
@@ -185,6 +186,16 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
 
   ide_configuration_set_internal_object (configuration, "flatpak-repo-dir", flatpak_repo_dir);
 
+  /* Check if flatpak build-init has been run by checking for the metadata file */
+  metadata_file = g_file_new_for_path (g_build_filename (build_path, "metadata", NULL));
+  g_assert (metadata_file != NULL);
+  if (g_file_query_exists (metadata_file, cancellable))
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  /* Now run either flatpak-builder or flatpak build-init */
   if (self->manifest != NULL)
     {
       gchar *manifest_path;
@@ -280,8 +291,11 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
       return;
     }
   ide_build_result_log_subprocess (build_result, process2);
-  /* If the directory is already initialized, don't fail */
-  ide_subprocess_wait (process2, cancellable, NULL);
+  if (!ide_subprocess_wait_check (process2, cancellable, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
   g_task_return_boolean (task, TRUE);
 }
