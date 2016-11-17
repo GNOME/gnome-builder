@@ -1785,11 +1785,9 @@ ide_source_view_maybe_overwrite (IdeSourceView *self,
 
   next = insert;
 
-  if (gtk_text_iter_forward_char (&next))
-    {
-      gtk_text_buffer_delete (buffer, &insert, &next);
-      *iter = insert;
-    }
+  gtk_text_iter_forward_char (&next);
+  gtk_text_buffer_delete (buffer, &insert, &next);
+  *iter = insert;
 }
 
 static gboolean
