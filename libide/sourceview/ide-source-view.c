@@ -170,6 +170,7 @@ typedef struct
   guint                        completion_visible : 1;
   guint                        enable_word_completion : 1;
   guint                        highlight_current_line : 1;
+  guint                        in_key_press : 1;
   guint                        in_replay_macro : 1;
   guint                        insert_mark_cleared : 1;
   guint                        insert_matching_brace : 1;
@@ -324,6 +325,10 @@ static void ide_source_view_real_set_mode            (IdeSourceView         *sel
                                                       const gchar           *name,
                                                       IdeSourceViewModeType  type);
 static void ide_source_view_save_offset              (IdeSourceView         *self);
+static void ide_source_view_maybe_overwrite          (IdeSourceView         *self,
+                                                      GtkTextIter           *iter,
+                                                      const gchar           *text,
+                                                      gint                   len);
 
 static SearchMovement *
 search_movement_ref (SearchMovement *movement)
@@ -1235,6 +1240,17 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
       ide_source_view_invalidate_range_mark (self, begin, end);
     }
 
+  if (priv->in_key_press)
+    {
+      /*
+       * If we are handling the key-press-event, we might have just inserted
+       * a character that indicates we should overwrite the next character.
+       * However, due to GtkIMContext constraints, we need to allow it to be
+       * inserted and then handle it here.
+       */
+      ide_source_view_maybe_overwrite (self, iter, text, len);
+    }
+
   IDE_EXIT;
 }
 
@@ -1697,35 +1713,22 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
   IDE_EXIT;
 }
 
-static gunichar
-peek_previous_char (const GtkTextIter *iter)
-{
-  GtkTextIter copy = *iter;
-  gunichar ch = 0;
-
-  if (!gtk_text_iter_is_start (&copy))
-    {
-      gtk_text_iter_backward_char (&copy);
-      ch = gtk_text_iter_get_char (&copy);
-    }
-
-  return ch;
-}
-
 static void
 ide_source_view_maybe_overwrite (IdeSourceView *self,
-                                 GdkEventKey   *event)
+                                 GtkTextIter   *iter,
+                                 const gchar   *text,
+                                 gint           len)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextMark *mark;
   GtkTextBuffer *buffer;
-  GtkTextIter iter;
   gunichar ch;
   gunichar prev_ch;
   gboolean ignore = FALSE;
 
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (event);
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (iter != NULL);
+  g_assert (text != NULL);
+  g_assert (len > 0);
 
   /*
    * Some auto-indenters will perform triggers on certain key-press that we
@@ -1747,48 +1750,53 @@ ide_source_view_maybe_overwrite (IdeSourceView *self,
   if (priv->snippets->length)
     return;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  /*
+   * Ignore this if it wasn't a single character insertion.
+   */
+  if (len != 1)
+    return;
 
-  ch = gtk_text_iter_get_char (&iter);
-  prev_ch = peek_previous_char (&iter);
+  ch = gtk_text_iter_get_char (iter);
+  prev_ch = g_utf8_get_char (text);
 
-  switch (event->keyval)
+  switch (prev_ch)
     {
-    case GDK_KEY_parenright:
+    case '(':
       ignore = (ch == ')');
       break;
 
-    case GDK_KEY_bracketright:
+    case '[':
       ignore = (ch == ']');
       break;
 
-    case GDK_KEY_braceright:
+    case '{':
       ignore = (ch == '}');
       break;
 
-    case GDK_KEY_quotedbl:
+    case '"':
       ignore = (ch == '"') && (prev_ch != '\\');
       break;
 
-    case GDK_KEY_quoteleft:
-    case GDK_KEY_quoteright:
+    case '\'':
       ignore = (ch == '\'');
       break;
 
     default:
-      break;
+      return;
     }
 
-  if (ignore && !gtk_text_buffer_get_has_selection (buffer))
+  if (!ignore)
+    return;
+
+  buffer = gtk_text_iter_get_buffer (iter);
+
+  if (!gtk_text_buffer_get_has_selection (buffer))
     {
-      GtkTextIter next = iter;
+      GtkTextIter next = *iter;
 
       if (!gtk_text_iter_forward_char (&next))
         gtk_text_buffer_get_end_iter (buffer, &next);
-
-      gtk_text_buffer_select_range (buffer, &iter, &next);
+      gtk_text_buffer_delete (buffer, iter, &next);
     }
 }
 
@@ -2364,22 +2372,17 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    */
   change_sequence = priv->change_sequence;
 
+  priv->in_key_press = TRUE;
+
   /*
    * If we are in a non-default mode, dispatch the event to the mode. This allows custom
    * keybindings like Emacs and Vim to be implemented using gtk-bindings CSS.
    */
   if (ide_source_view_do_mode (self, event))
-    return TRUE;
-
-  /*
-   * Allow the Input Method Context to potentially filter this keystroke.
-   * We have to do this after the IdeSourceViewMode has had a chance to
-   * intercept this as it might want to change states. Since calling
-   * filter_keypress will potentially call 'commit-text', we need to
-   * steal things.
-   */
-  if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (self), event))
-    return TRUE;
+    {
+      ret = TRUE;
+      goto cleanup;
+    }
 
   /*
    * Handle movement through the tab stops of the current snippet if needed.
@@ -2393,7 +2396,8 @@ ide_source_view_key_press_event (GtkWidget   *widget,
           ide_source_view_pop_snippet (self);
           ide_source_view_scroll_to_insert (self);
           ide_source_view_unblock_handlers (self);
-          return TRUE;
+          ret = TRUE;
+          goto cleanup;
 
         case GDK_KEY_KP_Tab:
         case GDK_KEY_Tab:
@@ -2404,7 +2408,8 @@ ide_source_view_key_press_event (GtkWidget   *widget,
                 ide_source_view_pop_snippet (self);
               ide_source_view_scroll_to_insert (self);
               ide_source_view_unblock_handlers (self);
-              return TRUE;
+              ret = TRUE;
+              goto cleanup;
             }
           /* Fallthrough */
         case GDK_KEY_ISO_Left_Tab:
@@ -2412,7 +2417,8 @@ ide_source_view_key_press_event (GtkWidget   *widget,
           ide_source_snippet_move_previous (snippet);
           ide_source_view_scroll_to_insert (self);
           ide_source_view_unblock_handlers (self);
-          return TRUE;
+          ret = TRUE;
+          goto cleanup;
 
         default:
           break;
@@ -2428,7 +2434,8 @@ ide_source_view_key_press_event (GtkWidget   *widget,
     {
       GtkSourceCompletion *completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
       g_signal_emit_by_name (completion, "activate-proposal");
-      return TRUE;
+      ret = TRUE;
+      goto cleanup;
     }
 
   /*
@@ -2439,15 +2446,11 @@ ide_source_view_key_press_event (GtkWidget   *widget,
     {
       if ((event->keyval >= GDK_KEY_0 && event->keyval <= GDK_KEY_9) ||
           (event->keyval >= GDK_KEY_KP_0 && event->keyval <= GDK_KEY_KP_9))
-        return TRUE;
+        {
+          ret = TRUE;
+          goto cleanup;
+        }
     }
-
-  /*
-   * If we are going to insert the same character as the next character in the
-   * buffer, we may want to remove it first. This allows us to still trigger
-   * the auto-indent engine (instead of just short-circuiting the key-press).
-   */
-  ide_source_view_maybe_overwrite (self, event);
 
   /*
    * If we are backspacing, and the next character is the matching brace,
@@ -2456,7 +2459,10 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   if ((event->keyval == GDK_KEY_BackSpace) && !gtk_text_buffer_get_has_selection (buffer))
     {
       if (ide_source_view_maybe_delete_match (self, event))
-        return TRUE;
+        {
+          ret = TRUE;
+          goto cleanup;
+        }
     }
 
   /*
@@ -2470,7 +2476,8 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       ide_indenter_is_trigger (indenter, event))
     {
       ide_source_view_do_indent (self, event, indenter);
-      return TRUE;
+      ret = TRUE;
+      goto cleanup;
     }
 
   /*
@@ -2480,9 +2487,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       priv->mode &&
       ide_source_view_mode_get_repeat_insert_with_count (priv->mode))
     {
-      gsize i;
-
-      for (i = MAX (1, priv->count); i > 0; i--)
+      for (gint i = MAX (1, priv->count); i > 0; i--)
         ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
       priv->count = 0;
     }
@@ -2502,6 +2507,9 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    */
   if (priv->change_sequence != change_sequence)
     ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
+
+cleanup:
+  priv->in_key_press = FALSE;
 
   return ret;
 }
