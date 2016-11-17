@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-11-03 20:25+0000\n"
-"PO-Revision-Date: 2016-11-05 07:27-0200\n"
+"POT-Creation-Date: 2016-11-16 23:34+0000\n"
+"PO-Revision-Date: 2016-11-17 02:34-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -85,8 +85,8 @@ msgid "Create"
 msgstr "Criar"
 
 #: contrib/egg/egg-file-chooser-entry.c:112
-#: libide/editor/ide-editor-view-actions.c:317
-#: libide/editor/ide-editor-view-actions.c:448
+#: libide/editor/ide-editor-view-actions.c:315
+#: libide/editor/ide-editor-view-actions.c:446
 #: plugins/color-picker/gb-color-picker-prefs.c:237
 #: plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: plugins/terminal/gb-terminal-view-actions.c:306
@@ -98,8 +98,8 @@ msgid "Browse…"
 msgstr "Navegar…"
 
 #: contrib/egg/egg-file-chooser-entry.c:488
-#: libide/editor/ide-editor-view-actions.c:316
-#: libide/editor/ide-editor-view-actions.c:447
+#: libide/editor/ide-editor-view-actions.c:314
+#: libide/editor/ide-editor-view-actions.c:445
 #: libide/greeter/ide-greeter-perspective.c:672
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
@@ -314,7 +314,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5698
+#: libide/sourceview/ide-source-view.c:5768
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -350,8 +350,8 @@ msgstr "Deve analisar o modelo antes de expandir"
 
 #: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
-msgid "Failed to locate template \"%s\""
-msgstr "Falha ao localizar modelo \"%s\""
+msgid "Failed to locate template “%s”"
+msgstr "Falha ao localizar modelo “%s”"
 
 #: contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
@@ -488,7 +488,7 @@ msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
-"\"Backspace\" removerá espaços adicionais para mantê-lo alinhado com o recuo "
+"“Backspace” removerá espaços adicionais para mantê-lo alinhado com o recuo "
 "de texto."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
@@ -499,8 +499,7 @@ msgstr "Início e fim inteligentes"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid "Whether or not Home moves to first non-space character."
 msgstr ""
-"Se \"Home\" deve, ou não, mover para o primeiro caractere que não seja "
-"espaço."
+"Se “Home” deve, ou não, mover para o primeiro caractere que não seja espaço."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 msgid "Show grid lines"
@@ -893,9 +892,9 @@ msgstr "Fe_char"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:498
+#: libide/application/ide-application.c:516
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:561
+#: libide/workbench/ide-workbench.c:560
 msgid "Builder"
 msgstr "Builder"
 
@@ -1039,6 +1038,7 @@ msgid "Run Builder in standalone mode"
 msgstr "Executa Builder em modo independente"
 
 #: libide/application/ide-application-command-line.c:200
+#| msgid "Show the application’s version"
 msgid "Show the application's version"
 msgstr "Mostra a versão do aplicativo"
 
@@ -1089,20 +1089,20 @@ msgstr "Por favor, forneça um endereço D-Bus"
 msgid "No such worker"
 msgstr "Trabalho inexistente"
 
-#: libide/buffers/ide-buffer.c:2418
+#: libide/buffers/ide-buffer.c:2413
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
-#: libide/buffers/ide-buffer-manager.c:672
+#: libide/buffers/ide-buffer-manager.c:673
 msgid "File too large to be opened."
 msgstr "Arquivo grande demais para ser aberto."
 
-#: libide/buffers/ide-buffer-manager.c:1749
+#: libide/buffers/ide-buffer-manager.c:1762
 #, c-format
 msgid "unsaved document %u"
 msgstr "documetno não salvo %u"
 
-#: libide/buffers/ide-buffer-manager.c:1783
+#: libide/buffers/ide-buffer-manager.c:1796
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falha ao salvar o buffer, ignorando reclamação."
 
@@ -1111,11 +1111,11 @@ msgstr "Falha ao salvar o buffer, ignorando reclamação."
 msgid "%s does not support building"
 msgstr "%s não possui suporte a compilação"
 
-#: libide/buildsystem/ide-build-manager.c:478
+#: libide/buildsystem/ide-build-manager.c:498
 msgid "A build is already in progress"
 msgstr "Uma compilação já está em progresso"
 
-#: libide/buildsystem/ide-build-manager.c:772
+#: libide/buildsystem/ide-build-manager.c:853
 msgid "Ready"
 msgstr "Pronto"
 
@@ -1132,7 +1132,7 @@ msgstr "Falha ao abrir o fluxo de saída padrão (stdout)."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() não possui suporte no sistema de compilação %s."
 
-#: libide/buildsystem/ide-configuration-manager.c:483
+#: libide/buildsystem/ide-configuration-manager.c:485
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1140,8 +1140,8 @@ msgstr "Padrão"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
-msgid "The device \"%s\" could not be found."
-msgstr "O dispositivo \"%s\" não pôde ser encontrado."
+msgid "The device “%s” could not be found."
+msgstr "O dispositivo “%s” não pôde ser encontrado."
 
 #: libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
@@ -1289,11 +1289,11 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: libide/editor/ide-editor-view-actions.c:310
+#: libide/editor/ide-editor-view-actions.c:308
 msgid "Save Document"
 msgstr "Salvar documento"
 
-#: libide/editor/ide-editor-view-actions.c:436
+#: libide/editor/ide-editor-view-actions.c:434
 msgid "Save Document As"
 msgstr "Salvar documento como"
 
@@ -1378,8 +1378,8 @@ msgstr "%s contém ASCII inválido"
 
 #: libide/gsettings/ide-language-defaults.c:193
 #, c-format
-msgid "Failed to parse integer from \"%s\""
-msgstr "Falha ao analisar inteiro do \"%s\""
+msgid "Failed to parse integer from “%s”"
+msgstr "Falha ao analisar inteiro do “%s”"
 
 #: libide/gsettings/ide-language-defaults.c:271
 msgid "language defaults missing version in [global] group."
@@ -1404,8 +1404,8 @@ msgstr "O contexto já foi restaurado."
 
 #: libide/ide-object.c:288
 #, c-format
-msgid "No implementations of extension point \"%s\"."
-msgstr "Nenhuma implementação de ponto de extensão \"%s\"."
+msgid "No implementations of extension point “%s”."
+msgstr "Nenhuma implementação de ponto de extensão “%s”."
 
 #: libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
@@ -1779,7 +1779,7 @@ msgstr "editor fonte monoespaçada"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:111
-#: plugins/terminal/gb-terminal-workbench-addin.c:90
+#: plugins/terminal/gb-terminal-workbench-addin.c:183
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1826,14 +1826,14 @@ msgstr "Movimento"
 
 #: libide/preferences/ide-preferences-builtin.c:149
 msgid "Home moves to first non-whitespace character"
-msgstr "\"Home\" move para o primeiro caractere que não seja espaço em branco"
+msgstr "“Home” move para o primeiro caractere que não seja espaço em branco"
 
 #: libide/preferences/ide-preferences-builtin.c:150
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
-"\"Backspace\" removerá espaços extra para manter você alinhado com a seu "
-"recuo de texto"
+"“Backspace” removerá espaços extra para manter você alinhado com a seu recuo "
+"de texto"
 
 #: libide/preferences/ide-preferences-builtin.c:158
 msgid "Cursor"
@@ -2178,8 +2178,8 @@ msgstr "O script deve estar em um sistema de arquivos local."
 
 #: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
-msgid "The script \"%s\" is not a PyGObject file."
-msgstr "O script \"%s\" não é um arquivo PyGObject."
+msgid "The script “%s” is not a PyGObject file."
+msgstr "O script “%s” não é um arquivo PyGObject."
 
 #: libide/runner/ide-run-manager.c:225
 msgid "Run"
@@ -2194,7 +2194,7 @@ msgstr "Não é possível executar o alvo, pois um outro alvo está em execuçã
 msgid "Failed to locate runtime"
 msgstr "Falha ao localizar a execução"
 
-#: libide/runner/ide-runner.c:150
+#: libide/runner/ide-runner.c:157 plugins/flatpak/gbp-flatpak-runner.c:78
 msgid "Process quit unexpectedly"
 msgstr "O processo saiu inesperadamente"
 
@@ -2215,10 +2215,6 @@ msgstr "Não foi possível adicionar provedor mais de uma vez."
 msgid "The provider could not be found."
 msgstr "O provedor não pôde ser encontrado."
 
-#: libide/snippets/ide-source-snippet.c:372
-msgid "Chunk does not belong to snippet."
-msgstr "O bloco não pertence a um trecho."
-
 #: libide/snippets/ide-source-snippets-manager.c:96
 #, c-format
 msgid "Failed to open directory: %s"
@@ -2229,21 +2225,21 @@ msgstr "Falha ao abrir o diretório: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar arquivo: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5154
+#: libide/sourceview/ide-source-view.c:5224
 #, c-format
 msgid "Insert “%s”"
-msgstr "Insira \"%s\""
+msgstr "Insira “%s”"
 
-#: libide/sourceview/ide-source-view.c:5156
+#: libide/sourceview/ide-source-view.c:5226
 #, c-format
 msgid "Replace “%s” with “%s”"
-msgstr "Substitua \"%s\" com \"%s\""
+msgstr "Substitua “%s” com “%s”"
 
-#: libide/sourceview/ide-source-view.c:5270
+#: libide/sourceview/ide-source-view.c:5340
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: libide/sourceview/ide-source-view.c:5697
+#: libide/sourceview/ide-source-view.c:5767
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
@@ -2265,8 +2261,9 @@ msgstr "ILCreateFromPath() falhou"
 
 #: libide/util/ide-file-manager.c:129
 #, c-format
+#| msgid "Cannot convert '%s’ into a valid NSURL."
 msgid "Cannot convert '%s' into a valid NSURL."
-msgstr "Não foi possível converter \"%s\" em uma NSURL válida."
+msgstr "Não foi possível converter “%s” em uma NSURL válida."
 
 #: libide/util/ide-file-manager.c:157
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
@@ -2287,33 +2284,39 @@ msgstr "Caracteres não-UTF-8 na URI"
 
 #: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
 #, c-format
+#| msgid "Invalid IP literal '%s’ in URI"
 msgid "Invalid IP literal '%s' in URI"
-msgstr "IP literal \"%s\" inválido na URI"
+msgstr "IP literal “%s” inválido na URI"
 
 #: libide/util/ide-uri.c:411
 #, c-format
+#| msgid "Invalid encoded IP literal '%s’ in URI"
 msgid "Invalid encoded IP literal '%s' in URI"
-msgstr "IP literal codificado \"%s\" inválido na URI"
+msgstr "IP literal codificado “%s” inválido na URI"
 
 #: libide/util/ide-uri.c:420
 #, c-format
+#| msgid "Invalid non-ASCII hostname '%s’ in URI"
 msgid "Invalid non-ASCII hostname '%s' in URI"
-msgstr "Nome de máquina não-ASCII \"%s\" inválido na URI"
+msgstr "Nome de máquina não-ASCII “%s” inválido na URI"
 
 #: libide/util/ide-uri.c:434
 #, c-format
+#| msgid "Non-ASCII hostname '%s’ forbidden in this URI"
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
-msgstr "Nome de máquina não-ASCII \"%s\" proibido nesta URI"
+msgstr "Nome de máquina não-ASCII “%s” proibido nesta URI"
 
 #: libide/util/ide-uri.c:457
 #, c-format
+#| msgid "Could not parse port '%s’ in URI"
 msgid "Could not parse port '%s' in URI"
-msgstr "Não foi possível analisar a porta \"%s\" na URL"
+msgstr "Não foi possível analisar a porta “%s” na URL"
 
 #: libide/util/ide-uri.c:464
 #, c-format
+#| msgid "Port '%s’ in URI is out of range"
 msgid "Port '%s' in URI is out of range"
-msgstr "Porta \"%s\" na URI fora dos limites"
+msgstr "Porta “%s” na URI fora dos limites"
 
 #: libide/util/ide-uri.c:590
 msgid "Base URI is not absolute"
@@ -2325,13 +2328,15 @@ msgstr "URI não é absoluta e nenhuma URI base foi fornecida"
 
 #: libide/util/ide-uri.c:660
 #, c-format
+#| msgid "Could not parse '%s’ as absolute URI"
 msgid "Could not parse '%s' as absolute URI"
-msgstr "Não foi possível analisar \"%s\" como URI absoluta"
+msgstr "Não foi possível analisar “%s” como URI absoluta"
 
 #: libide/util/ide-uri.c:1203
 #, c-format
+#| msgid "URI '%s’ has no host component"
 msgid "URI '%s' has no host component"
-msgstr "URI \"%s\" não possui um componente máquina"
+msgstr "URI “%s” não possui um componente máquina"
 
 #: libide/workbench/ide-layout-tab-bar.ui:33
 msgid "List open files"
@@ -2359,7 +2364,7 @@ msgid "Target"
 msgstr "Alvo"
 
 #. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:88
+#: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
 msgstr "faltando"
 
@@ -2424,7 +2429,7 @@ msgstr "Limpar"
 msgid "Open File"
 msgstr "Abrir arquivo"
 
-#: libide/workbench/ide-workbench.c:559
+#: libide/workbench/ide-workbench.c:558
 #, c-format
 msgid "%s - Builder"
 msgstr "%s - Builder"
@@ -2455,7 +2460,7 @@ msgstr "Compilação concluída com sucesso"
 
 #: plugins/autotools/ide-autotools-builder.c:159
 #: plugins/autotools/ide-autotools-builder.c:241
-#: plugins/autotools/ide-autotools-build-task.c:1205
+#: plugins/autotools/ide-autotools-build-task.c:1208
 #: plugins/cargo/cargo_plugin.py:198 plugins/meson/meson_plugin/__init__.py:349
 msgid "Building…"
 msgstr "Compilando…"
@@ -2486,7 +2491,7 @@ msgstr "Falha ao localizar dispositivo"
 
 #: plugins/autotools/ide-autotools-build-task.c:598
 #: plugins/autotools/ide-autotools-build-task.c:626
-#: plugins/autotools/ide-autotools-build-task.c:939
+#: plugins/autotools/ide-autotools-build-task.c:942
 msgid "Build Failed: "
 msgstr "Compilação falhou: "
 
@@ -2494,42 +2499,43 @@ msgstr "Compilação falhou: "
 msgid "Cannot execute build task more than once"
 msgstr "Não foi possível executar a tarefa de compilação mais de uma vez"
 
-#: plugins/autotools/ide-autotools-build-task.c:826
+#: plugins/autotools/ide-autotools-build-task.c:827
 msgid "Failed to access runtime for postbuild"
 msgstr "Falha ao acessar a execução para pós-compilação"
 
-#: plugins/autotools/ide-autotools-build-task.c:972
+#: plugins/autotools/ide-autotools-build-task.c:975
 msgid "Failed to create build directory."
 msgstr "Falha ao criar o diretório de compilação."
 
-#: plugins/autotools/ide-autotools-build-task.c:981
+#: plugins/autotools/ide-autotools-build-task.c:984
 #, c-format
+#| msgid "'%s’ is not a directory."
 msgid "'%s' is not a directory."
-msgstr "\"%s\" não é um diretório."
+msgstr "“%s” não é um diretório."
 
-#: plugins/autotools/ide-autotools-build-task.c:1020
+#: plugins/autotools/ide-autotools-build-task.c:1023
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh está faltando no diretório de projeto (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:1030
+#: plugins/autotools/ide-autotools-build-task.c:1033
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh não é um executável."
 
-#: plugins/autotools/ide-autotools-build-task.c:1034
+#: plugins/autotools/ide-autotools-build-task.c:1037
 msgid "Running autogen…"
 msgstr "Executando autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1069
+#: plugins/autotools/ide-autotools-build-task.c:1072
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh falhou ao criar configuração (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:1104
+#: plugins/autotools/ide-autotools-build-task.c:1107
 msgid "Running configure…"
 msgstr "Excecutando configure…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1203
+#: plugins/autotools/ide-autotools-build-task.c:1206
 #: plugins/cargo/cargo_plugin.py:195 plugins/meson/meson_plugin/__init__.py:342
 msgid "Cleaning…"
 msgstr "Limpando…"
@@ -2718,13 +2724,13 @@ msgstr "   Compilação executada para: %"
 
 #: plugins/build-tools/gbp-build-tool.c:212
 #, c-format
-msgid "Failed to locate device \"%s\""
+msgid "Failed to locate device “%s”"
 msgstr "Falha ao localizar dispositivo %s"
 
 #: plugins/build-tools/gbp-build-tool.c:222
 #, c-format
-msgid "Failed to locate runtime \"%s\""
-msgstr "Falha ao localizar a execução \"%s\""
+msgid "Failed to locate runtime “%s”"
+msgstr "Falha ao localizar a execução “%s”"
 
 #: plugins/build-tools/gbp-build-tool.c:286
 msgid "Clean the project"
@@ -3040,8 +3046,9 @@ msgstr "%s é inválido para %s"
 
 #: plugins/command-bar/gb-vim.c:158
 #, c-format
+#| msgid "Cannot find language '%s’"
 msgid "Cannot find language '%s'"
-msgstr "Não foi possível localizar a linguagem \"%s\""
+msgstr "Não foi possível localizar a linguagem “%s”"
 
 #: plugins/command-bar/gb-vim.c:315
 msgid "This command requires a GtkSourceView to be focused"
@@ -3058,8 +3065,9 @@ msgstr "Opção desconhecida: %s"
 
 #: plugins/command-bar/gb-vim.c:426
 #, c-format
+#| msgid "Cannot find colorscheme '%s’"
 msgid "Cannot find colorscheme '%s'"
-msgstr "Não foi possível localizar o esquema de cores \"%s\""
+msgstr "Não foi possível localizar o esquema de cores “%s”"
 
 #: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
@@ -3163,16 +3171,17 @@ msgid "The target language (if supported)"
 msgstr "A linguagem alvo (se houver suporte)"
 
 #: plugins/create-project/gbp-create-project-tool.c:142
-msgid "The version control to use or \"none\" to disable"
-msgstr "O controle de versão para usar ou \"none\" para desabilitar"
+msgid "The version control to use or “none” to disable"
+msgstr "O controle de versão para usar ou “none” para desabilitar"
 
 #: plugins/create-project/gbp-create-project-tool.c:143
 msgid "git"
 msgstr "git"
 
 #: plugins/create-project/gbp-create-project-tool.c:149
+#| msgid "create-project [OPTION…] PROJECT_NAME"
 msgid "create-project [OPTION...] PROJECT_NAME"
-msgstr "create-project [OPÇÃO...] NOME_PROJETO"
+msgstr "create-project [OPÇÃO…] NOME_PROJETO"
 
 #: plugins/create-project/gbp-create-project-tool.c:198
 msgid "Filename must be ASCII and may not contain : or ="
@@ -3206,6 +3215,10 @@ msgid "Project Name"
 msgstr "Nome do projeto"
 
 #: plugins/create-project/gbp-create-project-widget.ui:55
+#| msgid ""
+#| "Unique name that is used for your project’s folder and other technical "
+#| "resources. Should be in lower case without spaces and may not start with "
+#| "a number."
 msgid ""
 "Unique name that is used for your project's folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
@@ -3287,15 +3300,15 @@ msgstr "A seguinte URL foi copiada para a área de transferência"
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Não é possível fornecer comparação, nenhuma arquivo reserva fornecido."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:546
+#: plugins/git/ide-git-buffer-change-monitor.c:568
 msgid "Repository does not have a working directory."
 msgstr "O repositório não possui um diretório de trabalho."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:557
+#: plugins/git/ide-git-buffer-change-monitor.c:579
 msgid "File is not under control of git working directory."
 msgstr "O arquivo não está sob controle de um diretório de trabalho do git."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:623
+#: plugins/git/ide-git-buffer-change-monitor.c:645
 msgid "The requested file does not exist within the git index."
 msgstr "O arquivo requisitado não existe dentro do índice do git."
 
@@ -3314,6 +3327,7 @@ msgid "user@host:repository.git"
 msgstr "usuário@máquina:repositório.git"
 
 #: plugins/git/ide-git-clone-widget.ui:67
+#| msgid "Enter the URL of your project’s source code repository"
 msgid "Enter the URL of your project's source code repository"
 msgstr "Digite a URL do repositório de código fonte do seu projeto"
 
@@ -3528,11 +3542,14 @@ msgstr "Gerar log de suporte"
 
 #: plugins/support/ide-support-application-addin.c:79
 #, c-format
+#| msgid ""
+#| "The support log file has been written to '%s’. Please provide this file "
+#| "as an attachment on your bug report or support request."
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
-"O arquivo de log de suporte foi escrito em \"%s\". Por favor, forneça esse "
+"O arquivo de log de suporte foi escrito em “%s”. Por favor, forneça esse "
 "arquivo como um anexo em seu relatório de erro ou requisição de suporte."
 
 #: plugins/symbol-tree/symbol-tree-panel.c:274
@@ -3596,9 +3613,13 @@ msgstr "Abrir perfil…"
 msgid "Save Terminal Content As"
 msgstr "Salvar conteúdo do Terminal como"
 
-#: plugins/terminal/gb-terminal-view.c:459
+#: plugins/terminal/gb-terminal-view.c:448
 msgid "Untitled terminal"
 msgstr "Terminal sem título"
+
+#: plugins/terminal/gb-terminal-workbench-addin.c:120
+msgid "Run Output"
+msgstr "Saída da execução"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
@@ -3620,6 +3641,9 @@ msgstr "Mostra erros e avisos fornecidos pelo Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnósticos avisos erros"
+
+#~ msgid "Chunk does not belong to snippet."
+#~ msgstr "O bloco não pertence a um trecho."
 
 #~ msgid "Words"
 #~ msgstr "Palavras"
@@ -3811,8 +3835,8 @@ msgstr "vala diagnósticos avisos erros"
 #~ msgstr[0] "%s resultado\n"
 #~ msgstr[1] "%s resultados\n"
 
-#~ msgid "PROJECT_FILE [SEARCH TERMS...]"
-#~ msgstr "ARQUIVO_DE_PROJETO [TERMOS DE PESQUISAS...]"
+#~ msgid "PROJECT_FILE [SEARCH TERMS…]"
+#~ msgstr "ARQUIVO_DE_PROJETO [TERMOS DE PESQUISAS…]"
 
 #~ msgid "_New Document"
 #~ msgstr "_Novo documento"
@@ -4261,10 +4285,10 @@ msgstr "vala diagnósticos avisos erros"
 #~ "permanentemente."
 
 #~ msgid "Changes to document “%s” will be permanently lost."
-#~ msgstr "Alterações do documento \"%s\" serão permanentemente perdidas."
+#~ msgstr "Alterações do documento “%s” serão permanentemente perdidas."
 
 #~ msgid "Save changes to document “%s” before closing?"
-#~ msgstr "Salvar as alterações para o documento \"%s\" antes de fechar?"
+#~ msgstr "Salvar as alterações para o documento “%s” antes de fechar?"
 
 #~ msgid "Saving has been disabled by the system administrator."
 #~ msgstr "A gravação em disco foi desabilitada pelo administrador."
@@ -4387,7 +4411,7 @@ msgstr "vala diagnósticos avisos erros"
 #~ msgstr "A linguagem para a qual devem ser alteradas as configurações."
 
 #~ msgid "The file “%s” was modified outside of Builder."
-#~ msgstr "O arquivo \"%s\" foi modificado fora do Builder."
+#~ msgstr "O arquivo “%s” foi modificado fora do Builder."
 
 #~ msgid "Auto Indent"
 #~ msgstr "Recuo automático"
