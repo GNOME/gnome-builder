@@ -1721,9 +1721,10 @@ ide_source_view_maybe_overwrite (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
+  GtkTextIter insert;
+  GtkTextIter next;
   gunichar ch;
-  gunichar prev_ch;
-  gboolean ignore = FALSE;
+  gunichar next_ch;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (iter != NULL);
@@ -1756,47 +1757,38 @@ ide_source_view_maybe_overwrite (IdeSourceView *self,
   if (len != 1)
     return;
 
-  ch = gtk_text_iter_get_char (iter);
-  prev_ch = g_utf8_get_char (text);
+  /*
+   * Short circuit if there is already a selection.
+   */
+  buffer = gtk_text_iter_get_buffer (iter);
+  if (gtk_text_buffer_get_has_selection (buffer))
+      return;
 
-  switch (prev_ch)
+  /*
+   * @iter is pointing at the location we just inserted text. Since we
+   * know we only inserted one character, lets move past it and compare
+   * to see if we want to overwrite.
+   */
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert, gtk_text_buffer_get_insert (buffer));
+  ch = g_utf8_get_char (text);
+  next_ch = gtk_text_iter_get_char (&insert);
+
+  switch (ch)
     {
-    case '(':
-      ignore = (ch == ')');
-      break;
-
-    case '[':
-      ignore = (ch == ']');
-      break;
-
-    case '{':
-      ignore = (ch == '}');
-      break;
-
-    case '"':
-      ignore = (ch == '"') && (prev_ch != '\\');
-      break;
-
-    case '\'':
-      ignore = (ch == '\'');
-      break;
-
+    case ')': case ']': case '}': case '"': case '\'':
+      if (ch == next_ch)
+        break;
+      /* fall through */
     default:
       return;
     }
 
-  if (!ignore)
-    return;
+  next = insert;
 
-  buffer = gtk_text_iter_get_buffer (iter);
-
-  if (!gtk_text_buffer_get_has_selection (buffer))
+  if (gtk_text_iter_forward_char (&next))
     {
-      GtkTextIter next = *iter;
-
-      if (!gtk_text_iter_forward_char (&next))
-        gtk_text_buffer_get_end_iter (buffer, &next);
-      gtk_text_buffer_delete (buffer, iter, &next);
+      gtk_text_buffer_delete (buffer, &insert, &next);
+      *iter = insert;
     }
 }
 
