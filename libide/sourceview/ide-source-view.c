@@ -1775,7 +1775,7 @@ ide_source_view_maybe_overwrite (IdeSourceView *self,
 
   switch (ch)
     {
-    case ')': case ']': case '}': case '"': case '\'':
+    case ')': case ']': case '}': case '"': case '\'': case ';':
       if (ch == next_ch)
         break;
       /* fall through */
