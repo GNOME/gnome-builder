@@ -395,19 +395,22 @@ gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
       g_autofree gchar *hash = NULL;
       g_autofree gchar *id = NULL;
       g_autofree gchar *manifest_data = NULL;
-      GChecksum *checksum;
+      g_autofree gchar *path = NULL;
+      gsize manifest_data_len = 0;
 
-      if (g_file_get_contents (g_file_get_path (manifest->file),
-                               &manifest_data,
-                               NULL, NULL))
+      path = g_file_get_path (manifest->file);
+
+      if (g_file_get_contents (path, &manifest_data, &manifest_data_len, NULL))
         {
+          g_autoptr(GChecksum) checksum = NULL;
+
           checksum = g_checksum_new (G_CHECKSUM_SHA1);
-          g_checksum_update (checksum, (guchar *)manifest_data, -1);
+          g_checksum_update (checksum, (const guint8 *)manifest_data, manifest_data_len);
           hash = g_strdup (g_checksum_get_string (checksum));
-          g_checksum_free (checksum);
         }
 
       filename = g_file_get_basename (manifest->file);
+
       if (hash != NULL)
         id = g_strdup_printf ("%s@%s", filename, hash);
       else
