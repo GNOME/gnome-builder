@@ -391,7 +391,7 @@ gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
   for (guint i = 0; i < ar->len; i++)
     {
       FlatpakManifest *manifest = g_ptr_array_index (ar, i);
-      gchar *filename;
+      g_autofree gchar *filename = NULL;
       g_autofree gchar *hash = NULL;
       g_autofree gchar *id = NULL;
       g_autofree gchar *manifest_data = NULL;
