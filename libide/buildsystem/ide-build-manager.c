@@ -739,6 +739,66 @@ failure:
   IDE_EXIT;
 }
 
+static void
+ide_build_manager_install_save_all_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(IdeBuildResult) build_result = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeBuildManager *self = NULL;
+  GCancellable *cancellable;
+  BuildState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_buffer_manager_save_all_finish (buffer_manager, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_GOTO (failure);
+    }
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (IDE_IS_BUILDER (state->builder));
+
+  cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /*
+   * We might be able to save some build time if we can limit the target
+   * that needs to be installed. However, it's unclear that we want that
+   * because it could result in incomplete installation unless the build
+   * system compensates for it.
+   */
+
+  ide_builder_install_async (state->builder,
+                             &build_result,
+                             cancellable,
+                             ide_build_manager_install_cb,
+                             g_steal_pointer (&task));
+
+  ide_build_manager_set_build_result (self, build_result);
+
+failure:
+  if (self != NULL)
+    {
+      self->saving = FALSE;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+    }
+
+  IDE_EXIT;
+}
+
 void
 ide_build_manager_install_async (IdeBuildManager     *self,
                                  GCancellable        *cancellable,
@@ -747,8 +807,10 @@ ide_build_manager_install_async (IdeBuildManager     *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(IdeBuildResult) build_result = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+  BuildState *state;
 
   IDE_ENTRY;
 
@@ -760,32 +822,29 @@ ide_build_manager_install_async (IdeBuildManager     *self,
 
   if (ide_build_manager_check_busy (self, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (NULL == (builder = ide_build_manager_get_builder (self, &error)))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
+  state = g_slice_new0 (BuildState);
+  state->builder = g_steal_pointer (&builder);
+  g_task_set_task_data (task, state, build_state_free);
   g_set_object (&self->cancellable, cancellable);
 
-  /*
-   * We might be able to save some build time if we can limit the target
-   * that needs to be installed. However, it's unclear that we want that
-   * because it could result in incomplete installation unless the build
-   * system compensates for it.
-   */
-
-  ide_builder_install_async (builder,
-                             &build_result,
-                             cancellable,
-                             ide_build_manager_install_cb,
-                             g_object_ref (task));
-
-  ide_build_manager_set_build_result (self, build_result);
+  /* Save the buffers before starting the build. */
+  self->saving = TRUE;
+  context = ide_object_get_context (IDE_OBJECT (self));
+  buffer_manager = ide_context_get_buffer_manager (context);
+  ide_buffer_manager_save_all_async (buffer_manager,
+                                     cancellable,
+                                     ide_build_manager_install_save_all_cb,
+                                     g_steal_pointer (&task));
 
   /*
    * Update our last build time.
