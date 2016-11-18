@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
+#define FLATPAK_REPO_NAME "gnome-builder-builds"
+
 G_END_DECLS
 
 #endif /* GBP_FLATPAK_RUNTIME_H */

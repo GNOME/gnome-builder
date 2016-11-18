@@ -1,6 +1,6 @@
-/* gbp-flatpak-plugin.c
+/* gbp-flatpak-application-addin.h
  *
- * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#ifndef GBP_FLATPAK_APPLICATION_ADDIN_H
+#define GBP_FLATPAK_APPLICATION_ADDIN_H
+
 #include <ide.h>
 
-#include "gbp-flatpak-runtime-provider.h"
-#include "gbp-flatpak-application-addin.h"
+G_BEGIN_DECLS
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_RUNTIME_PROVIDER,
-                                              GBP_TYPE_FLATPAK_RUNTIME_PROVIDER);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_ADDIN,
-                                              GBP_TYPE_FLATPAK_APPLICATION_ADDIN);
-}
+#define GBP_TYPE_FLATPAK_APPLICATION_ADDIN (gbp_flatpak_application_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpFlatpakApplicationAddin, gbp_flatpak_application_addin, GBP, FLATPAK_APPLICATION_ADDIN, GObject)
+
+G_END_DECLS
+
+#endif /* GBP_FLATPAK_APPLICATION_ADDIN_H */

@@ -738,7 +738,7 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
   if (!ide_str_empty0 (self->app_id))
     ide_configuration_set_app_id (configuration, self->app_id);
   ide_configuration_set_prefix (configuration, "/app");
-  ide_configuration_set_internal_string (configuration, "flatpak-repo-name", "gnome-builder-builds");
+  ide_configuration_set_internal_string (configuration, "flatpak-repo-name", FLATPAK_REPO_NAME);
 }
 
 static void

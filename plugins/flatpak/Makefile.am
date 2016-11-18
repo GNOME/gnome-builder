@@ -19,6 +19,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-plugin.c \
 	gbp-flatpak-runner.c \
 	gbp-flatpak-runner.h \
+	gbp-flatpak-application-addin.c \
+	gbp-flatpak-application-addin.h \
 	$(NULL)
 
 libflatpak_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(FLATPAK_CFLAGS)
