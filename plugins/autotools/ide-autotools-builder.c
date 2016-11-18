@@ -225,9 +225,14 @@ ide_autotools_builder_install_async (IdeBuilder           *builder,
   g_autoptr(GFile) directory = NULL;
   IdeConfiguration *configuration;
   IdeContext *context;
+  IdeBuilderBuildFlags flags;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder));
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
+
+  flags = IDE_BUILDER_BUILD_FLAGS_NONE;
+  if (ide_autotools_builder_get_needs_bootstrap (self))
+    flags |= IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP;
 
   task = g_task_new (self, cancellable, callback, user_data);
 
@@ -249,7 +254,7 @@ ide_autotools_builder_install_async (IdeBuilder           *builder,
     *result = g_object_ref (build_result);
 
   ide_autotools_build_task_execute_with_postbuild (build_result,
-                                                   IDE_BUILDER_BUILD_FLAGS_NONE,
+                                                   flags,
                                                    cancellable,
                                                    ide_autotools_builder_install_cb,
                                                    g_object_ref (task));
