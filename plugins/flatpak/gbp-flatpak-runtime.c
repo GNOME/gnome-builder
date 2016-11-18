@@ -108,6 +108,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   const gchar *flatpak_repo_name = NULL;
   g_autofree gchar *build_path = NULL;
   g_autofree gchar *flatpak_repo_path = NULL;
+  g_autofree gchar *metadata_path = NULL;
   g_autoptr(GFile) build_dir = NULL;
   g_autoptr(GFile) flatpak_repo_dir = NULL;
   g_autoptr(GFile) metadata_file = NULL;
@@ -187,7 +188,8 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   ide_configuration_set_internal_object (configuration, "flatpak-repo-dir", flatpak_repo_dir);
 
   /* Check if flatpak build-init has been run by checking for the metadata file */
-  metadata_file = g_file_new_for_path (g_build_filename (build_path, "metadata", NULL));
+  metadata_path = g_build_filename (build_path, "metadata", NULL);
+  metadata_file = g_file_new_for_path (metadata_path);
   g_assert (metadata_file != NULL);
   if (g_file_query_exists (metadata_file, cancellable))
     {
@@ -348,6 +350,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   g_autofree gchar *repo_path = NULL;
   g_autofree gchar *build_path = NULL;
   g_autofree gchar *manifest_path = NULL;
+  g_autofree gchar *export_path = NULL;
   g_autoptr(GFile) export_dir = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher2 = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher3 = NULL;
@@ -374,7 +377,8 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   g_assert (!ide_str_empty0 (repo_path));
 
   /* Check if flatpak build-finish has already been run by checking for the export directory */
-  export_dir = g_file_new_for_path (g_build_filename (build_path, "export", NULL));
+  export_path = g_build_filename (build_path, "export", NULL);
+  export_dir = g_file_new_for_path (export_path);
   g_assert (export_dir != NULL);
   if (!g_file_query_exists (export_dir, cancellable))
     {
