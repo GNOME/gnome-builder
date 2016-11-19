@@ -8025,7 +8025,7 @@ ide_source_view_scroll_to_mark (IdeSourceView *self,
   ide_source_view_scroll_to_iter (self, &iter, within_margin, use_align, xalign, yalign,
                                   animate_scroll);
 
-#if IDE_ENABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     const gchar *name = gtk_text_mark_get_name (mark);
     IDE_TRACE_MSG ("Scrolling to mark \"%s\" at %d:%d",
