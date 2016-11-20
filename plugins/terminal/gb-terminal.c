@@ -54,7 +54,16 @@ enum {
   LAST_SIGNAL
 };
 
+/* From vteapp.c */
+#define DINGUS1 "(((gopher|news|telnet|nntp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?"
+#define DINGUS2 DINGUS1 "/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\) ,\\\"]"
+
 static guint signals [LAST_SIGNAL];
+static const gchar *url_regexes[] = {
+  DINGUS1,
+  DINGUS2,
+  NULL
+};
 
 /* The popup code is an adaptation of GtktextView popupmenu functions */
 static void
@@ -149,6 +158,19 @@ gb_terminal_button_press_event (GtkWidget      *widget,
       gb_terminal_do_popup (self, (GdkEvent *)button);
       return GDK_EVENT_STOP;
     }
+  else if ((button->type == GDK_BUTTON_PRESS) && (button->button == GDK_BUTTON_PRIMARY)
+            && ((button->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK))
+    {
+      g_autofree gchar *pattern = NULL;
+
+      pattern = vte_terminal_match_check_event (VTE_TERMINAL (self), (GdkEvent *)button, NULL);
+
+      if (pattern != NULL)
+        gtk_show_uri (gtk_widget_get_screen (widget), pattern,
+                      gtk_get_current_event_time (), NULL);
+
+      return GDK_EVENT_STOP;
+    }
 
   return GTK_WIDGET_CLASS (gb_terminal_parent_class)->button_press_event (widget, button);
 }
@@ -215,4 +237,15 @@ static void
 gb_terminal_init (GbTerminal *self)
 {
   egg_widget_action_group_attach (self, "terminal");
+
+  for (guint i = 0; url_regexes[i]; i++)
+    {
+      const gchar *pattern = url_regexes[i];
+      g_autoptr(VteRegex) regex = NULL;
+      gint tag;
+
+      regex = vte_regex_new_for_match (pattern, IDE_LITERAL_LENGTH (pattern), 0, NULL);
+      tag = vte_terminal_match_add_regex (VTE_TERMINAL (self), regex, 0);
+      vte_terminal_match_set_cursor_type (VTE_TERMINAL (self), tag, GDK_HAND2);
+    }
 }
