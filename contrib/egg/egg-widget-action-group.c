@@ -432,7 +432,7 @@ egg_widget_action_group_list_actions (GActionGroup *group)
 
   if (GTK_IS_WIDGET (self->widget))
     {
-      guint *signal_ids;
+      g_autofree guint *signal_ids = NULL;
       guint n_ids = 0;
       guint i;
 
