@@ -430,22 +430,27 @@ egg_widget_action_group_list_actions (GActionGroup *group)
 
   ar = g_ptr_array_new ();
 
-  if (GTK_IS_WIDGET (self->widget))
+  if (self->widget != NULL)
     {
-      g_autofree guint *signal_ids = NULL;
-      guint n_ids = 0;
-      guint i;
-
-      signal_ids = g_signal_list_ids (G_OBJECT_TYPE (group), &n_ids);
-
-      for (i = 0; i < n_ids; i++)
+      for (GType type = G_OBJECT_TYPE (self->widget);
+           type != G_TYPE_INVALID;
+           type = g_type_parent (type))
         {
-          GSignalQuery query;
+          g_autofree guint *signal_ids = NULL;
+          guint n_ids = 0;
+          guint i;
 
-          g_signal_query (signal_ids[i], &query);
+          signal_ids = g_signal_list_ids (type, &n_ids);
 
-          if ((query.signal_flags & G_SIGNAL_ACTION) != 0)
-            g_ptr_array_add (ar, g_strdup (query.signal_name));
+          for (i = 0; i < n_ids; i++)
+            {
+              GSignalQuery query;
+
+              g_signal_query (signal_ids[i], &query);
+
+              if ((query.signal_flags & G_SIGNAL_ACTION) != 0)
+                g_ptr_array_add (ar, g_strdup (query.signal_name));
+            }
         }
     }
 
