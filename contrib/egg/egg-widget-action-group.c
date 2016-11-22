@@ -630,6 +630,7 @@ egg_widget_action_group_set_action_enabled (EggWidgetActionGroup *self,
 {
   g_return_if_fail (EGG_IS_WIDGET_ACTION_GROUP (self));
   g_return_if_fail (action_name != NULL);
+  g_return_if_fail (egg_widget_action_group_has_action (G_ACTION_GROUP (self), action_name));
 
   enabled = !!enabled;
 
