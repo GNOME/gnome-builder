@@ -244,7 +244,7 @@ gb_terminal_init (GbTerminal *self)
       g_autoptr(VteRegex) regex = NULL;
       gint tag;
 
-      regex = vte_regex_new_for_match (pattern, IDE_LITERAL_LENGTH (pattern), 0, NULL);
+      regex = vte_regex_new_for_match (pattern, IDE_LITERAL_LENGTH (pattern), VTE_REGEX_FLAGS_DEFAULT, NULL);
       tag = vte_terminal_match_add_regex (VTE_TERMINAL (self), regex, 0);
       vte_terminal_match_set_cursor_type (VTE_TERMINAL (self), tag, GDK_HAND2);
     }
