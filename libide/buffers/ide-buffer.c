@@ -2335,7 +2335,7 @@ ide_buffer_rehighlight (IdeBuffer *self)
 
   /* In case we are disposing */
   if (priv->highlight_engine == NULL)
-    return;
+    IDE_EXIT;
 
   if (gtk_source_buffer_get_highlight_syntax (GTK_SOURCE_BUFFER (self)))
     {
