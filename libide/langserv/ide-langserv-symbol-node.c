@@ -204,12 +204,6 @@ ide_langserv_symbol_node_is_parent_of (IdeLangservSymbolNode *self,
   g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (self), FALSE);
   g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (other), FALSE);
 
-  g_print ("Compare\n");
-  g_print ("  self[begin] = %d %d\n", priv->begin.line, priv->begin.column);
-  g_print ("  self[end]   = %d %d\n", priv->end.line, priv->end.column);
-  g_print ("  other[begin] = %d %d\n", opriv->begin.line, opriv->begin.column);
-  g_print ("  other[end]   = %d %d\n", opriv->end.line, opriv->end.column);
-
   return (location_compare (&priv->begin, &opriv->begin) <= 0) &&
          (location_compare (&priv->end, &opriv->end) >= 0);
 }
