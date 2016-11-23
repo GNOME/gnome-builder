@@ -19,20 +19,18 @@
 #define G_LOG_DOMAIN "ide-langserv-symbol-tree"
 
 #include "ide-langserv-symbol-node.h"
+#include "ide-langserv-symbol-node-private.h"
 #include "ide-langserv-symbol-tree.h"
 
 typedef struct
 {
   GPtrArray *symbols;
+  GNode      root;
 } IdeLangservSymbolTreePrivate;
-
-struct _IdeLangservSymbolTree
-{
-  GObject parent_instance;
-};
 
 static void symbol_tree_iface_init (IdeSymbolTreeInterface *iface);
 
+struct _IdeLangservSymbolTree { GObject object; };
 G_DEFINE_TYPE_WITH_CODE (IdeLangservSymbolTree, ide_langserv_symbol_tree, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeLangservSymbolTree)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
@@ -43,31 +41,14 @@ ide_langserv_symbol_tree_get_n_children (IdeSymbolTree *tree,
 {
   IdeLangservSymbolTree *self = (IdeLangservSymbolTree *)tree;
   IdeLangservSymbolTreePrivate *priv = ide_langserv_symbol_tree_get_instance_private (self);
-  const gchar *parent_name = NULL;
-  guint n_children = 0;
 
   g_assert (IDE_IS_LANGSERV_SYMBOL_TREE (self));
-  g_assert (!parent || IDE_IS_SYMBOL_NODE (parent));
+  g_assert (!parent || IDE_IS_LANGSERV_SYMBOL_NODE (parent));
 
-  if (IDE_IS_LANGSERV_SYMBOL_NODE (parent))
-    parent_name = ide_symbol_node_get_name (parent);
+  if (parent == NULL)
+    return g_node_n_children (&priv->root);
 
-  /*
-   * This is all O(n) below, but with the size of trees we are working with
-   * it's not all that bad. If it becomes an issue, we can move to something
-   * like a hashtable.
-   */
-
-  for (guint i = 0; i < priv->symbols->len; i++)
-    {
-      IdeLangservSymbolNode *node = g_ptr_array_index (priv->symbols, i);
-      const gchar *node_parent_name = ide_langserv_symbol_node_get_parent_name (node);
-
-      if (g_strcmp0 (node_parent_name, parent_name) == 0)
-        n_children++;
-    }
-
-  return n_children;
+  return g_node_n_children (&IDE_LANGSERV_SYMBOL_NODE (parent)->gnode);
 }
 
 static IdeSymbolNode *
@@ -77,29 +58,18 @@ ide_langserv_symbol_tree_get_nth_child (IdeSymbolTree *tree,
 {
   IdeLangservSymbolTree *self = (IdeLangservSymbolTree *)tree;
   IdeLangservSymbolTreePrivate *priv = ide_langserv_symbol_tree_get_instance_private (self);
-  const gchar *parent_name = NULL;
 
   g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_TREE (self), NULL);
-  g_return_val_if_fail (!parent || IDE_IS_SYMBOL_NODE (parent), NULL);
-  g_return_val_if_fail (nth < priv->symbols->len, NULL);
+  g_return_val_if_fail (!parent || IDE_IS_LANGSERV_SYMBOL_NODE (parent), NULL);
 
-  if (IDE_IS_LANGSERV_SYMBOL_NODE (parent))
-    parent_name = ide_symbol_node_get_name (parent);
-
-  for (guint i = 0; i < priv->symbols->len; i++)
+  if (parent == NULL)
     {
-      IdeLangservSymbolNode *node = g_ptr_array_index (priv->symbols, i);
-      const gchar *node_parent_name = ide_langserv_symbol_node_get_parent_name (node);
-
-      if (g_strcmp0 (node_parent_name, parent_name) == 0)
-        {
-          if (nth == 0)
-            return g_object_ref (node);
-          nth--;
-        }
+      g_return_val_if_fail (nth < g_node_n_children (&priv->root), NULL);
+      return g_object_ref (g_node_nth_child (&priv->root, nth)->data);
     }
 
-  return NULL;
+  g_return_val_if_fail (nth < g_node_n_children (&IDE_LANGSERV_SYMBOL_NODE (parent)->gnode), NULL);
+  return g_object_ref (g_node_nth_child (&IDE_LANGSERV_SYMBOL_NODE (parent)->gnode, nth)->data);
 }
 
 static void
@@ -133,6 +103,60 @@ ide_langserv_symbol_tree_init (IdeLangservSymbolTree *self)
 {
 }
 
+static void
+add_to_node (GNode                 *node,
+             IdeLangservSymbolNode *symbol)
+{
+  /* First, check to see if any of the children are parents of the range of
+   * this symbol. If so, we will defer to adding it to that node.
+   */
+
+  for (GNode *iter = node->children; iter != NULL; iter = iter->next)
+    {
+      IdeLangservSymbolNode *child = iter->data;
+
+      /*
+       * If this node is an ancestor of ours, then we can defer to
+       * adding to that node.
+       */
+      if (ide_langserv_symbol_node_is_parent_of (child, symbol))
+        {
+          add_to_node (iter, symbol);
+          return;
+        }
+
+      /*
+       * If we are the parent of the child, then we need to insert
+       * ourselves in its place and add it to our node.
+       */
+      if (ide_langserv_symbol_node_is_parent_of (symbol, child))
+        {
+          /* Add this node to our children */
+          g_node_unlink (&child->gnode);
+          g_node_append (&symbol->gnode, &child->gnode);
+
+          /* add ourselves to the tree at this level */
+          g_node_append (node, &symbol->gnode);
+
+          return;
+        }
+    }
+
+  g_node_append (node, &symbol->gnode);
+}
+
+static void
+ide_langserv_symbol_tree_build (IdeLangservSymbolTree *self)
+{
+  IdeLangservSymbolTreePrivate *priv = ide_langserv_symbol_tree_get_instance_private (self);
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_TREE (self));
+  g_assert (priv->symbols != NULL);
+
+  for (guint i = 0; i < priv->symbols->len; i++)
+    add_to_node (&priv->root, g_ptr_array_index (priv->symbols, i));
+}
+
 /**
  * ide_langserv_symbol_tree_new:
  * @symbols: (transfer container) (element-type Ide.LangservSymbolNode): The symbols
@@ -152,6 +176,8 @@ ide_langserv_symbol_tree_new (GPtrArray *symbols)
   self = g_object_new (IDE_TYPE_LANGSERV_SYMBOL_TREE, NULL);
   priv = ide_langserv_symbol_tree_get_instance_private (self);
   priv->symbols = symbols;
+
+  ide_langserv_symbol_tree_build (self);
 
   return self;
 }

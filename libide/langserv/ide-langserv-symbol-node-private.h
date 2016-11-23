@@ -23,6 +23,13 @@
 
 G_BEGIN_DECLS
 
+struct _IdeLangservSymbolNode
+{
+  IdeSymbolNode parent_instance;
+  GNode         gnode;
+};
+
+
 IdeLangservSymbolNode *ide_langserv_symbol_node_new (GFile       *file,
                                                      const gchar *name,
                                                      const gchar *parent_name,

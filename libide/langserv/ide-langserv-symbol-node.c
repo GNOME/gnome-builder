@@ -23,24 +23,37 @@
 #include "diagnostics/ide-source-location.h"
 #include "files/ide-file.h"
 #include "langserv/ide-langserv-symbol-node.h"
+#include "langserv/ide-langserv-symbol-node-private.h"
+
+typedef struct
+{
+  guint line;
+  guint column;
+} Location;
 
 typedef struct
 {
   GFile *file;
   gchar *parent_name;
   IdeSymbolKind kind;
-  struct {
-    guint line;
-    guint column;
-  } begin, end;
+  Location begin;
+  Location end;
 } IdeLangservSymbolNodePrivate;
 
-struct _IdeLangservSymbolNode
-{
-  IdeSymbolNode parent_instance;
-};
-
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLangservSymbolNode, ide_langserv_symbol_node, IDE_TYPE_SYMBOL_NODE)
+
+static inline gint
+location_compare (const Location *a,
+                  const Location *b)
+{
+  gint ret;
+
+  ret = (gint)a->line - (gint)b->line;
+  if (ret == 0)
+    ret = (gint)a->column - (gint)b->column;
+
+  return ret;
+}
 
 static void
 ide_langserv_symbol_node_get_location_async (IdeSymbolNode       *node,
@@ -113,6 +126,7 @@ ide_langserv_symbol_node_class_init (IdeLangservSymbolNodeClass *klass)
 static void
 ide_langserv_symbol_node_init (IdeLangservSymbolNode *self)
 {
+  self->gnode.data = self;
 }
 
 IdeLangservSymbolNode *
@@ -178,4 +192,24 @@ ide_langserv_symbol_node_get_parent_name (IdeLangservSymbolNode *self)
   g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (self), NULL);
 
   return priv->parent_name;
+}
+
+gboolean
+ide_langserv_symbol_node_is_parent_of (IdeLangservSymbolNode *self,
+                                       IdeLangservSymbolNode *other)
+{
+  IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
+  IdeLangservSymbolNodePrivate *opriv = ide_langserv_symbol_node_get_instance_private (other);
+
+  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_NODE (other), FALSE);
+
+  g_print ("Compare\n");
+  g_print ("  self[begin] = %d %d\n", priv->begin.line, priv->begin.column);
+  g_print ("  self[end]   = %d %d\n", priv->end.line, priv->end.column);
+  g_print ("  other[begin] = %d %d\n", opriv->begin.line, opriv->begin.column);
+  g_print ("  other[end]   = %d %d\n", opriv->end.line, opriv->end.column);
+
+  return (location_compare (&priv->begin, &opriv->begin) <= 0) &&
+         (location_compare (&priv->end, &opriv->end) >= 0);
 }
