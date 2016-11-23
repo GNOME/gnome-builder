@@ -85,12 +85,13 @@ file_notify_language_cb (IdeGsettingsFileSettings *self,
   g_clear_object (&self->language_settings);
 
   language = ide_file_get_language (file);
-  if (language == NULL)
-    IDE_EXIT;
 
-  lang_id = gtk_source_language_get_id (language);
-  if (lang_id == NULL)
-    IDE_EXIT;
+  if (language == NULL)
+    lang_id = "plain-text";
+  else
+    lang_id = gtk_source_language_get_id (language);
+
+  g_assert (lang_id != NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   relative_path = g_strdup_printf ("/editor/language/%s/", lang_id);
