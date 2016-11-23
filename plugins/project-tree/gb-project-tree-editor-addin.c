@@ -73,7 +73,7 @@ gb_project_tree_editor_addin_reveal (GSimpleAction *action,
   g_assert (!file || G_IS_FILE (file));
 
   if (G_IS_FILE (file))
-    gb_project_tree_reveal (tree, file, TRUE);
+    gb_project_tree_reveal (tree, file, TRUE, FALSE);
 }
 
 static void

@@ -70,28 +70,37 @@ gb_project_tree_actions_refresh (GSimpleAction *action,
   GbProjectTree *self = user_data;
   IdeTreeNode *selected;
   GObject *item = NULL;
+  g_autoptr(GFile) expand_to = NULL;
+  gboolean expanded = FALSE;
 
   g_assert (GB_IS_PROJECT_TREE (self));
 
   if ((selected = ide_tree_get_selected (IDE_TREE (self))))
     {
+      expanded = ide_tree_node_get_expanded (selected);
       item = ide_tree_node_get_item (selected);
-      if (item != NULL)
-        g_object_ref (item);
+      if (GB_IS_PROJECT_FILE (item))
+        expand_to = g_object_ref (gb_project_file_get_file (GB_PROJECT_FILE (item)));
     }
 
   ide_tree_rebuild (IDE_TREE (self));
 
-  if (item != NULL)
+  if (expand_to != NULL)
     {
-      selected = ide_tree_find_item (IDE_TREE (self), item);
-      if (selected != NULL)
+      gb_project_tree_reveal (self, expand_to, FALSE, expanded);
+    }
+  else
+    {
+      /* Even if nothing was selected, we want the top level expanded */
+      IdeContext *context;
+      context = gb_project_tree_get_context (self);
+      if (context != NULL)
         {
-          ide_tree_node_expand (selected, TRUE);
-          ide_tree_node_select (selected);
-          ide_tree_scroll_to_node (IDE_TREE (self), selected);
+          GFile *project_file;
+          project_file = ide_context_get_project_file (context);
+          if (project_file != NULL)
+            gb_project_tree_reveal (self, project_file, FALSE, FALSE);
         }
-      g_object_unref (item);
     }
 }
 

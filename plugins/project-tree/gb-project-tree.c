@@ -73,7 +73,7 @@ gb_project_tree_project_file_renamed (GbProjectTree *self,
   g_assert (IDE_IS_PROJECT (project));
 
   ide_tree_rebuild (IDE_TREE (self));
-  gb_project_tree_reveal (self, dst_file, FALSE);
+  gb_project_tree_reveal (self, dst_file, FALSE, FALSE);
 
   IDE_EXIT;
 }
@@ -131,25 +131,14 @@ static void
 gb_project_tree_vcs_changed (GbProjectTree *self,
                              IdeVcs        *vcs)
 {
-  g_autoptr(GFile) file = NULL;
-  IdeTreeNode *node;
-  GObject *item;
+  GActionGroup *group;
 
   g_assert (GB_IS_PROJECT_TREE (self));
   g_assert (IDE_IS_VCS (vcs));
 
-  if (NULL != (node = ide_tree_get_selected (IDE_TREE (self))) &&
-      NULL != (item = ide_tree_node_get_item (node)) &&
-      GB_IS_PROJECT_FILE (item))
-    {
-      if (NULL != (file = gb_project_file_get_file (GB_PROJECT_FILE (item))))
-        g_object_ref (file);
-    }
-
-  ide_tree_rebuild (IDE_TREE (self));
-
-  if (file != NULL)
-    gb_project_tree_reveal (self, file, FALSE);
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "project-tree");
+  if (group != NULL)
+    g_action_group_activate_action (group, "refresh", NULL);
 }
 
 static void
@@ -179,7 +168,7 @@ gb_project_tree_buffer_saved_cb (GbProjectTree    *self,
       if (NULL == (node = ide_tree_find_custom (IDE_TREE (self), compare_to_file, gfile)))
         ide_tree_rebuild (IDE_TREE (self));
 
-      gb_project_tree_reveal (self, gfile, FALSE);
+      gb_project_tree_reveal (self, gfile, FALSE, FALSE);
     }
 }
 
@@ -423,18 +412,31 @@ find_files_node (IdeTree     *tree,
   return GB_IS_PROJECT_FILE (item);
 }
 
+/**
+ * gb_project_tree_reveal:
+ * @self: a #GbProjectTree
+ * @file: the #GFile to reveal
+ * @focus_tree_view: whether to focus the tree
+ * @expand_folder: whether the given file should be expanded (if it's a folder)
+ *
+ * Expand the tree so the node for the specified file is visible and selected.
+ * In the case that the file has been deleted, expand the tree as far as possible.
+ */
 void
 gb_project_tree_reveal (GbProjectTree *self,
                         GFile         *file,
-                        gboolean       focus_tree_view)
+                        gboolean       focus_tree_view,
+                        gboolean       expand_folder)
 {
   g_autofree gchar *relpath = NULL;
   g_auto(GStrv) parts = NULL;
   IdeContext *context;
-  IdeTreeNode *node;
+  IdeTreeNode *node = NULL;
+  IdeTreeNode *last_node = NULL;
   IdeVcs *vcs;
   GFile *workdir;
   guint i;
+  gboolean reveal_parent = FALSE;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
   g_return_if_fail (G_IS_FILE (file));
@@ -445,27 +447,52 @@ gb_project_tree_reveal (GbProjectTree *self,
   if (context == NULL)
     return;
 
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
-  relpath = g_file_get_relative_path (workdir, file);
-
-  if (relpath == NULL)
-    return;
-
   node = ide_tree_find_child_node (IDE_TREE (self), NULL, find_files_node, NULL);
   if (node == NULL)
     return;
 
-  parts = g_strsplit (relpath, G_DIR_SEPARATOR_S, 0);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
 
-  for (i = 0; parts [i]; i++)
+  if (!g_file_equal (workdir, file))
     {
-      node = ide_tree_find_child_node (IDE_TREE (self), node, find_child_node, parts [i]);
-      if (node == NULL)
+      relpath = g_file_get_relative_path (workdir, file);
+
+      if (relpath == NULL)
         return;
+
+      parts = g_strsplit (relpath, G_DIR_SEPARATOR_S, 0);
+
+      last_node = node;
+      for (i = 0; parts [i]; i++)
+        {
+          node = ide_tree_find_child_node (IDE_TREE (self), node, find_child_node, parts [i]);
+          if (node == NULL)
+            {
+              if (last_node != NULL)
+                {
+                  node = last_node;
+                  reveal_parent = TRUE;
+                  break;
+                }
+              else
+                {
+                  return;
+                }
+            }
+          else
+            {
+              last_node = node;
+            }
+        }
     }
 
-  ide_tree_expand_to_node (IDE_TREE (self), node);
+  /* If the specified node wasn't found, still expand its ancestor */
+  if (expand_folder || reveal_parent)
+    ide_tree_node_expand (node, TRUE);
+  else
+    ide_tree_expand_to_node (IDE_TREE (self), node);
+
   ide_tree_scroll_to_node (IDE_TREE (self), node);
   ide_tree_node_select (node);
 
