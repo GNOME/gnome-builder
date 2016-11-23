@@ -50,7 +50,6 @@ struct _IdeMakecache
 
   GFile        *makefile;
   GFile        *parent;
-  gchar        *llvm_flags;
   GMappedFile  *mapped;
   EggTaskCache *file_targets_cache;
   EggTaskCache *file_flags_cache;
@@ -140,98 +139,6 @@ ide_makecache_get_relative_path (IdeMakecache *self,
   return g_file_get_relative_path (workdir, file);
 }
 
-static void
-ide_makecache_discover_llvm_flags_worker (GTask        *task,
-                                          gpointer      source_object,
-                                          gpointer      task_data,
-                                          GCancellable *cancellable)
-{
-  g_autoptr(GSubprocess) subprocess = NULL;
-  g_autofree gchar *stdoutstr = NULL;
-  gchar *include_path = NULL;
-  GError *error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_TASK (task));
-
-  IDE_TRACE_MSG ("Spawning 'clang -print-file-name=include'");
-
-  subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE,
-                                 &error,
-                                 "clang",
-                                 "-print-file-name=include",
-                                 NULL);
-
-  if (!subprocess)
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  if (!g_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdoutstr, NULL, &error))
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  g_strstrip (stdoutstr);
-
-  IDE_TRACE_MSG ("Clang Result: %s", stdoutstr);
-
-  if (g_str_equal (stdoutstr, "include"))
-    {
-      g_task_return_pointer (task, NULL, NULL);
-      IDE_EXIT;
-    }
-
-  include_path = g_strdup_printf ("-I%s", stdoutstr);
-  g_task_return_pointer (task, include_path, g_free);
-
-  IDE_EXIT;
-}
-
-static void
-ide_makecache_discover_llvm_flags_async (IdeMakecache        *self,
-                                         GCancellable        *cancellable,
-                                         GAsyncReadyCallback  callback,
-                                         gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_MAKECACHE (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
-                             task,
-                             ide_makecache_discover_llvm_flags_worker);
-
-  IDE_EXIT;
-}
-
-static gchar *
-ide_makecache_discover_llvm_flags_finish (IdeMakecache  *self,
-                                          GAsyncResult  *result,
-                                          GError       **error)
-{
-  GTask *task = (GTask *)result;
-  gchar *ret;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAKECACHE (self));
-  g_assert (G_IS_TASK (task));
-
-  ret = g_task_propagate_pointer (task, error);
-
-  IDE_RETURN (ret);
-}
 
 static gboolean
 is_target_interesting (const gchar *target)
@@ -796,8 +703,6 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
       return;
     }
 
-  g_ptr_array_add (ret, g_strdup (self->llvm_flags));
-
   for (i = 0; i < argc; i++)
     {
       const gchar *flag = argv [i];
@@ -1335,13 +1240,7 @@ ide_makecache_get_file_flags__get_targets_cb (GObject      *object,
     {
       if (file_is_clangable (lookup->file))
         {
-          gchar **ret;
-
-          ret = g_new0 (gchar *, 2);
-          ret [0] = g_strdup (self->llvm_flags);
-          ret [1] = NULL;
-
-          g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
+          g_task_return_pointer (task, g_new0 (gchar **, 1), (GDestroyNotify)g_strfreev);
           IDE_EXIT;
         }
 
@@ -1414,7 +1313,6 @@ ide_makecache_finalize (GObject *object)
   g_clear_pointer (&self->mapped, g_mapped_file_unref);
   g_clear_object (&self->file_targets_cache);
   g_clear_object (&self->file_flags_cache);
-  g_clear_pointer (&self->llvm_flags, g_free);
   g_clear_pointer (&self->build_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
@@ -1519,31 +1417,6 @@ ide_makecache_get_makefile (IdeMakecache *self)
   return self->makefile;
 }
 
-static void
-ide_makecache__discover_llvm_flags_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
-{
-  IdeMakecache *self = (IdeMakecache *)object;
-  g_autoptr(GTask) task = user_data;
-  gchar *flags;
-  GError *error = NULL;
-
-  flags = ide_makecache_discover_llvm_flags_finish (self, result, &error);
-
-  if (error)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  self->llvm_flags = flags;
-
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
-                             task,
-                             ide_makecache_new_worker);
-}
-
 void
 ide_makecache_new_for_makefile_async (IdeContext          *context,
                                       GFile               *makefile,
@@ -1573,11 +1446,11 @@ ide_makecache_new_for_makefile_async (IdeContext          *context,
                        NULL);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_makecache_new_for_makefile_async);
 
-  ide_makecache_discover_llvm_flags_async (self,
-                                           cancellable,
-                                           ide_makecache__discover_llvm_flags_cb,
-                                           g_object_ref (task));
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_makecache_new_worker);
 
   IDE_EXIT;
 }

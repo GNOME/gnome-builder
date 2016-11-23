@@ -190,6 +190,60 @@ clear_unsaved_file (gpointer data)
   g_free ((gchar *)uf->Filename);
 }
 
+static const gchar *
+discover_llvm_flags (void)
+{
+  static const gchar *llvm_flags;
+  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autofree gchar *stdoutstr = NULL;
+  g_autoptr(GError) error = NULL;
+  gchar *tmp;
+
+  IDE_ENTRY;
+
+  if G_LIKELY (llvm_flags != NULL)
+    IDE_RETURN (llvm_flags);
+
+  /* XXX:
+   *
+   * When we make this support clang in other runtimes, we can use
+   * the runtime to spawn the process.
+   */
+
+  IDE_TRACE_MSG ("Spawning 'clang -print-file-name=include'");
+
+  subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE,
+                                 &error,
+                                 "clang",
+                                 "-print-file-name=include",
+                                 NULL);
+
+  if (!subprocess)
+    {
+      g_warning ("%s\n", error->message);
+      IDE_RETURN (NULL);
+    }
+
+  if (!g_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdoutstr, NULL, &error))
+    {
+      g_warning ("%s\n", error->message);
+      IDE_RETURN (NULL);
+    }
+
+  g_strstrip (stdoutstr);
+
+  IDE_TRACE_MSG ("Clang include path result: %s", stdoutstr);
+
+  if (g_str_equal (stdoutstr, "include"))
+    IDE_RETURN (NULL);
+
+  tmp = g_strdup_printf ("-I%s", stdoutstr);
+  llvm_flags = g_intern_string (tmp);
+  g_free (tmp);
+
+  IDE_RETURN (llvm_flags);
+}
+
 static void
 ide_clang_service_parse_worker (GTask        *task,
                                 gpointer      source_object,
@@ -203,10 +257,10 @@ ide_clang_service_parse_worker (GTask        *task,
   CXTranslationUnit tu = NULL;
   ParseRequest *request = task_data;
   IdeContext *context;
-  const gchar * const *argv;
+  g_autoptr(GPtrArray) built_argv = NULL;
   GFile *gfile;
-  gsize argc = 0;
   const gchar *detail_error = NULL;
+  const gchar *llvm_flags;
   enum CXErrorCode code;
   GArray *ar = NULL;
   gsize i;
@@ -238,14 +292,23 @@ ide_clang_service_parse_worker (GTask        *task,
       g_array_append_val (ar, uf);
     }
 
-  argv = (const gchar * const *)request->command_line_args;
-  argc = argv ? g_strv_length (request->command_line_args) : 0;
+  /*
+   * Synthesize new argv array for Clang withour discovered llvm flags
+   * included. Add a guard NULL just for extra safety.
+   */
+  built_argv = g_ptr_array_new ();
+  if (NULL != (llvm_flags = discover_llvm_flags ()))
+    g_ptr_array_add (built_argv, (gchar *)llvm_flags);
+  for (i = 0; request->command_line_args[i] != NULL; i++)
+    g_ptr_array_add (built_argv, request->command_line_args[i]);
+  g_ptr_array_add (built_argv, NULL);
 
   EGG_COUNTER_INC (ParseAttempts);
   code = clang_parseTranslationUnit2 (request->index,
                                       request->source_filename,
-                                      argv, argc,
-                                      (struct CXUnsavedFile *)(void *)ar->data,
+                                      (const gchar * const *)built_argv->pdata,
+                                      built_argv->len - 1,
+                                      (struct CXUnsavedFile *)(gpointer)ar->data,
                                       ar->len,
                                       request->options,
                                       &tu);
