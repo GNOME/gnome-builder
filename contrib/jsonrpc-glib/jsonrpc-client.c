@@ -501,7 +501,7 @@ jsonrpc_client_init (JsonrpcClient *self)
 
 /**
  * jsonrpc_client_new:
- * @io_stream: A #GIOStream
+ * @io_stream: (not nullable): A #GIOStream
  *
  * Creates a new #JsonrpcClient instance.
  *
