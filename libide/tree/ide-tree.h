@@ -73,6 +73,7 @@ IdeTreeNode   *ide_tree_find_custom     (IdeTree           *self,
                                          GEqualFunc         equal_func,
                                          gpointer           key);
 IdeTreeNode   *ide_tree_get_selected    (IdeTree           *self);
+void          ide_tree_unselect_all     (IdeTree           *self);
 void          ide_tree_rebuild          (IdeTree           *self);
 void          ide_tree_set_root         (IdeTree           *self,
                                          IdeTreeNode       *node);

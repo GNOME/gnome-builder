@@ -99,7 +99,10 @@ gb_project_tree_actions_refresh (GSimpleAction *action,
           GFile *project_file;
           project_file = ide_context_get_project_file (context);
           if (project_file != NULL)
-            gb_project_tree_reveal (self, project_file, FALSE, FALSE);
+            {
+              gb_project_tree_reveal (self, project_file, FALSE, FALSE);
+              ide_tree_unselect_all (IDE_TREE (self));
+            }
         }
     }
 }

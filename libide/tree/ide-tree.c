@@ -1098,6 +1098,23 @@ ide_tree_get_selected (IdeTree *self)
   return ret;
 }
 
+/**
+ * ide_tree_unselect_all:
+ * @self: (in): A #IdeTree.
+ *
+ * Unselects the currently selected node in the tree.
+ */
+void
+ide_tree_unselect_all (IdeTree *self)
+{
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (IDE_IS_TREE (self));
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
+  gtk_tree_selection_unselect_all (selection);
+}
+
 void
 ide_tree_scroll_to_node (IdeTree     *self,
                          IdeTreeNode *node)
