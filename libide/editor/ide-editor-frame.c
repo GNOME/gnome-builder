@@ -193,7 +193,7 @@ ide_editor_frame_update_ruler (IdeEditorFrame *self)
 
 static void
 ide_editor_frame_set_show_ruler (IdeEditorFrame *self,
-                                gboolean       show_ruler)
+                                 gboolean        show_ruler)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
@@ -207,7 +207,7 @@ ide_editor_frame_set_show_ruler (IdeEditorFrame *self,
 
 static void
 ide_editor_frame_animate_map (IdeEditorFrame *self,
-                             gboolean       visible)
+                              gboolean        visible)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
@@ -216,7 +216,7 @@ ide_editor_frame_animate_map (IdeEditorFrame *self,
 
 static void
 ide_editor_frame_show_map (IdeEditorFrame *self,
-                          IdeSourceMap  *source_map)
+                           IdeSourceMap   *source_map)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (IDE_IS_SOURCE_MAP (source_map));
@@ -226,7 +226,7 @@ ide_editor_frame_show_map (IdeEditorFrame *self,
 
 static void
 ide_editor_frame_hide_map (IdeEditorFrame *self,
-                          IdeSourceMap  *source_map)
+                           IdeSourceMap   *source_map)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (IDE_IS_SOURCE_MAP (source_map));
@@ -240,7 +240,7 @@ ide_editor_frame_hide_map (IdeEditorFrame *self,
 
 static void
 ide_editor_frame_set_position_label (IdeEditorFrame *self,
-                                    const gchar   *text)
+                                     const gchar    *text)
 {
   g_return_if_fail (IDE_IS_EDITOR_FRAME (self));
 
@@ -314,8 +314,8 @@ ide_editor_frame_update_search_position_label (IdeEditorFrame *self)
 
 static void
 ide_editor_frame_on_search_occurrences_notify (IdeEditorFrame          *self,
-                                              GParamSpec             *pspec,
-                                              GtkSourceSearchContext *search_context)
+                                               GParamSpec              *pspec,
+                                               GtkSourceSearchContext  *search_context)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
@@ -710,13 +710,13 @@ ide_editor_frame_grab_focus (GtkWidget *widget)
 
 static void
 ide_editor_frame__drag_data_received (IdeEditorFrame    *self,
-                                     GdkDragContext   *context,
-                                     gint              x,
-                                     gint              y,
-                                     GtkSelectionData *selection_data,
-                                     guint             info,
-                                     guint             timestamp,
-                                     GtkWidget        *widget)
+                                      GdkDragContext    *context,
+                                      gint               x,
+                                      gint               y,
+                                      GtkSelectionData  *selection_data,
+                                      guint              info,
+                                      guint              timestamp,
+                                      GtkWidget         *widget)
 {
   gchar **uri_list;
 
@@ -759,8 +759,8 @@ ide_editor_frame__drag_data_received (IdeEditorFrame    *self,
 
 static gboolean
 ide_editor_frame__search_key_press_event (IdeEditorFrame *self,
-                                         GdkEventKey   *event,
-                                         GdTaggedEntry *entry)
+                                          GdkEventKey    *event,
+                                          GdTaggedEntry  *entry)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
   g_assert (GD_IS_TAGGED_ENTRY (entry));
@@ -836,8 +836,8 @@ ide_editor_frame__replace_key_press_event (IdeEditorFrame *self,
 
 static gboolean
 ide_editor_frame__source_view_focus_in_event (IdeEditorFrame *self,
-                                             GdkEventKey   *event,
-                                             IdeSourceView *source_view)
+                                              GdkEventKey    *event,
+                                              IdeSourceView  *source_view)
 {
   GtkTextBuffer *buffer;
 
@@ -926,7 +926,7 @@ ide_editor_frame_set_show_map (IdeEditorFrame *self,
 
 static void
 ide_editor_frame_set_auto_hide_map (IdeEditorFrame *self,
-                                   gboolean       auto_hide_map)
+                                    gboolean        auto_hide_map)
 {
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
@@ -1072,9 +1072,9 @@ ide_editor_frame_dispose (GObject *object)
 
 static void
 ide_editor_frame_get_property (GObject    *object,
-                              guint       prop_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
 {
   IdeEditorFrame *self = IDE_EDITOR_FRAME (object);
 
@@ -1103,9 +1103,9 @@ ide_editor_frame_get_property (GObject    *object,
 
 static void
 ide_editor_frame_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
 {
   IdeEditorFrame *self = IDE_EDITOR_FRAME (object);
 
