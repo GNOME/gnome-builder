@@ -940,35 +940,6 @@ ide_editor_frame_set_auto_hide_map (IdeEditorFrame *self,
 }
 
 static void
-ide_editor_frame__source_view_populate_popup (IdeEditorFrame *self,
-                                             GtkWidget     *popup,
-                                             IdeSourceView *source_view)
-{
-  g_assert (IDE_IS_EDITOR_FRAME (self));
-  g_assert (GTK_IS_WIDGET (popup));
-  g_assert (IDE_IS_SOURCE_VIEW (source_view));
-
-  if (GTK_IS_MENU_SHELL (popup))
-    {
-      GtkWidget *item;
-      GtkWidget *sep;
-
-      sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
-                          "visible", TRUE,
-                          NULL);
-      gtk_menu_shell_append (GTK_MENU_SHELL (popup), sep);
-
-      item = g_object_new (GTK_TYPE_MENU_ITEM,
-                           "action-name", "view.reveal",
-                           "label", _("Re_veal in Project Tree"),
-                           "use-underline", TRUE,
-                           "visible", TRUE,
-                           NULL);
-      gtk_menu_shell_append (GTK_MENU_SHELL (popup), item);
-    }
-}
-
-static void
 ide_editor_frame__search_populate_popup (IdeEditorFrame *self,
                                          GtkWidget      *popup,
                                          GdTaggedEntry  *entry)
@@ -1037,12 +1008,6 @@ ide_editor_frame_constructed (GObject *object)
   g_signal_connect_object (self->source_view,
                            "focus-location",
                            G_CALLBACK (ide_editor_frame__source_view_focus_location),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->source_view,
-                           "populate-popup",
-                           G_CALLBACK (ide_editor_frame__source_view_populate_popup),
                            self,
                            G_CONNECT_SWAPPED);
 
