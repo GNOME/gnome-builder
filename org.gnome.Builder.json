@@ -1,7 +1,7 @@
 {
     "app-id": "org.gnome.Builder",
     "runtime": "org.gnome.Sdk",
-    "runtime-version": "master",
+    "runtime-version": "3.22",
     "sdk": "org.gnome.Sdk",
     "command": "gnome-builder",
     "finish-args": [
@@ -281,7 +281,7 @@
         {
             "name": "devhelp",
 	    "config-opts": [ "--disable-compile-warnings" ],
-            "cleanup": [ "/bin/*", "/lib/gedit/plugins", "/share/applications/*", "/share/dbus-1/services", "/share/GConf" ],
+	    "cleanup": [ "/bin/*", "/lib/gedit/plugins", "/share/applications/*", "/share/dbus-1/services", "/share/GConf" ],
             "sources": [
                 {
                     "type": "archive",
