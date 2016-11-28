@@ -438,8 +438,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
         }
       ide_subprocess_launcher_push_argv (launcher, build_path);
 
-      if (parser != NULL)
-        g_object_unref (parser);
+      g_clear_object (&parser);
 
       process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
@@ -697,7 +696,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
       ide_subprocess_launcher_set_run_on_host (ret, TRUE);
 
-      g_object_unref (parser);
+      g_clear_object (&parser);
     }
 
   return ret;
