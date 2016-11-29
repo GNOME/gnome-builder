@@ -1,4 +1,46 @@
 ==============
+Version 3.22.3
+==============
+
+Summary of changes since 3.22.3
+
+ • Fix Clang auto-copmletion snippet insertion and scoring
+ • Various uninitialized and undefined behavior fixes
+ • Language defaults are now installed
+ • Support for building with llvm 3.9
+ • Remove <> pairs when backspacing
+ • Support added for building and runing Flatpak applications, including
+   from Builder distributed via Flatpak
+ • flatpak-builder integration using json manifests
+ • Project tree expands to previous location after refreshing contents
+ • Buffers are saved before performing build system install operation
+ • Show flatpak prebuild and postbuild output in Build Output panel
+ • Store app-id in buildconfig
+ • Enter/Return has been re-enabled for auto-completion
+ • Goto Line popover no longer uses popover animation/delay
+ • Avoid over activation of ctags, clang and other completion providers
+ • Set LD_LIBRARY_PATH for Rust rls language server
+ • Fallback to ptsname() when necessary
+ • Workbench CSS style improvements
+ • Fix tab to move between snippet chunks during auto-completion
+ • TTY support for FreeBSD when spawning processes
+ • A new Run Output panel has been added
+ • Fix for insertion of certain input methods next to quotations
+ • The editor now allows overwriting ;
+ • The terminal now supports highlighting and activating URLs
+ • Fixes for copy and paste commands in terminal
+ • Support for compiling C code outside of autotools projects has
+   been improved to correctly discover standard include files
+ • SSL and SSH improvements via Flatpak builds
+
+It is strongly recommended that all users of Bulider upgrade to 3.22.3.
+
+Updated translations
+
+ • Lithuanian, Hungarian, Kazakh, German, Spanish, Czech, Polish,
+   Brazilian Portuguese, Latvian, Serbian
+
+==============
 Version 3.22.2
 ==============
 
