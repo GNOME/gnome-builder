@@ -173,7 +173,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher, flatpak_repo_path);
   process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
-  if (!process)
+  if (process == NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -248,7 +248,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
           ide_subprocess_launcher_push_argv (launcher3, manifest_path);
           process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, &error);
 
-          if (!process3)
+          if (process3 == NULL)
             {
               g_task_return_error (task, g_steal_pointer (&error));
               return;
@@ -287,7 +287,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher2, self->branch);
   process2 = ide_subprocess_launcher_spawn (launcher2, cancellable, &error);
 
-  if (!process2)
+  if (process2 == NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -442,7 +442,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
 
       process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
-      if (!process)
+      if (process == NULL)
         {
           g_task_return_error (task, g_steal_pointer (&error));
           return;
@@ -469,7 +469,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher2, build_path);
   process2 = ide_subprocess_launcher_spawn (launcher2, cancellable, &error);
 
-  if (!process2)
+  if (process2 == NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -500,7 +500,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher3, app_id);
   process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, &error);
 
-  if (!process3)
+  if (process3 == NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -523,7 +523,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
 
   process4 = ide_subprocess_launcher_spawn (launcher4, cancellable, &error);
 
-  if (!process4)
+  if (process4 == NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
