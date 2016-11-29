@@ -48,6 +48,40 @@ early_verbose_check (gint    *argc,
   g_option_context_free (context);
 }
 
+static void
+early_ssl_check (void)
+{
+  /*
+   * This tries to locate the SSL cert.pem and overrides the environment
+   * variable. Otherwise, chances are we won't be able to validate SSL
+   * certificates while inside of flatpak.
+   *
+   * Ideally, we will be able to delete this once Flatpak has a solution
+   * for SSL certificate management inside of applications.
+   */
+  if (ide_is_flatpak ())
+    {
+      if (NULL == g_getenv ("SSL_CERT_FILE"))
+        {
+          static const gchar *ssl_cert_paths[] = {
+            "/etc/pki/tls/cert.pem",
+            "/etc/ssl/cert.pem",
+            NULL
+          };
+
+          for (guint i = 0; ssl_cert_paths[i]; i++)
+            {
+              if (g_file_test (ssl_cert_paths[i], G_FILE_TEST_EXISTS))
+                {
+                  g_setenv ("SSL_CERT_FILE", ssl_cert_paths[i], TRUE);
+                  g_message ("Using “%s” for SSL_CERT_FILE.", ssl_cert_paths[i]);
+                  break;
+                }
+            }
+        }
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -63,6 +97,8 @@ main (int   argc,
              gtk_get_major_version (),
              gtk_get_minor_version (),
              gtk_get_micro_version ());
+
+  early_ssl_check ();
 
   app = ide_application_new ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
