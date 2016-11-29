@@ -498,7 +498,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher3, "uninstall");
   ide_subprocess_launcher_push_argv (launcher3, "--user");
   ide_subprocess_launcher_push_argv (launcher3, app_id);
-  process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, NULL);
+  process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, &error);
 
   if (!process3)
     {
