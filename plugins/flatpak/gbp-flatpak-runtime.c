@@ -646,6 +646,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       /* Add 'flatpak build' and the specified arguments to the launcher */
       ide_subprocess_launcher_push_argv (ret, "flatpak");
       ide_subprocess_launcher_push_argv (ret, "build");
+      ide_subprocess_launcher_push_argv (ret, "--share=network");
       if (!ide_str_empty0 (project_path))
         {
           g_autofree gchar *filesystem_option = NULL;
