@@ -18,14 +18,18 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-runner"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <glib/gi18n.h>
+#include <unistd.h>
 
 #include "gbp-flatpak-runner.h"
 
 struct _GbpFlatpakRunner
 {
   IdeRunner parent_instance;
+
+  gint tty_fd;
 };
 
 G_DEFINE_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, IDE_TYPE_RUNNER)
@@ -108,6 +112,18 @@ gbp_flatpak_runner_run_async (IdeRunner           *runner,
   ide_subprocess_launcher_set_flags (launcher, ide_runner_get_flags (&self->parent_instance));
 
   /*
+   * If we have a tty_fd set, then we want to override our stdin,
+   * stdout, and stderr fds with our TTY.
+   */
+  if (self->tty_fd != -1)
+    {
+      IDE_TRACE_MSG ("Setting TTY fd to %d\n", self->tty_fd);
+      ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->tty_fd));
+      ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->tty_fd));
+      ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->tty_fd));
+    }
+
+  /*
    * We want the runners to run on the host so that we aren't captive to
    * our containing system (flatpak, jhbuild, etc).
    */
@@ -186,15 +202,60 @@ gbp_flatpak_runner_new (IdeContext *context)
 }
 
 static void
+gbp_flatpak_runner_set_tty (IdeRunner *runner,
+                            int        tty_fd)
+{
+  GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
+
+  g_assert (GBP_IS_FLATPAK_RUNNER (self));
+  g_assert (tty_fd >= -1);
+
+  if (tty_fd != self->tty_fd)
+    {
+      if (self->tty_fd != -1)
+        {
+          close (self->tty_fd);
+          self->tty_fd = -1;
+        }
+
+      if (tty_fd != -1)
+        {
+          self->tty_fd = dup (tty_fd);
+          if (self->tty_fd == -1)
+            g_warning ("Failed to dup() tty_fd: %s", g_strerror (errno));
+        }
+    }
+}
+
+static void
+gbp_flatpak_runner_finalize (GObject *object)
+{
+  GbpFlatpakRunner *self = (GbpFlatpakRunner *)object;
+
+  if (self->tty_fd != -1)
+    {
+      close (self->tty_fd);
+      self->tty_fd = -1;
+    }
+
+  G_OBJECT_CLASS (gbp_flatpak_runner_parent_class)->finalize (object);
+}
+
+static void
 gbp_flatpak_runner_class_init (GbpFlatpakRunnerClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeRunnerClass *runner_class = IDE_RUNNER_CLASS (klass);
+
+  object_class->finalize = gbp_flatpak_runner_finalize;
 
   runner_class->run_async = gbp_flatpak_runner_run_async;
   runner_class->run_finish = gbp_flatpak_runner_run_finish;
+  runner_class->set_tty = gbp_flatpak_runner_set_tty;
 }
 
 static void
 gbp_flatpak_runner_init (GbpFlatpakRunner *self)
 {
+  self->tty_fd = -1;
 }
