@@ -918,8 +918,6 @@ ide_diagnostics_manager_update_group_by_file (IdeDiagnosticsManager *self,
         }
     }
 
-  g_assert_not_reached ();
-
   IDE_EXIT;
 }
 
