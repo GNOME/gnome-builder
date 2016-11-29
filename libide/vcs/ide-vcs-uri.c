@@ -28,12 +28,25 @@ struct _IdeVcsUri
 {
   volatile gint ref_count;
 
+  /*
+   * If the URI string was created and has not been changed, we try extra
+   * hard to provide the same URI back from ide_vcs_uri_to_string(). This
+   * field is cleared any time any of the other fields are changed.
+   */
+  gchar *non_destructive_uri;
+
   gchar *scheme;
   gchar *user;
   gchar *host;
   gchar *path;
   guint  port;
 };
+
+static inline void
+ide_vcs_uri_set_dirty (IdeVcsUri *self)
+{
+  g_clear_pointer (&self->non_destructive_uri, g_free);
+}
 
 static gboolean
 ide_vcs_uri_validate (const IdeVcsUri *self)
@@ -205,7 +218,10 @@ ide_vcs_uri_new (const gchar *uri)
   self->ref_count = 1;
 
   if (ide_vcs_uri_parse (self, uri) && ide_vcs_uri_validate (self))
-    return self;
+    {
+      self->non_destructive_uri = g_strdup (uri);
+      return self;
+    }
 
   g_free (self);
 
@@ -215,6 +231,7 @@ ide_vcs_uri_new (const gchar *uri)
 static void
 ide_vcs_uri_finalize (IdeVcsUri *self)
 {
+  g_free (self->non_destructive_uri);
   g_free (self->scheme);
   g_free (self->user);
   g_free (self->host);
@@ -303,6 +320,8 @@ ide_vcs_uri_set_scheme (IdeVcsUri   *self,
       else
         self->scheme = g_strdup (scheme);
     }
+
+  ide_vcs_uri_set_dirty (self);
 }
 
 void
@@ -325,6 +344,8 @@ ide_vcs_uri_set_user (IdeVcsUri   *self,
       else
         self->user = g_strdup (user);
     }
+
+  ide_vcs_uri_set_dirty (self);
 }
 
 void
@@ -341,6 +362,8 @@ ide_vcs_uri_set_host (IdeVcsUri   *self,
       g_free (self->host);
       self->host = g_strdup (host);
     }
+
+  ide_vcs_uri_set_dirty (self);
 }
 
 void
@@ -351,6 +374,8 @@ ide_vcs_uri_set_port (IdeVcsUri *self,
   g_return_if_fail (port <= G_MAXINT16);
 
   self->port = port;
+
+  ide_vcs_uri_set_dirty (self);
 }
 
 void
@@ -369,6 +394,8 @@ ide_vcs_uri_set_path (IdeVcsUri   *self,
       g_free (self->path);
       self->path = g_strdup (path);
     }
+
+  ide_vcs_uri_set_dirty (self);
 }
 
 gchar *
@@ -377,6 +404,9 @@ ide_vcs_uri_to_string (const IdeVcsUri *self)
   GString *str;
 
   g_return_val_if_fail (self, NULL);
+
+  if (self->non_destructive_uri != NULL)
+    return g_strdup (self->non_destructive_uri);
 
   str = g_string_new (NULL);
 
