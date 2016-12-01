@@ -34,6 +34,9 @@ typedef struct
   GbBeautifierConfigCommand   command;
   GFile                      *src_file;
   GFile                      *config_file;
+  GFile                      *tmp_workdir_file;
+  GFile                      *tmp_src_file;
+  GFile                      *tmp_config_file;
   gchar                      *lang_id;
   gchar                      *text;
 } ProcessState;
@@ -52,8 +55,16 @@ process_state_free (gpointer data)
 
   gb_beautifier_helper_remove_tmp_file (state->self, state->src_file);
   g_clear_object (&state->src_file);
-
   g_clear_object (&state->config_file);
+
+  g_file_delete (state->tmp_config_file, NULL, NULL);
+  g_file_delete (state->tmp_src_file, NULL, NULL);
+  g_file_delete (state->tmp_workdir_file, NULL, NULL);
+
+  g_clear_object (&state->tmp_workdir_file);
+  g_clear_object (&state->tmp_config_file);
+  g_clear_object (&state->tmp_src_file);
+
   g_free (state->lang_id);
   g_free (state->text);
 
@@ -93,6 +104,73 @@ gb_beautifier_process_create_for_uncrustify (GbBeautifierWorkbenchAddin *self,
                                   G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                   G_SUBPROCESS_FLAGS_STDERR_PIPE,
                                   &error);
+
+  g_ptr_array_free (args, TRUE);
+  return subprocess;
+}
+
+static GSubprocess *
+gb_beautifier_process_create_for_clang_format (GbBeautifierWorkbenchAddin *self,
+                                               ProcessState               *state,
+                                               GError                     *error)
+{
+  g_autoptr(GSubprocessLauncher) launcher = NULL;
+  GSubprocess *subprocess = NULL;
+  GPtrArray *args;
+  gchar *config_path;
+  gchar *src_path;
+  g_autofree gchar *tmp_workdir = NULL;
+  g_autofree gchar *tmp_config_path = NULL;
+  g_autofree gchar *tmp_src_path = NULL;
+
+  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (state != NULL);
+
+  config_path = g_file_get_path (state->config_file);
+  src_path = g_file_get_path (state->src_file);
+
+  g_assert (!ide_str_empty0 (config_path));
+  g_assert (!ide_str_empty0 (src_path));
+  g_assert (!ide_str_empty0 (state->lang_id));
+
+  if (NULL == (tmp_workdir = g_dir_make_tmp ("gnome-builder-beautify-XXXXXX",
+                                             &error)))
+    return NULL;
+
+  state->tmp_workdir_file = g_file_new_for_path (tmp_workdir);
+  tmp_config_path = g_build_filename (tmp_workdir,
+                                      ".clang-format",
+                                      NULL);
+  state->tmp_config_file = g_file_new_for_path (tmp_config_path);
+  if (!g_file_copy (state->config_file,
+                    state->tmp_config_file,
+                    G_FILE_COPY_OVERWRITE,
+                    NULL, NULL, NULL,
+                    &error))
+    return NULL;
+
+  tmp_src_path = g_build_filename (tmp_workdir,
+                                   "src_file",
+                                   NULL);
+  state->tmp_src_file = g_file_new_for_path (tmp_src_path);
+  if (!g_file_copy (state->src_file,
+                    state->tmp_src_file,
+                    G_FILE_COPY_OVERWRITE,
+                    NULL, NULL, NULL,
+                    &error))
+    return NULL;
+
+  args = g_ptr_array_new ();
+  g_ptr_array_add (args, "clang-format");
+  g_ptr_array_add (args, "-style=file");
+  g_ptr_array_add (args, tmp_src_path);
+  g_ptr_array_add (args, NULL);
+
+  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  g_subprocess_launcher_set_cwd (launcher, tmp_workdir);
+  subprocess = g_subprocess_launcher_spawnv (launcher,
+                                             (const gchar * const *)args->pdata,
+                                             &error);
 
   g_ptr_array_free (args, TRUE);
   return subprocess;
@@ -175,6 +253,8 @@ create_tmp_file_cb (GObject      *object,
 
   if (state->command == GB_BEAUTIFIER_CONFIG_COMMAND_UNCRUSTIFY)
     process = gb_beautifier_process_create_for_uncrustify (self, state, error);
+  else if (state->command == GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT)
+    process = gb_beautifier_process_create_for_clang_format (self, state, error);
   else
     g_assert_not_reached ();
 

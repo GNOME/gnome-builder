@@ -155,10 +155,9 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
               g_autofree gchar *file_path = NULL;
 
               if (0 == g_strcmp0 (command, "uncrustify"))
-                {
-                  g_clear_pointer (&command, g_free);
-                  entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_UNCRUSTIFY;
-                }
+                entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_UNCRUSTIFY;
+              else if (0 == g_strcmp0 (command, "clang-format"))
+                entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT;
               else
                 goto fail;
 
