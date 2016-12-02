@@ -913,6 +913,7 @@ run_genesis_addin (PeasExtensionSet *set,
 
   if (g_strcmp0 (state->name, G_OBJECT_TYPE_NAME (addin)) == 0)
     {
+      gtk_widget_set_sensitive (GTK_WIDGET (state->self->genesis_continue_button), FALSE);
       ide_genesis_addin_run_async (addin,
                                    NULL,
                                    ide_greeter_perspective_run_cb,
