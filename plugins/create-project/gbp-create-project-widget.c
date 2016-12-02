@@ -175,41 +175,51 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
 
-static gboolean
-gbp_create_project_widget_flow_box_filter (GtkFlowBoxChild *template_container,
-                                           gpointer         object)
+static void
+update_language_sensitivity (GtkWidget *widget,
+                             gpointer   data)
 {
-  GbpCreateProjectWidget *self = object;
+  GbpCreateProjectWidget *self = data;
   GbpCreateProjectTemplateIcon *template_icon;
   IdeProjectTemplate *template;
-  const gchar *language = NULL;
   g_auto(GStrv) template_languages = NULL;
+  const gchar *language;
+  gboolean sensitive = FALSE;
   gint i;
 
-  g_assert (GTK_IS_FLOW_BOX_CHILD (template_container));
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GTK_IS_FLOW_BOX_CHILD (widget));
 
   language = egg_radio_box_get_active_id (self->project_language_chooser);
 
   if (ide_str_empty0 (language))
-    return TRUE;
+    goto apply;
 
-  template_icon = GBP_CREATE_PROJECT_TEMPLATE_ICON (gtk_bin_get_child (GTK_BIN (template_container)));
+  template_icon = GBP_CREATE_PROJECT_TEMPLATE_ICON (gtk_bin_get_child (GTK_BIN (widget)));
   g_object_get (template_icon,
                 "template", &template,
                 NULL);
   template_languages = ide_project_template_get_languages (template);
-  g_object_unref (template);
 
   for (i = 0; template_languages [i]; i++)
     {
       if (g_str_equal (language, template_languages [i]))
-        return TRUE;
+        {
+          sensitive = TRUE;
+          goto apply;
+        }
     }
 
-  gtk_flow_box_unselect_child (self->project_template_chooser, template_container);
+apply:
+  gtk_widget_set_sensitive (widget, sensitive);
+}
 
-  return FALSE;
+static void
+gbp_create_project_widget_refilter (GbpCreateProjectWidget *self)
+{
+  gtk_container_foreach (GTK_CONTAINER (self->project_template_chooser),
+                         update_language_sensitivity,
+                         self);
 }
 
 static void
@@ -219,7 +229,7 @@ gbp_create_project_widget_language_changed (GbpCreateProjectWidget *self,
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
   g_assert (EGG_IS_RADIO_BOX (language_chooser));
 
-  gtk_flow_box_invalidate_filter (self->project_template_chooser);
+  gbp_create_project_widget_refilter (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
@@ -261,6 +271,8 @@ gbp_create_project_widget_add_template_buttons (GbpCreateProjectWidget *self,
       gtk_container_add (GTK_CONTAINER (template_container), GTK_WIDGET (template_icon));
       gtk_flow_box_insert (self->project_template_chooser, GTK_WIDGET (template_container), -1);
     }
+
+  gbp_create_project_widget_refilter (self);
 }
 
 static void
@@ -340,6 +352,7 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   g_autofree gchar *project_name = NULL;
   const gchar *language = NULL;
   GList *selected_template = NULL;
+  gboolean ret = FALSE;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
@@ -362,9 +375,11 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   if (selected_template == NULL)
     return FALSE;
 
+  ret = gtk_widget_get_sensitive (selected_template->data);
+
   g_list_free (selected_template);
 
-  return TRUE;
+  return ret;
 }
 
 static void
@@ -428,11 +443,6 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 
   path = g_settings_get_string (settings, "projects-directory");
   gbp_create_project_widget_set_directory (self, path);
-
-  gtk_flow_box_set_filter_func (self->project_template_chooser,
-                                gbp_create_project_widget_flow_box_filter,
-                                self,
-                                NULL);
 
   g_signal_connect_object (self->project_name_entry,
                            "changed",
