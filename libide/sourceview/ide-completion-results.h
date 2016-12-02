@@ -58,6 +58,7 @@ void                  ide_completion_results_present          (IdeCompletionResu
                                                                GtkSourceCompletionContext  *context);
 gboolean              ide_completion_results_replay           (IdeCompletionResults        *self,
                                                                const gchar                 *query);
+guint                 ide_completion_results_get_size         (IdeCompletionResults        *self);
 
 G_END_DECLS
 

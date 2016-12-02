@@ -452,3 +452,13 @@ ide_completion_results_init (IdeCompletionResults *self)
   priv->head = NULL;
   priv->query = NULL;
 }
+
+guint
+ide_completion_results_get_size (IdeCompletionResults *self)
+{
+  IdeCompletionResultsPrivate *priv = ide_completion_results_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_COMPLETION_RESULTS (self), 0);
+
+  return priv->results != NULL ? priv->results->len : 0;
+}
