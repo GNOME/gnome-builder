@@ -48,7 +48,14 @@ namespace Ide
 			var line = begin.get_slice (iter);
 
 			if (this.results != null) {
-				if ((this.line == iter.get_line ()) && this.results.replay (this.query)) {
+				// If we are right after a . then we cannot reuse our
+				// previous results since they will be for a different
+				// object type, also, ensure that the word has the same
+				// prefix as our initial query or we must regenerate
+				// our results.
+				if (!line.has_suffix (".") &&
+				    this.line == iter.get_line () &&
+				    this.results.replay (this.query)) {
 					this.results.present (this, context);
 					return;
 				}
