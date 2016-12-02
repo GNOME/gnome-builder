@@ -81,15 +81,15 @@ namespace Ide
 				int res_line = -1;
 				int res_column = -1;
 				this.results = index.code_complete (file.file,
-			                           iter.get_line () + 1,
-			                           iter.get_line_offset () + 1,
-			                           line,
-			                           unsaved_files,
-			                           this,
-			                           cancellable,
-			                           out res_line,
-			                           out res_column);
-					if (res_line > 0 && res_column > 0) {
+				                                    iter.get_line () + 1,
+				                                    iter.get_line_offset () + 1,
+				                                    line,
+				                                    unsaved_files,
+				                                    this,
+				                                    cancellable,
+				                                    out res_line,
+				                                    out res_column);
+				if (res_line > 0 && res_column > 0) {
 					this.line = res_line - 1;
 					this.column = res_column - 1;
 				}
