@@ -2,26 +2,24 @@
 # Serbian translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015—2016.
 # Марко М. Костић (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
 # Милош Поповић <gpopac@gmail.com>, 2015.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-21 12:13+0000\n"
-"PO-Revision-Date: 2015-09-22 11:11+0200\n"
-"Last-Translator: Милош Поповић <gpopac@gmail.com>\n"
+"POT-Creation-Date: 2016-10-29 19:57+0000\n"
+"PO-Revision-Date: 2016-12-02 07:26+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
 
 #: ../contrib/egg/egg-animation.c:723
@@ -293,8 +291,7 @@ msgid "8"
 msgstr "8"
 
 #: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2
-#: ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/gb-new-project-dialog.ui.h:2 ../data/ui/gb-projects-dialog.ui.h:3
 msgid "_Cancel"
 msgstr "_Откажи"
 
@@ -388,7 +385,7 @@ msgstr "Гит"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:12
 msgid "user@host:repository.git"
-msgstr "корисничко@адреса:ризница.гит"
+msgstr "korisnik@računar:riznica.git"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:13
 msgid "Enter the URL of your project's source code repository."
@@ -495,6 +492,36 @@ msgstr "Опсег клизања"
 #: ../data/ui/gb-preferences-page-editor.ui.h:21
 msgid "Minimal number of lines to keep above and below the cursor."
 msgstr "Најмањи број редова за изнад и испод курсора."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:22
+msgid "Draw Spaces"
+msgstr "Означи размаке"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:23
+#| msgid "Home moves to first non-space character."
+msgid "Draw a circle over space characters."
+msgstr "Исцртај круг преко знакова размака."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:24
+msgid "Draw an arrow over tab characters."
+msgstr "Исцртај стрелицу преко знакова табулатора."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:25
+msgid "Draw a carriage return over newline characters."
+msgstr "Исцртај крајник реда преко знакова новог реда."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:26
+msgid "Draw indicators for non-breaking spaces."
+msgstr "Исцртај указиваче за непрекидне размаке."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:27
+msgid "Draw leading space only."
+msgstr "Исцртај само водећи размак."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:28
+#| msgid "Trim Trailing Whitespace"
+msgid "Draw trailing space only."
+msgstr "Исцртај само пратећи размак."
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:8
@@ -664,8 +691,7 @@ msgstr "Поставке"
 msgid "Search Preferences…"
 msgstr "Поставке претраге..."
 
-#: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:255
+#: ../data/ui/gb-projects-dialog.ui.h:1 ../src/dialogs/gb-projects-dialog.c:255
 msgid "Select Project"
 msgstr "Изабери пројекат"
 
@@ -695,7 +721,7 @@ msgstr "Командна трака"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:6
 #: ../plugins/terminal/gb-terminal-document.c:87
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:96
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -845,62 +871,66 @@ msgid "Toggle overwrite"
 msgstr "Укључи преписивање"
 
 #: ../data/ui/gb-shortcuts-window.ui.h:43
+msgid "Reindent line"
+msgstr "Поново увуци ред"
+
+#: ../data/ui/gb-shortcuts-window.ui.h:44
 msgid "Navigation"
 msgstr "Навигација"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:44
+#: ../data/ui/gb-shortcuts-window.ui.h:45
 msgid "Move to next error in file"
 msgstr "Иди на следећу грешку у датотеци"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:45
+#: ../data/ui/gb-shortcuts-window.ui.h:46
 msgid "Move to previous error in file"
 msgstr "Иди на претходну грешку у датотеци"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:46
+#: ../data/ui/gb-shortcuts-window.ui.h:47
 msgid "Move to previous edit location"
 msgstr "Иди на претходну измену"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:47
+#: ../data/ui/gb-shortcuts-window.ui.h:48
 msgid "Move to next edit location"
 msgstr "Иди на следећу измену"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:48
+#: ../data/ui/gb-shortcuts-window.ui.h:49
 msgid "Jump to definition of symbol"
 msgstr "Скочи на дефиницију симбола"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:49
+#: ../data/ui/gb-shortcuts-window.ui.h:50
 msgid "Move viewport up within the file"
 msgstr "Помери прозорче горе, унутар датотеке"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:50
+#: ../data/ui/gb-shortcuts-window.ui.h:51
 msgid "Move viewport down within the file"
 msgstr "Помери прозорче доле, унутар датотеке"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:51
+#: ../data/ui/gb-shortcuts-window.ui.h:52
 msgid "Move viewport to end of file"
 msgstr "Помери прозорче на крај датотеке"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:52
+#: ../data/ui/gb-shortcuts-window.ui.h:53
 msgid "Move viewport to beginning of file"
 msgstr "Помери прозорче на почетак датотеке"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:53
+#: ../data/ui/gb-shortcuts-window.ui.h:54
 msgid "Move to matching bracket"
 msgstr "Иди на упарену заграду"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:54
+#: ../data/ui/gb-shortcuts-window.ui.h:55
 msgid "Selections"
 msgstr "Избори"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:55
+#: ../data/ui/gb-shortcuts-window.ui.h:56
 msgid "Select all"
 msgstr "Изабери све"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:56
+#: ../data/ui/gb-shortcuts-window.ui.h:57
 msgid "Unselect all"
 msgstr "Избаци све из избора"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:57
+#: ../data/ui/gb-shortcuts-window.ui.h:58
 msgid "Terminal Shortcuts"
 msgstr "Пречице терминала"
 
@@ -960,17 +990,17 @@ msgstr "Није дата ниједна датотека."
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Не могу да прикажем разлику, резервна датотека није достављена."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#: ../libide/git/ide-git-buffer-change-monitor.c:539
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "У ризници не постоји радни директоријум."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#: ../libide/git/ide-git-buffer-change-monitor.c:550
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Датотека се не налази под управништвом гит радног директоријума."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#: ../libide/git/ide-git-buffer-change-monitor.c:616
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Тражена датотека не постоји унутар садржаја гита."
@@ -1025,7 +1055,7 @@ msgstr "Не могу да поставим подразумеване вред�
 msgid "File contained invalid UTF-8"
 msgstr "Датотека садржи неисправан УТФ-8"
 
-#: ../libide/ide-buffer.c:1991
+#: ../libide/ide-buffer.c:2071
 msgid "The current language lacks a symbol resolver."
 msgstr "За тренутни језик не постоји разрешавач симбола."
 
@@ -1094,20 +1124,20 @@ msgstr "Контекст је већ повраћен."
 msgid "The device \"%s\" could not be found."
 msgstr "Не могу да пронађем уређај „%s“."
 
-#: ../libide/ide-object.c:285
+#: ../libide/ide-object.c:288
 #, c-format
 msgid "No implementations of extension point \"%s\"."
 msgstr "Не постоји спроведба тачке проширења „%s“."
 
-#: ../libide/ide-object.c:377
+#: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
 msgstr "Не могу да нађем прикључак за помоћ у изградњи кода."
 
-#: ../libide/ide-object.c:464
+#: ../libide/ide-object.c:467
 msgid "No such extension point."
 msgstr "Не постоји таква тачка проширења."
 
-#: ../libide/ide-object.c:474
+#: ../libide/ide-object.c:477
 msgid "No implementations of extension point."
 msgstr "Тачка проширења није направљена."
 
@@ -1119,7 +1149,7 @@ msgstr "Одредишна датотека мора бити унутар ст�
 msgid "File must be within the project tree."
 msgstr "Датотека мора бити унутар стаба пројекта."
 
-#: ../libide/ide-recent-projects.c:377
+#: ../libide/ide-recent-projects.c:382
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() функција може бити извршена само једном"
@@ -1133,11 +1163,11 @@ msgstr "%s функција нема спроведену GAsyncInitable мог�
 msgid "Chunk does not belong to snippet."
 msgstr "Део не припада исечку."
 
-#: ../libide/ide-source-snippet-completion-provider.c:288
+#: ../libide/ide-source-snippet-completion-provider.c:297
 msgid "Snippets"
 msgstr "Исечци"
 
-#: ../libide/ide-source-snippet-parser.c:495
+#: ../libide/ide-source-snippet-parser.c:496
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr "Неисправан исечак у %d. реду: %s"
@@ -1152,29 +1182,29 @@ msgstr "Не могу да отворим фасциклу: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Не могу да учитам датотеку: %s: %s"
 
-#: ../libide/ide-source-view.c:4563
+#: ../libide/ide-source-view.c:4733
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Убаци \"%s\""
 
-#: ../libide/ide-source-view.c:4565
+#: ../libide/ide-source-view.c:4735
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Замени \"%s\" са \"%s\""
 
-#: ../libide/ide-source-view.c:4683
+#: ../libide/ide-source-view.c:4854
 msgid "Apply Fix-It"
 msgstr "Примени исправку"
 
-#: ../libide/ide-source-view.c:4726
+#: ../libide/ide-source-view.c:4897
 msgid "Join Lines"
 msgstr "Споји редове"
 
-#: ../libide/ide-source-view.c:4737
+#: ../libide/ide-source-view.c:4908
 msgid "Sort Lines"
 msgstr "Поређај редове"
 
-#: ../libide/ide-source-view.c:4756
+#: ../libide/ide-source-view.c:4927
 msgid "Go to Definition"
 msgstr "Иди на дефиницију"
 
@@ -1187,7 +1217,7 @@ msgstr "Покушано је учитавање PyGObject скрипте кој
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "Скрипта „%s“ није PyGObject датотека."
 
-#: ../plugins/autotools/ide-autotools-build-system.c:175
+#: ../plugins/autotools/ide-autotools-build-system.c:182
 msgid "Failed to locate configure.ac"
 msgstr "Не могу да нађем configure.ac датотеку"
 
@@ -1222,36 +1252,32 @@ msgstr "Датотека autogen.sh није извршна."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh не може да направи configure (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:999
+#: ../plugins/autotools/ide-makecache.c:1006
 msgid "Invalid makefile provided, ignoring."
 msgstr "Дат је неисправан makefile, занемарујем га."
 
-#: ../plugins/clang/ide-clang-completion-provider.c:200
-msgid "Clang"
-msgstr "Це-ланг"
-
-#: ../plugins/clang/ide-clang-service.c:266
+#: ../plugins/clang/ide-clang-service.c:269
 msgid "Unknown failure"
 msgstr "Непозната грешка"
 
-#: ../plugins/clang/ide-clang-service.c:270
+#: ../plugins/clang/ide-clang-service.c:273
 msgid "Clang crashed"
 msgstr "Це-ланг је пукао"
 
-#: ../plugins/clang/ide-clang-service.c:274
+#: ../plugins/clang/ide-clang-service.c:277
 msgid "Invalid arguments"
 msgstr "Неисправни параметри"
 
-#: ../plugins/clang/ide-clang-service.c:278
+#: ../plugins/clang/ide-clang-service.c:281
 msgid "AST read error"
 msgstr "AST грешка приликом читања"
 
-#: ../plugins/clang/ide-clang-service.c:290
+#: ../plugins/clang/ide-clang-service.c:293
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Не могу да направим преводилачку јединицу: %s"
 
-#: ../plugins/clang/ide-clang-service.c:399
+#: ../plugins/clang/ide-clang-service.c:402
 msgid "File must be saved locally to parse."
 msgstr "Датотека мора бити сачувана локално да бих је обрадио."
 
@@ -1259,16 +1285,16 @@ msgstr "Датотека мора бити сачувана локално да 
 msgid "anonymous"
 msgstr "анонимно"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:654
+#: ../plugins/clang/ide-clang-translation-unit.c:656
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() функција ради само на локалним датотекама"
 
-#: ../plugins/command-bar/gb-command-bar.c:290
+#: ../plugins/command-bar/gb-command-bar.c:316
 #, c-format
 msgid "Command not found: %s"
 msgstr "Нисам нашао наредбу: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:594
+#: ../plugins/command-bar/gb-command-bar.c:620
 msgid "Use the entry below to execute a command"
 msgstr "Користите унос испод за извршавање наредбе"
 
@@ -1312,12 +1338,12 @@ msgstr "Уочена неисправност: синтаксна поднаре
 msgid "Invalid search and replace request"
 msgstr "Неисправан „нађи и замени“ захтев"
 
-#: ../plugins/command-bar/gb-vim.c:960
+#: ../plugins/command-bar/gb-vim.c:961
 #, c-format
 msgid "vim mode requires GtkSourceView"
 msgstr "Вим начин рада захтева GtkSourceView"
 
-#: ../plugins/command-bar/gb-vim.c:990
+#: ../plugins/command-bar/gb-vim.c:991
 #, c-format
 msgid "Not an editor command: %s"
 msgstr "%s није уређивачка наредба"
@@ -1326,10 +1352,6 @@ msgstr "%s није уређивачка наредба"
 #: ../plugins/python-pack/ide-python-format-provider.c:238
 msgid "Format Strings"
 msgstr "Формат реченица"
-
-#: ../plugins/ctags/ide-ctags-completion-provider.c:179
-msgid "CTags"
-msgstr "Це-ознаке"
 
 #: ../plugins/devhelp/gb-devhelp-document.c:71
 #, c-format
@@ -1342,7 +1364,7 @@ msgstr "Документација (%s)"
 msgid "Documentation"
 msgstr "Документација"
 
-#: ../plugins/device-manager/gb-device-manager-panel.c:75
+#: ../plugins/device-manager/gb-device-manager-panel.c:67
 msgid "Device Manager"
 msgstr "Управник уређаја"
 
@@ -1370,15 +1392,15 @@ msgstr "MinGW (64-битни)"
 msgid "MinGW (32-bit)"
 msgstr "MinGW (32-битни)"
 
-#: ../plugins/symbol-tree/symbol-tree.c:187
+#: ../plugins/symbol-tree/symbol-tree.c:236
 msgid "Current language does not support symbol resolvers"
 msgstr "Разрешавачи симбола нису подржани за овај програмски језик"
 
-#: ../plugins/symbol-tree/symbol-tree.c:211
+#: ../plugins/symbol-tree/symbol-tree.c:261
 msgid "Symbol Tree"
 msgstr "Стабло симбола"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:64
+#: ../plugins/sysmon/gb-sysmon-addin.c:58
 msgid "System Monitor"
 msgstr "Праћење система"
 
@@ -1487,7 +1509,7 @@ msgstr "%u. ред, %u. колона"
 msgid "%u of %u"
 msgstr "%u од %u"
 
-#: ../src/editor/gb-editor-frame.c:664
+#: ../src/editor/gb-editor-frame.c:662
 msgid "Re_veal in Project Tree"
 msgstr "Прикажи у стаблу пројекта"
 
@@ -1504,37 +1526,37 @@ msgstr "Сачувај документ"
 msgid "Save Document As"
 msgstr "Сачувај документ као"
 
-#: ../src/editor/gb-editor-view.c:119
+#: ../src/editor/gb-editor-view.c:120
 msgid "Plain Text"
 msgstr "Обичан текст"
 
 #. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:624
+#: ../src/editor/gb-editor-view.c:671
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "Пружа број између 1 и %u"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:95
+#: ../src/preferences/gb-preferences-page-editor.c:123
 msgid "restore insert cursor mark"
 msgstr ""
 "restore insert cursor mark povrati prethodni položaj pokazivača miša поврати "
 "претходни положај показивача миша"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:100
+#: ../src/preferences/gb-preferences-page-editor.c:128
 msgid "diff renderer gutter changes git vcs"
 msgstr ""
 "diff renderer gutter changes git vcs разлика диф рендер исцртавач обрада "
 "промене гит вцс промена dif razlika render iscrtavač obrada promene promena"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:105
+#: ../src/preferences/gb-preferences-page-editor.c:133
 msgid "line numbers"
 msgstr "редни бројеви редова line numbers redni brojevi redova"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:110
+#: ../src/preferences/gb-preferences-page-editor.c:138
 msgid "line lines highlight current"
 msgstr ""
 "line lines highlight current linija linije označavanje označiti trenutno "
@@ -1542,7 +1564,7 @@ msgstr ""
 "тренутни"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:115
+#: ../src/preferences/gb-preferences-page-editor.c:143
 msgid "bracket brackets highlight matching"
 msgstr ""
 "bracket brackets highlight matching zagrada zagrade označavanje označiti "
@@ -1550,24 +1572,32 @@ msgstr ""
 "upareno isticanje istaći истицање истаћи"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:120
+#: ../src/preferences/gb-preferences-page-editor.c:148
 msgid "lines margin scrolloff scroll off"
 msgstr ""
 "lines margin scrolloff scroll off linije margine klizač линије маргине клизач"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:126
+#: ../src/preferences/gb-preferences-page-editor.c:154
 msgid "font document editor monospace"
 msgstr ""
 "font document editor monospace uređivač dokument utvrđene širine monospejs "
 "уређивач документ утврђене ширине моноспејс фонт сликослов slikoslov"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:131
+#: ../src/preferences/gb-preferences-page-editor.c:159
 msgid "minimap mini map overview over view"
 msgstr ""
 "minimap mini map overview over view minimapa minijaturni pregled koda "
 "минимапа минијатурни преглед кода"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:165
+msgid ""
+"draw spaces space tab newline nbsp non-breaking whitespace trailing leading"
+msgstr ""
+"исцртај размаци размак табулатор нови_ред нбсп непрекидни празнина пратећи "
+"водећи"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-git.c:169
@@ -1718,8 +1748,13 @@ msgstr "Не могу да нађем достављача."
 # Можда је исправније Још %s. Треба проверити где се ово јавља.
 #: ../src/search/gb-search-display-group.c:182
 #, c-format
+#| msgid "%s more"
 msgid "%s more"
-msgstr "%s још"
+msgid_plural "%s more"
+msgstr[0] "још %s"
+msgstr[1] "још %s"
+msgstr[2] "још %s"
+msgstr[3] "још %s"
 
 #: ../src/shortcuts/gb-shortcuts-dialog.c:937
 msgid "Search Shortcuts"
@@ -1772,8 +1807,13 @@ msgstr "Пре једне године"
 
 #: ../src/util/gb-glib.c:69
 #, c-format
-msgid "About %u years ago"
-msgstr "Пре отприлике %u године"
+#| msgid "About %u years ago"
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Пре отприлике %u године"
+msgstr[1] "Пре отприлике %u године"
+msgstr[2] "Пре отприлике %u година"
+msgstr[3] "Пре отприлике %u године"
 
 #: ../src/workbench/gb-workbench-actions.c:162
 msgid "Open Document"
@@ -1788,11 +1828,11 @@ msgstr "Отвори"
 msgid "%s - Builder"
 msgstr "%s — Градитељ"
 
-#: ../src/workbench/gb-workbench.c:919
+#: ../src/workbench/gb-workbench.c:939
 msgid "Build Failure"
 msgstr "Неуспех при изградњи"
 
-#: ../src/workbench/gb-workbench.c:966
+#: ../src/workbench/gb-workbench.c:986
 msgid "Project build system does not support building"
 msgstr "Систем за изградњу пројекта не подржава градњу"
 
@@ -1925,12 +1965,23 @@ msgstr "— откриј пројекте"
 
 #: ../tools/ide-search.c:68
 #, c-format
-msgid "%s results\n"
-msgstr "%s резултати\n"
+#| msgid "%s results\n"
+msgid "%s result\n"
+msgid_plural "%s results\n"
+msgstr[0] "%s резултат\n"
+msgstr[1] "%s резултати\n"
+msgstr[2] "%s резултати\n"
+msgstr[3] "%s резултат\n"
 
 #: ../tools/ide-search.c:120
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "ПРОЈЕКТНА_ДАТОТЕКА [ПОЈМОВИ ЗА ПРЕТРАГУ...]"
+
+#~ msgid "Clang"
+#~ msgstr "Це-ланг"
+
+#~ msgid "CTags"
+#~ msgstr "Це-ознаке"
 
 #~ msgid "Search Symbols"
 #~ msgstr "Симболи за претрагу"
@@ -2030,9 +2081,6 @@ msgstr "ПРОЈЕКТНА_ДАТОТЕКА [ПОЈМОВИ ЗА ПРЕТРАГ�
 #~ "Омогућава аутоматско скривање приказа минијатурног прегледа кода унутар "
 #~ "Градитеља када миш није активан унутар прозора уређивача или када "
 #~ "одређени временски период истекне."
-
-#~ msgid "Draw Spaces"
-#~ msgstr "Означи размаке"
 
 #~ msgid "The various types of space to draw in the editor."
 #~ msgstr "Разне врсте размаке које ће уређивач означити унутар документа."
@@ -2846,9 +2894,6 @@ msgstr "ПРОЈЕКТНА_ДАТОТЕКА [ПОЈМОВИ ЗА ПРЕТРАГ�
 
 #~ msgid "The width in characters to represent a tab."
 #~ msgstr "Подешава величину табулатора, у карактерима"
-
-#~ msgid "Trim Trailing Whitespace"
-#~ msgstr "Краћење пратеће празнине"
 
 #~ msgid "If trailing whitespace should be trimmed."
 #~ msgstr "Омогућава скраћивање пратеће празнине."
