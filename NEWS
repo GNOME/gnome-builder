@@ -2,38 +2,38 @@
 Version 3.22.3
 ==============
 
-Summary of changes since 3.22.3
+Summary of changes since 3.22.2
 
- • Fix Clang auto-copmletion snippet insertion and scoring
+ • Fix Clang auto-completion snippet insertion and scoring
  • Various uninitialized and undefined behavior fixes
  • Language defaults are now installed
- • Support for building with llvm 3.9
+ • Support for building with LLVM 3.9
  • Remove <> pairs when backspacing
  • Support added for building and runing Flatpak applications, including
    from Builder distributed via Flatpak
- • flatpak-builder integration using json manifests
+ • Flatpak-Builder integration using JSON manifests
  • Project tree expands to previous location after refreshing contents
  • Buffers are saved before performing build system install operation
- • Show flatpak prebuild and postbuild output in Build Output panel
+ • Show Flatpak prebuild and postbuild output in Build Output panel
  • Store app-id in buildconfig
  • Enter/Return has been re-enabled for auto-completion
  • Goto Line popover no longer uses popover animation/delay
- • Avoid over activation of ctags, clang and other completion providers
- • Set LD_LIBRARY_PATH for Rust rls language server
+ • Avoid over-activation of Ctags, Clang and other completion providers
+ • Set LD_LIBRARY_PATH for Rust RLS language server
  • Fallback to ptsname() when necessary
  • Workbench CSS style improvements
- • Fix tab to move between snippet chunks during auto-completion
+ • Fix Tab to move between snippet chunks during auto-completion
  • TTY support for FreeBSD when spawning processes
  • A new Run Output panel has been added
  • Fix for insertion of certain input methods next to quotations
- • The editor now allows overwriting ;
+ • The editor now allows overwriting the ; character
  • The terminal now supports highlighting and activating URLs
  • Fixes for copy and paste commands in terminal
- • Support for compiling C code outside of autotools projects has
+ • Support for compiling C code outside of Autotools projects has
    been improved to correctly discover standard include files
  • SSL and SSH improvements via Flatpak builds
 
-It is strongly recommended that all users of Bulider upgrade to 3.22.3.
+It is strongly recommended that all users of Builder upgrade to 3.22.3.
 
 Updated translations
 
@@ -48,7 +48,7 @@ Summary of changes since 3.22.1
 
  * Flatpak builds of Builder can now target a Flatpak runtime when building
    the project. More work is ongoing to support running your project with
-   flatpak runtimes.
+   Flatpak runtimes.
  * Translation improvements
  * More RTL improvements
  * Lots of memory leak fixes found with ASAN
@@ -79,7 +79,7 @@ Summary of changes since 3.22.1
  * Runtimes have been improved to hook into the application build process.
  * Vim support has been improved to better support counts to change operations.
  * Build and runtime improvements for editorconfig.
- * Handle alt+0..n properly during auto-completion.
+ * Handle Alt+0..n properly during auto-completion.
  * Builder now depends on json-glib-1.0. This was already likely required
    via dependencies before, but now is explicit.
 
@@ -103,12 +103,12 @@ Summary of changes since 3.22.0
    on macOS).
  • Use “getent passwd” to get the current passwd when discovering
    preferred user shell.
- • Load both user and system installed flatpak runtimes.
+ • Load both user and system installed Flatpak runtimes.
  • Add support for Sysprof Visualizers (requires Sysprof 3.22.1)
  • Add empty, failed, and recording states for Sysprof plugin.
  • Prefer GtkNativeFileChooser when applicable.
- • Support for running some GJS projects using autotools. In particular
-   we try to discover the “GJS template” Makefile.am style.
+ • Support for running some Gjs projects using Autotools. In particular
+   we try to discover the “Gjs template” Makefile.am style.
  • Fix gettext usage from Python plugins.
  • The preferences perspective is now more tolerant of smaller screen
    sizes such as 1280xH.
@@ -124,7 +124,7 @@ GNOME 3.22.0 is here and GNOME Builder is no different.
 Since 3.21.91, we've added a bunch of features to help Builder run better under
 Flatpak.
 
- • Fixes improper invalidation of cache items like clang translation units.
+ • Fixes improper invalidation of cache items like Clang translation units.
  • New transfers API for plugins.
  • Support for prebuild/postbuild commands in .buildconfig.
  • Run terminals on the host system when contained in Flatpak.
@@ -134,7 +134,7 @@ Flatpak.
    IdeSubprocessLauncher:run-on-host property.
  • Various UI stablization fixes.
  • Add Build and Run keybindings to Shortcut window (Ekta Nandwani)
- • Fix running autotools targets with relative paths (Patrick Griffis)
+ • Fix running Autotools targets with relative paths (Patrick Griffis)
  • Fix running projects using GSettings (Patrick Griffis)
  • Add Python Gnome project (Patrick Griffis)
 
@@ -155,7 +155,7 @@ Another incremental release as we work towards GNOME 3.22.
  • Build system improvements (Andreas Henriksson, Kalev Lember)
  • A new "Quick Highlight" plugin to highlight words matching the
    current selection (Martin Blanchard)
- • New snippets for GJS have been added (Philip Chimento)
+ • New snippets for Gjs have been added (Philip Chimento)
  • Incremental gstyle/colorpicker improvements (Sebastien Lafargue)
  • A new "Transfers API" has landed but is not yet used by any
    components. This will be useful for plugins that involve download
@@ -239,14 +239,14 @@ they have already shipped 3.20.0 as it fixes numerous issues.
  • You can now select templates when creating a project, including
    C, C++, and Vala languages.
  • The Vala plugin now extracts --pkg command line arguments from
-   autotools projects.
+   Autotools projects.
  • Various bug fixes to preferences and gsettings.
  • Much more of builder is translatable now.
  • Build for FreeBSD and OpenBSD.
- • Fixes to vim movements.
+ • Fixes to Vim movements.
  • Many performance improvements to the editor.
  • Support for LLVM 3.8.
- • Fixes for ctrl+click on included headers to jump to header.
+ • Fixes for Ctrl+click on included headers to jump to header.
  • Fix for infinite loop in worker thread when cloning from
    unauthorized git repositories.
  • Builder removes unnecessary widgets after starting up, lowering
@@ -262,9 +262,9 @@ they have already shipped 3.20.0 as it fixes numerous issues.
    can now be removed.
 
 We also request that packages ensure that they ensure that the Builder
-package depends on automake, autoconf, and libtool. These will always
+package depends on Automake, Autoconf, and Libtool. These will always
 be available when building, but are also required at runtime for
-autotools support.
+Autotools support.
 
 Thanks to all our translators and contributors in this release!
 
@@ -296,9 +296,9 @@ Since our last release, you'll find:
  • More stylability controls using GtkSourceView style schemes.
  • The ability to toggle case-sensitivity with search context
    menus.
- • VIM movement improvements.
+ • Vim movement improvements.
  • The ability to disable project miners at startup.
- • Improvements to the clang completion engine.
+ • Improvements to the Clang completion engine.
  • Show empty state screen when last document is closed.
  • Show project tree when last document is closed.
  • Various build system improvements.
@@ -367,7 +367,7 @@ In this release, you'll find:
    Adrian Zatreanu)
  • The line change gutter got support for rendering deleted lines.
  • Ctags got support for coalescing similar completion results. (chandu)
- • Cursor location history and ctags were moved to .cache directories.
+ • Cursor location history and Ctags were moved to .cache directories.
    (Megh Parikh)
  • Libide, Egg, and Template-GLib headers are now installed to
    $(includedir)/gnome-builder-@VERSION@. This allows building C
@@ -426,7 +426,7 @@ still has a few major pieces still to land this cycle.
  • Loads of bug and build system fixes.
  • Project greeter and project creation have been rewritten for
    perspectives.
- • Plugins now have automatic resources for menus.ui and css themes.
+ • Plugins now have automatic resources for menus.ui and CSS themes.
  • Various keybinding improvements.
  • Control+click works for navigating to type definitions.
  • scrolloffset has much improved and gained support for negative
@@ -470,18 +470,18 @@ A short list of updates since 3.18.0:
  • A new button has been added to the editor to jump to the next warning
    or error.
  • The C indenter is a bit more friendly to alternate coding styles.
- • Reindent line support has landed (tab in emacs, == in vim, ctrl+alt+i
+ • Reindent line support has landed (Tab in Emacs, == in Vim, Ctrl+Alt+i
    as default).
  • A new font for the overview map has been enabled. It is called BuilderBlocks
    and is a generic block font based on Tofu from Behdad Esfahbod.
- • The ctags plugin can now defer tags generation to automakes `make ctags`.
+ • The Ctags plugin can now defer tags generation to Automakes `make ctags`.
  • You can now draw marks for spaces, tabs, newlines, non-breaking whitespace,
    trailing and leading spaces.
  • Many translation updates including (French, Hungarian, Kazakh, Korean,
    Spanish, Finnish, Esperanto, Czech, Italian, Brazilian Portuguese, Polish,
    German, and Serbian).
  • Improvements to the search workflow.
- • Various vim and emacs compatability and stability improvements.
+ • Various Vim and Emacs compatability and stability improvements.
  • Jedi completion proposals now show the correct word and lower probability
    of functions that start with __.
  • Symbol tree panel stability improvements.
@@ -504,10 +504,10 @@ A short list of updates since 3.17.92:
  • counters: add vsdo fallback on linux and no rdtscp instruction
  • counters: mask CPU bits from rdtscp instruction on x86_64
  • editor: release underlying document aggressively to prevent leaks
- • editor: <shift>k in vim mode to request documentation
+ • editor: <Shift>k in Vim mode to request documentation
  • editor: add simple goto line popover, activate with ctr+i in gedit mode
  • editor: fix crash upon DnD to editor
- • keybindings: use ctrl+alt+o for global search in gedit mode.
+ • keybindings: use Ctrl+Alt+o for global search in gedit mode.
  • map-bin: ignore size adjustment when floating bar is not used
  • plugins: show plugin greyed out if it is disabled
  • search: disable progress bar in search results
@@ -584,7 +584,7 @@ Version 3.16.3
 ==============
 
 Your Builder development team has been working hard to build on the
-tremendous momentum of the last few months. 3.16.3 is like each of it's
+tremendous momentum of the last few months. 3.16.3 is like each of its
 predecessors, packed with new features and bug fixes.
 
 I'd like to personally thank everyone who contributed bugs during the cycle.
@@ -599,7 +599,7 @@ Of note in this release:
  • A new source code minimap, recently pushed upstream into GtkSourceView.
  • A new greeter based on recent design work.
  • A new XML highlighter to highlight matching XML elements.
- • Support for ctags-based auto-completion.
+ • Support for Ctags-based auto-completion.
  • High-performance, mutli-threaded counters that can be enabled with
    --enable-rdtscp. These are disabled by default as they require newer
    Intel Core i[357] features. ide-list-counters can be used to extract
@@ -607,18 +607,18 @@ Of note in this release:
  • The preferences interface has been vastly improved.
  • Search improvements.
  • A strftime format completion provider for Python.
- • Additional emacs, vim, and default keybindings.
- • Experimental support for building autotools projects with mingw.
+ • Additional Emacs, Vim, and default keybindings.
+ • Experimental support for building Autotools projects with mingw.
  • Python auto-indenter improvements.
  • Many CSS style improvements on Adwaita.
- • Additional support for recursive-automake-based projects.
+ • Additional support for recursive-Automake-based projects.
  • Some features have made configurable with gsettings.
  • Layered settings support for project vs global settings.
  • Improved modelines support.
  • Support for parsing DOAP files.
  • Various memory leaks were plugged.
  • Incremental highlighting has more aggressive invalidation.
- • Various race conditions in autotools support were fixes.
+ • Various race conditions in Autotools support were fixes.
  • OpenBSD and FreeBSD build system fixes.
  • Many translation improvements.
  • libide-1.0.so and Ide-1.0.typelib are now installed to a private
@@ -653,7 +653,7 @@ This is primarily a bug-fix release.
 
  • Fix double free in dummy vcs.
  • Fix project tree loading in dummy vcs.
- • Fix workbench action names in emacs mode.
+ • Fix workbench action names in Emacs mode.
  • Improve sorting of filenames in project tree.
  • Ensure loading of files matching content types supported by
    GtkSourceLanguage.
@@ -663,7 +663,7 @@ This is primarily a bug-fix release.
  • Add move to trash in project tree.
  • Sort previously opened projects before projects discovered by miners.
  • Use sysconf() for page size (fixes building on OpenBSD).
- • Various clang build fixes.
+ • Various Clang build fixes.
  • Use arrow down instead of hamburger for search bar.
  • Fix unicode in markdown live preview.
 
@@ -694,25 +694,25 @@ Some highlights of the over 300 new commits in this release:
  • Improvements to dark theme.
  • Improvements to Builder's style scheme for C and C++ languages.
  • "Jump to definition" support for C and C++ languages.
-   Ctrl+] or gd in vim mode, <alt>period in emacs mode.
+   Ctrl+] or gd in Vim mode, <Alt>period in Emacs mode.
  • A new project selection and creation dialog on startup.
  • Git clone support from new project dialog.
- • "Find other file" similar to emacs to switch between source and header
+ • "Find other file" similar to Emacs to switch between source and header
    files in C and C++.
  • Improvements to scroll-offset which allows you to keep a given number
    of lines above and below the cursor. (Carlos Soriano, Christian Hergert)
  • Respect Gtk's "sort-directories-first" GSetting. (Garrett Regier)
- • Improvements to VIM mode including support for :bnext, :bprevious,
+ • Improvements to Vim mode including support for :bnext, :bprevious,
    :buffers and :ls (Alexandre Franke, Sebastien Lafargue)
  • Split support for HTML view (Sebastien Lafargue)
  • Build fixes for FreeBSD (Ting-Wei Lan)
  • Build fixes for OpenBSD (Antoine Jacoutot)
  • Support for editing "application/x-php" files.
- • Support extraction of CFLAGS from out-of-tree, non-recursive automake.
+ • Support extraction of CFLAGS from out-of-tree, non-recursive Automake.
    (Christian Hergert, Giovanni Campagna)
  • A new symbolic icon (Jakub Steiner)
  • Improvements to handling of drafts (Paolo Borelli)
- • Improvements to autotools builders (Paolo Borelli)
+ • Improvements to Autotools builders (Paolo Borelli)
  • Many translation updates including Czech, Polish, and Hebrew.
    (Marek Černocký, Piotr Drąg, and Yosef Or Boczko)
 
@@ -767,14 +767,14 @@ Some highlights of this release are:
  · An implementation of Vim's scrolloffset.
  · Restoration of insertion cursor when reloading a file.
  · Autocompletion based on current words in loaded buffers.
- · Experimental support for autocompletion based on clang.
- · Support for vim, emacs, and kate style modelines.
+ · Experimental support for autocompletion based on Clang.
+ · Support for Vim, Emacs, and Kate style modelines.
  · Editorconfig support.
- · Experimental read-only support for autoconf/automake based build
+ · Experimental read-only support for Autoconf/Automake based build
    systems.
  · Robust auto-indenters for GNU C89, Python, and XML.
  · Experimental project tree (available via F9).
- · Experimental support for building automake based projects.
+ · Experimental support for building Automake based projects.
  · Keybinding replay for command repeat in Vim emulation.
  · Autosaving of modified buffers, never lose a change.
  · Scripting via Python (CPython) or JavaScript (Gjs) and GObject
