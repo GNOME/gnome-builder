@@ -513,7 +513,7 @@ file_collapse (GFile *file)
     {
       g_autofree gchar *freeme = path;
 
-      path = g_build_filename (g_get_home_dir (), path, NULL);
+      path = g_build_filename (g_get_home_dir (), freeme, NULL);
     }
 
   if (g_str_has_prefix (path, g_get_home_dir ()))
@@ -521,7 +521,7 @@ file_collapse (GFile *file)
       g_autofree gchar *freeme = path;
 
       path = g_build_filename ("~",
-                               path + strlen (g_get_home_dir ()),
+                               freeme + strlen (g_get_home_dir ()),
                                NULL);
     }
 
