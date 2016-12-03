@@ -32,6 +32,7 @@ typedef struct
   GtkTextMark                *begin_mark;
   GtkTextMark                *end_mark;
   GbBeautifierConfigCommand   command;
+  GPtrArray                  *command_args;
   GFile                      *src_file;
   GFile                      *config_file;
   GFile                      *tmp_workdir_file;
@@ -68,44 +69,101 @@ process_state_free (gpointer data)
   g_free (state->lang_id);
   g_free (state->text);
 
+  if (state->command_args != NULL)
+    g_ptr_array_unref (state->command_args);
+
   g_slice_free (ProcessState, state);
 }
 
+static gchar *
+match_and_replace (const gchar *str,
+                   const gchar *pattern,
+                   const gchar *replacement)
+{
+  g_autofree gchar *head = NULL;
+  g_autofree gchar *tail = NULL;
+  gchar *needle;
+  gsize head_len;
+
+  g_assert (!ide_str_empty0 (str));
+  g_assert (!ide_str_empty0 (pattern));
+
+  if (NULL != (needle = g_strstr_len (str, -1, pattern)))
+    {
+      head_len = needle - str;
+      if (head_len > 0)
+        head = g_strndup (str, head_len);
+      else
+        head = g_strdup ("");
+
+      tail = needle + strlen (pattern);
+      if (*tail != '\0')
+        tail = g_strdup (tail);
+      else
+        tail = g_strdup ("");
+
+      return g_strconcat (head, replacement, tail, NULL);
+    }
+  else
+    return NULL;
+}
+
+static void
+command_args_expand (GbBeautifierWorkbenchAddin *self,
+                     GPtrArray                  *args,
+                     ProcessState               *state)
+{
+  g_autofree gchar *src_path = NULL;
+  g_autofree gchar *config_path = NULL;
+  gchar **arg_adr;
+  gchar *new_arg;
+  gboolean has_config = TRUE;
+
+  src_path = g_file_get_path (state->src_file);
+  if (G_IS_FILE (state->config_file))
+    config_path = g_file_get_path (state->config_file);
+  else
+    has_config = FALSE;
+
+  for (gint i = 0; g_ptr_array_index (args, i) != NULL; ++i)
+    {
+      arg_adr = (gchar **)&g_ptr_array_index (args, i);
+      if (NULL != (new_arg = match_and_replace (*arg_adr, "@s@", src_path)))
+        {
+          g_free (*arg_adr);
+          *arg_adr = new_arg;
+        }
+      else if (has_config &&
+               NULL != (new_arg = match_and_replace (*arg_adr, "@c@", config_path)))
+        {
+          g_free (*arg_adr);
+          *arg_adr = new_arg;
+        }
+    }
+}
+
 static GSubprocess *
-gb_beautifier_process_create_for_uncrustify (GbBeautifierWorkbenchAddin *self,
-                                             ProcessState               *state,
-                                             GError                     *error)
+gb_beautifier_process_create_generic (GbBeautifierWorkbenchAddin *self,
+                                      ProcessState               *state,
+                                      GError                     *error)
 {
   GSubprocess *subprocess = NULL;
-  GPtrArray *args;
-  gchar *config_path;
   gchar *src_path;
 
   g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
   g_assert (state != NULL);
 
-  config_path = g_file_get_path (state->config_file);
   src_path = g_file_get_path (state->src_file);
 
-  g_assert (!ide_str_empty0 (config_path));
   g_assert (!ide_str_empty0 (src_path));
   g_assert (!ide_str_empty0 (state->lang_id));
 
-  args = g_ptr_array_new ();
-  g_ptr_array_add (args, "uncrustify");
-
-  g_ptr_array_add (args, "-c");
-  g_ptr_array_add (args, config_path);
-  g_ptr_array_add (args, "-f");
-  g_ptr_array_add (args, src_path);
-  g_ptr_array_add (args, NULL);
-
-  subprocess = g_subprocess_newv ((const gchar * const *)args->pdata,
+  command_args_expand (self, state->command_args, state);
+  subprocess = g_subprocess_newv ((const gchar * const *)state->command_args->pdata,
                                   G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                   G_SUBPROCESS_FLAGS_STDERR_PIPE,
                                   &error);
 
-  g_ptr_array_free (args, TRUE);
   return subprocess;
 }
 
@@ -184,6 +242,7 @@ process_communicate_utf8_cb (GObject      *object,
   g_autoptr (GSubprocess) process = (GSubprocess *)object;
   g_autoptr (GTask) task = (GTask *)user_data;
   g_autofree gchar *stdout_str = NULL;
+  g_autofree gchar *stderr_str = NULL;
   g_autoptr(GError) error = NULL;
   GtkSourceCompletion *completion;
   GtkTextBuffer *buffer;
@@ -195,7 +254,7 @@ process_communicate_utf8_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-  if (!g_subprocess_communicate_utf8_finish (process, result, &stdout_str, NULL, &error))
+  if (!g_subprocess_communicate_utf8_finish (process, result, &stdout_str, &stderr_str, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -229,6 +288,11 @@ process_communicate_utf8_cb (GObject      *object,
 
       g_task_return_boolean (task, TRUE);
     }
+  else
+    g_warning ("beautify plugin: output empty\n");
+
+  g_warning ("beautify plugin stderr:\n%s\n", stderr_str);
+
 }
 
 static void
@@ -251,12 +315,10 @@ create_tmp_file_cb (GObject      *object,
   if (NULL == (state->src_file = gb_beautifier_helper_create_tmp_file_finish (self, result, &error)))
     goto fail;
 
-  if (state->command == GB_BEAUTIFIER_CONFIG_COMMAND_UNCRUSTIFY)
-    process = gb_beautifier_process_create_for_uncrustify (self, state, error);
-  else if (state->command == GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT)
+  if (state->command == GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT)
     process = gb_beautifier_process_create_for_clang_format (self, state, error);
   else
-    g_assert_not_reached ();
+    process = gb_beautifier_process_create_generic (self, state, error);
 
   if (process != NULL)
     {
@@ -278,6 +340,22 @@ create_tmp_file_cb (GObject      *object,
 fail:
   g_task_return_error (task, g_steal_pointer (&error));
   return;
+}
+
+static GPtrArray *
+command_args_copy (GPtrArray *args)
+{
+  GPtrArray *args_copy;
+
+  g_assert (args != NULL);
+
+  args_copy = g_ptr_array_new_with_free_func (g_free);
+  for (gint i = 0; g_ptr_array_index (args, i) != NULL; ++i)
+    g_ptr_array_add (args_copy, g_strdup (g_ptr_array_index (args, i)));
+
+  g_ptr_array_add (args_copy, NULL);
+
+  return args_copy;
 }
 
 void
@@ -325,6 +403,8 @@ gb_beautifier_process_launch_async (GbBeautifierWorkbenchAddin  *self,
   state->config_file = g_file_dup (entry->file);
   state->lang_id = g_strdup (lang_id);
 
+  if (entry->command_args != NULL)
+    state->command_args = command_args_copy (entry->command_args);
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gb_beautifier_process_launch_async);
   g_task_set_task_data (task, state, process_state_free);

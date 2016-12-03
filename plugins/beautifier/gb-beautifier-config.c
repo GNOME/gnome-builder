@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <ide.h>
 
 #include "gb-beautifier-private.h"
@@ -31,6 +32,9 @@ config_entry_clear_func (gpointer data)
   g_object_unref (entry->file);
   g_free (entry->name);
   g_free (entry->lang_id);
+
+  if (entry->command_args != NULL)
+    g_ptr_array_unref (entry->command_args);
 }
 
 static void
@@ -132,7 +136,14 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
         {
           g_autofree gchar *display_name = NULL;
           g_autofree gchar *command = NULL;
+          g_autofree gchar *command_pattern = NULL;
+          g_autoptr(GFile) file = NULL;
+          g_autofree gchar *config_path = NULL;
+          g_auto(GStrv) strv = NULL;
+          gint argc;
           gchar *profile;
+          gboolean has_command;
+          gboolean has_command_pattern;
 
           profile = profiles [i];
           if (0 == g_strcmp0 (profile, "global"))
@@ -149,41 +160,65 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           if (gb_beautifier_config_check_duplicates (self, entries, lang_id, display_name))
             continue;
 
-          if ( NULL != (command = g_key_file_get_string (key_file, profile, "command", &error)))
+          has_command = g_key_file_has_key (key_file, profile, "command", &error);
+          has_command_pattern = g_key_file_has_key (key_file, profile, "command-pattern", &error);
+          if (!has_command && !has_command_pattern)
             {
-              g_autoptr(GFile) file = NULL;
-              g_autofree gchar *file_path = NULL;
+              g_warning ("beautifier plugin: neither command nor command-pattern keys found");
+              g_warning ("entry \"%s\" disabled", display_name);
+              continue;
+            }
 
-              if (0 == g_strcmp0 (command, "uncrustify"))
-                entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_UNCRUSTIFY;
-              else if (0 == g_strcmp0 (command, "clang-format"))
+          memset (&entry, 0, sizeof(GbBeautifierConfigEntry));
+          if (has_command)
+            {
+              command = g_key_file_get_string (key_file, profile, "command", &error);
+              if (0 == g_strcmp0 (command, "clang-format"))
                 entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT;
               else
-                goto fail;
-
-              file_path = g_build_filename (base_path, real_lang_id, profile, NULL);
-              file = g_file_new_for_path (file_path);
-              if (g_file_query_exists (file, NULL))
                 {
-                  entry.name = g_steal_pointer (&display_name);
-                  entry.file = g_steal_pointer (&file);
-                  entry.lang_id = g_strdup (lang_id);
-
-                  if (0 == g_strcmp0 (default_profile, profile))
-                    {
-                      entry.is_default = TRUE;
-                      g_clear_pointer (&default_profile, g_free);
-                    }
-                  else
-                    entry.is_default = FALSE;
-
-                  g_array_append_val (entries, entry);
+                  g_warning ("beautifier plugin: command key out of possible values");
+                  g_warning ("entry \"%s\" disabled", display_name);
+                  continue;
                 }
-              else
-                g_warning ("Can't find \"%s\"", file_path);
             }
           else
-             goto fail;
+            {
+              command_pattern = g_key_file_get_string (key_file, profile, "command-pattern", &error);
+              if (!g_shell_parse_argv (command_pattern, &argc, &strv, &error))
+                {
+                  g_warning ("beautifier plugin: \"%s\"", error->message);
+                  return FALSE;
+                }
+
+              entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_NONE;
+              entry.command_args = g_ptr_array_new_with_free_func (g_free);
+              for (gint j = 0; strv [j] != NULL; ++j)
+                g_ptr_array_add (entry.command_args, g_strdup (strv [j]));
+
+              g_ptr_array_add (entry.command_args, NULL);
+            }
+
+          config_path = g_build_filename (base_path, real_lang_id, profile, NULL);
+          file = g_file_new_for_path (config_path);
+          if (g_file_query_exists (file, NULL))
+            {
+              entry.name = g_steal_pointer (&display_name);
+              entry.file = g_steal_pointer (&file);
+              entry.lang_id = g_strdup (lang_id);
+
+              if (0 == g_strcmp0 (default_profile, profile))
+                {
+                  entry.is_default = TRUE;
+                  g_clear_pointer (&default_profile, g_free);
+                }
+              else
+                entry.is_default = FALSE;
+
+              g_array_append_val (entries, entry);
+            }
+          else
+            g_warning ("Can't find \"%s\"", config_path);
         }
     }
 

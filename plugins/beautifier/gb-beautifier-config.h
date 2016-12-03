@@ -27,8 +27,8 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT,
-  GB_BEAUTIFIER_CONFIG_COMMAND_UNCRUSTIFY,
+  GB_BEAUTIFIER_CONFIG_COMMAND_NONE,
+  GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT
 } GbBeautifierConfigCommand;
 
 typedef struct
@@ -37,6 +37,7 @@ typedef struct
   GFile                     *file;
   gchar                     *name;
   GbBeautifierConfigCommand  command;
+  GPtrArray                 *command_args;
   guint                      is_default : 1;
 } GbBeautifierConfigEntry;
 
