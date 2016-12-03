@@ -129,7 +129,7 @@ Flatpak.
  • Support for prebuild/postbuild commands in .buildconfig.
  • Run terminals on the host system when contained in Flatpak.
  • Teach runtimes to run on the host system when necessary. Builder, when
-   running under Flatpak, can support using your host jhbuild now.
+   running under Flatpak, can support using your host JHBuild now.
  • Plugins can define if a process should run on the host with the
    IdeSubprocessLauncher:run-on-host property.
  • Various UI stablization fixes.
@@ -162,7 +162,7 @@ Another incremental release as we work towards GNOME 3.22.
    or upload operations, such as those to a physical device.
  • SCSS files are mapped to CSS for gnome-code-assistance.
  • Sysprof support is now automatically detected.
- • The devhelp search provider has been removed as it was
+ • The DevHelp search provider has been removed as it was
    better served via the Ctrl+Shift+F accelerator.
  • Builder now prefers the project id (sanitized name) in more
    places such as directory names which should improve building some
@@ -362,7 +362,7 @@ In this release, you'll find:
    create new and tweak existing configurations.
  • Support building projects inside xdg-app runtime, using
    "xdg-app build"
- • Support for building inside of a jhbuild runtime (Patrick Griffis)
+ • Support for building inside of a JHBuild runtime (Patrick Griffis)
  • Various tooltips were added to the user interface (Piotr Drąg,
    Adrian Zatreanu)
  • The line change gutter got support for rendering deleted lines.
@@ -474,16 +474,16 @@ A short list of updates since 3.18.0:
    as default).
  • A new font for the overview map has been enabled. It is called BuilderBlocks
    and is a generic block font based on Tofu from Behdad Esfahbod.
- • The Ctags plugin can now defer tags generation to Automakes `make ctags`.
+ • The Ctags plugin can now defer tags generation to Automake's `make ctags`.
  • You can now draw marks for spaces, tabs, newlines, non-breaking whitespace,
    trailing and leading spaces.
  • Many translation updates including (French, Hungarian, Kazakh, Korean,
    Spanish, Finnish, Esperanto, Czech, Italian, Brazilian Portuguese, Polish,
    German, and Serbian).
  • Improvements to the search workflow.
- • Various Vim and Emacs compatability and stability improvements.
+ • Various Vim and Emacs compatibility and stability improvements.
  • Jedi completion proposals now show the correct word and lower probability
-   of functions that start with __.
+   of functions that start with two underscores: __
  • Symbol tree panel stability improvements.
 
 
@@ -564,8 +564,8 @@ churned through bugs late in the cycle. We hope to do this less as we come
 out of beta.
 
 For those that are *very* adventurous, Builder should compile on OS X now with
-a properly configured jhbuild toolchain. Additionally, we have maintained
-compatability with FreeBSD and OpenBSD thanks to generous contributions.
+a properly configured JHBuild toolchain. Additionally, we have maintained
+compatibility with FreeBSD and OpenBSD thanks to generous contributions.
 
 Notes to packagers
 
@@ -651,8 +651,8 @@ Version 3.16.2
 Based on early feedback from 3.16.1, I'm announcing a followup release.
 This is primarily a bug-fix release.
 
- • Fix double free in dummy vcs.
- • Fix project tree loading in dummy vcs.
+ • Fix double free in dummy VCS.
+ • Fix project tree loading in dummy VCS.
  • Fix workbench action names in Emacs mode.
  • Improve sorting of filenames in project tree.
  • Ensure loading of files matching content types supported by
@@ -701,7 +701,7 @@ Some highlights of the over 300 new commits in this release:
    files in C and C++.
  • Improvements to scroll-offset which allows you to keep a given number
    of lines above and below the cursor. (Carlos Soriano, Christian Hergert)
- • Respect Gtk's "sort-directories-first" GSetting. (Garrett Regier)
+ • Respect GTK+'s "sort-directories-first" GSetting. (Garrett Regier)
  • Improvements to Vim mode including support for :bnext, :bprevious,
    :buffers and :ls (Alexandre Franke, Sebastien Lafargue)
  • Split support for HTML view (Sebastien Lafargue)
@@ -736,7 +736,7 @@ encourage everyone to try things out and file bugs and feature requests.
 
 I'd like to thank the Gedit and GtkSourceView team for all of their hard
 work integrating features from Builder upstream as well as adding
-features we needed. Additionally the GLib and Gtk+ teams were incredibly
+features we needed. Additionally the GLib and GTK+ teams were incredibly
 helpful to keep us moving.
 
 Builder is built in conjunction with LibIDE. This new shared library
@@ -760,7 +760,7 @@ Some highlights of this release are:
  · Navigation history to jump back and forward within modified files.
  · Robust snippet engine including support for GLib 2.44 style GObjects.
  · Quick search to locate files within your project as well as
-   documentation in devhelp.
+   documentation in DevHelp.
  · Smart backspace to simplify using spaces instead of tabs.
  · A command bar to execute internal GActions and Vim style commands
    with autocompletion.
@@ -782,9 +782,9 @@ Some highlights of this release are:
  · Dynamic power management when running on laptop battery.
  · HTML and Markdown live preview.
  · Autocompletion of g_date_time_format() format parameters.
- · Type ahead search with rubberbanding.
+ · Type-ahead search with rubberbanding.
 
-We wont be slowing down any time soon. Thanks to everyone for your
+We won't be slowing down any time soon. Thanks to everyone for your
 support, I cannot wait for what is ahead.
 
 -- Christian Hergert
@@ -803,4 +803,3 @@ took the time to file bugs as you find them.
 You can report bugs using bugzilla at the following URL:
 
   https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
-
