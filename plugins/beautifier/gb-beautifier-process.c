@@ -58,9 +58,12 @@ process_state_free (gpointer data)
   g_clear_object (&state->src_file);
   g_clear_object (&state->config_file);
 
-  g_file_delete (state->tmp_config_file, NULL, NULL);
-  g_file_delete (state->tmp_src_file, NULL, NULL);
-  g_file_delete (state->tmp_workdir_file, NULL, NULL);
+  if (state->tmp_config_file != NULL)
+    g_file_delete (state->tmp_config_file, NULL, NULL);
+  if (state->tmp_src_file != NULL)
+    g_file_delete (state->tmp_src_file, NULL, NULL);
+  if (state->tmp_workdir_file != NULL)
+    g_file_delete (state->tmp_workdir_file, NULL, NULL);
 
   g_clear_object (&state->tmp_workdir_file);
   g_clear_object (&state->tmp_config_file);
