@@ -284,14 +284,26 @@ add_entries_from_base_path (GbBeautifierWorkbenchAddin *self,
         {
           real_lang_id = g_file_info_get_display_name (info);
           if (is_a_lang_id (self, real_lang_id) &&
-              add_entries_from_config_ini_file (self, base_path, real_lang_id, real_lang_id, entries, NULL, FALSE))
+              add_entries_from_config_ini_file (self,
+                                                base_path,
+                                                real_lang_id,
+                                                real_lang_id,
+                                                entries,
+                                                NULL,
+                                                FALSE))
             ret = TRUE;
 
           for (gint i = 0; i < map->len; ++i)
             {
               entry = &g_array_index (map, GbBeautifierMapEntry, i);
               if (0 == g_strcmp0 (entry->profile, real_lang_id) &&
-                  add_entries_from_config_ini_file (self, base_path, entry->lang_id, real_lang_id, entries, entry->default_profile, TRUE))
+                  add_entries_from_config_ini_file (self,
+                                                    base_path,
+                                                    entry->lang_id,
+                                                    real_lang_id,
+                                                    entries,
+                                                    entry->default_profile,
+                                                    TRUE))
                 ret = TRUE;
             }
         }
