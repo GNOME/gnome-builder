@@ -34,7 +34,7 @@ typedef enum
 typedef struct
 {
   gchar                     *lang_id;
-  GFile                     *file;
+  GFile                     *config_file;
   gchar                     *name;
   GbBeautifierConfigCommand  command;
   GPtrArray                 *command_args;

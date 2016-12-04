@@ -403,8 +403,10 @@ gb_beautifier_process_launch_async (GbBeautifierWorkbenchAddin  *self,
   state->begin_mark = gtk_text_buffer_create_mark (buffer, NULL, begin, TRUE);
   state->end_mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
   state->command = entry->command;
-  state->config_file = g_file_dup (entry->file);
   state->lang_id = g_strdup (lang_id);
+
+  if (G_IS_FILE (entry->config_file))
+    state->config_file = g_file_dup (entry->config_file);
 
   if (entry->command_args != NULL)
     state->command_args = command_args_copy (entry->command_args);

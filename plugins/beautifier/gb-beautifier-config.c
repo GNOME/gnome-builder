@@ -29,7 +29,7 @@ config_entry_clear_func (gpointer data)
 
   g_assert (entry != NULL);
 
-  g_object_unref (entry->file);
+  g_object_unref (entry->config_file);
   g_free (entry->name);
   g_free (entry->lang_id);
 
@@ -65,7 +65,7 @@ gb_beautifier_config_check_duplicates (GbBeautifierWorkbenchAddin *self,
       GbBeautifierConfigEntry *entry = &g_array_index (entries, GbBeautifierConfigEntry, i);
 
       /* Check for a NULL element at the array end */
-      if (entry->file == NULL)
+      if (entry->config_file == NULL)
         break;
 
       if (0 == g_strcmp0 (entry->lang_id, lang_id) &&
@@ -138,7 +138,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           g_autofree gchar *display_name = NULL;
           g_autofree gchar *command = NULL;
           g_autofree gchar *command_pattern = NULL;
-          g_autoptr(GFile) file = NULL;
+          g_autoptr(GFile) config_file = NULL;
           g_autofree gchar *config_path = NULL;
           g_auto(GStrv) strv = NULL;
           gint argc;
@@ -201,11 +201,11 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
             }
 
           config_path = g_build_filename (base_path, real_lang_id, profile, NULL);
-          file = g_file_new_for_path (config_path);
-          if (g_file_query_exists (file, NULL))
+          config_file = g_file_new_for_path (config_path);
+          if (g_file_query_exists (config_file, NULL))
             {
               entry.name = g_steal_pointer (&display_name);
-              entry.file = g_steal_pointer (&file);
+              entry.config_file = g_steal_pointer (&config_file);
               entry.lang_id = g_strdup (lang_id);
 
               if (0 == g_strcmp0 (default_profile, profile))
