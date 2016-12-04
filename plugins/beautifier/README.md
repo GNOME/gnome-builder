@@ -5,10 +5,11 @@ To be able to trigger a beautify action you need:
 - Act on a file with a recognized language (or change the language in Builder interface)
 - Have a command configured for this language (or the menu will be empty)
 - The command executable need to be reachable from your $PATH
+- if your command use a config file, it need to be present.
 - Some text need to be selected.
 
 Then, two possible actions:
-- A default entry is defined: pressing &lt;ctrl&gt;&lt;alt&gt;b trigger the beautify actions.
+- A default entry is defined: pressing &lt;ctrl&gt;&lt;alt&gt;b trigger the default beautify action.
 - You can manually choose an entry in the contextual menu at "Selection-> Beautify" submenu.
 
 # Beautifier plugin configuration :
@@ -34,7 +35,7 @@ Each layer has a priority in the same order:
 - project
 - system
 
-This count for the language id groups, but for the default entry too.
+This count for the profiles, and for the default entry too.
 
 In each layer you will find:
 - a global.ini file.
@@ -42,19 +43,19 @@ In each layer you will find:
 
 In each language or group-of-languages folder, you will find:
 - A config.ini
-- Any numbers of configuration files used by your beautifier commands.
+- Any number of configuration files used by your beautifier commands.
 
 ```
 	[layer root]
 		global.ini
 		[lang_id folder]
 			config.ini
-			command_config_file.cfg (or any other file extension)
+			a_command_config_file.cfg (or any other file extension)
 			another_config_file.cfg
 		[mapped folder]
 			config.ini
-			command_config_file.cfg (or any other file extension)
-			another_config_file.cfg
+			a_command_config_file.cfg (or any other file extension)
+			yet_another_config_file.cfg
 ```
 
 ## global.ini groups and keys:
@@ -82,62 +83,82 @@ This permit to reference the same folder from different languages:
 ```
 	[chdr]
 	map = c_family
-	default = k&r.cfg
+	default = k&r
 
 	[objc]
 	map = c_family
 ```
 
+Inside a group, mandatory keys are: map
+
 ## config.ini groups and keys:
 
 The config.ini file define configuration to display and launch a beaufity action.
-Groups are named with one of your command configuration file found in the same folder.
+Groups are freely named (respecting GKeyFile syntax).
 The keys are:
-- command = the command to launch (currently, uncrustify or clang-format)
+
+- command = the command to launch (currently clang-format, because of the special processing needed)
+
+or
+
+- command-pattern = commandline to launch (starting by the command name and followed by possible arguments)
+  with pattern substitution:
+      @s@ for the selected text put in a file.
+      @c@ for the config file define by the config key.
+
 - name = the real name to display in the menu
 
+- config = the config file name (located in the same folder as the config.ini file)
+
+Mandatory key are: name and command or command-pattern, config if command-pattern need it.
+
 A specific group named [global] allow folder wide configuration.
-Currently, there's only one key: default = default configuration file
+Currently, there's only one key: default = default profile name, the one that gets the accelerator.
 
 ## Example of configuration:
 
 ```
+Files:
 	[layer root]
 		global.ini
-		[c_family]
+		c_family
 			config.ini
-			k&r.cfg
-			gnu.cfg
+			k&r-uncrustify.cfg
+			gnu-uncrustify.cfg
 
-		[c]
+		c
 			config.ini
-			my_config.cfg
+			gnome-builder-clang.cfg
 
+Content:
 	global.ini:
 		[chdr]
 		map = c_family
-		default = k&r.cfg
+		default = k&r
 
 		[objc]
 		map = c_family
 
-	[c_family] config.ini:
+	c_family/config.ini:
 		[global]
-		default = k&r.cfg
+		default = gnu
 
-		[k&r.cfg]
-		command = uncrustify
+		[k&r]
+		command-pattern = uncrustify -c @c@ -f @s@
+		config = k&r-uncrustify.cfg
 		name = Kernighan and Ritchie
 
-		[gnu.cfg]
-		command = uncrustify
+		[gnu]
+		command-pattern = uncrustify -c @c@ -f @s@
+		config = gnu-uncrustify.cfg
 		name = Gnu Style
 
-	[c] config.ini:
+	c/config.ini:
 		[global]
-		default = my_config.cfg
+		default = my_config
 
-		[my_config.cfg]
-		command = uncrustify
-		name = my C style
+		[my_config]
+		command = clang-format
+		config = gnome-builder-clang.cfg
+		name = my Clang style
 ```
