@@ -44,7 +44,7 @@ typedef struct
 typedef struct
 {
   gchar *lang_id;
-  gchar *profile;
+  gchar *mapped_lang_id;
   gchar *default_profile;
 } GbBeautifierMapEntry;
 

@@ -45,6 +45,7 @@ map_entry_clear_func (gpointer data)
   g_assert (entry != NULL);
 
   g_free (entry->lang_id);
+  g_free (entry->mapped_lang_id);
   g_free (entry->default_profile);
 }
 
@@ -296,7 +297,7 @@ add_entries_from_base_path (GbBeautifierWorkbenchAddin *self,
           for (gint i = 0; i < map->len; ++i)
             {
               entry = &g_array_index (map, GbBeautifierMapEntry, i);
-              if (0 == g_strcmp0 (entry->profile, real_lang_id) &&
+              if (0 == g_strcmp0 (entry->mapped_lang_id, real_lang_id) &&
                   add_entries_from_config_ini_file (self,
                                                     base_path,
                                                     entry->lang_id,
@@ -341,13 +342,13 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
     {
       for (gint i = 0; i < nb_lang_ids; ++i)
         {
-          g_autofree gchar *profile = NULL;
+          g_autofree gchar *mapped_lang_id = NULL;
           g_autofree gchar *default_profile = NULL;
           GbBeautifierMapEntry entry;
           gchar *lang_id = lang_ids [i];
 
           if (!is_a_lang_id (self, lang_id) ||
-              NULL == (profile = g_key_file_get_string (key_file, lang_id, "map", &error)))
+              NULL == (mapped_lang_id = g_key_file_get_string (key_file, lang_id, "map", &error)))
             continue;
 
           if (gb_beautifier_map_check_duplicates (self, map, lang_id))
@@ -356,7 +357,7 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
           default_profile = g_key_file_get_string (key_file, lang_id, "default", &error);
 
           entry.lang_id = g_strdup (lang_id);
-          entry.profile = g_steal_pointer (&profile);
+          entry.mapped_lang_id = g_steal_pointer (&mapped_lang_id);
           entry.default_profile = g_steal_pointer (&default_profile);
           g_array_append_val (map, entry);
         }
