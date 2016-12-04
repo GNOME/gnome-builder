@@ -138,8 +138,9 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           g_autofree gchar *display_name = NULL;
           g_autofree gchar *command = NULL;
           g_autofree gchar *command_pattern = NULL;
-          g_autoptr(GFile) config_file = NULL;
+          g_autofree gchar *config_name = NULL;
           g_autofree gchar *config_path = NULL;
+          g_autoptr(GFile) config_file = NULL;
           g_auto(GStrv) strv = NULL;
           gint argc;
           gchar *profile;
@@ -170,6 +171,18 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
               continue;
             }
 
+          if (NULL != (config_name = g_key_file_get_string (key_file, profile, "config", &error)))
+            {
+              config_path = g_build_filename (base_path, real_lang_id, config_name, NULL);
+              config_file = g_file_new_for_path (config_path);
+              if (!g_file_query_exists (config_file, NULL))
+                {
+                  g_warning ("beautifier plugin: \"%s\" does not exist", config_path);
+                  g_warning ("entry \"%s\" disabled", display_name);
+                  continue;
+                }
+            }
+
           memset (&entry, 0, sizeof(GbBeautifierConfigEntry));
           if (has_command)
             {
@@ -186,6 +199,14 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           else
             {
               command_pattern = g_key_file_get_string (key_file, profile, "command-pattern", &error);
+              if (g_strstr_len (command_pattern, -1, "@c@") == NULL && config_file != NULL)
+                {
+                  g_warning ("beautifier plugin: @c@ in \"%s\" command-pattern key but no config file set",
+                             profile);
+                  g_warning ("entry \"%s\" disabled", display_name);
+                  continue;
+                }
+
               if (!g_shell_parse_argv (command_pattern, &argc, &strv, &error))
                 {
                   g_warning ("beautifier plugin: \"%s\"", error->message);
@@ -200,26 +221,19 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
               g_ptr_array_add (entry.command_args, NULL);
             }
 
-          config_path = g_build_filename (base_path, real_lang_id, profile, NULL);
-          config_file = g_file_new_for_path (config_path);
-          if (g_file_query_exists (config_file, NULL))
-            {
-              entry.name = g_steal_pointer (&display_name);
-              entry.config_file = g_steal_pointer (&config_file);
-              entry.lang_id = g_strdup (lang_id);
+            entry.name = g_steal_pointer (&display_name);
+            entry.config_file = g_steal_pointer (&config_file);
+            entry.lang_id = g_strdup (lang_id);
 
-              if (0 == g_strcmp0 (default_profile, profile))
-                {
-                  entry.is_default = TRUE;
-                  g_clear_pointer (&default_profile, g_free);
-                }
-              else
-                entry.is_default = FALSE;
+            if (0 == g_strcmp0 (default_profile, profile))
+              {
+                entry.is_default = TRUE;
+                g_clear_pointer (&default_profile, g_free);
+              }
+            else
+              entry.is_default = FALSE;
 
-              g_array_append_val (entries, entry);
-            }
-          else
-            g_warning ("Can't find \"%s\"", config_path);
+            g_array_append_val (entries, entry);
         }
     }
 
