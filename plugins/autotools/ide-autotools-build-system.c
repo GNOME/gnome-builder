@@ -527,6 +527,44 @@ ide_autotools_build_system__config_changed_cb (IdeAutotoolsBuildSystem *self,
 }
 
 static void
+ide_autotools_build_system__vcs_changed_cb (IdeAutotoolsBuildSystem *self,
+                                            IdeVcs                  *vcs)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_VCS (vcs));
+
+  IDE_TRACE_MSG ("VCS has changed, evicting cached makecaches");
+
+  egg_task_cache_evict_all (self->task_cache);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_system__context_loaded_cb (IdeAutotoolsBuildSystem *self,
+                                               IdeContext              *context)
+{
+  IdeVcs *vcs;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  vcs = ide_context_get_vcs (context);
+
+  g_signal_connect_object (vcs,
+                           "changed",
+                           G_CALLBACK (ide_autotools_build_system__vcs_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  IDE_EXIT;
+}
+
+static void
 ide_autotools_build_system_constructed (GObject *object)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
@@ -539,6 +577,12 @@ ide_autotools_build_system_constructed (GObject *object)
   context = ide_object_get_context (IDE_OBJECT (self));
   buffer_manager = ide_context_get_buffer_manager (context);
   config_manager = ide_context_get_configuration_manager (context);
+
+  g_signal_connect_object (context,
+                           "loaded",
+                           G_CALLBACK (ide_autotools_build_system__context_loaded_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /*
    * Track change of active configuration so that we invalidate our cached build
