@@ -267,6 +267,31 @@ egg_task_cache_evict (EggTaskCache  *self,
   return egg_task_cache_evict_full (self, key, TRUE);
 }
 
+void
+egg_task_cache_evict_all (EggTaskCache *self)
+{
+  guint size;
+
+  g_return_if_fail (EGG_IS_TASK_CACHE (self));
+
+  size = g_hash_table_size (self->cache);
+
+  while (self->evict_heap->len > 0)
+    {
+      CacheItem *item;
+
+      /* The cache item is owned by the hashtable, so safe to "leak" here */
+      egg_heap_extract_index (self->evict_heap, self->evict_heap->len - 1, &item);
+    }
+
+  g_hash_table_remove_all (self->cache);
+
+  EGG_COUNTER_SUB (cached, size);
+
+  if (self->evict_source != NULL)
+    evict_source_rearm (self->evict_source);
+}
+
 /**
  * egg_task_cache_peek:
  * @self: An #EggTaskCache

@@ -72,6 +72,7 @@ gpointer      egg_task_cache_get_finish (EggTaskCache          *self,
                                          GError               **error);
 gboolean      egg_task_cache_evict      (EggTaskCache          *self,
                                          gconstpointer          key);
+void          egg_task_cache_evict_all  (EggTaskCache          *self);
 gpointer      egg_task_cache_peek       (EggTaskCache          *self,
                                          gconstpointer          key);
 GPtrArray    *egg_task_cache_get_values (EggTaskCache          *self);
