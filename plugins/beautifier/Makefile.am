@@ -33,20 +33,23 @@ nodist_libbeautifier_plugin_la_SOURCES =   \
 	$(NULL)
 
 resourcedir = $(datadir)/gnome-builder/plugins/beautifier_plugin
-nobase_resource_DATA =             \
-	data/global.ini            \
-	data/c/config.ini          \
-	data/c/gnu-indent.cfg      \
-	data/c/k&r.cfg             \
-	data/c/linux-kernel.cfg    \
-	data/c-sharp/config.ini    \
-	data/c-sharp/mono.cfg      \
-	data/d/config.ini          \
-	data/d/d.cfg               \
-	data/objc/config.ini       \
-	data/objc/objc.cfg         \
-	data/python/config.ini     \
-	data/xml/config.ini        \
+nobase_resource_DATA =                 \
+	data/global.ini                \
+	data/c/config.ini              \
+	data/c/gnu-indent.cfg          \
+	data/c/k&r.cfg                 \
+	data/c/linux-kernel.cfg        \
+	data/c-sharp/config.ini        \
+	data/c-sharp/mono.cfg          \
+	data/d/config.ini              \
+	data/d/d.cfg                   \
+	data/html/config.ini           \
+	data/html/tidy-autoindent.cfg  \
+	data/html/tidy-indent.cfg      \
+	data/objc/config.ini           \
+	data/objc/objc.cfg             \
+	data/python/config.ini         \
+	data/xml/config.ini            \
 	$(NULL)
 
 EXTRA_DIST += $(nobase_resource_DATA)
