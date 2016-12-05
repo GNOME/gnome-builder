@@ -46,6 +46,7 @@ nobase_resource_DATA =             \
 	data/objc/config.ini       \
 	data/objc/objc.cfg         \
 	data/python/config.ini     \
+	data/xml/config.ini        \
 	$(NULL)
 
 EXTRA_DIST += $(nobase_resource_DATA)
