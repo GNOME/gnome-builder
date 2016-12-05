@@ -153,10 +153,7 @@ gb_file_search_provider_build_cb (GObject      *object,
 {
   GbFileSearchIndex *index = (GbFileSearchIndex *)object;
   g_autoptr(GbFileSearchProvider) self = user_data;
-  IdeContext *context;
-  IdeBufferManager *bufmgr;
-  IdeProject *project;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (GB_IS_FILE_SEARCH_INDEX (index));
   g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
@@ -164,32 +161,10 @@ gb_file_search_provider_build_cb (GObject      *object,
   if (!gb_file_search_index_build_finish (index, result, &error))
     {
       g_warning ("%s", error->message);
-      g_clear_error (&error);
       return;
     }
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  bufmgr = ide_context_get_buffer_manager (context);
-
-  g_signal_connect_object (bufmgr,
-                           "buffer-loaded",
-                           G_CALLBACK (on_buffer_loaded),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  project = ide_context_get_project (context);
-
-  g_signal_connect_object (project,
-                           "file-renamed",
-                           G_CALLBACK (on_file_renamed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (project,
-                           "file-trashed",
-                           G_CALLBACK (on_file_trashed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  g_set_object (&self->index, index);
 }
 
 static GtkWidget *
@@ -251,23 +226,83 @@ gb_file_search_provider_get_priority (IdeSearchProvider *provider)
 }
 
 static void
+gb_file_search_provider_vcs_changed_cb (GbFileSearchProvider *self,
+                                        IdeVcs               *vcs)
+{
+  g_autoptr(GbFileSearchIndex) index = NULL;
+  IdeContext *context;
+  GFile *workdir;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (GB_IS_FILE_SEARCH_PROVIDER (self));
+  g_return_if_fail (IDE_IS_VCS (vcs));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  index = g_object_new (GB_TYPE_FILE_SEARCH_INDEX,
+                        "context", context,
+                        "root-directory", workdir,
+                        NULL);
+
+  gb_file_search_index_build_async (index,
+                                    NULL,
+                                    gb_file_search_provider_build_cb,
+                                    g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
 gb_file_search_provider_constructed (GObject *object)
 {
   GbFileSearchProvider *self = (GbFileSearchProvider *)object;
+  g_autoptr(GbFileSearchIndex) index = NULL;
+  IdeBufferManager *bufmgr;
   IdeContext *context;
+  IdeProject *project;
   IdeVcs *vcs;
   GFile *workdir;
 
   context = ide_object_get_context (IDE_OBJECT (self));
+
+  bufmgr = ide_context_get_buffer_manager (context);
+  project = ide_context_get_project (context);
   vcs = ide_context_get_vcs (context);
+
   workdir = ide_vcs_get_working_directory (vcs);
 
-  self->index = g_object_new (GB_TYPE_FILE_SEARCH_INDEX,
-                              "context", context,
-                              "root-directory", workdir,
-                              NULL);
+  g_signal_connect_object (vcs,
+                           "changed",
+                           G_CALLBACK (gb_file_search_provider_vcs_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  gb_file_search_index_build_async (self->index,
+  g_signal_connect_object (bufmgr,
+                           "buffer-loaded",
+                           G_CALLBACK (on_buffer_loaded),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (project,
+                           "file-renamed",
+                           G_CALLBACK (on_file_renamed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (project,
+                           "file-trashed",
+                           G_CALLBACK (on_file_trashed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  index = g_object_new (GB_TYPE_FILE_SEARCH_INDEX,
+                        "context", context,
+                        "root-directory", workdir,
+                        NULL);
+
+  gb_file_search_index_build_async (index,
                                     NULL,
                                     gb_file_search_provider_build_cb,
                                     g_object_ref (self));
