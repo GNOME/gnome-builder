@@ -1,0 +1,296 @@
+{
+    "app-id": "org.gnome.Builder",
+    "runtime": "org.gnome.Sdk",
+    "runtime-version": "3.22",
+    "branch": "stable",
+    "sdk": "org.gnome.Sdk",
+    "command": "gnome-builder",
+    "finish-args": [
+        /* Allow access to developer tools */
+        "--allow=devel",
+        "--talk-name=org.freedesktop.Flatpak",
+        /* X11 + XShm access */
+        "--share=ipc", "--socket=x11",
+        /* Wayland access */
+        "--socket=wayland",
+        /* We want full fs access */
+        "--filesystem=host",
+        /* Needs to talk to the network: */
+        "--share=network",
+        "--talk-name=org.gtk.vfs.*",
+        /* Needs access to policykit for flatpak and sysprof */
+        "--system-talk-name=org.freedesktop.PolicyKit1",
+        /* Needs access to host sysprofd for profiling */
+        "--system-talk-name=org.gnome.Sysprof2",
+        /* Needed for dconf to work (+ host or homedir read access from above) */
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        /* We need access to auth agents */
+        "--talk-name=org.freedesktop.secrets",
+        /* Needed for various SSL certificates to work */
+        "--env=SSL_CERT_DIR=/etc/ssl/certs",
+        "--env=SSL_CERT_FILE=/etc/ssl/cert.pem",
+        "--filesystem=/etc/ssl:ro",
+        "--filesystem=/etc/ca-certificates:ro",
+        "--filesystem=/var/lib/flatpak"
+    ],
+    "build-options" : {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+            "MOUNT_FUSE_PATH": "../tmp/",
+            "V": "1"
+        }
+    },
+    "cleanup": ["/include", "/lib/pkgconfig",
+                "/share/pkgconfig", "/share/aclocal",
+                "/man", "/share/man", "/share/gtk-doc",
+                "/share/vala",
+                "*.la", "*.a"],
+    "modules": [
+        {
+            "name": "libfuse",
+            "cleanup": [ "/bin" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/libfuse/libfuse/releases/download/fuse_2_9_5/fuse-2.9.5.tar.gz",
+                    "sha256": "579f371cc5ffc1afca7057512bf7d52988a9ede57859a7c55e5b9f72435cdbb5"
+                }
+            ]
+        },
+        {
+            "name": "libgsystem",
+            "sources": [
+                {
+                    "type": "git",
+                    "branch": "d606bec68ddfea78de4b03c3f3568afb71bdc1ce",
+                    "url": "git://git.gnome.org/libgsystem.git"
+                }
+            ]
+        },
+        {
+            "name": "ostree",
+            "config-opts": [ "--disable-man" ],
+            "cleanup": [ "/bin", "/etc/grub.d", "/libexec" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "branch": "056ca71a3b96e21d9e573b41ed83f5fa4bd118b2",
+                    "url": "https://github.com/ostreedev/ostree.git"
+                }
+            ]
+        },
+        {
+            "name": "flatpak",
+            "config-opts": [ "--disable-documentation",
+                             "--disable-seccomp",
+                             "--disable-sandboxed-triggers",
+                             "--disable-system-helper",
+                             "--with-system-install-dir=/var/lib/flatpak" ],
+            "cleanup": [ "/etc/profile.d",
+                         "/libexec",
+                         "/lib/systemd",
+                         "/share/dbus-1/interfaces/org.freedesktop.*",
+                         "/share/dbus-1/services/org.freedesktop.*",
+                         "/share/gdm" ],
+            "post-install": [ "cp /usr/bin/update-mime-database /app/bin",
+                              "cp /usr/bin/update-desktop-database /app/bin" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "branch": "cb180540a68da556254baf9019ad752438d53865",
+                    "url": "https://github.com/flatpak/flatpak.git"
+                }
+            ]
+        },
+        {
+            "name": "polkit",
+            "config-opts": [ "--disable-polkitd", "--disable-man-pages", "--disable-introspection" ],
+            "rm-configure": true,
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://www.freedesktop.org/software/polkit/releases/polkit-0.113.tar.gz",
+                    "sha256": "e1c095093c654951f78f8618d427faf91cf62abdefed98de40ff65eca6413c81"
+                },
+                {
+                    "type": "patch",
+                    "path": "polkit-build-Add-option-to-build-without-polkitd.patch"
+                },
+                {
+                    "type": "file",
+                    "path": "polkit-autogen",
+                    "dest-filename": "autogen.sh"
+                }
+            ]
+        },
+        {
+            "name": "python3-jedi",
+            "no-autogen": true,
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/source/j/jedi/jedi-0.9.0.tar.gz",
+                    "sha256": "3b4c19fba31bdead9ab7350fb9fa7c914c59b0a807dcdd5c00a05feb85491d31"
+                },
+                {
+                    "type": "file",
+                    "path": "setuptools-makefile",
+                    "dest-filename": "Makefile"
+                }
+            ]
+        },
+        {
+            "name": "python3-lxml",
+            "no-autogen": true,
+            "build-options": {
+                "cflags": "-I/usr/include",
+                "env": {
+                    "XSLT_CONFIG": "pkg-config libxslt",
+                    "XML2_CONFIG": "pkg-config libxml-2.0"
+                }
+            },
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.io/packages/source/l/lxml/lxml-3.6.4.tar.gz",
+                    "sha256": "61d5d3e00b5821e6cda099b3b4ccfea4527bf7c595e0fb3a7a760490cedd6172"
+                },
+                {
+                    "type": "file",
+                    "path": "setuptools-makefile",
+                    "dest-filename": "Makefile"
+                },
+                {
+                    "type": "patch",
+                    "path": "lxml-Fix-getting-lib-version-when-using-pkg-config.patch"
+                }
+            ]
+        },
+        {
+            "name": "libssh2",
+            "cmake": true,
+            "config-opts": [ "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
+                             "-DBUILD_SHARED_LIBS:BOOL=ON" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/libssh2/libssh2.git",
+                    "branch": "libssh2-1.6.0"
+                }
+            ]
+        },
+        {
+            "name": "libgit2",
+            "cmake": true,
+            "config-opts": [ "-DBUILD_SHARED_LIBS:BOOL=ON",
+                             "-DTHREADSAFE=ON" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/libgit2/libgit2.git",
+                    "branch": "maint/v0.24"
+                }
+            ]
+        },
+        {
+            "name": "libgit2-glib",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libgit2-glib/0.24/libgit2-glib-0.24.4.tar.xz",
+                    "sha256": "3a211f756f250042f352b3070e7314a048c88e785dba9d118b851253a7c60220"
+                }
+            ]
+        },
+        {
+            "name": "libpeas",
+            "cleanup": [ "/bin/*", "/lib/peas-demo" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libpeas/1.20/libpeas-1.20.0.tar.xz",
+                    "sha256": "f392fffe2dc00072a51bb2a1b274224a06bdc5f9c3b3c0ac4816909e9933d354"
+                }
+            ]
+        },
+        {
+            "name": "gtksourceview",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/gtksourceview/3.22/gtksourceview-3.22.0.tar.xz",
+                    "sha256": "70657f48732427984dce6cc812bdd3f2b701c0a49e0a0a08889705b3dadcf8e5"
+                }
+            ]
+        },
+        {
+            "name": "mm-common",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/mm-common/0.9/mm-common-0.9.10.tar.xz",
+		    "sha256": "16c0e2bc196b67fbc145edaecb5dbe5818386504fe5703de27002d77140fa217"
+                }
+            ]
+        },
+        {
+            "name": "libsigcplusplus",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libsigc++/2.9/libsigc++-2.9.3.tar.xz",
+		    "sha256": "0bf9b301ad6198c550986c51150a646df198e8d1d235270c16486b0dda30097f"
+                }
+            ]
+        },
+        {
+            "name": "glibmm",
+	    "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/glibmm/2.49/glibmm-2.49.5.tar.xz",
+		    "sha256": "4e9c147c3fd3b8ecb15b3d5bdc120ef4e88a5d6948c8e82c3d95f85add33304e"
+                }
+            ]
+        },
+        {
+            "name": "devhelp",
+            "cleanup": [ "/bin/*" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/devhelp/3.22/devhelp-3.22.0.tar.xz",
+                    "sha256": "59cae02e12d238cc5fc3f049d779895ba89701426d9173f5b534d4ab90c5ffb0"
+                }
+            ]
+        },
+        {
+            "name": "sysprof",
+            "config-opts": [ "--enable-gtk", "--with-sysprofd=host" ],
+            "cleanup": [ "/bin/*", "/libexec/sysprof" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "git://git.gnome.org/sysprof.git",
+                    "branch": "71e1134cbce95ecf8b9dee1d3a1c4328419a2aec"
+                }
+            ]
+        },
+        {
+            "name": "gnome-builder",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/endlessm/gnome-builder.git"
+                }
+            ]
+        }
+    ]
+}
