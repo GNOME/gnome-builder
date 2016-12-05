@@ -28,6 +28,8 @@
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        /* Need access to talk to the file manager */
+        "--talk-name=org.freedesktop.FileManager1",
         /* We need access to auth agents */
         "--talk-name=org.freedesktop.secrets",
 	"--filesystem=xdg-run/keyring",
