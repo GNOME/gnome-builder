@@ -151,7 +151,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           if (0 == g_strcmp0 (profile, "global"))
             {
               if (!is_from_map && default_profile == NULL)
-                default_profile = g_key_file_get_string (key_file, profile, "default", &error);
+                default_profile = g_key_file_get_string (key_file, profile, "default", NULL);
 
               continue;
             }
@@ -162,8 +162,8 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           if (gb_beautifier_config_check_duplicates (self, entries, lang_id, display_name))
             continue;
 
-          has_command = g_key_file_has_key (key_file, profile, "command", &error);
-          has_command_pattern = g_key_file_has_key (key_file, profile, "command-pattern", &error);
+          has_command = g_key_file_has_key (key_file, profile, "command", NULL);
+          has_command_pattern = g_key_file_has_key (key_file, profile, "command-pattern", NULL);
           if (!has_command && !has_command_pattern)
             {
               g_warning ("beautifier plugin: neither command nor command-pattern keys found");
@@ -171,7 +171,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
               continue;
             }
 
-          if (NULL != (config_name = g_key_file_get_string (key_file, profile, "config", &error)))
+          if (NULL != (config_name = g_key_file_get_string (key_file, profile, "config", NULL)))
             {
               config_path = g_build_filename (base_path, real_lang_id, config_name, NULL);
               config_file = g_file_new_for_path (config_path);
@@ -186,7 +186,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           memset (&entry, 0, sizeof(GbBeautifierConfigEntry));
           if (has_command)
             {
-              command = g_key_file_get_string (key_file, profile, "command", &error);
+              command = g_key_file_get_string (key_file, profile, "command", NULL);
               if (0 == g_strcmp0 (command, "clang-format"))
                 entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT;
               else
@@ -198,7 +198,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
             }
           else
             {
-              command_pattern = g_key_file_get_string (key_file, profile, "command-pattern", &error);
+              command_pattern = g_key_file_get_string (key_file, profile, "command-pattern", NULL);
               if (g_strstr_len (command_pattern, -1, "@c@") == NULL && config_file != NULL)
                 {
                   g_warning ("beautifier plugin: @c@ in \"%s\" command-pattern key but no config file set",
@@ -362,13 +362,13 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
           gchar *lang_id = lang_ids [i];
 
           if (!is_a_lang_id (self, lang_id) ||
-              NULL == (mapped_lang_id = g_key_file_get_string (key_file, lang_id, "map", &error)))
+              NULL == (mapped_lang_id = g_key_file_get_string (key_file, lang_id, "map", NULL)))
             continue;
 
           if (gb_beautifier_map_check_duplicates (self, map, lang_id))
             continue;
 
-          default_profile = g_key_file_get_string (key_file, lang_id, "default", &error);
+          default_profile = g_key_file_get_string (key_file, lang_id, "default", NULL);
 
           entry.lang_id = g_strdup (lang_id);
           entry.mapped_lang_id = g_steal_pointer (&mapped_lang_id);
