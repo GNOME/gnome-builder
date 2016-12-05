@@ -1,0 +1,8 @@
+[default]
+name=Builder (Development)
+device=local
+runtime=org.gnome.Builder.json@9e139ff87da237d4ecd348e9baa06a3a65e94480
+config-opts=--enable-tracing --enable-debug --enable-hello-cpp-plugin
+prefix=/app
+app-id=org.gnome.Builder
+default=true

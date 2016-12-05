@@ -17,6 +17,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 
 GITIGNOREFILES = \
 	**/*.swp \
+	.flatpak-builder \
 	*.o \
 	aclocal.m4 \
 	build-aux \

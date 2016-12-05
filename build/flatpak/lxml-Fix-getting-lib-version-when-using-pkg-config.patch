@@ -1,0 +1,27 @@
+From d10c98f4bb5e15d5c39bf71206065c3a25754900 Mon Sep 17 00:00:00 2001
+From: Patrick Griffis <tingping@tingping.se>
+Date: Mon, 22 Aug 2016 17:37:35 -0400
+Subject: [PATCH] Fix getting lib version when using pkg-config
+
+---
+ setupinfo.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setupinfo.py b/setupinfo.py
+index ecbf961..7cb0d7b 100644
+--- a/setupinfo.py
++++ b/setupinfo.py
+@@ -360,8 +360,8 @@ def check_min_version(version, min_version, error_name):
+ 
+ 
+ def get_library_versions():
+-    xml2_version = run_command(find_xml2_config(), "--version")
+-    xslt_version = run_command(find_xslt_config(), "--version")
++    xml2_version = run_command(find_xml2_config(), "--modversion")
++    xslt_version = run_command(find_xslt_config(), "--modversion")
+     return xml2_version, xslt_version
+ 
+ 
+-- 
+2.9.3
+
