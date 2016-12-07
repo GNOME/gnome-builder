@@ -335,6 +335,12 @@ ide_editor_view_create_split (IdeLayoutView *view,
   IdeBuffer *buffer;
   IdeContext *context;
   IdeBufferManager *buf_mgr;
+  IdeSourceView *source_view;
+  IdeSourceView *split_source_view;
+  GActionGroup *group;
+  GAction *action;
+  GVariant *state = NULL;
+  gboolean spellcheck_state;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
@@ -358,6 +364,19 @@ ide_editor_view_create_split (IdeLayoutView *view,
                       "document", buffer,
                       "visible", TRUE,
                       NULL);
+
+  source_view = self->frame1->source_view;
+  spellcheck_state = ide_source_view_get_spell_checking (source_view);
+
+  split_source_view = ((IdeEditorView *)ret)->frame1->source_view;
+  ide_source_view_set_spell_checking (split_source_view, spellcheck_state);
+
+  if (NULL != (group = gtk_widget_get_action_group (GTK_WIDGET (ret), "view")) &&
+      NULL != (action = g_action_map_lookup_action (G_ACTION_MAP (group), "spellchecking")))
+    {
+      state = g_variant_new_boolean (spellcheck_state);
+      g_simple_action_set_state (G_SIMPLE_ACTION (action), state);
+    }
 
   return ret;
 }
@@ -477,6 +496,7 @@ ide_editor_view_set_split_view (IdeLayoutView *view,
                                 gboolean       split_view)
 {
   IdeEditorView *self = (IdeEditorView *)view;
+  gboolean spellcheck_state;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
@@ -493,6 +513,10 @@ ide_editor_view_set_split_view (IdeLayoutView *view,
                                    "document", self->document,
                                    "visible", TRUE,
                                    NULL);
+
+      spellcheck_state = ide_source_view_get_spell_checking (self->frame1->source_view);
+      ide_source_view_set_spell_checking (self->frame2->source_view, spellcheck_state);
+
       g_signal_connect_object (self->frame2->source_view,
                                "request-documentation",
                                G_CALLBACK (ide_editor_view_request_documentation),

@@ -71,6 +71,7 @@ IdeFile            *ide_buffer_get_file                      (IdeBuffer         
 IdeBufferLineFlags  ide_buffer_get_line_flags                (IdeBuffer            *self,
                                                               guint                 line);
 gboolean            ide_buffer_get_read_only                 (IdeBuffer            *self);
+gboolean            ide_buffer_get_spell_checking            (IdeBuffer            *self);
 gboolean            ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
 const gchar        *ide_buffer_get_style_scheme_name         (IdeBuffer            *self);
 const gchar        *ide_buffer_get_title                     (IdeBuffer            *self);
@@ -79,6 +80,8 @@ void                ide_buffer_set_file                      (IdeBuffer         
                                                               IdeFile              *file);
 void                ide_buffer_set_highlight_diagnostics     (IdeBuffer            *self,
                                                               gboolean              highlight_diagnostics);
+void                ide_buffer_set_spell_checking            (IdeBuffer            *self,
+                                                              gboolean              enable);
 void                ide_buffer_set_style_scheme_name         (IdeBuffer            *self,
                                                               const gchar          *style_scheme_name);
 void                ide_buffer_trim_trailing_whitespace      (IdeBuffer            *self);

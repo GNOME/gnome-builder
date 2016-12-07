@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <stdlib.h>
+#include <gspell/gspell.h>
 
 #include <egg-animation.h>
 #include <egg-binding-group.h>
@@ -185,6 +186,7 @@ typedef struct
   guint                        show_search_shadow : 1;
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
+  guint                        spell_checking : 1;
 } IdeSourceViewPrivate;
 
 typedef struct
@@ -231,6 +233,7 @@ enum {
   PROP_SHOW_SEARCH_BUBBLES,
   PROP_SHOW_SEARCH_SHADOW,
   PROP_SNIPPET_COMPLETION,
+  PROP_SPELL_CHECKING,
   PROP_OVERSCROLL,
   LAST_PROP,
 
@@ -5770,6 +5773,41 @@ ide_source_view_real_begin_rename (IdeSourceView *self)
   IDE_EXIT;
 }
 
+void
+ide_source_view_set_spell_checking (IdeSourceView *self,
+                                    gboolean       enable)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GspellTextView *spell_text_view;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->spell_checking != enable)
+    {
+      if (IDE_IS_BUFFER (priv->buffer))
+        {
+          spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self));
+          gspell_text_view_set_inline_spell_checking (spell_text_view, enable);
+          gspell_text_view_set_enable_language_menu (spell_text_view, enable);
+
+          ide_buffer_set_spell_checking (priv->buffer, enable);
+
+          priv->spell_checking = enable;
+          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SPELL_CHECKING]);
+        }
+    }
+}
+
+gboolean
+ide_source_view_get_spell_checking (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->spell_checking;
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
@@ -5933,6 +5971,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_snippet_completion (self));
       break;
 
+    case PROP_SPELL_CHECKING:
+      g_value_set_boolean (value, ide_source_view_get_spell_checking (self));
+      break;
+
     case PROP_OVERSCROLL:
       g_value_set_int (value, priv->overscroll_num_lines);
       break;
@@ -6032,6 +6074,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SNIPPET_COMPLETION:
       ide_source_view_set_snippet_completion (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SPELL_CHECKING:
+      ide_source_view_set_spell_checking (self, g_value_get_boolean (value));
       break;
 
     case PROP_OVERSCROLL:
@@ -6284,6 +6330,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           "If snippet expansion should be enabled via the completion window.",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SPELL_CHECKING] =
+    g_param_spec_boolean ("spell-checking",
+                          "spell-checking",
+                          "If spell checking is activated",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_OVERSCROLL] =
     g_param_spec_int ("overscroll",

@@ -31,6 +31,7 @@
 #include "editor/ide-editor-view-private.h"
 #include "editor/ide-editor-view.h"
 #include "projects/ide-project.h"
+#include "sourceview/ide-source-view.h"
 #include "util/ide-gtk.h"
 #include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
@@ -663,6 +664,80 @@ ide_editor_view_actions_print (GSimpleAction *action,
   handle_print_result (self, GTK_PRINT_OPERATION (operation), result);
 }
 
+static void
+activate_spellcheck_cb (GtkWidget     *widget,
+                        IdeEditorView *self)
+{
+  IdeEditorView *editor_view = (IdeEditorView *)widget;
+  IdeSourceView *original_view;
+  IdeSourceView *dst_view;
+  GtkTextBuffer *original_buffer;
+  GtkTextBuffer *dst_buffer;
+  GActionGroup *group;
+  GAction *action;
+  GVariant *state;
+  gboolean spellcheck_state;
+
+  if (editor_view == self)
+    return;
+
+  original_view = self->frame1->source_view;
+  original_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (original_view));
+  dst_view = editor_view->frame1->source_view;
+  dst_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (dst_view));
+
+  if (original_buffer == dst_buffer)
+    {
+      spellcheck_state = ide_source_view_get_spell_checking (original_view);
+      state = g_variant_new_boolean (spellcheck_state);
+
+      if (NULL != (group = gtk_widget_get_action_group (GTK_WIDGET (editor_view), "view")) &&
+          NULL != (action = g_action_map_lookup_action (G_ACTION_MAP (group), "spellchecking")))
+        {
+          g_simple_action_set_state (G_SIMPLE_ACTION (action), state);
+          ide_source_view_set_spell_checking (dst_view, spellcheck_state);
+
+          if (editor_view->frame2)
+            {
+              dst_view = ide_editor_frame_get_source_view (editor_view->frame2);
+              ide_source_view_set_spell_checking (dst_view, spellcheck_state);
+            }
+        }
+    }
+}
+
+static void
+ide_editor_view_actions_spellchecking (GSimpleAction *action,
+                                       GVariant      *state,
+                                       gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+  IdeWorkbench *workbench;
+  IdePerspective *editor;
+  IdeSourceView *source_view;
+  gboolean action_state;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (state != NULL);
+  g_assert (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN));
+
+  g_simple_action_set_state (action, state);
+  action_state = g_variant_get_boolean (state);
+
+  source_view = ide_editor_frame_get_source_view (self->frame1);
+  ide_source_view_set_spell_checking (source_view, action_state);
+
+  if (self->frame2)
+    {
+      source_view = ide_editor_frame_get_source_view (self->frame2);
+      ide_source_view_set_spell_checking (source_view, action_state);
+    }
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+  ide_perspective_views_foreach (IDE_PERSPECTIVE (editor), (GtkCallback)activate_spellcheck_cb, self);
+}
+
 static GActionEntry IdeEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", ide_editor_view_actions_auto_indent },
   { "close", ide_editor_view_actions_close },
@@ -676,6 +751,7 @@ static GActionEntry IdeEditorViewActions[] = {
   { "show-line-numbers", NULL, NULL, "false", ide_editor_view_actions_show_line_numbers },
   { "show-right-margin", NULL, NULL, "false", ide_editor_view_actions_show_right_margin },
   { "smart-backspace", NULL, NULL, "false", ide_editor_view_actions_smart_backspace },
+  { "spellchecking", NULL, NULL, "false", ide_editor_view_actions_spellchecking },
   { "tab-width", NULL, "i", "8", ide_editor_view_actions_tab_width },
   { "toggle-split", ide_editor_view_actions_toggle_split },
   { "use-spaces", NULL, "b", "false", ide_editor_view_actions_use_spaces },
@@ -689,6 +765,7 @@ ide_editor_view_actions_init (IdeEditorView *self)
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorViewActions,
                                    G_N_ELEMENTS (IdeEditorViewActions), self);
+
   gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (group));
 
 #define WATCH_PROPERTY(name) \
