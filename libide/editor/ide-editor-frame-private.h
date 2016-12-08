@@ -23,7 +23,9 @@
 #include <gtk/gtk.h>
 #include <nautilus-floating-bar.h>
 
+#include "ide-types.h"
 #include "editor/ide-editor-map-bin.h"
+#include "ide-editor-spell-widget.h"
 #include "sourceview/ide-source-map.h"
 #include "sourceview/ide-source-view.h"
 
@@ -41,6 +43,7 @@ struct _IdeEditorFrame
   GtkLabel            *overwrite_label;
   GtkScrolledWindow   *scrolled_window;
   GtkRevealer         *search_revealer;
+  GtkRevealer         *spell_revealer;
   GtkFrame            *search_frame;
   GdTaggedEntry       *search_entry;
   GtkSearchEntry      *replace_entry;
@@ -58,7 +61,11 @@ struct _IdeEditorFrame
   guint                pending_replace_confirm;
   guint                auto_hide_map : 1;
   guint                show_ruler : 1;
+  guint                spellchecker_opened : 1;
 };
+
+void      ide_editor_frame_spell_widget_unmapped_cb      (IdeEditorFrame       *self,
+                                                          IdeEditorSpellWidget *spell_widget);
 
 G_END_DECLS
 

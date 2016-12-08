@@ -55,6 +55,7 @@ libide/editor/ide-editor-layout-stack-controls.c
 libide/editor/ide-editor-layout-stack-controls.ui
 libide/editor/ide-editor-perspective.c
 libide/editor/ide-editor-perspective.ui
+libide/editor/ide-editor-spell-widget.ui
 libide/editor/ide-editor-tweak-widget.ui
 libide/editor/ide-editor-view-actions.c
 libide/editor/ide-editor-view.c

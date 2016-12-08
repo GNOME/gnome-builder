@@ -20,7 +20,58 @@
 
 #include "ide-editor-frame-actions.h"
 #include "ide-editor-frame-private.h"
+#include "ide-editor-spell-widget.h"
 #include "util/ide-gtk.h"
+
+static void
+ide_editor_frame_actions_spellcheck (GSimpleAction *action,
+                                     GVariant      *variant,
+                                     gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+  GtkWidget *spell_widget;
+  GtkWidget *entry;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  if (IDE_IS_SOURCE_VIEW (self->source_view) &&
+      !self->spellchecker_opened)
+    {
+      g_assert (gtk_bin_get_child (GTK_BIN (self->spell_revealer)) == NULL);
+
+      self->spellchecker_opened = TRUE;
+
+      spell_widget = ide_editor_spell_widget_new (self->source_view);
+      gtk_widget_show (spell_widget);
+      gtk_container_add (GTK_CONTAINER (self->spell_revealer), spell_widget);
+
+      gtk_revealer_set_reveal_child (self->spell_revealer, TRUE);
+      entry = ide_editor_spell_widget_get_entry (IDE_EDITOR_SPELL_WIDGET (spell_widget));
+
+      /* We need the widget to be realized before the grab to avoid:
+       * gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+       */
+      gtk_widget_realize (entry);
+      gtk_widget_grab_focus (entry);
+      g_signal_connect_object (spell_widget,
+                               "unmap",
+                               G_CALLBACK (ide_editor_frame_spell_widget_unmapped_cb),
+                               self,
+                               G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+    }
+}
+
+static void
+ide_editor_frame_actions_exit_spell (GSimpleAction *action,
+                                     GVariant      *state,
+                                     gpointer       user_data)
+{
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+}
 
 static void
 ide_editor_frame_actions_find (GSimpleAction *action,
@@ -415,6 +466,7 @@ static const GActionEntry IdeEditorFrameActions[] = {
   { "next-search-result", ide_editor_frame_actions_next_search_result },
   { "previous-search-result", ide_editor_frame_actions_previous_search_result },
   { "replace-confirm", ide_editor_frame_actions_replace_confirm, "as" },
+  { "spellcheck", ide_editor_frame_actions_spellcheck, "i" },
 };
 
 static const GActionEntry IdeEditorFrameSearchActions[] = {
@@ -428,6 +480,10 @@ static const GActionEntry IdeEditorFrameSearchActions[] = {
   { "exit-search", ide_editor_frame_actions_exit_search },
   { "replace", ide_editor_frame_actions_replace },
   { "replace-all", ide_editor_frame_actions_replace_all },
+};
+
+static const GActionEntry IdeEditorFrameSpellActions[] = {
+  { "exit-spell", ide_editor_frame_actions_exit_spell },
 };
 
 void
@@ -458,5 +514,12 @@ ide_editor_frame_actions_init (IdeEditorFrame *self)
 
   gtk_widget_insert_action_group (GTK_WIDGET (self->search_frame), "search-entry", G_ACTION_GROUP (group));
 
+  g_object_unref (group);
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameSpellActions,
+                                   G_N_ELEMENTS (IdeEditorFrameSpellActions), self);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self->spell_revealer), "spell-entry", G_ACTION_GROUP (group));
   g_object_unref (group);
 }

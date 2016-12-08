@@ -59,6 +59,7 @@
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
   bind "<ctrl>r" { "action" ("frame", "find", "2") };
   bind "<ctrl>s" { "action" ("frame", "find", "3") };
+  bind "<alt>dollar" { "action" ("frame", "spellcheck", "1") };
   bind "<alt>period" { "goto-definition" () };
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };

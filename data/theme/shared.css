@@ -3,8 +3,8 @@ filechooser actionbar button.combo {
   padding: 0;
 }
 
-/* styling for editor search */
-frame.gb-search-frame {
+/* styling for editor search and spellchecker */
+frame.gb-search-frame, frame.gb-spell-frame {
   background-image: linear-gradient(shade(@theme_bg_color,1.05), @theme_bg_color);
   padding: 6px;
   border-style: solid;
@@ -15,36 +15,51 @@ frame.gb-search-frame {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-frame.gb-search-frame border {
+frame.gb-search-frame border,
+frame.gb-spell-frame border {
   border: none;
 }
 
-/* styling for the search frame close button */
+frame.gb-spell-frame list {
+  border: 1px solid @borders;
+}
+
+frame.gb-spell-option-frame border {
+  border: 1px solid @borders;
+}
+
+/* styling for the search and spellchecker frame close button */
 frame.gb-search-frame > box > grid:first-child > button.close:disabled,
-frame.gb-search-frame > box > grid:first-child > button.close {
+frame.gb-spell-frame > box > grid:first-child > button.close:disabled,
+frame.gb-search-frame > box > grid:first-child > button.close,
+frame.gb-spell-frame > box > grid:first-child > button.close {
   background: none;
   border: none;
   box-shadow: none;
   padding-left: 4px;
   padding-right: 4px;
 }
-frame.gb-search-frame > box > grid:first-child > button.close image {
+frame.gb-search-frame > box > grid:first-child > button.close image,
+frame.gb-spell-frame > box > grid:first-child > button.close image {
   color: @theme_fg_color;
   opacity: 0.3;
   margin: 2px;
   border: 1px solid transparent;
   border-radius: 3px;
 }
-frame.gb-search-frame > box > grid:first-child > button.close:hover image {
+frame.gb-search-frame > box > grid:first-child > button.close:hover image,
+frame.gb-spell-frame > box > grid:first-child > button.close:hover image {
   opacity: .75;
   transition-duration: 250ms;
   border: 1px solid @borders;
 }
-frame.gb-search-frame > box > grid:first-child > button.close:active image {
+frame.gb-search-frame > box > grid:first-child > button.close:active image,
+frame.gb-spell-frame > box > grid:first-child > button.close:active image {
   opacity: .8;
   background-image: linear-gradient(shade(@theme_bg_color, 0.9), @theme_bg_color);
 }
-frame.gb-search-frame > box > grid:first-child > button.close:backdrop image {
+frame.gb-search-frame > box > grid:first-child > button.close:backdrop image,
+frame.gb-spell-frame > box > grid:first-child > button.close:backdrop image {
   opacity: .1;
 }
 

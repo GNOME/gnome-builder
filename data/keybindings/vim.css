@@ -178,6 +178,8 @@
   /* start search backward */
   bind "question" { "action" ("frame", "find", "2") };
 
+  /* start spell checking */
+  bind "<shift>F7" { "action" ("frame", "spellcheck", "1") };
   /* start search */
   bind "slash" { "action" ("frame", "find", "3") };
   bind "KP_Divide" { "action" ("frame", "find", "3") };

@@ -29,6 +29,7 @@
 #include "editor/ide-editor-frame.h"
 #include "editor/ide-editor-map-bin.h"
 #include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-spell-widget.h"
 #include "history/ide-back-forward-list.h"
 #include "util/ide-dnd.h"
 #include "util/ide-gtk.h"
@@ -55,6 +56,22 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
+
+void
+ide_editor_frame_spell_widget_unmapped_cb (IdeEditorFrame       *self,
+                                           IdeEditorSpellWidget *spell_widget)
+{
+  GtkWidget *child;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (spell_widget));
+
+  if (NULL != (child = gtk_bin_get_child (GTK_BIN (self->spell_revealer))))
+    {
+      gtk_container_remove (GTK_CONTAINER (self->spell_revealer), child);
+      self->spellchecker_opened = FALSE;
+    }
+}
 
 static void
 update_replace_actions_sensitivity (IdeEditorFrame *self)
@@ -845,6 +862,7 @@ ide_editor_frame__source_view_focus_in_event (IdeEditorFrame *self,
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
   gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+  gtk_revealer_set_reveal_child (self->spell_revealer, FALSE);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
 
@@ -1201,6 +1219,7 @@ ide_editor_frame_class_init (IdeEditorFrameClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, replace_all_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, search_options);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, search_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, spell_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, source_map_container);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, source_overlay);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorFrame, source_view);

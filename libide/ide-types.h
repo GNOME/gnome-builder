@@ -57,6 +57,8 @@ typedef struct _IdeDiagnosticProvider          IdeDiagnosticProvider;
 typedef struct _IdeDiagnostics                 IdeDiagnostics;
 typedef struct _IdeDiagnosticsManager          IdeDiagnosticsManager;
 
+typedef struct _IdeEditorFrame                 IdeEditorFrame;
+
 typedef struct _IdeEnvironment                 IdeEnvironment;
 typedef struct _IdeEnvironmentVariable         IdeEnvironmentVariable;
 
