@@ -35,6 +35,8 @@ struct _GbpFlatpakRuntimeProvider
   FlatpakInstallation *system_installation;
   GCancellable        *cancellable;
   GPtrArray           *runtimes;
+  GFileMonitor        *system_flatpak_monitor;
+  GFileMonitor        *user_flatpak_monitor;
 };
 
 typedef struct
@@ -52,6 +54,9 @@ static void runtime_provider_iface_init (IdeRuntimeProviderInterface *);
 G_DEFINE_TYPE_EXTENDED (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER,
                                                runtime_provider_iface_init))
+
+static void gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider, IdeRuntimeManager *manager);
+static void gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider, IdeRuntimeManager *manager);
 
 static inline void
 sanitize_name (gchar *name)
@@ -437,6 +442,31 @@ gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
 }
 
 static void
+on_flatpak_installation_changed (GbpFlatpakRuntimeProvider *self,
+                                 GFile                     *file,
+                                 GFile                     *other_file,
+                                 GFileMonitorEvent          event_type,
+                                 GFileMonitor              *monitor)
+{
+  IdeRuntimeManager *manager;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (G_IS_FILE_MONITOR (self));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (!other_file || G_IS_FILE (other_file));
+
+  /* Save a pointer to manager before unload() wipes it out */
+  manager = self->manager;
+
+  gbp_flatpak_runtime_provider_unload (IDE_RUNTIME_PROVIDER (self), manager);
+  gbp_flatpak_runtime_provider_load (IDE_RUNTIME_PROVIDER (self), manager);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_flatpak_runtime_provider_load_worker (GTask        *task,
                                           gpointer      source_object,
                                           gpointer      task_data,
@@ -480,6 +510,43 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
+    }
+
+  /* Set up file monitors so the list of runtimes refreshes when necessary */
+  if (self->system_installation != NULL)
+    {
+      if (NULL == (self->system_flatpak_monitor = flatpak_installation_create_monitor (self->system_installation,
+                                                                                       cancellable, &error)))
+        {
+          g_warning ("Failed to create flatpak installation file monitor: %s", error->message);
+          g_clear_error (&error);
+        }
+      else
+        {
+          g_signal_connect_object (self->system_flatpak_monitor,
+                                   "changed",
+                                   G_CALLBACK (on_flatpak_installation_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
+    }
+
+  if (self->user_installation != NULL)
+    {
+      if (NULL == (self->user_flatpak_monitor = flatpak_installation_create_monitor (self->user_installation,
+                                                                                     cancellable, &error)))
+        {
+          g_warning ("Failed to create flatpak installation file monitor: %s", error->message);
+          g_clear_error (&error);
+        }
+      else
+        {
+          g_signal_connect_object (self->user_flatpak_monitor,
+                                   "changed",
+                                   G_CALLBACK (on_flatpak_installation_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
     }
 
   g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
@@ -553,6 +620,17 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
+
+  if (self->system_flatpak_monitor != NULL)
+    {
+      g_file_monitor_cancel (self->system_flatpak_monitor);
+      g_clear_object (&self->system_flatpak_monitor);
+    }
+  if (self->user_flatpak_monitor != NULL)
+    {
+      g_file_monitor_cancel (self->user_flatpak_monitor);
+      g_clear_object (&self->user_flatpak_monitor);
+    }
 
   if (self->runtimes != NULL)
     {
