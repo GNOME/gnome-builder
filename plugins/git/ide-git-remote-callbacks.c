@@ -41,6 +41,7 @@ G_DEFINE_TYPE (IdeGitRemoteCallbacks, ide_git_remote_callbacks, GGIT_TYPE_REMOTE
 enum {
   PROP_0,
   PROP_FRACTION,
+  PROP_PROGRESS,
   LAST_PROP
 };
 
@@ -202,6 +203,10 @@ ide_git_remote_callbacks_get_property (GObject    *object,
       g_value_set_double (value, ide_git_remote_callbacks_get_fraction (self));
       break;
 
+    case PROP_PROGRESS:
+      g_value_set_object (value, ide_git_remote_callbacks_get_progress (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -226,6 +231,12 @@ ide_git_remote_callbacks_class_init (IdeGitRemoteCallbacksClass *klass)
                          0,
                          1.0,
                          0.0,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  properties [PROP_PROGRESS] =
+    g_param_spec_object ("progress",
+                         "Progress",
+                         "An IdeProgress instance containing the operation progress.",
+                         IDE_TYPE_PROGRESS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);

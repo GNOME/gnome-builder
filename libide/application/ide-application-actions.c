@@ -175,16 +175,13 @@ ide_application_actions_open_project (GSimpleAction *action,
 
 
 static void
-ide_application_actions_new_project (GSimpleAction *action,
-                                     GVariant      *variant,
-                                     gpointer       user_data)
+ide_application_actions_load_workbench_view (IdeApplication *self,
+                                             const char     *genesis_view,
+                                             const char     *manifest)
 {
-  IdeApplication *self = user_data;
   IdeWorkbench *workbench = NULL;
   IdePerspective *greeter;
   const GList *list;
-
-  g_assert (IDE_IS_APPLICATION (self));
 
   list = gtk_application_get_windows (GTK_APPLICATION (self));
 
@@ -214,10 +211,22 @@ ide_application_actions_new_project (GSimpleAction *action,
   if (greeter)
     {
       ide_greeter_perspective_show_genesis_view (IDE_GREETER_PERSPECTIVE (greeter),
-                                                 "GbpCreateProjectGenesisAddin");
+                                                 genesis_view, manifest);
     }
 
   gtk_window_present (GTK_WINDOW (workbench));
+}
+
+static void
+ide_application_actions_new_project (GSimpleAction *action,
+                                     GVariant      *variant,
+                                     gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  ide_application_actions_load_workbench_view (self, "GbpCreateProjectGenesisAddin", NULL);
 }
 
 static void
@@ -307,6 +316,20 @@ ide_application_actions_load_project (GSimpleAction *action,
     }
 }
 
+static void
+ide_application_actions_load_flatpak (GSimpleAction *action,
+                                      GVariant      *args,
+                                      gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+  const gchar *manifest = NULL;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  manifest = g_variant_get_string (args, NULL);
+  ide_application_actions_load_workbench_view (self, "GbpFlatpakGenesisAddin", manifest);
+}
+
 static const GActionEntry IdeApplicationActions[] = {
   { "about",        ide_application_actions_about },
   { "dayhack",      ide_application_actions_dayhack },
@@ -314,6 +337,7 @@ static const GActionEntry IdeApplicationActions[] = {
   { "open-project", ide_application_actions_open_project },
   { "new-project",  ide_application_actions_new_project },
   { "load-project", ide_application_actions_load_project, "s"},
+  { "load-flatpak", ide_application_actions_load_flatpak, "s"},
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
   { "shortcuts",    ide_application_actions_shortcuts },

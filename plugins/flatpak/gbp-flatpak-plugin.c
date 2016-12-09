@@ -21,6 +21,7 @@
 
 #include "gbp-flatpak-runtime-provider.h"
 #include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-genesis-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
@@ -31,4 +32,7 @@ peas_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               GBP_TYPE_FLATPAK_APPLICATION_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_GENESIS_ADDIN,
+                                              GBP_TYPE_FLATPAK_GENESIS_ADDIN);
 }

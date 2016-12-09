@@ -164,6 +164,7 @@ ide_application_local_command_line (GApplication   *application,
   IdeApplication *self = (IdeApplication *)application;
   g_autofree gchar *path_copy = NULL;
   g_autofree gchar *filename = NULL;
+  g_autofree gchar *manifest = NULL;
   GOptionContext *context = NULL;
   GOptionGroup *group;
   const gchar *shortdesc = NULL;
@@ -232,6 +233,14 @@ ide_application_local_command_line (GApplication   *application,
       &filename,
       N_("Opens the project specified by PATH"),
       N_("PATH") },
+
+    { "manifest",
+      'm',
+      G_OPTION_FLAG_IN_MAIN,
+      G_OPTION_ARG_FILENAME,
+      &manifest,
+      N_("Clones the project specified by MANIFEST"),
+      N_("MANIFEST") },
 
     { NULL }
   };
@@ -455,6 +464,14 @@ ide_application_local_command_line (GApplication   *application,
       GVariant *file;
       file = g_variant_new ("s", filename);
       g_action_group_activate_action ((GActionGroup *) application, "load-project", file);
+      goto cleanup;
+    }
+
+  if (manifest != NULL)
+    {
+      GVariant *file;
+      file = g_variant_new ("s", manifest);
+      g_action_group_activate_action ((GActionGroup *) application, "load-flatpak", file);
       goto cleanup;
     }
 

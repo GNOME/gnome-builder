@@ -20,6 +20,7 @@
 #include <ide.h>
 
 #include "ide-git-genesis-addin.h"
+#include "ide-git-remote-callbacks.h"
 #include "ide-git-vcs.h"
 #include "ide-git-vcs-config.h"
 #include "ide-git-vcs-initializer.h"
@@ -54,6 +55,11 @@ peas_register_types (PeasObjectModule *module)
 {
   if (register_ggit ())
     {
+      /* HACK: we load this type by name from the flatpak plugin, so make
+       * sure it exists.
+       */
+      g_type_ensure (IDE_TYPE_GIT_REMOTE_CALLBACKS);
+
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_VCS,
                                                   IDE_TYPE_GIT_VCS);
