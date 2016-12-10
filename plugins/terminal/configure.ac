@@ -1,4 +1,4 @@
-PKG_CHECK_MODULES(TERMINAL, [vte-2.91 >= 0.40.2], [have_vte=yes], [have_vte=no])
+PKG_CHECK_MODULES(TERMINAL, [vte-2.91 >= 0.46], [have_vte=yes], [have_vte=no])
 
 AC_ARG_ENABLE([terminal-plugin],
               [AS_HELP_STRING([--enable-terminal-plugin=@<:@auto/yes/no@:>@],
