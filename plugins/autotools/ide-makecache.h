@@ -19,7 +19,7 @@
 #ifndef IDE_MAKECACHE_H
 #define IDE_MAKECACHE_H
 
-#include "ide-object.h"
+#include <ide.h>
 
 #include "ide-makecache-target.h"
 
@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeMakecache, ide_makecache, IDE, MAKECACHE, IdeObject)
 
-void                 ide_makecache_new_for_makefile_async   (IdeContext           *context,
+void                 ide_makecache_new_for_makefile_async   (IdeRuntime           *runtime,
                                                              GFile                *makefile,
                                                              GCancellable         *cancellable,
                                                              GAsyncReadyCallback   callback,

@@ -16,11 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-builder"
+
 #include <glib/gi18n.h>
 
-#include "ide-build-result.h"
-#include "ide-builder.h"
-#include "ide-configuration.h"
+#include "ide-context.h"
+#include "ide-debug.h"
+
+#include "buildsystem/ide-build-result.h"
+#include "buildsystem/ide-builder.h"
+#include "buildsystem/ide-configuration.h"
 
 typedef struct
 {
@@ -63,9 +68,18 @@ ide_builder_set_configuration (IdeBuilder       *self,
 
   g_assert (IDE_IS_BUILDER (self));
   g_assert (!configuration || IDE_IS_CONFIGURATION (configuration));
+  g_assert (priv->configuration == NULL);
 
-  if (g_set_object (&priv->configuration, configuration))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIGURATION]);
+  /* Make a copy of the configuration so that we do not need to worry
+   * about the user modifying the configuration while our bulid is
+   * active (and may be running in another thread).
+   *
+   * When the dirty bit is cleared from a successful build, the
+   * configuration will propagate that to the original build
+   * configuration.
+   */
+
+  priv->configuration = ide_configuration_snapshot (configuration);
 }
 
 static void
@@ -83,6 +97,8 @@ ide_builder_real_build_async (IdeBuilder            *self,
   g_assert (!result || *result == NULL);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_builder_real_build_async);
+
   g_task_return_new_error (task,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_SUPPORTED,
@@ -98,6 +114,80 @@ ide_builder_real_build_finish (IdeBuilder    *self,
   g_assert (IDE_IS_BUILDER (self));
   g_assert (G_IS_TASK (result));
 
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+ide_builder_real_get_build_targets_async (IdeBuilder          *self,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
+{
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_builder_real_get_build_targets_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "build targets not supported for %s",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+static GPtrArray *
+ide_builder_real_get_build_targets_finish (IdeBuilder    *self,
+                                           GAsyncResult  *result,
+                                           GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+ide_builder_real_get_build_flags_async (IdeBuilder          *self,
+                                        IdeFile             *file,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_builder_real_get_build_flags_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "build flags not supported for %s",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+static gchar **
+ide_builder_real_get_build_flags_finish (IdeBuilder    *self,
+                                         GAsyncResult  *result,
+                                         GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+ide_builder_real_install_async (IdeBuilder          *self,
+                                IdeBuildResult     **build_result,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_builder_real_install_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "install not supported for %s",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+static IdeBuildResult *
+ide_builder_real_install_finish (IdeBuilder    *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
+{
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
@@ -117,12 +207,12 @@ ide_builder_real_build_finish (IdeBuilder    *self,
  * See ide_builder_build_finish() to complete the request.
  */
 void
-ide_builder_build_async (IdeBuilder           *builder,
-                         IdeBuilderBuildFlags  flags,
-                         IdeBuildResult      **result,
-                         GCancellable         *cancellable,
-                         GAsyncReadyCallback   callback,
-                         gpointer              user_data)
+ide_builder_build_async (IdeBuilder            *builder,
+                         IdeBuilderBuildFlags   flags,
+                         IdeBuildResult       **result,
+                         GCancellable          *cancellable,
+                         GAsyncReadyCallback    callback,
+                         gpointer               user_data)
 {
   g_return_if_fail (IDE_IS_BUILDER (builder));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -196,6 +286,19 @@ ide_builder_set_property (GObject      *object,
 }
 
 static void
+ide_builder_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (ide_builder_parent_class)->constructed (object);
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    IdeContext *context = ide_object_get_context (IDE_OBJECT (object));
+    g_assert (IDE_IS_CONTEXT (context));
+  }
+#endif
+}
+
+static void
 ide_builder_finalize (GObject *object)
 {
   IdeBuilder *self = (IdeBuilder *)object;
@@ -211,12 +314,19 @@ ide_builder_class_init (IdeBuilderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_builder_constructed;
   object_class->finalize = ide_builder_finalize;
   object_class->get_property = ide_builder_get_property;
   object_class->set_property = ide_builder_set_property;
 
   klass->build_async = ide_builder_real_build_async;
   klass->build_finish = ide_builder_real_build_finish;
+  klass->install_async = ide_builder_real_install_async;
+  klass->install_finish = ide_builder_real_install_finish;
+  klass->get_build_flags_async = ide_builder_real_get_build_flags_async;
+  klass->get_build_flags_finish = ide_builder_real_get_build_flags_finish;
+  klass->get_build_targets_async = ide_builder_real_get_build_targets_async;
+  klass->get_build_targets_finish = ide_builder_real_get_build_targets_finish;
 
   properties [PROP_CONFIGURATION] =
     g_param_spec_object ("configuration",
@@ -283,4 +393,73 @@ ide_builder_install_finish (IdeBuilder    *self,
   g_return_val_if_fail (!ret || IDE_IS_BUILD_RESULT (ret), NULL);
 
   return ret;
+}
+
+void
+ide_builder_get_build_targets_async (IdeBuilder          *self,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_BUILDER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_BUILDER_GET_CLASS (self)->get_build_targets_async (self, cancellable, callback, user_data);
+}
+
+/**
+ * ide_builder_get_build_targets_finish:
+ * @self: An #IdeBuilder
+ * @result: A #GAsyncResult provided to the async callback
+ * @error: A location for a #GError or %NULL
+ *
+ * Completes an async operation to ide_builder_get_build_targets_async().
+ *
+ * Returns: (transfer container) (element-type Ide.BuildTarget): A #GPtrArray of the
+ *   build targets or %NULL upon failure and @error is set.
+ */
+GPtrArray *
+ide_builder_get_build_targets_finish (IdeBuilder    *self,
+                                      GAsyncResult  *result,
+                                      GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_BUILDER (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  return IDE_BUILDER_GET_CLASS (self)->get_build_targets_finish (self, result, error);
+}
+
+void
+ide_builder_get_build_flags_async (IdeBuilder          *self,
+                                   IdeFile             *file,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_BUILDER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_BUILDER_GET_CLASS (self)->get_build_flags_async (self, file, cancellable, callback, user_data);
+}
+
+/**
+ * ide_builder_get_build_flags_finish:
+ * @self: An #IdeBuilder
+ * @result: A #GAsyncResult provided to the async callback
+ * @error: A location for a #GError, or %NULL
+ *
+ * Completes the async operation to ide_builder_get_build_flags_async()
+ *
+ * Returns: (transfer full): A newly allocated %NULL terminated array of strings,
+ *   or %NULL upon failure.
+ */
+gchar **
+ide_builder_get_build_flags_finish (IdeBuilder    *self,
+                                    GAsyncResult  *result,
+                                    GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_BUILDER (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  return IDE_BUILDER_GET_CLASS (self)->get_build_flags_finish (self, result, error);
 }

@@ -43,9 +43,6 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         task = Gio.Task.new(self, cancel, callback)
         task.set_priority(priority)
 
-        self._cached_config = None
-        self._cached_builder = None
-
         # TODO: Be async here also
         project_file = self.get_context().get_project_file()
         if project_file.get_basename() == 'meson.build':
@@ -64,113 +61,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return -200 # Lower priority than Autotools for now
 
     def do_get_builder(self, config):
-        if config == self._cached_config:
-            return self._cached_builder
-        else:
-            self._cached_config = config
-            self._cached_builder = MesonBuilder(context=self.get_context(), configuration=config)
-            return self._cached_builder
-
-    def do_get_build_flags_async(self, ifile, cancellable, callback, data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_flags = []
-
-        # TODO: Cleaner API for this? The builder has this information not us..
-        config = self._cached_config
-        builder = self._cached_builder
-
-        if not config:
-            task.return_error(GLib.Error('Meson: Project must be built before we can get flags'))
-            return
-
-        def extract_flags(command: str):
-            flags = GLib.shell_parse_argv(command)[1] # Raises on failure
-            return [flag for flag in flags if flag.startswith(('-I', '-isystem', '-W', '-D'))]
-
-        def build_flags_thread():
-            commands_file = path.join(builder._get_build_dir().get_path(), 'compile_commands.json')
-            try:
-                with open(commands_file) as f:
-                    commands = json.loads(f.read(), encoding='utf-8')
-            except (json.JSONDecodeError, FileNotFoundError, UnicodeDecodeError) as e:
-                task.return_error(GLib.Error('Failed to decode meson json: {}'.format(e)))
-                return
-
-            infile = ifile.get_path()
-            for c in commands:
-                filepath = path.normpath(path.join(c['directory'], c['file']))
-                if filepath == infile:
-                    try:
-                        task.build_flags = extract_flags(c['command'])
-                    except GLib.Error as e:
-                        task.return_error(e)
-                        return
-                    break
-            else:
-                print('Meson: Warning: No flags found')
-
-            task.return_boolean(True)
-
-        thread = threading.Thread(target=build_flags_thread)
-        thread.start()
-
-    def do_get_build_flags_finish(self, result):
-        if result.propagate_boolean():
-            return result.build_flags
-
-    def do_get_build_targets_async(self, cancellable, callback, data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_targets = []
-
-        # TODO: Same API comment as above.
-        config = self._cached_config
-        builder = self._cached_builder
-
-        def build_targets_thread():
-            # TODO: Ide.Subprocess.communicate_utf8(None, cancellable) doesn't work?
-            try:
-                ret = subprocess.check_output(['mesonintrospect', '--targets',
-                                               builder._get_build_dir().get_path()])
-            except (subprocess.CalledProcessError, FileNotFoundError) as e:
-                task.return_error(GLib.Error('Failed to run mesonintrospect: {}'.format(e)))
-                return
-
-            targets = []
-            try:
-                meson_targets = json.loads(ret.decode('utf-8'))
-            except (json.JSONDecodeError, UnicodeDecodeError) as e:
-                task.return_error(GLib.Error('Failed to decode mesonintrospect json: {}'.format(e)))
-                return
-
-            bindir = path.join(config.get_prefix(), 'bin')
-            for t in meson_targets:
-                # TODO: Ideally BuildTargets understand filename != name
-                name = t['filename']
-                if isinstance(name, list):
-                    name = name[0]
-                name = path.basename(name)
-
-                install_dir = path.dirname(t.get('install_filename', ''))
-                installed = t['installed']
-
-                ide_target = MesonBuildTarget(install_dir, name=name)
-                # Try to be smart and sort these because Builder runs the
-                # first one. Ideally it allows the user to select the run targets.
-                if t['type'] == 'executable' and t['installed'] and \
-                    install_dir.startswith(bindir) and not t['filename'].endswith('-cli'):
-                    targets.insert(0, ide_target)
-                else:
-                    targets.append(ide_target)
-
-            task.build_targets = targets
-            task.return_boolean(True)
-
-        thread = threading.Thread(target=build_targets_thread)
-        thread.start()
-
-    def do_get_build_targets_finish(self, result):
-        if result.propagate_boolean():
-            return result.build_targets
+        return MesonBuilder(context=self.get_context(), configuration=config)
 
 
 class MesonBuilder(Ide.Builder):
@@ -254,6 +145,97 @@ class MesonBuilder(Ide.Builder):
     def do_install_finish(self, result) -> Ide.BuildResult:
         if result.propagate_boolean():
             return result.build_result
+
+    def do_get_build_flags_async(self, ifile, cancellable, callback, data=None):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.build_flags = []
+
+        def extract_flags(command: str):
+            flags = GLib.shell_parse_argv(command)[1] # Raises on failure
+            return [flag for flag in flags if flag.startswith(('-I', '-isystem', '-W', '-D'))]
+
+        def build_flags_thread():
+            commands_file = path.join(self._get_build_dir().get_path(), 'compile_commands.json')
+            try:
+                with open(commands_file) as f:
+                    commands = json.loads(f.read(), encoding='utf-8')
+            except (json.JSONDecodeError, FileNotFoundError, UnicodeDecodeError) as e:
+                task.return_error(GLib.Error('Failed to decode meson json: {}'.format(e)))
+                return
+
+            infile = ifile.get_path()
+            for c in commands:
+                filepath = path.normpath(path.join(c['directory'], c['file']))
+                if filepath == infile:
+                    try:
+                        task.build_flags = extract_flags(c['command'])
+                    except GLib.Error as e:
+                        task.return_error(e)
+                        return
+                    break
+            else:
+                print('Meson: Warning: No flags found')
+
+            task.return_boolean(True)
+
+        thread = threading.Thread(target=build_flags_thread)
+        thread.start()
+
+    def do_get_build_flags_finish(self, result):
+        if result.propagate_boolean():
+            return result.build_flags
+
+    def do_get_build_targets_async(self, cancellable, callback, data=None):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.build_targets = []
+
+        config = self.get_configuration()
+
+        def build_targets_thread():
+            # TODO: Ide.Subprocess.communicate_utf8(None, cancellable) doesn't work?
+            try:
+                ret = subprocess.check_output(['mesonintrospect', '--targets',
+                                               self._get_build_dir().get_path()])
+            except (subprocess.CalledProcessError, FileNotFoundError) as e:
+                task.return_error(GLib.Error('Failed to run mesonintrospect: {}'.format(e)))
+                return
+
+            targets = []
+            try:
+                meson_targets = json.loads(ret.decode('utf-8'))
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                task.return_error(GLib.Error('Failed to decode mesonintrospect json: {}'.format(e)))
+                return
+
+            bindir = path.join(config.get_prefix(), 'bin')
+            for t in meson_targets:
+                # TODO: Ideally BuildTargets understand filename != name
+                name = t['filename']
+                if isinstance(name, list):
+                    name = name[0]
+                name = path.basename(name)
+
+                install_dir = path.dirname(t.get('install_filename', ''))
+                installed = t['installed']
+
+                ide_target = MesonBuildTarget(install_dir, name=name)
+                # Try to be smart and sort these because Builder runs the
+                # first one. Ideally it allows the user to select the run targets.
+                if t['type'] == 'executable' and t['installed'] and \
+                    install_dir.startswith(bindir) and not t['filename'].endswith('-cli'):
+                    targets.insert(0, ide_target)
+                else:
+                    targets.append(ide_target)
+
+            task.build_targets = targets
+            task.return_boolean(True)
+
+        thread = threading.Thread(target=build_targets_thread)
+        thread.start()
+
+    def do_get_build_targets_finish(self, result):
+        if result.propagate_boolean():
+            return result.build_targets
 
 
 class MesonBuildResult(Ide.BuildResult):

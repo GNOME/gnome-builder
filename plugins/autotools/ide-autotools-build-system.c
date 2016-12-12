@@ -20,28 +20,20 @@
 
 #include "config.h"
 
-#include <egg-counter.h>
-#include <egg-task-cache.h>
-#include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
-#include <ide-internal.h>
 
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-builder.h"
 #include "ide-makecache.h"
 
-#define MAKECACHE_KEY "makecache"
-#define DEFAULT_MAKECACHE_TTL 0
-
 struct _IdeAutotoolsBuildSystem
 {
-  IdeObject     parent_instance;
+  IdeObject  parent_instance;
 
-  GFile        *project_file;
-  EggTaskCache *task_cache;
-  gchar        *tarball_name;
+  GFile     *project_file;
+  gchar     *tarball_name;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
@@ -54,8 +46,6 @@ G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsBuildSystem,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TAGS_BUILDER, tags_builder_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, build_system_iface_init))
-
-EGG_DEFINE_COUNTER (build_flags, "Autotools", "Flags Requests", "Requests count for build flags")
 
 enum {
   PROP_0,
@@ -82,17 +72,20 @@ ide_autotools_build_system_get_builder (IdeBuildSystem    *build_system,
   IdeBuilder *ret;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   context = ide_object_get_context (IDE_OBJECT (build_system));
+  g_assert (IDE_IS_CONTEXT (context));
 
   ret = g_object_new (IDE_TYPE_AUTOTOOLS_BUILDER,
                       "context", context,
                       "configuration", configuration,
                       NULL);
 
-  return ret;
+  IDE_RETURN (ret);
 }
 
 static gboolean
@@ -117,12 +110,21 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
                                                  gpointer      task_data,
                                                  GCancellable *cancellable)
 {
+  g_autoptr(GFile) parent = NULL;
+  g_autoptr(GFile) configure_ac = NULL;
+  g_autoptr(GFile) configure_in = NULL;
   GFile *file = task_data;
-  GFile *parent;
 
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /*
+   * Previously, we used to walk up the tree looking for configure.ac. But
+   * that causes more problems than it solves as it means that we cannot
+   * handle test projects inside the Builder project (and other projects
+   * may have the same issue for sub-projects).
+   */
 
   if (is_configure (file) && g_file_query_exists (file, cancellable))
     {
@@ -130,44 +132,23 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
       return;
     }
 
-  parent = g_object_ref (file);
+  if (g_file_query_file_type (file, 0, cancellable) == G_FILE_TYPE_DIRECTORY)
+    parent = g_object_ref (file);
+  else
+    parent = g_file_get_parent (file);
 
-  while (parent != NULL)
-    {
-      GFile *child;
-      GFile *tmp;
+  configure_ac = g_file_get_child (parent, "configure.ac");
+  if (g_file_query_exists (configure_ac, cancellable))
+    g_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
 
-      child = g_file_get_child (parent, "configure.ac");
-      if (g_file_query_exists (child, cancellable))
-        {
-          g_task_return_pointer (task, g_object_ref (child), g_object_unref);
-          g_clear_object (&child);
-          g_clear_object (&parent);
-          return;
-        }
-
-      child = g_file_get_child (parent, "configure.in");
-      if (g_file_query_exists (child, cancellable))
-        {
-          g_task_return_pointer (task, g_object_ref (child), g_object_unref);
-          g_clear_object (&child);
-          g_clear_object (&parent);
-          return;
-        }
-
-      g_clear_object (&child);
-
-      tmp = parent;
-      parent = g_file_get_parent (parent);
-      g_clear_object (&tmp);
-    }
-
-  g_clear_object (&parent);
+  configure_in = g_file_get_child (parent, "configure.in");
+  if (g_file_query_exists (configure_in, cancellable))
+    g_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
 
   g_task_return_new_error (task,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_FOUND,
-                           _("Failed to locate configure.ac"));
+                           "Failed to locate configure.ac");
 }
 
 static void
@@ -200,275 +181,7 @@ ide_autotools_build_system_discover_file_finish (IdeAutotoolsBuildSystem  *syste
   return g_task_propagate_pointer (task, error);
 }
 
-static void
-ide_autotools_build_system_get_local_makefile_async (IdeAutotoolsBuildSystem *self,
-                                                     GCancellable            *cancellable,
-                                                     GAsyncReadyCallback      callback,
-                                                     gpointer                 user_data)
-{
-  IdeContext *context;
-  g_autoptr(IdeConfiguration) configuration = NULL;
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(GFile) build_directory = NULL;
-  g_autoptr(GFile) makefile = NULL;
-  GError *error = NULL;
-
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  configuration = ide_configuration_new (context, "autotools-bootstrap", "local", "host");
-
-  builder = ide_autotools_build_system_get_builder (IDE_BUILD_SYSTEM (self), configuration, &error);
-
-  if (builder == NULL)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  build_directory = ide_autotools_builder_get_build_directory (IDE_AUTOTOOLS_BUILDER (builder));
-  makefile = g_file_get_child (build_directory, "Makefile");
-
-  g_task_return_pointer (task, g_object_ref (makefile), g_object_unref);
-}
-
-static GFile *
-ide_autotools_build_system_get_local_makefile_finish (IdeAutotoolsBuildSystem  *self,
-                                                      GAsyncResult             *result,
-                                                      GError                  **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (task));
-
-  return g_task_propagate_pointer (task, error);
-}
-
-static void
-populate_cache__new_makecache_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
-{
-  g_autoptr(GTask) task = user_data;
-  IdeMakecache *makecache;
-  GError *error = NULL;
-
-  g_assert (G_IS_TASK (task));
-
-  if (!(makecache = ide_makecache_new_for_makefile_finish (result, &error)))
-    g_task_return_error (task, error);
-  else
-    g_task_return_pointer (task, makecache, g_object_unref);
-}
-
-static void
-populate_cache__get_local_makefile_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GFile) makefile = NULL;
-  IdeContext *context;
-  GError *error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (task));
-
-  makefile = ide_autotools_build_system_get_local_makefile_finish (self, result, &error);
-
-  if (makefile == NULL)
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  ide_makecache_new_for_makefile_async (context,
-                                        makefile,
-                                        g_task_get_cancellable (task),
-                                        populate_cache__new_makecache_cb,
-                                        g_object_ref (task));
-
-  IDE_EXIT;
-}
-
-static void
-populate_cache_cb (EggTaskCache  *cache,
-                   gconstpointer  key,
-                   GTask         *task,
-                   gpointer       user_data)
-{
-  IdeAutotoolsBuildSystem *self = user_data;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (ide_str_equal0 (key, MAKECACHE_KEY));
-  g_assert (G_IS_TASK (task));
-
-  ide_autotools_build_system_get_local_makefile_async (self,
-                                                       g_task_get_cancellable (task),
-                                                       populate_cache__get_local_makefile_cb,
-                                                       g_object_ref (task));
-
-  IDE_EXIT;
-}
-
-static void
-ide_autotools_build_system_get_makecache_cb (GObject      *object,
-                                             GAsyncResult *result,
-                                             gpointer      user_data)
-{
-  EggTaskCache *task_cache = (EggTaskCache *)object;
-  g_autoptr(GTask) task = user_data;
-  IdeMakecache *ret;
-  GError *error = NULL;
-
-  if (!(ret = egg_task_cache_get_finish (task_cache, result, &error)))
-    g_task_return_error (task, error);
-  else
-    g_task_return_pointer (task, ret, g_object_unref);
-}
-
-static void
-ide_autotools_build_system_get_makecache_async (IdeAutotoolsBuildSystem *self,
-                                                GCancellable            *cancellable,
-                                                GAsyncReadyCallback      callback,
-                                                gpointer                 user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  egg_task_cache_get_async (self->task_cache,
-                            MAKECACHE_KEY,
-                            FALSE,
-                            cancellable,
-                            ide_autotools_build_system_get_makecache_cb,
-                            g_object_ref (task));
-}
-
-static IdeMakecache *
-ide_autotools_build_system_get_makecache_finish (IdeAutotoolsBuildSystem  *self,
-                                                 GAsyncResult             *result,
-                                                 GError                  **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
-
-  return g_task_propagate_pointer (task, error);
-}
-
-static void
-ide_autotools_build_system__get_file_flags_cb (GObject      *object,
-                                               GAsyncResult *result,
-                                               gpointer      user_data)
-{
-  IdeMakecache *makecache = (IdeMakecache *)object;
-  g_autoptr(GTask) task = user_data;
-  gchar **flags;
-  GError *error = NULL;
-
-  g_assert (IDE_IS_MAKECACHE (makecache));
-  g_assert (G_IS_TASK (task));
-
-  flags = ide_makecache_get_file_flags_finish (makecache, result, &error);
-
-  if (!flags)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_pointer (task, flags, (GDestroyNotify)g_strfreev);
-}
-
-static void
-ide_autotools_build_system__makecache_cb (GObject      *object,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
-  g_autoptr(IdeMakecache) makecache = NULL;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-  GFile *file;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (task));
-
-  makecache = ide_autotools_build_system_get_makecache_finish (self, result, &error);
-
-  if (!makecache)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  file = g_task_get_task_data (task);
-  g_assert (G_IS_FILE (file));
-
-  ide_makecache_get_file_flags_async (makecache,
-                                      file,
-                                      g_task_get_cancellable (task),
-                                      ide_autotools_build_system__get_file_flags_cb,
-                                      g_object_ref (task));
-}
-
-static void
-ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
-                                                  IdeFile             *file,
-                                                  GCancellable        *cancellable,
-                                                  GAsyncReadyCallback  callback,
-                                                  gpointer             user_data)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
-  g_autoptr(GTask) task = NULL;
-  GFile *gfile;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_FILE (file));
-
-  EGG_COUNTER_INC (build_flags);
-
-  gfile = ide_file_get_file (file);
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
-
-  ide_autotools_build_system_get_makecache_async (self,
-                                                  cancellable,
-                                                  ide_autotools_build_system__makecache_cb,
-                                                  g_object_ref (task));
-}
-
-static gchar **
-ide_autotools_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
-                                                   GAsyncResult    *result,
-                                                   GError         **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system));
-  g_assert (G_IS_TASK (task));
-
-  return g_task_propagate_pointer (task, error);
-}
-
+#if 0
 static gboolean
 looks_like_makefile (IdeBuffer *buffer)
 {
@@ -501,6 +214,7 @@ looks_like_makefile (IdeBuffer *buffer)
 
   return FALSE;
 }
+#endif
 
 static void
 ide_autotools_build_system__buffer_saved_cb (IdeAutotoolsBuildSystem *self,
@@ -511,19 +225,10 @@ ide_autotools_build_system__buffer_saved_cb (IdeAutotoolsBuildSystem *self,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
+#if 0
   if (looks_like_makefile (buffer))
     egg_task_cache_evict (self->task_cache, MAKECACHE_KEY);
-}
-
-static void
-ide_autotools_build_system__config_changed_cb (IdeAutotoolsBuildSystem *self,
-                                               GParamSpec              *pspec,
-                                               IdeConfigurationManager *config_manager)
-{
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (config_manager));
-
-  egg_task_cache_evict (self->task_cache, MAKECACHE_KEY);
+#endif
 }
 
 static void
@@ -537,7 +242,9 @@ ide_autotools_build_system__vcs_changed_cb (IdeAutotoolsBuildSystem *self,
 
   IDE_TRACE_MSG ("VCS has changed, evicting cached makecaches");
 
+#if 0
   egg_task_cache_evict_all (self->task_cache);
+#endif
 
   IDE_EXIT;
 }
@@ -568,29 +275,20 @@ static void
 ide_autotools_build_system_constructed (GObject *object)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
-  IdeConfigurationManager *config_manager;
   IdeBufferManager *buffer_manager;
   IdeContext *context;
 
   G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->constructed (object);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
   buffer_manager = ide_context_get_buffer_manager (context);
-  config_manager = ide_context_get_configuration_manager (context);
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
   g_signal_connect_object (context,
                            "loaded",
                            G_CALLBACK (ide_autotools_build_system__context_loaded_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  /*
-   * Track change of active configuration so that we invalidate our cached build
-   * targets (which might be out of date).
-   */
-  g_signal_connect_object (config_manager,
-                           "notify::current",
-                           G_CALLBACK (ide_autotools_build_system__config_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -612,113 +310,6 @@ ide_autotools_build_system_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 }
 
-static void
-ide_autotools_build_system_get_build_targets_cb2 (GObject      *object,
-                                                  GAsyncResult *result,
-                                                  gpointer      user_data)
-{
-  IdeMakecache *makecache = (IdeMakecache *)object;
-  g_autoptr(GTask) task = user_data;
-  GPtrArray *ret;
-  GError *error = NULL;
-
-  g_assert (IDE_IS_MAKECACHE (makecache));
-  g_assert (G_IS_TASK (task));
-
-  ret = ide_makecache_get_build_targets_finish (makecache, result, &error);
-
-  if (ret == NULL)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
-}
-
-static void
-ide_autotools_build_system_get_build_targets_cb (GObject      *object,
-                                                 GAsyncResult *result,
-                                                 gpointer      user_data)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
-  IdeContext *context;
-  IdeVcs *vcs;
-  g_autoptr(IdeConfiguration) configuration = NULL;
-  g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(GFile) build_dir = NULL;
-  g_autoptr(IdeMakecache) makecache = NULL;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (task));
-
-  makecache = ide_autotools_build_system_get_makecache_finish (self, result, &error);
-
-  if (makecache == NULL)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  configuration = ide_configuration_new (context, "autotools-bootstrap", "local", "host");
-  builder = ide_autotools_build_system_get_builder (IDE_BUILD_SYSTEM (self), configuration, &error);
-  if (builder)
-    {
-      build_dir = ide_autotools_builder_get_build_directory (IDE_AUTOTOOLS_BUILDER (builder));
-    }
-  else
-    {
-      vcs = ide_context_get_vcs (context);
-      build_dir = ide_vcs_get_working_directory (vcs);
-    }
-
-  ide_makecache_get_build_targets_async (makecache,
-                                         build_dir,
-                                         g_task_get_cancellable (task),
-                                         ide_autotools_build_system_get_build_targets_cb2,
-                                         g_object_ref (task));
-}
-
-static void
-ide_autotools_build_system_get_build_targets_async (IdeBuildSystem      *build_system,
-                                                    GCancellable        *cancellable,
-                                                    GAsyncReadyCallback  callback,
-                                                    gpointer             user_data)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_build_system_get_build_targets_async);
-
-  ide_autotools_build_system_get_makecache_async (self,
-                                                  cancellable,
-                                                  ide_autotools_build_system_get_build_targets_cb,
-                                                  g_object_ref (task));
-}
-
-static GPtrArray *
-ide_autotools_build_system_get_build_targets_finish (IdeBuildSystem  *build_system,
-                                                     GAsyncResult    *result,
-                                                     GError         **error)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
-  GTask *task = (GTask *)result;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (task));
-  g_assert (g_task_is_valid (task, self));
-  g_assert (g_task_get_source_tag (task) == ide_autotools_build_system_get_build_targets_async);
-
-  return g_task_propagate_pointer (task, error);
-}
-
 static gint
 ide_autotools_build_system_get_priority (IdeBuildSystem *system)
 {
@@ -731,7 +322,7 @@ ide_autotools_build_system_finalize (GObject *object)
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
 
   g_clear_pointer (&self->tarball_name, g_free);
-  g_clear_object (&self->task_cache);
+  g_clear_object (&self->project_file);
 
   G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->finalize (object);
 }
@@ -785,10 +376,6 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
 {
   iface->get_priority = ide_autotools_build_system_get_priority;
   iface->get_builder = ide_autotools_build_system_get_builder;
-  iface->get_build_flags_async = ide_autotools_build_system_get_build_flags_async;
-  iface->get_build_flags_finish = ide_autotools_build_system_get_build_flags_finish;
-  iface->get_build_targets_async = ide_autotools_build_system_get_build_targets_async;
-  iface->get_build_targets_finish = ide_autotools_build_system_get_build_targets_finish;
 }
 
 static void
@@ -821,27 +408,6 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
 static void
 ide_autotools_build_system_init (IdeAutotoolsBuildSystem *self)
 {
-  /*
-   * We actually only use this task cache for one instance, but it really
-   * makes it convenient to cache the result of even a single item so we
-   * can avoid async races in replies, as well as avoiding duplicate work.
-   *
-   * We don't require a ref/unref for the populate callback data since we
-   * will always have a GTask queued holding a reference during the lifetime
-   * of the populate callback execution.
-   */
-  self->task_cache = egg_task_cache_new (g_str_hash,
-                                         g_str_equal,
-                                         (GBoxedCopyFunc)g_strdup,
-                                         g_free,
-                                         g_object_ref,
-                                         g_object_unref,
-                                         DEFAULT_MAKECACHE_TTL,
-                                         populate_cache_cb,
-                                         self,
-                                         NULL);
-
-  egg_task_cache_set_name (self->task_cache, "makecache");
 }
 
 static void

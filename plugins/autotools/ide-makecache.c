@@ -54,6 +54,7 @@ struct _IdeMakecache
   EggTaskCache *file_targets_cache;
   EggTaskCache *file_flags_cache;
   GPtrArray    *build_targets;
+  IdeRuntime   *runtime;
 };
 
 typedef struct
@@ -414,6 +415,7 @@ ide_makecache_new_worker (GTask        *task,
                           GCancellable *cancellable)
 {
   IdeMakecache *self = source_object;
+  IdeRuntime *runtime = task_data;
   IdeContext *context;
   IdeProject *project;
   const gchar *project_id;
@@ -423,10 +425,9 @@ ide_makecache_new_worker (GTask        *task,
   g_autoptr(GFile) parent = NULL;
   g_autofree gchar *workdir = NULL;
   g_autoptr(GMappedFile) mapped = NULL;
-  g_autoptr(GSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   GError *error = NULL;
-  GPtrArray *args;
   int fdcopy;
   int fd;
 
@@ -434,6 +435,7 @@ ide_makecache_new_worker (GTask        *task,
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (IDE_IS_RUNTIME (runtime));
 
   if (!self->makefile || !(parent = g_file_get_parent (self->makefile)))
     {
@@ -501,9 +503,7 @@ ide_makecache_new_worker (GTask        *task,
   /*
    * Step 2, make an extra fd to be passed to the child process.
    */
-  fdcopy = dup (fd);
-
-  if (fdcopy == -1)
+  if (-1 == (fdcopy = dup (fd)))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -519,32 +519,29 @@ ide_makecache_new_worker (GTask        *task,
    *
    * Spawn `make -p -n -s` in the directory containing our makefile.
    */
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
-  args = g_ptr_array_new ();
-  g_ptr_array_add (args, GNU_MAKE_NAME);
-  g_ptr_array_add (args, "-p");
-  g_ptr_array_add (args, "-n");
-  g_ptr_array_add (args, "-s");
-  g_ptr_array_add (args, NULL);
-  g_subprocess_launcher_set_cwd (launcher, workdir);
-  g_subprocess_launcher_take_stdout_fd (launcher, fdcopy);
+  launcher = ide_runtime_create_launcher (runtime, &error);
 
-#ifdef IDE_ENABLE_TRACE
-  {
-    g_autofree gchar *str = NULL;
-    str = g_strjoinv (" ", (gchar **)args->pdata);
-    IDE_TRACE_MSG ("workdir=%s Launching '%s'", workdir, str);
-  }
-#endif
+  if (launcher == NULL)
+    {
+      g_task_return_error (task, error);
+      close (fdcopy);
+      close (fd);
+      IDE_EXIT;
+    }
 
-  subprocess = g_subprocess_launcher_spawnv (launcher,
-                                             (const gchar * const *)args->pdata,
-                                             &error);
+  ide_subprocess_launcher_push_argv (launcher, GNU_MAKE_NAME);
+  ide_subprocess_launcher_push_argv (launcher, "-p");
+  ide_subprocess_launcher_push_argv (launcher, "-n");
+  ide_subprocess_launcher_push_argv (launcher, "-s");
+  ide_subprocess_launcher_set_cwd (launcher, workdir);
 
-  g_ptr_array_free (args, TRUE);
+  ide_subprocess_launcher_set_flags (launcher, G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  ide_subprocess_launcher_take_stdout_fd (launcher, fdcopy);
   fdcopy = -1;
 
-  if (!subprocess)
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+
+  if (subprocess == NULL)
     {
       g_assert (error != NULL);
       g_task_return_error (task, error);
@@ -555,7 +552,9 @@ ide_makecache_new_worker (GTask        *task,
   /*
    * Step 4, wait for the subprocess to complete.
    */
-  if (!g_subprocess_wait (subprocess, cancellable, &error))
+  IDE_TRACE_MSG ("waiting for process to exit");
+
+  if (!ide_subprocess_wait (subprocess, cancellable, &error))
     {
       g_assert (error != NULL);
       g_task_return_error (task, error);
@@ -585,9 +584,10 @@ ide_makecache_new_worker (GTask        *task,
   /*
    * Step 6, map the makecache file into memory.
    */
+  lseek (fd, 0, SEEK_SET);
   mapped = g_mapped_file_new_from_fd (fd, FALSE, &error);
 
-  if (!mapped)
+  if (mapped == NULL)
     {
       g_assert (error != NULL);
       g_task_return_error (task, error);
@@ -612,9 +612,10 @@ ide_makecache_new_worker (GTask        *task,
     }
 
   /*
-   * Step 9, save the mmap for future use.
+   * Step 9, save the mmap and runtime for future use.
    */
   self->mapped = g_mapped_file_ref (mapped);
+  self->runtime = g_object_ref (runtime);
 
   g_task_return_pointer (task, g_object_ref (self), g_object_unref);
 
@@ -909,8 +910,8 @@ ide_makecache_get_file_flags_worker (GTask        *task,
   for (j = 0; j < lookup->targets->len; j++)
     {
       IdeMakecacheTarget *target;
-      g_autoptr(GSubprocessLauncher) launcher = NULL;
-      g_autoptr(GSubprocess) subprocess = NULL;
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
       g_autoptr(GPtrArray) argv = NULL;
       g_autofree gchar *stdoutstr = NULL;
       g_autofree gchar *cwd = NULL;
@@ -966,13 +967,23 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       }
 #endif
 
-      launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-      g_subprocess_launcher_set_cwd (launcher, cwd);
-      subprocess = g_subprocess_launcher_spawnv (launcher,
-                                                 (const gchar * const *)argv->pdata,
-                                                 &error);
+      launcher = ide_runtime_create_launcher (lookup->self->runtime, &error);
 
-      if (!subprocess)
+      if (launcher == NULL)
+        {
+          g_assert (error != NULL);
+          g_task_return_error (task, error);
+          IDE_EXIT;
+        }
+
+      ide_subprocess_launcher_set_flags (launcher, (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                                    G_SUBPROCESS_FLAGS_STDERR_SILENCE));
+      ide_subprocess_launcher_set_cwd (launcher, cwd);
+      ide_subprocess_launcher_push_args (launcher, (const gchar * const *)argv->pdata);
+
+      subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+
+      if (subprocess == NULL)
         {
           g_assert (error != NULL);
           g_task_return_error (task, error);
@@ -980,7 +991,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         }
 
       /* Don't let ourselves be cancelled from this operation */
-      if (!g_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdoutstr, NULL, &error))
+      if (!ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdoutstr, NULL, &error))
         {
           g_assert (error != NULL);
           g_task_return_error (task, error);
@@ -1313,6 +1324,7 @@ ide_makecache_finalize (GObject *object)
   g_clear_pointer (&self->mapped, g_mapped_file_unref);
   g_clear_object (&self->file_targets_cache);
   g_clear_object (&self->file_flags_cache);
+  g_clear_object (&self->runtime);
   g_clear_pointer (&self->build_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
@@ -1418,7 +1430,7 @@ ide_makecache_get_makefile (IdeMakecache *self)
 }
 
 void
-ide_makecache_new_for_makefile_async (IdeContext          *context,
+ide_makecache_new_for_makefile_async (IdeRuntime          *runtime,
                                       GFile               *makefile,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
@@ -1426,10 +1438,11 @@ ide_makecache_new_for_makefile_async (IdeContext          *context,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeMakecache) self = NULL;
+  IdeContext *context;
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_CONTEXT (context));
+  g_return_if_fail (IDE_IS_RUNTIME (runtime));
   g_return_if_fail (G_IS_FILE (makefile));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -1440,6 +1453,8 @@ ide_makecache_new_for_makefile_async (IdeContext          *context,
   }
 #endif
 
+  context = ide_object_get_context (IDE_OBJECT (runtime));
+
   self = g_object_new (IDE_TYPE_MAKECACHE,
                        "context", context,
                        "makefile", makefile,
@@ -1447,6 +1462,7 @@ ide_makecache_new_for_makefile_async (IdeContext          *context,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_makecache_new_for_makefile_async);
+  g_task_set_task_data (task, g_object_ref (runtime), g_object_unref);
 
   ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
                              task,

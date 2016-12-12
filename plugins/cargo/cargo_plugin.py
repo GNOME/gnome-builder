@@ -65,31 +65,8 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         # Priority is used to determine the order of discovery
         return 2000
 
-    def do_get_build_flags_async(self, ifile, cancellable, callback, data):
-        # GTask sort of is painful from Python.
-        # We can use it to attach some data to return from the finish
-        # function though.
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_flags = []
-        task.return_boolean(True)
-
-    def do_get_build_flags_finish(self, result):
-        if task.propagate_boolean():
-            return result.build_flags
-
     def do_get_builder(self, config):
         return CargoBuilder(config, context=self.get_context())
-
-    def do_get_build_targets_async(self, cancellable, callback, data):
-        # TODO: We need a way to figure out what "cargo run" will do so that
-        #       we can synthesize that as a build result.
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_targets = []
-        task.return_boolean(True)
-
-    def do_get_build_targets_finish(self, task):
-        if task.propagate_boolean():
-            return task.build_targets
 
 class CargoBuilder(Ide.Builder):
     config = GObject.Property(type=Ide.Configuration)
@@ -150,6 +127,30 @@ class CargoBuilder(Ide.Builder):
     def do_install_finish(self, task):
         if task.propagate_boolean():
             return task.build_result
+
+    def do_get_build_flags_async(self, ifile, cancellable, callback, data):
+        # TODO:
+        # GTask sort of is painful from Python.
+        # We can use it to attach some data to return from the finish
+        # function though.
+        task = Gio.Task.new(self, cancellable, callback)
+        task.build_flags = []
+        task.return_boolean(True)
+
+    def do_get_build_flags_finish(self, result):
+        if task.propagate_boolean():
+            return result.build_flags
+
+    def do_get_build_targets_async(self, cancellable, callback, data):
+        # TODO: We need a way to figure out what "cargo run" will do so that
+        #       we can synthesize that as a build result.
+        task = Gio.Task.new(self, cancellable, callback)
+        task.build_targets = []
+        task.return_boolean(True)
+
+    def do_get_build_targets_finish(self, task):
+        if task.propagate_boolean():
+            return task.build_targets
 
 class CargoBuildResult(Ide.BuildResult):
     runtime = GObject.Property(type=Ide.Runtime)

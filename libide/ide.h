@@ -47,6 +47,7 @@ G_BEGIN_DECLS
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-environment-variable.h"
 #include "buildsystem/ide-environment.h"
+#include "buildsystem/ide-simple-builder.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device-provider.h"
 #include "devices/ide-device.h"

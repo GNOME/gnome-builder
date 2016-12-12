@@ -24,6 +24,7 @@
 
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
+#include "buildsystem/ide-simple-builder.h"
 #include "directory/ide-directory-build-system.h"
 #include "projects/ide-project-file.h"
 #include "projects/ide-project-item.h"
@@ -169,85 +170,34 @@ async_initiable_init (GAsyncInitableIface *iface)
   iface->init_finish = ide_directory_build_system_init_finish;
 }
 
-static void
-ide_directory_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
-                                                  IdeFile             *file,
-                                                  GCancellable        *cancellable,
-                                                  GAsyncReadyCallback  callback,
-                                                  gpointer             user_data)
-{
-  IdeDirectoryBuildSystem *self = (IdeDirectoryBuildSystem *)build_system;
-  g_autoptr(GTask) task = NULL;
-  IdeConfigurationManager *configmgr;
-  GtkSourceLanguage *language;
-  IdeConfiguration *config;
-  IdeContext *context;
-  const gchar *env = NULL;
-  const gchar *id;
-
-  g_assert (IDE_IS_DIRECTORY_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_FILE (file));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  context = ide_object_get_context (IDE_OBJECT (build_system));
-  configmgr = ide_context_get_configuration_manager (context);
-  config = ide_configuration_manager_get_current (configmgr);
-
-  language = ide_file_get_language (file);
-
-  if (config == NULL || language == NULL)
-    goto failure;
-
-  id = gtk_source_language_get_id (language);
-
-  if (ide_str_equal0 (id, "c") || ide_str_equal0 (id, "chdr"))
-    env = ide_configuration_getenv (config, "CFLAGS");
-  else if (ide_str_equal0 (id, "cpp") || ide_str_equal0 (id, "cpphdr"))
-    env = ide_configuration_getenv (config, "CXXFLAGS");
-  else if (ide_str_equal0 (id, "vala"))
-    env = ide_configuration_getenv (config, "VALAFLAGS");
-
-  if (env != NULL)
-    {
-      gchar **flags = NULL;
-      gint argc;
-
-      if (g_shell_parse_argv (env, &argc, &flags, NULL))
-        {
-          g_task_return_pointer (task, flags, (GDestroyNotify)g_strfreev);
-          return;
-        }
-    }
-
-failure:
-  g_task_return_pointer (task, g_new0 (gchar*, 1), (GDestroyNotify)g_strfreev);
-}
-
-static gchar **
-ide_directory_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
-                                                   GAsyncResult    *result,
-                                                   GError         **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_assert (IDE_IS_DIRECTORY_BUILD_SYSTEM (build_system));
-  g_assert (G_IS_TASK (task));
-
-  return g_task_propagate_pointer (task, error);
-}
-
 static gint
 ide_directory_build_system_get_priority (IdeBuildSystem *build_system)
 {
   return 1000000;
 }
 
+static IdeBuilder *
+ide_directory_build_system_get_builder (IdeBuildSystem    *build_system,
+                                        IdeConfiguration  *configuration,
+                                        GError           **error)
+{
+  IdeDirectoryBuildSystem *self = (IdeDirectoryBuildSystem *)build_system;
+  IdeContext *context;
+
+  g_assert (IDE_IS_DIRECTORY_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  context = ide_object_get_context (IDE_OBJECT (build_system));
+
+  return g_object_new (IDE_TYPE_SIMPLE_BUILDER,
+                       "configuration", configuration,
+                       "context", context,
+                       NULL);
+}
+
 static void
 build_system_init (IdeBuildSystemInterface *iface)
 {
-  iface->get_build_flags_async = ide_directory_build_system_get_build_flags_async;
-  iface->get_build_flags_finish = ide_directory_build_system_get_build_flags_finish;
   iface->get_priority = ide_directory_build_system_get_priority;
+  iface->get_builder = ide_directory_build_system_get_builder;
 }

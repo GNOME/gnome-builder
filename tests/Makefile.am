@@ -117,6 +117,12 @@ test_ide_buffer_CFLAGS = $(tests_cflags)
 test_ide_buffer_LDADD = $(tests_libs)
 
 
+TESTS += test-ide-builder
+test_ide_builder_SOURCES = test-ide-builder.c
+test_ide_builder_CFLAGS = $(tests_cflags)
+test_ide_builder_LDADD = $(tests_libs)
+
+
 TESTS += test-ide-doap
 test_ide_doap_SOURCES = test-ide-doap.c
 test_ide_doap_CFLAGS = $(tests_cflags)

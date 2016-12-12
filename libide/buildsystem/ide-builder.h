@@ -40,23 +40,38 @@ struct _IdeBuilderClass
 {
   IdeObjectClass parent;
 
-  void            (*build_async)    (IdeBuilder            *self,
-                                     IdeBuilderBuildFlags   flags,
-                                     IdeBuildResult       **result,
-                                     GCancellable          *cancellable,
-                                     GAsyncReadyCallback    callback,
-                                     gpointer               user_data);
-  IdeBuildResult *(*build_finish)   (IdeBuilder            *self,
-                                     GAsyncResult          *result,
-                                     GError               **error);
-  void            (*install_async)  (IdeBuilder            *self,
-                                     IdeBuildResult       **result,
-                                     GCancellable          *cancellable,
-                                     GAsyncReadyCallback    callback,
-                                     gpointer               user_data);
-  IdeBuildResult *(*install_finish) (IdeBuilder            *self,
-                                     GAsyncResult          *result,
-                                     GError               **error);
+  void             (*build_async)              (IdeBuilder            *self,
+                                                IdeBuilderBuildFlags   flags,
+                                                IdeBuildResult       **result,
+                                                GCancellable          *cancellable,
+                                                GAsyncReadyCallback    callback,
+                                                gpointer               user_data);
+  IdeBuildResult  *(*build_finish)             (IdeBuilder            *self,
+                                                GAsyncResult          *result,
+                                                GError               **error);
+  void             (*install_async)            (IdeBuilder            *self,
+                                                IdeBuildResult       **result,
+                                                GCancellable          *cancellable,
+                                                GAsyncReadyCallback    callback,
+                                                gpointer               user_data);
+  IdeBuildResult  *(*install_finish)           (IdeBuilder            *self,
+                                                GAsyncResult          *result,
+                                                GError               **error);
+  void             (*get_build_flags_async)    (IdeBuilder            *self,
+                                                IdeFile               *file,
+                                                GCancellable          *cancellable,
+                                                GAsyncReadyCallback    callback,
+                                                gpointer               user_data);
+  gchar          **(*get_build_flags_finish)   (IdeBuilder            *self,
+                                                GAsyncResult          *result,
+                                                GError               **error);
+  void             (*get_build_targets_async)  (IdeBuilder            *self,
+                                                GCancellable          *cancellable,
+                                                GAsyncReadyCallback    callback,
+                                                gpointer               user_data);
+  GPtrArray       *(*get_build_targets_finish) (IdeBuilder            *self,
+                                                GAsyncResult          *result,
+                                                GError               **error);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -72,24 +87,39 @@ struct _IdeBuilderClass
   gpointer _reserved12;
 };
 
-IdeConfiguration *ide_builder_get_configuration (IdeBuilder            *self);
-void              ide_builder_build_async       (IdeBuilder            *self,
-                                                 IdeBuilderBuildFlags   flags,
-                                                 IdeBuildResult       **result,
-                                                 GCancellable          *cancellable,
-                                                 GAsyncReadyCallback    callback,
-                                                 gpointer               user_data);
-IdeBuildResult   *ide_builder_build_finish      (IdeBuilder            *self,
-                                                 GAsyncResult          *result,
-                                                 GError               **error);
-void              ide_builder_install_async     (IdeBuilder            *self,
-                                                 IdeBuildResult       **result,
-                                                 GCancellable          *cancellable,
-                                                 GAsyncReadyCallback    callback,
-                                                 gpointer               user_data);
-IdeBuildResult   *ide_builder_install_finish    (IdeBuilder            *self,
-                                                 GAsyncResult          *result,
-                                                 GError               **error);
+IdeConfiguration *ide_builder_get_configuration        (IdeBuilder            *self);
+void              ide_builder_build_async              (IdeBuilder            *self,
+                                                        IdeBuilderBuildFlags   flags,
+                                                        IdeBuildResult       **result,
+                                                        GCancellable          *cancellable,
+                                                        GAsyncReadyCallback    callback,
+                                                        gpointer               user_data);
+IdeBuildResult   *ide_builder_build_finish             (IdeBuilder            *self,
+                                                        GAsyncResult          *result,
+                                                        GError               **error);
+void              ide_builder_install_async            (IdeBuilder            *self,
+                                                        IdeBuildResult       **result,
+                                                        GCancellable          *cancellable,
+                                                        GAsyncReadyCallback    callback,
+                                                        gpointer               user_data);
+IdeBuildResult   *ide_builder_install_finish           (IdeBuilder            *self,
+                                                        GAsyncResult          *result,
+                                                        GError               **error);
+void              ide_builder_get_build_targets_async  (IdeBuilder            *self,
+                                                        GCancellable          *cancellable,
+                                                        GAsyncReadyCallback    callback,
+                                                        gpointer               user_data);
+GPtrArray        *ide_builder_get_build_targets_finish (IdeBuilder            *self,
+                                                        GAsyncResult          *result,
+                                                        GError               **error);
+void              ide_builder_get_build_flags_async    (IdeBuilder            *self,
+                                                        IdeFile               *file,
+                                                        GCancellable          *cancellable,
+                                                        GAsyncReadyCallback    callback,
+                                                        gpointer               user_data);
+gchar           **ide_builder_get_build_flags_finish   (IdeBuilder            *self,
+                                                        GAsyncResult          *result,
+                                                        GError               **error);
 
 G_END_DECLS
 
