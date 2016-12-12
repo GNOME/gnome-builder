@@ -7,16 +7,16 @@ AC_ARG_ENABLE([git-plugin],
               [enable_git_plugin=$enableval],
               [enable_git_plugin=auto])
 
-AS_IF([test "$enable_git_plugin" != no],[
-	PKG_CHECK_MODULES(GIT,
-	                  [libgit2-glib-1.0 >= ggit_required_version],
-	                  [have_git=yes],
-	                  [have_git=no])
+PKG_CHECK_MODULES(GIT,
+                  [libgit2-glib-1.0 >= ggit_required_version],
+                  [have_git=yes],
+                  [have_git=no])
 
-	AS_IF([test "$enable_git_plugin" = "yes" && test "$have_git" = "no"],[
-	       AC_MSG_ERROR([--enable-git-plugin requires libgit2-glib-1.0 >= ggit_required_version])
-	])
+AS_IF([test "$enable_git_plugin" == "yes" && test "$have_git" == "no"],[
+	AC_MSG_ERROR([--enable-git-plugin requires libgit2-glib-1.0 >= ggit_required_version])
+])
 
+AS_IF([test "$enable_git_plugin" != "no" && test "$have_git" == "yes"],[
 	enable_git_plugin=yes
 
 	dnl ***********************************************************************
@@ -50,7 +50,7 @@ AS_IF([test "$enable_git_plugin" != no],[
 	],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, please recompile a libgit2 with ssh support])])
 	CFLAGS="${cflags_save}"
 	LIBS="${libs_save}"
-])
+],[enable_git_plugin=no])
 
 AM_CONDITIONAL(ENABLE_GIT_PLUGIN, test x$enable_git_plugin = xyes)
 AC_CONFIG_FILES([plugins/git/Makefile])
