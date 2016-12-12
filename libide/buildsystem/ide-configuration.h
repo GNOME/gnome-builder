@@ -73,6 +73,7 @@ void                  ide_configuration_set_parallelism      (IdeConfiguration  
                                                               gint               parallelism);
 IdeEnvironment       *ide_configuration_get_environment      (IdeConfiguration  *self);
 IdeConfiguration     *ide_configuration_duplicate            (IdeConfiguration  *self);
+IdeConfiguration     *ide_configuration_snapshot             (IdeConfiguration  *self);
 guint                 ide_configuration_get_sequence         (IdeConfiguration  *self);
 IdeBuildCommandQueue *ide_configuration_get_prebuild         (IdeConfiguration  *self);
 IdeBuildCommandQueue *ide_configuration_get_postbuild        (IdeConfiguration  *self);

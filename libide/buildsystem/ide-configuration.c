@@ -26,6 +26,7 @@
 
 #include "buildsystem/ide-build-command-queue.h"
 #include "buildsystem/ide-configuration.h"
+#include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-environment.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device.h"
@@ -56,6 +57,7 @@ struct _IdeConfiguration
 
   guint           dirty : 1;
   guint           debug : 1;
+  guint           is_snapshot : 1;
 };
 
 G_DEFINE_TYPE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT)
@@ -843,10 +845,41 @@ ide_configuration_get_dirty (IdeConfiguration *self)
   return self->dirty;
 }
 
+static gboolean
+propagate_dirty_bit (gpointer user_data)
+{
+  g_autofree gpointer *data = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  g_autofree gchar *id = NULL;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  guint sequence;
+
+  g_assert (data != NULL);
+  g_assert (IDE_IS_CONTEXT (data[0]));
+
+  context = data[0];
+  id = data[1];
+  sequence = GPOINTER_TO_UINT (data[2]);
+
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_configuration (config_manager, id);
+
+  if (config != NULL)
+    {
+      if (sequence == config->sequence)
+        ide_configuration_set_dirty (config, FALSE);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 void
 ide_configuration_set_dirty (IdeConfiguration *self,
                              gboolean          dirty)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
 
   dirty = !!dirty;
@@ -857,16 +890,34 @@ ide_configuration_set_dirty (IdeConfiguration *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRTY]);
     }
 
-  /*
-   * Emit the changed signal so that the configuration manager
-   * can queue a writeback of the configuration. If we are
-   * clearing the dirty bit, then we don't need to do this.
-   */
   if (dirty)
     {
+      /*
+       * Emit the changed signal so that the configuration manager
+       * can queue a writeback of the configuration. If we are
+       * clearing the dirty bit, then we don't need to do this.
+       */
       self->sequence++;
+      IDE_TRACE_MSG ("configuration set dirty with sequence %u", self->sequence);
       ide_configuration_emit_changed (self);
     }
+  else if (self->is_snapshot)
+    {
+      gpointer *data;
+
+      /*
+       * If we are marking this not-dirty, and it is a snapshot (which means it
+       * was copied for a build process), then we want to propagate the dirty
+       * bit back to the primary configuration.
+       */
+      data = g_new0 (gpointer, 3);
+      data[0] = g_object_ref (ide_object_get_context (IDE_OBJECT (self)));
+      data[1] = g_strdup (self->id);
+      data[2] = GUINT_TO_POINTER (self->sequence);
+      g_timeout_add (0, propagate_dirty_bit, data);
+    }
+
+  IDE_EXIT;
 }
 
 /**
@@ -906,37 +957,32 @@ ide_configuration_set_config_opts (IdeConfiguration *self,
 }
 
 /**
- * ide_configuration_duplicate:
- * @self: An #IdeConfiguration
+ * ide_configuration_snapshot:
  *
- * Copies the configuration into a new configuration.
+ * Makes a snapshot of the configuration that can be used by build processes
+ * to build the project without synchronizing with other threads.
  *
- * Returns: (transfer full): An #IdeConfiguration.
+ * Returns: (transfer full): A newly allocated #IdeConfiguration.
  */
 IdeConfiguration *
-ide_configuration_duplicate (IdeConfiguration *self)
+ide_configuration_snapshot (IdeConfiguration *self)
 {
-  static gint next_counter = 2;
-  GHashTableIter iter;
   IdeConfiguration *copy;
   IdeContext *context;
-  g_autofree gchar *id = NULL;
-  g_autofree gchar *name = NULL;
   const gchar *key;
   const GValue *value;
+  GHashTableIter iter;
 
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  id = g_strdup_printf ("%s %d", self->id, next_counter++);
-  name = g_strdup_printf ("%s Copy", self->display_name);
 
   copy = g_object_new (IDE_TYPE_CONFIGURATION,
                        "config-opts", self->config_opts,
                        "context", context,
                        "device-id", self->device_id,
-                       "display-name", name,
-                       "id", id,
+                       "display-name", self->display_name,
+                       "id", self->id,
                        "prefix", self->prefix,
                        "runtime-id", self->runtime_id,
                        NULL);
@@ -952,6 +998,36 @@ ide_configuration_duplicate (IdeConfiguration *self)
   g_hash_table_iter_init (&iter, self->internal);
   while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
     g_hash_table_insert (copy->internal, g_strdup (key), _value_copy (value));
+
+  copy->dirty = self->dirty;
+  copy->is_snapshot = TRUE;
+  copy->sequence = self->sequence;
+
+  return copy;
+}
+
+/**
+ * ide_configuration_duplicate:
+ * @self: An #IdeConfiguration
+ *
+ * Copies the configuration into a new configuration.
+ *
+ * Returns: (transfer full): An #IdeConfiguration.
+ */
+IdeConfiguration *
+ide_configuration_duplicate (IdeConfiguration *self)
+{
+  static gint next_counter = 2;
+  IdeConfiguration *copy;
+
+  copy = ide_configuration_snapshot (self);
+
+  g_free (copy->id);
+  g_free (copy->display_name);
+
+  copy->id = g_strdup_printf ("%s %d", self->id, next_counter++);
+  copy->display_name = g_strdup_printf ("%s Copy", self->display_name);
+  copy->is_snapshot = FALSE;
 
   return copy;
 }
