@@ -26,7 +26,7 @@ AS_IF([test x$enable_idemm != xno],[
 			  [have_gtkmm=yes],
 			  [have_gtkmm=no])
 
-        AS_IF([test x$enable_idemm = xyes && test x$have_idemm = xno],[
+        AS_IF([test x$enable_idemm = xyes && test x$have_gtkmm = xno],[
 	       	AC_MSG_ERROR([--enable-idemm requires gtkmm >= gtkmm_required_version])
 	])
 
