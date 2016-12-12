@@ -828,7 +828,8 @@ ide_subprocess_launcher_insert_argv (IdeSubprocessLauncher *self,
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
-  g_return_if_fail (index < priv->argv->len);
+  g_return_if_fail (priv->argv->len > 0);
+  g_return_if_fail (index < (priv->argv->len - 1));
   g_return_if_fail (arg != NULL);
 
   g_ptr_array_insert (priv->argv, index, g_strdup (arg));
