@@ -88,7 +88,7 @@ test_buffer_manager_basic_cb2 (GObject      *object,
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
   text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (buffer), &begin, &end, TRUE);
-  g_assert_cmpstr (text, ==, "LT_INIT");
+  g_assert (g_str_has_prefix (text, "AC_PREREQ([2.69])\n"));
 
   tmpfd = g_file_open_tmp (NULL, &tmpfilename, &error);
   g_assert_no_error (error);

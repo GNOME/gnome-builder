@@ -25,30 +25,6 @@
 #include "application/ide-application-tests.h"
 
 static void
-flags_changed_cb (IdeBuffer *buffer,
-                  gpointer   user_data)
-{
-  g_autofree gchar *str = NULL;
-  g_autoptr(GTask) task = user_data;
-  GtkTextIter begin;
-  GtkTextIter end;
-
-  IDE_ENTRY;
-
-  ide_buffer_trim_trailing_whitespace (buffer);
-
-  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
-  str = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (buffer), &begin, &end, TRUE);
-  g_assert_cmpstr (str, ==, "abcd\n\n\n");
-
-  g_task_return_boolean (task, TRUE);
-
-  g_object_unref (buffer);
-
-  IDE_EXIT;
-}
-
-static void
 test_buffer_basic_cb2 (GObject      *object,
                        GAsyncResult *result,
                        gpointer      user_data)
@@ -65,12 +41,7 @@ test_buffer_basic_cb2 (GObject      *object,
   g_assert (ret);
   g_assert (IDE_IS_BUFFER (ret));
 
-  g_signal_connect_object (ret,
-                           "line-flags-changed",
-                           G_CALLBACK (flags_changed_cb),
-                           g_object_ref (task),
-                           0);
-  gtk_text_buffer_set_text (GTK_TEXT_BUFFER (ret), "abcd  \n\n  \n", -1);
+  g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }

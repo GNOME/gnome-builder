@@ -40,7 +40,7 @@ test_new_async_cb1 (GObject      *object,
   g_assert_cmpstr (G_OBJECT_TYPE_NAME (bs), ==, "IdeAutotoolsBuildSystem");
 
   vcs = ide_context_get_vcs (context);
-  g_assert_cmpstr (G_OBJECT_TYPE_NAME (vcs), ==, "IdeGitVcs");
+  g_assert_cmpstr (G_OBJECT_TYPE_NAME (vcs), ==, "IdeDirectoryVcs");
 
   root_build_dir = ide_context_get_root_build_dir (context);
   g_assert (g_str_has_suffix (root_build_dir, "/gnome-builder/builds"));
