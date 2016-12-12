@@ -246,19 +246,19 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
 
-  if (priv->stdin_fd)
+  if (priv->stdin_fd != -1)
     {
       g_subprocess_launcher_take_stdin_fd (launcher, priv->stdin_fd);
       priv->stdin_fd = -1;
     }
 
-  if (priv->stdout_fd)
+  if (priv->stdout_fd != -1)
     {
       g_subprocess_launcher_take_stdout_fd (launcher, priv->stdout_fd);
       priv->stdout_fd = -1;
     }
 
-  if (priv->stderr_fd)
+  if (priv->stderr_fd != -1)
     {
       g_subprocess_launcher_take_stderr_fd (launcher, priv->stderr_fd);
       priv->stderr_fd = -1;
