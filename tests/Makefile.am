@@ -282,4 +282,7 @@ EXTRA_DIST += \
 	data/project2/.you-dont-git-me \
 	$(NULL)
 
+run-%: %
+	$(TESTS_ENVIRONMENT) $(LIBTOOL) --mode=execute gdb -ex run $(builddir)/$*
+
 -include $(top_srcdir)/git.mk
