@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fcntl.h>
+#include <glib/gstdio.h>
 #include <ide.h>
+#include <unistd.h>
 
 static void
 test_basic (void)
@@ -58,6 +61,46 @@ test_communicate (void)
 
   g_assert (stdout_buf != NULL);
   g_assert (g_utf8_validate (stdout_buf, -1, NULL));
+}
+
+static void
+test_stdout_fd (void)
+{
+  IdeSubprocessLauncher *launcher;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *pattern = NULL;
+  gchar buffer[4096];
+  gboolean r;
+  gint fd;
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  ide_subprocess_launcher_push_argv (launcher, "ls");
+
+  pattern = g_build_filename (g_get_tmp_dir (), "makecache-XXXXXX", NULL);
+  fd = g_mkstemp (pattern);
+  g_assert_cmpint (fd, !=, -1);
+
+  ide_subprocess_launcher_take_stdout_fd (launcher, dup (fd));
+
+  subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error);
+  g_assert_no_error (error);
+  g_assert (subprocess != NULL);
+
+  r = ide_subprocess_wait (subprocess, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_cmpint (r, ==, TRUE);
+
+  r = lseek (fd, 0, SEEK_SET);
+  g_assert_cmpint (r, ==, 0);
+
+  r = read (fd, buffer, sizeof buffer);
+  g_assert_cmpint (r, >, 0);
+
+  r = g_unlink (pattern);
+  g_assert_cmpint (r, ==, 0);
+
+  close (fd);
 }
 
 static int
@@ -133,5 +176,6 @@ main (gint   argc,
   g_test_add_func ("/Ide/SubprocessLauncher/basic", test_basic);
   g_test_add_func ("/Ide/SubprocessLauncher/communicate", test_communicate);
   g_test_add_func ("/Ide/SubprocessLauncher/argv-manipulation", test_argv_manipulation);
+  g_test_add_func ("/Ide/SubprocessLauncher/take_stdout_fd", test_stdout_fd);
   return g_test_run ();
 }
