@@ -56,6 +56,7 @@ typedef struct
   IdeRuntime            *runtime;
   IdeBuildCommandQueue  *postbuild;
   IdeEnvironment        *environment;
+  IdeBuilderBuildFlags   flags;
   guint                  sequence;
   guint                  require_autogen : 1;
   guint                  require_configure : 1;
@@ -488,6 +489,7 @@ worker_state_new (IdeAutotoolsBuildTask  *self,
     project_dir = g_object_ref (project_file);
 
   state = g_slice_new0 (WorkerState);
+  state->flags = flags;
   state->sequence = ide_configuration_get_sequence (self->configuration);
   state->require_autogen = self->require_autogen || FLAG_SET (flags, IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP);
   state->require_configure = self->require_configure || (state->require_autogen && FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE));
@@ -805,6 +807,7 @@ ide_autotools_build_task_execute_with_postbuild_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeRuntime *runtime;
   GCancellable *cancellable;
+  IdeBuilderBuildFlags flags;
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -828,20 +831,27 @@ ide_autotools_build_task_execute_with_postbuild_cb (GObject      *object,
       return;
     }
 
+  flags = GPOINTER_TO_UINT (g_task_get_task_data (task));
   cancellable = g_task_get_cancellable (task);
 
-  if (self->install)
-    ide_runtime_postinstall_async (runtime,
-                                   IDE_BUILD_RESULT (self),
-                                   cancellable,
-                                   ide_autotools_build_task_postbuild_runtime_cb,
-                                   g_steal_pointer (&task));
-  else
-    ide_runtime_postbuild_async (runtime,
-                                 IDE_BUILD_RESULT (self),
-                                 cancellable,
-                                 ide_autotools_build_task_postbuild_runtime_cb,
-                                 g_steal_pointer (&task));
+  if ((flags & IDE_BUILDER_BUILD_FLAGS_NO_BUILD) == 0)
+    {
+      if (self->install)
+        ide_runtime_postinstall_async (runtime,
+                                       IDE_BUILD_RESULT (self),
+                                       cancellable,
+                                       ide_autotools_build_task_postbuild_runtime_cb,
+                                       g_steal_pointer (&task));
+      else
+        ide_runtime_postbuild_async (runtime,
+                                     IDE_BUILD_RESULT (self),
+                                     cancellable,
+                                     ide_autotools_build_task_postbuild_runtime_cb,
+                                     g_steal_pointer (&task));
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
 }
 
 void
@@ -858,6 +868,7 @@ ide_autotools_build_task_execute_with_postbuild (IdeAutotoolsBuildTask *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_autotools_build_task_execute_with_postbuild);
+  g_task_set_task_data (task, GUINT_TO_POINTER (flags), NULL);
 
   ide_autotools_build_task_execute_async (self,
                                           flags,
