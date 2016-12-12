@@ -55,6 +55,7 @@ struct _IdeMakecache
   EggTaskCache *file_flags_cache;
   GPtrArray    *build_targets;
   IdeRuntime   *runtime;
+  const gchar  *make_name;
 };
 
 typedef struct
@@ -457,6 +458,13 @@ ide_makecache_new_worker (GTask        *task,
       IDE_EXIT;
     }
 
+  /*
+   * If the runtime has a "gmake" instead of "make", we want to prefer that
+   * since we know it is GNU make.
+   */
+  if (ide_runtime_contains_program_in_path (self->runtime, "gmake", cancellable))
+    self->make_name = "gmake";
+
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
   project_id = ide_project_get_id (project);
@@ -529,7 +537,7 @@ ide_makecache_new_worker (GTask        *task,
       IDE_EXIT;
     }
 
-  ide_subprocess_launcher_push_argv (launcher, GNU_MAKE_NAME);
+  ide_subprocess_launcher_push_argv (launcher, self->make_name);
   ide_subprocess_launcher_push_argv (launcher, "-p");
   ide_subprocess_launcher_push_argv (launcher, "-n");
   ide_subprocess_launcher_push_argv (launcher, "-s");
@@ -942,7 +950,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         relpath++;
 
       argv = g_ptr_array_new ();
-      g_ptr_array_add (argv, GNU_MAKE_NAME);
+      g_ptr_array_add (argv, (gchar *)lookup->self->make_name);
       g_ptr_array_add (argv, "-C");
       g_ptr_array_add (argv, (gchar *)(subdir ?: "."));
       g_ptr_array_add (argv, "-s");
@@ -1394,6 +1402,8 @@ ide_makecache_init (IdeMakecache *self)
 {
   EGG_COUNTER_INC (instances);
 
+  self->make_name = "make";
+
   self->file_targets_cache = egg_task_cache_new ((GHashFunc)g_file_hash,
                                                  (GEqualFunc)g_file_equal,
                                                  g_object_ref,
@@ -1464,9 +1474,7 @@ ide_makecache_new_for_makefile_async (IdeRuntime          *runtime,
   g_task_set_source_tag (task, ide_makecache_new_for_makefile_async);
   g_task_set_task_data (task, g_object_ref (runtime), g_object_unref);
 
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
-                             task,
-                             ide_makecache_new_worker);
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER, task, ide_makecache_new_worker);
 
   IDE_EXIT;
 }
@@ -1753,7 +1761,6 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   g_autofree gchar *stdout_buf = NULL;
   IdeConfigurationManager *configmgr;
   IdeConfiguration *config;
-  const gchar *make_name = "make";
   IdeContext *context;
   IdeRuntime *runtime;
   GFile *build_dir = task_data;
@@ -1802,21 +1809,11 @@ ide_makecache_get_build_targets_worker (GTask        *task,
                                      (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                       G_SUBPROCESS_FLAGS_STDOUT_PIPE));
 
-  /* Default to "make" in runtimes other than the host, since we cannot
-   * rely on our configure-time check for the path there. This isn't totally
-   * correct, since we could be in jhbuild.
-   *
-   * TODO: We might want to rely on the runtime to discover basic utilities
-   *       like GNU Make.
-   */
-  if (g_strcmp0 (ide_configuration_get_runtime_id (config), "host") == 0)
-    make_name = GNU_MAKE_NAME;
-
-  ide_subprocess_launcher_push_argv (launcher, make_name);
+  ide_subprocess_launcher_push_argv (launcher, self->make_name);
 
   /* Find the argv index so we can insert arguments on each run */
   partial_argv = ide_subprocess_launcher_get_argv (launcher);
-  for (num_args = 0; partial_argv[num_args] != NULL; num_args++) ;
+  for (num_args = 0; partial_argv[num_args] != NULL; num_args++) { }
 
   ide_subprocess_launcher_push_argv (launcher, "-f");
   ide_subprocess_launcher_push_argv (launcher, "-");

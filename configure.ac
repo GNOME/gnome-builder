@@ -126,12 +126,6 @@ dnl Ensure C++11 is Supported
 dnl ***********************************************************************
 AX_CXX_COMPILE_STDCXX_11([noext], [mandatory])
 
-dnl ***********************************************************************
-dnl Find Path of GNU Make
-dnl ***********************************************************************
-AC_CHECK_PROG([GMAKE], [gmake], [gmake], [make])
-AC_DEFINE_UNQUOTED([GNU_MAKE_NAME], ["$GMAKE"], [Name of GNU make on this system])
-
 
 dnl ***********************************************************************
 dnl Enable high-performance counters
