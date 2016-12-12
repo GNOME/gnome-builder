@@ -36,6 +36,30 @@ test_basic (void)
   g_assert_cmpint (ide_subprocess_wait_check (process, NULL, &error), !=, 0);
 }
 
+static void
+test_communicate (void)
+{
+  IdeSubprocessLauncher *launcher;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+  gboolean r;
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  ide_subprocess_launcher_push_argv (launcher, "ls");
+
+  subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error);
+  g_assert_no_error (error);
+  g_assert (subprocess != NULL);
+
+  r = ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdout_buf, NULL, &error);
+  g_assert_no_error (error);
+  g_assert_cmpint (r, ==, TRUE);
+
+  g_assert (stdout_buf != NULL);
+  g_assert (g_utf8_validate (stdout_buf, -1, NULL));
+}
+
 static int
 check_args (IdeSubprocessLauncher *launcher,
             gchar *argv0,
@@ -79,9 +103,11 @@ static void
 test_argv_manipulation (void)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autofree gchar *popped = NULL;
 
   launcher = ide_subprocess_launcher_new (0);
   g_assert (launcher != NULL);
+  g_object_add_weak_pointer (G_OBJECT (launcher), (gpointer *)&launcher);
 
   ide_subprocess_launcher_push_argv (launcher, "echo");
   ide_subprocess_launcher_push_argv (launcher, "world");
@@ -91,8 +117,12 @@ test_argv_manipulation (void)
   ide_subprocess_launcher_replace_argv (launcher, 2, "universe");
   g_assert_cmpint (check_args (launcher, "echo", "hello", "universe", NULL), !=, 0);
 
-  g_assert_cmpstr (ide_subprocess_launcher_pop_argv (launcher), ==, "universe");
+  popped = ide_subprocess_launcher_pop_argv (launcher);
+  g_assert_cmpstr (popped, ==, "universe");
   g_assert_cmpint (check_args (launcher, "echo", "hello", NULL), !=, 0);
+
+  g_object_unref (launcher);
+  g_assert (launcher == NULL);
 }
 
 gint
@@ -101,6 +131,7 @@ main (gint   argc,
 {
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/SubprocessLauncher/basic", test_basic);
+  g_test_add_func ("/Ide/SubprocessLauncher/communicate", test_communicate);
   g_test_add_func ("/Ide/SubprocessLauncher/argv-manipulation", test_argv_manipulation);
   return g_test_run ();
 }
