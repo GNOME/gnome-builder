@@ -660,6 +660,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   ide_subprocess_launcher_push_argv (launcher4, "install");
   ide_subprocess_launcher_push_argv (launcher4, "--user");
   ide_subprocess_launcher_push_argv (launcher4, "--app");
+  ide_subprocess_launcher_push_argv (launcher4, "--no-deps");
   ide_subprocess_launcher_push_argv (launcher4, repo_name);
   ide_subprocess_launcher_push_argv (launcher4, app_id);
 
