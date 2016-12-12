@@ -840,11 +840,15 @@ ide_subprocess_launcher_replace_argv (IdeSubprocessLauncher *self,
                                       const gchar           *arg)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  gchar *old_arg;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
-  g_return_if_fail (index < priv->argv->len);
+  g_return_if_fail (priv->argv->len > 0);
+  g_return_if_fail (index < (priv->argv->len - 1));
   g_return_if_fail (arg != NULL);
 
-  g_ptr_array_remove_index (priv->argv, index);
-  g_ptr_array_insert (priv->argv, (index == priv->argv->len ? -1 : index), g_strdup (arg));
+  /* overwriting in place */
+  old_arg = g_ptr_array_index (priv->argv, index);
+  g_ptr_array_index (priv->argv, index) = g_strdup (arg);
+  g_free (old_arg);
 }
