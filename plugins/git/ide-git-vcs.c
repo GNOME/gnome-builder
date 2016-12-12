@@ -166,6 +166,24 @@ ide_git_vcs_discover (IdeGitVcs  *self,
   if (g_strcmp0 (name, ".git") == 0)
     return g_object_ref (file);
 
+  /*
+   * Work around for in-tree tests which we do not
+   * want to use the git backend.
+   *
+   * TODO: Allow options during context creation.
+   */
+  child = g_file_get_child (file, ".you-dont-git-me");
+
+  if (g_file_query_exists (child, NULL))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_SUPPORTED,
+                   "The project has blocked use of the git plugin");
+      return NULL;
+    }
+
+  g_clear_object (&child);
   child = g_file_get_child (file, ".git");
 
   if (g_file_query_exists (child, NULL))
@@ -198,12 +216,16 @@ ide_git_vcs_load (IdeGitVcs  *self,
   GFile *project_file;
 
   g_assert (IDE_IS_GIT_VCS (self));
+  g_assert (error != NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project_file = ide_context_get_project_file (context);
 
   if (!(location = ide_git_vcs_discover (self, project_file, error)))
     {
+      if (g_error_matches (*error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        return NULL;
+
       g_clear_error (error);
 
       /* Fallback to libgit2(-glib) discovery */
