@@ -86,6 +86,20 @@ class MesonBuilder(Ide.Builder):
         context = self.get_context()
         return context.get_vcs().get_working_directory()
 
+    @staticmethod
+    def _task_set_error(task, err):
+        task.build_result.set_mode(_('Failed'))
+        task.build_result.set_failed(True)
+        task.return_error(err)
+        task.build_result.set_running(False)
+
+    @staticmethod
+    def _task_set_success(task):
+        task.build_result.set_mode(_('Successful'))
+        task.build_result.set_failed(False)
+        task.return_boolean(True)
+        task.build_result.set_running(False)
+
     def do_build_async(self, flags, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)
         task.build_result = MesonBuildResult(self.configuration,
@@ -94,21 +108,27 @@ class MesonBuilder(Ide.Builder):
                                              cancellable,
                                              flags=flags)
 
-        def wrap_build():
+        def wrap_build(task):
             task.build_result.set_running(True)
             try:
                 task.build_result.build()
-                task.build_result.set_mode(_('Successful'))
-                task.build_result.set_failed(False)
-                task.return_boolean(True)
-            except GLib.Error as e:
-                task.build_result.set_mode(_('Failed'))
-                task.build_result.set_failed(True)
-                task.return_error(e)
-            task.build_result.set_running(False)
+            except GLib.Error as err:
+                self._task_set_error(task, err)
+            else:
+                def postbuild_finish(err):
+                    if err:
+                        self._task_set_error(task, err)
+                    else:
+                        self._task_set_success(task)
+                task.build_result._postbuild_async(postbuild_finish)
 
-        thread = threading.Thread(target=wrap_build)
-        thread.start()
+        def _on_prebuild_finish(task, err):
+            if err:
+                self._task_set_error(task, err)
+            else:
+                thread = threading.Thread(target=wrap_build, args=(task,))
+                thread.start()
+        task.build_result._prebuild_async(task, _on_prebuild_finish)
 
         return task.build_result
 
@@ -123,21 +143,21 @@ class MesonBuilder(Ide.Builder):
                                              self._get_source_dir(),
                                              cancellable)
 
-        def wrap_install():
+        def wrap_install(task):
             task.build_result.set_running(True)
             try:
                 task.build_result.install()
-                self = task.get_source_object()
-                task.build_result.set_mode(_('Successful'))
-                task.build_result.set_failed(False)
-                task.return_boolean(True)
-            except GLib.Error as e:
-                task.build_result.set_mode(_("Failed"))
-                task.build_result.set_failed(True)
-                task.return_error(e)
-            task.build_result.set_running(False)
+            except GLib.Error as err:
+                self._task_set_error(task, err)
+            else:
+                def postinstall_finish(err):
+                    if err:
+                        self._task_set_error(task, err)
+                    else:
+                        self._task_set_success(task)
+                task.build_result._postinstall_async(postinstall_finish)
 
-        thread = threading.Thread(target=wrap_install)
+        thread = threading.Thread(target=wrap_install, args=(task,))
         thread.start()
 
         return task.build_result
@@ -309,6 +329,59 @@ class MesonBuildResult(Ide.BuildResult):
         launcher = self._new_launcher(cwd=self.blddir)
         launcher.push_args([self._get_ninja(), 'install'])
         self._run_subprocess(launcher)
+
+    def _prebuild_async(self, task, callback):
+        # Unlike the rest of this class this is ran on the main thread
+        # using async apis so try to catch the error and propogate it
+        # where others are handled
+        def prebuild_command_finish(command, result):
+            try:
+                command.execute_finish(result)
+            except GLib.Error as e:
+                callback(task, e)
+            else:
+                callback(task, None)
+
+        def prebuild_finish(runtime, result):
+            try:
+                runtime.prebuild_finish(result)
+                prebuild_command = self.config.get_prebuild()
+                prebuild_command.execute_async(runtime, self.config.get_environment(),
+                                             self, self.cancel, prebuild_command_finish)
+            except GLib.Error as e:
+                callback(task, e)
+
+        if self.runtime:
+            self.set_mode(_('Running prebuild…'))
+            self.runtime.prebuild_async(self, self.cancel, prebuild_finish)
+
+    def _postaction_async(self, callback, install=False):
+        if not self.runtime:
+            return
+
+        def postaction_finish(runtime, result):
+            try:
+                if install:
+                    runtime.postinstall_finish(result)
+                else:
+                    runtime.postbuild_finish(result)
+            except GLib.Error as e:
+                callback(e)
+            else:
+                callback(None)
+
+        if install:
+            self.set_mode(_('Running post-install…'))
+            self.runtime.postinstall_async(self, self.cancel, postaction_finish)
+        else:
+            self.set_mode(_('Running post-build…'))
+            self.runtime.postbuild_async(self, self.cancel, postaction_finish)
+
+    def _postbuild_async(self, callback):
+        self._postaction_async(callback)
+
+    def _postinstall_async(self, callback):
+        self._ppostaction_async(callback, install=True)
 
     def build(self):
         # NOTE: These are ran in a thread and it raising GLib.Error is handled a layer up.
