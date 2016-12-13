@@ -275,7 +275,13 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
               ide_subprocess_launcher_push_argv (launcher2, "--from");
               ide_subprocess_launcher_push_argv (launcher2, gnome_repo_name);
               ide_subprocess_launcher_push_argv (launcher2, gnome_repo_path);
+              ide_build_result_log_stderr (build_result,
+                                           "Adding missing flatpak repository %s from %s\n",
+                                           gnome_repo_name, gnome_repo_path);
               process2 = ide_subprocess_launcher_spawn (launcher2, cancellable, &error);
+
+              if (process2 != NULL)
+                ide_build_result_log_subprocess (build_result, process2);
 
               if (process2 == NULL || !ide_subprocess_wait_check (process2, cancellable, &error))
                 {
@@ -303,7 +309,13 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
               ide_subprocess_launcher_push_argv (launcher3, gnome_repo_name);
               ide_subprocess_launcher_push_argv (launcher3, self->platform);
               ide_subprocess_launcher_push_argv (launcher3, self->branch);
+              ide_build_result_log_stderr (build_result,
+                                           "Installing missing flatpak runtime %s (%s)\n",
+                                           self->platform, self->branch);
               process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, &error);
+
+              if (process3 != NULL)
+                ide_build_result_log_subprocess (build_result, process3);
 
               if (process3 == NULL || !ide_subprocess_wait_check (process3, cancellable, &error))
                 {
@@ -331,7 +343,13 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
               ide_subprocess_launcher_push_argv (launcher4, gnome_repo_name);
               ide_subprocess_launcher_push_argv (launcher4, self->sdk);
               ide_subprocess_launcher_push_argv (launcher4, self->branch);
+              ide_build_result_log_stderr (build_result,
+                                           "Installing missing flatpak SDK %s (%s)\n",
+                                           self->sdk, self->branch);
               process4 = ide_subprocess_launcher_spawn (launcher4, cancellable, &error);
+
+              if (process4 != NULL)
+                ide_build_result_log_subprocess (build_result, process4);
 
               if (process4 == NULL || !ide_subprocess_wait_check (process4, cancellable, &error))
                 {
