@@ -38,6 +38,8 @@ struct _GbpFlatpakCloneWidget
   gchar          *child_name;
   gchar          *id;
   gchar          *manifest;
+
+  guint           strip_components;
 };
 
 typedef enum {
@@ -200,6 +202,7 @@ static void
 gbp_flatpak_clone_widget_init (GbpFlatpakCloneWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+  self->strip_components = 1;
 }
 
 static void
@@ -355,7 +358,12 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   else if (req->src->type == TYPE_ARCHIVE)
     {
       uristr = ide_vcs_uri_to_string (req->src->uri);
-      req->project_file = fetch_archive (uristr, req->src->sha, req->src->name, req->destination, &error);
+      req->project_file = fetch_archive (uristr,
+                                         req->src->sha,
+                                         req->src->name,
+                                         req->destination,
+                                         self->strip_components,
+                                         &error);
     }
 
   /* copy manifest into the source directory */

@@ -353,7 +353,7 @@ strip_components_into (GFile   *dest,
 
 static GFile *
 create_uncompress_directory (GFile   *dest,
-                             int      strip_components,
+                             guint    strip_components,
                              GError **error)
 {
   GFile *uncompress_dest = NULL;
@@ -452,7 +452,7 @@ download_archive (SoupURI      *uri,
 static gboolean
 extract_archive (GFile   *destination,
                  GFile   *archive_file,
-                 int      strip_components,
+                 guint    strip_components,
                  GError **error)
 {
   ArchiveType type;
@@ -516,6 +516,7 @@ fetch_archive (const gchar  *url,
                const gchar  *sha,
                const gchar  *module_name,
                GFile        *destination,
+               guint         strip_components,
                GError      **error)
 {
   g_autoptr(GFile) archive_file = NULL;
@@ -543,7 +544,7 @@ fetch_archive (const gchar  *url,
   if (!download_archive (uri, sha, archive_file, error))
     return NULL;
 
-  if (!extract_archive (source_dir, archive_file, 1, error))
+  if (!extract_archive (source_dir, archive_file, strip_components, error))
     return NULL;
 
   return g_steal_pointer (&source_dir);

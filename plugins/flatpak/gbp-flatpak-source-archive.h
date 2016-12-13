@@ -23,6 +23,7 @@ GFile    *fetch_archive (const gchar  *url,
                          const gchar  *sha,
                          const gchar  *module_name,
                          GFile        *destination,
+                         guint         strip_components,
                          GError      **error);
 
 #endif /* GBP_FLATPAK_SOURCE_ARCHIVE_H */
