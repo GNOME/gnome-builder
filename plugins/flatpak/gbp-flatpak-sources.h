@@ -1,4 +1,4 @@
-/* gbp-flatpak-source-archive.h
+/* gbp-flatpak-sources.h
  *
  * Copyright (C) 2016 Endless Mobile, Inc.
  *
@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_SOURCE_ARCHIVE_H
-#define GBP_FLATPAK_SOURCE_ARCHIVE_H
+#ifndef GBP_FLATPAK_SOURCES_H
+#define GBP_FLATPAK_SOURCES_H
 
 GFile    *fetch_archive (const gchar  *url,
                          const gchar  *sha,
@@ -31,4 +31,4 @@ gboolean  apply_patch (const gchar  *path,
                        guint         strip_components,
                        GError      **error);
 
-#endif /* GBP_FLATPAK_SOURCE_ARCHIVE_H */
+#endif /* GBP_FLATPAK_SOURCES_H */

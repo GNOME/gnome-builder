@@ -23,7 +23,7 @@
 #include "egg-animation.h"
 
 #include "gbp-flatpak-clone-widget.h"
-#include "gbp-flatpak-source-archive.h"
+#include "gbp-flatpak-sources.h"
 
 #define ANIMATION_DURATION_MSEC 250
 

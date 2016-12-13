@@ -25,8 +25,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-clone-widget.h \
 	gbp-flatpak-genesis-addin.c \
 	gbp-flatpak-genesis-addin.h \
-	gbp-flatpak-source-archive.c \
-	gbp-flatpak-source-archive.h \
+	gbp-flatpak-sources.c \
+	gbp-flatpak-sources.h \
 	$(NULL)
 
 nodist_libflatpak_plugin_la_SOURCES = \

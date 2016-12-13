@@ -1,4 +1,4 @@
-/* gbp-flatpak-source-archive.c
+/* gbp-flatpak-sources.c
  *
  * Copyright (C) 2016 Endless Mobile, Inc.
  *
@@ -22,7 +22,7 @@
 #include <libsoup/soup.h>
 
 #include "config.h"
-#include "gbp-flatpak-source-archive.h"
+#include "gbp-flatpak-sources.h"
 
 /* This file includes modified code from
  * flatpak/builder/builder-source-archive.c
