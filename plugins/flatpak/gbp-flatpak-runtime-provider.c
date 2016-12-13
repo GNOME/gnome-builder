@@ -453,7 +453,6 @@ on_flatpak_installation_changed (GbpFlatpakRuntimeProvider *self,
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
-  g_assert (G_IS_FILE_MONITOR (self));
   g_assert (!file || G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
 
