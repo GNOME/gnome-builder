@@ -25,8 +25,8 @@
 
 #include "gbp-build-log-panel.h"
 
-#define HORIZONTAL_AUTOSCROLL_TOLERENCE   3.0
-#define VERTICAL_AUTOSCROLL_TOLERENCE     30.0
+#define HORIZONTAL_AUTOSCROLL_TOLERANCE   3.0
+#define VERTICAL_AUTOSCROLL_TOLERANCE     30.0
 
 struct _GbpBuildLogPanel
 {
@@ -110,10 +110,10 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
   last_page_pos = gtk_adjustment_get_upper (self->vadjustment) -
                   gtk_adjustment_get_page_size (self->vadjustment);
   h_scroll_left =
-    gtk_adjustment_get_value (self->hadjustment) <= HORIZONTAL_AUTOSCROLL_TOLERENCE;
+    gtk_adjustment_get_value (self->hadjustment) <= HORIZONTAL_AUTOSCROLL_TOLERANCE;
   v_scroll_bottom =
     gtk_adjustment_get_value (self->vadjustment) >= last_page_pos -
-                                                    VERTICAL_AUTOSCROLL_TOLERENCE;
+                                                    VERTICAL_AUTOSCROLL_TOLERANCE;
 
   gtk_text_buffer_get_end_iter (self->buffer, &iter);
 
