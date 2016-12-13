@@ -303,6 +303,50 @@ unrpm (GFile   *dir,
 }
 
 static gboolean
+patch (GFile       *dir,
+       gboolean     use_git,
+       const char  *patch_path,
+       GError     **error,
+       ...)
+{
+  g_autoptr(GPtrArray) args = NULL;
+  const gchar *arg;
+  va_list ap;
+
+  va_start(ap, error);
+
+  args = g_ptr_array_new ();
+  if (use_git)
+    {
+      g_ptr_array_add (args, "git");
+      g_ptr_array_add (args, "apply");
+    }
+  else
+    {
+      g_ptr_array_add (args, "patch");
+    }
+
+  while ((arg = va_arg (ap, const gchar *)))
+    g_ptr_array_add (args, (gchar *) arg);
+
+  va_end (ap);
+
+  if (use_git)
+    {
+      g_ptr_array_add (args, (char *) patch_path);
+    }
+  else
+    {
+      g_ptr_array_add (args, "-i");
+      g_ptr_array_add (args, (char *) patch_path);
+    }
+
+  g_ptr_array_add (args, NULL);
+
+  return archive_spawnv (dir, NULL, error, (const char **) args->pdata);
+}
+
+static gboolean
 strip_components_into (GFile   *dest,
                        GFile   *src,
                        int      level,
@@ -548,4 +592,27 @@ fetch_archive (const gchar  *url,
     return NULL;
 
   return g_steal_pointer (&source_dir);
+}
+
+gboolean
+apply_patch (const gchar  *path,
+             GFile        *source_dir,
+             guint         strip_components,
+             GError      **error)
+{
+  g_autoptr(GFile) patchfile = NULL;
+  g_autofree char *patch_path = NULL;
+  g_autofree char *strip_components_str = NULL;
+  gboolean use_git = FALSE;
+
+  patchfile = g_file_resolve_relative_path (source_dir, path);
+  if (patchfile == NULL)
+    return FALSE;
+
+  strip_components_str = g_strdup_printf ("-p%u", strip_components);
+  patch_path = g_file_get_path (patchfile);
+  if (!patch (source_dir, use_git, patch_path, error, strip_components_str, NULL))
+    return FALSE;
+
+  return TRUE;
 }

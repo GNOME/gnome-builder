@@ -303,6 +303,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   g_autoptr(GFile) dst = NULL;
   GError *error = NULL;
   GType git_callbacks_type;
+  guint i;
 
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
@@ -364,6 +365,18 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
                                          req->destination,
                                          self->strip_components,
                                          &error);
+    }
+
+  for (i = 0; req->src->patches[i]; i++)
+    {
+      if (!apply_patch (req->src->patches[i],
+                        req->project_file,
+                        self->strip_components,
+                        &error))
+        {
+          g_task_return_error (task, error);
+          return;
+        }
     }
 
   /* copy manifest into the source directory */

@@ -26,4 +26,9 @@ GFile    *fetch_archive (const gchar  *url,
                          guint         strip_components,
                          GError      **error);
 
+gboolean  apply_patch (const gchar  *path,
+                       GFile        *source_dir,
+                       guint         strip_components,
+                       GError      **error);
+
 #endif /* GBP_FLATPAK_SOURCE_ARCHIVE_H */
