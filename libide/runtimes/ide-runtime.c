@@ -572,3 +572,31 @@ ide_runtime_error_quark (void)
 
   return quark;
 }
+
+/**
+ * ide_runtime_translate_file:
+ * @self: An #IdeRuntime
+ * @file: A #GFile
+ *
+ * Translates the file from a path within the runtime to a path that can
+ * be accessed from the host system.
+ *
+ * Returns: (transfer full) (not nullable): A #GFile.
+ */
+GFile *
+ide_runtime_translate_file (IdeRuntime *self,
+                            GFile      *file)
+{
+  GFile *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  if (IDE_RUNTIME_GET_CLASS (self)->translate_file)
+    ret = IDE_RUNTIME_GET_CLASS (self)->translate_file (self, file);
+
+  if (ret == NULL)
+    ret = g_object_ref (file);
+
+  return ret;
+}

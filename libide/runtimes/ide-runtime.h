@@ -76,8 +76,9 @@ struct _IdeRuntimeClass
   gboolean               (*postinstall_finish)       (IdeRuntime           *self,
                                                       GAsyncResult         *result,
                                                       GError              **error);
+  GFile                 *(*translate_file)           (IdeRuntime           *self,
+                                                      GFile                *file);
 
-  gpointer _reserved3;
   gpointer _reserved4;
   gpointer _reserved5;
   gpointer _reserved6;
@@ -136,6 +137,8 @@ void                   ide_runtime_set_id                   (IdeRuntime         
 const gchar           *ide_runtime_get_display_name         (IdeRuntime           *self);
 void                   ide_runtime_set_display_name         (IdeRuntime           *self,
                                                              const gchar          *display_name);
+GFile                 *ide_runtime_translate_file           (IdeRuntime           *self,
+                                                             GFile                *file);
 
 G_END_DECLS
 
