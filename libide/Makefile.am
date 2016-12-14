@@ -388,6 +388,10 @@ libide_1_0_la_SOURCES =                                   \
 	editor/ide-editor-layout-stack-controls.h         \
 	editor/ide-editor-print-operation.c               \
 	editor/ide-editor-print-operation.h               \
+	editor/ide-editor-spell-navigator.c               \
+	editor/ide-editor-spell-navigator.h               \
+	editor/ide-editor-spell-utils.c                   \
+	editor/ide-editor-spell-utils.h                   \
 	editor/ide-editor-spell-widget.c                  \
 	editor/ide-editor-spell-widget.h                  \
 	editor/ide-editor-tweak-widget.c                  \
