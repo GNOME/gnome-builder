@@ -97,6 +97,37 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   return (subprocess != NULL) && ide_subprocess_wait_check (subprocess, cancellable, NULL);
 }
 
+/**
+ * manifest_has_multiple_modules:
+ *
+ * Searches a #JsonObject to see if it has more than one
+ * element in a "modules" list.
+ */
+static gboolean
+manifest_has_multiple_modules (JsonObject *object)
+{
+  JsonArray *modules;
+  guint num_modules;
+
+  modules = json_object_get_array_member (object, "modules");
+  if (modules == NULL)
+    return FALSE;
+
+  num_modules = json_array_get_length (modules);
+  if (num_modules > 1)
+      return TRUE;
+  else if (num_modules == 0)
+      return FALSE;
+  else
+    {
+      object = json_array_get_object_element (modules, 0);
+      modules = json_object_get_array_member (object, "modules");
+      if (modules == NULL)
+        return FALSE;
+      return (json_array_get_length (modules) > 0);
+    }
+}
+
 static void
 gbp_flatpak_runtime_prebuild_worker (GTask        *task,
                                      gpointer      source_object,
@@ -208,10 +239,8 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
       gchar *manifest_path;
       g_autoptr(JsonParser) parser = NULL;
       JsonNode *root_node = NULL;
-      JsonNode *modules_node = NULL;
       JsonObject *root_object = NULL;
-      JsonArray *modules = NULL;
-      guint num_modules;
+      gboolean has_multiple_modules;
 
       manifest_path = g_file_get_path (self->manifest);
       g_assert (!ide_str_empty0 (manifest_path));
@@ -225,10 +254,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
       root_node = json_parser_get_root (parser);
       g_assert (JSON_NODE_HOLDS_OBJECT (root_node));
       root_object = json_node_get_object (root_node);
-      modules_node = json_object_get_member (root_object, "modules");
-      g_assert (JSON_NODE_HOLDS_ARRAY (modules_node));
-      modules = json_node_get_array (modules_node);
-      num_modules = json_array_get_length (modules);
+      has_multiple_modules = manifest_has_multiple_modules (root_object);
 
       if (g_strcmp0 (self->platform, "org.gnome.Platform") == 0 ||
           g_strcmp0 (self->sdk, "org.gnome.Sdk") == 0)
@@ -363,7 +389,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
         }
 
       /* No need to run flatpak-builder if there are no dependencies */
-      if (!already_ran_build_init && num_modules > 1)
+      if (!already_ran_build_init && has_multiple_modules)
         {
           g_autoptr(IdeSubprocessLauncher) launcher5 = NULL;
           g_autoptr(IdeSubprocess) process5 = NULL;
