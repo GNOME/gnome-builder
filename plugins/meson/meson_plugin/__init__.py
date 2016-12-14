@@ -381,7 +381,7 @@ class MesonBuildResult(Ide.BuildResult):
         self._postaction_async(callback)
 
     def _postinstall_async(self, callback):
-        self._ppostaction_async(callback, install=True)
+        self._postaction_async(callback, install=True)
 
     def build(self):
         # NOTE: These are ran in a thread and it raising GLib.Error is handled a layer up.
