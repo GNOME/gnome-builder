@@ -639,7 +639,10 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
                                    const gchar  *subdir)
 {
   static const gchar *dummy = "-I";
-  gchar *adjusted = NULL;
+  g_autofree gchar *adjusted = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GFile) translated = NULL;
+  g_autofree gchar *translated_path = NULL;
 
   g_assert (self != NULL);
   g_assert (ret != NULL);
@@ -680,9 +683,14 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
       part2 = adjusted;
     }
 
-  g_ptr_array_add (ret, g_strdup_printf ("%s%s", part1, part2));
+  file = g_file_new_for_path (part2);
+  translated = ide_runtime_translate_file (self->runtime, file);
+  translated_path = g_file_get_path (translated);
 
-  g_free (adjusted);
+  if (translated_path != NULL)
+    part2 = translated_path;
+
+  g_ptr_array_add (ret, g_strdup_printf ("%s%s", part1, part2));
 }
 
 static void
