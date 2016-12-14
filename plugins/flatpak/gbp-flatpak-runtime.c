@@ -47,7 +47,7 @@ enum {
   PROP_PRIMARY_MODULE,
   PROP_APP_ID,
   PROP_MANIFEST,
-  LAST_PROP
+  N_PROPS
 };
 
 static GParamSpec *properties [LAST_PROP];
@@ -1065,7 +1065,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
                           G_PARAM_CONSTRUCT |
                           G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
