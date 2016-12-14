@@ -138,6 +138,7 @@ gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
       g_autofree gchar *sdk = NULL;
       g_autoptr(GKeyFile) key_file = NULL;
       const gchar *metadata_data;
+      const gchar *deploy_dir;
       gsize metadata_len;
       g_autoptr(GError) local_error = NULL;
 
@@ -165,6 +166,7 @@ gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
       else
         str = g_strdup_printf ("%s <b>%s</b> <sup>%s</sup>", name, branch, arch);
 
+      deploy_dir = flatpak_installed_ref_get_deploy_dir (FLATPAK_INSTALLED_REF (ref));
       metadata = flatpak_installed_ref_load_metadata (FLATPAK_INSTALLED_REF (ref), cancellable, &local_error);
 
       if (metadata == NULL)
@@ -199,11 +201,12 @@ gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
       g_ptr_array_add (runtimes,
                        g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                                      "branch", branch,
-                                     "sdk", sdk,
-                                     "platform", name,
                                      "context", context,
-                                     "id", id,
+                                     "deploy-dir", deploy_dir,
                                      "display-name", str,
+                                     "id", id,
+                                     "platform", name,
+                                     "sdk", sdk,
                                      NULL));
     }
 
@@ -353,6 +356,48 @@ gbp_flatpak_runtime_provider_find_flatpak_manifests (GbpFlatpakRuntimeProvider *
   return ar;
 }
 
+static gchar *
+find_deploy_dir (GbpFlatpakRuntimeProvider *self,
+                 const gchar               *name,
+                 const gchar               *arch,
+                 const gchar               *branch,
+                 GCancellable              *cancellable)
+{
+  FlatpakInstallation *installations[2];
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  installations[0] = self->user_installation;
+  installations[1] = self->system_installation;
+
+  for (guint i = 0; i < G_N_ELEMENTS (installations); i++)
+    {
+      FlatpakInstallation *installation = installations[i];
+      g_autoptr(FlatpakInstalledRef) ref = NULL;
+
+      ref = flatpak_installation_get_installed_ref (installation,
+                                                    FLATPAK_REF_KIND_RUNTIME,
+                                                    name,
+                                                    arch,
+                                                    branch,
+                                                    cancellable,
+                                                    NULL);
+
+      if (ref != NULL)
+        {
+          const gchar *deploy_dir;
+
+          deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
+
+          if (deploy_dir != NULL)
+            return g_strdup (deploy_dir);
+        }
+    }
+
+  return NULL;
+}
+
 static gboolean
 gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
                                              GPtrArray                  *runtimes,
@@ -401,6 +446,7 @@ gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
       g_autofree gchar *id = NULL;
       g_autofree gchar *manifest_data = NULL;
       g_autofree gchar *path = NULL;
+      g_autofree gchar *deploy_dir = NULL;
       gsize manifest_data_len = 0;
 
       path = g_file_get_path (manifest->file);
@@ -424,17 +470,22 @@ gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
       if (contains_id (runtimes, id))
         continue;
 
+      deploy_dir = find_deploy_dir (self, manifest->sdk, NULL, manifest->branch, cancellable);
+      if (deploy_dir == NULL)
+        deploy_dir = find_deploy_dir (self, manifest->platform, NULL, manifest->branch, cancellable);
+
       g_ptr_array_add (runtimes,
                        g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
-                                     "branch", manifest->branch,
-                                     "sdk", manifest->sdk,
-                                     "platform", manifest->platform,
-                                     "manifest", manifest->file,
-                                     "primary-module", manifest->primary_module,
                                      "app-id", manifest->app_id,
+                                     "branch", manifest->branch,
                                      "context", context,
-                                     "id", id,
+                                     "deploy-dir", deploy_dir,
                                      "display-name", filename,
+                                     "id", id,
+                                     "manifest", manifest->file,
+                                     "platform", manifest->platform,
+                                     "primary-module", manifest->primary_module,
+                                     "sdk", manifest->sdk,
                                      NULL));
     }
 

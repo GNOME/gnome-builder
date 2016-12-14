@@ -29,11 +29,13 @@ struct _GbpFlatpakRuntime
 {
   IdeRuntime parent_instance;
 
-  gchar *sdk;
-  gchar *platform;
-  gchar *branch;
-  gchar *primary_module;
   gchar *app_id;
+  gchar *branch;
+  gchar *deploy_dir;
+  gchar *platform;
+  gchar *primary_module;
+  gchar *sdk;
+  GFile *deploy_dir_files;
   GFile *manifest;
 };
 
@@ -41,16 +43,17 @@ G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
 
 enum {
   PROP_0,
-  PROP_BRANCH,
-  PROP_PLATFORM,
-  PROP_SDK,
-  PROP_PRIMARY_MODULE,
   PROP_APP_ID,
+  PROP_BRANCH,
+  PROP_DEPLOY_DIR,
   PROP_MANIFEST,
+  PROP_PLATFORM,
+  PROP_PRIMARY_MODULE,
+  PROP_SDK,
   N_PROPS
 };
 
-static GParamSpec *properties [LAST_PROP];
+static GParamSpec *properties [N_PROPS];
 
 static gchar *
 get_build_directory (GbpFlatpakRuntime *self)
@@ -900,6 +903,76 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
 }
 
 static void
+gbp_flatpak_runtime_set_deploy_dir (GbpFlatpakRuntime *self,
+                                    const gchar       *deploy_dir)
+{
+  g_autoptr(GFile) file = NULL;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (self->deploy_dir == NULL);
+  g_assert (self->deploy_dir_files == NULL);
+
+  if (deploy_dir != NULL)
+    {
+      self->deploy_dir = g_strdup (deploy_dir);
+      file = g_file_new_for_path (deploy_dir);
+      self->deploy_dir_files = g_file_get_child (file, "files");
+    }
+}
+
+static GFile *
+gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
+                                    GFile      *file)
+{
+  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *build_dir = NULL;
+  g_autofree gchar *app_files_path = NULL;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (G_IS_FILE (file));
+
+  /*
+   * If we have a manifest and the runtime is not yet installed,
+   * then we can't do a whole lot right now. We have to wait for
+   * the runtime to be installed and a new runtime instance will
+   * be loaded.
+   */
+  if (self->deploy_dir_files == NULL || self->deploy_dir == NULL)
+    return NULL;
+
+  if (!g_file_is_native (file))
+    return NULL;
+
+  if (NULL == (path = g_file_get_path (file)))
+    return NULL;
+
+  if (g_str_equal ("/usr", path))
+    return g_object_ref (self->deploy_dir_files);
+
+  if (g_str_has_prefix (path, "/usr/"))
+    return g_file_get_child (self->deploy_dir_files, path + IDE_LITERAL_LENGTH ("/usr/"));
+
+  build_dir = get_build_directory (self);
+  app_files_path = g_build_filename (build_dir, "files", NULL);
+
+  if (g_str_equal (path, "/app"))
+    return g_file_new_for_path (app_files_path);
+
+  if (g_str_has_prefix (path, "/app/"))
+    {
+      g_autofree gchar *translated = NULL;
+
+      translated = g_build_filename (app_files_path,
+                                     path + IDE_LITERAL_LENGTH ("/app/"),
+                                     NULL);
+      return g_file_new_for_path (translated);
+    }
+
+  return NULL;
+}
+
+static void
 gbp_flatpak_runtime_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
@@ -931,6 +1004,10 @@ gbp_flatpak_runtime_get_property (GObject    *object,
 
     case PROP_MANIFEST:
       g_value_set_object (value, self->manifest);
+      break;
+
+    case PROP_DEPLOY_DIR:
+      g_value_set_string (value, self->deploy_dir);
       break;
 
     default:
@@ -972,6 +1049,10 @@ gbp_flatpak_runtime_set_property (GObject      *object,
       self->manifest = g_value_dup_object (value);
       break;
 
+    case PROP_DEPLOY_DIR:
+      gbp_flatpak_runtime_set_deploy_dir (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -987,6 +1068,8 @@ gbp_flatpak_runtime_finalize (GObject *object)
   g_clear_pointer (&self->branch, g_free);
   g_clear_pointer (&self->primary_module, g_free);
   g_clear_pointer (&self->app_id, g_free);
+  g_clear_pointer (&self->deploy_dir, g_free);
+  g_clear_object (&self->deploy_dir_files);
   g_clear_object (&self->manifest);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
@@ -1010,6 +1093,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->create_runner = gbp_flatpak_runtime_create_runner;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
+  runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
 
   properties [PROP_BRANCH] =
     g_param_spec_string ("branch",
@@ -1018,6 +1102,15 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
                          "master",
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DEPLOY_DIR] =
+    g_param_spec_string ("deploy-dir",
+                         "Deploy Directory",
+                         "The flatpak runtime deploy directory",
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PLATFORM] =
