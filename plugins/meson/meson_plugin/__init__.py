@@ -65,11 +65,6 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
 
 
 class MesonBuilder(Ide.Builder):
-    configuration = GObject.Property(type=Ide.Configuration)
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def _get_build_dir(self) -> Gio.File:
         context = self.get_context()
 
@@ -102,7 +97,7 @@ class MesonBuilder(Ide.Builder):
 
     def do_build_async(self, flags, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)
-        task.build_result = MesonBuildResult(self.configuration,
+        task.build_result = MesonBuildResult(self.props.configuration,
                                              self._get_build_dir(),
                                              self._get_source_dir(),
                                              cancellable,
@@ -138,7 +133,7 @@ class MesonBuilder(Ide.Builder):
 
     def do_install_async(self, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)
-        task.build_result = MesonBuildResult(self.configuration,
+        task.build_result = MesonBuildResult(self.props.configuration,
                                              self._get_build_dir(),
                                              self._get_source_dir(),
                                              cancellable)
