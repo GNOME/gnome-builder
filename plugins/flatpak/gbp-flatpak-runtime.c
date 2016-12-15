@@ -389,11 +389,21 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
         }
 
       /* No need to run flatpak-builder if there are no dependencies */
-      if (!already_ran_build_init && has_multiple_modules)
+      if (has_multiple_modules)
         {
           g_autoptr(IdeSubprocessLauncher) launcher5 = NULL;
           g_autoptr(IdeSubprocess) process5 = NULL;
+          g_autoptr(GFile) success_file = NULL;
           g_autofree gchar *stop_at_option = NULL;
+          g_autofree gchar *success_filename = NULL;
+
+          success_filename = g_build_filename (build_path, "flatpak-builder-success", NULL);
+          success_file = g_file_new_for_path (success_filename);
+          if (g_file_query_exists (success_file, cancellable))
+            {
+              g_task_return_boolean (task, TRUE);
+              return;
+            }
 
           /* Run flatpak-builder to build just the dependencies */
           launcher5 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
@@ -422,6 +432,12 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
               g_task_return_error (task, g_steal_pointer (&error));
               return;
             }
+
+          /*
+           * Make a file indicating that flatpak-builder finished successfully,
+           * so we know whether to run it for the next build.
+           */
+          g_object_unref (g_file_create (success_file, 0, cancellable, NULL));
 
           g_task_return_boolean (task, TRUE);
           return;
