@@ -139,11 +139,17 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
 
   configure_ac = g_file_get_child (parent, "configure.ac");
   if (g_file_query_exists (configure_ac, cancellable))
-    g_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
+    {
+      g_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
+      return;
+    }
 
   configure_in = g_file_get_child (parent, "configure.in");
   if (g_file_query_exists (configure_in, cancellable))
-    g_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
+    {
+      g_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
+      return;
+    }
 
   g_task_return_new_error (task,
                            G_IO_ERROR,
