@@ -96,6 +96,9 @@
   <!-- Search Shadow -->
   <style name="search-shadow"               background="#rgba(0,0,0,0.4)"/>
 
+  <!-- Spellchecker Matching -->
+  <style name="misspelled-match"            foreground="#000000" background="#b3d4fc"/>
+
   <!-- Comments -->
   <style name="def:comment"                 foreground="aluminium4"/>
   <style name="def:shebang"                 foreground="aluminium4" bold="true"/>

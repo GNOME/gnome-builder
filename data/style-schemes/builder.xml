@@ -107,6 +107,9 @@
   <!-- Search Shadow -->
   <style name="search-shadow"               background="#rgba(0,0,0,0.2)"/>
 
+  <!-- Spellchecker Matching -->
+  <style name="misspelled-match"            foreground="#000000" background="selection1"/>
+
   <!-- Quick Highlight Plugin -->
   <style name="quick-highlight"             background="#rgba(221,74,104,.15)"/>
 

@@ -143,6 +143,9 @@ ide_editor_spell_navigator_dispose (GObject *object)
 {
   IdeEditorSpellNavigator *self = (IdeEditorSpellNavigator *)object;
 
+  ide_source_view_set_misspelled_word (IDE_SOURCE_VIEW (self->view), NULL, NULL);
+  gtk_widget_queue_draw (GTK_WIDGET (self->view));
+
   g_clear_object (&self->view);
   g_hash_table_unref (self->words_count);
 
@@ -290,12 +293,13 @@ select_misspelled_word (IdeEditorSpellNavigator *self)
   gtk_text_buffer_get_iter_at_mark (self->buffer, &word_start, self->word_start);
   gtk_text_buffer_get_iter_at_mark (self->buffer, &word_end, self->word_end);
 
-  gtk_text_buffer_select_range (self->buffer, &word_start, &word_end);
+  ide_source_view_set_misspelled_word (IDE_SOURCE_VIEW (self->view), &word_start, &word_end);
+  gtk_widget_queue_draw (GTK_WIDGET (self->view));
 
   g_return_if_fail (gtk_text_view_get_buffer (self->view) == self->buffer);
 
   gtk_text_view_scroll_to_mark (self->view,
-                                gtk_text_buffer_get_insert (self->buffer),
+                                self->word_start,
                                 0.25,
                                 FALSE,
                                 0.0,

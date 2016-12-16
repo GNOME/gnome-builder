@@ -373,6 +373,9 @@ void                        ide_source_view_set_highlight_current_line(IdeSource
                                                                        gboolean                    highlight_current_line);
 void                        ide_source_view_set_insert_matching_brace (IdeSourceView              *self,
                                                                        gboolean                    insert_matching_brace);
+void                        ide_source_view_set_misspelled_word       (IdeSourceView              *self,
+                                                                       GtkTextIter                *start,
+                                                                       GtkTextIter                *end);
 void                        ide_source_view_set_overwrite_braces      (IdeSourceView              *self,
                                                                        gboolean                    overwrite_braces);
 void                        ide_source_view_set_rubberband_search     (IdeSourceView              *self,
