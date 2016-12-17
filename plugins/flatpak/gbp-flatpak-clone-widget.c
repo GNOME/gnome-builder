@@ -42,7 +42,8 @@ struct _GbpFlatpakCloneWidget
 
 typedef enum {
   TYPE_GIT,
-  TYPE_ARCHIVE
+  TYPE_ARCHIVE,
+  TYPE_PATCH
 } SourceType;
 
 typedef struct
@@ -51,6 +52,7 @@ typedef struct
   IdeVcsUri *uri;
   gchar     *branch;
   gchar     *sha;
+  gchar     *path;
   gchar     *name;
 } ModuleSource;
 
@@ -78,6 +80,7 @@ module_source_free (void *data)
   g_clear_pointer (&src->uri, ide_vcs_uri_unref);
   g_free (src->branch);
   g_free (src->sha);
+  g_free (src->path);
   g_free (src->name);
   g_slice_free (ModuleSource, src);
 }
@@ -418,16 +421,25 @@ get_source (GbpFlatpakCloneWidget  *self,
           src->type = TYPE_GIT;
           if (json_object_has_member (source_object, "branch"))
             src->branch = g_strdup (json_object_get_string_member (source_object, "branch"));
+
+          url = json_object_get_string_member (source_object, "url");
+          src->uri = ide_vcs_uri_new (url);
         }
       else if (strcmp (json_object_get_string_member(source_object, "type"), "archive") == 0)
         {
           src->type = TYPE_ARCHIVE;
           if (json_object_has_member (source_object, "sha256"))
             src->sha = g_strdup (json_object_get_string_member (source_object, "sha256"));
-        }
 
-      url = json_object_get_string_member (source_object, "url");
-      src->uri = ide_vcs_uri_new (url);
+          url = json_object_get_string_member (source_object, "url");
+          src->uri = ide_vcs_uri_new (url);
+        }
+      else if (g_strcmp0 (json_object_get_string_member(source_object, "type"), "patch") == 0)
+        {
+          src->type = TYPE_PATCH;
+          if (json_object_has_member (source_object, "path"))
+            src->path = g_strdup (json_object_get_string_member (source_object, "path"));
+        }
     }
 
   return src;
