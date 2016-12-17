@@ -154,6 +154,28 @@ fill_suggestions_box (IdeEditorSpellWidget *self,
     }
 }
 
+static void
+update_count_label (IdeEditorSpellWidget *self)
+{
+  const gchar *word;
+  guint count;
+
+  word = gtk_label_get_text (self->word_label);
+  if (0 != (count = ide_editor_spell_navigator_get_count (IDE_EDITOR_SPELL_NAVIGATOR (self->navigator), word)))
+    {
+      g_autofree gchar *count_text = NULL;
+
+      if (count > 1000)
+        count_text = g_strdup ("(>1000)");
+      else
+        count_text = g_strdup_printf ("(%i)", count);
+
+      gtk_label_set_text (self->count_label, count_text);
+    }
+  else
+    gtk_label_set_text (self->count_label, "");
+}
+
 static gboolean
 jump_to_next_misspelled_word (IdeEditorSpellWidget *self)
 {
@@ -161,7 +183,7 @@ jump_to_next_misspelled_word (IdeEditorSpellWidget *self)
   g_autofree gchar *word = NULL;
   g_autofree gchar *first_result = NULL;
   GtkListBoxRow *row;
-  guint count;
+
   GError *error = NULL;
   gboolean ret = FALSE;
 
@@ -170,19 +192,9 @@ jump_to_next_misspelled_word (IdeEditorSpellWidget *self)
   gtk_widget_grab_focus (GTK_WIDGET (self->word_entry));
   if ((ret = gspell_navigator_goto_next (self->navigator, &word, &checker, &error)))
     {
-      if (0 != (count = ide_editor_spell_navigator_get_count (IDE_EDITOR_SPELL_NAVIGATOR (self->navigator), word)))
-        {
-          g_autofree gchar *count_text = NULL;
-
-          if (count > 1000)
-            count_text = g_strdup ("(>1000)");
-          else
-            count_text = g_strdup_printf ("(%i)", count);
-
-          gtk_label_set_text (self->count_label, count_text);
-        }
-
       gtk_label_set_text (self->word_label, word);
+      update_count_label (self);
+
       fill_suggestions_box (self, word, &first_result);
       if (!ide_str_empty0 (first_result))
         {
@@ -482,6 +494,16 @@ ide_editor_spell_widget__language_notify_cb (IdeEditorSpellWidget *self,
 }
 
 static void
+ide_editor_spell_widget_words_counted_cb (IdeEditorSpellWidget *self,
+                                          GParamSpec           *pspec,
+                                          GspellNavigator      *navigator)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
+  update_count_label (self);
+}
+
+static void
 ide_editor_spell_widget_constructed (GObject *object)
 {
   IdeEditorSpellWidget *self = (IdeEditorSpellWidget *)object;
@@ -499,7 +521,10 @@ ide_editor_spell_widget_constructed (GObject *object)
   gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button),
                                         self->spellchecker_language);
 
-  self->navigator = ide_editor_spell_navigator_new (GTK_TEXT_VIEW (self->view));
+  g_signal_connect_swapped (self->navigator,
+                            "notify::words-counted",
+                            G_CALLBACK (ide_editor_spell_widget_words_counted_cb),
+                            self);
 
   g_signal_connect_swapped (self->word_entry,
                             "changed",

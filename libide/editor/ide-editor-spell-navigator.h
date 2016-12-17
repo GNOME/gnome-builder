@@ -28,9 +28,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorSpellNavigator, ide_editor_spell_navigator, IDE, EDITOR_SPELL_NAVIGATOR, GInitiallyUnowned)
 
-GspellNavigator *ide_editor_spell_navigator_new          (GtkTextView             *view);
-guint            ide_editor_spell_navigator_get_count    (IdeEditorSpellNavigator *self,
-                                                          const gchar             *word);
+GspellNavigator *ide_editor_spell_navigator_new                   (GtkTextView             *view);
+guint            ide_editor_spell_navigator_get_count             (IdeEditorSpellNavigator *self,
+                                                                   const gchar             *word);
+gboolean         ide_editor_spell_navigator_get_is_words_counted  (IdeEditorSpellNavigator *self);
 
 G_END_DECLS
 

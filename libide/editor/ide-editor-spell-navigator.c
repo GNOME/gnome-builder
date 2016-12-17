@@ -25,17 +25,22 @@
 #include "ide-editor-spell-navigator.h"
 #include "ide-editor-spell-utils.h"
 
+#define SPELLCHECKER_SUBREGION_LENGTH 500
+
 struct _IdeEditorSpellNavigator
 {
-  GObject        parent_instance;
+  GObject          parent_instance;
 
-  GtkTextView   *view;
-  GtkTextBuffer *buffer;
-  GHashTable    *words_count;
-  GtkTextMark   *start_boundary;
-  GtkTextMark   *end_boundary;
-  GtkTextMark   *word_start;
-  GtkTextMark   *word_end;
+  GtkTextView     *view;
+  GtkTextBuffer   *buffer;
+
+  GHashTable      *words_count;
+  GtkTextMark     *start_boundary;
+  GtkTextMark     *end_boundary;
+  GtkTextMark     *word_start;
+  GtkTextMark     *word_end;
+
+  guint            words_counted : 1;
 };
 
 static void gspell_navigator_iface_init (gpointer g_iface, gpointer iface_data);
@@ -46,12 +51,89 @@ G_DEFINE_TYPE_EXTENDED (IdeEditorSpellNavigator, ide_editor_spell_navigator, G_T
 enum {
   PROP_0,
   PROP_VIEW,
+  PROP_WORDS_COUNTED,
   N_PROPS
 };
 
 static GParamSpec *properties [N_PROPS];
 
-/* TODO: do it async */
+typedef struct
+{
+  IdeEditorSpellNavigator *navigator;
+  GtkSourceRegion         *words_count_region;
+  GtkSourceRegionIter      iter;
+} WordsCountState;
+
+static void
+words_count_state_free (gpointer *user_data)
+{
+  WordsCountState *state = (WordsCountState *)user_data;
+
+  g_object_unref (state->words_count_region);
+
+  g_slice_free (WordsCountState, state);
+}
+
+static gboolean
+ide_editor_spell_navigator_words_count_cb (WordsCountState *state)
+{
+  IdeEditorSpellNavigator *self = state->navigator;
+  GtkTextTag *no_spell_check_tag;
+  GtkTextIter start;
+  GtkTextIter end;
+  GtkTextIter word_start;
+  GtkTextIter word_end;
+  gchar *word;
+  guint count;
+
+  g_assert (IDE_IS_EDITOR_SPELL_NAVIGATOR (self));
+
+  no_spell_check_tag = ide_editor_spell_utils_get_no_spell_check_tag (self->buffer);
+  if (gtk_source_region_iter_get_subregion (&state->iter, &start, &end))
+  {
+    word_start = word_end = start;
+    while (TRUE)
+      {
+        if (!ide_editor_spell_utils_text_iter_starts_word (&word_start))
+          {
+            GtkTextIter iter;
+
+            iter = word_start;
+            ide_editor_spell_utils_text_iter_forward_word_end (&word_start);
+            if (gtk_text_iter_equal (&iter, &word_start))
+              break;
+
+            ide_editor_spell_utils_text_iter_backward_word_start (&word_start);
+          }
+
+        if (!ide_editor_spell_utils_skip_no_spell_check (no_spell_check_tag, &word_start, &end))
+          break;
+
+        word_end = word_start;
+        ide_editor_spell_utils_text_iter_forward_word_end (&word_end);
+        if (gtk_text_iter_compare (&word_end, &end) >= 0)
+          break;
+
+        word = gtk_text_buffer_get_text (self->buffer, &word_start, &word_end, FALSE);
+        if ((count = GPOINTER_TO_UINT (g_hash_table_lookup (self->words_count, word))))
+          count++;
+        else
+          count = 1;
+
+        g_hash_table_insert (self->words_count, word, GUINT_TO_POINTER (count));
+
+        word_start = word_end;
+      }
+
+    if (gtk_source_region_iter_next (&state->iter))
+      return G_SOURCE_CONTINUE;
+  }
+
+  self->words_counted = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WORDS_COUNTED]);
+
+  return G_SOURCE_REMOVE;
+}
 
 /* Always process start and end by init_boudaries before */
 static GHashTable *
@@ -60,54 +142,61 @@ ide_editor_spell_navigator_count_words (IdeEditorSpellNavigator *self,
                                         GtkTextIter             *end)
 {
   GHashTable *table;
-  GtkTextTag *no_spell_check_tag;
-  GtkTextIter word_start;
-  GtkTextIter word_end;
-  guint count;
-  gchar *word;
+  GtkSourceRegion *words_count_region;
+  WordsCountState *state;
+  GtkTextIter start_subregion;
+  GtkTextIter end_subregion;
+  gint line_start;
+  gint line_end;
+  gint nb_subregion;
 
   g_assert (IDE_IS_EDITOR_SPELL_NAVIGATOR (self));
   g_assert (start != NULL);
   g_assert (end != NULL);
 
-  word_start = word_end = *start;
-  no_spell_check_tag = ide_editor_spell_utils_get_no_spell_check_tag (self->buffer);
+  words_count_region = gtk_source_region_new (self->buffer);
+  line_start = gtk_text_iter_get_line (start);
+  line_end = gtk_text_iter_get_line (end);
+  nb_subregion = (line_end - line_start + 1) / SPELLCHECKER_SUBREGION_LENGTH;
 
-  table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  while (TRUE)
+  if (nb_subregion > 1)
     {
-      if (!ide_editor_spell_utils_text_iter_starts_word (&word_start))
+      for (gint i = 0; i < nb_subregion; ++i)
         {
-          GtkTextIter iter;
+          line_end = line_start + SPELLCHECKER_SUBREGION_LENGTH - 1;
+          gtk_text_buffer_get_iter_at_line_offset (self->buffer, &start_subregion, line_start, 0);
+          gtk_text_buffer_get_iter_at_line_offset (self->buffer, &end_subregion, line_end, 0);
+          if (!gtk_text_iter_ends_line (&end_subregion))
+            gtk_text_iter_forward_to_line_end (&end_subregion);
 
-          iter = word_start;
-          ide_editor_spell_utils_text_iter_forward_word_end (&word_start);
-          if (gtk_text_iter_equal (&iter, &word_start))
-            break;
-
-          ide_editor_spell_utils_text_iter_backward_word_start (&word_start);
+          gtk_source_region_add_subregion (words_count_region, &start_subregion, &end_subregion);
+          line_start = line_end + 1;
         }
-
-      if (!ide_editor_spell_utils_skip_no_spell_check (no_spell_check_tag, &word_start, end))
-        break;
-
-      word_end = word_start;
-      ide_editor_spell_utils_text_iter_forward_word_end (&word_end);
-      if (gtk_text_iter_compare (&word_end, end) >= 0)
-        break;
-
-      word = gtk_text_buffer_get_text (self->buffer, &word_start, &word_end, FALSE);
-      if ((count = GPOINTER_TO_UINT (g_hash_table_lookup (table, word))))
-        count++;
-      else
-        count = 1;
-
-      g_hash_table_insert (table, word, GUINT_TO_POINTER (count));
-
-      word_start = word_end;
     }
 
+  gtk_text_buffer_get_iter_at_line_offset (self->buffer, &start_subregion, line_start, 0);
+  gtk_source_region_add_subregion (words_count_region, &start_subregion, end);
+
+  table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  state = g_slice_new (WordsCountState);
+  state->navigator = self;
+  state->words_count_region = words_count_region;
+  gtk_source_region_get_start_region_iter (words_count_region, &state->iter);
+
+  g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                   (GSourceFunc)ide_editor_spell_navigator_words_count_cb,
+                   state,
+                   (GDestroyNotify)words_count_state_free);
+
   return table;
+}
+
+gboolean
+ide_editor_spell_navigator_get_is_words_counted (IdeEditorSpellNavigator *self)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_NAVIGATOR (self));
+
+  return self->words_counted;
 }
 
 guint
@@ -116,7 +205,7 @@ ide_editor_spell_navigator_get_count (IdeEditorSpellNavigator *self,
 {
   g_assert (IDE_IS_EDITOR_SPELL_NAVIGATOR (self));
 
-  if (ide_str_empty0 (word))
+  if (self->words_count == NULL || ide_str_empty0 (word))
     return 0;
   else
     return GPOINTER_TO_UINT (g_hash_table_lookup (self->words_count, word));
@@ -206,16 +295,19 @@ set_view (IdeEditorSpellNavigator *self,
   g_assert (self->view == NULL);
   g_assert (self->buffer == NULL);
 
-  self->view = g_object_ref (view);
-  self->buffer = g_object_ref (gtk_text_view_get_buffer (view));
+  if (view != self->view)
+    {
+      self->view = g_object_ref (view);
+      self->buffer = g_object_ref (gtk_text_view_get_buffer (view));
 
-  init_boundaries (self);
+      init_boundaries (self);
 
-  gtk_text_buffer_get_iter_at_mark (self->buffer, &start, self->start_boundary);
-  gtk_text_buffer_get_iter_at_mark (self->buffer, &end, self->end_boundary);
-  self->words_count = ide_editor_spell_navigator_count_words (self, &start, &end);
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &start, self->start_boundary);
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &end, self->end_boundary);
+      self->words_count = ide_editor_spell_navigator_count_words (self, &start, &end);
 
-  g_object_notify (G_OBJECT (self), "view");
+      g_object_notify (G_OBJECT (self), "view");
+    }
 }
 
 static void
@@ -251,6 +343,10 @@ ide_editor_spell_navigator_get_property (GObject    *object,
       g_value_set_object (value, self->view);
       break;
 
+    case PROP_WORDS_COUNTED:
+      g_value_set_boolean (value, self->words_counted);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -273,6 +369,13 @@ ide_editor_spell_navigator_class_init (IdeEditorSpellNavigatorClass *klass)
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS);
+
+  properties [PROP_WORDS_COUNTED] =
+    g_param_spec_boolean ("words-counted",
+                          "words-counted",
+                          "words-counted",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
