@@ -23,6 +23,7 @@
 #include "egg-animation.h"
 
 #include "gbp-flatpak-clone-widget.h"
+#include "gbp-flatpak-source-archive.h"
 
 #define ANIMATION_DURATION_MSEC 250
 
@@ -50,6 +51,7 @@ typedef struct
   IdeVcsUri *uri;
   gchar     *branch;
   gchar     *sha;
+  gchar     *name;
 } ModuleSource;
 
 typedef struct
@@ -76,6 +78,7 @@ module_source_free (void *data)
   g_clear_pointer (&src->uri, ide_vcs_uri_unref);
   g_free (src->branch);
   g_free (src->sha);
+  g_free (src->name);
   g_slice_free (ModuleSource, src);
 }
 
@@ -301,53 +304,57 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   g_assert (req != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* First, try to open an existing repository at this path */
-  repository = ggit_repository_open (req->destination, &error);
-
-  /* Ignore errors when the repository is not found, but fail the
-   * task otherwise.
-   */
-  if (repository == NULL &&
-      !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
+  if (req->src->type == TYPE_GIT)
     {
-      g_task_return_error (task, error);
-      return;
-    }
+      /* First, try to open an existing repository at this path */
+      repository = ggit_repository_open (req->destination, &error);
 
-  g_clear_error (&error);
-
-  if (repository == NULL)
-    {
-      /* HACK: we don't want libide to depend on libgit2 just yet, so for
-       * now, we just lookup the GType of the object we need from the git
-       * plugin by name.
-       */
-      git_callbacks_type = g_type_from_name ("IdeGitRemoteCallbacks");
-      g_assert (git_callbacks_type != 0);
-
-      callbacks = g_object_new (git_callbacks_type, NULL);
-      g_object_get (callbacks, "progress", &progress, NULL);
-      g_object_bind_property (progress, "fraction", self->clone_progress, "fraction", 0);
-
-      fetch_options = ggit_fetch_options_new ();
-      ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
-
-      clone_options = ggit_clone_options_new ();
-      ggit_clone_options_set_is_bare (clone_options, FALSE);
-      ggit_clone_options_set_checkout_branch (clone_options, req->src->branch);
-      ggit_clone_options_set_fetch_options (clone_options, fetch_options);
-      g_clear_pointer (&fetch_options, ggit_fetch_options_free);
-
-      uristr = ide_vcs_uri_to_string (req->src->uri);
-      ggit_repository_clone (uristr, req->destination, clone_options, &error);
-      if (repository == NULL)
+      if (repository == NULL &&
+          !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
         {
           g_task_return_error (task, error);
           return;
         }
-    }
 
-  req->project_file = ggit_repository_get_workdir (repository);
+      g_clear_error (&error);
+
+      if (repository == NULL)
+        {
+          /* HACK: we don't want libide to depend on libgit2 just yet, so for
+           * now, we just lookup the GType of the object we need from the git
+           * plugin by name.
+           */
+          git_callbacks_type = g_type_from_name ("IdeGitRemoteCallbacks");
+          g_assert (git_callbacks_type != 0);
+
+          callbacks = g_object_new (git_callbacks_type, NULL);
+          g_object_get (callbacks, "progress", &progress, NULL);
+          g_object_bind_property (progress, "fraction", self->clone_progress, "fraction", 0);
+
+          fetch_options = ggit_fetch_options_new ();
+          ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
+
+          clone_options = ggit_clone_options_new ();
+          ggit_clone_options_set_is_bare (clone_options, FALSE);
+          ggit_clone_options_set_checkout_branch (clone_options, req->src->branch);
+          ggit_clone_options_set_fetch_options (clone_options, fetch_options);
+          g_clear_pointer (&fetch_options, ggit_fetch_options_free);
+
+          uristr = ide_vcs_uri_to_string (req->src->uri);
+          repository = ggit_repository_clone (uristr, req->destination, clone_options, &error);
+          if (repository == NULL)
+            {
+              g_task_return_error (task, error);
+              return;
+            }
+        }
+      req->project_file = ggit_repository_get_workdir (repository);
+    }
+  else if (req->src->type == TYPE_ARCHIVE)
+    {
+      uristr = ide_vcs_uri_to_string (req->src->uri);
+      req->project_file = fetch_archive (uristr, req->src->sha, req->src->name, req->destination, &error);
+    }
 
   /* copy manifest into the source directory */
   src = g_file_new_for_path (self->manifest);
@@ -400,9 +407,11 @@ get_source (GbpFlatpakCloneWidget  *self,
       JsonObject *source_object;
       const gchar *url;
 
+      src = g_slice_new0 (ModuleSource);
+      src->name = g_strdup (json_object_get_string_member (app_object, "name"));
+
       source = json_array_get_element (sources, i);
       source_object = json_node_get_object (source);
-      src = g_slice_new0 (ModuleSource);
 
       if (g_strcmp0 (json_object_get_string_member (source_object, "type"), "git") == 0)
         {
