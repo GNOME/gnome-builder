@@ -42,18 +42,17 @@ struct _GbpFlatpakCloneWidget
 
 typedef enum {
   TYPE_GIT,
-  TYPE_ARCHIVE,
-  TYPE_PATCH
+  TYPE_ARCHIVE
 } SourceType;
 
 typedef struct
 {
   SourceType type;
-  IdeVcsUri *uri;
-  gchar     *branch;
-  gchar     *sha;
-  gchar     *path;
-  gchar     *name;
+  IdeVcsUri  *uri;
+  gchar      *branch;
+  gchar      *sha;
+  gchar      *name;
+  gchar     **patches;
 } ModuleSource;
 
 typedef struct
@@ -80,7 +79,7 @@ module_source_free (void *data)
   g_clear_pointer (&src->uri, ide_vcs_uri_unref);
   g_free (src->branch);
   g_free (src->sha);
-  g_free (src->path);
+  g_strfreev (src->patches);
   g_free (src->name);
   g_slice_free (ModuleSource, src);
 }
@@ -387,11 +386,13 @@ get_source (GbpFlatpakCloneWidget  *self,
   guint num_modules;
   ModuleSource *src;
   g_autoptr(IdeVcsUri) uri = NULL;
+  GPtrArray *patches;
 
   parser = json_parser_new ();
   if (!json_parser_load_from_file (parser, self->manifest, error))
     return NULL;
 
+  patches = g_ptr_array_new ();
   root_node = json_parser_get_root (parser);
   root_object = json_node_get_object (root_node);
 
@@ -404,14 +405,14 @@ get_source (GbpFlatpakCloneWidget  *self,
   app_object = json_array_get_object_element (modules, num_modules - 1);
   sources = json_object_get_array_member (app_object, "sources");
 
+  src = g_slice_new0 (ModuleSource);
+  src->name = g_strdup (json_object_get_string_member (app_object, "name"));
+
   for (guint i = 0; i < json_array_get_length (sources); i++)
     {
       JsonNode *source;
       JsonObject *source_object;
       const gchar *url;
-
-      src = g_slice_new0 (ModuleSource);
-      src->name = g_strdup (json_object_get_string_member (app_object, "name"));
 
       source = json_array_get_element (sources, i);
       source_object = json_node_get_object (source);
@@ -436,11 +437,13 @@ get_source (GbpFlatpakCloneWidget  *self,
         }
       else if (g_strcmp0 (json_object_get_string_member(source_object, "type"), "patch") == 0)
         {
-          src->type = TYPE_PATCH;
           if (json_object_has_member (source_object, "path"))
-            src->path = g_strdup (json_object_get_string_member (source_object, "path"));
+            g_ptr_array_add (patches, g_strdup (json_object_get_string_member (source_object, "path")));
         }
     }
+
+  g_ptr_array_add (patches, NULL);
+  src->patches = (gchar **) g_ptr_array_free (patches, FALSE);
 
   return src;
 }
@@ -472,7 +475,7 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
       return;
     }
 
-  if (src->uri != NULL)
+  if (src->uri != NULL && src->type == TYPE_GIT)
     {
       const gchar *uri_path;
       gchar *name = NULL;
