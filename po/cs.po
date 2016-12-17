@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-11-12 19:53+0000\n"
-"PO-Revision-Date: 2016-11-13 14:55+0100\n"
+"POT-Creation-Date: 2016-12-15 09:13+0000\n"
+"PO-Revision-Date: 2016-12-17 11:27+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -301,7 +301,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5764
+#: libide/sourceview/ide-source-view.c:5768
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -1079,7 +1079,7 @@ msgstr "neuložený dokument %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Selhalo uložení vyrovnávací paměti, ignoruje se opětovné použití."
 
-#: libide/buildsystem/ide-builder.c:89
+#: libide/buildsystem/ide-builder.c:105
 #, c-format
 msgid "%s does not support building"
 msgstr "%s nepodporuje sestavení"
@@ -1088,7 +1088,7 @@ msgstr "%s nepodporuje sestavení"
 msgid "A build is already in progress"
 msgstr "Sestavení již probíhá"
 
-#: libide/buildsystem/ide-build-manager.c:853
+#: libide/buildsystem/ide-build-manager.c:912
 msgid "Ready"
 msgstr "Připraveno"
 
@@ -1100,12 +1100,7 @@ msgstr "Selhalo otevření datového proudu stderr."
 msgid "Failed to open stdout stream."
 msgstr "Selhalo otevření datového proudu stdout."
 
-#: libide/buildsystem/ide-build-system.c:125
-#, c-format
-msgid "%s() is not supported on %s build system."
-msgstr "%s() není podporována v systému sestavení %s"
-
-#: libide/buildsystem/ide-configuration-manager.c:483
+#: libide/buildsystem/ide-configuration-manager.c:485
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1133,10 +1128,6 @@ msgstr "řádek %u, sloupec %u"
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
-
-#: libide/editor/ide-editor-frame.c:963 plugins/project-tree/gtk/menus.ui:6
-msgid "Re_veal in Project Tree"
-msgstr "Ukázat v projekto_vém stromu"
 
 #. OVR indicates we are in overwite mode
 #: libide/editor/ide-editor-frame.ui:17
@@ -2157,11 +2148,11 @@ msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
 #: libide/runner/ide-run-manager.c:324
-#: plugins/autotools/ide-autotools-build-task.c:478
+#: plugins/autotools/ide-autotools-build-task.c:479
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
-#: libide/runner/ide-runner.c:157
+#: libide/runner/ide-runner.c:157 plugins/flatpak/gbp-flatpak-runner.c:82
 msgid "Process quit unexpectedly"
 msgstr "Proces se neočekávaně ukončil"
 
@@ -2192,21 +2183,21 @@ msgstr "Selhalo otevření složky: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5220
+#: libide/sourceview/ide-source-view.c:5224
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: libide/sourceview/ide-source-view.c:5222
+#: libide/sourceview/ide-source-view.c:5226
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: libide/sourceview/ide-source-view.c:5336
+#: libide/sourceview/ide-source-view.c:5340
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: libide/sourceview/ide-source-view.c:5763
+#: libide/sourceview/ide-source-view.c:5767
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
@@ -2324,7 +2315,7 @@ msgid "Target"
 msgstr "Cíl"
 
 #. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:88
+#: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
 msgstr "schází"
 
@@ -2367,9 +2358,8 @@ msgstr "Profil sestavení"
 msgid "Last build"
 msgstr "Poslední sestavení"
 
-#: libide/workbench/ide-omni-bar.ui:325 plugins/cargo/cargo_plugin.py:113
-#: plugins/cargo/cargo_plugin.py:140 plugins/meson/meson_plugin/__init__.py:214
-#: plugins/meson/meson_plugin/__init__.py:244
+#: libide/workbench/ide-omni-bar.ui:325 plugins/cargo/cargo_plugin.py:90
+#: plugins/cargo/cargo_plugin.py:117 plugins/meson/meson_plugin/__init__.py:86
 msgid "Failed"
 msgstr "Selhalo"
 
@@ -2406,100 +2396,96 @@ msgstr "Zobrazovat nabídku pracovních nástrojů"
 msgid "Press Ctrl+. to search"
 msgstr "Zmáčknutím Ctrl+. můžete hledat"
 
-#: plugins/autotools/ide-autotools-builder.c:47
+#: plugins/autotools/ide-autotools-builder.c:235
 msgid "Build cancelled"
 msgstr "Sestavení bylo zrušeno"
 
-#: plugins/autotools/ide-autotools-builder.c:49
+#: plugins/autotools/ide-autotools-builder.c:237
 msgid "Build failed"
 msgstr "Sestavení selhalo"
 
-#: plugins/autotools/ide-autotools-builder.c:55
+#: plugins/autotools/ide-autotools-builder.c:243
 msgid "Build successful"
 msgstr "Sestavení proběhlo úspěšně"
 
-#: plugins/autotools/ide-autotools-builder.c:159
-#: plugins/autotools/ide-autotools-builder.c:241
-#: plugins/autotools/ide-autotools-build-task.c:1205
-#: plugins/cargo/cargo_plugin.py:198 plugins/meson/meson_plugin/__init__.py:349
+#: plugins/autotools/ide-autotools-builder.c:347
+#: plugins/autotools/ide-autotools-builder.c:539
+#: plugins/autotools/ide-autotools-build-task.c:1219
+#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:399
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: plugins/autotools/ide-autotools-builder.c:202
+#: plugins/autotools/ide-autotools-builder.c:495
 msgid "Install cancelled"
 msgstr "Instalace byla zrušena"
 
-#: plugins/autotools/ide-autotools-builder.c:204
+#: plugins/autotools/ide-autotools-builder.c:497
 msgid "Install failed"
 msgstr "Instalace selhala"
 
-#: plugins/autotools/ide-autotools-builder.c:210
+#: plugins/autotools/ide-autotools-builder.c:503
 msgid "Install successful"
 msgstr "Instalace proběhla úspěšně"
 
-#: plugins/autotools/ide-autotools-build-system.c:170
-msgid "Failed to locate configure.ac"
-msgstr "Selhalo vyhledání souboru configure.ac"
-
-#: plugins/autotools/ide-autotools-build-task.c:200
+#: plugins/autotools/ide-autotools-build-task.c:201
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "Složka musí být na místně připojeném souborovém systému."
 
-#: plugins/autotools/ide-autotools-build-task.c:467
+#: plugins/autotools/ide-autotools-build-task.c:468
 msgid "Failed to locate device"
 msgstr "Selhalo vyhledání zařízení"
 
-#: plugins/autotools/ide-autotools-build-task.c:598
-#: plugins/autotools/ide-autotools-build-task.c:626
-#: plugins/autotools/ide-autotools-build-task.c:939
+#: plugins/autotools/ide-autotools-build-task.c:600
+#: plugins/autotools/ide-autotools-build-task.c:628
+#: plugins/autotools/ide-autotools-build-task.c:953
 msgid "Build Failed: "
 msgstr "Sestavení selhalo: "
 
-#: plugins/autotools/ide-autotools-build-task.c:711
+#: plugins/autotools/ide-autotools-build-task.c:713
 msgid "Cannot execute build task more than once"
 msgstr "Úlohu provádějící sestavení nelze spustic vícekrát než jednou"
 
-#: plugins/autotools/ide-autotools-build-task.c:826
+#: plugins/autotools/ide-autotools-build-task.c:830
 msgid "Failed to access runtime for postbuild"
 msgstr "Selhalo přístup k běhového prostředí po sestavení"
 
-#: plugins/autotools/ide-autotools-build-task.c:972
+#: plugins/autotools/ide-autotools-build-task.c:986
 msgid "Failed to create build directory."
 msgstr "Selhalo vytvoření složky pro sestavení."
 
-#: plugins/autotools/ide-autotools-build-task.c:981
+#: plugins/autotools/ide-autotools-build-task.c:995
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "„%s“ není složka."
 
-#: plugins/autotools/ide-autotools-build-task.c:1020
+#: plugins/autotools/ide-autotools-build-task.c:1034
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "Ve složce projektu schází autogen.sh (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:1030
+#: plugins/autotools/ide-autotools-build-task.c:1044
 msgid "autogen.sh is not executable."
 msgstr "Skript autogen.sh není spustitelný."
 
-#: plugins/autotools/ide-autotools-build-task.c:1034
+#: plugins/autotools/ide-autotools-build-task.c:1048
 msgid "Running autogen…"
 msgstr "Běží autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1069
+#: plugins/autotools/ide-autotools-build-task.c:1083
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Skritp autogen.sh selhal při vytváření konfigurace (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:1104
+#: plugins/autotools/ide-autotools-build-task.c:1118
 msgid "Running configure…"
 msgstr "Probíhá konfigurace…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1203
-#: plugins/cargo/cargo_plugin.py:195 plugins/meson/meson_plugin/__init__.py:342
+#: plugins/autotools/ide-autotools-build-task.c:1217
+#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:392
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: plugins/autotools/ide-makecache.c:1148
+#: plugins/autotools/ide-makecache.c:1080
 msgid "Invalid makefile provided, ignoring."
 msgstr "Poskytnut neplatný Makefile, ignoruje se."
 
@@ -2563,7 +2549,7 @@ msgstr "Volby konfigurace"
 msgid "Environment"
 msgstr "Proměnné prostředí"
 
-#: plugins/build-tools/gbp-build-log-panel.c:254
+#: plugins/build-tools/gbp-build-log-panel.c:270
 msgid "Build Output"
 msgstr "Výpis ze sestavení"
 
@@ -2737,14 +2723,13 @@ msgstr "Cesta k projektovému souboru, výchozí je aktuální složka"
 msgid "New variable…"
 msgstr "Nová proměnná…"
 
-#: plugins/cargo/cargo_plugin.py:108 plugins/cargo/cargo_plugin.py:135
-#: plugins/cargo/cargo_plugin.py:200 plugins/cargo/cargo_plugin.py:210
-#: plugins/meson/meson_plugin/__init__.py:210
-#: plugins/meson/meson_plugin/__init__.py:240
+#: plugins/cargo/cargo_plugin.py:85 plugins/cargo/cargo_plugin.py:112
+#: plugins/cargo/cargo_plugin.py:201 plugins/cargo/cargo_plugin.py:211
+#: plugins/meson/meson_plugin/__init__.py:93
 msgid "Successful"
 msgstr "Úspěšné"
 
-#: plugins/cargo/cargo_plugin.py:208
+#: plugins/cargo/cargo_plugin.py:209
 msgid "Installing…"
 msgstr "Instaluje se…"
 
@@ -2761,28 +2746,28 @@ msgstr "Zobrazovat chyby a varování poskytnutá překladačem Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnostika varování chyba chyby"
 
-#: plugins/clang/ide-clang-service.c:263
+#: plugins/clang/ide-clang-service.c:326
 msgid "Unknown failure"
 msgstr "Neznámé selhání."
 
-#: plugins/clang/ide-clang-service.c:267
+#: plugins/clang/ide-clang-service.c:330
 msgid "Clang crashed"
 msgstr "Clang se zhroutil"
 
-#: plugins/clang/ide-clang-service.c:271
+#: plugins/clang/ide-clang-service.c:334
 msgid "Invalid arguments"
 msgstr "Neplatné argumenty"
 
-#: plugins/clang/ide-clang-service.c:275
+#: plugins/clang/ide-clang-service.c:338
 msgid "AST read error"
 msgstr "Chyba čtení AST"
 
-#: plugins/clang/ide-clang-service.c:287
+#: plugins/clang/ide-clang-service.c:350
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Selhalo vytvoření překladové jednotky: %s"
 
-#: plugins/clang/ide-clang-service.c:395
+#: plugins/clang/ide-clang-service.c:458
 msgid "File must be saved locally to parse."
 msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 
@@ -3160,7 +3145,7 @@ msgstr "Použité znaky by mohly v názvu projektu způsobit technické problém
 msgid "Directory already exists with that name"
 msgstr "Složka s tímto názvem již existuje"
 
-#: plugins/create-project/gbp-create-project-widget.c:559
+#: plugins/create-project/gbp-create-project-widget.c:569
 msgid "A failure occurred while initializing version control"
 msgstr "Během inicializace systému správy verzí došlo k chybě"
 
@@ -3300,7 +3285,7 @@ msgstr "Klonovat…"
 msgid "Clone"
 msgstr "Klonovat"
 
-#: plugins/git/ide-git-remote-callbacks.c:174
+#: plugins/git/ide-git-remote-callbacks.c:176
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr "Builder nebyl schopen předat pověření během klonování repozitáře."
@@ -3358,9 +3343,21 @@ msgstr "Navrhovat dokončování pro Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
-#: plugins/meson/meson_plugin/__init__.py:321
+#: plugins/meson/meson_plugin/__init__.py:318
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
+
+#: plugins/meson/meson_plugin/__init__.py:350
+msgid "Running prebuild…"
+msgstr "Probíhají činnosti před sestavením…"
+
+#: plugins/meson/meson_plugin/__init__.py:369
+msgid "Running post-install…"
+msgstr "Probíhají poinstalační činnosti…"
+
+#: plugins/meson/meson_plugin/__init__.py:372
+msgid "Running post-build…"
+msgstr "Probíhají činnosti po sestavení…"
 
 #: plugins/meson-templates/meson_templates/__init__.py:206
 msgid "Empty Meson Project"
@@ -3410,6 +3407,10 @@ msgstr "Prázdný"
 #, c-format
 msgid "Rename %s"
 msgstr "Přejmenovat %s"
+
+#: plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "Ukázat v projekto_vém stromu"
 
 #: plugins/project-tree/gtk/menus.ui:14
 msgid "_New"
