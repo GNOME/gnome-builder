@@ -801,23 +801,25 @@ ide_greeter_perspective_genesis_added (PeasExtensionSet *set,
   g_assert (IDE_IS_GENESIS_ADDIN (addin));
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
-  priority = ide_genesis_addin_get_priority (addin);
   title = ide_genesis_addin_get_label (addin);
-
-  button = g_object_new (GTK_TYPE_BUTTON,
-                         "name", G_OBJECT_TYPE_NAME (addin),
-                         "label", title,
-                         "visible", TRUE,
-                         NULL);
-  g_signal_connect_object (button,
-                           "clicked",
-                           G_CALLBACK (genesis_button_clicked),
-                           self,
-                           G_CONNECT_SWAPPED);
-  gtk_container_add_with_properties (GTK_CONTAINER (self->genesis_buttons), GTK_WIDGET (button),
-                                     "pack-type", GTK_PACK_START,
-                                     "priority", priority,
-                                     NULL);
+  if (title != NULL)
+    {
+      priority = ide_genesis_addin_get_priority (addin);
+      button = g_object_new (GTK_TYPE_BUTTON,
+                             "name", G_OBJECT_TYPE_NAME (addin),
+                             "label", title,
+                             "visible", TRUE,
+                             NULL);
+      g_signal_connect_object (button,
+                               "clicked",
+                               G_CALLBACK (genesis_button_clicked),
+                               self,
+                               G_CONNECT_SWAPPED);
+      gtk_container_add_with_properties (GTK_CONTAINER (self->genesis_buttons), GTK_WIDGET (button),
+                                         "pack-type", GTK_PACK_START,
+                                         "priority", priority,
+                                         NULL);
+    }
 
   child = ide_genesis_addin_get_widget (addin);
   gtk_container_add_with_properties (GTK_CONTAINER (self->genesis_stack), child,
