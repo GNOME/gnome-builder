@@ -25,14 +25,16 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-clone-widget.h \
 	gbp-flatpak-genesis-addin.c \
 	gbp-flatpak-genesis-addin.h \
+	gbp-flatpak-source-archive.c \
+	gbp-flatpak-source-archive.h \
 	$(NULL)
 
 nodist_libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-resources.c \
 	gbp-flatpak-resources.h
 
-libflatpak_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(FLATPAK_CFLAGS) $(GIT_CFLAGS)
-libflatpak_plugin_la_LIBADD = $(FLATPAK_LIBS) $(GIT_LIBS)
+libflatpak_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(FLATPAK_CFLAGS) $(GIT_CFLAGS) $(SOUP_CFLAGS)
+libflatpak_plugin_la_LIBADD = $(FLATPAK_LIBS) $(GIT_LIBS) $(SOUP_LIBS)
 libflatpak_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gbp-flatpak-resources.c

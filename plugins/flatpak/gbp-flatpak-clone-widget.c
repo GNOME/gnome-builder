@@ -410,6 +410,12 @@ get_source (GbpFlatpakCloneWidget  *self,
           if (json_object_has_member (source_object, "branch"))
             src->branch = g_strdup (json_object_get_string_member (source_object, "branch"));
         }
+      else if (strcmp (json_object_get_string_member(source_object, "type"), "archive") == 0)
+        {
+          src->type = TYPE_ARCHIVE;
+          if (json_object_has_member (source_object, "sha256"))
+            src->sha = g_strdup (json_object_get_string_member (source_object, "sha256"));
+        }
 
       url = json_object_get_string_member (source_object, "url");
       src->uri = ide_vcs_uri_new (url);
