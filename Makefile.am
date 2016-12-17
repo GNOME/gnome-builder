@@ -72,7 +72,7 @@ run:
 	GOBJECT_DEBUG=instance-count \
 	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
-	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
+	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s $(ARGS)
 
 strace:
 	PEAS_DEBUG=1 \
@@ -83,7 +83,7 @@ strace:
 	GOBJECT_DEBUG=instance-count \
 	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
-	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
+	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s $(ARGS)
 
 debug:
 	LSAN_OPTIONS=suppressions=$(top_srcdir)/build/asan.supp \
@@ -98,7 +98,7 @@ debug:
 	GOBJECT_DEBUG=instance-count \
 	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
-	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
+	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s $(ARGS)
 
 valgrind:
 	PEAS_DEBUG=1 \
@@ -110,6 +110,6 @@ valgrind:
 	G_SLICE=always-malloc \
 	PYTHONDONTWRITEBYTECODE=yes \
 	PATH=$(top_builddir)/src:${PATH} \
-	$(LIBTOOL) --mode=execute valgrind src/gnome-builder -vvvv -s
+	$(LIBTOOL) --mode=execute valgrind src/gnome-builder -vvvv -s $(ARGS)
 
 -include $(top_srcdir)/git.mk
