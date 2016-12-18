@@ -938,8 +938,12 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  if (!ide_str_empty0 (self->app_id))
-    ide_configuration_set_app_id (configuration, self->app_id);
+  if (!ide_configuration_get_app_id (configuration))
+    {
+      if (!ide_str_empty0 (self->app_id))
+        ide_configuration_set_app_id (configuration, self->app_id);
+    }
+
   ide_configuration_set_prefix (configuration, "/app");
   ide_configuration_set_internal_string (configuration, "flatpak-repo-name", FLATPAK_REPO_NAME);
 }
