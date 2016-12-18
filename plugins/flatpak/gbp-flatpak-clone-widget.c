@@ -205,38 +205,6 @@ gbp_flatpak_clone_widget_init (GbpFlatpakCloneWidget *self)
   self->strip_components = 1;
 }
 
-static void
-ide_workbench_open_project_async_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
-{
-  GbpFlatpakCloneWidget *self = user_data;
-  IdeWorkbench *workbench = IDE_WORKBENCH (object);
-  IdeConfigurationManager *configmgr;
-  IdeConfiguration *config;
-  IdeContext *context;
-  IdeContext *config_context;
-  IdeRuntimeManager *runtime_manager;
-
-  g_assert (IDE_IS_WORKBENCH (workbench));
-  g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
-
-  context = ide_workbench_get_context (IDE_WORKBENCH (workbench));
-  configmgr = ide_context_get_configuration_manager (context);
-  config = ide_configuration_manager_get_current (configmgr);
-
-  config_context = ide_object_get_context (IDE_OBJECT (config));
-  runtime_manager = ide_context_get_runtime_manager (config_context);
-
-  if (g_list_model_get_n_items (G_LIST_MODEL (runtime_manager)) > 0)
-    {
-      g_autoptr(IdeRuntime) last =
-        g_list_model_get_item (G_LIST_MODEL (runtime_manager),
-                               g_list_model_get_n_items (G_LIST_MODEL (runtime_manager)) - 1);
-      ide_configuration_set_runtime_id (config, ide_runtime_get_id (last));
-    }
-}
-
 static gboolean
 open_after_timeout (gpointer user_data)
 {
@@ -254,8 +222,7 @@ open_after_timeout (gpointer user_data)
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  ide_workbench_open_project_async (workbench, req->project_file, NULL,
-                                    ide_workbench_open_project_async_cb, g_object_ref (self));
+  ide_workbench_open_project_async (workbench, req->project_file, NULL, NULL, NULL);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -301,6 +268,13 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   g_autoptr(IdeProgress) progress = NULL;
   g_autoptr(GFile) src = NULL;
   g_autoptr(GFile) dst = NULL;
+  g_autoptr(GFile) build_config = NULL;
+  g_autoptr(GKeyFile) build_config_keyfile = NULL;
+  g_autofree gchar *manifest_contents = NULL;
+  g_autofree gchar *build_config_path = NULL;
+  g_autofree gchar *manifest_hash = NULL;
+  g_autofree gchar *runtime_id = NULL;
+  gsize manifest_contents_len;
   GError *error = NULL;
   GType git_callbacks_type;
   guint i;
@@ -383,12 +357,53 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   src = g_file_new_for_path (self->manifest);
   dst = g_file_get_child (req->project_file,
                           g_strjoin (".", self->id, "json", NULL));
-  g_clear_pointer (&self->id, g_free);
   if (!g_file_copy (src, dst, G_FILE_COPY_OVERWRITE, NULL,
                     NULL, NULL, &error))
     {
       g_task_return_error (task, error);
       return;
+    }
+
+  /* write a minimal build configuration file if it's not there yet */
+  build_config = g_file_get_child (req->project_file, ".buildconfig");
+  if (g_file_query_exists (build_config, NULL))
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  if (!g_file_get_contents (self->manifest,
+                            &manifest_contents, &manifest_contents_len, &error))
+    {
+      /* don't make this error fatal, but log a warning */
+      g_warning ("Failed to load JSON manifest at %s: %s",
+                 self->manifest, error->message);
+      g_error_free (error);
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  build_config_keyfile = g_key_file_new ();
+  g_key_file_set_string (build_config_keyfile, "default",
+                         "default", "true");
+  g_key_file_set_string (build_config_keyfile, "default",
+                         "device", "local");
+  g_key_file_set_string (build_config_keyfile, "default",
+                         "name", "Default");
+
+  manifest_hash = g_compute_checksum_for_data (G_CHECKSUM_SHA1,
+                                               (const guchar *) manifest_contents,
+                                               manifest_contents_len);
+  runtime_id = g_strdup_printf ("%s.json@%s", self->id, manifest_hash);
+  g_key_file_set_string (build_config_keyfile, "default",
+                         "runtime", runtime_id);
+  g_debug ("Setting project runtime id %s", runtime_id);
+
+  build_config_path = g_file_get_path (build_config);
+  if (!g_key_file_save_to_file (build_config_keyfile, build_config_path, &error))
+    {
+      g_warning ("Failed to save %s: %s", build_config_path, error->message);
+      g_error_free (error);
     }
 
   g_task_return_boolean (task, TRUE);
