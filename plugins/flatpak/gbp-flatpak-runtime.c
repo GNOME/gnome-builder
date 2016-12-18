@@ -451,7 +451,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
       g_autoptr(IdeSubprocessLauncher) launcher6 = NULL;
       g_autoptr(IdeSubprocess) process6 = NULL;
 
-      app_id = ide_configuration_get_app_id (configuration);
+      app_id = self->app_id;
       if (ide_str_empty0 (app_id))
         {
           g_warning ("Could not determine application ID");
@@ -668,7 +668,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
       return;
     }
 
-  app_id = ide_configuration_get_app_id (configuration);
+  app_id = self->app_id;
   if (ide_str_empty0 (app_id))
     {
       g_warning ("Could not determine application ID");
@@ -912,7 +912,7 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   runner = gbp_flatpak_runner_new (context);
   g_assert (GBP_IS_FLATPAK_RUNNER (runner));
 
-  app_id = ide_configuration_get_app_id (configuration);
+  app_id = self->app_id;
   if (ide_str_empty0 (app_id))
     {
       g_warning ("Could not determine application ID");
