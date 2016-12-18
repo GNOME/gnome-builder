@@ -901,6 +901,9 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   IdeConfiguration *configuration;
   GbpFlatpakRunner *runner;
   const gchar *app_id = NULL;
+  const gchar *config_app_id = NULL;
+  g_autofree gchar *own_name = NULL;
+  g_autofree gchar *app_id_override = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (IDE_IS_BUILD_TARGET (build_target));
@@ -913,18 +916,30 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   g_assert (GBP_IS_FLATPAK_RUNNER (runner));
 
   app_id = self->app_id;
+  config_app_id = ide_configuration_get_app_id (configuration);
   if (ide_str_empty0 (app_id))
     {
       g_warning ("Could not determine application ID");
       app_id = "org.gnome.FlatpakApp";
     }
+
+  if (g_strcmp0 (app_id, config_app_id) != 0)
+    {
+      own_name = g_strdup_printf ("--own-name=%s", config_app_id);
+      app_id_override = g_strdup_printf ("--gapplication-app-id=%s", config_app_id);
+    }
+
   ide_runner_set_run_on_host (IDE_RUNNER (runner), TRUE);
   ide_runner_append_argv (IDE_RUNNER (runner), "flatpak");
   ide_runner_append_argv (IDE_RUNNER (runner), "run");
+  if (own_name != NULL)
+    ide_runner_append_argv (IDE_RUNNER (runner), own_name);
   ide_runner_append_argv (IDE_RUNNER (runner), "--share=ipc");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=x11");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=wayland");
   ide_runner_append_argv (IDE_RUNNER (runner), app_id);
+  if (app_id_override)
+    ide_runner_append_argv (IDE_RUNNER (runner), app_id_override);
 
   return IDE_RUNNER (runner);
 }
