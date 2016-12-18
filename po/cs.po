@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-15 09:13+0000\n"
-"PO-Revision-Date: 2016-12-17 11:27+0100\n"
+"POT-Creation-Date: 2016-12-17 22:09+0000\n"
+"PO-Revision-Date: 2016-12-18 21:57+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -67,7 +67,7 @@ msgstr[2] "Před %u roky"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/greeter/ide-greeter-perspective.c:674
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -99,7 +99,7 @@ msgstr "Procházet…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:314
 #: libide/editor/ide-editor-view-actions.c:445
-#: libide/greeter/ide-greeter-perspective.c:672
+#: libide/greeter/ide-greeter-perspective.c:673
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -1005,60 +1005,68 @@ msgstr "Financovali"
 msgid "Commands:"
 msgstr "Příkazy:"
 
-#: libide/application/ide-application-command-line.c:186
+#: libide/application/ide-application-command-line.c:187
 msgid "List available subcommands"
 msgstr "Vypsat dostupné dílčí příkazy"
 
-#: libide/application/ide-application-command-line.c:193
+#: libide/application/ide-application-command-line.c:194
 msgid "Run Builder in standalone mode"
 msgstr "Spustit Builder v samostatném režimu"
 
-#: libide/application/ide-application-command-line.c:200
+#: libide/application/ide-application-command-line.c:201
 msgid "Show the application's version"
 msgstr "Zobrazit verzi aplikace"
 
-#: libide/application/ide-application-command-line.c:219
+#: libide/application/ide-application-command-line.c:220
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Více podrobností, může být zadáno vícekrát."
 
-#: libide/application/ide-application-command-line.c:226
+#: libide/application/ide-application-command-line.c:227
 msgid "Enter GApplication Service mode"
 msgstr "Vstoupit do režimu služba GApplication"
 
-#: libide/application/ide-application-command-line.c:233
-msgid "Opens the project specified by PATH"
-msgstr "Otevřít projekt zadaný CESTOU"
-
 #: libide/application/ide-application-command-line.c:234
+msgid "Opens the project specified by PATH"
+msgstr "Otevřít projekt zadaný pomocí CESTA"
+
+#: libide/application/ide-application-command-line.c:235
 #: plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "CESTA"
 
-#: libide/application/ide-application-command-line.c:264
+#: libide/application/ide-application-command-line.c:242
+msgid "Clones the project specified by MANIFEST"
+msgstr "Naklonovat projekt zadaný pomocí MANIFEST"
+
+#: libide/application/ide-application-command-line.c:243
+msgid "MANIFEST"
+msgstr "MANIFEST"
+
+#: libide/application/ide-application-command-line.c:273
 msgid "COMMAND"
 msgstr "PŘÍKAZ"
 
-#: libide/application/ide-application-command-line.c:335
+#: libide/application/ide-application-command-line.c:344
 msgid "No commands available"
 msgstr "Nejsou k dispozici žádné příkazy"
 
-#: libide/application/ide-application-command-line.c:365
+#: libide/application/ide-application-command-line.c:374
 msgid "Please provide a command"
 msgstr "Zadejte prosím příkaz"
 
-#: libide/application/ide-application-command-line.c:375
+#: libide/application/ide-application-command-line.c:384
 msgid "No such tool"
 msgstr "Takový nástroj neexistuje"
 
-#: libide/application/ide-application-command-line.c:389
+#: libide/application/ide-application-command-line.c:398
 msgid "Please provide a worker type"
 msgstr "Zadejte prosím typ sestavovacího procesu"
 
-#: libide/application/ide-application-command-line.c:396
+#: libide/application/ide-application-command-line.c:405
 msgid "Please provide a D-Bus address"
 msgstr "Zadejte prosím adresu D-Bus"
 
-#: libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:414
 msgid "No such worker"
 msgstr "Takový sestavovací proces neexistuje"
 
@@ -1280,11 +1288,11 @@ msgstr ""
 "Builder odhalil, že tento soubor byl externě změněn. Přejete si jej znovu "
 "načíst?"
 
-#: libide/greeter/ide-greeter-perspective.c:451
+#: libide/greeter/ide-greeter-perspective.c:452
 msgid "Failed to load the project"
 msgstr "Selhalo načtení projektu"
 
-#: libide/greeter/ide-greeter-perspective.c:668
+#: libide/greeter/ide-greeter-perspective.c:669
 msgid "Open Project"
 msgstr "Otevření projektu"
 
@@ -3285,7 +3293,7 @@ msgstr "Klonovat…"
 msgid "Clone"
 msgstr "Klonovat"
 
-#: plugins/git/ide-git-remote-callbacks.c:176
+#: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr "Builder nebyl schopen předat pověření během klonování repozitáře."
