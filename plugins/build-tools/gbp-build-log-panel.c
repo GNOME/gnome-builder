@@ -25,9 +25,6 @@
 
 #include "gbp-build-log-panel.h"
 
-#define HORIZONTAL_AUTOSCROLL_TOLERENCE   3.0
-#define VERTICAL_AUTOSCROLL_TOLERENCE     30.0
-
 struct _GbpBuildLogPanel
 {
   PnlDockWidget      parent_instance;
@@ -41,9 +38,6 @@ struct _GbpBuildLogPanel
   GtkScrolledWindow *scroller;
   GtkTextView       *text_view;
   GtkTextTag        *stderr_tag;
-
-  GtkAdjustment     *hadjustment;
-  GtkAdjustment     *vadjustment;
 };
 
 enum {
@@ -98,22 +92,12 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
                          const gchar       *message,
                          IdeBuildResult    *result)
 {
+  GtkTextMark *insert;
   GtkTextIter iter;
-  gboolean h_scroll_left;
-  gboolean v_scroll_bottom;
-  gdouble last_page_pos;
 
   g_assert (GBP_IS_BUILD_LOG_PANEL (self));
   g_assert (message != NULL);
   g_assert (IDE_IS_BUILD_RESULT (result));
-
-  last_page_pos = gtk_adjustment_get_upper (self->vadjustment) -
-                  gtk_adjustment_get_page_size (self->vadjustment);
-  h_scroll_left =
-    gtk_adjustment_get_value (self->hadjustment) <= HORIZONTAL_AUTOSCROLL_TOLERENCE;
-  v_scroll_bottom =
-    gtk_adjustment_get_value (self->vadjustment) >= last_page_pos -
-                                                    VERTICAL_AUTOSCROLL_TOLERENCE;
 
   gtk_text_buffer_get_end_iter (self->buffer, &iter);
 
@@ -132,8 +116,8 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
       gtk_text_buffer_apply_tag (self->buffer, self->stderr_tag, &begin, &iter);
     }
 
-  if (v_scroll_bottom && h_scroll_left)
-    gtk_adjustment_set_value (self->vadjustment, last_page_pos);
+  insert = gtk_text_buffer_get_insert (self->buffer);
+  gtk_text_view_scroll_to_mark (self->text_view, insert, 0.0, TRUE, 0.0, 0.0);
 }
 
 void
@@ -286,7 +270,4 @@ gbp_build_log_panel_init (GbpBuildLogPanel *self)
                            self,
                            G_CONNECT_SWAPPED);
   gbp_build_log_panel_changed_font_name (self, "font-name", self->settings);
-
-  self->hadjustment = gtk_scrolled_window_get_hadjustment (self->scroller);
-  self->vadjustment = gtk_scrolled_window_get_vadjustment (self->scroller);
 }
