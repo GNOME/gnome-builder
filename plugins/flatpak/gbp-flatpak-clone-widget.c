@@ -35,6 +35,7 @@ struct _GbpFlatpakCloneWidget
 
   guint           is_ready : 1;
 
+  gchar          *app_id_override;
   gchar          *child_name;
   gchar          *id;
   gchar          *manifest;
@@ -114,10 +115,42 @@ download_request_new (ModuleSource *src,
 }
 
 static void
+gbp_flatpak_clone_widget_set_manifest (GbpFlatpakCloneWidget *self,
+                                       const gchar           *manifest)
+{
+  gchar *ptr;
+
+  g_free (self->manifest);
+  g_free (self->app_id_override);
+
+  /* if the filename does not end with .json, just set it right away,
+   * even if it may fail later.
+   */
+  ptr = g_strrstr (manifest, ".json");
+  if (!ptr)
+    {
+      self->manifest = g_strdup (manifest);
+      return;
+    }
+
+  /* search for the first '+' after the .json extension */
+  ptr = strchr (ptr, '+');
+  if (!ptr)
+    {
+      self->manifest = g_strdup (manifest);
+      return;
+    }
+
+  self->manifest = g_strndup (manifest, strlen (manifest) - strlen (ptr));
+  self->app_id_override = g_strdup (ptr + 1);
+}
+
+static void
 gbp_flatpak_clone_widget_finalize (GObject *object)
 {
   GbpFlatpakCloneWidget *self = (GbpFlatpakCloneWidget *)object;
 
+  g_clear_pointer (&self->app_id_override, g_free);
   g_clear_pointer (&self->child_name, g_free);
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->manifest, g_free);
@@ -135,8 +168,7 @@ gbp_flatpak_clone_widget_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_MANIFEST:
-      g_free (self->manifest);
-      self->manifest = g_value_dup_string (value);
+      gbp_flatpak_clone_widget_set_manifest (self, g_value_get_string (value));
       break;
 
     default:
@@ -398,6 +430,13 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   g_key_file_set_string (build_config_keyfile, "default",
                          "runtime", runtime_id);
   g_debug ("Setting project runtime id %s", runtime_id);
+
+  if (self->app_id_override != NULL)
+    {
+      g_key_file_set_string (build_config_keyfile, "default",
+                             "app-id", self->app_id_override);
+      g_debug ("Setting project app ID override %s", self->app_id_override);
+    }
 
   build_config_path = g_file_get_path (build_config);
   if (!g_key_file_save_to_file (build_config_keyfile, build_config_path, &error))
