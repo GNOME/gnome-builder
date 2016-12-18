@@ -242,6 +242,24 @@ class MesonBuilder(Ide.Builder):
                 else:
                     targets.append(ide_target)
 
+            # It is possible the program installs a script not a binary
+            if not targets or targets[0].install_directory.get_path() != bindir:
+                try:
+                    # This is a new feature in Meson 0.37.0
+                    ret = subprocess.check_output(['mesonintrospect', '--installed',
+                                                   self._get_build_dir().get_path()])
+                    installed = json.loads(ret.decode('utf-8'))
+                    for f in installed.values():
+                        install_dir = path.dirname(f)
+                        if install_dir == bindir:
+                            # FIXME: This isn't a real target but builder doesn't
+                            # actually use it as such anyway.
+                            ide_target = MesonBuildTarget(install_dir, name=path.basename(f))
+                            targets.insert(0, ide_target)
+                            break # Only need one
+                except (subprocess.CalledProcessError, json.JSONDecodeError, UnicodeDecodeError):
+                    pass
+
             task.build_targets = targets
             task.return_boolean(True)
 
