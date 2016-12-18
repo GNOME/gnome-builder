@@ -669,8 +669,8 @@ ide_configuration_manager_init_worker (GTask        *task,
 {
   IdeConfigurationManager *self = source_object;
   g_autoptr(GFile) settings_file = NULL;
+  g_autoptr(GError) error = NULL;
   IdeContext *context;
-  GError *error = NULL;
   IdeVcs *vcs;
   GFile *workdir;
 
@@ -685,7 +685,12 @@ ide_configuration_manager_init_worker (GTask        *task,
 
   if (!g_file_query_exists (settings_file, cancellable) ||
       !ide_configuration_manager_restore (self, settings_file, cancellable, &error))
-    ide_configuration_manager_add_default (self);
+    {
+      if (error != NULL)
+        g_warning ("Failed to restore configuration: %s", error->message);
+
+      ide_configuration_manager_add_default (self);
+    }
 
   g_task_return_boolean (task, TRUE);
 }
