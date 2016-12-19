@@ -511,7 +511,7 @@ gb_vim_command_quit (GtkWidget      *active_widget,
       ide_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
     }
 
-  ide_widget_action (GTK_WIDGET (active_widget), "view-stack", "close", NULL);
+  ide_widget_action (GTK_WIDGET (active_widget), "view", "close", NULL);
 
   return TRUE;
 }
