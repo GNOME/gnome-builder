@@ -469,16 +469,9 @@ gb_project_tree_reveal (GbProjectTree *self,
           node = ide_tree_find_child_node (IDE_TREE (self), node, find_child_node, parts [i]);
           if (node == NULL)
             {
-              if (last_node != NULL)
-                {
-                  node = last_node;
-                  reveal_parent = TRUE;
-                  break;
-                }
-              else
-                {
-                  return;
-                }
+              node = last_node;
+              reveal_parent = TRUE;
+              break;
             }
           else
             {
