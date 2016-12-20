@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.15 -->
+  <template class="IdeEditorDictWidget" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Add Word</property>
+                <property name="halign">center</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">word_entry</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="word_entry">
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="width-chars">20</property>
+                <property name="max-width-chars">30</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="add_button">
+                <property name="label" translatable="yes">Add</property>
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">true</property>
+            <property name="expand">true</property>
+            <property name="shadow_type">in</property>
+            <property name="min-content-height">110</property>
+            <property name="max-content-height">110</property>
+            <property name="propagate-natural-height">true</property>
+            <child>
+              <object class="GtkListBox" id="words_list">
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="activate-on-single-click">false</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
