@@ -300,6 +300,16 @@
                     <property name="width">3</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkRevealer" id="dict_revealer">
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">5</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>

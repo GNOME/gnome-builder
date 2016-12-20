@@ -20,6 +20,7 @@
 #include <glib/gi18n.h>
 #include <gspell/gspell.h>
 
+#include "ide-editor-dict-widget.h"
 #include "ide-editor-spell-navigator.h"
 
 #include "ide-editor-spell-widget.h"
@@ -32,6 +33,7 @@ struct _IdeEditorSpellWidget
   IdeSourceView         *view;
   IdeBuffer             *buffer;
   GspellChecker         *checker;
+  IdeEditorDictWidget   *dict_widget;
   const GspellLanguage  *spellchecker_language;
 
   GtkLabel              *word_label;
@@ -45,6 +47,7 @@ struct _IdeEditorSpellWidget
   GtkButton             *change_all_button;
   GtkButton             *close_button;
   GtkListBox            *suggestions_box;
+  GtkRevealer           *dict_revealer;
 
   GtkButton             *highlight_checkbutton;
   GtkButton             *language_chooser_button;
@@ -516,6 +519,7 @@ ide_editor_spell_widget_constructed (GObject *object)
 
   spell_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self->buffer));
   self->checker = gspell_text_buffer_get_spell_checker (spell_buffer);
+  ide_editor_dict_widget_set_checker (self->dict_widget, self->checker);
 
   self->spellchecker_language = gspell_checker_get_language (self->checker);
   gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button),
@@ -705,12 +709,20 @@ ide_editor_spell_widget_class_init (IdeEditorSpellWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, highlight_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, language_chooser_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, suggestions_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_revealer);
 }
 
 static void
 ide_editor_spell_widget_init (IdeEditorSpellWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->dict_widget = ide_editor_dict_widget_new (NULL);
+  gtk_widget_show (GTK_WIDGET (self->dict_widget));
+  gtk_container_add (GTK_CONTAINER (self->dict_revealer), GTK_WIDGET (self->dict_widget));
+
+  /* TODO: plumb the revealing action */
+  gtk_revealer_set_reveal_child (self->dict_revealer, TRUE);
 
   self->view_spellchecker_set = FALSE;
 }

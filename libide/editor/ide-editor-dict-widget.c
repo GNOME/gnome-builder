@@ -205,7 +205,7 @@ close_button_clicked_cb (IdeEditorDictWidget *self,
   if (NULL != (row = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_LIST_BOX_ROW)))
     {
       word = g_object_get_data (G_OBJECT (row), "word");
-      /* TODO: remove from enchant pwl dict for the language */
+      gspell_checker_remove_word_from_personal (self->checker, word, -1);
       gtk_container_remove (GTK_CONTAINER (self->words_list), row);
     }
 }
