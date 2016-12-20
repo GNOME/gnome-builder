@@ -167,7 +167,16 @@ class MesonBuilder(Ide.Builder):
 
         def extract_flags(command: str):
             flags = GLib.shell_parse_argv(command)[1] # Raises on failure
-            return [flag for flag in flags if flag.startswith(('-I', '-isystem', '-W', '-D'))]
+            build_dir = self._get_build_dir().get_path()
+            wanted_flags = []
+            for flag in flags:
+                if flag.startswith('-I'):
+                    # All paths are relative to build
+                    abspath = path.normpath(path.join(build_dir, flag[2:]))
+                    wanted_flags.append('-I' + abspath)
+                elif flag.startswith(('-isystem', '-W', '-D')):
+                    wanted_flags.append(flag)
+            return wanted_flags
 
         def build_flags_thread():
             commands_file = path.join(self._get_build_dir().get_path(), 'compile_commands.json')
