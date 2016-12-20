@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-17 22:09+0000\n"
-"PO-Revision-Date: 2016-12-18 03:10+0100\n"
+"POT-Creation-Date: 2016-12-20 17:02+0000\n"
+"PO-Revision-Date: 2016-12-20 18:04+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2417,7 +2417,7 @@ msgstr "Pomyślnie zbudowano"
 #: plugins/autotools/ide-autotools-builder.c:347
 #: plugins/autotools/ide-autotools-builder.c:539
 #: plugins/autotools/ide-autotools-build-task.c:1219
-#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:399
+#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:427
 msgid "Building…"
 msgstr "Budowanie…"
 
@@ -2489,7 +2489,7 @@ msgid "Running configure…"
 msgstr "Wykonywanie polecenia configure…"
 
 #: plugins/autotools/ide-autotools-build-task.c:1217
-#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:392
+#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:420
 msgid "Cleaning…"
 msgstr "Czyszczenie…"
 
@@ -2557,7 +2557,7 @@ msgstr "Opcje polecenia configure"
 msgid "Environment"
 msgstr "Środowisko"
 
-#: plugins/build-tools/gbp-build-log-panel.c:270
+#: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Wyjście budowania"
 
@@ -3225,6 +3225,19 @@ msgstr "Dokumentacja"
 msgid "Switch To"
 msgstr "Przełącz na"
 
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Pobieranie źródeł programu…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "Klonowanie programu"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Sklonuj"
+
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Wyślij do serwisu Fpaste.org"
@@ -3281,10 +3294,6 @@ msgstr "Klonowanie projektu"
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
 msgstr "Sklonuj…"
-
-#: plugins/git/ide-git-genesis-addin.c:190
-msgid "Clone"
-msgstr "Sklonuj"
 
 #: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
@@ -3346,19 +3355,19 @@ msgstr "Sugerowanie uzupełnień języka Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Użycie biblioteki Jedi do uzupełniania w języku Python"
 
-#: plugins/meson/meson_plugin/__init__.py:318
+#: plugins/meson/meson_plugin/__init__.py:346
 msgid "Configuring…"
 msgstr "Konfigurowanie…"
 
-#: plugins/meson/meson_plugin/__init__.py:350
+#: plugins/meson/meson_plugin/__init__.py:378
 msgid "Running prebuild…"
 msgstr "Wykonywanie poleceń przed budowaniem…"
 
-#: plugins/meson/meson_plugin/__init__.py:369
+#: plugins/meson/meson_plugin/__init__.py:397
 msgid "Running post-install…"
 msgstr "Wykonywanie poleceń po instalacji…"
 
-#: plugins/meson/meson_plugin/__init__.py:372
+#: plugins/meson/meson_plugin/__init__.py:400
 msgid "Running post-build…"
 msgstr "Wykonywanie poleceń po budowaniu…"
 
