@@ -291,6 +291,7 @@ class MesonBuildResult(Ide.BuildResult):
             launcher.set_clear_env(False)
         if cwd:
             launcher.set_cwd(cwd.get_path())
+        launcher.overlay_environment(self.config.get_environment())
         return launcher
 
     def _get_ninja(self):
