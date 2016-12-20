@@ -462,7 +462,7 @@ ide_makecache_new_worker (GTask        *task,
    * If the runtime has a "gmake" instead of "make", we want to prefer that
    * since we know it is GNU make.
    */
-  if (ide_runtime_contains_program_in_path (self->runtime, "gmake", cancellable))
+  if (ide_runtime_contains_program_in_path (runtime, "gmake", cancellable))
     self->make_name = "gmake";
 
   context = ide_object_get_context (IDE_OBJECT (self));
