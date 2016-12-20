@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-11-16 23:34+0000\n"
-"PO-Revision-Date: 2016-11-17 02:34-0200\n"
+"POT-Creation-Date: 2016-12-17 22:09+0000\n"
+"PO-Revision-Date: 2016-12-20 11:42-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
 "X-Project-Style: gnome\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
@@ -68,7 +68,7 @@ msgstr[1] "Cerca de %u anos atrás"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/greeter/ide-greeter-perspective.c:674
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -100,7 +100,7 @@ msgstr "Navegar…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:314
 #: libide/editor/ide-editor-view-actions.c:445
-#: libide/greeter/ide-greeter-perspective.c:672
+#: libide/greeter/ide-greeter-perspective.c:673
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -1029,63 +1029,70 @@ msgstr "Fundado por"
 msgid "Commands:"
 msgstr "Comandos:"
 
-#: libide/application/ide-application-command-line.c:186
+#: libide/application/ide-application-command-line.c:187
 msgid "List available subcommands"
 msgstr "Lista de todos os subcomandos disponíveis"
 
-#: libide/application/ide-application-command-line.c:193
+#: libide/application/ide-application-command-line.c:194
 msgid "Run Builder in standalone mode"
 msgstr "Executa Builder em modo independente"
 
-#: libide/application/ide-application-command-line.c:200
-#| msgid "Show the application’s version"
+#: libide/application/ide-application-command-line.c:201
 msgid "Show the application's version"
 msgstr "Mostra a versão do aplicativo"
 
-#: libide/application/ide-application-command-line.c:219
+#: libide/application/ide-application-command-line.c:220
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Aumentar a verbosidade, pode ser especificado várias vezes"
 
-#: libide/application/ide-application-command-line.c:226
+#: libide/application/ide-application-command-line.c:227
 msgid "Enter GApplication Service mode"
 msgstr "Entrar no modo de serviço GApplication"
 
-#: libide/application/ide-application-command-line.c:233
+#: libide/application/ide-application-command-line.c:234
 msgid "Opens the project specified by PATH"
 msgstr "Abre o projeto especificado no CAMINHO"
 
-#: libide/application/ide-application-command-line.c:234
+#: libide/application/ide-application-command-line.c:235
 #: plugins/build-tools/gbp-build-tool.c:301
 msgid "PATH"
 msgstr "CAMINHO"
 
-#: libide/application/ide-application-command-line.c:264
+#: libide/application/ide-application-command-line.c:242
+msgid "Clones the project specified by MANIFEST"
+msgstr "Clona o projeto especificado por MANIFESTO"
+
+#: libide/application/ide-application-command-line.c:243
+msgid "MANIFEST"
+msgstr "MANIFESTO"
+
+#: libide/application/ide-application-command-line.c:273
 msgid "COMMAND"
 msgstr "COMANDO"
 
-#: libide/application/ide-application-command-line.c:335
+#: libide/application/ide-application-command-line.c:344
 msgid "No commands available"
 msgstr "Nenhum comando disponível"
 
-#: libide/application/ide-application-command-line.c:365
+#: libide/application/ide-application-command-line.c:374
 msgid "Please provide a command"
 msgstr "Por favor, forneça um comando"
 
-#: libide/application/ide-application-command-line.c:375
+#: libide/application/ide-application-command-line.c:384
 msgid "No such tool"
 msgstr "Ferramenta inexistente"
 
 # Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#: libide/application/ide-application-command-line.c:389
+#: libide/application/ide-application-command-line.c:398
 msgid "Please provide a worker type"
 msgstr "Por favor, forneça um tipo de trabalho"
 
-#: libide/application/ide-application-command-line.c:396
+#: libide/application/ide-application-command-line.c:405
 msgid "Please provide a D-Bus address"
 msgstr "Por favor, forneça um endereço D-Bus"
 
 # Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#: libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:414
 msgid "No such worker"
 msgstr "Trabalho inexistente"
 
@@ -1100,13 +1107,13 @@ msgstr "Arquivo grande demais para ser aberto."
 #: libide/buffers/ide-buffer-manager.c:1762
 #, c-format
 msgid "unsaved document %u"
-msgstr "documetno não salvo %u"
+msgstr "documento não salvo %u"
 
 #: libide/buffers/ide-buffer-manager.c:1796
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falha ao salvar o buffer, ignorando reclamação."
 
-#: libide/buildsystem/ide-builder.c:89
+#: libide/buildsystem/ide-builder.c:105
 #, c-format
 msgid "%s does not support building"
 msgstr "%s não possui suporte a compilação"
@@ -1115,7 +1122,7 @@ msgstr "%s não possui suporte a compilação"
 msgid "A build is already in progress"
 msgstr "Uma compilação já está em progresso"
 
-#: libide/buildsystem/ide-build-manager.c:853
+#: libide/buildsystem/ide-build-manager.c:912
 msgid "Ready"
 msgstr "Pronto"
 
@@ -1126,11 +1133,6 @@ msgstr "Falha ao abrir o fluxo de saída de erro (stderr)."
 #: libide/buildsystem/ide-build-result.c:306
 msgid "Failed to open stdout stream."
 msgstr "Falha ao abrir o fluxo de saída padrão (stdout)."
-
-#: libide/buildsystem/ide-build-system.c:125
-#, c-format
-msgid "%s() is not supported on %s build system."
-msgstr "%s() não possui suporte no sistema de compilação %s."
 
 #: libide/buildsystem/ide-configuration-manager.c:485
 #: libide/preferences/ide-preferences-builtin.c:337
@@ -1161,10 +1163,6 @@ msgstr "Linha %u, coluna %u"
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: libide/editor/ide-editor-frame.c:963 plugins/project-tree/gtk/menus.ui:6
-msgid "Re_veal in Project Tree"
-msgstr "Re_velar em árvore de projeto"
-
 #. OVR indicates we are in overwite mode
 #: libide/editor/ide-editor-frame.ui:17
 msgid "OVR"
@@ -1185,8 +1183,8 @@ msgstr "Alternar entre Pesquisar e Pesquisar-e-Substituir"
 #: libide/editor/ide-editor-frame.ui:218
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
-"Mostrar ou ocultar opções de pesquisa como p.ex. diferenciação de maiúsculo/"
-"minúsculo"
+"Mostrar ou ocultar opções de pesquisa como p.ex. diferenciação de "
+"maiúsculo/minúsculo"
 
 #: libide/editor/ide-editor-frame.ui:279
 msgid "Regular expressions"
@@ -1316,11 +1314,11 @@ msgstr ""
 "O Builder descobriu que este arquivo foi modificado externamente. Você "
 "gostaria de recarregar o arquivo?"
 
-#: libide/greeter/ide-greeter-perspective.c:451
+#: libide/greeter/ide-greeter-perspective.c:452
 msgid "Failed to load the project"
 msgstr "Falha ao carregar o projeto"
 
-#: libide/greeter/ide-greeter-perspective.c:668
+#: libide/greeter/ide-greeter-perspective.c:669
 msgid "Open Project"
 msgstr "Abrir projeto"
 
@@ -2190,11 +2188,11 @@ msgid "Cannot run target, another target is running"
 msgstr "Não é possível executar o alvo, pois um outro alvo está em execução"
 
 #: libide/runner/ide-run-manager.c:324
-#: plugins/autotools/ide-autotools-build-task.c:478
+#: plugins/autotools/ide-autotools-build-task.c:479
 msgid "Failed to locate runtime"
 msgstr "Falha ao localizar a execução"
 
-#: libide/runner/ide-runner.c:157 plugins/flatpak/gbp-flatpak-runner.c:78
+#: libide/runner/ide-runner.c:157 plugins/flatpak/gbp-flatpak-runner.c:82
 msgid "Process quit unexpectedly"
 msgstr "O processo saiu inesperadamente"
 
@@ -2261,7 +2259,6 @@ msgstr "ILCreateFromPath() falhou"
 
 #: libide/util/ide-file-manager.c:129
 #, c-format
-#| msgid "Cannot convert '%s’ into a valid NSURL."
 msgid "Cannot convert '%s' into a valid NSURL."
 msgstr "Não foi possível converter “%s” em uma NSURL válida."
 
@@ -2284,37 +2281,31 @@ msgstr "Caracteres não-UTF-8 na URI"
 
 #: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
 #, c-format
-#| msgid "Invalid IP literal '%s’ in URI"
 msgid "Invalid IP literal '%s' in URI"
 msgstr "IP literal “%s” inválido na URI"
 
 #: libide/util/ide-uri.c:411
 #, c-format
-#| msgid "Invalid encoded IP literal '%s’ in URI"
 msgid "Invalid encoded IP literal '%s' in URI"
 msgstr "IP literal codificado “%s” inválido na URI"
 
 #: libide/util/ide-uri.c:420
 #, c-format
-#| msgid "Invalid non-ASCII hostname '%s’ in URI"
 msgid "Invalid non-ASCII hostname '%s' in URI"
 msgstr "Nome de máquina não-ASCII “%s” inválido na URI"
 
 #: libide/util/ide-uri.c:434
 #, c-format
-#| msgid "Non-ASCII hostname '%s’ forbidden in this URI"
 msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr "Nome de máquina não-ASCII “%s” proibido nesta URI"
 
 #: libide/util/ide-uri.c:457
 #, c-format
-#| msgid "Could not parse port '%s’ in URI"
 msgid "Could not parse port '%s' in URI"
 msgstr "Não foi possível analisar a porta “%s” na URL"
 
 #: libide/util/ide-uri.c:464
 #, c-format
-#| msgid "Port '%s’ in URI is out of range"
 msgid "Port '%s' in URI is out of range"
 msgstr "Porta “%s” na URI fora dos limites"
 
@@ -2328,13 +2319,11 @@ msgstr "URI não é absoluta e nenhuma URI base foi fornecida"
 
 #: libide/util/ide-uri.c:660
 #, c-format
-#| msgid "Could not parse '%s’ as absolute URI"
 msgid "Could not parse '%s' as absolute URI"
 msgstr "Não foi possível analisar “%s” como URI absoluta"
 
 #: libide/util/ide-uri.c:1203
 #, c-format
-#| msgid "URI '%s’ has no host component"
 msgid "URI '%s' has no host component"
 msgstr "URI “%s” não possui um componente máquina"
 
@@ -2407,9 +2396,8 @@ msgstr "Perfil de compilação"
 msgid "Last build"
 msgstr "Última compilação"
 
-#: libide/workbench/ide-omni-bar.ui:325 plugins/cargo/cargo_plugin.py:113
-#: plugins/cargo/cargo_plugin.py:140 plugins/meson/meson_plugin/__init__.py:214
-#: plugins/meson/meson_plugin/__init__.py:244
+#: libide/workbench/ide-omni-bar.ui:325 plugins/cargo/cargo_plugin.py:90
+#: plugins/cargo/cargo_plugin.py:117 plugins/meson/meson_plugin/__init__.py:86
 msgid "Failed"
 msgstr "Falhou"
 
@@ -2446,101 +2434,96 @@ msgstr "Mostrar menu do workbench"
 msgid "Press Ctrl+. to search"
 msgstr "Pressione Ctrl+. para pesquisar"
 
-#: plugins/autotools/ide-autotools-builder.c:47
+#: plugins/autotools/ide-autotools-builder.c:235
 msgid "Build cancelled"
 msgstr "Compilação cancelada"
 
-#: plugins/autotools/ide-autotools-builder.c:49
+#: plugins/autotools/ide-autotools-builder.c:237
 msgid "Build failed"
 msgstr "Compilação falhou"
 
-#: plugins/autotools/ide-autotools-builder.c:55
+#: plugins/autotools/ide-autotools-builder.c:243
 msgid "Build successful"
 msgstr "Compilação concluída com sucesso"
 
-#: plugins/autotools/ide-autotools-builder.c:159
-#: plugins/autotools/ide-autotools-builder.c:241
-#: plugins/autotools/ide-autotools-build-task.c:1208
-#: plugins/cargo/cargo_plugin.py:198 plugins/meson/meson_plugin/__init__.py:349
+#: plugins/autotools/ide-autotools-builder.c:347
+#: plugins/autotools/ide-autotools-builder.c:539
+#: plugins/autotools/ide-autotools-build-task.c:1219
+#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:399
 msgid "Building…"
 msgstr "Compilando…"
 
-#: plugins/autotools/ide-autotools-builder.c:202
+#: plugins/autotools/ide-autotools-builder.c:495
 msgid "Install cancelled"
 msgstr "Instalação cancelada"
 
-#: plugins/autotools/ide-autotools-builder.c:204
+#: plugins/autotools/ide-autotools-builder.c:497
 msgid "Install failed"
 msgstr "Instalação falhou"
 
-#: plugins/autotools/ide-autotools-builder.c:210
+#: plugins/autotools/ide-autotools-builder.c:503
 msgid "Install successful"
 msgstr "Instalação concluída com sucesso"
 
-#: plugins/autotools/ide-autotools-build-system.c:170
-msgid "Failed to locate configure.ac"
-msgstr "Falha ao localizar o configure.ac"
-
-#: plugins/autotools/ide-autotools-build-task.c:200
+#: plugins/autotools/ide-autotools-build-task.c:201
 msgid "Directory must be on a locally mounted filesystem."
 msgstr "O diretório deve estar em um sistema de arquivos montado localmente."
 
-#: plugins/autotools/ide-autotools-build-task.c:467
+#: plugins/autotools/ide-autotools-build-task.c:468
 msgid "Failed to locate device"
 msgstr "Falha ao localizar dispositivo"
 
-#: plugins/autotools/ide-autotools-build-task.c:598
-#: plugins/autotools/ide-autotools-build-task.c:626
-#: plugins/autotools/ide-autotools-build-task.c:942
+#: plugins/autotools/ide-autotools-build-task.c:600
+#: plugins/autotools/ide-autotools-build-task.c:628
+#: plugins/autotools/ide-autotools-build-task.c:953
 msgid "Build Failed: "
 msgstr "Compilação falhou: "
 
-#: plugins/autotools/ide-autotools-build-task.c:711
+#: plugins/autotools/ide-autotools-build-task.c:713
 msgid "Cannot execute build task more than once"
 msgstr "Não foi possível executar a tarefa de compilação mais de uma vez"
 
-#: plugins/autotools/ide-autotools-build-task.c:827
+#: plugins/autotools/ide-autotools-build-task.c:830
 msgid "Failed to access runtime for postbuild"
 msgstr "Falha ao acessar a execução para pós-compilação"
 
-#: plugins/autotools/ide-autotools-build-task.c:975
+#: plugins/autotools/ide-autotools-build-task.c:986
 msgid "Failed to create build directory."
 msgstr "Falha ao criar o diretório de compilação."
 
-#: plugins/autotools/ide-autotools-build-task.c:984
+#: plugins/autotools/ide-autotools-build-task.c:995
 #, c-format
-#| msgid "'%s’ is not a directory."
 msgid "'%s' is not a directory."
 msgstr "“%s” não é um diretório."
 
-#: plugins/autotools/ide-autotools-build-task.c:1023
+#: plugins/autotools/ide-autotools-build-task.c:1034
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr "autogen.sh está faltando no diretório de projeto (%s)."
 
-#: plugins/autotools/ide-autotools-build-task.c:1033
+#: plugins/autotools/ide-autotools-build-task.c:1044
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh não é um executável."
 
-#: plugins/autotools/ide-autotools-build-task.c:1037
+#: plugins/autotools/ide-autotools-build-task.c:1048
 msgid "Running autogen…"
 msgstr "Executando autogen…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1072
+#: plugins/autotools/ide-autotools-build-task.c:1083
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh falhou ao criar configuração (%s)"
 
-#: plugins/autotools/ide-autotools-build-task.c:1107
+#: plugins/autotools/ide-autotools-build-task.c:1118
 msgid "Running configure…"
-msgstr "Excecutando configure…"
+msgstr "Executando configure…"
 
-#: plugins/autotools/ide-autotools-build-task.c:1206
-#: plugins/cargo/cargo_plugin.py:195 plugins/meson/meson_plugin/__init__.py:342
+#: plugins/autotools/ide-autotools-build-task.c:1217
+#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:392
 msgid "Cleaning…"
 msgstr "Limpando…"
 
-#: plugins/autotools/ide-makecache.c:1148
+#: plugins/autotools/ide-makecache.c:1080
 msgid "Invalid makefile provided, ignoring."
 msgstr "Makefile inválido fornecido, ignorando."
 
@@ -2604,7 +2587,7 @@ msgstr "Opções de configuração"
 msgid "Environment"
 msgstr "Ambiente"
 
-#: plugins/build-tools/gbp-build-log-panel.c:254
+#: plugins/build-tools/gbp-build-log-panel.c:270
 msgid "Build Output"
 msgstr "Saída da compilação"
 
@@ -2778,14 +2761,13 @@ msgid "New variable…"
 msgstr "Nova variável…"
 
 # A resposta por ser Failed ou Successful -- Rafael
-#: plugins/cargo/cargo_plugin.py:108 plugins/cargo/cargo_plugin.py:135
-#: plugins/cargo/cargo_plugin.py:200 plugins/cargo/cargo_plugin.py:210
-#: plugins/meson/meson_plugin/__init__.py:210
-#: plugins/meson/meson_plugin/__init__.py:240
+#: plugins/cargo/cargo_plugin.py:85 plugins/cargo/cargo_plugin.py:112
+#: plugins/cargo/cargo_plugin.py:201 plugins/cargo/cargo_plugin.py:211
+#: plugins/meson/meson_plugin/__init__.py:93
 msgid "Successful"
 msgstr "Sucesso"
 
-#: plugins/cargo/cargo_plugin.py:208
+#: plugins/cargo/cargo_plugin.py:209
 msgid "Installing…"
 msgstr "Instalando…"
 
@@ -2802,28 +2784,28 @@ msgstr "Mostrar erros e avisos fornecidos pelo Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos avisos erros"
 
-#: plugins/clang/ide-clang-service.c:263
+#: plugins/clang/ide-clang-service.c:326
 msgid "Unknown failure"
 msgstr "Falha desconhecida"
 
-#: plugins/clang/ide-clang-service.c:267
+#: plugins/clang/ide-clang-service.c:330
 msgid "Clang crashed"
 msgstr "Clang parou"
 
-#: plugins/clang/ide-clang-service.c:271
+#: plugins/clang/ide-clang-service.c:334
 msgid "Invalid arguments"
 msgstr "Argumentos inválidos"
 
-#: plugins/clang/ide-clang-service.c:275
+#: plugins/clang/ide-clang-service.c:338
 msgid "AST read error"
 msgstr "Erro de leitura AST"
 
-#: plugins/clang/ide-clang-service.c:287
+#: plugins/clang/ide-clang-service.c:350
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Falha ao criar unidade de tradução: %s"
 
-#: plugins/clang/ide-clang-service.c:395
+#: plugins/clang/ide-clang-service.c:458
 msgid "File must be saved locally to parse."
 msgstr "O arquivo deve estar salvo localmente para análise."
 
@@ -3046,7 +3028,6 @@ msgstr "%s é inválido para %s"
 
 #: plugins/command-bar/gb-vim.c:158
 #, c-format
-#| msgid "Cannot find language '%s’"
 msgid "Cannot find language '%s'"
 msgstr "Não foi possível localizar a linguagem “%s”"
 
@@ -3065,7 +3046,6 @@ msgstr "Opção desconhecida: %s"
 
 #: plugins/command-bar/gb-vim.c:426
 #, c-format
-#| msgid "Cannot find colorscheme '%s’"
 msgid "Cannot find colorscheme '%s'"
 msgstr "Não foi possível localizar o esquema de cores “%s”"
 
@@ -3179,7 +3159,6 @@ msgid "git"
 msgstr "git"
 
 #: plugins/create-project/gbp-create-project-tool.c:149
-#| msgid "create-project [OPTION…] PROJECT_NAME"
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPÇÃO…] NOME_PROJETO"
 
@@ -3206,7 +3185,7 @@ msgstr ""
 msgid "Directory already exists with that name"
 msgstr "O diretório já existe com aquele nome"
 
-#: plugins/create-project/gbp-create-project-widget.c:559
+#: plugins/create-project/gbp-create-project-widget.c:569
 msgid "A failure occurred while initializing version control"
 msgstr "Ocorreu uma falha ao inicializar o controle de versão"
 
@@ -3215,10 +3194,6 @@ msgid "Project Name"
 msgstr "Nome do projeto"
 
 #: plugins/create-project/gbp-create-project-widget.ui:55
-#| msgid ""
-#| "Unique name that is used for your project’s folder and other technical "
-#| "resources. Should be in lower case without spaces and may not start with "
-#| "a number."
 msgid ""
 "Unique name that is used for your project's folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
@@ -3327,7 +3302,6 @@ msgid "user@host:repository.git"
 msgstr "usuário@máquina:repositório.git"
 
 #: plugins/git/ide-git-clone-widget.ui:67
-#| msgid "Enter the URL of your project’s source code repository"
 msgid "Enter the URL of your project's source code repository"
 msgstr "Digite a URL do repositório de código fonte do seu projeto"
 
@@ -3351,7 +3325,7 @@ msgstr "Clonar…"
 msgid "Clone"
 msgstr "Clonar"
 
-#: plugins/git/ide-git-remote-callbacks.c:174
+#: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
@@ -3409,9 +3383,21 @@ msgstr "Sugerir preenchimento de Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usa Jedi para fornecer preenchimento para a linguagem Python"
 
-#: plugins/meson/meson_plugin/__init__.py:321
+#: plugins/meson/meson_plugin/__init__.py:318
 msgid "Configuring…"
 msgstr "Configurando…"
+
+#: plugins/meson/meson_plugin/__init__.py:350
+msgid "Running prebuild…"
+msgstr "Executando pré-compilação…"
+
+#: plugins/meson/meson_plugin/__init__.py:369
+msgid "Running post-install…"
+msgstr "Executando pós-instalação…"
+
+#: plugins/meson/meson_plugin/__init__.py:372
+msgid "Running post-build…"
+msgstr "Executando pós-compilação…"
 
 #: plugins/meson-templates/meson_templates/__init__.py:206
 msgid "Empty Meson Project"
@@ -3461,6 +3447,10 @@ msgstr "Vazio"
 #, c-format
 msgid "Rename %s"
 msgstr "Renomear %s"
+
+#: plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "Re_velar em árvore de projeto"
 
 #: plugins/project-tree/gtk/menus.ui:14
 msgid "_New"
@@ -3542,9 +3532,6 @@ msgstr "Gerar log de suporte"
 
 #: plugins/support/ide-support-application-addin.c:79
 #, c-format
-#| msgid ""
-#| "The support log file has been written to '%s’. Please provide this file "
-#| "as an attachment on your bug report or support request."
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
@@ -3641,6 +3628,12 @@ msgstr "Mostra erros e avisos fornecidos pelo Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnósticos avisos erros"
+
+#~ msgid "%s() is not supported on %s build system."
+#~ msgstr "%s() não possui suporte no sistema de compilação %s."
+
+#~ msgid "Failed to locate configure.ac"
+#~ msgstr "Falha ao localizar o configure.ac"
 
 #~ msgid "Chunk does not belong to snippet."
 #~ msgstr "O bloco não pertence a um trecho."
