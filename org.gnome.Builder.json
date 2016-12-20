@@ -4,36 +4,23 @@
     "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
     "command": "gnome-builder",
-    "tags": ["devel"],
-    "desktop-file-name-prefix": "(Development) ",
     "finish-args": [
-        /* Allow access to developer tools */
         "--allow=devel",
         "--talk-name=org.freedesktop.Flatpak",
-        /* X11 + XShm access */
         "--share=ipc", "--socket=x11",
-        /* Wayland access */
         "--socket=wayland",
-        /* We want full fs access */
         "--filesystem=host",
-        /* Needs to talk to the network: */
         "--share=network",
         "--talk-name=org.gtk.vfs.*",
-        /* Needs access to policykit for flatpak and sysprof */
         "--system-talk-name=org.freedesktop.PolicyKit1",
-        /* Needs access to host sysprofd for profiling */
         "--system-talk-name=org.gnome.Sysprof2",
-        /* Needed for dconf to work (+ host or homedir read access from above) */
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
-        /* Need access to talk to the file manager */
         "--talk-name=org.freedesktop.FileManager1",
-        /* We need access to auth agents */
         "--talk-name=org.freedesktop.secrets",
 	"--filesystem=xdg-run/keyring",
-        /* Needed for various SSL certificates to work */
         "--env=SSL_CERT_DIR=/etc/ssl/certs",
         "--filesystem=/etc/ssl:ro",
         "--filesystem=/etc/pki:ro",
@@ -73,6 +60,7 @@
             "sources": [
                 {
                     "type": "git",
+                    "branch": "d606bec68ddfea78de4b03c3f3568afb71bdc1ce",
                     "url": "git://git.gnome.org/libgsystem.git"
                 }
             ]
@@ -88,6 +76,7 @@
             "sources": [
                 {
                     "type": "git",
+		    "branch": "056ca71a3b96e21d9e573b41ed83f5fa4bd118b2",
                     "url": "https://github.com/ostreedev/ostree.git"
                 }
             ]
@@ -112,6 +101,7 @@
             "sources": [
                 {
                     "type": "git",
+                    "branch": "cb180540a68da556254baf9019ad752438d53865",
                     "url": "https://github.com/flatpak/flatpak.git"
                 }
             ]
@@ -216,8 +206,9 @@
             "name": "libgit2-glib",
             "sources": [
                 {
-                    "type": "git",
-                    "url": "git://git.gnome.org/libgit2-glib"
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libgit2-glib/0.24/libgit2-glib-0.24.4.tar.xz",
+                    "sha256": "3a211f756f250042f352b3070e7314a048c88e785dba9d118b851253a7c60220"
                 }
             ]
         },
@@ -226,8 +217,9 @@
             "cleanup": [ "/bin/*", "/lib/peas-demo" ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "git://git.gnome.org/libpeas"
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libpeas/1.20/libpeas-1.20.0.tar.xz",
+                    "sha256": "f392fffe2dc00072a51bb2a1b274224a06bdc5f9c3b3c0ac4816909e9933d354"
                 }
             ]
         },
@@ -235,9 +227,9 @@
             "name": "gtksourceview",
             "sources": [
                 {
-                    "branch": "gnome-3-24",
-                    "type": "git",
-                    "url": "git://git.gnome.org/gtksourceview"
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/gtksourceview/3.22/gtksourceview-3.22.0.tar.xz",
+                    "sha256": "70657f48732427984dce6cc812bdd3f2b701c0a49e0a0a08889705b3dadcf8e5"
                 }
             ]
         },
@@ -276,13 +268,14 @@
         },
         {
             "name": "devhelp",
-            "config-opts": [ "--disable-compile-warnings" ],
+	    "config-opts": [ "--disable-compile-warnings" ],
             "cleanup": [ "/bin/*", "/lib/gedit/plugins", "/share/applications/*", "/share/dbus-1/services", "/share/GConf" ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "git://git.gnome.org/devhelp"
-                }
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/devhelp/3.22/devhelp-3.22.0.tar.xz",
+                    "sha256": "59cae02e12d238cc5fc3f049d779895ba89701426d9173f5b534d4ab90c5ffb0"
+		}
             ]
         },
         {
@@ -297,21 +290,21 @@
         {
             "name": "sysprof",
             "config-opts": [ "--enable-gtk", "--with-sysprofd=host" ],
-            "cleanup": [ "/bin/*", "/libexec/sysprof", "/share/applications/*", "/share/mime/packages" ],
+	    "cleanup": [ "/bin/*", "/libexec/sysprof", "/share/applications/*", "/share/mime/packages" ],
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/sysprof"
+                    "url": "git://git.gnome.org/sysprof.git",
+                    "branch": "71e1134cbce95ecf8b9dee1d3a1c4328419a2aec"
                 }
             ]
         },
         {
             "name": "gnome-builder",
-            "config-opts": [ "--enable-tracing", "--enable-debug" ],
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/gnome-builder"
+                    "url": "https://github.com/endlessm/gnome-builder.git"
                 }
             ]
         }
