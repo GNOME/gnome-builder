@@ -121,10 +121,14 @@ manifest_has_multiple_modules (JsonObject *object)
   else
     {
       object = json_array_get_object_element (modules, 0);
-      modules = json_object_get_array_member (object, "modules");
-      if (modules == NULL)
-        return FALSE;
-      return (json_array_get_length (modules) > 0);
+      if (json_object_has_member (object, "modules"))
+        {
+          modules = json_object_get_array_member (object, "modules");
+          if (modules == NULL)
+            return FALSE;
+          return (json_array_get_length (modules) > 0);
+        }
+      return FALSE;
     }
 }
 
