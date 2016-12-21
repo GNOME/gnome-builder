@@ -1204,7 +1204,7 @@ step_make_all  (GTask                 *task,
       return FALSE;
     }
 
-  if (!g_strv_length (state->make_targets))
+  if ((state->flags & IDE_BUILDER_BUILD_FLAGS_NO_BUILD) == 0 && g_strv_length (state->make_targets) == 0)
     targets = (const gchar * const *)default_targets;
   else
     targets = (const gchar * const *)state->make_targets;
