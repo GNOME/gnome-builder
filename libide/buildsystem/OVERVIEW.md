@@ -32,6 +32,11 @@ file.
 
 An individual configuration that was loaded/persisted to the .buildconfig file.
 
+## ide-configuration-provider.*
+
+This is the interface used for loading and unloading configurations into the
+IdeConfigurationManager. The flatpak plugin is one place it's implemented.
+
 ## ide-environment.c
 
 Manages a collection of key/value pairs (IdeEnvironmentVariable). This is a
