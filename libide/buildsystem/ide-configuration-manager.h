@@ -47,7 +47,6 @@ gboolean          ide_configuration_manager_save_finish       (IdeConfigurationM
                                                                GAsyncResult             *result,
                                                                GError                  **error);
 
-
 G_END_DECLS
 
 #endif /* IDE_CONFIGURATION_MANAGER_H */

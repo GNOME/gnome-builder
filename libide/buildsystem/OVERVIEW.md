@@ -25,12 +25,13 @@ other high-level operations.
 
 ## ide-configuration-manager.c
 
-Manages all configurations for the project, and reads/writes the .buildconfig
-file.
+Manages all configurations for the project, which can be provided by plugins
+that implement the IdeConfigurationProvider interface.
 
 ## ide-configuration.c
 
-An individual configuration that was loaded/persisted to the .buildconfig file.
+An individual configuration that has information about how the project should
+be built, such as what options to pass to configure and which runtime to use.
 
 ## ide-configuration-provider.*
 
