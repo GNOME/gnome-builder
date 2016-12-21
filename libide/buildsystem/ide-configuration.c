@@ -970,6 +970,18 @@ ide_configuration_get_environment (IdeConfiguration *self)
   return self->environment;
 }
 
+void
+ide_configuration_set_environment (IdeConfiguration *self,
+                                   IdeEnvironment   *environment)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+
+  g_clear_object (&priv->environment);
+  priv->environment = g_object_ref (environment);
+}
+
 const gchar *
 ide_configuration_get_config_opts (IdeConfiguration *self)
 {

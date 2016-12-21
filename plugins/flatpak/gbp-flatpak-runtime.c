@@ -24,31 +24,26 @@
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-subprocess-launcher.h"
 #include "gbp-flatpak-runner.h"
+#include "gbp-flatpak-configuration.h"
 
 struct _GbpFlatpakRuntime
 {
   IdeRuntime parent_instance;
 
-  gchar *app_id;
   gchar *branch;
   gchar *deploy_dir;
   gchar *platform;
-  gchar *primary_module;
   gchar *sdk;
   GFile *deploy_dir_files;
-  GFile *manifest;
 };
 
 G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
 
 enum {
   PROP_0,
-  PROP_APP_ID,
   PROP_BRANCH,
   PROP_DEPLOY_DIR,
-  PROP_MANIFEST,
   PROP_PLATFORM,
-  PROP_PRIMARY_MODULE,
   PROP_SDK,
   N_PROPS
 };
@@ -147,14 +142,23 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       JsonObject *env_vars = NULL;
       JsonParser *parser = NULL;
       g_autoptr(GFileInfo) file_info = NULL;
-      IdeContext *context;
+      GFile *manifest;
       GFile *project_file;
+      IdeContext *context;
+      IdeConfigurationManager *config_manager;
+      IdeConfiguration *configuration;
 
       build_path = get_staging_directory (self);
       builddir = get_builddir (self);
 
+      context = ide_object_get_context (IDE_OBJECT (self));
+      config_manager = ide_context_get_configuration_manager (context);
+      configuration = ide_configuration_manager_get_current (config_manager);
+
       /* Attempt to parse the flatpak manifest */
-      if (self->manifest != NULL && (manifest_path = g_file_get_path (self->manifest)))
+      if (GBP_IS_FLATPAK_CONFIGURATION (configuration) &&
+          (manifest = gbp_flatpak_configuration_get_manifest ((GbpFlatpakConfiguration *)configuration)) &&
+          (manifest_path = g_file_get_path (manifest)))
         {
           GError *json_error = NULL;
           JsonObject *root_object;
@@ -184,7 +188,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
         }
 
       /* Find the project directory path */
-      context = ide_object_get_context (IDE_OBJECT (self));
       project_file = ide_context_get_project_file (context);
       if (project_file != NULL)
         {
@@ -274,7 +277,6 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   IdeConfiguration *configuration;
   GbpFlatpakRunner *runner;
   const gchar *app_id = NULL;
-  const gchar *config_app_id = NULL;
   g_autofree gchar *own_name = NULL;
   g_autofree gchar *app_id_override = NULL;
 
@@ -288,122 +290,22 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   runner = gbp_flatpak_runner_new (context);
   g_assert (GBP_IS_FLATPAK_RUNNER (runner));
 
-  app_id = self->app_id;
-  config_app_id = ide_configuration_get_app_id (configuration);
+  app_id = ide_configuration_get_app_id (configuration);
   if (ide_str_empty0 (app_id))
     {
       g_warning ("Could not determine application ID");
       app_id = "org.gnome.FlatpakApp";
     }
 
-  if (g_strcmp0 (app_id, config_app_id) != 0)
-    {
-      own_name = g_strdup_printf ("--own-name=%s", config_app_id);
-      app_id_override = g_strdup_printf ("--gapplication-app-id=%s", config_app_id);
-    }
-
   ide_runner_set_run_on_host (IDE_RUNNER (runner), TRUE);
   ide_runner_append_argv (IDE_RUNNER (runner), "flatpak");
   ide_runner_append_argv (IDE_RUNNER (runner), "run");
-  if (own_name != NULL)
-    ide_runner_append_argv (IDE_RUNNER (runner), own_name);
   ide_runner_append_argv (IDE_RUNNER (runner), "--share=ipc");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=x11");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=wayland");
   ide_runner_append_argv (IDE_RUNNER (runner), app_id);
-  if (app_id_override)
-    ide_runner_append_argv (IDE_RUNNER (runner), app_id_override);
 
   return IDE_RUNNER (runner);
-}
-
-static void
-gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
-                                           IdeConfiguration *configuration)
-{
-  GbpFlatpakRuntime* self = (GbpFlatpakRuntime *)runtime;
-  g_autofree gchar *manifest_path = NULL;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  if (!ide_configuration_get_app_id (configuration))
-    {
-      if (!ide_str_empty0 (self->app_id))
-        ide_configuration_set_app_id (configuration, self->app_id);
-    }
-
-  if (self->manifest != NULL)
-    manifest_path = g_file_get_path (self->manifest);
-
-  ide_configuration_set_prefix (configuration, "/app");
-
-  /*
-   * TODO: Move this to a GbpFlatpakConfiguration
-   *
-   * Parse some stuff to use later when building.
-   * This really belongs in an IdeConfiguration subclass.
-   */
-
-  ide_configuration_set_internal_string (configuration, "flatpak-repo-name", FLATPAK_REPO_NAME);
-  ide_configuration_set_internal_string (configuration, "flatpak-sdk", self->sdk);
-  ide_configuration_set_internal_string (configuration, "flatpak-runtime", self->platform);
-  ide_configuration_set_internal_string (configuration, "flatpak-branch", self->branch);
-  ide_configuration_set_internal_string (configuration, "flatpak-module", self->primary_module);
-  ide_configuration_set_internal_string (configuration, "flatpak-manifest", manifest_path);
-
-  {
-    g_autoptr(JsonParser) parser = NULL;
-    g_autoptr(GError) error = NULL;
-
-    parser = json_parser_new ();
-
-    if (json_parser_load_from_file (parser, manifest_path, &error))
-      {
-        JsonNode *root;
-        JsonNode *member;
-        JsonObject *root_object;
-        JsonArray *ar;
-
-        if (NULL != (root = json_parser_get_root (parser)) &&
-            JSON_NODE_HOLDS_OBJECT (root) &&
-            NULL != (root_object = json_node_get_object (root)))
-          {
-            if (json_object_has_member (root_object, "command"))
-              ide_configuration_set_internal_string (configuration,
-                                                     "flatpak-command",
-                                                     json_object_get_string_member (root_object, "command"));
-
-            if (json_object_has_member (root_object, "finish-args") &&
-                NULL != (member = json_object_get_member (root_object, "finish-args")) &&
-                JSON_NODE_HOLDS_ARRAY (member) &&
-                NULL != (ar = json_node_get_array (member)))
-              {
-                g_autoptr(GPtrArray) finish_args = NULL;
-                guint length = json_array_get_length (ar);
-
-                finish_args = g_ptr_array_sized_new (length + 1);
-
-                for (guint i = 0; i < length; i++)
-                  {
-                    JsonNode *ele = json_array_get_element (ar, i);
-                    const gchar *str = json_node_get_string (ele);
-
-                    if (str != NULL)
-                      g_ptr_array_add (finish_args, (gchar *)str);
-                  }
-
-                g_ptr_array_add (finish_args, NULL);
-
-                ide_configuration_set_internal_strv (configuration,
-                                                     "flatpak-finish-args",
-                                                     (const gchar * const *)finish_args->pdata);
-              }
-          }
-      }
-    else
-      g_warning ("Failure to parse Flatpak Manifest: %s", error->message);
-  }
 }
 
 static void
@@ -498,18 +400,6 @@ gbp_flatpak_runtime_get_property (GObject    *object,
       g_value_set_string (value, self->sdk);
       break;
 
-    case PROP_PRIMARY_MODULE:
-      g_value_set_string (value, self->primary_module);
-      break;
-
-    case PROP_APP_ID:
-      g_value_set_string (value, self->app_id);
-      break;
-
-    case PROP_MANIFEST:
-      g_value_set_object (value, self->manifest);
-      break;
-
     case PROP_DEPLOY_DIR:
       g_value_set_string (value, self->deploy_dir);
       break;
@@ -541,18 +431,6 @@ gbp_flatpak_runtime_set_property (GObject      *object,
       self->sdk = g_value_dup_string (value);
       break;
 
-    case PROP_PRIMARY_MODULE:
-      self->primary_module = g_value_dup_string (value);
-      break;
-
-    case PROP_APP_ID:
-      self->app_id = g_value_dup_string (value);
-      break;
-
-    case PROP_MANIFEST:
-      self->manifest = g_value_dup_object (value);
-      break;
-
     case PROP_DEPLOY_DIR:
       gbp_flatpak_runtime_set_deploy_dir (self, g_value_get_string (value));
       break;
@@ -570,11 +448,8 @@ gbp_flatpak_runtime_finalize (GObject *object)
   g_clear_pointer (&self->sdk, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->branch, g_free);
-  g_clear_pointer (&self->primary_module, g_free);
-  g_clear_pointer (&self->app_id, g_free);
   g_clear_pointer (&self->deploy_dir, g_free);
   g_clear_object (&self->deploy_dir_files);
-  g_clear_object (&self->manifest);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
 }
@@ -592,7 +467,6 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->create_launcher = gbp_flatpak_runtime_create_launcher;
   runtime_class->create_runner = gbp_flatpak_runtime_create_runner;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
-  runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
 
   properties [PROP_BRANCH] =
@@ -627,33 +501,6 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
                          "Sdk",
                          "Sdk",
                          "org.gnome.Sdk",
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT |
-                          G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_PRIMARY_MODULE] =
-    g_param_spec_string ("primary-module",
-                         "Primary module",
-                         "Primary module",
-                         NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT |
-                          G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_APP_ID] =
-    g_param_spec_string ("app-id",
-                         "App ID",
-                         "App ID",
-                         NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT |
-                          G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_MANIFEST] =
-    g_param_spec_object ("manifest",
-                         "Manifest",
-                         "Manifest file for use with flatpak-builder",
-                         G_TYPE_FILE,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT |
                           G_PARAM_STATIC_STRINGS));
