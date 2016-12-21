@@ -214,36 +214,51 @@ gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
 }
 
 static gchar *
-guess_primary_module (JsonObject *manifest_object,
-                      GFile      *directory)
+guess_primary_module (JsonNode *modules_node,
+                      GFile    *directory)
 {
-  JsonArray *modules = NULL;
+  JsonArray *modules;
+  JsonNode *module;
   gchar *dir_name;
-  guint num_modules;
 
-  g_assert (manifest_object != NULL);
   g_assert (G_IS_FILE (directory));
 
   dir_name = g_file_get_basename (directory);
   g_assert (!ide_str_empty0 (dir_name));
-  modules = json_object_get_array_member (manifest_object, "modules");
-  g_assert (modules != NULL);
+  g_return_val_if_fail (JSON_NODE_HOLDS_ARRAY (modules_node), NULL);
 
-  num_modules = json_array_get_length (modules);
-  for (guint i = 0; i < num_modules; i++)
+  /* TODO: Support module strings that refer to other files? */
+  modules = json_node_get_array (modules_node);
+  if (json_array_get_length (modules) == 1)
     {
-      JsonNode *module;
-      module = json_array_get_element (modules, i);
+      module = json_array_get_element (modules, 0);
       if (JSON_NODE_HOLDS_OBJECT (module))
+        return g_strdup (json_object_get_string_member (json_node_get_object (module), "name"));
+    }
+  else
+    {
+      for (guint i = 0; i < json_array_get_length (modules); i++)
         {
-          const gchar *module_name;
-          module_name = json_object_get_string_member (json_node_get_object (module), "name");
-          if (num_modules == 1 || g_strcmp0 (module_name, dir_name) == 0)
-            return g_strdup (module_name);
+          module = json_array_get_element (modules, i);
+          if (JSON_NODE_HOLDS_OBJECT (module))
+            {
+              const gchar *module_name;
+              module_name = json_object_get_string_member (json_node_get_object (module), "name");
+              if (g_strcmp0 (module_name, dir_name) == 0)
+                return g_strdup (module_name);
+              if (json_object_has_member (json_node_get_object (module), "modules"))
+                {
+                  JsonNode *nested_modules_node;
+                  g_autofree gchar *nested_primary_module = NULL;
+                  nested_modules_node = json_object_get_member (json_node_get_object (module), "modules");
+                  nested_primary_module = guess_primary_module (nested_modules_node, directory);
+                  if (nested_primary_module != NULL)
+                    return g_steal_pointer (&nested_primary_module);
+                }
+            }
         }
     }
 
-  g_warning ("Unable to determine the primary module in the flatpak manifest");
   return NULL;
 }
 
@@ -348,7 +363,9 @@ gbp_flatpak_runtime_provider_find_flatpak_manifests (GbpFlatpakRuntimeProvider *
         manifest->app_id = json_node_dup_string (app_id_node);
       else
         manifest->app_id = json_node_dup_string (id_node);
-      manifest->primary_module = guess_primary_module (root_object, directory);
+      manifest->primary_module = guess_primary_module (modules_node, directory);
+      if (manifest->primary_module == NULL)
+        g_warning ("Unable to determine the primary module in the flatpak manifest");
 
       g_ptr_array_add (ar, manifest);
     }
