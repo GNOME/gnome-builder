@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-17 22:09+0000\n"
-"PO-Revision-Date: 2016-12-18 21:57+0100\n"
+"POT-Creation-Date: 2016-12-20 17:02+0000\n"
+"PO-Revision-Date: 2016-12-21 23:49+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -2419,7 +2419,7 @@ msgstr "Sestavení proběhlo úspěšně"
 #: plugins/autotools/ide-autotools-builder.c:347
 #: plugins/autotools/ide-autotools-builder.c:539
 #: plugins/autotools/ide-autotools-build-task.c:1219
-#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:399
+#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:427
 msgid "Building…"
 msgstr "Sestavuje se…"
 
@@ -2489,7 +2489,7 @@ msgid "Running configure…"
 msgstr "Probíhá konfigurace…"
 
 #: plugins/autotools/ide-autotools-build-task.c:1217
-#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:392
+#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:420
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
@@ -2557,7 +2557,7 @@ msgstr "Volby konfigurace"
 msgid "Environment"
 msgstr "Proměnné prostředí"
 
-#: plugins/build-tools/gbp-build-log-panel.c:270
+#: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Výpis ze sestavení"
 
@@ -3232,6 +3232,19 @@ msgstr "Dokumentace"
 msgid "Switch To"
 msgstr "Přepnout na"
 
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Stahují se zdroje aplikace…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "Klonovat aplikaci"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Klonovat"
+
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Odeslat na Fpaste.org"
@@ -3288,10 +3301,6 @@ msgstr "Klonování projektu"
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
 msgstr "Klonovat…"
-
-#: plugins/git/ide-git-genesis-addin.c:190
-msgid "Clone"
-msgstr "Klonovat"
 
 #: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
@@ -3351,19 +3360,19 @@ msgstr "Navrhovat dokončování pro Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
-#: plugins/meson/meson_plugin/__init__.py:318
+#: plugins/meson/meson_plugin/__init__.py:346
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
 
-#: plugins/meson/meson_plugin/__init__.py:350
+#: plugins/meson/meson_plugin/__init__.py:378
 msgid "Running prebuild…"
 msgstr "Probíhají činnosti před sestavením…"
 
-#: plugins/meson/meson_plugin/__init__.py:369
+#: plugins/meson/meson_plugin/__init__.py:397
 msgid "Running post-install…"
 msgstr "Probíhají poinstalační činnosti…"
 
-#: plugins/meson/meson_plugin/__init__.py:372
+#: plugins/meson/meson_plugin/__init__.py:400
 msgid "Running post-build…"
 msgstr "Probíhají činnosti po sestavení…"
 
