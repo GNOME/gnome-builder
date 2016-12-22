@@ -1,4 +1,44 @@
 ==============
+Version 3.22.4
+==============
+
+Summary of changes since 3.22.3
+
+ • Some minor improvements to vala auto-completion
+ • UI tweaks to project creation view for better discovery
+ • Allow wider content in the file selection popover
+ • Improve cache eviction when certain project files change
+ • Allow talking to FileManager1 DBUS interface from flatpak
+ • A handful of leak fixes
+ • Improved unit tests
+ • Avoid overzealous background project builds
+ • Runtimes can now translate paths to files such as headers so that the
+   processes outside the runtime can access them.
+ • Allow libclang to parse files inside of Flatpak runtimes. This ensures
+   that autocompletion and diagnostics work when building against org.gnome.Sdk
+ • Autotools will discover gmake vs make from the runtime
+ • A "clone and edit this flatpak" feature as been added using the -m command
+   line option. This integrates with some GNOME-based compositors to allow an
+   "edit this app" feature.
+ • Various build system improvements
+ • Improved support for building flatpaks
+ • Improved support for the meson build system
+ • Builder depends on a newer VTE for various regex features and now the
+   build system configure check reflects that.
+ • Some vim improvements
+
+Updated translations
+
+ • Hungarian, Kazakh, German, Spanish, Esperanto, Czech, Polish,
+   and Brazilian Portuguese
+
+Thanks everyone for your contributions!
+
+The Builder project team will be progressing on larger features for the 3.24
+cycle so packagers should look to the 3-22 branch for additional stablizing
+patches.
+
+==============
 Version 3.22.3
 ==============
 

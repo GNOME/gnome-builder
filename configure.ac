@@ -6,7 +6,7 @@ dnl Define Versioning Information
 dnl ***********************************************************************
 m4_define([builder_major_version],[3])
 m4_define([builder_minor_version],[22])
-m4_define([builder_micro_version],[3])
+m4_define([builder_micro_version],[4])
 m4_define([builder_version],[builder_major_version.builder_minor_version.builder_micro_version])
 m4_define([builder_interface_age],[0])
 m4_define([builder_bugreport_url],
