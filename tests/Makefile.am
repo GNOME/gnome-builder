@@ -283,6 +283,7 @@ EXTRA_DIST += \
 	data/project1/autogen.sh \
 	data/project1/build-aux/m4/.keep \
 	data/project1/configure.ac \
+	data/project1/project1.c \
 	data/project1/project1.doap \
 	data/project1/tags \
 	data/project2/.you-dont-git-me \
