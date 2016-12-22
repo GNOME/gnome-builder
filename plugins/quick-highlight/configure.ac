@@ -1,6 +1,6 @@
-# --enable-quick-highlight=yes/no
+# --enable-quick-highlight-plugin=yes/no
 AC_ARG_ENABLE([quick-highlight-plugin],
-              [AS_HELP_STRING([--enable-quick-highlight=@<:@yes/no@:>@],
+              [AS_HELP_STRING([--enable-quick-highlight-plugin=@<:@yes/no@:>@],
                               [Build with support for quick symbol highlight.])],
               [enable_quick_highlight_plugin=$enableval],
               [enable_quick_highlight_plugin=yes])
