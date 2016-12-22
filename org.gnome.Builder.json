@@ -301,7 +301,6 @@
         },
         {
             "name": "gnome-builder",
-	    "config-opts": [ "--enable-tracing", "--enable-debug" ],
             "sources": [
                 {
                     "type": "git",
