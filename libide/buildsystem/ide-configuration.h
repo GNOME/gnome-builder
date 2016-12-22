@@ -28,7 +28,29 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIGURATION (ide_configuration_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeConfiguration, ide_configuration, IDE, CONFIGURATION, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeConfiguration, ide_configuration, IDE, CONFIGURATION, IdeObject)
+
+struct _IdeConfigurationClass
+{
+  IdeObjectClass parent;
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
+  gpointer _reserved9;
+  gpointer _reserved10;
+  gpointer _reserved11;
+  gpointer _reserved12;
+  gpointer _reserved13;
+  gpointer _reserved14;
+  gpointer _reserved15;
+  gpointer _reserved16;
+};
 
 IdeConfiguration     *ide_configuration_new                  (IdeContext        *context,
                                                               const gchar       *id,
