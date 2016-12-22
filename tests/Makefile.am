@@ -1,3 +1,6 @@
+.NOTPARALLEL:
+
+
 EXTRA_DIST =
 
 egg_cflags = \
