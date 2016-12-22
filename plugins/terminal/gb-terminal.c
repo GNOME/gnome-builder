@@ -36,21 +36,27 @@ struct _GbTerminal
   VteTerminal  parent;
 
   GtkWidget   *popup_menu;
+
+  gchar       *url;
 };
 
 struct _GbTerminalClass
 {
   VteTerminalClass parent;
 
-  void (*populate_popup) (GbTerminal *self,
-                          GtkWidget  *widget);
-  void (*select_all)     (GbTerminal *self,
-                          gboolean    all);
+  void     (*populate_popup)      (GbTerminal *self,
+                                   GtkWidget  *widget);
+  void     (*select_all)          (GbTerminal *self,
+                                   gboolean    all);
+  gboolean (*open_link)           (GbTerminal *self);
+  gboolean (*copy_link_address)   (GbTerminal *self);
 };
 
 G_DEFINE_TYPE (GbTerminal, gb_terminal, VTE_TYPE_TERMINAL)
 
 enum {
+  COPY_LINK_ADDRESS,
+  OPEN_LINK,
   POPULATE_POPUP,
   SELECT_ALL,
   LAST_SIGNAL
@@ -75,6 +81,8 @@ popup_menu_detach (GtkWidget *attach_widget,
   GbTerminal *terminal = GB_TERMINAL (attach_widget);
 
   terminal->popup_menu = NULL;
+
+  g_clear_pointer (&terminal->url, g_free);
 }
 
 static void
@@ -98,11 +106,15 @@ popup_targets_received (GtkClipboard     *clipboard,
       if (terminal->popup_menu)
         gtk_widget_destroy (terminal->popup_menu);
 
+      terminal->url  = vte_terminal_match_check_event (VTE_TERMINAL (terminal), (GdkEvent *)popup_info->event, NULL);
+
       menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gb-terminal-view-popup-menu");
       terminal->popup_menu = gtk_menu_new_from_model (G_MENU_MODEL (menu));
 
       group = gtk_widget_get_action_group (GTK_WIDGET (terminal), "terminal");
 
+      egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "copy-link-address", !(terminal->url == NULL));
+      egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "open-link", !(terminal->url == NULL));
       egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "copy-clipboard", have_selection);
       egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "paste-clipboard", clipboard_contains_text);
 
@@ -189,6 +201,37 @@ gb_terminal_real_select_all (GbTerminal *self,
     vte_terminal_unselect_all (VTE_TERMINAL (self));
 }
 
+static gboolean
+gb_terminal_copy_link_address (GbTerminal *self)
+{
+  g_assert (GB_IS_TERMINAL (self));
+  g_assert (self->url != NULL);
+
+  if (ide_str_empty0 (self->url))
+    return FALSE;
+
+  gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD),
+                          self->url,
+                          strlen (self->url));
+
+  return TRUE;
+}
+
+static gboolean
+gb_terminal_open_link (GbTerminal *self)
+{
+  g_assert (GB_IS_TERMINAL (self));
+  g_assert (self->url != NULL);
+
+  if (ide_str_empty0 (self->url))
+    return FALSE;
+
+  return gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (self)),
+                       self->url,
+                       gtk_get_current_event_time (),
+                       NULL);
+}
+
 static void
 gb_terminal_class_init (GbTerminalClass *klass)
 {
@@ -198,7 +241,27 @@ gb_terminal_class_init (GbTerminalClass *klass)
   widget_class->button_press_event = gb_terminal_button_press_event;
   widget_class->popup_menu = gb_terminal_popup_menu;
 
+  klass->copy_link_address = gb_terminal_copy_link_address;
+  klass->open_link = gb_terminal_open_link;
   klass->select_all = gb_terminal_real_select_all;
+
+  signals [COPY_LINK_ADDRESS] =
+    g_signal_new ("copy-link-address",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbTerminalClass, copy_link_address),
+                  NULL, NULL, NULL,
+                  G_TYPE_BOOLEAN,
+                  0);
+
+  signals [OPEN_LINK] =
+    g_signal_new ("open-link",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbTerminalClass, open_link),
+                  NULL, NULL, NULL,
+                  G_TYPE_BOOLEAN,
+                  0);
 
   signals [POPULATE_POPUP] =
     g_signal_new ("populate-popup",

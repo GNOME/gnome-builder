@@ -10,6 +10,18 @@
     </section>
   </menu>
   <menu id="gb-terminal-view-popup-menu">
+    <section id="gb-terminal-view-popup-menu-link-section">
+      <item>
+        <attribute name="label" translatable="yes">_Open Link</attribute>
+        <attribute name="action">terminal.open-link</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Copy Link Address</attribute>
+        <attribute name="action">terminal.copy-link-address</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
     <section id="gb-terminal-view-popup-menu-clipboard-section">
       <item>
         <attribute name="id">copy</attribute>
