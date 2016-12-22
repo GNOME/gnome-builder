@@ -17,6 +17,7 @@
  */
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <ide.h>
 
 #include "application/ide-application-tests.h"
@@ -183,6 +184,17 @@ test_build_system_autotools (GCancellable        *cancellable,
 
   path = g_build_filename (srcdir, "data", "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
+
+  /*
+   * If the project file is read-only, that means we are in distcheck with an
+   * out of tree build. We can't do this because the srcdir will be read-only.
+   */
+  if (g_access (path, W_OK) != 0)
+    {
+      g_test_skip ("Cannot run test with read-only srcdir");
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
 
   ide_context_new_async (project_file,
                          cancellable,
