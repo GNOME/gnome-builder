@@ -14,6 +14,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-application-addin.h \
 	gbp-flatpak-clone-widget.c \
 	gbp-flatpak-clone-widget.h \
+	gbp-flatpak-configuration.c \
+	gbp-flatpak-configuration.h \
 	gbp-flatpak-configuration-provider.c \
 	gbp-flatpak-configuration-provider.h \
 	gbp-flatpak-genesis-addin.c \
@@ -22,15 +24,11 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-pipeline-addin.h \
 	gbp-flatpak-plugin.c \
 	gbp-flatpak-plugin.c \
-	gbp-flatpak-runner.c \
-	gbp-flatpak-runner.c \
 	gbp-flatpak-runner.h \
 	gbp-flatpak-runner.h \
 	gbp-flatpak-runtime-provider.c \
 	gbp-flatpak-runtime-provider.h \
 	gbp-flatpak-runtime.c \
-	gbp-flatpak-runtime.c \
-	gbp-flatpak-runtime.h \
 	gbp-flatpak-runtime.h \
 	gbp-flatpak-sources.c \
 	gbp-flatpak-sources.h \
