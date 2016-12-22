@@ -32,7 +32,7 @@
         "--talk-name=org.freedesktop.FileManager1",
         /* We need access to auth agents */
         "--talk-name=org.freedesktop.secrets",
-	"--filesystem=xdg-run/keyring",
+        "--filesystem=xdg-run/keyring",
         /* Needed for various SSL certificates to work */
         "--env=SSL_CERT_DIR=/etc/ssl/certs",
         "--filesystem=/etc/ssl:ro",
@@ -209,6 +209,10 @@
                     "type": "git",
                     "url": "https://github.com/libgit2/libgit2.git",
                     "branch": "maint/v0.24"
+                },
+                {
+                    "type": "patch",
+                    "path": "build/flatpak/0001-libgit2-http-pretend-to-be-git-1.7.patch"
                 }
             ]
         },

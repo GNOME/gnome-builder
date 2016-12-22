@@ -1,0 +1,25 @@
+From ba5cc93f0de9a0e82eca918a7105b3eb685b3695 Mon Sep 17 00:00:00 2001
+From: Christian Hergert <chergert@redhat.com>
+Date: Mon, 19 Dec 2016 14:09:17 -0800
+Subject: [PATCH] http: pretend to be git 1.7+
+
+---
+ src/transports/http.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/transports/http.c b/src/transports/http.c
+index ca1f504..eb1addd 100644
+--- a/src/transports/http.c
++++ b/src/transports/http.c
+@@ -208,7 +208,7 @@ static int gen_request(
+ 
+ 	git_buf_printf(buf, "%s %s%s HTTP/1.1\r\n", s->verb, path, s->service_url);
+ 
+-	git_buf_printf(buf, "User-Agent: git/1.0 (%s)\r\n", user_agent());
++	git_buf_printf(buf, "User-Agent: git/1.7 (%s)\r\n", user_agent());
+ 	git_buf_printf(buf, "Host: %s\r\n", t->connection_data.host);
+ 
+ 	if (s->chunked || content_length > 0) {
+-- 
+2.9.3
+
