@@ -617,7 +617,7 @@ ide_workbench_set_context (IdeWorkbench *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
 
   /*
-   * Creating all the addins above is a bit intenstive, so give ourselves
+   * Creating all the addins above is a bit intensive, so give ourselves
    * just a bit of time to stablize allocations and sizing before
    * transitioning to the editor.
    */
