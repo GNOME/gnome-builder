@@ -37,6 +37,9 @@ struct _IdePreferencesGroup
   GtkFrame   *list_box_frame;
 
   GPtrArray  *widgets;
+
+  GtkListBoxRow *last_focused;
+  guint          last_focused_tab_backward : 1;
 };
 
 void  _ide_preferences_group_set_map  (IdePreferencesGroup *self,

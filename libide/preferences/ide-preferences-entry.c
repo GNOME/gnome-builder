@@ -214,3 +214,13 @@ ide_preferences_entry_get_title_widget (IdePreferencesEntry *self)
 
   return GTK_WIDGET (priv->title);
 }
+
+GtkWidget *
+ide_preferences_entry_get_entry_widget (IdePreferencesEntry *self)
+{
+  IdePreferencesEntryPrivate *priv = ide_preferences_entry_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_PREFERENCES_ENTRY (self), NULL);
+
+  return GTK_WIDGET (priv->entry);
+}

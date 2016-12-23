@@ -18,6 +18,7 @@
 
 #include "ide-preferences-bin.h"
 #include "ide-preferences-bin-private.h"
+#include "ide-preferences-entry.h"
 #include "ide-preferences-group.h"
 #include "ide-preferences-group-private.h"
 
@@ -274,6 +275,51 @@ ide_preferences_group_init (IdePreferencesGroup *self)
                            G_CONNECT_SWAPPED);
 }
 
+static gboolean
+ide_preferences_group_row_focus (IdePreferencesGroup *self,
+                                 GtkDirectionType     dir,
+                                 GtkListBoxRow       *row)
+{
+  GtkWidget *child;
+  GtkWidget *entry;
+
+  self->last_focused_tab_backward = (dir == GTK_DIR_TAB_BACKWARD);
+
+  child = gtk_bin_get_child (GTK_BIN (row));
+
+  if (IDE_IS_PREFERENCES_ENTRY (child))
+    {
+      entry = ide_preferences_entry_get_entry_widget ( IDE_PREFERENCES_ENTRY (child));
+      if (GTK_IS_ENTRY (entry) &&
+          gtk_widget_is_focus (entry) &&
+          dir == GTK_DIR_TAB_BACKWARD)
+        gtk_widget_grab_focus (GTK_WIDGET (row));
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+ide_preferences_group_row_grab_focus (IdePreferencesGroup *self,
+                                      GtkListBoxRow       *row)
+{
+  GtkWidget *child;
+  GtkListBoxRow *last_focused;
+
+  last_focused = self->last_focused;
+  child = gtk_bin_get_child (GTK_BIN (row));
+  if (IDE_IS_PREFERENCES_ENTRY (child))
+    {
+      self->last_focused = row;
+      if (row != last_focused || !self->last_focused_tab_backward)
+        gtk_widget_activate (child);
+
+      return;
+    }
+
+  self->last_focused = NULL;
+}
+
 void
 ide_preferences_group_add (IdePreferencesGroup *self,
                            GtkWidget           *widget)
@@ -304,6 +350,16 @@ ide_preferences_group_add (IdePreferencesGroup *self,
                             NULL);
 
       gtk_container_add (GTK_CONTAINER (self->list_box), row);
+      g_signal_connect_object (row,
+                               "focus",
+                               G_CALLBACK (ide_preferences_group_row_focus),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (row,
+                               "grab-focus",
+                               G_CALLBACK (ide_preferences_group_row_grab_focus),
+                               self,
+                               G_CONNECT_AFTER | G_CONNECT_SWAPPED);
     }
   else
     {
