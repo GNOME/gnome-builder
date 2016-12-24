@@ -142,22 +142,14 @@ guess_primary_module (JsonNode *modules_node,
   return NULL;
 }
 
-static GPtrArray *
-gbp_flatpak_configuration_provider_find_flatpak_manifests (GbpFlatpakConfigurationProvider *self,
-                                                           GCancellable                    *cancellable,
-                                                           GFile                           *directory,
-                                                           GError                         **error)
+static gboolean
+check_dir_for_manifests (GFile         *directory,
+                         GPtrArray     *manifests,
+                         GCancellable  *cancellable,
+                         GError       **error)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   GFileInfo *file_info = NULL;
-  GPtrArray *ar;
-
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (G_IS_FILE (directory));
-
-  ar = g_ptr_array_new ();
-  g_ptr_array_set_free_func (ar, flatpak_manifest_free);
 
   enumerator = g_file_enumerate_children (directory,
                                           G_FILE_ATTRIBUTE_STANDARD_NAME,
@@ -165,7 +157,7 @@ gbp_flatpak_configuration_provider_find_flatpak_manifests (GbpFlatpakConfigurati
                                           cancellable,
                                           error);
   if (!enumerator)
-    return NULL;
+    return FALSE;
 
   while ((file_info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
@@ -195,10 +187,17 @@ gbp_flatpak_configuration_provider_find_flatpak_manifests (GbpFlatpakConfigurati
       name = g_strdup (g_file_info_get_name (file_info));
       g_clear_object (&file_info);
 
-      if (name == NULL || file_type == G_FILE_TYPE_DIRECTORY)
+      if (name == NULL)
         continue;
 
       file = g_file_get_child (directory, name);
+
+      if (file_type == G_FILE_TYPE_DIRECTORY)
+        {
+          if (!check_dir_for_manifests (file, manifests, cancellable, error))
+            return FALSE;
+          continue;
+        }
 
       /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
       filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
@@ -337,7 +336,31 @@ gbp_flatpak_configuration_provider_find_flatpak_manifests (GbpFlatpakConfigurati
             }
         }
 
-      g_ptr_array_add (ar, manifest);
+      g_ptr_array_add (manifests, manifest);
+    }
+
+  return TRUE;
+}
+
+static GPtrArray *
+gbp_flatpak_configuration_provider_find_flatpak_manifests (GbpFlatpakConfigurationProvider *self,
+                                                           GCancellable                    *cancellable,
+                                                           GFile                           *directory,
+                                                           GError                         **error)
+{
+  GPtrArray *ar;
+
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_FILE (directory));
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_set_free_func (ar, flatpak_manifest_free);
+
+  if (!check_dir_for_manifests (directory, ar, cancellable, error))
+    {
+      g_ptr_array_free (ar, TRUE);
+      return NULL;
     }
 
   return ar;
