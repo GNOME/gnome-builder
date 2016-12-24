@@ -437,9 +437,11 @@ ide_greeter_perspective_open_project_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeWorkbench *workbench = (IdeWorkbench *)object;
+  g_autoptr(IdeGreeterPerspective) self = (IdeGreeterPerspective *)user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
   if (!ide_workbench_open_project_finish (workbench, result, &error))
     {
@@ -460,6 +462,9 @@ ide_greeter_perspective_open_project_cb (GObject      *object,
       g_signal_connect_swapped (dialog, "response", G_CALLBACK (gtk_widget_destroy), workbench);
 
       gtk_window_present (GTK_WINDOW (dialog));
+
+      gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
+      gtk_widget_set_sensitive (GTK_WIDGET (self->titlebar), TRUE);
     }
 }
 
@@ -521,7 +526,7 @@ ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
                                         project_file,
                                         NULL,
                                         ide_greeter_perspective_open_project_cb,
-                                        NULL);
+                                        g_object_ref (self));
     }
 
   ide_project_info_set_is_recent (project_info, TRUE);
