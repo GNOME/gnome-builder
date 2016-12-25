@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-20 17:02+0000\n"
-"PO-Revision-Date: 2016-12-20 20:15+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2016-12-24 11:11+0000\n"
+"PO-Revision-Date: 2016-12-25 10:28+0100\n"
+"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -762,11 +762,11 @@ msgstr "_Wiederholen"
 msgid "C_ut"
 msgstr "_Ausschneiden"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:16
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:28
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:20
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:32
 msgid "_Paste"
 msgstr "_Einfügen"
 
@@ -778,15 +778,15 @@ msgstr "_Löschen"
 msgid "Highlighting"
 msgstr "Hervorhebung"
 
-#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:26
+#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:38
 msgid "Selection"
 msgstr "Auswahl"
 
-#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:40
 msgid "Select _All"
 msgstr "_Alle auswählen"
 
-#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:33
+#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:45
 msgid "Select _None"
 msgstr "_Nichts auswählen"
 
@@ -1007,7 +1007,7 @@ msgstr "GNOME Builder"
 #: libide/application/ide-application-actions.c:124
 msgid "translator-credits"
 msgstr ""
-"Bernd Homuth <dev@hmt.im>, 2015\n"
+"Bernd Homuth <dev@hmt.im>, 2015, 2016\n"
 "Christian Kirbach <christian.kirbach@gmail.com>, 2015, 2016.\n"
 "Florian Bäuerle <florian.bae@gmail.com>, 2015."
 
@@ -3644,6 +3644,14 @@ msgstr "Erstellungs-Ausgabe"
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "_Neues Terminal"
+
+#: plugins/terminal/gtk/menus.ui:15
+msgid "_Open Link"
+msgstr "Verweis ö_ffnen"
+
+#: plugins/terminal/gtk/menus.ui:20
+msgid "_Copy Link Address"
+msgstr "Verweisadresse _kopieren"
 
 #: plugins/todo/todo_plugin/__init__.py:190
 msgid "Todo"
