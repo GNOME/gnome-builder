@@ -952,7 +952,7 @@ gstyle_slidein_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gstyle_slidein_parent_class)->realize (widget);
   gtk_widget_set_realized (widget, TRUE);
 
-  if (self->overlay_window == NULL)
+  if (self->overlay_child != NULL && self->overlay_window == NULL)
     self->overlay_window = gstyle_slidein_create_child_window (self);
 }
 
