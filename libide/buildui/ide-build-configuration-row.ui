@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpBuildConfigurationRow" parent="GtkListBoxRow">
+  <template class="IdeBuildConfigurationRow" parent="GtkListBoxRow">
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

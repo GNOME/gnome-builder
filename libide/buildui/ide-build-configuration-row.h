@@ -1,4 +1,4 @@
-/* gbp-build-configuration-view.h
+/* ide-build-configuration-row.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,23 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_BUILD_CONFIGURATION_VIEW_H
-#define GBP_BUILD_CONFIGURATION_VIEW_H
+#ifndef IDE_BUILD_CONFIGURATION_ROW_H
+#define IDE_BUILD_CONFIGURATION_ROW_H
 
+#include <gtk/gtk.h>
 #include <ide.h>
-
-#include "egg-column-layout.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILD_CONFIGURATION_VIEW (gbp_build_configuration_view_get_type())
+#define IDE_TYPE_BUILD_CONFIGURATION_ROW (ide_build_configuration_row_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuildConfigurationView, gbp_build_configuration_view, GBP, BUILD_CONFIGURATION_VIEW, EggColumnLayout)
+G_DECLARE_FINAL_TYPE (IdeBuildConfigurationRow, ide_build_configuration_row, IDE, BUILD_CONFIGURATION_ROW, GtkListBoxRow)
 
-IdeConfiguration *gbp_build_configuration_view_get_configuration (GbpBuildConfigurationView *self);
-void              gbp_build_configuration_view_set_configuration (GbpBuildConfigurationView *self,
-                                                                  IdeConfiguration          *configuration);
+GtkWidget        *ide_build_configuration_row_new               (IdeConfiguration         *configuration);
+IdeConfiguration *ide_build_configuration_row_get_configuration (IdeBuildConfigurationRow *self);
 
 G_END_DECLS
 
-#endif /* GBP_BUILD_CONFIGURATION_VIEW_H */
+#endif /* IDE_BUILD_CONFIGURATION_ROW_H */

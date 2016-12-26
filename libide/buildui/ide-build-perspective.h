@@ -1,4 +1,4 @@
-/* gbp-build-configuration-row.h
+/* ide-build-perspective.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_BUILD_CONFIGURATION_ROW_H
-#define GBP_BUILD_CONFIGURATION_ROW_H
+#ifndef IDE_BUILD_PERSPECTIVE_H
+#define IDE_BUILD_PERSPECTIVE_H
 
-#include <gtk/gtk.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILD_CONFIGURATION_ROW (gbp_build_configuration_row_get_type())
+#define IDE_TYPE_BUILD_PERSPECTIVE (ide_build_perspective_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuildConfigurationRow, gbp_build_configuration_row, GBP, BUILD_CONFIGURATION_ROW, GtkListBoxRow)
+G_DECLARE_FINAL_TYPE (IdeBuildPerspective, ide_build_perspective, IDE, BUILD_PERSPECTIVE, GtkBin)
 
-GtkWidget        *gbp_build_configuration_row_new               (IdeConfiguration         *configuration);
-IdeConfiguration *gbp_build_configuration_row_get_configuration (GbpBuildConfigurationRow *self);
+IdeConfiguration *ide_build_perspective_get_configuration (IdeBuildPerspective *self);
+void              ide_build_perspective_set_configuration (IdeBuildPerspective *self,
+                                                           IdeConfiguration    *configuration);
 
 G_END_DECLS
 
-#endif /* GBP_BUILD_CONFIGURATION_ROW_H */
+#endif /* IDE_BUILD_PERSPECTIVE_H */

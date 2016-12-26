@@ -100,4 +100,14 @@
   <gresource prefix="/org/gnome/builder/plugins/webkit">
     <file alias="webkit.plugin">../webkit/webkit.plugin</file>
   </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/buildui">
+    <file alias="buildui.plugin">../buildui/buildui.plugin</file>
+    <file compressed="true" alias="ide-build-configuration-row.ui">../buildui/ide-build-configuration-row.ui</file>
+    <file compressed="true" alias="ide-build-configuration-view.ui">../buildui/ide-build-configuration-view.ui</file>
+    <file compressed="true" alias="ide-build-log-panel.ui">../buildui/ide-build-log-panel.ui</file>
+    <file compressed="true" alias="ide-build-panel.ui">../buildui/ide-build-panel.ui</file>
+    <file compressed="true" alias="ide-build-perspective.ui">../buildui/ide-build-perspective.ui</file>
+    <file compressed="true" alias="ide-environment-editor-row.ui">../buildui/ide-environment-editor-row.ui</file>
+  </gresource>
 </gresources>

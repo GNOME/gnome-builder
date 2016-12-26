@@ -1,4 +1,4 @@
-/* gbp-build-configuration-view.c
+/* ide-build-configuration-view.c
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,15 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-build-configuration-view"
+
 #include <ide.h>
 #include <string.h>
 
-#include "gbp-build-configuration-view.h"
+#include "ide-build-configuration-view.h"
 
 #include "ide-environment-editor.h"
 #include "ide-internal.h"
 
-struct _GbpBuildConfigurationView
+struct _IdeBuildConfigurationView
 {
   EggColumnLayout       parent_instance;
 
@@ -48,7 +50,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (GbpBuildConfigurationView, gbp_build_configuration_view, EGG_TYPE_COLUMN_LAYOUT)
+G_DEFINE_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, EGG_TYPE_COLUMN_LAYOUT)
 
 static GParamSpec *properties [LAST_PROP];
 
@@ -175,13 +177,13 @@ create_device_row (gpointer item,
 }
 
 static void
-device_row_activated (GbpBuildConfigurationView *self,
+device_row_activated (IdeBuildConfigurationView *self,
                       GtkListBoxRow             *row,
                       GtkListBox                *list_box)
 {
   IdeDevice *device;
 
-  g_assert (GBP_IS_BUILD_CONFIGURATION_VIEW (self));
+  g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
@@ -192,13 +194,13 @@ device_row_activated (GbpBuildConfigurationView *self,
 }
 
 static void
-runtime_row_activated (GbpBuildConfigurationView *self,
+runtime_row_activated (IdeBuildConfigurationView *self,
                        GtkListBoxRow             *row,
                        GtkListBox                *list_box)
 {
   IdeRuntime *runtime;
 
-  g_assert (GBP_IS_BUILD_CONFIGURATION_VIEW (self));
+  g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
@@ -220,7 +222,7 @@ treat_null_as_empty (GBinding     *binding,
 }
 
 static void
-gbp_build_configuration_view_connect (GbpBuildConfigurationView *self,
+ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
                                       IdeConfiguration          *configuration)
 {
   IdeRuntimeManager *runtime_manager;
@@ -228,7 +230,7 @@ gbp_build_configuration_view_connect (GbpBuildConfigurationView *self,
   IdeContext *context;
   IdeEnvironment *environment;
 
-  g_assert (GBP_IS_BUILD_CONFIGURATION_VIEW (self));
+  g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   context = ide_object_get_context (IDE_OBJECT (configuration));
@@ -270,10 +272,10 @@ gbp_build_configuration_view_connect (GbpBuildConfigurationView *self,
 }
 
 static void
-gbp_build_configuration_view_disconnect (GbpBuildConfigurationView *self,
+ide_build_configuration_view_disconnect (IdeBuildConfigurationView *self,
                                          IdeConfiguration          *configuration)
 {
-  g_assert (GBP_IS_BUILD_CONFIGURATION_VIEW (self));
+  g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   gtk_list_box_bind_model (self->device_list_box, NULL, NULL, NULL, NULL);
@@ -285,31 +287,31 @@ gbp_build_configuration_view_disconnect (GbpBuildConfigurationView *self,
 }
 
 static void
-gbp_build_configuration_view_destroy (GtkWidget *widget)
+ide_build_configuration_view_destroy (GtkWidget *widget)
 {
-  GbpBuildConfigurationView *self = (GbpBuildConfigurationView *)widget;
+  IdeBuildConfigurationView *self = (IdeBuildConfigurationView *)widget;
 
   if (self->configuration != NULL)
     {
-      gbp_build_configuration_view_disconnect (self, self->configuration);
+      ide_build_configuration_view_disconnect (self, self->configuration);
       g_clear_object (&self->configuration);
     }
 
-  GTK_WIDGET_CLASS (gbp_build_configuration_view_parent_class)->destroy (widget);
+  GTK_WIDGET_CLASS (ide_build_configuration_view_parent_class)->destroy (widget);
 }
 
 static void
-gbp_build_configuration_view_get_property (GObject    *object,
+ide_build_configuration_view_get_property (GObject    *object,
                                            guint       prop_id,
                                            GValue     *value,
                                            GParamSpec *pspec)
 {
-  GbpBuildConfigurationView *self = GBP_BUILD_CONFIGURATION_VIEW (object);
+  IdeBuildConfigurationView *self = IDE_BUILD_CONFIGURATION_VIEW (object);
 
   switch (prop_id)
     {
     case PROP_CONFIGURATION:
-      g_value_set_object (value, gbp_build_configuration_view_get_configuration (self));
+      g_value_set_object (value, ide_build_configuration_view_get_configuration (self));
       break;
 
     default:
@@ -318,17 +320,17 @@ gbp_build_configuration_view_get_property (GObject    *object,
 }
 
 static void
-gbp_build_configuration_view_set_property (GObject      *object,
+ide_build_configuration_view_set_property (GObject      *object,
                                            guint         prop_id,
                                            const GValue *value,
                                            GParamSpec   *pspec)
 {
-  GbpBuildConfigurationView *self = GBP_BUILD_CONFIGURATION_VIEW (object);
+  IdeBuildConfigurationView *self = IDE_BUILD_CONFIGURATION_VIEW (object);
 
   switch (prop_id)
     {
     case PROP_CONFIGURATION:
-      gbp_build_configuration_view_set_configuration (self, g_value_get_object (value));
+      ide_build_configuration_view_set_configuration (self, g_value_get_object (value));
       break;
 
     default:
@@ -337,13 +339,13 @@ gbp_build_configuration_view_set_property (GObject      *object,
 }
 
 static void
-gbp_build_configuration_view_class_init (GbpBuildConfigurationViewClass *klass)
+ide_build_configuration_view_class_init (IdeBuildConfigurationViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = gbp_build_configuration_view_get_property;
-  object_class->set_property = gbp_build_configuration_view_set_property;
+  object_class->get_property = ide_build_configuration_view_get_property;
+  object_class->set_property = ide_build_configuration_view_set_property;
 
   properties [PROP_CONFIGURATION] =
     g_param_spec_object ("configuration",
@@ -354,22 +356,22 @@ gbp_build_configuration_view_class_init (GbpBuildConfigurationViewClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  widget_class->destroy = gbp_build_configuration_view_destroy;
+  widget_class->destroy = ide_build_configuration_view_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-configuration-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-configuration-view.ui");
   gtk_widget_class_set_css_name (widget_class, "configurationview");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, configure_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, device_list_box);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, display_name_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, environment_editor);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, prefix_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationView, runtime_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, configure_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, device_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, display_name_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, environment_editor);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, prefix_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, runtime_list_box);
 
   g_type_ensure (IDE_TYPE_ENVIRONMENT_EDITOR);
 }
 
 static void
-gbp_build_configuration_view_init (GbpBuildConfigurationView *self)
+ide_build_configuration_view_init (IdeBuildConfigurationView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -387,32 +389,32 @@ gbp_build_configuration_view_init (GbpBuildConfigurationView *self)
 }
 
 IdeConfiguration *
-gbp_build_configuration_view_get_configuration (GbpBuildConfigurationView *self)
+ide_build_configuration_view_get_configuration (IdeBuildConfigurationView *self)
 {
-  g_return_val_if_fail (GBP_IS_BUILD_CONFIGURATION_VIEW (self), NULL);
+  g_return_val_if_fail (IDE_IS_BUILD_CONFIGURATION_VIEW (self), NULL);
 
   return self->configuration;
 }
 
 void
-gbp_build_configuration_view_set_configuration (GbpBuildConfigurationView *self,
+ide_build_configuration_view_set_configuration (IdeBuildConfigurationView *self,
                                                 IdeConfiguration          *configuration)
 {
-  g_return_if_fail (GBP_IS_BUILD_CONFIGURATION_VIEW (self));
+  g_return_if_fail (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_return_if_fail (!configuration || IDE_IS_CONFIGURATION (configuration));
 
   if (self->configuration != configuration)
     {
       if (self->configuration != NULL)
         {
-          gbp_build_configuration_view_disconnect (self, self->configuration);
+          ide_build_configuration_view_disconnect (self, self->configuration);
           g_clear_object (&self->configuration);
         }
 
       if (configuration != NULL)
         {
           self->configuration = g_object_ref (configuration);
-          gbp_build_configuration_view_connect (self, configuration);
+          ide_build_configuration_view_connect (self, configuration);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIGURATION]);

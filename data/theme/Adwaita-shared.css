@@ -212,3 +212,89 @@ popover.transfers list row:first-child {
 popover.transfers list row > box {
   padding: 10px;
 }
+
+
+/*
+buildpanel button.popup:active,
+buildpanel button.popup:checked,
+buildpanel button.popup {
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  border-style: none;
+  margin: 0;
+  padding: 0;
+}
+*/
+
+list.buildpanel row {
+  padding: 10px;
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}
+
+list.buildpanel row:last-child {
+  border-bottom: none;
+}
+
+buildpanel list row {
+  padding: 6px;
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}
+
+buildpanel list row:last-child {
+  border-bottom: none;
+}
+
+buildpanel list row label.file {
+  opacity: 0.5;
+}
+
+
+buildpanel box.build-status {
+  background: shade(@theme_bg_color, 0.96);
+}
+
+
+buildperspective list.sidebar row:selected button:hover {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+  color: @theme_selected_fg_color;
+  opacity: 1;
+}
+buildperspective list.sidebar row:selected button,
+buildperspective list.sidebar row:selected button:active {
+  opacity: 0.8;
+}
+buildperspective list.sidebar {
+  border-right: 1px solid alpha(@borders, 0.55);
+}
+
+
+configurationview list row {
+  padding: 10px;
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}
+configurationview list row:last-child {
+  border-bottom: none;
+}
+configurationview list row entry {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+/* hrmm, we can use this to get row separators */
+buildpanel treeview,
+configurationview treeview {
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}
+
+
+buildpanel list > label {
+  font-weight: bold;
+  opacity: 0.55;
+  margin: 6px 10px 0px 10px;
+}

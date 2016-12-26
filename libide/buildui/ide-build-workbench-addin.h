@@ -1,6 +1,6 @@
-/* gbp-build-tool.h
+/* ide-build-workbench-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_BUILD_TOOL_H
-#define GBP_BUILD_TOOL_H
+#pragma once
 
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILD_TOOL (gbp_build_tool_get_type())
+#define IDE_TYPE_BUILD_WORKBENCH_ADDIN (ide_build_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuildTool, gbp_build_tool, GBP, BUILD_TOOL, GObject)
+G_DECLARE_FINAL_TYPE (IdeBuildWorkbenchAddin, ide_build_workbench_addin, IDE, BUILD_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_BUILD_TOOL_H */

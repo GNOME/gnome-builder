@@ -1,4 +1,4 @@
-/* gbp-build-plugin.c
+/* ide-build-plugin.c
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,19 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-build-plugin"
+
 #include <libpeas/peas.h>
 #include <ide.h>
 
-#include "gbp-build-tool.h"
-#include "gbp-build-workbench-addin.h"
+#include "ide-build-tool.h"
+#include "ide-build-workbench-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_build_tool_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_TOOL,
-                                              GBP_TYPE_BUILD_TOOL);
+                                              IDE_TYPE_BUILD_TOOL);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_BUILD_WORKBENCH_ADDIN);
+                                              IDE_TYPE_BUILD_WORKBENCH_ADDIN);
 }

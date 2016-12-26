@@ -1,4 +1,4 @@
-/* gbp-build-perspective.h
+/* ide-build-configuration-view.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_BUILD_PERSPECTIVE_H
-#define GBP_BUILD_PERSPECTIVE_H
+#ifndef IDE_BUILD_CONFIGURATION_VIEW_H
+#define IDE_BUILD_CONFIGURATION_VIEW_H
 
 #include <ide.h>
 
+#include "egg-column-layout.h"
+
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILD_PERSPECTIVE (gbp_build_perspective_get_type())
+#define IDE_TYPE_BUILD_CONFIGURATION_VIEW (ide_build_configuration_view_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuildPerspective, gbp_build_perspective, GBP, BUILD_PERSPECTIVE, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, IDE, BUILD_CONFIGURATION_VIEW, EggColumnLayout)
 
-IdeConfiguration *gbp_build_perspective_get_configuration (GbpBuildPerspective *self);
-void              gbp_build_perspective_set_configuration (GbpBuildPerspective *self,
-                                                           IdeConfiguration    *configuration);
+IdeConfiguration *ide_build_configuration_view_get_configuration (IdeBuildConfigurationView *self);
+void              ide_build_configuration_view_set_configuration (IdeBuildConfigurationView *self,
+                                                                  IdeConfiguration          *configuration);
 
 G_END_DECLS
 
-#endif /* GBP_BUILD_PERSPECTIVE_H */
+#endif /* IDE_BUILD_CONFIGURATION_VIEW_H */

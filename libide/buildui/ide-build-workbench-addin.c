@@ -1,4 +1,4 @@
-/* gbp-build-workbench-addin.c
+/* ide-build-workbench-addin.c
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,24 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-build-workbench-addin"
+
 #include <egg-binding-group.h>
 #include <glib/gi18n.h>
 
-#include "gbp-build-log-panel.h"
-#include "gbp-build-panel.h"
-#include "gbp-build-perspective.h"
-#include "gbp-build-workbench-addin.h"
+#include "ide-build-log-panel.h"
+#include "ide-build-panel.h"
+#include "ide-build-perspective.h"
+#include "ide-build-workbench-addin.h"
 
-struct _GbpBuildWorkbenchAddin
+struct _IdeBuildWorkbenchAddin
 {
   GObject              parent_instance;
 
   /* Unowned */
-  GbpBuildPanel       *panel;
+  IdeBuildPanel       *panel;
   IdeWorkbench        *workbench;
-  GbpBuildLogPanel    *build_log_panel;
+  IdeBuildLogPanel    *build_log_panel;
   GtkWidget           *run_button;
-  GbpBuildPerspective *build_perspective;
+  IdeBuildPerspective *build_perspective;
 
   /* Owned */
   IdeBuildPipeline    *pipeline;
@@ -42,7 +44,7 @@ struct _GbpBuildWorkbenchAddin
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbpBuildWorkbenchAddin, gbp_build_workbench_addin, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (IdeBuildWorkbenchAddin, ide_build_workbench_addin, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 enum {
@@ -70,30 +72,30 @@ gbp_build_workbench_addin_set_pipeline (GbpBuildWorkbenchAddin *self,
 }
 
 static void
-gbp_build_workbench_addin_view_output (GSimpleAction *action,
+ide_build_workbench_addin_view_output (GSimpleAction *action,
                                        GVariant      *param,
                                        gpointer       user_data)
 {
-  GbpBuildWorkbenchAddin *self = user_data;
+  IdeBuildWorkbenchAddin *self = user_data;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_BUILD_WORKBENCH_ADDIN (self));
 
   ide_workbench_focus (self->workbench, GTK_WIDGET (self->build_log_panel));
 }
 
 static void
-gbp_build_workbench_addin_configure (GSimpleAction *action,
+ide_build_workbench_addin_configure (GSimpleAction *action,
                                      GVariant      *param,
                                      gpointer       user_data)
 {
-  GbpBuildWorkbenchAddin *self = user_data;
+  IdeBuildWorkbenchAddin *self = user_data;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *config;
   IdeContext *context;
   const gchar *id;
 
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_BUILD_WORKBENCH_ADDIN (self));
   g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
   ide_workbench_set_visible_perspective (self->workbench,
@@ -105,20 +107,20 @@ gbp_build_workbench_addin_configure (GSimpleAction *action,
   config = ide_configuration_manager_get_configuration (config_manager, id);
 
   if (config != NULL)
-    gbp_build_perspective_set_configuration (self->build_perspective, config);
+    ide_build_perspective_set_configuration (self->build_perspective, config);
 }
 
 static const GActionEntry actions_entries[] = {
-  { "configure", gbp_build_workbench_addin_configure, "s" },
-  { "view-output", gbp_build_workbench_addin_view_output },
+  { "configure", ide_build_workbench_addin_configure, "s" },
+  { "view-output", ide_build_workbench_addin_view_output },
 };
 
 static void
-gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
+ide_build_workbench_addin_load (IdeWorkbenchAddin *addin,
                                 IdeWorkbench      *workbench)
 {
   IdeConfigurationManager *configuration_manager;
-  GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
+  IdeBuildWorkbenchAddin *self = (IdeBuildWorkbenchAddin *)addin;
   IdeConfiguration *configuration;
   IdeBuildManager *build_manager;
   IdePerspective *editor;
@@ -126,7 +128,7 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   GtkWidget *pane;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_BUILD_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   self->workbench = workbench;
@@ -146,13 +148,13 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
   pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (editor));
-  self->panel = g_object_new (GBP_TYPE_BUILD_PANEL,
+  self->panel = g_object_new (IDE_TYPE_BUILD_PANEL,
                               "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->panel));
 
   pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (editor));
-  self->build_log_panel = g_object_new (GBP_TYPE_BUILD_LOG_PANEL, NULL);
+  self->build_log_panel = g_object_new (IDE_TYPE_BUILD_LOG_PANEL, NULL);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->build_log_panel));
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools",
@@ -160,7 +162,7 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   g_object_bind_property (self, "pipeline", self->panel, "pipeline", 0);
 
-  self->build_perspective = g_object_new (GBP_TYPE_BUILD_PERSPECTIVE,
+  self->build_perspective = g_object_new (IDE_TYPE_BUILD_PERSPECTIVE,
                                           "configuration-manager", configuration_manager,
                                           "configuration", configuration,
                                           "visible", TRUE,
@@ -169,13 +171,13 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 }
 
 static void
-gbp_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
+ide_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
-  GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)addin;
+  IdeBuildWorkbenchAddin *self = (IdeBuildWorkbenchAddin *)addin;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
-  g_assert (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_BUILD_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools", NULL);
@@ -185,12 +187,12 @@ gbp_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
 }
 
 static void
-gbp_build_workbench_addin_get_property (GObject    *object,
+ide_build_workbench_addin_get_property (GObject    *object,
                                         guint       prop_id,
                                         GValue     *value,
                                         GParamSpec *pspec)
 {
-  GbpBuildWorkbenchAddin *self = GBP_BUILD_WORKBENCH_ADDIN(object);
+  IdeBuildWorkbenchAddin *self = IDE_BUILD_WORKBENCH_ADDIN(object);
 
   switch (prop_id)
     {
@@ -204,23 +206,23 @@ gbp_build_workbench_addin_get_property (GObject    *object,
 }
 
 static void
-gbp_build_workbench_addin_finalize (GObject *object)
+ide_build_workbench_addin_finalize (GObject *object)
 {
-  GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)object;
+  IdeBuildWorkbenchAddin *self = (IdeBuildWorkbenchAddin *)object;
 
   g_clear_object (&self->actions);
   g_clear_object (&self->pipeline);
 
-  G_OBJECT_CLASS (gbp_build_workbench_addin_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_build_workbench_addin_parent_class)->finalize (object);
 }
 
 static void
-gbp_build_workbench_addin_class_init (GbpBuildWorkbenchAddinClass *klass)
+ide_build_workbench_addin_class_init (IdeBuildWorkbenchAddinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gbp_build_workbench_addin_finalize;
-  object_class->get_property = gbp_build_workbench_addin_get_property;
+  object_class->finalize = ide_build_workbench_addin_finalize;
+  object_class->get_property = ide_build_workbench_addin_get_property;
 
   properties [PROP_PIPELINE] =
     g_param_spec_object ("pipeline",
@@ -233,7 +235,7 @@ gbp_build_workbench_addin_class_init (GbpBuildWorkbenchAddinClass *klass)
 }
 
 static void
-gbp_build_workbench_addin_init (GbpBuildWorkbenchAddin *self)
+ide_build_workbench_addin_init (IdeBuildWorkbenchAddin *self)
 {
   self->actions = g_simple_action_group_new ();
 
@@ -246,6 +248,6 @@ gbp_build_workbench_addin_init (GbpBuildWorkbenchAddin *self)
 static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
-  iface->load = gbp_build_workbench_addin_load;
-  iface->unload = gbp_build_workbench_addin_unload;
+  iface->load = ide_build_workbench_addin_load;
+  iface->unload = ide_build_workbench_addin_unload;
 }

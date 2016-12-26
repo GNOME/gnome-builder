@@ -1,4 +1,4 @@
-/* gbp-build-log-panel.c
+/* ide-build-log-panel.c
  *
  * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
  *
@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-build-log-panel"
+
 #include <glib/gi18n.h>
 #include <ide.h>
 
@@ -23,9 +25,9 @@
 
 #include "egg-signal-group.h"
 
-#include "gbp-build-log-panel.h"
+#include "ide-build-log-panel.h"
 
-struct _GbpBuildLogPanel
+struct _IdeBuildLogPanel
 {
   PnlDockWidget      parent_instance;
 
@@ -47,16 +49,16 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (GbpBuildLogPanel, gbp_build_log_panel, PNL_TYPE_DOCK_WIDGET)
+G_DEFINE_TYPE (IdeBuildLogPanel, ide_build_log_panel, PNL_TYPE_DOCK_WIDGET)
 
 static GParamSpec *properties [LAST_PROP];
 
 static void
-gbp_build_log_panel_reset_view (GbpBuildLogPanel *self)
+ide_build_log_panel_reset_view (IdeBuildLogPanel *self)
 {
   GtkStyleContext *context;
 
-  g_assert (GBP_IS_BUILD_LOG_PANEL (self));
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
 
   g_clear_object (&self->buffer);
 
@@ -88,16 +90,16 @@ gbp_build_log_panel_reset_view (GbpBuildLogPanel *self)
 }
 
 static void
-gbp_build_log_panel_log_observer (IdeBuildLogStream  stream,
+ide_build_log_panel_log_observer (IdeBuildLogStream  stream,
                                   const gchar       *message,
                                   gssize             message_len,
                                   gpointer           user_data)
 {
-  GbpBuildLogPanel *self = user_data;
+  IdeBuildLogPanel *self = user_data;
   GtkTextMark *insert;
   GtkTextIter iter;
 
-  g_assert (GBP_IS_BUILD_LOG_PANEL (self));
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
   g_assert (message != NULL);
   g_assert (message_len >= 0);
   g_assert (message[message_len] == '\0');
@@ -126,10 +128,10 @@ gbp_build_log_panel_log_observer (IdeBuildLogStream  stream,
 }
 
 void
-gbp_build_log_panel_set_pipeline (GbpBuildLogPanel *self,
+ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
                                   IdeBuildPipeline *pipeline)
 {
-  g_return_if_fail (GBP_IS_BUILD_LOG_PANEL (self));
+  g_return_if_fail (IDE_IS_BUILD_LOG_PANEL (self));
   g_return_if_fail (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
 
   if (pipeline != self->pipeline)
@@ -146,7 +148,7 @@ gbp_build_log_panel_set_pipeline (GbpBuildLogPanel *self,
           self->pipeline = g_object_ref (pipeline);
           self->log_observer =
             ide_build_pipeline_add_log_observer (self->pipeline,
-                                                 gbp_build_log_panel_log_observer,
+                                                 ide_build_log_panel_log_observer,
                                                  self,
                                                  NULL);
         }
@@ -154,14 +156,14 @@ gbp_build_log_panel_set_pipeline (GbpBuildLogPanel *self,
 }
 
 static void
-gbp_build_log_panel_changed_font_name (GbpBuildLogPanel *self,
+ide_build_log_panel_changed_font_name (IdeBuildLogPanel *self,
                                        const gchar      *key,
                                        GSettings        *settings)
 {
   gchar *font_name;
   PangoFontDescription *font_desc;
 
-  g_assert (GBP_IS_BUILD_LOG_PANEL (self));
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
   g_assert (g_strcmp0 (key, "font-name") == 0);
   g_assert (G_IS_SETTINGS (settings));
 
@@ -187,9 +189,9 @@ gbp_build_log_panel_changed_font_name (GbpBuildLogPanel *self,
 }
 
 static void
-gbp_build_log_panel_finalize (GObject *object)
+ide_build_log_panel_finalize (GObject *object)
 {
-  GbpBuildLogPanel *self = (GbpBuildLogPanel *)object;
+  IdeBuildLogPanel *self = (IdeBuildLogPanel *)object;
 
   self->stderr_tag = NULL;
 
@@ -197,26 +199,26 @@ gbp_build_log_panel_finalize (GObject *object)
   g_clear_object (&self->css);
   g_clear_object (&self->settings);
 
-  G_OBJECT_CLASS (gbp_build_log_panel_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_build_log_panel_parent_class)->finalize (object);
 }
 
 static void
-gbp_build_log_panel_dispose (GObject *object)
+ide_build_log_panel_dispose (GObject *object)
 {
-  GbpBuildLogPanel *self = (GbpBuildLogPanel *)object;
+  IdeBuildLogPanel *self = (IdeBuildLogPanel *)object;
 
-  gbp_build_log_panel_set_pipeline (self, NULL);
+  ide_build_log_panel_set_pipeline (self, NULL);
 
-  G_OBJECT_CLASS (gbp_build_log_panel_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ide_build_log_panel_parent_class)->dispose (object);
 }
 
 static void
-gbp_build_log_panel_get_property (GObject    *object,
+ide_build_log_panel_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
                                   GParamSpec *pspec)
 {
-  GbpBuildLogPanel *self = GBP_BUILD_LOG_PANEL (object);
+  IdeBuildLogPanel *self = IDE_BUILD_LOG_PANEL (object);
 
   switch (prop_id)
     {
@@ -230,17 +232,17 @@ gbp_build_log_panel_get_property (GObject    *object,
 }
 
 static void
-gbp_build_log_panel_set_property (GObject      *object,
+ide_build_log_panel_set_property (GObject      *object,
                                   guint         prop_id,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-  GbpBuildLogPanel *self = GBP_BUILD_LOG_PANEL (object);
+  IdeBuildLogPanel *self = IDE_BUILD_LOG_PANEL (object);
 
   switch (prop_id)
     {
     case PROP_PIPELINE:
-      gbp_build_log_panel_set_pipeline (self, g_value_get_object (value));
+      ide_build_log_panel_set_pipeline (self, g_value_get_object (value));
       break;
 
     default:
@@ -249,19 +251,19 @@ gbp_build_log_panel_set_property (GObject      *object,
 }
 
 static void
-gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
+ide_build_log_panel_class_init (IdeBuildLogPanelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = gbp_build_log_panel_dispose;
-  object_class->finalize = gbp_build_log_panel_finalize;
-  object_class->get_property = gbp_build_log_panel_get_property;
-  object_class->set_property = gbp_build_log_panel_set_property;
+  object_class->dispose = ide_build_log_panel_dispose;
+  object_class->finalize = ide_build_log_panel_finalize;
+  object_class->get_property = ide_build_log_panel_get_property;
+  object_class->set_property = ide_build_log_panel_set_property;
 
   gtk_widget_class_set_css_name (widget_class, "buildlogpanel");
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-log-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildLogPanel, scroller);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-log-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildLogPanel, scroller);
 
   properties [PROP_PIPELINE] =
     g_param_spec_object ("pipeline",
@@ -274,7 +276,7 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
 }
 
 static void
-gbp_build_log_panel_init (GbpBuildLogPanel *self)
+ide_build_log_panel_init (IdeBuildLogPanel *self)
 {
   self->css = gtk_css_provider_new ();
 
@@ -282,13 +284,13 @@ gbp_build_log_panel_init (GbpBuildLogPanel *self)
 
   g_object_set (self, "title", _("Build Output"), NULL);
 
-  gbp_build_log_panel_reset_view (self);
+  ide_build_log_panel_reset_view (self);
 
   self->settings = g_settings_new ("org.gnome.builder.terminal");
   g_signal_connect_object (self->settings,
                            "changed::font-name",
-                           G_CALLBACK (gbp_build_log_panel_changed_font_name),
+                           G_CALLBACK (ide_build_log_panel_changed_font_name),
                            self,
                            G_CONNECT_SWAPPED);
-  gbp_build_log_panel_changed_font_name (self, "font-name", self->settings);
+  ide_build_log_panel_changed_font_name (self, "font-name", self->settings);
 }

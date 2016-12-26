@@ -1,4 +1,4 @@
-/* gbp-build-configuration-row.c
+/* ide-build-configuration-row.c
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gbp-build-configuration-row.h"
+#define G_LOG_DOMAIN "ide-build-configuration-row"
 
-struct _GbpBuildConfigurationRow
+#include "ide-build-configuration-row.h"
+
+struct _IdeBuildConfigurationRow
 {
   GtkListBoxRow     parent_instance;
 
@@ -39,15 +41,15 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (GbpBuildConfigurationRow, gbp_build_configuration_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_TYPE (IdeBuildConfigurationRow, ide_build_configuration_row, GTK_TYPE_LIST_BOX_ROW)
 
 static GParamSpec *properties [LAST_PROP];
 
 static void
-gbp_build_configuration_row_set_configuration (GbpBuildConfigurationRow *self,
+ide_build_configuration_row_set_configuration (IdeBuildConfigurationRow *self,
                                                IdeConfiguration         *configuration)
 {
-  g_assert (GBP_IS_BUILD_CONFIGURATION_ROW (self));
+  g_assert (IDE_IS_BUILD_CONFIGURATION_ROW (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   if (g_set_object (&self->configuration, configuration))
@@ -57,27 +59,27 @@ gbp_build_configuration_row_set_configuration (GbpBuildConfigurationRow *self,
 }
 
 static void
-gbp_build_configuration_row_finalize (GObject *object)
+ide_build_configuration_row_finalize (GObject *object)
 {
-  GbpBuildConfigurationRow *self = (GbpBuildConfigurationRow *)object;
+  IdeBuildConfigurationRow *self = (IdeBuildConfigurationRow *)object;
 
   g_clear_object (&self->configuration);
 
-  G_OBJECT_CLASS (gbp_build_configuration_row_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_build_configuration_row_parent_class)->finalize (object);
 }
 
 static void
-gbp_build_configuration_row_get_property (GObject    *object,
+ide_build_configuration_row_get_property (GObject    *object,
                                           guint       prop_id,
                                           GValue     *value,
                                           GParamSpec *pspec)
 {
-  GbpBuildConfigurationRow *self = GBP_BUILD_CONFIGURATION_ROW (object);
+  IdeBuildConfigurationRow *self = IDE_BUILD_CONFIGURATION_ROW (object);
 
   switch (prop_id)
     {
     case PROP_CONFIGURATION:
-      g_value_set_object (value, gbp_build_configuration_row_get_configuration (self));
+      g_value_set_object (value, ide_build_configuration_row_get_configuration (self));
       break;
 
     default:
@@ -86,17 +88,17 @@ gbp_build_configuration_row_get_property (GObject    *object,
 }
 
 static void
-gbp_build_configuration_row_set_property (GObject      *object,
+ide_build_configuration_row_set_property (GObject      *object,
                                           guint         prop_id,
                                           const GValue *value,
                                           GParamSpec   *pspec)
 {
-  GbpBuildConfigurationRow *self = GBP_BUILD_CONFIGURATION_ROW (object);
+  IdeBuildConfigurationRow *self = IDE_BUILD_CONFIGURATION_ROW (object);
 
   switch (prop_id)
     {
     case PROP_CONFIGURATION:
-      gbp_build_configuration_row_set_configuration (self, g_value_get_object (value));
+      ide_build_configuration_row_set_configuration (self, g_value_get_object (value));
       break;
 
     case PROP_ACTIVE:
@@ -123,14 +125,14 @@ gbp_build_configuration_row_set_property (GObject      *object,
 }
 
 static void
-gbp_build_configuration_row_class_init (GbpBuildConfigurationRowClass *klass)
+ide_build_configuration_row_class_init (IdeBuildConfigurationRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gbp_build_configuration_row_finalize;
-  object_class->get_property = gbp_build_configuration_row_get_property;
-  object_class->set_property = gbp_build_configuration_row_set_property;
+  object_class->finalize = ide_build_configuration_row_finalize;
+  object_class->get_property = ide_build_configuration_row_get_property;
+  object_class->set_property = ide_build_configuration_row_set_property;
 
   properties [PROP_CONFIGURATION] =
     g_param_spec_object ("configuration",
@@ -155,24 +157,24 @@ gbp_build_configuration_row_class_init (GbpBuildConfigurationRowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-configuration-row.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, label);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, duplicate);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, delete);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, radio);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuildConfigurationRow, controls);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-configuration-row.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationRow, label);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationRow, duplicate);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationRow, delete);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationRow, radio);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationRow, controls);
 }
 
 static void
-gbp_build_configuration_row_init (GbpBuildConfigurationRow *self)
+ide_build_configuration_row_init (IdeBuildConfigurationRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 IdeConfiguration *
-gbp_build_configuration_row_get_configuration (GbpBuildConfigurationRow *self)
+ide_build_configuration_row_get_configuration (IdeBuildConfigurationRow *self)
 {
-  g_return_val_if_fail (GBP_IS_BUILD_CONFIGURATION_ROW (self), NULL);
+  g_return_val_if_fail (IDE_IS_BUILD_CONFIGURATION_ROW (self), NULL);
 
   return self->configuration;
 }

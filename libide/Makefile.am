@@ -381,6 +381,25 @@ libide_1_0_la_SOURCES =                                   \
 	buildsystem/ide-build-log-private.h               \
 	buildsystem/ide-build-stage-private.h             \
 	buildsystem/ide-buildsystem-plugin.c              \
+	buildui/ide-build-configuration-row.c             \
+	buildui/ide-build-configuration-row.h             \
+	buildui/ide-build-configuration-view.c            \
+	buildui/ide-build-configuration-view.h            \
+	buildui/ide-build-log-panel.c                     \
+	buildui/ide-build-log-panel.h                     \
+	buildui/ide-build-panel.c                         \
+	buildui/ide-build-panel.h                         \
+	buildui/ide-build-perspective.c                   \
+	buildui/ide-build-perspective.h                   \
+	buildui/ide-build-plugin.c                        \
+	buildui/ide-build-tool.c                          \
+	buildui/ide-build-tool.h                          \
+	buildui/ide-build-workbench-addin.c               \
+	buildui/ide-build-workbench-addin.h               \
+	buildui/ide-environment-editor-row.c              \
+	buildui/ide-environment-editor-row.h              \
+	buildui/ide-environment-editor.c                  \
+	buildui/ide-environment-editor.h                  \
 	editor/ide-editor-frame-actions.c                 \
 	editor/ide-editor-frame-actions.h                 \
 	editor/ide-editor-frame-private.h                 \

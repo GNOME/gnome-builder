@@ -1,5 +1,5 @@
 <interface>
-  <template class="GbpBuildLogPanel" parent="PnlDockWidget">
+  <template class="IdeBuildLogPanel" parent="PnlDockWidget">
     <child>
       <object class="GtkScrolledWindow" id="scroller">
         <property name="expand">true</property>

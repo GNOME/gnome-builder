@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-environment-editor"
+
 #include <glib/gi18n.h>
 
 #include "ide-environment-editor.h"

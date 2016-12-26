@@ -2,7 +2,6 @@ SUBDIRS = \
 	autotools \
 	autotools-templates \
 	beautifier \
-	build-tools \
 	c-pack \
 	cargo \
 	clang \
