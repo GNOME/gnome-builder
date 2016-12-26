@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-20 17:02+0000\n"
-"PO-Revision-Date: 2016-12-20 21:37-0200\n"
+"POT-Creation-Date: 2016-12-24 11:11+0000\n"
+"PO-Revision-Date: 2016-12-26 06:43-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -770,11 +770,11 @@ msgstr "_Refazer"
 msgid "C_ut"
 msgstr "C_ortar"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:16
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:28
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:20
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:32
 msgid "_Paste"
 msgstr "_Colar"
 
@@ -786,15 +786,15 @@ msgstr "_Excluir"
 msgid "Highlighting"
 msgstr "Realce"
 
-#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:26
+#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:38
 msgid "Selection"
 msgstr "Seleção"
 
-#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:40
 msgid "Select _All"
 msgstr "Selecionar _tudo"
 
-#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:33
+#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:45
 msgid "Select _None"
 msgstr "_Nenhum selecionado"
 
@@ -3268,7 +3268,6 @@ msgid "Downloading application sources…"
 msgstr "Baixando fontes de aplicativo…"
 
 #: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
-#| msgid "Clone"
 msgid "Clone App"
 msgstr "Clonar aplicativo"
 
@@ -3621,6 +3620,15 @@ msgstr "Saída da execução"
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "_Novo terminal"
+
+#: plugins/terminal/gtk/menus.ui:15
+#| msgid "_Open"
+msgid "_Open Link"
+msgstr "_Abrir link"
+
+#: plugins/terminal/gtk/menus.ui:20
+msgid "_Copy Link Address"
+msgstr "_Copiar endereço do link"
 
 #: plugins/todo/todo_plugin/__init__.py:190
 msgid "Todo"
