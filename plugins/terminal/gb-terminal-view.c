@@ -554,6 +554,16 @@ gb_terminal_view_set_font_name (GbTerminalView *self,
     }
 }
 
+static gboolean
+gb_terminal_get_split_view (IdeLayoutView *view)
+{
+  GbTerminalView *self = (GbTerminalView *)view;
+
+  g_assert (GB_IS_TERMINAL_VIEW (self));
+
+  return (self->terminal_bottom != NULL);
+}
+
 static void
 gb_terminal_set_split_view (IdeLayoutView   *view,
                             gboolean         split_view)
@@ -747,6 +757,7 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
 
   view_class->get_title = gb_terminal_get_title;
   view_class->create_split = gb_terminal_create_split;
+  view_class->get_split_view =  gb_terminal_get_split_view;
   view_class->set_split_view =  gb_terminal_set_split_view;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-view.ui");

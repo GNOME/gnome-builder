@@ -462,6 +462,16 @@ addin_unload_source_view (PeasExtensionSet *set,
   ide_editor_view_addin_unload_source_view (IDE_EDITOR_VIEW_ADDIN (exten), source_view);
 }
 
+static gboolean
+ide_editor_view_get_split_view (IdeLayoutView *view)
+{
+  IdeEditorView *self = (IdeEditorView *)view;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  return (self->frame2 != NULL);
+}
+
 static void
 ide_editor_view_set_split_view (IdeLayoutView *view,
                                 gboolean       split_view)
@@ -824,6 +834,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   view_class->create_split = ide_editor_view_create_split;
   view_class->get_special_title = ide_editor_view_get_special_title;
   view_class->get_modified = ide_editor_view_get_modified;
+  view_class->get_split_view = ide_editor_view_get_split_view;
   view_class->set_split_view = ide_editor_view_set_split_view;
   view_class->set_back_forward_list = ide_editor_view_set_back_forward_list;
   view_class->navigate_to = ide_editor_view_navigate_to;

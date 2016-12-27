@@ -41,6 +41,7 @@ struct _IdeLayoutViewClass
   gchar         *(*get_special_title)     (IdeLayoutView             *self);
   IdeLayoutView *(*create_split)          (IdeLayoutView             *self,
                                            GFile                     *file);
+  gboolean       (*get_split_view)        (IdeLayoutView             *self);
   void           (*set_split_view)        (IdeLayoutView             *self,
                                            gboolean                   split_view);
   void           (*set_back_forward_list) (IdeLayoutView             *self,
@@ -67,6 +68,7 @@ gboolean       ide_layout_view_get_can_split         (IdeLayoutView             
 gchar         *ide_layout_view_get_title             (IdeLayoutView             *self);
 gchar         *ide_layout_view_get_special_title     (IdeLayoutView             *self);
 gboolean       ide_layout_view_get_modified          (IdeLayoutView             *self);
+gboolean       ide_layout_view_get_split_view        (IdeLayoutView             *self);
 void           ide_layout_view_set_split_view        (IdeLayoutView             *self,
                                                       gboolean                   split_view);
 void           ide_layout_view_set_back_forward_list (IdeLayoutView             *self,

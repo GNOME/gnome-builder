@@ -98,6 +98,23 @@ ide_layout_view_create_split (IdeLayoutView *self,
 }
 
 /**
+ * ide_layout_view_get_split_view:
+ * @self: A #IdeLayoutView.
+ *
+ * Returns whether view is split or not.
+ */
+gboolean
+ide_layout_view_get_split_view (IdeLayoutView *self)
+{
+  g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), FALSE);
+
+  if (IDE_LAYOUT_VIEW_GET_CLASS (self)->get_split_view)
+    return IDE_LAYOUT_VIEW_GET_CLASS (self)->get_split_view (self);
+
+  return FALSE;
+}
+
+/**
  * ide_layout_view_set_split_view:
  * @self: A #IdeLayoutView.
  * @split_view: if the split should be enabled.

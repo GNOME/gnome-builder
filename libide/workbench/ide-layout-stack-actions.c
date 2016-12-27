@@ -122,14 +122,11 @@ do_split_down_cb (GObject      *object,
                   GAsyncResult *result,
                   gpointer      user_data)
 {
-  g_autoptr(GSimpleAction) action = user_data;
-  GTask *task = (GTask *)result;
   IdeLayoutView *view = (IdeLayoutView *)object;
-  GVariant *param = g_task_get_task_data (task);
-  gboolean split_view = g_variant_get_boolean (param);
 
-  ide_layout_view_set_split_view (view, split_view);
-  g_simple_action_set_state (action, param);
+  g_assert (IDE_IS_LAYOUT_VIEW (view));
+
+  ide_layout_view_set_split_view (view, !ide_layout_view_get_split_view (view));
 }
 
 static void
@@ -147,8 +144,7 @@ ide_layout_stack_actions_split_down (GSimpleAction *action,
   if (!IDE_IS_LAYOUT_VIEW (active_view))
     return;
 
-  task = g_task_new (active_view, NULL, do_split_down_cb, g_object_ref (action));
-  g_task_set_task_data (task, g_variant_ref (param), (GDestroyNotify)g_variant_unref);
+  task = g_task_new (active_view, NULL, do_split_down_cb, NULL);
   g_task_return_boolean (task, TRUE);
 }
 
@@ -305,7 +301,7 @@ static const GActionEntry gbViewStackActions[] = {
   { "next-view", ide_layout_stack_actions_next_view },
   { "previous-view", ide_layout_stack_actions_previous_view },
   { "show-list", ide_layout_stack_actions_show_list },
-  { "split-down", NULL, NULL, "false", ide_layout_stack_actions_split_down },
+  { "split-down", ide_layout_stack_actions_split_down },
   { "split-left", ide_layout_stack_actions_split_left, "s", NULL, NULL },
   { "split-right", ide_layout_stack_actions_split_right },
 };
