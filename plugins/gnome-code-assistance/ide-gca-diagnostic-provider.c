@@ -273,8 +273,17 @@ parse_cb (GObject      *object,
 
   if (!ret)
     {
-      IDE_TRACE_MSG ("%s", error->message);
-      g_task_return_error (task, error);
+      if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN))
+        {
+          g_task_return_pointer (task, ide_diagnostics_new (NULL),
+                                 (GDestroyNotify)ide_diagnostics_unref);
+        }
+      else
+        {
+          IDE_TRACE_MSG ("%s", error->message);
+          g_task_return_error (task, error);
+        }
+
       IDE_EXIT;
     }
 
