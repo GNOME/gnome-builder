@@ -85,6 +85,10 @@
     <file compressed="true" alias="ide-workbench.ui">../workbench/ide-workbench.ui</file>
   </gresource>
 
+  <gresource prefix="/org/gnome/builder/plugins/buildsystem">
+    <file alias="editor.plugin">../buildsystem/buildsystem.plugin</file>
+  </gresource>
+
   <gresource prefix="/org/gnome/builder/plugins/editor">
     <file alias="editor.plugin">../editor/editor.plugin</file>
   </gresource>

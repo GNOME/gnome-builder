@@ -40,6 +40,7 @@ libide_1_0_la_public_headers =                            \
 	buildsystem/ide-build-stage-transfer.h            \
 	buildsystem/ide-build-system.h                    \
 	buildsystem/ide-build-target.h                    \
+	buildsystem/ide-buildconfig-configuration-provider.h \
 	buildsystem/ide-configuration-manager.h           \
 	buildsystem/ide-configuration.h                   \
 	buildsystem/ide-configuration-provider.h          \
@@ -210,6 +211,7 @@ libide_1_0_la_public_sources =                            \
 	buildsystem/ide-build-stage-transfer.c            \
 	buildsystem/ide-build-system.c                    \
 	buildsystem/ide-build-target.c                    \
+	buildsystem/ide-buildconfig-configuration-provider.c \
 	buildsystem/ide-configuration-manager.c           \
 	buildsystem/ide-configuration.c                   \
 	buildsystem/ide-configuration-provider.c          \
@@ -378,6 +380,7 @@ libide_1_0_la_SOURCES =                                   \
 	buildsystem/ide-build-log.c                       \
 	buildsystem/ide-build-log-private.h               \
 	buildsystem/ide-build-stage-private.h             \
+	buildsystem/ide-buildsystem-plugin.c              \
 	editor/ide-editor-frame-actions.c                 \
 	editor/ide-editor-frame-actions.h                 \
 	editor/ide-editor-frame-private.h                 \
