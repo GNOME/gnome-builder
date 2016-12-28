@@ -294,7 +294,9 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   DownloadRequest *req = task_data;
   g_autofree gchar *uristr = NULL;
   GgitFetchOptions *fetch_options;
+  g_autoptr(GgitCheckoutOptions) checkout_options = NULL;
   g_autoptr(GgitCloneOptions) clone_options = NULL;
+  g_autoptr(GgitObject) parsed_rev = NULL;
   g_autoptr(GgitRemoteCallbacks) callbacks = NULL;
   g_autoptr(GgitRepository) repository = NULL;
   g_autoptr(IdeProgress) progress = NULL;
@@ -348,7 +350,6 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
 
           clone_options = ggit_clone_options_new ();
           ggit_clone_options_set_is_bare (clone_options, FALSE);
-          ggit_clone_options_set_checkout_branch (clone_options, req->src->branch);
           ggit_clone_options_set_fetch_options (clone_options, fetch_options);
           g_clear_pointer (&fetch_options, ggit_fetch_options_free);
 
@@ -358,6 +359,27 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
             {
               g_task_return_error (task, error);
               return;
+            }
+
+          /* Now check out the revision, when specified */
+          if (req->src->branch != NULL)
+            {
+              parsed_rev = ggit_repository_revparse (repository, req->src->branch, &error);
+              if (parsed_rev == NULL)
+                {
+                  g_task_return_error (task, error);
+                  return;
+                }
+
+              checkout_options = ggit_checkout_options_new ();
+              ggit_repository_reset (repository, parsed_rev, GGIT_RESET_HARD,
+                                     checkout_options, &error);
+
+              if (error != NULL)
+                {
+                  g_task_return_error (task, error);
+                  return;
+                }
             }
         }
       req->project_file = ggit_repository_get_workdir (repository);
