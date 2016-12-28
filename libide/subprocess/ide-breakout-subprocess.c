@@ -367,8 +367,17 @@ communicate_result_validate_utf8 (const char            *stream_name,
   if (buffer)
     {
       const char *end;
+      GError *local_error = NULL;
+
       if (!g_output_stream_is_closed (G_OUTPUT_STREAM (buffer)))
-        g_output_stream_close (G_OUTPUT_STREAM (buffer), NULL, NULL);
+        g_output_stream_close (G_OUTPUT_STREAM (buffer), NULL, &local_error);
+
+      if (local_error != NULL)
+        {
+          g_propagate_error (error, local_error);
+          IDE_RETURN (FALSE);
+        }
+
       *return_location = g_memory_output_stream_steal_data (buffer);
       if (!g_utf8_validate (*return_location, -1, &end))
         {
