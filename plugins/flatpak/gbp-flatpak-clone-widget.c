@@ -471,7 +471,13 @@ get_source (GbpFlatpakCloneWidget  *self,
   root_node = json_parser_get_root (parser);
   root_object = json_node_get_object (root_node);
 
-  self->id = g_strdup (json_object_get_string_member (root_object, "app-id"));
+  if (json_object_has_member (root_object, "app-id"))
+    self->id = g_strdup (json_object_get_string_member (root_object, "app-id"));
+  else if (json_object_has_member (root_object, "id"))
+    self->id = g_strdup (json_object_get_string_member (root_object, "id"));
+
+  if (self->id == NULL)
+    return NULL;
 
   modules = json_object_get_array_member (root_object, "modules");
   num_modules = json_array_get_length (modules);
