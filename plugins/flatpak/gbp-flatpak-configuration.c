@@ -210,10 +210,10 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
   sdk_node = json_object_get_member (root_object, "sdk");
   modules_node = json_object_get_member (root_object, "modules");
 
-  if ((!JSON_NODE_HOLDS_VALUE (app_id_node) && !JSON_NODE_HOLDS_VALUE (id_node)) ||
-       !JSON_NODE_HOLDS_VALUE (runtime_node) ||
-       !JSON_NODE_HOLDS_VALUE (sdk_node) ||
-       !JSON_NODE_HOLDS_ARRAY (modules_node))
+  if (((app_id_node == NULL || !JSON_NODE_HOLDS_VALUE (app_id_node)) && (id_node == NULL || !JSON_NODE_HOLDS_VALUE (id_node))) ||
+      (runtime_node == NULL || !JSON_NODE_HOLDS_VALUE (runtime_node)) ||
+      (sdk_node == NULL || !JSON_NODE_HOLDS_VALUE (sdk_node)) ||
+      (modules_node == NULL || !JSON_NODE_HOLDS_ARRAY (modules_node)))
     return FALSE;
 
   IDE_TRACE_MSG ("Discovered flatpak manifest at %s", path);
@@ -317,7 +317,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
       gbp_flatpak_configuration_set_finish_args (self, (const gchar * const *)finish_args_strv);
     }
 
-  if (JSON_NODE_HOLDS_VALUE (app_id_node))
+  if (app_id_node != NULL && JSON_NODE_HOLDS_VALUE (app_id_node))
     ide_configuration_set_app_id (IDE_CONFIGURATION (self), json_node_get_string (app_id_node));
   else
     ide_configuration_set_app_id (IDE_CONFIGURATION (self), json_node_get_string (id_node));
