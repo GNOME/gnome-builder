@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-17 22:09+0000\n"
-"PO-Revision-Date: 2016-12-19 17:28+0100\n"
+"POT-Creation-Date: 2016-12-26 17:32+0000\n"
+"PO-Revision-Date: 2016-12-29 11:07+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -67,7 +67,7 @@ msgstr[1] "Körülbelül %u éve"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:674
+#: libide/greeter/ide-greeter-perspective.c:679
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -99,7 +99,7 @@ msgstr "Tallózás…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:314
 #: libide/editor/ide-editor-view-actions.c:445
-#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/greeter/ide-greeter-perspective.c:678
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -754,11 +754,11 @@ msgstr "Új_ra"
 msgid "C_ut"
 msgstr "_Kivágás"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:16
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:28
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:20
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:32
 msgid "_Paste"
 msgstr "_Beillesztés"
 
@@ -770,15 +770,15 @@ msgstr "_Törlés"
 msgid "Highlighting"
 msgstr "Kiemelés"
 
-#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:26
+#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:38
 msgid "Selection"
 msgstr "Kijelölés"
 
-#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:40
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:33
+#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:45
 msgid "Select _None"
 msgstr "Kijelölés _megszüntetése"
 
@@ -1295,11 +1295,11 @@ msgstr ""
 "Az Építő észlelte, hogy a fájlt egy külső programmal módosították. Szeretné "
 "újratölteni a fájlt?"
 
-#: libide/greeter/ide-greeter-perspective.c:452
+#: libide/greeter/ide-greeter-perspective.c:454
 msgid "Failed to load the project"
 msgstr "A projekt nem tölthető be"
 
-#: libide/greeter/ide-greeter-perspective.c:669
+#: libide/greeter/ide-greeter-perspective.c:674
 msgid "Open Project"
 msgstr "Projekt megnyitása"
 
@@ -1405,37 +1405,37 @@ msgid "Editor Shortcuts"
 msgstr "Szerkesztő gyorsbillentyűi"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:431
+#: libide/keybindings/ide-shortcuts-window.ui:438
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Általános"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:435
+#: libide/keybindings/ide-shortcuts-window.ui:442
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Általános keresés"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:449
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Beállítások"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:456
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Parancssáv"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:456
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminál"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:463
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
@@ -1533,13 +1533,13 @@ msgid "Clear highlight"
 msgstr "Kiemelés törlése"
 
 #: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:472
+#: libide/keybindings/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Másolás és beillesztés"
 
 #: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:477
+#: libide/keybindings/ide-shortcuts-window.ui:484
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kijelölt szöveg másolása a vágólapra"
@@ -1550,7 +1550,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Kijelölt szöveg kivágása a vágólapra"
 
 #: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:484
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Szöveg beillesztése a vágólapról"
@@ -1612,105 +1612,110 @@ msgstr "Sor újra behúzása"
 
 #: libide/keybindings/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "Sor törlése"
+
+#: libide/keybindings/ide-shortcuts-window.ui:299
+msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
-#: libide/keybindings/ide-shortcuts-window.ui:293
+#: libide/keybindings/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Szemantikus nyelvi támogatás szükséges"
 
-#: libide/keybindings/ide-shortcuts-window.ui:301
+#: libide/keybindings/ide-shortcuts-window.ui:308
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigáció"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
+#: libide/keybindings/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Ugrás a következő hibára a fájlban"
 
-#: libide/keybindings/ide-shortcuts-window.ui:313
+#: libide/keybindings/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Ugrás az előző hibára a fájlban"
 
-#: libide/keybindings/ide-shortcuts-window.ui:320
+#: libide/keybindings/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Ugrás az előző szerkesztési helyre"
 
-#: libide/keybindings/ide-shortcuts-window.ui:327
+#: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Ugrás a következő szerkesztési helyre"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Ugrás szimbólumdefinícióra"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Nézőpont mozgatása felfelé a fájlban"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Nézőpont mozgatása lefelé a fájlban"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Nézőpont mozgatása a fájl végére"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Nézőpont mozgatása a fájl elejére"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Ugrás a zárójelpár másik tagjához"
 
-#: libide/keybindings/ide-shortcuts-window.ui:377
+#: libide/keybindings/ide-shortcuts-window.ui:384
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Kijelölések"
 
-#: libide/keybindings/ide-shortcuts-window.ui:382
+#: libide/keybindings/ide-shortcuts-window.ui:389
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Összes kijelölése"
 
-#: libide/keybindings/ide-shortcuts-window.ui:389
+#: libide/keybindings/ide-shortcuts-window.ui:396
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Összes kijelölésének megszüntetése"
 
-#: libide/keybindings/ide-shortcuts-window.ui:397
+#: libide/keybindings/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Összeállítás és futtatás"
 
-#: libide/keybindings/ide-shortcuts-window.ui:402
+#: libide/keybindings/ide-shortcuts-window.ui:409
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Összeállítás"
 
-#: libide/keybindings/ide-shortcuts-window.ui:409
+#: libide/keybindings/ide-shortcuts-window.ui:416
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Futtatás"
 
-#: libide/keybindings/ide-shortcuts-window.ui:416
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profilozás"
 
-#: libide/keybindings/ide-shortcuts-window.ui:427
+#: libide/keybindings/ide-shortcuts-window.ui:434
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminál gyorsbillentyűi"
@@ -2425,7 +2430,7 @@ msgstr "Összeállítás sikeres"
 #: plugins/autotools/ide-autotools-builder.c:347
 #: plugins/autotools/ide-autotools-builder.c:539
 #: plugins/autotools/ide-autotools-build-task.c:1219
-#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:399
+#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:427
 msgid "Building…"
 msgstr "Összeállítás…"
 
@@ -2495,7 +2500,7 @@ msgid "Running configure…"
 msgstr "A Configure futtatása…"
 
 #: plugins/autotools/ide-autotools-build-task.c:1217
-#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:392
+#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:420
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
@@ -2563,7 +2568,7 @@ msgstr "Configure beállításai"
 msgid "Environment"
 msgstr "Környezet"
 
-#: plugins/build-tools/gbp-build-log-panel.c:270
+#: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Összeállítás kimenete"
 
@@ -3243,6 +3248,19 @@ msgstr "Dokumentáció"
 msgid "Switch To"
 msgstr "Átváltás"
 
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Alkalmazásforrások letöltése…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "Alkalmazás klónozása"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Klónozás"
+
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Küldés ide: Fpaste.org"
@@ -3299,10 +3317,6 @@ msgstr "Projekt klónozása"
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
 msgstr "Klónozás…"
-
-#: plugins/git/ide-git-genesis-addin.c:190
-msgid "Clone"
-msgstr "Klónozás"
 
 #: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
@@ -3363,19 +3377,19 @@ msgstr "Python kiegészítési javaslatok"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Használja a Jedit kiegészítésre a Python nyelv esetén."
 
-#: plugins/meson/meson_plugin/__init__.py:318
+#: plugins/meson/meson_plugin/__init__.py:346
 msgid "Configuring…"
 msgstr "Konfigurálás…"
 
-#: plugins/meson/meson_plugin/__init__.py:350
+#: plugins/meson/meson_plugin/__init__.py:378
 msgid "Running prebuild…"
 msgstr "A prebuild futtatása…"
 
-#: plugins/meson/meson_plugin/__init__.py:369
+#: plugins/meson/meson_plugin/__init__.py:397
 msgid "Running post-install…"
 msgstr "A post-install futtatása…"
 
-#: plugins/meson/meson_plugin/__init__.py:372
+#: plugins/meson/meson_plugin/__init__.py:400
 msgid "Running post-build…"
 msgstr "A post-build futtatása…"
 
@@ -3590,6 +3604,14 @@ msgstr "Futtatás kimenete"
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "Új _terminál"
+
+#: plugins/terminal/gtk/menus.ui:15
+msgid "_Open Link"
+msgstr "Hi_vatkozás megnyitása"
+
+#: plugins/terminal/gtk/menus.ui:20
+msgid "_Copy Link Address"
+msgstr "Hivatkozás _címének másolása"
 
 #: plugins/todo/todo_plugin/__init__.py:190
 msgid "Todo"
