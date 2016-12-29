@@ -676,6 +676,8 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
   gpointer source;
   GTask *task;
 
+  IDE_ENTRY;
+
   g_assert (source_object != NULL);
 
   task = user_data;
@@ -739,6 +741,8 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
 
   /* And drop the original ref */
   g_object_unref (task);
+
+  IDE_EXIT;
 }
 
 static CommunicateState *
