@@ -477,7 +477,14 @@ get_source (GbpFlatpakCloneWidget  *self,
     self->id = g_strdup (json_object_get_string_member (root_object, "id"));
 
   if (self->id == NULL)
-    return NULL;
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_INVALID_DATA,
+                   "No app-id set in flatpak manifest %s",
+                   self->manifest);
+      return NULL;
+    }
 
   modules = json_object_get_array_member (root_object, "modules");
   num_modules = json_array_get_length (modules);
