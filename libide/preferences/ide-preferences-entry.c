@@ -215,6 +215,11 @@ ide_preferences_entry_get_title_widget (IdePreferencesEntry *self)
   return GTK_WIDGET (priv->title);
 }
 
+/**
+ * ide_preferences_entry_get_entry_widget:
+ *
+ * Returns: (transfer none): A #GtkWidget
+ */
 GtkWidget *
 ide_preferences_entry_get_entry_widget (IdePreferencesEntry *self)
 {
