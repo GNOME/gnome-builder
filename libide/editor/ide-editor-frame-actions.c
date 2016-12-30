@@ -33,6 +33,10 @@ ide_editor_frame_actions_find (GSimpleAction *action,
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), FALSE);
+
   search_direction = (GtkDirectionType) g_variant_get_int32 (variant);
   ide_source_view_set_search_direction (self->source_view,
                                         search_direction);
@@ -192,6 +196,27 @@ ide_editor_frame_actions_toggle_search_replace (GSimpleAction *action,
   gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), visible);
   gtk_widget_set_visible (GTK_WIDGET (self->replace_button), visible);
   gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), visible);
+}
+
+static void
+ide_editor_frame_actions_find_replace (GSimpleAction *action,
+                                       GVariant      *variant,
+                                       gpointer       user_data)
+{
+  GActionGroup *frame_group;
+  GAction *replace_options_action;
+  g_autoptr (GVariant) replace_options_variant = NULL;
+  IdeEditorFrame *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_FRAME (self));
+
+  if (NULL != (frame_group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry")) &&
+      NULL != (replace_options_action = g_action_map_lookup_action (G_ACTION_MAP (frame_group), "toggle-search-replace")))
+    {
+      replace_options_variant = g_variant_new_boolean (TRUE);
+      ide_editor_frame_actions_find (action, variant, user_data);
+      ide_editor_frame_actions_toggle_search_replace (G_SIMPLE_ACTION (replace_options_action), replace_options_variant, user_data);
+    }
 }
 
 static void
@@ -386,6 +411,7 @@ ide_editor_frame_actions_replace_confirm (GSimpleAction *action,
 
 static const GActionEntry IdeEditorFrameActions[] = {
   { "find", ide_editor_frame_actions_find, "i" },
+  { "find-replace", ide_editor_frame_actions_find_replace, "i" },
   { "next-search-result", ide_editor_frame_actions_next_search_result },
   { "previous-search-result", ide_editor_frame_actions_previous_search_result },
   { "replace-confirm", ide_editor_frame_actions_replace_confirm, "as" },
