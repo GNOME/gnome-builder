@@ -165,6 +165,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;h</property>
+                <property name="title" translatable="yes" context="shortcut window">Find and replace</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
                 <property name="accelerator">&lt;ctrl&gt;g</property>
                 <property name="title" translatable="yes" context="shortcut window">Find the next match</property>
               </object>
