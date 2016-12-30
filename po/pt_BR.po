@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-24 11:11+0000\n"
-"PO-Revision-Date: 2016-12-26 06:43-0200\n"
+"POT-Creation-Date: 2016-12-26 17:32+0000\n"
+"PO-Revision-Date: 2016-12-30 03:46-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -68,7 +68,7 @@ msgstr[1] "Cerca de %u anos atrás"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:674
+#: libide/greeter/ide-greeter-perspective.c:679
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -100,7 +100,7 @@ msgstr "Navegar…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:314
 #: libide/editor/ide-editor-view-actions.c:445
-#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/greeter/ide-greeter-perspective.c:678
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -1314,11 +1314,11 @@ msgstr ""
 "O Builder descobriu que este arquivo foi modificado externamente. Você "
 "gostaria de recarregar o arquivo?"
 
-#: libide/greeter/ide-greeter-perspective.c:452
+#: libide/greeter/ide-greeter-perspective.c:454
 msgid "Failed to load the project"
 msgstr "Falha ao carregar o projeto"
 
-#: libide/greeter/ide-greeter-perspective.c:669
+#: libide/greeter/ide-greeter-perspective.c:674
 msgid "Open Project"
 msgstr "Abrir projeto"
 
@@ -1423,37 +1423,37 @@ msgid "Editor Shortcuts"
 msgstr "Atalhos do editor"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:431
+#: libide/keybindings/ide-shortcuts-window.ui:438
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Geral"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:435
+#: libide/keybindings/ide-shortcuts-window.ui:442
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pesquisa global"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:449
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferências"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:456
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:456
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:463
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
@@ -1466,17 +1466,17 @@ msgstr "Painéis"
 #: libide/keybindings/ide-shortcuts-window.ui:59
 msgctxt "shortcut window"
 msgid "Toggle left panel"
-msgstr "Ativar painel esquerdo"
+msgstr "Ativa o painel esquerdo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:66
 msgctxt "shortcut window"
 msgid "Toggle right panel"
-msgstr "Ativar painel direito"
+msgstr "Ativa o painel direito"
 
 #: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
 msgid "Toggle bottom panel"
-msgstr "Ativar painel inferior"
+msgstr "Ativa o painel inferior"
 
 #: libide/keybindings/ide-shortcuts-window.ui:82
 msgctxt "shortcut window"
@@ -1487,13 +1487,13 @@ msgstr "Gestos no touchpad"
 #: libide/keybindings/ide-shortcuts-window.ui:135
 msgctxt "shortcut window"
 msgid "Switch to the next document"
-msgstr "Alternar para o próximo documento"
+msgstr "Alterna para o próximo documento"
 
 #: libide/keybindings/ide-shortcuts-window.ui:94
 #: libide/keybindings/ide-shortcuts-window.ui:142
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
-msgstr "Alternar para o documento anterior"
+msgstr "Alterna para o documento anterior"
 
 #: libide/keybindings/ide-shortcuts-window.ui:102
 msgctxt "shortcut window"
@@ -1503,95 +1503,95 @@ msgstr "Arquivos"
 #: libide/keybindings/ide-shortcuts-window.ui:107
 msgctxt "shortcut window"
 msgid "Create new document"
-msgstr "Criar novo documento"
+msgstr "Cria um novo documento"
 
 #: libide/keybindings/ide-shortcuts-window.ui:114
 msgctxt "shortcut window"
 msgid "Open a document"
-msgstr "Abrir um documento"
+msgstr "Abre um documento"
 
 #: libide/keybindings/ide-shortcuts-window.ui:121
 msgctxt "shortcut window"
 msgid "Save the document"
-msgstr "Salvar o documento"
+msgstr "Salva o documento"
 
 #: libide/keybindings/ide-shortcuts-window.ui:128
 msgctxt "shortcut window"
 msgid "Close the document"
-msgstr "Fechar o documento"
+msgstr "Fecha o documento"
 
 #: libide/keybindings/ide-shortcuts-window.ui:149
 msgctxt "shortcut window"
 msgid "Show list of open documents"
-msgstr "Mostrar lista de documentos abertos"
+msgstr "Mostra a lista de documentos abertos"
 
 #: libide/keybindings/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
 msgid "Find and replace"
-msgstr "Localizar e substituir"
+msgstr "Localiza e substitui"
 
 #: libide/keybindings/ide-shortcuts-window.ui:162
 msgctxt "shortcut window"
 msgid "Find"
-msgstr "Localizar"
+msgstr "Localiza"
 
 #: libide/keybindings/ide-shortcuts-window.ui:169
 msgctxt "shortcut window"
 msgid "Find the next match"
-msgstr "Localizar a próxima ocorrência"
+msgstr "Localiza a próxima ocorrência"
 
 #: libide/keybindings/ide-shortcuts-window.ui:176
 msgctxt "shortcut window"
 msgid "Find the previous match"
-msgstr "Localizar a ocorrência anterior"
+msgstr "Localiza a ocorrência anterior"
 
 #: libide/keybindings/ide-shortcuts-window.ui:183
 msgctxt "shortcut window"
 msgid "Clear highlight"
-msgstr "Limpar realce"
+msgstr "Limpa o realce"
 
 #: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:472
+#: libide/keybindings/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Copy and Paste"
-msgstr "Copiar e colar"
+msgstr "Copia e cola"
 
 #: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:477
+#: libide/keybindings/ide-shortcuts-window.ui:484
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
-msgstr "Copiar o texto selecionado para a área de transferência"
+msgstr "Copia o texto selecionado para a área de transferência"
 
 #: libide/keybindings/ide-shortcuts-window.ui:203
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
-msgstr "Colar o texto selecionado para a área de transferência"
+msgstr "Cola o texto selecionado para a área de transferência"
 
 #: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:484
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
-msgstr "Colar o texto da área de transferência"
+msgstr "Cola o texto da área de transferência"
 
 #: libide/keybindings/ide-shortcuts-window.ui:217
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
-msgstr "Duplicar linha ou seleção atual"
+msgstr "Duplica a linha ou seleção atual"
 
 #: libide/keybindings/ide-shortcuts-window.ui:225
 msgctxt "shortcut window"
 msgid "Undo and Redo"
-msgstr "Desfazer e refazer"
+msgstr "Desfaz e refaz"
 
 #: libide/keybindings/ide-shortcuts-window.ui:230
 msgctxt "shortcut window"
 msgid "Undo previous command"
-msgstr "Desfazer o comando anterior"
+msgstr "Desfaz o comando anterior"
 
 #: libide/keybindings/ide-shortcuts-window.ui:237
 msgctxt "shortcut window"
 msgid "Redo previous command"
-msgstr "Refazer o comando anterior"
+msgstr "Refaz o comando anterior"
 
 #: libide/keybindings/ide-shortcuts-window.ui:245
 msgctxt "shortcut window"
@@ -1601,134 +1601,139 @@ msgstr "Edição"
 #: libide/keybindings/ide-shortcuts-window.ui:250
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
-msgstr "Incrementar o número no cursor"
+msgstr "Incrementa o número no cursor"
 
 #: libide/keybindings/ide-shortcuts-window.ui:257
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
-msgstr "Decrementar o número no cursor"
+msgstr "Decrementa o número no cursor"
 
 #: libide/keybindings/ide-shortcuts-window.ui:264
 msgctxt "shortcut window"
 msgid "Join selected lines"
-msgstr "Juntar as linhas selecionadas"
+msgstr "Junta as linhas selecionadas"
 
 #: libide/keybindings/ide-shortcuts-window.ui:271
 msgctxt "shortcut window"
 msgid "Show completion window"
-msgstr "Mostrar janela de preenchimento"
+msgstr "Mostra a janela de preenchimento"
 
 #: libide/keybindings/ide-shortcuts-window.ui:278
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
-msgstr "Ativar sobrescrever"
+msgstr "Ativa sobrescrever"
 
 #: libide/keybindings/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
 msgid "Reindent line"
-msgstr "Aplicar recuo na linha"
+msgstr "Aplica um recuo na linha"
 
 #: libide/keybindings/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
-msgid "Rename symbol"
-msgstr "Renomear símbolo"
+msgid "Delete line"
+msgstr "Exclui a linha"
 
-#: libide/keybindings/ide-shortcuts-window.ui:293
+#: libide/keybindings/ide-shortcuts-window.ui:299
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "Renomeia o símbolo"
+
+#: libide/keybindings/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Requer suporte a linguagem semântica"
 
-#: libide/keybindings/ide-shortcuts-window.ui:301
+#: libide/keybindings/ide-shortcuts-window.ui:308
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegação"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
-msgctxt "shortcut window"
-msgid "Move to next error in file"
-msgstr "Mover para o próximo erro no arquivo"
-
 #: libide/keybindings/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
-msgid "Move to previous error in file"
-msgstr "Mover para o erro anterior no arquivo"
+msgid "Move to next error in file"
+msgstr "Move para o próximo erro no arquivo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
-msgid "Move to previous edit location"
-msgstr "Mover para o local de edição anterior"
+msgid "Move to previous error in file"
+msgstr "Move para o erro anterior no arquivo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
-msgid "Move to next edit location"
-msgstr "Mover para o próximo local de edição"
+msgid "Move to previous edit location"
+msgstr "Move para o local de edição anterior"
 
 #: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
-msgid "Jump to definition of symbol"
-msgstr "Pular para a definição do símbolo"
+msgid "Move to next edit location"
+msgstr "Move para o próximo local de edição"
 
 #: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
-msgid "Move viewport up within the file"
-msgstr "Mover viewport acima no arquivo"
+msgid "Jump to definition of symbol"
+msgstr "Pula para a definição do símbolo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
-msgid "Move viewport down within the file"
-msgstr "Mover viewport abaixo no arquivo"
+msgid "Move viewport up within the file"
+msgstr "Move o viewport acima no arquivo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
-msgid "Move viewport to end of file"
-msgstr "Mover viewport para o fim do arquivo"
+msgid "Move viewport down within the file"
+msgstr "Move o viewport abaixo no arquivo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
-msgid "Move viewport to beginning of file"
-msgstr "Mover viewport para o começo do arquivo"
+msgid "Move viewport to end of file"
+msgstr "Move o viewport para o fim do arquivo"
 
 #: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
-msgid "Move to matching bracket"
-msgstr "Mover para colchete correspondente"
+msgid "Move viewport to beginning of file"
+msgstr "Move o viewport para o começo do arquivo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:377
+#: libide/keybindings/ide-shortcuts-window.ui:376
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Move o para colchete correspondente"
+
+#: libide/keybindings/ide-shortcuts-window.ui:384
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Seleções"
 
-#: libide/keybindings/ide-shortcuts-window.ui:382
-msgctxt "shortcut window"
-msgid "Select all"
-msgstr "Selecionar tudo"
-
 #: libide/keybindings/ide-shortcuts-window.ui:389
 msgctxt "shortcut window"
-msgid "Unselect all"
-msgstr "Desmarcar tudo"
+msgid "Select all"
+msgstr "Seleciona tudo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:397
+#: libide/keybindings/ide-shortcuts-window.ui:396
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Desmarca tudo"
+
+#: libide/keybindings/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Build and Run"
-msgstr "Compilar e executar"
-
-#: libide/keybindings/ide-shortcuts-window.ui:402
-msgctxt "shortcut window"
-msgid "Build"
-msgstr "Compilar"
+msgstr "Compila e executa"
 
 #: libide/keybindings/ide-shortcuts-window.ui:409
 msgctxt "shortcut window"
-msgid "Run"
-msgstr "Executar"
+msgid "Build"
+msgstr "Compila"
 
 #: libide/keybindings/ide-shortcuts-window.ui:416
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Executa"
+
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfil"
 
-#: libide/keybindings/ide-shortcuts-window.ui:427
+#: libide/keybindings/ide-shortcuts-window.ui:434
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atalhos do Terminal"
@@ -3622,7 +3627,6 @@ msgid "_New Terminal"
 msgstr "_Novo terminal"
 
 #: plugins/terminal/gtk/menus.ui:15
-#| msgid "_Open"
 msgid "_Open Link"
 msgstr "_Abrir link"
 
