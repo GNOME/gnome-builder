@@ -56,6 +56,12 @@ enum {
   LAST_PROP
 };
 
+enum {
+  COLUMN_DIAGNOSTIC,
+  COLUMN_TEXT,
+  LAST_COLUMN
+};
+
 static GParamSpec *properties [LAST_PROP];
 
 static void
@@ -112,7 +118,9 @@ gbp_build_panel_diagnostic (GbpBuildPanel  *self,
           middle = (left + right) / 2;
 
           gtk_tree_model_iter_nth_child (model, &iter, NULL, middle);
-          gtk_tree_model_get (model, &iter, 0, &item, -1);
+          gtk_tree_model_get (model, &iter,
+                              COLUMN_DIAGNOSTIC, &item,
+                              -1);
 
           cmpval = ide_diagnostic_compare (item, diagnostic);
 
@@ -132,8 +140,8 @@ gbp_build_panel_diagnostic (GbpBuildPanel  *self,
 
       gtk_list_store_insert (self->diagnostics_store, &iter, middle);
       gtk_list_store_set (self->diagnostics_store, &iter,
-                          0, diagnostic,
-                          1, ide_diagnostic_get_text (diagnostic),
+                          COLUMN_DIAGNOSTIC, diagnostic,
+                          COLUMN_TEXT, ide_diagnostic_get_text (diagnostic),
                           -1);
     }
 
@@ -270,7 +278,10 @@ gbp_build_panel_diagnostic_activated (GbpBuildPanel     *self,
   if (!gtk_tree_model_get_iter (model, &iter, path))
     IDE_EXIT;
 
-  gtk_tree_model_get (model, &iter, 0, &diagnostic, -1);
+  gtk_tree_model_get (model, &iter,
+                      COLUMN_DIAGNOSTIC, &diagnostic,
+                      -1);
+
   if (diagnostic == NULL)
     IDE_EXIT;
 
