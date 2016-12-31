@@ -314,10 +314,15 @@ gbp_build_panel_text_func (GtkCellLayout   *layout,
                            gpointer         user_data)
 {
   g_autoptr(IdeDiagnostic) diagnostic = NULL;
+  g_auto(GValue) value = { 0 };
 
-  gtk_tree_model_get (model, iter, 0, &diagnostic, -1);
+  gtk_tree_model_get (model, iter,
+                      COLUMN_DIAGNOSTIC, &diagnostic,
+                      -1);
 
-  if (diagnostic != NULL)
+  g_value_init (&value, G_TYPE_STRING);
+
+  if G_LIKELY (diagnostic != NULL)
     {
       GString *str;
       const gchar *text;
@@ -356,12 +361,13 @@ gbp_build_panel_text_func (GtkCellLayout   *layout,
       if (text != NULL)
         g_string_append (str, text);
 
-      g_object_set (renderer, "markup", str->str, NULL);
+      g_value_take_string (&value, g_string_free (str, FALSE));
+      g_object_set_property (G_OBJECT (renderer), "markup", &value);
 
-      g_string_free (str, TRUE);
+      return;
     }
-  else
-    g_object_set (renderer, "text", NULL, NULL);
+
+  g_object_set_property (G_OBJECT (renderer), "text", &value);
 }
 
 static void
