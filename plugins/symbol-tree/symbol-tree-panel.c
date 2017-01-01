@@ -152,7 +152,7 @@ refresh_tree (SymbolTreePanel *self)
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (perspective != NULL);
 
-  if ((active_view = ide_layout_get_active_view (IDE_LAYOUT (perspective))) &&
+  if ((active_view = ide_editor_perspective_get_active_view (IDE_EDITOR_PERSPECTIVE (perspective))) &&
       IDE_IS_EDITOR_VIEW (active_view))
     {
       document = ide_editor_view_get_document (IDE_EDITOR_VIEW  (active_view));

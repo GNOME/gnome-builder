@@ -23,7 +23,6 @@
 
 G_BEGIN_DECLS
 
-GtkPositionType pnl_dock_bin_edge_get_edge (PnlDockBinEdge  *self);
 void            pnl_dock_bin_edge_set_edge (PnlDockBinEdge  *self,
                                             GtkPositionType  bin_edge);
 

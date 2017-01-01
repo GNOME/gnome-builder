@@ -24,6 +24,7 @@
 #define PNL_DOCK_OVERLAY_H
 
 #include "pnl-dock.h"
+#include "pnl-dock-overlay-edge.h"
 
 G_BEGIN_DECLS
 
@@ -43,8 +44,14 @@ struct _PnlDockOverlayClass
   void (*padding8) (void);
 };
 
-GtkWidget *pnl_dock_overlay_new (void);
-
+GtkWidget              *pnl_dock_overlay_new                   (void);
+void                    pnl_overlay_add_child                  (PnlDockOverlay  *self,
+                                                                GtkWidget       *child,
+                                                                const gchar     *type);
+PnlDockOverlayEdge     *pnl_dock_overlay_get_edge              (PnlDockOverlay  *self,
+                                                                GtkPositionType  position);
+GtkAdjustment          *pnl_dock_overlay_get_edge_adjustment   (PnlDockOverlay  *self,
+                                                                GtkPositionType  position);
 G_END_DECLS
 
 #endif /* PNL_DOCK_OVERLAY_H */

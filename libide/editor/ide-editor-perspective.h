@@ -20,8 +20,10 @@
 #define IDE_EDITOR_PERSPECTIVE_H
 
 #include <gtk/gtk.h>
+#include <pnl.h>
 
 #include "diagnostics/ide-source-location.h"
+#include "sourceview/ide-source-view.h"
 #include "workbench/ide-layout.h"
 #include "workbench/ide-perspective.h"
 
@@ -29,13 +31,26 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PERSPECTIVE (ide_editor_perspective_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
+G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, PnlDockOverlay)
 
-void ide_editor_perspective_focus_location                (IdeEditorPerspective *self,
-                                                           IdeSourceLocation    *location);
-void ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
-                                                           IdeBuffer            *buffer);
+void                 ide_editor_perspective_focus_location                 (IdeEditorPerspective   *self,
+                                                                            IdeSourceLocation      *location);
+void                 ide_editor_perspective_focus_buffer_in_current_stack  (IdeEditorPerspective   *self,
+                                                                            IdeBuffer              *buffer);
+GtkWidget           *ide_editor_perspective_get_active_view                (IdeEditorPerspective   *self);
+IdeLayout           *ide_editor_perspective_get_layout                     (IdeEditorPerspective   *self);
 
+GtkWidget           *ide_editor_perspective_get_center_widget              (IdeEditorPerspective   *self);
+GtkWidget           *ide_editor_perspective_get_top_edge                   (IdeEditorPerspective   *self);
+GtkWidget           *ide_editor_perspective_get_left_edge                  (IdeEditorPerspective   *self);
+GtkWidget           *ide_editor_perspective_get_bottom_edge                (IdeEditorPerspective   *self);
+GtkWidget           *ide_editor_perspective_get_right_edge                 (IdeEditorPerspective   *self);
+
+PnlDockOverlayEdge  *ide_editor_perspective_get_overlay_edge               (IdeEditorPerspective   *self,
+                                                                            GtkPositionType         position);
+
+void                 ide_editor_perspective_show_spellchecker              (IdeEditorPerspective   *self,
+                                                                            IdeSourceView          *source_view);
 G_END_DECLS
 
 #endif /* IDE_EDITOR_PERSPECTIVE_H */

@@ -77,9 +77,9 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
   dh_book_manager_populate (self->books);
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
-  g_assert (IDE_IS_LAYOUT (perspective));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
 
-  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
+  pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (perspective));
   g_assert (IDE_IS_LAYOUT_PANE (pane));
 
   self->panel = g_object_new (GBP_TYPE_DEVHELP_PANEL,
@@ -112,9 +112,9 @@ gbp_devhelp_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_clear_object (&self->books);
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
-  g_assert (IDE_IS_LAYOUT (perspective));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
 
-  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
+  pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (perspective));
   g_assert (IDE_IS_LAYOUT_PANE (pane));
 
   gtk_widget_destroy (GTK_WIDGET (self->panel));

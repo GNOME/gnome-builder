@@ -51,9 +51,9 @@ gb_sysmon_addin_load (IdeWorkbenchAddin *addin,
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
 
   g_assert (editor != NULL);
-  g_assert (IDE_IS_LAYOUT (editor));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
 
-  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (editor));
+  pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (editor));
   panel = g_object_new (GB_TYPE_SYSMON_PANEL,
                         "expand", TRUE,
                         "visible", TRUE,

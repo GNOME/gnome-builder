@@ -59,6 +59,7 @@ symbol_tree_load (IdeWorkbenchAddin *addin,
 {
   SymbolTree *self = (SymbolTree *)addin;
   IdePerspective *perspective;
+  IdeLayout *layout;
   GtkWidget *right_pane;
 
   g_assert (SYMBOL_IS_TREE (self));
@@ -66,15 +67,16 @@ symbol_tree_load (IdeWorkbenchAddin *addin,
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (perspective != NULL);
-  g_assert (IDE_IS_LAYOUT (perspective));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
 
-  g_signal_connect_object (perspective,
+  layout = ide_editor_perspective_get_layout (IDE_EDITOR_PERSPECTIVE (perspective));
+  g_signal_connect_object (layout,
                            "notify::active-view",
                            G_CALLBACK (notify_active_view_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
-  right_pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
+  right_pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (perspective));
   g_assert (right_pane != NULL);
 
   self->panel = g_object_new (SYMBOL_TYPE_TREE_PANEL,
@@ -102,9 +104,9 @@ symbol_tree_unload (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
-  g_assert (IDE_IS_LAYOUT (perspective));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
 
-  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (perspective));
+  pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (perspective));
   g_assert (IDE_IS_LAYOUT_PANE (pane));
 
   gtk_widget_destroy (GTK_WIDGET (self->panel));

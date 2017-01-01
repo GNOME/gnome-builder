@@ -190,7 +190,7 @@ init_dock (GbColorPickerWorkbenchAddin *self)
 
   init_palettes (self);
 
-  panel = (pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->editor)));
+  panel = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (self->editor));
   gtk_container_add (GTK_CONTAINER (panel), GTK_WIDGET (self->dock));
   gtk_container_add (GTK_CONTAINER (self->dock), self->color_panel);
 
@@ -443,7 +443,7 @@ active_view_changed_cb (GbColorPickerWorkbenchAddin *self,
 
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (self));
 
-  self->active_view = ide_layout_get_active_view (IDE_LAYOUT (self->editor));
+  self->active_view = ide_editor_perspective_get_active_view (self->editor);
   if (self->active_view != NULL && IDE_IS_EDITOR_VIEW (self->active_view))
     {
       state = get_menu_action_state (self, IDE_EDITOR_VIEW (self->active_view));
@@ -460,15 +460,17 @@ gb_color_picker_workbench_addin_load (IdeWorkbenchAddin *addin,
                                       IdeWorkbench      *workbench)
 {
   GbColorPickerWorkbenchAddin *self = (GbColorPickerWorkbenchAddin *)addin;
+  IdeLayout *layout;
 
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   ide_set_weak_pointer (&self->workbench, workbench);
   self->editor = IDE_EDITOR_PERSPECTIVE (ide_workbench_get_perspective_by_name (workbench, "editor"));
+  layout = ide_editor_perspective_get_layout (self->editor);
 
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)setup_view_cb, self);
-  self->active_view = ide_layout_get_active_view (IDE_LAYOUT (self->editor));
+  self->active_view = ide_editor_perspective_get_active_view (self->editor);
 
   g_signal_connect_object (self->editor,
                            "view-added",
@@ -480,7 +482,7 @@ gb_color_picker_workbench_addin_load (IdeWorkbenchAddin *addin,
                            G_CALLBACK (view_removed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (IDE_LAYOUT (self->editor),
+  g_signal_connect_object (layout,
                            "notify::active-view",
                            G_CALLBACK (active_view_changed_cb),
                            self,

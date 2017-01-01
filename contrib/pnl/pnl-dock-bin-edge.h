@@ -43,6 +43,8 @@ struct _PnlDockBinEdgeClass
   void (*padding8) (void);
 };
 
+GtkPositionType pnl_dock_bin_edge_get_edge (PnlDockBinEdge  *self);
+
 G_END_DECLS
 
 #endif /* PNL_DOCK_BIN_EDGE_H */

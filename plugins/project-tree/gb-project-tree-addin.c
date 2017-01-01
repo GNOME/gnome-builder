@@ -75,10 +75,10 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (editor != NULL);
 
-  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (editor));
+  pane = ide_editor_perspective_get_left_edge (IDE_EDITOR_PERSPECTIVE (editor));
   g_assert (pane != NULL);
 
-  content = pnl_dock_bin_get_center_widget (PNL_DOCK_BIN (editor));
+  content = ide_editor_perspective_get_center_widget (IDE_EDITOR_PERSPECTIVE (editor));
   g_assert (content != NULL);
 
   grid = ide_widget_find_child_typed (content, IDE_TYPE_LAYOUT_GRID);

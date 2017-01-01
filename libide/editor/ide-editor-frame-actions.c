@@ -20,6 +20,7 @@
 
 #include "ide-editor-frame-actions.h"
 #include "ide-editor-frame-private.h"
+#include "editor/ide-editor-perspective.h"
 #include "ide-editor-spell-widget.h"
 #include "util/ide-gtk.h"
 
@@ -29,36 +30,15 @@ ide_editor_frame_actions_spellcheck (GSimpleAction *action,
                                      gpointer       user_data)
 {
   IdeEditorFrame *self = user_data;
-  GtkWidget *spell_widget;
-  GtkWidget *entry;
+  IdeWorkbench *workbench;
+  IdePerspective *editor;
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
   if (IDE_IS_SOURCE_VIEW (self->source_view) &&
-      !self->spellchecker_opened)
-    {
-      g_assert (gtk_bin_get_child (GTK_BIN (self->spell_revealer)) == NULL);
-
-      self->spellchecker_opened = TRUE;
-
-      spell_widget = ide_editor_spell_widget_new (self->source_view);
-      gtk_widget_show (spell_widget);
-      gtk_container_add (GTK_CONTAINER (self->spell_revealer), spell_widget);
-
-      gtk_revealer_set_reveal_child (self->spell_revealer, TRUE);
-      entry = ide_editor_spell_widget_get_entry (IDE_EDITOR_SPELL_WIDGET (spell_widget));
-
-      /* We need the widget to be realized before the grab to avoid:
-       * gtk_widget_event: assertion 'WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
-       */
-      gtk_widget_realize (entry);
-      gtk_widget_grab_focus (entry);
-      g_signal_connect_object (spell_widget,
-                               "unmap",
-                               G_CALLBACK (ide_editor_frame_spell_widget_unmapped_cb),
-                               self,
-                               G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-    }
+      NULL != (workbench = ide_widget_get_workbench (GTK_WIDGET (self))) &&
+      NULL != (editor = ide_workbench_get_perspective_by_name (workbench, "editor")))
+    ide_editor_perspective_show_spellchecker (IDE_EDITOR_PERSPECTIVE (editor), self->source_view);
 }
 
 static void
@@ -520,6 +500,6 @@ ide_editor_frame_actions_init (IdeEditorFrame *self)
   g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameSpellActions,
                                    G_N_ELEMENTS (IdeEditorFrameSpellActions), self);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (self->spell_revealer), "spell-entry", G_ACTION_GROUP (group));
+  //gtk_widget_insert_action_group (GTK_WIDGET (self->spell_revealer), "spell-entry", G_ACTION_GROUP (group));
   g_object_unref (group);
 }

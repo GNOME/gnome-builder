@@ -17,7 +17,7 @@
  */
 
 #include "pnl-dock-item.h"
-#include "pnl-dock-overlay-edge-private.h"
+#include "pnl-dock-overlay-edge.h"
 #include "pnl-dock-paned.h"
 #include "pnl-dock-paned-private.h"
 #include "pnl-dock-stack.h"

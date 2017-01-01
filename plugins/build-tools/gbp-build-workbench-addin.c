@@ -145,13 +145,13 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   configuration = ide_configuration_manager_get_current (configuration_manager);
 
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (editor));
+  pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (editor));
   self->panel = g_object_new (GBP_TYPE_BUILD_PANEL,
                               "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->panel));
 
-  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (editor));
+  pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (editor));
   self->build_log_panel = g_object_new (GBP_TYPE_BUILD_LOG_PANEL, NULL);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->build_log_panel));
 

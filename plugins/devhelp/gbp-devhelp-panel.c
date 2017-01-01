@@ -76,7 +76,7 @@ gbp_devhelp_panel_link_selected (GbpDevhelpPanel *self,
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
-  g_assert (IDE_IS_LAYOUT (perspective));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
 
   ide_perspective_views_foreach (perspective, gbp_devhelp_panel_find_view, &view);
 
