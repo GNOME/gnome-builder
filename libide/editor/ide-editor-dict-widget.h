@@ -32,8 +32,11 @@ G_DECLARE_FINAL_TYPE (IdeEditorDictWidget, ide_editor_dict_widget, IDE, EDITOR_D
 IdeEditorDictWidget        *ide_editor_dict_widget_new               (GspellChecker         *checker);
 
 GspellChecker              *ide_editor_dict_widget_get_checker       (IdeEditorDictWidget   *self);
+gint                        ide_editor_dict_get_label_max_width      (IdeEditorDictWidget   *self);
 void                        ide_editor_dict_widget_set_checker       (IdeEditorDictWidget   *self,
                                                                       GspellChecker         *checker);
+void                        ide_editor_dict_set_label_width          (IdeEditorDictWidget   *self,
+                                                                      gint                   width);
 void                        ide_editor_dict_widget_add_word          (IdeEditorDictWidget   *self,
                                                                       const gchar           *word);
 

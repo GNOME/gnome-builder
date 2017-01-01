@@ -33,6 +33,8 @@ struct _IdeEditorDictWidget
   GtkWidget            *word_entry;
   GtkWidget            *add_button;
   GtkWidget            *words_list;
+  GtkLabel             *add_word_label;
+  GtkLabel             *language_label;
 };
 
 G_DEFINE_TYPE (IdeEditorDictWidget, ide_editor_dict_widget, GTK_TYPE_BIN)
@@ -298,11 +300,12 @@ ide_editor_dict_widget_get_words_cb (GObject      *object,
   g_clear_pointer (&self->words_array, g_ptr_array_unref);
 }
 
-void
-ide_editor_dict_widget_add_word (IdeEditorDictWidget *self,
-                                 const gchar         *word)
+static void
+add_dict_set_sensitivity (IdeEditorDictWidget *self,
+                          gboolean             sensitivity)
 {
-  /* TODO: code to add a word to the words array */
+  gtk_widget_set_sensitive (GTK_WIDGET (self->add_button), sensitivity);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->words_list), sensitivity);
 }
 
 static void
@@ -331,12 +334,29 @@ language_notify_cb (IdeEditorDictWidget *self,
           return;
         }
 
+      add_dict_set_sensitivity (self, TRUE);
       cancellable = g_cancellable_new ();
       ide_editor_dict_widget_get_words_async (self,
                                               ide_editor_dict_widget_get_words_cb,
                                               cancellable,
                                               NULL);
     }
+  else
+    add_dict_set_sensitivity (self, FALSE);
+}
+
+static void
+word_entry_text_notify_cb (IdeEditorDictWidget *self,
+                           GParamSpec          *pspec,
+                           GtkEntry            *word_entry)
+{
+  const gchar *word;
+
+  g_assert (IDE_IS_EDITOR_DICT_WIDGET (self));
+  g_assert (GTK_IS_ENTRY (word_entry));
+
+  word = gtk_entry_get_text (GTK_ENTRY (self->word_entry));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->add_button), !ide_str_empty0 (word));
 }
 
 static void
@@ -361,12 +381,32 @@ ide_editor_dict_widget_get_checker (IdeEditorDictWidget *self)
   return self->checker;
 }
 
+gint
+ide_editor_dict_get_label_max_width (IdeEditorDictWidget *self)
+{
+  gint add_word_label_width;
+
+  g_return_val_if_fail (IDE_IS_EDITOR_DICT_WIDGET (self), 0);
+
+  gtk_widget_get_preferred_width (GTK_WIDGET (self->add_word_label), NULL, &add_word_label_width);
+
+  return add_word_label_width;
+}
+
+void
+ide_editor_dict_set_label_width (IdeEditorDictWidget *self,
+                                 gint                 width)
+{
+  g_return_if_fail (IDE_IS_EDITOR_DICT_WIDGET (self));
+
+  gtk_widget_set_size_request (GTK_WIDGET (self->add_word_label), width, -1);
+  /* The other labels are in a grid column soo their size will be automatically set */
+}
+
 void
 ide_editor_dict_widget_set_checker (IdeEditorDictWidget *self,
                                     GspellChecker       *checker)
 {
-  GCancellable *cancellable;
-
   g_return_if_fail (IDE_IS_EDITOR_DICT_WIDGET (self));
 
   if (self->checker != checker)
@@ -393,19 +433,32 @@ ide_editor_dict_widget_set_checker (IdeEditorDictWidget *self,
     }
 }
 
+static gboolean
+check_dict_available (IdeEditorDictWidget *self)
+{
+  return (self->checker != NULL && self->language != NULL);
+}
+
 static void
 add_button_clicked_cb (IdeEditorDictWidget *self,
                        GtkButton           *button)
 {
-  g_autofree gchar *word = NULL;
+  const gchar *word;
+  GtkWidget *item;
 
   g_assert (IDE_IS_EDITOR_DICT_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (button));
 
-  word = gtk_entry_get_text (self->word_entry);
-
-  if (!ide_str_empty0 (word))
+  word = gtk_entry_get_text (GTK_ENTRY (self->word_entry));
+  /* TODO: check if word already in dict */
+  if (check_dict_available (self) && !ide_str_empty0 (word))
     {
-      ;
+      item = create_word_row (self, word);
+      gtk_list_box_insert (GTK_LIST_BOX (self->words_list), item, 0);
+      gspell_checker_add_word_to_personal (self->checker, word, -1);
+
+      gtk_entry_set_text (GTK_ENTRY (self->word_entry), "");
+      gtk_widget_grab_focus (self->word_entry);
     }
 }
 
@@ -486,6 +539,7 @@ ide_editor_dict_widget_class_init (IdeEditorDictWidgetClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-dict-widget.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorDictWidget, add_word_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorDictWidget, word_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorDictWidget, add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorDictWidget, words_list);
@@ -496,8 +550,13 @@ ide_editor_dict_widget_init (IdeEditorDictWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connnect (self->add_button,
-                     "clicked",
-                     add_button_clicked_cb,
-                     self);
+  g_signal_connect_swapped (self->add_button,
+                            "clicked",
+                            G_CALLBACK (add_button_clicked_cb),
+                            self);
+
+  g_signal_connect_swapped (self->word_entry,
+                            "notify::text",
+                            G_CALLBACK (word_entry_text_notify_cb),
+                            self);
 }
