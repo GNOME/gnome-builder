@@ -23,11 +23,11 @@
 #include "gbp-gcc-build-result-addin.h"
 
 
-#define ERROR_FORMAT_REGEX           \
-  "(?<filename>[a-zA-Z0-9\\-\\.]+):" \
-  "(?<line>\\d+):"                   \
-  "(?<column>\\d+): "                \
-  "(?<level>[\\w\\s]+): "            \
+#define ERROR_FORMAT_REGEX              \
+  "(?<filename>[a-zA-Z0-9\\-\\.\\/]+):" \
+  "(?<line>\\d+):"                      \
+  "(?<column>\\d+): "                   \
+  "(?<level>[\\w\\s]+): "               \
   "(?<message>.*)"
 
 struct _GbpGccBuildResultAddin
