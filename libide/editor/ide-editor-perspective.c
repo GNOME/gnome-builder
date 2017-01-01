@@ -20,6 +20,7 @@
 
 #include <egg-signal-group.h>
 #include <glib/gi18n.h>
+#include <pnl.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -35,6 +36,8 @@
 #include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
 
+#define OVERLAY_REVEAL_DURATION 300
+
 struct _IdeEditorPerspective
 {
   PnlDockOverlay         parent_instance;
@@ -46,8 +49,7 @@ struct _IdeEditorPerspective
 
   EggSignalGroup        *buffer_manager_signals;
 
-  GtkAdjustment         *spellchecker_edge_adj;
-
+  gint                   right_pane_position;
   guint                  spellchecker_opened : 1;
 };
 
@@ -821,75 +823,178 @@ ide_editor_perspective_get_overlay_edge (IdeEditorPerspective *self,
   return pnl_dock_overlay_get_edge (PNL_DOCK_OVERLAY (self), position);
 }
 
-static void
-ide_editor_perspective_edge_adj_changed_cb (IdeEditorPerspective *self,
-                                            GtkAdjustment        *edge_adj)
+static GtkOrientation
+get_orientation_from_position_type (GtkPositionType position_type)
 {
-  PnlDockOverlayEdge *edge;
-  GtkWidget *child;
-  gdouble value;
+  if (position_type == GTK_POS_LEFT || position_type == GTK_POS_RIGHT)
+    return GTK_ORIENTATION_HORIZONTAL;
+  else
+    return GTK_ORIENTATION_VERTICAL;
+}
+
+/* Triggered at the start of the animation */
+static void
+overlay_child_reveal_notify_cb (IdeEditorPerspective *self,
+                                GParamSpec           *pspec,
+                                PnlDockOverlayEdge   *edge)
+{
+  IdeLayoutPane *pane;
+  gboolean reveal;
 
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (PNL_IS_DOCK_OVERLAY_EDGE (edge));
 
-  value = gtk_adjustment_get_value (edge_adj);
-  if (value == 1.0)
+  gtk_container_child_get (GTK_CONTAINER (self), GTK_WIDGET (edge),
+                           "reveal", &reveal,
+                           NULL);
+
+  if (!reveal && self->spellchecker_opened)
     {
-      edge = ide_editor_perspective_get_overlay_edge (self, GTK_POS_RIGHT);
+      g_signal_handlers_disconnect_by_func (self,
+                                            overlay_child_reveal_notify_cb,
+                                            edge);
+
+      pane = IDE_LAYOUT_PANE (pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout)));
+      pnl_dock_revealer_animate_to_position (PNL_DOCK_REVEALER (pane),
+                                             self->right_pane_position,
+                                             OVERLAY_REVEAL_DURATION);
+    }
+}
+
+/* Triggered at the end of the animation */
+static void
+overlay_child_revealed_notify_cb (IdeEditorPerspective *self,
+                                  GParamSpec           *pspec,
+                                  PnlDockOverlayEdge   *edge)
+{
+  GtkWidget *child;
+  gboolean revealed;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (PNL_IS_DOCK_OVERLAY_EDGE (edge));
+
+  gtk_container_child_get (GTK_CONTAINER (self), GTK_WIDGET (edge),
+                           "revealed", &revealed,
+                           NULL);
+
+  if (!revealed && self->spellchecker_opened)
+    {
+      g_signal_handlers_disconnect_by_func (self,
+                                            overlay_child_revealed_notify_cb,
+                                            edge);
+
       child = gtk_bin_get_child (GTK_BIN (edge));
+      g_assert (child != NULL);
       gtk_container_remove (GTK_CONTAINER (edge), child);
       self->spellchecker_opened = FALSE;
-
-      g_signal_handlers_disconnect_by_func (self->spellchecker_edge_adj,
-                                            ide_editor_perspective_edge_adj_changed_cb,
-                                            self);
-      self->spellchecker_edge_adj = NULL;
     }
+  else if (revealed)
+    self->spellchecker_opened = TRUE;
+}
+
+static void
+show_spell_checker (IdeEditorPerspective *self,
+                    PnlDockOverlayEdge   *overlay_edge,
+                    IdeLayoutPane        *pane)
+{
+  GtkOrientation pane_orientation;
+  GtkPositionType pane_position_type;
+  GtkOrientation overlay_orientation;
+  GtkPositionType overlay_position_type;
+  gint overlay_size;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (gtk_bin_get_child (GTK_BIN (overlay_edge)) != NULL);
+
+  pane_position_type = pnl_dock_bin_edge_get_edge (PNL_DOCK_BIN_EDGE (pane));
+  overlay_position_type = pnl_dock_overlay_edge_get_edge (overlay_edge);
+
+  pane_orientation = get_orientation_from_position_type (pane_position_type);
+  overlay_orientation = get_orientation_from_position_type (overlay_position_type);
+
+  g_assert (pane_orientation == overlay_orientation);
+
+  if (pnl_dock_revealer_get_position_set (PNL_DOCK_REVEALER (pane)))
+    self->right_pane_position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
+  else
+    {
+      if (overlay_orientation == GTK_ORIENTATION_HORIZONTAL)
+        gtk_widget_get_preferred_width (GTK_WIDGET (pane), NULL, &self->right_pane_position);
+      else
+        gtk_widget_get_preferred_height (GTK_WIDGET (pane), NULL, &self->right_pane_position);
+    }
+
+  if (overlay_orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_widget_get_preferred_width (GTK_WIDGET (overlay_edge), NULL, &overlay_size);
+  else
+    gtk_widget_get_preferred_height (GTK_WIDGET (overlay_edge), NULL, &overlay_size);
+
+  g_signal_connect_object (overlay_edge,
+                           "child-notify::reveal",
+                           G_CALLBACK (overlay_child_reveal_notify_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (overlay_edge,
+                           "child-notify::revealed",
+                           G_CALLBACK (overlay_child_revealed_notify_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  pnl_dock_revealer_animate_to_position (PNL_DOCK_REVEALER (pane),
+                                         overlay_size,
+                                         OVERLAY_REVEAL_DURATION);
+  gtk_container_child_set (GTK_CONTAINER (self), GTK_WIDGET (overlay_edge),
+                           "reveal", TRUE,
+                           NULL);
+}
+
+static GtkWidget *
+create_spellchecker_widget (IdeSourceView *source_view)
+{
+  GtkWidget *spellchecker_widget;
+  GtkWidget *scroll_window;
+  GtkWidget *spell_widget;
+
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  spellchecker_widget = g_object_new (GTK_TYPE_BOX,
+                                      "visible", TRUE,
+                                      "expand", TRUE,
+                                      NULL);
+  scroll_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                                "visible", TRUE,
+                                "expand", TRUE,
+                                "propagate-natural-width", TRUE,
+                                NULL);
+  spell_widget = ide_editor_spell_widget_new (source_view);
+  gtk_box_pack_start (GTK_BOX (spellchecker_widget), scroll_window, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (scroll_window), spell_widget);
+  gtk_widget_show_all (spellchecker_widget);
+
+  return spellchecker_widget;
 }
 
 void
 ide_editor_perspective_show_spellchecker (IdeEditorPerspective *self,
                                           IdeSourceView        *source_view)
 {
-  GtkWidget *box;
-  GtkWidget *scroll_window;
-  GtkWidget *spell_widget;
-  PnlDockOverlayEdge *edge;
+  GtkWidget *spellchecker_widget;
+  PnlDockOverlayEdge *overlay_edge;
+  IdeLayoutPane *pane;
 
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
 
   if (!self->spellchecker_opened)
     {
       self->spellchecker_opened = TRUE;
+      spellchecker_widget = create_spellchecker_widget (source_view);
 
-      box = g_object_new (GTK_TYPE_BOX,
-                          "visible", TRUE,
-                          "expand", TRUE,
-                          NULL);
-      scroll_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                                    "visible", TRUE,
-                                    "expand", TRUE,
-                                    "width-request", 500,
-                                    "propagate-natural-width", TRUE,
-                                    NULL);
-      spell_widget = ide_editor_spell_widget_new (source_view);
-      gtk_box_pack_start (GTK_BOX (box), scroll_window, TRUE, TRUE, 0);
-      gtk_container_add (GTK_CONTAINER (scroll_window), spell_widget);
-      gtk_widget_show_all (box);
+      pnl_overlay_add_child (PNL_DOCK_OVERLAY (self), spellchecker_widget, "right");
+      overlay_edge = ide_editor_perspective_get_overlay_edge (self, GTK_POS_RIGHT);
+      gtk_widget_set_child_visible (GTK_WIDGET (overlay_edge), TRUE);
 
-      pnl_overlay_add_child (PNL_DOCK_OVERLAY (self), box, "right");
-      edge = ide_editor_perspective_get_overlay_edge (self, GTK_POS_RIGHT);
-      self->spellchecker_edge_adj = pnl_dock_overlay_get_edge_adjustment (PNL_DOCK_OVERLAY (self),
-                                                                          GTK_POS_RIGHT);
-      gtk_widget_set_child_visible (GTK_WIDGET (edge), TRUE);
-      //pnl_dock_overlay_edge_set_position (PNL_DOCK_OVERLAY_EDGE (edge), 100);
-
-      gtk_container_child_set (GTK_CONTAINER (self), GTK_WIDGET (edge),
-                               "reveal", TRUE,
-                               NULL);
-
-      g_signal_connect_swapped (self->spellchecker_edge_adj,
-                                "value-changed",
-                                G_CALLBACK (ide_editor_perspective_edge_adj_changed_cb),
-                                self);
+      pane = IDE_LAYOUT_PANE (pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout)));
+      show_spell_checker (self, overlay_edge, pane);
     }
 }

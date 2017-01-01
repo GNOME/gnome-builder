@@ -374,9 +374,6 @@ libide_1_0_la_SOURCES =                                   \
 	application/ide-application-private.h             \
 	application/ide-application-tests.c               \
 	application/ide-application-tests.h               \
-	editor/ide-editor-dict-widget.c                   \
-	editor/ide-editor-dict-widget.h                   \
-	editor/ide-editor-dict-widget.ui                  \
 	editor/ide-editor-frame-actions.c                 \
 	editor/ide-editor-frame-actions.h                 \
 	editor/ide-editor-frame-private.h                 \
@@ -395,6 +392,8 @@ libide_1_0_la_SOURCES =                                   \
 	editor/ide-editor-spell-navigator.h               \
 	editor/ide-editor-spell-utils.c                   \
 	editor/ide-editor-spell-utils.h                   \
+	editor/ide-editor-spell-dict.c                    \
+	editor/ide-editor-spell-dict.h                    \
 	editor/ide-editor-spell-widget.c                  \
 	editor/ide-editor-spell-widget.h                  \
 	editor/ide-editor-tweak-widget.c                  \
