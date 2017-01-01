@@ -25,6 +25,13 @@
 
 #include "ide-editor-spell-widget.h"
 
+typedef enum
+{
+  CHECK_WORD_NONE,
+  CHECK_WORD_CHECKING,
+  CHECK_WORD_IDLE
+} CheckWordState;
+
 struct _IdeEditorSpellWidget
 {
   GtkBin                 parent_instance;
@@ -36,29 +43,38 @@ struct _IdeEditorSpellWidget
   IdeEditorDictWidget   *dict_widget;
   const GspellLanguage  *spellchecker_language;
 
+  GtkLabel              *misspelled_label;
+  GtkLabel              *change_to_label;
+  GtkLabel              *suggestions_label;
+  GtkLabel              *language_label;
   GtkLabel              *word_label;
   GtkLabel              *count_label;
   GtkEntry              *word_entry;
-  GtkButton             *check_button;
-  GtkButton             *add_dict_button;
   GtkButton             *ignore_button;
   GtkButton             *ignore_all_button;
   GtkButton             *change_button;
   GtkButton             *change_all_button;
-  GtkButton             *close_button;
   GtkListBox            *suggestions_box;
-  GtkRevealer           *dict_revealer;
 
   GtkButton             *highlight_checkbutton;
   GtkButton             *language_chooser_button;
+  GtkWidget             *dict_box;
 
   GtkWidget             *placeholder;
   GAction               *view_spellchecking_action;
 
+  guint                  check_word_timeout_id;
+  CheckWordState         check_word_state;
+
   guint                  view_spellchecker_set : 1;
+  guint                  is_checking_word : 1;
+  guint                  is_check_word_invalid : 1;
+  guint                  is_check_word_idle : 1;
 };
 
 G_DEFINE_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, GTK_TYPE_BIN)
+
+#define CHECK_WORD_INTERVAL_MIN 100
 
 enum {
   PROP_0,
@@ -89,12 +105,10 @@ set_sensiblility (IdeEditorSpellWidget *self,
   clear_suggestions_box (self);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->word_entry), sensibility);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->check_button), sensibility);
   gtk_widget_set_sensitive (GTK_WIDGET (self->ignore_button), sensibility);
   gtk_widget_set_sensitive (GTK_WIDGET (self->ignore_all_button), sensibility);
   gtk_widget_set_sensitive (GTK_WIDGET (self->change_button), sensibility);
   gtk_widget_set_sensitive (GTK_WIDGET (self->change_all_button), sensibility);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->add_dict_button), sensibility);
   gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), sensibility);
 }
 
@@ -141,6 +155,7 @@ fill_suggestions_box (IdeEditorSpellWidget *self,
   if (NULL == (suggestions = gspell_checker_get_suggestions (self->checker, word, -1)))
     {
       *first_result = NULL;
+      gtk_label_set_text (GTK_LABEL (self->placeholder), _("No suggestioons"));
       gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), FALSE);
     }
   else
@@ -249,6 +264,52 @@ ide_editor_spell_widget_set_view (IdeEditorSpellWidget *self,
   self->navigator = ide_editor_spell_navigator_new (GTK_TEXT_VIEW (view));
 }
 
+static gboolean
+check_word_timeout_cb (IdeEditorSpellWidget *self)
+{
+  const gchar *word;
+  g_autofree gchar *first_result = NULL;
+  g_autoptr(GError) error = NULL;
+  gchar *icon_name;
+  gboolean ret = TRUE;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
+  self->check_word_state = CHECK_WORD_CHECKING;
+
+  word = gtk_entry_get_text (self->word_entry);
+  if (!ide_str_empty0 (word))
+    {
+      /* FIXME: suggestions can give a multiple-words suggestion that failed to the checkword test, ex: auto tools */
+      ret = gspell_checker_check_word (self->checker, word, -1, &error);
+      if (error != NULL)
+        {
+          printf ("check error:%s\n", error->message);
+        }
+    }
+
+  icon_name = ret ? "" : "dialog-warning-symbolic";
+  gtk_entry_set_icon_from_icon_name (self->word_entry,
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     icon_name);
+
+  self->check_word_state = CHECK_WORD_NONE;
+
+  self->check_word_timeout_id = 0;
+  if (self->is_check_word_invalid == TRUE)
+    {
+      self->check_word_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT,
+                                                        CHECK_WORD_INTERVAL_MIN,
+                                                        (GSourceFunc)check_word_timeout_cb,
+                                                        self,
+                                                        NULL);
+      self->check_word_state = CHECK_WORD_IDLE;
+      self->is_check_word_invalid = FALSE;
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_editor_spell_widget__word_entry_changed_cb (IdeEditorSpellWidget *self,
                                                 GtkEntry             *entry)
@@ -260,61 +321,27 @@ ide_editor_spell_widget__word_entry_changed_cb (IdeEditorSpellWidget *self,
 
   sensitive = (gtk_entry_get_text_length (entry) > 0);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->check_button), sensitive);
   gtk_widget_set_sensitive (GTK_WIDGET (self->change_button), sensitive);
   gtk_widget_set_sensitive (GTK_WIDGET (self->change_all_button), sensitive);
-}
 
-static void
-ide_editor_spell_widget__check_button_clicked_cb (IdeEditorSpellWidget *self,
-                                                  GtkButton            *button)
-{
-  const gchar *word;
-  g_autofree gchar *first_result = NULL;
-  GError *error = NULL;
-  gboolean ret = FALSE;
-
-  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  word = gtk_entry_get_text (self->word_entry);
-  g_assert (!ide_str_empty0 (word));
-
-  ret = gspell_checker_check_word (self->checker, word, -1, &error);
-  if (error != NULL)
+  if (self->check_word_state == CHECK_WORD_CHECKING)
     {
-      printf ("check error:%s\n", error->message);
+      self->is_check_word_invalid = TRUE;
+      return;
     }
 
-  if (ret)
+  if (self->check_word_state == CHECK_WORD_IDLE)
     {
-      gtk_label_set_text (GTK_LABEL (self->placeholder), _("Correct spelling"));
-      fill_suggestions_box (self, NULL, NULL);
+      g_source_remove (self->check_word_timeout_id);
+      self->check_word_timeout_id = 0;
     }
-  else
-    {
-      fill_suggestions_box (self, word, &first_result);
-      if (!ide_str_empty0 (first_result))
-        gtk_entry_set_text (self->word_entry, first_result);
-      else
-        gtk_label_set_text (GTK_LABEL (self->placeholder), _("No suggestioons"));
-    }
-}
 
-static void
-ide_editor_spell_widget__add_dict_button_clicked_cb (IdeEditorSpellWidget *self,
-                                                     GtkButton            *button)
-{
-  const gchar *word;
-
-  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  word = gtk_label_get_text (self->word_label);
-  g_assert (!ide_str_empty0 (word));
-
-  gspell_checker_add_word_to_personal (self->checker, word, -1);
-  jump_to_next_misspelled_word (self);
+  self->check_word_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT,
+                                                    CHECK_WORD_INTERVAL_MIN,
+                                                    (GSourceFunc)check_word_timeout_cb,
+                                                    self,
+                                                    NULL);
+  self->check_word_state = CHECK_WORD_IDLE;
 }
 
 static void
@@ -428,7 +455,7 @@ ide_editor_spell_widget__key_press_event_cb (IdeEditorSpellWidget *self,
 }
 
 static void
-ide_editor_frame_spell_widget_mapped_cb (IdeEditorSpellWidget *self)
+ide_editor_frame_spell__widget_mapped_cb (IdeEditorSpellWidget *self)
 {
   GActionGroup *group = NULL;
   GtkWidget *widget = GTK_WIDGET (self);
@@ -497,9 +524,9 @@ ide_editor_spell_widget__language_notify_cb (IdeEditorSpellWidget *self,
 }
 
 static void
-ide_editor_spell_widget_words_counted_cb (IdeEditorSpellWidget *self,
-                                          GParamSpec           *pspec,
-                                          GspellNavigator      *navigator)
+ide_editor_spell_widget__words_counted_cb (IdeEditorSpellWidget *self,
+                                           GParamSpec           *pspec,
+                                           GspellNavigator      *navigator)
 {
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
 
@@ -527,22 +554,12 @@ ide_editor_spell_widget_constructed (GObject *object)
 
   g_signal_connect_swapped (self->navigator,
                             "notify::words-counted",
-                            G_CALLBACK (ide_editor_spell_widget_words_counted_cb),
+                            G_CALLBACK (ide_editor_spell_widget__words_counted_cb),
                             self);
 
   g_signal_connect_swapped (self->word_entry,
                             "changed",
                             G_CALLBACK (ide_editor_spell_widget__word_entry_changed_cb),
-                            self);
-
-  g_signal_connect_swapped (self->check_button,
-                            "clicked",
-                            G_CALLBACK (ide_editor_spell_widget__check_button_clicked_cb),
-                            self);
-
-  g_signal_connect_swapped (self->add_dict_button,
-                            "clicked",
-                            G_CALLBACK (ide_editor_spell_widget__add_dict_button_clicked_cb),
                             self);
 
   g_signal_connect_swapped (self->ignore_button,
@@ -601,7 +618,7 @@ ide_editor_spell_widget_constructed (GObject *object)
    */
   g_signal_connect_object (self,
                            "map",
-                           G_CALLBACK (ide_editor_frame_spell_widget_mapped_cb),
+                           G_CALLBACK (ide_editor_frame_spell__widget_mapped_cb),
                            NULL,
                            G_CONNECT_AFTER);
 }
@@ -615,6 +632,9 @@ ide_editor_spell_widget_finalize (GObject *object)
   GtkTextBuffer *buffer;
 
   g_clear_object (&self->navigator);
+
+  if (self->check_word_timeout_id > 0)
+    g_source_remove (self->check_word_timeout_id);
 
   /* Set back the view spellchecking previous state */
   spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self->view));
@@ -696,33 +716,37 @@ ide_editor_spell_widget_class_init (IdeEditorSpellWidgetClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-spell-widget.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, misspelled_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, change_to_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, suggestions_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, language_label);
+
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, word_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, count_label);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, word_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, check_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, add_dict_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, ignore_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, ignore_all_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, change_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, change_all_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, close_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, highlight_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, language_chooser_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, suggestions_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_box);
 }
 
 static void
 ide_editor_spell_widget_init (IdeEditorSpellWidget *self)
 {
+
   gtk_widget_init_template (GTK_WIDGET (self));
-
   self->dict_widget = ide_editor_dict_widget_new (NULL);
-  gtk_widget_show (GTK_WIDGET (self->dict_widget));
-  gtk_container_add (GTK_CONTAINER (self->dict_revealer), GTK_WIDGET (self->dict_widget));
 
-  /* TODO: plumb the revealing action */
-  gtk_revealer_set_reveal_child (self->dict_revealer, TRUE);
+  gtk_widget_show (GTK_WIDGET (self->dict_widget));
+  gtk_container_add (GTK_CONTAINER (self->dict_box), GTK_WIDGET (self->dict_widget));
 
   self->view_spellchecker_set = FALSE;
+  /* FIXME: do not work, Gtk+ bug */
+  gtk_entry_set_icon_tooltip_text (self->word_entry,
+                                   GTK_ENTRY_ICON_SECONDARY,
+                                   _("The word is not in the dictionary"));
 }
