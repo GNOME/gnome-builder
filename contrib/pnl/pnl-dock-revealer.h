@@ -54,6 +54,9 @@ struct _PnlDockRevealerClass
 
 GType                          pnl_dock_revealer_transition_type_get_type (void);
 GtkWidget                     *pnl_dock_revealer_new                      (void);
+void                           pnl_dock_revealer_animate_to_position      (PnlDockRevealer               *self,
+                                                                           gint                           position,
+                                                                           guint                          transition_duration);
 PnlDockRevealerTransitionType  pnl_dock_revealer_get_transition_type      (PnlDockRevealer *self);
 void                           pnl_dock_revealer_set_transition_type      (PnlDockRevealer               *self,
                                                                            PnlDockRevealerTransitionType  transition_type);

@@ -850,9 +850,9 @@ overlay_child_reveal_notify_cb (IdeEditorPerspective *self,
 
   if (!reveal && self->spellchecker_opened)
     {
-      g_signal_handlers_disconnect_by_func (self,
+      g_signal_handlers_disconnect_by_func (edge,
                                             overlay_child_reveal_notify_cb,
-                                            edge);
+                                            self);
 
       pane = IDE_LAYOUT_PANE (pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout)));
       pnl_dock_revealer_animate_to_position (PNL_DOCK_REVEALER (pane),
@@ -879,9 +879,9 @@ overlay_child_revealed_notify_cb (IdeEditorPerspective *self,
 
   if (!revealed && self->spellchecker_opened)
     {
-      g_signal_handlers_disconnect_by_func (self,
+      g_signal_handlers_disconnect_by_func (edge,
                                             overlay_child_revealed_notify_cb,
-                                            edge);
+                                            self);
 
       child = gtk_bin_get_child (GTK_BIN (edge));
       g_assert (child != NULL);

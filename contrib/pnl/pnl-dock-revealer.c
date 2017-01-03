@@ -48,6 +48,7 @@ typedef struct
   GtkAdjustment                 *adjustment;
   GdkWindow                     *window;
   gint                           position;
+  gint                           position_tmp;
   guint                          transition_duration;
   PnlDockRevealerTransitionType  transition_type : 3;
   guint                          position_set : 1;
@@ -776,4 +777,102 @@ pnl_dock_revealer_transition_type_get_type (void)
     }
 
   return type_id;
+}
+
+static void
+pnl_dock_revealer_animate_to_position_done (gpointer user_data)
+{
+  g_autoptr(PnlDockRevealer) self = user_data;
+  PnlDockRevealerPrivate *priv = pnl_dock_revealer_get_instance_private (self);
+
+  g_assert (PNL_DOCK_REVEALER (self));
+
+  if (priv->adjustment != NULL)
+    {
+      gboolean child_revealed;
+
+      child_revealed = (priv->position_tmp > 0);
+      if (priv->child_revealed != child_revealed)
+        {
+          GtkWidget *child = gtk_bin_get_child (GTK_BIN (self));
+
+          priv->child_revealed = child_revealed;
+          gtk_widget_set_child_visible (GTK_WIDGET (child), child_revealed);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CHILD_REVEALED]);
+
+      gtk_adjustment_set_value (priv->adjustment, child_revealed ? 1.0 : 0.0);
+      priv->position = priv->position_tmp;
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+    }
+}
+
+void
+pnl_dock_revealer_animate_to_position (PnlDockRevealer *self,
+                                       gint             position,
+                                       guint            transition_duration)
+{
+  PnlDockRevealerPrivate *priv = pnl_dock_revealer_get_instance_private (self);
+  gdouble current_position;
+  gdouble value;
+
+  g_return_if_fail (PNL_IS_DOCK_REVEALER (self));
+
+  if (transition_duration == 0)
+    transition_duration = pnl_dock_revealer_calculate_duration (self);
+
+  current_position = priv->position;
+  if (current_position != position)
+    {
+      PnlAnimation *animation;
+      GtkWidget *child;
+
+      priv->reveal_child = (position > 0);
+      priv->position_tmp = position;
+      if (!priv->position_set)
+        {
+          priv->position_set = TRUE;
+          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POSITION_SET]);
+        }
+
+      if (current_position < position)
+        {
+          value = 1.0;
+          if (current_position > 0)
+            {
+              priv->position = position;
+              gtk_adjustment_set_value (priv->adjustment, current_position / position);
+            }
+        }
+      else
+        value = position / current_position;
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POSITION]);
+
+      child = gtk_bin_get_child (GTK_BIN (self));
+      if (child != NULL)
+        {
+          if (priv->animation != NULL)
+            {
+              pnl_animation_stop (priv->animation);
+              pnl_clear_weak_pointer (&priv->animation);
+            }
+
+          gtk_widget_set_child_visible (child, TRUE);
+          animation = pnl_object_animate_full (priv->adjustment,
+                                               PNL_ANIMATION_EASE_IN_OUT_CUBIC,
+                                               transition_duration,
+                                               gtk_widget_get_frame_clock (GTK_WIDGET (self)),
+                                               pnl_dock_revealer_animate_to_position_done,
+                                               g_object_ref (self),
+                                               "value", value,
+                                               NULL);
+
+          pnl_set_weak_pointer (&priv->animation, animation);
+        }
+
+      if ((priv->reveal_child && position == 0) || (!priv->reveal_child && position != 0))
+        g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REVEAL_CHILD]);
+    }
 }
