@@ -416,6 +416,8 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 static void
 ide_workbench_init (IdeWorkbench *self)
 {
+  GtkWindowGroup *window_group = NULL;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->perspectives = g_list_store_new (IDE_TYPE_PERSPECTIVE);
@@ -427,6 +429,10 @@ ide_workbench_init (IdeWorkbench *self)
                            G_CALLBACK (ide_workbench_notify_visible_child),
                            self,
                            G_CONNECT_SWAPPED);
+
+  window_group = gtk_window_group_new ();
+  gtk_window_group_add_window (window_group, GTK_WINDOW (self));
+  g_object_unref (window_group);
 }
 
 static void
