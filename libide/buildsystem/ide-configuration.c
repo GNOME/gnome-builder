@@ -983,6 +983,7 @@ ide_configuration_snapshot (IdeConfiguration *self)
                        "device-id", self->device_id,
                        "display-name", self->display_name,
                        "id", self->id,
+                       "parallelism", self->parallelism,
                        "prefix", self->prefix,
                        "runtime-id", self->runtime_id,
                        NULL);
