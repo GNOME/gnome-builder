@@ -17,4 +17,6 @@ include $(top_srcdir)/libidemm/generate-binding.am
 endif
 endif
 
+GITIGNOREFILES = .stamps
+
 -include $(top_srcdir)/git.mk
