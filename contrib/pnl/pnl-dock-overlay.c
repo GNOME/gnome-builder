@@ -34,6 +34,7 @@ typedef struct
   GtkAdjustment      *edge_adj [4];
   GtkAdjustment      *edge_handle_adj [4];
   guint               child_reveal : 4;
+  guint               child_revealed : 4;
 } PnlDockOverlayPrivate;
 
 static void pnl_dock_overlay_init_dock_iface      (PnlDockInterface     *iface);
@@ -58,6 +59,7 @@ enum {
 enum {
   CHILD_PROP_0,
   CHILD_PROP_REVEAL,
+  CHILD_PROP_REVEALED,
   N_CHILD_PROPS
 };
 
@@ -382,12 +384,77 @@ pnl_dock_overlay_get_child_reveal (PnlDockOverlay *self,
   return FALSE;
 }
 
+static gboolean
+pnl_dock_overlay_get_child_revealed (PnlDockOverlay *self,
+                                     GtkWidget      *child)
+{
+  PnlDockOverlayPrivate *priv = pnl_dock_overlay_get_instance_private (self);
+
+  g_assert (PNL_IS_DOCK_OVERLAY (self));
+  g_assert (GTK_IS_WIDGET (child));
+
+  if (PNL_IS_DOCK_OVERLAY_EDGE (child))
+    {
+      GtkPositionType edge;
+
+      edge = pnl_dock_overlay_edge_get_edge (PNL_DOCK_OVERLAY_EDGE (child));
+
+      return !!(priv->child_revealed & (1 << edge));
+    }
+
+  return FALSE;
+}
+
+typedef struct
+{
+  PnlDockOverlay  *self;
+  GtkWidget       *child;
+  GtkPositionType  edge;
+} ChildRevealState;
+
+static void
+child_reveal_state_free (gpointer data)
+{
+  ChildRevealState *state = (ChildRevealState *)data;
+
+  g_object_unref (state->self);
+  g_object_unref (state->child);
+
+  g_slice_free (ChildRevealState, state);
+}
+
+static void
+pnl_dock_overlay_child_reveal_done (gpointer user_data)
+{
+  ChildRevealState *state = (ChildRevealState *)user_data;
+  PnlDockOverlay *self = state->self;
+  PnlDockOverlayPrivate *priv = pnl_dock_overlay_get_instance_private (self);
+  gboolean revealed;
+
+  g_assert (PNL_IS_DOCK_OVERLAY (self));
+  g_assert (GTK_IS_WIDGET (state->child));
+
+  revealed = !!(priv->child_reveal & (1 << state->edge));
+
+  if (revealed)
+    priv->child_revealed = priv->child_revealed | (1 << state->edge);
+  else
+    priv->child_revealed = priv->child_revealed & ~(1 << state->edge);
+
+  gtk_container_child_notify_by_pspec (GTK_CONTAINER (self),
+                                       state->child,
+                                       child_properties [CHILD_PROP_REVEALED]);
+
+  child_reveal_state_free (state);
+}
+
 static void
 pnl_dock_overlay_set_child_reveal (PnlDockOverlay *self,
                                    GtkWidget      *child,
                                    gboolean        reveal)
 {
   PnlDockOverlayPrivate *priv = pnl_dock_overlay_get_instance_private (self);
+  ChildRevealState *state;
   GtkPositionType edge;
   guint child_reveal;
 
@@ -406,20 +473,26 @@ pnl_dock_overlay_set_child_reveal (PnlDockOverlay *self,
 
   if (priv->child_reveal != child_reveal)
     {
+      state = g_slice_new0 (ChildRevealState);
+      state->self = g_object_ref (self);
+      state->child = g_object_ref (child);
+      state->edge = edge;
+
       priv->child_reveal = child_reveal;
 
-      pnl_object_animate (priv->edge_adj [edge],
-                          PNL_ANIMATION_EASE_IN_OUT_CUBIC,
-                          REVEAL_DURATION,
-                          gtk_widget_get_frame_clock (child),
-                          "value", reveal ? 0.0 : 1.0,
-                          NULL);
+      pnl_object_animate_full (priv->edge_adj [edge],
+                               PNL_ANIMATION_EASE_IN_OUT_CUBIC,
+                               REVEAL_DURATION,
+                               gtk_widget_get_frame_clock (child),
+                               pnl_dock_overlay_child_reveal_done,
+                               state,
+                               "value", reveal ? 0.0 : 1.0,
+                               NULL);
 
       gtk_container_child_notify_by_pspec (GTK_CONTAINER (self),
                                            child,
                                            child_properties [CHILD_PROP_REVEAL]);
     }
-
 }
 
 static void
@@ -475,6 +548,10 @@ pnl_dock_overlay_get_child_property (GtkContainer *container,
       g_value_set_boolean (value, pnl_dock_overlay_get_child_reveal (self, widget));
       break;
 
+    case CHILD_PROP_REVEALED:
+      g_value_set_boolean (value, pnl_dock_overlay_get_child_revealed (self, widget));
+      break;
+
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, prop_id, pspec);
     }
@@ -522,12 +599,26 @@ pnl_dock_overlay_class_init (PnlDockOverlayClass *klass)
 
   g_object_class_override_property (object_class, PROP_MANAGER, "manager");
 
+  /* The difference between those two is:
+   * CHILD_PROP_REVEAL change its state at the animation start and can
+   * trigger a state change (so read/write capabilities)
+   *
+   * CHILD_PROP_REVEALED change its state at the animation end
+   * but is only readable.
+   */
   child_properties [CHILD_PROP_REVEAL] =
     g_param_spec_boolean ("reveal",
                           "Reveal",
                           "If the panel edge should be revealed",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  child_properties [CHILD_PROP_REVEALED] =
+    g_param_spec_boolean ("revealed",
+                          "Revealed",
+                          "If the panel edge is revealed",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gtk_container_class_install_child_properties (container_class, N_CHILD_PROPS, child_properties);
 
