@@ -32,25 +32,20 @@ ide_editor_frame_actions_spellcheck (GSimpleAction *action,
   IdeEditorFrame *self = user_data;
   IdeWorkbench *workbench;
   IdePerspective *editor;
+  gboolean state;
 
   g_assert (IDE_IS_EDITOR_FRAME (self));
 
+  state = !!g_variant_get_int32 (variant);
+  if (state == TRUE)
+    {
   if (IDE_IS_SOURCE_VIEW (self->source_view) &&
       NULL != (workbench = ide_widget_get_workbench (GTK_WIDGET (self))) &&
       NULL != (editor = ide_workbench_get_perspective_by_name (workbench, "editor")))
     ide_editor_perspective_show_spellchecker (IDE_EDITOR_PERSPECTIVE (editor), self->source_view);
-}
-
-static void
-ide_editor_frame_actions_exit_spell (GSimpleAction *action,
-                                     GVariant      *state,
-                                     gpointer       user_data)
-{
-  IdeEditorFrame *self = user_data;
-
-  g_assert (IDE_IS_EDITOR_FRAME (self));
-
-  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+    }
+  else
+    gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
 }
 
 static void
@@ -446,7 +441,7 @@ static const GActionEntry IdeEditorFrameActions[] = {
   { "next-search-result", ide_editor_frame_actions_next_search_result },
   { "previous-search-result", ide_editor_frame_actions_previous_search_result },
   { "replace-confirm", ide_editor_frame_actions_replace_confirm, "as" },
-  { "spellcheck", ide_editor_frame_actions_spellcheck, "i" },
+  { "show-spellcheck", ide_editor_frame_actions_spellcheck, "i" },
 };
 
 static const GActionEntry IdeEditorFrameSearchActions[] = {
@@ -460,10 +455,6 @@ static const GActionEntry IdeEditorFrameSearchActions[] = {
   { "exit-search", ide_editor_frame_actions_exit_search },
   { "replace", ide_editor_frame_actions_replace },
   { "replace-all", ide_editor_frame_actions_replace_all },
-};
-
-static const GActionEntry IdeEditorFrameSpellActions[] = {
-  { "exit-spell", ide_editor_frame_actions_exit_spell },
 };
 
 void
@@ -493,13 +484,5 @@ ide_editor_frame_actions_init (IdeEditorFrame *self)
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
   gtk_widget_insert_action_group (GTK_WIDGET (self->search_frame), "search-entry", G_ACTION_GROUP (group));
-
-  g_object_unref (group);
-
-  group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), IdeEditorFrameSpellActions,
-                                   G_N_ELEMENTS (IdeEditorFrameSpellActions), self);
-
-  //gtk_widget_insert_action_group (GTK_WIDGET (self->spell_revealer), "spell-entry", G_ACTION_GROUP (group));
   g_object_unref (group);
 }

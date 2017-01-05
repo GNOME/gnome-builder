@@ -446,7 +446,9 @@ ide_editor_spell_widget__key_press_event_cb (IdeEditorSpellWidget *self,
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
-      ide_widget_action (GTK_WIDGET (self), "spell-entry", "exit-spell", NULL);
+      ide_widget_action (GTK_WIDGET (self->view),
+                         "frame", "show-spellcheck",
+                         g_variant_new_int32 (0));
       return GDK_EVENT_STOP;
 
     default:
