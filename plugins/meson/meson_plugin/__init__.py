@@ -415,6 +415,9 @@ class MesonBuildResult(Ide.BuildResult):
 
         launcher = self._new_launcher(self.blddir)
         launcher.push_args([self._get_ninja()])
+        build_jobs = self.config.props.parallelism
+        if build_jobs > 0:
+            launcher.push_args(['-j{}'.format(build_jobs)])
         if clean:
             self.log_stdout_literal('Cleaning…')
             self.set_mode(_('Cleaning…'))
