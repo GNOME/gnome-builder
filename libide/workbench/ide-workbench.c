@@ -416,7 +416,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 static void
 ide_workbench_init (IdeWorkbench *self)
 {
-  GtkWindowGroup *window_group = NULL;
+  g_autoptr(GtkWindowGroup) window_group = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -432,7 +432,6 @@ ide_workbench_init (IdeWorkbench *self)
 
   window_group = gtk_window_group_new ();
   gtk_window_group_add_window (window_group, GTK_WINDOW (self));
-  g_object_unref (window_group);
 }
 
 static void
