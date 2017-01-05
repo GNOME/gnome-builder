@@ -773,6 +773,13 @@ ide_configuration_get_parallelism (IdeConfiguration *self)
 {
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), -1);
 
+  if (self->parallelism == -1)
+    {
+      g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
+
+      return g_settings_get_int (settings, "parallel");
+    }
+
   return self->parallelism;
 }
 
