@@ -253,7 +253,10 @@ ide_application_actions_shortcuts (GSimpleAction *action,
         }
 
       if (IDE_IS_WORKBENCH (window))
-        parent = window;
+        {
+          parent = window;
+          break;
+        }
     }
 
   window = g_object_new (IDE_TYPE_SHORTCUTS_WINDOW,
