@@ -52,12 +52,13 @@ struct _IdeEditorSpellWidget
   GtkButton             *change_button;
   GtkButton             *change_all_button;
   GtkListBox            *suggestions_box;
+  GtkBox                *count_box;
 
   GtkWidget             *dict_word_entry;
   GtkWidget             *dict_add_button;
   GtkWidget             *dict_words_list;
 
-  GtkButton             *highlight_checkbutton;
+  GtkButton             *highlight_switch;
   GtkButton             *language_chooser_button;
 
   GtkWidget             *placeholder;
@@ -184,14 +185,15 @@ update_count_label (IdeEditorSpellWidget *self)
       g_autofree gchar *count_text = NULL;
 
       if (count > 1000)
-        count_text = g_strdup ("(>1000)");
+        count_text = g_strdup (">1000");
       else
-        count_text = g_strdup_printf ("(%i)", count);
+        count_text = g_strdup_printf ("%i", count);
 
       gtk_label_set_text (self->count_label, count_text);
+      gtk_widget_set_visible (GTK_WIDGET (self->count_box), TRUE);
     }
   else
-    gtk_label_set_text (self->count_label, "");
+    gtk_widget_set_visible (GTK_WIDGET (self->count_box), TRUE);
 }
 
 static gboolean
@@ -480,7 +482,7 @@ ide_editor_spell__widget_mapped_cb (IdeEditorSpellWidget *self)
     {
       value = g_action_get_state (self->view_spellchecking_action);
       self->view_spellchecker_set = g_variant_get_boolean (value);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->highlight_checkbutton),
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->highlight_switch),
                                     self->view_spellchecker_set);
     }
 
@@ -488,15 +490,15 @@ ide_editor_spell__widget_mapped_cb (IdeEditorSpellWidget *self)
 }
 
 static void
-ide_editor_spell_widget__highlight_checkbutton_toggled_cb (IdeEditorSpellWidget *self,
-                                                           GtkCheckButton       *button)
+ide_editor_spell_widget__highlight_switch_toggled_cb (IdeEditorSpellWidget *self,
+                                                      gboolean              state,
+                                                      GtkSwitch            *switch_button)
 {
   GspellTextView *spell_text_view;
-  gboolean state;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
 
-  state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  gtk_switch_set_state (switch_button, state);
   spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self->view));
   gspell_text_view_set_inline_spell_checking (spell_text_view, state);
 }
@@ -537,6 +539,7 @@ dict_create_word_row (IdeEditorSpellWidget *self,
   GtkWidget *box;
   GtkWidget *label;
   GtkWidget *button;
+  GtkStyleContext *style_context;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (!ide_str_empty0 (word));
@@ -547,6 +550,8 @@ dict_create_word_row (IdeEditorSpellWidget *self,
                        NULL);
 
   button = gtk_button_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
+  style_context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (style_context, "close");
   g_signal_connect_swapped (button,
                             "clicked",
                             G_CALLBACK (dict_close_button_clicked_cb),
@@ -780,9 +785,9 @@ ide_editor_spell_widget_constructed (GObject *object)
                             G_CALLBACK (ide_editor_spell_widget__key_press_event_cb),
                             self);
 
-  g_signal_connect_swapped (self->highlight_checkbutton,
-                            "toggled",
-                            G_CALLBACK (ide_editor_spell_widget__highlight_checkbutton_toggled_cb),
+  g_signal_connect_swapped (self->highlight_switch,
+                            "state-set",
+                            G_CALLBACK (ide_editor_spell_widget__highlight_switch_toggled_cb),
                             self);
 
   g_signal_connect_object (self->language_chooser_button,
@@ -917,12 +922,13 @@ ide_editor_spell_widget_class_init (IdeEditorSpellWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, ignore_all_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, change_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, change_all_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, highlight_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, highlight_switch);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, language_chooser_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, suggestions_box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_word_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_words_list);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, count_box);
 }
 
 static void

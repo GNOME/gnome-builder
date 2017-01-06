@@ -3,8 +3,8 @@ filechooser actionbar button.combo {
   padding: 0;
 }
 
-/* styling for editor search and spellchecker */
-frame.gb-search-frame, frame.gb-spell-frame {
+/* styling for editor search */
+frame.gb-search-frame {
   background-image: linear-gradient(shade(@theme_bg_color,1.05), @theme_bg_color);
   padding: 6px;
   border-style: solid;
@@ -15,24 +15,15 @@ frame.gb-search-frame, frame.gb-spell-frame {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-frame.gb-search-frame border,
-frame.gb-spell-frame border {
+frame.gb-search-frame border {
   border: none;
 }
 
-frame.gb-spell-frame list {
-  border: 1px solid @borders;
-}
-
-frame.gb-spell-option-frame border {
-  border: 1px solid @borders;
-}
-
-/* styling for the search and spellchecker frame close button */
+/* styling for the search and spellchecker list close button */
 frame.gb-search-frame > box > grid:first-child > button.close:disabled,
-frame.gb-spell-frame > box > grid:first-child > button.close:disabled,
+.gb-spellchecker list button.close:disabled,
 frame.gb-search-frame > box > grid:first-child > button.close,
-frame.gb-spell-frame > box > grid:first-child > button.close {
+.gb-spellchecker list button.close {
   background: none;
   border: none;
   box-shadow: none;
@@ -40,7 +31,7 @@ frame.gb-spell-frame > box > grid:first-child > button.close {
   padding-right: 4px;
 }
 frame.gb-search-frame > box > grid:first-child > button.close image,
-frame.gb-spell-frame > box > grid:first-child > button.close image {
+.gb-spellchecker list button.close image {
   color: @theme_fg_color;
   opacity: 0.3;
   margin: 2px;
@@ -48,19 +39,35 @@ frame.gb-spell-frame > box > grid:first-child > button.close image {
   border-radius: 3px;
 }
 frame.gb-search-frame > box > grid:first-child > button.close:hover image,
-frame.gb-spell-frame > box > grid:first-child > button.close:hover image {
+.gb-spellchecker list button.close:hover image {
   opacity: .75;
   transition-duration: 250ms;
   border: 1px solid @borders;
 }
 frame.gb-search-frame > box > grid:first-child > button.close:active image,
-frame.gb-spell-frame > box > grid:first-child > button.close:active image {
+.gb-spellchecker list button.close:active image {
   opacity: .8;
   background-image: linear-gradient(shade(@theme_bg_color, 0.9), @theme_bg_color);
 }
 frame.gb-search-frame > box > grid:first-child > button.close:backdrop image,
-frame.gb-spell-frame > box > grid:first-child > button.close:backdrop image {
+.gb-spellchecker list button.close:backdrop image {
   opacity: .1;
+}
+
+/* styling for spellchecker */
+.gb-spellchecker list row label {
+  padding: 7px;
+}
+.gb-spellchecker list row {
+  border-bottom: 1px solid alpha(@borders, 0.2);
+}
+.gb-spellchecker list row:last-child {
+  border-bottom: none;
+}
+.countbox {
+  background-color: #b3d4fc;
+  border-radius: 3px;
+  padding: 3px;
 }
 
 /* styling for NautilusFloatingBar */
