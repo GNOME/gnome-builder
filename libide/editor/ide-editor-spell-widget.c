@@ -464,7 +464,7 @@ static void
 ide_editor_spell__widget_mapped_cb (IdeEditorSpellWidget *self)
 {
   GActionGroup *group = NULL;
-  GtkWidget *widget = GTK_WIDGET (self);
+  GtkWidget *widget = GTK_WIDGET (self->view);
   g_autoptr (GVariant) value = NULL;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
@@ -475,15 +475,13 @@ ide_editor_spell__widget_mapped_cb (IdeEditorSpellWidget *self)
       widget = gtk_widget_get_parent (widget);
     }
 
-  /* FIXME: we are not a descendant of view anymore */
   if (group != NULL &&
       NULL != (self->view_spellchecking_action = g_action_map_lookup_action (G_ACTION_MAP (group),
                                                                              "spellchecking")))
     {
       value = g_action_get_state (self->view_spellchecking_action);
       self->view_spellchecker_set = g_variant_get_boolean (value);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->highlight_switch),
-                                    self->view_spellchecker_set);
+      gtk_switch_set_active (GTK_SWITCH (self->highlight_switch), self->view_spellchecker_set);
     }
 
   jump_to_next_misspelled_word (self);
