@@ -67,3 +67,8 @@ docktabstrip docktab:checked {
 entry.search-missing {
   border-color: #330000;
 }
+
+/* spellchecker word count background darker with dark theme */
+.countbox {
+  background-color: #587A9E;
+}
