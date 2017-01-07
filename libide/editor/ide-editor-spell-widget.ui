@@ -102,6 +102,7 @@
         <child>
           <object class="GtkEntry" id="word_entry">
             <property name="visible">true</property>
+            <property name="can_default">true</property>
             <property name="can_focus">true</property>
             <property name="width-chars">20</property>
             <property name="max-width-chars">30</property>
@@ -248,6 +249,7 @@
             <child>
               <object class="GtkListBox" id="dict_words_list">
                 <property name="visible">true</property>
+                <property name="can_default">true</property>
                 <property name="can_focus">true</property>
                 <property name="activate-on-single-click">false</property>
               </object>

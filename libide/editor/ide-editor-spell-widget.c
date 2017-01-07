@@ -513,22 +513,92 @@ ide_editor_spell_widget__words_counted_cb (IdeEditorSpellWidget *self,
   update_count_label (self);
 }
 
+static GtkListBoxRow *
+get_next_row_to_focus (GtkListBox    *listbox,
+                       GtkListBoxRow *row)
+{
+  g_autoptr(GList) children = NULL;
+  gint index;
+  gint new_index;
+  gint len;
+
+  g_assert (GTK_IS_LIST_BOX (listbox));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+
+  children = gtk_container_get_children (GTK_CONTAINER (listbox));
+  if (0 == (len = g_list_length (children)))
+    return NULL;
+
+  index = gtk_list_box_row_get_index (row);
+  if (index < len - 1)
+    new_index = index + 1;
+  else if (index == len - 1 && len > 1)
+    new_index = index - 1;
+  else
+    return NULL;
+
+  return gtk_list_box_get_row_at_index (listbox, new_index);
+}
+
+static void
+remove_dict_row (IdeEditorSpellWidget *self,
+                 GtkListBox           *listbox,
+                 GtkListBoxRow        *row)
+{
+  GtkListBoxRow *next_row;
+  gchar *word;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_LIST_BOX (listbox));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+
+  if (row == gtk_list_box_get_selected_row (listbox))
+    {
+      if (NULL != (next_row = get_next_row_to_focus (listbox, row)))
+        {
+          gtk_widget_grab_focus (GTK_WIDGET (next_row));
+          gtk_list_box_select_row (listbox, next_row);
+        }
+      else
+        gtk_widget_grab_focus (GTK_WIDGET (self->word_entry));
+    }
+
+  word = g_object_get_data (G_OBJECT (row), "word");
+  gspell_checker_remove_word_from_personal (self->checker, word, -1);
+  gtk_container_remove (GTK_CONTAINER (self->dict_words_list), GTK_WIDGET (row));
+}
+
 static void
 dict_close_button_clicked_cb (IdeEditorSpellWidget *self,
                               GtkButton            *button)
 {
   GtkWidget *row;
-  gchar *word;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (GTK_IS_BUTTON (button));
 
   if (NULL != (row = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_LIST_BOX_ROW)))
+    remove_dict_row (self, GTK_LIST_BOX (self->dict_words_list), GTK_LIST_BOX_ROW (row));
+}
+
+static gboolean
+dict_row_key_pressed_event_cb (IdeEditorSpellWidget *self,
+                               GdkEventKey          *event,
+                               GtkListBox           *listbox)
+{
+  GtkListBoxRow *row;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_LIST_BOX (listbox));
+
+  if (NULL != (row = gtk_list_box_get_selected_row (listbox)) &&
+      event->keyval == GDK_KEY_Delete)
     {
-      word = g_object_get_data (G_OBJECT (row), "word");
-      gspell_checker_remove_word_from_personal (self->checker, word, -1);
-      gtk_container_remove (GTK_CONTAINER (self->dict_words_list), row);
+      remove_dict_row (self, GTK_LIST_BOX (self->dict_words_list), GTK_LIST_BOX_ROW (row));
+      return GDK_EVENT_STOP;
     }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static GtkWidget *
@@ -550,12 +620,14 @@ dict_create_word_row (IdeEditorSpellWidget *self,
                        NULL);
 
   button = gtk_button_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
-  style_context = gtk_widget_get_style_context (button);
-  gtk_style_context_add_class (style_context, "close");
+  gtk_widget_set_can_focus (button, FALSE);
   g_signal_connect_swapped (button,
                             "clicked",
                             G_CALLBACK (dict_close_button_clicked_cb),
                             self);
+
+  style_context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (style_context, "close");
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
@@ -564,7 +636,6 @@ dict_create_word_row (IdeEditorSpellWidget *self,
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);
   g_object_set_data_full (G_OBJECT (row), "word", g_strdup (word), g_free);
-
   gtk_widget_show_all (row);
 
   return row;
@@ -594,8 +665,9 @@ ide_editor_spell_widget__add_button_clicked_cb (IdeEditorSpellWidget *self,
       gtk_list_box_insert (GTK_LIST_BOX (self->dict_words_list), item, 0);
       gspell_checker_add_word_to_personal (self->checker, word, -1);
 
-      gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), "");
       gtk_widget_grab_focus (self->dict_word_entry);
+      gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), "");
+
     }
 }
 
@@ -942,4 +1014,9 @@ ide_editor_spell_widget_init (IdeEditorSpellWidget *self)
   gtk_entry_set_icon_tooltip_text (self->word_entry,
                                    GTK_ENTRY_ICON_SECONDARY,
                                    _("The word is not in the dictionary"));
+
+  g_signal_connect_swapped (self->dict_words_list,
+                            "key-press-event",
+                            G_CALLBACK (dict_row_key_pressed_event_cb),
+                            self);
 }
