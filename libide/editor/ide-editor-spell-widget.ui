@@ -210,7 +210,7 @@
             </child>
             <child>
               <object class="GtkButton" id="dict_add_button">
-                <property name="label" translatable="yes">Add</property>
+                <property name="label" translatable="yes">A_dd</property>
                 <property name="visible">true</property>
                 <property name="can_focus">true</property>
                 <property name="use_underline">True</property>

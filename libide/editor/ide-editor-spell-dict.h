@@ -28,20 +28,24 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorSpellDict, ide_editor_spell_dict, IDE, EDITOR_SPELL_DICT, GObject)
 
-IdeEditorSpellDict         *ide_editor_spell_dict_new               (GspellChecker         *checker);
+IdeEditorSpellDict         *ide_editor_spell_dict_new                        (GspellChecker         *checker);
 
-GspellChecker              *ide_editor_spell_dict_get_checker       (IdeEditorSpellDict    *self);
-void                        ide_editor_spell_dict_get_words_async   (IdeEditorSpellDict    *self,
-                                                                     GAsyncReadyCallback    callback,
-                                                                     GCancellable          *cancellable,
-                                                                     gpointer               user_data);
-GPtrArray                  *ide_editor_spell_dict_get_words_finish  (IdeEditorSpellDict    *self,
-                                                                     GAsyncResult          *result,
-                                                                     GError               **error);
-void                        ide_editor_spell_dict_set_checker       (IdeEditorSpellDict    *self,
-                                                                     GspellChecker         *checker);
-void                        ide_editor_spell_dict_add_word          (IdeEditorSpellDict    *self,
-                                                                     const gchar           *word);
+GspellChecker              *ide_editor_spell_dict_get_checker                (IdeEditorSpellDict    *self);
+void                        ide_editor_spell_dict_get_words_async            (IdeEditorSpellDict    *self,
+                                                                              GAsyncReadyCallback    callback,
+                                                                              GCancellable          *cancellable,
+                                                                              gpointer               user_data);
+GPtrArray                  *ide_editor_spell_dict_get_words_finish           (IdeEditorSpellDict    *self,
+                                                                              GAsyncResult          *result,
+                                                                              GError               **error);
+void                        ide_editor_spell_dict_set_checker                (IdeEditorSpellDict    *self,
+                                                                              GspellChecker         *checker);
+gboolean                    ide_editor_spell_dict_add_word_to_personal       (IdeEditorSpellDict    *self,
+                                                                              const gchar           *word);
+gboolean                    ide_editor_spell_dict_remove_word_from_personal  (IdeEditorSpellDict    *self,
+                                                                              const gchar           *word);
+gboolean                    ide_editor_spell_dict_personal_contains          (IdeEditorSpellDict    *self,
+                                                                              const gchar           *word);
 
 G_END_DECLS
 

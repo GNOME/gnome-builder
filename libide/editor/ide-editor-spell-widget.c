@@ -40,7 +40,7 @@ struct _IdeEditorSpellWidget
   IdeSourceView         *view;
   IdeBuffer             *buffer;
   GspellChecker         *checker;
-  IdeEditorSpellDict    *dict_widget;
+  IdeEditorSpellDict    *dict;
   GPtrArray             *words_array;
   const GspellLanguage  *spellchecker_language;
 
@@ -270,7 +270,6 @@ static gboolean
 check_word_timeout_cb (IdeEditorSpellWidget *self)
 {
   const gchar *word;
-  g_autofree gchar *first_result = NULL;
   g_autoptr(GError) error = NULL;
   gchar *icon_name;
   gboolean ret = TRUE;
@@ -725,7 +724,7 @@ ide_editor_spell_widget_get_dict_words_cb (GObject      *object,
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (G_IS_ASYNC_RESULT (result));
 
-  if (NULL == (self->words_array = ide_editor_spell_dict_get_words_finish (self->dict_widget,
+  if (NULL == (self->words_array = ide_editor_spell_dict_get_words_finish (self->dict,
                                                                            result,
                                                                            &error)))
     {
@@ -742,7 +741,7 @@ ide_editor_spell_widget_get_dict_words_async (IdeEditorSpellWidget *self)
 {
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
 
-  ide_editor_spell_dict_get_words_async (self->dict_widget,
+  ide_editor_spell_dict_get_words_async (self->dict,
                                          ide_editor_spell_widget_get_dict_words_cb,
                                          NULL,
                                          self);
@@ -802,7 +801,7 @@ ide_editor_spell_widget_constructed (GObject *object)
 
   spell_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self->buffer));
   self->checker = gspell_text_buffer_get_spell_checker (spell_buffer);
-  ide_editor_spell_dict_set_checker (self->dict_widget, self->checker);
+  ide_editor_spell_dict_set_checker (self->dict, self->checker);
 
   self->spellchecker_language = gspell_checker_get_language (self->checker);
   gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button),
@@ -1005,7 +1004,7 @@ static void
 ide_editor_spell_widget_init (IdeEditorSpellWidget *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-  self->dict_widget = ide_editor_spell_dict_new (NULL);
+  self->dict = ide_editor_spell_dict_new (NULL);
 
   self->view_spellchecker_set = FALSE;
   /* FIXME: do not work, Gtk+ bug */

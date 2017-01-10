@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* This GObject exists until Gspell handle managing the content of a dict */
+
 #include "ide-editor-spell-dict.h"
+#include <enchant.h>
 #include <gspell/gspell.h>
 
 #include <ide.h>
@@ -26,6 +29,8 @@ struct _IdeEditorSpellDict
   GtkBin                parent_instance;
 
   GspellChecker        *checker;
+  EnchantBroker        *broker;
+  EnchantDict          *dict;
   const GspellLanguage *language;
 };
 
@@ -139,6 +144,68 @@ open_file_cb (GObject      *object,
   read_line_async (g_steal_pointer (&task));
 }
 
+gboolean
+ide_editor_spell_dict_add_word_to_personal (IdeEditorSpellDict *self,
+                                            const gchar        *word)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+  g_assert (!ide_str_empty0 (word));
+
+ if (self->dict != NULL)
+    {
+      if (enchant_dict_is_added (self->dict, word, -1))
+        return FALSE;
+
+      enchant_dict_add (self->dict, word, -1);
+      return TRUE;
+    }
+  else
+    {
+      g_warning ("No dictionaries loaded");
+      return FALSE;
+    }
+}
+
+gboolean
+ide_editor_spell_dict_remove_word_from_personal (IdeEditorSpellDict *self,
+                                                 const gchar        *word)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+  g_assert (!ide_str_empty0 (word));
+
+  if (self->dict != NULL)
+    {
+      if (!enchant_dict_is_added (self->dict, word, -1))
+        return FALSE;
+
+      enchant_dict_remove (self->dict, word, -1);
+      return TRUE;
+    }
+  else
+    {
+      g_warning ("No dictionaries loaded");
+      return FALSE;
+    }
+}
+
+gboolean
+ide_editor_spell_dict_personal_contains (IdeEditorSpellDict *self,
+                                         const gchar        *word)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+  g_assert (!ide_str_empty0 (word));
+
+  if (self->dict != NULL)
+    {
+      return !!enchant_dict_is_added (self->dict, word, -1);
+    }
+  else
+    {
+      g_warning ("No dictionaries loaded");
+      return FALSE;
+    }
+}
+
 void
 ide_editor_spell_dict_get_words_async (IdeEditorSpellDict  *self,
                                        GAsyncReadyCallback  callback,
@@ -187,6 +254,26 @@ ide_editor_spell_dict_get_words_finish (IdeEditorSpellDict   *self,
 }
 
 static void
+ide_editor_spell_dict_set_dict (IdeEditorSpellDict    *self,
+                                const GspellLanguage  *language)
+{
+  const gchar *lang_code;
+
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+
+  if (language != NULL)
+    {
+      lang_code = gspell_language_get_code (language);
+      self->dict = enchant_broker_request_dict (self->broker, lang_code);
+    }
+  else if (self->dict != NULL)
+    {
+      enchant_broker_free_dict (self->broker, self->dict);
+      self->dict = NULL;
+    }
+}
+
+static void
 language_notify_cb (IdeEditorSpellDict  *self,
                     GParamSpec          *pspec,
                     GspellChecker       *checker)
@@ -201,7 +288,10 @@ language_notify_cb (IdeEditorSpellDict  *self,
   if ((self->language == NULL && language != NULL) ||
       (self->language != NULL && language == NULL) ||
       0 != gspell_language_compare (language, self->language))
-    self->language = language;
+    {
+      self->language = language;
+      ide_editor_spell_dict_set_dict (self, language);
+    }
 }
 
 static void
@@ -265,6 +355,15 @@ ide_editor_spell_dict_new (GspellChecker *checker)
 static void
 ide_editor_spell_dict_finalize (GObject *object)
 {
+  IdeEditorSpellDict *self = (IdeEditorSpellDict *)object;
+
+  if (self->broker != NULL)
+    {
+      if (self->dict != NULL)
+        enchant_broker_free_dict (self->broker, self->dict);
+
+      enchant_broker_free (self->broker);
+    }
 }
 
 static void
@@ -327,4 +426,5 @@ ide_editor_spell_dict_class_init (IdeEditorSpellDictClass *klass)
 static void
 ide_editor_spell_dict_init (IdeEditorSpellDict *self)
 {
+  self->broker = enchant_broker_init ();
 }
