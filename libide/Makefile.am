@@ -394,6 +394,8 @@ libide_1_0_la_SOURCES =                                   \
 	editor/ide-editor-spell-utils.h                   \
 	editor/ide-editor-spell-dict.c                    \
 	editor/ide-editor-spell-dict.h                    \
+	editor/ide-editor-spell-language-popover.c        \
+	editor/ide-editor-spell-language-popover.h        \
 	editor/ide-editor-spell-widget.c                  \
 	editor/ide-editor-spell-widget.h                  \
 	editor/ide-editor-tweak-widget.c                  \
