@@ -258,6 +258,99 @@ pnl_dock_overlay_toplevel_mnemonics (PnlDockOverlay *self,
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
+typedef struct
+{
+  PnlDockOverlay     *self;
+  PnlDockOverlayEdge *edge;
+  GtkWidget          *current_grab;
+  gboolean            result;
+} ForallState;
+
+/* Same as gtk_widget_is_ancestor but take care of
+ * following the popovers relative-to links.
+ */
+static gboolean
+pnl_overlay_dock_widget_is_ancestor (GtkWidget *widget,
+                                     GtkWidget *ancestor)
+{
+  GtkWidget *parent;
+
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (GTK_IS_WIDGET (ancestor));
+
+  while (widget != NULL)
+    {
+      if (GTK_IS_POPOVER (widget))
+        {
+          if (NULL == (widget = gtk_popover_get_relative_to (GTK_POPOVER (widget))))
+            return FALSE;
+
+          if (widget == ancestor)
+            return TRUE;
+        }
+
+      parent = gtk_widget_get_parent (widget);
+      if (parent == ancestor)
+        return TRUE;
+
+      widget = parent;
+    }
+
+  return FALSE;
+}
+
+static void
+pnl_overlay_container_forall_cb (GtkWidget *widget,
+                                 gpointer   user_data)
+{
+  ForallState *state = (ForallState *)user_data;
+
+  if (state->result == TRUE)
+    return;
+
+  if (GTK_IS_POPOVER (widget) &&
+      gtk_widget_is_visible (widget) &&
+      state->current_grab == widget &&
+      pnl_overlay_dock_widget_is_ancestor (widget, GTK_WIDGET (state->edge)))
+    {
+      state->result = TRUE;
+    }
+  else
+    return;
+}
+
+static gboolean
+pnl_dock_overlay_edge_need_to_close (PnlDockOverlay     *self,
+                                     PnlDockOverlayEdge *edge,
+                                     GtkWidget          *focus)
+{
+  GtkWidget *toplevel;
+  GtkWidget *current_grab;
+  gboolean result = TRUE;
+
+  g_assert (PNL_IS_DOCK_OVERLAY (self));
+  g_assert (PNL_IS_DOCK_OVERLAY_EDGE (edge));
+  g_assert (focus == NULL || GTK_IS_WIDGET (focus));
+
+  if (focus != NULL)
+    return !pnl_overlay_dock_widget_is_ancestor (focus, GTK_WIDGET (edge));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (edge));
+  current_grab = gtk_grab_get_current ();
+  if (current_grab == NULL)
+    return TRUE;
+
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      ForallState state = {self, edge, current_grab, FALSE};
+
+      gtk_container_forall (GTK_CONTAINER (toplevel), pnl_overlay_container_forall_cb, &state);
+      result = !state.result;
+    }
+
+  return result;
+}
+
 static void
 pnl_dock_overlay_toplevel_set_focus (PnlDockOverlay *self,
                                      GtkWidget      *widget,
@@ -274,15 +367,17 @@ pnl_dock_overlay_toplevel_set_focus (PnlDockOverlay *self,
    * TODO: If the overlay obscurs the new focus widget,
    *       hide immediately. Otherwise, use a short timeout.
    */
-
   for (i = 0; i < G_N_ELEMENTS (priv->edges); i++)
     {
       PnlDockOverlayEdge *edge = priv->edges [i];
 
-      if (!widget || !gtk_widget_is_ancestor (widget, GTK_WIDGET (edge)))
-        gtk_container_child_set (GTK_CONTAINER (self), GTK_WIDGET (edge),
-                                 "reveal", FALSE,
-                                 NULL);
+      if (!!(priv->child_reveal & (1 << i)) &&
+          pnl_dock_overlay_edge_need_to_close (self, edge, widget))
+        {
+          gtk_container_child_set (GTK_CONTAINER (self), GTK_WIDGET (edge),
+                                   "reveal", FALSE,
+                                   NULL);
+        }
     }
 }
 
@@ -751,9 +846,9 @@ pnl_dock_overlay_init_buildable_iface (GtkBuildableIface *iface)
 
 /**
  * pnl_dock_overlay_add_child:
- * self: a #PnlDockOverlay.
- * child: a #GtkWidget.
- * type: the type of the child to add (center, left, right, top, bottom).
+ * @self: a #PnlDockOverlay.
+ * @child: a #GtkWidget.
+ * @type: the type of the child to add (center, left, right, top, bottom).
  *
  */
 void
@@ -814,8 +909,8 @@ pnl_dock_overlay_init_dock_item_iface (PnlDockItemInterface *iface)
 
 /**
  * pnl_dock_overlay_get_edge:
- * self: An #PnlDockOverlay.
- * position: the edge position.
+ * @self: An #PnlDockOverlay.
+ * @position: the edge position.
  *
  * Returns: (transfer none): The corresponding #PnlDockOverlayEdge.
  */
@@ -832,8 +927,8 @@ pnl_dock_overlay_get_edge (PnlDockOverlay  *self,
 
 /**
  * pnl_dock_overlay_get_edge_adjustment:
- * self: An #PnlDockOverlay.
- * position: the edge position.
+ * @self: An #PnlDockOverlay.
+ * @position: the edge position.
  *
  * Returns: (transfer none): The corresponding #GtkAdjustment.
  */
