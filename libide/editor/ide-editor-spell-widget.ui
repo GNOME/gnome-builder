@@ -301,7 +301,7 @@
           </packing>
         </child>
         <child>
-          <object class="GspellLanguageChooserButton" id="language_chooser_button">
+          <object class="IdeEditorSpellLanguagePopover" id="language_chooser_button">
             <property name="visible">true</property>
             <property name="can_focus">true</property>
             <property name="hexpand">true</property>

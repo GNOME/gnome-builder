@@ -22,6 +22,7 @@
 
 #include "ide-editor-spell-dict.h"
 #include "ide-editor-spell-navigator.h"
+#include "ide-editor-spell-language-popover.h"
 
 #include "ide-editor-spell-widget.h"
 
@@ -544,10 +545,15 @@ remove_dict_row (IdeEditorSpellWidget *self,
 {
   GtkListBoxRow *next_row;
   gchar *word;
+  gboolean exist;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (GTK_IS_LIST_BOX (listbox));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
+
+  word = g_object_get_data (G_OBJECT (row), "word");
+  exist = ide_editor_spell_dict_remove_word_from_personal (self->dict, word);
+  g_assert (exist == TRUE);
 
   if (row == gtk_list_box_get_selected_row (listbox))
     {
@@ -560,9 +566,8 @@ remove_dict_row (IdeEditorSpellWidget *self,
         gtk_widget_grab_focus (GTK_WIDGET (self->word_entry));
     }
 
-  word = g_object_get_data (G_OBJECT (row), "word");
-  gspell_checker_remove_word_from_personal (self->checker, word, -1);
   gtk_container_remove (GTK_CONTAINER (self->dict_words_list), GTK_WIDGET (row));
+  ide_editor_spell_widget__dict_word_entry_changed_cb (self, GTK_ENTRY (self->dict_word_entry));
 }
 
 static void
@@ -658,9 +663,11 @@ ide_editor_spell_widget__add_button_clicked_cb (IdeEditorSpellWidget *self,
   /* TODO: check if word already in dict */
   if (check_dict_available (self) && !ide_str_empty0 (word))
     {
+      if (!ide_editor_spell_dict_add_word_to_personal (self->dict, word))
+        return;
+
       item = dict_create_word_row (self, word);
       gtk_list_box_insert (GTK_LIST_BOX (self->dict_words_list), item, 0);
-      gspell_checker_add_word_to_personal (self->checker, word, -1);
 
       gtk_widget_grab_focus (self->dict_word_entry);
       gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), "");
