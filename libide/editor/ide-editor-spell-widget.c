@@ -76,6 +76,7 @@ struct _IdeEditorSpellWidget
   guint                  is_checking_word : 1;
   guint                  is_check_word_invalid : 1;
   guint                  is_check_word_idle : 1;
+  guint                  is_word_entry_valid : 1;
 
   guint                  is_dict_checking_word : 1;
   guint                  is_dict_check_word_invalid : 1;
@@ -86,6 +87,7 @@ G_DEFINE_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, GTK_TYPE_BIN)
 
 #define CHECK_WORD_INTERVAL_MIN 100
 #define DICT_CHECK_WORD_INTERVAL_MIN 100
+#define WORD_ENTRY_MAX_SUGGESTIONS 6
 
 enum {
   PROP_0,
@@ -331,6 +333,7 @@ check_word_timeout_cb (IdeEditorSpellWidget *self)
                                      icon_name);
 
   self->check_word_state = CHECK_WORD_NONE;
+  self->is_word_entry_valid = ret;
 
   self->check_word_timeout_id = 0;
   if (self->is_check_word_invalid == TRUE)
@@ -765,6 +768,8 @@ ide_editor_spell_widget__add_button_clicked_cb (IdeEditorSpellWidget *self,
 {
   const gchar *word;
   GtkWidget *item;
+  GtkWidget *toplevel;
+  GtkWidget *focused_widget;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (GTK_IS_BUTTON (button));
@@ -893,10 +898,69 @@ ide_editor_spell_widget__language_notify_cb (IdeEditorSpellWidget *self,
           return;
         }
 
-      gtk_widget_set_sensitive (GTK_WIDGET (self->dict_add_button), TRUE);
+      ide_editor_spell_widget__dict_word_entry_changed_cb (self, GTK_ENTRY (self->dict_word_entry));
       gtk_widget_set_sensitive (GTK_WIDGET (self->dict_words_list), TRUE);
       ide_editor_spell_widget_get_dict_words_async (self);
     }
+}
+
+static void
+ide_editor_spell_widget__word_entry_suggestion_activate (IdeEditorSpellWidget *self,
+                                                         GtkMenuItem          *item)
+{
+  gchar *word;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_MENU_ITEM (item));
+
+  word = g_object_get_data (G_OBJECT (item), "word");
+  gtk_entry_set_text (self->word_entry, word);
+  gtk_editable_set_position (GTK_EDITABLE (self->word_entry), -1);
+}
+
+static void
+ide_editor_spell_widget__populate_popup_cb (IdeEditorSpellWidget *self,
+                                            GtkWidget            *popup,
+                                            GtkEntry             *entry)
+{
+  GSList *suggestions = NULL;
+  const gchar *text;
+  GtkWidget *item;
+  gint count = 0;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
+  text = gtk_entry_get_text (entry);
+  if (self->is_word_entry_valid ||
+      ide_str_empty0 (text) ||
+      NULL == (suggestions = gspell_checker_get_suggestions (self->checker, text, -1)))
+    return;
+
+  item = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
+                       "visible", TRUE,
+                       NULL);
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), item);
+
+  suggestions = g_slist_reverse (suggestions);
+  for (GSList *l = (GSList *)suggestions; l != NULL; l = l->next)
+    {
+      item = g_object_new (GTK_TYPE_MENU_ITEM,
+                           "label", l->data,
+                           "visible", TRUE,
+                           NULL);
+      g_object_set_data (G_OBJECT (item), "word", g_strdup (l->data));
+      gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), item);
+      g_signal_connect_object (item,
+                               "activate",
+                               G_CALLBACK (ide_editor_spell_widget__word_entry_suggestion_activate),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      if (++count >= WORD_ENTRY_MAX_SUGGESTIONS)
+        break;
+    }
+
+  g_slist_free_full (suggestions, g_free);
 }
 
 static void
@@ -928,6 +992,11 @@ ide_editor_spell_widget_constructed (GObject *object)
   g_signal_connect_swapped (self->word_entry,
                             "changed",
                             G_CALLBACK (ide_editor_spell_widget__word_entry_changed_cb),
+                            self);
+
+  g_signal_connect_swapped (self->word_entry,
+                            "populate-popup",
+                            G_CALLBACK (ide_editor_spell_widget__populate_popup_cb),
                             self);
 
   g_signal_connect_swapped (self->ignore_button,
