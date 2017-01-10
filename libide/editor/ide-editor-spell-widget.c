@@ -65,12 +65,14 @@ struct _IdeEditorSpellWidget
   GtkWidget             *placeholder;
   GAction               *view_spellchecking_action;
 
+  guint                  current_word_count;
   guint                  check_word_timeout_id;
   guint                  dict_check_word_timeout_id;
   CheckWordState         check_word_state;
   CheckWordState         dict_check_word_state;
 
   guint                  view_spellchecker_set : 1;
+
   guint                  is_checking_word : 1;
   guint                  is_check_word_invalid : 1;
   guint                  is_check_word_idle : 1;
@@ -105,8 +107,8 @@ clear_suggestions_box (IdeEditorSpellWidget *self)
 }
 
 static void
-set_sensiblility (IdeEditorSpellWidget *self,
-                  gboolean              sensibility)
+update_global_sensiblility (IdeEditorSpellWidget *self,
+                            gboolean              sensibility)
 {
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
 
@@ -119,6 +121,24 @@ set_sensiblility (IdeEditorSpellWidget *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self->change_button), sensibility);
   gtk_widget_set_sensitive (GTK_WIDGET (self->change_all_button), sensibility);
   gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), sensibility);
+}
+
+static void
+update_change_ignore_sensibility (IdeEditorSpellWidget *self)
+{
+  gboolean entry_sensitivity;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
+  entry_sensitivity = (gtk_entry_get_text_length (self->word_entry) > 0);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->change_button),
+                            entry_sensitivity);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->change_all_button),
+                            entry_sensitivity && (self->current_word_count > 1));
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->ignore_all_button),
+                            self->current_word_count > 1);
 }
 
 GtkWidget *
@@ -202,6 +222,9 @@ update_count_label (IdeEditorSpellWidget *self)
     }
   else
     gtk_widget_set_visible (GTK_WIDGET (self->count_box), TRUE);
+
+  self->current_word_count = count;
+  update_change_ignore_sensibility (self);
 }
 
 static gboolean
@@ -237,7 +260,7 @@ jump_to_next_misspelled_word (IdeEditorSpellWidget *self)
       else
         {
           gtk_label_set_text (GTK_LABEL (self->placeholder), _("Completed spell checking"));
-          set_sensiblility (self, FALSE);
+          update_global_sensiblility (self, FALSE);
         }
     }
 
@@ -297,9 +320,12 @@ check_word_timeout_cb (IdeEditorSpellWidget *self)
         {
           printf ("check error:%s\n", error->message);
         }
-    }
 
-  icon_name = ret ? "" : "dialog-warning-symbolic";
+      icon_name = ret ? "" : "dialog-warning-symbolic";
+    }
+  else
+    icon_name = "";
+
   gtk_entry_set_icon_from_icon_name (self->word_entry,
                                      GTK_ENTRY_ICON_SECONDARY,
                                      icon_name);
@@ -325,15 +351,10 @@ static void
 ide_editor_spell_widget__word_entry_changed_cb (IdeEditorSpellWidget *self,
                                                 GtkEntry             *entry)
 {
-  gboolean sensitive;
-
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
 
-  sensitive = (gtk_entry_get_text_length (entry) > 0);
-
-  gtk_widget_set_sensitive (GTK_WIDGET (self->change_button), sensitive);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->change_all_button), sensitive);
+  update_change_ignore_sensibility (self);
 
   if (self->check_word_state == CHECK_WORD_CHECKING)
     {
@@ -572,10 +593,13 @@ dict_check_word_timeout_cb (IdeEditorSpellWidget *self)
           valid = TRUE;
           gtk_widget_set_tooltip_text (self->dict_word_entry, NULL);
         }
+
+      icon_name = valid ? "" : "dialog-warning-symbolic";
     }
+  else
+    icon_name = "";
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->dict_add_button), valid);
-  icon_name = valid ? "" : "dialog-warning-symbolic";
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (self->dict_word_entry),
                                      GTK_ENTRY_ICON_SECONDARY,
                                      icon_name);
@@ -755,24 +779,18 @@ ide_editor_spell_widget__add_button_clicked_cb (IdeEditorSpellWidget *self,
       item = dict_create_word_row (self, word);
       gtk_list_box_insert (GTK_LIST_BOX (self->dict_words_list), item, 0);
 
-      gtk_widget_grab_focus (self->dict_word_entry);
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+      if (GTK_IS_WINDOW (toplevel) &&
+          NULL != (focused_widget = gtk_window_get_focus (GTK_WINDOW (toplevel))))
+        {
+          if (focused_widget != GTK_WIDGET (self->word_entry) &&
+              focused_widget != self->dict_word_entry)
+            gtk_widget_grab_focus (self->dict_word_entry);
+        }
+
       gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), "");
 
     }
-}
-
-static void
-ide_editor_spell_widget__word_entry_text_notify_cb (IdeEditorSpellWidget *self,
-                                                    GParamSpec           *pspec,
-                                                    GtkEntry             *word_entry)
-{
-  const gchar *word;
-
-  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
-  g_assert (GTK_IS_ENTRY (word_entry));
-
-  word = gtk_entry_get_text (GTK_ENTRY (self->dict_word_entry));
-  gtk_widget_set_sensitive (GTK_WIDGET (self->dict_add_button), !ide_str_empty0 (word));
 }
 
 static void
