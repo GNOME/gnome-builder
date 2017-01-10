@@ -354,10 +354,21 @@ static void
 ide_editor_spell_widget__word_entry_changed_cb (IdeEditorSpellWidget *self,
                                                 GtkEntry             *entry)
 {
+  const gchar *word;
+
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   update_change_ignore_sensibility (self);
+
+  word = gtk_entry_get_text (self->word_entry);
+  if (ide_str_empty0 (word))
+    {
+      word = gtk_label_get_text (self->word_label);
+      gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), word);
+    }
+  else
+    gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), word);
 
   if (self->check_word_state == CHECK_WORD_CHECKING)
     {
@@ -456,8 +467,14 @@ ide_editor_spell_widget__row_selected_cb (IdeEditorSpellWidget *self,
     {
       label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (row)));
       word = gtk_label_get_text (label);
+
+      g_signal_handlers_block_by_func (self->word_entry, ide_editor_spell_widget__word_entry_changed_cb, self);
+
       gtk_entry_set_text (self->word_entry, word);
       gtk_editable_set_position (GTK_EDITABLE (self->word_entry), -1);
+      update_change_ignore_sensibility (self);
+
+      g_signal_handlers_unblock_by_func (self->word_entry, ide_editor_spell_widget__word_entry_changed_cb, self);
     }
 }
 
@@ -914,8 +931,14 @@ ide_editor_spell_widget__word_entry_suggestion_activate (IdeEditorSpellWidget *s
   g_assert (GTK_IS_MENU_ITEM (item));
 
   word = g_object_get_data (G_OBJECT (item), "word");
+
+  g_signal_handlers_block_by_func (self->word_entry, ide_editor_spell_widget__word_entry_changed_cb, self);
+
   gtk_entry_set_text (self->word_entry, word);
   gtk_editable_set_position (GTK_EDITABLE (self->word_entry), -1);
+  update_change_ignore_sensibility (self);
+
+  g_signal_handlers_unblock_by_func (self->word_entry, ide_editor_spell_widget__word_entry_changed_cb, self);
 }
 
 static void
@@ -1068,6 +1091,10 @@ ide_editor_spell_widget_constructed (GObject *object)
                            G_CALLBACK (ide_editor_spell__widget_mapped_cb),
                            NULL,
                            G_CONNECT_AFTER);
+
+  g_object_bind_property (self->word_label, "label",
+                          self->dict_word_entry, "text",
+                          G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 }
 
 static void
