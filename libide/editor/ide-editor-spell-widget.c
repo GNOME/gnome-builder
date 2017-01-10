@@ -66,17 +66,24 @@ struct _IdeEditorSpellWidget
   GAction               *view_spellchecking_action;
 
   guint                  check_word_timeout_id;
+  guint                  dict_check_word_timeout_id;
   CheckWordState         check_word_state;
+  CheckWordState         dict_check_word_state;
 
   guint                  view_spellchecker_set : 1;
   guint                  is_checking_word : 1;
   guint                  is_check_word_invalid : 1;
   guint                  is_check_word_idle : 1;
+
+  guint                  is_dict_checking_word : 1;
+  guint                  is_dict_check_word_invalid : 1;
+  guint                  is_dict_check_word_idle : 1;
 };
 
 G_DEFINE_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, GTK_TYPE_BIN)
 
 #define CHECK_WORD_INTERVAL_MIN 100
+#define DICT_CHECK_WORD_INTERVAL_MIN 100
 
 enum {
   PROP_0,
@@ -538,6 +545,85 @@ get_next_row_to_focus (GtkListBox    *listbox,
   return gtk_list_box_get_row_at_index (listbox, new_index);
 }
 
+static gboolean
+dict_check_word_timeout_cb (IdeEditorSpellWidget *self)
+{
+  const gchar *word;
+  g_autofree gchar *tooltip = NULL;
+  gchar *icon_name;
+  gboolean valid = FALSE;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
+  self->dict_check_word_state = CHECK_WORD_CHECKING;
+
+  word = gtk_entry_get_text (GTK_ENTRY (self->dict_word_entry));
+  if (!ide_str_empty0 (word))
+    {
+      if (ide_editor_spell_dict_personal_contains (self->dict, word))
+        gtk_widget_set_tooltip_text (self->dict_word_entry, _("This word is already in the personal dictionary"));
+      else if (gspell_checker_check_word (self->checker, word, -1, NULL))
+        {
+          tooltip = g_strdup_printf (_("This word is already in the %s dictionary"), gspell_language_get_name (self->spellchecker_language));
+          gtk_widget_set_tooltip_text (self->dict_word_entry, tooltip);
+        }
+      else
+        {
+          valid = TRUE;
+          gtk_widget_set_tooltip_text (self->dict_word_entry, NULL);
+        }
+    }
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->dict_add_button), valid);
+  icon_name = valid ? "" : "dialog-warning-symbolic";
+  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (self->dict_word_entry),
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     icon_name);
+
+  self->dict_check_word_state = CHECK_WORD_NONE;
+
+  self->dict_check_word_timeout_id = 0;
+  if (self->is_dict_check_word_invalid == TRUE)
+    {
+      self->dict_check_word_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT,
+                                                             DICT_CHECK_WORD_INTERVAL_MIN,
+                                                             (GSourceFunc)dict_check_word_timeout_cb,
+                                                             self,
+                                                             NULL);
+      self->dict_check_word_state = CHECK_WORD_IDLE;
+      self->is_dict_check_word_invalid = FALSE;
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_editor_spell_widget__dict_word_entry_changed_cb (IdeEditorSpellWidget *self,
+                                                     GtkEntry             *dict_word_entry)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_ENTRY (dict_word_entry));
+
+  if (self->dict_check_word_state == CHECK_WORD_CHECKING)
+    {
+      self->is_dict_check_word_invalid = TRUE;
+      return;
+    }
+
+  if (self->dict_check_word_state == CHECK_WORD_IDLE)
+    {
+      g_source_remove (self->dict_check_word_timeout_id);
+      self->dict_check_word_timeout_id = 0;
+    }
+
+  self->dict_check_word_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT,
+                                                         CHECK_WORD_INTERVAL_MIN,
+                                                         (GSourceFunc)dict_check_word_timeout_cb,
+                                                         self,
+                                                         NULL);
+  self->dict_check_word_state = CHECK_WORD_IDLE;
+}
+
 static void
 remove_dict_row (IdeEditorSpellWidget *self,
                  GtkListBox           *listbox,
@@ -878,8 +964,8 @@ ide_editor_spell_widget_constructed (GObject *object)
                             self);
 
   g_signal_connect_swapped (self->dict_word_entry,
-                            "notify::text",
-                            G_CALLBACK (ide_editor_spell_widget__word_entry_text_notify_cb),
+                            "changed",
+                            G_CALLBACK (ide_editor_spell_widget__dict_word_entry_changed_cb),
                             self);
 
   self->placeholder = gtk_label_new (NULL);
