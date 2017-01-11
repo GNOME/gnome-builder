@@ -252,14 +252,6 @@ ide_editor_spell_navigator_dispose (GObject *object)
   G_OBJECT_CLASS (ide_editor_spell_navigator_parent_class)->dispose (object);
 }
 
-/* static void */
-/* ide_editor_spell_navigator_finalize (GObject *object) */
-/* { */
-/*   IdeEditorSpellNavigator *self = (IdeEditorSpellNavigator *)object; */
-
-/*   G_OBJECT_CLASS (ide_editor_spell_navigator_parent_class)->finalize (object); */
-/* } */
-
 static void
 init_boundaries (IdeEditorSpellNavigator *self)
 {
