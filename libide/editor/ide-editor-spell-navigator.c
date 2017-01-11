@@ -409,6 +409,27 @@ select_misspelled_word (IdeEditorSpellNavigator *self)
                                 0.0);
 }
 
+/* Go to the start of the current checked word so that
+ * we can re-check it again, change of language for example
+ */
+gboolean
+ide_editor_spell_navigator_goto_word_start (IdeEditorSpellNavigator *self)
+{
+  GtkTextIter start;
+
+  g_assert (IDE_IS_EDITOR_SPELL_NAVIGATOR (self));
+
+  if (self->word_start != NULL)
+    {
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &start, self->word_start);
+      gtk_text_buffer_move_mark (self->buffer, self->word_end, &start);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static gboolean
 ide_editor_spell_navigator_goto_next (GspellNavigator  *navigator,
                                       gchar           **word_p,

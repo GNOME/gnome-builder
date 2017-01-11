@@ -32,6 +32,7 @@ GspellNavigator *ide_editor_spell_navigator_new                   (GtkTextView  
 guint            ide_editor_spell_navigator_get_count             (IdeEditorSpellNavigator *self,
                                                                    const gchar             *word);
 gboolean         ide_editor_spell_navigator_get_is_words_counted  (IdeEditorSpellNavigator *self);
+gboolean         ide_editor_spell_navigator_goto_word_start       (IdeEditorSpellNavigator *self);
 
 G_END_DECLS
 

@@ -884,6 +884,9 @@ ide_editor_spell_widget__language_notify_cb (IdeEditorSpellWidget *self,
 
       ide_editor_spell_widget__dict_word_entry_changed_cb (self, GTK_ENTRY (self->dict_word_entry));
       gtk_widget_set_sensitive (GTK_WIDGET (self->dict_words_list), TRUE);
+
+      ide_editor_spell_navigator_goto_word_start (IDE_EDITOR_SPELL_NAVIGATOR (self->navigator));
+      jump_to_next_misspelled_word (self);
     }
 }
 
