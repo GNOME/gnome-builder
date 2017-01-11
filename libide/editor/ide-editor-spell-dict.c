@@ -24,14 +24,25 @@
 
 #include <ide.h>
 
+typedef enum {
+  INIT_NONE,
+  INIT_PROCESSING,
+  INIT_DONE
+} InitStatus;
+
 struct _IdeEditorSpellDict
 {
-  GtkBin                parent_instance;
+  GObject               parent_instance;
 
   GspellChecker        *checker;
   EnchantBroker        *broker;
   EnchantDict          *dict;
   const GspellLanguage *language;
+
+  GHashTable           *words;
+
+  InitStatus            init_status;
+  guint                 update_needed : 1;
 };
 
 G_DEFINE_TYPE (IdeEditorSpellDict, ide_editor_spell_dict, G_TYPE_OBJECT)
@@ -42,7 +53,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  LOADED,
+  LAST_SIGNAL
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [LAST_SIGNAL];
 
 static void read_line_cb (GObject *object, GAsyncResult *result, gpointer user_data);
 
@@ -51,7 +68,7 @@ typedef struct
   IdeEditorSpellDict  *self;
   GFile               *file;
   GDataInputStream    *data_stream;
-  GPtrArray           *ar;
+  GHashTable          *hash_table;
 } TaskState;
 
 static void
@@ -62,7 +79,7 @@ task_state_free (gpointer data)
   g_assert (state != NULL);
 
   g_clear_object (&state->file);
-  g_ptr_array_unref (state->ar);
+  g_hash_table_unref (state->hash_table);
 
   g_slice_free (TaskState, state);
 }
@@ -106,12 +123,12 @@ read_line_cb (GObject      *object,
           g_task_return_error (task, g_steal_pointer (&error));
         }
       else
-        g_task_return_pointer (task, state->ar, (GDestroyNotify)g_ptr_array_unref);
+        g_task_return_pointer (task, state->hash_table, (GDestroyNotify)g_hash_table_unref);
     }
   else
     {
       if (len > 0)
-        g_ptr_array_add (state->ar, word);
+        g_hash_table_add (state->hash_table, word);
 
       read_line_async (g_steal_pointer (&task));
     }
@@ -145,6 +162,29 @@ open_file_cb (GObject      *object,
 }
 
 gboolean
+ide_editor_spell_dict_personal_contains (IdeEditorSpellDict *self,
+                                         const gchar        *word)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+
+  if (ide_str_empty0 (word))
+    return FALSE;
+
+  if (self->dict != NULL)
+    {
+      if (self->words == NULL)
+        return FALSE;
+
+      return (NULL != g_hash_table_lookup (self->words, word));
+    }
+  else
+    {
+      g_warning ("No dictionaries loaded");
+      return FALSE;
+    }
+}
+
+gboolean
 ide_editor_spell_dict_add_word_to_personal (IdeEditorSpellDict *self,
                                             const gchar        *word)
 {
@@ -153,10 +193,11 @@ ide_editor_spell_dict_add_word_to_personal (IdeEditorSpellDict *self,
 
  if (self->dict != NULL)
     {
-      if (enchant_dict_is_added (self->dict, word, -1))
+      if (ide_editor_spell_dict_personal_contains (self, word))
         return FALSE;
 
       enchant_dict_add (self->dict, word, -1);
+      g_hash_table_add (self->words, g_strdup (word));
       return TRUE;
     }
   else
@@ -175,10 +216,11 @@ ide_editor_spell_dict_remove_word_from_personal (IdeEditorSpellDict *self,
 
   if (self->dict != NULL)
     {
-      if (!enchant_dict_is_added (self->dict, word, -1))
+      if (!ide_editor_spell_dict_personal_contains (self, word) || self->words == NULL)
         return FALSE;
 
       enchant_dict_remove (self->dict, word, -1);
+      g_hash_table_remove (self->words, word);
       return TRUE;
     }
   else
@@ -188,25 +230,37 @@ ide_editor_spell_dict_remove_word_from_personal (IdeEditorSpellDict *self,
     }
 }
 
-gboolean
-ide_editor_spell_dict_personal_contains (IdeEditorSpellDict *self,
-                                         const gchar        *word)
+static void
+hash_table_foreach_cb (const gchar *key,
+                       const gchar *value,
+                       GPtrArray   *ar)
 {
-  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
-  g_assert (!ide_str_empty0 (word));
-
-  if (self->dict != NULL)
-    {
-      return !!enchant_dict_is_added (self->dict, word, -1);
-    }
-  else
-    {
-      g_warning ("No dictionaries loaded");
-      return FALSE;
-    }
+  g_ptr_array_add (ar, g_strdup (key));
 }
 
-void
+GPtrArray *
+ide_editor_spell_dict_get_words (IdeEditorSpellDict  *self)
+{
+  GPtrArray *array;
+
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+
+  if (self->init_status == INIT_NONE)
+    {
+      g_warning ("Dict not loaded yet, you need to connect and wait for IdeEditorSpellDict::loaded");
+      return NULL;
+    }
+
+  if (self->words == NULL)
+    return NULL;
+
+  array = g_ptr_array_new_with_free_func (g_free);
+  g_hash_table_foreach (self->words, (GHFunc)hash_table_foreach_cb, array);
+
+  return array;
+}
+
+static void
 ide_editor_spell_dict_get_words_async (IdeEditorSpellDict  *self,
                                        GAsyncReadyCallback  callback,
                                        GCancellable        *cancellable,
@@ -231,7 +285,7 @@ ide_editor_spell_dict_get_words_async (IdeEditorSpellDict  *self,
   dict_filename = g_strconcat (gspell_language_get_code (self->language), ".dic", NULL);
   path = g_build_filename (g_get_user_config_dir (), "enchant", dict_filename, NULL);
   state->self = self;
-  state->ar = g_ptr_array_new_with_free_func (g_free);
+  state->hash_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   state->file = g_file_new_for_path (path);
 
   priority = g_task_get_priority (task);
@@ -242,7 +296,7 @@ ide_editor_spell_dict_get_words_async (IdeEditorSpellDict  *self,
                      g_steal_pointer (&task));
 }
 
-GPtrArray *
+static GHashTable *
 ide_editor_spell_dict_get_words_finish (IdeEditorSpellDict   *self,
                                         GAsyncResult         *result,
                                         GError              **error)
@@ -251,6 +305,45 @@ ide_editor_spell_dict_get_words_finish (IdeEditorSpellDict   *self,
   g_assert (g_task_is_valid (result, self));
 
   return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+ide_editor_spell_dict_get_dict_words_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeEditorSpellDict  *self = (IdeEditorSpellDict *)user_data;
+  g_autoptr(GError) error = NULL;
+  GHashTable *words;
+
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (NULL == (words = ide_editor_spell_dict_get_words_finish (self,
+                                                               result,
+                                                               &error)))
+    {
+      printf ("error: %s\n", error->message);
+      self->init_status = INIT_DONE;
+    }
+  else
+    {
+      g_clear_pointer (&self->words, g_hash_table_unref);
+      self->words = g_hash_table_ref (words);
+      self->init_status = INIT_DONE;
+
+      g_signal_emit_by_name (self, "loaded");
+    }
+
+  if (self->update_needed == TRUE)
+    {
+      self->update_needed = FALSE;
+      self->init_status = INIT_PROCESSING;
+      ide_editor_spell_dict_get_words_async (self,
+                                             ide_editor_spell_dict_get_dict_words_cb,
+                                             NULL,
+                                             self);
+    }
 }
 
 static void
@@ -265,11 +358,24 @@ ide_editor_spell_dict_set_dict (IdeEditorSpellDict    *self,
     {
       lang_code = gspell_language_get_code (language);
       self->dict = enchant_broker_request_dict (self->broker, lang_code);
+
+      if (self->init_status == INIT_PROCESSING)
+        self->update_needed = TRUE;
+      else
+        {
+          self->init_status = INIT_PROCESSING;
+          ide_editor_spell_dict_get_words_async (self,
+                                                 ide_editor_spell_dict_get_dict_words_cb,
+                                                 NULL,
+                                                 self);
+        }
     }
   else if (self->dict != NULL)
     {
       enchant_broker_free_dict (self->broker, self->dict);
       self->dict = NULL;
+
+      g_clear_pointer (&self->words, g_hash_table_unref);
     }
 }
 
@@ -304,6 +410,7 @@ checker_weak_ref_cb (gpointer data,
 
   self->checker = NULL;
   self->language = NULL;
+  ide_editor_spell_dict_set_dict (self, NULL);
 }
 
 GspellChecker *
@@ -364,6 +471,12 @@ ide_editor_spell_dict_finalize (GObject *object)
 
       enchant_broker_free (self->broker);
     }
+
+  if (self->words != NULL)
+    {
+      g_hash_table_remove_all (self->words);
+      g_hash_table_unref (self->words);
+    }
 }
 
 static void
@@ -405,6 +518,12 @@ ide_editor_spell_dict_set_property (GObject      *object,
 }
 
 static void
+ide_editor_spell_dict_loaded (IdeEditorSpellDict *self)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
+}
+
+static void
 ide_editor_spell_dict_class_init (IdeEditorSpellDictClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -421,6 +540,21 @@ ide_editor_spell_dict_class_init (IdeEditorSpellDictClass *klass)
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdeEditorSpellDict::loaded:
+   *
+   * This signal is emitted when the dictionary is fully initialised.
+   * (for now, personal dictionary loaded)
+   */
+  signals [LOADED] =
+    g_signal_new_class_handler ("loaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_editor_spell_dict_loaded),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                0);
 }
 
 static void

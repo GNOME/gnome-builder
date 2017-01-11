@@ -31,13 +31,7 @@ G_DECLARE_FINAL_TYPE (IdeEditorSpellDict, ide_editor_spell_dict, IDE, EDITOR_SPE
 IdeEditorSpellDict         *ide_editor_spell_dict_new                        (GspellChecker         *checker);
 
 GspellChecker              *ide_editor_spell_dict_get_checker                (IdeEditorSpellDict    *self);
-void                        ide_editor_spell_dict_get_words_async            (IdeEditorSpellDict    *self,
-                                                                              GAsyncReadyCallback    callback,
-                                                                              GCancellable          *cancellable,
-                                                                              gpointer               user_data);
-GPtrArray                  *ide_editor_spell_dict_get_words_finish           (IdeEditorSpellDict    *self,
-                                                                              GAsyncResult          *result,
-                                                                              GError               **error);
+GPtrArray                  *ide_editor_spell_dict_get_words                  (IdeEditorSpellDict    *self);
 void                        ide_editor_spell_dict_set_checker                (IdeEditorSpellDict    *self,
                                                                               GspellChecker         *checker);
 gboolean                    ide_editor_spell_dict_add_word_to_personal       (IdeEditorSpellDict    *self,

@@ -683,7 +683,8 @@ remove_dict_row (IdeEditorSpellWidget *self,
 
   word = g_object_get_data (G_OBJECT (row), "word");
   exist = ide_editor_spell_dict_remove_word_from_personal (self->dict, word);
-  g_assert (exist == TRUE);
+  if (!exist)
+    g_warning ("The word %s do not exist in the personnal dictionary", word);
 
   if (row == gtk_list_box_get_selected_row (listbox))
     {
@@ -847,40 +848,6 @@ dict_fill_listbox (IdeEditorSpellWidget *self,
 }
 
 static void
-ide_editor_spell_widget_get_dict_words_cb (GObject      *object,
-                                           GAsyncResult *result,
-                                           gpointer      user_data)
-{
-  IdeEditorSpellWidget  *self = (IdeEditorSpellWidget  *)user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (NULL == (self->words_array = ide_editor_spell_dict_get_words_finish (self->dict,
-                                                                           result,
-                                                                           &error)))
-    {
-      printf ("error: %s\n", error->message);
-      return;
-    }
-
-  dict_fill_listbox (self, self->words_array);
-  g_clear_pointer (&self->words_array, g_ptr_array_unref);
-}
-
-static void
-ide_editor_spell_widget_get_dict_words_async (IdeEditorSpellWidget *self)
-{
-  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
-
-  ide_editor_spell_dict_get_words_async (self->dict,
-                                         ide_editor_spell_widget_get_dict_words_cb,
-                                         NULL,
-                                         self);
-}
-
-static void
 ide_editor_spell_widget__language_notify_cb (IdeEditorSpellWidget *self,
                                              GParamSpec           *pspec,
                                              GtkButton            *language_chooser_button)
@@ -917,7 +884,6 @@ ide_editor_spell_widget__language_notify_cb (IdeEditorSpellWidget *self,
 
       ide_editor_spell_widget__dict_word_entry_changed_cb (self, GTK_ENTRY (self->dict_word_entry));
       gtk_widget_set_sensitive (GTK_WIDGET (self->dict_words_list), TRUE);
-      ide_editor_spell_widget_get_dict_words_async (self);
     }
 }
 
@@ -987,6 +953,18 @@ ide_editor_spell_widget__populate_popup_cb (IdeEditorSpellWidget *self,
 }
 
 static void
+ide_editor_spell_widget__dict__loaded_cb (IdeEditorSpellWidget *self,
+                                          IdeEditorSpellDict   *dict)
+{
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (IDE_IS_EDITOR_SPELL_DICT (dict));
+
+  self->words_array = ide_editor_spell_dict_get_words (self->dict);
+  dict_fill_listbox (self, self->words_array);
+  g_clear_pointer (&self->words_array, g_ptr_array_unref);
+}
+
+static void
 ide_editor_spell_widget_constructed (GObject *object)
 {
   IdeEditorSpellWidget *self = (IdeEditorSpellWidget *)object;
@@ -1004,8 +982,6 @@ ide_editor_spell_widget_constructed (GObject *object)
   self->spellchecker_language = gspell_checker_get_language (self->checker);
   gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button),
                                         self->spellchecker_language);
-
-  ide_editor_spell_widget_get_dict_words_async (self);
 
   g_signal_connect_swapped (self->navigator,
                             "notify::words-counted",
@@ -1091,6 +1067,11 @@ ide_editor_spell_widget_constructed (GObject *object)
                            G_CALLBACK (ide_editor_spell__widget_mapped_cb),
                            NULL,
                            G_CONNECT_AFTER);
+
+  g_signal_connect_swapped (self->dict,
+                            "loaded",
+                            G_CALLBACK (ide_editor_spell_widget__dict__loaded_cb),
+                            self);
 
   g_object_bind_property (self->word_label, "label",
                           self->dict_word_entry, "text",
