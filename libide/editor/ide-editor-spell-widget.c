@@ -294,7 +294,7 @@ ide_editor_spell_widget_set_view (IdeEditorSpellWidget *self,
   g_return_if_fail (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_return_if_fail (IDE_IS_SOURCE_VIEW (view));
 
-  self->view = view;
+  ide_set_weak_pointer (&self->view, view);
   if (GSPELL_IS_NAVIGATOR (self->navigator))
     g_clear_object (&self->navigator);
 
@@ -1113,28 +1113,32 @@ ide_editor_spell_widget_finalize (GObject *object)
   const GspellLanguage *spell_language;
   GtkTextBuffer *buffer;
 
-  g_clear_object (&self->navigator);
-
   if (self->check_word_timeout_id > 0)
     g_source_remove (self->check_word_timeout_id);
 
   /* Set back the view spellchecking previous state */
-  spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self->view));
-  if (self->view_spellchecker_set)
+  if (self->view != NULL)
     {
-      gspell_text_view_set_inline_spell_checking (spell_text_view, TRUE);
-      spell_language = gspell_checker_get_language (self->checker);
-      if (gspell_language_compare (self->spellchecker_language, spell_language) != 0)
-        gspell_checker_set_language (self->checker, self->spellchecker_language);
-    }
-  else
-    {
-      gspell_text_view_set_inline_spell_checking (spell_text_view, FALSE);
-      gspell_text_view_set_enable_language_menu (spell_text_view, FALSE);
+      spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self->view));
+      if (self->view_spellchecker_set)
+        {
+          gspell_text_view_set_inline_spell_checking (spell_text_view, TRUE);
+          spell_language = gspell_checker_get_language (self->checker);
+          if (gspell_language_compare (self->spellchecker_language, spell_language) != 0)
+            gspell_checker_set_language (self->checker, self->spellchecker_language);
+        }
+      else
+        {
+          gspell_text_view_set_inline_spell_checking (spell_text_view, FALSE);
+          gspell_text_view_set_enable_language_menu (spell_text_view, FALSE);
 
-      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view));
-      ide_buffer_set_spell_checking (IDE_BUFFER (buffer), FALSE);
+          buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view));
+          ide_buffer_set_spell_checking (IDE_BUFFER (buffer), FALSE);
+        }
     }
+
+  g_clear_object (&self->navigator);
+  ide_clear_weak_pointer (&self->view);
 
   G_OBJECT_CLASS (ide_editor_spell_widget_parent_class)->finalize (object);
 }
