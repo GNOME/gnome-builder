@@ -81,6 +81,8 @@ struct _IdeEditorSpellWidget
   guint                  is_dict_checking_word : 1;
   guint                  is_dict_check_word_invalid : 1;
   guint                  is_dict_check_word_idle : 1;
+
+  guint                  spellchecking_status : 1;
 };
 
 G_DEFINE_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, GTK_TYPE_BIN)
@@ -236,8 +238,7 @@ jump_to_next_misspelled_word (IdeEditorSpellWidget *self)
   g_autofree gchar *word = NULL;
   g_autofree gchar *first_result = NULL;
   GtkListBoxRow *row;
-
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   gboolean ret = FALSE;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
@@ -259,11 +260,12 @@ jump_to_next_misspelled_word (IdeEditorSpellWidget *self)
     {
       if (error != NULL)
         gtk_label_set_text (GTK_LABEL (self->placeholder), error->message);
-      else
-        {
-          gtk_label_set_text (GTK_LABEL (self->placeholder), _("Completed spell checking"));
-          update_global_sensiblility (self, FALSE);
-        }
+
+      self->spellchecking_status = FALSE;
+
+      gtk_label_set_text (GTK_LABEL (self->placeholder), _("Completed spell checking"));
+      gtk_widget_grab_focus (self->dict_word_entry);
+      update_global_sensiblility (self, FALSE);
     }
 
   return ret;
@@ -362,7 +364,7 @@ ide_editor_spell_widget__word_entry_changed_cb (IdeEditorSpellWidget *self,
   update_change_ignore_sensibility (self);
 
   word = gtk_entry_get_text (self->word_entry);
-  if (ide_str_empty0 (word))
+  if (ide_str_empty0 (word) && self->spellchecking_status == TRUE)
     {
       word = gtk_label_get_text (self->word_label);
       gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), word);
@@ -968,6 +970,24 @@ ide_editor_spell_widget__dict__loaded_cb (IdeEditorSpellWidget *self,
 }
 
 static void
+ide_editor_spell_widget__word_label_notify_cb (IdeEditorSpellWidget *self,
+                                               GParamSpec           *pspec,
+                                               GtkLabel             *word_label)
+{
+  const gchar *text;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_LABEL (word_label));
+
+  if (self->spellchecking_status == TRUE)
+    text = gtk_label_get_text (word_label);
+  else
+    text = "";
+
+  gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), text);
+}
+
+static void
 ide_editor_spell_widget_constructed (GObject *object)
 {
   IdeEditorSpellWidget *self = (IdeEditorSpellWidget *)object;
@@ -977,6 +997,8 @@ ide_editor_spell_widget_constructed (GObject *object)
 
   self->buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view)));
   ide_buffer_set_spell_checking (self->buffer, TRUE);
+
+  self->spellchecking_status = TRUE;
 
   spell_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self->buffer));
   self->checker = gspell_text_buffer_get_spell_checker (spell_buffer);
@@ -1076,9 +1098,11 @@ ide_editor_spell_widget_constructed (GObject *object)
                             G_CALLBACK (ide_editor_spell_widget__dict__loaded_cb),
                             self);
 
-  g_object_bind_property (self->word_label, "label",
-                          self->dict_word_entry, "text",
-                          G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+  g_signal_connect_object (self->word_label,
+                           "notify::label",
+                           G_CALLBACK (ide_editor_spell_widget__word_label_notify_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
