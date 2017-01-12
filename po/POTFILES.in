@@ -105,6 +105,8 @@ plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
 plugins/autotools-templates/autotools_templates/__init__.py
+plugins/beautifier/gb-beautifier-workbench-addin.c
+plugins/beautifier/gtk/menus.ui
 plugins/build-tools/gbp-build-configuration-row.ui
 plugins/build-tools/gbp-build-configuration-view.ui
 plugins/build-tools/gbp-build-log-panel.c
