@@ -15,16 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ide.h"
+
+#define G_LOG_DOMAIN "ide-spell-check-widget"
 
 #include <glib/gi18n.h>
 #include <gspell/gspell.h>
 
-#include "ide-editor-spell-dict.h"
-#include "ide-editor-spell-navigator.h"
-#include "ide-editor-spell-language-popover.h"
-
-#include "ide-editor-spell-widget.h"
+#include "ide-debug.h"
+#include "buffers/ide-buffer.h"
+#include "editor/ide-editor-spell-dict.h"
+#include "editor/ide-editor-spell-language-popover.h"
+#include "editor/ide-editor-spell-navigator.h"
+#include "editor/ide-editor-spell-widget.h"
+#include "util/ide-gtk.h"
 
 typedef enum
 {
@@ -104,6 +107,8 @@ clear_suggestions_box (IdeEditorSpellWidget *self)
 {
   GList *children;
 
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
   children = gtk_container_get_children (GTK_CONTAINER (self->suggestions_box));
 
   for (GList *l = children; l != NULL; l = g_list_next (l))
@@ -148,6 +153,8 @@ update_change_ignore_sensibility (IdeEditorSpellWidget *self)
 GtkWidget *
 ide_editor_spell_widget_get_entry (IdeEditorSpellWidget *self)
 {
+  g_return_val_if_fail (IDE_IS_EDITOR_SPELL_WIDGET (self), NULL);
+
   return GTK_WIDGET (self->word_entry);
 }
 
@@ -158,6 +165,7 @@ create_suggestion_row (IdeEditorSpellWidget *self,
   GtkWidget *row;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (!ide_str_empty0 (word));
 
   row = g_object_new (GTK_TYPE_LABEL,
                       "label", word,
@@ -177,6 +185,9 @@ fill_suggestions_box (IdeEditorSpellWidget *self,
   GtkWidget *item;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (first_result != NULL);
+
+  *first_result = NULL;
 
   clear_suggestions_box (self);
   if (ide_str_empty0 (word))
@@ -187,7 +198,6 @@ fill_suggestions_box (IdeEditorSpellWidget *self,
 
   if (NULL == (suggestions = gspell_checker_get_suggestions (self->checker, word, -1)))
     {
-      *first_result = NULL;
       gtk_label_set_text (GTK_LABEL (self->placeholder), _("No suggestioons"));
       gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), FALSE);
     }
@@ -210,6 +220,8 @@ update_count_label (IdeEditorSpellWidget *self)
 {
   const gchar *word;
   guint count;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
 
   word = gtk_label_get_text (self->word_label);
   if (0 != (count = ide_editor_spell_navigator_get_count (IDE_EDITOR_SPELL_NAVIGATOR (self->navigator), word)))
@@ -322,7 +334,7 @@ check_word_timeout_cb (IdeEditorSpellWidget *self)
       ret = gspell_checker_check_word (self->checker, word, -1, &error);
       if (error != NULL)
         {
-          printf ("check error:%s\n", error->message);
+          g_message ("check error:%s\n", error->message);
         }
 
       icon_name = ret ? "" : "dialog-warning-symbolic";
@@ -447,6 +459,9 @@ static void
 ide_editor_spell_widget__change_button_clicked_cb (IdeEditorSpellWidget *self,
                                                    GtkButton            *button)
 {
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (button));
+
   change_misspelled_word (self, FALSE);
 }
 
@@ -454,6 +469,9 @@ static void
 ide_editor_spell_widget__change_all_button_clicked_cb (IdeEditorSpellWidget *self,
                                                        GtkButton            *button)
 {
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (button));
+
   change_misspelled_word (self, TRUE);
 }
 
@@ -464,6 +482,10 @@ ide_editor_spell_widget__row_selected_cb (IdeEditorSpellWidget *self,
 {
   const gchar *word;
   GtkLabel *label;
+
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (listbox));
 
   if (row != NULL)
     {
@@ -485,6 +507,10 @@ ide_editor_spell_widget__row_activated_cb (IdeEditorSpellWidget *self,
                                            GtkListBoxRow        *row,
                                            GtkListBox           *listbox)
 {
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (listbox));
+
   if (row != NULL)
     change_misspelled_word (self, FALSE);
 }
@@ -494,6 +520,7 @@ ide_editor_spell_widget__key_press_event_cb (IdeEditorSpellWidget *self,
                                              GdkEventKey          *event)
 {
   g_assert (IDE_IS_SOURCE_VIEW (self->view));
+  g_assert (event != NULL);
 
   switch (event->keyval)
     {
@@ -545,6 +572,7 @@ ide_editor_spell_widget__highlight_switch_toggled_cb (IdeEditorSpellWidget *self
   GspellTextView *spell_text_view;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_SWITCH (switch_button));
 
   gtk_switch_set_state (switch_button, state);
   spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self->view));
@@ -557,6 +585,7 @@ ide_editor_spell_widget__words_counted_cb (IdeEditorSpellWidget *self,
                                            GspellNavigator      *navigator)
 {
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GSPELL_IS_NAVIGATOR (navigator));
 
   update_count_label (self);
 }
@@ -724,6 +753,7 @@ dict_row_key_pressed_event_cb (IdeEditorSpellWidget *self,
   GtkListBoxRow *row;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (event != NULL);
   g_assert (GTK_IS_LIST_BOX (listbox));
 
   if (NULL != (row = gtk_list_box_get_selected_row (listbox)) &&
@@ -779,6 +809,8 @@ dict_create_word_row (IdeEditorSpellWidget *self,
 static gboolean
 check_dict_available (IdeEditorSpellWidget *self)
 {
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
   return (self->checker != NULL && self->spellchecker_language != NULL);
 }
 
@@ -823,6 +855,8 @@ dict_clean_listbox (IdeEditorSpellWidget *self)
 {
   GList *children;
 
+  g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+
   children = gtk_container_get_children (GTK_CONTAINER (self->dict_words_list));
   for (GList *l = children; l != NULL; l = g_list_next (l))
     gtk_widget_destroy (GTK_WIDGET (l->data));
@@ -837,6 +871,7 @@ dict_fill_listbox (IdeEditorSpellWidget *self,
   GtkWidget *item;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (words_array != NULL);
 
   dict_clean_listbox (self);
 
@@ -861,6 +896,7 @@ ide_editor_spell_widget__language_notify_cb (IdeEditorSpellWidget *self,
   GtkListBoxRow *row;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (language_chooser_button));
 
   current_language = gspell_checker_get_language (self->checker);
   spell_language = gspell_language_chooser_get_language (GSPELL_LANGUAGE_CHOOSER (language_chooser_button));
@@ -923,6 +959,8 @@ ide_editor_spell_widget__populate_popup_cb (IdeEditorSpellWidget *self,
   gint count = 0;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
+  g_assert (GTK_IS_WIDGET (popup));
+  g_assert (GTK_IS_ENTRY (entry));
 
   text = gtk_entry_get_text (entry);
   if (self->is_word_entry_valid ||

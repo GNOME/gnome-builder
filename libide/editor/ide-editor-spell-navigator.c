@@ -220,11 +220,14 @@ ide_editor_spell_navigator_new (GtkTextView *view)
 }
 
 static void
-delete_mark (GtkTextBuffer *buffer,
-             GtkTextMark   *mark)
+delete_mark (GtkTextBuffer  *buffer,
+             GtkTextMark   **mark)
 {
-  if (mark != NULL)
-    gtk_text_buffer_delete_mark (buffer, mark);
+  if (mark != NULL && *mark != NULL)
+    {
+      GtkTextMark *m = g_steal_pointer (mark);
+      gtk_text_buffer_delete_mark (buffer, m);
+    }
 }
 
 static void
@@ -236,17 +239,15 @@ ide_editor_spell_navigator_dispose (GObject *object)
   gtk_widget_queue_draw (GTK_WIDGET (self->view));
 
   g_clear_object (&self->view);
-  g_hash_table_unref (self->words_count);
+  g_clear_pointer (&self->words_count, g_hash_table_unref);
 
   if (self->buffer != NULL)
     {
-      delete_mark (self->buffer, self->start_boundary);
-      delete_mark (self->buffer, self->end_boundary);
-      delete_mark (self->buffer, self->word_start);
-      delete_mark (self->buffer, self->word_end);
-
-      g_object_unref (self->buffer);
-      self->buffer = NULL;
+      delete_mark (self->buffer, &self->start_boundary);
+      delete_mark (self->buffer, &self->end_boundary);
+      delete_mark (self->buffer, &self->word_start);
+      delete_mark (self->buffer, &self->word_end);
+      g_clear_object (&self->buffer);
     }
 
   G_OBJECT_CLASS (ide_editor_spell_navigator_parent_class)->dispose (object);
@@ -594,33 +595,33 @@ ide_editor_spell_navigator_change_all (GspellNavigator *navigator,
   gtk_text_buffer_begin_user_action (self->buffer);
 
   while (TRUE)
-  {
-    gboolean found;
-    GtkTextIter match_start;
-    GtkTextIter match_end;
-    GtkTextIter limit;
+    {
+      gboolean found;
+      GtkTextIter match_start;
+      GtkTextIter match_end;
+      GtkTextIter limit;
 
-    gtk_text_buffer_get_iter_at_mark (self->buffer, &limit, self->end_boundary);
-    found = gtk_text_iter_forward_search (&iter,
-                                          word,
-                                          GTK_TEXT_SEARCH_VISIBLE_ONLY |
-                                          GTK_TEXT_SEARCH_TEXT_ONLY,
-                                          &match_start,
-                                          &match_end,
-                                          &limit);
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &limit, self->end_boundary);
+      found = gtk_text_iter_forward_search (&iter,
+                                            word,
+                                            GTK_TEXT_SEARCH_VISIBLE_ONLY |
+                                            GTK_TEXT_SEARCH_TEXT_ONLY,
+                                            &match_start,
+                                            &match_end,
+                                            &limit);
 
-    if (!found)
-      break;
+      if (!found)
+        break;
 
-    if (ide_editor_spell_utils_text_iter_starts_word (&match_start) &&
-        ide_editor_spell_utils_text_iter_ends_word (&match_end))
-      {
-        gtk_text_buffer_delete (self->buffer, &match_start, &match_end);
-        gtk_text_buffer_insert (self->buffer, &match_end, change_to, -1);
-      }
+      if (ide_editor_spell_utils_text_iter_starts_word (&match_start) &&
+          ide_editor_spell_utils_text_iter_ends_word (&match_end))
+        {
+          gtk_text_buffer_delete (self->buffer, &match_start, &match_end);
+          gtk_text_buffer_insert (self->buffer, &match_end, change_to, -1);
+        }
 
-    iter = match_end;
-  }
+      iter = match_end;
+    }
 
   gtk_text_buffer_end_user_action (self->buffer);
 }
