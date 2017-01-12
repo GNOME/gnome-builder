@@ -11,6 +11,14 @@ libxml_pack_plugin_la_SOURCES = \
 	ide-xml-highlighter.h \
 	ide-xml-indenter.c \
 	ide-xml-indenter.h \
+	ide-xml-service.c \
+	ide-xml-service.h \
+	ide-xml-symbol-node.c \
+	ide-xml-symbol-node.h \
+	ide-xml-symbol-resolver.c \
+	ide-xml-symbol-resolver.h \
+	ide-xml-symbol-tree.c \
+	ide-xml-symbol-tree.h \
 	ide-xml.c \
 	ide-xml.h \
 	xml-pack-plugin.c \

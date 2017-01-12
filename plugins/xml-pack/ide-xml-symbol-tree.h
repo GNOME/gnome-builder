@@ -1,6 +1,6 @@
-/* symbol-tree.h
+/* ide-xml-symbol-tree.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Sébastien Lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYMBOL_TREE_H
-#define SYMBOL_TREE_H
+#ifndef IDE_XML_SYMBOL_TREE_H
+#define IDE_XML_SYMBOL_TREE_H
 
-#include <glib-object.h>
 #include <ide.h>
+#include "ide-xml-symbol-node.h"
 
 G_BEGIN_DECLS
 
-#define SYMBOL_TYPE_TREE (symbol_tree_get_type())
+#define IDE_TYPE_XML_SYMBOL_TREE (ide_xml_symbol_tree_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTree, symbol_tree, SYMBOL, TREE, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeXmlSymbolTree, ide_xml_symbol_tree, IDE, XML_SYMBOL_TREE, GObject)
+
+IdeXmlSymbolTree *ide_xml_symbol_tree_new (IdeXmlSymbolNode *root_node);
 
 G_END_DECLS
 
-#endif /* SYMBOL_TREE_H */
+#endif /* IDE_XML_SYMBOL_TREE_H */

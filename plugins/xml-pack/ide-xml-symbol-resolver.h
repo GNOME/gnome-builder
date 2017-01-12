@@ -1,6 +1,6 @@
-/* symbol-tree.h
+/* ide-xml-symbol-resolver.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Sébastien Lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYMBOL_TREE_H
-#define SYMBOL_TREE_H
+#ifndef IDE_XML_SYMBOL_RESOLVER_H
+#define IDE_XML_SYMBOL_RESOLVER_H
 
-#include <glib-object.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define SYMBOL_TYPE_TREE (symbol_tree_get_type())
+#define IDE_TYPE_XML_SYMBOL_RESOLVER (ide_xml_symbol_resolver_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTree, symbol_tree, SYMBOL, TREE, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE, XML_SYMBOL_RESOLVER, IdeObject)
 
 G_END_DECLS
 
-#endif /* SYMBOL_TREE_H */
+#endif /* IDE_XML_SYMBOL_RESOLVER_H */

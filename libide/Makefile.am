@@ -603,7 +603,7 @@ libide_1_0_la_LIBADD =                                          \
 	$(top_builddir)/contrib/pnl/libpanel-gtk.la             \
 	$(top_builddir)/contrib/search/libsearch.la             \
 	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la    \
-	$(top_builddir)/contrib/xml/libxml.la                   \
+	$(top_builddir)/contrib/xml/libxml-private.la                   \
 	$(NULL)
 
 if ENABLE_WEBKIT
