@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "beautifier-config"
+
 #include <string.h>
 #include <ide.h>
 
@@ -125,6 +127,13 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
 
   key_file = g_key_file_new ();
   ini_path = g_build_filename (base_path, real_lang_id, "config.ini", NULL);
+
+  if (!g_file_test (ini_path, G_FILE_TEST_EXISTS))
+    {
+      g_debug ("%s doesn't exist\n", ini_path);
+      return FALSE;
+    }
+
   if (!g_key_file_load_from_file (key_file, ini_path, G_KEY_FILE_NONE, &error))
     return FALSE;
 
@@ -283,7 +292,7 @@ add_entries_from_base_path (GbBeautifierWorkbenchAddin *self,
                                                        NULL,
                                                        &error)))
     {
-      g_warning ("\"%s\"", error->message);
+      g_debug ("\"%s\"", error->message);
       return FALSE;
     }
 
@@ -351,6 +360,12 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
                                 NULL);
 
   key_file = g_key_file_new ();
+  if (!g_file_test (file_name, G_FILE_TEST_EXISTS))
+    {
+      g_debug ("%s doesn't exist\n", file_name);
+      return map;
+    }
+
   if (g_key_file_load_from_file (key_file, file_name, G_KEY_FILE_NONE, &error) &&
       NULL != (lang_ids = g_key_file_get_groups (key_file, &nb_lang_ids)))
     {
