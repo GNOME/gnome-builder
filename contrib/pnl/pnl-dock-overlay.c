@@ -326,6 +326,7 @@ pnl_dock_overlay_edge_need_to_close (PnlDockOverlay     *self,
 {
   GtkWidget *toplevel;
   GtkWidget *current_grab;
+  GtkWidget *current_focus;
   gboolean result = TRUE;
 
   g_assert (PNL_IS_DOCK_OVERLAY (self));
@@ -337,15 +338,21 @@ pnl_dock_overlay_edge_need_to_close (PnlDockOverlay     *self,
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (edge));
   current_grab = gtk_grab_get_current ();
-  if (current_grab == NULL)
-    return TRUE;
-
-  if (GTK_IS_WINDOW (toplevel))
+  if (current_grab != NULL)
     {
-      ForallState state = {self, edge, current_grab, FALSE};
+      if (GTK_IS_WINDOW (toplevel))
+        {
+          ForallState state = {self, edge, current_grab, FALSE};
 
-      gtk_container_forall (GTK_CONTAINER (toplevel), pnl_overlay_container_forall_cb, &state);
-      result = !state.result;
+          gtk_container_forall (GTK_CONTAINER (toplevel), pnl_overlay_container_forall_cb, &state);
+          result = !state.result;
+        }
+    }
+  else
+    {
+      if (GTK_IS_WINDOW (toplevel) &&
+          NULL != (current_focus = gtk_window_get_focus (GTK_WINDOW (toplevel))))
+        result = !pnl_overlay_dock_widget_is_ancestor (current_focus, GTK_WIDGET (edge));
     }
 
   return result;
