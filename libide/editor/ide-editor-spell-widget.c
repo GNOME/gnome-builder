@@ -198,7 +198,7 @@ fill_suggestions_box (IdeEditorSpellWidget *self,
 
   if (NULL == (suggestions = gspell_checker_get_suggestions (self->checker, word, -1)))
     {
-      gtk_label_set_text (GTK_LABEL (self->placeholder), _("No suggestioons"));
+      gtk_label_set_text (GTK_LABEL (self->placeholder), _("No suggestions"));
       gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), FALSE);
     }
   else
