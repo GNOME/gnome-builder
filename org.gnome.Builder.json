@@ -38,6 +38,8 @@
         "--filesystem=/etc/ssl:ro",
         "--filesystem=/etc/pki:ro",
         "--filesystem=/etc/ca-certificates:ro",
+        /* Need access to user and system flatpak repos */
+        "--filesystem=~/.local/share/flatpak",
         "--filesystem=/var/lib/flatpak"
     ],
     "build-options" : {
@@ -295,6 +297,17 @@
                 {
                     "type": "git",
                     "url": "git://git.gnome.org/json-glib"
+                }
+            ]
+        },
+        {
+            "name": "gspell",
+            "config-opts": [ "--disable-gtk-doc", "--disable-gtk-doc-html" ],
+            "cleanup": [ "/include", "/lib/pkgconfig", "*.la", "/share" ],
+            "sources": [
+                {
+                     "type": "git",
+                     "url": "git://git.gnome.org/gspell"
                 }
             ]
         },
