@@ -1,3 +1,5 @@
+root = true
+
 [*]
 charset = utf-8
 end_of_line = lf
@@ -38,4 +40,9 @@ tab_size = 4
 [*.{xml.in,xml}]
 indent_size = 2
 tab_size = 2
+indent_style = space
+
+[*.json]
+indent_size = 4
+tab_size = 4
 indent_style = space
