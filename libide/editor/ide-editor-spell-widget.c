@@ -484,7 +484,7 @@ ide_editor_spell_widget__row_selected_cb (IdeEditorSpellWidget *self,
   GtkLabel *label;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX_ROW (row) || row == NULL);
   g_assert (GTK_IS_LIST_BOX (listbox));
 
   if (row != NULL)
