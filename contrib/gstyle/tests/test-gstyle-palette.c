@@ -37,14 +37,16 @@ load_palette (gchar *name)
   palette = gstyle_palette_new_from_file (file, cancellable, &error);
   if (palette == NULL)
     printf ("error: %s\n", error->message);
+  else
+    {
+      uri = g_file_get_uri (file);
 
-  uri = g_file_get_uri (file);
-
-  printf ("Palette:\n\turi:'%s'\n\tname:'%s'\n\tid:'%s'\n\tnb colors:%i\n",
-          uri,
-          gstyle_palette_get_name (palette),
-          gstyle_palette_get_id (palette),
-          gstyle_palette_get_len (palette));
+      printf ("Palette:\n\turi:'%s'\n\tname:'%s'\n\tid:'%s'\n\tnb colors:%i\n",
+              uri,
+              gstyle_palette_get_name (palette),
+              gstyle_palette_get_id (palette),
+              gstyle_palette_get_len (palette));
+    }
 
   return palette;
 }
