@@ -184,7 +184,7 @@ select_language (IdeEditorSpellLanguagePopover *self,
   g_assert (IDE_IS_EDITOR_SPELL_LANGUAGE_POPOVER (self));
 
   if (self->treeview == NULL ||
-      lang == NULL ||
+      language == NULL ||
       !gtk_tree_model_get_iter_first (model, &iter))
     return;
 
