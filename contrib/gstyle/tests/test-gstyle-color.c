@@ -100,11 +100,15 @@ test_deltae (void)
 static void
 delta_rgb ()
 {
-  GdkRGBA src_rgba,dst_rgba;
+  GdkRGBA src_rgba = {0.0, 0.0, 0.0, 0.0};
+  GdkRGBA dst_rgba = {0.0, 0.0, 0.0, 0.0};
   GdkRGBA max_src_r_rgba, max_src_g_rgba, max_src_b_rgba;
   GdkRGBA max_dst_r_rgba;
   G_GNUC_UNUSED GdkRGBA max_dst_g_rgba, max_dst_b_rgba ;
-  GstyleXYZ xyz, max_r_xyz, max_g_xyz, max_b_xyz;
+  GstyleXYZ xyz;
+  GstyleXYZ max_r_xyz = {0.0, 0.0, 0.0, 0.0};
+  GstyleXYZ max_g_xyz = {0.0, 0.0, 0.0, 0.0};
+  GstyleXYZ max_b_xyz = {0.0, 0.0, 0.0, 0.0};
   gdouble r, g, b;
   GdkRGBA delta_rgba;
   gdouble dr_max = 0.0;
