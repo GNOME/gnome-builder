@@ -256,8 +256,8 @@ delta_hsv ()
                   max_src_hsv_s = src_s;
                   max_src_hsv_v = src_v;
                   max_dst_hsv_h = dst_h;
-                  max_dst_hsv_h = dst_s;
-                  max_dst_hsv_h = dst_v;
+                  max_dst_hsv_s = dst_s;
+                  max_dst_hsv_v = dst_v;
                 }
 
               if (ABS(ds) > ds_max)
