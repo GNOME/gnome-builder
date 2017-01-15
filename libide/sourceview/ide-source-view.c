@@ -999,6 +999,7 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
   g_autofree gchar *search_shadow_background = NULL;
   GdkRGBA spellchecker_bubble_fg;
   GdkRGBA spellchecker_bubble_bg;
+  gboolean colors_valid = TRUE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -1054,28 +1055,21 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
     {
       g_autofree gchar *background = NULL;
       g_autofree gchar *foreground = NULL;
-      gboolean ret = TRUE;
 
       g_object_get (spellchecker_match_style, "background", &background, NULL);
       g_object_get (spellchecker_match_style, "foreground", &foreground, NULL);
 
-      if (!ide_str_empty0 (background))
-        ret = gdk_rgba_parse (&spellchecker_bubble_bg, background);
-
-      if (!ret)
-        gdk_rgba_parse (&spellchecker_bubble_bg, "#ADD8E6");
-
-      ret = TRUE;
-      if (!ide_str_empty0 (foreground))
-        ret = gdk_rgba_parse (&spellchecker_bubble_fg, foreground);
-
-      if (!ret)
-        gdk_rgba_parse (&spellchecker_bubble_fg, "#0000FF");
+      if (ide_str_empty0 (background) ||
+          !gdk_rgba_parse (&spellchecker_bubble_bg, background) ||
+          ide_str_empty0 (foreground) ||
+          !gdk_rgba_parse (&spellchecker_bubble_fg, foreground))
+        colors_valid = FALSE;
     }
-  else
+
+  if (!colors_valid)
     {
       gdk_rgba_parse (&spellchecker_bubble_bg, "#ADD8E6");
-      gdk_rgba_parse (&spellchecker_bubble_fg, "#0000000");
+      gdk_rgba_parse (&spellchecker_bubble_fg, "#00000FF");
     }
 
   priv->spellchecker_bubble_bg_color1 = spellchecker_bubble_bg;
