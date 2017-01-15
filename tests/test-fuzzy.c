@@ -27,7 +27,7 @@ main (int argc,
   g_print ("Loading contents\n");
   if (!g_file_get_contents (argv [1], &contents, &len, NULL))
     {
-      g_critical ("Can't l;oad contents, aborting.");
+      g_critical ("Can't load contents, aborting.");
       return EXIT_FAILURE;
     }
 
