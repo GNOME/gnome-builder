@@ -25,7 +25,12 @@ main (int argc,
   fuzzy = fuzzy_new (FALSE);
 
   g_print ("Loading contents\n");
-  g_file_get_contents (argv [1], &contents, &len, NULL);
+  if (!g_file_get_contents (argv [1], &contents, &len, NULL))
+    {
+      g_critical ("Can't l;oad contents, aborting.");
+      return EXIT_FAILURE;
+    }
+
   g_print ("Loaded\n");
 
   ide_line_reader_init (&reader, contents, len);
