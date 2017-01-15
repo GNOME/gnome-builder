@@ -132,7 +132,10 @@ check_args (IdeSubprocessLauncher *launcher,
       const gchar *next_arg = NULL;
       next_arg = actual_argv[num_args++];
       if (g_strcmp0 (next_arg, item) != 0)
-        return 0;
+        {
+          va_end (args);
+          return 0;
+        }
     }
   va_end (args);
 
