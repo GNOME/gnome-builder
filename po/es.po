@@ -3,15 +3,15 @@
 # Copyright (C) 2015 THE GNOME Builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the GNOME Builder package.
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-17 22:09+0000\n"
-"PO-Revision-Date: 2016-12-20 11:13+0100\n"
+"POT-Creation-Date: 2016-12-26 17:32+0000\n"
+"PO-Revision-Date: 2017-01-11 09:31+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -67,7 +67,7 @@ msgstr[1] "Hace %u años aproximadamente"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:674
+#: libide/greeter/ide-greeter-perspective.c:679
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -99,7 +99,7 @@ msgstr "Explorar…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:314
 #: libide/editor/ide-editor-view-actions.c:445
-#: libide/greeter/ide-greeter-perspective.c:673
+#: libide/greeter/ide-greeter-perspective.c:678
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -337,7 +337,6 @@ msgstr "Debe analizar la plantilla antes de expandirla"
 
 #: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
-#| msgid "Failed to locate template \"%s\""
 msgid "Failed to locate template “%s”"
 msgstr "Falló al buscar la plantilla «%s»"
 
@@ -753,12 +752,12 @@ msgid "C_ut"
 msgstr "C_ortar"
 
 #: data/gtk/menus.ui:137 data/gtk/menus.ui:238
-#: plugins/terminal/gtk/menus.ui:16
+#: plugins/terminal/gtk/menus.ui:28
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: data/gtk/menus.ui:141 data/gtk/menus.ui:242
-#: plugins/terminal/gtk/menus.ui:20
+#: plugins/terminal/gtk/menus.ui:32
 msgid "_Paste"
 msgstr "_Pegar"
 
@@ -770,16 +769,16 @@ msgstr "_Eliminar"
 msgid "Highlighting"
 msgstr "Resaltado"
 
-#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:26
+#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:38
 msgid "Selection"
 msgstr "Selección"
 
 #: data/gtk/menus.ui:158 data/gtk/menus.ui:252
-#: plugins/terminal/gtk/menus.ui:28
+#: plugins/terminal/gtk/menus.ui:40
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:33
+#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:45
 msgid "Select _None"
 msgstr "No seleccionar _nada"
 
@@ -1042,7 +1041,6 @@ msgid "PATH"
 msgstr "RUTA"
 
 #: libide/application/ide-application-command-line.c:242
-#| msgid "Opens the project specified by PATH"
 msgid "Clones the project specified by MANIFEST"
 msgstr "Clona el proyecto especificado en MANIFEST"
 
@@ -1124,7 +1122,6 @@ msgstr "Predeterminado"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
-#| msgid "The device \"%s\" could not be found."
 msgid "The device “%s” could not be found."
 msgstr "No se pudo encontrar el dispositivo «%s»."
 
@@ -1297,11 +1294,11 @@ msgstr ""
 "Builder ha descubierto que este archivo se ha modificado externamente. "
 "¿Quiere recargarlo?"
 
-#: libide/greeter/ide-greeter-perspective.c:452
+#: libide/greeter/ide-greeter-perspective.c:454
 msgid "Failed to load the project"
 msgstr "Falló al cargar el proyecto"
 
-#: libide/greeter/ide-greeter-perspective.c:669
+#: libide/greeter/ide-greeter-perspective.c:674
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
@@ -1359,7 +1356,6 @@ msgstr "%s contiene caracteres ASCII no válidos"
 
 #: libide/gsettings/ide-language-defaults.c:193
 #, c-format
-#| msgid "Failed to parse integer from \"%s\""
 msgid "Failed to parse integer from “%s”"
 msgstr "Falló al analizar un entero desde «%s»"
 
@@ -1388,7 +1384,6 @@ msgstr "Ya se ha restaurado el contexto."
 
 #: libide/ide-object.c:288
 #, c-format
-#| msgid "No implementations of extension point \"%s\"."
 msgid "No implementations of extension point “%s”."
 msgstr "No hay implementaciones para el punto de extensión «%s»."
 
@@ -1410,37 +1405,37 @@ msgid "Editor Shortcuts"
 msgstr "Editor de atajos"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:431
+#: libide/keybindings/ide-shortcuts-window.ui:438
 msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:435
+#: libide/keybindings/ide-shortcuts-window.ui:442
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Búsqueda global"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:449
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:456
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de comandos"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:456
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:463
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Atajos del teclado"
@@ -1538,13 +1533,13 @@ msgid "Clear highlight"
 msgstr "Limpiar resaltado"
 
 #: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:472
+#: libide/keybindings/ide-shortcuts-window.ui:479
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copiar y pegar"
 
 #: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:477
+#: libide/keybindings/ide-shortcuts-window.ui:484
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copiar el texto seleccionado al portapapeles"
@@ -1555,7 +1550,7 @@ msgid "Cut selected text to clipboard"
 msgstr "Cortar el texto seleccionado al portapapeles"
 
 #: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:484
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Pegar texto del portapapeles"
@@ -1616,106 +1611,112 @@ msgid "Reindent line"
 msgstr "Volver a sangrar la línea"
 
 #: libide/keybindings/ide-shortcuts-window.ui:292
+#| msgid "Delete"
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "Eliminar línea"
+
+#: libide/keybindings/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:293
+#: libide/keybindings/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Requiere soporte de lenguajes semánticos"
 
-#: libide/keybindings/ide-shortcuts-window.ui:301
+#: libide/keybindings/ide-shortcuts-window.ui:308
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegación"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
+#: libide/keybindings/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Mover al siguiente error en el archivo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:313
+#: libide/keybindings/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Mover al anterior error en el archivo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:320
+#: libide/keybindings/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Mover a la ubicación de edición anterior"
 
-#: libide/keybindings/ide-shortcuts-window.ui:327
+#: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Mover a la siguiente ubicación de edición"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Saltar a la definición del símbolo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Mover la sección hacia arriba en el archivo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Mover la sección hacia abajo en el archivo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Mover la sección al final del archivo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Mover la sección al principio del archivo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Mover al corchete coincidente"
 
-#: libide/keybindings/ide-shortcuts-window.ui:377
+#: libide/keybindings/ide-shortcuts-window.ui:384
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Selecciones"
 
-#: libide/keybindings/ide-shortcuts-window.ui:382
+#: libide/keybindings/ide-shortcuts-window.ui:389
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:389
+#: libide/keybindings/ide-shortcuts-window.ui:396
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
-#: libide/keybindings/ide-shortcuts-window.ui:397
+#: libide/keybindings/ide-shortcuts-window.ui:404
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construir y ejecutar"
 
-#: libide/keybindings/ide-shortcuts-window.ui:402
+#: libide/keybindings/ide-shortcuts-window.ui:409
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Construir"
 
-#: libide/keybindings/ide-shortcuts-window.ui:409
+#: libide/keybindings/ide-shortcuts-window.ui:416
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Ejecutar"
 
-#: libide/keybindings/ide-shortcuts-window.ui:416
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Perfil"
 
-#: libide/keybindings/ide-shortcuts-window.ui:427
+#: libide/keybindings/ide-shortcuts-window.ui:434
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atajos de la terminal"
@@ -2165,7 +2166,6 @@ msgstr "El script debe encontrarse en el sistema de archivos local."
 
 #: libide/pygobject/ide-pygobject-script.c:274
 #, c-format
-#| msgid "The script \"%s\" is not a PyGObject file."
 msgid "The script “%s” is not a PyGObject file."
 msgstr "El script «%s» no es un archivo de PyGObject."
 
@@ -2440,7 +2440,7 @@ msgstr "Construcción correcta"
 #: plugins/autotools/ide-autotools-builder.c:539
 #: plugins/autotools/ide-autotools-build-task.c:1219
 #: plugins/cargo/cargo_plugin.py:199
-#: plugins/meson/meson_plugin/__init__.py:399
+#: plugins/meson/meson_plugin/__init__.py:427
 msgid "Building…"
 msgstr "Construyendo…"
 
@@ -2511,7 +2511,7 @@ msgstr "Ejecutando configure…"
 
 #: plugins/autotools/ide-autotools-build-task.c:1217
 #: plugins/cargo/cargo_plugin.py:196
-#: plugins/meson/meson_plugin/__init__.py:392
+#: plugins/meson/meson_plugin/__init__.py:420
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
@@ -2579,7 +2579,7 @@ msgstr "Configurar opciones"
 msgid "Environment"
 msgstr "Entorno"
 
-#: plugins/build-tools/gbp-build-log-panel.c:270
+#: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Salida de la construcción"
 
@@ -2699,13 +2699,11 @@ msgstr "   Construcción ejecutada para: %"
 
 #: plugins/build-tools/gbp-build-tool.c:212
 #, c-format
-#| msgid "Failed to locate device \"%s\""
 msgid "Failed to locate device “%s”"
 msgstr "Falló al buscar el dispositivo «%s»"
 
 #: plugins/build-tools/gbp-build-tool.c:222
 #, c-format
-#| msgid "Failed to locate runtime \"%s\""
 msgid "Failed to locate runtime “%s”"
 msgstr "Falló al buscar la rutina «%s»"
 
@@ -3145,7 +3143,6 @@ msgid "The target language (if supported)"
 msgstr "El lenguaje objetivo (si está soportado)"
 
 #: plugins/create-project/gbp-create-project-tool.c:142
-#| msgid "The version control to use or \"none\" to disable"
 msgid "The version control to use or “none” to disable"
 msgstr "El control de versiones que usar o «ninguno» para desactivarlo"
 
@@ -3258,6 +3255,20 @@ msgstr "Documentación"
 msgid "Switch To"
 msgstr "Cambiar a"
 
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Descargando fuentes de aplicaciones…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+#| msgid "Clone"
+msgid "Clone App"
+msgstr "Clonar aplicación"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Clonar"
+
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Enviar a Fpaste.org"
@@ -3316,10 +3327,6 @@ msgstr "Clonar proyecto"
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
 msgstr "Clonar…"
-
-#: plugins/git/ide-git-genesis-addin.c:190
-msgid "Clone"
-msgstr "Clonar"
 
 #: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
@@ -3380,22 +3387,19 @@ msgstr "Sugerir completado en Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
-#: plugins/meson/meson_plugin/__init__.py:318
+#: plugins/meson/meson_plugin/__init__.py:346
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: plugins/meson/meson_plugin/__init__.py:350
-#| msgid "Running configure…"
+#: plugins/meson/meson_plugin/__init__.py:378
 msgid "Running prebuild…"
 msgstr "Ejecutando prebuild…"
 
-#: plugins/meson/meson_plugin/__init__.py:369
-#| msgid "Running autogen…"
+#: plugins/meson/meson_plugin/__init__.py:397
 msgid "Running post-install…"
 msgstr "Ejecutando post-install…"
 
-#: plugins/meson/meson_plugin/__init__.py:372
-#| msgid "Running configure…"
+#: plugins/meson/meson_plugin/__init__.py:400
 msgid "Running post-build…"
 msgstr "Ejecutando post-build…"
 
@@ -3606,13 +3610,21 @@ msgid "Untitled terminal"
 msgstr "Terminal sin título"
 
 #: plugins/terminal/gb-terminal-workbench-addin.c:120
-#| msgid "Build Output"
 msgid "Run Output"
 msgstr "Salida de la ejecución"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "_Nueva terminal"
+
+#: plugins/terminal/gtk/menus.ui:15
+#| msgid "_Open"
+msgid "_Open Link"
+msgstr "_Abrir enlace"
+
+#: plugins/terminal/gtk/menus.ui:20
+msgid "_Copy Link Address"
+msgstr "C_opiar la dirección del enlace"
 
 #: plugins/todo/todo_plugin/__init__.py:190
 msgid "Todo"
@@ -3890,9 +3902,6 @@ msgstr "diagnósticos de alertas y errores de Vala"
 
 #~ msgid "New"
 #~ msgstr "Nuevo"
-
-#~ msgid "Delete"
-#~ msgstr "Eliminar"
 
 #~ msgid "_New Document"
 #~ msgstr "_Nuevo documento"
