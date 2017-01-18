@@ -29,19 +29,33 @@ struct _SymbolTree
 {
   GObject          parent_instance;
   SymbolTreePanel *panel;
+  IdeBuffer       *buffer;
 };
 
 static void workbench_addin_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (SymbolTree, symbol_tree, G_TYPE_OBJECT, 0,
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (SymbolTree, symbol_tree, IDE_TYPE_OBJECT, 0,
                                 G_IMPLEMENT_INTERFACE_DYNAMIC (IDE_TYPE_WORKBENCH_ADDIN,
                                                                workbench_addin_init))
+
+static void
+symbol_tree_symbol_resolver_loaded_cb (SymbolTree *self,
+                                       IdeBuffer  *buffer)
+{
+  g_assert (SYMBOL_IS_TREE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  symbol_tree_panel_reset (self->panel);
+}
 
 static void
 notify_active_view_cb (SymbolTree  *self,
                        GParamFlags *pspec,
                        IdeLayout   *layout)
 {
+  GtkWidget *active_view;
+  IdeBuffer *buffer;
+
   IDE_ENTRY;
 
   g_assert (SYMBOL_IS_TREE (self));
@@ -49,6 +63,30 @@ notify_active_view_cb (SymbolTree  *self,
   g_assert (IDE_IS_LAYOUT (layout));
 
   symbol_tree_panel_reset (self->panel);
+
+  if (self->buffer != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->buffer,
+                                            symbol_tree_symbol_resolver_loaded_cb,
+                                            self);
+      ide_clear_weak_pointer (&self->buffer);
+    }
+
+  active_view = ide_layout_get_active_view (layout);
+  if (IDE_IS_EDITOR_VIEW (active_view))
+    {
+      buffer = ide_editor_view_get_document (IDE_EDITOR_VIEW (active_view));
+      if (ide_buffer_get_symbol_resolver (buffer) == NULL)
+        {
+          ide_set_weak_pointer (&self->buffer, buffer);
+
+          g_signal_connect_object (buffer,
+                                   "symbol-resolver-loaded",
+                                   G_CALLBACK (symbol_tree_symbol_resolver_loaded_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
+    }
 
   IDE_EXIT;
 }
@@ -108,6 +146,14 @@ symbol_tree_unload (IdeWorkbenchAddin *addin,
 
   pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (perspective));
   g_assert (IDE_IS_LAYOUT_PANE (pane));
+
+  if (self->buffer != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->buffer,
+                                            symbol_tree_symbol_resolver_loaded_cb,
+                                            self);
+      ide_clear_weak_pointer (&self->buffer);
+    }
 
   gtk_widget_destroy (GTK_WIDGET (self->panel));
   self->panel = NULL;

@@ -129,6 +129,7 @@ enum {
   LINE_FLAGS_CHANGED,
   LOADED,
   SAVED,
+  SYMBOL_RESOLVER_LOADED,
   LAST_SIGNAL
 };
 
@@ -1104,7 +1105,10 @@ ide_buffer_load_symbol_resolver (IdeBuffer           *self,
   resolver = ide_extension_adapter_get_extension (adapter);
 
   if (resolver != NULL)
-    ide_symbol_resolver_load (resolver);
+    {
+      ide_symbol_resolver_load (resolver);
+      g_signal_emit (self, signals [SYMBOL_RESOLVER_LOADED], 0);
+    }
 
   IDE_EXIT;
 }
@@ -1548,6 +1552,20 @@ ide_buffer_class_init (IdeBufferClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  /**
+   * IdeBuffer::symbol-resolver-loaded:
+   *
+   * This signal is emitted when the buffer has completed loading a new symbol resolver.
+   */
+  signals [SYMBOL_RESOLVER_LOADED] =
+    g_signal_new_class_handler ("symbol-resolver-loaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                0,
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                0);
 }
 
 static void
