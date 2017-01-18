@@ -442,6 +442,7 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
 static void
 ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                     GFile               *file,
+                                                    IdeBuffer           *buffer,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data)

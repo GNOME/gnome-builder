@@ -78,7 +78,6 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
 {
   IdeXmlService *service = (IdeXmlService *)object;
   g_autoptr(GTask) task = user_data;
-  IdeContext *context;
   IdeXmlSymbolNode *root_node;
   IdeXmlSymbolTree *symbol_tree;
   GError *error = NULL;
@@ -88,12 +87,10 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_XML_SERVICE (service));
 
-  context = ide_object_get_context (IDE_OBJECT (service));
   root_node = ide_xml_service_get_root_node_finish (service, result, &error);
   if (root_node != NULL)
     {
       symbol_tree = ide_xml_symbol_tree_new (root_node);
-
       g_task_return_pointer (task, symbol_tree, g_object_unref);
     }
   else
@@ -105,6 +102,7 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
 static void
 ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                GFile               *file,
+                                               IdeBuffer           *buffer,
                                                GCancellable        *cancellable,
                                                GAsyncReadyCallback  callback,
                                                gpointer             user_data)
@@ -136,6 +134,7 @@ ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
 
   ide_xml_service_get_root_node_async (service,
                                        ifile,
+                                       buffer,
                                        0,
                                        cancellable,
                                        ide_xml_symbol_resolver_get_symbol_tree_cb,

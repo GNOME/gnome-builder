@@ -44,6 +44,7 @@ struct _IdeSymbolResolverInterface
                                             GError              **error);
   void           (*get_symbol_tree_async)  (IdeSymbolResolver    *self,
                                             GFile                *file,
+                                            IdeBuffer            *buffer,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,
                                             gpointer              user_data);
@@ -64,6 +65,7 @@ IdeSymbol     *ide_symbol_resolver_lookup_symbol_finish   (IdeSymbolResolver    
                                                            GError              **error);
 void           ide_symbol_resolver_get_symbol_tree_async  (IdeSymbolResolver    *self,
                                                            GFile                *file,
+                                                           IdeBuffer            *buffer,
                                                            GCancellable         *cancellable,
                                                            GAsyncReadyCallback   callback,
                                                            gpointer              user_data);

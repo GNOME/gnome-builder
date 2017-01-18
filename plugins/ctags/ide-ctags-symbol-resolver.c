@@ -615,6 +615,7 @@ ide_ctags_symbol_resolver_get_symbol_tree_worker (GTask        *task,
 static void
 ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                  GFile               *file,
+                                                 IdeBuffer           *buffer,
                                                  GCancellable        *cancellable,
                                                  GAsyncReadyCallback  callback,
                                                  gpointer             user_data)

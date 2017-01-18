@@ -26,6 +26,8 @@
 #include "ide-xml-service.h"
 #include "xml-reader.h"
 
+gboolean _ide_buffer_get_loading (IdeBuffer *self);
+
 #define DEFAULT_EVICTION_MSEC (60 * 1000)
 
 typedef GPtrArray IdeXmlStack;
@@ -319,6 +321,42 @@ ide_xml_service_get_root_node_cb (GObject      *object,
     }
 }
 
+typedef struct
+{
+  IdeXmlService *self;
+  GTask         *task;
+  GCancellable  *cancellable;
+  IdeFile       *ifile;
+  IdeBuffer     *buffer;
+} TaskState;
+
+static void
+ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
+                                   TaskState *state)
+{
+  IdeXmlService *self = (IdeXmlService *)state->self;
+  g_autoptr(GTask) task = state->task;
+
+  g_assert (IDE_IS_XML_SERVICE (self));
+  g_assert (G_IS_TASK (state->task));
+  g_assert (state->cancellable == NULL || G_IS_CANCELLABLE (state->cancellable));
+  g_assert (IDE_IS_FILE (state->ifile));
+  g_assert (IDE_IS_BUFFER (state->buffer));
+
+  printf ("buffer loaded\n");
+
+  egg_task_cache_get_async (self->trees,
+                            state->ifile,
+                            TRUE,
+                            state->cancellable,
+                            ide_xml_service_get_root_node_cb,
+                            g_steal_pointer (&task));
+
+  g_object_unref (state->buffer);
+  g_object_unref (state->ifile);
+  g_slice_free (TaskState, state);
+}
+
 /**
  * ide_xml_service_get_root_node_async:
  *
@@ -330,10 +368,14 @@ ide_xml_service_get_root_node_cb (GObject      *object,
  *
  * If the root node is out of date, then the source file(s) will be
  * parsed asynchronously.
+ *
+ * The xml service is meant to be used with buffers, that is,
+ * by extension, loaded views.
  */
 void
 ide_xml_service_get_root_node_async (IdeXmlService       *self,
                                      IdeFile             *file,
+                                     IdeBuffer           *buffer,
                                      gint64               min_serial,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
@@ -341,19 +383,22 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
 {
   IdeXmlSymbolNode *cached;
   g_autoptr(GTask) task = NULL;
+  IdeContext *context;
+  IdeBufferManager *manager;
+  GFile *gfile;
 
   g_return_if_fail (IDE_IS_XML_SERVICE (self));
   g_return_if_fail (IDE_IS_FILE (file));
+  g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  context = ide_object_get_context (IDE_OBJECT (self));
 
   if (min_serial == 0)
     {
-      IdeContext *context;
       IdeUnsavedFiles *unsaved_files;
 
-      context = ide_object_get_context (IDE_OBJECT (self));
       unsaved_files = ide_context_get_unsaved_files (context);
       min_serial = ide_unsaved_files_get_sequence (unsaved_files);
     }
@@ -370,12 +415,41 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
     }
 
   printf ("egg_task_cache_get_async\n");
-  egg_task_cache_get_async (self->trees,
-                            file,
-                            TRUE,
-                            cancellable,
-                            ide_xml_service_get_root_node_cb,
-                            g_object_ref (task));
+  manager = ide_context_get_buffer_manager (context);
+  gfile = ide_file_get_file (file);
+  if (!ide_buffer_manager_has_file (manager, gfile))
+    {
+      TaskState *state;
+
+      if (!_ide_buffer_get_loading (buffer))
+        {
+          g_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_NOT_SUPPORTED,
+                                   _("Buffer loaded but not in buffer manager."));
+          return;
+        }
+
+      /* Wait for the buffer to be fully loaded */
+      state = g_slice_new0 (TaskState);
+      state->self = self;
+      state->task = g_object_ref (task);
+      state->cancellable = cancellable;
+      state->ifile = g_object_ref (file);
+      state->buffer = g_object_ref (buffer);
+
+      g_signal_connect (buffer,
+                        "loaded",
+                        G_CALLBACK (ide_xml_service__buffer_loaded_cb),
+                        state);
+    }
+  else
+    egg_task_cache_get_async (self->trees,
+                              file,
+                              TRUE,
+                              cancellable,
+                              ide_xml_service_get_root_node_cb,
+                              g_object_ref (task));
 }
 
 /**

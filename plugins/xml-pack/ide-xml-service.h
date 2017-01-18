@@ -34,6 +34,7 @@ IdeXmlSymbolNode   *ide_xml_service_get_cached_root_node      (IdeXmlService    
                                                                GFile                *file);
 void                ide_xml_service_get_root_node_async       (IdeXmlService        *self,
                                                                IdeFile              *file,
+                                                               IdeBuffer            *buffer,
                                                                gint64                min_serial,
                                                                GCancellable         *cancellable,
                                                                GAsyncReadyCallback   callback,

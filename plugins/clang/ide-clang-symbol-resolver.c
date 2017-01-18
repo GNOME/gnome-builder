@@ -177,6 +177,7 @@ ide_clang_symbol_resolver_get_symbol_tree_cb (GObject      *object,
 static void
 ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                  GFile               *file,
+                                                 IdeBuffer           *buffer,
                                                  GCancellable        *cancellable,
                                                  GAsyncReadyCallback  callback,
                                                  gpointer             user_data)

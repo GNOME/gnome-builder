@@ -262,6 +262,7 @@ populate_cache_cb (EggTaskCache  *cache,
     {
       ide_symbol_resolver_get_symbol_tree_async (resolver,
                                                  ide_file_get_file (file),
+                                                 document,
                                                  g_task_get_cancellable (task),
                                                  get_symbol_tree_cb,
                                                  g_object_ref (task));

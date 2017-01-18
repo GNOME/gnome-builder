@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-symbol-resolver"
 
 #include "ide-context.h"
+#include "buffers/ide-buffer.h"
 
 #include "files/ide-file.h"
 #include "symbols/ide-symbol-resolver.h"
@@ -28,6 +29,7 @@ G_DEFINE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE_TYPE_OBJECT)
 static void
 ide_symbol_resolver_real_get_symbol_tree_async (IdeSymbolResolver   *self,
                                                 GFile               *file,
+                                                IdeBuffer           *buffer,
                                                 GCancellable        *cancellable,
                                                 GAsyncReadyCallback  callback,
                                                 gpointer             user_data)
@@ -36,6 +38,7 @@ ide_symbol_resolver_real_get_symbol_tree_async (IdeSymbolResolver   *self,
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (self));
   g_assert (G_IS_FILE (file));
+  g_assert (buffer == NULL || IDE_IS_BUFFER (buffer));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
@@ -123,6 +126,7 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
  * ide_symbol_resolver_get_symbol_tree_async:
  * @self: An #IdeSymbolResolver
  * @file: A #GFile
+ * @buffer: A #IdeBuffer or %NULL
  * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @callback: (allow-none): a callback to execute upon completion
  * @user_data: user data for @callback
@@ -132,6 +136,7 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
 void
 ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
                                            GFile               *file,
+                                           IdeBuffer           *buffer,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
@@ -139,7 +144,7 @@ ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
   g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
   g_return_if_fail (G_IS_FILE (file));
 
-  IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbol_tree_async (self, file, cancellable, callback, user_data);
+  IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbol_tree_async (self, file, buffer, cancellable, callback, user_data);
 }
 
 /**
