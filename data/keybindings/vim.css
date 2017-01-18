@@ -1870,9 +1870,26 @@
 
 @binding-set builder-vim-source-view-visual-line-g
 {
-  bind "g" { "movement" (first-line, 1, 1, 0)
+  /* XXX: This is a bit of a hack to just reuse the special
+   *      line handling case to wrap around our first selected
+   *      line. Otherwise, we lose that line. This type of stuff
+   *      really belongs in a special case keybinding context
+   *      once that subsystem lands.
+   */
+  bind "g" { "clear-count" ()
+             "append-to-count" (1)
+             "append-to-count" (0)
+             "append-to-count" (0)
+             "append-to-count" (0)
+             "append-to-count" (0)
+             "append-to-count" (0)
+             "append-to-count" (0)
+             "append-to-count" (0)
+             "movement" (previous-line, 1, 0, 1)
              "set-mode" ("vim-visual-line", permanent) };
   bind "j" { "movement" (next-line, 1, 1, 0)
+             "set-mode" ("vim-visual-line", permanent) };
+  bind "k" { "movement" (next-line, 1, 1, 0)
              "set-mode" ("vim-visual-line", permanent) };
 }
 
@@ -2311,6 +2328,8 @@ bind "KP_Multiply" { "save-insert-mark" ()
 
   bind "k" { "movement" (previous-line, 1, 0, 1) };
   bind "j" { "movement" (next-line, 1, 0, 1) };
+
+  bind "g" { "set-mode" ("vim-visual-line-g", transient ) };
 
   /* just to be nice */
   bind "h" { "end-macro" ()
