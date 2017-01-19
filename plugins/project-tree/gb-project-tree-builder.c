@@ -409,8 +409,9 @@ gb_project_tree_builder_init (GbProjectTreeBuilder *self)
   self->sort_directories_first = g_settings_get_boolean (self->file_chooser_settings,
                                                          "sort-directories-first");
 
-  g_signal_connect (self->file_chooser_settings,
-                    "changed::sort-directories-first",
-                    G_CALLBACK (gb_project_tree_builder_rebuild),
-                    self);
+  g_signal_connect_object (self->file_chooser_settings,
+                           "changed::sort-directories-first",
+                           G_CALLBACK (gb_project_tree_builder_rebuild),
+                           self,
+                           0);
 }
