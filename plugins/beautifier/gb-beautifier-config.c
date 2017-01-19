@@ -130,7 +130,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
 
   if (!g_file_test (ini_path, G_FILE_TEST_EXISTS))
     {
-      g_debug ("%s doesn't exist\n", ini_path);
+      g_debug ("%s doesn't exist", ini_path);
       return FALSE;
     }
 
@@ -362,7 +362,7 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
   key_file = g_key_file_new ();
   if (!g_file_test (file_name, G_FILE_TEST_EXISTS))
     {
-      g_debug ("%s doesn't exist\n", file_name);
+      g_debug ("%s doesn't exist", file_name);
       return map;
     }
 

@@ -293,17 +293,16 @@ process_communicate_utf8_cb (GObject      *object,
       g_task_return_boolean (task, TRUE);
     }
   else
-    g_warning ("beautify plugin: output empty\n");
+    g_warning ("beautify plugin: output empty");
 
   if (g_subprocess_get_if_exited (process))
     {
       status = g_subprocess_get_exit_status (process);
-      printf ("exit status:%i\n", status);
       if (status != 0 &&
           stderr_str != NULL &&
           !ide_str_empty0 (stderr_str))
         {
-          g_warning ("beautify plugin stderr:\n%s\n", stderr_str);
+          g_warning ("beautify plugin stderr:\n%s", stderr_str);
         }
     }
 }
