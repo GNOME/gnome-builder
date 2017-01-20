@@ -588,6 +588,7 @@ libide_1_0_la_LDFLAGS =                         \
 	$(OPTIMIZE_LDFLAGS)                     \
 	-avoid-version                          \
 	-no-undefined                           \
+	--no-as-needed                          \
 	-export-symbols-regex '^(ide_|_ide_).*' \
 	$(NULL)
 
@@ -597,7 +598,7 @@ libide_1_0_la_LIBADD =                                          \
 	-lm                                                     \
 	$(top_builddir)/data/icons/hicolor/libicons.la          \
 	$(top_builddir)/contrib/egg/libegg-private.la           \
-	$(top_builddir)/contrib/gd/libgd.la                     \
+	$(top_builddir)/contrib/gd/libgd-private.la             \
 	$(top_builddir)/contrib/jsonrpc-glib/libjsonrpc-glib.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la         \
 	$(top_builddir)/contrib/pnl/libpanel-gtk.la             \

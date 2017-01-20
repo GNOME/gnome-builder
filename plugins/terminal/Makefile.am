@@ -23,6 +23,9 @@ libterminal_la_SOURCES = \
 	gb-terminal-view-private.h \
 	gb-terminal-view-actions.c \
 	gb-terminal-view-actions.h \
+	gb-terminal-search.c \
+	gb-terminal-search.h \
+	gb-terminal-search-private.h \
 	gb-terminal-workbench-addin.c \
 	gb-terminal-workbench-addin.h \
 	$(NULL)
@@ -33,7 +36,10 @@ nodist_libterminal_la_SOURCES = \
 	$(NULL)
 
 libterminal_la_CFLAGS = $(PLUGIN_CFLAGS) $(TERMINAL_CFLAGS)
-libterminal_la_LIBADD = $(TERMINAL_LIBS)
+libterminal_la_LIBADD = \
+    $(TERMINAL_LIBS) \
+    $(top_builddir)/contrib/gd/libgd-private.la \
+    $(NULL)
 libterminal_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 glib_resources_c = gb-terminal-resources.c

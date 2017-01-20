@@ -48,6 +48,7 @@ struct _GbTerminalClass
                                    GtkWidget  *widget);
   void     (*select_all)          (GbTerminal *self,
                                    gboolean    all);
+  void     (*search_reveal)       (GbTerminal *self);
   gboolean (*open_link)           (GbTerminal *self);
   gboolean (*copy_link_address)   (GbTerminal *self);
 };
@@ -59,6 +60,7 @@ enum {
   OPEN_LINK,
   POPULATE_POPUP,
   SELECT_ALL,
+  SEARCH_REVEAL,
   LAST_SIGNAL
 };
 
@@ -233,6 +235,24 @@ gb_terminal_open_link (GbTerminal *self)
 }
 
 static void
+gb_terminal_real_search_reveal (GbTerminal *self)
+{
+  GtkWidget *parent_overlay;
+
+  g_assert (GB_IS_TERMINAL (self));
+
+  parent_overlay = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_OVERLAY);
+
+  if (parent_overlay != NULL)
+    {
+      GtkRevealer *revealer = ide_widget_find_child_typed (parent_overlay, GTK_TYPE_REVEALER);
+      
+      if (revealer != NULL && !gtk_revealer_get_child_revealed (revealer))
+        gtk_revealer_set_reveal_child (revealer, TRUE);
+    }
+}
+
+static void
 gb_terminal_class_init (GbTerminalClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -244,6 +264,7 @@ gb_terminal_class_init (GbTerminalClass *klass)
   klass->copy_link_address = gb_terminal_copy_link_address;
   klass->open_link = gb_terminal_open_link;
   klass->select_all = gb_terminal_real_select_all;
+  klass->search_reveal = gb_terminal_real_search_reveal;
 
   signals [COPY_LINK_ADDRESS] =
     g_signal_new ("copy-link-address",
@@ -252,6 +273,15 @@ gb_terminal_class_init (GbTerminalClass *klass)
                   G_STRUCT_OFFSET (GbTerminalClass, copy_link_address),
                   NULL, NULL, NULL,
                   G_TYPE_BOOLEAN,
+                  0);
+
+  signals [SEARCH_REVEAL] =
+    g_signal_new ("search-reveal",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbTerminalClass, search_reveal),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
                   0);
 
   signals [OPEN_LINK] =
@@ -295,6 +325,12 @@ gb_terminal_class_init (GbTerminalClass *klass)
                                 GDK_KEY_v,
                                 GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                 "paste-clipboard",
+                                0);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_f,
+                                GDK_CONTROL_MASK,
+                                "search-reveal",
                                 0);
 }
 

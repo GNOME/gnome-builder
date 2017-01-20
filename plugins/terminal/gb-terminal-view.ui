@@ -9,39 +9,47 @@
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkBox" id="top_container">
-            <property name="orientation">horizontal</property>
+          <object class="GtkOverlay" id="terminal_overlay_top">
             <property name="expand">true</property>
             <property name="visible">true</property>
             <child>
-              <object class="GbTerminal" id="terminal_top">
-                <property name="audible-bell">false</property>
+              <object class="GtkBox" id="top_container">
+                <property name="orientation">horizontal</property>
                 <property name="expand">true</property>
                 <property name="visible">true</property>
-                <property name="scrollback-lines">0xffffffff</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScrollbar" id="top_scrollbar">
-                <property name="orientation">vertical</property>
-                <property name="visible">true</property>
+                <child>
+                  <object class="GbTerminal" id="terminal_top">
+                    <property name="audible-bell">false</property>
+                    <property name="expand">true</property>
+                    <property name="visible">true</property>
+                    <property name="scrollback-lines">0xffffffff</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrollbar" id="top_scrollbar">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="resize">true</property>
-            <property name="shrink">true</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkBox" id="bottom_container">
-            <property name="orientation">horizontal</property>
+          <object class="GtkOverlay" id="terminal_overlay_bottom">
             <property name="expand">true</property>
             <property name="visible">false</property>
             <child>
-              <object class="GtkScrollbar" id="bottom_scrollbar">
-                <property name="orientation">vertical</property>
+              <object class="GtkBox" id="bottom_container">
+                <property name="orientation">horizontal</property>
+                <property name="expand">true</property>
                 <property name="visible">true</property>
+                <child>
+                  <object class="GtkScrollbar" id="bottom_scrollbar">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/terminal">
     <file>gb-terminal-view.ui</file>
+    <file>gb-terminal-search.ui</file>
     <file>gtk/menus.ui</file>
     <file>theme/shared.css</file>
   </gresource>

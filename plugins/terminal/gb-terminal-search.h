@@ -16,21 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_VIEW_H
-#define GB_TERMINAL_VIEW_H
+#ifndef GB_TERMINAL_SEARCH_H
+#define GB_TERMINAL_SEARCH_H
 
 #include <ide.h>
 #include <vte/vte.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TERMINAL_VIEW (gb_terminal_view_get_type())
+#define GB_TYPE_TERMINAL_SEARCH (gb_terminal_search_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTerminalView, gb_terminal_view, GB, TERMINAL_VIEW, IdeLayoutView)
+G_DECLARE_FINAL_TYPE (GbTerminalSearch, gb_terminal_search, GB, TERMINAL_SEARCH, GtkBin)
 
-void      gb_terminal_view_set_pty        (GbTerminalView *self,
-                                           VtePty         *pty);
+VteRegex    *terminal_search_get_regex       (GbTerminalSearch *self);
+gboolean     terminal_search_get_wrap_around (GbTerminalSearch *self);
+void         gb_terminal_search_set_terminal  (GbTerminalSearch *self,
+                							   VteTerminal      *terminal);
+GtkRevealer *terminal_search_get_revealer     (GbTerminalSearch *self);
 
 G_END_DECLS
 
-#endif /* GB_TERMINAL_VIEW_H */
+#endif /* GB_TERMINAL_SEARCH_H */

@@ -19,8 +19,12 @@
 #ifndef GB_TERMINAL_VIEW_PRIVATE_H
 #define GB_TERMINAL_VIEW_PRIVATE_H
 
+#include <gd-tagged-entry.h>
 #include <ide.h>
 #include <vte/vte.h>
+
+#include "gb-terminal-search.h"
+#include "gb-terminal-search-private.h"
 
 G_BEGIN_DECLS
 
@@ -28,11 +32,20 @@ struct _GbTerminalView
 {
   IdeLayoutView        parent_instance;
 
+  GtkOverlay          *terminal_overlay_top;
+  GtkOverlay          *terminal_overlay_bottom;
+
+  GtkRevealer         *search_revealer_top;
+  GtkRevealer         *search_revealer_bottom;
+
   VteTerminal         *terminal_top;
   VteTerminal         *terminal_bottom;
 
   GtkScrollbar        *top_scrollbar;
   GtkScrollbar        *bottom_scrollbar;
+
+  GbTerminalSearch    *tsearch;
+  GbTerminalSearch    *bsearch;
 
   GFile               *save_as_file_top;
   GFile               *save_as_file_bottom;

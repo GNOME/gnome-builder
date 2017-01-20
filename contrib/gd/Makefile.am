@@ -3,14 +3,15 @@ CLEANFILES =
 BUILT_SOURCES =
 EXTRA_DIST =
 
-noinst_LTLIBRARIES = libgd.la
+pkglibdir = $(libdir)/gnome-builder
+pkglib_LTLIBRARIES = libgd-private.la
 
-libgd_la_SOURCES = \
+libgd_private_la_SOURCES = \
 	gd-tagged-entry.c \
 	gd-tagged-entry.h \
 	$(NULL)
 
-nodist_libgd_la_SOURCES = \
+nodist_libgd_private_la_SOURCES = \
 	gd-resources.c \
 	gd-resources.h
 
@@ -20,7 +21,7 @@ glib_resources_xml = gd-tagged-entry.gresource.xml
 glib_resources_namespace = gd
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
-libgd_la_CFLAGS = $(GD_CFLAGS)
-libgd_la_LIBADD = $(GD_LIBS)
+libgd_private_la_CFLAGS = $(GD_CFLAGS)
+libgd_private_la_LIBADD = $(GD_LIBS)
 
 -include $(top_srcdir)/git.mk

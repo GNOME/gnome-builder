@@ -17,12 +17,14 @@
  */
 
 #define G_LOG_DOMAIN "gb-terminal-view"
+#define PCRE2_CODE_UNIT_WIDTH 0
 
 #include "config.h"
 
 #include <fcntl.h>
 #include <glib/gi18n.h>
 #include <ide.h>
+#include <pcre2.h>
 #include <stdlib.h>
 #include <vte/vte.h>
 #include <unistd.h>
@@ -43,7 +45,7 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *properties [LAST_PROP];
+static GParamSpec *properties[LAST_PROP];
 static gchar *cached_shell;
 
 /* TODO: allow palette to come from gnome-terminal. */
@@ -459,16 +461,18 @@ focus_in_event_cb (VteTerminal    *terminal,
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
   self->bottom_has_focus = (terminal != self->terminal_top);
-
+  
   if (terminal == self->terminal_top)
     {
       self->top_has_needs_attention = FALSE;
       gb_terminal_set_needs_attention (self, FALSE, GTK_POS_TOP);
+      gtk_revealer_set_reveal_child (self->search_revealer_top, FALSE);
     }
   else if (terminal == self->terminal_bottom)
     {
       self->bottom_has_needs_attention = FALSE;
       gb_terminal_set_needs_attention (self, FALSE, GTK_POS_BOTTOM);
+      gtk_revealer_set_reveal_child (self->search_revealer_bottom, FALSE);
     }
 
   return GDK_EVENT_PROPAGATE;
@@ -594,9 +598,18 @@ gb_terminal_set_split_view (IdeLayoutView   *view,
                                          GTK_WIDGET (self->terminal_bottom),
                                          "position", 0,
                                          NULL);
-      gtk_widget_show (self->bottom_container);
+      gtk_widget_show ( GTK_WIDGET (self->terminal_overlay_bottom));
+
+      self->bsearch = g_object_new (GB_TYPE_TERMINAL_SEARCH, NULL);
+      self->search_revealer_bottom = terminal_search_get_revealer (self->bsearch);
+
+      gtk_overlay_add_overlay (self->terminal_overlay_bottom,
+                               GTK_WIDGET (self->search_revealer_bottom));
 
       gb_terminal_view_connect_terminal (self, self->terminal_bottom);
+
+      gb_terminal_search_set_terminal (self->bsearch, self->terminal_bottom);
+
       style_context_changed (style_context, GB_TERMINAL_VIEW (view));
 
       gtk_widget_grab_focus (GTK_WIDGET (self->terminal_bottom));
@@ -609,15 +622,19 @@ gb_terminal_set_split_view (IdeLayoutView   *view,
     }
   else
     {
+      gtk_container_remove (GTK_CONTAINER (self->terminal_overlay_bottom),
+                            GTK_WIDGET (self->search_revealer_bottom));
       gtk_container_remove (GTK_CONTAINER (self->bottom_container),
                             GTK_WIDGET (self->terminal_bottom));
-      gtk_widget_hide (self->bottom_container);
+      gtk_widget_hide ( GTK_WIDGET (self->terminal_overlay_bottom));
 
       self->terminal_bottom = NULL;
+      self->search_revealer_bottom = NULL;
       self->bottom_has_focus = FALSE;
       self->bottom_has_spawned = FALSE;
       self->bottom_has_needs_attention = FALSE;
       g_clear_object (&self->save_as_file_bottom);
+      g_clear_object (&self->bsearch);
       gtk_widget_grab_focus (GTK_WIDGET (self->terminal_top));
     }
 }
@@ -765,6 +782,8 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, bottom_container);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, top_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, bottom_scrollbar);
+  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_overlay_top);
+  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_overlay_bottom);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
 
@@ -802,9 +821,18 @@ gb_terminal_view_init (GbTerminalView *self)
 
   self->manage_spawn = TRUE;
 
+  self->tsearch = g_object_new (GB_TYPE_TERMINAL_SEARCH, NULL);
+  self->search_revealer_top = terminal_search_get_revealer (self->tsearch);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  gtk_overlay_add_overlay (self->terminal_overlay_top,
+                           GTK_WIDGET (self->search_revealer_top));
+
   gb_terminal_view_connect_terminal (self, self->terminal_top);
+
+  gb_terminal_search_set_terminal (self->tsearch, self->terminal_top);
+
   gb_terminal_view_actions_init (self);
 
   settings = g_settings_new ("org.gnome.builder.terminal");
