@@ -33,6 +33,23 @@
     <file compressed="true">scalable/actions/lang-union-symbolic.svg</file>
     <file compressed="true">scalable/actions/lang-variable-symbolic.svg</file>
     <file compressed="true">scalable/actions/struct-field-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-attributes-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-child-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-item-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-menu-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-object-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-packing-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-property-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-section-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-signal-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-style-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-submenu-symbolic.svg</file>
+    <file compressed="true">scalable/actions/ui-template-symbolic.svg</file>
+    <file compressed="true">scalable/actions/xml-attribute-symbolic.svg</file>
+    <file compressed="true">scalable/actions/xml-cdata-symbolic.svg</file>
+    <file compressed="true">scalable/actions/xml-comment-symbolic.svg</file>
+    <file compressed="true">scalable/actions/xml-declaration-symbolic.svg</file>
+    <file compressed="true">scalable/actions/xml-element-symbolic.svg</file>
 
     <file compressed="true" alias="scalable/actions/builder-move-right-symbolic-rtl.svg">scalable/actions/builder-move-left-symbolic.svg</file>
     <file compressed="true" alias="scalable/actions/builder-move-left-symbolic-rtl.svg">scalable/actions/builder-move-right-symbolic.svg</file>
