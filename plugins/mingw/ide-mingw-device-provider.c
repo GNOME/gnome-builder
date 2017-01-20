@@ -159,6 +159,15 @@ ide_mingw_device_provider_constructed (GObject *object)
   task = g_task_new (self, NULL, load_cb, NULL);
   g_task_run_in_thread (task, ide_mingw_device_provider_discover_worker);
 }
+static void
+ide_mingw_device_provider_finalize (GObject *object)
+{
+  IdeMingwDeviceProvider *self = (IdeMingwDeviceProvider *)object;
+
+  g_clear_pointer (&self->devices, g_ptr_array_unref);
+
+  G_OBJECT_CLASS (ide_mingw_device_provider_parent_class)->finalize (object);
+}
 
 static void
 ide_mingw_device_provider_get_property (GObject    *object,
@@ -185,6 +194,7 @@ ide_mingw_device_provider_class_init (IdeMingwDeviceProviderClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = ide_mingw_device_provider_constructed;
+  object_class->finalize = ide_mingw_device_provider_finalize;
   object_class->get_property = ide_mingw_device_provider_get_property;
 
   properties [PROP_SETTLED] =

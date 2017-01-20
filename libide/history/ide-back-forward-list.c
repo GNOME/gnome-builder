@@ -313,7 +313,7 @@ ide_back_forward_list_merge (IdeBackForwardList *self,
   g_assert (ar2 != NULL);
 
   if (ar2->len == 0)
-    return;
+    goto cleanup;
 
   first = g_ptr_array_index (ar2, 0);
 
