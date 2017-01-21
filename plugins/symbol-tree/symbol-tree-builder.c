@@ -120,6 +120,73 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
         case IDE_SYMBOL_PACKAGE:
         case IDE_SYMBOL_PROPERTY:
         case IDE_SYMBOL_STRING:
+          icon_name = NULL;
+          break;
+
+        case IDE_SYMBOL_UI_ATTRIBUTES:
+          icon_name = "ui-attributes-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_CHILD:
+          icon_name = "ui-child-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_ITEM:
+          icon_name = "ui-item-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_MENU:
+          icon_name = "ui-menu-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_OBJECT:
+          icon_name = "ui-object-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_PACKING:
+          icon_name = "ui-packing-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_PROPERTY:
+          icon_name = "ui-property-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_SECTION:
+          icon_name = "ui-section-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_SIGNAL:
+          icon_name = "ui-signal-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_STYLE:
+          icon_name = "ui-style-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_SUBMENU:
+          icon_name = "ui-submenu-symbolic";
+          break;
+
+        case IDE_SYMBOL_UI_TEMPLATE:
+          icon_name = "ui-template-symbolic";
+          break;
+
+        case IDE_SYMBOL_XML_ATTRIBUTE:
+          icon_name = "xml-attribute-symbolic";
+          break;
+
+        case IDE_SYMBOL_XML_CONTENT:
+          icon_name = "xml-content-symbolic";
+          break;
+
+        case IDE_SYMBOL_XML_DECLARATION:
+          icon_name = "xml-declaration-symbolic";
+          break;
+
+        case IDE_SYMBOL_XML_ELEMENT:
+          icon_name = "xml-element-symbolic";
+          break;
+
         default:
           icon_name = NULL;
           break;
