@@ -23,60 +23,21 @@
 #include <gtksourceview/gtksource.h>
 #include <math.h>
 
+#include "ide-xml-tree-builder.h"
+
 #include "ide-xml-service.h"
-#include "xml-reader.h"
 
 gboolean _ide_buffer_get_loading (IdeBuffer *self);
 
 #define DEFAULT_EVICTION_MSEC (60 * 1000)
 
-typedef GPtrArray IdeXmlStack;
-
-static inline IdeXmlStack *
-stack_new (void)
-{
-  return g_ptr_array_new ();
-}
-
-static inline void
-stack_push (IdeXmlStack *stack,
-            gpointer     ptr)
-{
-  g_ptr_array_add (stack, ptr);
-}
-
-static inline gpointer
-stack_pop (IdeXmlStack *stack)
-{
-  gint end = stack->len - 1;
-
-  return (end < 0) ? NULL : g_ptr_array_remove_index_fast (stack, end);
-}
-
-static inline gint
-stack_is_empty (IdeXmlStack *stack)
-{
-  return (stack->len == 0);
-}
-
-static inline void
-stack_destroy (IdeXmlStack *stack)
-{
-  g_ptr_array_unref (stack);
-}
-
-static inline gsize
-stack_get_size (IdeXmlStack *stack)
-{
-  return stack->len;
-}
-
 struct _IdeXmlService
 {
   IdeObject         parent_instance;
 
-  EggTaskCache     *trees;
-  GCancellable     *cancellable;
+  EggTaskCache      *trees;
+  IdeXmlTreeBuilder *tree_builder;
+  GCancellable      *cancellable;
 };
 
 static void service_iface_init (IdeServiceInterface *iface);
@@ -84,153 +45,25 @@ static void service_iface_init (IdeServiceInterface *iface);
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlService, ide_xml_service, IDE_TYPE_OBJECT, 0,
                                 G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
 
-static IdeXmlSymbolNode *
-create_node_from_reader (XmlReader *reader)
-{
-  const gchar *name;
-  GFile *file = NULL;
-  guint line = 0;
-  guint line_offset = 0;
-
-  name = xml_reader_get_name (reader);
-
-  return ide_xml_symbol_node_new (name, file, line, line_offset);
-}
-
 static void
-print_node (IdeXmlSymbolNode *node,
-            guint             depth)
+ide_xml_service_build_tree_cb2 (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
 {
-  g_autofree gchar *spacer;
-
-  spacer = g_strnfill (depth, '\t');
-  printf ("%s%s (%i)\n",
-          spacer,
-          ide_symbol_node_get_name (IDE_SYMBOL_NODE (node)),
-          depth);
-}
-
-static IdeXmlSymbolNode *
-ide_xml_service_walk_tree (IdeXmlService    *self,
-                           XmlReader        *reader)
-{
-  IdeXmlStack *stack;
+  IdeXmlTreeBuilder *tree_builder = (IdeXmlTreeBuilder *)object;
+  g_autoptr(GTask) task = user_data;
   IdeXmlSymbolNode *root_node;
-  IdeXmlSymbolNode *parent_node;
-  IdeXmlSymbolNode *current_node;
-  IdeXmlSymbolNode *previous_node = NULL;
-  xmlReaderTypes type;
-  gint depth = 0;
-  gint current_depth = 0;
-  gboolean is_empty;
+  GError *error = NULL;
 
-  g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (XML_IS_READER (reader));
+  g_assert (IDE_IS_XML_TREE_BUILDER (tree_builder));
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
 
-  stack = stack_new ();
-
-  parent_node = root_node = ide_xml_symbol_node_new ("root", NULL, 0, 0);
-  stack_push (stack, parent_node);
-
-  while (xml_reader_read (reader))
-    {
-      type = xml_reader_get_node_type (reader);
-      if ( type == XML_READER_TYPE_ELEMENT)
-        {
-          current_node = create_node_from_reader (reader);
-          depth = xml_reader_get_depth (reader);
-          is_empty = xml_reader_is_empty_element (reader);
-
-          /* TODO: take end elements into account and use:
-           * || ABS (depth - current_depth) > 1
-           */
-          if (depth < 0)
-            {
-              g_warning ("Wrong xml element depth, current:%i new:%i\n", current_depth, depth);
-              break;
-            }
-
-          if (depth > current_depth)
-            {
-              ++current_depth;
-              stack_push (stack, parent_node);
-
-              g_assert (previous_node != NULL);
-              parent_node = previous_node;
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-          else if (depth < current_depth)
-            {
-              --current_depth;
-              parent_node = stack_pop (stack);
-              if (parent_node == NULL)
-                {
-                  g_warning ("Xml nodes stack empty\n");
-                  break;
-                }
-
-              g_assert (parent_node != NULL);
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-          else
-            {
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-
-          previous_node = current_node;
-          print_node (current_node, depth);
-        }
-    }
-
-  printf ("stack size:%li\n", stack_get_size (stack));
-
-  stack_destroy (stack);
-
-  return root_node;
-}
-
-static IdeXmlSymbolNode *
-ide_xml_service_build_tree (IdeXmlService *self,
-                            GBytes        *content,
-                            GFile         *file)
-{
-  IdeXmlSymbolNode *root_node;
-  XmlReader *reader;
-  const gchar *data;
-  g_autofree gchar *uri;
-  gsize size;
-
-  g_assert (IDE_IS_XML_SERVICE (self));
-
-  data = g_bytes_get_data (content, &size);
-  uri = g_file_get_uri (file);
-  reader = xml_reader_new ();
-  xml_reader_load_from_data (reader, data, size, uri, NULL);
-  root_node = ide_xml_service_walk_tree (self, reader);
-
-  g_object_unref (reader);
-
-  return root_node;
-}
-
-static GBytes *
-ide_xml_service_get_file_content (IdeXmlService *self,
-                                  GFile         *file)
-{
-  IdeContext *context;
-  IdeBufferManager *manager;
-  IdeBuffer *buffer;
-  GBytes *content = NULL;
-
-  g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (G_IS_FILE (file));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_context_get_buffer_manager (context);
-  if (NULL != (buffer = ide_buffer_manager_find_buffer (manager, file)))
-    content = ide_buffer_get_content (buffer);
-
-  return content;
+  root_node = ide_xml_tree_builder_build_tree_finish (tree_builder, result, &error);
+  if (root_node == NULL)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, root_node, g_object_unref);
 }
 
 static void
@@ -241,11 +74,8 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
 {
   IdeXmlService *self = user_data;
   g_autofree gchar *path = NULL;
-  IdeContext *context;
   IdeFile *ifile = (IdeFile *)key;
   GFile *gfile;
-  IdeXmlSymbolNode *root_node;
-  GBytes *content = NULL;
 
   IDE_ENTRY;
 
@@ -255,8 +85,6 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
   g_assert (G_IS_TASK (task));
 
   gfile = ide_file_get_file (ifile);
-  context = ide_object_get_context (IDE_OBJECT (self));
-
   if (!gfile || !(path = g_file_get_path (gfile)))
     {
       g_task_return_new_error (task,
@@ -267,19 +95,11 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
     }
 
   printf ("tree path:%s\n", path);
-  if (NULL != (content = ide_xml_service_get_file_content (self, gfile)))
-    {
-      root_node = ide_xml_service_build_tree (self, content, gfile);
-      g_task_return_pointer (task, root_node, g_object_unref);
-    }
-  else
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("Failed to create xml tree."));
-      return;
-    }
+  ide_xml_tree_builder_build_tree_async (self->tree_builder,
+                                         gfile,
+                                         g_task_get_cancellable (task),
+                                         ide_xml_service_build_tree_cb2,
+                                         g_object_ref (task));
 
   IDE_EXIT;
 }
@@ -306,18 +126,20 @@ ide_xml_service_get_root_node_cb (GObject      *object,
                                   gpointer      user_data)
 {
   EggTaskCache *cache = (EggTaskCache *)object;
-  g_autoptr(IdeXmlSymbolNode) ret = NULL;
   g_autoptr(GTask) task = user_data;
+  IdeXmlSymbolNode *ret;
   GError *error = NULL;
 
   g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
 
   if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
     g_task_return_error (task, error);
   else
     {
       printf ("new tree:%p\n", ret);
-    g_task_return_pointer (task, g_steal_pointer (&ret), g_object_unref);
+      g_task_return_pointer (task, ret, g_object_unref);
     }
 }
 
@@ -338,7 +160,7 @@ ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
   g_autoptr(GTask) task = state->task;
 
   g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (G_IS_TASK (state->task));
+  g_assert (G_IS_TASK (task));
   g_assert (state->cancellable == NULL || G_IS_CANCELLABLE (state->cancellable));
   g_assert (IDE_IS_FILE (state->ifile));
   g_assert (IDE_IS_BUFFER (state->buffer));
@@ -433,7 +255,7 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
       /* Wait for the buffer to be fully loaded */
       state = g_slice_new0 (TaskState);
       state->self = self;
-      state->task = g_object_ref (task);
+      state->task = g_steal_pointer (&task);
       state->cancellable = cancellable;
       state->ifile = g_object_ref (file);
       state->buffer = g_object_ref (buffer);
@@ -449,7 +271,7 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
                               TRUE,
                               cancellable,
                               ide_xml_service_get_root_node_cb,
-                              g_object_ref (task));
+                              g_steal_pointer (&task));
 }
 
 /**
@@ -468,6 +290,7 @@ ide_xml_service_get_root_node_finish (IdeXmlService  *self,
   GTask *task = (GTask *)result;
 
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
   return g_task_propagate_pointer (task, error);
 }
@@ -475,9 +298,9 @@ ide_xml_service_get_root_node_finish (IdeXmlService  *self,
 static void
 ide_xml_service_context_loaded (IdeService *service)
 {
-  IdeBufferManager *buffer_manager;
   IdeXmlService *self = (IdeXmlService *)service;
   IdeContext *context;
+  IdeBufferManager *buffer_manager;
 
   IDE_ENTRY;
 
@@ -491,6 +314,13 @@ ide_xml_service_context_loaded (IdeService *service)
                            G_CALLBACK (ide_xml_service_buffer_saved),
                            self,
                            G_CONNECT_SWAPPED);
+
+  if (self->tree_builder == NULL)
+    self->tree_builder = g_object_new (IDE_TYPE_XML_TREE_BUILDER,
+                                       "context", context,
+                                       NULL);
+
+  /* TODO: schedule caching of open views trees */
 
   IDE_EXIT;
 }
@@ -537,8 +367,10 @@ ide_xml_service_finalize (GObject *object)
 
   IDE_ENTRY;
 
-  g_clear_object (&self->trees);
-  g_clear_object (&self->cancellable);
+ ide_xml_service_stop (IDE_SERVICE (self));
+
+  if (self->tree_builder != NULL)
+    g_clear_object (&self->tree_builder);
 
   G_OBJECT_CLASS (ide_xml_service_parent_class)->finalize (object);
 
