@@ -101,8 +101,6 @@ G_BEGIN_DECLS
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"
 #include "runtimes/ide-runtime.h"
-#include "scripting/ide-script-manager.h"
-#include "scripting/ide-script.h"
 #include "search/ide-omni-search-row.h"
 #include "search/ide-pattern-spec.h"
 #include "search/ide-search-context.h"

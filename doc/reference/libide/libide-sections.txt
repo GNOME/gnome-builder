@@ -351,7 +351,6 @@ ide_context_get_device_manager
 ide_context_get_project
 ide_context_get_recent_manager
 ide_context_get_runtime_manager
-ide_context_get_script_manager
 ide_context_get_search_engine
 ide_context_get_settings
 ide_context_get_snippets_manager
@@ -1465,12 +1464,6 @@ IdeProjectTemplate
 </SECTION>
 
 <SECTION>
-<FILE>ide-pygobject-script</FILE>
-IDE_TYPE_PYGOBJECT_SCRIPT
-IdePyGObjectScript
-</SECTION>
-
-<SECTION>
 <FILE>ide-recent-projects</FILE>
 IDE_TYPE_RECENT_PROJECTS
 IDE_RECENT_PROJECTS_GROUP
@@ -1552,27 +1545,6 @@ IdeRuntimeProviderInterface
 ide_runtime_provider_load
 ide_runtime_provider_unload
 IdeRuntimeProvider
-</SECTION>
-
-<SECTION>
-<FILE>ide-script</FILE>
-<TITLE>IdeScript</TITLE>
-IDE_TYPE_SCRIPT
-IDE_SCRIPT_EXTENSION_POINT
-IdeScriptClass
-ide_script_load
-ide_script_unload
-ide_script_get_file
-IdeScript
-</SECTION>
-
-<SECTION>
-<FILE>ide-script-manager</FILE>
-IDE_TYPE_SCRIPT_MANAGER
-ide_script_manager_get_scripts_directory
-ide_script_manager_load_async
-ide_script_manager_load_finish
-IdeScriptManager
 </SECTION>
 
 <SECTION>
@@ -2210,8 +2182,6 @@ IdeRefactoryInterface
 IdeRuntime
 IdeRuntimeManager
 IdeRuntimeProvider
-IdeScript
-IdeScriptManager
 IdeSearchContext
 IdeSearchEngine
 IdeSearchProvider

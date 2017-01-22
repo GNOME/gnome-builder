@@ -45,7 +45,6 @@
 #include "projects/ide-recent-projects.h"
 #include "runner/ide-run-manager.h"
 #include "runtimes/ide-runtime-manager.h"
-#include "scripting/ide-script-manager.h"
 #include "search/ide-search-engine.h"
 #include "search/ide-search-provider.h"
 #include "snippets/ide-source-snippets-manager.h"
@@ -72,7 +71,6 @@ struct _IdeContext
   GtkRecentManager         *recent_manager;
   IdeRunManager            *run_manager;
   IdeRuntimeManager        *runtime_manager;
-  IdeScriptManager         *script_manager;
   IdeSearchEngine          *search_engine;
   IdeSourceSnippetsManager *snippets_manager;
   IdeTransferManager       *transfer_manager;
@@ -110,7 +108,6 @@ enum {
   PROP_PROJECT,
   PROP_ROOT_BUILD_DIR,
   PROP_RUNTIME_MANAGER,
-  PROP_SCRIPT_MANAGER,
   PROP_SEARCH_ENGINE,
   PROP_SNIPPETS_MANAGER,
   PROP_VCS,
@@ -424,21 +421,6 @@ ide_context_set_project_file (IdeContext *self,
 }
 
 /**
- * ide_context_get_script_manager:
- *
- * Retrieves the script manager for the context.
- *
- * Returns: (transfer none): An #IdeScriptManager.
- */
-IdeScriptManager *
-ide_context_get_script_manager (IdeContext *self)
-{
-  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
-
-  return self->script_manager;
-}
-
-/**
  * ide_context_get_search_engine:
  *
  * Retrieves the search engine for the context.
@@ -628,10 +610,6 @@ ide_context_get_property (GObject    *object,
       g_value_set_object (value, ide_context_get_runtime_manager (self));
       break;
 
-    case PROP_SCRIPT_MANAGER:
-      g_value_set_object (value, ide_context_get_script_manager (self));
-      break;
-
     case PROP_SEARCH_ENGINE:
       g_value_set_object (value, ide_context_get_search_engine (self));
       break;
@@ -751,13 +729,6 @@ ide_context_class_init (IdeContextClass *klass)
                          IDE_TYPE_RUNTIME_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_SCRIPT_MANAGER] =
-    g_param_spec_object ("script-manager",
-                         "Script Manager",
-                         "The script manager for the context.",
-                         IDE_TYPE_SCRIPT_MANAGER,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_SEARCH_ENGINE] =
     g_param_spec_object ("search-engine",
                          "Search Engine",
@@ -808,8 +779,6 @@ ide_context_class_init (IdeContextClass *klass)
 static void
 ide_context_init (IdeContext *self)
 {
-  g_autofree gchar *scriptsdir = NULL;
-
   IDE_ENTRY;
 
   g_mutex_init (&self->unload_mutex);
@@ -871,15 +840,6 @@ ide_context_init (IdeContext *self)
                                       NULL);
 
   self->snippets_manager = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER, NULL);
-
-  scriptsdir = g_build_filename (g_get_user_config_dir (),
-                                 ide_get_program_name (),
-                                 "scripts",
-                                 NULL);
-  self->script_manager = g_object_new (IDE_TYPE_SCRIPT_MANAGER,
-                                       "context", self,
-                                       "scripts-directory", scriptsdir,
-                                       NULL);
 
   IDE_EXIT;
 }
@@ -1121,46 +1081,6 @@ ide_context_init_unsaved_files (gpointer             source_object,
                                    cancellable,
                                    ide_context_init_unsaved_files_cb,
                                    g_object_ref (task));
-}
-
-static void
-ide_context_init_scripts_cb (GObject      *object,
-                             GAsyncResult *result,
-                             gpointer      user_data)
-{
-  IdeScriptManager *manager = (IdeScriptManager *)object;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-
-  g_assert (IDE_IS_SCRIPT_MANAGER (manager));
-  g_assert (G_IS_TASK (task));
-
-  if (!ide_script_manager_load_finish (manager, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_boolean (task, TRUE);
-}
-
-static void
-ide_context_init_scripts (gpointer             source_object,
-                          GCancellable        *cancellable,
-                          GAsyncReadyCallback  callback,
-                          gpointer             user_data)
-{
-  IdeContext *self = source_object;
-  g_autoptr(GTask) task = NULL;
-
-  g_return_if_fail (IDE_IS_CONTEXT (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  ide_script_manager_load_async (self->script_manager,
-                                 cancellable,
-                                 ide_context_init_scripts_cb,
-                                 g_object_ref (task));
 }
 
 static void
@@ -1582,7 +1502,6 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_project_name,
                         ide_context_init_back_forward_list,
                         ide_context_init_snippets,
-                        ide_context_init_scripts,
                         ide_context_init_unsaved_files,
                         ide_context_init_add_recent,
                         ide_context_init_search_engine,

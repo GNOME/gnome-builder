@@ -109,8 +109,6 @@ libide_1_0_la_public_headers =                            \
 	runtimes/ide-runtime-manager.h                    \
 	runtimes/ide-runtime-provider.h                   \
 	runtimes/ide-runtime.h                            \
-	scripting/ide-script-manager.h                    \
-	scripting/ide-script.h                            \
 	search/ide-omni-search-display.h                  \
 	search/ide-omni-search-entry.h                    \
 	search/ide-omni-search-group.h                    \
@@ -286,8 +284,6 @@ libide_1_0_la_public_sources =                            \
 	runtimes/ide-runtime-manager.c                    \
 	runtimes/ide-runtime-provider.c                   \
 	runtimes/ide-runtime.c                            \
-	scripting/ide-script-manager.c                    \
-	scripting/ide-script.c                            \
 	search/ide-omni-search-display.c                  \
 	search/ide-omni-search-entry.c                    \
 	search/ide-omni-search-group.c                    \
@@ -600,23 +596,6 @@ libide_1_0_la_includes +=                       \
 
 libide_1_0_la_CFLAGS += -DENABLE_EDITORCONFIG
 libide_1_0_la_LIBADD += $(top_builddir)/contrib/libeditorconfig/libeditorconfig.la
-endif
-
-
-if ENABLE_PYTHON_SCRIPTING
-libide_1_0_la_includes += -I$(srcdir)/pygobject
-
-libide_1_0_la_SOURCES +=                 \
-	pygobject/ide-pygobject-script.c \
-	pygobject/ide-pygobject-script.h \
-        $(NULL)
-
-libide_1_0_la_CFLAGS +=           \
-	$(PYGOBJECT_CFLAGS)       \
-	-DENABLE_PYTHON_SCRIPTING \
-        $(NULL)
-
-libide_1_0_la_LIBADD += $(PYGOBJECT_LIBS)
 endif
 
 

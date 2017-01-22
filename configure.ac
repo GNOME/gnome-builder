@@ -248,22 +248,18 @@ AM_CONDITIONAL(ENABLE_WEBKIT, [test "x$enable_webkit" = "xyes"])
 dnl ***********************************************************************
 dnl Check for Required Python
 dnl ***********************************************************************
-enable_python_scripting=no
 AS_IF([test "x$have_pygobject" = "xyes"],[
 	AM_PATH_PYTHON([3.2.3])
-	AC_PATH_TOOL(PYTHON3_CONFIG, "python3-config")
-	AS_IF([test -z "${PYTHON3_CONFIG}"],[
-		AC_MSG_RESULT([Failed to locate python3-config.])
+	AS_IF([test -z "${PYTHON}"],[
+		enable_python_scripting=no
+		AC_MSG_RESULT([Failed to locate python3.])
 	],[
-		LIBIDE_CFLAGS="${LIBIDE_CFLAGS} `${PYTHON3_CONFIG} --includes`"
-		LIBIDE_LIBS="${LIBIDE_LIBS} `${PYTHON3_CONFIG} --libs`"
-		LIBIDE_LDFLAGS="${LIBIDE_LDFLAGS} `${PYTHON3_CONFIG} --ldflags`"
 		enable_python_scripting=yes
+		pyoverridesdir="\$(pyexecdir)/gi/overrides"
+		AC_SUBST(pyoverridesdir)
 	])
-
-	pyoverridesdir="\$(pyexecdir)/gi/overrides"
-	AC_SUBST(pyoverridesdir)
 ])
+AM_CONDITIONAL(ENABLE_PYTHON_SCRIPTING, test x$enable_python_scripting != xno)
 
 
 dnl ***********************************************************************
@@ -317,12 +313,6 @@ m4_include([plugins/todo/configure.ac])
 m4_include([plugins/terminal/configure.ac])
 m4_include([plugins/vala-pack/configure.ac])
 m4_include([plugins/xml-pack/configure.ac])
-
-
-dnl ***********************************************************************
-dnl Define automake conditionals based on what we found
-dnl ***********************************************************************
-AM_CONDITIONAL(ENABLE_PYTHON_SCRIPTING, test x$enable_python_scripting != xno)
 
 
 dnl ***********************************************************************

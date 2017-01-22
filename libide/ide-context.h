@@ -42,7 +42,6 @@ IdeProject               *ide_context_get_project               (IdeContext     
 GtkRecentManager         *ide_context_get_recent_manager        (IdeContext           *self);
 IdeRunManager            *ide_context_get_run_manager           (IdeContext           *self);
 IdeRuntimeManager        *ide_context_get_runtime_manager       (IdeContext           *self);
-IdeScriptManager         *ide_context_get_script_manager        (IdeContext           *self);
 IdeSearchEngine          *ide_context_get_search_engine         (IdeContext           *self);
 IdeSettings              *ide_context_get_settings              (IdeContext           *self,
                                                                  const gchar          *schema_id,

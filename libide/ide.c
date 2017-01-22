@@ -31,10 +31,6 @@
 # include "editorconfig/ide-editorconfig-file-settings.h"
 #endif
 
-#ifdef ENABLE_PYTHON_SCRIPTING
-# include "pygobject/ide-pygobject-script.h"
-#endif
-
 static gboolean     programNameRead;
 static const gchar *programName = "libide";
 
@@ -70,7 +66,6 @@ static void
 ide_init_ctor (void)
 {
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
-  g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
 
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_MODELINES_FILE_SETTINGS,
@@ -86,11 +81,4 @@ ide_init_ctor (void)
                                   IDE_TYPE_GSETTINGS_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",
                                   -300);
-
-#ifdef ENABLE_PYTHON_SCRIPTING
-  g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
-                                  IDE_TYPE_PYGOBJECT_SCRIPT,
-                                  IDE_SCRIPT_EXTENSION_POINT".py",
-                                  -100);
-#endif
 }
