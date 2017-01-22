@@ -120,8 +120,86 @@ print_node (IdeXmlSymbolNode *node,
 }
 
 static IdeXmlSymbolNode *
-ide_xml_service_walk_tree (IdeXmlTreeBuilder  *self,
-                           XmlReader          *reader)
+ide_xml_service_walk_tree_ui (IdeXmlTreeBuilder  *self,
+                              XmlReader          *reader)
+{
+  IdeXmlStack *stack;
+  IdeXmlSymbolNode *root_node;
+  IdeXmlSymbolNode *parent_node;
+  IdeXmlSymbolNode *current_node;
+  IdeXmlSymbolNode *previous_node = NULL;
+  xmlReaderTypes type;
+  gint depth = 0;
+  gint current_depth = 0;
+  gboolean is_empty;
+
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+  g_assert (XML_IS_READER (reader));
+
+  stack = stack_new ();
+
+  parent_node = root_node = ide_xml_symbol_node_new ("root", IDE_SYMBOL_NONE,
+                                                     NULL, 0, 0);
+  stack_push (stack, parent_node);
+
+  while (xml_reader_read (reader))
+    {
+      type = xml_reader_get_node_type (reader);
+      if ( type == XML_READER_TYPE_ELEMENT)
+        {
+          current_node = create_node_from_reader (reader);
+          depth = xml_reader_get_depth (reader);
+          is_empty = xml_reader_is_empty_element (reader);
+
+          /* TODO: take end elements into account and use:
+           * || ABS (depth - current_depth) > 1
+           */
+          if (depth < 0)
+            {
+              g_warning ("Wrong xml element depth, current:%i new:%i\n", current_depth, depth);
+              break;
+            }
+
+          if (depth > current_depth)
+            {
+              ++current_depth;
+              stack_push (stack, parent_node);
+
+              g_assert (previous_node != NULL);
+              parent_node = previous_node;
+              ide_xml_symbol_node_take_child (parent_node, current_node);
+            }
+          else if (depth < current_depth)
+            {
+              --current_depth;
+              parent_node = stack_pop (stack);
+              if (parent_node == NULL)
+                {
+                  g_warning ("Xml nodes stack empty\n");
+                  break;
+                }
+
+              g_assert (parent_node != NULL);
+              ide_xml_symbol_node_take_child (parent_node, current_node);
+            }
+          else
+            {
+              ide_xml_symbol_node_take_child (parent_node, current_node);
+            }
+
+          previous_node = current_node;
+          print_node (current_node, depth);
+        }
+    }
+
+  stack_destroy (stack);
+
+  return root_node;
+}
+
+static IdeXmlSymbolNode *
+ide_xml_service_walk_tree_xml (IdeXmlTreeBuilder  *self,
+                               XmlReader          *reader)
 {
   IdeXmlStack *stack;
   IdeXmlSymbolNode *root_node;
@@ -222,6 +300,42 @@ ide_xml_service_get_file_content (IdeXmlTreeBuilder *self,
   return content;
 }
 
+static gboolean
+ide_xml_tree_builder_file_is_ui (GFile       *file,
+                                 const gchar *data,
+                                 gsize        size)
+{
+  g_autofree gchar *path;
+  gboolean ret = FALSE;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (data != NULL);
+  g_assert (size > 0);
+
+  path = g_file_get_path (file);
+  if (g_str_has_suffix (path, ".ui") || g_str_has_suffix (path, ".glade"))
+    {
+      XmlReader *reader;
+
+      reader = xml_reader_new ();
+      xml_reader_load_from_data (reader, data, size, NULL, NULL);
+      while (xml_reader_read (reader))
+        {
+          if (xml_reader_get_node_type (reader) == XML_READER_TYPE_ELEMENT)
+            {
+              if (ide_str_equal0 (xml_reader_get_name (reader), "interface"))
+                ret = TRUE;
+
+              break;
+            }
+        }
+
+      g_object_unref (reader);
+    }
+
+  return ret;
+}
+
 static void
 build_tree_worker (GTask        *task,
                    gpointer      source_object,
@@ -230,7 +344,7 @@ build_tree_worker (GTask        *task,
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)source_object;
   BuilderState *state = (BuilderState *)task_data;
-  IdeXmlSymbolNode *root_node;
+  IdeXmlSymbolNode *root_node = NULL;
   const gchar *data;
   g_autofree gchar *uri;
   gsize size;
@@ -240,13 +354,16 @@ build_tree_worker (GTask        *task,
   g_assert (state != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  printf ("build_tree_worker thread\n");
-
   data = g_bytes_get_data (state->content, &size);
   uri = g_file_get_uri (state->file);
   xml_reader_load_from_data (state->reader, data, size, uri, NULL);
 
-  if (NULL == (root_node = ide_xml_service_walk_tree (self, state->reader)))
+  if (ide_xml_tree_builder_file_is_ui (state->file,data, size))
+    root_node = ide_xml_service_walk_tree_ui (self, state->reader);
+  else
+    root_node = ide_xml_service_walk_tree_xml (self, state->reader);
+
+  if (root_node == NULL)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
