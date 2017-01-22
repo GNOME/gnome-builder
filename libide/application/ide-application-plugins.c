@@ -81,32 +81,20 @@ ide_application_discover_plugins (IdeApplication *self)
   PeasEngine *engine = peas_engine_get_default ();
   const GList *list;
   gchar *path;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_APPLICATION (self));
 
-  peas_engine_enable_loader (engine, "python3");
-
   if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
     {
-      GDir *dir;
+      g_irepository_prepend_search_path (BUILDDIR"/contrib/egg");
+      g_irepository_prepend_search_path (BUILDDIR"/contrib/gstyle");
+      g_irepository_prepend_search_path (BUILDDIR"/contrib/jsonrpc-glib");
+      g_irepository_prepend_search_path (BUILDDIR"/contrib/pnl");
+      g_irepository_prepend_search_path (BUILDDIR"/contrib/tmpl");
+      g_irepository_prepend_search_path (BUILDDIR"/libide");
 
-      g_irepository_require_private (g_irepository_get_default (),
-                                     BUILDDIR"/libide",
-                                     "Ide", "1.0", 0, NULL);
-
-      if ((dir = g_dir_open (BUILDDIR"/plugins", 0, NULL)))
-        {
-          const gchar *name;
-
-          while ((name = g_dir_read_name (dir)))
-            {
-              path = g_build_filename (BUILDDIR, "plugins", name, NULL);
-              peas_engine_prepend_search_path (engine, path, path);
-              g_free (path);
-            }
-
-          g_dir_close (dir);
-        }
+      peas_engine_prepend_search_path (engine, BUILDDIR"/plugins", NULL);
     }
   else
     {
@@ -117,15 +105,22 @@ ide_application_discover_plugins (IdeApplication *self)
                                        PACKAGE_DATADIR"/gnome-builder/plugins");
     }
 
-  peas_engine_prepend_search_path (engine,
-                                   "resource:///org/gnome/builder/plugins",
-                                   "resource:///org/gnome/builder/plugins");
+  g_irepository_require (NULL, "Ide", "1.0", 0, &error);
+  if (error != NULL)
+    {
+      g_warning ("Cannot enable Python 3 plugins: %s", error->message);
+    }
+  else
+    {
+      /* Avoid spamming stderr with Ide import tracebacks */
+      peas_engine_enable_loader (engine, "python3");
+    }
+
+  peas_engine_prepend_search_path (engine, "resource:///org/gnome/builder/plugins", NULL);
 
   path = g_build_filename (g_get_user_data_dir (), "gnome-builder", "plugins", NULL);
-  peas_engine_prepend_search_path (engine, path, path);
+  peas_engine_prepend_search_path (engine, path, NULL);
   g_free (path);
-
-  peas_engine_rescan_plugins (engine);
 
   list = peas_engine_get_plugin_list (engine);
 
