@@ -52,6 +52,7 @@ struct _IdeGreeterPerspective
   GtkStack             *stack;
   GtkStack             *top_stack;
   GtkButton            *genesis_continue_button;
+  GtkButton            *genesis_cancel_button;
   GtkLabel             *genesis_title;
   GtkStack             *genesis_stack;
   GtkInfoBar           *info_bar;
@@ -62,6 +63,7 @@ struct _IdeGreeterPerspective
   GtkBox               *my_projects_container;
   GtkListBox           *my_projects_list_box;
   GtkButton            *open_button;
+  GtkButton            *cancel_button;
   GtkBox               *other_projects_container;
   GtkListBox           *other_projects_list_box;
   GtkButton            *remove_button;
@@ -753,6 +755,17 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
+static void
+ide_greeter_perspective_cancel_clicked (IdeGreeterPerspective *self,
+                                        GtkButton             *cancel_button)
+{
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_BUTTON (cancel_button));
+
+  egg_state_machine_set_state (self->state_machine, "browse");
+  ide_greeter_perspective_apply_filter_all (self);
+}
+
 void
 ide_greeter_perspective_show_genesis_view (IdeGreeterPerspective *self,
                                            const gchar           *genesis_addin_name,
@@ -786,6 +799,17 @@ genesis_button_clicked (IdeGreeterPerspective *self,
 
   name = gtk_widget_get_name (GTK_WIDGET (button));
   ide_greeter_perspective_show_genesis_view (self, name, NULL);
+}
+
+static void
+ide_greeter_perspective_genesis_cancel_clicked (IdeGreeterPerspective *self,
+                                                GtkButton             *genesis_cancel_button)
+{
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_BUTTON (genesis_cancel_button));
+
+  egg_state_machine_set_state (self->state_machine, "browse");
+  ide_greeter_perspective_apply_filter_all (self);
 }
 
 static void
@@ -1140,6 +1164,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_set_css_name (widget_class, "greeter");
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_buttons);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_continue_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_title);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar);
@@ -1148,6 +1173,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, open_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, other_projects_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, other_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, remove_button);
@@ -1230,9 +1256,21 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (self->genesis_cancel_button,
+                           "clicked",
+                           G_CALLBACK (ide_greeter_perspective_genesis_cancel_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   g_signal_connect_object (self->open_button,
                            "clicked",
                            G_CALLBACK (ide_greeter_perspective_open_clicked),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->cancel_button,
+                           "clicked",
+                           G_CALLBACK (ide_greeter_perspective_cancel_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 

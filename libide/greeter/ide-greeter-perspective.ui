@@ -314,8 +314,6 @@
     </child>
     <child>
       <object class="GtkButton" id="genesis_cancel_button">
-        <property name="action-name">perspective.state</property>
-        <property name="action-target">'browse'</property>
         <property name="label" translatable="yes">_Cancel</property>
         <property name="use-underline">true</property>
         <property name="visible">true</property>
@@ -366,8 +364,6 @@
         <property name="tooltip-text" translatable="yes">Return to project selection</property>
         <property name="label" translatable="yes">_Cancel</property>
         <property name="use-underline">true</property>
-        <property name="action-name">perspective.state</property>
-        <property name="action-target">'browse'</property>
         <style>
           <class name="text-button"/>
         </style>
