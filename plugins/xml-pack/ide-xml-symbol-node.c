@@ -120,6 +120,7 @@ ide_xml_symbol_node_init (IdeXmlSymbolNode *self)
 
 IdeXmlSymbolNode *
 ide_xml_symbol_node_new (const gchar            *name,
+                         IdeSymbolKind           kind,
                          GFile                  *file,
                          guint                   line,
                          guint                   line_offset)
@@ -132,7 +133,7 @@ ide_xml_symbol_node_new (const gchar            *name,
 
   self = g_object_new (IDE_TYPE_XML_SYMBOL_NODE,
                        "name", name,
-                       "kind", IDE_SYMBOL_NONE,
+                       "kind", kind,
                        "flags", flags,
                        NULL);
 

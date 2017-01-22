@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE, XML_SYMBOL_NODE, IdeSymbolNode)
 
 IdeXmlSymbolNode         *ide_xml_symbol_node_new              (const gchar            *name,
+                                                                IdeSymbolKind           kind,
                                                                 GFile                  *file,
                                                                 guint                   line,
                                                                 guint                   line_offset);
