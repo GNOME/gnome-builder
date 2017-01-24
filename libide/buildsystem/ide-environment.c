@@ -30,6 +30,13 @@ static void list_model_iface_init (GListModelInterface *iface);
 G_DEFINE_TYPE_EXTENDED (IdeEnvironment, ide_environment, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
+enum {
+  CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals [LAST_SIGNAL];
+
 static void
 ide_environment_finalize (GObject *object)
 {
@@ -46,12 +53,31 @@ ide_environment_class_init (IdeEnvironmentClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_environment_finalize;
+
+  signals [CHANGED] =
+    g_signal_new ("changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+}
+
+static void
+ide_environment_items_changed (IdeEnvironment *self)
+{
+  g_assert (IDE_IS_ENVIRONMENT (self));
+
+  g_signal_emit (self, signals [CHANGED], 0);
 }
 
 static void
 ide_environment_init (IdeEnvironment *self)
 {
   self->variables = g_ptr_array_new_with_free_func (g_object_unref);
+
+  g_signal_connect (self,
+                    "items-changed",
+                    G_CALLBACK (ide_environment_items_changed),
+                    NULL);
 }
 
 static GType
@@ -88,6 +114,16 @@ list_model_iface_init (GListModelInterface *iface)
   iface->get_n_items = ide_environment_get_n_items;
   iface->get_item = ide_environment_get_item;
   iface->get_item_type = ide_environment_get_item_type;
+}
+
+static void
+ide_environment_variable_notify (IdeEnvironment         *self,
+                                 GParamSpec             *pspec,
+                                 IdeEnvironmentVariable *variable)
+{
+  g_assert (IDE_IS_ENVIRONMENT (self));
+
+  g_signal_emit (self, signals [CHANGED], 0);
 }
 
 void
@@ -128,6 +164,11 @@ ide_environment_setenv (IdeEnvironment *self,
                           "key", key,
                           "value", value,
                           NULL);
+      g_signal_connect_object (var,
+                               "notify",
+                               G_CALLBACK (ide_environment_variable_notify),
+                               self,
+                               G_CONNECT_SWAPPED);
       g_ptr_array_add (self->variables, var);
       g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
     }
@@ -230,6 +271,11 @@ ide_environment_append (IdeEnvironment         *self,
 
   position = self->variables->len;
 
+  g_signal_connect_object (variable,
+                           "notify",
+                           G_CALLBACK (ide_environment_variable_notify),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_ptr_array_add (self->variables, g_object_ref (variable));
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 }

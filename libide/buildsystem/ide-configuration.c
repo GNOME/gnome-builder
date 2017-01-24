@@ -209,9 +209,6 @@ ide_configuration_runtime_manager_items_changed (IdeConfiguration  *self,
 
 static void
 ide_configuration_environment_changed (IdeConfiguration *self,
-                                       guint             position,
-                                       guint             added,
-                                       guint             removed,
                                        IdeEnvironment   *environment)
 {
   IDE_ENTRY;
@@ -540,7 +537,7 @@ ide_configuration_init (IdeConfiguration *self)
   priv->internal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _value_free);
 
   g_signal_connect_object (priv->environment,
-                           "items-changed",
+                           "changed",
                            G_CALLBACK (ide_configuration_environment_changed),
                            self,
                            G_CONNECT_SWAPPED);
@@ -1031,6 +1028,11 @@ ide_configuration_set_environment (IdeConfiguration *self,
 
   g_clear_object (&priv->environment);
   priv->environment = g_object_ref (environment);
+  g_signal_connect_object (priv->environment,
+                           "changed",
+                           G_CALLBACK (ide_configuration_environment_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 const gchar *
