@@ -83,8 +83,6 @@
     <xi:include href="xml/ide-recent-projects.xml"/>
     <xi:include href="xml/ide-refactory.xml"/>
     <xi:include href="xml/ide-runtime.xml"/>
-    <xi:include href="xml/ide-script.xml"/>
-    <xi:include href="xml/ide-script-manager.xml"/>
     <xi:include href="xml/ide-search-context.xml"/>
     <xi:include href="xml/ide-search-engine.xml"/>
     <xi:include href="xml/ide-search-provider.xml"/>
