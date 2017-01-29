@@ -25,6 +25,12 @@ libxml_pack_plugin_la_SOURCES = \
 	ide-xml-symbol-tree.h \
 	ide-xml-tree-builder.c \
 	ide-xml-tree-builder.h \
+	ide-xml-tree-builder-generic.c \
+	ide-xml-tree-builder-generic.h \
+	ide-xml-tree-builder-ui.c \
+	ide-xml-tree-builder-ui.h \
+	ide-xml-tree-builder-utils.c \
+	ide-xml-tree-builder-utils-private.h \
 	ide-xml.c \
 	ide-xml.h \
 	xml-pack-plugin.c \

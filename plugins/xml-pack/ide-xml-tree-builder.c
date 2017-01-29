@@ -20,64 +20,19 @@
 #include <glib/gi18n.h>
 
 #include "xml-reader.h"
+#include "ide-xml-sax.h"
+#include "ide-xml-tree-builder-generic.h"
+#include "ide-xml-tree-builder-ui.h"
 
 #include "ide-xml-tree-builder.h"
 
-typedef GPtrArray IdeXmlStack;
-
-static inline IdeXmlStack *
-stack_new (void)
-{
-  return g_ptr_array_new ();
-}
-
-static inline void
-stack_push (IdeXmlStack *stack,
-            gpointer     ptr)
-{
-  g_ptr_array_add (stack, ptr);
-}
-
-static inline gpointer
-stack_pop (IdeXmlStack *stack)
-{
-  gint end = stack->len - 1;
-
-  return (end < 0) ? NULL : g_ptr_array_remove_index_fast (stack, end);
-}
-
-static inline gint
-stack_is_empty (IdeXmlStack *stack)
-{
-  return (stack->len == 0);
-}
-
-static inline void
-stack_destroy (IdeXmlStack *stack)
-{
-  g_ptr_array_unref (stack);
-}
-
-static inline gsize
-stack_get_size (IdeXmlStack *stack)
-{
-  return stack->len;
-}
-
-struct _IdeXmlService
-{
-  IdeObject         parent_instance;
-
-  EggTaskCache     *trees;
-  GCancellable     *cancellable;
-};
 struct _IdeXmlTreeBuilder
 {
   IdeObject parent_instance;
 };
 
 typedef struct{
-  XmlReader *reader;
+  IdeXmlSax *parser;
   GBytes    *content;
   GFile     *file;
 } BuilderState;
@@ -85,197 +40,12 @@ typedef struct{
 static void
 builder_state_free (BuilderState *state)
 {
-  g_clear_object (&state->reader);
+  g_clear_object (&state->parser);
   g_clear_pointer (&state->content, g_bytes_unref);
   g_clear_object (&state->file);
 }
 
 G_DEFINE_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE_TYPE_OBJECT)
-
-static IdeXmlSymbolNode *
-create_node_from_reader (XmlReader *reader)
-{
-  const gchar *name;
-  GFile *file = NULL;
-  guint line = 0;
-  guint line_offset = 0;
-
-  name = xml_reader_get_name (reader);
-
-  return ide_xml_symbol_node_new (name, IDE_SYMBOL_UI_OBJECT,
-                                  file, line, line_offset);
-}
-
-static void
-print_node (IdeXmlSymbolNode *node,
-            guint             depth)
-{
-  g_autofree gchar *spacer;
-
-  spacer = g_strnfill (depth, '\t');
-  printf ("%s%s (%i)\n",
-          spacer,
-          ide_symbol_node_get_name (IDE_SYMBOL_NODE (node)),
-          depth);
-}
-
-static IdeXmlSymbolNode *
-ide_xml_service_walk_tree_ui (IdeXmlTreeBuilder  *self,
-                              XmlReader          *reader)
-{
-  IdeXmlStack *stack;
-  IdeXmlSymbolNode *root_node;
-  IdeXmlSymbolNode *parent_node;
-  IdeXmlSymbolNode *current_node;
-  IdeXmlSymbolNode *previous_node = NULL;
-  xmlReaderTypes type;
-  gint depth = 0;
-  gint current_depth = 0;
-  gboolean is_empty;
-
-  g_assert (IDE_IS_XML_TREE_BUILDER (self));
-  g_assert (XML_IS_READER (reader));
-
-  stack = stack_new ();
-
-  parent_node = root_node = ide_xml_symbol_node_new ("root", IDE_SYMBOL_NONE,
-                                                     NULL, 0, 0);
-  stack_push (stack, parent_node);
-
-  while (xml_reader_read (reader))
-    {
-      type = xml_reader_get_node_type (reader);
-      if ( type == XML_READER_TYPE_ELEMENT)
-        {
-          current_node = create_node_from_reader (reader);
-          depth = xml_reader_get_depth (reader);
-          is_empty = xml_reader_is_empty_element (reader);
-
-          /* TODO: take end elements into account and use:
-           * || ABS (depth - current_depth) > 1
-           */
-          if (depth < 0)
-            {
-              g_warning ("Wrong xml element depth, current:%i new:%i\n", current_depth, depth);
-              break;
-            }
-
-          if (depth > current_depth)
-            {
-              ++current_depth;
-              stack_push (stack, parent_node);
-
-              g_assert (previous_node != NULL);
-              parent_node = previous_node;
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-          else if (depth < current_depth)
-            {
-              --current_depth;
-              parent_node = stack_pop (stack);
-              if (parent_node == NULL)
-                {
-                  g_warning ("Xml nodes stack empty\n");
-                  break;
-                }
-
-              g_assert (parent_node != NULL);
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-          else
-            {
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-
-          previous_node = current_node;
-          print_node (current_node, depth);
-        }
-    }
-
-  stack_destroy (stack);
-
-  return root_node;
-}
-
-static IdeXmlSymbolNode *
-ide_xml_service_walk_tree_xml (IdeXmlTreeBuilder  *self,
-                               XmlReader          *reader)
-{
-  IdeXmlStack *stack;
-  IdeXmlSymbolNode *root_node;
-  IdeXmlSymbolNode *parent_node;
-  IdeXmlSymbolNode *current_node;
-  IdeXmlSymbolNode *previous_node = NULL;
-  xmlReaderTypes type;
-  gint depth = 0;
-  gint current_depth = 0;
-  gboolean is_empty;
-
-  g_assert (IDE_IS_XML_TREE_BUILDER (self));
-  g_assert (XML_IS_READER (reader));
-
-  stack = stack_new ();
-
-  parent_node = root_node = ide_xml_symbol_node_new ("root", IDE_SYMBOL_NONE,
-                                                     NULL, 0, 0);
-  stack_push (stack, parent_node);
-
-  while (xml_reader_read (reader))
-    {
-      type = xml_reader_get_node_type (reader);
-      if ( type == XML_READER_TYPE_ELEMENT)
-        {
-          current_node = create_node_from_reader (reader);
-          depth = xml_reader_get_depth (reader);
-          is_empty = xml_reader_is_empty_element (reader);
-
-          /* TODO: take end elements into account and use:
-           * || ABS (depth - current_depth) > 1
-           */
-          if (depth < 0)
-            {
-              g_warning ("Wrong xml element depth, current:%i new:%i\n", current_depth, depth);
-              break;
-            }
-
-          if (depth > current_depth)
-            {
-              ++current_depth;
-              stack_push (stack, parent_node);
-
-              g_assert (previous_node != NULL);
-              parent_node = previous_node;
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-          else if (depth < current_depth)
-            {
-              --current_depth;
-              parent_node = stack_pop (stack);
-              if (parent_node == NULL)
-                {
-                  g_warning ("Xml nodes stack empty\n");
-                  break;
-                }
-
-              g_assert (parent_node != NULL);
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-          else
-            {
-              ide_xml_symbol_node_take_child (parent_node, current_node);
-            }
-
-          previous_node = current_node;
-          print_node (current_node, depth);
-        }
-    }
-
-  printf ("stack size:%li\n", stack_get_size (stack));
-
-  stack_destroy (stack);
-
-  return root_node;
-}
 
 static GBytes *
 ide_xml_service_get_file_content (IdeXmlTreeBuilder *self,
@@ -356,12 +126,11 @@ build_tree_worker (GTask        *task,
 
   data = g_bytes_get_data (state->content, &size);
   uri = g_file_get_uri (state->file);
-  xml_reader_load_from_data (state->reader, data, size, uri, NULL);
 
   if (ide_xml_tree_builder_file_is_ui (state->file,data, size))
-    root_node = ide_xml_service_walk_tree_ui (self, state->reader);
+    root_node = ide_xml_tree_builder_ui_create (state->parser, state->file, data, size);
   else
-    root_node = ide_xml_service_walk_tree_xml (self, state->reader);
+    root_node = ide_xml_tree_builder_generic_create (state->parser, state->file, data, size);
 
   if (root_node == NULL)
     {
@@ -403,7 +172,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
     }
 
   state = g_slice_new0 (BuilderState);
-  state->reader = xml_reader_new ();
+  state->parser = ide_xml_sax_new ();
   state->content = g_bytes_ref (content);
   state->file = g_object_ref (file);
 

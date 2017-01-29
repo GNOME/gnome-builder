@@ -25,36 +25,14 @@ struct _IdeXmlSymbolNode
 {
   IdeSymbolNode             parent_instance;
   GPtrArray                *children;
+  gchar                    *element_name;
   GFile                    *file;
-  guint                     line;
-  guint                     line_offset;
+  gint                      line;
+  gint                      line_offset;
   gint64                    serial;
 };
 
 G_DEFINE_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE_TYPE_SYMBOL_NODE)
-
-static void
-ide_xml_symbol_node_get_location_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
-{
-  IdeXmlSymbolResolver *resolver = (IdeXmlSymbolResolver *)object;
-  g_autoptr(IdeSourceLocation) location = NULL;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_XML_SYMBOL_RESOLVER (resolver));
-  g_assert (G_IS_TASK (task));
-
-  //location = ide_xml_symbol_resolver_get_location_finish (resolver, result, &error);
-
-  if (location == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
-  else
-    g_task_return_pointer (task,
-                           g_steal_pointer (&location),
-                           (GDestroyNotify)ide_source_location_unref);
-}
 
 static void
 ide_xml_symbol_node_get_location_async (IdeSymbolNode       *node,
@@ -64,18 +42,28 @@ ide_xml_symbol_node_get_location_async (IdeSymbolNode       *node,
 {
   IdeXmlSymbolNode *self = (IdeXmlSymbolNode *)node;
   g_autoptr(GTask) task = NULL;
+  IdeContext *context;
+  IdeFile *ifile;
+  IdeSourceLocation *ret;
 
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+  g_return_if_fail (G_IS_FILE (self->file));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_xml_symbol_node_get_location_async);
 
-  /* ide_xml_symbol_resolver_get_location_async (self->resolver, */
-  /*                                             self->index, */
-  /*                                             self->entry, */
-  /*                                             NULL, */
-  /*                                             ide_xml_symbol_node_get_location_cb, */
-  /*                                             g_steal_pointer (&task)); */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  ifile = g_object_new (IDE_TYPE_FILE,
+                        "file", self->file,
+                        "context", context,
+                        NULL);
+
+  /* TODO: libxml2 give us the end of a tag, we need to walk back
+   * in the buffer to get the start
+   */
+  ret = ide_source_location_new (ifile, self->line - 1, self->line_offset - 1, 0);
+
+  g_task_return_pointer (task, ret, (GDestroyNotify)ide_source_location_unref);
 }
 
 static IdeSourceLocation *
@@ -95,8 +83,7 @@ ide_xml_symbol_node_finalize (GObject *object)
   IdeXmlSymbolNode *self = (IdeXmlSymbolNode *)object;
 
   g_clear_pointer (&self->children, g_ptr_array_unref);
-  /* self->entry = NULL; */
-  /* g_clear_object (&self->index); */
+  g_free (self->element_name);
 
   G_OBJECT_CLASS (ide_xml_symbol_node_parent_class)->finalize (object);
 }
@@ -120,16 +107,17 @@ ide_xml_symbol_node_init (IdeXmlSymbolNode *self)
 
 IdeXmlSymbolNode *
 ide_xml_symbol_node_new (const gchar            *name,
+                         const gchar            *element_name,
                          IdeSymbolKind           kind,
                          GFile                  *file,
-                         guint                   line,
-                         guint                   line_offset)
+                         gint                    line,
+                         gint                    line_offset)
 {
   IdeXmlSymbolNode *self;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
 
   g_assert (!ide_str_empty0 (name));
-  //g_assert (G_IS_FILE (file));
+  g_assert (G_IS_FILE (file)|| file == NULL);
 
   self = g_object_new (IDE_TYPE_XML_SYMBOL_NODE,
                        "name", name,
@@ -137,7 +125,14 @@ ide_xml_symbol_node_new (const gchar            *name,
                        "flags", flags,
                        NULL);
 
-  self->file = file;
+  if (ide_str_empty0 (element_name))
+    self->element_name = g_strdup ("unknow");
+  else
+    self->element_name = g_strdup (element_name);
+
+  if (file != NULL)
+    self->file = g_object_ref (file);
+
   self->line = line;
   self->line_offset = line_offset;
 
@@ -173,6 +168,7 @@ ide_xml_symbol_node_take_child (IdeXmlSymbolNode *self,
 
   if (self->children == NULL)
     self->children = g_ptr_array_new_with_free_func (g_object_unref);
+
   g_ptr_array_add (self->children, child);
 }
 
@@ -182,4 +178,56 @@ ide_xml_symbol_node_get_serial (IdeXmlSymbolNode *self)
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), -1);
 
   return self->serial;
+}
+
+void
+ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
+                                  GFile            *file,
+                                  gint              line,
+                                  gint              line_offset)
+{
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+  g_return_if_fail (G_IS_FILE (file) || file == NULL);
+
+  g_clear_object (&self->file);
+  if (file != NULL)
+    self->file = g_object_ref (file);
+
+  self->line = line;
+  self->line_offset = line_offset;
+}
+
+GFile *
+ide_xml_symbol_node_get_location (IdeXmlSymbolNode *self,
+                                  gint             *line,
+                                  gint             *line_offset)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  if (line != NULL)
+    *line = self->line;
+
+  if (line_offset != NULL)
+    *line_offset = self->line_offset;
+
+  return self->file;
+}
+
+const gchar *
+ide_xml_symbol_node_get_element_name (IdeXmlSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  return self->element_name;
+}
+
+void
+ide_xml_symbol_node_set_element_name (IdeXmlSymbolNode *self,
+                                      const gchar      *element_name)
+{
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+  g_return_if_fail (!ide_str_empty0 (element_name));
+
+  g_free (self->element_name);
+  self->element_name = g_strdup (element_name);
 }
