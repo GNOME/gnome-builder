@@ -832,7 +832,10 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           g_autofree gchar *project_file_path = NULL;
           project_file_path = g_file_get_path (project_file);
           if (g_file_test (project_file_path, G_FILE_TEST_IS_DIR))
-            project_path = g_file_get_path (project_file);
+            {
+              project_path = g_file_get_path (project_file);
+              project_name = g_file_get_basename (project_file);
+            }
           else
             {
               g_autoptr(GFile) project_dir = NULL;
