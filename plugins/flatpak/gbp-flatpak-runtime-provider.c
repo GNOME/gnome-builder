@@ -219,7 +219,7 @@ guess_primary_module (JsonNode *modules_node,
 {
   JsonArray *modules;
   JsonNode *module;
-  gchar *dir_name;
+  g_autofree gchar *dir_name = NULL;
 
   g_assert (G_IS_FILE (directory));
 
