@@ -31,7 +31,7 @@ create_node_from_reader (XmlReader *reader)
 
   name = xml_reader_get_name (reader);
 
-  return ide_xml_symbol_node_new (name, NULL,
+  return ide_xml_symbol_node_new (name, NULL, NULL,
                                   IDE_SYMBOL_UI_OBJECT,
                                   file, line, line_offset);
 }
