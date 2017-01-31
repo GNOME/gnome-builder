@@ -23,14 +23,16 @@
 
 #include "ide-xml-sax.h"
 #include "ide-xml-symbol-node.h"
+#include "ide-xml-tree-builder.h"
 #include "xml-reader.h"
 
 G_BEGIN_DECLS
 
-IdeXmlSymbolNode *ide_xml_tree_builder_ui_create (IdeXmlSax   *parser,
-                                                  GFile       *file,
-                                                  const gchar *data,
-                                                  gsize        length);
+IdeXmlSymbolNode *ide_xml_tree_builder_ui_create (IdeXmlTreeBuilder *self,
+                                                  IdeXmlSax         *parser,
+                                                  GFile             *file,
+                                                  const gchar       *data,
+                                                  gsize              length);
 
 G_END_DECLS
 

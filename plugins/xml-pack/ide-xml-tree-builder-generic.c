@@ -37,13 +37,14 @@ create_node_from_reader (XmlReader *reader)
 }
 
 IdeXmlSymbolNode *
-ide_xml_tree_builder_generic_create (IdeXmlSax   *parser,
-                                     GFile       *file,
-                                     const gchar *data,
-                                     gsize        size)
+ide_xml_tree_builder_generic_create (IdeXmlTreeBuilder *self,
+                                     IdeXmlSax         *parser,
+                                     GFile             *file,
+                                     const gchar       *data,
+                                     gsize              size)
 {
   IdeXmlStack *stack;
-  IdeXmlSymbolNode *root_node;
+  IdeXmlSymbolNode *root_node = NULL;
   IdeXmlSymbolNode *parent_node;
   IdeXmlSymbolNode *current_node;
   IdeXmlSymbolNode *previous_node = NULL;

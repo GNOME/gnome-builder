@@ -80,8 +80,8 @@ builder_state_free (BuilderState *state)
 G_DEFINE_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE_TYPE_OBJECT)
 
 static GBytes *
-ide_xml_service_get_file_content (IdeXmlTreeBuilder *self,
-                                  GFile             *file)
+ide_xml_tree_builder_get_file_content (IdeXmlTreeBuilder *self,
+                                       GFile             *file)
 {
   IdeContext *context;
   IdeBufferManager *manager;
@@ -148,7 +148,6 @@ build_tree_worker (GTask        *task,
   BuilderState *state = (BuilderState *)task_data;
   IdeXmlSymbolNode *root_node = NULL;
   const gchar *data;
-  g_autofree gchar *uri;
   gsize size;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (self));
@@ -157,12 +156,11 @@ build_tree_worker (GTask        *task,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   data = g_bytes_get_data (state->content, &size);
-  uri = g_file_get_uri (state->file);
 
-  if (ide_xml_tree_builder_file_is_ui (state->file,data, size))
-    root_node = ide_xml_tree_builder_ui_create (state->parser, state->file, data, size);
+  if (ide_xml_tree_builder_file_is_ui (state->file, data, size))
+    root_node = ide_xml_tree_builder_ui_create (self, state->parser, state->file, data, size);
   else
-    root_node = ide_xml_tree_builder_generic_create (state->parser, state->file, data, size);
+    root_node = ide_xml_tree_builder_generic_create (self, state->parser, state->file, data, size);
 
   if (root_node == NULL)
     {
@@ -194,7 +192,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_xml_tree_builder_build_tree_async);
 
-  if (NULL == (content = ide_xml_service_get_file_content (self, file)))
+  if (NULL == (content = ide_xml_tree_builder_get_file_content (self, file)))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
