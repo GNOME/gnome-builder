@@ -65,10 +65,12 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
       IdeTreeNode *child;
       IdeSymbolKind kind;
       gboolean has_children;
+      gboolean use_markup;
 
       symbol = ide_symbol_tree_get_nth_child (symbol_tree, parent, i);
       name = ide_symbol_node_get_name (symbol);
       kind = ide_symbol_node_get_kind (symbol);
+      use_markup = ide_symbol_node_get_use_markup (symbol);
 
       switch (kind)
         {
@@ -202,6 +204,7 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
       child = g_object_new (IDE_TYPE_TREE_NODE,
                             "children-possible", has_children,
                             "text", name,
+                            "use-markup", use_markup,
                             "icon-name", icon_name,
                             "item", symbol,
                             NULL);
