@@ -187,6 +187,11 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
           icon_name = "xml-element-symbolic";
           break;
 
+        case IDE_SYMBOL_UI_MENU_ATTRIBUTE:
+        case IDE_SYMBOL_UI_STYLE_CLASS:
+          icon_name = NULL;
+          break;
+
         default:
           icon_name = NULL;
           break;
