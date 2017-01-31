@@ -176,5 +176,13 @@
   <style name="xml:attribute-value"         foreground="#669900"/>
   <style name="xml:tag-match"               background="#rgba(114,159,207,.20)"/>
 
+  <!-- Symbol-tree xml-pack coloring -->
+  <style name="symboltree::ui-label"        foreground="#000000" background="#D5E7FC"/>
+  <style name="symboltree::ui-id"           foreground="#000000" background="#D9E7BD"/>
+  <style name="symboltree::ui-style-class"  foreground="#000000" background="#DFCD9B"/>
+  <style name="symboltree::ui-type"         foreground="#000000" background="#F4DAC3"/>
+  <style name="symboltree::ui-parent"       foreground="#000000" background="#DEBECF"/>
+  <style name="symboltree::ui-class"        foreground="#000000" background="#FFEF98"/>
+
 </style-scheme>
 

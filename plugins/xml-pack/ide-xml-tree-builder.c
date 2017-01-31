@@ -26,9 +26,41 @@
 
 #include "ide-xml-tree-builder.h"
 
+typedef struct _ColorTag
+{
+  gchar *name;
+  gchar *fg;
+  gchar *bg;
+} ColorTag;
+
+static void
+color_tag_free (gpointer *data)
+{
+  ColorTag *tag = (ColorTag *)data;
+
+  g_free (tag->name);
+  g_free (tag->fg);
+  g_free (tag->bg);
+}
+
+/* Keep it in sync with ColorTagId enum */
+static ColorTag default_color_tags [] =
+{
+  { "label",       "#000000", "#D5E7FC" }, // COLOR_TAG_LABEL
+  { "id",          "#000000", "#D9E7BD" }, // COLOR_TAG_ID
+  { "style-class", "#000000", "#DFCD9B" }, // COLOR_TAG_STYLE_CLASS
+  { "type",        "#000000", "#F4DAC3" }, // COLOR_TAG_TYPE
+  { "parent",      "#000000", "#DEBECF" }, // COLOR_TAG_PARENT
+  { "class",       "#000000", "#FFEF98" }, // COLOR_TAG_CLASS
+  { NULL },
+};
+
 struct _IdeXmlTreeBuilder
 {
-  IdeObject parent_instance;
+  IdeObject  parent_instance;
+
+  GSettings *settings;
+  GArray    *color_tags;
 };
 
 typedef struct{
@@ -193,6 +225,101 @@ ide_xml_tree_builder_build_tree_finish (IdeXmlTreeBuilder  *self,
   return g_task_propagate_pointer (task, error);
 }
 
+gchar *
+ide_xml_tree_builder_get_color_tag (IdeXmlTreeBuilder *self,
+                                    const gchar       *str,
+                                    ColorTagId         id,
+                                    gboolean           space_before,
+                                    gboolean           space_after,
+                                    gboolean           space_inside)
+{
+  ColorTag *tag;
+
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+  g_assert (self->color_tags != NULL);
+  g_assert (!ide_str_empty0 (str));
+
+  tag = &g_array_index (self->color_tags, ColorTag, id);
+  return g_strdup_printf ("%s<span foreground=\"%s\" background=\"%s\">%s%s%s</span>%s",
+                          space_before ? " " : "",
+                          tag->fg,
+                          tag->bg,
+                          space_inside ? " " : "",
+                          str,
+                          space_inside ? " " : "",
+                          space_after ? " " : "");
+}
+
+static void
+init_color_tags (IdeXmlTreeBuilder *self)
+{
+  g_autofree gchar *scheme_name = NULL;
+  GtkSourceStyleSchemeManager *manager;
+  GtkSourceStyleScheme *scheme;
+  gchar *tag_name;
+  GtkSourceStyle *style;
+  gchar *foreground;
+  gchar *background;
+  ColorTag tag;
+  ColorTag *tag_ptr;
+  gboolean tag_set;
+
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  scheme_name = g_settings_get_string (self->settings, "style-scheme-name");
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_name);
+
+  g_array_remove_range (self->color_tags, 0, self->color_tags->len);
+  tag_ptr = default_color_tags;
+  while (tag_ptr->fg != NULL)
+    {
+      tag_set = FALSE;
+      if (scheme != NULL)
+        {
+          tag_name = g_strconcat ("symboltree::ui-", tag_ptr->name, NULL);
+          if (NULL != (style = gtk_source_style_scheme_get_style (scheme, tag_name)))
+            {
+              g_object_get (style, "foreground", &foreground, NULL);
+              g_object_get (style, "background", &background, NULL);
+              if (foreground != NULL && background != NULL)
+                {
+                  tag_set = TRUE;
+                  tag.name = g_strdup (tag_ptr->name);
+                  tag.fg = g_steal_pointer (&foreground);
+                  tag.bg = g_steal_pointer (&background);
+                }
+
+              g_free (foreground);
+              g_free (background);
+            }
+
+          g_free (tag_name);
+        }
+
+      if (!tag_set)
+        {
+          tag.name = g_strdup (tag_ptr->name);
+          tag.fg = g_strdup (tag_ptr->fg);
+          tag.bg = g_strdup (tag_ptr->bg);
+        }
+
+      g_array_append_val (self->color_tags, tag);
+      ++tag_ptr;
+    }
+}
+
+static void
+editor_settings_changed_cb (IdeXmlTreeBuilder *self,
+                            gchar             *key,
+                            GSettings         *settings)
+{
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  if (ide_str_equal0 (key, "style-scheme-name"))
+    init_color_tags (self);
+}
+
 IdeXmlTreeBuilder *
 ide_xml_tree_builder_new (void)
 {
@@ -202,6 +329,11 @@ ide_xml_tree_builder_new (void)
 static void
 ide_xml_tree_builder_finalize (GObject *object)
 {
+  IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)object;
+
+  g_clear_pointer (&self->color_tags, g_array_unref);
+  g_clear_object (&self->settings);
+
   G_OBJECT_CLASS (ide_xml_tree_builder_parent_class)->finalize (object);
 }
 
@@ -216,4 +348,14 @@ ide_xml_tree_builder_class_init (IdeXmlTreeBuilderClass *klass)
 static void
 ide_xml_tree_builder_init (IdeXmlTreeBuilder *self)
 {
+  self->color_tags = g_array_new (TRUE, TRUE, sizeof (ColorTag));
+  g_array_set_clear_func (self->color_tags, (GDestroyNotify)color_tag_free);
+
+  self->settings = g_settings_new ("org.gnome.builder.editor");
+  g_signal_connect_swapped (self->settings,
+                            "changed",
+                            G_CALLBACK (editor_settings_changed_cb),
+                            self);
+
+  init_color_tags (self);
 }
