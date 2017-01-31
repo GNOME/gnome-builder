@@ -18,8 +18,8 @@
 
 #include <egg-task-cache.h>
 #include <glib/gi18n.h>
+#include <string.h>
 
-#include "xml-reader.h"
 #include "ide-xml-sax.h"
 #include "ide-xml-tree-builder-generic.h"
 #include "ide-xml-tree-builder-ui.h"
@@ -107,8 +107,9 @@ ide_xml_tree_builder_file_is_ui (GFile       *file,
                                  const gchar *data,
                                  gsize        size)
 {
-  g_autofree gchar *path;
-  gboolean ret = FALSE;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *buffer = NULL;
+  gsize buffer_size;
 
   g_assert (G_IS_FILE (file));
   g_assert (data != NULL);
@@ -117,25 +118,13 @@ ide_xml_tree_builder_file_is_ui (GFile       *file,
   path = g_file_get_path (file);
   if (g_str_has_suffix (path, ".ui") || g_str_has_suffix (path, ".glade"))
     {
-      XmlReader *reader;
-
-      reader = xml_reader_new ();
-      xml_reader_load_from_data (reader, data, size, NULL, NULL);
-      while (xml_reader_read (reader))
-        {
-          if (xml_reader_get_node_type (reader) == XML_READER_TYPE_ELEMENT)
-            {
-              if (ide_str_equal0 (xml_reader_get_name (reader), "interface"))
-                ret = TRUE;
-
-              break;
-            }
-        }
-
-      g_object_unref (reader);
+      buffer_size = (size < 256) ? size : 256;
+      buffer = g_strndup (data, buffer_size);
+      if (NULL != (strstr (buffer, "<interface>")))
+        return TRUE;
     }
 
-  return ret;
+  return FALSE;
 }
 
 static void
@@ -153,7 +142,7 @@ build_tree_worker (GTask        *task,
   g_assert (IDE_IS_XML_TREE_BUILDER (self));
   g_assert (G_IS_TASK (task));
   g_assert (state != NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_bytes_get_data (state->content, &size);
 
@@ -203,7 +192,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
 
   state = g_slice_new0 (BuilderState);
   state->parser = ide_xml_sax_new ();
-  state->content = g_bytes_ref (content);
+  state->content = content;
   state->file = g_object_ref (file);
 
   g_task_set_task_data (task, state, (GDestroyNotify)builder_state_free);

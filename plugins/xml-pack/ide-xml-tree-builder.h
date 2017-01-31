@@ -55,6 +55,7 @@ gchar               *ide_xml_tree_builder_get_color_tag          (IdeXmlTreeBuil
                                                                   gboolean               space_before,
                                                                   gboolean               space_after,
                                                                   gboolean               space_inside);
+
 G_END_DECLS
 
 #endif /* IDE_XML_TREE_BUILDER_H */
