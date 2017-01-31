@@ -55,6 +55,7 @@ struct _IdeSymbolNodeClass
 IdeSymbolKind      ide_symbol_node_get_kind            (IdeSymbolNode        *self);
 IdeSymbolFlags     ide_symbol_node_get_flags           (IdeSymbolNode        *self);
 const gchar       *ide_symbol_node_get_name            (IdeSymbolNode        *self);
+gboolean           ide_symbol_node_get_use_markup      (IdeSymbolNode        *self);
 void               ide_symbol_node_get_location_async  (IdeSymbolNode        *self,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,

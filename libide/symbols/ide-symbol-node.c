@@ -27,6 +27,7 @@ typedef struct
   gchar          *name;
   IdeSymbolFlags  flags;
   IdeSymbolKind   kind;
+  guint           use_markup : 1;
 } IdeSymbolNodePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSymbolNode, ide_symbol_node, IDE_TYPE_OBJECT)
@@ -36,6 +37,7 @@ enum {
   PROP_FLAGS,
   PROP_KIND,
   PROP_NAME,
+  PROP_USE_MARKUP,
   LAST_PROP
 };
 
@@ -98,6 +100,10 @@ ide_symbol_node_get_property (GObject    *object,
       g_value_set_flags (value, ide_symbol_node_get_flags (self));
       break;
 
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, ide_symbol_node_get_use_markup (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -125,6 +131,10 @@ ide_symbol_node_set_property (GObject      *object,
 
     case PROP_FLAGS:
       priv->flags = g_value_get_flags (value);
+      break;
+
+    case PROP_USE_MARKUP:
+      priv->use_markup = g_value_get_boolean (value);
       break;
 
     default:
@@ -167,6 +177,13 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
                         IDE_SYMBOL_FLAGS_NONE,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_USE_MARKUP] =
+    g_param_spec_boolean ("use-markup",
+                          "use-markup",
+                          "Use markup",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
@@ -203,6 +220,16 @@ ide_symbol_node_get_kind (IdeSymbolNode *self)
   g_return_val_if_fail (IDE_IS_SYMBOL_NODE (self), IDE_SYMBOL_NONE);
 
   return priv->kind;
+}
+
+gboolean
+ide_symbol_node_get_use_markup (IdeSymbolNode *self)
+{
+  IdeSymbolNodePrivate *priv = ide_symbol_node_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SYMBOL_NODE (self), FALSE);
+
+  return priv->use_markup;
 }
 
 void
