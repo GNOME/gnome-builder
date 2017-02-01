@@ -412,6 +412,7 @@ ide_diagnostics_group_diagnose_foreach (IdeExtensionSetAdapter *adapter,
   IdeDiagnosticsManager *self = user_data;
   IdeDiagnosticsGroup *group;
   IdeContext *context;
+  g_autoptr (IdeBuffer) buffer = NULL;
   g_autoptr(IdeFile) file = NULL;
 
   IDE_ENTRY;
@@ -439,8 +440,10 @@ ide_diagnostics_group_diagnose_foreach (IdeExtensionSetAdapter *adapter,
   }
 #endif
 
+  buffer = g_weak_ref_get (&group->buffer_wr);
   ide_diagnostic_provider_diagnose_async (provider,
                                           file,
+                                          buffer,
                                           NULL,
                                           ide_diagnostics_group_diagnose_cb,
                                           g_object_ref (self));

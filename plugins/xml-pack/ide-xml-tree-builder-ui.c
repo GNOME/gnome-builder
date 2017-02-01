@@ -35,6 +35,8 @@ typedef struct _ParserState
   IdeXmlSax         *parser;
   IdeXmlStack       *stack;
   GFile             *file;
+  IdeXmlAnalysis    *analysis;
+  GPtrArray         *diagnostics_array;
   IdeXmlSymbolNode  *root_node;
   IdeXmlSymbolNode  *parent_node;
   IdeXmlSymbolNode  *current_node;
@@ -45,9 +47,12 @@ typedef struct _ParserState
 static void
 parser_state_free (ParserState *state)
 {
+  g_clear_pointer (&state->analysis, ide_xml_analysis_unref);
+  g_clear_pointer (&state->diagnostics_array, g_ptr_array_unref);
   g_clear_object (&state->stack);
   g_clear_object (&state->file);
   g_clear_object (&state->parser);
+  g_clear_object (&state->root_node);
 }
 
 static void
@@ -58,7 +63,7 @@ state_processing (ParserState           *state,
                   gboolean               is_internal)
 {
   IdeXmlSymbolNode *parent_node;
-  IdeXmlSymbolNode *popped_node;
+  IdeXmlSymbolNode *popped_node G_GNUC_UNUSED;
   g_autofree gchar *popped_element_name = NULL;
   gint line;
   gint line_offset;
@@ -157,7 +162,7 @@ start_element_sax_cb (ParserState    *state,
                       const xmlChar **attributes)
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)state->self;
-  g_autoptr (GString) string = NULL;
+  g_autoptr(GString) string = NULL;
   g_autofree gchar *label = NULL;
   const gchar *value = NULL;
   IdeXmlSymbolNode *node = NULL;
@@ -328,6 +333,97 @@ end_element_sax_cb (ParserState    *state,
   state_processing (state, (const gchar *)name, NULL, IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT, FALSE);
 }
 
+static IdeDiagnostic *
+create_diagnostic (ParserState            *state,
+                   const gchar            *msg,
+                   IdeDiagnosticSeverity   severity)
+{
+  IdeContext *context;
+  IdeDiagnostic *diagnostic;
+  g_autoptr(IdeSourceLocation) loc = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  gint line;
+  gint line_offset;
+
+  context = ide_object_get_context (IDE_OBJECT (state->self));
+
+  ide_xml_sax_get_position (state->parser, &line, &line_offset);
+  ifile = ide_file_new (context, state->file);
+  loc = ide_source_location_new (ifile,
+                                 line - 1,
+                                 line_offset - 1,
+                                 0);
+
+  diagnostic = ide_diagnostic_new (severity, msg, loc);
+
+  return diagnostic;
+}
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+
+static void
+warning_sax_cb (ParserState    *state,
+                const xmlChar  *name,
+                ...)
+{
+  IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)state->self;
+  IdeDiagnostic *diagnostic;
+  g_autofree gchar *msg = NULL;
+  va_list var_args;
+
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  va_start (var_args, name);
+  msg = g_strdup_vprintf ((const gchar *)name, var_args);
+  va_end (var_args);
+
+  diagnostic = create_diagnostic (state, msg, IDE_DIAGNOSTIC_WARNING);
+  g_ptr_array_add (state->diagnostics_array, diagnostic);
+}
+
+static void
+error_sax_cb (ParserState    *state,
+              const xmlChar  *name,
+              ...)
+{
+  IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)state->self;
+  IdeDiagnostic *diagnostic;
+  g_autofree gchar *msg = NULL;
+  va_list var_args;
+
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  va_start (var_args, name);
+  msg = g_strdup_vprintf ((const gchar *)name, var_args);
+  va_end (var_args);
+
+  diagnostic = create_diagnostic (state, msg, IDE_DIAGNOSTIC_ERROR);
+  g_ptr_array_add (state->diagnostics_array, diagnostic);
+}
+
+static void
+fatal_error_sax_cb (ParserState    *state,
+                    const xmlChar  *name,
+                    ...)
+{
+  IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)state->self;
+  IdeDiagnostic *diagnostic;
+  g_autofree gchar *msg = NULL;
+  va_list var_args;
+
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  va_start (var_args, name);
+  msg = g_strdup_vprintf ((const gchar *)name, var_args);
+  va_end (var_args);
+
+  diagnostic = create_diagnostic (state, msg, IDE_DIAGNOSTIC_FATAL);
+  g_ptr_array_add (state->diagnostics_array, diagnostic);
+}
+
+#pragma GCC diagnostic pop
+
 static void
 characters_sax_cb (ParserState    *state,
                    const xmlChar  *name,
@@ -375,7 +471,7 @@ node_post_processing_collect_style_classes (IdeXmlTreeBuilder *self,
                                             IdeXmlSymbolNode  *node)
 {
   IdeXmlSymbolNode *child;
-  g_autoptr (GString) label = NULL;
+  g_autoptr(GString) label = NULL;
   gint n_children;
 
   g_assert (IDE_IS_XML_SYMBOL_NODE (node));
@@ -407,14 +503,17 @@ node_post_processing_add_label (IdeXmlTreeBuilder *self,
                                 IdeXmlSymbolNode  *node)
 {
   const gchar *value;
-  g_autoptr (GString) name = NULL;
+  g_autoptr(GString) name = NULL;
   g_autofree gchar *label = NULL;
 
   g_assert (IDE_IS_XML_SYMBOL_NODE (node));
 
   if (NULL != (value = get_menu_attribute_value (node, "label")))
     {
-      name = g_string_new (NULL);
+      g_object_get (node, "name", &label, NULL);
+      name = g_string_new (label);
+      g_free (label);
+
       label = ide_xml_tree_builder_get_color_tag (self, "label", COLOR_TAG_LABEL, TRUE, TRUE, TRUE);
 
       g_string_append (name, label);
@@ -452,16 +551,16 @@ ide_xml_tree_builder_post_processing (IdeXmlTreeBuilder *self,
 
       if (ide_str_equal0 (element_name, "style"))
         node_post_processing_collect_style_classes (self, node);
-      else if (ide_str_equal0 (element_name, "item"))
-        node_post_processing_add_label (self, node);
-      else if (ide_str_equal0 (element_name, "submenu"))
+      else if (ide_str_equal0 (element_name, "item") ||
+               ide_str_equal0 (element_name, "submenu") ||
+               ide_str_equal0 (element_name, "section"))
         node_post_processing_add_label (self, node);
     }
 
   return TRUE;
 }
 
-IdeXmlSymbolNode *
+IdeXmlAnalysis *
 ide_xml_tree_builder_ui_create (IdeXmlTreeBuilder *self,
                                 IdeXmlSax         *parser,
                                 GFile             *file,
@@ -469,7 +568,8 @@ ide_xml_tree_builder_ui_create (IdeXmlTreeBuilder *self,
                                 gsize              length)
 {
   ParserState *state;
-  IdeXmlSymbolNode *root_node;
+  IdeXmlAnalysis *analysis;
+  g_autoptr(IdeDiagnostics) diagnostics = NULL;
   g_autofree gchar *uri = NULL;
 
   g_return_val_if_fail (IDE_IS_XML_SAX (parser), NULL);
@@ -482,6 +582,7 @@ ide_xml_tree_builder_ui_create (IdeXmlTreeBuilder *self,
   state->parser = g_object_ref (parser);
   state->stack = ide_xml_stack_new ();
   state->file = g_object_ref (file);
+  state->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
   state->build_state = BUILD_STATE_NORMAL;
 
   ide_xml_sax_clear (parser);
@@ -489,16 +590,26 @@ ide_xml_tree_builder_ui_create (IdeXmlTreeBuilder *self,
   ide_xml_sax_set_callback (parser, IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT, end_element_sax_cb);
   ide_xml_sax_set_callback (parser, IDE_XML_SAX_CALLBACK_TYPE_CHAR, characters_sax_cb);
 
+  ide_xml_sax_set_callback (parser, IDE_XML_SAX_CALLBACK_TYPE_WARNING, warning_sax_cb);
+  ide_xml_sax_set_callback (parser, IDE_XML_SAX_CALLBACK_TYPE_ERROR, error_sax_cb);
+  ide_xml_sax_set_callback (parser, IDE_XML_SAX_CALLBACK_TYPE_FATAL_ERROR, fatal_error_sax_cb);
+
+  state->analysis = ide_xml_analysis_new (-1);
   state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE, NULL, 0, 0);
+  ide_xml_analysis_set_root_node (state->analysis, state->root_node);
+
   state->parent_node = state->root_node;
   ide_xml_stack_push (state->stack, "root", state->root_node, NULL, 0);
 
   uri = g_file_get_uri (file);
   ide_xml_sax_parse (parser, data, length, uri, state);
 
-  root_node = state->root_node;
-  parser_state_free (state);
+  ide_xml_tree_builder_post_processing (self, state->root_node);
 
-  ide_xml_tree_builder_post_processing (self, root_node);
-  return root_node;
+  analysis = g_steal_pointer (&state->analysis);
+  diagnostics = ide_diagnostics_new (g_steal_pointer (&state->diagnostics_array));
+  ide_xml_analysis_set_diagnostics (analysis, diagnostics);
+
+  parser_state_free (state);
+  return analysis;
 }

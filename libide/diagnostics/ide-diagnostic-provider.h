@@ -35,6 +35,7 @@ struct _IdeDiagnosticProviderInterface
                                       IdeContext             *context);
   void            (*diagnose_async)  (IdeDiagnosticProvider  *self,
                                       IdeFile                *file,
+                                      IdeBuffer              *buffer,
                                       GCancellable           *cancellable,
                                       GAsyncReadyCallback     callback,
                                       gpointer                user_data);
@@ -46,6 +47,7 @@ struct _IdeDiagnosticProviderInterface
 
 void            ide_diagnostic_provider_diagnose_async   (IdeDiagnosticProvider  *self,
                                                           IdeFile                *file,
+                                                          IdeBuffer              *buffer,
                                                           GCancellable           *cancellable,
                                                           GAsyncReadyCallback     callback,
                                                           gpointer                user_data);

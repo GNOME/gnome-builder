@@ -21,6 +21,7 @@
 
 #include <glib.h>
 
+#include "ide-xml-analysis.h"
 #include "ide-xml-sax.h"
 #include "ide-xml-symbol-node.h"
 #include "ide-xml-tree-builder.h"
@@ -28,11 +29,11 @@
 
 G_BEGIN_DECLS
 
-IdeXmlSymbolNode *ide_xml_tree_builder_generic_create (IdeXmlTreeBuilder *self,
-                                                       IdeXmlSax         *parser,
-                                                       GFile             *file,
-                                                       const gchar       *data,
-                                                       gsize              size);
+IdeXmlAnalysis *ide_xml_tree_builder_generic_create (IdeXmlTreeBuilder *self,
+                                                     IdeXmlSax         *parser,
+                                                     GFile             *file,
+                                                     const gchar       *data,
+                                                     gsize              size);
 
 G_END_DECLS
 

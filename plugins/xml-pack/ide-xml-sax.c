@@ -125,6 +125,18 @@ ide_xml_sax_set_callback (IdeXmlSax             *self,
       handler->entityDecl = callback;
       break;
 
+    case IDE_XML_SAX_CALLBACK_TYPE_WARNING:
+      handler->warning = callback;
+      break;
+
+    case IDE_XML_SAX_CALLBACK_TYPE_ERROR:
+      handler->error = callback;
+      break;
+
+    case IDE_XML_SAX_CALLBACK_TYPE_FATAL_ERROR:
+      handler->fatalError = callback;
+      break;
+
     default:
       g_assert_not_reached ();
     }

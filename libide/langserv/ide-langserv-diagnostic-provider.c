@@ -72,6 +72,7 @@ ide_langserv_diagnostic_provider_get_diagnostics_cb (GObject      *object,
 static void
 ide_langserv_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                                                  IdeFile               *file,
+                                                 IdeBuffer             *buffer,
                                                  GCancellable          *cancellable,
                                                  GAsyncReadyCallback    callback,
                                                  gpointer               user_data)

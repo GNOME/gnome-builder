@@ -19,6 +19,7 @@
 #ifndef IDE_XML_TREE_BUILDER_H
 #define IDE_XML_TREE_BUILDER_H
 
+#include "ide-xml-analysis.h"
 #include "ide-xml-symbol-node.h"
 
 #include <glib-object.h>
@@ -46,7 +47,7 @@ void                 ide_xml_tree_builder_build_tree_async       (IdeXmlTreeBuil
                                                                   GCancellable          *cancellable,
                                                                   GAsyncReadyCallback    callback,
                                                                   gpointer               user_data);
-IdeXmlSymbolNode    *ide_xml_tree_builder_build_tree_finish      (IdeXmlTreeBuilder     *self,
+IdeXmlAnalysis      *ide_xml_tree_builder_build_tree_finish      (IdeXmlTreeBuilder     *self,
                                                                   GAsyncResult          *result,
                                                                   GError               **error);
 gchar               *ide_xml_tree_builder_get_color_tag          (IdeXmlTreeBuilder     *self,

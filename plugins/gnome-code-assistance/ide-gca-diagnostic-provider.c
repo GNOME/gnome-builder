@@ -404,6 +404,7 @@ cleanup:
 static void
 ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                                             IdeFile               *file,
+                                            IdeBuffer             *buffer,
                                             GCancellable          *cancellable,
                                             GAsyncReadyCallback    callback,
                                             gpointer               user_data)

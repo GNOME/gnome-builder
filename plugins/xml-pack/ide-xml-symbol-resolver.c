@@ -49,6 +49,7 @@ ide_xml_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   g_assert (location != NULL);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_xml_symbol_resolver_lookup_symbol_async);
 
   g_task_return_new_error (task,
                            G_IO_ERROR,
@@ -78,7 +79,7 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
 {
   IdeXmlService *service = (IdeXmlService *)object;
   g_autoptr(GTask) task = user_data;
-  IdeXmlSymbolNode *root_node;
+  g_autoptr(IdeXmlSymbolNode) root_node = NULL;
   IdeXmlSymbolTree *symbol_tree;
   GError *error = NULL;
 
@@ -124,18 +125,16 @@ ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  g_task_set_source_tag (task, ide_xml_symbol_resolver_get_symbol_tree_async);
 
   ifile = g_object_new (IDE_TYPE_FILE,
                         "file", file,
                         "context", context,
                         NULL);
 
-  printf ("=> ask symbol tree for:%s\n", g_file_get_path (file));
-
   ide_xml_service_get_root_node_async (service,
                                        ifile,
                                        buffer,
-                                       0,
                                        cancellable,
                                        ide_xml_symbol_resolver_get_symbol_tree_cb,
                                        g_object_ref (task));

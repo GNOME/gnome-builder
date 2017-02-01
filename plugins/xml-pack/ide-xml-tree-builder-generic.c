@@ -36,7 +36,7 @@ create_node_from_reader (XmlReader *reader)
                                   file, line, line_offset);
 }
 
-IdeXmlSymbolNode *
+IdeXmlAnalysis *
 ide_xml_tree_builder_generic_create (IdeXmlTreeBuilder *self,
                                      IdeXmlSax         *parser,
                                      GFile             *file,
@@ -44,7 +44,7 @@ ide_xml_tree_builder_generic_create (IdeXmlTreeBuilder *self,
                                      gsize              size)
 {
   IdeXmlStack *stack;
-  IdeXmlSymbolNode *root_node = NULL;
+  IdeXmlAnalysis *analysis = NULL;
   IdeXmlSymbolNode *parent_node;
   IdeXmlSymbolNode *current_node;
   IdeXmlSymbolNode *previous_node = NULL;
@@ -111,5 +111,5 @@ ide_xml_tree_builder_generic_create (IdeXmlTreeBuilder *self,
 
   /* stack_destroy (stack); */
 
-  return root_node;
+  return analysis;
 }

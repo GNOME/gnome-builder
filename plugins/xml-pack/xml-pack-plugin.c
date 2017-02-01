@@ -18,6 +18,7 @@
 
 #include <libpeas/peas.h>
 
+#include "ide-xml-diagnostic-provider.h"
 #include "ide-xml-highlighter.h"
 #include "ide-xml-indenter.h"
 #include "ide-xml-service.h"
@@ -36,6 +37,7 @@ peas_register_types (PeasObjectModule *module)
   _ide_xml_symbol_resolver_register_type (G_TYPE_MODULE (module));
   _ide_xml_service_register_type (G_TYPE_MODULE (module));
 
+  peas_object_module_register_extension_type (module, IDE_TYPE_DIAGNOSTIC_PROVIDER, IDE_TYPE_XML_DIAGNOSTIC_PROVIDER);
   peas_object_module_register_extension_type (module, IDE_TYPE_HIGHLIGHTER, IDE_TYPE_XML_HIGHLIGHTER);
   peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_XML_INDENTER);
   peas_object_module_register_extension_type (module, IDE_TYPE_SYMBOL_RESOLVER, IDE_TYPE_XML_SYMBOL_RESOLVER);

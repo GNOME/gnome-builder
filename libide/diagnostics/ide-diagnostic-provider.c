@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-diagnostic-provider"
 
+#include "buffers/ide-buffer.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 
@@ -58,9 +59,11 @@ ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
 
 }
 
+/* If the file does not match a loaded buffer, buffer is %NULL */
 void
 ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider *self,
                                          IdeFile               *file,
+                                         IdeBuffer             *buffer,
                                          GCancellable          *cancellable,
                                          GAsyncReadyCallback    callback,
                                          gpointer               user_data)
@@ -69,9 +72,15 @@ ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider *self,
 
   g_return_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (self));
   g_return_if_fail (IDE_IS_FILE (file));
+  g_return_if_fail (IDE_IS_BUFFER (buffer) || buffer == NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_async (self, file, cancellable, callback, user_data);
+  IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_async (self,
+                                                            file,
+                                                            buffer,
+                                                            cancellable,
+                                                            callback,
+                                                            user_data);
 
   IDE_EXIT;
 }

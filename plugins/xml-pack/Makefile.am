@@ -7,6 +7,10 @@ plugin_LTLIBRARIES = libxml-pack-plugin.la
 dist_plugin_DATA = xml-pack.plugin
 
 libxml_pack_plugin_la_SOURCES = \
+	ide-xml-analysis.c \
+	ide-xml-analysis.h \
+	ide-xml-diagnostic-provider.c \
+	ide-xml-diagnostic-provider.h \
 	ide-xml-highlighter.c \
 	ide-xml-highlighter.h \
 	ide-xml-indenter.c \

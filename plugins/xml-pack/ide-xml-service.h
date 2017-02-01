@@ -30,12 +30,22 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlService, ide_xml_service, IDE, XML_SERVICE, IdeObject)
 
+IdeDiagnostics     *ide_xml_service_get_cached_diagnostics    (IdeXmlService        *self,
+                                                               GFile                *gfile);
 IdeXmlSymbolNode   *ide_xml_service_get_cached_root_node      (IdeXmlService        *self,
-                                                               GFile                *file);
-void                ide_xml_service_get_root_node_async       (IdeXmlService        *self,
-                                                               IdeFile              *file,
+                                                               GFile                *gfile);
+IdeDiagnostics     *ide_xml_service_get_diagnostics_finish    (IdeXmlService        *self,
+                                                               GAsyncResult         *result,
+                                                               GError              **error);
+void                ide_xml_service_get_diagnostics_async     (IdeXmlService        *self,
+                                                               IdeFile              *ifile,
                                                                IdeBuffer            *buffer,
-                                                               gint64                min_serial,
+                                                               GCancellable         *cancellable,
+                                                               GAsyncReadyCallback   callback,
+                                                               gpointer              user_data);
+void                ide_xml_service_get_root_node_async       (IdeXmlService        *self,
+                                                               IdeFile              *ifile,
+                                                               IdeBuffer            *buffer,
                                                                GCancellable         *cancellable,
                                                                GAsyncReadyCallback   callback,
                                                                gpointer              user_data);

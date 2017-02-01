@@ -23,6 +23,7 @@
 #include <gtksourceview/gtksource.h>
 #include <math.h>
 
+#include "ide-xml-analysis.h"
 #include "ide-xml-tree-builder.h"
 
 #include "ide-xml-service.h"
@@ -33,9 +34,9 @@ gboolean _ide_buffer_get_loading (IdeBuffer *self);
 
 struct _IdeXmlService
 {
-  IdeObject         parent_instance;
+  IdeObject          parent_instance;
 
-  EggTaskCache      *trees;
+  EggTaskCache      *analyses;
   IdeXmlTreeBuilder *tree_builder;
   GCancellable      *cancellable;
 };
@@ -52,18 +53,17 @@ ide_xml_service_build_tree_cb2 (GObject      *object,
 {
   IdeXmlTreeBuilder *tree_builder = (IdeXmlTreeBuilder *)object;
   g_autoptr(GTask) task = user_data;
-  IdeXmlSymbolNode *root_node;
+  g_autoptr(IdeXmlAnalysis) analysis = NULL;
   GError *error = NULL;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (tree_builder));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
-  root_node = ide_xml_tree_builder_build_tree_finish (tree_builder, result, &error);
-  if (root_node == NULL)
+  if (NULL == (analysis = ide_xml_tree_builder_build_tree_finish (tree_builder, result, &error)))
     g_task_return_error (task, error);
   else
-    g_task_return_pointer (task, root_node, g_object_unref);
+    g_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
 }
 
 static void
@@ -79,13 +79,13 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
 
   IDE_ENTRY;
 
+  g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (key != NULL);
-  g_assert (IDE_IS_FILE ((IdeFile *)key));
+  g_assert (IDE_IS_FILE (ifile));
   g_assert (G_IS_TASK (task));
 
-  gfile = ide_file_get_file (ifile);
-  if (!gfile || !(path = g_file_get_path (gfile)))
+  if (NULL == (gfile = ide_file_get_file (ifile)) ||
+      NULL == (path = g_file_get_path (gfile)))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -94,7 +94,6 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
       return;
     }
 
-  printf ("tree path:%s\n", path);
   ide_xml_tree_builder_build_tree_async (self->tree_builder,
                                          gfile,
                                          g_task_get_cancellable (task),
@@ -105,42 +104,23 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
 }
 
 static void
-ide_xml_service_buffer_saved (IdeXmlService    *self,
-                              IdeBuffer        *buffer,
-                              IdeBufferManager *buffer_manager)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
-
-  printf ("buffer saved:%p\n", buffer);
-
-  IDE_EXIT;
-}
-
-static void
-ide_xml_service_get_root_node_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
+ide_xml_service_get_analysis_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   EggTaskCache *cache = (EggTaskCache *)object;
   g_autoptr(GTask) task = user_data;
-  IdeXmlSymbolNode *ret;
+  g_autoptr(IdeXmlAnalysis) analysis = NULL;
   GError *error = NULL;
 
   g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
-  if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
+  if (NULL == (analysis = egg_task_cache_get_finish (cache, result, &error)))
     g_task_return_error (task, error);
   else
-    {
-      printf ("new tree:%p\n", ret);
-      g_task_return_pointer (task, ret, g_object_unref);
-    }
+    g_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
 }
 
 typedef struct
@@ -157,26 +137,118 @@ ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
                                    TaskState *state)
 {
   IdeXmlService *self = (IdeXmlService *)state->self;
-  g_autoptr(GTask) task = state->task;
 
   g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_TASK (state->task));
   g_assert (state->cancellable == NULL || G_IS_CANCELLABLE (state->cancellable));
   g_assert (IDE_IS_FILE (state->ifile));
   g_assert (IDE_IS_BUFFER (state->buffer));
 
-  printf ("buffer loaded\n");
-
-  egg_task_cache_get_async (self->trees,
+  egg_task_cache_get_async (self->analyses,
                             state->ifile,
                             TRUE,
                             state->cancellable,
-                            ide_xml_service_get_root_node_cb,
-                            g_steal_pointer (&task));
+                            ide_xml_service_get_analysis_cb,
+                            g_steal_pointer (&state->task));
 
   g_object_unref (state->buffer);
   g_object_unref (state->ifile);
   g_slice_free (TaskState, state);
+}
+
+static void
+ide_xml_service_get_analysis_async (IdeXmlService       *self,
+                                    IdeFile             *ifile,
+                                    IdeBuffer           *buffer,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeContext *context;
+  IdeBufferManager *manager;
+  GFile *gfile;
+
+  g_assert (IDE_IS_XML_SERVICE (self));
+  g_assert (IDE_IS_FILE (ifile));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  manager = ide_context_get_buffer_manager (context);
+  gfile = ide_file_get_file (ifile);
+
+  if (!ide_buffer_manager_has_file (manager, gfile))
+    {
+      TaskState *state;
+
+      if (!_ide_buffer_get_loading (buffer))
+        {
+          g_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_NOT_SUPPORTED,
+                                   _("Buffer loaded but not in buffer manager."));
+          return;
+        }
+
+      /* Wait for the buffer to be fully loaded */
+      state = g_slice_new0 (TaskState);
+      state->self = self;
+      state->task = g_steal_pointer (&task);
+      state->cancellable = cancellable;
+      state->ifile = g_object_ref (ifile);
+      state->buffer = g_object_ref (buffer);
+
+      g_signal_connect (buffer,
+                        "loaded",
+                        G_CALLBACK (ide_xml_service__buffer_loaded_cb),
+                        state);
+    }
+  else
+    egg_task_cache_get_async (self->analyses,
+                              ifile,
+                              TRUE,
+                              cancellable,
+                              ide_xml_service_get_analysis_cb,
+                              g_steal_pointer (&task));
+}
+
+IdeXmlAnalysis *
+ide_xml_service_get_analysis_finish (IdeXmlService  *self,
+                                     GAsyncResult   *result,
+                                     GError        **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
+
+static void
+ide_xml_service_get_root_node_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  IdeXmlService *self = (IdeXmlService *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeXmlAnalysis) analysis = NULL;
+  IdeXmlSymbolNode *root_node;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_XML_SERVICE (self));
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
+
+  if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
+    g_task_return_error (task, error);
+  else
+    {
+      root_node = g_object_ref (ide_xml_analysis_get_root_node (analysis));
+      g_task_return_pointer (task, root_node, g_object_unref);
+    }
 }
 
 /**
@@ -196,82 +268,55 @@ ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
  */
 void
 ide_xml_service_get_root_node_async (IdeXmlService       *self,
-                                     IdeFile             *file,
+                                     IdeFile             *ifile,
                                      IdeBuffer           *buffer,
-                                     gint64               min_serial,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
 {
-  IdeXmlSymbolNode *cached;
   g_autoptr(GTask) task = NULL;
-  IdeContext *context;
-  IdeBufferManager *manager;
-  GFile *gfile;
+  IdeXmlAnalysis *cached;
 
   g_return_if_fail (IDE_IS_XML_SERVICE (self));
-  g_return_if_fail (IDE_IS_FILE (file));
+  g_return_if_fail (IDE_IS_FILE (ifile));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  if (min_serial == 0)
-    {
-      IdeUnsavedFiles *unsaved_files;
-
-      unsaved_files = ide_context_get_unsaved_files (context);
-      min_serial = ide_unsaved_files_get_sequence (unsaved_files);
-    }
 
   /*
-   * If we have a cached unit, and it is new enough, then re-use it.
+   * If we have a cached analysis with a valid root_node,
+   * and it is new enough, then re-use it.
    */
-  if ((cached = egg_task_cache_peek (self->trees, file)) &&
-      (ide_xml_symbol_node_get_serial (cached) >= min_serial))
+  if (NULL != (cached = egg_task_cache_peek (self->analyses, ifile)))
     {
-      printf ("get cached tree:%p\n", cached);
-      g_task_return_pointer (task, g_object_ref (cached), g_object_unref);
-      return;
-    }
+      IdeContext *context;
+      IdeUnsavedFiles *unsaved_files;
+      IdeUnsavedFile *uf;
+      IdeXmlSymbolNode *root_node;
+      GFile *gfile;
 
-  printf ("egg_task_cache_get_async\n");
-  manager = ide_context_get_buffer_manager (context);
-  gfile = ide_file_get_file (file);
-  if (!ide_buffer_manager_has_file (manager, gfile))
-    {
-      TaskState *state;
+      gfile = ide_file_get_file (ifile);
+      context = ide_object_get_context (IDE_OBJECT (self));
+      unsaved_files = ide_context_get_unsaved_files (context);
 
-      if (!_ide_buffer_get_loading (buffer))
+      if (NULL != (uf = ide_unsaved_files_get_unsaved_file (unsaved_files, gfile)) &&
+          ide_xml_analysis_get_sequence (cached) == ide_unsaved_file_get_sequence (uf))
         {
-          g_task_return_new_error (task,
-                                   G_IO_ERROR,
-                                   G_IO_ERROR_NOT_SUPPORTED,
-                                   _("Buffer loaded but not in buffer manager."));
+          root_node = g_object_ref (ide_xml_analysis_get_root_node (cached));
+          g_assert (IDE_IS_XML_SYMBOL_NODE (root_node));
+
+          g_task_return_pointer (task, root_node, g_object_unref);
           return;
         }
-
-      /* Wait for the buffer to be fully loaded */
-      state = g_slice_new0 (TaskState);
-      state->self = self;
-      state->task = g_steal_pointer (&task);
-      state->cancellable = cancellable;
-      state->ifile = g_object_ref (file);
-      state->buffer = g_object_ref (buffer);
-
-      g_signal_connect (buffer,
-                        "loaded",
-                        G_CALLBACK (ide_xml_service__buffer_loaded_cb),
-                        state);
     }
-  else
-    egg_task_cache_get_async (self->trees,
-                              file,
-                              TRUE,
-                              cancellable,
-                              ide_xml_service_get_root_node_cb,
-                              g_steal_pointer (&task));
+
+  ide_xml_service_get_analysis_async (self,
+                                      ifile,
+                                      buffer,
+                                      cancellable,
+                                      ide_xml_service_get_root_node_cb,
+                                      g_steal_pointer (&task));
 }
 
 /**
@@ -291,6 +336,121 @@ ide_xml_service_get_root_node_finish (IdeXmlService  *self,
 
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (error != NULL, NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
+
+static void
+ide_xml_service_get_diagnostics_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeXmlService  *self = (IdeXmlService *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeXmlAnalysis) analysis = NULL;
+  IdeDiagnostics *diagnostics;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_XML_SERVICE (self));
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
+
+  if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
+    g_task_return_error (task, error);
+  else
+    {
+      diagnostics = ide_diagnostics_ref (ide_xml_analysis_get_diagnostics (analysis));
+      g_task_return_pointer (task, diagnostics, (GDestroyNotify)ide_diagnostics_unref);
+    }
+}
+
+/**
+ * ide_xml_service_get_diagnostics_async:
+ *
+ * This function is used to asynchronously retrieve the diagnostics
+ * for a particular file.
+ *
+ * If the analysis is up to date, then no parsing will occur and the
+ * existing diagnostics will be used.
+ *
+ * If the analysis is out of date, then the source file(s) will be
+ * parsed asynchronously.
+ *
+ * The xml service is meant to be used with buffers, that is,
+ * by extension, loaded views.
+ */
+void
+ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
+                                       IdeFile             *ifile,
+                                       IdeBuffer           *buffer,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeXmlAnalysis *cached;
+
+  g_return_if_fail (IDE_IS_XML_SERVICE (self));
+  g_return_if_fail (IDE_IS_FILE (ifile));
+  g_return_if_fail (IDE_IS_BUFFER (buffer) || buffer == NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  /*
+   * If we have a cached analysis with some diagnostics,
+   * and it is new enough, then re-use it.
+   */
+  if (NULL != (cached = egg_task_cache_peek (self->analyses, ifile)))
+    {
+      IdeContext *context;
+      IdeUnsavedFiles *unsaved_files;
+      IdeUnsavedFile *uf;
+      IdeDiagnostics *diagnostics;
+      GFile *gfile;
+
+      gfile = ide_file_get_file (ifile);
+      context = ide_object_get_context (IDE_OBJECT (self));
+      unsaved_files = ide_context_get_unsaved_files (context);
+
+      if (NULL != (uf = ide_unsaved_files_get_unsaved_file (unsaved_files, gfile)) &&
+          ide_xml_analysis_get_sequence (cached) == ide_unsaved_file_get_sequence (uf))
+        {
+          diagnostics = ide_diagnostics_ref (ide_xml_analysis_get_diagnostics (cached));
+          g_assert (diagnostics != NULL);
+
+          g_task_return_pointer (task, diagnostics, (GDestroyNotify)ide_diagnostics_unref);
+          return;
+        }
+    }
+
+  ide_xml_service_get_analysis_async (self,
+                                      ifile,
+                                      buffer,
+                                      cancellable,
+                                      ide_xml_service_get_diagnostics_cb,
+                                      g_steal_pointer (&task));
+}
+
+/**
+ * ide_xml_service_get_diagnostics_finish:
+ *
+ * Completes an asychronous request to get the diagnostics for a given file.
+ * See ide_xml_service_get_diagnostics_async() for more information.
+ *
+ * Returns: (transfer full): An #IdeDiagnostics or %NULL on failure.
+ */
+IdeDiagnostics *
+ide_xml_service_get_diagnostics_finish (IdeXmlService  *self,
+                                        GAsyncResult   *result,
+                                        GError        **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (error != NULL, NULL);
 
   return g_task_propagate_pointer (task, error);
 }
@@ -300,27 +460,17 @@ ide_xml_service_context_loaded (IdeService *service)
 {
   IdeXmlService *self = (IdeXmlService *)service;
   IdeContext *context;
-  IdeBufferManager *buffer_manager;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_XML_SERVICE (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  buffer_manager = ide_context_get_buffer_manager (context);
-
-  g_signal_connect_object (buffer_manager,
-                           "buffer-saved",
-                           G_CALLBACK (ide_xml_service_buffer_saved),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   if (self->tree_builder == NULL)
     self->tree_builder = g_object_new (IDE_TYPE_XML_TREE_BUILDER,
                                        "context", context,
                                        NULL);
-
-  /* TODO: schedule caching of open views trees */
 
   IDE_EXIT;
 }
@@ -330,20 +480,20 @@ ide_xml_service_start (IdeService *service)
 {
   IdeXmlService *self = (IdeXmlService *)service;
 
-  g_return_if_fail (IDE_IS_XML_SERVICE (self));
+  g_assert (IDE_IS_XML_SERVICE (self));
 
-  self->trees = egg_task_cache_new ((GHashFunc)ide_file_hash,
-                                    (GEqualFunc)ide_file_equal,
-                                    g_object_ref,
-                                    g_object_unref,
-                                    g_object_ref,
-                                    g_object_unref,
-                                    DEFAULT_EVICTION_MSEC,
-                                    ide_xml_service_build_tree_cb,
-                                    self,
-                                    NULL);
+  self->analyses = egg_task_cache_new ((GHashFunc)ide_file_hash,
+                                       (GEqualFunc)ide_file_equal,
+                                       g_object_ref,
+                                       g_object_unref,
+                                       (GBoxedCopyFunc)ide_xml_analysis_ref,
+                                       (GBoxedFreeFunc)ide_xml_analysis_unref,
+                                       DEFAULT_EVICTION_MSEC,
+                                       ide_xml_service_build_tree_cb,
+                                       self,
+                                       NULL);
 
-  egg_task_cache_set_name (self->trees, "xml trees cache");
+  egg_task_cache_set_name (self->analyses, "xml analysis cache");
 }
 
 static void
@@ -351,13 +501,13 @@ ide_xml_service_stop (IdeService *service)
 {
   IdeXmlService *self = (IdeXmlService *)service;
 
-  g_return_if_fail (IDE_IS_XML_SERVICE (self));
+  g_assert (IDE_IS_XML_SERVICE (self));
 
   if (self->cancellable && !g_cancellable_is_cancelled (self->cancellable))
     g_cancellable_cancel (self->cancellable);
 
   g_clear_object (&self->cancellable);
-  g_clear_object (&self->trees);
+  g_clear_object (&self->analyses);
 }
 
 static void
@@ -367,10 +517,8 @@ ide_xml_service_finalize (GObject *object)
 
   IDE_ENTRY;
 
- ide_xml_service_stop (IDE_SERVICE (self));
-
-  if (self->tree_builder != NULL)
-    g_clear_object (&self->tree_builder);
+  ide_xml_service_stop (IDE_SERVICE (self));
+  g_clear_object (&self->tree_builder);
 
   G_OBJECT_CLASS (ide_xml_service_parent_class)->finalize (object);
 
@@ -418,14 +566,41 @@ _ide_xml_service_register_type (GTypeModule *module)
  */
 IdeXmlSymbolNode *
 ide_xml_service_get_cached_root_node (IdeXmlService *self,
-                                      GFile         *file)
+                                      GFile         *gfile)
 {
+  IdeXmlAnalysis *analysis;
   IdeXmlSymbolNode *cached;
 
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
-  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
+  g_return_val_if_fail (IDE_IS_FILE (gfile), NULL);
 
-  cached = egg_task_cache_peek (self->trees, file);
+  if (NULL != (analysis = egg_task_cache_peek (self->analyses, gfile)) &&
+      NULL != (cached = ide_xml_analysis_get_root_node (analysis)))
+    return g_object_ref (cached);
 
-  return cached ? g_object_ref (cached) : NULL;
+  return NULL;
+}
+
+/**
+ * ide_xml_service_get_cached_diagnostics:
+ *
+ * Gets the #IdeDiagnostics for the corresponding file.
+ *
+ * Returns: (transfer NULL): A #IdeDiagnostics.
+ */
+IdeDiagnostics *
+ide_xml_service_get_cached_diagnostics (IdeXmlService *self,
+                                        GFile         *gfile)
+{
+  IdeXmlAnalysis *analysis;
+  IdeDiagnostics *cached;
+
+  g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
+  g_return_val_if_fail (IDE_IS_FILE (gfile), NULL);
+
+  if (NULL != (analysis = egg_task_cache_peek (self->analyses, gfile)) &&
+      NULL != (cached = ide_xml_analysis_get_diagnostics (analysis)))
+    return ide_diagnostics_ref (cached);
+
+  return NULL;
 }

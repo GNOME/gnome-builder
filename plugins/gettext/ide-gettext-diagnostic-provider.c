@@ -195,6 +195,7 @@ get_diagnostics_cb (GObject      *source_object,
 static void
 ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                                                 IdeFile               *file,
+                                                IdeBuffer             *buffer,
                                                 GCancellable          *cancellable,
                                                 GAsyncReadyCallback    callback,
                                                 gpointer               user_data)

@@ -11,3 +11,5 @@ X-Symbol-Resolver-Languages=xml,html
 X-Symbol-Resolver-Languages-Priority=0
 X-Highlighter-Languages=xml,html
 X-Highlighter-Languages-Priority=0
+X-Diagnostic-Provider-Languages=xml,html
+X-Diagnostic-Provider-Languages-Priority=0

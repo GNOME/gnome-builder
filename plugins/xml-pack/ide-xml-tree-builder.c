@@ -67,6 +67,7 @@ typedef struct{
   IdeXmlSax *parser;
   GBytes    *content;
   GFile     *file;
+  gint64     sequence;
 } BuilderState;
 
 static void
@@ -81,11 +82,15 @@ G_DEFINE_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE_TYPE_OBJECT)
 
 static GBytes *
 ide_xml_tree_builder_get_file_content (IdeXmlTreeBuilder *self,
-                                       GFile             *file)
+                                       GFile             *file,
+                                       gint64            *sequence)
 {
   IdeContext *context;
   IdeBufferManager *manager;
+  IdeUnsavedFiles *unsaved_files;
+  IdeUnsavedFile *uf;
   IdeBuffer *buffer;
+  gint64 sequence_tmp = -1;
   GBytes *content = NULL;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (self));
@@ -94,10 +99,17 @@ ide_xml_tree_builder_get_file_content (IdeXmlTreeBuilder *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   manager = ide_context_get_buffer_manager (context);
 
-  printf ("found buffer:%p\n", ide_buffer_manager_find_buffer (manager, file));
-
   if (NULL != (buffer = ide_buffer_manager_find_buffer (manager, file)))
-    content = ide_buffer_get_content (buffer);
+    {
+      content = ide_buffer_get_content (buffer);
+
+      unsaved_files = ide_context_get_unsaved_files (context);
+      if (NULL != (uf = ide_unsaved_files_get_unsaved_file (unsaved_files, file)))
+        sequence_tmp = ide_unsaved_file_get_sequence (uf);
+    }
+
+  if (sequence != NULL)
+    *sequence = sequence_tmp;
 
   return content;
 }
@@ -135,7 +147,7 @@ build_tree_worker (GTask        *task,
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)source_object;
   BuilderState *state = (BuilderState *)task_data;
-  IdeXmlSymbolNode *root_node = NULL;
+  IdeXmlAnalysis *analysis = NULL;
   const gchar *data;
   gsize size;
 
@@ -147,11 +159,11 @@ build_tree_worker (GTask        *task,
   data = g_bytes_get_data (state->content, &size);
 
   if (ide_xml_tree_builder_file_is_ui (state->file, data, size))
-    root_node = ide_xml_tree_builder_ui_create (self, state->parser, state->file, data, size);
+    analysis = ide_xml_tree_builder_ui_create (self, state->parser, state->file, data, size);
   else
-    root_node = ide_xml_tree_builder_generic_create (self, state->parser, state->file, data, size);
+    analysis = ide_xml_tree_builder_generic_create (self, state->parser, state->file, data, size);
 
-  if (root_node == NULL)
+  if (analysis == NULL)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -160,7 +172,8 @@ build_tree_worker (GTask        *task,
       return;
     }
 
-  g_task_return_pointer (task, root_node, g_object_unref);
+  ide_xml_analysis_set_sequence (analysis, state->sequence);
+  g_task_return_pointer (task, analysis, (GDestroyNotify)ide_xml_analysis_unref);
 }
 
 void
@@ -173,6 +186,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
   g_autoptr(GTask) task = NULL;
   BuilderState *state;
   GBytes *content = NULL;
+  gint64 sequence;
 
   g_return_if_fail (IDE_IS_XML_TREE_BUILDER (self));
   g_return_if_fail (G_IS_FILE (file));
@@ -181,7 +195,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_xml_tree_builder_build_tree_async);
 
-  if (NULL == (content = ide_xml_tree_builder_get_file_content (self, file)))
+  if (NULL == (content = ide_xml_tree_builder_get_file_content (self, file, &sequence)))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -194,12 +208,13 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
   state->parser = ide_xml_sax_new ();
   state->content = content;
   state->file = g_object_ref (file);
+  state->sequence = sequence;
 
   g_task_set_task_data (task, state, (GDestroyNotify)builder_state_free);
   g_task_run_in_thread (task, build_tree_worker);
 }
 
-IdeXmlSymbolNode *
+IdeXmlAnalysis *
 ide_xml_tree_builder_build_tree_finish (IdeXmlTreeBuilder  *self,
                                         GAsyncResult       *result,
                                         GError            **error)
