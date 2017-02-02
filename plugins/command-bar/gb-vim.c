@@ -1013,8 +1013,8 @@ gb_vim_command_search (GtkWidget      *active_widget,
   const gchar *search_end = NULL;
   const gchar *replace_begin = NULL;
   const gchar *replace_end = NULL;
-  gchar *search_text = NULL;
-  gchar *replace_text = NULL;
+  g_autofree gchar *search_text = NULL;
+  g_autofree gchar *replace_text = NULL;
   gunichar separator;
   gboolean confirm_replace = FALSE;
 
@@ -1133,9 +1133,6 @@ gb_vim_command_search (GtkWidget      *active_widget,
     }
   else
     gb_vim_do_search_and_replace (buffer, NULL, NULL, search_text, replace_text, TRUE);
-
-  g_free (search_text);
-  g_free (replace_text);
 
   return TRUE;
 
