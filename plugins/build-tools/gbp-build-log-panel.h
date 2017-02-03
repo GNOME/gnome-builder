@@ -19,7 +19,6 @@
 #ifndef GBP_BUILD_LOG_PANEL_H
 #define GBP_BUILD_LOG_PANEL_H
 
-#include <gtk/gtk.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
@@ -28,8 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpBuildLogPanel, gbp_build_log_panel, GBP, BUILD_LOG_PANEL, PnlDockWidget)
 
-void gbp_build_log_panel_set_result (GbpBuildLogPanel *self,
-                                     IdeBuildResult   *result);
+void gbp_build_log_panel_set_pipeline (GbpBuildLogPanel *self,
+                                       IdeBuildPipeline *pipeline);
 
 G_END_DECLS
 

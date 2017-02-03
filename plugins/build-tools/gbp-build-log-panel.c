@@ -29,8 +29,7 @@ struct _GbpBuildLogPanel
 {
   PnlDockWidget      parent_instance;
 
-  IdeBuildResult    *result;
-  EggSignalGroup    *signals;
+  IdeBuildPipeline  *pipeline;
   GtkCssProvider    *css;
   GSettings         *settings;
   GtkTextBuffer     *buffer;
@@ -38,11 +37,13 @@ struct _GbpBuildLogPanel
   GtkScrolledWindow *scroller;
   GtkTextView       *text_view;
   GtkTextTag        *stderr_tag;
+
+  guint              log_observer;
 };
 
 enum {
   PROP_0,
-  PROP_RESULT,
+  PROP_PIPELINE,
   LAST_PROP
 };
 
@@ -87,23 +88,26 @@ gbp_build_log_panel_reset_view (GbpBuildLogPanel *self)
 }
 
 static void
-gbp_build_log_panel_log (GbpBuildLogPanel  *self,
-                         IdeBuildResultLog  log,
-                         const gchar       *message,
-                         IdeBuildResult    *result)
+gbp_build_log_panel_log_observer (IdeBuildLogStream  stream,
+                                  const gchar       *message,
+                                  gssize             message_len,
+                                  gpointer           user_data)
 {
+  GbpBuildLogPanel *self = user_data;
   GtkTextMark *insert;
   GtkTextIter iter;
 
   g_assert (GBP_IS_BUILD_LOG_PANEL (self));
   g_assert (message != NULL);
-  g_assert (IDE_IS_BUILD_RESULT (result));
+  g_assert (message_len >= 0);
+  g_assert (message[message_len] == '\0');
 
   gtk_text_buffer_get_end_iter (self->buffer, &iter);
 
-  if (G_LIKELY (log == IDE_BUILD_RESULT_LOG_STDOUT))
+  if G_LIKELY (stream == IDE_BUILD_LOG_STDOUT)
     {
       gtk_text_buffer_insert (self->buffer, &iter, message, -1);
+      gtk_text_buffer_insert (self->buffer, &iter, "\n", 1);
     }
   else
     {
@@ -112,6 +116,7 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
 
       offset = gtk_text_iter_get_offset (&iter);
       gtk_text_buffer_insert (self->buffer, &iter, message, -1);
+      gtk_text_buffer_insert (self->buffer, &iter, "\n", 1);
       gtk_text_buffer_get_iter_at_offset (self->buffer, &begin, offset);
       gtk_text_buffer_apply_tag (self->buffer, self->stderr_tag, &begin, &iter);
     }
@@ -121,16 +126,30 @@ gbp_build_log_panel_log (GbpBuildLogPanel  *self,
 }
 
 void
-gbp_build_log_panel_set_result (GbpBuildLogPanel *self,
-                                IdeBuildResult   *result)
+gbp_build_log_panel_set_pipeline (GbpBuildLogPanel *self,
+                                  IdeBuildPipeline *pipeline)
 {
   g_return_if_fail (GBP_IS_BUILD_LOG_PANEL (self));
-  g_return_if_fail (!result || IDE_IS_BUILD_RESULT (result));
+  g_return_if_fail (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
 
-  if (g_set_object (&self->result, result))
+  if (pipeline != self->pipeline)
     {
-      gbp_build_log_panel_reset_view (self);
-      egg_signal_group_set_target (self->signals, result);
+      if (self->pipeline != NULL)
+        {
+          ide_build_pipeline_remove_log_observer (self->pipeline, self->log_observer);
+          self->log_observer = 0;
+          g_clear_object (&self->pipeline);
+        }
+
+      if (pipeline != NULL)
+        {
+          self->pipeline = g_object_ref (pipeline);
+          self->log_observer =
+            ide_build_pipeline_add_log_observer (self->pipeline,
+                                                 gbp_build_log_panel_log_observer,
+                                                 self,
+                                                 NULL);
+        }
     }
 }
 
@@ -174,12 +193,21 @@ gbp_build_log_panel_finalize (GObject *object)
 
   self->stderr_tag = NULL;
 
-  g_clear_object (&self->result);
-  g_clear_object (&self->signals);
+  g_clear_object (&self->pipeline);
   g_clear_object (&self->css);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (gbp_build_log_panel_parent_class)->finalize (object);
+}
+
+static void
+gbp_build_log_panel_dispose (GObject *object)
+{
+  GbpBuildLogPanel *self = (GbpBuildLogPanel *)object;
+
+  gbp_build_log_panel_set_pipeline (self, NULL);
+
+  G_OBJECT_CLASS (gbp_build_log_panel_parent_class)->dispose (object);
 }
 
 static void
@@ -192,8 +220,8 @@ gbp_build_log_panel_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_RESULT:
-      g_value_set_object (value, self->result);
+    case PROP_PIPELINE:
+      g_value_set_object (value, self->pipeline);
       break;
 
     default:
@@ -211,8 +239,8 @@ gbp_build_log_panel_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_RESULT:
-      gbp_build_log_panel_set_result (self, g_value_get_object (value));
+    case PROP_PIPELINE:
+      gbp_build_log_panel_set_pipeline (self, g_value_get_object (value));
       break;
 
     default:
@@ -226,6 +254,7 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gbp_build_log_panel_dispose;
   object_class->finalize = gbp_build_log_panel_finalize;
   object_class->get_property = gbp_build_log_panel_get_property;
   object_class->set_property = gbp_build_log_panel_set_property;
@@ -234,11 +263,11 @@ gbp_build_log_panel_class_init (GbpBuildLogPanelClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/build-tools-plugin/gbp-build-log-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuildLogPanel, scroller);
 
-  properties [PROP_RESULT] =
-    g_param_spec_object ("result",
+  properties [PROP_PIPELINE] =
+    g_param_spec_object ("pipeline",
                          "Result",
                          "Result",
-                         IDE_TYPE_BUILD_RESULT,
+                         IDE_TYPE_BUILD_PIPELINE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
@@ -254,14 +283,6 @@ gbp_build_log_panel_init (GbpBuildLogPanel *self)
   g_object_set (self, "title", _("Build Output"), NULL);
 
   gbp_build_log_panel_reset_view (self);
-
-  self->signals = egg_signal_group_new (IDE_TYPE_BUILD_RESULT);
-
-  egg_signal_group_connect_object (self->signals,
-                                   "log",
-                                   G_CALLBACK (gbp_build_log_panel_log),
-                                   self,
-                                   G_CONNECT_SWAPPED);
 
   self->settings = g_settings_new ("org.gnome.builder.terminal");
   g_signal_connect_object (self->settings,

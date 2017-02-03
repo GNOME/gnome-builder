@@ -28,9 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpBuildPanel, gbp_build_panel, GBP, BUILD_PANEL, PnlDockWidget)
 
-void gbp_build_panel_set_result (GbpBuildPanel  *self,
-                                 IdeBuildResult *result);
-
 G_END_DECLS
 
 #endif /* GBP_BUILD_PANEL_H */

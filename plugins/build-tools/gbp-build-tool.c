@@ -21,6 +21,7 @@
 #endif
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gbp-build-tool.h"
 
@@ -30,17 +31,15 @@ struct _GbpBuildTool
   gint64  build_start;
 };
 
-static gint                  parallel = -1;
-static IdeBuilderBuildFlags  flags;
-static gchar                *configuration_id;
-static gchar                *device_id;
-static gchar                *runtime_id;
+static gint   parallel = -1;
+static gchar *configuration_id;
+static gchar *device_id;
+static gchar *runtime_id;
 
 static void application_tool_init (IdeApplicationToolInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (GbpBuildTool, gbp_build_tool, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_TOOL,
-                                               application_tool_init))
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_TOOL, application_tool_init))
 
 static void
 gbp_build_tool_class_init (GbpBuildToolClass *klass)
@@ -53,19 +52,19 @@ gbp_build_tool_init (GbpBuildTool *self)
 }
 
 static void
-gbp_build_tool_log (GbpBuildTool      *self,
-                    IdeBuildResultLog  log,
-                    const gchar       *message,
-                    IdeBuildResult    *build_result)
+gbp_build_tool_log_observer (IdeBuildLogStream  stream,
+                             const gchar       *message,
+                             gssize             message_len,
+                             gpointer           user_data)
 {
-  if (log == IDE_BUILD_RESULT_LOG_STDERR)
+  if (stream == IDE_BUILD_LOG_STDERR)
     g_printerr ("%s", message);
   else
     g_print ("%s", message);
 }
 
 static void
-print_build_info (IdeContext *context,
+print_build_info (IdeContext       *context,
                   IdeConfiguration *configuration)
 {
   IdeProject *project;
@@ -116,35 +115,35 @@ print_build_info (IdeContext *context,
 }
 
 static void
-gbp_build_tool_build_cb (GObject      *object,
-                         GAsyncResult *result,
-                         gpointer      user_data)
+gbp_build_tool_execute_cb (GObject      *object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
 {
+  IdeBuildManager *build_manager = (IdeBuildManager *)object;
   g_autoptr(GTask) task = user_data;
-  g_autoptr(IdeBuildResult) build_result = NULL;
+  g_autoptr(GError) error = NULL;
   GbpBuildTool *self;
-  IdeBuilder *builder = (IdeBuilder *)object;
-  GError *error = NULL;
   guint64 completed_at;
   guint64 total_usec;
 
   g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_BUILDER (builder));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   self = g_task_get_source_object (task);
   completed_at = g_get_monotonic_time ();
-  build_result = ide_builder_build_finish (builder, result, &error);
+
+  ide_build_manager_execute_finish (build_manager, result, &error);
 
   total_usec = completed_at - self->build_start;
 
-  if (build_result == NULL)
+  if (error != NULL)
     {
       g_printerr (_("===============\n"));
       g_printerr (_(" Build Failure: %s\n"), error->message);
       g_printerr (_(" Build ran for: %"G_GUINT64_FORMAT".%"G_GUINT64_FORMAT" seconds\n"),
                   (total_usec / 1000000), ((total_usec % 1000000) / 1000));
       g_printerr (_("===============\n"));
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -170,17 +169,16 @@ gbp_build_tool_new_context_cb (GObject      *object,
 {
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeContext) context = NULL;
-  g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(IdeBuildResult) build_result = NULL;
   g_autoptr(IdeConfiguration) configuration = NULL;
   IdeConfigurationManager *configuration_manager;
-  IdeBuildSystem *build_system;
-  GbpBuildTool *self;
+  IdeBuildManager *build_manager;
+  IdeBuildPipeline *pipeline;
+  GCancellable *cancellable;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  cancellable = g_task_get_cancellable (task);
 
   context = ide_context_new_finish (result, &error);
 
@@ -233,37 +231,18 @@ gbp_build_tool_new_context_cb (GObject      *object,
 
   print_build_info (context, configuration);
 
-  build_system = ide_context_get_build_system (context);
-  builder = ide_build_system_get_builder (build_system, configuration, &error);
+  build_manager = ide_context_get_build_manager (context);
 
-  if (builder == NULL)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  ide_build_pipeline_add_log_observer (pipeline,
+                                       gbp_build_tool_log_observer,
+                                       NULL, NULL);
 
-  self->build_start = g_get_monotonic_time ();
-
-  ide_builder_build_async (builder,
-                           flags,
-                           &build_result,
-                           g_task_get_cancellable (task),
-                           gbp_build_tool_build_cb,
-                           g_object_ref (task));
-
-  if (build_result != NULL)
-    {
-      /*
-       * XXX: Technically we could lose some log lines unless we
-       * guarantee that the build can't start until the main loop
-       * is reached. (Which is probably reasonable).
-       */
-      g_signal_connect_object (build_result,
-                               "log",
-                               G_CALLBACK (gbp_build_tool_log),
-                               g_task_get_source_object (task),
-                               G_CONNECT_SWAPPED);
-    }
+  ide_build_manager_execute_async (build_manager,
+                                   IDE_BUILD_PHASE_BUILD,
+                                   cancellable,
+                                   gbp_build_tool_execute_cb,
+                                   g_steal_pointer (&task));
 }
 
 static void
@@ -328,14 +307,13 @@ gbp_build_tool_run_async (IdeApplicationTool  *tool,
 
   if (clean)
     {
-      flags |= IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN;
-      flags |= IDE_BUILDER_BUILD_FLAGS_NO_BUILD;
+      /* TODO */
     }
 
   ide_context_new_async (project_file,
                          cancellable,
                          gbp_build_tool_new_context_cb,
-                         g_object_ref (task));
+                         g_steal_pointer (&task));
 }
 
 static gboolean

@@ -36,7 +36,7 @@ struct _GbpBuildWorkbenchAddin
   GbpBuildPerspective *build_perspective;
 
   /* Owned */
-  IdeBuildResult      *result;
+  IdeBuildPipeline    *pipeline;
   GSimpleActionGroup  *actions;
 };
 
@@ -47,25 +47,25 @@ G_DEFINE_TYPE_EXTENDED (GbpBuildWorkbenchAddin, gbp_build_workbench_addin, G_TYP
 
 enum {
   PROP_0,
-  PROP_RESULT,
+  PROP_PIPELINE,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
 
 static void
-gbp_build_workbench_addin_set_result (GbpBuildWorkbenchAddin *self,
-                                      IdeBuildResult         *result)
+gbp_build_workbench_addin_set_pipeline (GbpBuildWorkbenchAddin *self,
+                                        IdeBuildPipeline       *pipeline)
 {
   g_return_if_fail (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
-  g_return_if_fail (!result || IDE_IS_BUILD_RESULT (result));
+  g_return_if_fail (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (self->workbench != NULL);
 
-  if (g_set_object (&self->result, result))
+  if (g_set_object (&self->pipeline, pipeline))
     {
-      gbp_build_log_panel_set_result (self->build_log_panel, result);
+      gbp_build_log_panel_set_pipeline (self->build_log_panel, pipeline);
       gtk_widget_show (GTK_WIDGET (self->build_log_panel));
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RESULT]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
     }
 }
 
@@ -137,7 +137,7 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   g_signal_connect_object (build_manager,
                            "build-started",
-                           G_CALLBACK (gbp_build_workbench_addin_set_result),
+                           G_CALLBACK (gbp_build_workbench_addin_set_pipeline),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -158,7 +158,7 @@ gbp_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools",
                                   G_ACTION_GROUP (self->actions));
 
-  g_object_bind_property (self, "result", self->panel, "result", 0);
+  g_object_bind_property (self, "pipeline", self->panel, "pipeline", 0);
 
   self->build_perspective = g_object_new (GBP_TYPE_BUILD_PERSPECTIVE,
                                           "configuration-manager", configuration_manager,
@@ -194,8 +194,8 @@ gbp_build_workbench_addin_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_RESULT:
-      g_value_set_object (value, self->result);
+    case PROP_PIPELINE:
+      g_value_set_object (value, self->pipeline);
       break;
 
     default:
@@ -209,7 +209,7 @@ gbp_build_workbench_addin_finalize (GObject *object)
   GbpBuildWorkbenchAddin *self = (GbpBuildWorkbenchAddin *)object;
 
   g_clear_object (&self->actions);
-  g_clear_object (&self->result);
+  g_clear_object (&self->pipeline);
 
   G_OBJECT_CLASS (gbp_build_workbench_addin_parent_class)->finalize (object);
 }
@@ -222,11 +222,11 @@ gbp_build_workbench_addin_class_init (GbpBuildWorkbenchAddinClass *klass)
   object_class->finalize = gbp_build_workbench_addin_finalize;
   object_class->get_property = gbp_build_workbench_addin_get_property;
 
-  properties [PROP_RESULT] =
-    g_param_spec_object ("result",
-                         "Result",
-                         "The current build result",
-                         IDE_TYPE_BUILD_RESULT,
+  properties [PROP_PIPELINE] =
+    g_param_spec_object ("pipeline",
+                         "Pipeline",
+                         "The current build pipeline",
+                         IDE_TYPE_BUILD_PIPELINE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
