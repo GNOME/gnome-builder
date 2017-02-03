@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from os import path
-import subprocess
 import threading
 import shutil
 import json
@@ -33,8 +32,14 @@ from gi.repository import (
 
 _ = Ide.gettext
 
-ninja = None
+_NINJA_NAMES = [ 'ninja-build', 'ninja' ]
 
+def execInRuntime(runtime, *args):
+    launcher = runtime.create_launcher()
+    launcher.push_args(args)
+    proc = launcher.spawn(None)
+    _, stdout, stderr = proc.communicate_utf8(None, None)
+    return stdout
 
 class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
@@ -60,126 +65,30 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_priority(self):
         return -200 # Lower priority than Autotools for now
 
-    def do_get_builder(self, config):
-        return MesonBuilder(context=self.get_context(), configuration=config)
-
-
-class MesonBuilder(Ide.Builder):
-    def _get_build_dir(self) -> Gio.File:
-        context = self.get_context()
-
-        # This matches the Autotools layout
-        project_id = context.get_project().get_id()
-        buildroot = context.get_root_build_dir()
-        device = self.props.configuration.get_device()
-        device_id = device.get_id()
-        system_type = device.get_system_type()
-
-        return Gio.File.new_for_path(path.join(buildroot, project_id, device_id, system_type))
-
-    def _get_source_dir(self) -> Gio.File:
-        context = self.get_context()
-        return context.get_vcs().get_working_directory()
-
-    @staticmethod
-    def _task_set_error(task, err):
-        task.build_result.set_mode(_('Failed'))
-        task.build_result.set_failed(True)
-        task.return_error(err)
-        task.build_result.set_running(False)
-
-    @staticmethod
-    def _task_set_success(task):
-        task.build_result.set_mode(_('Successful'))
-        task.build_result.set_failed(False)
-        task.return_boolean(True)
-        task.build_result.set_running(False)
-
-    def do_build_async(self, flags, cancellable, callback, data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_result = MesonBuildResult(self.props.configuration,
-                                             self._get_build_dir(),
-                                             self._get_source_dir(),
-                                             cancellable,
-                                             flags=flags)
-
-        def wrap_build(task):
-            task.build_result.set_running(True)
-            try:
-                task.build_result.build()
-            except GLib.Error as err:
-                self._task_set_error(task, err)
-            else:
-                def postbuild_finish(err):
-                    if err:
-                        self._task_set_error(task, err)
-                    else:
-                        self._task_set_success(task)
-                task.build_result._postbuild_async(postbuild_finish)
-
-        def _on_prebuild_finish(task, err):
-            if err:
-                self._task_set_error(task, err)
-            else:
-                thread = threading.Thread(target=wrap_build, args=(task,))
-                thread.start()
-        task.build_result._prebuild_async(task, _on_prebuild_finish)
-
-        return task.build_result
-
-    def do_build_finish(self, result) -> Ide.BuildResult:
-        if result.propagate_boolean():
-            return result.build_result
-
-    def do_install_async(self, cancellable, callback, data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_result = MesonBuildResult(self.props.configuration,
-                                             self._get_build_dir(),
-                                             self._get_source_dir(),
-                                             cancellable)
-
-        def wrap_install(task):
-            task.build_result.set_running(True)
-            try:
-                task.build_result.install()
-            except GLib.Error as err:
-                self._task_set_error(task, err)
-            else:
-                def postinstall_finish(err):
-                    if err:
-                        self._task_set_error(task, err)
-                    else:
-                        self._task_set_success(task)
-                task.build_result._postinstall_async(postinstall_finish)
-
-        thread = threading.Thread(target=wrap_install, args=(task,))
-        thread.start()
-
-        return task.build_result
-
-    def do_install_finish(self, result) -> Ide.BuildResult:
-        if result.propagate_boolean():
-            return result.build_result
-
     def do_get_build_flags_async(self, ifile, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)
+        task.ifile = ifile
         task.build_flags = []
 
-        def extract_flags(command: str):
-            flags = GLib.shell_parse_argv(command)[1] # Raises on failure
-            build_dir = self._get_build_dir().get_path()
-            wanted_flags = []
-            for flag in flags:
-                if flag.startswith('-I'):
-                    # All paths are relative to build
-                    abspath = path.normpath(path.join(build_dir, flag[2:]))
-                    wanted_flags.append('-I' + abspath)
-                elif flag.startswith(('-isystem', '-W', '-D')):
-                    wanted_flags.append(flag)
-            return wanted_flags
+        context = self.get_context()
+        build_manager = context.get_build_manager()
 
+        # First we need to ensure that the build pipeline has progressed
+        # to complete the CONFIGURE stage which is where our mesonintrospect
+        # command caches the results.
+        build_manager.execute_async(Ide.BuildPhase.CONFIGURE,
+                                    cancellable,
+                                    self._get_build_flags_cb,
+                                    task)
+
+    def do_get_build_flags_finish(self, result):
+        if result.propagate_boolean():
+            return result.build_flags
+
+    def _get_build_flags_cb(self, build_manager, result, task):
         def build_flags_thread():
-            commands_file = path.join(self._get_build_dir().get_path(), 'compile_commands.json')
+            config = build_manager.get_pipeline().get_configuration()
+            commands_file = path.join(self.get_builddir(config), 'compile_commands.json')
             try:
                 with open(commands_file) as f:
                     commands = json.loads(f.read(), encoding='utf-8')
@@ -187,7 +96,7 @@ class MesonBuilder(Ide.Builder):
                 task.return_error(GLib.Error('Failed to decode meson json: {}'.format(e)))
                 return
 
-            infile = ifile.get_path()
+            infile = task.ifile.get_path()
             for c in commands:
                 filepath = path.normpath(path.join(c['directory'], c['file']))
                 if filepath == infile:
@@ -202,36 +111,50 @@ class MesonBuilder(Ide.Builder):
 
             task.return_boolean(True)
 
-        thread = threading.Thread(target=build_flags_thread)
-        thread.start()
-
-    def do_get_build_flags_finish(self, result):
-        if result.propagate_boolean():
-            return result.build_flags
+        try:
+            build_manager.execute_finish(result)
+            thread = threading.Thread(target=build_flags_thread)
+            thread.start()
+        except Exception as err:
+            task.return_error(err)
 
     def do_get_build_targets_async(self, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)
         task.build_targets = []
 
-        config = self.get_configuration()
+        build_manager = self.get_context().get_build_manager()
+        build_manager.execute_async(Ide.BuildPhase.CONFIGURE,
+                                    cancellable,
+                                    self._get_build_targets_cb,
+                                    task)
+
+    def do_get_build_targets_finish(self, result):
+        if result.propagate_boolean():
+            return result.build_targets
+
+    def _get_build_targets_cb(self, build_manager, result, task):
+        context = build_manager.get_context()
+        config = build_manager.get_pipeline().get_configuration()
+        runtime = config.get_runtime()
+        builddir = self.get_builddir(config)
+        prefix = config.get_prefix()
+        bindir = path.join(prefix, 'bin')
 
         def build_targets_thread():
-            # TODO: Ide.Subprocess.communicate_utf8(None, cancellable) doesn't work?
             try:
-                ret = subprocess.check_output(['mesonintrospect', '--targets',
-                                               self._get_build_dir().get_path()])
-            except (subprocess.CalledProcessError, FileNotFoundError) as e:
+                ret = execInRuntime(runtime, 'mesonintrospect', '--targets', builddir)
+            except Exception as e:
                 task.return_error(GLib.Error('Failed to run mesonintrospect: {}'.format(e)))
                 return
 
             targets = []
+
             try:
-                meson_targets = json.loads(ret.decode('utf-8'))
+                meson_targets = json.loads(ret)
             except (json.JSONDecodeError, UnicodeDecodeError) as e:
                 task.return_error(GLib.Error('Failed to decode mesonintrospect json: {}'.format(e)))
                 return
 
-            bindir = path.join(config.get_prefix(), 'bin')
             for t in meson_targets:
                 # TODO: Ideally BuildTargets understand filename != name
                 name = t['filename']
@@ -242,7 +165,7 @@ class MesonBuilder(Ide.Builder):
                 install_dir = path.dirname(t.get('install_filename', ''))
                 installed = t['installed']
 
-                ide_target = MesonBuildTarget(install_dir, name=name)
+                ide_target = MesonBuildTarget(install_dir, name=name, context=context)
                 # Try to be smart and sort these because Builder runs the
                 # first one. Ideally it allows the user to select the run targets.
                 if t['type'] == 'executable' and t['installed'] and \
@@ -255,9 +178,8 @@ class MesonBuilder(Ide.Builder):
             if not targets or targets[0].install_directory.get_path() != bindir:
                 try:
                     # This is a new feature in Meson 0.37.0
-                    ret = subprocess.check_output(['mesonintrospect', '--installed',
-                                                   self._get_build_dir().get_path()])
-                    installed = json.loads(ret.decode('utf-8'))
+                    ret = execInRuntime(runtime, 'mesonintrospect', '--installed', builddir)
+                    installed = json.loads(ret)
                     for f in installed.values():
                         install_dir = path.dirname(f)
                         if install_dir == bindir:
@@ -266,169 +188,101 @@ class MesonBuilder(Ide.Builder):
                             ide_target = MesonBuildTarget(install_dir, name=path.basename(f))
                             targets.insert(0, ide_target)
                             break # Only need one
-                except (subprocess.CalledProcessError, json.JSONDecodeError, UnicodeDecodeError):
+                except Exception as e:
                     pass
 
             task.build_targets = targets
             task.return_boolean(True)
 
-        thread = threading.Thread(target=build_targets_thread)
-        thread.start()
+        try:
+            build_manager.execute_finish(result)
+            thread = threading.Thread(target=build_targets_thread)
+            thread.start()
+        except Exception as err:
+            task.return_error(err)
 
-    def do_get_build_targets_finish(self, result):
-        if result.propagate_boolean():
-            return result.build_targets
 
+class MesonPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+    """
+    The MesonPipelineAddin registers stages to be executed when various
+    phases of the build pipeline are requested.
 
-class MesonBuildResult(Ide.BuildResult):
+    The configuration cannot change during the lifetime of the pipeline,
+    so it is safe to setup everything up-front.
+    """
 
-    def __init__(self, config, blddir, srcdir, cancel, flags=0, **kwargs):
-        super().__init__(**kwargs)
-        self.config = config
-        self.cancel = cancel
-        self.flags = flags
-        self.runtime = config.get_runtime()
-        self.blddir = blddir
-        self.srcdir = srcdir
+    def do_load(self, pipeline):
+        context = pipeline.get_context()
+        build_system = context.get_build_system()
 
-    def _new_launcher(self, cwd=None):
-        if self.runtime:
-            launcher = self.runtime.create_launcher()
-        else:
-            launcher = Ide.SubprocessLauncher.new(Gio.SubprocessFlags.NONE)
-            launcher.set_run_on_host(True)
-            launcher.set_clear_env(False)
-        if cwd:
-            launcher.set_cwd(cwd.get_path())
-        launcher.overlay_environment(self.config.get_environment())
-        return launcher
-
-    def _get_ninja(self):
-        global ninja
-        if not ninja:
-            if GLib.find_program_in_path('ninja-build'):
-                ninja = 'ninja-build' # Fedora...
-            else:
-                ninja = 'ninja'
-        return ninja
-
-    def _run_subprocess(self, launcher):
-        self.log_stdout_literal('Running: {}…'.format(' '.join(launcher.get_argv())))
-        proc = launcher.spawn()
-        self.log_subprocess(proc)
-        proc.wait_check(self.cancel)
-
-    def _ensure_configured(self):
-        bootstrap = bool(self.flags & Ide.BuilderBuildFlags.FORCE_BOOTSTRAP)
-
-        if bootstrap or self.config.get_dirty():
-            try:
-                shutil.rmtree(self.blddir.get_path())
-                self.log_stdout_literal('Deleting build directory…')
-            except FileNotFoundError:
-                pass
-            self.config.set_dirty(False)
-
-        if not self.blddir.query_exists():
-            self.log_stdout_literal('Creating build directory…')
-            self.blddir.make_directory_with_parents(self.cancel)
-
-        # TODO: For dirty config we could use `mesonconf` but it does not
-        # handle removing defines which might be unclear
-
-        if not self.blddir.get_child('build.ninja').query_exists():
-            config_opts = self.config.get_config_opts()
-            extra_opts = config_opts.split() if config_opts else []
-            extra_opts.append('--prefix=' + self.config.get_prefix())
-            launcher = self._new_launcher(self.srcdir)
-            launcher.push_args(['meson', self.blddir.get_path()] + extra_opts)
-
-            self.set_mode(_('Configuring…'))
-            self._run_subprocess(launcher)
-
-    def install(self):
-        self._ensure_configured()
-
-        launcher = self._new_launcher(cwd=self.blddir)
-        launcher.push_args([self._get_ninja(), 'install'])
-        self._run_subprocess(launcher)
-
-    def _prebuild_async(self, task, callback):
-        # Unlike the rest of this class this is ran on the main thread
-        # using async apis so try to catch the error and propogate it
-        # where others are handled
-        def prebuild_command_finish(command, result):
-            try:
-                command.execute_finish(result)
-            except GLib.Error as e:
-                callback(task, e)
-            else:
-                callback(task, None)
-
-        def prebuild_finish(runtime, result):
-            try:
-                runtime.prebuild_finish(result)
-                prebuild_command = self.config.get_prebuild()
-                prebuild_command.execute_async(runtime, self.config.get_environment(),
-                                             self, self.cancel, prebuild_command_finish)
-            except GLib.Error as e:
-                callback(task, e)
-
-        if self.runtime:
-            self.set_mode(_('Running prebuild…'))
-            self.runtime.prebuild_async(self, self.cancel, prebuild_finish)
-
-    def _postaction_async(self, callback, install=False):
-        if not self.runtime:
+        # Only register stages if we are a meson project
+        if type(build_system) != MesonBuildSystem:
             return
 
-        def postaction_finish(runtime, result):
-            try:
-                if install:
-                    runtime.postinstall_finish(result)
-                else:
-                    runtime.postbuild_finish(result)
-            except GLib.Error as e:
-                callback(e)
-            else:
-                callback(None)
+        config = pipeline.get_configuration()
+        runtime = config.get_runtime()
 
-        if install:
-            self.set_mode(_('Running post-install…'))
-            self.runtime.postinstall_async(self, self.cancel, postaction_finish)
-        else:
-            self.set_mode(_('Running post-build…'))
-            self.runtime.postbuild_async(self, self.cancel, postaction_finish)
+        srcdir = context.get_vcs().get_working_directory().get_path()
+        builddir = build_system.get_builddir(config)
 
-    def _postbuild_async(self, callback):
-        self._postaction_async(callback)
+        # Discover ninja in the runtime/SDK
+        ninja = None
+        for name in _NINJA_NAMES:
+            if runtime.contains_program_in_path(name):
+                ninja = name
+                break
+        if ninja is None:
+            print("Failed to locate ninja. Meson Building is disabled.")
+            return
 
-    def _postinstall_async(self, callback):
-        self._postaction_async(callback, install=True)
+        # Register the configuration launcher which will perform our
+        # "meson --prefix=..." configuration command.
+        config_launcher = pipeline.create_launcher()
+        config_launcher.push_argv('meson')
+        config_launcher.push_argv(srcdir)
+        config_launcher.push_argv(builddir)
+        config_launcher.push_argv('--prefix={}'.format(config.props.prefix))
+        config_opts = config.get_config_opts()
+        if config_opts:
+            _, config_opts = GLib.shell_parse_argv(config_opts)
+            config_launcher.push_args(config_opts)
 
-    def build(self):
-        # NOTE: These are ran in a thread and it raising GLib.Error is handled a layer up.
-        self._ensure_configured()
+        config_stage = Ide.BuildStageLauncher.new(context, config_launcher)
+        config_stage.set_completed(path.exists(path.join(builddir, 'build.ninja')))
+        self.track(pipeline.connect(Ide.BuildPhase.CONFIGURE, 0, config_stage))
 
-        clean = bool(self.flags & Ide.BuilderBuildFlags.FORCE_CLEAN)
-        build = not self.flags & Ide.BuilderBuildFlags.NO_BUILD
+        # Register the build launcher which will perform the incremental
+        # build of the project when the Ide.BuildPhase.BUILD phase is
+        # requested of the pipeline.
+        build_launcher = pipeline.create_launcher()
+        build_launcher.push_argv(ninja)
+        if config.props.parallelism > 0:
+            build_launcher.push_argv('-j{}'.format(config.props.parallelism))
 
-        launcher = self._new_launcher(self.blddir)
-        launcher.push_args([self._get_ninja()])
-        build_jobs = self.config.props.parallelism
-        if build_jobs > 0:
-            launcher.push_args(['-j{}'.format(build_jobs)])
-        if clean:
-            self.log_stdout_literal('Cleaning…')
-            self.set_mode(_('Cleaning…'))
-            launcher.push_args(['clean'])
-            self._run_subprocess(launcher)
-        if build:
-            if clean: # Build after cleaning
-                launcher.pop_argv()
-            self.log_stdout_literal('Building…')
-            self.set_mode(_('Building…'))
-            self._run_subprocess(launcher)
+        clean_launcher = pipeline.create_launcher()
+        clean_launcher.push_argv(ninja)
+        clean_launcher.push_argv('clean')
+        if config.props.parallelism > 0:
+            clean_launcher.push_argv('-j{}'.format(config.props.parallelism))
+
+        build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage.set_clean_launcher(clean_launcher)
+        build_stage.connect('query', self._query)
+        self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+
+        # Register the install launcher which will perform our
+        # "ninja install" when the Ide.BuildPhase.INSTALL phase
+        # is requested of the pipeline.
+        install_launcher = pipeline.create_launcher()
+        install_launcher.push_argv(ninja)
+        install_launcher.push_argv('install')
+
+        install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
+
+    def _query(self, stage, pipeline, cancellable):
+        stage.set_completed(False)
+
 
 class MesonBuildTarget(Ide.Object, Ide.BuildTarget):
     # TODO: These should be part of the BuildTarget interface
