@@ -9,7 +9,6 @@ SUBDIRS = \
 	color-picker \
 	command-bar \
 	comment-code \
-	contributing \
 	create-project \
 	ctags \
 	devhelp \
