@@ -94,6 +94,7 @@ libvala_pack_plugin_la_CFLAGS = \
 	-Wno-unused-but-set-variable \
 	-Wno-unused-label \
 	-Wno-unused-function \
+	-Wno-unused-variable \
 	$(NULL)
 
 libvala_pack_plugin_la_LIBADD = $(VALA_LIBS)
