@@ -29,38 +29,37 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeMakecache, ide_makecache, IDE, MAKECACHE, IdeObject)
 
-void                 ide_makecache_new_for_makefile_async   (IdeRuntime           *runtime,
-                                                             GFile                *makefile,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-IdeMakecache        *ide_makecache_new_for_makefile_finish  (GAsyncResult         *result,
-                                                             GError              **error);
-GFile               *ide_makecache_get_makefile             (IdeMakecache         *self);
-void                 ide_makecache_get_file_flags_async     (IdeMakecache         *self,
-                                                             GFile                *file,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-gchar              **ide_makecache_get_file_flags_finish    (IdeMakecache         *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
-void                 ide_makecache_get_file_targets_async   (IdeMakecache         *self,
-                                                             GFile                *file,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-GPtrArray           *ide_makecache_get_file_targets_finish  (IdeMakecache         *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
-void                 ide_makecache_get_build_targets_async  (IdeMakecache         *self,
-                                                             GFile                *build_dir,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-GPtrArray           *ide_makecache_get_build_targets_finish (IdeMakecache         *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
+void                 ide_makecache_new_for_cache_file_async  (IdeRuntime           *runtime,
+                                                              GFile                *cache_file,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+IdeMakecache        *ide_makecache_new_for_cache_file_finish (GAsyncResult         *result,
+                                                              GError              **error);
+void                 ide_makecache_get_file_flags_async      (IdeMakecache         *self,
+                                                              GFile                *file,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+gchar              **ide_makecache_get_file_flags_finish     (IdeMakecache         *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
+void                 ide_makecache_get_file_targets_async    (IdeMakecache         *self,
+                                                              GFile                *file,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+GPtrArray           *ide_makecache_get_file_targets_finish   (IdeMakecache         *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
+void                 ide_makecache_get_build_targets_async   (IdeMakecache         *self,
+                                                              GFile                *build_dir,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+GPtrArray           *ide_makecache_get_build_targets_finish  (IdeMakecache         *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
 
 G_END_DECLS
 
