@@ -5,6 +5,8 @@
 #include "ide-enums.h"
 
 #include "buffers/ide-buffer.h"
+#include "buildsystem/ide-build-log.h"
+#include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-result.h"
 #include "devices/ide-device.h"
 #include "diagnostics/ide-diagnostic.h"

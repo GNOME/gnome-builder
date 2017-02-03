@@ -606,6 +606,8 @@ endif
 
 glib_enum_headers =                        \
 	buffers/ide-buffer.h               \
+	buildsystem/ide-build-log.h        \
+	buildsystem/ide-build-pipeline.h   \
 	buildsystem/ide-build-result.h     \
 	devices/ide-device.h               \
 	diagnostics/ide-diagnostic.h       \
