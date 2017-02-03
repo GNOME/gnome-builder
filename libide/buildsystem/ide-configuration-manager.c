@@ -61,7 +61,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  INVALIDATE,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [LAST_PROP];
+static guint signals [N_SIGNALS];
 
 static void
 load_string (IdeConfiguration *configuration,
@@ -617,6 +623,18 @@ ide_configuration_manager_class_init (IdeConfigurationManagerClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  /**
+   * IdeConfigurationManager::invalidate:
+   *
+   * This signal is emitted any time a new configuration is selected or the
+   * currently selected configurations state changes.
+   */
+  signals [INVALIDATE] =
+    g_signal_new ("invalidate",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 static void
@@ -759,6 +777,8 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
+
+      g_signal_emit (self, signals [INVALIDATE], 0);
     }
 }
 
@@ -796,6 +816,8 @@ ide_configuration_manager_changed (IdeConfigurationManager *self,
   self->change_count++;
 
   ide_configuration_manager_queue_writeback (self);
+
+  g_signal_emit (self, signals [INVALIDATE], 0);
 }
 
 void
