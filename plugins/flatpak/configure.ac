@@ -1,4 +1,4 @@
-m4_define([flatpak_required_version], [0.6.9])
+m4_define([flatpak_required_version], [0.8.0])
 m4_define([ggit_required_version], [0.24.0])
 
 # --enable-flatpak-plugin=yes/no/auto
