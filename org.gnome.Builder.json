@@ -7,6 +7,8 @@
     "tags": ["devel"],
     "desktop-file-name-prefix": "(Development) ",
     "finish-args": [
+        /* Require recent flatpak at runtime */
+        "--require-version=0.8.0",
         /* Allow access to developer tools */
         "--allow=devel",
         "--talk-name=org.freedesktop.Flatpak",
