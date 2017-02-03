@@ -23,10 +23,11 @@
 
 G_BEGIN_DECLS
 
-gchar *ide_get_system_arch      (void);
-gsize  ide_get_system_page_size (void) G_GNUC_CONST;
-gchar *ide_path_collapse        (const gchar *path);
-gchar *ide_path_expand          (const gchar *path);
+gchar       *ide_get_system_arch      (void);
+const gchar *ide_get_system_type      (void);
+gsize        ide_get_system_page_size (void) G_GNUC_CONST;
+gchar       *ide_path_collapse        (const gchar *path);
+gchar       *ide_path_expand          (const gchar *path);
 
 G_END_DECLS
 
