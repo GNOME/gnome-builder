@@ -314,12 +314,12 @@ ide_git_vcs_load_monitor (IdeGitVcs  *self,
     {
       g_autoptr(GFile) location = NULL;
       g_autoptr(GFileMonitor) monitor = NULL;
-      g_autoptr(GFile) heads_dir = NULL;
+      g_autoptr(GFile) index_file = NULL;
       GError *local_error = NULL;
 
       location = ggit_repository_get_location (self->repository);
-      heads_dir = g_file_get_child (location, "HEAD");
-      monitor = g_file_monitor (heads_dir, 0, NULL, &local_error);
+      index_file = g_file_get_child (location, "index");
+      monitor = g_file_monitor (index_file, 0, NULL, &local_error);
 
       if (monitor == NULL)
         {
