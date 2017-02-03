@@ -134,6 +134,7 @@ typedef struct _IdeSymbolResolver              IdeSymbolResolver;
 typedef struct _IdeSymbolResolverInterface     IdeSymbolResolverInterface;
 
 typedef struct _IdeTransferManager             IdeTransferManager;
+typedef struct _IdeTransfer                    IdeTransfer;
 
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 
