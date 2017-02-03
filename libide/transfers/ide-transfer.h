@@ -38,6 +38,7 @@ struct _IdeTransferInterface
   gboolean (*execute_finish) (IdeTransfer          *self,
                               GAsyncResult         *result,
                               GError              **error);
+  gboolean (*has_completed)  (IdeTransfer          *self);
 };
 
 gdouble  ide_transfer_get_progress   (IdeTransfer          *self);
