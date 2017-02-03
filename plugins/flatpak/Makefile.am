@@ -29,6 +29,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-sources.h \
 	gbp-flatpak-transfer.c \
 	gbp-flatpak-transfer.h \
+	gbp-flatpak-util.c \
+	gbp-flatpak-util.h \
 	$(NULL)
 
 nodist_libflatpak_plugin_la_SOURCES = \
