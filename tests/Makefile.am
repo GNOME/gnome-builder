@@ -120,6 +120,10 @@ test_ide_buffer_CFLAGS = $(tests_cflags)
 test_ide_buffer_LDADD = $(tests_libs)
 
 
+TESTS += test-ide-build-pipeline
+test_ide_build_pipeline_SOURCES = test-ide-build-pipeline.c
+test_ide_build_pipeline_CFLAGS = $(tests_cflags)
+test_ide_build_pipeline_LDADD = $(tests_libs)
 
 
 TESTS += test-ide-doap
