@@ -672,17 +672,25 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
 
 /**
  * ide_subprocess_launcher_push_args:
- * @args: (array zero-terminated=1) (element-type utf8): the arguments
+ * @self: A #IdeSubprocessLauncher
+ * @args: (array zero-terminated=1) (element-type utf8) (nullable): the arguments
+ *
+ * This function is semantically identical to calling ide_subprocess_launcher_push_argv()
+ * for each element of @args.
+ *
+ * If @args is %NULL, this function does nothing.
  */
 void
 ide_subprocess_launcher_push_args (IdeSubprocessLauncher *self,
                                    const gchar * const   *args)
 {
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
-  g_return_if_fail (args != NULL);
 
-  for (guint i = 0; args [i] != NULL; i++)
-    ide_subprocess_launcher_push_argv (self, args [i]);
+  if (args != NULL)
+    {
+      for (guint i = 0; args [i] != NULL; i++)
+        ide_subprocess_launcher_push_argv (self, args [i]);
+    }
 }
 
 gchar *
