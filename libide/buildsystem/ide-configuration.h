@@ -86,6 +86,11 @@ const gchar          *ide_configuration_get_internal_string  (IdeConfiguration  
 void                  ide_configuration_set_internal_string  (IdeConfiguration  *self,
                                                               const gchar       *key,
                                                               const gchar       *value);
+const gchar * const  *ide_configuration_get_internal_strv    (IdeConfiguration  *self,
+                                                              const gchar       *key);
+void                  ide_configuration_set_internal_strv    (IdeConfiguration  *self,
+                                                              const gchar       *key,
+                                                              const gchar * const *value);
 gboolean              ide_configuration_get_internal_boolean (IdeConfiguration  *self,
                                                               const gchar       *key);
 void                  ide_configuration_set_internal_boolean (IdeConfiguration  *self,

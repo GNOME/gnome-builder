@@ -1228,6 +1228,37 @@ ide_configuration_set_internal_string (IdeConfiguration *self,
   g_value_set_string (v, value);
 }
 
+const gchar * const *
+ide_configuration_get_internal_strv (IdeConfiguration *self,
+                                     const gchar      *key)
+{
+  const GValue *v;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  v = g_hash_table_lookup (self->internal, key);
+
+  if (v != NULL && G_VALUE_HOLDS (v, G_TYPE_STRV))
+    return g_value_get_boxed (v);
+
+  return NULL;
+}
+
+void
+ide_configuration_set_internal_strv (IdeConfiguration    *self,
+                                     const gchar         *key,
+                                     const gchar * const *value)
+{
+  GValue *v;
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (key != NULL);
+
+  v = ide_configuration_reset_internal_value (self, key, G_TYPE_STRV);
+  g_value_set_boxed (v, value);
+}
+
 gboolean
 ide_configuration_get_internal_boolean (IdeConfiguration *self,
                                         const gchar      *key)
