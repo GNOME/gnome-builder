@@ -50,6 +50,7 @@ void                  ide_configuration_set_dirty            (IdeConfiguration  
 const gchar          *ide_configuration_get_display_name     (IdeConfiguration  *self);
 void                  ide_configuration_set_display_name     (IdeConfiguration  *self,
                                                               const gchar       *display_name);
+gboolean              ide_configuration_get_ready            (IdeConfiguration  *self);
 IdeRuntime           *ide_configuration_get_runtime          (IdeConfiguration  *self);
 void                  ide_configuration_set_runtime          (IdeConfiguration  *self,
                                                               IdeRuntime        *runtime);

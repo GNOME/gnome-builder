@@ -58,6 +58,14 @@ struct _IdeConfiguration
   guint           dirty : 1;
   guint           debug : 1;
   guint           is_snapshot : 1;
+
+  /*
+   * These are used to determine if we can make progress building
+   * with this configuration. When devices are added/removed, the
+   * IdeConfiguration:ready property will be notified.
+   */
+  guint           device_ready : 1;
+  guint           runtime_ready : 1;
 };
 
 G_DEFINE_TYPE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT)
@@ -74,6 +82,7 @@ enum {
   PROP_ID,
   PROP_PARALLELISM,
   PROP_PREFIX,
+  PROP_READY,
   PROP_RUNTIME,
   PROP_RUNTIME_ID,
   PROP_APP_ID,
@@ -156,14 +165,22 @@ ide_configuration_device_manager_items_changed (IdeConfiguration *self,
                                                 IdeDeviceManager *device_manager)
 {
   IdeDevice *device;
+  gboolean device_ready;
 
   g_assert (IDE_IS_CONFIGURATION (self));
   g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
 
   device = ide_device_manager_get_device (device_manager, self->device_id);
+  device_ready = !!device;
 
-  if (device != NULL)
+  if (!self->device_ready && device_ready)
     ide_device_prepare_configuration (device, self);
+
+  if (device_ready != self->device_ready)
+    {
+      self->device_ready = device_ready;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READY]);
+    }
 }
 
 static void
@@ -174,14 +191,22 @@ ide_configuration_runtime_manager_items_changed (IdeConfiguration  *self,
                                                  IdeRuntimeManager *runtime_manager)
 {
   IdeRuntime *runtime;
+  gboolean runtime_ready;
 
   g_assert (IDE_IS_CONFIGURATION (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
 
   runtime = ide_runtime_manager_get_runtime (runtime_manager, self->runtime_id);
+  runtime_ready = !!runtime;
 
-  if (runtime != NULL)
+  if (!self->runtime_ready && runtime_ready)
     ide_runtime_prepare_configuration (runtime, self);
+
+  if (runtime_ready != self->runtime_ready)
+    {
+      self->runtime_ready = runtime_ready;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READY]);
+    }
 }
 
 static void
@@ -295,6 +320,10 @@ ide_configuration_get_property (GObject    *object,
 
     case PROP_PARALLELISM:
       g_value_set_int (value, ide_configuration_get_parallelism (self));
+      break;
+
+    case PROP_READY:
+      g_value_set_boolean (value, ide_configuration_get_ready (self));
       break;
 
     case PROP_PREFIX:
@@ -462,6 +491,13 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                          "Prefix",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_READY] =
+    g_param_spec_boolean ("ready",
+                          "Ready",
+                          "If the configuration can be used for building",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RUNTIME] =
     g_param_spec_object ("runtime",
@@ -1337,4 +1373,22 @@ ide_configuration_set_internal_object (IdeConfiguration *self,
 
   v = ide_configuration_reset_internal_value (self, key, type);
   g_value_set_object (v, instance);
+}
+
+/**
+ * ide_configuration_get_ready:
+ * @self: An #IdeConfiguration
+ *
+ * Determines if the configuration is ready for use. That means that the
+ * build device can be accessed and the runtime is loaded. This may change
+ * at runtime as devices and runtimes are added or removed.
+ *
+ * Returns: %TRUE if the configuration is ready for use.
+ */
+gboolean
+ide_configuration_get_ready (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), FALSE);
+
+  return self->device_ready && self->runtime_ready;
 }
