@@ -25,8 +25,6 @@
 #include "ide-internal.h"
 #include "ide-macros.h"
 
-#include "buildsystem/ide-build-command.h"
-#include "buildsystem/ide-build-command-queue.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-environment.h"
@@ -122,36 +120,6 @@ load_environ (IdeConfiguration *configuration,
     }
 }
 
-static void
-load_command_queue (IdeBuildCommandQueue *cmdq,
-                    GKeyFile             *key_file,
-                    const gchar          *group,
-                    const gchar          *name)
-
-{
-  g_auto(GStrv) commands = NULL;
-
-  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (cmdq));
-  g_assert (key_file != NULL);
-  g_assert (group != NULL);
-  g_assert (name != NULL);
-
-  commands = g_key_file_get_string_list (key_file, group, name, NULL, NULL);
-
-  if (commands != NULL)
-    {
-      for (guint i = 0; commands [i]; i++)
-        {
-          g_autoptr(IdeBuildCommand) command = NULL;
-
-          command = g_object_new (IDE_TYPE_BUILD_COMMAND,
-                                  "command-text", commands [i],
-                                  NULL);
-          ide_build_command_queue_append (cmdq, command);
-        }
-    }
-}
-
 static gboolean
 ide_configuration_manager_load (IdeConfigurationManager  *self,
                                 GKeyFile                 *key_file,
@@ -179,24 +147,6 @@ ide_configuration_manager_load (IdeConfigurationManager  *self,
   load_string (configuration, key_file, group, "runtime", "runtime-id");
   load_string (configuration, key_file, group, "prefix", "prefix");
   load_string (configuration, key_file, group, "app-id", "app-id");
-
-  if (g_key_file_has_key (key_file, group, "prebuild", NULL))
-    {
-      g_autoptr(IdeBuildCommandQueue) cmdq = NULL;
-
-      cmdq = ide_build_command_queue_new ();
-      load_command_queue (cmdq, key_file, group, "prebuild");
-      _ide_configuration_set_prebuild (configuration, cmdq);
-    }
-
-  if (g_key_file_has_key (key_file, group, "postbuild", NULL))
-    {
-      g_autoptr(IdeBuildCommandQueue) cmdq = NULL;
-
-      cmdq = ide_build_command_queue_new ();
-      load_command_queue (cmdq, key_file, group, "postbuild");
-      _ide_configuration_set_postbuild (configuration, cmdq);
-    }
 
   env_group = g_strdup_printf ("%s.environment", group);
 
