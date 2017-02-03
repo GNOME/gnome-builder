@@ -239,16 +239,16 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
       ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
     }
 
-#ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *str = NULL;
     g_autofree gchar *env = NULL;
+
     str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
     env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
-    IDE_TRACE_MSG ("Launching '%s' from directory %s with environment %s %s parent environment",
-                   str, priv->cwd, env, priv->clear_env ? "clearing" : "inheriting");
+
+    g_debug ("Launching '%s' from directory '%s' with environment %s %s parent environment",
+             str, priv->cwd, env, priv->clear_env ? "clearing" : "inheriting");
   }
-#endif
 
   launcher = g_subprocess_launcher_new (priv->flags);
   g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
