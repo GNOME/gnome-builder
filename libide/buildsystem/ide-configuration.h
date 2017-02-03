@@ -76,8 +76,6 @@ IdeEnvironment       *ide_configuration_get_environment      (IdeConfiguration  
 IdeConfiguration     *ide_configuration_duplicate            (IdeConfiguration  *self);
 IdeConfiguration     *ide_configuration_snapshot             (IdeConfiguration  *self);
 guint                 ide_configuration_get_sequence         (IdeConfiguration  *self);
-IdeBuildCommandQueue *ide_configuration_get_prebuild         (IdeConfiguration  *self);
-IdeBuildCommandQueue *ide_configuration_get_postbuild        (IdeConfiguration  *self);
 const gchar          *ide_configuration_get_app_id           (IdeConfiguration  *self);
 void                  ide_configuration_set_app_id           (IdeConfiguration  *self,
                                                               const gchar       *app_id);
