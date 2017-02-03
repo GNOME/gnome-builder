@@ -136,6 +136,7 @@ G_BEGIN_DECLS
 #include "tree/ide-tree-node.h"
 #include "tree/ide-tree-types.h"
 #include "tree/ide-tree.h"
+#include "util/ide-directory-reaper.h"
 #include "util/ide-file-manager.h"
 #include "util/ide-flatpak.h"
 #include "util/ide-glib.h"

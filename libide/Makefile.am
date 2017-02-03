@@ -158,6 +158,7 @@ libide_1_0_la_public_headers =                            \
 	tree/ide-tree.h                                   \
 	util/ide-cairo.h                                  \
 	util/ide-dnd.h                                    \
+	util/ide-directory-reaper.h                       \
 	util/ide-file-manager.h                           \
 	util/ide-flatpak.h                                \
 	util/ide-glib.h                                   \
@@ -331,6 +332,7 @@ libide_1_0_la_public_sources =                            \
 	tree/ide-tree.c                                   \
 	util/ide-cairo.c                                  \
 	util/ide-dnd.c                                    \
+	util/ide-directory-reaper.c                       \
 	util/ide-file-manager.c                           \
 	util/ide-flatpak.c                                \
 	util/ide-glib.c                                   \
