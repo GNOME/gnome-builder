@@ -89,6 +89,9 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # can be navigated to quickly.
         self.mine(file, prepend=True)
 
+    def _is_ignored_pattern(self, name):
+        return name.endswith('.m4') or name.endswith('.in')
+
     def _post_from_main(self, args):
         items, prepend = args
 
@@ -97,7 +100,7 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
 
         for item in items:
             file = item.props.file
-            if vcs.is_ignored(file) or file.get_basename().endswith('.m4'):
+            if vcs.is_ignored(file) or self._is_ignored_pattern(file.get_basename()):
                 continue
             self.panel.add_item(item, prepend=prepend)
 
