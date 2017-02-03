@@ -6,6 +6,7 @@ SUBDIRS = \
 	c-pack \
 	cargo \
 	clang \
+	cmake \
 	color-picker \
 	command-bar \
 	comment-code \

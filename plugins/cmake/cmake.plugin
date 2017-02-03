@@ -1,0 +1,11 @@
+[Plugin]
+Module=cmake_plugin
+Loader=python3
+Name=CMake
+Description=Provides integration with the CMake build system
+Authors=Christian Hergert <chergert@redhat.com>
+Copyright=Copyright © 2016 Christian Hergert
+Builtin=true
+Hidden=false
+X-Project-File-Filter-Pattern=CMakeLists.txt
+X-Project-File-Filter-Name=CMake Project (CMakeLists.txt)

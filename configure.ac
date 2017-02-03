@@ -279,6 +279,7 @@ m4_include([plugins/c-pack/configure.ac])
 m4_include([plugins/cargo/configure.ac])
 m4_include([plugins/clang/configure.ac])
 m4_include([plugins/color-picker/configure.ac])
+m4_include([plugins/cmake/configure.ac])
 m4_include([plugins/command-bar/configure.ac])
 m4_include([plugins/comment-code/configure.ac])
 m4_include([plugins/create-project/configure.ac])
@@ -587,6 +588,7 @@ echo "  Beautifier  .......................... : ${enable_beautifier_plugin}"
 echo "  C Language Pack ...................... : ${enable_c_pack_plugin}"
 echo "  Cargo ................................ : ${enable_cargo_plugin}"
 echo "  Clang ................................ : ${enable_clang_plugin}"
+echo "  CMake ................................ : ${enable_cmake_plugin}"
 echo "  Color picker.......................... : ${enable_color_picker_plugin}"
 echo "  Command Bar .......................... : ${enable_command_bar_plugin}"
 echo "  Comment Code.......................... : ${enable_comment_code_plugin}"
