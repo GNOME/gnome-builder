@@ -23,7 +23,7 @@
 
 #include "ide-object.h"
 
-#include "buildsystem/ide-builder.h"
+#include "buildsystem/ide-build-pipeline.h"
 
 G_BEGIN_DECLS
 
@@ -31,27 +31,36 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBuildManager, ide_build_manager, IDE, BUILD_MANAGER, IdeObject)
 
-gboolean   ide_build_manager_get_busy            (IdeBuildManager       *self);
-gchar     *ide_build_manager_get_message         (IdeBuildManager       *self);
-GDateTime *ide_build_manager_get_last_build_time (IdeBuildManager       *self);
-GTimeSpan  ide_build_manager_get_running_time    (IdeBuildManager       *self);
-void       ide_build_manager_cancel              (IdeBuildManager       *self);
-void       ide_build_manager_build_async         (IdeBuildManager       *self,
-                                                  IdeBuildTarget        *build_target,
-                                                  IdeBuilderBuildFlags   build_flags,
-                                                  GCancellable          *cancellable,
-                                                  GAsyncReadyCallback    callback,
-                                                  gpointer               user_data);
-gboolean   ide_build_manager_build_finish        (IdeBuildManager       *self,
-                                                  GAsyncResult          *result,
-                                                  GError               **error);
-void       ide_build_manager_install_async       (IdeBuildManager       *self,
-                                                  GCancellable          *cancellable,
-                                                  GAsyncReadyCallback    callback,
-                                                  gpointer               user_data);
-gboolean   ide_build_manager_install_finish      (IdeBuildManager       *self,
-                                                  GAsyncResult          *result,
-                                                  GError               **error);
+gboolean          ide_build_manager_get_busy            (IdeBuildManager       *self);
+gchar            *ide_build_manager_get_message         (IdeBuildManager       *self);
+GDateTime        *ide_build_manager_get_last_build_time (IdeBuildManager       *self);
+GTimeSpan         ide_build_manager_get_running_time    (IdeBuildManager       *self);
+void              ide_build_manager_cancel              (IdeBuildManager       *self);
+IdeBuildPipeline *ide_build_manager_get_pipeline        (IdeBuildManager       *self);
+void              ide_build_manager_rebuild_async       (IdeBuildManager       *self,
+                                                         IdeBuildPhase          phase,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+gboolean          ide_build_manager_rebuild_finish      (IdeBuildManager       *self,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
+void              ide_build_manager_execute_async       (IdeBuildManager       *self,
+                                                         IdeBuildPhase          phase,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+gboolean          ide_build_manager_execute_finish      (IdeBuildManager       *self,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
+void              ide_build_manager_clean_async         (IdeBuildManager       *self,
+                                                         IdeBuildPhase          phase,
+                                                         GCancellable          *cancellable,
+                                                         GAsyncReadyCallback    callback,
+                                                         gpointer               user_data);
+gboolean          ide_build_manager_clean_finish        (IdeBuildManager       *self,
+                                                         GAsyncResult          *result,
+                                                         GError               **error);
 
 G_END_DECLS
 

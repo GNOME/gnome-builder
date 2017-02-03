@@ -40,16 +40,12 @@ libide_1_0_la_public_headers =                            \
 	buildsystem/ide-build-stage-launcher.h            \
 	buildsystem/ide-build-stage-mkdirs.h              \
 	buildsystem/ide-build-stage-transfer.h            \
-	buildsystem/ide-build-result-addin.h              \
-	buildsystem/ide-build-result.h                    \
 	buildsystem/ide-build-system.h                    \
 	buildsystem/ide-build-target.h                    \
-	buildsystem/ide-builder.h                         \
 	buildsystem/ide-configuration-manager.h           \
 	buildsystem/ide-configuration.h                   \
 	buildsystem/ide-environment-variable.h            \
 	buildsystem/ide-environment.h                     \
-	buildsystem/ide-simple-builder.h                  \
 	devices/ide-device-manager.h                      \
 	devices/ide-device-provider.h                     \
 	devices/ide-device.h                              \
@@ -215,16 +211,12 @@ libide_1_0_la_public_sources =                            \
 	buildsystem/ide-build-stage-launcher.c            \
 	buildsystem/ide-build-stage-mkdirs.c              \
 	buildsystem/ide-build-stage-transfer.c            \
-	buildsystem/ide-build-result-addin.c              \
-	buildsystem/ide-build-result.c                    \
 	buildsystem/ide-build-system.c                    \
 	buildsystem/ide-build-target.c                    \
-	buildsystem/ide-builder.c                         \
 	buildsystem/ide-configuration-manager.c           \
 	buildsystem/ide-configuration.c                   \
 	buildsystem/ide-environment-variable.c            \
 	buildsystem/ide-environment.c                     \
-	buildsystem/ide-simple-builder.c                  \
 	devices/ide-device-manager.c                      \
 	devices/ide-device-provider.c                     \
 	devices/ide-device.c                              \
@@ -621,7 +613,6 @@ glib_enum_headers =                        \
 	buffers/ide-buffer.h               \
 	buildsystem/ide-build-log.h        \
 	buildsystem/ide-build-pipeline.h   \
-	buildsystem/ide-build-result.h     \
 	devices/ide-device.h               \
 	diagnostics/ide-diagnostic.h       \
 	doap/ide-doap.h                    \

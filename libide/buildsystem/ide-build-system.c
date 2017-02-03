@@ -19,13 +19,13 @@
 #define G_LOG_DOMAIN "ide-build-system"
 
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-object.h"
 
 #include "buildsystem/ide-build-system.h"
-#include "buildsystem/ide-builder.h"
 #include "buildsystem/ide-configuration.h"
-#include "buildsystem/ide-configuration-manager.h"
 #include "files/ide-file.h"
+#include "projects/ide-project.h"
 
 G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
 
@@ -53,27 +53,61 @@ ide_build_system_get_priority (IdeBuildSystem *self)
   return 0;
 }
 
-static IdeBuilder *
-ide_build_system_real_get_builder (IdeBuildSystem    *self,
-                                   IdeConfiguration  *configuration,
-                                   GError           **error)
+static void
+ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,
+                                             IdeFile             *file,
+                                             GCancellable        *cancellable,
+                                             GAsyncReadyCallback  callback,
+                                             gpointer             user_data)
 {
-  g_assert (IDE_IS_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_build_system_real_get_build_flags_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Fetching build flags is not supported");
+}
 
-  g_set_error (error,
-               G_IO_ERROR,
-               G_IO_ERROR_NOT_SUPPORTED,
-               "%s() is not supported on %s build system.",
-               G_STRFUNC, G_OBJECT_TYPE_NAME (self));
+static gchar **
+ide_build_system_real_get_build_flags_finish (IdeBuildSystem  *self,
+                                              GAsyncResult    *result,
+                                              GError         **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
 
-  return NULL;
+static void
+ide_build_system_real_get_build_targets_async (IdeBuildSystem      *self,
+                                               GCancellable        *cancellable,
+                                               GAsyncReadyCallback  callback,
+                                               gpointer             user_data)
+{
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_build_system_real_get_build_targets_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Fetching build targets is not supported");
+}
+
+static GPtrArray *
+ide_build_system_real_get_build_targets_finish (IdeBuildSystem  *self,
+                                                GAsyncResult    *result,
+                                                GError         **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
 ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
-  iface->get_builder = ide_build_system_real_get_builder;
+  iface->get_build_flags_async = ide_build_system_real_get_build_flags_async;
+  iface->get_build_flags_finish = ide_build_system_real_get_build_flags_finish;
+  iface->get_build_targets_finish = ide_build_system_real_get_build_targets_finish;
+  iface->get_build_targets_async = ide_build_system_real_get_build_targets_async;
+  iface->get_build_targets_finish = ide_build_system_real_get_build_targets_finish;
 
   properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
@@ -161,81 +195,6 @@ ide_build_system_new_finish (GAsyncResult  *result,
   return ret ? IDE_BUILD_SYSTEM (ret) : NULL;
 }
 
-/**
- * ide_build_system_get_builder:
- * @system: The #IdeBuildSystem to perform the build.
- * @configuration: An #IdeConfiguration.
- *
- * This function returns an #IdeBuilder that can be used to perform a
- * build of the project using the configuration specified.
- *
- * See ide_builder_build_async() for more information.
- *
- * Returns: (transfer full): An #IdeBuilder or %NULL and @error is set.
- */
-IdeBuilder *
-ide_build_system_get_builder (IdeBuildSystem    *system,
-                              IdeConfiguration  *configuration,
-                              GError           **error)
-{
-  IdeBuilder *ret;
-
-  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (system), NULL);
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (configuration), NULL);
-
-  ret = IDE_BUILD_SYSTEM_GET_IFACE (system)->get_builder (system, configuration, error);
-
-  if (ret != NULL)
-    {
-      IdeContext *context;
-
-      context = ide_object_get_context (IDE_OBJECT (system));
-      ide_context_hold_for_object (context, ret);
-    }
-
-  return ret;
-}
-
-static IdeBuilder *
-get_default_builder (IdeBuildSystem  *self,
-                     GError         **error)
-{
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
-  IdeContext *context;
-
-  g_assert (IDE_IS_BUILD_SYSTEM (self));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  config_manager = ide_context_get_configuration_manager (context);
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (config_manager));
-
-  config = ide_configuration_manager_get_current (config_manager);
-  g_assert (IDE_IS_CONFIGURATION (config));
-
-  return ide_build_system_get_builder (IDE_BUILD_SYSTEM (self), config, error);
-}
-
-static void
-ide_build_system_get_build_flags_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
-{
-  IdeBuilder *builder = (IdeBuilder *)object;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  g_auto(GStrv) flags = NULL;
-
-  g_assert (IDE_IS_BUILDER (builder));
-
-  if (NULL == (flags = ide_builder_get_build_flags_finish (builder, result, &error)))
-    g_task_return_error (task, g_steal_pointer (&error));
-  else
-    g_task_return_pointer (task, g_steal_pointer (&flags), (GDestroyNotify)g_strfreev);
-}
-
 void
 ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
                                         IdeFile             *file,
@@ -243,28 +202,15 @@ ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
                                         GAsyncReadyCallback  callback,
                                         gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(GError) error = NULL;
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
   g_return_if_fail (IDE_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_system_get_build_flags_async);
+  IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_async (self, file, cancellable, callback, user_data);
 
-  if (NULL == (builder = get_default_builder (self, &error)))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  ide_builder_get_build_flags_async (builder,
-                                     file,
-                                     cancellable,
-                                     ide_build_system_get_build_flags_cb,
-                                     g_steal_pointer (&task));
+  IDE_EXIT;
 }
 
 /**
@@ -277,28 +223,16 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
                                          GAsyncResult    *result,
                                          GError         **error)
 {
+  gchar **ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
-}
+  ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_finish (self, result, error);
 
-static void
-ide_build_system_get_build_targets_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
-{
-  IdeBuilder *builder = (IdeBuilder *)object;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GPtrArray) targets = NULL;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_BUILDER (builder));
-
-  if (NULL == (targets = ide_builder_get_build_targets_finish (builder, result, &error)))
-    g_task_return_error (task, g_steal_pointer (&error));
-  else
-    g_task_return_pointer (task, g_steal_pointer (&targets), (GDestroyNotify)g_ptr_array_unref);
+  IDE_RETURN (ret);
 }
 
 void
@@ -307,26 +241,14 @@ ide_build_system_get_build_targets_async (IdeBuildSystem      *self,
                                           GAsyncReadyCallback  callback,
                                           gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(IdeBuilder) builder = NULL;
-  g_autoptr(GError) error = NULL;
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_system_get_build_targets_async);
+  IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_targets_async (self, cancellable, callback, user_data);
 
-  if (NULL == (builder = get_default_builder (self, &error)))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  ide_builder_get_build_targets_async (builder,
-                                       cancellable,
-                                       ide_build_system_get_build_targets_cb,
-                                       g_steal_pointer (&task));
+  IDE_EXIT;
 }
 
 /**
@@ -340,8 +262,58 @@ ide_build_system_get_build_targets_finish (IdeBuildSystem  *self,
                                            GAsyncResult    *result,
                                            GError         **error)
 {
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_targets_finish (self, result, error);
+
+  IDE_RETURN (ret);
+}
+
+gchar *
+ide_build_system_get_builddir (IdeBuildSystem   *self,
+                               IdeConfiguration *configuration)
+{
+  gchar *ret = NULL;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (configuration), NULL);
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir)
+    ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir (self, configuration);
+
+  if (ret == NULL)
+    {
+      g_autofree gchar *name = NULL;
+      const gchar *project_id;
+      const gchar *config_id;
+      const gchar *device_id;
+      const gchar *runtime_id;
+      IdeContext *context;
+      IdeProject *project;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      project = ide_context_get_project (context);
+      project_id = ide_project_get_id (project);
+      config_id = ide_configuration_get_id (configuration);
+      device_id = ide_configuration_get_device_id (configuration);
+      runtime_id = ide_configuration_get_runtime_id (configuration);
+
+      name = g_strdup_printf ("%s-%s-%s", config_id, device_id, runtime_id);
+
+      ret = g_build_filename (g_get_user_cache_dir (),
+                              "gnome-builder",
+                              "builds",
+                              project_id,
+                              name,
+                              NULL);
+    }
+
+  IDE_RETURN (ret);
 }

@@ -382,26 +382,27 @@ ide_run_manager_install_cb (GObject      *object,
 {
   IdeBuildManager *build_manager = (IdeBuildManager *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeRunManager *self;
   IdeBuildTarget *build_target;
   GCancellable *cancellable;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
   g_assert (G_IS_TASK (task));
 
-  if (!ide_build_manager_build_finish (build_manager, result, &error))
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
   self = g_task_get_source_object (task);
   g_assert (IDE_IS_RUN_MANAGER (self));
 
+  if (!ide_build_manager_execute_finish (build_manager, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
   build_target = ide_run_manager_get_build_target (self);
+
   if (build_target == NULL)
     {
       cancellable = g_task_get_cancellable (task);
@@ -474,7 +475,8 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_build_manager_install_async (build_manager,
+  ide_build_manager_execute_async (build_manager,
+                                   IDE_BUILD_PHASE_INSTALL,
                                    g_task_get_cancellable (task),
                                    ide_run_manager_install_cb,
                                    g_object_ref (task));

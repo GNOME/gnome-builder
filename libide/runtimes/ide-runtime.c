@@ -21,7 +21,6 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
-#include "buildsystem/ide-builder.h"
 #include "buildsystem/ide-configuration.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
@@ -42,87 +41,6 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
-
-static void
-ide_runtime_real_prebuild_async (IdeRuntime          *self,
-                                 IdeBuildResult      *build_result,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
-}
-
-static gboolean
-ide_runtime_real_prebuild_finish (IdeRuntime    *self,
-                                  GAsyncResult  *result,
-                                  GError       **error)
-{
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (G_IS_TASK (result));
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-static void
-ide_runtime_real_postbuild_async (IdeRuntime          *self,
-                                  IdeBuildResult      *build_result,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
-}
-
-static gboolean
-ide_runtime_real_postbuild_finish (IdeRuntime    *self,
-                                   GAsyncResult  *result,
-                                   GError       **error)
-{
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (G_IS_TASK (result));
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-static void
-ide_runtime_real_postinstall_async (IdeRuntime          *self,
-                                    IdeBuildResult      *build_result,
-                                    GCancellable        *cancellable,
-                                    GAsyncReadyCallback  callback,
-                                    gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
-}
-
-static gboolean
-ide_runtime_real_postinstall_finish (IdeRuntime    *self,
-                                     GAsyncResult  *result,
-                                     GError       **error)
-{
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (G_IS_TASK (result));
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
 
 static IdeSubprocessLauncher *
 ide_runtime_real_create_launcher (IdeRuntime  *self,
@@ -337,12 +255,6 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
   object_class->get_property = ide_runtime_get_property;
   object_class->set_property = ide_runtime_set_property;
 
-  klass->prebuild_async = ide_runtime_real_prebuild_async;
-  klass->prebuild_finish = ide_runtime_real_prebuild_finish;
-  klass->postbuild_async = ide_runtime_real_postbuild_async;
-  klass->postbuild_finish = ide_runtime_real_postbuild_finish;
-  klass->postinstall_async = ide_runtime_real_postinstall_async;
-  klass->postinstall_finish = ide_runtime_real_postinstall_finish;
   klass->create_launcher = ide_runtime_real_create_launcher;
   klass->create_runner = ide_runtime_real_create_runner;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
@@ -440,83 +352,12 @@ ide_runtime_new (IdeContext  *context,
                        NULL);
 }
 
-void
-ide_runtime_prebuild_async (IdeRuntime          *self,
-                            IdeBuildResult      *build_result,
-                            GCancellable        *cancellable,
-                            GAsyncReadyCallback  callback,
-                            gpointer             user_data)
-{
-  g_return_if_fail (IDE_IS_RUNTIME (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_RUNTIME_GET_CLASS (self)->prebuild_async (self, build_result, cancellable, callback, user_data);
-}
-
-gboolean
-ide_runtime_prebuild_finish (IdeRuntime    *self,
-                             GAsyncResult  *result,
-                             GError       **error)
-{
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), FALSE);
-
-  return IDE_RUNTIME_GET_CLASS (self)->prebuild_finish (self, result, error);
-}
-
-void
-ide_runtime_postbuild_async (IdeRuntime          *self,
-                             IdeBuildResult      *build_result,
-                             GCancellable        *cancellable,
-                             GAsyncReadyCallback  callback,
-                             gpointer             user_data)
-{
-  g_return_if_fail (IDE_IS_RUNTIME (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_RUNTIME_GET_CLASS (self)->postbuild_async (self, build_result, cancellable, callback, user_data);
-}
-
-gboolean
-ide_runtime_postbuild_finish (IdeRuntime    *self,
-                              GAsyncResult  *result,
-                              GError       **error)
-{
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), FALSE);
-
-  return IDE_RUNTIME_GET_CLASS (self)->postbuild_finish (self, result, error);
-}
-
-void
-ide_runtime_postinstall_async (IdeRuntime          *self,
-                               IdeBuildResult      *build_result,
-                               GCancellable        *cancellable,
-                               GAsyncReadyCallback  callback,
-                               gpointer             user_data)
-{
-  g_return_if_fail (IDE_IS_RUNTIME (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_RUNTIME_GET_CLASS (self)->postinstall_async (self, build_result, cancellable, callback, user_data);
-}
-
-gboolean
-ide_runtime_postinstall_finish (IdeRuntime    *self,
-                                GAsyncResult  *result,
-                                GError       **error)
-{
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), FALSE);
-
-  return IDE_RUNTIME_GET_CLASS (self)->postinstall_finish (self, result, error);
-}
-
 /**
  * ide_runtime_create_launcher:
  *
  * Creates a launcher for the runtime.
  *
  * This can be used to execute a command within a runtime.
- * If you are doing a build, you probably want to ensure you call
- * ide_runtime_prebuild_async() before using the launcher.
  *
  * It is important that this function can be run from a thread without
  * side effects.
