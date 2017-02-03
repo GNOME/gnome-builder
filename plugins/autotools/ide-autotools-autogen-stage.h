@@ -1,6 +1,6 @@
-/* ide-autotools-builder.h
+/* ide-autotools-autogen-stage.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,20 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_AUTOTOOLS_BUILDER_H
-#define IDE_AUTOTOOLS_BUILDER_H
+#ifndef IDE_AUTOTOOLS_AUTOGEN_STAGE_H
+#define IDE_AUTOTOOLS_AUTOGEN_STAGE_H
 
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_AUTOTOOLS_BUILDER (ide_autotools_builder_get_type())
+#define IDE_TYPE_AUTOTOOLS_AUTOGEN_STAGE (ide_autotools_autogen_stage_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeAutotoolsBuilder, ide_autotools_builder, IDE, AUTOTOOLS_BUILDER, IdeBuilder)
-
-GFile    *ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder  *self);
-gboolean  ide_autotools_builder_get_needs_bootstrap (IdeAutotoolsBuilder  *self);
+G_DECLARE_FINAL_TYPE (IdeAutotoolsAutogenStage, ide_autotools_autogen_stage, IDE, AUTOTOOLS_AUTOGEN_STAGE, IdeBuildStage)
 
 G_END_DECLS
 
-#endif /* IDE_AUTOTOOLS_BUILDER_H */
+#endif /* IDE_AUTOTOOLS_AUTOGEN_STAGE_H */

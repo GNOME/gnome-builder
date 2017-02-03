@@ -38,6 +38,10 @@ ide_autotools_application_addin_load (IdeApplicationAddin *addin,
   g_assert (IDE_IS_AUTOTOOLS_APPLICATION_ADDIN (addin));
   g_assert (IDE_IS_APPLICATION (application));
 
+  /*
+   * TODO: Move this to an IdeDirectoryReaper
+   */
+
   path = g_build_filename (g_get_user_cache_dir (),
                            "gnome-builder",
                            "makecache",

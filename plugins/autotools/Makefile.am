@@ -8,14 +8,16 @@ libautotools_plugin_la_SOURCES = \
 	autotools-plugin.c \
 	ide-autotools-application-addin.c \
 	ide-autotools-application-addin.h \
-	ide-autotools-builder.c \
-	ide-autotools-builder.h \
+	ide-autotools-autogen-stage.c \
+	ide-autotools-autogen-stage.h \
 	ide-autotools-build-system.c \
 	ide-autotools-build-system.h \
 	ide-autotools-build-target.c \
 	ide-autotools-build-target.h \
-	ide-autotools-build-task.c \
-	ide-autotools-build-task.h \
+	ide-autotools-makecache-stage.c \
+	ide-autotools-makecache-stage.h \
+	ide-autotools-pipeline-addin.c \
+	ide-autotools-pipeline-addin.h \
 	ide-autotools-project-miner.c \
 	ide-autotools-project-miner.h \
 	ide-makecache.c \

@@ -25,7 +25,7 @@
 #include <ide.h>
 
 #include "ide-autotools-build-system.h"
-#include "ide-autotools-builder.h"
+#include "ide-autotools-makecache-stage.h"
 #include "ide-makecache.h"
 
 struct _IdeAutotoolsBuildSystem
@@ -62,30 +62,6 @@ ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self)
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self), NULL);
 
   return self->tarball_name;
-}
-
-static IdeBuilder *
-ide_autotools_build_system_get_builder (IdeBuildSystem    *build_system,
-                                        IdeConfiguration  *configuration,
-                                        GError           **error)
-{
-  IdeBuilder *ret;
-  IdeContext *context;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  context = ide_object_get_context (IDE_OBJECT (build_system));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  ret = g_object_new (IDE_TYPE_AUTOTOOLS_BUILDER,
-                      "context", context,
-                      "configuration", configuration,
-                      NULL);
-
-  IDE_RETURN (ret);
 }
 
 static gboolean
@@ -323,6 +299,333 @@ ide_autotools_build_system_get_priority (IdeBuildSystem *system)
 }
 
 static void
+find_makecache_stage (gpointer data,
+                      gpointer user_data)
+{
+  IdeMakecache **makecache = user_data;
+  IdeBuildStage *stage = data;
+
+  if (*makecache != NULL)
+    return;
+
+  if (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (stage))
+    *makecache = ide_autotools_makecache_stage_get_makecache (IDE_AUTOTOOLS_MAKECACHE_STAGE (stage));
+}
+
+static void
+ide_autotools_build_system_get_file_flags_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdeMakecache *makecache = (IdeMakecache *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) flags = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAKECACHE (makecache));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  flags = ide_makecache_get_file_flags_finish (makecache, result, &error);
+
+  if (flags == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task, g_steal_pointer (&flags), (GDestroyNotify)g_strfreev);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
+                                                       GAsyncResult *result,
+                                                       gpointer      user_data)
+{
+  IdeBuildManager *build_manager = (IdeBuildManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeMakecache *makecache = NULL;
+  IdeBuildPipeline *pipeline;
+  GCancellable *cancellable;
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  file = g_task_get_task_data (task);
+  cancellable = g_task_get_cancellable (task);
+
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (!ide_build_manager_execute_finish (build_manager, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  /*
+   * Locate our makecache by finding the makecache stage (which should have
+   * successfully executed by now) and get makecache object. Then we can
+   * locate the build flags for the file (which makecache will translate
+   * into the appropriate build target).
+   */
+
+  ide_build_pipeline_foreach_stage (pipeline, find_makecache_stage, &makecache);
+
+  if (makecache != NULL)
+    {
+      ide_makecache_get_file_flags_async (makecache,
+                                          file,
+                                          cancellable,
+                                          ide_autotools_build_system_get_file_flags_cb,
+                                          g_steal_pointer (&task));
+      IDE_EXIT;
+    }
+
+  /*
+   * We failed to locate anything, so just return an empty array of
+   * of flags.
+   */
+
+  g_task_return_pointer (task, g_new0 (gchar *, 1), g_free);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
+                                                  IdeFile             *file,
+                                                  GCancellable        *cancellable,
+                                                  GAsyncReadyCallback  callback,
+                                                  gpointer             user_data)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_system_get_build_flags_async);
+  g_task_set_task_data (task, g_object_ref (ide_file_get_file (file)), g_object_unref);
+
+  /*
+   * To get the build flags for the file, we first need to get the makecache
+   * for the current build pipeline. That requires advancing the pipeline to
+   * at least the CONFIGURE stage so that our CONFIGURE|AFTER step has executed
+   * to generate the Makecache file in $builddir. With that, we can load a new
+   * IdeMakecache (if necessary) and scan the file for build flags.
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+
+  ide_build_manager_execute_async (build_manager,
+                                   IDE_BUILD_PHASE_CONFIGURE,
+                                   cancellable,
+                                   ide_autotools_build_system_get_build_flags_execute_cb,
+                                   g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static gchar **
+ide_autotools_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
+                                                   GAsyncResult    *result,
+                                                   GError         **error)
+{
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+ide_autotools_build_system_get_build_targets_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeMakecache *makecache = (IdeMakecache *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GPtrArray) ret = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAKECACHE (makecache));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  ret = ide_makecache_get_build_targets_finish (makecache, result, &error);
+
+  if (ret == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_system_get_build_targets_execute_cb (GObject      *object,
+                                                         GAsyncResult *result,
+                                                         gpointer      user_data)
+{
+  IdeBuildManager *build_manager = (IdeBuildManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) builddir_file = NULL;
+  IdeMakecache *makecache = NULL;
+  IdeBuildPipeline *pipeline;
+  GCancellable *cancellable;
+  const gchar *builddir;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (!ide_build_manager_execute_finish (build_manager, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  builddir = ide_build_pipeline_get_builddir (pipeline);
+  builddir_file = g_file_new_for_path (builddir);
+
+  /*
+   * Locate our makecache by finding the makecache stage (which should have
+   * successfully executed by now) and get makecache object. Then we can
+   * locate the build flags for the file (which makecache will translate
+   * into the appropriate build target).
+   */
+
+  ide_build_pipeline_foreach_stage (pipeline, find_makecache_stage, &makecache);
+
+  if (makecache != NULL)
+    {
+      ide_makecache_get_build_targets_async (makecache,
+                                             builddir_file,
+                                             cancellable,
+                                             ide_autotools_build_system_get_build_targets_cb,
+                                             g_steal_pointer (&task));
+      IDE_EXIT;
+    }
+
+  /*
+   * We failed to locate anything, so just return an empty array of
+   * of flags.
+   */
+
+  g_task_return_pointer (task, g_ptr_array_new (), (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_system_get_build_targets_async (IdeBuildSystem      *build_system,
+                                                    GCancellable        *cancellable,
+                                                    GAsyncReadyCallback  callback,
+                                                    gpointer             user_data)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_system_get_build_targets_async);
+
+  /*
+   * To get the build targets we first need to get the makecache for the
+   * current build pipeline. That requires advancing the pipeline to at least
+   * the CONFIGURE stage so that our CONFIGURE|AFTER step has executed to
+   * generate the Makecache file in $builddir.
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+
+  ide_build_manager_execute_async (build_manager,
+                                   IDE_BUILD_PHASE_CONFIGURE,
+                                   cancellable,
+                                   ide_autotools_build_system_get_build_targets_execute_cb,
+                                   g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static GPtrArray *
+ide_autotools_build_system_get_build_targets_finish (IdeBuildSystem  *build_system,
+                                                     GAsyncResult    *result,
+                                                     GError         **error)
+{
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static gchar *
+ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
+                                         IdeConfiguration *configuration)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
+  g_autoptr(GFile) makefile = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  /*
+   * If there is a Makefile in the build directory, then the project has been
+   * configured in-tree, and we must override the builddir to perform in-tree
+   * builds.
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  if (!g_file_is_native (workdir))
+    return NULL;
+
+  makefile = g_file_get_child (workdir, "Makefile");
+
+  if (g_file_query_exists (makefile, NULL))
+    return g_file_get_path (workdir);
+
+  return NULL;
+}
+
+static void
 ide_autotools_build_system_finalize (GObject *object)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
@@ -381,7 +684,11 @@ static void
 build_system_iface_init (IdeBuildSystemInterface *iface)
 {
   iface->get_priority = ide_autotools_build_system_get_priority;
-  iface->get_builder = ide_autotools_build_system_get_builder;
+  iface->get_build_flags_async = ide_autotools_build_system_get_build_flags_async;
+  iface->get_build_flags_finish = ide_autotools_build_system_get_build_flags_finish;
+  iface->get_builddir = ide_autotools_build_system_get_builddir;
+  iface->get_build_targets_async = ide_autotools_build_system_get_build_targets_async;
+  iface->get_build_targets_finish = ide_autotools_build_system_get_build_targets_finish;
 }
 
 static void
