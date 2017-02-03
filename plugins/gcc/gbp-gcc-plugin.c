@@ -19,12 +19,10 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
-#include "gbp-gcc-build-result-addin.h"
+#include "gbp-gcc-pipeline-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUILD_RESULT_ADDIN,
-                                              GBP_TYPE_GCC_BUILD_RESULT_ADDIN);
+  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_GCC_PIPELINE_ADDIN);
 }

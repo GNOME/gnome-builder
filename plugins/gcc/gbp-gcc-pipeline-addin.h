@@ -1,6 +1,6 @@
-/* gbp-gcc-build-result-addin.h
+/* gbp-gcc-pipeline-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_GCC_BUILD_RESULT_ADDIN_H
-#define GBP_GCC_BUILD_RESULT_ADDIN_H
+#ifndef GBP_GCC_PIPELINE_ADDIN_H
+#define GBP_GCC_PIPELINE_ADDIN_H
 
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GCC_BUILD_RESULT_ADDIN (gbp_gcc_build_result_addin_get_type())
+#define GBP_TYPE_GCC_PIPELINE_ADDIN (gbp_gcc_pipeline_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGccBuildResultAddin, gbp_gcc_build_result_addin, GBP, GCC_BUILD_RESULT_ADDIN, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpGccPipelineAddin, gbp_gcc_pipeline_addin, GBP, GCC_PIPELINE_ADDIN, IdeObject)
 
 G_END_DECLS
 
-#endif /* GBP_GCC_BUILD_RESULT_ADDIN_H */
+#endif /* GBP_GCC_PIPELINE_ADDIN_H */
