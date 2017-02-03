@@ -33,8 +33,11 @@ struct _IdeTransferManager
   GPtrArray *transfers;
 };
 
-static void list_model_iface_init     (GListModelInterface *iface);
-static void ide_transfer_manager_pump (IdeTransferManager  *self);
+static void list_model_iface_init                 (GListModelInterface *iface);
+static void ide_transfer_manager_pump             (IdeTransferManager  *self);
+static void ide_transfer_manager_execute_complete (IdeTransferManager *self,
+                                                   GTask              *task,
+                                                   const GError       *reason);
 
 G_DEFINE_TYPE_EXTENDED (IdeTransferManager, ide_transfer_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
@@ -131,9 +134,11 @@ ide_transfer_manager_execute_cb (GObject      *object,
 
       context = ide_object_get_context (IDE_OBJECT (self));
       ide_context_warning (context, "%s", error->message);
-    }
 
-  g_signal_emit (self, signals [TRANSFER_COMPLETED], 0, transfer);
+      g_signal_emit (self, signals [TRANSFER_FAILED], 0, transfer, error);
+    }
+  else
+    g_signal_emit (self, signals [TRANSFER_COMPLETED], 0, transfer);
 
   ide_transfer_manager_pump (self);
 
@@ -363,6 +368,23 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
                   0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, IDE_TYPE_TRANSFER);
+
+  /**
+   * IdeTransferManager::transfer-failed:
+   * @self: An #IdeTransferManager
+   * @transfer: An #IdeTransfer
+   * @reason: (in): The reason for the failure.
+   *
+   * This signal is emitted when a transfer has failed to complete
+   * successfully.
+   */
+  signals [TRANSFER_FAILED] =
+    g_signal_new ("transfer-failed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 2, IDE_TYPE_TRANSFER, G_TYPE_ERROR);
 }
 
 static void
@@ -523,4 +545,115 @@ ide_transfer_manager_get_progress (IdeTransferManager *self)
     }
 
   return total / (gdouble)self->transfers->len;
+}
+
+static void
+ide_transfer_manager_execute_transfer_completed (IdeTransferManager *self,
+                                                 IdeTransfer        *transfer,
+                                                 GTask              *task)
+{
+  IdeTransfer *task_data;
+
+  g_assert (IDE_IS_TRANSFER_MANAGER (self));
+  g_assert (IDE_IS_TRANSFER (transfer));
+  g_assert (G_IS_TASK (task));
+
+  task_data = g_task_get_task_data (task);
+
+  if (task_data == transfer)
+    ide_transfer_manager_execute_complete (self, task, NULL);
+}
+
+static void
+ide_transfer_manager_execute_transfer_failed (IdeTransferManager *self,
+                                              IdeTransfer        *transfer,
+                                              const GError       *reason,
+                                              GTask              *task)
+{
+  IdeTransfer *task_data;
+
+  g_assert (IDE_IS_TRANSFER_MANAGER (self));
+  g_assert (IDE_IS_TRANSFER (transfer));
+  g_assert (reason != NULL);
+  g_assert (G_IS_TASK (task));
+
+  task_data = g_task_get_task_data (task);
+
+  if (task_data == transfer)
+    ide_transfer_manager_execute_complete (self, task, reason);
+}
+
+static void
+ide_transfer_manager_execute_complete (IdeTransferManager *self,
+                                       GTask              *task,
+                                       const GError       *reason)
+{
+  g_assert (IDE_IS_TRANSFER_MANAGER (self));
+  g_assert (G_IS_TASK (task));
+
+  g_signal_handlers_disconnect_by_func (self,
+                                        G_CALLBACK (ide_transfer_manager_execute_transfer_completed),
+                                        task);
+
+  g_signal_handlers_disconnect_by_func (self,
+                                        G_CALLBACK (ide_transfer_manager_execute_transfer_failed),
+                                        task);
+
+  if (reason != NULL)
+    g_task_return_error (task, g_error_copy (reason));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+/**
+ * ide_transfer_manager_execute_async:
+ *
+ * This is a convenience function that will queue @transfer into the transfer
+ * manager and execute callback upon completion of the transfer. The success
+ * or failure #GError will be propagated to the caller via
+ * ide_transfer_manager_execute_finish().
+ */
+void
+ide_transfer_manager_execute_async (IdeTransferManager  *self,
+                                    IdeTransfer         *transfer,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_TRANSFER_MANAGER (self));
+  g_return_if_fail (IDE_IS_TRANSFER (transfer));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_transfer_manager_execute_async);
+  g_task_set_task_data (task, g_object_ref (transfer), g_object_unref);
+
+  g_signal_connect_data (self,
+                         "transfer-completed",
+                         G_CALLBACK (ide_transfer_manager_execute_transfer_completed),
+                         g_object_ref (task),
+                         (GClosureNotify)g_object_unref,
+                         0);
+
+  g_signal_connect_data (self,
+                         "transfer-failed",
+                         G_CALLBACK (ide_transfer_manager_execute_transfer_failed),
+                         g_object_ref (task),
+                         (GClosureNotify)g_object_unref,
+                         0);
+
+  ide_transfer_manager_queue (self, transfer);
+}
+
+gboolean
+ide_transfer_manager_execute_finish (IdeTransferManager  *self,
+                                     GAsyncResult        *result,
+                                     GError             **error)
+{
+  g_return_val_if_fail (IDE_IS_TRANSFER_MANAGER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
