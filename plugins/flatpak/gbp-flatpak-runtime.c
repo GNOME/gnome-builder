@@ -56,7 +56,7 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static gchar *
-get_build_directory (GbpFlatpakRuntime *self)
+get_staging_directory (GbpFlatpakRuntime *self)
 {
   IdeContext *context;
   IdeProject *project;
@@ -68,9 +68,9 @@ get_build_directory (GbpFlatpakRuntime *self)
 
   return g_build_filename (g_get_user_cache_dir (),
                            "gnome-builder",
-                           "builds",
-                           ide_project_get_id (project),
                            "flatpak",
+                           "staging",
+                           ide_project_get_id (project),
                            ide_runtime_get_id (IDE_RUNTIME (self)),
                            NULL);
 }
@@ -80,691 +80,48 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                               const gchar  *program,
                                               GCancellable *cancellable)
 {
+  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
 
-  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  launcher = ide_runtime_create_launcher (runtime, 0);
+  /*
+   * To check if a program is available, we don't want to use the normal
+   * launcher because it will only be available if the build directory
+   * has been created and setup. Instead, we will use flatpak to run the
+   * runtime which was added in Flatpak 0.6.13.
+   */
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
 
-  ide_subprocess_launcher_push_argv (launcher, "which");
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+
+  ide_subprocess_launcher_push_argv (launcher, "flatpak");
+  ide_subprocess_launcher_push_argv (launcher, "run");
+  ide_subprocess_launcher_push_argv (launcher, "--command=which");
+  ide_subprocess_launcher_push_argv (launcher, self->sdk);
   ide_subprocess_launcher_push_argv (launcher, program);
 
   subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL);
 
-  return (subprocess != NULL) && ide_subprocess_wait_check (subprocess, cancellable, NULL);
+  if (subprocess != NULL)
+    return ide_subprocess_wait_check (subprocess, cancellable, NULL);
+
+  return FALSE;
 }
 
-/**
- * manifest_has_multiple_modules:
- *
- * Searches a #JsonObject to see if it has more than one
- * element in a "modules" list.
- */
-static gboolean
-manifest_has_multiple_modules (JsonObject *object)
+static const gchar *
+get_builddir (GbpFlatpakRuntime *self)
 {
-  JsonArray *modules;
-  guint num_modules;
-
-  modules = json_object_get_array_member (object, "modules");
-  if (modules == NULL)
-    return FALSE;
-
-  num_modules = json_array_get_length (modules);
-  if (num_modules > 1)
-      return TRUE;
-  else if (num_modules == 0)
-      return FALSE;
-  else
-    {
-      JsonNode *module;
-      module = json_array_get_element (modules, 0);
-      if (JSON_NODE_HOLDS_OBJECT (module))
-        {
-          object = json_node_get_object (module);
-          if (json_object_has_member (object, "modules"))
-            {
-              modules = json_object_get_array_member (object, "modules");
-              if (modules == NULL)
-                return FALSE;
-              return (json_array_get_length (modules) > 0);
-            }
-        }
-      return FALSE;
-    }
-}
-
-static void
-gbp_flatpak_runtime_prebuild_worker (GTask        *task,
-                                     gpointer      source_object,
-                                     gpointer      task_data,
-                                     GCancellable *cancellable)
-{
-  GbpFlatpakRuntime *self = source_object;
-  IdeBuildResult *build_result = (IdeBuildResult *)task_data;
-  IdeContext *context;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *configuration;
-  IdeRuntimeManager *runtime_manager;
-  const gchar *flatpak_repo_name = NULL;
-  gboolean already_ran_build_init = FALSE;
-  g_autofree gchar *build_path = NULL;
-  g_autofree gchar *flatpak_repo_path = NULL;
-  g_autofree gchar *metadata_path = NULL;
-  g_autoptr(GFile) build_dir = NULL;
-  g_autoptr(GFile) flatpak_repo_dir = NULL;
-  g_autoptr(GFile) metadata_file = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) process = NULL;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (G_IS_TASK (task));
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (IDE_IS_BUILD_RESULT (build_result));
-
-  build_path = get_build_directory (self);
-  build_dir = g_file_new_for_path (build_path);
-
-  if (!g_file_query_exists (build_dir, cancellable))
-    {
-      if (!g_file_make_directory_with_parents (build_dir, cancellable, &error))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-    }
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
-  configuration = ide_configuration_manager_get_current (config_manager);
-  runtime_manager = ide_context_get_runtime_manager (context);
-
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
-
-  /* Make sure there's a local flatpak repo we can use to export the build */
-  flatpak_repo_path = g_build_filename (g_get_user_cache_dir (),
-                                        "gnome-builder",
-                                        "flatpak-repo",
-                                        NULL);
-  flatpak_repo_dir = g_file_new_for_path (flatpak_repo_path);
-  if (!g_file_query_exists (flatpak_repo_dir, cancellable))
-    {
-      if (!g_file_make_directory_with_parents (flatpak_repo_dir, cancellable, &error))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-    }
-
-  launcher = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-  if (launcher == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "remote-add");
-  ide_subprocess_launcher_push_argv (launcher, "--user");
-  ide_subprocess_launcher_push_argv (launcher, "--no-gpg-verify");
-  ide_subprocess_launcher_push_argv (launcher, "--if-not-exists");
-  flatpak_repo_name = ide_configuration_get_internal_string (configuration, "flatpak-repo-name");
-  g_assert (!ide_str_empty0 (flatpak_repo_name));
-  ide_subprocess_launcher_push_argv (launcher, flatpak_repo_name);
-  ide_subprocess_launcher_push_argv (launcher, flatpak_repo_path);
-  process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
-
-  if (process == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_build_result_log_subprocess (build_result, process);
-  if (!ide_subprocess_wait_check (process, cancellable, &error))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  ide_configuration_set_internal_object (configuration, "flatpak-repo-dir", flatpak_repo_dir);
-
-  /* Check if flatpak build-init has been run by checking for the metadata file */
-  metadata_path = g_build_filename (build_path, "metadata", NULL);
-  metadata_file = g_file_new_for_path (metadata_path);
-  g_assert (metadata_file != NULL);
-  if (g_file_query_exists (metadata_file, cancellable))
-    already_ran_build_init = TRUE;
-
-  /*
-   * Install the runtime and sdk if they're just the standard gnome ones,
-   * and run flatpak-builder if necessary.
-   */
-  if (self->manifest != NULL)
-    {
-      g_autofree gchar *manifest_path = NULL;
-      g_autoptr(JsonParser) parser = NULL;
-      JsonNode *root_node = NULL;
-      JsonObject *root_object = NULL;
-      gboolean has_multiple_modules;
-
-      manifest_path = g_file_get_path (self->manifest);
-      g_assert (!ide_str_empty0 (manifest_path));
-
-      parser = json_parser_new ();
-      if (!json_parser_load_from_file (parser, manifest_path, &error))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-      root_node = json_parser_get_root (parser);
-      g_assert (JSON_NODE_HOLDS_OBJECT (root_node));
-      root_object = json_node_get_object (root_node);
-      has_multiple_modules = manifest_has_multiple_modules (root_object);
-
-      if (g_strcmp0 (self->platform, "org.gnome.Platform") == 0 ||
-          g_strcmp0 (self->sdk, "org.gnome.Sdk") == 0)
-        {
-          gchar *gnome_repo_name = NULL;
-          gchar *gnome_repo_path = NULL;
-          const gchar *arch = NULL;
-          g_autofree gchar *runtime_id = NULL;
-          g_autofree gchar *sdk_id = NULL;
-          IdeRuntime *runtime;
-          IdeRuntime *sdk;
-
-          arch = flatpak_get_default_arch ();
-
-          runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", self->platform, self->branch, arch);
-          sdk_id = g_strdup_printf ("flatpak:%s/%s/%s", self->sdk, self->branch, arch);
-          runtime = ide_runtime_manager_get_runtime (runtime_manager, runtime_id);
-          sdk = ide_runtime_manager_get_runtime (runtime_manager, sdk_id);
-
-          /* Add the gnome or gnome-nightly remote */
-          if (runtime == NULL || sdk == NULL)
-            {
-              g_autoptr(IdeSubprocessLauncher) launcher2 = NULL;
-              g_autoptr(IdeSubprocess) process2 = NULL;
-
-              if (g_strcmp0 (self->branch, "master") == 0)
-                {
-                  gnome_repo_name = "gnome-nightly";
-                  gnome_repo_path = "https://sdk.gnome.org/gnome-nightly.flatpakrepo";
-                }
-              else
-                {
-                  gnome_repo_name = "gnome";
-                  gnome_repo_path = "https://sdk.gnome.org/gnome.flatpakrepo";
-                }
-
-              launcher2 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-              if (launcher2 == NULL)
-                {
-                  g_task_return_error (task, g_steal_pointer (&error));
-                  return;
-                }
-              ide_subprocess_launcher_push_argv (launcher2, "flatpak");
-              ide_subprocess_launcher_push_argv (launcher2, "remote-add");
-              ide_subprocess_launcher_push_argv (launcher2, "--user");
-              ide_subprocess_launcher_push_argv (launcher2, "--if-not-exists");
-              ide_subprocess_launcher_push_argv (launcher2, "--from");
-              ide_subprocess_launcher_push_argv (launcher2, gnome_repo_name);
-              ide_subprocess_launcher_push_argv (launcher2, gnome_repo_path);
-              ide_build_result_log_stderr (build_result,
-                                           "Adding missing flatpak repository %s from %s\n",
-                                           gnome_repo_name, gnome_repo_path);
-              process2 = ide_subprocess_launcher_spawn (launcher2, cancellable, &error);
-
-              if (process2 != NULL)
-                ide_build_result_log_subprocess (build_result, process2);
-
-              if (process2 == NULL || !ide_subprocess_wait_check (process2, cancellable, &error))
-                {
-                  g_task_return_error (task, g_steal_pointer (&error));
-                  return;
-                }
-            }
-
-          /* Install the runtime */
-          if (runtime == NULL && g_strcmp0 (self->platform, "org.gnome.Platform") == 0)
-            {
-              g_autoptr(IdeSubprocessLauncher) launcher3 = NULL;
-              g_autoptr(IdeSubprocess) process3 = NULL;
-
-              launcher3 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-              if (launcher3 == NULL)
-                {
-                  g_task_return_error (task, g_steal_pointer (&error));
-                  return;
-                }
-              ide_subprocess_launcher_push_argv (launcher3, "flatpak");
-              ide_subprocess_launcher_push_argv (launcher3, "install");
-              ide_subprocess_launcher_push_argv (launcher3, "--user");
-              ide_subprocess_launcher_push_argv (launcher3, "--runtime");
-              ide_subprocess_launcher_push_argv (launcher3, gnome_repo_name);
-              ide_subprocess_launcher_push_argv (launcher3, self->platform);
-              ide_subprocess_launcher_push_argv (launcher3, self->branch);
-              ide_build_result_log_stderr (build_result,
-                                           "Installing missing flatpak runtime %s (%s)\n",
-                                           self->platform, self->branch);
-              process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, &error);
-
-              if (process3 != NULL)
-                ide_build_result_log_subprocess (build_result, process3);
-
-              if (process3 == NULL || !ide_subprocess_wait_check (process3, cancellable, &error))
-                {
-                  g_task_return_error (task, g_steal_pointer (&error));
-                  return;
-                }
-            }
-
-          /* Install the sdk */
-          if (sdk == NULL && g_strcmp0 (self->sdk, "org.gnome.Sdk") == 0)
-            {
-              g_autoptr(IdeSubprocessLauncher) launcher4 = NULL;
-              g_autoptr(IdeSubprocess) process4 = NULL;
-
-              launcher4 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-              if (launcher4 == NULL)
-                {
-                  g_task_return_error (task, g_steal_pointer (&error));
-                  return;
-                }
-              ide_subprocess_launcher_push_argv (launcher4, "flatpak");
-              ide_subprocess_launcher_push_argv (launcher4, "install");
-              ide_subprocess_launcher_push_argv (launcher4, "--user");
-              ide_subprocess_launcher_push_argv (launcher4, "--runtime");
-              ide_subprocess_launcher_push_argv (launcher4, gnome_repo_name);
-              ide_subprocess_launcher_push_argv (launcher4, self->sdk);
-              ide_subprocess_launcher_push_argv (launcher4, self->branch);
-              ide_build_result_log_stderr (build_result,
-                                           "Installing missing flatpak SDK %s (%s)\n",
-                                           self->sdk, self->branch);
-              process4 = ide_subprocess_launcher_spawn (launcher4, cancellable, &error);
-
-              if (process4 != NULL)
-                ide_build_result_log_subprocess (build_result, process4);
-
-              if (process4 == NULL || !ide_subprocess_wait_check (process4, cancellable, &error))
-                {
-                  g_task_return_error (task, g_steal_pointer (&error));
-                  return;
-                }
-            }
-        }
-
-      /* No need to run flatpak-builder if there are no dependencies */
-      if (has_multiple_modules)
-        {
-          g_autoptr(IdeSubprocessLauncher) launcher5 = NULL;
-          g_autoptr(IdeSubprocess) process5 = NULL;
-          g_autoptr(GFile) success_file = NULL;
-          g_autofree gchar *stop_at_option = NULL;
-          g_autofree gchar *success_filename = NULL;
-
-          success_filename = g_build_filename (build_path, "flatpak-builder-success", NULL);
-          success_file = g_file_new_for_path (success_filename);
-          if (g_file_query_exists (success_file, cancellable))
-            {
-              g_task_return_boolean (task, TRUE);
-              return;
-            }
-
-          /* Run flatpak-builder to build just the dependencies */
-          launcher5 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-          if (launcher5 == NULL)
-            {
-              g_task_return_error (task, g_steal_pointer (&error));
-              return;
-            }
-          ide_subprocess_launcher_push_argv (launcher5, "flatpak-builder");
-          ide_subprocess_launcher_push_argv (launcher5, "--ccache");
-          ide_subprocess_launcher_push_argv (launcher5, "--force-clean");
-          stop_at_option = g_strdup_printf ("--stop-at=%s", self->primary_module);
-          ide_subprocess_launcher_push_argv (launcher5, stop_at_option);
-          ide_subprocess_launcher_push_argv (launcher5, build_path);
-          ide_subprocess_launcher_push_argv (launcher5, manifest_path);
-          process5 = ide_subprocess_launcher_spawn (launcher5, cancellable, &error);
-
-          if (process5 == NULL)
-            {
-              g_task_return_error (task, g_steal_pointer (&error));
-              return;
-            }
-          ide_build_result_log_subprocess (build_result, process5);
-          if (!ide_subprocess_wait_check (process5, cancellable, &error))
-            {
-              g_task_return_error (task, g_steal_pointer (&error));
-              return;
-            }
-
-          /*
-           * Make a file indicating that flatpak-builder finished successfully,
-           * so we know whether to run it for the next build.
-           */
-          g_object_unref (g_file_create (success_file, 0, cancellable, NULL));
-
-          g_task_return_boolean (task, TRUE);
-          return;
-        }
-    }
-
-  /* Run flatpak build-init */
-  if (!already_ran_build_init)
-    {
-      const gchar *app_id = NULL;
-      g_autoptr(IdeSubprocessLauncher) launcher6 = NULL;
-      g_autoptr(IdeSubprocess) process6 = NULL;
-
-      app_id = self->app_id;
-      if (ide_str_empty0 (app_id))
-        {
-          g_warning ("Could not determine application ID");
-          app_id = "org.gnome.FlatpakApp";
-        }
-
-      launcher6 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-      if (launcher6 == NULL)
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-      ide_subprocess_launcher_push_argv (launcher6, "flatpak");
-      ide_subprocess_launcher_push_argv (launcher6, "build-init");
-      ide_subprocess_launcher_push_argv (launcher6, build_path);
-      ide_subprocess_launcher_push_argv (launcher6, app_id);
-      ide_subprocess_launcher_push_argv (launcher6, self->sdk);
-      ide_subprocess_launcher_push_argv (launcher6, self->platform);
-      ide_subprocess_launcher_push_argv (launcher6, self->branch);
-      process6 = ide_subprocess_launcher_spawn (launcher6, cancellable, &error);
-
-      if (process6 == NULL)
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-      ide_build_result_log_subprocess (build_result, process6);
-      if (!ide_subprocess_wait_check (process6, cancellable, &error))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-    }
-
-  g_task_return_boolean (task, TRUE);
-}
-
-static void
-gbp_flatpak_runtime_prebuild_async (IdeRuntime          *runtime,
-                                    IdeBuildResult      *build_result,
-                                    GCancellable        *cancellable,
-                                    GAsyncReadyCallback  callback,
-                                    gpointer             user_data)
-{
-  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (IDE_IS_BUILD_RESULT (build_result));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (build_result), (GDestroyNotify)g_object_unref);
-  g_task_run_in_thread (task, gbp_flatpak_runtime_prebuild_worker);
-}
-
-static gboolean
-gbp_flatpak_runtime_prebuild_finish (IdeRuntime    *runtime,
-                                     GAsyncResult  *result,
-                                     GError       **error)
-{
-  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (G_IS_TASK (result));
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-static void
-gbp_flatpak_runtime_postinstall_worker (GTask        *task,
-                                        gpointer      source_object,
-                                        gpointer      task_data,
-                                        GCancellable *cancellable)
-{
-  GbpFlatpakRuntime *self = source_object;
-  IdeBuildResult *build_result = (IdeBuildResult *)task_data;
-  IdeContext *context;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *configuration;
-  const gchar *app_id = NULL;
-  g_autofree gchar *repo_name = NULL;
-  g_autofree gchar *repo_path = NULL;
-  g_autofree gchar *build_path = NULL;
-  g_autofree gchar *manifest_path = NULL;
-  g_autofree gchar *export_path = NULL;
-  g_autoptr(GFile) export_dir = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher2 = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher3 = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher4 = NULL;
-  g_autoptr(IdeSubprocess) process2 = NULL;
-  g_autoptr(IdeSubprocess) process3 = NULL;
-  g_autoptr(IdeSubprocess) process4 = NULL;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (G_IS_TASK (task));
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (IDE_IS_BUILD_RESULT (build_result));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
-  configuration = ide_configuration_manager_get_current (config_manager);
-
-  build_path = get_build_directory (self);
-  repo_name = g_strdup (ide_configuration_get_internal_string (configuration, "flatpak-repo-name"));
-  repo_path = g_file_get_path (ide_configuration_get_internal_object (configuration, "flatpak-repo-dir"));
-
-  g_assert (!ide_str_empty0 (repo_name));
-  g_assert (!ide_str_empty0 (repo_path));
-
-  /* Check if flatpak build-finish has already been run by checking for the export directory */
-  export_path = g_build_filename (build_path, "export", NULL);
-  export_dir = g_file_new_for_path (export_path);
-  g_assert (export_dir != NULL);
-  if (!g_file_query_exists (export_dir, cancellable))
-    {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      g_autoptr(IdeSubprocess) process = NULL;
-      JsonArray *finish_args = NULL;
-      const gchar *command = NULL;
-      JsonParser *parser = NULL;
-
-      /* Attempt to parse the flatpak manifest */
-      if (self->manifest != NULL && (manifest_path = g_file_get_path (self->manifest)))
-        {
-          GError *json_error = NULL;
-          JsonObject *root_object;
-
-          parser = json_parser_new ();
-          json_parser_load_from_file (parser, manifest_path, &json_error);
-          if (json_error)
-            g_debug ("Error parsing flatpak manifest %s: %s", manifest_path, json_error->message);
-          else
-            {
-              root_object = json_node_get_object (json_parser_get_root (parser));
-              if (root_object != NULL)
-                {
-                  if (json_object_has_member (root_object, "command"))
-                    command = json_object_get_string_member (root_object, "command");
-                  if (json_object_has_member (root_object, "finish-args"))
-                    finish_args = json_object_get_array_member (root_object, "finish-args");
-                }
-            }
-        }
-
-      /* Finalize the build directory */
-      launcher = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-      if (launcher == NULL)
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-      ide_subprocess_launcher_push_argv (launcher, "flatpak");
-      ide_subprocess_launcher_push_argv (launcher, "build-finish");
-      if (!ide_str_empty0 (command))
-        {
-          g_autofree gchar *command_option = NULL;
-          command_option = g_strdup_printf ("--command=%s", command);
-          ide_subprocess_launcher_push_argv (launcher, command_option);
-        }
-      if (finish_args != NULL)
-        {
-          for (guint i = 0; i < json_array_get_length (finish_args); i++)
-            {
-              const gchar *arg;
-              arg = json_array_get_string_element (finish_args, i);
-              if (!ide_str_empty0 (arg))
-                ide_subprocess_launcher_push_argv (launcher, arg);
-            }
-        }
-      ide_subprocess_launcher_push_argv (launcher, build_path);
-
-      g_clear_object (&parser);
-
-      process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
-
-      if (process == NULL)
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-      ide_build_result_log_subprocess (build_result, process);
-      if (!ide_subprocess_wait_check (process, cancellable, &error))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-    }
-
-  /* Export the build to the repo */
-  launcher2 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-  if (launcher2 == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_subprocess_launcher_push_argv (launcher2, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher2, "build-export");
-  ide_subprocess_launcher_push_argv (launcher2, "--subject=\"Development build\"");
-  ide_subprocess_launcher_push_argv (launcher2, repo_path);
-  ide_subprocess_launcher_push_argv (launcher2, build_path);
-  process2 = ide_subprocess_launcher_spawn (launcher2, cancellable, &error);
-
-  if (process2 == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_build_result_log_subprocess (build_result, process2);
-  if (!ide_subprocess_wait_check (process2, cancellable, &error))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  app_id = self->app_id;
-  if (ide_str_empty0 (app_id))
-    {
-      g_warning ("Could not determine application ID");
-      app_id = "org.gnome.FlatpakApp";
-    }
-  /* Try to uninstall it in case this isn't the first run */
-  launcher3 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-  if (launcher3 == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_subprocess_launcher_push_argv (launcher3, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher3, "uninstall");
-  ide_subprocess_launcher_push_argv (launcher3, "--user");
-  ide_subprocess_launcher_push_argv (launcher3, app_id);
-  process3 = ide_subprocess_launcher_spawn (launcher3, cancellable, &error);
-
-  if (process3 == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_subprocess_wait (process3, cancellable, NULL);
-
-  /* Finally install the app */
-  launcher4 = IDE_RUNTIME_CLASS (gbp_flatpak_runtime_parent_class)->create_launcher (IDE_RUNTIME (self), &error);
-  if (launcher4 == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_subprocess_launcher_push_argv (launcher4, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher4, "install");
-  ide_subprocess_launcher_push_argv (launcher4, "--user");
-  ide_subprocess_launcher_push_argv (launcher4, "--app");
-  ide_subprocess_launcher_push_argv (launcher4, "--no-deps");
-  ide_subprocess_launcher_push_argv (launcher4, repo_name);
-  ide_subprocess_launcher_push_argv (launcher4, app_id);
-
-  process4 = ide_subprocess_launcher_spawn (launcher4, cancellable, &error);
-
-  if (process4 == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-  ide_build_result_log_subprocess (build_result, process4);
-  if (!ide_subprocess_wait_check (process4, cancellable, &error))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  g_task_return_boolean (task, TRUE);
-}
-
-static void
-gbp_flatpak_runtime_postinstall_async (IdeRuntime          *runtime,
-                                       IdeBuildResult      *build_result,
-                                       GCancellable        *cancellable,
-                                       GAsyncReadyCallback  callback,
-                                       gpointer             user_data)
-{
-  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (IDE_IS_BUILD_RESULT (build_result));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (build_result), (GDestroyNotify)g_object_unref);
-  g_task_run_in_thread (task, gbp_flatpak_runtime_postinstall_worker);
-}
-
-static gboolean
-gbp_flatpak_runtime_postinstall_finish (IdeRuntime    *runtime,
-                                        GAsyncResult  *result,
-                                        GError       **error)
-{
-  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (G_IS_TASK (result));
-
-  return g_task_propagate_boolean (G_TASK (result), error);
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+  IdeBuildManager *build_manager = ide_context_get_build_manager (context);
+  IdeBuildPipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+  const gchar *builddir = ide_build_pipeline_get_builddir (pipeline);
+
+  return builddir;
 }
 
 static IdeSubprocessLauncher *
@@ -780,10 +137,11 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
   if (ret != NULL)
     {
-      g_autofree gchar *build_path = NULL;
       g_autofree gchar *manifest_path = NULL;
       g_autofree gchar *project_name = NULL;
       g_autofree gchar *project_path = NULL;
+      g_autofree gchar *build_path = NULL;
+      const gchar *builddir = NULL;
       const gchar *cflags = NULL;
       const gchar *cxxflags = NULL;
       JsonObject *env_vars = NULL;
@@ -792,7 +150,8 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       IdeContext *context;
       GFile *project_file;
 
-      build_path = get_build_directory (self);
+      build_path = get_staging_directory (self);
+      builddir = get_builddir (self);
 
       /* Attempt to parse the flatpak manifest */
       if (self->manifest != NULL && (manifest_path = g_file_get_path (self->manifest)))
@@ -855,7 +214,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           g_autofree gchar *bind_mount_option = NULL;
           g_autofree gchar *build_dir_option = NULL;
           filesystem_option = g_strdup_printf ("--filesystem=%s", project_path);
-          bind_mount_option = g_strdup_printf ("--bind-mount=/run/build/%s=%s", project_name, project_path);
+          bind_mount_option = g_strdup_printf ("--bind-mount=/run/build/%s=%s", project_name, builddir);
           build_dir_option = g_strdup_printf ("--build-dir=/run/build/%s", project_name);
           ide_subprocess_launcher_push_argv (ret, "--nofilesystem=host");
           ide_subprocess_launcher_push_argv (ret, filesystem_option);
@@ -963,6 +322,7 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
                                            IdeConfiguration *configuration)
 {
   GbpFlatpakRuntime* self = (GbpFlatpakRuntime *)runtime;
+  g_autofree gchar *manifest_path = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
@@ -973,8 +333,77 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
         ide_configuration_set_app_id (configuration, self->app_id);
     }
 
+  if (self->manifest != NULL)
+    manifest_path = g_file_get_path (self->manifest);
+
   ide_configuration_set_prefix (configuration, "/app");
+
+  /*
+   * TODO: Move this to a GbpFlatpakConfiguration
+   *
+   * Parse some stuff to use later when building.
+   * This really belongs in an IdeConfiguration subclass.
+   */
+
   ide_configuration_set_internal_string (configuration, "flatpak-repo-name", FLATPAK_REPO_NAME);
+  ide_configuration_set_internal_string (configuration, "flatpak-sdk", self->sdk);
+  ide_configuration_set_internal_string (configuration, "flatpak-runtime", self->platform);
+  ide_configuration_set_internal_string (configuration, "flatpak-branch", self->branch);
+  ide_configuration_set_internal_string (configuration, "flatpak-module", self->primary_module);
+  ide_configuration_set_internal_string (configuration, "flatpak-manifest", manifest_path);
+
+  {
+    g_autoptr(JsonParser) parser = NULL;
+    g_autoptr(GError) error = NULL;
+
+    parser = json_parser_new ();
+
+    if (json_parser_load_from_file (parser, manifest_path, &error))
+      {
+        JsonNode *root;
+        JsonNode *member;
+        JsonObject *root_object;
+        JsonArray *ar;
+
+        if (NULL != (root = json_parser_get_root (parser)) &&
+            JSON_NODE_HOLDS_OBJECT (root) &&
+            NULL != (root_object = json_node_get_object (root)))
+          {
+            if (json_object_has_member (root_object, "command"))
+              ide_configuration_set_internal_string (configuration,
+                                                     "flatpak-command",
+                                                     json_object_get_string_member (root_object, "command"));
+
+            if (json_object_has_member (root_object, "finish-args") &&
+                NULL != (member = json_object_get_member (root_object, "finish-args")) &&
+                JSON_NODE_HOLDS_ARRAY (member) &&
+                NULL != (ar = json_node_get_array (member)))
+              {
+                g_autoptr(GPtrArray) finish_args = NULL;
+                guint length = json_array_get_length (ar);
+
+                finish_args = g_ptr_array_sized_new (length + 1);
+
+                for (guint i = 0; i < length; i++)
+                  {
+                    JsonNode *ele = json_array_get_element (ar, i);
+                    const gchar *str = json_node_get_string (ele);
+
+                    if (str != NULL)
+                      g_ptr_array_add (finish_args, (gchar *)str);
+                  }
+
+                g_ptr_array_add (finish_args, NULL);
+
+                ide_configuration_set_internal_strv (configuration,
+                                                     "flatpak-finish-args",
+                                                     (const gchar * const *)finish_args->pdata);
+              }
+          }
+      }
+    else
+      g_warning ("Failure to parse Flatpak Manifest: %s", error->message);
+  }
 }
 
 static void
@@ -1028,7 +457,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
   if (g_str_has_prefix (path, "/usr/"))
     return g_file_get_child (self->deploy_dir_files, path + IDE_LITERAL_LENGTH ("/usr/"));
 
-  build_dir = get_build_directory (self);
+  build_dir = get_staging_directory (self);
   app_files_path = g_build_filename (build_dir, "files", NULL);
 
   if (g_str_equal (path, "/app"))
@@ -1160,10 +589,6 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   object_class->get_property = gbp_flatpak_runtime_get_property;
   object_class->set_property = gbp_flatpak_runtime_set_property;
 
-  runtime_class->prebuild_async = gbp_flatpak_runtime_prebuild_async;
-  runtime_class->prebuild_finish = gbp_flatpak_runtime_prebuild_finish;
-  runtime_class->postinstall_async = gbp_flatpak_runtime_postinstall_async;
-  runtime_class->postinstall_finish = gbp_flatpak_runtime_postinstall_finish;
   runtime_class->create_launcher = gbp_flatpak_runtime_create_launcher;
   runtime_class->create_runner = gbp_flatpak_runtime_create_runner;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
