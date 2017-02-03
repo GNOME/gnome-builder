@@ -64,6 +64,8 @@ struct _IdeApplication
 
   GHashTable          *plugin_settings;
 
+  GPtrArray           *reapers;
+
   guint                disable_theme_tracking : 1;
 };
 

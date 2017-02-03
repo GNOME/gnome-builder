@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 
 #include "projects/ide-recent-projects.h"
+#include "util/ide-directory-reaper.h"
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,8 @@ GMenu              *ide_application_get_menu_by_id       (IdeApplication       *
                                                           const gchar          *id);
 gboolean            ide_application_open_project         (IdeApplication       *self,
                                                           GFile                *file);
+void                ide_application_add_reaper           (IdeApplication       *self,
+                                                          IdeDirectoryReaper   *reaper);
 
 G_END_DECLS
 
