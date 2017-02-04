@@ -23,7 +23,6 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-pipeline-addin.c \
 	gbp-flatpak-pipeline-addin.h \
 	gbp-flatpak-plugin.c \
-	gbp-flatpak-plugin.c \
 	gbp-flatpak-runner.h \
 	gbp-flatpak-runner.h \
 	gbp-flatpak-runtime-provider.c \
@@ -33,7 +32,7 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-sources.c \
 	gbp-flatpak-sources.h \
 	gbp-flatpak-subprocess-launcher.c \
-	gbp-flatpak-subprocess-launcher.c \
+	gbp-flatpak-subprocess-launcher.h \
 	gbp-flatpak-transfer.c \
 	gbp-flatpak-transfer.h \
 	gbp-flatpak-util.c \
