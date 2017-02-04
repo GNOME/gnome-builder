@@ -56,16 +56,16 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
-gbp_build_workbench_addin_set_pipeline (GbpBuildWorkbenchAddin *self,
+ide_build_workbench_addin_set_pipeline (IdeBuildWorkbenchAddin *self,
                                         IdeBuildPipeline       *pipeline)
 {
-  g_return_if_fail (GBP_IS_BUILD_WORKBENCH_ADDIN (self));
+  g_return_if_fail (IDE_IS_BUILD_WORKBENCH_ADDIN (self));
   g_return_if_fail (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (self->workbench != NULL);
 
   if (g_set_object (&self->pipeline, pipeline))
     {
-      gbp_build_log_panel_set_pipeline (self->build_log_panel, pipeline);
+      ide_build_log_panel_set_pipeline (self->build_log_panel, pipeline);
       gtk_widget_show (GTK_WIDGET (self->build_log_panel));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
     }
@@ -139,7 +139,7 @@ ide_build_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   g_signal_connect_object (build_manager,
                            "build-started",
-                           G_CALLBACK (gbp_build_workbench_addin_set_pipeline),
+                           G_CALLBACK (ide_build_workbench_addin_set_pipeline),
                            self,
                            G_CONNECT_SWAPPED);
 
