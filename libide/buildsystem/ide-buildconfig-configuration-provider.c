@@ -25,8 +25,7 @@
 #include "ide-internal.h"
 #include "ide-macros.h"
 
-#include "buildsystem/ide-build-command.h"
-#include "buildsystem/ide-build-command-queue.h"
+#include "buildsystem/ide-buildconfig-configuration.h"
 #include "buildsystem/ide-buildconfig-configuration-provider.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration-provider.h"
@@ -347,36 +346,6 @@ load_environ (IdeConfiguration *configuration,
     }
 }
 
-static void
-load_command_queue (IdeBuildCommandQueue *cmdq,
-                    GKeyFile             *key_file,
-                    const gchar          *group,
-                    const gchar          *name)
-
-{
-  g_auto(GStrv) commands = NULL;
-
-  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (cmdq));
-  g_assert (key_file != NULL);
-  g_assert (group != NULL);
-  g_assert (name != NULL);
-
-  commands = g_key_file_get_string_list (key_file, group, name, NULL, NULL);
-
-  if (commands != NULL)
-    {
-      for (guint i = 0; commands [i]; i++)
-        {
-          g_autoptr(IdeBuildCommand) command = NULL;
-
-          command = g_object_new (IDE_TYPE_BUILD_COMMAND,
-                                  "command-text", commands [i],
-                                  NULL);
-          ide_build_command_queue_append (cmdq, command);
-        }
-    }
-}
-
 static gboolean
 ide_buildconfig_configuration_provider_load_group (IdeBuildconfigConfigurationProvider  *self,
                                                    GKeyFile                             *key_file,
@@ -393,7 +362,7 @@ ide_buildconfig_configuration_provider_load_group (IdeBuildconfigConfigurationPr
 
   context = ide_object_get_context (IDE_OBJECT (self->manager));
 
-  configuration = g_object_new (IDE_TYPE_CONFIGURATION,
+  configuration = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
                                 "id", group,
                                 "context", context,
                                 NULL);
@@ -407,20 +376,20 @@ ide_buildconfig_configuration_provider_load_group (IdeBuildconfigConfigurationPr
 
   if (g_key_file_has_key (key_file, group, "prebuild", NULL))
     {
-      g_autoptr(IdeBuildCommandQueue) cmdq = NULL;
+      g_auto(GStrv) commands = NULL;
 
-      cmdq = ide_build_command_queue_new ();
-      load_command_queue (cmdq, key_file, group, "prebuild");
-      _ide_configuration_set_prebuild (configuration, cmdq);
+      commands = g_key_file_get_string_list (key_file, group, "prebuild", NULL, NULL);
+      ide_buildconfig_configuration_set_prebuild (IDE_BUILDCONFIG_CONFIGURATION (configuration),
+                                                  (const gchar * const *)commands);
     }
 
   if (g_key_file_has_key (key_file, group, "postbuild", NULL))
     {
-      g_autoptr(IdeBuildCommandQueue) cmdq = NULL;
+      g_auto(GStrv) commands = NULL;
 
-      cmdq = ide_build_command_queue_new ();
-      load_command_queue (cmdq, key_file, group, "postbuild");
-      _ide_configuration_set_postbuild (configuration, cmdq);
+      commands = g_key_file_get_string_list (key_file, group, "postbuild", NULL, NULL);
+      ide_buildconfig_configuration_set_postbuild (IDE_BUILDCONFIG_CONFIGURATION (configuration),
+                                                   (const gchar * const *)commands);
     }
 
   env_group = g_strdup_printf ("%s.environment", group);
@@ -532,12 +501,11 @@ ide_buildconfig_configuration_provider_load_cb (GObject      *object,
                                                 GAsyncResult *result,
                                                 gpointer      user_data)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)object;
   GError *error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (object));
   g_assert (G_IS_TASK (result));
 
   if (!g_task_propagate_boolean (G_TASK (result), &error))
