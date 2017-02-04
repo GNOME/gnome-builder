@@ -380,6 +380,8 @@ libide_1_0_la_SOURCES =                                   \
 	application/ide-application-tests.c               \
 	application/ide-application-tests.h               \
 	buildconfig/ide-buildconfig-plugin.c              \
+	buildconfig/ide-buildconfig-pipeline-addin.c      \
+	buildconfig/ide-buildconfig-pipeline-addin.h      \
 	buildsystem/ide-build-log.c                       \
 	buildsystem/ide-build-log-private.h               \
 	buildsystem/ide-build-stage-private.h             \

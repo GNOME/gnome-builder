@@ -21,6 +21,8 @@
 #include <libpeas/peas.h>
 
 #include "buildconfig/ide-buildconfig-configuration-provider.h"
+#include "buildconfig/ide-buildconfig-pipeline-addin.h"
+#include "buildsystem/ide-build-pipeline-addin.h"
 #include "buildsystem/ide-configuration-provider.h"
 
 void
@@ -29,4 +31,7 @@ ide_buildsystem_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIGURATION_PROVIDER,
                                               IDE_TYPE_BUILDCONFIG_CONFIGURATION_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                              IDE_TYPE_BUILDCONFIG_PIPELINE_ADDIN);
 }
