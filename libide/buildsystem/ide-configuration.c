@@ -1227,12 +1227,13 @@ const gchar * const *
 ide_configuration_get_internal_strv (IdeConfiguration *self,
                                      const gchar      *key)
 {
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
   const GValue *v;
 
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  v = g_hash_table_lookup (self->internal, key);
+  v = g_hash_table_lookup (priv->internal, key);
 
   if (v != NULL && G_VALUE_HOLDS (v, G_TYPE_STRV))
     return g_value_get_boxed (v);
@@ -1418,7 +1419,9 @@ ide_configuration_set_internal_object (IdeConfiguration *self,
 gboolean
 ide_configuration_get_ready (IdeConfiguration *self)
 {
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), FALSE);
 
-  return self->device_ready && self->runtime_ready;
+  return priv->device_ready && priv->runtime_ready;
 }
