@@ -20,8 +20,8 @@
 
 #include <libpeas/peas.h>
 
+#include "buildconfig/ide-buildconfig-configuration-provider.h"
 #include "buildsystem/ide-configuration-provider.h"
-#include "buildsystem/ide-buildconfig-configuration-provider.h"
 
 void
 ide_buildsystem_register_types (PeasObjectModule *module)

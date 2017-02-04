@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib/gi18n.h>
+#define G_LOG_DOMAIN "ide-buildconfig-configuration"
 
-#include "buildsystem/ide-buildconfig-configuration.h"
+#include "buildconfig/ide-buildconfig-configuration.h"
 
 struct _IdeBuildconfigConfiguration
 {

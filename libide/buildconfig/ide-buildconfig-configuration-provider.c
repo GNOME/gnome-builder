@@ -25,8 +25,8 @@
 #include "ide-internal.h"
 #include "ide-macros.h"
 
-#include "buildsystem/ide-buildconfig-configuration.h"
-#include "buildsystem/ide-buildconfig-configuration-provider.h"
+#include "buildconfig/ide-buildconfig-configuration.h"
+#include "buildconfig/ide-buildconfig-configuration-provider.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration-provider.h"
 #include "buildsystem/ide-configuration.h"

@@ -30,6 +30,8 @@ libide_1_0_la_public_headers =                            \
 	buffers/ide-buffer.h                              \
 	buffers/ide-unsaved-file.h                        \
 	buffers/ide-unsaved-files.h                       \
+	buildconfig/ide-buildconfig-configuration.h       \
+	buildconfig/ide-buildconfig-configuration-provider.h \
 	buildsystem/ide-build-log.h                       \
 	buildsystem/ide-build-manager.h                   \
 	buildsystem/ide-build-pipeline.h                  \
@@ -40,8 +42,6 @@ libide_1_0_la_public_headers =                            \
 	buildsystem/ide-build-stage-transfer.h            \
 	buildsystem/ide-build-system.h                    \
 	buildsystem/ide-build-target.h                    \
-	buildsystem/ide-buildconfig-configuration.h       \
-	buildsystem/ide-buildconfig-configuration-provider.h \
 	buildsystem/ide-configuration-manager.h           \
 	buildsystem/ide-configuration.h                   \
 	buildsystem/ide-configuration-provider.h          \
@@ -203,6 +203,8 @@ libide_1_0_la_public_sources =                            \
 	buffers/ide-buffer.c                              \
 	buffers/ide-unsaved-file.c                        \
 	buffers/ide-unsaved-files.c                       \
+	buildconfig/ide-buildconfig-configuration.c       \
+	buildconfig/ide-buildconfig-configuration-provider.c \
 	buildsystem/ide-build-manager.c                   \
 	buildsystem/ide-build-pipeline.c                  \
 	buildsystem/ide-build-pipeline-addin.c            \
@@ -212,8 +214,6 @@ libide_1_0_la_public_sources =                            \
 	buildsystem/ide-build-stage-transfer.c            \
 	buildsystem/ide-build-system.c                    \
 	buildsystem/ide-build-target.c                    \
-	buildsystem/ide-buildconfig-configuration.c       \
-	buildsystem/ide-buildconfig-configuration-provider.c \
 	buildsystem/ide-configuration-manager.c           \
 	buildsystem/ide-configuration.c                   \
 	buildsystem/ide-configuration-provider.c          \
@@ -379,10 +379,10 @@ libide_1_0_la_SOURCES =                                   \
 	application/ide-application-private.h             \
 	application/ide-application-tests.c               \
 	application/ide-application-tests.h               \
+	buildconfig/ide-buildconfig-plugin.c              \
 	buildsystem/ide-build-log.c                       \
 	buildsystem/ide-build-log-private.h               \
 	buildsystem/ide-build-stage-private.h             \
-	buildsystem/ide-buildsystem-plugin.c              \
 	buildui/ide-build-configuration-row.c             \
 	buildui/ide-build-configuration-row.h             \
 	buildui/ide-build-configuration-view.c            \
