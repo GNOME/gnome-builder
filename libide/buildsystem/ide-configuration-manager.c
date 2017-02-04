@@ -506,10 +506,6 @@ ide_configuration_manager_changed (IdeConfigurationManager *self,
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  self->change_count++;
-
-  ide_configuration_manager_queue_writeback (self);
-
   g_signal_emit (self, signals [INVALIDATE], 0);
 }
 
