@@ -23,7 +23,7 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-pipeline-addin.c \
 	gbp-flatpak-pipeline-addin.h \
 	gbp-flatpak-plugin.c \
-	gbp-flatpak-runner.h \
+	gbp-flatpak-runner.c \
 	gbp-flatpak-runner.h \
 	gbp-flatpak-runtime-provider.c \
 	gbp-flatpak-runtime-provider.h \
