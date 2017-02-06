@@ -23,17 +23,19 @@
 gchar *
 gbp_flatpak_get_repo_dir (IdeConfiguration *configuration)
 {
+  g_autofree gchar *runtime_id = NULL;
   const gchar *project_id;
-  const gchar *runtime_id;
   IdeContext *context;
   IdeProject *project;
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  runtime_id = ide_configuration_get_runtime_id (configuration);
+  runtime_id = g_strdup (ide_configuration_get_runtime_id (configuration));
   context = ide_object_get_context (IDE_OBJECT (configuration));
   project = ide_context_get_project (context);
   project_id = ide_project_get_id (project);
+
+  g_strdelimit (runtime_id, G_DIR_SEPARATOR_S, '-');
 
   return g_build_filename (g_get_user_cache_dir (),
                            "gnome-builder",
@@ -47,17 +49,19 @@ gbp_flatpak_get_repo_dir (IdeConfiguration *configuration)
 gchar *
 gbp_flatpak_get_staging_dir (IdeConfiguration *configuration)
 {
+  g_autofree gchar *runtime_id = NULL;
   const gchar *project_id;
-  const gchar *runtime_id;
   IdeContext *context;
   IdeProject *project;
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  runtime_id = ide_configuration_get_runtime_id (configuration);
+  runtime_id = g_strdup (ide_configuration_get_runtime_id (configuration));
   context = ide_object_get_context (IDE_OBJECT (configuration));
   project = ide_context_get_project (context);
   project_id = ide_project_get_id (project);
+
+  g_strdelimit (runtime_id, G_DIR_SEPARATOR_S, '-');
 
   return g_build_filename (g_get_user_cache_dir (),
                            "gnome-builder",
