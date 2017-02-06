@@ -51,6 +51,18 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+static const gchar *
+get_builddir (GbpFlatpakRuntime *self)
+{
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+  IdeBuildManager *build_manager = ide_context_get_build_manager (context);
+  IdeBuildPipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+  const gchar *builddir = ide_build_pipeline_get_builddir (pipeline);
+
+  return builddir;
+}
+
+
 static gchar *
 get_staging_directory (GbpFlatpakRuntime *self)
 {
@@ -99,17 +111,6 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   return FALSE;
 }
 
-static const gchar *
-get_builddir (GbpFlatpakRuntime *self)
-{
-  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-  IdeBuildManager *build_manager = ide_context_get_build_manager (context);
-  IdeBuildPipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
-  const gchar *builddir = ide_build_pipeline_get_builddir (pipeline);
-
-  return builddir;
-}
-
 static IdeSubprocessLauncher *
 gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
                                      GError     **error)
@@ -139,17 +140,17 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       IdeConfigurationManager *config_manager;
       IdeConfiguration *configuration;
 
-      build_path = get_staging_directory (self);
-      builddir = get_builddir (self);
-
       context = ide_object_get_context (IDE_OBJECT (self));
       config_manager = ide_context_get_configuration_manager (context);
       configuration = ide_configuration_manager_get_current (config_manager);
 
+      build_path = get_staging_directory (self);
+      builddir = get_builddir (self);
+
       /* Attempt to parse the flatpak manifest */
       if (GBP_IS_FLATPAK_CONFIGURATION (configuration) &&
-          (manifest = gbp_flatpak_configuration_get_manifest ((GbpFlatpakConfiguration *)configuration)) &&
-          (manifest_path = g_file_get_path (manifest)))
+          NULL != (manifest = gbp_flatpak_configuration_get_manifest (GBP_FLATPAK_CONFIGURATION (configuration))) &&
+          NULL != (manifest_path = g_file_get_path (manifest)))
         {
           GError *json_error = NULL;
           JsonObject *root_object;

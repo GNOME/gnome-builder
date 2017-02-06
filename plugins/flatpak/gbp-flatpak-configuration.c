@@ -42,7 +42,8 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-GFile *gbp_flatpak_configuration_get_manifest (GbpFlatpakConfiguration *self)
+GFile *
+gbp_flatpak_configuration_get_manifest (GbpFlatpakConfiguration *self)
 {
   g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self), NULL);
 

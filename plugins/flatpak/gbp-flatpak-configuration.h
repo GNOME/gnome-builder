@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakConfiguration, gbp_flatpak_configuration, GBP, FLATPAK_CONFIGURATION, IdeConfiguration)
 
-GFile       *gbp_flatpak_configuration_get_manifest (GbpFlatpakConfiguration *self);
+GFile       *gbp_flatpak_configuration_get_manifest       (GbpFlatpakConfiguration *self);
 const gchar *gbp_flatpak_configuration_get_primary_module (GbpFlatpakConfiguration *self);
 void         gbp_flatpak_configuration_set_primary_module (GbpFlatpakConfiguration *self,
                                                            const gchar *primary_module);
