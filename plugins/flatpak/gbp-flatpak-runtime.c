@@ -25,6 +25,7 @@
 #include "gbp-flatpak-subprocess-launcher.h"
 #include "gbp-flatpak-runner.h"
 #include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-util.h"
 
 struct _GbpFlatpakRuntime
 {
@@ -53,21 +54,11 @@ static GParamSpec *properties [N_PROPS];
 static gchar *
 get_staging_directory (GbpFlatpakRuntime *self)
 {
-  IdeContext *context;
-  IdeProject *project;
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+  IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
+  IdeConfiguration *config = ide_configuration_manager_get_current (config_manager);
 
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
-
-  return g_build_filename (g_get_user_cache_dir (),
-                           "gnome-builder",
-                           "flatpak",
-                           "staging",
-                           ide_project_get_id (project),
-                           ide_runtime_get_id (IDE_RUNTIME (self)),
-                           NULL);
+  return gbp_flatpak_get_staging_dir (config);
 }
 
 static gboolean
