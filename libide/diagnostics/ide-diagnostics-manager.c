@@ -368,8 +368,7 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
    * reported. This ensures that the gutter gets cleared and line-flags
    * cache updated.
    */
-  if (group->in_diagnose == 0)
-    group->sequence++;
+  group->sequence++;
 
   /*
    * Since the individual groups have sequence numbers associated with changes,
