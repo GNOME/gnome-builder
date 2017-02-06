@@ -305,7 +305,8 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       device_id = ide_configuration_get_device_id (configuration);
       runtime_id = ide_configuration_get_runtime_id (configuration);
 
-      name = g_strdup_printf ("%s-%s-%s", config_id, device_id, runtime_id);
+      name = g_strdelimit (g_strdup_printf ("%s-%s-%s", config_id, device_id, runtime_id),
+                           G_DIR_SEPARATOR_S, '-');
 
       ret = g_build_filename (g_get_user_cache_dir (),
                               "gnome-builder",
