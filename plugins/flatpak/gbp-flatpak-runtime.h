@@ -29,6 +29,16 @@ G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTI
 
 #define FLATPAK_REPO_NAME "gnome-builder-builds"
 
+const gchar         *gbp_flatpak_runtime_get_branch   (GbpFlatpakRuntime *self);
+void                 gbp_flatpak_runtime_set_branch   (GbpFlatpakRuntime *self,
+                                                       const gchar *branch);
+const gchar         *gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self);
+void                 gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
+                                                       const gchar *platform);
+const gchar         *gbp_flatpak_runtime_get_sdk      (GbpFlatpakRuntime *self);
+void                 gbp_flatpak_runtime_set_sdk      (GbpFlatpakRuntime *self,
+                                                       const gchar *sdk);
+
 G_END_DECLS
 
 #endif /* GBP_FLATPAK_RUNTIME_H */

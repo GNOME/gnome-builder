@@ -24,6 +24,8 @@
 #include "gbp-flatpak-util.h"
 #include "gbp-flatpak-configuration.h"
 
+G_DEFINE_QUARK (gb-flatpak-pipeline-error-quark, gb_flatpak_pipeline_error)
+
 enum {
   PREPARE_MKDIRS,
   PREPARE_BUILD_INIT,
@@ -85,6 +87,7 @@ register_remotes_stage (GbpFlatpakPipelineAddin  *self,
   g_autoptr(IdeBuildStage) stage = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   IdeConfiguration *config;
+  IdeRuntime *runtime;
   const gchar *branch;
   const gchar *platform;
   const gchar *sdk;
@@ -97,10 +100,20 @@ register_remotes_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_CONTEXT (context));
 
   config = ide_build_pipeline_get_configuration (pipeline);
+  runtime = ide_configuration_get_runtime (config);
 
-  platform = gbp_flatpak_configuration_get_platform (GBP_FLATPAK_CONFIGURATION (config));
-  sdk = gbp_flatpak_configuration_get_sdk (GBP_FLATPAK_CONFIGURATION (config));
-  branch = gbp_flatpak_configuration_get_branch (GBP_FLATPAK_CONFIGURATION (config));
+  if (!GBP_IS_FLATPAK_RUNTIME (runtime))
+    {
+      g_set_error (error,
+                   GB_FLATPAK_PIPELINE_ERROR,
+                   GB_FLATPAK_PIPELINE_ERROR_WRONG_RUNTIME,
+                   "Configuration changed to a non-flatpak runtime during pipeline initialization");
+      return FALSE;
+    }
+
+  platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
+  sdk = gbp_flatpak_runtime_get_sdk (GBP_FLATPAK_RUNTIME (runtime));
+  branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
 
   if (ide_str_equal0 (platform, "org.gnome.Platform") ||
       ide_str_equal0 (platform, "org.gnome.Sdk") ||
@@ -168,6 +181,7 @@ register_download_stage (GbpFlatpakPipelineAddin  *self,
                          GError                  **error)
 {
   IdeConfiguration *config;
+  IdeRuntime *runtime;
   const gchar *items[2] = { NULL };
   const gchar *platform;
   const gchar *sdk;
@@ -178,9 +192,20 @@ register_download_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  platform = gbp_flatpak_configuration_get_platform (GBP_FLATPAK_CONFIGURATION (config));
-  sdk = gbp_flatpak_configuration_get_sdk (GBP_FLATPAK_CONFIGURATION (config));
-  branch = gbp_flatpak_configuration_get_branch (GBP_FLATPAK_CONFIGURATION (config));
+  runtime = ide_configuration_get_runtime (config);
+
+  if (!GBP_IS_FLATPAK_RUNTIME (runtime))
+    {
+      g_set_error (error,
+                   GB_FLATPAK_PIPELINE_ERROR,
+                   GB_FLATPAK_PIPELINE_ERROR_WRONG_RUNTIME,
+                   "Configuration changed to a non-flatpak runtime during pipeline initialization");
+      return FALSE;
+    }
+
+  platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
+  sdk = gbp_flatpak_runtime_get_sdk (GBP_FLATPAK_RUNTIME (runtime));
+  branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
 
   items[0] = platform;
   items[1] = sdk;
@@ -247,6 +272,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *metadata_path = NULL;
   IdeConfiguration *config;
+  IdeRuntime *runtime;
   const gchar *app_id;
   const gchar *platform;
   const gchar *sdk;
@@ -260,13 +286,22 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   launcher = create_subprocess_launcher ();
 
   config = ide_build_pipeline_get_configuration (pipeline);
+  runtime = ide_configuration_get_runtime (config);
+
+  if (!GBP_IS_FLATPAK_RUNTIME (runtime))
+    {
+      g_set_error (error,
+                   GB_FLATPAK_PIPELINE_ERROR,
+                   GB_FLATPAK_PIPELINE_ERROR_WRONG_RUNTIME,
+                   "Configuration changed to a non-flatpak runtime during pipeline initialization");
+      return FALSE;
+    }
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
   app_id = ide_configuration_get_app_id (config);
-  platform = gbp_flatpak_configuration_get_platform (GBP_FLATPAK_CONFIGURATION (config));
-  sdk = gbp_flatpak_configuration_get_sdk (GBP_FLATPAK_CONFIGURATION (config));
-  branch = gbp_flatpak_configuration_get_branch (GBP_FLATPAK_CONFIGURATION (config));
-
+  platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
+  sdk = gbp_flatpak_runtime_get_sdk (GBP_FLATPAK_RUNTIME (runtime));
+  branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
 
   if (platform == NULL && sdk == NULL)
     {
@@ -340,14 +375,14 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 
   config = ide_build_pipeline_get_configuration (pipeline);
 
-  primary_module = gbp_flatpak_configuration_get_primary_module (GBP_FLATPAK_CONFIGURATION (config));
-  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
-
   /* If there is no manifest, then there are no dependencies
    * to build for this configuration.
    */
-  if (manifest_path == NULL)
+  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
     return TRUE;
+
+  primary_module = gbp_flatpak_configuration_get_primary_module (GBP_FLATPAK_CONFIGURATION (config));
+  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
 
@@ -394,15 +429,15 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
 
   config = ide_build_pipeline_get_configuration (pipeline);
 
-  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
-  command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
-  finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
-
   /* If there is no manifest, then there are no dependencies
    * to build for this configuration.
    */
-  if (manifest_path == NULL)
+  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
     return TRUE;
+
+  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
+  command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
+  finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
 

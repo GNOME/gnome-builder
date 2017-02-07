@@ -27,6 +27,15 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakPipelineAddin, gbp_flatpak_pipeline_addin, GBP, FLATPAK_PIPELINE_ADDIN, IdeObject)
 
+#define GB_FLATPAK_PIPELINE_ERROR (gb_flatpak_pipeline_error_quark())
+
+typedef enum
+{
+  GB_FLATPAK_PIPELINE_ERROR_WRONG_RUNTIME
+} GbFlatpakPipelineError;
+
+GQuark     gb_flatpak_pipeline_error_quark (void);
+
 G_END_DECLS
 
 #endif /* GBP_FLATPAK_PIPELINE_ADDIN_H */

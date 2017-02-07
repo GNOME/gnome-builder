@@ -382,6 +382,63 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
   return NULL;
 }
 
+const gchar *
+gbp_flatpak_runtime_get_branch (GbpFlatpakRuntime *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  return self->branch;
+}
+
+void
+gbp_flatpak_runtime_set_branch (GbpFlatpakRuntime *self,
+                                const gchar       *branch)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
+
+  g_free (self->branch);
+  self->branch = g_strdup (branch);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
+}
+
+const gchar *
+gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  return self->platform;
+}
+
+void
+gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
+                                  const gchar       *platform)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
+
+  g_free (self->platform);
+  self->platform = g_strdup (platform);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PLATFORM]);
+}
+
+const gchar *
+gbp_flatpak_runtime_get_sdk (GbpFlatpakRuntime *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  return self->sdk;
+}
+
+void
+gbp_flatpak_runtime_set_sdk (GbpFlatpakRuntime *self,
+                             const gchar       *sdk)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
+
+  g_free (self->sdk);
+  self->sdk = g_strdup (sdk);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SDK]);
+}
+
 static void
 gbp_flatpak_runtime_get_property (GObject    *object,
                                   guint       prop_id,
@@ -393,15 +450,15 @@ gbp_flatpak_runtime_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_BRANCH:
-      g_value_set_string (value, self->branch);
+      g_value_set_string (value, gbp_flatpak_runtime_get_branch (self));
       break;
 
     case PROP_PLATFORM:
-      g_value_set_string (value, self->platform);
+      g_value_set_string (value, gbp_flatpak_runtime_get_platform (self));
       break;
 
     case PROP_SDK:
-      g_value_set_string (value, self->sdk);
+      g_value_set_string (value, gbp_flatpak_runtime_get_sdk (self));
       break;
 
     case PROP_DEPLOY_DIR:
@@ -424,15 +481,15 @@ gbp_flatpak_runtime_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_BRANCH:
-      self->branch = g_value_dup_string (value);
+      gbp_flatpak_runtime_set_branch (self, g_value_get_string (value));
       break;
 
     case PROP_PLATFORM:
-      self->platform = g_value_dup_string (value);
+      gbp_flatpak_runtime_set_platform (self, g_value_get_string (value));
       break;
 
     case PROP_SDK:
-      self->sdk = g_value_dup_string (value);
+      gbp_flatpak_runtime_set_sdk (self, g_value_get_string (value));
       break;
 
     case PROP_DEPLOY_DIR:
