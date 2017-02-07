@@ -79,3 +79,7 @@ Specifics processing:
 
 ## HTML and XML files
 
+Tag content is not shown.
+Comment content is shown on the same line as the comment node.
+CDATA content is not shown.
+Attributes are collected and shown on the same line as the tag node.
