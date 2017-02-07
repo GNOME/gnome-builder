@@ -39,6 +39,7 @@ typedef enum _ColorTagId
   COLOR_TAG_TYPE,
   COLOR_TAG_PARENT,
   COLOR_TAG_CLASS,
+  COLOR_TAG_ATTRIBUTE,
 } ColorTagId;
 
 IdeXmlTreeBuilder   *ide_xml_tree_builder_new                    (void);

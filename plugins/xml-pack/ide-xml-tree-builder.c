@@ -52,6 +52,7 @@ static ColorTag default_color_tags [] =
   { "type",        "#000000", "#F4DAC3" }, // COLOR_TAG_TYPE
   { "parent",      "#000000", "#DEBECF" }, // COLOR_TAG_PARENT
   { "class",       "#000000", "#FFEF98" }, // COLOR_TAG_CLASS
+  { "attribute",   "#000000", "#F0E68C" }, // COLOR_TAG_ATTRIBUTE
   { NULL },
 };
 
@@ -279,7 +280,7 @@ init_color_tags (IdeXmlTreeBuilder *self)
       tag_set = FALSE;
       if (scheme != NULL)
         {
-          tag_name = g_strconcat ("symboltree::ui-", tag_ptr->name, NULL);
+          tag_name = g_strconcat ("symboltree::", tag_ptr->name, NULL);
           if (NULL != (style = gtk_source_style_scheme_get_style (scheme, tag_name)))
             {
               g_object_get (style, "foreground", &foreground, NULL);

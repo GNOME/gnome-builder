@@ -177,8 +177,12 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
           icon_name = "xml-attribute-symbolic";
           break;
 
-        case IDE_SYMBOL_XML_CONTENT:
-          icon_name = "xml-content-symbolic";
+        case IDE_SYMBOL_XML_CDATA:
+          icon_name = "xml-cdata-symbolic";
+          break;
+
+        case IDE_SYMBOL_XML_COMMENT:
+          icon_name = "xml-comment-symbolic";
           break;
 
         case IDE_SYMBOL_XML_DECLARATION:

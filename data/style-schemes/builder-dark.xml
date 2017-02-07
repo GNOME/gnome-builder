@@ -177,12 +177,13 @@
   <style name="xml:tag-match"               background="#rgba(114,159,207,.20)"/>
 
   <!-- Symbol-tree xml-pack coloring -->
-  <style name="symboltree::ui-label"        foreground="#000000" background="#D5E7FC"/>
-  <style name="symboltree::ui-id"           foreground="#000000" background="#D9E7BD"/>
-  <style name="symboltree::ui-style-class"  foreground="#000000" background="#DFCD9B"/>
-  <style name="symboltree::ui-type"         foreground="#000000" background="#F4DAC3"/>
-  <style name="symboltree::ui-parent"       foreground="#000000" background="#DEBECF"/>
-  <style name="symboltree::ui-class"        foreground="#000000" background="#FFEF98"/>
+  <style name="symboltree::label"           foreground="#000000" background="#D5E7FC"/>
+  <style name="symboltree::id"              foreground="#000000" background="#D9E7BD"/>
+  <style name="symboltree::style-class"     foreground="#000000" background="#DFCD9B"/>
+  <style name="symboltree::type"            foreground="#000000" background="#F4DAC3"/>
+  <style name="symboltree::parent"          foreground="#000000" background="#DEBECF"/>
+  <style name="symboltree::class"           foreground="#000000" background="#FFEF98"/>
+  <style name="symboltree::attribute"       foreground="#000000" background="#F0E68C"/>
 
 </style-scheme>
 
