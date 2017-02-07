@@ -87,6 +87,8 @@ ide_application_discover_plugins (IdeApplication *self)
 
   if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
     {
+      GDir *dir;
+
       g_irepository_prepend_search_path (BUILDDIR"/contrib/egg");
       g_irepository_prepend_search_path (BUILDDIR"/contrib/gstyle");
       g_irepository_prepend_search_path (BUILDDIR"/contrib/jsonrpc-glib");
@@ -94,7 +96,19 @@ ide_application_discover_plugins (IdeApplication *self)
       g_irepository_prepend_search_path (BUILDDIR"/contrib/tmpl");
       g_irepository_prepend_search_path (BUILDDIR"/libide");
 
-      peas_engine_prepend_search_path (engine, BUILDDIR"/plugins", NULL);
+      if ((dir = g_dir_open (BUILDDIR"/plugins", 0, NULL)))
+        {
+          const gchar *name;
+
+          while ((name = g_dir_read_name (dir)))
+            {
+              path = g_build_filename (BUILDDIR, "plugins", name, NULL);
+              peas_engine_prepend_search_path (engine, path, path);
+              g_free (path);
+            }
+
+          g_dir_close (dir);
+        }
     }
   else
     {

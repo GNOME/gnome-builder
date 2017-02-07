@@ -245,7 +245,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
    */
   if (self->manifest != NULL)
     {
-      gchar *manifest_path;
+      g_autofree gchar *manifest_path = NULL;
       g_autoptr(JsonParser) parser = NULL;
       JsonNode *root_node = NULL;
       JsonObject *root_object = NULL;
@@ -541,8 +541,8 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   IdeContext *context;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *configuration;
-  const gchar *repo_name = NULL;
   const gchar *app_id = NULL;
+  g_autofree gchar *repo_name = NULL;
   g_autofree gchar *repo_path = NULL;
   g_autofree gchar *build_path = NULL;
   g_autofree gchar *manifest_path = NULL;
@@ -566,7 +566,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
   configuration = ide_configuration_manager_get_current (config_manager);
 
   build_path = get_build_directory (self);
-  repo_name = ide_configuration_get_internal_string (configuration, "flatpak-repo-name");
+  repo_name = g_strdup (ide_configuration_get_internal_string (configuration, "flatpak-repo-name"));
   repo_path = g_file_get_path (ide_configuration_get_internal_object (configuration, "flatpak-repo-dir"));
 
   g_assert (!ide_str_empty0 (repo_name));
@@ -782,8 +782,8 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
     {
       g_autofree gchar *build_path = NULL;
       g_autofree gchar *manifest_path = NULL;
-      gchar *project_path;
-      gchar *project_name;
+      g_autofree gchar *project_name = NULL;
+      g_autofree gchar *project_path = NULL;
       const gchar *cflags = NULL;
       const gchar *cxxflags = NULL;
       JsonObject *env_vars = NULL;
@@ -829,8 +829,13 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       project_file = ide_context_get_project_file (context);
       if (project_file != NULL)
         {
-          if (g_file_test (g_file_get_path (project_file), G_FILE_TEST_IS_DIR))
-            project_path = g_file_get_path (project_file);
+          g_autofree gchar *project_file_path = NULL;
+          project_file_path = g_file_get_path (project_file);
+          if (g_file_test (project_file_path, G_FILE_TEST_IS_DIR))
+            {
+              project_path = g_file_get_path (project_file);
+              project_name = g_file_get_basename (project_file);
+            }
           else
             {
               g_autoptr(GFile) project_dir = NULL;

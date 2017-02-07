@@ -212,6 +212,13 @@ ide_ctags_builder_build_worker (GTask        *task,
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
   g_subprocess_launcher_set_cwd (launcher, workpath);
   g_subprocess_launcher_set_stdout_file_path (launcher, tags_file);
+  /*
+   * ctags can sometimes write to TMPDIR for incremental writes so that it
+   * can sort internally. On large files this can cause us to run out of
+   * tmpfs. Instead, just use the home dir which should map to something
+   * that is persistent.
+   */
+  g_subprocess_launcher_setenv (launcher, "TMPDIR", tagsdir, TRUE);
   process = g_subprocess_launcher_spawnv (launcher, (const gchar * const *)argv->pdata, &error);
 
   EGG_COUNTER_INC (parse_count);

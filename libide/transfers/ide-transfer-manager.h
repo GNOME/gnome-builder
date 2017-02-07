@@ -29,17 +29,25 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeTransferManager, ide_transfer_manager, IDE, TRANSFER_MANAGER, IdeObject)
 
-gdouble  ide_transfer_manager_get_progress   (IdeTransferManager *self);
-gboolean ide_transfer_manager_get_has_active (IdeTransferManager *self);
-guint    ide_transfer_manager_get_max_active (IdeTransferManager *self);
-void     ide_transfer_manager_set_max_active (IdeTransferManager *self,
-                                              guint               max_active);
-void     ide_transfer_manager_cancel         (IdeTransferManager *self,
-                                              IdeTransfer        *transfer);
-void     ide_transfer_manager_cancel_all     (IdeTransferManager *self);
-void     ide_transfer_manager_clear          (IdeTransferManager *self);
-void     ide_transfer_manager_queue          (IdeTransferManager *self,
-                                              IdeTransfer        *transfer);
+gdouble  ide_transfer_manager_get_progress   (IdeTransferManager   *self);
+gboolean ide_transfer_manager_get_has_active (IdeTransferManager   *self);
+guint    ide_transfer_manager_get_max_active (IdeTransferManager   *self);
+void     ide_transfer_manager_set_max_active (IdeTransferManager   *self,
+                                              guint                 max_active);
+void     ide_transfer_manager_cancel         (IdeTransferManager   *self,
+                                              IdeTransfer          *transfer);
+void     ide_transfer_manager_cancel_all     (IdeTransferManager   *self);
+void     ide_transfer_manager_clear          (IdeTransferManager   *self);
+void     ide_transfer_manager_queue          (IdeTransferManager   *self,
+                                              IdeTransfer          *transfer);
+void     ide_transfer_manager_execute_async  (IdeTransferManager   *self,
+                                              IdeTransfer          *transfer,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+gboolean ide_transfer_manager_execute_finish (IdeTransferManager   *self,
+                                              GAsyncResult         *result,
+                                              GError              **error);
 
 G_END_DECLS
 

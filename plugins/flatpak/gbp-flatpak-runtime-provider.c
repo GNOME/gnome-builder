@@ -219,7 +219,7 @@ guess_primary_module (JsonNode *modules_node,
 {
   JsonArray *modules;
   JsonNode *module;
-  gchar *dir_name;
+  g_autofree gchar *dir_name = NULL;
 
   g_assert (G_IS_FILE (directory));
 
@@ -392,6 +392,9 @@ find_deploy_dir (GbpFlatpakRuntimeProvider *self,
     {
       FlatpakInstallation *installation = installations[i];
       g_autoptr(FlatpakInstalledRef) ref = NULL;
+
+      if (installation == NULL)
+        continue;
 
       ref = flatpak_installation_get_installed_ref (installation,
                                                     FLATPAK_REF_KIND_RUNTIME,
