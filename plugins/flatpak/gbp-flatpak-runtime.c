@@ -301,6 +301,18 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
 }
 
 static void
+gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
+                                           IdeConfiguration *configuration)
+{
+  GbpFlatpakRuntime* self = (GbpFlatpakRuntime *)runtime;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  ide_configuration_set_prefix (configuration, "/app");
+}
+
+static void
 gbp_flatpak_runtime_set_deploy_dir (GbpFlatpakRuntime *self,
                                     const gchar       *deploy_dir)
 {
@@ -459,6 +471,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->create_launcher = gbp_flatpak_runtime_create_launcher;
   runtime_class->create_runner = gbp_flatpak_runtime_create_runner;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
+  runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
 
   properties [PROP_BRANCH] =
