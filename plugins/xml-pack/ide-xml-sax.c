@@ -23,18 +23,6 @@
 
 #include "ide-xml-sax.h"
 
-#define XML_TO_CHAR(s)  ((char *) (s))
-#define CHAR_TO_XML(s)  ((unsigned char *) (s))
-#define RETURN_STRDUP_AND_XMLFREE(stmt) \
-  G_STMT_START {                        \
-    guchar *x;                          \
-    gchar *y;                           \
-    x = stmt;                           \
-    y = g_strdup((char *)x);            \
-    xmlFree(x);                         \
-    return y;                           \
-  } G_STMT_END
-
 struct _IdeXmlSax
 {
   GObject        parent_instance;
@@ -56,8 +44,6 @@ ide_xml_sax_new (void)
 static void
 ide_xml_sax_finalize (GObject *object)
 {
-  IdeXmlSax *self = (IdeXmlSax *)object;
-
   G_OBJECT_CLASS (ide_xml_sax_parent_class)->finalize (object);
 }
 
@@ -166,13 +152,10 @@ ide_xml_sax_parse (IdeXmlSax   *self,
   g_return_val_if_fail (self->initialized == TRUE, FALSE);
   g_return_val_if_fail (self->context == NULL, FALSE);
 
-  printf ("parse base:%p\n", data);
-
   self->context = xmlCreateMemoryParserCtxt (data, length);
   self->context->userData = user_data;
 
   self->context->sax = &self->handler;
-  //xmlSAXVersion(&self->handler, 2);
   self->handler.initialized = XML_SAX2_MAGIC;
   xmlCtxtUseOptions (self->context, XML_PARSE_RECOVER | XML_PARSE_NOENT);
 
@@ -208,18 +191,5 @@ ide_xml_sax_get_depth (IdeXmlSax *self)
   g_return_val_if_fail (self->context != NULL, FALSE);
 
   return self->context->nameNr;
-}
-
-gsize
-ide_xml_sax_get_byteconsumed (IdeXmlSax *self)
-{
-  xmlParserInput *input;
-
-  g_return_val_if_fail (IDE_IS_XML_SAX (self), FALSE);
-  g_return_val_if_fail (self->context != NULL, FALSE);
-
-  input = self->context->input;
-
-  return input->base;
 }
 

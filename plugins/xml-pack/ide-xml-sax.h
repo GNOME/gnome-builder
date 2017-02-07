@@ -45,7 +45,6 @@ enum _IdeXmlSaxCallbackType {
 };
 
 void            ide_xml_sax_clear             (IdeXmlSax              *self);
-gsize           ide_xml_sax_get_byteconsumed  (IdeXmlSax              *self);
 gint            ide_xml_sax_get_depth         (IdeXmlSax              *self);
 gboolean        ide_xml_sax_get_position      (IdeXmlSax              *self,
                                                gint                   *line,
