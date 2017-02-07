@@ -133,7 +133,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       const gchar *cxxflags = NULL;
       JsonObject *env_vars = NULL;
       JsonParser *parser = NULL;
-      g_autoptr(GFileInfo) file_info = NULL;
       GFile *manifest;
       GFile *project_file;
       IdeContext *context;
