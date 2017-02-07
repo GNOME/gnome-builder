@@ -1,6 +1,6 @@
 [Plugin]
 Module=xml-pack-plugin
-Name=XML Auto-Indenter, highlighter and resolver
+Name=XML Auto-Indenter, highlighter, resolver, diagnostics
 Description=Provides language support features for XML
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert

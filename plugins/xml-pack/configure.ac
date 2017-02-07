@@ -1,7 +1,7 @@
 # --enable-xml-pack-plugin=yes/no
 AC_ARG_ENABLE([xml-pack-plugin],
               [AS_HELP_STRING([--enable-xml-pack-plugin=@<:@yes/no@:>@],
-                              [Build with support for xml enhancements such as indentation and auto completion.])],
+                              [Build with support for xml enhancements: indentation, highlight, resolver, diagnostics.])],
               [enable_xml_pack_plugin=$enableval],
               [enable_xml_pack_plugin=yes])
 
