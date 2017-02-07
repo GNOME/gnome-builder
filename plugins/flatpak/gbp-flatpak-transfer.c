@@ -400,16 +400,19 @@ gbp_flatpak_transfer_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ID:
+      g_free (self->id);
       self->id = g_value_dup_string (value);
       break;
 
     case PROP_ARCH:
+      g_free (self->arch);
       self->arch = g_value_dup_string (value);
       if (self->arch == NULL)
         self->arch = g_strdup (flatpak_get_default_arch ());
       break;
 
     case PROP_BRANCH:
+      g_free (self->branch);
       self->branch = g_value_dup_string (value);
       if (self->branch == NULL)
         self->branch = g_strdup ("stable");
