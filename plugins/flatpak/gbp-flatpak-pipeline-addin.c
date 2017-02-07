@@ -22,6 +22,7 @@
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-transfer.h"
 #include "gbp-flatpak-util.h"
+#include "gbp-flatpak-configuration.h"
 
 enum {
   PREPARE_MKDIRS,
@@ -97,9 +98,9 @@ register_remotes_stage (GbpFlatpakPipelineAddin  *self,
 
   config = ide_build_pipeline_get_configuration (pipeline);
 
-  platform = ide_configuration_get_internal_string (config, "flatpak-platform");
-  sdk = ide_configuration_get_internal_string (config, "flatpak-sdk");
-  branch = ide_configuration_get_internal_string (config, "flatpak-branch");
+  platform = gbp_flatpak_configuration_get_platform (GBP_FLATPAK_CONFIGURATION (config));
+  sdk = gbp_flatpak_configuration_get_sdk (GBP_FLATPAK_CONFIGURATION (config));
+  branch = gbp_flatpak_configuration_get_branch (GBP_FLATPAK_CONFIGURATION (config));
 
   if (ide_str_equal0 (platform, "org.gnome.Platform") ||
       ide_str_equal0 (platform, "org.gnome.Sdk") ||
@@ -177,9 +178,9 @@ register_download_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  platform = ide_configuration_get_internal_string (config, "flatpak-platform");
-  sdk = ide_configuration_get_internal_string (config, "flatpak-sdk");
-  branch = ide_configuration_get_internal_string (config, "flatpak-branch");
+  platform = gbp_flatpak_configuration_get_platform (GBP_FLATPAK_CONFIGURATION (config));
+  sdk = gbp_flatpak_configuration_get_sdk (GBP_FLATPAK_CONFIGURATION (config));
+  branch = gbp_flatpak_configuration_get_branch (GBP_FLATPAK_CONFIGURATION (config));
 
   items[0] = platform;
   items[1] = sdk;
@@ -261,10 +262,11 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   config = ide_build_pipeline_get_configuration (pipeline);
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
-  platform = ide_configuration_get_internal_string (config, "flatpak-platform");
   app_id = ide_configuration_get_app_id (config);
-  sdk = ide_configuration_get_internal_string (config, "flatpak-sdk");
-  branch = ide_configuration_get_internal_string (config, "flatpak-branch");
+  platform = gbp_flatpak_configuration_get_platform (GBP_FLATPAK_CONFIGURATION (config));
+  sdk = gbp_flatpak_configuration_get_sdk (GBP_FLATPAK_CONFIGURATION (config));
+  branch = gbp_flatpak_configuration_get_branch (GBP_FLATPAK_CONFIGURATION (config));
+
 
   if (platform == NULL && sdk == NULL)
     {
@@ -328,7 +330,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *stop_at_option = NULL;
   IdeConfiguration *config;
-  const gchar *manifest_path;
+  g_autofree gchar *manifest_path = NULL;
   const gchar *primary_module;
   guint stage_id;
 
@@ -338,8 +340,8 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 
   config = ide_build_pipeline_get_configuration (pipeline);
 
-  primary_module = ide_configuration_get_internal_string (config, "flatpak-module");
-  manifest_path = ide_configuration_get_internal_string (config, "flatpak-manifest");
+  primary_module = gbp_flatpak_configuration_get_primary_module (GBP_FLATPAK_CONFIGURATION (config));
+  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
 
   /* If there is no manifest, then there are no dependencies
    * to build for this configuration.
@@ -382,7 +384,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *export_path = NULL;
   IdeConfiguration *config;
-  const gchar *manifest_path;
+  g_autofree gchar *manifest_path = NULL;
   const gchar *command;
   guint stage_id;
 
@@ -392,9 +394,9 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
 
   config = ide_build_pipeline_get_configuration (pipeline);
 
-  manifest_path = ide_configuration_get_internal_string (config, "flatpak-manifest");
-  command = ide_configuration_get_internal_string (config, "flatpak-command");
-  finish_args = ide_configuration_get_internal_strv (config, "flatpak-finish-args");
+  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
+  command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
+  finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
 
   /* If there is no manifest, then there are no dependencies
    * to build for this configuration.

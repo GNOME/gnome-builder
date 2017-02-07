@@ -46,10 +46,15 @@ struct _GbpFlatpakConfigurationProvider
 typedef struct
 {
   gchar          *app_id;
+  gchar          *branch;
+  gchar          *command;
   gchar          *config_opts;
+  gchar         **finish_args;
+  gchar          *platform;
   gchar          *prefix;
   gchar          *primary_module;
   gchar          *runtime_id;
+  gchar          *sdk;
   GFile          *file;
   IdeEnvironment *environment;
 } FlatpakManifest;
@@ -595,10 +600,15 @@ flatpak_manifest_free (void *data)
   FlatpakManifest *manifest = data;
 
   g_free (manifest->app_id);
+  g_free (manifest->branch);
+  g_free (manifest->command);
   g_free (manifest->config_opts);
+  g_free (manifest->platform);
   g_free (manifest->prefix);
   g_free (manifest->primary_module);
   g_free (manifest->runtime_id);
+  g_free (manifest->sdk);
+  g_strfreev (manifest->finish_args);
   g_clear_object (&manifest->environment);
   g_clear_object (&manifest->file);
   g_slice_free (FlatpakManifest, manifest);
@@ -689,6 +699,8 @@ check_dir_for_manifests (GFile         *directory,
       JsonNode *sdk_node = NULL;
       JsonNode *modules_node = NULL;
       JsonNode *primary_module_node = NULL;
+      JsonNode *command_node = NULL;
+      JsonNode *finish_args_node = NULL;
       JsonObject *root_object = NULL;
       g_autoptr(GError) local_error = NULL;
       g_autoptr(GFile) file = NULL;
@@ -809,12 +821,40 @@ check_dir_for_manifests (GFile         *directory,
         }
 
       platform = json_node_get_string (runtime_node);
+      manifest->platform = g_strdup (platform);
+
       if (!JSON_NODE_HOLDS_VALUE (runtime_version_node) || ide_str_empty0 (json_node_get_string (runtime_version_node)))
         branch = "master";
       else
         branch = json_node_get_string (runtime_version_node);
+      manifest->branch = g_strdup (branch);
+
       arch = flatpak_get_default_arch ();
       manifest->runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", platform, branch, arch);
+
+      manifest->sdk = json_node_dup_string (sdk_node);
+
+      command_node = json_object_get_member (root_object, "command");
+      if (JSON_NODE_HOLDS_VALUE (command_node))
+        manifest->command = json_node_dup_string (command_node);
+
+      finish_args_node = json_object_get_member (root_object, "finish-args");
+      if (JSON_NODE_HOLDS_ARRAY (finish_args_node))
+        {
+          JsonArray *finish_args_array;
+          GPtrArray *finish_args;
+          finish_args = g_ptr_array_new ();
+          finish_args_array = json_node_get_array (finish_args_node);
+          for (guint i = 0; i < json_array_get_length (finish_args_array); i++)
+            {
+              gchar *arg;
+              arg = g_strdup (json_array_get_string_element (finish_args_array, i));
+              if (!ide_str_empty0 (arg))
+                g_ptr_array_add (finish_args, arg);
+            }
+          g_ptr_array_add (finish_args, NULL);
+          manifest->finish_args = (gchar **)g_ptr_array_free (finish_args, FALSE);
+        }
 
       if (JSON_NODE_HOLDS_VALUE (app_id_node))
         manifest->app_id = json_node_dup_string (app_id_node);
@@ -957,16 +997,23 @@ gbp_flatpak_configuration_provider_load_manifests (GbpFlatpakConfigurationProvid
        */
       configuration = g_object_new (GBP_TYPE_FLATPAK_CONFIGURATION,
                                     "app-id", manifest->app_id,
+                                    "branch", manifest->branch,
                                     "context", context,
                                     "display-name", filename,
                                     "device-id", "local",
                                     "id", id,
                                     "manifest", manifest->file,
+                                    "platform", manifest->platform,
                                     "prefix", (manifest->prefix != NULL ? manifest->prefix : "/app"),
                                     "runtime-id", manifest->runtime_id,
+                                    "sdk", manifest->sdk,
                                     NULL);
       if (manifest->primary_module != NULL)
         gbp_flatpak_configuration_set_primary_module (configuration, manifest->primary_module);
+      if (manifest->command != NULL)
+        gbp_flatpak_configuration_set_command (configuration, manifest->command);
+      if (manifest->finish_args != NULL)
+        gbp_flatpak_configuration_set_finish_args (configuration, (const gchar * const *)manifest->finish_args);
       if (manifest->environment != NULL)
         ide_configuration_set_environment (IDE_CONFIGURATION (configuration), manifest->environment);
       if (manifest->config_opts != NULL)
