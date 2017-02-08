@@ -34,8 +34,8 @@ struct _IdeBuildTargetInterface
   GTypeInterface parent_iface;
 
   GFile *(*get_install_directory) (IdeBuildTarget *self);
+  gchar *(*get_name)              (IdeBuildTarget *self);
 
-  gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;
   gpointer _reserved4;
@@ -46,6 +46,7 @@ struct _IdeBuildTargetInterface
 };
 
 GFile *ide_build_target_get_install_directory (IdeBuildTarget *self);
+gchar *ide_build_target_get_name (IdeBuildTarget *self);
 
 G_END_DECLS
 

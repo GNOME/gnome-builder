@@ -159,8 +159,17 @@ ide_autotools_build_target_get_install_directory (IdeBuildTarget *target)
   return NULL;
 }
 
+static gchar *
+ide_autotools_build_target_get_name (IdeBuildTarget *target)
+{
+  IdeAutotoolsBuildTarget *self = (IdeAutotoolsBuildTarget *)target;
+
+  return g_strdup (self->name);
+}
+
 static void
 build_target_iface_init (IdeBuildTargetInterface *iface)
 {
   iface->get_install_directory = ide_autotools_build_target_get_install_directory;
+  iface->get_name = ide_autotools_build_target_get_name;
 }

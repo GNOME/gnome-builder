@@ -264,37 +264,35 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
   IdeContext *context;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *configuration;
   GbpFlatpakRunner *runner;
-  const gchar *app_id = NULL;
-  g_autofree gchar *own_name = NULL;
-  g_autofree gchar *app_id_override = NULL;
+  g_autofree gchar *build_path = NULL;
+  g_autofree gchar *binary_name = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (IDE_IS_BUILD_TARGET (build_target));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
-  configuration = ide_configuration_manager_get_current (config_manager);
-
   runner = gbp_flatpak_runner_new (context);
   g_assert (GBP_IS_FLATPAK_RUNNER (runner));
 
-  app_id = ide_configuration_get_app_id (configuration);
-  if (ide_str_empty0 (app_id))
+  build_path = get_staging_directory (self);
+  binary_name = ide_build_target_get_name (build_target);
+  /* Use the project name if we can't determine the binary */
+  if (ide_str_empty0 (binary_name))
     {
-      g_warning ("Could not determine application ID");
-      app_id = "org.gnome.FlatpakApp";
+      IdeProject *project;
+      project = ide_context_get_project (context);
+      binary_name = g_strdup (ide_project_get_name (project));
     }
 
   ide_runner_set_run_on_host (IDE_RUNNER (runner), TRUE);
   ide_runner_append_argv (IDE_RUNNER (runner), "flatpak");
-  ide_runner_append_argv (IDE_RUNNER (runner), "run");
+  ide_runner_append_argv (IDE_RUNNER (runner), "build");
   ide_runner_append_argv (IDE_RUNNER (runner), "--share=ipc");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=x11");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=wayland");
-  ide_runner_append_argv (IDE_RUNNER (runner), app_id);
+  ide_runner_append_argv (IDE_RUNNER (runner), build_path);
+  ide_runner_append_argv (IDE_RUNNER (runner), binary_name);
 
   return IDE_RUNNER (runner);
 }
