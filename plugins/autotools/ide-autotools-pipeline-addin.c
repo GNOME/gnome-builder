@@ -162,7 +162,10 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
   IdeConfiguration *configuration;
+  IdeDevice *device;
   g_autofree gchar *configure_path = NULL;
+  g_autofree gchar *host_arg = NULL;
+  const gchar *system_type;
   const gchar *config_opts;
   const gchar *prefix;
   guint stage_id;
@@ -178,12 +181,18 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   configure_path = ide_build_pipeline_build_srcdir_path (pipeline, "configure", NULL);
   ide_subprocess_launcher_push_argv (launcher, configure_path);
 
+  /* --host=triplet */
+  configuration = ide_build_pipeline_get_configuration (pipeline);
+  device = ide_configuration_get_device (configuration);
+  system_type = ide_device_get_system_type (device);
+  host_arg = g_strdup_printf ("--host=%s", system_type);
+  ide_subprocess_launcher_push_argv (launcher, host_arg);
+
   /*
    * Parse the configure options as defined in the build configuration and append
    * them to configure.
    */
 
-  configuration = ide_build_pipeline_get_configuration (pipeline);
   config_opts = ide_configuration_get_config_opts (configuration);
   prefix = ide_configuration_get_prefix (configuration);
 
