@@ -1858,6 +1858,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
 
   if (ret != NULL)
     {
+      ide_subprocess_launcher_set_clear_env (ret, TRUE);
       ide_subprocess_launcher_set_cwd (ret, ide_build_pipeline_get_builddir (self));
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
