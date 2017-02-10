@@ -231,6 +231,14 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
+  /* Many things break without at least PATH, HOME, etc. being set */
+  if (priv->clear_env)
+    {
+      ide_subprocess_launcher_setenv (self, "PATH", "/bin:/usr/bin", FALSE);
+      ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
+      ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
+    }
+
 #ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *str = NULL;
