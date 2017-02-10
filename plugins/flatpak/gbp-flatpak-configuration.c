@@ -18,10 +18,8 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-configuration"
 
-#include "ide-debug.h"
-
 #include "gbp-flatpak-configuration.h"
-#include "buildsystem/ide-configuration.h"
+#include "gbp-flatpak-runtime.h"
 
 struct _GbpFlatpakConfiguration
 {
