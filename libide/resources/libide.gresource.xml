@@ -86,7 +86,7 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/buildsystem">
-    <file alias="editor.plugin">../buildsystem/buildsystem.plugin</file>
+    <file alias="buildsystem.plugin">../buildsystem/buildsystem.plugin</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/editor">
