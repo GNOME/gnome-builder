@@ -1425,3 +1425,37 @@ ide_configuration_get_ready (IdeConfiguration *self)
 
   return priv->device_ready && priv->runtime_ready;
 }
+
+gboolean
+ide_configuration_supports_device (IdeConfiguration *self,
+                                   IdeDevice        *device)
+{
+  gboolean ret = TRUE;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), FALSE);
+  g_return_val_if_fail (IDE_IS_DEVICE (device), FALSE);
+
+  if (IDE_CONFIGURATION_GET_CLASS (self)->supports_device)
+    ret = IDE_CONFIGURATION_GET_CLASS (self)->supports_device (self, device);
+
+  IDE_RETURN (ret);
+}
+
+gboolean
+ide_configuration_supports_runtime (IdeConfiguration *self,
+                                    IdeRuntime       *runtime)
+{
+  gboolean ret = TRUE;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), FALSE);
+  g_return_val_if_fail (IDE_IS_RUNTIME (runtime), FALSE);
+
+  if (IDE_CONFIGURATION_GET_CLASS (self)->supports_runtime)
+    ret = IDE_CONFIGURATION_GET_CLASS (self)->supports_runtime (self, runtime);
+
+  IDE_RETURN (ret);
+}

@@ -34,6 +34,11 @@ struct _IdeConfigurationClass
 {
   IdeObjectClass parent;
 
+  gboolean    (*supports_device)  (IdeConfiguration *self,
+                                   IdeDevice        *device);
+  gboolean    (*supports_runtime) (IdeConfiguration *self,
+                                   IdeRuntime       *runtime);
+
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;
@@ -103,6 +108,10 @@ guint                 ide_configuration_get_sequence         (IdeConfiguration  
 const gchar          *ide_configuration_get_app_id           (IdeConfiguration  *self);
 void                  ide_configuration_set_app_id           (IdeConfiguration  *self,
                                                               const gchar       *app_id);
+gboolean              ide_configuration_supports_device      (IdeConfiguration  *self,
+                                                              IdeDevice         *device);
+gboolean              ide_configuration_supports_runtime     (IdeConfiguration  *self,
+                                                              IdeRuntime        *runtime);
 const gchar          *ide_configuration_get_internal_string  (IdeConfiguration  *self,
                                                               const gchar       *key);
 void                  ide_configuration_set_internal_string  (IdeConfiguration  *self,
