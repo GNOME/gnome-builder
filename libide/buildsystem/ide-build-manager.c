@@ -233,6 +233,11 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   config = ide_configuration_manager_get_current (config_manager);
 
   /*
+   * TODO: If the runtime is missing, we need to asynchronously try to
+   *       install the runtime, and then setup the pipeline.
+   */
+
+  /*
    * We want to set the pipeline before connecting things using the GInitable
    * interface so that we can access the builddir from
    * IdeRuntime.create_launcher() during pipeline addin initialization.
