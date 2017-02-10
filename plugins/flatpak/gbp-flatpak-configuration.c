@@ -183,9 +183,12 @@ gbp_flatpak_configuration_set_sdk (GbpFlatpakConfiguration *self,
 {
   g_return_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self));
 
-  g_free (self->sdk);
-  self->sdk = g_strdup (sdk);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SDK]);
+  if (g_strcmp0 (self->sdk, sdk) != 0)
+    {
+      g_free (self->sdk);
+      self->sdk = g_strdup (sdk);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SDK]);
+    }
 }
 
 static void
