@@ -25,6 +25,7 @@
 
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-runtime-provider.h"
+#include "gbp-flatpak-transfer.h"
 
 struct _GbpFlatpakRuntimeProvider
 {
@@ -405,9 +406,116 @@ gbp_flatpak_runtime_provider_init (GbpFlatpakRuntimeProvider *self)
 {
 }
 
+static gboolean
+gbp_flatpak_runtime_provider_can_install (IdeRuntimeProvider *provider,
+                                          const gchar        *runtime_id)
+{
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (provider));
+  g_assert (runtime_id != NULL);
+
+  return g_str_has_prefix (runtime_id, "flatpak:");
+}
+
+static void
+gbp_flatpak_runtime_provider_install_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeTransferManager *transfer_manager = (IdeTransferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TRANSFER_MANAGER (transfer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_transfer_manager_execute_finish (transfer_manager, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
+                                            const gchar         *runtime_id,
+                                            GCancellable        *cancellable,
+                                            GAsyncReadyCallback  callback,
+                                            gpointer             user_data)
+{
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
+  g_autoptr(GbpFlatpakTransfer) transfer = NULL;
+  g_autoptr(GTask) task = NULL;
+  g_autofree gchar *delimited = NULL;
+  g_auto(GStrv) parts = NULL;
+  IdeContext *context;
+  IdeTransferManager *transfer_manager;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (runtime_id != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_runtime_provider_install_async);
+
+  if (!g_str_has_prefix (runtime_id, "flatpak:"))
+    IDE_GOTO (unknown_runtime_id);
+
+  delimited = g_strdelimit (g_strdup (runtime_id), ":/", ':');
+  parts = g_strsplit (delimited, ":", 0);
+
+  if (g_strv_length (parts) != 4)
+    IDE_GOTO (unknown_runtime_id);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  transfer = gbp_flatpak_transfer_new (context, parts[1], parts[2], parts[3], TRUE);
+
+  transfer_manager = ide_context_get_transfer_manager (context);
+  ide_transfer_manager_execute_async (transfer_manager,
+                                      IDE_TRANSFER (transfer),
+                                      cancellable,
+                                      gbp_flatpak_runtime_provider_install_cb,
+                                      g_steal_pointer (&task));
+
+  IDE_EXIT;
+
+unknown_runtime_id:
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Unknown runtime_id %s",
+                           runtime_id);
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_flatpak_runtime_provider_install_finish (IdeRuntimeProvider  *provider,
+                                             GAsyncResult        *result,
+                                             GError             **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (provider));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
 static void
 runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
 {
   iface->load = gbp_flatpak_runtime_provider_load;
   iface->unload = gbp_flatpak_runtime_provider_unload;
+  iface->can_install = gbp_flatpak_runtime_provider_can_install;
+  iface->install_async = gbp_flatpak_runtime_provider_install_async;
+  iface->install_finish = gbp_flatpak_runtime_provider_install_finish;
 }
