@@ -22,6 +22,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
@@ -34,6 +35,12 @@ struct _IdeRuntimeManager
   GPtrArray        *runtimes;
   guint             unloading : 1;
 };
+
+typedef struct
+{
+  const gchar        *runtime_id;
+  IdeRuntimeProvider *provider;
+} InstallLookup;
 
 static void list_model_iface_init (GListModelInterface *iface);
 static void initable_iface_init   (GInitableIface      *iface);
@@ -243,13 +250,162 @@ ide_runtime_manager_get_runtime (IdeRuntimeManager *self,
   for (i = 0; i < self->runtimes->len; i++)
     {
       IdeRuntime *runtime = g_ptr_array_index (self->runtimes, i);
-      const gchar *runtime_id;
-
-      runtime_id = ide_runtime_get_id (runtime);
+      const gchar *runtime_id = ide_runtime_get_id (runtime);
 
       if (g_strcmp0 (runtime_id, id) == 0)
         return runtime;
     }
 
   return NULL;
+}
+
+static void
+install_lookup_cb (PeasExtensionSet   *set,
+                   PeasPluginInfo     *plugin,
+                   IdeRuntimeProvider *provider,
+                   InstallLookup      *lookup)
+{
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin != NULL);
+  g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
+  g_assert (lookup != NULL);
+  g_assert (lookup->runtime_id != NULL);
+  g_assert (lookup->provider == NULL || IDE_IS_RUNTIME_PROVIDER (lookup->provider));
+
+  if (lookup->provider == NULL)
+    {
+      if (ide_runtime_provider_can_install (provider, lookup->runtime_id))
+        lookup->provider = provider;
+    }
+}
+
+static void
+ide_runtime_manager_install_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeRuntimeProvider *provider = (IdeRuntimeProvider *)object;
+  IdeRuntimeManager *self;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeRuntime *runtime;
+  const gchar *runtime_id;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_runtime_provider_install_finish (provider, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  self = g_task_get_source_object (task);
+  runtime_id = g_task_get_task_data (task);
+
+  g_assert (IDE_IS_RUNTIME_MANAGER (self));
+  g_assert (runtime_id != NULL);
+
+  runtime = ide_runtime_manager_get_runtime (self, runtime_id);
+
+  if (runtime == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Runtime provider returned success but did not register runtime %s",
+                               runtime_id);
+      IDE_EXIT;
+    }
+
+  g_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_runtime_manager_ensure_async:
+ * @self: An #IdeRuntimeManager
+ * @runtime_id: the id for an expected runtime
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: a callback to call after execution
+ * @user_data: user data for @callback
+ *
+ * This function will asynchronously check if a runtime is installed.
+ *
+ * If it is not installed, it will check to see if any runtime provider
+ * can provide the runtime by installing it. If so, the runtime will be
+ * installed.
+ *
+ * Call ide_runtime_manager_ensure_finish() to get the resulting runtime
+ * or a #GError in case of failure.
+ */
+void
+ide_runtime_manager_ensure_async (IdeRuntimeManager   *self,
+                                  const gchar         *runtime_id,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeRuntime *runtime;
+  InstallLookup lookup = { 0 };
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
+  g_return_if_fail (runtime_id != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_runtime_manager_ensure_async);
+  g_task_set_task_data (task, g_strdup (runtime_id), g_free);
+
+  runtime = ide_runtime_manager_get_runtime (self, runtime_id);
+
+  if (runtime != NULL)
+    {
+      g_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
+      IDE_EXIT;
+    }
+
+  peas_extension_set_foreach (self->extensions,
+                              (PeasExtensionSetForeachFunc) install_lookup_cb,
+                              &lookup);
+
+  if (lookup.provider == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to locate provider for runtime: %s",
+                               runtime_id);
+      IDE_EXIT;
+    }
+
+  ide_runtime_provider_install_async (lookup.provider,
+                                      runtime_id,
+                                      cancellable,
+                                      ide_runtime_manager_install_cb,
+                                      g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_runtime_manager_ensure_finish:
+ *
+ * Returns: (transfer full): An #IdeRuntime or %NULL.
+ */
+IdeRuntime *
+ide_runtime_manager_ensure_finish (IdeRuntimeManager  *self,
+                                   GAsyncResult       *result,
+                                   GError            **error)
+{
+  g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
