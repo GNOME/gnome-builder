@@ -12,6 +12,7 @@ extra_defs_gen_generate_defs_libide_LDADD = \
 	$(LIBIDE_LIBS) \
 	-lglibmm_generate_extra_defs-2.4 \
 	-L$(top_builddir)/libide \
+	$(top_builddir)/contrib/pnl/libpanel-gtk.la \
 	-lide-1.0
 
 AM_CPPFLAGS = \

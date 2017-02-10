@@ -660,6 +660,7 @@ Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
 Ide_1_0_gir_LIBS =                                           \
 	libide-1.0.la                                        \
 	$(top_builddir)/contrib/egg/libegg-private.la        \
+	$(top_builddir)/contrib/pnl/libpanel-gtk.la          \
 	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la \
         $(NULL)
 Ide_1_0_gir_FILES = $(introspection_sources)

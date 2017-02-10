@@ -28,7 +28,13 @@ libidemm_1_0_la_LDFLAGS =
 	-no-undefined \
 	$(NULL)
 
-libidemm_1_0_la_LIBADD  = $(IDEMM_LIBS)
+libidemm_1_0_la_LIBADD =                                        \
+	$(IDEMM_LIBS)                                           \
+	$(top_builddir)/contrib/egg/libegg-private.la           \
+	$(top_builddir)/contrib/jsonrpc-glib/libjsonrpc-glib.la \
+	$(top_builddir)/contrib/pnl/libpanel-gtk.la             \
+	$(top_builddir)/contrib/tmpl/libtemplate-glib-1.0.la    \
+	$(NULL)
 
 endif
 

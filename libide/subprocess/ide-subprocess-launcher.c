@@ -231,6 +231,14 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
+  /* Many things break without at least PATH, HOME, etc. being set */
+  if (priv->clear_env)
+    {
+      ide_subprocess_launcher_setenv (self, "PATH", "/bin:/usr/bin", FALSE);
+      ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
+      ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
+    }
+
 #ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *str = NULL;
@@ -267,9 +275,14 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   /*
    * GSubprocessLauncher starts by inheriting the current environment.
    * So if clear-env is set, we need to unset those environment variables.
+   * Simply setting the environ to NULL doesn't work, because glib uses
+   * execv rather than execve in that case.
    */
   if (priv->clear_env)
-    g_subprocess_launcher_set_environ (launcher, NULL);
+    {
+      gchar *envp[] = { NULL };
+      g_subprocess_launcher_set_environ (launcher, envp);
+    }
 
   /*
    * Now override any environment variables that were set using
