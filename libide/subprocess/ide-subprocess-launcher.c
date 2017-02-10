@@ -267,9 +267,14 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   /*
    * GSubprocessLauncher starts by inheriting the current environment.
    * So if clear-env is set, we need to unset those environment variables.
+   * Simply setting the environ to NULL doesn't work, because glib uses
+   * execv rather than execve in that case.
    */
   if (priv->clear_env)
-    g_subprocess_launcher_set_environ (launcher, NULL);
+    {
+      gchar *envp[] = { NULL };
+      g_subprocess_launcher_set_environ (launcher, envp);
+    }
 
   /*
    * Now override any environment variables that were set using
