@@ -26,7 +26,7 @@
 #include "buildsystem/ide-configuration-provider.h"
 
 void
-ide_buildsystem_register_types (PeasObjectModule *module)
+ide_buildconfig_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIGURATION_PROVIDER,
