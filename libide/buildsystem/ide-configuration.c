@@ -136,6 +136,46 @@ ide_configuration_emit_changed (IdeConfiguration *self)
   g_signal_emit (self, signals [CHANGED], 0);
 }
 
+static IdeDevice *
+ide_configuration_real_get_device (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  if (priv->device_id != NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeDeviceManager *device_manager = ide_context_get_device_manager (context);
+      IdeDevice *device = ide_device_manager_get_device (device_manager, priv->device_id);
+
+      if (device != NULL)
+        return g_object_ref (device);
+    }
+
+  return NULL;
+}
+
+static IdeRuntime *
+ide_configuration_real_get_runtime (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  if (priv->runtime_id != NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeRuntimeManager *runtime_manager = ide_context_get_runtime_manager (context);
+      IdeRuntime *runtime = ide_runtime_manager_get_runtime (runtime_manager, priv->runtime_id);
+
+      if (runtime != NULL)
+        return g_object_ref (runtime);
+    }
+
+  return NULL;
+}
+
 static void
 ide_configuration_set_id (IdeConfiguration *self,
                           const gchar      *id)
@@ -217,8 +257,39 @@ ide_configuration_environment_changed (IdeConfiguration *self,
   g_assert (IDE_IS_ENVIRONMENT (environment));
 
   ide_configuration_set_dirty (self, TRUE);
+  ide_configuration_emit_changed (self);
 
   IDE_EXIT;
+}
+
+static void
+ide_configuration_real_set_device (IdeConfiguration *self,
+                                    IdeDevice       *device)
+{
+  const gchar *device_id = "local";
+
+  g_assert (IDE_IS_CONFIGURATION (self));
+  g_assert (!device || IDE_IS_DEVICE (device));
+
+  if (device != NULL)
+    device_id = ide_device_get_id (device);
+
+  ide_configuration_set_device_id (self, device_id);
+}
+
+static void
+ide_configuration_real_set_runtime (IdeConfiguration *self,
+                                    IdeRuntime       *runtime)
+{
+  const gchar *runtime_id = "host";
+
+  g_assert (IDE_IS_CONFIGURATION (self));
+  g_assert (!runtime || IDE_IS_RUNTIME (runtime));
+
+  if (runtime != NULL)
+    runtime_id = ide_runtime_get_id (runtime);
+
+  ide_configuration_set_runtime_id (self, runtime_id);
 }
 
 static void
@@ -414,6 +485,11 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
   object_class->get_property = ide_configuration_get_property;
   object_class->set_property = ide_configuration_set_property;
 
+  klass->get_device = ide_configuration_real_get_device;
+  klass->set_device = ide_configuration_real_set_device;
+  klass->get_runtime = ide_configuration_real_get_runtime;
+  klass->set_runtime = ide_configuration_real_set_runtime;
+
   properties [PROP_CONFIG_OPTS] =
     g_param_spec_string ("config-opts",
                          "Config Options",
@@ -589,14 +665,15 @@ ide_configuration_set_device_id (IdeConfiguration *self,
       g_free (priv->device_id);
       priv->device_id = g_strdup (device_id);
 
-      ide_configuration_set_dirty (self, TRUE);
-
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE_ID]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
 
       context = ide_object_get_context (IDE_OBJECT (self));
       device_manager = ide_context_get_device_manager (context);
       ide_configuration_device_manager_items_changed (self, 0, 0, 0, device_manager);
+
+      ide_configuration_set_dirty (self, TRUE);
+      ide_configuration_emit_changed (self);
     }
 }
 
@@ -611,31 +688,19 @@ ide_configuration_set_device_id (IdeConfiguration *self,
 IdeDevice *
 ide_configuration_get_device (IdeConfiguration *self)
 {
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-  IdeDeviceManager *device_manager;
-  IdeContext *context;
-
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  device_manager = ide_context_get_device_manager (context);
-
-  return ide_device_manager_get_device (device_manager, priv->device_id);
+  return IDE_CONFIGURATION_GET_CLASS (self)->get_device (self);
 }
 
 void
 ide_configuration_set_device (IdeConfiguration *self,
                               IdeDevice        *device)
 {
-  const gchar *device_id = "local";
-
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
   g_return_if_fail (!device || IDE_IS_DEVICE (device));
 
-  if (device != NULL)
-    device_id = ide_device_get_id (device);
-
-  ide_configuration_set_device_id (self, device_id);
+  IDE_CONFIGURATION_GET_CLASS (self)->set_device (self, device);
 }
 
 /**
@@ -697,14 +762,15 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
       g_free (priv->runtime_id);
       priv->runtime_id = g_strdup (runtime_id);
 
-      ide_configuration_set_dirty (self, TRUE);
-
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNTIME_ID]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNTIME]);
 
       context = ide_object_get_context (IDE_OBJECT (self));
       runtime_manager = ide_context_get_runtime_manager (context);
       ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
+
+      ide_configuration_set_dirty (self, TRUE);
+      ide_configuration_emit_changed (self);
     }
 }
 
@@ -719,31 +785,19 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
 IdeRuntime *
 ide_configuration_get_runtime (IdeConfiguration *self)
 {
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-  IdeRuntimeManager *runtime_manager;
-  IdeContext *context;
-
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  runtime_manager = ide_context_get_runtime_manager (context);
-
-  return ide_runtime_manager_get_runtime (runtime_manager, priv->runtime_id);
+  return IDE_CONFIGURATION_GET_CLASS (self)->get_runtime (self);
 }
 
 void
 ide_configuration_set_runtime (IdeConfiguration *self,
                                IdeRuntime       *runtime)
 {
-  const gchar *runtime_id = "host";
-
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
 
-  if (runtime != NULL)
-    runtime_id = ide_runtime_get_id (runtime);
-
-  ide_configuration_set_runtime_id (self, runtime_id);
+  IDE_CONFIGURATION_GET_CLASS (self)->set_runtime (self, runtime);
 }
 
 /**

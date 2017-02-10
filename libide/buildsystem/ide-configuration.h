@@ -34,6 +34,14 @@ struct _IdeConfigurationClass
 {
   IdeObjectClass parent;
 
+  IdeDevice  *(*get_device)       (IdeConfiguration *self);
+  void        (*set_device)       (IdeConfiguration *self,
+                                   IdeDevice        *device);
+
+  IdeRuntime *(*get_runtime)      (IdeConfiguration *self);
+  void        (*set_runtime)      (IdeConfiguration *self,
+                                   IdeRuntime       *runtime);
+
   gboolean    (*supports_device)  (IdeConfiguration *self,
                                    IdeDevice        *device);
   gboolean    (*supports_runtime) (IdeConfiguration *self,
