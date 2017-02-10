@@ -5,16 +5,16 @@
 # Christian Kirbach <christian.kirbach@gmail.com>, 2015, 2016.
 # Bernd Homuth <dev@hmt.im>, 2015.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2015-2016.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2016
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2016-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-26 17:32+0000\n"
-"PO-Revision-Date: 2016-12-29 11:53+0100\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2017-02-02 23:19+0000\n"
+"PO-Revision-Date: 2017-02-07 12:13+0100\n"
+"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -69,7 +69,7 @@ msgstr[1] "Vor ungefähr %u Jahren"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:679
+#: libide/greeter/ide-greeter-perspective.c:681
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -86,8 +86,8 @@ msgid "Create"
 msgstr "Anlegen"
 
 #: contrib/egg/egg-file-chooser-entry.c:112
-#: libide/editor/ide-editor-view-actions.c:315
-#: libide/editor/ide-editor-view-actions.c:446
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
 #: plugins/color-picker/gb-color-picker-prefs.c:237
 #: plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: plugins/terminal/gb-terminal-view-actions.c:306
@@ -99,9 +99,9 @@ msgid "Browse…"
 msgstr "Durchsuchen …"
 
 #: contrib/egg/egg-file-chooser-entry.c:488
-#: libide/editor/ide-editor-view-actions.c:314
-#: libide/editor/ide-editor-view-actions.c:445
-#: libide/greeter/ide-greeter-perspective.c:678
+#: libide/editor/ide-editor-view-actions.c:315
+#: libide/editor/ide-editor-view-actions.c:446
+#: libide/greeter/ide-greeter-perspective.c:680
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -308,7 +308,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5768
+#: libide/sourceview/ide-source-view.c:5855
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Umbenennen"
@@ -762,15 +762,15 @@ msgstr "_Wiederholen"
 msgid "C_ut"
 msgstr "_Ausschneiden"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:238 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:28
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:242 plugins/terminal/gtk/menus.ui:32
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:32
 msgid "_Paste"
 msgstr "_Einfügen"
 
-#: data/gtk/menus.ui:145 data/gtk/menus.ui:246
+#: data/gtk/menus.ui:145 data/gtk/menus.ui:257
 msgid "_Delete"
 msgstr "_Löschen"
 
@@ -778,108 +778,112 @@ msgstr "_Löschen"
 msgid "Highlighting"
 msgstr "Hervorhebung"
 
-#: data/gtk/menus.ui:156 plugins/terminal/gtk/menus.ui:38
+#: data/gtk/menus.ui:153 data/gtk/menus.ui:206
+msgid "Spellchecking"
+msgstr "Rechtschreibprüfung"
+
+#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
 msgid "Selection"
 msgstr "Auswahl"
 
-#: data/gtk/menus.ui:158 data/gtk/menus.ui:252 plugins/terminal/gtk/menus.ui:40
+#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:40
 msgid "Select _All"
 msgstr "_Alle auswählen"
 
-#: data/gtk/menus.ui:163 plugins/terminal/gtk/menus.ui:45
+#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:45
 msgid "Select _None"
 msgstr "_Nichts auswählen"
 
-#: data/gtk/menus.ui:169
+#: data/gtk/menus.ui:173
 msgid "All _Upper Case"
 msgstr "Alles _groß schreiben"
 
-#: data/gtk/menus.ui:174
+#: data/gtk/menus.ui:178
 msgid "All _Lower Case"
 msgstr "Alles _klein schreiben"
 
-#: data/gtk/menus.ui:179
+#: data/gtk/menus.ui:183
 msgid "_Invert Case"
 msgstr "Groß-/Kleinschreibung _umkehren"
 
-#: data/gtk/menus.ui:184
+#: data/gtk/menus.ui:188
 msgid "_Title Case"
 msgstr "Überschrif_t-Großschreibung"
 
-#: data/gtk/menus.ui:191
+#: data/gtk/menus.ui:195
 msgid "Join Lines"
 msgstr "Zeilen zusammenfügen"
 
-#: data/gtk/menus.ui:195
+#: data/gtk/menus.ui:199
 msgid "Sort Lines"
 msgstr "Zeilen sortieren"
 
-#: data/gtk/menus.ui:204
+#: data/gtk/menus.ui:215
 msgid "Zoom"
 msgstr "Größe"
 
-#: data/gtk/menus.ui:206
+#: data/gtk/menus.ui:217
 msgid "Zoom _In"
 msgstr "Ver_größern"
 
-#: data/gtk/menus.ui:211
+#: data/gtk/menus.ui:222
 msgid "Zoom _Out"
 msgstr "Ver_kleinern"
 
-#: data/gtk/menus.ui:217
+#: data/gtk/menus.ui:228
 msgid "Reset"
 msgstr "Zurücksetzen"
 
 # Zugegeben, nicht optimal. Soweit ich das beurteilen kann, handelt es sich um die Funktion, dass die Suche nach dem Erreichen des Dateiendes (oder des Anfangs bei Rückwärtssuche) zum Anfang (bzw. Ende) zurückspringt und neu beginnt. Genauso habe ich es kürzlich im Texteditor Nano übersetzt.
-#: data/gtk/menus.ui:228
+#: data/gtk/menus.ui:239
 msgid "_Wrap Around"
 msgstr "Suche _umbrechen"
 
-#: data/gtk/menus.ui:234
+#: data/gtk/menus.ui:245
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: data/gtk/menus.ui:260
+#: data/gtk/menus.ui:271
 msgid "Split"
 msgstr "Teilen"
 
-#: data/gtk/menus.ui:262
+#: data/gtk/menus.ui:273
 msgid "Split Left"
 msgstr "Dokument links teilen"
 
-#: data/gtk/menus.ui:267
+#: data/gtk/menus.ui:278
 msgid "Split Right"
 msgstr "Dokument rechts teilen"
 
-#: data/gtk/menus.ui:272
+#: data/gtk/menus.ui:283
 msgid "Split Down"
 msgstr "Dokument unten teilen"
 
-#: data/gtk/menus.ui:279
+#: data/gtk/menus.ui:290
 msgid "Move"
 msgstr "Verschieben"
 
-#: data/gtk/menus.ui:281
+#: data/gtk/menus.ui:292
 msgid "Move Left"
 msgstr "Nach links verschieben"
 
-#: data/gtk/menus.ui:286
+#: data/gtk/menus.ui:297
 msgid "Move Right"
 msgstr "Nach rechts verschieben"
 
-#: data/gtk/menus.ui:294
+#: data/gtk/menus.ui:305
 msgid "_Save"
 msgstr "_Speichern"
 
-#: data/gtk/menus.ui:298
+#: data/gtk/menus.ui:309
 msgid "_Save As"
 msgstr "Speichern _unter"
 
-#: data/gtk/menus.ui:304
+#: data/gtk/menus.ui:315
 msgid "_Print"
 msgstr "_Drucken"
 
-#: data/gtk/menus.ui:310 plugins/sysprof/gbp-sysprof-perspective.ui:28
+#: data/gtk/menus.ui:321 plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Schließen"
 
@@ -887,7 +891,7 @@ msgstr "_Schließen"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:516
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:560
+#: libide/workbench/ide-workbench.c:565
 msgid "Builder"
 msgstr "Builder"
 
@@ -1015,7 +1019,7 @@ msgstr ""
 msgid "Learn more about GNOME Builder"
 msgstr "Erfahren Sie mehr über GNOME Builder"
 
-#: libide/application/ide-application-actions.c:131
+#: libide/application/ide-application-actions.c:130
 msgid "Funded By"
 msgstr "Gefördert von"
 
@@ -1088,7 +1092,7 @@ msgstr "Bitte geben Sie eine D-Bus-Adresse an"
 msgid "No such worker"
 msgstr "Kein solcher Worker"
 
-#: libide/buffers/ide-buffer.c:2413
+#: libide/buffers/ide-buffer.c:2458
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -1161,33 +1165,33 @@ msgstr "%u von %u"
 msgid "OVR"
 msgstr "OVR"
 
-#: libide/editor/ide-editor-frame.ui:160
+#: libide/editor/ide-editor-frame.ui:166
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: libide/editor/ide-editor-frame.ui:173
+#: libide/editor/ide-editor-frame.ui:179
 msgid "Replace All"
 msgstr "Alle ersetzen"
 
-#: libide/editor/ide-editor-frame.ui:195
+#: libide/editor/ide-editor-frame.ui:201
 msgid "Switch between Search and Search-and-Replace"
 msgstr "Wechsel zwischen Suchen und Suchen-und-Ersetzen"
 
-#: libide/editor/ide-editor-frame.ui:218
+#: libide/editor/ide-editor-frame.ui:224
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Suchoptionen anzeigen oder verbergen, wie die Berücksichtigung von Groß- "
 "oder Kleinschreibung"
 
-#: libide/editor/ide-editor-frame.ui:279
+#: libide/editor/ide-editor-frame.ui:285
 msgid "Regular expressions"
 msgstr "Reguläre Ausdrücke"
 
-#: libide/editor/ide-editor-frame.ui:294
+#: libide/editor/ide-editor-frame.ui:300
 msgid "Case sensitive"
 msgstr "Groß-/Kleinschreibung beachten"
 
-#: libide/editor/ide-editor-frame.ui:309
+#: libide/editor/ide-editor-frame.ui:315
 msgid "Match whole word only"
 msgstr "Nur ganze Wörter"
 
@@ -1219,21 +1223,106 @@ msgstr "Gehe zu Zeile"
 msgid "Go"
 msgstr "Navigieren"
 
-#: libide/editor/ide-editor-perspective.c:456
+#: libide/editor/ide-editor-perspective.c:523
 #: libide/preferences/ide-preferences-builtin.c:109
 #: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
 msgstr "Editor"
 
-#: libide/editor/ide-editor-perspective.ui:27
+#: libide/editor/ide-editor-perspective.ui:30
 msgid "No open files"
 msgstr "Keine geöffneten Dateien"
 
-#: libide/editor/ide-editor-perspective.ui:40
+#: libide/editor/ide-editor-perspective.ui:43
 msgid "Try opening a file by typing in the search box at the top"
 msgstr ""
 "Versuchen Sie, eine Datei zu öffnen, indem Sie den Namen oben im Suchfeld "
 "eingeben"
+
+#: libide/editor/ide-editor-spell-language-popover.c:232
+msgid "No language selected"
+msgstr "Keine Sprache gewählt"
+
+#: libide/editor/ide-editor-spell-navigator.c:458
+msgid ""
+"Spell checker error: no language set. It’s maybe because no dictionaries are "
+"installed."
+msgstr ""
+"Fehler bei der Rechtschreibprüfung: Es ist keine Sprache festgelegt. "
+"Eventuell ist der Grund, dass keine Wörterbücher installiert sind."
+
+#: libide/editor/ide-editor-spell-widget.c:201
+msgid "No suggestions"
+msgstr "Keine Vorschläge"
+
+#: libide/editor/ide-editor-spell-widget.c:278
+msgid "Completed spell checking"
+msgstr "Rechtschreibprüfung abgeschlossen"
+
+#: libide/editor/ide-editor-spell-widget.c:636
+msgid "This word is already in the personal dictionary"
+msgstr "Das Wort ist bereits im privaten Wörterbuch"
+
+#: libide/editor/ide-editor-spell-widget.c:639
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "Das Wort ist bereits im Wörterbuch %s"
+
+#: libide/editor/ide-editor-spell-widget.c:1270
+msgid "The word is not in the dictionary"
+msgstr "Das Wort ist nicht im Wörterbuch"
+
+#: libide/editor/ide-editor-spell-widget.ui:14
+msgid "Misspelled"
+msgstr "Falsch geschrieben"
+
+#: libide/editor/ide-editor-spell-widget.ui:65
+msgid "_Ignore"
+msgstr "_Ignorieren"
+
+#: libide/editor/ide-editor-spell-widget.ui:73
+msgid "Ignore _All"
+msgstr "_Alle ignorieren"
+
+#: libide/editor/ide-editor-spell-widget.ui:92
+msgid "Change _to"
+msgstr "Ändern _zu"
+
+#: libide/editor/ide-editor-spell-widget.ui:124
+msgid "Cha_nge"
+msgstr "Ä_ndern"
+
+#: libide/editor/ide-editor-spell-widget.ui:132
+msgid "Change A_ll"
+msgstr "_Alle ändern"
+
+#: libide/editor/ide-editor-spell-widget.ui:151
+msgid "_Suggestions"
+msgstr "_Vorschläge"
+
+#: libide/editor/ide-editor-spell-widget.ui:188
+msgid "Add Word"
+msgstr "Wort hinzufügen"
+
+#: libide/editor/ide-editor-spell-widget.ui:213
+msgid "A_dd"
+msgstr "_Hinzufügen"
+
+#: libide/editor/ide-editor-spell-widget.ui:229
+msgid "Dictionary"
+msgstr "Wörterbuch"
+
+#: libide/editor/ide-editor-spell-widget.ui:267
+msgid "Options"
+msgstr "Einstellungen"
+
+#: libide/editor/ide-editor-spell-widget.ui:292
+msgid "_Language"
+msgstr "_Sprache"
+
+#: libide/editor/ide-editor-spell-widget.ui:319
+msgid "_Highlight"
+msgstr "_Hervorheben"
 
 #: libide/editor/ide-editor-tweak-widget.ui:22
 msgid "Search highlight mode…"
@@ -1282,11 +1371,11 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: libide/editor/ide-editor-view-actions.c:308
+#: libide/editor/ide-editor-view-actions.c:309
 msgid "Save Document"
 msgstr "Dokument speichern"
 
-#: libide/editor/ide-editor-view-actions.c:434
+#: libide/editor/ide-editor-view-actions.c:435
 msgid "Save Document As"
 msgstr "Dokument speichern unter"
 
@@ -1295,8 +1384,8 @@ msgid "_Reload"
 msgstr "A_ktualisieren"
 
 #: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:319
-#: libide/greeter/ide-greeter-perspective.ui:367
+#: libide/greeter/ide-greeter-perspective.ui:317
+#: libide/greeter/ide-greeter-perspective.ui:365
 #: libide/workbench/ide-omni-bar.ui:353
 msgid "_Cancel"
 msgstr "_Abbrechen"
@@ -1309,11 +1398,11 @@ msgstr ""
 "Builder hat festgestellt, dass diese Datei anderweitig geändert wurde. "
 "Wollen Sie die Datei neu laden?"
 
-#: libide/greeter/ide-greeter-perspective.c:454
+#: libide/greeter/ide-greeter-perspective.c:456
 msgid "Failed to load the project"
 msgstr "Projekt konnte nicht geladen werden"
 
-#: libide/greeter/ide-greeter-perspective.c:674
+#: libide/greeter/ide-greeter-perspective.c:676
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
@@ -1353,15 +1442,15 @@ msgstr "Wählen Sie ein Projekt"
 msgid "Click an item to select"
 msgstr "Klicken Sie auf ein Element, um es auszuwählen"
 
-#: libide/greeter/ide-greeter-perspective.ui:331
+#: libide/greeter/ide-greeter-perspective.ui:329
 msgid "Open…"
 msgstr "Öffnen …"
 
-#: libide/greeter/ide-greeter-perspective.ui:346
+#: libide/greeter/ide-greeter-perspective.ui:344
 msgid "Select projects for removal"
 msgstr "Projekte zum Entfernen auswählen"
 
-#: libide/greeter/ide-greeter-perspective.ui:366
+#: libide/greeter/ide-greeter-perspective.ui:364
 msgid "Return to project selection"
 msgstr "Zurück zur Projektauswahl"
 
@@ -1383,16 +1472,16 @@ msgstr "Fehlende Versionen in [globaler] Gruppe der Sprachstandards."
 msgid "Failed to initialize defaults."
 msgstr "Standardwerte konnten nicht initialisiert werden."
 
-#: libide/ide.c:62
+#: libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: libide/ide-context.c:1944
+#: libide/ide-context.c:1863
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: libide/ide-context.c:2063
+#: libide/ide-context.c:1982
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -1419,37 +1508,37 @@ msgid "Editor Shortcuts"
 msgstr "Editor-Tastenkombinationen"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:438
+#: libide/keybindings/ide-shortcuts-window.ui:445
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Allgemein"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:449
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Globale Suche"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:456
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Einstellungen"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:456
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Befehlsleiste"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:463
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:470
+#: libide/keybindings/ide-shortcuts-window.ui:477
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkombinationen"
@@ -1522,6 +1611,7 @@ msgid "Show list of open documents"
 msgstr "Liste der geöffneten Dokumente anzeigen"
 
 #: libide/keybindings/ide-shortcuts-window.ui:157
+#: libide/keybindings/ide-shortcuts-window.ui:169
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Suchen und Ersetzen"
@@ -1531,205 +1621,205 @@ msgctxt "shortcut window"
 msgid "Find"
 msgstr "Suchen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:169
+#: libide/keybindings/ide-shortcuts-window.ui:176
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Weitersuchen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:176
+#: libide/keybindings/ide-shortcuts-window.ui:183
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Rückwärts weitersuchen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:183
+#: libide/keybindings/ide-shortcuts-window.ui:190
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Hervorhebung löschen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:479
+#: libide/keybindings/ide-shortcuts-window.ui:198
+#: libide/keybindings/ide-shortcuts-window.ui:486
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopieren und Einfügen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:484
+#: libide/keybindings/ide-shortcuts-window.ui:203
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Ausgewählten Text in die Zwischenablage kopieren"
 
-#: libide/keybindings/ide-shortcuts-window.ui:203
+#: libide/keybindings/ide-shortcuts-window.ui:210
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Ausgewählten Text in die Zwischenablage ausschneiden"
 
-#: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:491
+#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:498
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Text aus der Zwischenablage einfügen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:224
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Aktuelle Zeile oder Auswahl duplizieren"
 
-#: libide/keybindings/ide-shortcuts-window.ui:225
+#: libide/keybindings/ide-shortcuts-window.ui:232
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Rückgängig und Wiederholen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:230
+#: libide/keybindings/ide-shortcuts-window.ui:237
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Letzten Befehl rückgängig machen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:237
+#: libide/keybindings/ide-shortcuts-window.ui:244
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Letzten Befehl wiederholen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:245
+#: libide/keybindings/ide-shortcuts-window.ui:252
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Bearbeiten"
 
-#: libide/keybindings/ide-shortcuts-window.ui:250
+#: libide/keybindings/ide-shortcuts-window.ui:257
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Zahl unter dem Zeiger erhöhen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:257
+#: libide/keybindings/ide-shortcuts-window.ui:264
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Zahl unter dem Zeiger verringern"
 
-#: libide/keybindings/ide-shortcuts-window.ui:264
+#: libide/keybindings/ide-shortcuts-window.ui:271
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Ausgewählte Zeilen vereinen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:271
+#: libide/keybindings/ide-shortcuts-window.ui:278
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Vervollständigungsfenster anzeigen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:278
+#: libide/keybindings/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Überschreiben aktivieren"
 
-#: libide/keybindings/ide-shortcuts-window.ui:285
+#: libide/keybindings/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Zeile wieder einrücken"
 
-#: libide/keybindings/ide-shortcuts-window.ui:292
+#: libide/keybindings/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Zeile löschen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:299
+#: libide/keybindings/ide-shortcuts-window.ui:306
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:300
+#: libide/keybindings/ide-shortcuts-window.ui:307
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Benötigt semantische Sprachunterstützung"
 
-#: libide/keybindings/ide-shortcuts-window.ui:308
+#: libide/keybindings/ide-shortcuts-window.ui:315
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigation"
 
-#: libide/keybindings/ide-shortcuts-window.ui:313
+#: libide/keybindings/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Zum nächsten Fehler in der Datei wechseln"
 
-#: libide/keybindings/ide-shortcuts-window.ui:320
+#: libide/keybindings/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Zum vorherigen Fehler in der Datei wechseln"
 
-#: libide/keybindings/ide-shortcuts-window.ui:327
+#: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Zur zuletzt bearbeiteten Stelle wechseln"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Zur nächsten zu bearbeitenden Stelle wechseln"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Zur Definition des Symbols wechseln"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Ansichtsfeld innerhalb der Datei aufwärts schieben"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Ansichtsfeld innerhalb der Datei abwärts schieben"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Ansichtsfeld zum Ende der Datei schieben"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Ansichtsfeld zum Anfang der Datei schieben"
 
-#: libide/keybindings/ide-shortcuts-window.ui:376
+#: libide/keybindings/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Zur übereinstimmenden Klammer wechseln"
 
-#: libide/keybindings/ide-shortcuts-window.ui:384
+#: libide/keybindings/ide-shortcuts-window.ui:391
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Auswahl"
 
-#: libide/keybindings/ide-shortcuts-window.ui:389
+#: libide/keybindings/ide-shortcuts-window.ui:396
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Alle auswählen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:396
+#: libide/keybindings/ide-shortcuts-window.ui:403
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Alles abwählen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:404
+#: libide/keybindings/ide-shortcuts-window.ui:411
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Erstellen und ausführen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:409
+#: libide/keybindings/ide-shortcuts-window.ui:416
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Erstellen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:416
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Ausführen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:423
+#: libide/keybindings/ide-shortcuts-window.ui:430
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profil"
 
-#: libide/keybindings/ide-shortcuts-window.ui:434
+#: libide/keybindings/ide-shortcuts-window.ui:441
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Terminaltastenkombinationen"
@@ -2098,7 +2188,7 @@ msgstr "Anzahl der Prozessoren"
 
 #: libide/preferences/ide-preferences-builtin.c:375
 #: libide/workbench/ide-omni-bar.ui:379
-#: plugins/build-tools/gbp-build-panel.c:452
+#: plugins/build-tools/gbp-build-panel.c:469
 msgid "Build"
 msgstr "Erstellen"
 
@@ -2172,23 +2262,6 @@ msgstr "Die Datei muss innerhalb des Projektbaums sein."
 msgid "%s() may only be executed once"
 msgstr "%s() darf nur einmal aufgerufen werden."
 
-#: libide/pygobject/ide-pygobject-script.c:135
-msgid "Attempt to load a PyGObject script with no filename."
-msgstr "Versuch, ein PyGObject-Script ohne Dateiname zu laden."
-
-#: libide/pygobject/ide-pygobject-script.c:254
-msgid "The filename for the script was not provided."
-msgstr "Der Dateiname für das Skript war nicht angegeben."
-
-#: libide/pygobject/ide-pygobject-script.c:265
-msgid "The script must be on a local filesystem."
-msgstr "Das Skript muss im lokalen Dateisystem sein."
-
-#: libide/pygobject/ide-pygobject-script.c:274
-#, c-format
-msgid "The script “%s” is not a PyGObject file."
-msgstr "Das Skript »%s« ist keine PyGObject-Datei."
-
 #: libide/runner/ide-run-manager.c:225
 msgid "Run"
 msgstr "Ausführen"
@@ -2211,11 +2284,6 @@ msgstr "Prozess wurde unerwartet beendet"
 msgid "Host operating system"
 msgstr "Wirtsbetriebssystem"
 
-#: libide/scripting/ide-script.c:205
-#, c-format
-msgid "%s has not implemented GAsyncInitable."
-msgstr "%s implementiert GAsyncInitable nicht."
-
 #: libide/search/ide-omni-search-display.c:271
 msgid "Cannot add provider more than once."
 msgstr "Anbieter kann nicht mehrmals hinzugefügt werden."
@@ -2234,21 +2302,21 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5224
+#: libide/sourceview/ide-source-view.c:5311
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: libide/sourceview/ide-source-view.c:5226
+#: libide/sourceview/ide-source-view.c:5313
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: libide/sourceview/ide-source-view.c:5340
+#: libide/sourceview/ide-source-view.c:5427
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: libide/sourceview/ide-source-view.c:5767
+#: libide/sourceview/ide-source-view.c:5854
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
@@ -2354,7 +2422,7 @@ msgstr "Zur nächsten zu bearbeitenden Stelle wechseln"
 msgid "Close the current document"
 msgstr "Aktuelles Dokument schließen"
 
-#: libide/workbench/ide-layout-view.c:125
+#: libide/workbench/ide-layout-view.c:142
 msgid "untitled document"
 msgstr "Unbenanntes Dokument"
 
@@ -2428,7 +2496,7 @@ msgstr "Aufräumen"
 msgid "Open File"
 msgstr "Datei öffnen"
 
-#: libide/workbench/ide-workbench.c:558
+#: libide/workbench/ide-workbench.c:563
 #, c-format
 msgid "%s - Builder"
 msgstr "%s – Builder"
@@ -2461,7 +2529,7 @@ msgstr "Erstellung erfolgreich"
 #: plugins/autotools/ide-autotools-builder.c:347
 #: plugins/autotools/ide-autotools-builder.c:539
 #: plugins/autotools/ide-autotools-build-task.c:1219
-#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:427
+#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:430
 msgid "Building…"
 msgstr "Erstellung …"
 
@@ -2532,7 +2600,7 @@ msgid "Running configure…"
 msgstr "Configure wird ausgeführt …"
 
 #: plugins/autotools/ide-autotools-build-task.c:1217
-#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:420
+#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:423
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
@@ -2563,6 +2631,19 @@ msgstr "GNOME-Anwendung"
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Eine neue GNOME-Anwendung für Flatpak erstellen"
+
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:190
+#, c-format
+msgid "No beautifier available for “%s”"
+msgstr "Kein Schönmacher für »%s« verfügbar"
+
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:192
+msgid "No beautifier available"
+msgstr "Keine Schönmacher verfügbar"
+
+#: plugins/beautifier/gtk/menus.ui:9
+msgid "Beautify"
+msgstr "Verschönern"
 
 #: plugins/build-tools/gbp-build-configuration-row.ui:43
 msgid "Duplicate the configuration"
@@ -2604,14 +2685,14 @@ msgstr "Umgebung"
 msgid "Build Output"
 msgstr "Erstellungs-Ausgabe"
 
-#: plugins/build-tools/gbp-build-panel.c:83
+#: plugins/build-tools/gbp-build-panel.c:89
 #, c-format
 msgid "%d warning"
 msgid_plural "%d warnings"
 msgstr[0] "%d Warnung"
 msgstr[1] "%d Warnungen"
 
-#: plugins/build-tools/gbp-build-panel.c:92
+#: plugins/build-tools/gbp-build-panel.c:98
 #, c-format
 msgid "%d error"
 msgid_plural "%d errors"
@@ -3079,11 +3160,11 @@ msgstr "Arbeitsordner konnte nicht gefunden werden"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Ungültiger Syntaxunterbefehl: %s"
 
-#: plugins/command-bar/gb-vim.c:1146
+#: plugins/command-bar/gb-vim.c:1143
 msgid "Invalid search and replace request"
 msgstr "Ungültige Suchen-und-Ersetzen-Anfrage"
 
-#: plugins/command-bar/gb-vim.c:1252
+#: plugins/command-bar/gb-vim.c:1249
 #, c-format
 msgid "Not a command: %s"
 msgstr "Kein Befehl: %s"
@@ -3675,6 +3756,21 @@ msgstr "Von Vala erzeugte Fehler und Warnungen anzeigen"
 msgid "vala diagnostics warnings errors"
 msgstr "Vala Fehlerdiagnose Warnungen Fehler"
 
+#~ msgid "Attempt to load a PyGObject script with no filename."
+#~ msgstr "Versuch, ein PyGObject-Script ohne Dateiname zu laden."
+
+#~ msgid "The filename for the script was not provided."
+#~ msgstr "Der Dateiname für das Skript war nicht angegeben."
+
+#~ msgid "The script must be on a local filesystem."
+#~ msgstr "Das Skript muss im lokalen Dateisystem sein."
+
+#~ msgid "The script “%s” is not a PyGObject file."
+#~ msgstr "Das Skript »%s« ist keine PyGObject-Datei."
+
+#~ msgid "%s has not implemented GAsyncInitable."
+#~ msgstr "%s implementiert GAsyncInitable nicht."
+
 #~ msgid "%s() is not supported on %s build system."
 #~ msgstr "%s() wird vom Buildsystem %s nicht unterstützt."
 
@@ -3683,9 +3779,6 @@ msgstr "Vala Fehlerdiagnose Warnungen Fehler"
 
 #~ msgid "Chunk does not belong to snippet."
 #~ msgstr "Stück gehört nicht zum Schnipsel."
-
-#~ msgid "Words"
-#~ msgstr "Wörter"
 
 #~ msgid "Errors"
 #~ msgstr "Fehler"
@@ -5153,9 +5246,6 @@ msgstr "Vala Fehlerdiagnose Warnungen Fehler"
 
 #~ msgid "GNOME Builder - %s"
 #~ msgstr "GNOME Builder – %s"
-
-#~ msgid "Question"
-#~ msgstr "Frage"
 
 #~ msgid ""
 #~ "If you don't save, changes from the last %ld second will be permanently "
