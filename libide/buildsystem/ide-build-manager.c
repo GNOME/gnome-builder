@@ -28,6 +28,8 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
+#include "runtimes/ide-runtime.h"
+#include "runtimes/ide-runtime-manager.h"
 
 struct _IdeBuildManager
 {
@@ -212,12 +214,66 @@ ide_build_manager_pipeline_finished (IdeBuildManager  *self,
 }
 
 static void
+ide_build_manager_ensure_runtime_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeRuntimeManager *runtime_manager = (IdeRuntimeManager *)object;
+  g_autoptr(IdeRuntime) runtime = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeBuildManager *self;
+  IdeBuildPipeline *pipeline;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  pipeline = g_task_get_task_data (task);
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  runtime = ide_runtime_manager_ensure_finish (runtime_manager, result, &error);
+
+  if (runtime == NULL)
+    {
+      g_message ("Failed to locate runtime: %s", error->message);
+      IDE_GOTO (failure);
+    }
+
+  /* This will cause plugins to load on the pipeline. */
+  if (!g_initable_init (G_INITABLE (pipeline), NULL, &error))
+    {
+      g_warning ("Failure to initialize pipeline: %s", error->message);
+      IDE_GOTO (failure);
+    }
+
+  IDE_EXIT;
+
+failure:
+  if (pipeline == self->pipeline)
+    {
+      g_clear_object (&self->pipeline);
+      egg_signal_group_set_target (self->pipeline_signals, NULL);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 {
   IdeConfigurationManager *config_manager;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = NULL;
+  IdeRuntimeManager *runtime_manager;
   IdeConfiguration *config;
   IdeContext *context;
+  const gchar *runtime_id;
 
   IDE_ENTRY;
 
@@ -225,25 +281,38 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 
   IDE_TRACE_MSG ("Reloading pipeline due to configuration change");
 
+  /*
+   * Cancel and clear our previous pipeline and associated components
+   * as they are not invalide.
+   */
+
   if (self->cancellable != NULL)
-    ide_build_manager_cancel (self);
+    {
+      ide_build_manager_cancel (self);
+      g_clear_object (&self->cancellable);
+    }
 
   g_clear_object (&self->pipeline);
+
   g_clear_pointer (&self->running_time, g_timer_destroy);
 
+  self->diagnostic_count = 0;
+
   context = ide_object_get_context (IDE_OBJECT (self));
+
   config_manager = ide_context_get_configuration_manager (context);
   config = ide_configuration_manager_get_current (config_manager);
 
-  /*
-   * TODO: If the runtime is missing, we need to asynchronously try to
-   *       install the runtime, and then setup the pipeline.
-   */
+  runtime_manager = ide_context_get_runtime_manager (context);
+  runtime_id = ide_configuration_get_runtime_id (config);
 
   /*
    * We want to set the pipeline before connecting things using the GInitable
    * interface so that we can access the builddir from
    * IdeRuntime.create_launcher() during pipeline addin initialization.
+   *
+   * We will delay the initialization until after the we have ensured the
+   * runtime is available (possibly installing it).
    */
   self->pipeline = g_object_new (IDE_TYPE_BUILD_PIPELINE,
                                  "context", context,
@@ -251,14 +320,23 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                  NULL);
   egg_signal_group_set_target (self->pipeline_signals, self->pipeline);
 
-
-  self->diagnostic_count = 0;
-
-  g_clear_object (&self->cancellable);
-
-  /* This will cause plugins to load on the pipeline. */
-  if (!g_initable_init (G_INITABLE (self->pipeline), NULL, &error))
-    g_warning ("Failure to initialize pipeline: %s", error->message);
+  /*
+   * This next part of the pipeline setup is asynchronous, as we need to
+   * make sure that the pipeline's runtime is available before we setup
+   * the pipeline. That could mean that we have to install it.
+   *
+   * We setup a cancellable so that we can cancel the setup operation in
+   * case a further configuration change comes through and we need to
+   * tear down the pipeline immediately.
+   */
+  self->cancellable = g_cancellable_new ();
+  task = g_task_new (self, self->cancellable, NULL, NULL);
+  g_task_set_task_data (task, g_object_ref (self->pipeline), g_object_unref);
+  ide_runtime_manager_ensure_async (runtime_manager,
+                                    runtime_id,
+                                    self->cancellable,
+                                    ide_build_manager_ensure_runtime_cb,
+                                    g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
