@@ -24,6 +24,7 @@
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-genesis-addin.h"
 #include "gbp-flatpak-pipeline-addin.h"
+#include "gbp-flatpak-preferences-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
@@ -43,4 +44,7 @@ peas_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_PIPELINE_ADDIN,
                                               GBP_TYPE_FLATPAK_PIPELINE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_FLATPAK_PREFERENCES_ADDIN);
 }

@@ -22,6 +22,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-genesis-addin.h \
 	gbp-flatpak-pipeline-addin.c \
 	gbp-flatpak-pipeline-addin.h \
+	gbp-flatpak-preferences-addin.c \
+	gbp-flatpak-preferences-addin.h \
 	gbp-flatpak-plugin.c \
 	gbp-flatpak-runner.c \
 	gbp-flatpak-runner.h \
