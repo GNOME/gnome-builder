@@ -185,6 +185,11 @@ struct _IdeBuildPipeline
   guint seqnum;
 
   /*
+   * If GInitableIface.init has been called.
+   */
+  guint initialized : 1;
+
+  /*
    * If we failed to build, this should be set.
    */
   guint failed : 1;
@@ -834,6 +839,8 @@ ide_build_pipeline_initable_init (GInitable     *initable,
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONFIGURATION (self->configuration));
 
+  self->initialized = TRUE;
+
   g_signal_connect_object (self->configuration,
                            "notify::ready",
                            G_CALLBACK (ide_build_pipeline_notify_ready),
@@ -844,6 +851,8 @@ ide_build_pipeline_initable_init (GInitable     *initable,
     ide_build_pipeline_load (self);
   else
     g_message ("Configuration not ready, delaying pipeline setup");
+
+  ide_build_pipeline_queue_flush (self);
 
   IDE_RETURN (TRUE);
 }
@@ -1261,6 +1270,12 @@ ide_build_pipeline_do_flush (gpointer data)
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
+
+  /*
+   * If we have not yet initialized, there is nothing we can do.
+   */
+  if (!self->initialized)
+    IDE_RETURN (G_SOURCE_REMOVE);
 
   /*
    * If the busy bit is set, there is nothing to do right now.
