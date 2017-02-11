@@ -60,7 +60,7 @@ typedef struct
 static void transfer_iface_init                     (IdeTransferInterface *iface);
 static void gbp_flatpak_transfer_install_repos_tick (GTask                *task);
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakTransfer, gbp_flatpak_transfer, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbpFlatpakTransfer, gbp_flatpak_transfer, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TRANSFER, transfer_iface_init))
 
 static GParamSpec *properties [N_PROPS];
@@ -682,13 +682,11 @@ gbp_flatpak_transfer_init (GbpFlatpakTransfer *self)
 }
 
 GbpFlatpakTransfer *
-gbp_flatpak_transfer_new (IdeContext  *context,
-                          const gchar *id,
+gbp_flatpak_transfer_new (const gchar *id,
                           const gchar *arch,
                           const gchar *branch,
                           gboolean     force_update)
 {
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (id != NULL, NULL);
 
   if (arch == NULL)
@@ -698,7 +696,6 @@ gbp_flatpak_transfer_new (IdeContext  *context,
     branch = "stable";
 
   return g_object_new (GBP_TYPE_FLATPAK_TRANSFER,
-                       "context", context,
                        "id", id,
                        "arch", arch,
                        "branch", branch,

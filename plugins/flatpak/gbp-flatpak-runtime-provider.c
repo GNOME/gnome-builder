@@ -499,7 +499,7 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
     IDE_GOTO (unknown_runtime_id);
 
   context = ide_object_get_context (IDE_OBJECT (self->manager));
-  transfer = gbp_flatpak_transfer_new (context, parts[1], parts[2], parts[3], TRUE);
+  transfer = gbp_flatpak_transfer_new (parts[1], parts[2], parts[3], TRUE);
 
   transfer_manager = ide_context_get_transfer_manager (context);
   ide_transfer_manager_execute_async (transfer_manager,
