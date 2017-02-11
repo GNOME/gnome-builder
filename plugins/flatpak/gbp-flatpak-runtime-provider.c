@@ -189,6 +189,24 @@ gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
   return TRUE;
 }
 
+void
+gbp_flatpak_runtime_provider_reload (GbpFlatpakRuntimeProvider *self)
+{
+  IdeRuntimeManager *manager;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+
+  /* Save a pointer to manager before unload() wipes it out */
+  manager = self->manager;
+
+  gbp_flatpak_runtime_provider_unload (IDE_RUNTIME_PROVIDER (self), manager);
+  gbp_flatpak_runtime_provider_load (IDE_RUNTIME_PROVIDER (self), manager);
+
+  IDE_EXIT;
+}
+
 static void
 on_flatpak_installation_changed (GbpFlatpakRuntimeProvider *self,
                                  GFile                     *file,
@@ -196,19 +214,13 @@ on_flatpak_installation_changed (GbpFlatpakRuntimeProvider *self,
                                  GFileMonitorEvent          event_type,
                                  GFileMonitor              *monitor)
 {
-  IdeRuntimeManager *manager;
-
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (!file || G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
 
-  /* Save a pointer to manager before unload() wipes it out */
-  manager = self->manager;
-
-  gbp_flatpak_runtime_provider_unload (IDE_RUNTIME_PROVIDER (self), manager);
-  gbp_flatpak_runtime_provider_load (IDE_RUNTIME_PROVIDER (self), manager);
+  gbp_flatpak_runtime_provider_reload (self);
 
   IDE_EXIT;
 }
@@ -422,6 +434,7 @@ gbp_flatpak_runtime_provider_install_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeTransferManager *transfer_manager = (IdeTransferManager *)object;
+  GbpFlatpakRuntimeProvider *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
@@ -430,10 +443,22 @@ gbp_flatpak_runtime_provider_install_cb (GObject      *object,
   g_assert (IDE_IS_TRANSFER_MANAGER (transfer_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
 
+  self = g_task_get_source_object (task);
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+
   if (!ide_transfer_manager_execute_finish (transfer_manager, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
-  else
-    g_task_return_boolean (task, TRUE);
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  /*
+   * TODO: This needs to be done with an async pair so we know when it has completed.
+   */
+  gbp_flatpak_runtime_provider_reload (self);
+
+  g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
