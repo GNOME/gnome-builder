@@ -351,7 +351,10 @@ ide_runtime_manager_ensure_async (IdeRuntimeManager   *self,
 {
   g_autoptr(GTask) task = NULL;
   IdeRuntime *runtime;
-  InstallLookup lookup = { 0 };
+  InstallLookup lookup = {
+    .runtime_id = runtime_id,
+    .provider = NULL
+  };
 
   IDE_ENTRY;
 
