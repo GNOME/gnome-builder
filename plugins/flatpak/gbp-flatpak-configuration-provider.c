@@ -830,7 +830,7 @@ check_dir_for_manifests (GFile         *directory,
       manifest->branch = g_strdup (branch);
 
       arch = flatpak_get_default_arch ();
-      manifest->runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", platform, branch, arch);
+      manifest->runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", platform, arch, branch);
 
       manifest->sdk = json_node_dup_string (sdk_node);
 

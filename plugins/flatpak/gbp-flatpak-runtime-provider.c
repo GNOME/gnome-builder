@@ -132,7 +132,7 @@ gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
       arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
       branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
 
-      id = g_strdup_printf ("flatpak:%s/%s/%s", name, branch, arch);
+      id = g_strdup_printf ("flatpak:%s/%s/%s", name, arch, branch);
 
       if (contains_id (runtimes, id))
         continue;
@@ -461,6 +461,8 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_flatpak_runtime_provider_install_async);
+
+  /* flatpak:name/arch/branch */
 
   if (!g_str_has_prefix (runtime_id, "flatpak:"))
     IDE_GOTO (unknown_runtime_id);
