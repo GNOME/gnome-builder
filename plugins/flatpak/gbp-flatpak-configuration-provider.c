@@ -994,6 +994,8 @@ gbp_flatpak_configuration_provider_load_manifests (GbpFlatpakConfigurationProvid
        * are read when needed by the runtime. If we set up a file monitor to reload the
        * configuration when it changes on disk, it might make more sense for those fields
        * to be read and processed here so we're only parsing the manifest in one place.
+       *
+       * CJH: We probably want gbp_flatpak_configuration_load_from_file() or similar.
        */
       configuration = g_object_new (GBP_TYPE_FLATPAK_CONFIGURATION,
                                     "app-id", manifest->app_id,
