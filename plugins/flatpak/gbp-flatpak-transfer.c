@@ -51,12 +51,159 @@ enum {
   N_PROPS
 };
 
-static void transfer_iface_init (IdeTransferInterface *iface);
+typedef struct
+{
+  const gchar *name;
+  const gchar *url;
+} BuiltinFlatpakRepo;
+
+static void transfer_iface_init                     (IdeTransferInterface *iface);
+static void gbp_flatpak_transfer_install_repos_tick (GTask                *task);
 
 G_DEFINE_TYPE_WITH_CODE (GbpFlatpakTransfer, gbp_flatpak_transfer, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TRANSFER, transfer_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+static BuiltinFlatpakRepo builtin_flatpak_repos[] = {
+  { "gnome",         "https://sdk.gnome.org/gnome.flatpakrepo" },
+  { "gnome-nightly", "https://sdk.gnome.org/gnome-nightly.flatpakrepo" },
+};
+
+static void
+take_status (GbpFlatpakTransfer *self,
+             gchar              *status)
+{
+  g_mutex_lock (&self->mutex);
+  g_free (self->status);
+  self->status = status;
+  g_mutex_unlock (&self->mutex);
+
+  ide_object_notify_in_main (self, properties[PROP_STATUS]);
+}
+
+static void
+gbp_flatpak_transfer_wait_check_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    gbp_flatpak_transfer_install_repos_tick (task);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_transfer_install_repos_tick (GTask *task)
+{
+  GbpFlatpakTransfer *self;
+  gint *pos;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  pos = g_task_get_task_data (task);
+
+  if (*pos < G_N_ELEMENTS (builtin_flatpak_repos))
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
+      g_autoptr(GError) error = NULL;
+      const gchar *name = builtin_flatpak_repos[*pos].name;
+      const gchar *url = builtin_flatpak_repos[*pos].url;
+      GCancellable *cancellable = g_task_get_cancellable (task);
+
+      g_mutex_lock (&self->mutex);
+      g_free (self->status);
+      /* translators: message is used to notify to the user we are checking for a flatpak repository */
+      self->status = g_strdup_printf (_("Checking for %s repository"), name);
+      g_mutex_unlock (&self->mutex);
+
+      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                              G_SUBPROCESS_FLAGS_STDERR_PIPE);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+      ide_subprocess_launcher_push_argv (launcher, "flatpak");
+      ide_subprocess_launcher_push_argv (launcher, "remote-add");
+      ide_subprocess_launcher_push_argv (launcher, "--user");
+      ide_subprocess_launcher_push_argv (launcher, "--if-not-exists");
+      ide_subprocess_launcher_push_argv (launcher, "--from");
+      ide_subprocess_launcher_push_argv (launcher, name);
+      ide_subprocess_launcher_push_argv (launcher, url);
+
+      subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+
+      if (subprocess == NULL)
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
+
+      ide_subprocess_wait_check_async (subprocess,
+                                       cancellable,
+                                       gbp_flatpak_transfer_wait_check_cb,
+                                       g_object_ref (task));
+
+      (*pos)++;
+
+      IDE_EXIT;
+    }
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_transfer_install_repos_async (GbpFlatpakTransfer  *self,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_TRANSFER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_transfer_install_repos_async);
+  g_task_set_task_data (task, g_new0 (guint, 1), g_free);
+
+  gbp_flatpak_transfer_install_repos_tick (task);
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_flatpak_transfer_install_repos_finish (GbpFlatpakTransfer  *self,
+                                           GAsyncResult        *result,
+                                           GError             **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_TRANSFER (self));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
 
 static void
 progress_callback (const gchar *status,
@@ -89,6 +236,8 @@ update_installation (GbpFlatpakTransfer   *self,
   g_assert (GBP_IS_FLATPAK_TRANSFER (self));
   g_assert (FLATPAK_IS_INSTALLATION (installation));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  take_status (self, g_strdup_printf (_("Updating “%s”"), self->id));
 
   ref = flatpak_installation_update (installation,
                                      FLATPAK_UPDATE_FLAGS_NONE,
@@ -123,6 +272,10 @@ install_from_remote (GbpFlatpakTransfer   *self,
   g_debug ("Installing %s/%s/%s from remote %s",
            self->id, self->arch, self->branch,
            flatpak_remote_get_name (remote));
+
+  take_status (self, g_strdup_printf (_("Installing “%s” from “%s”"),
+                                      self->id,
+                                      flatpak_remote_get_name (remote)));
 
   ref = flatpak_installation_install (installation,
                                       flatpak_remote_get_name (remote),
@@ -169,6 +322,9 @@ gbp_flatpak_transfer_execute_worker (GTask        *task,
   installations[0] = user = flatpak_installation_new_user (cancellable, NULL);
   installations[1] = system = flatpak_installation_new_system (cancellable, NULL);
 
+  IDE_TRACE_MSG (" installations[0] = %s", G_OBJECT_TYPE_NAME (installations[0]));
+  IDE_TRACE_MSG (" installations[1] = %s", G_OBJECT_TYPE_NAME (installations[1]));
+
   /*
    * Locate the id within a previous installation;
    */
@@ -189,6 +345,9 @@ gbp_flatpak_transfer_execute_worker (GTask        *task,
           g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
+
+      IDE_TRACE_MSG ("Looking for %s/%s/%s in installation[%d]",
+                     self->id, self->arch, self->branch, i);
 
       for (guint j = 0; j < refs->len; j++)
         {
@@ -281,6 +440,10 @@ gbp_flatpak_transfer_execute_worker (GTask        *task,
               arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
               branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
 
+              IDE_TRACE_MSG ("Found %s/%s/%s within remote of installation[%d][%s]",
+                             id, arch, branch, i,
+                             flatpak_remote_get_name (remote));
+
               if (g_strcmp0 (self->id, id) == 0 &&
                   g_strcmp0 (self->branch, branch) == 0 &&
                   g_strcmp0 (self->arch, arch) == 0)
@@ -299,9 +462,32 @@ gbp_flatpak_transfer_execute_worker (GTask        *task,
   g_task_return_new_error (task,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_FOUND,
-                           /* Translators: %s is the id of the runtime such as org.gnome.Sdk */
-                           _("Failed to locate %s"),
-                           self->id);
+                           /* Translators: %s is the id of the runtime such as org.gnome.Sdk/x86_64/master */
+                           _("Failed to locate %s/%s/%s"),
+                           self->id, self->arch, self->branch);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_transfer_install_repos_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  GbpFlatpakTransfer *self = (GbpFlatpakTransfer *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_TRANSFER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!gbp_flatpak_transfer_install_repos_finish (self, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_run_in_thread (task, gbp_flatpak_transfer_execute_worker);
 
   IDE_EXIT;
 }
@@ -315,12 +501,20 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
   GbpFlatpakTransfer *self = (GbpFlatpakTransfer *)transfer;
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FLATPAK_TRANSFER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_flatpak_transfer_execute_async);
-  g_task_run_in_thread (task, gbp_flatpak_transfer_execute_worker);
+
+  gbp_flatpak_transfer_install_repos_async (self,
+                                            cancellable,
+                                            gbp_flatpak_transfer_install_repos_cb,
+                                            g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -328,10 +522,16 @@ gbp_flatpak_transfer_execute_finish (IdeTransfer   *transfer,
                                      GAsyncResult  *result,
                                      GError       **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FLATPAK_TRANSFER (transfer));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
