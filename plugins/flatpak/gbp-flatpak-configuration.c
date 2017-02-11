@@ -369,4 +369,5 @@ gbp_flatpak_configuration_class_init (GbpFlatpakConfigurationClass *klass)
 static void
 gbp_flatpak_configuration_init (GbpFlatpakConfiguration *self)
 {
+  ide_configuration_set_prefix (IDE_CONFIGURATION (self), "/app");
 }
