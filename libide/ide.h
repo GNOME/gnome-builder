@@ -134,6 +134,7 @@ G_BEGIN_DECLS
 #include "template/ide-template-provider.h"
 #include "threading/ide-thread-pool.h"
 #include "transfers/ide-transfer.h"
+#include "transfers/ide-transfer-button.h"
 #include "transfers/ide-transfer-manager.h"
 #include "tree/ide-tree-builder.h"
 #include "tree/ide-tree-node.h"

@@ -153,6 +153,7 @@ libide_1_0_la_public_headers =                            \
 	transfers/ide-transfer-manager.h                  \
 	transfers/ide-transfer-row.h                      \
 	transfers/ide-transfer.h                          \
+	transfers/ide-transfer-button.h                   \
 	transfers/ide-transfers-button.h                  \
 	transfers/ide-transfers-progress-icon.h           \
 	tree/ide-tree-builder.h                           \
@@ -331,6 +332,7 @@ libide_1_0_la_public_sources =                            \
 	transfers/ide-transfer-manager.c                  \
 	transfers/ide-transfer-row.c                      \
 	transfers/ide-transfer.c                          \
+	transfers/ide-transfer-button.c                   \
 	transfers/ide-transfers-button.c                  \
 	transfers/ide-transfers-progress-icon.c           \
 	tree/ide-tree-builder.c                           \
