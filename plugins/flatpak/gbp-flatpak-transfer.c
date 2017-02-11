@@ -571,7 +571,8 @@ gbp_flatpak_transfer_get_property (GObject    *object,
       break;
 
     case PROP_TITLE:
-      g_value_take_string (value, g_strdup_printf (_("Installing %s"), self->id));
+      g_value_take_string (value, g_strdup_printf (_("Installing %s %s for %s"),
+                                                   self->id, self->branch, self->arch));
       break;
 
     case PROP_ICON_NAME:
