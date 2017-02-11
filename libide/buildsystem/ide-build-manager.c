@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-manager"
 
+#include <egg-signal-group.h>
+
 #include "ide-context.h"
 #include "ide-debug.h"
 
@@ -35,6 +37,7 @@ struct _IdeBuildManager
   GDateTime        *last_build_time;
   GCancellable     *cancellable;
   GActionGroup     *actions;
+  EggSignalGroup   *pipeline_signals;
 
   GTimer           *running_time;
 
@@ -246,36 +249,8 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                  "context", context,
                                  "configuration", config,
                                  NULL);
+  egg_signal_group_set_target (self->pipeline_signals, self->pipeline);
 
-  g_signal_connect_object (self->pipeline,
-                           "diagnostic",
-                           G_CALLBACK (ide_build_manager_handle_diagnostic),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->pipeline,
-                           "notify::busy",
-                           G_CALLBACK (ide_build_manager_notify_busy),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->pipeline,
-                           "notify::message",
-                           G_CALLBACK (ide_build_manager_notify_message),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->pipeline,
-                           "started",
-                           G_CALLBACK (ide_build_manager_pipeline_started),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->pipeline,
-                           "finished",
-                           G_CALLBACK (ide_build_manager_pipeline_finished),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   self->diagnostic_count = 0;
 
@@ -364,6 +339,7 @@ ide_build_manager_finalize (GObject *object)
   IdeBuildManager *self = (IdeBuildManager *)object;
 
   g_clear_object (&self->pipeline);
+  g_clear_object (&self->pipeline_signals);
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->last_build_time, g_date_time_unref);
   g_clear_pointer (&self->running_time, g_timer_destroy);
@@ -637,6 +613,39 @@ ide_build_manager_init (IdeBuildManager *self)
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
+
+  self->pipeline_signals = egg_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
+
+  egg_signal_group_connect_object (self->pipeline_signals,
+                                   "diagnostic",
+                                   G_CALLBACK (ide_build_manager_handle_diagnostic),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->pipeline_signals,
+                                   "notify::busy",
+                                   G_CALLBACK (ide_build_manager_notify_busy),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->pipeline_signals,
+                                   "notify::message",
+                                   G_CALLBACK (ide_build_manager_notify_message),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->pipeline_signals,
+                                   "started",
+                                   G_CALLBACK (ide_build_manager_pipeline_started),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->pipeline_signals,
+                                   "finished",
+                                   G_CALLBACK (ide_build_manager_pipeline_finished),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
 
   IDE_EXIT;
 }
