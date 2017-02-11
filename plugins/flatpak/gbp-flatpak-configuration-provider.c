@@ -1092,6 +1092,7 @@ gbp_flatpak_configuration_provider_load_cb (GObject      *object,
       IdeConfiguration *configuration = g_ptr_array_index (ret, i);
 
       ide_configuration_manager_add (self->manager, configuration);
+      ide_configuration_manager_set_current (self->manager, configuration);
     }
 
   self->configurations = ret;
