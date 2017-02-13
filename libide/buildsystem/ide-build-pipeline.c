@@ -848,11 +848,12 @@ ide_build_pipeline_initable_init (GInitable     *initable,
                            G_CONNECT_SWAPPED);
 
   if (ide_configuration_get_ready (self->configuration))
-    ide_build_pipeline_load (self);
+    {
+      ide_build_pipeline_load (self);
+      ide_build_pipeline_queue_flush (self);
+    }
   else
     g_message ("Configuration not ready, delaying pipeline setup");
-
-  ide_build_pipeline_queue_flush (self);
 
   IDE_RETURN (TRUE);
 }
