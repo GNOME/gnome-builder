@@ -1276,13 +1276,19 @@ ide_build_pipeline_do_flush (gpointer data)
    * If we have not yet initialized, there is nothing we can do.
    */
   if (!self->initialized)
-    IDE_RETURN (G_SOURCE_REMOVE);
+    {
+      IDE_TRACE_MSG ("Not initialized, deferring flush");
+      IDE_RETURN (G_SOURCE_REMOVE);
+    }
 
   /*
    * If the busy bit is set, there is nothing to do right now.
    */
   if (self->busy)
-    IDE_GOTO (busy_or_completed);
+    {
+      IDE_TRACE_MSG ("pipeline already busy, defering flush");
+      IDE_RETURN (G_SOURCE_REMOVE);
+    }
 
   /* Ensure our builddir is created, or else we will fail all pending tasks. */
   builddir = g_file_new_for_path (self->builddir);
@@ -1305,8 +1311,12 @@ ide_build_pipeline_do_flush (gpointer data)
    * tail and we want FIFO semantics).
    */
   task = g_queue_pop_head (&self->task_queue);
+
   if (task == NULL)
-    IDE_GOTO (busy_or_completed);
+    {
+      IDE_TRACE_MSG ("No tasks to process");
+      IDE_RETURN (G_SOURCE_REMOVE);
+    }
 
   g_assert (G_IS_TASK (task));
   g_assert (self->busy == FALSE);
@@ -1404,7 +1414,6 @@ ide_build_pipeline_do_flush (gpointer data)
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
-busy_or_completed:
   IDE_RETURN (G_SOURCE_REMOVE);
 }
 
