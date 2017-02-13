@@ -717,7 +717,9 @@ check_dir_for_manifests (GFile         *directory,
 
       if (file_type == G_FILE_TYPE_DIRECTORY)
         {
-          if (!check_dir_for_manifests (file, manifests, cancellable, error))
+          if (g_strcmp0 (name, ".git") == 0)
+            continue;
+          else if (!check_dir_for_manifests (file, manifests, cancellable, error))
             return FALSE;
           continue;
         }
