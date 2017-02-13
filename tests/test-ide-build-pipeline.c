@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "test-ide-build-pipeline"
+
 #include <ide.h>
 
 #include "application/ide-application-tests.h"
@@ -31,6 +33,8 @@ execute_cb (GObject      *object,
   gint r;
 
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  g_debug ("Pipeline callback of completion");
 
   r = ide_build_pipeline_execute_finish (pipeline, result, &error);
   g_assert_no_error (error);
@@ -68,6 +72,8 @@ context_loaded (GObject      *object,
                            NULL);
 
   ide_build_pipeline_request_phase (pipeline, IDE_BUILD_PHASE_BUILD);
+
+  g_debug ("Executing pipeline");
 
   ide_build_pipeline_execute_async (pipeline,
                                     NULL,
