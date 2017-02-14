@@ -74,9 +74,12 @@ create_runtime_row (gpointer item,
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *row;
+  gboolean sensitive;
 
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  sensitive = ide_configuration_supports_runtime (configuration, runtime);
 
   box = g_object_new (GTK_TYPE_BOX,
                       "spacing", 12,
@@ -112,6 +115,7 @@ create_runtime_row (gpointer item,
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "child", box,
+                      "sensitive", sensitive,
                       "visible", TRUE,
                       NULL);
 
@@ -130,9 +134,12 @@ create_device_row (gpointer item,
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *row;
+  gboolean sensitive;
 
   g_assert (IDE_IS_DEVICE (device));
   g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  sensitive = ide_configuration_supports_device (configuration, device);
 
   box = g_object_new (GTK_TYPE_BOX,
                       "spacing", 12,
@@ -168,6 +175,7 @@ create_device_row (gpointer item,
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "child", box,
+                      "sensitive", sensitive,
                       "visible", TRUE,
                       NULL);
 
