@@ -110,7 +110,7 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
                                                              NULL);
 
           if (refs == NULL)
-            return;
+            continue;
 
           for (guint j = 0; j < refs->len; j++)
             {
