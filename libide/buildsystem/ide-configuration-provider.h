@@ -33,11 +33,11 @@ struct _IdeConfigurationProviderInterface
 {
   GTypeInterface parent;
 
-  void   (*load)          (IdeConfigurationProvider  *self,
+  void     (*load)        (IdeConfigurationProvider  *self,
                            IdeConfigurationManager   *manager);
-  void   (*unload)        (IdeConfigurationProvider  *self,
+  void     (*unload)      (IdeConfigurationProvider  *self,
                            IdeConfigurationManager   *manager);
-  void   (*save_async)    (IdeConfigurationProvider  *self,
+  void     (*save_async)  (IdeConfigurationProvider  *self,
                            GCancellable              *cancellable,
                            GAsyncReadyCallback        callback,
                            gpointer                   user_data);
@@ -46,14 +46,14 @@ struct _IdeConfigurationProviderInterface
                            GError                   **error);
 };
 
-void ide_configuration_provider_load            (IdeConfigurationProvider *self,
-                                                 IdeConfigurationManager  *manager);
-void ide_configuration_provider_unload          (IdeConfigurationProvider *self,
-                                                 IdeConfigurationManager  *manager);
-void ide_configuration_provider_save_async      (IdeConfigurationProvider *self,
-                                                 GCancellable             *cancellable,
-                                                 GAsyncReadyCallback       callback,
-                                                 gpointer                  user_data);
+void     ide_configuration_provider_load        (IdeConfigurationProvider  *self,
+                                                 IdeConfigurationManager   *manager);
+void     ide_configuration_provider_unload      (IdeConfigurationProvider  *self,
+                                                 IdeConfigurationManager   *manager);
+void     ide_configuration_provider_save_async  (IdeConfigurationProvider  *self,
+                                                 GCancellable              *cancellable,
+                                                 GAsyncReadyCallback        callback,
+                                                 gpointer                   user_data);
 gboolean ide_configuration_provider_save_finish (IdeConfigurationProvider  *self,
                                                  GAsyncResult              *result,
                                                  GError                   **error);
