@@ -620,6 +620,7 @@ guess_primary_module (JsonNode *modules_node,
 {
   JsonArray *modules;
   JsonNode *module;
+  JsonNode *parent;
   g_autofree gchar *dir_name;
 
   g_assert (G_IS_FILE (directory));
@@ -658,6 +659,17 @@ guess_primary_module (JsonNode *modules_node,
                 }
             }
         }
+        /* If none match, assume the last module in the list is the primary one */
+        parent = json_node_get_parent (modules_node);
+        if (JSON_NODE_HOLDS_OBJECT (parent) &&
+            json_node_get_parent (parent) == NULL &&
+            json_array_get_length (modules) > 0)
+          {
+            JsonNode *last_node;
+            last_node = json_array_get_element (modules, json_array_get_length (modules) - 1);
+            if (JSON_NODE_HOLDS_OBJECT (last_node))
+              return last_node;
+          }
     }
 
   return NULL;
