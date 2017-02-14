@@ -37,6 +37,7 @@
 #include "buildsystem/ide-build-stage-launcher.h"
 #include "buildsystem/ide-build-stage-private.h"
 #include "buildsystem/ide-build-system.h"
+#include "buildsystem/ide-build-utils.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
@@ -464,6 +465,7 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
 {
   IdeBuildPipeline *self = user_data;
   const gchar *enterdir;
+  g_autofree gchar *filtered_message = NULL;
 
   g_assert (stream == IDE_BUILD_LOG_STDOUT || stream == IDE_BUILD_LOG_STDERR);
   g_assert (IDE_IS_BUILD_PIPELINE (self));
@@ -478,12 +480,14 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
   if (self->log != NULL)
     ide_build_log_observer (stream, message, message_len, self->log);
 
+  filtered_message = ide_build_utils_color_codes_filtering (message);
+
   /*
    * This expects LANG=C, which is defined in the autotools Builder.
    * Not the most ideal decoupling of logic, but we don't have a whole
    * lot to work with here.
    */
-  if (NULL != (enterdir = strstr (message, ENTERING_DIRECTORY_BEGIN)) &&
+  if (NULL != (enterdir = strstr (filtered_message, ENTERING_DIRECTORY_BEGIN)) &&
       g_str_has_suffix (enterdir, ENTERING_DIRECTORY_END))
     {
       gssize len;
@@ -507,7 +511,7 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
       const ErrorFormat *errfmt = &g_array_index (self->errfmts, ErrorFormat, i);
       g_autoptr(GMatchInfo) match_info = NULL;
 
-      if (g_regex_match (errfmt->regex, message, 0, &match_info))
+      if (g_regex_match (errfmt->regex, filtered_message, 0, &match_info))
         {
           g_autoptr(IdeDiagnostic) diagnostic = create_diagnostic (self, match_info);
 
