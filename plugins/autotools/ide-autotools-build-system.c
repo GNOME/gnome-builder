@@ -163,7 +163,25 @@ ide_autotools_build_system_discover_file_finish (IdeAutotoolsBuildSystem  *syste
   return g_task_propagate_pointer (task, error);
 }
 
-#if 0
+static void
+invalidate_makecache_stage (gpointer data,
+                            gpointer user_data)
+{
+  IdeBuildStage *stage = data;
+
+  if (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (stage))
+    ide_build_stage_set_completed (stage, FALSE);
+}
+
+static void
+evict_makecache (IdeContext *context)
+{
+  IdeBuildManager *build_manager = ide_context_get_build_manager (context);
+  IdeBuildPipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  ide_build_pipeline_foreach_stage (pipeline, invalidate_makecache_stage, NULL);
+}
+
 static gboolean
 looks_like_makefile (IdeBuffer *buffer)
 {
@@ -196,7 +214,6 @@ looks_like_makefile (IdeBuffer *buffer)
 
   return FALSE;
 }
-#endif
 
 static void
 ide_autotools_build_system__buffer_saved_cb (IdeAutotoolsBuildSystem *self,
@@ -207,10 +224,8 @@ ide_autotools_build_system__buffer_saved_cb (IdeAutotoolsBuildSystem *self,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-#if 0
   if (looks_like_makefile (buffer))
-    egg_task_cache_evict (self->task_cache, MAKECACHE_KEY);
-#endif
+    evict_makecache (ide_object_get_context (IDE_OBJECT (self)));
 }
 
 static void
@@ -224,9 +239,7 @@ ide_autotools_build_system__vcs_changed_cb (IdeAutotoolsBuildSystem *self,
 
   IDE_TRACE_MSG ("VCS has changed, evicting cached makecaches");
 
-#if 0
-  egg_task_cache_evict_all (self->task_cache);
-#endif
+  evict_makecache (ide_object_get_context (IDE_OBJECT (self)));
 
   IDE_EXIT;
 }
