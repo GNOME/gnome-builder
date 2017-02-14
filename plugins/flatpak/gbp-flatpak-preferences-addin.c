@@ -109,6 +109,9 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
                                                              NULL,
                                                              NULL);
 
+          if (refs == NULL)
+            return;
+
           for (guint j = 0; j < refs->len; j++)
             {
               FlatpakRemoteRef *ref = g_ptr_array_index (refs, j);
