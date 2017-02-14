@@ -189,6 +189,16 @@ gbp_flatpak_configuration_set_sdk (GbpFlatpakConfiguration *self,
     }
 }
 
+static gboolean
+gbp_flatpak_configuration_supports_runtime (IdeConfiguration *configuration,
+                                            IdeRuntime       *runtime)
+{
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION (configuration));
+  g_assert (IDE_IS_RUNTIME (runtime));
+
+  return GBP_IS_FLATPAK_RUNTIME (runtime);
+}
+
 static void
 gbp_flatpak_configuration_get_property (GObject    *object,
                                         guint       prop_id,
@@ -295,10 +305,13 @@ static void
 gbp_flatpak_configuration_class_init (GbpFlatpakConfigurationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeConfigurationClass *config_class = IDE_CONFIGURATION_CLASS (klass);
 
   object_class->finalize = gbp_flatpak_configuration_finalize;
   object_class->get_property = gbp_flatpak_configuration_get_property;
   object_class->set_property = gbp_flatpak_configuration_set_property;
+
+  config_class->supports_runtime = gbp_flatpak_configuration_supports_runtime;
 
   properties [PROP_BRANCH] =
     g_param_spec_string ("branch",
