@@ -146,6 +146,18 @@ ide_subprocess_wait_check_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  if (ide_subprocess_get_if_signaled (self))
+    {
+      gint term_sig = ide_subprocess_get_term_sig (self);
+
+      g_task_return_new_error (task,
+                               G_SPAWN_ERROR,
+                               G_SPAWN_ERROR_FAILED,
+                               "Child process killed by signal %d",
+                               term_sig);
+      IDE_EXIT;
+    }
+
   if (!ide_subprocess_check_exit_status (self, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));

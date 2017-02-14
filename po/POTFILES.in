@@ -41,9 +41,7 @@ libide/application/ide-application.c
 libide/application/ide-application-command-line.c
 libide/buffers/ide-buffer.c
 libide/buffers/ide-buffer-manager.c
-libide/buildsystem/ide-builder.c
 libide/buildsystem/ide-build-manager.c
-libide/buildsystem/ide-build-result.c
 libide/buildsystem/ide-build-system.c
 libide/buildsystem/ide-configuration-manager.c
 libide/devices/ide-device-manager.c
@@ -98,9 +96,7 @@ libide/workbench/ide-omni-bar.ui
 libide/workbench/ide-workbench-actions.c
 libide/workbench/ide-workbench.c
 libide/workbench/ide-workbench-header-bar.ui
-plugins/autotools/ide-autotools-builder.c
 plugins/autotools/ide-autotools-build-system.c
-plugins/autotools/ide-autotools-build-task.c
 plugins/autotools/ide-makecache.c
 plugins/autotools-templates/autotools_templates/__init__.py
 plugins/beautifier/gb-beautifier-workbench-addin.c
@@ -131,8 +127,6 @@ plugins/color-picker/gtk/menus.ui
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
 plugins/comment-code/gtk/menus.ui
-plugins/contributing/contributing_plugin/helper.py
-plugins/contributing/contributing_plugin/__init__.py
 plugins/c-pack/ide-c-format-provider.c
 plugins/create-project/gbp-create-project-genesis-addin.c
 plugins/create-project/gbp-create-project-tool.c

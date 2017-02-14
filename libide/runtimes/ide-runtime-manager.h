@@ -27,12 +27,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeRuntimeManager, ide_runtime_manager, IDE, RUNTIME_MANAGER, IdeObject)
 
-IdeRuntime *ide_runtime_manager_get_runtime (IdeRuntimeManager *self,
-                                             const gchar       *id);
-void        ide_runtime_manager_add         (IdeRuntimeManager *self,
-                                             IdeRuntime        *runtime);
-void        ide_runtime_manager_remove      (IdeRuntimeManager *self,
-                                             IdeRuntime        *runtime);
+IdeRuntime *ide_runtime_manager_get_runtime   (IdeRuntimeManager    *self,
+                                               const gchar          *id);
+void        ide_runtime_manager_add           (IdeRuntimeManager    *self,
+                                               IdeRuntime           *runtime);
+void        ide_runtime_manager_remove        (IdeRuntimeManager    *self,
+                                               IdeRuntime           *runtime);
+void        ide_runtime_manager_ensure_async  (IdeRuntimeManager    *self,
+                                               const gchar          *runtime_id,
+                                               GCancellable         *cancellable,
+                                               GAsyncReadyCallback   callback,
+                                               gpointer              user_data);
+IdeRuntime *ide_runtime_manager_ensure_finish (IdeRuntimeManager    *self,
+                                               GAsyncResult         *result,
+                                               GError              **error);
 
 G_END_DECLS
 

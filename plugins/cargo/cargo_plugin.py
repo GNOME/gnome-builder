@@ -29,7 +29,7 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Ide
 
-_ = Ide.gettext
+_CARGO = 'cargo'
 
 class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
@@ -65,149 +65,62 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         # Priority is used to determine the order of discovery
         return 2000
 
-    def do_get_builder(self, config):
-        return CargoBuilder(config, context=self.get_context())
+class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
+    """
+    The CargoPipelineAddin is responsible for creating the necessary build
+    stages and attaching them to phases of the build pipeline.
+    """
 
-class CargoBuilder(Ide.Builder):
-    config = GObject.Property(type=Ide.Configuration)
-
-    def __init__(self, config, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.config = config
-
-    def do_build_async(self, flags, cancellable, callback, data):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_result = CargoBuildResult(self.config, flags, context=self.get_context())
-
-        def wrap_execute():
-            try:
-                task.build_result.build()
-                task.build_result.set_mode(_('Successful'))
-                task.build_result.set_failed(False)
-                task.build_result.set_running(False)
-                task.return_boolean(True)
-            except Exception as ex:
-                task.build_result.set_mode(_("Failed"))
-                task.build_result.set_failed(True)
-                task.build_result.set_running(False)
-                task.return_error(ex)
-
-        thread = threading.Thread(target=wrap_execute)
-        thread.start()
-
-        return task.build_result
-
-    def do_build_finish(self, task):
-        if task.propagate_boolean():
-            return task.build_result
-
-    def do_install_async(self, cancellable, callback, data):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_result = CargoBuildResult(self.config, 0, context=self.get_context())
-
-        def wrap_execute():
-            try:
-                task.build_result.install()
-                self = task.get_source_object()
-                task.build_result.set_mode(_('Successful'))
-                task.build_result.set_failed(False)
-                task.build_result.set_running(False)
-                task.return_boolean(True)
-            except Exception as ex:
-                task.build_result.set_mode(_("Failed"))
-                task.build_result.set_failed(True)
-                task.build_result.set_running(False)
-                task.return_error(ex)
-
-        thread = threading.Thread(target=wrap_execute)
-        thread.start()
-
-        return task.build_result
-
-    def do_install_finish(self, task):
-        if task.propagate_boolean():
-            return task.build_result
-
-    def do_get_build_flags_async(self, ifile, cancellable, callback, data):
-        # TODO:
-        # GTask sort of is painful from Python.
-        # We can use it to attach some data to return from the finish
-        # function though.
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_flags = []
-        task.return_boolean(True)
-
-    def do_get_build_flags_finish(self, result):
-        if task.propagate_boolean():
-            return result.build_flags
-
-    def do_get_build_targets_async(self, cancellable, callback, data):
-        # TODO: We need a way to figure out what "cargo run" will do so that
-        #       we can synthesize that as a build result.
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_targets = []
-        task.return_boolean(True)
-
-    def do_get_build_targets_finish(self, task):
-        if task.propagate_boolean():
-            return task.build_targets
-
-class CargoBuildResult(Ide.BuildResult):
-    runtime = GObject.Property(type=Ide.Runtime)
-
-    def __init__(self, config, flags, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
+    def do_load(self, pipeline):
         context = self.get_context()
-        vcs = context.get_vcs()
+        build_system = context.get_build_system()
 
-        self.flags = flags
-        self.runtime = config.get_runtime()
-        self.directory = vcs.get_working_directory().get_path()
+        # Ignore pipeline unless this is a cargo project
+        if type(build_system) != CargoBuildSystem:
+            return
 
-        self.set_running(True)
+        cargo_toml = build_system.props.project_file.get_path()
+        config = pipeline.get_configuration()
+        system_type = config.get_device().get_system_type()
+        builddir = pipeline.get_builddir()
 
-    def _run(self, mode, *args):
-        self.set_mode(mode)
+        # Fetch dependencies so that we no longer need network access
+        fetch_launcher = pipeline.create_launcher()
+        fetch_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
+        fetch_launcher.push_argv(_CARGO)
+        fetch_launcher.push_argv('fetch')
+        fetch_launcher.push_argv('--manifest-path')
+        fetch_launcher.push_argv(cargo_toml)
+        self.track(pipeline.connect_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
 
-        if self.runtime is not None:
-            launcher = self.runtime.create_launcher()
-        else:
-            launcher = Ide.SubprocessLauncher()
-            launcher.set_run_on_host(True)
-            launcher.set_clear_environment(False)
+        # Fetch dependencies so that we no longer need network access
+        build_launcher = pipeline.create_launcher()
+        build_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
+        build_launcher.push_argv(_CARGO)
+        build_launcher.push_argv('build')
+        build_launcher.push_argv('--manifest-path')
+        build_launcher.push_argv(cargo_toml)
+        build_launcher.push_argv('--message-format')
+        build_launcher.push_argv('human')
 
-        launcher.set_cwd(self.directory)
-        launcher.push_argv('cargo')
-        for arg in args:
-            launcher.push_argv(arg)
+        if Ide.get_system_type() != system_type:
+            build_launcher.push_argv('--target')
+            build_launcher.push_argv(system_type)
 
-        subprocess = launcher.spawn()
+        if config.props.parallelism > 0:
+            build_launcher.push_argv('-j{}'.format(config.props.parallelism))
 
-        self.log_subprocess(subprocess)
+        if not config.props.debug:
+            build_launcher.push_argv('--release')
 
-        subprocess.wait_check()
+        clean_launcher = pipeline.create_launcher()
+        clean_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
+        clean_launcher.push_argv(_CARGO)
+        clean_launcher.push_argv('clean')
+        clean_launcher.push_argv('--manifest-path')
+        clean_launcher.push_argv(cargo_toml)
 
-        return True
+        build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage.set_clean_launcher(clean_launcher)
+        self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
 
-    def build(self):
-        # Do a clean first if requested.
-        if self.flags & Ide.BuilderBuildFlags.FORCE_CLEAN != 0:
-            self._run(_("Cleaning…"), 'clean')
-
-        if self.flags & Ide.BuilderBuildFlags.NO_BUILD == 0:
-            self._run(_("Building…"), 'build', '--verbose')
-
-        self.set_mode(_('Successful'))
-        self.set_failed(False)
-        self.set_running(False)
-
-        return True
-
-    def install(self):
-        self.build()
-        self._run(_('Installing…'), 'install')
-
-        self.set_mode(_('Successful'))
-        self.set_failed(False)
-        self.set_running(False)

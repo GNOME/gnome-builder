@@ -25,6 +25,42 @@
 
 #include "ide-posix.h"
 
+const gchar *
+ide_get_system_type (void)
+{
+  static gchar *system_type;
+  g_autofree gchar *os_lower = NULL;
+  const gchar *machine = NULL;
+  struct utsname u;
+
+  if (system_type != NULL)
+    return system_type;
+
+  if (uname (&u) < 0)
+    return g_strdup ("unknown");
+
+  os_lower = g_utf8_strdown (u.sysname, -1);
+
+  /* config.sub doesn't accept amd64-OS */
+  machine = strcmp (u.machine, "amd64") ? u.machine : "x86_64";
+
+  /*
+   * TODO: Clearly we want to discover "gnu", but that should be just fine
+   *       for a default until we try to actually run on something non-gnu.
+   *       Which seems unlikely at the moment. If you run FreeBSD, you can
+   *       probably fix this for me :-) And while you're at it, make the
+   *       uname() call more portable.
+   */
+
+#ifdef __GLIBC__
+  system_type = g_strdup_printf ("%s-%s-%s", machine, os_lower, "gnu");
+#else
+  system_type = g_strdup_printf ("%s-%s", machine, os_lower);
+#endif
+
+  return system_type;
+}
+
 gchar *
 ide_get_system_arch (void)
 {

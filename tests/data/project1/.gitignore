@@ -15,4 +15,5 @@ build-aux/m4/lt~obsolete.m4
 build-aux/missing
 build/
 config.h.in
+config.h.in~
 configure

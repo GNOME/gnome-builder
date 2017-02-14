@@ -21,7 +21,8 @@
 #include <string.h>
 #include <sys/utsname.h>
 
-#include "ide-local-device.h"
+#include "local/ide-local-device.h"
+#include "util/ide-posix.h"
 
 typedef struct
 {
@@ -29,36 +30,6 @@ typedef struct
 } IdeLocalDevicePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLocalDevice, ide_local_device, IDE_TYPE_DEVICE)
-
-static gchar *
-get_system_type (void)
-{
-  g_autofree gchar *os_lower = NULL;
-  const gchar *machine = NULL;
-  struct utsname u;
-
-  if (uname (&u) < 0)
-    return g_strdup ("unknown");
-
-  os_lower = g_utf8_strdown (u.sysname, -1);
-
-  /* config.sub doesn't accept amd64-OS */
-  machine = strcmp (u.machine, "amd64") ? u.machine : "x86_64";
-
-  /*
-   * TODO: Clearly we want to discover "gnu", but that should be just fine
-   *       for a default until we try to actually run on something non-gnu.
-   *       Which seems unlikely at the moment. If you run FreeBSD, you can
-   *       probably fix this for me :-) And while you're at it, make the
-   *       uname() call more portable.
-   */
-
-#ifdef __GLIBC__
-  return g_strdup_printf ("%s-%s-%s", machine, os_lower, "gnu");
-#else
-  return g_strdup_printf ("%s-%s", machine, os_lower);
-#endif
-}
 
 static const gchar *
 ide_local_device_get_system_type (IdeDevice *device)
@@ -99,7 +70,7 @@ ide_local_device_init (IdeLocalDevice *self)
 {
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
 
-  priv->system_type = get_system_type ();
+  priv->system_type = g_strdup (ide_get_system_type ());
 
   ide_device_set_display_name (IDE_DEVICE (self), g_get_host_name ());
   ide_device_set_id (IDE_DEVICE (self), "local");

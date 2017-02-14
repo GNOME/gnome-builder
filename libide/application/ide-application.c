@@ -427,6 +427,17 @@ ide_application_shutdown (GApplication *application)
 
   if (G_APPLICATION_CLASS (ide_application_parent_class)->shutdown)
     G_APPLICATION_CLASS (ide_application_parent_class)->shutdown (application);
+
+  /* Run all reapers serially on shutdown */
+
+  for (guint i = 0; i < self->reapers->len; i++)
+    {
+      IdeDirectoryReaper *reaper = g_ptr_array_index (self->reapers, i);
+
+      g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
+
+      ide_directory_reaper_execute (reaper, NULL, NULL);
+    }
 }
 
 static void
@@ -469,6 +480,7 @@ ide_application_finalize (GObject *object)
   g_clear_pointer (&self->merge_ids, g_hash_table_unref);
   g_clear_pointer (&self->plugin_css, g_hash_table_unref);
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
+  g_clear_pointer (&self->reapers, g_ptr_array_unref);
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
@@ -503,6 +515,8 @@ static void
 ide_application_init (IdeApplication *self)
 {
   ide_set_program_name (PACKAGE_NAME);
+
+  self->reapers = g_ptr_array_new_with_free_func (g_object_unref);
 
   self->started_at = g_date_time_new_now_utc ();
   self->mode = IDE_APPLICATION_MODE_PRIMARY;
@@ -825,4 +839,14 @@ GThread *
 ide_application_get_main_thread (void)
 {
   return main_thread;
+}
+
+void
+ide_application_add_reaper (IdeApplication     *self,
+                            IdeDirectoryReaper *reaper)
+{
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+  g_return_if_fail (IDE_IS_DIRECTORY_REAPER (reaper));
+
+  g_ptr_array_add (self->reapers, g_object_ref (reaper));
 }

@@ -42,3 +42,19 @@ ide_build_target_get_install_directory (IdeBuildTarget *self)
 
   return NULL;
 }
+
+/**
+ * ide_build_target_get_name:
+ *
+ * Returns: (nullable) (transfer full): A filename or %NULL.
+ */
+gchar *
+ide_build_target_get_name (IdeBuildTarget *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
+
+  if (IDE_BUILD_TARGET_GET_IFACE (self)->get_name)
+    return IDE_BUILD_TARGET_GET_IFACE (self)->get_name (self);
+
+  return NULL;
+}

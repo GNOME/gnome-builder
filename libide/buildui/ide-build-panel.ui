@@ -1,0 +1,203 @@
+<interface>
+  <template class="IdeBuildPanel" parent="PnlDockWidget">
+    <child>
+      <object class="GtkBox" id="toplevel">
+        <property name="visible">true</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">horizontal</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="status_revealer">
+            <property name="transition-type">slide-down</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="build-status"/>
+                </style>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="border-width">12</property>
+                    <property name="column-spacing">12</property>
+                    <property name="column-homogeneous">true</property>
+                    <property name="row-spacing">3</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel" id="label4">
+                        <property name="label" translatable="yes">Status:</property>
+                        <property name="xalign">1.0</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="status_label">
+                        <property name="ellipsize">end</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label5">
+                        <property name="label" translatable="yes">Running Time:</property>
+                        <property name="xalign">1.0</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="running_time_label">
+                        <property name="xalign">0.0</property>
+                        <property name="visible">true</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label6">
+                        <property name="label" translatable="yes">Warnings:</property>
+                        <property name="xalign">1.0</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="warnings_label">
+                        <property name="xalign">0.0</property>
+                        <property name="visible">true</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Errors:</property>
+                        <property name="xalign">1.0</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="errors_label">
+                        <property name="xalign">0.0</property>
+                        <property name="visible">true</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="visible">true</property>
+            <child>
+              <object class="EggEmptyState">
+                <property name="border-width">12</property>
+                <property name="icon-name">builder-build-symbolic</property>
+                <property name="margin-top">12</property>
+                <property name="pixel-size">64</property>
+                <property name="title" translatable="yes">No Diagnostics</property>
+                <property name="subtitle" translatable="yes" comments="the action:// link is used to execute a build">&lt;a href="action://build-manager.build"&gt;Build your project&lt;/a&gt; to show diagnostics here</property>
+                <property name="valign">start</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">empty-state</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="vexpand">true</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkTreeView" id="diagnostics_tree_view">
+                    <property name="activate-on-single-click">true</property>
+                    <property name="tooltip-column">1</property>
+                    <property name="model">diagnostics_store</property>
+                    <property name="headers-visible">false</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="diagnostics_column">
+                        <property name="expand">true</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="diagnostics_text">
+                            <property name="yalign">0.0</property>
+                            <property name="xalign">0.0</property>
+                            <property name="ypad">6</property>
+                            <property name="width-chars">0</property>
+                            <property name="ellipsize">end</property>
+                            <property name="wrap-mode">word-char</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">diagnostics</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkListStore" id="diagnostics_store">
+    <columns>
+      <column type="IdeDiagnostic"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+</interface>

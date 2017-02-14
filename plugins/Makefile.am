@@ -2,14 +2,13 @@ SUBDIRS = \
 	autotools \
 	autotools-templates \
 	beautifier \
-	build-tools \
 	c-pack \
 	cargo \
 	clang \
+	cmake \
 	color-picker \
 	command-bar \
 	comment-code \
-	contributing \
 	create-project \
 	ctags \
 	devhelp \

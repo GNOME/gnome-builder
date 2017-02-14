@@ -33,11 +33,44 @@ ide_runtime_provider_real_unload (IdeRuntimeProvider *self,
 {
 }
 
+static gboolean
+ide_runtime_provider_real_can_install (IdeRuntimeProvider *self,
+                                       const gchar        *runtime_id)
+{
+  return FALSE;
+}
+
+void
+ide_runtime_provider_real_install_async (IdeRuntimeProvider  *self,
+                                         const gchar         *runtime_id,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
+{
+  g_task_report_new_error (self, callback, user_data,
+                           ide_runtime_provider_real_install_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "%s does not support installing runtimes",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+gboolean
+ide_runtime_provider_real_install_finish (IdeRuntimeProvider  *self,
+                                          GAsyncResult        *result,
+                                          GError             **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
 static void
 ide_runtime_provider_default_init (IdeRuntimeProviderInterface *iface)
 {
   iface->load = ide_runtime_provider_real_load;
   iface->unload = ide_runtime_provider_real_unload;
+  iface->can_install = ide_runtime_provider_real_can_install;
+  iface->install_async = ide_runtime_provider_real_install_async;
+  iface->install_finish = ide_runtime_provider_real_install_finish;
 }
 
 void
@@ -58,4 +91,39 @@ ide_runtime_provider_unload (IdeRuntimeProvider *self,
   g_return_if_fail (IDE_IS_RUNTIME_MANAGER (manager));
 
   IDE_RUNTIME_PROVIDER_GET_IFACE (self)->unload (self, manager);
+}
+
+gboolean
+ide_runtime_provider_can_install (IdeRuntimeProvider *self,
+                                  const gchar        *runtime_id)
+{
+  g_return_val_if_fail (IDE_IS_RUNTIME_PROVIDER (self), FALSE);
+  g_return_val_if_fail (runtime_id != NULL, FALSE);
+
+  return IDE_RUNTIME_PROVIDER_GET_IFACE (self)->can_install (self, runtime_id);
+}
+
+void
+ide_runtime_provider_install_async (IdeRuntimeProvider  *self,
+                                    const gchar         *runtime_id,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_RUNTIME_PROVIDER (self));
+  g_return_if_fail (runtime_id != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_RUNTIME_PROVIDER_GET_IFACE (self)->install_async (self, runtime_id, cancellable, callback, user_data);
+}
+
+gboolean
+ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
+                                     GAsyncResult        *result,
+                                     GError             **error)
+{
+  g_return_val_if_fail (IDE_IS_RUNTIME_PROVIDER (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return IDE_RUNTIME_PROVIDER_GET_IFACE (self)->install_finish (self, result, error);
 }

@@ -43,22 +43,6 @@ struct _IdeRuntimeClass
 {
   IdeObjectClass parent;
 
-  void                   (*prebuild_async)           (IdeRuntime           *self,
-                                                      IdeBuildResult       *build_result,
-                                                      GCancellable         *cancellable,
-                                                      GAsyncReadyCallback   callback,
-                                                      gpointer              user_data);
-  gboolean               (*prebuild_finish)          (IdeRuntime           *self,
-                                                      GAsyncResult         *result,
-                                                      GError              **error);
-  void                   (*postbuild_async)          (IdeRuntime           *self,
-                                                      IdeBuildResult       *build_result,
-                                                      GCancellable         *cancellable,
-                                                      GAsyncReadyCallback   callback,
-                                                      gpointer              user_data);
-  gboolean               (*postbuild_finish)         (IdeRuntime           *self,
-                                                      GAsyncResult         *result,
-                                                      GError              **error);
   gboolean               (*contains_program_in_path) (IdeRuntime           *self,
                                                       const gchar          *program,
                                                       GCancellable         *cancellable);
@@ -68,14 +52,6 @@ struct _IdeRuntimeClass
                                                       IdeConfiguration     *configuration);
   IdeRunner             *(*create_runner)            (IdeRuntime           *self,
                                                       IdeBuildTarget       *build_target);
-  void                   (*postinstall_async)        (IdeRuntime           *self,
-                                                      IdeBuildResult       *build_result,
-                                                      GCancellable         *cancellable,
-                                                      GAsyncReadyCallback   callback,
-                                                      gpointer              user_data);
-  gboolean               (*postinstall_finish)       (IdeRuntime           *self,
-                                                      GAsyncResult         *result,
-                                                      GError              **error);
   GFile                 *(*translate_file)           (IdeRuntime           *self,
                                                       GFile                *file);
 
@@ -95,30 +71,6 @@ struct _IdeRuntimeClass
 };
 
 GQuark                 ide_runtime_error_quark              (void) G_GNUC_CONST;
-void                   ide_runtime_prebuild_async           (IdeRuntime           *self,
-                                                             IdeBuildResult       *build_result,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-gboolean               ide_runtime_prebuild_finish          (IdeRuntime           *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
-void                   ide_runtime_postbuild_async          (IdeRuntime           *self,
-                                                             IdeBuildResult       *build_result,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-gboolean               ide_runtime_postbuild_finish         (IdeRuntime           *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
-void                   ide_runtime_postinstall_async        (IdeRuntime           *self,
-                                                             IdeBuildResult       *build_result,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-gboolean               ide_runtime_postinstall_finish       (IdeRuntime           *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
 gboolean               ide_runtime_contains_program_in_path (IdeRuntime           *self,
                                                              const gchar          *program,
                                                              GCancellable         *cancellable);

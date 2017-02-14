@@ -128,5 +128,8 @@ ide_transfer_has_completed (IdeTransfer *self)
 {
   g_return_val_if_fail (IDE_IS_TRANSFER (self), FALSE);
 
+  if (IDE_TRANSFER_GET_IFACE (self)->has_completed)
+    return IDE_TRANSFER_GET_IFACE (self)->has_completed (self);
+
   return !!g_object_get_data (G_OBJECT (self), "IDE_TRANSFER_COMPLETED");
 }

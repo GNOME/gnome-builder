@@ -28,7 +28,42 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIGURATION (ide_configuration_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeConfiguration, ide_configuration, IDE, CONFIGURATION, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeConfiguration, ide_configuration, IDE, CONFIGURATION, IdeObject)
+
+struct _IdeConfigurationClass
+{
+  IdeObjectClass parent;
+
+  IdeDevice  *(*get_device)       (IdeConfiguration *self);
+  void        (*set_device)       (IdeConfiguration *self,
+                                   IdeDevice        *device);
+
+  IdeRuntime *(*get_runtime)      (IdeConfiguration *self);
+  void        (*set_runtime)      (IdeConfiguration *self,
+                                   IdeRuntime       *runtime);
+
+  gboolean    (*supports_device)  (IdeConfiguration *self,
+                                   IdeDevice        *device);
+  gboolean    (*supports_runtime) (IdeConfiguration *self,
+                                   IdeRuntime       *runtime);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
+  gpointer _reserved9;
+  gpointer _reserved10;
+  gpointer _reserved11;
+  gpointer _reserved12;
+  gpointer _reserved13;
+  gpointer _reserved14;
+  gpointer _reserved15;
+  gpointer _reserved16;
+};
 
 IdeConfiguration     *ide_configuration_new                  (IdeContext        *context,
                                                               const gchar       *id,
@@ -50,6 +85,7 @@ void                  ide_configuration_set_dirty            (IdeConfiguration  
 const gchar          *ide_configuration_get_display_name     (IdeConfiguration  *self);
 void                  ide_configuration_set_display_name     (IdeConfiguration  *self,
                                                               const gchar       *display_name);
+gboolean              ide_configuration_get_ready            (IdeConfiguration  *self);
 IdeRuntime           *ide_configuration_get_runtime          (IdeConfiguration  *self);
 void                  ide_configuration_set_runtime          (IdeConfiguration  *self,
                                                               IdeRuntime        *runtime);
@@ -72,19 +108,28 @@ gint                  ide_configuration_get_parallelism      (IdeConfiguration  
 void                  ide_configuration_set_parallelism      (IdeConfiguration  *self,
                                                               gint               parallelism);
 IdeEnvironment       *ide_configuration_get_environment      (IdeConfiguration  *self);
+void                  ide_configuration_set_environment      (IdeConfiguration  *self,
+                                                              IdeEnvironment    *environment);
 IdeConfiguration     *ide_configuration_duplicate            (IdeConfiguration  *self);
 IdeConfiguration     *ide_configuration_snapshot             (IdeConfiguration  *self);
 guint                 ide_configuration_get_sequence         (IdeConfiguration  *self);
-IdeBuildCommandQueue *ide_configuration_get_prebuild         (IdeConfiguration  *self);
-IdeBuildCommandQueue *ide_configuration_get_postbuild        (IdeConfiguration  *self);
 const gchar          *ide_configuration_get_app_id           (IdeConfiguration  *self);
 void                  ide_configuration_set_app_id           (IdeConfiguration  *self,
-                                                              const gchar        *app_id);
+                                                              const gchar       *app_id);
+gboolean              ide_configuration_supports_device      (IdeConfiguration  *self,
+                                                              IdeDevice         *device);
+gboolean              ide_configuration_supports_runtime     (IdeConfiguration  *self,
+                                                              IdeRuntime        *runtime);
 const gchar          *ide_configuration_get_internal_string  (IdeConfiguration  *self,
                                                               const gchar       *key);
 void                  ide_configuration_set_internal_string  (IdeConfiguration  *self,
                                                               const gchar       *key,
                                                               const gchar       *value);
+const gchar * const  *ide_configuration_get_internal_strv    (IdeConfiguration  *self,
+                                                              const gchar       *key);
+void                  ide_configuration_set_internal_strv    (IdeConfiguration  *self,
+                                                              const gchar       *key,
+                                                              const gchar * const *value);
 gboolean              ide_configuration_get_internal_boolean (IdeConfiguration  *self,
                                                               const gchar       *key);
 void                  ide_configuration_set_internal_boolean (IdeConfiguration  *self,

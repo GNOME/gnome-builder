@@ -35,11 +35,13 @@ typedef struct _IdeBufferChangeMonitor         IdeBufferChangeMonitor;
 
 typedef struct _IdeBufferManager               IdeBufferManager;
 
-typedef struct _IdeBuilder                     IdeBuilder;
 typedef struct _IdeBuildCommand                IdeBuildCommand;
 typedef struct _IdeBuildCommandQueue           IdeBuildCommandQueue;
+typedef struct _IdeBuilder                     IdeBuilder;
 typedef struct _IdeBuildManager                IdeBuildManager;
+typedef struct _IdeBuildPipeline               IdeBuildPipeline;
 typedef struct _IdeBuildResult                 IdeBuildResult;
+typedef struct _IdeBuildStage                  IdeBuildStage;
 typedef struct _IdeBuildSystem                 IdeBuildSystem;
 typedef struct _IdeBuildTarget                 IdeBuildTarget;
 
@@ -134,6 +136,7 @@ typedef struct _IdeSymbolResolver              IdeSymbolResolver;
 typedef struct _IdeSymbolResolverInterface     IdeSymbolResolverInterface;
 
 typedef struct _IdeTransferManager             IdeTransferManager;
+typedef struct _IdeTransfer                    IdeTransfer;
 
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 

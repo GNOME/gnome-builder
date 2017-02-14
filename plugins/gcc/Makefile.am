@@ -7,8 +7,8 @@ plugin_LTLIBRARIES = libgcc-plugin.la
 dist_plugin_DATA = gcc.plugin
 
 libgcc_plugin_la_SOURCES = \
-	gbp-gcc-build-result-addin.c \
-	gbp-gcc-build-result-addin.h \
+	gbp-gcc-pipeline-addin.c \
+	gbp-gcc-pipeline-addin.h \
 	gbp-gcc-plugin.c
 
 libgcc_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)

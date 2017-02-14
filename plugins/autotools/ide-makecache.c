@@ -48,7 +48,6 @@ struct _IdeMakecache
 {
   IdeObject     parent_instance;
 
-  GFile        *makefile;
   GFile        *parent;
   GMappedFile  *mapped;
   EggTaskCache *file_targets_cache;
@@ -75,14 +74,6 @@ typedef struct
 G_DEFINE_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
 
 EGG_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
-
-enum {
-  PROP_0,
-  PROP_MAKEFILE,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
 
 static void
 file_flags_lookup_free (gpointer data)
@@ -342,292 +333,6 @@ ide_makecache_validate_mapped_file (GMappedFile  *mapped,
     }
 
   IDE_RETURN (TRUE);
-}
-
-static int
-ide_makecache_open_temp (IdeMakecache  *self,
-                         gchar        **name_used,
-                         GError       **error)
-{
-  IdeContext *context;
-  IdeProject *project;
-  const gchar *project_id;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *directory = NULL;
-  time_t now;
-  int fd;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAKECACHE (self));
-  g_assert (name_used);
-  g_assert (error);
-  g_assert (!*error);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
-  project_id = ide_project_get_id (project);
-
-  directory = g_build_filename (g_get_user_cache_dir (),
-                                ide_get_program_name (),
-                                "makecache",
-                                NULL);
-
-  g_debug ("Using \"%s\" for makecache directory", directory);
-
-  if (g_mkdir_with_parents (directory, 0700) != 0)
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   g_io_error_from_errno (errno),
-                   "Failed to create makecache directory");
-      IDE_RETURN (-1);
-    }
-
-  now = time (NULL);
-  name = g_strdup_printf ("%s.makecache.tmp-%u", project_id, (guint)now);
-  path = g_build_filename (directory, name, NULL);
-
-  g_debug ("Creating temporary makecache at \"%s\"", path);
-
-  fd = g_open (path, O_CREAT|O_RDWR, 0600);
-
-  if (fd == -1)
-    {
-      *name_used = NULL;
-      g_set_error (error,
-                   G_IO_ERROR,
-                   g_io_error_from_errno (errno),
-                   "Failed to open temporary file: %s",
-                   g_strerror (errno));
-      IDE_RETURN (-1);
-    }
-
-  *name_used = g_strdup (path);
-
-  IDE_RETURN (fd);
-}
-
-static void
-ide_makecache_new_worker (GTask        *task,
-                          gpointer      source_object,
-                          gpointer      task_data,
-                          GCancellable *cancellable)
-{
-  IdeMakecache *self = source_object;
-  IdeRuntime *runtime = task_data;
-  IdeContext *context;
-  IdeProject *project;
-  const gchar *project_id;
-  g_autofree gchar *name_used = NULL;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *cache_path = NULL;
-  g_autoptr(GFile) parent = NULL;
-  g_autofree gchar *workdir = NULL;
-  g_autoptr(GMappedFile) mapped = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  GError *error = NULL;
-  int fdcopy;
-  int fd;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_MAKECACHE (self));
-  g_assert (IDE_IS_RUNTIME (runtime));
-
-  if (!self->makefile || !(parent = g_file_get_parent (self->makefile)))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "No makefile was specified.");
-      IDE_EXIT;
-    }
-
-  workdir = g_file_get_path (parent);
-
-  if (!workdir)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "Makefile must be accessable on local filesystem.");
-      IDE_EXIT;
-    }
-
-  /*
-   * If the runtime has a "gmake" instead of "make", we want to prefer that
-   * since we know it is GNU make.
-   */
-  if (ide_runtime_contains_program_in_path (runtime, "gmake", cancellable))
-    self->make_name = "gmake";
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
-  project_id = ide_project_get_id (project);
-  name = g_strdup_printf ("%s.makecache", project_id);
-  cache_path = g_build_filename (g_get_user_cache_dir (),
-                                 ide_get_program_name (),
-                                 "makecache",
-                                 name,
-                                 NULL);
-
- /*
-  * NOTE:
-  *
-  * The makecache file is a file that contains all of the output from `make -p -n -s` on an
-  * automake project. This contains everything we need to determine what make targets a file
-  * "belongs to".
-  *
-  * The process is as follows.
-  *
-  * 1) Open a new temporary file to contain the output. This needs to be in the same directory
-  *    as the target so that we can rename() it into place.
-  * 2) dup() the fd to pass to the child process.
-  * 3) Spawn `make -p -n -s` using the temporary file as stdout.
-  * 4) Wait for the subprocess to complete. It would be nice if we could do this asynchronously,
-  *    but we'd need to break this whole thing into more tasks.
-  * 5) Move the temporary file into position at ~/.cache/<prgname>/<project>.makecache
-  * 6) mmap() the cache file using g_mapped_file_new_from_fd().
-  * 7) Close the fd. This does NOT cause the mmap() region to be unmapped.
-  * 8) Validate the mmap() contents with g_utf8_validate().
-  */
-
-  /*
-   * Step 1, open our temporary file.
-   */
-  fd = ide_makecache_open_temp (self, &name_used, &error);
-
-  if (fd == -1)
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  /*
-   * Step 2, make an extra fd to be passed to the child process.
-   */
-  if (-1 == (fdcopy = dup (fd)))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               g_io_error_from_errno (errno),
-                               "Failed to open temporary file: %s",
-                               g_strerror (errno));
-      close (fd);
-      IDE_EXIT;
-    }
-
-  /*
-   * Step 3,
-   *
-   * Spawn `make -p -n -s` in the directory containing our makefile.
-   */
-  launcher = ide_runtime_create_launcher (runtime, &error);
-
-  if (launcher == NULL)
-    {
-      g_task_return_error (task, error);
-      close (fdcopy);
-      close (fd);
-      IDE_EXIT;
-    }
-
-  ide_subprocess_launcher_push_argv (launcher, self->make_name);
-  ide_subprocess_launcher_push_argv (launcher, "-p");
-  ide_subprocess_launcher_push_argv (launcher, "-n");
-  ide_subprocess_launcher_push_argv (launcher, "-s");
-  ide_subprocess_launcher_set_cwd (launcher, workdir);
-
-  ide_subprocess_launcher_set_flags (launcher, G_SUBPROCESS_FLAGS_STDERR_SILENCE);
-  ide_subprocess_launcher_take_stdout_fd (launcher, fdcopy);
-  fdcopy = -1;
-
-  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
-
-  if (subprocess == NULL)
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      close (fd);
-      IDE_EXIT;
-    }
-
-  /*
-   * Step 4, wait for the subprocess to complete.
-   */
-  IDE_TRACE_MSG ("waiting for process to exit");
-
-  if (!ide_subprocess_wait (subprocess, cancellable, &error))
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      close (fd);
-      IDE_EXIT;
-    }
-
-  /*
-   * Step 5, move the file into location at the cache path.
-   *
-   * TODO:
-   *
-   * If we can switch to O_TMPFILE and use renameat2(), that would be neat. I'm not sure that is
-   * possible though since the O_TMPFILE will not have a filename associated with it.
-   */
-  if (0 != g_rename (name_used, cache_path))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               g_io_error_from_errno (errno),
-                               "Failed to move makecache into target directory: %s",
-                               g_strerror (errno));
-      close (fd);
-      IDE_EXIT;
-    }
-
-  /*
-   * Step 6, map the makecache file into memory.
-   */
-  lseek (fd, 0, SEEK_SET);
-  mapped = g_mapped_file_new_from_fd (fd, FALSE, &error);
-
-  if (mapped == NULL)
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      close (fd);
-      IDE_EXIT;
-    }
-
-  /*
-   * Step 7, we are done with fd, so close it now. Note that this does not have an effect on the
-   * mmap() region.
-   */
-  close (fd);
-
-  /*
-   * Step 8, validate the contents of the mmap region.
-   */
-  if (!ide_makecache_validate_mapped_file (mapped, &error))
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  /*
-   * Step 9, save the mmap and runtime for future use.
-   */
-  self->mapped = g_mapped_file_ref (mapped);
-  self->runtime = g_object_ref (runtime);
-
-  g_task_return_pointer (task, g_object_ref (self), g_object_unref);
-
-  IDE_EXIT;
 }
 
 static void
@@ -1064,27 +769,6 @@ ide_makecache_get_file_flags_worker (GTask        *task,
   IDE_EXIT;
 }
 
-static void
-ide_makecache_set_makefile (IdeMakecache *self,
-                            GFile        *makefile)
-{
-  g_autoptr(GFile) parent = NULL;
-
-  g_return_if_fail (IDE_IS_MAKECACHE (self));
-  g_return_if_fail (G_IS_FILE (makefile));
-
-  parent = g_file_get_parent (makefile);
-
-  if (!parent)
-    {
-      g_warning (_("Invalid makefile provided, ignoring."));
-      return;
-    }
-
-  g_set_object (&self->makefile, makefile);
-  g_set_object (&self->parent, parent);
-}
-
 static gchar *
 replace_suffix (const gchar *str,
                 const gchar *replace)
@@ -1336,11 +1020,12 @@ ide_makecache_finalize (GObject *object)
 {
   IdeMakecache *self = (IdeMakecache *)object;
 
-  g_clear_object (&self->makefile);
-  g_clear_pointer (&self->mapped, g_mapped_file_unref);
   g_clear_object (&self->file_targets_cache);
   g_clear_object (&self->file_flags_cache);
   g_clear_object (&self->runtime);
+  g_clear_object (&self->parent);
+
+  g_clear_pointer (&self->mapped, g_mapped_file_unref);
   g_clear_pointer (&self->build_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
@@ -1349,60 +1034,11 @@ ide_makecache_finalize (GObject *object)
 }
 
 static void
-ide_makecache_get_property (GObject    *object,
-                            guint       prop_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
-{
-  IdeMakecache *self = IDE_MAKECACHE (object);
-
-  switch (prop_id)
-    {
-    case PROP_MAKEFILE:
-      g_value_set_object (value, ide_makecache_get_makefile (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_makecache_set_property (GObject      *object,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
-{
-  IdeMakecache *self = IDE_MAKECACHE (object);
-
-  switch (prop_id)
-    {
-    case PROP_MAKEFILE:
-      ide_makecache_set_makefile (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 ide_makecache_class_init (IdeMakecacheClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_makecache_finalize;
-  object_class->get_property = ide_makecache_get_property;
-  object_class->set_property = ide_makecache_set_property;
-
-  properties [PROP_MAKEFILE] =
-    g_param_spec_object ("makefile",
-                         "Makefile",
-                         "The root makefile to be cached.",
-                         G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -1439,57 +1075,113 @@ ide_makecache_init (IdeMakecache *self)
   egg_task_cache_set_name (self->file_flags_cache, "makecache: file-flags-cache");
 }
 
-GFile *
-ide_makecache_get_makefile (IdeMakecache *self)
+static void
+ide_makecache_validate_worker (GTask        *task,
+                               gpointer      source_object,
+                               gpointer      task_data,
+                               GCancellable *cancellable)
 {
-  g_return_val_if_fail (IDE_IS_MAKECACHE (self), NULL);
+  IdeMakecache *self = task_data;
+  g_autoptr(GError) error = NULL;
 
-  return self->makefile;
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (!ide_makecache_validate_mapped_file (self->mapped, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task, g_object_ref (self), g_object_unref);
+
+  IDE_EXIT;
 }
 
 void
-ide_makecache_new_for_makefile_async (IdeRuntime          *runtime,
-                                      GFile               *makefile,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      gpointer             user_data)
+ide_makecache_new_for_cache_file_async (IdeRuntime          *runtime,
+                                        GFile               *cache_file,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeMakecache) self = NULL;
+  g_autoptr(GFile) parent = NULL;
+  g_autoptr(GMappedFile) mapped = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *cache_path = NULL;
   IdeContext *context;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_RUNTIME (runtime));
-  g_return_if_fail (G_IS_FILE (makefile));
+  g_return_if_fail (G_IS_FILE (cache_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-#ifdef IDE_ENABLE_TRACE
-  {
-    g_autofree gchar *path = g_file_get_path (makefile);
-    IDE_TRACE_MSG ("Generating makecache for %s", path);
-  }
-#endif
+  task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_makecache_new_for_cache_file_async);
+
+  if (!g_file_is_native (cache_file))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "Makecache files must be on a native filesystem");
+      IDE_EXIT;
+    }
+
+  cache_path = g_file_get_path (cache_file);
+
+  if (cache_path == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "Makecache files must be on a native filesystem");
+      IDE_EXIT;
+    }
+
+  parent = g_file_get_parent (cache_file);
+
+  if (parent == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "Makecache cannot be /");
+      IDE_EXIT;
+    }
 
   context = ide_object_get_context (IDE_OBJECT (runtime));
 
   self = g_object_new (IDE_TYPE_MAKECACHE,
                        "context", context,
-                       "makefile", makefile,
                        NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_makecache_new_for_makefile_async);
-  g_task_set_task_data (task, g_object_ref (runtime), g_object_unref);
+  mapped = g_mapped_file_new (cache_path, FALSE, &error);
 
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER, task, ide_makecache_new_worker);
+  if (mapped == NULL)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  self->parent = g_steal_pointer (&parent);
+  self->mapped = g_steal_pointer (&mapped);
+  self->runtime = g_object_ref (runtime);
+
+  if (ide_runtime_contains_program_in_path (runtime, "gmake", NULL))
+    self->make_name = "gmake";
+
+  g_task_set_task_data (task, g_steal_pointer (&self), g_object_unref);
+  g_task_run_in_thread (task, ide_makecache_validate_worker);
 
   IDE_EXIT;
 }
 
 IdeMakecache *
-ide_makecache_new_for_makefile_finish (GAsyncResult  *result,
-                                       GError       **error)
+ide_makecache_new_for_cache_file_finish (GAsyncResult  *result,
+                                         GError       **error)
 {
   GTask *task = (GTask *)result;
   IdeMakecache *ret;

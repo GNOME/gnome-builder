@@ -19,21 +19,16 @@
 #define G_LOG_DOMAIN "ide-configuration-manager"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-internal.h"
 #include "ide-macros.h"
 
-#include "buildsystem/ide-build-command.h"
-#include "buildsystem/ide-build-command-queue.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
-#include "buildsystem/ide-environment.h"
-#include "vcs/ide-vcs.h"
-
-#define DOT_BUILD_CONFIG ".buildconfig"
-#define WRITEBACK_TIMEOUT_SECS 2
+#include "buildsystem/ide-configuration-provider.h"
 
 struct _IdeConfigurationManager
 {
@@ -41,10 +36,7 @@ struct _IdeConfigurationManager
 
   GPtrArray        *configurations;
   IdeConfiguration *current;
-  GKeyFile         *key_file;
-
-  gulong            writeback_handler;
-  guint             change_count;
+  PeasExtensionSet *extensions;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
@@ -61,415 +53,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  INVALIDATE,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [LAST_PROP];
-
-static void
-load_string (IdeConfiguration *configuration,
-             GKeyFile         *key_file,
-             const gchar      *group,
-             const gchar      *key,
-             const gchar      *property)
-{
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (key_file != NULL);
-  g_assert (group != NULL);
-  g_assert (key != NULL);
-
-  if (g_key_file_has_key (key_file, group, key, NULL))
-    {
-      g_auto(GValue) value = G_VALUE_INIT;
-
-      g_value_init (&value, G_TYPE_STRING);
-      g_value_take_string (&value, g_key_file_get_string (key_file, group, key, NULL));
-      g_object_set_property (G_OBJECT (configuration), property, &value);
-    }
-}
-
-static void
-load_environ (IdeConfiguration *configuration,
-              GKeyFile         *key_file,
-              const gchar      *group)
-{
-  IdeEnvironment *environment;
-  g_auto(GStrv) keys = NULL;
-
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (key_file != NULL);
-  g_assert (group != NULL);
-
-  environment = ide_configuration_get_environment (configuration);
-  keys = g_key_file_get_keys (key_file, group, NULL, NULL);
-
-  if (keys != NULL)
-    {
-      guint i;
-
-      for (i = 0; keys [i]; i++)
-        {
-          g_autofree gchar *value = NULL;
-
-          value = g_key_file_get_string (key_file, group, keys [i], NULL);
-
-          if (value != NULL)
-            ide_environment_setenv (environment, keys [i], value);
-        }
-    }
-}
-
-static void
-load_command_queue (IdeBuildCommandQueue *cmdq,
-                    GKeyFile             *key_file,
-                    const gchar          *group,
-                    const gchar          *name)
-
-{
-  g_auto(GStrv) commands = NULL;
-
-  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (cmdq));
-  g_assert (key_file != NULL);
-  g_assert (group != NULL);
-  g_assert (name != NULL);
-
-  commands = g_key_file_get_string_list (key_file, group, name, NULL, NULL);
-
-  if (commands != NULL)
-    {
-      for (guint i = 0; commands [i]; i++)
-        {
-          g_autoptr(IdeBuildCommand) command = NULL;
-
-          command = g_object_new (IDE_TYPE_BUILD_COMMAND,
-                                  "command-text", commands [i],
-                                  NULL);
-          ide_build_command_queue_append (cmdq, command);
-        }
-    }
-}
-
-static gboolean
-ide_configuration_manager_load (IdeConfigurationManager  *self,
-                                GKeyFile                 *key_file,
-                                const gchar              *group,
-                                GError                  **error)
-{
-  g_autoptr(IdeConfiguration) configuration = NULL;
-  g_autofree gchar *env_group = NULL;
-  IdeContext *context;
-
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
-  g_assert (key_file != NULL);
-  g_assert (group != NULL);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  configuration = g_object_new (IDE_TYPE_CONFIGURATION,
-                                "id", group,
-                                "context", context,
-                                NULL);
-
-  load_string (configuration, key_file, group, "config-opts", "config-opts");
-  load_string (configuration, key_file, group, "device", "device-id");
-  load_string (configuration, key_file, group, "name", "display-name");
-  load_string (configuration, key_file, group, "runtime", "runtime-id");
-  load_string (configuration, key_file, group, "prefix", "prefix");
-  load_string (configuration, key_file, group, "app-id", "app-id");
-
-  if (g_key_file_has_key (key_file, group, "prebuild", NULL))
-    {
-      g_autoptr(IdeBuildCommandQueue) cmdq = NULL;
-
-      cmdq = ide_build_command_queue_new ();
-      load_command_queue (cmdq, key_file, group, "prebuild");
-      _ide_configuration_set_prebuild (configuration, cmdq);
-    }
-
-  if (g_key_file_has_key (key_file, group, "postbuild", NULL))
-    {
-      g_autoptr(IdeBuildCommandQueue) cmdq = NULL;
-
-      cmdq = ide_build_command_queue_new ();
-      load_command_queue (cmdq, key_file, group, "postbuild");
-      _ide_configuration_set_postbuild (configuration, cmdq);
-    }
-
-  env_group = g_strdup_printf ("%s.environment", group);
-
-  if (g_key_file_has_group (key_file, env_group))
-    load_environ (configuration, key_file, env_group);
-
-  ide_configuration_set_dirty (configuration, FALSE);
-
-  ide_configuration_manager_add (self, configuration);
-
-  if (g_key_file_get_boolean (key_file, group, "default", NULL))
-    ide_configuration_manager_set_current (self, configuration);
-
-  return TRUE;
-}
-
-static gboolean
-ide_configuration_manager_restore (IdeConfigurationManager  *self,
-                                   GFile                    *file,
-                                   GCancellable             *cancellable,
-                                   GError                  **error)
-{
-  g_autofree gchar *contents = NULL;
-  g_auto(GStrv) groups = NULL;
-  gsize length = 0;
-  guint i;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
-  g_assert (self->key_file == NULL);
-  g_assert (G_IS_FILE (file));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  self->key_file = g_key_file_new ();
-
-  if (!g_file_load_contents (file, cancellable, &contents, &length, NULL, error))
-    IDE_RETURN (FALSE);
-
-  if (!g_key_file_load_from_data (self->key_file,
-                                  contents,
-                                  length,
-                                  G_KEY_FILE_KEEP_COMMENTS,
-                                  error))
-    IDE_RETURN (FALSE);
-
-  groups = g_key_file_get_groups (self->key_file, NULL);
-
-  for (i = 0; groups [i]; i++)
-    {
-      if (g_str_has_suffix (groups [i], ".environment"))
-        continue;
-
-      if (!ide_configuration_manager_load (self, self->key_file, groups [i], error))
-        IDE_RETURN (FALSE);
-    }
-
-  IDE_RETURN (TRUE);
-}
-
-static void
-ide_configuration_manager_save_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
-{
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-  GFile *file = (GFile *)object;
-
-  g_assert (G_IS_FILE (file));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (!g_file_replace_contents_finish (file, result, NULL, &error))
-    g_task_return_error (task, error);
-  else
-    g_task_return_boolean (task, TRUE);
-}
-
-void
-ide_configuration_manager_save_async (IdeConfigurationManager *self,
-                                      GCancellable            *cancellable,
-                                      GAsyncReadyCallback      callback,
-                                      gpointer                 user_data)
-{
-  g_autoptr(GHashTable) group_names = NULL;
-  g_autoptr(GTask) task = NULL;
-  g_auto(GStrv) groups = NULL;
-  g_autoptr(GFile) file = NULL;
-  g_autoptr(GBytes) bytes = NULL;
-  gchar *data;
-  gsize length;
-  IdeContext *context;
-  IdeVcs *vcs;
-  GFile *workdir;
-  GError *error = NULL;
-  guint i;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  if (self->change_count == 0)
-    {
-      g_task_return_boolean (task, TRUE);
-      return;
-    }
-
-  self->change_count = 0;
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
-  file = g_file_get_child (workdir, DOT_BUILD_CONFIG);
-
-  /*
-   * NOTE:
-   *
-   * We keep the GKeyFile around from when we parsed .buildconfig, so that
-   * we can try to preserve comments and such when writing back.
-   *
-   * This means that we need to fill in all our known configuration
-   * sections, and then remove any that were removed since we were
-   * parsed it last.
-   */
-
-  if (self->key_file == NULL)
-    self->key_file = g_key_file_new ();
-
-  group_names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-  for (i = 0; i < self->configurations->len; i++)
-    {
-      IdeConfiguration *configuration = g_ptr_array_index (self->configurations, i);
-      IdeEnvironment *environment;
-      guint n_items;
-      guint j;
-      gchar *group;
-      gchar *group_environ;
-
-      group = g_strdup (ide_configuration_get_id (configuration));
-      group_environ = g_strdup_printf ("%s.environment", group);
-
-      /*
-       * Track our known group names, so we can remove missing names after
-       * we've updated the GKeyFile.
-       */
-      g_hash_table_insert (group_names, group, NULL);
-      g_hash_table_insert (group_names, group_environ, NULL);
-
-#define PERSIST_STRING_KEY(key, getter) \
-      g_key_file_set_string (self->key_file, group, key, \
-                             ide_configuration_##getter (configuration) ?: "")
-      PERSIST_STRING_KEY ("name", get_display_name);
-      PERSIST_STRING_KEY ("device", get_device_id);
-      PERSIST_STRING_KEY ("runtime", get_runtime_id);
-      PERSIST_STRING_KEY ("config-opts", get_config_opts);
-      PERSIST_STRING_KEY ("prefix", get_prefix);
-      PERSIST_STRING_KEY ("app-id", get_app_id);
-#undef PERSIST_STRING_KEY
-
-      if (configuration == self->current)
-        g_key_file_set_boolean (self->key_file, group, "default", TRUE);
-      else
-        g_key_file_remove_key (self->key_file, group, "default", NULL);
-
-      environment = ide_configuration_get_environment (configuration);
-
-      /*
-       * Remove all environment keys that are no longer specified in the
-       * environment. This allows us to just do a single pass of additions
-       * from the environment below.
-       */
-      if (g_key_file_has_group (self->key_file, group_environ))
-        {
-          g_auto(GStrv) keys = NULL;
-
-          if (NULL != (keys = g_key_file_get_keys (self->key_file, group_environ, NULL, NULL)))
-            {
-              for (j = 0; keys [j]; j++)
-                {
-                  if (!ide_environment_getenv (environment, keys [j]))
-                    g_key_file_remove_key (self->key_file, group_environ, keys [j], NULL);
-                }
-            }
-        }
-
-      n_items = g_list_model_get_n_items (G_LIST_MODEL (environment));
-
-      for (j = 0; j < n_items; j++)
-        {
-          g_autoptr(IdeEnvironmentVariable) var = NULL;
-          const gchar *key;
-          const gchar *value;
-
-          var = g_list_model_get_item (G_LIST_MODEL (environment), j);
-          key = ide_environment_variable_get_key (var);
-          value = ide_environment_variable_get_value (var);
-
-          if (!ide_str_empty0 (key))
-            g_key_file_set_string (self->key_file, group_environ, key, value ?: "");
-        }
-    }
-
-  /*
-   * Now truncate any old groups in the keyfile.
-   */
-  if (NULL != (groups = g_key_file_get_groups (self->key_file, NULL)))
-    {
-      for (i = 0; groups [i]; i++)
-        {
-          if (!g_hash_table_contains (group_names, groups [i]))
-            g_key_file_remove_group (self->key_file, groups [i], NULL);
-        }
-    }
-
-  if (NULL == (data = g_key_file_to_data (self->key_file, &length, &error)))
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  bytes = g_bytes_new_take (data, length);
-
-  g_file_replace_contents_bytes_async (file,
-                                       bytes,
-                                       NULL,
-                                       FALSE,
-                                       G_FILE_CREATE_NONE,
-                                       cancellable,
-                                       ide_configuration_manager_save_cb,
-                                       g_object_ref (task));
-
-  IDE_EXIT;
-}
-
-gboolean
-ide_configuration_manager_save_finish (IdeConfigurationManager  *self,
-                                       GAsyncResult             *result,
-                                       GError                  **error)
-{
-  g_return_val_if_fail (IDE_IS_CONFIGURATION_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-static gboolean
-ide_configuration_manager_do_writeback (gpointer data)
-{
-  IdeConfigurationManager *self = data;
-
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
-
-  self->writeback_handler = 0;
-
-  ide_configuration_manager_save_async (self, NULL, NULL, NULL);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-ide_configuration_manager_queue_writeback (IdeConfigurationManager *self)
-{
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
-
-  IDE_ENTRY;
-
-  if (self->writeback_handler != 0)
-    g_source_remove (self->writeback_handler);
-
-  self->writeback_handler = g_timeout_add_seconds (WRITEBACK_TIMEOUT_SECS,
-                                                   ide_configuration_manager_do_writeback,
-                                                   self);
-
-  IDE_EXIT;
-}
+static guint signals [N_SIGNALS];
 
 static void
 ide_configuration_manager_add_default (IdeConfigurationManager *self)
@@ -487,6 +77,78 @@ ide_configuration_manager_add_default (IdeConfigurationManager *self)
 
   if (self->configurations->len == 1)
     ide_configuration_manager_set_current (self, config);
+}
+
+static void
+ide_configuration_manager_save_provider_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
+{
+  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_configuration_provider_save_finish (provider, result, &error))
+    g_task_return_error (task, error);
+}
+
+static void
+ide_configuration_manager_save_provider (PeasExtensionSet *set,
+                                         PeasPluginInfo   *plugin_info,
+                                         PeasExtension    *exten,
+                                         gpointer          user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+  g_assert (G_IS_TASK (task));
+
+  if (!g_task_had_error (task))
+    ide_configuration_provider_save_async (provider,
+                                           g_task_get_cancellable (task),
+                                           ide_configuration_manager_save_provider_cb,
+                                           g_object_ref (task));
+}
+
+void
+ide_configuration_manager_save_async (IdeConfigurationManager *self,
+                                      GCancellable            *cancellable,
+                                      GAsyncReadyCallback      callback,
+                                      gpointer                 user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  peas_extension_set_foreach (self->extensions,
+                              ide_configuration_manager_save_provider,
+                              g_object_ref (task));
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_configuration_manager_save_finish (IdeConfigurationManager  *self,
+                                       GAsyncResult             *result,
+                                       GError                  **error)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION_MANAGER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 /**
@@ -533,9 +195,7 @@ ide_configuration_manager_finalize (GObject *object)
 {
   IdeConfigurationManager *self = (IdeConfigurationManager *)object;
 
-  ide_clear_source (&self->writeback_handler);
   g_clear_pointer (&self->configurations, g_ptr_array_unref);
-  g_clear_pointer (&self->key_file, g_key_file_free);
 
   if (self->current != NULL)
     {
@@ -617,6 +277,18 @@ ide_configuration_manager_class_init (IdeConfigurationManagerClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  /**
+   * IdeConfigurationManager::invalidate:
+   *
+   * This signal is emitted any time a new configuration is selected or the
+   * currently selected configurations state changes.
+   */
+  signals [INVALIDATE] =
+    g_signal_new ("invalidate",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 static void
@@ -662,6 +334,38 @@ list_model_iface_init (GListModelInterface *iface)
 }
 
 static void
+ide_configuration_manager_extension_added (PeasExtensionSet *set,
+                                           PeasPluginInfo   *plugin_info,
+                                           PeasExtension    *exten,
+                                           gpointer          user_data)
+{
+  IdeConfigurationManager *self = user_data;
+  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+
+  ide_configuration_provider_load (provider, self);
+}
+
+static void
+ide_configuration_manager_extension_removed (PeasExtensionSet *set,
+                                             PeasPluginInfo   *plugin_info,
+                                             PeasExtension    *exten,
+                                             gpointer          user_data)
+{
+  IdeConfigurationManager *self = user_data;
+  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+
+  ide_configuration_provider_unload (provider, self);
+}
+
+static void
 ide_configuration_manager_init_worker (GTask        *task,
                                        gpointer      source_object,
                                        gpointer      task_data,
@@ -671,26 +375,33 @@ ide_configuration_manager_init_worker (GTask        *task,
   g_autoptr(GFile) settings_file = NULL;
   g_autoptr(GError) error = NULL;
   IdeContext *context;
-  IdeVcs *vcs;
-  GFile *workdir;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
-  settings_file = g_file_get_child (workdir, DOT_BUILD_CONFIG);
+  g_assert (IDE_IS_CONTEXT (context));
 
-  if (!g_file_query_exists (settings_file, cancellable) ||
-      !ide_configuration_manager_restore (self, settings_file, cancellable, &error))
-    {
-      if (error != NULL)
-        g_warning ("Failed to restore configuration: %s", error->message);
+  self->extensions = peas_extension_set_new (peas_engine_get_default (),
+                                             IDE_TYPE_CONFIGURATION_PROVIDER,
+                                             NULL);
 
-      ide_configuration_manager_add_default (self);
-    }
+  g_signal_connect (self->extensions,
+                    "extension-added",
+                    G_CALLBACK (ide_configuration_manager_extension_added),
+                    self);
+
+  g_signal_connect (self->extensions,
+                    "extension-removed",
+                    G_CALLBACK (ide_configuration_manager_extension_removed),
+                    self);
+
+  peas_extension_set_foreach (self->extensions,
+                              ide_configuration_manager_extension_added,
+                              self);
+
+  ide_configuration_manager_add_default (self);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -759,6 +470,8 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
+
+      g_signal_emit (self, signals [INVALIDATE], 0);
     }
 }
 
@@ -793,9 +506,7 @@ ide_configuration_manager_changed (IdeConfigurationManager *self,
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  self->change_count++;
-
-  ide_configuration_manager_queue_writeback (self);
+  g_signal_emit (self, signals [INVALIDATE], 0);
 }
 
 void
@@ -807,15 +518,15 @@ ide_configuration_manager_add (IdeConfigurationManager *self,
   g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (self));
   g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
 
+  position = self->configurations->len;
+  g_ptr_array_add (self->configurations, g_object_ref (configuration));
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+
   g_signal_connect_object (configuration,
                            "changed",
                            G_CALLBACK (ide_configuration_manager_changed),
                            self,
                            G_CONNECT_SWAPPED);
-
-  position = self->configurations->len;
-  g_ptr_array_add (self->configurations, g_object_ref (configuration));
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 }
 
 void
@@ -833,6 +544,9 @@ ide_configuration_manager_remove (IdeConfigurationManager *self,
 
       if (item == configuration)
         {
+          g_signal_handlers_disconnect_by_func (configuration,
+                                                G_CALLBACK (ide_configuration_manager_changed),
+                                                self);
           g_ptr_array_remove_index (self->configurations, i);
           g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
           if (self->configurations->len == 0)

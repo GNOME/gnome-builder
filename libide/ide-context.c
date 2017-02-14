@@ -1463,6 +1463,27 @@ ide_context_init_diagnostics_manager (gpointer             source_object,
 }
 
 static void
+ide_context_init_build_manager (gpointer             source_object,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = NULL;
+  IdeContext *self = source_object;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  if (!g_initable_init (G_INITABLE (self->build_manager), cancellable, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_loaded (gpointer             source_object,
                          GCancellable        *cancellable,
                          GAsyncReadyCallback  callback,
@@ -1507,6 +1528,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_search_engine,
                         ide_context_init_runtimes,
                         ide_context_init_configuration_manager,
+                        ide_context_init_build_manager,
                         ide_context_init_diagnostics_manager,
                         ide_context_init_loaded,
                         NULL);

@@ -22,9 +22,6 @@
 
 #include "ide-context.h"
 
-#include "buildsystem/ide-configuration-manager.h"
-#include "buildsystem/ide-configuration.h"
-#include "buildsystem/ide-simple-builder.h"
 #include "directory/ide-directory-build-system.h"
 #include "projects/ide-project-file.h"
 #include "projects/ide-project-item.h"
@@ -176,28 +173,8 @@ ide_directory_build_system_get_priority (IdeBuildSystem *build_system)
   return 1000000;
 }
 
-static IdeBuilder *
-ide_directory_build_system_get_builder (IdeBuildSystem    *build_system,
-                                        IdeConfiguration  *configuration,
-                                        GError           **error)
-{
-  IdeDirectoryBuildSystem *self = (IdeDirectoryBuildSystem *)build_system;
-  IdeContext *context;
-
-  g_assert (IDE_IS_DIRECTORY_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  context = ide_object_get_context (IDE_OBJECT (build_system));
-
-  return g_object_new (IDE_TYPE_SIMPLE_BUILDER,
-                       "configuration", configuration,
-                       "context", context,
-                       NULL);
-}
-
 static void
 build_system_init (IdeBuildSystemInterface *iface)
 {
   iface->get_priority = ide_directory_build_system_get_priority;
-  iface->get_builder = ide_directory_build_system_get_builder;
 }
