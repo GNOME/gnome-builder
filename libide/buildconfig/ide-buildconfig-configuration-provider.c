@@ -33,7 +33,7 @@
 #include "buildsystem/ide-environment.h"
 #include "vcs/ide-vcs.h"
 
-#define DOT_BUILD_CONFIG ".buildconfig"
+#define DOT_BUILDCONFIG ".buildconfig"
 #define WRITEBACK_TIMEOUT_SECS 2
 
 struct _IdeBuildconfigConfigurationProvider
@@ -102,8 +102,9 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_buildconfig_configuration_provider_save_async);
 
-  if (self->change_count == 0)
+  if (self->configurations == NULL || self->change_count == 0)
     {
       g_task_return_boolean (task, TRUE);
       return;
@@ -114,7 +115,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
   context = ide_object_get_context (IDE_OBJECT (self->manager));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
-  file = g_file_get_child (workdir, DOT_BUILD_CONFIG);
+  file = g_file_get_child (workdir, DOT_BUILDCONFIG);
 
   /*
    * NOTE:
@@ -350,6 +351,7 @@ static gboolean
 ide_buildconfig_configuration_provider_load_group (IdeBuildconfigConfigurationProvider  *self,
                                                    GKeyFile                             *key_file,
                                                    const gchar                          *group,
+                                                   GPtrArray                            *configs,
                                                    GError                              **error)
 {
   g_autoptr(IdeConfiguration) configuration = NULL;
@@ -399,12 +401,8 @@ ide_buildconfig_configuration_provider_load_group (IdeBuildconfigConfigurationPr
 
   ide_configuration_set_dirty (configuration, FALSE);
 
-  ide_configuration_manager_add (self->manager, configuration);
-
-  g_ptr_array_add (self->configurations, configuration);
-
   if (g_key_file_get_boolean (key_file, group, "default", NULL))
-    ide_configuration_manager_set_current (self->manager, configuration);
+    g_object_set_data (G_OBJECT (configuration), "WAS_DEFAULT", GINT_TO_POINTER (TRUE));
 
   g_signal_connect_object (configuration,
                            "changed",
@@ -412,12 +410,15 @@ ide_buildconfig_configuration_provider_load_group (IdeBuildconfigConfigurationPr
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_ptr_array_add (configs, g_steal_pointer (&configuration));
+
   return TRUE;
 }
 
 static gboolean
 ide_buildconfig_configuration_provider_restore (IdeBuildconfigConfigurationProvider  *self,
                                                 GFile                                *file,
+                                                GPtrArray                            *configs,
                                                 GCancellable                         *cancellable,
                                                 GError                              **error)
 {
@@ -452,7 +453,7 @@ ide_buildconfig_configuration_provider_restore (IdeBuildconfigConfigurationProvi
       if (g_str_has_suffix (groups [i], ".environment"))
         continue;
 
-      if (!ide_buildconfig_configuration_provider_load_group (self, self->key_file, groups [i], error))
+      if (!ide_buildconfig_configuration_provider_load_group (self, self->key_file, groups [i], configs, error))
         IDE_RETURN (FALSE);
     }
 
@@ -468,6 +469,8 @@ ide_buildconfig_configuration_provider_load_worker (GTask        *task,
   IdeBuildconfigConfigurationProvider *self = source_object;
   g_autoptr(GFile) settings_file = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GPtrArray) configs = NULL;
+  IdeConfigurationManager *manager = task_data;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
@@ -476,22 +479,26 @@ ide_buildconfig_configuration_provider_load_worker (GTask        *task,
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (self->manager));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  context = ide_object_get_context (IDE_OBJECT (self->manager));
+  configs = g_ptr_array_new_with_free_func (g_object_unref);
+
+  context = ide_object_get_context (IDE_OBJECT (manager));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
-  settings_file = g_file_get_child (workdir, DOT_BUILD_CONFIG);
+  settings_file = g_file_get_child (workdir, DOT_BUILDCONFIG);
 
-  if (!g_file_query_exists (settings_file, cancellable) ||
-      !ide_buildconfig_configuration_provider_restore (self, settings_file, cancellable, &error))
+  if (g_file_query_exists (settings_file, cancellable))
     {
-      if (error != NULL)
-        g_warning ("Failed to restore configuration: %s", error->message);
+      if (!ide_buildconfig_configuration_provider_restore (self, settings_file, configs, cancellable, &error))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
     }
 
-  g_task_return_boolean (task, TRUE);
+  g_task_return_pointer (task, g_steal_pointer (&configs), (GDestroyNotify)g_ptr_array_unref);
 
   IDE_EXIT;
 }
@@ -501,18 +508,43 @@ ide_buildconfig_configuration_provider_load_cb (GObject      *object,
                                                 GAsyncResult *result,
                                                 gpointer      user_data)
 {
-  GError *error = NULL;
+  IdeBuildconfigConfigurationProvider *self;
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (object));
   g_assert (G_IS_TASK (result));
 
-  if (!g_task_propagate_boolean (G_TASK (result), &error))
+  ar = g_task_propagate_pointer (G_TASK (result), &error);
+  self = g_task_get_source_object (G_TASK (result));
+
+  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (self->configurations == NULL);
+
+  if (ar != NULL && self->manager != NULL)
     {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
+      for (guint i = 0; i < ar->len; i++)
+        {
+          IdeConfiguration *config = g_ptr_array_index (ar, i);
+
+          g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION (config));
+
+          ide_configuration_manager_add (self->manager, config);
+
+          if (g_object_get_data (G_OBJECT (config), "WAS_DEFAULT"))
+            {
+              ide_configuration_manager_set_current (self->manager, config);
+              g_object_set_data (G_OBJECT (config), "WAS_DEFAULT", NULL);
+            }
+        }
     }
+
+  self->configurations = g_steal_pointer (&ar);
+
+  if (error != NULL)
+    g_warning ("Failed to restore configuration: %s", error->message);
 
   IDE_EXIT;
 }
@@ -532,9 +564,10 @@ ide_buildconfig_configuration_provider_load (IdeConfigurationProvider *provider,
   ide_set_weak_pointer (&self->manager, manager);
 
   self->cancellable = g_cancellable_new ();
-  self->configurations = g_ptr_array_new_with_free_func (g_object_unref);
 
   task = g_task_new (self, self->cancellable, ide_buildconfig_configuration_provider_load_cb, NULL);
+  g_task_set_source_tag (task, ide_buildconfig_configuration_provider_load);
+  g_task_set_task_data (task, g_object_ref (manager), g_object_unref);
   g_task_run_in_thread (task, ide_buildconfig_configuration_provider_load_worker);
 
   IDE_EXIT;
