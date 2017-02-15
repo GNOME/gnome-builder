@@ -111,6 +111,18 @@ ide_xml_sax_set_callback (IdeXmlSax             *self,
       handler->entityDecl = callback;
       break;
 
+    case IDE_XML_SAX_CALLBACK_TYPE_INTERNAL_SUBSET:
+      handler->internalSubset = callback;
+      break;
+
+    case IDE_XML_SAX_CALLBACK_TYPE_EXTERNAL_SUBSET:
+      handler->externalSubset = callback;
+      break;
+
+    case IDE_XML_SAX_CALLBACK_TYPE_PROCESSING_INSTRUCTION:
+      handler->processingInstruction = callback;
+      break;
+
     case IDE_XML_SAX_CALLBACK_TYPE_WARNING:
       handler->warning = callback;
       break;

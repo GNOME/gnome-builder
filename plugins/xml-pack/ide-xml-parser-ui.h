@@ -1,4 +1,4 @@
-/* ide-xml-tree-builder-ui.h
+/* ide-xml-parser-ui.h
  *
  * Copyright (C) 2017 Sebastien Lafargue <slafargue@gnome.org>
  *
@@ -16,26 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_TREE_BUILDER_UI_H
-#define IDE_XML_TREE_BUILDER_UI_H
+#ifndef IDE_XML_PARSER_UI_H
+#define IDE_XML_PARSER_UI_H
 
 #include <glib.h>
-#include <ide.h>
 
-#include "ide-xml-analysis.h"
-#include "ide-xml-sax.h"
-#include "ide-xml-symbol-node.h"
-#include "ide-xml-tree-builder.h"
-#include "xml-reader.h"
+#include "ide-xml-parser-private.h"
 
 G_BEGIN_DECLS
 
-IdeXmlAnalysis *ide_xml_tree_builder_ui_create (IdeXmlTreeBuilder *self,
-                                                IdeXmlSax         *parser,
-                                                GFile             *file,
-                                                const gchar       *data,
-                                                gsize              length);
+void      ide_xml_parser_ui_setup       (IdeXmlParser *self,
+                                         ParserState  *state);
 
 G_END_DECLS
 
-#endif /* IDE_XML_TREE_BUILDER_UI_H */
+#endif /* IDE_XML_PARSER_UI_H */

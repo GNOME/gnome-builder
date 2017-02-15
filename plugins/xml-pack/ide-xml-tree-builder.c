@@ -16,70 +16,68 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libxml/parser.h>
 #include <string.h>
 
+#include "ide-xml-parser.h"
 #include "ide-xml-sax.h"
-#include "ide-xml-tree-builder-generic.h"
-#include "ide-xml-tree-builder-ui.h"
+#include "ide-xml-service.h"
+#include "ide-xml-schema-cache-entry.h"
+#include "ide-xml-tree-builder-utils-private.h"
+#include "ide-xml-validator.h"
 
 #include "ide-xml-tree-builder.h"
 
-typedef struct _ColorTag
-{
-  gchar *name;
-  gchar *fg;
-  gchar *bg;
-} ColorTag;
-
-static void
-color_tag_free (gpointer *data)
-{
-  ColorTag *tag = (ColorTag *)data;
-
-  g_free (tag->name);
-  g_free (tag->fg);
-  g_free (tag->bg);
-}
-
-/* Keep it in sync with ColorTagId enum */
-static ColorTag default_color_tags [] =
-{
-  { "label",       "#000000", "#D5E7FC" }, // COLOR_TAG_LABEL
-  { "id",          "#000000", "#D9E7BD" }, // COLOR_TAG_ID
-  { "style-class", "#000000", "#DFCD9B" }, // COLOR_TAG_STYLE_CLASS
-  { "type",        "#000000", "#F4DAC3" }, // COLOR_TAG_TYPE
-  { "parent",      "#000000", "#DEBECF" }, // COLOR_TAG_PARENT
-  { "class",       "#000000", "#FFEF98" }, // COLOR_TAG_CLASS
-  { "attribute",   "#000000", "#F0E68C" }, // COLOR_TAG_ATTRIBUTE
-  { NULL },
-};
-
 struct _IdeXmlTreeBuilder
 {
-  IdeObject  parent_instance;
+  IdeObject        parent_instance;
 
-  GSettings *settings;
-  GArray    *color_tags;
+  IdeXmlParser    *parser;
+  IdeXmlValidator *validator;
 };
 
 typedef struct{
-  IdeXmlSax *parser;
-  GBytes    *content;
-  GFile     *file;
-  gint64     sequence;
-} BuilderState;
+  GBytes         *content;
+  GFile          *file;
+  IdeXmlAnalysis *analysis;
+  gint64          sequence;
+} TreeBuilderState;
 
 static void
-builder_state_free (BuilderState *state)
+tree_builder_state_free (TreeBuilderState *state)
 {
-  g_clear_object (&state->parser);
   g_clear_pointer (&state->content, g_bytes_unref);
+  g_clear_pointer (&state->analysis, ide_xml_analysis_unref);
   g_clear_object (&state->file);
 }
 
 G_DEFINE_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE_TYPE_OBJECT)
+
+static IdeDiagnostic *
+create_diagnostic (IdeContext             *context,
+                   const gchar            *msg,
+                   GFile                  *file,
+                   gint                    line,
+                   gint                    col,
+                   IdeDiagnosticSeverity   severity)
+{
+  IdeDiagnostic *diagnostic;
+  g_autoptr(IdeSourceLocation) loc = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+
+  ifile = ide_file_new (context, file);
+  loc = ide_source_location_new (ifile,
+                                 line - 1,
+                                 col - 1,
+                                 0);
+
+  diagnostic = ide_diagnostic_new (severity, msg, loc);
+
+  return diagnostic;
+}
 
 static GBytes *
 ide_xml_tree_builder_get_file_content (IdeXmlTreeBuilder *self,
@@ -115,65 +113,291 @@ ide_xml_tree_builder_get_file_content (IdeXmlTreeBuilder *self,
   return content;
 }
 
-static gboolean
-ide_xml_tree_builder_file_is_ui (GFile       *file,
-                                 const gchar *data,
-                                 gsize        size)
+typedef struct _FetchSchemasState
 {
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *buffer = NULL;
-  gsize buffer_size;
+  IdeXmlTreeBuilder *self;
+  GTask             *task;
+  GArray            *schemas;
+  guint              index;
+} FetchSchemasState;
 
-  g_assert (G_IS_FILE (file));
-  g_assert (data != NULL);
-  g_assert (size > 0);
+static void
+fetch_schema_state_free (FetchSchemasState *state)
+{
+  g_object_unref (state->self);
+  g_array_unref (state->schemas);
 
-  path = g_file_get_path (file);
-  if (g_str_has_suffix (path, ".ui") || g_str_has_suffix (path, ".glade"))
-    {
-      buffer_size = (size < 256) ? size : 256;
-      buffer = g_strndup (data, buffer_size);
-      if (NULL != (strstr (buffer, "<interface>")))
-        return TRUE;
-    }
-
-  return FALSE;
+  g_slice_free (FetchSchemasState, state);
 }
 
 static void
-build_tree_worker (GTask        *task,
-                   gpointer      source_object,
-                   gpointer      task_data,
-                   GCancellable *cancellable)
+fetch_schemas_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
 {
-  IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)source_object;
-  BuilderState *state = (BuilderState *)task_data;
-  IdeXmlAnalysis *analysis = NULL;
-  const gchar *data;
-  gsize size;
+  DzlTaskCache *schemas_cache = (DzlTaskCache *)object;
+  FetchSchemasState *state = (FetchSchemasState *)user_data;
+  g_autoptr (IdeXmlSchemaCacheEntry) cache_entry = NULL;
+  GTask *task = state->task;
+  guint count;
+  SchemaEntry *entry;
+  GError *error = NULL;
+
+  g_assert (DZL_IS_TASK_CACHE (schemas_cache));
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
+
+  cache_entry = dzl_task_cache_get_finish (schemas_cache, result, &error);
+  entry = &g_array_index (state->schemas, SchemaEntry, state->index);
+
+  if (cache_entry->content != NULL)
+    entry->schema_content = g_bytes_ref (cache_entry->content);
+  else
+    entry->error_message = g_strdup (cache_entry->error_message);
+
+  fetch_schema_state_free (state);
+  count = GPOINTER_TO_UINT (g_task_get_task_data (task));
+  --count;
+  g_task_set_task_data (task, GUINT_TO_POINTER (count), NULL);
+
+  if (count == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      g_object_unref (task);
+    }
+}
+
+static gboolean
+fetch_schemas_async (IdeXmlTreeBuilder   *self,
+                     GArray              *schemas,
+                     GCancellable        *cancellable,
+                     GAsyncReadyCallback  callback,
+                     gpointer             user_data)
+{
+  IdeContext *context;
+  IdeXmlService *service;
+  DzlTaskCache *schemas_cache;
+  GTask *task;
+  guint count = 0;
+  gboolean has_external_schemas = FALSE;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (self));
-  g_assert (G_IS_TASK (task));
-  g_assert (state != NULL);
-  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_assert (schemas != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  data = g_bytes_get_data (state->content, &size);
+  if (schemas->len == 0)
+    return FALSE;
 
-  if (ide_xml_tree_builder_file_is_ui (state->file, data, size))
-    analysis = ide_xml_tree_builder_ui_create (self, state->parser, state->file, data, size);
-  else
-    analysis = ide_xml_tree_builder_generic_create (self, state->parser, state->file, data, size);
+  /* TODO: use a worker thread */
+  task = g_task_new (self, cancellable, callback, user_data);
 
-  if (analysis == NULL)
+  context = ide_object_get_context (IDE_OBJECT (self));
+  service = ide_context_get_service_typed (context, IDE_TYPE_XML_SERVICE);
+  schemas_cache = ide_xml_service_get_schemas_cache (service);
+
+  for (gint i = 0; i < schemas->len; ++i)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("Failed to create the XML tree."));
+      SchemaEntry *entry;
+      FetchSchemasState *state;
+
+      entry = &g_array_index (schemas, SchemaEntry, i);
+      /* Check if it's an internal schema */
+      if (entry->schema_file == NULL)
+        continue;
+
+      state = g_slice_new0 (FetchSchemasState);
+      state->self = g_object_ref (self);
+      state->schemas = g_array_ref (schemas);
+      state->task = task;
+
+      ++count;
+      g_task_set_task_data (task, GUINT_TO_POINTER (count), NULL);
+      has_external_schemas = TRUE;
+
+      state->index = i;
+      /* TODO: peek schemas if it's already in cache */
+      dzl_task_cache_get_async (schemas_cache,
+                                entry->schema_file,
+                                FALSE,
+                                cancellable,
+                                fetch_schemas_cb,
+                                state);
+
+      printf ("fetching schema URL:%s\n", g_file_get_uri (entry->schema_file));
+    }
+
+  if (!has_external_schemas)
+    g_task_return_boolean (task, TRUE);
+
+  return TRUE;
+}
+
+static gboolean
+fetch_schemas_finish (IdeXmlTreeBuilder  *self,
+                      GAsyncResult       *result,
+                      GError            **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_XML_TREE_BUILDER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (error != NULL, FALSE);
+
+  return g_task_propagate_boolean (task, error);
+}
+
+static void
+ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeXmlTreeBuilder *self;
+  TreeBuilderState *state;
+  IdeContext *context;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr (GArray) schemas = NULL;
+  const gchar *doc_data;
+  xmlDoc *doc;
+  gsize doc_size;
+  SchemaKind kind;
+  GError *error = NULL;
+
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  if (!fetch_schemas_finish (self, result, &error))
+    {
+      g_task_return_error (task, error);
       return;
     }
 
+  state = g_task_get_task_data (task);
+  schemas = ide_xml_analysis_get_schemas (state->analysis);
+  ide_xml_analysis_set_schemas (state->analysis, NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  doc_data = g_bytes_get_data (state->content, &doc_size);
+  if (NULL != (doc = xmlParseMemory (doc_data, doc_size)))
+    {
+      doc->URL = (guchar *)g_file_get_uri (state->file);
+      for (gint i = 0; i < schemas->len; ++i)
+        {
+          SchemaEntry *entry;
+          const gchar *schema_data;
+          gsize schema_size;
+          g_autoptr (IdeDiagnostics) diagnostics = NULL;
+          g_autoptr (IdeDiagnostic) diagnostic = NULL;
+          gboolean schema_ret;
+
+          entry = &g_array_index (schemas, SchemaEntry, i);
+          kind = entry->schema_kind;
+
+          if (kind == SCHEMA_KIND_RNG || kind == SCHEMA_KIND_XML_SCHEMA)
+            {
+              if (entry->schema_content != NULL)
+                {
+                  schema_data = g_bytes_get_data (entry->schema_content, &schema_size);
+                  schema_ret = ide_xml_validator_set_schema (self->validator,
+                                                             kind,
+                                                             schema_data,
+                                                             schema_size);
+                }
+              else
+                {
+                  g_assert (entry->error_message != NULL);
+
+                  diagnostic = create_diagnostic (context,
+                                                  entry->error_message,
+                                                  state->file,
+                                                  entry->schema_line,
+                                                  entry->schema_col,
+                                                  IDE_DIAGNOSTIC_ERROR);
+                  ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
+                  continue;
+                }
+            }
+          else if (kind == SCHEMA_KIND_DTD)
+            {
+            schema_ret = ide_xml_validator_set_schema (self->validator, SCHEMA_KIND_DTD, NULL, 0);
+            }
+          else
+            g_assert_not_reached ();
+
+          if (!schema_ret)
+            {
+              g_autofree gchar *uri = NULL;
+              g_autofree gchar *msg = NULL;
+
+              uri = g_file_get_uri (entry->schema_file);
+              msg = g_strdup_printf ("Can't parse the schema: '%s'", uri);
+              diagnostic = create_diagnostic (context,
+                                              msg,
+                                              state->file,
+                                              entry->schema_line,
+                                              entry->schema_col,
+                                              IDE_DIAGNOSTIC_ERROR);
+              ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
+              continue;
+            }
+
+          if (ide_xml_validator_validate (self->validator, doc, &diagnostics))
+            printf ("validated\n");
+          else
+            printf ("NOT validated\n");
+
+          ide_diagnostics_merge (state->analysis->diagnostics, diagnostics);
+        }
+
+      xmlFreeDoc (doc);
+    }
+  else
+    {
+      /* TODO: set error */
+      printf ("can't create xmlDoc\n");
+    }
+
+  g_task_return_pointer (task, state->analysis, (GDestroyNotify)ide_xml_analysis_unref);
+}
+
+static void
+ide_xml_tree_builder_build_tree_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeXmlTreeBuilder *self;
+  g_autoptr(GTask) task = user_data;
+  TreeBuilderState *state;
+  IdeXmlAnalysis *analysis;
+  GError *error = NULL;
+
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  if (NULL == (analysis = ide_xml_parser_get_analysis_finish (self->parser, result, &error)))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  state = g_task_get_task_data (task);
+  state->analysis = ide_xml_analysis_ref (analysis);
   ide_xml_analysis_set_sequence (analysis, state->sequence);
+
+  if (analysis->schemas != NULL &&
+      fetch_schemas_async (self,
+                           analysis->schemas,
+                           g_task_get_cancellable (task),
+                           ide_xml_tree_builder_build_tree_cb2,
+                           g_object_ref (task)))
+    return;
+
   g_task_return_pointer (task, analysis, (GDestroyNotify)ide_xml_analysis_unref);
 }
 
@@ -185,7 +409,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
                                        gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  BuilderState *state;
+  TreeBuilderState *state;
   GBytes *content = NULL;
   gint64 sequence;
 
@@ -205,14 +429,19 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
       return;
     }
 
-  state = g_slice_new0 (BuilderState);
-  state->parser = ide_xml_sax_new ();
-  state->content = content;
+  state = g_slice_new0 (TreeBuilderState);
   state->file = g_object_ref (file);
+  state->content = g_bytes_ref (content);
   state->sequence = sequence;
+  g_task_set_task_data (task, state, (GDestroyNotify)tree_builder_state_free);
 
-  g_task_set_task_data (task, state, (GDestroyNotify)builder_state_free);
-  g_task_run_in_thread (task, build_tree_worker);
+  ide_xml_parser_get_analysis_async (self->parser,
+                                     file,
+                                     content,
+                                     sequence,
+                                     cancellable,
+                                     ide_xml_tree_builder_build_tree_cb,
+                                     g_steal_pointer (&task));
 }
 
 IdeXmlAnalysis *
@@ -228,105 +457,11 @@ ide_xml_tree_builder_build_tree_finish (IdeXmlTreeBuilder  *self,
   return g_task_propagate_pointer (task, error);
 }
 
-gchar *
-ide_xml_tree_builder_get_color_tag (IdeXmlTreeBuilder *self,
-                                    const gchar       *str,
-                                    ColorTagId         id,
-                                    gboolean           space_before,
-                                    gboolean           space_after,
-                                    gboolean           space_inside)
-{
-  ColorTag *tag;
-
-  g_assert (IDE_IS_XML_TREE_BUILDER (self));
-  g_assert (self->color_tags != NULL);
-  g_assert (!ide_str_empty0 (str));
-
-  tag = &g_array_index (self->color_tags, ColorTag, id);
-  return g_strdup_printf ("%s<span foreground=\"%s\" background=\"%s\">%s%s%s</span>%s",
-                          space_before ? " " : "",
-                          tag->fg,
-                          tag->bg,
-                          space_inside ? " " : "",
-                          str,
-                          space_inside ? " " : "",
-                          space_after ? " " : "");
-}
-
-static void
-init_color_tags (IdeXmlTreeBuilder *self)
-{
-  g_autofree gchar *scheme_name = NULL;
-  GtkSourceStyleSchemeManager *manager;
-  GtkSourceStyleScheme *scheme;
-  gchar *tag_name;
-  GtkSourceStyle *style;
-  gchar *foreground;
-  gchar *background;
-  ColorTag tag;
-  ColorTag *tag_ptr;
-  gboolean tag_set;
-
-  g_assert (IDE_IS_XML_TREE_BUILDER (self));
-
-  scheme_name = g_settings_get_string (self->settings, "style-scheme-name");
-  manager = gtk_source_style_scheme_manager_get_default ();
-  scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_name);
-
-  g_array_remove_range (self->color_tags, 0, self->color_tags->len);
-  tag_ptr = default_color_tags;
-  while (tag_ptr->fg != NULL)
-    {
-      tag_set = FALSE;
-      if (scheme != NULL)
-        {
-          tag_name = g_strconcat ("symboltree::", tag_ptr->name, NULL);
-          if (NULL != (style = gtk_source_style_scheme_get_style (scheme, tag_name)))
-            {
-              g_object_get (style, "foreground", &foreground, NULL);
-              g_object_get (style, "background", &background, NULL);
-              if (foreground != NULL && background != NULL)
-                {
-                  tag_set = TRUE;
-                  tag.name = g_strdup (tag_ptr->name);
-                  tag.fg = g_steal_pointer (&foreground);
-                  tag.bg = g_steal_pointer (&background);
-                }
-
-              g_free (foreground);
-              g_free (background);
-            }
-
-          g_free (tag_name);
-        }
-
-      if (!tag_set)
-        {
-          tag.name = g_strdup (tag_ptr->name);
-          tag.fg = g_strdup (tag_ptr->fg);
-          tag.bg = g_strdup (tag_ptr->bg);
-        }
-
-      g_array_append_val (self->color_tags, tag);
-      ++tag_ptr;
-    }
-}
-
-static void
-editor_settings_changed_cb (IdeXmlTreeBuilder *self,
-                            gchar             *key,
-                            GSettings         *settings)
-{
-  g_assert (IDE_IS_XML_TREE_BUILDER (self));
-
-  if (ide_str_equal0 (key, "style-scheme-name"))
-    init_color_tags (self);
-}
-
 IdeXmlTreeBuilder *
-ide_xml_tree_builder_new (void)
+ide_xml_tree_builder_new (DzlTaskCache *schemas)
 {
-  return g_object_new (IDE_TYPE_XML_TREE_BUILDER, NULL);
+  return g_object_new (IDE_TYPE_XML_TREE_BUILDER,
+                       NULL);
 }
 
 static void
@@ -334,8 +469,8 @@ ide_xml_tree_builder_finalize (GObject *object)
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)object;
 
-  g_clear_pointer (&self->color_tags, g_array_unref);
-  g_clear_object (&self->settings);
+  g_clear_object (&self->parser);
+  g_clear_object (&self->validator);
 
   G_OBJECT_CLASS (ide_xml_tree_builder_parent_class)->finalize (object);
 }
@@ -351,14 +486,12 @@ ide_xml_tree_builder_class_init (IdeXmlTreeBuilderClass *klass)
 static void
 ide_xml_tree_builder_init (IdeXmlTreeBuilder *self)
 {
-  self->color_tags = g_array_new (TRUE, TRUE, sizeof (ColorTag));
-  g_array_set_clear_func (self->color_tags, (GDestroyNotify)color_tag_free);
+  IdeContext *context;
 
-  self->settings = g_settings_new ("org.gnome.builder.editor");
-  g_signal_connect_swapped (self->settings,
-                            "changed",
-                            G_CALLBACK (editor_settings_changed_cb),
-                            self);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  self->parser = g_object_new (IDE_TYPE_XML_PARSER,
+                               "context", context,
+                               NULL);
 
-  init_color_tags (self);
+  self->validator = ide_xml_validator_new (context);
 }

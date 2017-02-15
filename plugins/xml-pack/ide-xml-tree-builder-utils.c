@@ -16,7 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "ide-xml-tree-builder-utils-private.h"
+
+#define HREF_LEN 6
 
 void
 print_node (IdeXmlSymbolNode *node,
@@ -67,3 +71,42 @@ list_get_attribute (const guchar **attributes,
 
   return NULL;
 }
+
+gchar *
+get_schema_url (const gchar *data)
+{
+  gchar *begin;
+  gchar *end;
+
+  if (NULL != (begin = strstr (data, "href=\"")))
+    {
+      end = begin += HREF_LEN;
+      while (end != NULL)
+        {
+          if (NULL != (end = strchr (begin, '"')))
+            {
+              if (*(end - 1) != '\\')
+                return g_strndup (begin, end - begin);
+            }
+        }
+    }
+
+  return NULL;
+}
+
+const gchar *
+get_schema_kind_string (SchemaKind kind)
+{
+  if (kind == SCHEMA_KIND_NONE)
+    return "No schema";
+  else if (kind == SCHEMA_KIND_DTD)
+    return "DTD schema (.dtd or internal)";
+  else if (kind == SCHEMA_KIND_RNG)
+    return "RNG schema (.rng)";
+  else if (kind == SCHEMA_KIND_XML_SCHEMA)
+    return "XML schema (.xsd)";
+
+  g_assert_not_reached ();
+}
+
+
