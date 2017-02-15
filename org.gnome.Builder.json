@@ -212,11 +212,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/libgit2/libgit2.git",
-                    "branch": "maint/v0.24"
-                },
-                {
-                    "type": "patch",
-                    "path": "build/flatpak/0001-libgit2-http-pretend-to-be-git-1.7.patch"
+                    "branch": "maint/v0.25"
                 }
             ]
         },
