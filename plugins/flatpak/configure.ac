@@ -1,5 +1,5 @@
 m4_define([flatpak_required_version], [0.8.0])
-m4_define([ggit_required_version], [0.24.0])
+m4_define([ggit_required_version], [0.25.0])
 
 # --enable-flatpak-plugin=yes/no/auto
 AC_ARG_ENABLE([flatpak-plugin],
