@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-01-18 21:50+0000\n"
-"PO-Revision-Date: 2017-01-20 11:20+0500\n"
+"POT-Creation-Date: 2017-02-15 00:40+0000\n"
+"PO-Revision-Date: 2017-02-15 09:28+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -64,7 +64,7 @@ msgstr[0] "Шамамен %u жыл бұрын"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:679
+#: libide/greeter/ide-greeter-perspective.c:681
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -96,7 +96,7 @@ msgstr "Шолу…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:678
+#: libide/greeter/ide-greeter-perspective.c:680
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -289,7 +289,7 @@ msgid "Palettes"
 msgstr "Палитралар"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:946
-#: plugins/color-picker/gtk/color-picker.ui:48
+#: plugins/color-picker/gtk/color-picker.ui:49
 msgid "No open palettes"
 msgstr "Ашық палитралар жоқ"
 
@@ -854,7 +854,7 @@ msgstr "_Жабу"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:516
+#: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:144
 #: libide/workbench/ide-workbench.c:565
 msgid "Builder"
@@ -1009,7 +1009,7 @@ msgid "Opens the project specified by PATH"
 msgstr "ОРНАЛАСУЫ бойынша берілген жобаны ашады"
 
 #: libide/application/ide-application-command-line.c:235
-#: plugins/build-tools/gbp-build-tool.c:301
+#: libide/buildui/ide-build-tool.c:282
 msgid "PATH"
 msgstr "ЖОЛ"
 
@@ -1049,7 +1049,7 @@ msgstr "D-Bus адресін көрсетіңіз"
 msgid "No such worker"
 msgstr ""
 
-#: libide/buffers/ide-buffer.c:2458
+#: libide/buffers/ide-buffer.c:2476
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
@@ -1066,32 +1066,284 @@ msgstr "сақталмаған құжат %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
-#: libide/buildsystem/ide-builder.c:105
-#, c-format
-msgid "%s does not support building"
-msgstr "%s құрастыруды қолдамайды"
+#: libide/buildsystem/ide-build-pipeline.c:2032
+msgid "Cleaning…"
+msgstr "Тазарту…"
 
-#: libide/buildsystem/ide-build-manager.c:498
-msgid "A build is already in progress"
-msgstr "Құрастыру жүріп жатыр."
+#: libide/buildsystem/ide-build-pipeline.c:2047
+msgid "Downloading…"
+msgstr "Жүктелуде…"
 
-#: libide/buildsystem/ide-build-manager.c:912
+#: libide/buildsystem/ide-build-pipeline.c:2051
+msgid "Building dependencies…"
+msgstr "Тәуелділіктерді құрастыру…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2055
+msgid "Bootstrapping…"
+msgstr "Ортаны дайындау…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2059
+msgid "Configuring…"
+msgstr "Баптау…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2063
+msgid "Building…"
+msgstr "Жинау…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2067
+msgid "Installing…"
+msgstr "Орнату…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2071
+msgid "Exporting…"
+msgstr "Экспорттау…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2075
+#: libide/buildsystem/ide-build-pipeline.c:2079
+msgid "Success"
+msgstr "Сәтті аяқталды"
+
+#: libide/buildsystem/ide-build-pipeline.c:2083
+#: libide/workbench/ide-omni-bar.ui:325
+msgid "Failed"
+msgstr "Сәтсіз"
+
+#: libide/buildsystem/ide-build-pipeline.c:2087
+msgid "Preparing…"
+msgstr "Дайындау…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Ready"
 msgstr "Дайын"
 
-#: libide/buildsystem/ide-build-result.c:276
-msgid "Failed to open stderr stream."
-msgstr "stderr ағынын ашу сәтсіз аяқталды."
-
-#: libide/buildsystem/ide-build-result.c:306
-msgid "Failed to open stdout stream."
-msgstr "stdout ағынын ашу сәтсіз аяқталды."
-
-#: libide/buildsystem/ide-configuration-manager.c:485
+#: libide/buildsystem/ide-configuration-manager.c:75
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
 msgstr "Стандартты"
+
+#: libide/buildui/ide-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr ""
+
+#: libide/buildui/ide-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr ""
+
+#: libide/buildui/ide-build-configuration-view.ui:11
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+msgid "General"
+msgstr "Жалпы"
+
+#: libide/buildui/ide-build-configuration-view.ui:28
+msgid "The name of the build configuration"
+msgstr ""
+
+#: libide/buildui/ide-build-configuration-view.ui:37
+msgid "Name"
+msgstr "Атауы"
+
+#: libide/buildui/ide-build-configuration-view.ui:58
+msgid "The prefix to use when installing the project"
+msgstr ""
+
+#: libide/buildui/ide-build-configuration-view.ui:67
+msgid "Installation Prefix"
+msgstr "Орнату префиксі"
+
+#: libide/buildui/ide-build-configuration-view.ui:88
+msgid "Options to use when bootstrapping the project"
+msgstr ""
+
+#: libide/buildui/ide-build-configuration-view.ui:97
+msgid "Configure Options"
+msgstr "Баптау опциялары"
+
+#: libide/buildui/ide-build-configuration-view.ui:129
+#: libide/workbench/ide-omni-bar-row.ui:54
+msgid "Device"
+msgstr "Құрылғы"
+
+#: libide/buildui/ide-build-configuration-view.ui:157
+#: libide/workbench/ide-omni-bar-row.ui:85
+msgid "Runtime"
+msgstr "Орындалу ортасы"
+
+#: libide/buildui/ide-build-configuration-view.ui:185
+msgid "Environment"
+msgstr "Қоршам"
+
+#: libide/buildui/ide-build-log-panel.c:714
+msgid "Build Output"
+msgstr "Құрастыру шығысы"
+
+#: libide/buildui/ide-build-panel.c:86
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d ескерту"
+
+#: libide/buildui/ide-build-panel.c:95
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d қате"
+
+#: libide/buildui/ide-build-panel.c:517
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:379
+msgid "Build"
+msgstr "Жинау"
+
+#: libide/buildui/ide-build-panel.ui:33
+msgid "Status:"
+msgstr "Қалып-күйі:"
+
+#: libide/buildui/ide-build-panel.ui:58
+msgid "Running Time:"
+msgstr "Орындалған уақыты:"
+
+#: libide/buildui/ide-build-panel.ui:82
+msgid "Warnings:"
+msgstr "Ескертулер:"
+
+#: libide/buildui/ide-build-panel.ui:106
+msgid "Errors:"
+msgstr "Қателер:"
+
+#: libide/buildui/ide-build-panel.ui:149
+msgid "No Diagnostics"
+msgstr "Диагностика жоқ"
+
+#. the action:// link is used to execute a build
+#: libide/buildui/ide-build-panel.ui:150
+msgid ""
+"<a href=\"action://build-manager.build\">Build your project</a> to show "
+"diagnostics here"
+msgstr ""
+
+#: libide/buildui/ide-build-perspective.c:438
+msgid "Build Preferences"
+msgstr "Құрастыру баптаулары"
+
+#: libide/buildui/ide-build-tool.c:103 libide/buildui/ide-build-tool.c:116
+msgid "========================\n"
+msgstr "========================\n"
+
+#: libide/buildui/ide-build-tool.c:104
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Жоба аты: %s\n"
+
+#: libide/buildui/ide-build-tool.c:105
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " Нұсқаларды басқару жүйесі: %s\n"
+
+#: libide/buildui/ide-build-tool.c:106
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Құрастыру жүйесі: %s\n"
+
+#: libide/buildui/ide-build-tool.c:107
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Құрастыру күні және уақыты: %s\n"
+
+#: libide/buildui/ide-build-tool.c:108
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Қай құрылғы үшін құрастыру: %s (%s)\n"
+
+#: libide/buildui/ide-build-tool.c:113
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "            Қоршам: %s\n"
+
+#: libide/buildui/ide-build-tool.c:143 libide/buildui/ide-build-tool.c:147
+msgid "===============\n"
+msgstr "===============\n"
+
+#: libide/buildui/ide-build-tool.c:144
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " Құрастыру қатесі: %s\n"
+
+#: libide/buildui/ide-build-tool.c:145
+msgid " Build ran for: %"
+msgstr " Құрастыру алған уақыт: %"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: libide/buildui/ide-build-tool.c:158 libide/buildui/ide-build-tool.c:162
+msgid "=================\n"
+msgstr "=================\n"
+
+#: libide/buildui/ide-build-tool.c:159
+msgid " Build Successful\n"
+msgstr " Құрастыру сәтті аяқталды\n"
+
+#: libide/buildui/ide-build-tool.c:160
+msgid "   Build ran for: %"
+msgstr "   Құрастыру алған уақыт: %"
+
+#: libide/buildui/ide-build-tool.c:212
+#, c-format
+msgid "Failed to locate device “%s”"
+msgstr "\"%s\" құрылғысын табу сәтсіз аяқталды"
+
+#: libide/buildui/ide-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime “%s”"
+msgstr "\"%s\" орындалу ортасын табу сәтсіз аяқталды"
+
+#: libide/buildui/ide-build-tool.c:267
+msgid "Clean the project"
+msgstr "Жобаны тазарту"
+
+#: libide/buildui/ide-build-tool.c:269
+msgid "The ID of the device to build for"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:270
+msgid "local"
+msgstr "жергілікті"
+
+#: libide/buildui/ide-build-tool.c:272
+msgid "The runtime to use for building"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:273
+msgid "host"
+msgstr "хост"
+
+#: libide/buildui/ide-build-tool.c:275
+msgid "Number of workers to use when building"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:276
+msgid "N"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:278
+msgid "The configuration to use from .buildconfig"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:279
+msgid "CONFIG_ID"
+msgstr "CONFIG_ID"
+
+#: libide/buildui/ide-build-tool.c:281
+msgid "Path to project file, defaults to current directory"
+msgstr ""
+
+#: libide/buildui/ide-environment-editor.c:67
+msgid "New variable…"
+msgstr "Жаңа айнымалы…"
 
 #: libide/devices/ide-device-manager.c:147
 #, c-format
@@ -1334,8 +1586,8 @@ msgid "_Reload"
 msgstr "Қа_йта жүктеу"
 
 #: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:319
-#: libide/greeter/ide-greeter-perspective.ui:367
+#: libide/greeter/ide-greeter-perspective.ui:317
+#: libide/greeter/ide-greeter-perspective.ui:365
 #: libide/workbench/ide-omni-bar.ui:353
 msgid "_Cancel"
 msgstr "Ба_с тарту"
@@ -1346,11 +1598,11 @@ msgid ""
 "you like to reload the file?"
 msgstr ""
 
-#: libide/greeter/ide-greeter-perspective.c:454
+#: libide/greeter/ide-greeter-perspective.c:456
 msgid "Failed to load the project"
 msgstr "Жобаны жүктеу сәтсіз аяқталды"
 
-#: libide/greeter/ide-greeter-perspective.c:674
+#: libide/greeter/ide-greeter-perspective.c:676
 msgid "Open Project"
 msgstr "Жобаны ашу"
 
@@ -1388,15 +1640,15 @@ msgstr "Жобаны таңдау"
 msgid "Click an item to select"
 msgstr "Нәрсені таңдау үшін оның үстіне шертіңіз"
 
-#: libide/greeter/ide-greeter-perspective.ui:331
+#: libide/greeter/ide-greeter-perspective.ui:329
 msgid "Open…"
 msgstr "Ашу…"
 
-#: libide/greeter/ide-greeter-perspective.ui:346
+#: libide/greeter/ide-greeter-perspective.ui:344
 msgid "Select projects for removal"
 msgstr "Өшіру үшін жобаны таңдау"
 
-#: libide/greeter/ide-greeter-perspective.ui:366
+#: libide/greeter/ide-greeter-perspective.ui:364
 msgid "Return to project selection"
 msgstr "Жобаны таңдауға оралу"
 
@@ -1418,16 +1670,16 @@ msgstr ""
 msgid "Failed to initialize defaults."
 msgstr ""
 
-#: libide/ide.c:62
+#: libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: libide/ide-context.c:1944
+#: libide/ide-context.c:1885
 msgid "An unload request is already pending"
 msgstr ""
 
-#: libide/ide-context.c:2063
+#: libide/ide-context.c:2004
 msgid "Context has already been restored."
 msgstr ""
 
@@ -2043,12 +2295,6 @@ msgstr "Бағдарламалау тілдері"
 msgid "Search languages…"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:316
-#: libide/preferences/ide-preferences-builtin.c:377
-#: plugins/build-tools/gbp-build-configuration-view.ui:11
-msgid "General"
-msgstr "Жалпы"
-
 #: libide/preferences/ide-preferences-builtin.c:317
 msgid "Trim trailing whitespace"
 msgstr ""
@@ -2109,12 +2355,6 @@ msgstr ""
 #: libide/preferences/ide-preferences-builtin.c:360
 msgid "Number of CPU"
 msgstr "Процессорлар саны"
-
-#: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:379
-#: plugins/build-tools/gbp-build-panel.c:469
-msgid "Build"
-msgstr "Жинау"
 
 #: libide/preferences/ide-preferences-builtin.c:378
 msgid "Build Workers"
@@ -2186,23 +2426,6 @@ msgstr "Файл жоба ағашының ішінде болуы тиіс."
 msgid "%s() may only be executed once"
 msgstr "%s() тек бір рет орындауға болады"
 
-#: libide/pygobject/ide-pygobject-script.c:135
-msgid "Attempt to load a PyGObject script with no filename."
-msgstr ""
-
-#: libide/pygobject/ide-pygobject-script.c:254
-msgid "The filename for the script was not provided."
-msgstr ""
-
-#: libide/pygobject/ide-pygobject-script.c:265
-msgid "The script must be on a local filesystem."
-msgstr ""
-
-#: libide/pygobject/ide-pygobject-script.c:274
-#, c-format
-msgid "The script “%s” is not a PyGObject file."
-msgstr "\"%s\" скрипті PyGObject файлы емес."
-
 #: libide/runner/ide-run-manager.c:225
 msgid "Run"
 msgstr "Жөнелту"
@@ -2212,7 +2435,6 @@ msgid "Cannot run target, another target is running"
 msgstr ""
 
 #: libide/runner/ide-run-manager.c:324
-#: plugins/autotools/ide-autotools-build-task.c:479
 msgid "Failed to locate runtime"
 msgstr ""
 
@@ -2220,13 +2442,8 @@ msgstr ""
 msgid "Process quit unexpectedly"
 msgstr ""
 
-#: libide/runtimes/ide-runtime-manager.c:107
+#: libide/runtimes/ide-runtime-manager.c:114
 msgid "Host operating system"
-msgstr ""
-
-#: libide/scripting/ide-script.c:205
-#, c-format
-msgid "%s has not implemented GAsyncInitable."
 msgstr ""
 
 #: libide/search/ide-omni-search-display.c:271
@@ -2371,8 +2588,14 @@ msgstr "Ағымдағы құжатты жабу"
 msgid "untitled document"
 msgstr "атаусыз құжат"
 
+#. translators: this message is shown in the header bar to indicate build status
+#: libide/workbench/ide-omni-bar.c:169
+#, c-format
+msgid "Build: %s"
+msgstr "Жинақ: %s"
+
 #. Translators: "Target" is providing context to the selected build configuration
-#: libide/workbench/ide-omni-bar.c:366
+#: libide/workbench/ide-omni-bar.c:356
 msgid "Target"
 msgstr "Мақсаты"
 
@@ -2384,16 +2607,6 @@ msgstr "жетіспейді"
 #: libide/workbench/ide-omni-bar-row.ui:31
 msgid "Edit build configuration"
 msgstr "Құрастыру баптауларын түзету"
-
-#: libide/workbench/ide-omni-bar-row.ui:54
-#: plugins/build-tools/gbp-build-configuration-view.ui:129
-msgid "Device"
-msgstr "Құрылғы"
-
-#: libide/workbench/ide-omni-bar-row.ui:85
-#: plugins/build-tools/gbp-build-configuration-view.ui:157
-msgid "Runtime"
-msgstr "Орындалу ортасы"
 
 #: libide/workbench/ide-omni-bar.ui:108
 msgid "Build project (Ctrl+F7)"
@@ -2419,11 +2632,6 @@ msgstr "Құрастыру профилі"
 #: libide/workbench/ide-omni-bar.ui:275
 msgid "Last build"
 msgstr "Соңғы құрастыру"
-
-#: libide/workbench/ide-omni-bar.ui:325 plugins/cargo/cargo_plugin.py:90
-#: plugins/cargo/cargo_plugin.py:117 plugins/meson/meson_plugin/__init__.py:86
-msgid "Failed"
-msgstr "Сәтсіз"
 
 #: libide/workbench/ide-omni-bar.ui:342
 msgid "View Output"
@@ -2458,98 +2666,9 @@ msgstr ""
 msgid "Press Ctrl+. to search"
 msgstr "Іздеу үшін Ctrl+. басыңыз"
 
-#: plugins/autotools/ide-autotools-builder.c:235
-msgid "Build cancelled"
-msgstr "Құрастыру тоқтатылды"
-
-#: plugins/autotools/ide-autotools-builder.c:237
-msgid "Build failed"
-msgstr "Құрастыру сәтсіз аяқталды"
-
-#: plugins/autotools/ide-autotools-builder.c:243
-msgid "Build successful"
-msgstr "Құрастыру сәтті аяқталды"
-
-#: plugins/autotools/ide-autotools-builder.c:347
-#: plugins/autotools/ide-autotools-builder.c:539
-#: plugins/autotools/ide-autotools-build-task.c:1219
-#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:430
-msgid "Building…"
-msgstr "Жинау…"
-
-#: plugins/autotools/ide-autotools-builder.c:495
-msgid "Install cancelled"
-msgstr "Орнату тоқтатылды"
-
-#: plugins/autotools/ide-autotools-builder.c:497
-msgid "Install failed"
-msgstr "Орнату сәтсіз аяқталды"
-
-#: plugins/autotools/ide-autotools-builder.c:503
-msgid "Install successful"
-msgstr "Орнату сәтті аяқталды"
-
-#: plugins/autotools/ide-autotools-build-task.c:201
-msgid "Directory must be on a locally mounted filesystem."
-msgstr "Бума жергілікті тіркелген файлдық жүйеде болуы тиіс."
-
-#: plugins/autotools/ide-autotools-build-task.c:468
-msgid "Failed to locate device"
-msgstr "Құрылғыны табу сәтсіз аяқталды"
-
-#: plugins/autotools/ide-autotools-build-task.c:600
-#: plugins/autotools/ide-autotools-build-task.c:628
-#: plugins/autotools/ide-autotools-build-task.c:953
-msgid "Build Failed: "
-msgstr "Құрастыру сәтсіз аяқталды: "
-
-#: plugins/autotools/ide-autotools-build-task.c:713
-msgid "Cannot execute build task more than once"
-msgstr "Құрастыру тапсырмасын бірден көп рет орындау мүмкін емес"
-
-#: plugins/autotools/ide-autotools-build-task.c:830
-msgid "Failed to access runtime for postbuild"
-msgstr ""
-
-#: plugins/autotools/ide-autotools-build-task.c:986
-msgid "Failed to create build directory."
-msgstr "Құрастыру бумасын жасау сәтсіз аяқталды."
-
-#: plugins/autotools/ide-autotools-build-task.c:995
-#, c-format
-msgid "'%s' is not a directory."
-msgstr "'%s' бума емес."
-
-#: plugins/autotools/ide-autotools-build-task.c:1034
-#, c-format
-msgid "autogen.sh is missing from project directory (%s)."
-msgstr "autogen.sh жоба бумасында жоқ болып тұр (%s)."
-
-#: plugins/autotools/ide-autotools-build-task.c:1044
-msgid "autogen.sh is not executable."
-msgstr "autogen.sh орындалатын файл емес."
-
-#: plugins/autotools/ide-autotools-build-task.c:1048
-msgid "Running autogen…"
-msgstr "autogen орындалуда…"
-
-#: plugins/autotools/ide-autotools-build-task.c:1083
-#, c-format
-msgid "autogen.sh failed to create configure (%s)"
-msgstr ""
-
-#: plugins/autotools/ide-autotools-build-task.c:1118
-msgid "Running configure…"
-msgstr "configure орындалуда…"
-
-#: plugins/autotools/ide-autotools-build-task.c:1217
-#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:423
-msgid "Cleaning…"
-msgstr "Тазарту…"
-
-#: plugins/autotools/ide-makecache.c:1080
-msgid "Invalid makefile provided, ignoring."
-msgstr ""
+#: plugins/autotools/ide-autotools-makecache-stage.c:194
+msgid "Building cache…"
+msgstr "Кэшті құрастыру…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library"
@@ -2588,220 +2707,6 @@ msgstr ""
 msgid "Beautify"
 msgstr ""
 
-#: plugins/build-tools/gbp-build-configuration-row.ui:43
-msgid "Duplicate the configuration"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-configuration-row.ui:59
-msgid "Delete the configuration"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:28
-msgid "The name of the build configuration"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:37
-msgid "Name"
-msgstr "Атауы"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:58
-msgid "The prefix to use when installing the project"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:67
-msgid "Installation Prefix"
-msgstr "Орнату префиксі"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:88
-msgid "Options to use when bootstrapping the project"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:97
-msgid "Configure Options"
-msgstr "Баптау опциялары"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:185
-msgid "Environment"
-msgstr "Қоршам"
-
-#: plugins/build-tools/gbp-build-log-panel.c:254
-msgid "Build Output"
-msgstr "Құрастыру шығысы"
-
-#: plugins/build-tools/gbp-build-panel.c:89
-#, c-format
-msgid "%d warning"
-msgid_plural "%d warnings"
-msgstr[0] "%d ескерту"
-
-#: plugins/build-tools/gbp-build-panel.c:98
-#, c-format
-msgid "%d error"
-msgid_plural "%d errors"
-msgstr[0] "%d қате"
-
-#: plugins/build-tools/gbp-build-panel.ui:33
-msgid "Status:"
-msgstr "Қалып-күйі:"
-
-#: plugins/build-tools/gbp-build-panel.ui:58
-msgid "Running Time:"
-msgstr "Орындалған уақыты:"
-
-#: plugins/build-tools/gbp-build-panel.ui:82
-msgid "Warnings:"
-msgstr "Ескертулер:"
-
-#: plugins/build-tools/gbp-build-panel.ui:106
-msgid "Errors:"
-msgstr "Қателер:"
-
-#: plugins/build-tools/gbp-build-panel.ui:149
-msgid "No Diagnostics"
-msgstr "Диагностика жоқ"
-
-#. the action:// link is used to execute a build
-#: plugins/build-tools/gbp-build-panel.ui:150
-msgid ""
-"<a href=\"action://build-manager.build\">Build your project</a> to show "
-"diagnostics here"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-perspective.c:436
-msgid "Build Preferences"
-msgstr "Құрастыру баптаулары"
-
-#: plugins/build-tools/gbp-build-tool.c:102
-#: plugins/build-tools/gbp-build-tool.c:115
-msgid "========================\n"
-msgstr "========================\n"
-
-#: plugins/build-tools/gbp-build-tool.c:103
-#, c-format
-msgid "           Project Name: %s\n"
-msgstr "           Жоба аты: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:104
-#, c-format
-msgid " Version Control System: %s\n"
-msgstr " Нұсқаларды басқару жүйесі: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:105
-#, c-format
-msgid "           Build System: %s\n"
-msgstr "           Құрастыру жүйесі: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:106
-#, c-format
-msgid "    Build Date and Time: %s\n"
-msgstr "    Құрастыру күні және уақыты: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:107
-#, c-format
-msgid "    Building for Device: %s (%s)\n"
-msgstr "    Қай құрылғы үшін құрастыру: %s (%s)\n"
-
-#: plugins/build-tools/gbp-build-tool.c:112
-#, c-format
-msgid "            Environment: %s\n"
-msgstr "            Қоршам: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:142
-#: plugins/build-tools/gbp-build-tool.c:146
-msgid "===============\n"
-msgstr "===============\n"
-
-#: plugins/build-tools/gbp-build-tool.c:143
-#, c-format
-msgid " Build Failure: %s\n"
-msgstr " Құрастыру қатесі: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:144
-msgid " Build ran for: %"
-msgstr " Құрастыру алған уақыт: %"
-
-#.
-#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
-#. *       here too. It would be nice if we could say, go build this project,
-#. *       for this device, and then deploy.
-#.
-#: plugins/build-tools/gbp-build-tool.c:157
-#: plugins/build-tools/gbp-build-tool.c:161
-msgid "=================\n"
-msgstr "=================\n"
-
-#: plugins/build-tools/gbp-build-tool.c:158
-msgid " Build Successful\n"
-msgstr " Құрастыру сәтті аяқталды\n"
-
-#: plugins/build-tools/gbp-build-tool.c:159
-msgid "   Build ran for: %"
-msgstr "   Құрастыру алған уақыт: %"
-
-#: plugins/build-tools/gbp-build-tool.c:212
-#, c-format
-msgid "Failed to locate device “%s”"
-msgstr "\"%s\" құрылғысын табу сәтсіз аяқталды"
-
-#: plugins/build-tools/gbp-build-tool.c:222
-#, c-format
-msgid "Failed to locate runtime “%s”"
-msgstr "\"%s\" орындалу ортасын табу сәтсіз аяқталды"
-
-#: plugins/build-tools/gbp-build-tool.c:286
-msgid "Clean the project"
-msgstr "Жобаны тазарту"
-
-#: plugins/build-tools/gbp-build-tool.c:288
-msgid "The ID of the device to build for"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-tool.c:289
-msgid "local"
-msgstr "жергілікті"
-
-#: plugins/build-tools/gbp-build-tool.c:291
-msgid "The runtime to use for building"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-tool.c:292
-msgid "host"
-msgstr "хост"
-
-#: plugins/build-tools/gbp-build-tool.c:294
-msgid "Number of workers to use when building"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-tool.c:295
-msgid "N"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-tool.c:297
-msgid "The configuration to use from .buildconfig"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-tool.c:298
-msgid "CONFIG_ID"
-msgstr "CONFIG_ID"
-
-#: plugins/build-tools/gbp-build-tool.c:300
-msgid "Path to project file, defaults to current directory"
-msgstr ""
-
-#: plugins/build-tools/ide-environment-editor.c:65
-msgid "New variable…"
-msgstr "Жаңа айнымалы…"
-
-#: plugins/cargo/cargo_plugin.py:85 plugins/cargo/cargo_plugin.py:112
-#: plugins/cargo/cargo_plugin.py:201 plugins/cargo/cargo_plugin.py:211
-#: plugins/meson/meson_plugin/__init__.py:93
-msgid "Successful"
-msgstr "Сәтті"
-
-#: plugins/cargo/cargo_plugin.py:209
-msgid "Installing…"
-msgstr "Орнату…"
-
 #: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
 msgstr "Clang"
@@ -2836,7 +2741,7 @@ msgstr "AST оқу қатесі"
 msgid "Failed to create translation unit: %s"
 msgstr ""
 
-#: plugins/clang/ide-clang-service.c:458
+#: plugins/clang/ide-clang-service.c:458 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "Файлды талдау үшін ол жергілікті сақталған болуы тиіс."
 
@@ -3027,7 +2932,7 @@ msgstr "Таңдалған палитралар жоқ"
 msgid "Select a palette file"
 msgstr "Палитра файлын таңдау"
 
-#: plugins/color-picker/gtk/color-picker.ui:61
+#: plugins/color-picker/gtk/color-picker.ui:62
 msgid "Try loading or generating a palette using the menu"
 msgstr ""
 
@@ -3085,11 +2990,11 @@ msgstr ""
 msgid "Invalid :syntax subcommand: %s"
 msgstr ""
 
-#: plugins/command-bar/gb-vim.c:1146
+#: plugins/command-bar/gb-vim.c:1143
 msgid "Invalid search and replace request"
 msgstr "Іздеу және алмастыруға сұраным қате"
 
-#: plugins/command-bar/gb-vim.c:1252
+#: plugins/command-bar/gb-vim.c:1249
 #, c-format
 msgid "Not a command: %s"
 msgstr "Команда емес: %s"
@@ -3101,42 +3006,6 @@ msgstr "Кодты түсіндірме қылу"
 #: plugins/comment-code/gtk/menus.ui:14
 msgid "Uncomment code"
 msgstr "Кодты түсіндірме емес қылу"
-
-#: plugins/contributing/contributing_plugin/helper.py:77
-#, python-format
-msgid ""
-"Usage:\n"
-"  %(prgname) %(command) OPTIONS\n"
-msgstr ""
-"Қолданылуы:\n"
-"  %(prgname) %(command) ОПЦИЯЛАР\n"
-
-#: plugins/contributing/contributing_plugin/__init__.py:55
-msgid "Missing project name"
-msgstr "Жоба атауы көрсетілмеген"
-
-#: plugins/contributing/contributing_plugin/__init__.py:69
-msgid ""
-"Usage:\n"
-"  ide contribute PROJECT_NAME\n"
-"\n"
-"  This command will bootstrap your system to begin contributing to the "
-"project\n"
-"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-"that\n"
-"  you have the required dependencies to build, and bootstraps the first "
-"build\n"
-"  of the project.\n"
-"\n"
-"Examples:\n"
-"  ide contribute gnome-builder\n"
-"  ide contribute gnome-maps\n"
-"\n"
-msgstr ""
-
-#: plugins/contributing/contributing_plugin/__init__.py:227
-msgid "Username"
-msgstr "Пайдаланушы"
 
 #: plugins/c-pack/ide-c-format-provider.c:283
 #: plugins/python-pack/ide-python-format-provider.c:240
@@ -3285,6 +3154,54 @@ msgstr "Қолданбаны клондау"
 msgid "Clone"
 msgstr "Клондау"
 
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:73
+msgid "Install"
+msgstr "Орнату"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:79
+msgid "Update"
+msgstr "Жаңарту"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:193
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:194
+msgid "Application Runtimes"
+msgstr ""
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:199
+msgid "Developer SDKs"
+msgstr ""
+
+#. translators: message is used to notify to the user we are checking for a flatpak repository
+#: plugins/flatpak/gbp-flatpak-transfer.c:131
+#, c-format
+msgid "Checking for %s repository"
+msgstr ""
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:240
+#, c-format
+msgid "Updating “%s”"
+msgstr "\"%s\" жаңарту"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:276
+#, c-format
+msgid "Installing “%s” from “%s”"
+msgstr ""
+
+#. Translators: %s is the id of the runtime such as org.gnome.Sdk/x86_64/master
+#: plugins/flatpak/gbp-flatpak-transfer.c:466
+#, c-format
+#| msgid "Failed to load file: %s: %s"
+msgid "Failed to locate %s/%s/%s"
+msgstr "%s/%s/%s табу мүмкін емес"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:574
+#, c-format
+msgid "Installing %s %s for %s"
+msgstr ""
+
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Fpaste.org қызметіне жіберу"
@@ -3394,22 +3311,6 @@ msgstr "Python толықтыруларын ұсыну"
 
 #: plugins/jedi/jedi_plugin.py:733
 msgid "Use Jedi to provide completions for the Python language"
-msgstr ""
-
-#: plugins/meson/meson_plugin/__init__.py:346
-msgid "Configuring…"
-msgstr "Баптау…"
-
-#: plugins/meson/meson_plugin/__init__.py:378
-msgid "Running prebuild…"
-msgstr ""
-
-#: plugins/meson/meson_plugin/__init__.py:397
-msgid "Running post-install…"
-msgstr ""
-
-#: plugins/meson/meson_plugin/__init__.py:400
-msgid "Running post-build…"
 msgstr ""
 
 #: plugins/meson-templates/meson_templates/__init__.py:206
@@ -3551,11 +3452,11 @@ msgstr ""
 "Қолдау көрсету журналы \"%s\" файлына жазылды. Бұл файлды сіздің ақаулық "
 "жөніндегі хабарламаға немесе қолдау көрсету сұранымыңызға қосып жіберіңіз."
 
-#: plugins/symbol-tree/symbol-tree-panel.c:274
+#: plugins/symbol-tree/symbol-tree-panel.c:275
 msgid "Current language does not support symbol resolvers"
 msgstr ""
 
-#: plugins/symbol-tree/symbol-tree-panel.c:414
+#: plugins/symbol-tree/symbol-tree-panel.c:415
 msgid "Symbols"
 msgstr "Таңбалар"
 
@@ -3630,7 +3531,7 @@ msgstr "Сі_лтемені ашу"
 msgid "_Copy Link Address"
 msgstr "Сілтеме адр_есін көшіру"
 
-#: plugins/todo/todo_plugin/__init__.py:190
+#: plugins/todo/todo_plugin/__init__.py:193
 msgid "Todo"
 msgstr "Жасау үшін"
 
@@ -3646,6 +3547,88 @@ msgstr "Vala ұсынған қателер мен ескертулерді кө�
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr ""
+
+#: plugins/xml-pack/ide-xml-service.c:191
+msgid "Buffer loaded but not in the buffer manager."
+msgstr ""
+
+#: plugins/xml-pack/ide-xml-tree-builder.c:172
+#: plugins/xml-pack/ide-xml-tree-builder.c:204
+msgid "Failed to create the XML tree."
+msgstr "XML ағашын жасау сәтсіз аяқталды."
+
+#~ msgid "%s does not support building"
+#~ msgstr "%s құрастыруды қолдамайды"
+
+#~ msgid "A build is already in progress"
+#~ msgstr "Құрастыру жүріп жатыр."
+
+#~ msgid "Failed to open stderr stream."
+#~ msgstr "stderr ағынын ашу сәтсіз аяқталды."
+
+#~ msgid "Failed to open stdout stream."
+#~ msgstr "stdout ағынын ашу сәтсіз аяқталды."
+
+#~ msgid "The script “%s” is not a PyGObject file."
+#~ msgstr "\"%s\" скрипті PyGObject файлы емес."
+
+#~ msgid "Build cancelled"
+#~ msgstr "Құрастыру тоқтатылды"
+
+#~ msgid "Build failed"
+#~ msgstr "Құрастыру сәтсіз аяқталды"
+
+#~ msgid "Build successful"
+#~ msgstr "Құрастыру сәтті аяқталды"
+
+#~ msgid "Install cancelled"
+#~ msgstr "Орнату тоқтатылды"
+
+#~ msgid "Install failed"
+#~ msgstr "Орнату сәтсіз аяқталды"
+
+#~ msgid "Install successful"
+#~ msgstr "Орнату сәтті аяқталды"
+
+#~ msgid "Directory must be on a locally mounted filesystem."
+#~ msgstr "Бума жергілікті тіркелген файлдық жүйеде болуы тиіс."
+
+#~ msgid "Failed to locate device"
+#~ msgstr "Құрылғыны табу сәтсіз аяқталды"
+
+#~ msgid "Build Failed: "
+#~ msgstr "Құрастыру сәтсіз аяқталды: "
+
+#~ msgid "Cannot execute build task more than once"
+#~ msgstr "Құрастыру тапсырмасын бірден көп рет орындау мүмкін емес"
+
+#~ msgid "'%s' is not a directory."
+#~ msgstr "'%s' бума емес."
+
+#~ msgid "autogen.sh is missing from project directory (%s)."
+#~ msgstr "autogen.sh жоба бумасында жоқ болып тұр (%s)."
+
+#~ msgid "autogen.sh is not executable."
+#~ msgstr "autogen.sh орындалатын файл емес."
+
+#~ msgid "Running autogen…"
+#~ msgstr "autogen орындалуда…"
+
+#~ msgid "Running configure…"
+#~ msgstr "configure орындалуда…"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %(prgname) %(command) OPTIONS\n"
+#~ msgstr ""
+#~ "Қолданылуы:\n"
+#~ "  %(prgname) %(command) ОПЦИЯЛАР\n"
+
+#~ msgid "Missing project name"
+#~ msgstr "Жоба атауы көрсетілмеген"
+
+#~ msgid "Username"
+#~ msgstr "Пайдаланушы"
 
 #~ msgid "Failed to locate configure.ac"
 #~ msgstr "configure.ac табылмады"
@@ -3688,9 +3671,6 @@ msgstr ""
 
 #~ msgid "Search for projects"
 #~ msgstr "Жобаларды іздеу"
-
-#~ msgid "Export"
-#~ msgstr "Экспорт"
 
 #~ msgid "Versioning"
 #~ msgstr "Нұсқаларды басқару"
