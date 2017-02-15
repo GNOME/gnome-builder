@@ -27,16 +27,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeProgress, ide_progress, IDE, PROGRESS, GObject)
 
-IdeProgress *ide_progress_new                    (void);
-gdouble      ide_progress_get_fraction           (IdeProgress *self);
-const gchar *ide_progress_get_message            (IdeProgress *self);
-void         ide_progress_set_fraction           (IdeProgress *self,
-                                                  gdouble      fraction);
-void         ide_progress_set_message            (IdeProgress *self,
-                                                  const gchar *message);
-void         ide_progress_file_progress_callback (goffset      current_num_bytes,
-                                                  goffset      total_num_bytes,
-                                                  gpointer     user_data);
+IdeProgress *ide_progress_new                       (void);
+gdouble      ide_progress_get_fraction              (IdeProgress *self);
+gchar       *ide_progress_get_message               (IdeProgress *self);
+void         ide_progress_set_fraction              (IdeProgress *self,
+                                                     gdouble      fraction);
+void         ide_progress_set_message               (IdeProgress *self,
+                                                     const gchar *message);
+void         ide_progress_flatpak_progress_callback (const char  *status,
+                                                     guint        progress,
+                                                     gboolean     estimating,
+                                                     gpointer     user_data);
+void         ide_progress_file_progress_callback    (goffset      current_num_bytes,
+                                                     goffset      total_num_bytes,
+                                                     gpointer     user_data);
 
 G_END_DECLS
 

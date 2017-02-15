@@ -3618,7 +3618,7 @@
 (define-method get_message
   (of-object "IdeProgress")
   (c-name "ide_progress_get_message")
-  (return-type "const-gchar*")
+  (return-type "gchar*")
 )
 
 (define-method set_fraction

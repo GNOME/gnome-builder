@@ -20,12 +20,14 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-object.h"
 #include "ide-progress.h"
 
 struct _IdeProgress
 {
   GObject  parent_instance;
 
+  GMutex   mutex;
   gchar   *message;
   gdouble  fraction;
   guint    completed : 1;
@@ -57,19 +59,27 @@ ide_progress_set_completed (IdeProgress *self,
 {
   g_return_if_fail (IDE_IS_PROGRESS (self));
 
+  g_mutex_lock (&self->mutex);
   if (self->completed != completed)
     {
       self->completed = completed;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COMPLETED]);
+      ide_object_notify_in_main (G_OBJECT (self), properties [PROP_COMPLETED]);
     }
+  g_mutex_unlock (&self->mutex);
 }
 
 gdouble
 ide_progress_get_fraction (IdeProgress *self)
 {
+  gdouble ret;
+
   g_return_val_if_fail (IDE_IS_PROGRESS (self), 0.0);
 
-  return self->fraction;
+  g_mutex_lock (&self->mutex);
+  ret = self->fraction;
+  g_mutex_unlock (&self->mutex);
+
+  return ret;
 }
 
 void
@@ -80,21 +90,29 @@ ide_progress_set_fraction (IdeProgress *self,
   g_return_if_fail (fraction >= 0.0);
   g_return_if_fail (fraction <= 1.0);
 
+  g_mutex_lock (&self->mutex);
   if (self->fraction != fraction)
     {
       self->fraction = fraction;
       if (fraction == 1.0)
         ide_progress_set_completed (self, TRUE);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FRACTION]);
+      ide_object_notify_in_main (G_OBJECT (self), properties [PROP_FRACTION]);
     }
+  g_mutex_unlock (&self->mutex);
 }
 
-const gchar *
+gchar *
 ide_progress_get_message (IdeProgress *self)
 {
+  gchar *ret;
+
   g_return_val_if_fail (IDE_IS_PROGRESS (self), NULL);
 
-  return self->message;
+  g_mutex_lock (&self->mutex);
+  ret = g_strdup (self->message);
+  g_mutex_unlock (&self->mutex);
+
+  return ret;
 }
 
 void
@@ -103,12 +121,28 @@ ide_progress_set_message (IdeProgress *self,
 {
   g_return_if_fail (IDE_IS_PROGRESS (self));
 
-  if (self->message != message)
+  g_mutex_lock (&self->mutex);
+  if (g_strcmp0 (self->message, message) != 0)
     {
       g_free (self->message);
       self->message = g_strdup (message);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
+      ide_object_notify_in_main (G_OBJECT (self), properties [PROP_MESSAGE]);
     }
+  g_mutex_unlock (&self->mutex);
+}
+
+void
+ide_progress_flatpak_progress_callback (const char *status,
+                                        guint       progress,
+                                        gboolean    estimating,
+                                        gpointer    user_data)
+{
+  IdeProgress *self = user_data;
+
+  g_return_if_fail (IDE_IS_PROGRESS (self));
+
+  ide_progress_set_message (self, status);
+  ide_progress_set_fraction (self, (gdouble)progress / 100.0);
 }
 
 /**
@@ -142,6 +176,7 @@ ide_progress_finalize (GObject *object)
   IdeProgress *self = (IdeProgress *)object;
 
   g_clear_pointer (&self->message, g_free);
+  g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS (ide_progress_parent_class)->finalize (object);
 }
@@ -165,7 +200,7 @@ ide_progress_get_property (GObject    *object,
       break;
 
     case PROP_MESSAGE:
-      g_value_set_string (value, ide_progress_get_message (self));
+      g_value_take_string (value, ide_progress_get_message (self));
       break;
 
     default:
@@ -234,6 +269,7 @@ ide_progress_class_init (IdeProgressClass *klass)
 static void
 ide_progress_init (IdeProgress *self)
 {
+  g_mutex_init (&self->mutex);
 }
 
 IdeProgress *
