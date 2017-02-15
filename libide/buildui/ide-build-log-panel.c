@@ -396,7 +396,7 @@ find_color_code (IdeBuildLogPanel  *self,
           *start = cursor;
           cursor += 2;
         }
-      else if (*cursor == '\033' || *cursor == '\x01b')
+      else if (*cursor == '\033')
         {
           *start = cursor;
           ++cursor;
