@@ -169,7 +169,7 @@ build_tree_worker (GTask        *task,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
-                               _("Failed to create xml tree."));
+                               _("Failed to create the XML tree."));
       return;
     }
 
@@ -201,7 +201,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
-                               _("Failed to create xml tree."));
+                               _("Failed to create the XML tree."));
       return;
     }
 

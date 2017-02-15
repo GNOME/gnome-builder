@@ -90,7 +90,7 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("File must be saved localy to parse."));
+                               _("File must be saved locally to parse."));
       return;
     }
 
@@ -188,7 +188,7 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
           g_task_return_new_error (task,
                                    G_IO_ERROR,
                                    G_IO_ERROR_NOT_SUPPORTED,
-                                   _("Buffer loaded but not in buffer manager."));
+                                   _("Buffer loaded but not in the buffer manager."));
           return;
         }
 
