@@ -25,6 +25,7 @@ namespace Ide
 	public class ValaSymbolResolver: Ide.Object, Ide.SymbolResolver
 	{
 		public async Ide.SymbolTree? get_symbol_tree_async (GLib.File file,
+		                                                    Ide.Buffer buffer,
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{

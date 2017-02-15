@@ -25,6 +25,7 @@ namespace Ide
 	public class ValaDiagnosticProvider: Ide.Object, Ide.DiagnosticProvider
 	{
 		public async Ide.Diagnostics? diagnose_async (Ide.File file,
+		                                              Ide.Buffer buffer,
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
