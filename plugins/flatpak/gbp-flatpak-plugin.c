@@ -29,6 +29,8 @@
 void
 peas_register_types (PeasObjectModule *module)
 {
+  ide_vcs_register_ignored (".flatpak-builder");
+
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIGURATION_PROVIDER,
                                               GBP_TYPE_FLATPAK_CONFIGURATION_PROVIDER);
