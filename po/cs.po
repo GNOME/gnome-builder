@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-14 14:18+0000\n"
-"PO-Revision-Date: 2017-02-14 16:11+0100\n"
+"POT-Creation-Date: 2017-02-15 00:40+0000\n"
+"PO-Revision-Date: 2017-02-15 09:10+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -291,7 +291,7 @@ msgid "Palettes"
 msgstr "Palety"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:946
-#: plugins/color-picker/gtk/color-picker.ui:48
+#: plugins/color-picker/gtk/color-picker.ui:49
 msgid "No open palettes"
 msgstr "Nejsou otevřené žádné palety"
 
@@ -1073,7 +1073,7 @@ msgstr "Zadejte prosím adresu D-Bus"
 msgid "No such worker"
 msgstr "Takový sestavovací proces neexistuje"
 
-#: libide/buffers/ide-buffer.c:2458
+#: libide/buffers/ide-buffer.c:2476
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
@@ -1090,53 +1090,53 @@ msgstr "neuložený dokument %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Selhalo uložení vyrovnávací paměti, ignoruje se opětovné použití."
 
-#: libide/buildsystem/ide-build-pipeline.c:2028
+#: libide/buildsystem/ide-build-pipeline.c:2032
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2043
+#: libide/buildsystem/ide-build-pipeline.c:2047
 msgid "Downloading…"
 msgstr "Stahuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2047
+#: libide/buildsystem/ide-build-pipeline.c:2051
 msgid "Building dependencies…"
 msgstr "Sestavují se závislosti…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2051
+#: libide/buildsystem/ide-build-pipeline.c:2055
 msgid "Bootstrapping…"
 msgstr "Připravuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2055
+#: libide/buildsystem/ide-build-pipeline.c:2059
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2059
+#: libide/buildsystem/ide-build-pipeline.c:2063
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2063
+#: libide/buildsystem/ide-build-pipeline.c:2067
 msgid "Installing…"
 msgstr "Instaluje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2067
+#: libide/buildsystem/ide-build-pipeline.c:2071
 msgid "Exporting…"
 msgstr "Exportuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2071
 #: libide/buildsystem/ide-build-pipeline.c:2075
+#: libide/buildsystem/ide-build-pipeline.c:2079
 msgid "Success"
 msgstr "Úspěšné"
 
-#: libide/buildsystem/ide-build-pipeline.c:2079
+#: libide/buildsystem/ide-build-pipeline.c:2083
 #: libide/workbench/ide-omni-bar.ui:325
 msgid "Failed"
 msgstr "Selhalo"
 
-#: libide/buildsystem/ide-build-pipeline.c:2083
+#: libide/buildsystem/ide-build-pipeline.c:2087
 msgid "Preparing…"
 msgstr "Připravuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2087
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Ready"
 msgstr "Připraveno"
 
@@ -1198,7 +1198,7 @@ msgstr "Běhové prostředí"
 msgid "Environment"
 msgstr "Proměnné prostředí"
 
-#: libide/buildui/ide-build-log-panel.c:285
+#: libide/buildui/ide-build-log-panel.c:714
 msgid "Build Output"
 msgstr "Výpis ze sestavení"
 
@@ -2787,7 +2787,7 @@ msgstr "Chyba čtení AST"
 msgid "Failed to create translation unit: %s"
 msgstr "Selhalo vytvoření překladové jednotky: %s"
 
-#: plugins/clang/ide-clang-service.c:458
+#: plugins/clang/ide-clang-service.c:458 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 
@@ -2980,7 +2980,7 @@ msgstr "Nejsou vybrané žádné palety"
 msgid "Select a palette file"
 msgstr "Vyberte soubor s paletou"
 
-#: plugins/color-picker/gtk/color-picker.ui:61
+#: plugins/color-picker/gtk/color-picker.ui:62
 msgid "Try loading or generating a palette using the menu"
 msgstr "Zkuste načíst nebo vygenerovat paletu pomocí nabídky"
 
@@ -3207,24 +3207,22 @@ msgid "Clone"
 msgstr "Klonovat"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:73
-#| msgid "Installing…"
 msgid "Install"
 msgstr "Instalovat"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:79
-#| msgid "Updated"
 msgid "Update"
 msgstr "Aktualizovat"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:190
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:193
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:191
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:194
 msgid "Application Runtimes"
 msgstr "Běhová prostředí aplikace"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:196
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:199
 msgid "Developer SDKs"
 msgstr "Vývojářská SDK"
 
@@ -3509,11 +3507,11 @@ msgstr ""
 "Soubor se záznamem pro podporu byl zapsán do „%s“. Poskytněte prosím tento "
 "soubor jako přílohu ve svém hlášení chyby nebo žádosti o podporu."
 
-#: plugins/symbol-tree/symbol-tree-panel.c:274
+#: plugins/symbol-tree/symbol-tree-panel.c:275
 msgid "Current language does not support symbol resolvers"
 msgstr "Aktuální jazyk nepodporuje rozpoznávání symbolů"
 
-#: plugins/symbol-tree/symbol-tree-panel.c:414
+#: plugins/symbol-tree/symbol-tree-panel.c:415
 msgid "Symbols"
 msgstr "Symboly"
 
@@ -3606,3 +3604,13 @@ msgstr "Zobrazovat chyby a varování poskytované pro jazyk Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostika varování chyba chyby"
+
+#: plugins/xml-pack/ide-xml-service.c:191
+msgid "Buffer loaded but not in the buffer manager."
+msgstr ""
+"Vyrovnávací paměť byla načtena, ale není ve správci vyrovnávacích pamětí."
+
+#: plugins/xml-pack/ide-xml-tree-builder.c:172
+#: plugins/xml-pack/ide-xml-tree-builder.c:204
+msgid "Failed to create the XML tree."
+msgstr "Selhalo vytvoření stromu XML"
