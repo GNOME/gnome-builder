@@ -46,6 +46,7 @@ struct _IdeVcsInterface
   gchar                  *(*get_branch_name)           (IdeVcs     *self);
 };
 
+void                    ide_vcs_register_ignored          (const gchar          *pattern);
 IdeBufferChangeMonitor *ide_vcs_get_buffer_change_monitor (IdeVcs               *self,
                                                            IdeBuffer            *buffer);
 GFile                  *ide_vcs_get_working_directory     (IdeVcs               *self);

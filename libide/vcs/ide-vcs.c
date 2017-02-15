@@ -32,6 +32,16 @@ enum {
 };
 
 static guint signals [N_SIGNALS];
+static GPtrArray *ignored;
+
+void
+ide_vcs_register_ignored (const gchar *pattern)
+{
+  if (ignored == NULL)
+    ignored = g_ptr_array_new ();
+
+  g_ptr_array_add (ignored, g_pattern_spec_new (pattern));
+}
 
 static void
 ide_vcs_default_init (IdeVcsInterface *iface)
@@ -78,6 +88,21 @@ ide_vcs_is_ignored (IdeVcs  *self,
                     GError **error)
 {
   g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
+
+  if G_LIKELY (ignored != NULL)
+    {
+      g_autofree gchar *name = g_file_get_basename (file);
+      guint len = strlen (name);
+      g_autofree gchar *reversed = g_utf8_strreverse (name, len);
+
+      for (guint i = 0; i < ignored->len; i++)
+        {
+          GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
+
+          if (g_pattern_match (pattern_spec, len, name, reversed))
+            return TRUE;
+        }
+    }
 
   if (IDE_VCS_GET_IFACE (self)->is_ignored)
     return IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
