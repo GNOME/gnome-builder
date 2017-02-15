@@ -182,3 +182,5 @@ plugins/terminal/gb-terminal-workbench-addin.c
 plugins/terminal/gtk/menus.ui
 plugins/todo/todo_plugin/__init__.py
 plugins/vala-pack/ide-vala-preferences-addin.vala
+plugins/xml-pack/ide-xml-service.c
+plugins/xml-pack/ide-xml-tree-builder.c
