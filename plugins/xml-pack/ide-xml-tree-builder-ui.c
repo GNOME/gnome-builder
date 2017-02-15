@@ -142,7 +142,6 @@ state_processing (ParserState           *state,
 
   state->current_depth = depth;
   state->current_node = node;
-  print_node (node, depth);
 }
 
 static const gchar *
