@@ -126,7 +126,7 @@ ide_file_manager_show (GFile   *file,
     else
       {
         g_set_error (error, G_FILE_ERROR, 0,
-                     _("Cannot convert '%s' into a valid NSURL."), uri);
+                     _("Cannot convert “%s” into a valid NSURL."), uri);
         retval = FALSE;
       }
 

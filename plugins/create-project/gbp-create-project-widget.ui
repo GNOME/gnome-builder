@@ -52,7 +52,7 @@
                         <property name="wrap">true</property>
                         <property name="visible">true</property>
                         <property name="max-width-chars">60</property>
-                        <property name="label" translatable="yes">Unique name that is used for your project's folder and other technical resources. Should be in lower case without spaces and may not start with a number.</property>
+                        <property name="label" translatable="yes">Unique name that is used for your project’s folder and other technical resources. Should be in lower case without spaces and may not start with a number.</property>
                         <style>
                           <class name="dim-label"/>
                         </style>

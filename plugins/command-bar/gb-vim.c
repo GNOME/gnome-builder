@@ -155,7 +155,7 @@ gb_vim_set_filetype (GtkSourceView  *source_view,
       g_set_error (error,
                    GB_VIM_ERROR,
                    GB_VIM_ERROR_UNKNOWN_OPTION,
-                   _("Cannot find language '%s'"),
+                   _("Cannot find language “%s”"),
                    value);
       return FALSE;
     }
@@ -423,7 +423,7 @@ gb_vim_command_colorscheme (GtkWidget      *active_widget,
           g_set_error (error,
                        GB_VIM_ERROR,
                        GB_VIM_ERROR_UNKNOWN_OPTION,
-                       _("Cannot find colorscheme '%s'"),
+                       _("Cannot find colorscheme “%s”"),
                        options);
           return FALSE;
         }

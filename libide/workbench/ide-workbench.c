@@ -560,7 +560,7 @@ transform_title (GBinding     *binding,
   const gchar *name = g_value_get_string (from_value);
 
   if (name != NULL)
-    g_value_take_string (to_value, g_strdup_printf (_("%s - Builder"), name));
+    g_value_take_string (to_value, g_strdup_printf (_("%s — Builder"), name));
   else
     g_value_set_static_string (to_value, _("Builder"));
 

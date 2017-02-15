@@ -363,7 +363,7 @@ parse_host (const gchar       *raw_host,
       if (raw_host[len - 1] != ']')
         {
           g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_HOST,
-                       _("Invalid IP literal '%s' in URI"),
+                       _("Invalid IP literal “%s” in URI"),
                        raw_host);
           return FALSE;
         }
@@ -374,7 +374,7 @@ parse_host (const gchar       *raw_host,
         {
           g_free (addr);
           g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_HOST,
-                       _("Invalid IP literal '%s' in URI"),
+                       _("Invalid IP literal “%s” in URI"),
                        raw_host);
           return FALSE;
         }
@@ -408,7 +408,7 @@ parse_host (const gchar       *raw_host,
     {
       g_free (decoded);
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_HOST,
-                   _("Invalid encoded IP literal '%s' in URI"),
+                   _("Invalid encoded IP literal “%s” in URI"),
                    raw_host);
       return FALSE;
     }
@@ -417,7 +417,7 @@ parse_host (const gchar       *raw_host,
     {
       g_free (decoded);
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_HOST,
-                   _("Invalid non-ASCII hostname '%s' in URI"),
+                   _("Invalid non-ASCII hostname “%s” in URI"),
                    raw_host);
       return FALSE;
     }
@@ -431,7 +431,7 @@ parse_host (const gchar       *raw_host,
   if (flags & IDE_URI_PARSE_NO_IRI)
     {
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_HOST,
-                   _("Non-ASCII hostname '%s' forbidden in this URI"),
+                   _("Non-ASCII hostname “%s” forbidden in this URI"),
                    decoded);
       g_free (decoded);
       return FALSE;
@@ -454,14 +454,14 @@ parse_port (const gchar  *raw_port,
   if (*end)
     {
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_PORT,
-                   _("Could not parse port '%s' in URI"),
+                   _("Could not parse port “%s” in URI"),
                    raw_port);
       return FALSE;
     }
   else if (parsed_port > 65535)
     {
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_PORT,
-                   _("Port '%s' in URI is out of range"),
+                   _("Port “%s” in URI is out of range"),
                    raw_port);
       return FALSE;
     }
@@ -657,7 +657,7 @@ ide_uri_new_relative (IdeUri            *base_uri,
   if (!uri->scheme && !base_uri)
     {
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_MISC,
-                   _("Could not parse '%s' as absolute URI"),
+                   _("Could not parse “%s” as absolute URI"),
                    uri_string);
       GOTO (fail);
     }
@@ -1200,7 +1200,7 @@ ide_uri_parse_host (const gchar       *uri_string,
   if (!raw_host)
     {
       g_set_error (error, IDE_URI_ERROR, IDE_URI_ERROR_BAD_HOST,
-                   _("URI '%s' has no host component"),
+                   _("URI “%s” has no host component"),
                    uri_string);
       GOTO (fail);
     }

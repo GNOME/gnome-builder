@@ -76,7 +76,7 @@ generate_support_activate (GSimpleAction              *action,
       goto cleanup;
     }
 
-  text = g_strdup_printf (_("The support log file has been written to '%s'. "
+  text = g_strdup_printf (_("The support log file has been written to “%s”. "
                             "Please provide this file as an attachment on "
                             "your bug report or support request."),
                             log_path);

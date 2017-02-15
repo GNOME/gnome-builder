@@ -64,7 +64,7 @@
                         <property name="width-chars">35</property>
                         <property name="max-width-chars">50</property>
                         <property name="placeholder-text" translatable="yes">user@host:repository.git</property>
-                        <property name="tooltip-text" translatable="yes">Enter the URL of your project's source code repository</property>
+                        <property name="tooltip-text" translatable="yes">Enter the URL of your project’s source code repository</property>
                         <property name="valign">baseline</property>
                         <property name="visible">true</property>
                       </object>

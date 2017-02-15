@@ -198,7 +198,7 @@ ide_application_local_command_line (GApplication   *application,
       G_OPTION_FLAG_NONE,
       G_OPTION_ARG_NONE,
       &version,
-      N_("Show the application's version") },
+      N_("Show the application’s version") },
 
     { "type",
       0,
