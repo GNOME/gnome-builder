@@ -749,7 +749,10 @@ check_dir_for_manifests (GFile         *directory,
       parser = json_parser_new ();
       json_parser_load_from_file (parser, path, &local_error);
       if (local_error != NULL)
-        continue;
+        {
+          g_warning ("Error parsing potential flatpak manifest %s: %s", path, local_error->message);
+          continue;
+        }
 
       root_node = json_parser_get_root (parser);
       if (!JSON_NODE_HOLDS_OBJECT (root_node))
