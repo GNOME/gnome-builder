@@ -96,6 +96,8 @@ ide_subprocess_launcher_kill_process_group (GCancellable *cancellable,
   const gchar *ident;
   pid_t pid;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_CANCELLABLE (cancellable));
   g_assert (G_IS_SUBPROCESS (subprocess));
 
@@ -114,6 +116,8 @@ ide_subprocess_launcher_kill_process_group (GCancellable *cancellable,
   g_signal_handlers_disconnect_by_func (cancellable,
                                         G_CALLBACK (ide_subprocess_launcher_kill_process_group),
                                         subprocess);
+
+  IDE_EXIT;
 #else
 # error "Your platform is not yet supported"
 #endif
@@ -123,6 +127,8 @@ static void
 ide_subprocess_launcher_kill_host_process (GCancellable  *cancellable,
                                            IdeSubprocess *subprocess)
 {
+  IDE_ENTRY;
+
   g_assert (G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
 
@@ -131,6 +137,8 @@ ide_subprocess_launcher_kill_host_process (GCancellable  *cancellable,
                                         subprocess);
 
   ide_subprocess_force_exit (subprocess);
+
+  IDE_EXIT;
 }
 
 IdeSubprocessLauncher *
