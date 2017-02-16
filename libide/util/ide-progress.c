@@ -61,11 +61,10 @@ ide_progress_set_completed (IdeProgress *self,
 
   g_mutex_lock (&self->mutex);
   if (self->completed != completed)
-    {
-      self->completed = completed;
-      ide_object_notify_in_main (G_OBJECT (self), properties [PROP_COMPLETED]);
-    }
+    self->completed = completed;
   g_mutex_unlock (&self->mutex);
+
+  ide_object_notify_in_main (G_OBJECT (self), properties [PROP_COMPLETED]);
 }
 
 gdouble
@@ -86,6 +85,9 @@ void
 ide_progress_set_fraction (IdeProgress *self,
                            gdouble      fraction)
 {
+  gboolean do_completed = FALSE;
+  gboolean do_notify = FALSE;
+
   g_return_if_fail (IDE_IS_PROGRESS (self));
   g_return_if_fail (fraction >= 0.0);
   g_return_if_fail (fraction <= 1.0);
@@ -95,10 +97,16 @@ ide_progress_set_fraction (IdeProgress *self,
     {
       self->fraction = fraction;
       if (fraction == 1.0)
-        ide_progress_set_completed (self, TRUE);
-      ide_object_notify_in_main (G_OBJECT (self), properties [PROP_FRACTION]);
+        do_completed = TRUE;
+      do_notify = TRUE;
     }
   g_mutex_unlock (&self->mutex);
+
+  if (do_completed)
+    ide_progress_set_completed (self, TRUE);
+
+  if (do_notify)
+    ide_object_notify_in_main (G_OBJECT (self), properties [PROP_FRACTION]);
 }
 
 gchar *
