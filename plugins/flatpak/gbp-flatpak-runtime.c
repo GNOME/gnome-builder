@@ -22,10 +22,11 @@
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 
+#include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-runner.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-subprocess-launcher.h"
-#include "gbp-flatpak-runner.h"
-#include "gbp-flatpak-configuration.h"
 #include "gbp-flatpak-util.h"
 
 struct _GbpFlatpakRuntime
@@ -608,17 +609,31 @@ gbp_flatpak_runtime_init (GbpFlatpakRuntime *self)
 {
 }
 
+static gchar *
+locate_deploy_dir (const gchar *sdk_id)
+{
+  g_auto(GStrv) parts = g_strsplit (sdk_id, "/", 3);
+
+  if (g_strv_length (parts) == 3)
+    return gbp_flatpak_application_addin_get_deploy_dir (gbp_flatpak_application_addin_get_default (),
+                                                         parts[0], parts[1], parts[2]);
+  return NULL;
+}
+
 GbpFlatpakRuntime *
 gbp_flatpak_runtime_new (IdeContext           *context,
                          FlatpakInstalledRef  *ref,
                          GCancellable         *cancellable,
                          GError              **error)
 {
+  g_autofree gchar *sdk_deploy_dir = NULL;
   g_autoptr(GBytes) metadata = NULL;
   g_autoptr(GKeyFile) keyfile = NULL;
   g_autofree gchar *sdk = NULL;
   g_autofree gchar *id = NULL;
   g_autofree gchar *display_name = NULL;
+  g_autofree gchar *triplet = NULL;
+  g_autoptr(FlatpakRef) sdk_ref = NULL;
   const gchar *name;
   const gchar *arch;
   const gchar *branch;
@@ -631,7 +646,8 @@ gbp_flatpak_runtime_new (IdeContext           *context,
   arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
   branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
   deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
-  id = g_strdup_printf ("flatpak:%s/%s/%s", name, arch, branch);
+  triplet = g_strdup_printf ("%s/%s/%s", name, arch, branch);
+  id = g_strdup_printf ("flatpak:%s", triplet);
 
   metadata = flatpak_installed_ref_load_metadata (ref, cancellable, error);
   if (metadata == NULL)
@@ -647,6 +663,13 @@ gbp_flatpak_runtime_new (IdeContext           *context,
     display_name = g_strdup_printf (_("%s <b>%s</b>"), name, branch);
   else
     display_name = g_strdup_printf (_("%s <b>%s</b> <span variant='smallcaps'>%s</span>"), name, branch, arch);
+
+  /*
+   * If we have an SDK that is different from this runtime, we need to locate
+   * the SDK deploy-dir instead (for things like includes, pkg-config, etc).
+   */
+  if (sdk != NULL && !g_str_equal (sdk, triplet) && NULL != (sdk_deploy_dir = locate_deploy_dir (sdk)))
+    deploy_dir = sdk_deploy_dir;
 
   return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                        "context", context,
