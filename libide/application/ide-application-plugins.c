@@ -29,7 +29,7 @@
 #include "theming/ide-css-provider.h"
 
 static const gchar *blacklisted_plugins[] = {
-  "build-tools", /* Renamed to buildui */
+  "build-tools-plugin", /* Renamed to buildui */
 };
 
 static gboolean
