@@ -28,12 +28,26 @@
 #include "application/ide-application-private.h"
 #include "theming/ide-css-provider.h"
 
+static const gchar *blacklisted_plugins[] = {
+  "build-tools", /* Renamed to buildui */
+};
+
 static gboolean
 ide_application_can_load_plugin (IdeApplication *self,
                                  PeasPluginInfo *plugin_info)
 {
+  const gchar *module_name;
+
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (plugin_info != NULL);
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+
+  for (guint i = 0; i < G_N_ELEMENTS (blacklisted_plugins); i++)
+    {
+      if (g_strcmp0 (module_name, blacklisted_plugins[i]) == 0)
+        return FALSE;
+    }
 
   if (self->mode == IDE_APPLICATION_MODE_WORKER)
     {
