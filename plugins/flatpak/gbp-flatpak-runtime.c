@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "gbp-flatpak-runtime"
 
 #include <flatpak.h>
+#include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 
 #include "gbp-flatpak-runtime.h"
@@ -31,6 +32,7 @@ struct _GbpFlatpakRuntime
 {
   IdeRuntime parent_instance;
 
+  gchar *arch;
   gchar *branch;
   gchar *deploy_dir;
   gchar *platform;
@@ -42,6 +44,7 @@ G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
 
 enum {
   PROP_0,
+  PROP_ARCH,
   PROP_BRANCH,
   PROP_DEPLOY_DIR,
   PROP_PLATFORM,
@@ -380,6 +383,28 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
 }
 
 const gchar *
+gbp_flatpak_runtime_get_arch (GbpFlatpakRuntime *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  return self->arch;
+}
+
+void
+gbp_flatpak_runtime_set_arch (GbpFlatpakRuntime *self,
+                              const gchar       *arch)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
+
+  if (g_strcmp0 (arch, self->arch) != 0)
+    {
+      g_free (self->arch);
+      self->arch = g_strdup (arch);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARCH]);
+    }
+}
+
+const gchar *
 gbp_flatpak_runtime_get_branch (GbpFlatpakRuntime *self)
 {
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
@@ -393,9 +418,12 @@ gbp_flatpak_runtime_set_branch (GbpFlatpakRuntime *self,
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
-  g_free (self->branch);
-  self->branch = g_strdup (branch);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
+  if (g_strcmp0 (branch, self->branch) != 0)
+    {
+      g_free (self->branch);
+      self->branch = g_strdup (branch);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
+    }
 }
 
 const gchar *
@@ -446,6 +474,10 @@ gbp_flatpak_runtime_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ARCH:
+      g_value_set_string (value, gbp_flatpak_runtime_get_arch (self));
+      break;
+
     case PROP_BRANCH:
       g_value_set_string (value, gbp_flatpak_runtime_get_branch (self));
       break;
@@ -477,6 +509,10 @@ gbp_flatpak_runtime_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ARCH:
+      gbp_flatpak_runtime_set_arch (self, g_value_get_string (value));
+      break;
+
     case PROP_BRANCH:
       gbp_flatpak_runtime_set_branch (self, g_value_get_string (value));
       break;
@@ -503,10 +539,11 @@ gbp_flatpak_runtime_finalize (GObject *object)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)object;
 
-  g_clear_pointer (&self->sdk, g_free);
-  g_clear_pointer (&self->platform, g_free);
+  g_clear_pointer (&self->arch, g_free);
   g_clear_pointer (&self->branch, g_free);
   g_clear_pointer (&self->deploy_dir, g_free);
+  g_clear_pointer (&self->platform, g_free);
+  g_clear_pointer (&self->sdk, g_free);
   g_clear_object (&self->deploy_dir_files);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
@@ -528,41 +565,40 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
 
+  properties [PROP_ARCH] =
+    g_param_spec_string ("arch",
+                         "Arch",
+                         "Arch",
+                         flatpak_get_default_arch (),
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_BRANCH] =
     g_param_spec_string ("branch",
                          "Branch",
                          "Branch",
                          "master",
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DEPLOY_DIR] =
     g_param_spec_string ("deploy-dir",
                          "Deploy Directory",
                          "The flatpak runtime deploy directory",
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PLATFORM] =
     g_param_spec_string ("platform",
                          "Platform",
                          "Platform",
                          "org.gnome.Platform",
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SDK] =
     g_param_spec_string ("sdk",
                          "Sdk",
                          "Sdk",
                          "org.gnome.Sdk",
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -570,4 +606,56 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
 static void
 gbp_flatpak_runtime_init (GbpFlatpakRuntime *self)
 {
+}
+
+GbpFlatpakRuntime *
+gbp_flatpak_runtime_new (IdeContext           *context,
+                         FlatpakInstalledRef  *ref,
+                         GCancellable         *cancellable,
+                         GError              **error)
+{
+  g_autoptr(GBytes) metadata = NULL;
+  g_autoptr(GKeyFile) keyfile = NULL;
+  g_autofree gchar *sdk = NULL;
+  g_autofree gchar *id = NULL;
+  g_autofree gchar *display_name = NULL;
+  const gchar *name;
+  const gchar *arch;
+  const gchar *branch;
+  const gchar *deploy_dir;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (FLATPAK_IS_INSTALLED_REF (ref), NULL);
+
+  name = flatpak_ref_get_name (FLATPAK_REF (ref));
+  arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
+  branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
+  deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
+  id = g_strdup_printf ("flatpak:%s/%s/%s", name, arch, branch);
+
+  metadata = flatpak_installed_ref_load_metadata (ref, cancellable, error);
+  if (metadata == NULL)
+    return NULL;
+
+  keyfile = g_key_file_new ();
+  if (!g_key_file_load_from_bytes (keyfile, metadata, 0, error))
+    return NULL;
+
+  sdk = g_key_file_get_string (keyfile, "Runtime", "sdk", NULL);
+
+  if (g_str_equal (arch, flatpak_get_default_arch ()))
+    display_name = g_strdup_printf (_("%s <b>%s</b>"), name, branch);
+  else
+    display_name = g_strdup_printf (_("%s <b>%s</b> <span variant='smallcaps'>%s</span>"), name, branch, arch);
+
+  return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
+                       "context", context,
+                       "id", id,
+                       "arch", arch,
+                       "branch", branch,
+                       "deploy-dir", deploy_dir,
+                       "display-name", display_name,
+                       "platform", name,
+                       "sdk", sdk,
+                       NULL);
 }

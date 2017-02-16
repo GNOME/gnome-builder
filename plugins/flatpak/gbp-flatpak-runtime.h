@@ -19,6 +19,7 @@
 #ifndef GBP_FLATPAK_RUNTIME_H
 #define GBP_FLATPAK_RUNTIME_H
 
+#include <flatpak.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
@@ -27,17 +28,17 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
+/* TODO: Get rid of this with custom installation */
 #define FLATPAK_REPO_NAME "gnome-builder-builds"
 
-const gchar         *gbp_flatpak_runtime_get_branch   (GbpFlatpakRuntime *self);
-void                 gbp_flatpak_runtime_set_branch   (GbpFlatpakRuntime *self,
-                                                       const gchar *branch);
-const gchar         *gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self);
-void                 gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
-                                                       const gchar *platform);
-const gchar         *gbp_flatpak_runtime_get_sdk      (GbpFlatpakRuntime *self);
-void                 gbp_flatpak_runtime_set_sdk      (GbpFlatpakRuntime *self,
-                                                       const gchar *sdk);
+GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (IdeContext           *context,
+                                                       FlatpakInstalledRef  *ref,
+                                                       GCancellable         *cancellable,
+                                                       GError              **error);
+const gchar         *gbp_flatpak_runtime_get_arch     (GbpFlatpakRuntime    *self);
+const gchar         *gbp_flatpak_runtime_get_branch   (GbpFlatpakRuntime    *self);
+const gchar         *gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime    *self);
+const gchar         *gbp_flatpak_runtime_get_sdk      (GbpFlatpakRuntime    *self);
 
 G_END_DECLS
 
