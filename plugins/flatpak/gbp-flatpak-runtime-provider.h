@@ -27,8 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, GBP, FLATPAK_RUNTIME_PROVIDER, GObject)
 
-void gbp_flatpak_runtime_provider_reload (GbpFlatpakRuntimeProvider *self);
-
 G_END_DECLS
 
 #endif /* GBP_FLATPAK_RUNTIME_PROVIDER_H */
