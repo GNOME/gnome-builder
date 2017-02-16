@@ -918,3 +918,57 @@ gbp_flatpak_application_addin_locate_sdk_finish (GbpFlatpakApplicationAddin  *se
 
   IDE_RETURN (ret);
 }
+
+static FlatpakInstalledRef *
+gbp_flatpak_application_addin_find_ref (GbpFlatpakApplicationAddin *self,
+                                        const gchar                *id,
+                                        const gchar                *arch,
+                                        const gchar                *branch)
+{
+  for (guint i = 0; i < self->installations->len; i++)
+    {
+      InstallInfo *info = g_ptr_array_index (self->installations, i);
+      g_autoptr(GPtrArray) ar = NULL;
+
+      ar = flatpak_installation_list_installed_refs_by_kind (info->installation,
+                                                             FLATPAK_REF_KIND_RUNTIME,
+                                                             NULL,
+                                                             NULL);
+
+      if (ar != NULL)
+        {
+          for (guint j = 0; j < ar->len; j++)
+            {
+              FlatpakRef *ref = g_ptr_array_index (ar, j);
+
+              if (g_strcmp0 (id, flatpak_ref_get_name (ref)) == 0 &&
+                  g_strcmp0 (arch, flatpak_ref_get_arch (ref)) == 0 &&
+                  g_strcmp0 (branch, flatpak_ref_get_branch (ref)) == 0)
+                return g_object_ref (ref);
+            }
+        }
+    }
+
+  return NULL;
+}
+
+gchar *
+gbp_flatpak_application_addin_get_deploy_dir (GbpFlatpakApplicationAddin *self,
+                                              const gchar                *id,
+                                              const gchar                *arch,
+                                              const gchar                *branch)
+{
+  g_autoptr(FlatpakInstalledRef) ref = NULL;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), NULL);
+  g_return_val_if_fail (id, NULL);
+  g_return_val_if_fail (arch, NULL);
+  g_return_val_if_fail (branch, NULL);
+
+  ref = gbp_flatpak_application_addin_find_ref (self, id, arch, branch);
+
+  if (ref != NULL)
+    return g_strdup (flatpak_installed_ref_get_deploy_dir (ref));
+
+  return NULL;
+}

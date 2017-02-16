@@ -58,6 +58,10 @@ gboolean                    gbp_flatpak_application_addin_locate_sdk_finish     
                                                                                   gchar                      **sdk_arch,
                                                                                   gchar                      **sdk_branch,
                                                                                   GError                     **error);
+gchar                      *gbp_flatpak_application_addin_get_deploy_dir         (GbpFlatpakApplicationAddin  *self,
+                                                                                  const gchar                 *id,
+                                                                                  const gchar                 *arch,
+                                                                                  const gchar                 *branch);
 
 G_END_DECLS
 
