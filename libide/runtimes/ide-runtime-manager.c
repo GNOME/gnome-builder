@@ -404,8 +404,28 @@ ide_runtime_manager_ensure_finish (IdeRuntimeManager  *self,
                                    GAsyncResult       *result,
                                    GError            **error)
 {
+  g_autoptr(GError) local_error = NULL;
+  IdeRuntime *ret;
+
   g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), &local_error);
+
+  /*
+   * If we got NOT_SUPPORTED error, and the runtime already exists,
+   * then we can synthesize a successful result to the caller.
+   */
+  if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+    {
+      const gchar *runtime_id = g_task_get_task_data (G_TASK (result));
+      ret = ide_runtime_manager_get_runtime (self, runtime_id);
+      if (ret != NULL)
+        return ret;
+    }
+
+  if (error != NULL)
+    *error = g_steal_pointer (&local_error);
+
+  return ret;
 }
