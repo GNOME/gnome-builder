@@ -211,7 +211,7 @@ gbp_flatpak_application_addin_remove_old_repo (GbpFlatpakApplicationAddin  *self
 
   process = ide_subprocess_launcher_spawn (launcher, cancellable, error);
 
-  if (process == NULL)
+  if (process != NULL)
     ret = ide_subprocess_wait (process, cancellable, error);
 
   IDE_RETURN (ret);
