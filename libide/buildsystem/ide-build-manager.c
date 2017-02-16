@@ -853,13 +853,12 @@ ide_build_manager_cancel (IdeBuildManager *self)
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
 
+  g_debug ("Cancelling build due to user request");
+
   cancellable = g_steal_pointer (&self->cancellable);
 
-  if (cancellable != NULL && !g_cancellable_is_cancelled (cancellable))
-    {
-      g_debug ("Cancelling build due to user request");
-      g_cancellable_cancel (cancellable);
-    }
+  if (!g_cancellable_is_cancelled (cancellable))
+    g_cancellable_cancel (cancellable);
 
   IDE_EXIT;
 }
