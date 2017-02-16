@@ -1,3 +1,53 @@
+===============
+Version 3.22.90
+===============
+
+We've been hard at work this cycle turning Builder upside down and replacing
+the build engine. We now have a new build pipeline that allows for much more
+flexibility for build systems and runtimes. There is certainly a bit of fallout
+from this, but with your help testing, we can have these bugs shook out by
+final release.
+
+ • A new IdeBuildPipeline which allows various plugins to hook stages
+   into the pipeline at given phases. This provides much more flexability
+   for plugins.
+ • Significant improvements to XML plugin including a symbol resolver.
+ • The symbol tree has a new style which makes it easier to browse.
+ • Support for semantic spellchecking, including comments and strings.
+ • Meson support has been improved and now supports building within
+   flatpak runtimes.
+ • A new beautifier plugin to cleanup source using external commands such
+   as clang-format, indent, or xml-lint.
+ • The build panel now has support for colored output from programs such
+   as GCC.
+ • Configurations are now abstracted through ConfigurationProviders so that
+   plugins may provide configurations. This means that flatpak json manifests
+   are now implemented as configurations.
+ • The build-tools plugin has been moved to libide and should be removed
+   from existing installations.
+ • Support for building with CMake and Ninja build system.
+ • Autotools, meson, cmake, ninja, cargo, flatpak, jhbuild plugins have been
+   rewritten to support the build pipeline.
+ • The terminal plugin now supports hyperlinks.
+ • Flatpak runtimes will be automatically downloaded using the new transfers
+   manager if it is missing and a build is required.
+ • A race condition in accessing CFLAGS for the project as configured has
+   been fixed due to the build pipeline.
+ • Plugins can register files that should be ignored in the project tree.
+ • Ctags now uses a custom TMPDIR for when ctags needs to create large files
+   for use with sort. This is necessary as /tmp is typically not persistent
+   storage and the files can get quite large for some projects like WebKit.
+ • Vim emulation improvements.
+
+I'd like to let people know that we intend to move Builder to the meson build
+system for 3.26. So that will give you 6 months to update your distributions
+build infrastructure to support meson for GNOME applications.
+
+Updated translations
+
+  Simplified Chinese, Swedish, Brazilian Portuguese, Polish, Czech, Finnish,
+  Spanish, German, Kazakh, Hungarian, and Lithuanian.
+
 ==============
 Version 3.22.4
 ==============
