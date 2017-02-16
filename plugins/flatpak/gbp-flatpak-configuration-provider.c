@@ -293,13 +293,19 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                               g_auto(GStrv) line_parts = NULL;
                               line_parts = g_strsplit (new_environ[j], "=", 2);
                               if (g_strcmp0 (line_parts[0], "CFLAGS") == 0)
-                                cflags_line = g_strdup_printf ("%s\"cflags\": \"%s\"",
-                                                               build_options_indent,
-                                                               line_parts[1]);
-                              else if (g_strcmp0 (line_parts[0], "CXXFLAGS") == 0)
-                                cxxflags_line = g_strdup_printf ("%s\"cxxflags\": \"%s\"",
+                                {
+                                  g_free (cflags_line);
+                                  cflags_line = g_strdup_printf ("%s\"cflags\": \"%s\"",
                                                                  build_options_indent,
                                                                  line_parts[1]);
+                                }
+                              else if (g_strcmp0 (line_parts[0], "CXXFLAGS") == 0)
+                                {
+                                  g_free (cxxflags_line);
+                                  cxxflags_line = g_strdup_printf ("%s\"cxxflags\": \"%s\"",
+                                                                   build_options_indent,
+                                                                   line_parts[1]);
+                                }
                               else
                                 {
                                   if (env_lines == NULL)
@@ -864,10 +870,9 @@ check_dir_for_manifests (GFile         *directory,
           finish_args_array = json_node_get_array (finish_args_node);
           for (guint i = 0; i < json_array_get_length (finish_args_array); i++)
             {
-              gchar *arg;
-              arg = g_strdup (json_array_get_string_element (finish_args_array, i));
+              const gchar *arg = json_array_get_string_element (finish_args_array, i);
               if (!ide_str_empty0 (arg))
-                g_ptr_array_add (finish_args, arg);
+                g_ptr_array_add (finish_args, g_strdup (arg));
             }
           g_ptr_array_add (finish_args, NULL);
           manifest->finish_args = (gchar **)g_ptr_array_free (finish_args, FALSE);
