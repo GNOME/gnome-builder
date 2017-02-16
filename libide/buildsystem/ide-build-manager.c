@@ -1118,12 +1118,16 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
 {
+  g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (cancellable == NULL)
+    cancellable = local_cancellable = g_cancellable_new ();
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_clean_async);
@@ -1138,9 +1142,6 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
     }
 
   g_set_object (&self->cancellable, cancellable);
-
-  if (self->cancellable == NULL)
-    self->cancellable = g_cancellable_new ();
 
   self->diagnostic_count = 0;
 
@@ -1272,12 +1273,16 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
+  g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (cancellable == NULL)
+    cancellable = local_cancellable = g_cancellable_new ();
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_rebuild_async);
@@ -1292,9 +1297,6 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
     }
 
   g_set_object (&self->cancellable, cancellable);
-
-  if (self->cancellable == NULL)
-    self->cancellable = g_cancellable_new ();
 
   ide_build_pipeline_rebuild_async (self->pipeline,
                                     phase,
