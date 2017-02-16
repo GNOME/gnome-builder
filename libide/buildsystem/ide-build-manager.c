@@ -975,6 +975,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
+  g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GTask) task = NULL;
   IdeContext *context;
   IdeBufferManager *buffer_manager;
@@ -983,6 +984,9 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (cancellable == NULL)
+    cancellable = local_cancellable = g_cancellable_new ();
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_execute_async);
