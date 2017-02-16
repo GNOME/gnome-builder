@@ -27,12 +27,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakTransfer, gbp_flatpak_transfer, GBP, FLATPAK_TRANSFER, GObject)
 
-GbpFlatpakTransfer *gbp_flatpak_transfer_new          (const gchar        *id,
-                                                       const gchar        *arch,
-                                                       const gchar        *branch,
-                                                       gboolean            force_update);
-gboolean            gbp_flatpak_transfer_is_installed (GbpFlatpakTransfer *self,
-                                                       GCancellable       *cancellable);
+GbpFlatpakTransfer *gbp_flatpak_transfer_new (const gchar        *id,
+                                              const gchar        *arch,
+                                              const gchar        *branch,
+                                              gboolean            force_update);
 
 G_END_DECLS
 
