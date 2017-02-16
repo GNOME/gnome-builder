@@ -75,6 +75,18 @@ enum {
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+static void
+ide_build_manager_propagate_busy (IdeBuildManager *self)
+{
+  gboolean busy = ide_build_manager_get_busy (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "cancel", busy);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "build", !busy);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "rebuild", !busy);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "clean", !busy);
+}
+
 static gboolean
 timer_callback (gpointer data)
 {
@@ -158,8 +170,7 @@ ide_build_manager_notify_busy (IdeBuildManager  *self,
   g_assert (G_IS_PARAM_SPEC (pspec));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  if (pipeline == self->pipeline)
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  ide_build_manager_propagate_busy (self);
 
   IDE_EXIT;
 }
@@ -338,11 +349,12 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                     ide_build_manager_ensure_runtime_cb,
                                     g_steal_pointer (&task));
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+
+  ide_build_manager_propagate_busy (self);
 
   IDE_EXIT;
 }
@@ -676,6 +688,8 @@ ide_build_manager_action_clean (GSimpleAction *action,
 static void
 ide_build_manager_init (IdeBuildManager *self)
 {
+  static const gchar *invert_names[] = { "build", "clean", "rebuild" };
+  static const gchar *names[] = { "cancel" };
   static GActionEntry actions[] = {
     { "build", ide_build_manager_action_build },
     { "cancel", ide_build_manager_action_cancel },
@@ -691,6 +705,20 @@ ide_build_manager_init (IdeBuildManager *self)
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
+
+  for (guint i = 0; i < G_N_ELEMENTS (invert_names); i++)
+    {
+      const gchar *name = invert_names [i];
+      GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
+      g_object_bind_property (self, "busy", action, "enabled", G_BINDING_INVERT_BOOLEAN);
+    }
+
+  for (guint i = 0; i < G_N_ELEMENTS (names); i++)
+    {
+      const gchar *name = names [i];
+      GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
+      g_object_bind_property (self, "busy", action, "enabled", 0);
+    }
 
   self->pipeline_signals = egg_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
 
@@ -881,7 +909,7 @@ ide_build_manager_execute_cb (GObject      *object,
   g_task_return_boolean (task, TRUE);
 
 failure:
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  ide_build_manager_propagate_busy (self);
 
   IDE_EXIT;
 }
@@ -919,10 +947,11 @@ ide_build_manager_save_all_cb (GObject      *object,
                                     ide_build_manager_execute_cb,
                                     g_steal_pointer (&task));
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+
+  ide_build_manager_propagate_busy (self);
 
   IDE_EXIT;
 }
@@ -1012,10 +1041,11 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
                                     ide_build_manager_execute_cb,
                                     g_steal_pointer (&task));
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+
+  ide_build_manager_propagate_busy (self);
 
   IDE_EXIT;
 }
@@ -1075,7 +1105,7 @@ ide_build_manager_clean_cb (GObject      *object,
   g_task_return_boolean (task, TRUE);
 
 failure:
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  ide_build_manager_propagate_busy (self);
 }
 
 void
@@ -1117,8 +1147,9 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
                                   ide_build_manager_clean_cb,
                                   g_steal_pointer (&task));
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
+
+  ide_build_manager_propagate_busy (self);
 
   IDE_EXIT;
 }
