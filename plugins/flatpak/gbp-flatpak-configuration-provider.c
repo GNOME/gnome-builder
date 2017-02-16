@@ -113,8 +113,8 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       const gchar *new_runtime_id;
       const gchar *config_prefix;
       const gchar *new_prefix;
+      const gchar *new_runtime_name = NULL;
       gchar *json_string;
-      gchar *new_runtime_name;
       GFile *manifest;
       gboolean in_config_opts_array;
       gboolean in_primary_module;
