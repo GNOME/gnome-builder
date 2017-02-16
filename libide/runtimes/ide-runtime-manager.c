@@ -350,7 +350,6 @@ ide_runtime_manager_ensure_async (IdeRuntimeManager   *self,
                                   gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  IdeRuntime *runtime;
   InstallLookup lookup = {
     .runtime_id = runtime_id,
     .provider = NULL
@@ -366,13 +365,11 @@ ide_runtime_manager_ensure_async (IdeRuntimeManager   *self,
   g_task_set_source_tag (task, ide_runtime_manager_ensure_async);
   g_task_set_task_data (task, g_strdup (runtime_id), g_free);
 
-  runtime = ide_runtime_manager_get_runtime (self, runtime_id);
-
-  if (runtime != NULL)
-    {
-      g_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
-      IDE_EXIT;
-    }
+  /*
+   * It would be tempting to just return early here if we could locate
+   * the runtime as already registered. But that isn't enough since we
+   * might need to also install an SDK.
+   */
 
   peas_extension_set_foreach (self->extensions,
                               (PeasExtensionSetForeachFunc) install_lookup_cb,
