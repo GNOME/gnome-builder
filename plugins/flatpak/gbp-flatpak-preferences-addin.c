@@ -21,6 +21,7 @@
 #include <flatpak.h>
 #include <glib/gi18n.h>
 
+#include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-preferences-addin.h"
 #include "gbp-flatpak-transfer.h"
 
@@ -46,9 +47,11 @@ create_row (GbpFlatpakPreferencesAddin *self,
 {
   g_autofree gchar *label = NULL;
   g_autoptr(GbpFlatpakTransfer) transfer = NULL;
+  GbpFlatpakApplicationAddin *app_addin;
   GtkWidget *box;
   GtkWidget *button;
 
+  app_addin = gbp_flatpak_application_addin_get_default ();
   transfer = gbp_flatpak_transfer_new (name, arch, branch, TRUE);
 
   box = g_object_new (GTK_TYPE_BOX,
@@ -75,7 +78,7 @@ create_row (GbpFlatpakPreferencesAddin *self,
                          "width-request", 100,
                          NULL);
 
-  if (gbp_flatpak_transfer_is_installed (transfer, NULL))
+  if (gbp_flatpak_application_addin_has_runtime (app_addin, name, arch, branch))
     gtk_button_set_label (GTK_BUTTON (button), _("Update"));
 
   /* TODO: Update label after transfer completes */
