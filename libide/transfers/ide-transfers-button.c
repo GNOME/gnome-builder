@@ -153,8 +153,6 @@ create_transfer_row (gpointer item,
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_transfers_button_begin_theatrics (self);
-
   return GTK_WIDGET (row);
 }
 
@@ -214,6 +212,8 @@ ide_transfers_button_transfer_completed (IdeTransfersButton *self,
 
   if (lookup.row != NULL)
     ide_transfer_row_pump (lookup.row);
+
+  ide_transfers_button_begin_theatrics (self);
 }
 
 static void
