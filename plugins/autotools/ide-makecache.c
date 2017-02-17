@@ -1590,7 +1590,18 @@ ide_makecache_get_build_targets_worker (GTask        *task,
             }
           else
             {
-              ide_subprocess_launcher_replace_argv (launcher, (num_args + 1), rel_path);
+              /*
+               * Because the launcher might modify the arguments (as the flatpak one does),
+               * we should recalculate where the subdirectory is in the list.
+               */
+              const gchar * const * current_argv;
+              guint subdir_pos;
+              current_argv = ide_subprocess_launcher_get_argv (launcher);
+              for (subdir_pos = 0;
+                   current_argv[subdir_pos] != NULL &&
+                   g_strcmp0 (current_argv[subdir_pos], "-C") != 0;
+                   subdir_pos++) { }
+              ide_subprocess_launcher_replace_argv (launcher, (subdir_pos + 1), rel_path);
             }
         }
 
