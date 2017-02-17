@@ -75,7 +75,8 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
       for (guint i = 0; envp[i] != NULL; i++)
         {
           g_autofree gchar *arg = g_strdup_printf ("--env=%s", envp[i]);
-          ide_subprocess_launcher_insert_argv (launcher, argpos, arg);
+          if (!g_strv_contains (argv, arg))
+            ide_subprocess_launcher_insert_argv (launcher, argpos, arg);
         }
     }
 
