@@ -454,6 +454,24 @@ gbp_flatpak_runtime_get_sdk (GbpFlatpakRuntime *self)
   return self->sdk;
 }
 
+gchar *
+gbp_flatpak_runtime_get_sdk_name (GbpFlatpakRuntime *self)
+{
+  const gchar *slash;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  if (self->sdk == NULL)
+    return NULL;
+
+  slash = strchr (self->sdk, '/');
+
+  if (slash == NULL)
+    return g_strdup (self->sdk);
+  else
+    return g_strndup (self->sdk, slash - self->sdk);
+}
+
 void
 gbp_flatpak_runtime_set_sdk (GbpFlatpakRuntime *self,
                              const gchar       *sdk)
