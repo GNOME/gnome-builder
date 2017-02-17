@@ -339,26 +339,6 @@ ide_omni_bar_row_activated (IdeOmniBar    *self,
   ide_configuration_manager_set_current (config_manager, config);
 }
 
-static gboolean
-add_target_prefix_transform (GBinding     *binding,
-                             const GValue *from_value,
-                             GValue       *to_value,
-                             gpointer      user_data)
-{
-  g_assert (G_IS_BINDING (binding));
-  g_assert (from_value != NULL);
-  g_assert (G_VALUE_HOLDS_STRING (from_value));
-  g_assert (to_value != NULL);
-
-  g_value_take_string (to_value,
-                       g_strdup_printf ("%s: %s",
-                                        /* Translators: "Target" is providing context to the selected build configuration */
-                                        _("Target"),
-                                        g_value_get_string (from_value)));
-
-  return TRUE;
-}
-
 static void
 ide_omni_bar_context_set (GtkWidget  *widget,
                           IdeContext *context)
@@ -780,15 +760,11 @@ ide_omni_bar_init (IdeOmniBar *self)
 
   self->config_manager_bindings = egg_binding_group_new ();
 
-  egg_binding_group_bind_full (self->config_manager_bindings,
-                               "current-display-name",
-                               self->config_name_label,
-                               "label",
-                               G_BINDING_SYNC_CREATE,
-                               add_target_prefix_transform,
-                               NULL,
-                               NULL,
-                               NULL);
+  egg_binding_group_bind (self->config_manager_bindings,
+                          "current-display-name",
+                          self->config_name_label,
+                          "label",
+                          G_BINDING_SYNC_CREATE);
 
   self->config_manager_signals = egg_signal_group_new (IDE_TYPE_CONFIGURATION_MANAGER);
 
