@@ -109,12 +109,12 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
   g_autofree gchar *staging_dir = NULL;
+  g_autofree gchar *sdk = NULL;
   g_autofree gchar *metadata_path = NULL;
   IdeConfiguration *config;
   IdeRuntime *runtime;
   const gchar *app_id;
   const gchar *platform;
-  const gchar *sdk;
   const gchar *branch;
   guint stage_id;
 
@@ -139,7 +139,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   staging_dir = gbp_flatpak_get_staging_dir (config);
   app_id = ide_configuration_get_app_id (config);
   platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
-  sdk = gbp_flatpak_runtime_get_sdk (GBP_FLATPAK_RUNTIME (runtime));
+  sdk = gbp_flatpak_runtime_get_sdk_name (GBP_FLATPAK_RUNTIME (runtime));
   branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
 
   if (platform == NULL && sdk == NULL)
@@ -155,7 +155,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
     platform = sdk;
 
   if (sdk == NULL)
-    sdk = platform;
+    sdk = g_strdup (platform);
 
   metadata_path = g_build_filename (staging_dir, "metadata", NULL);
 
