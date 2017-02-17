@@ -29,24 +29,24 @@ G_DECLARE_FINAL_TYPE (GbpFlatpakConfiguration, gbp_flatpak_configuration, GBP, F
 
 const gchar         *gbp_flatpak_configuration_get_branch         (GbpFlatpakConfiguration *self);
 void                 gbp_flatpak_configuration_set_branch         (GbpFlatpakConfiguration *self,
-                                                                   const gchar *branch);
+                                                                   const gchar             *branch);
 const gchar         *gbp_flatpak_configuration_get_command        (GbpFlatpakConfiguration *self);
 void                 gbp_flatpak_configuration_set_command        (GbpFlatpakConfiguration *self,
-                                                                   const gchar *command);
+                                                                   const gchar             *command);
 const gchar * const *gbp_flatpak_configuration_get_finish_args    (GbpFlatpakConfiguration *self);
 void                 gbp_flatpak_configuration_set_finish_args    (GbpFlatpakConfiguration *self,
-                                                                   const gchar * const *finish_args);
+                                                                   const gchar * const     *finish_args);
 GFile               *gbp_flatpak_configuration_get_manifest       (GbpFlatpakConfiguration *self);
 gchar               *gbp_flatpak_configuration_get_manifest_path  (GbpFlatpakConfiguration *self);
 const gchar         *gbp_flatpak_configuration_get_platform       (GbpFlatpakConfiguration *self);
 void                 gbp_flatpak_configuration_set_platform       (GbpFlatpakConfiguration *self,
-                                                                   const gchar *platform);
+                                                                   const gchar             *platform);
 const gchar         *gbp_flatpak_configuration_get_primary_module (GbpFlatpakConfiguration *self);
 void                 gbp_flatpak_configuration_set_primary_module (GbpFlatpakConfiguration *self,
-                                                                   const gchar *primary_module);
+                                                                   const gchar             *primary_module);
 const gchar         *gbp_flatpak_configuration_get_sdk            (GbpFlatpakConfiguration *self);
 void                 gbp_flatpak_configuration_set_sdk            (GbpFlatpakConfiguration *self,
-                                                                   const gchar *sdk);
+                                                                   const gchar             *sdk);
 
 G_END_DECLS
 
