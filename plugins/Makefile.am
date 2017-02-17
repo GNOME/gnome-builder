@@ -32,6 +32,7 @@ SUBDIRS = \
 	python-pack \
 	quick-highlight \
 	rust-langserv \
+	rustup \
 	support \
 	symbol-tree \
 	sysmon \

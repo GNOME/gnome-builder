@@ -1,0 +1,9 @@
+[Plugin]
+Module=rustup_plugin
+Name=RustUp
+Loader=python3
+Description=Helps you keep your rust installation updated
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2016 Christian Hergert
+Builtin=true
+Hidden=true
