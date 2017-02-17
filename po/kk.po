@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-15 00:40+0000\n"
-"PO-Revision-Date: 2017-02-15 09:28+0500\n"
+"POT-Creation-Date: 2017-02-16 15:47+0000\n"
+"PO-Revision-Date: 2017-02-17 11:45+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -188,15 +188,15 @@ msgstr "Мәні"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
 msgid "Cielab l"
-msgstr ""
+msgstr "Cielab l"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
 msgid "Cielab a"
-msgstr ""
+msgstr "Cielab a"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
 msgid "Cielab b"
-msgstr ""
+msgstr "Cielab b"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
 msgid "Red"
@@ -233,15 +233,15 @@ msgstr "V"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:322
 msgid "L*"
-msgstr ""
+msgstr "L*"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:332
 msgid "a*"
-msgstr ""
+msgstr "a*"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:342
 msgid "b*"
-msgstr ""
+msgstr "b*"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:441
 msgid "R"
@@ -249,11 +249,11 @@ msgstr "R"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:451
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:461
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:573
 #: plugins/color-picker/gtk/color-picker-prefs.ui:433
@@ -429,6 +429,8 @@ msgstr "Ағымдағы жолды түспен ерекшелеу"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr ""
+"Іске қосылған болса, түзеткіш курсор орналасқан жолды түспен ерекшелейтін "
+"болады."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
@@ -437,6 +439,7 @@ msgstr "Сәйкес жақшаларды түспен ерекшелеу"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
 msgstr ""
+"Іске қосылған болса, түзеткіш сәйкес жақшаларды түспен ерекшелейтін болады."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
@@ -444,7 +447,7 @@ msgstr "Жол нөмірлерін көрсету"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr ""
+msgstr "Іске қосылған болса, түзеткіш жолдар нөмірлерін көрсетеді."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 #: libide/editor/ide-editor-tweak-widget.ui:91
@@ -579,7 +582,7 @@ msgstr "Алдыңғы файлдарды қалпына келтіру"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:36
 msgid "Restore previously opened files when loading a project."
-msgstr ""
+msgstr "Жобаны жүктеу кезінде алдында ашылған файлдарды қалпына келтіру."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
@@ -592,6 +595,7 @@ msgstr "Жобаның бүйір панелін көрсету"
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the sidebar will be visible in the editor workspace."
 msgstr ""
+"Іске қосылған болса, түзеткіш жұмыс орнында бүйір панель көрсетілетін болады."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:84
@@ -601,6 +605,8 @@ msgstr "Таңбашаларды көрсету"
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid "If enabled, the project tree will display icons next to each item."
 msgstr ""
+"Іске қосылған болса, жоба ағашы әр нәрсенің қасында оның таңбашасын "
+"көрсетеді."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: plugins/project-tree/gtk/menus.ui:88
@@ -618,7 +624,7 @@ msgstr "Сол жақ панельді көрсету"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
 msgid "If enabled, the left panel will be displayed."
-msgstr ""
+msgstr "Іске қосылған болса, сол жақ панелі көрсетілетін болады."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
 msgid "Left Panel Position"
@@ -626,7 +632,7 @@ msgstr "Сол жақ панель орналасуы"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
 msgid "The width in pixel units of the left panel."
-msgstr ""
+msgstr "Сол жақ панельдің пиксельмен есептелген ені."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
 msgid "Show Right Panel"
@@ -634,7 +640,7 @@ msgstr "Оң жақ панельді көрсету"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
 msgid "If enabled, the right panel will be displayed."
-msgstr ""
+msgstr "Іске қосылған болса, оң жақ панелі көрсетілетін болады."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
 msgid "Right Panel Position"
@@ -642,7 +648,7 @@ msgstr "Оң жақ панель орналасуы"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
 msgid "The width in pixel units of the right panel."
-msgstr ""
+msgstr "Оң жақ панельдің пиксельмен есептелген ені."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
 msgid "Show Bottom Panel"
@@ -650,7 +656,7 @@ msgstr "Төменгі панельді көрсету"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
 msgid "If enabled, the bottom panel will be displayed."
-msgstr ""
+msgstr "Іске қосылған болса, астыңғы панель көрсетілетін болады."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
 msgid "Bottom Panel Position"
@@ -658,7 +664,7 @@ msgstr "Төменгі панель орналасуы"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
 msgid "The height in pixel units of the bottom panel."
-msgstr ""
+msgstr "Астыңғы панельдің пиксельмен есептелген биіктігі."
 
 #: data/gtk/menus.ui:7
 msgid "_New Project"
@@ -993,7 +999,7 @@ msgid "Run Builder in standalone mode"
 msgstr ""
 
 #: libide/application/ide-application-command-line.c:201
-msgid "Show the application's version"
+msgid "Show the application’s version"
 msgstr "Қолданба нұсқасын көрсету"
 
 #: libide/application/ide-application-command-line.c:220
@@ -1459,7 +1465,7 @@ msgstr "Ұсыныстар жоқ"
 
 #: libide/editor/ide-editor-spell-widget.c:278
 msgid "Completed spell checking"
-msgstr ""
+msgstr "Емлені тексеру аяқталды"
 
 #: libide/editor/ide-editor-spell-widget.c:636
 msgid "This word is already in the personal dictionary"
@@ -1488,15 +1494,15 @@ msgstr "Б_арлығын елемеу"
 
 #: libide/editor/ide-editor-spell-widget.ui:92
 msgid "Change _to"
-msgstr ""
+msgstr "Келесіге өз_герту"
 
 #: libide/editor/ide-editor-spell-widget.ui:124
 msgid "Cha_nge"
-msgstr ""
+msgstr "Ө_згерту"
 
 #: libide/editor/ide-editor-spell-widget.ui:132
 msgid "Change A_ll"
-msgstr ""
+msgstr "Б_арлығын өзгерту"
 
 #: libide/editor/ide-editor-spell-widget.ui:151
 msgid "_Suggestions"
@@ -1597,6 +1603,8 @@ msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr ""
+"Құрастырушы бұл файл сыртқы қолданбамен өзгертілгенін анықтады. Бұл файлды "
+"қайта жүктеуді қалайсыз ба?"
 
 #: libide/greeter/ide-greeter-perspective.c:456
 msgid "Failed to load the project"
@@ -1860,7 +1868,7 @@ msgstr "Алмасу буферінен мәтінді кірістіру"
 #: libide/keybindings/ide-shortcuts-window.ui:224
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
-msgstr ""
+msgstr "Ағымдағы жолды немесе таңдауды қосарлау"
 
 #: libide/keybindings/ide-shortcuts-window.ui:232
 msgctxt "shortcut window"
@@ -1945,42 +1953,42 @@ msgstr "Файлдағы алдыңғы қатеге жылжу"
 #: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
-msgstr ""
+msgstr "Алдыңғы түзету орнына жылжыту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Move to next edit location"
-msgstr ""
+msgstr "Келесі түзету орнына жылжыту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
-msgstr ""
+msgstr "Таңбаның анықтамасына өту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
-msgstr ""
+msgstr "Көріну аймағын файл бойымен жоғары жылжыту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
-msgstr ""
+msgstr "Көріну аймағын файл бойымен төмен жылжыту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
-msgstr ""
+msgstr "Көріну аймағын файл соңына жылжыту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
-msgstr ""
+msgstr "Көріну аймағын файл басына жылжыту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
-msgstr ""
+msgstr "Сәйкес жақшаға жылжыту"
 
 #: libide/keybindings/ide-shortcuts-window.ui:391
 msgctxt "shortcut window"
@@ -2317,15 +2325,15 @@ msgstr "Шет өрістері"
 
 #: libide/preferences/ide-preferences-builtin.c:321
 msgid "Show right margin"
-msgstr ""
+msgstr "Оң жақ шет өрісін көрсету"
 
 #: libide/preferences/ide-preferences-builtin.c:322
 msgid "Right margin position"
-msgstr ""
+msgstr "Оң жақ шет өрісінің орны"
 
 #: libide/preferences/ide-preferences-builtin.c:322
 msgid "Position in spaces for the right margin"
-msgstr ""
+msgstr "Оң жақ шет өрісінің бос аралықтармен есептелген орны"
 
 #: libide/preferences/ide-preferences-builtin.c:325
 msgid "Tab width"
@@ -2333,23 +2341,23 @@ msgstr "Табуляция ені"
 
 #: libide/preferences/ide-preferences-builtin.c:325
 msgid "Width of a tab character in spaces"
-msgstr ""
+msgstr "Табуляцияның бос аралықтармен есептелген ені"
 
 #: libide/preferences/ide-preferences-builtin.c:326
 msgid "Insert spaces instead of tabs"
-msgstr ""
+msgstr "Табуляция орнына бос аралықтарды енгізу"
 
 #: libide/preferences/ide-preferences-builtin.c:326
 msgid "Prefer spaces over use of tabs"
-msgstr ""
+msgstr "Табуляцияның орнына бос аралықтарды қолдану"
 
 #: libide/preferences/ide-preferences-builtin.c:327
 msgid "Automatically indent"
-msgstr ""
+msgstr "Автошегіну"
 
 #: libide/preferences/ide-preferences-builtin.c:327
 msgid "Indent source code as you type"
-msgstr ""
+msgstr "Бастапқы кодты теріп отырған кезде шегіну"
 
 #: libide/preferences/ide-preferences-builtin.c:342
 #: libide/preferences/ide-preferences-builtin.c:360
@@ -2370,7 +2378,7 @@ msgstr "Жобалар"
 
 #: libide/preferences/ide-preferences-builtin.c:392
 msgid "Workspace"
-msgstr ""
+msgstr "Жұмыс орны"
 
 #: libide/preferences/ide-preferences-builtin.c:393
 msgid "A place for all your projects"
@@ -2382,7 +2390,7 @@ msgstr "Алдында ашылған файлдарды қалпына келт
 
 #: libide/preferences/ide-preferences-builtin.c:394
 msgid "Open previously opened files when loading a project"
-msgstr ""
+msgstr "Жобаны жүктеу кезінде алдында ашылған файлдарды ашу"
 
 #: libide/preferences/ide-preferences-builtin.c:396
 msgid "Project Discovery"
@@ -2500,7 +2508,7 @@ msgstr "ILCreateFromPath() сәтсіз аяқталды"
 
 #: libide/util/ide-file-manager.c:129
 #, c-format
-msgid "Cannot convert '%s' into a valid NSURL."
+msgid "Cannot convert “%s” into a valid NSURL."
 msgstr ""
 
 #: libide/util/ide-file-manager.c:157
@@ -2522,32 +2530,32 @@ msgstr ""
 
 #: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
 #, c-format
-msgid "Invalid IP literal '%s' in URI"
+msgid "Invalid IP literal “%s” in URI"
 msgstr ""
 
 #: libide/util/ide-uri.c:411
 #, c-format
-msgid "Invalid encoded IP literal '%s' in URI"
+msgid "Invalid encoded IP literal “%s” in URI"
 msgstr ""
 
 #: libide/util/ide-uri.c:420
 #, c-format
-msgid "Invalid non-ASCII hostname '%s' in URI"
+msgid "Invalid non-ASCII hostname “%s” in URI"
 msgstr ""
 
 #: libide/util/ide-uri.c:434
 #, c-format
-msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgid "Non-ASCII hostname “%s” forbidden in this URI"
 msgstr ""
 
 #: libide/util/ide-uri.c:457
 #, c-format
-msgid "Could not parse port '%s' in URI"
+msgid "Could not parse port “%s” in URI"
 msgstr ""
 
 #: libide/util/ide-uri.c:464
 #, c-format
-msgid "Port '%s' in URI is out of range"
+msgid "Port “%s” in URI is out of range"
 msgstr ""
 
 #: libide/util/ide-uri.c:590
@@ -2560,12 +2568,12 @@ msgstr ""
 
 #: libide/util/ide-uri.c:660
 #, c-format
-msgid "Could not parse '%s' as absolute URI"
+msgid "Could not parse “%s” as absolute URI"
 msgstr ""
 
 #: libide/util/ide-uri.c:1203
 #, c-format
-msgid "URI '%s' has no host component"
+msgid "URI “%s” has no host component"
 msgstr ""
 
 #: libide/workbench/ide-layout-tab-bar.ui:33
@@ -2651,8 +2659,9 @@ msgstr "Файлды ашу"
 
 #: libide/workbench/ide-workbench.c:563
 #, c-format
-msgid "%s - Builder"
-msgstr "%s - Құрастырушы"
+#| msgid "%s - Builder"
+msgid "%s — Builder"
+msgstr "%s — Құрастырушы"
 
 #: libide/workbench/ide-workbench-header-bar.ui:43
 msgid "Transfers"
@@ -2881,7 +2890,7 @@ msgid "Filters:"
 msgstr "Сүзгілер:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
-msgid "Select a filter that act on the colors or 'None'."
+msgid "Select a filter that act on the colors or “None”."
 msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
@@ -2960,8 +2969,8 @@ msgstr "%s %s үшін жарамсыз"
 
 #: plugins/command-bar/gb-vim.c:158
 #, c-format
-msgid "Cannot find language '%s'"
-msgstr "'%s' тілін табу мүмкін емес"
+msgid "Cannot find language “%s”"
+msgstr "\"%s\" тілін табу мүмкін емес"
 
 #: plugins/command-bar/gb-vim.c:315
 msgid "This command requires a GtkSourceView to be focused"
@@ -2978,8 +2987,8 @@ msgstr "Белгісіз опция: %s"
 
 #: plugins/command-bar/gb-vim.c:426
 #, c-format
-msgid "Cannot find colorscheme '%s'"
-msgstr ""
+msgid "Cannot find colorscheme “%s”"
+msgstr "\"%s\" түстер схемасын табу сәтсіз аяқталды"
 
 #: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
@@ -3075,7 +3084,7 @@ msgstr "Жоба атауы"
 
 #: plugins/create-project/gbp-create-project-widget.ui:55
 msgid ""
-"Unique name that is used for your project's folder and other technical "
+"Unique name that is used for your project’s folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
 "number."
 msgstr ""
@@ -3154,50 +3163,43 @@ msgstr "Қолданбаны клондау"
 msgid "Clone"
 msgstr "Клондау"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:73
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:76
 msgid "Install"
 msgstr "Орнату"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:79
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:82
 msgid "Update"
 msgstr "Жаңарту"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:193
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:196
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:194
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:197
 msgid "Application Runtimes"
 msgstr ""
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:199
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:202
 msgid "Developer SDKs"
 msgstr ""
 
-#. translators: message is used to notify to the user we are checking for a flatpak repository
-#: plugins/flatpak/gbp-flatpak-transfer.c:131
+#: plugins/flatpak/gbp-flatpak-runtime.c:647
 #, c-format
-msgid "Checking for %s repository"
-msgstr ""
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:240
+#: plugins/flatpak/gbp-flatpak-runtime.c:649
 #, c-format
-msgid "Updating “%s”"
-msgstr "\"%s\" жаңарту"
+msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:276
+#: plugins/flatpak/gbp-flatpak-transfer.c:214
 #, c-format
-msgid "Installing “%s” from “%s”"
-msgstr ""
+#| msgid "Installing…"
+msgid "Installing %s %s"
+msgstr "%s %s орнату"
 
-#. Translators: %s is the id of the runtime such as org.gnome.Sdk/x86_64/master
-#: plugins/flatpak/gbp-flatpak-transfer.c:466
-#, c-format
-#| msgid "Failed to load file: %s: %s"
-msgid "Failed to locate %s/%s/%s"
-msgstr "%s/%s/%s табу мүмкін емес"
-
-#: plugins/flatpak/gbp-flatpak-transfer.c:574
+#: plugins/flatpak/gbp-flatpak-transfer.c:216
 #, c-format
 msgid "Installing %s %s for %s"
 msgstr ""
@@ -3240,7 +3242,7 @@ msgid "user@host:repository.git"
 msgstr "user@host:repository.git"
 
 #: plugins/git/ide-git-clone-widget.ui:67
-msgid "Enter the URL of your project's source code repository"
+msgid "Enter the URL of your project’s source code repository"
 msgstr ""
 
 #: plugins/git/ide-git-clone-widget.ui:94
@@ -3297,8 +3299,8 @@ msgstr ""
 
 #: plugins/hello-cpp/hellocppapplicationaddin.cc:48
 #, c-format
-msgid "Wow! You've spent with Builder %d second!\n"
-msgid_plural "Wow! You've spent with Builder %d seconds!\n"
+msgid "Wow! You’ve spent with Builder %d second!\n"
+msgid_plural "Wow! You’ve spent with Builder %d seconds!\n"
 msgstr[0] ""
 
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
@@ -3446,7 +3448,7 @@ msgstr "Қолдау көрсету журналын жасау"
 #: plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
-"The support log file has been written to '%s'. Please provide this file as "
+"The support log file has been written to “%s”. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
 "Қолдау көрсету журналы \"%s\" файлына жазылды. Бұл файлды сіздің ақаулық "
@@ -3493,7 +3495,7 @@ msgstr "Профильді ашу"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:311
 msgid "Sysprof Capture (*.syscap)"
-msgstr ""
+msgstr "Sysprof Capture (*.syscap)"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:317
 msgid "All Files"
@@ -3556,6 +3558,13 @@ msgstr ""
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "XML ағашын жасау сәтсіз аяқталды."
+
+#~ msgid "Updating “%s”"
+#~ msgstr "\"%s\" жаңарту"
+
+#~| msgid "Failed to load file: %s: %s"
+#~ msgid "Failed to locate %s/%s/%s"
+#~ msgstr "%s/%s/%s табу мүмкін емес"
 
 #~ msgid "%s does not support building"
 #~ msgstr "%s құрастыруды қолдамайды"
