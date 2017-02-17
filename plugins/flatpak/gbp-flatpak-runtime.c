@@ -262,6 +262,38 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
   return ret;
 }
 
+static gchar *
+get_binary_name (GbpFlatpakRuntime *self,
+                 IdeBuildTarget    *build_target)
+{
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+  IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
+  IdeConfiguration *config = ide_configuration_manager_get_current (config_manager);
+
+  if (GBP_IS_FLATPAK_CONFIGURATION (config))
+    {
+      const gchar *command;
+      command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
+      if (!ide_str_empty0 (command))
+        return g_strdup (command);
+    }
+
+  /* Use the build target name if there's no command in the manifest */
+  {
+    g_autofree gchar *build_target_name = NULL;
+    build_target_name = ide_build_target_get_name (build_target);
+    if (!ide_str_empty0 (build_target_name))
+      return g_steal_pointer (&build_target_name);
+  }
+
+  /* Use the project name as a last resort */
+  {
+    IdeProject *project;
+    project = ide_context_get_project (context);
+    return g_strdup (ide_project_get_name (project));
+  }
+}
+
 IdeRunner *
 gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
                                    IdeBuildTarget *build_target)
@@ -280,14 +312,7 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   g_assert (GBP_IS_FLATPAK_RUNNER (runner));
 
   build_path = get_staging_directory (self);
-  binary_name = ide_build_target_get_name (build_target);
-  /* Use the project name if we can't determine the binary */
-  if (ide_str_empty0 (binary_name))
-    {
-      IdeProject *project;
-      project = ide_context_get_project (context);
-      binary_name = g_strdup (ide_project_get_name (project));
-    }
+  binary_name = get_binary_name (self, build_target);
 
   ide_runner_set_run_on_host (IDE_RUNNER (runner), TRUE);
   ide_runner_append_argv (IDE_RUNNER (runner), "flatpak");
