@@ -45,6 +45,18 @@ AC_SUBST(LIBIDE_VERSION)
 
 
 dnl ***********************************************************************
+dnl Check if we are building from a git checkout
+dnl ***********************************************************************
+building_from_git=no
+AS_IF([test -d "${srcdir}/.git"],[
+       building_from_git=yes
+       COMMIT_ID=`git describe --always | cut -f 2- -d -`
+       AC_DEFINE_UNQUOTED([COMMIT_ID], ["$COMMIT_ID"], [git commit suffix])
+       AC_SUBST(COMMIT_ID)
+])
+
+
+dnl ***********************************************************************
 dnl Initialize Automake
 dnl ***********************************************************************
 AM_SILENT_RULES([yes])
@@ -555,6 +567,7 @@ echo " ${PACKAGE} - ${VERSION}"
 echo ""
 echo " Options"
 echo ""
+echo "  Building from Git .................... : ${building_from_git}"
 echo "  Prefix ............................... : ${prefix}"
 echo "  Libdir ............................... : ${libdir}"
 echo "  Optimized Build ...................... : ${enable_optimizations}"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-support"
 
+#include "config.h"
+
 #include <egg-counter.h>
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -58,6 +60,13 @@ ide_get_support_log (void)
   guint n_monitors;
 
   str = g_string_new (NULL);
+
+  g_string_append (str, "[runtime.version]\n");
+  g_string_append_printf (str, "version = \"%s\"\n", PACKAGE_VERSION);
+#ifdef COMMIT_ID
+  g_string_append_printf (str, "commit = \"%s\"\n", COMMIT_ID);
+#endif
+  g_string_append (str, "\n");
 
   /*
    * Log host information.

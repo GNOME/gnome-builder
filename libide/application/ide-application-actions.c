@@ -122,7 +122,11 @@ ide_application_actions_about (GSimpleAction *action,
                          "program-name", _("GNOME Builder"),
                          "transient-for", parent,
                          "translator-credits", _("translator-credits"),
+#ifdef COMMIT_ID
+                         "version", PACKAGE_VERSION "+" COMMIT_ID,
+#else
                          "version", PACKAGE_VERSION,
+#endif
                          "website", "https://wiki.gnome.org/Apps/Builder",
                          "website-label", _("Learn more about GNOME Builder"),
                          NULL);
