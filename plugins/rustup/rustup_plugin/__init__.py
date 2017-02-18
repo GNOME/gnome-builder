@@ -258,7 +258,7 @@ class RustupInstaller(Ide.Object, Ide.Transfer):
         elif self.mode == _MODE_UPDATE:
             self.props.title = _('Updating rustup')
         elif self.mode == _MODE_INSTALL_TOOLCHAIN:
-            self.props.title = _('Installing ') + self.toolchain 
+            self.props.title = _('Installing ') + self.toolchain
         self.props.status = _('Checking system')
         self.props.icon_name = 'emblem-system-symbolic'
         self.state = _STATE_INIT
@@ -375,7 +375,7 @@ class RustupInstaller(Ide.Object, Ide.Transfer):
                 else:
                     self.props.status = _('Error')
                 task.return_boolean(False)
-                
+
         except Exception as ex:
             # cancelled error
             if ex.code is 19:
@@ -419,7 +419,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         rustup_toolchain_custom.pack_start(self.create_no_rustup_label(), True, True, 0)
         # gets displayed if no toolchain is currently installed
         rustup_toolchain_custom.pack_start(self.create_no_toolchain_view(), True, True, 0)
-        
+
         self.ids = [
             preferences.add_custom('sdk', 'rustup', rustup_custom, None, 1000),
             preferences.add_custom('sdk', 'rustup_toolchains_edit', rustup_toolchain_custom, None, 1000),
@@ -447,7 +447,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
 
         rustup_button = Gtk.Button(halign='end', valign='center', expand=True, visible=True)
         rustup_button.set_label(_('Update') if RustupApplicationAddin.instance.has_rustup else _('Install'))
-    
+
         # set the button label to install or update if rustup is available
         def has_rustup_callback(applicationAddin):
             rustup_button.set_label(_('Update') if applicationAddin.has_rustup else _('Install'))
@@ -459,13 +459,13 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
             rustup_button.set_sensitive(not applicationAddin.busy)
             if applicationAddin.busy:
                 rustup_button.set_label(_('Updating') if applicationAddin.active_transfer.mode == _MODE_UPDATE else _('Installing'))
-        RustupApplicationAddin.instance.connect('notify::busy', busy)      
+        RustupApplicationAddin.instance.connect('notify::busy', busy)
 
         # allow to install rustup if not detected or to update it
         def change_rustup(button):
             if RustupApplicationAddin.instance.has_rustup:
                 RustupApplicationAddin.instance.update()
-            else:   
+            else:
                 RustupApplicationAddin.instance.install()
         rustup_button.connect('clicked', change_rustup)
 
@@ -490,7 +490,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
                 item = self.store.get_item(row.get_index())
                 self.default_toolchain_button.set_sensitive(not item.default)
                 self.remove_toolchain.set_sensitive(True)
-            else:                
+            else:
                 self.default_toolchain_button.set_sensitive(False)
                 self.remove_toolchain.set_sensitive(False)
         self.toolchain_listbox.connect('row-selected', row_selected, self)
@@ -515,7 +515,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         self.remove_toolchain = Gtk.Button(image = remove_icon, halign='end', expand=False, visible=True)
         self.remove_toolchain.set_sensitive(False)
         list_control.pack_end(self.remove_toolchain, False, False, 0)
-        
+
         def remove_toolchain_(button):
             index = self.toolchain_listbox.get_selected_row().get_index()
             item = self.store.get_item(index)
@@ -533,7 +533,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         # disable button if we're busy
         def busy(applicationAddin, param):
             add_toolchain.set_sensitive(not applicationAddin.busy)
-        RustupApplicationAddin.instance.connect('notify::busy', busy) 
+        RustupApplicationAddin.instance.connect('notify::busy', busy)
 
         # reload toolchains
         def has_rustup_callback(applicationAddin):
