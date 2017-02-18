@@ -105,28 +105,29 @@ struct _IdeOmniBar
   /*
    * The following are template children from the GtkBuilder template.
    */
-  GtkLabel       *branch_label;
-  GtkEventBox    *event_box;
-  GtkLabel       *project_label;
-  GtkBox         *branch_box;
-  GtkLabel       *build_result_mode_label;
-  GtkImage       *build_result_diagnostics_image;
-  GtkButton      *build_button;
-  GtkButton      *cancel_button;
-  GtkLabel       *config_name_label;
-  GtkStack       *message_stack;
-  GtkPopover     *popover;
-  GtkLabel       *popover_branch_label;
-  GtkButton      *popover_build_cancel_button;
-  GtkLabel       *popover_build_mode_label;
-  GtkLabel       *popover_build_running_time_label;
-  GtkListBox     *popover_configuration_list_box;
-  GtkRevealer    *popover_details_revealer;
-  GtkLabel       *popover_failed_label;
-  GtkLabel       *popover_last_build_time_label;
-  GtkStack       *popover_time_stack;
-  GtkButton      *popover_view_output_button;
-  GtkLabel       *popover_project_label;
+  GtkLabel             *branch_label;
+  GtkEventBox          *event_box;
+  GtkLabel             *project_label;
+  GtkBox               *branch_box;
+  GtkLabel             *build_result_mode_label;
+  GtkImage             *build_result_diagnostics_image;
+  GtkButton            *build_button;
+  GtkShortcutsShortcut *build_button_shortcut;
+  GtkButton            *cancel_button;
+  GtkLabel             *config_name_label;
+  GtkStack             *message_stack;
+  GtkPopover           *popover;
+  GtkLabel             *popover_branch_label;
+  GtkButton            *popover_build_cancel_button;
+  GtkLabel             *popover_build_mode_label;
+  GtkLabel             *popover_build_running_time_label;
+  GtkListBox           *popover_configuration_list_box;
+  GtkRevealer          *popover_details_revealer;
+  GtkLabel             *popover_failed_label;
+  GtkLabel             *popover_last_build_time_label;
+  GtkStack             *popover_time_stack;
+  GtkButton            *popover_view_output_button;
+  GtkLabel             *popover_project_label;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
@@ -578,6 +579,21 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
 }
 
 static void
+ide_omni_bar__build_button__query_tooltip (IdeOmniBar *self,
+                                           gint        x,
+                                           gint        y,
+                                           gboolean    keyboard,
+                                           GtkTooltip *tooltip,
+                                           GtkButton  *button)
+{
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (GTK_IS_TOOLTIP (tooltip));
+  g_assert (GTK_IS_BUTTON (button));
+
+  gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_button_shortcut));
+}
+
+static void
 ide_omni_bar_finalize (GObject *object)
 {
   IdeOmniBar *self = (IdeOmniBar *)object;
@@ -620,6 +636,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button_shortcut);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, cancel_button);
@@ -647,6 +664,12 @@ ide_omni_bar_init (IdeOmniBar *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_widget_set_direction (GTK_WIDGET (self->branch_box), GTK_TEXT_DIR_LTR);
+
+  g_signal_connect_object (self->build_button,
+                           "query-tooltip",
+                           G_CALLBACK (ide_omni_bar__build_button__query_tooltip),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /*
    * IdeBuildManager bindings and signals.

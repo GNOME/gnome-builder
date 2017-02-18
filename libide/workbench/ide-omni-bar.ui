@@ -103,11 +103,11 @@
       <object class="GtkButton" id="build_button">
         <property name="action-name">build-manager.build</property>
         <property name="focus-on-click">false</property>
+        <property name="has-tooltip">yes</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkImage">
             <property name="icon-name">builder-build-symbolic</property>
-            <property name="tooltip-text" translatable="yes">Build project (Ctrl+F7)</property>
             <property name="visible">true</property>
           </object>
         </child>
@@ -409,5 +409,10 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkShortcutsShortcut" id="build_button_shortcut">
+    <property name="accelerator">&lt;primary&gt;F7</property>
+    <property name="title" translatable="yes">Build project</property>
+    <property name="visible">true</property>
   </object>
 </interface>
