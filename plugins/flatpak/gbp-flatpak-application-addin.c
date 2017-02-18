@@ -630,6 +630,7 @@ gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin
                                                       GError                     **error)
 {
   InstallRequest *request;
+  g_autoptr(GError) local_error = NULL;
 
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
@@ -647,7 +648,19 @@ gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin
       g_signal_emit (self, signals[RUNTIME_ADDED], 0, request->ref);
     }
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  if (!g_task_propagate_boolean (G_TASK (result), &local_error))
+    {
+      /* Ignore "already installed" errors. */
+      if (!g_error_matches (local_error, FLATPAK_ERROR, FLATPAK_ERROR_ALREADY_INSTALLED))
+        {
+          g_propagate_error (error,  g_steal_pointer (&local_error));
+          return FALSE;
+        }
+
+      g_clear_error (&local_error);
+    }
+
+  return TRUE;
 }
 
 gboolean
