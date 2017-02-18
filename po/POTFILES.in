@@ -170,6 +170,7 @@ plugins/project-tree/gb-rename-file-popover.ui
 plugins/project-tree/gtk/menus.ui
 plugins/python-pack/ide-python-format-provider.c
 plugins/quick-highlight/gbp-quick-highlight-preferences.c
+plugins/rustup/rustup_plugin/__init__.py
 plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c
 plugins/symbol-tree/symbol-tree-panel.c
