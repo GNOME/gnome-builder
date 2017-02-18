@@ -133,7 +133,9 @@ ide_preferences_page_add_group (IdePreferencesPage  *self,
 
   g_hash_table_insert (self->groups_by_name, name, group);
 
-  gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (group));
+  gtk_container_add_with_properties (GTK_CONTAINER (self->box), GTK_WIDGET (group),
+                                     "priority", ide_preferences_group_get_priority (group),
+                                     NULL);
 }
 
 /**
