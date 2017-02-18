@@ -28,11 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbTerminalSearch, gb_terminal_search, GB, TERMINAL_SEARCH, GtkBin)
 
-VteRegex    *terminal_search_get_regex       (GbTerminalSearch *self);
-gboolean     terminal_search_get_wrap_around (GbTerminalSearch *self);
-void         gb_terminal_search_set_terminal  (GbTerminalSearch *self,
-                							   VteTerminal      *terminal);
-GtkRevealer *terminal_search_get_revealer     (GbTerminalSearch *self);
+VteRegex    *gb_terminal_search_get_regex       (GbTerminalSearch *self);
+gboolean     gb_terminal_search_get_wrap_around (GbTerminalSearch *self);
+void         gb_terminal_search_set_terminal    (GbTerminalSearch *self,
+                                                 VteTerminal      *terminal);
+GtkRevealer *gb_terminal_search_get_revealer    (GbTerminalSearch *self);
 
 G_END_DECLS
 

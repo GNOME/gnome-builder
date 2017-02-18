@@ -461,7 +461,7 @@ focus_in_event_cb (VteTerminal    *terminal,
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
   self->bottom_has_focus = (terminal != self->terminal_top);
-  
+
   if (terminal == self->terminal_top)
     {
       self->top_has_needs_attention = FALSE;
@@ -601,7 +601,7 @@ gb_terminal_set_split_view (IdeLayoutView   *view,
       gtk_widget_show ( GTK_WIDGET (self->terminal_overlay_bottom));
 
       self->bsearch = g_object_new (GB_TYPE_TERMINAL_SEARCH, NULL);
-      self->search_revealer_bottom = terminal_search_get_revealer (self->bsearch);
+      self->search_revealer_bottom = gb_terminal_search_get_revealer (self->bsearch);
 
       gtk_overlay_add_overlay (self->terminal_overlay_bottom,
                                GTK_WIDGET (self->search_revealer_bottom));
@@ -822,7 +822,7 @@ gb_terminal_view_init (GbTerminalView *self)
   self->manage_spawn = TRUE;
 
   self->tsearch = g_object_new (GB_TYPE_TERMINAL_SEARCH, NULL);
-  self->search_revealer_top = terminal_search_get_revealer (self->tsearch);
+  self->search_revealer_top = gb_terminal_search_get_revealer (self->tsearch);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 

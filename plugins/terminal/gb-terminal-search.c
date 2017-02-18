@@ -145,7 +145,7 @@ update_regex (GbTerminalSearch *self)
 
   update_sensitivity (self);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_REGEX]);     
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_REGEX]);
 }
 
 static void
@@ -191,7 +191,7 @@ search_overlay_notify_regex_cb (VteTerminal    *terminal,
   g_assert (GB_IS_TERMINAL_SEARCH (self));
   g_assert (VTE_IS_TERMINAL (terminal));
 
-  regex = terminal_search_get_regex (self);
+  regex = gb_terminal_search_get_regex (self);
   vte_terminal_search_set_regex (VTE_TERMINAL (terminal), regex, 0);
 }
 
@@ -205,7 +205,7 @@ search_overlay_notify_wrap_around_cb (VteTerminal    *terminal,
   g_assert (GB_IS_TERMINAL_SEARCH (self));
   g_assert (VTE_IS_TERMINAL (terminal));
 
-  wrap = terminal_search_get_wrap_around (self);
+  wrap = gb_terminal_search_get_wrap_around (self);
   vte_terminal_search_set_wrap_around (terminal, wrap);
 }
 
@@ -230,7 +230,7 @@ search_revealer_cb (GtkRevealer      *search_revealer,
   g_assert (GB_IS_TERMINAL_SEARCH (self));
 
   if (gtk_revealer_get_child_revealed (search_revealer))
-    { 
+    {
       if (vte_terminal_get_has_selection (self->terminal))
         {
           vte_terminal_copy_primary (self->terminal);
@@ -278,11 +278,11 @@ gb_terminal_search_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_REGEX:
-      g_value_set_boxed (value, terminal_search_get_regex (self));
+      g_value_set_boxed (value, gb_terminal_search_get_regex (self));
       break;
-    
+
     case PROP_WRAP_AROUND:
-      g_value_set_boolean (value, terminal_search_get_wrap_around (self));
+      g_value_set_boolean (value, gb_terminal_search_get_wrap_around (self));
       break;
 
     default:
@@ -297,9 +297,9 @@ gb_terminal_search_class_init (GbTerminalSearchClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = gb_terminal_search_get_property;
-  
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-search.ui");
-  
+
   gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_prev_button);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_next_button);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, close_button);
@@ -365,13 +365,13 @@ gb_terminal_search_set_terminal (GbTerminalSearch *self,
                                  VteTerminal      *terminal)
 {
   g_assert (GB_IS_TERMINAL_SEARCH (self));
-  
+
   self->terminal = terminal;
   gb_terminal_search_connect_terminal (self);
 }
 
 VteRegex *
-terminal_search_get_regex (GbTerminalSearch *self)
+gb_terminal_search_get_regex (GbTerminalSearch *self)
 {
   g_return_val_if_fail (GB_IS_TERMINAL_SEARCH (self), NULL);
 
@@ -379,7 +379,7 @@ terminal_search_get_regex (GbTerminalSearch *self)
 }
 
 gboolean
-terminal_search_get_wrap_around (GbTerminalSearch *self)
+gb_terminal_search_get_wrap_around (GbTerminalSearch *self)
 {
   g_return_val_if_fail (GB_IS_TERMINAL_SEARCH (self), FALSE);
 
@@ -387,7 +387,7 @@ terminal_search_get_wrap_around (GbTerminalSearch *self)
 }
 
 GtkRevealer *
-terminal_search_get_revealer (GbTerminalSearch *self)
+gb_terminal_search_get_revealer (GbTerminalSearch *self)
 {
   g_return_val_if_fail (GB_IS_TERMINAL_SEARCH (self), FALSE);
 
