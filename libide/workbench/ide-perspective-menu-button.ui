@@ -12,6 +12,7 @@
   </object>
   <template class="IdePerspectiveMenuButton" parent="GtkMenuButton">
     <property name="popover">popover</property>
+    <property name="tooltip-text" translatable="yes">Switch perspective</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
