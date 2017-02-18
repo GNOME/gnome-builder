@@ -136,7 +136,7 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
                 continue;
 
               row = create_row (self, name, arch, branch);
-              id = ide_preferences_add_custom (preferences, "flatpak", "runtimes", row, NULL, 0);
+              id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, NULL, 0);
               g_array_append_val (self->ids, id);
             }
         }
@@ -193,8 +193,7 @@ gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
 
   self->ids = g_array_new (FALSE, FALSE, sizeof (guint));
 
-  ide_preferences_add_page (preferences, "flatpak", _("Flatpak"), 600);
-  ide_preferences_add_list_group (preferences, "flatpak", "runtimes", _("Application Runtimes"), GTK_SELECTION_NONE, 0);
+  ide_preferences_add_list_group (preferences, "sdk", "flatpak-runtimes", _("Flatpak Runtimes"), GTK_SELECTION_NONE, 0);
 
   gbp_flatpak_preferences_addin_reload (self, preferences);
 
