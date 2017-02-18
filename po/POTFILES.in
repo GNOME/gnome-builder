@@ -84,6 +84,7 @@ libide/preferences/ide-preferences-perspective.ui
 libide/projects/ide-project.c
 libide/projects/ide-recent-projects.c
 libide/runner/ide-run-button.c
+libide/runner/ide-run-button.ui
 libide/runner/ide-run-manager.c
 libide/runner/ide-runner.c
 libide/runtimes/ide-runtime-manager.c
@@ -102,6 +103,7 @@ libide/workbench/ide-omni-bar.c
 libide/workbench/ide-omni-bar-row.c
 libide/workbench/ide-omni-bar-row.ui
 libide/workbench/ide-omni-bar.ui
+libide/workbench/ide-perspective-menu-button.ui
 libide/workbench/ide-workbench-actions.c
 libide/workbench/ide-workbench.c
 libide/workbench/ide-workbench-header-bar.ui
