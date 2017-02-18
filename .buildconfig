@@ -1,8 +1,0 @@
-[default]
-name=Builder (Development)
-device=local
-runtime=flatpak:org.gnome.Sdk/master/x86_64
-config-opts=--enable-tracing --enable-debug --enable-hello-cpp-plugin
-prefix=/app
-app-id=org.gnome.Builder
-default=true
