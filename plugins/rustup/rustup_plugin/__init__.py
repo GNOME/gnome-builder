@@ -277,7 +277,7 @@ class RustupInstaller(Ide.Object, Ide.Transfer):
         elif self.mode == _MODE_UPDATE:
             self.props.title = _('Updating rustup')
         elif self.mode == _MODE_INSTALL_TOOLCHAIN:
-            self.props.title = _('Installing ') + self.toolchain
+            self.props.title = _('Installing rust ') + self.toolchain
         self.props.status = _('Checking system')
         self.props.icon_name = 'emblem-system-symbolic'
         self.state = _STATE_INIT
