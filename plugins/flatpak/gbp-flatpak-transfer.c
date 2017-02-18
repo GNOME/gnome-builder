@@ -120,8 +120,6 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_flatpak_transfer_execute_async);
 
-  g_clear_object (&self->progress);
-
   addin = gbp_flatpak_application_addin_get_default ();
 
   if (gbp_flatpak_application_addin_has_runtime (addin, self->id, self->arch, self->branch) && !self->force_update)
@@ -188,7 +186,6 @@ gbp_flatpak_transfer_finalize (GObject *object)
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->arch, g_free);
   g_clear_pointer (&self->branch, g_free);
-  g_clear_object (&self->progress);
 
   G_OBJECT_CLASS (gbp_flatpak_transfer_parent_class)->finalize (object);
 
