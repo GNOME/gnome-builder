@@ -330,21 +330,18 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
   argv[0] = terminal_executable;
   g_return_if_fail (terminal_executable != NULL);
 
+  env = g_get_environ ();
+
 #ifdef HAVE_VTE
   {
     /*
      * Overwrite SHELL to the users default shell.
      * Failure to do so typically results in /bin/sh being used.
      */
-    gchar *shell;
-
-    shell = vte_get_user_shell ();
-    g_setenv ("SHELL", shell, TRUE);
-    g_free (shell);
+    g_autofree gchar *shell = vte_get_user_shell ();
+    env = g_environ_setenv (env, "SHELL", shell, TRUE);
   }
 #endif
-
-  env = g_get_environ ();
 
   /* Can't use GdkAppLaunchContext as
    * we cannot set the working directory.
