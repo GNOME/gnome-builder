@@ -122,6 +122,7 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
               const gchar *name = flatpak_ref_get_name (FLATPAK_REF (ref));
               const gchar *branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
               const gchar *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
+              g_autofree gchar *keywords = NULL;
               GtkWidget *row;
               guint id;
 
@@ -135,8 +136,11 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
               if (is_ignored (name))
                 continue;
 
+              /* translators: keywords are used to match search keywords in preferences */
+              keywords = g_strdup_printf (_("flatpak %s %s %s"), name, branch, arch);
+
               row = create_row (self, name, arch, branch);
-              id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, NULL, 0);
+              id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, keywords, j);
               g_array_append_val (self->ids, id);
             }
         }
