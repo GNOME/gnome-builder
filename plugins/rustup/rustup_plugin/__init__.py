@@ -420,7 +420,6 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
        PreferencesAddin to display the installed rustup version and to change the rustup installation
     """
     def do_load(self, preferences):
-        preferences.add_page('sdk', _('SDKs'), 550)
         preferences.add_list_group('sdk', 'rustup', _('Rustup'), Gtk.SelectionMode.NONE, 100)
         preferences.add_group('sdk', 'rustup_toolchains_edit', _('Rustup Toolchains'), 100)
 

@@ -523,6 +523,13 @@ ide_preferences_builtin_register_vcs (IdePreferences *preferences)
   g_clear_object (&extensions);
 }
 
+static void
+ide_preferences_builtin_register_sdks (IdePreferences *preferences)
+{
+  /* only the page goes here, plugins will fill in the details */
+  ide_preferences_add_page (preferences, "sdk", _("SDKs"), 550);
+}
+
 void
 _ide_preferences_builtin_register (IdePreferences *preferences)
 {
@@ -536,4 +543,5 @@ _ide_preferences_builtin_register (IdePreferences *preferences)
   ide_preferences_builtin_register_build (preferences);
   ide_preferences_builtin_register_projects (preferences);
   ide_preferences_builtin_register_vcs (preferences);
+  ide_preferences_builtin_register_sdks (preferences);
 }
