@@ -26,9 +26,11 @@ import re
 import pty
 import stat
 
+gi.require_version('Egg', '1.0')
 gi.require_version('Ide', '1.0')
 gi.require_version('Gtk', '3.0')
 
+from gi.repository import Egg
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
@@ -43,6 +45,23 @@ def get_module_data_path(name):
     plugin = engine.get_plugin_info('rustup_plugin')
     data_dir = plugin.get_data_dir()
     return GLib.build_filenamev([data_dir, name])
+
+def looks_like_channel(channel):
+    if not channel:
+        return False
+
+    if channel in ('stable', 'beta', 'nightly'):
+        return True
+
+    if channel.startswith('stable-') or \
+       channel.startswith('beta-') or \
+       channel.startswith('nightly-'):
+        return True
+
+    if channel[0].isdigit():
+        return True
+
+    return False
 
 class RustUpWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     """
@@ -410,7 +429,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
 
         # rustup toolchains page: displays the installed toolchains, allows to set the default
         # toolchain, install new toolchains and remove a toolchain
-        rustup_toolchain_custom = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5, expand=True, visible=True)
+        rustup_toolchain_custom = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6, expand=True, visible=True)
         # list of toolchains
         rustup_toolchain_custom.pack_start(self.create_toolchain_listbox(), True, True, 0)
         # list controls: install, set default and remove
@@ -510,11 +529,16 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
 
     def create_toolchain_listcontrols(self):
         list_control = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12, expand=True, visible=True)
+
+        bbox = Gtk.Box(visible=True)
+        bbox.get_style_context().add_class('linked')
+        list_control.pack_end(bbox, False, False, 0)
+
         # remove toolchain button
         remove_icon = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name='list-remove-symbolic'), Gtk.IconSize.BUTTON)
         self.remove_toolchain = Gtk.Button(image = remove_icon, halign='end', expand=False, visible=True)
         self.remove_toolchain.set_sensitive(False)
-        list_control.pack_end(self.remove_toolchain, False, False, 0)
+        bbox.pack_end(self.remove_toolchain, False, False, 0)
 
         def remove_toolchain_(button):
             index = self.toolchain_listbox.get_selected_row().get_index()
@@ -528,7 +552,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         add_toolchain.props.focus_on_click = False
         add_toolchain.set_popover(self.create_install_popover())
         add_toolchain.set_sensitive(RustupApplicationAddin.instance.has_rustup)
-        list_control.pack_end(add_toolchain, False, False, 0)
+        bbox.pack_start(add_toolchain, False, False, 0)
 
         # disable button if we're busy
         def busy(applicationAddin, param):
@@ -544,9 +568,9 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         has_rustup_callback(RustupApplicationAddin.instance)
 
         # set default toolchain button
-        self.default_toolchain_button = Gtk.Button(halign='end', valign='start', expand=True, visible=True, label=_('Default'))
+        self.default_toolchain_button = Gtk.Button(visible=True, label=_('Make default'), tooltip_text=_('Makes the selected toolchain the default rust installation'))
         self.default_toolchain_button.set_sensitive(False)
-        list_control.pack_end(self.default_toolchain_button, False, False, 0)
+        list_control.pack_start(self.default_toolchain_button, False, False, 0)
 
         def set_default_toolchain(button):
             index = self.toolchain_listbox.get_selected_row().get_index()
@@ -559,28 +583,30 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         return list_control
 
     def create_install_popover(self):
-        popover = Gtk.Popover(visible=False)
-        popover.set_border_width(6)
-        def add(b):
-            RustupApplicationAddin.instance.install_toolchain(entry.get_text())
-            popover.popdown()
-        hlist = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0, expand=True, visible=True)
-        hlist.get_style_context().add_class('linked')
-        entry = Gtk.Entry(visible=True)
-        entry.set_can_focus(True)
-        entry.props.tooltip_text = _('''Standard release channel toolchain names have the following form:
+        popover = Egg.SimplePopover(title=_('Install Rust Channel'),
+                                    button_text=_('Install'),
+                                    text='stable',
+                                    ready=True,
+                                    # translators: channel is stable, beta, nightly, with optional architecture and date
+                                    message=_('Enter name of rust channel'),
+                                    tooltip_text=_('''Standard release channel toolchain names have the following form:
                         <channel>[-<date>][-<host>]
 
                         <channel>    = stable|beta|nightly|<version>
                         <date>          = YYYY-MM-DD
-                        <host>          = <target-triple>''')
-        entry.connect('activate', add)
-        hlist.add(entry)
+                        <host>          = <target-triple>'''))
 
-        add_button = Gtk.Button(visible=True, label=_('Add'))
-        add_button.connect('clicked', add)
-        hlist.add(add_button)
-        popover.add(hlist)
+
+        def add(popover, text):
+            RustupApplicationAddin.instance.install_toolchain(text)
+            popover.popdown()
+
+        def changed(popover):
+            popover.set_ready(looks_like_channel(popover.get_text()))
+
+        popover.connect('activate', add)
+        popover.connect('changed', changed)
+
         return popover
 
     def create_no_rustup_label(self):
