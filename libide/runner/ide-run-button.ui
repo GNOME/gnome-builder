@@ -35,6 +35,7 @@
       <object class="GtkButton" id="stop_button">
         <property name="action-name">run-manager.stop</property>
         <property name="focus-on-click">false</property>
+        <property name="tooltip-text" translatable="yes">Stop running</property>
         <style>
           <class name="image-button"/>
         </style>
