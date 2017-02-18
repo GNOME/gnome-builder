@@ -27,9 +27,28 @@
 
 struct _GbpFlatpakPreferencesAddin
 {
-  GObject  parent_instance;
-  GArray  *ids;
+  GObject         parent_instance;
+
+  GArray         *ids;
+  IdePreferences *preferences;
+
+  guint           show_all : 1;
 };
+
+static void gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self,
+                                                  IdePreferences             *preferences);
+
+static void
+gbp_flatpak_preferences_addin_view_more (GbpFlatpakPreferencesAddin *self,
+                                         IdePreferencesBin          *bin)
+{
+  g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
+  g_assert (IDE_IS_PREFERENCES_BIN (bin));
+
+  self->show_all = !self->show_all;
+  if (self->preferences != NULL)
+    gbp_flatpak_preferences_addin_reload (self, self->preferences);
+}
 
 static gboolean
 is_ignored (const gchar *name)
@@ -88,12 +107,46 @@ create_row (GbpFlatpakPreferencesAddin *self,
   return box;
 }
 
+static gint
+compare_refs (gconstpointer a,
+              gconstpointer b)
+{
+  FlatpakRef *refa = *(FlatpakRef **)a;
+  FlatpakRef *refb = *(FlatpakRef **)b;
+  gint ret;
+
+  ret = g_strcmp0 (flatpak_ref_get_name (refa), flatpak_ref_get_name (refb));
+  if (ret != 0)
+    return ret;
+
+  /* sort numerically in reverse */
+  ret = -g_utf8_collate (flatpak_ref_get_branch (refa), flatpak_ref_get_branch (refb));
+  if (ret != 0)
+    return ret;
+
+  return g_strcmp0 (flatpak_ref_get_arch (refa), flatpak_ref_get_arch (refb));
+}
+
+static gboolean
+is_old_gnome_version (const gchar *version)
+{
+  if (g_str_equal (version, "master"))
+    return FALSE;
+
+  if (g_utf8_collate ("3.20", version) > 0)
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 add_runtimes (GbpFlatpakPreferencesAddin *self,
               IdePreferences             *preferences,
               FlatpakInstallation        *installation)
 {
   g_autoptr(GPtrArray) remotes = NULL;
+  g_autoptr(GPtrArray) all_refs = g_ptr_array_new_with_free_func (g_object_unref);
+  guint ignored = 0;
 
   remotes = flatpak_installation_list_remotes (installation, NULL, NULL);
 
@@ -103,7 +156,6 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
         {
           FlatpakRemote *remote = g_ptr_array_index (remotes, i);
           g_autoptr(GPtrArray) refs = NULL;
-
 
           g_assert (FLATPAK_IS_REMOTE (remote));
 
@@ -116,34 +168,75 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
             continue;
 
           for (guint j = 0; j < refs->len; j++)
-            {
-              FlatpakRemoteRef *ref = g_ptr_array_index (refs, j);
-              FlatpakRefKind kind = flatpak_ref_get_kind (FLATPAK_REF (ref));
-              const gchar *name = flatpak_ref_get_name (FLATPAK_REF (ref));
-              const gchar *branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
-              const gchar *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
-              g_autofree gchar *keywords = NULL;
-              GtkWidget *row;
-              guint id;
-
-              /* TODO: handle multi-arch and cross-compile */
-              if (g_strcmp0 (arch, flatpak_get_default_arch ()) != 0)
-                continue;
-
-              if (kind != FLATPAK_REF_KIND_RUNTIME)
-                continue;
-
-              if (is_ignored (name))
-                continue;
-
-              /* translators: keywords are used to match search keywords in preferences */
-              keywords = g_strdup_printf (_("flatpak %s %s %s"), name, branch, arch);
-
-              row = create_row (self, name, arch, branch);
-              id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, keywords, j);
-              g_array_append_val (self->ids, id);
-            }
+            g_ptr_array_add (all_refs, g_object_ref (g_ptr_array_index (refs, j)));
         }
+    }
+
+  g_ptr_array_sort (all_refs, compare_refs);
+
+  for (guint j = 0; j < all_refs->len; j++)
+    {
+      FlatpakRemoteRef *ref = g_ptr_array_index (all_refs, j);
+      FlatpakRefKind kind = flatpak_ref_get_kind (FLATPAK_REF (ref));
+      const gchar *name = flatpak_ref_get_name (FLATPAK_REF (ref));
+      const gchar *branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
+      const gchar *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
+      g_autofree gchar *keywords = NULL;
+      GtkWidget *row;
+      guint id;
+
+      /* TODO: handle multi-arch and cross-compile */
+      if (g_strcmp0 (arch, flatpak_get_default_arch ()) != 0)
+        continue;
+
+      if (kind != FLATPAK_REF_KIND_RUNTIME)
+        continue;
+
+      if (is_ignored (name))
+        continue;
+
+      /* Don't show this item by default if it's not GNOME or an old branch */
+      if (!self->show_all && (!g_str_has_prefix (name, "org.gnome.") || is_old_gnome_version (branch)))
+        {
+          ignored++;
+          continue;
+        }
+
+      /* translators: keywords are used to match search keywords in preferences */
+      keywords = g_strdup_printf (_("flatpak %s %s %s"), name, branch, arch);
+
+      row = create_row (self, name, arch, branch);
+      id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, keywords, j);
+      g_array_append_val (self->ids, id);
+    }
+
+  if (ignored)
+    {
+      g_autofree gchar *tooltip = NULL;
+      GtkWidget *image;
+      GtkWidget *row;
+      guint id;
+
+      /* translators: %u is the number of hidden runtimes to be shown */
+      tooltip = g_strdup_printf (_("Show %u more runtimes"), ignored);
+
+      image = g_object_new (GTK_TYPE_IMAGE,
+                            "icon-size", GTK_ICON_SIZE_MENU,
+                            "icon-name", "view-more-symbolic",
+                            "tooltip-text", tooltip,
+                            "visible", TRUE,
+                            NULL);
+      row = g_object_new (IDE_TYPE_PREFERENCES_BIN,
+                          "child", image,
+                          "visible", TRUE,
+                          NULL);
+      g_signal_connect_object (row,
+                               "preference-activated",
+                               G_CALLBACK (gbp_flatpak_preferences_addin_view_more),
+                               self,
+                               G_CONNECT_SWAPPED);
+      id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, NULL, G_MAXINT);
+      g_array_append_val (self->ids, id);
     }
 }
 
@@ -196,25 +289,11 @@ gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
   g_assert (IDE_IS_PREFERENCES (preferences));
 
   self->ids = g_array_new (FALSE, FALSE, sizeof (guint));
+  self->preferences = preferences;
 
   ide_preferences_add_list_group (preferences, "sdk", "flatpak-runtimes", _("Flatpak Runtimes"), GTK_SELECTION_NONE, 0);
 
   gbp_flatpak_preferences_addin_reload (self, preferences);
-
-#if 0
-  ide_preferences_add_list_group (preferences, "flatpak", "sdks", _("Developer SDKs"), GTK_SELECTION_NONE, 0);
-  id = ide_preferences_add_custom (preferences,
-                                   "flatpak",
-                                   "sdks",
-                                   g_object_new (GTK_TYPE_LABEL,
-                                                 "visible", TRUE,
-                                                 "label", "org.gnome.Sdk/x86_64/master",
-                                                 "xalign", 0.0f,
-                                                 NULL),
-                                   NULL,
-                                   0);
-  g_array_append_val (self->ids, id);
-#endif
 
   IDE_EXIT;
 }
@@ -238,6 +317,7 @@ gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
     }
 
   g_clear_pointer (&self->ids, g_array_unref);
+  self->preferences = NULL;
 
   IDE_EXIT;
 }
