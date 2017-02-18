@@ -90,15 +90,14 @@ main (int   argc,
   int ret;
 
   ide_log_init (TRUE, NULL);
-
   early_verbose_check (&argc, &argv);
+
+  early_ssl_check ();
 
   g_message ("Initializing with Gtk+ version %d.%d.%d.",
              gtk_get_major_version (),
              gtk_get_minor_version (),
              gtk_get_micro_version ());
-
-  early_ssl_check ();
 
   app = ide_application_new ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
