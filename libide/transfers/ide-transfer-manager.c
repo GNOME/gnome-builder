@@ -416,6 +416,17 @@ ide_transfer_manager_queue (IdeTransferManager *self,
   g_return_if_fail (IDE_IS_TRANSFER_MANAGER (self));
   g_return_if_fail (IDE_IS_TRANSFER (transfer));
 
+  for (guint i = 0; i < self->transfers->len; i++)
+    {
+      IdeTransfer *ele = g_ptr_array_index (self->transfers, i);
+
+      if (ele == transfer)
+        {
+          transfer_set_active (transfer, FALSE);
+          goto already_inserted;
+        }
+    }
+
   g_signal_connect_object (transfer,
                            "notify::progress",
                            G_CALLBACK (ide_transfer_manager_notify_progress),
@@ -425,6 +436,8 @@ ide_transfer_manager_queue (IdeTransferManager *self,
   position = self->transfers->len;
   g_ptr_array_add (self->transfers, g_object_ref (transfer));
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+
+already_inserted:
   ide_transfer_manager_pump (self);
 
   IDE_EXIT;
