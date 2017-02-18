@@ -32,8 +32,12 @@ struct _GbpFlatpakTransfer
   gchar       *arch;
   gchar       *branch;
   gchar       *status;
+  gchar       *title;
   gdouble      progress;
+  guint        has_runtime : 1;
   guint        force_update : 1;
+  guint        finished : 1;
+  guint        failed : 1;
 };
 
 enum {
@@ -55,6 +59,41 @@ G_DEFINE_TYPE_WITH_CODE (GbpFlatpakTransfer, gbp_flatpak_transfer, G_TYPE_OBJECT
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_TRANSFER, transfer_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+gbp_flatpak_transfer_update_title (GbpFlatpakTransfer *self)
+{
+  GString *str;
+
+  g_return_if_fail (GBP_IS_FLATPAK_TRANSFER (self));
+
+  str = g_string_new (NULL);
+
+  if (!self->failed)
+    {
+      if (self->has_runtime)
+        {
+          if (self->finished)
+            g_string_append (str, _("Updated "));
+          else
+            g_string_append (str, _("Updating "));
+        }
+      else
+        {
+          if (self->finished)
+            g_string_append (str, _("Installed "));
+          else
+            g_string_append (str, _("Installing "));
+        }
+    }
+
+  g_string_append_printf (str, "%s %s", self->id, self->branch);
+
+  g_free (self->title);
+  self->title = g_string_free (str, FALSE);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+}
 
 static void
 proxy_notify (GbpFlatpakTransfer *self,
@@ -102,6 +141,19 @@ gbp_flatpak_transfer_execute_cb (GObject      *object,
 }
 
 static void
+task_completed (GbpFlatpakTransfer *self,
+                GParamSpec         *pspec,
+                GTask              *task)
+{
+  g_assert (GBP_IS_FLATPAK_TRANSFER (self));
+  g_assert (G_IS_TASK (task));
+
+  self->finished = TRUE;
+  gbp_flatpak_transfer_update_title (self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STATUS]);
+}
+
+static void
 gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
@@ -120,13 +172,25 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_flatpak_transfer_execute_async);
 
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (task_completed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   addin = gbp_flatpak_application_addin_get_default ();
 
-  if (gbp_flatpak_application_addin_has_runtime (addin, self->id, self->arch, self->branch) && !self->force_update)
+  self->failed = FALSE;
+  self->finished = FALSE;
+  self->has_runtime = gbp_flatpak_application_addin_has_runtime (addin, self->id, self->arch, self->branch);
+
+  if (self->has_runtime && !self->force_update)
     {
       g_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
+
+  gbp_flatpak_transfer_update_title (self);
 
   gbp_flatpak_application_addin_install_runtime_async (addin,
                                                        self->id,
@@ -157,14 +221,21 @@ gbp_flatpak_transfer_execute_finish (IdeTransfer   *transfer,
                                      GAsyncResult  *result,
                                      GError       **error)
 {
+  GbpFlatpakTransfer *self = (GbpFlatpakTransfer *)transfer;
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_FLATPAK_TRANSFER (transfer));
+  g_assert (GBP_IS_FLATPAK_TRANSFER (self));
   g_assert (G_IS_TASK (result));
 
   ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  if (ret == FALSE)
+    {
+      self->failed = TRUE;
+      gbp_flatpak_transfer_update_title (self);
+    }
 
   IDE_RETURN (ret);
 }
@@ -186,6 +257,8 @@ gbp_flatpak_transfer_finalize (GObject *object)
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->arch, g_free);
   g_clear_pointer (&self->branch, g_free);
+  g_clear_pointer (&self->title, g_free);
+  g_clear_pointer (&self->status, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_transfer_parent_class)->finalize (object);
 
@@ -203,15 +276,18 @@ gbp_flatpak_transfer_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_STATUS:
-      g_value_set_string (value, self->status);
+      if (self->failed)
+        g_value_set_static_string (value, _("Failed to install runtime"));
+      else if (self->finished && self->has_runtime)
+        g_value_set_static_string (value, _("Runtime has been updated"));
+      else if (self->finished)
+        g_value_set_static_string (value, _("Runtime has been installed"));
+      else
+        g_value_set_string (value, self->status);
       break;
 
     case PROP_TITLE:
-      if (g_str_equal (self->arch, flatpak_get_default_arch ()))
-        g_value_take_string (value, g_strdup_printf (_("Installing %s %s"), self->id, self->branch));
-      else
-        g_value_take_string (value, g_strdup_printf (_("Installing %s %s for %s"),
-                                                     self->id, self->branch, self->arch));
+      g_value_set_string (value, self->title);
       break;
 
     case PROP_ICON_NAME:
