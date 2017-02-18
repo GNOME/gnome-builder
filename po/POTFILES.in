@@ -179,6 +179,7 @@ plugins/sysprof/gbp-sysprof-perspective.c
 plugins/sysprof/gbp-sysprof-perspective.ui
 plugins/sysprof/gbp-sysprof-workbench-addin.c
 plugins/sysprof/gtk/menus.ui
+plugins/terminal/gb-terminal-search.ui
 plugins/terminal/gb-terminal-view-actions.c
 plugins/terminal/gb-terminal-view.c
 plugins/terminal/gb-terminal-workbench-addin.c
