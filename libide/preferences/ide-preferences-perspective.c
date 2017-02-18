@@ -874,12 +874,20 @@ ide_preferences_perspective_remove_id (IdePreferences *preferences,
     {
       if (g_hash_table_remove (self->widgets, GINT_TO_POINTER (widget_id)))
         {
-          gtk_widget_destroy (widget);
+          GtkWidget *parent = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+
+          /* in case we added our own row ancestor, destroy it */
+          if (parent != NULL)
+            gtk_widget_destroy (parent);
+          else
+            gtk_widget_destroy (widget);
+
           return TRUE;
         }
     }
 
   g_warning ("No Preferences widget with number %i could be found and thus removed.", widget_id);
+
   return FALSE;
 }
 
