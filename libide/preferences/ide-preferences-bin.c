@@ -44,6 +44,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  PREFERENCE_ACTIVATED,
+  N_SIGNALS
+};
+
+static guint signals [N_SIGNALS];
+
 static GParamSpec *properties [LAST_PROP];
 static GHashTable *settings_cache;
 
@@ -247,6 +254,15 @@ ide_preferences_bin_destroy (GtkWidget *widget)
 }
 
 static void
+ide_preferences_bin_activated (GtkWidget *widget)
+{
+  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child)
+    gtk_widget_activate (child);
+}
+
+static void
 ide_preferences_bin_finalize (GObject *object)
 {
   IdePreferencesBin *self = (IdePreferencesBin *)object;
@@ -369,6 +385,13 @@ ide_preferences_bin_class_init (IdePreferencesBinClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  signals [PREFERENCE_ACTIVATED] = widget_class->activate_signal =
+    g_signal_new_class_handler ("preference-activated",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_preferences_bin_activated),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, "preferencesbin");
 
