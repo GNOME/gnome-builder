@@ -218,7 +218,7 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
       guint id;
 
       /* translators: %u is the number of hidden runtimes to be shown */
-      tooltip = g_strdup_printf (_("Show %u more runtimes"), ignored);
+      tooltip = g_strdup_printf (ngettext ("Show %u more runtime", "show %u more runtimes", ignored), ignored);
 
       image = g_object_new (GTK_TYPE_IMAGE,
                             "icon-size", GTK_ICON_SIZE_MENU,
