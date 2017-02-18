@@ -30,15 +30,16 @@
 
 struct _IdeRunButton
 {
-  GtkBox         parent_instance;
+  GtkBox                parent_instance;
 
-  GtkSizeGroup  *accel_size_group;
-  GtkButton     *button;
-  GtkImage      *button_image;
-  GtkListBox    *list_box;
-  GtkMenuButton *menu_button;
-  GtkPopover    *popover;
-  GtkButton     *stop_button;
+  GtkSizeGroup         *accel_size_group;
+  GtkButton            *button;
+  GtkImage             *button_image;
+  GtkListBox           *list_box;
+  GtkMenuButton        *menu_button;
+  GtkPopover           *popover;
+  GtkButton            *stop_button;
+  GtkShortcutsShortcut *run_shortcut;
 };
 
 G_DEFINE_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
@@ -139,9 +140,6 @@ ide_run_button_handler_set (IdeRunButton  *self,
           g_object_set (self->button_image,
                         "icon-name", info->icon_name,
                         NULL);
-          g_object_set (self->button,
-                        "tooltip-text", info->title,
-                        NULL);
           break;
         }
     }
@@ -230,6 +228,46 @@ ide_run_button_context_set (GtkWidget  *widget,
 }
 
 static void
+ide_run_button_query_tooltip (IdeRunButton *self,
+                              gint          x,
+                              gint          y,
+                              gboolean      keyboard_tooltip,
+                              GtkTooltip   *tooltip,
+                              GtkButton    *button)
+{
+  IdeRunManager *run_manager;
+  const GList *list;
+  const GList *iter;
+  const gchar *handler;
+  IdeContext *context;
+
+  g_assert (IDE_IS_RUN_BUTTON (self));
+  g_assert (GTK_IS_TOOLTIP (tooltip));
+  g_assert (GTK_IS_BUTTON (button));
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+  run_manager = ide_context_get_run_manager (context);
+  handler = ide_run_manager_get_handler (run_manager);
+  list = _ide_run_manager_get_handlers (run_manager);
+
+  for (iter = list; iter; iter = iter->next)
+    {
+      const IdeRunHandlerInfo *info = iter->data;
+
+      if (g_strcmp0 (info->id, handler) == 0)
+        {
+          g_object_set (self->run_shortcut,
+                        "accelerator", info->accel,
+                        "title", info->title,
+                        "visible", TRUE,
+                        NULL);
+          gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_shortcut));
+          break;
+        }
+    }
+}
+
+static void
 ide_run_button_class_init (IdeRunButtonClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -241,6 +279,7 @@ ide_run_button_class_init (IdeRunButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, popover);
+  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_shortcut);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, stop_button);
 }
 
@@ -252,6 +291,12 @@ ide_run_button_init (IdeRunButton *self)
   g_signal_connect_object (self->list_box,
                            "row-activated",
                            G_CALLBACK (ide_run_button_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->button,
+                           "query-tooltip",
+                           G_CALLBACK (ide_run_button_query_tooltip),
                            self,
                            G_CONNECT_SWAPPED);
 

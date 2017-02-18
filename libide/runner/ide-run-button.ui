@@ -10,6 +10,8 @@
       </object>
     </child>
   </object>
+  <object class="GtkShortcutsShortcut" id="run_shortcut">
+  </object>
   <template class="IdeRunButton" parent="GtkBox">
     <property name="orientation">horizontal</property>
     <style>
@@ -19,6 +21,7 @@
       <object class="GtkButton" id="button">
         <property name="action-name">run-manager.run</property>
         <property name="focus-on-click">false</property>
+        <property name="has-tooltip">true</property>
         <property name="visible">true</property>
         <style>
           <class name="image-button"/>
@@ -51,6 +54,7 @@
       <object class="GtkMenuButton" id="menu_button">
         <property name="focus-on-click">false</property>
         <property name="popover">popover</property>
+        <property name="tooltip-text" translatable="yes">Change run options</property>
         <property name="visible">true</property>
         <style>
           <class name="image-button"/>
