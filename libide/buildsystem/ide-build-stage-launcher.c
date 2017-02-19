@@ -113,7 +113,7 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
                               gpointer               user_data)
 {
   IdeBuildStageLauncher *self = (IdeBuildStageLauncher *)stage;
-  IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self);
+  IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self); G_GNUC_UNUSED
   g_autoptr(GTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
