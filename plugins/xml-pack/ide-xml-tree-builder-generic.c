@@ -63,7 +63,7 @@ state_processing (ParserState           *state,
                   gboolean               is_internal)
 {
   IdeXmlSymbolNode *parent_node;
-  IdeXmlSymbolNode *popped_node G_GNUC_UNUSED;
+  G_GNUC_UNUSED IdeXmlSymbolNode *popped_node;
   g_autofree gchar *popped_element_name = NULL;
   gint line;
   gint line_offset;
