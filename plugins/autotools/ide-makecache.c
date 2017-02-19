@@ -1633,7 +1633,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        */
       ide_line_reader_init (&reader, stdout_buf, -1);
 
-      while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
+      line = ide_line_reader_next (&reader, &line_len);
+      while (line != NULL)
         {
           g_auto(GStrv) parts = NULL;
           g_auto(GStrv) names = NULL;
@@ -1642,6 +1643,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
           line [line_len] = '\0';
 
           parts = g_strsplit (line, "=", 2);
+
+          line = ide_line_reader_next (&reader, &line_len);
 
           if (!parts[0] || !parts[1] || !*parts[1])
             continue;
@@ -1654,7 +1657,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
           if (g_str_has_suffix (key, "dir"))
             {
               g_hash_table_insert (amdirs, g_strdup (key), g_strdup (parts [1]));
-              continue;
+              if (line != NULL) /* Don't skip the following code on last iteration of loop */
+                continue;
             }
 
           names = g_strsplit (parts [1], " ", 0);
