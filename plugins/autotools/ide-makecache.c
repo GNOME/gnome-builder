@@ -1661,6 +1661,9 @@ ide_makecache_get_build_targets_worker (GTask        *task,
                 continue;
             }
 
+          if (g_hash_table_size (amdirs) < 1)
+            continue;
+
           names = g_strsplit (parts [1], " ", 0);
 
           for (guint i = 0; names [i]; i++)
@@ -1670,6 +1673,9 @@ ide_makecache_get_build_targets_worker (GTask        *task,
               const gchar *name = names [i];
 
               installdir = find_install_dir (key, amdirs);
+
+              if (installdir == NULL)
+                continue;
 
               target = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TARGET,
                                      "build-directory", makedir,
