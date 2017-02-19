@@ -212,8 +212,9 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
         workbench.get_context().get_transfer_manager().connect('transfer-failed', self.transfer_failed)
         self.workbenches.add(workbench)
         # add the current transfer to the new workbench
-        if self.active_transfer:
-            workbench.get_context().get_transfer_manager().queue(self.active_transfer)
+        # CJH: This isn't right, so we'll punt on this until we have application level transfers
+        # if self.active_transfer:
+        #    workbench.get_context().get_transfer_manager().execute_async(self.active_transfer, None, None)
 
     def transfer_completed(self, transfer_manager, transfer):
         # reset the active transfer on completion, ensures that new workbenches dont get an old transfer
@@ -231,8 +232,12 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
         self.active_transfer = transfer
         self.notify('busy')
         # run it in all transfer managers
+        # TODO: This isn't really correct, but we need to move transfer manager to
+        #       IdeApplication.get_transfer_manager()
         for workbench in self.workbenches:
-            workbench.get_context().get_transfer_manager().queue(transfer)
+            context = workbench.get_context()
+            transfers = context.get_transfer_manager()
+            transfers.execute_async(transfer)
 
     def install(self):
         self.run_transfer(RustupInstaller(mode=_MODE_INSTALL))
@@ -252,14 +257,10 @@ _STATE_INSTALL_COMP = 4
 _STATE_CHECK_UPDATE_SELF = 5
 _STATE_DOWN_UPDATE_SELF = 6
 
-class RustupInstaller(Ide.Object, Ide.Transfer):
+class RustupInstaller(Ide.Transfer):
     """
     The RustupInstaller handles the installation of rustup, rustc, rust-std and cargo.
     """
-    title = GObject.Property(type=str)
-    icon_name = GObject.Property(type=str)
-    progress = GObject.Property(type=float)
-    status = GObject.Property(type=str)
 
     def __init__(self, *args, **kwargs):
         if 'mode' in kwargs:

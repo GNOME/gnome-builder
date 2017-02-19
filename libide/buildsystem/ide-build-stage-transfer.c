@@ -79,7 +79,7 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_stage_transfer_execute_async);
 
-  if (ide_transfer_has_completed (self->transfer))
+  if (ide_transfer_get_completed (self->transfer))
     {
       g_task_return_boolean (task, TRUE);
       return;
@@ -173,7 +173,7 @@ ide_build_stage_transfer_class_init (IdeBuildStageTransferClass *klass)
                          "The transfer to perform as part of the stage",
                          IDE_TYPE_TRANSFER,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 

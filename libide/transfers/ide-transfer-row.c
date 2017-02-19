@@ -24,16 +24,16 @@
 
 struct _IdeTransferRow
 {
-  GtkListBoxRow parent_instance;
+  GtkListBoxRow    parent_instance;
 
-  IdeTransfer *transfer;
+  IdeTransfer     *transfer;
   EggBindingGroup *bindings;
 
-  GtkLabel *status;
-  GtkLabel *title;
-  GtkImage *image;
-  GtkProgressBar *progress;
-  GtkButton *cancel;
+  GtkLabel        *status;
+  GtkLabel        *title;
+  GtkImage        *image;
+  GtkProgressBar  *progress;
+  GtkButton       *cancel;
 };
 
 enum {
@@ -163,28 +163,28 @@ ide_transfer_row_init (IdeTransferRow *self)
 
   self->bindings = egg_binding_group_new ();
 
-  egg_binding_group_bind (self->bindings,
-                          "title",
-                          self->title,
-                          "label",
+  egg_binding_group_bind (self->bindings, "active",
+                          self->progress, "visible",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings,
-                          "status",
-                          self->status,
-                          "label",
+  egg_binding_group_bind (self->bindings, "active",
+                          self->cancel, "visible",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings,
-                          "progress",
-                          self->progress,
-                          "fraction",
+  egg_binding_group_bind (self->bindings, "title",
+                          self->title, "label",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings,
-                          "icon-name",
-                          self->image,
-                          "icon-name",
+  egg_binding_group_bind (self->bindings, "status",
+                          self->status, "label",
+                          G_BINDING_SYNC_CREATE);
+
+  egg_binding_group_bind (self->bindings, "progress",
+                          self->progress, "fraction",
+                          G_BINDING_SYNC_CREATE);
+
+  egg_binding_group_bind (self->bindings, "icon-name",
+                          self->image, "icon-name",
                           G_BINDING_SYNC_CREATE);
 }
 
@@ -211,20 +211,6 @@ ide_transfer_row_set_transfer (IdeTransferRow *self,
   if (g_set_object (&self->transfer, transfer))
     {
       egg_binding_group_set_source (self->bindings, transfer);
-      ide_transfer_row_pump (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRANSFER]);
     }
-}
-
-void
-ide_transfer_row_pump (IdeTransferRow *self)
-{
-  gboolean completed;
-
-  g_return_if_fail (IDE_IS_TRANSFER_ROW (self));
-
-  completed = ide_transfer_has_completed (self->transfer);
-
-  gtk_widget_set_visible (GTK_WIDGET (self->cancel), !completed);
-  gtk_widget_set_visible (GTK_WIDGET (self->progress), !completed);
 }

@@ -26,18 +26,16 @@
 
 struct _GbpFlatpakTransfer
 {
-  IdeObject    parent_instance;
+  IdeTransfer parent_instance;
 
-  gchar       *id;
-  gchar       *arch;
-  gchar       *branch;
-  gchar       *status;
-  gchar       *title;
-  gdouble      progress;
-  guint        has_runtime : 1;
-  guint        force_update : 1;
-  guint        finished : 1;
-  guint        failed : 1;
+  gchar *id;
+  gchar *arch;
+  gchar *branch;
+
+  guint  has_runtime : 1;
+  guint  force_update : 1;
+  guint  finished : 1;
+  guint  failed : 1;
 };
 
 enum {
@@ -46,24 +44,17 @@ enum {
   PROP_ARCH,
   PROP_BRANCH,
   PROP_FORCE_UPDATE,
-  PROP_TITLE,
-  PROP_ICON_NAME,
-  PROP_PROGRESS,
-  PROP_STATUS,
   N_PROPS
 };
 
-static void transfer_iface_init (IdeTransferInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakTransfer, gbp_flatpak_transfer, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_TRANSFER, transfer_iface_init))
+G_DEFINE_TYPE (GbpFlatpakTransfer, gbp_flatpak_transfer, IDE_TYPE_TRANSFER)
 
 static GParamSpec *properties [N_PROPS];
 
 static void
 gbp_flatpak_transfer_update_title (GbpFlatpakTransfer *self)
 {
-  GString *str;
+  g_autoptr(GString) str = NULL;
 
   g_return_if_fail (GBP_IS_FLATPAK_TRANSFER (self));
 
@@ -89,10 +80,29 @@ gbp_flatpak_transfer_update_title (GbpFlatpakTransfer *self)
 
   g_string_append_printf (str, "%s %s", self->id, self->branch);
 
-  g_free (self->title);
-  self->title = g_string_free (str, FALSE);
+  ide_transfer_set_title (IDE_TRANSFER (self), str->str);
+}
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+static void
+task_completed (GbpFlatpakTransfer *self,
+                GParamSpec         *pspec,
+                GTask              *task)
+{
+  g_assert (GBP_IS_FLATPAK_TRANSFER (self));
+  g_assert (G_IS_TASK (task));
+
+  self->finished = TRUE;
+
+  gbp_flatpak_transfer_update_title (self);
+
+  ide_transfer_set_progress (IDE_TRANSFER (self), 1.0);
+
+  if (self->failed)
+    ide_transfer_set_status (IDE_TRANSFER (self), _("Failed to install runtime"));
+  else if (self->finished && self->has_runtime)
+    ide_transfer_set_status (IDE_TRANSFER (self), _("Runtime has been updated"));
+  else
+    ide_transfer_set_status (IDE_TRANSFER (self), _("Runtime has been installed"));
 }
 
 static void
@@ -106,16 +116,12 @@ proxy_notify (GbpFlatpakTransfer *self,
 
   if (g_strcmp0 (pspec->name, "message") == 0)
     {
-      g_free (self->status);
-      self->status = ide_progress_get_message (progress);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATUS]);
+      g_autofree gchar *message = ide_progress_get_message (progress);
+      ide_transfer_set_status (IDE_TRANSFER (self), message);
     }
 
   if (g_strcmp0 (pspec->name, "fraction") == 0)
-    {
-      self->progress = ide_progress_get_fraction (progress);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PROGRESS]);
-    }
+    ide_transfer_set_progress (IDE_TRANSFER (self), ide_progress_get_fraction (progress));
 }
 
 static void
@@ -138,19 +144,6 @@ gbp_flatpak_transfer_execute_cb (GObject      *object,
     g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
-}
-
-static void
-task_completed (GbpFlatpakTransfer *self,
-                GParamSpec         *pspec,
-                GTask              *task)
-{
-  g_assert (GBP_IS_FLATPAK_TRANSFER (self));
-  g_assert (G_IS_TASK (task));
-
-  self->finished = TRUE;
-  gbp_flatpak_transfer_update_title (self);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STATUS]);
 }
 
 static void
@@ -241,28 +234,15 @@ gbp_flatpak_transfer_execute_finish (IdeTransfer   *transfer,
 }
 
 static void
-transfer_iface_init (IdeTransferInterface *iface)
-{
-  iface->execute_async = gbp_flatpak_transfer_execute_async;
-  iface->execute_finish = gbp_flatpak_transfer_execute_finish;
-}
-
-static void
 gbp_flatpak_transfer_finalize (GObject *object)
 {
   GbpFlatpakTransfer *self = (GbpFlatpakTransfer *)object;
 
-  IDE_ENTRY;
-
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->arch, g_free);
   g_clear_pointer (&self->branch, g_free);
-  g_clear_pointer (&self->title, g_free);
-  g_clear_pointer (&self->status, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_transfer_parent_class)->finalize (object);
-
-  IDE_EXIT;
 }
 
 static void
@@ -275,27 +255,20 @@ gbp_flatpak_transfer_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_STATUS:
-      if (self->failed)
-        g_value_set_static_string (value, _("Failed to install runtime"));
-      else if (self->finished && self->has_runtime)
-        g_value_set_static_string (value, _("Runtime has been updated"));
-      else if (self->finished)
-        g_value_set_static_string (value, _("Runtime has been installed"));
-      else
-        g_value_set_string (value, self->status);
+    case PROP_ID:
+      g_value_set_string (value, self->id);
       break;
 
-    case PROP_TITLE:
-      g_value_set_string (value, self->title);
+    case PROP_ARCH:
+      g_value_set_string (value, self->arch);
       break;
 
-    case PROP_ICON_NAME:
-      g_value_set_static_string (value, "folder-download-symbolic");
+    case PROP_BRANCH:
+      g_value_set_string (value, self->branch);
       break;
 
-    case PROP_PROGRESS:
-      g_value_set_double (value, self->progress);
+    case PROP_FORCE_UPDATE:
+      g_value_set_boolean (value, self->force_update);
       break;
 
     default:
@@ -321,15 +294,11 @@ gbp_flatpak_transfer_set_property (GObject      *object,
     case PROP_ARCH:
       g_free (self->arch);
       self->arch = g_value_dup_string (value);
-      if (self->arch == NULL)
-        self->arch = g_strdup (flatpak_get_default_arch ());
       break;
 
     case PROP_BRANCH:
       g_free (self->branch);
       self->branch = g_value_dup_string (value);
-      if (self->branch == NULL)
-        self->branch = g_strdup ("stable");
       break;
 
     case PROP_FORCE_UPDATE:
@@ -345,42 +314,42 @@ static void
 gbp_flatpak_transfer_class_init (GbpFlatpakTransferClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeTransferClass *transfer_class = IDE_TRANSFER_CLASS (klass);
 
   object_class->finalize = gbp_flatpak_transfer_finalize;
   object_class->get_property = gbp_flatpak_transfer_get_property;
   object_class->set_property = gbp_flatpak_transfer_set_property;
 
+  transfer_class->execute_async = gbp_flatpak_transfer_execute_async;
+  transfer_class->execute_finish = gbp_flatpak_transfer_execute_finish;
+
   properties [PROP_ID] =
-    g_param_spec_string ("id", NULL, NULL, NULL,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+    g_param_spec_string ("id",
+                         "Id",
+                         "The runtime identifier such as org.gnome.Platform",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ARCH] =
-    g_param_spec_string ("arch", NULL, NULL, NULL,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+    g_param_spec_string ("arch",
+                         "Arch",
+                         "The arch identifier such as x86_64",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_BRANCH] =
-    g_param_spec_string ("branch", NULL, NULL, NULL,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+    g_param_spec_string ("branch",
+                         "Branch",
+                         "The branch identifier such as 'stable'",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FORCE_UPDATE] =
-    g_param_spec_boolean ("force-update", NULL, NULL, FALSE,
-                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  properties [PROP_STATUS] =
-    g_param_spec_string ("status", NULL, NULL, NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  properties [PROP_TITLE] =
-    g_param_spec_string ("title", NULL, NULL, NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  properties [PROP_ICON_NAME] =
-    g_param_spec_string ("icon-name", NULL, NULL, NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  properties [PROP_PROGRESS] =
-    g_param_spec_double ("progress", NULL, NULL, 0.0, 100.0, 0.0,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+    g_param_spec_boolean ("force-update",
+                          "Force Update",
+                          "If we should always try to at least update",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -388,8 +357,6 @@ gbp_flatpak_transfer_class_init (GbpFlatpakTransferClass *klass)
 static void
 gbp_flatpak_transfer_init (GbpFlatpakTransfer *self)
 {
-  self->arch = g_strdup (flatpak_get_default_arch ());
-  self->branch = g_strdup ("master");
 }
 
 GbpFlatpakTransfer *

@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeTransferRow, ide_transfer_row, IDE, TRANSFER_ROW, GtkListBoxRow)
 
-void         ide_transfer_row_pump         (IdeTransferRow *self) G_GNUC_INTERNAL;
 IdeTransfer *ide_transfer_row_get_transfer (IdeTransferRow *self);
 void         ide_transfer_row_set_transfer (IdeTransferRow *self,
                                             IdeTransfer    *transfer);

@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_TRANSFER (gbp_flatpak_transfer_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakTransfer, gbp_flatpak_transfer, GBP, FLATPAK_TRANSFER, GObject)
+G_DECLARE_FINAL_TYPE (GbpFlatpakTransfer, gbp_flatpak_transfer, GBP, FLATPAK_TRANSFER, IdeTransfer)
 
 GbpFlatpakTransfer *gbp_flatpak_transfer_new (const gchar        *id,
                                               const gchar        *arch,

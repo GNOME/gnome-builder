@@ -29,15 +29,10 @@
 struct _IdeTransferManager
 {
   GObject    parent_instance;
-  guint      max_active;
   GPtrArray *transfers;
 };
 
-static void list_model_iface_init                 (GListModelInterface *iface);
-static void ide_transfer_manager_pump             (IdeTransferManager  *self);
-static void ide_transfer_manager_execute_complete (IdeTransferManager *self,
-                                                   GTask              *task,
-                                                   const GError       *reason);
+static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeTransferManager, ide_transfer_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
@@ -45,7 +40,6 @@ G_DEFINE_TYPE_EXTENDED (IdeTransferManager, ide_transfer_manager, IDE_TYPE_OBJEC
 enum {
   PROP_0,
   PROP_HAS_ACTIVE,
-  PROP_MAX_ACTIVE,
   PROP_PROGRESS,
   N_PROPS
 };
@@ -53,158 +47,12 @@ enum {
 enum {
   TRANSFER_COMPLETED,
   TRANSFER_FAILED,
+  ALL_TRANSFERS_COMPLETED,
   N_SIGNALS
 };
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
-
-#define GET_BOOLEAN(obj,name)     (NULL != g_object_get_data(G_OBJECT(obj), name))
-#define SET_BOOLEAN(obj,name,val) (g_object_set_data(G_OBJECT(obj), name, GINT_TO_POINTER(val)))
-
-static void
-transfer_cancel (IdeTransfer *transfer)
-{
-  GCancellable *cancellable;
-
-  g_assert (IDE_IS_TRANSFER (transfer));
-
-  cancellable = g_object_get_data (G_OBJECT (transfer), "IDE_TRANSFER_CANCELLABLE");
-  if (G_IS_CANCELLABLE (cancellable) && !g_cancellable_is_cancelled (cancellable))
-    g_cancellable_cancel (cancellable);
-}
-
-static gboolean
-transfer_get_active (IdeTransfer *transfer)
-{
-  return GET_BOOLEAN (transfer, "IDE_TRANSFER_ACTIVE");
-}
-
-static void
-transfer_set_active (IdeTransfer *transfer,
-                     gboolean     active)
-{
-  SET_BOOLEAN (transfer, "IDE_TRANSFER_ACTIVE", active);
-}
-
-static void
-transfer_set_completed (IdeTransfer *transfer,
-                        gboolean     completed)
-{
-  SET_BOOLEAN (transfer, "IDE_TRANSFER_COMPLETED", completed);
-}
-
-static guint
-ide_transfer_manager_count_active (IdeTransferManager *self)
-{
-  guint active = 0;
-
-  g_assert (IDE_IS_TRANSFER_MANAGER (self));
-
-  for (guint i = 0; i < self->transfers->len; i++)
-    {
-      IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
-
-      if (transfer_get_active (transfer) && !ide_transfer_has_completed (transfer))
-        active++;
-    }
-
-  return active;
-}
-
-static void
-ide_transfer_manager_execute_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
-{
-  IdeTransfer *transfer = (IdeTransfer *)object;
-  g_autoptr(IdeTransferManager) self = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TRANSFER_MANAGER (self));
-  g_assert (IDE_IS_TRANSFER (transfer));
-
-  transfer_set_completed (transfer, TRUE);
-
-  if (!ide_transfer_execute_finish (transfer, result, &error))
-    {
-      IdeContext *context;
-
-      context = ide_object_get_context (IDE_OBJECT (self));
-      ide_context_warning (context, "%s", error->message);
-
-      g_signal_emit (self, signals [TRANSFER_FAILED], 0, transfer, error);
-    }
-  else
-    g_signal_emit (self, signals [TRANSFER_COMPLETED], 0, transfer);
-
-  ide_transfer_manager_pump (self);
-
-  IDE_EXIT;
-}
-
-static void
-ide_transfer_manager_begin (IdeTransferManager *self,
-                            IdeTransfer        *transfer)
-{
-  GCancellable *cancellable;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TRANSFER_MANAGER (self));
-  g_assert (IDE_IS_TRANSFER (transfer));
-
-  transfer_set_active (transfer, TRUE);
-
-  cancellable = g_cancellable_new ();
-
-  g_object_set_data_full (G_OBJECT (transfer),
-                          "IDE_TRANSFER_CANCELLABLE",
-                          cancellable,
-                          g_object_unref);
-
-  ide_transfer_execute_async (transfer,
-                              cancellable,
-                              ide_transfer_manager_execute_cb,
-                              g_object_ref (self));
-
-  IDE_EXIT;
-}
-
-static void
-ide_transfer_manager_pump (IdeTransferManager *self)
-{
-  guint active;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TRANSFER_MANAGER (self));
-
-  active = ide_transfer_manager_count_active (self);
-
-  if (active < self->max_active)
-    {
-      for (guint i = 0; i < self->transfers->len; i++)
-        {
-          IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
-
-          if (!transfer_get_active (transfer))
-            {
-              active++;
-              ide_transfer_manager_begin (self, transfer);
-              if (active >= self->max_active)
-                break;
-            }
-        }
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_ACTIVE]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
-
-  IDE_EXIT;
-}
 
 /**
  * ide_transfer_manager_get_has_active:
@@ -222,33 +70,11 @@ ide_transfer_manager_get_has_active (IdeTransferManager *self)
     {
       IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
 
-      if (transfer_get_active (transfer) && !ide_transfer_has_completed (transfer))
+      if (ide_transfer_get_active (transfer))
         return TRUE;
     }
 
   return FALSE;
-}
-
-guint
-ide_transfer_manager_get_max_active (IdeTransferManager *self)
-{
-  g_return_val_if_fail (IDE_IS_TRANSFER_MANAGER (self), 0);
-
-  return self->max_active;
-}
-
-void
-ide_transfer_manager_set_max_active (IdeTransferManager *self,
-                                     guint               max_active)
-{
-  g_return_if_fail (IDE_IS_TRANSFER_MANAGER (self));
-
-  if (self->max_active != max_active)
-    {
-      self->max_active = max_active;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MAX_ACTIVE]);
-      ide_transfer_manager_pump (self);
-    }
 }
 
 static void
@@ -275,31 +101,8 @@ ide_transfer_manager_get_property (GObject    *object,
       g_value_set_boolean (value, ide_transfer_manager_get_has_active (self));
       break;
 
-    case PROP_MAX_ACTIVE:
-      g_value_set_uint (value, ide_transfer_manager_get_max_active (self));
-      break;
-
     case PROP_PROGRESS:
       g_value_set_double (value, ide_transfer_manager_get_progress (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_transfer_manager_set_property (GObject      *object,
-                                   guint         prop_id,
-                                   const GValue *value,
-                                   GParamSpec   *pspec)
-{
-  IdeTransferManager *self = IDE_TRANSFER_MANAGER (object);
-
-  switch (prop_id)
-    {
-    case PROP_MAX_ACTIVE:
-      ide_transfer_manager_set_max_active (self, g_value_get_uint (value));
       break;
 
     default:
@@ -314,7 +117,6 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
 
   object_class->finalize = ide_transfer_manager_finalize;
   object_class->get_property = ide_transfer_manager_get_property;
-  object_class->set_property = ide_transfer_manager_set_property;
 
   /**
    * IdeTransferManager:has-active:
@@ -329,20 +131,11 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * IdeTransferManager:max-active:
+   * IdeTransferManager:progress:
    *
-   * Sets the max number of transfers to have active at one time.
-   * Set to zero for a sensible default.
+   * A double between and including 0.0 and 1.0 describing the progress of
+   * all tasks.
    */
-  properties [PROP_MAX_ACTIVE] =
-    g_param_spec_uint ("max-active",
-                       "Max Active",
-                       "Max Active",
-                       0,
-                       G_MAXUINT,
-                       0,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
                          "Progress",
@@ -353,6 +146,17 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdeTransferManager::all-transfers-completed:
+   *
+   * This signal is emitted when all of the transfers have completed or failed.
+   */
+  signals [ALL_TRANSFERS_COMPLETED] =
+    g_signal_new ("all-transfers-completed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   /**
    * IdeTransferManager::transfer-completed:
@@ -390,7 +194,6 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
 static void
 ide_transfer_manager_init (IdeTransferManager *self)
 {
-  self->max_active = DEFAULT_MAX_ACTIVE;
   self->transfers = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
@@ -405,26 +208,21 @@ ide_transfer_manager_notify_progress (IdeTransferManager *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
 }
 
-void
-ide_transfer_manager_queue (IdeTransferManager *self,
-                            IdeTransfer        *transfer)
+static gboolean
+ide_transfer_manager_append (IdeTransferManager *self,
+                             IdeTransfer        *transfer)
 {
   guint position;
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_TRANSFER_MANAGER (self));
-  g_return_if_fail (IDE_IS_TRANSFER (transfer));
+  g_return_val_if_fail (IDE_IS_TRANSFER_MANAGER (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TRANSFER (transfer), FALSE);
 
   for (guint i = 0; i < self->transfers->len; i++)
     {
-      IdeTransfer *ele = g_ptr_array_index (self->transfers, i);
-
-      if (ele == transfer)
-        {
-          transfer_set_active (transfer, FALSE);
-          goto already_inserted;
-        }
+      if (transfer == (IdeTransfer *)g_ptr_array_index (self->transfers, i))
+        IDE_RETURN (FALSE);
     }
 
   g_signal_connect_object (transfer,
@@ -437,10 +235,7 @@ ide_transfer_manager_queue (IdeTransferManager *self,
   g_ptr_array_add (self->transfers, g_object_ref (transfer));
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 
-already_inserted:
-  ide_transfer_manager_pump (self);
-
-  IDE_EXIT;
+  IDE_RETURN (TRUE);
 }
 
 void
@@ -454,22 +249,8 @@ ide_transfer_manager_cancel_all (IdeTransferManager *self)
     {
       IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
 
-      transfer_cancel (transfer);
+      ide_transfer_cancel (transfer);
     }
-
-  IDE_EXIT;
-}
-
-void
-ide_transfer_manager_cancel (IdeTransferManager *self,
-                             IdeTransfer        *transfer)
-{
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_TRANSFER_MANAGER (self));
-  g_return_if_fail (IDE_IS_TRANSFER (transfer));
-
-  transfer_cancel (transfer);
 
   IDE_EXIT;
 }
@@ -490,7 +271,7 @@ ide_transfer_manager_clear (IdeTransferManager *self)
     {
       IdeTransfer *transfer = g_ptr_array_index (self->transfers, i - 1);
 
-      if (ide_transfer_has_completed (transfer))
+      if (!ide_transfer_get_active (transfer))
         {
           g_ptr_array_remove_index (self->transfers, i - 1);
           g_list_model_items_changed (G_LIST_MODEL (self), i - 1, 1, 0);
@@ -545,81 +326,64 @@ ide_transfer_manager_get_progress (IdeTransferManager *self)
 
   g_return_val_if_fail (IDE_IS_TRANSFER_MANAGER (self), 0.0);
 
-  if (self->transfers->len == 0)
-    return 0.0;
-
-  for (guint i = 0; i < self->transfers->len; i++)
+  if (self->transfers->len > 0)
     {
-      IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
-      gdouble progress;
-
-      progress = ide_transfer_get_progress (transfer);
-      total += MAX (0.0, MIN (1.0, progress));
+      for (guint i = 0; i < self->transfers->len; i++)
+        {
+          IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
+          gdouble progress = ide_transfer_get_progress (transfer);
+          total += MAX (0.0, MIN (1.0, progress));
+        }
+      total /= (gdouble)self->transfers->len;
     }
 
-  return total / (gdouble)self->transfers->len;
+  return total;
 }
 
 static void
-ide_transfer_manager_execute_transfer_completed (IdeTransferManager *self,
-                                                 IdeTransfer        *transfer,
-                                                 GTask              *task)
+ide_transfer_manager_execute_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
-  IdeTransfer *task_data;
+  IdeTransfer *transfer = (IdeTransfer *)object;
+  IdeTransferManager *self;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
 
-  g_assert (IDE_IS_TRANSFER_MANAGER (self));
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TRANSFER (transfer));
   g_assert (G_IS_TASK (task));
 
-  task_data = g_task_get_task_data (task);
+  self = g_task_get_source_object (task);
 
-  if (task_data == transfer)
-    ide_transfer_manager_execute_complete (self, task, NULL);
-}
-
-static void
-ide_transfer_manager_execute_transfer_failed (IdeTransferManager *self,
-                                              IdeTransfer        *transfer,
-                                              const GError       *reason,
-                                              GTask              *task)
-{
-  IdeTransfer *task_data;
-
-  g_assert (IDE_IS_TRANSFER_MANAGER (self));
-  g_assert (IDE_IS_TRANSFER (transfer));
-  g_assert (reason != NULL);
-  g_assert (G_IS_TASK (task));
-
-  task_data = g_task_get_task_data (task);
-
-  if (task_data == transfer)
-    ide_transfer_manager_execute_complete (self, task, reason);
-}
-
-static void
-ide_transfer_manager_execute_complete (IdeTransferManager *self,
-                                       GTask              *task,
-                                       const GError       *reason)
-{
-  g_assert (IDE_IS_TRANSFER_MANAGER (self));
-  g_assert (G_IS_TASK (task));
-
-  g_signal_handlers_disconnect_by_func (self,
-                                        G_CALLBACK (ide_transfer_manager_execute_transfer_completed),
-                                        task);
-
-  g_signal_handlers_disconnect_by_func (self,
-                                        G_CALLBACK (ide_transfer_manager_execute_transfer_failed),
-                                        task);
-
-  if (reason != NULL)
-    g_task_return_error (task, g_error_copy (reason));
+  if (!ide_transfer_execute_finish (transfer, result, &error))
+    {
+      g_signal_emit (self, signals[TRANSFER_FAILED], 0, transfer, error);
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_GOTO (notify_properties);
+    }
   else
-    g_task_return_boolean (task, TRUE);
+    {
+      g_signal_emit (self, signals[TRANSFER_COMPLETED], 0, transfer);
+    }
+
+  if (!ide_transfer_manager_get_has_active (self))
+    g_signal_emit (self, signals[ALL_TRANSFERS_COMPLETED], 0);
+
+notify_properties:
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_ACTIVE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
+
+  IDE_EXIT;
 }
 
 /**
  * ide_transfer_manager_execute_async:
+ * @self: An #IdeTransferManager
+ * @cancellable: (nullable): A #GCancellable
+ * @callback: (nullable) A callback or %NULL
+ * @user_data: user data for @callback
  *
  * This is a convenience function that will queue @transfer into the transfer
  * manager and execute callback upon completion of the transfer. The success
@@ -635,29 +399,31 @@ ide_transfer_manager_execute_async (IdeTransferManager  *self,
 {
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_TRANSFER_MANAGER (self));
   g_return_if_fail (IDE_IS_TRANSFER (transfer));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_transfer_manager_execute_async);
-  g_task_set_task_data (task, g_object_ref (transfer), g_object_unref);
 
-  g_signal_connect_data (self,
-                         "transfer-completed",
-                         G_CALLBACK (ide_transfer_manager_execute_transfer_completed),
-                         g_object_ref (task),
-                         (GClosureNotify)g_object_unref,
-                         0);
+  if (!ide_transfer_manager_append (self, transfer))
+    {
+      if (ide_transfer_get_active (transfer))
+        {
+          g_warning ("%s is already active, ignoring transfer request",
+                     G_OBJECT_TYPE_NAME (transfer));
+          IDE_EXIT;
+        }
+    }
 
-  g_signal_connect_data (self,
-                         "transfer-failed",
-                         G_CALLBACK (ide_transfer_manager_execute_transfer_failed),
-                         g_object_ref (task),
-                         (GClosureNotify)g_object_unref,
-                         0);
+  ide_transfer_execute_async (transfer,
+                              cancellable,
+                              ide_transfer_manager_execute_cb,
+                              g_steal_pointer (&task));
 
-  ide_transfer_manager_queue (self, transfer);
+  IDE_EXIT;
 }
 
 gboolean

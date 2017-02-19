@@ -25,11 +25,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER (ide_transfer_get_type())
 
-G_DECLARE_INTERFACE (IdeTransfer, ide_transfer, IDE, TRANSFER, GObject)
+G_DECLARE_DERIVABLE_TYPE (IdeTransfer, ide_transfer, IDE, TRANSFER, GObject)
 
-struct _IdeTransferInterface
+struct _IdeTransferClass
 {
-  GTypeInterface parent;
+  GObjectClass parent_class;
 
   void     (*execute_async)  (IdeTransfer          *self,
                               GCancellable         *cancellable,
@@ -38,18 +38,39 @@ struct _IdeTransferInterface
   gboolean (*execute_finish) (IdeTransfer          *self,
                               GAsyncResult         *result,
                               GError              **error);
-  gboolean (*has_completed)  (IdeTransfer          *self);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
-gdouble  ide_transfer_get_progress   (IdeTransfer          *self);
-void     ide_transfer_execute_async  (IdeTransfer          *self,
-                                      GCancellable         *cancellable,
-                                      GAsyncReadyCallback   callback,
-                                      gpointer              user_data);
-gboolean ide_transfer_execute_finish (IdeTransfer          *self,
-                                      GAsyncResult         *result,
-                                      GError              **error);
-gboolean ide_transfer_has_completed  (IdeTransfer          *self);
+void         ide_transfer_cancel         (IdeTransfer          *self);
+gboolean     ide_transfer_get_completed  (IdeTransfer          *self);
+gboolean     ide_transfer_get_active     (IdeTransfer          *self);
+const gchar *ide_transfer_get_icon_name  (IdeTransfer          *self);
+void         ide_transfer_set_icon_name  (IdeTransfer          *self,
+                                          const gchar          *icon_name);
+gdouble      ide_transfer_get_progress   (IdeTransfer          *self);
+void         ide_transfer_set_progress   (IdeTransfer          *self,
+                                          gdouble               progress);
+const gchar *ide_transfer_get_status     (IdeTransfer          *self);
+void         ide_transfer_set_status     (IdeTransfer          *self,
+                                          const gchar          *status);
+const gchar *ide_transfer_get_title      (IdeTransfer          *self);
+void         ide_transfer_set_title      (IdeTransfer          *self,
+                                          const gchar          *title);
+void         ide_transfer_execute_async  (IdeTransfer          *self,
+                                          GCancellable         *cancellable,
+                                          GAsyncReadyCallback   callback,
+                                          gpointer              user_data);
+gboolean     ide_transfer_execute_finish (IdeTransfer          *self,
+                                          GAsyncResult         *result,
+                                          GError              **error);
 
 G_END_DECLS
 

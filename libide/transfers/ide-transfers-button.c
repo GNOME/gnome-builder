@@ -117,17 +117,13 @@ static void
 ide_transfers_button_cancel_clicked (IdeTransfersButton *self,
                                      IdeTransferRow     *row)
 {
-  IdeTransferManager *transfer_manager;
   IdeTransfer *transfer;
-  IdeContext *context;
 
   g_assert (IDE_IS_TRANSFERS_BUTTON (self));
   g_assert (IDE_IS_TRANSFER_ROW (row));
 
-  if (NULL != (transfer = ide_transfer_row_get_transfer (row)) &&
-      NULL != (context = ide_widget_get_context (GTK_WIDGET (self))) &&
-      NULL != (transfer_manager = ide_context_get_transfer_manager (context)))
-    ide_transfer_manager_cancel (transfer_manager, transfer);
+  if (NULL != (transfer = ide_transfer_row_get_transfer (row)))
+    ide_transfer_cancel (transfer);
 }
 
 static GtkWidget *
@@ -175,47 +171,6 @@ ide_transfers_button_update_visibility (IdeTransfersButton *self)
 
   IDE_EXIT;
 }
-
-static void
-find_transfer_row (GtkWidget *widget,
-                   gpointer   user_data)
-{
-  struct {
-    IdeTransfer    *transfer;
-    IdeTransferRow *row;
-  } *lookup = user_data;
-
-  if (lookup->row != NULL)
-    return;
-
-  if (lookup->transfer == ide_transfer_row_get_transfer (IDE_TRANSFER_ROW (widget)))
-    lookup->row = IDE_TRANSFER_ROW (widget);
-}
-
-static void
-ide_transfers_button_transfer_completed (IdeTransfersButton *self,
-                                         IdeTransfer        *transfer,
-                                         IdeTransferManager *transfer_manager)
-{
-  struct {
-    IdeTransfer    *transfer;
-    IdeTransferRow *row;
-  } lookup = { transfer, NULL };
-
-  g_assert (IDE_IS_TRANSFERS_BUTTON (self));
-  g_assert (IDE_IS_TRANSFER (transfer));
-  g_assert (IDE_IS_TRANSFER_MANAGER (transfer_manager));
-
-  gtk_container_foreach (GTK_CONTAINER (self->list_box),
-                         find_transfer_row,
-                         &lookup);
-
-  if (lookup.row != NULL)
-    ide_transfer_row_pump (lookup.row);
-
-  ide_transfers_button_begin_theatrics (self);
-}
-
 static void
 ide_transfers_button_context_set (GtkWidget  *widget,
                                   IdeContext *context)
@@ -232,8 +187,8 @@ ide_transfers_button_context_set (GtkWidget  *widget,
   transfer_manager = ide_context_get_transfer_manager (context);
 
   g_signal_connect_object (transfer_manager,
-                           "transfer-completed",
-                           G_CALLBACK (ide_transfers_button_transfer_completed),
+                           "all-transfers-completed",
+                           G_CALLBACK (ide_transfers_button_begin_theatrics),
                            self,
                            G_CONNECT_SWAPPED);
 
