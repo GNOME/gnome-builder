@@ -106,6 +106,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Matej Urbančič",
   "Mathieu Bridon",
   "Mathieu Duponchelle",
+  "Matthew Leeds",
   "Matthias Clasen",
   "Megh Parikh",
   "Michael Biebl",
