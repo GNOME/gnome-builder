@@ -382,7 +382,7 @@ notify_properties:
  * ide_transfer_manager_execute_async:
  * @self: An #IdeTransferManager
  * @cancellable: (nullable): A #GCancellable
- * @callback: (nullable) A callback or %NULL
+ * @callback: (nullable): A callback or %NULL
  * @user_data: user data for @callback
  *
  * This is a convenience function that will queue @transfer into the transfer
