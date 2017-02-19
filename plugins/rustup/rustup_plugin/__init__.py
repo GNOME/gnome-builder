@@ -291,9 +291,11 @@ class RustupInstaller(Ide.Transfer):
         launcher.set_clear_env(False)
         if self.mode == _MODE_INSTALL:
             rustup_sh_path = get_module_data_path('resources/rustup.sh')
-            # ensure that the script is executable
-            st = os.stat(rustup_sh_path)
-            os.chmod(rustup_sh_path, st.st_mode | stat.S_IEXEC)
+            # XXX: ensure that the script is executable
+            #      this should not be neccessary now that we bundle rustup.sh
+            #      and its likely the script is read-only anyway.
+            # st = os.stat(rustup_sh_path)
+            # os.chmod(rustup_sh_path, st.st_mode | stat.S_IEXEC)
             launcher.push_argv(rustup_sh_path)
             # install default toolchain automatically
             launcher.push_argv('-y')
