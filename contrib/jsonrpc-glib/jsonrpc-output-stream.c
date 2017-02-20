@@ -179,7 +179,7 @@ jsonrpc_output_stream_write_message_async_cb (GObject      *object,
                                               gpointer      user_data)
 {
   GOutputStream *stream = (GOutputStream *)object;
-  JsonrpcOutputStream *self;
+  g_autoptr(JsonrpcOutputStream) self = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
   GBytes *bytes;
@@ -188,7 +188,8 @@ jsonrpc_output_stream_write_message_async_cb (GObject      *object,
   g_assert (G_IS_OUTPUT_STREAM (stream));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
-  self = g_task_get_source_object (task);
+
+  self = g_object_ref (g_task_get_source_object (task));
   g_assert (JSONRPC_IS_OUTPUT_STREAM (self));
 
   if (!g_output_stream_write_all_finish (stream, result, &n_written, &error))
