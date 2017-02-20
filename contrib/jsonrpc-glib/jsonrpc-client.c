@@ -741,7 +741,7 @@ jsonrpc_client_call_sync_cb (GObject      *object,
                              gpointer      user_data)
 {
   JsonrpcClient *self = (JsonrpcClient *)object;
-  GTask *task = user_data;
+  g_autoptr(GTask) task = user_data;
   g_autoptr(JsonNode) return_value = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -800,7 +800,7 @@ jsonrpc_client_call (JsonrpcClient  *self,
                              params,
                              cancellable,
                              jsonrpc_client_call_sync_cb,
-                             task);
+                             g_object_ref (task));
 
   while (!g_task_get_completed (task))
     g_main_context_iteration (main_context, TRUE);
