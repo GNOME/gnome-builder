@@ -298,6 +298,8 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
 {
   g_autoptr(GArray) ar = NULL;
   g_auto(IdeSearchReducer) reducer = { 0 };
+  g_autoptr(GString) delimited = NULL;
+  const gchar *iter = query;
   IdeContext *icontext;
   gsize max_matches;
   gsize i;
@@ -314,7 +316,19 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
   max_matches = ide_search_context_get_max_results (context);
   ide_search_reducer_init (&reducer, context, provider, max_matches);
 
-  ar = fuzzy_match (self->fuzzy, query, max_matches);
+  delimited = g_string_new (NULL);
+
+  for (; *iter; iter = g_utf8_next_char (iter))
+    {
+      gunichar ch = g_utf8_get_char (iter);
+
+      if (!g_unichar_isspace (ch))
+        g_string_append_unichar (delimited, ch);
+    }
+
+  g_print ("Searching with: %s\n", delimited->str);
+
+  ar = fuzzy_match (self->fuzzy, delimited->str, max_matches);
 
   for (i = 0; i < ar->len; i++)
     {
@@ -327,7 +341,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           g_autoptr(GbFileSearchResult) result = NULL;
           g_autofree gchar *markup = NULL;
 
-          markup = ide_completion_item_fuzzy_highlight (match->key, query);
+          markup = ide_completion_item_fuzzy_highlight (match->key, delimited->str);
           result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
                                  "context", icontext,
                                  "provider", provider,
