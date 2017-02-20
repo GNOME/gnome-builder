@@ -77,8 +77,10 @@ class RustService(Ide.Object, Ide.Service):
             # Setup a launcher to spawn the rust language server
             launcher = self._create_launcher()
             launcher.set_clear_env(False)
-            launcher.setenv("SYS_ROOT", self._discover_sysroot(), True)
-            launcher.setenv("LD_LIBRARY_PATH", os.path.join(self._discover_sysroot(), "lib"), True)
+            sysroot = self._discover_sysroot()
+            if sysroot:
+                launcher.setenv("SYS_ROOT", sysroot, True)
+                launcher.setenv("LD_LIBRARY_PATH", os.path.join(sysroot, "lib"), True)
 
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
@@ -140,11 +142,15 @@ class RustService(Ide.Object, Ide.Service):
         get, by using `rust --print sysroot` as the rust-language-server
         documentation suggests.
         """
-        launcher = self._create_launcher()
-        launcher.push_args(['rustc', '--print', 'sysroot'])
-        subprocess = launcher.spawn()
-        _, stdout, _ = subprocess.communicate_utf8()
-        return stdout.strip()
+        for rustc in ['rustc', os.path.expanduser('~/.cargo/bin/rustc')]:
+            try:
+                launcher = self._create_launcher()
+                launcher.push_args([rustc, '--print', 'sysroot'])
+                subprocess = launcher.spawn()
+                _, stdout, _ = subprocess.communicate_utf8()
+                return stdout.strip()
+            except:
+                pass
 
     @classmethod
     def bind_client(klass, provider):
