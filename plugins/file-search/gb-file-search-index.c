@@ -326,8 +326,6 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
         g_string_append_unichar (delimited, ch);
     }
 
-  g_print ("Searching with: %s\n", delimited->str);
-
   ar = fuzzy_match (self->fuzzy, delimited->str, max_matches);
 
   for (i = 0; i < ar->len; i++)
