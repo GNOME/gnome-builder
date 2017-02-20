@@ -300,11 +300,14 @@ jsonrpc_client_panic (JsonrpcClient *self,
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
   g_autoptr(GHashTable) invocations = NULL;
+  g_autoptr(JsonrpcClient) hold = NULL;
   GHashTableIter iter;
   GTask *task;
 
   g_assert (JSONRPC_IS_CLIENT (self));
   g_assert (error != NULL);
+
+  hold = g_object_ref (self);
 
   priv->failed = TRUE;
 
