@@ -155,7 +155,6 @@ plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 plugins/gnome-code-assistance/ide-gca-service.c
 plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml
-plugins/hello-cpp/hellocppapplicationaddin.cc
 plugins/html-preview/html_preview_plugin/gtk/menus.ui
 plugins/jedi/jedi_plugin.py
 plugins/meson/meson_plugin/__init__.py

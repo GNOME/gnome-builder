@@ -19,7 +19,6 @@ SUBDIRS = \
 	gettext \
 	git \
 	gnome-code-assistance \
-	hello-cpp \
 	html-completion \
 	html-preview \
 	jedi \

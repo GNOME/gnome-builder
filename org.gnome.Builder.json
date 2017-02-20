@@ -58,7 +58,6 @@
                 "/man", "/share/man", "/share/gtk-doc",
                 "/share/doc", "/share/vala", "/share/appdata",
                 "/share/bash-completions",
-                "/lib/sigc++-2.0", "/lib/glibmm-2.4", "/lib/giomm-2.4",
                 "*.la", "*.a"],
     "modules": [
         {
@@ -242,39 +241,6 @@
                     "branch": "gnome-3-24",
                     "type": "git",
                     "url": "git://git.gnome.org/gtksourceview"
-                }
-            ]
-        },
-        {
-            "name": "mm-common",
-            "config-opts": [ "--disable-documentation" ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.gnome.org/sources/mm-common/0.9/mm-common-0.9.10.tar.xz",
-                    "sha256": "16c0e2bc196b67fbc145edaecb5dbe5818386504fe5703de27002d77140fa217"
-                }
-            ]
-        },
-        {
-            "name": "libsigcplusplus",
-            "config-opts": [ "--disable-documentation" ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.gnome.org/sources/libsigc++/2.9/libsigc++-2.9.3.tar.xz",
-                    "sha256": "0bf9b301ad6198c550986c51150a646df198e8d1d235270c16486b0dda30097f"
-                }
-            ]
-        },
-        {
-            "name": "glibmm",
-            "config-opts": [ "--disable-documentation" ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.gnome.org/sources/glibmm/2.49/glibmm-2.49.5.tar.xz",
-                    "sha256": "4e9c147c3fd3b8ecb15b3d5bdc120ef4e88a5d6948c8e82c3d95f85add33304e"
                 }
             ]
         },

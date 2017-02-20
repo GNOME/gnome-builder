@@ -275,12 +275,6 @@ AM_CONDITIONAL(ENABLE_PYTHON_SCRIPTING, test x$enable_python_scripting != xno)
 
 
 dnl ***********************************************************************
-dnl Check for idemm
-dnl ***********************************************************************
-m4_include([libidemm/configure.ac])
-
-
-dnl ***********************************************************************
 dnl Check for supported plugins
 dnl ***********************************************************************
 m4_include([plugins/autotools/configure.ac])
@@ -303,7 +297,6 @@ m4_include([plugins/gcc/configure.ac])
 m4_include([plugins/gettext/configure.ac])
 m4_include([plugins/git/configure.ac])
 m4_include([plugins/gnome-code-assistance/configure.ac])
-m4_include([plugins/hello-cpp/configure.ac])
 m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
 m4_include([plugins/jedi/configure.ac])
@@ -585,14 +578,6 @@ echo "  Build API reference .................. : ${enable_gtk_doc}"
 echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
 echo "  Sanitizer ............................ : ${with_sanitizer}"
 echo ""
-echo " Optional libraries"
-echo ""
-echo "  idemm ................................ : ${enable_idemm}"
-echo ""
-echo " Scripting"
-echo ""
-echo "  Python ............................... : ${enable_python_scripting}"
-echo ""
 echo " Plugins"
 echo ""
 echo "  Autotools ............................ : ${enable_autotools_plugin}"
@@ -635,10 +620,6 @@ echo "  Terminal ............................. : ${enable_terminal_plugin}"
 echo "  Vala Language Pack ................... : ${enable_vala_pack_plugin}"
 echo "  Flatpak .............................. : ${enable_flatpak_plugin}"
 echo "  XML Language Pack .................... : ${enable_xml_pack_plugin}"
-echo ""
-echo " Example Plugins"
-echo ""
-echo "  Example C++ .......................... : ${enable_hello_cpp_plugin}"
 echo ""
 echo " Templates"
 echo ""
