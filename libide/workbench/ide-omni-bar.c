@@ -222,15 +222,10 @@ on_configure_row (IdeOmniBar    *self,
   /*
    * TODO: This can be removed once GtkListBoxRow can activate actions
    *       in the "activate" signal (using something like action-name).
-   *
-   *       This code is basically a layer violation since build-tools
-   *       is provided by a plugin and we are simply activating it.
-   *       However, it's an internal plugin and should always be there,
-   *       so not the end of the world.
    */
 
   ide_widget_action (GTK_WIDGET (self),
-                     "build-tools",
+                     "buildui",
                      "configure",
                      g_variant_new_string (id));
 

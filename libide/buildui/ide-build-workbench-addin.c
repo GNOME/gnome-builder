@@ -157,7 +157,7 @@ ide_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   self->build_log_panel = g_object_new (IDE_TYPE_BUILD_LOG_PANEL, NULL);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->build_log_panel));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools",
+  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "buildui",
                                   G_ACTION_GROUP (self->actions));
 
   g_object_bind_property (self, "pipeline", self->panel, "pipeline", 0);
@@ -180,7 +180,7 @@ ide_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_BUILD_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "build-tools", NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "buildui", NULL);
 
   gtk_widget_destroy (GTK_WIDGET (self->panel));
   self->panel = NULL;
