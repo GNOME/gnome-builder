@@ -54,7 +54,6 @@
     },
     "cleanup": ["/include", "/lib/pkgconfig", "/lib/cmake",
                 "/share/pkgconfig", "/share/aclocal",
-                "/share/mm-common", "/bin/mm-*",
                 "/man", "/share/man", "/share/gtk-doc",
                 "/share/doc", "/share/vala", "/share/appdata",
                 "/share/bash-completions",
