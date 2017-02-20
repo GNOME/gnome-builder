@@ -29,12 +29,12 @@ AS_IF([test "$enable_git_plugin" != "no" && test "$have_git" == "yes"],[
 	# Thread-Safe
 	AC_MSG_CHECKING([for thread-safe support in libgit2])
 	AC_TRY_RUN([
-		#include <libgit2-glib/ggit.h>
+		#include <git2.h>
 		int
 		main(int argc, const char *argv[])
 		{
-			ggit_init ();
-			return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
+			git_libgit2_init ();
+			return ((git_libgit2_features() & GIT_FEATURE_THREADS) != 0) ? 0 : 1;
 		}
 	],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, please recompile a threadsafe version of libgit2 (-DTHREADSAFE:BOOL=ON)])])
 	# SSH
@@ -44,8 +44,8 @@ AS_IF([test "$enable_git_plugin" != "no" && test "$have_git" == "yes"],[
 		int
 		main(int argc, const char *argv[])
 		{
-			ggit_init ();
-			return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
+			git_libgit2_init ();
+			return ((git_libgit2_features () & GIT_FEATURE_SSH) != 0) ? 0 : 1;
 		}
 	],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, please recompile a libgit2 with ssh support])])
 	CFLAGS="${cflags_save}"
