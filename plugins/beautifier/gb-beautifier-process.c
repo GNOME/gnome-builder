@@ -151,7 +151,7 @@ gb_beautifier_process_create_generic (GbBeautifierWorkbenchAddin *self,
                                       GError                     *error)
 {
   GSubprocess *subprocess = NULL;
-  gchar *src_path;
+  g_autofree gchar *src_path = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
   g_assert (state != NULL);
