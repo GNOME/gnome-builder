@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-16 15:47+0000\n"
-"PO-Revision-Date: 2017-02-17 11:45+0500\n"
+"POT-Creation-Date: 2017-02-19 18:37+0000\n"
+"PO-Revision-Date: 2017-02-20 08:48+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -978,11 +978,11 @@ msgstr "GNOME құрастырушысы"
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
-#: libide/application/ide-application-actions.c:127
+#: libide/application/ide-application-actions.c:131
 msgid "Learn more about GNOME Builder"
 msgstr "GNOME құрастырушысы туралы көбірек біліңіз"
 
-#: libide/application/ide-application-actions.c:130
+#: libide/application/ide-application-actions.c:134
 msgid "Funded By"
 msgstr "Демеушілер"
 
@@ -1072,53 +1072,53 @@ msgstr "сақталмаған құжат %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
-#: libide/buildsystem/ide-build-pipeline.c:2032
+#: libide/buildsystem/ide-build-pipeline.c:2036
 msgid "Cleaning…"
 msgstr "Тазарту…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2047
+#: libide/buildsystem/ide-build-pipeline.c:2051
 msgid "Downloading…"
 msgstr "Жүктелуде…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2051
+#: libide/buildsystem/ide-build-pipeline.c:2055
 msgid "Building dependencies…"
 msgstr "Тәуелділіктерді құрастыру…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2055
+#: libide/buildsystem/ide-build-pipeline.c:2059
 msgid "Bootstrapping…"
 msgstr "Ортаны дайындау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2059
+#: libide/buildsystem/ide-build-pipeline.c:2063
 msgid "Configuring…"
 msgstr "Баптау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2063
+#: libide/buildsystem/ide-build-pipeline.c:2067
 msgid "Building…"
 msgstr "Жинау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2067
+#: libide/buildsystem/ide-build-pipeline.c:2071
 msgid "Installing…"
 msgstr "Орнату…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2071
+#: libide/buildsystem/ide-build-pipeline.c:2075
 msgid "Exporting…"
 msgstr "Экспорттау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2075
 #: libide/buildsystem/ide-build-pipeline.c:2079
+#: libide/buildsystem/ide-build-pipeline.c:2083
 msgid "Success"
 msgstr "Сәтті аяқталды"
 
-#: libide/buildsystem/ide-build-pipeline.c:2083
-#: libide/workbench/ide-omni-bar.ui:325
+#: libide/buildsystem/ide-build-pipeline.c:2087
+#: libide/workbench/ide-omni-bar.ui:327
 msgid "Failed"
 msgstr "Сәтсіз"
 
-#: libide/buildsystem/ide-build-pipeline.c:2087
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Preparing…"
 msgstr "Дайындау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/buildsystem/ide-build-pipeline.c:2095
 msgid "Ready"
 msgstr "Дайын"
 
@@ -1198,7 +1198,7 @@ msgstr[0] "%d қате"
 
 #: libide/buildui/ide-build-panel.c:517
 #: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:379
+#: libide/workbench/ide-omni-bar.ui:381
 msgid "Build"
 msgstr "Жинау"
 
@@ -1392,6 +1392,7 @@ msgid "Switch between Search and Search-and-Replace"
 msgstr "Іздеу және іздеу мен алмастыру арасында ауысу"
 
 #: libide/editor/ide-editor-frame.ui:224
+#: plugins/terminal/gb-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 
@@ -1400,6 +1401,7 @@ msgid "Regular expressions"
 msgstr "Тұрақты өрнек"
 
 #: libide/editor/ide-editor-frame.ui:300
+#: plugins/terminal/gb-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "Регистрді ескеру"
 
@@ -1594,7 +1596,7 @@ msgstr "Қа_йта жүктеу"
 #: libide/editor/ide-editor-view.ui:31
 #: libide/greeter/ide-greeter-perspective.ui:317
 #: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:353
+#: libide/workbench/ide-omni-bar.ui:355
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
@@ -2409,11 +2411,16 @@ msgstr ""
 msgid "Version Control"
 msgstr "Нұсқаларды басқару"
 
+#. only the page goes here, plugins will fill in the details
+#: libide/preferences/ide-preferences-builtin.c:530
+msgid "SDKs"
+msgstr ""
+
 #: libide/preferences/ide-preferences-font-button.ui:57
 msgid "_Select"
 msgstr "Таң_дау"
 
-#: libide/preferences/ide-preferences-perspective.c:955
+#: libide/preferences/ide-preferences-perspective.c:963
 msgid "Preferences"
 msgstr "Баптаулар"
 
@@ -2433,6 +2440,14 @@ msgstr "Файл жоба ағашының ішінде болуы тиіс."
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() тек бір рет орындауға болады"
+
+#: libide/runner/ide-run-button.ui:41
+msgid "Stop running"
+msgstr ""
+
+#: libide/runner/ide-run-button.ui:57
+msgid "Change run options"
+msgstr "Орындалу баптауларын өзгерту"
 
 #: libide/runner/ide-run-manager.c:225
 msgid "Run"
@@ -2597,15 +2612,10 @@ msgid "untitled document"
 msgstr "атаусыз құжат"
 
 #. translators: this message is shown in the header bar to indicate build status
-#: libide/workbench/ide-omni-bar.c:169
+#: libide/workbench/ide-omni-bar.c:170
 #, c-format
 msgid "Build: %s"
 msgstr "Жинақ: %s"
-
-#. Translators: "Target" is providing context to the selected build configuration
-#: libide/workbench/ide-omni-bar.c:356
-msgid "Target"
-msgstr "Мақсаты"
 
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:90
@@ -2616,42 +2626,46 @@ msgstr "жетіспейді"
 msgid "Edit build configuration"
 msgstr "Құрастыру баптауларын түзету"
 
-#: libide/workbench/ide-omni-bar.ui:108
-msgid "Build project (Ctrl+F7)"
-msgstr "Жобаны құрастыру (Ctrl+F7)"
-
-#: libide/workbench/ide-omni-bar.ui:126
+#: libide/workbench/ide-omni-bar.ui:128
 msgid "Cancel build"
 msgstr "Құрастыруды тоқтату"
 
-#: libide/workbench/ide-omni-bar.ui:170
+#: libide/workbench/ide-omni-bar.ui:172
 #: plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Жоба"
 
-#: libide/workbench/ide-omni-bar.ui:194
+#: libide/workbench/ide-omni-bar.ui:196
 msgid "Branch"
 msgstr "Бұтақ"
 
-#: libide/workbench/ide-omni-bar.ui:229
+#: libide/workbench/ide-omni-bar.ui:231
 msgid "Build Profile"
 msgstr "Құрастыру профилі"
 
-#: libide/workbench/ide-omni-bar.ui:275
+#: libide/workbench/ide-omni-bar.ui:277
 msgid "Last build"
 msgstr "Соңғы құрастыру"
 
-#: libide/workbench/ide-omni-bar.ui:342
+#: libide/workbench/ide-omni-bar.ui:344
 msgid "View Output"
 msgstr "Шығысын қарау"
 
-#: libide/workbench/ide-omni-bar.ui:389
+#: libide/workbench/ide-omni-bar.ui:391
 msgid "Rebuild"
 msgstr "Қайта құрастыру"
 
-#: libide/workbench/ide-omni-bar.ui:399
+#: libide/workbench/ide-omni-bar.ui:401
 msgid "Clean"
 msgstr "Тазарту"
+
+#: libide/workbench/ide-omni-bar.ui:415
+msgid "Build project"
+msgstr "Жобаны құрастыру"
+
+#: libide/workbench/ide-perspective-menu-button.ui:15
+msgid "Switch perspective"
+msgstr ""
 
 #: libide/workbench/ide-workbench-actions.c:73
 msgid "Open File"
@@ -2659,7 +2673,6 @@ msgstr "Файлды ашу"
 
 #: libide/workbench/ide-workbench.c:563
 #, c-format
-#| msgid "%s - Builder"
 msgid "%s — Builder"
 msgstr "%s — Құрастырушы"
 
@@ -3163,45 +3176,74 @@ msgstr "Қолданбаны клондау"
 msgid "Clone"
 msgstr "Клондау"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:76
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/rustup/rustup_plugin/__init__.py:468
+#: plugins/rustup/rustup_plugin/__init__.py:472
+#: plugins/rustup/rustup_plugin/__init__.py:587
 msgid "Install"
 msgstr "Орнату"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:82
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/rustup/rustup_plugin/__init__.py:468
+#: plugins/rustup/rustup_plugin/__init__.py:472
 msgid "Update"
 msgstr "Жаңарту"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:196
-msgid "Flatpak"
-msgstr "Flatpak"
+#. translators: keywords are used to match search keywords in preferences
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#, c-format
+msgid "flatpak %s %s %s"
+msgstr "flatpak %s %s %s"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:197
-msgid "Application Runtimes"
-msgstr ""
+#. translators: %u is the number of hidden runtimes to be shown
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] ""
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:202
-msgid "Developer SDKs"
-msgstr ""
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#| msgid "Runtime"
+msgid "Flatpak Runtimes"
+msgstr "Flatpak орындалу орталары"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:647
+#: plugins/flatpak/gbp-flatpak-runtime.c:706
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:649
+#: plugins/flatpak/gbp-flatpak-runtime.c:708
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:214
-#, c-format
-#| msgid "Installing…"
-msgid "Installing %s %s"
-msgstr "%s %s орнату"
+#: plugins/flatpak/gbp-flatpak-transfer.c:68
+msgid "Updated "
+msgstr "Жаңартылған"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:216
-#, c-format
-msgid "Installing %s %s for %s"
+#: plugins/flatpak/gbp-flatpak-transfer.c:70
+msgid "Updating "
+msgstr "Жаңартылуда"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:75
+msgid "Installed "
+msgstr "Орнатылған"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:77
+#: plugins/rustup/rustup_plugin/__init__.py:346
+msgid "Installing "
+msgstr "Орнатылуда"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:101
+msgid "Failed to install runtime"
+msgstr "Орындалу ортасын орнату сәтсіз аяқталды"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:103
+msgid "Runtime has been updated"
+msgstr ""
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:105
+msgid "Runtime has been installed"
 msgstr ""
 
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
@@ -3441,6 +3483,118 @@ msgstr ""
 msgid "quick highlight words matching current selection"
 msgstr ""
 
+#: plugins/rustup/rustup_plugin/__init__.py:80
+msgid "Rustup not installed"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:277
+msgid "Installing rustup"
+msgstr "rustup орнатылуда"
+
+#: plugins/rustup/rustup_plugin/__init__.py:279
+msgid "Updating rustup"
+msgstr "rustup жаңартылуда"
+
+#: plugins/rustup/rustup_plugin/__init__.py:281
+msgid "Installing rust "
+msgstr "rust орнатылуда"
+
+#: plugins/rustup/rustup_plugin/__init__.py:282
+msgid "Checking system"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:328
+msgid "Downloading rustup-init"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:333
+msgid "Syncing channel updates"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:339
+msgid "Downloading "
+msgstr "Жүктеліп алынуда"
+
+#: plugins/rustup/rustup_plugin/__init__.py:352
+msgid "Checking for rustup updates"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:357
+msgid "Downloading rustup update"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:394
+msgid "Error installing "
+msgstr "Орнату қатесі"
+
+#: plugins/rustup/rustup_plugin/__init__.py:396
+msgid "Error"
+msgstr "Қате"
+
+#: plugins/rustup/rustup_plugin/__init__.py:402
+msgid "Cancelled"
+msgstr "Бас тартылған"
+
+#: plugins/rustup/rustup_plugin/__init__.py:410
+msgid "Finished"
+msgstr "Аяқталған"
+
+#: plugins/rustup/rustup_plugin/__init__.py:424
+msgid "Rustup"
+msgstr "Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:425
+msgid "Rustup Toolchains"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:480
+msgid "Updating"
+msgstr "Жаңартылуда"
+
+#: plugins/rustup/rustup_plugin/__init__.py:480
+msgid "Installing"
+msgstr "Орнатылуда"
+
+#. set default toolchain button
+#: plugins/rustup/rustup_plugin/__init__.py:571
+msgid "Make default"
+msgstr "Негізгі қылу"
+
+#: plugins/rustup/rustup_plugin/__init__.py:571
+msgid "Makes the selected toolchain the default rust installation"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:586
+msgid "Install Rust Channel"
+msgstr "Rust арнасын орнату"
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: plugins/rustup/rustup_plugin/__init__.py:591
+msgid "Enter name of rust channel"
+msgstr "Rust арнасы үшін атын енгізіңіз"
+
+#: plugins/rustup/rustup_plugin/__init__.py:592
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:617
+msgid "Install Rustup to manage toolchains here!"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:624
+msgid "No toolchain installed. Click"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:625
+msgid "to add a new toolchain!"
+msgstr ""
+
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Қолдау көрсету журналын жасау"
@@ -3509,11 +3663,23 @@ msgstr "Профильдеушімен жөнелту"
 msgid "Open Profile…"
 msgstr "Профильді ашу…"
 
+#: plugins/terminal/gb-terminal-search.ui:152
+msgid "Regex"
+msgstr ""
+
+#: plugins/terminal/gb-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "Тек толық сөзді сәйкестеу"
+
+#: plugins/terminal/gb-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "Соңына жеткенде басына өту"
+
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Терминал құрамасын қалайша сақтау"
 
-#: plugins/terminal/gb-terminal-view.c:448
+#: plugins/terminal/gb-terminal-view.c:450
 msgid "Untitled terminal"
 msgstr "Атаусыз терминал"
 
@@ -3559,8 +3725,11 @@ msgstr ""
 msgid "Failed to create the XML tree."
 msgstr "XML ағашын жасау сәтсіз аяқталды."
 
-#~ msgid "Updating “%s”"
-#~ msgstr "\"%s\" жаңарту"
+#~ msgid "Target"
+#~ msgstr "Мақсаты"
+
+#~ msgid "Flatpak"
+#~ msgstr "Flatpak"
 
 #~| msgid "Failed to load file: %s: %s"
 #~ msgid "Failed to locate %s/%s/%s"
@@ -3589,9 +3758,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 
 #~ msgid "Build successful"
 #~ msgstr "Құрастыру сәтті аяқталды"
-
-#~ msgid "Install cancelled"
-#~ msgstr "Орнату тоқтатылды"
 
 #~ msgid "Install failed"
 #~ msgstr "Орнату сәтсіз аяқталды"
@@ -3641,9 +3807,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 
 #~ msgid "Failed to locate configure.ac"
 #~ msgstr "configure.ac табылмады"
-
-#~ msgid "Errors"
-#~ msgstr "Қателер"
 
 #~ msgid "Warnings"
 #~ msgstr "Ескертулер"
