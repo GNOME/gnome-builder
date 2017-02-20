@@ -592,10 +592,14 @@ gb_vim_command_vsplit (GtkWidget      *active_widget,
           return FALSE;
         }
 
-      file_path = g_strdup (options);
-
-      if (!g_path_is_absolute (file_path))
-        file_path = g_build_filename (g_file_get_path (workdir), file_path, NULL);
+      if (!g_path_is_absolute (options))
+        {
+          g_autofree gchar *workdir_path = NULL;
+          workdir_path = g_file_get_path (workdir);
+          file_path = g_build_filename (workdir_path, options, NULL);
+        }
+      else
+        file_path = g_strdup (options);
 
       file = g_file_new_for_path (file_path);
 
