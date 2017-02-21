@@ -73,6 +73,9 @@ void            ide_runner_append_argv     (IdeRunner            *self,
 gchar         **ide_runner_get_argv        (IdeRunner            *self);
 void            ide_runner_set_argv        (IdeRunner            *self,
                                             const gchar * const  *argv);
+gint            ide_runner_take_fd         (IdeRunner            *self,
+                                            gint                  source_fd,
+                                            gint                  dest_fd);
 GInputStream   *ide_runner_get_stdin       (IdeRunner            *self);
 GOutputStream  *ide_runner_get_stdout      (IdeRunner            *self);
 GOutputStream  *ide_runner_get_stderr      (IdeRunner            *self);

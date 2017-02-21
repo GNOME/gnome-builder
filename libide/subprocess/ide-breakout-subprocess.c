@@ -36,6 +36,7 @@
 
 #include "application/ide-application.h"
 #include "subprocess/ide-breakout-subprocess.h"
+#include "subprocess/ide-breakout-subprocess-private.h"
 #include "util/ide-glib.h"
 
 #ifndef FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV
@@ -81,6 +82,9 @@ struct _IdeBreakoutSubprocess
   GOutputStream *stdin_pipe;
   GInputStream *stdout_pipe;
   GInputStream *stderr_pipe;
+
+  IdeBreakoutFdMapping *fd_mapping;
+  guint fd_mapping_len;
 
   GMainContext *main_context;
 
@@ -1350,6 +1354,33 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
 
 
   /*
+   * Now add the rest of our FDs that we might need to map in for which
+   * the subprocess launcher tried to map.
+   */
+  for (guint i = 0; i < self->fd_mapping_len; i++)
+    {
+      const IdeBreakoutFdMapping *map = &self->fd_mapping[i];
+      g_autoptr(GError) fd_error = NULL;
+      gint dest_handle;
+
+      dest_handle = g_unix_fd_list_append (fd_list, map->source_fd, &fd_error);
+
+      if (dest_handle != -1)
+        g_variant_builder_add (fd_builder, "{uh}", map->dest_fd, dest_handle);
+      else
+        g_warning ("%s", fd_error->message);
+
+      close (map->source_fd);
+    }
+
+  /*
+   * We don't want to allow these FDs to be used again.
+   */
+  self->fd_mapping_len = 0;
+  g_clear_pointer (&self->fd_mapping, g_free);
+
+
+  /*
    * Build streams for our application to use.
    */
   maybe_create_output_stream (&self->stdin_pipe, &stdin_pair[1], !!(self->flags & G_SUBPROCESS_FLAGS_STDIN_PIPE));
@@ -1568,6 +1599,10 @@ ide_breakout_subprocess_finalize (GObject *object)
   if (self->stderr_fd != -1)
     close (self->stderr_fd);
 
+  for (guint i = 0; i < self->fd_mapping_len; i++)
+    close (self->fd_mapping[i].source_fd);
+  g_clear_pointer (&self->fd_mapping, g_free);
+
   G_OBJECT_CLASS (ide_breakout_subprocess_parent_class)->finalize (object);
 
   EGG_COUNTER_DEC (instances);
@@ -1697,16 +1732,18 @@ ide_breakout_subprocess_init (IdeBreakoutSubprocess *self)
 }
 
 IdeSubprocess *
-_ide_breakout_subprocess_new (const gchar          *cwd,
-                              const gchar * const  *argv,
-                              const gchar * const  *env,
-                              GSubprocessFlags      flags,
-                              gboolean              clear_env,
-                              gint                  stdin_fd,
-                              gint                  stdout_fd,
-                              gint                  stderr_fd,
-                              GCancellable         *cancellable,
-                              GError              **error)
+_ide_breakout_subprocess_new (const gchar                 *cwd,
+                              const gchar * const         *argv,
+                              const gchar * const         *env,
+                              GSubprocessFlags             flags,
+                              gboolean                     clear_env,
+                              gint                         stdin_fd,
+                              gint                         stdout_fd,
+                              gint                         stderr_fd,
+                              const IdeBreakoutFdMapping  *fd_mapping,
+                              guint                        fd_mapping_len,
+                              GCancellable                *cancellable,
+                              GError                     **error)
 {
   g_autoptr(IdeBreakoutSubprocess) ret = NULL;
 
@@ -1724,6 +1761,10 @@ _ide_breakout_subprocess_new (const gchar          *cwd,
   ret->stdin_fd = stdin_fd;
   ret->stdout_fd = stdout_fd;
   ret->stderr_fd = stderr_fd;
+
+  ret->fd_mapping = g_new0 (IdeBreakoutFdMapping, fd_mapping_len);
+  ret->fd_mapping_len = fd_mapping_len;
+  memcpy (ret->fd_mapping, fd_mapping, sizeof(gint) * fd_mapping_len);
 
   if (!g_initable_init (G_INITABLE (ret), cancellable, error))
     return NULL;

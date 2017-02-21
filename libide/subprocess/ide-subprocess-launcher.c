@@ -43,6 +43,7 @@ typedef struct
   GPtrArray        *argv;
   gchar            *cwd;
   gchar           **environ;
+  GArray           *fd_mapping;
 
   gint              stdin_fd;
   gint              stdout_fd;
@@ -51,6 +52,12 @@ typedef struct
   guint             run_on_host : 1;
   guint             clear_env : 1;
 } IdeSubprocessLauncherPrivate;
+
+typedef struct
+{
+  gint source_fd;
+  gint dest_fd;
+} FdMapping;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSubprocessLauncher, ide_subprocess_launcher, G_TYPE_OBJECT)
 
@@ -175,6 +182,7 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
   g_autoptr(IdeSubprocess) process = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GArray) fds = NULL;
 
   IDE_ENTRY;
 
@@ -191,6 +199,8 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
   }
 #endif
 
+  fds = g_steal_pointer (&priv->fd_mapping);
+
   process = _ide_breakout_subprocess_new (priv->cwd,
                                           (const gchar * const *)priv->argv->pdata,
                                           (const gchar * const *)priv->environ,
@@ -199,6 +209,8 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
                                           priv->stdin_fd,
                                           priv->stdout_fd,
                                           priv->stderr_fd,
+                                          fds ? (gpointer)fds->data : NULL,
+                                          fds ? fds->len : 0,
                                           cancellable,
                                           &error);
 
@@ -278,6 +290,18 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
     {
       g_subprocess_launcher_take_stderr_fd (launcher, priv->stderr_fd);
       priv->stderr_fd = -1;
+    }
+
+  if (priv->fd_mapping != NULL)
+    {
+      g_autoptr(GArray) ar = g_steal_pointer (&priv->fd_mapping);
+
+      for (guint i = 0; i < ar->len; i++)
+        {
+          const FdMapping *map = &g_array_index (ar, FdMapping, i);
+
+          g_subprocess_launcher_take_fd (launcher, map->source_fd, map->dest_fd);
+        }
     }
 
   /*
@@ -361,6 +385,19 @@ ide_subprocess_launcher_finalize (GObject *object)
 {
   IdeSubprocessLauncher *self = (IdeSubprocessLauncher *)object;
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  if (priv->fd_mapping != NULL)
+    {
+      for (guint i = 0; i < priv->fd_mapping->len; i++)
+        {
+          FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+          if (map->source_fd != -1)
+            close (map->source_fd);
+        }
+
+      g_clear_pointer (&priv->fd_mapping, g_array_unref);
+    }
 
   g_clear_pointer (&priv->argv, g_ptr_array_unref);
   g_clear_pointer (&priv->cwd, g_free);
@@ -881,4 +918,25 @@ ide_subprocess_launcher_replace_argv (IdeSubprocessLauncher *self,
   old_arg = g_ptr_array_index (priv->argv, index);
   g_ptr_array_index (priv->argv, index) = g_strdup (arg);
   g_free (old_arg);
+}
+
+void
+ide_subprocess_launcher_take_fd (IdeSubprocessLauncher *self,
+                                 gint                   source_fd,
+                                 gint                   dest_fd)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  FdMapping map = {
+    .source_fd = source_fd,
+    .dest_fd = dest_fd
+  };
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+  g_return_if_fail (source_fd > -1);
+  g_return_if_fail (dest_fd > -1);
+
+  if (priv->fd_mapping == NULL)
+    priv->fd_mapping = g_array_new (FALSE, FALSE, sizeof (FdMapping));
+
+  g_array_append_val (priv->fd_mapping, map);
 }

@@ -56,6 +56,12 @@ typedef struct
   GSList *posthook_queue;
 } IdeRunnerRunState;
 
+typedef struct
+{
+  gint source_fd;
+  gint dest_fd;
+} FdMapping;
+
 enum {
   PROP_0,
   PROP_ARGV,
@@ -204,10 +210,25 @@ ide_runner_real_run_async (IdeRunner           *self,
    */
   if (priv->tty_fd != -1)
     {
-      IDE_TRACE_MSG ("Setting TTY fd to %d\n", priv->tty_fd);
+      IDE_TRACE_MSG ("Setting TTY fd to %d", priv->tty_fd);
       ide_subprocess_launcher_take_stdin_fd (launcher, dup (priv->tty_fd));
       ide_subprocess_launcher_take_stdout_fd (launcher, dup (priv->tty_fd));
       ide_subprocess_launcher_take_stderr_fd (launcher, dup (priv->tty_fd));
+    }
+
+  /*
+   * Now map in any additionally requested FDs.
+   */
+  if (priv->fd_mapping != NULL)
+    {
+      g_autoptr(GArray) ar = g_steal_pointer (&priv->fd_mapping);
+
+      for (guint i = 0; i < ar->len; i++)
+        {
+          FdMapping *map = &g_array_index (ar, FdMapping, i);
+
+          ide_subprocess_launcher_take_fd (launcher, map->source_fd, map->dest_fd);
+        }
     }
 
   /*
@@ -371,6 +392,22 @@ ide_runner_finalize (GObject *object)
   g_queue_foreach (&priv->argv, (GFunc)g_free, NULL);
   g_queue_clear (&priv->argv);
   g_clear_object (&priv->env);
+
+  if (priv->fd_mapping != NULL)
+    {
+      for (guint i = 0; i < priv->fd_mapping->len; i++)
+        {
+          FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+          if (map->source_fd != -1)
+            {
+              close (map->source_fd);
+              map->source_fd = -1;
+            }
+        }
+    }
+
+  g_clear_pointer (&priv->fd_mapping, g_array_unref);
 
   if (priv->tty_fd != -1)
     {
@@ -953,4 +990,92 @@ ide_runner_set_tty (IdeRunner *self,
              G_OBJECT_TYPE_NAME (self));
 
   IDE_EXIT;
+}
+
+static gint
+sort_fd_mapping (gconstpointer a,
+                 gconstpointer b)
+{
+  const FdMapping *map_a = a;
+  const FdMapping *map_b = b;
+
+  return map_a->dest_fd - map_b->dest_fd;
+}
+
+/**
+ * ide_runner_take_fd:
+ * @self: An #IdeRunner
+ * @source_fd: the fd to map, this will be closed by #IdeRunner
+ * @dest_fd: the target FD in the spawned process, or -1 for next available
+ *
+ * This will ensure that @source_fd is mapped into the new process as @dest_fd.
+ * If @dest_fd is -1, then the next fd will be used and that value will be
+ * returned. Note that this is not a valid fd in the calling process, only
+ * within the destination process.
+ *
+ * Returns: @dest_fd or the FD or the next available dest_fd.
+ */
+gint
+ide_runner_take_fd (IdeRunner *self,
+                    gint       source_fd,
+                    gint       dest_fd)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+  FdMapping map = { -1, -1 };
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), -1);
+  g_return_val_if_fail (source_fd > -1, -1);
+
+  if (priv->fd_mapping == NULL)
+    priv->fd_mapping = g_array_new (FALSE, FALSE, sizeof (FdMapping));
+
+  /*
+   * Quick and dirty hack to take the next FD, won't deal with people mapping
+   * to 1024 well, but we can fix that when we come across it.
+   */
+  if (dest_fd < 0)
+    {
+      if (priv->fd_mapping->len == 0)
+        dest_fd = 3;
+      else
+        dest_fd = g_array_index (priv->fd_mapping, FdMapping, priv->fd_mapping->len - 1).dest_fd + 1;
+    }
+
+  map.source_fd = source_fd;
+  map.dest_fd = dest_fd;
+
+  g_array_append_val (priv->fd_mapping, map);
+  g_array_sort (priv->fd_mapping, sort_fd_mapping);
+
+  return dest_fd;
+}
+
+guint
+ide_runner_get_n_fd_mappings (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), 0);
+
+  return priv->fd_mapping ? priv->fd_mapping->len : 0;
+}
+
+gint
+ide_runner_get_nth_fd_maping (IdeRunner *self,
+                              guint      i,
+                              gint      *dest_fd)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+  FdMapping *map;
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), -1);
+  g_return_val_if_fail (priv->fd_mapping != NULL, -1);
+  g_return_val_if_fail (i < priv->fd_mapping->len, -1);
+  g_return_val_if_fail (dest_fd != NULL, -1);
+
+  map = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+  *dest_fd = map->dest_fd;
+
+  return map->source_fd;
 }

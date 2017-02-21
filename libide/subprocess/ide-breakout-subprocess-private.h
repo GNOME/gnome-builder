@@ -23,16 +23,24 @@
 
 G_BEGIN_DECLS
 
-IdeSubprocess *_ide_breakout_subprocess_new (const gchar          *cwd,
-                                             const gchar * const  *argv,
-                                             const gchar * const  *env,
-                                             GSubprocessFlags      flags,
-                                             gboolean              clear_flags,
-                                             gint                  stdin_fd,
-                                             gint                  stdout_fd,
-                                             gint                  stderr_fd,
-                                             GCancellable         *cancellable,
-                                             GError              **error) G_GNUC_INTERNAL;
+typedef struct
+{
+  gint source_fd;
+  gint dest_fd;
+} IdeBreakoutFdMapping;
+
+IdeSubprocess *_ide_breakout_subprocess_new (const gchar                 *cwd,
+                                             const gchar * const         *argv,
+                                             const gchar * const         *env,
+                                             GSubprocessFlags             flags,
+                                             gboolean                     clear_flags,
+                                             gint                         stdin_fd,
+                                             gint                         stdout_fd,
+                                             gint                         stderr_fd,
+                                             const IdeBreakoutFdMapping  *fd_map,
+                                             guint                        fd_map_len,
+                                             GCancellable                *cancellable,
+                                             GError                     **error) G_GNUC_INTERNAL;
 
 G_END_DECLS
 
