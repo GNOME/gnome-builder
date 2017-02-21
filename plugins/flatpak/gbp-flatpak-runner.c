@@ -29,202 +29,54 @@ struct _GbpFlatpakRunner
 {
   IdeRunner parent_instance;
 
-  gint tty_fd;
+  gchar *build_path;
+  gchar *binary_path;
 };
 
 G_DEFINE_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, IDE_TYPE_RUNNER)
 
-static void
-gbp_flatpak_runner_run_wait_cb (GObject      *object,
-                                GAsyncResult *result,
-                                gpointer      user_data)
+static IdeSubprocessLauncher *
+gbp_flatpak_runner_create_launcher (IdeRunner *runner)
 {
-  IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-  GbpFlatpakRunner *self;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
-
-  g_assert (GBP_IS_FLATPAK_RUNNER (self));
-
-  g_signal_emit_by_name (&self->parent_instance, "exited");
-
-  if (!ide_subprocess_wait_finish (subprocess, result, &error))
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  if (ide_subprocess_get_if_exited (subprocess))
-    {
-      gint exit_code;
-
-      exit_code = ide_subprocess_get_exit_status (subprocess);
-
-      if (exit_code == EXIT_SUCCESS)
-        {
-          g_task_return_boolean (task, TRUE);
-          IDE_EXIT;
-        }
-    }
-
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_FAILED,
-                           "%s",
-                           _("Process quit unexpectedly"));
-
-  IDE_EXIT;
+  return ide_subprocess_launcher_new (0);
 }
 
 static void
-gbp_flatpak_runner_run_async (IdeRunner           *runner,
-                              GCancellable        *cancellable,
-                              GAsyncReadyCallback  callback,
-                              gpointer             user_data)
-{
-  GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_auto(GStrv) argv = NULL;
-  const gchar *identifier;
-  GError *error = NULL;
-  guint argpos = 0;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_FLATPAK_RUNNER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_runner_run_async);
-
-  launcher = ide_subprocess_launcher_new (0);
-
-  ide_subprocess_launcher_set_flags (launcher, ide_runner_get_flags (&self->parent_instance));
-
-  /*
-   * If we have a tty_fd set, then we want to override our stdin,
-   * stdout, and stderr fds with our TTY.
-   */
-  if (self->tty_fd != -1)
-    {
-      IDE_TRACE_MSG ("Setting TTY fd to %d\n", self->tty_fd);
-      ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->tty_fd));
-      ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->tty_fd));
-      ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->tty_fd));
-    }
-
-  /*
-   * We want the runners to run on the host so that we aren't captive to
-   * our containing system (flatpak, jhbuild, etc).
-   */
-  ide_subprocess_launcher_set_run_on_host (launcher, ide_runner_get_run_on_host (&self->parent_instance));
-
-  /*
-   * We don't want the environment cleared because we need access to
-   * things like DISPLAY, WAYLAND_DISPLAY, and DBUS_SESSION_BUS_ADDRESS.
-   */
-  ide_subprocess_launcher_set_clear_env (launcher, ide_runner_get_clear_env (&self->parent_instance));
-
-  /*
-   * Overlay the environment provided.
-   */
-  ide_subprocess_launcher_overlay_environment (launcher, ide_runner_get_environment (&self->parent_instance));
-
-  /*
-   * Push all of our configured arguments in order.
-   */
-  argv = ide_runner_get_argv (&self->parent_instance);
-  for (argpos = 0; argv[argpos] != NULL; argpos++)
-    ide_subprocess_launcher_push_argv (launcher, argv[argpos]);
-
-  /*
-   * Set the working directory for the process.
-   * FIXME: Allow this to be configurable! Add IdeRunner::cwd.
-   */
-  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
-
-  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
-
-  g_assert (subprocess == NULL || IDE_IS_SUBPROCESS (subprocess));
-
-  if (subprocess == NULL)
-    {
-      g_task_return_error (task, error);
-      IDE_GOTO (failure);
-    }
-
-  identifier = ide_subprocess_get_identifier (subprocess);
-
-  g_signal_emit_by_name (&self->parent_instance, "spawned", identifier);
-
-  ide_subprocess_wait_async (subprocess,
-                             cancellable,
-                             gbp_flatpak_runner_run_wait_cb,
-                             g_steal_pointer (&task));
-
-failure:
-  IDE_EXIT;
-}
-
-static gboolean
-gbp_flatpak_runner_run_finish (IdeRunner     *runner,
-                               GAsyncResult  *result,
-                               GError       **error)
+gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
+                                   IdeSubprocessLauncher *launcher)
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
 
-  g_assert (GBP_IS_FLATPAK_RUNNER (self));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), self));
-  g_assert (g_task_get_source_tag (G_TASK (result)) == gbp_flatpak_runner_run_async);
+  g_assert (GBP_IS_FLATPAK_RUNNER (runner));
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  ide_subprocess_launcher_insert_argv (launcher, 0, "flatpak");
+  ide_subprocess_launcher_insert_argv (launcher, 1, "build");
+  ide_subprocess_launcher_insert_argv (launcher, 2, "--share=ipc");
+  ide_subprocess_launcher_insert_argv (launcher, 3, "--socket=x11");
+  ide_subprocess_launcher_insert_argv (launcher, 4, "--socket=wayland");
+  ide_subprocess_launcher_insert_argv (launcher, 5, self->build_path);
 }
 
 GbpFlatpakRunner *
-gbp_flatpak_runner_new (IdeContext *context)
+gbp_flatpak_runner_new (IdeContext  *context,
+                        const gchar *build_path,
+                        const gchar *binary_path)
 {
+  GbpFlatpakRunner *self;
+
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  return g_object_new (GBP_TYPE_FLATPAK_RUNNER,
+  self = g_object_new (GBP_TYPE_FLATPAK_RUNNER,
                        "context", context,
                        NULL);
-}
 
-static void
-gbp_flatpak_runner_set_tty (IdeRunner *runner,
-                            int        tty_fd)
-{
-  GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
+  ide_runner_append_argv (IDE_RUNNER (self), binary_path);
 
-  g_assert (GBP_IS_FLATPAK_RUNNER (self));
-  g_assert (tty_fd >= -1);
+  self->build_path = g_strdup (build_path);
+  self->binary_path = g_strdup (binary_path);
 
-  if (tty_fd != self->tty_fd)
-    {
-      if (self->tty_fd != -1)
-        {
-          close (self->tty_fd);
-          self->tty_fd = -1;
-        }
-
-      if (tty_fd != -1)
-        {
-          self->tty_fd = dup (tty_fd);
-          if (self->tty_fd == -1)
-            g_warning ("Failed to dup() tty_fd: %s", g_strerror (errno));
-        }
-    }
+  return self;
 }
 
 static void
@@ -232,11 +84,8 @@ gbp_flatpak_runner_finalize (GObject *object)
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)object;
 
-  if (self->tty_fd != -1)
-    {
-      close (self->tty_fd);
-      self->tty_fd = -1;
-    }
+  g_clear_pointer (&self->build_path, g_free);
+  g_clear_pointer (&self->binary_path, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_runner_parent_class)->finalize (object);
 }
@@ -249,13 +98,13 @@ gbp_flatpak_runner_class_init (GbpFlatpakRunnerClass *klass)
 
   object_class->finalize = gbp_flatpak_runner_finalize;
 
-  runner_class->run_async = gbp_flatpak_runner_run_async;
-  runner_class->run_finish = gbp_flatpak_runner_run_finish;
-  runner_class->set_tty = gbp_flatpak_runner_set_tty;
+  runner_class->create_launcher = gbp_flatpak_runner_create_launcher;
+  runner_class->fixup_launcher = gbp_flatpak_runner_fixup_launcher;
 }
 
 static void
 gbp_flatpak_runner_init (GbpFlatpakRunner *self)
 {
-  self->tty_fd = -1;
+  ide_runner_set_run_on_host (IDE_RUNNER (self), TRUE);
+  ide_runner_set_clear_env (IDE_RUNNER (self), FALSE);
 }
