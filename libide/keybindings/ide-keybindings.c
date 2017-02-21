@@ -52,7 +52,7 @@ static GParamSpec *properties [LAST_PROP];
 
 IdeKeybindings *
 ide_keybindings_new (GtkApplication *application,
-                    const gchar    *mode)
+                     const gchar    *mode)
 {
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
@@ -195,7 +195,7 @@ ide_keybindings_get_mode (IdeKeybindings *self)
 
 void
 ide_keybindings_set_mode (IdeKeybindings *self,
-                         const gchar   *mode)
+                          const gchar    *mode)
 {
   g_return_if_fail (IDE_IS_KEYBINDINGS (self));
 
@@ -221,7 +221,7 @@ ide_keybindings_get_application (IdeKeybindings *self)
 
 static void
 ide_keybindings_set_application (IdeKeybindings  *self,
-                                GtkApplication *application)
+                                 GtkApplication  *application)
 {
   g_assert (IDE_IS_KEYBINDINGS (self));
   g_assert (!application || GTK_IS_APPLICATION (application));
@@ -244,9 +244,9 @@ ide_keybindings_set_application (IdeKeybindings  *self,
 
 static void
 ide_keybindings_parsing_error (GtkCssProvider *css_provider,
-                              GtkCssSection  *section,
-                              GError         *error,
-                              gpointer        user_data)
+                               GtkCssSection  *section,
+                               GError         *error,
+                               gpointer        user_data)
 {
   g_autofree gchar *filename = NULL;
   GFile *file;
@@ -315,9 +315,9 @@ ide_keybindings_finalize (GObject *object)
 
 static void
 ide_keybindings_get_property (GObject    *object,
-                             guint       prop_id,
-                             GValue     *value,
-                             GParamSpec *pspec)
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
 {
   IdeKeybindings *self = IDE_KEYBINDINGS (object);
 
@@ -338,9 +338,9 @@ ide_keybindings_get_property (GObject    *object,
 
 static void
 ide_keybindings_set_property (GObject      *object,
-                             guint         prop_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
 {
   IdeKeybindings *self = IDE_KEYBINDINGS (object);
 
