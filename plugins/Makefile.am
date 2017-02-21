@@ -39,6 +39,7 @@ SUBDIRS = \
 	terminal \
 	todo \
 	vala-pack \
+	valgrind \
 	xml-pack \
 	$(NULL)
 
