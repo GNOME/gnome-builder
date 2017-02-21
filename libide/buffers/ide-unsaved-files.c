@@ -488,8 +488,8 @@ setup_tempfile (GFile  *file,
                 gchar **temp_path)
 {
   g_autofree gchar *name = NULL;
+  g_autofree gchar *template = NULL;
   const gchar *suffix;
-  gchar *template;
 
   g_assert (G_IS_FILE (file));
   g_assert (temp_fd);
