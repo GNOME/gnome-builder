@@ -34,19 +34,31 @@ struct _IdeRunnerClass
 {
   IdeObjectClass parent;
 
-  void           (*force_quit) (IdeRunner            *self);
-  GInputStream  *(*get_stdin)  (IdeRunner            *self);
-  GOutputStream *(*get_stdout) (IdeRunner            *self);
-  GOutputStream *(*get_stderr) (IdeRunner            *self);
-  void           (*run_async)  (IdeRunner            *self,
-                                GCancellable         *cancellable,
-                                GAsyncReadyCallback   callback,
-                                gpointer              user_data);
-  gboolean       (*run_finish) (IdeRunner            *self,
-                                GAsyncResult         *result,
-                                GError              **error);
-  void           (*set_tty)    (IdeRunner            *self,
-                                int                   tty_fd);
+  void                   (*force_quit)      (IdeRunner             *self);
+  GInputStream          *(*get_stdin)       (IdeRunner             *self);
+  GOutputStream         *(*get_stdout)      (IdeRunner             *self);
+  GOutputStream         *(*get_stderr)      (IdeRunner             *self);
+  void                   (*run_async)       (IdeRunner             *self,
+                                             GCancellable          *cancellable,
+                                             GAsyncReadyCallback    callback,
+                                             gpointer               user_data);
+  gboolean               (*run_finish)      (IdeRunner             *self,
+                                             GAsyncResult          *result,
+                                             GError               **error);
+  void                   (*set_tty)         (IdeRunner             *self,
+                                             int                    tty_fd);
+  IdeSubprocessLauncher *(*create_launcher) (IdeRunner             *self);
+  void                   (*fixup_launcher)  (IdeRunner             *self,
+                                             IdeSubprocessLauncher *launcher);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
 IdeRunner      *ide_runner_new             (IdeContext           *context);

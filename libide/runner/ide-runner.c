@@ -40,6 +40,8 @@ typedef struct
   PeasExtensionSet *addins;
   IdeEnvironment *env;
 
+  GArray *fd_mapping;
+
   GQueue argv;
 
   GSubprocessFlags flags;
@@ -165,6 +167,24 @@ ide_runner_run_wait_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static IdeSubprocessLauncher *
+ide_runner_real_create_launcher (IdeRunner *self)
+{
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  IdeContext *context;
+  IdeRuntime *runtime;
+
+  g_assert (IDE_IS_RUNNER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+  runtime = ide_configuration_get_runtime (config);
+
+  return ide_runtime_create_launcher (runtime, NULL);
+}
+
 static void
 ide_runner_real_run_async (IdeRunner           *self,
                            GCancellable        *cancellable,
@@ -195,9 +215,8 @@ ide_runner_real_run_async (IdeRunner           *self,
   config = ide_configuration_manager_get_current (config_manager);
   runtime = ide_configuration_get_runtime (config);
 
-
   if (runtime != NULL)
-    launcher = ide_runtime_create_launcher (runtime, NULL);
+    launcher = IDE_RUNNER_GET_CLASS (self)->create_launcher (self);
 
   if (launcher == NULL)
     launcher = ide_subprocess_launcher_new (0);
@@ -251,7 +270,7 @@ ide_runner_real_run_async (IdeRunner           *self,
   /*
    * Push all of our configured arguments in order.
    */
-  for (GList *iter = priv->argv.head; iter != NULL; iter = iter->next)
+  for (const GList *iter = priv->argv.head; iter != NULL; iter = iter->next)
     ide_subprocess_launcher_push_argv (launcher, iter->data);
 
   /*
@@ -259,6 +278,10 @@ ide_runner_real_run_async (IdeRunner           *self,
    * FIXME: Allow this to be configurable! Add IdeRunner::cwd.
    */
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
+
+  /* Give the runner a final chance to mutate the launcher */
+  if (IDE_RUNNER_GET_CLASS (self)->fixup_launcher)
+    IDE_RUNNER_GET_CLASS (self)->fixup_launcher (self, launcher);
 
   subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
@@ -489,6 +512,7 @@ ide_runner_class_init (IdeRunnerClass *klass)
   klass->run_async = ide_runner_real_run_async;
   klass->run_finish = ide_runner_real_run_finish;
   klass->set_tty = ide_runner_real_set_tty;
+  klass->create_launcher = ide_runner_real_create_launcher;
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv",
