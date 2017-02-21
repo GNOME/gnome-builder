@@ -68,6 +68,7 @@ class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # we will open the temp file in the builder editor.
         source_fd, name = GLib.file_open_tmp('gnome-builder-valgrind-XXXXXX.txt')
         map_fd = runner.take_fd(source_fd, -1)
+        runner.prepend_argv('--track-origins=yes')
         runner.prepend_argv('--log-fd='+str(map_fd))
         runner.prepend_argv('valgrind')
         runner.connect('exited', self.runner_exited, name)
