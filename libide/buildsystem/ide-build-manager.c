@@ -61,6 +61,7 @@ enum {
   PROP_HAS_DIAGNOSTICS,
   PROP_LAST_BUILD_TIME,
   PROP_MESSAGE,
+  PROP_PIPELINE,
   PROP_RUNNING_TIME,
   N_PROPS
 };
@@ -262,6 +263,8 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
       g_warning ("Failure to initialize pipeline: %s", error->message);
       IDE_GOTO (failure);
     }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
   IDE_EXIT;
 
@@ -469,6 +472,10 @@ ide_build_manager_get_property (GObject    *object,
       g_value_set_boolean (value, self->diagnostic_count > 0);
       break;
 
+    case PROP_PIPELINE:
+      g_value_set_object (value, self->pipeline);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -536,6 +543,13 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                          "The current build message",
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  properties [PROP_PIPELINE] =
+    g_param_spec_object ("pipeline",
+                         "Pipeline",
+                         "The build pipeline",
+                         IDE_TYPE_BUILD_PIPELINE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeBuildManager:running-time:
