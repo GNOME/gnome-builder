@@ -277,7 +277,6 @@
         {
             "name": "meson",
             "no-autogen": true,
-            "cleanup": [ "/bin", "/lib" ],
             "sources": [
                 {
                     "type": "archive",
