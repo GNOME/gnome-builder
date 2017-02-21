@@ -41,6 +41,13 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /*
+   * Don't allow PATH to be set when traversing "flatpak build" from the default
+   * IdeSubprocessLauncher. We need to ensure that /app/bin is available.
+   */
+  if (ide_subprocess_launcher_get_clear_env (launcher))
+    ide_subprocess_launcher_setenv (launcher, "PATH", "/app/bin:/bin:/usr/bin", TRUE);
+
+  /*
    * The "flatpak build" command will filter out all of our environment variables
    * from the subprocess. So we need to look at our configured environment and
    * convert the KEY=VALUE pairs into --env=key=value command line arguments.
