@@ -49,21 +49,43 @@ G_DEFINE_TYPE_EXTENDED (GbTerminalWorkbenchAddin,
                         0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
-static void
-new_terminal_activate_cb (GSimpleAction            *action,
-                          GVariant                 *param,
-                          GbTerminalWorkbenchAddin *self)
+static IdeRuntime *
+find_runtime (IdeWorkbench *workbench)
 {
+  IdeContext *context;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  context = ide_workbench_get_context (workbench);
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+
+  return ide_configuration_get_runtime (config);
+}
+
+static void
+new_terminal_activate (GSimpleAction *action,
+                       GVariant      *param,
+                       gpointer       user_data)
+{
+  GbTerminalWorkbenchAddin *self = user_data;
   GbTerminalView *view;
   IdePerspective *perspective;
+  IdeRuntime *runtime = NULL;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
+
+  if (g_strcmp0 (g_action_get_name (G_ACTION (action)), "new-terminal-in-runtime") == 0)
+    runtime = find_runtime (self->workbench);
 
   perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
   ide_workbench_set_visible_perspective (self->workbench, perspective);
 
   view = g_object_new (GB_TYPE_TERMINAL_VIEW,
+                       "runtime", runtime,
                        "visible", TRUE,
                        NULL);
   gtk_container_add (GTK_CONTAINER (perspective), GTK_WIDGET (view));
@@ -160,6 +182,10 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
   IdeContext *context;
   IdeRunManager *run_manager;
   g_autoptr(GSimpleAction) action = NULL;
+  static const GActionEntry actions[] = {
+    { "new-terminal", new_terminal_activate },
+    { "new-terminal-in-runtime", new_terminal_activate },
+  };
 
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -168,13 +194,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   ide_set_weak_pointer (&self->workbench, workbench);
 
-  action = g_simple_action_new ("new-terminal", NULL);
-  g_signal_connect_object (action,
-                           "activate",
-                           G_CALLBACK (new_terminal_activate_cb),
-                           self,
-                           0);
-  g_action_map_add_action (G_ACTION_MAP (workbench), G_ACTION (action));
+  g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions, G_N_ELEMENTS (actions), self);
 
   if (self->panel_terminal == NULL)
     {
@@ -218,6 +238,7 @@ gb_terminal_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal");
+  g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal-in-runtime");
 
   if (self->panel_dock_widget != NULL)
     {

@@ -32,6 +32,12 @@ struct _GbTerminalView
 {
   IdeLayoutView        parent_instance;
 
+  /*
+   * If we are spawning a process in a runtime instead of the
+   * host, then we will have a runtime pointer here.
+   */
+  IdeRuntime          *runtime;
+
   GtkOverlay          *terminal_overlay_top;
   GtkOverlay          *terminal_overlay_bottom;
 

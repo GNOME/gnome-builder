@@ -42,6 +42,7 @@ enum {
   PROP_FONT_NAME,
   PROP_MANAGE_SPAWN,
   PROP_PTY,
+  PROP_RUNTIME,
   LAST_PROP
 };
 
@@ -79,8 +80,9 @@ static void gb_terminal_respawn               (GbTerminalView *self,
                                                VteTerminal    *terminal);
 
 static gchar *
-gb_terminal_view_discover_shell (GCancellable  *cancellable,
-                                 GError       **error)
+gb_terminal_view_discover_shell (GbTerminalView  *self,
+                                 GCancellable    *cancellable,
+                                 GError         **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
@@ -99,7 +101,12 @@ gb_terminal_view_discover_shell (GCancellable  *cancellable,
   if (!g_shell_parse_argv (command, NULL, &argv, error))
     return NULL;
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  if (self->runtime != NULL)
+    launcher = ide_runtime_create_launcher (self->runtime, NULL);
+
+  if (launcher == NULL)
+    launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
@@ -221,7 +228,7 @@ gb_terminal_respawn (GbTerminalView *self,
   workdir = ide_vcs_get_working_directory (vcs);
   workpath = g_file_get_path (workdir);
 
-  shell = gb_terminal_view_discover_shell (NULL, &error);
+  shell = gb_terminal_view_discover_shell (self, NULL, &error);
 
   if (shell == NULL)
     {
@@ -256,8 +263,13 @@ gb_terminal_respawn (GbTerminalView *self,
   if (-1 == (stdout_fd = dup (tty_fd)) || -1 == (stderr_fd = dup (tty_fd)))
     IDE_GOTO (failure);
 
-  /* XXX: It would be nice to allow using the runtimes launcher */
-  launcher = ide_subprocess_launcher_new (0);
+  if (self->runtime != NULL)
+    launcher = ide_runtime_create_launcher (self->runtime, NULL);
+
+  if (launcher == NULL)
+    launcher = ide_subprocess_launcher_new (0);
+
+  ide_subprocess_launcher_set_flags (launcher, 0);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_cwd (launcher, workpath);
@@ -702,6 +714,7 @@ gb_terminal_view_finalize (GObject *object)
   g_clear_object (&self->save_as_file_bottom);
   g_clear_pointer (&self->selection_buffer, g_free);
   g_clear_object (&self->pty);
+  g_clear_object (&self->runtime);
 
   G_OBJECT_CLASS (gb_terminal_view_parent_class)->finalize (object);
 }
@@ -722,6 +735,10 @@ gb_terminal_view_get_property (GObject    *object,
 
     case PROP_PTY:
       g_value_set_object (value, self->pty);
+      break;
+
+    case PROP_RUNTIME:
+      g_value_set_object (value, self->runtime);
       break;
 
     default:
@@ -749,6 +766,10 @@ gb_terminal_view_set_property (GObject      *object,
 
     case PROP_PTY:
       self->pty = g_value_dup_object (value);
+      break;
+
+    case PROP_RUNTIME:
+      self->runtime = g_value_dup_object (value);
       break;
 
     default:
@@ -807,6 +828,13 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
                          "The psuedo terminal to use",
                          VTE_TYPE_PTY,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_RUNTIME] =
+    g_param_spec_object ("runtime",
+                         "Runtime",
+                         "The runtime to use for spawning",
+                         IDE_TYPE_RUNTIME,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

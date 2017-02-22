@@ -36,12 +36,17 @@ gb_terminal_application_addin_load (IdeApplicationAddin *addin,
                                     IdeApplication      *application)
 {
   const gchar *new_terminal_accels[] = { "<ctrl><shift>t", NULL };
+  const gchar *new_terminal_in_runtime_accels[] = { "<ctrl><alt><shift>t", NULL };
 
   g_assert (GB_IS_TERMINAL_APPLICATION_ADDIN (addin));
   g_assert (IDE_IS_APPLICATION (application));
 
-  gtk_application_set_accels_for_action (GTK_APPLICATION (application), "win.new-terminal",
+  gtk_application_set_accels_for_action (GTK_APPLICATION (application),
+                                         "win.new-terminal",
                                          new_terminal_accels);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (application),
+                                         "win.new-terminal-in-runtime",
+                                         new_terminal_in_runtime_accels);
 }
 
 static void
@@ -54,6 +59,7 @@ gb_terminal_application_addin_unload (IdeApplicationAddin *addin,
   g_assert (IDE_IS_APPLICATION (application));
 
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "win.new-terminal", empty_accels);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (application), "win.new-terminal-in-runtime", empty_accels);
 }
 
 static void
