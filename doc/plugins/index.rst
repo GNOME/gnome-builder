@@ -1,6 +1,6 @@
-#######
-Plugins
-#######
+################
+Creating Plugins
+################
 
 .. toctree::
    :maxdepth: 3
