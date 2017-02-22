@@ -1,0 +1,36 @@
+/* Original Stylesheet */
+@import url("https://media.readthedocs.org/css/sphinx_rtd_theme.css");
+
+/* GNOME Overrides */
+
+/* Overpass for headings */
+@import url("http://overpass-30e2.kxcdn.com/overpass.css");
+
+/* Source Sans for text */
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,700i,400,400i&amp;subset=latin-ext");
+
+body {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: "Overpass", sans-serif;
+  font-weight: 200;
+}
+
+a.icon-home, a.icon-home:hover {
+  display: inline-block;
+  padding: 2px 2px 2px 20px;
+  background: transparent url(img/org.gnome.Builder.png) center left no-repeat;
+}
+.fa-home::before, .icon-home::before {
+  content: "";
+}
+
+.wy-side-nav-search {
+  background-color: #4a90d9;
+}
+
+a, a:visited { color: #4a90d9; }
+  .wy-menu a { color: #919191; }
+  .wy-side-nav-search a { color: #fff; }
