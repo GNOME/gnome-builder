@@ -375,19 +375,6 @@ AM_CONDITIONAL([ENABLE_TESTS], test "$enable_tests" = "yes")
 
 
 dnl ***********************************************************************
-dnl Support for gtk-doc Documentation Engine
-dnl ***********************************************************************
-GTK_DOC_CHECK([1.11],[--flavour no-tmpl])
-AM_CONDITIONAL(ENABLE_GTK_DOC, test "x$enable_gtk_doc" = "xyes")
-AC_ARG_ENABLE(doc-cross-references,
-              AS_HELP_STRING([--disable-doc-cross-references],
-                             [cross reference symbols from other libraries @<:@default=yes@:>@]),
-              enable_doc_cross_references=$enableval,
-              enable_doc_cross_references=yes)
-AM_CONDITIONAL(ENABLE_DOC_CROSS_REFERENCES, test x$enable_doc_cross_references != xno)
-
-
-dnl ***********************************************************************
 dnl Setup Various Compiler Optimizations
 dnl ***********************************************************************
 AC_MSG_CHECKING([whether to enable optimized builds])
@@ -535,14 +522,10 @@ AC_CONFIG_FILES([
 	data/style-schemes/Makefile
 	data/template-glib-1.0.pc
 	data/org.gnome.Builder.desktop.in
-
 	data/gsettings/org.gnome.builder.code-insight.gschema.xml
+
 	doc/Makefile
 	doc/examples/Makefile
-	doc/examples/scripts/Makefile
-	doc/reference/Makefile
-	doc/reference/libide/Makefile
-	doc/reference/libide/version.xml
 
 	help/Makefile
 
@@ -575,8 +558,6 @@ echo "  Enable Debug ......................... : ${enable_debug}"
 echo "  Enable Tracing ....................... : ${enable_tracing}"
 echo "  Enable Profiling (-pg)................ : ${enable_profiling}"
 echo "  Build Test Suite ..................... : ${enable_tests}"
-echo "  Build API reference .................. : ${enable_gtk_doc}"
-echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
 echo "  Sanitizer ............................ : ${with_sanitizer}"
 echo ""
 echo " Plugins"
