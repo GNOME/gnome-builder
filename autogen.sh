@@ -18,7 +18,6 @@ touch ChangeLog
 touch INSTALL
 
 aclocal --install -I build/autotools || exit 1
-gtkdocize || exit 1
 autoreconf --force --install -Wno-portability || exit 1
 
 cd $olddir
