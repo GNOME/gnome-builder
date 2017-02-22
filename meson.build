@@ -150,7 +150,6 @@ subdir('contrib/tmpl')
 subdir('contrib/xml')
 subdir('contrib/gstyle') # Depends on libsearch/libxml
 subdir('libide')
-subdir('doc/reference/libide')
 subdir('help')
 subdir('plugins')
 subdir('po')
