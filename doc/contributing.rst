@@ -22,7 +22,7 @@ Filing bugs helps us improve the softwrae for everyone and we really appreciate 
 For various spam reasons our bugtracker requires that you create an account.
 We hope this minor inconvenience is not too much trouble.
 
-Find a Bug To Work On
+Find A Bug To Work On
 =====================
 
 If you wish to start contributing code to Builder, simply pick a bug from this list of `newcomer bugs`_.
@@ -63,7 +63,7 @@ And writing great documentation requires you learn about the product.
 This is one way to improve things for the next person while you explore the code-base.
 You can find the documentation in the ``doc/`` directory of the `git repository`_.
 
-Planning and Project Management
+Planning And Project Management
 ===============================
 
 Many of us that work on the Builder code-base are great at writing code.
