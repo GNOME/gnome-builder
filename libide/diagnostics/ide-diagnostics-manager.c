@@ -500,7 +500,7 @@ ide_diagnostics_manager_begin_diagnose (gpointer data)
     {
       IdeDiagnosticsGroup *group = value;
 
-      if (group->needs_diagnose && group->adapter != NULL)
+      if (group->needs_diagnose && group->adapter != NULL && group->in_diagnose == 0)
         ide_diagnostics_group_diagnose (group, self);
     }
 
