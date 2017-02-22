@@ -1,6 +1,6 @@
-########
-Builder
-########
+#############
+GNOME Builder
+#############
 
 Welcome to the Builder project!
 

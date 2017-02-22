@@ -1,10 +1,9 @@
-#############################
-Getting to know the interface
-#############################
+#######################
+Exploring the Interface
+#######################
 
 =============
 The Workbench
 =============
 
-This is some text
 
