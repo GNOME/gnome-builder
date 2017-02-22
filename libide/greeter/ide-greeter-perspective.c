@@ -658,6 +658,7 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
   GtkWidget *toplevel;
   PeasEngine *engine;
   const GList *list;
+  GtkFileFilter *all_filter;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (GTK_IS_BUTTON (open_button));
@@ -687,6 +688,10 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                            G_CALLBACK (ide_greeter_perspective_dialog_notify_filter),
                            self,
                            G_CONNECT_SWAPPED);
+
+  all_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (all_filter, _("All Project Types"));
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), all_filter);
 
   for (; list != NULL; list = list->next)
     {
@@ -722,7 +727,10 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
       for (i = 0; patterns [i] != NULL; i++)
         {
           if (*patterns [i])
-            gtk_file_filter_add_pattern (filter, patterns [i]);
+            {
+              gtk_file_filter_add_pattern (filter, patterns [i]);
+              gtk_file_filter_add_pattern (all_filter, patterns [i]);
+            }
         }
 
       for (i = 0; content_types [i] != NULL; i++)
@@ -730,6 +738,7 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
           if (*content_types [i])
             {
               gtk_file_filter_add_mime_type (filter, content_types [i]);
+              gtk_file_filter_add_mime_type (all_filter, content_types [i]);
 
               /* Helper so we can change the file chooser action to OPEN_DIRECTORY,
                * otherwise the user won't be able to choose a directory, it will
@@ -751,6 +760,8 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                            G_CALLBACK (ide_greeter_perspective_dialog_response),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
