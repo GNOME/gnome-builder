@@ -240,7 +240,9 @@ class MesonPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         config_launcher = pipeline.create_launcher()
         config_launcher.push_argv('meson')
         config_launcher.push_argv(srcdir)
-        config_launcher.push_argv(builddir)
+        # We will be launched from the builddir, so . is fine (as the directory
+        # may be mapped somewhere else in the build runtime).
+        config_launcher.push_argv('.')
         config_launcher.push_argv('--prefix={}'.format(config.props.prefix))
         config_opts = config.get_config_opts()
         if config_opts:
