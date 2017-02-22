@@ -19,4 +19,5 @@ Contents
    introduction
    plugins/index
    api/index
+   contributing
    credits
