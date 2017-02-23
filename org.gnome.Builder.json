@@ -164,6 +164,7 @@
         {
             "name": "python3-lxml",
             "no-autogen": true,
+            "ensure-writable": ["/lib/python*/site-packages/easy-install.pth"],
             "build-options": {
                 "cflags": "-I/usr/include",
                 "env": {
@@ -277,6 +278,7 @@
         {
             "name": "meson",
             "no-autogen": true,
+            "ensure-writable": ["/lib/python*/site-packages/easy-install.pth"],
             "sources": [
                 {
                     "type": "archive",
