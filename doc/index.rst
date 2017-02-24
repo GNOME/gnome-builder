@@ -16,7 +16,8 @@ Contents
    :maxdepth: 4
    :titlesonly:
 
-   introduction
+   installation
+   exploring
    plugins/index
    api/index
    contributing
