@@ -165,9 +165,9 @@ test_ide_uri_LDADD = $(tests_libs)
 #TESTS += test-c-parse-helper
 #test_c_parse_helper_SOURCES = test-c-parse-helper.c
 #test_c_parse_helper_CFLAGS =                                                                                                                            \
-#	$(tests_cflags)                                                                                                                                        \
-#	-include $(top_srcdir)/libide/c/c-parse-helper.c                                                                                                       \
-#	-include $(top_srcdir)/libide/c/c-parse-helper.h                                                                                                       \
+#	$(tests_cflags)                                                                                                                                         \
+#	-include $(top_srcdir)/libide/c/c-parse-helper.c                                                                                                        \
+#	-include $(top_srcdir)/libide/c/c-parse-helper.h                                                                                                        \
 #	$(NULL)
 #test_c_parse_helper_LDADD = $(tests_libs)
 

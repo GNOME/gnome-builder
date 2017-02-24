@@ -9,34 +9,34 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libterminal.la
 dist_plugin_DATA = terminal.plugin
 
-libterminal_la_SOURCES =                    \
-	gb-terminal.c                       \
-	gb-terminal.h                       \
-	gb-terminal-application-addin.c     \
-	gb-terminal-application-addin.h     \
-	gb-terminal-plugin.c                \
-	gb-terminal-private.h               \
-	gb-terminal-util.c                  \
-	gb-terminal-util.h                  \
-	gb-terminal-view.c                  \
-	gb-terminal-view.h                  \
-	gb-terminal-view-private.h          \
-	gb-terminal-view-actions.c          \
-	gb-terminal-view-actions.h          \
-	gb-terminal-search.c                \
-	gb-terminal-search.h                \
-	gb-terminal-search-private.h        \
-	gb-terminal-workbench-addin.c       \
-	gb-terminal-workbench-addin.h       \
+libterminal_la_SOURCES =                        \
+	gb-terminal.c                           \
+	gb-terminal.h                           \
+	gb-terminal-application-addin.c         \
+	gb-terminal-application-addin.h         \
+	gb-terminal-plugin.c                    \
+	gb-terminal-private.h                   \
+	gb-terminal-util.c                      \
+	gb-terminal-util.h                      \
+	gb-terminal-view.c                      \
+	gb-terminal-view.h                      \
+	gb-terminal-view-private.h              \
+	gb-terminal-view-actions.c              \
+	gb-terminal-view-actions.h              \
+	gb-terminal-search.c                    \
+	gb-terminal-search.h                    \
+	gb-terminal-search-private.h            \
+	gb-terminal-workbench-addin.c           \
+	gb-terminal-workbench-addin.h           \
 	$(NULL)
 
-nodist_libterminal_la_SOURCES =             \
-	gb-terminal-resources.c             \
-	gb-terminal-resources.h             \
+nodist_libterminal_la_SOURCES =                 \
+	gb-terminal-resources.c                 \
+	gb-terminal-resources.h                 \
 	$(NULL)
 
 libterminal_la_CFLAGS = $(PLUGIN_CFLAGS) $(TERMINAL_CFLAGS)
-libterminal_la_LIBADD =                     \
+libterminal_la_LIBADD =                         \
     $(TERMINAL_LIBS)                            \
     $(top_builddir)/contrib/gd/libgd-private.la \
     $(NULL)

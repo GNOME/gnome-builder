@@ -21,7 +21,7 @@ def count_prefix_tabs(line):
 
 def count_visual_chars(line):
     n_tabs = count_prefix_tabs(line)
-    return n_tabs * 8 + len(line.strip())
+    return n_tabs * 8 + len(line.replace('\t',''))
 
 for path in filenames:
     lines = None
