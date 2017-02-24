@@ -3,87 +3,87 @@
 
 EXTRA_DIST =
 
-egg_cflags =                                                                                                                                             \
-	$(DEBUG_CFLAGS)                                                                                                                                  \
-	$(LIBIDE_CFLAGS)                                                                                                                                 \
-	-I$(top_srcdir)/contrib/egg                                                                                                                      \
-	-DTEST_DATA_DIR="\"$(abs_srcdir)/data\""                                                                                                         \
+egg_cflags =                                                    \
+	$(DEBUG_CFLAGS)                                         \
+	$(LIBIDE_CFLAGS)                                        \
+	-I$(top_srcdir)/contrib/egg                             \
+	-DTEST_DATA_DIR="\"$(abs_srcdir)/data\""                \
 	$(NULL)
 
-egg_libs =                                                                                                                                               \
-	$(LIBIDE_LIBS)                                                                                                                                   \
-	$(top_builddir)/contrib/egg/libegg-private.la                                                                                                    \
+egg_libs =                                                      \
+	$(LIBIDE_LIBS)                                          \
+	$(top_builddir)/contrib/egg/libegg-private.la           \
 	$(NULL)
 
-rg_cflags =                                                                                                                                              \
-	$(DEBUG_CFLAGS)                                                                                                                                  \
-	$(RG_CFLAGS)                                                                                                                                     \
-	-I$(top_srcdir)/contrib/egg                                                                                                                      \
-	-I$(top_srcdir)/contrib/rg                                                                                                                       \
+rg_cflags =                                                     \
+	$(DEBUG_CFLAGS)                                         \
+	$(RG_CFLAGS)                                            \
+	-I$(top_srcdir)/contrib/egg                             \
+	-I$(top_srcdir)/contrib/rg                              \
 	$(NULL)
 
-rg_libs =                                                                                                                                                \
-	$(top_builddir)/contrib/egg/libegg-private.la                                                                                                    \
-	$(top_builddir)/contrib/rg/librg.la                                                                                                              \
-	$(RG_LIBS)                                                                                                                                       \
+rg_libs =                                                       \
+	$(top_builddir)/contrib/egg/libegg-private.la           \
+	$(top_builddir)/contrib/rg/librg.la                     \
+	$(RG_LIBS)                                              \
 	$(NULL)
 
-jsonrpc_cflags =                                                                                                                                         \
-	$(DEBUG_CFLAGS)                                                                                                                                  \
-	$(JSONRPC_CFLAGS)                                                                                                                                \
-	-I$(top_srcdir)/contrib/jsonrpc-glib                                                                                                             \
+jsonrpc_cflags =                                                \
+	$(DEBUG_CFLAGS)                                         \
+	$(JSONRPC_CFLAGS)                                       \
+	-I$(top_srcdir)/contrib/jsonrpc-glib                    \
 	$(NULL)
 
-jsonrpc_libs =                                                                                                                                           \
-	$(top_builddir)/contrib/jsonrpc-glib/libjsonrpc-glib.la                                                                                          \
-	$(JSONRPC_LIBS)                                                                                                                                  \
+jsonrpc_libs =                                                  \
+	$(top_builddir)/contrib/jsonrpc-glib/libjsonrpc-glib.la \
+	$(JSONRPC_LIBS)                                         \
 	$(NULL)
 
-search_cflags =                                                                                                                                          \
-	$(DEBUG_CFLAGS)                                                                                                                                  \
-	$(SEARCH_CFLAGS)                                                                                                                                 \
-	-I$(top_srcdir)/contrib/search                                                                                                                   \
-	-I$(top_srcdir)/libide/util                                                                                                                      \
+search_cflags =                                                 \
+	$(DEBUG_CFLAGS)                                         \
+	$(SEARCH_CFLAGS)                                        \
+	-I$(top_srcdir)/contrib/search                          \
+	-I$(top_srcdir)/libide/util                             \
 	$(NULL)
 
-search_libs =                                                                                                                                            \
-	$(SEARCH_LIBS)                                                                                                                                   \
-	$(top_builddir)/contrib/search/libsearch.la                                                                                                      \
-	$(top_builddir)/libide/libide-1.0.la                                                                                                             \
-	$(top_builddir)/contrib/egg/libegg-private.la                                                                                                    \
+search_libs =                                                   \
+	$(SEARCH_LIBS)                                          \
+	$(top_builddir)/contrib/search/libsearch.la             \
+	$(top_builddir)/libide/libide-1.0.la                    \
+	$(top_builddir)/contrib/egg/libegg-private.la           \
 	$(NULL)
 
-tests_cflags =                                                                                                                                           \
-	$(egg_cflags)                                                                                                                                    \
-	$(LIBIDE_CFLAGS)                                                                                                                                 \
-	-I$(top_srcdir)/libide                                                                                                                           \
-	-I$(top_builddir)/libide                                                                                                                         \
-	-I$(top_srcdir)/contrib/pnl                                                                                                                      \
-	-I$(top_builddir)/contrib/pnl                                                                                                                    \
+tests_cflags =                                                  \
+	$(egg_cflags)                                           \
+	$(LIBIDE_CFLAGS)                                        \
+	-I$(top_srcdir)/libide                                  \
+	-I$(top_builddir)/libide                                \
+	-I$(top_srcdir)/contrib/pnl                             \
+	-I$(top_builddir)/contrib/pnl                           \
 	$(NULL)
 
-tests_libs =                                                                                                                                             \
-	$(LIBIDE_LIBS)                                                                                                                                   \
-	$(top_builddir)/libide/libide-1.0.la                                                                                                             \
-	$(top_builddir)/contrib/egg/libegg-private.la                                                                                                    \
+tests_libs =                                                    \
+	$(LIBIDE_LIBS)                                          \
+	$(top_builddir)/libide/libide-1.0.la                    \
+	$(top_builddir)/contrib/egg/libegg-private.la           \
 	$(NULL)
 
-tests_ldflags =                                                                                                                                          \
-	-export-dynamic                                                                                                                                  \
+tests_ldflags =                                                 \
+	-export-dynamic                                         \
 	$(NULL)
 
 misc_programs =
 
-TESTS_ENVIRONMENT=                                                                                                                                       \
+TESTS_ENVIRONMENT=                                              \
 	GI_TYPELIB_PATH="$(top_builddir)/libide:$(top_builddir)/contrib/tmpl:$(top_builddir)/contrib/egg:$(top_builddir)/contrib/pnl:$(GI_TYPELIB_PATH)" \
-	GB_IN_TREE_PLUGINS=1                                                                                                                             \
-	G_TEST_SRCDIR="$(abs_srcdir)"                                                                                                                    \
-	G_TEST_BUILDDIR="$(abs_builddir)"                                                                                                                \
-	G_DEBUG=gc-friendly                                                                                                                              \
-	GSETTINGS_BACKEND=memory                                                                                                                         \
-	GTK_IM_METHOD=none                                                                                                                               \
-	PYTHONDONTWRITEBYTECODE=yes                                                                                                                      \
-	MALLOC_CHECK_=2                                                                                                                                  \
+	GB_IN_TREE_PLUGINS=1                                    \
+	G_TEST_SRCDIR="$(abs_srcdir)"                           \
+	G_TEST_BUILDDIR="$(abs_builddir)"                       \
+	G_DEBUG=gc-friendly                                     \
+	GSETTINGS_BACKEND=memory                                \
+	GTK_IM_METHOD=none                                      \
+	PYTHONDONTWRITEBYTECODE=yes                             \
+	MALLOC_CHECK_=2                                         \
 	MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256))
 
 LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
@@ -164,10 +164,10 @@ test_ide_uri_LDADD = $(tests_libs)
 
 #TESTS += test-c-parse-helper
 #test_c_parse_helper_SOURCES = test-c-parse-helper.c
-#test_c_parse_helper_CFLAGS =                                                                                                                            \
-#	$(tests_cflags)                                                                                                                                         \
-#	-include $(top_srcdir)/libide/c/c-parse-helper.c                                                                                                        \
-#	-include $(top_srcdir)/libide/c/c-parse-helper.h                                                                                                        \
+#test_c_parse_helper_CFLAGS =                                   \
+#	$(tests_cflags)                                                \
+#	-include $(top_srcdir)/libide/c/c-parse-helper.c               \
+#	-include $(top_srcdir)/libide/c/c-parse-helper.h               \
 #	$(NULL)
 #test_c_parse_helper_LDADD = $(tests_libs)
 
@@ -223,12 +223,12 @@ misc_programs += test-egg-menu-manager
 test_egg_menu_manager_SOURCES = test-egg-menu-manager.c
 test_egg_menu_manager_CFLAGS = $(egg_cflags)
 test_egg_menu_manager_LDADD = $(egg_libs)
-EXTRA_DIST +=                                                                                                                                            \
-	menus-exten-1.ui                                                                                                                                 \
-	menus-exten-2.ui                                                                                                                                 \
-	menus-exten-3.ui                                                                                                                                 \
-	menus-exten-4.ui                                                                                                                                 \
-	menus-exten-5.ui                                                                                                                                 \
+EXTRA_DIST +=                                                   \
+	menus-exten-1.ui                                        \
+	menus-exten-2.ui                                        \
+	menus-exten-3.ui                                        \
+	menus-exten-4.ui                                        \
+	menus-exten-5.ui                                        \
 	menus.ui
 
 
@@ -280,16 +280,16 @@ endif
 
 check_PROGRAMS = $(TESTS) $(misc_programs)
 
-EXTRA_DIST +=                                                                                                                                            \
-	data/project1/.editorconfig                                                                                                                      \
-	data/project1/.you-dont-git-me                                                                                                                   \
-	data/project1/autogen.sh                                                                                                                         \
-	data/project1/build-aux/m4/.keep                                                                                                                 \
-	data/project1/configure.ac                                                                                                                       \
-	data/project1/project1.c                                                                                                                         \
-	data/project1/project1.doap                                                                                                                      \
-	data/project1/tags                                                                                                                               \
-	data/project2/.you-dont-git-me                                                                                                                   \
+EXTRA_DIST +=                                                   \
+	data/project1/.editorconfig                             \
+	data/project1/.you-dont-git-me                          \
+	data/project1/autogen.sh                                \
+	data/project1/build-aux/m4/.keep                        \
+	data/project1/configure.ac                              \
+	data/project1/project1.c                                \
+	data/project1/project1.doap                             \
+	data/project1/tags                                      \
+	data/project2/.you-dont-git-me                          \
 	$(NULL)
 
 run-%: %

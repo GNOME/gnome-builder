@@ -8,6 +8,8 @@ line and then reformat all lines to match the proper tailing whitespace.
 import os
 import sys
 
+_MAX_LENGTH = 120
+
 filenames = sys.argv[1:]
 
 def count_prefix_tabs(line):
@@ -35,7 +37,9 @@ for path in filenames:
             if line.endswith('\\\n'):
                 line = line[:-2].rstrip()
                 length = count_visual_chars(line)
-                longest = max(longest, length)
+                # if the line length is pathalogical, ignore it
+                if length < _MAX_LENGTH:
+                    longest = max(longest, length)
 
     # Now rewrite the file with the line modifications
     with open(path + '.tmp', 'w') as stream:
