@@ -15,9 +15,7 @@ Creating Plugins
    building/index
    processes/index
    devices
-   runtimes
    running
-   symbols
    keybindings
    langserv
    search

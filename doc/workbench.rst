@@ -1,9 +1,0 @@
-#########
-Workbench
-#########
-
-Header Bar
-==========
-
-Perspectives
-============

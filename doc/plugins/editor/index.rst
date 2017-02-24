@@ -12,6 +12,3 @@ Extending the Editor
    autocompletion
    snippets
    filesettings
-   gotodef
-   symbols
-   rename
