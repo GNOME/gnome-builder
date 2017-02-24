@@ -99,6 +99,21 @@ main (int   argc,
              gtk_get_minor_version (),
              gtk_get_micro_version ());
 
+  /*
+   * FIXME: Work around type registration deadlocks in GObject.
+   *
+   * There seems to be a deadlock in GObject type registration from
+   * different threads based on some different parts of the type system.
+   * This is problematic because we occasionally race during startup in
+   * GZlibDecopmressor's get_type() registration.
+   *
+   * Instead, we'll just deal with this early by registering the type
+   * as soon as possible.
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=779199
+   */
+  g_type_ensure (G_TYPE_ZLIB_DECOMPRESSOR);
+
   app = ide_application_new ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_clear_object (&app);
