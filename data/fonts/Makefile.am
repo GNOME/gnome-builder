@@ -1,5 +1,5 @@
 fontdir = $(datadir)/gnome-builder/fonts
-dist_font_DATA = \
+dist_font_DATA =          \
 	BuilderBlocks.ttf \
 	$(NULL)
 

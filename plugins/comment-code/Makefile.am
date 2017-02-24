@@ -9,14 +9,14 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libcomment-code-plugin.la
 dist_plugin_DATA = comment-code.plugin
 
-libcomment_code_plugin_la_SOURCES = \
-	gbp-comment-code-plugin.c \
-	gbp-comment-code-view-addin.c \
-	gbp-comment-code-view-addin.h \
+libcomment_code_plugin_la_SOURCES =        \
+	gbp-comment-code-plugin.c          \
+	gbp-comment-code-view-addin.c      \
+	gbp-comment-code-view-addin.h      \
 	$(NULL)
 
 nodist_libcomment_code_plugin_la_SOURCES = \
-	gbp-comment-code-resources.c \
+	gbp-comment-code-resources.c       \
 	gbp-comment-code-resources.h
 
 libcomment_code_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)

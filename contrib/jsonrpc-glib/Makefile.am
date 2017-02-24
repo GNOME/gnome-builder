@@ -4,30 +4,30 @@ EXTRA_DIST =
 
 noinst_LTLIBRARIES = libjsonrpc-glib.la
 
-libjsonrpc_glib_la_public_sources = \
-	jsonrpc-client.c \
-	jsonrpc-client.h \
-	jsonrpc-input-stream.c \
-	jsonrpc-input-stream.h \
-	jsonrpc-output-stream.c \
-	jsonrpc-output-stream.h \
-	jsonrpc-server.c \
-	jsonrpc-server.h \
-	jsonrpc-version.h \
+libjsonrpc_glib_la_public_sources =          \
+	jsonrpc-client.c                     \
+	jsonrpc-client.h                     \
+	jsonrpc-input-stream.c               \
+	jsonrpc-input-stream.h               \
+	jsonrpc-output-stream.c              \
+	jsonrpc-output-stream.h              \
+	jsonrpc-server.c                     \
+	jsonrpc-server.h                     \
+	jsonrpc-version.h                    \
 	$(NULL)
 
-libjsonrpc_glib_la_SOURCES = \
+libjsonrpc_glib_la_SOURCES =                 \
 	$(libjsonrpc_glib_la_public_sources) \
-	jsonrpc-glib.h \
-	jcon.c \
-	jcon.h \
+	jsonrpc-glib.h                       \
+	jcon.c                               \
+	jcon.h                               \
 	$(NULL)
 
-libjsonrpc_glib_la_CFLAGS = \
-	-DJSONRPC_GLIB_COMPILATION \
-	$(DEBUG_CFLAGS) \
-	$(JSONRPC_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
+libjsonrpc_glib_la_CFLAGS =                  \
+	-DJSONRPC_GLIB_COMPILATION           \
+	$(DEBUG_CFLAGS)                      \
+	$(JSONRPC_CFLAGS)                    \
+	$(OPTIMIZE_CFLAGS)                   \
 	$(NULL)
 
 libjsonrpc_glib_la_LIBADD = $(JSONRPC_LIBS)
@@ -45,9 +45,9 @@ Jsonrpc_1_0_gir_INCLUDES = Gio-2.0 Json-1.0
 Jsonrpc_1_0_gir_CFLAGS = $(libjsonrpc_glib_la_CFLAGS)
 Jsonrpc_1_0_gir_LIBS = libjsonrpc-glib.la
 Jsonrpc_1_0_gir_FILES = $(libjsonrpc_glib_la_public_sources)
-Jsonrpc_1_0_gir_SCANNERFLAGS = \
-	--c-include="jsonrpc-glib.h" \
-	-n Jsonrpc \
+Jsonrpc_1_0_gir_SCANNERFLAGS =               \
+	--c-include="jsonrpc-glib.h"         \
+	-n Jsonrpc                           \
 	$(NULL)
 INTROSPECTION_GIRS += Jsonrpc-1.0.gir
 

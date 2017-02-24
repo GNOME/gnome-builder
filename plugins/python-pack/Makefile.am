@@ -6,12 +6,12 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libpython-pack-plugin.la
 dist_plugin_DATA = python-pack.plugin
 
-libpython_pack_plugin_la_SOURCES = \
-	ide-python-indenter.c \
-	ide-python-indenter.h \
+libpython_pack_plugin_la_SOURCES =   \
+	ide-python-indenter.c        \
+	ide-python-indenter.h        \
 	ide-python-format-provider.c \
 	ide-python-format-provider.h \
-	python-pack-plugin.c \
+	python-pack-plugin.c         \
 	$(NULL)
 
 libpython_pack_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)

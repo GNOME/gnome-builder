@@ -9,39 +9,39 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libcolor-picker-plugin.la
 dist_plugin_DATA = color-picker.plugin
 
-libcolor_picker_plugin_la_SOURCES =               \
-	gb-color-picker-helper.c                  \
-	gb-color-picker-helper.h                  \
-	gb-color-picker-plugin.c                  \
-	gb-color-picker-document-monitor.c        \
-	gb-color-picker-document-monitor.h        \
-	gb-color-picker-prefs.c                   \
-	gb-color-picker-prefs.h                   \
-	gb-color-picker-prefs-list.c              \
-	gb-color-picker-prefs-palette-list.h      \
-	gb-color-picker-prefs-palette-list.c      \
-	gb-color-picker-prefs-list.h              \
-	gb-color-picker-prefs-palette-row.c       \
-	gb-color-picker-prefs-palette-row.h       \
-	gb-color-picker-private.h                 \
-	gb-color-picker-workbench-addin.c         \
-	gb-color-picker-workbench-addin.h         \
-	gb-color-picker-workbench-addin-private.h \
+libcolor_picker_plugin_la_SOURCES =                                         \
+	gb-color-picker-helper.c                                            \
+	gb-color-picker-helper.h                                            \
+	gb-color-picker-plugin.c                                            \
+	gb-color-picker-document-monitor.c                                  \
+	gb-color-picker-document-monitor.h                                  \
+	gb-color-picker-prefs.c                                             \
+	gb-color-picker-prefs.h                                             \
+	gb-color-picker-prefs-list.c                                        \
+	gb-color-picker-prefs-palette-list.h                                \
+	gb-color-picker-prefs-palette-list.c                                \
+	gb-color-picker-prefs-list.h                                        \
+	gb-color-picker-prefs-palette-row.c                                 \
+	gb-color-picker-prefs-palette-row.h                                 \
+	gb-color-picker-private.h                                           \
+	gb-color-picker-workbench-addin.c                                   \
+	gb-color-picker-workbench-addin.h                                   \
+	gb-color-picker-workbench-addin-private.h                           \
 	$(NULL)
 
-libcolor_picker_plugin_la_includes =   \
-	-I$(top_srcdir)/contrib/gstyle \
+libcolor_picker_plugin_la_includes =                                        \
+	-I$(top_srcdir)/contrib/gstyle                                      \
 	$(NULL)
 
-nodist_libcolor_picker_plugin_la_SOURCES = \
-	gb-color-picker-resources.c        \
-	gb-color-picker-resources.h        \
+nodist_libcolor_picker_plugin_la_SOURCES =                                  \
+	gb-color-picker-resources.c                                         \
+	gb-color-picker-resources.h                                         \
 	$(NULL)
 
 libcolor_picker_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(GSTYLE_CFLAGS)
-libcolor_picker_plugin_la_LIBADD = \
-	$(GSTYLE_LIBS) \
-	$(top_builddir)/contrib/gstyle/libgstyle-private.la \
+libcolor_picker_plugin_la_LIBADD =                                          \
+	$(GSTYLE_LIBS)                                                      \
+	$(top_builddir)/contrib/gstyle/libgstyle-private.la                 \
 	$(NULL)
 
 libcolor_picker_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)

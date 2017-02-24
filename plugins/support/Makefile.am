@@ -9,16 +9,16 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libsupport-plugin.la
 dist_plugin_DATA = support.plugin
 
-libsupport_plugin_la_SOURCES = \
+libsupport_plugin_la_SOURCES =          \
 	ide-support-application-addin.c \
 	ide-support-application-addin.h \
-	ide-support.c \
-	ide-support.h \
-	ide-support-plugin.c \
+	ide-support.c                   \
+	ide-support.h                   \
+	ide-support-plugin.c            \
 	$(NULL)
 
-nodist_libsupport_plugin_la_SOURCES = \
-	ide-support-resources.c \
+nodist_libsupport_plugin_la_SOURCES =   \
+	ide-support-resources.c         \
 	ide-support-resources.h
 
 libsupport_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)

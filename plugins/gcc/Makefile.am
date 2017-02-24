@@ -6,7 +6,7 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libgcc-plugin.la
 dist_plugin_DATA = gcc.plugin
 
-libgcc_plugin_la_SOURCES = \
+libgcc_plugin_la_SOURCES =       \
 	gbp-gcc-pipeline-addin.c \
 	gbp-gcc-pipeline-addin.h \
 	gbp-gcc-plugin.c

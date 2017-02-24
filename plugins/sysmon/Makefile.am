@@ -9,11 +9,11 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libsysmon.la
 dist_plugin_DATA = sysmon.plugin
 
-libsysmon_la_SOURCES = \
-	gb-sysmon-panel.c \
-	gb-sysmon-panel.h \
-	gb-sysmon-addin.c \
-	gb-sysmon-addin.h \
+libsysmon_la_SOURCES =        \
+	gb-sysmon-panel.c     \
+	gb-sysmon-panel.h     \
+	gb-sysmon-addin.c     \
+	gb-sysmon-addin.h     \
 	$(NULL)
 
 nodist_libsysmon_la_SOURCES = \

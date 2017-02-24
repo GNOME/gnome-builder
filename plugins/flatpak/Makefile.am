@@ -9,40 +9,40 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libflatpak-plugin.la
 dist_plugin_DATA = flatpak.plugin
 
-libflatpak_plugin_la_SOURCES = \
-	gbp-flatpak-application-addin.c \
-	gbp-flatpak-application-addin.h \
-	gbp-flatpak-clone-widget.c \
-	gbp-flatpak-clone-widget.h \
-	gbp-flatpak-configuration.c \
-	gbp-flatpak-configuration.h \
+libflatpak_plugin_la_SOURCES =               \
+	gbp-flatpak-application-addin.c      \
+	gbp-flatpak-application-addin.h      \
+	gbp-flatpak-clone-widget.c           \
+	gbp-flatpak-clone-widget.h           \
+	gbp-flatpak-configuration.c          \
+	gbp-flatpak-configuration.h          \
 	gbp-flatpak-configuration-provider.c \
 	gbp-flatpak-configuration-provider.h \
-	gbp-flatpak-genesis-addin.c \
-	gbp-flatpak-genesis-addin.h \
-	gbp-flatpak-pipeline-addin.c \
-	gbp-flatpak-pipeline-addin.h \
-	gbp-flatpak-preferences-addin.c \
-	gbp-flatpak-preferences-addin.h \
-	gbp-flatpak-plugin.c \
-	gbp-flatpak-runner.c \
-	gbp-flatpak-runner.h \
-	gbp-flatpak-runtime-provider.c \
-	gbp-flatpak-runtime-provider.h \
-	gbp-flatpak-runtime.c \
-	gbp-flatpak-runtime.h \
-	gbp-flatpak-sources.c \
-	gbp-flatpak-sources.h \
-	gbp-flatpak-subprocess-launcher.c \
-	gbp-flatpak-subprocess-launcher.h \
-	gbp-flatpak-transfer.c \
-	gbp-flatpak-transfer.h \
-	gbp-flatpak-util.c \
-	gbp-flatpak-util.h \
+	gbp-flatpak-genesis-addin.c          \
+	gbp-flatpak-genesis-addin.h          \
+	gbp-flatpak-pipeline-addin.c         \
+	gbp-flatpak-pipeline-addin.h         \
+	gbp-flatpak-preferences-addin.c      \
+	gbp-flatpak-preferences-addin.h      \
+	gbp-flatpak-plugin.c                 \
+	gbp-flatpak-runner.c                 \
+	gbp-flatpak-runner.h                 \
+	gbp-flatpak-runtime-provider.c       \
+	gbp-flatpak-runtime-provider.h       \
+	gbp-flatpak-runtime.c                \
+	gbp-flatpak-runtime.h                \
+	gbp-flatpak-sources.c                \
+	gbp-flatpak-sources.h                \
+	gbp-flatpak-subprocess-launcher.c    \
+	gbp-flatpak-subprocess-launcher.h    \
+	gbp-flatpak-transfer.c               \
+	gbp-flatpak-transfer.h               \
+	gbp-flatpak-util.c                   \
+	gbp-flatpak-util.h                   \
 	$(NULL)
 
-nodist_libflatpak_plugin_la_SOURCES = \
-	gbp-flatpak-resources.c \
+nodist_libflatpak_plugin_la_SOURCES =        \
+	gbp-flatpak-resources.c              \
 	gbp-flatpak-resources.h
 
 libflatpak_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(FLATPAK_CFLAGS) $(GIT_CFLAGS) $(SOUP_CFLAGS)

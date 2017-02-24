@@ -1,31 +1,31 @@
-bin_PROGRAMS = \
-	gnome-builder \
-	gnome-builder-cli \
+bin_PROGRAMS =                                         \
+	gnome-builder                                  \
+	gnome-builder-cli                              \
 	$(NULL)
 
-libexec_PROGRAMS = \
-	gnome-builder-worker \
+libexec_PROGRAMS =                                     \
+	gnome-builder-worker                           \
 	$(NULL)
 
-AM_CPPFLAGS = \
-	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
-	$(LIBIDE_CFLAGS) \
-	$(DEBUG_CFLAGS) \
-	$(OPTIMIZE_CFLAGS) \
-	$(TERMINAL_CFLAGS) \
-	-I$(top_builddir)/data/icons/hicolor \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/libide \
-	-I$(top_srcdir)/contrib/pnl \
-	-I$(top_builddir)/contrib/pnl \
+AM_CPPFLAGS =                                          \
+	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\"   \
+	$(LIBIDE_CFLAGS)                               \
+	$(DEBUG_CFLAGS)                                \
+	$(OPTIMIZE_CFLAGS)                             \
+	$(TERMINAL_CFLAGS)                             \
+	-I$(top_builddir)/data/icons/hicolor           \
+	-I$(top_builddir)/libide                       \
+	-I$(top_srcdir)/libide                         \
+	-I$(top_srcdir)/contrib/pnl                    \
+	-I$(top_builddir)/contrib/pnl                  \
 	$(NULL)
 
-gnome_builder_libs = \
-	$(LIBIDE_LIBS) \
-	$(top_builddir)/contrib/egg/libegg-private.la \
-	$(top_builddir)/contrib/pnl/libpanel-gtk.la \
+gnome_builder_libs =                                   \
+	$(LIBIDE_LIBS)                                 \
+	$(top_builddir)/contrib/egg/libegg-private.la  \
+	$(top_builddir)/contrib/pnl/libpanel-gtk.la    \
 	$(top_builddir)/data/icons/hicolor/libicons.la \
-	$(top_builddir)/libide/libide-1.0.la \
+	$(top_builddir)/libide/libide-1.0.la           \
 	$(NULL)
 
 AM_LDFLAGS = -export-dynamic

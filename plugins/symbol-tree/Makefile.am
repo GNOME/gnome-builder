@@ -9,17 +9,17 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libsymbol-tree.la
 dist_plugin_DATA = symbol-tree.plugin
 
-libsymbol_tree_la_SOURCES = \
-	symbol-tree-builder.c \
-	symbol-tree-builder.h \
-	symbol-tree-panel.c \
-	symbol-tree-panel.h \
-	symbol-tree.c \
-	symbol-tree.h \
+libsymbol_tree_la_SOURCES =        \
+	symbol-tree-builder.c      \
+	symbol-tree-builder.h      \
+	symbol-tree-panel.c        \
+	symbol-tree-panel.h        \
+	symbol-tree.c              \
+	symbol-tree.h              \
 	$(NULL)
 
 nodist_libsymbol_tree_la_SOURCES = \
-	symbol-tree-resources.c \
+	symbol-tree-resources.c    \
 	symbol-tree-resources.h
 
 libsymbol_tree_la_CFLAGS = $(PLUGIN_CFLAGS)

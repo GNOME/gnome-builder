@@ -9,7 +9,7 @@ moduledir = $(libdir)/gnome-builder/plugins/rustup_plugin
 dist_module_DATA = rustup_plugin/__init__.py
 
 resourcedir = $(datadir)/gnome-builder/plugins/
-nobase_resource_DATA = \
+nobase_resource_DATA =                    \
 	rustup_plugin/resources/rustup.sh \
 	$(NULL)
 

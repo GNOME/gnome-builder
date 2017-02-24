@@ -6,10 +6,10 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libquick-highlight-plugin.la
 dist_plugin_DATA = quick-highlight.plugin
 
-libquick_highlight_plugin_la_SOURCES = \
-	gbp-quick-highlight-plugin.c \
-	gbp-quick-highlight-view-addin.c \
-	gbp-quick-highlight-view-addin.h \
+libquick_highlight_plugin_la_SOURCES =    \
+	gbp-quick-highlight-plugin.c      \
+	gbp-quick-highlight-view-addin.c  \
+	gbp-quick-highlight-view-addin.h  \
 	gbp-quick-highlight-preferences.c \
 	gbp-quick-highlight-preferences.h \
 	$(NULL)

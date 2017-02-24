@@ -1,10 +1,10 @@
 EXTRA_DIST =
 
-gstyle_cflags =                              \
-	$(DEBUG_CFLAGS)                      \
-	$(GSTYLE_CFLAGS)                     \
-	-I$(top_srcdir)/contrib/gstyle       \
-	-DTEST_DATA_DIR="\"$(abs_srcdir)/data\"" \
+gstyle_cflags =                                             \
+	$(DEBUG_CFLAGS)                                     \
+	$(GSTYLE_CFLAGS)                                    \
+	-I$(top_srcdir)/contrib/gstyle                      \
+	-DTEST_DATA_DIR="\"$(abs_srcdir)/data\""            \
 	$(NULL)
 
 gstyle_libs =                                               \
@@ -12,30 +12,30 @@ gstyle_libs =                                               \
 	$(top_builddir)/contrib/gstyle/libgstyle-private.la \
 	$(NULL)
 
-tests_cflags =                   \
-	$(egg_cflags)            \
-	$(gstyle_cflags)         \
+tests_cflags =                                              \
+	$(egg_cflags)                                       \
+	$(gstyle_cflags)                                    \
 	$(NULL)
 
-tests_libs =                                          \
-	$(gstyle_libs)                                \
-	$(top_builddir)/contrib/egg/libegg-private.la \
+tests_libs =                                                \
+	$(gstyle_libs)                                      \
+	$(top_builddir)/contrib/egg/libegg-private.la       \
 	$(NULL)
 
-tests_ldflags =         \
-	-export-dynamic \
+tests_ldflags =                                             \
+	-export-dynamic                                     \
 	$(NULL)
 
 misc_programs =
 
-TESTS_ENVIRONMENT =                                 \
-	GB_IN_TREE_PLUGINS=1                        \
-	G_TEST_SRCDIR="$(abs_srcdir)"               \
-	G_TEST_BUILDDIR="$(abs_builddir)"           \
-	G_DEBUG=gc-friendly                         \
-	GSETTINGS_BACKEND=memory                    \
-	MALLOC_CHECK_=2                             \
-	MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256)) \
+TESTS_ENVIRONMENT =                                         \
+	GB_IN_TREE_PLUGINS=1                                \
+	G_TEST_SRCDIR="$(abs_srcdir)"                       \
+	G_TEST_BUILDDIR="$(abs_builddir)"                   \
+	G_DEBUG=gc-friendly                                 \
+	GSETTINGS_BACKEND=memory                            \
+	MALLOC_CHECK_=2                                     \
+	MALLOC_PERTURB_=$$(($${RANDOM:-256} % 256))         \
 	$(NULL)
 
 LOG_COMPILER = $(top_srcdir)/build/autotools/tap-test
@@ -91,9 +91,9 @@ endif
 
 check_PROGRAMS = $(TESTS) $(misc_programs)
 
-EXTRA_DIST +=                   \
-	data/palette.gpl        \
-	data/palette.gstyle.xml \
+EXTRA_DIST +=                                               \
+	data/palette.gpl                                    \
+	data/palette.gstyle.xml                             \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk

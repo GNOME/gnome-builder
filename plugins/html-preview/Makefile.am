@@ -9,8 +9,8 @@ moduledir = $(libdir)/gnome-builder/plugins/html_preview_plugin
 dist_module_DATA = html_preview_plugin/__init__.py
 
 resourcedir = $(datadir)/gnome-builder/plugins/html_preview_plugin
-dist_resource_DATA = \
-	html_preview_plugin/markdown.css \
+dist_resource_DATA =                         \
+	html_preview_plugin/markdown.css     \
 	html_preview_plugin/markdown-view.js \
 	html_preview_plugin/marked.js
 

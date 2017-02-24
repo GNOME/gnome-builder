@@ -6,13 +6,13 @@ EXTRA_DIST =
 pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libgd-private.la
 
-libgd_private_la_SOURCES = \
-	gd-tagged-entry.c \
-	gd-tagged-entry.h \
+libgd_private_la_SOURCES =        \
+	gd-tagged-entry.c         \
+	gd-tagged-entry.h         \
 	$(NULL)
 
 nodist_libgd_private_la_SOURCES = \
-	gd-resources.c \
+	gd-resources.c            \
 	gd-resources.h
 
 glib_resources_c = gd-resources.c

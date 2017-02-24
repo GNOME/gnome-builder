@@ -6,12 +6,12 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libc-pack-plugin.la
 dist_plugin_DATA = c-pack.plugin
 
-libc_pack_plugin_la_SOURCES = \
-	c-pack-plugin.c \
-	c-parse-helper.c \
-	c-parse-helper.h \
-	ide-c-indenter.c \
-	ide-c-indenter.h \
+libc_pack_plugin_la_SOURCES =   \
+	c-pack-plugin.c         \
+	c-parse-helper.c        \
+	c-parse-helper.h        \
+	ide-c-indenter.c        \
+	ide-c-indenter.h        \
 	ide-c-format-provider.c \
 	ide-c-format-provider.h \
 	$(NULL)

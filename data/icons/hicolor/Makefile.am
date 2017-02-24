@@ -5,7 +5,7 @@ EXTRA_DIST =
 
 noinst_LTLIBRARIES = libicons.la
 
-nodist_libicons_la_SOURCES = \
+nodist_libicons_la_SOURCES =  \
 	ide-icons-resources.c \
 	ide-icons-resources.h
 

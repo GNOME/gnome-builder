@@ -9,29 +9,29 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libcommand-bar.la
 dist_plugin_DATA = command-bar.plugin
 
-libcommand_bar_la_SOURCES = \
-	gb-command-bar-resources.c \
-	gb-command-bar-resources.h \
-	gb-command-bar.c \
-	gb-command-bar.h \
+libcommand_bar_la_SOURCES =           \
+	gb-command-bar-resources.c    \
+	gb-command-bar-resources.h    \
+	gb-command-bar.c              \
+	gb-command-bar.h              \
 	gb-command-gaction-provider.c \
 	gb-command-gaction-provider.h \
-	gb-command-gaction.c \
-	gb-command-gaction.h \
-	gb-command-manager.c \
-	gb-command-manager.h \
-	gb-command-provider.c \
-	gb-command-provider.h \
-	gb-command-result.c \
-	gb-command-result.h \
-	gb-command-vim-provider.c \
-	gb-command-vim-provider.h \
-	gb-command-vim.c \
-	gb-command-vim.h \
-	gb-command.c \
-	gb-command.h \
-	gb-vim.c \
-	gb-vim.h \
+	gb-command-gaction.c          \
+	gb-command-gaction.h          \
+	gb-command-manager.c          \
+	gb-command-manager.h          \
+	gb-command-provider.c         \
+	gb-command-provider.h         \
+	gb-command-result.c           \
+	gb-command-result.h           \
+	gb-command-vim-provider.c     \
+	gb-command-vim-provider.h     \
+	gb-command-vim.c              \
+	gb-command-vim.h              \
+	gb-command.c                  \
+	gb-command.h                  \
+	gb-vim.c                      \
+	gb-vim.h                      \
 	$(NULL)
 
 libcommand_bar_la_CFLAGS = $(PLUGIN_CFLAGS)

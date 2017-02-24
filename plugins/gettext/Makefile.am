@@ -6,10 +6,10 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libgettext-plugin.la
 dist_plugin_DATA = gettext.plugin
 
-libgettext_plugin_la_SOURCES = \
+libgettext_plugin_la_SOURCES =            \
 	ide-gettext-diagnostic-provider.c \
 	ide-gettext-diagnostic-provider.h \
-	gettext-plugin.c \
+	gettext-plugin.c                  \
 	$(NULL)
 
 libgettext_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(GETTEXT_CFLAGS)

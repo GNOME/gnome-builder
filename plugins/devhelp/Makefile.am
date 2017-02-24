@@ -9,20 +9,20 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libdevhelp-plugin.la
 dist_plugin_DATA = devhelp.plugin
 
-libdevhelp_plugin_la_SOURCES = \
+libdevhelp_plugin_la_SOURCES =          \
 	gbp-devhelp-editor-view-addin.c \
 	gbp-devhelp-editor-view-addin.h \
-	gbp-devhelp-panel.c \
-	gbp-devhelp-panel.h \
-	gbp-devhelp-plugin.c \
-	gbp-devhelp-view.c \
-	gbp-devhelp-view.h \
-	gbp-devhelp-workbench-addin.c \
-	gbp-devhelp-workbench-addin.h \
+	gbp-devhelp-panel.c             \
+	gbp-devhelp-panel.h             \
+	gbp-devhelp-plugin.c            \
+	gbp-devhelp-view.c              \
+	gbp-devhelp-view.h              \
+	gbp-devhelp-workbench-addin.c   \
+	gbp-devhelp-workbench-addin.h   \
 	$(NULL)
 
-nodist_libdevhelp_plugin_la_SOURCES = \
-	gbp-devhelp-resources.c \
+nodist_libdevhelp_plugin_la_SOURCES =   \
+	gbp-devhelp-resources.c         \
 	gbp-devhelp-resources.h
 
 libdevhelp_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(DEVHELP_CFLAGS)

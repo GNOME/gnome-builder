@@ -6,10 +6,10 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libmingw-plugin.la
 dist_plugin_DATA = mingw.plugin
 
-libmingw_plugin_la_SOURCES = \
-	mingw-plugin.c \
-	ide-mingw-device.c \
-	ide-mingw-device.h \
+libmingw_plugin_la_SOURCES =        \
+	mingw-plugin.c              \
+	ide-mingw-device.c          \
+	ide-mingw-device.h          \
 	ide-mingw-device-provider.c \
 	ide-mingw-device-provider.h \
 	$(NULL)

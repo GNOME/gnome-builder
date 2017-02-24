@@ -9,20 +9,20 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libcreate-project-plugin.la
 dist_plugin_DATA = create-project.plugin
 
-libcreate_project_plugin_la_SOURCES = \
-	gbp-create-project-genesis-addin.c \
-	gbp-create-project-genesis-addin.h \
-	gbp-create-project-plugin.c \
-	gbp-create-project-template-icon.c \
-	gbp-create-project-template-icon.h \
-	gbp-create-project-tool.c \
-	gbp-create-project-tool.h \
-	gbp-create-project-widget.c \
-	gbp-create-project-widget.h \
+libcreate_project_plugin_la_SOURCES =        \
+	gbp-create-project-genesis-addin.c   \
+	gbp-create-project-genesis-addin.h   \
+	gbp-create-project-plugin.c          \
+	gbp-create-project-template-icon.c   \
+	gbp-create-project-template-icon.h   \
+	gbp-create-project-tool.c            \
+	gbp-create-project-tool.h            \
+	gbp-create-project-widget.c          \
+	gbp-create-project-widget.h          \
 	$(NULL)
 
 nodist_libcreate_project_plugin_la_SOURCES = \
-	gbp-create-project-resources.c \
+	gbp-create-project-resources.c       \
 	gbp-create-project-resources.h
 
 libcreate_project_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)

@@ -3,12 +3,12 @@
 HELP_ID = gnome-builder
 
 # Media files
-HELP_MEDIA = \
+HELP_MEDIA =              \
 	figures/icon.png
 
 # Help pages
-HELP_FILES = \
-	index.page \
+HELP_FILES =              \
+	index.page        \
 	introduction.page \
 	legal.xml
 

@@ -1,7 +1,7 @@
 styledir = $(datadir)/gtksourceview-3.0/styles/
 
-style_DATA = \
-	builder.xml \
+style_DATA =             \
+	builder.xml      \
 	builder-dark.xml \
 	$(NULL)
 

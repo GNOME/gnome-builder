@@ -24,35 +24,35 @@ service_DATA = $(service_in_files:.service.in=.service)
 
 # pkg-config
 pkgconfigdir = $(libdir)/gnome-builder/pkgconfig
-pkgconfig_DATA = \
-	libide-1.0.pc \
+pkgconfig_DATA =                                   \
+	libide-1.0.pc                              \
 	template-glib-1.0.pc
 
 org.gnome.Builder.service: org.gnome.Builder.service.in
-	$(AM_V_GEN)	\
+	$(AM_V_GEN)                                \
 		[ -d $(@D) ] || $(mkdir_p) $(@D) ; \
 		sed -e "s|\@bindir\@|$(bindir)|" $< > $@.tmp && mv $@.tmp $@
 
-EXTRA_DIST = \
-	$(appstream_in_files) \
-	$(desktop_in_in_files) \
-	$(service_in_files) \
+EXTRA_DIST =                                       \
+	$(appstream_in_files)                      \
+	$(desktop_in_in_files)                     \
+	$(service_in_files)                        \
 	$(NULL)
 
-CLEANFILES = \
-	$(appstream_XML) \
-	$(desktop_DATA) \
-	$(desktop_in_files) \
-	$(service_DATA) \
+CLEANFILES =                                       \
+	$(appstream_XML)                           \
+	$(desktop_DATA)                            \
+	$(desktop_in_files)                        \
+	$(service_DATA)                            \
 	$(NULL)
 
-DISTCLEANFILES = \
-	$(desktop_in_files) \
+DISTCLEANFILES =                                   \
+	$(desktop_in_files)                        \
 	$(NULL)
 
 desktop-file-validate: $(desktop_DATA)
-	for f in $^; do \
-		$(DESKTOP_FILE_VALIDATE) $$f; \
+	for f in $^; do                            \
+		$(DESKTOP_FILE_VALIDATE) $$f;      \
 	done
 
 check-local: desktop-file-validate

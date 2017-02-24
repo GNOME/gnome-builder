@@ -9,26 +9,26 @@ plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libgit-plugin.la
 dist_plugin_DATA = git.plugin
 
-libgit_plugin_la_SOURCES = \
+libgit_plugin_la_SOURCES =              \
 	ide-git-buffer-change-monitor.c \
 	ide-git-buffer-change-monitor.h \
-	ide-git-clone-widget.c \
-	ide-git-clone-widget.h \
-	ide-git-genesis-addin.c \
-	ide-git-genesis-addin.h \
-	ide-git-plugin.c \
-	ide-git-remote-callbacks.c \
-	ide-git-remote-callbacks.h \
-	ide-git-vcs.c \
-	ide-git-vcs.h \
-	ide-git-vcs-config.c \
-	ide-git-vcs-config.h \
-	ide-git-vcs-initializer.c \
-	ide-git-vcs-initializer.h \
+	ide-git-clone-widget.c          \
+	ide-git-clone-widget.h          \
+	ide-git-genesis-addin.c         \
+	ide-git-genesis-addin.h         \
+	ide-git-plugin.c                \
+	ide-git-remote-callbacks.c      \
+	ide-git-remote-callbacks.h      \
+	ide-git-vcs.c                   \
+	ide-git-vcs.h                   \
+	ide-git-vcs-config.c            \
+	ide-git-vcs-config.h            \
+	ide-git-vcs-initializer.c       \
+	ide-git-vcs-initializer.h       \
 	$(NULL)
 
-nodist_libgit_plugin_la_SOURCES = \
-	ide-git-resources.c \
+nodist_libgit_plugin_la_SOURCES =       \
+	ide-git-resources.c             \
 	ide-git-resources.h
 
 libgit_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(GIT_CFLAGS)
