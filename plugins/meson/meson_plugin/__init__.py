@@ -41,6 +41,18 @@ def execInRuntime(runtime, *args):
     _, stdout, stderr = proc.communicate_utf8(None, None)
     return stdout
 
+def extract_flags(command: str, builddir: str):
+    flags = GLib.shell_parse_argv(command)[1] # Raises on failure
+    wanted_flags = []
+    for flag in flags:
+        if flag.startswith('-I'):
+            # All paths are relative to build
+            abspath = path.normpath(path.join(builddir, flag[2:]))
+            wanted_flags.append('-I' + abspath)
+        elif flag.startswith(('-isystem', '-W', '-D')):
+            wanted_flags.append(flag)
+    return wanted_flags
+
 class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
 
@@ -88,7 +100,10 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def _get_build_flags_cb(self, build_manager, result, task):
         def build_flags_thread():
             config = build_manager.get_pipeline().get_configuration()
+            builddir = build_manager.get_pipeline().get_builddir()
+
             commands_file = path.join(self.get_builddir(config), 'compile_commands.json')
+
             try:
                 with open(commands_file) as f:
                     commands = json.loads(f.read(), encoding='utf-8')
@@ -101,7 +116,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
                 filepath = path.normpath(path.join(c['directory'], c['file']))
                 if filepath == infile:
                     try:
-                        task.build_flags = extract_flags(c['command'])
+                        task.build_flags = extract_flags(c['command'], builddir)
                     except GLib.Error as e:
                         task.return_error(e)
                         return
