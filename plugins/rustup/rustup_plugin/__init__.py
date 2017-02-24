@@ -279,6 +279,7 @@ class RustupInstaller(Ide.Transfer):
             self.props.title = _('Updating rustup')
         elif self.mode == _MODE_INSTALL_TOOLCHAIN:
             self.props.title = _('Installing rust ') + self.toolchain
+
         self.props.status = _('Checking system')
         self.props.icon_name = 'emblem-system-symbolic'
         self.state = _STATE_INIT
@@ -286,9 +287,11 @@ class RustupInstaller(Ide.Transfer):
         self.installed_components = 0
 
         task = Gio.Task.new(self, cancellable, callback)
+
         launcher = Ide.SubprocessLauncher()
         launcher.set_run_on_host(True)
         launcher.set_clear_env(False)
+
         if self.mode == _MODE_INSTALL:
             rustup_sh_path = get_module_data_path('resources/rustup.sh')
             # XXX: ensure that the script is executable
@@ -307,18 +310,22 @@ class RustupInstaller(Ide.Transfer):
             launcher.push_argv('toolchain')
             launcher.push_argv('install')
             launcher.push_argv(self.toolchain)
+
         # rustup needs a tty to give us a progress bar
         (master_fd, slave_fd) = pty.openpty()
-        launcher.take_stdin_fd (slave_fd)
-        launcher.take_stdout_fd (slave_fd)
-        launcher.take_stderr_fd (slave_fd)
+        launcher.take_stdin_fd(os.dup(slave_fd))
+        launcher.take_stdout_fd(os.dup(slave_fd))
+        launcher.take_stderr_fd(slave_fd)
 
         data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(master_fd, False))
         # set it to ANY so the progress bars can be parsed
         data_stream.set_newline_type(Gio.DataStreamNewlineType.ANY)
         data_stream.read_line_async(GLib.PRIORITY_DEFAULT, cancellable, self._read_line_cb, cancellable)
 
-        sub_process = launcher.spawn()
+        try:
+            sub_process = launcher.spawn()
+        except Exception as ex:
+            task.return_error(GLib.Error(ex))
 
         sub_process.wait_async(cancellable, self._wait_cb, task)
 
