@@ -44,6 +44,7 @@
 #include "resources/ide-resources.h"
 #include "theming/ide-css-provider.h"
 #include "theming/ide-theme-manager.h"
+#include "util/ide-flatpak.h"
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"
 
@@ -102,11 +103,27 @@ ide_application_register_theme_overrides (IdeApplication *self)
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  self->theme_manager = ide_theme_manager_new ();
-
   screen = gdk_screen_get_default ();
   gtk_settings = gtk_settings_get_for_screen (screen);
   settings = g_settings_new ("org.gnome.builder");
+
+  /*
+   * As early as possible, overwrite the gtk theme if we are running in
+   * flatpak. We want to ensure that we provide the best visual appearance
+   * that we can, for which we only support the internal Gtk theme currently.
+   *
+   * If we can get a designer that manages other themes and keeps them up
+   * to date and working inside flatpak, we can consider doing something
+   * different here.
+   */
+  if (ide_is_flatpak () && g_getenv ("GTK_THEME") == NULL)
+    {
+      g_object_set (gtk_settings,
+                    "gtk-theme-name", "Adwaita",
+                    NULL);
+    }
+
+  self->theme_manager = ide_theme_manager_new ();
 
   /*
    * Some users override the "default to dark theme" in gnome-tweak-tool,
