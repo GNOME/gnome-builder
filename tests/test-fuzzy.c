@@ -1,7 +1,8 @@
 #include <fuzzy.h>
-#include <ide.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "util/ide-line-reader.h"
 
 int
 main (int argc,
