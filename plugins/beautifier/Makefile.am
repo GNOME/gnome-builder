@@ -49,6 +49,7 @@ nobase_resource_DATA =                                                          
 	beautifier_plugin/data/objc/objc.cfg                                                         \
 	beautifier_plugin/data/python/config.ini                                                     \
 	beautifier_plugin/data/xml/config.ini                                                        \
+	beautifier_plugin/internal/align_makefile.py                                                 \
 	$(NULL)
 
 EXTRA_DIST += $(nobase_resource_DATA)
