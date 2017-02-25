@@ -1657,7 +1657,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
           parts = g_strsplit (line, "=", 2);
 
           g_strstrip (parts [0]);
-          g_strstrip (parts [1]);
+          if (parts[1])
+            g_strstrip (parts [1]);
 
           if (ide_str_empty0 (parts[0]) || ide_str_empty0 (parts[1]))
             continue;
