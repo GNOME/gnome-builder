@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-22 22:45+0000\n"
-"PO-Revision-Date: 2017-02-23 20:57-0300\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
+"POT-Creation-Date: 2017-02-25 04:41+0000\n"
+"PO-Revision-Date: 2017-02-25 20:36-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
 "X-Project-Style: gnome\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
@@ -891,7 +891,7 @@ msgstr "Fe_char"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:530
+#: libide/application/ide-application.c:547
 #: libide/preferences/ide-preferences-builtin.c:144
 #: libide/workbench/ide-workbench.c:565
 msgid "Builder"
@@ -1112,54 +1112,54 @@ msgstr "documento não salvo %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falha ao salvar o buffer, ignorando reclamação."
 
-#: libide/buildsystem/ide-build-pipeline.c:2036
+#: libide/buildsystem/ide-build-pipeline.c:2040
 msgid "Cleaning…"
 msgstr "Limpando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2051
+#: libide/buildsystem/ide-build-pipeline.c:2055
 msgid "Downloading…"
 msgstr "Baixando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2055
+#: libide/buildsystem/ide-build-pipeline.c:2059
 msgid "Building dependencies…"
 msgstr "Preferências de compilação…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2059
+#: libide/buildsystem/ide-build-pipeline.c:2063
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2063
+#: libide/buildsystem/ide-build-pipeline.c:2067
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2067
+#: libide/buildsystem/ide-build-pipeline.c:2071
 msgid "Building…"
 msgstr "Compilando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2071
+#: libide/buildsystem/ide-build-pipeline.c:2075
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2075
+#: libide/buildsystem/ide-build-pipeline.c:2079
 msgid "Exporting…"
 msgstr "Exportando…"
 
 # A resposta por ser Failed ou Successful -- Rafael
-#: libide/buildsystem/ide-build-pipeline.c:2079
 #: libide/buildsystem/ide-build-pipeline.c:2083
+#: libide/buildsystem/ide-build-pipeline.c:2087
 msgid "Success"
 msgstr "Sucesso"
 
-#: libide/buildsystem/ide-build-pipeline.c:2087
+#: libide/buildsystem/ide-build-pipeline.c:2091
 #: libide/workbench/ide-omni-bar.ui:328
 msgid "Failed"
 msgstr "Falhou"
 
-#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/buildsystem/ide-build-pipeline.c:2095
 msgid "Preparing…"
 msgstr "Preparando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2095
+#: libide/buildsystem/ide-build-pipeline.c:2099
 msgid "Ready"
 msgstr "Pronto"
 
@@ -2092,6 +2092,18 @@ msgstr "Perfil"
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Atalhos do Terminal"
+
+#: libide/keybindings/ide-shortcuts-window.ui:520
+#| msgid "Search"
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Pesquisa"
+
+#: libide/keybindings/ide-shortcuts-window.ui:525
+#| msgid "Untitled terminal"
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "Terminal sem título"
 
 #: libide/preferences/ide-preferences-builtin.c:65
 #: libide/preferences/ide-preferences-builtin.c:66
@@ -3259,15 +3271,15 @@ msgid "Clone"
 msgstr "Clonar"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
-#: plugins/rustup/rustup_plugin/__init__.py:470
-#: plugins/rustup/rustup_plugin/__init__.py:474
-#: plugins/rustup/rustup_plugin/__init__.py:589
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Instalar"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
-#: plugins/rustup/rustup_plugin/__init__.py:470
-#: plugins/rustup/rustup_plugin/__init__.py:474
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Atualizar"
 
@@ -3312,7 +3324,7 @@ msgid "Installed "
 msgstr "Instalado "
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:77
-#: plugins/rustup/rustup_plugin/__init__.py:348
+#: plugins/rustup/rustup_plugin/__init__.py:355
 msgid "Installing "
 msgstr "Instalando "
 
@@ -3580,81 +3592,81 @@ msgstr "Atualizando rustup"
 msgid "Installing rust "
 msgstr "Instalando rust "
 
-#: plugins/rustup/rustup_plugin/__init__.py:282
+#: plugins/rustup/rustup_plugin/__init__.py:283
 msgid "Checking system"
 msgstr "Verificando o sistema"
 
-#: plugins/rustup/rustup_plugin/__init__.py:330
+#: plugins/rustup/rustup_plugin/__init__.py:337
 msgid "Downloading rustup-init"
 msgstr "Baixando rustup-init"
 
-#: plugins/rustup/rustup_plugin/__init__.py:335
+#: plugins/rustup/rustup_plugin/__init__.py:342
 msgid "Syncing channel updates"
 msgstr "Sincronizando atualizações de canal"
 
-#: plugins/rustup/rustup_plugin/__init__.py:341
+#: plugins/rustup/rustup_plugin/__init__.py:348
 msgid "Downloading "
 msgstr "Baixando "
 
-#: plugins/rustup/rustup_plugin/__init__.py:354
+#: plugins/rustup/rustup_plugin/__init__.py:361
 msgid "Checking for rustup updates"
 msgstr "Verificando por atualizações do rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:359
+#: plugins/rustup/rustup_plugin/__init__.py:366
 msgid "Downloading rustup update"
 msgstr "Baixando atualização do rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:396
+#: plugins/rustup/rustup_plugin/__init__.py:403
 msgid "Error installing "
 msgstr "Erro ao instalar "
 
-#: plugins/rustup/rustup_plugin/__init__.py:398
+#: plugins/rustup/rustup_plugin/__init__.py:405
 msgid "Error"
 msgstr "Erro"
 
-#: plugins/rustup/rustup_plugin/__init__.py:404
+#: plugins/rustup/rustup_plugin/__init__.py:411
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: plugins/rustup/rustup_plugin/__init__.py:412
+#: plugins/rustup/rustup_plugin/__init__.py:419
 msgid "Finished"
 msgstr "Concluído"
 
-#: plugins/rustup/rustup_plugin/__init__.py:426
+#: plugins/rustup/rustup_plugin/__init__.py:433
 msgid "Rustup"
 msgstr "Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:427
+#: plugins/rustup/rustup_plugin/__init__.py:434
 msgid "Rustup Toolchains"
 msgstr "Cadeia de ferramentas Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:482
+#: plugins/rustup/rustup_plugin/__init__.py:489
 msgid "Updating"
 msgstr "Atualizando"
 
-#: plugins/rustup/rustup_plugin/__init__.py:482
+#: plugins/rustup/rustup_plugin/__init__.py:489
 msgid "Installing"
 msgstr "Instalando"
 
 #. set default toolchain button
-#: plugins/rustup/rustup_plugin/__init__.py:573
+#: plugins/rustup/rustup_plugin/__init__.py:580
 msgid "Make default"
 msgstr "Tornar padrão"
 
-#: plugins/rustup/rustup_plugin/__init__.py:573
+#: plugins/rustup/rustup_plugin/__init__.py:580
 msgid "Makes the selected toolchain the default rust installation"
 msgstr "Faz da cadeia de ferramentas selecionada a instalação padrão de rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:588
+#: plugins/rustup/rustup_plugin/__init__.py:595
 msgid "Install Rust Channel"
 msgstr "Instalar canal rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: plugins/rustup/rustup_plugin/__init__.py:593
+#: plugins/rustup/rustup_plugin/__init__.py:600
 msgid "Enter name of rust channel"
 msgstr "Digite um nome de canal rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:594
+#: plugins/rustup/rustup_plugin/__init__.py:601
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -3671,15 +3683,15 @@ msgstr ""
 "                        <data>          = YYYY-MM-DD\n"
 "                        <host>          = <target-triple>"
 
-#: plugins/rustup/rustup_plugin/__init__.py:619
+#: plugins/rustup/rustup_plugin/__init__.py:626
 msgid "Install Rustup to manage toolchains here!"
 msgstr "Instale Rustup para gerenciar cadeias de instalações aqui!"
 
-#: plugins/rustup/rustup_plugin/__init__.py:626
+#: plugins/rustup/rustup_plugin/__init__.py:633
 msgid "No toolchain installed. Click"
 msgstr "Nenhuma cadeia de ferramentas instalada. Clique"
 
-#: plugins/rustup/rustup_plugin/__init__.py:627
+#: plugins/rustup/rustup_plugin/__init__.py:634
 msgid "to add a new toolchain!"
 msgstr "para adicionar uma nova cadeia de ferramenta!"
 
