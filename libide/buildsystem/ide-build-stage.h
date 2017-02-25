@@ -141,6 +141,21 @@ struct _IdeBuildStageClass
   void     (*reap)           (IdeBuildStage        *self,
                               IdeDirectoryReaper   *reaper);
 
+
+  /**
+   * IdeBuildStage:chain:
+   *
+   * We might want to be able to "chain" multiple stages into a single stage
+   * so that we can avoid duplicate work. For example, if we have a "make"
+   * stage immediately follwed by a "make install" stage, it does not make
+   * sense to perform them both individually.
+   *
+   * Returns: %TRUE if @next's work was chained into @self for the next
+   *    execution of the pipeline.
+   */
+  gboolean (*chain)          (IdeBuildStage        *self,
+                              IdeBuildStage        *next);
+
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;
@@ -193,6 +208,8 @@ void           ide_build_stage_clean_async      (IdeBuildStage        *self,
 gboolean       ide_build_stage_clean_finish     (IdeBuildStage        *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
+gboolean       ide_build_stage_chain            (IdeBuildStage        *self,
+                                                 IdeBuildStage        *next);
 void           ide_build_stage_pause            (IdeBuildStage        *self);
 void           ide_build_stage_unpause          (IdeBuildStage        *self);
 void           ide_build_stage_emit_reap        (IdeBuildStage        *self,

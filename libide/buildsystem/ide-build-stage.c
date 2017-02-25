@@ -50,6 +50,7 @@ enum {
 };
 
 enum {
+  CHAIN,
   QUERY,
   REAP,
   N_SIGNALS
@@ -229,6 +230,13 @@ ide_build_stage_real_clean_finish (IdeBuildStage  *self,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static gboolean
+ide_build_stage_real_chain (IdeBuildStage *self,
+                            IdeBuildStage *next)
+{
+  return FALSE;
+}
+
 static void
 ide_build_stage_finalize (GObject *object)
 {
@@ -313,6 +321,7 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
   klass->execute_finish = ide_build_stage_real_execute_finish;
   klass->clean_async = ide_build_stage_real_clean_async;
   klass->clean_finish = ide_build_stage_real_clean_finish;
+  klass->chain = ide_build_stage_real_chain;
 
   /**
    * IdeBuildStage:completed:
@@ -377,6 +386,16 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [CHAIN] =
+    g_signal_new ("chain",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeBuildStageClass, chain),
+                  g_signal_accumulator_true_handled,
+                  NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN, 1, IDE_TYPE_BUILD_STAGE);
 
   signals [QUERY] =
     g_signal_new_class_handler ("query",
@@ -896,4 +915,18 @@ ide_build_stage_emit_reap (IdeBuildStage      *self,
   g_signal_emit (self, signals [REAP], 0, reaper);
 
   IDE_EXIT;
+}
+
+gboolean
+ide_build_stage_chain (IdeBuildStage *self,
+                       IdeBuildStage *next)
+{
+  gboolean ret = FALSE;
+
+  g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_BUILD_STAGE (next), FALSE);
+
+  g_signal_emit (self, signals[CHAIN], 0, next, &ret);
+
+  return ret;
 }

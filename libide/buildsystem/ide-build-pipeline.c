@@ -1087,6 +1087,47 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
 }
 
 static void
+ide_build_pipeline_try_chain (IdeBuildPipeline *self,
+                              IdeBuildStage    *stage,
+                              guint             position)
+{
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+
+  for (; position < self->pipeline->len; position++)
+    {
+      const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, position);
+      gboolean chained;
+
+      /*
+       * Ignore all future stages if they were not requested by the current
+       * pipeline execution.
+       */
+      if (((entry->phase & IDE_BUILD_PHASE_MASK) & self->requested_mask) == 0)
+        return;
+
+      chained = ide_build_stage_chain (stage, entry->stage);
+
+      IDE_TRACE_MSG ("Checking if %s chains to stage[%d] (%s) = %s",
+                     G_OBJECT_TYPE_NAME (stage),
+                     position,
+                     G_OBJECT_TYPE_NAME (entry->stage),
+                     chained ? "yes" : "no");
+
+      if (!chained)
+        return;
+
+      /*
+       * NOTE: We do not mark the chained stage as completed as that is left
+       *       up to the chain implementation. We simply let self->position
+       *       be advanced to point at the index of the cained entry.
+       */
+
+      self->position = position;
+    }
+}
+
+static void
 ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
                                  GTask            *task)
 {
@@ -1137,6 +1178,13 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
       if ((entry->phase & IDE_BUILD_PHASE_MASK) & self->requested_mask)
         {
           self->current_stage = entry->stage;
+
+          /*
+           * We might be able to chain upcoming stages to this stage and avoid
+           * duplicate work. This will also advance self->position based on
+           * how many stages were chained.
+           */
+          ide_build_pipeline_try_chain (self, entry->stage, self->position + 1);
 
           _ide_build_stage_execute_with_query_async (entry->stage,
                                                      self,
