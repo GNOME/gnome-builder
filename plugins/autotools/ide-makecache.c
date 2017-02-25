@@ -19,9 +19,7 @@
 
 #define G_LOG_DOMAIN "ide-makecache"
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include "egg-counter.h"
 #include "egg-task-cache.h"
@@ -32,6 +30,7 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <ide.h>
 
@@ -1559,7 +1558,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
     {
       g_autoptr(IdeSubprocess) subprocess = NULL;
       g_autoptr(GHashTable) amdirs = NULL;
-      g_autofree gchar *rel_path = NULL;
+      g_autofree gchar *path = NULL;
+      const gchar * const *argv;
       GFile *makedir;
 
       /*
@@ -1605,41 +1605,64 @@ ide_makecache_get_build_targets_worker (GTask        *task,
 
       /*
        * Read through the output from make, and parse the installation targets
-       * that we care about.
+       * that we care about. We do this as two passes because we cannot rely
+       * on the order of targets from make.
        */
       ide_line_reader_init (&reader, stdout_buf, -1);
 
-      line = ide_line_reader_next (&reader, &line_len);
-      while (line != NULL)
+      while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
+        {
+          const gchar *eq = memchr (line, '=', line_len);
+          g_autofree gchar *key = NULL;
+          g_autofree gchar *value = NULL;
+
+          /* Highly unlikely, but if we get a line without an =, ignore it */
+          if (eq == NULL)
+            continue;
+
+          /*
+           * If this is doesn't end in dir (bindir, libdir, etc), then we
+           * definitely don't care about it. We also don't care about it
+           * if its a program name that ends in dir, but that doesn't
+           * matter since we wont match it later.
+           */
+          key = g_strstrip (g_strndup (line, eq - line));
+          if (!g_str_has_suffix (key, "dir"))
+            continue;
+
+          /* Move past = */
+          eq++;
+
+          value = g_strstrip (g_strndup (eq, (line + line_len) - eq));
+          g_hash_table_insert (amdirs, g_steal_pointer (&key), g_steal_pointer (&value));
+        }
+
+      /*
+       * Now do a second pass and look for programs that match. If we have the
+       * resulting automake-dir in the amdirs, we should have a real path to
+       * use for the target.
+       */
+
+      ide_line_reader_init (&reader, stdout_buf, -1);
+
+      while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
         {
           g_auto(GStrv) parts = NULL;
           g_auto(GStrv) names = NULL;
           const gchar *key;
 
+          /* Mutate string to simplify splitting */
           line [line_len] = '\0';
 
           parts = g_strsplit (line, "=", 2);
 
-          line = ide_line_reader_next (&reader, &line_len);
-
-          if (!parts[0] || !parts[1] || !*parts[1])
-            continue;
-
           g_strstrip (parts [0]);
           g_strstrip (parts [1]);
 
-          key = parts [0];
-
-          if (g_str_has_suffix (key, "dir"))
-            {
-              g_hash_table_insert (amdirs, g_strdup (key), g_strdup (parts [1]));
-              if (line != NULL) /* Don't skip the following code on last iteration of loop */
-                continue;
-            }
-
-          if (g_hash_table_size (amdirs) < 1)
+          if (ide_str_empty0 (parts[0]) || ide_str_empty0 (parts[1]))
             continue;
 
+          key = parts [0];
           names = g_strsplit (parts [1], " ", 0);
 
           for (guint i = 0; names [i]; i++)
@@ -1649,7 +1672,6 @@ ide_makecache_get_build_targets_worker (GTask        *task,
               const gchar *name = names [i];
 
               installdir = find_install_dir (key, amdirs);
-
               if (installdir == NULL)
                 continue;
 
