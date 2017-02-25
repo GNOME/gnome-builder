@@ -25,6 +25,20 @@
 #include "gb-beautifier-private.h"
 #include "gb-beautifier-config.h"
 
+static const gchar *
+get_datadir ()
+{
+  PeasEngine *engine;
+  PeasPluginInfo *info;
+  const gchar *datadir = NULL;
+
+  engine = peas_engine_get_default ();
+  if (NULL != (info = peas_engine_get_plugin_info (engine, "beautifier_plugin")))
+    datadir = peas_plugin_info_get_data_dir (info);
+
+  return datadir;
+}
+
 static void
 config_entry_clear_func (gpointer data)
 {
@@ -152,6 +166,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
           g_autofree gchar *config_path = NULL;
           g_autoptr(GFile) config_file = NULL;
           g_auto(GStrv) strv = NULL;
+          const gchar *datadir;
           gint argc;
           gchar *profile;
           gboolean has_command;
@@ -208,7 +223,15 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
             }
           else
             {
-              command_pattern = g_key_file_get_string (key_file, profile, "command-pattern", NULL);
+              command = g_key_file_get_string (key_file, profile, "command-pattern", NULL);
+              if (g_str_has_prefix (command, "[internal]"))
+                {
+                  datadir = get_datadir ();
+                  command_pattern = g_build_filename (datadir, "internal", command + 10, NULL);
+                }
+              else
+                command_pattern = g_strdup (command);
+
               if (g_strstr_len (command_pattern, -1, "@c@") == NULL && config_file != NULL)
                 {
                   g_warning ("beautifier plugin: @c@ in \"%s\" command-pattern key but no config file set",
@@ -400,8 +423,6 @@ GArray *
 gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self)
 {
   IdeContext *context;
-  PeasEngine *engine;
-  PeasPluginInfo *info;
   IdeVcs *vcs;
   GArray *entries;
   GArray *map = NULL;
@@ -444,10 +465,8 @@ gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self)
     }
 
   /* System wide config */
-  engine = peas_engine_get_default ();
-  if (NULL != (info = peas_engine_get_plugin_info (engine, "beautifier_plugin")))
+  if (NULL != (datadir = get_datadir ()))
     {
-      datadir = peas_plugin_info_get_data_dir (info);
       configdir = g_build_filename (datadir, "data", NULL);
 
       map = gb_beautifier_config_get_map (self, configdir);

@@ -106,6 +106,9 @@ or
       @s@ for the selected text put in a file.
       @c@ for the config file define by the config key.
 
+By adding [internal] in front of the command pattern, the command is
+searched in the Builder data dir.
+
 - name = the real name to display in the menu
 
 - config = the config file name (located in the same folder as the config.ini file)
