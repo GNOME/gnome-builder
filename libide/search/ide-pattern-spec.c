@@ -32,7 +32,7 @@ G_DEFINE_BOXED_TYPE (IdePatternSpec, ide_pattern_spec, ide_pattern_spec_ref, ide
 EGG_DEFINE_COUNTER (instances, "IdePatternSpec", "Instances", "Number of IdePatternSpec")
 
 /**
- * SECTION:ide-pattern-spec:
+ * SECTION:idepatternspec:
  *
  * This works similar to GPatternSpec except the query syntax is different.
  * It tries to mtach word boundaries, but with matching partial words up

@@ -23,7 +23,7 @@
 #include "ide-source-snippet-context.h"
 
 /**
- * SECTION:ide-source-snippet-context:
+ * SECTION:idesourcesnippetcontext:
  * @title: IdeSourceSnippetContext
  * @short_description: Context for expanding #IdeSourceSnippetChunk<!-- -->'s.
  *

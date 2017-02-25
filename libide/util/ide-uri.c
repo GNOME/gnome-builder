@@ -32,7 +32,7 @@
 #endif
 
 /**
- * SECTION:ide-uri
+ * SECTION:ideuri
  * @short_description: URI-handling utilities
  * @include: glib.h
  *

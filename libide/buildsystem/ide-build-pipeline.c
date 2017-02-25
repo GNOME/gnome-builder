@@ -49,9 +49,10 @@
 EGG_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
 
 /**
- * SECTION:ide-build-pipeline
+ * SECTION:idebuildpipeline
  * @title: IdeBuildPipeline
  * @short_description: Pluggable build pipeline
+ * @include: ide.h
  *
  * The #IdeBuildPipeline is responsible for managing the build process
  * for Builder. It consists of multiple build "phases" (see #IdeBuildPhase

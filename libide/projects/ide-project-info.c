@@ -29,7 +29,7 @@
 #include "ide-project-info.h"
 
 /**
- * SECTION:ide-project-info:
+ * SECTION:ideprojectinfo:
  * @title: IdeProjectInfo
  * @short_description: Information about a project not yet loaded
  *
