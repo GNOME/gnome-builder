@@ -22,7 +22,6 @@ if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
 	echo "" >&2
 fi
 
-aclocal --install || exit 1
 {{if enable_gtk_doc}}
 gtkdocize || exit 1
 {{end}}
