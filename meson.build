@@ -113,7 +113,6 @@ if cc.has_function('sched_getcpu')
 endif
 
 configure_file(
-  input: 'config.h.meson',
   output: 'config.h',
   configuration: conf
 )
