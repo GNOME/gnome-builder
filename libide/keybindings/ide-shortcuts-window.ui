@@ -514,6 +514,19 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">true</property>
+            <property name="title" translatable="yes" context="shortcut window">Search</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;f</property>
+                <property name="title" translatable="yes" context="shortcut window">Find text within terminal</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </template>
