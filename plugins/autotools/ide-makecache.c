@@ -1468,9 +1468,6 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   gchar *line;
   gsize line_len;
   IdeLineReader reader;
-  const gchar * const * partial_argv;
-  guint num_args;
-  gboolean first_subdir = TRUE;
 
   IDE_ENTRY;
 
@@ -1511,9 +1508,8 @@ ide_makecache_get_build_targets_worker (GTask        *task,
 
   ide_subprocess_launcher_push_argv (launcher, self->make_name);
 
-  /* Find the argv index so we can insert arguments on each run */
-  partial_argv = ide_subprocess_launcher_get_argv (launcher);
-  for (num_args = 0; partial_argv[num_args] != NULL; num_args++) { }
+  ide_subprocess_launcher_push_argv (launcher, "-C");
+  ide_subprocess_launcher_push_argv (launcher, "FAKE_BUILD_DIR");
 
   ide_subprocess_launcher_push_argv (launcher, "-f");
   ide_subprocess_launcher_push_argv (launcher, "-");
@@ -1573,35 +1569,15 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        * the same directory as the process.
        */
       makedir = g_ptr_array_index (makedirs, j);
-      rel_path = g_file_get_relative_path (build_dir, makedir);
-      if (rel_path == NULL)
+      path = g_file_get_path (makedir);
+      argv = ide_subprocess_launcher_get_argv (launcher);
+
+      for (guint i = 0; argv[i]; i++)
         {
-          g_autofree gchar *path = NULL;
-          path = g_file_get_path (makedir);
-          ide_subprocess_launcher_set_cwd (launcher, path);
-        }
-      else
-        {
-          if (first_subdir)
+          if (g_str_equal (argv[i], "-C"))
             {
-              ide_subprocess_launcher_insert_argv (launcher, num_args, "-C");
-              ide_subprocess_launcher_insert_argv (launcher, (num_args + 1), rel_path);
-              first_subdir = FALSE;
-            }
-          else
-            {
-              /*
-               * Because the launcher might modify the arguments (as the flatpak one does),
-               * we should recalculate where the subdirectory is in the list.
-               */
-              const gchar * const * current_argv;
-              guint subdir_pos;
-              current_argv = ide_subprocess_launcher_get_argv (launcher);
-              for (subdir_pos = 0;
-                   current_argv[subdir_pos] != NULL &&
-                   g_strcmp0 (current_argv[subdir_pos], "-C") != 0;
-                   subdir_pos++) { }
-              ide_subprocess_launcher_replace_argv (launcher, (subdir_pos + 1), rel_path);
+              ide_subprocess_launcher_replace_argv (launcher, i + 1, path);
+              break;
             }
         }
 
