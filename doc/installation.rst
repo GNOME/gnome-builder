@@ -55,7 +55,7 @@ via JHBuild
 If you plan on contributing to the GNOME desktop and application suite, you may want to install Builder via JHBuild_.
 See the `Newcomers Tutorial`_ for more information on joining the community and installing JHBuild_.
 
-We are aggresively moving towards using Flatpak for contributing to Builder, but we aren't quite there yet.
+We are aggressively moving towards using Flatpak for contributing to Builder, but we aren't quite there yet.
 
 Command Line
 ^^^^^^^^^^^^
@@ -101,4 +101,4 @@ If you're running from a system installed package of Builder, the binary name is
 
    $ gnome-builder -vvvv
 
-If youre issue persists, please consider `filing a bug`_.
+If your issue persists, please consider `filing a bug`_.
