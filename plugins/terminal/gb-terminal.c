@@ -246,7 +246,7 @@ gb_terminal_real_search_reveal (GbTerminal *self)
   if (parent_overlay != NULL)
     {
       GtkRevealer *revealer = ide_widget_find_child_typed (parent_overlay, GTK_TYPE_REVEALER);
-      
+
       if (revealer != NULL && !gtk_revealer_get_child_revealed (revealer))
         gtk_revealer_set_reveal_child (revealer, TRUE);
     }
@@ -329,7 +329,7 @@ gb_terminal_class_init (GbTerminalClass *klass)
 
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_f,
-                                GDK_CONTROL_MASK,
+                                GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                 "search-reveal",
                                 0);
 }
