@@ -21,9 +21,8 @@ beautifier_sources = [
 ]
 
 beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier')
-shared_module('beautifier-plugin', beautifier_sources,
+shared_module('beautifier_plugin', beautifier_sources,
   dependencies: plugin_deps,
-  c_args: '-DGB_BEAUTIFIER_PLUGIN_DATADIR="@0@"'.format(join_paths(beautifier_datadir, 'data')),
   link_args: plugin_link_args,
   link_depends: plugin_link_deps,
   install: true,

@@ -1,5 +1,5 @@
 [Plugin]
-Module=beautifier-plugin
+Module=beautifier_plugin
 Name=Code Beautifier
 Description=Beautify code according to profiles
 Authors=Sébastien Lafargue <slafargue@gnome.org>

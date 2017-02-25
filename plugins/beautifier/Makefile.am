@@ -7,11 +7,10 @@ EXTRA_DIST = $(plugin_DATA)
 
 beautifier_cflags =                                                                                  \
 	$(PLUGIN_CFLAGS)                                                                             \
-	-DGB_BEAUTIFIER_PLUGIN_DATADIR="\"$(datadir)/gnome-builder/plugins/beautifier_plugin/data\"" \
 	$(NULL)
 
 plugindir = $(libdir)/gnome-builder/plugins
-plugin_LTLIBRARIES = libbeautifier-plugin.la
+plugin_LTLIBRARIES = libbeautifier_plugin.la
 dist_plugin_DATA = beautifier.plugin
 
 libbeautifier_plugin_la_SOURCES =                                                                    \
@@ -32,24 +31,24 @@ nodist_libbeautifier_plugin_la_SOURCES =                                        
 	gb-beautifier-resources.h                                                                    \
 	$(NULL)
 
-resourcedir = $(datadir)/gnome-builder/plugins/beautifier_plugin
+resourcedir = $(datadir)/gnome-builder/plugins
 nobase_resource_DATA =                                                                               \
-	data/global.ini                                                                              \
-	data/c/config.ini                                                                            \
-	data/c/gnu-indent.cfg                                                                        \
-	data/c/k&r.cfg                                                                               \
-	data/c/linux-kernel.cfg                                                                      \
-	data/c-sharp/config.ini                                                                      \
-	data/c-sharp/mono.cfg                                                                        \
-	data/d/config.ini                                                                            \
-	data/d/d.cfg                                                                                 \
-	data/html/config.ini                                                                         \
-	data/html/tidy-autoindent.cfg                                                                \
-	data/html/tidy-indent.cfg                                                                    \
-	data/objc/config.ini                                                                         \
-	data/objc/objc.cfg                                                                           \
-	data/python/config.ini                                                                       \
-	data/xml/config.ini                                                                          \
+	beautifier_plugin/data/global.ini                                                            \
+	beautifier_plugin/data/c/config.ini                                                          \
+	beautifier_plugin/data/c/gnu-indent.cfg                                                      \
+	beautifier_plugin/data/c/k&r.cfg                                                             \
+	beautifier_plugin/data/c/linux-kernel.cfg                                                    \
+	beautifier_plugin/data/c-sharp/config.ini                                                    \
+	beautifier_plugin/data/c-sharp/mono.cfg                                                      \
+	beautifier_plugin/data/d/config.ini                                                          \
+	beautifier_plugin/data/d/d.cfg                                                               \
+	beautifier_plugin/data/html/config.ini                                                       \
+	beautifier_plugin/data/html/tidy-autoindent.cfg                                              \
+	beautifier_plugin/data/html/tidy-indent.cfg                                                  \
+	beautifier_plugin/data/objc/config.ini                                                       \
+	beautifier_plugin/data/objc/objc.cfg                                                         \
+	beautifier_plugin/data/python/config.ini                                                     \
+	beautifier_plugin/data/xml/config.ini                                                        \
 	$(NULL)
 
 EXTRA_DIST += $(nobase_resource_DATA)

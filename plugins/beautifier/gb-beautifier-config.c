@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <ide.h>
+#include <libpeas/peas.h>
 
 #include "gb-beautifier-private.h"
 #include "gb-beautifier-config.h"
@@ -399,11 +400,15 @@ GArray *
 gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self)
 {
   IdeContext *context;
+  PeasEngine *engine;
+  PeasPluginInfo *info;
   IdeVcs *vcs;
   GArray *entries;
   GArray *map = NULL;
   g_autofree gchar *project_config_path = NULL;
   g_autofree gchar *user_config_path = NULL;
+  const gchar *datadir;
+  g_autofree gchar *configdir = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
 
@@ -439,10 +444,17 @@ gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self)
     }
 
   /* System wide config */
-  map = gb_beautifier_config_get_map (self, GB_BEAUTIFIER_PLUGIN_DATADIR);
-  add_entries_from_base_path (self, GB_BEAUTIFIER_PLUGIN_DATADIR, entries, map);
-  if (map != NULL)
-    g_array_free (map, TRUE);
+  engine = peas_engine_get_default ();
+  if (NULL != (info = peas_engine_get_plugin_info (engine, "beautifier_plugin")))
+    {
+      datadir = peas_plugin_info_get_data_dir (info);
+      configdir = g_build_filename (datadir, "data", NULL);
+
+      map = gb_beautifier_config_get_map (self, configdir);
+      add_entries_from_base_path (self, configdir, entries, map);
+      if (map != NULL)
+        g_array_free (map, TRUE);
+    }
 
   return entries;
 }
