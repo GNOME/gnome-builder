@@ -20,6 +20,7 @@
 
 #include "ide-autotools-autogen-stage.h"
 #include "ide-autotools-build-system.h"
+#include "ide-autotools-make-stage.h"
 #include "ide-autotools-makecache-stage.h"
 #include "ide-autotools-pipeline-addin.h"
 
@@ -245,107 +246,35 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   return TRUE;
 }
 
-static void
-make_stage_query (IdeAutotoolsPipelineAddin *self,
-                  IdeBuildPipeline          *pipeline,
-                  GCancellable              *cancellable,
-                  IdeBuildStageLauncher     *stage)
-{
-  g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (stage));
-
-  /* Always rely on make to determine up-to-date status */
-  ide_build_stage_set_completed (IDE_BUILD_STAGE (stage), FALSE);
-}
-
-G_GNUC_NULL_TERMINATED static gboolean
+static gboolean
 register_make_stage (IdeAutotoolsPipelineAddin  *self,
                      IdeBuildPipeline           *pipeline,
-                     IdeRuntime                 *runtime,
-                     const gchar                *log_file,
-                     gboolean                    ignore_exit_code,
-                     gboolean                    include_clean,
                      IdeBuildPhase               phase,
                      GError                    **error,
-                     const gchar                *make,
-                     const gchar                *first_target,
-                     ...)
+                     const gchar                *target,
+                     const gchar                *clean_target)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
-  IdeConfiguration *configuration;
-  g_autofree gchar *j = NULL;
+  IdeConfiguration *config;
   IdeContext *context;
   guint stage_id;
   gint parallel;
-  va_list args;
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
-  g_assert (IDE_IS_RUNTIME (runtime));
 
   context = ide_object_get_context (IDE_OBJECT (pipeline));
-  configuration = ide_build_pipeline_get_configuration (pipeline);
+  config = ide_build_pipeline_get_configuration (pipeline);
+  parallel = ide_configuration_get_parallelism (config);
 
-  launcher = ide_build_pipeline_create_launcher (pipeline, error);
-
-  if (launcher == NULL)
-    return FALSE;
-
-  parallel = ide_configuration_get_parallelism (configuration);
-
-  if (parallel == -1)
-    j = g_strdup_printf ("-j%u", g_get_num_processors () + 1);
-  else if (parallel == 0)
-    j = g_strdup_printf ("-j%u", g_get_num_processors ());
-  else
-    j = g_strdup_printf ("-j%u", parallel);
-
-  ide_subprocess_launcher_push_argv (launcher, make);
-  ide_subprocess_launcher_push_argv (launcher, j);
-
-  /* We want silent rules when possible */
-  ide_subprocess_launcher_push_argv (launcher, "V=0");
-
-  va_start (args, first_target);
-  do
-    ide_subprocess_launcher_push_argv (launcher, first_target);
-  while (NULL != (first_target = va_arg (args, const gchar *)));
-  va_end (args);
-
-  stage = ide_build_stage_launcher_new (context, launcher);
-
-  if (log_file != NULL)
-    ide_build_stage_set_stdout_path (stage, log_file);
-
-  if (ignore_exit_code)
-    ide_build_stage_launcher_set_ignore_exit_status (IDE_BUILD_STAGE_LAUNCHER (stage), TRUE);
-
-  g_signal_connect_object (stage,
-                           "query",
-                           G_CALLBACK (make_stage_query),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  if (include_clean)
-    {
-      g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
-
-      clean_launcher = ide_build_pipeline_create_launcher (pipeline, error);
-
-      if (clean_launcher == NULL)
-        return FALSE;
-
-      ide_subprocess_launcher_push_argv (clean_launcher, make);
-      ide_subprocess_launcher_push_argv (clean_launcher, "clean");
-
-      ide_build_stage_launcher_set_clean_launcher (IDE_BUILD_STAGE_LAUNCHER (stage), clean_launcher);
-    }
+  stage = g_object_new (IDE_TYPE_AUTOTOOLS_MAKE_STAGE,
+                        "clean-target", clean_target,
+                        "context", context,
+                        "parallel", parallel,
+                        "target", target,
+                        NULL);
 
   stage_id = ide_build_pipeline_connect (pipeline, phase, 0, stage);
-
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -380,31 +309,23 @@ ide_autotools_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 {
   IdeAutotoolsPipelineAddin *self = (IdeAutotoolsPipelineAddin *)addin;
   g_autoptr(GError) error = NULL;
-  IdeConfiguration *config;
   IdeBuildSystem *build_system;
   IdeContext *context;
-  IdeRuntime *runtime;
-  const gchar *make = "make";
 
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (addin));
   build_system = ide_context_get_build_system (context);
-  config = ide_build_pipeline_get_configuration (pipeline);
-  runtime = ide_configuration_get_runtime (config);
 
   if (!IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system))
     return;
 
-  if (ide_runtime_contains_program_in_path (runtime, "gmake", NULL))
-    make = "gmake";
-
   if (!register_autoreconf_stage (self, pipeline, &error) ||
       !register_configure_stage (self, pipeline, &error) ||
       !register_makecache_stage (self, pipeline, &error) ||
-      !register_make_stage (self, pipeline, runtime, NULL, FALSE, TRUE, IDE_BUILD_PHASE_BUILD, &error, make, "all", NULL) ||
-      !register_make_stage (self, pipeline, runtime, NULL, FALSE, FALSE, IDE_BUILD_PHASE_INSTALL, &error, make, "install", NULL))
+      !register_make_stage (self, pipeline, IDE_BUILD_PHASE_BUILD, &error, "all", "clean") ||
+      !register_make_stage (self, pipeline, IDE_BUILD_PHASE_INSTALL, &error, "install", NULL))
     {
       g_assert (error != NULL);
       g_warning ("Failed to create autotools launcher: %s", error->message);

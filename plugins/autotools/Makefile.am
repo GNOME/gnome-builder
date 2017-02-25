@@ -14,6 +14,8 @@ libautotools_plugin_la_SOURCES =          \
 	ide-autotools-build-system.h      \
 	ide-autotools-build-target.c      \
 	ide-autotools-build-target.h      \
+	ide-autotools-make-stage.c        \
+	ide-autotools-make-stage.h        \
 	ide-autotools-makecache-stage.c   \
 	ide-autotools-makecache-stage.h   \
 	ide-autotools-pipeline-addin.c    \
