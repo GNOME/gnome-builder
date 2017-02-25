@@ -8,7 +8,7 @@
 #endif
 
 /**
- * SECTION:{{prefix}}-version
+ * SECTION:{{prefix}}version
  * @short_description: {{name}} version checking
  *
  * {{name}} provides macros to check the version of the library

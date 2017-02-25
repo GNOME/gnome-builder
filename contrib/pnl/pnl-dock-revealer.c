@@ -21,7 +21,7 @@
 #include "pnl-util-private.h"
 
 /**
- * SECTION:pnl-dock-revealer
+ * SECTION:pnldockrevealer
  * @title: PnlDockRevealer
  * @short_description: A panel revealer
  *

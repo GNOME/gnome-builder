@@ -33,7 +33,7 @@ G_DEFINE_TYPE (EggMenuManager, egg_menu_manager, G_TYPE_OBJECT)
 #define EGG_MENU_ATTRIBUTE_MERGE_ID "egg-merge-id"
 
 /**
- * SECTION:egg-menu-manager
+ * SECTION:eggmenumanager
  * @short_description: UI merging for menus
  *
  * The goal of #EggMenuManager is to simplify the process of merging multiple

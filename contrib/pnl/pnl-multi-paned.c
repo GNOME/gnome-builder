@@ -25,7 +25,7 @@
 #define IS_HORIZONTAL(o) (o == GTK_ORIENTATION_HORIZONTAL)
 
 /**
- * SECTION:pnl-multi-paned
+ * SECTION:pnlmultipaned
  * @title: PnlMultiPaned
  * @short_description: A widget with multiple adjustable panes
  *

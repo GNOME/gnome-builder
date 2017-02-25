@@ -30,7 +30,7 @@
 #include "util/ide-settings.h"
 
 /**
- * SECTION:ide-settings
+ * SECTION:idesettings
  * @title: IdeSettings
  * @short_description: Project and Application Preferences
  *

@@ -20,7 +20,7 @@
 #include "egg-signal-group.h"
 
 /**
- * SECTION:egg-centering-bin:
+ * SECTION:eggcenteringbin:
  * @title: EggCenteringBin
  * @short_description: center a widget with respect to the toplevel
  *

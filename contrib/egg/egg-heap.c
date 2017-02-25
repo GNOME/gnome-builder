@@ -23,7 +23,7 @@
 #include "egg-heap.h"
 
 /**
- * SECTION:egg-heap
+ * SECTION:eggheap
  * @title: Heaps
  * @short_description: efficient priority queues using min/max heaps
  *

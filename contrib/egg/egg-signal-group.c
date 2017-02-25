@@ -24,7 +24,7 @@
 #include "egg-signal-group.h"
 
 /**
- * SECTION:egg-signal-group
+ * SECTION:eggsignalgroup
  * @title: EggSignalGroup
  * @short_description: Manage a collection of signals on a #GObject
  *

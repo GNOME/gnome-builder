@@ -19,7 +19,7 @@
 #define G_LOG_DOMAIN "jsonrpc-client"
 
 /**
- * SECTION:jsonrpc-client:
+ * SECTION:jsonrpcclient:
  * @title: JsonrpcClient
  * @short_description: a client for JSON-RPC communication
  *

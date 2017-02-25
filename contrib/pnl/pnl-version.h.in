@@ -24,7 +24,7 @@
 #endif
 
 /**
- * SECTION:pnl-version
+ * SECTION:pnlversion
  * @short_description: pnl version checking
  *
  * pnl provides macros to check the version of the library

@@ -17,7 +17,7 @@
  */
 
 /**
- * SECTION:egg-priority-box:
+ * SECTION:eggprioritybox:
  * @title: EggPriorityBox
  *
  * This is like a #GtkBox but uses stable priorities to sort.

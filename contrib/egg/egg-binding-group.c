@@ -24,7 +24,7 @@
 #include "egg-binding-group.h"
 
 /**
- * SECTION:egg-binding-group
+ * SECTION:eggbindinggroup
  * @title: EggBindingGroup
  * @short_description: Manage a collection of #GBindings on
  *      a #GObject as a group.
