@@ -36,14 +36,14 @@ You can also use the command line to install Builder.
 
 .. code-block:: sh
 
-   $ flatpak install --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref?h=gnome-3-22
+   $ flatpak install --user --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref?h=gnome-3-22
    $ flatpak run org.gnome.Builder
 
 **Nightly**
 
 .. code-block:: sh
 
-   $ flatpak install --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref
+   $ flatpak install --user --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref
    $ flatpak run org.gnome.Builder
 
 .. note:: Nightly builds are built with tracing enabled. The tracing is fairly lightweight, but it includes a great deal of more debugging information.
