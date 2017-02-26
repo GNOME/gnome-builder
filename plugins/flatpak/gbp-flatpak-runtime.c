@@ -369,7 +369,6 @@ gbp_flatpak_runtime_get_debug_dir (GbpFlatpakRuntime *self)
           if (g_file_test (path, G_FILE_TEST_IS_DIR))
             {
               self->debug_dir = g_steal_pointer (&path);
-              g_print (">>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s\n", self->debug_dir);
               break;
             }
         }
@@ -383,6 +382,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
                                     GFile      *file)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
+  const gchar *debug_dir;
   g_autofree gchar *path = NULL;
   g_autofree gchar *build_dir = NULL;
   g_autofree gchar *app_files_path = NULL;
@@ -405,23 +405,26 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
   if (NULL == (path = g_file_get_path (file)))
     return NULL;
 
-  if (g_str_equal ("/usr", path))
-    return g_object_ref (self->deploy_dir_files);
+  debug_dir = gbp_flatpak_runtime_get_debug_dir (self);
 
-  if (g_str_equal (path, "/usr/lib/debug") || g_str_has_prefix (path, "/usr/lib/debug/"))
+  if (debug_dir != NULL)
     {
-      const gchar *debug_dir = gbp_flatpak_runtime_get_debug_dir (self);
+      if (g_str_equal (path, "/usr/lib/debug"))
+        return g_file_new_for_path (debug_dir);
 
-      if (debug_dir)
+      if (g_str_has_prefix (path, "/usr/lib/debug/"))
         {
           g_autofree gchar *translated = NULL;
 
           translated = g_build_filename (debug_dir,
-                                         path + IDE_LITERAL_LENGTH ("/usr/lib/debug"),
+                                         path + IDE_LITERAL_LENGTH ("/usr/lib/debug/"),
                                          NULL);
           return g_file_new_for_path (translated);
         }
     }
+
+  if (g_str_equal ("/usr", path))
+    return g_object_ref (self->deploy_dir_files);
 
   if (g_str_has_prefix (path, "/usr/"))
     return g_file_get_child (self->deploy_dir_files, path + IDE_LITERAL_LENGTH ("/usr/"));
