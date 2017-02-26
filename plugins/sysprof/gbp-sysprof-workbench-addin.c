@@ -184,10 +184,10 @@ profiler_run_handler (IdeRunManager *run_manager,
    */
   {
     static const gchar *dirs[] = {
+      "/usr/lib",
       "/usr/lib/debug",
       "/app/lib",
       "/app/lib/debug",
-      "/app/lib/debug/lib",
       NULL
     };
 
@@ -195,11 +195,10 @@ profiler_run_handler (IdeRunManager *run_manager,
 
     for (guint i = 0; dirs[i]; i++)
       {
-        gchar *path;
+        g_autofree gchar *path = get_runtime_sysroot (context, dirs[i]);
 
-        path = get_runtime_sysroot (context, dirs[i]);
-        sp_symbol_dirs_add (path);
-        g_free (path);
+        if (path != NULL)
+          sp_symbol_dirs_add (path);
       }
   }
 
