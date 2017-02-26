@@ -124,6 +124,40 @@ libpeas_dep = dependency('libpeas-1.0', version: '>= 1.18.0')
 libm_dep = cc.find_library('m', required: false)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 
+if get_option('with_flatpak') or get_option('with_git')
+  libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
+
+  libgit_thread_safe_check = '''
+    #include <libgit2-glib/ggit.h>
+    int main(int argc, const char *argv[])
+    {
+      ggit_init ();
+      return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
+    }
+  '''
+  res = cc.run(libgit_thread_safe_check,
+    dependencies: libgit_dep,
+  )
+  if res.returncode() != 0
+    error('libgit2 was not compiled with -DTHREADSAFE:BOOL=ON')
+  endif
+
+  libgit_ssh_check = '''
+    #include <libgit2-glib/ggit.h>
+    int main(int argc, const char *argv[])
+    {
+      ggit_init ();
+      return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
+    }
+  '''
+  res = cc.run(libgit_ssh_check,
+    dependencies: libgit_dep,
+  )
+  if res.returncode() != 0
+    error('libgit2 was not compiled with SSH support')
+  endif
+endif
+
 
 pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
 pkglibdir = join_paths(get_option('libdir'), 'gnome-builder')

@@ -44,7 +44,7 @@ flatpak_sources = [
 flatpak_deps = plugin_deps + [
   dependency('flatpak', version: '>= 0.8.0'),
   dependency('libsoup-2.4', version: '>= 2.52.0'),
-  dependency('libgit2-glib-1.0', version: '>= 0.24.0'), # FIXME: 0.25.0
+  libgit_dep,
 ]
 
 # FIXME: Check for libgit thread and ssh support
