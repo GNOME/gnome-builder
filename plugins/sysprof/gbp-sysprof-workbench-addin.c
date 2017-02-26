@@ -123,6 +123,32 @@ profiler_child_spawned (GbpSysprofWorkbenchAddin *self,
   sp_profiler_start (self->profiler);
 }
 
+static gchar *
+get_runtime_sysroot (IdeContext  *context,
+                     const gchar *path)
+{
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  IdeRuntime *runtime;
+
+  g_assert (IDE_IS_CONTEXT (context));
+
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+  runtime = ide_configuration_get_runtime (config);
+
+  if (runtime != NULL)
+    {
+      g_autoptr(GFile) base = g_file_new_for_path (path);
+      g_autoptr(GFile) translated = ide_runtime_translate_file (runtime, base);
+
+      if (translated != NULL)
+        return g_file_get_path (translated);
+    }
+
+  return NULL;
+}
+
 static void
 profiler_run_handler (IdeRunManager *run_manager,
                       IdeRunner     *runner,
@@ -132,6 +158,8 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_autoptr(SpSource) proc_source = NULL;
   g_autoptr(SpSource) perf_source = NULL;
   g_autoptr(SpSource) hostinfo_source = NULL;
+  g_autofree gchar *sysroot = NULL;
+  IdeContext *context;
 
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_RUNNER (runner));
@@ -143,6 +171,37 @@ profiler_run_handler (IdeRunManager *run_manager,
         sp_profiler_stop (self->profiler);
       g_clear_object (&self->profiler);
     }
+
+  /*
+   * First get a copy of the active runtime and find the root of it's
+   * translation path. That way we can adjust for the sysroot when
+   * resolving symbols.
+   *
+   * TODO: Hardcoding /usr and /app here sucks, we need a way to have
+   *       this in the flatpak plugin instead (and associated plumbing
+   *       to abstract it). We probably should just have a "get_debug_paths"
+   *       type helper from the runtime.
+   */
+  {
+    static const gchar *dirs[] = {
+      "/usr/lib/debug",
+      "/app/lib",
+      "/app/lib/debug",
+      "/app/lib/debug/lib",
+      NULL
+    };
+
+    context = ide_object_get_context (IDE_OBJECT (run_manager));
+
+    for (guint i = 0; dirs[i]; i++)
+      {
+        gchar *path;
+
+        path = get_runtime_sysroot (context, dirs[i]);
+        sp_symbol_dirs_add (path);
+        g_free (path);
+      }
+  }
 
   self->profiler = sp_local_profiler_new ();
 
