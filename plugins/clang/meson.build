@@ -26,15 +26,40 @@ clang_sources = [
   'clang-plugin.c',
 ]
 
-cc = meson.get_compiler('c')
-libclang = cc.find_library('libclang')
+llvm_config = find_program(
+  'llvm-config',
+  'llvm-config-3.9', 'llvm-config39',
+  'llvm-config-3.8', 'llvm-config38',
+  'llvm-config-3.7', 'llvm-config37',
+  'llvm-config-3.6', 'llvm-config36',
+  'llvm-config-3.5', 'llvm-config35',
+  'llvm-config-4.0', 'llvm-config-devel',
+)
 
-clang_deps = plugin_deps + [
-  libclang,
-]
+ret = run_command(llvm_config, '--includedir')
+if ret.returncode() != 0
+  error('clang: Failed to run ' + llvm_config.path())
+endif
+clang_include = ret.stdout().strip()
+
+ret = run_command(llvm_config, '--ldflags')
+if ret.returncode() != 0
+  error('clang: Failed to run ' + llvm_config.path())
+endif
+clang_ldflags = ret.stdout().strip().split(' ')
+
+if not cc.has_header('clang-c/Index.h', prefix: clang_include)
+  error('clang: Failed to find headers')
+endif
+
+clang_dep = declare_dependency(
+  dependencies: cc.find_library('libclang'),
+  link_args: clang_ldflags,
+  include_directories: include_directories(clang_include),
+)
 
 shared_module('clang-plugin', clang_sources,
-  dependencies: clang_deps,
+  dependencies: plugin_deps + [clang_dep],
   link_args: plugin_link_args,
   link_depends: plugin_link_deps,
   install: true,
