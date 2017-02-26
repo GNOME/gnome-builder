@@ -38,6 +38,7 @@ struct _GbpFlatpakConfigurationProvider
   IdeConfigurationManager *manager;
   GCancellable            *cancellable;
   GPtrArray               *configurations;
+  GPtrArray               *manifest_monitors;
 
   gulong                   writeback_handler;
   guint                    change_count;
@@ -577,8 +578,8 @@ gbp_flatpak_configuration_provider_queue_writeback (GbpFlatpakConfigurationProvi
 }
 
 static void
-gbp_flatpak_configuration_provider_changed (GbpFlatpakConfigurationProvider *self,
-                                            IdeConfiguration *configuration)
+gbp_flatpak_configuration_provider_config_changed (GbpFlatpakConfigurationProvider *self,
+                                                   IdeConfiguration                *configuration)
 {
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
@@ -606,6 +607,144 @@ contains_id (GPtrArray   *ar,
     }
 
   return FALSE;
+}
+
+static gchar *
+get_manifest_id (const gchar *path,
+                 const gchar *filename)
+{
+  g_autofree gchar *manifest_data = NULL;
+  g_autofree gchar *hash = NULL;
+  gsize manifest_data_len = 0;
+
+  g_assert (!ide_str_empty0 (path));
+
+  if (g_file_get_contents (path, &manifest_data, &manifest_data_len, NULL))
+    {
+      g_autoptr(GChecksum) checksum = NULL;
+
+      checksum = g_checksum_new (G_CHECKSUM_SHA1);
+      g_checksum_update (checksum, (const guint8 *)manifest_data, manifest_data_len);
+      hash = g_strdup (g_checksum_get_string (checksum));
+    }
+
+  if (hash != NULL)
+    return g_strdup_printf ("%s@%s", filename, hash);
+  else
+    return g_strdup (filename);
+}
+
+static void
+gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProvider *self,
+                                                     GFile                           *file,
+                                                     GFile                           *other_file,
+                                                     GFileMonitorEvent                event,
+                                                     GFileMonitor                    *file_monitor)
+{
+  GbpFlatpakConfiguration *relevant_config = NULL;
+  IdeContext *context;
+  GFile *new_config_file;
+  g_autofree gchar *filename = NULL;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *id = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_FILE_MONITOR (file_monitor));
+
+  context = ide_object_get_context (IDE_OBJECT (self->manager));
+
+  if (self->configurations != NULL)
+    {
+      for (guint i = 0; i < self->configurations->len; i++)
+        {
+          GbpFlatpakConfiguration *configuration = g_ptr_array_index (self->configurations, i);
+          GFile *config_manifest;
+          config_manifest = gbp_flatpak_configuration_get_manifest (configuration);
+          if (g_file_equal (file, config_manifest) ||
+              (event == G_FILE_MONITOR_EVENT_RENAMED && g_file_equal (other_file, config_manifest)))
+            {
+              relevant_config = configuration;
+              break;
+            }
+        }
+    }
+
+  if (relevant_config == NULL)
+    IDE_EXIT;
+
+  new_config_file = file;
+  switch (event)
+    {
+    case G_FILE_MONITOR_EVENT_DELETED:
+    case G_FILE_MONITOR_EVENT_MOVED_OUT:
+        ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
+        g_ptr_array_remove_fast (self->configurations, relevant_config);
+        g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
+        break;
+    case G_FILE_MONITOR_EVENT_RENAMED:
+        filename = g_file_get_basename (other_file);
+        /* The "rename" is just a temporary file created by an editor */
+        if (g_str_has_suffix (filename, "~"))
+          IDE_EXIT;
+        else
+          g_free (filename);
+        new_config_file = other_file;
+        /* Don't break so we can reuse the code below to add the new config */
+    case G_FILE_MONITOR_EVENT_CREATED:
+    case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+    case G_FILE_MONITOR_EVENT_MOVED_IN:
+        path = g_file_get_path (new_config_file);
+        filename = g_file_get_basename (new_config_file);
+        id = get_manifest_id (path, filename);
+        if (!contains_id (self->configurations, id))
+          {
+            g_autoptr(GbpFlatpakConfiguration) new_config = NULL;
+            new_config = gbp_flatpak_configuration_new (context, id, filename);
+            if (gbp_flatpak_configuration_load_from_file (new_config, new_config_file))
+              {
+                g_autoptr(GFileMonitor) manifest_monitor = NULL;
+                g_autoptr(GError) local_error = NULL;
+                g_signal_connect_object (new_config,
+                                         "changed",
+                                         G_CALLBACK (gbp_flatpak_configuration_provider_config_changed),
+                                         self,
+                                         G_CONNECT_SWAPPED);
+
+                manifest_monitor = g_file_monitor_file (file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
+                if (manifest_monitor == NULL)
+                  g_warning ("Error encountered trying to monitor flatpak manifest %s: %s", path, local_error->message);
+                else
+                  {
+                    g_signal_connect_object (manifest_monitor,
+                                             "changed",
+                                             G_CALLBACK (gbp_flatpak_configuration_provider_manifest_changed),
+                                             self,
+                                             G_CONNECT_SWAPPED);
+                    g_ptr_array_add (self->manifest_monitors, g_steal_pointer (&manifest_monitor));
+                  }
+                ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
+                g_ptr_array_remove_fast (self->configurations, relevant_config);
+                g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
+                ide_configuration_manager_add (self->manager, IDE_CONFIGURATION (new_config));
+                ide_configuration_manager_set_current (self->manager, IDE_CONFIGURATION (new_config));
+                g_ptr_array_add (self->configurations, g_steal_pointer (&new_config));
+              }
+          }
+        break;
+
+    case G_FILE_MONITOR_EVENT_CHANGED:
+    case G_FILE_MONITOR_EVENT_MOVED:
+    case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+    case G_FILE_MONITOR_EVENT_UNMOUNTED:
+    case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+    default:
+      break;
+    }
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -639,14 +778,13 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
       GFileType file_type;
       g_autofree gchar *filename = NULL;
       g_autofree gchar *path = NULL;
-      g_autofree gchar *hash = NULL;
       g_autofree gchar *id = NULL;
-      g_autofree gchar *manifest_data = NULL;
-      gsize manifest_data_len = 0;
       g_autoptr(GRegex) filename_regex = NULL;
       g_autoptr(GMatchInfo) match_info = NULL;
       g_autoptr(GFile) file = NULL;
       g_autoptr(GbpFlatpakConfiguration) possible_config = NULL;
+      g_autoptr(GFileMonitor) manifest_monitor = NULL;
+      g_autoptr(GError) local_error = NULL;
 
       file_type = g_file_info_get_file_type (file_info);
       filename = g_strdup (g_file_info_get_name (file_info));
@@ -678,17 +816,7 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
 
       /* Check if the file has already been loaded as a config */
       path = g_file_get_path (file);
-      if (g_file_get_contents (path, &manifest_data, &manifest_data_len, NULL))
-        {
-          g_autoptr(GChecksum) checksum = NULL;
-
-          checksum = g_checksum_new (G_CHECKSUM_SHA1);
-          g_checksum_update (checksum, (const guint8 *)manifest_data, manifest_data_len);
-          hash = g_strdup (g_checksum_get_string (checksum));
-        }
-
-      id = (hash != NULL) ? g_strdup_printf ("%s@%s", filename, hash) : g_strdup (filename);
-
+      id = get_manifest_id (path, filename);
       if (contains_id (configs, id))
         continue;
 
@@ -699,9 +827,22 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
 
       g_signal_connect_object (possible_config,
                                "changed",
-                               G_CALLBACK (gbp_flatpak_configuration_provider_changed),
+                               G_CALLBACK (gbp_flatpak_configuration_provider_config_changed),
                                self,
                                G_CONNECT_SWAPPED);
+
+      manifest_monitor = g_file_monitor_file (file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
+      if (manifest_monitor == NULL)
+        g_warning ("Error encountered trying to monitor flatpak manifest %s: %s", path, local_error->message);
+      else
+        {
+          g_signal_connect_object (manifest_monitor,
+                                   "changed",
+                                   G_CALLBACK (gbp_flatpak_configuration_provider_manifest_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          g_ptr_array_add (self->manifest_monitors, g_steal_pointer (&manifest_monitor));
+        }
 
       g_ptr_array_add (configs, g_steal_pointer (&possible_config));
     }
@@ -835,6 +976,8 @@ gbp_flatpak_configuration_provider_load (IdeConfigurationProvider *provider,
 
   ide_set_weak_pointer (&self->manager, manager);
 
+  self->manifest_monitors = g_ptr_array_new_with_free_func (g_object_unref);
+
   self->cancellable = g_cancellable_new ();
 
   task = g_task_new (self, self->cancellable, gbp_flatpak_configuration_provider_load_cb, NULL);
@@ -867,6 +1010,8 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider,
     }
 
   g_clear_pointer (&self->configurations, g_ptr_array_unref);
+
+  g_clear_pointer (&self->manifest_monitors, g_ptr_array_unref);
 
   if (self->cancellable != NULL)
     g_cancellable_cancel (self->cancellable);
