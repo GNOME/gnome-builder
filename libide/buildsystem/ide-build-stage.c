@@ -398,11 +398,15 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
                   G_TYPE_BOOLEAN, 1, IDE_TYPE_BUILD_STAGE);
 
   signals [QUERY] =
-    g_signal_new_class_handler ("query",
-                                G_TYPE_FROM_CLASS (klass),
-                                G_SIGNAL_RUN_LAST,
-                                NULL, NULL, NULL, NULL,
-                                G_TYPE_NONE, 2, IDE_TYPE_BUILD_PIPELINE, G_TYPE_CANCELLABLE);
+    g_signal_new ("query",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeBuildStageClass, query),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  2,
+                  IDE_TYPE_BUILD_PIPELINE,
+                  G_TYPE_CANCELLABLE);
 
   signals [REAP] =
     g_signal_new ("reap",
@@ -872,10 +876,17 @@ ide_build_stage_get_stdout_path (IdeBuildStage *self)
 gboolean
 _ide_build_stage_has_query (IdeBuildStage *self)
 {
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
 
-  return g_signal_has_handler_pending (self, signals [QUERY], 0, FALSE) ||
-         IDE_BUILD_STAGE_GET_CLASS (self)->query != NULL;
+  if (g_signal_has_handler_pending (self, signals [QUERY], 0, FALSE))
+    IDE_RETURN (TRUE);
+
+  if (IDE_BUILD_STAGE_GET_CLASS (self)->query)
+    IDE_RETURN (TRUE);
+
+  IDE_RETURN (FALSE);
 }
 
 void
