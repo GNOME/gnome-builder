@@ -2,16 +2,13 @@ schema_dir = join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 
 # Perhaps this should be moved to the plugin
 ctags_path = 'ctags'
-ctags = find_program('ctags-exuberant', required: false)
-if not ctags.found()
-  ctags = find_program('exctags', required: false)
-  if not ctags.found()
-    ctags = find_program('ectags', required: false)
-    if not ctags.found()
-      ctags = find_program('ctags', required: false)
-    endif
-  endif
-endif
+ctags = find_program(
+  'ctags',
+  'ctags-exuberant',
+  'exctags',
+  'ectags',
+  required: false
+)
 if ctags.found()
   ctags_path = ctags.path()
 endif
