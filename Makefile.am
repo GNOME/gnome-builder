@@ -62,7 +62,7 @@ dist-hook:
 RUNTIME_TYPELIB_PATH = libide:contrib/egg:contrib/pnl:contrib/tmpl:$(GI_TYPELIB_PATH)
 
 run:
-	LSAN_OPTIONS=suppressions=$(top_srcdir)/build/asan.supp                \
+	@ LSAN_OPTIONS=suppressions=$(top_srcdir)/build/asan.supp              \
 	ASAN_OPTIONS=alloc_dealloc_mismatch=0                                  \
 	PEAS_DEBUG=1                                                           \
 	GB_IN_TREE_PLUGINS=1                                                   \
@@ -75,7 +75,7 @@ run:
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s $(ARGS)
 
 strace:
-	PEAS_DEBUG=1                                                           \
+	@ PEAS_DEBUG=1                                                         \
 	GB_IN_TREE_PLUGINS=1                                                   \
 	GB_IN_TREE_FONTS=1                                                     \
 	GB_IN_TREE_STYLE_SCHEMES=1                                             \
@@ -86,7 +86,7 @@ strace:
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s $(ARGS)
 
 debug:
-	LSAN_OPTIONS=suppressions=$(top_srcdir)/build/asan.supp                \
+	@ LSAN_OPTIONS=suppressions=$(top_srcdir)/build/asan.supp              \
 	ASAN_OPTIONS=alloc_dealloc_mismatch=0                                  \
 	G_SLICE=always-malloc                                                  \
 	PEAS_DEBUG=1                                                           \
@@ -101,7 +101,7 @@ debug:
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s $(ARGS)
 
 valgrind:
-	PEAS_DEBUG=1                                                           \
+	@ PEAS_DEBUG=1                                                         \
 	GB_IN_TREE_PLUGINS=1                                                   \
 	GB_IN_TREE_FONTS=1                                                     \
 	GB_IN_TREE_STYLE_SCHEMES=1                                             \
