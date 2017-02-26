@@ -52,10 +52,11 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 
   ide_subprocess_launcher_insert_argv (launcher, 0, "flatpak");
   ide_subprocess_launcher_insert_argv (launcher, 1, "build");
-  ide_subprocess_launcher_insert_argv (launcher, 2, "--share=ipc");
-  ide_subprocess_launcher_insert_argv (launcher, 3, "--socket=x11");
-  ide_subprocess_launcher_insert_argv (launcher, 4, "--socket=wayland");
-  ide_subprocess_launcher_insert_argv (launcher, 5, self->build_path);
+  ide_subprocess_launcher_insert_argv (launcher, 2, "--allow=devel");
+  ide_subprocess_launcher_insert_argv (launcher, 3, "--share=ipc");
+  ide_subprocess_launcher_insert_argv (launcher, 4, "--socket=x11");
+  ide_subprocess_launcher_insert_argv (launcher, 5, "--socket=wayland");
+  ide_subprocess_launcher_insert_argv (launcher, 6, self->build_path);
 }
 
 GbpFlatpakRunner *
