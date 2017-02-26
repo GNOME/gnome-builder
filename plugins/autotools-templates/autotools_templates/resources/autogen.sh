@@ -22,6 +22,8 @@ if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
 	echo "" >&2
 fi
 
+mkdir -p m4
+
 {{if enable_gtk_doc}}
 gtkdocize || exit 1
 {{end}}
