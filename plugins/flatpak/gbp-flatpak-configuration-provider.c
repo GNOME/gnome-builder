@@ -93,6 +93,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       g_autoptr(GFileInputStream) file_stream = NULL;
       g_autoptr(GDataInputStream) data_stream = NULL;
       g_autoptr(GRegex) runtime_regex = NULL;
+      g_autoptr(GRegex) runtime_version_regex = NULL;
       g_autoptr(GRegex) build_options_regex = NULL;
       g_autoptr(GRegex) config_opts_regex = NULL;
       g_autoptr(GRegex) primary_module_regex = NULL;
@@ -114,6 +115,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       const gchar *config_prefix;
       const gchar *new_prefix;
       const gchar *new_runtime_name = NULL;
+      const gchar *new_runtime_version = NULL;
       gchar *json_string;
       GFile *manifest;
       gboolean in_config_opts_array;
@@ -147,6 +149,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       data_stream = g_data_input_stream_new (G_INPUT_STREAM (file_stream));
 
       runtime_regex = g_regex_new ("^\\s*\"runtime\"\\s*:\\s*\"(?<id>.+)\",$", 0, 0, NULL);
+      runtime_version_regex = g_regex_new ("^\\s*\"runtime-version\"\\s*:\\s*\"(?<version>.+)\",$", 0, 0, NULL);
       build_options_regex = g_regex_new ("^\\s*\"build-options\"\\s*:\\s*{$", 0, 0, NULL);
       config_opts_regex = g_regex_new ("^(\\s*\"config-opts\"\\s*:\\s*\\[\\s*).+$", 0, 0, NULL);
       primary_module_regex_str = g_strdup_printf ("^(\\s*)\"name\"\\s*:\\s*\"%s\",$", primary_module);
@@ -158,6 +161,8 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
           new_runtime_parts = g_strsplit (new_runtime_id + 8, "/", 3);
           if (new_runtime_parts[0] != NULL)
             new_runtime_name = new_runtime_parts[0];
+          if (new_runtime_parts[2] != NULL)
+            new_runtime_version = new_runtime_parts[2];
         }
 
       new_config_opts_string = g_strdup (ide_configuration_get_config_opts (IDE_CONFIGURATION (configuration)));
@@ -232,6 +237,25 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                   old_runtime_ptr = g_strstr_len (line, -1, id);
                   *old_runtime_ptr = '\0';
                   new_line = g_strdup_printf ("%s%s\",", line, new_runtime_name);
+                  g_free (line);
+                  line = new_line;
+                }
+            }
+
+          /* Replace the runtime version with the user-chosen one */
+          if (!ide_str_empty0 (new_runtime_version))
+            {
+              g_autoptr(GMatchInfo) match_info = NULL;
+              g_regex_match (runtime_version_regex, line, 0, &match_info);
+              if (g_match_info_matches (match_info))
+                {
+                  gchar *old_runtime_version_ptr;
+                  gchar *new_line;
+                  g_autofree gchar *version = NULL;
+                  version = g_match_info_fetch_named (match_info, "version");
+                  old_runtime_version_ptr = g_strstr_len (line, -1, version);
+                  *old_runtime_version_ptr = '\0';
+                  new_line = g_strdup_printf ("%s%s\",", line, new_runtime_version);
                   g_free (line);
                   line = new_line;
                 }
