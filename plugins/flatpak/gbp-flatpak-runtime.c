@@ -38,6 +38,7 @@ struct _GbpFlatpakRuntime
   gchar *deploy_dir;
   gchar *platform;
   gchar *sdk;
+  gchar *debug_dir;
   GFile *deploy_dir_files;
 };
 
@@ -340,6 +341,43 @@ gbp_flatpak_runtime_set_deploy_dir (GbpFlatpakRuntime *self,
     }
 }
 
+static const gchar *
+gbp_flatpak_runtime_get_debug_dir (GbpFlatpakRuntime *self)
+{
+  if G_UNLIKELY (self->debug_dir == NULL)
+    {
+      const gchar *ids[] = {
+        self->platform,
+        self->sdk,
+      };
+
+      for (guint i = 0; i < G_N_ELEMENTS (ids); i++)
+        {
+          g_autofree gchar *name = g_strdup_printf ("%s.Debug", ids[i]);
+          g_autofree gchar *deploy_path = NULL;
+          g_autofree gchar *path = NULL;
+
+          /*
+           * The easiest way to reliably stay within the same installation
+           * is to just use relative paths to the checkout of the deploy dir.
+           */
+          deploy_path = g_file_get_path (self->deploy_dir_files);
+          path = g_build_filename (deploy_path, "..", "..", "..", "..", "..",
+                                   name, self->arch, self->branch, "active", "files",
+                                   NULL);
+
+          if (g_file_test (path, G_FILE_TEST_IS_DIR))
+            {
+              self->debug_dir = g_steal_pointer (&path);
+              g_print (">>>>>>>>>>>>>>>>>>>>>>>>>>>>> %s\n", self->debug_dir);
+              break;
+            }
+        }
+    }
+
+  return self->debug_dir;
+}
+
 static GFile *
 gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
                                     GFile      *file)
@@ -369,6 +407,21 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
 
   if (g_str_equal ("/usr", path))
     return g_object_ref (self->deploy_dir_files);
+
+  if (g_str_equal (path, "/usr/lib/debug") || g_str_has_prefix (path, "/usr/lib/debug/"))
+    {
+      const gchar *debug_dir = gbp_flatpak_runtime_get_debug_dir (self);
+
+      if (debug_dir)
+        {
+          g_autofree gchar *translated = NULL;
+
+          translated = g_build_filename (debug_dir,
+                                         path + IDE_LITERAL_LENGTH ("/usr/lib/debug"),
+                                         NULL);
+          return g_file_new_for_path (translated);
+        }
+    }
 
   if (g_str_has_prefix (path, "/usr/"))
     return g_file_get_child (self->deploy_dir_files, path + IDE_LITERAL_LENGTH ("/usr/"));
@@ -569,6 +622,7 @@ gbp_flatpak_runtime_finalize (GObject *object)
 
   g_clear_pointer (&self->arch, g_free);
   g_clear_pointer (&self->branch, g_free);
+  g_clear_pointer (&self->debug_dir, g_free);
   g_clear_pointer (&self->deploy_dir, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->sdk, g_free);
