@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-19 18:37+0000\n"
-"PO-Revision-Date: 2017-02-20 00:40+0100\n"
+"POT-Creation-Date: 2017-02-25 04:41+0000\n"
+"PO-Revision-Date: 2017-02-26 21:15+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -68,7 +68,7 @@ msgstr[2] "Około %u lat temu"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
@@ -100,7 +100,7 @@ msgstr "Przeglądaj…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:680
+#: libide/greeter/ide-greeter-perspective.c:681
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -213,11 +213,6 @@ msgstr "Zielony"
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
 msgid "Blue"
 msgstr "Niebieski"
-
-#: contrib/gstyle/tests/data/palette.gstyle.xml:20
-#: plugins/color-picker/data/basic.gstyle.xml:20
-msgid "Basic"
-msgstr "Podstawowa"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
@@ -873,7 +868,7 @@ msgstr "Za_mknij"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:530
+#: libide/application/ide-application.c:547
 #: libide/preferences/ide-preferences-builtin.c:144
 #: libide/workbench/ide-workbench.c:565
 msgid "Builder"
@@ -1093,53 +1088,53 @@ msgstr "niezapisywany dokument %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 
-#: libide/buildsystem/ide-build-pipeline.c:2036
+#: libide/buildsystem/ide-build-pipeline.c:2040
 msgid "Cleaning…"
 msgstr "Czyszczenie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2051
+#: libide/buildsystem/ide-build-pipeline.c:2055
 msgid "Downloading…"
 msgstr "Pobieranie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2055
+#: libide/buildsystem/ide-build-pipeline.c:2059
 msgid "Building dependencies…"
 msgstr "Budowanie zależności…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2059
+#: libide/buildsystem/ide-build-pipeline.c:2063
 msgid "Bootstrapping…"
 msgstr "Zakładanie projektu…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2063
+#: libide/buildsystem/ide-build-pipeline.c:2067
 msgid "Configuring…"
 msgstr "Konfigurowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2067
+#: libide/buildsystem/ide-build-pipeline.c:2071
 msgid "Building…"
 msgstr "Budowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2071
+#: libide/buildsystem/ide-build-pipeline.c:2075
 msgid "Installing…"
 msgstr "Instalowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2075
+#: libide/buildsystem/ide-build-pipeline.c:2079
 msgid "Exporting…"
 msgstr "Eksportowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2079
 #: libide/buildsystem/ide-build-pipeline.c:2083
+#: libide/buildsystem/ide-build-pipeline.c:2087
 msgid "Success"
 msgstr "Powodzenie"
 
-#: libide/buildsystem/ide-build-pipeline.c:2087
-#: libide/workbench/ide-omni-bar.ui:327
+#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/workbench/ide-omni-bar.ui:328
 msgid "Failed"
 msgstr "Niepowodzenie"
 
-#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/buildsystem/ide-build-pipeline.c:2095
 msgid "Preparing…"
 msgstr "Przygotowywanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2095
+#: libide/buildsystem/ide-build-pipeline.c:2099
 msgid "Ready"
 msgstr "Gotowe"
 
@@ -1223,7 +1218,7 @@ msgstr[2] "%d błędów"
 
 #: libide/buildui/ide-build-panel.c:517
 #: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:381
+#: libide/workbench/ide-omni-bar.ui:382
 msgid "Build"
 msgstr "Budowanie"
 
@@ -1627,7 +1622,7 @@ msgstr "_Wczytaj ponownie"
 #: libide/editor/ide-editor-view.ui:31
 #: libide/greeter/ide-greeter-perspective.ui:317
 #: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:355
+#: libide/workbench/ide-omni-bar.ui:356
 msgid "_Cancel"
 msgstr "_Anuluj"
 
@@ -1641,9 +1636,13 @@ msgstr "Wykryto zmianę pliku w innym programie. Wczytać go ponownie?"
 msgid "Failed to load the project"
 msgstr "Wczytanie projektu się nie powiodło"
 
-#: libide/greeter/ide-greeter-perspective.c:676
+#: libide/greeter/ide-greeter-perspective.c:677
 msgid "Open Project"
 msgstr "Otwarcie projektu"
+
+#: libide/greeter/ide-greeter-perspective.c:693
+msgid "All Project Types"
+msgstr "Wszystkie typy projektów"
 
 #. the action:// link is used to jump to the new-project view
 #: libide/greeter/ide-greeter-perspective.ui:52
@@ -1745,321 +1744,337 @@ msgid "Editor Shortcuts"
 msgstr "Skróty edytora"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:445
+#: libide/keybindings/ide-shortcuts-window.ui:452
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Ogólne"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:456
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Globalne wyszukiwanie"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:456
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencje"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:463
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Pasek poleceń"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:470
+#: libide/keybindings/ide-shortcuts-window.ui:477
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:477
+#: libide/keybindings/ide-shortcuts-window.ui:484
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr "Terminal w środowisku wykonawczym budowania"
+
+#: libide/keybindings/ide-shortcuts-window.ui:53
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiszowe"
 
-#: libide/keybindings/ide-shortcuts-window.ui:55
+#: libide/keybindings/ide-shortcuts-window.ui:62
 msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Panele"
 
-#: libide/keybindings/ide-shortcuts-window.ui:59
+#: libide/keybindings/ide-shortcuts-window.ui:66
 msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Przełączenie lewego panelu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:66
+#: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Przełączenie prawego panelu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:73
+#: libide/keybindings/ide-shortcuts-window.ui:80
 msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Przełączenie dolnego panelu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:82
+#: libide/keybindings/ide-shortcuts-window.ui:89
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gesty panelu dotykowego"
 
-#: libide/keybindings/ide-shortcuts-window.ui:87
-#: libide/keybindings/ide-shortcuts-window.ui:135
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Przełączenie na następny dokument"
 
-#: libide/keybindings/ide-shortcuts-window.ui:94
-#: libide/keybindings/ide-shortcuts-window.ui:142
+#: libide/keybindings/ide-shortcuts-window.ui:101
+#: libide/keybindings/ide-shortcuts-window.ui:149
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Przełączenie na poprzedni dokument"
 
-#: libide/keybindings/ide-shortcuts-window.ui:102
+#: libide/keybindings/ide-shortcuts-window.ui:109
 msgctxt "shortcut window"
 msgid "Files"
 msgstr "Pliki"
 
-#: libide/keybindings/ide-shortcuts-window.ui:107
+#: libide/keybindings/ide-shortcuts-window.ui:114
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Utworzenie nowego dokumentu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:114
+#: libide/keybindings/ide-shortcuts-window.ui:121
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Otwarcie dokumentu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:121
+#: libide/keybindings/ide-shortcuts-window.ui:128
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Zapisanie dokumentu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:128
+#: libide/keybindings/ide-shortcuts-window.ui:135
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Zamknięcie dokumentu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:149
+#: libide/keybindings/ide-shortcuts-window.ui:156
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Wyświetlenie listy otwartych dokumentów"
 
-#: libide/keybindings/ide-shortcuts-window.ui:157
-#: libide/keybindings/ide-shortcuts-window.ui:169
+#: libide/keybindings/ide-shortcuts-window.ui:164
+#: libide/keybindings/ide-shortcuts-window.ui:176
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Wyszukiwanie i zastępowanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:162
+#: libide/keybindings/ide-shortcuts-window.ui:169
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Wyszukiwanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:176
+#: libide/keybindings/ide-shortcuts-window.ui:183
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Wyszukiwanie następnego dopasowania"
 
-#: libide/keybindings/ide-shortcuts-window.ui:183
+#: libide/keybindings/ide-shortcuts-window.ui:190
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Wyszukiwanie poprzedniego dopasowania"
 
-#: libide/keybindings/ide-shortcuts-window.ui:190
+#: libide/keybindings/ide-shortcuts-window.ui:197
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Wyłączenie wyróżniania"
 
-#: libide/keybindings/ide-shortcuts-window.ui:198
-#: libide/keybindings/ide-shortcuts-window.ui:486
+#: libide/keybindings/ide-shortcuts-window.ui:205
+#: libide/keybindings/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiowanie i wklejanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:203
-#: libide/keybindings/ide-shortcuts-window.ui:491
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:505
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Skopiowanie zaznaczonego tekstu do schowka"
 
-#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:217
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Wycięcie zaznaczonego tekstu do schowka"
 
-#: libide/keybindings/ide-shortcuts-window.ui:217
-#: libide/keybindings/ide-shortcuts-window.ui:498
+#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Wklejenie tekstu ze schowka"
 
-#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:231
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Powielenie bieżącego wiersza lub zaznaczenia"
 
-#: libide/keybindings/ide-shortcuts-window.ui:232
+#: libide/keybindings/ide-shortcuts-window.ui:239
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Cofanie i ponawianie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:237
+#: libide/keybindings/ide-shortcuts-window.ui:244
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Cofnięcie poprzedniego polecenia"
 
-#: libide/keybindings/ide-shortcuts-window.ui:244
+#: libide/keybindings/ide-shortcuts-window.ui:251
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Ponowienie poprzedniego polecenia"
 
-#: libide/keybindings/ide-shortcuts-window.ui:252
+#: libide/keybindings/ide-shortcuts-window.ui:259
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edycja"
 
-#: libide/keybindings/ide-shortcuts-window.ui:257
+#: libide/keybindings/ide-shortcuts-window.ui:264
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Zwiększenie liczby w pozycji kursora"
 
-#: libide/keybindings/ide-shortcuts-window.ui:264
+#: libide/keybindings/ide-shortcuts-window.ui:271
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Zmniejszenie liczby w pozycji kursora"
 
-#: libide/keybindings/ide-shortcuts-window.ui:271
+#: libide/keybindings/ide-shortcuts-window.ui:278
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Połączenie zaznaczonych wierszy"
 
-#: libide/keybindings/ide-shortcuts-window.ui:278
+#: libide/keybindings/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Wyświetlenie okna uzupełniania"
 
-#: libide/keybindings/ide-shortcuts-window.ui:285
+#: libide/keybindings/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Przełączenie zastępowania"
 
-#: libide/keybindings/ide-shortcuts-window.ui:292
+#: libide/keybindings/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Ponowne wcięcie wiersza"
 
-#: libide/keybindings/ide-shortcuts-window.ui:299
+#: libide/keybindings/ide-shortcuts-window.ui:306
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Usunięcie wiersza"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
+#: libide/keybindings/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Zmiana nazwy symbolu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:307
+#: libide/keybindings/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Wymaga semantycznej obsługi języka"
 
-#: libide/keybindings/ide-shortcuts-window.ui:315
+#: libide/keybindings/ide-shortcuts-window.ui:322
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Nawigacja"
 
-#: libide/keybindings/ide-shortcuts-window.ui:320
+#: libide/keybindings/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Przejście do następnego błędu w pliku"
 
-#: libide/keybindings/ide-shortcuts-window.ui:327
+#: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Przejście do poprzedniego błędu w pliku"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Przejście do poprzedniego położenia edycji"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Przejście do następnego położenia edycji"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Przejście do definicji symbolu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Przeniesienie portu widoku do góry w pliku"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Przeniesienie portu widoku w dół w pliku"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Przeniesienie portu widoku na koniec pliku"
 
-#: libide/keybindings/ide-shortcuts-window.ui:376
+#: libide/keybindings/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Przeniesienie portu widoku na początek pliku"
 
-#: libide/keybindings/ide-shortcuts-window.ui:383
+#: libide/keybindings/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Przeniesienie do pasującego nawiasu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:391
+#: libide/keybindings/ide-shortcuts-window.ui:398
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Zaznaczanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:396
+#: libide/keybindings/ide-shortcuts-window.ui:403
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Zaznaczenie wszystkiego"
 
-#: libide/keybindings/ide-shortcuts-window.ui:403
+#: libide/keybindings/ide-shortcuts-window.ui:410
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Odznaczenie wszystkiego"
 
-#: libide/keybindings/ide-shortcuts-window.ui:411
+#: libide/keybindings/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Zbudowanie i wykonanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:416
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Zbudowanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:423
+#: libide/keybindings/ide-shortcuts-window.ui:430
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Wykonanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:430
+#: libide/keybindings/ide-shortcuts-window.ui:437
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profilowanie"
 
-#: libide/keybindings/ide-shortcuts-window.ui:441
+#: libide/keybindings/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Skróty terminala"
+
+#: libide/keybindings/ide-shortcuts-window.ui:520
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Wyszukiwanie"
+
+#: libide/keybindings/ide-shortcuts-window.ui:525
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "Wyszukiwanie tekstu w terminalu"
 
 #: libide/preferences/ide-preferences-builtin.c:65
 #: libide/preferences/ide-preferences-builtin.c:66
@@ -2105,7 +2120,7 @@ msgstr "edytor czcionka font stałej szerokości monospace"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:111
-#: plugins/terminal/gb-terminal-workbench-addin.c:183
+#: plugins/terminal/gb-terminal-workbench-addin.c:203
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -2498,7 +2513,7 @@ msgstr "Nie można wykonać celu, inny jest wykonywany"
 msgid "Failed to locate runtime"
 msgstr "Ustalenie położenia środowiska wykonawczego się nie powiodło"
 
-#: libide/runner/ide-runner.c:157 plugins/flatpak/gbp-flatpak-runner.c:82
+#: libide/runner/ide-runner.c:165
 msgid "Process quit unexpectedly"
 msgstr "Proces nieoczekiwanie zakończył działanie"
 
@@ -2663,40 +2678,40 @@ msgstr "brak"
 msgid "Edit build configuration"
 msgstr "Modyfikuje konfigurację budowania"
 
-#: libide/workbench/ide-omni-bar.ui:128
+#: libide/workbench/ide-omni-bar.ui:129
 msgid "Cancel build"
 msgstr "Anuluje budowanie"
 
-#: libide/workbench/ide-omni-bar.ui:172
+#: libide/workbench/ide-omni-bar.ui:173
 #: plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Projekt"
 
-#: libide/workbench/ide-omni-bar.ui:196
+#: libide/workbench/ide-omni-bar.ui:197
 msgid "Branch"
 msgstr "Gałąź"
 
-#: libide/workbench/ide-omni-bar.ui:231
+#: libide/workbench/ide-omni-bar.ui:232
 msgid "Build Profile"
 msgstr "Profil budowania"
 
-#: libide/workbench/ide-omni-bar.ui:277
+#: libide/workbench/ide-omni-bar.ui:278
 msgid "Last build"
 msgstr "Ostatnio zbudowane"
 
-#: libide/workbench/ide-omni-bar.ui:344
+#: libide/workbench/ide-omni-bar.ui:345
 msgid "View Output"
 msgstr "Wyświetl wyjście"
 
-#: libide/workbench/ide-omni-bar.ui:391
+#: libide/workbench/ide-omni-bar.ui:392
 msgid "Rebuild"
 msgstr "Przebuduj"
 
-#: libide/workbench/ide-omni-bar.ui:401
+#: libide/workbench/ide-omni-bar.ui:402
 msgid "Clean"
 msgstr "Wyczyść"
 
-#: libide/workbench/ide-omni-bar.ui:415
+#: libide/workbench/ide-omni-bar.ui:416
 msgid "Build project"
 msgstr "Buduje projekt"
 
@@ -3044,16 +3059,16 @@ msgstr "Nie można odnaleźć schematu kolorów „%s”"
 msgid "Failed to locate working directory"
 msgstr "Ustalenie położenia katalogu roboczego się nie powiodło"
 
-#: plugins/command-bar/gb-vim.c:707
+#: plugins/command-bar/gb-vim.c:711
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Nieprawidłowe podpolecenie „:syntax”: %s"
 
-#: plugins/command-bar/gb-vim.c:1143
+#: plugins/command-bar/gb-vim.c:1147
 msgid "Invalid search and replace request"
 msgstr "Nieprawidłowe żądanie wyszukania i zastąpienia"
 
-#: plugins/command-bar/gb-vim.c:1249
+#: plugins/command-bar/gb-vim.c:1253
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nie jest poleceniem: %s"
@@ -3217,15 +3232,15 @@ msgid "Clone"
 msgstr "Sklonuj"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
-#: plugins/rustup/rustup_plugin/__init__.py:468
-#: plugins/rustup/rustup_plugin/__init__.py:472
-#: plugins/rustup/rustup_plugin/__init__.py:587
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Zainstaluj"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
-#: plugins/rustup/rustup_plugin/__init__.py:468
-#: plugins/rustup/rustup_plugin/__init__.py:472
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Zaktualizuj"
 
@@ -3248,12 +3263,12 @@ msgstr[2] "Wyświetla %u środowisk wykonawczych więcej"
 msgid "Flatpak Runtimes"
 msgstr "Środowisko wykonawcze Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:706
+#: plugins/flatpak/gbp-flatpak-runtime.c:693
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:708
+#: plugins/flatpak/gbp-flatpak-runtime.c:695
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3271,7 +3286,7 @@ msgid "Installed "
 msgstr "Zainstalowano "
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:77
-#: plugins/rustup/rustup_plugin/__init__.py:346
+#: plugins/rustup/rustup_plugin/__init__.py:355
 msgid "Installing "
 msgstr "Instalowanie "
 
@@ -3383,14 +3398,6 @@ msgid ""
 msgstr ""
 "Włącza użycie programu pylint do wyszukiwania dodatkowych diagnostyk "
 "w programach w języku Python. Może to powodować wykonywanie kodu w projekcie."
-
-#: plugins/hello-cpp/hellocppapplicationaddin.cc:48
-#, c-format
-msgid "Wow! You’ve spent with Builder %d second!\n"
-msgid_plural "Wow! You’ve spent with Builder %d seconds!\n"
-msgstr[0] "W Builderze spędzono %d sekundę!\n"
-msgstr[1] "W Builderze spędzono %d sekundy!\n"
-msgstr[2] "W Builderze spędzono %d sekund!\n"
 
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
@@ -3548,81 +3555,81 @@ msgstr "Aktualizowanie Rustup"
 msgid "Installing rust "
 msgstr "Instalowanie Rust "
 
-#: plugins/rustup/rustup_plugin/__init__.py:282
+#: plugins/rustup/rustup_plugin/__init__.py:283
 msgid "Checking system"
 msgstr "Sprawdzanie systemu"
 
-#: plugins/rustup/rustup_plugin/__init__.py:328
+#: plugins/rustup/rustup_plugin/__init__.py:337
 msgid "Downloading rustup-init"
 msgstr "Pobieranie „rustup-init”"
 
-#: plugins/rustup/rustup_plugin/__init__.py:333
+#: plugins/rustup/rustup_plugin/__init__.py:342
 msgid "Syncing channel updates"
 msgstr "Synchronizowanie aktualizacji kanałów"
 
-#: plugins/rustup/rustup_plugin/__init__.py:339
+#: plugins/rustup/rustup_plugin/__init__.py:348
 msgid "Downloading "
 msgstr "Pobieranie "
 
-#: plugins/rustup/rustup_plugin/__init__.py:352
+#: plugins/rustup/rustup_plugin/__init__.py:361
 msgid "Checking for rustup updates"
 msgstr "Wyszukiwanie aktualizacji Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:357
+#: plugins/rustup/rustup_plugin/__init__.py:366
 msgid "Downloading rustup update"
 msgstr "Pobieranie aktualizacji Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:394
+#: plugins/rustup/rustup_plugin/__init__.py:403
 msgid "Error installing "
 msgstr "Błąd podczas instalowania "
 
-#: plugins/rustup/rustup_plugin/__init__.py:396
+#: plugins/rustup/rustup_plugin/__init__.py:405
 msgid "Error"
 msgstr "Błąd"
 
-#: plugins/rustup/rustup_plugin/__init__.py:402
+#: plugins/rustup/rustup_plugin/__init__.py:411
 msgid "Cancelled"
 msgstr "Anulowano"
 
-#: plugins/rustup/rustup_plugin/__init__.py:410
+#: plugins/rustup/rustup_plugin/__init__.py:419
 msgid "Finished"
 msgstr "Ukończono"
 
-#: plugins/rustup/rustup_plugin/__init__.py:424
+#: plugins/rustup/rustup_plugin/__init__.py:433
 msgid "Rustup"
 msgstr "Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:425
+#: plugins/rustup/rustup_plugin/__init__.py:434
 msgid "Rustup Toolchains"
 msgstr "Zestawy narzędzi Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:480
+#: plugins/rustup/rustup_plugin/__init__.py:489
 msgid "Updating"
 msgstr "Aktualizowanie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:480
+#: plugins/rustup/rustup_plugin/__init__.py:489
 msgid "Installing"
 msgstr "Instalowanie"
 
 #. set default toolchain button
-#: plugins/rustup/rustup_plugin/__init__.py:571
+#: plugins/rustup/rustup_plugin/__init__.py:580
 msgid "Make default"
 msgstr "Ustaw jako domyślne"
 
-#: plugins/rustup/rustup_plugin/__init__.py:571
+#: plugins/rustup/rustup_plugin/__init__.py:580
 msgid "Makes the selected toolchain the default rust installation"
 msgstr "Ustawia zaznaczony zestaw narzędzi jako domyślną instalację Rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:586
+#: plugins/rustup/rustup_plugin/__init__.py:595
 msgid "Install Rust Channel"
 msgstr "Instalacja kanału Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: plugins/rustup/rustup_plugin/__init__.py:591
+#: plugins/rustup/rustup_plugin/__init__.py:600
 msgid "Enter name of rust channel"
 msgstr "Nazwa kanału Rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:592
+#: plugins/rustup/rustup_plugin/__init__.py:601
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -3638,16 +3645,16 @@ msgstr ""
 "                        <data>          = RRRR-MM-DD\n"
 "                        <gospodarz>     = <trójka-docelowa>"
 
-#: plugins/rustup/rustup_plugin/__init__.py:617
+#: plugins/rustup/rustup_plugin/__init__.py:626
 msgid "Install Rustup to manage toolchains here!"
 msgstr ""
 "Zainstalowanie Rustup umożliwia zarządzanie zestawami narzędzi w tym miejscu."
 
-#: plugins/rustup/rustup_plugin/__init__.py:624
+#: plugins/rustup/rustup_plugin/__init__.py:633
 msgid "No toolchain installed. Click"
 msgstr "Żaden zestaw narzędzi nie jest zainstalowany. Kliknięcie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:625
+#: plugins/rustup/rustup_plugin/__init__.py:634
 msgid "to add a new toolchain!"
 msgstr "doda nowy zestaw narzędzi."
 
@@ -3737,11 +3744,11 @@ msgstr "Automatyczny powrót do początku"
 msgid "Save Terminal Content As"
 msgstr "Zapis zawartości terminala jako"
 
-#: plugins/terminal/gb-terminal-view.c:450
+#: plugins/terminal/gb-terminal-view.c:462
 msgid "Untitled terminal"
 msgstr "Terminal bez tytułu"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:120
+#: plugins/terminal/gb-terminal-workbench-addin.c:142
 msgid "Run Output"
 msgstr "Wyjście uruchamiania"
 
@@ -3774,6 +3781,10 @@ msgstr "Wyświetlanie błędów i ostrzeżeń języka Vala"
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostyka ostrzeżenia błędy"
 
+#: plugins/valgrind/valgrind_plugin/__init__.py:52
+msgid "Run with Valgrind"
+msgstr "Wykonaj za pomocą Valgrind"
+
 #: plugins/xml-pack/ide-xml-service.c:191
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Wczytano bufor, ale nie w menedżerze buforów."
@@ -3782,3 +3793,6 @@ msgstr "Wczytano bufor, ale nie w menedżerze buforów."
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Utworzenie drzewa XML się nie powiodło."
+
+msgid "Basic"
+msgstr "Podstawowa"
