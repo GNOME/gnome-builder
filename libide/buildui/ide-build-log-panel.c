@@ -548,7 +548,7 @@ ide_build_log_panel_log_observer (IdeBuildLogStream  stream,
   ide_build_log_panel_insert_text (self, message, &iter, stream);
 
   insert = gtk_text_buffer_get_insert (self->buffer);
-  gtk_text_view_scroll_to_mark (self->text_view, insert, 0.0, TRUE, 0.0, 0.0);
+  gtk_text_view_scroll_to_mark (self->text_view, insert, 0.0, TRUE, 1.0, 0.0);
 }
 
 void
