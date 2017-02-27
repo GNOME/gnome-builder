@@ -65,6 +65,7 @@
                   <object class="GtkStack" id="message_stack">
                     <property name="vhomogeneous">false</property>
                     <property name="hhomogeneous">false</property>
+                    <property name="interpolate-size">true</property>
                     <property name="transition-type">slide-left</property>
                     <property name="transition-duration">500</property>
                     <property name="visible">true</property>
