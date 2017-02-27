@@ -169,6 +169,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
               if (root_object != NULL && json_object_has_member (root_object, "build-options"))
                 {
                   JsonObject *build_options = NULL;
+
                   build_options = json_object_get_object_member (root_object, "build-options");
                   if (build_options != NULL)
                     {
@@ -188,6 +189,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       if (project_file != NULL)
         {
           g_autofree gchar *project_file_path = NULL;
+
           project_file_path = g_file_get_path (project_file);
           if (g_file_test (project_file_path, G_FILE_TEST_IS_DIR))
             {
@@ -197,6 +199,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           else
             {
               g_autoptr(GFile) project_dir = NULL;
+
               project_dir = g_file_get_parent (project_file);
               project_path = g_file_get_path (project_dir);
               project_name = g_file_get_basename (project_dir);
@@ -212,6 +215,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           g_autofree gchar *filesystem_option_src = NULL;
           g_autofree gchar *filesystem_option_build = NULL;
           g_autofree gchar *build_dir_option = NULL;
+
           filesystem_option_src = g_strdup_printf ("--filesystem=%s", project_path);
           filesystem_option_build = g_strdup_printf ("--filesystem=%s", builddir);
           build_dir_option = g_strdup_printf ("--build-dir=%s", builddir);
@@ -224,14 +228,17 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
         {
           g_autoptr(GList) env_list = NULL;
           GList *l;
+
           env_list = json_object_get_members (env_vars);
           for (l = env_list; l != NULL; l = l->next)
             {
               const gchar *env_name = (gchar *)l->data;
               const gchar *env_value = json_object_get_string_member (env_vars, env_name);
+
               if (!ide_str_empty0 (env_name) && !ide_str_empty0 (env_value))
                 {
                   g_autofree gchar *env_option = NULL;
+
                   env_option = g_strdup_printf ("--env=%s=%s", env_name, env_value);
                   ide_subprocess_launcher_push_argv (ret, env_option);
                 }
@@ -240,12 +247,14 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       if (!ide_str_empty0 (cflags))
         {
           g_autofree gchar *cflags_option = NULL;
+
           cflags_option = g_strdup_printf ("--env=CFLAGS=%s", cflags);
           ide_subprocess_launcher_push_argv (ret, cflags_option);
         }
       if (!ide_str_empty0 (cxxflags))
         {
           g_autofree gchar *cxxflags_option = NULL;
+
           cxxflags_option = g_strdup_printf ("--env=CXXFLAGS=%s", cxxflags);
           ide_subprocess_launcher_push_argv (ret, cxxflags_option);
         }
@@ -274,6 +283,7 @@ get_binary_name (GbpFlatpakRuntime *self,
   if (GBP_IS_FLATPAK_CONFIGURATION (config))
     {
       const gchar *command;
+
       command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
       if (!ide_str_empty0 (command))
         return g_strdup (command);
@@ -282,6 +292,7 @@ get_binary_name (GbpFlatpakRuntime *self,
   /* Use the build target name if there's no command in the manifest */
   {
     g_autofree gchar *build_target_name = NULL;
+
     build_target_name = ide_build_target_get_name (build_target);
     if (!ide_str_empty0 (build_target_name))
       return g_steal_pointer (&build_target_name);
@@ -290,6 +301,7 @@ get_binary_name (GbpFlatpakRuntime *self,
   /* Use the project name as a last resort */
   {
     IdeProject *project;
+
     project = ide_context_get_project (context);
     return g_strdup (ide_project_get_name (project));
   }
