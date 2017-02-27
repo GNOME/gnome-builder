@@ -209,12 +209,15 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, "--share=network");
       if (!ide_str_empty0 (project_path))
         {
-          g_autofree gchar *filesystem_option = NULL;
+          g_autofree gchar *filesystem_option_src = NULL;
+          g_autofree gchar *filesystem_option_build = NULL;
           g_autofree gchar *build_dir_option = NULL;
-          filesystem_option = g_strdup_printf ("--filesystem=%s", project_path);
+          filesystem_option_src = g_strdup_printf ("--filesystem=%s", project_path);
+          filesystem_option_build = g_strdup_printf ("--filesystem=%s", builddir);
           build_dir_option = g_strdup_printf ("--build-dir=%s", builddir);
           ide_subprocess_launcher_push_argv (ret, "--nofilesystem=host");
-          ide_subprocess_launcher_push_argv (ret, filesystem_option);
+          ide_subprocess_launcher_push_argv (ret, filesystem_option_src);
+          ide_subprocess_launcher_push_argv (ret, filesystem_option_build);
           ide_subprocess_launcher_push_argv (ret, build_dir_option);
         }
       if (env_vars != NULL)
