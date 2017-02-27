@@ -25,6 +25,8 @@
         "--system-talk-name=org.freedesktop.PolicyKit1",
         /* Needs access to host sysprofd for profiling */
         "--system-talk-name=org.gnome.Sysprof2",
+        /* Needs access to host gnome-code-assistance for extra languages */
+        "--talk-name=org.gnome.CodeAssist.v1.*",
         /* Needed for dconf to work (+ host or homedir read access from above) */
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
