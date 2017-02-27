@@ -145,18 +145,16 @@ ide_application_actions_help (GSimpleAction *action,
 {
   IdeApplication *self = user_data;
   GtkWindow *focused_window= NULL;
-  GdkScreen *screen = NULL;
   GError *err = NULL;
 
   g_assert (IDE_IS_APPLICATION (self));
 
   focused_window = gtk_application_get_active_window (GTK_APPLICATION (self));
 
-  screen = gtk_window_get_screen (focused_window);
-  gtk_show_uri (screen,
-                "help:gnome-builder",
-                gtk_get_current_event_time (),
-                &err);
+  gtk_show_uri_on_window (focused_window,
+                          "help:gnome-builder",
+                          gtk_get_current_event_time (),
+                          &err);
   if (err)
     {
       g_message ("Unable to open help: %s\n", err->message);

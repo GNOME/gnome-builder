@@ -182,8 +182,19 @@ gb_terminal_button_press_event (GtkWidget      *widget,
       pattern = vte_terminal_match_check_event (VTE_TERMINAL (self), (GdkEvent *)button, NULL);
 
       if (pattern != NULL)
-        gtk_show_uri (gtk_widget_get_screen (widget), pattern,
-                      gtk_get_current_event_time (), NULL);
+        {
+          GtkApplication *app;
+          GtkWindow *focused_window;
+
+          if (NULL != (app = GTK_APPLICATION (g_application_get_default ())) &&
+              NULL != (focused_window = gtk_application_get_active_window (app)))
+            {
+              gtk_show_uri_on_window (focused_window,
+                                      pattern,
+                                      gtk_get_current_event_time (),
+                                      NULL);
+            }
+        }
 
       return GDK_EVENT_STOP;
     }
@@ -222,16 +233,25 @@ gb_terminal_copy_link_address (GbTerminal *self)
 static gboolean
 gb_terminal_open_link (GbTerminal *self)
 {
+  GtkApplication *app;
+  GtkWindow *focused_window;
+
   g_assert (GB_IS_TERMINAL (self));
   g_assert (self->url != NULL);
 
   if (ide_str_empty0 (self->url))
     return FALSE;
 
-  return gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (self)),
-                       self->url,
-                       gtk_get_current_event_time (),
-                       NULL);
+  if (NULL != (app = GTK_APPLICATION (g_application_get_default ())) &&
+      NULL != (focused_window = gtk_application_get_active_window (app)))
+    {
+      return gtk_show_uri_on_window (focused_window,
+                                     self->url,
+                                     gtk_get_current_event_time (),
+                                     NULL);
+    }
+  else
+    return FALSE;
 }
 
 static void
