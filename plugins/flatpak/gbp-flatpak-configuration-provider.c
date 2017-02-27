@@ -146,15 +146,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
           new_runtime_parts = g_strsplit (new_runtime_id + 8, "/", 3);
           if (new_runtime_parts[0] != NULL)
             new_runtime_name = new_runtime_parts[0];
+
           if (new_runtime_parts[2] != NULL)
             new_runtime_version = new_runtime_parts[2];
         }
 
       new_config_opts_string = g_strdup (ide_configuration_get_config_opts (IDE_CONFIGURATION (configuration)));
       if (!ide_str_empty0 (new_config_opts_string))
-        {
-          new_config_opts = g_strsplit (g_strstrip (new_config_opts_string), " ", 0);
-        }
+        new_config_opts = g_strsplit (g_strstrip (new_config_opts_string), " ", 0);
 
       new_environ = ide_configuration_get_environ (IDE_CONFIGURATION (configuration));
 
@@ -185,6 +184,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
               g_task_return_error (task, error);
               IDE_EXIT;
             }
+
           if (line == NULL)
             break;
 
@@ -192,6 +192,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
           if (!in_primary_module)
             {
               g_autoptr(GMatchInfo) match_info = NULL;
+
               g_regex_match (primary_module_regex, line, 0, &match_info);
               if (g_match_info_matches (match_info))
                 {
@@ -212,12 +213,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
           if (!ide_str_empty0 (new_runtime_name))
             {
               g_autoptr(GMatchInfo) match_info = NULL;
+
               g_regex_match (runtime_regex, line, 0, &match_info);
               if (g_match_info_matches (match_info))
                 {
                   gchar *old_runtime_ptr;
                   gchar *new_line;
                   g_autofree gchar *id = NULL;
+
                   id = g_match_info_fetch_named (match_info, "id");
                   old_runtime_ptr = g_strstr_len (line, -1, id);
                   *old_runtime_ptr = '\0';
@@ -231,12 +234,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
           if (!ide_str_empty0 (new_runtime_version))
             {
               g_autoptr(GMatchInfo) match_info = NULL;
+
               g_regex_match (runtime_version_regex, line, 0, &match_info);
               if (g_match_info_matches (match_info))
                 {
                   gchar *old_runtime_version_ptr;
                   gchar *new_line;
                   g_autofree gchar *version = NULL;
+
                   version = g_match_info_fetch_named (match_info, "version");
                   old_runtime_version_ptr = g_strstr_len (line, -1, version);
                   *old_runtime_version_ptr = '\0';
@@ -250,29 +255,29 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
           if (!in_build_options && !build_options_replaced)
             {
               g_autoptr(GMatchInfo) match_info = NULL;
+
               g_regex_match (build_options_regex, line, 0, &match_info);
               if (g_match_info_matches (match_info))
-                {
-                  in_build_options = TRUE;
-                }
+                in_build_options = TRUE;
             }
           else if (in_build_options)
             {
               if (g_strstr_len (line, -1, "{") != NULL)
                 nested_curly_braces++;
+
               if (g_strstr_len (line, -1, "}") == NULL)
                 {
                   if (build_options_indent == NULL)
                     {
                       g_autoptr(GRegex) build_options_internal_regex = NULL;
                       g_autoptr(GMatchInfo) match_info = NULL;
+
                       build_options_internal_regex = g_regex_new ("^(\\s*)\".+\"\\s*:.*$", 0, 0, NULL);
                       g_regex_match (build_options_internal_regex, line, 0, &match_info);
                       if (g_match_info_matches (match_info))
-                        {
-                          build_options_indent = g_match_info_fetch (match_info, 1);
-                        }
+                        build_options_indent = g_match_info_fetch (match_info, 1);
                     }
+
                   /* Discard the line because it will be replaced with new info */
                   g_free (line);
                   continue;
@@ -295,11 +300,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                           g_autofree gchar *cflags_line = NULL;
                           g_autofree gchar *cxxflags_line = NULL;
                           g_autoptr(GPtrArray) env_lines = NULL;
+
                           if (build_options_indent == NULL)
                             build_options_indent = g_strdup ("        ");
+
                           for (guint j = 0; new_environ[j]; j++)
                             {
                               g_auto(GStrv) line_parts = NULL;
+
                               line_parts = g_strsplit (new_environ[j], "=", 2);
                               if (g_strcmp0 (line_parts[0], "CFLAGS") == 0)
                                 {
@@ -322,6 +330,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                                       env_lines = g_ptr_array_new_with_free_func (g_free);
                                       g_ptr_array_add (env_lines, g_strdup_printf ("%s\"env\": {", build_options_indent));
                                     }
+
                                   g_ptr_array_add (env_lines, g_strdup_printf ("%s    \"%s\": \"%s\"",
                                                                                build_options_indent,
                                                                                line_parts[0],
@@ -331,18 +340,23 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                           if (cflags_line != NULL)
                             {
                               gchar *line_ending;
+
                               line_ending = (!ide_str_empty0 (new_prefix) || cxxflags_line != NULL || env_lines != NULL) ? "," : "";
                               g_ptr_array_add (new_lines, g_strdup_printf ("%s%s", cflags_line, line_ending));
                             }
+
                           if (cxxflags_line != NULL)
                             {
                               gchar *line_ending;
+
                               line_ending = (!ide_str_empty0 (new_prefix) || env_lines != NULL) ? "," : "";
                               g_ptr_array_add (new_lines, g_strdup_printf ("%s%s", cxxflags_line, line_ending));
                             }
+
                           if (!ide_str_empty0 (new_prefix))
                             {
                               gchar *line_ending;
+
                               line_ending = (env_lines != NULL) ? "," : "";
                               g_ptr_array_add (new_lines, g_strdup_printf ("%s\"prefix\": \"%s\"%s",
                                                                            build_options_indent,
@@ -356,12 +370,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                                 {
                                   gchar *env_line;
                                   gchar *line_ending;
+
                                   line_ending = (j > 0 && j < env_lines->len - 2) ? "," : "";
                                   env_line = (gchar *)g_ptr_array_index (env_lines, j);
                                   g_ptr_array_add (new_lines, g_strdup_printf ("%s%s", env_line, line_ending));
                                 }
                             }
                         }
+
                        in_build_options = FALSE;
                        build_options_replaced = TRUE;
                     }
@@ -416,10 +432,12 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                           else
                             {
                               g_auto(GStrv) line_parts = NULL;
+
                               line_parts = g_strsplit (line, "\"", 0);
                               opts_per_line = (g_strv_length (line_parts) - 3) / 2;
                               opts_per_line = (opts_per_line > 0) ? opts_per_line : 1;
                             }
+
                           g_free (line);
                           continue;
                         }
@@ -443,13 +461,16 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                   else
                     {
                       gchar *array_suffix;
+
                       array_suffix = *(right_bracket - 1) == ' ' ? " ]" : "]";
                       if (config_opt_indent == NULL)
                         {
                           g_auto(GStrv) line_parts = NULL;
+
                           line_parts = g_strsplit (line, "\"", 0);
                           config_opt_indent = g_strdup (line_parts[0]);
                         }
+
                       for (guint j = 0; g_strv_length (new_config_opts) > j; j += opts_per_line)
                         {
                           g_autoptr(GPtrArray) config_opts_subset = NULL;
@@ -463,12 +484,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                           config_opts_subset = g_ptr_array_new ();
                           for (guint k = 0; k < opts_per_line && new_config_opts[j+k]; ++k)
                             g_ptr_array_add (config_opts_subset, new_config_opts[j+k]);
+
                           g_ptr_array_add (config_opts_subset, NULL);
                           opts_this_line = g_strjoinv ("\", \"", (gchar **)config_opts_subset->pdata);
 
                           new_line = g_strdup_printf ("%s\"%s\"%s,", prefix, opts_this_line, suffix);
                           g_ptr_array_add (new_lines, new_line);
                         }
+
                       /* Discard the line that was just replaced with the new config-opts array */
                       g_free (line);
                       continue;
@@ -684,6 +707,7 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
         g_ptr_array_remove_fast (self->configurations, relevant_config);
         g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
         break;
+
     case G_FILE_MONITOR_EVENT_RENAMED:
         filename = g_file_get_basename (other_file);
         /* The "rename" is just a temporary file created by an editor */
@@ -699,14 +723,17 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
         path = g_file_get_path (new_config_file);
         filename = g_file_get_basename (new_config_file);
         id = get_manifest_id (path, filename);
+
         if (!contains_id (self->configurations, id))
           {
             g_autoptr(GbpFlatpakConfiguration) new_config = NULL;
+
             new_config = gbp_flatpak_configuration_new (context, id, filename);
             if (gbp_flatpak_configuration_load_from_file (new_config, new_config_file))
               {
                 g_autoptr(GFileMonitor) manifest_monitor = NULL;
                 g_autoptr(GError) local_error = NULL;
+
                 g_signal_connect_object (new_config,
                                          "changed",
                                          G_CALLBACK (gbp_flatpak_configuration_provider_config_changed),
@@ -725,6 +752,7 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
                                              G_CONNECT_SWAPPED);
                     g_ptr_array_add (self->manifest_monitors, g_steal_pointer (&manifest_monitor));
                   }
+
                 ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
                 g_ptr_array_remove_fast (self->configurations, relevant_config);
                 g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
@@ -1015,6 +1043,7 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider,
 
   if (self->cancellable != NULL)
     g_cancellable_cancel (self->cancellable);
+
   g_clear_object (&self->cancellable);
 
   ide_clear_weak_pointer (&self->manager);
