@@ -129,16 +129,11 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
   if (ret != NULL)
     {
-      g_autofree gchar *manifest_path = NULL;
       g_autofree gchar *project_name = NULL;
       g_autofree gchar *project_path = NULL;
       g_autofree gchar *build_path = NULL;
+      g_auto(GStrv) new_environ = NULL;
       const gchar *builddir = NULL;
-      const gchar *cflags = NULL;
-      const gchar *cxxflags = NULL;
-      JsonObject *env_vars = NULL;
-      JsonParser *parser = NULL;
-      GFile *manifest;
       GFile *project_file;
       IdeContext *context;
       IdeConfigurationManager *config_manager;
@@ -150,39 +145,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
       build_path = get_staging_directory (self);
       builddir = get_builddir (self);
-
-      /* Attempt to parse the flatpak manifest */
-      if (GBP_IS_FLATPAK_CONFIGURATION (configuration) &&
-          NULL != (manifest = gbp_flatpak_configuration_get_manifest (GBP_FLATPAK_CONFIGURATION (configuration))) &&
-          NULL != (manifest_path = g_file_get_path (manifest)))
-        {
-          GError *json_error = NULL;
-          JsonObject *root_object;
-
-          parser = json_parser_new ();
-          json_parser_load_from_file (parser, manifest_path, &json_error);
-          if (json_error)
-            g_debug ("Error parsing flatpak manifest %s: %s", manifest_path, json_error->message);
-          else
-            {
-              root_object = json_node_get_object (json_parser_get_root (parser));
-              if (root_object != NULL && json_object_has_member (root_object, "build-options"))
-                {
-                  JsonObject *build_options = NULL;
-
-                  build_options = json_object_get_object_member (root_object, "build-options");
-                  if (build_options != NULL)
-                    {
-                      if (json_object_has_member (build_options, "cflags"))
-                        cflags = json_object_get_string_member (build_options, "cflags");
-                      if (json_object_has_member (build_options, "cxxflags"))
-                        cxxflags = json_object_get_string_member (build_options, "cxxflags");
-                      if (json_object_has_member (build_options, "env"))
-                        env_vars = json_object_get_object_member (build_options, "env");
-                    }
-                }
-            }
-        }
 
       /* Find the project directory path */
       project_file = ide_context_get_project_file (context);
@@ -224,39 +186,19 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           ide_subprocess_launcher_push_argv (ret, filesystem_option_build);
           ide_subprocess_launcher_push_argv (ret, build_dir_option);
         }
-      if (env_vars != NULL)
+      new_environ = ide_configuration_get_environ (IDE_CONFIGURATION (configuration));
+      if (g_strv_length (new_environ) > 0)
         {
-          g_autoptr(GList) env_list = NULL;
-          GList *l;
-
-          env_list = json_object_get_members (env_vars);
-          for (l = env_list; l != NULL; l = l->next)
+          for (guint i = 0; new_environ[i]; i++)
             {
-              const gchar *env_name = (gchar *)l->data;
-              const gchar *env_value = json_object_get_string_member (env_vars, env_name);
-
-              if (!ide_str_empty0 (env_name) && !ide_str_empty0 (env_value))
+              if (g_utf8_strlen (new_environ[i], -1) > 1)
                 {
                   g_autofree gchar *env_option = NULL;
 
-                  env_option = g_strdup_printf ("--env=%s=%s", env_name, env_value);
+                  env_option = g_strdup_printf ("--env=%s", new_environ[i]);
                   ide_subprocess_launcher_push_argv (ret, env_option);
                 }
             }
-        }
-      if (!ide_str_empty0 (cflags))
-        {
-          g_autofree gchar *cflags_option = NULL;
-
-          cflags_option = g_strdup_printf ("--env=CFLAGS=%s", cflags);
-          ide_subprocess_launcher_push_argv (ret, cflags_option);
-        }
-      if (!ide_str_empty0 (cxxflags))
-        {
-          g_autofree gchar *cxxflags_option = NULL;
-
-          cxxflags_option = g_strdup_printf ("--env=CXXFLAGS=%s", cxxflags);
-          ide_subprocess_launcher_push_argv (ret, cxxflags_option);
         }
 
       /* We want the configure step to be separate so IdeAutotoolsBuildTask can pass options to it */
@@ -265,8 +207,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, build_path);
 
       ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-
-      g_clear_object (&parser);
     }
 
   return ret;
