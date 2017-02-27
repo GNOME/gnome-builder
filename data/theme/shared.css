@@ -3,6 +3,11 @@ filechooser actionbar button.combo {
   padding: 0;
 }
 
+/* Generic styles */
+.warning {
+    color: @warning_color;
+}
+
 /* styling for editor search */
 frame.gb-search-frame {
   background-image: linear-gradient(shade(@theme_bg_color,1.05), @theme_bg_color);
