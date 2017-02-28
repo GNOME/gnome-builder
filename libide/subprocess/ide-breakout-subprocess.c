@@ -1098,7 +1098,7 @@ host_command_exited_cb (GDBusConnection *connection,
     IDE_EXIT;
 
   g_variant_get (parameters, "(uu)", &client_pid, &exit_status);
-  if (client_pid != self->client_pid)
+  if (client_pid != (guint32)self->client_pid)
     IDE_EXIT;
 
   locker = g_mutex_locker_new (&self->waiter_mutex);
