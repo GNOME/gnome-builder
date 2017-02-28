@@ -9,12 +9,12 @@ include the following:
 
  • Lots of transfer engine improvements
  • Omnibar styling changes
- • Support for flatpak has stablized a great deal
+ • Support for flatpak has stabilized a great deal
  • New keyboard tooltips for various headerbar items
  • Search within the terminal using ctrl+shift+f
  • PTY fd ownership fixes for RustUp
- • File search now ignores whitespace
- • libidemm and glibmm/gtkmm dependencies were dropped as nobodoy was using
+ • File search now ignores white-space
+ • libidemm and glibmm/gtkmm dependencies were dropped as nobody was using
    them and it will slow our migration to meson.
  • Various Jsonrpc improvements for language server communication.
  • A new valgrind plugin for leak tracking when testing your application.
@@ -37,7 +37,7 @@ include the following:
  • The Flatpak plugin no longer tries to build your project from
    /run/build/$project due to breaking mtime and general difficulty
    in keeping things consistent between subprocess executions.
-   This has the side-effect of reducing the predicability of source
+   This has the side-effect of reducing the predictability of source
    location in debug symbols. But as flatpak-builder should be used for
    release builds, this seems fine.
  • Various workbench UI improvements.
