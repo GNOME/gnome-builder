@@ -18,11 +18,14 @@
 
 #define G_LOG_DOMAIN "ide-subprocess-launcher"
 
+#include <fcntl.h>
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "ide-debug.h"
@@ -44,6 +47,7 @@ typedef struct
   gchar            *cwd;
   gchar           **environ;
   GArray           *fd_mapping;
+  gchar            *stdout_file_path;
 
   gint              stdin_fd;
   gint              stdout_fd;
@@ -183,6 +187,9 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
   g_autoptr(IdeSubprocess) process = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GArray) fds = NULL;
+  gint stdin_fd = -1;
+  gint stdout_fd = -1;
+  gint stderr_fd = -1;
 
   IDE_ENTRY;
 
@@ -201,14 +208,25 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
 
   fds = g_steal_pointer (&priv->fd_mapping);
 
+  if (priv->stdin_fd != -1)
+    stdin_fd = dup (priv->stdin_fd);
+
+  if (priv->stdout_fd != -1)
+    stdout_fd = dup (priv->stdout_fd);
+  else if (priv->stdout_file_path != NULL)
+    stdout_fd = open (priv->stdout_file_path, O_WRONLY);
+
+  if (priv->stderr_fd != -1)
+    stderr_fd = dup (priv->stderr_fd);
+
   process = _ide_breakout_subprocess_new (priv->cwd,
                                           (const gchar * const *)priv->argv->pdata,
                                           (const gchar * const *)priv->environ,
                                           priv->flags,
                                           priv->clear_env,
-                                          priv->stdin_fd,
-                                          priv->stdout_fd,
-                                          priv->stderr_fd,
+                                          stdin_fd,
+                                          stdout_fd,
+                                          stderr_fd,
                                           fds ? (gpointer)fds->data : NULL,
                                           fds ? fds->len : 0,
                                           cancellable,
@@ -273,6 +291,9 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   launcher = g_subprocess_launcher_new (priv->flags);
   g_subprocess_launcher_set_child_setup (launcher, child_setup_func, NULL, NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
+
+  if (priv->stdout_file_path != NULL)
+    g_subprocess_launcher_set_stdout_file_path (launcher, priv->stdout_file_path);
 
   if (priv->stdin_fd != -1)
     {
@@ -402,15 +423,25 @@ ide_subprocess_launcher_finalize (GObject *object)
   g_clear_pointer (&priv->argv, g_ptr_array_unref);
   g_clear_pointer (&priv->cwd, g_free);
   g_clear_pointer (&priv->environ, g_strfreev);
+  g_clear_pointer (&priv->stdout_file_path, g_free);
 
   if (priv->stdin_fd != -1)
-    close (priv->stdin_fd);
+    {
+      close (priv->stdin_fd);
+      priv->stdin_fd = -1;
+    }
 
   if (priv->stdout_fd != -1)
-    close (priv->stdout_fd);
+    {
+      close (priv->stdout_fd);
+      priv->stdout_fd = -1;
+    }
 
   if (priv->stderr_fd != -1)
-    close (priv->stderr_fd);
+    {
+      close (priv->stderr_fd);
+      priv->stderr_fd = -1;
+    }
 
   G_OBJECT_CLASS (ide_subprocess_launcher_parent_class)->finalize (object);
 }

@@ -86,6 +86,8 @@ gchar                 *ide_subprocess_launcher_pop_argv            (IdeSubproces
 IdeSubprocess         *ide_subprocess_launcher_spawn               (IdeSubprocessLauncher  *self,
                                                                     GCancellable           *cancellable,
                                                                     GError                **error);
+void                   ide_subprocess_launcher_set_stdout_file_path(IdeSubprocessLauncher  *self,
+                                                                    const gchar            *stdout_file_path);
 void                   ide_subprocess_launcher_take_fd             (IdeSubprocessLauncher  *self,
                                                                     gint                    source_fd,
                                                                     gint                    dest_fd);
