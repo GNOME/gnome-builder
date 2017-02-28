@@ -133,7 +133,6 @@ gb_color_picker_document_monitor_uncolorize (GbColorPickerDocumentMonitor *self,
   GtkTextTag *color_tag;
   GtkTextTag *tag;
   GSList *l;
-  gint n;
 
   g_return_if_fail (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
   g_return_if_fail (self->buffer != NULL);
@@ -143,7 +142,7 @@ gb_color_picker_document_monitor_uncolorize (GbColorPickerDocumentMonitor *self,
     {
       taglist = g_ptr_array_new ();
       gtk_text_tag_table_foreach (tag_table, (GtkTextTagTableForeach)remove_color_tag_foreach_cb, taglist);
-      for (n = 0; n < taglist->len; ++n)
+      for (guint n = 0; n < taglist->len; ++n)
         gtk_text_tag_table_remove (tag_table, g_ptr_array_index (taglist, n));
 
       return;
@@ -204,7 +203,6 @@ gb_color_picker_document_monitor_colorize (GbColorPickerDocumentMonitor *self,
   GtkTextIter tag_end;
   gint offset;
   gint len;
-  gint n;
   gint pos;
 
   g_return_if_fail (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
@@ -227,7 +225,7 @@ gb_color_picker_document_monitor_colorize (GbColorPickerDocumentMonitor *self,
   text = gtk_text_buffer_get_slice (GTK_TEXT_BUFFER (self->buffer), &real_begin, &real_end, TRUE);
 
   items = gstyle_color_parse (text);
-  for (n = 0; n < items->len; ++n)
+  for (guint n = 0; n < items->len; ++n)
     {
       item = g_ptr_array_index (items, n);
       pos = offset + gstyle_color_item_get_start (item);
