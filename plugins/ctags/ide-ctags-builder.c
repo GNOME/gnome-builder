@@ -95,7 +95,7 @@ ide_ctags_builder_process_wait_cb (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
 {
-  GSubprocess *process = (GSubprocess *)object;
+  IdeSubprocess *process = (IdeSubprocess *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
@@ -104,7 +104,7 @@ ide_ctags_builder_process_wait_cb (GObject      *object,
   g_assert (G_IS_SUBPROCESS (process));
   g_assert (G_IS_TASK (task));
 
-  if (!g_subprocess_wait_finish (process, result, &error))
+  if (!ide_subprocess_wait_finish (process, result, &error))
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
@@ -120,9 +120,8 @@ ide_ctags_builder_build_worker (GTask        *task,
 {
   IdeCtagsBuilder *self = source_object;
   g_autoptr(GFile) workdir = NULL;
-  g_autoptr(GSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) process = NULL;
-  g_autoptr(GPtrArray) argv = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) process = NULL;
   g_autofree gchar *tags_file = NULL;
   g_autofree gchar *tags_filename = NULL;
   g_autofree gchar *workpath = NULL;
@@ -181,45 +180,40 @@ ide_ctags_builder_build_worker (GTask        *task,
   if (g_file_test (tags_file, G_FILE_TEST_EXISTS))
     g_unlink (tags_file);
 
-  argv = g_ptr_array_new_with_free_func (g_free);
-  g_ptr_array_add (argv, g_strdup (g_quark_to_string (self->ctags_path)));
-  g_ptr_array_add (argv, g_strdup ("-f"));
-  g_ptr_array_add (argv, g_strdup ("-"));
-  g_ptr_array_add (argv, g_strdup ("--recurse=yes"));
-  g_ptr_array_add (argv, g_strdup ("--tag-relative=no"));
-  g_ptr_array_add (argv, g_strdup ("--exclude=.git"));
-  g_ptr_array_add (argv, g_strdup ("--exclude=.bzr"));
-  g_ptr_array_add (argv, g_strdup ("--exclude=.svn"));
-  g_ptr_array_add (argv, g_strdup ("--sort=yes"));
-  g_ptr_array_add (argv, g_strdup ("--languages=all"));
-  g_ptr_array_add (argv, g_strdup ("--file-scope=yes"));
-  g_ptr_array_add (argv, g_strdup ("--c-kinds=+defgpstx"));
-  if (g_file_test (options_path, G_FILE_TEST_IS_REGULAR))
-    g_ptr_array_add (argv, g_strdup_printf ("--options=%s", options_path));
-  g_ptr_array_add (argv, g_strdup ("."));
-  g_ptr_array_add (argv, NULL);
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
 
-#ifdef IDE_ENABLE_TRACE
-  {
-    g_autofree gchar *msg = g_strjoinv (" ", (gchar **)argv->pdata);
-    IDE_TRACE_MSG ("%s", msg);
-  }
-#endif
+  ide_subprocess_launcher_push_argv (launcher, g_quark_to_string (self->ctags_path));
+  ide_subprocess_launcher_push_argv (launcher, "-f");
+  ide_subprocess_launcher_push_argv (launcher, "-");
+  ide_subprocess_launcher_push_argv (launcher, "--recurse=yes");
+  ide_subprocess_launcher_push_argv (launcher, "--tag-relative=no");
+  ide_subprocess_launcher_push_argv (launcher, "--exclude=.git");
+  ide_subprocess_launcher_push_argv (launcher, "--exclude=.bzr");
+  ide_subprocess_launcher_push_argv (launcher, "--exclude=.svn");
+  ide_subprocess_launcher_push_argv (launcher, "--sort=yes");
+  ide_subprocess_launcher_push_argv (launcher, "--languages=all");
+  ide_subprocess_launcher_push_argv (launcher, "--file-scope=yes");
+  ide_subprocess_launcher_push_argv (launcher, "--c-kinds=+defgpstx");
+  if (g_file_test (options_path, G_FILE_TEST_IS_REGULAR))
+    {
+      ide_subprocess_launcher_push_argv (launcher, "--options");
+      ide_subprocess_launcher_push_argv (launcher, options_path);
+    }
+  ide_subprocess_launcher_push_argv (launcher, ".");
 
   /*
    * Create our arguments to launch the ctags generation process.
    */
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
-  g_subprocess_launcher_set_cwd (launcher, workpath);
-  g_subprocess_launcher_set_stdout_file_path (launcher, tags_file);
+  ide_subprocess_launcher_set_cwd (launcher, workpath);
+  ide_subprocess_launcher_set_stdout_file_path (launcher, tags_file);
   /*
    * ctags can sometimes write to TMPDIR for incremental writes so that it
    * can sort internally. On large files this can cause us to run out of
    * tmpfs. Instead, just use the home dir which should map to something
    * that is persistent.
    */
-  g_subprocess_launcher_setenv (launcher, "TMPDIR", tagsdir, TRUE);
-  process = g_subprocess_launcher_spawnv (launcher, (const gchar * const *)argv->pdata, &error);
+  ide_subprocess_launcher_setenv (launcher, "TMPDIR", tagsdir, TRUE);
+  process = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
   EGG_COUNTER_INC (parse_count);
 
@@ -231,10 +225,10 @@ ide_ctags_builder_build_worker (GTask        *task,
 
   g_task_set_task_data (task, g_file_new_for_path (tags_file), g_object_unref);
 
-  g_subprocess_wait_async (process,
-                           cancellable,
-                           ide_ctags_builder_process_wait_cb,
-                           g_object_ref (task));
+  ide_subprocess_wait_async (process,
+                             cancellable,
+                             ide_ctags_builder_process_wait_cb,
+                             g_object_ref (task));
 
   IDE_EXIT;
 }
