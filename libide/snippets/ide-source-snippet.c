@@ -115,7 +115,6 @@ ide_source_snippet_copy (IdeSourceSnippet *self)
 {
   IdeSourceSnippetChunk *chunk;
   IdeSourceSnippet *ret;
-  gint i;
 
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET (self), NULL);
 
@@ -126,7 +125,7 @@ ide_source_snippet_copy (IdeSourceSnippet *self)
                       "snippet-text", self->snippet_text,
                       NULL);
 
-  for (i = 0; i < self->chunks->len; i++)
+  for (guint i = 0; i < self->chunks->len; i++)
     {
       chunk = g_ptr_array_index (self->chunks, i);
       chunk = ide_source_snippet_chunk_copy (chunk);
@@ -256,14 +255,13 @@ ide_source_snippet_get_index (IdeSourceSnippet *self,
 {
   gint offset;
   gint run;
-  gint i;
 
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET (self), 0);
   g_return_val_if_fail (iter, 0);
 
   offset = ide_source_snippet_get_offset (self, iter);
 
-  for (i = 0; i < self->runs->len; i++)
+  for (guint i = 0; i < self->runs->len; i++)
     {
       run = g_array_index (self->runs, gint, i);
       offset -= run;
@@ -274,7 +272,7 @@ ide_source_snippet_get_index (IdeSourceSnippet *self,
            *       instead of textmarks (which gives us lots of gravity grief).
            *       We guess which snippet it is based on the current chunk.
            */
-          if ((i + 1) == self->current_chunk)
+          if (self->current_chunk > -1 && (i + 1) == (guint)self->current_chunk)
             return (i + 1);
           return i;
         }
@@ -386,7 +384,7 @@ ide_source_snippet_select_chunk (IdeSourceSnippet *self,
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
   g_return_if_fail (n >= 0);
-  g_return_if_fail (n < self->runs->len);
+  g_return_if_fail ((guint)n < self->runs->len);
 
   ide_source_snippet_get_nth_chunk_range (self, n, &begin, &end);
 
@@ -591,7 +589,6 @@ ide_source_snippet_begin (IdeSourceSnippet *self,
 {
   IdeSourceSnippetContext *context;
   gboolean ret;
-  gint i;
 
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET (self), FALSE);
   g_return_val_if_fail (!self->buffer, FALSE);
@@ -615,7 +612,7 @@ ide_source_snippet_begin (IdeSourceSnippet *self,
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  for (i = 0; i < self->chunks->len; i++)
+  for (guint i = 0; i < self->chunks->len; i++)
     {
       IdeSourceSnippetChunk *chunk;
       const gchar *text;
@@ -873,10 +870,14 @@ ide_source_snippet_before_delete_range (IdeSourceSnippet *self,
   g_return_if_fail (end);
 
   len = gtk_text_iter_get_offset (end) - gtk_text_iter_get_offset (begin);
+
   n = ide_source_snippet_get_index (self, begin);
+  if (n < 0)
+    IDE_EXIT;
+
   self->current_chunk = n;
 
-  while (len && n < self->runs->len)
+  while (len != 0 && (guint)n < self->runs->len)
     {
       if (lower_bound == -1 || n < lower_bound)
         lower_bound = n;
