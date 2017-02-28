@@ -569,7 +569,7 @@ ide_build_pipeline_get_phase (IdeBuildPipeline *self)
     return IDE_BUILD_PHASE_NONE;
   else if (self->failed)
     return IDE_BUILD_PHASE_FAILED;
-  else if (self->position < self->pipeline->len)
+  else if ((guint)self->position < self->pipeline->len)
     return g_array_index (self->pipeline, PipelineEntry, self->position).phase & IDE_BUILD_PHASE_MASK;
   else
     return IDE_BUILD_PHASE_FINISHED;
@@ -1168,7 +1168,7 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
    * will handle all of that for us, in cause they call ide_build_stage_pause()
    * during the ::query callback.
    */
-  for (self->position++; self->position < self->pipeline->len; self->position++)
+  for (self->position++; (guint)self->position < self->pipeline->len; self->position++)
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, self->position);
 
@@ -1637,7 +1637,7 @@ ide_build_pipeline_request_phase (IdeBuildPipeline *self,
     {
       const GFlagsValue *value = &klass->values[i];
 
-      if (phase == value->value)
+      if ((guint)phase == value->value)
         {
           IDE_TRACE_MSG ("requesting pipeline phase %s", value->value_nick);
           /*
@@ -2329,7 +2329,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
 
       if (value->value & phase)
         {
-          if (value->value < min_phase)
+          if (value->value < (guint)min_phase)
             min_phase = value->value;
         }
     }
