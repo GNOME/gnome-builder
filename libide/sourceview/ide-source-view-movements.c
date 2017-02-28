@@ -528,11 +528,11 @@ ide_source_view_movements_next_line (Movement *mv)
       target_line = gtk_text_iter_get_line (&mv->insert) + 1;
       gtk_text_iter_set_line (&mv->insert, target_line);
 
-      if (target_line != gtk_text_iter_get_line (&mv->insert))
-      {
-        gtk_text_buffer_get_end_iter (buffer, &mv->insert);
-        goto select_to_end;
-      }
+      if (target_line != (guint)gtk_text_iter_get_line (&mv->insert))
+        {
+          gtk_text_buffer_get_end_iter (buffer, &mv->insert);
+          goto select_to_end;
+        }
 
       select_range (mv, &mv->insert, &mv->selection);
       ensure_anchor_selected (mv);
@@ -614,7 +614,7 @@ ide_source_view_movements_previous_line (Movement *mv)
     }
 
   gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line - 1);
-  if ((line - 1) == gtk_text_iter_get_line (&mv->insert))
+  if (line == ((guint)gtk_text_iter_get_line (&mv->insert) + 1))
     {
       gtk_text_buffer_get_iter_at_line_offset (buffer, &mv->insert, line - 1, offset);
 
@@ -819,7 +819,7 @@ ide_source_view_movements_move_page (Movement *mv)
   line_bottom = gtk_text_iter_get_line (&iter_bottom);
 
   half_page_vertical = MAX (1, (line_bottom - line_top) / 2);
-  scrolloff = MIN (ide_source_view_get_scroll_offset (mv->self), half_page_vertical);
+  scrolloff = MIN (ide_source_view_get_scroll_offset (mv->self), (guint)half_page_vertical);
 
   hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (mv->self));
   gtk_text_view_get_iter_location (text_view, &mv->insert, &rect);
