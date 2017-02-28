@@ -220,6 +220,17 @@ cache_item_new (EggTaskCache  *self,
   return ret;
 }
 
+static gpointer
+egg_task_cache_dummy_copy_func (gpointer boxed)
+{
+  return boxed;
+}
+
+static void
+egg_task_cache_dummy_destroy_func (gpointer boxed)
+{
+}
+
 static gboolean
 egg_task_cache_evict_full (EggTaskCache  *self,
                            gconstpointer  key,
@@ -592,9 +603,7 @@ egg_task_cache_constructed (GObject *object)
 
   G_OBJECT_CLASS (egg_task_cache_parent_class)->constructed (object);
 
-  if ((self->key_copy_func == NULL) ||
-      (self->key_destroy_func == NULL) ||
-      (self->key_equal_func == NULL) ||
+  if ((self->key_equal_func == NULL) ||
       (self->key_hash_func == NULL) ||
       (self->value_copy_func == NULL) ||
       (self->value_destroy_func == NULL) ||
@@ -603,6 +612,12 @@ egg_task_cache_constructed (GObject *object)
       g_error ("EggTaskCache was configured improperly.");
       return;
     }
+
+  if (self->key_copy_func == NULL)
+    self->key_copy_func = egg_task_cache_dummy_copy_func;
+
+  if (self->key_destroy_func == NULL)
+    self->key_destroy_func = egg_task_cache_dummy_destroy_func;
 
   /*
    * This is where the cached result objects live.
@@ -880,8 +895,6 @@ egg_task_cache_new (GHashFunc            key_hash_func,
 {
   g_return_val_if_fail (key_hash_func, NULL);
   g_return_val_if_fail (key_equal_func, NULL);
-  g_return_val_if_fail (key_copy_func, NULL);
-  g_return_val_if_fail (key_destroy_func, NULL);
   g_return_val_if_fail (populate_callback, NULL);
 
   return g_object_new (EGG_TYPE_TASK_CACHE,
