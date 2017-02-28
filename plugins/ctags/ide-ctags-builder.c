@@ -204,6 +204,7 @@ ide_ctags_builder_build_worker (GTask        *task,
   /*
    * Create our arguments to launch the ctags generation process.
    */
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_cwd (launcher, workpath);
   ide_subprocess_launcher_set_stdout_file_path (launcher, tags_file);
   /*
