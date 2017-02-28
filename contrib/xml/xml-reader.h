@@ -48,7 +48,7 @@ gboolean              xml_reader_load_from_file          (XmlReader     *reader,
                                                           GError       **error);
 gboolean              xml_reader_load_from_data          (XmlReader     *reader,
                                                           const gchar   *data,
-                                                          gsize          length,
+                                                          gssize         length,
                                                           const gchar   *uri,
                                                           const gchar   *encoding);
 gboolean              xml_reader_load_from_stream        (XmlReader     *reader,
