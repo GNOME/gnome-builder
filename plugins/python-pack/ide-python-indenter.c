@@ -419,12 +419,11 @@ indent_parens (IdePythonIndenter *python,
       (gtk_text_iter_get_line (iter) == gtk_text_iter_get_line (&copy)))
     {
       guint offset;
-      gint i;
 
       offset = gtk_text_iter_get_line_offset (iter);
 
       str = g_string_new (NULL);
-      for (i = 0; i <= offset; i++)
+      for (guint i = 0; i <= offset; i++)
         g_string_append (str, " ");
       return g_string_free (str, FALSE);
     }
@@ -610,7 +609,7 @@ maybe_unindent_else_or_elif (IdePythonIndenter *python,
 
       line_offset = gtk_text_iter_get_line_offset (&copy);
       move_first_nonspace_char (&copy);
-      if (line_offset != gtk_text_iter_get_line_offset (&copy))
+      if (line_offset != (guint)gtk_text_iter_get_line_offset (&copy))
         IDE_GOTO (failure);
     }
 
