@@ -316,7 +316,7 @@ egg_heap_extract (EggHeap  *heap,
 
 gboolean
 egg_heap_extract_index (EggHeap  *heap,
-                        guint     index_,
+                        gsize     index_,
                         gpointer  result)
 {
   EggHeapReal *real = (EggHeapReal *)heap;

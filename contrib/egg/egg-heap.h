@@ -47,7 +47,7 @@ void       egg_heap_insert_vals   (EggHeap        *heap,
 gboolean   egg_heap_extract       (EggHeap        *heap,
                                    gpointer        result);
 gboolean   egg_heap_extract_index (EggHeap        *heap,
-                                   guint           index_,
+                                   gsize           index_,
                                    gpointer        result);
 
 G_END_DECLS
