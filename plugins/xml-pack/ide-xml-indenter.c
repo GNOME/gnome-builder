@@ -411,8 +411,12 @@ ide_xml_indenter_format (IdeIndenter *indenter,
     }
 
   xml->tab_width = tab_width;
-  xml->indent_width = (indent_width <= 0) ? tab_width : indent_width;
   xml->use_tabs = !gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
+
+  if (indent_width <= 0)
+    xml->indent_width = tab_width;
+  else
+    xml->indent_width = indent_width;
 
   /* do nothing if we are in a cdata section */
   if (text_iter_in_cdata (begin))
