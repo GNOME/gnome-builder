@@ -138,7 +138,7 @@ view_populate_submenu (GbBeautifierWorkbenchAddin *self,
   g_menu_remove_all (default_menu);
 
   lang_id = gb_beautifier_helper_get_lang_id (self, view);
-  for (gint i = 0; i < entries->len; ++i)
+  for (guint i = 0; i < entries->len; ++i)
     {
       GbBeautifierConfigEntry *entry;
       g_autoptr(GMenuItem) item = NULL;

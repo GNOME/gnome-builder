@@ -77,7 +77,7 @@ gb_beautifier_config_check_duplicates (GbBeautifierWorkbenchAddin *self,
   g_assert (!ide_str_empty0 (lang_id));
   g_assert (!ide_str_empty0 (display_name));
 
-  for (gint i = 0; i < entries->len; ++i)
+  for (guint i = 0; i < entries->len; ++i)
     {
       GbBeautifierConfigEntry *entry = &g_array_index (entries, GbBeautifierConfigEntry, i);
 
@@ -102,7 +102,7 @@ gb_beautifier_map_check_duplicates (GbBeautifierWorkbenchAddin *self,
   g_assert (map != NULL);
   g_assert (!ide_str_empty0 (lang_id));
 
-  for (gint i = 0; i < map->len; ++i)
+  for (guint i = 0; i < map->len; ++i)
     {
       GbBeautifierMapEntry *entry = &g_array_index (map, GbBeautifierMapEntry, i);
 
@@ -157,7 +157,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
 
   if (NULL != (profiles = g_key_file_get_groups (key_file, &nb_profiles)))
     {
-      for (gint i = 0; i < nb_profiles; ++i)
+      for (guint i = 0; i < nb_profiles; ++i)
         {
           g_autofree gchar *display_name = NULL;
           g_autofree gchar *command = NULL;
@@ -341,7 +341,7 @@ add_entries_from_base_path (GbBeautifierWorkbenchAddin *self,
                                                 FALSE))
             ret = TRUE;
 
-          for (gint i = 0; i < map->len; ++i)
+          for (guint i = 0; i < map->len; ++i)
             {
               entry = &g_array_index (map, GbBeautifierMapEntry, i);
               if (0 == g_strcmp0 (entry->mapped_lang_id, real_lang_id) &&
@@ -393,7 +393,7 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
   if (g_key_file_load_from_file (key_file, file_name, G_KEY_FILE_NONE, &error) &&
       NULL != (lang_ids = g_key_file_get_groups (key_file, &nb_lang_ids)))
     {
-      for (gint i = 0; i < nb_lang_ids; ++i)
+      for (guint i = 0; i < nb_lang_ids; ++i)
         {
           g_autofree gchar *mapped_lang_id = NULL;
           g_autofree gchar *default_profile = NULL;
