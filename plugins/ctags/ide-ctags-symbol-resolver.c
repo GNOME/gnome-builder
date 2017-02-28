@@ -141,7 +141,7 @@ calculate_offset (const gchar *data,
 
   ide_line_reader_init (&reader, (gchar *)data, length);
 
-  while (reader.pos < offset)
+  while (reader.pos < (gssize)offset)
     {
       gsize line_len;
 
