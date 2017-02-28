@@ -515,7 +515,7 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
     g_assert (self->typed_text_index >= 0);
 
     num_chunks = clang_getNumCompletionChunks (result->CompletionString);
-    g_assert (num_chunks > self->typed_text_index);
+    g_assert ((gint)num_chunks > self->typed_text_index);
 
     kind = clang_getCompletionChunkKind (result->CompletionString, self->typed_text_index);
     g_assert (kind == CXCompletionChunk_TypedText);
