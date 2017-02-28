@@ -2177,7 +2177,7 @@ is_key_vim_binded (GtkWidget       *widget,
   gtk_style_context_get (context, state, "gtk-key-bindings", &binding_set_array, NULL);
   if (binding_set_array)
     {
-      for (gint i = 0; i < binding_set_array->len; i++)
+      for (guint i = 0; i < binding_set_array->len; i++)
         {
           binding_set = g_ptr_array_index (binding_set_array, i);
           if (g_str_has_prefix (binding_set->set_name, "builder-vim"))
@@ -3203,7 +3203,6 @@ ide_source_view_real_insert_modifier (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
   gchar str[8] = { 0 };
-  gsize i;
   gint count = 1;
   gint len;
 
@@ -3221,7 +3220,7 @@ ide_source_view_real_insert_modifier (IdeSourceView *self,
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   gtk_text_buffer_begin_user_action (buffer);
-  for (i = 0; i < count; i++)
+  for (gint i = 0; i < count; i++)
     gtk_text_buffer_insert_at_cursor (buffer, str, len);
   gtk_text_buffer_end_user_action (buffer);
 }
@@ -4604,7 +4603,6 @@ ide_source_view_draw_snippets_background (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = GTK_TEXT_VIEW (self);
   GdkWindow *window;
-  gint len;
   gint width;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -4615,15 +4613,16 @@ ide_source_view_draw_snippets_background (IdeSourceView *self,
 
   gdk_cairo_set_source_rgba (cr, &priv->snippet_area_background_rgba);
 
-  len = priv->snippets->length;
-
   cairo_save (cr);
 
-  for (guint i = 0; i < len; i++)
+  for (guint i = 0; i < priv->snippets->length; i++)
     {
       IdeSourceSnippet *snippet = g_queue_peek_nth (priv->snippets, i);
 
-      ide_source_view_draw_snippet_background (self, cr, snippet, width - ((len - i) * 10));
+      ide_source_view_draw_snippet_background (self,
+                                               cr,
+                                               snippet,
+                                               width - ((priv->snippets->length - i) * 10));
     }
 
   cairo_restore (cr);
@@ -5172,7 +5171,6 @@ ide_source_view_real_replay_macro (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceViewCapture *capture;
   gint count = 1;
-  gsize i;
 
   IDE_ENTRY;
 
@@ -5200,7 +5198,7 @@ ide_source_view_real_replay_macro (IdeSourceView *self,
 
   priv->in_replay_macro = TRUE;
   capture = priv->capture, priv->capture = NULL;
-  for (i = 0; i < count; i++)
+  for (gint i = 0; i < count; i++)
     ide_source_view_capture_replay (capture);
   g_clear_object (&priv->capture);
   priv->capture = capture, capture = NULL;
@@ -7769,7 +7767,7 @@ ide_source_view_get_visible_rect (IdeSourceView *self,
 
       visible_lines = area.height / priv->cached_char_height;
       max_scroll_offset = (visible_lines - 1) / 2;
-      scroll_offset = MIN (priv->scroll_offset, max_scroll_offset);
+      scroll_offset = MIN ((gint)priv->scroll_offset, max_scroll_offset);
       scroll_offset_height = priv->cached_char_height * scroll_offset;
 
       area.y += scroll_offset_height;
@@ -7780,7 +7778,7 @@ ide_source_view_get_visible_rect (IdeSourceView *self,
        * desired scrolloffset, we need to remove an extra line so we don't have two
        * visible lines.
        */
-      if ((scroll_offset < priv->scroll_offset) && (visible_lines & 1) == 0)
+      if ((scroll_offset < (gint)priv->scroll_offset) && (visible_lines & 1) == 0)
         area.height -= priv->cached_char_height;
 
       /*
@@ -8028,7 +8026,7 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
 
       visible_lines = screen.height / priv->cached_char_height;
       max_scroll_offset = (visible_lines - 1) / 2;
-      scroll_offset = MIN (priv->scroll_offset, max_scroll_offset);
+      scroll_offset = MIN ((gint)priv->scroll_offset, max_scroll_offset);
       scroll_offset_height = priv->cached_char_height * scroll_offset;
 
       if (scroll_offset_height > 0)
