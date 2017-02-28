@@ -1336,7 +1336,10 @@ ide_c_indenter_format (IdeIndenter    *indenter,
     }
 
   c->tab_width = tab_width;
-  c->indent_width = (indent_width <= 0) ? tab_width : indent_width;
+  if (indent_width <= 0)
+    c->indent_width = tab_width;
+  else
+    c->indent_width = indent_width;
   c->use_tabs = !gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
 
   switch (event->keyval) {
