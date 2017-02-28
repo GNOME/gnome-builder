@@ -268,6 +268,9 @@ ide_diagnostic_take_range (IdeDiagnostic  *self,
     self->ranges = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_source_range_unref);
 
   g_ptr_array_add (self->ranges, range);
+
+  if (self->location == NULL)
+    self->location = ide_source_location_ref (ide_source_range_get_begin (range));
 }
 
 /**
