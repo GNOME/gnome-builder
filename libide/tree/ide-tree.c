@@ -203,7 +203,7 @@ ide_tree_popup (IdeTree        *self,
 
   if (priv->context_menu != NULL)
     {
-      for (gint i = 0; i < priv->builders->len; i++)
+      for (guint i = 0; i < priv->builders->len; i++)
         {
           IdeTreeBuilder *builder = g_ptr_array_index (priv->builders, i);
 
@@ -278,7 +278,6 @@ ide_tree_selection_changed (IdeTree         *self,
   GtkTreeIter iter;
   IdeTreeNode *node;
   IdeTreeNode *unselection;
-  gint i;
 
   IDE_ENTRY;
 
@@ -288,7 +287,7 @@ ide_tree_selection_changed (IdeTree         *self,
   if ((unselection = priv->selection))
     {
       priv->selection = NULL;
-      for (i = 0; i < priv->builders->len; i++)
+      for (guint i = 0; i < priv->builders->len; i++)
         {
           builder = g_ptr_array_index (priv->builders, i);
           _ide_tree_builder_node_unselected (builder, unselection);
@@ -300,7 +299,7 @@ ide_tree_selection_changed (IdeTree         *self,
       gtk_tree_model_get (model, &iter, 0, &node, -1);
       if (node)
         {
-          for (i = 0; i < priv->builders->len; i++)
+          for (guint i = 0; i < priv->builders->len; i++)
             {
               builder = g_ptr_array_index (priv->builders, i);
               _ide_tree_builder_node_selected (builder, node);
@@ -549,7 +548,6 @@ ide_tree_row_activated (GtkTreeView       *tree_view,
   GtkTreeIter iter;
   IdeTreeNode *node = NULL;
   gboolean handled = FALSE;
-  gint i;
 
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (path != NULL);
@@ -559,7 +557,7 @@ ide_tree_row_activated (GtkTreeView       *tree_view,
   if (gtk_tree_model_get_iter (model, &iter, path))
     {
       gtk_tree_model_get (model, &iter, 0, &node, -1);
-      for (i = 0; i < priv->builders->len; i++)
+      for (guint i = 0; i < priv->builders->len; i++)
         {
           builder = g_ptr_array_index (priv->builders, i);
           if ((handled = _ide_tree_builder_node_activated (builder, node)))
