@@ -60,6 +60,7 @@ tests_cflags =                                                  \
 	-I$(top_builddir)/libide                                \
 	-I$(top_srcdir)/contrib/pnl                             \
 	-I$(top_builddir)/contrib/pnl                           \
+	-I$(top_srcdir)/contrib/search                          \
 	$(NULL)
 
 tests_libs =                                                    \
@@ -192,8 +193,8 @@ test_cpu_graph_LDADD = $(rg_libs)
 
 misc_programs += test-fuzzy
 test_fuzzy_SOURCES = test-fuzzy.c
-test_fuzzy_CFLAGS = $(search_cflags)
-test_fuzzy_LDADD = $(search_libs)
+test_fuzzy_CFLAGS = $(tests_cflags)
+test_fuzzy_LDADD = $(tests_libs)
 
 
 misc_programs += test-egg-slider
