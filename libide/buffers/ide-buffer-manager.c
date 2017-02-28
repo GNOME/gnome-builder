@@ -412,14 +412,13 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
   IdeFile *file;
   GFile *gfile;
   gint position = -1;
-  gint i;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
-  for (i = 0; i < self->buffers->len; i++)
+  for (guint i = 0; i < self->buffers->len; i++)
     {
       if ((gpointer)buffer == g_ptr_array_index (self->buffers, i))
         {

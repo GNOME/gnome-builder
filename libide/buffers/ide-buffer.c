@@ -1874,7 +1874,7 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
 
           ide_buffer_get_iter_at_location (self, &pos, location);
 
-          if (line == gtk_text_iter_get_line (&pos))
+          if (line == (guint)gtk_text_iter_get_line (&pos))
             {
               guint offset;
 
