@@ -289,7 +289,7 @@ class RustupInstaller(Ide.Transfer):
         task = Gio.Task.new(self, cancellable, callback)
 
         launcher = Ide.SubprocessLauncher()
-        launcher.set_run_on_host(True)
+        launcher.set_run_on_host(False)
         launcher.set_clear_env(False)
 
         if self.mode == _MODE_INSTALL:
