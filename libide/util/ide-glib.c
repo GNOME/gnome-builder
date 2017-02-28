@@ -24,7 +24,7 @@
 
 typedef struct
 {
-  int type;
+  GType type;
   GTask *task;
   union {
     gboolean v_bool;
