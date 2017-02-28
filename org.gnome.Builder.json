@@ -1,11 +1,10 @@
 {
     "app-id": "org.gnome.Builder",
     "runtime": "org.gnome.Sdk",
-    "runtime-version": "master",
+    "runtime-version": "3.22",
+    "branch": "stable",
     "sdk": "org.gnome.Sdk",
     "command": "gnome-builder",
-    "tags": ["devel"],
-    "desktop-file-name-prefix": "(Development) ",
     "finish-args": [
         /* Allow access to developer tools */
         "--allow=devel",
@@ -311,6 +310,7 @@
             "sources": [
                 {
                     "type": "git",
+                    "branch": "gnome-builder-3-22",
                     "url": "git://git.gnome.org/gnome-builder"
                 }
             ]
