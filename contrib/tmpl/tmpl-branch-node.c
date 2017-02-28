@@ -141,9 +141,7 @@ tmpl_branch_node_visit_children (TmplNode        *node,
 
   if (self->children != NULL)
     {
-      gint i;
-
-      for (i = 0; i < self->children->len; i++)
+      for (guint i = 0; i < self->children->len; i++)
         {
           TmplNode *child = g_ptr_array_index (self->children, i);
 
@@ -245,9 +243,7 @@ tmpl_branch_node_branch (TmplBranchNode  *self,
 
   if (self->children != NULL)
     {
-      gint i;
-
-      for (i = 0; i < self->children->len; i++)
+      for (guint i = 0; i < self->children->len; i++)
         {
           TmplNode *child = g_ptr_array_index (self->children, i);
 

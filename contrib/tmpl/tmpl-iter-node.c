@@ -102,12 +102,11 @@ tmpl_iter_node_visit_children (TmplNode        *node,
                                gpointer         user_data)
 {
   TmplIterNode *self = (TmplIterNode *)node;
-  gint i;
 
   g_assert (TMPL_IS_ITER_NODE (self));
   g_assert (visitor != NULL);
 
-  for (i = 0; i < self->children->len; i++)
+  for (guint i = 0; i < self->children->len; i++)
     {
       TmplNode *child = g_ptr_array_index (self->children, i);
 

@@ -121,7 +121,6 @@ tmpl_node_real_visit_children (TmplNode        *self,
                                gpointer         user_data)
 {
   TmplNodePrivate *priv = tmpl_node_get_instance_private (self);
-  gint i;
 
   TMPL_ENTRY;
 
@@ -130,7 +129,7 @@ tmpl_node_real_visit_children (TmplNode        *self,
 
   if (priv->children != NULL)
     {
-      for (i = 0; i < priv->children->len; i++)
+      for (guint i = 0; i < priv->children->len; i++)
         {
           TmplNode *child = g_ptr_array_index (priv->children, i);
 
