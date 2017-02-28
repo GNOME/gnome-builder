@@ -345,7 +345,7 @@ rg_table_iter_set (RgTableIter *iter,
     {
       RgColumn *column;
 
-      if (column_id >= priv->columns->len)
+      if (column_id >= (gint)priv->columns->len)
         {
           g_critical ("No such column %d", column_id);
           goto cleanup;
@@ -387,7 +387,7 @@ rg_table_iter_get (RgTableIter *iter,
     {
       RgColumn *column;
 
-      if (column_id >= priv->columns->len)
+      if (column_id >= (gint)priv->columns->len)
         {
           g_critical ("No such column %d", column_id);
           goto cleanup;

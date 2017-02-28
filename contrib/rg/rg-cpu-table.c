@@ -110,7 +110,7 @@ rg_cpu_table_poll (RgCpuTable *self)
 
                     ret = sscanf(cpu, "cpu%d", &id);
 
-                    if (ret != 1 || id < 0 || id >= self->n_cpu)
+                    if (ret != 1 || id < 0 || id >= (gint)self->n_cpu)
                       goto next;
 
                     cpu_info = &g_array_index (self->cpu_info, CpuInfo, id);
