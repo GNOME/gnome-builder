@@ -137,7 +137,7 @@ gb_color_picker_helper_change_color_tag (GtkTextTag    *tag,
 
   gstyle_color_fill_rgba (color, &bg_rgba);
   bg_rgba.alpha = 1.0;
-  
+
   gb_color_picker_helper_get_matching_monochrome (&bg_rgba, &fg_rgba);
 
   g_object_set (G_OBJECT (tag),
@@ -266,7 +266,7 @@ gb_color_picker_helper_set_color_tag_at_iter (GtkTextIter *iter,
         {
           start_offset = gtk_text_iter_get_line_offset (&begin);
           cursor_offset = gtk_text_iter_get_line_offset (iter);
-          dst_offset = MIN (cursor_offset, start_offset + strlen (new_text) - 1);
+          dst_offset = MIN (cursor_offset, start_offset + (gint)strlen (new_text) - 1);
         }
 
       gb_color_picker_helper_change_color_tag (tag, color);
