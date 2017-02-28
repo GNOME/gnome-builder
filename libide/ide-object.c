@@ -348,7 +348,7 @@ extension_init_cb (GObject      *object,
 
   if (!g_async_initable_init_finish (initable, result, &error))
     {
-      if (state->position == state->plugins->len)
+      if ((guint)state->position == state->plugins->len)
         {
           g_task_return_error (task, error);
           return;
@@ -372,7 +372,7 @@ ide_object_new_for_extension_async_try_next (GTask *task)
 
   state = g_task_get_task_data (task);
 
-  if (state->position == state->plugins->len)
+  if ((guint)state->position == state->plugins->len)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
