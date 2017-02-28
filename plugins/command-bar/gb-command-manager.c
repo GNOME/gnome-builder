@@ -126,14 +126,13 @@ gb_command_manager_complete (GbCommandManager *manager,
                              const gchar      *initial_command_text)
 {
   GPtrArray *completions;
-  int i;
 
   g_return_val_if_fail (GB_IS_COMMAND_MANAGER (manager), NULL);
   g_return_val_if_fail (initial_command_text, NULL);
 
   completions = g_ptr_array_new ();
 
-  for (i = 0; i < manager->providers->len; i++)
+  for (guint i = 0; i < manager->providers->len; i++)
     {
       GbCommandProvider *provider;
 
