@@ -147,13 +147,11 @@ ide_omni_search_display_result_selected (IdeOmniSearchDisplay *self,
 void
 ide_omni_search_display_move_next_result (IdeOmniSearchDisplay *self)
 {
-  gint i;
-
   g_return_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self));
 
   self->do_autoselect = FALSE;
 
-  for (i = 0; i < self->providers->len; i++)
+  for (guint i = 0; i < self->providers->len; i++)
     {
       ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
 
@@ -176,7 +174,7 @@ ide_omni_search_display_move_next_result (IdeOmniSearchDisplay *self)
         }
     }
 
-  for (i = 0; i < self->providers->len; i++)
+  for (guint i = 0; i < self->providers->len; i++)
     {
       ProviderEntry *ptr = g_ptr_array_index (self->providers, i);
 
@@ -228,11 +226,9 @@ ide_omni_search_display_move_previous_result (IdeOmniSearchDisplay *self)
 static void
 ide_omni_search_display_activate (IdeOmniSearchDisplay *self)
 {
-  gsize i;
-
   g_assert (IDE_IS_OMNI_SEARCH_DISPLAY (self));
 
-  for (i = 0; i < self->providers->len; i++)
+  for (guint i = 0; i < self->providers->len; i++)
     {
       ProviderEntry *ptr;
 
@@ -669,11 +665,10 @@ guint64
 ide_omni_search_display_get_count (IdeOmniSearchDisplay *self)
 {
   guint64 count = 0;
-  gint i;
 
   g_return_val_if_fail (IDE_IS_OMNI_SEARCH_DISPLAY (self), 0);
 
-  for (i = 0; i < self->providers->len; i++)
+  for (guint i = 0; i < self->providers->len; i++)
     {
       ProviderEntry *provider = g_ptr_array_index (self->providers, i);
       count += ide_omni_search_group_get_count (provider->group);
