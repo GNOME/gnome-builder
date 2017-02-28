@@ -87,7 +87,7 @@ typedef struct _EggHeapReal EggHeapReal;
 struct _EggHeapReal
 {
   gchar          *data;
-  gsize           len;
+  gssize          len;
   volatile gint   ref_count;
   guint           element_size;
   gsize           allocated_len;
@@ -205,7 +205,7 @@ static void
 egg_heap_real_shrink (EggHeapReal *real)
 {
   g_assert (real);
-  g_assert ((real->allocated_len / 2) >= real->len);
+  g_assert ((real->allocated_len / 2) >= (gsize)real->len);
 
   real->allocated_len = MAX (MIN_HEAP_SIZE, real->allocated_len / 2);
   real->data = g_realloc_n (real->data,
@@ -223,7 +223,7 @@ egg_heap_real_insert_val (EggHeapReal   *real,
   g_assert (real);
   g_assert (data);
 
-  if (G_UNLIKELY (real->len == real->allocated_len))
+  if (G_UNLIKELY ((gsize)real->len == real->allocated_len))
     egg_heap_real_grow (real);
 
   memcpy (real->data + (real->element_size * real->len),
@@ -255,6 +255,7 @@ egg_heap_insert_vals (EggHeap       *heap,
   g_return_if_fail (heap);
   g_return_if_fail (data);
   g_return_if_fail (len);
+  g_return_if_fail ((G_MAXSSIZE - len) > real->len);
 
   for (i = 0; i < len; i++, ptr += real->element_size)
     egg_heap_real_insert_val (real, ptr);
@@ -308,7 +309,7 @@ egg_heap_extract (EggHeap  *heap,
         }
     }
 
-  if ((real->len > MIN_HEAP_SIZE) && (real->allocated_len / 2) >= real->len)
+  if ((real->len > MIN_HEAP_SIZE) && (real->allocated_len / 2) >= (gsize)real->len)
     egg_heap_real_shrink (real);
 
   return TRUE;
@@ -320,15 +321,17 @@ egg_heap_extract_index (EggHeap  *heap,
                         gpointer  result)
 {
   EggHeapReal *real = (EggHeapReal *)heap;
-  gint ipos;
-  gint lpos;
-  gint mpos;
-  gint ppos;
-  gint rpos;
+  gssize ipos;
+  gssize lpos;
+  gssize mpos;
+  gssize ppos;
+  gssize rpos;
 
   g_return_val_if_fail (heap, FALSE);
+  g_return_val_if_fail (index_ < G_MAXSSIZE, FALSE);
+  g_return_val_if_fail (index_ < (gsize)real->len, FALSE);
 
-  if (real->len == 0)
+  if (real->len <= 0)
     return FALSE;
 
   if (result)
@@ -336,7 +339,7 @@ egg_heap_extract_index (EggHeap  *heap,
 
   real->len--;
 
-  if (real->len && index_ != real->len)
+  if (real->len > 0 && index_ != (gsize)real->len)
     {
       memcpy (heap_index (real, index_),
               heap_index (real, real->len),
@@ -352,7 +355,7 @@ egg_heap_extract_index (EggHeap  *heap,
           ppos = heap_parent (ppos);
         }
 
-      if (ipos == index_)
+      if (ipos == (gssize)index_)
         {
           while (TRUE)
             {
@@ -377,7 +380,7 @@ egg_heap_extract_index (EggHeap  *heap,
         }
     }
 
-  if ((real->len > MIN_HEAP_SIZE) && (real->allocated_len / 2) >= real->len)
+  if ((real->len > MIN_HEAP_SIZE) && (real->allocated_len / 2) >= (gsize)real->len)
     egg_heap_real_shrink (real);
 
   return TRUE;
