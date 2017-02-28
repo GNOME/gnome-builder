@@ -408,7 +408,6 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
   g_auto(GStrv) argv = NULL;
   gboolean in_expand = FALSE;
   GError *error = NULL;
-  gsize i;
 
   g_assert (line != NULL);
   g_assert (ret != NULL);
@@ -424,7 +423,7 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
       return;
     }
 
-  for (i = 0; i < argc; i++)
+  for (gint i = 0; i < argc; i++)
     {
       const gchar *flag = argv [i];
 
