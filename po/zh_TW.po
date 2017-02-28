@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-07 16:02+0000\n"
-"PO-Revision-Date: 2016-02-13 12:46+0800\n"
+"POT-Creation-Date: 2017-02-25 04:41+0000\n"
+"PO-Revision-Date: 2017-02-28 11:03+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <chinese-l10n@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -17,1599 +17,1259 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.11\n"
 
-#: ../contrib/egg/egg-animation.c:715
+#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "無法定位 %2$s 類別中的 %1$s 屬性"
 
-#: ../contrib/egg/egg-animation.c:1055 ../contrib/egg/egg-animation.c:1061
+#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "%2$s 中找不到 %1$s 屬性"
 
-#: ../contrib/egg/egg-animation.c:1069
+#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "在 %2$s 中或 %3$s 親代中找不到 %1$s 屬性"
 
-#: ../contrib/egg/egg-animation.c:1079
+#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "無法擷取 va_list 數值：%s"
 
-#: ../contrib/egg/egg-date-time.c:55
+#: contrib/egg/egg-date-time.c:55
 msgid "Just now"
 msgstr "剛剛"
 
-#: ../contrib/egg/egg-date-time.c:57
+#: contrib/egg/egg-date-time.c:57
 msgid "An hour ago"
 msgstr "一小時前"
 
-#: ../contrib/egg/egg-date-time.c:59
+#: contrib/egg/egg-date-time.c:59
 msgid "Yesterday"
 msgstr "昨天"
 
-#: ../contrib/egg/egg-date-time.c:65
+#: contrib/egg/egg-date-time.c:65
 msgid "About a year ago"
 msgstr "大約一年前"
 
-#: ../contrib/egg/egg-date-time.c:69
+#: contrib/egg/egg-date-time.c:69
 #, c-format
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "大約 %u 年前"
 
-#: ../contrib/egg/egg-search-bar.c:378
+#: contrib/egg/egg-file-chooser-entry.c:100
+#: contrib/egg/egg-file-chooser-entry.c:489
+#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/workbench/ide-workbench-actions.c:76
+#: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
+msgid "Open"
+msgstr "開啟"
+
+#: contrib/egg/egg-file-chooser-entry.c:104
+msgid "Select"
+msgstr "選擇"
+
+#: contrib/egg/egg-file-chooser-entry.c:108
+#: plugins/create-project/gbp-create-project-genesis-addin.c:229
+msgid "Create"
+msgstr "建立"
+
+#: contrib/egg/egg-file-chooser-entry.c:112
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
+#: plugins/color-picker/gb-color-picker-prefs.c:237
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "儲存"
+
+#: contrib/egg/egg-file-chooser-entry.c:455
+msgid "Browse…"
+msgstr "瀏覽…"
+
+#: contrib/egg/egg-file-chooser-entry.c:488
+#: libide/editor/ide-editor-view-actions.c:315
+#: libide/editor/ide-editor-view-actions.c:446
+#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/workbench/ide-workbench-actions.c:77
+#: plugins/color-picker/gb-color-picker-prefs.c:98
+#: plugins/color-picker/gb-color-picker-prefs.c:214
+#: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:306
+#: plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "取消"
+
+#: contrib/egg/egg-search-bar.c:378
 msgid "Search"
 msgstr "搜尋"
 
-#: ../contrib/search/trie.c:790
+#: contrib/gstyle/gstyle-color-panel.c:953
+msgid "Palette: "
+msgstr "調色盤："
+
+#: contrib/gstyle/gstyle-color-panel.c:955
+msgid "Palette"
+msgstr "調色盤"
+
+#: contrib/gstyle/gstyle-color-plane.c:1601
+#, fuzzy
+msgid "Color Plane"
+msgstr "調色盤"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:66
+msgid "Color name"
+msgstr "顏色名稱"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:68
+msgid "Enter a new name for the color"
+msgstr "輸入顏色的新名稱"
+
+#: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
+#, c-format
+msgid "failed to parse line %i\n"
+msgstr "無法解析列 %i\n"
+
+#: contrib/gstyle/gstyle-palette.c:613
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s：調色盤是空的\n"
+
+#: contrib/gstyle/gstyle-palette.c:719
+#, c-format
+msgid "%s: failed to parse\n"
+msgstr "%s：無法解析\n"
+
+#: contrib/gstyle/gstyle-palette.c:727
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "無法開啟 %s\n"
+
+#: contrib/gstyle/gstyle-palette.c:765
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s：這個檔案格式不支援\n"
+
+#: contrib/gstyle/gstyle-palette.c:822
+msgid "failed to parse\n"
+msgstr "無法解析\n"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
+msgid "Generated"
+msgstr "已產生"
+
+#: contrib/gstyle/gstyle-palette.c:932
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "無法儲存 %s\n"
+
+#: contrib/gstyle/gstyle-palette-widget.c:983
+#, c-format
+msgid "Unsaved palette %u"
+msgstr "未儲存調色盤 %u"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
+msgid "Hue"
+msgstr "色相"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:75
+msgid "Saturation"
+msgstr "飽和度"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+msgid "Value"
+msgstr "數值"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
+msgid "Cielab l"
+msgstr "Cielab l"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr "Cielab a"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
+msgid "Cielab b"
+msgstr "Cielab b"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
+msgid "Red"
+msgstr "紅"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr "綠色"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr "藍色"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr "顏色元件"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:451
+#| msgid "Go"
+msgid "G"
+msgstr "G"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:573
+#: plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "顏色字串"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:634
+msgid "HEX3"
+msgstr "HEX3"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:645
+msgid "HEX6"
+msgstr "HEX6"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:656
+msgid "RGB"
+msgstr "RGB"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:667
+msgid "RGBA"
+msgstr "RGBA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:678
+msgid "HSL"
+msgstr "HSL"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:689
+msgid "HSLA"
+msgstr "HSLA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "調色盤"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:946
+#: plugins/color-picker/gtk/color-picker.ui:49
+msgid "No open palettes"
+msgstr "沒有開啟的調色盤"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr "使用偏好設定載入或產生調色盤"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:13
+#: libide/sourceview/ide-source-view.c:5855
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "重新命名"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:19
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "移除"
+
+#: contrib/gstyle/ui/gstyle-rename-popover.ui:35
+#: plugins/project-tree/gb-rename-file-popover.ui:35
+#: plugins/project-tree/gtk/menus.ui:57
+msgid "_Rename"
+msgstr "重新命名(_R)"
+
+#: contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
 msgstr ""
 
-#: ../contrib/tmpl/tmpl-parser.c:199
+#: contrib/tmpl/tmpl-parser.c:199
 #, c-format
 msgid "%s() may only be called once"
 msgstr "%s() 只能呼叫一次"
 
-#: ../contrib/tmpl/tmpl-parser.c:211
-#, c-format
+#: contrib/tmpl/tmpl-parser.c:211
 msgid "Parser does not contain an input stream"
 msgstr "解析器不包含輸入串流"
 
-#: ../contrib/tmpl/tmpl-template.c:451
-#, c-format
+#: contrib/tmpl/tmpl-template.c:454
 msgid "Must parse template before expanding"
 msgstr "擴展前必須解析範本"
 
-#: ../contrib/tmpl/tmpl-template-locator.c:105
+#: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
-msgid "Failed to locate template \"%s\""
+msgid "Failed to locate template “%s”"
 msgstr "無法定位範本「%s」"
 
-#: ../contrib/xml/xml-reader.c:327
-#, c-format
+#: contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
 msgstr "無法分析來自串流的 XML"
 
-#: ../data/gtk/menus.ui.h:1
-msgid "_New Project"
-msgstr "新專案(_N)"
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+msgid "Build Parallelism"
+msgstr "平行組建"
 
-#: ../data/gtk/menus.ui.h:2
-msgid "_Open Project"
-msgstr "開啟專案(_O)"
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr "編譯時要使用的工作程式數量，-1 代表預設值。0 代表 CPU 的數量。"
 
-#: ../data/gtk/menus.ui.h:3
-msgid "_Preferences"
-msgstr "偏好設定(_P)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Suggest Snippet Completion"
+msgstr "建議文字片段補齊"
 
-#: ../data/gtk/menus.ui.h:4
-msgid "Keyboard _Shortcuts"
-msgstr "鍵盤捷徑鍵(_K)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "允許在文件插入文字片段。"
 
-#: ../data/gtk/menus.ui.h:5
-msgid "_Help"
-msgstr "求助(_H)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Clang based autocompletion (Experimental)"
+msgstr "使用 Clang 來建議文字補齊 (實驗性)"
 
-#: ../data/gtk/menus.ui.h:6
-msgid "_About"
-msgstr "關於(_A)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "使用 Clang 對 C 與 C++ 語言進行文字補齊。"
 
-#: ../data/gtk/menus.ui.h:7
-msgid "_Quit"
-msgstr "退出(_Q)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Ctags based autocompletion"
+msgstr "基於 Ctags 的文字補齊"
 
-#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
-msgid "_Reload"
-msgstr "重新載入(_R)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "Use Ctags for autocompletion."
+msgstr "使用 Ctags 建議文字補齊。"
 
-#: ../data/gtk/menus.ui.h:9
-msgid "_Print…"
-msgstr "列印(_P)…"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
+msgid "Enable auto-completion of words in document"
+msgstr "啟用對文件中的字詞自動補齊"
 
-#: ../data/gtk/menus.ui.h:10
-msgid "_Fullscreen"
-msgstr "全螢幕(_F)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr "如果啟用，目前文件內的文字將可用於自動補齊。"
 
-#: ../data/gtk/menus.ui.h:11
-msgid "_New File"
-msgstr "新增檔案(_N)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
+msgid "Enable semantic highlighting"
+msgstr "啟用語義標示"
 
-#: ../data/gtk/menus.ui.h:12
-msgid "_Open File"
-msgstr "開啟檔案(_O)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr "如果啟用，將從原始程式碼中提取支援的語言資訊以提供額外標示。"
 
-#: ../data/gtk/menus.ui.h:13
-msgid "Save _All"
-msgstr "全部儲存(_A)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
+msgid "Path to ctags executable"
+msgstr "ctags 可執行檔路徑"
 
-#: ../data/gtk/menus.ui.h:14
-msgid "_Close All"
-msgstr "全部關閉(_C)"
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
+msgid "The path to the ctags executable on the system."
+msgstr "系統中 ctags 可執行檔的路徑。"
 
-#: ../data/gtk/menus.ui.h:15
-msgid "_Go to Definition"
-msgstr "移至定義(_G)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+msgid "Restore last position"
+msgstr "回復上次位置"
 
-#: ../data/gtk/menus.ui.h:16
-msgid "_Undo"
-msgstr "復原(_U)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid "Jump to the last position when reopening a file"
+msgstr "重新開啟檔案時跳到最後一個位置"
 
-#: ../data/gtk/menus.ui.h:17
-msgid "_Redo"
-msgstr "取消復原(_R)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+msgid "Show modified lines"
+msgstr "顯示修改的列"
 
-#: ../data/gtk/menus.ui.h:18
-msgid "C_ut"
-msgstr "剪下(_U)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr "如果啟用，編輯器將在原始碼旁顯示該列額外資訊與變更。"
 
-#: ../data/gtk/menus.ui.h:19
-msgid "_Copy"
-msgstr "複製(_C)"
-
-#: ../data/gtk/menus.ui.h:20
-msgid "_Paste"
-msgstr "貼上(_P)"
-
-#: ../data/gtk/menus.ui.h:21
-msgid "_Delete"
-msgstr "刪除(_D)"
-
-#: ../data/gtk/menus.ui.h:22
-msgid "Selection"
-msgstr "選取項目"
-
-#: ../data/gtk/menus.ui.h:23
-msgid "Select _All"
-msgstr "全部選取(_A)"
-
-#: ../data/gtk/menus.ui.h:24
-msgid "Select _None"
-msgstr "全部取消選取(_N)"
-
-#: ../data/gtk/menus.ui.h:25
-msgid "All _Upper Case"
-msgstr "全部大寫(_U)"
-
-#: ../data/gtk/menus.ui.h:26
-msgid "All _Lower Case"
-msgstr "全部小寫(_L)"
-
-#: ../data/gtk/menus.ui.h:27
-msgid "_Invert Case"
-msgstr "反轉大小寫(_I)"
-
-#: ../data/gtk/menus.ui.h:28
-msgid "_Title Case"
-msgstr "標題大小寫(_T)"
-
-#: ../data/gtk/menus.ui.h:29
-msgid "Join Lines"
-msgstr "連結列"
-
-#: ../data/gtk/menus.ui.h:30
-msgid "Sort Lines"
-msgstr "排序列"
-
-#: ../data/gtk/menus.ui.h:31
-msgid "Zoom"
-msgstr "縮放"
-
-#: ../data/gtk/menus.ui.h:32
-msgid "Zoom _In"
-msgstr "拉近(_I)"
-
-#: ../data/gtk/menus.ui.h:33
-msgid "Zoom _Out"
-msgstr "拉遠(_O)"
-
-#: ../data/gtk/menus.ui.h:34
-msgid "Reset"
-msgstr "重新設定"
-
-#: ../data/gtk/menus.ui.h:35
-msgid "Split"
-msgstr "分割"
-
-#: ../data/gtk/menus.ui.h:36
-msgid "Split Left"
-msgstr "分割於左側"
-
-#: ../data/gtk/menus.ui.h:37
-msgid "Split Right"
-msgstr "分割於右側"
-
-#: ../data/gtk/menus.ui.h:38
-msgid "Split Down"
-msgstr "分割於下方"
-
-#: ../data/gtk/menus.ui.h:39
-msgid "Move"
-msgstr "移動"
-
-#: ../data/gtk/menus.ui.h:40
-msgid "Move Left"
-msgstr "向左移動"
-
-#: ../data/gtk/menus.ui.h:41
-msgid "Move Right"
-msgstr "向右移動"
-
-#: ../data/gtk/menus.ui.h:42
-msgid "_Save"
-msgstr "儲存(_S)"
-
-#: ../data/gtk/menus.ui.h:43
-msgid "_Save As"
-msgstr "另存為(_A)"
-
-#: ../data/gtk/menus.ui.h:44
-msgid "_Print"
-msgstr "列印(_P)"
-
-#: ../data/gtk/menus.ui.h:45
-msgid "_Close"
-msgstr "關閉(_C)"
-
-#: ../data/style-schemes/builder-dark.xml.h:1
-msgid "Builder Dark"
-msgstr "Builder  黑"
-
-#: ../data/style-schemes/builder-dark.xml.h:2
-msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "使用 Tango 調色盤的 Builder 暗色系配色"
-
-#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:404
-#: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Builder"
-msgstr "Builder"
-
-#: ../data/style-schemes/builder.xml.h:2
-msgid "The default color scheme for Builder"
-msgstr "Builder 預設色彩配色"
-
-#. OVR indicates we are in overwite mode
-#: ../data/ui/ide-editor-frame.ui.h:2
-#, fuzzy
-msgid "OVR"
-msgstr "覆寫"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:1
-msgid "Search highlight mode…"
-msgstr "搜尋標明模式…"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:2
-msgid "Display line numbers"
-msgstr "顯示列號"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:3
-msgid "Display right margin"
-msgstr "顯示右邊緣"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+#: libide/editor/ide-editor-tweak-widget.ui:74
 msgid "Highlight current line"
 msgstr "標明目前一列"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:5
-msgid "Auto indent"
-msgstr "自動縮排"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr "如果啟用，標示游標目前所在的一列。"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:6
-#: ../libide/preferences/ide-preferences-builtin.c:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+msgid "Highlight matching brackets"
+msgstr "標示成對的弧號"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "如果啟用，編輯器會標示成對的括弧。"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+msgid "Show line numbers"
+msgstr "顯示列號"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will show line numbers."
+msgstr "如果啟用，編輯器會顯示列號。"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: libide/editor/ide-editor-tweak-widget.ui:91
+#: libide/preferences/ide-preferences-builtin.c:150
 msgid "Smart Backspace"
 msgstr "智慧型 BackSpace"
 
-#: ../data/ui/ide-editor-tweak-widget.ui.h:7
-#: ../libide/preferences/ide-preferences-builtin.c:233
-msgid "Indentation"
-msgstr "縮排"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:8
-#: ../libide/preferences/ide-preferences-builtin.c:145
-msgid "Spaces"
-msgstr "空格"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:9
-#: ../libide/preferences/ide-preferences-builtin.c:146
-msgid "Tabs"
-msgstr "Tab"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:10
-msgid "2"
-msgstr "2"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:11
-msgid "3"
-msgstr "3"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:12
-msgid "4"
-msgstr "4"
-
-#: ../data/ui/ide-editor-tweak-widget.ui.h:13
-msgid "8"
-msgstr "8"
-
-#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:7
-msgid "_Cancel"
-msgstr "取消(_C)"
-
-#: ../data/ui/ide-editor-view.ui.h:3
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid ""
-"Builder has discovered that this file has been modified externally. Would "
-"you like to reload the file?"
-msgstr "Builder 發現到這個檔案在外部修改過。您想要重新載入這個檔案嗎？"
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr "Backspace 會移除額外的空白讓您保持對齊縮排寬度。"
 
-#: ../data/ui/ide-editor-view.ui.h:4
-msgid "Go to Line"
-msgstr "移至列號"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: libide/preferences/ide-preferences-builtin.c:149
+msgid "Smart Home and End"
+msgstr "智慧式 Home 與 End"
 
-#: ../data/ui/ide-editor-view.ui.h:5
-msgid "Go"
-msgstr "前往"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid "Whether or not Home moves to first non-space character."
+msgstr "Home 移至第一個非空白字元。"
 
-#: ../data/ui/ide-genesis-perspective.ui.h:1
-msgid "New Project"
-msgstr "新專案"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+msgid "Show grid lines"
+msgstr "顯示格線"
 
-#: ../data/ui/ide-genesis-perspective.ui.h:2
-msgid "Co_ntinue"
-msgstr "繼續(_N)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr "如果啟用，則編輯器將在文件中顯示格線。"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:1
-msgid "Recent Projects"
-msgstr "最近的專案"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:74
+#: libide/preferences/ide-preferences-builtin.c:172
+msgid "Show overview map"
+msgstr "顯示概覽地圖"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:2
-msgid "Other Projects"
-msgstr "其他的專案"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr "如果啟用，Builder 會在編輯器旁顯示原始碼檔案的概覽地圖。"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:3
-msgid "_Remove"
-msgstr "移除(_R)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+msgid "Automatically Hide Overview Map"
+msgstr "自動隱藏概覽地圖"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:4
-msgid "Select a Project"
-msgstr "選擇一個專案"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"如果啟用，Builder 將在滑鼠焦點離開編輯器，或者發生逾時的時候會自動隱藏概覽地"
+"圖。"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:5
-msgid "Click an item to select"
-msgstr "點選想要選擇的項目"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid "Draw Spaces"
+msgstr "繪出空格"
 
-#: ../data/ui/ide-greeter-perspective.ui.h:6
-#: ../plugins/project-tree/gtk/menus.ui.h:2
-msgid "_New"
-msgstr "新增(_N)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+msgid "The various types of space to draw in the editor."
+msgstr "在編輯器中繪製的各種類型的空白。"
 
-#: ../data/ui/ide-preferences-font-button.ui.h:1
-msgid "_Select"
-msgstr "選擇(_S)"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Overscroll"
+msgstr ""
 
-#: ../data/ui/ide-shortcuts-window.ui.h:1
-msgctxt "shortcut window"
-msgid "Editor Shortcuts"
-msgstr "編輯器捷徑鍵"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "捲動超出緩衝區結尾的列數。"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:2
-msgctxt "shortcut window"
-msgid "General"
-msgstr "一般"
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Enabled"
+msgstr "已啟用"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:3
-msgctxt "shortcut window"
-msgid "Global Search"
-msgstr "全域搜尋"
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr "擴充功能中的類型是否已啟用。"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:4
-msgctxt "shortcut window"
-msgid "Preferences"
-msgstr "偏好設定"
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "視窗尺寸"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:5
-msgctxt "shortcut window"
-msgid "Command Bar"
-msgstr "命令列"
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "視窗的尺寸 (寬度與高度)。"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:6
-msgctxt "shortcut window"
-msgid "Terminal"
-msgstr "終端機"
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window position"
+msgstr "視窗位置"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:7
-msgctxt "shortcut window"
-msgid "Keyboard Shortcuts"
-msgstr "鍵盤捷徑鍵"
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr "視窗位置 (x 與 y)。"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:8
-msgctxt "shortcut window"
-msgid "Panels"
-msgstr "面板"
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr "視窗最大化"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:9
-msgctxt "shortcut window"
-msgid "Toggle left panel"
-msgstr "切換左面板"
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr "視窗最大化狀態"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:10
-msgctxt "shortcut window"
-msgid "Toggle right panel"
-msgstr "切換右面板"
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+msgid "Night Mode"
+msgstr "夜晚模式"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:11
-msgctxt "shortcut window"
-msgid "Toggle bottom panel"
-msgstr "切換底部面板"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:12
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "觸控板手勢"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:13
-msgctxt "shortcut window"
-msgid "Switch to the next document"
-msgstr "切換到下一個文件"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:14
-msgctxt "shortcut window"
-msgid "Switch to the previous document"
-msgstr "切換到上一個文件"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:15
-msgctxt "shortcut window"
-msgid "Files"
-msgstr "檔案"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:16
-msgctxt "shortcut window"
-msgid "Create new document"
-msgstr "建立新文件"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:17
-msgctxt "shortcut window"
-msgid "Open a document"
-msgstr "開啟文件"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:18
-msgctxt "shortcut window"
-msgid "Save the document"
-msgstr "儲存文件為"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:19
-msgctxt "shortcut window"
-msgid "Close the document"
-msgstr "關閉文件"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:20
-msgctxt "shortcut window"
-msgid "Find and replace"
-msgstr "尋找與取代"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:21
-msgctxt "shortcut window"
-msgid "Find"
-msgstr "尋找"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:22
-msgctxt "shortcut window"
-msgid "Find the next match"
-msgstr "尋找下一個符合項"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:23
-msgctxt "shortcut window"
-msgid "Find the previous match"
-msgstr "尋找上一個符合項"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:24
-msgctxt "shortcut window"
-msgid "Clear highlight"
-msgstr "清除標示"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:25
-msgctxt "shortcut window"
-msgid "Copy and Paste"
-msgstr "複製與貼上"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:26
-msgctxt "shortcut window"
-msgid "Copy selected text to clipboard"
-msgstr "將選取的文字複製至剪貼簿"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:27
-msgctxt "shortcut window"
-msgid "Cut selected text to clipboard"
-msgstr "將選定的文字剪貼至剪貼簿"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:28
-msgctxt "shortcut window"
-msgid "Paste text from clipboard"
-msgstr "從剪貼簿貼上文字"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:29
-msgctxt "shortcut window"
-msgid "Undo and Redo"
-msgstr "復原與取消復原"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:30
-msgctxt "shortcut window"
-msgid "Undo previous command"
-msgstr "復原上一個命令"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:31
-msgctxt "shortcut window"
-msgid "Redo previous command"
-msgstr "重做上一個命令"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:32
-msgctxt "shortcut window"
-msgid "Editing"
-msgstr "正在編輯"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:33
-msgctxt "shortcut window"
-msgid "Increment number at cursor"
-msgstr "游標處的遞增數"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:34
-msgctxt "shortcut window"
-msgid "Decrement number at cursor"
-msgstr "游標處的遞減數"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:35
-msgctxt "shortcut window"
-msgid "Join selected lines"
-msgstr "連結選取的列"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:36
-msgctxt "shortcut window"
-msgid "Show completion window"
-msgstr "顯示補齊視窗"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:37
-msgctxt "shortcut window"
-msgid "Toggle overwrite"
-msgstr "切換覆寫"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:38
-msgctxt "shortcut window"
-msgid "Reindent line"
-msgstr "重新縮排列"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:39
-msgctxt "shortcut window"
-msgid "Navigation"
-msgstr "導覽"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:40
-msgctxt "shortcut window"
-msgid "Move to next error in file"
-msgstr "移至檔案中的下一個錯誤"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:41
-msgctxt "shortcut window"
-msgid "Move to previous error in file"
-msgstr "移至檔案中的上一個錯誤"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:42
-msgctxt "shortcut window"
-msgid "Move to previous edit location"
-msgstr "移至上一個編輯位置"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:43
-msgctxt "shortcut window"
-msgid "Move to next edit location"
-msgstr "移至下一個編輯位置"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:44
-msgctxt "shortcut window"
-msgid "Jump to definition of symbol"
-msgstr "移至符號定義"
-
-#: ../data/ui/ide-shortcuts-window.ui.h:45
+#: data/gsettings/org.gnome.builder.gschema.xml:21
 #, fuzzy
-#| msgid "The line number within the file."
-msgctxt "shortcut window"
-msgid "Move sectionport up within the file"
-msgstr "檔案內的列號。"
+#| msgid "The parameters for the action."
+msgid "Prefer dark application chrome."
+msgstr "應用程式偏好暗色主題"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:46
-#, fuzzy
-#| msgid "The line number within the file."
-msgctxt "shortcut window"
-msgid "Move sectionport down within the file"
-msgstr "檔案內的列號。"
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+#| msgid "- discover projects"
+msgid "Mine projects"
+msgstr "Mine 專案"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:47
-#, fuzzy
-msgctxt "shortcut window"
-msgid "Move sectionport to end of file"
-msgstr "檔案太早結束"
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+msgid "Search directories for projects."
+msgstr "專案的搜尋目錄。"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:48
-#, fuzzy
-msgctxt "shortcut window"
-msgid "Move sectionport to beginning of file"
-msgstr "無法將檔案移至回收筒"
+#: data/gsettings/org.gnome.builder.gschema.xml:30
+#: libide/preferences/ide-preferences-builtin.c:393
+msgid "Projects directory"
+msgstr "專案目錄"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:49
-msgctxt "shortcut window"
-msgid "Move to matching bracket"
-msgstr "移至對稱的括弧"
+#: data/gsettings/org.gnome.builder.gschema.xml:31
+msgid "Directory for all Builder projects."
+msgstr "所有 Builder 專案的目錄。"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:50
-msgctxt "shortcut window"
-msgid "Selections"
+#: data/gsettings/org.gnome.builder.gschema.xml:35
+msgid "Restore Previous Files"
+msgstr "還原以前的檔案"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:36
+msgid "Restore previously opened files when loading a project."
+msgstr "載入專案時，還原以前開啟過的檔案。"
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr "是否應啟用外掛程式"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+msgid "Show Project Sidebar"
+msgstr "顯示專案側邊欄"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr "如果啟用，將在編輯器的工作區中顯示側邊欄。"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: plugins/project-tree/gtk/menus.ui:84
+msgid "Show Icons"
+msgstr "顯示圖示"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr "如果啟用，會在專案樹狀圖的每個項目旁顯示圖示。"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:88
+msgid "Show Ignored Files"
+msgstr "顯示忽略的檔案"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr "如果啟用，專案樹狀圖會顯示被 VCS 忽略的檔案。"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+msgid "Show Left Panel"
+msgstr "顯示左側面板"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+msgid "If enabled, the left panel will be displayed."
+msgstr "如果啟用，將會顯示左側的面板。"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+msgid "Left Panel Position"
+msgstr "左側面板位置"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+msgid "The width in pixel units of the left panel."
+msgstr "左側面板的寬度，以像素計。"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+msgid "Show Right Panel"
+msgstr "顯示右側面板"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+msgid "If enabled, the right panel will be displayed."
+msgstr "如果啟用，將會顯示左側的面板。"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+msgid "Right Panel Position"
+msgstr "右側面板位置"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+msgid "The width in pixel units of the right panel."
+msgstr "右側面板的寬度，以像素計。"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+msgid "Show Bottom Panel"
+msgstr "顯示底部面板"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "如果啟用，將會顯示底部的面板。"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+msgid "Bottom Panel Position"
+msgstr "底部面板位置"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr "底部面板的寬度，以像素計。"
+
+#: data/gtk/menus.ui:7
+msgid "_New Project"
+msgstr "新專案(_N)"
+
+#: data/gtk/menus.ui:11
+msgid "_Open Project"
+msgstr "開啟專案(_O)"
+
+#: data/gtk/menus.ui:18
+msgid "_Preferences"
+msgstr "偏好設定(_P)"
+
+#: data/gtk/menus.ui:26
+msgid "Keyboard _Shortcuts"
+msgstr "鍵盤捷徑鍵(_K)"
+
+#: data/gtk/menus.ui:30
+msgid "_Help"
+msgstr "求助(_H)"
+
+#: data/gtk/menus.ui:34
+msgid "_About"
+msgstr "關於(_A)"
+
+#: data/gtk/menus.ui:38
+msgid "_Quit"
+msgstr "退出(_Q)"
+
+#: data/gtk/menus.ui:49
+msgid "Show left panel"
+msgstr "顯示左側面板"
+
+#: data/gtk/menus.ui:54
+msgid "Show bottom panel"
+msgstr "顯示底部面板"
+
+#: data/gtk/menus.ui:59
+msgid "Show right panel"
+msgstr "顯示右側面板"
+
+#: data/gtk/menus.ui:87
+msgid "_New File"
+msgstr "新增檔案(_N)"
+
+#: data/gtk/menus.ui:93
+msgid "_Open File…"
+msgstr "開啟檔案(_O)…"
+
+#: data/gtk/menus.ui:99
+msgid "Save _All"
+msgstr "全部儲存(_A)"
+
+#: data/gtk/menus.ui:116
+msgid "_Go to Definition"
+msgstr "移至定義(_G)"
+
+#: data/gtk/menus.ui:122
+msgid "_Undo"
+msgstr "復原(_U)"
+
+#: data/gtk/menus.ui:126
+msgid "_Redo"
+msgstr "取消復原(_R)"
+
+#: data/gtk/menus.ui:132
+msgid "C_ut"
+msgstr "剪下(_U)"
+
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:28
+msgid "_Copy"
+msgstr "複製(_C)"
+
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:32
+msgid "_Paste"
+msgstr "貼上(_P)"
+
+#: data/gtk/menus.ui:145 data/gtk/menus.ui:257
+msgid "_Delete"
+msgstr "刪除(_D)"
+
+#: data/gtk/menus.ui:151 libide/preferences/ide-preferences-builtin.c:190
+msgid "Highlighting"
+msgstr "標明"
+
+#: data/gtk/menus.ui:153 data/gtk/menus.ui:206
+msgid "Spellchecking"
+msgstr "拼字檢查"
+
+#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
+msgid "Selection"
 msgstr "選取項目"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:51
-msgctxt "shortcut window"
-msgid "Select all"
-msgstr "全部選取"
+#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:40
+msgid "Select _All"
+msgstr "全部選取(_A)"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:52
-msgctxt "shortcut window"
-msgid "Unselect all"
-msgstr "取消全選"
+#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:45
+msgid "Select _None"
+msgstr "全部取消選取(_N)"
 
-#: ../data/ui/ide-shortcuts-window.ui.h:53
-msgctxt "shortcut window"
-msgid "Terminal Shortcuts"
-msgstr "終端機捷徑鍵"
+#: data/gtk/menus.ui:173
+msgid "All _Upper Case"
+msgstr "全部大寫(_U)"
 
-#: ../libide/directory/ide-directory-genesis-addin.c:106
-msgid "From an existing project on this computer"
-msgstr "這臺電腦現有的專案"
+#: data/gtk/menus.ui:178
+msgid "All _Lower Case"
+msgstr "全部小寫(_L)"
 
-#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
-msgid "No file was provided."
-msgstr "沒有提供檔案。"
+#: data/gtk/menus.ui:183
+msgid "_Invert Case"
+msgstr "反轉大小寫(_I)"
 
-#: ../libide/editor/ide-editor-frame.c:75
-#, c-format
-msgid "Line %u, Column %u"
-msgstr "列 %u，行 %u"
+#: data/gtk/menus.ui:188
+msgid "_Title Case"
+msgstr "標題大小寫(_T)"
 
-#: ../libide/editor/ide-editor-frame.c:242
-#, c-format
-msgid "%u of %u"
-msgstr "%u / %u"
+#: data/gtk/menus.ui:195
+msgid "Join Lines"
+msgstr "連結列"
 
-#: ../libide/editor/ide-editor-frame.c:641
-#: ../plugins/project-tree/gtk/menus.ui.h:1
-msgid "Re_veal in Project Tree"
-msgstr "在專案樹中顯現(_V)"
+#: data/gtk/menus.ui:199
+msgid "Sort Lines"
+msgstr "排序列"
 
-#: ../libide/editor/ide-editor-perspective.c:350
-#: ../libide/preferences/ide-preferences-builtin.c:102
-#: ../libide/preferences/ide-preferences-builtin.c:125
-msgid "Editor"
-msgstr "編輯器"
+#: data/gtk/menus.ui:215
+msgid "Zoom"
+msgstr "縮放"
 
-#: ../libide/editor/ide-editor-view-actions.c:301
-msgid "Save Document"
-msgstr "儲存文件"
+#: data/gtk/menus.ui:217
+msgid "Zoom _In"
+msgstr "拉近(_I)"
 
-#: ../libide/editor/ide-editor-view-actions.c:307
-#: ../libide/editor/ide-editor-view-actions.c:438
-#: ../libide/ide-workbench-actions.c:67
-#: ../plugins/build-tools/gbp-build-panel.ui.h:13
-#: ../plugins/terminal/gb-terminal-view-actions.c:305
-msgid "Cancel"
-msgstr "取消"
+#: data/gtk/menus.ui:222
+msgid "Zoom _Out"
+msgstr "拉遠(_O)"
 
-#: ../libide/editor/ide-editor-view-actions.c:308
-#: ../libide/editor/ide-editor-view-actions.c:439
-#: ../plugins/terminal/gb-terminal-view-actions.c:306
-msgid "Save"
-msgstr "儲存"
+#: data/gtk/menus.ui:228
+msgid "Reset"
+msgstr "重新設定"
 
-#: ../libide/editor/ide-editor-view-actions.c:427
-msgid "Save Document As"
-msgstr "儲存文件為"
+#: data/gtk/menus.ui:239
+msgid "_Wrap Around"
+msgstr "回開頭處再開始(_W)"
 
-#: ../libide/editor/ide-editor-view.c:109
-msgid "Plain Text"
-msgstr "純文字"
+#: data/gtk/menus.ui:245
+msgid "Cu_t"
+msgstr "剪下(_T)"
 
-#. translators: the user selected a number outside the value range for the document.
-#: ../libide/editor/ide-editor-view.c:660
-#, c-format
-msgid "Provide a number between 1 and %u"
-msgstr "提供一個介於 1 和 %u 的數字"
+#: data/gtk/menus.ui:271
+msgid "Split"
+msgstr "分割"
 
-#: ../libide/genesis/ide-genesis-perspective.c:200
-#: ../libide/greeter/ide-greeter-perspective.c:429
-msgid "Failed to load the project"
-msgstr "無法載入專案"
+#: data/gtk/menus.ui:273
+msgid "Split Left"
+msgstr "分割於左側"
 
-#: ../libide/gsettings/ide-language-defaults.c:177
-#, c-format
-msgid "%s contained invalid ASCII"
-msgstr "%s 包含無效的 ASCII"
+#: data/gtk/menus.ui:278
+msgid "Split Right"
+msgstr "分割於右側"
 
-#: ../libide/gsettings/ide-language-defaults.c:192
-#, c-format
-msgid "Failed to parse integer from \"%s\""
-msgstr "無法從「%s」分析整數"
+#: data/gtk/menus.ui:283
+msgid "Split Down"
+msgstr "分割於下方"
 
-#: ../libide/gsettings/ide-language-defaults.c:270
-msgid "language defaults missing version in [global] group."
-msgstr "語言預設值在 [global] 群組中缺少版本。"
+#: data/gtk/menus.ui:290
+msgid "Move"
+msgstr "移動"
 
-#: ../libide/gsettings/ide-language-defaults.c:362
-msgid "Failed to initialize defaults."
-msgstr "無法初始化預設值。"
+#: data/gtk/menus.ui:292
+msgid "Move Left"
+msgstr "向左移動"
 
-#: ../libide/ide-application-actions.c:114
+#: data/gtk/menus.ui:297
+msgid "Move Right"
+msgstr "向右移動"
+
+#: data/gtk/menus.ui:305
+msgid "_Save"
+msgstr "儲存(_S)"
+
+#: data/gtk/menus.ui:309
+msgid "_Save As"
+msgstr "另存為(_A)"
+
+#: data/gtk/menus.ui:315
+msgid "_Print"
+msgstr "列印(_P)"
+
+#: data/gtk/menus.ui:321 plugins/sysprof/gbp-sysprof-perspective.ui:28
+msgid "_Close"
+msgstr "關閉(_C)"
+
+#: data/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: libide/application/ide-application.c:547
+#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/workbench/ide-workbench.c:565
+msgid "Builder"
+msgstr "Builder"
+
+#: data/org.gnome.Builder.appdata.xml.in:8
+#: libide/application/ide-application-actions.c:116
 msgid "An IDE for GNOME"
 msgstr "GNOME 的 IDE"
 
-#: ../libide/ide-application-actions.c:120
+#: data/org.gnome.Builder.appdata.xml.in:11
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder 是 積極開發的 GNOME 整合式開發環境。它結合 GTK +、Glib 和 GNOME API "
+"等基本的 GNOME 技術整合的支援，以及任何開發人員都讚賞，像語法標示和文字片段的"
+"功能。"
+
+#: data/org.gnome.Builder.appdata.xml.in:17
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr "您可以預期 Builder 會隨著 GNOME 每六個月的更新周期推出新的釋出版本。"
+
+#: data/org.gnome.Builder.appdata.xml.in:21
+msgid "Features:"
+msgstr "功能："
+
+#: data/org.gnome.Builder.appdata.xml.in:23
+msgid "Built in syntax highlighting for many languages"
+msgstr "內建許多語言的語法標示"
+
+#: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:52
+msgid "Side-by-side code editors"
+msgstr "同步程式碼編輯器"
+
+#: data/org.gnome.Builder.appdata.xml.in:25
+msgid "Integration with Git"
+msgstr "整合 Git"
+
+#: data/org.gnome.Builder.appdata.xml.in:26
+msgid "Integration with Autotools"
+msgstr "整合 Autotools"
+
+#: data/org.gnome.Builder.appdata.xml.in:27
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr "基於 Clang 的自動補齊、語義標示和診斷"
+
+#: data/org.gnome.Builder.appdata.xml.in:28
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr "基於 Python 的自動補齊、語義標示和診斷"
+
+#: data/org.gnome.Builder.appdata.xml.in:29
+msgid "Vala based auto-completion and diagnostics"
+msgstr "基於 Vala 的自動補齊和診斷"
+
+#: data/org.gnome.Builder.appdata.xml.in:30
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "C、Python、Vala 和 XML 的自動縮排支援"
+
+#: data/org.gnome.Builder.appdata.xml.in:31
+msgid "HTML/Markdown live preview"
+msgstr "HTML/Markdown 即時預覽"
+
+#: data/org.gnome.Builder.appdata.xml.in:32
+msgid "Optional Vim-style editing"
+msgstr "選用的 Vim-風格式編輯"
+
+#: data/org.gnome.Builder.appdata.xml.in:33
+msgid "An integrated software profiler for native applications"
+msgstr "對原生應用程式整合的軟體效能分析器"
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+msgid "Support for building with jhbuild"
+msgstr "支援以 jhbuild 組建"
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Preview support for building with Flatpak runtimes"
+msgstr "組建 Flatpak 執行階段的預覽支援"
+
+#: data/org.gnome.Builder.appdata.xml.in:44
+msgid "Fast global search"
+msgstr "快速全域搜尋"
+
+#: data/org.gnome.Builder.appdata.xml.in:48
+msgid "Integrated project tree"
+msgstr "整合專案樹"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "開發 GNOME 軟體"
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.Builder.desktop.in.in:7
+msgid "org.gnome.Builder"
+msgstr "org.gnome.Builder"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;組建;開發;"
+
+#: libide/application/ide-application-actions.c:122
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: ../libide/ide-application-actions.c:122
+#: libide/application/ide-application-actions.c:124
 msgid "translator-credits"
 msgstr "Cheng-Chia Tseng <pswo10680@gmail.com>, 2015"
 
-#: ../libide/ide-application-actions.c:125
+#: libide/application/ide-application-actions.c:131
 msgid "Learn more about GNOME Builder"
 msgstr "了解更多關於 GNOME Builder"
 
-#: ../libide/ide-application-actions.c:129
+#: libide/application/ide-application-actions.c:134
 msgid "Funded By"
 msgstr "資金者："
 
-#: ../libide/ide-application-command-line.c:102
+#: libide/application/ide-application-command-line.c:102
 msgid "Commands:"
 msgstr "指令："
 
-#: ../libide/ide-application-command-line.c:165
+#: libide/application/ide-application-command-line.c:187
 msgid "List available subcommands"
 msgstr "列出可供使用的子指令列表"
 
-#: ../libide/ide-application-command-line.c:172
+#: libide/application/ide-application-command-line.c:194
 msgid "Run Builder in standalone mode"
 msgstr "以單獨模式執行 Builder"
 
-#: ../libide/ide-application-command-line.c:179
-msgid "Show the application's version"
+#: libide/application/ide-application-command-line.c:201
+msgid "Show the application’s version"
 msgstr "顯示應用程式的版本"
 
-#: ../libide/ide-application-command-line.c:198
+#: libide/application/ide-application-command-line.c:220
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "增加詳細程度，可能指定多次"
 
-#: ../libide/ide-application-command-line.c:228
+#: libide/application/ide-application-command-line.c:227
+msgid "Enter GApplication Service mode"
+msgstr "進入 GApplication 服務模式"
+
+#: libide/application/ide-application-command-line.c:234
+msgid "Opens the project specified by PATH"
+msgstr "開啟由 PATH 指定的專案"
+
+#: libide/application/ide-application-command-line.c:235
+#: libide/buildui/ide-build-tool.c:282
+msgid "PATH"
+msgstr "路徑"
+
+#: libide/application/ide-application-command-line.c:242
+msgid "Clones the project specified by MANIFEST"
+msgstr "重製由 MANIFEST 指定的專案"
+
+#: libide/application/ide-application-command-line.c:243
+msgid "MANIFEST"
+msgstr "MANIFEST"
+
+#: libide/application/ide-application-command-line.c:273
 msgid "COMMAND"
 msgstr "指令"
 
-#: ../libide/ide-application-command-line.c:286
+#: libide/application/ide-application-command-line.c:344
 msgid "No commands available"
 msgstr "沒有指令可用"
 
-#: ../libide/ide-application-command-line.c:315
+#: libide/application/ide-application-command-line.c:374
 msgid "Please provide a command"
 msgstr "請提供一個指令"
 
-#: ../libide/ide-application-command-line.c:325
+#: libide/application/ide-application-command-line.c:384
 msgid "No such tool"
 msgstr "沒有這樣的工具"
 
-#: ../libide/ide-application-command-line.c:339
+#: libide/application/ide-application-command-line.c:398
 msgid "Please provide a worker type"
 msgstr "請提供工作程式類型"
 
-#: ../libide/ide-application-command-line.c:346
+#: libide/application/ide-application-command-line.c:405
 msgid "Please provide a D-Bus address"
 msgstr "請提供 D-Bus 位址"
 
-#: ../libide/ide-application-command-line.c:355
+#: libide/application/ide-application-command-line.c:414
 msgid "No such worker"
 msgstr "沒有這種工作程式"
 
-#: ../libide/ide-buffer.c:2204
+#: libide/buffers/ide-buffer.c:2476
 msgid "The current language lacks a symbol resolver."
 msgstr "目前的語言缺乏符號解譯器。"
 
-#: ../libide/ide-buffer-manager.c:612
+#: libide/buffers/ide-buffer-manager.c:673
 msgid "File too large to be opened."
 msgstr "檔案太過巨大無法開啟。"
 
-#: ../libide/ide-buffer-manager.c:1456
-msgid "Words"
-msgstr "字詞"
-
-#: ../libide/ide-buffer-manager.c:1668
+#: libide/buffers/ide-buffer-manager.c:1762
 #, c-format
 msgid "unsaved document %u"
 msgstr "未儲存文件 %u"
 
-#: ../libide/ide-buffer-manager.c:1702
+#: libide/buffers/ide-buffer-manager.c:1796
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "IP 組態失敗"
 
-#: ../libide/ide-builder.c:55
-#, c-format
-msgid "%s does not implement build_async()"
-msgstr "%s 沒有實作 build_async()"
-
-#: ../libide/ide-builder.c:61
-msgid "No implementation of build_async()"
-msgstr "沒有實作 build_async()"
-
-#: ../libide/ide-build-result.c:217
-msgid "Failed to open stderr stream."
-msgstr "無法開啟 stderr 的串流。"
-
-#: ../libide/ide-build-result.c:247
-msgid "Failed to open stdout stream."
-msgstr "無法開啟 stdout 的串流。"
-
-#: ../libide/ide-build-system.c:232
-#, c-format
-msgid "%s() is not supported on %s build system."
-msgstr "%s() 在 %s 建置系統中不支援。"
-
-#: ../libide/ide.c:62
-#, c-format
-msgid "You must call %s() before using libide."
-msgstr "使用 libido 前您必須呼叫 %s()。"
-
-#: ../libide/ide-context.c:1665
-msgid "An unload request is already pending"
-msgstr "已經預定一項卸載要求"
-
-#: ../libide/ide-context.c:1780
-msgid "Context has already been restored."
-msgstr "脈絡已經復原了。"
-
-#: ../libide/ide-device-manager.c:144
-#, c-format
-msgid "The device \"%s\" could not be found."
-msgstr "找不到「%s」裝置。"
-
-#: ../libide/ide-layout-view.c:146
-msgid "untitled document"
-msgstr "無標題文件"
-
-#: ../libide/ide-object.c:288
-#, c-format
-msgid "No implementations of extension point \"%s\"."
-msgstr "沒有延伸點「%s」的實作。"
-
-#: ../libide/ide-object.c:380
-msgid "Failed to locate build system plugin."
-msgstr "無法定位建置系統外掛程式。"
-
-#: ../libide/ide-object.c:467
-msgid "No such extension point."
-msgstr "沒有這種延伸點。"
-
-#: ../libide/ide-object.c:477
-msgid "No implementations of extension point."
-msgstr "沒有延伸點的實作。"
-
-#: ../libide/ide-project.c:463
-msgid "Destination file must be within the project tree."
-msgstr "目的端檔案必須在專案樹中。"
-
-#: ../libide/ide-project.c:593
-msgid "File must be within the project tree."
-msgstr "檔案必須在專案樹中。"
-
-#: ../libide/ide-recent-projects.c:382
-#, c-format
-msgid "%s() may only be executed once"
-msgstr "%s() 只能執行一次"
-
-#: ../libide/ide-script.c:205
-#, c-format
-msgid "%s has not implemented GAsyncInitable."
-msgstr "%s 沒有實作 GAsyncInitable。"
-
-#: ../libide/ide-source-snippet.c:370
-#, fuzzy
-msgid "Chunk does not belong to snippet."
-msgstr "%s 不屬於一個群組"
-
-#: ../libide/ide-source-snippet-completion-provider.c:297
-#: ../libide/preferences/ide-preferences-builtin.c:173
-msgid "Snippets"
-msgstr "文字片段"
-
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "第 %d 列有無效的文字片段： %s"
-
-#: ../libide/ide-source-snippets-manager.c:96
-#, c-format
-msgid "Failed to open directory: %s"
-msgstr "無法開啟目錄：%s"
-
-#: ../libide/ide-source-snippets-manager.c:109
-#, c-format
-msgid "Failed to load file: %s: %s"
-msgstr "無法載入檔案：%s：%s"
-
-#: ../libide/ide-source-view.c:4965
-#, c-format
-msgid "Insert \"%s\""
-msgstr "插入「%s」"
-
-#: ../libide/ide-source-view.c:4967
-#, c-format
-msgid "Replace \"%s\" with \"%s\""
-msgstr "將「%s」取代為「%s」"
-
-#: ../libide/ide-source-view.c:5081
-msgid "Apply Fix-It"
-msgstr "套用 Fix-It"
-
-#: ../libide/ide-uri.c:181
-#, no-c-format
-msgid "Invalid %-encoding in URI"
-msgstr "URI 有無效的 %-encoding"
-
-#: ../libide/ide-uri.c:219
-msgid "Non-UTF-8 characters in URI"
-msgstr "URI  中的非UTF-8 字元"
-
-#: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
-#, c-format
-msgid "Invalid IP literal '%s' in URI"
-msgstr "URI 中無效的 IP 字面「%s」"
-
-#: ../libide/ide-uri.c:411
-#, c-format
-msgid "Invalid encoded IP literal '%s' in URI"
-msgstr "在 URI 中無效編碼 IP 字面「%s」"
-
-#: ../libide/ide-uri.c:420
-#, c-format
-msgid "Invalid non-ASCII hostname '%s' in URI"
-msgstr "URI 中無效的非 ASCII 主機名稱「%s」"
-
-#: ../libide/ide-uri.c:435
-#, c-format
-msgid "Non-ASCII hostname '%s' forbidden in this URI"
-msgstr "這個 URI 禁止使用非 ASCII 主機名稱「%s」"
-
-#: ../libide/ide-uri.c:457
-#, c-format
-msgid "Could not parse port '%s' in URI"
-msgstr "無法解析 URI 中的連接埠「%s」"
-
-#: ../libide/ide-uri.c:464
-#, c-format
-msgid "Port '%s' in URI is out of range"
-msgstr "URI 中的連接埠「%s」超出範圍"
-
-#: ../libide/ide-uri.c:590
-msgid "Base URI is not absolute"
-msgstr "基礎 URI 不是絕對的"
-
-#: ../libide/ide-uri.c:617
-msgid "URI is not absolute, and no base URI was provided"
-msgstr "URI 不是絕對的，沒有提供基礎 URI"
-
-#: ../libide/ide-uri.c:662
-#, c-format
-msgid "Could not parse '%s' as absolute URI"
-msgstr "無法解析「%s」為絕對 URI"
-
-#: ../libide/ide-uri.c:1190
-#, c-format
-msgid "URI '%s' has no host component"
-msgstr "URI「%s」沒有主機元件"
-
-#: ../libide/ide-workbench-actions.c:64
-msgid "Open File"
-msgstr "開啟檔案"
-
-#: ../libide/ide-workbench-actions.c:68
-msgid "Open"
-msgstr "開啟"
-
-#: ../libide/preferences/ide-preferences-builtin.c:40
-msgid "Extensions"
-msgstr "擴充功能"
-
-#: ../libide/preferences/ide-preferences-builtin.c:41
-msgid "Installed Extensions"
-msgstr "安裝的擴充功能"
-
-#: ../libide/preferences/ide-preferences-builtin.c:42
-msgid "Bundled Extensions"
-msgstr "綁定的擴充功能"
-
-#: ../libide/preferences/ide-preferences-builtin.c:77
-msgid "Appearance"
-msgstr "外觀"
-
-#: ../libide/preferences/ide-preferences-builtin.c:79
-msgid "Themes"
-msgstr "布景主題"
-
-#: ../libide/preferences/ide-preferences-builtin.c:80
-msgid "Dark Theme"
-msgstr "深黑主題"
-
-#: ../libide/preferences/ide-preferences-builtin.c:80
-msgid "Whether Builder should use a dark theme"
-msgstr "Builder 是否應使用暗色系布景主題"
-
-#: ../libide/preferences/ide-preferences-builtin.c:80
-msgid "dark theme"
-msgstr "深黑主題"
-
-#: ../libide/preferences/ide-preferences-builtin.c:81
-msgid "Grid Pattern"
-msgstr "格線圖案"
-
-#: ../libide/preferences/ide-preferences-builtin.c:81
-msgid "Display a grid pattern underneath source code"
-msgstr "在源碼下顯示格線圖案"
-
-#: ../libide/preferences/ide-preferences-builtin.c:101
-msgid "Font"
-msgstr "字型"
-
-#: ../libide/preferences/ide-preferences-builtin.c:102
-msgid "editor font monospace"
-msgstr "editor font monospace 編輯器 字型 等寬"
-
-#. XXX: This belongs in terminal addin
-#: ../libide/preferences/ide-preferences-builtin.c:104
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:99
-msgid "Terminal"
-msgstr "終端機"
-
-#: ../libide/preferences/ide-preferences-builtin.c:104
-msgid "terminal font monospace"
-msgstr "terminal font monospace 終端機 字型 等寬"
-
-#: ../libide/preferences/ide-preferences-builtin.c:110
-msgid "Keyboard"
-msgstr "鍵盤"
-
-#: ../libide/preferences/ide-preferences-builtin.c:112
-msgid "Emulation"
-msgstr "模擬"
-
-#: ../libide/preferences/ide-preferences-builtin.c:113
-msgid "Default keybinding mode which mimics gedit"
-msgstr "模仿 gedit 的預設組合鍵模式"
-
-#: ../libide/preferences/ide-preferences-builtin.c:114
-msgid "Emacs"
-msgstr "Emacs"
-
-#: ../libide/preferences/ide-preferences-builtin.c:114
-msgid "Emulates the Emacs text editor"
-msgstr "模擬 Emacs 文字編輯器"
-
-#: ../libide/preferences/ide-preferences-builtin.c:115
-msgid "Vim"
-msgstr "Vim"
-
-#: ../libide/preferences/ide-preferences-builtin.c:115
-msgid "Emulates the Vim text editor"
-msgstr "模擬 Vim 文字編輯器"
-
-#: ../libide/preferences/ide-preferences-builtin.c:117
-msgid "Movement"
-msgstr "移動"
-
-#: ../libide/preferences/ide-preferences-builtin.c:118
-msgid "Smart Home and End"
-msgstr "智慧式 Home 與 End"
-
-#: ../libide/preferences/ide-preferences-builtin.c:118
-msgid "Home moves to first non-whitespace character"
-msgstr "Home 移至第一個非空白字元"
-
-#: ../libide/preferences/ide-preferences-builtin.c:119
-msgid ""
-"Backspace will remove extra space to keep you aligned with your indentation"
-msgstr "Backspace 會移除額外的空白讓您保持對齊縮排寬度"
-
-#: ../libide/preferences/ide-preferences-builtin.c:127
-msgid "Cursor"
-msgstr "游標"
-
-#: ../libide/preferences/ide-preferences-builtin.c:128
-msgid "Restore cursor position"
-msgstr "回復游標位置"
-
-#: ../libide/preferences/ide-preferences-builtin.c:128
-msgid "Restore cursor position when a file is reopened"
-msgstr "重新開啟檔案時還原插入游標上次的位置"
-
-#: ../libide/preferences/ide-preferences-builtin.c:129
-msgid "Scroll Offset"
-msgstr "捲動偏移"
-
-#: ../libide/preferences/ide-preferences-builtin.c:129
-msgid "Minimum number of lines to keep above and below the cursor"
-msgstr "留在游標之上與之下的最小列數"
-
-#: ../libide/preferences/ide-preferences-builtin.c:130
-msgid "Overscroll"
-msgstr ""
-
-#: ../libide/preferences/ide-preferences-builtin.c:130
-msgid "Allow the editor to scroll past the end of the buffer"
-msgstr ""
-
-#: ../libide/preferences/ide-preferences-builtin.c:132
-msgid "Line Information"
-msgstr "列資訊"
-
-#: ../libide/preferences/ide-preferences-builtin.c:133
-msgid "Line numbers"
-msgstr "列號"
-
-#: ../libide/preferences/ide-preferences-builtin.c:133
-msgid "Show line number at beginning of each line"
-msgstr "在每列開頭顯示列號"
-
-#: ../libide/preferences/ide-preferences-builtin.c:134
-msgid "Line changes"
-msgstr "列變更"
-
-#: ../libide/preferences/ide-preferences-builtin.c:134
-msgid "Show if a line was added or modified next to line number"
-msgstr "在列號旁顯示是否有加入或修改列"
-
-#: ../libide/preferences/ide-preferences-builtin.c:136
-msgid "Highlight"
-msgstr "標示"
-
-#: ../libide/preferences/ide-preferences-builtin.c:137
-msgid "Current line"
-msgstr "目前的行"
-
-#: ../libide/preferences/ide-preferences-builtin.c:137
-msgid "Make current line stand out with highlights"
-msgstr "標示目前所在的列"
-
-#: ../libide/preferences/ide-preferences-builtin.c:138
-msgid "Matching brackets"
-msgstr "成對的弧號"
-
-#: ../libide/preferences/ide-preferences-builtin.c:138
-msgid "Highlight matching brackets based on cursor position"
-msgstr "基於游標位置標明成對的括號"
-
-#: ../libide/preferences/ide-preferences-builtin.c:140
-msgid "Code Overview"
-msgstr "原始碼概覽"
-
-#: ../libide/preferences/ide-preferences-builtin.c:141
-msgid "Show overview map"
-msgstr "顯示概覽地圖"
-
-#: ../libide/preferences/ide-preferences-builtin.c:141
-msgid "A zoomed out view to enhance navigating source code"
-msgstr "拉近檢視以加強原始碼導覽"
-
-#: ../libide/preferences/ide-preferences-builtin.c:142
-msgid "Automatically hide overview map"
-msgstr "自動隱藏概覽地圖"
-
-#: ../libide/preferences/ide-preferences-builtin.c:142
-msgid "Automatically hide map when editor loses focus"
-msgstr "當編輯器失去焦點時自動隱藏地圖"
-
-#: ../libide/preferences/ide-preferences-builtin.c:144
-msgid "Whitespace Characters"
-msgstr "空白字元"
-
-#: ../libide/preferences/ide-preferences-builtin.c:147
-msgid "New line and carriage return"
-msgstr "新列並回車"
-
-#: ../libide/preferences/ide-preferences-builtin.c:148
-msgid "Non-breaking spaces"
-msgstr "不斷列空白"
-
-#: ../libide/preferences/ide-preferences-builtin.c:149
-msgid "Spaces inside of text"
-msgstr "文字中的空格"
-
-#: ../libide/preferences/ide-preferences-builtin.c:150
-msgid "Trailing Only"
-msgstr "只有結尾"
-
-#: ../libide/preferences/ide-preferences-builtin.c:151
-msgid "Leading Only"
-msgstr "只有開頭"
-
-#: ../libide/preferences/ide-preferences-builtin.c:157
-#, fuzzy
-#| msgid "Code Assistant"
-msgid "Code Insight"
-msgstr "代碼"
-
-#: ../libide/preferences/ide-preferences-builtin.c:159
-msgid "Highlighting"
-msgstr "標明"
-
-#: ../libide/preferences/ide-preferences-builtin.c:160
-msgid "Semantic Highlighting"
-msgstr "語義標示"
-
-#: ../libide/preferences/ide-preferences-builtin.c:160
-msgid ""
-"Use code insight to highlight additional information discovered in source "
-"file"
-msgstr ""
-
-#: ../libide/preferences/ide-preferences-builtin.c:162
-msgid "Completion"
-msgstr "補齊"
-
-#: ../libide/preferences/ide-preferences-builtin.c:163
-msgid "Suggest words found in open files"
-msgstr "在開啟檔案中建議字詞"
-
-#: ../libide/preferences/ide-preferences-builtin.c:163
-msgid ""
-"Suggests completions as you type based on words found in any open document"
-msgstr "當您輸入時利用在所有開啟的文件中找到的字來建議文字補齊。"
-
-#: ../libide/preferences/ide-preferences-builtin.c:164
-msgid "Suggest completions using Ctags"
-msgstr "使用 Ctags 來建議文字補齊"
-
-#: ../libide/preferences/ide-preferences-builtin.c:164
-msgid ""
-"Create and manages a Ctags database for completing class names, functions, "
-"and more"
-msgstr "建立和管理用來補齊類別名稱、函式等等的 Ctags 資料庫"
-
-#: ../libide/preferences/ide-preferences-builtin.c:165
-msgid "Suggest completions using Clang (Experimental)"
-msgstr "使用 Clang 來建議文字補齊 (實驗性)"
-
-#: ../libide/preferences/ide-preferences-builtin.c:165
-msgid "Use Clang to suggest completions for C and C++ languages"
-msgstr "使用 Clang 對 C 與 C++ 語言進行文字補齊"
-
-#: ../libide/preferences/ide-preferences-builtin.c:167
-msgid "Diagnostics"
-msgstr "診斷"
-
-#: ../libide/preferences/ide-preferences-builtin.c:176
-msgid "Code snippets"
-msgstr "程式碼文字片段"
-
-#: ../libide/preferences/ide-preferences-builtin.c:176
-msgid "Use code fragments to increase typing efficiency"
-msgstr "使用原始碼片段以提高打字效率"
-
-#: ../libide/preferences/ide-preferences-builtin.c:190
-msgid "Programming Languages"
-msgstr "程式設計語言"
-
-#: ../libide/preferences/ide-preferences-builtin.c:227
-msgid "Trim trailing whitespace"
-msgstr "修剪結尾空白"
-
-#: ../libide/preferences/ide-preferences-builtin.c:227
-msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
-msgstr "儲存後，將剪裁修改列結尾的空格。"
-
-#: ../libide/preferences/ide-preferences-builtin.c:229
-msgid "Margins"
-msgstr "邊界"
-
-#: ../libide/preferences/ide-preferences-builtin.c:230
-msgid "Show right margin"
-msgstr "顯示右邊界"
-
-#: ../libide/preferences/ide-preferences-builtin.c:231
-msgid "Right margin position"
-msgstr "右邊邊界位置"
-
-#: ../libide/preferences/ide-preferences-builtin.c:231
-msgid "Position in spaces for the right margin"
-msgstr "右邊界位置(以空白計)"
-
-#: ../libide/preferences/ide-preferences-builtin.c:234
-msgid "Tab width"
-msgstr "Tab 字元寬度"
-
-#: ../libide/preferences/ide-preferences-builtin.c:234
-msgid "Width of a tab character in spaces"
-msgstr "Tab 字元寬度(以空白計)"
-
-#: ../libide/preferences/ide-preferences-builtin.c:235
-msgid "Insert spaces instead of tabs"
-msgstr "插入空格代替 Tab 字元"
-
-#: ../libide/preferences/ide-preferences-builtin.c:235
-msgid "Prefer spaces over use of tabs"
-msgstr "偏好空格而非 Tab"
-
-#: ../libide/preferences/ide-preferences-builtin.c:236
-msgid "Automatically indent"
-msgstr "自動縮排"
-
-#: ../libide/preferences/ide-preferences-builtin.c:236
-msgid "Indent source code as you type"
-msgstr "當您輸入時縮排原始碼"
-
-#: ../libide/preferences/ide-preferences-builtin.c:242
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:331
-msgid "Build"
-msgstr "建置"
-
-#: ../libide/preferences/ide-preferences-builtin.c:244
-msgid "General"
-msgstr "一般"
-
-#: ../libide/preferences/ide-preferences-builtin.c:245
-msgid "Build Workers"
-msgstr "建置工作程式"
-
-#: ../libide/preferences/ide-preferences-builtin.c:245
-msgid "Number of parallel build workers"
-msgstr "平行編譯工作程式的數量"
-
-#: ../libide/preferences/ide-preferences-perspective.c:796
-msgid "Preferences"
-msgstr "偏好設定"
-
-#: ../libide/pygobject/ide-pygobject-script.c:135
-msgid "Attempt to load a PyGObject script with no filename."
-msgstr "嘗試載入沒有檔案名稱的 PyGObject 命令稿。"
-
-#: ../libide/pygobject/ide-pygobject-script.c:254
-msgid "The filename for the script was not provided."
-msgstr "沒有提供命令稿的檔案名稱。"
-
-#: ../libide/pygobject/ide-pygobject-script.c:265
-msgid "The script must be on a local filesystem."
-msgstr "命令稿必須是本地端檔案。"
-
-#: ../libide/pygobject/ide-pygobject-script.c:274
-#, c-format
-msgid "The script \"%s\" is not a PyGObject file."
-msgstr "命令稿「%s」不是 PyGObject 檔案。"
-
-#: ../libide/search/ide-omni-search-display.c:264
-msgid "Cannot add provider more than once."
-msgstr "不能加入超過一個以上的提供者。"
-
-#: ../libide/search/ide-omni-search-display.c:340
-msgid "The provider could not be found."
-msgstr "找不到提供者。"
-
-#: ../libide/util/ide-file-manager.c:64
-msgid "File path is NULL"
-msgstr "檔案路徑為 NULL"
-
-#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
-msgid "Error converting UTF-8 filename to wide char"
-msgstr "轉換 UTF-8 檔案名稱為寬字元時發生錯誤"
-
-#: ../libide/util/ide-file-manager.c:92
-msgid "ILCreateFromPath() failed"
-msgstr "ILCreateFromPath() 失敗"
-
-#: ../libide/util/ide-file-manager.c:129
-#, c-format
-msgid "Cannot convert '%s' into a valid NSURL."
-msgstr "無法轉換「%s」為有效的 NSURL。"
-
-#: ../libide/util/ide-file-manager.c:157
-msgid "Connecting to org.freedesktop.FileManager1 failed: "
-msgstr "連線到 org.freedesktop.FileManager1 失敗："
-
-#: ../libide/util/ide-file-manager.c:181
-msgid "Calling ShowItems failed: "
-msgstr "呼叫 ShowItems 失敗："
-
-#: ../plugins/autotools/ide-autotools-builder.c:130
-msgid "Cancelled"
-msgstr "已取消"
-
-#: ../plugins/autotools/ide-autotools-builder.c:132
-msgid "Failed"
-msgstr "失敗"
-
-#: ../plugins/autotools/ide-autotools-builder.c:138
-msgid "Success"
-msgstr "成功"
-
-#: ../plugins/autotools/ide-autotools-builder.c:242
-#: ../plugins/autotools/ide-autotools-build-task.c:933
-msgid "Building…"
-msgstr "建置…"
-
-#: ../plugins/autotools/ide-autotools-build-system.c:182
-msgid "Failed to locate configure.ac"
-msgstr "無法定位 configure.ac"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:270
-msgid "Directory must be on a locally mounted filesystem."
-msgstr "目錄必須為本地端掛載的檔案系統。"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:649
-msgid "Cannot execute build task more than once."
-msgstr "不能執行超過一項的建置工作。"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:734
-msgid "Failed to create build directory."
-msgstr "無法建立建置目錄。"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:743
-#, c-format
-msgid "'%s' is not a directory."
-msgstr "「%s」不是一個目錄。"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:782
-#, c-format
-msgid "autogen.sh is missing from project directory (%s)."
-msgstr "在專案目錄中缺少 autogen.sh (%s)。"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:792
-msgid "autogen.sh is not executable."
-msgstr "autogen.sh 不是可執行檔。"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:796
-msgid "Autogening…"
-msgstr "自動產生…"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:825
-#, c-format
-msgid "autogen.sh failed to create configure (%s)"
-msgstr "autogen.sh 無法建立 configure (%s)"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:860
-msgid "Configuring…"
-msgstr "正在設定…"
-
-#: ../plugins/autotools/ide-autotools-build-task.c:931
+#: libide/buildsystem/ide-build-pipeline.c:2040
 msgid "Cleaning…"
 msgstr "正在清理…"
 
-#: ../plugins/autotools/ide-makecache.c:1006
-msgid "Invalid makefile provided, ignoring."
-msgstr "提供了無效的 makefile，略過。"
+#: libide/buildsystem/ide-build-pipeline.c:2055
+msgid "Downloading…"
+msgstr "正在下載..."
 
-#: ../plugins/build-tools/gbp-build-panel-row.c:68
-msgid "Unknown file"
-msgstr "不明的檔案"
+#: libide/buildsystem/ide-build-pipeline.c:2059
+msgid "Building dependencies…"
+msgstr "組建相依性…"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:1
-msgid "Device:"
-msgstr "裝置："
+#: libide/buildsystem/ide-build-pipeline.c:2063
+msgid "Bootstrapping…"
+msgstr ""
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:2
-msgid "Framework:"
-msgstr "框架："
+#: libide/buildsystem/ide-build-pipeline.c:2067
+msgid "Configuring…"
+msgstr "正在設定…"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:3
-msgid "Packaging:"
-msgstr "封裝："
+#: libide/buildsystem/ide-build-pipeline.c:2071
+msgid "Building…"
+msgstr "建置…"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:4
-#: ../plugins/project-tree/gtk/menus.ui.h:12
-msgid "_Build"
-msgstr "建置(_B)"
+#: libide/buildsystem/ide-build-pipeline.c:2075
+msgid "Installing…"
+msgstr "正在安裝…"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:5
-#: ../plugins/project-tree/gtk/menus.ui.h:13
-msgid "_Rebuild"
-msgstr "重新建置(_B)"
+#: libide/buildsystem/ide-build-pipeline.c:2079
+msgid "Exporting…"
+msgstr "正在匯出…"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:6
-msgid "_Clean"
-msgstr "清理(_C)"
+#: libide/buildsystem/ide-build-pipeline.c:2083
+#: libide/buildsystem/ide-build-pipeline.c:2087
+msgid "Success"
+msgstr "成功"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:7
-msgid "framework"
-msgstr "框架"
+#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/workbench/ide-omni-bar.ui:328
+msgid "Failed"
+msgstr "失敗"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:8
-msgid "packaging"
-msgstr "封裝"
+#: libide/buildsystem/ide-build-pipeline.c:2095
+msgid "Preparing…"
+msgstr "正在準備…"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+#: libide/buildsystem/ide-build-pipeline.c:2099
+msgid "Ready"
+msgstr "準備就緒"
+
+#: libide/buildsystem/ide-configuration-manager.c:75
+#: libide/preferences/ide-preferences-builtin.c:337
+#: libide/preferences/ide-preferences-builtin.c:355
+msgid "Default"
+msgstr "預設值"
+
+#: libide/buildui/ide-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr "重製設定"
+
+#: libide/buildui/ide-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr "刪除設定"
+
+#: libide/buildui/ide-build-configuration-view.ui:11
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+msgid "General"
+msgstr "一般"
+
+#: libide/buildui/ide-build-configuration-view.ui:28
+msgid "The name of the build configuration"
+msgstr "組建設定的名稱"
+
+#: libide/buildui/ide-build-configuration-view.ui:37
+msgid "Name"
+msgstr "名稱"
+
+#: libide/buildui/ide-build-configuration-view.ui:58
+msgid "The prefix to use when installing the project"
+msgstr "安裝專案時使用的前綴"
+
+#: libide/buildui/ide-build-configuration-view.ui:67
+msgid "Installation Prefix"
+msgstr "安裝前綴"
+
+#: libide/buildui/ide-build-configuration-view.ui:88
+#, fuzzy
+msgid "Options to use when bootstrapping the project"
+msgstr "安裝專案時使用的前綴"
+
+#: libide/buildui/ide-build-configuration-view.ui:97
+msgid "Configure Options"
+msgstr "設定選項"
+
+#: libide/buildui/ide-build-configuration-view.ui:129
+#: libide/workbench/ide-omni-bar-row.ui:54
+msgid "Device"
+msgstr "裝置"
+
+#: libide/buildui/ide-build-configuration-view.ui:157
+#: libide/workbench/ide-omni-bar-row.ui:85
+msgid "Runtime"
+msgstr "執行階段"
+
+#: libide/buildui/ide-build-configuration-view.ui:185
+msgid "Environment"
+msgstr "環境"
+
+#: libide/buildui/ide-build-log-panel.c:714
+msgid "Build Output"
+msgstr "建置輸出"
+
+#: libide/buildui/ide-build-panel.c:86
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d 警告"
+
+#: libide/buildui/ide-build-panel.c:95
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d 錯誤"
+
+#: libide/buildui/ide-build-panel.c:517
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:382
+msgid "Build"
+msgstr "建置"
+
+#: libide/buildui/ide-build-panel.ui:33
 msgid "Status:"
 msgstr "狀態："
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+#: libide/buildui/ide-build-panel.ui:58
 msgid "Running Time:"
 msgstr "執行時間："
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:11
+#: libide/buildui/ide-build-panel.ui:82
 msgid "Warnings:"
 msgstr "警告："
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:12
+#: libide/buildui/ide-build-panel.ui:106
 msgid "Errors:"
 msgstr "錯誤："
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:14
-msgid "Deploy"
-msgstr "部署"
+#: libide/buildui/ide-build-panel.ui:149
+msgid "No Diagnostics"
+msgstr "沒有診斷"
 
-#: ../plugins/build-tools/gbp-build-panel.ui.h:15
-msgid "Export"
-msgstr "匯出"
+#. the action:// link is used to execute a build
+#: libide/buildui/ide-build-panel.ui:150
+msgid ""
+"<a href=\"action://build-manager.build\">Build your project</a> to show "
+"diagnostics here"
+msgstr ""
+"<a href=\"action://build-manager.build\">組建您的專案</a> 以在這裡顯示診斷"
 
-#: ../plugins/build-tools/gbp-build-tool.c:91
-#: ../plugins/build-tools/gbp-build-tool.c:97
-#, c-format
+#: libide/buildui/ide-build-perspective.c:438
+msgid "Build Preferences"
+msgstr "組建偏好設定"
+
+#: libide/buildui/ide-build-tool.c:103 libide/buildui/ide-build-tool.c:116
 msgid "========================\n"
 msgstr "========================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:92
+#: libide/buildui/ide-build-tool.c:104
 #, c-format
 msgid "           Project Name: %s\n"
 msgstr "           專案名稱：%s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:93
+#: libide/buildui/ide-build-tool.c:105
 #, c-format
 msgid " Version Control System: %s\n"
 msgstr " 版本控制系統：%s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:94
+#: libide/buildui/ide-build-tool.c:106
 #, c-format
 msgid "           Build System: %s\n"
 msgstr "           建置系統：%s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:95
+#: libide/buildui/ide-build-tool.c:107
 #, c-format
 msgid "    Build Date and Time: %s\n"
 msgstr "    建置日期時刻：%s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:96
+#: libide/buildui/ide-build-tool.c:108
 #, c-format
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    建置設備：%s (%s)\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:124
-#: ../plugins/build-tools/gbp-build-tool.c:128
+#: libide/buildui/ide-build-tool.c:113
 #, c-format
+msgid "            Environment: %s\n"
+msgstr "           環境：%s\n"
+
+#: libide/buildui/ide-build-tool.c:143 libide/buildui/ide-build-tool.c:147
 msgid "===============\n"
 msgstr "===============\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:125
+#: libide/buildui/ide-build-tool.c:144
 #, c-format
 msgid " Build Failure: %s\n"
 msgstr " 建置失敗：%s\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:126
+#: libide/buildui/ide-build-tool.c:145
 msgid " Build ran for: %"
 msgstr " 建置執行於：%"
 
@@ -1618,2208 +1278,2475 @@ msgstr " 建置執行於：%"
 #. *       here too. It would be nice if we could say, go build this project,
 #. *       for this device, and then deploy.
 #.
-#: ../plugins/build-tools/gbp-build-tool.c:139
-#: ../plugins/build-tools/gbp-build-tool.c:143
-#, c-format
+#: libide/buildui/ide-build-tool.c:158 libide/buildui/ide-build-tool.c:162
 msgid "=================\n"
 msgstr "=================\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:140
-#, c-format
+#: libide/buildui/ide-build-tool.c:159
 msgid " Build Successful\n"
 msgstr " 建置成功\n"
 
-#: ../plugins/build-tools/gbp-build-tool.c:141
+#: libide/buildui/ide-build-tool.c:160
 msgid "   Build ran for: %"
 msgstr "  建置執行於：%"
 
-#: ../plugins/build-tools/gbp-build-tool.c:191
+#: libide/buildui/ide-build-tool.c:212
 #, c-format
-msgid "Failed to locate device \"%s\""
+msgid "Failed to locate device “%s”"
 msgstr "無法定位裝置「%s」"
 
-#: ../plugins/build-tools/gbp-build-tool.c:254
+#: libide/buildui/ide-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime “%s”"
+msgstr "無法定位執行階段「%s」"
+
+#: libide/buildui/ide-build-tool.c:267
 msgid "Clean the project"
 msgstr "清理此專案"
 
-#: ../plugins/build-tools/gbp-build-tool.c:256
+#: libide/buildui/ide-build-tool.c:269
 msgid "The ID of the device to build for"
 msgstr "要建置的裝置 ID"
 
-#: ../plugins/build-tools/gbp-build-tool.c:257
+#: libide/buildui/ide-build-tool.c:270
 msgid "local"
 msgstr "本地端"
 
-#: ../plugins/build-tools/gbp-build-tool.c:259
+#: libide/buildui/ide-build-tool.c:272
+msgid "The runtime to use for building"
+msgstr "用於組建的執行階段。"
+
+#: libide/buildui/ide-build-tool.c:273
+msgid "host"
+msgstr "主機"
+
+#: libide/buildui/ide-build-tool.c:275
 msgid "Number of workers to use when building"
 msgstr "編譯時要使用的工作程式數量"
 
-#: ../plugins/build-tools/gbp-build-tool.c:260
+#: libide/buildui/ide-build-tool.c:276
 msgid "N"
 msgstr "N"
 
-#: ../plugins/build-tools/gbp-build-tool.c:262
+#: libide/buildui/ide-build-tool.c:278
+msgid "The configuration to use from .buildconfig"
+msgstr "從 .buildconfig 要使用的設定"
+
+#: libide/buildui/ide-build-tool.c:279
+msgid "CONFIG_ID"
+msgstr "CONFIG_ID"
+
+#: libide/buildui/ide-build-tool.c:281
 msgid "Path to project file, defaults to current directory"
 msgstr "專案檔案的路徑，預設為目前的目錄"
 
-#: ../plugins/build-tools/gbp-build-tool.c:263
-msgid "PATH"
-msgstr "路徑"
+#: libide/buildui/ide-environment-editor.c:67
+msgid "New variable…"
+msgstr "新增變數…"
 
-#: ../plugins/build-tools/gbp-build-workbench-addin.c:337
-msgid "Build Output"
-msgstr "建置輸出"
+#: libide/devices/ide-device-manager.c:147
+#, c-format
+msgid "The device “%s” could not be found."
+msgstr "找不到「%s」裝置。"
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: libide/directory/ide-directory-vcs.c:55
+msgid "unversioned"
+msgstr "未訂版本"
+
+#: libide/editorconfig/ide-editorconfig-file-settings.c:159
+msgid "No file was provided."
+msgstr "沒有提供檔案。"
+
+#: libide/editor/ide-editor-frame.c:138
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "列 %u，行 %u"
+
+#: libide/editor/ide-editor-frame.c:310
+#, c-format
+msgid "%u of %u"
+msgstr "%u / %u"
+
+#. OVR indicates we are in overwite mode
+#: libide/editor/ide-editor-frame.ui:17
+msgid "OVR"
+msgstr "OVR"
+
+#: libide/editor/ide-editor-frame.ui:166
+msgid "Replace"
+msgstr "取代"
+
+#: libide/editor/ide-editor-frame.ui:179
+msgid "Replace All"
+msgstr "全部取代"
+
+#: libide/editor/ide-editor-frame.ui:201
+msgid "Switch between Search and Search-and-Replace"
+msgstr "切換搜尋與取代"
+
+#: libide/editor/ide-editor-frame.ui:224
+#: plugins/terminal/gb-terminal-search.ui:100
+msgid "Show or hide search options such as case sensitivity"
+msgstr "顯示或隱藏搜尋選項，如區分大小寫"
+
+#: libide/editor/ide-editor-frame.ui:285
+msgid "Regular expressions"
+msgstr "正規表示式"
+
+#: libide/editor/ide-editor-frame.ui:300
+#: plugins/terminal/gb-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "區分大小寫"
+
+#: libide/editor/ide-editor-frame.ui:315
+msgid "Match whole word only"
+msgstr "比對整個字詞"
+
+#: libide/editor/ide-editor-layout-stack-controls.c:46
+msgid "Plain Text"
+msgstr "純文字"
+
+#. translators: the user selected a number outside the value range for the document.
+#: libide/editor/ide-editor-layout-stack-controls.c:191
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "提供一個介於 1 和 %u 的數字"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:31
+msgid "Go to line number"
+msgstr "移至列號"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:100
+msgid "Change editor settings and language"
+msgstr "改變編輯器設定值和語言"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:114
+#: libide/editor/ide-editor-view.ui:100
+msgid "Go to Line"
+msgstr "移至列號"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:115
+#: libide/editor/ide-editor-view.ui:101
+msgid "Go"
+msgstr "前往"
+
+#: libide/editor/ide-editor-perspective.c:523
+#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:156
+msgid "Editor"
+msgstr "編輯器"
+
+#: libide/editor/ide-editor-perspective.ui:30
+msgid "No open files"
+msgstr "尚未開啟檔案"
+
+#: libide/editor/ide-editor-perspective.ui:43
+msgid "Try opening a file by typing in the search box at the top"
+msgstr "試試在頂端的搜尋方塊中輸入來開啟檔案"
+
+#: libide/editor/ide-editor-spell-language-popover.c:232
+msgid "No language selected"
+msgstr "尚未選擇語言"
+
+#: libide/editor/ide-editor-spell-navigator.c:458
+msgid ""
+"Spell checker error: no language set. It’s maybe because no dictionaries are "
+"installed."
+msgstr "拼字檢查器錯誤︰ 沒有設定語言。也許是因為沒有安裝字典。"
+
+#: libide/editor/ide-editor-spell-widget.c:201
+msgid "No suggestions"
+msgstr "沒有建議"
+
+#: libide/editor/ide-editor-spell-widget.c:278
+msgid "Completed spell checking"
+msgstr "已完成的拼字檢查"
+
+#: libide/editor/ide-editor-spell-widget.c:636
+msgid "This word is already in the personal dictionary"
+msgstr "這個字詞已在個人字典中"
+
+#: libide/editor/ide-editor-spell-widget.c:639
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "這個字詞已在 %s 字典中"
+
+#: libide/editor/ide-editor-spell-widget.c:1270
+msgid "The word is not in the dictionary"
+msgstr "這個字詞不在字典中"
+
+#: libide/editor/ide-editor-spell-widget.ui:14
+msgid "Misspelled"
+msgstr "拼錯"
+
+#: libide/editor/ide-editor-spell-widget.ui:65
+msgid "_Ignore"
+msgstr "忽略(_I)"
+
+#: libide/editor/ide-editor-spell-widget.ui:73
+msgid "Ignore _All"
+msgstr "全部忽略(_A)"
+
+#: libide/editor/ide-editor-spell-widget.ui:92
+msgid "Change _to"
+msgstr "變更為(_T)"
+
+#: libide/editor/ide-editor-spell-widget.ui:124
+msgid "Cha_nge"
+msgstr "變更(_N)"
+
+#: libide/editor/ide-editor-spell-widget.ui:132
+msgid "Change A_ll"
+msgstr "全部變更(_L)"
+
+#: libide/editor/ide-editor-spell-widget.ui:151
+msgid "_Suggestions"
+msgstr "建議(_S)"
+
+#: libide/editor/ide-editor-spell-widget.ui:188
+msgid "Add Word"
+msgstr "加入字詞"
+
+#: libide/editor/ide-editor-spell-widget.ui:213
+msgid "A_dd"
+msgstr "加入(_D)"
+
+#: libide/editor/ide-editor-spell-widget.ui:229
+msgid "Dictionary"
+msgstr "字典"
+
+#: libide/editor/ide-editor-spell-widget.ui:267
+msgid "Options"
+msgstr "選項"
+
+#: libide/editor/ide-editor-spell-widget.ui:292
+msgid "_Language"
+msgstr "語言(_L)"
+
+#: libide/editor/ide-editor-spell-widget.ui:319
+msgid "_Highlight"
+msgstr "標示(_H)"
+
+#: libide/editor/ide-editor-tweak-widget.ui:22
+msgid "Search highlight mode…"
+msgstr "搜尋標明模式…"
+
+#: libide/editor/ide-editor-tweak-widget.ui:56
+msgid "Display line numbers"
+msgstr "顯示列號"
+
+#: libide/editor/ide-editor-tweak-widget.ui:65
+msgid "Display right margin"
+msgstr "顯示右邊緣"
+
+#: libide/editor/ide-editor-tweak-widget.ui:83
+msgid "Auto indent"
+msgstr "自動縮排"
+
+#: libide/editor/ide-editor-tweak-widget.ui:99
+#: libide/preferences/ide-preferences-builtin.c:324
+msgid "Indentation"
+msgstr "縮排"
+
+#: libide/editor/ide-editor-tweak-widget.ui:127
+#: libide/preferences/ide-preferences-builtin.c:176
+msgid "Spaces"
+msgstr "空格"
+
+#: libide/editor/ide-editor-tweak-widget.ui:137
+#: libide/preferences/ide-preferences-builtin.c:177
+msgid "Tabs"
+msgstr "Tab"
+
+#: libide/editor/ide-editor-tweak-widget.ui:157
+msgid "2"
+msgstr "2"
+
+#: libide/editor/ide-editor-tweak-widget.ui:167
+msgid "3"
+msgstr "3"
+
+#: libide/editor/ide-editor-tweak-widget.ui:177
+msgid "4"
+msgstr "4"
+
+#: libide/editor/ide-editor-tweak-widget.ui:187
+msgid "8"
+msgstr "8"
+
+#: libide/editor/ide-editor-view-actions.c:309
+msgid "Save Document"
+msgstr "儲存文件"
+
+#: libide/editor/ide-editor-view-actions.c:435
+msgid "Save Document As"
+msgstr "儲存文件為"
+
+#: libide/editor/ide-editor-view.ui:23
+msgid "_Reload"
+msgstr "重新載入(_R)"
+
+#: libide/editor/ide-editor-view.ui:31
+#: libide/greeter/ide-greeter-perspective.ui:317
+#: libide/greeter/ide-greeter-perspective.ui:365
+#: libide/workbench/ide-omni-bar.ui:356
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: libide/editor/ide-editor-view.ui:44
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr "Builder 發現到這個檔案在外部修改過。您想要重新載入這個檔案嗎？"
+
+#: libide/greeter/ide-greeter-perspective.c:456
+msgid "Failed to load the project"
+msgstr "無法載入專案"
+
+#: libide/greeter/ide-greeter-perspective.c:677
+msgid "Open Project"
+msgstr "開啟專案"
+
+#: libide/greeter/ide-greeter-perspective.c:693
+msgid "All Project Types"
+msgstr "所有的專案類型"
+
+#. the action:// link is used to jump to the new-project view
+#: libide/greeter/ide-greeter-perspective.ui:52
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr "何不<a href=\"action://app.new-project\">建立一個新的專案</a>？"
+
+#: libide/greeter/ide-greeter-perspective.ui:53
+msgid "No projects found"
+msgstr "找不到專案"
+
+#: libide/greeter/ide-greeter-perspective.ui:100
+msgid "Recent Projects"
+msgstr "最近的專案"
+
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
+msgid "Updated"
+msgstr "已更新"
+
+#: libide/greeter/ide-greeter-perspective.ui:150
+msgid "Other Projects"
+msgstr "其他的專案"
+
+#: libide/greeter/ide-greeter-perspective.ui:206
+msgid "_Remove"
+msgstr "移除(_R)"
+
+#: libide/greeter/ide-greeter-perspective.ui:290
+msgid "Select a Project"
+msgstr "選擇一個專案"
+
+#: libide/greeter/ide-greeter-perspective.ui:299
+msgid "Click an item to select"
+msgstr "點選想要選擇的項目"
+
+#: libide/greeter/ide-greeter-perspective.ui:329
+msgid "Open…"
+msgstr "開啟"
+
+#: libide/greeter/ide-greeter-perspective.ui:344
+msgid "Select projects for removal"
+msgstr "選擇要移除的專案"
+
+#: libide/greeter/ide-greeter-perspective.ui:364
+msgid "Return to project selection"
+msgstr "返回專案的選擇"
+
+#: libide/gsettings/ide-language-defaults.c:178
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s 包含無效的 ASCII"
+
+#: libide/gsettings/ide-language-defaults.c:193
+#, c-format
+msgid "Failed to parse integer from “%s”"
+msgstr "無法從「%s」分析整數"
+
+#: libide/gsettings/ide-language-defaults.c:271
+msgid "language defaults missing version in [global] group."
+msgstr "語言預設值在 [global] 群組中缺少版本。"
+
+#: libide/gsettings/ide-language-defaults.c:363
+msgid "Failed to initialize defaults."
+msgstr "無法初始化預設值。"
+
+#: libide/ide.c:58
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "使用 libido 前您必須呼叫 %s()。"
+
+#: libide/ide-context.c:1885
+msgid "An unload request is already pending"
+msgstr "已經預定一項卸載要求"
+
+#: libide/ide-context.c:2004
+msgid "Context has already been restored."
+msgstr "脈絡已經復原了。"
+
+#: libide/ide-object.c:288
+#, c-format
+msgid "No implementations of extension point “%s”."
+msgstr "沒有延伸點「%s」的實作。"
+
+#: libide/ide-object.c:380
+msgid "Failed to locate build system plugin."
+msgstr "無法定位建置系統外掛程式。"
+
+#: libide/ide-object.c:467
+msgid "No such extension point."
+msgstr "沒有這種延伸點。"
+
+#: libide/ide-object.c:477
+msgid "No implementations of extension point."
+msgstr "沒有延伸點的實作。"
+
+#: libide/keybindings/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "編輯器捷徑鍵"
+
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:452
+msgctxt "shortcut window"
+msgid "General"
+msgstr "一般"
+
+#: libide/keybindings/ide-shortcuts-window.ui:18
+#: libide/keybindings/ide-shortcuts-window.ui:456
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "全域搜尋"
+
+#: libide/keybindings/ide-shortcuts-window.ui:25
+#: libide/keybindings/ide-shortcuts-window.ui:463
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "偏好設定"
+
+#: libide/keybindings/ide-shortcuts-window.ui:32
+#: libide/keybindings/ide-shortcuts-window.ui:470
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "命令列"
+
+#: libide/keybindings/ide-shortcuts-window.ui:39
+#: libide/keybindings/ide-shortcuts-window.ui:477
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "終端機"
+
+#: libide/keybindings/ide-shortcuts-window.ui:46
+#: libide/keybindings/ide-shortcuts-window.ui:484
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr "在組建執行階段的終端機"
+
+#: libide/keybindings/ide-shortcuts-window.ui:53
+#: libide/keybindings/ide-shortcuts-window.ui:491
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "鍵盤捷徑鍵"
+
+#: libide/keybindings/ide-shortcuts-window.ui:62
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "面板"
+
+#: libide/keybindings/ide-shortcuts-window.ui:66
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "切換左面板"
+
+#: libide/keybindings/ide-shortcuts-window.ui:73
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "切換右面板"
+
+#: libide/keybindings/ide-shortcuts-window.ui:80
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "切換底部面板"
+
+#: libide/keybindings/ide-shortcuts-window.ui:89
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "觸控板手勢"
+
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "切換到下一個文件"
+
+#: libide/keybindings/ide-shortcuts-window.ui:101
+#: libide/keybindings/ide-shortcuts-window.ui:149
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "切換到上一個文件"
+
+#: libide/keybindings/ide-shortcuts-window.ui:109
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "檔案"
+
+#: libide/keybindings/ide-shortcuts-window.ui:114
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "建立新文件"
+
+#: libide/keybindings/ide-shortcuts-window.ui:121
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "開啟文件"
+
+#: libide/keybindings/ide-shortcuts-window.ui:128
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "儲存文件為"
+
+#: libide/keybindings/ide-shortcuts-window.ui:135
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "關閉文件"
+
+#: libide/keybindings/ide-shortcuts-window.ui:156
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "顯示開啟文件的列表。"
+
+#: libide/keybindings/ide-shortcuts-window.ui:164
+#: libide/keybindings/ide-shortcuts-window.ui:176
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "尋找與取代"
+
+#: libide/keybindings/ide-shortcuts-window.ui:169
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "尋找"
+
+#: libide/keybindings/ide-shortcuts-window.ui:183
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "尋找下一個符合項"
+
+#: libide/keybindings/ide-shortcuts-window.ui:190
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "尋找上一個符合項"
+
+#: libide/keybindings/ide-shortcuts-window.ui:197
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "清除標示"
+
+#: libide/keybindings/ide-shortcuts-window.ui:205
+#: libide/keybindings/ide-shortcuts-window.ui:500
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "複製與貼上"
+
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:505
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "將選取的文字複製至剪貼簿"
+
+#: libide/keybindings/ide-shortcuts-window.ui:217
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "將選定的文字剪貼至剪貼簿"
+
+#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:512
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "從剪貼簿貼上文字"
+
+#: libide/keybindings/ide-shortcuts-window.ui:231
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "重製目前的列或選擇區域"
+
+#: libide/keybindings/ide-shortcuts-window.ui:239
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "復原與取消復原"
+
+#: libide/keybindings/ide-shortcuts-window.ui:244
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "復原上一個命令"
+
+#: libide/keybindings/ide-shortcuts-window.ui:251
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "重做上一個命令"
+
+#: libide/keybindings/ide-shortcuts-window.ui:259
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "正在編輯"
+
+#: libide/keybindings/ide-shortcuts-window.ui:264
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "游標處的遞增數"
+
+#: libide/keybindings/ide-shortcuts-window.ui:271
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "游標處的遞減數"
+
+#: libide/keybindings/ide-shortcuts-window.ui:278
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "連結選取的列"
+
+#: libide/keybindings/ide-shortcuts-window.ui:285
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "顯示補齊視窗"
+
+#: libide/keybindings/ide-shortcuts-window.ui:292
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "切換覆寫"
+
+#: libide/keybindings/ide-shortcuts-window.ui:299
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "重新縮排列"
+
+#: libide/keybindings/ide-shortcuts-window.ui:306
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "刪除列"
+
+#: libide/keybindings/ide-shortcuts-window.ui:313
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "重新命名符號"
+
+#: libide/keybindings/ide-shortcuts-window.ui:314
+msgctxt "shortcut window"
+msgid "Requires semantic language support"
+msgstr "需要語義語言支援"
+
+#: libide/keybindings/ide-shortcuts-window.ui:322
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "導覽"
+
+#: libide/keybindings/ide-shortcuts-window.ui:327
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "移至檔案中的下一個錯誤"
+
+#: libide/keybindings/ide-shortcuts-window.ui:334
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "移至檔案中的上一個錯誤"
+
+#: libide/keybindings/ide-shortcuts-window.ui:341
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "移至上一個編輯位置"
+
+#: libide/keybindings/ide-shortcuts-window.ui:348
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "移至下一個編輯位置"
+
+#: libide/keybindings/ide-shortcuts-window.ui:355
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "移至符號定義"
+
+#: libide/keybindings/ide-shortcuts-window.ui:362
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr "檔案內的檢視區上移"
+
+#: libide/keybindings/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr "檔案內的檢視區下移"
+
+#: libide/keybindings/ide-shortcuts-window.ui:376
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr "將檢視區移到檔案結尾"
+
+#: libide/keybindings/ide-shortcuts-window.ui:383
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr "將檢視區移到檔案開頭"
+
+#: libide/keybindings/ide-shortcuts-window.ui:390
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "移至對稱的括弧"
+
+#: libide/keybindings/ide-shortcuts-window.ui:398
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "選取項目"
+
+#: libide/keybindings/ide-shortcuts-window.ui:403
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "全部選取"
+
+#: libide/keybindings/ide-shortcuts-window.ui:410
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "取消全選"
+
+#: libide/keybindings/ide-shortcuts-window.ui:418
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "組建並執行"
+
+#: libide/keybindings/ide-shortcuts-window.ui:423
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "組建"
+
+#: libide/keybindings/ide-shortcuts-window.ui:430
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "執行"
+
+#: libide/keybindings/ide-shortcuts-window.ui:437
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "設定檔"
+
+#: libide/keybindings/ide-shortcuts-window.ui:448
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "終端機捷徑鍵"
+
+#: libide/keybindings/ide-shortcuts-window.ui:520
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "搜尋"
+
+#: libide/keybindings/ide-shortcuts-window.ui:525
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "尋找終端機裡的文字"
+
+#: libide/preferences/ide-preferences-builtin.c:65
+#: libide/preferences/ide-preferences-builtin.c:66
+msgid "Extensions"
+msgstr "擴充功能"
+
+#: libide/preferences/ide-preferences-builtin.c:102
+msgid "Appearance"
+msgstr "外觀"
+
+#: libide/preferences/ide-preferences-builtin.c:104
+msgid "Themes"
+msgstr "布景主題"
+
+#: libide/preferences/ide-preferences-builtin.c:105
+msgid "Dark Theme"
+msgstr "深黑主題"
+
+#: libide/preferences/ide-preferences-builtin.c:105
+msgid "Whether Builder should use a dark theme"
+msgstr "Builder 是否應使用暗色系布景主題"
+
+#: libide/preferences/ide-preferences-builtin.c:105
+msgid "dark theme"
+msgstr "深黑主題"
+
+#: libide/preferences/ide-preferences-builtin.c:106
+msgid "Grid Pattern"
+msgstr "格線圖案"
+
+#: libide/preferences/ide-preferences-builtin.c:106
+msgid "Display a grid pattern underneath source code"
+msgstr "在源碼下顯示格線圖案"
+
+#: libide/preferences/ide-preferences-builtin.c:108
+msgid "Font"
+msgstr "字型"
+
+#: libide/preferences/ide-preferences-builtin.c:109
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "editor font monospace 編輯器 字型 等寬"
+
+#. XXX: This belongs in terminal addin
+#: libide/preferences/ide-preferences-builtin.c:111
+#: plugins/terminal/gb-terminal-workbench-addin.c:203
+msgid "Terminal"
+msgstr "終端機"
+
+#: libide/preferences/ide-preferences-builtin.c:111
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "terminal font monospace 終端機 字型 等寬"
+
+#: libide/preferences/ide-preferences-builtin.c:116
+msgid "Color Scheme"
+msgstr "色彩配置"
+
+#: libide/preferences/ide-preferences-builtin.c:141
+msgid "Keyboard"
+msgstr "鍵盤"
+
+#: libide/preferences/ide-preferences-builtin.c:143
+msgid "Emulation"
+msgstr "模擬"
+
+#: libide/preferences/ide-preferences-builtin.c:144
+msgid "Default keybinding mode which mimics gedit"
+msgstr "模仿 gedit 的預設組合鍵模式"
+
+#: libide/preferences/ide-preferences-builtin.c:145
+msgid "Emacs"
+msgstr "Emacs"
+
+#: libide/preferences/ide-preferences-builtin.c:145
+msgid "Emulates the Emacs text editor"
+msgstr "模擬 Emacs 文字編輯器"
+
+#: libide/preferences/ide-preferences-builtin.c:146
+msgid "Vim"
+msgstr "Vim"
+
+#: libide/preferences/ide-preferences-builtin.c:146
+msgid "Emulates the Vim text editor"
+msgstr "模擬 Vim 文字編輯器"
+
+#: libide/preferences/ide-preferences-builtin.c:148
+msgid "Movement"
+msgstr "移動"
+
+#: libide/preferences/ide-preferences-builtin.c:149
+msgid "Home moves to first non-whitespace character"
+msgstr "Home 移至第一個非空白字元"
+
+#: libide/preferences/ide-preferences-builtin.c:150
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr "Backspace 會移除額外的空白讓您保持對齊縮排寬度"
+
+#: libide/preferences/ide-preferences-builtin.c:158
+msgid "Cursor"
+msgstr "游標"
+
+#: libide/preferences/ide-preferences-builtin.c:159
+msgid "Restore cursor position"
+msgstr "回復游標位置"
+
+#: libide/preferences/ide-preferences-builtin.c:159
+msgid "Restore cursor position when a file is reopened"
+msgstr "重新開啟檔案時還原插入游標上次的位置"
+
+#: libide/preferences/ide-preferences-builtin.c:160
+msgid "Scroll Offset"
+msgstr "捲動偏移"
+
+#: libide/preferences/ide-preferences-builtin.c:160
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr "留在游標之上與之下的最小列數"
+
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr "允許編輯器捲動超過緩衝區的結尾"
+
+#: libide/preferences/ide-preferences-builtin.c:163
+msgid "Line Information"
+msgstr "列資訊"
+
+#: libide/preferences/ide-preferences-builtin.c:164
+msgid "Line numbers"
+msgstr "列號"
+
+#: libide/preferences/ide-preferences-builtin.c:164
+msgid "Show line number at beginning of each line"
+msgstr "在每列開頭顯示列號"
+
+#: libide/preferences/ide-preferences-builtin.c:165
+msgid "Line changes"
+msgstr "列變更"
+
+#: libide/preferences/ide-preferences-builtin.c:165
+msgid "Show if a line was added or modified next to line number"
+msgstr "在列號旁顯示是否有加入或修改列"
+
+#: libide/preferences/ide-preferences-builtin.c:167
+msgid "Highlight"
+msgstr "標示"
+
+#: libide/preferences/ide-preferences-builtin.c:168
+msgid "Current line"
+msgstr "目前的行"
+
+#: libide/preferences/ide-preferences-builtin.c:168
+msgid "Make current line stand out with highlights"
+msgstr "標示目前所在的列"
+
+#: libide/preferences/ide-preferences-builtin.c:169
+msgid "Matching brackets"
+msgstr "成對的弧號"
+
+#: libide/preferences/ide-preferences-builtin.c:169
+msgid "Highlight matching brackets based on cursor position"
+msgstr "基於游標位置標明成對的括號"
+
+#: libide/preferences/ide-preferences-builtin.c:171
+msgid "Code Overview"
+msgstr "原始碼概覽"
+
+#: libide/preferences/ide-preferences-builtin.c:172
+msgid "A zoomed out view to enhance navigating source code"
+msgstr "拉近檢視以加強原始碼導覽"
+
+#: libide/preferences/ide-preferences-builtin.c:173
+msgid "Automatically hide overview map"
+msgstr "自動隱藏概覽地圖"
+
+#: libide/preferences/ide-preferences-builtin.c:173
+msgid "Automatically hide map when editor loses focus"
+msgstr "當編輯器失去焦點時自動隱藏地圖"
+
+#: libide/preferences/ide-preferences-builtin.c:175
+msgid "Whitespace Characters"
+msgstr "空白字元"
+
+#: libide/preferences/ide-preferences-builtin.c:178
+msgid "New line and carriage return"
+msgstr "新列並回車"
+
+#: libide/preferences/ide-preferences-builtin.c:179
+msgid "Non-breaking spaces"
+msgstr "不斷列空白"
+
+#: libide/preferences/ide-preferences-builtin.c:180
+msgid "Spaces inside of text"
+msgstr "文字中的空格"
+
+#: libide/preferences/ide-preferences-builtin.c:181
+msgid "Trailing Only"
+msgstr "只有結尾"
+
+#: libide/preferences/ide-preferences-builtin.c:182
+msgid "Leading Only"
+msgstr "只有開頭"
+
+#: libide/preferences/ide-preferences-builtin.c:188
+msgid "Code Insight"
+msgstr "代碼剖析"
+
+#: libide/preferences/ide-preferences-builtin.c:191
+msgid "Semantic Highlighting"
+msgstr "語義標示"
+
+#: libide/preferences/ide-preferences-builtin.c:191
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr "使用代碼剖析來標示在原始碼檔案中發現的額外資訊"
+
+#: libide/preferences/ide-preferences-builtin.c:193
+msgid "Completion"
+msgstr "補齊"
+
+#: libide/preferences/ide-preferences-builtin.c:194
+msgid "Suggest words found in open files"
+msgstr "在開啟檔案中建議字詞"
+
+#: libide/preferences/ide-preferences-builtin.c:194
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr "當您輸入時利用在所有開啟的文件中找到的字來建議文字補齊。"
+
+#: libide/preferences/ide-preferences-builtin.c:195
+msgid "Suggest completions using Ctags"
+msgstr "使用 Ctags 來建議文字補齊"
+
+#: libide/preferences/ide-preferences-builtin.c:195
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr "建立和管理用來補齊類別名稱、函式等等的 Ctags 資料庫"
+
+#: libide/preferences/ide-preferences-builtin.c:196
+msgid "Suggest completions using Clang (Experimental)"
+msgstr "使用 Clang 來建議文字補齊 (實驗性)"
+
+#: libide/preferences/ide-preferences-builtin.c:196
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr "使用 Clang 對 C 與 C++ 語言進行文字補齊"
+
+#: libide/preferences/ide-preferences-builtin.c:198
+msgid "Diagnostics"
+msgstr "診斷"
+
+#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
+msgid "Snippets"
+msgstr "文字片段"
+
+#: libide/preferences/ide-preferences-builtin.c:207
+msgid "Code snippets"
+msgstr "程式碼文字片段"
+
+#: libide/preferences/ide-preferences-builtin.c:207
+msgid "Use code fragments to increase typing efficiency"
+msgstr "使用原始碼片段以提高打字效率"
+
+#: libide/preferences/ide-preferences-builtin.c:251
+msgid "Programming Languages"
+msgstr "程式設計語言"
+
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: libide/preferences/ide-preferences-builtin.c:262
+msgid "Search languages…"
+msgstr "搜尋語言…"
+
+#: libide/preferences/ide-preferences-builtin.c:317
+msgid "Trim trailing whitespace"
+msgstr "修剪結尾空白"
+
+#: libide/preferences/ide-preferences-builtin.c:317
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr "儲存後，將剪裁修改列結尾的空格。"
+
+#: libide/preferences/ide-preferences-builtin.c:318
+msgid "Overwrite Braces"
+msgstr "覆寫括號"
+
+#: libide/preferences/ide-preferences-builtin.c:318
+msgid "Overwrite closing braces"
+msgstr "覆寫結尾括號"
+
+#: libide/preferences/ide-preferences-builtin.c:320
+msgid "Margins"
+msgstr "邊界"
+
+#: libide/preferences/ide-preferences-builtin.c:321
+msgid "Show right margin"
+msgstr "顯示右邊界"
+
+#: libide/preferences/ide-preferences-builtin.c:322
+msgid "Right margin position"
+msgstr "右邊邊界位置"
+
+#: libide/preferences/ide-preferences-builtin.c:322
+msgid "Position in spaces for the right margin"
+msgstr "右邊界位置(以空白計)"
+
+#: libide/preferences/ide-preferences-builtin.c:325
+msgid "Tab width"
+msgstr "Tab 字元寬度"
+
+#: libide/preferences/ide-preferences-builtin.c:325
+msgid "Width of a tab character in spaces"
+msgstr "Tab 字元寬度(以空白計)"
+
+#: libide/preferences/ide-preferences-builtin.c:326
+msgid "Insert spaces instead of tabs"
+msgstr "插入空格代替 Tab 字元"
+
+#: libide/preferences/ide-preferences-builtin.c:326
+msgid "Prefer spaces over use of tabs"
+msgstr "偏好空格而非 Tab"
+
+#: libide/preferences/ide-preferences-builtin.c:327
+msgid "Automatically indent"
+msgstr "自動縮排"
+
+#: libide/preferences/ide-preferences-builtin.c:327
+msgid "Indent source code as you type"
+msgstr "當您輸入時縮排原始碼"
+
+#: libide/preferences/ide-preferences-builtin.c:342
+#: libide/preferences/ide-preferences-builtin.c:360
+msgid "Number of CPU"
+msgstr "CPU 的數量"
+
+#: libide/preferences/ide-preferences-builtin.c:378
+msgid "Build Workers"
+msgstr "建置工作程式"
+
+#: libide/preferences/ide-preferences-builtin.c:378
+msgid "Number of parallel build workers"
+msgstr "平行編譯工作程式的數量"
+
+#: libide/preferences/ide-preferences-builtin.c:390
+msgid "Projects"
+msgstr "專案"
+
+#: libide/preferences/ide-preferences-builtin.c:392
+msgid "Workspace"
+msgstr "工作區"
+
+#: libide/preferences/ide-preferences-builtin.c:393
+msgid "A place for all your projects"
+msgstr "您所有專案的位置"
+
+#: libide/preferences/ide-preferences-builtin.c:394
+msgid "Restore previously opened files"
+msgstr "還原以前開啟過的檔案"
+
+#: libide/preferences/ide-preferences-builtin.c:394
+msgid "Open previously opened files when loading a project"
+msgstr "載入專案時開啟以前開啟過的檔案"
+
+#: libide/preferences/ide-preferences-builtin.c:396
+msgid "Project Discovery"
+msgstr "專案探索"
+
+#: libide/preferences/ide-preferences-builtin.c:397
+msgid "Discover projects on my computer"
+msgstr "探索我的電腦現有的專案"
+
+#: libide/preferences/ide-preferences-builtin.c:397
+msgid "Scan your computer for existing projects"
+msgstr "掃描您電腦中現有的專案"
+
+#: libide/preferences/ide-preferences-builtin.c:518
+#: plugins/create-project/gbp-create-project-widget.ui:153
+msgid "Version Control"
+msgstr "版本控制"
+
+#. only the page goes here, plugins will fill in the details
+#: libide/preferences/ide-preferences-builtin.c:530
+msgid "SDKs"
+msgstr "SDK"
+
+#: libide/preferences/ide-preferences-font-button.ui:57
+msgid "_Select"
+msgstr "選擇(_S)"
+
+#: libide/preferences/ide-preferences-perspective.c:963
+msgid "Preferences"
+msgstr "偏好設定"
+
+#: libide/preferences/ide-preferences-perspective.ui:15
+msgid "Search Preferences"
+msgstr "搜尋偏好設定"
+
+#: libide/projects/ide-project.c:527
+msgid "Destination file must be within the project tree."
+msgstr "目的端檔案必須在專案樹中。"
+
+#: libide/projects/ide-project.c:662
+msgid "File must be within the project tree."
+msgstr "檔案必須在專案樹中。"
+
+#: libide/projects/ide-recent-projects.c:396
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "%s() 只能執行一次"
+
+#: libide/runner/ide-run-button.ui:41
+msgid "Stop running"
+msgstr "停止執行"
+
+#: libide/runner/ide-run-button.ui:57
+msgid "Change run options"
+msgstr "改變執行選項"
+
+#: libide/runner/ide-run-manager.c:225
+msgid "Run"
+msgstr "執行"
+
+#: libide/runner/ide-run-manager.c:254
+msgid "Cannot run target, another target is running"
+msgstr "不能執行目標，有另一個目標正在執行"
+
+#: libide/runner/ide-run-manager.c:324
+msgid "Failed to locate runtime"
+msgstr "無法定位執行階段"
+
+#: libide/runner/ide-runner.c:165
+msgid "Process quit unexpectedly"
+msgstr "程序意外的退出"
+
+#: libide/runtimes/ide-runtime-manager.c:114
+msgid "Host operating system"
+msgstr "主機作業系統"
+
+#: libide/search/ide-omni-search-display.c:271
+msgid "Cannot add provider more than once."
+msgstr "不能加入超過一個以上的提供者。"
+
+#: libide/search/ide-omni-search-display.c:347
+msgid "The provider could not be found."
+msgstr "找不到提供者。"
+
+#: libide/snippets/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "無法開啟目錄：%s"
+
+#: libide/snippets/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "無法載入檔案：%s：%s"
+
+#: libide/sourceview/ide-source-view.c:5311
+#, c-format
+msgid "Insert “%s”"
+msgstr "插入「%s」"
+
+#: libide/sourceview/ide-source-view.c:5313
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "將「%s」取代為「%s」"
+
+#: libide/sourceview/ide-source-view.c:5427
+msgid "Apply Fix-It"
+msgstr "套用 Fix-It"
+
+#: libide/sourceview/ide-source-view.c:5854
+msgid "Rename symbol"
+msgstr "重新命名符號"
+
+#: libide/transfers/ide-transfers-button.ui:35
+msgid "Clear _All"
+msgstr "全部清除(_A)"
+
+#: libide/util/ide-file-manager.c:64
+msgid "File path is NULL"
+msgstr "檔案路徑為 NULL"
+
+#: libide/util/ide-file-manager.c:73 libide/util/ide-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "轉換 UTF-8 檔案名稱為寬字元時發生錯誤"
+
+#: libide/util/ide-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "ILCreateFromPath() 失敗"
+
+#: libide/util/ide-file-manager.c:129
+#, c-format
+msgid "Cannot convert “%s” into a valid NSURL."
+msgstr "無法轉換「%s」為有效的 NSURL。"
+
+#: libide/util/ide-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "連線到 org.freedesktop.FileManager1 失敗："
+
+#: libide/util/ide-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "呼叫 ShowItems 失敗："
+
+#: libide/util/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "URI 有無效的 %-encoding"
+
+#: libide/util/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr "URI  中的非UTF-8 字元"
+
+#: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal “%s” in URI"
+msgstr "URI 中無效的 IP 字面「%s」"
+
+#: libide/util/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal “%s” in URI"
+msgstr "在 URI 中無效編碼 IP 字面「%s」"
+
+#: libide/util/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname “%s” in URI"
+msgstr "URI 中無效的非 ASCII 主機名稱「%s」"
+
+#: libide/util/ide-uri.c:434
+#, c-format
+msgid "Non-ASCII hostname “%s” forbidden in this URI"
+msgstr "這個 URI 禁止使用非 ASCII 主機名稱「%s」"
+
+#: libide/util/ide-uri.c:457
+#, c-format
+msgid "Could not parse port “%s” in URI"
+msgstr "無法解析 URI 中的連接埠「%s」"
+
+#: libide/util/ide-uri.c:464
+#, c-format
+msgid "Port “%s” in URI is out of range"
+msgstr "URI 中的連接埠「%s」超出範圍"
+
+#: libide/util/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr "基礎 URI 不是絕對的"
+
+#: libide/util/ide-uri.c:615
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "URI 不是絕對的，沒有提供基礎 URI"
+
+#: libide/util/ide-uri.c:660
+#, c-format
+msgid "Could not parse “%s” as absolute URI"
+msgstr "無法解析「%s」為絕對 URI"
+
+#: libide/util/ide-uri.c:1203
+#, c-format
+msgid "URI “%s” has no host component"
+msgstr "URI「%s」沒有主機元件"
+
+#: libide/workbench/ide-layout-tab-bar.ui:33
+msgid "List open files"
+msgstr "列出開啟檔案"
+
+#: libide/workbench/ide-layout-tab.ui:19
+msgid "Jump to previous location"
+msgstr "移至上一個位置"
+
+#: libide/workbench/ide-layout-tab.ui:33
+msgid "Jump to next location"
+msgstr "移至下一個位置"
+
+#: libide/workbench/ide-layout-tab.ui:125
+msgid "Close the current document"
+msgstr "關閉目前的文件"
+
+#: libide/workbench/ide-layout-view.c:142
+msgid "untitled document"
+msgstr "無標題文件"
+
+#. translators: this message is shown in the header bar to indicate build status
+#: libide/workbench/ide-omni-bar.c:170
+#, c-format
+#| msgid "Build"
+msgid "Build: %s"
+msgstr "組建：%s"
+
+#. Translators, missing means we could not locate the runtime
+#: libide/workbench/ide-omni-bar-row.c:90
+msgid "missing"
+msgstr "遺失"
+
+#: libide/workbench/ide-omni-bar-row.ui:31
+msgid "Edit build configuration"
+msgstr "編輯組建設定"
+
+#: libide/workbench/ide-omni-bar.ui:129
+msgid "Cancel build"
+msgstr "取消組建"
+
+#: libide/workbench/ide-omni-bar.ui:173
+#: plugins/project-tree/gb-project-tree-addin.c:105
+msgid "Project"
+msgstr "專案"
+
+#: libide/workbench/ide-omni-bar.ui:197
+msgid "Branch"
+msgstr "分支"
+
+#: libide/workbench/ide-omni-bar.ui:232
+msgid "Build Profile"
+msgstr "組建設定檔"
+
+#: libide/workbench/ide-omni-bar.ui:278
+msgid "Last build"
+msgstr "上次組建"
+
+#: libide/workbench/ide-omni-bar.ui:345
+msgid "View Output"
+msgstr "檢視輸出"
+
+#: libide/workbench/ide-omni-bar.ui:392
+msgid "Rebuild"
+msgstr "重新組建"
+
+#: libide/workbench/ide-omni-bar.ui:402
+msgid "Clean"
+msgstr "清除"
+
+#: libide/workbench/ide-omni-bar.ui:416
+msgid "Build project"
+msgstr "組建專案"
+
+#: libide/workbench/ide-perspective-menu-button.ui:15
+msgid "Switch perspective"
+msgstr "切換視角"
+
+#: libide/workbench/ide-workbench-actions.c:73
+msgid "Open File"
+msgstr "開啟檔案"
+
+#: libide/workbench/ide-workbench.c:563
+#, c-format
+msgid "%s — Builder"
+msgstr "%s — Builder"
+
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "傳輸"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
+#, fuzzy
+msgid "Show workbench menu"
+msgstr "顯示/隱藏動作選單"
+
+#: libide/workbench/ide-workbench-header-bar.ui:73
+msgid "Press Ctrl+. to search"
+msgstr "按 Ctrl+. 搜尋"
+
+#: plugins/autotools/ide-autotools-makecache-stage.c:194
+msgid "Building cache…"
+msgstr "組建快取…"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
+msgid "Shared Library"
+msgstr "共享程式庫"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
+msgid "Create a new autotools project with a shared library"
+msgstr "建立新的 autotools 專案與分享的程式庫"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
+msgid "Empty Project"
+msgstr "空白專案"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
+msgid "Create a new empty autotools project"
+msgstr "建立新的空白 autotools 專案"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
+msgid "GNOME Application"
+msgstr "GNOME 應用程式"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
+msgid "Create a new flatpak-ready GNOME application"
+msgstr "建立一個新的 flatpak-相容 GNOME 應用程式"
+
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:190
+#, fuzzy, c-format
+msgid "No beautifier available for “%s”"
+msgstr "沒有數值供「%s/%s」使用"
+
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:192
+#, fuzzy
+#| msgid "No commands available"
+msgid "No beautifier available"
+msgstr "不存在"
+
+#: plugins/beautifier/gtk/menus.ui:9
+msgid "Beautify"
+msgstr ""
+
+#: plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "顯示由 Clang 提供的錯誤和警告"
+
+#. translators: keywords used when searching for preferences
+#: plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang 診斷警告與錯誤"
+
+#: plugins/clang/ide-clang-service.c:326
 msgid "Unknown failure"
 msgstr "不明的失敗"
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: plugins/clang/ide-clang-service.c:330
 msgid "Clang crashed"
 msgstr "Clang 已當掉"
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: plugins/clang/ide-clang-service.c:334
 msgid "Invalid arguments"
 msgstr "無效的引數"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: plugins/clang/ide-clang-service.c:338
 msgid "AST read error"
 msgstr "AST 讀取錯誤"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: plugins/clang/ide-clang-service.c:350
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "無法建立轉譯單元：%s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: plugins/clang/ide-clang-service.c:458 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "檔案必須儲存在本地端才能解析。"
 
-#: ../plugins/clang/ide-clang-symbol-node.c:149
+#: plugins/clang/ide-clang-symbol-node.c:149
 msgid "anonymous"
 msgstr "匿名"
 
-#: ../plugins/clang/ide-clang-translation-unit.c:656
+#: plugins/clang/ide-clang-translation-unit.c:642
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() 只能用於本地端檔案"
 
-#: ../plugins/command-bar/gb-command-bar.c:299
+#: plugins/color-picker/gb-color-picker-prefs.c:97
+msgid "Close without Saving"
+msgstr "關閉而不儲存"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:99
+msgid "Save As…"
+msgstr "另存為…"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:207
+msgid "Load palette"
+msgstr "載入調色盤"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:234
+msgid "Save palette"
+msgstr "儲存調色盤"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:725
+msgid "All files"
+msgstr "所有檔案"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:729
+msgid "All supported palettes formats"
+msgstr "所有支援的調色盤格式"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:734
+msgid "GIMP palette"
+msgstr "GIMP 調色盤"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:738
+msgid "GNOME Builder palette"
+msgstr "GNOME Builder 調色盤"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+msgid "Palette name"
+msgstr "調色盤名稱"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Enter a new name for the palette"
+msgstr "輸入調色盤的新名稱"
+
+#: plugins/color-picker/gb-color-picker-workbench-addin.c:178
+msgid "Colors"
+msgstr "顏色"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr "HSV 可見度"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+msgid "If the HSV components are visible."
+msgstr "HSV 元件是否顯示。"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr "LAB 可見度"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+msgid "If the LAB components are visible."
+msgstr "LAB 元件是否顯示。"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr "RGB 可見度"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+msgid "If the RGB components are visible."
+msgstr "RGB 元件是否顯示。"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr "RGB 單位"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr "RGB 元件與字串使用的單位。"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+msgid "Selected palette ID"
+msgstr "選擇的調色盤 ID"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr "載入的調色盤 ID 中選取的 ID。"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+msgid "Color strings visibility"
+msgstr "顏色字串可見度"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr "可見的顏色字串。"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "顏色過濾器"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr "顏色元件"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "可見性："
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr "選擇要在面板中看到的滑動鈕的色票。"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "單位："
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr "選擇您想要在面板中使用的 RGB 元件和字串的單位類型。"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "過濾器："
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or “None”."
+msgstr "選擇用在此顏色的過濾器或是「None」(沒有)。"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr "選擇您想要在面板中看到的顏色字串。"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr "調色盤選項"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr "調色盤檢視模式︰"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "列表"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "調色盤管理"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "載入"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "從目前的文件"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr "選擇您想要在面板中看到的調色盤或關閉其中一個。"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr "沒有載入的調色盤"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr "沒有選取的調色板"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "選擇調色盤檔案"
+
+#: plugins/color-picker/gtk/color-picker.ui:62
+msgid "Try loading or generating a palette using the menu"
+msgstr "嘗試載入或使用選單產生一個調色盤"
+
+#: plugins/color-picker/gtk/menus.ui:7
+msgid "Enable color picker"
+msgstr "啟用顏色挑選器"
+
+#: plugins/command-bar/gb-command-bar.c:302
 #, c-format
 msgid "Command not found: %s"
 msgstr "找不到指令：%s"
 
-#: ../plugins/command-bar/gb-command-bar.c:603
+#: plugins/command-bar/gb-command-bar.c:612
 msgid "Use the entry below to execute a command"
 msgstr "使用下方的條目以執行指令"
 
-#: ../plugins/command-bar/gb-vim.c:86
-#, c-format
+#: plugins/command-bar/gb-vim.c:90
 msgid "Number required"
 msgstr "需要數量"
 
-#: ../plugins/command-bar/gb-vim.c:96
+#: plugins/command-bar/gb-vim.c:100
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s 對 %s 是無效的"
 
-#: ../plugins/command-bar/gb-vim.c:154
+#: plugins/command-bar/gb-vim.c:158
 #, c-format
-msgid "Cannot find language '%s'"
+msgid "Cannot find language “%s”"
 msgstr "找不到語言「%s」"
 
-#: ../plugins/command-bar/gb-vim.c:311
-#, c-format
+#: plugins/command-bar/gb-vim.c:315
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "這個指令需要 GtkSourceView 才能聚焦"
 
-#: ../plugins/command-bar/gb-vim.c:322
-#, c-format
+#: plugins/command-bar/gb-vim.c:326
 msgid "This command requires a view to be focused"
 msgstr "此命令需要一個檢視來聚焦"
 
-#: ../plugins/command-bar/gb-vim.c:379
+#: plugins/command-bar/gb-vim.c:383
 #, c-format
 msgid "Unknown option: %s"
 msgstr "不明的選項：%s"
 
-#: ../plugins/command-bar/gb-vim.c:422
+#: plugins/command-bar/gb-vim.c:426
 #, c-format
-msgid "Cannot find colorscheme '%s'"
+msgid "Cannot find colorscheme “%s”"
 msgstr "找不到色彩方案「%s」"
 
-#: ../plugins/command-bar/gb-vim.c:463
-#, c-format
+#: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
 msgstr "無法定位工作目錄"
 
-#: ../plugins/command-bar/gb-vim.c:640
+#: plugins/command-bar/gb-vim.c:711
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "無效：語法子命令：%s"
 
-#: ../plugins/command-bar/gb-vim.c:1022
-#, c-format
+#: plugins/command-bar/gb-vim.c:1147
 msgid "Invalid search and replace request"
 msgstr "無效的搜尋及取代要求"
 
-#: ../plugins/command-bar/gb-vim.c:1127
+#: plugins/command-bar/gb-vim.c:1253
 #, c-format
 msgid "Not a command: %s"
 msgstr "不是指令：%s"
 
-#: ../plugins/contributing/contributing_plugin/helper.py:76
-#, python-format
-msgid ""
-"Usage:\n"
-"  %(prgname) %(command) OPTIONS\n"
-msgstr ""
-"用法：\n"
-"  %(prgname) %(command) OPTIONS\n"
+#: plugins/comment-code/gtk/menus.ui:9
+msgid "Comment code"
+msgstr "附註代碼"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:54
-msgid "Missing project name"
-msgstr "缺少專案名稱"
+#: plugins/comment-code/gtk/menus.ui:14
+msgid "Uncomment code"
+msgstr "取消備註代碼"
 
-#: ../plugins/contributing/contributing_plugin/__init__.py:68
-msgid ""
-"Usage:\n"
-"  ide contribute PROJECT_NAME\n"
-"\n"
-"  This command will bootstrap your system to begin contributing to the "
-"project\n"
-"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-"that\n"
-"  you have the required dependencies to build, and bootstraps the first "
-"build\n"
-"  of the project.\n"
-"\n"
-"Examples:\n"
-"  ide contribute gnome-builder\n"
-"  ide contribute gnome-maps\n"
-"\n"
-msgstr ""
-"用法：\n"
-"  ide contribute PROJECT_NAME\n"
-"\n"
-"  這個指令會引導您的系統為名為\n"
-"   PROJECT_NAME 的專案準備。包含取得原始碼、確保\n"
-"  您具備編譯需要的相依性，以及第一次編譯專案所需的\n"
-"  引導。\n"
-"\n"
-"範例：\n"
-"  ide contribute gnome-builder\n"
-"  ide contribute gnome-maps\n"
-"\n"
-
-#: ../plugins/contributing/contributing_plugin/__init__.py:226
-msgid "Username"
-msgstr "使用者名稱"
-
-#: ../plugins/c-pack/ide-c-format-provider.c:281
-#: ../plugins/python-pack/ide-python-format-provider.c:238
+#: plugins/c-pack/ide-c-format-provider.c:283
+#: plugins/python-pack/ide-python-format-provider.c:240
 msgid "Format Strings"
 msgstr "格式字串"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:130
+#: plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "New Project"
+msgstr "新專案"
+
+#: plugins/create-project/gbp-create-project-genesis-addin.c:223
+msgid "New…"
+msgstr "新增…"
+
+#: plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr "列出可用的範本"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:132
+#: plugins/create-project/gbp-create-project-tool.c:138
 msgid "Project template to generate"
 msgstr "要產生的專案範本"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:138
+#: plugins/create-project/gbp-create-project-tool.c:140
+msgid "The target language (if supported)"
+msgstr "目標語言 (如果支援)"
+
+#: plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or “none” to disable"
+msgstr "要使用的版本控制，或使用「none」(沒有)來停用"
+
+#: plugins/create-project/gbp-create-project-tool.c:143
+#| msgid "Git"
+msgid "git"
+msgstr "git"
+
+#: plugins/create-project/gbp-create-project-tool.c:149
 msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPTION...] PROJECT_NAME"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:187
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:198
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "檔案名稱必須是 ASCII 並且不能包含 : 或 ="
 
-#: ../plugins/create-project/gbp-create-project-tool.c:291
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:372
 msgid "Please specify a project name.\n"
 msgstr "請指定專案名稱。\n"
 
-#: ../plugins/create-project/gbp-create-project-tool.c:307
-#, c-format
+#: plugins/create-project/gbp-create-project-tool.c:388
 msgid "Please specify a project template with --template=\n"
 msgstr "請以 --template= 指定專案範本\n"
 
-#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
-#: ../plugins/devhelp/gbp-devhelp-workbench-addin.c:90
+#: plugins/create-project/gbp-create-project-widget.c:157
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr "專案名稱使用了可能會導致技術問題的字元"
+
+#: plugins/create-project/gbp-create-project-widget.c:164
+msgid "Directory already exists with that name"
+msgstr "同樣名稱的目錄已經存在"
+
+#: plugins/create-project/gbp-create-project-widget.c:569
+msgid "A failure occurred while initializing version control"
+msgstr "初始化版本控制時出現錯誤"
+
+#: plugins/create-project/gbp-create-project-widget.ui:28
+msgid "Project Name"
+msgstr "專案名稱"
+
+#: plugins/create-project/gbp-create-project-widget.ui:55
+msgid ""
+"Unique name that is used for your project’s folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+"用於您的專案資料夾和其他技術資源的唯一名稱。應使用小寫無空格的字元，並且不能"
+"以數字開頭。"
+
+#: plugins/create-project/gbp-create-project-widget.ui:74
+msgid "Project Location"
+msgstr "專案位置"
+
+#: plugins/create-project/gbp-create-project-widget.ui:85
+#: plugins/git/ide-git-clone-widget.ui:78
+msgid "Select Project Directory"
+msgstr "選擇專案目錄"
+
+#: plugins/create-project/gbp-create-project-widget.ui:98
+msgid "Language"
+msgstr "語言"
+
+#: plugins/create-project/gbp-create-project-widget.ui:120
+msgid "License"
+msgstr "授權"
+
+#: plugins/create-project/gbp-create-project-widget.ui:135
+msgid "GPLv3+"
+msgstr "GPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:136
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:137
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:138
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: plugins/create-project/gbp-create-project-widget.ui:139
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:140
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:141
+msgid "No license"
+msgstr "沒有授權"
+
+#: plugins/create-project/gbp-create-project-widget.ui:174
+msgid "Uses the Git version control system"
+msgstr "使用 Git 版本控制系統"
+
+#: plugins/create-project/gbp-create-project-widget.ui:236
+msgid "Select a Template"
+msgstr "選擇一個範本"
+
+#: plugins/devhelp/gbp-devhelp-panel.c:194
 msgid "Documentation"
 msgstr "文件"
 
-#: ../plugins/file-search/gb-file-search-provider.c:44
+#: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "切換為"
 
-#: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "正在下載應用程式來源…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "重製程式"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "重製"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:596
+msgid "Install"
+msgstr "安裝"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+msgid "Update"
+msgstr "更新"
+
+#. translators: keywords are used to match search keywords in preferences
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#, c-format
+msgid "flatpak %s %s %s"
+msgstr "flatpak %s %s %s"
+
+#. translators: %u is the number of hidden runtimes to be shown
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] "顯示另外 %u 個執行階段"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+msgid "Flatpak Runtimes"
+msgstr "Flatpak 執行階段"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:693
+#, c-format
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:695
+#, c-format
+msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:68
+msgid "Updated "
+msgstr "已更新"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:70
+msgid "Updating "
+msgstr "正在更新"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:75
+msgid "Installed "
+msgstr "已安裝"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:77
+#: plugins/rustup/rustup_plugin/__init__.py:355
+msgid "Installing "
+msgstr "安裝中"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:101
+msgid "Failed to install runtime"
+msgstr "無法安裝執行階段"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:103
+msgid "Runtime has been updated"
+msgstr "執行階段已更新"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:105
+msgid "Runtime has been installed"
+msgstr "執行階段已安裝"
+
+#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "傳送到 Fpaste.org"
 
-#: ../plugins/fpaste/fpaste_plugin/__init__.py:104
+#: plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
 msgstr "下列的 URL 已被複製到剪貼簿"
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:167
+#: plugins/git/ide-git-buffer-change-monitor.c:162
 msgid "Cannot provide diff, no backing file provided."
 msgstr "不能提供 diff，沒有提供備份檔案。"
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:539
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:568
 msgid "Repository does not have a working directory."
 msgstr "倉儲沒有工作目錄。"
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:550
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:579
 msgid "File is not under control of git working directory."
 msgstr "檔案不在 git 工作目錄的控制之下。"
 
-#: ../plugins/git/ide-git-buffer-change-monitor.c:616
-#, c-format
+#: plugins/git/ide-git-buffer-change-monitor.c:645
 msgid "The requested file does not exist within the git index."
 msgstr "要求的檔案不存在 git 索引中。"
 
-#: ../plugins/git/ide-git-clone-widget.c:131
+#: plugins/git/ide-git-clone-widget.c:141
+#: plugins/git/ide-git-clone-widget.c:387
 msgid "A valid Git URL is required"
 msgstr "需要有效的 Git URL"
 
-#: ../plugins/git/ide-git-clone-widget.c:200
-msgid "Projects"
-msgstr "專案"
+#: plugins/git/ide-git-clone-widget.ui:38
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr "使用 Git 來建立一個遠端託管專案的本地端副本。"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:1
+#: plugins/git/ide-git-clone-widget.ui:66
 msgid "user@host:repository.git"
 msgstr "user@host:repository.git"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:2
-msgid "Enter the URL of your project's source code repository"
+#: plugins/git/ide-git-clone-widget.ui:67
+msgid "Enter the URL of your project’s source code repository"
 msgstr "輸入您的專案源碼倉儲的 URL"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:3
-msgid "Directory"
-msgstr "目錄"
+#: plugins/git/ide-git-clone-widget.ui:94
+msgid "Repository URL"
+msgstr "倉儲 URL"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:4
-msgid "Enter the name of the directory to create"
-msgstr "輸入要建立的目錄名稱"
+#: plugins/git/ide-git-clone-widget.ui:102
+msgid "Project Destination"
+msgstr "專案目的端"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:5
-msgid "Repository"
-msgstr "倉儲"
+#: plugins/git/ide-git-genesis-addin.c:93
+msgid "Clone Project"
+msgstr "重製專案"
 
-#: ../plugins/git/ide-git-clone-widget.ui.h:6
-msgid "Location"
-msgstr "位置"
+#: plugins/git/ide-git-genesis-addin.c:184
+msgid "Clone…"
+msgstr "重製…"
 
-#: ../plugins/git/ide-git-genesis-addin.c:93
-msgid "From a existing project in a Git repository"
-msgstr "從 Git 倉儲中現有的專案"
+#: plugins/git/ide-git-remote-callbacks.c:177
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr "重製倉儲時 Builder 無法提供適當的憑證。"
 
-#: ../plugins/git/ide-git-preferences-addin.c:108
-msgid "Version Control"
-msgstr "版本控制"
-
-#: ../plugins/git/ide-git-preferences-addin.c:145
-msgid "Attribution"
-msgstr "署名"
-
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
 msgid "Code assistance requires a local file."
 msgstr "代碼助理需要本地端檔案。"
 
-#: ../plugins/gnome-code-assistance/ide-gca-service.c:168
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr "允許使用 pylint，這可能在您的專案中執行程式碼"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint code execute execution 程式碼 執行"
+
+#: plugins/gnome-code-assistance/ide-gca-service.c:182
 msgid "No language specified"
 msgstr "尚未指定語言"
 
-#: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+msgid "Enable Pylint"
+msgstr "啟用 Pylint"
+
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+"啟用以 pylint 來尋找 Python 程式中外的診斷。這可能在您的專案中執行程式碼。"
+
+#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "以 HTML 預覽"
 
-#: ../plugins/jedi/jedi_plugin.py:672
+#: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
 msgstr "使用 Python 建議字詞補完"
 
-#: ../plugins/jedi/jedi_plugin.py:673
+#: plugins/jedi/jedi_plugin.py:733
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "使用 Jedi 對 Python 語言進行文字補齊"
 
-#: ../plugins/library-template/library_template/__init__.py:52
-msgid "Shared Library"
-msgstr "共享程式庫"
+#: plugins/meson-templates/meson_templates/__init__.py:206
+msgid "Empty Meson Project"
+msgstr "空白 Meson 專案"
 
-#: ../plugins/library-template/library_template/__init__.py:55
-msgid "Create a new autotools project with a shared library"
-msgstr "建立新的 autotools 專案與分享的程式庫"
+#: plugins/meson-templates/meson_templates/__init__.py:208
+msgid "Create a new empty meson project"
+msgstr "建立新的空白 meson 專案"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:95
+#: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
 msgstr "MinGW 64 位元"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:107
+#: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32 位元"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:123
-#: ../plugins/project-tree/gb-rename-file-popover.c:141
+#: plugins/project-tree/gb-new-file-popover.c:123
+#: plugins/project-tree/gb-rename-file-popover.c:139
 msgid "A folder with that name already exists."
 msgstr "同樣名稱的資料夾已經存在。"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:126
-#: ../plugins/project-tree/gb-rename-file-popover.c:144
+#: plugins/project-tree/gb-new-file-popover.c:126
+#: plugins/project-tree/gb-rename-file-popover.c:142
 msgid "A file with that name already exists."
 msgstr "同樣名稱的檔案已經存在。"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:348
-#: ../plugins/project-tree/gb-new-file-popover.ui.h:1
-#: ../plugins/project-tree/gb-rename-file-popover.ui.h:1
+#: plugins/project-tree/gb-new-file-popover.c:348
+#: plugins/project-tree/gb-new-file-popover.ui:13
+#: plugins/project-tree/gb-rename-file-popover.ui:13
 msgid "File Name"
 msgstr "檔案名稱"
 
-#: ../plugins/project-tree/gb-new-file-popover.c:350
+#: plugins/project-tree/gb-new-file-popover.c:350
 msgid "Folder Name"
 msgstr "資料夾名稱"
 
-#: ../plugins/project-tree/gb-new-file-popover.ui.h:2
+#: plugins/project-tree/gb-new-file-popover.ui:35
 msgid "_Create"
 msgstr "建立(_C)"
 
-#: ../plugins/project-tree/gb-project-tree-addin.c:77
-msgid "Project"
-msgstr "專案"
+#: plugins/project-tree/gb-project-tree-builder.c:207
+msgid "Empty"
+msgstr "空的"
 
-#: ../plugins/project-tree/gb-project-tree-builder.c:77
-msgid "Files"
-msgstr "檔案"
-
-#: ../plugins/project-tree/gb-rename-file-popover.c:79
+#: plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
 msgid "Rename %s"
 msgstr "重新命名 %s"
 
-#: ../plugins/project-tree/gb-rename-file-popover.c:172
-msgid "File name must not contain subdirectories."
-msgstr "檔案名稱不能包含子目錄。"
+#: plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "在專案樹中顯現(_V)"
 
-#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
-#: ../plugins/project-tree/gtk/menus.ui.h:10
-msgid "_Rename"
-msgstr "重新命名(_R)"
+#: plugins/project-tree/gtk/menus.ui:14
+msgid "_New"
+msgstr "新增(_N)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:3
+#: plugins/project-tree/gtk/menus.ui:17
 msgid "_Empty File"
 msgstr "空白檔案(_E)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:4
+#: plugins/project-tree/gtk/menus.ui:23
 msgid "_New Folder"
 msgstr "新增資料夾(_N)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:5
+#: plugins/project-tree/gtk/menus.ui:29
 msgid "_Open"
 msgstr "開啟(_O)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:6
+#: plugins/project-tree/gtk/menus.ui:34
 msgid "Open _With"
 msgstr "以此開啟(_W)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:7
+#: plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
 msgstr "源碼編輯器"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:8
+#: plugins/project-tree/gtk/menus.ui:47
 msgid "_Open Containing Folder"
 msgstr "開啟包含的資料夾(_O)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:9
+#: plugins/project-tree/gtk/menus.ui:51
 msgid "_Open in Terminal"
 msgstr "在終端機開啟(_O)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:11
+#: plugins/project-tree/gtk/menus.ui:64
 msgid "Mo_ve to Trash"
 msgstr "丟進回收筒(_V)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:14
+#: plugins/project-tree/gtk/menus.ui:71
+msgid "_Build"
+msgstr "建置(_B)"
+
+#: plugins/project-tree/gtk/menus.ui:75
+msgid "_Rebuild"
+msgstr "重新建置(_B)"
+
+#: plugins/project-tree/gtk/menus.ui:81
 msgid "Display Options"
 msgstr "顯示選項"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:15
-msgid "Show Icons"
-msgstr "顯示圖示"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:16
-msgid "Show Ignored Files"
-msgstr "顯示忽略的檔案"
-
-#: ../plugins/project-tree/gtk/menus.ui.h:17
+#: plugins/project-tree/gtk/menus.ui:92
 msgid "Sort Directories First"
 msgstr "先排序目錄"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:18
+#: plugins/project-tree/gtk/menus.ui:98
 msgid "_Collapse All Nodes"
 msgstr "收摺所有的節點(_C)"
 
-#: ../plugins/project-tree/gtk/menus.ui.h:19
+#: plugins/project-tree/gtk/menus.ui:102
 msgid "_Refresh"
 msgstr "重新整理(_R)"
 
-#: ../plugins/support/gtk/menus.ui.h:1
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr "字詞符合選擇區域"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr "標示符合目前選擇區域的所有字詞"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr ""
+"quick highlight words matching current selection 快速 標示 字詞 符合 目前 選"
+"擇區域"
+
+#: plugins/rustup/rustup_plugin/__init__.py:80
+msgid "Rustup not installed"
+msgstr "尚未安裝 Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:277
+msgid "Installing rustup"
+msgstr "正在安裝 rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:279
+msgid "Updating rustup"
+msgstr "正在更新 rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:281
+msgid "Installing rust "
+msgstr "正在安裝 rust "
+
+#: plugins/rustup/rustup_plugin/__init__.py:283
+msgid "Checking system"
+msgstr "正在檢查系統"
+
+#: plugins/rustup/rustup_plugin/__init__.py:337
+msgid "Downloading rustup-init"
+msgstr "正在下載 rustup-init"
+
+#: plugins/rustup/rustup_plugin/__init__.py:342
+msgid "Syncing channel updates"
+msgstr "同步頻道更新"
+
+#: plugins/rustup/rustup_plugin/__init__.py:348
+msgid "Downloading "
+msgstr "正在下載"
+
+#: plugins/rustup/rustup_plugin/__init__.py:361
+msgid "Checking for rustup updates"
+msgstr "正在檢查 rustup 更新"
+
+#: plugins/rustup/rustup_plugin/__init__.py:366
+msgid "Downloading rustup update"
+msgstr "正在下載 rustup 更新"
+
+#: plugins/rustup/rustup_plugin/__init__.py:403
+msgid "Error installing "
+msgstr "安裝時發生錯誤"
+
+#: plugins/rustup/rustup_plugin/__init__.py:405
+msgid "Error"
+msgstr "錯誤"
+
+#: plugins/rustup/rustup_plugin/__init__.py:411
+msgid "Cancelled"
+msgstr "已取消"
+
+#: plugins/rustup/rustup_plugin/__init__.py:419
+msgid "Finished"
+msgstr "已完成"
+
+#: plugins/rustup/rustup_plugin/__init__.py:433
+msgid "Rustup"
+msgstr "Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:434
+msgid "Rustup Toolchains"
+msgstr "Rustup 工具鏈"
+
+#: plugins/rustup/rustup_plugin/__init__.py:489
+msgid "Updating"
+msgstr "正在更新"
+
+#: plugins/rustup/rustup_plugin/__init__.py:489
+msgid "Installing"
+msgstr "正在安裝"
+
+#. set default toolchain button
+#: plugins/rustup/rustup_plugin/__init__.py:580
+msgid "Make default"
+msgstr "Make 預設值"
+
+#: plugins/rustup/rustup_plugin/__init__.py:580
+msgid "Makes the selected toolchain the default rust installation"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:595
+msgid "Install Rust Channel"
+msgstr "安裝 Rust 頻道"
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: plugins/rustup/rustup_plugin/__init__.py:600
+msgid "Enter name of rust channel"
+msgstr "請輸入 rust 頻道名稱"
+
+#: plugins/rustup/rustup_plugin/__init__.py:601
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+msgstr ""
+"標準釋出頻道工具鏈名稱有下列格式：\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+
+#: plugins/rustup/rustup_plugin/__init__.py:626
+msgid "Install Rustup to manage toolchains here!"
+msgstr "在這裡安裝 Rustup 以管理工具鏈！"
+
+#: plugins/rustup/rustup_plugin/__init__.py:633
+msgid "No toolchain installed. Click"
+msgstr "尚未安裝工具鏈。點擊"
+
+#: plugins/rustup/rustup_plugin/__init__.py:634
+msgid "to add a new toolchain!"
+msgstr "加入新的工具鏈！"
+
+#: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "生成支援記錄"
 
-#: ../plugins/support/ide-support-application-addin.c:79
+#: plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
-"The support log file has been written to '%s'. Please provide this file as "
+"The support log file has been written to “%s”. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
 "支援紀錄檔已寫入「%s」。請在您的程式錯誤回報或支援要求中提供這個檔案做為附"
 "件。"
 
-#: ../plugins/symbol-tree/symbol-tree.c:84
-msgid "Symbols"
-msgstr "符號"
-
-#: ../plugins/symbol-tree/symbol-tree-panel.c:239
+#: plugins/symbol-tree/symbol-tree-panel.c:275
 msgid "Current language does not support symbol resolvers"
 msgstr "目前的語言不支援符號解譯器"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:63
+#: plugins/symbol-tree/symbol-tree-panel.c:415
+msgid "Symbols"
+msgstr "符號"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:25
+msgid "No symbols"
+msgstr "沒有符號"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:26
+msgid "Open a file to see symbols within the file"
+msgstr "開啟檔案以查看檔案中的符號"
+
+#: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
 msgstr "系統監控"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:297
+#: plugins/sysprof/gbp-sysprof-perspective.c:135
+msgid "Profiler"
+msgstr "效能剖析"
+
+#. the action:// link is used to run the project
+#: plugins/sysprof/gbp-sysprof-perspective.ui:49
+msgid ""
+"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
+"profiler</a> from the run menu to begin"
+msgstr ""
+"從執行選單選擇 <a href=\"action://run-manager.run-with-handler::profiler\">以"
+"效能分析器執行</a>開始"
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:81
+msgid "CPU"
+msgstr "CPU"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:302
+msgid "Open Profile"
+msgstr "開啟設定檔"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:311
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Sysprof 擷取 (*.syscap)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:317
+msgid "All Files"
+msgstr "所有檔案"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:418
+msgid "Run with Profiler"
+msgstr "執行效能分析"
+
+#: plugins/sysprof/gtk/menus.ui:6
+msgid "Open Profile…"
+msgstr "開啟設定檔…"
+
+#: plugins/terminal/gb-terminal-search.ui:152
+msgid "Regex"
+msgstr "正規表示式"
+
+#: plugins/terminal/gb-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "比對整個字詞"
+
+#: plugins/terminal/gb-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "回開頭處再開始"
+
+#: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "儲存終端機內容為"
 
-#: ../plugins/terminal/gtk/menus.ui.h:1
+#: plugins/terminal/gb-terminal-view.c:462
+msgid "Untitled terminal"
+msgstr "無標題終端機"
+
+#: plugins/terminal/gb-terminal-workbench-addin.c:142
+msgid "Run Output"
+msgstr "執行輸出"
+
+#: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "新增終端機(_N)"
 
-#: ../plugins/todo/todo_plugin/__init__.py:60
+#: plugins/terminal/gtk/menus.ui:15
+msgid "_Open Link"
+msgstr "開啟連結(_O)"
+
+#: plugins/terminal/gtk/menus.ui:20
+msgid "_Copy Link Address"
+msgstr "複製連結位址(_C)"
+
+#: plugins/todo/todo_plugin/__init__.py:193
 msgid "Todo"
 msgstr "待辦事項"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
 msgstr "Vala"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
-msgstr "顯示由 Vala 提供的錯誤和警告山"
+msgstr "顯示由 Vala 提供的錯誤和警告"
 
-#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:35
+#. translators: keywords used when searching for preferences
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala 建置警告與錯誤"
 
-#~ msgid "Name"
-#~ msgstr "名稱"
-
-#~ msgid "The name of the action"
-#~ msgstr "動作的名稱"
-
-#, fuzzy
-#~ msgid "State Machine"
-#~ msgstr "省/州："
-
-#~ msgid "Tag close icon visibility"
-#~ msgstr "標記關閉圖示可見度"
-
-#~ msgid "Whether the close button should be shown in tags."
-#~ msgstr "關閉按鈕是否在標籤中顯示。"
-
-#~ msgid "Label"
-#~ msgstr "標籤"
-
-#~ msgid "Text to show on the tag."
-#~ msgstr "標籤上要顯示的文字。"
-
-#~ msgid "Tag has a close button"
-#~ msgstr "標籤具有關閉按鈕"
-
-#~ msgid "Whether the tag has a close button."
-#~ msgstr "標籤是否包含關閉按鈕。"
-
-#~ msgid "Style"
-#~ msgstr "樣式"
-
-#~ msgid "Style of the tag."
-#~ msgstr "標記的樣式。"
-
-#~ msgid "The name of the column"
-#~ msgstr "欄位的名稱"
-
-#~ msgid "Value Type"
-#~ msgstr "數值類型"
-
-#~ msgid "Timespan"
-#~ msgstr "時間跨距"
-
-#~ msgid "Max Samples"
-#~ msgstr "最大樣本數量"
-
-#~ msgid "Table"
-#~ msgstr "表格"
-
-#~ msgid "The data table for the graph."
-#~ msgstr "圖表的資料表格。"
-
-#~ msgid "Column"
-#~ msgstr "行"
-
-#, fuzzy
-#~| msgid "Tab Width"
-#~ msgid "Line Width"
-#~ msgstr "格線寬度"
-
-#~ msgid "Stroke Color"
-#~ msgstr "刪除線顏色"
-
-#~ msgid "Stroke Color RGBA"
-#~ msgstr "刪除線顏色 RGBA"
-
-#, fuzzy
-#~ msgid "Timespan to visualize, in microseconds."
-#~ msgstr "時間跨距"
-
-#~ msgid "Value Max"
-#~ msgstr "數值最大值"
-
-#~ msgid "Value Min"
-#~ msgstr "數值最小值"
-
-#~ msgid "Encoding"
-#~ msgstr "編碼"
-
-#~ msgid "URI"
-#~ msgstr "URI"
-
-#~ msgid "_New Document"
-#~ msgstr "新增文件(_N)"
-
-#~ msgid "Display right _margin at column:"
-#~ msgstr "顯示右邊邊界於(_M):"
-
-#~ msgid "_Enable automatic indentation"
-#~ msgstr "啟用自動縮排(_E)"
-
-#~ msgid "From remote source code repository"
-#~ msgstr "從遠端源碼倉儲"
-
-#~ msgid "GNOME Version"
-#~ msgstr "GNOME 版本"
-
-#~ msgid "Language"
-#~ msgstr "語言"
-
-#~ msgid "Pattern"
-#~ msgstr "樣式"
-
-#~ msgid "Git"
-#~ msgstr "Git"
-
-#~ msgid "Display Document Changes"
-#~ msgstr "顯示文件變更"
-
-#~ msgid "Display Line Numbers"
-#~ msgstr "顯示列號"
-
-#~ msgid "Display the line numbers next to each line of the document."
-#~ msgstr "在文件每列旁邊顯示列號。"
-
-#~ msgid "Highlight Current Line"
-#~ msgstr "標明目前一列"
-
-#~ msgid "Highlight the line containing the cursor."
-#~ msgstr "標示游標目前所在的一列。"
-
-#~ msgid "Whether or not matching brackets should be highlighted."
-#~ msgstr "是否應標明成對的弧號。"
-
-#~ msgid "Display Overview Map"
-#~ msgstr "顯示概覽地圖"
-
-#~ msgid "Display an overview map next to the source code editor."
-#~ msgstr "在源碼編輯器旁顯示概覽地圖。"
-
-#~ msgid "Automatically hide the overview map during periods of inactivity."
-#~ msgstr "經過一段時間不使用後自動隱藏概覽地圖。"
-
-#~ msgid "Cursor Placement"
-#~ msgstr "游標放置"
-
-#~ msgid "Email"
-#~ msgstr "電子郵件"
-
-#~ msgid ""
-#~ "Highlight additional syntax based upon information found in the document."
-#~ msgstr "根據在文件中找到的資訊標明額外的語法。"
-
-#~ msgid "Use Ctags for completions in supported languages."
-#~ msgstr "使用 Ctags 對支援的語言建議文字補齊。"
-
-#~ msgid "Suggest Completions using Jedi"
-#~ msgstr "使用 Jedi 建議字詞補完"
-
-#~ msgid "Key Binding Emulation"
-#~ msgstr "組合鍵模擬"
-
-#~ msgid "The default keybindings for Builder."
-#~ msgstr "Builder 預設組合鍵。"
-
-#~ msgid "Emacs Emulation"
-#~ msgstr "Emacs 模擬"
-
-#~ msgid "Night Mode"
-#~ msgstr "夜晚模式"
-
-#, fuzzy
-#~| msgid "The parameters for the action."
-#~ msgid "Use dark colors for the application chrome."
-#~ msgstr "動作的參數。"
-
-#~ msgid "Search Preferences…"
-#~ msgstr "搜尋偏好設定…"
-
-#~ msgid "Select Project"
-#~ msgstr "選擇專案"
-
-#~ msgid "New"
-#~ msgstr "新增"
-
-#~ msgid "The configuration for the build."
-#~ msgstr "組建的設定。"
-
-#~ msgid "Tarball Name"
-#~ msgstr "Tarball 名稱"
-
-#~ msgid "The name of the project tarball."
-#~ msgstr "專案 tarball 的名稱。"
-
-#~ msgid "The overlay config for the compilation."
-#~ msgstr "編譯的覆蓋設定。"
-
-#~ msgid "The directory to perform the build within."
-#~ msgstr "用來執行組建的目錄。"
-
-#~ msgid "Require Autogen"
-#~ msgstr "需要 Autogen"
-
-#~| msgid "If spaces should be used instead of tabs."
-#~ msgid "If autogen.sh should be forced to execute."
-#~ msgstr "autogen.sh 是否應強制執行。"
-
-#~ msgid "Require Configure"
-#~ msgstr "需要 Configure"
-
-#~ msgid "If configure should be forced to execute."
-#~ msgstr "configure 是否應強制執行。"
-
-#~ msgid "Root Directory"
-#~ msgstr "根目錄"
-
-#~ msgid "The root directory to scan from."
-#~ msgstr "要掃描的根目錄。"
-
-#~ msgid "Makefile"
-#~ msgstr "Makefile"
-
-#~ msgid "The root makefile to be cached."
-#~ msgstr "要快取的根 makefile。"
-
-#~ msgid "Bug Database"
-#~ msgstr "程式錯誤資料庫"
-
-#~ msgid "Category"
-#~ msgstr "類別"
-
-#~ msgid "Description"
-#~ msgstr "描述"
-
-#~ msgid "Download Page"
-#~ msgstr "下載頁面"
-
-#~ msgid "Homepage"
-#~ msgstr "首頁"
-
-#~ msgid "Languages"
-#~ msgstr "語言"
-
-#~ msgid "Shortdesc"
-#~ msgstr "短描述"
-
-#~ msgid "The email of the person."
-#~ msgstr "個人電子郵件。"
-
-#~ msgid "The name of the person."
-#~ msgstr "個人姓名。"
-
-#~ msgid "The repository to use for calculating diffs."
-#~ msgstr "用於計算 diffs 的倉儲。"
-
-#~ msgid "Fraction"
-#~ msgstr "片段"
-
-#~ msgid "A fraction containing the operation progress."
-#~ msgstr "包含操作進度的片段。"
-
-#~ msgid "The git repository for the project."
-#~ msgstr "專案的 git 倉儲。"
-
-#~ msgid "Attempt to load a GJS script with no filename."
-#~ msgstr "嘗試載入沒有檔案名稱的 GJS 命令稿。"
-
-#~ msgid "Failed to create JavaScript context."
-#~ msgstr "無法建立 JavaScript 脈絡"
-
-#~ msgid "Failed to set IdeContext in JavaScript runtime."
-#~ msgstr "無法在 JavaScript 執行階段設定 IdeContext。"
-
-#~ msgid "The script \"%s\" is not a JavaScript file."
-#~ msgstr "命令稿「%s」不是 JavaScript 檔案。"
-
-#~ msgid "The location of the navigation item."
-#~ msgstr "導覽項目的位置。"
-
-#~ msgid "Can Go Backward"
-#~ msgstr "可以返回走"
-
-#~ msgid "If there are more backward navigation items."
-#~ msgstr "是否有更多向後導覽項目。"
-
-#~ msgid "Can Go Forward"
-#~ msgstr "可以往前進"
-
-#~ msgid "If there are more forward navigation items."
-#~ msgstr "是否有更多向前導覽項目。"
-
-#~ msgid "The current navigation item."
-#~ msgstr "目前的導覽項目。"
-
-#~ msgid "File contained invalid UTF-8"
-#~ msgstr "檔案包含無效的 UTF-8"
-
-#~ msgid "Busy"
-#~ msgstr "忙碌"
-
-#~ msgid "If the buffer is performing background work."
-#~ msgstr "緩衝區是否正在進行背景工作。"
-
-#~ msgid "Changed on Volume"
-#~ msgstr "儲存區已變更"
-
-#~ msgid "If the file has changed on disk and the buffer is not in sync."
-#~ msgstr "磁碟上的檔案是否已變更，而緩衝區尚未同步。"
-
-#~ msgid "Context"
-#~ msgstr "情境"
-
-#~ msgid "The IdeContext for the buffer."
-#~ msgstr "緩衝區的 IdeContext。"
-
-#~ msgid "File"
-#~ msgstr "檔案"
-
-#~ msgid "The file represented by the buffer."
-#~ msgstr "這個緩衝區代表的檔案。"
-
-#~ msgid "If the underlying file is read only."
-#~ msgstr "底層檔案是否是唯讀檔案。"
-
-#~ msgid "Style Scheme Name"
-#~ msgstr "樣式方案名稱"
-
-#~ msgid "The title of the buffer."
-#~ msgstr "緩衝區的標題。"
-
-#~ msgid "Buffer"
-#~ msgstr "緩衝"
-
-#~ msgid "The IdeBuffer to be monitored."
-#~ msgstr "要監視的 IdeBuffer。"
-
-#~ msgid "Auto Save"
-#~ msgstr "自動儲存"
-
-#~ msgid "If the documents should auto save after a configured timeout."
-#~ msgstr "文件是否應在設定的逾時時間後自動儲存。"
-
-#~ msgid "Auto Save Timeout"
-#~ msgstr "自動儲存逾時"
-
-#~ msgid "The number of seconds after modification before auto saving."
-#~ msgstr "修改後到自動儲存前的秒數。"
-
-#~ msgid "Focused Buffer"
-#~ msgstr "聚焦緩衝區"
-
-#~ msgid "The currently focused buffer."
-#~ msgstr "目前聚焦的緩衝區。"
-
-#~ msgid "Project File"
-#~ msgstr "專案檔案"
-
-#~ msgid "The project file."
-#~ msgstr "專案檔案。"
-
-#~ msgid "Builder requires libgit2-glib with threading support."
-#~ msgstr "Builder 需要 libgit2-glib 才能支援執行緒。"
-
-#~ msgid "Builder requires libgit2-glib with SSH support."
-#~ msgstr "Builder 需要 libgit2-glib 才能支援 SSH。"
-
-#~ msgid "Back Forward List"
-#~ msgstr "向後向前列表"
-
-#~ msgid "Back/forward navigation history for the context."
-#~ msgstr "前後脈絡的向前/向後導覽歷史紀錄。"
-
-#~ msgid "Buffer Manager"
-#~ msgstr "緩衝區管理員"
-
-#~ msgid "The buffer manager for the context."
-#~ msgstr "脈絡的緩衝區管理員。"
-
-#~ msgid "Build System"
-#~ msgstr "組建系統"
-
-#~ msgid "The build system used by the context."
-#~ msgstr "脈絡使用的組建系統。"
-
-#~ msgid "Device Manager"
-#~ msgstr "裝置管理員"
-
-#~ msgid "The device manager for the context."
-#~ msgstr "脈絡的裝置管理員。"
-
-#~ msgid "The project for the context."
-#~ msgstr "脈絡的專案。"
-
-#~ msgid "The project file for the context."
-#~ msgstr "脈絡的專案檔案。"
-
-#~ msgid "Root Build Directory"
-#~ msgstr "根組建目錄"
-
-#~ msgid "The root directory to perform builds within."
-#~ msgstr "用來執行組建的根目錄。"
-
-#~ msgid "Script Manager"
-#~ msgstr "命令稿管理員"
-
-#~ msgid "The script manager for the context."
-#~ msgstr "脈絡的命令稿管理員。"
-
-#~ msgid "The search engine for the context."
-#~ msgstr "脈絡的搜尋引擎。"
-
-#~ msgid "Snippets Manager"
-#~ msgstr "文字片段管理員"
-
-#~ msgid "The snippets manager for the context."
-#~ msgstr "脈絡的文字片段管理員。"
-
-#~ msgid "Unsaved Files"
-#~ msgstr "未儲存的檔案"
-
-#~ msgid "The unsaved files in the context."
-#~ msgstr "脈絡的未儲存檔案。"
-
-#~ msgid "VCS"
-#~ msgstr "VCS"
-
-#~ msgid "The VCS for the context."
-#~ msgstr "脈絡的 VCS。"
-
-#~ msgid "Display Name"
-#~ msgstr "顯示名稱"
-
-#~ msgid "The display name of the device."
-#~ msgstr "裝置的顯示名稱。"
-
-#~ msgid "ID"
-#~ msgstr "ID"
-
-#~ msgid "The device identifier."
-#~ msgstr "裝置的識別符。"
-
-#~ msgid "System Type"
-#~ msgstr "系統類型"
-
-#~ msgid "The system type for which to compile."
-#~ msgstr "要編譯的系統類型。"
-
-#~ msgid "Settled"
-#~ msgstr "已解决"
-
-#, fuzzy
-#~| msgid "If the view split is enabled."
-#~ msgid "If the device providers have settled."
-#~ msgstr "檔案設定值實作是否已解決。"
-
-#~ msgid "Engine"
-#~ msgstr "引擎"
-
-#~ msgid "The extension object."
-#~ msgstr "延伸物件。"
-
-#~ msgid "Interface Type"
-#~ msgstr "介面類型"
-
-#~ msgid "The GType of the extension interface."
-#~ msgstr "延伸介面的 GType。"
-
-#~ msgid "Key"
-#~ msgstr "設定鍵"
-
-#~ msgid "The external data key to match from plugin info."
-#~ msgstr "要從外掛程式資訊比對的外部資料鍵。"
-
-#~ msgid "Value"
-#~ msgstr "數值"
-
-#~ msgid "The external data value to match from plugin info."
-#~ msgstr "要從外掛程式資訊比對的外部資料數值。"
-
-#~ msgid "The path to the underlying file."
-#~ msgstr "底層檔案的路徑。"
-
-#~ msgid "Is Temporary"
-#~ msgstr "暫時"
-
-#~ msgid "If the file represents a temporary file."
-#~ msgstr "檔案是否為暫存檔案。"
-
-#~ msgid "The file language."
-#~ msgstr "檔案語言。"
-
-#~ msgid "Path"
-#~ msgstr "路徑"
-
-#~ msgid "The path within the project."
-#~ msgstr "此專案中的路徑。"
-
-#~ msgid "Temporary ID"
-#~ msgstr "暫時 ID"
-
-#~ msgid "A unique identifier for temporary files."
-#~ msgstr "暫存檔案的獨特識別符。"
-
-#~ msgid "The IdeFile the settings represent."
-#~ msgstr "設定值代表的 IdeFile。"
-
-#~ msgid "If the file settings implementations have settled."
-#~ msgstr "檔案設定值實作是否已解決。"
-
-#~ msgid "The buffer to highlight."
-#~ msgstr "要標明的緩衝區。"
-
-#~ msgid "The highlighter to use for type information."
-#~ msgstr "用於類型資訊的標記器。"
-
-#~ msgid "The context that owns the object."
-#~ msgstr "擁有此物件的脈絡。"
-
-#~ msgid "Completed"
-#~ msgstr "已完成"
-
-#~ msgid "If the progress has completed."
-#~ msgstr "進度是否已完成。"
-
-#~ msgid "The fraction of the progress."
-#~ msgstr "進度列片段"
-
-#~ msgid "Message"
-#~ msgstr "訊息"
-
-#~ msgid "A short message for the progress."
-#~ msgstr "進度的簡短訊息。"
-
-#~ msgid "The unique project identifier."
-#~ msgstr "專案的唯一識別符。"
-
-#~ msgid "The name of the project."
-#~ msgstr "專案的名稱。"
-
-#~ msgid "Root"
-#~ msgstr "根"
-
-#~ msgid "The root object for the project."
-#~ msgstr "專案的根物件。"
-
-#~ msgid "A GFile to the underlying file."
-#~ msgstr "底層檔案的 GFile。"
-
-#~ msgid "File Info"
-#~ msgstr "檔案資訊"
-
-#~ msgid "The file information for the project file."
-#~ msgstr "專案檔案的檔案資訊。"
-
-#~ msgid "Is Directory"
-#~ msgstr "是目錄"
-
-#~ msgid "The short name of the file."
-#~ msgstr "該檔案的簡短名稱。"
-
-#~ msgid "The path for the file within the project tree."
-#~ msgstr "專案樹中的檔案路徑。"
-
-#~ msgid "The project description."
-#~ msgstr "專案的描述。"
-
-#~ msgid "The project directory."
-#~ msgstr "專案的目錄。"
-
-#~ msgid "DOAP"
-#~ msgstr "DOAP"
-
-#~ msgid "A DOAP describing the project."
-#~ msgstr "用來描述專案的 DOAP。"
-
-#~ msgid "The toplevel project file."
-#~ msgstr "頂端層級的專案檔案。"
-
-#~ msgid "Is Recent"
-#~ msgstr "是最近使用的"
-
-#~ msgid "Last Modified At"
-#~ msgstr "最後修改於"
-
-#~ msgid "Priority"
-#~ msgstr "優先序"
-
-#~ msgid "The priority of the project information type."
-#~ msgstr "專案資訊型態的優先等級。"
-
-#~ msgid "Parent"
-#~ msgstr "親代"
-
-#~ msgid "The parent project item, if not the root."
-#~ msgstr "母專案項目，如果不是根項目。"
-
-#~ msgid "The file containing the script."
-#~ msgstr "檔案包含命令稿。"
-
-#~ msgid "Scripts Directory"
-#~ msgstr "命令稿目錄"
-
-#~ msgid "The local path to the directory containing scripts."
-#~ msgstr "包含命令稿的目錄的本地端路徑。"
-
-#~ msgid "Provider"
-#~ msgstr "提供者"
-
-#~ msgid "The Search Provider"
-#~ msgstr "搜尋提供者"
-
-#~ msgid "The title of the search result."
-#~ msgstr "搜尋結果的標題。"
-
-#~ msgid "Subtitle"
-#~ msgstr "副題"
-
-#~ msgid "The subtitle of the search result."
-#~ msgstr "搜尋結果的副標題。"
-
-#~ msgid "Score"
-#~ msgstr "分數"
-
-#~ msgid "The score of the search result."
-#~ msgstr "搜尋結果的分數。"
-
-#~ msgid "Ignore Project Settings"
-#~ msgstr "忽略專案設定值"
-
-#~ msgid "If project settings should be ignored."
-#~ msgstr "是否應忽略專案設定值。"
-
-#~ msgid "Relative Path"
-#~ msgstr "相對路徑"
-
-#~ msgid "Schema ID"
-#~ msgstr "基模 ID"
-
-#~ msgid "The GtkTextBuffer for the snippet."
-#~ msgstr "文字片段的 GtkTextBuffer。"
-
-#~ msgid "Mark Begin"
-#~ msgstr "標記開始"
-
-#~ msgid "The beginning text mark."
-#~ msgstr "文字標記開頭。"
-
-#~ msgid "Mark End"
-#~ msgstr "標記結束"
-
-#~ msgid "The ending text mark."
-#~ msgstr "文字標記結尾。"
-
-#~ msgid "Trigger"
-#~ msgstr "觸發"
-
-#~ msgid "The trigger for the snippet."
-#~ msgstr "文字片段觸發器。"
-
-#~ msgid "The language for the snippet."
-#~ msgstr "文字片段的語言。"
-
-#~ msgid "The description for the snippet."
-#~ msgstr "文字片段的描述。"
-
-#~ msgid "Tab Stop"
-#~ msgstr "Tab 落點"
-
-#~ msgid "The current tab stop."
-#~ msgstr "目前的定位點停止處。"
-
-#~ msgid "The snippet context."
-#~ msgstr "文字片段脈絡。"
-
-#~ msgid "Spec"
-#~ msgstr "規格"
-
-#~ msgid "The specification to expand using the context."
-#~ msgstr "使用脈絡要擴展的規格。"
-
-#, fuzzy
-#~ msgid "The tab stop for the chunk."
-#~ msgstr "Tab 落點"
-
-#~ msgid "Text"
-#~ msgstr "文字"
-
-#, fuzzy
-#~ msgid "The text for the chunk."
-#~ msgstr "PNG text 區段的內容 %s 無法轉換為 ISO-8859-1 編碼。"
-
-#~ msgid "Text Set"
-#~ msgstr "文字設定"
-
-#~ msgid "If the text property has been manually set."
-#~ msgstr "文字屬性是否已手動設定。"
-
-#~ msgid "Snippet"
-#~ msgstr "文字片段"
-
-#~ msgid "The snippet to insert."
-#~ msgstr "要插入的文字片段。"
-
-#~ msgid "Source View"
-#~ msgstr "源碼檢視"
-
-#~ msgid "The source view to insert snippet into."
-#~ msgstr "要插入文字片段的源碼檢視。"
-
-#~ msgid "The snippets to complete with this provider."
-#~ msgstr "以這個提供者完成的文字片段。"
-
-#~ msgid "Count"
-#~ msgstr "數目"
-
-#~ msgid "The count for movements."
-#~ msgstr "移動的數目。"
-
-#~ msgid "File Settings"
-#~ msgstr "檔案設定值"
-
-#~ msgid "The file settings that have been loaded for the file."
-#~ msgstr "已為檔案載入的檔案設定值。"
-
-#~ msgid "Font Description"
-#~ msgstr "字型描述"
-
-#~ msgid "The Pango font description to use for rendering source."
-#~ msgstr "描繪來源的 Pango 字型描述。"
-
-#~ msgid "Enable Word Completion"
-#~ msgstr "啟用字詞補完"
-
-#~ msgid "If words from all buffers can be used to autocomplete."
-#~ msgstr "所有緩衝區中的文字是否能用於自動補完。"
-
-#~ msgid "Font Name"
-#~ msgstr "字型名稱"
-
-#~ msgid "The Pango font name to use for rendering source."
-#~ msgstr "用來描繪來源的 Pango 字型描述。"
-
-#~ msgid "Indenter"
-#~ msgstr "縮排器"
-
-#~ msgid "Mode Display Name"
-#~ msgstr "模式顯示名稱"
-
-#~ msgid "The display name of the keybinding mode."
-#~ msgstr "組合鍵模式的顯示名稱。"
-
-#~ msgid "Overwrite Braces"
-#~ msgstr "覆寫括號"
-
-#~ msgid ""
-#~ "The number of lines between the insertion cursor and screen boundary."
-#~ msgstr "插入游標與螢幕邊界之間的行數。"
-
-#~ msgid "Search Context"
-#~ msgstr "搜尋情境"
-
-#~ msgid "The search context for the view."
-#~ msgstr "該檢視的搜尋情境。"
-
-#~ msgid "If the background grid should be shown."
-#~ msgstr "是否顯示背景格線。"
-
-#, fuzzy
-#~| msgid "If the line numbers should be shown."
-#~ msgid "If line changes should be shown in the left gutter."
-#~ msgstr "是否應顯示列號。"
-
-#~ msgid "Show Line Diagnostics"
-#~ msgstr "顯示列診斷"
-
-#~ msgid "Show Search Bubbles"
-#~ msgstr "顯示搜尋氣泡"
-
-#~ msgid "If search bubbles should be rendered."
-#~ msgstr "是否顯示搜尋氣泡。"
-
-#~ msgid "Show Search Shadow"
-#~ msgstr "顯示搜尋陰影"
-
-#~ msgid "If the shadow should be drawn when performing searches."
-#~ msgstr "進行搜尋時是否應繪製陰影。"
-
-#~ msgid "Snippet Completion"
-#~ msgstr "文字片段補完"
-
-#~ msgid "If snippet expansion should be enabled via the completion window."
-#~ msgstr "文字片段擴充功能是否應透過補完視窗啟用。"
-
-#~ msgid "View"
-#~ msgstr "檢視"
-
-#~ msgid "The source view."
-#~ msgstr "源碼檢視。"
-
-#~ msgid "The name of the mode."
-#~ msgstr "模式的名稱。"
-
-#~ msgid "Kind"
-#~ msgstr "類型"
-
-#~ msgid "Flags"
-#~ msgstr "旗標"
-
-#~ msgid "Duration"
-#~ msgstr "時間"
-
-#~ msgid "The duration of the animation"
-#~ msgstr "動畫的時間"
-
-#~ msgid "An optional frame-clock to synchronize with."
-#~ msgstr "選用性的同步用框幀時鐘。"
-
-#~ msgid "Mode"
-#~ msgstr "模式"
-
-#~ msgid "The animation mode"
-#~ msgstr "動畫模式"
-
-#~ msgid "Target"
-#~ msgstr "目標"
-
-#~ msgid "The target of the animation"
-#~ msgstr "動畫的目標"
-
-#~ msgid "Alpha"
-#~ msgstr "Alpha"
-
-#~ msgid "background"
-#~ msgstr "背景"
-
-#~ msgid "height"
-#~ msgstr "高"
-
-#~ msgid "width"
-#~ msgstr "寬"
-
-#~ msgid "x"
-#~ msgstr "x"
-
-#~ msgid "y"
-#~ msgstr "y"
-
-#~ msgid "Index"
-#~ msgstr "索引"
-
-#~ msgid "The index in the result set."
-#~ msgstr "結果集中的索引。"
-
-#~ msgid "Results"
-#~ msgstr "結果"
-
-#~ msgid "The Clang result set."
-#~ msgstr "Clang 結果集。"
-
-#~ msgid "Clang"
-#~ msgstr "Clang"
-
-#~ msgid "Native"
-#~ msgstr "原生"
-
-#~ msgid "The file used to build the translation unit."
-#~ msgstr "用來組建轉譯單元的檔案。"
-
-#~ msgid "The highlight index for the translation unit."
-#~ msgstr "轉譯單元的標明索引。"
-
-#~ msgid "The native translation unit pointer."
-#~ msgstr "原生轉譯單元的指標。"
-
-#~ msgid "Serial"
-#~ msgstr "序號"
-
-#~ msgid "A sequence number for the translation unit."
-#~ msgstr "轉譯單元的序列號碼。"
-
-#~ msgid "Action Group"
-#~ msgstr "動作群組"
-
-#~ msgid "The GActionGroup containing the action."
-#~ msgstr "包含該動作的 GActionGroup。"
-
-#~ msgid "Action Name"
-#~ msgstr "動作名稱"
-
-#~ msgid "Parameters"
-#~ msgstr "參數"
-
-#~ msgid "The parameters for the action."
-#~ msgstr "動作的參數。"
-
-#~ msgid "Active View"
-#~ msgstr "使用中檢視"
-
-#~ msgid "The last focused GbView widget."
-#~ msgstr "最近聚焦的 GbView 元件。"
-
-#~ msgid "The priority of the command provider."
-#~ msgstr "指令提供者的優先序。"
-
-#, fuzzy
-#~ msgid "The target workbench."
-#~ msgstr "目標："
-
-#~ msgid "The command text if any."
-#~ msgstr "如果有指令文字。"
-
-#~ msgid "Is Error"
-#~ msgstr "有錯誤"
-
-#~ msgid "If the result is an error."
-#~ msgstr "是否結果有錯誤。"
-
-#~ msgid "If the command is still running."
-#~ msgstr "是否指令仍在執行中。"
-
-#~ msgid "Result Text"
-#~ msgstr "結果文字"
-
-#~ msgid "The result text if any."
-#~ msgstr "如果有任何的結果文字則顯示。"
-
-#~ msgid "The command text to execute"
-#~ msgstr "要執行的指令文字"
-
-#~ msgid "The source view to modify."
-#~ msgstr "要修改的源碼檢視。"
-
-#~ msgid "CTags"
-#~ msgstr "CTags"
-
-#~ msgid "The file containing the ctags data."
-#~ msgstr "包含 ctags 資料的檔案。"
-
-#~ msgid "Documentation (%s)"
-#~ msgstr "文件 (%s)"
-
-#~ msgid "The uri to load."
-#~ msgstr "要載入的 URI。"
-
-#~ msgid "Document"
-#~ msgstr "文件"
-
-#~ msgid "The document for the devhelp view."
-#~ msgstr "devhelp 檢視的文件。"
-
-#~ msgid "Symbol Tree"
-#~ msgstr "符號樹"
-
-#~ msgid "The document for the VTE terminal view."
-#~ msgstr "VTE 終端機檢視的文件。"
-
-#, fuzzy
-#~ msgid "The workbench window."
-#~ msgstr "視窗的視窗定位"
-
-#~ msgid "Select Project File"
-#~ msgstr "選擇專案檔案"
-
-#~ msgid "Clone Repository"
-#~ msgstr "重製倉儲"
-
-#~ msgid "Autotools Project (configure.ac)"
-#~ msgstr "Autotools 專案 (configure.ac)"
-
-#~ msgid "Any Directory"
-#~ msgstr "任何目錄"
-
-#~ msgid "Directory|Projects"
-#~ msgstr "目錄|專案"
-
-#~ msgid "(Click on items to select them)"
-#~ msgstr "(點擊項目來選取它們)"
-
-#~ msgid "The project information for the row."
-#~ msgstr "此列的專案資訊。"
-
-#~ msgid "Selection Mode"
-#~ msgstr "選擇模式"
-
-#~ msgid "Modified"
-#~ msgstr "已修改"
-
-#~ msgid "If the document has been modified from disk."
-#~ msgstr "文件是否在磁碟上已修改。"
-
-#~ msgid "The title of the document."
-#~ msgstr "該文件的標題。"
-
-#~ msgid "If the document is read only."
-#~ msgstr "這份文件是否是唯讀。"
-
-#~ msgid "Auto Hide Map"
-#~ msgstr "自動隱藏地圖"
-
-#~ msgid "The back forward list."
-#~ msgstr "向後向前列表"
-
-#~ msgid "The editor document."
-#~ msgstr "編輯器向文件。"
-
-#~ msgid "Show Map"
-#~ msgstr "顯示地圖"
-
-#~ msgid "If the overview map should be shown."
-#~ msgstr "是否顯示概覽地圖。"
-
-#~ msgid "The language to change the settings for."
-#~ msgstr "設定值要變更成的語言。"
-
-#, fuzzy
-#~ msgid "The label for the pill box."
-#~ msgstr "標籤(_L)"
-
-#~ msgid "The project information to render."
-#~ msgstr "要繪製的專案資訊。"
-
-#, fuzzy
-#~| msgid "An error that may have been loaded."
-#~ msgid "The recent projects that have been mined."
-#~ msgstr "加入最近播放過的檔案"
-
-#~ msgid "HTML Preview"
-#~ msgstr "HTML 預覽"
-
-#~ msgid "%s (Preview)"
-#~ msgstr "%s (預覽)"
-
-#~ msgid "The buffer to monitor for changes."
-#~ msgstr "用來監控變更的緩衝區。"
-
-#~ msgid "The document to view as HTML."
-#~ msgstr "以 HTML 檢視的文件。"
-
-#~ msgid "Application"
-#~ msgstr "應用程式"
-
-#~ msgid "The application to register keybindings for."
-#~ msgstr "註冊組合鍵的應用程式。"
-
-#~ msgid "The name of the keybindings mode."
-#~ msgstr "組合鍵模式的名稱。"
-
-#~ msgid "The title for the preferences page."
-#~ msgstr "偏好設定頁面的題名。"
-
-#~ msgid "restore insert cursor mark"
-#~ msgstr "還原游標插入標記"
-
-#~ msgid "diff renderer gutter changes git vcs"
-#~ msgstr "diff renderer gutter changes git vcs"
-
-#~ msgid "line lines highlight current"
-#~ msgstr "line lines highlight current"
-
-#~ msgid "bracket brackets highlight matching"
-#~ msgstr "bracket brackets highlight matching"
-
-#~ msgid "lines margin scrolloff scroll off"
-#~ msgstr "lines margin scrolloff scroll off 行號 邊界"
-
-#~ msgid "minimap mini map overview over view"
-#~ msgstr "minimap mini map overview over view 迷你地圖 迷你 地圖"
-
-#~| msgid "git author name surname"
-#~ msgid "git author name surname attribution source code"
-#~ msgstr "git author name surname attribution source code"
-
-#~| msgid "git author email mail address"
-#~ msgid "git author email mail address attribute source code"
-#~ msgstr "git author email mail address attribute source code"
-
-#~ msgid "word words auto completion suggest found document"
-#~ msgstr "word words auto completion suggest found document"
-
-#~ msgid "experimental clang autocompletion auto complete"
-#~ msgstr "experimental clang autocompletion auto complete 自動補完"
-
-#~ msgid "exuberant ctags tags autocompletion auto complete"
-#~ msgstr "exuberant ctags tags autocompletion auto complete 自動補完 "
-
-#~| msgid "Failed to load keybindings."
-#~ msgid "default builder keybindings"
-#~ msgstr "default builder keybindings"
-
-#~| msgid "emacs modal"
-#~ msgid "emacs keybindings modal"
-#~ msgstr "emacs keybindings modal"
-
-#~| msgid "vim modal"
-#~ msgid "vim keybindings modal"
-#~ msgstr "vim keybindings modal"
-
-#~ msgid "smart home end"
-#~ msgstr "smart home end 智慧"
-
-#~ msgid "smart back backspace indent align"
-#~ msgstr "smart back backspace indent align 縮排 對齊"
-
-#~ msgid "show grid lines"
-#~ msgstr "show grid lines 顯示 格線"
-
-#~ msgid "source style scheme source tango solarized builder syntax"
-#~ msgstr "source style scheme source tango solarized builder syntax"
-
-#~ msgid "The title of the switch."
-#~ msgstr "開關的標題。"
-
-#~ msgid "The description for the switch."
-#~ msgstr "開關的描述。"
-
-#~ msgid "Is Radio"
-#~ msgstr "是單選"
-
-#~ msgid "If a radio button should be used."
-#~ msgstr "是否使用單選按鈕。"
-
-#~ msgid "Settings"
-#~ msgstr "設定值"
-
-#~ msgid "The GSettings for the setting."
-#~ msgstr "設定值的 GSettings"
-
-#~ msgid "Settings Schema Key"
-#~ msgstr "設定值基模設定鍵"
-
-#~ msgid "The settings schema key."
-#~ msgstr "設定值的基模設定鍵。"
-
-#~ msgid "Settings Schema Value"
-#~ msgstr "設定值基模數值"
-
-#~ msgid "An action-target for the settings action."
-#~ msgstr "設定值動作的動作目標。"
-
-#~ msgid "Size Group"
-#~ msgstr "大小群組"
-
-#~ msgid "The sizing group for the control."
-#~ msgstr "控制元的尺寸群組。"
-
-#~ msgid "File Type"
-#~ msgstr "檔案類型"
-
-#~ msgid "The file type to create."
-#~ msgstr "要建立的檔案類型。"
-
-#~ msgid "Icon Name"
-#~ msgstr "圖示名稱"
-
-#~ msgid "If files ignored by the VCS should be displayed."
-#~ msgstr "是否顯示 VCS 略過的檔案。"
-
-#~ msgid "Max Content Height"
-#~ msgstr "最大內容高度"
-
-#~ msgid "The maximum height request that can be made."
-#~ msgstr "能要求的最大寬度。"
-
-#~ msgid "Max Content Width"
-#~ msgstr "最大內容寬度"
-
-#~ msgid "The maximum width request that can be made."
-#~ msgstr "能要求的最大寬度。"
-
-#~ msgid "The active search context."
-#~ msgstr "使用中搜尋情境。"
-
-#~ msgid "%s more"
-#~ msgstr "還需要 %s"
-
-#~ msgid "The search provider"
-#~ msgstr "搜尋提供者"
-
-#~ msgid "The size group for the label."
-#~ msgstr "標籤的大小群組。"
-
-#~ msgid "Result"
-#~ msgstr "結果"
-
-#~ msgid "Tree"
-#~ msgstr "樹"
-
-#~ msgid "The GbTree the builder belongs to."
-#~ msgstr "Builder 所屬的 GbTree。"
-
-#~ msgid "The root object of the tree."
-#~ msgstr "樹的根物件。"
-
-#~ msgid "The node selection."
-#~ msgstr "節點選取項目。"
-
-#~ msgid "The icon name to display."
-#~ msgstr "要顯示的圖示名稱。"
-
-#~ msgid "Item"
-#~ msgstr "項目"
-
-#~ msgid "Optional object to associate with node."
-#~ msgstr "要與節點作關聯的選用物件。"
-
-#~ msgid "The parent node."
-#~ msgstr "親代節點。"
-
-#~ msgid "The GbTree the node belongs to."
-#~ msgstr "節點所屬的 GbTree。"
-
-#~ msgid "The text of the node."
-#~ msgstr "節點的文字。"
-
-#~ msgid "Use Markup"
-#~ msgstr "使用標記"
-
-#~ msgid "If text should be translated as markup."
-#~ msgstr "是否文字應轉譯為標記。"
-
-#~ msgid "Use Dim Label"
-#~ msgstr "使用暗淡標籤"
-
-#~ msgid "If text should be rendered with a dim label."
-#~ msgstr "文字是否應以暗淡標籤繪製。"
-
-#~ msgid "Can Split"
-#~ msgstr "可以分割"
-
-#~ msgid "If the view can be split."
-#~ msgstr "檢視是否可以分割。"
-
-#~ msgid "The underlying document."
-#~ msgstr "底層文件。"
-
-#~ msgid "If the document has been modified."
-#~ msgstr "該文件是否已經修改。"
-
-#~ msgid "The view title."
-#~ msgstr "檢視標題。"
-
-#~ msgid "The active view."
-#~ msgstr "使用中檢視。"
-
-#~| msgid "Builder"
-#~ msgid "%s - Builder"
-#~ msgstr "%s - Builder"
-
-#~ msgid "If the project is currently building."
-#~ msgstr "專案目前是否正在組建。"
-
-#, fuzzy
-#~ msgid "The IdeContext for the workbench."
-#~ msgstr "導覽"
-
-#~ msgid "Build Failure"
-#~ msgstr "組建失敗"
-
-#~ msgid "Project build system does not support building"
-#~ msgstr "專案組建系統不支援組建"
-
-#~ msgid "Position"
-#~ msgstr "位置"
-
-#~ msgid "Which slider child is visible."
-#~ msgstr "哪個滑動鈕子項是可視的。"
-
-#~ msgid "Left Pane"
-#~ msgstr "左窗格"
-
-#~ msgid "The left workspace pane."
-#~ msgstr "左方工作區窗格。"
-
-#~ msgid "Right Pane"
-#~ msgstr "右窗格"
-
-#~ msgid "Bottom Pane"
-#~ msgstr "底部窗格"
-
-#~ msgid "Content Pane"
-#~ msgstr "內容窗格"
-
-#~ msgid "The content workspace pane."
-#~ msgstr "內容工作區窗格。"
-
-#~ msgid "The position of the pane relative to its edge."
-#~ msgstr "窗格相對於其邊緣的位置。"
-
-#~ msgid "Reveal"
-#~ msgstr "顯示"
-
-#~ msgid "If the pane should be revealed."
-#~ msgstr "是否應顯示窗格。"
-
-#~ msgid "The position of the pane."
-#~ msgstr "窗格的位置。"
-
-#~ msgid "The target device we are building for."
-#~ msgstr "我們組建的目標裝置。"
-
-#~ msgid "DEVICE_ID"
-#~ msgstr "DEVICE_ID"
-
-#, fuzzy
-#~ msgid "Increase parallelism in the build."
-#~ msgstr "增加縮排(_I)"
-
-#~ msgid "- Build the project."
-#~ msgstr "- 建置專案。"
-
-#~ msgid "- Get build flags for a project file"
-#~ msgstr "- 取得專案檔案的組建旗標"
-
-#~ msgid "- List devices found on the system."
-#~ msgstr "- 列出在系統中找到的裝置。"
-
-#~ msgid "Failed to diagnose: %s\n"
-#~ msgstr "無法診斷：%s\n"
-
-#~ msgid "No such file in project: %s\n"
-#~ msgstr "專案中沒有這樣的檔案：%s\n"
-
-#~ msgid "- List diagnostics for a file."
-#~ msgstr "- 列出檔案的診斷。"
-
-#~ msgid "- List files found in project."
-#~ msgstr "- 列出專案中找到的檔案。"
-
-#~ msgid "No files provided to load settings for.\n"
-#~ msgstr "沒有提供讀取設定值的檔案。\n"
-
-#~ msgid "- discover projects"
-#~ msgstr "- 探索專案"
-
-#~ msgid "%s results\n"
-#~ msgstr "%s 結果\n"
-
-#~ msgid "PROJECT_FILE [SEARCH TERMS...]"
-#~ msgstr "PROJECT_FILE [SEARCH TERMS...]"
-
-#~ msgid "Failed to load keybindings: %s"
-#~ msgstr "無法載入按鍵綁定：%s"
-
-#~ msgid "Failed to load local keybindings: %s"
-#~ msgstr "無法載入本地端按鍵綁定：%s"
-
-#~ msgid "If code assistance is currently processing."
-#~ msgstr "是否代碼助理正在處理中。"
-
-#~ msgid "The buffer "
-#~ msgstr "緩衝"
-
-#~ msgid ""
-#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s"
-#~ "\" (%s)"
-#~ msgstr "無法載入 BBus 連線。代碼助理將停用。「%s」(%s)"
-
-#, fuzzy
-#~ msgid "The result to be visualized in the item."
-#~ msgstr "項目中要示現的結果。"
-
-#~ msgid "Active DocumentView"
-#~ msgstr "使用中 DocumentView"
-
-#~ msgid "Progress"
-#~ msgstr "進度"
-
-#~ msgid "GNOME Builder - %s"
-#~ msgstr "GNOME Builder - %s"
-
-#~ msgid "Question"
-#~ msgstr "問題"
-
-#~ msgid "Close _without Saving"
-#~ msgstr "關閉而不儲存(_W)"
-
-#~ msgid "_Save As…"
-#~ msgstr "另存為(_S)…"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you don't save, changes from the last minute will be permanently lost."
-#~ msgstr "如果不儲存，將會永久地失去 1 分鐘前所作的修改。"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you don't save, changes from the last hour will be permanently lost."
-#~ msgstr "如果不儲存，將會永久地失去 1 小時前所作的修改。"
-
-#, fuzzy
-#~ msgid "Changes to document “%s” will be permanently lost."
-#~ msgstr "將會永久地失去對文件“%s”所作的修改。"
-
-#, fuzzy
-#~ msgid "Save changes to document “%s” before closing?"
-#~ msgstr "在關閉前將變更儲存到文件“%s”？"
-
-#, fuzzy
-#~ msgid "Saving has been disabled by the system administrator."
-#~ msgstr "儲存功能已被系統管理員禁用。"
-
-#, fuzzy
-#~ msgid "Docum_ents with unsaved changes:"
-#~ msgstr "已修改但未儲存的文件(_E):"
-
-#, fuzzy
-#~ msgid "S_elect the documents you want to save:"
-#~ msgstr "請選擇需要儲存的文件(_E):"
-
-#, fuzzy
-#~ msgid "If you don't save, all your changes will be permanently lost."
-#~ msgstr "如果不儲存，所有已修改的部份將會永久地遺失。"
-
-#, fuzzy
-#~ msgid "The document manager for the document grid."
-#~ msgstr "文件管理員"
-
-#~ msgid "The number of documents in the manager."
-#~ msgstr "管理員中的文件數。"
-
-#, fuzzy
-#~ msgid "The document manager for the stack."
-#~ msgstr "文件管理員"
-
-#~ msgid "Can Preview"
-#~ msgstr "可以預覽"
-
-#~ msgid "The document being viewed."
-#~ msgstr "正在檢視的文件。"
-
-#~ msgid "%s (Read Only)"
-#~ msgstr "%s (唯讀)"
-
-#~ msgid "No file was selected for saving."
-#~ msgstr "沒有選取檔案要儲存。"
-
-#, fuzzy
-#~ msgid "The backing file for the document."
-#~ msgstr "備份檔案"
-
-#, fuzzy
-#~ msgid "Loading or saving progress."
-#~ msgstr "儲存進度："
-
-#~ msgid "If whitespace should be trimmed before saving."
-#~ msgstr "是否在儲存前應截去空白。"
-
-#~ msgid "The column within the line."
-#~ msgstr "文字的行號。"
-
-#, fuzzy
-#~ msgid "The file for which to store the mark."
-#~ msgstr "儲存記號的檔案。"
-
-#~ msgid "Line"
-#~ msgstr "列"
-
-#~ msgid "The direction of the last text searched for."
-#~ msgstr "上次文字搜尋的方向。"
-
-#~ msgid "Line Offset"
-#~ msgstr "列偏移"
-
-#~ msgid "The file “%s” was modified outside of Builder."
-#~ msgstr "「%s」檔案已在 Builder 外部經過修改。"
-
-#~ msgid "If we should use the auto-indentation engine."
-#~ msgstr "是否我們應該使用自動縮排引擎。"
-
-#~ msgid "The document edited by the view."
-#~ msgstr "該檢視之下所編輯的文件。"
-
-#~ msgid "If we should show the right margin."
-#~ msgstr "我們是否應顯示右側邊緣。"
-
-#~ msgid "Split Enabled"
-#~ msgstr "啟用分割"
-
-#~ msgid "The width a tab should be drawn as."
-#~ msgstr "應如何描繪 Tab 的寬度。"
-
-#~ msgid "Use Spaces"
-#~ msgstr "使用空格"
-
-#, fuzzy
-#~ msgid "The change monitor for the gutter renderer."
-#~ msgstr "變更監視器"
-
-#, fuzzy
-#~ msgid "No filename, cannot discover repository."
-#~ msgstr "不能寫入軟體庫組態"
-
-#, fuzzy
-#~ msgid "Failure copying to \"%s\": %s"
-#~ msgstr "自動調整寬度於 %s 失敗\n"
-
-#~ msgid "Can Format"
-#~ msgstr "可以格式化"
-
-#, fuzzy
-#~ msgid "If the source language can be formatted."
-#~ msgstr "此詞彙表的源語言"
-
-#, fuzzy
-#~ msgid "The font name to apply to the widget."
-#~ msgstr "字型選擇視窗元件"
-
-#~ msgid "Enable smart home end in gtksourceview."
-#~ msgstr "在 gtksourceview 中啟用智慧式 Home End。"
-
-#, fuzzy
-#~ msgid "Whether to show the grid lines."
-#~ msgstr "顯示儲存格格線。"
-
-#~ msgid "Stack"
-#~ msgstr "堆疊"
-
-#, fuzzy
-#~ msgid "Bar's primary label"
-#~ msgstr "標籤"
-
-#, fuzzy
-#~ msgid "Bar's details label"
-#~ msgstr "%(label)s %(details)s"
-
-#, fuzzy
-#~ msgid "Details label displayed by the bar"
-#~ msgstr "%(label)s %(details)s"
-
-#, fuzzy
-#~ msgid "Show spinner"
-#~ msgstr "轉輪"
-
-#~ msgid "Workspace"
-#~ msgstr "工作區"
-
-#, fuzzy
-#~ msgid "The workspace to ensure is focused."
-#~ msgstr "Fedora 現在變得更加聚焦"
-
-#, fuzzy
-#~ msgid "The workbench the navigation list is for."
-#~ msgstr "導覽"
-
-#~ msgid ""
-#~ "Christian Hergert\n"
-#~ "Alexander Larsson\n"
-#~ "Alexandre Franke\n"
-#~ "Carlos Soriano\n"
-#~ "Cosimo Cecchi\n"
-#~ "Dimitris Zenios\n"
-#~ "Fabiano Fidêncio\n"
-#~ "Florian Bäuerle\n"
-#~ "Florian Müllner\n"
-#~ "Hashem Nasarat\n"
-#~ "Hylke Bons\n"
-#~ "Igor Gnatenko\n"
-#~ "Jakub Steiner\n"
-#~ "Jasper St. Pierre\n"
-#~ "Jonathon Jongsma\n"
-#~ "Mathieu Bridon\n"
-#~ "Megh Parikh\n"
-#~ "Michael Catanzaro\n"
-#~ "Pete Travis\n"
-#~ "Ray Strode\n"
-#~ "Roberto Majadas\n"
-#~ "Ting-Wei Lan\n"
-#~ "Trinh Anh Ngoc\n"
-#~ "Yosef Or Boczko"
-#~ msgstr ""
-#~ "Christian Hergert\n"
-#~ "Alexander Larsson\n"
-#~ "Alexandre Franke\n"
-#~ "Carlos Soriano\n"
-#~ "Cosimo Cecchi\n"
-#~ "Dimitris Zenios\n"
-#~ "Fabiano Fidêncio\n"
-#~ "Florian Bäuerle\n"
-#~ "Florian Müllner\n"
-#~ "Hashem Nasarat\n"
-#~ "Hylke Bons\n"
-#~ "Igor Gnatenko\n"
-#~ "Jakub Steiner\n"
-#~ "Jasper St. Pierre\n"
-#~ "Jonathon Jongsma\n"
-#~ "Mathieu Bridon\n"
-#~ "Megh Parikh\n"
-#~ "Michael Catanzaro\n"
-#~ "Pete Travis\n"
-#~ "Ray Strode\n"
-#~ "Roberto Majadas\n"
-#~ "Ting-Wei Lan\n"
-#~ "Trinh Anh Ngoc\n"
-#~ "Yosef Or Boczko"
-
-#~ msgid "Artwork By:"
-#~ msgstr "美工："
-
-#~ msgid ""
-#~ "Allan Day\n"
-#~ "Hylke Bons\n"
-#~ "Jakub Steiner"
-#~ msgstr ""
-#~ "Allan Day\n"
-#~ "Hylke Bons\n"
-#~ "Jakub Steiner"
-
-#~ msgid "Translated By:"
-#~ msgstr "翻譯："
-
-#~ msgid ""
-#~ "Christian Hergert\n"
-#~ "Gareth Foster"
-#~ msgstr ""
-#~ "Christian Hergert\n"
-#~ "Gareth Foster"
-
-#~ msgid "Special Thanks To:"
-#~ msgstr "特別感謝："
-
-#~ msgid ""
-#~ "Andy Hertzfeld and the Eazel Team\n"
-#~ "Alberto Ruiz\n"
-#~ "Bastien Nocera\n"
-#~ "Cosimo Cecchi\n"
-#~ "Emmanuele Bassi\n"
-#~ "Federico Mena Quintero\n"
-#~ "Jasper St Pierre\n"
-#~ "Jon McCann\n"
-#~ "Jonathan Blandford\n"
-#~ "Matthias Clasen\n"
-#~ "Miguel de Icaza\n"
-#~ "Owen Taylor\n"
-#~ "Rob Taylor\n"
-#~ "Spencer Kimball\n"
-#~ "Ximian Team\n"
-#~ "\n"
-#~ "Each and every contributor to GNOME\n"
-#~ "and the Friends of GNOME"
-#~ msgstr ""
-#~ "Andy Hertzfeld 與 Eazel 團隊\n"
-#~ "Alberto Ruiz\n"
-#~ "Bastien Nocera\n"
-#~ "Cosimo Cecchi\n"
-#~ "Emmanuele Bassi\n"
-#~ "Federico Mena Quintero\n"
-#~ "Jasper St Pierre\n"
-#~ "Jon McCann\n"
-#~ "Jonathan Blandford\n"
-#~ "Matthias Clasen\n"
-#~ "Miguel de Icaza\n"
-#~ "Owen Taylor\n"
-#~ "Rob Taylor\n"
-#~ "Spencer Kimball\n"
-#~ "Ximian Team\n"
-#~ "\n"
-#~ "各位與每位 GNOME 貢獻者\n"
-#~ "以及 GNOME 之友"
-
-#~ msgid ""
-#~ "Copyright 2014 Christian Hergert, et al.\n"
-#~ "Licensed under the GNU GPL 3 or newer"
-#~ msgstr ""
-#~ "著作權所有 2014 Christian Hergert 等人。\n"
-#~ "根據 GNU GPL 3 版或後續版本給予授權"
-
-#~ msgid "Search Documents"
-#~ msgstr "搜尋文件"
-
-#~ msgid "No documents were found"
-#~ msgstr "找不到文件"
-
-#~ msgid "Line 1, Column 1"
-#~ msgstr "列 1，行 1"
-
-#~ msgid "<b>Show Line Numbers</b>"
-#~ msgstr "<b>顯示列號</b>"
-
-#~ msgid "<b>Highlight Current Line</b>"
-#~ msgstr "<b>標明目前一列</b>"
-
-#~ msgid "<b>Smart Home End</b>"
-#~ msgstr "<b>智慧 Home、End 鍵</b>"
-
-#~ msgid "<b>Show Grid Lines</b>"
-#~ msgstr "<b>顯示格線</b>"
-
-#~ msgid "<b>EMACS Modal Editing</b>"
-#~ msgstr "<b>EMACS 範型編輯</b>"
-
-#~ msgid "Use EMACS style modal editing in the source code editor."
-#~ msgstr "源碼編輯器中使用 EMACS 風格範型編輯。"
-
-#~ msgid "Author Name"
-#~ msgstr "作者名稱"
-
-#~ msgid "Author Email"
-#~ msgstr "作者電子信箱"
-
-#~ msgid "<b>VIM Modal Editing</b>"
-#~ msgstr "<b>VIM 範型編輯</b>"
-
-#~ msgid "Language Settings"
-#~ msgstr "語言設定"
-
-#~ msgid "Go back in history"
-#~ msgstr "返回歷史記錄"
-
-#~ msgid "Go forward in history"
-#~ msgstr "前進歷史記錄"
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "The result match score."
-#~ msgstr "結果比對分數。"
-
-#~ msgid "The command manager for the workspace."
-#~ msgstr "工作空間的指令管理員。"
+#: plugins/valgrind/valgrind_plugin/__init__.py:52
+msgid "Run with Valgrind"
+msgstr "以 Valgrind 執行"
+
+#: plugins/xml-pack/ide-xml-service.c:191
+msgid "Buffer loaded but not in the buffer manager."
+msgstr "已載入緩衝區但不是在緩衝區管理器中。"
+
+#: plugins/xml-pack/ide-xml-tree-builder.c:172
+#: plugins/xml-pack/ide-xml-tree-builder.c:204
+msgid "Failed to create the XML tree."
+msgstr "無法建立 XML 樹狀圖。"
