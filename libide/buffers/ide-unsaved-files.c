@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-unsaved-files"
 
 #include <errno.h>
+#include <fcntl.h>
 #include <glib/gstdio.h>
 #include <string.h>
 
@@ -485,23 +486,51 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
 static void
 setup_tempfile (GFile  *file,
                 gint   *temp_fd,
-                gchar **temp_path)
+                gchar **temp_path_out)
 {
+  g_autofree gchar *tmpdir = NULL;
   g_autofree gchar *name = NULL;
-  g_autofree gchar *template = NULL;
+  g_autofree gchar *shortname = NULL;
+  g_autofree gchar *tmpl_path = NULL;
   const gchar *suffix;
 
   g_assert (G_IS_FILE (file));
   g_assert (temp_fd);
-  g_assert (temp_path);
+  g_assert (temp_path_out);
 
   *temp_fd = -1;
-  *temp_path = NULL;
+  *temp_path_out = NULL;
 
+  /* Get the suffix for the filename so that we can add it as the suffix to
+   * our temporary file. That increases the chance that anything sniffing
+   * content-type will work correctly.
+   */
   name = g_file_get_basename (file);
   suffix = strrchr (name, '.') ?: "";
-  template = g_strdup_printf ("builder_codeassistant_XXXXXX%s", suffix);
-  *temp_fd = g_file_open_tmp (template, temp_path, NULL);
+
+
+  /*
+   * We want to create our tempfile within a custom directory. It turns out
+   * that g_mkstemp_full() does not do directory checks in the template, so
+   * we can pass our own directory to be used instead of $TMPDIR. We need to
+   * control the directory so that we can ensure we have one that is available
+   * to both the flatpak runtime and the host system.
+   */
+  tmpdir = g_build_filename (g_get_user_cache_dir (),
+                             "gnome-builder",
+                             "buffers",
+                             NULL);
+  shortname = g_strdup_printf ("buffer-XXXXXX%s", suffix);
+  tmpl_path = g_build_filename (tmpdir, shortname, NULL);
+
+  /* Ensure the directory exists */
+  if (!g_file_test (tmpdir, G_FILE_TEST_IS_DIR))
+    g_mkdir_with_parents (tmpdir, 0750);
+
+  /* Now try to open our custom tempfile in the directory we control. */
+  *temp_fd = g_mkstemp_full (tmpl_path, O_RDWR, 0664);
+  if (*temp_fd != -1)
+    *temp_path_out = g_steal_pointer (&tmpl_path);
 }
 
 void
