@@ -866,9 +866,9 @@ static void
 dict_fill_listbox (IdeEditorSpellWidget *self,
                    GPtrArray            *words_array)
 {
-  gsize len;
   const gchar *word;
   GtkWidget *item;
+  guint len;
 
   g_assert (IDE_IS_EDITOR_SPELL_WIDGET (self));
   g_assert (words_array != NULL);
@@ -876,7 +876,7 @@ dict_fill_listbox (IdeEditorSpellWidget *self,
   dict_clean_listbox (self);
 
   len = words_array->len;
-  for (gint i = 0; i < len; ++i)
+  for (guint i = 0; i < len; ++i)
     {
       word = g_ptr_array_index (words_array, i);
       item = dict_create_word_row (self, word);
