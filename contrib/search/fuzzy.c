@@ -321,7 +321,7 @@ fuzzy_unref (Fuzzy *fuzzy)
 static gboolean
 fuzzy_do_match (FuzzyLookup *lookup,
                 FuzzyItem   *item,
-                gint         table_index,
+                guint        table_index,
                 gint         score)
 {
   FuzzyItem *iter;
@@ -333,7 +333,7 @@ fuzzy_do_match (FuzzyLookup *lookup,
   table = lookup->tables [table_index];
   state = &lookup->state [table_index];
 
-  for (; state [0] < table->len; state [0]++)
+  for (; state [0] < (gint)table->len; state [0]++)
     {
       iter = &g_array_index (table, FuzzyItem, state[0]);
 
@@ -406,7 +406,7 @@ fuzzy_match (Fuzzy       *fuzzy,
   GArray *matches = NULL;
   GArray *root;
   gchar *downcase = NULL;
-  gint i;
+  guint i;
 
   g_return_val_if_fail (fuzzy, NULL);
   g_return_val_if_fail (!fuzzy->in_bulk_insert, NULL);
