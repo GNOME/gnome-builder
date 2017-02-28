@@ -28,7 +28,7 @@ struct _IdeGettextDiagnostics
 {
   GObject         parent_instance;
   IdeDiagnostics *diagnostics;
-  guint64         sequence;
+  gint64          sequence;
 };
 
 struct _IdeGettextDiagnosticProvider
