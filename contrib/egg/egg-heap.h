@@ -33,7 +33,7 @@ typedef struct _EggHeap EggHeap;
 struct _EggHeap
 {
   gchar *data;
-  guint  len;
+  gsize  len;
 };
 
 GType      egg_heap_get_type      (void);
