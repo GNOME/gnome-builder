@@ -1,4 +1,60 @@
 ===============
+Version 3.23.91
+===============
+
+One step closer to 3.24!
+
+We've fixed a bunch of bugs you found for us in 3.23.90. Some of those
+include the following:
+
+ • Lots of transfer engine improvements
+ • Omnibar styling changes
+ • Support for flatpak has stablized a great deal
+ • New keyboard tooltips for various headerbar items
+ • Search within the terminal using ctrl+shift+f
+ • PTY fd ownership fixes for RustUp
+ • File search now ignores whitespace
+ • libidemm and glibmm/gtkmm dependencies were dropped as nobodoy was using
+   them and it will slow our migration to meson.
+ • Various Jsonrpc improvements for language server communication.
+ • A new valgrind plugin for leak tracking when testing your application.
+ • Meson improvements when running under flatpak.
+ • You can now start a new terminal inside the build runtime using
+   ctrl+alt+shift+t.
+ • Some new documentation is in the works, and available online at
+   https://builder.readthedocs.io. We would love your contributions here.
+ • The Open Project dialog now defaults to allowing you to select any
+   project type with the default file filter.
+ • More source beautifiers, including one for makefiles.
+ • A workaround for a GObject type system deadlock as been added. This
+   works around an issue where the type system would race initializing
+   the GZlibDecompressor type from multiple threads.
+ • Build pipeline subprocess launchers now inherit the environment
+   configured from the build configuration.
+ • Makecache can now handle out-of-order responses from make for lists
+   of target binaries. This should improve Builder's ability to run
+   your project successfully.
+ • The Flatpak plugin no longer tries to build your project from
+   /run/build/$project due to breaking mtime and general difficulty
+   in keeping things consistent between subprocess executions.
+   This has the side-effect of reducing the predicability of source
+   location in debug symbols. But as flatpak-builder should be used for
+   release builds, this seems fine.
+ • Various workbench UI improvements.
+ • Builder's Sysprof-based profiler can now profile applications launched
+   inside of mount-namespaces, such as Flatpak.
+ • Builder downloaded via Flatpak includes fixes for communicating with
+   GNOME Code Assistance from a host installation.
+ • Various memory leak fixes.
+ • Flatpak-based configurations have improved their non-destructive
+   write-back to disk upon changes.
+ • Autogen-based projects have simplified init scripts.
+
+Updated translations
+
+  Brazilian Portuguese, Polish, Spanish, German, Kazakh, and Hungarian.
+
+===============
 Version 3.23.90
 ===============
 
