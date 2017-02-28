@@ -108,6 +108,20 @@ fi
 
 
 dnl ***********************************************************************
+dnl Setup the "channel" name to help us track down user issues
+dnl ***********************************************************************
+channel_guess=distro
+AS_IF([test -d "${srcdir}/.git"],[channel_guess=devel])
+AS_IF([test x$UNDER_JHBUILD != x],[channel_guess=jhbuild])
+AC_ARG_WITH([channel],
+            AS_HELP_STRING([--enable-channel=@<:@devel/distro/jhbuild/flatpak-nightly/flatpak-stable@:>@],
+                           [Sets the distribution channel for the build to help developers track down bugs]),
+            [channel=$withval],
+	    [channel=$channel_guess])
+AC_DEFINE_UNQUOTED([CHANNEL], ["$channel"], [Distribution channel for Builder])
+
+
+dnl ***********************************************************************
 dnl Check for Required Headers
 dnl ***********************************************************************
 AC_ARG_ENABLE([editorconfig],
@@ -541,7 +555,7 @@ AC_OUTPUT
 
 
 echo ""
-echo " ${PACKAGE} - ${VERSION}"
+echo " ${PACKAGE} - ${VERSION} (${channel})"
 echo ""
 echo " Options"
 echo ""

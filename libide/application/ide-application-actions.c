@@ -92,6 +92,7 @@ ide_application_actions_about (GSimpleAction *action,
                                gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  g_autoptr(GString) version = NULL;
   GtkDialog *dialog;
   GtkWindow *parent = NULL;
   GList *iter;
@@ -110,6 +111,17 @@ ide_application_actions_about (GSimpleAction *action,
         }
     }
 
+  version = g_string_new (PACKAGE_VERSION);
+
+#ifdef COMMIT_ID
+  g_string_append (version, "+"COMMIT_ID);
+#endif
+
+#ifdef CHANNEL
+  if (g_strcmp0 (CHANNEL, "distro") != 0)
+    g_string_append (version, " ("CHANNEL")");
+#endif
+
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "artists", ide_application_credits_artists,
                          "authors", ide_application_credits_authors,
@@ -122,11 +134,7 @@ ide_application_actions_about (GSimpleAction *action,
                          "program-name", _("GNOME Builder"),
                          "transient-for", parent,
                          "translator-credits", _("translator-credits"),
-#ifdef COMMIT_ID
-                         "version", PACKAGE_VERSION "+" COMMIT_ID,
-#else
-                         "version", PACKAGE_VERSION,
-#endif
+                         "version", version->str,
                          "website", "https://wiki.gnome.org/Apps/Builder",
                          "website-label", _("Learn more about GNOME Builder"),
                          NULL);
