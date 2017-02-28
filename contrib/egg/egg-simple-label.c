@@ -25,7 +25,7 @@ struct _EggSimpleLabel
   GtkWidget    parent_instance;
 
   gchar       *label;
-  guint        label_len;
+  gint         label_len;
 
   gint         width_chars;
 
@@ -313,7 +313,7 @@ egg_simple_label_set_label (EggSimpleLabel *self,
 
   if (g_strcmp0 (label, self->label) != 0)
     {
-      guint last_len = self->label_len;
+      gint last_len = self->label_len;
 
       g_free (self->label);
 

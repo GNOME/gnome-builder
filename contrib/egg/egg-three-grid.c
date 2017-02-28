@@ -24,13 +24,13 @@
 
 typedef struct
 {
-  GtkWidget *widget;
-  gint       column;
-  gint       row;
-  gint       min_height;
-  gint       nat_height;
-  gint       min_baseline;
-  gint       nat_baseline;
+  GtkWidget          *widget;
+  EggThreeGridColumn  column;
+  gint                row;
+  gint                min_height;
+  gint                nat_height;
+  gint                min_baseline;
+  gint                nat_baseline;
 } EggThreeGridChild;
 
 typedef struct
@@ -499,7 +499,7 @@ egg_three_grid_size_allocate (GtkWidget     *widget,
    * We can handle #1 and #2 with the same logic though.
    */
 
-  if ((MAX (left_min_width, right_min_width) * 2 + center_nat_width) >= (area.width - (priv->column_spacing * 2)))
+  if ((MAX (left_min_width, right_min_width) * 2 + center_nat_width) >= (area.width - (gint)(priv->column_spacing * 2)))
     {
       /* Handle #3 */
       left = left_min_width;

@@ -120,7 +120,7 @@ egg_column_layout_layout (EggColumnLayout *self,
     n_columns = MAX (1, (width - (border_width * 2)) / (priv->column_width + priv->column_spacing));
 
   if (priv->max_columns > 0)
-    n_columns = MIN (n_columns, priv->max_columns);
+    n_columns = MIN (n_columns, (gint)priv->max_columns);
 
   for (column = 0, i = 0; column < n_columns; column++)
     {

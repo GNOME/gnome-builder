@@ -97,7 +97,6 @@ find_with_attribute_string (GMenuModel  *model,
                             const gchar *value)
 {
   guint n_items;
-  gint i;
 
   g_assert (G_IS_MENU_MODEL (model));
   g_assert (attribute != NULL);
@@ -105,7 +104,7 @@ find_with_attribute_string (GMenuModel  *model,
 
   n_items = g_menu_model_get_n_items (model);
 
-  for (i = 0; i < n_items; i++)
+  for (guint i = 0; i < n_items; i++)
     {
       g_autofree gchar *item_value = NULL;
 
@@ -225,7 +224,6 @@ egg_menu_manager_merge_model (EggMenuManager *self,
                               guint           merge_id)
 {
   guint n_items;
-  gint i;
 
   g_assert (EGG_IS_MENU_MANAGER (self));
   g_assert (G_IS_MENU (menu));
@@ -246,7 +244,7 @@ egg_menu_manager_merge_model (EggMenuManager *self,
 
   n_items = g_menu_model_get_n_items (model);
 
-  for (i = 0; i < n_items; i++)
+  for (guint i = 0; i < n_items; i++)
     {
       g_autoptr(GMenuItem) item = NULL;
       g_autoptr(GMenuLinkIter) link_iter = NULL;

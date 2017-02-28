@@ -88,13 +88,12 @@ create_variant_type (const GType *types,
 {
   const GVariantType *ret = NULL;
   GString *str;
-  gint i;
 
   g_assert (types != NULL || n_types == 0);
 
   str = g_string_new ("(");
 
-  for (i = 0; i < n_types; i++)
+  for (guint i = 0; i < n_types; i++)
     {
       switch (types [i])
         {
@@ -184,7 +183,6 @@ do_activate (EggWidgetActionGroup *self,
   GArray *ar;
   GVariantIter iter;
   gsize n_children;
-  gint i;
 
   g_assert (query != NULL);
   g_assert (GTK_IS_WIDGET (widget));
@@ -230,7 +228,7 @@ do_activate (EggWidgetActionGroup *self,
 
   g_variant_iter_init (&iter, params);
 
-  for (i = 0; i < query->n_params; i++)
+  for (guint i = 0; i < query->n_params; i++)
     {
       g_autoptr(GVariant) param = NULL;
       GValue value = G_VALUE_INIT;
@@ -297,7 +295,7 @@ do_activate (EggWidgetActionGroup *self,
 
 skip_emit:
   /* ignore instance */
-  for (i = 1; i < ar->len; i++)
+  for (guint i = 1; i < ar->len; i++)
     g_value_unset (&g_array_index (ar, GValue, i));
 
   g_array_unref (ar);
