@@ -49,7 +49,7 @@ struct _IdeHighlightEngine
   GSList              *private_tags;
   GSList              *public_tags;
 
-  guint64              quanta_expiration;
+  gint64               quanta_expiration;
 
   guint                work_timeout;
 
