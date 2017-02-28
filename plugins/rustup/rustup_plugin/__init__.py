@@ -325,7 +325,7 @@ class RustupInstaller(Ide.Transfer):
         try:
             sub_process = launcher.spawn()
         except Exception as ex:
-            task.return_error(GLib.Error(ex))
+            task.return_error(GLib.Error(message=repr(ex))
 
         sub_process.wait_async(cancellable, self._wait_cb, task)
 
