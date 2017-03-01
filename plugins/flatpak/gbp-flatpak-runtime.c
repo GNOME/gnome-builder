@@ -97,7 +97,8 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
    * has been created and setup. Instead, we will use flatpak to run the
    * runtime which was added in Flatpak 0.6.13.
    */
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
+                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
 
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
