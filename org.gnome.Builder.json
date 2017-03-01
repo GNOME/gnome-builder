@@ -4,8 +4,8 @@
     "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
     "command": "gnome-builder",
-    "tags": ["devel"],
-    "desktop-file-name-prefix": "(Development) ",
+    "tags": ["nightly"],
+    "desktop-file-name-prefix": "(Nightly) ",
     "finish-args": [
         /* Require recent flatpak at runtime */
         "--require-version=0.8.0",
@@ -307,7 +307,7 @@
         },
         {
             "name": "gnome-builder",
-            "config-opts": [ "--enable-tracing", "--enable-debug", "--with-channel=flatpak-devel" ],
+            "config-opts": [ "--enable-tracing", "--enable-debug", "--with-channel=flatpak-nightly" ],
             "sources": [
                 {
                     "type": "git",
