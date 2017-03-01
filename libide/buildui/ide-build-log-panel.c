@@ -705,8 +705,26 @@ ide_build_log_panel_class_init (IdeBuildLogPanelClass *klass)
 }
 
 static void
+ide_build_log_panel_clear_activate (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  IdeBuildLogPanel *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
+
+  gtk_text_buffer_set_text (self->buffer, "", 0);
+}
+
+static void
 ide_build_log_panel_init (IdeBuildLogPanel *self)
 {
+  static GActionEntry entries[] = {
+    { "clear", ide_build_log_panel_clear_activate },
+  };
+  g_autoptr(GSimpleActionGroup) actions = NULL;
+
   self->css = gtk_css_provider_new ();
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -722,4 +740,8 @@ ide_build_log_panel_init (IdeBuildLogPanel *self)
                            self,
                            G_CONNECT_SWAPPED);
   ide_build_log_panel_changed_font_name (self, "font-name", self->settings);
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "build-log", G_ACTION_GROUP (actions));
 }

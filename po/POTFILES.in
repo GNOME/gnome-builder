@@ -48,6 +48,7 @@ libide/buildsystem/ide-configuration-manager.c
 libide/buildui/ide-build-configuration-row.ui
 libide/buildui/ide-build-configuration-view.ui
 libide/buildui/ide-build-log-panel.c
+libide/buildui/ide-build-log-panel.ui
 libide/buildui/ide-build-panel.c
 libide/buildui/ide-build-panel.ui
 libide/buildui/ide-build-perspective.c
