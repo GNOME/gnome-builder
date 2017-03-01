@@ -1521,12 +1521,6 @@ ide_build_pipeline_connect (IdeBuildPipeline *self,
                         (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_BEFORE ||
                         (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_AFTER, 0);
 
-  if G_UNLIKELY (self->position != -1)
-    {
-      g_warning ("Cannot insert stage into pipeline after execution, ignoring");
-      IDE_RETURN (0);
-    }
-
   klass = g_type_class_ref (IDE_TYPE_BUILD_PHASE);
 
   for (guint i = 0; i < klass->n_values; i++)
