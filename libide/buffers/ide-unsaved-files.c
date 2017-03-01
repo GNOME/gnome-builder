@@ -31,6 +31,7 @@
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
 #include "projects/ide-project.h"
+#include "util/ide-directory-reaper.h"
 
 typedef struct
 {
@@ -153,6 +154,15 @@ hash_uri (const gchar *uri)
   g_checksum_free (checksum);
 
   return ret;
+}
+
+static gchar *
+get_buffers_dir (void)
+{
+  return g_build_filename (g_get_user_cache_dir (),
+                           "gnome-builder",
+                           "buffers",
+                           NULL);
 }
 
 static void
@@ -516,10 +526,7 @@ setup_tempfile (GFile  *file,
    * control the directory so that we can ensure we have one that is available
    * to both the flatpak runtime and the host system.
    */
-  tmpdir = g_build_filename (g_get_user_cache_dir (),
-                             "gnome-builder",
-                             "buffers",
-                             NULL);
+  tmpdir = get_buffers_dir ();
   shortname = g_strdup_printf ("buffer-XXXXXX%s", suffix);
   tmpl_path = g_build_filename (tmpdir, shortname, NULL);
 
@@ -715,6 +722,32 @@ ide_unsaved_files_get_sequence (IdeUnsavedFiles *self)
 }
 
 static void
+ide_unsaved_files_set_context (IdeObject  *object,
+                               IdeContext *context)
+{
+  IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
+  g_autoptr(IdeDirectoryReaper) reaper = NULL;
+  g_autoptr(GFile) buffersdir = NULL;
+  g_autofree gchar *path = NULL;
+
+  g_assert (IDE_IS_UNSAVED_FILES (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  reaper = ide_directory_reaper_new ();
+
+  /*
+   * Setup a reaper to cleanup old files in case that we left some around
+   * after a previous crash.
+   */
+  path = get_buffers_dir ();
+  buffersdir = g_file_new_for_path (path);
+  ide_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_DAY);
+
+  /* Now cleanup the old files */
+  ide_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
+}
+
+static void
 ide_unsaved_files_finalize (GObject *object)
 {
   IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
@@ -729,8 +762,11 @@ static void
 ide_unsaved_files_class_init (IdeUnsavedFilesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *ide_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_unsaved_files_finalize;
+
+  ide_object_class->set_context = ide_unsaved_files_set_context;
 }
 
 static void
