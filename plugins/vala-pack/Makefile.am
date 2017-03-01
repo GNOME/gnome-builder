@@ -35,6 +35,7 @@ libvala_pack_plugin_la_VALASOURCES =                                          \
 	ide-vala-indenter.vala                                                \
 	ide-vala-index.vala                                                   \
 	ide-vala-locator.vala                                                 \
+	ide-vala-pipeline-addin.vala                                          \
 	ide-vala-preferences-addin.vala                                       \
 	ide-vala-source-file.vala                                             \
 	ide-vala-symbol-resolver.vala                                         \
@@ -54,6 +55,7 @@ nodist_libvala_pack_plugin_la_SOURCES =                                       \
 	ide-vala-indenter.c                                                   \
 	ide-vala-index.c                                                      \
 	ide-vala-locator.c                                                    \
+	ide-vala-pipeline-addin.c                                             \
 	ide-vala-preferences-addin.c                                          \
 	ide-vala-source-file.c                                                \
 	ide-vala-symbol-resolver.c                                            \
