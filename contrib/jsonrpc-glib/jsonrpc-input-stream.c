@@ -180,7 +180,6 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
 
       if (((content_length == G_MININT64 || content_length == G_MAXINT64) && errno == ERANGE) ||
           (content_length < 0) ||
-          (content_length > G_MAXSSIZE) ||
           (content_length > priv->max_size_bytes))
         {
           g_task_return_new_error (task,
