@@ -101,7 +101,7 @@ ide_ctags_builder_process_wait_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SUBPROCESS (process));
+  g_assert (IDE_IS_SUBPROCESS (process));
   g_assert (G_IS_TASK (task));
 
   if (!ide_subprocess_wait_finish (process, result, &error))
