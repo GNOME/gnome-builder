@@ -60,6 +60,8 @@ We are aggressively moving towards using Flatpak for contributing to Builder, bu
 Command Line
 ^^^^^^^^^^^^
 
+.. note:: You almost certainly want to read the `Newcomers Tutorial`_ on how to build a GNOME application before proceeding.
+
 .. code-block:: sh
 
    $ git clone git://git.gnome.org/jhbuild.git
@@ -71,7 +73,7 @@ Command Line
    $ jhbuild build gnome-builder
    $ jhbuild run gnome-builder
 
-.. warning:: Do not install JHBuild via your Linux distribution's package manager. It will be out of date.
+.. warning:: While it may be tempting to install jhbuild using your Linux distribution's package manager, it will lack an updated description of the GNOME modules and is therefore insufficient. Always install jhbuild from git.
 
 
 via Release Tarball
