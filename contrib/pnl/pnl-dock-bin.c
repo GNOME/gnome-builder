@@ -894,7 +894,7 @@ pnl_dock_bin_create_child_handle (PnlDockBin      *self,
   GdkWindowAttr attributes = { 0 };
   GdkDisplay *display;
   GdkWindow *parent;
-  GdkCursorType cursor_type;
+  const gchar *cursor_name;
 
   g_assert (PNL_IS_DOCK_BIN (self));
   g_assert (child != NULL);
@@ -904,9 +904,9 @@ pnl_dock_bin_create_child_handle (PnlDockBin      *self,
   display = gtk_widget_get_display (GTK_WIDGET (self));
   parent = gtk_widget_get_window (GTK_WIDGET (self));
 
-  cursor_type = (child->type == PNL_DOCK_BIN_CHILD_LEFT || child->type == PNL_DOCK_BIN_CHILD_RIGHT)
-              ? GDK_SB_H_DOUBLE_ARROW
-              : GDK_SB_V_DOUBLE_ARROW;
+  cursor_name = (child->type == PNL_DOCK_BIN_CHILD_LEFT || child->type == PNL_DOCK_BIN_CHILD_RIGHT)
+              ? "col-resize"
+              : "row-resize";
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_ONLY;
@@ -920,7 +920,7 @@ pnl_dock_bin_create_child_handle (PnlDockBin      *self,
                            GDK_ENTER_NOTIFY_MASK |
                            GDK_LEAVE_NOTIFY_MASK |
                            GDK_POINTER_MOTION_MASK);
-  attributes.cursor = gdk_cursor_new_for_display (display, cursor_type);
+  attributes.cursor = gdk_cursor_new_from_name (display, cursor_name);
 
   child->handle = gdk_window_new (parent, &attributes, GDK_WA_CURSOR);
   gtk_widget_register_window (GTK_WIDGET (self), child->handle);
