@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-25 21:14+0000\n"
-"PO-Revision-Date: 2017-02-25 23:38+0100\n"
+"POT-Creation-Date: 2017-03-01 22:58+0000\n"
+"PO-Revision-Date: 2017-03-02 00:08+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -69,7 +69,7 @@ msgstr[1] "Ungefär %u år sedan"
 #: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
 msgid "Open"
 msgstr "Öppna"
 
@@ -103,7 +103,7 @@ msgstr "Bläddra…"
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:306
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Avbryt"
@@ -212,6 +212,11 @@ msgstr "Grön"
 msgid "Blue"
 msgstr "Blå"
 
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "Enkel"
+
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
 msgstr "Färgkomponenter"
@@ -295,7 +300,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Läs in eller generera en palett med inställningarna"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5855
+#: libide/sourceview/ide-source-view.c:5853
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Byt namn"
@@ -876,7 +881,7 @@ msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:116
+#: libide/application/ide-application-actions.c:128
 msgid "An IDE for GNOME"
 msgstr "En utvecklingsmiljö för GNOME"
 
@@ -983,11 +988,11 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Bygg;Utveckla;"
 
-#: libide/application/ide-application-actions.c:122
+#: libide/application/ide-application-actions.c:134
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:124
+#: libide/application/ide-application-actions.c:136
 msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
@@ -996,11 +1001,11 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
-#: libide/application/ide-application-actions.c:131
+#: libide/application/ide-application-actions.c:139
 msgid "Learn more about GNOME Builder"
 msgstr "Lär dig mer om GNOME Builder"
 
-#: libide/application/ide-application-actions.c:134
+#: libide/application/ide-application-actions.c:142
 msgid "Funded By"
 msgstr "Finansierat av"
 
@@ -1077,67 +1082,67 @@ msgstr "Ingen sådan arbetare finns"
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
-#: libide/buffers/ide-buffer-manager.c:673
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "Fil för stor för att öppnas."
 
-#: libide/buffers/ide-buffer-manager.c:1762
+#: libide/buffers/ide-buffer-manager.c:1761
 #, c-format
 msgid "unsaved document %u"
 msgstr "osparat dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1796
+#: libide/buffers/ide-buffer-manager.c:1795
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Misslyckades med att spara buffert, ignorerar återkrävande."
 
-#: libide/buildsystem/ide-build-pipeline.c:2088
+#: libide/buildsystem/ide-build-pipeline.c:2082
 msgid "Cleaning…"
 msgstr "Rensar…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2103
+#: libide/buildsystem/ide-build-pipeline.c:2097
 msgid "Downloading…"
 msgstr "Hämtar…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2107
+#: libide/buildsystem/ide-build-pipeline.c:2101
 msgid "Building dependencies…"
 msgstr "Bygger beroenden…"
 
 # "Startar upp" kändes för allmänt, så utgår från stegets namn IDE_BUILD_PHASE_AUTOGEN
-#: libide/buildsystem/ide-build-pipeline.c:2111
+#: libide/buildsystem/ide-build-pipeline.c:2105
 msgid "Bootstrapping…"
 msgstr "Automatisk generering…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2115
+#: libide/buildsystem/ide-build-pipeline.c:2109
 msgid "Configuring…"
 msgstr "Konfigurerar…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2119
+#: libide/buildsystem/ide-build-pipeline.c:2113
 msgid "Building…"
 msgstr "Bygger…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2123
+#: libide/buildsystem/ide-build-pipeline.c:2117
 msgid "Installing…"
 msgstr "Installerar…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2127
+#: libide/buildsystem/ide-build-pipeline.c:2121
 msgid "Exporting…"
 msgstr "Exporterar…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2131
-#: libide/buildsystem/ide-build-pipeline.c:2135
+#: libide/buildsystem/ide-build-pipeline.c:2125
+#: libide/buildsystem/ide-build-pipeline.c:2129
 msgid "Success"
 msgstr "Lyckades"
 
-#: libide/buildsystem/ide-build-pipeline.c:2139
-#: libide/workbench/ide-omni-bar.ui:328
+#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Misslyckades"
 
-#: libide/buildsystem/ide-build-pipeline.c:2143
+#: libide/buildsystem/ide-build-pipeline.c:2137
 msgid "Preparing…"
 msgstr "Förbereder…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2147
+#: libide/buildsystem/ide-build-pipeline.c:2141
 msgid "Ready"
 msgstr "Redo"
 
@@ -1199,9 +1204,18 @@ msgstr "Exekveringsmiljö"
 msgid "Environment"
 msgstr "Miljö"
 
-#: libide/buildui/ide-build-log-panel.c:714
+#: libide/buildui/ide-build-log-panel.c:732
 msgid "Build Output"
 msgstr "Byggutmatning"
+
+#: libide/buildui/ide-build-log-panel.ui:25
+msgid "Clear build log"
+msgstr "Rensa bygglogg"
+
+#: libide/buildui/ide-build-log-panel.ui:42
+#: libide/workbench/ide-omni-bar.ui:133
+msgid "Cancel build"
+msgstr "Avbryt bygge"
 
 #: libide/buildui/ide-build-panel.c:86
 #, c-format
@@ -1219,7 +1233,7 @@ msgstr[1] "%d fel"
 
 #: libide/buildui/ide-build-panel.c:517
 #: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:382
+#: libide/workbench/ide-omni-bar.ui:386
 msgid "Build"
 msgstr "Bygg"
 
@@ -1623,7 +1637,7 @@ msgstr "_Läs om"
 #: libide/editor/ide-editor-view.ui:31
 #: libide/greeter/ide-greeter-perspective.ui:317
 #: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:356
+#: libide/workbench/ide-omni-bar.ui:360
 msgid "_Cancel"
 msgstr "A_vbryt"
 
@@ -2526,11 +2540,11 @@ msgstr "Processen har oväntat avslutats"
 msgid "Host operating system"
 msgstr "Värdoperativsystem"
 
-#: libide/search/ide-omni-search-display.c:271
+#: libide/search/ide-omni-search-display.c:267
 msgid "Cannot add provider more than once."
 msgstr "Kan inte lägga till leverantör mer än en gång."
 
-#: libide/search/ide-omni-search-display.c:347
+#: libide/search/ide-omni-search-display.c:343
 msgid "The provider could not be found."
 msgstr "Leverantören kunde inte hittas."
 
@@ -2544,22 +2558,22 @@ msgstr "Misslyckades med att öppna katalog: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Misslyckades med att läsa in fil: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5311
+#: libide/sourceview/ide-source-view.c:5309
 #, c-format
 msgid "Insert “%s”"
 msgstr "Infoga ”%s”"
 
-#: libide/sourceview/ide-source-view.c:5313
+#: libide/sourceview/ide-source-view.c:5311
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Ersätt ”%s” med ”%s”"
 
 # Fix-it: små automatiska fixar för problem
-#: libide/sourceview/ide-source-view.c:5427
+#: libide/sourceview/ide-source-view.c:5425
 msgid "Apply Fix-It"
 msgstr "Tillämpa Fixa-det"
 
-#: libide/sourceview/ide-source-view.c:5854
+#: libide/sourceview/ide-source-view.c:5852
 msgid "Rename symbol"
 msgstr "Byt namn på symbol"
 
@@ -2684,40 +2698,36 @@ msgstr "saknas"
 msgid "Edit build configuration"
 msgstr "Redigera byggkonfiguration"
 
-#: libide/workbench/ide-omni-bar.ui:129
-msgid "Cancel build"
-msgstr "Avbryt bygge"
-
-#: libide/workbench/ide-omni-bar.ui:173
+#: libide/workbench/ide-omni-bar.ui:177
 #: plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Projekt"
 
-#: libide/workbench/ide-omni-bar.ui:197
+#: libide/workbench/ide-omni-bar.ui:201
 msgid "Branch"
 msgstr "Gren"
 
-#: libide/workbench/ide-omni-bar.ui:232
+#: libide/workbench/ide-omni-bar.ui:236
 msgid "Build Profile"
 msgstr "Byggprofil"
 
-#: libide/workbench/ide-omni-bar.ui:278
+#: libide/workbench/ide-omni-bar.ui:282
 msgid "Last build"
 msgstr "Senaste bygge"
 
-#: libide/workbench/ide-omni-bar.ui:345
+#: libide/workbench/ide-omni-bar.ui:349
 msgid "View Output"
 msgstr "Visa utmatning"
 
-#: libide/workbench/ide-omni-bar.ui:392
+#: libide/workbench/ide-omni-bar.ui:396
 msgid "Rebuild"
 msgstr "Bygg om"
 
-#: libide/workbench/ide-omni-bar.ui:402
+#: libide/workbench/ide-omni-bar.ui:406
 msgid "Clean"
 msgstr "Rensa"
 
-#: libide/workbench/ide-omni-bar.ui:416
+#: libide/workbench/ide-omni-bar.ui:420
 msgid "Build project"
 msgstr "Bygg projekt"
 
@@ -3271,12 +3281,12 @@ msgstr[1] "visa %u till exekveringsmiljöer"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-exekveringsmlijöer"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:692
+#: plugins/flatpak/gbp-flatpak-runtime.c:703
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:694
+#: plugins/flatpak/gbp-flatpak-runtime.c:705
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3716,19 +3726,19 @@ msgstr ""
 msgid "CPU"
 msgstr "Processor"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:302
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
 msgid "Open Profile"
 msgstr "Öppna profil"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:311
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof-fångst (*.syscap)"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:317
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
 msgid "All Files"
 msgstr "Alla filer"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:418
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
 msgid "Run with Profiler"
 msgstr "Kör med profilerare"
 
@@ -3801,9 +3811,6 @@ msgstr "Buffert inläst men inte i bufferthanteraren."
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Misslyckades med att skapa XML-trädet."
-
-#~ msgid "Basic"
-#~ msgstr "Enkel"
 
 #~ msgid "Wow! You’ve spent with Builder %d second!\n"
 #~ msgid_plural "Wow! You’ve spent with Builder %d seconds!\n"
