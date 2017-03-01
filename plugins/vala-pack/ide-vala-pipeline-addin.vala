@@ -23,7 +23,7 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaPipelineAddin: GLib.Object, Ide.BuildPipelineAddin
+	public class ValaPipelineAddin: Ide.Object, Ide.BuildPipelineAddin
 	{
 		// main.vala:24.30-24.30: error: initializer list used for `Gtk.WindowType', which is neither array nor struct
 		const string ERROR_FORMAT_REGEX =
@@ -33,8 +33,6 @@ namespace Ide
 			"(?<message>.*)";
 
 		uint error_format = 0;
-
-		public Ide.Context context { owned get; construct; }
 
 		public void load (Ide.BuildPipeline pipeline)
 		{
