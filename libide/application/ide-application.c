@@ -119,6 +119,7 @@ ide_application_register_theme_overrides (IdeApplication *self)
   if (ide_is_flatpak () && g_getenv ("GTK_THEME") == NULL)
     {
       g_object_set (gtk_settings,
+                    "gtk-cursor-theme-name", "Adwaita",
                     "gtk-theme-name", "Adwaita",
                     NULL);
     }
