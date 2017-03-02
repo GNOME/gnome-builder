@@ -49,6 +49,8 @@ You can also use the command line to install Builder.
 .. note:: Nightly builds are built with tracing enabled. The tracing is fairly lightweight, but it includes a great deal of more debugging information.
 
 
+.. _via-jhbuild:
+
 via JHBuild
 -----------
 

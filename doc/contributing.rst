@@ -30,28 +30,10 @@ If you wish to start contributing code to Builder, simply pick a bug from this l
 Building From Source
 ====================
 
-One of the first steps to joining a software project is to build the software.
-Check out the `GNOME Newcomers Tutorial`_ for how to build software for GNOME.
-It includes a guide for how to build Builder, as well as many other GNOME software projects.
+Learn out how to install :ref:`via-jhbuild` in our installation documentation.
 
-For the impatient, you can use ``jhbuild`` to simplify the build process.
-
-.. note::
-
-   We do not recommend installing jhbuild using your Linux distributions package manager as
-   it will be out of date.
-
-.. code-block:: sh
-
-
-   git clone git://git.gnome.org/jhbuild.git
-   cd jhbuild
-   ./autogen.sh --simple-install
-   make
-   make install
-   jhbuild sysdeps --install gnome-builder
-   jhbuild build gnome-builder
-   jhbuild run gnome-builder
+Currently, JHBuild is how we recommend contributing to Builder.
+We do expect this to change very soon in that you'll be able to easily contribute to Builder from our flatpak-version of Builder.
 
 Improve This Documentation
 ==========================
@@ -75,4 +57,3 @@ Helping us do this in Builder will make you a shepard of geeks.
 .. _`newcomer bugs`: https://bugzilla.gnome.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&columnlist=component%2Cchangeddate%2Cbug_severity%2Cpriority%2Cshort_desc&keywords=newcomers&list_id=193415&order=changeddate%20DESC%2Ccomponent&product=gnome-builder&resolution=---
 .. _`GNOME Newcomers Tutorial`: https://wiki.gnome.org/Newcomers/BuildGnome
 .. _`git repository`: https://git.gnome.org/browse/gnome-builder/tree
-
