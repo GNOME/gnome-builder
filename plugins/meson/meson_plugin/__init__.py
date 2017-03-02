@@ -34,9 +34,12 @@ _ = Ide.gettext
 
 _NINJA_NAMES = [ 'ninja-build', 'ninja' ]
 
-def execInRuntime(runtime, *args):
+def execInRuntime(runtime, *args, **kwargs):
+    directory = kwargs.get('directory', None)
     launcher = runtime.create_launcher()
     launcher.push_args(args)
+    if directory is not None:
+        launcher.set_cwd(directory)
     proc = launcher.spawn(None)
     _, stdout, stderr = proc.communicate_utf8(None, None)
     return stdout
@@ -98,12 +101,12 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
             return result.build_flags
 
     def _get_build_flags_cb(self, build_manager, result, task):
+        config = build_manager.get_pipeline().get_configuration()
+        builddir = build_manager.get_pipeline().get_builddir()
+        commands_file = path.join(self.get_builddir(config), 'compile_commands.json')
+        runtime = config.get_runtime()
+
         def build_flags_thread():
-            config = build_manager.get_pipeline().get_configuration()
-            builddir = build_manager.get_pipeline().get_builddir()
-
-            commands_file = path.join(self.get_builddir(config), 'compile_commands.json')
-
             try:
                 with open(commands_file) as f:
                     commands = json.loads(f.read(), encoding='utf-8')
@@ -121,8 +124,35 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
                         task.return_error(e)
                         return
                     break
-            else:
-                print('Meson: Warning: No flags found')
+
+            if infile.get_basename().endswith('.vala'):
+                # We didn't find anything in the compile_commands.json, so now try to use
+                # the compdb from ninja and see if it has anything useful for us.
+                ninja = None
+                for name in _NINJA_NAMES:
+                    if runtime.contains_program_in_path(name):
+                        ninja = name
+                        break
+                if ninja:
+                    ret = execInRuntime(runtime, ninja, '-t', 'compdb', 'vala_COMPILER', directory=builddir)
+                    try:
+                        commands = json.loads(ret, encoding='utf-8')
+                    except Exception as e:
+                        task.return_error(GLib.Error('Failed to decode ninja json: {}'.format(e)))
+                        return
+
+                    for c in commands:
+                        try:
+                            _, argv = GLib.shell_parse_argv(c['command'])
+                            # TODO: It would be nice to filter these arguments a bit,
+                            #       but the vala plugin should handle that fine.
+                            task.build_flags = argv
+                            task.return_boolean(True)
+                            return
+                        except:
+                            pass
+
+            print('Meson: Warning: No flags found')
 
             task.return_boolean(True)
 
