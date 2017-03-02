@@ -62,6 +62,7 @@ vala_pack_sources = [
   'ide-vala-indenter.vala',
   'ide-vala-index.vala',
   'ide-vala-locator.vala',
+  'ide-vala-pipeline-addin.vala',
   'ide-vala-preferences-addin.vala',
   'ide-vala-source-file.vala',
   'ide-vala-symbol-resolver.vala',
