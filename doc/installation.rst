@@ -64,6 +64,17 @@ Command Line
 
 .. code-block:: sh
 
+   # Make sure you have the following packages installed before starting
+
+   # On Fedora
+   $ sudo dnf install clang-devel llvm-devel libssh2-devel
+
+   # On Ubuntu
+   $ sudo apt-get install clang-3.9 libclang-3.9-dev llvm-3.9-dev libssh2-1-dev
+
+
+.. code-block:: sh
+
    $ git clone git://git.gnome.org/jhbuild.git
    $ cd jhbuild
    $ ./autogen.sh --simple-install
