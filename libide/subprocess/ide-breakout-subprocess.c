@@ -1460,7 +1460,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
    * system. We need to ensure our fd_list is sent across for redirecting
    * various standard streams.
    */
-  g_assert_cmpint (3, ==, g_unix_fd_list_get_length (fd_list));
+  g_assert_cmpint (g_unix_fd_list_get_length (fd_list), >=, 3);
   params = g_variant_new ("(^ay^aay@a{uh}@a{ss}u)",
                           self->cwd ?: g_get_home_dir (),
                           self->argv,
