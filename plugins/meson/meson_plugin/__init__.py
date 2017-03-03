@@ -125,7 +125,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
                         return
                     break
 
-            if infile.get_basename().endswith('.vala'):
+            if infile.endswith('.vala'):
                 # We didn't find anything in the compile_commands.json, so now try to use
                 # the compdb from ninja and see if it has anything useful for us.
                 ninja = None
