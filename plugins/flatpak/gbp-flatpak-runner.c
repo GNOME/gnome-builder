@@ -24,6 +24,7 @@
 #include <unistd.h>
 
 #include "gbp-flatpak-runner.h"
+#include "gbp-flatpak-configuration.h"
 
 struct _GbpFlatpakRunner
 {
@@ -46,17 +47,37 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
                                    IdeSubprocessLauncher *launcher)
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
+  IdeContext *context;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *configuration;
+  guint i = 0;
 
   g_assert (GBP_IS_FLATPAK_RUNNER (runner));
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
-  ide_subprocess_launcher_insert_argv (launcher, 0, "flatpak");
-  ide_subprocess_launcher_insert_argv (launcher, 1, "build");
-  ide_subprocess_launcher_insert_argv (launcher, 2, "--allow=devel");
-  ide_subprocess_launcher_insert_argv (launcher, 3, "--share=ipc");
-  ide_subprocess_launcher_insert_argv (launcher, 4, "--socket=x11");
-  ide_subprocess_launcher_insert_argv (launcher, 5, "--socket=wayland");
-  ide_subprocess_launcher_insert_argv (launcher, 6, self->build_path);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  configuration = ide_configuration_manager_get_current (config_manager);
+
+  ide_subprocess_launcher_insert_argv (launcher, i++, "flatpak");
+  ide_subprocess_launcher_insert_argv (launcher, i++, "build");
+  ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
+
+  if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
+    {
+      const gchar * const *finish_args = NULL;
+      finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (configuration));
+      for (guint j = 0; finish_args[j]; j++)
+        ide_subprocess_launcher_insert_argv (launcher, i++, finish_args[j]);
+    }
+  else
+    {
+      ide_subprocess_launcher_insert_argv (launcher, i++, "--share=ipc");
+      ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=x11");
+      ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=wayland");
+    }
+
+  ide_subprocess_launcher_insert_argv (launcher, i++, self->build_path);
 }
 
 GbpFlatpakRunner *
