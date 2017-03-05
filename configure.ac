@@ -304,6 +304,7 @@ m4_include([plugins/comment-code/configure.ac])
 m4_include([plugins/create-project/configure.ac])
 m4_include([plugins/ctags/configure.ac])
 m4_include([plugins/devhelp/configure.ac])
+m4_include([plugins/eslint/configure.ac])
 m4_include([plugins/file-search/configure.ac])
 m4_include([plugins/flatpak/configure.ac])
 m4_include([plugins/fpaste/configure.ac])
@@ -588,6 +589,7 @@ echo "  Command Bar .......................... : ${enable_command_bar_plugin}"
 echo "  Comment Code.......................... : ${enable_comment_code_plugin}"
 echo "  Ctags ................................ : ${enable_ctags_plugin}"
 echo "  Devhelp .............................. : ${enable_devhelp_plugin}"
+echo "  ESLint ............................... : ${enable_eslint_plugin}"
 echo "  Editorconfig ......................... : ${enable_editorconfig}"
 echo "  Flatpak .............................. : ${enable_flatpak_plugin}"
 echo "  Fpaste.org ........................... : ${enable_fpaste_plugin}"

@@ -1,0 +1,9 @@
+[Plugin]
+Module=eslint_plugin
+Name=eslint
+Loader=python3
+Description=Provides javascript lints
+Authors=Georg Vienna <georg.vienna@himbarsoft.com>
+Copyright=Copyright © 2017 Georg Vienna <georg.vienna@himbarsoft.com>
+X-Diagnostic-Provider-Languages=js
+X-Diagnostic-Provider-Languages-Priority=100

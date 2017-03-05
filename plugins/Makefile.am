@@ -12,6 +12,7 @@ SUBDIRS =                            \
 	create-project               \
 	ctags                        \
 	devhelp                      \
+	eslint                       \
 	file-search                  \
 	flatpak                      \
 	fpaste                       \
