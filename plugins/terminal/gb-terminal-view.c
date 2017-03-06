@@ -259,7 +259,15 @@ gb_terminal_respawn (GbTerminalView *self,
     IDE_GOTO (failure);
 
   if (self->runtime != NULL)
-    launcher = ide_runtime_create_launcher (self->runtime, NULL);
+    {
+      launcher = ide_runtime_create_launcher (self->runtime, NULL);
+
+      if (!ide_runtime_contains_program_in_path (self->runtime, shell, NULL))
+        {
+          g_free (shell);
+          shell = g_strdup ("/bin/bash");
+        }
+    }
 
   if (launcher == NULL)
     launcher = ide_subprocess_launcher_new (0);
