@@ -1536,6 +1536,9 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                             G_SIGNAL_RUN_LAST,
                                             0, NULL, NULL, NULL,
                                             G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
+
+  g_type_ensure (GTK_SOURCE_TYPE_FILE_LOADER);
+  g_type_ensure (GTK_SOURCE_TYPE_FILE_SAVER);
 }
 
 static void
