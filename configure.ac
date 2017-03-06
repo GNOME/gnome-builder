@@ -315,6 +315,7 @@ m4_include([plugins/html-completion/configure.ac])
 m4_include([plugins/html-preview/configure.ac])
 m4_include([plugins/jedi/configure.ac])
 m4_include([plugins/jhbuild/configure.ac])
+m4_include([plugins/make/configure.ac])
 m4_include([plugins/meson/configure.ac])
 m4_include([plugins/meson-templates/configure.ac])
 m4_include([plugins/mingw/configure.ac])
@@ -598,6 +599,7 @@ echo "  GNOME Code Assistance ................ : ${enable_gnome_code_assistance_
 echo "  HTML Autocompletion .................. : ${enable_html_completion_plugin}"
 echo "  HTML and Markdown Preview ............ : ${enable_html_preview_plugin}"
 echo "  JHBuild .............................. : ${enable_jhbuild_plugin}"
+echo "  Make ................................. : ${enable_make_plugin}"
 echo "  Meson ................................ : ${enable_meson_plugin}"
 echo "  MinGW ................................ : ${enable_mingw_plugin}"
 echo "  Project Creation ..................... : ${enable_create_project_plugin}"

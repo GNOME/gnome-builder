@@ -23,6 +23,7 @@ SUBDIRS =                            \
 	html-preview                 \
 	jedi                         \
 	jhbuild                      \
+	make                         \
 	mingw                        \
 	meson                        \
 	meson-templates              \
