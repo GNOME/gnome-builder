@@ -704,7 +704,7 @@ egg_task_cache_dispose (GObject *object)
       gint64 count;
 
       count = g_hash_table_size (self->in_flight);
-      g_clear_pointer (&self->in_flight, g_hash_table_unref);
+      g_clear_pointer (&self->in_flight, (GDestroyNotify)g_hash_table_unref);
 
       EGG_COUNTER_SUB (in_flight, count);
     }
