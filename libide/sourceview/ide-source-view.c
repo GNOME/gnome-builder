@@ -2800,12 +2800,15 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
       gtk_text_buffer_apply_tag_by_name (GTK_TEXT_BUFFER (priv->buffer),
                                          TAG_DEFINITION, &word_start, &word_end);
 
-      gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (priv->buffer),
-                                 priv->definition_highlight_start_mark,
-                                 &word_start);
-      gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (priv->buffer),
-                                 priv->definition_highlight_end_mark,
-                                 &word_end);
+      if (priv->definition_highlight_start_mark != NULL)
+        gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                   priv->definition_highlight_start_mark,
+                                   &word_start);
+
+      if (priv->definition_highlight_end_mark != NULL)
+        gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (priv->buffer),
+                                   priv->definition_highlight_end_mark,
+                                   &word_end);
 
       ide_source_view_set_cursor_from_name (data->self, "pointer");
     }
