@@ -233,8 +233,7 @@ cancelled_data_free (gpointer data)
 {
   CancelledData *cancelled = data;
 
-  cancelled->self->key_destroy_func (cancelled->key);
-  cancelled->key = NULL;
+  g_clear_pointer (&cancelled->key, cancelled->self->key_destroy_func);
 
   g_cancellable_disconnect (cancelled->cancellable, cancelled->cancelled_id);
   g_clear_object (&cancelled->cancellable);
