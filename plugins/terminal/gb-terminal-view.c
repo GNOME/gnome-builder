@@ -101,11 +101,11 @@ gb_terminal_view_discover_shell (GbTerminalView  *self,
   if (!g_shell_parse_argv (command, NULL, &argv, error))
     return NULL;
 
-  if (self->runtime != NULL)
-    launcher = ide_runtime_create_launcher (self->runtime, NULL);
-
-  if (launcher == NULL)
-    launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  /*
+   * We don't use the runtime shell here, because we want to know
+   * what the host thinks the user shell should be.
+   */
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
 
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
