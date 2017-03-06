@@ -548,6 +548,7 @@ egg_task_cache_fetch_cb (GObject      *object,
     }
 
   self->key_destroy_func (key);
+  g_object_unref (task);
 
   EGG_COUNTER_DEC (in_flight);
 }
