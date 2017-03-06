@@ -34,6 +34,14 @@ typedef struct
 
 typedef struct
 {
+  EggTaskCache *self;
+  GCancellable *cancellable;
+  gpointer      key;
+  gulong        cancelled_id;
+} CancelledData;
+
+typedef struct
+{
   GSource  source;
   EggHeap *heap;
 } EvictSource;
@@ -216,6 +224,40 @@ cache_item_new (EggTaskCache  *self,
   ret->value = self->value_copy_func ((gpointer)value);
   if (self->time_to_live_usec > 0)
     ret->evict_at = g_get_monotonic_time () + self->time_to_live_usec;
+
+  return ret;
+}
+
+static void
+cancelled_data_free (gpointer data)
+{
+  CancelledData *cancelled = data;
+
+  cancelled->self->key_destroy_func (cancelled->key);
+  cancelled->key = NULL;
+
+  g_cancellable_disconnect (cancelled->cancellable, cancelled->cancelled_id);
+  g_clear_object (&cancelled->cancellable);
+  cancelled->cancelled_id = 0;
+
+  cancelled->self = NULL;
+
+  g_slice_free (CancelledData, cancelled);
+}
+
+static CancelledData *
+cancelled_data_new (EggTaskCache  *self,
+                    GCancellable  *cancellable,
+                    gconstpointer  key,
+                    gulong         cancelled_id)
+{
+  CancelledData *ret;
+
+  ret = g_slice_new0 (CancelledData);
+  ret->self = self;
+  ret->cancellable = (cancellable != NULL) ? g_object_ref (cancellable) : NULL;
+  ret->key = self->key_copy_func ((gpointer)key);
+  ret->cancelled_id = cancelled_id;
 
   return ret;
 }
@@ -424,6 +466,58 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
 }
 
 static void
+egg_task_cache_cancelled_cb (GCancellable *cancellable,
+                             gpointer      user_data)
+{
+  EggTaskCache *self;
+  CancelledData *data;
+  GPtrArray *queued;
+  GTask *task = (GTask *)user_data;
+  gboolean cancelled = FALSE;
+
+  self = (EggTaskCache *)g_task_get_source_object (task);
+  data = (CancelledData *)g_task_get_task_data (task);
+
+  if ((queued = g_hash_table_lookup (self->queued, data->key)))
+    {
+      gsize i;
+
+      for (i = 0; i < queued->len; i++)
+        {
+          GCancellable *queued_cancellable;
+          GTask *queued_task;
+
+          queued_task = g_ptr_array_index (queued, i);
+          queued_cancellable = g_task_get_cancellable (queued_task);
+
+          if (queued_task == task && queued_cancellable == cancellable)
+            {
+              cancelled = g_task_return_error_if_cancelled (task);
+              g_ptr_array_remove_index_fast (queued, (guint) i);
+
+              EGG_COUNTER_DEC (queued);
+              break;
+            }
+        }
+
+      if (queued->len == 0)
+        {
+          GTask *fetch_task;
+
+          if ((fetch_task = g_hash_table_lookup (self->in_flight, data->key)))
+            {
+              GCancellable *fetch_cancellable;
+
+              fetch_cancellable = g_task_get_cancellable (fetch_task);
+              g_cancellable_cancel (fetch_cancellable);
+            }
+        }
+    }
+
+  g_return_if_fail (cancelled);
+}
+
+static void
 egg_task_cache_fetch_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
@@ -468,8 +562,10 @@ egg_task_cache_get_async (EggTaskCache        *self,
 {
   g_autoptr(GTask) fetch_task = NULL;
   g_autoptr(GTask) task = NULL;
+  CancelledData *data;
   GPtrArray *queued;
   gpointer ret;
+  gulong cancelled_id = 0;
 
   g_return_if_fail (EGG_IS_TASK_CACHE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -511,14 +607,28 @@ egg_task_cache_get_async (EggTaskCache        *self,
    */
   if (!g_hash_table_contains (self->in_flight, key))
     {
+      g_autoptr(GCancellable) fetch_cancellable = NULL;
+
+      fetch_cancellable = g_cancellable_new ();
       fetch_task = g_task_new (self,
-                               cancellable,
+                               fetch_cancellable,
                                egg_task_cache_fetch_cb,
                                self->key_copy_func ((gpointer)key));
       g_hash_table_insert (self->in_flight,
                            self->key_copy_func ((gpointer)key),
                            g_object_ref (fetch_task));
     }
+
+  if (cancellable != NULL)
+    {
+      cancelled_id = g_cancellable_connect (cancellable,
+                                            G_CALLBACK (egg_task_cache_cancelled_cb),
+                                            task,
+                                            NULL);
+    }
+
+  data = cancelled_data_new (self, cancellable, key, cancelled_id);
+  g_task_set_task_data (task, data, cancelled_data_free);
 
   if (fetch_task != NULL)
     {
