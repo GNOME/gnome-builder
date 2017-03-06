@@ -518,7 +518,7 @@ egg_task_cache_get_async (EggTaskCache        *self,
                                self->key_copy_func ((gpointer)key));
       g_hash_table_insert (self->in_flight,
                            self->key_copy_func ((gpointer)key),
-                           GINT_TO_POINTER (TRUE));
+                           g_object_ref (fetch_task));
       self->populate_callback (self,
                                key,
                                g_object_ref (fetch_task),
@@ -634,7 +634,7 @@ egg_task_cache_constructed (GObject *object)
   self->in_flight = g_hash_table_new_full (self->key_hash_func,
                                            self->key_equal_func,
                                            self->key_destroy_func,
-                                           NULL);
+                                           g_object_unref);
 
   /*
    * This is where tasks queue waiting for an in_flight callback.
