@@ -493,9 +493,7 @@ egg_task_cache_cancelled_cb (GCancellable *cancellable,
 
   if ((queued = g_hash_table_lookup (self->queued, data->key)))
     {
-      gsize i;
-
-      for (i = 0; i < queued->len; i++)
+      for (guint i = 0; i < queued->len; i++)
         {
           GCancellable *queued_cancellable;
           GTask *queued_task;
@@ -506,7 +504,7 @@ egg_task_cache_cancelled_cb (GCancellable *cancellable,
           if (queued_task == task && queued_cancellable == cancellable)
             {
               cancelled = g_task_return_error_if_cancelled (task);
-              g_ptr_array_remove_index_fast (queued, (guint) i);
+              g_ptr_array_remove_index_fast (queued, i);
 
               EGG_COUNTER_DEC (queued);
               break;
