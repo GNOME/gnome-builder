@@ -235,9 +235,13 @@ cancelled_data_free (gpointer data)
 
   g_clear_pointer (&cancelled->key, cancelled->self->key_destroy_func);
 
-  g_cancellable_disconnect (cancelled->cancellable, cancelled->cancelled_id);
-  g_clear_object (&cancelled->cancellable);
-  cancelled->cancelled_id = 0;
+  if (cancelled->cancelled_id != 0)
+    {
+      g_cancellable_disconnect (cancelled->cancellable, cancelled->cancelled_id);
+      cancelled->cancelled_id = 0;
+
+      g_clear_object (&cancelled->cancellable);
+    }
 
   cancelled->self = NULL;
 
@@ -476,6 +480,8 @@ egg_task_cache_cancelled_cb (GCancellable *cancellable,
 
   self = (EggTaskCache *)g_task_get_source_object (task);
   data = (CancelledData *)g_task_get_task_data (task);
+
+  data->cancelled_id = 0;
 
   if ((queued = g_hash_table_lookup (self->queued, data->key)))
     {
