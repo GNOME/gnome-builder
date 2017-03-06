@@ -191,7 +191,6 @@ static void
 gb_terminal_respawn (GbTerminalView *self,
                      VteTerminal    *terminal)
 {
-  g_autoptr(GPtrArray) args = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *workpath = NULL;
@@ -243,10 +242,6 @@ gb_terminal_respawn (GbTerminalView *self,
       g_clear_error (&error);
     }
 
-  args = g_ptr_array_new ();
-  g_ptr_array_add (args, (gchar *)shell);
-  g_ptr_array_add (args, NULL);
-
   pty = vte_terminal_pty_new_sync (terminal,
                                    VTE_PTY_DEFAULT | VTE_PTY_NO_LASTLOG | VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP,
                                    NULL,
@@ -273,7 +268,7 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_cwd (launcher, workpath);
-  ide_subprocess_launcher_push_args (launcher, (const gchar * const *)args->pdata);
+  ide_subprocess_launcher_push_argv (launcher, shell);
   ide_subprocess_launcher_take_stdin_fd (launcher, tty_fd);
   ide_subprocess_launcher_take_stdout_fd (launcher, stdout_fd);
   ide_subprocess_launcher_take_stderr_fd (launcher, stderr_fd);
