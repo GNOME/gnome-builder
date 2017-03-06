@@ -475,11 +475,19 @@ egg_task_cache_cancelled_cb (GCancellable *cancellable,
   EggTaskCache *self;
   CancelledData *data;
   GPtrArray *queued;
-  GTask *task = (GTask *)user_data;
+  GTask *task = user_data;
   gboolean cancelled = FALSE;
 
-  self = (EggTaskCache *)g_task_get_source_object (task);
-  data = (CancelledData *)g_task_get_task_data (task);
+  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  data = g_task_get_task_data (task);
+
+  g_assert (EGG_IS_TASK_CACHE (self));
+  g_assert (data != NULL);
+  g_assert (data->self == self);
+  g_assert (!data->cancellable || G_IS_CANCELLABLE (data->cancellable));
 
   data->cancelled_id = 0;
 
