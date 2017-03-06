@@ -466,6 +466,7 @@ egg_task_cache_get_async (EggTaskCache        *self,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
 {
+  g_autoptr(GTask) fetch_task = NULL;
   g_autoptr(GTask) task = NULL;
   GPtrArray *queued;
   gpointer ret;
@@ -510,8 +511,6 @@ egg_task_cache_get_async (EggTaskCache        *self,
    */
   if (!g_hash_table_contains (self->in_flight, key))
     {
-      g_autoptr(GTask) fetch_task = NULL;
-
       fetch_task = g_task_new (self,
                                cancellable,
                                egg_task_cache_fetch_cb,
@@ -519,6 +518,10 @@ egg_task_cache_get_async (EggTaskCache        *self,
       g_hash_table_insert (self->in_flight,
                            self->key_copy_func ((gpointer)key),
                            g_object_ref (fetch_task));
+    }
+
+  if (fetch_task != NULL)
+    {
       self->populate_callback (self,
                                key,
                                g_object_ref (fetch_task),
