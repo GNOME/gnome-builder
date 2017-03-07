@@ -23,6 +23,74 @@
                 "/share/vala",
                 "*.la", "*.a"],
     "modules": [
+{{if language == "c++"}}
+        {
+            "name": "libsigcplusplus",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libsigc++/2.10/libsigc++-2.10.0.tar.xz",
+                    "sha256": "f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81"
+                }
+            ]
+        },
+        {
+            "name": "glibmm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/glibmm/2.49/glibmm-2.49.7.tar.xz",
+                    "sha256": "571d8ecd082a66fa7248f500063409c1f478edc36f553d0eb27cf6199dee0b25"
+                }
+            ]
+        },
+        {
+            "name": "cairomm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/cairomm/1.12/cairomm-1.12.0.tar.xz",
+                    "sha256": "a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6"
+                }
+            ]
+        },
+        {
+            "name": "pangomm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/pangomm/2.40/pangomm-2.40.1.tar.xz",
+                    "sha256": "9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af"
+                }
+            ]
+        },
+        {
+            "name": "atkmm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/atkmm/2.24/atkmm-2.24.2.tar.xz",
+                    "sha256": "ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd"
+                }
+            ]
+        },
+        {
+            "name": "gtkmm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/gtkmm/3.22/gtkmm-3.22.0.tar.xz",
+                    "sha256": "05da4d4b628fb20c8384630ddf478a3b5562952b2d6181fe28d58f6cbc0514f5"
+                }
+            ]
+        },
+{{end}}
         {
             "name": "{{name}}",
             "sources": [
