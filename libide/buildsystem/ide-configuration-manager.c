@@ -39,8 +39,9 @@ struct _IdeConfigurationManager
   PeasExtensionSet *extensions;
 };
 
-static void async_initable_iface_init (GAsyncInitableIface *iface);
-static void list_model_iface_init     (GListModelInterface *iface);
+static void async_initable_iface_init           (GAsyncInitableIface *iface);
+static void list_model_iface_init               (GListModelInterface *iface);
+static void ide_configuration_manager_save_tick (GTask               *task);
 
 G_DEFINE_TYPE_EXTENDED (IdeConfigurationManager, ide_configuration_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
@@ -80,40 +81,76 @@ ide_configuration_manager_add_default (IdeConfigurationManager *self)
 }
 
 static void
-ide_configuration_manager_save_provider_cb (GObject      *object,
-                                            GAsyncResult *result,
-                                            gpointer      user_data)
+ide_configuration_manager_collect_providers (PeasExtensionSet *set,
+                                             PeasPluginInfo   *plugin_info,
+                                             PeasExtension    *exten,
+                                             gpointer          user_data)
+{
+  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)exten;
+  GPtrArray *providers = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+  g_assert (providers != NULL);
+
+  g_ptr_array_add (providers, g_object_ref (provider));
+}
+
+static void
+ide_configuration_manager_save_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
 {
   IdeConfigurationProvider *provider = (IdeConfigurationProvider *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
   g_assert (G_IS_TASK (task));
 
   if (!ide_configuration_provider_save_finish (provider, result, &error))
-    g_task_return_error (task, error);
+    g_warning ("%s: %s", G_OBJECT_TYPE_NAME (provider), error->message);
+
+  ide_configuration_manager_save_tick (task);
+
+  IDE_EXIT;
 }
 
 static void
-ide_configuration_manager_save_provider (PeasExtensionSet *set,
-                                         PeasPluginInfo   *plugin_info,
-                                         PeasExtension    *exten,
-                                         gpointer          user_data)
+ide_configuration_manager_save_tick (GTask *task)
 {
-  g_autoptr(GTask) task = user_data;
-  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)exten;
+  IdeConfigurationProvider *provider;
+  GCancellable *cancellable;
+  GPtrArray *providers;
 
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
 
-  if (!g_task_had_error (task))
-    ide_configuration_provider_save_async (provider,
-                                           g_task_get_cancellable (task),
-                                           ide_configuration_manager_save_provider_cb,
-                                           g_object_ref (task));
+  providers = g_task_get_task_data (task);
+  cancellable = g_task_get_cancellable (task);
+
+  if (providers->len == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
+
+  provider = g_ptr_array_index (providers, providers->len - 1);
+
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+
+  ide_configuration_provider_save_async (provider,
+                                         cancellable,
+                                         ide_configuration_manager_save_cb,
+                                         g_object_ref (task));
+
+  g_ptr_array_remove_index (providers, providers->len - 1);
+
+  IDE_EXIT;
 }
 
 void
@@ -123,6 +160,7 @@ ide_configuration_manager_save_async (IdeConfigurationManager *self,
                                       gpointer                 user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) providers = NULL;
 
   IDE_ENTRY;
 
@@ -130,12 +168,23 @@ ide_configuration_manager_save_async (IdeConfigurationManager *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_configuration_manager_save_async);
+
+  providers = g_ptr_array_new_with_free_func (g_object_unref);
 
   peas_extension_set_foreach (self->extensions,
-                              ide_configuration_manager_save_provider,
-                              g_object_ref (task));
+                              ide_configuration_manager_collect_providers,
+                              providers);
 
-  g_task_return_boolean (task, TRUE);
+  if (providers->len == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
+
+  g_task_set_task_data (task, g_steal_pointer (&providers), (GDestroyNotify)g_ptr_array_unref);
+
+  ide_configuration_manager_save_tick (task);
 
   IDE_EXIT;
 }
