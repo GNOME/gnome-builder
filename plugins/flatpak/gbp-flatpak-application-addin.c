@@ -762,6 +762,82 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
                  locate->id, locate->arch, locate->branch);
 
   /*
+   * First we'll try to resolve things by locating local items. This allows
+   * us to avoid network traffic.
+   */
+
+  for (guint i = 0; i < locate->installations->len; i++)
+    {
+      InstallInfo *info = g_ptr_array_index (locate->installations, i);
+      FlatpakInstallation *installation = info->installation;
+      g_autoptr(GPtrArray) refs = NULL;
+
+      g_assert (FLATPAK_IS_INSTALLATION (installation));
+
+      refs = flatpak_installation_list_installed_refs_by_kind (installation,
+                                                               FLATPAK_REF_KIND_RUNTIME,
+                                                               cancellable, NULL);
+      if (refs == NULL)
+        continue;
+
+      for (guint j = 0; j < refs->len; j++)
+        {
+          FlatpakInstalledRef *ref = g_ptr_array_index (refs, j);
+          const gchar *id = flatpak_ref_get_name (FLATPAK_REF (ref));
+          const gchar *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
+          const gchar *branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
+
+          if (g_strcmp0 (locate->id, id) == 0 &&
+              g_strcmp0 (locate->arch, arch) == 0 &&
+              g_strcmp0 (locate->branch, branch) == 0)
+            {
+              g_autoptr(GError) error = NULL;
+              g_autoptr(GBytes) bytes = NULL;
+              g_autoptr(GKeyFile) keyfile = NULL;
+              g_autofree gchar *idstr = NULL;
+              const gchar *data;
+              gsize len;
+
+              bytes = flatpak_installed_ref_load_metadata (ref, cancellable, NULL);
+
+              keyfile = g_key_file_new ();
+              data = (gchar *)g_bytes_get_data (bytes, &len);
+
+              if (!g_key_file_load_from_data (keyfile, data, len, 0, &error))
+                {
+                  g_task_return_error (task, g_steal_pointer (&error));
+                  IDE_EXIT;
+                }
+
+              idstr = g_key_file_get_string (keyfile, "Runtime", "sdk", NULL);
+
+              if (idstr != NULL)
+                {
+                  g_auto(GStrv) parts = g_strsplit (idstr, "/", 3);
+
+                  if (g_strv_length (parts) != 3)
+                    {
+                      g_task_return_new_error (task,
+                                               G_IO_ERROR,
+                                               G_IO_ERROR_INVALID_DATA,
+                                               "Invalid runtime id %s",
+                                               idstr);
+                      IDE_EXIT;
+                    }
+
+                  locate->sdk_id = g_strdup (parts[0]);
+                  locate->sdk_arch = g_strdup (parts[1]);
+                  locate->sdk_branch = g_strdup (parts[2]);
+                }
+
+              g_task_return_boolean (task, TRUE);
+
+              IDE_EXIT;
+            }
+        }
+    }
+
+  /*
    * Look through all of our remote refs and see if we find a match for
    * the runtime for which we need to locate the SDK. Afterwards, we need
    * to get the metedata for that runtime so that we can find the sdk field
