@@ -1,5 +1,5 @@
 # Brazilian Portuguese translation for gnome-builder.
-# Copyright (C) 2016 gnome-builder's COPYRIGHT HOLDER
+# Copyright (C) 2017 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Gustavo Marques <gutodisse@gmail.com>, 2015.
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-01 22:58+0000\n"
-"PO-Revision-Date: 2017-03-02 11:05-0200\n"
+"POT-Creation-Date: 2017-03-07 10:02+0000\n"
+"PO-Revision-Date: 2017-03-07 09:09-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -314,7 +314,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5853
+#: libide/sourceview/ide-source-view.c:5856
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -1108,12 +1108,12 @@ msgstr "O idioma atual carece de um resolvedor de símbolos."
 msgid "File too large to be opened."
 msgstr "Arquivo grande demais para ser aberto."
 
-#: libide/buffers/ide-buffer-manager.c:1761
+#: libide/buffers/ide-buffer-manager.c:1764
 #, c-format
 msgid "unsaved document %u"
 msgstr "documento não salvo %u"
 
-#: libide/buffers/ide-buffer-manager.c:1795
+#: libide/buffers/ide-buffer-manager.c:1798
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falha ao salvar o buffer, ignorando reclamação."
 
@@ -1168,7 +1168,7 @@ msgstr "Preparando…"
 msgid "Ready"
 msgstr "Pronto"
 
-#: libide/buildsystem/ide-configuration-manager.c:75
+#: libide/buildsystem/ide-configuration-manager.c:76
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1231,7 +1231,6 @@ msgid "Build Output"
 msgstr "Saída da compilação"
 
 #: libide/buildui/ide-build-log-panel.ui:25
-#| msgid "Clear _All"
 msgid "Clear build log"
 msgstr "Limpar log de compilação"
 
@@ -1755,11 +1754,11 @@ msgstr "Falha ao inicializar padrões."
 msgid "You must call %s() before using libide."
 msgstr "Você tem que chamar %s() antes de usar libide."
 
-#: libide/ide-context.c:1885
+#: libide/ide-context.c:1887
 msgid "An unload request is already pending"
 msgstr "Uma requisição para descarregar já está pendente"
 
-#: libide/ide-context.c:2004
+#: libide/ide-context.c:2006
 msgid "Context has already been restored."
 msgstr "O contexto já foi restaurado."
 
@@ -2586,21 +2585,21 @@ msgstr "Falha ao abrir o diretório: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar arquivo: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5309
+#: libide/sourceview/ide-source-view.c:5312
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira “%s”"
 
-#: libide/sourceview/ide-source-view.c:5311
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua “%s” com “%s”"
 
-#: libide/sourceview/ide-source-view.c:5425
+#: libide/sourceview/ide-source-view.c:5428
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: libide/sourceview/ide-source-view.c:5852
+#: libide/sourceview/ide-source-view.c:5855
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
@@ -3262,6 +3261,38 @@ msgstr "Selecionar um modelo"
 msgid "Documentation"
 msgstr "Documentação"
 
+#: plugins/eslint/eslint_plugin/__init__.py:106
+#| msgid "Pylint"
+msgid "ESlint"
+msgstr "ESlint"
+
+#: plugins/eslint/eslint_plugin/__init__.py:107
+#| msgid "Enable the use of pylint, which may execute code in your project"
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr "Habilita o uso do ESLint, que pode executar código no seu projeto"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/eslint/eslint_plugin/__init__.py:109
+#| msgid "pylint python lint code execute execution"
+msgid "eslint javascript lint code execute execution"
+msgstr "esling javascript lint código executar execução"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+#| msgid "Enable Pylint"
+msgid "Enable ESLint"
+msgstr "Habilitar ESLint"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+#| msgid ""
+#| "Enable the use of pylint to find additional diagnostics in Python "
+#| "programs. This may result in the execution of code in your project."
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Habilita o uso do eslint para localizar diagnósticos adicionais em programa "
+"JavaScript. Isso pode resultar na execução do código de seu projeto."
+
 #: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Alternar para"
@@ -3790,7 +3821,7 @@ msgstr "Quebra de linha"
 msgid "Save Terminal Content As"
 msgstr "Salvar conteúdo do Terminal como"
 
-#: plugins/terminal/gb-terminal-view.c:462
+#: plugins/terminal/gb-terminal-view.c:465
 msgid "Untitled terminal"
 msgstr "Terminal sem título"
 
