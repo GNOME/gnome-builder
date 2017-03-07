@@ -177,8 +177,8 @@ cache_item_free (gpointer data)
 {
   CacheItem *item = data;
 
-  item->self->key_destroy_func (item->key);
-  item->self->value_destroy_func (item->value);
+  g_clear_pointer (&item->key, item->self->key_destroy_func);
+  g_clear_pointer (&item->value, item->self->value_destroy_func);
   item->self = NULL;
   item->evict_at = 0;
 
