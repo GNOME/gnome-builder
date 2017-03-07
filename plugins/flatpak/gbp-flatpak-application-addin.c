@@ -758,6 +758,9 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
   g_assert (locate->installations != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  IDE_TRACE_MSG ("Locating SDK for %s/%s/%s",
+                 locate->id, locate->arch, locate->branch);
+
   /*
    * Look through all of our remote refs and see if we find a match for
    * the runtime for which we need to locate the SDK. Afterwards, we need
@@ -859,6 +862,11 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
             }
         }
     }
+
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_FOUND,
+                           "Failed to locate corresponding SDK");
 
   IDE_EXIT;
 }
