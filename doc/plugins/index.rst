@@ -19,6 +19,7 @@ Creating Plugins
    keybindings
    langserv
    search
+   menus
    preferences
    transfers
    workers
