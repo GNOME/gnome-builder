@@ -296,7 +296,7 @@ class EmptyProjectTemplate(AutotoolsTemplate):
          )
 
     def get_packages(self):
-        return "gio-2.0 >= 2.42"
+        return "gio-2.0 >= 2.50"
 
     def prepare_files(self, files):
         files['resources/src/Makefile.empty'] = 'src/Makefile.am'
@@ -313,9 +313,9 @@ class GnomeProjectTemplate(AutotoolsTemplate):
 
     def get_packages(self):
         if self.language == "c" or self.language == "vala":
-            return "gio-2.0 >= 2.42 gtk+-3.0 >= 3.20"
+            return "gio-2.0 >= 2.50 gtk+-3.0 >= 3.22"
         elif self.language == "c++":
-            return "giomm-2.4 >= 2.42 gtkmm-3.0 >= 3.20"
+            return "giomm-2.4 >= 2.49.7 gtkmm-3.0 >= 3.22"
         else:
             return ""
 
