@@ -235,13 +235,9 @@ cancelled_data_free (gpointer data)
 
   g_clear_pointer (&cancelled->key, cancelled->self->key_destroy_func);
 
-  if (cancelled->cancelled_id != 0)
-    {
-      g_cancellable_disconnect (cancelled->cancellable, cancelled->cancelled_id);
-      cancelled->cancelled_id = 0;
-
-      g_clear_object (&cancelled->cancellable);
-    }
+  g_cancellable_disconnect (cancelled->cancellable, cancelled->cancelled_id);
+  cancelled->cancelled_id = 0;
+  g_clear_object (&cancelled->cancellable);
 
   cancelled->self = NULL;
 
@@ -468,28 +464,27 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
     }
 }
 
-static void
-egg_task_cache_cancelled_cb (GCancellable *cancellable,
-                             gpointer      user_data)
+static gboolean
+egg_task_cache_cancel_in_idle (gpointer user_data)
 {
   EggTaskCache *self;
   CancelledData *data;
+  GCancellable *cancellable;
   GPtrArray *queued;
   GTask *task = user_data;
   gboolean cancelled = FALSE;
 
-  g_assert (G_IS_CANCELLABLE (cancellable));
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  cancellable = g_task_get_cancellable (task);
   data = g_task_get_task_data (task);
 
   g_assert (EGG_IS_TASK_CACHE (self));
+  g_assert (G_IS_CANCELLABLE (cancellable));
   g_assert (data != NULL);
   g_assert (data->self == self);
   g_assert (data->cancellable == cancellable);
-
-  data->cancelled_id = 0;
 
   if ((queued = g_hash_table_lookup (self->queued, data->key)))
     {
@@ -525,7 +520,38 @@ egg_task_cache_cancelled_cb (GCancellable *cancellable,
         }
     }
 
-  g_return_if_fail (cancelled);
+  g_return_val_if_fail (cancelled, G_SOURCE_REMOVE);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+egg_task_cache_cancelled_cb (GCancellable *cancellable,
+                             gpointer      user_data)
+{
+  EggTaskCache *self;
+  CancelledData *data;
+  GMainContext *context;
+  g_autoptr(GSource) source = NULL;
+  GTask *task = user_data;
+
+  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  data = g_task_get_task_data (task);
+
+  g_assert (EGG_IS_TASK_CACHE (self));
+  g_assert (data != NULL);
+  g_assert (data->self == self);
+  g_assert (data->cancellable == cancellable);
+
+  source = g_idle_source_new ();
+  g_source_set_callback (source, egg_task_cache_cancel_in_idle, g_object_ref (task), g_object_unref);
+  g_source_set_name (source, "[egg] egg_task_cache_cancel_in_idle");
+
+  context = g_main_context_get_thread_default ();
+  g_source_attach (source, context);
 }
 
 static void
