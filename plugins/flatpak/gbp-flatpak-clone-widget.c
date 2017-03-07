@@ -278,6 +278,9 @@ gbp_flatpak_clone_widget_worker_completed (GTask      *task,
                            "fraction", 1.0,
                            NULL);
 
+  if (g_task_had_error (task))
+    return;
+
   /* Wait for a second so animations can complete before opening
    * the project. Otherwise, it's pretty jarring to the user.
    */
@@ -393,6 +396,11 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
                                          req->destination,
                                          self->strip_components,
                                          &error);
+      if (error != NULL)
+	{
+	  g_task_return_error (task, error);
+	  return;
+	}
     }
 
   for (i = 0; req->src->patches[i]; i++)
