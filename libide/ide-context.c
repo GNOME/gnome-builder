@@ -1684,11 +1684,12 @@ ide_context_unload_configuration_manager (gpointer             source_object,
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self->configuration_manager));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_unload_configuration_manager);
 
   ide_configuration_manager_save_async (self->configuration_manager,
                                         cancellable,
                                         ide_context_unload__configuration_manager_save_cb,
-                                        g_object_ref (task));
+                                        g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -1732,13 +1733,14 @@ ide_context_unload_back_forward_list (gpointer             source_object,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_unload_back_forward_list);
 
   file = get_back_forward_list_file (self);
   _ide_back_forward_list_save_async (self->back_forward_list,
                                      file,
                                      cancellable,
                                      ide_context_unload__back_forward_list_save_cb,
-                                     g_object_ref (task));
+                                     g_steal_pointer (&task));
 
   IDE_EXIT;
 }
