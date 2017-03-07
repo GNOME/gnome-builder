@@ -487,7 +487,7 @@ egg_task_cache_cancelled_cb (GCancellable *cancellable,
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (data != NULL);
   g_assert (data->self == self);
-  g_assert (!data->cancellable || G_IS_CANCELLABLE (data->cancellable));
+  g_assert (data->cancellable == cancellable);
 
   data->cancelled_id = 0;
 
