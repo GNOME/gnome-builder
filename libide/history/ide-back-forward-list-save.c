@@ -169,6 +169,7 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
   _ide_back_forward_list_foreach (self, ide_back_forward_list_save_collect, state);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, _ide_back_forward_list_save_async);
   g_task_set_task_data (task, state, ide_back_forward_list_save_free);
 
   if (state->content->len == 0)
