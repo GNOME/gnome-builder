@@ -206,6 +206,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   IdeConfiguration *config;
   g_autofree gchar *manifest_path = NULL;
   const gchar *primary_module;
+  const gchar *src_dir;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -224,8 +225,11 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
+  src_dir = ide_build_pipeline_get_srcdir (pipeline);
 
   launcher = create_subprocess_launcher ();
+
+  ide_subprocess_launcher_set_cwd (launcher, src_dir);
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
   ide_subprocess_launcher_push_argv (launcher, "--ccache");
