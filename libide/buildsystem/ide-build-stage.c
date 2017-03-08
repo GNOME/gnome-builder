@@ -35,6 +35,7 @@ typedef struct
   GOutputStream       *stdout_stream;
   gint                 n_pause;
   guint                completed : 1;
+  guint                disabled : 1;
   guint                transient : 1;
 } IdeBuildStagePrivate;
 
@@ -43,6 +44,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildStage, ide_build_stage, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_COMPLETED,
+  PROP_DISABLED,
   PROP_NAME,
   PROP_STDOUT_PATH,
   PROP_TRANSIENT,
@@ -267,6 +269,10 @@ ide_build_stage_get_property (GObject    *object,
       g_value_set_boolean (value, ide_build_stage_get_completed (self));
       break;
 
+    case PROP_DISABLED:
+      g_value_set_boolean (value, ide_build_stage_get_disabled (self));
+      break;
+
     case PROP_NAME:
       g_value_set_string (value, ide_build_stage_get_name (self));
       break;
@@ -292,6 +298,10 @@ ide_build_stage_set_property (GObject      *object,
     {
     case PROP_COMPLETED:
       ide_build_stage_set_completed (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_DISABLED:
+      ide_build_stage_set_disabled (self, g_value_get_boolean (value));
       break;
 
     case PROP_NAME:
@@ -334,6 +344,24 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
     g_param_spec_boolean ("completed",
                           "Completed",
                           "If the stage has been completed",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeBuildStage:disabled:
+   *
+   * If the build stage is disabled. This allows you to have a stage that is
+   * attached but will not be activated during execution.
+   *
+   * You may enable it later and then re-execute the pipeline.
+   *
+   * If the stage is both transient and disabled, it will not be removed during
+   * the transient cleanup phase.
+   */
+  properties [PROP_DISABLED] =
+    g_param_spec_boolean ("disabled",
+                          "Disabled",
+                          "If the stage has been disabled",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -937,7 +965,37 @@ ide_build_stage_chain (IdeBuildStage *self,
   g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
   g_return_val_if_fail (IDE_IS_BUILD_STAGE (next), FALSE);
 
+  if (ide_build_stage_get_disabled (next))
+    return FALSE;
+
   g_signal_emit (self, signals[CHAIN], 0, next, &ret);
 
   return ret;
+}
+
+gboolean
+ide_build_stage_get_disabled (IdeBuildStage *self)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
+
+  return priv->disabled;
+}
+
+void
+ide_build_stage_set_disabled (IdeBuildStage *self,
+                              gboolean       disabled)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_STAGE (self));
+
+  disabled = !!disabled;
+
+  if (priv->disabled != disabled)
+    {
+      priv->disabled = disabled;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISABLED]);
+    }
 }

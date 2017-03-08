@@ -1106,6 +1106,10 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
       if (((entry->phase & IDE_BUILD_PHASE_MASK) & self->requested_mask) == 0)
         return;
 
+      /* Skip past the stage if it is disabled. */
+      if (ide_build_stage_get_disabled (entry->stage))
+        continue;
+
       chained = ide_build_stage_chain (stage, entry->stage);
 
       IDE_TRACE_MSG ("Checking if %s chains to stage[%d] (%s) = %s",
@@ -1174,6 +1178,10 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
 
       g_assert (entry->stage != NULL);
       g_assert (IDE_IS_BUILD_STAGE (entry->stage));
+
+      /* Ignore the stage if it is disabled */
+      if (ide_build_stage_get_disabled (entry->stage))
+        continue;
 
       if ((entry->phase & IDE_BUILD_PHASE_MASK) & self->requested_mask)
         {
