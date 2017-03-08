@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-17 22:09+0000\n"
-"PO-Revision-Date: 2016-12-19 17:28+0100\n"
+"POT-Creation-Date: 2017-02-28 18:33+0000\n"
+"PO-Revision-Date: 2017-03-08 14:32+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -2425,7 +2425,7 @@ msgstr "Összeállítás sikeres"
 #: plugins/autotools/ide-autotools-builder.c:347
 #: plugins/autotools/ide-autotools-builder.c:539
 #: plugins/autotools/ide-autotools-build-task.c:1219
-#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:399
+#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:427
 msgid "Building…"
 msgstr "Összeállítás…"
 
@@ -2495,7 +2495,7 @@ msgid "Running configure…"
 msgstr "A Configure futtatása…"
 
 #: plugins/autotools/ide-autotools-build-task.c:1217
-#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:392
+#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:420
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
@@ -2563,7 +2563,7 @@ msgstr "Configure beállításai"
 msgid "Environment"
 msgstr "Környezet"
 
-#: plugins/build-tools/gbp-build-log-panel.c:270
+#: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
 msgstr "Összeállítás kimenete"
 
@@ -3243,6 +3243,19 @@ msgstr "Dokumentáció"
 msgid "Switch To"
 msgstr "Átváltás"
 
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Alkalmazásforrások letöltése…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "Alkalmazás klónozása"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Klónozás"
+
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Küldés ide: Fpaste.org"
@@ -3299,10 +3312,6 @@ msgstr "Projekt klónozása"
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
 msgstr "Klónozás…"
-
-#: plugins/git/ide-git-genesis-addin.c:190
-msgid "Clone"
-msgstr "Klónozás"
 
 #: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
@@ -3363,19 +3372,19 @@ msgstr "Python kiegészítési javaslatok"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Használja a Jedit kiegészítésre a Python nyelv esetén."
 
-#: plugins/meson/meson_plugin/__init__.py:318
+#: plugins/meson/meson_plugin/__init__.py:346
 msgid "Configuring…"
 msgstr "Konfigurálás…"
 
-#: plugins/meson/meson_plugin/__init__.py:350
+#: plugins/meson/meson_plugin/__init__.py:378
 msgid "Running prebuild…"
 msgstr "A prebuild futtatása…"
 
-#: plugins/meson/meson_plugin/__init__.py:369
+#: plugins/meson/meson_plugin/__init__.py:397
 msgid "Running post-install…"
 msgstr "A post-install futtatása…"
 
-#: plugins/meson/meson_plugin/__init__.py:372
+#: plugins/meson/meson_plugin/__init__.py:400
 msgid "Running post-build…"
 msgstr "A post-build futtatása…"
 
