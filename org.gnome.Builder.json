@@ -34,6 +34,8 @@
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         /* Need access to talk to the file manager */
         "--talk-name=org.freedesktop.FileManager1",
+        /* Need access to packagekit for installs */
+        "--talk-name=org.freedesktop.PackageKit",
         /* We need access to auth agents */
         "--talk-name=org.freedesktop.secrets",
         "--filesystem=xdg-run/keyring",
