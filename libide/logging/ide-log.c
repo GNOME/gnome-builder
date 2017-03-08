@@ -179,7 +179,7 @@ ide_log_handler (const gchar    *log_domain,
       t = (time_t) tv.tv_sec;
       tt = *localtime (&t);
       strftime (ftime, sizeof (ftime), "%H:%M:%S", &tt);
-      buffer = g_strdup_printf ("%s.%04ld  %30s[%d]: %s: %s\n",
+      buffer = g_strdup_printf ("%s.%04ld  %40s[%d]: %s: %s\n",
                                 ftime,
                                 tv.tv_usec / 1000,
                                 log_domain,
