@@ -160,7 +160,7 @@ ide_application_actions_help (GSimpleAction *action,
   focused_window = gtk_application_get_active_window (GTK_APPLICATION (self));
 
   gtk_show_uri_on_window (focused_window,
-                          "help:gnome-builder",
+                          "https://builder.readthedocs.io",
                           gtk_get_current_event_time (),
                           &err);
   if (err)

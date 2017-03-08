@@ -1,4 +1,4 @@
-SUBDIRS = . build contrib data libide src plugins tools po tests doc help
+SUBDIRS = . build contrib data libide src plugins tools po tests doc
 
 ACLOCAL_AMFLAGS = -I build/autotools
 

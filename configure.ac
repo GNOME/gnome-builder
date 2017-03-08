@@ -75,12 +75,6 @@ AM_GNU_GETTEXT([external])
 
 
 dnl ***********************************************************************
-dnl User documentation
-dnl ***********************************************************************
-YELP_HELP_INIT
-
-
-dnl ***********************************************************************
 dnl Check for Required Programs
 dnl ***********************************************************************
 AC_PROG_CC
@@ -542,8 +536,6 @@ AC_CONFIG_FILES([
 
 	doc/Makefile
 	doc/examples/Makefile
-
-	help/Makefile
 
 	po/Makefile.in
 
