@@ -20,5 +20,5 @@ Contents
    exploring
    plugins/index
    api/index
-   contributing
+   contributing/index
    credits

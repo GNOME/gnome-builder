@@ -6,6 +6,14 @@ If you're interested in contributing to Builder and GNOME at large, we would lov
 Only with people like you can GNOME exist.
 We love seeing people that use GNOME transform into people that create GNOME.
 
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+
+   planning
+   writingdocs
+   code
+
 IRC
 ===
 
@@ -34,23 +42,6 @@ Learn out how to install :ref:`via-jhbuild` in our installation documentation.
 
 Currently, JHBuild is how we recommend contributing to Builder.
 We do expect this to change very soon in that you'll be able to easily contribute to Builder from our flatpak-version of Builder.
-
-Improve This Documentation
-==========================
-
-One great way to learn about a software project is to try to document it!
-Writing great documentation can be both challenging and rewarding.
-And writing great documentation requires you learn about the product.
-
-This is one way to improve things for the next person while you explore the code-base.
-You can find the documentation in the ``doc/`` directory of the `git repository`_.
-
-Planning And Project Management
-===============================
-
-Many of us that work on the Builder code-base are great at writing code.
-But we are not so great at managing schedules, planning feature priorities, and coordinating with other projects.
-Helping us do this in Builder will make you a shepard of geeks.
 
 .. _`Builder IRC channel`: irc://irc.gnome.org/#gnome-builder
 .. _`Builder Bug Tracker`: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
