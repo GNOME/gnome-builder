@@ -34,6 +34,12 @@ enum {
   PREPARE_REMOTES,
 };
 
+enum {
+  EXPORT_BUILD_FINISH,
+  EXPORT_BUILD_EXPORT,
+  EXPORT_BUILD_BUNDLE,
+};
+
 static IdeSubprocessLauncher *
 create_subprocess_launcher (void)
 {
@@ -422,7 +428,136 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
                          (GClosureNotify)g_free,
                          0);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, 0, stage);
+  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_FINISH, stage);
+  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
+
+  return TRUE;
+}
+
+static void
+build_bundle_notify_completed (IdeBuildStage *stage,
+                               GParamSpec    *pspec,
+                               const gchar   *dest_path)
+{
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (dest_path != NULL);
+
+  /*
+   * If we successfully completed the build-bundle, show the file
+   * to the user so they can copy/paste/share/etc.
+   */
+
+  if (ide_build_stage_get_completed (stage))
+    {
+      g_autoptr(GFile) file = g_file_new_for_path (dest_path);
+      ide_file_manager_show (file, NULL);
+    }
+}
+
+static gboolean
+register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
+                             IdeBuildPipeline         *pipeline,
+                             IdeContext               *context,
+                             GError                  **error)
+{
+  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autofree gchar *staging_dir = NULL;
+  g_autofree gchar *repo_dir = NULL;
+  g_autofree gchar *export_path = NULL;
+  g_autofree gchar *dest_path = NULL;
+  g_autofree gchar *name = NULL;
+  IdeConfiguration *config;
+  const gchar *app_id;
+  guint stage_id;
+
+  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  config = ide_build_pipeline_get_configuration (pipeline);
+  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+    return TRUE;
+
+  staging_dir = gbp_flatpak_get_staging_dir (config);
+  repo_dir = gbp_flatpak_get_repo_dir (config);
+
+  app_id = ide_configuration_get_app_id (config);
+  name = g_strdup_printf ("%s.flatpak", app_id);
+  dest_path = g_build_filename (staging_dir, name, NULL);
+
+  launcher = create_subprocess_launcher ();
+
+  ide_subprocess_launcher_push_argv (launcher, "flatpak");
+  ide_subprocess_launcher_push_argv (launcher, "build-bundle");
+  ide_subprocess_launcher_push_argv (launcher, repo_dir);
+  ide_subprocess_launcher_push_argv (launcher, dest_path);
+  ide_subprocess_launcher_push_argv (launcher, app_id);
+  /* TODO:
+   *
+   * We probably need to provide UI/config opt to tweak the branch name
+   * if (ide_configuration_get_is_release (config))
+   */
+  ide_subprocess_launcher_push_argv (launcher, "master");
+
+  stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "context", context,
+                        "launcher", launcher,
+                        NULL);
+
+  g_signal_connect_data (stage,
+                         "notify::completed",
+                         G_CALLBACK (build_bundle_notify_completed),
+                         g_steal_pointer (&dest_path),
+                         (GClosureNotify)g_free,
+                         0);
+
+  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_BUNDLE, stage);
+  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
+
+  return TRUE;
+}
+
+static gboolean
+register_build_export_stage (GbpFlatpakPipelineAddin  *self,
+                             IdeBuildPipeline         *pipeline,
+                             IdeContext               *context,
+                             GError                  **error)
+{
+  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autofree gchar *staging_dir = NULL;
+  g_autofree gchar *repo_dir = NULL;
+  g_autofree gchar *export_path = NULL;
+  g_autofree gchar *manifest_path = NULL;
+  IdeConfiguration *config;
+  guint stage_id;
+
+  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  config = ide_build_pipeline_get_configuration (pipeline);
+  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+    return TRUE;
+
+  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
+  staging_dir = gbp_flatpak_get_staging_dir (config);
+  repo_dir = gbp_flatpak_get_repo_dir (config);
+
+  launcher = create_subprocess_launcher ();
+
+  ide_subprocess_launcher_push_argv (launcher, "flatpak");
+  ide_subprocess_launcher_push_argv (launcher, "build-export");
+  ide_subprocess_launcher_push_argv (launcher, repo_dir);
+  ide_subprocess_launcher_push_argv (launcher, staging_dir);
+
+  stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "context", context,
+                        "launcher", launcher,
+                        NULL);
+
+  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_EXPORT, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -467,7 +602,9 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       !register_build_init_stage (self, pipeline, context, &error) ||
       !register_downloads_stage (self, pipeline, context, &error) ||
       !register_dependencies_stage (self, pipeline, context, &error) ||
-      !register_build_finish_stage (self, pipeline, context, &error))
+      !register_build_finish_stage (self, pipeline, context, &error) ||
+      !register_build_export_stage (self, pipeline, context, &error) ||
+      !register_build_bundle_stage (self, pipeline, context, &error))
     g_warning ("%s", error->message);
 }
 

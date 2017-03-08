@@ -83,6 +83,47 @@ gbp_flatpak_workbench_addin_update_dependencies (GSimpleAction *action,
   ide_build_manager_execute_async (manager, IDE_BUILD_PHASE_DOWNLOADS, NULL, NULL, NULL);
 }
 
+static void
+gbp_flatpak_workbench_addin_export_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeBuildManager *manager = (IdeBuildManager *)object;
+  g_autoptr(GbpFlatpakWorkbenchAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_build_manager_execute_finish (manager, result, &error))
+    {
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  /* Open the directory containing the flatpak bundle */
+}
+
+static void
+gbp_flatpak_workbench_addin_export (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  GbpFlatpakWorkbenchAddin *self = user_data;
+  IdeBuildManager *manager;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
+
+  manager = ide_context_get_build_manager (ide_workbench_get_context (self->workbench));
+
+  ide_build_manager_execute_async (manager,
+                                   IDE_BUILD_PHASE_EXPORT,
+                                   NULL,
+                                   gbp_flatpak_workbench_addin_export_cb,
+                                   g_object_ref (self));
+}
+
 G_DEFINE_TYPE_EXTENDED (GbpFlatpakWorkbenchAddin, gbp_flatpak_workbench_addin, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
@@ -109,6 +150,7 @@ gbp_flatpak_workbench_addin_init (GbpFlatpakWorkbenchAddin *self)
 {
   static const GActionEntry actions[] = {
     { "update-dependencies", gbp_flatpak_workbench_addin_update_dependencies },
+    { "export", gbp_flatpak_workbench_addin_export },
   };
 
   self->actions = g_simple_action_group_new ();
