@@ -251,7 +251,7 @@
         {
             "name": "devhelp",
             "config-opts": [ "--disable-compile-warnings" ],
-            "cleanup": [ "/bin/*", "/lib/gedit/plugins", "/share/applications/*", "/share/dbus-1/services", "/share/GConf" ],
+            "cleanup": [ "/bin/*", "/lib/gedit/plugins", "/share/appdata/*", "/share/applications/*", "/share/dbus-1/services", "/share/GConf" ],
             "sources": [
                 {
                     "type": "git",
@@ -299,7 +299,7 @@
         {
             "name": "sysprof",
             "config-opts": [ "--enable-gtk", "--with-sysprofd=host" ],
-            "cleanup": [ "/bin/*", "/libexec/sysprof", "/share/applications/*", "/share/mime/packages" ],
+            "cleanup": [ "/bin/*", "/libexec/sysprof", "/share/appdata/*", "/share/applications/*", "/share/mime/packages" ],
             "sources": [
                 {
                     "type": "git",
