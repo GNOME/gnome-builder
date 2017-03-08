@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-26 08:11+0000\n"
-"PO-Revision-Date: 2017-02-26 23:10+0100\n"
-"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"POT-Creation-Date: 2017-03-07 10:02+0000\n"
+"PO-Revision-Date: 2017-03-07 15:43+0100\n"
+"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -215,6 +215,11 @@ msgstr "Zöld"
 msgid "Blue"
 msgstr "Kék"
 
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "Alap"
+
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
 msgstr "Színkomponensek"
@@ -298,7 +303,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5855
+#: libide/sourceview/ide-source-view.c:5856
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Átnevezés"
@@ -882,7 +887,7 @@ msgid "Builder"
 msgstr "Építő"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:116
+#: libide/application/ide-application-actions.c:128
 msgid "An IDE for GNOME"
 msgstr "Integrált fejlesztői környezet a GNOME-hoz"
 
@@ -989,21 +994,21 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Építés;Összeállítás;Fejlesztés;"
 
-#: libide/application/ide-application-actions.c:122
+#: libide/application/ide-application-actions.c:134
 msgid "GNOME Builder"
 msgstr "GNOME Építő"
 
-#: libide/application/ide-application-actions.c:124
+#: libide/application/ide-application-actions.c:136
 msgid "translator-credits"
 msgstr ""
 "Kelemen Gábor <kelemeng at ubuntu dot com>\n"
 "Meskó Balázs <meskobalazs at gmail dot com>"
 
-#: libide/application/ide-application-actions.c:131
+#: libide/application/ide-application-actions.c:139
 msgid "Learn more about GNOME Builder"
 msgstr "Tudjon meg többet a GNOME Építőről"
 
-#: libide/application/ide-application-actions.c:134
+#: libide/application/ide-application-actions.c:142
 msgid "Funded By"
 msgstr "Támogatta"
 
@@ -1080,70 +1085,70 @@ msgstr "Nincs ilyen építő"
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
-#: libide/buffers/ide-buffer-manager.c:673
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "A fájl túl nagy a megnyitáshoz."
 
-#: libide/buffers/ide-buffer-manager.c:1762
+#: libide/buffers/ide-buffer-manager.c:1764
 #, c-format
 msgid "unsaved document %u"
 msgstr "mentetlen dokumentum %u"
 
-#: libide/buffers/ide-buffer-manager.c:1796
+#: libide/buffers/ide-buffer-manager.c:1798
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
 
-#: libide/buildsystem/ide-build-pipeline.c:2088
+#: libide/buildsystem/ide-build-pipeline.c:2082
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2103
+#: libide/buildsystem/ide-build-pipeline.c:2097
 msgid "Downloading…"
 msgstr "Letöltés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2107
+#: libide/buildsystem/ide-build-pipeline.c:2101
 msgid "Building dependencies…"
 msgstr "Függőségek összeállítása…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2111
+#: libide/buildsystem/ide-build-pipeline.c:2105
 msgid "Bootstrapping…"
 msgstr "Indítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2115
+#: libide/buildsystem/ide-build-pipeline.c:2109
 msgid "Configuring…"
 msgstr "Beállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2119
+#: libide/buildsystem/ide-build-pipeline.c:2113
 msgid "Building…"
 msgstr "Összeállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2123
+#: libide/buildsystem/ide-build-pipeline.c:2117
 msgid "Installing…"
 msgstr "Telepítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2127
+#: libide/buildsystem/ide-build-pipeline.c:2121
 msgid "Exporting…"
 msgstr "Exportálás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2131
-#: libide/buildsystem/ide-build-pipeline.c:2135
+#: libide/buildsystem/ide-build-pipeline.c:2125
+#: libide/buildsystem/ide-build-pipeline.c:2129
 msgid "Success"
 msgstr "Sikeres"
 
-#: libide/buildsystem/ide-build-pipeline.c:2139
-#: libide/workbench/ide-omni-bar.ui:328
+#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: libide/buildsystem/ide-build-pipeline.c:2143
+#: libide/buildsystem/ide-build-pipeline.c:2137
 msgid "Preparing…"
 msgstr "Előkészítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2147
+#: libide/buildsystem/ide-build-pipeline.c:2141
 msgid "Ready"
 msgstr "Kész"
 
-#: libide/buildsystem/ide-configuration-manager.c:75
+#: libide/buildsystem/ide-configuration-manager.c:76
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1201,9 +1206,18 @@ msgstr "Futtatókörnyezet"
 msgid "Environment"
 msgstr "Környezet"
 
-#: libide/buildui/ide-build-log-panel.c:714
+#: libide/buildui/ide-build-log-panel.c:732
 msgid "Build Output"
 msgstr "Összeállítás kimenete"
+
+#: libide/buildui/ide-build-log-panel.ui:25
+msgid "Clear build log"
+msgstr "Összeállítás kimenetének törlése"
+
+#: libide/buildui/ide-build-log-panel.ui:42
+#: libide/workbench/ide-omni-bar.ui:133
+msgid "Cancel build"
+msgstr "Összeállítás megszakítása"
 
 #: libide/buildui/ide-build-panel.c:86
 #, c-format
@@ -1221,7 +1235,7 @@ msgstr[1] "%d hiba"
 
 #: libide/buildui/ide-build-panel.c:517
 #: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:382
+#: libide/workbench/ide-omni-bar.ui:386
 msgid "Build"
 msgstr "Összeállítás"
 
@@ -1627,7 +1641,7 @@ msgstr "Új_ratöltés"
 #: libide/editor/ide-editor-view.ui:31
 #: libide/greeter/ide-greeter-perspective.ui:317
 #: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:356
+#: libide/workbench/ide-omni-bar.ui:360
 msgid "_Cancel"
 msgstr "_Mégse"
 
@@ -1648,7 +1662,6 @@ msgid "Open Project"
 msgstr "Projekt megnyitása"
 
 #: libide/greeter/ide-greeter-perspective.c:693
-#| msgid "Projects"
 msgid "All Project Types"
 msgstr "Minden projekttípus"
 
@@ -1723,11 +1736,11 @@ msgstr "Az alapbeállítások előkészítése meghiúsult."
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: libide/ide-context.c:1885
+#: libide/ide-context.c:1887
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: libide/ide-context.c:2004
+#: libide/ide-context.c:2006
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
@@ -2077,13 +2090,11 @@ msgid "Terminal Shortcuts"
 msgstr "Terminál gyorsbillentyűi"
 
 #: libide/keybindings/ide-shortcuts-window.ui:520
-#| msgid "Search"
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Keresés"
 
 #: libide/keybindings/ide-shortcuts-window.ui:525
-#| msgid "Untitled terminal"
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Szöveg keresése terminálban"
@@ -2532,11 +2543,11 @@ msgstr "A folyamat váratlanul kilépett"
 msgid "Host operating system"
 msgstr "Gazda operációs rendszer"
 
-#: libide/search/ide-omni-search-display.c:271
+#: libide/search/ide-omni-search-display.c:267
 msgid "Cannot add provider more than once."
 msgstr "A szolgáltató nem adható hozzá egynél többször."
 
-#: libide/search/ide-omni-search-display.c:347
+#: libide/search/ide-omni-search-display.c:343
 msgid "The provider could not be found."
 msgstr "A szolgáltató nem található."
 
@@ -2550,21 +2561,21 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: libide/sourceview/ide-source-view.c:5311
+#: libide/sourceview/ide-source-view.c:5312
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: libide/sourceview/ide-source-view.c:5313
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: libide/sourceview/ide-source-view.c:5427
+#: libide/sourceview/ide-source-view.c:5428
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: libide/sourceview/ide-source-view.c:5854
+#: libide/sourceview/ide-source-view.c:5855
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
@@ -2689,40 +2700,36 @@ msgstr "hiányzó"
 msgid "Edit build configuration"
 msgstr "Összeállítási konfiguráció szerkesztése"
 
-#: libide/workbench/ide-omni-bar.ui:129
-msgid "Cancel build"
-msgstr "Összeállítás megszakítása"
-
-#: libide/workbench/ide-omni-bar.ui:173
+#: libide/workbench/ide-omni-bar.ui:177
 #: plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Projekt"
 
-#: libide/workbench/ide-omni-bar.ui:197
+#: libide/workbench/ide-omni-bar.ui:201
 msgid "Branch"
 msgstr "Ág"
 
-#: libide/workbench/ide-omni-bar.ui:232
+#: libide/workbench/ide-omni-bar.ui:236
 msgid "Build Profile"
 msgstr "Összeállítási profil"
 
-#: libide/workbench/ide-omni-bar.ui:278
+#: libide/workbench/ide-omni-bar.ui:282
 msgid "Last build"
 msgstr "Legutóbbi összeállítás"
 
-#: libide/workbench/ide-omni-bar.ui:345
+#: libide/workbench/ide-omni-bar.ui:349
 msgid "View Output"
 msgstr "Kimenet megtekintése"
 
-#: libide/workbench/ide-omni-bar.ui:392
+#: libide/workbench/ide-omni-bar.ui:396
 msgid "Rebuild"
 msgstr "Újra-összeállítás"
 
-#: libide/workbench/ide-omni-bar.ui:402
+#: libide/workbench/ide-omni-bar.ui:406
 msgid "Clean"
 msgstr "Tisztítás"
 
-#: libide/workbench/ide-omni-bar.ui:416
+#: libide/workbench/ide-omni-bar.ui:420
 msgid "Build project"
 msgstr "Projekt összeállítása"
 
@@ -3234,6 +3241,32 @@ msgstr "Válasszon egy sablont"
 msgid "Documentation"
 msgstr "Dokumentáció"
 
+#: plugins/eslint/eslint_plugin/__init__.py:106
+msgid "ESlint"
+msgstr "ESlint"
+
+#: plugins/eslint/eslint_plugin/__init__.py:107
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+"Az ESlint használatának engedélyezése, ami kódot futtathat a projektjében"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/eslint/eslint_plugin/__init__.py:109
+msgid "eslint javascript lint code execute execution"
+msgstr "eslint javascript lint kód végrehajtás"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr "ESlint engedélyezése"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Az eslint használatának engedélyezése, a JavaScript fájlok további "
+"elemzéséhez. Ez további kódfuttatást jelenthet a projektjében."
+
 #: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Átváltás"
@@ -3282,12 +3315,12 @@ msgstr[1] "Még %u futtatókörnyezet megjelenítése"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak futtatókörnyezetek"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:747
+#: plugins/flatpak/gbp-flatpak-runtime.c:703
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:749
+#: plugins/flatpak/gbp-flatpak-runtime.c:705
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3760,7 +3793,7 @@ msgstr "Körkörös keresés"
 msgid "Save Terminal Content As"
 msgstr "Terminál tartalmának mentése másként"
 
-#: plugins/terminal/gb-terminal-view.c:462
+#: plugins/terminal/gb-terminal-view.c:465
 msgid "Untitled terminal"
 msgstr "Névtelen terminál"
 
@@ -3809,9 +3842,6 @@ msgstr "Puffer betöltve, de nincs a pufferkezelőben."
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Az XML fa létrehozása meghiúsult."
-
-#~ msgid "Basic"
-#~ msgstr "Alap"
 
 #~ msgid "%s does not support building"
 #~ msgstr "%s nem támogatja az összeállítást"
