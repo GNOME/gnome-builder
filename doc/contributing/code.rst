@@ -4,7 +4,7 @@ Contributing Code
 
 There are a lot of things that need to be written in Builder and we'd love to have your help in doing so.
 Take a look at :ref:`Creating Plugins<creating_plugins>` to learn how to write plugins.
-Most things in Builder are implemented as plugins while the scaffolding is written in C and foundin libide_.
+Most things in Builder are implemented as plugins while the scaffolding is written in C and found in libide_.
 
 Plugins can be written in C, C++, Python, or Vala.
 
