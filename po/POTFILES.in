@@ -143,6 +143,7 @@ plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml
 plugins/file-search/gb-file-search-provider.c
 plugins/flatpak/gbp-flatpak-clone-widget.ui
 plugins/flatpak/gbp-flatpak-genesis-addin.c
+plugins/flatpak/gbp-flatpak-pipeline-addin.c
 plugins/flatpak/gbp-flatpak-preferences-addin.c
 plugins/flatpak/gbp-flatpak-runner.c
 plugins/flatpak/gbp-flatpak-runtime.c
