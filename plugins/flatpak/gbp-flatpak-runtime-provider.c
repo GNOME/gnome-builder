@@ -344,6 +344,180 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
 }
 
 static void
+gbp_flatpak_runtime_provider_install_deps_worker (GTask        *task,
+                                                  gpointer      source_object,
+                                                  gpointer      task_data,
+                                                  GCancellable *cancellable)
+{
+  g_autoptr(GDBusConnection) bus = NULL;
+  g_autoptr(GDBusProxy) proxy = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GPtrArray) packages = NULL;
+  gboolean retval = FALSE;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /*
+   * This will try to install both the flatpak and flatpak-builder packages
+   * to ensure that we can run flatpak-builder on the host. Additionally,
+   * we require flatpak just in case people somehow get Builder without
+   * the flatpak program.
+   */
+
+  packages = g_ptr_array_new ();
+
+  if (NULL == (bus = g_bus_get_sync (G_BUS_TYPE_SESSION, cancellable, &error)))
+    IDE_GOTO (failure);
+
+  reply = g_dbus_connection_call_sync (bus,
+                                       "org.freedesktop.PackageKit",
+                                       "/org/freedesktop/PackageKit",
+                                       "org.freedesktop.PackageKit.Query",
+                                       "IsInstalled",
+                                       g_variant_new ("(ss)", "flatpak", ""),
+                                       G_VARIANT_TYPE ("(b)"),
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       -1,
+                                       cancellable,
+                                       &error);
+  if (reply == NULL)
+    IDE_GOTO (failure);
+
+  g_variant_get (reply, "(b)", &retval);
+  g_clear_pointer (&reply, g_variant_unref);
+
+  if (!retval)
+    g_ptr_array_add (packages, "flatpak");
+
+  reply = g_dbus_connection_call_sync (bus,
+                                       "org.freedesktop.PackageKit",
+                                       "/org/freedesktop/PackageKit",
+                                       "org.freedesktop.PackageKit.Query",
+                                       "IsInstalled",
+                                       g_variant_new ("(ss)", "flatpak-builder", ""),
+                                       G_VARIANT_TYPE ("(b)"),
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       -1,
+                                       cancellable,
+                                       &error);
+  if (reply == NULL)
+    IDE_GOTO (failure);
+
+  g_variant_get (reply, "(b)", &retval);
+  g_clear_pointer (&reply, g_variant_unref);
+
+  if (!retval)
+    g_ptr_array_add (packages, "flatpak-builder");
+
+  g_ptr_array_add (packages, NULL);
+
+  if (packages->len > 1)
+    {
+      GVariantBuilder builder;
+
+      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+
+      reply = g_dbus_connection_call_sync (bus,
+                                           "org.freedesktop.PackageKit",
+                                           "/org/freedesktop/PackageKit",
+                                           "org.freedesktop.PackageKit.Modify2",
+                                           "InstallPackageNames",
+                                           g_variant_new ("(^a&sssa{sv})",
+                                                          (const gchar * const *)packages->pdata,
+                                                          "",
+                                                          "org.gnome.Builder",
+                                                          &builder),
+                                           NULL,
+                                           G_DBUS_CALL_FLAGS_NONE,
+                                           -1,
+                                           cancellable,
+                                           &error);
+      if (reply == NULL)
+        IDE_GOTO (failure);
+    }
+
+failure:
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_runtime_provider_install_deps_async (GbpFlatpakRuntimeProvider *self,
+                                                 GCancellable              *cancellable,
+                                                 GAsyncReadyCallback        callback,
+                                                 gpointer                   user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_runtime_provider_install_deps_async);
+  g_task_run_in_thread (task, gbp_flatpak_runtime_provider_install_deps_worker);
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_flatpak_runtime_provider_install_deps_finish (GbpFlatpakRuntimeProvider  *self,
+                                                  GAsyncResult               *result,
+                                                  GError                    **error)
+{
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+gbp_flatpak_runtime_provider_install_deps_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  InstallRuntime *install;
+  GCancellable *cancellable;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  install = g_task_get_task_data (task);
+  cancellable = g_task_get_cancellable (task);
+
+  if (!gbp_flatpak_runtime_provider_install_deps_finish (self, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  gbp_flatpak_application_addin_locate_sdk_async (gbp_flatpak_application_addin_get_default (),
+                                                  install->id,
+                                                  install->arch,
+                                                  install->branch,
+                                                  cancellable,
+                                                  gbp_flatpak_runtime_provider_locate_sdk_cb,
+                                                  g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static void
 gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
                                             const gchar         *runtime_id,
                                             GCancellable        *cancellable,
@@ -387,13 +561,10 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
 
   g_task_set_task_data (task, install, (GDestroyNotify)install_runtime_free);
 
-  gbp_flatpak_application_addin_locate_sdk_async (gbp_flatpak_application_addin_get_default (),
-                                                  install->id,
-                                                  install->arch,
-                                                  install->branch,
-                                                  cancellable,
-                                                  gbp_flatpak_runtime_provider_locate_sdk_cb,
-                                                  g_steal_pointer (&task));
+  gbp_flatpak_runtime_provider_install_deps_async (self,
+                                                   cancellable,
+                                                   gbp_flatpak_runtime_provider_install_deps_cb,
+                                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 
