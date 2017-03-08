@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-07 10:02+0000\n"
-"PO-Revision-Date: 2017-03-07 15:08+0500\n"
+"POT-Creation-Date: 2017-03-08 01:36+0000\n"
+"PO-Revision-Date: 2017-03-08 13:21+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
@@ -1072,53 +1072,53 @@ msgstr "сақталмаған құжат %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
-#: libide/buildsystem/ide-build-pipeline.c:2082
+#: libide/buildsystem/ide-build-pipeline.c:2090
 msgid "Cleaning…"
 msgstr "Тазарту…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2097
+#: libide/buildsystem/ide-build-pipeline.c:2105
 msgid "Downloading…"
 msgstr "Жүктелуде…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2101
+#: libide/buildsystem/ide-build-pipeline.c:2109
 msgid "Building dependencies…"
 msgstr "Тәуелділіктерді құрастыру…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2105
+#: libide/buildsystem/ide-build-pipeline.c:2113
 msgid "Bootstrapping…"
 msgstr "Ортаны дайындау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2109
+#: libide/buildsystem/ide-build-pipeline.c:2117
 msgid "Configuring…"
 msgstr "Баптау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2113
+#: libide/buildsystem/ide-build-pipeline.c:2121
 msgid "Building…"
 msgstr "Жинау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2117
+#: libide/buildsystem/ide-build-pipeline.c:2125
 msgid "Installing…"
 msgstr "Орнату…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2121
+#: libide/buildsystem/ide-build-pipeline.c:2129
 msgid "Exporting…"
 msgstr "Экспорттау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2125
-#: libide/buildsystem/ide-build-pipeline.c:2129
+#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/buildsystem/ide-build-pipeline.c:2137
 msgid "Success"
 msgstr "Сәтті аяқталды"
 
-#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/buildsystem/ide-build-pipeline.c:2141
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Сәтсіз"
 
-#: libide/buildsystem/ide-build-pipeline.c:2137
+#: libide/buildsystem/ide-build-pipeline.c:2145
 msgid "Preparing…"
 msgstr "Дайындау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/buildsystem/ide-build-pipeline.c:2149
 msgid "Ready"
 msgstr "Дайын"
 
@@ -3187,7 +3187,6 @@ msgid "Documentation"
 msgstr "Құжаттама"
 
 #: plugins/eslint/eslint_plugin/__init__.py:106
-#| msgid "Pylint"
 msgid "ESlint"
 msgstr "ESlint"
 
@@ -3294,6 +3293,18 @@ msgstr ""
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:105
 msgid "Runtime has been installed"
+msgstr ""
+
+#: plugins/flatpak/gtk/menus.ui:6
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: plugins/flatpak/gtk/menus.ui:8
+msgid "_Download Dependencies"
+msgstr "Тәуелділіктерді жү_ктеп алу"
+
+#: plugins/flatpak/gtk/menus.ui:12
+msgid "_Export as Bundle"
 msgstr ""
 
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
@@ -3525,7 +3536,7 @@ msgstr ""
 #. Translators: the following are keywords used for searching to locate this preference
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
 msgid "quick highlight words matching current selection"
-msgstr ""
+msgstr "ағымдағы таңдауға сәйкес келетін сөздерді түспен жылдам ерекшелеу"
 
 #: plugins/rustup/rustup_plugin/__init__.py:80
 msgid "Rustup not installed"
@@ -3549,11 +3560,11 @@ msgstr "Жүйені тексеру"
 
 #: plugins/rustup/rustup_plugin/__init__.py:337
 msgid "Downloading rustup-init"
-msgstr ""
+msgstr "Rustup-init жүктеп алу"
 
 #: plugins/rustup/rustup_plugin/__init__.py:342
 msgid "Syncing channel updates"
-msgstr ""
+msgstr "Арна жаңартуралын синхрондау"
 
 #: plugins/rustup/rustup_plugin/__init__.py:348
 msgid "Downloading "
@@ -3561,11 +3572,11 @@ msgstr "Жүктеліп алынуда"
 
 #: plugins/rustup/rustup_plugin/__init__.py:361
 msgid "Checking for rustup updates"
-msgstr ""
+msgstr "Rustup жаңартуларын тексеру"
 
 #: plugins/rustup/rustup_plugin/__init__.py:366
 msgid "Downloading rustup update"
-msgstr ""
+msgstr "Rustup жаңартуын жүктеп алу"
 
 #: plugins/rustup/rustup_plugin/__init__.py:403
 msgid "Error installing "
@@ -3775,9 +3786,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 
 #~ msgid "Target"
 #~ msgstr "Мақсаты"
-
-#~ msgid "Flatpak"
-#~ msgstr "Flatpak"
 
 #~| msgid "Failed to load file: %s: %s"
 #~ msgid "Failed to locate %s/%s/%s"
