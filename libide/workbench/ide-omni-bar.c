@@ -154,25 +154,6 @@ date_time_to_label (GBinding     *binding,
 }
 
 static gboolean
-message_to_label (GBinding     *binding,
-                  const GValue *from_value,
-                  GValue       *to_value,
-                  gpointer      user_data)
-{
-  g_assert (G_IS_BINDING (binding));
-  g_assert (from_value != NULL);
-  g_assert (G_VALUE_HOLDS (from_value, G_TYPE_STRING));
-  g_assert (to_value != NULL);
-  g_assert (G_VALUE_HOLDS (to_value, G_TYPE_STRING));
-
-  g_value_take_string (to_value,
-                       /* translators: this message is shown in the header bar to indicate build status */
-                       g_strdup_printf (_("Build: %s"), g_value_get_string (from_value)));
-
-  return TRUE;
-}
-
-static gboolean
 file_to_relative_path (GBinding     *binding,
                        const GValue *from_value,
                        GValue       *to_value,
@@ -700,13 +681,9 @@ ide_omni_bar_init (IdeOmniBar *self)
                                NULL,
                                NULL);
 
-  egg_binding_group_bind_full (self->build_manager_bindings,
-                               "message",
-                               self->build_result_mode_label,
-                               "label",
-                               G_BINDING_SYNC_CREATE,
-                               message_to_label,
-                               NULL, NULL, NULL);
+  egg_binding_group_bind (self->build_manager_bindings, "message",
+                          self->build_result_mode_label, "label",
+                          G_BINDING_SYNC_CREATE);
 
   egg_binding_group_bind (self->build_manager_bindings,
                           "message",
