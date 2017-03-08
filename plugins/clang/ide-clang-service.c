@@ -380,12 +380,35 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 
   argv = ide_build_system_get_build_flags_finish (build_system, result, &error);
 
-  if (!argv)
+  if (!argv || !argv[0])
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+      IdeConfigurationManager *manager;
+      IdeConfiguration *config;
+      IdeContext *context;
+      const gchar *cflags;
+      const gchar *cxxflags;
+
+      g_clear_pointer (&argv, g_strfreev);
+
+      if (error && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         g_message ("%s", error->message);
       g_clear_error (&error);
-      argv = g_new0 (gchar*, 1);
+
+      /* Try to find CFLAGS or CXXFLAGS */
+      context = ide_object_get_context (IDE_OBJECT (build_system));
+      manager = ide_context_get_configuration_manager (context);
+      config = ide_configuration_manager_get_current (manager);
+      cflags = ide_configuration_getenv (config, "CFLAGS");
+      cxxflags = ide_configuration_getenv (config, "CXXFLAGS");
+
+      if (cflags && *cflags)
+        g_shell_parse_argv (cflags, NULL, &argv, NULL);
+
+      if (cxxflags && (!argv || !*argv))
+        g_shell_parse_argv (cxxflags, NULL, &argv, NULL);
+
+      if (argv == NULL)
+        argv = g_new0 (gchar*, 1);
     }
 
   request->command_line_args = argv;
