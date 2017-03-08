@@ -19,12 +19,13 @@
 #include <libpeas/peas.h>
 #include <ide.h>
 
-#include "gbp-flatpak-configuration-provider.h"
-#include "gbp-flatpak-runtime-provider.h"
 #include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-configuration-provider.h"
 #include "gbp-flatpak-genesis-addin.h"
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-preferences-addin.h"
+#include "gbp-flatpak-runtime-provider.h"
+#include "gbp-flatpak-workbench-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
@@ -49,4 +50,7 @@ peas_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               GBP_TYPE_FLATPAK_PREFERENCES_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_FLATPAK_WORKBENCH_ADDIN);
 }
