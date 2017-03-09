@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-07 10:02+0000\n"
-"PO-Revision-Date: 2017-03-07 15:43+0100\n"
+"POT-Creation-Date: 2017-03-09 10:05+0000\n"
+"PO-Revision-Date: 2017-03-09 13:32+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -887,7 +887,7 @@ msgid "Builder"
 msgstr "Építő"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:128
+#: libide/application/ide-application-actions.c:129
 msgid "An IDE for GNOME"
 msgstr "Integrált fejlesztői környezet a GNOME-hoz"
 
@@ -994,21 +994,21 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Építés;Összeállítás;Fejlesztés;"
 
-#: libide/application/ide-application-actions.c:134
+#: libide/application/ide-application-actions.c:135
 msgid "GNOME Builder"
 msgstr "GNOME Építő"
 
-#: libide/application/ide-application-actions.c:136
+#: libide/application/ide-application-actions.c:137
 msgid "translator-credits"
 msgstr ""
 "Kelemen Gábor <kelemeng at ubuntu dot com>\n"
 "Meskó Balázs <meskobalazs at gmail dot com>"
 
-#: libide/application/ide-application-actions.c:139
+#: libide/application/ide-application-actions.c:140
 msgid "Learn more about GNOME Builder"
 msgstr "Tudjon meg többet a GNOME Építőről"
 
-#: libide/application/ide-application-actions.c:142
+#: libide/application/ide-application-actions.c:143
 msgid "Funded By"
 msgstr "Támogatta"
 
@@ -1098,53 +1098,53 @@ msgstr "mentetlen dokumentum %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
 
-#: libide/buildsystem/ide-build-pipeline.c:2082
+#: libide/buildsystem/ide-build-pipeline.c:2090
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2097
+#: libide/buildsystem/ide-build-pipeline.c:2105
 msgid "Downloading…"
 msgstr "Letöltés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2101
+#: libide/buildsystem/ide-build-pipeline.c:2109
 msgid "Building dependencies…"
 msgstr "Függőségek összeállítása…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2105
+#: libide/buildsystem/ide-build-pipeline.c:2113
 msgid "Bootstrapping…"
 msgstr "Indítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2109
+#: libide/buildsystem/ide-build-pipeline.c:2117
 msgid "Configuring…"
 msgstr "Beállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2113
+#: libide/buildsystem/ide-build-pipeline.c:2121
 msgid "Building…"
 msgstr "Összeállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2117
+#: libide/buildsystem/ide-build-pipeline.c:2125
 msgid "Installing…"
 msgstr "Telepítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2121
+#: libide/buildsystem/ide-build-pipeline.c:2129
 msgid "Exporting…"
 msgstr "Exportálás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2125
-#: libide/buildsystem/ide-build-pipeline.c:2129
+#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/buildsystem/ide-build-pipeline.c:2137
 msgid "Success"
 msgstr "Sikeres"
 
-#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/buildsystem/ide-build-pipeline.c:2141
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: libide/buildsystem/ide-build-pipeline.c:2137
+#: libide/buildsystem/ide-build-pipeline.c:2145
 msgid "Preparing…"
 msgstr "Előkészítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/buildsystem/ide-build-pipeline.c:2149
 msgid "Ready"
 msgstr "Kész"
 
@@ -1233,7 +1233,7 @@ msgid_plural "%d errors"
 msgstr[0] "%d hiba"
 msgstr[1] "%d hiba"
 
-#: libide/buildui/ide-build-panel.c:517
+#: libide/buildui/ide-build-panel.c:521
 #: libide/preferences/ide-preferences-builtin.c:375
 #: libide/workbench/ide-omni-bar.ui:386
 msgid "Build"
@@ -2685,12 +2685,6 @@ msgstr "Aktuális dokumentum bezárása"
 msgid "untitled document"
 msgstr "névtelen dokumentum"
 
-#. translators: this message is shown in the header bar to indicate build status
-#: libide/workbench/ide-omni-bar.c:170
-#, c-format
-msgid "Build: %s"
-msgstr "Összeállítás: %s"
-
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
@@ -2833,7 +2827,7 @@ msgstr "AST olvasási hiba"
 msgid "Failed to create translation unit: %s"
 msgstr "Nem sikerült létrehozni a(z) „%s” fordítási egységet"
 
-#: plugins/clang/ide-clang-service.c:458 plugins/xml-pack/ide-xml-service.c:93
+#: plugins/clang/ide-clang-service.c:481 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "A fájlnak helyben mentettnek kell lennie a feldolgozáshoz."
 
@@ -3284,6 +3278,10 @@ msgstr "Alkalmazás klónozása"
 msgid "Clone"
 msgstr "Klónozás"
 
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
+msgid "Network is not available, skipping downloads"
+msgstr "A hálózat nem elérhető, letöltések kihagyása"
+
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
@@ -3353,6 +3351,18 @@ msgstr "A futtatókörnyezet frissítve lett"
 #: plugins/flatpak/gbp-flatpak-transfer.c:105
 msgid "Runtime has been installed"
 msgstr "A futtatókörnyezet telepítve lett"
+
+#: plugins/flatpak/gtk/menus.ui:6
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: plugins/flatpak/gtk/menus.ui:8
+msgid "_Download Dependencies"
+msgstr "Függőségek _letöltése"
+
+#: plugins/flatpak/gtk/menus.ui:12
+msgid "_Export as Bundle"
+msgstr "_Exportálás csomagként"
 
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
@@ -3842,6 +3852,9 @@ msgstr "Puffer betöltve, de nincs a pufferkezelőben."
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Az XML fa létrehozása meghiúsult."
+
+#~ msgid "Build: %s"
+#~ msgstr "Összeállítás: %s"
 
 #~ msgid "%s does not support building"
 #~ msgstr "%s nem támogatja az összeállítást"
