@@ -44,3 +44,25 @@ ide_is_flatpak (void)
 
   return is_flatpak;
 }
+
+static gchar *
+get_base_path (const gchar *name)
+{
+  g_autoptr(GKeyFile) keyfile = g_key_file_new ();
+
+  if (g_key_file_load_from_file (keyfile, "/.flatpak-info", 0, NULL))
+    return g_key_file_get_string (keyfile, "Instance", name, NULL);
+
+  return NULL;
+}
+
+gchar *
+ide_flatpak_get_app_path (const gchar *path)
+{
+  static gchar *base_path;
+
+  if (base_path == NULL)
+    base_path = get_base_path ("app-path");
+
+  return g_build_filename (base_path, path, NULL);
+}

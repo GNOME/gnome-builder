@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-gboolean ide_is_flatpak (void);
+gboolean  ide_is_flatpak           (void);
+gchar    *ide_flatpak_get_app_path (const gchar *path);
 
 G_END_DECLS
 
