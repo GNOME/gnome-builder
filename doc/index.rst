@@ -18,6 +18,7 @@ Contents
 
    installation
    exploring
+   projects/index
    plugins/index
    api/index
    contributing/index
