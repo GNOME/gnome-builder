@@ -178,14 +178,17 @@ ide_build_panel_started (IdeBuildPanel    *self,
   g_assert (IDE_IS_BUILD_PANEL (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  self->error_count = 0;
-  self->warning_count = 0;
+  if (phase >= IDE_BUILD_PHASE_BUILD)
+    {
+      self->error_count = 0;
+      self->warning_count = 0;
 
-  gtk_label_set_label (self->warnings_label, "—");
-  gtk_label_set_label (self->errors_label, "—");
+      gtk_label_set_label (self->warnings_label, "—");
+      gtk_label_set_label (self->errors_label, "—");
 
-  gtk_list_store_clear (self->diagnostics_store);
-  g_hash_table_remove_all (self->diags_hash);
+      gtk_list_store_clear (self->diagnostics_store);
+      g_hash_table_remove_all (self->diags_hash);
+    }
 
   IDE_EXIT;
 }
