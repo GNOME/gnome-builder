@@ -9,13 +9,6 @@ Project Greeter
    :width: 555 px
    :align: center
 
-Cloning an Existing Project
-===========================
-
-.. image:: figures/clone.png
-   :width: 555 px
-   :align: center
-
 Workbench Window
 ================
 

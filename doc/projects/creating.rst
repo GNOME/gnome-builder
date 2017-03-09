@@ -1,8 +1,17 @@
-#####################
-Creating your Project
-#####################
+###############################
+Creating and Importing Projects
+###############################
+
+Creating a new Project
+======================
 
 .. image:: ../figures/newproject.png
-   :width: 700 px
+   :align: center
+
+
+Cloning an Existing Project
+===========================
+
+.. image:: ../figures/clone.png
    :align: center
 
