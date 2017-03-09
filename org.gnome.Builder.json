@@ -79,7 +79,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/libgsystem.git"
+                    "url": "https://git.gnome.org/browse/libgsystem.git"
                 }
             ]
         },
@@ -224,7 +224,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/libgit2-glib"
+                    "url": "https://git.gnome.org/browse/libgit2-glib"
                 }
             ]
         },
@@ -234,7 +234,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/libpeas"
+                    "url": "https://git.gnome.org/browse/libpeas"
                 }
             ]
         },
@@ -244,7 +244,7 @@
                 {
                     "branch": "gnome-3-24",
                     "type": "git",
-                    "url": "git://git.gnome.org/gtksourceview"
+                    "url": "https://git.gnome.org/browse/gtksourceview"
                 }
             ]
         },
@@ -255,7 +255,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/devhelp"
+                    "url": "https://git.gnome.org/browse/devhelp"
                 }
             ]
         },
@@ -264,7 +264,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/json-glib"
+                    "url": "https://git.gnome.org/browse/json-glib"
                 }
             ]
         },
@@ -275,7 +275,7 @@
             "sources": [
                 {
                      "type": "git",
-                     "url": "git://git.gnome.org/gspell"
+                     "url": "https://git.gnome.org/browse/gspell"
                 }
             ]
         },
@@ -303,7 +303,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/sysprof"
+                    "url": "https://git.gnome.org/browse/sysprof"
                 }
             ]
         },
@@ -313,7 +313,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "git://git.gnome.org/gnome-builder"
+                    "url": "https://git.gnome.org/browse/gnome-builder"
                 }
             ]
         }
