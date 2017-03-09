@@ -543,6 +543,7 @@ libide_1_0_la_SOURCES =                                                     \
 libide_1_0_la_includes =                                                    \
 	$(DEBUG_CFLAGS)                                                     \
 	-DPACKAGE_DATADIR="\"${datadir}\""                                  \
+	-DPACKAGE_DOCDIR="\"${docdir}\""                                    \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\"                        \
 	-DPACKAGE_LIBDIR=\""${libdir}"\"                                    \
 	-DPACKAGE_LIBEXECDIR=\""${libexecdir}"\"                            \

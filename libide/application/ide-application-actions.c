@@ -31,6 +31,7 @@
 #include "keybindings/ide-shortcuts-window.h"
 #include "workbench/ide-workbench.h"
 #include "greeter/ide-greeter-perspective.h"
+#include "util/ide-flatpak.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -153,21 +154,35 @@ ide_application_actions_help (GSimpleAction *action,
 {
   IdeApplication *self = user_data;
   GtkWindow *focused_window= NULL;
-  GError *err = NULL;
+  const gchar *uri = "https://builder.readthedocs.io";
+  g_autoptr(GError) error = NULL;
+  GNetworkMonitor *monitor;
+  g_autofree gchar *real_uri = NULL;
 
   g_assert (IDE_IS_APPLICATION (self));
 
   focused_window = gtk_application_get_active_window (GTK_APPLICATION (self));
 
-  gtk_show_uri_on_window (focused_window,
-                          "https://builder.readthedocs.io",
-                          gtk_get_current_event_time (),
-                          &err);
-  if (err)
+  monitor = g_network_monitor_get_default ();
+
+  /*
+   * If we don't have network access, we should try to use the local
+   * documentation. To do that we might need to translate it to the
+   * path for which the host has access.
+   */
+  if (!g_network_monitor_get_network_available (monitor))
     {
-      g_message ("Unable to open help: %s\n", err->message);
-      g_error_free (err);
+      if (g_file_test (PACKAGE_DOCDIR"/html/index.html", G_FILE_TEST_IS_REGULAR))
+        {
+          if (ide_is_flatpak ())
+            uri = real_uri = ide_flatpak_get_app_path ("/share/doc/gnome-builder/html/index.html");
+          else
+            uri = "file://"PACKAGE_DOCDIR"/html/index.html";
+        }
     }
+
+  if (!gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
+    g_message ("Unable to open help: %s\n", error->message);
 }
 
 static void
