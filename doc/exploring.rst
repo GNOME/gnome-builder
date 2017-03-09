@@ -4,6 +4,15 @@ Exploring the Interface
 
 The following sections will help you get to know a few aspects of Builder.
 
+ * `Project Greeter`_
+ * `Workbench Window`_
+ * `Header Bar`_
+ * `Switching Perspectives`_
+ * `Showing and Hiding Panels`_
+ * `Build your Project`_
+ * `Preferences`_
+ * `Command Bar`_
+
 Project Greeter
 ===============
 
