@@ -144,6 +144,8 @@ ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
   g_assert (IDE_IS_FILE (state->ifile));
   g_assert (IDE_IS_BUFFER (state->buffer));
 
+  g_signal_handlers_disconnect_by_func (buffer, ide_xml_service__buffer_loaded_cb, state);
+
   egg_task_cache_get_async (self->analyses,
                             state->ifile,
                             TRUE,
