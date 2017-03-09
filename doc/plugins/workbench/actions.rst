@@ -31,4 +31,4 @@ This adds a new action named ``hello`` to the workbench.
 It can be connected to widgets by using the ``win.hello`` action-name.
 Additionally, you can call the action with ``hello`` from the command bar.
 
-To toggle whether or not the action can be activated. set the ``Gio.SimpleAction:enabled`` property.
+To toggle whether or not the action can be activated, set the ``Gio.SimpleAction:enabled`` property.
