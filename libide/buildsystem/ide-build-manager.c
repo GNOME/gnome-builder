@@ -195,6 +195,7 @@ ide_build_manager_notify_message (IdeBuildManager  *self,
 
 static void
 ide_build_manager_pipeline_started (IdeBuildManager  *self,
+                                    IdeBuildPhase     phase,
                                     IdeBuildPipeline *pipeline)
 {
   IDE_ENTRY;

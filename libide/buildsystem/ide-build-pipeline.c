@@ -1006,6 +1006,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
   /**
    * IdeBuildPipeline::started:
    * @self: An #IdeBuildPipeline
+   * @phase: the #IdeBuildPhase for which we are advancing
    *
    * This signal is emitted when the pipeline has started executing in
    * response to ide_build_pipeline_execute_async() being called.
@@ -1015,7 +1016,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_build_pipeline_real_started),
-                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE, 1, IDE_TYPE_BUILD_PHASE);
 
   /**
    * IdeBuildPipeline::finished:
@@ -1431,10 +1433,8 @@ ide_build_pipeline_do_flush (gpointer data)
       }
   }
 
-  /*
-   * Notify any observers that a build (of some sort) is about to start.
-   */
-  g_signal_emit (self, signals [STARTED], 0);
+  /* Notify any observers that a build (of some sort) is about to start. */
+  g_signal_emit (self, signals [STARTED], 0, task_data->phase);
 
   switch (task_data->type)
     {

@@ -170,6 +170,7 @@ ide_build_panel_update_running_time (IdeBuildPanel *self)
 
 static void
 ide_build_panel_started (IdeBuildPanel    *self,
+                         IdeBuildPhase     phase,
                          IdeBuildPipeline *pipeline)
 {
   IDE_ENTRY;
