@@ -31,6 +31,11 @@ indent_size = 2
 tab_size = 2
 indent_style = space
 
+[*.rst]
+indent_size = 3
+tab_size = 3
+indent_style = space
+
 [*.vala]
 indent_size = 4
 indent_style = tab
