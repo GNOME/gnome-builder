@@ -484,9 +484,9 @@ ide_workbench_open_project_async (IdeWorkbench        *self,
 {
   g_autoptr(GTask) task = NULL;
 
-  g_assert (IDE_IS_WORKBENCH (self));
-  g_assert (G_IS_FILE (file_or_directory));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+  g_return_if_fail (G_IS_FILE (file_or_directory));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
 
