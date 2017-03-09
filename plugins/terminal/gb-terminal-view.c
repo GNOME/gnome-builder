@@ -95,7 +95,7 @@ gb_terminal_view_discover_shell (GbTerminalView  *self,
   if (cached_shell != NULL)
     return g_strdup (cached_shell);
 
-  command = g_strdup_printf ("sh -c 'getent passwd | grep ^%s: | cut -f 7 -d :'",
+  command = g_strdup_printf ("sh -c 'getent passwd | grep ^%s: | head -n1 | cut -f 7 -d :'",
                              g_get_user_name ());
 
   if (!g_shell_parse_argv (command, NULL, &argv, error))
