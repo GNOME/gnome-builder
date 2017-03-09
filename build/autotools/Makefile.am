@@ -16,7 +16,6 @@ EXTRA_DIST =                                         \
 	pkg.m4                                       \
 	vala.m4                                      \
 	vapigen.m4                                   \
-	yelp.m4                                      \
 	tap-test                                     \
 	$(NULL)
 
