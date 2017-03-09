@@ -1,8 +1,8 @@
 .. _creating_plugins:
 
-################
-Creating Plugins
-################
+#######
+Plugins
+#######
 
 The following provides examples of various ways you can extend Builder.
 All examples are provided in the Python 3 language for succinctness.
