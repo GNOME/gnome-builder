@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-workbench-addin.h"
 
 struct _GbpFlatpakWorkbenchAddin
@@ -32,27 +33,27 @@ struct _GbpFlatpakWorkbenchAddin
 };
 
 static void
-query_packages_cb (GObject      *object,
-                   GAsyncResult *result,
-                   gpointer      user_data)
+check_sysdeps_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
 {
-  GDBusConnection *bus = (GDBusConnection *)object;
+  GbpFlatpakApplicationAddin *app_addin = (GbpFlatpakApplicationAddin *)object;
   g_autoptr(IdeWorkbenchMessage) message = user_data;
-  g_autoptr(GVariant) reply = NULL;
   g_autoptr(GError) error = NULL;
+  gboolean has_sysdeps;
 
-  g_assert (G_IS_DBUS_CONNECTION (bus));
+  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (app_addin));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_WORKBENCH_MESSAGE (message));
 
-  reply = g_dbus_connection_call_finish (bus, result, &error);
+  has_sysdeps = gbp_flatpak_application_addin_check_sysdeps_finish (app_addin, result, &error);
 
-  if (reply != NULL)
-    {
-      gboolean installed = FALSE;
+#ifdef IDE_ENABLE_TRACE
+  if (error != NULL)
+    IDE_TRACE_MSG ("which flatpak-builder resulted in %s", error->message);
+#endif
 
-      g_variant_get (reply, "(b)", &installed);
-      gtk_widget_set_visible (GTK_WIDGET (message), !installed);
-    }
+  gtk_widget_set_visible (GTK_WIDGET (message), has_sysdeps == FALSE);
 }
 
 static void
@@ -60,7 +61,7 @@ gbp_flatpak_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
   GbpFlatpakWorkbenchAddin *self = (GbpFlatpakWorkbenchAddin *)addin;
-  g_autoptr(GDBusConnection) bus = NULL;
+  GbpFlatpakApplicationAddin *app_addin;
   IdeContext *context;
 
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
@@ -82,23 +83,11 @@ gbp_flatpak_workbench_addin_load (IdeWorkbenchAddin *addin,
   ide_workbench_message_add_action (self->message, _("Install"), "flatpak.install-flatpak-builder");
   ide_workbench_push_message (workbench, self->message);
 
-  /*
-   * Discover if flatpak-builder is available, and if not, we will show the
-   * message bar to the user.
-   */
-  if (NULL != (bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL)))
-    g_dbus_connection_call (bus,
-                            "org.freedesktop.PackageKit",
-                            "/org/freedesktop/PackageKit",
-                            "org.freedesktop.PackageKit.Query",
-                            "IsInstalled",
-                            g_variant_new ("(ss)", "flatpak-builder", ""),
-                            G_VARIANT_TYPE ("(b)"),
-                            G_DBUS_CALL_FLAGS_NONE,
-                            -1,
-                            NULL,
-                            query_packages_cb,
-                            g_object_ref (self->message));
+  app_addin = gbp_flatpak_application_addin_get_default ();
+  gbp_flatpak_application_addin_check_sysdeps_async (app_addin,
+                                                     NULL,
+                                                     check_sysdeps_cb,
+                                                     g_object_ref (self->message));
 }
 
 static void

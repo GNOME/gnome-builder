@@ -34,6 +34,13 @@ gboolean                    gbp_flatpak_application_addin_has_runtime           
                                                                                   const gchar                 *id,
                                                                                   const gchar                 *arch,
                                                                                   const gchar                 *branch);
+void                        gbp_flatpak_application_addin_check_sysdeps_async    (GbpFlatpakApplicationAddin  *self,
+                                                                                  GCancellable                *cancellable,
+                                                                                  GAsyncReadyCallback          callback,
+                                                                                  gpointer                     user_data);
+gboolean                    gbp_flatpak_application_addin_check_sysdeps_finish   (GbpFlatpakApplicationAddin  *self,
+                                                                                  GAsyncResult                *result,
+                                                                                  GError                     **error);
 void                        gbp_flatpak_application_addin_install_runtime_async  (GbpFlatpakApplicationAddin  *self,
                                                                                   const gchar                 *runtime_id,
                                                                                   const gchar                 *arch,

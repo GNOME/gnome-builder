@@ -1069,3 +1069,84 @@ gbp_flatpak_application_addin_get_deploy_dir (GbpFlatpakApplicationAddin *self,
 
   return NULL;
 }
+
+static void
+gbp_flatpak_application_addin_check_sysdeps_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS (subprocess));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_if_fail (G_IS_TASK (task));
+
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+void
+gbp_flatpak_application_addin_check_sysdeps_async (GbpFlatpakApplicationAddin *self,
+                                                   GCancellable               *cancellable,
+                                                   GAsyncReadyCallback         callback,
+                                                   gpointer                    user_data)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_application_addin_check_sysdeps_async);
+
+  launcher = ide_subprocess_launcher_new (0);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_push_argv (launcher, "which");
+  ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
+
+  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+
+  if (subprocess == NULL)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_GOTO (failure);
+    }
+
+  ide_subprocess_wait_check_async (subprocess,
+                                   cancellable,
+                                   gbp_flatpak_application_addin_check_sysdeps_cb,
+                                   g_steal_pointer (&task));
+
+failure:
+  IDE_EXIT;
+}
+
+gboolean
+gbp_flatpak_application_addin_check_sysdeps_finish (GbpFlatpakApplicationAddin  *self,
+                                                    GAsyncResult                *result,
+                                                    GError                     **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
