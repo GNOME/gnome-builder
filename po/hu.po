@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-09 10:05+0000\n"
-"PO-Revision-Date: 2017-03-09 13:32+0100\n"
+"POT-Creation-Date: 2017-03-10 08:45+0000\n"
+"PO-Revision-Date: 2017-03-10 13:31+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -882,7 +882,7 @@ msgstr "_Bezárás"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:547
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:565
+#: libide/workbench/ide-workbench.c:566
 msgid "Builder"
 msgstr "Építő"
 
@@ -2579,6 +2579,13 @@ msgstr "Javítás érvényesítése"
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "%u csomag telepítése"
+msgstr[1] "%u csomag telepítése"
+
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
 msgstr "Összes _törlése"
@@ -2735,7 +2742,7 @@ msgstr "Perspektíva váltása"
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
-#: libide/workbench/ide-workbench.c:563
+#: libide/workbench/ide-workbench.c:564
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Építő"
@@ -3283,6 +3290,7 @@ msgid "Network is not available, skipping downloads"
 msgstr "A hálózat nem elérhető, letöltések kihagyása"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:82
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
@@ -3351,6 +3359,18 @@ msgstr "A futtatókörnyezet frissítve lett"
 #: plugins/flatpak/gbp-flatpak-transfer.c:105
 msgid "Runtime has been installed"
 msgstr "A futtatókörnyezet telepítve lett"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:77
+msgid "Your computer is missing flatpak-builder"
+msgstr "A flatpak-builder hiányzik a számítógépéről"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+"Ez a program szükséges a Flatpak alkalmazások összeállításához. Szeretné "
+"telepíteni?"
 
 #: plugins/flatpak/gtk/menus.ui:6
 msgid "Flatpak"
@@ -3844,7 +3864,7 @@ msgstr "vala diagnosztika figyelmeztetések hibák"
 msgid "Run with Valgrind"
 msgstr "Futtatás Valgrinddal"
 
-#: plugins/xml-pack/ide-xml-service.c:191
+#: plugins/xml-pack/ide-xml-service.c:193
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Puffer betöltve, de nincs a pufferkezelőben."
 
