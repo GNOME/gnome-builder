@@ -22,14 +22,14 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaSymbolResolver: Ide.Object, Ide.SymbolResolver
+	public class ValaSymbolResolver: GLib.Object, Ide.SymbolResolver
 	{
 		public async Ide.SymbolTree? get_symbol_tree_async (GLib.File file,
 		                                                    Ide.Buffer buffer,
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var context = this.get_context ();
+			var context = this._context;
 			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
 			var index = service.index;
 			var symbol_tree = yield index.get_symbol_tree (file, cancellable);
@@ -41,7 +41,7 @@ namespace Ide
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var context = this.get_context ();
+			var context = this._context;
 			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
 			var index = service.index;
 			var file = location.get_file ();
@@ -111,6 +111,13 @@ namespace Ide
 		}
 
 		public void load () {}
+
+		// This code shouldn't have to exist.
+		// If we can fixup libide+vala to not have such weird interaction that
+		// would be great.
+		Ide.Context? _context;
+		public Ide.Context context { construct { _context = value; } }
+		public void set_context (Ide.Context context) { _context = context; }
 	}
 }
 

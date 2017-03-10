@@ -21,7 +21,7 @@ using Ide;
 
 namespace Ide
 {
-	public class ValaIndenter: Ide.Object, Ide.Indenter
+	public class ValaIndenter: GLib.Object, Ide.Indenter
 	{
 		public bool is_trigger (Gdk.EventKey evkey)
 		{
@@ -180,5 +180,12 @@ namespace Ide
 
 			return (prev.get_char () == '{') && (iter.get_char () == '\n') && (next.get_char () == '}');
 		}
+
+		// This code shouldn't have to exist.
+		// If we can fixup libide+vala to not have such weird interaction that
+		// would be great.
+		Ide.Context? _context;
+		public Ide.Context context { construct { _context = value; } }
+		public void set_context (Ide.Context context) { _context = context; }
 	}
 }
