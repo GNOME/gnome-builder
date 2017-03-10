@@ -219,7 +219,6 @@ gbp_flatpak_workbench_addin_install_flatpak_builder (GSimpleAction *action,
   IdeContext *context;
 
   static const gchar *packages[] = {
-    "flatpak",
     "flatpak-builder",
     NULL
   };
