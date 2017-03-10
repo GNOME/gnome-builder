@@ -203,7 +203,17 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
     /* TODO: Write to message bar */
     g_warning ("%s", error->message);
   else
-    gtk_widget_hide (GTK_WIDGET (self->message));
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (manager));
+      IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
+
+      /* TODO: It would be nice to have a cleaner way to re-setup the pipeline
+       *       because we know it is invalidated.
+       */
+      g_signal_emit_by_name (config_manager, "invalidate");
+
+      gtk_widget_hide (GTK_WIDGET (self->message));
+    }
 
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 }
