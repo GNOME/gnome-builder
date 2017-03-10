@@ -51,6 +51,7 @@ struct _IdeWorkbench
   IdePerspectiveMenuButton  *perspective_menu_button;
   GtkStack                  *perspectives_stack;
   GtkSizeGroup              *header_size_group;
+  GtkBox                    *message_box;
 
   GObject                   *selection_owner;
 };

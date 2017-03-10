@@ -33,12 +33,28 @@
       <object class="GtkOverlay">
         <property name="visible">true</property>
         <child>
-          <object class="GtkStack" id="perspectives_stack">
-            <property name="hexpand">true</property>
-            <property name="homogeneous">false</property>
-            <property name="transition-type">crossfade</property>
-            <property name="transition-duration">333</property>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
             <property name="visible">true</property>
+            <child>
+              <object class="GtkBox" id="message_box">
+                <property name="orientation">vertical</property>
+                <property name="hexpand">false</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="message-box"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStack" id="perspectives_stack">
+                <property name="hexpand">true</property>
+                <property name="homogeneous">false</property>
+                <property name="transition-type">crossfade</property>
+                <property name="transition-duration">333</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

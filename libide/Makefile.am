@@ -191,6 +191,7 @@ libide_1_0_la_public_headers =                                              \
 	workbench/ide-omni-bar.h                                            \
 	workbench/ide-perspective.h                                         \
 	workbench/ide-workbench-addin.h                                     \
+	workbench/ide-workbench-message.h                                   \
 	workbench/ide-workbench-header-bar.h                                \
 	workbench/ide-workbench.h                                           \
 	workers/ide-worker.h                                                \
@@ -370,6 +371,7 @@ libide_1_0_la_public_sources =                                              \
 	workbench/ide-perspective.c                                         \
 	workbench/ide-workbench-addin.c                                     \
 	workbench/ide-workbench-header-bar.c                                \
+	workbench/ide-workbench-message.c                                   \
 	workbench/ide-workbench-open.c                                      \
 	workbench/ide-workbench.c                                           \
 	workers/ide-worker.c                                                \

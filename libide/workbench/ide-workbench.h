@@ -26,6 +26,7 @@
 #include "util/ide-uri.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench-header-bar.h"
+#include "workbench/ide-workbench-message.h"
 
 G_BEGIN_DECLS
 
@@ -98,6 +99,10 @@ void                   ide_workbench_views_foreach                (IdeWorkbench 
                                                                    GtkCallback             callback,
                                                                    gpointer                user_data);
 IdeWorkbenchHeaderBar *ide_workbench_get_headerbar                (IdeWorkbench           *self);
+void                   ide_workbench_push_message                 (IdeWorkbench           *self,
+                                                                   IdeWorkbenchMessage    *message);
+gboolean               ide_workbench_pop_message                  (IdeWorkbench           *self,
+                                                                   const gchar            *message_id);
 
 G_END_DECLS
 

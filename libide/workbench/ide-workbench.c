@@ -409,6 +409,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_size_group);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, message_box);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspective_menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack);
 }
@@ -978,4 +979,77 @@ ide_workbench_get_headerbar (IdeWorkbench *self)
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
 
   return self->header_bar;
+}
+
+static void
+ide_workbench_message_response (IdeWorkbench        *self,
+                                gint                 response_id,
+                                IdeWorkbenchMessage *message)
+{
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (IDE_IS_WORKBENCH_MESSAGE (message));
+
+  if (response_id == GTK_RESPONSE_CLOSE)
+    gtk_widget_hide (GTK_WIDGET (message));
+}
+
+void
+ide_workbench_push_message (IdeWorkbench        *self,
+                            IdeWorkbenchMessage *message)
+{
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+  g_return_if_fail (IDE_IS_WORKBENCH_MESSAGE (message));
+
+  g_signal_connect_object (message,
+                           "response",
+                           G_CALLBACK (ide_workbench_message_response),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_container_add (GTK_CONTAINER (self->message_box), GTK_WIDGET (message));
+}
+
+static void
+locate_widget_for_message_id (GtkWidget *widget,
+                              gpointer user_data)
+{
+  struct {
+    const gchar *id;
+    GtkWidget   *widget;
+  } *lookup = user_data;
+
+  if (IDE_IS_WORKBENCH_MESSAGE (widget))
+    {
+      const gchar *id;
+
+      id = ide_workbench_message_get_id (IDE_WORKBENCH_MESSAGE (widget));
+
+      if (g_strcmp0 (id, lookup->id) == 0)
+        lookup->widget = widget;
+    }
+}
+
+gboolean
+ide_workbench_pop_message (IdeWorkbench *self,
+                           const gchar  *message_id)
+{
+  struct {
+    const gchar *id;
+    GtkWidget   *widget;
+  } lookup = { message_id };
+
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), FALSE);
+  g_return_val_if_fail (message_id != NULL, FALSE);
+
+  gtk_container_foreach (GTK_CONTAINER (self->message_box),
+                         locate_widget_for_message_id,
+                         &lookup);
+
+  if (lookup.widget)
+    {
+      gtk_widget_destroy (lookup.widget);
+      return TRUE;
+    }
+
+  return FALSE;
 }

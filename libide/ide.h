@@ -172,6 +172,7 @@ G_BEGIN_DECLS
 #include "workbench/ide-layout.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench-addin.h"
+#include "workbench/ide-workbench-message.h"
 #include "workbench/ide-workbench-header-bar.h"
 #include "workbench/ide-workbench.h"
 
