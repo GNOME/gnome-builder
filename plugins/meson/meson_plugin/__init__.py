@@ -78,7 +78,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return result.propagate_boolean()
 
     def do_get_priority(self):
-        return -200 # Lower priority than Autotools for now
+        return 100
 
     def do_get_build_flags_async(self, ifile, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)

@@ -62,8 +62,7 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return task.propagate_boolean()
 
     def do_get_priority(self):
-        # Priority is used to determine the order of discovery
-        return 2000
+        return 300
 
 class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """

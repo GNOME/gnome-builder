@@ -50,7 +50,7 @@ class CMakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return result.propagate_boolean()
 
     def do_get_priority(self):
-        return -300 # Lower priority than Autotools for now
+        return 200
 
 
 class CMakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
