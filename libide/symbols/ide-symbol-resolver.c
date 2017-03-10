@@ -24,7 +24,7 @@
 #include "files/ide-file.h"
 #include "symbols/ide-symbol-resolver.h"
 
-G_DEFINE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, G_TYPE_OBJECT)
 
 static void
 ide_symbol_resolver_real_get_symbol_tree_async (IdeSymbolResolver   *self,
