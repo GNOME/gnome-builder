@@ -66,7 +66,13 @@ ide_build_workbench_addin_set_pipeline (IdeBuildWorkbenchAddin *self,
   if (g_set_object (&self->pipeline, pipeline))
     {
       ide_build_log_panel_set_pipeline (self->build_log_panel, pipeline);
-      gtk_widget_show (GTK_WIDGET (self->build_log_panel));
+
+      if (!gtk_widget_get_visible (GTK_WIDGET (self->build_log_panel)))
+        {
+          gtk_widget_show (GTK_WIDGET (self->build_log_panel));
+          pnl_dock_item_present (PNL_DOCK_ITEM (self->build_log_panel));
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
     }
 }
