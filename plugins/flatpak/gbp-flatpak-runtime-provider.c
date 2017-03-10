@@ -413,30 +413,29 @@ gbp_flatpak_runtime_provider_install_deps_worker (GTask        *task,
   if (!retval)
     g_ptr_array_add (packages, "flatpak-builder");
 
-  g_ptr_array_add (packages, NULL);
-
-  if (packages->len > 1)
+  if (packages->len > 0)
     {
-      GVariantBuilder builder;
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
 
-      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+      /* Launch a process to install flatpak-builder */
 
-      reply = g_dbus_connection_call_sync (bus,
-                                           "org.freedesktop.PackageKit",
-                                           "/org/freedesktop/PackageKit",
-                                           "org.freedesktop.PackageKit.Modify2",
-                                           "InstallPackageNames",
-                                           g_variant_new ("(^a&sssa{sv})",
-                                                          (const gchar * const *)packages->pdata,
-                                                          "",
-                                                          "org.gnome.Builder",
-                                                          &builder),
-                                           NULL,
-                                           G_DBUS_CALL_FLAGS_NONE,
-                                           -1,
-                                           cancellable,
-                                           &error);
-      if (reply == NULL)
+      launcher = ide_subprocess_launcher_new (0);
+
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+
+      ide_subprocess_launcher_push_argv (launcher, "pkexec");
+      ide_subprocess_launcher_push_argv (launcher, "pkcon");
+      ide_subprocess_launcher_push_argv (launcher, "install");
+      ide_subprocess_launcher_push_argv (launcher, "-y");
+      ide_subprocess_launcher_push_argv (launcher, "-p");
+      for (guint i = 0; i < packages->len; i++)
+        ide_subprocess_launcher_push_argv (launcher, g_ptr_array_index (packages, i));
+
+      if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
+        IDE_GOTO (failure);
+
+      if (!ide_subprocess_wait_check (subprocess, cancellable, &error))
         IDE_GOTO (failure);
     }
 
