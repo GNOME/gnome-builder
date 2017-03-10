@@ -26,7 +26,7 @@
 #include "diagnostics/ide-diagnostics.h"
 #include "files/ide-file.h"
 
-G_DEFINE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, G_TYPE_OBJECT)
 
 enum {
   INVALIDATED,
