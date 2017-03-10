@@ -1057,55 +1057,62 @@ gb_vim_command_search (GtkWidget      *active_widget,
         }
     }
 
-  if (!search_end)
-    goto invalid_request;
-
-  replace_begin = command = g_utf8_next_char (command);
-
-  for (; *command; command = g_utf8_next_char (command))
+  if (search_end == NULL)
     {
-      if (*command == '\\')
-        {
-          command = g_utf8_next_char (command);
-          if (!*command)
-            goto invalid_request;
-          continue;
-        }
-
-      if (g_utf8_get_char (command) == separator)
-        {
-          replace_end = command;
-          break;
-        }
+      search_text = g_strdup (search_begin);
+      replace_text = g_strdup ("");
     }
-
-  if (!replace_end)
-    goto invalid_request;
-
-  command = g_utf8_next_char (command);
-
-  if (*command)
+  else
     {
-      for (; *command; command++)
+      search_text = g_strndup (search_begin, search_end - search_begin);
+
+      replace_begin = command = g_utf8_next_char (command);
+
+      for (; *command; command = g_utf8_next_char (command))
         {
-          switch (*command)
+          if (*command == '\\')
             {
-            case 'c':
-              confirm_replace = TRUE;
-              break;
+              command = g_utf8_next_char (command);
+              if (!*command)
+                goto invalid_request;
+              continue;
+            }
 
-            case 'g':
-              break;
-
-            /* what other options are supported? */
-            default:
+          if (g_utf8_get_char (command) == separator)
+            {
+              replace_end = command;
               break;
             }
         }
-    }
 
-  search_text = g_strndup (search_begin, search_end - search_begin);
-  replace_text = g_strndup (replace_begin, replace_end - replace_begin);
+      if (replace_end == NULL)
+        replace_text = g_strdup (replace_begin);
+      else
+        {
+          replace_text = g_strndup (replace_begin, replace_end - replace_begin);
+          command = g_utf8_next_char (command);
+        }
+
+      if (*command)
+        {
+          for (; *command; command++)
+            {
+              switch (*command)
+                {
+                case 'c':
+                  confirm_replace = TRUE;
+                  break;
+
+                case 'g':
+                  break;
+
+                /* what other options are supported? */
+                default:
+                  break;
+                }
+            }
+        }
+    }
 
   if (confirm_replace)
     {
