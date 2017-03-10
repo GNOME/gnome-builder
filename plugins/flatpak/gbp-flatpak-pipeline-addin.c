@@ -350,14 +350,12 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
                              IdeContext               *context,
                              GError                  **error)
 {
-  const gchar * const *finish_args;
-  g_autoptr(IdeBuildStage) stage = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeBuildStage) stage = NULL;
+  g_autofree gchar *repo_dir = NULL;
   g_autofree gchar *staging_dir = NULL;
-  g_autofree gchar *export_path = NULL;
-  IdeConfiguration *config;
   g_autofree gchar *manifest_path = NULL;
-  const gchar *command;
+  IdeConfiguration *config;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -365,68 +363,27 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_CONTEXT (context));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-
-  /* If there is no manifest, then there are no dependencies
-   * to build for this configuration.
-   */
   if (!GBP_IS_FLATPAK_CONFIGURATION (config))
     return TRUE;
 
   manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
-  command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
-  finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
-
   staging_dir = gbp_flatpak_get_staging_dir (config);
+  repo_dir = gbp_flatpak_get_repo_dir (config);
 
   launcher = create_subprocess_launcher ();
 
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-finish");
-
-  /*
-   * The --command argument allows the manifest to specify which binary in the
-   * path (/app/bin) should be used as the application binary. By default, the
-   * first binary found in /app/bin is used. However, for applications that
-   * contain supplimental binaries, they may need to specify which is primary.
-   */
-  if (!ide_str_empty0 (command))
-    {
-      g_autofree gchar *command_option = NULL;
-
-      command_option = g_strdup_printf ("--command=%s", command);
-      ide_subprocess_launcher_push_argv (launcher, command_option);
-    }
-
-  /*
-   * The finish args include things like --share=network. These specify which
-   * sandboxing features are necessary, what host files may need to be mapped
-   * in, which D-Bus services to allow, and more.
-   */
-  ide_subprocess_launcher_push_args (launcher, finish_args);
-
-  /*
-   * The staging directory is the location we did build-init with (or which
-   * the flatpak-builder was using for building).
-   */
+  ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
+  ide_subprocess_launcher_push_argv (launcher, "--ccache");
+  ide_subprocess_launcher_push_argv (launcher, "--finish-only");
+  ide_subprocess_launcher_push_argv (launcher, "--repo");
+  ide_subprocess_launcher_push_argv (launcher, repo_dir);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
+  ide_subprocess_launcher_push_argv (launcher, manifest_path);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "context", context,
                         "launcher", launcher,
                         NULL);
-
-  /*
-   * If the export directory is found, we already performed the build-finish
-   * and we do not need to run this operation again. So check if the file
-   * exists and update IdeBuildStage:completed.
-   */
-  export_path = g_build_filename (staging_dir, "export", NULL);
-  g_signal_connect_data (stage,
-                         "query",
-                         G_CALLBACK (check_if_file_exists),
-                         g_steal_pointer (&export_path),
-                         (GClosureNotify)g_free,
-                         0);
 
   stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_FINISH, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
@@ -518,51 +475,6 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   return TRUE;
 }
 
-static gboolean
-register_build_export_stage (GbpFlatpakPipelineAddin  *self,
-                             IdeBuildPipeline         *pipeline,
-                             IdeContext               *context,
-                             GError                  **error)
-{
-  g_autoptr(IdeBuildStage) stage = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autofree gchar *staging_dir = NULL;
-  g_autofree gchar *repo_dir = NULL;
-  g_autofree gchar *export_path = NULL;
-  g_autofree gchar *manifest_path = NULL;
-  IdeConfiguration *config;
-  guint stage_id;
-
-  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  config = ide_build_pipeline_get_configuration (pipeline);
-  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
-    return TRUE;
-
-  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
-  staging_dir = gbp_flatpak_get_staging_dir (config);
-  repo_dir = gbp_flatpak_get_repo_dir (config);
-
-  launcher = create_subprocess_launcher ();
-
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-export");
-  ide_subprocess_launcher_push_argv (launcher, repo_dir);
-  ide_subprocess_launcher_push_argv (launcher, staging_dir);
-
-  stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
-                        "context", context,
-                        "launcher", launcher,
-                        NULL);
-
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_EXPORT, stage);
-  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
-
-  return TRUE;
-}
-
 static void
 gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
                                  IdeBuildPipeline      *pipeline)
@@ -603,7 +515,6 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       !register_downloads_stage (self, pipeline, context, &error) ||
       !register_dependencies_stage (self, pipeline, context, &error) ||
       !register_build_finish_stage (self, pipeline, context, &error) ||
-      !register_build_export_stage (self, pipeline, context, &error) ||
       !register_build_bundle_stage (self, pipeline, context, &error))
     g_warning ("%s", error->message);
 }
