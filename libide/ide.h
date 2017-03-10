@@ -142,6 +142,7 @@ G_BEGIN_DECLS
 #include "template/ide-project-template.h"
 #include "template/ide-template-provider.h"
 #include "threading/ide-thread-pool.h"
+#include "transfers/ide-pkcon-transfer.h"
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-button.h"
 #include "transfers/ide-transfer-manager.h"
