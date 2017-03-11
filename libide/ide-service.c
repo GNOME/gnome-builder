@@ -21,14 +21,14 @@
 #include "ide-context.h"
 #include "ide-service.h"
 
-G_DEFINE_INTERFACE (IdeService, ide_service, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeService, ide_service, IDE_TYPE_OBJECT)
 
 enum {
   CONTEXT_LOADED,
-  LAST_SIGNAL
+  N_SIGNALS
 };
 
-static guint signals [LAST_SIGNAL];
+static guint signals [N_SIGNALS];
 
 const gchar *
 ide_service_get_name (IdeService *service)
@@ -74,13 +74,6 @@ static void
 ide_service_default_init (IdeServiceInterface *iface)
 {
   iface->get_name = ide_service_real_get_name;
-
-  g_object_interface_install_property (iface,
-    g_param_spec_object ("context",
-                         "Context",
-                         "Context",
-                         IDE_TYPE_CONTEXT,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 
   signals [CONTEXT_LOADED] =
     g_signal_new ("context-loaded",

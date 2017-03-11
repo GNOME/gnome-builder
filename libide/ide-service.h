@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SERVICE (ide_service_get_type())
 
-G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, GObject)
+G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, IdeObject)
 
 struct _IdeServiceInterface
 {
@@ -35,8 +35,6 @@ struct _IdeServiceInterface
   const gchar *(*get_name)       (IdeService *service);
   void         (*start)          (IdeService *service);
   void         (*stop)           (IdeService *service);
-  void         (*set_context)    (IdeService *service,
-                                  IdeContext *context);
 };
 
 const gchar *ide_service_get_name (IdeService *self);
