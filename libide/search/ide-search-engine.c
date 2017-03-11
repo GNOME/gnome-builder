@@ -20,10 +20,12 @@
 #include <libpeas/peas.h>
 
 #include "ide-internal.h"
-#include "ide-search-context.h"
-#include "ide-search-engine.h"
-#include "ide-search-provider.h"
-#include "ide-search-result.h"
+
+#include "plugins/ide-extension-util.h"
+#include "search/ide-search-context.h"
+#include "search/ide-search-engine.h"
+#include "search/ide-search-provider.h"
+#include "search/ide-search-result.h"
 
 struct _IdeSearchEngine
 {
@@ -89,10 +91,10 @@ ide_search_engine_constructed (GObject *object)
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  self->extensions = peas_extension_set_new (peas_engine_get_default (),
-                                             IDE_TYPE_SEARCH_PROVIDER,
-                                             "context", context,
-                                             NULL);
+  self->extensions = ide_extension_set_new (peas_engine_get_default (),
+                                            IDE_TYPE_SEARCH_PROVIDER,
+                                            "context", context,
+                                            NULL);
 
   G_OBJECT_CLASS (ide_search_engine_parent_class)->constructed (object);
 }

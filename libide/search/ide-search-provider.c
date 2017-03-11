@@ -65,13 +65,6 @@ ide_search_provider_default_init (IdeSearchProviderInterface *iface)
   iface->get_prefix = ide_search_provider_real_get_prefix;
   iface->create_row = ide_search_provider_real_create_row;
   iface->activate = ide_search_provider_real_activate;
-
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 }
 
 const gchar *
