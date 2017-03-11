@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-08 01:36+0000\n"
-"PO-Revision-Date: 2017-03-08 13:21+0500\n"
+"POT-Creation-Date: 2017-03-10 08:45+0000\n"
+"PO-Revision-Date: 2017-03-11 08:48+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -862,12 +862,12 @@ msgstr "_Жабу"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:547
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:565
+#: libide/workbench/ide-workbench.c:566
 msgid "Builder"
 msgstr "Құрастырушы"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:128
+#: libide/application/ide-application-actions.c:129
 msgid "An IDE for GNOME"
 msgstr "GNOME үшін IDE"
 
@@ -970,19 +970,19 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Құрастыру;Өндіру;"
 
-#: libide/application/ide-application-actions.c:134
+#: libide/application/ide-application-actions.c:135
 msgid "GNOME Builder"
 msgstr "GNOME құрастырушысы"
 
-#: libide/application/ide-application-actions.c:136
+#: libide/application/ide-application-actions.c:137
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
-#: libide/application/ide-application-actions.c:139
+#: libide/application/ide-application-actions.c:140
 msgid "Learn more about GNOME Builder"
 msgstr "GNOME құрастырушысы туралы көбірек біліңіз"
 
-#: libide/application/ide-application-actions.c:142
+#: libide/application/ide-application-actions.c:143
 msgid "Funded By"
 msgstr "Демеушілер"
 
@@ -1205,7 +1205,7 @@ msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] "%d қате"
 
-#: libide/buildui/ide-build-panel.c:517
+#: libide/buildui/ide-build-panel.c:521
 #: libide/preferences/ide-preferences-builtin.c:375
 #: libide/workbench/ide-omni-bar.ui:386
 msgid "Build"
@@ -2536,6 +2536,13 @@ msgstr ""
 msgid "Rename symbol"
 msgstr "Таңба атын ауыстыру"
 
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+#| msgid "Installing rust "
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "%u дестені орнату"
+
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
 msgstr "Барлығын _тазарту"
@@ -2642,12 +2649,6 @@ msgstr "Ағымдағы құжатты жабу"
 msgid "untitled document"
 msgstr "атаусыз құжат"
 
-#. translators: this message is shown in the header bar to indicate build status
-#: libide/workbench/ide-omni-bar.c:170
-#, c-format
-msgid "Build: %s"
-msgstr "Жинақ: %s"
-
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
@@ -2698,7 +2699,7 @@ msgstr ""
 msgid "Open File"
 msgstr "Файлды ашу"
 
-#: libide/workbench/ide-workbench.c:563
+#: libide/workbench/ide-workbench.c:564
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Құрастырушы"
@@ -2790,7 +2791,7 @@ msgstr "AST оқу қатесі"
 msgid "Failed to create translation unit: %s"
 msgstr ""
 
-#: plugins/clang/ide-clang-service.c:458 plugins/xml-pack/ide-xml-service.c:93
+#: plugins/clang/ide-clang-service.c:481 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "Файлды талдау үшін ол жергілікті сақталған болуы тиіс."
 
@@ -3226,7 +3227,12 @@ msgstr "Қолданбаны клондау"
 msgid "Clone"
 msgstr "Клондау"
 
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
+msgid "Network is not available, skipping downloads"
+msgstr ""
+
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:82
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
@@ -3289,11 +3295,23 @@ msgstr "Орындалу ортасын орнату сәтсіз аяқталд
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:103
 msgid "Runtime has been updated"
-msgstr ""
+msgstr "Орындалу ортасы жаңартылды"
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:105
 msgid "Runtime has been installed"
+msgstr "Орындалу орнатылды"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:77
+msgid "Your computer is missing flatpak-builder"
+msgstr "Сіздің компьютеріңізде flatpak-builder жоқ"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
 msgstr ""
+"Бұл бағдарлама Flatpak қолданбаларын құрастыру үшін керек. Оны орнатуды "
+"қалайсыз ба?"
 
 #: plugins/flatpak/gtk/menus.ui:6
 msgid "Flatpak"
@@ -3313,7 +3331,7 @@ msgstr "Fpaste.org қызметіне жіберу"
 
 #: plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
-msgstr ""
+msgstr "Келесі сілтеме алмасу буферіне көшірілді"
 
 #: plugins/git/ide-git-buffer-change-monitor.c:162
 msgid "Cannot provide diff, no backing file provided."
@@ -3775,7 +3793,7 @@ msgstr ""
 msgid "Run with Valgrind"
 msgstr "Valgrind көмегімен жөнелту"
 
-#: plugins/xml-pack/ide-xml-service.c:191
+#: plugins/xml-pack/ide-xml-service.c:193
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 
@@ -3783,6 +3801,9 @@ msgstr ""
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "XML ағашын жасау сәтсіз аяқталды."
+
+#~ msgid "Build: %s"
+#~ msgstr "Жинақ: %s"
 
 #~ msgid "Target"
 #~ msgstr "Мақсаты"
