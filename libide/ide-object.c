@@ -94,6 +94,14 @@ ide_object_release_context (gpointer  data,
   ide_object_destroy (self);
 }
 
+static IdeContext *
+ide_object_real_get_context (IdeObject *self)
+{
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+
+  return priv->context;
+}
+
 /**
  * ide_object_get_context:
  *
@@ -104,16 +112,24 @@ ide_object_release_context (gpointer  data,
 IdeContext *
 ide_object_get_context (IdeObject *self)
 {
-  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_OBJECT (self), NULL);
 
-  return priv->context;
+  return IDE_OBJECT_GET_CLASS (self)->get_context (self);
 }
 
 void
 ide_object_set_context (IdeObject  *self,
                         IdeContext *context)
+{
+  g_return_if_fail (IDE_IS_OBJECT (self));
+  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
+
+  IDE_OBJECT_GET_CLASS (self)->set_context (self, context);
+}
+
+static void
+ide_object_real_set_context (IdeObject  *self,
+                             IdeContext *context)
 {
   IdeObjectPrivate *priv = ide_object_get_instance_private (self);
 
@@ -137,9 +153,6 @@ ide_object_set_context (IdeObject  *self,
                              ide_object_release_context,
                              self);
         }
-
-      if (IDE_OBJECT_GET_CLASS (self)->set_context)
-        IDE_OBJECT_GET_CLASS (self)->set_context (self, context);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
     }
@@ -210,6 +223,9 @@ ide_object_class_init (IdeObjectClass *klass)
   object_class->dispose = ide_object_dispose;
   object_class->get_property = ide_object_get_property;
   object_class->set_property = ide_object_set_property;
+
+  klass->get_context = ide_object_real_get_context;
+  klass->set_context = ide_object_real_set_context;
 
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
