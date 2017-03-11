@@ -175,6 +175,13 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   sdk = gbp_flatpak_runtime_get_sdk_name (GBP_FLATPAK_RUNTIME (runtime));
   branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
 
+  /*
+   * If we got here by using a non-flatpak configuration, then there is a
+   * chance we don't have a valid app-id.
+   */
+  if (ide_str_empty0 (app_id))
+    app_id = "com.example.App";
+
   if (platform == NULL && sdk == NULL)
     {
       g_set_error (error,
