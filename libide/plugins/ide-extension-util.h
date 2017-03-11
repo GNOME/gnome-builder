@@ -23,12 +23,21 @@
 
 G_BEGIN_DECLS
 
-gboolean ide_extension_util_can_use_plugin (PeasEngine     *engine,
-                                            PeasPluginInfo *plugin_info,
-                                            GType           interface_type,
-                                            const gchar    *key,
-                                            const gchar    *value,
-                                            gint           *priority);
+gboolean         ide_extension_util_can_use_plugin (PeasEngine     *engine,
+                                                    PeasPluginInfo *plugin_info,
+                                                    GType           interface_type,
+                                                    const gchar    *key,
+                                                    const gchar    *value,
+                                                    gint           *priority);
+PeasExtensionSet *ide_extension_set_new            (PeasEngine     *engine,
+                                                    GType           type,
+                                                    const gchar    *first_property,
+                                                    ...);
+PeasExtension    *ide_extension_new                (PeasEngine     *engine,
+                                                    PeasPluginInfo *plugin_info,
+                                                    GType           interface_type,
+                                                    const gchar    *first_property,
+                                                    ...);
 
 G_END_DECLS
 
