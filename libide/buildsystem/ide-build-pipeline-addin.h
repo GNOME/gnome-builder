@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_PIPELINE_ADDIN (ide_build_pipeline_addin_get_type())
 
-G_DECLARE_INTERFACE (IdeBuildPipelineAddin, ide_build_pipeline_addin, IDE, BUILD_PIPELINE_ADDIN, GObject)
+G_DECLARE_INTERFACE (IdeBuildPipelineAddin, ide_build_pipeline_addin, IDE, BUILD_PIPELINE_ADDIN, IdeObject)
 
 struct _IdeBuildPipelineAddinInterface
 {
@@ -37,10 +37,6 @@ struct _IdeBuildPipelineAddinInterface
                   IdeBuildPipeline      *pipeline);
   void (*unload) (IdeBuildPipelineAddin *self,
                   IdeBuildPipeline      *pipeline);
-
-  /* Pacify vala, these are unnecessary */
-  void        (*set_context) (IdeBuildPipelineAddin *self,
-                              IdeContext            *context);
 };
 
 void ide_build_pipeline_addin_load   (IdeBuildPipelineAddin *self,

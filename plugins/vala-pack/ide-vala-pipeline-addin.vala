@@ -23,7 +23,7 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaPipelineAddin: GLib.Object, Ide.BuildPipelineAddin
+	public class ValaPipelineAddin: Ide.Object, Ide.BuildPipelineAddin
 	{
 		// main.vala:24.30-24.30: error: initializer list used for `Gtk.WindowType', which is neither array nor struct
 		const string ERROR_FORMAT_REGEX =
@@ -44,12 +44,5 @@ namespace Ide
 		{
 			pipeline.remove_error_format (this.error_format);
 		}
-
-		// This code shouldn't have to exist.
-		// If we can fixup libide+vala to not have such weird interaction that
-		// would be great.
-		Ide.Context? _context;
-		public Ide.Context context { construct { _context = value; } }
-		public void set_context (Ide.Context context) { _context = context; }
 	}
 }

@@ -22,17 +22,11 @@
 
 #include "buildsystem/ide-build-pipeline-addin.h"
 
-G_DEFINE_INTERFACE (IdeBuildPipelineAddin, ide_build_pipeline_addin, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeBuildPipelineAddin, ide_build_pipeline_addin, IDE_TYPE_OBJECT)
 
 static void
 ide_build_pipeline_addin_default_init (IdeBuildPipelineAddinInterface *iface)
 {
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            NULL,
-                                                            NULL,
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 void

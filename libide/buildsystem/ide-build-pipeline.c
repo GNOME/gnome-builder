@@ -41,6 +41,7 @@
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
+#include "plugins/ide-extension-util.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
 #include "util/ide-directory-reaper.h"
@@ -726,10 +727,10 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  self->addins = peas_extension_set_new (peas_engine_get_default (),
-                                         IDE_TYPE_BUILD_PIPELINE_ADDIN,
-                                         "context", context,
-                                         NULL);
+  self->addins = ide_extension_set_new (peas_engine_get_default (),
+                                        IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                        "context", context,
+                                        NULL);
 
   g_signal_connect (self->addins,
                     "extension-added",
