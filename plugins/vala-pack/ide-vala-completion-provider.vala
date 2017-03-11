@@ -22,7 +22,7 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaCompletionProvider: GLib.Object,
+	public class ValaCompletionProvider: Ide.Object,
 	                                     Gtk.SourceCompletionProvider,
 	                                     Ide.CompletionProvider
 	{
@@ -75,9 +75,9 @@ namespace Ide
 
 			buffer.sync_to_unsaved_files ();
 
-			var service = (this._context.get_service_typed (typeof (Ide.ValaService)) as Ide.ValaService);
+			var service = (this.get_context ().get_service_typed (typeof (Ide.ValaService)) as Ide.ValaService);
 			var index = service.index;
-			var unsaved_files = this._context.get_unsaved_files ();
+			var unsaved_files = this.get_context ().get_unsaved_files ();
 
 			var cancellable = new GLib.Cancellable ();
 			context.cancelled.connect(() => {
@@ -147,12 +147,5 @@ namespace Ide
 		}
 
 		public void load () {}
-
-		// This code shouldn't have to exist.
-		// If we can fixup libide+vala to not have such weird interaction that
-		// would be great.
-		Ide.Context? _context;
-		public Ide.Context context { construct { _context = value; } }
-		public void set_context (Ide.Context context) { _context = context; }
 	}
 }

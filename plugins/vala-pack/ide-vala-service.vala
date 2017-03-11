@@ -22,10 +22,9 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaService: GLib.Object, Ide.Service
+	public class ValaService: Ide.Object, Ide.Service
 	{
 		Ide.ValaIndex _index;
-		Ide.Context? _context;
 
 		construct {
 		}
@@ -39,10 +38,10 @@ namespace Ide
 		}
 
 		public void start () {
-			this._index = new Ide.ValaIndex (this._context);
+			this._index = new Ide.ValaIndex (this.get_context ());
 
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
-				Ide.Vcs vcs = this._context.get_vcs ();
+				Ide.Vcs vcs = this.get_context ().get_vcs ();
 				var files = new ArrayList<GLib.File> ();
 
 				load_directory (vcs.get_working_directory (), null, files);
@@ -84,18 +83,6 @@ namespace Ide
 			} catch (GLib.Error err) {
 				warning ("%s", err.message);
 			}
-		}
-
-		// This code shouldn't have to exist.
-		// If we can fixup libide+vala to not have such weird interaction that
-		// would be great.
-
-		public Ide.Context context {
-			construct { this._context = value; }
-		}
-
-		public void set_context (Ide.Context context) {
-			this._context = context;
 		}
 	}
 }
