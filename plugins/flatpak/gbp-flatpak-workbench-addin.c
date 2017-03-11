@@ -234,6 +234,8 @@ gbp_flatpak_workbench_addin_install_flatpak_builder (GSimpleAction *action,
   context = ide_workbench_get_context (self->workbench);
   manager = ide_context_get_transfer_manager (context);
 
+  g_simple_action_set_enabled (action, FALSE);
+
   ide_transfer_manager_execute_async (manager,
                                       IDE_TRANSFER (transfer),
                                       NULL,
