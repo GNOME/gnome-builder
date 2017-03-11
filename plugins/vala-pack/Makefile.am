@@ -17,7 +17,7 @@ dist_plugin_DATA = vala-pack.plugin
 
 BUILT_SOURCES = libvala_pack_plugin_la_vala.stamp
 
-libvala_pack_plugin_la_vala.stamp: $(libvala_pack_plugin_la_VALASOURCES)
+libvala_pack_plugin_la_vala.stamp: $(libvala_pack_plugin_la_VALASOURCES) Makefile
 	$(AM_V_GEN)$(VALAC)                                                   \
 		$(libvala_pack_plugin_la_VALAFLAGS)                           \
 		$(addprefix $(srcdir)/,$(libvala_pack_plugin_la_VALASOURCES)) \
