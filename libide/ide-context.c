@@ -39,6 +39,7 @@
 #include "doap/ide-doap.h"
 #include "history/ide-back-forward-list-private.h"
 #include "history/ide-back-forward-list.h"
+#include "plugins/ide-extension-util.h"
 #include "projects/ide-project-files.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
@@ -1224,10 +1225,10 @@ ide_context_init_services (gpointer             source_object,
   task = g_task_new (self, cancellable, callback, user_data);
 
   self->services_by_gtype = g_hash_table_new (NULL, NULL);
-  self->services = peas_extension_set_new (peas_engine_get_default (),
-                                           IDE_TYPE_SERVICE,
-                                           "context", self,
-                                           NULL);
+  self->services = ide_extension_set_new (peas_engine_get_default (),
+                                          IDE_TYPE_SERVICE,
+                                          "context", self,
+                                          NULL);
 
   g_signal_connect_object (self->services,
                            "extension-added",
