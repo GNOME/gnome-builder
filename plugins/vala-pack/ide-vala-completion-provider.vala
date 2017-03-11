@@ -30,6 +30,7 @@ namespace Ide
 		int line = -1;
 		int column = -1;
 		Ide.CompletionResults? results;
+		Ide.Context? _context;
 
 		public void populate (Gtk.SourceCompletionContext context)
 		{
@@ -146,13 +147,8 @@ namespace Ide
 			return 200;
 		}
 
-		public void load () {}
-
-		// This code shouldn't have to exist.
-		// If we can fixup libide+vala to not have such weird interaction that
-		// would be great.
-		Ide.Context? _context;
-		public Ide.Context context { construct { _context = value; } }
-		public void set_context (Ide.Context context) { _context = context; }
+		public void load (Ide.Context context) {
+			this._context = context;
+		}
 	}
 }

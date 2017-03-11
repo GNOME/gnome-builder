@@ -19,19 +19,11 @@
 #include "ide-completion-provider.h"
 #include "ide-context.h"
 
-G_DEFINE_INTERFACE (IdeCompletionProvider,
-                    ide_completion_provider,
-                    GTK_SOURCE_TYPE_COMPLETION_PROVIDER)
+G_DEFINE_INTERFACE (IdeCompletionProvider, ide_completion_provider, GTK_SOURCE_TYPE_COMPLETION_PROVIDER)
 
 static void
 ide_completion_provider_default_init (IdeCompletionProviderInterface *iface)
 {
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 gboolean
@@ -115,10 +107,12 @@ ide_completion_provider_context_current_word (GtkSourceCompletionContext *contex
 }
 
 void
-ide_completion_provider_load (IdeCompletionProvider *self)
+ide_completion_provider_load (IdeCompletionProvider *self,
+                              IdeContext            *context)
 {
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (self));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
 
   if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load)
-    IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load (self);
+    IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load (self, context);
 }
