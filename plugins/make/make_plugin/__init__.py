@@ -92,6 +92,9 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         config = pipeline.get_configuration()
         runtime = config.get_runtime()
 
+        # If the configuration has set $MAKE, then use it.
+        make = config.getenv('MAKE') or "make"
+
         srcdir = context.get_vcs().get_working_directory().get_path()
         builddir = build_system.get_builddir(config)
 
@@ -99,12 +102,12 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         # build of the project when the Ide.BuildPhase.BUILD phase is
         # requested of the pipeline.
         build_launcher = pipeline.create_launcher()
-        build_launcher.push_argv('make')
+        build_launcher.push_argv(make)
         if config.props.parallelism > 0:
             build_launcher.push_argv('-j{}'.format(config.props.parallelism))
 
         clean_launcher = pipeline.create_launcher()
-        clean_launcher.push_argv('make')
+        clean_launcher.push_argv(make)
         clean_launcher.push_argv('clean')
 
         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
@@ -116,7 +119,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         # "make install" when the Ide.BuildPhase.INSTALL phase
         # is requested of the pipeline.
         install_launcher = pipeline.create_launcher()
-        install_launcher.push_argv('make')
+        install_launcher.push_argv(make)
         install_launcher.push_argv('install')
 
         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
