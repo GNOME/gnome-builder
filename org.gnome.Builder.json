@@ -66,6 +66,10 @@
         {
             "name": "libfuse",
             "cleanup": [ "/bin" ],
+            "config-opts": [
+                "UDEV_RULES_PATH=/app/etc/udev/rules.d",
+                "INIT_D_PATH=/app/etc/init.d"
+            ],
             "sources": [
                 {
                     "type": "archive",
