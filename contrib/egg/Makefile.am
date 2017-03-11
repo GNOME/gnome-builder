@@ -25,6 +25,7 @@ headers_DATA =                        \
 	egg-pill-box.h                \
 	egg-priority-box.h            \
 	egg-private.h                 \
+	egg-progress-button.h         \
 	egg-radio-box.h               \
 	egg-scrolled-window.h         \
 	egg-search-bar.h              \
@@ -59,6 +60,7 @@ libegg_private_la_SOURCES =           \
 	egg-menu-manager.c            \
 	egg-pill-box.c                \
 	egg-priority-box.c            \
+	egg-progress-button.c         \
 	egg-radio-box.c               \
 	egg-scrolled-window.c         \
 	egg-search-bar.c              \
