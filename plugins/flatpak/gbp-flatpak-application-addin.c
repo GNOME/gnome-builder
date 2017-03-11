@@ -1113,6 +1113,7 @@ gbp_flatpak_application_addin_check_sysdeps_async (GbpFlatpakApplicationAddin *s
   g_task_set_source_tag (task, gbp_flatpak_application_addin_check_sysdeps_async);
 
   launcher = ide_subprocess_launcher_new (0);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_push_argv (launcher, "which");
   ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
