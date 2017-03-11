@@ -366,6 +366,7 @@ ide_transfer_manager_execute_cb (GObject      *object,
   else
     {
       g_signal_emit (self, signals[TRANSFER_COMPLETED], 0, transfer);
+      g_task_return_boolean (task, TRUE);
     }
 
   if (!ide_transfer_manager_get_has_active (self))
