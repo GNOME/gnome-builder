@@ -181,16 +181,20 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   GAction *action;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TRANSFER_MANAGER (manager));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (self->actions),
-                                       "install-flatpak-builder");
+  action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "install-flatpak-builder");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 
   if (!ide_transfer_manager_execute_finish (manager, result, &error))
-    /* TODO: Write to message bar */
-    g_warning ("%s", error->message);
+    {
+      /* TODO: Write to message bar */
+      g_warning ("Installation of flatpak-builder failed: %s", error->message);
+    }
   else
     {
       IdeContext *context = ide_object_get_context (IDE_OBJECT (manager));
@@ -200,11 +204,10 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
        *       because we know it is invalidated.
        */
       g_signal_emit_by_name (config_manager, "invalidate");
-
       gtk_widget_hide (GTK_WIDGET (self->message));
     }
 
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+  IDE_EXIT;
 }
 
 static void
