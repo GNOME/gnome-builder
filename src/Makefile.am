@@ -16,6 +16,7 @@ AM_CPPFLAGS =                                          \
 	-I$(top_builddir)/data/icons/hicolor           \
 	-I$(top_builddir)/libide                       \
 	-I$(top_srcdir)/libide                         \
+	-I$(top_srcdir)/contrib/egg                    \
 	-I$(top_srcdir)/contrib/pnl                    \
 	-I$(top_builddir)/contrib/pnl                  \
 	$(NULL)
