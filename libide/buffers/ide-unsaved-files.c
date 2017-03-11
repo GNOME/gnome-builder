@@ -733,6 +733,8 @@ ide_unsaved_files_set_context (IdeObject  *object,
   g_assert (IDE_IS_UNSAVED_FILES (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
+  IDE_OBJECT_CLASS (ide_unsaved_files_parent_class)->set_context (object, context);
+
   reaper = ide_directory_reaper_new ();
 
   /*
