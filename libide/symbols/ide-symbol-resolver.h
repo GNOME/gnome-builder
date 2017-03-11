@@ -26,12 +26,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL_RESOLVER (ide_symbol_resolver_get_type())
 
-G_DECLARE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE, SYMBOL_RESOLVER, GObject)
+G_DECLARE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE, SYMBOL_RESOLVER, IdeObject)
 
 struct _IdeSymbolResolverInterface
 {
   GTypeInterface parent_interface;
 
+  void           (*set_context)            (IdeSymbolResolver    *self,
+                                            IdeContext           *context);
   void           (*lookup_symbol_async)    (IdeSymbolResolver    *self,
                                             IdeSourceLocation    *location,
                                             GCancellable         *cancellable,
@@ -50,10 +52,6 @@ struct _IdeSymbolResolverInterface
                                             GAsyncResult         *result,
                                             GError              **error);
   void           (*load)                   (IdeSymbolResolver    *self);
-
-  /* Pacify vala, ideally we wouldn't have this vfunc */
-  void           (*set_context)            (IdeSymbolResolver    *self,
-                                            IdeContext           *context);
 };
 
 void           ide_symbol_resolver_load                   (IdeSymbolResolver    *self);

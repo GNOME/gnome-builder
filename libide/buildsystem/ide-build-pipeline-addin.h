@@ -39,6 +39,7 @@ struct _IdeBuildPipelineAddinInterface
                   IdeBuildPipeline      *pipeline);
 
   /* Pacify vala, these are unnecessary */
+  IdeContext *(*get_context) (IdeBuildPipelineAddin *self);
   void        (*set_context) (IdeBuildPipelineAddin *self,
                               IdeContext            *context);
 };

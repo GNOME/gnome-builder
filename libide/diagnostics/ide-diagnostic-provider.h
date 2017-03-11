@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTIC_PROVIDER (ide_diagnostic_provider_get_type())
 
-G_DECLARE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE, DIAGNOSTIC_PROVIDER, GObject)
+G_DECLARE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE, DIAGNOSTIC_PROVIDER, IdeObject)
 
 struct _IdeDiagnosticProviderInterface
 {
