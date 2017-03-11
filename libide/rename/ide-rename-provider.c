@@ -66,13 +66,6 @@ ide_rename_provider_default_init (IdeRenameProviderInterface *iface)
 {
   iface->rename_async = ide_rename_provider_real_rename_async;
   iface->rename_finish = ide_rename_provider_real_rename_finish;
-
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "The context for the IdeObject",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 /**

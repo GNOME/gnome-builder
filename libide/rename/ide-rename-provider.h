@@ -43,10 +43,6 @@ struct _IdeRenameProviderInterface
                              GAsyncResult         *result,
                              GPtrArray           **edits,
                              GError              **error);
-  /* Silence Vala */
-  void     (*set_context)   (IdeRenameProvider    *self,
-                             IdeContext           *context);
-
   void     (*load)          (IdeRenameProvider    *self);
 };
 
