@@ -24,6 +24,7 @@
 #include "ide-device-provider.h"
 
 #include "local/ide-local-device.h"
+#include "plugins/ide-extension-util.h"
 
 struct _IdeDeviceManager
 {
@@ -249,10 +250,10 @@ ide_device_manager_add_providers (IdeDeviceManager *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  self->providers = peas_extension_set_new (peas_engine_get_default (),
-                                            IDE_TYPE_DEVICE_PROVIDER,
-                                            "context", context,
-                                            NULL);
+  self->providers = ide_extension_set_new (peas_engine_get_default (),
+                                           IDE_TYPE_DEVICE_PROVIDER,
+                                           "context", context,
+                                           NULL);
 
   g_signal_connect (self->providers,
                     "extension-added",
