@@ -313,7 +313,7 @@
         },
         {
             "name": "gnome-builder",
-            "config-opts": [ "--enable-tracing", "--enable-debug", "--with-channel=flatpak-nightly", "--disable-vala-pack-plugin" ],
+            "config-opts": [ "--enable-tracing", "--enable-debug", "--with-channel=flatpak-nightly" ],
             "sources": [
                 {
                     "type": "git",
