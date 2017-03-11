@@ -162,16 +162,16 @@ ide_extension_adapter_reload (IdeExtensionAdapter *self)
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
 
       if (g_type_is_a (self->interface_type, IDE_TYPE_OBJECT))
-        extension = peas_engine_create_extension (self->engine,
-                                                  best_match,
-                                                  self->interface_type,
-                                                  "context", context,
-                                                  NULL);
+        extension = ide_extension_new (self->engine,
+                                       best_match,
+                                       self->interface_type,
+                                       "context", context,
+                                       NULL);
       else
-        extension = peas_engine_create_extension (self->engine,
-                                                  best_match,
-                                                  self->interface_type,
-                                                  NULL);
+        extension = ide_extension_new (self->engine,
+                                       best_match,
+                                       self->interface_type,
+                                       NULL);
     }
 
   ide_extension_adapter_set_extension (self, best_match, extension);

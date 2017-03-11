@@ -176,11 +176,18 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
             {
               PeasExtension *exten;
 
-              exten = peas_engine_create_extension (self->engine,
-                                                    plugin_info,
-                                                    self->interface_type,
-                                                    "context", context,
-                                                    NULL);
+              if (g_type_is_a (self->interface_type, IDE_TYPE_OBJECT))
+                exten = ide_extension_new (self->engine,
+                                           plugin_info,
+                                           self->interface_type,
+                                           "context", context,
+                                           NULL);
+              else
+                exten = ide_extension_new (self->engine,
+                                           plugin_info,
+                                           self->interface_type,
+                                           NULL);
+
               add_extension (self, plugin_info, exten);
             }
         }
