@@ -6,23 +6,23 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-09-03 02:44+0000\n"
-"PO-Revision-Date: 2016-09-05 11:02+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"POT-Creation-Date: 2017-03-10 23:29+0000\n"
+"PO-Revision-Date: 2017-03-11 17:00+0700\n"
+"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr "Tak dapat temukan properti %s dalam kelas %s"
+msgstr "Tidak dapat menemukan properti %s dalam kelas %s"
 
 #: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
 #: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
@@ -64,10 +64,10 @@ msgstr[0] "Sekitar %u tahun yang lalu"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:673
-#: libide/workbench/ide-workbench-actions.c:70
+#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:254
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
 msgid "Open"
 msgstr "Buka"
 
@@ -81,8 +81,8 @@ msgid "Create"
 msgstr "Buat"
 
 #: contrib/egg/egg-file-chooser-entry.c:112
-#: libide/editor/ide-editor-view-actions.c:317
-#: libide/editor/ide-editor-view-actions.c:448
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
 #: plugins/color-picker/gb-color-picker-prefs.c:237
 #: plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: plugins/terminal/gb-terminal-view-actions.c:306
@@ -94,14 +94,14 @@ msgid "Browse…"
 msgstr "Ramban..."
 
 #: contrib/egg/egg-file-chooser-entry.c:488
-#: libide/editor/ide-editor-view-actions.c:316
-#: libide/editor/ide-editor-view-actions.c:447
-#: libide/greeter/ide-greeter-perspective.c:672
-#: libide/workbench/ide-workbench-actions.c:69
+#: libide/editor/ide-editor-view-actions.c:315
+#: libide/editor/ide-editor-view-actions.c:446
+#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:255
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Batal"
@@ -210,6 +210,11 @@ msgstr "Hijau"
 msgid "Blue"
 msgstr "Biru"
 
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "Dasar"
+
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
 msgstr "Komponen Warna"
@@ -284,7 +289,7 @@ msgid "Palettes"
 msgstr "Palet"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:946
-#: plugins/color-picker/gtk/color-picker.ui:48
+#: plugins/color-picker/gtk/color-picker.ui:49
 msgid "No open palettes"
 msgstr "Tidak ada palet yang terbuka"
 
@@ -293,6 +298,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
+#: libide/sourceview/ide-source-view.c:5856
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Ubah nama"
@@ -322,13 +328,13 @@ msgstr "%s() hanya dapat dipanggil sekali"
 msgid "Parser does not contain an input stream"
 msgstr "Pengurai tidak mengandung stream masukan"
 
-#: contrib/tmpl/tmpl-template.c:451
+#: contrib/tmpl/tmpl-template.c:454
 msgid "Must parse template before expanding"
 msgstr "Mesti mengurai templat sebelum mengembangkan"
 
 #: contrib/tmpl/tmpl-template-locator.c:105
 #, c-format
-msgid "Failed to locate template \"%s\""
+msgid "Failed to locate template “%s”"
 msgstr "Gagal menemukan templat \"%s\""
 
 #: contrib/xml/xml-reader.c:327
@@ -450,7 +456,7 @@ msgstr "Bila difungsikan, penyunting akan menampilkan nomor baris."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 #: libide/editor/ide-editor-tweak-widget.ui:91
-#: libide/preferences/ide-preferences-builtin.c:133
+#: libide/preferences/ide-preferences-builtin.c:150
 msgid "Smart Backspace"
 msgstr "Backspace Cerdas"
 
@@ -463,10 +469,9 @@ msgstr ""
 "Anda."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: libide/preferences/ide-preferences-builtin.c:132
-#, fuzzy
+#: libide/preferences/ide-preferences-builtin.c:149
 msgid "Smart Home and End"
-msgstr "Rumah"
+msgstr "Home dan End Cerdas"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid "Whether or not Home moves to first non-space character."
@@ -482,7 +487,7 @@ msgstr ""
 "Bila difungsikan, penyunting akan menampilkan garis kisi dalam dokumen."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:74
-#: libide/preferences/ide-preferences-builtin.c:155
+#: libide/preferences/ide-preferences-builtin.c:172
 msgid "Show overview map"
 msgstr "Tampilkan peta ringkasan"
 
@@ -515,7 +520,7 @@ msgid "The various types of space to draw in the editor."
 msgstr "Berbagai tipe spasi yang akan digambar dalam penyunting."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:90
-#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Overscroll"
 msgstr "Gulir Lebih"
 
@@ -566,20 +571,20 @@ msgstr "Lebih suka kroma aplikasi gelap."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:25
 msgid "Mine projects"
-msgstr "Menambang projek"
+msgstr "Menambang proyek"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:26
 msgid "Search directories for projects."
-msgstr "Dari projek dalam direktori."
+msgstr "Cari direktori untuk proyek."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "Projects directory"
-msgstr "Direktori projek"
+msgstr "Direktori proyek"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:31
 msgid "Directory for all Builder projects."
-msgstr "Direktori untuk semua projek Builder."
+msgstr "Direktori untuk semua proyek Builder."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
@@ -587,7 +592,7 @@ msgstr "Pulihkan Berkas Sebelumnya"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:36
 msgid "Restore previously opened files when loading a project."
-msgstr "Pulihkan berkas yang sebelumnya dibuka ketika memuat suatu projek."
+msgstr "Pulihkan berkas yang sebelumnya dibuka ketika memuat suatu proyek."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
@@ -595,7 +600,7 @@ msgstr "Bila pengaya mesti difungsikan"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 msgid "Show Project Sidebar"
-msgstr "Tampilkan Bilah Sisi Projek"
+msgstr "Tampilkan Bilah Sisi Proyek"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the sidebar will be visible in the editor workspace."
@@ -609,7 +614,7 @@ msgstr "Tampilkan Ikon"
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid "If enabled, the project tree will display icons next to each item."
 msgstr ""
-"Bila difungsikan, pohon projek akan menampilkan ikon di sebelah setiap butir."
+"Bila difungsikan, pohon proyek akan menampilkan ikon di sebelah setiap butir."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: plugins/project-tree/gtk/menus.ui:88
@@ -620,7 +625,7 @@ msgstr "Tampilkan Berkas yang Diabaikan"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
-"Bila difungsikan, pohon projek akan menampilkan berkas yang diabaikan oleh "
+"Bila difungsikan, pohon proyek akan menampilkan berkas yang diabaikan oleh "
 "VCS."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
@@ -673,11 +678,11 @@ msgstr "Tinggi panel bawah dalam piksel."
 
 #: data/gtk/menus.ui:7
 msgid "_New Project"
-msgstr "Projek _Baru"
+msgstr "Proyek _Baru"
 
 #: data/gtk/menus.ui:11
 msgid "_Open Project"
-msgstr "Buka Pr_ojek"
+msgstr "Buka Pr_oyek"
 
 #: data/gtk/menus.ui:18
 msgid "_Preferences"
@@ -699,177 +704,180 @@ msgstr "Tent_ang"
 msgid "_Quit"
 msgstr "_Keluar"
 
-#: data/gtk/menus.ui:48
+#: data/gtk/menus.ui:49
 msgid "Show left panel"
 msgstr "Tampilkan panel kiri"
 
-#: data/gtk/menus.ui:53
+#: data/gtk/menus.ui:54
 msgid "Show bottom panel"
 msgstr "Tampilkan panel bawah"
 
-#: data/gtk/menus.ui:58
+#: data/gtk/menus.ui:59
 msgid "Show right panel"
 msgstr "Tampilkan panel kanan"
 
-#: data/gtk/menus.ui:86
+#: data/gtk/menus.ui:87
 msgid "_New File"
 msgstr "_Berkas Baru"
 
-#: data/gtk/menus.ui:92
+#: data/gtk/menus.ui:93
 msgid "_Open File…"
 msgstr "_Buka Berkas..."
 
-#: data/gtk/menus.ui:98
+#: data/gtk/menus.ui:99
 msgid "Save _All"
 msgstr "Simpan Semu_a"
 
-#: data/gtk/menus.ui:115
+#: data/gtk/menus.ui:116
 msgid "_Go to Definition"
 msgstr "_Ke Definisi"
 
-#: data/gtk/menus.ui:121
+#: data/gtk/menus.ui:122
 msgid "_Undo"
 msgstr "Tak _Jadi"
 
-#: data/gtk/menus.ui:125
+#: data/gtk/menus.ui:126
 msgid "_Redo"
 msgstr "_Jadi Lagi"
 
-#: data/gtk/menus.ui:131
+#: data/gtk/menus.ui:132
 msgid "C_ut"
 msgstr "_Potong"
 
-#: data/gtk/menus.ui:136 data/gtk/menus.ui:237 plugins/terminal/gtk/menus.ui:16
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:28
 msgid "_Copy"
 msgstr "_Salin"
 
-#: data/gtk/menus.ui:140 data/gtk/menus.ui:241 plugins/terminal/gtk/menus.ui:20
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:32
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: data/gtk/menus.ui:144 data/gtk/menus.ui:245
+#: data/gtk/menus.ui:145 data/gtk/menus.ui:257
 msgid "_Delete"
 msgstr "_Hapus"
 
-#: data/gtk/menus.ui:150 libide/preferences/ide-preferences-builtin.c:173
+#: data/gtk/menus.ui:151 libide/preferences/ide-preferences-builtin.c:190
 msgid "Highlighting"
 msgstr "Penyorotan"
 
-#: data/gtk/menus.ui:155 plugins/terminal/gtk/menus.ui:26
+#: data/gtk/menus.ui:153 data/gtk/menus.ui:206
+msgid "Spellchecking"
+msgstr "Pemeriksaan ejaan"
+
+#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
 msgid "Selection"
 msgstr "Pilihan"
 
-#: data/gtk/menus.ui:157 data/gtk/menus.ui:251 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:40
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: data/gtk/menus.ui:162 plugins/terminal/gtk/menus.ui:33
+#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:45
 msgid "Select _None"
 msgstr "Pilih Tak Satupu_n"
 
-#: data/gtk/menus.ui:168
+#: data/gtk/menus.ui:173
 msgid "All _Upper Case"
 msgstr "Sem_ua Huruf Besar"
 
-#: data/gtk/menus.ui:173
+#: data/gtk/menus.ui:178
 msgid "All _Lower Case"
 msgstr "Semua Huruf Keci_l"
 
-#: data/gtk/menus.ui:178
+#: data/gtk/menus.ui:183
 msgid "_Invert Case"
 msgstr "Bal_ikkan Besar Kecil Huruf"
 
-#: data/gtk/menus.ui:183
+#: data/gtk/menus.ui:188
 msgid "_Title Case"
 msgstr "Kapi_talisasi Judul"
 
-#: data/gtk/menus.ui:190
+#: data/gtk/menus.ui:195
 msgid "Join Lines"
 msgstr "Gabung Baris"
 
-#: data/gtk/menus.ui:194
+#: data/gtk/menus.ui:199
 msgid "Sort Lines"
 msgstr "Urutkan Baris"
 
-#: data/gtk/menus.ui:203
+#: data/gtk/menus.ui:215
 msgid "Zoom"
 msgstr "Zum"
 
-#: data/gtk/menus.ui:205
+#: data/gtk/menus.ui:217
 msgid "Zoom _In"
 msgstr "Per_besar"
 
-#: data/gtk/menus.ui:210
+#: data/gtk/menus.ui:222
 msgid "Zoom _Out"
 msgstr "Per_kecil"
 
-#: data/gtk/menus.ui:216
+#: data/gtk/menus.ui:228
 msgid "Reset"
 msgstr "Reset"
 
-#: data/gtk/menus.ui:227
-#, fuzzy
+#: data/gtk/menus.ui:239
 msgid "_Wrap Around"
 msgstr "_Melipat"
 
-#: data/gtk/menus.ui:233
+#: data/gtk/menus.ui:245
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: data/gtk/menus.ui:259
+#: data/gtk/menus.ui:271
 msgid "Split"
 msgstr "Belah"
 
-#: data/gtk/menus.ui:261
+#: data/gtk/menus.ui:273
 msgid "Split Left"
 msgstr "Belah Kiri"
 
-#: data/gtk/menus.ui:266
+#: data/gtk/menus.ui:278
 msgid "Split Right"
 msgstr "Belah Kanan"
 
-#: data/gtk/menus.ui:271
+#: data/gtk/menus.ui:283
 msgid "Split Down"
 msgstr "Belah Turun"
 
-#: data/gtk/menus.ui:278
+#: data/gtk/menus.ui:290
 msgid "Move"
 msgstr "Pindah"
 
-#: data/gtk/menus.ui:280
+#: data/gtk/menus.ui:292
 msgid "Move Left"
 msgstr "Pindah Ke Kiri"
 
-#: data/gtk/menus.ui:285
+#: data/gtk/menus.ui:297
 msgid "Move Right"
 msgstr "Pindah Ke Kanan"
 
-#: data/gtk/menus.ui:293
+#: data/gtk/menus.ui:305
 msgid "_Save"
 msgstr "_Simpan"
 
-#: data/gtk/menus.ui:297
+#: data/gtk/menus.ui:309
 msgid "_Save As"
 msgstr "_Simpan Sebagai"
 
-#: data/gtk/menus.ui:303
+#: data/gtk/menus.ui:315
 msgid "_Print"
 msgstr "_Cetak"
 
-#: data/gtk/menus.ui:309
+#: data/gtk/menus.ui:321 plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Tutup"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:466
-#: libide/preferences/ide-preferences-builtin.c:127
-#: libide/workbench/ide-workbench.c:560
+#: libide/application/ide-application.c:547
+#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/workbench/ide-workbench.c:566
 msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:116
+#: libide/application/ide-application-actions.c:129
 msgid "An IDE for GNOME"
 msgstr "IDE untuk GNOME"
 
@@ -880,6 +888,10 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
+"Builder merupakan Integrated Development Environment yang aktif dikembangkan "
+"untuk GNOME. Ini menggabungkan dukungan terintegrasi untuk teknologi GNOME "
+"yang penting seperti GTK+, GLib, dan API GNOME dengan fitur yang setiap "
+"pengembang akan mengapresiasi, seperti sintaks dan potongan."
 
 #: data/org.gnome.Builder.appdata.xml.in:17
 msgid ""
@@ -898,6 +910,7 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Penyorotan sintaks bawaan untuk banyak bahasa"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:52
 msgid "Side-by-side code editors"
 msgstr "Penyunting kode bersisian"
 
@@ -928,17 +941,32 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Dukungan indentasi otomatis untuk C, Python, Vala, dan XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-#, fuzzy
 msgid "HTML/Markdown live preview"
-msgstr "Pratinjau sebagai HTML"
+msgstr "Pratinjau sebagai HTML/Markdown"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
 msgstr "Penyuntingan gaya Vim opsional"
 
 #: data/org.gnome.Builder.appdata.xml.in:33
-msgid "Preview support for building with Xdg-App runtimes"
-msgstr "Dukungan pratinjau untuk build dengan runtime Xdg-App"
+msgid "An integrated software profiler for native applications"
+msgstr "Profiler perangkat lunak terpadu untuk aplikasi native"
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+msgid "Support for building with jhbuild"
+msgstr "Dukungan untuk membangun dengan jhbuild"
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Preview support for building with Flatpak runtimes"
+msgstr "Dukungan pratinjau untuk membangun dengan Flatpak runtimes"
+
+#: data/org.gnome.Builder.appdata.xml.in:44
+msgid "Fast global search"
+msgstr "Pencarian global cepat"
+
+#: data/org.gnome.Builder.appdata.xml.in:48
+msgid "Integrated project tree"
+msgstr "Pohon proyek terpadu"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -954,19 +982,21 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Build;Bangun;Kembangkan;"
 
-#: libide/application/ide-application-actions.c:122
+#: libide/application/ide-application-actions.c:135
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:124
+#: libide/application/ide-application-actions.c:137
 msgid "translator-credits"
-msgstr "Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016"
+msgstr ""
+"Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016.\n"
+"Kukuh Syafaat <syafaatkukuh@gmail.com>, 2017."
 
-#: libide/application/ide-application-actions.c:127
+#: libide/application/ide-application-actions.c:140
 msgid "Learn more about GNOME Builder"
 msgstr "Pelajari lebih banyak tentang GNOME Builder"
 
-#: libide/application/ide-application-actions.c:131
+#: libide/application/ide-application-actions.c:143
 msgid "Funded By"
 msgstr "Didanai Oleh"
 
@@ -974,119 +1004,381 @@ msgstr "Didanai Oleh"
 msgid "Commands:"
 msgstr "Perintah:"
 
-#: libide/application/ide-application-command-line.c:186
+#: libide/application/ide-application-command-line.c:187
 msgid "List available subcommands"
 msgstr "Daftar sub perintah yang tersedia"
 
-#: libide/application/ide-application-command-line.c:193
+#: libide/application/ide-application-command-line.c:194
 msgid "Run Builder in standalone mode"
 msgstr "Menjalankan Builder dalam mode mandiri"
 
-#: libide/application/ide-application-command-line.c:200
-msgid "Show the application's version"
+#: libide/application/ide-application-command-line.c:201
+msgid "Show the application’s version"
 msgstr "Tampilkan versi aplikasi"
 
-#: libide/application/ide-application-command-line.c:219
+#: libide/application/ide-application-command-line.c:220
 msgid "Increase verbosity, may be specified multiple times"
 msgstr "Tingkatkan kerincian, boleh dinyatakan berkali-kali"
 
-#: libide/application/ide-application-command-line.c:226
+#: libide/application/ide-application-command-line.c:227
 msgid "Enter GApplication Service mode"
 msgstr "Masuk mode Layanan GApplication"
 
-#: libide/application/ide-application-command-line.c:233
-msgid "Opens the project specified by PATH"
-msgstr "Buka projek yang dinyatakan oleh PATH"
-
 #: libide/application/ide-application-command-line.c:234
-#: plugins/build-tools/gbp-build-tool.c:301
+msgid "Opens the project specified by PATH"
+msgstr "Buka proyek yang dinyatakan oleh PATH"
+
+#: libide/application/ide-application-command-line.c:235
+#: libide/buildui/ide-build-tool.c:282
 msgid "PATH"
 msgstr "PATH"
 
-#: libide/application/ide-application-command-line.c:264
+#: libide/application/ide-application-command-line.c:242
+msgid "Clones the project specified by MANIFEST"
+msgstr "Klon proyek yang ditentukan oleh MANIFEST"
+
+#: libide/application/ide-application-command-line.c:243
+msgid "MANIFEST"
+msgstr "MANIFEST"
+
+#: libide/application/ide-application-command-line.c:273
 msgid "COMMAND"
 msgstr "PERINTAH"
 
-#: libide/application/ide-application-command-line.c:335
+#: libide/application/ide-application-command-line.c:344
 msgid "No commands available"
 msgstr "Tidak ada perintah yang tersedia"
 
-#: libide/application/ide-application-command-line.c:365
+#: libide/application/ide-application-command-line.c:374
 msgid "Please provide a command"
 msgstr "Harap sediakan sebuah perintah"
 
-#: libide/application/ide-application-command-line.c:375
+#: libide/application/ide-application-command-line.c:384
 msgid "No such tool"
 msgstr "Tidak ada perkakas itu"
 
-#: libide/application/ide-application-command-line.c:389
+#: libide/application/ide-application-command-line.c:398
 msgid "Please provide a worker type"
 msgstr "Harap sediakan suatu tipe pekerja"
 
-#: libide/application/ide-application-command-line.c:396
+#: libide/application/ide-application-command-line.c:405
 msgid "Please provide a D-Bus address"
 msgstr "Harap sediakan alamat D-Bus"
 
-#: libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:414
 msgid "No such worker"
 msgstr "Tidak ada pekerja sedemikian"
 
-#: libide/buffers/ide-buffer.c:2473
+#: libide/buffers/ide-buffer.c:2476
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
-#: libide/buffers/ide-buffer-manager.c:633
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "Berkas terlalu besar untuk dibuka."
 
-#: libide/buffers/ide-buffer-manager.c:1483
-msgid "Words"
-msgstr "Kata"
-
-#: libide/buffers/ide-buffer-manager.c:1695
+#: libide/buffers/ide-buffer-manager.c:1764
 #, c-format
 msgid "unsaved document %u"
 msgstr "dokumen tanpa judul %u"
 
-#: libide/buffers/ide-buffer-manager.c:1729
+#: libide/buffers/ide-buffer-manager.c:1798
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Gagal menyimpan penyangga, mengabaikan reklamasi."
 
-#: libide/buildsystem/ide-builder.c:89
-#, c-format
-msgid "%s does not support building"
-msgstr "%s tak mendukung build"
+#: libide/buildsystem/ide-build-pipeline.c:2090
+msgid "Cleaning…"
+msgstr "Membersihkan..."
 
-#: libide/buildsystem/ide-build-manager.c:478
-msgid "A build is already in progress"
-msgstr "Operasi build tengah berjalan"
+#: libide/buildsystem/ide-build-pipeline.c:2105
+msgid "Downloading…"
+msgstr "Mengunduh…"
 
-#: libide/buildsystem/ide-build-manager.c:771
+#: libide/buildsystem/ide-build-pipeline.c:2109
+msgid "Building dependencies…"
+msgstr "Membangun dependensi…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2113
+msgid "Bootstrapping…"
+msgstr "Bootstrapping…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2117
+msgid "Configuring…"
+msgstr "Mengkonfigurasi…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2121
+msgid "Building…"
+msgstr "Sedang build..."
+
+#: libide/buildsystem/ide-build-pipeline.c:2125
+msgid "Installing…"
+msgstr "Instalasi…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2129
+msgid "Exporting…"
+msgstr "Mengekspor…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/buildsystem/ide-build-pipeline.c:2137
+msgid "Success"
+msgstr "Berhasil"
+
+#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/workbench/ide-omni-bar.ui:332
+msgid "Failed"
+msgstr "Gagal"
+
+#: libide/buildsystem/ide-build-pipeline.c:2145
+msgid "Preparing…"
+msgstr "Mempersiapkan…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2149
 msgid "Ready"
 msgstr "Siap"
 
-#: libide/buildsystem/ide-build-result.c:249
-msgid "Failed to open stderr stream."
-msgstr "Gagal membuka stream stderr."
-
-#: libide/buildsystem/ide-build-result.c:279
-msgid "Failed to open stdout stream."
-msgstr "Gagal membuka stream stdout."
-
-#: libide/buildsystem/ide-build-system.c:125
-#, c-format
-msgid "%s() is not supported on %s build system."
-msgstr "%s() tak didukung pada sistem build %s."
-
-#: libide/buildsystem/ide-configuration-manager.c:479
-#: libide/preferences/ide-preferences-builtin.c:261
-#: libide/preferences/ide-preferences-builtin.c:279
+#: libide/buildsystem/ide-configuration-manager.c:76
+#: libide/preferences/ide-preferences-builtin.c:337
+#: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
 msgstr "Baku"
 
+#: libide/buildui/ide-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr "Duplikatkan konfigurasi"
+
+#: libide/buildui/ide-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr "Hapus konfigurasi"
+
+#: libide/buildui/ide-build-configuration-view.ui:11
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+msgid "General"
+msgstr "Umum"
+
+#: libide/buildui/ide-build-configuration-view.ui:28
+msgid "The name of the build configuration"
+msgstr "Nama berkas konfigurasi build"
+
+#: libide/buildui/ide-build-configuration-view.ui:37
+msgid "Name"
+msgstr "Nama"
+
+#: libide/buildui/ide-build-configuration-view.ui:58
+msgid "The prefix to use when installing the project"
+msgstr "Prefiks yang dipakai ketika instalasi proyek"
+
+#: libide/buildui/ide-build-configuration-view.ui:67
+msgid "Installation Prefix"
+msgstr "Prefiks Instalasi"
+
+#: libide/buildui/ide-build-configuration-view.ui:88
+msgid "Options to use when bootstrapping the project"
+msgstr "Opsi yang dipakai ketika mem-bootstrap proyek"
+
+#: libide/buildui/ide-build-configuration-view.ui:97
+msgid "Configure Options"
+msgstr "Opsi Konfigurasi"
+
+#: libide/buildui/ide-build-configuration-view.ui:129
+#: libide/workbench/ide-omni-bar-row.ui:54
+msgid "Device"
+msgstr "Perangkat"
+
+#: libide/buildui/ide-build-configuration-view.ui:157
+#: libide/workbench/ide-omni-bar-row.ui:85
+msgid "Runtime"
+msgstr "Runtime"
+
+#: libide/buildui/ide-build-configuration-view.ui:185
+msgid "Environment"
+msgstr "Lingkungan"
+
+#: libide/buildui/ide-build-log-panel.c:732
+msgid "Build Output"
+msgstr "Keluaran Build"
+
+#: libide/buildui/ide-build-log-panel.ui:25
+msgid "Clear build log"
+msgstr "Bersihkan log build"
+
+#: libide/buildui/ide-build-log-panel.ui:42
+#: libide/workbench/ide-omni-bar.ui:133
+msgid "Cancel build"
+msgstr "Batalkan build"
+
+#: libide/buildui/ide-build-panel.c:86
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d peringatan"
+
+#: libide/buildui/ide-build-panel.c:95
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d kesalahan"
+
+#: libide/buildui/ide-build-panel.c:521
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:386
+msgid "Build"
+msgstr "Build"
+
+#: libide/buildui/ide-build-panel.ui:33
+msgid "Status:"
+msgstr "Status:"
+
+#: libide/buildui/ide-build-panel.ui:58
+msgid "Running Time:"
+msgstr "Waktu Berjalan:"
+
+#: libide/buildui/ide-build-panel.ui:82
+msgid "Warnings:"
+msgstr "Peringatan:"
+
+#: libide/buildui/ide-build-panel.ui:106
+msgid "Errors:"
+msgstr "Kesalahan:"
+
+#: libide/buildui/ide-build-panel.ui:149
+msgid "No Diagnostics"
+msgstr "Tidak ada diagnostik"
+
+#. the action:// link is used to execute a build
+#: libide/buildui/ide-build-panel.ui:150
+msgid ""
+"<a href=\"action://build-manager.build\">Build your project</a> to show "
+"diagnostics here"
+msgstr ""
+"<a href=\"action://build-manager.build\">Bangun proyek Anda</a> untuk "
+"menunjukkan diagnosa disini"
+
+#: libide/buildui/ide-build-perspective.c:438
+msgid "Build Preferences"
+msgstr "Preferensi Build"
+
+#: libide/buildui/ide-build-tool.c:103 libide/buildui/ide-build-tool.c:116
+msgid "========================\n"
+msgstr "========================\n"
+
+#: libide/buildui/ide-build-tool.c:104
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Nama Proyek: %s\n"
+
+#: libide/buildui/ide-build-tool.c:105
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " Sistem Kendali Versi: %s\n"
+
+#: libide/buildui/ide-build-tool.c:106
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Sistem Build: %s\n"
+
+#: libide/buildui/ide-build-tool.c:107
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Tanggal dan Waktu Build: %s\n"
+
+#: libide/buildui/ide-build-tool.c:108
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Membangun untuk Perangkat: %s (%s)\n"
+
+#: libide/buildui/ide-build-tool.c:113
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "            Lingkungan: %s\n"
+
+#: libide/buildui/ide-build-tool.c:143 libide/buildui/ide-build-tool.c:147
+msgid "===============\n"
+msgstr "===============\n"
+
+#: libide/buildui/ide-build-tool.c:144
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " Kegagalan Build: %s\n"
+
+#: libide/buildui/ide-build-tool.c:145
+msgid " Build ran for: %"
+msgstr " Build berjalan untuk: %s"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: libide/buildui/ide-build-tool.c:158 libide/buildui/ide-build-tool.c:162
+msgid "=================\n"
+msgstr "=================\n"
+
+#: libide/buildui/ide-build-tool.c:159
+msgid " Build Successful\n"
+msgstr " Build Sukses\n"
+
+#: libide/buildui/ide-build-tool.c:160
+msgid "   Build ran for: %"
+msgstr "   Build berjalan untuk: %"
+
+#: libide/buildui/ide-build-tool.c:212
+#, c-format
+msgid "Failed to locate device “%s”"
+msgstr "Gagal menemukan perangkat \"%s\""
+
+#: libide/buildui/ide-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime “%s”"
+msgstr "Gagal menemukan runtime \"%s\""
+
+#: libide/buildui/ide-build-tool.c:267
+msgid "Clean the project"
+msgstr "Bersihkan proyek"
+
+#: libide/buildui/ide-build-tool.c:269
+msgid "The ID of the device to build for"
+msgstr "ID perangkat untuk membangun"
+
+#: libide/buildui/ide-build-tool.c:270
+msgid "local"
+msgstr "lokal"
+
+#: libide/buildui/ide-build-tool.c:272
+msgid "The runtime to use for building"
+msgstr "Runtime yang akan digunakan untuk membangun"
+
+#: libide/buildui/ide-build-tool.c:273
+msgid "host"
+msgstr "host"
+
+#: libide/buildui/ide-build-tool.c:275
+msgid "Number of workers to use when building"
+msgstr "Banyaknya pekerja yang dipakai saat membangun"
+
+#: libide/buildui/ide-build-tool.c:276
+msgid "N"
+msgstr "N"
+
+#: libide/buildui/ide-build-tool.c:278
+msgid "The configuration to use from .buildconfig"
+msgstr "Konfigurasi yang digunakan dari .buildconfig"
+
+#: libide/buildui/ide-build-tool.c:279
+msgid "CONFIG_ID"
+msgstr "ID_KONFIG"
+
+#: libide/buildui/ide-build-tool.c:281
+msgid "Path to project file, defaults to current directory"
+msgstr "Path ke berkas proyek, nilai baku ke direktori saat ini"
+
+#: libide/buildui/ide-environment-editor.c:67
+msgid "New variable…"
+msgstr "Variabel baru..."
+
 #: libide/devices/ide-device-manager.c:147
 #, c-format
-msgid "The device \"%s\" could not be found."
+msgid "The device “%s” could not be found."
 msgstr "Perangkat \"%s\" tidak bisa ditemukan."
 
 #: libide/directory/ide-directory-vcs.c:55
@@ -1107,42 +1399,40 @@ msgstr "Baris %u, Kolom %u"
 msgid "%u of %u"
 msgstr "%u dari %u"
 
-#: libide/editor/ide-editor-frame.c:963 plugins/project-tree/gtk/menus.ui:6
-msgid "Re_veal in Project Tree"
-msgstr "_Ungkapkan dalam Pohon Projek"
-
 #. OVR indicates we are in overwite mode
 #: libide/editor/ide-editor-frame.ui:17
 msgid "OVR"
 msgstr "OVR"
 
-#: libide/editor/ide-editor-frame.ui:160
+#: libide/editor/ide-editor-frame.ui:166
 msgid "Replace"
 msgstr "Ganti"
 
-#: libide/editor/ide-editor-frame.ui:173
+#: libide/editor/ide-editor-frame.ui:179
 msgid "Replace All"
 msgstr "Ganti Semua"
 
-#: libide/editor/ide-editor-frame.ui:195
+#: libide/editor/ide-editor-frame.ui:201
 msgid "Switch between Search and Search-and-Replace"
 msgstr "Bertukar antara Cari dan Cari-dan-Ganti"
 
-#: libide/editor/ide-editor-frame.ui:218
+#: libide/editor/ide-editor-frame.ui:224
+#: plugins/terminal/gb-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Tampilkan atau sembunyikan opsi pencarian seperti misalnya peka huruf besar "
 "kecil"
 
-#: libide/editor/ide-editor-frame.ui:279
+#: libide/editor/ide-editor-frame.ui:285
 msgid "Regular expressions"
 msgstr "Ekspresi reguler"
 
-#: libide/editor/ide-editor-frame.ui:294
+#: libide/editor/ide-editor-frame.ui:300
+#: plugins/terminal/gb-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "Peka huruf besar kecil"
 
-#: libide/editor/ide-editor-frame.ui:309
+#: libide/editor/ide-editor-frame.ui:315
 msgid "Match whole word only"
 msgstr "Cocok seluruh kata"
 
@@ -1174,20 +1464,105 @@ msgstr "Ke Baris"
 msgid "Go"
 msgstr "Lompat"
 
-#: libide/editor/ide-editor-perspective.c:448
-#: libide/preferences/ide-preferences-builtin.c:110
-#: libide/preferences/ide-preferences-builtin.c:139
+#: libide/editor/ide-editor-perspective.c:523
+#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:156
 msgid "Editor"
 msgstr "Penyunting"
 
-#: libide/editor/ide-editor-perspective.ui:27
+#: libide/editor/ide-editor-perspective.ui:30
 msgid "No open files"
 msgstr "Tidak ada berkas terbuka"
 
-#: libide/editor/ide-editor-perspective.ui:40
+#: libide/editor/ide-editor-perspective.ui:43
 msgid "Try opening a file by typing in the search box at the top"
 msgstr ""
 "Cobalah membuka suatu berkas dengan mengetik dalam kotak cari di puncak"
+
+#: libide/editor/ide-editor-spell-language-popover.c:232
+msgid "No language selected"
+msgstr "Tidak ada bahasa yang dipilih"
+
+#: libide/editor/ide-editor-spell-navigator.c:458
+msgid ""
+"Spell checker error: no language set. It’s maybe because no dictionaries are "
+"installed."
+msgstr ""
+"Kesalahan pemeriksa ejaan: tidak ada set bahasa. Ini mungkin karena tidak "
+"ada kamus yang diinstal."
+
+#: libide/editor/ide-editor-spell-widget.c:201
+msgid "No suggestions"
+msgstr "Tidak ada saran"
+
+#: libide/editor/ide-editor-spell-widget.c:278
+msgid "Completed spell checking"
+msgstr "Pemeriksaan ejaan selesai"
+
+#: libide/editor/ide-editor-spell-widget.c:636
+msgid "This word is already in the personal dictionary"
+msgstr "Kata ini sudah ada dalam kamus pribadi"
+
+#: libide/editor/ide-editor-spell-widget.c:639
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "Kata ini sudah ada dalam kamus %s"
+
+#: libide/editor/ide-editor-spell-widget.c:1270
+msgid "The word is not in the dictionary"
+msgstr "Kata tersebut tidak ada dalam kamus"
+
+#: libide/editor/ide-editor-spell-widget.ui:14
+msgid "Misspelled"
+msgstr "Salah eja"
+
+#: libide/editor/ide-editor-spell-widget.ui:65
+msgid "_Ignore"
+msgstr "Aba_ikan"
+
+#: libide/editor/ide-editor-spell-widget.ui:73
+msgid "Ignore _All"
+msgstr "_Abaikan Semua"
+
+#: libide/editor/ide-editor-spell-widget.ui:92
+msgid "Change _to"
+msgstr "Ubah _ke"
+
+#: libide/editor/ide-editor-spell-widget.ui:124
+msgid "Cha_nge"
+msgstr "Uba_h"
+
+#: libide/editor/ide-editor-spell-widget.ui:132
+msgid "Change A_ll"
+msgstr "Ubah _Semua"
+
+#: libide/editor/ide-editor-spell-widget.ui:151
+msgid "_Suggestions"
+msgstr "_Saran"
+
+#: libide/editor/ide-editor-spell-widget.ui:188
+msgid "Add Word"
+msgstr "Tambah Kata"
+
+#: libide/editor/ide-editor-spell-widget.ui:213
+msgid "A_dd"
+msgstr "T_ambah"
+
+#: libide/editor/ide-editor-spell-widget.ui:229
+msgid "Dictionary"
+msgstr "Kamus"
+
+#: libide/editor/ide-editor-spell-widget.ui:267
+msgid "Options"
+msgstr "Opsi"
+
+#: libide/editor/ide-editor-spell-widget.ui:292
+msgid "_Language"
+msgstr "_Bahasa"
+
+#: libide/editor/ide-editor-spell-widget.ui:319
+msgid "_Highlight"
+msgstr "_Penyorotan"
 
 #: libide/editor/ide-editor-tweak-widget.ui:22
 msgid "Search highlight mode…"
@@ -1206,17 +1581,17 @@ msgid "Auto indent"
 msgstr "Indentasi otomatis"
 
 #: libide/editor/ide-editor-tweak-widget.ui:99
-#: libide/preferences/ide-preferences-builtin.c:248
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Indentation"
 msgstr "Indentasi"
 
 #: libide/editor/ide-editor-tweak-widget.ui:127
-#: libide/preferences/ide-preferences-builtin.c:159
+#: libide/preferences/ide-preferences-builtin.c:176
 msgid "Spaces"
 msgstr "Spasi"
 
 #: libide/editor/ide-editor-tweak-widget.ui:137
-#: libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:177
 msgid "Tabs"
 msgstr "Tab"
 
@@ -1236,11 +1611,11 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: libide/editor/ide-editor-view-actions.c:310
+#: libide/editor/ide-editor-view-actions.c:309
 msgid "Save Document"
 msgstr "Simpan Dokumen"
 
-#: libide/editor/ide-editor-view-actions.c:436
+#: libide/editor/ide-editor-view-actions.c:435
 msgid "Save Document As"
 msgstr "Simpan Dokumen Sebagai"
 
@@ -1249,9 +1624,9 @@ msgid "_Reload"
 msgstr "_Muat Ulang"
 
 #: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:310
-#: libide/greeter/ide-greeter-perspective.ui:358
-#: libide/workbench/ide-omni-bar.ui:346
+#: libide/greeter/ide-greeter-perspective.ui:317
+#: libide/greeter/ide-greeter-perspective.ui:365
+#: libide/workbench/ide-omni-bar.ui:360
 msgid "_Cancel"
 msgstr "_Batal"
 
@@ -1263,28 +1638,32 @@ msgstr ""
 "Builder telah menemukan bahwa berkas ini telah diubah secara eksternal. "
 "Apakah Anda hendak memuat ulang berkas itu?"
 
-#: libide/greeter/ide-greeter-perspective.c:451
+#: libide/greeter/ide-greeter-perspective.c:456
 msgid "Failed to load the project"
-msgstr "Gagal memuat projek"
+msgstr "Gagal memuat proyek"
 
-#: libide/greeter/ide-greeter-perspective.c:668
+#: libide/greeter/ide-greeter-perspective.c:677
 msgid "Open Project"
-msgstr "Buka Projek"
+msgstr "Buka Proyek"
+
+#: libide/greeter/ide-greeter-perspective.c:693
+msgid "All Project Types"
+msgstr "Semua Jenis Proyek"
 
 #. the action:// link is used to jump to the new-project view
 #: libide/greeter/ide-greeter-perspective.ui:52
 msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 msgstr ""
-"Mengapa tidak <a href=\"action://app.new-project\">membuat sebuah projek "
+"Mengapa tidak <a href=\"action://app.new-project\">membuat sebuah proyek "
 "baru</a>?"
 
 #: libide/greeter/ide-greeter-perspective.ui:53
 msgid "No projects found"
-msgstr "Tidak ada projek yang ditemukan"
+msgstr "Tidak ada proyek yang ditemukan"
 
 #: libide/greeter/ide-greeter-perspective.ui:100
 msgid "Recent Projects"
-msgstr "Projek Baru-baru Ini"
+msgstr "Proyek Baru-baru Ini"
 
 #: libide/greeter/ide-greeter-perspective.ui:115
 #: libide/greeter/ide-greeter-perspective.ui:165
@@ -1293,7 +1672,7 @@ msgstr "Dimutakhirkan"
 
 #: libide/greeter/ide-greeter-perspective.ui:150
 msgid "Other Projects"
-msgstr "Projek Lain"
+msgstr "Proyek Lain"
 
 #: libide/greeter/ide-greeter-perspective.ui:206
 msgid "_Remove"
@@ -1301,23 +1680,23 @@ msgstr "_Hapus"
 
 #: libide/greeter/ide-greeter-perspective.ui:290
 msgid "Select a Project"
-msgstr "Pilih Projek"
+msgstr "Pilih Proyek"
 
-#: libide/greeter/ide-greeter-perspective.ui:296
+#: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Click an item to select"
 msgstr "Klik pada butir untuk memilih"
 
-#: libide/greeter/ide-greeter-perspective.ui:322
+#: libide/greeter/ide-greeter-perspective.ui:329
 msgid "Open…"
 msgstr "Buka..."
 
-#: libide/greeter/ide-greeter-perspective.ui:337
+#: libide/greeter/ide-greeter-perspective.ui:344
 msgid "Select projects for removal"
-msgstr "Pilih projek yang akan dihapus"
+msgstr "Pilih proyek yang akan dihapus"
 
-#: libide/greeter/ide-greeter-perspective.ui:357
+#: libide/greeter/ide-greeter-perspective.ui:364
 msgid "Return to project selection"
-msgstr "Kembali ke pemilihan projek"
+msgstr "Kembali ke pemilihan proyek"
 
 #: libide/gsettings/ide-language-defaults.c:178
 #, c-format
@@ -1326,7 +1705,7 @@ msgstr "%s memuat ASCII yang tidak valid"
 
 #: libide/gsettings/ide-language-defaults.c:193
 #, c-format
-msgid "Failed to parse integer from \"%s\""
+msgid "Failed to parse integer from “%s”"
 msgstr "Gagal mengurai bilangan bulat dari \"%s\""
 
 #: libide/gsettings/ide-language-defaults.c:271
@@ -1337,22 +1716,22 @@ msgstr "baku bahasa kurang versi dalam grup [global]."
 msgid "Failed to initialize defaults."
 msgstr "Gagal menginisialisasi baku."
 
-#: libide/ide.c:62
+#: libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Anda mesti memanggil %s() sebelum memakai libide."
 
-#: libide/ide-context.c:1870
+#: libide/ide-context.c:1887
 msgid "An unload request is already pending"
 msgstr "Suatu permintaan bongkar masih tertunda"
 
-#: libide/ide-context.c:1989
+#: libide/ide-context.c:2006
 msgid "Context has already been restored."
 msgstr "Konteks telah pernah dipulihkan."
 
 #: libide/ide-object.c:288
 #, c-format
-msgid "No implementations of extension point \"%s\"."
+msgid "No implementations of extension point “%s”."
 msgstr "Tidak ada implementasi titik ekstensi \"%s\"."
 
 #: libide/ide-object.c:380
@@ -1373,691 +1752,737 @@ msgid "Editor Shortcuts"
 msgstr "Pintasan Penyunting"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:396
+#: libide/keybindings/ide-shortcuts-window.ui:452
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Umum"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:400
+#: libide/keybindings/ide-shortcuts-window.ui:456
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Pencarian Global"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:407
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferensi"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:414
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Bilah Perintah"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:421
+#: libide/keybindings/ide-shortcuts-window.ui:477
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:428
+#: libide/keybindings/ide-shortcuts-window.ui:484
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr "Terminal pada Build Runtime"
+
+#: libide/keybindings/ide-shortcuts-window.ui:53
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Tik"
 
-#: libide/keybindings/ide-shortcuts-window.ui:55
+#: libide/keybindings/ide-shortcuts-window.ui:62
 msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Panel"
 
-#: libide/keybindings/ide-shortcuts-window.ui:59
+#: libide/keybindings/ide-shortcuts-window.ui:66
 msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Jungkitkan panel kiri"
 
-#: libide/keybindings/ide-shortcuts-window.ui:66
+#: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Jungkitkan panel kanan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:73
+#: libide/keybindings/ide-shortcuts-window.ui:80
 msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Jungkitkan panel bawah"
 
-#: libide/keybindings/ide-shortcuts-window.ui:82
+#: libide/keybindings/ide-shortcuts-window.ui:89
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gestur touchpad"
 
-#: libide/keybindings/ide-shortcuts-window.ui:87
-#: libide/keybindings/ide-shortcuts-window.ui:135
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Bertukar ke dokumen selanjutnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:94
-#: libide/keybindings/ide-shortcuts-window.ui:142
+#: libide/keybindings/ide-shortcuts-window.ui:101
+#: libide/keybindings/ide-shortcuts-window.ui:149
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Bertukar ke dokumen sebelumnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:102
+#: libide/keybindings/ide-shortcuts-window.ui:109
 msgctxt "shortcut window"
 msgid "Files"
 msgstr "Berkas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:107
+#: libide/keybindings/ide-shortcuts-window.ui:114
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Buat dokumen baru"
 
-#: libide/keybindings/ide-shortcuts-window.ui:114
+#: libide/keybindings/ide-shortcuts-window.ui:121
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Buka suatu dokumen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:121
+#: libide/keybindings/ide-shortcuts-window.ui:128
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Simpan dokumen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:128
+#: libide/keybindings/ide-shortcuts-window.ui:135
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Tutup dokumen"
 
-#: libide/keybindings/ide-shortcuts-window.ui:149
+#: libide/keybindings/ide-shortcuts-window.ui:156
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Tampilkan daftar dokumen yang terbuka"
 
-#: libide/keybindings/ide-shortcuts-window.ui:157
+#: libide/keybindings/ide-shortcuts-window.ui:164
+#: libide/keybindings/ide-shortcuts-window.ui:176
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Cari dan ganti"
 
-#: libide/keybindings/ide-shortcuts-window.ui:162
+#: libide/keybindings/ide-shortcuts-window.ui:169
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Cari"
 
-#: libide/keybindings/ide-shortcuts-window.ui:169
+#: libide/keybindings/ide-shortcuts-window.ui:183
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Cari cocok selanjutnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:176
+#: libide/keybindings/ide-shortcuts-window.ui:190
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Cari cocok sebelumnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:183
+#: libide/keybindings/ide-shortcuts-window.ui:197
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Bersihkan sorotan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:191
-#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/keybindings/ide-shortcuts-window.ui:205
+#: libide/keybindings/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Salin dan Tempel"
 
-#: libide/keybindings/ide-shortcuts-window.ui:196
-#: libide/keybindings/ide-shortcuts-window.ui:442
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:505
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Salin teks yang dipilih ke papan klip"
 
-#: libide/keybindings/ide-shortcuts-window.ui:203
+#: libide/keybindings/ide-shortcuts-window.ui:217
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Potong teks yang dipilih ke papan klip"
 
-#: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Tempel teks dari papan klip"
 
-#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:231
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Duplikatkan baris saat ini atau pilihan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:225
+#: libide/keybindings/ide-shortcuts-window.ui:239
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Tak Jadi dan Jadi Lagi"
 
-#: libide/keybindings/ide-shortcuts-window.ui:230
+#: libide/keybindings/ide-shortcuts-window.ui:244
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Batalkan perintah sebelumnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:237
+#: libide/keybindings/ide-shortcuts-window.ui:251
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Jadikan lagi perintah sebelumnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:245
+#: libide/keybindings/ide-shortcuts-window.ui:259
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Penyuntingan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:250
+#: libide/keybindings/ide-shortcuts-window.ui:264
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Naikkan angka pada kursor"
 
-#: libide/keybindings/ide-shortcuts-window.ui:257
+#: libide/keybindings/ide-shortcuts-window.ui:271
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Turunkan angka pada kursor"
 
-#: libide/keybindings/ide-shortcuts-window.ui:264
+#: libide/keybindings/ide-shortcuts-window.ui:278
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Gabungkan baris yang dipilih"
 
-#: libide/keybindings/ide-shortcuts-window.ui:271
+#: libide/keybindings/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Tampilkan jendela pelengkapan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:278
+#: libide/keybindings/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Jungkitkan penimpaan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:285
+#: libide/keybindings/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Indentasi ulang baris"
 
-#: libide/keybindings/ide-shortcuts-window.ui:293
+#: libide/keybindings/ide-shortcuts-window.ui:306
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "Hapus baris"
+
+#: libide/keybindings/ide-shortcuts-window.ui:313
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "Ubah nama simbol"
+
+#: libide/keybindings/ide-shortcuts-window.ui:314
+msgctxt "shortcut window"
+msgid "Requires semantic language support"
+msgstr "Memerlukan dukungan bahasa semantik"
+
+#: libide/keybindings/ide-shortcuts-window.ui:322
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigasi"
 
-#: libide/keybindings/ide-shortcuts-window.ui:298
+#: libide/keybindings/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Ke kesalahan selanjutnya dalam berkas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:305
+#: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Ke kesalahan sebelumnya dalam berkas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:312
+#: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Ke lokasi sunting sebelumnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:319
+#: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Ke lokasi sunting selanjutnya"
 
-#: libide/keybindings/ide-shortcuts-window.ui:326
+#: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Lompat ke definisi simbol"
 
-#: libide/keybindings/ide-shortcuts-window.ui:333
+#: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Naikkan viewport di dalam berkas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:340
+#: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Turunkan viewport di dalam berkas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:347
+#: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Pindahkan viewport ke akhir berkas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:354
+#: libide/keybindings/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Pindahkan viewport ke awal berkas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:361
+#: libide/keybindings/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Ke tanda kurung pasangan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:398
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Pilihan"
 
-#: libide/keybindings/ide-shortcuts-window.ui:374
+#: libide/keybindings/ide-shortcuts-window.ui:403
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Pilih semua"
 
-#: libide/keybindings/ide-shortcuts-window.ui:381
+#: libide/keybindings/ide-shortcuts-window.ui:410
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Pilih tak satupun"
 
-#: libide/keybindings/ide-shortcuts-window.ui:392
+#: libide/keybindings/ide-shortcuts-window.ui:418
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Bangun dan Jalankan"
+
+#: libide/keybindings/ide-shortcuts-window.ui:423
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Bangun"
+
+#: libide/keybindings/ide-shortcuts-window.ui:430
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Jalankan"
+
+#: libide/keybindings/ide-shortcuts-window.ui:437
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Profil"
+
+#: libide/keybindings/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Pintasan Terminal"
 
-#: libide/preferences/ide-preferences-builtin.c:46
+#: libide/keybindings/ide-shortcuts-window.ui:520
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Cari"
+
+#: libide/keybindings/ide-shortcuts-window.ui:525
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "Cari teks dalam terminal"
+
+#: libide/preferences/ide-preferences-builtin.c:65
+#: libide/preferences/ide-preferences-builtin.c:66
 msgid "Extensions"
 msgstr "Ekstensi"
 
-#: libide/preferences/ide-preferences-builtin.c:47
-msgid "Installed Extensions"
-msgstr "Ekstensi Terpasang"
-
-#: libide/preferences/ide-preferences-builtin.c:48
-msgid "Bundled Extensions"
-msgstr "Ekstensi Bawaan"
-
-#: libide/preferences/ide-preferences-builtin.c:85
+#: libide/preferences/ide-preferences-builtin.c:102
 msgid "Appearance"
 msgstr "Penampilan"
 
-#: libide/preferences/ide-preferences-builtin.c:87
+#: libide/preferences/ide-preferences-builtin.c:104
 msgid "Themes"
 msgstr "Tema"
 
-#: libide/preferences/ide-preferences-builtin.c:88
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Dark Theme"
 msgstr "Tema Gelap"
 
-#: libide/preferences/ide-preferences-builtin.c:88
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "Whether Builder should use a dark theme"
 msgstr "Apakah Builder mesti memakai tema gelap"
 
-#: libide/preferences/ide-preferences-builtin.c:88
+#: libide/preferences/ide-preferences-builtin.c:105
 msgid "dark theme"
 msgstr "tema gelap"
 
-#: libide/preferences/ide-preferences-builtin.c:89
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Grid Pattern"
 msgstr "Pola Kisi"
 
-#: libide/preferences/ide-preferences-builtin.c:89
+#: libide/preferences/ide-preferences-builtin.c:106
 msgid "Display a grid pattern underneath source code"
 msgstr "Tampilkan suatu pola kisi di bawah kode sumber"
 
-#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:108
 msgid "Font"
 msgstr "Fonta"
 
-#: libide/preferences/ide-preferences-builtin.c:110
+#: libide/preferences/ide-preferences-builtin.c:109
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr "fonta penyunting lebar seragam"
 
 #. XXX: This belongs in terminal addin
-#: libide/preferences/ide-preferences-builtin.c:112
-#: plugins/terminal/gb-terminal-workbench-addin.c:90
+#: libide/preferences/ide-preferences-builtin.c:111
+#: plugins/terminal/gb-terminal-workbench-addin.c:203
 msgid "Terminal"
 msgstr "Terminal"
 
-#: libide/preferences/ide-preferences-builtin.c:112
+#: libide/preferences/ide-preferences-builtin.c:111
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr "fonta terminal lebar seragam"
 
-#: libide/preferences/ide-preferences-builtin.c:124
+#: libide/preferences/ide-preferences-builtin.c:116
+msgid "Color Scheme"
+msgstr "Skema Warna"
+
+#: libide/preferences/ide-preferences-builtin.c:141
 msgid "Keyboard"
 msgstr "Papan Ketik"
 
-#: libide/preferences/ide-preferences-builtin.c:126
+#: libide/preferences/ide-preferences-builtin.c:143
 msgid "Emulation"
 msgstr "Emulasi"
 
-#: libide/preferences/ide-preferences-builtin.c:127
+#: libide/preferences/ide-preferences-builtin.c:144
 msgid "Default keybinding mode which mimics gedit"
 msgstr "Mode pengikatan tombol baku yang menirukan gedit"
 
-#: libide/preferences/ide-preferences-builtin.c:128
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emacs"
 msgstr "Emacs"
 
-#: libide/preferences/ide-preferences-builtin.c:128
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Emulates the Emacs text editor"
 msgstr "Mengemulasi penyunting teks Emacs"
 
-#: libide/preferences/ide-preferences-builtin.c:129
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Vim"
 msgstr "Vim"
 
-#: libide/preferences/ide-preferences-builtin.c:129
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Emulates the Vim text editor"
 msgstr "Mengemulasi penyunting teks Vim"
 
-#: libide/preferences/ide-preferences-builtin.c:131
+#: libide/preferences/ide-preferences-builtin.c:148
 msgid "Movement"
 msgstr "Pergerakan"
 
-#: libide/preferences/ide-preferences-builtin.c:132
+#: libide/preferences/ide-preferences-builtin.c:149
 msgid "Home moves to first non-whitespace character"
 msgstr "Home bergerak ke karakter bukan spasi pertama"
 
-#: libide/preferences/ide-preferences-builtin.c:133
+#: libide/preferences/ide-preferences-builtin.c:150
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backspace akan menghapus spasi ekstra agar tetap rata dengan lebar indentasi "
 "Anda"
 
-#: libide/preferences/ide-preferences-builtin.c:141
+#: libide/preferences/ide-preferences-builtin.c:158
 msgid "Cursor"
 msgstr "Kursor"
 
-#: libide/preferences/ide-preferences-builtin.c:142
+#: libide/preferences/ide-preferences-builtin.c:159
 msgid "Restore cursor position"
 msgstr "Memulihkan posisi kursor"
 
-#: libide/preferences/ide-preferences-builtin.c:142
+#: libide/preferences/ide-preferences-builtin.c:159
 msgid "Restore cursor position when a file is reopened"
 msgstr "Pulihkan posisi kursor ketika sebuah berkas dibuka ulang"
 
-#: libide/preferences/ide-preferences-builtin.c:143
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Scroll Offset"
 msgstr "Ofset Gulir"
 
-#: libide/preferences/ide-preferences-builtin.c:143
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr "Cacah baris minimal yang dipertahankan di atas dan di bawah kursor"
 
-#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr "Mengijinkan penyunting menggulir melewati akhir penyangga"
 
-#: libide/preferences/ide-preferences-builtin.c:146
+#: libide/preferences/ide-preferences-builtin.c:163
 msgid "Line Information"
 msgstr "Informasi Baris"
 
-#: libide/preferences/ide-preferences-builtin.c:147
+#: libide/preferences/ide-preferences-builtin.c:164
 msgid "Line numbers"
 msgstr "Nomor baris"
 
-#: libide/preferences/ide-preferences-builtin.c:147
+#: libide/preferences/ide-preferences-builtin.c:164
 msgid "Show line number at beginning of each line"
 msgstr "Tampilkan nomor baris di awal setiap baris"
 
-#: libide/preferences/ide-preferences-builtin.c:148
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Line changes"
 msgstr "Perubahan baris"
 
-#: libide/preferences/ide-preferences-builtin.c:148
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Show if a line was added or modified next to line number"
 msgstr ""
 "Tampilkan apakah suatu baris ditambahkan atau diubah di sebelah nomor baris"
 
-#: libide/preferences/ide-preferences-builtin.c:150
+#: libide/preferences/ide-preferences-builtin.c:167
 msgid "Highlight"
 msgstr "Penyorotan"
 
-#: libide/preferences/ide-preferences-builtin.c:151
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Current line"
 msgstr "Baris kini"
 
-#: libide/preferences/ide-preferences-builtin.c:151
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Make current line stand out with highlights"
 msgstr "Membuat baris saat ini menonjol dengan penyorotan"
 
-#: libide/preferences/ide-preferences-builtin.c:152
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Matching brackets"
 msgstr "Kurung pasangan"
 
-#: libide/preferences/ide-preferences-builtin.c:152
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Sorot tanda kurung pasangan berbasis pada posisi kursor"
 
-#: libide/preferences/ide-preferences-builtin.c:154
+#: libide/preferences/ide-preferences-builtin.c:171
 msgid "Code Overview"
 msgstr "Ringkasan Kode"
 
-#: libide/preferences/ide-preferences-builtin.c:155
+#: libide/preferences/ide-preferences-builtin.c:172
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Suatu tilikan diperkecil untuk meningkatkan navigasi kode sumber"
 
-#: libide/preferences/ide-preferences-builtin.c:156
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Automatically hide overview map"
 msgstr "Otomatis sembunyikan peta ikhtisar"
 
-#: libide/preferences/ide-preferences-builtin.c:156
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Automatically hide map when editor loses focus"
 msgstr "Secara otomatis menyembunyikan peta ketika penyunting kehilangan fokus"
 
-#: libide/preferences/ide-preferences-builtin.c:158
+#: libide/preferences/ide-preferences-builtin.c:175
 msgid "Whitespace Characters"
 msgstr "Karakter Whitespace"
 
-#: libide/preferences/ide-preferences-builtin.c:161
+#: libide/preferences/ide-preferences-builtin.c:178
 msgid "New line and carriage return"
 msgstr "Baris baru dan carriage return"
 
-#: libide/preferences/ide-preferences-builtin.c:162
+#: libide/preferences/ide-preferences-builtin.c:179
 msgid "Non-breaking spaces"
 msgstr "Spasi tak-pecah"
 
-#: libide/preferences/ide-preferences-builtin.c:163
+#: libide/preferences/ide-preferences-builtin.c:180
 msgid "Spaces inside of text"
 msgstr "Spasi di dalam teks"
 
-#: libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:181
 msgid "Trailing Only"
 msgstr "Hanya Di Ekor"
 
-#: libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:182
 msgid "Leading Only"
 msgstr "Hanya Di Depan"
 
-#: libide/preferences/ide-preferences-builtin.c:171
+#: libide/preferences/ide-preferences-builtin.c:188
 msgid "Code Insight"
 msgstr "Code Insight"
 
-#: libide/preferences/ide-preferences-builtin.c:174
+#: libide/preferences/ide-preferences-builtin.c:191
 msgid "Semantic Highlighting"
 msgstr "Penyorotan Semantik"
 
-#: libide/preferences/ide-preferences-builtin.c:174
+#: libide/preferences/ide-preferences-builtin.c:191
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
+"Gunakan kode insight untuk menyorot informasi tambahan yang ditemukan pada "
+"berkas sumber"
 
-#: libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:193
 msgid "Completion"
 msgstr "Pelengkapan"
 
-#: libide/preferences/ide-preferences-builtin.c:177
-#, fuzzy
+#: libide/preferences/ide-preferences-builtin.c:194
 msgid "Suggest words found in open files"
-msgstr ""
-"Sarankan pelengkapan kata yang ditemukan di dalam semua dokumen yang terbuka."
+msgstr "Sarankan kata yang ditemukan dalam berkas yang terbuka"
 
-#: libide/preferences/ide-preferences-builtin.c:177
-#, fuzzy
+#: libide/preferences/ide-preferences-builtin.c:194
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
-"Sarankan pelengkapan kata yang ditemukan di dalam semua dokumen yang terbuka."
+"Sarankan pelengkapan saat Anda mengetik berdasarkan kata yang ditemukan "
+"dalam setiap dokumen yang terbuka"
 
-#: libide/preferences/ide-preferences-builtin.c:178
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid "Suggest completions using Ctags"
 msgstr "Sarankan pelengkapan memakai Ctags"
 
-#: libide/preferences/ide-preferences-builtin.c:178
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
 msgstr ""
+"Buat dan kelola basis data Ctags untuk melengkapi nama kelas, fungsi, dan "
+"lainnya"
 
-#: libide/preferences/ide-preferences-builtin.c:179
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Sarankan pelengkapan memakai Clang (Percobaan)"
 
-#: libide/preferences/ide-preferences-builtin.c:179
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Gunakan Clang untuk pelengkapan dalam bahasa C dan C++"
 
-#: libide/preferences/ide-preferences-builtin.c:181
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
-#: libide/preferences/ide-preferences-builtin.c:187
-#: libide/snippets/ide-source-snippet-completion-provider.c:297
+#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Snippet"
 
-#: libide/preferences/ide-preferences-builtin.c:190
+#: libide/preferences/ide-preferences-builtin.c:207
 msgid "Code snippets"
 msgstr "Snippet kode"
 
-#: libide/preferences/ide-preferences-builtin.c:190
+#: libide/preferences/ide-preferences-builtin.c:207
 msgid "Use code fragments to increase typing efficiency"
-msgstr ""
+msgstr "Gunakan fragmen kode untuk meningkatkan efisiensi pengetikan"
 
-#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/preferences/ide-preferences-builtin.c:251
 msgid "Programming Languages"
 msgstr "Bahasa Pemrograman"
 
-#: libide/preferences/ide-preferences-builtin.c:241
-#, fuzzy
-msgid "Trim trailing whitespace"
-msgstr "di belakang"
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: libide/preferences/ide-preferences-builtin.c:262
+msgid "Search languages…"
+msgstr "Cari bahasa…"
 
-#: libide/preferences/ide-preferences-builtin.c:241
+#: libide/preferences/ide-preferences-builtin.c:317
+msgid "Trim trailing whitespace"
+msgstr "Pangkas trailing whitespace"
+
+#: libide/preferences/ide-preferences-builtin.c:317
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
+"Setelah menyimpan, trailing spasi dari baris yang diubah akan dipangkas."
 
-#: libide/preferences/ide-preferences-builtin.c:242
-#, fuzzy
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite Braces"
-msgstr "_Timpa"
+msgstr "Timpa Tanda Kurung"
 
-#: libide/preferences/ide-preferences-builtin.c:242
-#, fuzzy
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Overwrite closing braces"
-msgstr "_Timpa"
+msgstr "Timpa tanda kurung penutup"
 
-#: libide/preferences/ide-preferences-builtin.c:244
-#, fuzzy
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Margins"
 msgstr "Margin"
 
-#: libide/preferences/ide-preferences-builtin.c:245
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Show right margin"
 msgstr "Tampilkan marjin kanan"
 
-#: libide/preferences/ide-preferences-builtin.c:246
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Right margin position"
 msgstr "Posisi marjin kanan"
 
-#: libide/preferences/ide-preferences-builtin.c:246
-#, fuzzy
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Position in spaces for the right margin"
-msgstr "Tampilkan batas kanan"
+msgstr "Posisi di ruang untuk margin kanan"
 
-#: libide/preferences/ide-preferences-builtin.c:249
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Tab width"
 msgstr "Lebar tab"
 
-#: libide/preferences/ide-preferences-builtin.c:249
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Width of a tab character in spaces"
 msgstr "Lebar dari sebuah karakter tab dalam spasi"
 
-#: libide/preferences/ide-preferences-builtin.c:250
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Insert spaces instead of tabs"
 msgstr "Gunakan spasi, jangan tab"
 
-#: libide/preferences/ide-preferences-builtin.c:250
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Prefer spaces over use of tabs"
 msgstr "Lebih suka spasi daripada tab"
 
-#: libide/preferences/ide-preferences-builtin.c:251
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Automatically indent"
 msgstr "Indentasi otomatis"
 
-#: libide/preferences/ide-preferences-builtin.c:251
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Indent source code as you type"
 msgstr "Indentasikan kode sumber sembari Anda mengetik"
 
-#: libide/preferences/ide-preferences-builtin.c:266
-#: libide/preferences/ide-preferences-builtin.c:284
+#: libide/preferences/ide-preferences-builtin.c:342
+#: libide/preferences/ide-preferences-builtin.c:360
 msgid "Number of CPU"
 msgstr "Banyaknya CPU"
 
-#: libide/preferences/ide-preferences-builtin.c:299
-#: libide/workbench/ide-omni-bar.ui:372
-#: plugins/build-tools/gbp-build-panel.c:386
-msgid "Build"
-msgstr "Build"
-
-#: libide/preferences/ide-preferences-builtin.c:301
-#: plugins/build-tools/gbp-build-configuration-view.ui:11
-msgid "General"
-msgstr "Umum"
-
-#: libide/preferences/ide-preferences-builtin.c:302
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "Build Workers"
 msgstr "Pekerja Build"
 
-#: libide/preferences/ide-preferences-builtin.c:302
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "Number of parallel build workers"
 msgstr "Banyaknya pekerja build paralel"
 
-#: libide/preferences/ide-preferences-builtin.c:314
+#: libide/preferences/ide-preferences-builtin.c:390
 msgid "Projects"
-msgstr "Projek"
+msgstr "Proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:392
 msgid "Workspace"
 msgstr "Area kerja"
 
-#: libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "A place for all your projects"
-msgstr "Suatu tempat untuk semua projek Anda"
+msgstr "Suatu tempat untuk semua proyek Anda"
 
-#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:394
 msgid "Restore previously opened files"
 msgstr "Pulihkan berkas yang sebelumnya terbuka"
 
-#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:394
 msgid "Open previously opened files when loading a project"
-msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah projek"
+msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Project Discovery"
-msgstr "Penemuan Projek"
+msgstr "Penemuan Proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Discover projects on my computer"
-msgstr "Temukan projek pada komputer ini"
+msgstr "Temukan proyek pada komputer ini"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Scan your computer for existing projects"
-msgstr "Pindai komputer Anda untuk projek yang ada"
+msgstr "Pindai komputer Anda untuk proyek yang ada"
 
-#: libide/preferences/ide-preferences-builtin.c:442
-#: plugins/create-project/gbp-create-project-widget.ui:80
+#: libide/preferences/ide-preferences-builtin.c:518
+#: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "Version Control"
 msgstr "Kendali Versi"
+
+#. only the page goes here, plugins will fill in the details
+#: libide/preferences/ide-preferences-builtin.c:530
+msgid "SDKs"
+msgstr "SDK"
 
 #: libide/preferences/ide-preferences-font-button.ui:57
 msgid "_Select"
 msgstr "_Pilih"
 
-#: libide/preferences/ide-preferences-perspective.c:886
+#: libide/preferences/ide-preferences-perspective.c:963
 msgid "Preferences"
 msgstr "Preferensi"
 
@@ -2067,71 +2492,52 @@ msgstr "Preferensi Pencarian"
 
 #: libide/projects/ide-project.c:527
 msgid "Destination file must be within the project tree."
-msgstr "Berkas tujuan mesti di dalam pohon projek."
+msgstr "Berkas tujuan mesti di dalam pohon proyek."
 
 #: libide/projects/ide-project.c:662
 msgid "File must be within the project tree."
-msgstr "Berkas mesti di dalam pohon projek."
+msgstr "Berkas mesti di dalam pohon proyek."
 
 #: libide/projects/ide-recent-projects.c:396
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() hanya dapat dieksekusi sekali"
 
-#: libide/pygobject/ide-pygobject-script.c:135
-msgid "Attempt to load a PyGObject script with no filename."
-msgstr "Upaya memuat suatu skrip PyGObject tanpa nama berkas."
+#: libide/runner/ide-run-button.ui:41
+msgid "Stop running"
+msgstr "Berhenti jalankan"
 
-#: libide/pygobject/ide-pygobject-script.c:254
-msgid "The filename for the script was not provided."
-msgstr "Nama berkas bagi skrip tidak diberikan."
+#: libide/runner/ide-run-button.ui:57
+msgid "Change run options"
+msgstr "Ubah opsi jalankan"
 
-#: libide/pygobject/ide-pygobject-script.c:265
-msgid "The script must be on a local filesystem."
-msgstr "Skrip mesti pada sistem berkas lokal."
-
-#: libide/pygobject/ide-pygobject-script.c:274
-#, c-format
-msgid "The script \"%s\" is not a PyGObject file."
-msgstr "Skrip \"%s\" bukan berkas PyGObject."
-
-#: libide/runner/ide-run-manager.c:171
+#: libide/runner/ide-run-manager.c:225
 msgid "Run"
 msgstr "Jalankan"
 
-#: libide/runner/ide-run-manager.c:200
+#: libide/runner/ide-run-manager.c:254
 msgid "Cannot run target, another target is running"
 msgstr "Tidak bisa menjalankan target, target lain sedang berjalan"
 
-#: libide/runner/ide-run-manager.c:287
-#: plugins/autotools/ide-autotools-build-task.c:440
+#: libide/runner/ide-run-manager.c:324
 msgid "Failed to locate runtime"
 msgstr "Gagal menemukan runtime"
 
-#: libide/runner/ide-runner.c:137
+#: libide/runner/ide-runner.c:165
 msgid "Process quit unexpectedly"
 msgstr "Proses keluar tak disangka"
 
-#: libide/runtimes/ide-runtime-manager.c:104
+#: libide/runtimes/ide-runtime-manager.c:114
 msgid "Host operating system"
 msgstr "Sistem operasi host"
 
-#: libide/scripting/ide-script.c:205
-#, c-format
-msgid "%s has not implemented GAsyncInitable."
-msgstr "%s belum mengimplementasi GAsyncInitable."
-
-#: libide/search/ide-omni-search-display.c:271
+#: libide/search/ide-omni-search-display.c:267
 msgid "Cannot add provider more than once."
 msgstr "Tak bisa menambahkan penyedia lebih dari sekali."
 
-#: libide/search/ide-omni-search-display.c:347
+#: libide/search/ide-omni-search-display.c:343
 msgid "The provider could not be found."
 msgstr "Penyedia tidak bisa ditemukan."
-
-#: libide/snippets/ide-source-snippet.c:372
-msgid "Chunk does not belong to snippet."
-msgstr "Penggalan bukan milik snippet."
 
 #: libide/snippets/ide-source-snippets-manager.c:96
 #, c-format
@@ -2143,19 +2549,29 @@ msgstr "Gagal membuka direktori: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Gagal memuat berkas: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5139
+#: libide/sourceview/ide-source-view.c:5312
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5141
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5255
+#: libide/sourceview/ide-source-view.c:5428
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
+
+#: libide/sourceview/ide-source-view.c:5855
+msgid "Rename symbol"
+msgstr "Ubah nama simbol"
+
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "Memasang %u paket"
 
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
@@ -2175,8 +2591,8 @@ msgstr "ILCreateFromPath() gagal"
 
 #: libide/util/ide-file-manager.c:129
 #, c-format
-msgid "Cannot convert '%s' into a valid NSURL."
-msgstr "Tidak bisa mengonversi '%s' ke suatu NSURL yang valid."
+msgid "Cannot convert “%s” into a valid NSURL."
+msgstr "Tidak bisa mengonversi \"%s\" ke suatu NSURL yang valid."
 
 #: libide/util/ide-file-manager.c:157
 msgid "Connecting to org.freedesktop.FileManager1 failed: "
@@ -2187,67 +2603,65 @@ msgid "Calling ShowItems failed: "
 msgstr "Pemanggilan ShowItems gagal:"
 
 #: libide/util/ide-uri.c:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Invalid %-encoding in URI"
-msgstr "URI folder '%s' tidak valid"
+msgstr "%-encode dalam URI tidak valid"
 
 #: libide/util/ide-uri.c:219
 msgid "Non-UTF-8 characters in URI"
 msgstr "Karakter bukan UTF-8 dalam URI"
 
 #: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
-#, fuzzy, c-format
-msgid "Invalid IP literal '%s' in URI"
-msgstr "path atau URI \"%s\" tidak valid"
+#, c-format
+msgid "Invalid IP literal “%s” in URI"
+msgstr "IP literal “%s” dalam URI tidak valid"
 
 #: libide/util/ide-uri.c:411
 #, c-format
-msgid "Invalid encoded IP literal '%s' in URI"
-msgstr ""
+msgid "Invalid encoded IP literal “%s” in URI"
+msgstr "Enkode IP literal “%s” dalam URI tidak valid"
 
 #: libide/util/ide-uri.c:420
 #, c-format
-msgid "Invalid non-ASCII hostname '%s' in URI"
-msgstr "Nama host bukan ASCII yang tidak valid '%s' dalam URI"
+msgid "Invalid non-ASCII hostname “%s” in URI"
+msgstr "Nama host non-ASCII \"%s\" dalam URI tidak valid"
 
 #: libide/util/ide-uri.c:434
 #, c-format
-msgid "Non-ASCII hostname '%s' forbidden in this URI"
-msgstr "Nama host bukan ASCII '%s' dilarang dalam URI ini"
+msgid "Non-ASCII hostname “%s” forbidden in this URI"
+msgstr "Nama host non-ASCII \"%s\" dilarang dalam URI ini"
 
 #: libide/util/ide-uri.c:457
 #, c-format
-msgid "Could not parse port '%s' in URI"
-msgstr "Gagal mengurai port '%s' dalam URI"
+msgid "Could not parse port “%s” in URI"
+msgstr "Tidak dapat menguraikan port \"%s\" dalam URI"
 
 #: libide/util/ide-uri.c:464
 #, c-format
-msgid "Port '%s' in URI is out of range"
-msgstr "Port '%s' dalam URI di luar jangkauan"
+msgid "Port “%s” in URI is out of range"
+msgstr "Port \"%s\" dalam URI di luar jangkauan"
 
 #: libide/util/ide-uri.c:590
 msgid "Base URI is not absolute"
 msgstr "URI basis tidak absolut"
 
 #: libide/util/ide-uri.c:615
-#, fuzzy
 msgid "URI is not absolute, and no base URI was provided"
-msgstr "URI untuk berkas desktop peluncur panel tidak ada\n"
+msgstr "URI tidak absolut, dan tidak ada dasar URI yang disediakan"
 
 #: libide/util/ide-uri.c:660
-#, fuzzy, c-format
-msgid "Could not parse '%s' as absolute URI"
-msgstr "Gagal mengurai URI PKCS#11 '%s'\n"
+#, c-format
+msgid "Could not parse “%s” as absolute URI"
+msgstr "Tidak dapat menguraikan \"%s\" sebagai URI absolut"
 
 #: libide/util/ide-uri.c:1203
-#, fuzzy, c-format
-msgid "URI '%s' has no host component"
-msgstr "Host \"%s\" memiliki UserGroup \"%s\"\n"
+#, c-format
+msgid "URI “%s” has no host component"
+msgstr "URI \"%s\" tidak memiliki komponen host"
 
 #: libide/workbench/ide-layout-tab-bar.ui:33
-#, fuzzy
 msgid "List open files"
-msgstr "Berkas untuk dibuka"
+msgstr "Daftar berkas yang terbuka"
 
 #: libide/workbench/ide-layout-tab.ui:19
 msgid "Jump to previous location"
@@ -2261,17 +2675,12 @@ msgstr "Lompat ke lokasi selanjutnya"
 msgid "Close the current document"
 msgstr "Tutup dokumen kini"
 
-#: libide/workbench/ide-layout-view.c:125
+#: libide/workbench/ide-layout-view.c:142
 msgid "untitled document"
 msgstr "dokumen tanpa judul"
 
-#. Translators: "Target" is providing context to the selected build configuration
-#: libide/workbench/ide-omni-bar.c:365
-msgid "Target"
-msgstr "Target"
-
 #. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:88
+#: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
 msgstr "kurang"
 
@@ -2279,399 +2688,104 @@ msgstr "kurang"
 msgid "Edit build configuration"
 msgstr "Sunting konfigurasi build"
 
-#: libide/workbench/ide-omni-bar-row.ui:54
-#: plugins/build-tools/gbp-build-configuration-view.ui:129
-msgid "Device"
-msgstr "Perangkat"
-
-#: libide/workbench/ide-omni-bar-row.ui:85
-#: plugins/build-tools/gbp-build-configuration-view.ui:157
-msgid "Runtime"
-msgstr "Runtime"
-
-#: libide/workbench/ide-omni-bar.ui:101
-msgid "Build project (Ctrl+F7)"
-msgstr "Build projek (Ctrl+F7)"
-
-#: libide/workbench/ide-omni-bar.ui:119
-msgid "Cancel build"
-msgstr "Batalkan build"
-
-#: libide/workbench/ide-omni-bar.ui:163
+#: libide/workbench/ide-omni-bar.ui:177
 #: plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
-msgstr "Projek"
+msgstr "Proyek"
 
-#: libide/workbench/ide-omni-bar.ui:187
+#: libide/workbench/ide-omni-bar.ui:201
 msgid "Branch"
 msgstr "Branch"
 
-#: libide/workbench/ide-omni-bar.ui:222
+#: libide/workbench/ide-omni-bar.ui:236
 msgid "Build Profile"
 msgstr "Profil Build"
 
-#: libide/workbench/ide-omni-bar.ui:268
+#: libide/workbench/ide-omni-bar.ui:282
 msgid "Last build"
 msgstr "Build terakhir"
 
-#: libide/workbench/ide-omni-bar.ui:318
-msgid "Failed"
-msgstr "Gagal"
-
-#: libide/workbench/ide-omni-bar.ui:335
+#: libide/workbench/ide-omni-bar.ui:349
 msgid "View Output"
 msgstr "Tilik Keluaran"
 
-#: libide/workbench/ide-omni-bar.ui:382
+#: libide/workbench/ide-omni-bar.ui:396
 msgid "Rebuild"
 msgstr "Build Ulang"
 
-#: libide/workbench/ide-omni-bar.ui:392
+#: libide/workbench/ide-omni-bar.ui:406
 msgid "Clean"
 msgstr "Bersihkan"
 
-#: libide/workbench/ide-workbench-actions.c:66
+#: libide/workbench/ide-omni-bar.ui:420
+msgid "Build project"
+msgstr "Bangun proyek"
+
+#: libide/workbench/ide-perspective-menu-button.ui:15
+msgid "Switch perspective"
+msgstr "Beralih perspektif"
+
+#: libide/workbench/ide-workbench-actions.c:73
 msgid "Open File"
 msgstr "Buka Berkas"
 
-#: libide/workbench/ide-workbench.c:558
+#: libide/workbench/ide-workbench.c:564
 #, c-format
-msgid "%s - Builder"
-msgstr "%s - Builder"
+msgid "%s — Builder"
+msgstr "%s — Builder"
 
 #: libide/workbench/ide-workbench-header-bar.ui:43
 msgid "Transfers"
 msgstr "Transfer"
 
 #: libide/workbench/ide-workbench-header-bar.ui:50
-#, fuzzy
 msgid "Show workbench menu"
-msgstr "Tampilkan gambar menu"
+msgstr "Tampilkan menu meja kerja"
 
 #: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
 msgstr "Tekan Ctrl+. untuk mencari"
 
-#: plugins/autotools/ide-autotools-builder.c:47
-msgid "Build cancelled"
-msgstr "Build dibatalkan"
+#: plugins/autotools/ide-autotools-makecache-stage.c:194
+msgid "Building cache…"
+msgstr "Membangun tembolok…"
 
-#: plugins/autotools/ide-autotools-builder.c:49
-msgid "Build failed"
-msgstr "Build gagal"
-
-#: plugins/autotools/ide-autotools-builder.c:55
-msgid "Build successful"
-msgstr "Build sukses"
-
-#: plugins/autotools/ide-autotools-builder.c:159
-#: plugins/autotools/ide-autotools-builder.c:240
-#: plugins/autotools/ide-autotools-build-task.c:1037
-msgid "Building…"
-msgstr "Sedang build..."
-
-#: plugins/autotools/ide-autotools-builder.c:201
-msgid "Install cancelled"
-msgstr "Instalasi dibatalkan"
-
-#: plugins/autotools/ide-autotools-builder.c:203
-msgid "Install failed"
-msgstr "Instalasi gagal"
-
-#: plugins/autotools/ide-autotools-builder.c:209
-msgid "Install successful"
-msgstr "Instalasi sukses"
-
-#: plugins/autotools/ide-autotools-build-system.c:170
-msgid "Failed to locate configure.ac"
-msgstr "Gagal menemukan configure.ac"
-
-#: plugins/autotools/ide-autotools-build-task.c:179
-msgid "Directory must be on a locally mounted filesystem."
-msgstr "Direktori mesti ada pada suatu sistem berkas yang dikait secara lokal."
-
-#: plugins/autotools/ide-autotools-build-task.c:429
-msgid "Failed to locate device"
-msgstr "Gagal mencari perangkat"
-
-#: plugins/autotools/ide-autotools-build-task.c:664
-msgid "Cannot execute build task more than once"
-msgstr "Tidak bisa menjalankan tugas build lebih dari sekali"
-
-#: plugins/autotools/ide-autotools-build-task.c:807
-msgid "Failed to create build directory."
-msgstr "Gagal membuat direktori build."
-
-#: plugins/autotools/ide-autotools-build-task.c:816
-#, c-format
-msgid "'%s' is not a directory."
-msgstr "'%s' bukan direktori."
-
-#: plugins/autotools/ide-autotools-build-task.c:855
-#, c-format
-msgid "autogen.sh is missing from project directory (%s)."
-msgstr "autogen.sh hilang dari direktori projek (%s)."
-
-#: plugins/autotools/ide-autotools-build-task.c:865
-msgid "autogen.sh is not executable."
-msgstr "autogen.sh bukan executable."
-
-#: plugins/autotools/ide-autotools-build-task.c:869
-msgid "Running autogen…"
-msgstr "Menjalankan autogen..."
-
-#: plugins/autotools/ide-autotools-build-task.c:903
-#, c-format
-msgid "autogen.sh failed to create configure (%s)"
-msgstr "autogen.sh gagal membuat configure (%s)"
-
-#: plugins/autotools/ide-autotools-build-task.c:938
-msgid "Running configure…"
-msgstr "Menjalankan configure..."
-
-#: plugins/autotools/ide-autotools-build-task.c:1035
-msgid "Cleaning…"
-msgstr "Membersihkan..."
-
-#: plugins/autotools/ide-makecache.c:1147
-msgid "Invalid makefile provided, ignoring."
-msgstr "Makefile yang diberikan tak valid, diabaikan."
-
-#: plugins/autotools-templates/autotools_templates/__init__.py:261
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library"
 msgstr "Pustaka Bersama"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:263
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
-msgstr "Buat suatu projek autotools baru dengan pustaka bersama"
+msgstr "Buat suatu proyek autotools baru dengan pustaka bersama"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:287
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
 msgid "Empty Project"
-msgstr "Projek Kosong"
+msgstr "Proyek Kosong"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:290
-#, fuzzy
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
-msgstr "Tak dapat membuat projek baru."
+msgstr "Buat proyek autotools kosong baru"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:304
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
 msgid "GNOME Application"
 msgstr "Aplikasi GNOME"
 
-#: plugins/autotools-templates/autotools_templates/__init__.py:306
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Buat suatu aplikasi GNOME baru yang siap-flatpak"
 
-#: plugins/build-tools/gbp-build-configuration-row.ui:43
-msgid "Duplicate the configuration"
-msgstr "Duplikatkan konfigurasi"
-
-#: plugins/build-tools/gbp-build-configuration-row.ui:59
-msgid "Delete the configuration"
-msgstr "Hapus konfigurasi"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:28
-msgid "The name of the build configuration"
-msgstr "Nama berkas konfigurasi build"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:37
-msgid "Name"
-msgstr "Nama"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:58
-msgid "The prefix to use when installing the project"
-msgstr "Prefiks yang dipakai ketika memasang projek"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:67
-msgid "Installation Prefix"
-msgstr "Prefiks Instalasi"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:88
-msgid "Options to use when bootstrapping the project"
-msgstr "Opsi yang dipakai ketika mem-bootstrap projek"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:97
-#, fuzzy
-msgid "Configure Options"
-msgstr "&Konfigurasi..."
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:185
-msgid "Environment"
-msgstr "Lingkungan"
-
-#: plugins/build-tools/gbp-build-log-panel.c:254
-msgid "Build Output"
-msgstr "Keluaran Build"
-
-#: plugins/build-tools/gbp-build-panel.c:84
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:190
 #, c-format
-msgid "%d warning"
-msgid_plural "%d warnings"
-msgstr[0] "%d peringatan"
+msgid "No beautifier available for “%s”"
+msgstr "Tidak ada beautifier yang tersedia untuk \"%s\""
 
-#: plugins/build-tools/gbp-build-panel.c:91
-#, c-format
-msgid "%d error"
-msgid_plural "%d errors"
-msgstr[0] "%d kesalahan"
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:192
+msgid "No beautifier available"
+msgstr "Tidak ada beautifier yang tersedia"
 
-#: plugins/build-tools/gbp-build-panel.c:246
-msgid "Errors"
-msgstr "Kesalahan"
-
-#: plugins/build-tools/gbp-build-panel.c:249
-msgid "Warnings"
-msgstr "Peringatan"
-
-#: plugins/build-tools/gbp-build-panel.c:252
-msgid "Notes"
-msgstr "Catatan"
-
-#: plugins/build-tools/gbp-build-panel-row.c:76
-msgid "Unknown file"
-msgstr "Berkas tak dikenal"
-
-#: plugins/build-tools/gbp-build-panel.ui:33
-msgid "Status:"
-msgstr "Status:"
-
-#: plugins/build-tools/gbp-build-panel.ui:58
-#, fuzzy
-msgid "Running Time:"
-msgstr "Lama waktu putar data audio dalam bentuk JJMMDD."
-
-#: plugins/build-tools/gbp-build-panel.ui:82
-msgid "Warnings:"
-msgstr "Peringatan:"
-
-#: plugins/build-tools/gbp-build-panel.ui:106
-msgid "Errors:"
-msgstr "Kesalahan:"
-
-#: plugins/build-tools/gbp-build-tool.c:102
-#: plugins/build-tools/gbp-build-tool.c:115
-msgid "========================\n"
-msgstr "========================\n"
-
-#: plugins/build-tools/gbp-build-tool.c:103
-#, c-format
-msgid "           Project Name: %s\n"
-msgstr "           Nama Projek: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:104
-#, c-format
-msgid " Version Control System: %s\n"
-msgstr " Sistem Kendali Versi: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:105
-#, c-format
-msgid "           Build System: %s\n"
-msgstr "           Sistem Build: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:106
-#, c-format
-msgid "    Build Date and Time: %s\n"
-msgstr "    Tanggal dan Waktu Build: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:107
-#, c-format
-msgid "    Building for Device: %s (%s)\n"
-msgstr "    Membangun untuk Perangkat: %s (%s)\n"
-
-#: plugins/build-tools/gbp-build-tool.c:112
-#, c-format
-msgid "            Environment: %s\n"
-msgstr "            Lingkungan: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:142
-#: plugins/build-tools/gbp-build-tool.c:146
-msgid "===============\n"
-msgstr "===============\n"
-
-#: plugins/build-tools/gbp-build-tool.c:143
-#, c-format
-msgid " Build Failure: %s\n"
-msgstr " Kegagalan Build: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:144
-msgid " Build ran for: %"
-msgstr " Build berjalan untuk: %s"
-
-#.
-#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
-#. *       here too. It would be nice if we could say, go build this project,
-#. *       for this device, and then deploy.
-#.
-#: plugins/build-tools/gbp-build-tool.c:157
-#: plugins/build-tools/gbp-build-tool.c:161
-msgid "=================\n"
-msgstr "=================\n"
-
-#: plugins/build-tools/gbp-build-tool.c:158
-msgid " Build Successful\n"
-msgstr " Build Sukses\n"
-
-#: plugins/build-tools/gbp-build-tool.c:159
-msgid "   Build ran for: %"
-msgstr "   Build berjalan untuk: %"
-
-#: plugins/build-tools/gbp-build-tool.c:212
-#, c-format
-msgid "Failed to locate device \"%s\""
-msgstr "Gagal menemukan perangkat \"%s\""
-
-#: plugins/build-tools/gbp-build-tool.c:222
-#, c-format
-msgid "Failed to locate runtime \"%s\""
-msgstr "Gagal menemukan runtime \"%s\""
-
-#: plugins/build-tools/gbp-build-tool.c:286
-msgid "Clean the project"
-msgstr "Bersihkan projek"
-
-#: plugins/build-tools/gbp-build-tool.c:288
-#, fuzzy
-msgid "The ID of the device to build for"
-msgstr "ID Perangkat:"
-
-#: plugins/build-tools/gbp-build-tool.c:289
-#, fuzzy
-msgid "local"
-msgstr "Lokal"
-
-#: plugins/build-tools/gbp-build-tool.c:291
-#, fuzzy
-msgid "The runtime to use for building"
-msgstr "    Membangun untuk Perangkat: %s (%s)\n"
-
-#: plugins/build-tools/gbp-build-tool.c:292
-msgid "host"
-msgstr "host"
-
-#: plugins/build-tools/gbp-build-tool.c:294
-msgid "Number of workers to use when building"
-msgstr "Banyaknya pekerja yang dipakai saat build"
-
-#: plugins/build-tools/gbp-build-tool.c:295
-msgid "N"
-msgstr "N"
-
-#: plugins/build-tools/gbp-build-tool.c:297
-#, fuzzy
-msgid "The configuration to use from .buildconfig"
-msgstr "Menata %s untuk memakai konfigurasi standar"
-
-#: plugins/build-tools/gbp-build-tool.c:298
-msgid "CONFIG_ID"
-msgstr "ID_KONFIG"
-
-#: plugins/build-tools/gbp-build-tool.c:300
-msgid "Path to project file, defaults to current directory"
-msgstr "Path ke berkas projek, nilai baku ke direktori saat ini"
-
-#: plugins/build-tools/ide-environment-editor.c:65
-msgid "New variable…"
-msgstr "Variabel baru..."
+#: plugins/beautifier/gtk/menus.ui:9
+msgid "Beautify"
+msgstr "Beautify"
 
 #: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -2679,35 +2793,35 @@ msgstr "Clang"
 
 #: plugins/clang/ide-clang-preferences-addin.c:63
 msgid "Show errors and warnings provided by Clang"
-msgstr ""
+msgstr "Tampilkan kesalahan dan peringatan yang disediakan oleh Clang"
 
 #. translators: keywords used when searching for preferences
 #: plugins/clang/ide-clang-preferences-addin.c:65
 msgid "clang diagnostics warnings errors"
-msgstr ""
+msgstr "kesalahan peringatan diagnostik clang"
 
-#: plugins/clang/ide-clang-service.c:263
+#: plugins/clang/ide-clang-service.c:326
 msgid "Unknown failure"
 msgstr "Kegagalan yang tak dikenal"
 
-#: plugins/clang/ide-clang-service.c:267
+#: plugins/clang/ide-clang-service.c:330
 msgid "Clang crashed"
 msgstr "Clang crash"
 
-#: plugins/clang/ide-clang-service.c:271
+#: plugins/clang/ide-clang-service.c:334
 msgid "Invalid arguments"
 msgstr "Argumen tidak valid"
 
-#: plugins/clang/ide-clang-service.c:275
+#: plugins/clang/ide-clang-service.c:338
 msgid "AST read error"
 msgstr "Galat baca AST"
 
-#: plugins/clang/ide-clang-service.c:287
+#: plugins/clang/ide-clang-service.c:350
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Gagal membuat unit terjemahan: %s"
 
-#: plugins/clang/ide-clang-service.c:395
+#: plugins/clang/ide-clang-service.c:481 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
@@ -2748,18 +2862,16 @@ msgid "GIMP palette"
 msgstr "Palet GIMP"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:738
-#, fuzzy
 msgid "GNOME Builder palette"
-msgstr "Builder - Kembangkan perangkat lunak bagi GNOME"
+msgstr "Palet GNOME Builder"
 
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
 msgstr "Nama palet"
 
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
-#, fuzzy
 msgid "Enter a new name for the palette"
-msgstr "Masukkan nama baru untuk warna "
+msgstr "Masukkan nama baru untuk palet"
 
 #: plugins/color-picker/gb-color-picker-workbench-addin.c:178
 msgid "Colors"
@@ -2767,30 +2879,27 @@ msgstr "Warna"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 msgid "HSV visibility"
-msgstr ""
+msgstr "Visibilitas HSV"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
-#, fuzzy
 msgid "If the HSV components are visible."
-msgstr "Tampak"
+msgstr "Jika komponen HSV terlihat."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
 msgid "LAB visibility"
-msgstr ""
+msgstr "Visibilitas LAB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
-#, fuzzy
 msgid "If the LAB components are visible."
-msgstr "Tampak"
+msgstr "Jika komponen LAB terlihat."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
 msgid "RGB visibility"
-msgstr ""
+msgstr "Visibilitas RGB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
-#, fuzzy
 msgid "If the RGB components are visible."
-msgstr "RGB bawaan"
+msgstr "Jika komponen RGB terlihat."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
 msgid "RGB unit"
@@ -2806,17 +2915,15 @@ msgstr "ID palet yang dipilih"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
 msgid "The selected palette ID among the loaded ones."
-msgstr ""
+msgstr "Palet ID yang dipilih diantara yang dimuat."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
-#, fuzzy
 msgid "Color strings visibility"
-msgstr "String warn"
+msgstr "Visibilitas string warna"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
-#, fuzzy
 msgid "The visible color strings."
-msgstr "String warn"
+msgstr "String warna terlihat"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
 msgid "Color filter"
@@ -2837,7 +2944,7 @@ msgstr "Visibilitas:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:63
 msgid "Select the color spaces for which you want to see sliders in the panel."
-msgstr ""
+msgstr "Pilih ruang warna yang ingin Anda lihat slider di panel."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
@@ -2856,8 +2963,8 @@ msgid "Filters:"
 msgstr "Penyaring:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
-msgid "Select a filter that act on the colors or 'None'."
-msgstr "Pilih tapis yang diterapkan pada warna atau 'None'."
+msgid "Select a filter that act on the colors or “None”."
+msgstr "Pilih penyaring yang bekerja pada warna atau \"None\"."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -2872,14 +2979,12 @@ msgid "Palette view mode:"
 msgstr "Mode tampilan palet:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:638
-#, fuzzy
 msgid "List"
 msgstr "Daftar"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:676
-#, fuzzy
 msgid "Swatches"
-msgstr "ukuran swatch dalam pt"
+msgstr "Swatch"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:717
 msgid "Palette management"
@@ -2898,28 +3003,24 @@ msgid "Select the palette you want to see in the panel or close one."
 msgstr "Pilih palet yang ingin Anda lihat dalam panel atau tutup satu."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:891
-#, fuzzy
 msgid "No loaded palettes"
-msgstr "Palet"
+msgstr "Tidak ada palet yang dimuat"
 
 #: plugins/color-picker/gtk/color-picker-preview.ui:45
-#, fuzzy
 msgid "No selected palettes"
-msgstr "Palet"
+msgstr "Tidak ada palet yang dipilih"
 
 #: plugins/color-picker/gtk/color-picker-preview.ui:58
-#, fuzzy
 msgid "Select a palette file"
-msgstr "Pilih sebuah file"
+msgstr "Pilih berkas palet"
 
-#: plugins/color-picker/gtk/color-picker.ui:61
+#: plugins/color-picker/gtk/color-picker.ui:62
 msgid "Try loading or generating a palette using the menu"
-msgstr ""
+msgstr "Coba untuk memuat atau menghasilkan palet menggunakan menu"
 
 #: plugins/color-picker/gtk/menus.ui:7
-#, fuzzy
 msgid "Enable color picker"
-msgstr "Pemilih Warna"
+msgstr "Aktifkan pemilih warna"
 
 #: plugins/command-bar/gb-command-bar.c:302
 #, c-format
@@ -2941,17 +3042,16 @@ msgstr "%s tak valid bagi %s"
 
 #: plugins/command-bar/gb-vim.c:158
 #, c-format
-msgid "Cannot find language '%s'"
-msgstr "Tak bisa temukan bahasa '%s'"
+msgid "Cannot find language “%s”"
+msgstr "Tidak dapat menemukan bahasa “%s”"
 
 #: plugins/command-bar/gb-vim.c:315
-#, fuzzy
 msgid "This command requires a GtkSourceView to be focused"
-msgstr "mode vim memerlukan GtkSourceView"
+msgstr "Perintah ini memerlukan GtkSourceView yang difokuskan"
 
 #: plugins/command-bar/gb-vim.c:326
 msgid "This command requires a view to be focused"
-msgstr ""
+msgstr "Perintah ini memerlukan pandangan yang difokuskan"
 
 #: plugins/command-bar/gb-vim.c:383
 #, c-format
@@ -2960,71 +3060,34 @@ msgstr "Opsi tak dikenal: %s"
 
 #: plugins/command-bar/gb-vim.c:426
 #, c-format
-msgid "Cannot find colorscheme '%s'"
-msgstr "Tak bisa temukan skema warna '%s'"
+msgid "Cannot find colorscheme “%s”"
+msgstr "Tak bisa temukan skema warna \"%s\""
 
 #: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
 msgstr "Gagal menemukan direktori kerja"
 
-#: plugins/command-bar/gb-vim.c:707
+#: plugins/command-bar/gb-vim.c:711
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Sub perintah :syntax tidak valid: %s"
 
-#: plugins/command-bar/gb-vim.c:1146
+#: plugins/command-bar/gb-vim.c:1154
 msgid "Invalid search and replace request"
 msgstr "Permintaan cari dan ganti yang tak valid"
 
-#: plugins/command-bar/gb-vim.c:1252
-#, fuzzy, c-format
+#: plugins/command-bar/gb-vim.c:1260
+#, c-format
 msgid "Not a command: %s"
-msgstr "Tidak bisa jalankan perintah '%s': %s"
+msgstr "Bukan perintah: %s"
 
 #: plugins/comment-code/gtk/menus.ui:9
-#, fuzzy
 msgid "Comment code"
-msgstr "Komentar Kode"
+msgstr "Komentar kode"
 
 #: plugins/comment-code/gtk/menus.ui:14
-#, fuzzy
 msgid "Uncomment code"
-msgstr "Jadikan komentar atau jangan jadikan komentar blok kode"
-
-#: plugins/contributing/contributing_plugin/helper.py:76
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %(prgname) %(command) OPTIONS\n"
-msgstr "Cara pakai:  openconnect [opsi] <server>\n"
-
-#: plugins/contributing/contributing_plugin/__init__.py:54
-#, fuzzy
-msgid "Missing project name"
-msgstr "           Nama Projek: %s\n"
-
-#: plugins/contributing/contributing_plugin/__init__.py:68
-msgid ""
-"Usage:\n"
-"  ide contribute PROJECT_NAME\n"
-"\n"
-"  This command will bootstrap your system to begin contributing to the "
-"project\n"
-"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-"that\n"
-"  you have the required dependencies to build, and bootstraps the first "
-"build\n"
-"  of the project.\n"
-"\n"
-"Examples:\n"
-"  ide contribute gnome-builder\n"
-"  ide contribute gnome-maps\n"
-"\n"
-msgstr ""
-
-#: plugins/contributing/contributing_plugin/__init__.py:226
-msgid "Username"
-msgstr "Nama pengguna"
+msgstr "Hilangkan komentar kode"
 
 #: plugins/c-pack/ide-c-format-provider.c:283
 #: plugins/python-pack/ide-python-format-provider.c:240
@@ -3033,128 +3096,126 @@ msgstr "Kalimat Format"
 
 #: plugins/create-project/gbp-create-project-genesis-addin.c:158
 msgid "New Project"
-msgstr "Projek Baru"
+msgstr "Proyek Baru"
 
 #: plugins/create-project/gbp-create-project-genesis-addin.c:223
 msgid "New…"
 msgstr "Baru..."
 
 #: plugins/create-project/gbp-create-project-tool.c:136
-#, fuzzy
 msgid "List available templates"
-msgstr "Daftar semua mode yang tersedia."
+msgstr "Daftar templat yang tersedia."
 
 #: plugins/create-project/gbp-create-project-tool.c:138
-#, fuzzy
 msgid "Project template to generate"
-msgstr "Widget templat projek, bila ada"
+msgstr "Templat proyek untuk menghasilkan"
 
 #: plugins/create-project/gbp-create-project-tool.c:140
 msgid "The target language (if supported)"
 msgstr "Bahasa target (bila didukung)"
 
 #: plugins/create-project/gbp-create-project-tool.c:142
-msgid "The version control to use or \"none\" to disable"
-msgstr "Kendali versi yang akan dipakai atau \"none\" untuk tidak memakai"
+msgid "The version control to use or “none” to disable"
+msgstr "Kontrol versi untuk menggunakan atau \"none\" untuk menonaktifkan"
 
 #: plugins/create-project/gbp-create-project-tool.c:143
 msgid "git"
 msgstr "git"
 
 #: plugins/create-project/gbp-create-project-tool.c:149
-#, fuzzy
 msgid "create-project [OPTION...] PROJECT_NAME"
-msgstr "Tak dapat membuat projek baru."
+msgstr "create-project [OPTION...] PROJECT_NAME"
 
 #: plugins/create-project/gbp-create-project-tool.c:198
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Nama berkas mesti ASCII dan tak boleh mengandung : atau ="
 
 #: plugins/create-project/gbp-create-project-tool.c:372
-#, fuzzy
 msgid "Please specify a project name.\n"
-msgstr "Anda harus menyatakan suatu nama berkas"
+msgstr "Silakan tentukan nama proyek.\n"
 
 #: plugins/create-project/gbp-create-project-tool.c:388
-#, fuzzy
 msgid "Please specify a project template with --template=\n"
-msgstr "Widget templat projek, bila ada"
+msgstr "Silakan tentukan templat proyek dengan --template =\n"
 
-#: plugins/create-project/gbp-create-project-widget.c:148
+#: plugins/create-project/gbp-create-project-widget.c:157
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
+"Karakter yang digunakan mungkin menyebabkan masalah teknis seperti nama "
+"proyek"
 
-#: plugins/create-project/gbp-create-project-widget.c:155
+#: plugins/create-project/gbp-create-project-widget.c:164
 msgid "Directory already exists with that name"
-msgstr ""
+msgstr "Direktori sudah ada dengan nama tersebut"
 
-#: plugins/create-project/gbp-create-project-widget.c:550
+#: plugins/create-project/gbp-create-project-widget.c:569
 msgid "A failure occurred while initializing version control"
-msgstr ""
+msgstr "Kegagalan terjadi saat inisialisasi versi kontrol"
 
-#: plugins/create-project/gbp-create-project-widget.ui:38
+#: plugins/create-project/gbp-create-project-widget.ui:28
 msgid "Project Name"
-msgstr "Nama Projek"
+msgstr "Nama Proyek"
 
-#: plugins/create-project/gbp-create-project-widget.ui:49
+#: plugins/create-project/gbp-create-project-widget.ui:55
+msgid ""
+"Unique name that is used for your project’s folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+"Nama unik yang digunakan untuk folder proyek Anda dan sumber teknis lainnya. "
+"Harus dalam huruf kecil tanpa spasi dan mungkin tidak dimulai dengan angka."
+
+#: plugins/create-project/gbp-create-project-widget.ui:74
 msgid "Project Location"
-msgstr "Lokasi Projek"
+msgstr "Lokasi Proyek"
 
-#: plugins/create-project/gbp-create-project-widget.ui:57
+#: plugins/create-project/gbp-create-project-widget.ui:85
+#: plugins/git/ide-git-clone-widget.ui:78
+msgid "Select Project Directory"
+msgstr "Pilih Direktori Proyek"
+
+#: plugins/create-project/gbp-create-project-widget.ui:98
 msgid "Language"
 msgstr "Bahasa"
 
-#: plugins/create-project/gbp-create-project-widget.ui:69
+#: plugins/create-project/gbp-create-project-widget.ui:120
 msgid "License"
 msgstr "Lisensi"
 
-#: plugins/create-project/gbp-create-project-widget.ui:112
-msgid ""
-"Unique name that is used for your project's folder and other technical "
-"resources. Should be in lower case without spaces."
-msgstr ""
-
-#: plugins/create-project/gbp-create-project-widget.ui:130
-#: plugins/git/ide-git-clone-widget.ui:78
-#, fuzzy
-msgid "Select Project Directory"
-msgstr "Pilih Projek"
-
-#: plugins/create-project/gbp-create-project-widget.ui:149
+#: plugins/create-project/gbp-create-project-widget.ui:135
 msgid "GPLv3+"
 msgstr "GPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:150
+#: plugins/create-project/gbp-create-project-widget.ui:136
 msgid "LGPLv3+"
 msgstr "LGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:151
+#: plugins/create-project/gbp-create-project-widget.ui:137
 msgid "AGPLv3+"
 msgstr "AGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:152
+#: plugins/create-project/gbp-create-project-widget.ui:138
 msgid "MIT/X11"
 msgstr "MIT/X11"
 
-#: plugins/create-project/gbp-create-project-widget.ui:153
+#: plugins/create-project/gbp-create-project-widget.ui:139
 msgid "GPLv2+"
 msgstr "GPLv2+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:154
+#: plugins/create-project/gbp-create-project-widget.ui:140
 msgid "LGPLv2.1+"
 msgstr "LGPLv2.1+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:155
+#: plugins/create-project/gbp-create-project-widget.ui:141
 msgid "No license"
 msgstr "Tanpa lisensi"
 
-#: plugins/create-project/gbp-create-project-widget.ui:172
-#, fuzzy
+#: plugins/create-project/gbp-create-project-widget.ui:174
 msgid "Uses the Git version control system"
-msgstr " Sistem Kendali Versi: %s\n"
+msgstr "Menggunakan ssistem kontrol versi Git"
 
-#: plugins/create-project/gbp-create-project-widget.ui:257
+#: plugins/create-project/gbp-create-project-widget.ui:236
 msgid "Select a Template"
 msgstr "Pilih Templat"
 
@@ -3162,9 +3223,148 @@ msgstr "Pilih Templat"
 msgid "Documentation"
 msgstr "Dokumentasi"
 
+#: plugins/eslint/eslint_plugin/__init__.py:106
+msgid "ESlint"
+msgstr "ESlint"
+
+#: plugins/eslint/eslint_plugin/__init__.py:107
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+"Memungkinkan penggunaan ESLint, yang dapat mengeksekusi kode dalam proyek "
+"Anda"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/eslint/eslint_plugin/__init__.py:109
+msgid "eslint javascript lint code execute execution"
+msgstr "eslint javascript kode lint mengeksekusi eksekusi"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr "Aktifkan ESLint"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Memungkinkan penggunaan eslint untuk menemukan diagnostik tambahan dalam "
+"berkas JavaScript. Hal ini dapat mengakibatkan eksekusi kode dalam proyek "
+"Anda."
+
 #: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Berganti Ke"
+
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Mengunduh sumber aplikasi…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "Klon Aplikasi"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Klon"
+
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
+msgid "Network is not available, skipping downloads"
+msgstr "Jaringan tidak tersedia, lewati unduhan"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:596
+msgid "Install"
+msgstr "Instalasi"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+msgid "Update"
+msgstr "Pemutakhiran"
+
+#. translators: keywords are used to match search keywords in preferences
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#, c-format
+msgid "flatpak %s %s %s"
+msgstr "flatpak %s %s %s"
+
+#. translators: %u is the number of hidden runtimes to be shown
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] "Tampilkan %u lebih banyak runtime"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+msgid "Flatpak Runtimes"
+msgstr "Flatpak Runtimes"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:703
+#, c-format
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:705
+#, c-format
+msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:68
+msgid "Updated "
+msgstr "Dimutakhirkan"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:70
+msgid "Updating "
+msgstr "Memutakhirkan"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:75
+msgid "Installed "
+msgstr "Dinstalasi"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:77
+#: plugins/rustup/rustup_plugin/__init__.py:355
+msgid "Installing "
+msgstr "Instalasi"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:101
+msgid "Failed to install runtime"
+msgstr "Gagal menginstal runtime"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:103
+msgid "Runtime has been updated"
+msgstr "Runtime telah dimutakhirkan"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:105
+msgid "Runtime has been installed"
+msgstr "Runtime telah dipasang"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid "Your computer is missing flatpak-builder"
+msgstr "Komputer Anda kehilangan flatpak-builder"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+"Program ini diperlukan untuk membangun aplikasi Flatpak. Apakah Anda ingin "
+"menginstalnya?"
+
+#: plugins/flatpak/gtk/menus.ui:6
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: plugins/flatpak/gtk/menus.ui:8
+msgid "_Download Dependencies"
+msgstr "Unduh _Dependensi"
+
+#: plugins/flatpak/gtk/menus.ui:12
+msgid "_Export as Bundle"
+msgstr "_Ekspor sebagai bundel"
 
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
@@ -3172,22 +3372,22 @@ msgstr "Kirim-ke Fpaste.org"
 
 #: plugins/fpaste/fpaste_plugin/__init__.py:110
 msgid "The following URL has been copied to the clipboard"
-msgstr ""
+msgstr "URL berikut telah disalin ke clipboard"
 
 #: plugins/git/ide-git-buffer-change-monitor.c:162
 msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 "Tidak bisa menyediakan diff, tidak ada berkas pendukung yang disediakan."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:546
+#: plugins/git/ide-git-buffer-change-monitor.c:568
 msgid "Repository does not have a working directory."
 msgstr "Repositori tak punya suatu direktori kerja."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:557
+#: plugins/git/ide-git-buffer-change-monitor.c:579
 msgid "File is not under control of git working directory."
 msgstr "Berkas tidak di bawah kendali dari direktori kerja git."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:623
+#: plugins/git/ide-git-buffer-change-monitor.c:645
 msgid "The requested file does not exist within the git index."
 msgstr "Berkas yang diminta tak ada di dalam indeks git."
 
@@ -3198,42 +3398,38 @@ msgstr "Sebuah URL Git yang valid diperlukan"
 
 #: plugins/git/ide-git-clone-widget.ui:38
 msgid "Use Git to create a local copy of a remotely hosted project."
-msgstr ""
+msgstr "Gunakan Git untuk membuat salinan lokal dari remotely hosted project."
 
 #: plugins/git/ide-git-clone-widget.ui:66
 msgid "user@host:repository.git"
 msgstr "user@host:repository.git"
 
 #: plugins/git/ide-git-clone-widget.ui:67
-#, fuzzy
-msgid "Enter the URL of your project's source code repository"
-msgstr "Masukkan URL repositori kode sumber projek Anda."
+msgid "Enter the URL of your project’s source code repository"
+msgstr "Masukkan URL repositori kode sumber proyek Anda."
 
 #: plugins/git/ide-git-clone-widget.ui:94
 msgid "Repository URL"
 msgstr "URL repositori"
 
 #: plugins/git/ide-git-clone-widget.ui:102
-#, fuzzy
 msgid "Project Destination"
-msgstr "_Tujuan"
+msgstr "Tujuan Proyek"
 
 #: plugins/git/ide-git-genesis-addin.c:93
 msgid "Clone Project"
-msgstr "Klon Projek"
+msgstr "Klon Proyek"
 
 #: plugins/git/ide-git-genesis-addin.c:184
 msgid "Clone…"
 msgstr "Klon..."
 
-#: plugins/git/ide-git-genesis-addin.c:190
-msgid "Clone"
-msgstr "Klon"
-
-#: plugins/git/ide-git-remote-callbacks.c:174
+#: plugins/git/ide-git-remote-callbacks.c:177
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
+"Builder gagal untuk memberikan kredensial yang tepat ketika kloning "
+"repositori."
 
 #: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
 msgid "Code assistance requires a local file."
@@ -3246,13 +3442,15 @@ msgstr "Pylint"
 #: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
 msgid "Enable the use of pylint, which may execute code in your project"
 msgstr ""
+"Memungkinkan penggunaan pylint, yang dapat mengeksekusi kode dalam proyek "
+"Anda"
 
 #. translators: these are keywords used to search for preferences
 #: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
 msgid "pylint python lint code execute execution"
-msgstr ""
+msgstr "pylint python kode lint mengeksekusi eksekusi"
 
-#: plugins/gnome-code-assistance/ide-gca-service.c:176
+#: plugins/gnome-code-assistance/ide-gca-service.c:182
 msgid "No language specified"
 msgstr "Tidak ada bahasa yang dinyatakan"
 
@@ -3265,25 +3463,28 @@ msgid ""
 "Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
 msgstr ""
-
-#: plugins/hello-cpp/hellocppapplicationaddin.cc:48
-#, c-format
-msgid "Wow! You've spent with Builder %d second!\n"
-msgid_plural "Wow! You've spent with Builder %d seconds!\n"
-msgstr[0] ""
+"Memungkinkan penggunaan pylint untuk menemukan diagnostik tambahan dalam "
+"program Python. Hal ini dapat mengakibatkan eksekusi kode dalam proyek Anda."
 
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Pratinjau sebagai HTML"
 
-#: plugins/jedi/jedi_plugin.py:731
+#: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
 msgstr "Sarankan pelengkapan Python"
 
-#: plugins/jedi/jedi_plugin.py:732
-#, fuzzy
+#: plugins/jedi/jedi_plugin.py:733
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Gunakan Jedi untuk pelengkapan dalam bahasa Python."
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+msgid "Empty Meson Project"
+msgstr "Proyek Meson Kosong"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+msgid "Create a new empty meson project"
+msgstr "Buat proyek meson kosong baru"
 
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
@@ -3326,6 +3527,10 @@ msgstr "Kosong"
 msgid "Rename %s"
 msgstr "Ubah nama %s"
 
+#: plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "_Ungkapkan dalam Pohon Proyek"
+
 #: plugins/project-tree/gtk/menus.ui:14
 msgid "_New"
 msgstr "_Baru"
@@ -3364,11 +3569,11 @@ msgstr "Buang ke _Tong Sampah"
 
 #: plugins/project-tree/gtk/menus.ui:71
 msgid "_Build"
-msgstr "_Build"
+msgstr "_Bangun"
 
 #: plugins/project-tree/gtk/menus.ui:75
 msgid "_Rebuild"
-msgstr "Build _Ulang"
+msgstr "Bangun _Ulang"
 
 #: plugins/project-tree/gtk/menus.ui:81
 msgid "Display Options"
@@ -3388,16 +3593,134 @@ msgstr "Sega_rkan"
 
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
 msgid "Words matching selection"
-msgstr ""
+msgstr "Seleksi kata yang cocok"
 
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
 msgid "Highlight all occurrences of words matching the current selection"
-msgstr ""
+msgstr "Sorot semua peristiwa dari kata yang cocok pilihan saat ini"
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
 msgid "quick highlight words matching current selection"
+msgstr "kata sorot cepat yang cocok dengan pilihan saat ini"
+
+#: plugins/rustup/rustup_plugin/__init__.py:80
+msgid "Rustup not installed"
+msgstr "Rustup tidak diinstal"
+
+#: plugins/rustup/rustup_plugin/__init__.py:277
+msgid "Installing rustup"
+msgstr "Instalasi rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:279
+msgid "Updating rustup"
+msgstr "Memutakhirkan rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:281
+msgid "Installing rust "
+msgstr "Instalasi rust"
+
+#: plugins/rustup/rustup_plugin/__init__.py:283
+msgid "Checking system"
+msgstr "Memeriksa sistem"
+
+#: plugins/rustup/rustup_plugin/__init__.py:337
+msgid "Downloading rustup-init"
+msgstr "Mengunduh rustup-init"
+
+#: plugins/rustup/rustup_plugin/__init__.py:342
+msgid "Syncing channel updates"
+msgstr "Sinkronisasi kanal pemutakhiran"
+
+#: plugins/rustup/rustup_plugin/__init__.py:348
+msgid "Downloading "
+msgstr "Mengunduh"
+
+#: plugins/rustup/rustup_plugin/__init__.py:361
+msgid "Checking for rustup updates"
+msgstr "Memeriksa pemutakhiran rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:366
+msgid "Downloading rustup update"
+msgstr "Mengunduh pemutakhiran rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:403
+msgid "Error installing "
+msgstr "Kesalahan menginstal"
+
+#: plugins/rustup/rustup_plugin/__init__.py:405
+msgid "Error"
+msgstr "Kesalahan"
+
+#: plugins/rustup/rustup_plugin/__init__.py:411
+msgid "Cancelled"
+msgstr "Batal"
+
+#: plugins/rustup/rustup_plugin/__init__.py:419
+msgid "Finished"
+msgstr "Selesai"
+
+#: plugins/rustup/rustup_plugin/__init__.py:433
+msgid "Rustup"
+msgstr "Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:434
+msgid "Rustup Toolchains"
+msgstr "Rustup Toolchains"
+
+#: plugins/rustup/rustup_plugin/__init__.py:489
+msgid "Updating"
+msgstr "Memutakhirkan"
+
+#: plugins/rustup/rustup_plugin/__init__.py:489
+msgid "Installing"
+msgstr "Instalasi"
+
+#. set default toolchain button
+#: plugins/rustup/rustup_plugin/__init__.py:580
+msgid "Make default"
+msgstr "Jadikan baku"
+
+#: plugins/rustup/rustup_plugin/__init__.py:580
+msgid "Makes the selected toolchain the default rust installation"
+msgstr "Membuat toolchain yang dipilih sebagai instalasi rust bawaan"
+
+#: plugins/rustup/rustup_plugin/__init__.py:595
+msgid "Install Rust Channel"
+msgstr "Instalasi Rust Channel"
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: plugins/rustup/rustup_plugin/__init__.py:600
+msgid "Enter name of rust channel"
+msgstr "Masukkan nama untuk rust channel"
+
+#: plugins/rustup/rustup_plugin/__init__.py:601
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
 msgstr ""
+"Rilis standar kanal nama toolchain memiliki bentuk berikut:\n"
+"                        <kanal>[-<tanggal>][-<host>]\n"
+"\n"
+"                        <kanal>    = stabil|beta|nightly|<versi>\n"
+"                        <tanggal> = YYYY-MM-DD\n"
+"                        <host>      = <target-triple>"
+
+#: plugins/rustup/rustup_plugin/__init__.py:626
+msgid "Install Rustup to manage toolchains here!"
+msgstr "Instal Rustup untuk mengelola toolchain disini!"
+
+#: plugins/rustup/rustup_plugin/__init__.py:633
+msgid "No toolchain installed. Click"
+msgstr "Tidak ada toolchain yang terpasang. Klik"
+
+#: plugins/rustup/rustup_plugin/__init__.py:634
+msgid "to add a new toolchain!"
+msgstr "untuk menambahkan toolchain baru!"
 
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
@@ -3406,59 +3729,108 @@ msgstr "Buat Log Dukungan"
 #: plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
-"The support log file has been written to '%s'. Please provide this file as "
+"The support log file has been written to “%s”. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
-"Berkas log dukungan telah ditulis ke '%s'. Harap berikan berkas ini sebagai "
-"lampiran pada laporan kutu atau permintaan dukungan Anda."
+"Berkas log dukungan telah ditulis ke \"%s\". Harap berikan berkas ini "
+"sebagai lampiran pada laporan kutu atau permintaan dukungan Anda."
 
-#: plugins/symbol-tree/symbol-tree-panel.c:265
+#: plugins/symbol-tree/symbol-tree-panel.c:275
 msgid "Current language does not support symbol resolvers"
 msgstr "Bahasa saat ini tak mendukung "
 
-#: plugins/symbol-tree/symbol-tree-panel.c:365
+#: plugins/symbol-tree/symbol-tree-panel.c:415
 msgid "Symbols"
 msgstr "Simbol"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:25
+msgid "No symbols"
+msgstr "Tidak ada simbol"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:26
+msgid "Open a file to see symbols within the file"
+msgstr "Buka berkas untuk melihat simbol dalam berkas"
 
 #: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
 msgstr "Monitor Sistem"
 
-#: plugins/sysprof/gbp-sysprof-perspective.c:65
+#: plugins/sysprof/gbp-sysprof-perspective.c:135
 msgid "Profiler"
-msgstr ""
+msgstr "Profiler"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:251
+#. the action:// link is used to run the project
+#: plugins/sysprof/gbp-sysprof-perspective.ui:49
+msgid ""
+"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
+"profiler</a> from the run menu to begin"
+msgstr ""
+"Pilih <a href=\"action://run-manager.run-with-handler::profiler\">Jalankan "
+"dengan profiler</a> dari menu jalankan untuk memulai"
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:81
+msgid "CPU"
+msgstr "CPU"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
 msgid "Open Profile"
-msgstr ""
+msgstr "Buka Profil"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:259
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
 msgid "Sysprof Capture (*.syscap)"
-msgstr ""
+msgstr "Sysprof Capture (*.syscap)"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:265
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
 msgid "All Files"
 msgstr "Semua Berkas"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
 msgid "Run with Profiler"
-msgstr ""
+msgstr "Jalankan dengan Profiler"
 
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
-msgstr ""
+msgstr "Buka Profil…"
+
+#: plugins/terminal/gb-terminal-search.ui:152
+msgid "Regex"
+msgstr "Regex"
+
+#: plugins/terminal/gb-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "Cocokkan seluruh kata"
+
+#: plugins/terminal/gb-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "Melipat"
 
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Simpan Isi Terminal Sebagai"
 
+#: plugins/terminal/gb-terminal-view.c:465
+msgid "Untitled terminal"
+msgstr "Terminal tanpa judul"
+
+#: plugins/terminal/gb-terminal-workbench-addin.c:142
+msgid "Run Output"
+msgstr "Jalankan Keluaran"
+
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "Terminal _Baru"
 
-#: plugins/todo/todo_plugin/__init__.py:186
+#: plugins/terminal/gtk/menus.ui:15
+msgid "_Open Link"
+msgstr "B_uka Tautan"
+
+#: plugins/terminal/gtk/menus.ui:20
+msgid "_Copy Link Address"
+msgstr "_Salin Alamat Taut"
+
+#: plugins/todo/todo_plugin/__init__.py:193
 msgid "Todo"
-msgstr ""
+msgstr "Todo"
 
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
@@ -3466,9 +3838,126 @@ msgstr "Vala"
 
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
-msgstr ""
+msgstr "Tampilkan kesalahan dan peringatan yang disediakan oleh Vala"
 
 #. translators: keywords used when searching for preferences
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "vala diagnostik peringatan kesalahan"
+
+#: plugins/valgrind/valgrind_plugin/__init__.py:52
+msgid "Run with Valgrind"
+msgstr "Jalankan dengan Valgrind"
+
+#: plugins/xml-pack/ide-xml-service.c:193
+msgid "Buffer loaded but not in the buffer manager."
+msgstr "Buffer dimuat tapi tidak di pengelola buffer."
+
+#: plugins/xml-pack/ide-xml-tree-builder.c:172
+#: plugins/xml-pack/ide-xml-tree-builder.c:204
+msgid "Failed to create the XML tree."
+msgstr "Gagal membuat pohon XML."
+
+#~ msgid "%s does not support building"
+#~ msgstr "%s tak mendukung build"
+
+#~ msgid "A build is already in progress"
+#~ msgstr "Operasi build tengah berjalan"
+
+#~ msgid "Failed to open stderr stream."
+#~ msgstr "Gagal membuka stream stderr."
+
+#~ msgid "Failed to open stdout stream."
+#~ msgstr "Gagal membuka stream stdout."
+
+#~ msgid "%s() is not supported on %s build system."
+#~ msgstr "%s() tak didukung pada sistem build %s."
+
+#~ msgid "Installed Extensions"
+#~ msgstr "Ekstensi Terpasang"
+
+#~ msgid "Bundled Extensions"
+#~ msgstr "Ekstensi Bawaan"
+
+#~ msgid "Attempt to load a PyGObject script with no filename."
+#~ msgstr "Upaya memuat suatu skrip PyGObject tanpa nama berkas."
+
+#~ msgid "The filename for the script was not provided."
+#~ msgstr "Nama berkas bagi skrip tidak diberikan."
+
+#~ msgid "The script must be on a local filesystem."
+#~ msgstr "Skrip mesti pada sistem berkas lokal."
+
+#~ msgid "The script \"%s\" is not a PyGObject file."
+#~ msgstr "Skrip \"%s\" bukan berkas PyGObject."
+
+#~ msgid "%s has not implemented GAsyncInitable."
+#~ msgstr "%s belum mengimplementasi GAsyncInitable."
+
+#~ msgid "Chunk does not belong to snippet."
+#~ msgstr "Penggalan bukan milik snippet."
+
+#~ msgid "Target"
+#~ msgstr "Target"
+
+#~ msgid "Build failed"
+#~ msgstr "Build gagal"
+
+#~ msgid "Build successful"
+#~ msgstr "Build sukses"
+
+#~ msgid "Failed to locate configure.ac"
+#~ msgstr "Gagal menemukan configure.ac"
+
+#~ msgid "Directory must be on a locally mounted filesystem."
+#~ msgstr ""
+#~ "Direktori mesti ada pada suatu sistem berkas yang dikait secara lokal."
+
+#~ msgid "Failed to locate device"
+#~ msgstr "Gagal mencari perangkat"
+
+#~ msgid "Cannot execute build task more than once"
+#~ msgstr "Tidak bisa menjalankan tugas build lebih dari sekali"
+
+#~ msgid "'%s' is not a directory."
+#~ msgstr "'%s' bukan direktori."
+
+#~ msgid "autogen.sh is missing from project directory (%s)."
+#~ msgstr "autogen.sh hilang dari direktori projek (%s)."
+
+#~ msgid "autogen.sh is not executable."
+#~ msgstr "autogen.sh bukan executable."
+
+#~ msgid "Running autogen…"
+#~ msgstr "Menjalankan autogen..."
+
+#~ msgid "autogen.sh failed to create configure (%s)"
+#~ msgstr "autogen.sh gagal membuat configure (%s)"
+
+#~ msgid "Running configure…"
+#~ msgstr "Menjalankan configure..."
+
+#~ msgid "Invalid makefile provided, ignoring."
+#~ msgstr "Makefile yang diberikan tak valid, diabaikan."
+
+#~ msgid "Warnings"
+#~ msgstr "Peringatan"
+
+#~ msgid "Notes"
+#~ msgstr "Catatan"
+
+#~ msgid "Unknown file"
+#~ msgstr "Berkas tak dikenal"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %(prgname) %(command) OPTIONS\n"
+#~ msgstr "Cara pakai:  openconnect [opsi] <server>\n"
+
+#, fuzzy
+#~ msgid "Missing project name"
+#~ msgstr "           Nama Projek: %s\n"
+
+#~ msgid "Username"
+#~ msgstr "Nama pengguna"
