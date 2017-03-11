@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_INDENTER (ide_indenter_get_type())
 
-G_DECLARE_INTERFACE (IdeIndenter, ide_indenter, IDE, INDENTER, GObject)
+G_DECLARE_INTERFACE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
 
 struct _IdeIndenterInterface
 {
@@ -41,8 +41,6 @@ struct _IdeIndenterInterface
                             GdkEventKey   *event);
   gboolean  (*is_trigger)  (IdeIndenter   *self,
                             GdkEventKey   *event);
-  void      (*set_context) (IdeIndenter   *self,
-                            IdeContext    *context);
 };
 
 gboolean  ide_indenter_is_trigger (IdeIndenter *self,

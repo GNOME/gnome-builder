@@ -21,7 +21,7 @@
 #include "ide-context.h"
 #include "ide-indenter.h"
 
-G_DEFINE_INTERFACE (IdeIndenter, ide_indenter, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeIndenter, ide_indenter, IDE_TYPE_OBJECT)
 
 static gchar *
 ide_indenter_default_format (IdeIndenter *self,
@@ -46,13 +46,6 @@ ide_indenter_default_init (IdeIndenterInterface *iface)
 {
   iface->format = ide_indenter_default_format;
   iface->is_trigger = ide_indenter_default_is_trigger;
-
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 /**
