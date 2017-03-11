@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-10 16:19+0000\n"
-"PO-Revision-Date: 2017-03-07 16:15+0200\n"
-"Last-Translator: Moo\n"
+"POT-Creation-Date: 2017-03-10 19:54+0000\n"
+"PO-Revision-Date: 2017-03-11 12:39+0200\n"
+"Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -2564,13 +2564,13 @@ msgid "Rename symbol"
 msgstr "Pervadinti simbolį"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
-#, fuzzy, c-format
+#, c-format
 #| msgid "Installing rust "
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
-msgstr[0] "Diegiama rust "
-msgstr[1] "Diegiama rust "
-msgstr[2] "Diegiama rust "
+msgstr[0] "Diegiamas %u paketas"
+msgstr[1] "Diegiami %u paketai"
+msgstr[2] "Diegiama %u paketų"
 
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
@@ -3268,7 +3268,7 @@ msgstr "Klonuoti"
 
 #: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
 msgid "Network is not available, skipping downloads"
-msgstr ""
+msgstr "Tinklas nepasiekiamas, parsiuntimai praleidžiami"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:82
@@ -3344,29 +3344,27 @@ msgstr "Vykdymo aplinka buvo įdiegta"
 
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:77
 msgid "Your computer is missing flatpak-builder"
-msgstr ""
+msgstr "Jūsų kompiuteryje nėra flatpak-builder"
 
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
 msgid ""
 "This program is necessary for building Flatpak applications. Would you like "
 "to install it?"
-msgstr ""
+msgstr "Ši programa yra būtina Flatpak programų kūrimui. Ar norite ją įdiegti?"
 
 #: plugins/flatpak/gtk/menus.ui:6
-#, fuzzy
 #| msgid "Flatpak Runtimes"
 msgid "Flatpak"
-msgstr "Flatpak vykdymo aplinkos"
+msgstr "Flatpak"
 
 #: plugins/flatpak/gtk/menus.ui:8
-#, fuzzy
 #| msgid "Building dependencies…"
 msgid "_Download Dependencies"
-msgstr "Kuriamos priklausomybės…"
+msgstr "_Parsiųsti priklausomybes…"
 
 #: plugins/flatpak/gtk/menus.ui:12
 msgid "_Export as Bundle"
-msgstr ""
+msgstr "_Eksportuoti kaip rinkinį"
 
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
