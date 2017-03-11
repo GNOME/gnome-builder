@@ -28,14 +28,15 @@
 #include "ide-ctags-service.h"
 #include "ide-ctags-util.h"
 
-static void provider_iface_init (GtkSourceCompletionProviderIface *iface);
+static void provider_iface_init  (GtkSourceCompletionProviderIface *iface);
+static void provider2_iface_init (IdeCompletionProviderInterface   *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionProvider,
                                 ide_ctags_completion_provider,
                                 IDE_TYPE_OBJECT,
                                 0,
                                 G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, provider_iface_init)
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
+                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider2_iface_init))
 
 void
 ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
@@ -72,15 +73,15 @@ ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
 }
 
 static void
-ide_ctags_completion_provider_constructed (GObject *object)
+ide_ctags_completion_provider_load (IdeCompletionProvider *provider,
+                                    IdeContext            *context)
 {
-  IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
-  IdeContext *context;
+  IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   IdeCtagsService *service;
 
-  G_OBJECT_CLASS (ide_ctags_completion_provider_parent_class)->constructed (object);
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_CONTEXT (context));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
   ide_ctags_service_register_completion (service, self);
 }
@@ -117,7 +118,6 @@ ide_ctags_completion_provider_class_init (IdeCtagsCompletionProviderClass *klass
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_ctags_completion_provider_constructed;
   object_class->dispose = ide_ctags_completion_provider_dispose;
   object_class->finalize = ide_ctags_completion_provider_finalize;
 }
@@ -364,6 +364,12 @@ provider_iface_init (GtkSourceCompletionProviderIface *iface)
   iface->match = ide_ctags_completion_provider_match;
   iface->populate = ide_ctags_completion_provider_populate;
   iface->activate_proposal = ide_ctags_completion_provider_activate_proposal;
+}
+
+static void
+provider2_iface_init (IdeCompletionProviderInterface *iface)
+{
+  iface->load = ide_ctags_completion_provider_load;
 }
 
 void

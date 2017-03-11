@@ -1495,6 +1495,7 @@ ide_source_view__completion_provider_added (IdeExtensionSetAdapter *adapter,
                                             PeasExtension          *extension,
                                             IdeSourceView          *self)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceCompletion *completion;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -1508,7 +1509,8 @@ ide_source_view__completion_provider_added (IdeExtensionSetAdapter *adapter,
                                       GTK_SOURCE_COMPLETION_PROVIDER (extension),
                                       NULL);
 
-  ide_completion_provider_load (IDE_COMPLETION_PROVIDER (extension));
+  ide_completion_provider_load (IDE_COMPLETION_PROVIDER (extension),
+                                ide_buffer_get_context (priv->buffer));
 }
 
 static void
