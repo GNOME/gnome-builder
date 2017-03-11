@@ -19,12 +19,12 @@
 #define G_LOG_DOMAIN "ide-symbol-resolver"
 
 #include "ide-context.h"
-#include "buffers/ide-buffer.h"
 
+#include "buffers/ide-buffer.h"
 #include "files/ide-file.h"
 #include "symbols/ide-symbol-resolver.h"
 
-G_DEFINE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE_TYPE_OBJECT)
 
 static void
 ide_symbol_resolver_real_get_symbol_tree_async (IdeSymbolResolver   *self,
@@ -65,13 +65,6 @@ ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
 {
   iface->get_symbol_tree_async = ide_symbol_resolver_real_get_symbol_tree_async;
   iface->get_symbol_tree_finish = ide_symbol_resolver_real_get_symbol_tree_finish;
-
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 /**
