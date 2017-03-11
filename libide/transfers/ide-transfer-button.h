@@ -21,17 +21,19 @@
 
 #include <gtk/gtk.h>
 
+#include "egg-progress-button.h"
+
 #include "transfers/ide-transfer.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_BUTTON (ide_transfer_button_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeTransferButton, ide_transfer_button, IDE, TRANSFER_BUTTON, GtkButton)
+G_DECLARE_DERIVABLE_TYPE (IdeTransferButton, ide_transfer_button, IDE, TRANSFER_BUTTON, EggProgressButton)
 
 struct _IdeTransferButtonClass
 {
-  GtkButtonClass parent_class;
+  EggProgressButtonClass parent_class;
 
   gpointer _reserved1;
   gpointer _reserved2;

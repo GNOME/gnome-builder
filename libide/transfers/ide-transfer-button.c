@@ -38,9 +38,36 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeTransferButton, ide_transfer_button, GTK_TYPE_BUTTON)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeTransferButton, ide_transfer_button, EGG_TYPE_PROGRESS_BUTTON)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+notify_progress_cb (IdeTransferButton *self,
+                    GParamSpec        *pspec,
+                    IdeTransfer       *transfer)
+{
+  gdouble progress;
+
+  g_assert (IDE_IS_TRANSFER_BUTTON (self));
+  g_assert (pspec != NULL);
+  g_assert (IDE_IS_TRANSFER (transfer));
+
+  progress = ide_transfer_get_progress (transfer);
+
+  egg_progress_button_set_progress (EGG_PROGRESS_BUTTON (self), progress * 100.0);
+}
+
+static void
+notify_active_cb (IdeTransferButton *self,
+                  GParamSpec        *pspec,
+                  IdeTransfer       *transfer)
+{
+  g_assert (IDE_IS_TRANSFER_BUTTON (self));
+  g_assert (IDE_IS_TRANSFER (transfer));
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self), !ide_transfer_get_active (transfer));
+}
 
 static void
 ide_transfer_button_set_transfer (IdeTransferButton *self,
@@ -53,8 +80,35 @@ ide_transfer_button_set_transfer (IdeTransferButton *self,
   g_assert (IDE_IS_TRANSFER_BUTTON (self));
   g_assert (!transfer || IDE_IS_TRANSFER (transfer));
 
-  if (g_set_object (&priv->transfer, transfer))
-    gtk_widget_set_sensitive (GTK_WIDGET (self), transfer != NULL);
+  if (transfer != priv->transfer)
+    {
+      if (priv->transfer != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (priv->transfer, notify_progress_cb, self);
+          g_signal_handlers_disconnect_by_func (priv->transfer, notify_active_cb, self);
+          g_clear_object (&priv->transfer);
+          gtk_widget_hide (GTK_WIDGET (self));
+        }
+
+      if (transfer != NULL)
+        {
+          priv->transfer = g_object_ref (transfer);
+          g_signal_connect_object (priv->transfer,
+                                   "notify::active",
+                                   G_CALLBACK (notify_active_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          g_signal_connect_object (priv->transfer,
+                                   "notify::progress",
+                                   G_CALLBACK (notify_progress_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          notify_active_cb (self, NULL, priv->transfer);
+          gtk_widget_show (GTK_WIDGET (self));
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRANSFER]);
+    }
 
   IDE_EXIT;
 }
@@ -76,6 +130,7 @@ ide_transfer_button_execute_cb (GObject      *object,
   ide_transfer_manager_execute_finish (transfer_manager, result, NULL);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
+  egg_progress_button_set_show_progress (EGG_PROGRESS_BUTTON (self), FALSE);
 
   IDE_EXIT;
 }
@@ -100,6 +155,7 @@ ide_transfer_button_clicked (GtkButton *button)
   if (context == NULL)
     return;
 
+  egg_progress_button_set_show_progress (EGG_PROGRESS_BUTTON (self), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
 
   transfer_manager = ide_context_get_transfer_manager (context);
@@ -186,7 +242,7 @@ ide_transfer_button_class_init (IdeTransferButtonClass *klass)
                          "Transfer",
                          IDE_TYPE_TRANSFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
