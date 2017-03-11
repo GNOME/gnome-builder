@@ -25,14 +25,13 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTIC_PROVIDER (ide_diagnostic_provider_get_type())
 
-G_DECLARE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE, DIAGNOSTIC_PROVIDER, GObject)
+G_DECLARE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE, DIAGNOSTIC_PROVIDER, IdeObject)
 
 struct _IdeDiagnosticProviderInterface
 {
   GTypeInterface parent_interface;
 
-  void            (*set_context)     (IdeDiagnosticProvider  *self,
-                                      IdeContext             *context);
+  void            (*load)            (IdeDiagnosticProvider  *self);
   void            (*diagnose_async)  (IdeDiagnosticProvider  *self,
                                       IdeFile                *file,
                                       IdeBuffer              *buffer,
@@ -42,7 +41,6 @@ struct _IdeDiagnosticProviderInterface
   IdeDiagnostics *(*diagnose_finish) (IdeDiagnosticProvider  *self,
                                       GAsyncResult           *result,
                                       GError                **error);
-  void            (*load)            (IdeDiagnosticProvider  *self);
 };
 
 void            ide_diagnostic_provider_diagnose_async   (IdeDiagnosticProvider  *self,

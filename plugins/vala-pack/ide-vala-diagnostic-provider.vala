@@ -22,26 +22,19 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaDiagnosticProvider: GLib.Object, Ide.DiagnosticProvider
+	public class ValaDiagnosticProvider: Ide.Object, Ide.DiagnosticProvider
 	{
 		public async Ide.Diagnostics? diagnose_async (Ide.File file,
 		                                              Ide.Buffer buffer,
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var service = (Ide.ValaService)_context.get_service_typed (typeof (Ide.ValaService));
-			yield service.index.parse_file (file.file, _context.unsaved_files, cancellable);
+			var service = (Ide.ValaService)get_context ().get_service_typed (typeof (Ide.ValaService));
+			yield service.index.parse_file (file.file, get_context ().unsaved_files, cancellable);
 			var results = yield service.index.get_diagnostics (file.file, cancellable);
 			return results;
 		}
 
 		public void load () {}
-
-		// This code shouldn't have to exist.
-		// If we can fixup libide+vala to not have such weird interaction that
-		// would be great.
-		Ide.Context? _context;
-		public Ide.Context context { construct { _context = value; } }
-		public void set_context (Ide.Context context) { _context = context; }
 	}
 }

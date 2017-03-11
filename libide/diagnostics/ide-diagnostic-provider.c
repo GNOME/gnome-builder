@@ -26,7 +26,7 @@
 #include "diagnostics/ide-diagnostics.h"
 #include "files/ide-file.h"
 
-G_DEFINE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE_TYPE_OBJECT)
 
 enum {
   INVALIDATED,
@@ -38,13 +38,6 @@ static guint signals [N_SIGNALS];
 static void
 ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
 {
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
-
   /**
    * IdeDiagnosticProvider::invlaidated:
    *
@@ -61,12 +54,12 @@ ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
 
 /* If the file does not match a loaded buffer, buffer is %NULL */
 void
-ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider *self,
-                                         IdeFile               *file,
-                                         IdeBuffer             *buffer,
-                                         GCancellable          *cancellable,
-                                         GAsyncReadyCallback    callback,
-                                         gpointer               user_data)
+ide_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *self,
+                                        IdeFile               *file,
+                                        IdeBuffer             *buffer,
+                                        GCancellable          *cancellable,
+                                        GAsyncReadyCallback    callback,
+                                        gpointer               user_data)
 {
   IDE_ENTRY;
 
