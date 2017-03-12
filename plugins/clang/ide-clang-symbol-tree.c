@@ -101,10 +101,12 @@ cursor_is_recognized (TraversalState *state,
      */
 
     case CXCursor_ClassDecl:
+    case CXCursor_CXXMethod:
     case CXCursor_EnumConstantDecl:
     case CXCursor_EnumDecl:
     case CXCursor_FieldDecl:
     case CXCursor_FunctionDecl:
+    case CXCursor_Namespace:
     case CXCursor_StructDecl:
     case CXCursor_TypedefDecl:
     case CXCursor_UnionDecl:
