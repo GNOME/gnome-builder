@@ -23,7 +23,7 @@
 
 #include "ide-autotools-project-miner.h"
 
-#define MAX_MINE_DEPTH 5
+#define MAX_MINE_DEPTH 2
 
 struct _IdeAutotoolsProjectMiner
 {
