@@ -314,6 +314,7 @@ m4_include([plugins/make/configure.ac])
 m4_include([plugins/meson/configure.ac])
 m4_include([plugins/meson-templates/configure.ac])
 m4_include([plugins/mingw/configure.ac])
+m4_include([plugins/mono/configure.ac])
 m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
 m4_include([plugins/python-pack/configure.ac])
@@ -596,6 +597,7 @@ echo "  JHBuild .............................. : ${enable_jhbuild_plugin}"
 echo "  Make ................................. : ${enable_make_plugin}"
 echo "  Meson ................................ : ${enable_meson_plugin}"
 echo "  MinGW ................................ : ${enable_mingw_plugin}"
+echo "  Mono ................................. : ${enable_mono_plugin}"
 echo "  Project Creation ..................... : ${enable_create_project_plugin}"
 echo "  Project Tree ......................... : ${enable_project_tree_plugin}"
 echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_completion_plugin}"

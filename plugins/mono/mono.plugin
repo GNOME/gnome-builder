@@ -1,0 +1,9 @@
+[Plugin]
+Module=mono_plugin
+Loader=python3
+Name=Mono
+Description=Provides integration with Mono
+Authors=Christian Hergert <chergert@redhat.com>
+Copyright=Copyright © 2017 Christian Hergert
+Builtin=true
+Hidden=false

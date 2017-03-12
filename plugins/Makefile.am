@@ -25,9 +25,10 @@ SUBDIRS =                            \
 	jedi                         \
 	jhbuild                      \
 	make                         \
-	mingw                        \
 	meson                        \
 	meson-templates              \
+	mingw                        \
+	mono                         \
 	project-tree                 \
 	python-gi-imports-completion \
 	python-pack                  \
