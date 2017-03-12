@@ -95,13 +95,36 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
                                   GtkEntry          *entry)
 {
   g_autoptr(IdeVcsUri) uri = NULL;
+  g_autoptr(GString) str = NULL;
   const gchar *text;
   gboolean is_ready = FALSE;
+  gboolean matches = TRUE;
 
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   text = gtk_entry_get_text (entry);
+  str = g_string_new (NULL);
+
+  for (const gchar *ptr = text; *ptr; ptr = g_utf8_next_char (ptr))
+    {
+      gunichar ch = g_utf8_get_char (ptr);
+
+      if (!g_unichar_isspace (ch))
+        {
+          g_string_append_unichar (str, ch);
+          matches = FALSE;
+        }
+    }
+
+  if (!matches)
+    {
+      g_signal_handlers_block_by_func (entry, G_CALLBACK (ide_git_clone_widget_uri_changed), self);
+      text = str->str;
+      gtk_entry_set_text (entry, text);
+      g_signal_handlers_unblock_by_func (entry, G_CALLBACK (ide_git_clone_widget_uri_changed), self);
+    }
+
   uri = ide_vcs_uri_new (text);
 
   if (uri != NULL)
@@ -364,8 +387,8 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) location = NULL;
   g_autoptr(IdeVcsUri) uri = NULL;
+  g_autofree gchar *uristr = NULL;
   CloneRequest *req;
-  const gchar *uristr;
 
   g_return_if_fail (IDE_IS_GIT_CLONE_WIDGET (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -374,7 +397,7 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
 
   gtk_label_set_label (self->clone_error_label, NULL);
 
-  uristr = gtk_entry_get_text (self->clone_uri_entry);
+  uristr = g_strstrip (g_strdup (gtk_entry_get_text (self->clone_uri_entry)));
   location = egg_file_chooser_entry_get_file (EGG_FILE_CHOOSER_ENTRY (self->clone_location_entry));
 
   uri = ide_vcs_uri_new (uristr);
