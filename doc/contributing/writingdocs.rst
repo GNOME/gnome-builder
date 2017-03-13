@@ -1,3 +1,7 @@
+.. _`Builder Bugzilla`: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder&component=docs
+.. _`git workflow`: https://wiki.gnome.org/Newcomers/CodeContributionWorkflow
+
+
 #####################
 Writing Documentation
 #####################
@@ -32,7 +36,7 @@ To open the documentation with your web browser, use ``xdg-open _build/index.htm
 Submitting Patches
 ==================
 
-We will accept patches for documentation no matter how get them to us.
+We will accept patches for documentation no matter how you get them to us.
 However, you will save us a lot of time if you can:
 
  * Create a patch with git.
@@ -41,7 +45,7 @@ However, you will save us a lot of time if you can:
 Creating a Patch
 ================
 
-First off, if you have not configured git to include your full name and email, do so like:
+First off, if you have not configured git to include your full name and email, type the following in a terminal:
 
 .. code-block:: bash
 
@@ -76,5 +80,8 @@ Upload the patch file you exported with ``git format-patch HEAD^`` above.
 
 Click "Submit Bug" and we'll take care of the rest!
 
+GNOME git Best Practices
+========================
 
-.. _`Builder Bugzilla`: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder&component=docs
+To learn more about using git with GNOME, including how to set up git, submitting patches,
+and good commit messages, visit the `git workflow`_ GNOME wiki page.
