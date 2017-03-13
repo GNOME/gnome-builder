@@ -51,8 +51,10 @@ struct _IdeBuildSystemInterface
                                            GError              **error);
   gchar      *(*get_builddir)             (IdeBuildSystem       *self,
                                            IdeConfiguration     *configuration);
+  gchar      *(*get_id)                   (IdeBuildSystem       *self);
 };
 
+gchar          *ide_build_system_get_id                   (IdeBuildSystem       *self);
 void            ide_build_system_new_async                (IdeContext           *context,
                                                            GFile                *project_file,
                                                            GCancellable         *cancellable,

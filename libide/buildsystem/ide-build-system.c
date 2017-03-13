@@ -318,3 +318,14 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
 
   IDE_RETURN (ret);
 }
+
+gchar *
+ide_build_system_get_id (IdeBuildSystem *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_id)
+    return IDE_BUILD_SYSTEM_GET_IFACE (self)->get_id (self);
+
+  return g_strdup (G_OBJECT_TYPE_NAME (self));
+}
