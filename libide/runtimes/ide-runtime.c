@@ -24,6 +24,9 @@
 #include "buildsystem/ide-configuration.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
+#include "util/ide-flatpak.h"
 
 typedef struct
 {
@@ -75,18 +78,42 @@ ide_runtime_real_contains_program_in_path (IdeRuntime   *self,
                                            const gchar  *program,
                                            GCancellable *cancellable)
 {
-  gchar *path;
-  gboolean ret;
-
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  path = g_find_program_in_path (program);
-  ret = path != NULL;
-  g_free (path);
+  if (!ide_is_flatpak ())
+    {
+      g_autofree gchar *path = NULL;
+      path = g_find_program_in_path (program);
+      return path != NULL;
+    }
+  else
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
 
-  return ret;
+      /*
+       * If we are in flatpak, we have to execute a program on the host to
+       * determine if there is a program available, as we cannot resolve
+       * file paths from inside the mount namespace.
+       */
+
+      if (NULL != (launcher = ide_runtime_create_launcher (self, NULL)))
+        {
+          g_autoptr(IdeSubprocess) subprocess = NULL;
+
+          ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+          ide_subprocess_launcher_push_argv (launcher, "which");
+          ide_subprocess_launcher_push_argv (launcher, program);
+
+          if (NULL != (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
+            return ide_subprocess_wait_check (subprocess, NULL, NULL);
+        }
+
+      return FALSE;
+    }
+
+  g_assert_not_reached ();
 }
 
 gboolean
