@@ -289,7 +289,6 @@ ide_build_stage_launcher_set_property (GObject      *object,
                                        GParamSpec   *pspec)
 {
   IdeBuildStageLauncher *self = (IdeBuildStageLauncher *)object;
-  IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -302,7 +301,7 @@ ide_build_stage_launcher_set_property (GObject      *object,
       break;
 
     case PROP_LAUNCHER:
-      priv->launcher = g_value_dup_object (value);
+      ide_build_stage_launcher_set_launcher (self, g_value_get_object (value));
       break;
 
     default:
@@ -345,7 +344,7 @@ ide_build_stage_launcher_class_init (IdeBuildStageLauncherClass *klass)
                          "The subprocess launcher to execute",
                          IDE_TYPE_SUBPROCESS_LAUNCHER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -369,6 +368,29 @@ ide_build_stage_launcher_get_launcher (IdeBuildStageLauncher *self)
   return priv->launcher;
 }
 
+void
+ide_build_stage_launcher_set_launcher (IdeBuildStageLauncher *self,
+                                       IdeSubprocessLauncher *launcher)
+{
+  IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_STAGE_LAUNCHER (self));
+  g_return_if_fail (!launcher || IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
+  if (g_set_object (&priv->launcher, launcher))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAUNCHER]);
+}
+
+/**
+ * ide_build_stage_launcher_new:
+ * @context: An #IdeContext
+ * @launcher: (nullable): An #IdeSubprocessLauncher or %NULL
+ *
+ * Creates a new #IdeBuildStageLauncher that can be attached to an
+ * #IdeBuildPipeline.
+ *
+ * Returns: (transfer full): An #IdeBuildStageLauncher
+ */
 IdeBuildStage *
 ide_build_stage_launcher_new (IdeContext            *context,
                               IdeSubprocessLauncher *launcher)

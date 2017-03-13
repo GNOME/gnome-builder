@@ -45,6 +45,8 @@ struct _IdeBuildStageLauncherClass
 IdeBuildStage         *ide_build_stage_launcher_new                    (IdeContext            *context,
                                                                         IdeSubprocessLauncher *launcher);
 IdeSubprocessLauncher *ide_build_stage_launcher_get_launcher           (IdeBuildStageLauncher *self);
+void                   ide_build_stage_launcher_set_launcher           (IdeBuildStageLauncher *self,
+                                                                        IdeSubprocessLauncher *launcher);
 IdeSubprocessLauncher *ide_build_stage_launcher_get_clean_launcher     (IdeBuildStageLauncher *self);
 void                   ide_build_stage_launcher_set_clean_launcher     (IdeBuildStageLauncher *self,
                                                                         IdeSubprocessLauncher *clean_launcher);
