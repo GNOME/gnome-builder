@@ -33,6 +33,7 @@
 #include "buffers/ide-unsaved-files.h"
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-system.h"
+#include "buildsystem/ide-build-system-discovery.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "devices/ide-device-manager.h"
@@ -65,6 +66,7 @@ struct _IdeContext
   IdeBufferManager         *buffer_manager;
   IdeBuildManager          *build_manager;
   IdeBuildSystem           *build_system;
+  gchar                    *build_system_hint;
   IdeConfigurationManager  *configuration_manager;
   IdeDiagnosticsManager    *diagnostics_manager;
   IdeDeviceManager         *device_manager;
@@ -346,6 +348,7 @@ ide_context_new_async (GFile               *project_file,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_new_async);
 
   g_async_initable_new_async (IDE_TYPE_CONTEXT,
                               G_PRIORITY_DEFAULT,
@@ -539,6 +542,7 @@ ide_context_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  g_clear_pointer (&self->build_system_hint, g_free);
   g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
   g_clear_pointer (&self->root_build_dir, g_free);
   g_clear_pointer (&self->recent_projects_path, g_free);
@@ -1020,6 +1024,7 @@ ide_context_init_build_system (gpointer             source_object,
   task = g_task_new (self, cancellable, callback, user_data);
   ide_build_system_new_async (self,
                               self->project_file,
+                              self->build_system_hint,
                               cancellable,
                               ide_context_init_build_system_cb,
                               g_object_ref (task));
@@ -1503,6 +1508,119 @@ ide_context_init_loaded (gpointer             source_object,
 }
 
 static void
+ide_context_init_early_discover_cb (PeasExtensionSet *set,
+                                    PeasPluginInfo   *plugin_info,
+                                    PeasExtension    *exten,
+                                    gpointer          user_data)
+{
+  IdeBuildSystemDiscovery *discovery = (IdeBuildSystemDiscovery *)exten;
+  g_autofree gchar *ret = NULL;
+  struct {
+    GFile *project_file;
+    gchar *hint;
+    gint   priority;
+  } *state = user_data;
+  gint priority = 0;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_BUILD_SYSTEM_DISCOVERY (exten));
+  g_assert (state != NULL);
+
+  ret = ide_build_system_discovery_discover (discovery, state->project_file, NULL, &priority, NULL);
+
+  if (ret != NULL && priority < state->priority)
+    {
+      g_free (state->hint);
+      state->hint = g_steal_pointer (&ret);
+      state->priority = priority;
+    }
+}
+
+static void
+ide_context_init_early_discovery_worker (GTask        *task,
+                                         gpointer      source_object,
+                                         gpointer      task_data,
+                                         GCancellable *cancellable)
+{
+  IdeContext *self = source_object;
+  g_autoptr(PeasExtensionSet) addins = NULL;
+  GFile *project_file = task_data;
+  struct {
+    GFile *project_file;
+    gchar *hint;
+    gint   priority;
+  } state;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (G_IS_FILE (project_file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /*
+   * Before we load our build system by working through the extension
+   * points, try to discover if there is a specific build system we
+   * should be using.
+   */
+
+  /*
+   * If the project file is not a directory, then we don't want to do any type-hint
+   * discovery (as we want to let the build system directly try to load the project).
+   */
+  if (g_file_query_file_type (project_file, 0, cancellable) != G_FILE_TYPE_DIRECTORY)
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  state.project_file = project_file;
+  state.hint = NULL;
+  state.priority = G_MAXINT;
+
+  /*
+   * Ask our plugins to try to discover what build system to use before loading
+   * build system extension points. This allows things like flatpak configuration
+   * files to influence what build system to load.
+   */
+  addins = peas_extension_set_new (peas_engine_get_default (),
+                                   IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
+                                   NULL);
+
+  peas_extension_set_foreach (addins, ide_context_init_early_discover_cb, &state);
+
+  /*
+   * If we discovered the build system to use based on the hint, we need to stash
+   * that info so the ide_context_init_build_system() function can use it to narrow
+   * the build systems to try.
+   */
+  if (state.hint != NULL)
+    {
+      IDE_TRACE_MSG ("Discovered that %s is the build system to load", state.hint);
+      self->build_system_hint = g_steal_pointer (&state.hint);
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_init_early_discovery (gpointer             source_object,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_init_early_discovery);
+  g_task_set_task_data (task, g_object_ref (self->project_file), g_object_unref);
+  g_task_run_in_thread (task, ide_context_init_early_discovery_worker);
+}
+
+static void
 ide_context_init_async (GAsyncInitable      *initable,
                         int                  io_priority,
                         GCancellable        *cancellable,
@@ -1518,6 +1636,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         cancellable,
                         callback,
                         user_data,
+                        ide_context_init_early_discovery,
                         ide_context_init_build_system,
                         ide_context_init_vcs,
                         ide_context_init_services,
