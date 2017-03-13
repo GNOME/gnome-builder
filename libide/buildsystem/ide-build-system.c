@@ -133,6 +133,17 @@ sort_priority (gconstpointer a,
 {
   IdeBuildSystem **as = (IdeBuildSystem **)a;
   IdeBuildSystem **bs = (IdeBuildSystem **)b;
+  g_autofree gchar *id_a = ide_build_system_get_id (*as);
+  g_autofree gchar *id_b = ide_build_system_get_id (*bs);
+  const gchar *build_system_hint = data;
+
+  if (build_system_hint != NULL)
+    {
+      if (g_strcmp0 (build_system_hint, id_a) == 0)
+        return -1;
+      else if (g_strcmp0 (build_system_hint, id_b) == 0)
+        return 1;
+    }
 
   return ide_build_system_get_priority (*as) - ide_build_system_get_priority (*bs);
 }
@@ -141,6 +152,7 @@ sort_priority (gconstpointer a,
  * ide_build_system_new_async:
  * @context: #IdeBuildSystem
  * @project_file: A #GFile containing the directory or project file.
+ * @build_system_hint: A hint for the build system to use
  * @cancellable: (allow-none): A #GCancellable
  * @callback: A callback to execute upon completion
  * @user_data: User data for @callback.
@@ -155,6 +167,7 @@ sort_priority (gconstpointer a,
 void
 ide_build_system_new_async (IdeContext          *context,
                             GFile               *project_file,
+                            const gchar         *build_system_hint,
                             GCancellable        *cancellable,
                             GAsyncReadyCallback  callback,
                             gpointer             user_data)
@@ -164,7 +177,7 @@ ide_build_system_new_async (IdeContext          *context,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ide_object_new_for_extension_async (IDE_TYPE_BUILD_SYSTEM,
-                                      sort_priority, NULL,
+                                      sort_priority, (gpointer)build_system_hint,
                                       G_PRIORITY_DEFAULT,
                                       cancellable,
                                       callback,
