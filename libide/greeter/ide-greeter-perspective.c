@@ -48,6 +48,7 @@ struct _IdeGreeterPerspective
   PeasExtensionSet     *genesis_set;
 
   GBinding             *ready_binding;
+  GCancellable         *cancellable;
 
   GtkStack             *stack;
   GtkStack             *top_stack;
@@ -819,6 +820,7 @@ ide_greeter_perspective_genesis_cancel_clicked (IdeGreeterPerspective *self,
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (GTK_IS_BUTTON (genesis_cancel_button));
 
+  g_cancellable_cancel (self->cancellable);
   egg_state_machine_set_state (self->state_machine, "browse");
   ide_greeter_perspective_apply_filter_all (self);
 }
@@ -940,9 +942,12 @@ ide_greeter_perspective_run_cb (GObject      *object,
 
   if (!ide_genesis_addin_run_finish (addin, result, &error))
     {
-      g_strstrip (error->message);
-      gtk_label_set_label (self->info_bar_label, error->message);
-      gtk_revealer_set_reveal_child (self->info_bar_revealer, TRUE);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_strstrip (error->message);
+          gtk_label_set_label (self->info_bar_label, error->message);
+          gtk_revealer_set_reveal_child (self->info_bar_revealer, TRUE);
+        }
     }
 
   /* Update continue button sensitivity */
@@ -970,7 +975,7 @@ run_genesis_addin (PeasExtensionSet *set,
     {
       gtk_widget_set_sensitive (GTK_WIDGET (state->self->genesis_continue_button), FALSE);
       ide_genesis_addin_run_async (addin,
-                                   NULL,
+                                   state->self->cancellable,
                                    ide_greeter_perspective_run_cb,
                                    g_object_ref (state->self));
     }
@@ -988,6 +993,9 @@ ide_greeter_perspective_genesis_continue (IdeGreeterPerspective *self)
 
   state.self = self;
   state.name = gtk_stack_get_visible_child_name (self->genesis_stack);
+
+  g_clear_object (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
 
   peas_extension_set_foreach (self->genesis_set, run_genesis_addin, &state);
 }
@@ -1107,6 +1115,7 @@ ide_greeter_perspective_finalize (GObject *object)
   g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
   g_clear_object (&self->signal_group);
   g_clear_object (&self->recent_projects);
+  g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_greeter_perspective_parent_class)->finalize (object);
 }
