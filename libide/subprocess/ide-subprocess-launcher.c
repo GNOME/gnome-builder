@@ -269,15 +269,6 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  /* Many things break without at least PATH, HOME, etc. being set */
-  if (priv->clear_env)
-    {
-      ide_subprocess_launcher_setenv (self, "PATH", "/bin:/usr/bin", FALSE);
-      ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
-      ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
-      ide_subprocess_launcher_setenv (self, "LANG", g_getenv ("LANG"), FALSE);
-    }
-
   {
     g_autofree gchar *str = NULL;
     g_autofree gchar *env = NULL;
@@ -386,6 +377,7 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
                                     GCancellable           *cancellable,
                                     GError                **error)
 {
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
@@ -393,6 +385,20 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
 
   task = g_task_new (self, cancellable, NULL, NULL);
   g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn);
+
+  if (priv->clear_env)
+    {
+      /*
+       * Many things break without at least PATH, HOME, etc. being set.
+       * The GbpFlatpakSubprocessLauncher will also try to set PATH so
+       * that it can get /app/bin too. Since it chains up to us, we wont
+       * overwrite PATH in that case (which is what we want).
+       */
+      ide_subprocess_launcher_setenv (self, "PATH", "/bin:/usr/bin", FALSE);
+      ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
+      ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
+      ide_subprocess_launcher_setenv (self, "LANG", g_getenv ("LANG"), FALSE);
+    }
 
   if (should_use_breakout_process (self))
     g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_host_worker);

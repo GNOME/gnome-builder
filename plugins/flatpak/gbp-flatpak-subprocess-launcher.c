@@ -79,6 +79,10 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
             }
         }
 
+      /*
+       * Since this can be called multiple times, we have to avoid re-adding
+       * the --env= parameters a second (or third, or fourth) time.
+       */
       for (guint i = 0; envp[i] != NULL; i++)
         {
           g_autofree gchar *arg = g_strdup_printf ("--env=%s", envp[i]);
