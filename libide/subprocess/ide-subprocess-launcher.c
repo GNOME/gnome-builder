@@ -275,6 +275,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
       ide_subprocess_launcher_setenv (self, "PATH", "/bin:/usr/bin", FALSE);
       ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
       ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
+      ide_subprocess_launcher_setenv (self, "LANG", g_getenv ("LANG"), FALSE);
     }
 
   {
