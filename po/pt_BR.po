@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-09 21:36+0000\n"
-"PO-Revision-Date: 2017-03-09 20:08-0200\n"
+"POT-Creation-Date: 2017-03-11 22:33+0000\n"
+"PO-Revision-Date: 2017-03-13 19:58-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -314,7 +314,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5856
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -898,7 +898,7 @@ msgstr "Fe_char"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:547
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:565
+#: libide/workbench/ide-workbench.c:566
 msgid "Builder"
 msgstr "Builder"
 
@@ -1117,54 +1117,54 @@ msgstr "documento não salvo %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falha ao salvar o buffer, ignorando reclamação."
 
-#: libide/buildsystem/ide-build-pipeline.c:2090
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Cleaning…"
 msgstr "Limpando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2105
+#: libide/buildsystem/ide-build-pipeline.c:2106
 msgid "Downloading…"
 msgstr "Baixando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2109
+#: libide/buildsystem/ide-build-pipeline.c:2110
 msgid "Building dependencies…"
 msgstr "Preferências de compilação…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2113
+#: libide/buildsystem/ide-build-pipeline.c:2114
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2117
+#: libide/buildsystem/ide-build-pipeline.c:2118
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2121
+#: libide/buildsystem/ide-build-pipeline.c:2122
 msgid "Building…"
 msgstr "Compilando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2125
+#: libide/buildsystem/ide-build-pipeline.c:2126
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2129
+#: libide/buildsystem/ide-build-pipeline.c:2130
 msgid "Exporting…"
 msgstr "Exportando…"
 
 # A resposta por ser Failed ou Successful -- Rafael
-#: libide/buildsystem/ide-build-pipeline.c:2133
-#: libide/buildsystem/ide-build-pipeline.c:2137
+#: libide/buildsystem/ide-build-pipeline.c:2134
+#: libide/buildsystem/ide-build-pipeline.c:2138
 msgid "Success"
 msgstr "Sucesso"
 
-#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/buildsystem/ide-build-pipeline.c:2142
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Falhou"
 
-#: libide/buildsystem/ide-build-pipeline.c:2145
+#: libide/buildsystem/ide-build-pipeline.c:2146
 msgid "Preparing…"
 msgstr "Preparando…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2149
+#: libide/buildsystem/ide-build-pipeline.c:2150
 msgid "Ready"
 msgstr "Pronto"
 
@@ -1411,7 +1411,7 @@ msgstr "Caminho para o arquivo do projeto, tendo como padrão o diretório atual
 msgid "New variable…"
 msgstr "Nova variável…"
 
-#: libide/devices/ide-device-manager.c:147
+#: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
 msgstr "O dispositivo “%s” não pôde ser encontrado."
@@ -1754,28 +1754,28 @@ msgstr "Falha ao inicializar padrões."
 msgid "You must call %s() before using libide."
 msgstr "Você tem que chamar %s() antes de usar libide."
 
-#: libide/ide-context.c:1887
+#: libide/ide-context.c:1888
 msgid "An unload request is already pending"
 msgstr "Uma requisição para descarregar já está pendente"
 
-#: libide/ide-context.c:2006
+#: libide/ide-context.c:2007
 msgid "Context has already been restored."
 msgstr "O contexto já foi restaurado."
 
-#: libide/ide-object.c:288
+#: libide/ide-object.c:304
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "Nenhuma implementação de ponto de extensão “%s”."
 
-#: libide/ide-object.c:380
+#: libide/ide-object.c:396
 msgid "Failed to locate build system plugin."
 msgstr "Falha ao localizar o plug-in do sistema de compilação."
 
-#: libide/ide-object.c:467
+#: libide/ide-object.c:483
 msgid "No such extension point."
 msgstr "Ponto de extensão inexistente."
 
-#: libide/ide-object.c:477
+#: libide/ide-object.c:493
 msgid "No implementations of extension point."
 msgstr "Nenhuma implementação de ponto de extensão."
 
@@ -2585,23 +2585,31 @@ msgstr "Falha ao abrir o diretório: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar arquivo: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5312
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira “%s”"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua “%s” com “%s”"
 
-#: libide/sourceview/ide-source-view.c:5428
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: libide/sourceview/ide-source-view.c:5855
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
+
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+#| msgid "Installing rust "
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "Instalando %u pacote"
+msgstr[1] "Instalando %u pacotes"
 
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
@@ -2664,7 +2672,7 @@ msgstr "Nome de máquina não-ASCII “%s” proibido nesta URI"
 #: libide/util/ide-uri.c:457
 #, c-format
 msgid "Could not parse port “%s” in URI"
-msgstr "Não foi possível analisar a porta “%s” na URL"
+msgstr "Não foi possível analisar a porta “%s” na URI"
 
 #: libide/util/ide-uri.c:464
 #, c-format
@@ -2759,7 +2767,7 @@ msgstr "Alterna o perspectiva"
 msgid "Open File"
 msgstr "Abrir arquivo"
 
-#: libide/workbench/ide-workbench.c:563
+#: libide/workbench/ide-workbench.c:564
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
@@ -3104,11 +3112,11 @@ msgstr "Falha ao localizar o diretório de trabalho"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Subcomando :syntax inválido: %s"
 
-#: plugins/command-bar/gb-vim.c:1147
+#: plugins/command-bar/gb-vim.c:1154
 msgid "Invalid search and replace request"
 msgstr "Requisição de pesquisa e substituição inválida"
 
-#: plugins/command-bar/gb-vim.c:1253
+#: plugins/command-bar/gb-vim.c:1260
 #, c-format
 msgid "Not a command: %s"
 msgstr "Não é um comando: %s"
@@ -3302,6 +3310,7 @@ msgid "Network is not available, skipping downloads"
 msgstr "Rede não disponível, pulando os downloads"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
@@ -3371,13 +3380,23 @@ msgstr "O runtime foi atualização"
 msgid "Runtime has been installed"
 msgstr "O runtime foi instalada"
 
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid "Your computer is missing flatpak-builder"
+msgstr "Seu computador não possui flatpak-builder"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+"Esse programa é necessário para compilar aplicativos do Flatpak. Você "
+"gostaria de instalá-lo?"
+
 #: plugins/flatpak/gtk/menus.ui:6
-#| msgid "Flatpak Runtimes"
 msgid "Flatpak"
 msgstr "Flatpak"
 
 #: plugins/flatpak/gtk/menus.ui:8
-#| msgid "Building dependencies…"
 msgid "_Download Dependencies"
 msgstr "Dependências de _download"
 
