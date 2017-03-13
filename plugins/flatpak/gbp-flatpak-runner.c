@@ -65,10 +65,16 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 
   if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
     {
-      const gchar * const *finish_args = NULL;
-      finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (configuration));
+      const gchar * const *finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (configuration));
+
       for (guint j = 0; finish_args[j]; j++)
-        ide_subprocess_launcher_insert_argv (launcher, i++, finish_args[j]);
+        {
+          const gchar *arg = finish_args[j];
+
+          /* "flatpak build" does not support require-version */
+          if (!g_str_has_prefix (arg, "--require-version"))
+            ide_subprocess_launcher_insert_argv (launcher, i++, arg);
+        }
     }
   else
     {
