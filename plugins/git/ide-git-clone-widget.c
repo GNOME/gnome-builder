@@ -372,6 +372,9 @@ ide_git_clone_widget_worker (GTask        *task,
       return;
     }
 
+  if (g_task_return_error_if_cancelled (task))
+    return;
+
   req->project_file = ggit_repository_get_workdir (repository);
   g_timeout_add (0, finish_animation_in_idle, g_object_ref (task));
 
