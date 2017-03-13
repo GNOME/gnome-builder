@@ -21,11 +21,12 @@
 #include <egg-signal-group.h>
 #include <glib/gi18n.h>
 
-#include "buffers/ide-buffer.h"
+#include "ide-macros.h"
 
-#include "ide-line-change-gutter-renderer.h"
-#include "ide-source-map.h"
-#include "ide-source-view.h"
+#include "buffers/ide-buffer.h"
+#include "sourceview/ide-line-change-gutter-renderer.h"
+#include "sourceview/ide-source-map.h"
+#include "sourceview/ide-source-view.h"
 
 #define CONCEAL_TIMEOUT 2000
 
@@ -38,6 +39,9 @@ struct _IdeSourceMap
   GtkSourceGutterRenderer   *line_renderer;
   guint                      delayed_conceal_timeout;
   guint                      show_map : 1;
+
+  guint                      in_map : 1;
+  guint                      in_view : 1;
 };
 
 G_DEFINE_TYPE (IdeSourceMap, ide_source_map, GTK_SOURCE_TYPE_MAP)
@@ -78,6 +82,16 @@ ide_source_map__enter_notify_event (IdeSourceMap     *self,
   g_assert (event != NULL);
   g_assert (GTK_IS_WIDGET (widget));
 
+  /* We use this same method for both the view and self,
+   * so if we are hovering our map, keep track of it.
+   */
+
+  if (IDE_IS_SOURCE_MAP (widget))
+    self->in_map = TRUE;
+
+  if (IDE_IS_SOURCE_VIEW (widget))
+    self->in_view = TRUE;
+
   if (self->show_map == FALSE)
     {
       self->show_map = TRUE;
@@ -92,12 +106,12 @@ ide_source_map_show_map_and_queue_fade (IdeSourceMap *self)
 {
   g_assert (IDE_IS_SOURCE_MAP (self));
 
-  if (self->delayed_conceal_timeout != 0)
-    g_source_remove (self->delayed_conceal_timeout);
+  ide_clear_source (&self->delayed_conceal_timeout);
 
-  self->delayed_conceal_timeout = g_timeout_add (CONCEAL_TIMEOUT,
-                                                 ide_source_map_do_conceal,
-                                                 self);
+  if (self->in_map == FALSE)
+    self->delayed_conceal_timeout = g_timeout_add (CONCEAL_TIMEOUT,
+                                                   ide_source_map_do_conceal,
+                                                   self);
 
   if (self->show_map == FALSE)
     {
@@ -114,6 +128,16 @@ ide_source_map__leave_notify_event (IdeSourceMap     *self,
   g_assert (IDE_IS_SOURCE_MAP (self));
   g_assert (event != NULL);
   g_assert (GTK_IS_WIDGET (widget));
+
+  /* We use this same method for both the view and self,
+   * so if we are hovering our map, keep track of it.
+   */
+
+  if (IDE_IS_SOURCE_MAP (widget))
+    self->in_map = FALSE;
+
+  if (IDE_IS_SOURCE_VIEW (widget))
+    self->in_view = FALSE;
 
   ide_source_map_show_map_and_queue_fade (self);
 
@@ -261,6 +285,8 @@ static void
 ide_source_map_init (IdeSourceMap *self)
 {
   GtkSourceGutter *gutter;
+
+  gtk_widget_add_events (GTK_WIDGET (self), GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
 
   /* Buffer */
   self->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
