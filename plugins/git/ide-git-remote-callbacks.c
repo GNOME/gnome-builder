@@ -34,6 +34,7 @@ struct _IdeGitRemoteCallbacks
   IdeProgress         *progress;
   gdouble              fraction;
   GgitCredtype         tried;
+  guint                cancelled : 1;
 };
 
 G_DEFINE_TYPE (IdeGitRemoteCallbacks, ide_git_remote_callbacks, GGIT_TYPE_REMOTE_CALLBACKS)
@@ -92,6 +93,9 @@ ide_git_remote_callbacks__notify_fraction_cb (gpointer data)
 
   g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (self));
 
+  if (self->cancelled)
+    return G_SOURCE_REMOVE;
+
   if ((animation = self->animation))
     {
       ide_clear_weak_pointer (&self->animation);
@@ -122,6 +126,9 @@ ide_git_remote_callbacks_real_transfer_progress (GgitRemoteCallbacks  *callbacks
   g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (self));
   g_assert (stats != NULL);
 
+  if (self->cancelled)
+    return;
+
   total = ggit_transfer_progress_get_total_objects (stats);
   received = ggit_transfer_progress_get_received_objects (stats);
   if (total == 0)
@@ -149,6 +156,15 @@ ide_git_remote_callbacks_real_credentials (GgitRemoteCallbacks  *callbacks,
   g_assert (url != NULL);
 
   IDE_TRACE_MSG ("username=%s url=%s", username_from_url ?: "", url);
+
+  if (self->cancelled)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_CANCELLED,
+                   "The operation has been canceled");
+      IDE_RETURN (NULL);
+    }
 
   allowed_types &= ~self->tried;
 
@@ -232,6 +248,7 @@ ide_git_remote_callbacks_class_init (IdeGitRemoteCallbacksClass *klass)
                          1.0,
                          0.0,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_PROGRESS] =
     g_param_spec_object ("progress",
                          "Progress",
@@ -246,4 +263,18 @@ static void
 ide_git_remote_callbacks_init (IdeGitRemoteCallbacks *self)
 {
   self->progress = g_object_new (IDE_TYPE_PROGRESS, NULL);
+}
+
+/**
+ * ide_git_remote_callbacks_cancel:
+ *
+ * This function should be called when a clone was canceled so that we can
+ * avoid dispatching more events.
+ */
+void
+ide_git_remote_callbacks_cancel (IdeGitRemoteCallbacks *self)
+{
+  g_return_if_fail (IDE_IS_GIT_REMOTE_CALLBACKS (self));
+
+  self->cancelled  = TRUE;
 }

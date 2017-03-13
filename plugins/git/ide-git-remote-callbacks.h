@@ -32,6 +32,7 @@ G_DECLARE_FINAL_TYPE (IdeGitRemoteCallbacks, ide_git_remote_callbacks,
 GgitRemoteCallbacks *ide_git_remote_callbacks_new          (void);
 gdouble              ide_git_remote_callbacks_get_fraction (IdeGitRemoteCallbacks *self);
 IdeProgress         *ide_git_remote_callbacks_get_progress (IdeGitRemoteCallbacks *self);
+void                 ide_git_remote_callbacks_cancel       (IdeGitRemoteCallbacks *self);
 
 G_END_DECLS
 
