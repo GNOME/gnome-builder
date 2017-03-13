@@ -349,6 +349,11 @@ ide_git_clone_widget_worker (GTask        *task,
   callbacks = g_object_new (IDE_TYPE_GIT_REMOTE_CALLBACKS, NULL);
   progress = ide_git_remote_callbacks_get_progress (IDE_GIT_REMOTE_CALLBACKS (callbacks));
   g_object_bind_property (progress, "fraction", self->clone_progress, "fraction", 0);
+  g_signal_connect_object (cancellable,
+                           "cancelled",
+                           G_CALLBACK (ide_git_remote_callbacks_cancel),
+                           callbacks,
+                           G_CONNECT_SWAPPED);
 
   fetch_options = ggit_fetch_options_new ();
   ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
@@ -397,6 +402,17 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_git_clone_widget_clone_async);
+
+  /*
+   * ggit_repository_clone() will block and we don't have a good way to
+   * cancel it. So we need to return immediately (even though the clone
+   * will continue in the background for now).
+   *
+   * FIXME: Find Ggit API to cancel clone. We might need access to the
+   *    GgitRemote so we can ggit_remote_disconnect().
+   */
+  g_task_set_return_on_cancel (task, TRUE);
 
   gtk_label_set_label (self->clone_error_label, NULL);
 
@@ -430,6 +446,9 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), FALSE);
 
+  gtk_progress_bar_set_fraction (self->clone_progress, 0.0);
+  gtk_widget_show (GTK_WIDGET (self->clone_progress));
+
   g_task_set_task_data (task, req, clone_request_free);
   g_task_run_in_thread (task, ide_git_clone_widget_worker);
 }
@@ -439,13 +458,24 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
                                    GAsyncResult       *result,
                                    GError            **error)
 {
+  GError *local_error = NULL;
+  gboolean ret;
+
   g_return_val_if_fail (IDE_IS_GIT_CLONE_WIDGET (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), &local_error);
+
+  /* Only hide progress if we were cancelled */
+  if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    gtk_widget_hide (GTK_WIDGET (self->clone_progress));
 
   gtk_spinner_stop (self->clone_spinner);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), TRUE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  g_propagate_error (error, local_error);
+
+  return ret;
 }
