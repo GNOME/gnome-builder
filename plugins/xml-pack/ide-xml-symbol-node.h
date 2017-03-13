@@ -35,7 +35,8 @@ IdeXmlSymbolNode         *ide_xml_symbol_node_new                           (con
                                                                              IdeSymbolKind           kind,
                                                                              GFile                  *file,
                                                                              gint                    line,
-                                                                             gint                    line_offset);
+                                                                             gint                    line_offset,
+                                                                             gsize                   size);
 void                      ide_xml_symbol_node_take_child                    (IdeXmlSymbolNode       *self,
                                                                              IdeXmlSymbolNode       *child);
 void                      ide_xml_symbol_node_take_internal_child           (IdeXmlSymbolNode       *self,
@@ -43,7 +44,8 @@ void                      ide_xml_symbol_node_take_internal_child           (Ide
 const gchar              *ide_xml_symbol_node_get_element_name              (IdeXmlSymbolNode       *self);
 GFile *                   ide_xml_symbol_node_get_location                  (IdeXmlSymbolNode       *self,
                                                                              gint                   *line,
-                                                                             gint                   *line_offset);
+                                                                             gint                   *line_offset,
+                                                                             gsize                  *size);
 guint                     ide_xml_symbol_node_get_n_children                (IdeXmlSymbolNode       *self);
 guint                     ide_xml_symbol_node_get_n_internal_children       (IdeXmlSymbolNode       *self);
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_child                 (IdeXmlSymbolNode       *self,
@@ -54,7 +56,8 @@ const gchar              *ide_xml_symbol_node_get_value                     (Ide
 void                      ide_xml_symbol_node_set_location                  (IdeXmlSymbolNode       *self,
                                                                              GFile                  *file,
                                                                              gint                    line,
-                                                                             gint                    line_offset);
+                                                                             gint                    line_offset,
+                                                                             gsize                   size);
 void                      ide_xml_symbol_node_set_element_name              (IdeXmlSymbolNode       *self,
                                                                              const gchar            *element_name);
 void                      ide_xml_symbol_node_set_value                     (IdeXmlSymbolNode       *self,

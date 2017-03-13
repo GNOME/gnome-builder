@@ -31,6 +31,7 @@ struct _IdeXmlSymbolNode
   GFile                    *file;
   gint                      line;
   gint                      line_offset;
+  gsize                     size;
 };
 
 G_DEFINE_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE_TYPE_SYMBOL_NODE)
@@ -119,7 +120,8 @@ ide_xml_symbol_node_new (const gchar            *name,
                          IdeSymbolKind           kind,
                          GFile                  *file,
                          gint                    line,
-                         gint                    line_offset)
+                         gint                    line_offset,
+                         gsize                   size)
 {
   IdeXmlSymbolNode *self;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
@@ -222,7 +224,8 @@ void
 ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
                                   GFile            *file,
                                   gint              line,
-                                  gint              line_offset)
+                                  gint              line_offset,
+                                  gsize             size)
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
   g_return_if_fail (G_IS_FILE (file) || file == NULL);
@@ -233,6 +236,7 @@ ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
 
   self->line = line;
   self->line_offset = line_offset;
+  self->size = size;
 }
 
 /**
@@ -246,7 +250,8 @@ ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
 GFile *
 ide_xml_symbol_node_get_location (IdeXmlSymbolNode *self,
                                   gint             *line,
-                                  gint             *line_offset)
+                                  gint             *line_offset,
+                                  gsize            *size)
 {
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
@@ -255,6 +260,9 @@ ide_xml_symbol_node_get_location (IdeXmlSymbolNode *self,
 
   if (line_offset != NULL)
     *line_offset = self->line_offset;
+
+  if (size != NULL)
+    *size = self->size;
 
   return self->file;
 }

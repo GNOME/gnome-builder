@@ -104,23 +104,45 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
   IdeXmlParser *self = (IdeXmlParser *)state->self;
   IdeContext *context;
   IdeDiagnostic *diagnostic;
-  g_autoptr(IdeSourceLocation) loc = NULL;
+  g_autoptr(IdeSourceLocation) start_loc = NULL;
+  g_autoptr(IdeSourceLocation) end_loc = NULL;
   g_autoptr(IdeFile) ifile = NULL;
-  gint line;
-  gint line_offset;
+  gint start_line;
+  gint start_line_offset;
+  gint end_line;
+  gint end_line_offset;
+  gsize size;
 
   g_assert (IDE_IS_XML_PARSER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  ide_xml_sax_get_position (self->sax_parser, &line, &line_offset);
-  ifile = ide_file_new (context, state->file);
-  loc = ide_source_location_new (ifile,
-                                 line - 1,
-                                 line_offset - 1,
-                                 0);
+  ide_xml_sax_get_location (self->sax_parser,
+                            &start_line, &start_line_offset,
+                            &end_line, &end_line_offset,
+                            &size);
 
-  diagnostic = ide_diagnostic_new (severity, msg, loc);
+  ifile = ide_file_new (context, state->file);
+  start_loc = ide_source_location_new (ifile,
+                                       start_line - 1,
+                                       start_line_offset - 1,
+                                       0);
+
+  if (size > 0)
+    {
+      IdeSourceRange *range;
+
+      end_loc = ide_source_location_new (ifile,
+                                         end_line - 1,
+                                         end_line_offset - 1,
+                                         0);
+
+      range = ide_source_range_new (start_loc, end_loc);
+      diagnostic = ide_diagnostic_new (severity, msg, NULL);
+      ide_diagnostic_take_range (diagnostic, range);
+    }
+  else
+    diagnostic = ide_diagnostic_new (severity, msg, start_loc);
 
   return diagnostic;
 }
@@ -138,6 +160,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
   g_autofree gchar *popped_element_name = NULL;
   gint line;
   gint line_offset;
+  gsize size;
   gint depth;
 
   g_assert (IDE_IS_XML_SYMBOL_NODE (node) || node == NULL);
@@ -173,8 +196,8 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
       return;
     }
 
-  ide_xml_sax_get_position (self->sax_parser, &line, &line_offset);
-  ide_xml_symbol_node_set_location (node, g_object_ref (state->file), line, line_offset);
+  ide_xml_sax_get_location (self->sax_parser, &line, &line_offset, NULL, NULL, &size);
+  ide_xml_symbol_node_set_location (node, g_object_ref (state->file), line, line_offset, size);
 
   /* TODO: take end elements into account and use:
    * || ABS (depth - current_depth) > 1
@@ -305,7 +328,7 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
   printf ("internal subset:%s external_id:%s system_id:%s\n", name, external_id, system_id);
 
   entry.schema_kind = SCHEMA_KIND_DTD;
-  ide_xml_sax_get_position (self->sax_parser, &entry.schema_line, &entry.schema_col);
+  ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL);
   g_array_append_val (state->schemas, entry);
 }
 
@@ -369,7 +392,7 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           else
             goto fail;
 
-          ide_xml_sax_get_position (self->sax_parser, &entry.schema_line, &entry.schema_col);
+          ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL);
           entry.schema_file = get_absolute_schema_file (state->file, schema_url);
           g_array_append_val (state->schemas, entry);
 
@@ -497,7 +520,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->build_state = BUILD_STATE_NORMAL;
 
   state->analysis = ide_xml_analysis_new (-1);
-  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE, NULL, 0, 0);
+  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE, NULL, 0, 0, 0);
   ide_xml_analysis_set_root_node (state->analysis, state->root_node);
 
   state->parent_node = state->root_node;

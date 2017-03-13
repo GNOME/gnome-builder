@@ -29,6 +29,7 @@ print_node (IdeXmlSymbolNode *node,
   g_autofree gchar *spacer;
   gint line;
   gint line_offset;
+  gsize size;
 
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (node) || node == NULL);
 
@@ -39,14 +40,15 @@ print_node (IdeXmlSymbolNode *node,
     }
 
   spacer = g_strnfill (depth, '\t');
-  ide_xml_symbol_node_get_location (node, &line, &line_offset);
+  ide_xml_symbol_node_get_location (node, &line, &line_offset, &size);
 
-  printf ("%s%s (%i) at (%i,%i) %p\n",
+  printf ("%s%s (%i) at (%i,%i) size:%li %p\n",
           spacer,
           ide_symbol_node_get_name (IDE_SYMBOL_NODE (node)),
           depth,
           line,
           line_offset,
+          size,
           node);
 }
 
