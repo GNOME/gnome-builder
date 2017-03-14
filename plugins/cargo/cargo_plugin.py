@@ -34,7 +34,7 @@ _CARGO = 'cargo'
 class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
 
-    def get_id(self):
+    def do_get_id(self):
         return 'cargo'
 
     def do_init_async(self, io_priority, cancellable, callback, data):

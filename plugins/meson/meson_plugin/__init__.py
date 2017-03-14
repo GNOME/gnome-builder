@@ -59,7 +59,7 @@ def extract_flags(command: str, builddir: str):
 class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
 
-    def get_id(self):
+    def do_get_id(self):
         return 'meson'
 
     def do_init_async(self, priority, cancel, callback, data=None):

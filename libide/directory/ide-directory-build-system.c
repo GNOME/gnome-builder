@@ -173,8 +173,15 @@ ide_directory_build_system_get_priority (IdeBuildSystem *build_system)
   return 1000000;
 }
 
+static gchar *
+ide_directory_build_system_get_id (IdeBuildSystem *build_system)
+{
+  return g_strdup ("directory");
+}
+
 static void
 build_system_init (IdeBuildSystemInterface *iface)
 {
   iface->get_priority = ide_directory_build_system_get_priority;
+  iface->get_id = ide_directory_build_system_get_id;
 }
