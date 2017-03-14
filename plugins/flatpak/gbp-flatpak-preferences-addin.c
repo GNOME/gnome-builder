@@ -241,9 +241,13 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
 }
 
 static void
-gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self,
-                                      IdePreferences             *preferences)
+gbp_flatpak_preferences_addin_reload_worker (GTask        *task,
+                                             gpointer      source_object,
+                                             gpointer      task_data,
+                                             GCancellable *cancellable)
 {
+  GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)source_object;
+  IdePreferences *preferences = (IdePreferences *)task_data;
   g_autoptr(FlatpakInstallation) system = NULL;
   g_autoptr(FlatpakInstallation) user = NULL;
   g_autoptr(GFile) file = NULL;
@@ -252,6 +256,7 @@ gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self,
 
   IDE_ENTRY;
 
+  g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
   g_assert (IDE_IS_PREFERENCES (preferences));
 
@@ -273,6 +278,26 @@ gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self,
   system = flatpak_installation_new_system (NULL, NULL);
   if (system != NULL)
     add_runtimes (self, preferences, system);
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self,
+                                      IdePreferences             *preferences)
+{
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
+  g_assert (IDE_IS_PREFERENCES (preferences));
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_task_data (task, g_object_ref (preferences), g_object_unref);
+  g_task_run_in_thread (task, gbp_flatpak_preferences_addin_reload_worker);
 
   IDE_EXIT;
 }
