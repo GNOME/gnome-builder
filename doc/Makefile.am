@@ -66,6 +66,9 @@ install-data-hook:
 		cp -a $(srcdir)/html/* "$(DESTDIR)$(docdir)/html/" ; \
 	fi
 
+uninstall-local:
+	rm -rf "$(DESTDIR)$(docdir)/html/"
+
 GITIGNOREFILES = _build
 
 -include $(top_srcdir)/git.mk
