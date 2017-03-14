@@ -143,7 +143,7 @@ ide_autotools_make_stage_wait_cb (GObject      *object,
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
 
-  if (!ide_subprocess_wait_finish (subprocess, result, &error))
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
     g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
@@ -215,10 +215,10 @@ ide_autotools_make_stage_execute_async (IdeBuildStage       *stage,
 
   ide_build_stage_log_subprocess (stage, subprocess);
 
-  ide_subprocess_wait_async (subprocess,
-                             cancellable,
-                             ide_autotools_make_stage_wait_cb,
-                             g_steal_pointer (&task));
+  ide_subprocess_wait_check_async (subprocess,
+                                   cancellable,
+                                   ide_autotools_make_stage_wait_cb,
+                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -293,10 +293,10 @@ ide_autotools_make_stage_clean_async (IdeBuildStage       *stage,
 
   ide_build_stage_log_subprocess (stage, subprocess);
 
-  ide_subprocess_wait_async (subprocess,
-                             cancellable,
-                             ide_autotools_make_stage_wait_cb,
-                             g_steal_pointer (&task));
+  ide_subprocess_wait_check_async (subprocess,
+                                   cancellable,
+                                   ide_autotools_make_stage_wait_cb,
+                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
