@@ -44,14 +44,17 @@ struct _GbpFlatpakConfigurationProvider
   guint                    change_count;
 };
 
-static void configuration_provider_iface_init (IdeConfigurationProviderInterface *);
+static void configuration_provider_iface_init         (IdeConfigurationProviderInterface  *iface);
+static void gbp_flatpak_configuration_provider_load   (IdeConfigurationProvider           *provider,
+                                                       IdeConfigurationManager            *manager);
+static void gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider           *provider,
+                                                       IdeConfigurationManager            *manager);
 
 G_DEFINE_TYPE_EXTENDED (GbpFlatpakConfigurationProvider, gbp_flatpak_configuration_provider, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
                                                configuration_provider_iface_init))
 
-static void gbp_flatpak_configuration_provider_load (IdeConfigurationProvider *provider, IdeConfigurationManager *manager);
-static void gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider, IdeConfigurationManager *manager);
+static GRegex *filename_regex;
 
 static void
 gbp_flatpak_configuration_provider_save_worker (GTask        *task,
@@ -807,7 +810,6 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
       g_autofree gchar *filename = NULL;
       g_autofree gchar *path = NULL;
       g_autofree gchar *id = NULL;
-      g_autoptr(GRegex) filename_regex = NULL;
       g_autoptr(GMatchInfo) match_info = NULL;
       g_autoptr(GFile) file = NULL;
       g_autoptr(GbpFlatpakConfiguration) possible_config = NULL;
@@ -832,10 +834,6 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
             return FALSE;
           continue;
         }
-
-      /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
-      filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
-                                    0, 0, NULL);
 
       /* Check if the filename resembles APP_ID.json */
       g_regex_match (filename_regex, filename, 0, &match_info);
@@ -1054,6 +1052,9 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider,
 static void
 gbp_flatpak_configuration_provider_class_init (GbpFlatpakConfigurationProviderClass *klass)
 {
+  /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
+  filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
+                                G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void
