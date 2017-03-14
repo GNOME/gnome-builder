@@ -1,8 +1,8 @@
 [Plugin]
 Module=html_preview_plugin
 Loader=python3
-Name=HTML and Markdown Preview
-Description=Live preview of HTML and Markdown documents.
+Name=HTML, reStructuredText and Markdown Preview
+Description=Live preview of HTML, reStructuredText and Markdown documents.
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true

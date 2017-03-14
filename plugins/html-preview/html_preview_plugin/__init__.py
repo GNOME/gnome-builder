@@ -34,6 +34,13 @@ from gi.repository import Ide
 from gi.repository import WebKit2
 from gi.repository import Peas
 
+can_preview_rst = True
+
+try:
+    from docutils.core import publish_string
+except ImportError:
+    can_preview_rst = False
+
 _ = Ide.gettext
 
 class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
@@ -67,17 +74,23 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         actions.remove_action('preview-as-html')
 
     def do_language_changed(self, language_id):
-        enabled = (language_id in ('html', 'markdown'))
+        enabled = (language_id in ('html', 'markdown', 'rst'))
         self.action.set_enabled(enabled)
 
     def preview_activated(self, editor):
         document = editor.get_document()
+        language = document.get_language()
+        if language and language.get_id() == 'rst' and not can_preview_rst:
+            return
+
         view = HtmlPreviewView(document, visible=True)
+
         stack = editor.get_ancestor(Ide.LayoutStack)
         stack.add(view)
 
 class HtmlPreviewView(Ide.LayoutView):
     markdown = False
+    rst = False
 
     def __init__(self, document, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -90,8 +103,12 @@ class HtmlPreviewView(Ide.LayoutView):
         settings.enable_html5_local_storage = False
 
         language = document.get_language()
-        if language and language.get_id() == 'markdown':
-            self.markdown = True
+        if language:
+            id = language.get_id()
+            if id == 'markdown':
+                self.markdown = True
+            elif id == 'rst':
+                self.rst = True
 
         document.connect('changed', self.on_changed)
         self.on_changed(document)
@@ -125,6 +142,9 @@ class HtmlPreviewView(Ide.LayoutView):
 </html>
 """ % params
 
+    def get_rst(self, text):
+        return publish_string(text, writer_name='html5')
+
     def reload(self):
         base_uri = self.document.get_file().get_file().get_uri()
 
@@ -133,6 +153,8 @@ class HtmlPreviewView(Ide.LayoutView):
 
         if self.markdown:
             text = self.get_markdown(text)
+        elif self.rst:
+            text = self.get_rst(text).decode("utf-8")
 
         self.webview.load_html(text, base_uri)
 
