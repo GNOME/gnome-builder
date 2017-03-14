@@ -1,4 +1,60 @@
 ===============
+Version 3.23.92
+===============
+
+Our 3.24 RC is here with 3.23.92. We expect Builder 3.24 to be final next week.
+
+Changes include:
+
+ • A lot of -Wsign-compare compile fixes.
+ • Fix inconsistent field in priority heap.
+ • Ctags can now use ctags binary from the host.
+ • Various Rustup fixes when running in flatpak.
+ • Add support for gnome-code-assistance when running under flatpak.
+ • Use Adwaita theme when under flatpak.
+ • Use names for cursors instead of old-style enums.
+ • Extract errors from vala compiler during builds.
+ • Extract errors from gmcs/mcs (mono) during builds.
+ • Much documentation has been added.
+ • Subprocess FD fixes when using the flatpak development service.
+ • EggTaskCache correctness improvements.
+ • Fallback to ninja to discover VALAFLAGS with older meson releases.
+ • Various terminal improvements when under flatpak.
+ • Move flatpak downloads into downloads phase of build pipeline.
+ • Add support for exporting an App.flatpak.
+ • Add support for manually downloading dependencies.
+ • Clang will fallback to CFLAGS or CXXFLAGS from environment variables.
+ • Make buildsystem will now use $MAKE environment variable if specified.
+ • The clone dialog will now strip whitespace from URIs.
+ • Fixes in user-preferred-shell discovery.
+ • The build panel is now shown upon first build (but without focus).
+ • Before exporting, flatpak-builder will now be used to finish the
+   build process and cleanup commands.
+ • Builder will notify the user if flatpak-builder is not installed, as it
+   is necessary for a good portion of the value of Builder.
+ • Builder will look at manifest files to try to discover the build system.
+   This is useful when projects have multiple build systems in transition.
+ • Much polish to flatpak runtime installations.
+ • Lots of Vala plugin fixes and cleanup due to recent Vala changes.
+ • Autools project miner has reduced the depth of search to speed up
+   application startup. We intend to switch to a custom tracker miner
+   in a future release of Builder.
+ • Various fixes for Meson inside of a flatpak runtime.
+ • Fix cancellation of clone operations in the project greeter.
+ • Don't pass --require-version to `flatpak build` when running.
+ • Always use headerbar for about dialog.
+ • Fix hysteresis in animation for editor overview map.
+ • Various subprocess correctness improvements.
+ • Use the diagnostics range for the source location if not specified.
+ • Support for a basic "make" build system has been added.
+
+Updated Translations
+
+  Swedish, Lithuanian, Hungarian, Kazakh, Korean, Chinese (Taiwan), Friulian,
+  Galician, Finnish, Indonesian, Czech, German, Polish, Brazilian Portuguese,
+  Serbian
+
+===============
 Version 3.23.91
 ===============
 
