@@ -63,7 +63,7 @@ dist-hook:
 install-data-hook:
 	if test -d "$(srcdir)/html"; then                            \
 		$(MKDIR_P) "$(DESTDIR)$(docdir)/html" ;              \
-		cp -a $(srcdir)/html/* "$(DESTDIR)$(docdir)/html/" ; \
+		cp -R --no-preserve=all $(srcdir)/html/* "$(DESTDIR)$(docdir)/html/" ; \
 	fi
 
 uninstall-local:
