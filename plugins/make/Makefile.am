@@ -10,6 +10,4 @@ dist_module_DATA = make_plugin/__init__.py
 
 endif
 
-include $(top_srcdir)/plugins/Makefile.plugin
-
 -include $(top_srcdir)/git.mk
