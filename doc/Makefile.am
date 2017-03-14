@@ -61,9 +61,9 @@ dist-hook:
 	rm -rf html ; $(SPHINX_BUILD) "$(top_srcdir)/doc" "$(distdir)/html"
 
 install-data-hook:
-	if test -d "$(srcdir)/html"; then                  \
-		$(MKDIR_P) "$(DESTDIR)$(docdir)/html" ;    \
-		cp -a html/* "$(DESTDIR)$(docdir)/html/" ; \
+	if test -d "$(srcdir)/html"; then                            \
+		$(MKDIR_P) "$(DESTDIR)$(docdir)/html" ;              \
+		cp -a $(srcdir)/html/* "$(DESTDIR)$(docdir)/html/" ; \
 	fi
 
 GITIGNOREFILES = _build
