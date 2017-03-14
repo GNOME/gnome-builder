@@ -17,6 +17,7 @@
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-preferences-addin"
+#define MIN_GNOME_VERSION "3.22"
 
 #include <flatpak.h>
 #include <glib/gi18n.h>
@@ -133,10 +134,7 @@ is_old_gnome_version (const gchar *version)
   if (g_str_equal (version, "master"))
     return FALSE;
 
-  if (g_utf8_collate ("3.20", version) > 0)
-    return TRUE;
-
-  return FALSE;
+  return g_utf8_collate (MIN_GNOME_VERSION, version) > 0;
 }
 
 static void
