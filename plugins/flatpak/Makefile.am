@@ -12,6 +12,8 @@ dist_plugin_DATA = flatpak.plugin
 libflatpak_plugin_la_SOURCES =               \
 	gbp-flatpak-application-addin.c      \
 	gbp-flatpak-application-addin.h      \
+	gbp-flatpak-build-system-discovery.c \
+	gbp-flatpak-build-system-discovery.h \
 	gbp-flatpak-clone-widget.c           \
 	gbp-flatpak-clone-widget.h           \
 	gbp-flatpak-configuration.c          \
