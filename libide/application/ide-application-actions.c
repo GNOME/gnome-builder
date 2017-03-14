@@ -17,6 +17,7 @@
  */
 
 #define G_LOG_DOMAIN "ide-application-actions"
+#define DOCS_URI "https://builder.readthedocs.io"
 
 #include "config.h"
 
@@ -149,41 +150,80 @@ ide_application_actions_about (GSimpleAction *action,
 }
 
 static void
+ide_application_actions_help_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  GNetworkMonitor *monitor = (GNetworkMonitor *)object;
+  g_autoptr(IdeApplication) self = user_data;
+  GtkWindow *focused_window;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  focused_window = gtk_application_get_active_window (GTK_APPLICATION (self));
+
+  /*
+   * If we can reach the documentation website, prefer showing up-to-date
+   * documentation from the website.
+   */
+  if (g_network_monitor_can_reach_finish (monitor, result, NULL))
+    {
+      if (gtk_show_uri_on_window (focused_window, DOCS_URI, gtk_get_current_event_time (), NULL))
+        IDE_EXIT;
+    }
+
+  /*
+   * We failed to reach the online site for some reason (offline, transient error, etc),
+   * so instead try to load the local documentation.
+   */
+  if (g_file_test (PACKAGE_DOCDIR"/html/index.html", G_FILE_TEST_IS_REGULAR))
+    {
+      const gchar *uri;
+      g_autofree gchar *real_uri = NULL;
+      g_autoptr(GError) error = NULL;
+
+      if (ide_is_flatpak ())
+        uri = real_uri = ide_flatpak_get_app_path ("/share/doc/gnome-builder/html/index.html");
+      else
+        uri = "file://"PACKAGE_DOCDIR"/html/index.html";
+
+      if (!gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
+        g_warning ("Failed to load documentation: %s", error->message);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_application_actions_help (GSimpleAction *action,
                               GVariant      *param,
                               gpointer       user_data)
 {
   IdeApplication *self = user_data;
-  GtkWindow *focused_window= NULL;
-  const gchar *uri = "https://builder.readthedocs.io";
-  g_autoptr(GError) error = NULL;
-  GNetworkMonitor *monitor;
-  g_autofree gchar *real_uri = NULL;
+  g_autoptr(GSocketConnectable) network_address = NULL;
 
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
 
-  focused_window = gtk_application_get_active_window (GTK_APPLICATION (self));
-
-  monitor = g_network_monitor_get_default ();
-
   /*
-   * If we don't have network access, we should try to use the local
-   * documentation. To do that we might need to translate it to the
-   * path for which the host has access.
+   * Check for access to the internet. Sadly, we cannot use
+   * g_network_monitor_get_network_available() because that does not seem to
+   * act correctly on some systems (Ubuntu appears to be one example). So
+   * instead, we can asynchronously check if we can reach the peer first.
    */
-  if (!g_network_monitor_get_network_available (monitor))
-    {
-      if (g_file_test (PACKAGE_DOCDIR"/html/index.html", G_FILE_TEST_IS_REGULAR))
-        {
-          if (ide_is_flatpak ())
-            uri = real_uri = ide_flatpak_get_app_path ("/share/doc/gnome-builder/html/index.html");
-          else
-            uri = "file://"PACKAGE_DOCDIR"/html/index.html";
-        }
-    }
+  network_address = g_network_address_parse_uri (DOCS_URI, 443, NULL);
+  g_network_monitor_can_reach_async (g_network_monitor_get_default (),
+                                     network_address,
+                                     NULL,
+                                     ide_application_actions_help_cb,
+                                     g_object_ref (self));
 
-  if (!gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
-    g_message ("Unable to open help: %s\n", error->message);
+  IDE_EXIT;
 }
 
 static void
