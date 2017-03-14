@@ -382,7 +382,7 @@ static void
 ide_object_new_for_extension_async_try_next (GTask *task)
 {
   InitExtensionAsyncState *state;
-  IdeBuildSystem *build_system;
+  GAsyncInitable *initable;
 
   g_assert (G_IS_TASK (task));
 
@@ -397,9 +397,11 @@ ide_object_new_for_extension_async_try_next (GTask *task)
       return;
     }
 
-  build_system = g_ptr_array_index (state->plugins, state->position++);
+  initable = g_ptr_array_index (state->plugins, state->position++);
 
-  g_async_initable_init_async (G_ASYNC_INITABLE (build_system),
+  IDE_TRACE_MSG ("Initializing object of type %s", G_OBJECT_TYPE_NAME (initable));
+
+  g_async_initable_init_async (initable,
                                state->io_priority,
                                g_task_get_cancellable (task),
                                extension_init_cb,
@@ -448,6 +450,14 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
 
   if (sort_priority_func != NULL)
     g_ptr_array_sort_with_data (state->plugins, sort_priority_func, sort_priority_data);
+
+#ifdef IDE_ENABLE_TRACE
+  for (guint i = 0; i < state->plugins->len; i++)
+    {
+      gpointer instance = g_ptr_array_index (state->plugins, i);
+      IDE_TRACE_MSG (" Plugin[%u] = %s", i, G_OBJECT_TYPE_NAME (instance));
+    }
+#endif
 
   g_task_set_task_data (task, state, extension_async_state_free);
 
