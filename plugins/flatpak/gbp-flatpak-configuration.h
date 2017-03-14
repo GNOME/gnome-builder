@@ -27,11 +27,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakConfiguration, gbp_flatpak_configuration, GBP, FLATPAK_CONFIGURATION, IdeConfiguration)
 
-GbpFlatpakConfiguration  *gbp_flatpak_configuration_new                (IdeContext  *context,
-                                                                        const gchar *id,
-                                                                        const gchar *display_name);
+GbpFlatpakConfiguration  *gbp_flatpak_configuration_new                (IdeContext              *context,
+                                                                        const gchar             *id,
+                                                                        const gchar             *display_name);
 gboolean                  gbp_flatpak_configuration_load_from_file     (GbpFlatpakConfiguration *self,
-                                                                        GFile *manifest);
+                                                                        GFile                   *manifest);
 const gchar              *gbp_flatpak_configuration_get_branch         (GbpFlatpakConfiguration *self);
 void                      gbp_flatpak_configuration_set_branch         (GbpFlatpakConfiguration *self,
                                                                         const gchar             *branch);
