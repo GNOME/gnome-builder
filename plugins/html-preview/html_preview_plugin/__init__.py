@@ -63,11 +63,21 @@ class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
 
 class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
     def do_load(self, editor):
+        self.workbench = editor.get_ancestor(Ide.Workbench)
+
         self.action = Gio.SimpleAction(name='preview-as-html', enabled=True)
         self.action.connect('activate', lambda *_: self.preview_activated(editor))
 
         actions = editor.get_action_group('view')
         actions.add_action(self.action)
+
+        self.install_action = Gio.SimpleAction(name='install-docutils', enabled=True)
+        self.install_action.connect('activate', lambda *_: self.install_docutils(editor))
+
+        group = Gio.SimpleActionGroup()
+        group.insert(self.install_action)
+
+        self.workbench.insert_action_group('html-preview', group)
 
     def do_unload(self, editor):
         actions = editor.get_action_group('view')
@@ -78,15 +88,48 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         self.action.set_enabled(enabled)
 
     def preview_activated(self, editor):
+        global can_preview_rst
+
         document = editor.get_document()
         language = document.get_language()
+
         if language and language.get_id() == 'rst' and not can_preview_rst:
+            self.show_missing_message(editor)
             return
 
         view = HtmlPreviewView(document, visible=True)
 
         stack = editor.get_ancestor(Ide.LayoutStack)
         stack.add(view)
+
+    def show_missing_message(self, editor):
+        message = Ide.WorkbenchMessage(
+            id='org.gnome.builder.docutils.install',
+            title=_('Your computer is missing python3-docutils'),
+            show_close_button=True,
+            visible=True)
+
+        message.add_action(_('Install'), 'html-preview.install-docutils')
+        self.workbench.push_message(message)
+
+    def install_docutils(self, editor):
+        transfer = Ide.PkconTransfer(packages=['python3-docutils'])
+        context = self.workbench.get_context()
+        manager = context.get_transfer_manager()
+
+        manager.execute_async(transfer, None, self.docutils_installed, None)
+
+    def docutils_installed(self, object, result, data):
+        global can_preview_rst
+        global publish_string
+
+        try:
+            from docutils.core import publish_string
+        except ImportError:
+            return
+
+        can_preview_rst = True
+        self.workbench.pop_message('org.gnome.builder.docutils.install')
 
 class HtmlPreviewView(Ide.LayoutView):
     markdown = False
