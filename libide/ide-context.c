@@ -1531,7 +1531,7 @@ ide_context_init_early_discover_cb (PeasExtensionSet *set,
 
   ret = ide_build_system_discovery_discover (discovery, state->project_file, NULL, &priority, NULL);
 
-  if (ret != NULL && priority < state->priority)
+  if (ret != NULL && (priority < state->priority || state->hint == NULL))
     {
       g_free (state->hint);
       state->hint = g_steal_pointer (&ret);
