@@ -176,6 +176,8 @@ ide_build_system_new_async (IdeContext          *context,
   g_return_if_fail (G_IS_FILE (project_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  IDE_TRACE_MSG ("Creating build system with hint \"%s\"", build_system_hint ?: "");
+
   ide_object_new_for_extension_async (IDE_TYPE_BUILD_SYSTEM,
                                       sort_priority, (gpointer)build_system_hint,
                                       G_PRIORITY_DEFAULT,
