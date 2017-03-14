@@ -1022,6 +1022,8 @@ ide_context_init_build_system (gpointer             source_object,
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_init_build_system);
+
   ide_build_system_new_async (self,
                               self->project_file,
                               self->build_system_hint,
@@ -1545,6 +1547,7 @@ ide_context_init_early_discovery_worker (GTask        *task,
 {
   IdeContext *self = source_object;
   g_autoptr(PeasExtensionSet) addins = NULL;
+  g_autoptr(GFile) parent = NULL;
   GFile *project_file = task_data;
   struct {
     GFile *project_file;
@@ -1564,13 +1567,13 @@ ide_context_init_early_discovery_worker (GTask        *task,
    */
 
   /*
-   * If the project file is not a directory, then we don't want to do any type-hint
-   * discovery (as we want to let the build system directly try to load the project).
+   * If the project file is not a directory, we want the parent so that the the
+   * discovery layer can potentially change which build system should be loaded.
    */
   if (g_file_query_file_type (project_file, 0, cancellable) != G_FILE_TYPE_DIRECTORY)
     {
-      g_task_return_boolean (task, TRUE);
-      return;
+      parent = g_file_get_parent (project_file);
+      project_file = parent;
     }
 
   state.project_file = project_file;
@@ -1596,7 +1599,14 @@ ide_context_init_early_discovery_worker (GTask        *task,
   if (state.hint != NULL)
     {
       IDE_TRACE_MSG ("Discovered that %s is the build system to load", state.hint);
+
       self->build_system_hint = g_steal_pointer (&state.hint);
+
+      /*
+       * We might need to take the parent as the new project file, so
+       * that the build system can load the proper file.
+       */
+      g_set_object (&self->project_file, project_file);
     }
 
   g_task_return_boolean (task, TRUE);
