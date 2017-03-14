@@ -31,12 +31,12 @@ struct _GbpFlatpakPreferencesAddin
 
   GArray         *ids;
   IdePreferences *preferences;
+  GCancellable   *cancellable;
 
   guint           show_all : 1;
 };
 
-static void gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self,
-                                                  IdePreferences             *preferences);
+static void gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self);
 
 static void
 gbp_flatpak_preferences_addin_view_more (GbpFlatpakPreferencesAddin *self,
@@ -47,7 +47,7 @@ gbp_flatpak_preferences_addin_view_more (GbpFlatpakPreferencesAddin *self,
 
   self->show_all = !self->show_all;
   if (self->preferences != NULL)
-    gbp_flatpak_preferences_addin_reload (self, self->preferences);
+    gbp_flatpak_preferences_addin_reload (self);
 }
 
 static gboolean
@@ -140,13 +140,17 @@ is_old_gnome_version (const gchar *version)
 }
 
 static void
-add_runtimes (GbpFlatpakPreferencesAddin *self,
-              IdePreferences             *preferences,
-              FlatpakInstallation        *installation)
+populate_runtimes (GbpFlatpakPreferencesAddin *self,
+                   FlatpakInstallation        *installation,
+                   GPtrArray                  *runtimes)
 {
   g_autoptr(GPtrArray) remotes = NULL;
-  g_autoptr(GPtrArray) all_refs = g_ptr_array_new_with_free_func (g_object_unref);
-  guint ignored = 0;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
+  g_assert (FLATPAK_IS_INSTALLATION (installation));
+  g_assert (runtimes != NULL);
 
   remotes = flatpak_installation_list_remotes (installation, NULL, NULL);
 
@@ -168,29 +172,98 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
             continue;
 
           for (guint j = 0; j < refs->len; j++)
-            g_ptr_array_add (all_refs, g_object_ref (g_ptr_array_index (refs, j)));
+            {
+              FlatpakRef *ref = g_ptr_array_index (refs, j);
+              FlatpakRefKind kind = flatpak_ref_get_kind (ref);
+              const gchar *arch = flatpak_ref_get_arch (ref);
+
+              if (kind != FLATPAK_REF_KIND_RUNTIME)
+                continue;
+
+              /* Ignore other arches for now */
+              if (g_strcmp0 (arch, flatpak_get_default_arch ()) != 0)
+                continue;
+
+              g_ptr_array_add (runtimes, g_object_ref (ref));
+            }
         }
     }
 
-  g_ptr_array_sort (all_refs, compare_refs);
+  IDE_EXIT;
+}
 
-  for (guint j = 0; j < all_refs->len; j++)
+static void
+gbp_flatpak_preferences_addin_reload_worker (GTask        *task,
+                                             gpointer      source_object,
+                                             gpointer      task_data,
+                                             GCancellable *cancellable)
+{
+  GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)source_object;
+  g_autoptr(FlatpakInstallation) system = NULL;
+  g_autoptr(FlatpakInstallation) user = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GPtrArray) runtimes = NULL;
+  g_autofree gchar *path = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
+
+  runtimes = g_ptr_array_new_with_free_func (g_object_unref);
+
+  path = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
+  file = g_file_new_for_path (path);
+  user = flatpak_installation_new_for_path (file, TRUE, NULL, NULL);
+  if (user != NULL)
+    populate_runtimes (self, user, runtimes);
+
+  system = flatpak_installation_new_system (NULL, NULL);
+  if (system != NULL)
+    populate_runtimes (self, system, runtimes);
+
+  g_ptr_array_sort (runtimes, compare_refs);
+
+  g_task_return_pointer (task, g_steal_pointer (&runtimes), (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_preferences_addin_reload_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)object;
+  g_autoptr(GPtrArray) runtimes = NULL;
+  g_autoptr(GError) error = NULL;
+  guint ignored = 0;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
+  g_assert (G_IS_TASK (result));
+
+  if (NULL == (runtimes = g_task_propagate_pointer (G_TASK (result), &error)))
     {
-      FlatpakRemoteRef *ref = g_ptr_array_index (all_refs, j);
-      FlatpakRefKind kind = flatpak_ref_get_kind (FLATPAK_REF (ref));
+      g_warning ("%s", error->message);
+      IDE_EXIT;
+    }
+
+  if (self->preferences == NULL)
+    IDE_EXIT;
+
+  IDE_TRACE_MSG ("Found %u runtimes", runtimes->len);
+
+  for (guint j = 0; j < runtimes->len; j++)
+    {
+      FlatpakRemoteRef *ref = g_ptr_array_index (runtimes, j);
       const gchar *name = flatpak_ref_get_name (FLATPAK_REF (ref));
       const gchar *branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
       const gchar *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
       g_autofree gchar *keywords = NULL;
       GtkWidget *row;
       guint id;
-
-      /* TODO: handle multi-arch and cross-compile */
-      if (g_strcmp0 (arch, flatpak_get_default_arch ()) != 0)
-        continue;
-
-      if (kind != FLATPAK_REF_KIND_RUNTIME)
-        continue;
 
       if (is_ignored (name))
         continue;
@@ -206,11 +279,11 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
       keywords = g_strdup_printf (_("flatpak %s %s %s"), name, branch, arch);
 
       row = create_row (self, name, arch, branch);
-      id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, keywords, j);
+      id = ide_preferences_add_custom (self->preferences, "sdk", "flatpak-runtimes", row, keywords, j);
       g_array_append_val (self->ids, id);
     }
 
-  if (ignored)
+  if (ignored != 0)
     {
       g_autofree gchar *tooltip = NULL;
       GtkWidget *image;
@@ -235,68 +308,38 @@ add_runtimes (GbpFlatpakPreferencesAddin *self,
                                G_CALLBACK (gbp_flatpak_preferences_addin_view_more),
                                self,
                                G_CONNECT_SWAPPED);
-      id = ide_preferences_add_custom (preferences, "sdk", "flatpak-runtimes", row, NULL, G_MAXINT);
+      id = ide_preferences_add_custom (self->preferences, "sdk", "flatpak-runtimes", row, NULL, G_MAXINT);
       g_array_append_val (self->ids, id);
     }
+
+  IDE_EXIT;
 }
 
 static void
-gbp_flatpak_preferences_addin_reload_worker (GTask        *task,
-                                             gpointer      source_object,
-                                             gpointer      task_data,
-                                             GCancellable *cancellable)
+gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self)
 {
-  GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)source_object;
-  IdePreferences *preferences = (IdePreferences *)task_data;
-  g_autoptr(FlatpakInstallation) system = NULL;
-  g_autoptr(FlatpakInstallation) user = NULL;
-  g_autoptr(GFile) file = NULL;
-  g_autofree gchar *path = NULL;
+  g_autoptr(GTask) task = NULL;
   guint id;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (IDE_IS_PREFERENCES (self->preferences));
+
+  g_clear_object (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
 
   if (self->ids != NULL)
     {
       for (guint i = 0; i < self->ids->len; i++)
         {
           id = g_array_index (self->ids, guint, i);
-          ide_preferences_remove_id (preferences, id);
+          ide_preferences_remove_id (self->preferences, id);
         }
     }
 
-  path = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
-  file = g_file_new_for_path (path);
-  user = flatpak_installation_new_for_path (file, TRUE, NULL, NULL);
-  if (user != NULL)
-    add_runtimes (self, preferences, user);
-
-  system = flatpak_installation_new_system (NULL, NULL);
-  if (system != NULL)
-    add_runtimes (self, preferences, system);
-
-  g_task_return_boolean (task, TRUE);
-
-  IDE_EXIT;
-}
-
-static void
-gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self,
-                                      IdePreferences             *preferences)
-{
-  g_autoptr(GTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
-
-  task = g_task_new (self, NULL, NULL, NULL);
-  g_task_set_task_data (task, g_object_ref (preferences), g_object_unref);
+  task = g_task_new (self, self->cancellable, gbp_flatpak_preferences_addin_reload_cb, NULL);
+  g_task_set_source_tag (task, gbp_flatpak_preferences_addin_reload);
   g_task_run_in_thread (task, gbp_flatpak_preferences_addin_reload_worker);
 
   IDE_EXIT;
@@ -318,7 +361,7 @@ gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
 
   ide_preferences_add_list_group (preferences, "sdk", "flatpak-runtimes", _("Flatpak Runtimes"), GTK_SELECTION_NONE, 0);
 
-  gbp_flatpak_preferences_addin_reload (self, preferences);
+  gbp_flatpak_preferences_addin_reload (self);
 
   IDE_EXIT;
 }
@@ -333,6 +376,9 @@ gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
 
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
   g_assert (IDE_IS_PREFERENCES (preferences));
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
 
   for (guint i = 0; i < self->ids->len; i++)
     {
