@@ -839,7 +839,10 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
       return 0;
     }
 
-  gtk_widget_set_visible (widget, TRUE);
+  widget_id = ++self->last_widget_id;
+
+  gtk_widget_show (widget);
+  gtk_widget_show (GTK_WIDGET (group));
 
   if (IDE_IS_PREFERENCES_BIN (widget))
     container = IDE_PREFERENCES_BIN (widget);
@@ -853,7 +856,6 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
 
   ide_preferences_group_add (group, GTK_WIDGET (container));
 
-  widget_id = ++self->last_widget_id;
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
 
   return widget_id;
