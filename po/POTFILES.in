@@ -163,6 +163,7 @@ plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 plugins/gnome-code-assistance/ide-gca-service.c
 plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml
 plugins/html-preview/html_preview_plugin/gtk/menus.ui
+plugins/html-preview/html_preview_plugin/__init__.py
 plugins/jedi/jedi_plugin.py
 plugins/meson/meson_plugin/__init__.py
 plugins/meson-templates/meson_templates/__init__.py
