@@ -332,11 +332,11 @@ ide_breakout_subprocess_wait_finish (IdeSubprocess  *subprocess,
 }
 
 void
-ide_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
-                                       const char          *stdin_buf,
-                                       GCancellable        *cancellable,
-                                       GAsyncReadyCallback  callback,
-                                       gpointer             user_data)
+ide_breakout_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
+                                                const char          *stdin_buf,
+                                                GCancellable        *cancellable,
+                                                GAsyncReadyCallback  callback,
+                                                gpointer             user_data)
 {
   IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
   g_autoptr(GBytes) stdin_bytes = NULL;
@@ -396,11 +396,11 @@ communicate_result_validate_utf8 (const char            *stream_name,
 }
 
 gboolean
-ide_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
-                                        GAsyncResult   *result,
-                                        char          **stdout_buf,
-                                        char          **stderr_buf,
-                                        GError        **error)
+ide_breakout_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
+                                                 GAsyncResult   *result,
+                                                 char          **stdout_buf,
+                                                 char          **stderr_buf,
+                                                 GError        **error)
 {
   gboolean ret = FALSE;
   CommunicateState *state;

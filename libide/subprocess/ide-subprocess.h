@@ -135,6 +135,16 @@ gboolean       ide_subprocess_communicate_finish (IdeSubprocess        *self,
                                                   GBytes              **stdout_buf,
                                                   GBytes              **stderr_buf,
                                                   GError              **error);
+void           ide_subprocess_communicate_utf8_async  (IdeSubprocess        *self,
+                                                       const gchar          *stdin_buf,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+gboolean       ide_subprocess_communicate_utf8_finish (IdeSubprocess        *self,
+                                                       GAsyncResult         *result,
+                                                       gchar               **stdout_buf,
+                                                       gchar               **stderr_buf,
+                                                       GError              **error);
 
 G_END_DECLS
 

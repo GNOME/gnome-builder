@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-subprocess"
 
+#include <string.h>
+
 #include "ide-debug.h"
 
 #include "subprocess/ide-subprocess.h"
@@ -310,6 +312,23 @@ ide_subprocess_communicate_utf8 (IdeSubprocess  *self,
   return WRAP_INTERFACE_METHOD (self, communicate_utf8, FALSE, stdin_buf, cancellable, stdout_buf, stderr_buf, error);
 }
 
+/**
+ * ide_subprocess_communicate_async:
+ * @self: An #IdeSubprocess
+ * @stdin_buf: (nullable): A #GBytes to send to stdin or %NULL
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: A callback to complete the request
+ * @user_data: user data for @callback
+ *
+ * Asynchronously communicates with the the child process.
+ *
+ * There is no need to call ide_subprocess_wait() on the process if using
+ * this asynchronous operation as it will internally wait for the child
+ * to exit or be signaled.
+ *
+ * Ensure you've set the proper flags to ensure that you can write to stdin
+ * or read from stderr/stdout as necessary.
+ */
 void
 ide_subprocess_communicate_async (IdeSubprocess       *self,
                                   GBytes              *stdin_buf,
@@ -323,6 +342,18 @@ ide_subprocess_communicate_async (IdeSubprocess       *self,
   WRAP_INTERFACE_METHOD (self, communicate_async, NULL, stdin_buf, cancellable, callback, user_data);
 }
 
+/**
+ * ide_subprocess_communicate_finish:
+ * @self: An #IdeSubprocess
+ * @result: A #GAsyncResult
+ * @stdout_buf: (out) (optional): A location for a #Bytes.
+ * @stderr_buf: (out) (optional): A location for a #Bytes.
+ * @error: a location for a #GError
+ *
+ * Finishes a request to ide_subprocess_communicate_async().
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
 gboolean
 ide_subprocess_communicate_finish (IdeSubprocess  *self,
                                    GAsyncResult   *result,
@@ -334,6 +365,86 @@ ide_subprocess_communicate_finish (IdeSubprocess  *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return WRAP_INTERFACE_METHOD (self, communicate_finish, FALSE, result, stdout_buf, stderr_buf, error);
+}
+
+/**
+ * ide_subprocess_communicate_utf8_async:
+ * @stdin_buf: (nullable): The data to send to stdin or %NULL
+ *
+ */
+void
+ide_subprocess_communicate_utf8_async (IdeSubprocess       *self,
+                                       const gchar         *stdin_buf,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
+{
+  g_autoptr(GBytes) stdin_bytes = NULL;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (stdin_buf)
+    stdin_bytes = g_bytes_new (stdin_buf, strlen (stdin_buf));
+
+  ide_subprocess_communicate_async (self, stdin_bytes, cancellable, callback, user_data);
+}
+
+static gchar *
+get_utf8_bytes (GBytes *bytes)
+{
+  const gchar *data;
+  gsize size;
+
+  data = g_bytes_get_data (bytes, &size);
+
+  if (size < G_MAXSIZE && g_utf8_validate (data, size, NULL))
+    return g_strndup (data, size);
+
+  return NULL;
+}
+
+/**
+ * ide_subprocess_communicate_utf8_finish:
+ * @self: An #IdeSubprocess
+ * @result: A #GAsyncResult
+ * @stdout_buf: (out) (optional): A location for the UTF-8 formatted output string or %NULL
+ * @stderr_buf: (out) (optional): A location for the UTF-8 formatted output string or %NULL
+ * @error: A location for a #GError, or %NULL
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
+gboolean
+ide_subprocess_communicate_utf8_finish (IdeSubprocess  *self,
+                                        GAsyncResult   *result,
+                                        gchar         **stdout_buf,
+                                        gchar         **stderr_buf,
+                                        GError        **error)
+{
+  g_autoptr(GBytes) stdout_bytes = NULL;
+  g_autoptr(GBytes) stderr_bytes = NULL;
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  if (ide_subprocess_communicate_finish (self, result, &stdout_bytes, &stderr_bytes, error))
+    {
+      if (stdout_bytes && stdout_buf)
+        *stdout_buf = get_utf8_bytes (stdout_bytes);
+
+      if (stderr_bytes && stderr_buf)
+        *stderr_buf = get_utf8_bytes (stderr_bytes);
+
+      return TRUE;
+    }
+
+  if (stdout_buf)
+    *stdout_buf = NULL;
+
+  if (stderr_buf)
+    *stderr_buf = NULL;
+
+  return FALSE;
 }
 
 gboolean
