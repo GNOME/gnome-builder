@@ -171,10 +171,10 @@ class PHPizeBuildSystemDiscovery(GObject.Object, Ide.BuildSystemDiscovery):
                 stream = open(config_m4.get_path(), encoding='UTF-8')
                 if 'PHP_ARG_ENABLE' in stream.read():
                     return ('phpize', 1000)
-        except Exception as ex:
-            print(repr(ex))
+        except:
+            pass
 
-        raise RuntimeError("Not a phpize build system")
+        return (None, 0)
 
 class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
