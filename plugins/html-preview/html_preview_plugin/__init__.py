@@ -49,6 +49,7 @@ except ImportError:
 
 _ = Ide.gettext
 
+
 class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
     MARKDOWN_CSS = None
     MARKED_JS = None
@@ -136,6 +137,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
 
         can_preview_rst = True
         self.workbench.pop_message('org.gnome.builder.docutils.install')
+
 
 class HtmlPreviewView(Ide.LayoutView):
     markdown = False
