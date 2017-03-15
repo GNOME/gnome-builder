@@ -29,6 +29,7 @@ SUBDIRS =                            \
 	meson-templates              \
 	mingw                        \
 	mono                         \
+	phpize                       \
 	project-tree                 \
 	python-gi-imports-completion \
 	python-pack                  \
