@@ -102,6 +102,11 @@ create_launcher (IdeAutotoolsMakeStage  *self,
   if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, error)))
     return NULL;
 
+  ide_subprocess_launcher_set_flags (launcher,
+                                     G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                     G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                     G_SUBPROCESS_FLAGS_STDERR_PIPE);
+
   ide_subprocess_launcher_push_argv (launcher, self->make);
 
   /* Force disable previous V=1 that might be set by environment

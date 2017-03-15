@@ -174,10 +174,13 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   g_assert (IDE_IS_AUTOTOOLS_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  launcher = ide_build_pipeline_create_launcher (pipeline, error);
-
-  if (launcher == NULL)
+  if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, error)))
     return FALSE;
+
+  ide_subprocess_launcher_set_flags (launcher,
+                                     G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                     G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                     G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
   configure_path = ide_build_pipeline_build_srcdir_path (pipeline, "configure", NULL);
   ide_subprocess_launcher_push_argv (launcher, configure_path);
