@@ -183,10 +183,19 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
                                            "context", context,
                                            NULL);
               else
-                exten = ide_extension_new (self->engine,
-                                           plugin_info,
-                                           self->interface_type,
-                                           NULL);
+                {
+                  exten = ide_extension_new (self->engine,
+                                             plugin_info,
+                                             self->interface_type,
+                                             NULL);
+                  /*
+                   * If the plugin object turned out to have IdeObject
+                   * as a base, try to set it now (even though we couldn't
+                   * do it at construction time).
+                   */
+                  if (IDE_IS_OBJECT (exten))
+                    ide_object_set_context (IDE_OBJECT (exten), context);
+                }
 
               add_extension (self, plugin_info, exten);
             }

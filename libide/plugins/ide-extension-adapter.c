@@ -168,10 +168,19 @@ ide_extension_adapter_reload (IdeExtensionAdapter *self)
                                        "context", context,
                                        NULL);
       else
-        extension = ide_extension_new (self->engine,
-                                       best_match,
-                                       self->interface_type,
-                                       NULL);
+        {
+          extension = ide_extension_new (self->engine,
+                                         best_match,
+                                         self->interface_type,
+                                         NULL);
+          /*
+           * If the plugin object turned out to have IdeObject
+           * as a base, try to set it now (even though we couldn't
+           * do it at construction time).
+           */
+          if (IDE_IS_OBJECT (extension))
+            ide_object_set_context (IDE_OBJECT (extension), context);
+        }
     }
 
   ide_extension_adapter_set_extension (self, best_match, extension);
