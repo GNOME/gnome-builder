@@ -21,6 +21,7 @@
 
 import gi
 import os
+import locale
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Ide', '1.0')
@@ -33,6 +34,11 @@ from gi.repository import GObject
 from gi.repository import Ide
 from gi.repository import WebKit2
 from gi.repository import Peas
+
+try:
+    locale.setlocale(locale.LC_ALL, '')
+except:
+    pass
 
 can_preview_rst = True
 
@@ -185,11 +191,15 @@ class HtmlPreviewView(Ide.LayoutView):
 </html>
 """ % params
 
-    def get_rst(self, text):
-        return publish_string(text, writer_name='html5')
+    def get_rst(self, text, path):
+        return publish_string(text,
+                              writer_name='html5',
+                              source_path=path,
+                              destination_path=path)
 
     def reload(self):
-        base_uri = self.document.get_file().get_file().get_uri()
+        file = self.document.get_file().get_file()
+        base_uri = file.get_uri()
 
         begin, end = self.document.get_bounds()
         text = self.document.get_text(begin, end, True)
@@ -197,7 +207,7 @@ class HtmlPreviewView(Ide.LayoutView):
         if self.markdown:
             text = self.get_markdown(text)
         elif self.rst:
-            text = self.get_rst(text).decode("utf-8")
+            text = self.get_rst(text, file.get_path()).decode("utf-8")
 
         self.webview.load_html(text, base_uri)
 
