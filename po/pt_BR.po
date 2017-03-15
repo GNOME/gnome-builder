@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-11 22:33+0000\n"
-"PO-Revision-Date: 2017-03-13 19:58-0200\n"
+"POT-Creation-Date: 2017-03-15 14:05+0000\n"
+"PO-Revision-Date: 2017-03-15 18:51-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -68,7 +68,7 @@ msgstr[1] "Cerca de %u anos atrás"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:683
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -100,7 +100,7 @@ msgstr "Navegar…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -903,7 +903,7 @@ msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:129
+#: libide/application/ide-application-actions.c:130
 msgid "An IDE for GNOME"
 msgstr "Uma IDE para o GNOME"
 
@@ -1010,22 +1010,22 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Construir;Compilar;Desenvolver;"
 
-#: libide/application/ide-application-actions.c:135
+#: libide/application/ide-application-actions.c:136
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:137
+#: libide/application/ide-application-actions.c:138
 msgid "translator-credits"
 msgstr ""
 "Enrico Nicoletto\n"
 "Gustavo Marques\n"
 "Rafael Fontenelle"
 
-#: libide/application/ide-application-actions.c:140
+#: libide/application/ide-application-actions.c:142
 msgid "Learn more about GNOME Builder"
 msgstr "Aprenda mais sobre o GNOME Builder"
 
-#: libide/application/ide-application-actions.c:143
+#: libide/application/ide-application-actions.c:145
 msgid "Funded By"
 msgstr "Fundado por"
 
@@ -1672,15 +1672,15 @@ msgstr ""
 "O Builder descobriu que este arquivo foi modificado externamente. Você "
 "gostaria de recarregar o arquivo?"
 
-#: libide/greeter/ide-greeter-perspective.c:456
+#: libide/greeter/ide-greeter-perspective.c:457
 msgid "Failed to load the project"
 msgstr "Falha ao carregar o projeto"
 
-#: libide/greeter/ide-greeter-perspective.c:677
+#: libide/greeter/ide-greeter-perspective.c:678
 msgid "Open Project"
 msgstr "Abrir projeto"
 
-#: libide/greeter/ide-greeter-perspective.c:693
+#: libide/greeter/ide-greeter-perspective.c:694
 msgid "All Project Types"
 msgstr "Todos tipos de projetos"
 
@@ -1754,11 +1754,11 @@ msgstr "Falha ao inicializar padrões."
 msgid "You must call %s() before using libide."
 msgstr "Você tem que chamar %s() antes de usar libide."
 
-#: libide/ide-context.c:1888
+#: libide/ide-context.c:2017
 msgid "An unload request is already pending"
 msgstr "Uma requisição para descarregar já está pendente"
 
-#: libide/ide-context.c:2007
+#: libide/ide-context.c:2136
 msgid "Context has already been restored."
 msgstr "O contexto já foi restaurado."
 
@@ -1771,11 +1771,11 @@ msgstr "Nenhuma implementação de ponto de extensão “%s”."
 msgid "Failed to locate build system plugin."
 msgstr "Falha ao localizar o plug-in do sistema de compilação."
 
-#: libide/ide-object.c:483
+#: libide/ide-object.c:493
 msgid "No such extension point."
 msgstr "Ponto de extensão inexistente."
 
-#: libide/ide-object.c:493
+#: libide/ide-object.c:503
 msgid "No implementations of extension point."
 msgstr "Nenhuma implementação de ponto de extensão."
 
@@ -2518,7 +2518,7 @@ msgstr "SDKs"
 msgid "_Select"
 msgstr "_Selecionar"
 
-#: libide/preferences/ide-preferences-perspective.c:963
+#: libide/preferences/ide-preferences-perspective.c:965
 msgid "Preferences"
 msgstr "Preferências"
 
@@ -2605,7 +2605,6 @@ msgstr "Renomear símbolo"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
-#| msgid "Installing rust "
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "Instalando %u pacote"
@@ -3211,7 +3210,7 @@ msgid "Project Location"
 msgstr "Local do projeto"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:78
+#: plugins/git/ide-git-clone-widget.ui:76
 msgid "Select Project Directory"
 msgstr "Selecionar diretório do projeto"
 
@@ -3309,35 +3308,36 @@ msgstr "Clonar"
 msgid "Network is not available, skipping downloads"
 msgstr "Rede não disponível, pulando os downloads"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:112
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Instalar"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Atualizar"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Mostrar mais %u runtime"
 msgstr[1] "Mostrar mais %u runtimes"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
 msgid "Flatpak Runtimes"
 msgstr "Runtimes do Flatpak"
 
@@ -3428,29 +3428,29 @@ msgstr "O arquivo não está sob controle de um diretório de trabalho do git."
 msgid "The requested file does not exist within the git index."
 msgstr "O arquivo requisitado não existe dentro do índice do git."
 
-#: plugins/git/ide-git-clone-widget.c:141
-#: plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
 msgid "A valid Git URL is required"
 msgstr "Uma URL Git válida é necessária"
 
-#: plugins/git/ide-git-clone-widget.ui:38
+#: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr ""
 "Usa Git para criar uma cópia local de um projeto hospedado remotamente."
 
-#: plugins/git/ide-git-clone-widget.ui:66
+#: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
 msgstr "usuário@máquina:repositório.git"
 
-#: plugins/git/ide-git-clone-widget.ui:67
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Digite a URL do repositório de código fonte do seu projeto"
 
-#: plugins/git/ide-git-clone-widget.ui:94
+#: plugins/git/ide-git-clone-widget.ui:92
 msgid "Repository URL"
 msgstr "URL do repositório"
 
-#: plugins/git/ide-git-clone-widget.ui:102
+#: plugins/git/ide-git-clone-widget.ui:100
 msgid "Project Destination"
 msgstr "Destino do projeto"
 
@@ -3462,13 +3462,13 @@ msgstr "Clonar projeto"
 msgid "Clone…"
 msgstr "Clonar…"
 
-#: plugins/git/ide-git-remote-callbacks.c:177
+#: plugins/git/ide-git-remote-callbacks.c:193
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
 "Builder falhou em fornecer credenciais apropriadas ao clonar o repositório."
 
-#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
 msgid "Code assistance requires a local file."
 msgstr "Assistência de código requer um arquivo local."
 
@@ -3504,6 +3504,11 @@ msgstr ""
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Visualizar como HTML"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:108
+#| msgid "Your computer is missing flatpak-builder"
+msgid "Your computer is missing python3-docutils"
+msgstr "Seu computador não possui python3-docutils"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
