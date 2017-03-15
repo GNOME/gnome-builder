@@ -1,25 +1,25 @@
 # Hungarian translation for gnome-builder.
-# Copyright (C) 2015-2016 Free Software Foundation, Inc.
+# Copyright (C) 2015-2017 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-builder package.
 #
 # Balázs Meskó <meskobalazs at gmail dot com>, 2015, 2016.
-# Balázs Úr <urbalazs at gmail dot com>, 2015, 2016.
+# Balázs Úr <urbalazs at gmail dot com>, 2015, 2016, 2017.
 # Gabor Kelemen <kelemeng at ubuntu dot com>, 2015, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-10 08:45+0000\n"
-"PO-Revision-Date: 2017-03-10 13:31+0100\n"
-"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
+"POT-Creation-Date: 2017-03-15 14:05+0000\n"
+"PO-Revision-Date: 2017-03-15 17:31+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Lokalize 1.2\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -67,7 +67,7 @@ msgstr[1] "Körülbelül %u éve"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:683
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -99,7 +99,7 @@ msgstr "Tallózás…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -303,7 +303,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5856
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Átnevezés"
@@ -887,7 +887,7 @@ msgid "Builder"
 msgstr "Építő"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:129
+#: libide/application/ide-application-actions.c:130
 msgid "An IDE for GNOME"
 msgstr "Integrált fejlesztői környezet a GNOME-hoz"
 
@@ -994,21 +994,21 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Építés;Összeállítás;Fejlesztés;"
 
-#: libide/application/ide-application-actions.c:135
+#: libide/application/ide-application-actions.c:136
 msgid "GNOME Builder"
 msgstr "GNOME Építő"
 
-#: libide/application/ide-application-actions.c:137
+#: libide/application/ide-application-actions.c:138
 msgid "translator-credits"
 msgstr ""
 "Kelemen Gábor <kelemeng at ubuntu dot com>\n"
 "Meskó Balázs <meskobalazs at gmail dot com>"
 
-#: libide/application/ide-application-actions.c:140
+#: libide/application/ide-application-actions.c:142
 msgid "Learn more about GNOME Builder"
 msgstr "Tudjon meg többet a GNOME Építőről"
 
-#: libide/application/ide-application-actions.c:143
+#: libide/application/ide-application-actions.c:145
 msgid "Funded By"
 msgstr "Támogatta"
 
@@ -1098,53 +1098,53 @@ msgstr "mentetlen dokumentum %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
 
-#: libide/buildsystem/ide-build-pipeline.c:2090
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2105
+#: libide/buildsystem/ide-build-pipeline.c:2106
 msgid "Downloading…"
 msgstr "Letöltés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2109
+#: libide/buildsystem/ide-build-pipeline.c:2110
 msgid "Building dependencies…"
 msgstr "Függőségek összeállítása…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2113
+#: libide/buildsystem/ide-build-pipeline.c:2114
 msgid "Bootstrapping…"
 msgstr "Indítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2117
+#: libide/buildsystem/ide-build-pipeline.c:2118
 msgid "Configuring…"
 msgstr "Beállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2121
+#: libide/buildsystem/ide-build-pipeline.c:2122
 msgid "Building…"
 msgstr "Összeállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2125
+#: libide/buildsystem/ide-build-pipeline.c:2126
 msgid "Installing…"
 msgstr "Telepítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2129
+#: libide/buildsystem/ide-build-pipeline.c:2130
 msgid "Exporting…"
 msgstr "Exportálás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2133
-#: libide/buildsystem/ide-build-pipeline.c:2137
+#: libide/buildsystem/ide-build-pipeline.c:2134
+#: libide/buildsystem/ide-build-pipeline.c:2138
 msgid "Success"
 msgstr "Sikeres"
 
-#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/buildsystem/ide-build-pipeline.c:2142
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: libide/buildsystem/ide-build-pipeline.c:2145
+#: libide/buildsystem/ide-build-pipeline.c:2146
 msgid "Preparing…"
 msgstr "Előkészítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2149
+#: libide/buildsystem/ide-build-pipeline.c:2150
 msgid "Ready"
 msgstr "Kész"
 
@@ -1392,7 +1392,7 @@ msgstr "Útvonal a projektfájlhoz, alapértelmezésben az aktuális könyvtár"
 msgid "New variable…"
 msgstr "Új változó…"
 
-#: libide/devices/ide-device-manager.c:147
+#: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
 msgstr "A(z) „%s” eszköz nem található."
@@ -1653,15 +1653,15 @@ msgstr ""
 "Az Építő észlelte, hogy a fájlt egy külső programmal módosították. Szeretné "
 "újratölteni a fájlt?"
 
-#: libide/greeter/ide-greeter-perspective.c:456
+#: libide/greeter/ide-greeter-perspective.c:457
 msgid "Failed to load the project"
 msgstr "A projekt nem tölthető be"
 
-#: libide/greeter/ide-greeter-perspective.c:677
+#: libide/greeter/ide-greeter-perspective.c:678
 msgid "Open Project"
 msgstr "Projekt megnyitása"
 
-#: libide/greeter/ide-greeter-perspective.c:693
+#: libide/greeter/ide-greeter-perspective.c:694
 msgid "All Project Types"
 msgstr "Minden projekttípus"
 
@@ -1736,28 +1736,28 @@ msgstr "Az alapbeállítások előkészítése meghiúsult."
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: libide/ide-context.c:1887
+#: libide/ide-context.c:2017
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: libide/ide-context.c:2006
+#: libide/ide-context.c:2136
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
-#: libide/ide-object.c:288
+#: libide/ide-object.c:304
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "A kiegészítési pont nincs megvalósítva: „%s”."
 
-#: libide/ide-object.c:380
+#: libide/ide-object.c:396
 msgid "Failed to locate build system plugin."
 msgstr "Az összeállítási rendszer bővítménye nem található."
 
-#: libide/ide-object.c:467
+#: libide/ide-object.c:493
 msgid "No such extension point."
 msgstr "Nincs ilyen kiegészítési pont."
 
-#: libide/ide-object.c:477
+#: libide/ide-object.c:503
 msgid "No implementations of extension point."
 msgstr "A kiegészítési pont nincs megvalósítva."
 
@@ -2494,7 +2494,7 @@ msgstr "SDK-k"
 msgid "_Select"
 msgstr "_Kijelölés"
 
-#: libide/preferences/ide-preferences-perspective.c:963
+#: libide/preferences/ide-preferences-perspective.c:965
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -2561,21 +2561,21 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: libide/sourceview/ide-source-view.c:5312
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: libide/sourceview/ide-source-view.c:5428
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: libide/sourceview/ide-source-view.c:5855
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
@@ -3089,11 +3089,11 @@ msgstr "A munkakönyvtár nem található"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Érvénytelen :syntax parancsrészlet: %s"
 
-#: plugins/command-bar/gb-vim.c:1147
+#: plugins/command-bar/gb-vim.c:1154
 msgid "Invalid search and replace request"
 msgstr "Érvénytelen keresés és csere kérés"
 
-#: plugins/command-bar/gb-vim.c:1253
+#: plugins/command-bar/gb-vim.c:1260
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nem parancs: %s"
@@ -3190,7 +3190,7 @@ msgid "Project Location"
 msgstr "Projekt helye"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:78
+#: plugins/git/ide-git-clone-widget.ui:76
 msgid "Select Project Directory"
 msgstr "Projektmappa kiválasztása"
 
@@ -3289,35 +3289,36 @@ msgstr "Klónozás"
 msgid "Network is not available, skipping downloads"
 msgstr "A hálózat nem elérhető, letöltések kihagyása"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
-#: plugins/flatpak/gbp-flatpak-workbench-addin.c:82
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:112
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Telepítés"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Frissítés"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Még %u futtatókörnyezet megjelenítése"
 msgstr[1] "Még %u futtatókörnyezet megjelenítése"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
 msgid "Flatpak Runtimes"
 msgstr "Flatpak futtatókörnyezetek"
 
@@ -3360,11 +3361,11 @@ msgstr "A futtatókörnyezet frissítve lett"
 msgid "Runtime has been installed"
 msgstr "A futtatókörnyezet telepítve lett"
 
-#: plugins/flatpak/gbp-flatpak-workbench-addin.c:77
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
 msgid "Your computer is missing flatpak-builder"
 msgstr "A flatpak-builder hiányzik a számítógépéről"
 
-#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
 msgid ""
 "This program is necessary for building Flatpak applications. Would you like "
 "to install it?"
@@ -3408,28 +3409,28 @@ msgstr "A fájl nincs a git munkakönyvtár kezelése alatt."
 msgid "The requested file does not exist within the git index."
 msgstr "A kért fájl nem létezik a git indexben."
 
-#: plugins/git/ide-git-clone-widget.c:141
-#: plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
 msgid "A valid Git URL is required"
 msgstr "Egy érvényes Git URL szükséges"
 
-#: plugins/git/ide-git-clone-widget.ui:38
+#: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr "A Git használata egy helyi másolat készítéséhez egy távoli projektről."
 
-#: plugins/git/ide-git-clone-widget.ui:66
+#: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
 msgstr "felhasználó@gép:tároló.git"
 
-#: plugins/git/ide-git-clone-widget.ui:67
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Írja be a projekt forráskód-tárolójának URL-címét"
 
-#: plugins/git/ide-git-clone-widget.ui:94
+#: plugins/git/ide-git-clone-widget.ui:92
 msgid "Repository URL"
 msgstr "Tároló URL"
 
-#: plugins/git/ide-git-clone-widget.ui:102
+#: plugins/git/ide-git-clone-widget.ui:100
 msgid "Project Destination"
 msgstr "Projekt cél"
 
@@ -3441,13 +3442,13 @@ msgstr "Projekt klónozása"
 msgid "Clone…"
 msgstr "Klónozás…"
 
-#: plugins/git/ide-git-remote-callbacks.c:177
+#: plugins/git/ide-git-remote-callbacks.c:193
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
 "Az Építő nem adott meg megfelelő hitelesítési adatokat a tároló klónozásakor."
 
-#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
 msgid "Code assistance requires a local file."
 msgstr "A kódkiegészítéshez helyi fájl szükséges."
 
@@ -3484,6 +3485,11 @@ msgstr ""
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Előnézet HTML-ként"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:108
+#| msgid "Your computer is missing flatpak-builder"
+msgid "Your computer is missing python3-docutils"
+msgstr "A python3-docutils hiányzik a számítógépéről"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3873,161 +3879,3 @@ msgstr "Puffer betöltve, de nincs a pufferkezelőben."
 msgid "Failed to create the XML tree."
 msgstr "Az XML fa létrehozása meghiúsult."
 
-#~ msgid "Build: %s"
-#~ msgstr "Összeállítás: %s"
-
-#~ msgid "%s does not support building"
-#~ msgstr "%s nem támogatja az összeállítást"
-
-#~ msgid "A build is already in progress"
-#~ msgstr "Egy összeállítás már folyamatban van"
-
-#~ msgid "Failed to open stderr stream."
-#~ msgstr "Az stderr hibafolyam megnyitása meghiúsult."
-
-#~ msgid "Failed to open stdout stream."
-#~ msgstr "Az stdout adatfolyam megnyitása meghiúsult."
-
-#~ msgid "Attempt to load a PyGObject script with no filename."
-#~ msgstr "Kísérlet fájlnév nélküli PyGObject parancsfájl betöltésére."
-
-#~ msgid "The filename for the script was not provided."
-#~ msgstr "A parancsfájl neve nem lett megadva."
-
-#~ msgid "The script must be on a local filesystem."
-#~ msgstr "A parancsfájlnak helyi fájlrendszeren kell lennie."
-
-#~ msgid "The script “%s” is not a PyGObject file."
-#~ msgstr "A(z) „%s” nem egy PyGObject parancsfájl."
-
-#~ msgid "%s has not implemented GAsyncInitable."
-#~ msgstr "A(z) „%s” nem valósítja meg a GAsyncInitable-t."
-
-#~ msgid "Target"
-#~ msgstr "Cél"
-
-#~ msgid "Build cancelled"
-#~ msgstr "Összeállítás megszakítva"
-
-#~ msgid "Build failed"
-#~ msgstr "Összeállítás sikertelen"
-
-#~ msgid "Build successful"
-#~ msgstr "Összeállítás sikeres"
-
-#~ msgid "Install successful"
-#~ msgstr "Telepítés sikeres"
-
-#~ msgid "Directory must be on a locally mounted filesystem."
-#~ msgstr "A mappának csatolva kell lennie a helyi fájlrendszerre."
-
-#~ msgid "Failed to locate device"
-#~ msgstr "Az eszköz nem található"
-
-#~ msgid "Build Failed: "
-#~ msgstr "Összeállítás sikertelen: "
-
-#~ msgid "Cannot execute build task more than once"
-#~ msgstr "Az összeállítási feladat nem futtatható egynél többször"
-
-#~ msgid "Failed to access runtime for postbuild"
-#~ msgstr "A postbuild futtatókörnyezet nem található"
-
-#~ msgid "'%s' is not a directory."
-#~ msgstr "A(z) „%s” nem könyvtár."
-
-#~ msgid "autogen.sh is missing from project directory (%s)."
-#~ msgstr "Az autogen.sh hiányzik a projektkönyvtárból (%s)."
-
-#~ msgid "autogen.sh is not executable."
-#~ msgstr "Az autogen.sh nem futtatható."
-
-#~ msgid "Running autogen…"
-#~ msgstr "Az Autogen futtatása…"
-
-#~ msgid "autogen.sh failed to create configure (%s)"
-#~ msgstr "Az autogen.sh nem tudta létrehozni a configure-t (%s)"
-
-#~ msgid "Running configure…"
-#~ msgstr "A Configure futtatása…"
-
-#~ msgid "Invalid makefile provided, ignoring."
-#~ msgstr "A megadott makefile érvénytelen, figyelmen kívül hagyva."
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  %(prgname) %(command) OPTIONS\n"
-#~ msgstr ""
-#~ "Használat:\n"
-#~ "  %(prgname) %(command) BEÁLLÍTÁSOK\n"
-
-#~ msgid "Missing project name"
-#~ msgstr "Hiányzó projektnév"
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  ide contribute PROJECT_NAME\n"
-#~ "\n"
-#~ "  This command will bootstrap your system to begin contributing to the "
-#~ "project\n"
-#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-#~ "that\n"
-#~ "  you have the required dependencies to build, and bootstraps the first "
-#~ "build\n"
-#~ "  of the project.\n"
-#~ "\n"
-#~ "Examples:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Használat:\n"
-#~ "  ide contribute PROJEKT_NEVE\n"
-#~ "\n"
-#~ "  Ez a parancs felkészíti a rendszerét, hogy közreműködjön a PROJEKT_NEVE "
-#~ "nevű\n"
-#~ "  projektben. Ebbe beletartozik a források letöltése, annak a "
-#~ "biztosítása, hogy\n"
-#~ "  rendelkezik az összeállításhoz szükséges függőségekkel, és a projekt "
-#~ "első\n"
-#~ "  összeállítása.\n"
-#~ "\n"
-#~ "Példák:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-
-#~ msgid "Username"
-#~ msgstr "Felhasználónév"
-
-#~ msgid "Wow! You've spent with Builder %d second!\n"
-#~ msgid_plural "Wow! You've spent with Builder %d seconds!\n"
-#~ msgstr[0] "Hűha! %d másodpercet töltött az Építővel!\n"
-#~ msgstr[1] "Hűha! %d másodpercet töltött az Építővel!\n"
-
-#~ msgid "Running prebuild…"
-#~ msgstr "A prebuild futtatása…"
-
-#~ msgid "Running post-install…"
-#~ msgstr "A post-install futtatása…"
-
-#~ msgid "Running post-build…"
-#~ msgstr "A post-build futtatása…"
-
-#~ msgid "%s() is not supported on %s build system."
-#~ msgstr "A(z) %s() nem támogatott a(z) %s összeállítási rendszeren."
-
-#~ msgid "Failed to locate configure.ac"
-#~ msgstr "Nem található a „configure.ac” fájl"
-
-#~ msgid "Chunk does not belong to snippet."
-#~ msgstr "A részlet nem tartozik a töredékhez."
-
-#~ msgid "Warnings"
-#~ msgstr "Figyelmeztetések"
-
-#~ msgid "Notes"
-#~ msgstr "Megjegyzések"
-
-#~ msgid "Unknown file"
-#~ msgstr "Ismeretlen fájl"
