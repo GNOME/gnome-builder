@@ -109,6 +109,9 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
 
   IDE_TRACE_MSG ("We found %u potential manifests", manifests->len);
 
+  if (priority)
+    *priority = 0;
+
   for (guint i = 0; i < manifests->len; i++)
     {
       GFile *file = g_ptr_array_index (manifests, i);
@@ -159,12 +162,19 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
           NULL != (buildsystem = json_node_get_string (buildsystem_node)) &&
           *buildsystem != '\0')
         {
-          gchar *ret = g_strdup (buildsystem);
+          gchar *ret;
 
+          if (ide_str_equal0 (buildsystem, "cmake-ninja"))
+            buildsystem = "cmake";
+
+          /* TODO: We could maybe support this if we properly extract the
+           *       build-commands property from the manifest.
+           */
+          else if (ide_str_equal0 (buildsystem, "simple"))
+            IDE_RETURN (NULL);
+
+          ret = g_strdup (buildsystem);
           IDE_TRACE_MSG ("Discovered buildsystem of type \"%s\"", ret);
-
-          *priority = 0;
-
           IDE_RETURN (ret);
         }
     }
