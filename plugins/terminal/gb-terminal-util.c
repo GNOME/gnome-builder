@@ -50,6 +50,7 @@ gb_vte_pty_create_slave (VtePty *pty)
 #ifdef HAVE_PTSNAME_R
   if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
     return -1;
+  name[sizeof name - 1] = '\0';
 #else
   if (NULL == (name = ptsname (master_fd)))
     return -1;
