@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-10 08:45+0000\n"
-"PO-Revision-Date: 2017-03-10 11:50+0100\n"
+"POT-Creation-Date: 2017-03-15 14:05+0000\n"
+"PO-Revision-Date: 2017-03-15 15:07+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -68,7 +68,7 @@ msgstr[2] "Około %u lat temu"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:683
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -100,7 +100,7 @@ msgstr "Przeglądaj…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -302,7 +302,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Można wczytać lub utworzyć paletę za pomocą preferencji"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5856
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Zmień nazwę"
@@ -880,7 +880,7 @@ msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:129
+#: libide/application/ide-application-actions.c:130
 msgid "An IDE for GNOME"
 msgstr "Zintegrowane środowisko programistyczne dla GNOME"
 
@@ -989,21 +989,21 @@ msgstr ""
 "Budowanie;Buduj;Zbuduj;Programowanie;Programuj;Zaprogramuj;Zintegrowane;"
 "środowisko;programistyczne;IDE;"
 
-#: libide/application/ide-application-actions.c:135
+#: libide/application/ide-application-actions.c:136
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:137
+#: libide/application/ide-application-actions.c:138
 msgid "translator-credits"
 msgstr ""
 "Piotr Drąg <piotrdrag@gmail.com>, 2015-2017\n"
 "Aviary.pl <community-poland@mozilla.org>, 2015-2017"
 
-#: libide/application/ide-application-actions.c:140
+#: libide/application/ide-application-actions.c:142
 msgid "Learn more about GNOME Builder"
 msgstr "Więcej informacji o programie GNOME Builder"
 
-#: libide/application/ide-application-actions.c:143
+#: libide/application/ide-application-actions.c:145
 msgid "Funded By"
 msgstr "Wsparte finansowo przez"
 
@@ -1093,53 +1093,53 @@ msgstr "niezapisywany dokument %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 
-#: libide/buildsystem/ide-build-pipeline.c:2090
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Cleaning…"
 msgstr "Czyszczenie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2105
+#: libide/buildsystem/ide-build-pipeline.c:2106
 msgid "Downloading…"
 msgstr "Pobieranie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2109
+#: libide/buildsystem/ide-build-pipeline.c:2110
 msgid "Building dependencies…"
 msgstr "Budowanie zależności…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2113
+#: libide/buildsystem/ide-build-pipeline.c:2114
 msgid "Bootstrapping…"
 msgstr "Zakładanie projektu…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2117
+#: libide/buildsystem/ide-build-pipeline.c:2118
 msgid "Configuring…"
 msgstr "Konfigurowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2121
+#: libide/buildsystem/ide-build-pipeline.c:2122
 msgid "Building…"
 msgstr "Budowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2125
+#: libide/buildsystem/ide-build-pipeline.c:2126
 msgid "Installing…"
 msgstr "Instalowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2129
+#: libide/buildsystem/ide-build-pipeline.c:2130
 msgid "Exporting…"
 msgstr "Eksportowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2133
-#: libide/buildsystem/ide-build-pipeline.c:2137
+#: libide/buildsystem/ide-build-pipeline.c:2134
+#: libide/buildsystem/ide-build-pipeline.c:2138
 msgid "Success"
 msgstr "Powodzenie"
 
-#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/buildsystem/ide-build-pipeline.c:2142
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Niepowodzenie"
 
-#: libide/buildsystem/ide-build-pipeline.c:2145
+#: libide/buildsystem/ide-build-pipeline.c:2146
 msgid "Preparing…"
 msgstr "Przygotowywanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2149
+#: libide/buildsystem/ide-build-pipeline.c:2150
 msgid "Ready"
 msgstr "Gotowe"
 
@@ -1387,7 +1387,7 @@ msgstr "Ścieżka do pliku projektu, domyślnie bieżący katalog"
 msgid "New variable…"
 msgstr "Nowa zmienna…"
 
-#: libide/devices/ide-device-manager.c:147
+#: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
 msgstr "Nie można odnaleźć urządzenia „%s”."
@@ -1646,15 +1646,15 @@ msgid ""
 "you like to reload the file?"
 msgstr "Wykryto zmianę pliku w innym programie. Wczytać go ponownie?"
 
-#: libide/greeter/ide-greeter-perspective.c:456
+#: libide/greeter/ide-greeter-perspective.c:457
 msgid "Failed to load the project"
 msgstr "Wczytanie projektu się nie powiodło"
 
-#: libide/greeter/ide-greeter-perspective.c:677
+#: libide/greeter/ide-greeter-perspective.c:678
 msgid "Open Project"
 msgstr "Otwarcie projektu"
 
-#: libide/greeter/ide-greeter-perspective.c:693
+#: libide/greeter/ide-greeter-perspective.c:694
 msgid "All Project Types"
 msgstr "Wszystkie typy projektów"
 
@@ -1727,28 +1727,28 @@ msgstr "Zainicjowanie wartości domyślnych się nie powiodło."
 msgid "You must call %s() before using libide."
 msgstr "Należy wywołać funkcję %s() przed użyciem biblioteki libide."
 
-#: libide/ide-context.c:1887
+#: libide/ide-context.c:2017
 msgid "An unload request is already pending"
 msgstr "Żądanie usunięcia z pamięci jest już wykonywane"
 
-#: libide/ide-context.c:2006
+#: libide/ide-context.c:2136
 msgid "Context has already been restored."
 msgstr "Kontekst został już przywrócony."
 
-#: libide/ide-object.c:288
+#: libide/ide-object.c:304
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "Brak implementacji punktu rozszerzenia „%s”."
 
-#: libide/ide-object.c:380
+#: libide/ide-object.c:396
 msgid "Failed to locate build system plugin."
 msgstr "Ustalenie położenia wtyczki systemu budowania się nie powiodło."
 
-#: libide/ide-object.c:467
+#: libide/ide-object.c:493
 msgid "No such extension point."
 msgstr "Nie ma takiego punktu rozszerzenia."
 
-#: libide/ide-object.c:477
+#: libide/ide-object.c:503
 msgid "No implementations of extension point."
 msgstr "Brak implementacji punktu rozszerzenia."
 
@@ -2486,7 +2486,7 @@ msgstr "Środowiska programistyczne"
 msgid "_Select"
 msgstr "_Wybierz"
 
-#: libide/preferences/ide-preferences-perspective.c:963
+#: libide/preferences/ide-preferences-perspective.c:965
 msgid "Preferences"
 msgstr "Preferencje"
 
@@ -2553,21 +2553,21 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5312
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: libide/sourceview/ide-source-view.c:5428
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: libide/sourceview/ide-source-view.c:5855
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Zmiana nazwy symbolu"
 
@@ -3076,11 +3076,11 @@ msgstr "Ustalenie położenia katalogu roboczego się nie powiodło"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Nieprawidłowe podpolecenie „:syntax”: %s"
 
-#: plugins/command-bar/gb-vim.c:1147
+#: plugins/command-bar/gb-vim.c:1154
 msgid "Invalid search and replace request"
 msgstr "Nieprawidłowe żądanie wyszukania i zastąpienia"
 
-#: plugins/command-bar/gb-vim.c:1253
+#: plugins/command-bar/gb-vim.c:1260
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nie jest poleceniem: %s"
@@ -3174,7 +3174,7 @@ msgid "Project Location"
 msgstr "Położenie projektu"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:78
+#: plugins/git/ide-git-clone-widget.ui:76
 msgid "Select Project Directory"
 msgstr "Wybór katalogu projektu"
 
@@ -3273,28 +3273,29 @@ msgstr "Sklonuj"
 msgid "Network is not available, skipping downloads"
 msgstr "Sieć jest niedostępna, pomijanie pobierania"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
-#: plugins/flatpak/gbp-flatpak-workbench-addin.c:82
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:112
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Zainstaluj"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Zaktualizuj"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "Flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
@@ -3302,7 +3303,7 @@ msgstr[0] "Wyświetla %u środowisko wykonawcze więcej"
 msgstr[1] "Wyświetla %u środowiska wykonawcze więcej"
 msgstr[2] "Wyświetla %u środowisk wykonawczych więcej"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
 msgid "Flatpak Runtimes"
 msgstr "Środowisko wykonawcze Flatpak"
 
@@ -3345,11 +3346,11 @@ msgstr "Zaktualizowano środowisko wykonawcze"
 msgid "Runtime has been installed"
 msgstr "Zainstalowano środowisko wykonawcze"
 
-#: plugins/flatpak/gbp-flatpak-workbench-addin.c:77
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
 msgid "Your computer is missing flatpak-builder"
 msgstr "Na komputerze nie ma programu flatpak-builder"
 
-#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
 msgid ""
 "This program is necessary for building Flatpak applications. Would you like "
 "to install it?"
@@ -3391,28 +3392,28 @@ msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
 
-#: plugins/git/ide-git-clone-widget.c:141
-#: plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
 msgid "A valid Git URL is required"
 msgstr "Wymagany jest prawidłowy adres URL systemu git"
 
-#: plugins/git/ide-git-clone-widget.ui:38
+#: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr "Użycie systemu git do utworzenia lokalnej kopii zdalnego projektu."
 
-#: plugins/git/ide-git-clone-widget.ui:66
+#: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
 msgstr "użytkownik@serwer:repozytorium.git"
 
-#: plugins/git/ide-git-clone-widget.ui:67
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Adres URL repozytorium kodu źródłowego projektu"
 
-#: plugins/git/ide-git-clone-widget.ui:94
+#: plugins/git/ide-git-clone-widget.ui:92
 msgid "Repository URL"
 msgstr "Adres URL repozytorium"
 
-#: plugins/git/ide-git-clone-widget.ui:102
+#: plugins/git/ide-git-clone-widget.ui:100
 msgid "Project Destination"
 msgstr "Cel projektu"
 
@@ -3424,14 +3425,14 @@ msgstr "Klonowanie projektu"
 msgid "Clone…"
 msgstr "Sklonuj…"
 
-#: plugins/git/ide-git-remote-callbacks.c:177
+#: plugins/git/ide-git-remote-callbacks.c:193
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
 "Dostarczenie odpowiednich danych uwierzytelniających podczas klonowania "
 "repozytorium się nie powiodło."
 
-#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
 msgid "Code assistance requires a local file."
 msgstr "Asysta podczas pisania kodu wymaga lokalnego pliku."
 
@@ -3467,6 +3468,10 @@ msgstr ""
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Podgląd jako HTML"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:108
+msgid "Your computer is missing python3-docutils"
+msgstr "Na komputerze nie ma programu python3-docutils"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
