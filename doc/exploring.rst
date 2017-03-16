@@ -2,7 +2,7 @@
 Exploring the Interface
 #######################
 
-The following sections will help you get to know a few aspects of Builder.
+The following sections will help you get to know Builder.
 
  * `Project Greeter`_
  * `Workbench Window`_
@@ -16,49 +16,50 @@ The following sections will help you get to know a few aspects of Builder.
 Project Greeter
 ===============
 
-When you start Builder, you will be greeted by the following window.
+When you start Builder, you will be asked to select a project to be opened:
 
 .. image:: figures/greeter.png
    :width: 555 px
    :align: center
 
 The window displays projects that were discovered on your system.
-By default, the ``~/Projects`` directory will be scanned for projects on startup.
+By default, the ``~/Projects`` directory will be scanned for projects when Builder starts.
 Projects you have previously opened will be shown at the top.
 
-Selecting a project row opens the project.
-Alternatively, start typing to search the projects followed by "Enter" to open.
-Simply pressing "Enter" on startup will open your most-recently opened project.
+Selecting a project row opens the project or pressing "Enter" will open the last project that was open.
+You can also start typing to search the projects followed by "Enter" to open.
 
-If you'd like to remove a previously opened project, use the checkmark button in the top right to activate "selection mode".
-Select the row you'd like to remove and then click "Delete" in the lower left corner of the window.
+If you'd like to remove a previously opened project from the list, activate *Selection mode*.  
+Press the "Select" button in the top right corner to the left of the close application button and
+then select the row you would like to remove. 
+Select the row(s) you'd like to remove and then click "Remove" in the lower left corner of the window.
 
 Workbench Window
 ================
 
 The application window containing your project is called the "**Workbench Window**".
-The workbench is split up into two main areas.
-At the top is the `Header Bar`_ and beneath that is the current "**Perspective**".
+The Workbench is split up into two main areas.
+At the top is the `Header Bar`_ and below is the current "**Perspective**".
 
-Builder has many perspectives, such as the Editor, Build Preferences, Application Preferences, and the Profiler.
+Builder has many perspectives, including the Editor, Build Preferences, Application Preferences, and the Profiler.
 
 Header Bar
 ==========
 
-Below shows the header bar.
-This contains a button in the top-left for `Switching Perspectives`_.
-In the center is the "OmniBar" which cna be used to `Build your Project`_.
+The header bar is shown below.
+This contains a button in the top left for `Switching Perspectives`_.
+In the center is the "OmniBar" which can be used to `Build your Project`_.
 
-To the right of the OmniBar is the Run button.
-Clicking the arrow next to it allows you to change how Builder will run your application.
-You can run normally, with a profiler, or Valgrind.
+To the right of the OmniBar is the *Run* button.
+Clicking the arrow next to *Run* allows you to change how Builder will run your application.
+You can run normally, with a profiler, or with Valgrind.
 
 On the right is the search box.
-Just type a few characters from the file you'd like to open and it will fuzzy search your project tree.
+Type a few characters from the file you would like to open and it will fuzzy search your project tree.
 Use "Enter" to complete the request and open the file.
 
-Right of the search box is the workbench menu.
-You can find a few more options in here such as `Showing and Hiding Panels`_.
+To the right of the search box is the workbench menu.
+You can find more options here such as `Showing and Hiding Panels`_.
 
 
 .. image:: figures/workbench.png
@@ -67,7 +68,7 @@ You can find a few more options in here such as `Showing and Hiding Panels`_.
 Switching Perspectives
 ======================
 
-To switch perspectives, use the perspective selector button in the top-left of the workbench window.
+To switch perspectives, click the perspective selector button in the top left of the workbench window.
 Perspectives that support a keyboard accelerator will display the appropriate accelerator next to name of the perspective.
 
 .. image:: figures/perspectives.png
@@ -90,13 +91,13 @@ Build your Project
 ==================
 
 To build your project, use the OmniBar in the center of the header bar.
-On the right of the OmniBar is a button for starting a build as shown in the image below.
+To the right of the OmniBar is a button for starting a build as shown in the image below.
 
 .. image:: figures/omnibar.png
    :width: 495 px
    :align: center
 
-Additionally, you can use the "build", "rebuild", or "clean" commands from the command bar.
+You can also use the "build", "rebuild", or "clean" commands from the command bar.
 
 While the project is building, the build button will change to a cancel button.
 Clicking the cancel button will abort the current build.
@@ -109,8 +110,8 @@ Clicking the cancel button will abort the current build.
 Preferences
 ===========
 
-The preferences perspective allows you to change various preferences for Builder and plugins.
-You can search for preferences using the keyword search in the top-left of the preferences perspective.
+The preferences perspective allows you to change settings for Builder and its plugins.
+You can search for preferences using the keyword search in the top left of the preferences perspective.
 
 .. image:: figures/preferences.png
    :align: center
@@ -123,7 +124,7 @@ The command bar provides a command-line-interface into Builder.
 You can type various actions to activate them.
 If Vim-mode is enabled, you can also activate some Vim-inspired commands here.
 
-The command bar has tab completion which is shown below.
+The command bar includes tab completion as shown below.
 
 .. image:: figures/commandbar.png
    :align: center
