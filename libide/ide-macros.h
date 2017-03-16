@@ -50,6 +50,12 @@ G_BEGIN_DECLS
 /* strlen() generally gets hoisted out automatically */
 #define IDE_LITERAL_LENGTH(s) (strlen(s))
 
+#if __GNUC__ >= 7
+# define IDE_FALLTHROUGH __attribute__((fallthrough))
+#else
+# define IDE_FALLTHROUGH
+#endif
+
 static inline gboolean
 ide_str_empty0 (const gchar *str)
 {
