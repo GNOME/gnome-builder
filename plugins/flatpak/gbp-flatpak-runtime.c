@@ -173,6 +173,12 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, "flatpak");
       ide_subprocess_launcher_push_argv (ret, "build");
       ide_subprocess_launcher_push_argv (ret, "--share=network");
+
+      /* We might need access to ccache configs inside the build environ.
+       * See https://bugzilla.gnome.org/show_bug.cgi?id=780153
+       */
+      ide_subprocess_launcher_push_argv (ret, "--filesystem=~/.ccache");
+
       if (!ide_str_empty0 (project_path))
         {
           g_autofree gchar *filesystem_option_src = NULL;
