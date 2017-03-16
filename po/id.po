@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-10 23:29+0000\n"
-"PO-Revision-Date: 2017-03-11 17:00+0700\n"
-"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
+"POT-Creation-Date: 2017-03-15 14:05+0000\n"
+"PO-Revision-Date: 2017-03-16 09:40+0700\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -64,7 +64,7 @@ msgstr[0] "Sekitar %u tahun yang lalu"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:683
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -96,7 +96,7 @@ msgstr "Ramban..."
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -298,7 +298,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5856
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Ubah nama"
@@ -877,7 +877,7 @@ msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:129
+#: libide/application/ide-application-actions.c:130
 msgid "An IDE for GNOME"
 msgstr "IDE untuk GNOME"
 
@@ -982,21 +982,21 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Build;Bangun;Kembangkan;"
 
-#: libide/application/ide-application-actions.c:135
+#: libide/application/ide-application-actions.c:136
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:137
+#: libide/application/ide-application-actions.c:138
 msgid "translator-credits"
 msgstr ""
 "Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016.\n"
 "Kukuh Syafaat <syafaatkukuh@gmail.com>, 2017."
 
-#: libide/application/ide-application-actions.c:140
+#: libide/application/ide-application-actions.c:142
 msgid "Learn more about GNOME Builder"
 msgstr "Pelajari lebih banyak tentang GNOME Builder"
 
-#: libide/application/ide-application-actions.c:143
+#: libide/application/ide-application-actions.c:145
 msgid "Funded By"
 msgstr "Didanai Oleh"
 
@@ -1086,53 +1086,53 @@ msgstr "dokumen tanpa judul %u"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Gagal menyimpan penyangga, mengabaikan reklamasi."
 
-#: libide/buildsystem/ide-build-pipeline.c:2090
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Cleaning…"
 msgstr "Membersihkan..."
 
-#: libide/buildsystem/ide-build-pipeline.c:2105
+#: libide/buildsystem/ide-build-pipeline.c:2106
 msgid "Downloading…"
 msgstr "Mengunduh…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2109
+#: libide/buildsystem/ide-build-pipeline.c:2110
 msgid "Building dependencies…"
 msgstr "Membangun dependensi…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2113
+#: libide/buildsystem/ide-build-pipeline.c:2114
 msgid "Bootstrapping…"
 msgstr "Bootstrapping…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2117
+#: libide/buildsystem/ide-build-pipeline.c:2118
 msgid "Configuring…"
 msgstr "Mengkonfigurasi…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2121
+#: libide/buildsystem/ide-build-pipeline.c:2122
 msgid "Building…"
 msgstr "Sedang build..."
 
-#: libide/buildsystem/ide-build-pipeline.c:2125
+#: libide/buildsystem/ide-build-pipeline.c:2126
 msgid "Installing…"
 msgstr "Instalasi…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2129
+#: libide/buildsystem/ide-build-pipeline.c:2130
 msgid "Exporting…"
 msgstr "Mengekspor…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2133
-#: libide/buildsystem/ide-build-pipeline.c:2137
+#: libide/buildsystem/ide-build-pipeline.c:2134
+#: libide/buildsystem/ide-build-pipeline.c:2138
 msgid "Success"
 msgstr "Berhasil"
 
-#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/buildsystem/ide-build-pipeline.c:2142
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Gagal"
 
-#: libide/buildsystem/ide-build-pipeline.c:2145
+#: libide/buildsystem/ide-build-pipeline.c:2146
 msgid "Preparing…"
 msgstr "Mempersiapkan…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2149
+#: libide/buildsystem/ide-build-pipeline.c:2150
 msgid "Ready"
 msgstr "Siap"
 
@@ -1376,7 +1376,7 @@ msgstr "Path ke berkas proyek, nilai baku ke direktori saat ini"
 msgid "New variable…"
 msgstr "Variabel baru..."
 
-#: libide/devices/ide-device-manager.c:147
+#: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
 msgstr "Perangkat \"%s\" tidak bisa ditemukan."
@@ -1638,15 +1638,15 @@ msgstr ""
 "Builder telah menemukan bahwa berkas ini telah diubah secara eksternal. "
 "Apakah Anda hendak memuat ulang berkas itu?"
 
-#: libide/greeter/ide-greeter-perspective.c:456
+#: libide/greeter/ide-greeter-perspective.c:457
 msgid "Failed to load the project"
 msgstr "Gagal memuat proyek"
 
-#: libide/greeter/ide-greeter-perspective.c:677
+#: libide/greeter/ide-greeter-perspective.c:678
 msgid "Open Project"
 msgstr "Buka Proyek"
 
-#: libide/greeter/ide-greeter-perspective.c:693
+#: libide/greeter/ide-greeter-perspective.c:694
 msgid "All Project Types"
 msgstr "Semua Jenis Proyek"
 
@@ -1721,28 +1721,28 @@ msgstr "Gagal menginisialisasi baku."
 msgid "You must call %s() before using libide."
 msgstr "Anda mesti memanggil %s() sebelum memakai libide."
 
-#: libide/ide-context.c:1887
+#: libide/ide-context.c:2017
 msgid "An unload request is already pending"
 msgstr "Suatu permintaan bongkar masih tertunda"
 
-#: libide/ide-context.c:2006
+#: libide/ide-context.c:2136
 msgid "Context has already been restored."
 msgstr "Konteks telah pernah dipulihkan."
 
-#: libide/ide-object.c:288
+#: libide/ide-object.c:304
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "Tidak ada implementasi titik ekstensi \"%s\"."
 
-#: libide/ide-object.c:380
+#: libide/ide-object.c:396
 msgid "Failed to locate build system plugin."
 msgstr "Gagal mencari pengaya sistem build."
 
-#: libide/ide-object.c:467
+#: libide/ide-object.c:493
 msgid "No such extension point."
 msgstr "Tidak ada titik ekstensi seperti itu."
 
-#: libide/ide-object.c:477
+#: libide/ide-object.c:503
 msgid "No implementations of extension point."
 msgstr "Tidak ada implementasi titik ekstensi."
 
@@ -2482,7 +2482,7 @@ msgstr "SDK"
 msgid "_Select"
 msgstr "_Pilih"
 
-#: libide/preferences/ide-preferences-perspective.c:963
+#: libide/preferences/ide-preferences-perspective.c:965
 msgid "Preferences"
 msgstr "Preferensi"
 
@@ -2549,21 +2549,21 @@ msgstr "Gagal membuka direktori: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Gagal memuat berkas: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5312
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5428
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: libide/sourceview/ide-source-view.c:5855
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
@@ -3171,7 +3171,7 @@ msgid "Project Location"
 msgstr "Lokasi Proyek"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:78
+#: plugins/git/ide-git-clone-widget.ui:76
 msgid "Select Project Directory"
 msgstr "Pilih Direktori Proyek"
 
@@ -3272,34 +3272,35 @@ msgstr "Klon"
 msgid "Network is not available, skipping downloads"
 msgstr "Jaringan tidak tersedia, lewati unduhan"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:112
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Instalasi"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Pemutakhiran"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Tampilkan %u lebih banyak runtime"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Runtimes"
 
@@ -3391,28 +3392,28 @@ msgstr "Berkas tidak di bawah kendali dari direktori kerja git."
 msgid "The requested file does not exist within the git index."
 msgstr "Berkas yang diminta tak ada di dalam indeks git."
 
-#: plugins/git/ide-git-clone-widget.c:141
-#: plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
 msgid "A valid Git URL is required"
 msgstr "Sebuah URL Git yang valid diperlukan"
 
-#: plugins/git/ide-git-clone-widget.ui:38
+#: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr "Gunakan Git untuk membuat salinan lokal dari remotely hosted project."
 
-#: plugins/git/ide-git-clone-widget.ui:66
+#: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
 msgstr "user@host:repository.git"
 
-#: plugins/git/ide-git-clone-widget.ui:67
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Masukkan URL repositori kode sumber proyek Anda."
 
-#: plugins/git/ide-git-clone-widget.ui:94
+#: plugins/git/ide-git-clone-widget.ui:92
 msgid "Repository URL"
 msgstr "URL repositori"
 
-#: plugins/git/ide-git-clone-widget.ui:102
+#: plugins/git/ide-git-clone-widget.ui:100
 msgid "Project Destination"
 msgstr "Tujuan Proyek"
 
@@ -3424,14 +3425,14 @@ msgstr "Klon Proyek"
 msgid "Clone…"
 msgstr "Klon..."
 
-#: plugins/git/ide-git-remote-callbacks.c:177
+#: plugins/git/ide-git-remote-callbacks.c:193
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
 "Builder gagal untuk memberikan kredensial yang tepat ketika kloning "
 "repositori."
 
-#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
 msgid "Code assistance requires a local file."
 msgstr "Bantuan kode memerlukan suatu berkas lokal."
 
@@ -3469,6 +3470,10 @@ msgstr ""
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Pratinjau sebagai HTML"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:108
+msgid "Your computer is missing python3-docutils"
+msgstr "Komputer Anda kekurangan python3-docutils"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3857,107 +3862,3 @@ msgstr "Buffer dimuat tapi tidak di pengelola buffer."
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Gagal membuat pohon XML."
-
-#~ msgid "%s does not support building"
-#~ msgstr "%s tak mendukung build"
-
-#~ msgid "A build is already in progress"
-#~ msgstr "Operasi build tengah berjalan"
-
-#~ msgid "Failed to open stderr stream."
-#~ msgstr "Gagal membuka stream stderr."
-
-#~ msgid "Failed to open stdout stream."
-#~ msgstr "Gagal membuka stream stdout."
-
-#~ msgid "%s() is not supported on %s build system."
-#~ msgstr "%s() tak didukung pada sistem build %s."
-
-#~ msgid "Installed Extensions"
-#~ msgstr "Ekstensi Terpasang"
-
-#~ msgid "Bundled Extensions"
-#~ msgstr "Ekstensi Bawaan"
-
-#~ msgid "Attempt to load a PyGObject script with no filename."
-#~ msgstr "Upaya memuat suatu skrip PyGObject tanpa nama berkas."
-
-#~ msgid "The filename for the script was not provided."
-#~ msgstr "Nama berkas bagi skrip tidak diberikan."
-
-#~ msgid "The script must be on a local filesystem."
-#~ msgstr "Skrip mesti pada sistem berkas lokal."
-
-#~ msgid "The script \"%s\" is not a PyGObject file."
-#~ msgstr "Skrip \"%s\" bukan berkas PyGObject."
-
-#~ msgid "%s has not implemented GAsyncInitable."
-#~ msgstr "%s belum mengimplementasi GAsyncInitable."
-
-#~ msgid "Chunk does not belong to snippet."
-#~ msgstr "Penggalan bukan milik snippet."
-
-#~ msgid "Target"
-#~ msgstr "Target"
-
-#~ msgid "Build failed"
-#~ msgstr "Build gagal"
-
-#~ msgid "Build successful"
-#~ msgstr "Build sukses"
-
-#~ msgid "Failed to locate configure.ac"
-#~ msgstr "Gagal menemukan configure.ac"
-
-#~ msgid "Directory must be on a locally mounted filesystem."
-#~ msgstr ""
-#~ "Direktori mesti ada pada suatu sistem berkas yang dikait secara lokal."
-
-#~ msgid "Failed to locate device"
-#~ msgstr "Gagal mencari perangkat"
-
-#~ msgid "Cannot execute build task more than once"
-#~ msgstr "Tidak bisa menjalankan tugas build lebih dari sekali"
-
-#~ msgid "'%s' is not a directory."
-#~ msgstr "'%s' bukan direktori."
-
-#~ msgid "autogen.sh is missing from project directory (%s)."
-#~ msgstr "autogen.sh hilang dari direktori projek (%s)."
-
-#~ msgid "autogen.sh is not executable."
-#~ msgstr "autogen.sh bukan executable."
-
-#~ msgid "Running autogen…"
-#~ msgstr "Menjalankan autogen..."
-
-#~ msgid "autogen.sh failed to create configure (%s)"
-#~ msgstr "autogen.sh gagal membuat configure (%s)"
-
-#~ msgid "Running configure…"
-#~ msgstr "Menjalankan configure..."
-
-#~ msgid "Invalid makefile provided, ignoring."
-#~ msgstr "Makefile yang diberikan tak valid, diabaikan."
-
-#~ msgid "Warnings"
-#~ msgstr "Peringatan"
-
-#~ msgid "Notes"
-#~ msgstr "Catatan"
-
-#~ msgid "Unknown file"
-#~ msgstr "Berkas tak dikenal"
-
-#, fuzzy
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  %(prgname) %(command) OPTIONS\n"
-#~ msgstr "Cara pakai:  openconnect [opsi] <server>\n"
-
-#, fuzzy
-#~ msgid "Missing project name"
-#~ msgstr "           Nama Projek: %s\n"
-
-#~ msgid "Username"
-#~ msgstr "Nama pengguna"
