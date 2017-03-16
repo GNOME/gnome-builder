@@ -35,6 +35,9 @@ gboolean                  gbp_flatpak_configuration_load_from_file     (GbpFlatp
 const gchar              *gbp_flatpak_configuration_get_branch         (GbpFlatpakConfiguration *self);
 void                      gbp_flatpak_configuration_set_branch         (GbpFlatpakConfiguration *self,
                                                                         const gchar             *branch);
+const gchar * const      *gbp_flatpak_configuration_get_build_commands (GbpFlatpakConfiguration *self);
+void                      gbp_flatpak_configuration_set_build_commands (GbpFlatpakConfiguration *self,
+                                                                        const gchar *const      *build_commands);
 const gchar              *gbp_flatpak_configuration_get_command        (GbpFlatpakConfiguration *self);
 void                      gbp_flatpak_configuration_set_command        (GbpFlatpakConfiguration *self,
                                                                         const gchar             *command);
