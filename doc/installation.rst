@@ -22,17 +22,17 @@ It is also the engine behind Builder's powerful SDK!
 via Flatpak
 -----------
 
-If you have a recent Linux distribution, such as Fedora 25, simply download our Stable_ flatpak and click **Install** when Software_ opens.
-If Software_ does not automatically open, try opening the Stable_ flatpakref from your file browser.
+If you have a recent Linux distribution, such as Fedora 25, simply download the Stable_ Flatpak and click **Install** when Software_ opens.
+If Software_ does not automatically open, try opening the Stable_ flatpakref by double clicking it in your file browser.
 
-If you want to track Builder development, you might want our Nightly_ channel instead of Stable_.
+If you want to track Builder development, you might want the Nightly_ channel instead of Stable_.
 
 .. note:: To build flatpak-based applications, ensure that the ``flatpak-builder`` program is installed. On Fedora, this is the ``flatpak-builder`` package.
 
 Command Line
 ^^^^^^^^^^^^
 
-You can also use the command line to install Builder.
+You can also use the command line to install Builder:
 
 **Stable**
 
@@ -64,7 +64,7 @@ We are aggressively moving towards using Flatpak for contributing to Builder, bu
 Command Line
 ^^^^^^^^^^^^
 
-.. note:: You almost certainly want to read the `Newcomers Tutorial`_ on how to build a GNOME application before proceeding.
+.. note:: Please review the GNOME `Newcomers Tutorial`_ on how to build a GNOME application before proceeding.
 
 .. code-block:: sh
 
@@ -98,15 +98,16 @@ We do not recommend installing from release tarballs unless you are a Linux dist
 Builder has a complex set of dependencies which heavily target the current release of GNOME.
 Keeping up with these requires updating much of the GNOME desktop.
 
-You probably want to install via Flatpak, which does not have this restriction.
+Please install via Flatpak, which does not have this restriction.
 
 
 Troubleshooting
 ---------------
 
-If you are having troubles running Builder, we suggest running with verbose output as it will log more information about the running system.
+If you are having trouble running Builder, start Builder with verbose output. 
+This will log more information about the running system.
 The ``gnome-builder`` program can take multiple arguments of ``-v`` to increase verbosity.
-For example, if running from ``flatpak``, you can increase the logging verbosity like:
+For example, if running from ``flatpak``:
 
 .. code-block:: sh
 
