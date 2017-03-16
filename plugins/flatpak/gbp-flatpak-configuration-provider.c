@@ -720,6 +720,7 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
           g_free (filename);
         new_config_file = other_file;
         /* Don't break so we can reuse the code below to add the new config */
+      IDE_FALLTHROUGH;
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_MOVED_IN:
