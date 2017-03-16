@@ -19,7 +19,7 @@ AS_IF([test "$enable_flatpak_plugin" != no],[
 	PKG_CHECK_MODULES(SOUP, [libsoup-2.4 >= soup_required_version])
 
 
-       AS_IF([test "$enable_flatpak_plugin" = "yes" && test "$have_flatpak" = "no"],[
+	AS_IF([test "$enable_flatpak_plugin" = "yes" && test "$have_flatpak" = "no"],[
 	       AC_MSG_ERROR([--enable-flatpak-plugin requires flatpak >= flatpak_required_version])
 	])
 
@@ -33,7 +33,7 @@ AS_IF([test "$enable_flatpak_plugin" != no],[
 	])
 
 	AS_IF([test "$have_flatpak" = "yes" && test "$have_git" = "yes"],[
-		[enable_flatpak_plugin=yes]
+		enable_flatpak_plugin=yes
 	])
 
 	dnl ***********************************************************************
