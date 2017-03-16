@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-01 22:58+0000\n"
-"PO-Revision-Date: 2017-03-05 18:44+0100\n"
+"POT-Creation-Date: 2017-03-15 16:27+0000\n"
+"PO-Revision-Date: 2017-03-16 11:07+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -69,7 +69,7 @@ msgstr[1] "Vor ungefähr %u Jahren"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:683
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -101,7 +101,7 @@ msgstr "Durchsuchen …"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -308,7 +308,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5853
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Umbenennen"
@@ -891,12 +891,12 @@ msgstr "_Schließen"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:547
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:565
+#: libide/workbench/ide-workbench.c:566
 msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:128
+#: libide/application/ide-application-actions.c:130
 msgid "An IDE for GNOME"
 msgstr "Eine integrierte Entwicklungsumgebung für GNOME"
 
@@ -1004,22 +1004,22 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Erstellen;Entwickeln;IDE;"
 
-#: libide/application/ide-application-actions.c:134
+#: libide/application/ide-application-actions.c:136
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:136
+#: libide/application/ide-application-actions.c:138
 msgid "translator-credits"
 msgstr ""
 "Bernd Homuth <dev@hmt.im>, 2015, 2016\n"
 "Christian Kirbach <christian.kirbach@gmail.com>, 2015, 2016.\n"
 "Florian Bäuerle <florian.bae@gmail.com>, 2015."
 
-#: libide/application/ide-application-actions.c:139
+#: libide/application/ide-application-actions.c:142
 msgid "Learn more about GNOME Builder"
 msgstr "Erfahren Sie mehr über GNOME Builder"
 
-#: libide/application/ide-application-actions.c:142
+#: libide/application/ide-application-actions.c:145
 msgid "Funded By"
 msgstr "Gefördert von"
 
@@ -1100,66 +1100,66 @@ msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: libide/buffers/ide-buffer-manager.c:1761
+#: libide/buffers/ide-buffer-manager.c:1764
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1795
+#: libide/buffers/ide-buffer-manager.c:1798
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Puffer konnte nicht gespeichert werden, Beschwerde wird ignoriert."
 
-#: libide/buildsystem/ide-build-pipeline.c:2082
+#: libide/buildsystem/ide-build-pipeline.c:2091
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2097
+#: libide/buildsystem/ide-build-pipeline.c:2106
 msgid "Downloading…"
 msgstr "Wird heruntergeladen …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2101
+#: libide/buildsystem/ide-build-pipeline.c:2110
 msgid "Building dependencies…"
 msgstr "Abhängigkeiten werden erstellt …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2105
+#: libide/buildsystem/ide-build-pipeline.c:2114
 msgid "Bootstrapping…"
 msgstr "Bootstrapping …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2109
+#: libide/buildsystem/ide-build-pipeline.c:2118
 msgid "Configuring…"
 msgstr "Konfiguration läuft …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2113
+#: libide/buildsystem/ide-build-pipeline.c:2122
 msgid "Building…"
 msgstr "Erstellung …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2117
+#: libide/buildsystem/ide-build-pipeline.c:2126
 msgid "Installing…"
 msgstr "Installieren …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2121
+#: libide/buildsystem/ide-build-pipeline.c:2130
 msgid "Exporting…"
 msgstr "Wird exportiert …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2125
-#: libide/buildsystem/ide-build-pipeline.c:2129
+#: libide/buildsystem/ide-build-pipeline.c:2134
+#: libide/buildsystem/ide-build-pipeline.c:2138
 msgid "Success"
 msgstr "Erfolg"
 
-#: libide/buildsystem/ide-build-pipeline.c:2133
+#: libide/buildsystem/ide-build-pipeline.c:2142
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Gescheitert"
 
-#: libide/buildsystem/ide-build-pipeline.c:2137
+#: libide/buildsystem/ide-build-pipeline.c:2146
 msgid "Preparing…"
 msgstr "Wird vorbereitet …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2141
+#: libide/buildsystem/ide-build-pipeline.c:2150
 msgid "Ready"
 msgstr "Bereit"
 
-#: libide/buildsystem/ide-configuration-manager.c:75
+#: libide/buildsystem/ide-configuration-manager.c:76
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1244,7 +1244,7 @@ msgid_plural "%d errors"
 msgstr[0] "%d Fehler"
 msgstr[1] "%d Fehler"
 
-#: libide/buildui/ide-build-panel.c:517
+#: libide/buildui/ide-build-panel.c:521
 #: libide/preferences/ide-preferences-builtin.c:375
 #: libide/workbench/ide-omni-bar.ui:386
 msgid "Build"
@@ -1401,7 +1401,7 @@ msgstr "Pfad zur Projektdatei, Vorgabe ist der aktuelle Ordner"
 msgid "New variable…"
 msgstr "Neue Variable …"
 
-#: libide/devices/ide-device-manager.c:147
+#: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
 msgstr "Das Gerät »%s« konnte nicht gefunden werden."
@@ -1665,15 +1665,15 @@ msgstr ""
 "Builder hat festgestellt, dass diese Datei anderweitig geändert wurde. "
 "Wollen Sie die Datei neu laden?"
 
-#: libide/greeter/ide-greeter-perspective.c:456
+#: libide/greeter/ide-greeter-perspective.c:457
 msgid "Failed to load the project"
 msgstr "Projekt konnte nicht geladen werden"
 
-#: libide/greeter/ide-greeter-perspective.c:677
+#: libide/greeter/ide-greeter-perspective.c:678
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
-#: libide/greeter/ide-greeter-perspective.c:693
+#: libide/greeter/ide-greeter-perspective.c:694
 msgid "All Project Types"
 msgstr "Alle Projektarten"
 
@@ -1748,28 +1748,28 @@ msgstr "Standardwerte konnten nicht initialisiert werden."
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: libide/ide-context.c:1885
+#: libide/ide-context.c:2017
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: libide/ide-context.c:2004
+#: libide/ide-context.c:2136
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
-#: libide/ide-object.c:288
+#: libide/ide-object.c:304
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "Keine Implementationen des Erweiterungspunkts »%s«."
 
-#: libide/ide-object.c:380
+#: libide/ide-object.c:396
 msgid "Failed to locate build system plugin."
 msgstr "Buildsystem-Erweiterung konnte nicht geladen werden."
 
-#: libide/ide-object.c:467
+#: libide/ide-object.c:493
 msgid "No such extension point."
 msgstr "Kein solcher Erweiterungspunkt."
 
-#: libide/ide-object.c:477
+#: libide/ide-object.c:503
 msgid "No implementations of extension point."
 msgstr "Keine Implementationen des Erweiterungspunktes."
 
@@ -2521,7 +2521,7 @@ msgstr "SDKs"
 msgid "_Select"
 msgstr "Au_swählen"
 
-#: libide/preferences/ide-preferences-perspective.c:963
+#: libide/preferences/ide-preferences-perspective.c:965
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -2589,23 +2589,30 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5309
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: libide/sourceview/ide-source-view.c:5311
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: libide/sourceview/ide-source-view.c:5425
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: libide/sourceview/ide-source-view.c:5852
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
+
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "%u Paket wird installiert"
+msgstr[1] "%u Pakete werden installiert"
 
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
@@ -2713,12 +2720,6 @@ msgstr "Aktuelles Dokument schließen"
 msgid "untitled document"
 msgstr "Unbenanntes Dokument"
 
-#. translators: this message is shown in the header bar to indicate build status
-#: libide/workbench/ide-omni-bar.c:170
-#, c-format
-msgid "Build: %s"
-msgstr "Erstellen: %s"
-
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
@@ -2769,7 +2770,7 @@ msgstr "Perspektive wechseln"
 msgid "Open File"
 msgstr "Datei öffnen"
 
-#: libide/workbench/ide-workbench.c:563
+#: libide/workbench/ide-workbench.c:564
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Builder"
@@ -2862,7 +2863,7 @@ msgstr "AST-Lesefehler"
 msgid "Failed to create translation unit: %s"
 msgstr "Die Übersetzungseinheit konnte nicht geladen werden: %s"
 
-#: plugins/clang/ide-clang-service.c:458 plugins/xml-pack/ide-xml-service.c:93
+#: plugins/clang/ide-clang-service.c:481 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "Die Datei muss zum Einlesen lokal gespeichert sein."
 
@@ -3125,11 +3126,11 @@ msgstr "Arbeitsordner konnte nicht gefunden werden"
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Ungültiger Syntaxunterbefehl: %s"
 
-#: plugins/command-bar/gb-vim.c:1147
+#: plugins/command-bar/gb-vim.c:1154
 msgid "Invalid search and replace request"
 msgstr "Ungültige Suchen-und-Ersetzen-Anfrage"
 
-#: plugins/command-bar/gb-vim.c:1253
+#: plugins/command-bar/gb-vim.c:1260
 #, c-format
 msgid "Not a command: %s"
 msgstr "Kein Befehl: %s"
@@ -3226,7 +3227,7 @@ msgid "Project Location"
 msgstr "Ort des Projekts"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:78
+#: plugins/git/ide-git-clone-widget.ui:76
 msgid "Select Project Directory"
 msgstr "Projektordner auswählen"
 
@@ -3278,6 +3279,33 @@ msgstr "Wählen Sie eine Vorlage"
 msgid "Documentation"
 msgstr "Handbuch"
 
+#: plugins/eslint/eslint_plugin/__init__.py:106
+msgid "ESlint"
+msgstr "ESLint"
+
+#: plugins/eslint/eslint_plugin/__init__.py:107
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+"Nutzung von ESLint aktivieren, womit Code in Ihrem Projekt ausgeführt werden "
+"kann"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/eslint/eslint_plugin/__init__.py:109
+msgid "eslint javascript lint code execute execution"
+msgstr "ESLint JavaScript lint Code ausführen Ausführung"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr "ESLint aktivieren"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Nutzung von ESLint für zusätzliche Fehlerdiagnosen in JavaScript-Programmen "
+"aktivieren. Das kann dazu führen, dass Code in Ihrem Projekt ausgeführt wird."
+
 #: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Wechseln zu"
@@ -3295,34 +3323,40 @@ msgstr "App klonen"
 msgid "Clone"
 msgstr "Klonen"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
+msgid "Network is not available, skipping downloads"
+msgstr "Netzwerk ist nicht verfügbar, Downloads werden übersprungen"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:119
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Installieren"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Aktualisieren"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "%u weitere Laufzeit zeigen"
 msgstr[1] "%u weitere Laufzeiten zeigen"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-Laufzeitumgebungen"
 
@@ -3365,6 +3399,30 @@ msgstr "Laufzeit wurde aktualisiert"
 msgid "Runtime has been installed"
 msgstr "Laufzeit wurde installiert"
 
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid "Your computer is missing flatpak-builder"
+msgstr "Ihrem Rechner fehlt der »Flatpak-Builder«"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+"Dieses Programm ist zum Erstellen von Flatpak-Anwendungen notwendig. Möchten "
+"Sie es installieren?"
+
+#: plugins/flatpak/gtk/menus.ui:6
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: plugins/flatpak/gtk/menus.ui:8
+msgid "_Download Dependencies"
+msgstr "_Download-Abhängigkeiten"
+
+#: plugins/flatpak/gtk/menus.ui:12
+msgid "_Export as Bundle"
+msgstr "Als Bundle _exportieren"
+
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "An Fpaste.org senden"
@@ -3390,30 +3448,30 @@ msgstr "Die Datei ist nicht unter der Kontrolle des git-Arbeitsordners"
 msgid "The requested file does not exist within the git index."
 msgstr "Die angeforderte Datei existiert nicht im git-Index."
 
-#: plugins/git/ide-git-clone-widget.c:141
-#: plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
 msgid "A valid Git URL is required"
 msgstr "Eine gültige git-Adresse wird benötigt"
 
-#: plugins/git/ide-git-clone-widget.ui:38
+#: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr ""
 "Git zum Anlegen einer lokalen Kopie des auf einem entfernten Rechner "
 "verwalteten Projekts verwenden."
 
-#: plugins/git/ide-git-clone-widget.ui:66
+#: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
 msgstr "Benutzer@Rechner:Archiv.git"
 
-#: plugins/git/ide-git-clone-widget.ui:67
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Geben Sie die URL des Quellcode-Archivs Ihres Projekts ein."
 
-#: plugins/git/ide-git-clone-widget.ui:94
+#: plugins/git/ide-git-clone-widget.ui:92
 msgid "Repository URL"
 msgstr "Adresse des Archivs"
 
-#: plugins/git/ide-git-clone-widget.ui:102
+#: plugins/git/ide-git-clone-widget.ui:100
 msgid "Project Destination"
 msgstr "Projekt-Ziel"
 
@@ -3425,14 +3483,14 @@ msgstr "Projekt klonen"
 msgid "Clone…"
 msgstr "Klonen …"
 
-#: plugins/git/ide-git-remote-callbacks.c:177
+#: plugins/git/ide-git-remote-callbacks.c:193
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
 "Builder konnte keine angemessene Legitimierung beim Klonen eines "
 "Softwarebestands liefern."
 
-#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
 msgid "Code assistance requires a local file."
 msgstr "Der Codeassistent benötigt eine lokale Datei."
 
@@ -3449,7 +3507,7 @@ msgstr ""
 #. translators: these are keywords used to search for preferences
 #: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
 msgid "pylint python lint code execute execution"
-msgstr "pylint python lint code ausführen Ausführung"
+msgstr "pylint Python lint code ausführen Ausführung"
 
 #: plugins/gnome-code-assistance/ide-gca-service.c:182
 msgid "No language specified"
@@ -3465,12 +3523,15 @@ msgid ""
 "This may result in the execution of code in your project."
 msgstr ""
 "Nutzung von Pylint für zusätzliche Fehlerdiagnosen in Python-Programmen "
-"aktivieren. Das kann dazu führen, dass Code in Ihrem Projekt ausgeführt "
-"werden kann."
+"aktivieren. Das kann dazu führen, dass Code in Ihrem Projekt ausgeführt wird."
 
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "HTML-Vorschau"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:115
+msgid "Your computer is missing python3-docutils"
+msgstr "Ihrem Rechner fehlt das Paket python3-docutils"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3812,7 +3873,7 @@ msgstr "Suche umbrechen"
 msgid "Save Terminal Content As"
 msgstr "Terminalinhalt speichern unter"
 
-#: plugins/terminal/gb-terminal-view.c:462
+#: plugins/terminal/gb-terminal-view.c:465
 msgid "Untitled terminal"
 msgstr "Unbenanntes Terminal"
 
@@ -3853,7 +3914,7 @@ msgstr "Vala Fehlerdiagnose Warnungen Fehler"
 msgid "Run with Valgrind"
 msgstr "Mit Valgrind ausführen"
 
-#: plugins/xml-pack/ide-xml-service.c:191
+#: plugins/xml-pack/ide-xml-service.c:193
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Der Puffer wurde geladen, ist aber nicht in der Pufferverwaltung vorhanden."
@@ -3863,6 +3924,9 @@ msgstr ""
 msgid "Failed to create the XML tree."
 msgstr "Der XML-Baum konnte nicht angelegt werden."
 
+#~ msgid "Build: %s"
+#~ msgstr "Erstellen: %s"
+
 #~ msgid "Wow! You’ve spent with Builder %d second!\n"
 #~ msgid_plural "Wow! You’ve spent with Builder %d seconds!\n"
 #~ msgstr[0] "Donnerwetter! Sie haben mit Builder %d Sekunde verbracht!\n"
@@ -3870,9 +3934,6 @@ msgstr "Der XML-Baum konnte nicht angelegt werden."
 
 #~ msgid "Build project (Ctrl+F7)"
 #~ msgstr "Projekt erstellen (Strg+F7)"
-
-#~ msgid "Flatpak"
-#~ msgstr "Flatpak"
 
 #~ msgid "Developer SDKs"
 #~ msgstr "Entwickler-SDKs"
