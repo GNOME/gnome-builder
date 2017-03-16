@@ -407,6 +407,61 @@ register_build_commands_stage (GbpFlatpakPipelineAddin  *self,
 }
 
 static gboolean
+register_post_install_commands_stage (GbpFlatpakPipelineAddin  *self,
+                                      IdeBuildPipeline         *pipeline,
+                                      IdeContext               *context,
+                                      GError                  **error)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeBuildStage) stage = NULL;
+  IdeConfiguration *config;
+  guint stage_id;
+  const gchar * const *post_install_commands;
+  const gchar *builddir;
+
+  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  config = ide_build_pipeline_get_configuration (pipeline);
+  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+    return TRUE;
+
+  launcher = create_subprocess_launcher ();
+
+  ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
+  ide_subprocess_launcher_push_argv (launcher, "-c");
+
+  post_install_commands = gbp_flatpak_configuration_get_post_install_commands (GBP_FLATPAK_CONFIGURATION (config));
+  if (post_install_commands == NULL)
+    return TRUE;
+  else
+    {
+      /* Join the commands so we can use one launcher */
+      g_autofree gchar *post_install_commands_joined = NULL;
+      post_install_commands_joined = g_strjoinv (" && ", (gchar **)post_install_commands);
+      ide_subprocess_launcher_push_argv (launcher, post_install_commands_joined);
+    }
+
+  builddir = ide_build_pipeline_get_builddir (pipeline);
+  if (builddir != NULL)
+    ide_subprocess_launcher_set_cwd (launcher, builddir);
+
+  stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "context", context,
+                        "launcher", launcher,
+                        NULL);
+
+  stage_id = ide_build_pipeline_connect (pipeline,
+                                         IDE_BUILD_PHASE_INSTALL | IDE_BUILD_PHASE_AFTER,
+                                         0,
+                                         stage);
+  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
+
+  return TRUE;
+}
+
+static gboolean
 register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
                              IdeBuildPipeline         *pipeline,
                              IdeContext               *context,
@@ -577,6 +632,7 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       !register_downloads_stage (self, pipeline, context, &error) ||
       !register_dependencies_stage (self, pipeline, context, &error) ||
       !register_build_commands_stage (self, pipeline, context, &error) ||
+      !register_post_install_commands_stage (self, pipeline, context, &error) ||
       !register_build_finish_stage (self, pipeline, context, &error) ||
       !register_build_bundle_stage (self, pipeline, context, &error))
     g_warning ("%s", error->message);
