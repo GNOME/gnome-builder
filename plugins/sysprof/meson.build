@@ -17,7 +17,7 @@ sysprof_sources = [
 ]
 
 sysprof_deps = plugin_deps + [
-  dependency('sysprof-ui-2', version: '>=3.21.90'),
+  dependency('sysprof-ui-2', version: '>= 3.23.91'),
 ]
 
 shared_module('sysprof-plugin', sysprof_sources,
