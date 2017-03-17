@@ -168,7 +168,7 @@ class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
         RustService.bind_client(self)
 
 class RustCompletionProvider(Ide.LangservCompletionProvider):
-    def do_load(self):
+    def do_load(self, context):
         RustService.bind_client(self)
 
 class RustRenameProvider(Ide.LangservRenameProvider):
