@@ -946,6 +946,19 @@ ide_langserv_client_start (IdeLangservClient *self)
 }
 
 static void
+ide_langserv_client_close_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  g_autoptr(IdeLangservClient) self = user_data;
+  JsonrpcClient *client = (JsonrpcClient *)object;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (self));
+
+  jsonrpc_client_close_finish (client, result, NULL);
+}
+
+static void
 ide_langserv_client_shutdown_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
@@ -961,8 +974,11 @@ ide_langserv_client_shutdown_cb (GObject      *object,
 
   if (!jsonrpc_client_call_finish (client, result, NULL, &error))
     g_warning ("%s", error->message);
-
-  jsonrpc_client_close_async (client, NULL, NULL, NULL);
+  else
+    jsonrpc_client_close_async (client,
+                                NULL,
+                                ide_langserv_client_close_cb,
+                                g_object_ref (self));
 
   IDE_EXIT;
 }
@@ -1004,6 +1020,7 @@ ide_langserv_client_call_cb (GObject      *object,
 
   g_assert (JSONRPC_IS_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
 
   if (!jsonrpc_client_call_finish (client, result, &return_value, &error))
     {
@@ -1039,6 +1056,11 @@ ide_langserv_client_call_async (IdeLangservClient   *self,
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (method != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (!priv->rpc_client || JSONRPC_IS_CLIENT (priv->rpc_client));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_langserv_client_call_async);

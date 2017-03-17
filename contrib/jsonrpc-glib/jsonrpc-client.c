@@ -474,23 +474,31 @@ jsonrpc_client_new (GIOStream *io_stream)
 }
 
 static void
-jsonrpc_client_call_notify_completed (GTask      *task,
-                                      GParamSpec *pspec,
-                                      gpointer    user_data)
+jsonrpc_client_remove_from_invocatoins (JsonrpcClient *self,
+                                        GTask         *task)
 {
-  JsonrpcClientPrivate *priv;
-  JsonrpcClient *self;
+  JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
   gpointer id;
 
+  g_assert (JSONRPC_IS_CLIENT (self));
   g_assert (G_IS_TASK (task));
-  g_assert (pspec != NULL);
-  g_assert (g_str_equal (pspec->name, "completed"));
 
-  self = g_task_get_source_object (task);
-  priv = jsonrpc_client_get_instance_private (self);
   id = g_task_get_task_data (task);
 
   g_hash_table_remove (priv->invocations, id);
+}
+
+static void
+jsonrpc_client_call_notify_completed (JsonrpcClient *self,
+                                      GParamSpec    *pspec,
+                                      GTask         *task)
+{
+  g_assert (JSONRPC_IS_CLIENT (self));
+  g_assert (pspec != NULL);
+  g_assert (g_str_equal (pspec->name, "completed"));
+  g_assert (G_IS_TASK (task));
+
+  jsonrpc_client_remove_from_invocatoins (self, task);
 }
 
 static void
@@ -501,12 +509,20 @@ jsonrpc_client_call_write_cb (GObject      *object,
   JsonrpcOutputStream *stream = (JsonrpcOutputStream *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  JsonrpcClient *self;
 
   g_assert (JSONRPC_IS_OUTPUT_STREAM (stream));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  g_assert (JSONRPC_IS_CLIENT (self));
+
+  jsonrpc_client_remove_from_invocatoins (self, task);
 
   if (!jsonrpc_output_stream_write_message_finish (stream, result, &error))
     {
+      jsonrpc_client_panic (self, error);
       g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
@@ -838,10 +854,11 @@ jsonrpc_client_call_async (JsonrpcClient       *self,
       return;
     }
 
-  g_signal_connect (task,
-                    "notify::completed",
-                    G_CALLBACK (jsonrpc_client_call_notify_completed),
-                    NULL);
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (jsonrpc_client_call_notify_completed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   id = ++priv->sequence;
 
