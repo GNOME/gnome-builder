@@ -1,0 +1,39 @@
+From dc9d5e6df0c30341b99302a085d4fc8269a82942 Mon Sep 17 00:00:00 2001
+From: Christian Hergert <chergert@redhat.com>
+Date: Fri, 17 Mar 2017 13:35:14 -0700
+Subject: [PATCH] workaround deadlocks in type initialization
+
+---
+ gtksourceview/gtksourcefileloader.c | 2 ++
+ gtksourceview/gtksourcefilesaver.c  | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/gtksourceview/gtksourcefileloader.c b/gtksourceview/gtksourcefileloader.c
+index 0376b9b6..5bd11abe 100644
+--- a/gtksourceview/gtksourcefileloader.c
++++ b/gtksourceview/gtksourcefileloader.c
+@@ -447,6 +447,8 @@ gtk_source_file_loader_class_init (GtkSourceFileLoaderClass *klass)
+ 							      G_PARAM_READWRITE |
+ 							      G_PARAM_CONSTRUCT_ONLY |
+ 							      G_PARAM_STATIC_STRINGS));
++
++	g_type_ensure (GTK_SOURCE_TYPE_BUFFER_OUTPUT_STREAM);
+ }
+ 
+ static void
+diff --git a/gtksourceview/gtksourcefilesaver.c b/gtksourceview/gtksourcefilesaver.c
+index dd75e091..0e3f20f9 100644
+--- a/gtksourceview/gtksourcefilesaver.c
++++ b/gtksourceview/gtksourcefilesaver.c
+@@ -464,6 +464,8 @@ gtk_source_file_saver_class_init (GtkSourceFileSaverClass *klass)
+ 							     G_PARAM_READWRITE |
+ 							     G_PARAM_CONSTRUCT |
+ 							     G_PARAM_STATIC_STRINGS));
++
++	g_type_ensure (GTK_SOURCE_TYPE_BUFFER_INPUT_STREAM);
+ }
+ 
+ static void
+-- 
+2.12.0
+
