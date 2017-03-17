@@ -4,22 +4,23 @@
 # Alexandre Franke <alexandre.franke@gmail.com>, 2015-2016.
 # Yannick Inizan <inizan.yannick@gmail.com>, 2015.
 # Laurent de Burlet <thevedeburlet@gmail.com>, 2016.
+# Guillaume Bernard <contact.guib@laposte.net>, 2017
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-02 23:19+0000\n"
-"PO-Revision-Date: 2016-09-29 10:39+0300\n"
-"Last-Translator: Laurent de Burlet <thevedeburlet@gmail.com>\n"
+"POT-Creation-Date: 2017-03-16 21:50+0000\n"
+"PO-Revision-Date: 2017-03-16 23:05+0100\n"
+"Last-Translator: Guillaume Bernard <contact.guib@laposte.net>\n"
 "Language-Team: français <>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -67,10 +68,10 @@ msgstr[1] "Il y a environ %u ans"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:683
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:305
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
 msgid "Open"
 msgstr "Ouvrir"
 
@@ -99,12 +100,12 @@ msgstr "Parcourir…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:680
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
 #: plugins/color-picker/gb-color-picker-prefs.c:241
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:306
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
 #: plugins/terminal/gb-terminal-view-actions.c:305
 msgid "Cancel"
 msgstr "Annuler"
@@ -292,7 +293,7 @@ msgid "Palettes"
 msgstr "Palettes"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:946
-#: plugins/color-picker/gtk/color-picker.ui:48
+#: plugins/color-picker/gtk/color-picker.ui:49
 msgid "No open palettes"
 msgstr "Aucune palette ouverte"
 
@@ -301,7 +302,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Charger ou générer une palette selon les préférences"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5855
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renommer"
@@ -336,8 +337,7 @@ msgid "Must parse template before expanding"
 msgstr "Le modèle doit être analysé avant d'être étendu"
 
 #: contrib/tmpl/tmpl-template-locator.c:105
-#, fuzzy, c-format
-#| msgid "Failed to locate template \"%s\""
+#, c-format
 msgid "Failed to locate template “%s”"
 msgstr "Impossible de trouver le modèle « %s »"
 
@@ -771,7 +771,7 @@ msgstr "Mise en surbrillance"
 
 #: data/gtk/menus.ui:153 data/gtk/menus.ui:206
 msgid "Spellchecking"
-msgstr ""
+msgstr "Vérification orthographique"
 
 #: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
 msgid "Selection"
@@ -879,14 +879,14 @@ msgstr "_Fermer"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:516
+#: libide/application/ide-application.c:547
 #: libide/preferences/ide-preferences-builtin.c:144
-#: libide/workbench/ide-workbench.c:565
+#: libide/workbench/ide-workbench.c:566
 msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:116
+#: libide/application/ide-application-actions.c:130
 msgid "An IDE for GNOME"
 msgstr "Un EDI pour GNOME"
 
@@ -970,7 +970,8 @@ msgstr "Prise en charge de la construction avec jhbuild"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
 msgid "Preview support for building with Flatpak runtimes"
-msgstr "Prise en charge pour la construction d'exécutables Flatpak (pré-version)"
+msgstr ""
+"Prise en charge pour la construction d'exécutables Flatpak (pré-version)"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
 msgid "Fast global search"
@@ -994,22 +995,23 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Construire;Développer;"
 
-#: libide/application/ide-application-actions.c:122
+#: libide/application/ide-application-actions.c:136
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:124
+#: libide/application/ide-application-actions.c:138
 msgid "translator-credits"
 msgstr ""
-"Alexandre Franke <alexandre.franke@gmail.com>, 2015-2016\n"
+"Alexandre Franke <alexandre.franke@gmail.com>, 2015-2017\n"
 "Yannick Inizan <inizan.yannick@gmail.com>, 2015\n"
-"Laurent de Burlet <thevedeburlet@gmail.com>, 2016"
+"Laurent de Burlet <thevedeburlet@gmail.com>, 2016\n"
+"Guillaume Bernard <contact.guib@laposte.net>, 2017"
 
-#: libide/application/ide-application-actions.c:127
+#: libide/application/ide-application-actions.c:142
 msgid "Learn more about GNOME Builder"
 msgstr "En apprendre plus sur GNOME Builder"
 
-#: libide/application/ide-application-actions.c:130
+#: libide/application/ide-application-actions.c:145
 msgid "Funded By"
 msgstr "Financé par"
 
@@ -1026,7 +1028,7 @@ msgid "Run Builder in standalone mode"
 msgstr "Lancer Builder en mode autonome"
 
 #: libide/application/ide-application-command-line.c:201
-msgid "Show the application's version"
+msgid "Show the application’s version"
 msgstr "Montrer la version de l'application"
 
 #: libide/application/ide-application-command-line.c:220
@@ -1042,19 +1044,17 @@ msgid "Opens the project specified by PATH"
 msgstr "Ouvre le projet indiqué par CHEMIN"
 
 #: libide/application/ide-application-command-line.c:235
-#: plugins/build-tools/gbp-build-tool.c:301
+#: libide/buildui/ide-build-tool.c:282
 msgid "PATH"
 msgstr "CHEMIN"
 
 #: libide/application/ide-application-command-line.c:242
-#, fuzzy
-#| msgid "Opens the project specified by PATH"
 msgid "Clones the project specified by MANIFEST"
-msgstr "Ouvre le projet indiqué par CHEMIN"
+msgstr "Clone le projet indiqué par MANIFESTE"
 
 #: libide/application/ide-application-command-line.c:243
 msgid "MANIFEST"
-msgstr ""
+msgstr "MANIFESTE"
 
 #: libide/application/ide-application-command-line.c:273
 msgid "COMMAND"
@@ -1084,53 +1084,317 @@ msgstr "Veuillez fournir une adresse D-Bus"
 msgid "No such worker"
 msgstr "Pas de constructeur de ce type"
 
-#: libide/buffers/ide-buffer.c:2458
+#: libide/buffers/ide-buffer.c:2476
 msgid "The current language lacks a symbol resolver."
 msgstr "Le langage actuel ne possède pas de résolveur de symboles."
 
-#: libide/buffers/ide-buffer-manager.c:673
+#: libide/buffers/ide-buffer-manager.c:672
 msgid "File too large to be opened."
 msgstr "Fichier trop grand pour être ouvert."
 
-#: libide/buffers/ide-buffer-manager.c:1762
+#: libide/buffers/ide-buffer-manager.c:1764
 #, c-format
 msgid "unsaved document %u"
 msgstr "document non enregistré %u"
 
-#: libide/buffers/ide-buffer-manager.c:1796
+#: libide/buffers/ide-buffer-manager.c:1798
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Impossible d'enregistrer le tampon, réclamation ignorée."
 
-#: libide/buildsystem/ide-builder.c:105
-#, c-format
-msgid "%s does not support building"
-msgstr "%s ne prend pas en charge la construction"
+#: libide/buildsystem/ide-build-pipeline.c:2091
+msgid "Cleaning…"
+msgstr "Nettoyage…"
 
-#: libide/buildsystem/ide-build-manager.c:498
-msgid "A build is already in progress"
-msgstr "Une construction est déjà en cours"
+#: libide/buildsystem/ide-build-pipeline.c:2106
+msgid "Downloading…"
+msgstr "Téléchargement…"
 
-#: libide/buildsystem/ide-build-manager.c:912
+#: libide/buildsystem/ide-build-pipeline.c:2110
+msgid "Building dependencies…"
+msgstr "Construction des dépendances…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2114
+msgid "Bootstrapping…"
+msgstr "Amorçage…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2118
+msgid "Configuring…"
+msgstr "Configuration…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2122
+msgid "Building…"
+msgstr "Construction…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2126
+msgid "Installing…"
+msgstr "Installation…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2130
+msgid "Exporting…"
+msgstr "Exportation…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2134
+#: libide/buildsystem/ide-build-pipeline.c:2138
+msgid "Success"
+msgstr "Succès"
+
+#: libide/buildsystem/ide-build-pipeline.c:2142
+#: libide/workbench/ide-omni-bar.ui:332
+msgid "Failed"
+msgstr "Échec"
+
+#: libide/buildsystem/ide-build-pipeline.c:2146
+msgid "Preparing…"
+msgstr "Préparation…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2150
 msgid "Ready"
 msgstr "Prêt"
 
-#: libide/buildsystem/ide-build-result.c:276
-msgid "Failed to open stderr stream."
-msgstr "Impossible d'ouvrir le flux d'erreur standard."
-
-#: libide/buildsystem/ide-build-result.c:306
-msgid "Failed to open stdout stream."
-msgstr "Impossible d'ouvrir le flux de sortie standard."
-
-#: libide/buildsystem/ide-configuration-manager.c:485
+#: libide/buildsystem/ide-configuration-manager.c:76
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
 msgstr "Défaut"
 
-#: libide/devices/ide-device-manager.c:147
-#, fuzzy, c-format
-#| msgid "The device \"%s\" could not be found."
+#: libide/buildui/ide-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr "Dupliquer la configuration"
+
+#: libide/buildui/ide-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr "Supprimer la configuration"
+
+#: libide/buildui/ide-build-configuration-view.ui:11
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+msgid "General"
+msgstr "Général"
+
+#: libide/buildui/ide-build-configuration-view.ui:28
+msgid "The name of the build configuration"
+msgstr "Le nom de la configuration de construction"
+
+#: libide/buildui/ide-build-configuration-view.ui:37
+msgid "Name"
+msgstr "Nom"
+
+#: libide/buildui/ide-build-configuration-view.ui:58
+msgid "The prefix to use when installing the project"
+msgstr "Le préfixe à utiliser lors de l'installation du projet"
+
+#: libide/buildui/ide-build-configuration-view.ui:67
+msgid "Installation Prefix"
+msgstr "Préfixe d'installation"
+
+#: libide/buildui/ide-build-configuration-view.ui:88
+msgid "Options to use when bootstrapping the project"
+msgstr "Options à utiliser lors de l'initialisation du projet"
+
+#: libide/buildui/ide-build-configuration-view.ui:97
+msgid "Configure Options"
+msgstr "Configurer les options"
+
+#: libide/buildui/ide-build-configuration-view.ui:129
+#: libide/workbench/ide-omni-bar-row.ui:54
+msgid "Device"
+msgstr "Périphérique"
+
+#: libide/buildui/ide-build-configuration-view.ui:157
+#: libide/workbench/ide-omni-bar-row.ui:85
+msgid "Runtime"
+msgstr "Exécutable"
+
+#: libide/buildui/ide-build-configuration-view.ui:185
+msgid "Environment"
+msgstr "Environnement"
+
+#: libide/buildui/ide-build-log-panel.c:732
+msgid "Build Output"
+msgstr "Sortie de la construction"
+
+#: libide/buildui/ide-build-log-panel.ui:25
+msgid "Clear build log"
+msgstr "Effacer le journal de construction"
+
+#: libide/buildui/ide-build-log-panel.ui:42
+#: libide/workbench/ide-omni-bar.ui:133
+msgid "Cancel build"
+msgstr "Annuler la construction"
+
+#: libide/buildui/ide-build-panel.c:86
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d avertissement"
+msgstr[1] "%d avertissements"
+
+#: libide/buildui/ide-build-panel.c:95
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d erreur"
+msgstr[1] "%d erreurs"
+
+#: libide/buildui/ide-build-panel.c:521
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:386
+msgid "Build"
+msgstr "Construire"
+
+#: libide/buildui/ide-build-panel.ui:33
+msgid "Status:"
+msgstr "État :"
+
+#: libide/buildui/ide-build-panel.ui:58
+msgid "Running Time:"
+msgstr "Durée d'exécution :"
+
+#: libide/buildui/ide-build-panel.ui:82
+msgid "Warnings:"
+msgstr "Avertissements :"
+
+#: libide/buildui/ide-build-panel.ui:106
+msgid "Errors:"
+msgstr "Erreurs :"
+
+#: libide/buildui/ide-build-panel.ui:149
+msgid "No Diagnostics"
+msgstr "Aucun diagnostique"
+
+#. the action:// link is used to execute a build
+#: libide/buildui/ide-build-panel.ui:150
+msgid ""
+"<a href=\"action://build-manager.build\">Build your project</a> to show "
+"diagnostics here"
+msgstr ""
+"<a href=\"action://build-manager.build\">Construire le projet</a> pour "
+"afficher les diagnostiques"
+
+#: libide/buildui/ide-build-perspective.c:438
+msgid "Build Preferences"
+msgstr "Préférences de construction"
+
+#: libide/buildui/ide-build-tool.c:103 libide/buildui/ide-build-tool.c:116
+msgid "========================\n"
+msgstr "========================\n"
+
+#: libide/buildui/ide-build-tool.c:104
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Nom du projet: %s\n"
+
+#: libide/buildui/ide-build-tool.c:105
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " Système de contrôle de version : %s\n"
+
+#: libide/buildui/ide-build-tool.c:106
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Système de construction : %s\n"
+
+#: libide/buildui/ide-build-tool.c:107
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Date et heure de construction : %s\n"
+
+#: libide/buildui/ide-build-tool.c:108
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Construction pour le périphérique : %s (%s)\n"
+
+#: libide/buildui/ide-build-tool.c:113
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "            Environnement : %s\n"
+
+#: libide/buildui/ide-build-tool.c:143 libide/buildui/ide-build-tool.c:147
+msgid "===============\n"
+msgstr "===============\n"
+
+#: libide/buildui/ide-build-tool.c:144
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " Échec de la construction : %s\n"
+
+#: libide/buildui/ide-build-tool.c:145
+msgid " Build ran for: %"
+msgstr " Durée de construction : %"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: libide/buildui/ide-build-tool.c:158 libide/buildui/ide-build-tool.c:162
+msgid "=================\n"
+msgstr "=================\n"
+
+#: libide/buildui/ide-build-tool.c:159
+msgid " Build Successful\n"
+msgstr " Construction terminée\n"
+
+#: libide/buildui/ide-build-tool.c:160
+msgid "   Build ran for: %"
+msgstr " Durée de construction : %"
+
+#: libide/buildui/ide-build-tool.c:212
+#, c-format
+msgid "Failed to locate device “%s”"
+msgstr "Échec de la localisation du périphérique « %s »"
+
+#: libide/buildui/ide-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime “%s”"
+msgstr "Échec de la localisation de l'exécutable « %s »"
+
+#: libide/buildui/ide-build-tool.c:267
+msgid "Clean the project"
+msgstr "Nettoyer le projet."
+
+#: libide/buildui/ide-build-tool.c:269
+msgid "The ID of the device to build for"
+msgstr "L'ID du périphérique pour lequel construire"
+
+#: libide/buildui/ide-build-tool.c:270
+msgid "local"
+msgstr "local"
+
+#: libide/buildui/ide-build-tool.c:272
+msgid "The runtime to use for building"
+msgstr "L'exécutable à utiliser pour la construction"
+
+#: libide/buildui/ide-build-tool.c:273
+msgid "host"
+msgstr "hôte"
+
+#: libide/buildui/ide-build-tool.c:275
+msgid "Number of workers to use when building"
+msgstr "Nombre de constructeurs à utiliser lors de la construction"
+
+#: libide/buildui/ide-build-tool.c:276
+msgid "N"
+msgstr "N"
+
+#: libide/buildui/ide-build-tool.c:278
+msgid "The configuration to use from .buildconfig"
+msgstr "La configuration à utiliser dans .buildconfig"
+
+#: libide/buildui/ide-build-tool.c:279
+msgid "CONFIG_ID"
+msgstr "ID_CONFIG"
+
+#: libide/buildui/ide-build-tool.c:281
+msgid "Path to project file, defaults to current directory"
+msgstr "Chemin vers le fichier de projet, répertoire courant par défaut"
+
+#: libide/buildui/ide-environment-editor.c:67
+msgid "New variable…"
+msgstr "Nouvelle variable…"
+
+#: libide/devices/ide-device-manager.c:148
+#, c-format
 msgid "The device “%s” could not be found."
 msgstr "Impossible de trouver le périphérique « %s »."
 
@@ -1170,6 +1434,7 @@ msgid "Switch between Search and Search-and-Replace"
 msgstr "Basculer entre Rechercher et Rechercher-et-remplacer"
 
 #: libide/editor/ide-editor-frame.ui:224
+#: plugins/terminal/gb-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Afficher ou cacher les options de recherche telles que la sensibilité à la "
@@ -1180,6 +1445,7 @@ msgid "Regular expressions"
 msgstr "Expressions régulières"
 
 #: libide/editor/ide-editor-frame.ui:300
+#: plugins/terminal/gb-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "Sensible à la casse"
 
@@ -1231,102 +1497,89 @@ msgstr ""
 "Essayez d'ouvrir un fichier en tapant dans la boîte de recherche en haut"
 
 #: libide/editor/ide-editor-spell-language-popover.c:232
-#, fuzzy
-#| msgid "No language specified"
 msgid "No language selected"
-msgstr "Pas de langage précisé"
+msgstr "Pas de langue sélectionnée"
 
 #: libide/editor/ide-editor-spell-navigator.c:458
 msgid ""
 "Spell checker error: no language set. It’s maybe because no dictionaries are "
 "installed."
 msgstr ""
+"Erreur lors de la vérification orthographique : aucune langue définie. Il se "
+"peut qu'aucun dictionnaire ne soit installé."
 
 #: libide/editor/ide-editor-spell-widget.c:201
 msgid "No suggestions"
-msgstr ""
+msgstr "Aucune suggestion"
 
 #: libide/editor/ide-editor-spell-widget.c:278
 msgid "Completed spell checking"
-msgstr ""
+msgstr "Vérification orthographique terminée"
 
 #: libide/editor/ide-editor-spell-widget.c:636
 msgid "This word is already in the personal dictionary"
-msgstr ""
+msgstr "Ce mot est déjà dans le dictionnaire personnel"
 
 #: libide/editor/ide-editor-spell-widget.c:639
 #, c-format
 msgid "This word is already in the %s dictionary"
-msgstr ""
+msgstr "Ce mot est déjà dans le dictionnaire %s"
 
 #: libide/editor/ide-editor-spell-widget.c:1270
 msgid "The word is not in the dictionary"
-msgstr ""
+msgstr "Le mot n'est pas dans le dictionnaire"
 
 #: libide/editor/ide-editor-spell-widget.ui:14
 msgid "Misspelled"
-msgstr ""
+msgstr "Mal orthographié"
 
 #: libide/editor/ide-editor-spell-widget.ui:65
 msgid "_Ignore"
-msgstr ""
+msgstr "_Ignorer"
 
 #: libide/editor/ide-editor-spell-widget.ui:73
-#, fuzzy
-#| msgid "Save _All"
 msgid "Ignore _All"
-msgstr "Enregistrer _tout"
+msgstr "_Tout ignorer"
 
 #: libide/editor/ide-editor-spell-widget.ui:92
 msgid "Change _to"
-msgstr ""
+msgstr "Modifier _en"
 
 #: libide/editor/ide-editor-spell-widget.ui:124
 msgid "Cha_nge"
-msgstr ""
+msgstr "_Modifier"
 
 #: libide/editor/ide-editor-spell-widget.ui:132
 msgid "Change A_ll"
-msgstr ""
+msgstr "_Tout modifier"
 
 #: libide/editor/ide-editor-spell-widget.ui:151
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Selections"
 msgid "_Suggestions"
-msgstr "Sélections"
+msgstr "_Suggestions"
 
 #: libide/editor/ide-editor-spell-widget.ui:188
-#, fuzzy
-#| msgid "Words"
 msgid "Add Word"
-msgstr "Mots"
+msgstr "Ajouter le mot"
 
 #: libide/editor/ide-editor-spell-widget.ui:213
 msgid "A_dd"
-msgstr ""
+msgstr "Aj_outer"
 
 #: libide/editor/ide-editor-spell-widget.ui:229
 msgid "Dictionary"
-msgstr ""
+msgstr "Dictionnaire"
 
 #: libide/editor/ide-editor-spell-widget.ui:267
-#, fuzzy
-#| msgid "Display Options"
 msgid "Options"
-msgstr "Options d'affichage"
+msgstr "Options"
 
 #: libide/editor/ide-editor-spell-widget.ui:292
-#, fuzzy
-#| msgid "Language"
 msgid "_Language"
-msgstr "Langage"
+msgstr "_Langue"
 
 #: libide/editor/ide-editor-spell-widget.ui:319
-#, fuzzy
-#| msgid "Highlight"
 msgid "_Highlight"
-msgstr "Surbrillance"
+msgstr "_Surbrillance"
 
 #: libide/editor/ide-editor-tweak-widget.ui:22
 msgid "Search highlight mode…"
@@ -1390,7 +1643,7 @@ msgstr "_Recharger"
 #: libide/editor/ide-editor-view.ui:31
 #: libide/greeter/ide-greeter-perspective.ui:317
 #: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:353
+#: libide/workbench/ide-omni-bar.ui:360
 msgid "_Cancel"
 msgstr "A_nnuler"
 
@@ -1402,13 +1655,17 @@ msgstr ""
 "Builder a détecté que ce fichier a été modifié par une application externe. "
 "Voulez-vous recharger ce fichier ?"
 
-#: libide/greeter/ide-greeter-perspective.c:456
+#: libide/greeter/ide-greeter-perspective.c:457
 msgid "Failed to load the project"
 msgstr "Échec de chargement du projet"
 
-#: libide/greeter/ide-greeter-perspective.c:676
+#: libide/greeter/ide-greeter-perspective.c:678
 msgid "Open Project"
 msgstr "Ouvrir un projet"
+
+#: libide/greeter/ide-greeter-perspective.c:694
+msgid "All Project Types"
+msgstr "Tous les types de projets"
 
 #. the action:// link is used to jump to the new-project view
 #: libide/greeter/ide-greeter-perspective.ui:52
@@ -1464,8 +1721,7 @@ msgid "%s contained invalid ASCII"
 msgstr "%s contient des caractères ASCII invalides"
 
 #: libide/gsettings/ide-language-defaults.c:193
-#, fuzzy, c-format
-#| msgid "Failed to parse integer from \"%s\""
+#, c-format
 msgid "Failed to parse integer from “%s”"
 msgstr "Impossible d'analyser un entier depuis « %s »"
 
@@ -1482,29 +1738,28 @@ msgstr "Échec à l'initialisation des options par défaut."
 msgid "You must call %s() before using libide."
 msgstr "Vous devez appeler %s() avant d'utiliser libide."
 
-#: libide/ide-context.c:1863
+#: libide/ide-context.c:2017
 msgid "An unload request is already pending"
 msgstr "Une requète de déchargement est déjà en attente"
 
-#: libide/ide-context.c:1982
+#: libide/ide-context.c:2136
 msgid "Context has already been restored."
 msgstr "Le contexte a déjà été restauré."
 
-#: libide/ide-object.c:288
-#, fuzzy, c-format
-#| msgid "No implementations of extension point \"%s\"."
+#: libide/ide-object.c:304
+#, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "Pas d'implémentation du point d'extension « %s »."
 
-#: libide/ide-object.c:380
+#: libide/ide-object.c:396
 msgid "Failed to locate build system plugin."
 msgstr "Échec de la localisation du greffon du système de construction"
 
-#: libide/ide-object.c:467
+#: libide/ide-object.c:493
 msgid "No such extension point."
 msgstr "Point d'extension inexistant."
 
-#: libide/ide-object.c:477
+#: libide/ide-object.c:503
 msgid "No implementations of extension point."
 msgstr "Pas d'implémentation du point d'extension."
 
@@ -1514,327 +1769,337 @@ msgid "Editor Shortcuts"
 msgstr "Raccourcis de l'éditeur"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:445
+#: libide/keybindings/ide-shortcuts-window.ui:452
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Général"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:449
+#: libide/keybindings/ide-shortcuts-window.ui:456
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Recherche globale"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:456
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Préférences"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:463
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barre de commande"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:470
+#: libide/keybindings/ide-shortcuts-window.ui:477
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:477
+#: libide/keybindings/ide-shortcuts-window.ui:484
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr "Terminal dans l'environnement d'exécution"
+
+#: libide/keybindings/ide-shortcuts-window.ui:53
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Raccourcis clavier"
 
-#: libide/keybindings/ide-shortcuts-window.ui:55
+#: libide/keybindings/ide-shortcuts-window.ui:62
 msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Panneaux"
 
-#: libide/keybindings/ide-shortcuts-window.ui:59
+#: libide/keybindings/ide-shortcuts-window.ui:66
 msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Basculer le panneau de gauche"
 
-#: libide/keybindings/ide-shortcuts-window.ui:66
+#: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Basculer le panneau de droite"
 
-#: libide/keybindings/ide-shortcuts-window.ui:73
+#: libide/keybindings/ide-shortcuts-window.ui:80
 msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Basculer le panneau du bas"
 
-#: libide/keybindings/ide-shortcuts-window.ui:82
+#: libide/keybindings/ide-shortcuts-window.ui:89
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Gestes du pavé tactile"
 
-#: libide/keybindings/ide-shortcuts-window.ui:87
-#: libide/keybindings/ide-shortcuts-window.ui:135
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Passer au document suivant"
 
-#: libide/keybindings/ide-shortcuts-window.ui:94
-#: libide/keybindings/ide-shortcuts-window.ui:142
+#: libide/keybindings/ide-shortcuts-window.ui:101
+#: libide/keybindings/ide-shortcuts-window.ui:149
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Passer au document précédent"
 
-#: libide/keybindings/ide-shortcuts-window.ui:102
+#: libide/keybindings/ide-shortcuts-window.ui:109
 msgctxt "shortcut window"
 msgid "Files"
 msgstr "Fichiers"
 
-#: libide/keybindings/ide-shortcuts-window.ui:107
+#: libide/keybindings/ide-shortcuts-window.ui:114
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Créer un nouveau document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:114
+#: libide/keybindings/ide-shortcuts-window.ui:121
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Ouvrir un document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:121
+#: libide/keybindings/ide-shortcuts-window.ui:128
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Enregistrer le document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:128
+#: libide/keybindings/ide-shortcuts-window.ui:135
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Fermer le document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:149
+#: libide/keybindings/ide-shortcuts-window.ui:156
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Afficher la liste des documents ouverts"
 
-#: libide/keybindings/ide-shortcuts-window.ui:157
-#: libide/keybindings/ide-shortcuts-window.ui:169
+#: libide/keybindings/ide-shortcuts-window.ui:164
+#: libide/keybindings/ide-shortcuts-window.ui:176
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Rechercher et remplacer"
 
-#: libide/keybindings/ide-shortcuts-window.ui:162
+#: libide/keybindings/ide-shortcuts-window.ui:169
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Rechercher"
 
-#: libide/keybindings/ide-shortcuts-window.ui:176
+#: libide/keybindings/ide-shortcuts-window.ui:183
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Rechercher la prochaine occurence"
 
-#: libide/keybindings/ide-shortcuts-window.ui:183
+#: libide/keybindings/ide-shortcuts-window.ui:190
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Rechercher l'occurence précédente"
 
-#: libide/keybindings/ide-shortcuts-window.ui:190
+#: libide/keybindings/ide-shortcuts-window.ui:197
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Effacer la mise en surbrillance"
 
-#: libide/keybindings/ide-shortcuts-window.ui:198
-#: libide/keybindings/ide-shortcuts-window.ui:486
+#: libide/keybindings/ide-shortcuts-window.ui:205
+#: libide/keybindings/ide-shortcuts-window.ui:500
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Copier et coller"
 
-#: libide/keybindings/ide-shortcuts-window.ui:203
-#: libide/keybindings/ide-shortcuts-window.ui:491
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:505
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Copier le texte sélectionné vers le presse-papier"
 
-#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:217
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Couper le texte sélectionné vers le presse-papier"
 
-#: libide/keybindings/ide-shortcuts-window.ui:217
-#: libide/keybindings/ide-shortcuts-window.ui:498
+#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Coller le texte contenu dans le presse-papier"
 
-#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:231
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Dupliquer la ligne actuelle ou la sélection"
 
-#: libide/keybindings/ide-shortcuts-window.ui:232
+#: libide/keybindings/ide-shortcuts-window.ui:239
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Annuler et refaire"
 
-#: libide/keybindings/ide-shortcuts-window.ui:237
+#: libide/keybindings/ide-shortcuts-window.ui:244
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Annuler la commande précédente"
 
-#: libide/keybindings/ide-shortcuts-window.ui:244
+#: libide/keybindings/ide-shortcuts-window.ui:251
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Refaire la commande précédente"
 
-#: libide/keybindings/ide-shortcuts-window.ui:252
+#: libide/keybindings/ide-shortcuts-window.ui:259
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Modification"
 
-#: libide/keybindings/ide-shortcuts-window.ui:257
+#: libide/keybindings/ide-shortcuts-window.ui:264
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Incrémenter le nombre sous le curseur"
 
-#: libide/keybindings/ide-shortcuts-window.ui:264
+#: libide/keybindings/ide-shortcuts-window.ui:271
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Décrémenter le nombre sous le curseur"
 
-#: libide/keybindings/ide-shortcuts-window.ui:271
+#: libide/keybindings/ide-shortcuts-window.ui:278
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Joindre les lignes sélectionnées"
 
-#: libide/keybindings/ide-shortcuts-window.ui:278
+#: libide/keybindings/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Montrer la fenêtre d'avancement"
 
-#: libide/keybindings/ide-shortcuts-window.ui:285
+#: libide/keybindings/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Basculer l'écrasement"
 
-#: libide/keybindings/ide-shortcuts-window.ui:292
+#: libide/keybindings/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Réindenter la ligne"
 
-#: libide/keybindings/ide-shortcuts-window.ui:299
-#, fuzzy
-#| msgid "_Delete"
+#: libide/keybindings/ide-shortcuts-window.ui:306
 msgctxt "shortcut window"
 msgid "Delete line"
-msgstr "_Supprimer"
+msgstr "Supprimer la ligne"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
-#, fuzzy
-#| msgid "Rename %s"
+#: libide/keybindings/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Rename symbol"
-msgstr "Renommer %s"
+msgstr "Renommer le symbole"
 
-#: libide/keybindings/ide-shortcuts-window.ui:307
-#, fuzzy
-#| msgid "The target language (if supported)"
+#: libide/keybindings/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
-msgstr "Le langage cible (si pris en charge)"
+msgstr "Requiert la prise en charge sémantique du langage"
 
-#: libide/keybindings/ide-shortcuts-window.ui:315
+#: libide/keybindings/ide-shortcuts-window.ui:322
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigation"
 
-#: libide/keybindings/ide-shortcuts-window.ui:320
+#: libide/keybindings/ide-shortcuts-window.ui:327
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Aller à la prochaine erreur du fichier"
 
-#: libide/keybindings/ide-shortcuts-window.ui:327
+#: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Aller à l'erreur précédente du fichier"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Aller à l'emplacement d'édition précédent"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Aller à l'emplacement d'édition suivant"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Aller à la définition du symbole"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Déplacer la vue vers le haut à l'intérieur du document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Déplacer la vue vers le bas à l'intérieur du document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Déplacer la vue à la fin du document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:376
+#: libide/keybindings/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Déplacer la vue au début du document"
 
-#: libide/keybindings/ide-shortcuts-window.ui:383
+#: libide/keybindings/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Aller à l'accolade correspondante"
 
-#: libide/keybindings/ide-shortcuts-window.ui:391
+#: libide/keybindings/ide-shortcuts-window.ui:398
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Sélections"
 
-#: libide/keybindings/ide-shortcuts-window.ui:396
+#: libide/keybindings/ide-shortcuts-window.ui:403
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Tout sélectionner"
 
-#: libide/keybindings/ide-shortcuts-window.ui:403
+#: libide/keybindings/ide-shortcuts-window.ui:410
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Tout désélectionner"
 
-#: libide/keybindings/ide-shortcuts-window.ui:411
+#: libide/keybindings/ide-shortcuts-window.ui:418
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construire et exécuter"
 
-#: libide/keybindings/ide-shortcuts-window.ui:416
+#: libide/keybindings/ide-shortcuts-window.ui:423
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Construire"
 
-#: libide/keybindings/ide-shortcuts-window.ui:423
+#: libide/keybindings/ide-shortcuts-window.ui:430
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Exécuter"
 
-#: libide/keybindings/ide-shortcuts-window.ui:430
+#: libide/keybindings/ide-shortcuts-window.ui:437
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profiler"
 
-#: libide/keybindings/ide-shortcuts-window.ui:441
+#: libide/keybindings/ide-shortcuts-window.ui:448
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Raccourcis du Terminal"
+
+#: libide/keybindings/ide-shortcuts-window.ui:520
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Rechercher"
+
+#: libide/keybindings/ide-shortcuts-window.ui:525
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "Rechercher du texte dans le terminal"
 
 #: libide/preferences/ide-preferences-builtin.c:65
 #: libide/preferences/ide-preferences-builtin.c:66
@@ -1880,7 +2145,7 @@ msgstr "éditeur police monospace chasse fixe"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:111
-#: plugins/terminal/gb-terminal-workbench-addin.c:183
+#: plugins/terminal/gb-terminal-workbench-addin.c:203
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -2123,12 +2388,6 @@ msgstr "Langages de programmation"
 msgid "Search languages…"
 msgstr "Recherche des langages…"
 
-#: libide/preferences/ide-preferences-builtin.c:316
-#: libide/preferences/ide-preferences-builtin.c:377
-#: plugins/build-tools/gbp-build-configuration-view.ui:11
-msgid "General"
-msgstr "Général"
-
 #: libide/preferences/ide-preferences-builtin.c:317
 msgid "Trim trailing whitespace"
 msgstr "Supprimer les espaces en fin de ligne"
@@ -2192,12 +2451,6 @@ msgstr "Indenter le code source lors de la saisie"
 msgid "Number of CPU"
 msgstr "Nombre de processeurs"
 
-#: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:379
-#: plugins/build-tools/gbp-build-panel.c:469
-msgid "Build"
-msgstr "Construire"
-
 #: libide/preferences/ide-preferences-builtin.c:378
 msgid "Build Workers"
 msgstr "Constructeurs"
@@ -2244,11 +2497,16 @@ msgstr "Rechercher des projets existants sur votre ordinateur"
 msgid "Version Control"
 msgstr "Contrôle de versions"
 
+#. only the page goes here, plugins will fill in the details
+#: libide/preferences/ide-preferences-builtin.c:530
+msgid "SDKs"
+msgstr "SDKs"
+
 #: libide/preferences/ide-preferences-font-button.ui:57
 msgid "_Select"
 msgstr "_Sélectionner"
 
-#: libide/preferences/ide-preferences-perspective.c:955
+#: libide/preferences/ide-preferences-perspective.c:965
 msgid "Preferences"
 msgstr "Préférences"
 
@@ -2269,6 +2527,14 @@ msgstr "Le fichier doit se trouver dans l'arborescence du projet."
 msgid "%s() may only be executed once"
 msgstr "%s() ne peut être exécutée qu'une seule fois"
 
+#: libide/runner/ide-run-button.ui:41
+msgid "Stop running"
+msgstr "Stopper l'exécution"
+
+#: libide/runner/ide-run-button.ui:57
+msgid "Change run options"
+msgstr "Modifier les options d'exécution"
+
 #: libide/runner/ide-run-manager.c:225
 msgid "Run"
 msgstr "Exécuter"
@@ -2279,23 +2545,22 @@ msgstr ""
 "Impossible d'exécuter la cible, une autre cible est en cours d'exécution"
 
 #: libide/runner/ide-run-manager.c:324
-#: plugins/autotools/ide-autotools-build-task.c:479
 msgid "Failed to locate runtime"
-msgstr "Échec de la localisation de l'exécutable"
+msgstr "Échec de la localisation de l'environnement d'exécution"
 
-#: libide/runner/ide-runner.c:157 plugins/flatpak/gbp-flatpak-runner.c:82
+#: libide/runner/ide-runner.c:165
 msgid "Process quit unexpectedly"
 msgstr "Le processus a quitté de manière inattendue"
 
-#: libide/runtimes/ide-runtime-manager.c:107
+#: libide/runtimes/ide-runtime-manager.c:114
 msgid "Host operating system"
 msgstr "Système d'exploitation hôte"
 
-#: libide/search/ide-omni-search-display.c:271
+#: libide/search/ide-omni-search-display.c:267
 msgid "Cannot add provider more than once."
 msgstr "Impossible d'ajouter un fournisseur plus d'une fois."
 
-#: libide/search/ide-omni-search-display.c:347
+#: libide/search/ide-omni-search-display.c:343
 msgid "The provider could not be found."
 msgstr "Impossible de trouver le fournisseur."
 
@@ -2309,25 +2574,30 @@ msgstr "Échec à l'ouverture du dossier : %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Échec au chargement du fichier %s : %s"
 
-#: libide/sourceview/ide-source-view.c:5311
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insérer « %s »"
 
-#: libide/sourceview/ide-source-view.c:5313
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Remplacer « %s » par « %s »"
 
-#: libide/sourceview/ide-source-view.c:5427
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Appliquer la correction automatique"
 
-#: libide/sourceview/ide-source-view.c:5854
-#, fuzzy
-#| msgid "Rename %s"
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
-msgstr "Renommer %s"
+msgstr "Renommer le symbole"
+
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "Installation d'un paquet"
+msgstr[1] "Installation de %u paquets"
 
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
@@ -2348,7 +2618,7 @@ msgstr "ILCreateFromPath() a échoué"
 
 #: libide/util/ide-file-manager.c:129
 #, c-format
-msgid "Cannot convert '%s' into a valid NSURL."
+msgid "Cannot convert “%s” into a valid NSURL."
 msgstr "Impossible de convertir « %s » en une NSURL valide."
 
 #: libide/util/ide-file-manager.c:157
@@ -2370,34 +2640,35 @@ msgstr "Caractères non-UTF-8 dans l'URI"
 
 #: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
 #, c-format
-msgid "Invalid IP literal '%s' in URI"
-msgstr "Le format de l'IP '%s' est invalide dans l'URI"
+msgid "Invalid IP literal “%s” in URI"
+msgstr "Le format de l'IP « %s » est invalide dans l'URI"
 
 #: libide/util/ide-uri.c:411
 #, c-format
-msgid "Invalid encoded IP literal '%s' in URI"
-msgstr "Le format d'encodage de l'IP '%s' est invalide dans l'URI"
+msgid "Invalid encoded IP literal “%s” in URI"
+msgstr "Le format d'encodage de l'IP « %s » est invalide dans l'URI"
 
 #: libide/util/ide-uri.c:420
 #, c-format
-msgid "Invalid non-ASCII hostname '%s' in URI"
+msgid "Invalid non-ASCII hostname “%s” in URI"
 msgstr ""
-"Le nom d'hôte '%s' contient des caractères non-ASCII invalides dans l'URI"
+"Le nom d'hôte « %s » contient des caractères non-ASCII invalides dans l'URI"
 
 #: libide/util/ide-uri.c:434
 #, c-format
-msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgid "Non-ASCII hostname “%s” forbidden in this URI"
 msgstr ""
-"Les caractères non-ASCII dans le nom d'hôte '%s' sont interdits dans cet URI"
+"Les caractères non-ASCII dans le nom d'hôte « %s » sont interdits dans cet "
+"URI"
 
 #: libide/util/ide-uri.c:457
 #, c-format
-msgid "Could not parse port '%s' in URI"
+msgid "Could not parse port “%s” in URI"
 msgstr "Impossible d'analyser le port « %s » dans l'URI"
 
 #: libide/util/ide-uri.c:464
 #, c-format
-msgid "Port '%s' in URI is out of range"
+msgid "Port “%s” in URI is out of range"
 msgstr "Le port « %s » dans l'URI est hors plage"
 
 #: libide/util/ide-uri.c:590
@@ -2410,12 +2681,12 @@ msgstr "L'URI n'est pas absolue, et aucune URI de base n'a été fournie"
 
 #: libide/util/ide-uri.c:660
 #, c-format
-msgid "Could not parse '%s' as absolute URI"
+msgid "Could not parse “%s” as absolute URI"
 msgstr "Impossible d'analyser « %s » comme URI absolue"
 
 #: libide/util/ide-uri.c:1203
 #, c-format
-msgid "URI '%s' has no host component"
+msgid "URI “%s” has no host component"
 msgstr "L'URI « %s » n'a pas de composant hôte"
 
 #: libide/workbench/ide-layout-tab-bar.ui:33
@@ -2438,11 +2709,6 @@ msgstr "Fermer le document en cours"
 msgid "untitled document"
 msgstr "document sans titre"
 
-#. Translators: "Target" is providing context to the selected build configuration
-#: libide/workbench/ide-omni-bar.c:366
-msgid "Target"
-msgstr "Cible"
-
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
@@ -2452,66 +2718,51 @@ msgstr "manquant"
 msgid "Edit build configuration"
 msgstr "Modifier la configuration de construction"
 
-#: libide/workbench/ide-omni-bar-row.ui:54
-#: plugins/build-tools/gbp-build-configuration-view.ui:129
-msgid "Device"
-msgstr "Périphérique"
-
-#: libide/workbench/ide-omni-bar-row.ui:85
-#: plugins/build-tools/gbp-build-configuration-view.ui:157
-msgid "Runtime"
-msgstr "Exécutable"
-
-#: libide/workbench/ide-omni-bar.ui:108
-msgid "Build project (Ctrl+F7)"
-msgstr "Construire le projet (Ctrl + F7)"
-
-#: libide/workbench/ide-omni-bar.ui:126
-msgid "Cancel build"
-msgstr "Annuler la construction"
-
-#: libide/workbench/ide-omni-bar.ui:170
+#: libide/workbench/ide-omni-bar.ui:177
 #: plugins/project-tree/gb-project-tree-addin.c:105
 msgid "Project"
 msgstr "Projet"
 
-#: libide/workbench/ide-omni-bar.ui:194
+#: libide/workbench/ide-omni-bar.ui:201
 msgid "Branch"
 msgstr "Branche"
 
-#: libide/workbench/ide-omni-bar.ui:229
+#: libide/workbench/ide-omni-bar.ui:236
 msgid "Build Profile"
 msgstr "Profil de construction"
 
-#: libide/workbench/ide-omni-bar.ui:275
+#: libide/workbench/ide-omni-bar.ui:282
 msgid "Last build"
 msgstr "Dernière construction"
 
-#: libide/workbench/ide-omni-bar.ui:325 plugins/cargo/cargo_plugin.py:90
-#: plugins/cargo/cargo_plugin.py:117 plugins/meson/meson_plugin/__init__.py:86
-msgid "Failed"
-msgstr "Échec"
-
-#: libide/workbench/ide-omni-bar.ui:342
+#: libide/workbench/ide-omni-bar.ui:349
 msgid "View Output"
 msgstr "Voir la sortie"
 
-#: libide/workbench/ide-omni-bar.ui:389
+#: libide/workbench/ide-omni-bar.ui:396
 msgid "Rebuild"
 msgstr "Reconstruire"
 
-#: libide/workbench/ide-omni-bar.ui:399
+#: libide/workbench/ide-omni-bar.ui:406
 msgid "Clean"
 msgstr "Nettoyer"
+
+#: libide/workbench/ide-omni-bar.ui:420
+msgid "Build project"
+msgstr "Construire le projet"
+
+#: libide/workbench/ide-perspective-menu-button.ui:15
+msgid "Switch perspective"
+msgstr "Changer de perspective"
 
 #: libide/workbench/ide-workbench-actions.c:73
 msgid "Open File"
 msgstr "Ouvrir le fichier"
 
-#: libide/workbench/ide-workbench.c:563
+#: libide/workbench/ide-workbench.c:564
 #, c-format
-msgid "%s - Builder"
-msgstr "%s - Builder"
+msgid "%s — Builder"
+msgstr "%s — Builder"
 
 #: libide/workbench/ide-workbench-header-bar.ui:43
 msgid "Transfers"
@@ -2525,100 +2776,9 @@ msgstr "Afficher le menu de l'espace de travail"
 msgid "Press Ctrl+. to search"
 msgstr "Appuyez sur Ctrl+. pour rechercher"
 
-#: plugins/autotools/ide-autotools-builder.c:235
-msgid "Build cancelled"
-msgstr "Construction annulée"
-
-#: plugins/autotools/ide-autotools-builder.c:237
-msgid "Build failed"
-msgstr "Échec de la construction"
-
-#: plugins/autotools/ide-autotools-builder.c:243
-msgid "Build successful"
-msgstr "Construction réussie"
-
-#: plugins/autotools/ide-autotools-builder.c:347
-#: plugins/autotools/ide-autotools-builder.c:539
-#: plugins/autotools/ide-autotools-build-task.c:1219
-#: plugins/cargo/cargo_plugin.py:199 plugins/meson/meson_plugin/__init__.py:430
-msgid "Building…"
-msgstr "Construction…"
-
-#: plugins/autotools/ide-autotools-builder.c:495
-msgid "Install cancelled"
-msgstr "Installation annulée"
-
-#: plugins/autotools/ide-autotools-builder.c:497
-msgid "Install failed"
-msgstr "Échec de l'installation"
-
-#: plugins/autotools/ide-autotools-builder.c:503
-msgid "Install successful"
-msgstr "Installation réussie"
-
-#: plugins/autotools/ide-autotools-build-task.c:201
-msgid "Directory must be on a locally mounted filesystem."
-msgstr "Le répertoire doit être sur un système de fichiers monté localement."
-
-#: plugins/autotools/ide-autotools-build-task.c:468
-msgid "Failed to locate device"
-msgstr "Échec de la localisation du périphérique"
-
-#: plugins/autotools/ide-autotools-build-task.c:600
-#: plugins/autotools/ide-autotools-build-task.c:628
-#: plugins/autotools/ide-autotools-build-task.c:953
-msgid "Build Failed: "
-msgstr "Échec de la construction : "
-
-#: plugins/autotools/ide-autotools-build-task.c:713
-msgid "Cannot execute build task more than once"
-msgstr "Impossible de lancer une tâche de construction plus d'une fois"
-
-#: plugins/autotools/ide-autotools-build-task.c:830
-#, fuzzy
-#| msgid "Failed to locate runtime \"%s\""
-msgid "Failed to access runtime for postbuild"
-msgstr "Échec de la localisation de l'exécutable « %s »"
-
-#: plugins/autotools/ide-autotools-build-task.c:986
-msgid "Failed to create build directory."
-msgstr "Échec lors de la création du répertoire de construction."
-
-#: plugins/autotools/ide-autotools-build-task.c:995
-#, c-format
-msgid "'%s' is not a directory."
-msgstr "« %s » n'est pas un répertoire."
-
-#: plugins/autotools/ide-autotools-build-task.c:1034
-#, c-format
-msgid "autogen.sh is missing from project directory (%s)."
-msgstr "autogen.sh n'est pas présent dans le répertoire du projet (%s)."
-
-#: plugins/autotools/ide-autotools-build-task.c:1044
-msgid "autogen.sh is not executable."
-msgstr "autogen.sh n'est pas exécutable."
-
-#: plugins/autotools/ide-autotools-build-task.c:1048
-msgid "Running autogen…"
-msgstr "autogen en cours d'exécution…"
-
-#: plugins/autotools/ide-autotools-build-task.c:1083
-#, c-format
-msgid "autogen.sh failed to create configure (%s)"
-msgstr "autogen.sh n'a pas pu créer le fichier configure (%s)"
-
-#: plugins/autotools/ide-autotools-build-task.c:1118
-msgid "Running configure…"
-msgstr "configure en cours d'exécution…"
-
-#: plugins/autotools/ide-autotools-build-task.c:1217
-#: plugins/cargo/cargo_plugin.py:196 plugins/meson/meson_plugin/__init__.py:423
-msgid "Cleaning…"
-msgstr "Nettoyage…"
-
-#: plugins/autotools/ide-makecache.c:1080
-msgid "Invalid makefile provided, ignoring."
-msgstr "Le fichier makefile indiqué est invalide, il sera ignoré."
+#: plugins/autotools/ide-autotools-makecache-stage.c:194
+msgid "Building cache…"
+msgstr "Construction du cache…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library"
@@ -2647,238 +2807,15 @@ msgstr "Créer une nouvelle application GNOME avec flatpak"
 #: plugins/beautifier/gb-beautifier-workbench-addin.c:190
 #, c-format
 msgid "No beautifier available for “%s”"
-msgstr ""
+msgstr "Aucun enjoliveur disponible pour « %s »"
 
 #: plugins/beautifier/gb-beautifier-workbench-addin.c:192
-#, fuzzy
-#| msgid "No commands available"
 msgid "No beautifier available"
-msgstr "Aucune commande disponible"
+msgstr "Aucun enjoliveur disponible"
 
 #: plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-configuration-row.ui:43
-msgid "Duplicate the configuration"
-msgstr "Dupliquer la configuration"
-
-#: plugins/build-tools/gbp-build-configuration-row.ui:59
-msgid "Delete the configuration"
-msgstr "Supprimer la configuration"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:28
-msgid "The name of the build configuration"
-msgstr "Le nom de la configuration de construction"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:37
-msgid "Name"
-msgstr "Nom"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:58
-msgid "The prefix to use when installing the project"
-msgstr "Le préfixe à utiliser lors de l'installation du projet"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:67
-msgid "Installation Prefix"
-msgstr "Préfixe d'installation"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:88
-msgid "Options to use when bootstrapping the project"
-msgstr "Options à utiliser lors de l'initialisation du projet"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:97
-msgid "Configure Options"
-msgstr "Configurer les options"
-
-#: plugins/build-tools/gbp-build-configuration-view.ui:185
-msgid "Environment"
-msgstr "Environnement"
-
-#: plugins/build-tools/gbp-build-log-panel.c:254
-msgid "Build Output"
-msgstr "Sortie de la construction"
-
-#: plugins/build-tools/gbp-build-panel.c:89
-#, c-format
-msgid "%d warning"
-msgid_plural "%d warnings"
-msgstr[0] "%d avertissement"
-msgstr[1] "%d avertissements"
-
-#: plugins/build-tools/gbp-build-panel.c:98
-#, c-format
-msgid "%d error"
-msgid_plural "%d errors"
-msgstr[0] "%d erreur"
-msgstr[1] "%d erreurs"
-
-#: plugins/build-tools/gbp-build-panel.ui:33
-msgid "Status:"
-msgstr "État :"
-
-#: plugins/build-tools/gbp-build-panel.ui:58
-msgid "Running Time:"
-msgstr "Durée d'exécution :"
-
-#: plugins/build-tools/gbp-build-panel.ui:82
-msgid "Warnings:"
-msgstr "Avertissements :"
-
-#: plugins/build-tools/gbp-build-panel.ui:106
-msgid "Errors:"
-msgstr "Erreurs :"
-
-#: plugins/build-tools/gbp-build-panel.ui:149
-#, fuzzy
-#| msgid "Diagnostics"
-msgid "No Diagnostics"
-msgstr "Diagnostiques"
-
-#. the action:// link is used to execute a build
-#: plugins/build-tools/gbp-build-panel.ui:150
-msgid ""
-"<a href=\"action://build-manager.build\">Build your project</a> to show "
-"diagnostics here"
-msgstr ""
-
-#: plugins/build-tools/gbp-build-perspective.c:436
-msgid "Build Preferences"
-msgstr "Préférences de construction"
-
-#: plugins/build-tools/gbp-build-tool.c:102
-#: plugins/build-tools/gbp-build-tool.c:115
-msgid "========================\n"
-msgstr "========================\n"
-
-#: plugins/build-tools/gbp-build-tool.c:103
-#, c-format
-msgid "           Project Name: %s\n"
-msgstr "           Nom du projet: %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:104
-#, c-format
-msgid " Version Control System: %s\n"
-msgstr " Système de contrôle de version : %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:105
-#, c-format
-msgid "           Build System: %s\n"
-msgstr "           Système de construction : %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:106
-#, c-format
-msgid "    Build Date and Time: %s\n"
-msgstr "    Date et heure de construction : %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:107
-#, c-format
-msgid "    Building for Device: %s (%s)\n"
-msgstr "    Construction pour le périphérique : %s (%s)\n"
-
-#: plugins/build-tools/gbp-build-tool.c:112
-#, c-format
-msgid "            Environment: %s\n"
-msgstr "            Environnement : %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:142
-#: plugins/build-tools/gbp-build-tool.c:146
-msgid "===============\n"
-msgstr "===============\n"
-
-#: plugins/build-tools/gbp-build-tool.c:143
-#, c-format
-msgid " Build Failure: %s\n"
-msgstr " Échec de la construction : %s\n"
-
-#: plugins/build-tools/gbp-build-tool.c:144
-msgid " Build ran for: %"
-msgstr " Durée de construction : %"
-
-#.
-#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
-#. *       here too. It would be nice if we could say, go build this project,
-#. *       for this device, and then deploy.
-#.
-#: plugins/build-tools/gbp-build-tool.c:157
-#: plugins/build-tools/gbp-build-tool.c:161
-msgid "=================\n"
-msgstr "=================\n"
-
-#: plugins/build-tools/gbp-build-tool.c:158
-msgid " Build Successful\n"
-msgstr " Construction terminée\n"
-
-#: plugins/build-tools/gbp-build-tool.c:159
-msgid "   Build ran for: %"
-msgstr " Durée de construction : %"
-
-#: plugins/build-tools/gbp-build-tool.c:212
-#, fuzzy, c-format
-#| msgid "Failed to locate device \"%s\""
-msgid "Failed to locate device “%s”"
-msgstr "Échec de la localisation du périphérique « %s »"
-
-#: plugins/build-tools/gbp-build-tool.c:222
-#, c-format
-msgid "Failed to locate runtime “%s”"
-msgstr "Échec de la localisation de l'exécutable « %s »"
-
-#: plugins/build-tools/gbp-build-tool.c:286
-msgid "Clean the project"
-msgstr "Nettoyer le projet."
-
-#: plugins/build-tools/gbp-build-tool.c:288
-msgid "The ID of the device to build for"
-msgstr "L'ID du périphérique pour lequel construire"
-
-#: plugins/build-tools/gbp-build-tool.c:289
-msgid "local"
-msgstr "local"
-
-#: plugins/build-tools/gbp-build-tool.c:291
-msgid "The runtime to use for building"
-msgstr "L'exécutable à utiliser pour la construction"
-
-#: plugins/build-tools/gbp-build-tool.c:292
-msgid "host"
-msgstr "hôte"
-
-#: plugins/build-tools/gbp-build-tool.c:294
-msgid "Number of workers to use when building"
-msgstr "Nombre de constructeurs à utiliser lors de la construction"
-
-#: plugins/build-tools/gbp-build-tool.c:295
-msgid "N"
-msgstr "N"
-
-#: plugins/build-tools/gbp-build-tool.c:297
-msgid "The configuration to use from .buildconfig"
-msgstr "La configuration à utiliser dans .buildconfig"
-
-#: plugins/build-tools/gbp-build-tool.c:298
-msgid "CONFIG_ID"
-msgstr "ID_CONFIG"
-
-#: plugins/build-tools/gbp-build-tool.c:300
-msgid "Path to project file, defaults to current directory"
-msgstr "Chemin vers le fichier de projet, répertoire courant par défaut"
-
-#: plugins/build-tools/ide-environment-editor.c:65
-msgid "New variable…"
-msgstr "Nouvelle variable…"
-
-#: plugins/cargo/cargo_plugin.py:85 plugins/cargo/cargo_plugin.py:112
-#: plugins/cargo/cargo_plugin.py:201 plugins/cargo/cargo_plugin.py:211
-#: plugins/meson/meson_plugin/__init__.py:93
-#, fuzzy
-#| msgid " Build Successful\n"
-msgid "Successful"
-msgstr " Construction terminée\n"
-
-#: plugins/cargo/cargo_plugin.py:209
-msgid "Installing…"
-msgstr ""
+msgstr "Enjoliver"
 
 #: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -2914,7 +2851,7 @@ msgstr "Erreur de lecture de l'AST (arbre syntaxique abstrait)"
 msgid "Failed to create translation unit: %s"
 msgstr "Échec de la création de l'unité de traduction : %s"
 
-#: plugins/clang/ide-clang-service.c:458
+#: plugins/clang/ide-clang-service.c:481 plugins/xml-pack/ide-xml-service.c:93
 msgid "File must be saved locally to parse."
 msgstr "Le fichier doit être enregistré localement pour l'analyse."
 
@@ -3059,7 +2996,7 @@ msgid "Filters:"
 msgstr "Filtres :"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
-msgid "Select a filter that act on the colors or 'None'."
+msgid "Select a filter that act on the colors or “None”."
 msgstr "Sélectionnez un filtre agissant sur les couleurs ou « None »."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
@@ -3113,7 +3050,7 @@ msgstr "Aucune palette sélectionnée"
 msgid "Select a palette file"
 msgstr "Sélectionner un fichier palette"
 
-#: plugins/color-picker/gtk/color-picker.ui:61
+#: plugins/color-picker/gtk/color-picker.ui:62
 msgid "Try loading or generating a palette using the menu"
 msgstr "Essayer de charger ou générer une palette à l'aide du menu"
 
@@ -3141,7 +3078,7 @@ msgstr "%s est non valide pour %s"
 
 #: plugins/command-bar/gb-vim.c:158
 #, c-format
-msgid "Cannot find language '%s'"
+msgid "Cannot find language “%s”"
 msgstr "Impossible de trouver le langage « %s »"
 
 #: plugins/command-bar/gb-vim.c:315
@@ -3159,23 +3096,23 @@ msgstr "Option inconnue : %s"
 
 #: plugins/command-bar/gb-vim.c:426
 #, c-format
-msgid "Cannot find colorscheme '%s'"
+msgid "Cannot find colorscheme “%s”"
 msgstr "Impossible de trouver le thème de couleurs « %s »"
 
 #: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
 msgid "Failed to locate working directory"
 msgstr "Échec de la localisation du répertoire de travail"
 
-#: plugins/command-bar/gb-vim.c:707
+#: plugins/command-bar/gb-vim.c:711
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Sous-commande :syntaxe invalide : %s"
 
-#: plugins/command-bar/gb-vim.c:1143
+#: plugins/command-bar/gb-vim.c:1154
 msgid "Invalid search and replace request"
 msgstr "Requête de recherche et remplacement non valide"
 
-#: plugins/command-bar/gb-vim.c:1249
+#: plugins/command-bar/gb-vim.c:1260
 #, c-format
 msgid "Not a command: %s"
 msgstr "Ce n'est pas une commande : %s"
@@ -3187,55 +3124,6 @@ msgstr "Commenter le code"
 #: plugins/comment-code/gtk/menus.ui:14
 msgid "Uncomment code"
 msgstr "Enlever le commentaire du code"
-
-#: plugins/contributing/contributing_plugin/helper.py:77
-#, python-format
-msgid ""
-"Usage:\n"
-"  %(prgname) %(command) OPTIONS\n"
-msgstr ""
-"Utilisation:\n"
-"  %(prgname) %(command) OPTIONS\n"
-
-#: plugins/contributing/contributing_plugin/__init__.py:55
-msgid "Missing project name"
-msgstr "Nom de projet manquant"
-
-#: plugins/contributing/contributing_plugin/__init__.py:69
-msgid ""
-"Usage:\n"
-"  ide contribute PROJECT_NAME\n"
-"\n"
-"  This command will bootstrap your system to begin contributing to the "
-"project\n"
-"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-"that\n"
-"  you have the required dependencies to build, and bootstraps the first "
-"build\n"
-"  of the project.\n"
-"\n"
-"Examples:\n"
-"  ide contribute gnome-builder\n"
-"  ide contribute gnome-maps\n"
-"\n"
-msgstr ""
-"Utilisation :\n"
-"  ide contribute NOM_DU_PROJET\n"
-"\n"
-"  Cette commande amorcera votre système pour commencer à contribuer au\n"
-"  projet désigné par NOM_DU_PROJET. Cela inclue la récupération des "
-"sources,\n"
-"  assurera que vous avez les dépendances nécessaires à la construction,\n"
-"  et amorcera la première construction du projet.\n"
-"\n"
-"Exemples :\n"
-"  ide contribute gnome-builder\n"
-"  ide contribute gnome-maps\n"
-"\n"
-
-#: plugins/contributing/contributing_plugin/__init__.py:227
-msgid "Username"
-msgstr "Nom d'utilisateur"
 
 #: plugins/c-pack/ide-c-format-provider.c:283
 #: plugins/python-pack/ide-python-format-provider.c:240
@@ -3263,8 +3151,6 @@ msgid "The target language (if supported)"
 msgstr "Le langage cible (si pris en charge)"
 
 #: plugins/create-project/gbp-create-project-tool.c:142
-#, fuzzy
-#| msgid "The version control to use or \"none\" to disable"
 msgid "The version control to use or “none” to disable"
 msgstr ""
 "Le gestionnaire de versions à utiliser ou « none » (aucun) pour désactiver"
@@ -3312,7 +3198,7 @@ msgstr "Nom du projet"
 
 #: plugins/create-project/gbp-create-project-widget.ui:55
 msgid ""
-"Unique name that is used for your project's folder and other technical "
+"Unique name that is used for your project’s folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
 "number."
 msgstr ""
@@ -3325,7 +3211,7 @@ msgid "Project Location"
 msgstr "Emplacement du projet"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:78
+#: plugins/git/ide-git-clone-widget.ui:76
 msgid "Select Project Directory"
 msgstr "Sélectionner le répertoire du projet"
 
@@ -3377,24 +3263,157 @@ msgstr "Sélectionner un modèle"
 msgid "Documentation"
 msgstr "Documentation"
 
+#: plugins/eslint/eslint_plugin/__init__.py:106
+msgid "ESlint"
+msgstr "ESLint"
+
+#: plugins/eslint/eslint_plugin/__init__.py:107
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+"Active l'utilisation de ESLint, ce qui peut exécuter du code dans votre "
+"projet"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/eslint/eslint_plugin/__init__.py:109
+msgid "eslint javascript lint code execute execution"
+msgstr "eslint javascript lint code exécuter exécution"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr "Activer ESLint"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Activer l'utilisation de eslint pour trouver des diagnostiques "
+"supplémentaires dans les programmes Javascript. Cela peut amener à "
+"l'exécution de code dans votre projet."
+
 #: plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Basculer vers"
 
 #: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
 msgid "Downloading application sources…"
-msgstr ""
+msgstr "Téléchargement des sources de l'application…"
 
 #: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
-#, fuzzy
-#| msgid "Clone"
 msgid "Clone App"
-msgstr "Cloner"
+msgstr "Cloner l'application"
 
 #: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
 #: plugins/git/ide-git-genesis-addin.c:190
 msgid "Clone"
 msgstr "Cloner"
+
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
+msgid "Network is not available, skipping downloads"
+msgstr "Le réseau n'est pas disponible, abandon des téléchargements"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:119
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:596
+msgid "Install"
+msgstr "Installer"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
+#: plugins/rustup/rustup_plugin/__init__.py:477
+#: plugins/rustup/rustup_plugin/__init__.py:481
+msgid "Update"
+msgstr "Mise à jour"
+
+#. translators: keywords are used to match search keywords in preferences
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
+#, c-format
+msgid "flatpak %s %s %s"
+msgstr "flatpak %s %s %s"
+
+#. translators: %u is the number of hidden runtimes to be shown
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] "Afficher l'environnement d'exécution suivant"
+msgstr[1] "Afficher les %u environnements d'exécution suivants"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
+msgid "Flatpak Runtimes"
+msgstr "Environnements d'exécution Flatpak"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:714
+#, c-format
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:716
+#, c-format
+msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:67
+#, c-format
+msgid "Updated %s %s"
+msgstr "%s %s mis à jour"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:70
+#, c-format
+msgid "Updating %s %s"
+msgstr "Mise à jour de %s %s"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:76
+#, c-format
+msgid "Installed %s %s"
+msgstr "%s %s installé"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:79
+#, c-format
+msgid "Installing %s %s"
+msgstr "Installation de %s %s"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:101
+msgid "Failed to install runtime"
+msgstr "L'installation de l'environnement d'exécution a échoué"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:103
+msgid "Runtime has been updated"
+msgstr "L'environnement d'exécution a été mis à jour"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:105
+msgid "Runtime has been installed"
+msgstr "L'environnement d'exécution a été installé"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid "Your computer is missing flatpak-builder"
+msgstr "Le logiciel flatpak-builder n'est pas installé"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+"Ce programme est nécessaire pour construire des applications Flatpak. Voulez-"
+"vous l'installer ?"
+
+#: plugins/flatpak/gtk/menus.ui:6
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: plugins/flatpak/gtk/menus.ui:8
+msgid "_Download Dependencies"
+msgstr "_Télécharger les dépendances"
+
+#: plugins/flatpak/gtk/menus.ui:12
+msgid "_Export as Bundle"
+msgstr "_Exporter comme application autonome"
 
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
@@ -3420,29 +3439,29 @@ msgstr "Le fichier n'est pas sous le contrôle du répertoire de travail git."
 msgid "The requested file does not exist within the git index."
 msgstr "Le fichier demandé n'existe pas dans l'index git."
 
-#: plugins/git/ide-git-clone-widget.c:141
-#: plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
 msgid "A valid Git URL is required"
 msgstr "Un URL git valid est nécessaire"
 
-#: plugins/git/ide-git-clone-widget.ui:38
+#: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr ""
 "Utiliser Git pour créer une copie locale d'un projet hébergé à distance."
 
-#: plugins/git/ide-git-clone-widget.ui:66
+#: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
 msgstr "utilisateur@hôte:dépôt.git"
 
-#: plugins/git/ide-git-clone-widget.ui:67
-msgid "Enter the URL of your project's source code repository"
+#: plugins/git/ide-git-clone-widget.ui:65
+msgid "Enter the URL of your project’s source code repository"
 msgstr "Saisissez l'URL du dépôt du code source de votre projet"
 
-#: plugins/git/ide-git-clone-widget.ui:94
+#: plugins/git/ide-git-clone-widget.ui:92
 msgid "Repository URL"
 msgstr "URL du dépôt"
 
-#: plugins/git/ide-git-clone-widget.ui:102
+#: plugins/git/ide-git-clone-widget.ui:100
 msgid "Project Destination"
 msgstr "Destination du projet"
 
@@ -3454,14 +3473,14 @@ msgstr "Cloner un projet"
 msgid "Clone…"
 msgstr "Cloner…"
 
-#: plugins/git/ide-git-remote-callbacks.c:177
+#: plugins/git/ide-git-remote-callbacks.c:193
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
 "Builder n'a pas pu fournir les données d'authentification lors du clonage du "
 "dépôt."
 
-#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
 msgid "Code assistance requires a local file."
 msgstr "L'assistance de code nécessite un fichier local."
 
@@ -3497,16 +3516,13 @@ msgstr ""
 "supplémentaires dans les programmes Python. Cela peut amener à l'exécution "
 "de code dans votre projet."
 
-#: plugins/hello-cpp/hellocppapplicationaddin.cc:48
-#, c-format
-msgid "Wow! You've spent with Builder %d second!\n"
-msgid_plural "Wow! You've spent with Builder %d seconds!\n"
-msgstr[0] "Ouah ! Vous avez passé %d seconde avec Builder !\n"
-msgstr[1] "Ouah ! Vous avez passé %d secondes avec Builder !\n"
-
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Aperçu en tant que HTML"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:115
+msgid "Your computer is missing python3-docutils"
+msgstr "Le logiciel python3-docutils n'est pas installé"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3516,41 +3532,13 @@ msgstr "Suggérer la complétion Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Utiliser Jedi pour fournir la complétion du language Python"
 
-#: plugins/meson/meson_plugin/__init__.py:346
-#, fuzzy
-#| msgid "Configure Options"
-msgid "Configuring…"
-msgstr "Configurer les options"
-
-#: plugins/meson/meson_plugin/__init__.py:378
-#, fuzzy
-#| msgid "Running configure…"
-msgid "Running prebuild…"
-msgstr "configure en cours d'exécution…"
-
-#: plugins/meson/meson_plugin/__init__.py:397
-#, fuzzy
-#| msgid "Running autogen…"
-msgid "Running post-install…"
-msgstr "autogen en cours d'exécution…"
-
-#: plugins/meson/meson_plugin/__init__.py:400
-#, fuzzy
-#| msgid "Running configure…"
-msgid "Running post-build…"
-msgstr "configure en cours d'exécution…"
-
 #: plugins/meson-templates/meson_templates/__init__.py:206
-#, fuzzy
-#| msgid "Empty Project"
 msgid "Empty Meson Project"
-msgstr "Projet vide"
+msgstr "Projet Meson vide"
 
 #: plugins/meson-templates/meson_templates/__init__.py:208
-#, fuzzy
-#| msgid "Create a new empty autotools project"
 msgid "Create a new empty meson project"
-msgstr "Créer un nouveau projet autotools vide"
+msgstr "Créer un nouveau projet meson vide"
 
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
@@ -3673,6 +3661,128 @@ msgstr ""
 "rapide surlignement surbrillance mots correspondants correspondance "
 "sélection actuelle"
 
+#: plugins/rustup/rustup_plugin/__init__.py:80
+msgid "Rustup not installed"
+msgstr "Rustup n'est pas installé"
+
+#: plugins/rustup/rustup_plugin/__init__.py:277
+msgid "Installing rustup"
+msgstr "Installation de rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:279
+msgid "Updating rustup"
+msgstr "Mise à jour de rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:281
+msgid "Installing rust "
+msgstr "Installation de rust "
+
+#: plugins/rustup/rustup_plugin/__init__.py:283
+msgid "Checking system"
+msgstr "Vérification du système"
+
+#: plugins/rustup/rustup_plugin/__init__.py:337
+msgid "Downloading rustup-init"
+msgstr "Téléchargement de rustup-init"
+
+#: plugins/rustup/rustup_plugin/__init__.py:342
+msgid "Syncing channel updates"
+msgstr "Synchronisation des mises à jour de canaux"
+
+#: plugins/rustup/rustup_plugin/__init__.py:348
+msgid "Downloading "
+msgstr "Téléchargement de "
+
+#: plugins/rustup/rustup_plugin/__init__.py:355
+msgid "Installing "
+msgstr "Installation "
+
+#: plugins/rustup/rustup_plugin/__init__.py:361
+msgid "Checking for rustup updates"
+msgstr "Vérification des mises à jour de rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:366
+msgid "Downloading rustup update"
+msgstr "Téléchargement de la mise à jour de rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:403
+msgid "Error installing "
+msgstr "Erreur à l'installation de "
+
+#: plugins/rustup/rustup_plugin/__init__.py:405
+msgid "Error"
+msgstr "Erreur"
+
+#: plugins/rustup/rustup_plugin/__init__.py:411
+msgid "Cancelled"
+msgstr "Annulé"
+
+#: plugins/rustup/rustup_plugin/__init__.py:419
+msgid "Finished"
+msgstr "Terminé"
+
+#: plugins/rustup/rustup_plugin/__init__.py:433
+msgid "Rustup"
+msgstr "Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:434
+msgid "Rustup Toolchains"
+msgstr "Chaînes de compilation de Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:489
+msgid "Updating"
+msgstr "Mise à jour"
+
+#: plugins/rustup/rustup_plugin/__init__.py:489
+msgid "Installing"
+msgstr "Installation en cours"
+
+#. set default toolchain button
+#: plugins/rustup/rustup_plugin/__init__.py:580
+msgid "Make default"
+msgstr "Utiliser par défaut"
+
+#: plugins/rustup/rustup_plugin/__init__.py:580
+msgid "Makes the selected toolchain the default rust installation"
+msgstr "Marquer la chaîne de compilation sélectionné comme celle par défaut"
+
+#: plugins/rustup/rustup_plugin/__init__.py:595
+msgid "Install Rust Channel"
+msgstr "Installation du canal Rust"
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: plugins/rustup/rustup_plugin/__init__.py:600
+msgid "Enter name of rust channel"
+msgstr "Saisissez un nom pour le canal rust"
+
+#: plugins/rustup/rustup_plugin/__init__.py:601
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+msgstr ""
+"Les noms des chaînes de construction ont en général la forme suivante :\n"
+"                        <canal>[-<date>][-<hôte>]\n"
+"\n"
+"                        <canal>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <hôte>          = <triplet-système-cible>"
+
+#: plugins/rustup/rustup_plugin/__init__.py:626
+msgid "Install Rustup to manage toolchains here!"
+msgstr "Installez Rustup pour gérer les chaînes de compilation !"
+
+#: plugins/rustup/rustup_plugin/__init__.py:633
+msgid "No toolchain installed. Click"
+msgstr "Aucune chaîne de compilation installée. Cliquez"
+
+#: plugins/rustup/rustup_plugin/__init__.py:634
+msgid "to add a new toolchain!"
+msgstr "pour ajouter une nouvelle chaîne de compilation !"
+
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Générer le journal de support"
@@ -3680,32 +3790,27 @@ msgstr "Générer le journal de support"
 #: plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
-"The support log file has been written to '%s'. Please provide this file as "
+"The support log file has been written to “%s”. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
-"Le journal de support a été enregistrée dans « %s ». Veuillez fournir ce "
+"Le journal de support a été enregistré dans « %s ». Veuillez fournir ce "
 "fichier en pièce-jointe du rapport de bug ou de la demande d'assistance."
 
-#: plugins/symbol-tree/symbol-tree-panel.c:274
+#: plugins/symbol-tree/symbol-tree-panel.c:275
 msgid "Current language does not support symbol resolvers"
 msgstr "Le langage actuel ne prend pas en charge les résolveurs de symboles"
 
-#: plugins/symbol-tree/symbol-tree-panel.c:414
+#: plugins/symbol-tree/symbol-tree-panel.c:415
 msgid "Symbols"
 msgstr "Symboles"
 
 #: plugins/symbol-tree/symbol-tree-panel.ui:25
-#, fuzzy
-#| msgid "Symbols"
 msgid "No symbols"
-msgstr "Symboles"
+msgstr "Aucun symbole"
 
 #: plugins/symbol-tree/symbol-tree-panel.ui:26
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move viewport down within the file"
 msgid "Open a file to see symbols within the file"
-msgstr "Déplacer la vue vers le bas à l'intérieur du document"
+msgstr "Ouvrir un fichier pour en voir les symboles"
 
 #: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
@@ -3721,24 +3826,26 @@ msgid ""
 "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
 "profiler</a> from the run menu to begin"
 msgstr ""
+"Sélectionnez <a href=\"action://run-manager.run-with-handler::profiler"
+"\">Lancer avec le profileur</a> dans le menu d'exécution pour démarrer"
 
 #: plugins/sysprof/gbp-sysprof-perspective.ui:81
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:302
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
 msgid "Open Profile"
 msgstr "Ouvrir le profil"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:311
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Capture Sysprof (*.syscap)"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:317
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
 msgid "All Files"
 msgstr "Tous les fichiers"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:418
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
 msgid "Run with Profiler"
 msgstr "Lancer avec le profileur"
 
@@ -3746,35 +3853,43 @@ msgstr "Lancer avec le profileur"
 msgid "Open Profile…"
 msgstr "Ouvrir le profil…"
 
+#: plugins/terminal/gb-terminal-search.ui:152
+msgid "Regex"
+msgstr "Expression régulière"
+
+#: plugins/terminal/gb-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "Correspondance avec l'ensemble du mot"
+
+#: plugins/terminal/gb-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "Recherche circulaire"
+
 #: plugins/terminal/gb-terminal-view-actions.c:297
 msgid "Save Terminal Content As"
 msgstr "Enregistrer le contenu du terminal sous"
 
-#: plugins/terminal/gb-terminal-view.c:448
+#: plugins/terminal/gb-terminal-view.c:465
 msgid "Untitled terminal"
 msgstr "Terminal sans titre"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:120
-#, fuzzy
-#| msgid "Build Output"
+#: plugins/terminal/gb-terminal-workbench-addin.c:142
 msgid "Run Output"
-msgstr "Sortie de la construction"
+msgstr "Sortie de l'exécution"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "_Nouveau terminal"
 
 #: plugins/terminal/gtk/menus.ui:15
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Link"
-msgstr "_Ouvrir"
+msgstr "_Ouvrir le lien"
 
 #: plugins/terminal/gtk/menus.ui:20
 msgid "_Copy Link Address"
-msgstr ""
+msgstr "Copier l'_adresse du lien"
 
-#: plugins/todo/todo_plugin/__init__.py:190
+#: plugins/todo/todo_plugin/__init__.py:193
 msgid "Todo"
 msgstr "Tâches"
 
@@ -3790,3 +3905,16 @@ msgstr "Afficher les erreurs et avertissements provenant de Vala"
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:36
 msgid "vala diagnostics warnings errors"
 msgstr "Vala diagnostiques avertissements erreurs"
+
+#: plugins/valgrind/valgrind_plugin/__init__.py:52
+msgid "Run with Valgrind"
+msgstr "Lancer avec Valgrind"
+
+#: plugins/xml-pack/ide-xml-service.c:193
+msgid "Buffer loaded but not in the buffer manager."
+msgstr "Le tampon est chargé mais n'est pas dans le gestionnaire de tampons."
+
+#: plugins/xml-pack/ide-xml-tree-builder.c:172
+#: plugins/xml-pack/ide-xml-tree-builder.c:204
+msgid "Failed to create the XML tree."
+msgstr "Échec lors de la création de l'arbre XML"
