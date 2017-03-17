@@ -23,9 +23,33 @@
 #include "jsonrpc-output-stream.h"
 #include "jsonrpc-version.h"
 
+/**
+ * SECTION:jsonrpc-output-stream
+ * @title: #JsonrpcOutputStream
+ * @short_description: A JSONRPC output stream
+ *
+ * The #JsonrpcOutputStream is resonsible for serializing messages onto
+ * the underlying stream.
+ *
+ * Optionally, if jsonrpc_output_stream_set_use_gvariant() has been called,
+ * the messages will be encoded directly in the #GVariant format instead of
+ * JSON along with setting a "Content-Type" header to "application/gvariant".
+ * This is useful for situations where you control both sides of the RPC server
+ * using jsonrpc-glib as you can reduce the overhead of parsing JSON nodes due
+ * to #GVariant not requiring parsing or allocation overhead to the same degree
+ * as JSON.
+ *
+ * For example, if you need a large message, which is encoded in JSON, you need
+ * to decode the entire message up front which avoids performing lazy operations.
+ * When using GVariant encoding, you have a single allocation created for the
+ * #GVariant which means you reduce the memory pressure caused by lots of small
+ * allocations.
+ */
+
 typedef struct
 {
   GQueue queue;
+  guint  use_gvariant : 1;
 } JsonrpcOutputStreamPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (JsonrpcOutputStream, jsonrpc_output_stream, G_TYPE_DATA_OUTPUT_STREAM)
@@ -34,7 +58,52 @@ static void jsonrpc_output_stream_write_message_async_cb (GObject      *object,
                                                           GAsyncResult *result,
                                                           gpointer      user_data);
 
+enum {
+  PROP_0,
+  PROP_USE_GVARIANT,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 static gboolean jsonrpc_output_stream_debug;
+
+static void
+jsonrpc_output_stream_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
+{
+  JsonrpcOutputStream *self = JSONRPC_OUTPUT_STREAM (object);
+
+  switch (prop_id)
+    {
+    case PROP_USE_GVARIANT:
+      g_value_set_boolean (value, jsonrpc_output_stream_get_use_gvariant (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+jsonrpc_output_stream_set_property (GObject      *object,
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
+{
+  JsonrpcOutputStream *self = JSONRPC_OUTPUT_STREAM (object);
+
+  switch (prop_id)
+    {
+    case PROP_USE_GVARIANT:
+      jsonrpc_output_stream_set_use_gvariant (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
 
 static void
 jsonrpc_output_stream_finalize (GObject *object)
@@ -54,6 +123,17 @@ jsonrpc_output_stream_class_init (JsonrpcOutputStreamClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = jsonrpc_output_stream_finalize;
+  object_class->get_property = jsonrpc_output_stream_get_property;
+  object_class->set_property = jsonrpc_output_stream_set_property;
+
+  properties [PROP_USE_GVARIANT] =
+    g_param_spec_boolean ("use-gvariant",
+                         "Use GVariant",
+                         "If GVariant encoding should be used",
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   jsonrpc_output_stream_debug = !!g_getenv ("JSONRPC_DEBUG");
 }
@@ -68,44 +148,61 @@ jsonrpc_output_stream_init (JsonrpcOutputStream *self)
 
 static GBytes *
 jsonrpc_output_stream_create_bytes (JsonrpcOutputStream  *self,
-                                    JsonNode             *node,
+                                    GVariant             *message,
                                     GError              **error)
 {
-  g_autofree gchar *str = NULL;
-  GString *message;
+  JsonrpcOutputStreamPrivate *priv = jsonrpc_output_stream_get_instance_private (self);
+  g_autoptr(GByteArray) buffer = NULL;
+  g_autofree gchar *message_freeme = NULL;
+  gconstpointer message_data = NULL;
+  gsize message_len = 0;
+  gchar header[256];
   gsize len;
 
   g_assert (JSONRPC_IS_OUTPUT_STREAM (self));
-  g_assert (node != NULL);
+  g_assert (message != NULL);
 
-  if (!JSON_NODE_HOLDS_OBJECT (node) && !JSON_NODE_HOLDS_ARRAY (node))
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_INVAL,
-                   "node must be an array or object");
-      return FALSE;
-    }
+  buffer = g_byte_array_sized_new (g_variant_get_size (message) + 128);
 
-  str = json_to_string (node, FALSE);
-  len = strlen (str);
-
+#if 0
   if G_UNLIKELY (jsonrpc_output_stream_debug)
     g_message (">>> %s", str);
+#endif
 
-  /*
-   * Try to allocate our buffer in a single shot. Sadly we can't serialize
-   * JsonNode directly into a GString or we could remove the double
-   * allocation going on here.
-   */
-  message = g_string_sized_new (len + 32);
+  if (priv->use_gvariant)
+    {
+      message_data = g_variant_get_data (message);
+      message_len = g_variant_get_size (message);
+    }
+  else
+    {
+      message_freeme = json_gvariant_serialize_data (message, &message_len);
+      message_data = message_freeme;
+    }
 
-  g_string_append_printf (message, "Content-Length: %"G_GSIZE_FORMAT"\r\n\r\n", len);
-  g_string_append_len (message, str, len);
+  /* Add Content-Length header */
+  len = g_snprintf (header, sizeof header, "Content-Length: %"G_GSIZE_FORMAT"\r\n", message_len);
+  g_byte_array_append (buffer, (const guint8 *)header, len);
 
-  len = message->len;
+  if (priv->use_gvariant)
+    {
+      /* Add Content-Type header */
+      len = g_snprintf (header, sizeof header, "Content-Type: application/%s\r\n",
+                        priv->use_gvariant ? "gvariant" : "json");
+      g_byte_array_append (buffer, (const guint8 *)header, len);
 
-  return g_bytes_new_take (g_string_free (message, FALSE), len);
+      /* Add our GVariantType for the peer to decode */
+      len = g_snprintf (header, sizeof header, "X-GVariant-Type: %s\r\n",
+                        (const gchar *)g_variant_get_type_string (message));
+      g_byte_array_append (buffer, (const guint8 *)header, len);
+    }
+
+  g_byte_array_append (buffer, (const guint8 *)"\r\n", 2);
+
+  /* Add serialized message data */
+  g_byte_array_append (buffer, (const guint8 *)message_data, message_len);
+
+  return g_byte_array_free_to_bytes (g_steal_pointer (&buffer));
 }
 
 JsonrpcOutputStream *
@@ -179,7 +276,7 @@ jsonrpc_output_stream_write_message_async_cb (GObject      *object,
                                               gpointer      user_data)
 {
   GOutputStream *stream = (GOutputStream *)object;
-  g_autoptr(JsonrpcOutputStream) self = NULL;
+  JsonrpcOutputStream *self;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
   GBytes *bytes;
@@ -188,8 +285,7 @@ jsonrpc_output_stream_write_message_async_cb (GObject      *object,
   g_assert (G_IS_OUTPUT_STREAM (stream));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
-
-  self = g_object_ref (g_task_get_source_object (task));
+  self = g_task_get_source_object (task);
   g_assert (JSONRPC_IS_OUTPUT_STREAM (self));
 
   if (!g_output_stream_write_all_finish (stream, result, &n_written, &error))
@@ -217,7 +313,7 @@ jsonrpc_output_stream_write_message_async_cb (GObject      *object,
 
 void
 jsonrpc_output_stream_write_message_async (JsonrpcOutputStream *self,
-                                           JsonNode            *node,
+                                           GVariant            *message,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
@@ -228,13 +324,13 @@ jsonrpc_output_stream_write_message_async (JsonrpcOutputStream *self,
   g_autoptr(GError) error = NULL;
 
   g_return_if_fail (JSONRPC_IS_OUTPUT_STREAM (self));
-  g_return_if_fail (node != NULL);
+  g_return_if_fail (message != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, jsonrpc_output_stream_write_message_async);
 
-  if (NULL == (bytes = jsonrpc_output_stream_create_bytes (self, node, &error)))
+  if (NULL == (bytes = jsonrpc_output_stream_create_bytes (self, message, &error)))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -277,7 +373,7 @@ jsonrpc_output_stream_write_message_sync_cb (GObject      *object,
 
 gboolean
 jsonrpc_output_stream_write_message (JsonrpcOutputStream  *self,
-                                     JsonNode             *node,
+                                     GVariant             *message,
                                      GCancellable         *cancellable,
                                      GError              **error)
 {
@@ -285,7 +381,7 @@ jsonrpc_output_stream_write_message (JsonrpcOutputStream  *self,
   g_autoptr(GMainContext) main_context = NULL;
 
   g_return_val_if_fail (JSONRPC_IS_OUTPUT_STREAM (self), FALSE);
-  g_return_val_if_fail (node != NULL, FALSE);
+  g_return_val_if_fail (message != NULL, FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
 
   main_context = g_main_context_ref_thread_default ();
@@ -294,7 +390,7 @@ jsonrpc_output_stream_write_message (JsonrpcOutputStream  *self,
   g_task_set_source_tag (task, jsonrpc_output_stream_write_message);
 
   jsonrpc_output_stream_write_message_async (self,
-                                             node,
+                                             message,
                                              cancellable,
                                              jsonrpc_output_stream_write_message_sync_cb,
                                              task);
@@ -303,4 +399,31 @@ jsonrpc_output_stream_write_message (JsonrpcOutputStream  *self,
     g_main_context_iteration (main_context, TRUE);
 
   return g_task_propagate_boolean (task, error);
+}
+
+gboolean
+jsonrpc_output_stream_get_use_gvariant (JsonrpcOutputStream *self)
+{
+  JsonrpcOutputStreamPrivate *priv = jsonrpc_output_stream_get_instance_private (self);
+
+  g_return_val_if_fail (JSONRPC_IS_OUTPUT_STREAM (self), FALSE);
+
+  return priv->use_gvariant;
+}
+
+void
+jsonrpc_output_stream_set_use_gvariant (JsonrpcOutputStream *self,
+                                        gboolean             use_gvariant)
+{
+  JsonrpcOutputStreamPrivate *priv = jsonrpc_output_stream_get_instance_private (self);
+
+  g_return_if_fail (JSONRPC_IS_OUTPUT_STREAM (self));
+
+  use_gvariant = !!use_gvariant;
+
+  if (priv->use_gvariant != use_gvariant)
+    {
+      priv->use_gvariant = use_gvariant;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_USE_GVARIANT]);
+    }
 }

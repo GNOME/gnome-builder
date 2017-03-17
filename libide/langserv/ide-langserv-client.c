@@ -122,7 +122,7 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
                                   IdeBuffer         *buffer,
                                   IdeBufferManager  *buffer_manager)
 {
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
 
   IDE_ENTRY;
@@ -136,9 +136,9 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
 
   uri = ide_buffer_get_uri (buffer);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
     "}"
   );
 
@@ -161,7 +161,7 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
                                         gint               len,
                                         IdeBuffer         *buffer)
 {
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *copy = NULL;
   gint line;
@@ -182,25 +182,25 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   line = gtk_text_iter_get_line (location);
   column = gtk_text_iter_get_line_offset (location);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
-      "version", JCON_INT (version),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+      "version", JSONRPC_MESSAGE_PUT_INT32 (version),
     "}",
     "contentChanges", "[",
       "{",
         "range", "{",
           "start", "{",
-            "line", JCON_INT (line),
-            "character", JCON_INT (column),
+            "line", JSONRPC_MESSAGE_PUT_INT32 (line),
+            "character", JSONRPC_MESSAGE_PUT_INT32 (column),
           "}",
           "end", "{",
-            "line", JCON_INT (line),
-            "character", JCON_INT (column),
+            "line", JSONRPC_MESSAGE_PUT_INT32 (line),
+            "character", JSONRPC_MESSAGE_PUT_INT32 (column),
           "}",
         "}",
-        "rangeLength", JCON_INT (0),
-        "text", JCON_STRING (copy),
+        "rangeLength", JSONRPC_MESSAGE_PUT_INT32 (0),
+        "text", JSONRPC_MESSAGE_PUT_STRING (copy),
       "}",
     "]");
 
@@ -218,7 +218,7 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
                                          IdeBuffer         *buffer)
 {
 
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   struct {
     gint line;
@@ -245,24 +245,24 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
 
   length = gtk_text_iter_get_offset (end_iter) - gtk_text_iter_get_offset (begin_iter);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
-      "version", JCON_INT (version),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+      "version", JSONRPC_MESSAGE_PUT_INT32 (version),
     "}",
     "contentChanges", "[",
       "{",
         "range", "{",
           "start", "{",
-            "line", JCON_INT (begin.line),
-            "character", JCON_INT (begin.column),
+            "line", JSONRPC_MESSAGE_PUT_INT32 (begin.line),
+            "character", JSONRPC_MESSAGE_PUT_INT32 (begin.column),
           "}",
           "end", "{",
-            "line", JCON_INT (end.line),
-            "character", JCON_INT (end.column),
+            "line", JSONRPC_MESSAGE_PUT_INT32 (end.line),
+            "character", JSONRPC_MESSAGE_PUT_INT32 (end.column),
           "}",
         "}",
-        "rangeLength", JCON_INT (length),
+        "rangeLength", JSONRPC_MESSAGE_PUT_INT32 (length),
         "text", "",
       "}",
     "]");
@@ -279,7 +279,7 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
                                    IdeBuffer         *buffer,
                                    IdeBufferManager  *buffer_manager)
 {
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
 
   IDE_ENTRY;
@@ -305,9 +305,9 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
 
   uri = ide_buffer_get_uri (buffer);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
     "}"
   );
 
@@ -324,7 +324,7 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
                                      IdeBuffer         *buffer,
                                      IdeBufferManager  *buffer_manager)
 {
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
 
   IDE_ENTRY;
@@ -338,9 +338,9 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
 
   uri = ide_buffer_get_uri (buffer);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
     "}"
   );
 
@@ -391,7 +391,7 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
                                           GFile             *file,
                                           IdeProject        *project)
 {
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
 
   IDE_ENTRY;
@@ -402,11 +402,11 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
 
   uri = g_file_get_uri (file);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "changes", "[",
       "{",
-        "uri", JCON_STRING (uri),
-        "type", JCON_INT (FILE_CHANGE_TYPE_DELETED),
+        "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+        "type", JSONRPC_MESSAGE_PUT_INT32 (FILE_CHANGE_TYPE_DELETED),
       "}",
     "]"
   );
@@ -427,7 +427,7 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
                                           GFile             *dst,
                                           IdeProject        *project)
 {
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *src_uri = NULL;
   g_autofree gchar *dst_uri = NULL;
 
@@ -441,15 +441,15 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
   src_uri = g_file_get_uri (src);
   dst_uri = g_file_get_uri (dst);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "changes", "["
       "{",
-        "uri", JCON_STRING (src_uri),
-        "type", JCON_INT (FILE_CHANGE_TYPE_DELETED),
+        "uri", JSONRPC_MESSAGE_PUT_STRING (src_uri),
+        "type", JSONRPC_MESSAGE_PUT_INT32 (FILE_CHANGE_TYPE_DELETED),
       "}",
       "{",
-        "uri", JCON_STRING (dst_uri),
-        "type", JCON_INT (FILE_CHANGE_TYPE_CREATED),
+        "uri", JSONRPC_MESSAGE_PUT_STRING (dst_uri),
+        "type", JSONRPC_MESSAGE_PUT_INT32 (FILE_CHANGE_TYPE_CREATED),
       "}",
     "]"
   );
@@ -467,28 +467,24 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
 static IdeDiagnostics *
 ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
                                            IdeFile           *file,
-                                           JsonArray         *diagnostics)
+                                           GVariantIter      *diagnostics)
 {
   g_autoptr(GPtrArray) ar = NULL;
-  guint length;
+  GVariant *value;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (diagnostics != NULL);
 
-  length = json_array_get_length (diagnostics);
+  ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
 
-  ar = g_ptr_array_sized_new (length);
-  g_ptr_array_set_free_func (ar, (GDestroyNotify)ide_diagnostic_unref);
-
-  for (guint i = 0; i < length; i++)
+  while (g_variant_iter_loop (diagnostics, "v", &value))
     {
-      JsonNode *node = json_array_get_element (diagnostics, i);
       g_autoptr(IdeSourceLocation) begin_loc = NULL;
       g_autoptr(IdeSourceLocation) end_loc = NULL;
       g_autoptr(IdeDiagnostic) diag = NULL;
+      g_autoptr(GVariant) range = NULL;
       const gchar *message = NULL;
       const gchar *source = NULL;
-      JsonNode *range = NULL;
       gint severity = 0;
       gboolean success;
       struct {
@@ -497,24 +493,24 @@ ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
       } begin, end;
 
       /* Mandatory fields */
-      if (!JCON_EXTRACT (node,
-                         "range", JCONE_NODE (range),
-                         "message", JCONE_STRING (message)))
+      if (!JSONRPC_MESSAGE_PARSE (value,
+                                  "range", JSONRPC_MESSAGE_GET_VARIANT (&range),
+                                  "message", JSONRPC_MESSAGE_GET_STRING (&message)))
         continue;
 
       /* Optional Fields */
-      JCON_EXTRACT (node, "severity", JCONE_INT (severity));
-      JCON_EXTRACT (node, "source", JCONE_STRING (source));
+      JSONRPC_MESSAGE_PARSE (value, "severity", JSONRPC_MESSAGE_GET_INT32 (&severity));
+      JSONRPC_MESSAGE_PARSE (value, "source", JSONRPC_MESSAGE_GET_STRING (&source));
 
       /* Extract location information */
-      success = JCON_EXTRACT (range,
+      success = JSONRPC_MESSAGE_PARSE (range,
         "start", "{",
-          "line", JCONE_INT (begin.line),
-          "character", JCONE_INT (begin.column),
+          "line", JSONRPC_MESSAGE_GET_INT32 (&begin.line),
+          "character", JSONRPC_MESSAGE_GET_INT32 (&begin.column),
         "}",
         "end", "{",
-          "line", JCONE_INT (end.line),
-          "character", JCONE_INT (end.column),
+          "line", JSONRPC_MESSAGE_GET_INT32 (&end.line),
+          "character", JSONRPC_MESSAGE_GET_INT32 (&end.column),
         "}"
       );
 
@@ -552,10 +548,10 @@ ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
 
 static void
 ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
-                                                       JsonNode          *params)
+                                                       GVariant          *params)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  JsonArray *json_diagnostics = NULL;
+  g_autoptr(GVariantIter) json_diagnostics = NULL;
   const gchar *uri = NULL;
   gboolean success;
 
@@ -564,9 +560,9 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (params != NULL);
 
-  success = JCON_EXTRACT (params,
-    "uri", JCONE_STRING (uri),
-    "diagnostics", JCONE_ARRAY (json_diagnostics)
+  success = JSONRPC_MESSAGE_PARSE (params,
+    "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+    "diagnostics", JSONRPC_MESSAGE_GET_ITER (&json_diagnostics)
   );
 
   if (success)
@@ -604,7 +600,7 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
 static void
 ide_langserv_client_real_notification (IdeLangservClient *self,
                                        const gchar       *method,
-                                       JsonNode          *params)
+                                       GVariant          *params)
 {
   IDE_ENTRY;
 
@@ -621,7 +617,7 @@ ide_langserv_client_real_notification (IdeLangservClient *self,
 static void
 ide_langserv_client_send_notification (IdeLangservClient *self,
                                        const gchar       *method,
-                                       JsonNode          *params,
+                                       GVariant          *params,
                                        JsonrpcClient     *rpc_client)
 {
   GQuark detail;
@@ -753,7 +749,7 @@ ide_langserv_client_class_init (IdeLangservClientClass *klass)
                   G_TYPE_NONE,
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  JSON_TYPE_NODE);
+                  G_TYPE_VARIANT);
 
   signals [SUPPORTS_LANGUAGE] =
     g_signal_new ("supports-language",
@@ -842,7 +838,7 @@ ide_langserv_client_initialize_cb (GObject      *object,
   JsonrpcClient *rpc_client = (JsonrpcClient *)object;
   g_autoptr(IdeLangservClient) self = user_data;
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  g_autoptr(JsonNode) reply = NULL;
+  g_autoptr(GVariant) reply = NULL;
   g_autoptr(GError) error = NULL;
   IdeBufferManager *buffer_manager;
   IdeProject *project;
@@ -896,7 +892,7 @@ void
 ide_langserv_client_start (IdeLangservClient *self)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *root_path = NULL;
   IdeContext *context;
   IdeVcs *vcs;
@@ -933,9 +929,9 @@ ide_langserv_client_start (IdeLangservClient *self)
    * also start our read loop.
    */
 
-  params = JCON_NEW (
-    "processId", JCON_INT (getpid ()),
-    "rootPath", JCON_STRING (root_path),
+  params = JSONRPC_MESSAGE_NEW (
+    "processId", JSONRPC_MESSAGE_PUT_INT32 (getpid ()),
+    "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
     "capabilities", "{", "}"
   );
 
@@ -1000,7 +996,7 @@ ide_langserv_client_call_cb (GObject      *object,
                              gpointer      user_data)
 {
   JsonrpcClient *client = (JsonrpcClient *)object;
-  g_autoptr(JsonNode) return_value = NULL;
+  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
 
@@ -1015,7 +1011,7 @@ ide_langserv_client_call_cb (GObject      *object,
       return;
     }
 
-  g_task_return_pointer (task, g_steal_pointer (&return_value), (GDestroyNotify)json_node_unref);
+  g_task_return_pointer (task, g_steal_pointer (&return_value), (GDestroyNotify)g_variant_unref);
 
   IDE_EXIT;
 }
@@ -1024,7 +1020,7 @@ ide_langserv_client_call_cb (GObject      *object,
  * ide_langserv_client_call_async:
  * @self: An #IdeLangservClient
  * @method: the method to call
- * @params: (nullable) (transfer full): An #JsonNode or %NULL
+ * @params: (nullable) (transfer full): An #GVariant or %NULL
  * @cancellable: (nullable): A cancellable or %NULL
  * @callback: the callback to receive the result, or %NULL
  * @user_data: user data for @callback
@@ -1034,7 +1030,7 @@ ide_langserv_client_call_cb (GObject      *object,
 void
 ide_langserv_client_call_async (IdeLangservClient   *self,
                                 const gchar         *method,
-                                JsonNode            *params,
+                                GVariant            *params,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
@@ -1069,10 +1065,10 @@ ide_langserv_client_call_async (IdeLangservClient   *self,
 gboolean
 ide_langserv_client_call_finish (IdeLangservClient  *self,
                                  GAsyncResult       *result,
-                                 JsonNode          **return_value,
+                                 GVariant          **return_value,
                                  GError            **error)
 {
-  g_autoptr(JsonNode) local_return_value = NULL;
+  g_autoptr(GVariant) local_return_value = NULL;
   gboolean ret;
 
   IDE_ENTRY;
@@ -1112,7 +1108,7 @@ ide_langserv_client_send_notification_cb (GObject      *object,
  * ide_langserv_client_send_notification_async:
  * @self: An #IdeLangservClient
  * @method: the method to notification
- * @params: (nullable) (transfer full): An #JsonNode or %NULL
+ * @params: (nullable) (transfer full): An #GVariant or %NULL
  * @cancellable: (nullable): A cancellable or %NULL
  * @notificationback: the notificationback to receive the result, or %NULL
  * @user_data: user data for @notificationback
@@ -1122,7 +1118,7 @@ ide_langserv_client_send_notification_cb (GObject      *object,
 void
 ide_langserv_client_send_notification_async (IdeLangservClient   *self,
                                              const gchar         *method,
-                                             JsonNode            *params,
+                                             GVariant            *params,
                                              GCancellable        *cancellable,
                                              GAsyncReadyCallback  notificationback,
                                              gpointer             user_data)

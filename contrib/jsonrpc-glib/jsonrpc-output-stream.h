@@ -47,12 +47,15 @@ struct _JsonrpcOutputStreamClass
 };
 
 JsonrpcOutputStream *jsonrpc_output_stream_new                  (GOutputStream        *base_stream);
+gboolean             jsonrpc_output_stream_get_use_gvariant     (JsonrpcOutputStream  *self);
+void                 jsonrpc_output_stream_set_use_gvariant     (JsonrpcOutputStream  *self,
+                                                                 gboolean              use_gvariant);
 gboolean             jsonrpc_output_stream_write_message        (JsonrpcOutputStream  *self,
-                                                                 JsonNode             *node,
+                                                                 GVariant             *message,
                                                                  GCancellable         *cancellable,
                                                                  GError              **error);
 void                 jsonrpc_output_stream_write_message_async  (JsonrpcOutputStream  *self,
-                                                                 JsonNode             *node,
+                                                                 GVariant             *message,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);

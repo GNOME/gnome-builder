@@ -19,7 +19,7 @@
 #define G_LOG_DOMAIN "jsonrpc-client"
 
 /**
- * SECTION:jsonrpcclient:
+ * SECTION:jsonrpc-client:
  * @title: JsonrpcClient
  * @short_description: a client for JSON-RPC communication
  *
@@ -39,7 +39,7 @@
  *
  * To make an RPC call, use jsonrpc_client_call() or
  * jsonrpc_client_call_async() and provide the method name and the parameters
- * as a #JsonNode for call.
+ * as a #GVariant for call.
  *
  * It is a programming error to mix synchronous and asynchronous API calls
  * of the #JsonrpcClient class.
@@ -51,9 +51,9 @@
 
 #include <glib.h>
 
-#include "jcon.h"
 #include "jsonrpc-client.h"
 #include "jsonrpc-input-stream.h"
+#include "jsonrpc-input-stream-private.h"
 #include "jsonrpc-output-stream.h"
 
 typedef struct
@@ -78,14 +78,14 @@ typedef struct
   /*
    * The input_stream field contains our wrapper input stream around the
    * underlying input stream provided by JsonrpcClient::io-stream. This
-   * allows us to conveniently write JsonNode instances.
+   * allows us to conveniently write GVariant  instances.
    */
   JsonrpcInputStream *input_stream;
 
   /*
    * The output_stream field contains our wrapper output stream around the
    * underlying output stream provided by JsonrpcClient::io-stream. This
-   * allows us to convieniently read JsonNode instances.
+   * allows us to convieniently read GVariant instances.
    */
   JsonrpcOutputStream *output_stream;
 
@@ -101,7 +101,7 @@ typedef struct
    * Every JSONRPC invocation needs a request id. This is a monotonic
    * integer that we encode as a string to the server.
    */
-  gint sequence;
+  gint64 sequence;
 
   /*
    * This bit indicates if we have sent a call yet. Once we send our
@@ -122,6 +122,13 @@ typedef struct
    * circuit on future operations sooner.
    */
   guint failed : 1;
+
+  /*
+   * If we should try to use gvariant encoding when communicating with
+   * our peer. This is helpful to be able to lower parser and memory
+   * overhead.
+   */
+  guint use_gvariant : 1;
 } JsonrpcClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (JsonrpcClient, jsonrpc_client, G_TYPE_OBJECT)
@@ -129,6 +136,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (JsonrpcClient, jsonrpc_client, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_IO_STREAM,
+  PROP_USE_GVARIANT,
   N_PROPS
 };
 
@@ -145,55 +153,43 @@ static guint signals [N_SIGNALS];
  * Check to see if this looks like a jsonrpc 2.0 reply of any kind.
  */
 static gboolean
-is_jsonrpc_reply (JsonNode *node)
+is_jsonrpc_reply (GVariantDict *dict)
 {
-  JsonObject *object;
-  const gchar *value;
+  const gchar *value = NULL;
 
-  return JSON_NODE_HOLDS_OBJECT (node) &&
-         NULL != (object = json_node_get_object (node)) &&
-         json_object_has_member (object, "jsonrpc") &&
-         NULL != (value = json_object_get_string_member (object, "jsonrpc")) &&
-         (g_strcmp0 (value, "2.0") == 0);
+  g_assert (dict != NULL);
+
+  return (g_variant_dict_contains (dict, "jsonrpc") &&
+          g_variant_dict_lookup (dict, "jsonrpc", "&s", &value) &&
+          g_str_equal (value, "2.0"));
 }
 
 /*
  * Check to see if this looks like a notification reply.
  */
 static gboolean
-is_jsonrpc_notification (JsonNode *node)
+is_jsonrpc_notification (GVariantDict *dict)
 {
-  JsonObject *object;
-  const gchar *value;
+  const gchar *method = NULL;
 
-  g_assert (JSON_NODE_HOLDS_OBJECT (node));
+  g_assert (dict != NULL);
 
-  object = json_node_get_object (node);
-
-  return !json_object_has_member (object, "id") &&
-         json_object_has_member (object, "method") &&
-         NULL != (value = json_object_get_string_member (object, "method")) &&
-         value != NULL && *value != '\0';
+  return (!g_variant_dict_contains (dict, "id") &&
+          g_variant_dict_contains (dict, "method") &&
+          g_variant_dict_lookup (dict, "method", "&s", &method) &&
+          method != NULL && *method != '\0');
 }
 
 /*
  * Check to see if this looks like a proper result for an RPC.
  */
 static gboolean
-is_jsonrpc_result (JsonNode *node)
+is_jsonrpc_result (GVariantDict *dict)
 {
-  JsonObject *object;
-  JsonNode *field;
+  g_assert (dict != NULL);
 
-  g_assert (JSON_NODE_HOLDS_OBJECT (node));
-
-  object = json_node_get_object (node);
-
-  return json_object_has_member (object, "id") &&
-         NULL != (field = json_object_get_member (object, "id")) &&
-         JSON_NODE_HOLDS_VALUE (field) &&
-         json_node_get_int (field) > 0 &&
-         json_object_has_member (object, "result");
+  return (g_variant_dict_contains (dict, "id") &&
+          g_variant_dict_contains (dict, "result"));
 }
 
 
@@ -201,91 +197,16 @@ is_jsonrpc_result (JsonNode *node)
  * Check to see if this looks like a proper method call for an RPC.
  */
 static gboolean
-is_jsonrpc_call (JsonNode     *node,
-                 JsonNode    **id,
-                 JsonNode    **params,
-                 const gchar **method)
+is_jsonrpc_call (GVariantDict *dict)
 {
-  JsonNode *tmp_id = NULL;
-  JsonNode *tmp_params = NULL;
-  const gchar *tmp_method = NULL;
-  gboolean success;
+  const gchar *method = NULL;
 
-  g_assert (JSON_NODE_HOLDS_OBJECT (node));
+  g_assert (dict != NULL);
 
-  success = JCON_EXTRACT (node,
-    "id", JCONE_NODE (tmp_id),
-    "method", JCONE_STRING (tmp_method),
-    "params", JCONE_NODE (tmp_params)
-  );
-
-  if (success && tmp_id != NULL && tmp_method != NULL && tmp_params != NULL)
-    {
-      if (id != NULL)
-        *id = tmp_id;
-
-      if (method != NULL)
-        *method = tmp_method;
-
-      if (params != NULL)
-        *params = tmp_params;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/*
- * Try to unwrap the error and possibly set @id to the extracted RPC
- * request id.
- */
-static gboolean
-unwrap_jsonrpc_error (JsonNode  *node,
-                      gint      *id,
-                      GError   **error)
-{
-  JsonObject *object;
-  JsonObject *err_obj;
-  JsonNode *field;
-
-  g_assert (node != NULL);
-  g_assert (id != NULL);
-  g_assert (error != NULL);
-
-  if (!JSON_NODE_HOLDS_OBJECT (node))
-    return FALSE;
-
-  object = json_node_get_object (node);
-
-  if (json_object_has_member (object, "id") &&
-      NULL != (field = json_object_get_member (object, "id")) &&
-      JSON_NODE_HOLDS_VALUE (field) &&
-      json_node_get_int (field) > 0)
-    *id = json_node_get_int (field);
-  else
-    *id = -1;
-
-  if (json_object_has_member (object, "error") &&
-      NULL != (field = json_object_get_member (object, "error")) &&
-      JSON_NODE_HOLDS_OBJECT (field) &&
-      NULL != (err_obj = json_node_get_object (field)))
-    {
-      const gchar *message;
-      gint code;
-
-      message = json_object_get_string_member (err_obj, "message");
-      code = json_object_get_int_member (err_obj, "code");
-
-      if (message == NULL || *message == '\0')
-        message = "Unknown error occurred";
-
-      g_set_error_literal (error, JSONRPC_CLIENT_ERROR, code, message);
-
-      return TRUE;
-    }
-
-  return FALSE;
+  return (g_variant_dict_contains (dict, "id") &&
+          g_variant_dict_contains (dict, "method") &&
+          g_variant_dict_lookup (dict, "method", "&s", &method) &&
+          g_variant_dict_contains (dict, "params"));
 }
 
 /*
@@ -300,18 +221,15 @@ jsonrpc_client_panic (JsonrpcClient *self,
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
   g_autoptr(GHashTable) invocations = NULL;
-  g_autoptr(JsonrpcClient) hold = NULL;
   GHashTableIter iter;
   GTask *task;
 
   g_assert (JSONRPC_IS_CLIENT (self));
   g_assert (error != NULL);
 
-  hold = g_object_ref (self);
-
   priv->failed = TRUE;
 
-  g_warning ("%s", error->message);
+  g_warning ("%s(): %s", G_STRFUNC, error->message);
 
   jsonrpc_client_close (self, NULL, NULL);
 
@@ -404,6 +322,25 @@ jsonrpc_client_finalize (GObject *object)
 }
 
 static void
+jsonrpc_client_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  JsonrpcClient *self = JSONRPC_CLIENT (object);
+
+  switch (prop_id)
+    {
+    case PROP_USE_GVARIANT:
+      g_value_set_boolean (value, jsonrpc_client_get_use_gvariant (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 jsonrpc_client_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -418,6 +355,10 @@ jsonrpc_client_set_property (GObject      *object,
       priv->io_stream = g_value_dup_object (value);
       break;
 
+    case PROP_USE_GVARIANT:
+      jsonrpc_client_set_use_gvariant (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -430,6 +371,7 @@ jsonrpc_client_class_init (JsonrpcClientClass *klass)
 
   object_class->constructed = jsonrpc_client_constructed;
   object_class->finalize = jsonrpc_client_finalize;
+  object_class->get_property = jsonrpc_client_get_property;
   object_class->set_property = jsonrpc_client_set_property;
 
   properties [PROP_IO_STREAM] =
@@ -439,14 +381,21 @@ jsonrpc_client_class_init (JsonrpcClientClass *klass)
                          G_TYPE_IO_STREAM,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_USE_GVARIANT] =
+    g_param_spec_boolean ("use-gvariant",
+                          "Use GVariant",
+                          "If GVariant encoding should be used",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   /**
    * JsonrpcClient::handle-call:
    * @self: A #JsonrpcClient
-   * @method: the method name
-   * @id: The "id" field of the JSONRPC message
-   * @params: The "params" field of the JSONRPC message
+   * @method: (not nullable): the method name
+   * @id: (not nullable): The "id" field of the JSONRPC message
+   * @params: (nullable): The "params" field of the JSONRPC message
    *
    * This signal is emitted when an RPC has been received from
    * the peer we are connected to. Return %TRUE if you have handled
@@ -466,14 +415,14 @@ jsonrpc_client_class_init (JsonrpcClientClass *klass)
                   G_TYPE_BOOLEAN,
                   3,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  JSON_TYPE_NODE,
-                  JSON_TYPE_NODE);
+                  G_TYPE_VARIANT,
+                  G_TYPE_VARIANT);
 
   /**
    * JsonrpcClient::notification:
    * @self: A #JsonrpcClient
    * @method: the method name of the notification
-   * @params: params for the notification
+   * @params: (nullable): params for the notification
    *
    * This signal is emitted when a notification has been received
    * from a peer. Unlike #JsonrpcClient::handle-call, this does
@@ -489,7 +438,7 @@ jsonrpc_client_class_init (JsonrpcClientClass *klass)
                   G_TYPE_NONE,
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  JSON_TYPE_NODE);
+                  G_TYPE_VARIANT);
 }
 
 static void
@@ -576,17 +525,14 @@ jsonrpc_client_call_read_cb (GObject      *object,
   JsonrpcInputStream *stream = (JsonrpcInputStream *)object;
   g_autoptr(JsonrpcClient) self = user_data;
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonNode) node = NULL;
+  g_autoptr(GVariant) message = NULL;
   g_autoptr(GError) error = NULL;
-  JsonNode *id_node = NULL;
-  JsonNode *params_node = NULL;
-  const gchar *method = NULL;
-  gint id = -1;
+  g_auto(GVariantDict) dict = { 0 };
 
   g_assert (JSONRPC_IS_INPUT_STREAM (stream));
   g_assert (JSONRPC_IS_CLIENT (self));
 
-  if (!jsonrpc_input_stream_read_message_finish (stream, result, &node, &error))
+  if (!jsonrpc_input_stream_read_message_finish (stream, result, &message, &error))
     {
       /*
        * Handle jsonrpc_client_close() conditions gracefully.
@@ -603,14 +549,27 @@ jsonrpc_client_call_read_cb (GObject      *object,
       return;
     }
 
-  g_assert (node != NULL);
+  g_assert (message != NULL);
+
+  /* If we received a gvariant-based message, upgrade connection */
+  if (_jsonrpc_input_stream_get_has_seen_gvariant (stream))
+    jsonrpc_client_set_use_gvariant (self, TRUE);
+
+  /* Make sure we got a proper type back from the variant. */
+  if (!g_variant_is_of_type (message, G_VARIANT_TYPE_VARDICT))
+    {
+      jsonrpc_client_panic (self, error);
+      return;
+    }
+
+  g_variant_dict_init (&dict, message);
 
   /*
    * If the message is malformed, we'll also need to perform another read.
    * We do this to try to be relaxed against failures. That seems to be
    * the JSONRPC way, although I'm not sure I like the idea.
    */
-  if (!is_jsonrpc_reply (node))
+  if (!is_jsonrpc_reply (&dict))
     {
       error = g_error_new_literal (G_IO_ERROR,
                                    G_IO_ERROR_INVALID_DATA,
@@ -623,78 +582,86 @@ jsonrpc_client_call_read_cb (GObject      *object,
    * If the response does not have an "id" field, then it is a "notification"
    * and we need to emit the "notificiation" signal.
    */
-  if (is_jsonrpc_notification (node))
+  if (is_jsonrpc_notification (&dict))
     {
-      g_autoptr(JsonNode) empty_params = NULL;
-      const gchar *method_name;
-      JsonObject *obj;
-      JsonNode *params;
+      g_autoptr(GVariant) params = NULL;
+      const gchar *method_name = NULL;
 
-      obj = json_node_get_object (node);
-      method_name = json_object_get_string_member (obj, "method");
-      params = json_object_get_member (obj, "params");
-
-      if (params == NULL)
-        params = empty_params = json_node_new (JSON_NODE_ARRAY);
-
-      g_signal_emit (self, signals [NOTIFICATION], 0, method_name, params);
+      if (g_variant_dict_lookup (&dict, "method", "&s", &method_name))
+        {
+          params = g_variant_dict_lookup_value (&dict, "params", NULL);
+          g_signal_emit (self, signals [NOTIFICATION], 0, method_name, params);
+        }
 
       goto begin_next_read;
     }
 
-  if (is_jsonrpc_result (node))
+  if (is_jsonrpc_result (&dict))
     {
-      JsonObject *obj;
-      JsonNode *res;
+      g_autoptr(GVariant) params = NULL;
+      gint64 id = -1;
       GTask *task;
 
-      obj = json_node_get_object (node);
-      id = json_object_get_int_member (obj, "id");
-      res = json_object_get_member (obj, "result");
-
-      task = g_hash_table_lookup (priv->invocations, GINT_TO_POINTER (id));
-
-      if (task != NULL)
+      if (!g_variant_dict_lookup (&dict, "id", "x", &id) ||
+          NULL == (task = g_hash_table_lookup (priv->invocations, GINT_TO_POINTER (id))))
         {
-          g_task_return_pointer (task, json_node_copy (res), (GDestroyNotify)json_node_unref);
-          goto begin_next_read;
+          error = g_error_new_literal (G_IO_ERROR,
+                                       G_IO_ERROR_INVALID_DATA,
+                                       "Reply to missing or invalid task");
+          jsonrpc_client_panic (self, error);
+          return;
         }
 
-      error = g_error_new_literal (G_IO_ERROR,
-                                   G_IO_ERROR_INVALID_DATA,
-                                   "Reply to missing or invalid task");
-      jsonrpc_client_panic (self, error);
-      return;
+      if (NULL != (params = g_variant_dict_lookup_value (&dict, "result", NULL)))
+        g_task_return_pointer (task, g_steal_pointer (&params), (GDestroyNotify)g_variant_unref);
+      else
+        g_task_return_pointer (task, NULL, NULL);
+
+      goto begin_next_read;
     }
 
   /*
    * If this is a method call, emit the handle-call signal.
    */
-  if (is_jsonrpc_call (node,
-                       &id_node,
-                       &params_node,
-                       &method))
+  if (is_jsonrpc_call (&dict))
     {
+      g_autoptr(GVariant) id = NULL;
+      g_autoptr(GVariant) params = NULL;
+      const gchar *method_name = NULL;
       gboolean ret = FALSE;
 
-      g_signal_emit (self, signals [HANDLE_CALL], 0, method, id_node, params_node, &ret);
+      if (!g_variant_dict_lookup (&dict, "method", "&s", &method_name) ||
+          NULL == (id = g_variant_dict_lookup_value (&dict, "id", NULL)))
+        {
+          error = g_error_new (G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               "Call contains invalid method or id field");
+          jsonrpc_client_panic (self, error);
+          return;
+        }
+
+      params = g_variant_dict_lookup_value (&dict, "params", NULL);
+
+      g_assert (method_name != NULL);
+      g_assert (id != NULL);
+
+      g_signal_emit (self, signals [HANDLE_CALL], 0, method_name, id, params, &ret);
 
       if (ret == FALSE)
         {
-          g_autoptr(JsonNode) reply = NULL;
+          GVariantDict reply;
+          GVariantDict error_dict;
 
-          reply = JCON_NEW (
-            "jsonrpc", "2.0",
-            "id", JCON_NODE (id_node),
-            "error", "{",
-              "code", JCON_INT (-32601),
-              "message", "The method does not exist or is not available",
-            "}"
-          );
+          g_variant_dict_init (&error_dict, NULL);
+          g_variant_dict_insert (&error_dict, "code", "i", -32601);
+          g_variant_dict_insert (&error_dict, "message", "s", "The method does not exist or is not available");
 
-          jsonrpc_output_stream_write_message_async (priv->output_stream,
-                                                     g_steal_pointer (&reply),
-                                                     NULL, NULL, NULL);
+          g_variant_dict_init (&reply, NULL);
+          g_variant_dict_insert (&reply, "jsonrpc", "s", "2.0");
+          g_variant_dict_insert_value (&reply, "id", id);
+          g_variant_dict_insert_value (&reply, "error", g_variant_dict_end (&error_dict));
+
+          jsonrpc_output_stream_write_message_async (priv->output_stream, g_variant_dict_end (&reply), NULL, NULL, NULL);
         }
 
       return;
@@ -704,17 +671,29 @@ jsonrpc_client_call_read_cb (GObject      *object,
    * If we got an error destined for one of our inflight invocations, then
    * we need to dispatch it now.
    */
-  if (unwrap_jsonrpc_error (node, &id, &error))
+
+  if (g_variant_dict_contains (&dict, "id") &&
+      g_variant_dict_contains (&dict, "error"))
     {
-      if (id > 0)
+      g_auto(GVariantDict) error_dict = { 0 };
+      g_autoptr(GVariant) error_variant = NULL;
+      g_autofree gchar *errstr = NULL;
+      gint64 id = -1;
+
+      error_variant = g_variant_dict_lookup_value (&dict, "error", NULL);
+      errstr = g_variant_print (error_variant, FALSE);
+      error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_FAILED, errstr);
+
+      if (g_variant_dict_lookup (&dict, "id", "x", &id))
         {
           GTask *task = g_hash_table_lookup (priv->invocations, GINT_TO_POINTER (id));
 
           if (task != NULL)
-            {
-              g_task_return_error (task, g_steal_pointer (&error));
-              goto begin_next_read;
-            }
+            g_task_return_error (task, g_steal_pointer (&error));
+          else
+            g_warning ("Received error for task %"G_GINT64_FORMAT" which is unknown", id);
+
+          goto begin_next_read;
         }
 
       /*
@@ -725,10 +704,7 @@ jsonrpc_client_call_read_cb (GObject      *object,
       return;
     }
 
-  {
-    g_autofree gchar *str = json_to_string (node, FALSE);
-    g_warning ("Unhandled message: %s", str);
-  }
+  g_warning ("Unhandled RPC from peer!");
 
 begin_next_read:
   if (priv->input_stream != NULL && priv->in_shutdown == FALSE)
@@ -744,8 +720,8 @@ jsonrpc_client_call_sync_cb (GObject      *object,
                              gpointer      user_data)
 {
   JsonrpcClient *self = (JsonrpcClient *)object;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(JsonNode) return_value = NULL;
+  GTask *task = user_data;
+  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (JSONRPC_IS_CLIENT (self));
@@ -755,38 +731,38 @@ jsonrpc_client_call_sync_cb (GObject      *object,
   if (!jsonrpc_client_call_finish (self, result, &return_value, &error))
     g_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&return_value), (GDestroyNotify)json_node_unref);
+    g_task_return_pointer (task, g_steal_pointer (&return_value), (GDestroyNotify)g_variant_unref);
 }
 
 /**
  * jsonrpc_client_call:
  * @self: A #JsonrpcClient
  * @method: the name of the method to call
- * @params: (transfer full) (nullable): A #JsonNode of parameters or %NULL
+ * @params: (transfer none) (nullable): A #GVariant of parameters or %NULL
  * @cancellable: (nullable): A #GCancellable or %NULL
  * @return_value: (nullable) (out): A location for a #JsonNode.
  *
  * Synchronously calls @method with @params on the remote peer.
  *
- * This function takes ownership of @params.
- *
  * once a reply has been received, or failure, this function will return.
  * If successful, @return_value will be set with the reslut field of
  * the response.
+ *
+ * If @params is floating then this function consumes the reference.
  *
  * Returns; %TRUE on success; otherwise %FALSE and @error is set.
  */
 gboolean
 jsonrpc_client_call (JsonrpcClient  *self,
                      const gchar    *method,
-                     JsonNode       *params,
+                     GVariant       *params,
                      GCancellable   *cancellable,
-                     JsonNode      **return_value,
+                     GVariant      **return_value,
                      GError        **error)
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GMainContext) main_context = NULL;
-  g_autoptr(JsonNode) local_return_value = NULL;
+  g_autoptr(GVariant) local_return_value = NULL;
   gboolean ret;
 
   g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
@@ -803,7 +779,7 @@ jsonrpc_client_call (JsonrpcClient  *self,
                              params,
                              cancellable,
                              jsonrpc_client_call_sync_cb,
-                             g_object_ref (task));
+                             task);
 
   while (!g_task_get_completed (task))
     g_main_context_iteration (main_context, TRUE);
@@ -821,7 +797,7 @@ jsonrpc_client_call (JsonrpcClient  *self,
  * jsonrpc_client_call_async:
  * @self: A #JsonrpcClient
  * @method: the name of the method to call
- * @params: (transfer full) (nullable): A #JsonNode of parameters or %NULL
+ * @params: (transfer none) (nullable): A #JsonNode of parameters or %NULL
  * @cancellable: (nullable): A #GCancellable or %NULL
  * @callback: a callback to executed upon completion
  * @user_data: user data for @callback
@@ -837,16 +813,17 @@ jsonrpc_client_call (JsonrpcClient  *self,
 void
 jsonrpc_client_call_async (JsonrpcClient       *self,
                            const gchar         *method,
-                           JsonNode            *params,
+                           GVariant            *params,
                            GCancellable        *cancellable,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonNode) message = NULL;
+  g_autoptr(GVariant) message = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GError) error = NULL;
-  gint id;
+  GVariantDict dict;
+  gint64 id;
 
   g_return_if_fail (JSONRPC_IS_CLIENT (self));
   g_return_if_fail (method != NULL);
@@ -870,15 +847,17 @@ jsonrpc_client_call_async (JsonrpcClient       *self,
 
   g_task_set_task_data (task, GINT_TO_POINTER (id), NULL);
 
+  /* Use empty maybe type for NULL, and floating reference will
+   * be consumed by g_variant_dict_insert_value() below. */
   if (params == NULL)
-    params = json_node_new (JSON_NODE_NULL);
+    params = g_variant_new_maybe (G_VARIANT_TYPE_VARIANT, NULL);
 
-  message = JCON_NEW (
-    "jsonrpc", "2.0",
-    "id", JCON_INT (id),
-    "method", JCON_STRING (method),
-    "params", JCON_NODE (params)
-  );
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "jsonrpc", "s", "2.0");
+  g_variant_dict_insert (&dict, "id", "x", id);
+  g_variant_dict_insert (&dict, "method", "s", method);
+  g_variant_dict_insert_value (&dict, "params", params);
+  message = g_variant_dict_end (&dict);
 
   g_hash_table_insert (priv->invocations, GINT_TO_POINTER (id), g_object_ref (task));
 
@@ -906,7 +885,7 @@ jsonrpc_client_call_async (JsonrpcClient       *self,
 gboolean
 jsonrpc_client_call_finish (JsonrpcClient  *self,
                             GAsyncResult   *result,
-                            JsonNode      **return_value,
+                            GVariant      **return_value,
                             GError        **error)
 {
   g_autoptr(JsonNode) local_return_value = NULL;
@@ -966,12 +945,13 @@ jsonrpc_client_send_notification_write_cb (GObject      *object,
 gboolean
 jsonrpc_client_send_notification (JsonrpcClient  *self,
                                   const gchar    *method,
-                                  JsonNode       *params,
+                                  GVariant       *params,
                                   GCancellable   *cancellable,
                                   GError        **error)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonNode) message = NULL;
+  g_autoptr(GVariant) message = NULL;
+  GVariantDict dict;
   gboolean ret;
 
   g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
@@ -981,18 +961,18 @@ jsonrpc_client_send_notification (JsonrpcClient  *self,
   if (!jsonrpc_client_check_ready (self, error))
     return FALSE;
 
+  /* Use empty maybe type for NULL params. The floating reference will
+   * be consumed below in g_variant_dict_insert_value(). */
   if (params == NULL)
-    params = json_node_new (JSON_NODE_NULL);
+    params = g_variant_new_maybe (G_VARIANT_TYPE_VARIANT, NULL);
 
-  message = JCON_NEW (
-    "jsonrpc", "2.0",
-    "method", JCON_STRING (method),
-    "params", JCON_NODE (params)
-  );
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "jsonrpc", "s", "2.0");
+  g_variant_dict_insert (&dict, "method", "s", method);
+  g_variant_dict_insert_value (&dict, "params", params);
+  message = g_variant_dict_end (&dict);
 
   ret = jsonrpc_output_stream_write_message (priv->output_stream, message, cancellable, error);
-
-  json_node_unref (params);
 
   return ret;
 }
@@ -1001,7 +981,7 @@ jsonrpc_client_send_notification (JsonrpcClient  *self,
  * jsonrpc_client_send_notification_async:
  * @self: A #JsonrpcClient
  * @method: the name of the method to call
- * @params: (transfer full) (nullable): A #JsonNode of parameters or %NULL
+ * @params: (transfer none) (nullable): A #GVariant of parameters or %NULL
  * @cancellable: (nullable): A #GCancellable or %NULL
  *
  * Asynchronously calls @method with @params on the remote peer.
@@ -1011,20 +991,21 @@ jsonrpc_client_send_notification (JsonrpcClient  *self,
  * the bytes have been delivered to the underlying stream. This does
  * not indicate that the peer has received them.
  *
- * This function takes ownership of @params.
+ * If @params is floating then the reference is consumed.
  */
 void
 jsonrpc_client_send_notification_async (JsonrpcClient       *self,
                                         const gchar         *method,
-                                        JsonNode            *params,
+                                        GVariant            *params,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
                                         gpointer             user_data)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonNode) message = NULL;
+  g_autoptr(GVariant) message = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GError) error = NULL;
+  GVariantDict dict;
 
   g_return_if_fail (JSONRPC_IS_CLIENT (self));
   g_return_if_fail (method != NULL);
@@ -1040,21 +1021,19 @@ jsonrpc_client_send_notification_async (JsonrpcClient       *self,
     }
 
   if (params == NULL)
-    params = json_node_new (JSON_NODE_NULL);
+    params = g_variant_new_maybe (G_VARIANT_TYPE_VARIANT, NULL);
 
-  message = JCON_NEW (
-    "jsonrpc", "2.0",
-    "method", JCON_STRING (method),
-    "params", JCON_NODE (params)
-  );
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "jsonrpc", "s", "2.0");
+  g_variant_dict_insert (&dict, "method", "s", method);
+  g_variant_dict_insert_value (&dict, "params", params);
+  message = g_variant_dict_end (&dict);
 
   jsonrpc_output_stream_write_message_async (priv->output_stream,
                                              message,
                                              cancellable,
                                              jsonrpc_client_send_notification_write_cb,
                                              g_steal_pointer (&task));
-
-  json_node_unref (params);
 }
 
 /**
@@ -1194,20 +1173,21 @@ jsonrpc_client_close_finish (JsonrpcClient  *self,
 
 /**
  * jsonrpc_client_reply:
- * @id: (transfer full) (not nullable): the id of the message to reply
- * result: (transfer full) (nullable): the return value or %NULL
+ * @id: (transfer none) (not nullable): the id of the message to reply
+ * result: (transfer none) (nullable): the return value or %NULL
  *
  * Synchronous variant of jsonrpc_client_reply_async().
  */
 gboolean
 jsonrpc_client_reply (JsonrpcClient  *self,
-                      JsonNode       *id,
-                      JsonNode       *result,
+                      GVariant       *id,
+                      GVariant       *result,
                       GCancellable   *cancellable,
                       GError        **error)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
-  g_autoptr(JsonNode) message = NULL;
+  g_autoptr(GVariant) message = NULL;
+  GVariantDict dict;
   gboolean ret;
 
   g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
@@ -1218,18 +1198,15 @@ jsonrpc_client_reply (JsonrpcClient  *self,
     return FALSE;
 
   if (result == NULL)
-    result = json_node_new (JSON_NODE_NULL);
+    result = g_variant_new_maybe (G_VARIANT_TYPE_VARIANT, NULL);
 
-  message = JCON_NEW (
-    "jsonrpc", "2.0",
-    "id", JCON_NODE (id),
-    "result", JCON_NODE (result)
-  );
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "jsonrpc", "s", "2.0");
+  g_variant_dict_insert_value (&dict, "id", id);
+  g_variant_dict_insert_value (&dict, "result", result);
+  message = g_variant_dict_end (&dict);
 
   ret = jsonrpc_output_stream_write_message (priv->output_stream, message, cancellable, error);
-
-  json_node_unref (id);
-  json_node_unref (result);
 
   return ret;
 }
@@ -1276,16 +1253,17 @@ jsonrpc_client_reply_cb (GObject      *object,
  */
 void
 jsonrpc_client_reply_async (JsonrpcClient       *self,
-                            JsonNode            *id,
-                            JsonNode            *result,
+                            GVariant            *id,
+                            GVariant            *result,
                             GCancellable        *cancellable,
                             GAsyncReadyCallback  callback,
                             gpointer             user_data)
 {
   JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
-  g_autoptr(JsonNode) message = NULL;
+  g_autoptr(GVariant) message = NULL;
   g_autoptr(GError) error = NULL;
+  GVariantDict dict;
 
   g_return_if_fail (JSONRPC_IS_CLIENT (self));
   g_return_if_fail (id != NULL);
@@ -1301,22 +1279,19 @@ jsonrpc_client_reply_async (JsonrpcClient       *self,
     }
 
   if (result == NULL)
-    result = json_node_new (JSON_NODE_NULL);
+    result = g_variant_new_maybe (G_VARIANT_TYPE_VARIANT, NULL);
 
-  message = JCON_NEW (
-    "jsonrpc", "2.0",
-    "id", JCON_NODE (id),
-    "result", JCON_NODE (result)
-  );
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "jsonrpc", "s", "2.0");
+  g_variant_dict_insert_value (&dict, "id", id);
+  g_variant_dict_insert_value (&dict, "result", result);
+  message = g_variant_dict_end (&dict);
 
   jsonrpc_output_stream_write_message_async (priv->output_stream,
                                              message,
                                              cancellable,
                                              jsonrpc_client_reply_cb,
                                              g_steal_pointer (&task));
-
-  json_node_unref (id);
-  json_node_unref (result);
 }
 
 gboolean
@@ -1357,5 +1332,34 @@ jsonrpc_client_start_listening (JsonrpcClient *self)
                                                priv->read_loop_cancellable,
                                                jsonrpc_client_call_read_cb,
                                                g_object_ref (self));
+    }
+}
+
+gboolean
+jsonrpc_client_get_use_gvariant (JsonrpcClient *self)
+{
+  JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
+
+  g_return_val_if_fail (JSONRPC_IS_CLIENT (self), FALSE);
+
+  return priv->use_gvariant;
+}
+
+void
+jsonrpc_client_set_use_gvariant (JsonrpcClient *self,
+                                 gboolean       use_gvariant)
+{
+  JsonrpcClientPrivate *priv = jsonrpc_client_get_instance_private (self);
+
+  g_return_if_fail (JSONRPC_IS_CLIENT (self));
+
+  use_gvariant = !!use_gvariant;
+
+  if (priv->use_gvariant != use_gvariant)
+    {
+      priv->use_gvariant = use_gvariant;
+      if (priv->output_stream != NULL)
+        jsonrpc_output_stream_set_use_gvariant (priv->output_stream, use_gvariant);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_USE_GVARIANT]);
     }
 }

@@ -217,7 +217,8 @@ PKG_CHECK_MODULES(GSTYLE,   [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version])
 PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
-PKG_CHECK_MODULES(JSONRPC,  [json-glib-1.0 >= json_glib_required_version])
+PKG_CHECK_MODULES(JSONRPC,  [json-glib-1.0 >= json_glib_required_version
+                             gio-unix-2.0])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gio-unix-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version

@@ -126,15 +126,14 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
 {
   IdeLangservClient *client = (IdeLangservClient *)object;
   IdeLangservRenameProvider *self;
-  g_autoptr(JsonNode) return_value = NULL;
+  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GPtrArray) ret = NULL;
-  JsonObject *changes_by_uri = NULL;
-  JsonObjectIter iter;
-  const gchar *uri;
+  g_autoptr(GVariantIter) changes_by_uri = NULL;
   IdeContext *context;
-  JsonNode *changes;
+  const gchar *uri;
+  GVariant *changes;
 
   IDE_ENTRY;
 
@@ -150,31 +149,27 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  if (!JCON_EXTRACT (return_value, "changes", JCONE_OBJECT (changes_by_uri)))
+  if (!JSONRPC_MESSAGE_PARSE (return_value, "changes", JSONRPC_MESSAGE_GET_ITER (&changes_by_uri)))
     IDE_EXIT;
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
-  json_object_iter_init (&iter, changes_by_uri);
-
-  while (json_object_iter_next (&iter, &uri, &changes))
+  while (g_variant_iter_loop (changes_by_uri, "{sv}", &uri, &changes))
     {
       g_autoptr(GFile) gfile = g_file_new_for_uri (uri);
       g_autoptr(IdeFile) ifile = ide_file_new (context, gfile);
-      JsonArray *array;
-      guint length;
+      GVariantIter changes_iter;
+      GVariant *change;
 
-      if (!JSON_NODE_HOLDS_ARRAY (changes))
+      if (!g_variant_is_container (changes))
         continue;
 
-      array = json_node_get_array (changes);
-      length = json_array_get_length (array);
+      g_variant_iter_init (&changes_iter, changes);
 
-      for (guint i = 0; i < length; i++)
+      while (g_variant_iter_loop (&changes_iter, "v", &change))
         {
-          JsonNode *change = json_array_get_element (array, i);
           g_autoptr(IdeSourceLocation) begin_location = NULL;
           g_autoptr(IdeSourceLocation) end_location = NULL;
           g_autoptr(IdeSourceRange) range = NULL;
@@ -186,22 +181,25 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
             gint column;
           } begin, end;
 
-          success = JCON_EXTRACT (change,
+          success = JSONRPC_MESSAGE_PARSE (change,
             "range", "{",
               "start", "{",
-                "line", JCONE_INT (begin.line),
-                "character", JCONE_INT (begin.column),
+                "line", JSONRPC_MESSAGE_GET_INT32 (&begin.line),
+                "character", JSONRPC_MESSAGE_GET_INT32 (&begin.column),
               "}",
               "end", "{",
-                "line", JCONE_INT (end.line),
-                "character", JCONE_INT (end.column),
+                "line", JSONRPC_MESSAGE_GET_INT32 (&end.line),
+                "character", JSONRPC_MESSAGE_GET_INT32 (&end.column),
               "}",
             "}",
-            "newText", JCONE_STRING (new_text)
+            "newText", JSONRPC_MESSAGE_GET_STRING (&new_text)
           );
 
           if (!success)
-            continue;
+            {
+              IDE_TRACE_MSG ("Failed to extract change from variant");
+              continue;
+            }
 
           begin_location = ide_source_location_new (ifile, begin.line, begin.column, 0);
           end_location = ide_source_location_new (ifile, end.line, end.column, 0);
@@ -232,7 +230,7 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
   IdeLangservRenameProvider *self = (IdeLangservRenameProvider *)provider;
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   IdeFile *ifile;
   GFile *gfile;
@@ -265,15 +263,15 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
   line = ide_source_location_get_line (location);
   column = ide_source_location_get_line_offset (location);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
     "}",
     "position", "{",
-      "line", JCON_INT (line),
-      "character", JCON_INT (column),
+      "line", JSONRPC_MESSAGE_PUT_INT32 (line),
+      "character", JSONRPC_MESSAGE_PUT_INT32 (column),
     "}",
-    "newName", JCON_STRING (new_name)
+    "newName", JSONRPC_MESSAGE_PUT_STRING (new_name)
   );
 
   ide_langserv_client_call_async (priv->client,

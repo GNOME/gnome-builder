@@ -25,7 +25,7 @@
 #endif
 
 /**
- * SECTION:jsonrpcversion
+ * SECTION:jsonrpc-version
  * @short_description: jsonrpc-glib version checking
  *
  * jsonrpc-glib provides macros to check the version of the library

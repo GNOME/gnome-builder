@@ -20,7 +20,6 @@
 #define JSONRPC_CLIENT_H
 
 #include <gio/gio.h>
-#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
@@ -35,11 +34,11 @@ struct _JsonrpcClientClass
 
   void     (*notification) (JsonrpcClient *self,
                             const gchar   *method_name,
-                            JsonNode      *params);
+                            GVariant      *params);
   gboolean (*handle_call)  (JsonrpcClient *self,
                             const gchar   *method,
-                            JsonNode      *id,
-                            JsonNode      *params);
+                            GVariant      *id,
+                            GVariant      *params);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -53,6 +52,9 @@ struct _JsonrpcClientClass
 
 GQuark         jsonrpc_client_error_quark              (void);
 JsonrpcClient *jsonrpc_client_new                      (GIOStream            *io_stream);
+gboolean       jsonrpc_client_get_use_gvariant         (JsonrpcClient        *self);
+void           jsonrpc_client_set_use_gvariant         (JsonrpcClient        *self,
+                                                        gboolean              use_gvariant);
 gboolean       jsonrpc_client_close                    (JsonrpcClient        *self,
                                                         GCancellable         *cancellable,
                                                         GError              **error);
@@ -65,28 +67,28 @@ gboolean       jsonrpc_client_close_finish             (JsonrpcClient        *se
                                                         GError              **error);
 gboolean       jsonrpc_client_call                     (JsonrpcClient        *self,
                                                         const gchar          *method,
-                                                        JsonNode             *params,
+                                                        GVariant             *params,
                                                         GCancellable         *cancellable,
-                                                        JsonNode            **return_value,
+                                                        GVariant            **return_value,
                                                         GError              **error);
 void           jsonrpc_client_call_async               (JsonrpcClient        *self,
                                                         const gchar          *method,
-                                                        JsonNode             *params,
+                                                        GVariant             *params,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);
 gboolean       jsonrpc_client_call_finish              (JsonrpcClient        *self,
                                                         GAsyncResult         *result,
-                                                        JsonNode            **return_value,
+                                                        GVariant            **return_value,
                                                         GError              **error);
 gboolean       jsonrpc_client_send_notification        (JsonrpcClient        *self,
                                                         const gchar          *method,
-                                                        JsonNode             *params,
+                                                        GVariant             *params,
                                                         GCancellable         *cancellable,
                                                         GError              **error);
 void           jsonrpc_client_send_notification_async  (JsonrpcClient        *self,
                                                         const gchar          *method,
-                                                        JsonNode             *params,
+                                                        GVariant             *params,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);
@@ -94,13 +96,13 @@ gboolean       jsonrpc_client_send_notification_finish (JsonrpcClient        *se
                                                         GAsyncResult         *result,
                                                         GError              **error);
 gboolean       jsonrpc_client_reply                    (JsonrpcClient        *self,
-                                                        JsonNode             *id,
-                                                        JsonNode             *result,
+                                                        GVariant             *id,
+                                                        GVariant             *result,
                                                         GCancellable         *cancellable,
                                                         GError              **error);
 void           jsonrpc_client_reply_async              (JsonrpcClient        *self,
-                                                        JsonNode             *id,
-                                                        JsonNode             *result,
+                                                        GVariant             *id,
+                                                        GVariant             *result,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);

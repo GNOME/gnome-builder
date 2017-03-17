@@ -226,9 +226,11 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
 {
   IdeLangservClient *client = (IdeLangservClient *)object;
   g_autoptr(CompletionState) state = user_data;
+  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(JsonNode) return_value = NULL;
+  GVariant *node;
   GList *list = NULL;
+  GVariantIter iter;
 
   IDE_ENTRY;
 
@@ -250,41 +252,39 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
    *       the other completion result work we've done.
    */
 
-  if (JSON_NODE_HOLDS_ARRAY (return_value))
+  g_variant_iter_init (&iter, return_value);
+
+  while (g_variant_iter_loop (&iter, "v", &node))
     {
-      JsonArray *array = json_node_get_array (return_value);
-      guint length = json_array_get_length (array);
+      g_autoptr(GtkSourceCompletionItem) item = NULL;
+      g_autofree gchar *full_label = NULL;
+      const gchar *label;
+      const gchar *detail;
+      gboolean success;
 
-      for (guint i = length; i > 0; i--)
+      success = JSONRPC_MESSAGE_PARSE (node,
+        "label", JSONRPC_MESSAGE_GET_STRING (&label),
+        "detail", JSONRPC_MESSAGE_GET_STRING (&detail)
+      );
+
+      if (!success)
         {
-          JsonNode *node = json_array_get_element (array, i - 1);
-          g_autoptr(GtkSourceCompletionItem) item = NULL;
-          g_autofree gchar *full_label = NULL;
-          const gchar *label;
-          const gchar *detail;
-          gboolean success;
-
-          success = JCON_EXTRACT (node,
-            "label", JCONE_STRING (label),
-            "detail", JCONE_STRING (detail)
-          );
-
-          if (!success)
-            continue;
-
-          if (label != NULL && detail != NULL)
-            full_label = g_strdup_printf ("%s : %s", label, detail);
-          else
-            full_label = g_strdup (label);
-
-          //item = gtk_source_completion_item_new (full_label, label, NULL, NULL);
-          item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
-                               "label", full_label,
-                               "text", label,
-                               NULL);
-
-          list = g_list_prepend (list, g_steal_pointer (&item));
+          IDE_TRACE_MSG ("Failed to extract completion item from node");
+          continue;
         }
+
+      if (label != NULL && detail != NULL)
+        full_label = g_strdup_printf ("%s : %s", label, detail);
+      else
+        full_label = g_strdup (label);
+
+      //item = gtk_source_completion_item_new (full_label, label, NULL, NULL);
+      item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
+                           "label", full_label,
+                           "text", label,
+                           NULL);
+
+      list = g_list_prepend (list, g_steal_pointer (&item));
     }
 
 failure:
@@ -304,7 +304,7 @@ ide_langserv_completion_provider_populate (GtkSourceCompletionProvider *provider
 {
   IdeLangservCompletionProvider *self = (IdeLangservCompletionProvider *)provider;
   IdeLangservCompletionProviderPrivate *priv = ide_langserv_completion_provider_get_instance_private (self);
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autoptr(GCancellable) cancellable = NULL;
   g_autoptr(CompletionState) state = NULL;
   g_autofree gchar *uri = NULL;
@@ -333,13 +333,13 @@ ide_langserv_completion_provider_populate (GtkSourceCompletionProvider *provider
   line = gtk_text_iter_get_line (&iter);
   column = gtk_text_iter_get_line_offset (&iter);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
     "}",
     "position", "{",
-      "line", JCON_INT (line),
-      "character", JCON_INT (column),
+      "line", JSONRPC_MESSAGE_PUT_INT32 (line),
+      "character", JSONRPC_MESSAGE_PUT_INT32 (column),
     "}"
   );
 

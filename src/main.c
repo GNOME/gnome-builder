@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "builder"
 
 #include <ide.h>
+#include <gtksourceview/gtksource.h>
 
 static gboolean
 verbose_cb (const gchar  *option_name,

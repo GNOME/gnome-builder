@@ -19,7 +19,6 @@
 #ifndef JSONRPC_SERVER_H
 #define JSONRPC_SERVER_H
 
-#include <json-glib/json-glib.h>
 #include <gio/gio.h>
 
 #include "jsonrpc-client.h"
@@ -37,12 +36,12 @@ struct _JsonrpcServerClass
   gboolean (*handle_call)  (JsonrpcServer *self,
                             JsonrpcClient *client,
                             const gchar   *method,
-                            JsonNode      *id,
-                            JsonNode      *params);
+                            GVariant      *id,
+                            GVariant      *params);
   void     (*notification) (JsonrpcServer *self,
                             JsonrpcClient *client,
                             const gchar   *method,
-                            JsonNode      *params);
+                            GVariant      *params);
 
   gpointer _reserved1;
   gpointer _reserved2;

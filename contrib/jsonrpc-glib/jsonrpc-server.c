@@ -65,8 +65,8 @@ jsonrpc_server_class_init (JsonrpcServerClass *klass)
                   4,
                   JSONRPC_TYPE_CLIENT,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  JSON_TYPE_NODE,
-                  JSON_TYPE_NODE);
+                  G_TYPE_VARIANT,
+                  G_TYPE_VARIANT);
 
   signals [NOTIFICATION] =
     g_signal_new ("notification",
@@ -78,7 +78,7 @@ jsonrpc_server_class_init (JsonrpcServerClass *klass)
                   3,
                   JSONRPC_TYPE_CLIENT,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  JSON_TYPE_NODE);
+                  G_TYPE_VARIANT);
 }
 
 static void

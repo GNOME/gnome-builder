@@ -19,20 +19,25 @@
 #define G_LOG_DOMAIN "jsonrpc-input-stream"
 
 #include <errno.h>
+#include <json-glib/json-glib.h>
 #include <string.h>
 
 #include "jsonrpc-input-stream.h"
+#include "jsonrpc-input-stream-private.h"
 
 typedef struct
 {
-  gssize content_length;
-  gchar *buffer;
-  gint priority;
+  gssize        content_length;
+  gchar        *buffer;
+  GVariantType *gvariant_type;
+  gint16        priority;
+  gint          use_gvariant : 1;
 } ReadState;
 
 typedef struct
 {
   gssize max_size_bytes;
+  guint has_seen_gvariant : 1;
 } JsonrpcInputStreamPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (JsonrpcInputStream, jsonrpc_input_stream, G_TYPE_DATA_INPUT_STREAM)
@@ -45,6 +50,7 @@ read_state_free (gpointer data)
   ReadState *state = data;
 
   g_free (state->buffer);
+  g_free (state->gvariant_type);
   g_slice_free (ReadState, state);
 }
 
@@ -81,10 +87,9 @@ jsonrpc_input_stream_read_body_cb (GObject      *object,
 {
   JsonrpcInputStream *self = (JsonrpcInputStream *)object;
   g_autoptr(GTask) task = user_data;
-  g_autoptr(JsonParser) parser = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) message = NULL;
   ReadState *state;
-  JsonNode *root;
   gsize n_read;
 
   g_assert (JSONRPC_IS_INPUT_STREAM (self));
@@ -110,31 +115,34 @@ jsonrpc_input_stream_read_body_cb (GObject      *object,
 
   state->buffer [state->content_length] = '\0';
 
-  if G_UNLIKELY (jsonrpc_input_stream_debug)
+  if G_UNLIKELY (jsonrpc_input_stream_debug && state->use_gvariant == FALSE)
     g_message ("<<< %s", state->buffer);
 
-  parser = json_parser_new_immutable ();
+  if (state->use_gvariant)
+    {
+      message = g_variant_new_from_data (state->gvariant_type ?  state->gvariant_type
+                                                              : G_VARIANT_TYPE_VARDICT,
+                                         state->buffer,
+                                         state->content_length,
+                                         FALSE,
+                                         g_free,
+                                         state->buffer);
+      state->buffer = NULL;
+    }
+  else
+    {
+      message = json_gvariant_deserialize_data (state->buffer, state->content_length, NULL, &error);
+    }
 
-  if (!json_parser_load_from_data (parser, state->buffer, state->content_length, &error))
+  g_assert (message != NULL || error != NULL);
+
+  if (error != NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  if (NULL == (root = json_parser_get_root (parser)))
-    {
-      /*
-       * If we get back a NULL root node, that means that we got
-       * a short read (such as a closed stream).
-       */
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_CLOSED,
-                               "The peer did not send a reply");
-      return;
-    }
-
-  g_task_return_pointer (task, json_node_copy (root), (GDestroyNotify)json_node_unref);
+  g_task_return_pointer (task, g_steal_pointer (&message), (GDestroyNotify)g_variant_unref);
 }
 
 static void
@@ -154,22 +162,18 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
   g_assert (JSONRPC_IS_INPUT_STREAM (self));
   g_assert (G_IS_TASK (task));
 
+  state = g_task_get_task_data (task);
+  cancellable = g_task_get_cancellable (task);
+
   line = g_data_input_stream_read_line_finish_utf8 (G_DATA_INPUT_STREAM (self), result, &length, &error);
 
   if (line == NULL)
     {
-      if (error != NULL)
-        g_task_return_error (task, g_steal_pointer (&error));
-      else
-        g_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_CLOSED,
-                                 "The peer has closed the stream");
+      if (error == NULL)
+        goto read_next_line;
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
-
-  state = g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
 
   if (strncasecmp ("Content-Length: ", line, 16) == 0)
     {
@@ -180,6 +184,7 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
 
       if (((content_length == G_MININT64 || content_length == G_MAXINT64) && errno == ERANGE) ||
           (content_length < 0) ||
+          (content_length > G_MAXSSIZE) ||
           (content_length > priv->max_size_bytes))
         {
           g_task_return_new_error (task,
@@ -190,6 +195,29 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
         }
 
       state->content_length = content_length;
+    }
+
+  if (strncasecmp ("Content-Type: ", line, 14) == 0)
+    {
+      if (NULL != strstr (line, "application/gvariant"))
+        state->use_gvariant = TRUE;
+    }
+
+  if (strncasecmp ("X-GVariant-Type: ", line, 17) == 0)
+    {
+      const gchar *type_string = line + 17;
+
+      if (!g_variant_type_string_is_valid (type_string))
+        {
+          g_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_INVALID_DATA,
+                                   "Invalid X-GVariant-Type received from peer");
+          return;
+        }
+
+      g_clear_pointer (&state->gvariant_type, g_free);
+      state->gvariant_type = (GVariantType *)g_strdup (type_string);
     }
 
   /*
@@ -220,6 +248,7 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
       return;
     }
 
+read_next_line:
   g_data_input_stream_read_line_async (G_DATA_INPUT_STREAM (self),
                                        state->priority,
                                        cancellable,
@@ -257,20 +286,26 @@ jsonrpc_input_stream_read_message_async (JsonrpcInputStream  *self,
 gboolean
 jsonrpc_input_stream_read_message_finish (JsonrpcInputStream  *self,
                                           GAsyncResult        *result,
-                                          JsonNode           **node,
+                                          GVariant           **message,
                                           GError             **error)
 {
-  g_autoptr(JsonNode) local_node = NULL;
+  JsonrpcInputStreamPrivate *priv = jsonrpc_input_stream_get_instance_private (self);
+  g_autoptr(GVariant) local_message = NULL;
+  ReadState *state;
   gboolean ret;
 
   g_return_val_if_fail (JSONRPC_IS_INPUT_STREAM (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  local_node = g_task_propagate_pointer (G_TASK (result), error);
-  ret = local_node != NULL;
+  /* track if we've seen an application/gvariant */
+  state = g_task_get_task_data (G_TASK (result));
+  priv->has_seen_gvariant |= state->use_gvariant;
 
-  if (node != NULL)
-    *node = g_steal_pointer (&local_node);
+  local_message = g_task_propagate_pointer (G_TASK (result), error);
+  ret = local_message != NULL;
+
+  if (message != NULL)
+    *message = g_steal_pointer (&local_message);
 
   return ret;
 }
@@ -282,26 +317,26 @@ jsonrpc_input_stream_read_message_sync_cb (GObject      *object,
 {
   JsonrpcInputStream *self = (JsonrpcInputStream *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(JsonNode) node = NULL;
+  g_autoptr(GVariant) message = NULL;
   GTask *task = user_data;
 
   g_assert (JSONRPC_IS_INPUT_STREAM (self));
   g_assert (G_IS_TASK (task));
 
-  if (!jsonrpc_input_stream_read_message_finish (self, result, &node, &error))
+  if (!jsonrpc_input_stream_read_message_finish (self, result, &message, &error))
     g_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&node), (GDestroyNotify)json_node_unref);
+    g_task_return_pointer (task, g_steal_pointer (&message), (GDestroyNotify)g_variant_unref);
 }
 
 gboolean
 jsonrpc_input_stream_read_message (JsonrpcInputStream  *self,
                                    GCancellable        *cancellable,
-                                   JsonNode           **node,
+                                   GVariant           **message,
                                    GError             **error)
 {
   g_autoptr(GMainContext) main_context = NULL;
-  g_autoptr(JsonNode) local_node = NULL;
+  g_autoptr(GVariant) local_message = NULL;
   g_autoptr(GTask) task = NULL;
   gboolean ret;
 
@@ -321,12 +356,21 @@ jsonrpc_input_stream_read_message (JsonrpcInputStream  *self,
   while (!g_task_get_completed (task))
     g_main_context_iteration (main_context, TRUE);
 
-  local_node = g_task_propagate_pointer (task, error);
-  ret = local_node != NULL;
+  local_message = g_task_propagate_pointer (task, error);
+  ret = local_message != NULL;
 
-  if (node != NULL)
-    *node = g_steal_pointer (&local_node);
+  if (message != NULL)
+    *message = g_steal_pointer (&local_message);
 
   return ret;
 }
 
+gboolean
+_jsonrpc_input_stream_get_has_seen_gvariant (JsonrpcInputStream *self)
+{
+  JsonrpcInputStreamPrivate *priv = jsonrpc_input_stream_get_instance_private (self);
+
+  g_return_val_if_fail (JSONRPC_IS_INPUT_STREAM (self), FALSE);
+
+  return priv->has_seen_gvariant;
+}

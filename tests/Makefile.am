@@ -28,17 +28,6 @@ rg_libs =                                                       \
 	$(RG_LIBS)                                              \
 	$(NULL)
 
-jsonrpc_cflags =                                                \
-	$(DEBUG_CFLAGS)                                         \
-	$(JSONRPC_CFLAGS)                                       \
-	-I$(top_srcdir)/contrib/jsonrpc-glib                    \
-	$(NULL)
-
-jsonrpc_libs =                                                  \
-	$(top_builddir)/contrib/jsonrpc-glib/libjsonrpc-glib.la \
-	$(JSONRPC_LIBS)                                         \
-	$(NULL)
-
 search_cflags =                                                 \
 	$(DEBUG_CFLAGS)                                         \
 	$(SEARCH_CFLAGS)                                        \
@@ -267,12 +256,6 @@ TESTS += test-egg-heap
 test_egg_heap_SOURCES = test-egg-heap.c
 test_egg_heap_CFLAGS = $(egg_cflags)
 test_egg_heap_LDADD = $(egg_libs)
-
-
-TESTS += test-jcon
-test_jcon_SOURCES = test-jcon.c
-test_jcon_CFLAGS = $(jsonrpc_cflags)
-test_jcon_LDADD = $(jsonrpc_libs)
 
 
 if ENABLE_TESTS

@@ -99,9 +99,9 @@ ide_langserv_highlighter_document_symbol_cb (GObject      *object,
   IdeLangservClient *client = (IdeLangservClient *)object;
   g_autoptr(IdeLangservHighlighter) self = user_data;
   IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
-  g_autoptr(JsonNode) return_value = NULL;
+  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
-  JsonArray *ar;
+  GVariantIter iter;
 
   IDE_ENTRY;
 
@@ -117,31 +117,30 @@ ide_langserv_highlighter_document_symbol_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  /*
-   * TODO: We should get the tag to have the proper name based
-   *       on the type.
-   */
+  /* TODO: We should get the tag to have the proper name based on the type. */
 
-  if (JSON_NODE_HOLDS_ARRAY (return_value) && NULL != (ar = json_node_get_array (return_value)))
+  if (g_variant_iter_init (&iter, return_value))
     {
       g_autoptr(IdeHighlightIndex) index = ide_highlight_index_new ();
-      guint length = json_array_get_length (ar);
+      GVariant *member = NULL;
 
-      for (guint i = 0; i < length; i++)
+      while (g_variant_iter_loop (&iter, "v", &member))
         {
-          JsonNode *member = json_array_get_element (ar, i);
           const gchar *name = NULL;
           const gchar *tag;
           gboolean success;
           gint kind = 0;
 
-          success = JCON_EXTRACT (member,
-            "name", JCONE_STRING (name),
-            "kind", JCONE_INT (kind)
+          success = JSONRPC_MESSAGE_PARSE (member,
+            "name", JSONRPC_MESSAGE_GET_STRING (&name),
+            "kind", JSONRPC_MESSAGE_GET_INT32 (&kind)
           );
 
           if (!success)
-            continue;
+            {
+              IDE_TRACE_MSG ("Failed to unwrap name and kind from symbol");
+              continue;
+            }
 
           switch (kind)
             {
@@ -159,7 +158,6 @@ ide_langserv_highlighter_document_symbol_cb (GObject      *object,
             case 11:  /* INTERFACE */
               tag = "def:type";
               break;
-
 
             case 14:  /* CONSTANT */
               tag = "def:constant";
@@ -200,16 +198,16 @@ ide_langserv_highlighter_update_symbols (gpointer data)
 
   if (priv->client != NULL && priv->engine != NULL)
     {
-      g_autoptr(JsonNode) params = NULL;
+      g_autoptr(GVariant) params = NULL;
       g_autofree gchar *uri = NULL;
       IdeBuffer *buffer;
 
       buffer = ide_highlight_engine_get_buffer (priv->engine);
       uri = ide_buffer_get_uri (buffer);
 
-      params = JCON_NEW (
+      params = JSONRPC_MESSAGE_NEW (
         "textDocument", "{",
-          "uri", JCON_STRING (uri),
+          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
         "}"
       );
 

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-configuration"
 
+#include <json-glib/json-glib.h>
+
 #include "gbp-flatpak-configuration.h"
 #include "gbp-flatpak-runtime.h"
 

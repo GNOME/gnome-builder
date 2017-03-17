@@ -20,7 +20,6 @@
 #define JSONRPC_INPUT_STREAM_H
 
 #include <gio/gio.h>
-#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
@@ -45,7 +44,7 @@ struct _JsonrpcInputStreamClass
 JsonrpcInputStream *jsonrpc_input_stream_new                 (GInputStream         *base_stream);
 gboolean            jsonrpc_input_stream_read_message        (JsonrpcInputStream   *self,
                                                               GCancellable         *cancellable,
-                                                              JsonNode            **node,
+                                                              GVariant            **message,
                                                               GError              **error);
 void                jsonrpc_input_stream_read_message_async  (JsonrpcInputStream   *self,
                                                               GCancellable         *cancellable,
@@ -53,7 +52,7 @@ void                jsonrpc_input_stream_read_message_async  (JsonrpcInputStream
                                                               gpointer              user_data);
 gboolean            jsonrpc_input_stream_read_message_finish (JsonrpcInputStream   *self,
                                                               GAsyncResult         *result,
-                                                              JsonNode            **node,
+                                                              GVariant            **message,
                                                               GError              **error);
 
 G_END_DECLS

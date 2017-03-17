@@ -19,8 +19,8 @@ libjsonrpc_glib_la_public_sources =          \
 libjsonrpc_glib_la_SOURCES =                 \
 	$(libjsonrpc_glib_la_public_sources) \
 	jsonrpc-glib.h                       \
-	jcon.c                               \
-	jcon.h                               \
+	jsonrpc-message.c                    \
+	jsonrpc-message.h                    \
 	$(NULL)
 
 libjsonrpc_glib_la_CFLAGS =                  \
@@ -81,5 +81,24 @@ EXTRA_DIST += jsonrpc-glib.deps
 
 DISTCLEANFILES += $(vapi_DATA)
 endif
+
+noinst_PROGRAMS =
+TESTS =
+
+noinst_PROGRAMS += test-message
+TESTS += test-message
+test_message_CFLAGS = $(JSONRPC_CFLAGS)
+test_message_LDADD = \
+	$(JSONRPC_LIBS) \
+	libjsonrpc-glib.la \
+	$(NULL)
+
+noinst_PROGRAMS += test-server
+TESTS += test-server
+test_server_CFLAGS = $(JSONRPC_CFLAGS)
+test_server_LDADD = \
+	$(JSONRPC_LIBS) \
+	libjsonrpc-glib.la \
+	$(NULL)
 
 -include $(top_srcdir)/git.mk

@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <json-glib/json-glib.h>
 #include <libgit2-glib/ggit.h>
 #include <ide.h>
 
