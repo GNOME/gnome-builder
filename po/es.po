@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-11 22:33+0000\n"
-"PO-Revision-Date: 2017-03-15 12:56+0100\n"
+"POT-Creation-Date: 2017-03-16 20:45+0000\n"
+"PO-Revision-Date: 2017-03-17 12:31+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -67,7 +67,7 @@ msgstr[1] "Hace %u años aproximadamente"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:683
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -99,7 +99,7 @@ msgstr "Explorar…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/greeter/ide-greeter-perspective.c:682
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -887,7 +887,7 @@ msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:129
+#: libide/application/ide-application-actions.c:130
 msgid "An IDE for GNOME"
 msgstr "Un EID para GNOME"
 
@@ -993,21 +993,21 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Construir;Desarrollar;"
 
-#: libide/application/ide-application-actions.c:135
+#: libide/application/ide-application-actions.c:136
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: libide/application/ide-application-actions.c:137
+#: libide/application/ide-application-actions.c:138
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016\n"
 "Ian Hernandez <ihernandezs@openmailbox.org>, 2015"
 
-#: libide/application/ide-application-actions.c:140
+#: libide/application/ide-application-actions.c:142
 msgid "Learn more about GNOME Builder"
 msgstr "Aprenda más sobre GNOME Builder"
 
-#: libide/application/ide-application-actions.c:143
+#: libide/application/ide-application-actions.c:145
 msgid "Funded By"
 msgstr "Fundado por"
 
@@ -1210,7 +1210,6 @@ msgid "Build Output"
 msgstr "Salida de la construcción"
 
 #: libide/buildui/ide-build-log-panel.ui:25
-#| msgid "Clear _All"
 msgid "Clear build log"
 msgstr "Limpiar el registro de construcción"
 
@@ -1651,15 +1650,15 @@ msgstr ""
 "Builder ha descubierto que este archivo se ha modificado externamente. "
 "¿Quiere recargarlo?"
 
-#: libide/greeter/ide-greeter-perspective.c:456
+#: libide/greeter/ide-greeter-perspective.c:457
 msgid "Failed to load the project"
 msgstr "Falló al cargar el proyecto"
 
-#: libide/greeter/ide-greeter-perspective.c:677
+#: libide/greeter/ide-greeter-perspective.c:678
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
-#: libide/greeter/ide-greeter-perspective.c:693
+#: libide/greeter/ide-greeter-perspective.c:694
 msgid "All Project Types"
 msgstr "Todos los tipos de proyectos"
 
@@ -1735,11 +1734,11 @@ msgstr "Falló al inicializar los parámetros predeterminados."
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: libide/ide-context.c:1888
+#: libide/ide-context.c:2017
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: libide/ide-context.c:2007
+#: libide/ide-context.c:2136
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
@@ -1752,11 +1751,11 @@ msgstr "No hay implementaciones para el punto de extensión «%s»."
 msgid "Failed to locate build system plugin."
 msgstr "Falló al buscar el complemento del sistema de construcción."
 
-#: libide/ide-object.c:483
+#: libide/ide-object.c:493
 msgid "No such extension point."
 msgstr "No existe el punto de extensión."
 
-#: libide/ide-object.c:493
+#: libide/ide-object.c:503
 msgid "No implementations of extension point."
 msgstr "No hay implementaciones para el punto de extensión."
 
@@ -2501,7 +2500,7 @@ msgstr "SDK"
 msgid "_Select"
 msgstr "_Seleccionar"
 
-#: libide/preferences/ide-preferences-perspective.c:963
+#: libide/preferences/ide-preferences-perspective.c:965
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -2588,7 +2587,6 @@ msgstr "Renombrar símbolo"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
-#| msgid "Installing rust "
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "Instalando %u paquete"
@@ -3195,7 +3193,7 @@ msgid "Project Location"
 msgstr "Ubicación del proyecto"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:78
+#: plugins/git/ide-git-clone-widget.ui:76
 msgid "Select Project Directory"
 msgstr "Seleccionar la carpeta de proyectos"
 
@@ -3248,30 +3246,23 @@ msgid "Documentation"
 msgstr "Documentación"
 
 #: plugins/eslint/eslint_plugin/__init__.py:106
-#| msgid "Pylint"
 msgid "ESlint"
 msgstr "ESlint"
 
 #: plugins/eslint/eslint_plugin/__init__.py:107
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr "Activar el uso de ESLint, que puede ejecutar código en su proyecto"
 
 #. translators: these are keywords used to search for preferences
 #: plugins/eslint/eslint_plugin/__init__.py:109
-#| msgid "pylint python lint code execute execution"
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint código ejecutar ejecución"
 
 #: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
-#| msgid "Enable Pylint"
 msgid "Enable ESLint"
 msgstr "Activar ESLint"
 
 #: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
-#| msgid ""
-#| "Enable the use of pylint to find additional diagnostics in Python "
-#| "programs. This may result in the execution of code in your project."
 msgid ""
 "Enable the use of eslint to find additional diagnostics in JavaScript files. "
 "This may result in the execution of code in your project."
@@ -3300,64 +3291,76 @@ msgstr "Clonar"
 msgid "Network is not available, skipping downloads"
 msgstr "La red no está disponible, omitiendo las descargas"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:119
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
 msgid "Install"
 msgstr "Instalar"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:101
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 msgid "Update"
 msgstr "Actualizar"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:206
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:221
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Mostrar %u rutina más"
 msgstr[1] "mostrar %u rutinas más"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
 msgid "Flatpak Runtimes"
 msgstr "Rutinas de flatpak"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:703
+#: plugins/flatpak/gbp-flatpak-runtime.c:714
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:705
+#: plugins/flatpak/gbp-flatpak-runtime.c:716
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:68
-msgid "Updated "
-msgstr "Actualizado "
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:67
+#, c-format
+#| msgid "Updated "
+msgid "Updated %s %s"
+msgstr "Actualizado %s %s"
 
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
 #: plugins/flatpak/gbp-flatpak-transfer.c:70
-msgid "Updating "
-msgstr "Actualizando "
+#, c-format
+#| msgid "Updating "
+msgid "Updating %s %s"
+msgstr "Actualizando %s %s"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:75
-msgid "Installed "
-msgstr "Instalado "
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:76
+#, c-format
+#| msgid "Installed "
+msgid "Installed %s %s"
+msgstr "Instalado %s %s"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:77
-#: plugins/rustup/rustup_plugin/__init__.py:355
-msgid "Installing "
-msgstr "Instalando "
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:79
+#, c-format
+#| msgid "Installing %s %s for %s"
+msgid "Installing %s %s"
+msgstr "Instalando %s %s"
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:101
 msgid "Failed to install runtime"
@@ -3388,7 +3391,6 @@ msgid "Flatpak"
 msgstr "Flatpak"
 
 #: plugins/flatpak/gtk/menus.ui:8
-#| msgid "Building dependencies…"
 msgid "_Download Dependencies"
 msgstr "_Descargar dependencias"
 
@@ -3422,28 +3424,28 @@ msgstr "El archivo no está bajo el control de la carpeta de trabajo de git."
 msgid "The requested file does not exist within the git index."
 msgstr "El archivo solicitado no existe dentro del índice de git."
 
-#: plugins/git/ide-git-clone-widget.c:141
-#: plugins/git/ide-git-clone-widget.c:387
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
 msgid "A valid Git URL is required"
 msgstr "Se necesita un URL de Git válido"
 
-#: plugins/git/ide-git-clone-widget.ui:38
+#: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr "Usar Git para crear una copia local del proyecto alojado en remoto."
 
-#: plugins/git/ide-git-clone-widget.ui:66
+#: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
 msgstr "usuario@equipo:repositorio.git"
 
-#: plugins/git/ide-git-clone-widget.ui:67
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Introduzca el URL del repositorio de código fuente de su proyecto"
 
-#: plugins/git/ide-git-clone-widget.ui:94
+#: plugins/git/ide-git-clone-widget.ui:92
 msgid "Repository URL"
 msgstr "URL del repositorio"
 
-#: plugins/git/ide-git-clone-widget.ui:102
+#: plugins/git/ide-git-clone-widget.ui:100
 msgid "Project Destination"
 msgstr "Destino del proyecto"
 
@@ -3455,14 +3457,14 @@ msgstr "Clonar proyecto"
 msgid "Clone…"
 msgstr "Clonar…"
 
-#: plugins/git/ide-git-remote-callbacks.c:177
+#: plugins/git/ide-git-remote-callbacks.c:193
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
 "Builder ha fallado al proporcionar las credenciales apropiadas al clonar el "
 "repositorio."
 
-#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:368
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
 msgid "Code assistance requires a local file."
 msgstr "La asistencia de código requiere de un archivo local."
 
@@ -3498,6 +3500,11 @@ msgstr ""
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
 msgstr "Vista previa como HTML"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:115
+#| msgid "Your computer is missing flatpak-builder"
+msgid "Your computer is missing python3-docutils"
+msgstr "Su equipo no tiene python3-docutils"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3666,6 +3673,10 @@ msgstr "Sincronizando actualizaciones de canales"
 #: plugins/rustup/rustup_plugin/__init__.py:348
 msgid "Downloading "
 msgstr "Descargando "
+
+#: plugins/rustup/rustup_plugin/__init__.py:355
+msgid "Installing "
+msgstr "Instalando "
 
 #: plugins/rustup/rustup_plugin/__init__.py:361
 msgid "Checking for rustup updates"
@@ -3908,9 +3919,6 @@ msgstr "Falló al crear el árbol XML."
 
 #~ msgid "Developer SDKs"
 #~ msgstr "SDK para desarrolladores"
-
-#~ msgid "Installing %s %s for %s"
-#~ msgstr "Instalando %s %s para %s"
 
 #~| msgid "Replace “%s” with “%s”"
 #~ msgid "Installing “%s” from “%s”"
