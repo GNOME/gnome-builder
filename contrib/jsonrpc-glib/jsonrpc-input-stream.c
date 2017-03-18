@@ -31,13 +31,13 @@ typedef struct
   gchar        *buffer;
   GVariantType *gvariant_type;
   gint16        priority;
-  gint          use_gvariant : 1;
+  guint         use_gvariant : 1;
 } ReadState;
 
 typedef struct
 {
   gssize max_size_bytes;
-  guint has_seen_gvariant : 1;
+  guint  has_seen_gvariant : 1;
 } JsonrpcInputStreamPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (JsonrpcInputStream, jsonrpc_input_stream, G_TYPE_DATA_INPUT_STREAM)
