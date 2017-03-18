@@ -166,13 +166,14 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) gfile = NULL;
   g_autoptr(IdeSourceLocation) location = NULL;
-  g_autoptr(GVariant) location_node = NULL;
+  g_autoptr(GVariant) variant = NULL;
+  GVariantIter iter;
   const gchar *uri;
-  gboolean success;
   struct {
-    gint line;
-    gint column;
+    gint64 line;
+    gint64 column;
   } begin, end;
+  gboolean success = FALSE;
 
   IDE_ENTRY;
 
@@ -188,50 +189,31 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  /*
-   * We can either get a Location or a Location[] from the peer. We only
-   * care about the first node in this case, so extract Location[0] if
-   * we need to and unwrap the variant wrapper.
-   */
-  if (g_variant_is_of_type (return_value, G_VARIANT_TYPE ("av")) &&
-      g_variant_n_children (return_value) > 0)
-    g_variant_get_child (return_value, 0, "v", &location_node);
-  else
-    location_node = g_variant_get_child_value (return_value, 0);
+#if 0
+  {
+    g_autofree gchar *str = g_variant_print (return_value, TRUE);
+    IDE_TRACE_MSG ("Got reply: %s", str);
+  }
+#endif
 
-  /*
-   * If we failed to extract the appropriate node, we can just bail
-   * as a failure.
-   */
-  if (location_node == NULL || !g_variant_is_of_type (location_node, G_VARIANT_TYPE ("a{sv}")))
+  g_variant_iter_init (&iter, return_value);
+
+  if (g_variant_iter_next (&iter, "v", &variant))
     {
-      if (location_node != NULL)
-        {
-          IDE_TRACE_MSG ("textDocument/definition child is of type: %s",
-                         g_variant_get_type_string (location_node));
-        }
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               "Got invalid reply for textDocument/definition");
-      IDE_EXIT;
+      success = JSONRPC_MESSAGE_PARSE (variant,
+        "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+        "range", "{",
+          "start", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
+          "}",
+          "end", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
+          "}",
+        "}"
+      );
     }
-
-  g_assert (g_variant_is_of_type (location_node, G_VARIANT_TYPE ("a{sv}")));
-
-  success = JSONRPC_MESSAGE_PARSE (location_node,
-    "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
-    "range", "{",
-      "start", "{",
-        "line", JSONRPC_MESSAGE_GET_INT32 (&begin.line),
-        "character", JSONRPC_MESSAGE_GET_INT32 (&begin.column),
-      "}",
-      "end", "{",
-        "line", JSONRPC_MESSAGE_GET_INT32 (&end.line),
-        "character", JSONRPC_MESSAGE_GET_INT32 (&end.column),
-      "}",
-    "}"
-  );
 
   if (!success)
     {
@@ -243,7 +225,7 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
     }
 
   IDE_TRACE_MSG ("Definition location is %s %d:%d",
-                 uri, begin.line + 1, begin.column + 1);
+                 uri, (gint)begin.line + 1, (gint)begin.column + 1);
 
   gfile = g_file_new_for_uri (uri);
   ifile = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), gfile);
@@ -388,26 +370,26 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
       const gchar *container_name = NULL;
       const gchar *uri = NULL;
       gboolean success;
-      gint kind = -1;
+      gint64 kind = -1;
       struct {
-        gint line;
-        gint column;
+        gint64 line;
+        gint64 column;
       } begin, end;
 
       /* Mandatory fields */
       success = JSONRPC_MESSAGE_PARSE (node,
         "name", JSONRPC_MESSAGE_GET_STRING (&name),
-        "kind", JSONRPC_MESSAGE_GET_INT32 (&kind),
+        "kind", JSONRPC_MESSAGE_GET_INT64 (&kind),
         "location", "{",
           "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
           "range", "{",
             "start", "{",
-              "line", JSONRPC_MESSAGE_GET_INT32 (&begin.line),
-              "character", JSONRPC_MESSAGE_GET_INT32 (&begin.column),
+              "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+              "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
             "}",
             "end", "{",
-              "line", JSONRPC_MESSAGE_GET_INT32 (&end.line),
-              "character", JSONRPC_MESSAGE_GET_INT32 (&end.column),
+              "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+              "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
             "}",
           "}",
         "}"
