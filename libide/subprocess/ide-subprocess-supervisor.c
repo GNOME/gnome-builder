@@ -203,17 +203,21 @@ ide_subprocess_supervisor_start (IdeSubprocessSupervisor *self)
   IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
   gboolean ret;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
 
   if (priv->launcher == NULL)
     {
       g_warning ("Cannot supervise process, no launcher has been set");
-      return;
+      IDE_EXIT;
     }
 
   priv->supervising = TRUE;
 
   g_signal_emit (self, signals [SUPERVISE], 0, priv->launcher, &ret);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -221,17 +225,21 @@ ide_subprocess_supervisor_start_in_usec_cb (gpointer data)
 {
   g_autoptr(IdeSubprocessSupervisor) self = data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
 
   ide_subprocess_supervisor_start (self);
 
-  return G_SOURCE_REMOVE;
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
 ide_subprocess_supervisor_start_in_usec (IdeSubprocessSupervisor *self,
                                          gint64                   usec)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (self));
 
   /* Wait to re-start the supervisor until our RATE_LIMIT_THRESHOLD_SECONDS
@@ -241,6 +249,8 @@ ide_subprocess_supervisor_start_in_usec (IdeSubprocessSupervisor *self,
   g_timeout_add (usec / 1000L,
                  ide_subprocess_supervisor_start_in_usec_cb,
                  g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 void
@@ -249,17 +259,21 @@ ide_subprocess_supervisor_stop (IdeSubprocessSupervisor *self)
   IdeSubprocessSupervisorPrivate *priv = ide_subprocess_supervisor_get_instance_private (self);
   gboolean ret;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SUBPROCESS_SUPERVISOR (self));
 
   if (priv->launcher == NULL)
     {
       g_warning ("Cannot unsupervise process, no launcher has been set");
-      return;
+      IDE_EXIT;
     }
 
   priv->supervising = FALSE;
 
   g_signal_emit (self, signals [UNSUPERVISE], 0, priv->launcher, &ret);
+
+  IDE_EXIT;
 }
 
 /**
