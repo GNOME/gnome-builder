@@ -372,6 +372,41 @@ gbp_flatpak_application_addin_get_default (void)
   return instance;
 }
 
+/*
+* Ensure we have our repositories that we need to locate various
+* runtimes for GNOME.
+*/
+static gboolean
+ensure_remotes_exist_sync (GCancellable  *cancellable,
+                           GError       **error)
+{
+  for (guint i = 0; i < G_N_ELEMENTS (builtin_flatpak_repos); i++)
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
+      const gchar *name = builtin_flatpak_repos[i].name;
+      const gchar *url = builtin_flatpak_repos[i].url;
+
+      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                              G_SUBPROCESS_FLAGS_STDERR_PIPE);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+      ide_subprocess_launcher_push_argv (launcher, "flatpak");
+      ide_subprocess_launcher_push_argv (launcher, "remote-add");
+      ide_subprocess_launcher_push_argv (launcher, "--user");
+      ide_subprocess_launcher_push_argv (launcher, "--if-not-exists");
+      ide_subprocess_launcher_push_argv (launcher, "--from");
+      ide_subprocess_launcher_push_argv (launcher, name);
+      ide_subprocess_launcher_push_argv (launcher, url);
+
+      subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, error);
+
+      if (subprocess == NULL || !ide_subprocess_wait_check (subprocess, cancellable, error))
+        return FALSE;
+    }
+  return TRUE;
+}
+
 static void
 gbp_flatpak_application_addin_install_completed (GbpFlatpakApplicationAddin *self,
                                                  GParamSpec                 *pspec,
@@ -404,6 +439,7 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
 {
   GbpFlatpakApplicationAddin *self = source_object;
   InstallRequest *request = task_data;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -415,37 +451,10 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
   g_assert (request->branch != NULL);
   g_assert (request->installations != NULL);
 
-  /*
-   * First ensure we have our repositories that we need to locate various
-   * runtimes for GNOME.
-   */
-  for (guint i = 0; i < G_N_ELEMENTS (builtin_flatpak_repos); i++)
+  if (!ensure_remotes_exist_sync (cancellable, &error))
     {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      g_autoptr(IdeSubprocess) subprocess = NULL;
-      g_autoptr(GError) error = NULL;
-      const gchar *name = builtin_flatpak_repos[i].name;
-      const gchar *url = builtin_flatpak_repos[i].url;
-
-      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                              G_SUBPROCESS_FLAGS_STDERR_PIPE);
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-      ide_subprocess_launcher_push_argv (launcher, "flatpak");
-      ide_subprocess_launcher_push_argv (launcher, "remote-add");
-      ide_subprocess_launcher_push_argv (launcher, "--user");
-      ide_subprocess_launcher_push_argv (launcher, "--if-not-exists");
-      ide_subprocess_launcher_push_argv (launcher, "--from");
-      ide_subprocess_launcher_push_argv (launcher, name);
-      ide_subprocess_launcher_push_argv (launcher, url);
-
-      subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
-
-      if (subprocess == NULL || !ide_subprocess_wait_check (subprocess, cancellable, &error))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          IDE_EXIT;
-        }
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   /*
@@ -477,8 +486,6 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
               g_strcmp0 (request->branch, branch) == 0 &&
               g_strcmp0 (request->arch, arch) == 0)
             {
-              g_autoptr(GError) error = NULL;
-
               request->ref = flatpak_installation_update (installation,
                                                           FLATPAK_UPDATE_FLAGS_NONE,
                                                           FLATPAK_REF_KIND_RUNTIME,
@@ -541,8 +548,6 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
                   g_strcmp0 (request->arch, arch) == 0 &&
                   g_strcmp0 (request->branch, branch) == 0)
                 {
-                  g_autoptr(GError) error = NULL;
-
                   request->ref = flatpak_installation_install (installation,
                                                                name,
                                                                FLATPAK_REF_KIND_RUNTIME,
@@ -746,6 +751,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
                                                  GCancellable *cancellable)
 {
   LocateSdk *locate = task_data;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -791,7 +797,6 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
               g_strcmp0 (locate->arch, arch) == 0 &&
               g_strcmp0 (locate->branch, branch) == 0)
             {
-              g_autoptr(GError) error = NULL;
               g_autoptr(GBytes) bytes = NULL;
               g_autoptr(GKeyFile) keyfile = NULL;
               g_autofree gchar *idstr = NULL;
@@ -847,6 +852,12 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
    * have a cached copy of the file.
    */
 
+  if (!ensure_remotes_exist_sync (cancellable, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
   for (guint i = 0; i < locate->installations->len; i++)
     {
       InstallInfo *info = g_ptr_array_index (locate->installations, i);
@@ -882,7 +893,6 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
                   g_strcmp0 (locate->arch, arch) == 0 &&
                   g_strcmp0 (locate->branch, branch) == 0)
                 {
-                  g_autoptr(GError) error = NULL;
                   g_autoptr(GBytes) bytes = NULL;
                   g_autoptr(GKeyFile) keyfile = NULL;
                   g_autofree gchar *idstr = NULL;
