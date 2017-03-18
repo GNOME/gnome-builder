@@ -101,4 +101,12 @@ test_server_LDADD = \
 	libjsonrpc-glib.la \
 	$(NULL)
 
+noinst_PROGRAMS += test-stress
+TESTS += test-stress
+test_stress_CFLAGS = $(JSONRPC_CFLAGS)
+test_stress_LDADD = \
+	$(JSONRPC_LIBS) \
+	libjsonrpc-glib.la \
+	$(NULL)
+
 -include $(top_srcdir)/git.mk
