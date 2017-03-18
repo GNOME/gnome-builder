@@ -21,6 +21,7 @@
 
 import gi
 import threading
+import os
 
 gi.require_version('Ide', '1.0')
 
@@ -85,11 +86,21 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         config = pipeline.get_configuration()
         system_type = config.get_device().get_system_type()
         builddir = pipeline.get_builddir()
+        runtime = config.get_runtime()
+
+        # We might need to use cargo from ~/.cargo/bin
+        cargo = _CARGO
+        if config.getenv('CARGO'):
+            cargo = config.getenv('CARGO')
+        elif not runtime.contains_program_in_path(_CARGO):
+            cargo_in_home = os.path.expanduser('~/.cargo/bin/cargo')
+            if os.path.exists(cargo_in_home):
+                cargo = cargo_in_home
 
         # Fetch dependencies so that we no longer need network access
         fetch_launcher = pipeline.create_launcher()
         fetch_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
-        fetch_launcher.push_argv(_CARGO)
+        fetch_launcher.push_argv(cargo)
         fetch_launcher.push_argv('fetch')
         fetch_launcher.push_argv('--manifest-path')
         fetch_launcher.push_argv(cargo_toml)
@@ -98,7 +109,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         # Fetch dependencies so that we no longer need network access
         build_launcher = pipeline.create_launcher()
         build_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
-        build_launcher.push_argv(_CARGO)
+        build_launcher.push_argv(cargo)
         build_launcher.push_argv('build')
         build_launcher.push_argv('--manifest-path')
         build_launcher.push_argv(cargo_toml)
@@ -117,7 +128,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         clean_launcher = pipeline.create_launcher()
         clean_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
-        clean_launcher.push_argv(_CARGO)
+        clean_launcher.push_argv(cargo)
         clean_launcher.push_argv('clean')
         clean_launcher.push_argv('--manifest-path')
         clean_launcher.push_argv(cargo_toml)
