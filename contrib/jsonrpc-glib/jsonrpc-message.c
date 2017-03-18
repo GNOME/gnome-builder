@@ -22,7 +22,7 @@
 
 #include "jsonrpc-message.h"
 
-#if 1
+#if 0
 # define ENTRY     do { g_print (" ENTRY: %s(): %d\n", G_STRFUNC, __LINE__); } while (0)
 # define RETURN(r) do { g_print ("RETURN: %s(): %d\n", G_STRFUNC, __LINE__); return r; } while (0)
 # define EXIT      do { g_print ("  EXIT: %s(): %d\n", G_STRFUNC, __LINE__); return; } while (0)
