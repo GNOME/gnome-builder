@@ -68,7 +68,7 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
   IdePerspective *perspective;
   GtkWidget *pane;
   GSimpleAction *action;
-  const gchar *focus_accel[] = { "<control><shift>f", NULL };
+  const gchar *focus_accel[] = { "<control><shift>k", NULL };
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
