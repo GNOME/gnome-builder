@@ -519,6 +519,9 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
 
       g_assert (FLATPAK_IS_INSTALLATION (installation));
 
+      /* Refresh in case a new remote was added */
+      flatpak_installation_drop_caches (installation, cancellable, NULL);
+
       remotes = flatpak_installation_list_remotes (installation, cancellable, NULL);
       if (remotes == NULL)
         continue;
@@ -865,6 +868,9 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
       g_autoptr(GPtrArray) remotes = NULL;
 
       g_assert (FLATPAK_IS_INSTALLATION (installation));
+
+      /* Refresh in case a new remote was added */
+      flatpak_installation_drop_caches (installation, cancellable, NULL);
 
       remotes = flatpak_installation_list_remotes (installation, cancellable, NULL);
       if (remotes == NULL)
