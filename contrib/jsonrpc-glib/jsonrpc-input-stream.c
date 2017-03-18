@@ -270,11 +270,12 @@ jsonrpc_input_stream_read_message_async (JsonrpcInputStream  *self,
 
   state = g_slice_new0 (ReadState);
   state->content_length = -1;
-  state->priority = G_PRIORITY_DEFAULT;
+  state->priority = G_PRIORITY_LOW;
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, jsonrpc_input_stream_read_message_async);
   g_task_set_task_data (task, state, read_state_free);
+  g_task_set_priority (task, state->priority);
 
   g_data_input_stream_read_line_async (G_DATA_INPUT_STREAM (self),
                                        state->priority,
