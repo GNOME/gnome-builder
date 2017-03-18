@@ -177,19 +177,19 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
           const gchar *new_text = NULL;
           gboolean success;
           struct {
-            gint line;
-            gint column;
+            gint64 line;
+            gint64 column;
           } begin, end;
 
           success = JSONRPC_MESSAGE_PARSE (change,
             "range", "{",
               "start", "{",
-                "line", JSONRPC_MESSAGE_GET_INT32 (&begin.line),
-                "character", JSONRPC_MESSAGE_GET_INT32 (&begin.column),
+                "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+                "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
               "}",
               "end", "{",
-                "line", JSONRPC_MESSAGE_GET_INT32 (&end.line),
-                "character", JSONRPC_MESSAGE_GET_INT32 (&end.column),
+                "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+                "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
               "}",
             "}",
             "newText", JSONRPC_MESSAGE_GET_STRING (&new_text)
