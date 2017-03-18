@@ -82,6 +82,10 @@ class RustService(Ide.Object, Ide.Service):
                 launcher.setenv("SYS_ROOT", sysroot, True)
                 launcher.setenv("LD_LIBRARY_PATH", os.path.join(sysroot, "lib"), True)
 
+            # Locate the directory of the project and run rls from there.
+            workdir = self.get_context().get_vcs().get_working_directory()
+            launcher.set_cwd(workdir.get_path())
+
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
             path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
