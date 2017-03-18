@@ -129,11 +129,11 @@ ide_langserv_highlighter_document_symbol_cb (GObject      *object,
           const gchar *name = NULL;
           const gchar *tag;
           gboolean success;
-          gint kind = 0;
+          gint64 kind = 0;
 
           success = JSONRPC_MESSAGE_PARSE (member,
             "name", JSONRPC_MESSAGE_GET_STRING (&name),
-            "kind", JSONRPC_MESSAGE_GET_INT32 (&kind)
+            "kind", JSONRPC_MESSAGE_GET_INT64 (&kind)
           );
 
           if (!success)
