@@ -185,21 +185,21 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
       "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-      "version", JSONRPC_MESSAGE_PUT_INT32 (version),
+      "version", JSONRPC_MESSAGE_PUT_INT64 (version),
     "}",
     "contentChanges", "[",
       "{",
         "range", "{",
           "start", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT32 (line),
-            "character", JSONRPC_MESSAGE_PUT_INT32 (column),
+            "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+            "character", JSONRPC_MESSAGE_PUT_INT64 (column),
           "}",
           "end", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT32 (line),
-            "character", JSONRPC_MESSAGE_PUT_INT32 (column),
+            "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+            "character", JSONRPC_MESSAGE_PUT_INT64 (column),
           "}",
         "}",
-        "rangeLength", JSONRPC_MESSAGE_PUT_INT32 (0),
+        "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (0),
         "text", JSONRPC_MESSAGE_PUT_STRING (copy),
       "}",
     "]");
@@ -248,21 +248,21 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
       "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-      "version", JSONRPC_MESSAGE_PUT_INT32 (version),
+      "version", JSONRPC_MESSAGE_PUT_INT64 (version),
     "}",
     "contentChanges", "[",
       "{",
         "range", "{",
           "start", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT32 (begin.line),
-            "character", JSONRPC_MESSAGE_PUT_INT32 (begin.column),
+            "line", JSONRPC_MESSAGE_PUT_INT64 (begin.line),
+            "character", JSONRPC_MESSAGE_PUT_INT64 (begin.column),
           "}",
           "end", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT32 (end.line),
-            "character", JSONRPC_MESSAGE_PUT_INT32 (end.column),
+            "line", JSONRPC_MESSAGE_PUT_INT64 (end.line),
+            "character", JSONRPC_MESSAGE_PUT_INT64 (end.column),
           "}",
         "}",
-        "rangeLength", JSONRPC_MESSAGE_PUT_INT32 (length),
+        "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (length),
         "text", "",
       "}",
     "]");
@@ -406,7 +406,7 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
     "changes", "[",
       "{",
         "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-        "type", JSONRPC_MESSAGE_PUT_INT32 (FILE_CHANGE_TYPE_DELETED),
+        "type", JSONRPC_MESSAGE_PUT_INT64 (FILE_CHANGE_TYPE_DELETED),
       "}",
     "]"
   );
@@ -445,11 +445,11 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
     "changes", "["
       "{",
         "uri", JSONRPC_MESSAGE_PUT_STRING (src_uri),
-        "type", JSONRPC_MESSAGE_PUT_INT32 (FILE_CHANGE_TYPE_DELETED),
+        "type", JSONRPC_MESSAGE_PUT_INT64 (FILE_CHANGE_TYPE_DELETED),
       "}",
       "{",
         "uri", JSONRPC_MESSAGE_PUT_STRING (dst_uri),
-        "type", JSONRPC_MESSAGE_PUT_INT32 (FILE_CHANGE_TYPE_CREATED),
+        "type", JSONRPC_MESSAGE_PUT_INT64 (FILE_CHANGE_TYPE_CREATED),
       "}",
     "]"
   );
@@ -485,11 +485,11 @@ ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
       g_autoptr(GVariant) range = NULL;
       const gchar *message = NULL;
       const gchar *source = NULL;
-      gint severity = 0;
+      gint64 severity = 0;
       gboolean success;
       struct {
-        gint line;
-        gint column;
+        gint64 line;
+        gint64 column;
       } begin, end;
 
       /* Mandatory fields */
@@ -499,18 +499,18 @@ ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
         continue;
 
       /* Optional Fields */
-      JSONRPC_MESSAGE_PARSE (value, "severity", JSONRPC_MESSAGE_GET_INT32 (&severity));
+      JSONRPC_MESSAGE_PARSE (value, "severity", JSONRPC_MESSAGE_GET_INT64 (&severity));
       JSONRPC_MESSAGE_PARSE (value, "source", JSONRPC_MESSAGE_GET_STRING (&source));
 
       /* Extract location information */
       success = JSONRPC_MESSAGE_PARSE (range,
         "start", "{",
-          "line", JSONRPC_MESSAGE_GET_INT32 (&begin.line),
-          "character", JSONRPC_MESSAGE_GET_INT32 (&begin.column),
+          "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+          "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
         "}",
         "end", "{",
-          "line", JSONRPC_MESSAGE_GET_INT32 (&end.line),
-          "character", JSONRPC_MESSAGE_GET_INT32 (&end.column),
+          "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+          "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
         "}"
       );
 
@@ -930,7 +930,7 @@ ide_langserv_client_start (IdeLangservClient *self)
    */
 
   params = JSONRPC_MESSAGE_NEW (
-    "processId", JSONRPC_MESSAGE_PUT_INT32 (getpid ()),
+    "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
     "capabilities", "{", "}"
   );
