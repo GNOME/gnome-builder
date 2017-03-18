@@ -160,6 +160,7 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
   gsize length = 0;
 
   g_assert (JSONRPC_IS_INPUT_STREAM (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   state = g_task_get_task_data (task);
@@ -169,9 +170,13 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
 
   if (line == NULL)
     {
-      if (error == NULL)
-        goto read_next_line;
-      g_task_return_error (task, g_steal_pointer (&error));
+      if (error != NULL)
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        g_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "No data to read from peer");
       return;
     }
 
@@ -248,7 +253,6 @@ jsonrpc_input_stream_read_headers_cb (GObject      *object,
       return;
     }
 
-read_next_line:
   g_data_input_stream_read_line_async (G_DATA_INPUT_STREAM (self),
                                        state->priority,
                                        cancellable,
