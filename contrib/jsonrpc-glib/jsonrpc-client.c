@@ -229,14 +229,6 @@ jsonrpc_client_panic (JsonrpcClient *self,
 
   priv->failed = TRUE;
 
-  /*
-   * Ignore warning() on a few common cases that happen when we close the
-   * underlying socket/pipe/etc.
-   */
-  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CLOSED) &&
-      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_BROKEN_PIPE))
-    g_warning ("%s(): %s", G_STRFUNC, error->message);
-
   jsonrpc_client_close (self, NULL, NULL);
 
   /* Steal the tasks so that we don't have to worry about reentry. */
