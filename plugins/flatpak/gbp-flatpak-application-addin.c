@@ -840,7 +840,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
   /*
    * Look through all of our remote refs and see if we find a match for
    * the runtime for which we need to locate the SDK. Afterwards, we need
-   * to get the metedata for that runtime so that we can find the sdk field
+   * to get the metadata for that runtime so that we can find the sdk field
    * which maps to another runtime.
    *
    * We might have to make a request to the server for the ref if we do not
