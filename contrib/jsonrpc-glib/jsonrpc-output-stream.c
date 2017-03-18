@@ -329,6 +329,7 @@ jsonrpc_output_stream_write_message_async (JsonrpcOutputStream *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, jsonrpc_output_stream_write_message_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (NULL == (bytes = jsonrpc_output_stream_create_bytes (self, message, &error)))
     {
