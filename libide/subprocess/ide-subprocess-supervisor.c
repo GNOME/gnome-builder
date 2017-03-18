@@ -246,7 +246,7 @@ ide_subprocess_supervisor_start_in_usec (IdeSubprocessSupervisor *self,
    * have elapsed since our last spawn time. The amount of time required
    * will be given to us in the @usec parameter.
    */
-  g_timeout_add (usec / 1000L,
+  g_timeout_add (MAX (250, usec / 1000L),
                  ide_subprocess_supervisor_start_in_usec_cb,
                  g_object_ref (self));
 
