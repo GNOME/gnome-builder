@@ -1,18 +1,23 @@
+#include <json-glib/json-glib.h>
+
 #include "jsonrpc-message.h"
 
 static void
 test_basic (void)
 {
   g_autoptr(GVariant) node = NULL;
+  g_autoptr(JsonParser) parser = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) deserialized = NULL;
   const gchar *foo1 = NULL;
-  gint baz_baz_baz = 0;
+  gint64 baz_baz_baz = 0;
   gboolean r;
 
   node = JSONRPC_MESSAGE_NEW (
     "foo", "foo1",
     "bar", "foo2",
     "baz", "{",
-      "baz", "[", "{", "baz", JSONRPC_MESSAGE_PUT_INT32 (123), "}", "]",
+      "baz", "[", "{", "baz", JSONRPC_MESSAGE_PUT_INT64 (123), "}", "]",
     "}"
   );
 
@@ -21,13 +26,25 @@ test_basic (void)
   r = JSONRPC_MESSAGE_PARSE (node,
     "foo", JSONRPC_MESSAGE_GET_STRING (&foo1),
     "baz", "{",
-      "baz", "[", "{", "baz", JSONRPC_MESSAGE_GET_INT32 (&baz_baz_baz), "}", "]",
+      "baz", "[", "{", "baz", JSONRPC_MESSAGE_GET_INT64 (&baz_baz_baz), "}", "]",
     "}"
   );
 
   g_assert_cmpstr (foo1, ==, "foo1");
   g_assert_cmpint (baz_baz_baz, ==, 123);
   g_assert_cmpint (r, ==, 1);
+
+  /* compare json gvariant encoding to ensure it matches */
+#define TESTSTR "{'foo': 'foo1', 'bar': 'foo2', 'baz': {'baz': [{'baz': 123}]}}"
+  parser = json_parser_new ();
+  r = json_parser_load_from_data (parser, TESTSTR, -1, &error);
+  g_assert (r);
+  g_assert_no_error (error);
+  deserialized = json_gvariant_deserialize (json_parser_get_root (parser), NULL, &error);
+  g_assert (deserialized);
+  g_assert_no_error (error);
+  g_assert (g_variant_equal (deserialized, node));
+#undef TESTSTR
 }
 
 static void

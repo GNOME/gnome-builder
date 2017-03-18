@@ -60,6 +60,18 @@ typedef struct
 typedef struct
 {
   JsonrpcMessageMagic magic;
+  gint64 val;
+} JsonrpcMessagePutInt64;
+
+typedef struct
+{
+  JsonrpcMessageMagic magic;
+  gint64 *valptr;
+} JsonrpcMessageGetInt64;
+
+typedef struct
+{
+  JsonrpcMessageMagic magic;
   gboolean val;
 } JsonrpcMessagePutBoolean;
 
@@ -106,6 +118,8 @@ typedef struct
 #define _JSONRPC_MESSAGE_GET_STRING_MAGIC  _JSONRPC_MAGIC("GETS")
 #define _JSONRPC_MESSAGE_PUT_INT32_MAGIC   _JSONRPC_MAGIC("PUTI")
 #define _JSONRPC_MESSAGE_GET_INT32_MAGIC   _JSONRPC_MAGIC("GETI")
+#define _JSONRPC_MESSAGE_PUT_INT64_MAGIC   _JSONRPC_MAGIC("PUTX")
+#define _JSONRPC_MESSAGE_GET_INT64_MAGIC   _JSONRPC_MAGIC("GETX")
 #define _JSONRPC_MESSAGE_PUT_BOOLEAN_MAGIC _JSONRPC_MAGIC("PUTB")
 #define _JSONRPC_MESSAGE_GET_BOOLEAN_MAGIC _JSONRPC_MAGIC("GETB")
 #define _JSONRPC_MESSAGE_PUT_DOUBLE_MAGIC  _JSONRPC_MAGIC("PUTD")
@@ -118,6 +132,8 @@ typedef struct
 #define _JSONRPC_MESSAGE_GET_STRING_MAGIC_C  _JSONRPC_MAGIC_C('G','E','T','S')
 #define _JSONRPC_MESSAGE_PUT_INT32_MAGIC_C   _JSONRPC_MAGIC_C('P','U','T','I')
 #define _JSONRPC_MESSAGE_GET_INT32_MAGIC_C   _JSONRPC_MAGIC_C('G','E','T','I')
+#define _JSONRPC_MESSAGE_PUT_INT64_MAGIC_C   _JSONRPC_MAGIC_C('P','U','T','X')
+#define _JSONRPC_MESSAGE_GET_INT64_MAGIC_C   _JSONRPC_MAGIC_C('G','E','T','X')
 #define _JSONRPC_MESSAGE_PUT_BOOLEAN_MAGIC_C _JSONRPC_MAGIC_C('P','U','T','B')
 #define _JSONRPC_MESSAGE_GET_BOOLEAN_MAGIC_C _JSONRPC_MAGIC_C('G','E','T','B')
 #define _JSONRPC_MESSAGE_PUT_DOUBLE_MAGIC_C  _JSONRPC_MAGIC_C('P','U','T','D')
@@ -142,6 +158,11 @@ typedef struct
   (&((JsonrpcMessagePutInt32) { .magic = {_JSONRPC_MESSAGE_PUT_INT32_MAGIC_C}, .val = _val }))
 #define JSONRPC_MESSAGE_GET_INT32(_valptr) \
   (&((JsonrpcMessageGetInt32) { .magic = {_JSONRPC_MESSAGE_GET_INT32_MAGIC_C}, .valptr = _valptr }))
+
+#define JSONRPC_MESSAGE_PUT_INT64(_val) \
+  (&((JsonrpcMessagePutInt64) { .magic = {_JSONRPC_MESSAGE_PUT_INT64_MAGIC_C}, .val = _val }))
+#define JSONRPC_MESSAGE_GET_INT64(_valptr) \
+  (&((JsonrpcMessageGetInt64) { .magic = {_JSONRPC_MESSAGE_GET_INT64_MAGIC_C}, .valptr = _valptr }))
 
 #define JSONRPC_MESSAGE_PUT_BOOLEAN(_val) \
   (&((JsonrpcMessagePutBoolean) { .magic = {_JSONRPC_MESSAGE_PUT_BOOLEAN_MAGIC_C}, .val = _val }))

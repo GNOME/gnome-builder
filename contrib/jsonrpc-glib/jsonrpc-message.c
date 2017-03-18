@@ -39,11 +39,13 @@
 
 #define IS_PUT_STRING(_any)  COMPARE_MAGIC(_any, PUT_STRING)
 #define IS_PUT_INT32(_any)   COMPARE_MAGIC(_any, PUT_INT32)
+#define IS_PUT_INT64(_any)   COMPARE_MAGIC(_any, PUT_INT64)
 #define IS_PUT_BOOLEAN(_any) COMPARE_MAGIC(_any, PUT_BOOLEAN)
 #define IS_PUT_DOUBLE(_any)  COMPARE_MAGIC(_any, PUT_DOUBLE)
 
 #define IS_GET_STRING(_any)  COMPARE_MAGIC(_any, GET_STRING)
 #define IS_GET_INT32(_any)   COMPARE_MAGIC(_any, GET_INT32)
+#define IS_GET_INT64(_any)   COMPARE_MAGIC(_any, GET_INT64)
 #define IS_GET_BOOLEAN(_any) COMPARE_MAGIC(_any, GET_BOOLEAN)
 #define IS_GET_DOUBLE(_any)  COMPARE_MAGIC(_any, GET_DOUBLE)
 #define IS_GET_ITER(_any)    COMPARE_MAGIC(_any, GET_ITER)
@@ -129,6 +131,8 @@ jsonrpc_message_build_object (GVariantBuilder *builder,
         g_variant_builder_add (builder, "s", ((JsonrpcMessagePutString *)valptr)->val);
       else if (IS_PUT_INT32 (valptr))
         g_variant_builder_add (builder, "i", ((JsonrpcMessagePutInt32 *)valptr)->val);
+      else if (IS_PUT_INT64 (valptr))
+        g_variant_builder_add (builder, "x", ((JsonrpcMessagePutInt64 *)valptr)->val);
       else if (IS_PUT_BOOLEAN (valptr))
         g_variant_builder_add (builder, "b", ((JsonrpcMessagePutBoolean *)valptr)->val);
       else if (IS_PUT_DOUBLE (valptr))
@@ -191,6 +195,8 @@ jsonrpc_message_build_array (GVariantBuilder *builder,
         g_variant_builder_add (builder, "s", ((JsonrpcMessagePutString *)valptr)->val);
       else if (IS_PUT_INT32 (valptr))
         g_variant_builder_add (builder, "i", ((JsonrpcMessagePutInt32 *)valptr)->val);
+      else if (IS_PUT_INT64 (valptr))
+        g_variant_builder_add (builder, "x", ((JsonrpcMessagePutInt64 *)valptr)->val);
       else if (IS_PUT_BOOLEAN (valptr))
         g_variant_builder_add (builder, "b", ((JsonrpcMessagePutBoolean *)valptr)->val);
       else if (IS_PUT_DOUBLE (valptr))
@@ -301,6 +307,8 @@ jsonrpc_message_parse_object (GVariantDict *dict,
     ret = g_variant_dict_lookup (dict, key, "&s", ((JsonrpcMessageGetString *)valptr)->valptr);
   else if (IS_GET_INT32 (valptr))
     ret = g_variant_dict_lookup (dict, key, "i", ((JsonrpcMessageGetInt32 *)valptr)->valptr);
+  else if (IS_GET_INT64 (valptr))
+    ret = g_variant_dict_lookup (dict, key, "x", ((JsonrpcMessageGetInt64 *)valptr)->valptr);
   else if (IS_GET_BOOLEAN (valptr))
     ret = g_variant_dict_lookup (dict, key, "b", ((JsonrpcMessageGetBoolean *)valptr)->valptr);
   else if (IS_GET_DOUBLE (valptr))
@@ -388,6 +396,11 @@ jsonrpc_message_parse_array_va (GVariantIter *iter,
     {
       if ((ret = g_variant_is_of_type (value, G_VARIANT_TYPE_INT32)))
         *((JsonrpcMessageGetInt32 *)valptr)->valptr = g_variant_get_int32 (value);
+    }
+  else if (IS_GET_INT64 (valptr))
+    {
+      if ((ret = g_variant_is_of_type (value, G_VARIANT_TYPE_INT64)))
+        *((JsonrpcMessageGetInt64 *)valptr)->valptr = g_variant_get_int64 (value);
     }
   else if (IS_GET_BOOLEAN (valptr))
     {
