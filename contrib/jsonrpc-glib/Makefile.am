@@ -2,7 +2,8 @@ CLEANFILES =
 DISTCLEANFILES =
 EXTRA_DIST =
 
-noinst_LTLIBRARIES = libjsonrpc-glib.la
+pkglibdir = $(libdir)/gnome-builder
+pkglib_LTLIBRARIES = libjsonrpc-glib.la
 
 libjsonrpc_glib_la_public_sources =          \
 	jsonrpc-client.c                     \
