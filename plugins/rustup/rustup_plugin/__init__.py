@@ -122,7 +122,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             Checks if a rustup installation is available.
         """
         self.rustup_executable = None
-        for rustup_bin in ['rustup', os.path.expanduser('~/.cargo/bin/rustup')]:
+        for rustup_bin in ('rustup', os.path.expanduser('~/.cargo/bin/rustup')):
             try:
                 launcher = Ide.SubprocessLauncher.new(Gio.SubprocessFlags.STDOUT_PIPE)
                 launcher.push_argv(rustup_bin)
