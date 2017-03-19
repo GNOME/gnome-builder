@@ -406,7 +406,7 @@ class RustupInstaller(Ide.Transfer):
     def _wait_cb(self, sub_process, result, task):
         try:
             sub_process.wait_check_finish(result)
-            if sub_process.get_exit_status() == 0:
+            if sub_process.get_if_exited() and sub_process.get_exit_status() == 0:
                 task.return_boolean(True)
             else:
                 if self.mode == _MODE_INSTALL_TOOLCHAIN:
