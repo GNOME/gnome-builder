@@ -34,7 +34,6 @@ struct _IdeCtagsService
 
   EggTaskCache     *indexes;
   GCancellable     *cancellable;
-  IdeCtagsBuilder  *builder;
   GPtrArray        *highlighters;
   GPtrArray        *completions;
   GHashTable       *build_timeout_by_dir;
@@ -447,27 +446,6 @@ ide_ctags_service_queue_mine (IdeCtagsService *self)
 }
 
 static void
-ide_ctags_service_tags_built_cb (IdeCtagsService *self,
-                                 GFile           *tags_file,
-                                 IdeCtagsBuilder *builder)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_CTAGS_SERVICE (self));
-  g_assert (G_IS_FILE (tags_file));
-  g_assert (IDE_IS_CTAGS_BUILDER (builder));
-
-  egg_task_cache_get_async (self->indexes,
-                            tags_file,
-                            TRUE,
-                            self->cancellable,
-                            ide_ctags_service_tags_loaded_cb,
-                            g_object_ref (self));
-
-  IDE_EXIT;
-}
-
-static void
 build_system_tags_cb (GObject      *object,
                       GAsyncResult *result,
                       gpointer      user_data)
@@ -594,20 +572,6 @@ ide_ctags_service_context_loaded (IdeService *service)
 static void
 ide_ctags_service_start (IdeService *service)
 {
-  IdeCtagsService *self = (IdeCtagsService *)service;
-  IdeContext *context;
-
-  g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  self->builder = g_object_new (IDE_TYPE_CTAGS_BUILDER,
-                                "context", context,
-                                NULL);
-  g_signal_connect_object (self->builder,
-                           "tags-built",
-                           G_CALLBACK (ide_ctags_service_tags_built_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -621,7 +585,6 @@ ide_ctags_service_stop (IdeService *service)
     g_cancellable_cancel (self->cancellable);
 
   g_clear_object (&self->cancellable);
-  g_clear_object (&self->builder);
 }
 
 static void
