@@ -46,6 +46,10 @@ def get_module_data_path(name):
     data_dir = plugin.get_data_dir()
     return GLib.build_filenamev([data_dir, name])
 
+def close_fds(task, param, fds):
+    for fd in fds:
+        os.close(fd)
+
 def looks_like_channel(channel):
     if not channel:
         return False
@@ -289,9 +293,10 @@ class RustupInstaller(Ide.Transfer):
 
         task = Gio.Task.new(self, cancellable, callback)
 
-        launcher = Ide.SubprocessLauncher.new(Gio.SubprocessFlags.STDIN_PIPE)
+        launcher = Ide.SubprocessLauncher.new(0)
         launcher.set_clear_env(False)
         launcher.set_run_on_host(True)
+        launcher.set_cwd(GLib.get_home_dir())
 
         stdin_data = None
 
@@ -321,22 +326,24 @@ class RustupInstaller(Ide.Transfer):
 
         # rustup needs a tty to give us a progress bar
         (master_fd, slave_fd) = pty.openpty()
+        launcher.take_stdin_fd(os.dup(slave_fd))
         launcher.take_stdout_fd(os.dup(slave_fd))
-        launcher.take_stderr_fd(slave_fd)
+        launcher.take_stderr_fd(os.dup(slave_fd))
 
-        data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(master_fd, True))
+        data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(os.dup(master_fd), True))
         # set it to ANY so the progress bars can be parsed
         data_stream.set_newline_type(Gio.DataStreamNewlineType.ANY)
         data_stream.read_line_async(GLib.PRIORITY_DEFAULT, cancellable, self._read_line_cb, cancellable)
 
+        task.connect('notify::completed', close_fds, (master_fd, slave_fd))
+
         try:
             sub_process = launcher.spawn()
-            stdin_stream = sub_process.get_stdin_pipe()
-            if stdin_data is not None:
-                stdin_stream.write_all(stdin_data)
-            stdin_stream.close()
+            if stdin_data:
+                os.write(master_fd, stdin_data)
             sub_process.wait_async(cancellable, self._wait_cb, task)
         except Exception as ex:
+            print(repr(ex))
             task.return_error(GLib.Error(message=repr(ex)))
 
     def _read_line_cb(self, data_stream, result, cancellable):
