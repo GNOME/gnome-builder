@@ -127,8 +127,9 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
                 sub_process = launcher.spawn()
 
                 _, stdout, stderr = sub_process.communicate_utf8(None, None)
-                self.rustup_executable = rustup_bin
-                break
+                if stdout:
+                    self.rustup_executable = rustup_bin
+                    break
             except GLib.Error as e:
                 pass
         if self.rustup_executable is None:
