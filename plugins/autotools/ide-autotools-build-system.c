@@ -38,12 +38,10 @@ struct _IdeAutotoolsBuildSystem
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 static void build_system_iface_init (IdeBuildSystemInterface *iface);
-static void tags_builder_iface_init (IdeTagsBuilderInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsBuildSystem,
                          ide_autotools_build_system,
                          IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_TAGS_BUILDER, tags_builder_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, build_system_iface_init))
 
@@ -868,138 +866,4 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 {
   iface->init_async = ide_autotools_build_system_init_async;
   iface->init_finish = ide_autotools_build_system_init_finish;
-}
-
-static void
-simple_make_command_cb (GObject      *object,
-                        GAsyncResult *result,
-                        gpointer      user_data)
-{
-  IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-
-  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    g_task_return_error (task, error);
-  else
-    g_task_return_boolean (task, TRUE);
-}
-
-static void
-simple_make_command (GFile            *directory,
-                     const gchar      *target,
-                     GTask            *task,
-                     IdeConfiguration *configuration)
-{
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autofree gchar *cwd = NULL;
-  GCancellable *cancellable;
-  IdeRuntime *runtime;
-  GError *error = NULL;
-
-  g_assert (G_IS_FILE (directory));
-  g_assert (target != NULL);
-  g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  cancellable = g_task_get_cancellable (task);
-
-  if (!g_file_is_native (directory))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_REGULAR_FILE,
-                               "Cannot use non-local directories.");
-      return;
-    }
-
-  if (NULL == (runtime = ide_configuration_get_runtime (configuration)))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               "Failed to locate runtime");
-      return;
-    }
-
-  if (NULL == (launcher = ide_runtime_create_launcher (runtime, &error)))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  cwd = g_file_get_path (directory);
-  ide_subprocess_launcher_set_cwd (launcher, cwd);
-
-  if (ide_runtime_contains_program_in_path (runtime, "gmake", cancellable))
-    ide_subprocess_launcher_push_argv (launcher, "gmake");
-  else
-    ide_subprocess_launcher_push_argv (launcher, "make");
-
-  ide_subprocess_launcher_push_argv (launcher, target);
-
-  g_task_set_return_on_cancel (task, FALSE);
-
-  if (g_task_return_error_if_cancelled (task))
-    return;
-
-  if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  ide_subprocess_wait_check_async (subprocess,
-                                   cancellable,
-                                   simple_make_command_cb,
-                                   g_object_ref (task));
-}
-
-static void
-ide_autotools_build_system_tags_build_async (IdeTagsBuilder      *builder,
-                                             GFile               *file_or_directory,
-                                             gboolean             recursive,
-                                             GCancellable        *cancellable,
-                                             GAsyncReadyCallback  callback,
-                                             gpointer             user_data)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)builder;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *configuration;
-  IdeContext *context;
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (G_IS_FILE (file_or_directory));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
-  configuration = ide_configuration_manager_get_current (config_manager);
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_build_system_tags_build_async);
-  simple_make_command (file_or_directory, "ctags", task, configuration);
-}
-
-static gboolean
-ide_autotools_build_system_tags_build_finish (IdeTagsBuilder  *builder,
-                                              GAsyncResult    *result,
-                                              GError         **error)
-{
-  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)builder;
-  GTask *task = (GTask *)result;
-
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self), FALSE);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-
-  return g_task_propagate_boolean (task, error);
-}
-
-static void
-tags_builder_iface_init (IdeTagsBuilderInterface *iface)
-{
-  iface->build_async = ide_autotools_build_system_tags_build_async;
-  iface->build_finish = ide_autotools_build_system_tags_build_finish;
 }
