@@ -603,12 +603,12 @@ libide_sources = libide_generated_headers + libide_public_sources + [
 libgtksource_dep = dependency('gtksourceview-3.0', version: '>= 3.22.0')
 
 libide_deps = [
-  dependency('gio-unix-2.0'),
   dependency('pangoft2', version: '>= 1.38.0'),
   dependency('gspell-1', version: '>= 1.2.0'),
   dependency('enchant'),
   libgtksource_dep,
   libgio_dep,
+  libgiounix_dep,
   libgtk_dep,
   libpeas_dep,
   libegg_dep,
