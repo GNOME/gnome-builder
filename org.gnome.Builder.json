@@ -259,10 +259,6 @@
                     "branch": "gnome-3-24",
                     "type": "git",
                     "url": "https://git.gnome.org/browse/gtksourceview"
-                },
-                {
-                    "type": "patch",
-                    "path": "build/flatpak/0001-workaround-deadlocks-in-type-initialization.patch"
                 }
             ]
         },
