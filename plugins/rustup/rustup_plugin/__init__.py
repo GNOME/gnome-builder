@@ -423,11 +423,10 @@ class RustupInstaller(Ide.Transfer):
                 task.return_boolean(False)
 
         except Exception as ex:
-            # cancelled error
-            if ex.code is 19:
+            if getattr(ex, 'code') == Gio.IOErrorEnum.CANCELLED:
                 self.props.status = _('Cancelled')
             else:
-                print('_wait_cb', ex, ex.code)
+                print('_wait_cb', repr(ex))
             task.return_boolean(False)
         RustupApplicationAddin.instance.check_rustup()
 
