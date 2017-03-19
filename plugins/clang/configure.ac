@@ -10,13 +10,13 @@ AS_IF([test "$enable_clang_plugin" != "no"],[
 	real_enable_clang_plugin=$enable_clang_plugin
 	enable_clang_plugin=no
 	AC_CHECK_PROGS([LLVM_CONFIG], [ \
+		llvm-config-4.0 llvm-config40 \
 		llvm-config-3.9 llvm-config39 \
 		llvm-config-3.8 llvm-config38 \
 		llvm-config-3.7 llvm-config37 \
 		llvm-config-3.6 llvm-config36 \
 		llvm-config-3.5 llvm-config35 \
-		llvm-config \
-		llvm-config-4.0 llvm-config-devel], [])
+		llvm-config llvm-config-devel], [])
 	AS_IF([test "x$LLVM_CONFIG" = "x"],[],[
 		CLANG_INCLUDEDIR=`$LLVM_CONFIG --includedir`
 		CLANG_CFLAGS="-I$CLANG_INCLUDEDIR"
