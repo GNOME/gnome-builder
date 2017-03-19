@@ -864,9 +864,14 @@ ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
   if (success)
     {
       if (stdout_buf)
-        *stdout_buf = g_memory_output_stream_steal_as_bytes (state->stdout_buf);
+        *stdout_buf = state->stdout_buf ?
+                      g_memory_output_stream_steal_as_bytes (state->stdout_buf) :
+                      g_bytes_new (NULL, 0);
+
       if (stderr_buf)
-        *stderr_buf = g_memory_output_stream_steal_as_bytes (state->stderr_buf);
+        *stderr_buf = state->stderr_buf ?
+                      g_memory_output_stream_steal_as_bytes (state->stderr_buf) :
+                      g_bytes_new (NULL, 0);
     }
 
   g_object_unref (task);
