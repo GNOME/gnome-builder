@@ -318,7 +318,7 @@ class RustupInstaller(Ide.Transfer):
         launcher.take_stdout_fd(os.dup(slave_fd))
         launcher.take_stderr_fd(slave_fd)
 
-        data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(master_fd, False))
+        data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(master_fd, True))
         # set it to ANY so the progress bars can be parsed
         data_stream.set_newline_type(Gio.DataStreamNewlineType.ANY)
         data_stream.read_line_async(GLib.PRIORITY_DEFAULT, cancellable, self._read_line_cb, cancellable)
