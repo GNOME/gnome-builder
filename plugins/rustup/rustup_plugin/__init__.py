@@ -126,7 +126,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
                 launcher.set_run_on_host(True)
                 sub_process = launcher.spawn()
 
-                _, stdout, stderr = sub_process.communicate_utf8(None, None)
+                success, stdout, stderr = sub_process.communicate_utf8(None, None)
                 if stdout:
                     self.rustup_executable = rustup_bin
                     break
@@ -152,7 +152,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             launcher.set_run_on_host(True)
             sub_process = launcher.spawn()
 
-            _, stdout, stderr = sub_process.communicate_utf8(None, None)
+            success, stdout, stderr = sub_process.communicate_utf8(None, None)
             toolchains = []
             for line in iter(stdout.splitlines()):
                 if not 'no installed toolchains' in line:
@@ -173,7 +173,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             launcher.set_run_on_host(True)
             sub_process = launcher.spawn()
 
-            _, stdout, stderr = sub_process.communicate_utf8(None, None)
+            success, stdout, stderr = sub_process.communicate_utf8(None, None)
         except Exception as e:
             print(e)
             pass
@@ -195,7 +195,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             launcher.set_run_on_host(True)
             sub_process = launcher.spawn()
 
-            _, stdout, stderr = sub_process.communicate_utf8(None, None)
+            success, stdout, stderr = sub_process.communicate_utf8(None, None)
         except Exception as e:
             print(e)
             pass
