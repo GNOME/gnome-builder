@@ -71,6 +71,7 @@ GPtrArray                *ide_ctags_index_find_with_path(IdeCtagsIndex          
 gchar                    *ide_ctags_index_resolve_path  (IdeCtagsIndex            *self,
                                                          const gchar              *path);
 GFile                    *ide_ctags_index_get_file      (IdeCtagsIndex            *self);
+gboolean                  ide_ctags_index_get_is_empty  (IdeCtagsIndex            *self);
 gsize                     ide_ctags_index_get_size      (IdeCtagsIndex            *self);
 const gchar              *ide_ctags_index_get_path_root (IdeCtagsIndex            *self);
 const IdeCtagsIndexEntry *ide_ctags_index_lookup        (IdeCtagsIndex            *self,

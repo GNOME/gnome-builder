@@ -1,6 +1,6 @@
 /* ide-ctags-builder.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #ifndef IDE_CTAGS_BUILDER_H
 #define IDE_CTAGS_BUILDER_H
 
-#include "ide-object.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
@@ -27,8 +27,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsBuilder, ide_ctags_builder, IDE, CTAGS_BUILDER, IdeObject)
 
-IdeCtagsBuilder *ide_ctags_builder_new     (void);
-void             ide_ctags_builder_rebuild (IdeCtagsBuilder *self);
+IdeTagsBuilder *ide_ctags_builder_new (IdeContext *context);
 
 G_END_DECLS
 

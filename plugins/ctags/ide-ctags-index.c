@@ -445,7 +445,7 @@ ide_ctags_index_init_async (GAsyncInitable      *initable,
       return;
     }
 
-  g_task_run_in_thread (task, ide_ctags_index_build_index);
+  ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_index_build_index);
 }
 
 static gboolean
@@ -676,4 +676,12 @@ ide_ctags_index_find_with_path (IdeCtagsIndex *self,
     }
 
   return ar;
+}
+
+gboolean
+ide_ctags_index_get_is_empty (IdeCtagsIndex *self)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_INDEX (self), FALSE);
+
+  return self->index == NULL || self->index->len == 0;
 }

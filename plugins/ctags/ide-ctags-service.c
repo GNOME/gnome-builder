@@ -37,9 +37,18 @@ struct _IdeCtagsService
   IdeCtagsBuilder  *builder;
   GPtrArray        *highlighters;
   GPtrArray        *completions;
+  GHashTable       *build_timeout_by_dir;
 
-  guint             build_tags_timeout;
+  guint             queued_miner_handler;
+  guint             miner_active : 1;
+  guint             needs_recursive_mine : 1;
 };
+
+typedef struct
+{
+  gchar *path;
+  guint  recursive;
+} MineInfo;
 
 static void service_iface_init (IdeServiceInterface *iface);
 
@@ -60,6 +69,11 @@ ide_ctags_service_build_index_init_cb (GObject      *object,
 
   if (!g_async_initable_init_finish (G_ASYNC_INITABLE (index), result, &error))
     g_task_return_error (task, error);
+  else if (ide_ctags_index_get_is_empty (index))
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NONE,
+                             "tags file is empty");
   else
     g_task_return_pointer (task, g_object_ref (index), g_object_unref);
 }
@@ -68,10 +82,14 @@ static guint64
 get_file_mtime (GFile *file)
 {
   g_autoptr(GFileInfo) info = NULL;
+  g_autofree gchar *path = NULL;
 
   if ((info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                  G_FILE_QUERY_INFO_NONE, NULL, NULL)))
     return g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  path = g_file_get_uri (file);
+  g_warning ("Failed to get mtime for %s", path);
 
   return 0;
 }
@@ -123,7 +141,6 @@ ide_ctags_service_build_index_cb (EggTaskCache  *cache,
   IdeCtagsService *self = user_data;
   g_autoptr(IdeCtagsIndex) index = NULL;
   GFile *file = (GFile *)key;
-  g_autofree gchar *uri = NULL;
   g_autofree gchar *path_root = NULL;
 
   IDE_ENTRY;
@@ -136,8 +153,12 @@ ide_ctags_service_build_index_cb (EggTaskCache  *cache,
   path_root = resolve_path_root (self, file);
   index = ide_ctags_index_new (file, path_root, get_file_mtime (file));
 
-  uri = g_file_get_uri (file);
-  g_debug ("Building ctags in memory index for %s", uri);
+#ifdef IDE_ENABLE_TRACE
+  {
+    g_autofree gchar *uri = g_file_get_uri (file);
+    IDE_TRACE_MSG ("Building ctags in memory index for %s", uri);
+  }
+#endif
 
   g_async_initable_init_async (G_ASYNC_INITABLE (index),
                                G_PRIORITY_DEFAULT,
@@ -166,8 +187,12 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
 
   if (!(index = egg_task_cache_get_finish (cache, result, &error)))
     {
-      g_debug ("%s", error->message);
+      /* don't log if it was an empty file */
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NONE))
+        g_debug ("%s", error->message);
+
       g_clear_error (&error);
+
       IDE_EXIT;
     }
 
@@ -192,20 +217,26 @@ static gboolean
 file_is_newer (IdeCtagsIndex *index,
                GFile         *file)
 {
+  guint64 file_mtime;
+  guint64 ctags_mtime;
+
   g_assert (IDE_IS_CTAGS_INDEX (index));
   g_assert (G_IS_FILE (file));
 
-  return get_file_mtime (file) > ide_ctags_index_get_mtime (index);
+  file_mtime = get_file_mtime (file);
+  ctags_mtime = ide_ctags_index_get_mtime (index);
+
+  return file_mtime > ctags_mtime;
 }
 
 static gboolean
 do_load (gpointer data)
 {
+  IdeCtagsIndex *prev;
   struct {
     IdeCtagsService *self;
     GFile *file;
   } *pair = data;
-  IdeCtagsIndex *prev;
 
   if ((prev = egg_task_cache_peek (pair->self->indexes, pair->file)))
     {
@@ -316,64 +347,103 @@ ide_ctags_service_miner (GTask        *task,
                          gpointer      task_data,
                          GCancellable *cancellable)
 {
-  g_autofree gchar *project_tags = NULL;
-  g_autofree gchar *filename = NULL;
   IdeCtagsService *self = source_object;
-  IdeContext *context;
-  IdeProject *project;
-  IdeVcs *vcs;
-  GFile *file;
+  GArray *mine_info = task_data;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_CTAGS_SERVICE (self));
+  g_assert (mine_info != NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  project = ide_context_get_project (context);
-  filename = g_strconcat (ide_project_get_id (project), ".tags", NULL);
-  project_tags = g_build_filename (g_get_user_cache_dir (),
-                                   ide_get_program_name (),
-                                   "tags",
-                                   filename,
-                                   NULL);
+  for (guint i = 0; i < mine_info->len; i++)
+    {
+      const MineInfo *info = &g_array_index (mine_info, MineInfo, i);
+      g_autoptr(GFile) file = g_file_new_for_path (info->path);
 
-  /* mine ~/.cache/gnome-builder/tags/<name>.tags */
-  file = g_file_new_for_path (project_tags);
-  ide_ctags_service_load_tags (self, file);
-  g_object_unref (file);
+      ide_ctags_service_mine_directory (self, file, info->recursive, cancellable);
+    }
 
-  /* mine the project tree */
-  file = g_object_ref (ide_vcs_get_working_directory (vcs));
-  ide_ctags_service_mine_directory (self, file, TRUE, cancellable);
-  g_object_unref (file);
+  self->miner_active = FALSE;
 
-  /* mine ~/.tags */
-  file = g_file_new_for_path (g_get_home_dir ());
-  ide_ctags_service_mine_directory (self, file, FALSE, cancellable);
-  g_object_unref (file);
-
-  /* mine /usr/include */
-  file = g_file_new_for_path ("/usr/include");
-  ide_ctags_service_mine_directory (self, file, TRUE, cancellable);
-  g_object_unref (file);
-
-  ide_object_release (IDE_OBJECT (self));
+  IDE_EXIT;
 }
 
 static void
-ide_ctags_service_mine (IdeCtagsService *self)
+clear_mine_info (gpointer data)
 {
+  MineInfo *info = data;
+
+  g_free (info->path);
+}
+
+static gboolean
+ide_ctags_service_do_mine (gpointer data)
+{
+  IdeCtagsService *self = data;
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GArray) mine_info = NULL;
+  g_autofree gchar *path = NULL;
+  IdeContext *context;
+  IdeProject *project;
+  MineInfo info;
+  GFile *workdir;
 
-  g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
+  IDE_ENTRY;
 
-  /* prevent unloading until we release from worker thread */
-  ide_object_hold (IDE_OBJECT (self));
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
 
-  self->cancellable = g_cancellable_new ();
+  self->queued_miner_handler = 0;
+  self->miner_active = TRUE;
 
-  task = g_task_new (self, self->cancellable, NULL, NULL);
-  g_task_run_in_thread (task, ide_ctags_service_miner);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  project = ide_context_get_project (context);
+  workdir = ide_vcs_get_working_directory (ide_context_get_vcs (context));
+
+  mine_info = g_array_new (FALSE, FALSE, sizeof (MineInfo));
+  g_array_set_clear_func (mine_info, clear_mine_info);
+
+  /* mine: ~/.cache/gnome-builder/tags/$project_id */
+  info.path = g_build_filename (g_get_user_cache_dir (),
+                                ide_get_program_name (),
+                                "tags",
+                                ide_project_get_id (project),
+                                NULL);
+  info.recursive = TRUE;
+  g_array_append_val (mine_info, info);
+
+  /* mine: ~/.tags */
+  info.path = g_strdup (g_get_home_dir ());
+  info.recursive = FALSE;
+  g_array_append_val (mine_info, info);
+
+  /* mine the project tree */
+  info.path = g_file_get_path (workdir);
+  info.recursive = TRUE;
+  g_array_append_val (mine_info, info);
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_source_tag (task, ide_ctags_service_do_mine);
+  g_task_set_task_data (task, g_steal_pointer (&mine_info), (GDestroyNotify)g_array_unref);
+  ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_service_miner);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+ide_ctags_service_queue_mine (IdeCtagsService *self)
+{
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
+
+  if (self->queued_miner_handler == 0 && self->miner_active == FALSE)
+    {
+      self->queued_miner_handler =
+        g_timeout_add_full (250,
+                            G_PRIORITY_DEFAULT,
+                            ide_ctags_service_do_mine,
+                            g_object_ref (self),
+                            g_object_unref);
+    }
 }
 
 static void
@@ -407,49 +477,67 @@ build_system_tags_cb (GObject      *object,
 
   g_assert (IDE_IS_TAGS_BUILDER (builder));
 
-  ide_ctags_service_mine (self);
+  ide_ctags_service_queue_mine (self);
 }
 
 static gboolean
-restart_miner (gpointer data)
+restart_miner (gpointer user_data)
 {
-  IdeCtagsService *self = data;
+  g_autofree gpointer *data = user_data;
+  g_autoptr(IdeCtagsService) self = data[0];
+  g_autoptr(GFile) directory = data[1];
+  g_autoptr(IdeTagsBuilder) tags_builder = NULL;
+  IdeBuildSystem *build_system;
   IdeContext *context;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CTAGS_SERVICE (self));
 
-  self->build_tags_timeout = 0;
+  g_hash_table_remove (self->build_timeout_by_dir, directory);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_context_get_build_system (context);
 
-  if (context != NULL)
-    {
-      IdeBuildSystem *build_system;
+  if (IDE_IS_TAGS_BUILDER (build_system))
+    tags_builder = g_object_ref (IDE_TAGS_BUILDER (build_system));
+  else
+    tags_builder = ide_ctags_builder_new (context);
 
-      build_system = ide_context_get_build_system (context);
+  ide_tags_builder_build_async (tags_builder,
+                                directory,
+                                self->needs_recursive_mine,
+                                NULL,
+                                build_system_tags_cb,
+                                g_object_ref (self));
 
-      if (IDE_IS_TAGS_BUILDER (build_system))
-        {
-          IdeVcs *vcs;
-          GFile *workdir;
-
-          vcs = ide_context_get_vcs (context);
-          workdir = ide_vcs_get_working_directory (vcs);
-          ide_tags_builder_build_async (IDE_TAGS_BUILDER (build_system), workdir, TRUE, NULL,
-                                        build_system_tags_cb, g_object_ref (self));
-          IDE_GOTO (finish);
-        }
-      else
-        {
-          ide_ctags_builder_rebuild (self->builder);
-        }
-    }
-
-finish:
+  self->needs_recursive_mine = FALSE;
 
   IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+ide_ctags_service_queue_build_for_directory (IdeCtagsService *self,
+                                             GFile           *directory)
+{
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
+  g_assert (G_IS_FILE (directory));
+
+  if (!g_hash_table_lookup (self->build_timeout_by_dir, directory))
+    {
+      gpointer *data;
+      guint source_id;
+
+      data = g_new0 (gpointer, 2);
+      data[0] = g_object_ref (self);
+      data[1] = g_object_ref (directory);
+
+      source_id = g_timeout_add_seconds (5, restart_miner, data);
+
+      g_hash_table_insert (self->build_timeout_by_dir,
+                           g_object_ref (directory),
+                           GUINT_TO_POINTER (source_id));
+    }
 }
 
 static void
@@ -457,14 +545,16 @@ ide_ctags_service_buffer_saved (IdeCtagsService  *self,
                                 IdeBuffer        *buffer,
                                 IdeBufferManager *buffer_manager)
 {
+  g_autoptr(GFile) parent = NULL;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_CTAGS_SERVICE (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  if (self->build_tags_timeout == 0)
-    self->build_tags_timeout = g_timeout_add_seconds (5, restart_miner, self);
+  parent = g_file_get_parent (ide_file_get_file (ide_buffer_get_file (buffer)));
+  ide_ctags_service_queue_build_for_directory (self, parent);
 
   IDE_EXIT;
 }
@@ -475,6 +565,7 @@ ide_ctags_service_context_loaded (IdeService *service)
   IdeBufferManager *buffer_manager;
   IdeCtagsService *self = (IdeCtagsService *)service;
   IdeContext *context;
+  GFile *workdir;
 
   IDE_ENTRY;
 
@@ -482,6 +573,7 @@ ide_ctags_service_context_loaded (IdeService *service)
 
   context = ide_object_get_context (IDE_OBJECT (self));
   buffer_manager = ide_context_get_buffer_manager (context);
+  workdir = ide_vcs_get_working_directory (ide_context_get_vcs (context));
 
   g_signal_connect_object (buffer_manager,
                            "buffer-saved",
@@ -489,7 +581,12 @@ ide_ctags_service_context_loaded (IdeService *service)
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_ctags_service_mine (self);
+  /*
+   * Rebuild all ctags for the project at startup of the service.
+   * Then we do incrementals from there on out.
+   */
+  self->needs_recursive_mine = TRUE;
+  ide_ctags_service_queue_build_for_directory (self, workdir);
 
   IDE_EXIT;
 }
@@ -523,7 +620,6 @@ ide_ctags_service_stop (IdeService *service)
   if (self->cancellable && !g_cancellable_is_cancelled (self->cancellable))
     g_cancellable_cancel (self->cancellable);
 
-  ide_clear_source (&self->build_tags_timeout);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->builder);
 }
@@ -535,11 +631,11 @@ ide_ctags_service_finalize (GObject *object)
 
   IDE_ENTRY;
 
-  ide_clear_source (&self->build_tags_timeout);
   g_clear_object (&self->indexes);
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->highlighters, g_ptr_array_unref);
   g_clear_pointer (&self->completions, g_ptr_array_unref);
+  g_clear_pointer (&self->build_timeout_by_dir, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_ctags_service_parent_class)->finalize (object);
 
@@ -572,6 +668,10 @@ ide_ctags_service_init (IdeCtagsService *self)
 {
   self->highlighters = g_ptr_array_new ();
   self->completions = g_ptr_array_new ();
+
+  self->build_timeout_by_dir = g_hash_table_new_full ((GHashFunc)g_file_hash,
+                                                      (GEqualFunc)g_file_equal,
+                                                      g_object_unref, NULL);
 
   self->indexes = egg_task_cache_new ((GHashFunc)g_file_hash,
                                       (GEqualFunc)g_file_equal,
