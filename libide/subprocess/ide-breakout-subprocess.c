@@ -331,7 +331,7 @@ ide_breakout_subprocess_wait_finish (IdeSubprocess  *subprocess,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
-void
+static void
 ide_breakout_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
                                                 const char          *stdin_buf,
                                                 GCancellable        *cancellable,
@@ -395,7 +395,7 @@ communicate_result_validate_utf8 (const char            *stream_name,
   IDE_RETURN (TRUE);
 }
 
-gboolean
+static gboolean
 ide_breakout_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
                                                  GAsyncResult   *result,
                                                  char          **stdout_buf,
@@ -931,6 +931,8 @@ subprocess_iface_init (IdeSubprocessInterface *iface)
   iface->communicate_utf8 = ide_breakout_subprocess_communicate_utf8;
   iface->communicate_async = ide_breakout_subprocess_communicate_async;
   iface->communicate_finish = ide_breakout_subprocess_communicate_finish;
+  iface->communicate_utf8_async = ide_breakout_subprocess_communicate_utf8_async;
+  iface->communicate_utf8_finish = ide_breakout_subprocess_communicate_utf8_finish;
 }
 
 static gboolean

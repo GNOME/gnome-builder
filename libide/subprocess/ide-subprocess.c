@@ -379,29 +379,10 @@ ide_subprocess_communicate_utf8_async (IdeSubprocess       *self,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
 {
-  g_autoptr(GBytes) stdin_bytes = NULL;
-
   g_return_if_fail (IDE_IS_SUBPROCESS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (stdin_buf)
-    stdin_bytes = g_bytes_new (stdin_buf, strlen (stdin_buf));
-
-  ide_subprocess_communicate_async (self, stdin_bytes, cancellable, callback, user_data);
-}
-
-static gchar *
-get_utf8_bytes (GBytes *bytes)
-{
-  const gchar *data;
-  gsize size;
-
-  data = g_bytes_get_data (bytes, &size);
-
-  if (size < G_MAXSIZE && g_utf8_validate (data, size, NULL))
-    return g_strndup (data, size);
-
-  return NULL;
+  WRAP_INTERFACE_METHOD (self, communicate_utf8_async, NULL, stdin_buf, cancellable, callback, user_data);
 }
 
 /**
@@ -421,30 +402,10 @@ ide_subprocess_communicate_utf8_finish (IdeSubprocess  *self,
                                         gchar         **stderr_buf,
                                         GError        **error)
 {
-  g_autoptr(GBytes) stdout_bytes = NULL;
-  g_autoptr(GBytes) stderr_bytes = NULL;
-
   g_return_val_if_fail (IDE_IS_SUBPROCESS (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  if (ide_subprocess_communicate_finish (self, result, &stdout_bytes, &stderr_bytes, error))
-    {
-      if (stdout_bytes && stdout_buf)
-        *stdout_buf = get_utf8_bytes (stdout_bytes);
-
-      if (stderr_bytes && stderr_buf)
-        *stderr_buf = get_utf8_bytes (stderr_bytes);
-
-      return TRUE;
-    }
-
-  if (stdout_buf)
-    *stdout_buf = NULL;
-
-  if (stderr_buf)
-    *stderr_buf = NULL;
-
-  return FALSE;
+  return WRAP_INTERFACE_METHOD (self, communicate_utf8_finish, FALSE, result, stdout_buf, stderr_buf, error);
 }
 
 gboolean
