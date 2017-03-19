@@ -338,7 +338,8 @@ class RustupInstaller(Ide.Transfer):
         task.connect('notify::completed', close_fds, (master_fd, slave_fd))
 
         try:
-            sub_process = launcher.spawn()
+            # pass cancellable so that if cancelled, the process force exits
+            sub_process = launcher.spawn(cancellable)
             if stdin_data:
                 os.write(master_fd, stdin_data)
             sub_process.wait_async(cancellable, self._wait_cb, task)
