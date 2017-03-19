@@ -31,9 +31,9 @@ struct _IdeTagsBuilderInterface
 {
   GTypeInterface parent;
 
-  void (*build_async)      (IdeTagsBuilder       *self,
-                            GFile                *directory_or_flie,
-                            gboolean              asynchronous,
+  void     (*build_async)  (IdeTagsBuilder       *self,
+                            GFile                *directory_or_file,
+                            gboolean              recursive,
                             GCancellable         *cancellable,
                             GAsyncReadyCallback   callback,
                             gpointer              user_data);
