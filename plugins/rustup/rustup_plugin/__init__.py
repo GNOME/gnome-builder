@@ -289,20 +289,27 @@ class RustupInstaller(Ide.Transfer):
 
         task = Gio.Task.new(self, cancellable, callback)
 
-        launcher = Ide.SubprocessLauncher()
-        launcher.set_run_on_host(False)
+        launcher = Ide.SubprocessLauncher.new(Gio.SubprocessFlags.STDIN_PIPE)
         launcher.set_clear_env(False)
+        launcher.set_run_on_host(True)
+
+        stdin_data = None
 
         if self.mode == _MODE_INSTALL:
-            rustup_sh_path = get_module_data_path('resources/rustup.sh')
-            # XXX: ensure that the script is executable
-            #      this should not be neccessary now that we bundle rustup.sh
-            #      and its likely the script is read-only anyway.
-            # st = os.stat(rustup_sh_path)
-            # os.chmod(rustup_sh_path, st.st_mode | stat.S_IEXEC)
-            launcher.push_argv(rustup_sh_path)
-            # install default toolchain automatically
+            # Because our script is inside the application mount namespace, and we
+            # need to execute this on the host (via the subprocess helper), we need
+            # to execute it using bash and reading from stdin.
+
+            launcher.push_argv('bash')
+            launcher.push_argv('--')
+            launcher.push_argv('/dev/stdin')
             launcher.push_argv('-y')
+
+            try:
+                rustup_sh_path = get_module_data_path('resources/rustup.sh')
+                success, stdin_data = GLib.file_get_contents(rustup_sh_path)
+            except:
+                stdin_data = ""
         elif self.mode == _MODE_UPDATE:
             launcher.push_argv(RustupApplicationAddin.instance.rustup_executable)
             launcher.push_argv('update')
@@ -314,7 +321,6 @@ class RustupInstaller(Ide.Transfer):
 
         # rustup needs a tty to give us a progress bar
         (master_fd, slave_fd) = pty.openpty()
-        launcher.take_stdin_fd(os.dup(slave_fd))
         launcher.take_stdout_fd(os.dup(slave_fd))
         launcher.take_stderr_fd(slave_fd)
 
@@ -325,6 +331,10 @@ class RustupInstaller(Ide.Transfer):
 
         try:
             sub_process = launcher.spawn()
+            stdin_stream = sub_process.get_stdin_pipe()
+            if stdin_data is not None:
+                stdin_stream.write_all(stdin_data)
+            stdin_stream.close()
             sub_process.wait_async(cancellable, self._wait_cb, task)
         except Exception as ex:
             task.return_error(GLib.Error(message=repr(ex)))
