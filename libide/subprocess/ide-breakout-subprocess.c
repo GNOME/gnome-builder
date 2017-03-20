@@ -1789,7 +1789,7 @@ _ide_breakout_subprocess_new (const gchar                 *cwd,
 
   ret->fd_mapping = g_new0 (IdeBreakoutFdMapping, fd_mapping_len);
   ret->fd_mapping_len = fd_mapping_len;
-  memcpy (ret->fd_mapping, fd_mapping, sizeof(gint) * fd_mapping_len);
+  memcpy (ret->fd_mapping, fd_mapping, sizeof(IdeBreakoutFdMapping) * fd_mapping_len);
 
   if (!g_initable_init (G_INITABLE (ret), cancellable, error))
     return NULL;
