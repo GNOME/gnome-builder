@@ -330,6 +330,8 @@ class RustupInstaller(Ide.Transfer):
         launcher.take_stdout_fd(os.dup(slave_fd))
         launcher.take_stderr_fd(os.dup(slave_fd))
 
+        launcher.setenv('TERM', 'xterm-256color', True)
+
         data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(os.dup(master_fd), True))
         # set it to ANY so the progress bars can be parsed
         data_stream.set_newline_type(Gio.DataStreamNewlineType.ANY)
