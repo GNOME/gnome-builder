@@ -4,8 +4,6 @@
     "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
     "command": "gnome-builder",
-    "tags": ["nightly"],
-    "desktop-file-name-prefix": "(Nightly) ",
     "finish-args": [
         /* Require recent flatpak at runtime */
         "--require-version=0.8.0",
