@@ -1103,3 +1103,32 @@ ide_runner_get_nth_fd_maping (IdeRunner *self,
 
   return map->source_fd;
 }
+
+/**
+ * ide_runner_get_runtime:
+ * @self: An #IdeRuntime
+ *
+ * This function will get the #IdeRuntime that will be used to execute the
+ * application. Consumers may want to use this to determine if a particular
+ * program is available (such as gdb, perf, strace, etc).
+ *
+ * Returns: (nullable) (transfer full): An #IdeRuntime or %NULL.
+ */
+IdeRuntime *
+ide_runner_get_runtime (IdeRunner *self)
+{
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  IdeContext *context;
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
+
+  if (IDE_RUNNER_GET_CLASS (self)->get_runtime)
+    return IDE_RUNNER_GET_CLASS (self)->get_runtime (self);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+
+  return config != NULL ? g_object_ref (config) : NULL;
+}

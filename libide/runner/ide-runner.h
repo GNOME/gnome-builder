@@ -50,6 +50,7 @@ struct _IdeRunnerClass
   IdeSubprocessLauncher *(*create_launcher) (IdeRunner             *self);
   void                   (*fixup_launcher)  (IdeRunner             *self,
                                              IdeSubprocessLauncher *launcher);
+  IdeRuntime            *(*get_runtime)     (IdeRunner             *self);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -58,10 +59,10 @@ struct _IdeRunnerClass
   gpointer _reserved5;
   gpointer _reserved6;
   gpointer _reserved7;
-  gpointer _reserved8;
 };
 
 IdeRunner         *ide_runner_new             (IdeContext           *context);
+IdeRuntime        *ide_runner_get_runtime     (IdeRunner            *self);
 void               ide_runner_force_quit      (IdeRunner            *self);
 IdeEnvironment    *ide_runner_get_environment (IdeRunner            *self);
 void               ide_runner_run_async       (IdeRunner            *self,
