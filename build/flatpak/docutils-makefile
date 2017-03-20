@@ -1,0 +1,6 @@
+all:
+	# Run build with python2 which is required for lib2to3
+	python ./setup.py build
+
+install:
+	python3 ./setup.py install --prefix=/app --skip-build --optimize=1
