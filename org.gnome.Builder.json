@@ -193,8 +193,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.io/packages/source/l/lxml/lxml-3.6.4.tar.gz",
-                    "sha256": "61d5d3e00b5821e6cda099b3b4ccfea4527bf7c595e0fb3a7a760490cedd6172"
+                    "url": "https://pypi.python.org/packages/39/e8/a8e0b1fa65dd021d48fe21464f71783655f39a41f218293c1c590d54eb82/lxml-3.7.3.tar.gz",
+                    "sha256": "aa502d78a51ee7d127b4824ff96500f0181d3c7826e6ee7b800d068be79361c7"
                 },
                 {
                     "type": "file",
@@ -230,15 +230,14 @@
                 {
                     "type": "git",
                     "url": "https://github.com/libssh2/libssh2.git",
-                    "branch": "libssh2-1.6.0"
+                    "branch": "libssh2-1.8.0"
                 }
             ]
         },
         {
             "name": "libgit2",
             "cmake": true,
-            "config-opts": [ "-DBUILD_SHARED_LIBS:BOOL=ON",
-                             "-DTHREADSAFE=ON" ],
+            "config-opts": [ "-DBUILD_SHARED_LIBS:BOOL=ON", "-DTHREADSAFE=ON" ],
             "sources": [
                 {
                     "type": "git",
@@ -270,9 +269,9 @@
             "name": "gtksourceview",
             "sources": [
                 {
-                    "branch": "gnome-3-24",
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/gtksourceview"
+                    "url": "https://git.gnome.org/browse/gtksourceview",
+                    "branch": "gnome-3-24"
                 }
             ]
         },
