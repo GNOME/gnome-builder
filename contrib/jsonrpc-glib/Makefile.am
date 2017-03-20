@@ -20,6 +20,7 @@ libjsonrpc_glib_la_public_sources =          \
 libjsonrpc_glib_la_SOURCES =                 \
 	$(libjsonrpc_glib_la_public_sources) \
 	jsonrpc-glib.h                       \
+	jsonrpc-input-stream-private.h       \
 	jsonrpc-message.c                    \
 	jsonrpc-message.h                    \
 	$(NULL)

@@ -2,6 +2,7 @@ SUBDIRS = examples
 
 EXTRA_DIST = \
 	api/index.rst \
+	conf.py \
 	contributing/code.rst \
 	contributing/index.rst \
 	contributing/planning.rst \
