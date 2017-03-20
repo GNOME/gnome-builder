@@ -83,7 +83,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libgsystem.git"
+                    "url": "https://git.gnome.org/browse/libgsystem.git",
+                    "branch": "d606bec68ddfea78de4b03c3f3568afb71bdc1ce"
                 }
             ]
         },
@@ -98,7 +99,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/ostreedev/ostree.git"
+                    "url": "https://github.com/ostreedev/ostree.git",
+                    "branch": "v2017.3"
                 }
             ]
         },
@@ -122,7 +124,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/flatpak/flatpak.git"
+                    "url": "https://github.com/flatpak/flatpak.git",
+                    "branch": "0.9.1"
                 }
             ]
         },
@@ -193,8 +196,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.io/packages/source/l/lxml/lxml-3.6.4.tar.gz",
-                    "sha256": "61d5d3e00b5821e6cda099b3b4ccfea4527bf7c595e0fb3a7a760490cedd6172"
+                    "url": "https://pypi.python.org/packages/39/e8/a8e0b1fa65dd021d48fe21464f71783655f39a41f218293c1c590d54eb82/lxml-3.7.3.tar.gz",
+                    "sha256": "aa502d78a51ee7d127b4824ff96500f0181d3c7826e6ee7b800d068be79361c7"
                 },
                 {
                     "type": "file",
@@ -230,15 +233,14 @@
                 {
                     "type": "git",
                     "url": "https://github.com/libssh2/libssh2.git",
-                    "branch": "libssh2-1.6.0"
+                    "branch": "libssh2-1.8.0"
                 }
             ]
         },
         {
             "name": "libgit2",
             "cmake": true,
-            "config-opts": [ "-DBUILD_SHARED_LIBS:BOOL=ON",
-                             "-DTHREADSAFE=ON" ],
+            "config-opts": [ "-DBUILD_SHARED_LIBS:BOOL=ON", "-DTHREADSAFE=ON" ],
             "sources": [
                 {
                     "type": "git",
@@ -252,7 +254,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libgit2-glib"
+                    "url": "https://git.gnome.org/browse/libgit2-glib",
+                    "branch": "v0.25.0"
                 }
             ]
         },
@@ -262,7 +265,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libpeas"
+                    "url": "https://git.gnome.org/browse/libpeas",
+                    "branch": "libpeas-1.20.0"
                 }
             ]
         },
@@ -270,9 +274,9 @@
             "name": "gtksourceview",
             "sources": [
                 {
-                    "branch": "gnome-3-24",
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/gtksourceview"
+                    "url": "https://git.gnome.org/browse/gtksourceview",
+                    "branch": "gnome-3-24"
                 }
             ]
         },
@@ -283,7 +287,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/devhelp"
+                    "url": "https://git.gnome.org/browse/devhelp",
+                    "branch": "3.24.0"
                 }
             ]
         },
@@ -304,24 +309,8 @@
             "sources": [
                 {
                      "type": "git",
-                     "url": "https://git.gnome.org/browse/gspell"
-                }
-            ]
-        },
-        {
-            "name": "meson",
-            "no-autogen": true,
-            "ensure-writable": ["/lib/python*/site-packages/easy-install.pth"],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://github.com/mesonbuild/meson/releases/download/0.38.1/meson-0.38.1.tar.gz",
-                    "sha256": "dcb05349b32427924fa2a258a5e23e40e09c1bf9dd09919198c3a2ae1c38ba53"
-                },
-                {
-                    "type": "file",
-                    "path": "build/flatpak/setuptools-makefile",
-                    "dest-filename": "Makefile"
+                     "url": "https://git.gnome.org/browse/gspell",
+                     "branch": "1.4.0"
                 }
             ]
         },
@@ -332,17 +321,19 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/sysprof"
+                    "url": "https://git.gnome.org/browse/sysprof",
+                    "branch": "sysprof-3-24"
                 }
             ]
         },
         {
             "name": "gnome-builder",
-            "config-opts": [ "--enable-tracing", "--enable-debug", "--with-channel=flatpak-nightly" ],
+            "config-opts": [ "--with-channel=flatpak-stable" ],
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/gnome-builder"
+                    "url": "https://git.gnome.org/browse/gnome-builder",
+                    "branch": "gnome-builder-3-24"
                 }
             ]
         }
