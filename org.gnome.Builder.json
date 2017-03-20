@@ -220,6 +220,10 @@
                     "type": "file",
                     "path": "build/flatpak/setuptools-makefile",
                     "dest-filename": "Makefile"
+                },
+                {
+                    "type": "patch",
+                    "path": "build/flatpak/docutils-fix-python3-shebang.patch"
                 }
             ]
         },
