@@ -113,7 +113,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
             try:
                 with open(commands_file) as f:
                     commands = json.loads(f.read(), encoding='utf-8')
-            except (json.JSONDecodeError, FileNotFoundError, UnicodeDecodeError) as e:
+            except (ValueError, FileNotFoundError, UnicodeDecodeError) as e:
                 task.return_error(GLib.Error('Failed to decode meson json: {}'.format(e)))
                 return
 
