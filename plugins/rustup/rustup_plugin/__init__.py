@@ -408,7 +408,7 @@ class RustupInstaller(Ide.Transfer):
                 data_stream.read_line_async(GLib.PRIORITY_DEFAULT, cancellable, self._read_line_cb, cancellable)
         except Exception as ex:
             # ignore cancelled error
-            if ex.code is not 19:
+            if getattr(ex, 'code') != Gio.IOErrorEnum.CANCELLED:
                 print('_read_line_cb', ex)
 
     def _wait_cb(self, sub_process, result, task):
