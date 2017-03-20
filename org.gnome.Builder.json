@@ -209,17 +209,15 @@
         },
         {
             "name": "python3-docutils",
-            "no-autogen": true,
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3.5 install --prefix=/app docutils-0.13.1-py3-none-any.whl"
+            ],
             "sources": [
                 {
-                    "type": "archive",
-                    "url": "https://pypi.python.org/packages/05/25/7b5484aca5d46915493f1fd4ecb63c38c333bd32aa9ad6e19da8d08895ae/docutils-0.13.1.tar.gz",
-                    "sha256": "718c0f5fb677be0f34b781e04241c4067cbd9327b66bdd8e763201130f5175be"
-                },
-                {
                     "type": "file",
-                    "path": "build/flatpak/docutils-makefile",
-                    "dest-filename": "Makefile"
+                    "url": "https://pypi.python.org/packages/7c/30/8fb30d820c012a6f701a66618ce065b6d61d08ac0a77e47fc7808dbaee47/docutils-0.13.1-py3-none-any.whl",
+                    "sha256": "cb3ebcb09242804f84bdbf0b26504077a054da6772c6f4d625f335cc53ebf94d"
                 }
             ]
         },
