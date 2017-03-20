@@ -208,6 +208,22 @@
             ]
         },
         {
+            "name": "python3-docutils",
+            "no-autogen": true,
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/05/25/7b5484aca5d46915493f1fd4ecb63c38c333bd32aa9ad6e19da8d08895ae/docutils-0.13.1.tar.gz",
+                    "sha256": "718c0f5fb677be0f34b781e04241c4067cbd9327b66bdd8e763201130f5175be"
+                },
+                {
+                    "type": "file",
+                    "path": "build/flatpak/setuptools-makefile",
+                    "dest-filename": "Makefile"
+                }
+            ]
+        },
+        {
             "name": "libssh2",
             "cmake": true,
             "config-opts": [ "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
