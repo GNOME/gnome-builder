@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-16 20:45+0000\n"
-"PO-Revision-Date: 2017-03-17 14:05+0100\n"
+"POT-Creation-Date: 2017-03-20 14:21+0000\n"
+"PO-Revision-Date: 2017-03-20 16:17+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -68,7 +68,7 @@ msgstr[2] "Około %u lat temu"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:683
+#: libide/greeter/ide-greeter-perspective.c:685
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -100,7 +100,7 @@ msgstr "Przeglądaj…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -1650,11 +1650,11 @@ msgstr "Wykryto zmianę pliku w innym programie. Wczytać go ponownie?"
 msgid "Failed to load the project"
 msgstr "Wczytanie projektu się nie powiodło"
 
-#: libide/greeter/ide-greeter-perspective.c:678
+#: libide/greeter/ide-greeter-perspective.c:680
 msgid "Open Project"
 msgstr "Otwarcie projektu"
 
-#: libide/greeter/ide-greeter-perspective.c:694
+#: libide/greeter/ide-greeter-perspective.c:696
 msgid "All Project Types"
 msgstr "Wszystkie typy projektów"
 
@@ -3276,15 +3276,15 @@ msgstr "Sieć jest niedostępna, pomijanie pobierania"
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
 #: plugins/html-preview/html_preview_plugin/__init__.py:119
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
-#: plugins/rustup/rustup_plugin/__init__.py:596
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+#: plugins/rustup/rustup_plugin/__init__.py:615
 msgid "Install"
 msgstr "Zainstaluj"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Zaktualizuj"
 
@@ -3406,7 +3406,7 @@ msgstr "Wymagany jest prawidłowy adres URL systemu git"
 
 #: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
-msgstr "Użycie systemu git do utworzenia lokalnej kopii zdalnego projektu."
+msgstr "Używanie systemu git do utworzenia lokalnej kopii zdalnego projektu."
 
 #: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
@@ -3616,101 +3616,101 @@ msgid "quick highlight words matching current selection"
 msgstr ""
 "szybkie wyróżnianie słów słowa wyrazów wyrazy pasujące bieżące zaznaczenie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:80
+#: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
 msgstr "Nie zainstalowano Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:277
+#: plugins/rustup/rustup_plugin/__init__.py:282
 msgid "Installing rustup"
 msgstr "Instalowanie Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:279
+#: plugins/rustup/rustup_plugin/__init__.py:284
 msgid "Updating rustup"
 msgstr "Aktualizowanie Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:281
+#: plugins/rustup/rustup_plugin/__init__.py:286
 msgid "Installing rust "
 msgstr "Instalowanie Rust "
 
-#: plugins/rustup/rustup_plugin/__init__.py:283
+#: plugins/rustup/rustup_plugin/__init__.py:288
 msgid "Checking system"
 msgstr "Sprawdzanie systemu"
 
-#: plugins/rustup/rustup_plugin/__init__.py:337
+#: plugins/rustup/rustup_plugin/__init__.py:357
 msgid "Downloading rustup-init"
 msgstr "Pobieranie „rustup-init”"
 
-#: plugins/rustup/rustup_plugin/__init__.py:342
+#: plugins/rustup/rustup_plugin/__init__.py:362
 msgid "Syncing channel updates"
 msgstr "Synchronizowanie aktualizacji kanałów"
 
-#: plugins/rustup/rustup_plugin/__init__.py:348
+#: plugins/rustup/rustup_plugin/__init__.py:368
 msgid "Downloading "
 msgstr "Pobieranie "
 
-#: plugins/rustup/rustup_plugin/__init__.py:355
+#: plugins/rustup/rustup_plugin/__init__.py:375
 msgid "Installing "
 msgstr "Instalowanie "
 
-#: plugins/rustup/rustup_plugin/__init__.py:361
+#: plugins/rustup/rustup_plugin/__init__.py:381
 msgid "Checking for rustup updates"
 msgstr "Wyszukiwanie aktualizacji Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:366
+#: plugins/rustup/rustup_plugin/__init__.py:386
 msgid "Downloading rustup update"
 msgstr "Pobieranie aktualizacji Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:403
+#: plugins/rustup/rustup_plugin/__init__.py:423
 msgid "Error installing "
 msgstr "Błąd podczas instalowania "
 
-#: plugins/rustup/rustup_plugin/__init__.py:405
+#: plugins/rustup/rustup_plugin/__init__.py:425
 msgid "Error"
 msgstr "Błąd"
 
-#: plugins/rustup/rustup_plugin/__init__.py:411
+#: plugins/rustup/rustup_plugin/__init__.py:430
 msgid "Cancelled"
 msgstr "Anulowano"
 
-#: plugins/rustup/rustup_plugin/__init__.py:419
+#: plugins/rustup/rustup_plugin/__init__.py:438
 msgid "Finished"
 msgstr "Ukończono"
 
-#: plugins/rustup/rustup_plugin/__init__.py:433
+#: plugins/rustup/rustup_plugin/__init__.py:452
 msgid "Rustup"
 msgstr "Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:434
+#: plugins/rustup/rustup_plugin/__init__.py:453
 msgid "Rustup Toolchains"
 msgstr "Zestawy narzędzi Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Updating"
 msgstr "Aktualizowanie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Installing"
 msgstr "Instalowanie"
 
 #. set default toolchain button
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Make default"
 msgstr "Ustaw jako domyślne"
 
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Makes the selected toolchain the default rust installation"
 msgstr "Ustawia zaznaczony zestaw narzędzi jako domyślną instalację Rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:595
+#: plugins/rustup/rustup_plugin/__init__.py:614
 msgid "Install Rust Channel"
 msgstr "Instalacja kanału Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: plugins/rustup/rustup_plugin/__init__.py:600
+#: plugins/rustup/rustup_plugin/__init__.py:619
 msgid "Enter name of rust channel"
 msgstr "Nazwa kanału Rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:601
+#: plugins/rustup/rustup_plugin/__init__.py:620
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -3726,16 +3726,16 @@ msgstr ""
 "                        <data>          = RRRR-MM-DD\n"
 "                        <gospodarz>     = <trójka-docelowa>"
 
-#: plugins/rustup/rustup_plugin/__init__.py:626
+#: plugins/rustup/rustup_plugin/__init__.py:645
 msgid "Install Rustup to manage toolchains here!"
 msgstr ""
 "Zainstalowanie Rustup umożliwia zarządzanie zestawami narzędzi w tym miejscu."
 
-#: plugins/rustup/rustup_plugin/__init__.py:633
+#: plugins/rustup/rustup_plugin/__init__.py:652
 msgid "No toolchain installed. Click"
 msgstr "Żaden zestaw narzędzi nie jest zainstalowany. Kliknięcie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:634
+#: plugins/rustup/rustup_plugin/__init__.py:653
 msgid "to add a new toolchain!"
 msgstr "doda nowy zestaw narzędzi."
 
