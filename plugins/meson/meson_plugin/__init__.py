@@ -328,6 +328,7 @@ class MesonPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         install_launcher.push_argv('install')
 
         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        install_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
 
     def _query(self, stage, pipeline, cancellable):
