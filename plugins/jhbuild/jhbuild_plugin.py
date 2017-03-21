@@ -47,18 +47,15 @@ class JhbuildRuntime(Ide.Runtime):
         return runner
 
     def do_create_launcher(self):
-        try:
-            launcher = Ide.Runtime.do_create_launcher(self)
+        launcher = Ide.Runtime.do_create_launcher(self)
 
-            launcher.push_argv(self.get_jhbuild_path())
-            launcher.push_argv('run')
+        launcher.push_argv(self.get_jhbuild_path())
+        launcher.push_argv('run')
 
-            launcher.set_run_on_host(True)
-            launcher.set_clear_env(False)
+        launcher.set_run_on_host(True)
+        launcher.set_clear_env(False)
 
-            return launcher
-        except GLib.Error:
-            return None
+        return launcher
 
     def do_prepare_configuration(self, configuration):
         launcher = self.create_launcher()
