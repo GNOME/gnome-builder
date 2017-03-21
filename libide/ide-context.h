@@ -36,6 +36,7 @@ IdeBufferManager         *ide_context_get_buffer_manager        (IdeContext     
 IdeBuildManager          *ide_context_get_build_manager         (IdeContext           *self);
 IdeBuildSystem           *ide_context_get_build_system          (IdeContext           *self);
 IdeConfigurationManager  *ide_context_get_configuration_manager (IdeContext           *self);
+IdeDebugManager          *ide_context_get_debug_manager         (IdeContext           *self);
 IdeDiagnosticsManager    *ide_context_get_diagnostics_manager   (IdeContext           *self);
 IdeDeviceManager         *ide_context_get_device_manager        (IdeContext           *self);
 IdeProject               *ide_context_get_project               (IdeContext           *self);

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDebuggerControls" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkButton" id="continue_button">
+            <property name="action-name">debugger.continue</property>
+            <property name="tooltip-text" translatable="yes">Continue running the program</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">debug-continue-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="execute_from_cursor_button">
+            <property name="action-name">debugger.execute-from-cursor</property>
+            <property name="tooltip-text" translatable="yes">Execute from the current cursor position</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">debug-execute-from-cursor-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="execute_to_cursor_button">
+            <property name="action-name">debugger.execute-to-cursor</property>
+            <property name="tooltip-text" translatable="yes">Execute until reaching the current cursor position</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">debug-execute-to-cursor-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="step_in_button">
+            <property name="action-name">debugger.step-in</property>
+            <property name="tooltip-text" translatable="yes">Step into the scope</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">debug-step-in-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="step_out_button">
+            <property name="action-name">debugger.step-out</property>
+            <property name="tooltip-text" translatable="yes">Step out of scope</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">debug-step-out-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="step_over_button">
+            <property name="action-name">debugger.step-over</property>
+            <property name="tooltip-text" translatable="yes">Step over the operation</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">debug-step-over-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -51,6 +51,8 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">
+    <file compressed="true" alias="ide-debugger-controls.ui">../debugger/ide-debugger-controls.ui</file>
+    <file compressed="true" alias="ide-debugger-perspective.ui">../debugger/ide-debugger-perspective.ui</file>
     <file compressed="true" alias="ide-editor-frame.ui">../editor/ide-editor-frame.ui</file>
     <file compressed="true" alias="ide-editor-layout-stack-controls.ui">../editor/ide-editor-layout-stack-controls.ui</file>
     <file compressed="true" alias="ide-editor-perspective.ui">../editor/ide-editor-perspective.ui</file>
@@ -90,12 +92,16 @@
     <file alias="buildconfig.plugin">../buildconfig/buildconfig.plugin</file>
   </gresource>
 
-  <gresource prefix="/org/gnome/builder/plugins/editor">
-    <file alias="editor.plugin">../editor/editor.plugin</file>
+  <gresource prefix="/org/gnome/builder/plugins/debugger">
+    <file alias="debugger.plugin">../debugger/debugger.plugin</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/directory">
     <file alias="directory.plugin">../directory/directory.plugin</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/editor">
+    <file alias="editor.plugin">../editor/editor.plugin</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/webkit">

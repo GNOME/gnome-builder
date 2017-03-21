@@ -50,6 +50,9 @@ typedef struct _IdeConfigurationManager        IdeConfigurationManager;
 
 typedef struct _IdeContext                     IdeContext;
 
+typedef struct _IdeDebugger                    IdeDebugger;
+typedef struct _IdeDebugManager                IdeDebugManager;
+
 typedef struct _IdeDevice                      IdeDevice;
 typedef struct _IdeDeviceManager               IdeDeviceManager;
 typedef struct _IdeDeviceProvider              IdeDeviceProvider;
