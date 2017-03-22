@@ -240,7 +240,7 @@ gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self)
    * which is precisely what we want.
    *
    * We can't use flatpak_installation_new_user() since that will not map to
-   * the users real flatpak user installation. It will instead map to the
+   * the user's real flatpak user installation. It will instead map to the
    * reidrected XDG_DATA_DIRS version. Therefore, we synthesize the path to the
    * location we know it should be at.
    */
@@ -508,8 +508,8 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
     }
 
   /*
-   * We failed to locate a previous install, so instead lets discover the
-   * ref from a remote symmary description.
+   * We failed to locate a previous install, so instead let's discover the
+   * ref from a remote summary description.
    */
   for (guint i = 0; i < request->installations->len; i++)
     {
@@ -648,7 +648,7 @@ gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin
   /*
    * We might want to immediately notify about the ref so that the
    * caller can access the runtime after calling this. Otherwise our
-   * notify:;completed might not have yet run.
+   * notify::completed might not have yet run.
    */
   if (request->ref != NULL && !request->did_added)
     {
@@ -731,7 +731,7 @@ gbp_flatpak_application_addin_class_init (GbpFlatpakApplicationAddinClass *klass
    * @runtime: A #FlatpakInstalledRef
    *
    * This signal is emitted when a new runtime is discovered. No deduplication
-   * is dealth with here, so consumers will need to ensure they have not seen
+   * is dealt with here, so consumers will need to ensure they have not seen
    * the runtime before by deduplicating with id/arch/branch.
    */
   signals [RUNTIME_ADDED] = g_signal_new ("runtime-added",
