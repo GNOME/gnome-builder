@@ -1151,6 +1151,7 @@ ide_runner_get_runtime (IdeRunner *self)
   IdeConfigurationManager *config_manager;
   IdeConfiguration *config;
   IdeContext *context;
+  IdeRuntime *runtime;
 
   g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
 
@@ -1160,8 +1161,9 @@ ide_runner_get_runtime (IdeRunner *self)
   context = ide_object_get_context (IDE_OBJECT (self));
   config_manager = ide_context_get_configuration_manager (context);
   config = ide_configuration_manager_get_current (config_manager);
+  runtime = ide_configuration_get_runtime (config);
 
-  return config != NULL ? g_object_ref (config) : NULL;
+  return runtime != NULL ? g_object_ref (runtime) : NULL;
 }
 
 gboolean
