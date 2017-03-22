@@ -425,7 +425,7 @@ ide_application_unload_plugin_css (IdeApplication *self,
 }
 
 void
-ide_application_init_plugin_menus (IdeApplication *self)
+ide_application_init_plugin_accessories (IdeApplication *self)
 {
   const GList *list;
   PeasEngine *engine;

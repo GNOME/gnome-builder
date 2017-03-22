@@ -72,7 +72,7 @@ struct _IdeApplication
 void     ide_application_discover_plugins           (IdeApplication        *self) G_GNUC_INTERNAL;
 void     ide_application_load_plugins               (IdeApplication        *self) G_GNUC_INTERNAL;
 void     ide_application_load_addins                (IdeApplication        *self) G_GNUC_INTERNAL;
-void     ide_application_init_plugin_menus          (IdeApplication        *self) G_GNUC_INTERNAL;
+void     ide_application_init_plugin_accessories    (IdeApplication        *self) G_GNUC_INTERNAL;
 gboolean ide_application_local_command_line         (GApplication          *application,
                                                      gchar               ***arguments,
                                                      gint                  *exit_status) G_GNUC_INTERNAL;
