@@ -59,6 +59,7 @@ struct _IdeApplication
   GHashTable          *merge_ids;
 
   GHashTable          *plugin_css;
+  GHashTable          *plugin_gresources;
 
   GList               *test_funcs;
 

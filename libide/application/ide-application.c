@@ -499,6 +499,7 @@ ide_application_finalize (GObject *object)
   g_clear_pointer (&self->plugin_css, g_hash_table_unref);
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_pointer (&self->reapers, g_ptr_array_unref);
+  g_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
