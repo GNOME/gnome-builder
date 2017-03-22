@@ -359,7 +359,20 @@ ide_application_local_command_line (GApplication   *application,
 
   if (version)
     {
-      g_print (PACKAGE_STRING"\n");
+      g_autoptr(GString) version_str = NULL;
+
+      version_str = g_string_new (PACKAGE_VERSION);
+
+#ifdef COMMIT_ID
+      g_string_append (version_str, "+"COMMIT_ID);
+#endif
+
+#ifdef CHANNEL
+      if (g_strcmp0 (CHANNEL, "distro") != 0)
+        g_string_append (version_str, " ("CHANNEL")");
+#endif
+
+      g_print ("%s\n", version_str->str);
       *exit_status = EXIT_SUCCESS;
       goto cleanup;
     }
