@@ -179,7 +179,7 @@ debugger_lookup (PeasExtensionSet *set,
                  gpointer          user_data)
 {
   DebuggerLookup *lookup = user_data;
-  IdeDebugger *debugger = (IdeDebugger *)debugger;
+  IdeDebugger *debugger = (IdeDebugger *)exten;
   gint priority = G_MAXINT;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
