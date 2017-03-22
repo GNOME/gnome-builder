@@ -18,12 +18,21 @@
 
 #define G_LOG_DOMAIN "ide-debugger"
 
+#include "ide-enums.h"
 #include "ide-debug.h"
 
 #include "debugger/ide-debugger.h"
+#include "diagnostics/ide-source-location.h"
 #include "runner/ide-runner.h"
 
 G_DEFINE_INTERFACE (IdeDebugger, ide_debugger, IDE_TYPE_OBJECT)
+
+enum {
+  STOPPED,
+  N_SIGNALS
+};
+
+static guint signals [N_SIGNALS];
 
 gchar *
 ide_debugger_real_get_name (IdeDebugger *self)
@@ -44,6 +53,46 @@ ide_debugger_default_init (IdeDebuggerInterface *iface)
 {
   iface->get_name = ide_debugger_real_get_name;
   iface->supports_runner = ide_debugger_real_supports_runner;
+
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("can-step-in",
+                                                             "Can Step In",
+                                                             "If we can advance the debugger, stepping into any function call in the line",
+                                                             FALSE,
+                                                             (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
+
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("can-step-over",
+                                                             "Can Step Over",
+                                                             "If we can advance the debugger, stepping over any function calls in the line",
+                                                             FALSE,
+                                                             (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
+
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("can-continue",
+                                                             "Can Continue",
+                                                             "If we can advance the debugger to the next breakpoint",
+                                                             FALSE,
+                                                             (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
+
+  /**
+   * IdeDebugger::stopped:
+   * @self: An #IdeDebugger
+   * @reason: An #IdeDebuggerStopReason for why the stop occurred
+   * @location: An #IdeSourceLocation of where the debugger has stopped
+   *
+   * The "stopped" signal should be emitted when the debugger has stopped at a
+   * new location. @reason indicates the reson for the stop, and @location is
+   * the location where the stop has occurred.
+   */
+  signals [STOPPED] =
+    g_signal_new ("stopped",
+                  G_TYPE_FROM_INTERFACE (iface),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeDebuggerInterface, stopped),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  2, IDE_TYPE_DEBUGGER_STOP_REASON, IDE_TYPE_SOURCE_LOCATION);
 }
 
 /**
@@ -101,4 +150,15 @@ ide_debugger_get_name (IdeDebugger *self)
     ret = g_strdup (G_OBJECT_TYPE_NAME (self));
 
   return ret;
+}
+
+void
+ide_debugger_emit_stopped (IdeDebugger           *self,
+                           IdeDebuggerStopReason  reason,
+                           IdeSourceLocation     *location)
+{
+  g_return_if_fail (IDE_IS_DEBUGGER (self));
+  g_return_if_fail (location != NULL);
+
+  g_signal_emit (self, signals [STOPPED], 0, reason, location);
 }

@@ -24,19 +24,16 @@ from gi.repository import GObject
 from gi.repository import Ide
 
 class GdbDebugger(Ide.Object, Ide.Debugger):
+    can_step_in = GObject.Property('can-step-in', type=bool, default=False)
+    can_step_over = GObject.Property('can-step-over', type=bool, default=False)
+    can_continue = GObject.Property('can-continue', type=bool, default=False)
+
     def do_get_name(self):
         return 'GNU Debugger'
 
     def do_supports_runner(self, runner):
-        """
-        Checks to see if we support running this program.
-
-        TODO: We should check if it is an ELF binary.
-
-        For now, we just always return True, but with a priority that
-        allows other debuggers to take priority.
-        """
-        if runner.get_runtime().contains_program('gdb'):
+        if runner.get_runtime().contains_program_in_path('gdb'):
             return (True, GLib.MAXINT)
         else:
             return (False, 0)
+

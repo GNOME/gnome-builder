@@ -674,6 +674,7 @@ glib_enum_headers =                                                         \
 	buffers/ide-buffer.h                                                \
 	buildsystem/ide-build-log.h                                         \
 	buildsystem/ide-build-pipeline.h                                    \
+	debugger/ide-debugger.h                                             \
 	devices/ide-device.h                                                \
 	diagnostics/ide-diagnostic.h                                        \
 	doap/ide-doap.h                                                     \

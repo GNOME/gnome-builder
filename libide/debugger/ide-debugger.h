@@ -27,20 +27,36 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE (IdeDebugger, ide_debugger, IDE, DEBUGGER, IdeObject)
 
+typedef enum
+{
+  IDE_DEBUGGER_STOP_UNDEFINED = 0,
+  IDE_DEBUGGER_STOP_BREAKPOINT,
+  IDE_DEBUGGER_STOP_WATCHPOINT,
+  IDE_DEBUGGER_STOP_EXITED_FROM_SIGNAL,
+  IDE_DEBUGGER_STOP_EXITED_NORMALLY,
+  IDE_DEBUGGER_STOP_SIGNALED,
+} IdeDebuggerStopReason;
+
 struct _IdeDebuggerInterface
 {
   GTypeInterface parent_iface;
 
-  gchar    *(*get_name)        (IdeDebugger *self);
-  gboolean  (*supports_runner) (IdeDebugger *self,
-                                IdeRunner   *runner,
-                                gint        *priority);
+  gchar    *(*get_name)        (IdeDebugger           *self);
+  gboolean  (*supports_runner) (IdeDebugger           *self,
+                                IdeRunner             *runner,
+                                gint                  *priority);
+  void      (*stopped)         (IdeDebugger           *self,
+                                IdeDebuggerStopReason  reason,
+                                IdeSourceLocation     *location);
 };
 
-gchar    *ide_debugger_get_name        (IdeDebugger *self);
-gboolean  ide_debugger_supports_runner (IdeDebugger *self,
-                                        IdeRunner   *runner,
-                                        gint        *priority);
+gchar    *ide_debugger_get_name        (IdeDebugger           *self);
+gboolean  ide_debugger_supports_runner (IdeDebugger           *self,
+                                        IdeRunner             *runner,
+                                        gint                  *priority);
+void      ide_debugger_emit_stopped    (IdeDebugger           *self,
+                                        IdeDebuggerStopReason  reason,
+                                        IdeSourceLocation     *location);
 
 G_END_DECLS
 
