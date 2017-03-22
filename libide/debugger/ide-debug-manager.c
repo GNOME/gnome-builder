@@ -241,6 +241,7 @@ ide_debug_manager_start (IdeDebugManager  *self,
 
   if (debugger == NULL)
     {
+      ide_runner_set_failed (runner, TRUE);
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_NOT_SUPPORTED,
