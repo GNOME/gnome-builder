@@ -50,6 +50,27 @@ You can also use the command line to install Builder:
 
 .. note:: Nightly builds are built with tracing enabled. The tracing is fairly lightweight, but it includes a great deal of more debugging information.
 
+Local Flatpak Builds
+--------------------
+
+You can also build Builder as a flatpak yourself to test local changes. First, make a repo for your local builds:
+
+.. code-block:: sh
+
+   $ mkdir ~/my-flatpak-builds
+   $ flatpak remote-add --user --no-gpg-verify my-flatpak-builds ~/my-flatpak-builds
+
+Now, in Builder's source directory, use ``flatpak-builder`` to build a Builder flatpak and install it
+
+.. code-block:: sh
+
+   $ git clone https://git.gnome.org/browse/gnome-builder/
+   $ cd gnome-builder
+   $ mkdir app
+   $ flatpak-builder --ccache --repo=$HOME/my-flatpak-builds app org.gnome.Builder.json
+   $ flatpak install --user my-flatpak-builds org.gnome.Builder
+
+.. note:: After following these steps once you can omit adding the remote or creating the app directory. You'll also need to add the ``--force-clean`` option to flatpak-builder and use ``flatpak update`` rather than ``flatpak install``.
 
 .. _via-jhbuild:
 
