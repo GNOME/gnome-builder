@@ -36,4 +36,7 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
         For now, we just always return True, but with a priority that
         allows other debuggers to take priority.
         """
-        return (True, GLib.MAXINT)
+        if runner.get_runtime().contains_program('gdb'):
+            return (True, GLib.MAXINT)
+        else:
+            return (False, 0)
