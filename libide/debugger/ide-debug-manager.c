@@ -20,13 +20,25 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-debug-manager.h"
+#include "ide-debug.h"
+
+#include "debugger/ide-debug-manager.h"
+#include "debugger/ide-debugger.h"
+#include "plugins/ide-extension-util.h"
+#include "runner/ide-runner.h"
 
 struct _IdeDebugManager
 {
   IdeObject           parent_instance;
   GSimpleActionGroup *actions;
 };
+
+typedef struct
+{
+  IdeDebugger *debugger;
+  IdeRunner   *runner;
+  gint         priority;
+} DebuggerLookup;
 
 enum {
   PROP_0,
@@ -124,8 +136,6 @@ ide_debug_manager_get_property (GObject    *object,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  IdeDebugManager *self = IDE_DEBUG_MANAGER (object);
-
   switch (prop_id)
     {
     default:
@@ -139,8 +149,6 @@ ide_debug_manager_set_property (GObject      *object,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  IdeDebugManager *self = IDE_DEBUG_MANAGER (object);
-
   switch (prop_id)
     {
     default:
@@ -164,15 +172,90 @@ ide_debug_manager_init (IdeDebugManager *self)
   self->actions = g_simple_action_group_new ();
 }
 
+static void
+debugger_lookup (PeasExtensionSet *set,
+                 PeasPluginInfo   *plugin_info,
+                 PeasExtension    *exten,
+                 gpointer          user_data)
+{
+  DebuggerLookup *lookup = user_data;
+  IdeDebugger *debugger = (IdeDebugger *)debugger;
+  gint priority = G_MAXINT;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_DEBUGGER (debugger));
+  g_assert (lookup != NULL);
+
+  if (ide_debugger_supports_runner (debugger, lookup->runner, &priority))
+    {
+      if (lookup->debugger == NULL || priority < lookup->priority)
+        {
+          g_set_object (&lookup->debugger, debugger);
+          lookup->priority = priority;
+        }
+    }
+}
+
+IdeDebugger *
+ide_debug_manager_find_debugger (IdeDebugManager *self,
+                                 IdeRunner       *runner)
+{
+  g_autoptr(PeasExtensionSet) set = NULL;
+  IdeContext *context;
+  DebuggerLookup lookup;
+
+  g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_RUNNER (runner), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (runner));
+
+  lookup.debugger = NULL;
+  lookup.runner = runner;
+  lookup.priority = G_MAXINT;
+
+  set = ide_extension_set_new (peas_engine_get_default (),
+                               IDE_TYPE_DEBUGGER,
+                               "context", context,
+                               NULL);
+
+  peas_extension_set_foreach (set, debugger_lookup, &lookup);
+
+  return lookup.debugger;
+}
+
 gboolean
 ide_debug_manager_start (IdeDebugManager  *self,
                          IdeRunner        *runner,
                          GError          **error)
 {
-  g_set_error (error,
-               G_IO_ERROR,
-               G_IO_ERROR_NOT_SUPPORTED,
-               _("A suitable debugger could not be found."));
+  g_autoptr(IdeDebugger) debugger = NULL;
+  gboolean ret = FALSE;
 
-  return FALSE;
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), FALSE);
+  g_return_val_if_fail (IDE_IS_RUNNER (runner), FALSE);
+
+  debugger = ide_debug_manager_find_debugger (self, runner);
+
+  if (debugger == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_SUPPORTED,
+                   _("A suitable debugger could not be found."));
+      IDE_GOTO (failure);
+    }
+
+  ret = TRUE;
+
+failure:
+  IDE_RETURN (ret);
+}
+
+void
+ide_debug_manager_stop (IdeDebugManager *self)
+{
+  g_return_if_fail (IDE_IS_DEBUG_MANAGER (self));
 }
