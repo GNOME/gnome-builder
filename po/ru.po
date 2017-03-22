@@ -1,0 +1,3906 @@
+# Russian translation for gnome-builder.
+# Copyright (C) 2017 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+#
+# Stas Solovey <whats_up@tut.by>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2017-03-22 20:52+0000\n"
+"PO-Revision-Date: 2017-03-23 01:49+0300\n"
+"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
+"Language-Team: Русский <gnome-cyr@gnome.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.8.11\n"
+
+#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "Не удается определить свойство %s в классе %s"
+
+#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Не удалось найти свойство %s в %s"
+
+#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr "Не удалось найти свойство %s в %s или одного из родителей %s"
+
+#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "Не удалось получить значение va_list: %s"
+
+#: contrib/egg/egg-date-time.c:55
+msgid "Just now"
+msgstr "Только что"
+
+#: contrib/egg/egg-date-time.c:57
+msgid "An hour ago"
+msgstr "Час назад"
+
+#: contrib/egg/egg-date-time.c:59
+msgid "Yesterday"
+msgstr "Вчера"
+
+#: contrib/egg/egg-date-time.c:65
+msgid "About a year ago"
+msgstr "Около года назад"
+
+#: contrib/egg/egg-date-time.c:69
+#, c-format
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Около %u года назад"
+msgstr[1] "Около %u лет назад"
+msgstr[2] "Около %u лет назад"
+
+#: contrib/egg/egg-file-chooser-entry.c:100
+#: contrib/egg/egg-file-chooser-entry.c:489
+#: libide/greeter/ide-greeter-perspective.c:685
+#: libide/workbench/ide-workbench-actions.c:76
+#: plugins/color-picker/gb-color-picker-prefs.c:210
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
+msgid "Open"
+msgstr "Открыть"
+
+#: contrib/egg/egg-file-chooser-entry.c:104
+msgid "Select"
+msgstr "Выбрать"
+
+#: contrib/egg/egg-file-chooser-entry.c:108
+#: plugins/create-project/gbp-create-project-genesis-addin.c:229
+msgid "Create"
+msgstr "Создать"
+
+#: contrib/egg/egg-file-chooser-entry.c:112
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
+#: plugins/color-picker/gb-color-picker-prefs.c:237
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Сохранить"
+
+#: contrib/egg/egg-file-chooser-entry.c:455
+msgid "Browse…"
+msgstr "Обзор…"
+
+#: contrib/egg/egg-file-chooser-entry.c:488
+#: libide/editor/ide-editor-view-actions.c:315
+#: libide/editor/ide-editor-view-actions.c:446
+#: libide/greeter/ide-greeter-perspective.c:684
+#: libide/workbench/ide-workbench-actions.c:77
+#: plugins/color-picker/gb-color-picker-prefs.c:98
+#: plugins/color-picker/gb-color-picker-prefs.c:214
+#: plugins/color-picker/gb-color-picker-prefs.c:241
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
+#: plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Отменить"
+
+#: contrib/egg/egg-search-bar.c:378
+msgid "Search"
+msgstr "Поиск"
+
+#: contrib/gstyle/gstyle-color-panel.c:953
+msgid "Palette: "
+msgstr "Палитра: "
+
+#: contrib/gstyle/gstyle-color-panel.c:955
+msgid "Palette"
+msgstr "Палитра"
+
+#: contrib/gstyle/gstyle-color-plane.c:1601
+msgid "Color Plane"
+msgstr "Цвет Границы"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:66
+msgid "Color name"
+msgstr "Название цвета"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:68
+msgid "Enter a new name for the color"
+msgstr "Введите новое название цвета"
+
+#: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
+#, c-format
+msgid "failed to parse line %i\n"
+msgstr "не удалось разобрать строку %i\n"
+
+#: contrib/gstyle/gstyle-palette.c:613
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s: палитра пуста\n"
+
+#: contrib/gstyle/gstyle-palette.c:719
+#, c-format
+msgid "%s: failed to parse\n"
+msgstr "%s: не удалось проанализировать\n"
+
+#: contrib/gstyle/gstyle-palette.c:727
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "Невозможно открыть %s\n"
+
+#: contrib/gstyle/gstyle-palette.c:765
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s: Данный формат файла не поддерживается\n"
+
+#: contrib/gstyle/gstyle-palette.c:822
+msgid "failed to parse\n"
+msgstr "не удалось обработать\n"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
+msgid "Generated"
+msgstr "Сформирован"
+
+#: contrib/gstyle/gstyle-palette.c:932
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "Невозможно сохранить %s\n"
+
+#: contrib/gstyle/gstyle-palette-widget.c:983
+#, c-format
+msgid "Unsaved palette %u"
+msgstr "Несохранённая палитра %u"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
+msgid "Hue"
+msgstr "Hue"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:75
+msgid "Saturation"
+msgstr "Насыщенность"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+msgid "Value"
+msgstr "Значение"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
+msgid "Cielab l"
+msgstr "Cielab l"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr "Cielab a"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
+msgid "Cielab b"
+msgstr "Cielab b"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
+msgid "Red"
+msgstr "Красный"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr "Зеленый"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr "Синий"
+
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "Основной"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr "Компонеты цвета"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:573
+#: plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "Цвет строк"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:634
+msgid "HEX3"
+msgstr "HEX3"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:645
+msgid "HEX6"
+msgstr "HEX6"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:656
+msgid "RGB"
+msgstr "RGB"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:667
+msgid "RGBA"
+msgstr "RGBA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:678
+msgid "HSL"
+msgstr "HSL"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:689
+msgid "HSLA"
+msgstr "HSLA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "Палитры"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:946
+#: plugins/color-picker/gtk/color-picker.ui:49
+msgid "No open palettes"
+msgstr "Нет открытых палитр"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr "Загрузите или создайте палитру используя параметры"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:13
+#: libide/sourceview/ide-source-view.c:5858
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "Переименовать"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:19
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "Удалить"
+
+#: contrib/gstyle/ui/gstyle-rename-popover.ui:35
+#: plugins/project-tree/gb-rename-file-popover.ui:35
+#: plugins/project-tree/gtk/menus.ui:57
+msgid "_Rename"
+msgstr "_Переименовать"
+
+#: contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr "Перекрестный порядок %u не поддерживается на Trie."
+
+#: contrib/tmpl/tmpl-parser.c:199
+#, c-format
+msgid "%s() may only be called once"
+msgstr "%s() может быть вызван только один раз"
+
+#: contrib/tmpl/tmpl-parser.c:211
+msgid "Parser does not contain an input stream"
+msgstr "Обработчик не содержит входящий поток"
+
+#: contrib/tmpl/tmpl-template.c:454
+msgid "Must parse template before expanding"
+msgstr "Необходимо разобрать шаблон перед расширением"
+
+#: contrib/tmpl/tmpl-template-locator.c:105
+#, c-format
+msgid "Failed to locate template “%s”"
+msgstr "Не удалось найти шаблон «%s»"
+
+#: contrib/xml/xml-reader.c:327
+msgid "Could not parse XML from stream"
+msgstr "Невозможно обработать XML из потока"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+msgid "Build Parallelism"
+msgstr "Параллельная сборка"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+"Количество рабочих потоков, используемых для сборки. «-1» — значение по "
+"умолчанию. «0» — означает число процессоров."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Suggest Snippet Completion"
+msgstr "Предлагать варианты автодополнения фрагмента текста"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Разрешить вставлять фрагменты текста в документ."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Автодополнение на основе Clang (Экспериментально)"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Использовать Clang для автодополнения в языках С и С++."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Ctags based autocompletion"
+msgstr "Автодополнение на основе Ctags"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "Use Ctags for autocompletion."
+msgstr "Использовать Ctags для автодополнения."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
+msgid "Enable auto-completion of words in document"
+msgstr "Включить автодополнение слов в документе"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+"Если этот параметр включён, слова внутри текущего документа будут доступны "
+"для автодополнения."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
+msgid "Enable semantic highlighting"
+msgstr "Включить подсветку семантики"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+"Если этот параметр включён, будет предоставляться дополнительная подстветка "
+"для поддерживаемых языков, на основе информации полученной из исходного кода."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
+msgid "Path to ctags executable"
+msgstr "Путь к исполняемым файлам ctag"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
+msgid "The path to the ctags executable on the system."
+msgstr "Путь к исполняемым файлам ctag в системе."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+msgid "Restore last position"
+msgstr "Восстановить последнюю позицию"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid "Jump to the last position when reopening a file"
+msgstr "Перейти к последней позиции при повторном открытии файла"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+msgid "Show modified lines"
+msgstr "Показывать измененные строки"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+"Если этот параметр включён, редактор покажет изменения и дополнения рядом с "
+"исходным кодом."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+#: libide/editor/ide-editor-tweak-widget.ui:74
+msgid "Highlight current line"
+msgstr "Подсвечивать текущую строку"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr ""
+"Если это параметр включен, редактор будет подсвечивать строку в которой "
+"находится курсор."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+msgid "Highlight matching brackets"
+msgstr "Подсвечивать парные скобки"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "Если этот параметр включён, редактор будет подсвечивать парные скобки."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+msgid "Show line numbers"
+msgstr "Показывать номера строк"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will show line numbers."
+msgstr "Если этот параметр включён, редактор будет показывать номера строк."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: libide/editor/ide-editor-tweak-widget.ui:91
+#: libide/preferences/ide-preferences-builtin.c:150
+msgid "Smart Backspace"
+msgstr "Умная кнопка Backspace"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"Клавиша Backspace будет удалять дополнительные пробелы, чтобы удерживать "
+"курсор в пределах отступа."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: libide/preferences/ide-preferences-builtin.c:149
+msgid "Smart Home and End"
+msgstr "Умные кнопки Home и End"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid "Whether or not Home moves to first non-space character."
+msgstr "Будет ли клавиша «Home» перемещать к первому непробельному символу."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+msgid "Show grid lines"
+msgstr "Показывать сетку"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr "Если этот параметр включён, редактор будет показывать сетку документа."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:74
+#: libide/preferences/ide-preferences-builtin.c:172
+msgid "Show overview map"
+msgstr "Показывать обзорную карту"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+"Если этот параметр включён, Builder будет отображать обзорную карту текущего "
+"файла рядом с редактором."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+msgid "Automatically Hide Overview Map"
+msgstr "Автоматически Скрывать Обзорную Карту"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"Если этот параметр включён, Builder будет автоматически скрывать обзорную "
+"карту когда курсор мыши покидает редактор, или возникает таймаут."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid "Draw Spaces"
+msgstr "Отображение пробелов"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+msgid "The various types of space to draw in the editor."
+msgstr "Отображать в редакторе различные варианты пробелов."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Overscroll"
+msgstr "Прокрутка"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "Количество строк для прокрутки за пределами конца буфера."
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Enabled"
+msgstr "Включено"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr "Если тип внутри расширения включен."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "Размер окна"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "Размер окна (ширина и высота)."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window position"
+msgstr "Положение окна"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr "Положение окна (x ; y)."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr "Развернутое окно"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr "Состояние развернутого окна"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+msgid "Night Mode"
+msgstr "Ночной режим"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+msgid "Prefer dark application chrome."
+msgstr "Предпочитать тёмное оформление приложения."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+msgid "Mine projects"
+msgstr "Мои проекты"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+msgid "Search directories for projects."
+msgstr "Директории для поиска проектов."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:30
+#: libide/preferences/ide-preferences-builtin.c:393
+msgid "Projects directory"
+msgstr "Директория проектов"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:31
+msgid "Directory for all Builder projects."
+msgstr "Директория для всех проектов приложения Builder."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:35
+msgid "Restore Previous Files"
+msgstr "Восстановить предыдущие файлы"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:36
+msgid "Restore previously opened files when loading a project."
+msgstr "Восстановить предыдущие файлы при загрузке проекта."
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr "Если плагин должен быть включён"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+msgid "Show Project Sidebar"
+msgstr "Показывать боковую панель проекта"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr ""
+"Если этот параметр включён, боковая панель будет видна в рабочем "
+"пространстве редактора."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: plugins/project-tree/gtk/menus.ui:84
+msgid "Show Icons"
+msgstr "Показывать значки"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr ""
+"Если этот параметр включён, в дереве проекта будут отображаться значки рядом "
+"с каждым элементом."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:88
+msgid "Show Ignored Files"
+msgstr "Показывать проигнорированные файлы"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Если этот параметр включён, в дереве проекта будут отображаться файлы, "
+"которые игнорируются VCS."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+msgid "Show Left Panel"
+msgstr "Показывать левую панель"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+msgid "If enabled, the left panel will be displayed."
+msgstr "Если этот параметр включён, будет отображаться левая панель."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+msgid "Left Panel Position"
+msgstr "Позиция левой панели"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+msgid "The width in pixel units of the left panel."
+msgstr "Ширина левой панели в пикселях."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+msgid "Show Right Panel"
+msgstr "Показывать правую панель"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+msgid "If enabled, the right panel will be displayed."
+msgstr "Если этот параметр включён, будет отображаться правая панель."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+msgid "Right Panel Position"
+msgstr "Позиция правой панели"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+msgid "The width in pixel units of the right panel."
+msgstr "Ширина правой панели в пикселях."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+msgid "Show Bottom Panel"
+msgstr "Показывать нижнюю панель"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "Если этот параметр включён, будет отображаться нижняя панель."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+msgid "Bottom Panel Position"
+msgstr "Позиция нижней панели"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr "Высота нижней панели в пикселях."
+
+#: data/gtk/menus.ui:7
+msgid "_New Project"
+msgstr "_Создать проект"
+
+#: data/gtk/menus.ui:11
+msgid "_Open Project"
+msgstr "_Открыть проект"
+
+#: data/gtk/menus.ui:18
+msgid "_Preferences"
+msgstr "_Параметры"
+
+#: data/gtk/menus.ui:26
+msgid "Keyboard _Shortcuts"
+msgstr "Комбинации к_лавиш"
+
+#: data/gtk/menus.ui:30
+msgid "_Help"
+msgstr "Сп_равка"
+
+#: data/gtk/menus.ui:34
+msgid "_About"
+msgstr "О програм_ме"
+
+#: data/gtk/menus.ui:38
+msgid "_Quit"
+msgstr "_Завершить"
+
+#: data/gtk/menus.ui:49
+msgid "Show left panel"
+msgstr "Показывать левую панель"
+
+#: data/gtk/menus.ui:54
+msgid "Show bottom panel"
+msgstr "Показывать нижнюю панель"
+
+#: data/gtk/menus.ui:59
+msgid "Show right panel"
+msgstr "Показывать правую панель"
+
+#: data/gtk/menus.ui:87
+msgid "_New File"
+msgstr "Со_здать файл"
+
+#: data/gtk/menus.ui:93
+msgid "_Open File…"
+msgstr "О_ткрыть файл…"
+
+#: data/gtk/menus.ui:99
+msgid "Save _All"
+msgstr "Со_хранить все"
+
+#: data/gtk/menus.ui:116
+msgid "_Go to Definition"
+msgstr "П_ерейти к описанию"
+
+#: data/gtk/menus.ui:122
+msgid "_Undo"
+msgstr "Отме_нить"
+
+#: data/gtk/menus.ui:126
+msgid "_Redo"
+msgstr "Верн_уть"
+
+#: data/gtk/menus.ui:132
+msgid "C_ut"
+msgstr "_Вырезать"
+
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:28
+msgid "_Copy"
+msgstr "_Копировать"
+
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:32
+msgid "_Paste"
+msgstr "Вст_авить"
+
+#: data/gtk/menus.ui:145 data/gtk/menus.ui:257
+msgid "_Delete"
+msgstr "У_далить"
+
+#: data/gtk/menus.ui:151 libide/preferences/ide-preferences-builtin.c:190
+msgid "Highlighting"
+msgstr "Подсветка"
+
+#: data/gtk/menus.ui:153 data/gtk/menus.ui:206
+msgid "Spellchecking"
+msgstr "Проверка орфографии"
+
+#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
+msgid "Selection"
+msgstr "Выделение"
+
+#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:40
+msgid "Select _All"
+msgstr "В_ыбрать все"
+
+#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:45
+msgid "Select _None"
+msgstr "Отменить вы_бор"
+
+#: data/gtk/menus.ui:173
+msgid "All _Upper Case"
+msgstr "Все в верхн_ий регистр"
+
+#: data/gtk/menus.ui:178
+msgid "All _Lower Case"
+msgstr "Все в ни_жний регистр"
+
+#: data/gtk/menus.ui:183
+msgid "_Invert Case"
+msgstr "И_нвертировать регистр"
+
+#: data/gtk/menus.ui:188
+msgid "_Title Case"
+msgstr "Прописная в на_чале каждого слова"
+
+#: data/gtk/menus.ui:195
+msgid "Join Lines"
+msgstr "Объединить строки"
+
+#: data/gtk/menus.ui:199
+msgid "Sort Lines"
+msgstr "Сортировать строки"
+
+#: data/gtk/menus.ui:215
+msgid "Zoom"
+msgstr "Масштаб"
+
+#: data/gtk/menus.ui:217
+msgid "Zoom _In"
+msgstr "У_величить"
+
+#: data/gtk/menus.ui:222
+msgid "Zoom _Out"
+msgstr "У_меньшить"
+
+#: data/gtk/menus.ui:228
+msgid "Reset"
+msgstr "Сброс"
+
+#: data/gtk/menus.ui:239
+msgid "_Wrap Around"
+msgstr "_Автоматически переходить к началу документа"
+
+#: data/gtk/menus.ui:245
+msgid "Cu_t"
+msgstr "Выр_езать"
+
+#: data/gtk/menus.ui:271
+msgid "Split"
+msgstr "Разделить"
+
+#: data/gtk/menus.ui:273
+msgid "Split Left"
+msgstr "Разделить слева"
+
+#: data/gtk/menus.ui:278
+msgid "Split Right"
+msgstr "Разделить справа"
+
+#: data/gtk/menus.ui:283
+msgid "Split Down"
+msgstr "Разделить снизу"
+
+#: data/gtk/menus.ui:290
+msgid "Move"
+msgstr "Переместить"
+
+#: data/gtk/menus.ui:292
+msgid "Move Left"
+msgstr "Переместить влево"
+
+#: data/gtk/menus.ui:297
+msgid "Move Right"
+msgstr "Переместить вправо"
+
+#: data/gtk/menus.ui:305
+msgid "_Save"
+msgstr "_Сохранить"
+
+#: data/gtk/menus.ui:309
+msgid "_Save As"
+msgstr "Сохранить _как"
+
+#: data/gtk/menus.ui:315
+msgid "_Print"
+msgstr "_Печать"
+
+#: data/gtk/menus.ui:321 plugins/sysprof/gbp-sysprof-perspective.ui:28
+msgid "_Close"
+msgstr "_Закрыть"
+
+#: data/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: libide/application/ide-application.c:549
+#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/workbench/ide-workbench.c:566
+msgid "Builder"
+msgstr "Builder"
+
+#: data/org.gnome.Builder.appdata.xml.in:8
+#: libide/application/ide-application-actions.c:130
+msgid "An IDE for GNOME"
+msgstr "IDE для GNOME"
+
+#: data/org.gnome.Builder.appdata.xml.in:11
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder является активно развиваемой интегрированной средой разработки для "
+"GNOME. Приложение сочетает в себе встроенную поддержку основных технологий "
+"GNOME таких как GTK+, Glib и GNOME APIs, с функциями которые оценит любой "
+"разработчик, такими как подсветка синтаксиса и автодополнение фрагментов "
+"текста."
+
+#: data/org.gnome.Builder.appdata.xml.in:17
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"Вы можете рассчитывать на постоянные выпуски приложения Builder с новым "
+"выпуском GNOME каждые шесть месяцев."
+
+#: data/org.gnome.Builder.appdata.xml.in:21
+msgid "Features:"
+msgstr "Особенности:"
+
+#: data/org.gnome.Builder.appdata.xml.in:23
+msgid "Built in syntax highlighting for many languages"
+msgstr "Встроенная подсветка синтаксиса для многочисленных языков"
+
+#: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:52
+msgid "Side-by-side code editors"
+msgstr "Многооконный редактор кода"
+
+#: data/org.gnome.Builder.appdata.xml.in:25
+msgid "Integration with Git"
+msgstr "Интеграция с Git"
+
+#: data/org.gnome.Builder.appdata.xml.in:26
+msgid "Integration with Autotools"
+msgstr "Интеграция с Autotools"
+
+#: data/org.gnome.Builder.appdata.xml.in:27
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr "Автодополнение на основе Clang, семантическая подсветка, и диагностика"
+
+#: data/org.gnome.Builder.appdata.xml.in:28
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Автодополнение на основе Python, семантическая подстветка, и диагностика"
+
+#: data/org.gnome.Builder.appdata.xml.in:29
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Автодополнение на основе Vala и диагностика"
+
+#: data/org.gnome.Builder.appdata.xml.in:30
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Поддержка автоматических отступов для C, Python, Vala, и XML"
+
+#: data/org.gnome.Builder.appdata.xml.in:31
+msgid "HTML/Markdown live preview"
+msgstr "Предварительный просмотр HTML/Markdown"
+
+#: data/org.gnome.Builder.appdata.xml.in:32
+msgid "Optional Vim-style editing"
+msgstr "Опциональное редактирование в стиле Vim"
+
+#: data/org.gnome.Builder.appdata.xml.in:33
+msgid "An integrated software profiler for native applications"
+msgstr ""
+"Интегрированное программное обеспечение профайлера для собственных приложений"
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+msgid "Support for building with jhbuild"
+msgstr "Поддержка сборки с jhbuild"
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Preview support for building with Flatpak runtimes"
+msgstr ""
+"Поддержка предварительного просмотра для построения с исполняемыми "
+"библиотеками Flatpak"
+
+#: data/org.gnome.Builder.appdata.xml.in:44
+msgid "Fast global search"
+msgstr "Быстрый глобальный поиск"
+
+#: data/org.gnome.Builder.appdata.xml.in:48
+msgid "Integrated project tree"
+msgstr "Встроенное дерево проекта"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Сборка программного обеспечения для GNOME"
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.Builder.desktop.in.in:7
+msgid "org.gnome.Builder"
+msgstr "org.gnome.Builder"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;"
+
+#: libide/application/ide-application-actions.c:136
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: libide/application/ide-application-actions.c:138
+msgid "translator-credits"
+msgstr "Stas Solovey <whats_up@tut.by>, 2017."
+
+#: libide/application/ide-application-actions.c:142
+msgid "Learn more about GNOME Builder"
+msgstr "Узнайте больше о GNOME Builder"
+
+#: libide/application/ide-application-actions.c:145
+msgid "Funded By"
+msgstr "Финансируется"
+
+#: libide/application/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "Команды:"
+
+#: libide/application/ide-application-command-line.c:187
+msgid "List available subcommands"
+msgstr "Список доступных подкоманд"
+
+#: libide/application/ide-application-command-line.c:194
+msgid "Run Builder in standalone mode"
+msgstr "Запустить Builder в автономном режиме"
+
+#: libide/application/ide-application-command-line.c:201
+msgid "Show the application’s version"
+msgstr "Показать версию приложения"
+
+#: libide/application/ide-application-command-line.c:220
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "Увеличение числа слов, может быть задан несколько раз"
+
+#: libide/application/ide-application-command-line.c:227
+msgid "Enter GApplication Service mode"
+msgstr "Войти в режим GApplication Service"
+
+#: libide/application/ide-application-command-line.c:234
+msgid "Opens the project specified by PATH"
+msgstr "Открывает проект по указаному пути"
+
+#: libide/application/ide-application-command-line.c:235
+#: libide/buildui/ide-build-tool.c:282
+msgid "PATH"
+msgstr "ПУТЬ"
+
+#: libide/application/ide-application-command-line.c:242
+msgid "Clones the project specified by MANIFEST"
+msgstr "Клонирует проект указанный в MANIFEST"
+
+#: libide/application/ide-application-command-line.c:243
+msgid "MANIFEST"
+msgstr "MANIFEST"
+
+#: libide/application/ide-application-command-line.c:273
+msgid "COMMAND"
+msgstr "КОМАНДА"
+
+#: libide/application/ide-application-command-line.c:344
+msgid "No commands available"
+msgstr "Нет доступных команд"
+
+#: libide/application/ide-application-command-line.c:387
+msgid "Please provide a command"
+msgstr "Пожалуйста, укажите команду"
+
+#: libide/application/ide-application-command-line.c:397
+msgid "No such tool"
+msgstr "Нет такого инструмента"
+
+#: libide/application/ide-application-command-line.c:411
+msgid "Please provide a worker type"
+msgstr "Предоставьте тип рабочего потока"
+
+#: libide/application/ide-application-command-line.c:418
+msgid "Please provide a D-Bus address"
+msgstr "Предоставьте адрес D-Bus"
+
+#: libide/application/ide-application-command-line.c:427
+msgid "No such worker"
+msgstr "Нет такого рабочего потока"
+
+#: libide/buffers/ide-buffer.c:2476
+msgid "The current language lacks a symbol resolver."
+msgstr "В текущем языке отсутствует распознаватель символов."
+
+#: libide/buffers/ide-buffer-manager.c:672
+msgid "File too large to be opened."
+msgstr "Слишком большой файл для открытия."
+
+#: libide/buffers/ide-buffer-manager.c:1764
+#, c-format
+msgid "unsaved document %u"
+msgstr "несохраннёный документ %u"
+
+#: libide/buffers/ide-buffer-manager.c:1798
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "Не удалось сохранить буфер, игнорируя исправление."
+
+#: libide/buildsystem/ide-build-pipeline.c:2091
+msgid "Cleaning…"
+msgstr "Очистка…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2106
+msgid "Downloading…"
+msgstr "Скачивание…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2110
+msgid "Building dependencies…"
+msgstr "Построение зависимостей…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2114
+msgid "Bootstrapping…"
+msgstr "Начальная загрузка…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2118
+msgid "Configuring…"
+msgstr "Настройка…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2122
+msgid "Building…"
+msgstr "Сборка…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2126
+msgid "Installing…"
+msgstr "Установка…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2130
+msgid "Exporting…"
+msgstr "Экпорт…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2134
+#: libide/buildsystem/ide-build-pipeline.c:2138
+msgid "Success"
+msgstr "Успешно"
+
+#: libide/buildsystem/ide-build-pipeline.c:2142
+#: libide/workbench/ide-omni-bar.ui:332
+msgid "Failed"
+msgstr "Неудачно"
+
+#: libide/buildsystem/ide-build-pipeline.c:2146
+msgid "Preparing…"
+msgstr "Подготовка…"
+
+#: libide/buildsystem/ide-build-pipeline.c:2150
+msgid "Ready"
+msgstr "Готово"
+
+#: libide/buildsystem/ide-configuration-manager.c:76
+#: libide/preferences/ide-preferences-builtin.c:337
+#: libide/preferences/ide-preferences-builtin.c:355
+msgid "Default"
+msgstr "По умолчанию"
+
+#: libide/buildui/ide-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr "Дублировать конфигурацию"
+
+#: libide/buildui/ide-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr "Удалить конфигурацию"
+
+#: libide/buildui/ide-build-configuration-view.ui:11
+#: libide/preferences/ide-preferences-builtin.c:316
+#: libide/preferences/ide-preferences-builtin.c:377
+msgid "General"
+msgstr "Основные"
+
+#: libide/buildui/ide-build-configuration-view.ui:28
+msgid "The name of the build configuration"
+msgstr "Название конфигурации сборки"
+
+#: libide/buildui/ide-build-configuration-view.ui:37
+msgid "Name"
+msgstr "Имя"
+
+#: libide/buildui/ide-build-configuration-view.ui:58
+msgid "The prefix to use when installing the project"
+msgstr "Используемый префикс при установке проекта"
+
+#: libide/buildui/ide-build-configuration-view.ui:67
+msgid "Installation Prefix"
+msgstr "Префикс установки"
+
+#: libide/buildui/ide-build-configuration-view.ui:88
+msgid "Options to use when bootstrapping the project"
+msgstr "Варианты использования при начальной загрузке проекта"
+
+#: libide/buildui/ide-build-configuration-view.ui:97
+msgid "Configure Options"
+msgstr "Параметры конфигурирования"
+
+#: libide/buildui/ide-build-configuration-view.ui:129
+#: libide/workbench/ide-omni-bar-row.ui:54
+msgid "Device"
+msgstr "Устройство"
+
+#: libide/buildui/ide-build-configuration-view.ui:157
+#: libide/workbench/ide-omni-bar-row.ui:85
+msgid "Runtime"
+msgstr "Исполняемая библиотека"
+
+#: libide/buildui/ide-build-configuration-view.ui:185
+msgid "Environment"
+msgstr "Окружение"
+
+#: libide/buildui/ide-build-log-panel.c:732
+msgid "Build Output"
+msgstr "Вывод результата сборки"
+
+#: libide/buildui/ide-build-log-panel.ui:25
+msgid "Clear build log"
+msgstr "Очистить журнал сборки"
+
+#: libide/buildui/ide-build-log-panel.ui:42
+#: libide/workbench/ide-omni-bar.ui:133
+msgid "Cancel build"
+msgstr "Отменить сборку"
+
+#: libide/buildui/ide-build-panel.c:86
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d предупреждение"
+msgstr[1] "%d предупреждения"
+msgstr[2] "%d предупреждений"
+
+#: libide/buildui/ide-build-panel.c:95
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d ошибка"
+msgstr[1] "%d ошибки"
+msgstr[2] "%d ошибок"
+
+#: libide/buildui/ide-build-panel.c:521
+#: libide/preferences/ide-preferences-builtin.c:375
+#: libide/workbench/ide-omni-bar.ui:386
+msgid "Build"
+msgstr "Сборка"
+
+#: libide/buildui/ide-build-panel.ui:33
+msgid "Status:"
+msgstr "Статус:"
+
+#: libide/buildui/ide-build-panel.ui:58
+msgid "Running Time:"
+msgstr "Продолжительность:"
+
+#: libide/buildui/ide-build-panel.ui:82
+msgid "Warnings:"
+msgstr "Предупреждения:"
+
+#: libide/buildui/ide-build-panel.ui:106
+msgid "Errors:"
+msgstr "Ошибки:"
+
+#: libide/buildui/ide-build-panel.ui:149
+msgid "No Diagnostics"
+msgstr "Без диагностики"
+
+#. the action:// link is used to execute a build
+#: libide/buildui/ide-build-panel.ui:150
+msgid ""
+"<a href=\"action://build-manager.build\">Build your project</a> to show "
+"diagnostics here"
+msgstr ""
+"<a href=\"action://build-manager.build\">Начните сборку проекта</a> для "
+"отображения здесь данных диагностики"
+
+#: libide/buildui/ide-build-perspective.c:438
+msgid "Build Preferences"
+msgstr "Параметры сборки"
+
+#: libide/buildui/ide-build-tool.c:103 libide/buildui/ide-build-tool.c:116
+msgid "========================\n"
+msgstr "========================\n"
+
+#: libide/buildui/ide-build-tool.c:104
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "           Имя проекта: %s\n"
+
+#: libide/buildui/ide-build-tool.c:105
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr " Система контроля версий: %s\n"
+
+#: libide/buildui/ide-build-tool.c:106
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Система сборки: %s\n"
+
+#: libide/buildui/ide-build-tool.c:107
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Дата и время сборки: %s\n"
+
+#: libide/buildui/ide-build-tool.c:108
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Сборка для устройства: %s (%s)\n"
+
+#: libide/buildui/ide-build-tool.c:113
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "            Окружение: %s\n"
+
+#: libide/buildui/ide-build-tool.c:143 libide/buildui/ide-build-tool.c:147
+msgid "===============\n"
+msgstr "===============\n"
+
+#: libide/buildui/ide-build-tool.c:144
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " Сбой при сборке: %s\n"
+
+#: libide/buildui/ide-build-tool.c:145
+msgid " Build ran for: %"
+msgstr " Сборка выполняется для: %"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: libide/buildui/ide-build-tool.c:158 libide/buildui/ide-build-tool.c:162
+msgid "=================\n"
+msgstr "=================\n"
+
+#: libide/buildui/ide-build-tool.c:159
+msgid " Build Successful\n"
+msgstr " Сборка прошла успешно\n"
+
+#: libide/buildui/ide-build-tool.c:160
+msgid "   Build ran for: %"
+msgstr "   Сборка выполняется для: %"
+
+#: libide/buildui/ide-build-tool.c:212
+#, c-format
+msgid "Failed to locate device “%s”"
+msgstr "Не удалось найти устройство «%s»"
+
+#: libide/buildui/ide-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime “%s”"
+msgstr "Не удалось найти исполняемую библиотеку «%s»"
+
+#: libide/buildui/ide-build-tool.c:267
+msgid "Clean the project"
+msgstr "Очистить проект"
+
+#: libide/buildui/ide-build-tool.c:269
+msgid "The ID of the device to build for"
+msgstr "ID устройства для сборки"
+
+#: libide/buildui/ide-build-tool.c:270
+msgid "local"
+msgstr "локальный"
+
+#: libide/buildui/ide-build-tool.c:272
+msgid "The runtime to use for building"
+msgstr "Исполняемая библиотека используемая при сборке"
+
+#: libide/buildui/ide-build-tool.c:273
+msgid "host"
+msgstr "узел"
+
+#: libide/buildui/ide-build-tool.c:275
+msgid "Number of workers to use when building"
+msgstr "Число рабочих потоков используемых при сборке"
+
+#: libide/buildui/ide-build-tool.c:276
+msgid "N"
+msgstr "N"
+
+#: libide/buildui/ide-build-tool.c:278
+msgid "The configuration to use from .buildconfig"
+msgstr "Конфигурация для использования из .buildconfig"
+
+#: libide/buildui/ide-build-tool.c:279
+msgid "CONFIG_ID"
+msgstr "CONFIG_ID"
+
+#: libide/buildui/ide-build-tool.c:281
+msgid "Path to project file, defaults to current directory"
+msgstr "Путь к файлу проекта, по умолчанию: текущая директория"
+
+#: libide/buildui/ide-environment-editor.c:67
+msgid "New variable…"
+msgstr "Новая переменная…"
+
+#: libide/devices/ide-device-manager.c:148
+#, c-format
+msgid "The device “%s” could not be found."
+msgstr "Не удалось найти устройство «%s»."
+
+#: libide/directory/ide-directory-vcs.c:55
+msgid "unversioned"
+msgstr "без версии"
+
+#: libide/editorconfig/ide-editorconfig-file-settings.c:159
+msgid "No file was provided."
+msgstr "Файл не был предоставлен."
+
+#: libide/editor/ide-editor-frame.c:138
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "Строка %u, столбец %u"
+
+#: libide/editor/ide-editor-frame.c:310
+#, c-format
+msgid "%u of %u"
+msgstr "%u из %u"
+
+#. OVR indicates we are in overwite mode
+#: libide/editor/ide-editor-frame.ui:17
+msgid "OVR"
+msgstr "ЗАМ"
+
+#: libide/editor/ide-editor-frame.ui:166
+msgid "Replace"
+msgstr "Заменить"
+
+#: libide/editor/ide-editor-frame.ui:179
+msgid "Replace All"
+msgstr "Заменить все"
+
+#: libide/editor/ide-editor-frame.ui:201
+msgid "Switch between Search and Search-and-Replace"
+msgstr "Переключение между поиском и поиском-и-заменой"
+
+#: libide/editor/ide-editor-frame.ui:224
+#: plugins/terminal/gb-terminal-search.ui:100
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+"Показать или скрыть параметры поиска, такие как чувствительность к регистру"
+
+#: libide/editor/ide-editor-frame.ui:285
+msgid "Regular expressions"
+msgstr "Регулярные выражения"
+
+#: libide/editor/ide-editor-frame.ui:300
+#: plugins/terminal/gb-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "Учитывать регистр"
+
+#: libide/editor/ide-editor-frame.ui:315
+msgid "Match whole word only"
+msgstr "Только по слову целиком"
+
+#: libide/editor/ide-editor-layout-stack-controls.c:46
+msgid "Plain Text"
+msgstr "Простой текст"
+
+#. translators: the user selected a number outside the value range for the document.
+#: libide/editor/ide-editor-layout-stack-controls.c:191
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Введите число между 1 и %u"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:31
+msgid "Go to line number"
+msgstr "Перейти по номеру строки"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:100
+msgid "Change editor settings and language"
+msgstr "Изменить язык и настройки редактора"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:114
+#: libide/editor/ide-editor-view.ui:100
+msgid "Go to Line"
+msgstr "Перейти к строке"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:115
+#: libide/editor/ide-editor-view.ui:101
+msgid "Go"
+msgstr "Перейти"
+
+#: libide/editor/ide-editor-perspective.c:523
+#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:156
+msgid "Editor"
+msgstr "Редактор"
+
+#: libide/editor/ide-editor-perspective.ui:30
+msgid "No open files"
+msgstr "Нет открытых файлов"
+
+#: libide/editor/ide-editor-perspective.ui:43
+msgid "Try opening a file by typing in the search box at the top"
+msgstr "Попробуйте открыть файл, введя название в верхнем поле поиска"
+
+#: libide/editor/ide-editor-spell-language-popover.c:232
+msgid "No language selected"
+msgstr "Язык не выбран"
+
+#: libide/editor/ide-editor-spell-navigator.c:458
+msgid ""
+"Spell checker error: no language set. It’s maybe because no dictionaries are "
+"installed."
+msgstr ""
+"Ошибка проверки орфографии: не установлен язык. Возможная причина — не "
+"установлены словари."
+
+#: libide/editor/ide-editor-spell-widget.c:201
+msgid "No suggestions"
+msgstr "Нет предложений"
+
+#: libide/editor/ide-editor-spell-widget.c:278
+msgid "Completed spell checking"
+msgstr "Проверка орфографии завершена"
+
+#: libide/editor/ide-editor-spell-widget.c:636
+msgid "This word is already in the personal dictionary"
+msgstr "Это слово уже находится в персональном словаре"
+
+#: libide/editor/ide-editor-spell-widget.c:639
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "Это слово уже находиться в словаре %s"
+
+#: libide/editor/ide-editor-spell-widget.c:1270
+msgid "The word is not in the dictionary"
+msgstr "Слово отсутствует в словаре"
+
+#: libide/editor/ide-editor-spell-widget.ui:14
+msgid "Misspelled"
+msgstr "Ошибка в написании"
+
+#: libide/editor/ide-editor-spell-widget.ui:65
+msgid "_Ignore"
+msgstr "И_гнорировать"
+
+#: libide/editor/ide-editor-spell-widget.ui:73
+msgid "Ignore _All"
+msgstr "_Игнорировать все"
+
+#: libide/editor/ide-editor-spell-widget.ui:92
+msgid "Change _to"
+msgstr "За_менить на"
+
+#: libide/editor/ide-editor-spell-widget.ui:124
+msgid "Cha_nge"
+msgstr "З_аменить"
+
+#: libide/editor/ide-editor-spell-widget.ui:132
+msgid "Change A_ll"
+msgstr "_Заменить все"
+
+#: libide/editor/ide-editor-spell-widget.ui:151
+msgid "_Suggestions"
+msgstr "_Предложения"
+
+#: libide/editor/ide-editor-spell-widget.ui:188
+msgid "Add Word"
+msgstr "Добавить слово"
+
+#: libide/editor/ide-editor-spell-widget.ui:213
+msgid "A_dd"
+msgstr "_Добавить"
+
+#: libide/editor/ide-editor-spell-widget.ui:229
+msgid "Dictionary"
+msgstr "Словарь"
+
+#: libide/editor/ide-editor-spell-widget.ui:267
+msgid "Options"
+msgstr "Параметры"
+
+#: libide/editor/ide-editor-spell-widget.ui:292
+msgid "_Language"
+msgstr "_Язык"
+
+#: libide/editor/ide-editor-spell-widget.ui:319
+msgid "_Highlight"
+msgstr "_Подсветка"
+
+#: libide/editor/ide-editor-tweak-widget.ui:22
+msgid "Search highlight mode…"
+msgstr "Режим подсветки поиска…"
+
+#: libide/editor/ide-editor-tweak-widget.ui:56
+msgid "Display line numbers"
+msgstr "Показывать количество строк"
+
+#: libide/editor/ide-editor-tweak-widget.ui:65
+msgid "Display right margin"
+msgstr "Показывать правую границу"
+
+#: libide/editor/ide-editor-tweak-widget.ui:83
+msgid "Auto indent"
+msgstr "Автоматический отступ"
+
+#: libide/editor/ide-editor-tweak-widget.ui:99
+#: libide/preferences/ide-preferences-builtin.c:324
+msgid "Indentation"
+msgstr "Отступ"
+
+#: libide/editor/ide-editor-tweak-widget.ui:127
+#: libide/preferences/ide-preferences-builtin.c:176
+msgid "Spaces"
+msgstr "Пробелы"
+
+#: libide/editor/ide-editor-tweak-widget.ui:137
+#: libide/preferences/ide-preferences-builtin.c:177
+msgid "Tabs"
+msgstr "Табуляция"
+
+#: libide/editor/ide-editor-tweak-widget.ui:157
+msgid "2"
+msgstr "2"
+
+#: libide/editor/ide-editor-tweak-widget.ui:167
+msgid "3"
+msgstr "3"
+
+#: libide/editor/ide-editor-tweak-widget.ui:177
+msgid "4"
+msgstr "4"
+
+#: libide/editor/ide-editor-tweak-widget.ui:187
+msgid "8"
+msgstr "8"
+
+#: libide/editor/ide-editor-view-actions.c:309
+msgid "Save Document"
+msgstr "Сохранить документ"
+
+#: libide/editor/ide-editor-view-actions.c:435
+msgid "Save Document As"
+msgstr "Сохранить документ как"
+
+#: libide/editor/ide-editor-view.ui:23
+msgid "_Reload"
+msgstr "_Перезагрузить"
+
+#: libide/editor/ide-editor-view.ui:31
+#: libide/greeter/ide-greeter-perspective.ui:317
+#: libide/greeter/ide-greeter-perspective.ui:365
+#: libide/workbench/ide-omni-bar.ui:360
+msgid "_Cancel"
+msgstr "_Отмена"
+
+#: libide/editor/ide-editor-view.ui:44
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Builder обнаружил, что данный файл был изменен извне. Хотите перезагрузить "
+"его?"
+
+#: libide/greeter/ide-greeter-perspective.c:457
+msgid "Failed to load the project"
+msgstr "Не удалось загрузить проект"
+
+#: libide/greeter/ide-greeter-perspective.c:680
+msgid "Open Project"
+msgstr "Открыть проект"
+
+#: libide/greeter/ide-greeter-perspective.c:696
+msgid "All Project Types"
+msgstr "Все типы проектов"
+
+#. the action:// link is used to jump to the new-project view
+#: libide/greeter/ide-greeter-perspective.ui:52
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"Почему бы не <a href=\"action://app.new-project\">создать новый проект</a>?"
+
+#: libide/greeter/ide-greeter-perspective.ui:53
+msgid "No projects found"
+msgstr "Проекты не найдены"
+
+#: libide/greeter/ide-greeter-perspective.ui:100
+msgid "Recent Projects"
+msgstr "Недавние проекты"
+
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
+msgid "Updated"
+msgstr "Обновлено"
+
+#: libide/greeter/ide-greeter-perspective.ui:150
+msgid "Other Projects"
+msgstr "Другие проекты"
+
+#: libide/greeter/ide-greeter-perspective.ui:206
+msgid "_Remove"
+msgstr "_Удалить"
+
+#: libide/greeter/ide-greeter-perspective.ui:290
+msgid "Select a Project"
+msgstr "Выбрать проект"
+
+#: libide/greeter/ide-greeter-perspective.ui:299
+msgid "Click an item to select"
+msgstr "Нажмите на объект, чтобы выбрать"
+
+#: libide/greeter/ide-greeter-perspective.ui:329
+msgid "Open…"
+msgstr "Открыть…"
+
+#: libide/greeter/ide-greeter-perspective.ui:344
+msgid "Select projects for removal"
+msgstr "Выбрать проекты для удаления"
+
+#: libide/greeter/ide-greeter-perspective.ui:364
+msgid "Return to project selection"
+msgstr "Вернуться к выбору проекта"
+
+#: libide/gsettings/ide-language-defaults.c:178
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s содержит недопустимый ASCII"
+
+#: libide/gsettings/ide-language-defaults.c:193
+#, c-format
+msgid "Failed to parse integer from “%s”"
+msgstr "Не удалось разобрать целое число из «%s»"
+
+#: libide/gsettings/ide-language-defaults.c:271
+msgid "language defaults missing version in [global] group."
+msgstr "отсутствует версия языка по умолчанию в группе [global]."
+
+#: libide/gsettings/ide-language-defaults.c:363
+msgid "Failed to initialize defaults."
+msgstr "Не удалось инициализировать значения по умолчанию."
+
+#: libide/ide.c:58
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "Вы должны вызвать %s() перед использованием libide."
+
+#: libide/ide-context.c:2017
+msgid "An unload request is already pending"
+msgstr "Запрос выгрузки уже выполняется"
+
+#: libide/ide-context.c:2136
+msgid "Context has already been restored."
+msgstr "Контекст уже был восстановлен."
+
+#: libide/ide-object.c:304
+#, c-format
+msgid "No implementations of extension point “%s”."
+msgstr "Нет реализаций точки расширения «%s»."
+
+#: libide/ide-object.c:396
+msgid "Failed to locate build system plugin."
+msgstr "Не удалось найти плагин сборки системы."
+
+#: libide/ide-object.c:493
+msgid "No such extension point."
+msgstr "Нет такой точки расширения."
+
+#: libide/ide-object.c:503
+msgid "No implementations of extension point."
+msgstr "Нет реализаций точки расширения."
+
+#: libide/keybindings/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "Редактор комбинаций клавиш"
+
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:452
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Основные"
+
+#: libide/keybindings/ide-shortcuts-window.ui:18
+#: libide/keybindings/ide-shortcuts-window.ui:456
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "Глобальный поиск"
+
+#: libide/keybindings/ide-shortcuts-window.ui:25
+#: libide/keybindings/ide-shortcuts-window.ui:463
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Параметры"
+
+#: libide/keybindings/ide-shortcuts-window.ui:32
+#: libide/keybindings/ide-shortcuts-window.ui:470
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "Панель Команд"
+
+#: libide/keybindings/ide-shortcuts-window.ui:39
+#: libide/keybindings/ide-shortcuts-window.ui:477
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "Терминал"
+
+#: libide/keybindings/ide-shortcuts-window.ui:46
+#: libide/keybindings/ide-shortcuts-window.ui:484
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr "Терминал в среде исполнения сборки"
+
+#: libide/keybindings/ide-shortcuts-window.ui:53
+#: libide/keybindings/ide-shortcuts-window.ui:491
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "Комбинации клавиш"
+
+#: libide/keybindings/ide-shortcuts-window.ui:62
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Панели"
+
+#: libide/keybindings/ide-shortcuts-window.ui:66
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "Переключить левую панель"
+
+#: libide/keybindings/ide-shortcuts-window.ui:73
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "Переключить правую панель"
+
+#: libide/keybindings/ide-shortcuts-window.ui:80
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "Переключить нижнюю панель"
+
+#: libide/keybindings/ide-shortcuts-window.ui:89
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Жесты сенсорной панели"
+
+#: libide/keybindings/ide-shortcuts-window.ui:94
+#: libide/keybindings/ide-shortcuts-window.ui:142
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Перейти к следующему документу"
+
+#: libide/keybindings/ide-shortcuts-window.ui:101
+#: libide/keybindings/ide-shortcuts-window.ui:149
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Перейти к предыдущему документу"
+
+#: libide/keybindings/ide-shortcuts-window.ui:109
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Файлы"
+
+#: libide/keybindings/ide-shortcuts-window.ui:114
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "Создать новый документ"
+
+#: libide/keybindings/ide-shortcuts-window.ui:121
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Открыть документ"
+
+#: libide/keybindings/ide-shortcuts-window.ui:128
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Сохранить документ"
+
+#: libide/keybindings/ide-shortcuts-window.ui:135
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Закрыть документ"
+
+#: libide/keybindings/ide-shortcuts-window.ui:156
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "Показать список открытых документов"
+
+#: libide/keybindings/ide-shortcuts-window.ui:164
+#: libide/keybindings/ide-shortcuts-window.ui:176
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Найти и заменить"
+
+#: libide/keybindings/ide-shortcuts-window.ui:169
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Найти"
+
+#: libide/keybindings/ide-shortcuts-window.ui:183
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Найти следующее совпадение"
+
+#: libide/keybindings/ide-shortcuts-window.ui:190
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "Найти предыдущее совпадение"
+
+#: libide/keybindings/ide-shortcuts-window.ui:197
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "Очистить подсветку"
+
+#: libide/keybindings/ide-shortcuts-window.ui:205
+#: libide/keybindings/ide-shortcuts-window.ui:500
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "Копировать и вставить"
+
+#: libide/keybindings/ide-shortcuts-window.ui:210
+#: libide/keybindings/ide-shortcuts-window.ui:505
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "Копировать выделенный текст в буфер"
+
+#: libide/keybindings/ide-shortcuts-window.ui:217
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "Вырезать выделенный текст в буфер"
+
+#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:512
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "Вставить текст из буфера"
+
+#: libide/keybindings/ide-shortcuts-window.ui:231
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "Дублировать текущую строку или выделенное"
+
+#: libide/keybindings/ide-shortcuts-window.ui:239
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "Отменить и вернуть"
+
+#: libide/keybindings/ide-shortcuts-window.ui:244
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "Отменить предыдущую команду"
+
+#: libide/keybindings/ide-shortcuts-window.ui:251
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "Вернуть предыдущую команду"
+
+#: libide/keybindings/ide-shortcuts-window.ui:259
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Редактирование"
+
+#: libide/keybindings/ide-shortcuts-window.ui:264
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "Увеличить число рядом с курсором"
+
+#: libide/keybindings/ide-shortcuts-window.ui:271
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "Уменьшить число рядом с курсором"
+
+#: libide/keybindings/ide-shortcuts-window.ui:278
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "Объединить выбранные строки"
+
+#: libide/keybindings/ide-shortcuts-window.ui:285
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "Показать окно автодополнения"
+
+#: libide/keybindings/ide-shortcuts-window.ui:292
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "Переключить замену"
+
+#: libide/keybindings/ide-shortcuts-window.ui:299
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "Линия отступа"
+
+#: libide/keybindings/ide-shortcuts-window.ui:306
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "Удалить строку"
+
+#: libide/keybindings/ide-shortcuts-window.ui:313
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "Переименовать символ"
+
+#: libide/keybindings/ide-shortcuts-window.ui:314
+msgctxt "shortcut window"
+msgid "Requires semantic language support"
+msgstr "Требуется поддержка семантического языка"
+
+#: libide/keybindings/ide-shortcuts-window.ui:322
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Навигация"
+
+#: libide/keybindings/ide-shortcuts-window.ui:327
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "Перейти к следующей ошибке в файле"
+
+#: libide/keybindings/ide-shortcuts-window.ui:334
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "Перейти к предыдущей ошибке в файле"
+
+#: libide/keybindings/ide-shortcuts-window.ui:341
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "Перейти к предыдущему месту редактирования"
+
+#: libide/keybindings/ide-shortcuts-window.ui:348
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "Перейти к следующему месту редактирования"
+
+#: libide/keybindings/ide-shortcuts-window.ui:355
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "Перейти к определению символа"
+
+#: libide/keybindings/ide-shortcuts-window.ui:362
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr "Переместить окно просмотра вверх"
+
+#: libide/keybindings/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr "Переместить окно просмотра вниз"
+
+#: libide/keybindings/ide-shortcuts-window.ui:376
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr "Переместить окно просмотра в конец файла"
+
+#: libide/keybindings/ide-shortcuts-window.ui:383
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr "Переместить окно просмотра в начало файла"
+
+#: libide/keybindings/ide-shortcuts-window.ui:390
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Перейти к открывающей / закрывающей скобке"
+
+#: libide/keybindings/ide-shortcuts-window.ui:398
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "Выбор"
+
+#: libide/keybindings/ide-shortcuts-window.ui:403
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Выделить все"
+
+#: libide/keybindings/ide-shortcuts-window.ui:410
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Снять выделенное"
+
+#: libide/keybindings/ide-shortcuts-window.ui:418
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Собрать и запустить"
+
+#: libide/keybindings/ide-shortcuts-window.ui:423
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Собрать"
+
+#: libide/keybindings/ide-shortcuts-window.ui:430
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Запустить"
+
+#: libide/keybindings/ide-shortcuts-window.ui:437
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Профиль"
+
+#: libide/keybindings/ide-shortcuts-window.ui:448
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "Комбинации клавиш терминала"
+
+#: libide/keybindings/ide-shortcuts-window.ui:520
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Поиск"
+
+#: libide/keybindings/ide-shortcuts-window.ui:525
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "Поиск текста в терминале"
+
+#: libide/preferences/ide-preferences-builtin.c:65
+#: libide/preferences/ide-preferences-builtin.c:66
+msgid "Extensions"
+msgstr "Расширения"
+
+#: libide/preferences/ide-preferences-builtin.c:102
+msgid "Appearance"
+msgstr "Внешний вид"
+
+#: libide/preferences/ide-preferences-builtin.c:104
+msgid "Themes"
+msgstr "Темы"
+
+#: libide/preferences/ide-preferences-builtin.c:105
+msgid "Dark Theme"
+msgstr "Тёмная тема"
+
+#: libide/preferences/ide-preferences-builtin.c:105
+msgid "Whether Builder should use a dark theme"
+msgstr "Определяет следует ли Builder использовать тёмную тему"
+
+#: libide/preferences/ide-preferences-builtin.c:105
+msgid "dark theme"
+msgstr "тёмная тема"
+
+#: libide/preferences/ide-preferences-builtin.c:106
+msgid "Grid Pattern"
+msgstr "Схема сетки"
+
+#: libide/preferences/ide-preferences-builtin.c:106
+msgid "Display a grid pattern underneath source code"
+msgstr "Отображать схему сетки под исходным кодом"
+
+#: libide/preferences/ide-preferences-builtin.c:108
+msgid "Font"
+msgstr "Шрифт"
+
+#: libide/preferences/ide-preferences-builtin.c:109
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "моноширинный шрифт редактора"
+
+#. XXX: This belongs in terminal addin
+#: libide/preferences/ide-preferences-builtin.c:111
+#: plugins/terminal/gb-terminal-workbench-addin.c:203
+msgid "Terminal"
+msgstr "Терминал"
+
+#: libide/preferences/ide-preferences-builtin.c:111
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "моноширинный шрифт терминала"
+
+#: libide/preferences/ide-preferences-builtin.c:116
+msgid "Color Scheme"
+msgstr "Цветовая схема"
+
+#: libide/preferences/ide-preferences-builtin.c:141
+msgid "Keyboard"
+msgstr "Клавиатура"
+
+#: libide/preferences/ide-preferences-builtin.c:143
+msgid "Emulation"
+msgstr "Эмуляция"
+
+#: libide/preferences/ide-preferences-builtin.c:144
+msgid "Default keybinding mode which mimics gedit"
+msgstr "Режим привязки клавиш, по умолчанию имитирует gedit"
+
+#: libide/preferences/ide-preferences-builtin.c:145
+msgid "Emacs"
+msgstr "Emacs"
+
+#: libide/preferences/ide-preferences-builtin.c:145
+msgid "Emulates the Emacs text editor"
+msgstr "Эмулирует текстовый редактор Emacs"
+
+#: libide/preferences/ide-preferences-builtin.c:146
+msgid "Vim"
+msgstr "Vim"
+
+#: libide/preferences/ide-preferences-builtin.c:146
+msgid "Emulates the Vim text editor"
+msgstr "Эмулирует текстовый редактор Vim"
+
+#: libide/preferences/ide-preferences-builtin.c:148
+msgid "Movement"
+msgstr "Перемещение"
+
+#: libide/preferences/ide-preferences-builtin.c:149
+msgid "Home moves to first non-whitespace character"
+msgstr "Клавиша Home перемещает курсор к первому непробельному символу"
+
+#: libide/preferences/ide-preferences-builtin.c:150
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+"Клавиша Backspace будет удалять дополнительное пространство, чтобы держать "
+"курсор в соответствии с отступом"
+
+#: libide/preferences/ide-preferences-builtin.c:158
+msgid "Cursor"
+msgstr "Курсор"
+
+#: libide/preferences/ide-preferences-builtin.c:159
+msgid "Restore cursor position"
+msgstr "Восстановить позицию курсора"
+
+#: libide/preferences/ide-preferences-builtin.c:159
+msgid "Restore cursor position when a file is reopened"
+msgstr "Восстановить позицию курсора при повторном открытии файла"
+
+#: libide/preferences/ide-preferences-builtin.c:160
+msgid "Scroll Offset"
+msgstr "Запас прокрутки"
+
+#: libide/preferences/ide-preferences-builtin.c:160
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr ""
+"Минимальное количество строк, которое должно находиться над и под курсором"
+
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr "Разрешить редактору прокрутку дальше конца буфера"
+
+#: libide/preferences/ide-preferences-builtin.c:163
+msgid "Line Information"
+msgstr "Строка состояния"
+
+#: libide/preferences/ide-preferences-builtin.c:164
+msgid "Line numbers"
+msgstr "Номера строк"
+
+#: libide/preferences/ide-preferences-builtin.c:164
+msgid "Show line number at beginning of each line"
+msgstr "Показывать номер в начале каждой строки"
+
+#: libide/preferences/ide-preferences-builtin.c:165
+msgid "Line changes"
+msgstr "Изменение строк"
+
+#: libide/preferences/ide-preferences-builtin.c:165
+msgid "Show if a line was added or modified next to line number"
+msgstr "Показывать рядом с номером строки, добавление или изменение в строке"
+
+#: libide/preferences/ide-preferences-builtin.c:167
+msgid "Highlight"
+msgstr "Подсветка"
+
+#: libide/preferences/ide-preferences-builtin.c:168
+msgid "Current line"
+msgstr "Текущая строка"
+
+#: libide/preferences/ide-preferences-builtin.c:168
+msgid "Make current line stand out with highlights"
+msgstr "Выделять текущую строку"
+
+#: libide/preferences/ide-preferences-builtin.c:169
+msgid "Matching brackets"
+msgstr "Парные скобки"
+
+#: libide/preferences/ide-preferences-builtin.c:169
+msgid "Highlight matching brackets based on cursor position"
+msgstr "Подсвечивать парные скобки на основании позиции курсора"
+
+#: libide/preferences/ide-preferences-builtin.c:171
+msgid "Code Overview"
+msgstr "Обзор кода"
+
+#: libide/preferences/ide-preferences-builtin.c:172
+msgid "A zoomed out view to enhance navigating source code"
+msgstr "Отдалить обзор для улучшения навигации по исходному коду"
+
+#: libide/preferences/ide-preferences-builtin.c:173
+msgid "Automatically hide overview map"
+msgstr "Автоматически скрывать обзорную карту"
+
+#: libide/preferences/ide-preferences-builtin.c:173
+msgid "Automatically hide map when editor loses focus"
+msgstr "Автоматически скрывать карту, когда редактор теряет фокус"
+
+#: libide/preferences/ide-preferences-builtin.c:175
+msgid "Whitespace Characters"
+msgstr "Пробельные символы"
+
+#: libide/preferences/ide-preferences-builtin.c:178
+msgid "New line and carriage return"
+msgstr "Новая линия и возврат каретки"
+
+#: libide/preferences/ide-preferences-builtin.c:179
+msgid "Non-breaking spaces"
+msgstr "Неразрывные пробелы"
+
+#: libide/preferences/ide-preferences-builtin.c:180
+msgid "Spaces inside of text"
+msgstr "Пробелы внутри текста"
+
+#: libide/preferences/ide-preferences-builtin.c:181
+msgid "Trailing Only"
+msgstr "Только завершающий"
+
+#: libide/preferences/ide-preferences-builtin.c:182
+msgid "Leading Only"
+msgstr "Только ведущий"
+
+#: libide/preferences/ide-preferences-builtin.c:188
+msgid "Code Insight"
+msgstr "Анализ кода"
+
+#: libide/preferences/ide-preferences-builtin.c:191
+msgid "Semantic Highlighting"
+msgstr "Подсветка семантики"
+
+#: libide/preferences/ide-preferences-builtin.c:191
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr ""
+"Использовать анализ кода, чтобы подсветить дополнительную информацию, "
+"выявленную в исходном файле"
+
+#: libide/preferences/ide-preferences-builtin.c:193
+msgid "Completion"
+msgstr "Автодополнение"
+
+#: libide/preferences/ide-preferences-builtin.c:194
+msgid "Suggest words found in open files"
+msgstr "Предлагать слова, найденные в открытых файлах"
+
+#: libide/preferences/ide-preferences-builtin.c:194
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr ""
+"Во время ввода предлагать автодополнения, на основе найденных слов в "
+"открытых документах"
+
+#: libide/preferences/ide-preferences-builtin.c:195
+msgid "Suggest completions using Ctags"
+msgstr "Предлагать автодополнения используя Ctags"
+
+#: libide/preferences/ide-preferences-builtin.c:195
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr ""
+"Создайте и управляйте базой данных Ctags для автодополнения имен классов, "
+"функций и много другого"
+
+#: libide/preferences/ide-preferences-builtin.c:196
+msgid "Suggest completions using Clang (Experimental)"
+msgstr "Предлагать автодополнения используя Clang (Экспериментально)"
+
+#: libide/preferences/ide-preferences-builtin.c:196
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr "Предлагать автодополнения для языков C и C++ используя Clang"
+
+#: libide/preferences/ide-preferences-builtin.c:198
+msgid "Diagnostics"
+msgstr "Диагностика"
+
+#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
+msgid "Snippets"
+msgstr "Фрагменты текста"
+
+#: libide/preferences/ide-preferences-builtin.c:207
+msgid "Code snippets"
+msgstr "Фрагменты кода"
+
+#: libide/preferences/ide-preferences-builtin.c:207
+msgid "Use code fragments to increase typing efficiency"
+msgstr "Использовать фрагменты кода для повышения эффективности набора текста"
+
+#: libide/preferences/ide-preferences-builtin.c:251
+msgid "Programming Languages"
+msgstr "Языки программирования"
+
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: libide/preferences/ide-preferences-builtin.c:262
+msgid "Search languages…"
+msgstr "Поиск языков…"
+
+#: libide/preferences/ide-preferences-builtin.c:317
+msgid "Trim trailing whitespace"
+msgstr "Удаление завершающих пробельных символов"
+
+#: libide/preferences/ide-preferences-builtin.c:317
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr ""
+"При сохранении, завершающие пробельные символы в измененных строках будут "
+"удалены."
+
+#: libide/preferences/ide-preferences-builtin.c:318
+msgid "Overwrite Braces"
+msgstr "Замена скобок"
+
+#: libide/preferences/ide-preferences-builtin.c:318
+msgid "Overwrite closing braces"
+msgstr "Замена закрывающих скобок"
+
+#: libide/preferences/ide-preferences-builtin.c:320
+msgid "Margins"
+msgstr "Границы"
+
+#: libide/preferences/ide-preferences-builtin.c:321
+msgid "Show right margin"
+msgstr "Показывать правую границу"
+
+#: libide/preferences/ide-preferences-builtin.c:322
+msgid "Right margin position"
+msgstr "Позиция правой границы"
+
+#: libide/preferences/ide-preferences-builtin.c:322
+msgid "Position in spaces for the right margin"
+msgstr "Расстояние, в пробелах, до правой границы"
+
+#: libide/preferences/ide-preferences-builtin.c:325
+msgid "Tab width"
+msgstr "Ширина табуляции"
+
+#: libide/preferences/ide-preferences-builtin.c:325
+msgid "Width of a tab character in spaces"
+msgstr "Ширина табуляции в пробелах"
+
+#: libide/preferences/ide-preferences-builtin.c:326
+msgid "Insert spaces instead of tabs"
+msgstr "Вставлять пробелы вместо табуляции"
+
+#: libide/preferences/ide-preferences-builtin.c:326
+msgid "Prefer spaces over use of tabs"
+msgstr "Предпочитать пробелы использованию табуляции"
+
+#: libide/preferences/ide-preferences-builtin.c:327
+msgid "Automatically indent"
+msgstr "Автоматический отступ"
+
+#: libide/preferences/ide-preferences-builtin.c:327
+msgid "Indent source code as you type"
+msgstr "Делать отступ во время ввода"
+
+#: libide/preferences/ide-preferences-builtin.c:342
+#: libide/preferences/ide-preferences-builtin.c:360
+msgid "Number of CPU"
+msgstr "Количество ЦПУ"
+
+#: libide/preferences/ide-preferences-builtin.c:378
+msgid "Build Workers"
+msgstr "Рабочие потоки сборки"
+
+#: libide/preferences/ide-preferences-builtin.c:378
+msgid "Number of parallel build workers"
+msgstr "Число параллельных рабочих потоков сборки"
+
+#: libide/preferences/ide-preferences-builtin.c:390
+msgid "Projects"
+msgstr "Проекты"
+
+#: libide/preferences/ide-preferences-builtin.c:392
+msgid "Workspace"
+msgstr "Рабочее пространство"
+
+#: libide/preferences/ide-preferences-builtin.c:393
+msgid "A place for all your projects"
+msgstr "Место для всех ваших проектов"
+
+#: libide/preferences/ide-preferences-builtin.c:394
+msgid "Restore previously opened files"
+msgstr "Восстановить ранее открытые файлы"
+
+#: libide/preferences/ide-preferences-builtin.c:394
+msgid "Open previously opened files when loading a project"
+msgstr "Открывать ранее открытые файлы при загрузке проекта"
+
+#: libide/preferences/ide-preferences-builtin.c:396
+msgid "Project Discovery"
+msgstr "Обнаружение проекта"
+
+#: libide/preferences/ide-preferences-builtin.c:397
+msgid "Discover projects on my computer"
+msgstr "Обнаружение проектов на компьютере"
+
+#: libide/preferences/ide-preferences-builtin.c:397
+msgid "Scan your computer for existing projects"
+msgstr "Проверка системы на наличие существующих проектов"
+
+#: libide/preferences/ide-preferences-builtin.c:518
+#: plugins/create-project/gbp-create-project-widget.ui:153
+msgid "Version Control"
+msgstr "Контроль версий"
+
+#. only the page goes here, plugins will fill in the details
+#: libide/preferences/ide-preferences-builtin.c:530
+msgid "SDKs"
+msgstr "SDKs"
+
+#: libide/preferences/ide-preferences-font-button.ui:57
+msgid "_Select"
+msgstr "_Выбрать"
+
+#: libide/preferences/ide-preferences-perspective.c:965
+msgid "Preferences"
+msgstr "Параметры"
+
+#: libide/preferences/ide-preferences-perspective.ui:15
+msgid "Search Preferences"
+msgstr "Параметры поиска"
+
+#: libide/projects/ide-project.c:527
+msgid "Destination file must be within the project tree."
+msgstr "Файл назначения должен находиться в пределах дерева проекта."
+
+#: libide/projects/ide-project.c:662
+msgid "File must be within the project tree."
+msgstr "Файл должен быть в дереве проекта."
+
+#: libide/projects/ide-recent-projects.c:396
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "%s() может быть выполнена только один раз"
+
+#: libide/runner/ide-run-button.ui:41
+msgid "Stop running"
+msgstr "Остановить выполнение"
+
+#: libide/runner/ide-run-button.ui:57
+msgid "Change run options"
+msgstr "Изменить параметры выполнения"
+
+#: libide/runner/ide-run-manager.c:225
+msgid "Run"
+msgstr "Выполнить"
+
+#: libide/runner/ide-run-manager.c:254
+msgid "Cannot run target, another target is running"
+msgstr "Не удается выполнить цель, выполняется другая цель"
+
+#: libide/runner/ide-run-manager.c:324
+msgid "Failed to locate runtime"
+msgstr "Не удалось найти исполняемую библиотеку"
+
+#: libide/runner/ide-runner.c:165
+msgid "Process quit unexpectedly"
+msgstr "Процесс неожиданно завершил работу"
+
+#: libide/runtimes/ide-runtime-manager.c:114
+msgid "Host operating system"
+msgstr "Операционная система узла"
+
+#: libide/search/ide-omni-search-display.c:267
+msgid "Cannot add provider more than once."
+msgstr "Невозможно добавить оператор больше одного раза."
+
+#: libide/search/ide-omni-search-display.c:343
+msgid "The provider could not be found."
+msgstr "Поставщик не найден."
+
+#: libide/snippets/ide-source-snippets-manager.c:96
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Не удалось открыть директорию: %s"
+
+#: libide/snippets/ide-source-snippets-manager.c:109
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Не удалось загрузить файл: %s: %s"
+
+#: libide/sourceview/ide-source-view.c:5314
+#, c-format
+msgid "Insert “%s”"
+msgstr "Вставить «%s»"
+
+#: libide/sourceview/ide-source-view.c:5316
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "Заменить «%s» на «%s»"
+
+#: libide/sourceview/ide-source-view.c:5430
+msgid "Apply Fix-It"
+msgstr "Применить «Fix-It»"
+
+#: libide/sourceview/ide-source-view.c:5857
+msgid "Rename symbol"
+msgstr "Переименовать символ"
+
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "Устанавливается %u пакет"
+msgstr[1] "Устанавливается %u пакета"
+msgstr[2] "Устанавливается %u пакетов"
+
+#: libide/transfers/ide-transfers-button.ui:35
+msgid "Clear _All"
+msgstr "_Очистить все"
+
+#: libide/util/ide-file-manager.c:64
+msgid "File path is NULL"
+msgstr "Несуществующий путь к файлу"
+
+#: libide/util/ide-file-manager.c:73 libide/util/ide-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "Ошибка преобразования имени файла UTF-8 в «wide char»"
+
+#: libide/util/ide-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "Сбой ILCreateFromPath()"
+
+#: libide/util/ide-file-manager.c:129
+#, c-format
+msgid "Cannot convert “%s” into a valid NSURL."
+msgstr "Невозможно преобразовать «%s» в корректный NSURL."
+
+#: libide/util/ide-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "Не удалось подключиться к org.freedesktop.FileManager1: "
+
+#: libide/util/ide-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "Не удалось вызвать ShowItems: "
+
+#: libide/util/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "Некорректное %-кодирование в URI"
+
+#: libide/util/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr "Не-UTF-8 символы в URI"
+
+#: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal “%s” in URI"
+msgstr "Недопустимый IP literal «%s» в URI"
+
+#: libide/util/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal “%s” in URI"
+msgstr "Недопустимое кодирование IP literal «%s» в URI"
+
+#: libide/util/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname “%s” in URI"
+msgstr "Недопустимое не-ASCII имя узла «%s» в URI"
+
+#: libide/util/ide-uri.c:434
+#, c-format
+msgid "Non-ASCII hostname “%s” forbidden in this URI"
+msgstr "Не-ASCII имя узла «%s» недопустимо в данном URI"
+
+#: libide/util/ide-uri.c:457
+#, c-format
+msgid "Could not parse port “%s” in URI"
+msgstr "Невозможно разобрать порт «%s» в URI"
+
+#: libide/util/ide-uri.c:464
+#, c-format
+msgid "Port “%s” in URI is out of range"
+msgstr "Порт «%s» в URI находиться вне диапазона"
+
+#: libide/util/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr "Базовый URI не является абсолютным"
+
+#: libide/util/ide-uri.c:615
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "URI не является абсолютным, и базовый URI не предоставлен"
+
+#: libide/util/ide-uri.c:660
+#, c-format
+msgid "Could not parse “%s” as absolute URI"
+msgstr "Невозможно разобрать «%s» как абсолютный URI"
+
+#: libide/util/ide-uri.c:1203
+#, c-format
+msgid "URI “%s” has no host component"
+msgstr "URI «%s» не имеет хост-компонента"
+
+#: libide/workbench/ide-layout-tab-bar.ui:33
+msgid "List open files"
+msgstr "Показать список открытых файлов"
+
+#: libide/workbench/ide-layout-tab.ui:19
+msgid "Jump to previous location"
+msgstr "Перейти к предыдущей директории"
+
+#: libide/workbench/ide-layout-tab.ui:33
+msgid "Jump to next location"
+msgstr "Перейти к следующей директории"
+
+#: libide/workbench/ide-layout-tab.ui:125
+msgid "Close the current document"
+msgstr "Закрыть текущий документ"
+
+#: libide/workbench/ide-layout-view.c:142
+msgid "untitled document"
+msgstr "безымянный документ"
+
+#. Translators, missing means we could not locate the runtime
+#: libide/workbench/ide-omni-bar-row.c:90
+msgid "missing"
+msgstr "отсутствует"
+
+#: libide/workbench/ide-omni-bar-row.ui:31
+msgid "Edit build configuration"
+msgstr "Редактировать конфигурацию сборки"
+
+#: libide/workbench/ide-omni-bar.ui:177
+#: plugins/project-tree/gb-project-tree-addin.c:105
+msgid "Project"
+msgstr "Проект"
+
+#: libide/workbench/ide-omni-bar.ui:201
+msgid "Branch"
+msgstr "Ветка"
+
+#: libide/workbench/ide-omni-bar.ui:236
+msgid "Build Profile"
+msgstr "Профиль сборки"
+
+#: libide/workbench/ide-omni-bar.ui:282
+msgid "Last build"
+msgstr "Последняя сборка"
+
+#: libide/workbench/ide-omni-bar.ui:349
+msgid "View Output"
+msgstr "Показать окно вывода"
+
+#: libide/workbench/ide-omni-bar.ui:396
+msgid "Rebuild"
+msgstr "Пересобрать"
+
+#: libide/workbench/ide-omni-bar.ui:406
+msgid "Clean"
+msgstr "Очистить"
+
+#: libide/workbench/ide-omni-bar.ui:420
+msgid "Build project"
+msgstr "Собрать проект"
+
+#: libide/workbench/ide-perspective-menu-button.ui:15
+msgid "Switch perspective"
+msgstr "Переключение перспективы"
+
+#: libide/workbench/ide-workbench-actions.c:73
+msgid "Open File"
+msgstr "Открыть файл"
+
+#: libide/workbench/ide-workbench.c:564
+#, c-format
+msgid "%s — Builder"
+msgstr "%s — Builder"
+
+#: libide/workbench/ide-workbench-header-bar.ui:43
+msgid "Transfers"
+msgstr "Передача"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
+msgid "Show workbench menu"
+msgstr "Показывать главное меню"
+
+#: libide/workbench/ide-workbench-header-bar.ui:73
+msgid "Press Ctrl+. to search"
+msgstr "Нажмите Ctrl+. для поиска"
+
+#: plugins/autotools/ide-autotools-makecache-stage.c:194
+msgid "Building cache…"
+msgstr "Построение кэша…"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
+msgid "Shared Library"
+msgstr "Разделяемая библиотека"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
+msgid "Create a new autotools project with a shared library"
+msgstr "Создать новый проект autotools с разделяемой библиотекой"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
+msgid "Empty Project"
+msgstr "Пустой проект"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
+msgid "Create a new empty autotools project"
+msgstr "Создать новый пустой проект autotools"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
+msgid "GNOME Application"
+msgstr "Приложение GNOME"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
+msgid "Create a new flatpak-ready GNOME application"
+msgstr "Создать новое приложение GNOME с поддержкой Flatpak"
+
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:190
+#, c-format
+msgid "No beautifier available for “%s”"
+msgstr "Нет доступных украшений для «%s»"
+
+#: plugins/beautifier/gb-beautifier-workbench-addin.c:192
+msgid "No beautifier available"
+msgstr "Нет доступных украшений"
+
+#: plugins/beautifier/gtk/menus.ui:9
+msgid "Beautify"
+msgstr "Украсить"
+
+#: plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Показывать ошибки и предупреждения предоставленные Clang"
+
+#. translators: keywords used when searching for preferences
+#: plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang диагностика предупреждения ошибки"
+
+#: plugins/clang/ide-clang-service.c:326
+msgid "Unknown failure"
+msgstr "Неизвестный сбой"
+
+#: plugins/clang/ide-clang-service.c:330
+msgid "Clang crashed"
+msgstr "Сбой Clang"
+
+#: plugins/clang/ide-clang-service.c:334
+msgid "Invalid arguments"
+msgstr "Недопустимые аргументы"
+
+#: plugins/clang/ide-clang-service.c:338
+msgid "AST read error"
+msgstr "Ошибка чтения AST"
+
+#: plugins/clang/ide-clang-service.c:350
+#, c-format
+msgid "Failed to create translation unit: %s"
+msgstr "Не удалось создать блок перевода: %s"
+
+#: plugins/clang/ide-clang-service.c:481 plugins/xml-pack/ide-xml-service.c:93
+msgid "File must be saved locally to parse."
+msgstr "Файл должен быть сохранен локально для разбора."
+
+#: plugins/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr "анонимный"
+
+#: plugins/clang/ide-clang-translation-unit.c:642
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr "clang_codeCompleteAt() работает только с локальными файлами"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:97
+msgid "Close without Saving"
+msgstr "Закрыть без сохранения"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:99
+msgid "Save As…"
+msgstr "Сохранить как…"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:207
+msgid "Load palette"
+msgstr "Загрузить палитру"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:234
+msgid "Save palette"
+msgstr "Сохранить палитру"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:725
+msgid "All files"
+msgstr "Все файлы"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:729
+msgid "All supported palettes formats"
+msgstr "Все поддерживаемые форматы палитр"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:734
+msgid "GIMP palette"
+msgstr "Палитра GIMP"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:738
+msgid "GNOME Builder palette"
+msgstr "Палитра GNOME Builder"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+msgid "Palette name"
+msgstr "Имя палитры"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Enter a new name for the palette"
+msgstr "Введите новое имя палитры"
+
+#: plugins/color-picker/gb-color-picker-workbench-addin.c:178
+msgid "Colors"
+msgstr "Цвета"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr "Видимость HSV"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+msgid "If the HSV components are visible."
+msgstr "Если компоненты HSV видимые."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr "Видимость LAB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+msgid "If the LAB components are visible."
+msgstr "Если компоненты LAB видимые."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr "Видимость RGB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+msgid "If the RGB components are visible."
+msgstr "Если компоненты RGB видимые."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr "Блок RGB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr "Блок используемый рядами и компонентом RGB"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+msgid "Selected palette ID"
+msgstr "Выбранный ID палитры"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr "Выбранный ID палитры среди загруженных."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+msgid "Color strings visibility"
+msgstr "Видимость цветных строк"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr "Видимые цветные строки."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "Цветовой фильтр"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr "Фильтр, используемый в цветовых шкалах и цветовом уровне."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr "Компоненты цвета"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "Видимость:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr ""
+"Выберите цветовое пространство, для которого хотите видеть ползунки на "
+"панели."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "Элементы:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+"Выберите тип блока, который хотите использовать для рядов и компонентов RGB "
+"на панели."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "Фильтры:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or “None”."
+msgstr "Выберите фильтр, действующий на цвета или «None»."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr "Выберите цвета строк, которые хотите видеть на панели."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr "Параметры палитр"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr "Режим просмотра палитры:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "Список"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr "Образцы"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "Управление палитрой"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "Загрузить"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "Из текущего документа"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr "Выберите палитру, которую хотите видеть на панели или рядом с ней."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr "Нет загруженных палитр"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr "Нет выбранных палитр"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "Выберите файл палитры"
+
+#: plugins/color-picker/gtk/color-picker.ui:62
+msgid "Try loading or generating a palette using the menu"
+msgstr "Попробуйте загрузить или создать палитру с помощью меню"
+
+#: plugins/color-picker/gtk/menus.ui:7
+msgid "Enable color picker"
+msgstr "Включить выбор цвета"
+
+#: plugins/command-bar/gb-command-bar.c:302
+#, c-format
+msgid "Command not found: %s"
+msgstr "Команда не найдена: %s"
+
+#: plugins/command-bar/gb-command-bar.c:612
+msgid "Use the entry below to execute a command"
+msgstr "Используйте строку ввода ниже, чтобы выполнить команду"
+
+#: plugins/command-bar/gb-vim.c:90
+msgid "Number required"
+msgstr "Необходимое количество"
+
+#: plugins/command-bar/gb-vim.c:100
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s недопустимо для %s"
+
+#: plugins/command-bar/gb-vim.c:158
+#, c-format
+msgid "Cannot find language “%s”"
+msgstr "Не удалось найти язык «%s»"
+
+#: plugins/command-bar/gb-vim.c:315
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Эта команда требует активное окно GtkSourceView"
+
+#: plugins/command-bar/gb-vim.c:326
+msgid "This command requires a view to be focused"
+msgstr "Эта команда требует активный вид"
+
+#: plugins/command-bar/gb-vim.c:383
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Неизвестный параметр: %s"
+
+#: plugins/command-bar/gb-vim.c:426
+#, c-format
+msgid "Cannot find colorscheme “%s”"
+msgstr "Не удалось найти цветовую схему «%s»"
+
+#: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
+msgid "Failed to locate working directory"
+msgstr "Не удалось найти рабочую директорию"
+
+#: plugins/command-bar/gb-vim.c:711
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr "Недопустимая синтаксическая субкоманда: %s"
+
+#: plugins/command-bar/gb-vim.c:1154
+msgid "Invalid search and replace request"
+msgstr "Недопустимый запрос поиска и замены"
+
+#: plugins/command-bar/gb-vim.c:1260
+#, c-format
+msgid "Not a command: %s"
+msgstr "Не является командой: %s"
+
+#: plugins/comment-code/gtk/menus.ui:9
+msgid "Comment code"
+msgstr "Закомментировать"
+
+#: plugins/comment-code/gtk/menus.ui:14
+msgid "Uncomment code"
+msgstr "Раскомментировать"
+
+#: plugins/c-pack/ide-c-format-provider.c:283
+#: plugins/python-pack/ide-python-format-provider.c:240
+msgid "Format Strings"
+msgstr "Формат строк"
+
+#: plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "New Project"
+msgstr "Новый проект"
+
+#: plugins/create-project/gbp-create-project-genesis-addin.c:223
+msgid "New…"
+msgstr "Создать…"
+
+#: plugins/create-project/gbp-create-project-tool.c:136
+msgid "List available templates"
+msgstr "Показать доступные шаблоны"
+
+#: plugins/create-project/gbp-create-project-tool.c:138
+msgid "Project template to generate"
+msgstr "Шаблон проекта для создания"
+
+#: plugins/create-project/gbp-create-project-tool.c:140
+msgid "The target language (if supported)"
+msgstr "Целевой язык (если поддерживается)"
+
+#: plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or “none” to disable"
+msgstr "Используемая система контроля версий или «none» для отключения"
+
+#: plugins/create-project/gbp-create-project-tool.c:143
+msgid "git"
+msgstr "git"
+
+#: plugins/create-project/gbp-create-project-tool.c:149
+msgid "create-project [OPTION...] PROJECT_NAME"
+msgstr "создать-проект [ОПЦИЯ...] ПРОЕКТ_ИМЯ"
+
+#: plugins/create-project/gbp-create-project-tool.c:198
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr ""
+"Имя файла должно быть в ASCII и не должно содержать знаков двоеточие или "
+"равно"
+
+#: plugins/create-project/gbp-create-project-tool.c:372
+msgid "Please specify a project name.\n"
+msgstr "Укажите имя проекта.\n"
+
+#: plugins/create-project/gbp-create-project-tool.c:388
+msgid "Please specify a project template with --template=\n"
+msgstr "Укажите шаблон проекта с помощью --template=\n"
+
+#: plugins/create-project/gbp-create-project-widget.c:157
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+"Были использованы символы, которые могут вызывать технические проблемы при "
+"использовании их в названии проекта"
+
+#: plugins/create-project/gbp-create-project-widget.c:164
+msgid "Directory already exists with that name"
+msgstr "Директория с таким именем уже существует"
+
+#: plugins/create-project/gbp-create-project-widget.c:569
+msgid "A failure occurred while initializing version control"
+msgstr "Произошел сбой при инициализации контроля версий"
+
+#: plugins/create-project/gbp-create-project-widget.ui:28
+msgid "Project Name"
+msgstr "Имя проекта"
+
+#: plugins/create-project/gbp-create-project-widget.ui:55
+msgid ""
+"Unique name that is used for your project’s folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+"Уникальное имя, которое используется для директории вашего проекта и других "
+"технических ресурсов. Должно быть в нижнем регистре без пробелов и не может "
+"начинаться с цифры."
+
+#: plugins/create-project/gbp-create-project-widget.ui:74
+msgid "Project Location"
+msgstr "Расположение проекта"
+
+#: plugins/create-project/gbp-create-project-widget.ui:85
+#: plugins/git/ide-git-clone-widget.ui:76
+msgid "Select Project Directory"
+msgstr "Выберите директорию проекта"
+
+#: plugins/create-project/gbp-create-project-widget.ui:98
+msgid "Language"
+msgstr "Язык"
+
+#: plugins/create-project/gbp-create-project-widget.ui:120
+msgid "License"
+msgstr "Лицензия"
+
+#: plugins/create-project/gbp-create-project-widget.ui:135
+msgid "GPLv3+"
+msgstr "GPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:136
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:137
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:138
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: plugins/create-project/gbp-create-project-widget.ui:139
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:140
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: plugins/create-project/gbp-create-project-widget.ui:141
+msgid "No license"
+msgstr "Без лицензии"
+
+#: plugins/create-project/gbp-create-project-widget.ui:174
+msgid "Uses the Git version control system"
+msgstr "Использовать систему контроля версий Git"
+
+#: plugins/create-project/gbp-create-project-widget.ui:236
+msgid "Select a Template"
+msgstr "Выбрать шаблон"
+
+#: plugins/devhelp/gbp-devhelp-panel.c:194
+msgid "Documentation"
+msgstr "Документация"
+
+#: plugins/eslint/eslint_plugin/__init__.py:106
+msgid "ESlint"
+msgstr "ESLint"
+
+#: plugins/eslint/eslint_plugin/__init__.py:107
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+"Включить использование ESLint, для возможности выполнения кода в вашем "
+"проекте"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/eslint/eslint_plugin/__init__.py:109
+msgid "eslint javascript lint code execute execution"
+msgstr "eslint javascript lint код выполнить выполнение"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr "Включить ESLint"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Включить использование eslint, чтобы найти дополнительную диагностическую "
+"информацию в файлах JavaScript. Это может привести к выполнению кода в вашем "
+"проекте."
+
+#: plugins/file-search/gb-file-search-provider.c:44
+msgid "Switch To"
+msgstr "Переключить на"
+
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Загрузка источников приложения…"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "Клонировать приложение"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Клонировать"
+
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
+msgid "Network is not available, skipping downloads"
+msgstr "Сеть недоступна, отмена загрузок"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:119
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+#: plugins/rustup/rustup_plugin/__init__.py:615
+msgid "Install"
+msgstr "Установить"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+msgid "Update"
+msgstr "Обновить"
+
+#. translators: keywords are used to match search keywords in preferences
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
+#, c-format
+msgid "flatpak %s %s %s"
+msgstr "flatpak %s %s %s"
+
+#. translators: %u is the number of hidden runtimes to be shown
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] "показать еще %u исполняемую библиотеку"
+msgstr[1] "показать еще %u исполняемые библиотеки"
+msgstr[2] "показать еще %u исполняемых библиотек"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
+msgid "Flatpak Runtimes"
+msgstr "Исполняемые библиотеки Flatpak"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:714
+#, c-format
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:716
+#, c-format
+msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:67
+#, c-format
+msgid "Updated %s %s"
+msgstr "Обновлено %s %s"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:70
+#, c-format
+msgid "Updating %s %s"
+msgstr "Обновление %s %s"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:76
+#, c-format
+msgid "Installed %s %s"
+msgstr "Установлено %s %s"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:79
+#, c-format
+msgid "Installing %s %s"
+msgstr "Устанавливается %s %s"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:101
+msgid "Failed to install runtime"
+msgstr "Не удалось установить исполняемую библиотеку"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:103
+msgid "Runtime has been updated"
+msgstr "Исполняемая библиотека обновлена"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:105
+msgid "Runtime has been installed"
+msgstr "Исполняемая библиотека установлена"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid "Your computer is missing flatpak-builder"
+msgstr "На компьютере отсутствует flatpak-builder"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+"Эта программа необходима для создания приложений Flatpak. Хотите установить "
+"её?"
+
+#: plugins/flatpak/gtk/menus.ui:6
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: plugins/flatpak/gtk/menus.ui:8
+msgid "_Download Dependencies"
+msgstr "_Загрузить зависимости"
+
+#: plugins/flatpak/gtk/menus.ui:12
+msgid "_Export as Bundle"
+msgstr "_Экспортировать как пакет"
+
+#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
+msgid "Send to Fpaste.org"
+msgstr "Отправить на Fpaste.org"
+
+#: plugins/fpaste/fpaste_plugin/__init__.py:110
+msgid "The following URL has been copied to the clipboard"
+msgstr "Следующий URL-адрес был скопирован в буфер"
+
+#: plugins/git/ide-git-buffer-change-monitor.c:162
+msgid "Cannot provide diff, no backing file provided."
+msgstr "Невозможно предоставить diff, нет предоставленного резервного файла."
+
+#: plugins/git/ide-git-buffer-change-monitor.c:568
+msgid "Repository does not have a working directory."
+msgstr "Репозиторий не имеет рабочего каталога."
+
+#: plugins/git/ide-git-buffer-change-monitor.c:579
+msgid "File is not under control of git working directory."
+msgstr "Файл не находится под управлением рабочего каталога git."
+
+#: plugins/git/ide-git-buffer-change-monitor.c:645
+msgid "The requested file does not exist within the git index."
+msgstr "Запрошенный файл не существует в индексе git."
+
+#: plugins/git/ide-git-clone-widget.c:164
+#: plugins/git/ide-git-clone-widget.c:429
+msgid "A valid Git URL is required"
+msgstr "Требуется корректный URL-адрес Git"
+
+#: plugins/git/ide-git-clone-widget.ui:36
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr "Используйте Git для создания локальной копии удалённого проекта."
+
+#: plugins/git/ide-git-clone-widget.ui:64
+msgid "user@host:repository.git"
+msgstr "user@host:repository.git"
+
+#: plugins/git/ide-git-clone-widget.ui:65
+msgid "Enter the URL of your project’s source code repository"
+msgstr "Введите URL-адрес репозитория исходного кода вашего проекта."
+
+#: plugins/git/ide-git-clone-widget.ui:92
+msgid "Repository URL"
+msgstr "URL-адрес репозитория"
+
+#: plugins/git/ide-git-clone-widget.ui:100
+msgid "Project Destination"
+msgstr "Назначение проекта"
+
+#: plugins/git/ide-git-genesis-addin.c:93
+msgid "Clone Project"
+msgstr "Клонировать проект"
+
+#: plugins/git/ide-git-genesis-addin.c:184
+msgid "Clone…"
+msgstr "Клонировать…"
+
+#: plugins/git/ide-git-remote-callbacks.c:193
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
+"При клонировании репозитория Builder не смог предоставить соответствующие "
+"учетные данные."
+
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
+msgid "Code assistance requires a local file."
+msgstr "Для помощи при написании кода требуется локальный файл."
+
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+"Включить использование pylint, для возможности выполнения кода в вашем "
+"проекте"
+
+#. translators: these are keywords used to search for preferences
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint код выполнить выполнение"
+
+#: plugins/gnome-code-assistance/ide-gca-service.c:182
+msgid "No language specified"
+msgstr "Язык не указан"
+
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+msgid "Enable Pylint"
+msgstr "Включить Pylint"
+
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Включить использование pylint, чтобы найти дополнительную диагностическую "
+"информацию в программах на Python. Это может привести к выполнению кода в "
+"вашем проекте."
+
+#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
+msgid "Preview as HTML"
+msgstr "Просмотр в виде HTML"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:115
+msgid "Your computer is missing python3-docutils"
+msgstr "На компьютере отсутствует python3-docutils"
+
+#: plugins/jedi/jedi_plugin.py:732
+msgid "Suggest Python completions"
+msgstr "Предлагать варианты автодополнения для Python"
+
+#: plugins/jedi/jedi_plugin.py:733
+msgid "Use Jedi to provide completions for the Python language"
+msgstr "Использовать Jedi для предоставления автодополнений для языка Python"
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+msgid "Empty Meson Project"
+msgstr "Пустой проект Meson"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+msgid "Create a new empty meson project"
+msgstr "Создать пустой проект meson"
+
+#: plugins/mingw/ide-mingw-device-provider.c:94
+msgid "MinGW 64-bit"
+msgstr "MinGW 64-бит"
+
+#: plugins/mingw/ide-mingw-device-provider.c:106
+msgid "MinGW 32-bit"
+msgstr "MinGW 32-бит"
+
+#: plugins/project-tree/gb-new-file-popover.c:123
+#: plugins/project-tree/gb-rename-file-popover.c:139
+msgid "A folder with that name already exists."
+msgstr "Папка с таким именем уже существует."
+
+#: plugins/project-tree/gb-new-file-popover.c:126
+#: plugins/project-tree/gb-rename-file-popover.c:142
+msgid "A file with that name already exists."
+msgstr "Файл с таким именем уже существует."
+
+#: plugins/project-tree/gb-new-file-popover.c:348
+#: plugins/project-tree/gb-new-file-popover.ui:13
+#: plugins/project-tree/gb-rename-file-popover.ui:13
+msgid "File Name"
+msgstr "Имя файла"
+
+#: plugins/project-tree/gb-new-file-popover.c:350
+msgid "Folder Name"
+msgstr "Имя папки"
+
+#: plugins/project-tree/gb-new-file-popover.ui:35
+msgid "_Create"
+msgstr "_Создать"
+
+#: plugins/project-tree/gb-project-tree-builder.c:207
+msgid "Empty"
+msgstr "Пустой"
+
+#: plugins/project-tree/gb-rename-file-popover.c:79
+#, c-format
+msgid "Rename %s"
+msgstr "Переименовать %s"
+
+#: plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "Показать в дереве проекта"
+
+#: plugins/project-tree/gtk/menus.ui:14
+msgid "_New"
+msgstr "_Новый"
+
+#: plugins/project-tree/gtk/menus.ui:17
+msgid "_Empty File"
+msgstr "_Пустой Файл"
+
+#: plugins/project-tree/gtk/menus.ui:23
+msgid "_New Folder"
+msgstr "_Создать папку"
+
+#: plugins/project-tree/gtk/menus.ui:29
+msgid "_Open"
+msgstr "_Открыть"
+
+#: plugins/project-tree/gtk/menus.ui:34
+msgid "Open _With"
+msgstr "Открыть с _помощью"
+
+#: plugins/project-tree/gtk/menus.ui:37
+msgid "Source Code Editor"
+msgstr "Редактор исходного кода"
+
+#: plugins/project-tree/gtk/menus.ui:47
+msgid "_Open Containing Folder"
+msgstr "О_ткрыть папку содержащую объект"
+
+#: plugins/project-tree/gtk/menus.ui:51
+msgid "_Open in Terminal"
+msgstr "Открыть в _терминале"
+
+#: plugins/project-tree/gtk/menus.ui:64
+msgid "Mo_ve to Trash"
+msgstr "Пере_местить в корзину"
+
+#: plugins/project-tree/gtk/menus.ui:71
+msgid "_Build"
+msgstr "С_обрать"
+
+#: plugins/project-tree/gtk/menus.ui:75
+msgid "_Rebuild"
+msgstr "П_ересобрать"
+
+#: plugins/project-tree/gtk/menus.ui:81
+msgid "Display Options"
+msgstr "Параметры отображения"
+
+#: plugins/project-tree/gtk/menus.ui:92
+msgid "Sort Directories First"
+msgstr "Сначала директории"
+
+#: plugins/project-tree/gtk/menus.ui:98
+msgid "_Collapse All Nodes"
+msgstr "С_вернуть все узлы"
+
+#: plugins/project-tree/gtk/menus.ui:102
+msgid "_Refresh"
+msgstr "О_бновить"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr "Слова, соответствующие выбору"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr "Выделить все вхождения слов, соответствующие текущему выбору"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr "быстрая подсветка слов соответствующих текущему выбору"
+
+#: plugins/rustup/rustup_plugin/__init__.py:84
+msgid "Rustup not installed"
+msgstr "Rustup не установлен"
+
+#: plugins/rustup/rustup_plugin/__init__.py:282
+msgid "Installing rustup"
+msgstr "Установка rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:284
+msgid "Updating rustup"
+msgstr "Обновление rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:286
+msgid "Installing rust "
+msgstr "Установка rust "
+
+#: plugins/rustup/rustup_plugin/__init__.py:288
+msgid "Checking system"
+msgstr "Проверка системы"
+
+#: plugins/rustup/rustup_plugin/__init__.py:357
+msgid "Downloading rustup-init"
+msgstr "Скачивание rustup-init"
+
+#: plugins/rustup/rustup_plugin/__init__.py:362
+msgid "Syncing channel updates"
+msgstr "Синхронизация канала обновлений"
+
+#: plugins/rustup/rustup_plugin/__init__.py:368
+msgid "Downloading "
+msgstr "Скачивание "
+
+#: plugins/rustup/rustup_plugin/__init__.py:375
+msgid "Installing "
+msgstr "Установка "
+
+#: plugins/rustup/rustup_plugin/__init__.py:381
+msgid "Checking for rustup updates"
+msgstr "Проверка наличия обновлений rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:386
+msgid "Downloading rustup update"
+msgstr "Скачивание обновлений rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:423
+msgid "Error installing "
+msgstr "Ошибка при установке "
+
+#: plugins/rustup/rustup_plugin/__init__.py:425
+msgid "Error"
+msgstr "Ошибка"
+
+#: plugins/rustup/rustup_plugin/__init__.py:430
+msgid "Cancelled"
+msgstr "Отменено"
+
+#: plugins/rustup/rustup_plugin/__init__.py:438
+msgid "Finished"
+msgstr "Завершено"
+
+#: plugins/rustup/rustup_plugin/__init__.py:452
+msgid "Rustup"
+msgstr "Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:453
+msgid "Rustup Toolchains"
+msgstr "Наборы инструментов Rustup"
+
+#: plugins/rustup/rustup_plugin/__init__.py:508
+msgid "Updating"
+msgstr "Обновление"
+
+#: plugins/rustup/rustup_plugin/__init__.py:508
+msgid "Installing"
+msgstr "Установка"
+
+#. set default toolchain button
+#: plugins/rustup/rustup_plugin/__init__.py:599
+msgid "Make default"
+msgstr "Использовать по умолчанию"
+
+#: plugins/rustup/rustup_plugin/__init__.py:599
+msgid "Makes the selected toolchain the default rust installation"
+msgstr ""
+"Устанавливает выбранный набор инструментов, как установку rust по умолчанию"
+
+#: plugins/rustup/rustup_plugin/__init__.py:614
+msgid "Install Rust Channel"
+msgstr "Установка канала Rust"
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: plugins/rustup/rustup_plugin/__init__.py:619
+msgid "Enter name of rust channel"
+msgstr "Введите название канала rust"
+
+#: plugins/rustup/rustup_plugin/__init__.py:620
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+msgstr ""
+"Стандартные названия каналов выпусков наборов инструментов имеют следующий "
+"вид:\n"
+" <канал>[-<дата>][-<узел>]\n"
+"\n"
+"                        <канал>    = stable|beta|nightly|<версия>\n"
+"                        <дата>          = ГГГГ-ММ-ДД\n"
+"                        <узел>          = <target-triple>"
+
+#: plugins/rustup/rustup_plugin/__init__.py:645
+msgid "Install Rustup to manage toolchains here!"
+msgstr "Установите Rustup для управления наборами инструментов прямо здесь."
+
+#: plugins/rustup/rustup_plugin/__init__.py:652
+msgid "No toolchain installed. Click"
+msgstr "Не установлен набор инструментов. Нажмите"
+
+#: plugins/rustup/rustup_plugin/__init__.py:653
+msgid "to add a new toolchain!"
+msgstr "чтобы добавить новый набор инструментов."
+
+#: plugins/support/gtk/menus.ui:7
+msgid "Generate Support Log"
+msgstr "Создать журнал поддержки"
+
+#: plugins/support/ide-support-application-addin.c:79
+#, c-format
+msgid ""
+"The support log file has been written to “%s”. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+"Файл журнала поддержки был записан в «%s». Предоставьте этот файл как "
+"вложение к сообщению об ошибке или запросу поддержки."
+
+#: plugins/symbol-tree/symbol-tree-panel.c:275
+msgid "Current language does not support symbol resolvers"
+msgstr "Текущий язык не поддерживает распознаватели символов"
+
+#: plugins/symbol-tree/symbol-tree-panel.c:415
+msgid "Symbols"
+msgstr "Символы"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:25
+msgid "No symbols"
+msgstr "Нет символов"
+
+#: plugins/symbol-tree/symbol-tree-panel.ui:26
+msgid "Open a file to see symbols within the file"
+msgstr "Откройте файл, чтобы просмотреть символы внутри файла"
+
+#: plugins/sysmon/gb-sysmon-panel.ui:5
+msgid "System Monitor"
+msgstr "Системный монитор"
+
+#: plugins/sysprof/gbp-sysprof-perspective.c:135
+msgid "Profiler"
+msgstr "Профайлер"
+
+#. the action:// link is used to run the project
+#: plugins/sysprof/gbp-sysprof-perspective.ui:49
+msgid ""
+"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
+"profiler</a> from the run menu to begin"
+msgstr ""
+"Выберите <a href=\"action://run-manager.run-with-handler::profiler"
+"\">Запустить с помощью профайлера</a> из меню запуска чтобы начать"
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:81
+msgid "CPU"
+msgstr "ЦПУ"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
+msgid "Open Profile"
+msgstr "Открыть профиль"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Захват Sysprof (*.syscap)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
+msgid "All Files"
+msgstr "Все файлы"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
+msgid "Run with Profiler"
+msgstr "Запустить с помощью профайлера"
+
+#: plugins/sysprof/gtk/menus.ui:6
+msgid "Open Profile…"
+msgstr "Открыть профиль…"
+
+#: plugins/terminal/gb-terminal-search.ui:152
+msgid "Regex"
+msgstr "Регулярное выражение"
+
+#: plugins/terminal/gb-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "По слову целиком"
+
+#: plugins/terminal/gb-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "Обратный поиск"
+
+#: plugins/terminal/gb-terminal-view-actions.c:297
+msgid "Save Terminal Content As"
+msgstr "Сохранить содержимое терминала как"
+
+#: plugins/terminal/gb-terminal-view.c:465
+msgid "Untitled terminal"
+msgstr "Безымянный терминал"
+
+#: plugins/terminal/gb-terminal-workbench-addin.c:142
+msgid "Run Output"
+msgstr "Вывод данных выполнения"
+
+#: plugins/terminal/gtk/menus.ui:6
+msgid "_New Terminal"
+msgstr "_Новый терминал"
+
+#: plugins/terminal/gtk/menus.ui:15
+msgid "_Open Link"
+msgstr "_Открыть ссылку"
+
+#: plugins/terminal/gtk/menus.ui:20
+msgid "_Copy Link Address"
+msgstr "_Копировать адрес ссылки"
+
+#: plugins/todo/todo_plugin/__init__.py:193
+msgid "Todo"
+msgstr "Todo"
+
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr "Показывать ошибки и предупреждения, предоставляемые Vala"
+
+#. translators: keywords used when searching for preferences
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:36
+msgid "vala diagnostics warnings errors"
+msgstr "vala диагностика предупреждения ошибки"
+
+#: plugins/valgrind/valgrind_plugin/__init__.py:52
+msgid "Run with Valgrind"
+msgstr "Запустить с помощью Valgrind"
+
+#: plugins/xml-pack/ide-xml-service.c:193
+msgid "Buffer loaded but not in the buffer manager."
+msgstr "Буфер загружен, но не в менеджере буферов."
+
+#: plugins/xml-pack/ide-xml-tree-builder.c:172
+#: plugins/xml-pack/ide-xml-tree-builder.c:204
+msgid "Failed to create the XML tree."
+msgstr "Не удалось создать дерево XML."
+
+#~ msgid "Build: %s"
+#~ msgstr "Сборка: %s"
+
+#~ msgid "Wow! You’ve spent with Builder %d second!\n"
+#~ msgid_plural "Wow! You’ve spent with Builder %d seconds!\n"
+#~ msgstr[0] "Вау! Вы провели в Builder %d секунду!\n"
+#~ msgstr[1] "Вау! Вы провели в Builder %d секунды!\n"
+#~ msgstr[2] "Вау! Вы провели в Builder %d секунд!\n"
