@@ -31,14 +31,16 @@ struct _IdeDebuggerInterface
 {
   GTypeInterface parent_iface;
 
-  gboolean (*supports_runner) (IdeDebugger *self,
-                               IdeRunner   *runner,
-                               gint        *priority);
+  gchar    *(*get_name)        (IdeDebugger *self);
+  gboolean  (*supports_runner) (IdeDebugger *self,
+                                IdeRunner   *runner,
+                                gint        *priority);
 };
 
-gboolean ide_debugger_supports_runner (IdeDebugger *self,
-                                       IdeRunner   *runner,
-                                       gint        *priority);
+gchar    *ide_debugger_get_name        (IdeDebugger *self);
+gboolean  ide_debugger_supports_runner (IdeDebugger *self,
+                                        IdeRunner   *runner,
+                                        gint        *priority);
 
 G_END_DECLS
 

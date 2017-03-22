@@ -25,9 +25,25 @@
 
 G_DEFINE_INTERFACE (IdeDebugger, ide_debugger, IDE_TYPE_OBJECT)
 
+gchar *
+ide_debugger_real_get_name (IdeDebugger *self)
+{
+  return g_strdup (G_OBJECT_TYPE_NAME (self));
+}
+
+static gboolean
+ide_debugger_real_supports_runner (IdeDebugger *self,
+                                   IdeRunner   *runner,
+                                   gint        *priority)
+{
+  return FALSE;
+}
+
 static void
 ide_debugger_default_init (IdeDebuggerInterface *iface)
 {
+  iface->get_name = ide_debugger_real_get_name;
+  iface->supports_runner = ide_debugger_real_supports_runner;
 }
 
 /**
@@ -47,7 +63,7 @@ ide_debugger_supports_runner (IdeDebugger *self,
                               IdeRunner   *runner,
                               gint        *priority)
 {
-  gboolean ret = FALSE;
+  gboolean ret;
 
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), FALSE);
   g_return_val_if_fail (IDE_IS_RUNNER (runner), FALSE);
@@ -55,12 +71,34 @@ ide_debugger_supports_runner (IdeDebugger *self,
   if (priority != NULL)
     *priority = G_MAXINT;
 
-  if (IDE_DEBUGGER_GET_IFACE (self)->supports_runner)
-    ret = IDE_DEBUGGER_GET_IFACE (self)->supports_runner (self, runner, priority);
+  ret = IDE_DEBUGGER_GET_IFACE (self)->supports_runner (self, runner, priority);
 
   IDE_TRACE_MSG ("Chceking if %s supports runner %s",
                  G_OBJECT_TYPE_NAME (self),
                  G_OBJECT_TYPE_NAME (runner));
+
+  return ret;
+}
+
+/**
+ * ide_debugger_get_name:
+ * @self: A #IdeDebugger
+ *
+ * Gets the proper name of the debugger to display to the user.
+ *
+ * Returns: (transfer full): the display name for the debugger.
+ */
+gchar *
+ide_debugger_get_name (IdeDebugger *self)
+{
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_DEBUGGER (self), NULL);
+
+  ret = IDE_DEBUGGER_GET_IFACE (self)->get_name (self);
+
+  if (ret == NULL)
+    ret = g_strdup (G_OBJECT_TYPE_NAME (self));
 
   return ret;
 }
