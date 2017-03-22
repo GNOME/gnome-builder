@@ -414,6 +414,10 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
                          g_strdup ("language"),
                          g_variant_ref_sink (g_variant_new_string (self->language)));
 
+  g_hash_table_insert (params,
+                       g_strdup ("versioning"),
+                       g_variant_ref_sink (g_variant_new_string (self->vcs ?: "git")));
+
   ide_project_template_expand_async (template,
                                      params,
                                      NULL,
