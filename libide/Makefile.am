@@ -49,6 +49,7 @@ libide_1_0_la_public_headers =                                              \
 	buildsystem/ide-configuration-provider.h                            \
 	buildsystem/ide-environment-variable.h                              \
 	buildsystem/ide-environment.h                                       \
+	debugger/ide-debugger.h                                             \
 	debugger/ide-debug-manager.h                                        \
 	debugger/ide-debugger-breakpoints.h                                 \
 	debugger/ide-debugger-editor-view-addin.h                           \
@@ -236,6 +237,7 @@ libide_1_0_la_public_sources =                                              \
 	buildsystem/ide-configuration-provider.c                            \
 	buildsystem/ide-environment-variable.c                              \
 	buildsystem/ide-environment.c                                       \
+	debugger/ide-debugger.c                                             \
 	debugger/ide-debug-manager.c                                        \
 	debugger/ide-debugger-breakpoints.c                                 \
 	debugger/ide-debugger-editor-view-addin.c                           \
