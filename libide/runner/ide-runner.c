@@ -49,6 +49,7 @@ typedef struct
   int tty_fd;
 
   guint clear_env : 1;
+  guint failed : 1;
   guint run_on_host : 1;
 } IdeRunnerPrivate;
 
@@ -69,6 +70,7 @@ enum {
   PROP_ARGV,
   PROP_CLEAR_ENV,
   PROP_ENV,
+  PROP_FAILED,
   PROP_RUN_ON_HOST,
   N_PROPS
 };
@@ -463,6 +465,10 @@ ide_runner_get_property (GObject    *object,
       g_value_set_object (value, ide_runner_get_environment (self));
       break;
 
+    case PROP_FAILED:
+      g_value_set_boolean (value, ide_runner_get_failed (self));
+      break;
+
     case PROP_RUN_ON_HOST:
       g_value_set_boolean (value, ide_runner_get_run_on_host (self));
       break;
@@ -488,6 +494,10 @@ ide_runner_set_property (GObject      *object,
 
     case PROP_CLEAR_ENV:
       ide_runner_set_clear_env (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_FAILED:
+      ide_runner_set_failed (self, g_value_get_boolean (value));
       break;
 
     case PROP_RUN_ON_HOST:
@@ -535,6 +545,27 @@ ide_runner_class_init (IdeRunnerClass *klass)
                          IDE_TYPE_ENVIRONMENT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeRunner:failed:
+   *
+   * If the runner has "failed". This should be set if a plugin can determine
+   * that the runner cannot be executed due to an external issue. One such
+   * example might be a debugger plugin that cannot locate a suitable debugger
+   * to run the program.
+   */
+  properties [PROP_FAILED] =
+    g_param_spec_boolean ("failed",
+                          "Failed",
+                          "If the runner has failed",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeRunner:run-on-host:
+   *
+   * The "run-on-host" property indicates the program should be run on the
+   * host machine rather than inside the application sandbox.
+   */
   properties [PROP_RUN_ON_HOST] =
     g_param_spec_boolean ("run-on-host",
                           "Run on Host",
@@ -1131,4 +1162,31 @@ ide_runner_get_runtime (IdeRunner *self)
   config = ide_configuration_manager_get_current (config_manager);
 
   return config != NULL ? g_object_ref (config) : NULL;
+}
+
+gboolean
+ide_runner_get_failed (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), FALSE);
+
+  return priv->failed;
+}
+
+void
+ide_runner_set_failed (IdeRunner *self,
+                       gboolean   failed)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+
+  failed = !!failed;
+
+  if (failed != priv->failed)
+    {
+      priv->failed = failed;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FAILED]);
+    }
 }

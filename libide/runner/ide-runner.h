@@ -62,6 +62,9 @@ struct _IdeRunnerClass
 };
 
 IdeRunner         *ide_runner_new             (IdeContext           *context);
+gboolean           ide_runner_get_failed      (IdeRunner            *self);
+void               ide_runner_set_failed      (IdeRunner            *self,
+                                               gboolean              failed);
 IdeRuntime        *ide_runner_get_runtime     (IdeRunner            *self);
 void               ide_runner_force_quit      (IdeRunner            *self);
 IdeEnvironment    *ide_runner_get_environment (IdeRunner            *self);

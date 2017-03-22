@@ -302,6 +302,8 @@ do_run_async (IdeRunManager *self,
   g_autoptr(IdeRunner) runner = NULL;
   GCancellable *cancellable;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (G_IS_TASK (task));
 
@@ -341,10 +343,21 @@ do_run_async (IdeRunManager *self,
 
   g_signal_emit (self, signals [RUN], 0, runner);
 
+  if (ide_runner_get_failed (runner))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to execute the application");
+      IDE_EXIT;
+    }
+
   ide_runner_run_async (runner,
                         cancellable,
                         ide_run_manager_run_cb,
                         g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
