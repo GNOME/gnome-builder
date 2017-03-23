@@ -1,0 +1,55 @@
+=thread-group-added,id="i1"
+~"GNU gdb (GDB) Fedora 7.12.50.20170226-4.fc26\n"
+~"Copyright (C) 2017 Free Software Foundation, Inc.\n"
+~"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.  Type \"show copying\"\nand \"show warranty\" for details.\n"
+~"This GDB was configured as \"x86_64-redhat-linux-gnu\".\nType \"show configuration\" for configuration details."
+~"\nFor bug reporting instructions, please see:\n"
+~"<http://www.gnu.org/software/gdb/bugs/>.\n"
+~"Find the GDB manual and other documentation resources online at:\n<http://www.gnu.org/software/gdb/documentation/>.\n"
+~"For help, type \"help\".\n"
+~"Type \"apropos word\" to search for commands related to \"word\"...\n"
+~"Reading symbols from ls..."
+~"Reading symbols from /home/christian/Projects/gnome-builder/ls..."
+~"(no debugging symbols found)...done.\n"
+~"(no debugging symbols found)...done.\n"
+(gdb) 
+&"b main\n"
+~"Breakpoint 1 at 0x38b0\n"
+=breakpoint-created,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00000000000038b0",at="<main>",thread-groups=["i1"],times="0",original-location="main"}
+^done
+(gdb) 
+&"r\n"
+~"Starting program: /usr/bin/ls \n"
+=thread-group-started,id="i1",pid="4633"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1"
+^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libselinux.so.1",target-name="/lib64/libselinux.so.1",host-name="/lib64/libselinux.so.1",symbols-loaded="0",thread-group="i1"
+=library-loaded,id="/lib64/libcap.so.2",target-name="/lib64/libcap.so.2",host-name="/lib64/libcap.so.2",symbols-loaded="0",thread-group="i1"
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1"
+=library-loaded,id="/lib64/libpcre.so.1",target-name="/lib64/libpcre.so.1",host-name="/lib64/libpcre.so.1",symbols-loaded="0",thread-group="i1"
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1"
+=library-loaded,id="/lib64/libpthread.so.0",target-name="/lib64/libpthread.so.0",host-name="/lib64/libpthread.so.0",symbols-loaded="0",thread-group="i1"
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00005555555578b0",at="<main>",thread-groups=["i1"],times="1",original-location="main"}
+~"\n"
+~"Breakpoint 1, 0x00005555555578b0 in main ()\n"
+*stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00005555555578b0",func="main",args=[]},thread-id="1",stopped-threads="all",core="1"
+(gdb) 
+&"c\n"
+~"Continuing.\n"
+^running
+*running,thread-id="all"
+(gdb) 
+~"[Inferior 1 (process 4633) exited normally]\n"
+=thread-exited,id="1",group-id="i1"
+=thread-group-exited,id="i1",exit-code="0"
+*stopped,reason="exited-normally"
+(gdb) 
+&"c\n"
+&"The program is not being run.\n"
+^error,msg="The program is not being run."
+(gdb) 

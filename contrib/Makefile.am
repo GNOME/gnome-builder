@@ -4,6 +4,7 @@ SUBDIRS =               \
 	gd              \
 	libeditorconfig \
 	jsonrpc-glib    \
+	mi2             \
 	nautilus        \
 	pnl             \
 	rg              \

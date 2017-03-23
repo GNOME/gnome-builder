@@ -230,6 +230,7 @@ PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              libpeas-1.0 >= peas_required_version
                              libxml-2.0 >= libxml_required_version
                              pangoft2 >= pangoft2_required_version])
+PKG_CHECK_MODULES(MI2,      [gio-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(PANEL_GTK,[gtk+-3.0 >= gtk_required_version])
@@ -515,6 +516,7 @@ AC_CONFIG_FILES([
 	contrib/jsonrpc-glib/Makefile
 	contrib/jsonrpc-glib/jsonrpc-version.h
 	contrib/libeditorconfig/Makefile
+	contrib/mi2/Makefile
 	contrib/nautilus/Makefile
 	contrib/pnl/Makefile
 	contrib/pnl/pnl-version.h
