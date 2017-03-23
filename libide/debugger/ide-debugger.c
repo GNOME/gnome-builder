@@ -162,3 +162,14 @@ ide_debugger_emit_stopped (IdeDebugger           *self,
 
   g_signal_emit (self, signals [STOPPED], 0, reason, location);
 }
+
+void
+ide_debugger_prepare (IdeDebugger *self,
+                      IdeRunner   *runner)
+{
+  g_return_if_fail (IDE_IS_DEBUGGER (self));
+  g_return_if_fail (IDE_IS_RUNNER (runner));
+
+  if (IDE_DEBUGGER_GET_IFACE (self)->prepare)
+    IDE_DEBUGGER_GET_IFACE (self)->prepare (self, runner);
+}

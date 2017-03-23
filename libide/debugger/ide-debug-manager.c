@@ -249,6 +249,8 @@ ide_debug_manager_start (IdeDebugManager  *self,
       IDE_GOTO (failure);
     }
 
+  ide_debugger_prepare (debugger, runner);
+
   ret = TRUE;
 
 failure:

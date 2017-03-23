@@ -48,12 +48,16 @@ struct _IdeDebuggerInterface
   void      (*stopped)         (IdeDebugger           *self,
                                 IdeDebuggerStopReason  reason,
                                 IdeSourceLocation     *location);
+  void      (*prepare)         (IdeDebugger           *debugger,
+                                IdeRunner             *runner);
 };
 
 gchar    *ide_debugger_get_name        (IdeDebugger           *self);
 gboolean  ide_debugger_supports_runner (IdeDebugger           *self,
                                         IdeRunner             *runner,
                                         gint                  *priority);
+void      ide_debugger_prepare         (IdeDebugger           *self,
+                                        IdeRunner             *runner);
 void      ide_debugger_emit_stopped    (IdeDebugger           *self,
                                         IdeDebuggerStopReason  reason,
                                         IdeSourceLocation     *location);
