@@ -698,7 +698,9 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
         }
     }
 
-  if (relevant_config == NULL)
+  if (relevant_config == NULL &&
+      event != G_FILE_MONITOR_EVENT_CREATED &&
+      event != G_FILE_MONITOR_EVENT_MOVED_IN)
     IDE_EXIT;
 
   new_config_file = file;
@@ -708,7 +710,6 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
     case G_FILE_MONITOR_EVENT_MOVED_OUT:
       ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
       g_ptr_array_remove_fast (self->configurations, relevant_config);
-      g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
       break;
 
     case G_FILE_MONITOR_EVENT_RENAMED:
@@ -756,8 +757,11 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
                   g_ptr_array_add (self->manifest_monitors, g_steal_pointer (&manifest_monitor));
                 }
 
-              ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
-              g_ptr_array_remove_fast (self->configurations, relevant_config);
+              if (relevant_config != NULL)
+                {
+                  ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
+                  g_ptr_array_remove_fast (self->configurations, relevant_config);
+                }
               g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
               ide_configuration_manager_add (self->manager, IDE_CONFIGURATION (new_config));
               ide_configuration_manager_set_current (self->manager, IDE_CONFIGURATION (new_config));
