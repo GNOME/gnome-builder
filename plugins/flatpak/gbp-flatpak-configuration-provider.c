@@ -743,7 +743,7 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
                                        self,
                                        G_CONNECT_SWAPPED);
 
-              manifest_monitor = g_file_monitor_file (file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
+              manifest_monitor = g_file_monitor_file (new_config_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
               if (manifest_monitor == NULL)
                 g_warning ("Error encountered trying to monitor flatpak manifest %s: %s", path, local_error->message);
               else
