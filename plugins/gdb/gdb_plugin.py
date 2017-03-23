@@ -37,3 +37,9 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
         else:
             return (False, 0)
 
+    def do_prepare(self, runner):
+        gdb_arguments = ['gdb', '-ex', 'run', '--args']
+
+        for arg in reversed(gdb_arguments):
+            runner.prepend_argv(arg)
+
