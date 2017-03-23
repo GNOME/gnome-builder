@@ -23,9 +23,10 @@
 
 struct _Mi2EventMessage
 {
-  Mi2Message parent_instance;
+  Mi2Message  parent_instance;
 
-  gchar *name;
+  gchar      *name;
+  GHashTable *params;
 };
 
 enum {
@@ -44,6 +45,7 @@ mi2_event_mesage_finalize (GObject *object)
   Mi2EventMessage *self = (Mi2EventMessage *)object;
 
   g_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->params, g_hash_table_unref);
 
   G_OBJECT_CLASS (mi2_event_mesage_parent_class)->finalize (object);
 }
@@ -108,6 +110,7 @@ mi2_event_mesage_class_init (Mi2EventMessageClass *klass)
 static void
 mi2_event_mesage_init (Mi2EventMessage *self)
 {
+  self->params = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 }
 
 /**
@@ -136,7 +139,7 @@ mi2_event_message_new_from_string (const gchar *line)
               !(value = mi2_util_parse_string (line, &line)))
             break;
 
-          g_print ("*%s* **%s**\n", key, value);
+          g_hash_table_insert (ret->params, g_steal_pointer (&key), g_steal_pointer (&value));
         }
     }
 
@@ -161,4 +164,42 @@ mi2_event_message_set_name (Mi2EventMessage *self,
       self->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
+}
+
+const gchar *
+mi2_event_message_get_param_string (Mi2EventMessage *self,
+                                    const gchar     *name)
+{
+  g_return_val_if_fail (MI2_IS_EVENT_MESSAGE (self), NULL);
+
+  return g_hash_table_lookup (self->params, name);
+}
+
+void
+mi2_event_message_set_param_string (Mi2EventMessage *self,
+                                    const gchar     *name,
+                                    const gchar     *value)
+{
+  g_return_if_fail (MI2_IS_EVENT_MESSAGE (self));
+  g_return_if_fail (name != NULL);
+
+  g_hash_table_insert (self->params, g_strdup (name), g_strdup (value));
+}
+
+/**
+ * mi2_event_message_get_params:
+ * @self: An #Mi2EventMessage
+ *
+ * Gets the keys for params that are stored in the message, free the
+ * result with g_free() as ownership of the fields is owned by the
+ * #Mi2EventMessage.
+ *
+ * Returns: (transfer container): A %NULL-terminated array of param names.
+ */
+const gchar **
+mi2_event_message_get_params (Mi2EventMessage *self)
+{
+  g_return_val_if_fail (MI2_IS_EVENT_MESSAGE (self), NULL);
+
+  return (const gchar **)g_hash_table_get_keys_as_array (self->params, NULL);
 }

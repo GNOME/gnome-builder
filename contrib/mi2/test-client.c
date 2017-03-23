@@ -46,7 +46,22 @@ static void
 log_handler (Mi2Client   *client,
              const gchar *log)
 {
-  g_print ("%s", log);
+  //g_print ("%s", log);
+}
+
+static void
+thread_group_added (Mi2Client       *client,
+                    Mi2EventMessage *message,
+                    gpointer         user_data)
+{
+}
+
+static void
+event (Mi2Client       *client,
+       Mi2EventMessage *message,
+       gpointer         user_data)
+{
+  g_print ("EVENT: %s\n", mi2_event_message_get_name (message));
 }
 
 gint
@@ -61,6 +76,8 @@ main (gint argc,
   client = mi2_client_new (io_stream);
 
   g_signal_connect (client, "log", G_CALLBACK (log_handler), NULL);
+  g_signal_connect (client, "event::thread-group-added", G_CALLBACK (thread_group_added), NULL);
+  g_signal_connect (client, "event", G_CALLBACK (event), NULL);
 
   mi2_client_start_listening (client);
 

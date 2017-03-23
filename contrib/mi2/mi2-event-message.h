@@ -27,10 +27,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (Mi2EventMessage, mi2_event_mesage, MI2, EVENT_MESSAGE, Mi2Message)
 
-Mi2Message  *mi2_event_message_new_from_string (const gchar     *line);
-const gchar *mi2_event_message_get_name        (Mi2EventMessage *self);
-void         mi2_event_message_set_name        (Mi2EventMessage *self,
-                                                const gchar     *name);
+Mi2Message   *mi2_event_message_new_from_string  (const gchar     *line);
+const gchar  *mi2_event_message_get_name         (Mi2EventMessage *self);
+void          mi2_event_message_set_name         (Mi2EventMessage *self,
+                                                  const gchar     *name);
+const gchar **mi2_event_message_get_params       (Mi2EventMessage *self);
+const gchar  *mi2_event_message_get_param_string (Mi2EventMessage *self,
+                                                  const gchar     *name);
+void          mi2_event_message_set_param_string (Mi2EventMessage *self,
+                                                  const gchar     *name,
+                                                  const gchar     *value);
 
 G_END_DECLS
 

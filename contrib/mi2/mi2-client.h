@@ -23,6 +23,9 @@
 
 G_BEGIN_DECLS
 
+#include "mi2-message.h"
+#include "mi2-event-message.h"
+
 #define MI2_TYPE_CLIENT (mi2_client_get_type())
 
 G_DECLARE_DERIVABLE_TYPE (Mi2Client, mi2_client, MI2, CLIENT, GObject)
@@ -31,8 +34,10 @@ struct _Mi2ClientClass
 {
   GObjectClass parent_instance;
 
-  void (*log) (Mi2Client   *self,
-               const gchar *log);
+  void (*log)   (Mi2Client       *self,
+                 const gchar     *log);
+  void (*event) (Mi2Client       *self,
+                 Mi2EventMessage *message);
 
   gpointer _reserved1;
   gpointer _reserved2;

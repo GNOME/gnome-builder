@@ -42,6 +42,7 @@ enum {
 };
 
 enum {
+  EVENT,
   LOG,
   N_SIGNALS
 };
@@ -158,6 +159,14 @@ mi2_client_class_init (Mi2ClientClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  signals [EVENT] =
+    g_signal_new ("event",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+                  G_STRUCT_OFFSET (Mi2ClientClass, event),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, MI2_TYPE_EVENT_MESSAGE);
+
   signals [LOG] =
     g_signal_new ("log",
                   G_TYPE_FROM_CLASS (klass),
@@ -261,7 +270,10 @@ mi2_client_dispatch (Mi2Client  *self,
     }
   else if (MI2_IS_EVENT_MESSAGE (message))
     {
-      g_print ("Event: %s\n", mi2_event_message_get_name (MI2_EVENT_MESSAGE (message)));
+      const gchar *name = mi2_event_message_get_name (MI2_EVENT_MESSAGE (message));
+      GQuark detail = g_quark_try_string (name);
+
+      g_signal_emit (self, signals [EVENT], detail, message);
     }
   else
     g_print ("Got message of type %s\n", G_OBJECT_TYPE_NAME (message));
