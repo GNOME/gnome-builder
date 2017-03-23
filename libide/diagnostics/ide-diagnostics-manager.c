@@ -524,7 +524,7 @@ ide_diagnostics_group_queue_diagnose (IdeDiagnosticsGroup   *group,
 
   if (group->in_diagnose == 0 && self->queued_diagnose_source == 0)
     self->queued_diagnose_source =
-      gdk_threads_add_idle_full (G_PRIORITY_DEFAULT,
+      gdk_threads_add_idle_full (G_PRIORITY_LOW,
                                  ide_diagnostics_manager_begin_diagnose,
                                  g_object_ref (self),
                                  g_object_unref);
