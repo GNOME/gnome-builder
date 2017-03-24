@@ -1090,10 +1090,17 @@ ide_runner_take_fd (IdeRunner *self,
    */
   if (dest_fd < 0)
     {
-      if (priv->fd_mapping->len == 0)
-        dest_fd = 3;
-      else
-        dest_fd = g_array_index (priv->fd_mapping, FdMapping, priv->fd_mapping->len - 1).dest_fd + 1;
+      gint max_fd = 2;
+
+      for (guint i = 0; i < priv->fd_mapping->len; i++)
+        {
+          FdMapping *entry = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+          if (entry->dest_fd > max_fd)
+            max_fd = entry->dest_fd;
+        }
+
+      dest_fd = max_fd + 1;
     }
 
   map.source_fd = source_fd;
