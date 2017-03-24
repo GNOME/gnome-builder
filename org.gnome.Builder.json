@@ -18,6 +18,7 @@
         "--socket=wayland",
         /* We want full fs access */
         "--filesystem=home",
+        "--filesystem=host",
         /* Needs to talk to the network: */
         "--share=network",
         "--talk-name=org.gtk.vfs.*",
