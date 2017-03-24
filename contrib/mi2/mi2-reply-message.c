@@ -130,13 +130,45 @@ mi2_reply_message_new_from_string (const gchar *line)
       while (line != NULL && *line != '\0')
         {
           g_autofree gchar *key = NULL;
-          g_autofree gchar *value = NULL;
 
-          if (!(key = mi2_util_parse_word (line, &line)) ||
-              !(value = mi2_util_parse_string (line, &line)))
+          if (*line == ',')
+            line++;
+
+          key = mi2_util_parse_word (line, &line);
+          if (key == NULL)
             break;
 
-          mi2_message_set_param_string (MI2_MESSAGE (ret), key, value);
+          if (*line == '=')
+            line++;
+
+          if (*line == '"')
+            {
+              g_autofree gchar *value = NULL;
+
+              value = mi2_util_parse_string (line, &line);
+              mi2_message_set_param_string (MI2_MESSAGE (ret), key, value);
+              continue;
+            }
+          else if (*line == '{')
+            {
+              g_autoptr(GVariant) variant = NULL;
+
+              variant = mi2_util_parse_record (line, &line);
+              mi2_message_set_param (MI2_MESSAGE (ret), key, variant);
+              continue;
+            }
+          else if (*line == '[')
+            {
+              g_autoptr(GVariant) variant = NULL;
+
+              variant = mi2_util_parse_list (line, &line);
+              mi2_message_set_param (MI2_MESSAGE (ret), key, variant);
+              continue;
+            }
+
+          g_warning ("Failed to parse: %s\n", line);
+
+          break;
         }
     }
 

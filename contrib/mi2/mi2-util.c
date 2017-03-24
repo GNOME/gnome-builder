@@ -101,11 +101,155 @@ mi2_util_parse_word (const gchar  *line,
 
   ret = g_strndup (begin, line - begin);
 
-  if (*line)
-    line++;
-
   if (endptr)
     *endptr = line;
 
   return ret;
+}
+
+GVariant *
+mi2_util_parse_record (const gchar *line,
+                       const gchar **endptr)
+{
+  GVariantDict dict;
+
+  g_return_val_if_fail (line != NULL, NULL);
+  g_return_val_if_fail (*line == '{', NULL);
+
+  g_variant_dict_init (&dict, NULL);
+
+  /* move past { */
+  line++;
+
+  while (*line != '}')
+    {
+      g_autofree gchar *key = NULL;
+
+      if (*line == ',')
+        line++;
+
+      if (!(key = mi2_util_parse_word (line, &line)))
+        goto failure;
+
+      if (*line == '=')
+        line++;
+
+      if (*line == '"')
+        {
+          g_autofree gchar *value = NULL;
+
+          if (!(value = mi2_util_parse_string (line, &line)))
+            goto failure;
+
+          g_variant_dict_insert (&dict, key, "s", value);
+        }
+      else if (*line == '{')
+        {
+          g_autoptr(GVariant) v = NULL;
+
+          if (!(v = mi2_util_parse_record (line, &line)))
+            goto failure;
+
+          g_variant_dict_insert_value (&dict, key, v);
+        }
+      else if (*line == '[')
+        {
+          g_autoptr(GVariant) ar = NULL;
+
+          if (!(ar = mi2_util_parse_list (line, &line)))
+            goto failure;
+
+          g_variant_dict_insert_value (&dict, key, ar);
+        }
+      else
+        goto failure;
+
+      if (*line == ',')
+        line++;
+    }
+
+  g_assert (*line == '}');
+
+  line++;
+
+  if (endptr)
+    *endptr = line;
+
+  return g_variant_ref_sink (g_variant_dict_end (&dict));
+
+failure:
+  g_variant_dict_clear (&dict);
+  if (endptr)
+    *endptr = NULL;
+  return NULL;
+}
+
+GVariant *
+mi2_util_parse_list (const gchar  *line,
+                     const gchar **endptr)
+{
+  GVariantBuilder builder;
+
+  g_return_val_if_fail (line != NULL, NULL);
+  g_return_val_if_fail (*line == '[', NULL);
+
+  /* move past [ */
+  line++;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("av"));
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
+
+  while (*line != ']')
+    {
+      if (*line == '"')
+        {
+          g_autofree gchar *value = NULL;
+
+          if (!(value = mi2_util_parse_string (line, &line)))
+            goto failure;
+
+          g_variant_builder_add (&builder, "s", value);
+        }
+      else if (*line == '{')
+        {
+          g_autoptr(GVariant) v = NULL;
+
+          if (!(v = mi2_util_parse_record (line, &line)))
+            goto failure;
+
+          g_variant_builder_add_value (&builder, v);
+        }
+      else if (*line == '[')
+        {
+          g_autoptr(GVariant) ar = NULL;
+
+          if (!(ar = mi2_util_parse_list (line, &line)))
+            goto failure;
+
+          g_variant_builder_add_value (&builder, ar);
+        }
+      else
+        goto failure;
+
+
+      if (*line == ',')
+        line++;
+    }
+
+  g_assert (*line == ']');
+
+  line++;
+
+  if (endptr)
+    *endptr = line;
+
+  g_variant_builder_close (&builder);
+
+  return g_variant_ref_sink (g_variant_builder_end (&builder));
+
+failure:
+  g_variant_builder_clear (&builder);
+  if (endptr)
+    *endptr = NULL;
+  return NULL;
 }

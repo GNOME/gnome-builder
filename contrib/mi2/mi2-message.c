@@ -33,6 +33,12 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (Mi2Message, mi2_message, G_TYPE_OBJECT)
 
+static GHashTable *
+make_hashtable (void)
+{
+  return g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_variant_unref);
+}
+
 static void
 mi2_message_finalize (GObject *object)
 {
@@ -128,13 +134,14 @@ mi2_message_get_param_string (Mi2Message  *self,
                               const gchar *name)
 {
   Mi2MessagePrivate *priv = mi2_message_get_instance_private (self);
+  GVariant *variant = NULL;
 
   g_return_val_if_fail (MI2_IS_MESSAGE (self), NULL);
 
   if (priv->params != NULL)
-    return g_hash_table_lookup (priv->params, name);
+    variant = g_hash_table_lookup (priv->params, name);
 
-  return NULL;
+  return variant == NULL ? NULL : g_variant_get_string (variant, NULL);
 }
 
 void
@@ -148,8 +155,50 @@ mi2_message_set_param_string (Mi2Message  *self,
   g_return_if_fail (name != NULL);
 
   if (priv->params == NULL)
-    priv->params = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-  g_hash_table_insert (priv->params, g_strdup (name), g_strdup (value));
+    priv->params = make_hashtable ();
+
+  if (value == NULL)
+    g_hash_table_remove (priv->params, name);
+  else
+    g_hash_table_insert (priv->params,
+                         g_strdup (name),
+                         g_variant_ref_sink (g_variant_new_string (value)));
+}
+
+GVariant *
+mi2_message_get_param (Mi2Message  *self,
+                       const gchar *param)
+{
+  Mi2MessagePrivate *priv = mi2_message_get_instance_private (self);
+
+  g_return_val_if_fail (MI2_IS_MESSAGE (self), NULL);
+  g_return_val_if_fail (param != NULL, NULL);
+
+  if (priv->params)
+    return g_hash_table_lookup (priv->params, param);
+
+  return NULL;
+}
+
+void
+mi2_message_set_param (Mi2Message  *self,
+                       const gchar *param,
+                       GVariant    *variant)
+{
+  Mi2MessagePrivate *priv = mi2_message_get_instance_private (self);
+
+  g_return_if_fail (MI2_IS_MESSAGE (self));
+  g_return_if_fail (param != NULL);
+
+  if (priv->params == NULL)
+    priv->params = make_hashtable ();
+
+  if (variant == NULL)
+    g_hash_table_remove (priv->params, param);
+  else
+    g_hash_table_insert (priv->params,
+                         g_strdup (param),
+                         g_variant_ref_sink (variant));
 }
 
 /**

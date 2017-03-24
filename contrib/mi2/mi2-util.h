@@ -23,10 +23,14 @@
 
 G_BEGIN_DECLS
 
-gchar *mi2_util_parse_string (const gchar  *line,
-                              const gchar **endptr);
-gchar *mi2_util_parse_word   (const gchar  *line,
-                              const gchar **endptr);
+gchar    *mi2_util_parse_string (const gchar  *line,
+                                 const gchar **endptr);
+gchar    *mi2_util_parse_word   (const gchar  *line,
+                                 const gchar **endptr);
+GVariant *mi2_util_parse_record (const gchar  *line,
+                                 const gchar **endptr);
+GVariant *mi2_util_parse_list   (const gchar  *line,
+                                 const gchar **endptr);
 
 G_END_DECLS
 
