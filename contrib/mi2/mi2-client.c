@@ -34,7 +34,7 @@ typedef struct
   Mi2InputStream  *input_stream;
   Mi2OutputStream *output_stream;
   GCancellable    *read_loop_cancellable;
-  GTask           *current_exec;
+  GQueue           exec_queue;
 
   guint            is_listening : 1;
 } Mi2ClientPrivate;
@@ -128,6 +128,9 @@ mi2_client_finalize (GObject *object)
   g_clear_object (&priv->input_stream);
   g_clear_object (&priv->output_stream);
   g_clear_object (&priv->read_loop_cancellable);
+
+  g_queue_foreach (&priv->exec_queue, (GFunc)g_object_unref, NULL);
+  g_queue_clear (&priv->exec_queue);
 
   G_OBJECT_CLASS (mi2_client_parent_class)->finalize (object);
 }
@@ -235,6 +238,9 @@ mi2_client_class_init (Mi2ClientClass *klass)
 static void
 mi2_client_init (Mi2Client *self)
 {
+  Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+
+  g_queue_init (&priv->exec_queue);
 }
 
 Mi2Client *
@@ -293,20 +299,11 @@ mi2_client_exec_async (Mi2Client           *self,
       return;
     }
 
-  if (priv->current_exec != NULL)
-    {
-      g_task_return_new_error (task,
-                               MI2_ERROR,
-                               MI2_ERROR_EXEC_PENDING,
-                               "An operation is already pending");
-      return;
-    }
-
   message = g_object_new (MI2_TYPE_COMMAND_MESSAGE,
                           "command", command,
                           NULL);
 
-  priv->current_exec = g_object_ref (task);
+  g_queue_push_tail (&priv->exec_queue, g_object_ref (task));
 
   mi2_output_stream_write_message_async (priv->output_stream,
                                          message,
@@ -373,7 +370,7 @@ mi2_client_dispatch (Mi2Client  *self,
     }
   else if (MI2_IS_REPLY_MESSAGE (message))
     {
-      g_autoptr(GTask) task = g_steal_pointer (&priv->current_exec);
+      g_autoptr(GTask) task = g_queue_pop_head (&priv->exec_queue);
 
       if (task != NULL)
         {
