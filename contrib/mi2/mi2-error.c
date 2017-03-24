@@ -1,4 +1,4 @@
-/* mi2-event-mesage.h
+/* mi2-error.c
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -16,22 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MI2_EVENT_MESAGE_H
-#define MI2_EVENT_MESAGE_H
+#include "mi2-error.h"
 
-#include "mi2-message.h"
-
-G_BEGIN_DECLS
-
-#define MI2_TYPE_EVENT_MESSAGE (mi2_event_mesage_get_type())
-
-G_DECLARE_FINAL_TYPE (Mi2EventMessage, mi2_event_mesage, MI2, EVENT_MESSAGE, Mi2Message)
-
-Mi2Message   *mi2_event_message_new_from_string (const gchar     *line);
-const gchar  *mi2_event_message_get_name        (Mi2EventMessage *self);
-void          mi2_event_message_set_name        (Mi2EventMessage *self,
-                                                 const gchar     *name);
-
-G_END_DECLS
-
-#endif /* MI2_EVENT_MESAGE_H */
+GQuark
+mi2_error_quark (void)
+{
+  return g_quark_from_static_string ("mi2-error-domain");
+}

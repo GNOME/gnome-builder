@@ -1,4 +1,4 @@
-/* mi2-event-mesage.c
+/* mi2-reply-mesage.c
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "mi2-event-message"
+#define G_LOG_DOMAIN "mi2-reply-message"
 
-#include "mi2-event-message.h"
+#include "mi2-error.h"
+#include "mi2-reply-message.h"
 #include "mi2-util.h"
 
-struct _Mi2EventMessage
+struct _Mi2ReplyMessage
 {
   Mi2Message  parent_instance;
   gchar      *name;
@@ -33,32 +34,32 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (Mi2EventMessage, mi2_event_mesage, MI2_TYPE_MESSAGE)
+G_DEFINE_TYPE (Mi2ReplyMessage, mi2_reply_mesage, MI2_TYPE_MESSAGE)
 
 static GParamSpec *properties [N_PROPS];
 
 static void
-mi2_event_mesage_finalize (GObject *object)
+mi2_reply_mesage_finalize (GObject *object)
 {
-  Mi2EventMessage *self = (Mi2EventMessage *)object;
+  Mi2ReplyMessage *self = (Mi2ReplyMessage *)object;
 
   g_clear_pointer (&self->name, g_free);
 
-  G_OBJECT_CLASS (mi2_event_mesage_parent_class)->finalize (object);
+  G_OBJECT_CLASS (mi2_reply_mesage_parent_class)->finalize (object);
 }
 
 static void
-mi2_event_mesage_get_property (GObject    *object,
+mi2_reply_mesage_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  Mi2EventMessage *self = MI2_EVENT_MESSAGE (object);
+  Mi2ReplyMessage *self = MI2_REPLY_MESSAGE (object);
 
   switch (prop_id)
     {
     case PROP_NAME:
-      g_value_set_string (value, mi2_event_message_get_name (self));
+      g_value_set_string (value, mi2_reply_message_get_name (self));
       break;
 
     default:
@@ -67,17 +68,17 @@ mi2_event_mesage_get_property (GObject    *object,
 }
 
 static void
-mi2_event_mesage_set_property (GObject      *object,
+mi2_reply_mesage_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
-  Mi2EventMessage *self = MI2_EVENT_MESSAGE (object);
+  Mi2ReplyMessage *self = MI2_REPLY_MESSAGE (object);
 
   switch (prop_id)
     {
     case PROP_NAME:
-      mi2_event_message_set_name (self, g_value_get_string (value));
+      mi2_reply_message_set_name (self, g_value_get_string (value));
       break;
 
     default:
@@ -86,13 +87,13 @@ mi2_event_mesage_set_property (GObject      *object,
 }
 
 static void
-mi2_event_mesage_class_init (Mi2EventMessageClass *klass)
+mi2_reply_mesage_class_init (Mi2ReplyMessageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = mi2_event_mesage_finalize;
-  object_class->get_property = mi2_event_mesage_get_property;
-  object_class->set_property = mi2_event_mesage_set_property;
+  object_class->finalize = mi2_reply_mesage_finalize;
+  object_class->get_property = mi2_reply_mesage_get_property;
+  object_class->set_property = mi2_reply_mesage_set_property;
 
   properties [PROP_NAME] =
     g_param_spec_string ("name",
@@ -105,22 +106,22 @@ mi2_event_mesage_class_init (Mi2EventMessageClass *klass)
 }
 
 static void
-mi2_event_mesage_init (Mi2EventMessage *self)
+mi2_reply_mesage_init (Mi2ReplyMessage *self)
 {
 }
 
 /**
- * mi2_event_message_new_from_string:
+ * mi2_reply_message_new_from_string:
  * @line: the string to be parsed
  *
  * Returns: (transfer full): An #Mi2Message
  */
 Mi2Message *
-mi2_event_message_new_from_string (const gchar *line)
+mi2_reply_message_new_from_string (const gchar *line)
 {
-  Mi2EventMessage *ret;
+  Mi2ReplyMessage *ret;
 
-  ret = g_object_new (MI2_TYPE_EVENT_MESSAGE, NULL);
+  ret = g_object_new (MI2_TYPE_REPLY_MESSAGE, NULL);
 
   if (line && *line)
     {
@@ -143,15 +144,15 @@ mi2_event_message_new_from_string (const gchar *line)
 }
 
 const gchar *
-mi2_event_message_get_name (Mi2EventMessage *self)
+mi2_reply_message_get_name (Mi2ReplyMessage *self)
 {
-  g_return_val_if_fail (MI2_IS_EVENT_MESSAGE (self), NULL);
+  g_return_val_if_fail (MI2_IS_REPLY_MESSAGE (self), NULL);
 
   return self->name;
 }
 
 void
-mi2_event_message_set_name (Mi2EventMessage *self,
+mi2_reply_message_set_name (Mi2ReplyMessage *self,
                             const gchar     *name)
 {
   if (name != self->name)
@@ -160,4 +161,28 @@ mi2_event_message_set_name (Mi2EventMessage *self,
       self->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
+}
+
+gboolean
+mi2_reply_message_check_error (Mi2ReplyMessage  *self,
+                               GError          **error)
+{
+  g_return_val_if_fail (MI2_IS_REPLY_MESSAGE (self), FALSE);
+
+  if (g_strcmp0 (self->name, "error") == 0)
+    {
+      const gchar *msg = mi2_message_get_param_string (MI2_MESSAGE (self), "msg");
+
+      if (msg == NULL || *msg == '\0')
+        msg = "An unknown error occrred";
+
+      g_set_error_literal (error,
+                           MI2_ERROR,
+                           MI2_ERROR_UNKNOWN_ERROR,
+                           msg);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }

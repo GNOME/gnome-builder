@@ -21,9 +21,11 @@
 #include "mi2-client.h"
 #include "mi2-command-message.h"
 #include "mi2-console-message.h"
+#include "mi2-error.h"
 #include "mi2-event-message.h"
 #include "mi2-input-stream.h"
 #include "mi2-output-stream.h"
+#include "mi2-reply-message.h"
 
 typedef struct
 {
@@ -31,8 +33,9 @@ typedef struct
   Mi2InputStream  *input_stream;
   Mi2OutputStream *output_stream;
   GCancellable    *read_loop_cancellable;
+  GTask           *current_exec;
 
-  guint is_listening : 1;
+  guint            is_listening : 1;
 } Mi2ClientPrivate;
 
 enum {
@@ -204,8 +207,13 @@ mi2_client_exec_write_message_cb (GObject      *object,
 
   if (!mi2_output_stream_write_message_finish (stream, result, &error))
     g_task_return_error (task, g_steal_pointer (&error));
-  else
-    g_task_return_boolean (task, TRUE);
+
+  /*
+   * Do not successfully complete request here.
+   *
+   * Successful completion of the task must come from a reply
+   * sent to us by the peer looking something like ^running.
+   */
 }
 
 void
@@ -232,9 +240,20 @@ mi2_client_exec_async (Mi2Client           *self,
       return;
     }
 
+  if (priv->current_exec != NULL)
+    {
+      g_task_return_new_error (task,
+                               MI2_ERROR,
+                               MI2_ERROR_EXEC_PENDING,
+                               "An operation is already pending");
+      return;
+    }
+
   message = g_object_new (MI2_TYPE_COMMAND_MESSAGE,
                           "command", command,
                           NULL);
+
+  priv->current_exec = g_object_ref (task);
 
   mi2_output_stream_write_message_async (priv->output_stream,
                                          message,
@@ -258,6 +277,8 @@ static void
 mi2_client_dispatch (Mi2Client  *self,
                      Mi2Message *message)
 {
+  Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+
   g_return_if_fail (MI2_IS_CLIENT (self));
   g_return_if_fail (MI2_IS_MESSAGE (message));
 
@@ -274,6 +295,20 @@ mi2_client_dispatch (Mi2Client  *self,
       GQuark detail = g_quark_try_string (name);
 
       g_signal_emit (self, signals [EVENT], detail, message);
+    }
+  else if (MI2_IS_REPLY_MESSAGE (message))
+    {
+      g_autoptr(GTask) task = g_steal_pointer (&priv->current_exec);
+
+      if (task != NULL)
+        {
+          g_autoptr(GError) error = NULL;
+
+          if (mi2_reply_message_check_error (MI2_REPLY_MESSAGE (message), &error))
+            g_task_return_error (task, g_steal_pointer (&error));
+          else
+            g_task_return_boolean (task, TRUE);
+        }
     }
   else
     g_print ("Got message of type %s\n", G_OBJECT_TYPE_NAME (message));

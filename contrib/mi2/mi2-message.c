@@ -24,20 +24,14 @@
 #include "mi2-console-message.h"
 #include "mi2-event-message.h"
 #include "mi2-info-message.h"
+#include "mi2-reply-message.h"
 
 typedef struct
 {
-  gpointer dummy;
+  GHashTable *params;
 } Mi2MessagePrivate;
 
-enum {
-  PROP_0,
-  N_PROPS
-};
-
 G_DEFINE_TYPE_WITH_PRIVATE (Mi2Message, mi2_message, G_TYPE_OBJECT)
-
-static GParamSpec *properties [N_PROPS];
 
 static void
 mi2_message_finalize (GObject *object)
@@ -45,37 +39,9 @@ mi2_message_finalize (GObject *object)
   Mi2Message *self = (Mi2Message *)object;
   Mi2MessagePrivate *priv = mi2_message_get_instance_private (self);
 
+  g_clear_pointer (&priv->params, g_hash_table_unref);
+
   G_OBJECT_CLASS (mi2_message_parent_class)->finalize (object);
-}
-
-static void
-mi2_message_get_property (GObject    *object,
-                          guint       prop_id,
-                          GValue     *value,
-                          GParamSpec *pspec)
-{
-  Mi2Message *self = MI2_MESSAGE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-mi2_message_set_property (GObject      *object,
-                          guint         prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
-{
-  Mi2Message *self = MI2_MESSAGE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -84,8 +50,6 @@ mi2_message_class_init (Mi2MessageClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = mi2_message_finalize;
-  object_class->get_property = mi2_message_get_property;
-  object_class->set_property = mi2_message_set_property;
 }
 
 static void
@@ -123,9 +87,12 @@ mi2_message_parse (const gchar  *line,
       ret = mi2_info_message_new_from_string (line);
       break;
 
+    case '^':
+      ret = mi2_reply_message_new_from_string (line);
+      break;
+
     case '=':
     case '*':
-    case '^':
       ret = mi2_event_message_new_from_string (line);
       break;
 
@@ -154,4 +121,56 @@ mi2_message_serialize (Mi2Message *self)
   g_return_val_if_fail (MI2_IS_MESSAGE (self), NULL);
 
   return MI2_MESSAGE_GET_CLASS (self)->serialize (self);
+}
+
+const gchar *
+mi2_message_get_param_string (Mi2Message  *self,
+                              const gchar *name)
+{
+  Mi2MessagePrivate *priv = mi2_message_get_instance_private (self);
+
+  g_return_val_if_fail (MI2_IS_MESSAGE (self), NULL);
+
+  if (priv->params != NULL)
+    return g_hash_table_lookup (priv->params, name);
+
+  return NULL;
+}
+
+void
+mi2_message_set_param_string (Mi2Message  *self,
+                              const gchar *name,
+                              const gchar *value)
+{
+  Mi2MessagePrivate *priv = mi2_message_get_instance_private (self);
+
+  g_return_if_fail (MI2_IS_MESSAGE (self));
+  g_return_if_fail (name != NULL);
+
+  if (priv->params == NULL)
+    priv->params = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  g_hash_table_insert (priv->params, g_strdup (name), g_strdup (value));
+}
+
+/**
+ * mi2_message_get_params:
+ * @self: An #Mi2Message
+ *
+ * Gets the keys for params that are stored in the message, free the
+ * result with g_free() as ownership of the fields is owned by the
+ * #Mi2Message.
+ *
+ * Returns: (transfer container): A %NULL-terminated array of param names.
+ */
+const gchar **
+mi2_message_get_params (Mi2Message *self)
+{
+  Mi2MessagePrivate *priv = mi2_message_get_instance_private (self);
+
+  g_return_val_if_fail (MI2_IS_MESSAGE (self), NULL);
+
+  if (priv->params != NULL)
+    return (const gchar **)g_hash_table_get_keys_as_array (priv->params, NULL);
+
+  return (const gchar **)g_new0 (gchar *, 1);
 }

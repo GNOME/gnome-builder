@@ -1,4 +1,4 @@
-/* mi2-event-mesage.h
+/* mi2-error.h
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -16,22 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MI2_EVENT_MESAGE_H
-#define MI2_EVENT_MESAGE_H
+#ifndef MI2_ERROR_H
+#define MI2_ERROR_H
 
-#include "mi2-message.h"
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-#define MI2_TYPE_EVENT_MESSAGE (mi2_event_mesage_get_type())
+#define MI2_ERROR (mi2_error_quark())
 
-G_DECLARE_FINAL_TYPE (Mi2EventMessage, mi2_event_mesage, MI2, EVENT_MESSAGE, Mi2Message)
+typedef enum
+{
+  MI2_ERROR_UNKNOWN_ERROR,
+  MI2_ERROR_EXEC_PENDING,
+} Mi2Error;
 
-Mi2Message   *mi2_event_message_new_from_string (const gchar     *line);
-const gchar  *mi2_event_message_get_name        (Mi2EventMessage *self);
-void          mi2_event_message_set_name        (Mi2EventMessage *self,
-                                                 const gchar     *name);
+GQuark mi2_error_quark (void);
 
 G_END_DECLS
 
-#endif /* MI2_EVENT_MESAGE_H */
+#endif /* MI2_ERROR_H */

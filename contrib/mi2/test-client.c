@@ -17,6 +17,7 @@
  */
 
 #include "mi2-client.h"
+#include "mi2-error.h"
 
 static GMainLoop *main_loop;
 
@@ -46,7 +47,7 @@ static void
 log_handler (Mi2Client   *client,
              const gchar *log)
 {
-  //g_print ("%s", log);
+  g_print ("%s", log);
 }
 
 static void
@@ -62,6 +63,26 @@ event (Mi2Client       *client,
        gpointer         user_data)
 {
   g_print ("EVENT: %s\n", mi2_event_message_get_name (message));
+}
+
+static void
+stack_info_frame_cb (GObject      *object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  Mi2Client *client = (Mi2Client *)object;
+  g_autoptr(GError) error = NULL;
+  gboolean r;
+
+  g_assert (MI2_IS_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  r = mi2_client_exec_finish (client, result, &error);
+  g_assert_error (error, MI2_ERROR, MI2_ERROR_UNKNOWN_ERROR);
+  g_assert_cmpstr (error->message, ==, "No registers.");
+  g_assert_cmpint (r, ==, FALSE);
+
+  g_main_loop_quit (main_loop);
 }
 
 gint
@@ -80,6 +101,12 @@ main (gint argc,
   g_signal_connect (client, "event", G_CALLBACK (event), NULL);
 
   mi2_client_start_listening (client);
+
+  mi2_client_exec_async (client,
+                         "stack-info-frame",
+                         NULL,
+                         stack_info_frame_cb,
+                         NULL);
 
   g_main_loop_run (main_loop);
   g_main_loop_unref (main_loop);

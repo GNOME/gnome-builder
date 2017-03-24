@@ -39,6 +39,31 @@ G_DEFINE_TYPE (Mi2CommandMessage, mi2_command_message, MI2_TYPE_MESSAGE)
 
 static GParamSpec *properties [N_PROPS];
 
+static GBytes *
+mi2_command_message_serialize (Mi2Message *message)
+{
+  Mi2CommandMessage *self = (Mi2CommandMessage *)message;
+  GString *str;
+
+  g_assert (MI2_IS_COMMAND_MESSAGE (self));
+
+  if (!self->command || !*self->command)
+    return NULL;
+
+  str = g_string_new (NULL);
+
+  if (*self->command == '-')
+    g_string_append (str, self->command);
+  else
+    g_string_append_printf (str, "-%s", self->command);
+
+  /* TODO: Params? */
+
+  g_string_append_c (str, '\n');
+
+  return g_string_free_to_bytes (str);
+}
+
 static void
 mi2_command_message_finalize (GObject *object)
 {
@@ -91,10 +116,13 @@ static void
 mi2_command_message_class_init (Mi2CommandMessageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  Mi2MessageClass *message_class = MI2_MESSAGE_CLASS (klass);
 
   object_class->finalize = mi2_command_message_finalize;
   object_class->get_property = mi2_command_message_get_property;
   object_class->set_property = mi2_command_message_set_property;
+
+  message_class->serialize = mi2_command_message_serialize;
 
   properties [PROP_COMMAND] =
     g_param_spec_string ("command", NULL, NULL, NULL,

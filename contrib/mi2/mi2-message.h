@@ -43,10 +43,16 @@ struct _Mi2MessageClass
   gpointer _reserved8;
 };
 
-Mi2Message *mi2_message_parse     (const gchar  *line,
-                                   gsize         len,
-                                   GError      **error);
-GBytes     *mi2_message_serialize (Mi2Message   *self);
+Mi2Message   *mi2_message_parse            (const gchar  *line,
+                                            gsize         len,
+                                            GError      **error);
+GBytes       *mi2_message_serialize        (Mi2Message   *self);
+const gchar **mi2_message_get_params       (Mi2Message   *self);
+const gchar  *mi2_message_get_param_string (Mi2Message   *self,
+                                            const gchar  *name);
+void          mi2_message_set_param_string (Mi2Message   *self,
+                                            const gchar  *name,
+                                            const gchar  *value);
 
 G_END_DECLS
 

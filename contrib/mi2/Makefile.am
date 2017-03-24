@@ -17,12 +17,16 @@ libmi2_glib_la_public_sources =          \
 	mi2-console-message.h            \
 	mi2-event-message.c              \
 	mi2-event-message.h              \
+	mi2-error.c                      \
+	mi2-error.h                      \
 	mi2-info-message.c               \
 	mi2-info-message.h               \
 	mi2-input-stream.c               \
 	mi2-input-stream.h               \
 	mi2-message.c                    \
 	mi2-message.h                    \
+	mi2-reply-message.c              \
+	mi2-reply-message.h              \
 	mi2-output-stream.c              \
 	mi2-output-stream.h              \
 	mi2-util.c                       \
