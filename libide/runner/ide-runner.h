@@ -97,6 +97,7 @@ GInputStream      *ide_runner_get_stderr      (IdeRunner            *self);
 gboolean           ide_runner_get_run_on_host (IdeRunner            *self);
 void               ide_runner_set_run_on_host (IdeRunner            *self,
                                                gboolean              run_on_host);
+gint               ide_runner_steal_tty       (IdeRunner            *self);
 void               ide_runner_set_tty         (IdeRunner            *self,
                                                int                   tty_fd);
 
