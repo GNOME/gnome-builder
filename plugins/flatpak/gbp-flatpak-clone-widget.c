@@ -312,6 +312,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   g_autofree gchar *build_config_path = NULL;
   g_autofree gchar *manifest_hash = NULL;
   g_autofree gchar *runtime_id = NULL;
+  g_autofree gchar *manifest_file_name = NULL;
   gsize manifest_contents_len;
   GError *error = NULL;
   GType git_callbacks_type;
@@ -418,8 +419,9 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
 
   /* copy manifest into the source directory */
   src = g_file_new_for_path (self->manifest);
+  manifest_file_name = g_strjoin (".", self->id, "json", NULL);
   dst = g_file_get_child (req->project_file,
-                          g_strjoin (".", self->id, "json", NULL));
+                          manifest_file_name);
   if (!g_file_copy (src, dst, G_FILE_COPY_OVERWRITE, NULL,
                     NULL, NULL, &error))
     {
