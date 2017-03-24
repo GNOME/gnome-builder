@@ -10,6 +10,8 @@ flatpak_sources = [
   flatpak_res,
   'gbp-flatpak-application-addin.c',
   'gbp-flatpak-application-addin.h',
+  'gbp-flatpak-build-system-discovery.c',
+  'gbp-flatpak-build-system-discovery.h',
   'gbp-flatpak-clone-widget.c',
   'gbp-flatpak-clone-widget.h',
   'gbp-flatpak-configuration.c',
@@ -37,6 +39,8 @@ flatpak_sources = [
   'gbp-flatpak-transfer.h',
   'gbp-flatpak-util.c',
   'gbp-flatpak-util.h',
+  'gbp-flatpak-workbench-addin.c',
+  'gbp-flatpak-workbench-addin.h',
 ]
 
 
