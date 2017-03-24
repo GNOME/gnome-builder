@@ -29,6 +29,7 @@ typedef enum
 {
   MI2_ERROR_UNKNOWN_ERROR,
   MI2_ERROR_EXEC_PENDING,
+  MI2_ERROR_INVALID_DATA,
 } Mi2Error;
 
 GQuark mi2_error_quark (void);

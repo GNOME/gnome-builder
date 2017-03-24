@@ -48,6 +48,8 @@ Mi2Message   *mi2_message_parse            (const gchar  *line,
                                             GError      **error);
 GBytes       *mi2_message_serialize        (Mi2Message   *self);
 const gchar **mi2_message_get_params       (Mi2Message   *self);
+void          mi2_message_parse_params     (Mi2Message   *self,
+                                            const gchar  *line);
 GVariant     *mi2_message_get_param        (Mi2Message   *self,
                                             const gchar  *param);
 void          mi2_message_set_param        (Mi2Message   *self,

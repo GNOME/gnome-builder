@@ -28,9 +28,17 @@ G_BEGIN_DECLS
 #include "mi2-event-message.h"
 #include "mi2-reply-message.h"
 
-#define MI2_TYPE_CLIENT (mi2_client_get_type())
+#define MI2_TYPE_CLIENT      (mi2_client_get_type())
+#define MI2_TYPE_STOP_REASON (mi2_stop_reason_get_type())
 
 G_DECLARE_DERIVABLE_TYPE (Mi2Client, mi2_client, MI2, CLIENT, GObject)
+
+typedef enum
+{
+  MI2_STOP_UNKNOWN,
+  MI2_STOP_EXITED_NORMALLY,
+  MI2_STOP_BREAKPOINT_HIT,
+} Mi2StopReason;
 
 struct _Mi2ClientClass
 {
@@ -40,10 +48,13 @@ struct _Mi2ClientClass
                                const gchar     *log);
   void (*event)               (Mi2Client       *self,
                                Mi2EventMessage *message);
-  void (*breakpoint_inserted) (Mi2Client     *client,
-                               Mi2Breakpoint *breakpoint);
-  void (*breakpoint_removed)  (Mi2Client     *client,
-                               gint           breakpoint_id);
+  void (*breakpoint_inserted) (Mi2Client       *client,
+                               Mi2Breakpoint   *breakpoint);
+  void (*breakpoint_removed)  (Mi2Client       *client,
+                               gint             breakpoint_id);
+  void (*stopped)             (Mi2Client       *self,
+                               Mi2StopReason    reason,
+                               Mi2Message      *message);
 
   gpointer _reserved1;
   gpointer _reserved2;
@@ -63,34 +74,51 @@ struct _Mi2ClientClass
   gpointer _reserved16;
 };
 
-Mi2Client *mi2_client_new                      (GIOStream            *stream);
-void       mi2_client_exec_async               (Mi2Client            *self,
-                                                const gchar          *command,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-gboolean   mi2_client_exec_finish              (Mi2Client            *self,
-                                                GAsyncResult         *result,
-                                                Mi2ReplyMessage     **reply,
-                                                GError              **error);
-void       mi2_client_start_listening          (Mi2Client            *self);
-void       mi2_client_stop_listening           (Mi2Client            *self);
-void       mi2_client_insert_breakpoint_async  (Mi2Client            *self,
-                                                Mi2Breakpoint        *breakpoint,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-gint       mi2_client_insert_breakpoint_finish (Mi2Client            *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       mi2_client_remove_breakpoint_async  (Mi2Client            *self,
-                                                gint                  breakpoint_id,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-gboolean   mi2_client_remove_breakpoint_finish (Mi2Client            *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
+GType          mi2_stop_reason_get_type                   (void);
+Mi2StopReason  mi2_stop_reason_parse                      (const gchar          *reason);
+Mi2Client     *mi2_client_new                             (GIOStream            *stream);
+void           mi2_client_exec_async                      (Mi2Client            *self,
+                                                           const gchar          *command,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+gboolean       mi2_client_exec_finish                     (Mi2Client            *self,
+                                                           GAsyncResult         *result,
+                                                           Mi2ReplyMessage     **reply,
+                                                           GError              **error);
+void           mi2_client_start_listening                 (Mi2Client            *self);
+void           mi2_client_stop_listening                  (Mi2Client            *self);
+void           mi2_client_continue_async                  (Mi2Client            *self,
+                                                           gboolean              reverse,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+gboolean       mi2_client_continue_finish                 (Mi2Client            *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
+void           mi2_client_run_async                       (Mi2Client            *self,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+gboolean       mi2_client_run_finish                      (Mi2Client            *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
+void           mi2_client_insert_breakpoint_async         (Mi2Client            *self,
+                                                           Mi2Breakpoint        *breakpoint,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+gint           mi2_client_insert_breakpoint_finish        (Mi2Client            *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
+void           mi2_client_remove_breakpoint_async         (Mi2Client            *self,
+                                                           gint                  breakpoint_id,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+gboolean       mi2_client_remove_breakpoint_finish        (Mi2Client            *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
 
 
 G_END_DECLS

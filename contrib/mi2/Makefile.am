@@ -1,5 +1,6 @@
 CLEANFILES =
 DISTCLEANFILES =
+BUILT_SOURCES =
 
 EXTRA_DIST =              \
 	test-stream-1.txt \
@@ -38,6 +39,8 @@ libmi2_glib_la_public_sources =          \
 libmi2_glib_la_SOURCES =                 \
 	$(libmi2_glib_la_public_sources) \
 	mi2-glib.h                       \
+	mi2-enums.c                      \
+	mi2-enums.h                      \
 	$(NULL)
 
 libmi2_glib_la_CFLAGS =                     \
@@ -49,6 +52,15 @@ libmi2_glib_la_CFLAGS =                     \
 
 libmi2_glib_la_LIBADD = $(MI2_LIBS)
 libmi2_glib_la_LDFLAGS = $(OPTIMIZE_LDFLAGS)
+
+glib_enum_headers =  \
+	mi2-error.h \
+	$(NULL)
+
+glib_enum_h = mi2-enums.h
+glib_enum_c = mi2-enums.c
+
+include $(top_srcdir)/build/autotools/Makefile.am.enums
 
 if HAVE_INTROSPECTION
 -include $(INTROSPECTION_MAKEFILE)

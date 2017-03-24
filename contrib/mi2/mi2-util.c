@@ -25,9 +25,7 @@ mi2_util_parse_string (const gchar  *line,
   g_autoptr(GString) str = NULL;
 
   g_return_val_if_fail (line != NULL, NULL);
-
-  if (*line != '"')
-    goto failure;
+  g_return_val_if_fail (line[0] == '"', NULL);
 
   str = g_string_new (NULL);
 
@@ -76,6 +74,8 @@ mi2_util_parse_string (const gchar  *line,
   return g_string_free (g_steal_pointer (&str), FALSE);
 
 failure:
+  g_warning ("Failed to parse string");
+
   if (endptr)
     *endptr = NULL;
 
@@ -108,20 +108,20 @@ mi2_util_parse_word (const gchar  *line,
 }
 
 GVariant *
-mi2_util_parse_record (const gchar *line,
+mi2_util_parse_record (const gchar  *line,
                        const gchar **endptr)
 {
   GVariantDict dict;
 
   g_return_val_if_fail (line != NULL, NULL);
-  g_return_val_if_fail (*line == '{', NULL);
 
   g_variant_dict_init (&dict, NULL);
 
-  /* move past { */
-  line++;
+  /* move past { if we aren't starting from inside {} */
+  if (*line == '{')
+    line++;
 
-  while (*line != '}')
+  while (*line && *line != '}')
     {
       g_autofree gchar *key = NULL;
 
@@ -168,9 +168,8 @@ mi2_util_parse_record (const gchar *line,
         line++;
     }
 
-  g_assert (*line == '}');
-
-  line++;
+  if (*line == '}')
+    line++;
 
   if (endptr)
     *endptr = line;
@@ -178,6 +177,7 @@ mi2_util_parse_record (const gchar *line,
   return g_variant_ref_sink (g_variant_dict_end (&dict));
 
 failure:
+  g_warning ("Failed to parse record");
   g_variant_dict_clear (&dict);
   if (endptr)
     *endptr = NULL;
@@ -197,43 +197,49 @@ mi2_util_parse_list (const gchar  *line,
   line++;
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("av"));
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
 
-  while (*line != ']')
+  if (*line != ']')
     {
-      if (*line == '"')
-        {
-          g_autofree gchar *value = NULL;
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
 
-          if (!(value = mi2_util_parse_string (line, &line)))
+      while (*line != ']')
+        {
+          if (*line == '"')
+            {
+              g_autofree gchar *value = NULL;
+
+              if (!(value = mi2_util_parse_string (line, &line)))
+                goto failure;
+
+              g_variant_builder_add (&builder, "s", value);
+            }
+          else if (*line == '{')
+            {
+              g_autoptr(GVariant) v = NULL;
+
+              if (!(v = mi2_util_parse_record (line, &line)))
+                goto failure;
+
+              g_variant_builder_add_value (&builder, v);
+            }
+          else if (*line == '[')
+            {
+              g_autoptr(GVariant) ar = NULL;
+
+              if (!(ar = mi2_util_parse_list (line, &line)))
+                goto failure;
+
+              g_variant_builder_add_value (&builder, ar);
+            }
+          else
             goto failure;
 
-          g_variant_builder_add (&builder, "s", value);
+
+          if (*line == ',')
+            line++;
         }
-      else if (*line == '{')
-        {
-          g_autoptr(GVariant) v = NULL;
 
-          if (!(v = mi2_util_parse_record (line, &line)))
-            goto failure;
-
-          g_variant_builder_add_value (&builder, v);
-        }
-      else if (*line == '[')
-        {
-          g_autoptr(GVariant) ar = NULL;
-
-          if (!(ar = mi2_util_parse_list (line, &line)))
-            goto failure;
-
-          g_variant_builder_add_value (&builder, ar);
-        }
-      else
-        goto failure;
-
-
-      if (*line == ',')
-        line++;
+      g_variant_builder_close (&builder);
     }
 
   g_assert (*line == ']');
@@ -243,11 +249,10 @@ mi2_util_parse_list (const gchar  *line,
   if (endptr)
     *endptr = line;
 
-  g_variant_builder_close (&builder);
-
   return g_variant_ref_sink (g_variant_builder_end (&builder));
 
 failure:
+  g_warning ("Failed to parse list");
   g_variant_builder_clear (&builder);
   if (endptr)
     *endptr = NULL;

@@ -22,9 +22,11 @@
 
 #include "mi2-command-message.h"
 #include "mi2-console-message.h"
+#include "mi2-error.h"
 #include "mi2-event-message.h"
 #include "mi2-info-message.h"
 #include "mi2-reply-message.h"
+#include "mi2-util.h"
 
 typedef struct
 {
@@ -78,10 +80,13 @@ mi2_message_parse (const gchar  *line,
                    gsize         len,
                    GError      **error)
 {
+  const gchar *begin = line;
   Mi2Message *ret = NULL;
 
   g_return_val_if_fail (line != NULL, NULL);
   g_return_val_if_fail (len > 0, NULL);
+
+  g_print (">>> %s\n", line);
 
   switch (line[0])
     {
@@ -110,7 +115,36 @@ mi2_message_parse (const gchar  *line,
       break;
     }
 
+  if (ret == NULL)
+    g_set_error (error,
+                 MI2_ERROR,
+                 MI2_ERROR_INVALID_DATA,
+                 "Failed to parse: %s", begin);
+
   return ret;
+}
+
+void
+mi2_message_parse_params (Mi2Message  *self,
+                          const gchar *line)
+{
+  g_autoptr(GVariant) params = NULL;
+
+  g_return_if_fail (MI2_IS_MESSAGE (self));
+  g_return_if_fail (line != NULL);
+
+  params = mi2_util_parse_record (line, NULL);
+
+  if (params)
+    {
+      GVariantIter iter;
+      const gchar *key;
+      GVariant *value;
+
+      g_variant_iter_init (&iter, params);
+      while (g_variant_iter_loop (&iter, "{sv}", &key, &value))
+        mi2_message_set_param (self, key, value);
+    }
 }
 
 /**

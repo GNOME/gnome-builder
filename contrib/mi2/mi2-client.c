@@ -21,6 +21,7 @@
 #include "mi2-client.h"
 #include "mi2-command-message.h"
 #include "mi2-console-message.h"
+#include "mi2-enums.h"
 #include "mi2-error.h"
 #include "mi2-event-message.h"
 #include "mi2-input-stream.h"
@@ -49,6 +50,7 @@ enum {
   BREAKPOINT_REMOVED,
   EVENT,
   LOG,
+  STOPPED,
   N_SIGNALS
 };
 
@@ -90,6 +92,29 @@ mi2_client_set_io_stream (Mi2Client *self,
     {
       priv->input_stream = mi2_input_stream_new (g_io_stream_get_input_stream (io_stream));
       priv->output_stream = mi2_output_stream_new (g_io_stream_get_output_stream (io_stream));
+    }
+}
+
+static void
+mi2_client_real_event (Mi2Client       *self,
+                       Mi2EventMessage *message)
+{
+  const gchar *name;
+
+  g_assert (MI2_IS_CLIENT (self));
+  g_assert (MI2_IS_EVENT_MESSAGE (message));
+
+  name = mi2_event_message_get_name (message);
+
+  if (g_strcmp0 (name, "stopped") == 0)
+    {
+      const gchar *reasonstr;
+      Mi2StopReason reason;
+
+      reasonstr = mi2_message_get_param_string (MI2_MESSAGE (message), "reason");
+      reason = mi2_stop_reason_parse (reasonstr);
+
+      g_signal_emit (self, signals [STOPPED], 0, reason, message);
     }
 }
 
@@ -155,6 +180,8 @@ mi2_client_class_init (Mi2ClientClass *klass)
   object_class->get_property = mi2_client_get_property;
   object_class->set_property = mi2_client_set_property;
 
+  klass->event = mi2_client_real_event;
+
   properties [PROP_IO_STREAM] =
     g_param_spec_object ("io-stream",
                          "IO Stream",
@@ -195,6 +222,14 @@ mi2_client_class_init (Mi2ClientClass *klass)
                   G_STRUCT_OFFSET (Mi2ClientClass, log),
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 1, G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  signals [STOPPED] =
+    g_signal_new ("stopped",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (Mi2ClientClass, stopped),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 2, MI2_TYPE_STOP_REASON, MI2_TYPE_MESSAGE);
 }
 
 static void
@@ -482,7 +517,6 @@ mi2_client_insert_breakpoint_async (Mi2Client           *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(Mi2CommandMessage) command = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GString) str = NULL;
   const gchar *address;
@@ -520,10 +554,6 @@ mi2_client_insert_breakpoint_async (Mi2Client           *self,
 
   if (address)
     g_string_append_printf (str, " %s", address);
-
-  command = g_object_new (MI2_TYPE_COMMAND_MESSAGE,
-                          "command", str,
-                          NULL);
 
   mi2_client_exec_async (self,
                          str->str,
@@ -588,7 +618,6 @@ mi2_client_remove_breakpoint_async (Mi2Client           *self,
                                     gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  g_autoptr(Mi2CommandMessage) command = NULL;
   g_autofree gchar *str = NULL;
 
   g_return_if_fail (MI2_IS_CLIENT (self));
@@ -599,10 +628,6 @@ mi2_client_remove_breakpoint_async (Mi2Client           *self,
   g_task_set_task_data (task, GINT_TO_POINTER (breakpoint_id), NULL);
 
   str = g_strdup_printf ("-break-delete %d", breakpoint_id);
-
-  command = g_object_new (MI2_TYPE_COMMAND_MESSAGE,
-                          "command", str,
-                          NULL);
 
   mi2_client_exec_async (self,
                          str,
@@ -622,6 +647,89 @@ mi2_client_remove_breakpoint_finish (Mi2Client     *self,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static void
+mi2_client_exec_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  Mi2Client *self = (Mi2Client *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+
+  g_assert (MI2_IS_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!mi2_client_exec_finish (self, result, NULL, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+mi2_client_run_async (Mi2Client           *self,
+                      GCancellable        *cancellable,
+                      GAsyncReadyCallback  callback,
+                      gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (MI2_IS_CLIENT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, mi2_client_run_async);
+
+  mi2_client_exec_async (self,
+                         "-exec-run --start",
+                         cancellable,
+                         mi2_client_exec_cb,
+                         g_steal_pointer (&task));
+}
+
+gboolean
+mi2_client_run_finish (Mi2Client     *self,
+                       GAsyncResult  *result,
+                       GError       **error)
+{
+  g_return_val_if_fail (MI2_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+void
+mi2_client_continue_async (Mi2Client           *self,
+                           gboolean             reverse,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (MI2_IS_CLIENT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, mi2_client_continue_async);
+
+  mi2_client_exec_async (self,
+                         reverse ? "-exec-continue --reverse" : "-exec-continue",
+                         cancellable,
+                         mi2_client_exec_cb,
+                         g_steal_pointer (&task));
+}
+
+gboolean
+mi2_client_continue_finish (Mi2Client     *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (MI2_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
 #if 0
 void
 mi2_client_async (Mi2Client           *self,
@@ -629,6 +737,12 @@ mi2_client_async (Mi2Client           *self,
                   GAsyncReadyCallback  callback,
                   gpointer             user_data)
 {
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (MI2_IS_CLIENT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
 }
 
 gboolean
@@ -642,3 +756,41 @@ mi2_client_finish (Mi2Client     *self,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 #endif
+
+GType
+mi2_stop_reason_get_type (void)
+{
+  static GType type_id;
+
+  if (g_once_init_enter (&type_id))
+    {
+      GType _type_id;
+      static const GEnumValue values[] = {
+        { MI2_STOP_UNKNOWN, "MI2_STOP_UNKNOWN", "unknown" },
+        { MI2_STOP_EXITED_NORMALLY, "MI2_STOP_EXITED_NORMALLY", "exited-normally" },
+        { MI2_STOP_BREAKPOINT_HIT, "MI2_STOP_BREAKPOINT_HIT", "breakpoint-hit" },
+        { 0 }
+      };
+
+      _type_id = g_enum_register_static ("Mi2StopReason", values);
+      g_once_init_leave (&type_id, _type_id);
+    }
+
+  return type_id;
+}
+
+Mi2StopReason
+mi2_stop_reason_parse (const gchar *reason)
+{
+  GEnumClass *klass;
+  GEnumValue *value = NULL;
+
+  if (reason)
+    {
+      klass = g_type_class_ref (MI2_TYPE_STOP_REASON);
+      value = g_enum_get_value_by_nick (klass, reason);
+      g_type_class_unref (klass);
+    }
+
+  return value ? value->value : 0;
+}

@@ -20,6 +20,7 @@
 #include "mi2-error.h"
 
 static GMainLoop *main_loop;
+static gint g_breakpoint_id;
 
 static GIOStream *
 create_io_stream_to_gdb (void)
@@ -128,17 +129,48 @@ stack_info_frame_cb (GObject      *object,
 }
 
 static void
+on_stopped (Mi2Client     *client,
+            Mi2StopReason  reason,
+            Mi2Message    *message,
+            gpointer       user_data)
+{
+  g_assert (MI2_IS_CLIENT (client));
+  g_assert (MI2_IS_MESSAGE (message));
+
+
+  if (reason == MI2_STOP_BREAKPOINT_HIT)
+    mi2_client_continue_async (client, FALSE, NULL, NULL, NULL);
+  else
+    mi2_client_remove_breakpoint_async (client,
+                                        g_breakpoint_id,
+                                        NULL,
+                                        remove_breakpoint_cb,
+                                        NULL);
+}
+
+static void
+run_cb (GObject      *object,
+        GAsyncResult *result,
+        gpointer      user_data)
+{
+  Mi2Client *client = (Mi2Client *)object;
+  g_autoptr(GError) error = NULL;
+  gboolean r;
+
+  r = mi2_client_run_finish (client, result, &error);
+  g_assert_no_error (error);
+  g_assert_cmpint (r, ==, TRUE);
+}
+
+static void
 on_breakpoint_inserted (Mi2Client     *client,
                         Mi2Breakpoint *breakpoint,
                         gpointer       user_data)
 {
-  g_print ("breakpoint added: %d\n", mi2_breakpoint_get_id (breakpoint));
+  g_breakpoint_id = mi2_breakpoint_get_id (breakpoint);
+  g_print ("breakpoint added: %d\n", g_breakpoint_id);
 
-  mi2_client_remove_breakpoint_async (client,
-                                      mi2_breakpoint_get_id (breakpoint),
-                                      NULL,
-                                      remove_breakpoint_cb,
-                                      NULL);
+  mi2_client_run_async (client, NULL, run_cb, NULL);
 }
 
 static void
@@ -165,6 +197,7 @@ main (gint argc,
   g_signal_connect (client, "log", G_CALLBACK (log_handler), NULL);
   g_signal_connect (client, "event::thread-group-added", G_CALLBACK (thread_group_added), NULL);
   g_signal_connect (client, "event", G_CALLBACK (event), NULL);
+  g_signal_connect (client, "stopped", G_CALLBACK (on_stopped), NULL);
   g_signal_connect (client, "breakpoint-inserted", G_CALLBACK (on_breakpoint_inserted), NULL);
   g_signal_connect (client, "breakpoint-removed", G_CALLBACK (on_breakpoint_removed), NULL);
 

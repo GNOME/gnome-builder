@@ -125,18 +125,7 @@ mi2_event_message_new_from_string (const gchar *line)
   if (line && *line)
     {
       ret->name = mi2_util_parse_word (&line[1], &line);
-
-      while (line != NULL && *line != '\0')
-        {
-          g_autofree gchar *key = NULL;
-          g_autofree gchar *value = NULL;
-
-          if (!(key = mi2_util_parse_word (line, &line)) ||
-              !(value = mi2_util_parse_string (line, &line)))
-            break;
-
-          mi2_message_set_param_string (MI2_MESSAGE (ret), key, value);
-        }
+      mi2_message_parse_params (MI2_MESSAGE (ret), line);
     }
 
   return MI2_MESSAGE (ret);
