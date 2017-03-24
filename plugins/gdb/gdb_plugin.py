@@ -42,8 +42,6 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
     client = None
 
     def __del__(self):
-        if self.inferior_pty is not None:
-            os.close(self.inferior_pty)
         if self.client:
             self.client.stop_listening()
 
@@ -68,8 +66,9 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
 
         # We need to steal the TTY from the runner (if there is one) so
         # that we can tell GDB to use it. But we need our own access to
-        # gdb over a regular stdin/stdout pipe.
-        self.inferior_pty = runner.steal_tty()
+        # gdb over a regular stdin/stdout pipe. We remap the TTY in as
+        # a different FD so that we can use it later from gdb.
+        self.inferior_pty = runner.take_fd(runner.steal_tty(), -1)
 
         # We need access to stdin/stdout so that we can communicate with
         # the gdb process.
@@ -94,8 +93,7 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
         # We stole the pty from the runner so that we could pass it to gdb
         # instead. This will ensure that gdb re-opens that pty. Since gdb is
         # in the same sandbox as the application, this should Just Work™.
-        ttyname = os.ttyname(self.inferior_pty)
-        command = '-gdb-set inferior-tty {}'.format(ttyname)
+        command = '-gdb-set inferior-tty /proc/self/fd/{}'.format(self.inferior_pty)
         self.client.exec_async(command, None, self.on_client_exec_cb, command)
 
         # Add a breakpoint at main()
