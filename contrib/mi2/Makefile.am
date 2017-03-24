@@ -9,6 +9,8 @@ pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libmi2-glib.la
 
 libmi2_glib_la_public_sources =          \
+	mi2-breakpoint.c                 \
+	mi2-breakpoint.h                 \
 	mi2-client.c                     \
 	mi2-client.h                     \
 	mi2-command-message.c            \
