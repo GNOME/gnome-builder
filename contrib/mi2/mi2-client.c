@@ -34,7 +34,8 @@ typedef struct
   Mi2InputStream  *input_stream;
   Mi2OutputStream *output_stream;
   GCancellable    *read_loop_cancellable;
-  GQueue           exec_queue;
+  GQueue           exec_tasks;
+  GQueue           exec_commands;
 
   guint            is_listening : 1;
 } Mi2ClientPrivate;
@@ -129,8 +130,11 @@ mi2_client_finalize (GObject *object)
   g_clear_object (&priv->output_stream);
   g_clear_object (&priv->read_loop_cancellable);
 
-  g_queue_foreach (&priv->exec_queue, (GFunc)g_object_unref, NULL);
-  g_queue_clear (&priv->exec_queue);
+  g_queue_foreach (&priv->exec_tasks, (GFunc)g_object_unref, NULL);
+  g_queue_clear (&priv->exec_tasks);
+
+  g_queue_foreach (&priv->exec_commands, (GFunc)g_object_unref, NULL);
+  g_queue_clear (&priv->exec_commands);
 
   G_OBJECT_CLASS (mi2_client_parent_class)->finalize (object);
 }
@@ -240,7 +244,8 @@ mi2_client_init (Mi2Client *self)
 {
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
 
-  g_queue_init (&priv->exec_queue);
+  g_queue_init (&priv->exec_commands);
+  g_queue_init (&priv->exec_tasks);
 }
 
 Mi2Client *
@@ -257,15 +262,24 @@ mi2_client_exec_write_message_cb (GObject      *object,
                                   gpointer      user_data)
 {
   Mi2OutputStream *stream = (Mi2OutputStream *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(Mi2Message) message = NULL;
+  g_autoptr(Mi2Client) self = user_data;
   g_autoptr(GError) error = NULL;
+  Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+  GCancellable *cancellable;
 
   g_assert (MI2_IS_OUTPUT_STREAM (stream));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (MI2_IS_CLIENT (self));
+
 
   if (!mi2_output_stream_write_message_finish (stream, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    {
+      g_autoptr(GTask) task = NULL;
+
+      task = g_queue_pop_head (&priv->exec_tasks);
+      g_task_return_error (task, g_steal_pointer (&error));
+    }
 
   /*
    * Do not successfully complete request here.
@@ -273,6 +287,17 @@ mi2_client_exec_write_message_cb (GObject      *object,
    * Successful completion of the task must come from a reply
    * sent to us by the peer looking something like ^running.
    */
+
+  /*
+   * Move forward to the next asynchronous command to execute.
+   */
+  cancellable = g_task_get_cancellable (priv->exec_tasks.head->data);
+  if (NULL != (message = g_queue_pop_head (&priv->exec_commands)))
+    mi2_output_stream_write_message_async (priv->output_stream,
+                                           message,
+                                           cancellable,
+                                           mi2_client_exec_write_message_cb,
+                                           g_steal_pointer (&self));
 }
 
 void
@@ -303,13 +328,16 @@ mi2_client_exec_async (Mi2Client           *self,
                           "command", command,
                           NULL);
 
-  g_queue_push_tail (&priv->exec_queue, g_object_ref (task));
+  g_queue_push_tail (&priv->exec_tasks, g_object_ref (task));
 
-  mi2_output_stream_write_message_async (priv->output_stream,
-                                         message,
-                                         cancellable,
-                                         mi2_client_exec_write_message_cb,
-                                         g_steal_pointer (&task));
+  if (priv->exec_tasks.length > 1)
+    g_queue_push_tail (&priv->exec_commands, g_steal_pointer (&message));
+  else
+    mi2_output_stream_write_message_async (priv->output_stream,
+                                           message,
+                                           cancellable,
+                                           mi2_client_exec_write_message_cb,
+                                           g_object_ref (self));
 }
 
 /**
@@ -370,7 +398,7 @@ mi2_client_dispatch (Mi2Client  *self,
     }
   else if (MI2_IS_REPLY_MESSAGE (message))
     {
-      g_autoptr(GTask) task = g_queue_pop_head (&priv->exec_queue);
+      g_autoptr(GTask) task = g_queue_pop_head (&priv->exec_tasks);
 
       if (task != NULL)
         {
