@@ -83,6 +83,23 @@ breakpoint_cb (GObject      *object,
 }
 
 static void
+remove_breakpoint_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  Mi2Client *client = (Mi2Client *)object;
+  g_autoptr(GError) error = NULL;
+  gboolean r;
+
+  g_assert (MI2_IS_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  r = mi2_client_remove_breakpoint_finish (client, result, &error);
+  g_assert_no_error (error);
+  g_assert_cmpint (r, ==, TRUE);
+}
+
+static void
 stack_info_frame_cb (GObject      *object,
                      GAsyncResult *result,
                      gpointer      user_data)
@@ -116,6 +133,12 @@ on_breakpoint_inserted (Mi2Client     *client,
                         gpointer       user_data)
 {
   g_print ("breakpoint added: %d\n", mi2_breakpoint_get_id (breakpoint));
+
+  mi2_client_remove_breakpoint_async (client,
+                                      mi2_breakpoint_get_id (breakpoint),
+                                      NULL,
+                                      remove_breakpoint_cb,
+                                      NULL);
 }
 
 static void
@@ -124,6 +147,8 @@ on_breakpoint_removed (Mi2Client *client,
                        gpointer   user_data)
 {
   g_print ("breakpoint removed: %d\n", breakpoint_id);
+
+  g_main_loop_quit (main_loop);
 }
 
 gint
