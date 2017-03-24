@@ -35,9 +35,9 @@ struct _IdeRunnerClass
   IdeObjectClass parent;
 
   void                   (*force_quit)      (IdeRunner             *self);
-  GInputStream          *(*get_stdin)       (IdeRunner             *self);
-  GOutputStream         *(*get_stdout)      (IdeRunner             *self);
-  GOutputStream         *(*get_stderr)      (IdeRunner             *self);
+  GOutputStream         *(*get_stdin)       (IdeRunner             *self);
+  GInputStream          *(*get_stdout)      (IdeRunner             *self);
+  GInputStream          *(*get_stderr)      (IdeRunner             *self);
   void                   (*run_async)       (IdeRunner             *self,
                                              GCancellable          *cancellable,
                                              GAsyncReadyCallback    callback,
@@ -91,9 +91,9 @@ void               ide_runner_set_argv        (IdeRunner            *self,
 gint               ide_runner_take_fd         (IdeRunner            *self,
                                                gint                  source_fd,
                                                gint                  dest_fd);
-GInputStream      *ide_runner_get_stdin       (IdeRunner            *self);
-GOutputStream     *ide_runner_get_stdout      (IdeRunner            *self);
-GOutputStream     *ide_runner_get_stderr      (IdeRunner            *self);
+GOutputStream     *ide_runner_get_stdin       (IdeRunner            *self);
+GInputStream      *ide_runner_get_stdout      (IdeRunner            *self);
+GInputStream      *ide_runner_get_stderr      (IdeRunner            *self);
 gboolean           ide_runner_get_run_on_host (IdeRunner            *self);
 void               ide_runner_set_run_on_host (IdeRunner            *self,
                                                gboolean              run_on_host);

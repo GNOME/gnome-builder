@@ -42,6 +42,8 @@ typedef struct
 
   GArray *fd_mapping;
 
+  IdeSubprocess *subprocess;
+
   GQueue argv;
 
   GSubprocessFlags flags;
@@ -125,6 +127,7 @@ ide_runner_run_wait_cb (GObject      *object,
                         gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  IdeRunnerPrivate *priv;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
   IdeRunner *self;
@@ -136,8 +139,11 @@ ide_runner_run_wait_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  priv = ide_runner_get_instance_private (self);
 
   g_assert (IDE_IS_RUNNER (self));
+
+  g_clear_object (&priv->subprocess);
 
   g_signal_emit (self, signals [EXITED], 0);
 
@@ -295,8 +301,9 @@ ide_runner_real_run_async (IdeRunner           *self,
       IDE_GOTO (failure);
     }
 
-  identifier = ide_subprocess_get_identifier (subprocess);
+  priv->subprocess = g_object_ref (subprocess);
 
+  identifier = ide_subprocess_get_identifier (subprocess);
   g_signal_emit (self, signals [SPAWNED], 0, identifier);
 
   ide_subprocess_wait_async (subprocess,
@@ -319,6 +326,36 @@ ide_runner_real_run_finish (IdeRunner     *self,
   g_assert (g_task_get_source_tag (G_TASK (result)) == ide_runner_real_run_async);
 
   return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static GOutputStream *
+ide_runner_real_get_stdin (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  if (priv->subprocess)
+    return g_object_ref (ide_subprocess_get_stdin_pipe (priv->subprocess));
+  return NULL;
+}
+
+static GInputStream *
+ide_runner_real_get_stdout (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  if (priv->subprocess)
+    return g_object_ref (ide_subprocess_get_stdout_pipe (priv->subprocess));
+  return NULL;
+}
+
+static GInputStream *
+ide_runner_real_get_stderr (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  if (priv->subprocess)
+    return g_object_ref (ide_subprocess_get_stderr_pipe (priv->subprocess));
+  return NULL;
 }
 
 static void
@@ -417,6 +454,7 @@ ide_runner_finalize (GObject *object)
   g_queue_foreach (&priv->argv, (GFunc)g_free, NULL);
   g_queue_clear (&priv->argv);
   g_clear_object (&priv->env);
+  g_clear_object (&priv->subprocess);
 
   if (priv->fd_mapping != NULL)
     {
@@ -523,6 +561,9 @@ ide_runner_class_init (IdeRunnerClass *klass)
   klass->run_finish = ide_runner_real_run_finish;
   klass->set_tty = ide_runner_real_set_tty;
   klass->create_launcher = ide_runner_real_create_launcher;
+  klass->get_stdin = ide_runner_real_get_stdin;
+  klass->get_stdout = ide_runner_real_get_stdout;
+  klass->get_stderr = ide_runner_real_get_stderr;
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv",
@@ -617,7 +658,7 @@ ide_runner_init (IdeRunner *self)
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
  */
-GInputStream *
+GOutputStream *
 ide_runner_get_stdin (IdeRunner *self)
 {
   g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
@@ -630,7 +671,7 @@ ide_runner_get_stdin (IdeRunner *self)
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
  */
-GOutputStream *
+GInputStream *
 ide_runner_get_stdout (IdeRunner *self)
 {
   g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
@@ -643,7 +684,7 @@ ide_runner_get_stdout (IdeRunner *self)
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
  */
-GOutputStream *
+GInputStream *
 ide_runner_get_stderr (IdeRunner *self)
 {
   g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
