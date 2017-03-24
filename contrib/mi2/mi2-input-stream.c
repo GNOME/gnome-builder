@@ -79,6 +79,15 @@ mi2_input_stream_read_message_read_line_cb (GObject      *object,
       return;
     }
 
+  if (line == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_CLOSED,
+                               "The stream has closed");
+      return;
+    }
+
   /* Let Mi2Message decode the protocol content */
   if (NULL == (message = mi2_message_parse (line, len, &error)))
     {
