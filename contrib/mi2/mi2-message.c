@@ -86,8 +86,6 @@ mi2_message_parse (const gchar  *line,
   g_return_val_if_fail (line != NULL, NULL);
   g_return_val_if_fail (len > 0, NULL);
 
-  g_print (">>> %s\n", line);
-
   switch (line[0])
     {
     case '~':
