@@ -411,7 +411,9 @@ mi2_client_dispatch (Mi2Client  *self,
         }
     }
   else
-    g_print ("Got message of type %s\n", G_OBJECT_TYPE_NAME (message));
+    {
+      g_warning ("Got message of type %s\n", G_OBJECT_TYPE_NAME (message));
+    }
 }
 
 static void

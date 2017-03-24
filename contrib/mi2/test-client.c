@@ -176,7 +176,6 @@ on_stopped (Mi2Client     *client,
   g_assert (MI2_IS_MESSAGE (message));
 
   g_print ("stopped %d %s\n", reason, mi2_message_get_param_string (message, "reason"));
-  g_print ("%s\n", g_strjoinv (" ", mi2_message_get_params (message)));
 
   if (reason == MI2_STOP_BREAKPOINT_HIT)
     mi2_client_continue_async (client, FALSE, NULL, NULL, NULL);
