@@ -45,6 +45,8 @@ enum {
 };
 
 enum {
+  BREAKPOINT_INSERTED,
+  BREAKPOINT_REMOVED,
   EVENT,
   LOG,
   N_SIGNALS
@@ -162,6 +164,22 @@ mi2_client_class_init (Mi2ClientClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  signals [BREAKPOINT_INSERTED] =
+    g_signal_new ("breakpoint-inserted",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (Mi2ClientClass, breakpoint_inserted),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, MI2_TYPE_BREAKPOINT);
+
+  signals [BREAKPOINT_REMOVED] =
+    g_signal_new ("breakpoint-removed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (Mi2ClientClass, breakpoint_removed),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, G_TYPE_INT);
+
   signals [EVENT] =
     g_signal_new ("event",
                   G_TYPE_FROM_CLASS (klass),
@@ -262,15 +280,37 @@ mi2_client_exec_async (Mi2Client           *self,
                                          g_steal_pointer (&task));
 }
 
+/**
+ * mi2_client_exec_finish:
+ * @self: An #Mi2Client
+ * @result: A #GAsyncResult
+ * @reply: (optional) (out) (transfer full): A location for a reply.
+ * @error: a location for a #GError or %NULL
+ *
+ * Completes a request to mi2_client_exec_async(). The reply from the
+ * gdb instance will be provided to @message.
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
 gboolean
-mi2_client_exec_finish (Mi2Client     *self,
-                        GAsyncResult  *result,
-                        GError       **error)
+mi2_client_exec_finish (Mi2Client        *self,
+                        GAsyncResult     *result,
+                        Mi2ReplyMessage **reply,
+                        GError          **error)
 {
+  g_autoptr(Mi2ReplyMessage) local_message = NULL;
+  gboolean ret;
+
   g_return_val_if_fail (MI2_IS_CLIENT (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  local_message = g_task_propagate_pointer (G_TASK (result), error);
+  ret = !!local_message;
+
+  if (reply)
+    *reply = g_steal_pointer (&local_message);
+
+  return ret;
 }
 
 static void
@@ -307,7 +347,7 @@ mi2_client_dispatch (Mi2Client  *self,
           if (mi2_reply_message_check_error (MI2_REPLY_MESSAGE (message), &error))
             g_task_return_error (task, g_steal_pointer (&error));
           else
-            g_task_return_boolean (task, TRUE);
+            g_task_return_pointer (task, g_object_ref (message), g_object_unref);
         }
     }
   else
@@ -378,6 +418,208 @@ mi2_client_stop_listening (Mi2Client *self)
       priv->is_listening = FALSE;
       g_cancellable_cancel (priv->read_loop_cancellable);
     }
+}
+
+static void
+mi2_client_insert_breakpoint_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  Mi2Client *self = (Mi2Client *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(Mi2ReplyMessage) message = NULL;
+  Mi2Breakpoint *breakpoint;
+  GVariant *bkpt;
+
+  g_assert (MI2_IS_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!mi2_client_exec_finish (self, result, &message, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  breakpoint = g_task_get_task_data (task);
+
+  bkpt = mi2_message_get_param (MI2_MESSAGE (message), "bkpt");
+
+  if (bkpt != NULL)
+    {
+      GVariantDict dict;
+      const gchar *number = NULL;
+
+      g_variant_dict_init (&dict, bkpt);
+      g_variant_dict_lookup (&dict, "number", "&s", &number);
+      g_variant_dict_clear (&dict);
+
+      mi2_breakpoint_set_id (breakpoint, g_ascii_strtoll (number, NULL, 10));
+    }
+
+  g_signal_emit (self, signals [BREAKPOINT_INSERTED], 0, breakpoint);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+/**
+ * mi2_client_insert_breakpoint_async:
+ * @self: A #Mi2Client
+ * @breakpoint: An #Mi2Breakpoint
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: A callback to execute
+ * @user_data: user data for @callback
+ *
+ * Adds a breakpoint at @function. If @filename is specified, the function
+ * will be resolved within that file.
+ *
+ * Call mi2_client_insert_breakpoint_async() to complete the operation.
+ */
+void
+mi2_client_insert_breakpoint_async (Mi2Client           *self,
+                                    Mi2Breakpoint       *breakpoint,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(Mi2CommandMessage) command = NULL;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GString) str = NULL;
+  const gchar *address;
+  const gchar *filename;
+  const gchar *function;
+  const gchar *linespec;
+  gint line_offset;
+
+  g_return_if_fail (MI2_IS_CLIENT (self));
+  g_return_if_fail (MI2_IS_BREAKPOINT (breakpoint));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, mi2_client_insert_breakpoint_async);
+  g_task_set_task_data (task, g_object_ref (breakpoint), g_object_unref);
+
+  str = g_string_new ("-break-insert");
+
+  line_offset = mi2_breakpoint_get_line_offset (breakpoint);
+  linespec = mi2_breakpoint_get_linespec (breakpoint);
+  function = mi2_breakpoint_get_function (breakpoint);
+  filename = mi2_breakpoint_get_filename (breakpoint);
+  address = mi2_breakpoint_get_address (breakpoint);
+
+  if (linespec)
+    g_string_append_printf (str, " %s", linespec);
+
+  if (filename)
+    g_string_append_printf (str, " --source %s", filename);
+
+  if (function)
+    g_string_append_printf (str, " --function %s", function);
+
+  if (line_offset)
+    g_string_append_printf (str, " --line %d", line_offset);
+
+  if (address)
+    g_string_append_printf (str, " %s", address);
+
+  command = g_object_new (MI2_TYPE_COMMAND_MESSAGE,
+                          "command", str,
+                          NULL);
+
+  mi2_client_exec_async (self,
+                         str->str,
+                         cancellable,
+                         mi2_client_insert_breakpoint_cb,
+                         g_steal_pointer (&task));
+}
+
+gint
+mi2_client_insert_breakpoint_finish (Mi2Client     *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
+{
+  g_return_val_if_fail (MI2_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_int (G_TASK (result), error);
+}
+
+static void
+mi2_client_remove_breakpoint_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  Mi2Client *self = (Mi2Client *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  gint id;
+
+  g_assert (MI2_IS_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!mi2_client_exec_finish (self, result, NULL, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  id = GPOINTER_TO_INT (g_task_get_task_data (task));
+  g_signal_emit (self, signals [BREAKPOINT_REMOVED], 0, id);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+/**
+ * mi2_client_remove_breakpoint_async:
+ * @self: A #Mi2Client
+ * @breakpoint_id: The id of the breakpoint
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: A callback to execute
+ * @user_data: user data for @callback
+ *
+ * Removes a breakpoint that was previously added.
+ *
+ * Call mi2_client_remove_breakpoint_finish() to complete the operation.
+ */
+void
+mi2_client_remove_breakpoint_async (Mi2Client           *self,
+                                    gint                 breakpoint_id,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(Mi2CommandMessage) command = NULL;
+  g_autofree gchar *str = NULL;
+
+  g_return_if_fail (MI2_IS_CLIENT (self));
+  g_return_if_fail (breakpoint_id > 0);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, mi2_client_remove_breakpoint_async);
+  g_task_set_task_data (task, GINT_TO_POINTER (breakpoint_id), NULL);
+
+  str = g_strdup_printf ("-break-delete %d", breakpoint_id);
+
+  command = g_object_new (MI2_TYPE_COMMAND_MESSAGE,
+                          "command", str,
+                          NULL);
+
+  mi2_client_exec_async (self,
+                         str,
+                         cancellable,
+                         mi2_client_remove_breakpoint_cb,
+                         g_steal_pointer (&task));
+}
+
+gboolean
+mi2_client_remove_breakpoint_finish (Mi2Client     *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
+{
+  g_return_val_if_fail (MI2_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 #if 0

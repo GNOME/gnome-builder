@@ -30,7 +30,7 @@ create_io_stream_to_gdb (void)
 
   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
                                  &error,
-                                 "gdb", "--interpreter", "mi2",
+                                 "gdb", "--interpreter", "mi2", "ls",
                                  NULL);
   g_assert_no_error (error);
   g_assert (subprocess);
@@ -66,9 +66,9 @@ event (Mi2Client       *client,
 }
 
 static void
-stack_info_frame_cb (GObject      *object,
-                     GAsyncResult *result,
-                     gpointer      user_data)
+breakpoint_cb (GObject      *object,
+               GAsyncResult *result,
+               gpointer      user_data)
 {
   Mi2Client *client = (Mi2Client *)object;
   g_autoptr(GError) error = NULL;
@@ -77,12 +77,53 @@ stack_info_frame_cb (GObject      *object,
   g_assert (MI2_IS_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
 
-  r = mi2_client_exec_finish (client, result, &error);
+  r = mi2_client_insert_breakpoint_finish (client, result, &error);
+  g_assert_no_error (error);
+  g_assert_cmpint (r, ==, TRUE);
+}
+
+static void
+stack_info_frame_cb (GObject      *object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  Mi2Client *client = (Mi2Client *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(Mi2Breakpoint) breakpoint = NULL;
+  gboolean r;
+
+  g_assert (MI2_IS_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  r = mi2_client_exec_finish (client, result, NULL, &error);
   g_assert_error (error, MI2_ERROR, MI2_ERROR_UNKNOWN_ERROR);
   g_assert_cmpstr (error->message, ==, "No registers.");
   g_assert_cmpint (r, ==, FALSE);
 
-  g_main_loop_quit (main_loop);
+  breakpoint = mi2_breakpoint_new ();
+  mi2_breakpoint_set_function (breakpoint, "main");
+
+  mi2_client_insert_breakpoint_async (client,
+                                      breakpoint,
+                                      NULL,
+                                      breakpoint_cb,
+                                      NULL);
+}
+
+static void
+on_breakpoint_inserted (Mi2Client     *client,
+                        Mi2Breakpoint *breakpoint,
+                        gpointer       user_data)
+{
+  g_print ("breakpoint added: %d\n", mi2_breakpoint_get_id (breakpoint));
+}
+
+static void
+on_breakpoint_removed (Mi2Client *client,
+                       gint       breakpoint_id,
+                       gpointer   user_data)
+{
+  g_print ("breakpoint removed: %d\n", breakpoint_id);
 }
 
 gint
@@ -99,10 +140,13 @@ main (gint argc,
   g_signal_connect (client, "log", G_CALLBACK (log_handler), NULL);
   g_signal_connect (client, "event::thread-group-added", G_CALLBACK (thread_group_added), NULL);
   g_signal_connect (client, "event", G_CALLBACK (event), NULL);
+  g_signal_connect (client, "breakpoint-inserted", G_CALLBACK (on_breakpoint_inserted), NULL);
+  g_signal_connect (client, "breakpoint-removed", G_CALLBACK (on_breakpoint_removed), NULL);
 
   mi2_client_start_listening (client);
 
   mi2_client_exec_async (client,
+                         /* converted to -stack-info-frame */
                          "stack-info-frame",
                          NULL,
                          stack_info_frame_cb,
