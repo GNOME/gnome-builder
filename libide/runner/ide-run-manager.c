@@ -70,6 +70,21 @@ static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
 static void
+ide_run_manager_real_run (IdeRunManager *self,
+                          IdeRunner     *runner)
+{
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_RUNNER (runner));
+
+  /*
+   * If the current handler has a callback specified (our default "run" handler
+   * does not), then we need to allow that handler to prepare the runner.
+   */
+  if (self->handler != NULL && self->handler->handler != NULL)
+    self->handler->handler (self, runner, self->handler->handler_data);
+}
+
+static void
 ide_run_handler_info_free (gpointer data)
 {
   IdeRunHandlerInfo *info = data;
@@ -186,18 +201,24 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
    * This signal is emitted right before ide_runner_run_async() is called
    * on an #IdeRunner. It can be used by plugins to tweak things right
    * before the runner is executed.
+   *
+   * The current run handler (debugger, profiler, etc) is run as the default
+   * handler for this function. So connect with %G_SIGNAL_AFTER if you want
+   * to be nofied after the run handler has executed. It's unwise to change
+   * things that the run handler might expect. Generally if you want to
+   * change settings, do that before the run handler has exected.
    */
   signals [RUN] =
-    g_signal_new ("run",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  1,
-                  IDE_TYPE_RUNNER);
+    g_signal_new_class_handler ("run",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_run_manager_real_run),
+                                NULL,
+                                NULL,
+                                NULL,
+                                G_TYPE_NONE,
+                                1,
+                                IDE_TYPE_RUNNER);
 
   /**
    * IdeRunManager::stopped:
@@ -328,13 +349,6 @@ do_run_async (IdeRunManager *self,
 
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  /*
-   * If the current handler has a callback specified (our default "run" handler
-   * does not), then we need to allow that handler to prepare the runner.
-   */
-  if (self->handler != NULL && self->handler->handler != NULL)
-    self->handler->handler (self, runner, self->handler->handler_data);
 
   g_signal_emit (self, signals [RUN], 0, runner);
 
