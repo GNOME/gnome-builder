@@ -94,8 +94,9 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
         # We stole the pty from the runner so that we could pass it to gdb
         # instead. This will ensure that gdb re-opens that pty. Since gdb is
         # in the same sandbox as the application, this should Just Work™.
-        command = '-gdb-set inferior-tty {}'.format(os.ttyname(self.inferior_pty))
-        self.client.exec_async(command, None, self.on_client_exec_cb)
+        ttyname = os.ttyname(self.inferior_pty)
+        command = '-gdb-set inferior-tty {}'.format(ttyname)
+        self.client.exec_async(command, None, self.on_client_exec_cb, command)
 
         # Add a breakpoint at main()
         #breakpoint = Mi2.Breakpoint(function='main')
@@ -110,9 +111,11 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
         except Exception as ex:
             print(repr(ex))
 
-    def on_client_exec_cb(self, client, result):
+    def on_client_exec_cb(self, client, result, command=None):
         try:
             ret = client.exec_finish(result)
+            if command:
+                print('{} completed'.format(command))
         except Exception as ex:
             print(repr(ex))
 
