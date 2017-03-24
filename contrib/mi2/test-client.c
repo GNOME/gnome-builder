@@ -54,6 +54,8 @@ open_pty (gint *out_master_fd,
   *out_slave_fd = slave_fd;
   *out_master_fd = master_fd;
 
+  g_assert_cmpstr (name, ==, ttyname (slave_fd));
+
   return g_strdup (name);
 }
 
