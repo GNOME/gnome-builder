@@ -266,12 +266,10 @@ mi2_client_exec_write_message_cb (GObject      *object,
   g_autoptr(Mi2Client) self = user_data;
   g_autoptr(GError) error = NULL;
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
-  GCancellable *cancellable;
 
   g_assert (MI2_IS_OUTPUT_STREAM (stream));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (MI2_IS_CLIENT (self));
-
 
   if (!mi2_output_stream_write_message_finish (stream, result, &error))
     {
@@ -279,6 +277,7 @@ mi2_client_exec_write_message_cb (GObject      *object,
 
       task = g_queue_pop_head (&priv->exec_tasks);
       g_task_return_error (task, g_steal_pointer (&error));
+      return;
     }
 
   /*
@@ -287,17 +286,6 @@ mi2_client_exec_write_message_cb (GObject      *object,
    * Successful completion of the task must come from a reply
    * sent to us by the peer looking something like ^running.
    */
-
-  /*
-   * Move forward to the next asynchronous command to execute.
-   */
-  cancellable = g_task_get_cancellable (priv->exec_tasks.head->data);
-  if (NULL != (message = g_queue_pop_head (&priv->exec_commands)))
-    mi2_output_stream_write_message_async (priv->output_stream,
-                                           message,
-                                           cancellable,
-                                           mi2_client_exec_write_message_cb,
-                                           g_steal_pointer (&self));
 }
 
 void
@@ -399,6 +387,7 @@ mi2_client_dispatch (Mi2Client  *self,
   else if (MI2_IS_REPLY_MESSAGE (message))
     {
       g_autoptr(GTask) task = g_queue_pop_head (&priv->exec_tasks);
+      g_autoptr(Mi2Message) next_message = NULL;
 
       if (task != NULL)
         {
@@ -408,6 +397,23 @@ mi2_client_dispatch (Mi2Client  *self,
             g_task_return_error (task, g_steal_pointer (&error));
           else
             g_task_return_pointer (task, g_object_ref (message), g_object_unref);
+        }
+
+      /*
+       * Move forward to the next asynchronous command to execute.
+       * We do this here so that we don't have multiple requests on
+       * the wire at one time, as gdb cannot handle that.
+       */
+      if (NULL != (next_message = g_queue_pop_head (&priv->exec_commands)))
+        {
+          GCancellable *cancellable;
+
+          cancellable = g_task_get_cancellable (priv->exec_tasks.head->data);
+          mi2_output_stream_write_message_async (priv->output_stream,
+                                                 next_message,
+                                                 cancellable,
+                                                 mi2_client_exec_write_message_cb,
+                                                 g_steal_pointer (&self));
         }
     }
   else
