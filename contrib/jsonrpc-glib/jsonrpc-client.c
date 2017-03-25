@@ -1247,7 +1247,7 @@ jsonrpc_client_reply_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   if (!jsonrpc_output_stream_write_message_finish (stream, result, &error))
-    g_task_return_error (task, g_steal_pointer (&task));
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }
