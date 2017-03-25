@@ -31,6 +31,7 @@ struct _IdeDebugManager
 {
   IdeObject           parent_instance;
   GSimpleActionGroup *actions;
+  guint               active : 1;
 };
 
 typedef struct
@@ -42,6 +43,7 @@ typedef struct
 
 enum {
   PROP_0,
+  PROP_ACTIVE,
   N_PROPS
 };
 
@@ -52,6 +54,19 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_debug_manager_set_active (IdeDebugManager *self,
+                              gboolean         active)
+{
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+
+  if (active != self->active)
+    {
+      self->active = active;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE]);
+    }
+}
 
 static gboolean
 ide_debug_manager_has_action (GActionGroup *group,
@@ -136,21 +151,14 @@ ide_debug_manager_get_property (GObject    *object,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
+  IdeDebugManager *self = IDE_DEBUG_MANAGER (object);
 
-static void
-ide_debug_manager_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
   switch (prop_id)
     {
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, self->active);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -163,7 +171,23 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
 
   object_class->finalize = ide_debug_manager_finalize;
   object_class->get_property = ide_debug_manager_get_property;
-  object_class->set_property = ide_debug_manager_set_property;
+
+  /**
+   * IdeDebugManager:active:
+   *
+   * If the debugger is active.
+   *
+   * This can be used to determine if the controls should be made visible
+   * in the workbench.
+   */
+  properties [PROP_ACTIVE] =
+    g_param_spec_boolean ("active",
+                          "Active",
+                          "If the debugger is running",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -224,6 +248,16 @@ ide_debug_manager_find_debugger (IdeDebugManager *self,
   return lookup.debugger;
 }
 
+static void
+ide_debug_manager_runner_exited (IdeDebugManager *self,
+                                 IdeRunner       *runner)
+{
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (IDE_IS_RUNNER (runner));
+
+  ide_debug_manager_set_active (self, FALSE);
+}
+
 gboolean
 ide_debug_manager_start (IdeDebugManager  *self,
                          IdeRunner        *runner,
@@ -251,6 +285,14 @@ ide_debug_manager_start (IdeDebugManager  *self,
 
   ide_debugger_prepare (debugger, runner);
 
+  g_signal_connect_object (runner,
+                           "exited",
+                           G_CALLBACK (ide_debug_manager_runner_exited),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  ide_debug_manager_set_active (self, TRUE);
+
   ret = TRUE;
 
 failure:
@@ -261,4 +303,12 @@ void
 ide_debug_manager_stop (IdeDebugManager *self)
 {
   g_return_if_fail (IDE_IS_DEBUG_MANAGER (self));
+}
+
+gboolean
+ide_debug_manager_get_active (IdeDebugManager *self)
+{
+  g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), FALSE);
+
+  return self->active;
 }

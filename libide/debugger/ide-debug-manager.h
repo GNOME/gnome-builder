@@ -27,10 +27,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDebugManager, ide_debug_manager, IDE, DEBUG_MANAGER, IdeObject)
 
-gboolean ide_debug_manager_start (IdeDebugManager  *self,
-                                  IdeRunner        *runner,
-                                  GError          **error);
-void     ide_debug_manager_stop  (IdeDebugManager  *self);
+gboolean ide_debug_manager_get_active (IdeDebugManager  *self);
+gboolean ide_debug_manager_start      (IdeDebugManager  *self,
+                                       IdeRunner        *runner,
+                                       GError          **error);
+void     ide_debug_manager_stop       (IdeDebugManager  *self);
 
 G_END_DECLS
 
