@@ -111,6 +111,7 @@ mi2_input_stream_read_message_async (Mi2InputStream      *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, mi2_input_stream_read_message_async);
+  g_task_set_return_on_cancel (task, TRUE);
 
   g_data_input_stream_read_line_async (G_DATA_INPUT_STREAM (self),
                                        G_PRIORITY_LOW,
