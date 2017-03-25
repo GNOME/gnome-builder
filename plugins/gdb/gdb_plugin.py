@@ -44,10 +44,6 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
     # process over stdin/stdout.
     client = None
 
-    def __del__(self):
-        if self.client:
-            self.client.stop_listening()
-
     def do_get_name(self):
         return 'GNU Debugger'
 
@@ -121,7 +117,9 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
             print(repr(ex))
 
     def on_runner_exited(self, runner):
-        self.client.stop_listening()
+        client = self.client
+        self.client = None
+        client.stop_listening()
 
     def on_client_log(self, client, message):
         print('>>>', message[:-1])
