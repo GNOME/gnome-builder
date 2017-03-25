@@ -129,6 +129,7 @@ class CMakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
         build_stage.set_clean_launcher(clean_launcher)
+        build_stage.set_check_stdout(True)
         build_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
 
