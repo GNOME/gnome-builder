@@ -387,6 +387,8 @@ ide_recent_projects_discover_async (IdeRecentProjects   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_recent_projects_discover_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->discovered)
     {
