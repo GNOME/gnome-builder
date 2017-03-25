@@ -339,6 +339,21 @@ mi2_client_exec_write_message_cb (GObject      *object,
    */
 }
 
+/**
+ * mi2_client_exec_async:
+ * @self: a #Mi2Client
+ * @command: the command to execute
+ * @cancellable: (nullable): optional #GCancellable object or %NULL.
+ * @callback: (scope async): A callback to execute upon completion
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Executes @command asynchronously.
+ *
+ * If another command is in-flight, the command will be queued until the
+ * reply has been received from the in-flight command.
+ *
+ * Call mi2_client_exec_finish() to get the response to the command.
+ */
 void
 mi2_client_exec_async (Mi2Client           *self,
                        const gchar         *command,
@@ -507,6 +522,16 @@ mi2_client_read_loop_cb (GObject      *object,
                                          g_steal_pointer (&self));
 }
 
+/**
+ * mi2_client_start_listening:
+ * @self: a #Mi2Client
+ *
+ * This function starts listening to the gdb process.
+ *
+ * You should call this function after attaching to any signals you want
+ * to be notified about so that you do not race with the gdb process to
+ * handle those signals.
+ */
 void
 mi2_client_start_listening (Mi2Client *self)
 {
@@ -525,6 +550,12 @@ mi2_client_start_listening (Mi2Client *self)
                                        g_object_ref (self));
 }
 
+/**
+ * mi2_client_stop_listening:
+ * @self: a #Mi2Client
+ *
+ * Stop listening to the gdb process and cancel any in-flight operations.
+ */
 void
 mi2_client_stop_listening (Mi2Client *self)
 {
@@ -586,8 +617,8 @@ mi2_client_insert_breakpoint_cb (GObject      *object,
  * @self: A #Mi2Client
  * @breakpoint: An #Mi2Breakpoint
  * @cancellable: (nullable): A #GCancellable or %NULL
- * @callback: A callback to execute
- * @user_data: user data for @callback
+ * @callback: (scope async): A callback to execute
+ * @user_data: (closure): user data for @callback
  *
  * Adds a breakpoint at @function. If @filename is specified, the function
  * will be resolved within that file.
@@ -646,6 +677,16 @@ mi2_client_insert_breakpoint_async (Mi2Client           *self,
                          g_steal_pointer (&task));
 }
 
+/**
+ * mi2_client_insert_breakpoint_finish:
+ * @self: a #Mi2Client
+ * @result: the #GAsyncResult provided to the callback function
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to mi2_client_insert_breakpoint_async().
+ *
+ * Returns: a positive integer if successful, otherwise zero and @error is set.
+ */
 gint
 mi2_client_insert_breakpoint_finish (Mi2Client     *self,
                                      GAsyncResult  *result,
@@ -687,8 +728,8 @@ mi2_client_remove_breakpoint_cb (GObject      *object,
  * @self: A #Mi2Client
  * @breakpoint_id: The id of the breakpoint
  * @cancellable: (nullable): A #GCancellable or %NULL
- * @callback: A callback to execute
- * @user_data: user data for @callback
+ * @callback: (scope async): A callback to execute
+ * @user_data: (closure): user data for @callback
  *
  * Removes a breakpoint that was previously added.
  *
@@ -720,6 +761,16 @@ mi2_client_remove_breakpoint_async (Mi2Client           *self,
                          g_steal_pointer (&task));
 }
 
+/**
+ * mi2_client_remote_breakpoint_finish:
+ * @self: a #Mi2Client
+ * @result: the #GAsyncResult provided to the callback function
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to mi2_client_remote_breakpoint_async().
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
 gboolean
 mi2_client_remove_breakpoint_finish (Mi2Client     *self,
                                      GAsyncResult  *result,
@@ -749,6 +800,17 @@ mi2_client_exec_cb (GObject      *object,
     g_task_return_boolean (task, TRUE);
 }
 
+/**
+ * mi2_client_run_async:
+ * @self: a #Mi2Client
+ * @cancellable: (nullable): an optional #GCancellable, or %NULL
+ * @callback: (scope async): a callback to execute upon completion
+ * @user_data: (closure): the data to pass to @callback function
+ *
+ * Asynchronously requests that the inferior program be run.
+ *
+ * Call mi2_client_run_finish() from @callback to get the result.
+ */
 void
 mi2_client_run_async (Mi2Client           *self,
                       GCancellable        *cancellable,
@@ -770,6 +832,16 @@ mi2_client_run_async (Mi2Client           *self,
                          g_steal_pointer (&task));
 }
 
+/**
+ * mi2_client_func_name_finish:
+ * @self: a #Mi2Client
+ * @result: the #GAsyncResult provided to the callback function
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to mi2_client_func_name_async().
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
 gboolean
 mi2_client_run_finish (Mi2Client     *self,
                        GAsyncResult  *result,
@@ -781,6 +853,17 @@ mi2_client_run_finish (Mi2Client     *self,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+/**
+ * mi2_client_continue_async:
+ * @self: a #Mi2Client
+ * @cancellable: (nullable): an optional #GCancellable, or %NULL
+ * @callback: (scope async): a callback to execute upon completion
+ * @user_data: (closure): the data to pass to @callback function
+ *
+ * Asynchronously executes the continue command.
+ *
+ * Call mi2_client_continue_finish() from @callback to get the result.
+ */
 void
 mi2_client_continue_async (Mi2Client           *self,
                            gboolean             reverse,
@@ -803,6 +886,16 @@ mi2_client_continue_async (Mi2Client           *self,
                          g_steal_pointer (&task));
 }
 
+/**
+ * mi2_client_continue_finish:
+ * @self: a #Mi2Client
+ * @result: the #GAsyncResult provided to the callback function
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to mi2_client_continue_async().
+ *
+ * Returns: %TRUE if successful, otherwise %FALSE and @error is est.
+ */
 gboolean
 mi2_client_continue_finish (Mi2Client     *self,
                             GAsyncResult  *result,
