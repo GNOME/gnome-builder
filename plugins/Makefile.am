@@ -34,6 +34,7 @@ SUBDIRS =                            \
 	python-gi-imports-completion \
 	python-pack                  \
 	quick-highlight              \
+	retab                        \
 	rust-langserv                \
 	rustup                       \
 	support                      \
