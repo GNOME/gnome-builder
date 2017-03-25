@@ -402,7 +402,7 @@ ide_recent_projects_discover_async (IdeRecentProjects   *self,
 
   ide_recent_projects_load_recent (self);
 
-  if (recent_only)
+  if (recent_only || g_getenv ("IDE_DO_NOT_SCAN_PROJECTS") != NULL)
     {
       g_task_return_boolean (task, TRUE);
       return;
