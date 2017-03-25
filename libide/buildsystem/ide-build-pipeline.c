@@ -424,21 +424,31 @@ create_diagnostic (IdeBuildPipeline *self,
 
   parsed.severity = parse_severity (level);
 
-  if (!g_path_is_absolute (filename) && self->errfmt_current_dir != NULL)
+  if (!g_path_is_absolute (filename))
     {
-      const gchar *basedir = self->errfmt_current_dir;
       gchar *path;
 
-      if (g_str_has_prefix (basedir, self->errfmt_top_dir))
+      if (self->errfmt_current_dir != NULL)
         {
-          basedir += strlen (self->errfmt_top_dir);
-          if (*basedir == G_DIR_SEPARATOR)
-            basedir++;
-        }
+          const gchar *basedir = self->errfmt_current_dir;
 
-      path = g_build_filename (basedir, filename, NULL);
-      g_free (filename);
-      filename = path;
+          if (g_str_has_prefix (basedir, self->errfmt_top_dir))
+            {
+              basedir += strlen (self->errfmt_top_dir);
+              if (*basedir == G_DIR_SEPARATOR)
+                basedir++;
+            }
+
+          path = g_build_filename (basedir, filename, NULL);
+          g_free (filename);
+          filename = path;
+        }
+      else
+        {
+          path = g_build_filename (self->builddir, filename, NULL);
+          g_free (filename);
+          filename = path;
+        }
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
