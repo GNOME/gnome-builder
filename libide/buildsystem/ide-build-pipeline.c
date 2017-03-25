@@ -1924,6 +1924,8 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
 
       ide_subprocess_launcher_set_clear_env (ret, TRUE);
       ide_subprocess_launcher_overlay_environment (ret, env);
+      /* Always ignore V=1 from configurations */
+      ide_subprocess_launcher_setenv (ret, "V", "0", TRUE);
       ide_subprocess_launcher_set_cwd (ret, ide_build_pipeline_get_builddir (self));
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
