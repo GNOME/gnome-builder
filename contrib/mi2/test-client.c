@@ -221,7 +221,9 @@ on_breakpoint_removed (Mi2Client *client,
 {
   g_print ("breakpoint removed: %d\n", breakpoint_id);
 
-  g_main_loop_quit (main_loop);
+  mi2_client_stop_listening (client);
+
+  g_timeout_add (100, (GSourceFunc)g_main_loop_quit, main_loop);
 }
 
 static void
