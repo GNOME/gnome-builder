@@ -60,6 +60,36 @@ G_DEFINE_TYPE_WITH_PRIVATE (Mi2Client, mi2_client, G_TYPE_OBJECT)
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+static void
+mi2_client_cancel_all_tasks (Mi2Client *self)
+{
+  Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+  GList *list;
+
+  g_assert (MI2_IS_CLIENT (self));
+
+  g_queue_foreach (&priv->exec_commands, (GFunc)g_object_unref, NULL);
+  g_queue_clear (&priv->exec_commands);
+
+  list = priv->exec_tasks.head;
+
+  priv->exec_tasks.head = NULL;
+  priv->exec_tasks.tail = NULL;
+  priv->exec_tasks.length = 0;
+
+  for (const GList *iter = list; iter != NULL; iter = iter->next)
+    {
+      g_autoptr(GTask) task = iter->data;
+
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_CANCELLED,
+                               "The operation was cancelled");
+    }
+
+  g_list_free (list);
+}
+
 static gboolean
 mi2_client_check_ready (Mi2Client  *self,
                         GError    **error)
@@ -74,6 +104,24 @@ mi2_client_check_ready (Mi2Client  *self,
                    G_IO_ERROR,
                    G_IO_ERROR_NOT_CONNECTED,
                    "Not connected to gdb");
+      return FALSE;
+    }
+
+  if (priv->read_loop_cancellable == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_CONNECTED,
+                   "You must call mi2_client_start_listening() first");
+      return FALSE;
+    }
+
+  if (g_cancellable_is_cancelled (priv->read_loop_cancellable))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_CANCELLED,
+                   "The client has already been shutdown");
       return FALSE;
     }
 
@@ -120,22 +168,24 @@ mi2_client_real_event (Mi2Client       *self,
 }
 
 static void
-mi2_client_finalize (GObject *object)
+mi2_client_dispose (GObject *object)
 {
   Mi2Client *self = (Mi2Client *)object;
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+
+  mi2_client_cancel_all_tasks (self);
 
   g_clear_object (&priv->io_stream);
   g_clear_object (&priv->input_stream);
   g_clear_object (&priv->output_stream);
   g_clear_object (&priv->read_loop_cancellable);
 
-  g_queue_foreach (&priv->exec_tasks, (GFunc)g_object_unref, NULL);
-  g_queue_clear (&priv->exec_tasks);
+  G_OBJECT_CLASS (mi2_client_parent_class)->dispose (object);
+}
 
-  g_queue_foreach (&priv->exec_commands, (GFunc)g_object_unref, NULL);
-  g_queue_clear (&priv->exec_commands);
-
+static void
+mi2_client_finalize (GObject *object)
+{
   G_OBJECT_CLASS (mi2_client_parent_class)->finalize (object);
 }
 
@@ -183,6 +233,7 @@ mi2_client_class_init (Mi2ClientClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = mi2_client_dispose;
   object_class->finalize = mi2_client_finalize;
   object_class->get_property = mi2_client_get_property;
   object_class->set_property = mi2_client_set_property;
