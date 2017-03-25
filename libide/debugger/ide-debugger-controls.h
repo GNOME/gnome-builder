@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_CONTROLS (ide_debugger_controls_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerControls, ide_debugger_controls, IDE, DEBUGGER_CONTROLS, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerControls, ide_debugger_controls, IDE, DEBUGGER_CONTROLS, GtkRevealer)
 
 IdeDebugger *ide_debugger_controls_get_debugger (IdeDebuggerControls *self);
 void         ide_debugger_controls_set_debugger (IdeDebuggerControls *self,

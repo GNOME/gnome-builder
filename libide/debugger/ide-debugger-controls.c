@@ -23,7 +23,7 @@ struct _IdeDebuggerControls
   GtkBin parent_instance;
 };
 
-G_DEFINE_TYPE (IdeDebuggerControls, ide_debugger_controls, GTK_TYPE_BIN)
+G_DEFINE_TYPE (IdeDebuggerControls, ide_debugger_controls, GTK_TYPE_REVEALER)
 
 static void
 ide_debugger_controls_class_init (IdeDebuggerControlsClass *klass)

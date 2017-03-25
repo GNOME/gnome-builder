@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeDebuggerControls" parent="GtkBin">
+  <template class="IdeDebuggerControls" parent="GtkRevealer">
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

@@ -70,6 +70,43 @@ debugger_run_handler (IdeRunManager *run_manager,
 }
 
 static void
+debug_manager_notify_active (IdeDebuggerWorkbenchAddin *self,
+                             GParamSpec                *pspec,
+                             IdeDebugManager           *debug_manager)
+{
+  g_assert (IDE_IS_DEBUGGER_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
+
+  /*
+   * Instead of using a property binding, we use this signal callback so
+   * that we can adjust the reveal-child and visible. Otherwise the widgets
+   * will take up space+padding when reveal-child is FALSE.
+   */
+
+  if (ide_debug_manager_get_active (debug_manager))
+    {
+      gtk_widget_show (GTK_WIDGET (self->controls));
+      gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls), TRUE);
+    }
+  else
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls), FALSE);
+    }
+}
+
+static void
+controls_notify_child_revealed (IdeDebuggerWorkbenchAddin *self,
+                                GParamSpec                *pspec,
+                                IdeDebuggerControls       *controls)
+{
+  g_assert (IDE_IS_DEBUGGER_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_DEBUGGER_CONTROLS (controls));
+
+  if (!gtk_revealer_get_child_revealed (GTK_REVEALER (controls)))
+    gtk_widget_hide (GTK_WIDGET (controls));
+}
+
+static void
 ide_debugger_workbench_addin_load (IdeWorkbenchAddin *addin,
                                    IdeWorkbench      *workbench)
 {
@@ -95,8 +132,21 @@ ide_debugger_workbench_addin_load (IdeWorkbenchAddin *addin,
   headerbar = ide_workbench_get_headerbar (workbench);
 
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
-                                 "visible", TRUE,
+                                 "transition-duration", 500,
+                                 "transition-type", GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT,
+                                 "reveal-child", FALSE,
+                                 "visible", FALSE,
                                  NULL);
+  g_signal_connect_object (debug_manager,
+                           "notify::active",
+                           G_CALLBACK (debug_manager_notify_active),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->controls,
+                           "notify::child-revealed",
+                           G_CALLBACK (controls_notify_child_revealed),
+                           self,
+                           G_CONNECT_SWAPPED);
   ide_workbench_header_bar_insert_left (headerbar,
                                         GTK_WIDGET (self->controls),
                                         GTK_PACK_START,
