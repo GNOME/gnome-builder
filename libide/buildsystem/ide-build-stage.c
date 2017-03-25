@@ -37,12 +37,14 @@ typedef struct
   guint                completed : 1;
   guint                disabled : 1;
   guint                transient : 1;
+  guint                check_stdout : 1;
 } IdeBuildStagePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildStage, ide_build_stage, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_CHECK_STDOUT,
   PROP_COMPLETED,
   PROP_DISABLED,
   PROP_NAME,
@@ -265,6 +267,10 @@ ide_build_stage_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CHECK_STDOUT:
+      g_value_set_boolean (value, ide_build_stage_get_check_stdout (self));
+      break;
+
     case PROP_COMPLETED:
       g_value_set_boolean (value, ide_build_stage_get_completed (self));
       break;
@@ -296,6 +302,10 @@ ide_build_stage_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CHECK_STDOUT:
+      ide_build_stage_set_check_stdout (self, g_value_get_boolean (value));
+      break;
+
     case PROP_COMPLETED:
       ide_build_stage_set_completed (self, g_value_get_boolean (value));
       break;
@@ -332,6 +342,23 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
   klass->clean_async = ide_build_stage_real_clean_async;
   klass->clean_finish = ide_build_stage_real_clean_finish;
   klass->chain = ide_build_stage_real_chain;
+
+  /**
+   * IdeBuildStage:check-stdout:
+   *
+   * Most build systems will preserve stderr for the processes they call, such
+   * as gcc, clang, and others. However, if your build system redirects all
+   * output to stdout, you may need to set this property to %TRUE to ensure
+   * that Builder will extract errors from stdout.
+   *
+   * One such example is Ninja.
+   */
+  properties [PROP_CHECK_STDOUT] =
+    g_param_spec_boolean ("check-stdout",
+                         "Check STDOUT",
+                         "If STDOUT should be checked for errors using error regexes",
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeBuildStage:completed:
@@ -997,5 +1024,32 @@ ide_build_stage_set_disabled (IdeBuildStage *self,
     {
       priv->disabled = disabled;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISABLED]);
+    }
+}
+
+gboolean
+ide_build_stage_get_check_stdout (IdeBuildStage *self)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
+
+  return priv->check_stdout;
+}
+
+void
+ide_build_stage_set_check_stdout (IdeBuildStage *self,
+                                  gboolean       check_stdout)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_STAGE (self));
+
+  check_stdout = !!check_stdout;
+
+  if (check_stdout != priv->check_stdout)
+    {
+      priv->check_stdout = check_stdout;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CHECK_STDOUT]);
     }
 }
