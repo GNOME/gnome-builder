@@ -192,6 +192,9 @@ void           ide_build_stage_set_completed    (IdeBuildStage        *self,
 gboolean       ide_build_stage_get_disabled     (IdeBuildStage        *self);
 void           ide_build_stage_set_disabled     (IdeBuildStage        *self,
                                                  gboolean              disabled);
+gboolean       ide_build_stage_get_check_stdout (IdeBuildStage        *self);
+void           ide_build_stage_set_check_stdout (IdeBuildStage        *self,
+                                                 gboolean              check_stdout);
 gboolean       ide_build_stage_get_transient    (IdeBuildStage        *self);
 void           ide_build_stage_set_transient    (IdeBuildStage        *self,
                                                  gboolean              transient);

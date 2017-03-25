@@ -201,6 +201,13 @@ struct _IdeBuildPipeline
    * If we are in the middle of a clean operation.
    */
   guint in_clean : 1;
+
+  /*
+   * Precalculation if we need to look for errors on stdout. We can't rely
+   * on @current_stage for this, becase log entries might come in
+   * asynchronously and after the processes/stage has completed.
+   */
+  guint errors_on_stdout : 1;
 };
 
 typedef enum
@@ -425,7 +432,7 @@ create_diagnostic (IdeBuildPipeline *self,
       if (g_str_has_prefix (basedir, self->errfmt_top_dir))
         {
           basedir += strlen (self->errfmt_top_dir);
-          if (*basedir == '/')
+          if (*basedir == G_DIR_SEPARATOR)
             basedir++;
         }
 
@@ -466,8 +473,8 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
                                  gpointer           user_data)
 {
   IdeBuildPipeline *self = user_data;
-  const gchar *enterdir;
   g_autofree gchar *filtered_message = NULL;
+  const gchar *enterdir;
 
   g_assert (stream == IDE_BUILD_LOG_STDOUT || stream == IDE_BUILD_LOG_STDERR);
   g_assert (IDE_IS_BUILD_PIPELINE (self));
@@ -519,7 +526,13 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
           return;
         }
     }
-  else if (stream == IDE_BUILD_LOG_STDERR)
+
+  /*
+   * Unfortunately, some build engines such as Ninja refuse to pass errors on
+   * stderr like the tooling they abstract. So we must parse stdout in addition
+   * to stderr to extract errors.
+   */
+  if (stream == IDE_BUILD_LOG_STDERR || self->errors_on_stdout)
     {
       for (guint i = 0; i < self->errfmts->len; i++)
         {
@@ -663,6 +676,19 @@ ide_build_pipeline_real_started (IdeBuildPipeline *self)
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
+
+  self->errors_on_stdout = FALSE;
+
+  for (guint i = 0; i < self->pipeline->len; i++)
+    {
+      PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
+
+      if (ide_build_stage_get_check_stdout (entry->stage))
+        {
+          self->errors_on_stdout = TRUE;
+          break;
+        }
+    }
 
   IDE_EXIT;
 }
