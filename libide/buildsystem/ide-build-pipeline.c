@@ -474,7 +474,7 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
   g_assert (message != NULL);
 
 #define ENTERING_DIRECTORY_BEGIN "Entering directory '"
-#define ENTERING_DIRECTORY_END   "'\n"
+#define ENTERING_DIRECTORY_END   "'"
 
   if (message_len < 0)
     message_len = strlen (message);
