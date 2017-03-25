@@ -19,7 +19,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import gi
 import os
+
+gi.require_version('Mi2', '1.0')
 
 from gi.repository import GLib
 from gi.repository import GObject
