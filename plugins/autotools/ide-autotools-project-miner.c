@@ -327,6 +327,8 @@ ide_autotools_project_miner_mine_async (IdeProjectMiner     *miner,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (miner, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_project_miner_mine_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   /*
    * Get the projects directory from GSettings.
