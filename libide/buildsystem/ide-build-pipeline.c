@@ -495,6 +495,15 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
       gssize len;
 
       enterdir += IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
+
+      /* Translate to relative paths for out-of-tree builds */
+      if (g_str_has_prefix (enterdir, self->builddir))
+        {
+          enterdir += strlen (self->builddir);
+          if (*enterdir == G_DIR_SEPARATOR)
+            enterdir++;
+        }
+
       len = strlen (enterdir) - IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
 
       if (len > 0)
