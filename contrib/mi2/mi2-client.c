@@ -344,8 +344,8 @@ mi2_client_exec_write_message_cb (GObject      *object,
  * @self: a #Mi2Client
  * @command: the command to execute
  * @cancellable: (nullable): optional #GCancellable object or %NULL.
- * @callback: (scope async): A callback to execute upon completion
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a callback to execute
+ * @user_data: user data for @callback
  *
  * Executes @command asynchronously.
  *
@@ -617,8 +617,8 @@ mi2_client_insert_breakpoint_cb (GObject      *object,
  * @self: A #Mi2Client
  * @breakpoint: An #Mi2Breakpoint
  * @cancellable: (nullable): A #GCancellable or %NULL
- * @callback: (scope async): A callback to execute
- * @user_data: (closure): user data for @callback
+ * @callback: (scope async) (closure user_data): A callback to execute
+ * @user_data: user data for @callback
  *
  * Adds a breakpoint at @function. If @filename is specified, the function
  * will be resolved within that file.
@@ -728,8 +728,8 @@ mi2_client_remove_breakpoint_cb (GObject      *object,
  * @self: A #Mi2Client
  * @breakpoint_id: The id of the breakpoint
  * @cancellable: (nullable): A #GCancellable or %NULL
- * @callback: (scope async): A callback to execute
- * @user_data: (closure): user data for @callback
+ * @callback: (scope async) (closure user_data): A callback to execute
+ * @user_data: user data for @callback
  *
  * Removes a breakpoint that was previously added.
  *
@@ -804,8 +804,8 @@ mi2_client_exec_cb (GObject      *object,
  * mi2_client_run_async:
  * @self: a #Mi2Client
  * @cancellable: (nullable): an optional #GCancellable, or %NULL
- * @callback: (scope async): a callback to execute upon completion
- * @user_data: (closure): the data to pass to @callback function
+ * @callback: (scope async) (closure user_data): a callback to execute
+ * @user_data: user data for @callback
  *
  * Asynchronously requests that the inferior program be run.
  *
@@ -857,8 +857,8 @@ mi2_client_run_finish (Mi2Client     *self,
  * mi2_client_continue_async:
  * @self: a #Mi2Client
  * @cancellable: (nullable): an optional #GCancellable, or %NULL
- * @callback: (scope async): a callback to execute upon completion
- * @user_data: (closure): the data to pass to @callback function
+ * @callback: (scope async) (closure user_data): a callback to execute
+ * @user_data: user data for @callback
  *
  * Asynchronously executes the continue command.
  *
