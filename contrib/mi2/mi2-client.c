@@ -566,6 +566,7 @@ mi2_client_stop_listening (Mi2Client *self)
   if (priv->is_listening)
     {
       priv->is_listening = FALSE;
+      mi2_client_cancel_all_tasks (self);
       g_cancellable_cancel (priv->read_loop_cancellable);
     }
 }
