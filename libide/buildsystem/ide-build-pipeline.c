@@ -484,52 +484,57 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
 
   filtered_message = ide_build_utils_color_codes_filtering (message);
 
-  /*
-   * This expects LANG=C, which is defined in the autotools Builder.
-   * Not the most ideal decoupling of logic, but we don't have a whole
-   * lot to work with here.
-   */
-  if (NULL != (enterdir = strstr (filtered_message, ENTERING_DIRECTORY_BEGIN)) &&
-      g_str_has_suffix (enterdir, ENTERING_DIRECTORY_END))
+  if (stream == IDE_BUILD_LOG_STDOUT)
     {
-      gssize len;
-
-      enterdir += IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
-
-      /* Translate to relative paths for out-of-tree builds */
-      if (g_str_has_prefix (enterdir, self->builddir))
+      /*
+       * This expects LANG=C, which is defined in the autotools Builder.
+       * Not the most ideal decoupling of logic, but we don't have a whole
+       * lot to work with here.
+       */
+      if (NULL != (enterdir = strstr (filtered_message, ENTERING_DIRECTORY_BEGIN)) &&
+          g_str_has_suffix (enterdir, ENTERING_DIRECTORY_END))
         {
-          enterdir += strlen (self->builddir);
-          if (*enterdir == G_DIR_SEPARATOR)
-            enterdir++;
-        }
+          gssize len;
 
-      len = strlen (enterdir) - IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
+          enterdir += IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
 
-      if (len > 0)
-        {
-          g_free (self->errfmt_current_dir);
-          self->errfmt_current_dir = g_strndup (enterdir, len);
-          if (self->errfmt_top_dir == NULL)
-            self->errfmt_top_dir = g_strndup (enterdir, len);
-        }
-
-      return;
-    }
-
-  for (guint i = 0; i < self->errfmts->len; i++)
-    {
-      const ErrorFormat *errfmt = &g_array_index (self->errfmts, ErrorFormat, i);
-      g_autoptr(GMatchInfo) match_info = NULL;
-
-      if (g_regex_match (errfmt->regex, filtered_message, 0, &match_info))
-        {
-          g_autoptr(IdeDiagnostic) diagnostic = create_diagnostic (self, match_info);
-
-          if (diagnostic != NULL)
+          /* Translate to relative paths for out-of-tree builds */
+          if (g_str_has_prefix (enterdir, self->builddir))
             {
-              ide_build_pipeline_emit_diagnostic (self, diagnostic);
-              return;
+              enterdir += strlen (self->builddir);
+              if (*enterdir == G_DIR_SEPARATOR)
+                enterdir++;
+            }
+
+          len = strlen (enterdir) - IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
+
+          if (len > 0)
+            {
+              g_free (self->errfmt_current_dir);
+              self->errfmt_current_dir = g_strndup (enterdir, len);
+              if (self->errfmt_top_dir == NULL)
+                self->errfmt_top_dir = g_strndup (enterdir, len);
+            }
+
+          return;
+        }
+    }
+  else if (stream == IDE_BUILD_LOG_STDERR)
+    {
+      for (guint i = 0; i < self->errfmts->len; i++)
+        {
+          const ErrorFormat *errfmt = &g_array_index (self->errfmts, ErrorFormat, i);
+          g_autoptr(GMatchInfo) match_info = NULL;
+
+          if (g_regex_match (errfmt->regex, filtered_message, 0, &match_info))
+            {
+              g_autoptr(IdeDiagnostic) diagnostic = create_diagnostic (self, match_info);
+
+              if (diagnostic != NULL)
+                {
+                  ide_build_pipeline_emit_diagnostic (self, diagnostic);
+                  return;
+                }
             }
         }
     }
