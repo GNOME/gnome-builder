@@ -33,11 +33,9 @@ typedef struct
   GIOStream       *io_stream;
   Mi2InputStream  *input_stream;
   Mi2OutputStream *output_stream;
-  GCancellable    *read_loop_cancellable;
+  GCancellable    *listen_cancellable;
   GQueue           exec_tasks;
   GQueue           exec_commands;
-
-  guint            is_listening : 1;
 } Mi2ClientPrivate;
 
 enum {
@@ -107,7 +105,7 @@ mi2_client_check_ready (Mi2Client  *self,
       return FALSE;
     }
 
-  if (priv->read_loop_cancellable == NULL)
+  if (priv->listen_cancellable == NULL)
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -116,7 +114,7 @@ mi2_client_check_ready (Mi2Client  *self,
       return FALSE;
     }
 
-  if (g_cancellable_is_cancelled (priv->read_loop_cancellable))
+  if (g_cancellable_is_cancelled (priv->listen_cancellable))
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -173,12 +171,12 @@ mi2_client_dispose (GObject *object)
   Mi2Client *self = (Mi2Client *)object;
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
 
-  mi2_client_cancel_all_tasks (self);
+  g_print ("*************** dispose\n");
 
   g_clear_object (&priv->io_stream);
   g_clear_object (&priv->input_stream);
   g_clear_object (&priv->output_stream);
-  g_clear_object (&priv->read_loop_cancellable);
+  g_clear_object (&priv->listen_cancellable);
 
   G_OBJECT_CLASS (mi2_client_parent_class)->dispose (object);
 }
@@ -186,6 +184,17 @@ mi2_client_dispose (GObject *object)
 static void
 mi2_client_finalize (GObject *object)
 {
+  Mi2Client *self = (Mi2Client *)object;
+  Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+
+  g_assert (priv->exec_commands.length == 0);
+  g_assert (priv->exec_commands.head == NULL);
+  g_assert (priv->exec_commands.tail == NULL);
+
+  g_assert (priv->exec_tasks.length == 0);
+  g_assert (priv->exec_tasks.head == NULL);
+  g_assert (priv->exec_tasks.tail == NULL);
+
   G_OBJECT_CLASS (mi2_client_parent_class)->finalize (object);
 }
 
@@ -494,81 +503,166 @@ mi2_client_read_loop_cb (GObject      *object,
                          gpointer      user_data)
 {
   Mi2InputStream *stream = (Mi2InputStream *)object;
-  g_autoptr(Mi2Client) self = user_data;
-  Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+  g_autoptr(GTask) task = user_data;
   g_autoptr(Mi2Message) message = NULL;
   g_autoptr(GError) error = NULL;
+  GCancellable *cancellable;
+  Mi2Client *self;
 
   g_assert (MI2_IS_INPUT_STREAM (stream));
-  g_assert (MI2_IS_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
 
   message = mi2_input_stream_read_message_finish (stream, result, &error);
+  g_assert (!message || MI2_IS_MESSAGE (message));
 
   if (message == NULL)
     {
-      priv->is_listening = FALSE;
-      g_clear_object (&priv->read_loop_cancellable);
-      if (error && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_warning ("%s", error->message);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  mi2_client_dispatch (self, message);
+  self = g_task_get_source_object (task);
+  g_assert (MI2_IS_CLIENT (self));
 
-  if (priv->is_listening)
-    mi2_input_stream_read_message_async (priv->input_stream,
-                                         priv->read_loop_cancellable,
-                                         mi2_client_read_loop_cb,
-                                         g_steal_pointer (&self));
+  mi2_client_dispatch (self, message);
+  g_clear_object (&message);
+
+  if (g_task_return_error_if_cancelled (task))
+    return;
+
+  cancellable = g_task_get_cancellable (task);
+  mi2_input_stream_read_message_async (stream,
+                                       cancellable,
+                                       mi2_client_read_loop_cb,
+                                       g_steal_pointer (&task));
 }
 
 /**
- * mi2_client_start_listening:
+ * mi2_client_listen_async:
  * @self: a #Mi2Client
+ * @cancellable: (nullable): an optional #GCancellable, or %NULL
+ * @callback: (scope async) (closure user_data): a callback to execute upon completion
+ * @user_data: the data to pass to @callback function
  *
- * This function starts listening to the gdb process.
+ * Starts listening to the gdb process using the configured streams.
  *
- * You should call this function after attaching to any signals you want
- * to be notified about so that you do not race with the gdb process to
- * handle those signals.
+ * This will hold a reference to the client (preventing finalization) until
+ * mi2_client_shutdown_async() has been called.
+ *
+ * Call mi2_client_listen_finish() from @callback to complete the operation.
  */
 void
-mi2_client_start_listening (Mi2Client *self)
+mi2_client_listen_async (Mi2Client           *self,
+                         GCancellable        *cancellable,
+                         GAsyncReadyCallback  callback,
+                         gpointer             user_data)
 {
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (MI2_IS_CLIENT (self));
-  g_return_if_fail (priv->is_listening == FALSE);
-  g_return_if_fail (priv->input_stream != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  priv->is_listening = TRUE;
-  priv->read_loop_cancellable = g_cancellable_new ();
+  if (priv->listen_cancellable != NULL)
+    {
+      g_task_report_new_error (self, callback, user_data,
+                               mi2_client_listen_async,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVAL,
+                               "You are already listening");
+      return;
+    }
+
+  if (cancellable != NULL)
+    priv->listen_cancellable = g_object_ref (cancellable);
+  else
+    priv->listen_cancellable = g_cancellable_new ();
+
+  task = g_task_new (self, priv->listen_cancellable, callback, user_data);
+  g_task_set_source_tag (task, mi2_client_listen_async);
 
   mi2_input_stream_read_message_async (priv->input_stream,
-                                       priv->read_loop_cancellable,
+                                       priv->listen_cancellable,
                                        mi2_client_read_loop_cb,
-                                       g_object_ref (self));
+                                       g_steal_pointer (&task));
 }
 
 /**
- * mi2_client_stop_listening:
+ * mi2_client_listen_finish:
  * @self: a #Mi2Client
+ * @result: the #GAsyncResult provided to the callback function
+ * @error: a location for a #GError, or %NULL
  *
- * Stop listening to the gdb process and cancel any in-flight operations.
+ * Completes an asynchronous request to mi2_client_listen_async().
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
+gboolean
+mi2_client_listen_finish (Mi2Client     *self,
+                          GAsyncResult  *result,
+                          GError       **error)
+{
+  g_return_val_if_fail (MI2_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+/**
+ * mi2_client_shutdown_async:
+ * @self: a #Mi2Client
+ * @cancellable: (nullable): an optional #GCancellable, or %NULL
+ * @callback: (scope async) (closure user_data): a callback to execute upon completion
+ * @user_data: the data to pass to @callback function
+ *
+ * Asynchronously requests the shutdown of the client, cancelling any in-flight
+ * requests and breaking the incoming event processing loop.
+ *
+ * Call mi2_client_shutdown_finish() to complete the operation.
  */
 void
-mi2_client_stop_listening (Mi2Client *self)
+mi2_client_shutdown_async (Mi2Client           *self,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
 {
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (MI2_IS_CLIENT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (priv->is_listening)
-    {
-      priv->is_listening = FALSE;
-      mi2_client_cancel_all_tasks (self);
-      g_cancellable_cancel (priv->read_loop_cancellable);
-    }
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, mi2_client_shutdown_async);
+
+  mi2_client_cancel_all_tasks (self);
+
+  if (!g_cancellable_is_cancelled (priv->listen_cancellable))
+    g_cancellable_cancel (priv->listen_cancellable);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+/**
+ * mi2_client_shutdown_finish:
+ * @self: a #Mi2Client
+ * @result: the #GAsyncResult provided to the callback function
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to mi2_client_shutdown_async().
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
+gboolean
+mi2_client_shutdown_finish (Mi2Client     *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (MI2_IS_CLIENT (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void

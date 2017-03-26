@@ -87,7 +87,7 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
         self.client.connect('log', self.on_client_log)
 
         # Start the async read loop for the client to process replies.
-        self.client.start_listening()
+        self.client.listen_async(None, self.on_listen_cb)
 
         # We stole the pty from the runner so that we could pass it to gdb
         # instead. This will ensure that gdb re-opens that pty. Since gdb is
@@ -116,10 +116,14 @@ class GdbDebugger(Ide.Object, Ide.Debugger):
         except Exception as ex:
             print(repr(ex))
 
+    def on_listen_cb(self, client, result):
+        try:
+            client.listen_finish(result)
+        except Exception as ex:
+            print(repr(ex))
+
     def on_runner_exited(self, runner):
-        client = self.client
-        self.client = None
-        client.stop_listening()
+        self.client.shutdown_async()
 
     def on_client_log(self, client, message):
         print('>>>', message[:-1])

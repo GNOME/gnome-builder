@@ -86,8 +86,20 @@ gboolean       mi2_client_exec_finish                     (Mi2Client            
                                                            GAsyncResult         *result,
                                                            Mi2ReplyMessage     **reply,
                                                            GError              **error);
-void           mi2_client_start_listening                 (Mi2Client            *self);
-void           mi2_client_stop_listening                  (Mi2Client            *self);
+void           mi2_client_listen_async                    (Mi2Client            *self,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+gboolean       mi2_client_listen_finish                   (Mi2Client            *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
+void           mi2_client_shutdown_async                  (Mi2Client            *self,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+gboolean       mi2_client_shutdown_finish                 (Mi2Client            *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
 void           mi2_client_continue_async                  (Mi2Client            *self,
                                                            gboolean              reverse,
                                                            GCancellable         *cancellable,

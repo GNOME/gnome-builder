@@ -221,9 +221,8 @@ on_breakpoint_removed (Mi2Client *client,
 {
   g_print ("breakpoint removed: %d\n", breakpoint_id);
 
-  mi2_client_stop_listening (client);
-
-  g_timeout_add (100, (GSourceFunc)g_main_loop_quit, main_loop);
+  g_print ("Shutting down client\n");
+  mi2_client_shutdown_async (client, NULL, NULL, NULL);
 }
 
 static void
@@ -247,6 +246,23 @@ tty_done (GObject      *object,
                          NULL,
                          stack_info_frame_cb,
                          NULL);
+}
+
+static void
+listen_done_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  g_autoptr(GError) error = NULL;
+  gboolean r;
+
+  g_print ("Listen operation completed\n");
+
+  r = mi2_client_listen_finish (MI2_CLIENT (object), result, &error);
+  g_assert_error (error, G_IO_ERROR, G_IO_ERROR_CANCELLED);
+  g_assert_cmpint (r, ==, FALSE);
+
+  g_main_loop_quit (main_loop);
 }
 
 gint
@@ -273,7 +289,7 @@ main (gint argc,
   g_signal_connect (client, "breakpoint-inserted", G_CALLBACK (on_breakpoint_inserted), NULL);
   g_signal_connect (client, "breakpoint-removed", G_CALLBACK (on_breakpoint_removed), NULL);
 
-  mi2_client_start_listening (client);
+  mi2_client_listen_async (client, NULL, listen_done_cb, NULL);
 
   cmd = g_strdup_printf ("-gdb-set inferior-tty %s", path);
   mi2_client_exec_async (client, cmd, NULL, tty_done, NULL);
