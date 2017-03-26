@@ -1824,10 +1824,31 @@ pnl_dock_bin_add_child (GtkBuildable *buildable,
     gtk_container_add (GTK_CONTAINER (parent), GTK_WIDGET (child));
 }
 
+static GObject *
+pnl_dock_bin_get_internal_child (GtkBuildable *buildable,
+                                 GtkBuilder   *builder,
+                                 const gchar  *childname)
+{
+  PnlDockBin *self = (PnlDockBin *)buildable;
+
+  g_assert (PNL_IS_DOCK_BIN (self));
+  g_assert (GTK_IS_BUILDER (builder));
+
+  if (g_strcmp0 ("top", childname) == 0)
+    return G_OBJECT (pnl_dock_bin_get_top_edge (self));
+  else if (g_strcmp0 ("bottom", childname) == 0)
+    return G_OBJECT (pnl_dock_bin_get_bottom_edge (self));
+  else if (g_strcmp0 ("right", childname) == 0)
+    return G_OBJECT (pnl_dock_bin_get_right_edge (self));
+
+  return NULL;
+}
+
 static void
 pnl_dock_bin_init_buildable_iface (GtkBuildableIface *iface)
 {
   iface->add_child = pnl_dock_bin_add_child;
+  iface->get_internal_child = pnl_dock_bin_get_internal_child;
 }
 
 static void
