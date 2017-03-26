@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-debug-manager"
 
+#include <egg-binding-group.h>
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
@@ -30,8 +31,11 @@
 struct _IdeDebugManager
 {
   IdeObject           parent_instance;
+
   GSimpleActionGroup *actions;
   IdeDebugger        *debugger;
+  EggBindingGroup    *debugger_bindings;
+
   guint               active : 1;
 };
 
@@ -137,12 +141,69 @@ G_DEFINE_TYPE_EXTENDED (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
 
 static void
+ide_debug_manager_action_step_in (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  IdeDebugManager *self = user_data;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+}
+
+static void
+ide_debug_manager_action_step_over (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  IdeDebugManager *self = user_data;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+}
+
+static void
+ide_debug_manager_action_continue (GSimpleAction *action,
+                                   GVariant      *param,
+                                   gpointer       user_data)
+{
+  IdeDebugManager *self = user_data;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+}
+
+static void
+ide_debug_manager_action_propagate_enabled (IdeDebugManager *self,
+                                            GParamSpec      *pspec,
+                                            GSimpleAction   *action)
+{
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (pspec != NULL);
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self),
+                                         g_action_get_name (G_ACTION (action)),
+                                         g_action_get_enabled (G_ACTION (action)));
+}
+
+static GActionEntry debugger_action_entries[] = {
+  { "step-in",   ide_debug_manager_action_step_in },
+  { "step-over", ide_debug_manager_action_step_over },
+  { "continue",  ide_debug_manager_action_continue },
+};
+
+static void
 ide_debug_manager_finalize (GObject *object)
 {
   IdeDebugManager *self = (IdeDebugManager *)object;
 
   g_clear_object (&self->actions);
   g_clear_object (&self->debugger);
+  g_clear_object (&self->debugger_bindings);
 
   G_OBJECT_CLASS (ide_debug_manager_parent_class)->finalize (object);
 }
@@ -196,6 +257,39 @@ static void
 ide_debug_manager_init (IdeDebugManager *self)
 {
   self->actions = g_simple_action_group_new ();
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   debugger_action_entries,
+                                   G_N_ELEMENTS (debugger_action_entries),
+                                   self);
+
+  for (guint i = 0; i < G_N_ELEMENTS (debugger_action_entries); i++)
+    {
+      const gchar *name = debugger_action_entries[i].name;
+      GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
+
+      g_signal_connect_object (action,
+                               "notify::enabled",
+                               G_CALLBACK (ide_debug_manager_action_propagate_enabled),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+
+#define BIND_PROPERTY_TO_ACTION(name, action_name)                                   \
+  egg_binding_group_bind (self->debugger_bindings,                                   \
+                          name,                                                      \
+                          g_action_map_lookup_action (G_ACTION_MAP (self->actions),  \
+                                                      action_name),                  \
+                          "enabled",                                                 \
+                          G_BINDING_SYNC_CREATE)
+
+  self->debugger_bindings = egg_binding_group_new ();
+
+  BIND_PROPERTY_TO_ACTION ("can-continue", "continue");
+  BIND_PROPERTY_TO_ACTION ("can-step-in", "step-in");
+  BIND_PROPERTY_TO_ACTION ("can-step-out", "step-out");
+
+#undef BIND_PROPERTY_TO_ACTION
 }
 
 static void
@@ -294,6 +388,7 @@ ide_debug_manager_start (IdeDebugManager  *self,
                            G_CONNECT_SWAPPED);
 
   self->debugger = g_steal_pointer (&debugger);
+  egg_binding_group_set_source (self->debugger_bindings, self->debugger);
 
   ide_debug_manager_set_active (self, TRUE);
 
@@ -308,6 +403,7 @@ ide_debug_manager_stop (IdeDebugManager *self)
 {
   g_return_if_fail (IDE_IS_DEBUG_MANAGER (self));
 
+  egg_binding_group_set_source (self->debugger_bindings, NULL);
   g_clear_object (&self->debugger);
 }
 
