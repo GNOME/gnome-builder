@@ -10,7 +10,7 @@
         </style>
         <child>
           <object class="GtkButton" id="continue_button">
-            <property name="action-name">debugger.continue</property>
+            <property name="action-name">debug-manager.continue</property>
             <property name="tooltip-text" translatable="yes">Continue running the program</property>
             <property name="visible">true</property>
             <child>
@@ -23,7 +23,7 @@
         </child>
         <child>
           <object class="GtkButton" id="execute_from_cursor_button">
-            <property name="action-name">debugger.execute-from-cursor</property>
+            <property name="action-name">debug-manager.execute-from-cursor</property>
             <property name="tooltip-text" translatable="yes">Execute from the current cursor position</property>
             <property name="visible">true</property>
             <child>
@@ -36,7 +36,7 @@
         </child>
         <child>
           <object class="GtkButton" id="execute_to_cursor_button">
-            <property name="action-name">debugger.execute-to-cursor</property>
+            <property name="action-name">debug-manager.execute-to-cursor</property>
             <property name="tooltip-text" translatable="yes">Execute until reaching the current cursor position</property>
             <property name="visible">true</property>
             <child>
@@ -49,8 +49,8 @@
         </child>
         <child>
           <object class="GtkButton" id="step_in_button">
-            <property name="action-name">debugger.step-in</property>
-            <property name="tooltip-text" translatable="yes">Step into the scope</property>
+            <property name="action-name">debug-manager.step-in</property>
+            <property name="tooltip-text" translatable="yes">Execute the current line, stepping into any function calls</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkImage">
@@ -61,26 +61,26 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="step_out_button">
-            <property name="action-name">debugger.step-out</property>
-            <property name="tooltip-text" translatable="yes">Step out of scope</property>
+          <object class="GtkButton" id="step_over_button">
+            <property name="action-name">debug-manager.step-over</property>
+            <property name="tooltip-text" translatable="yes">Execute the current line, stepping over any function calls</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">debug-step-out-symbolic</property>
+                <property name="icon-name">debug-step-over-symbolic</property>
                 <property name="visible">true</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="step_over_button">
-            <property name="action-name">debugger.step-over</property>
-            <property name="tooltip-text" translatable="yes">Step over the operation</property>
+          <object class="GtkButton" id="finish_button">
+            <property name="action-name">debug-manager.finish</property>
+            <property name="tooltip-text" translatable="yes">Run until the end of the function</property>
             <property name="visible">true</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">debug-step-over-symbolic</property>
+                <property name="icon-name">debug-step-out-symbolic</property>
                 <property name="visible">true</property>
               </object>
             </child>
