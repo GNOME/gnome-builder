@@ -509,7 +509,10 @@ mi2_client_read_loop_cb (GObject      *object,
 
   if (message == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      if (error != NULL)
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        g_task_return_boolean (task, TRUE);
       return;
     }
 
