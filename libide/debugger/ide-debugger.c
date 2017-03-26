@@ -173,3 +173,13 @@ ide_debugger_prepare (IdeDebugger *self,
   if (IDE_DEBUGGER_GET_IFACE (self)->prepare)
     IDE_DEBUGGER_GET_IFACE (self)->prepare (self, runner);
 }
+
+void
+ide_debugger_run (IdeDebugger        *self,
+                  IdeDebuggerRunType  run_type)
+{
+  g_return_if_fail (IDE_IS_DEBUGGER (self));
+
+  if (IDE_DEBUGGER_GET_IFACE (self)->run)
+    IDE_DEBUGGER_GET_IFACE (self)->run (self, run_type);
+}

@@ -150,6 +150,8 @@ ide_debug_manager_action_step_in (GSimpleAction *action,
   g_assert (IDE_IS_DEBUG_MANAGER (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
 
+  if (self->debugger != NULL)
+    ide_debugger_run (self->debugger, IDE_DEBUGGER_RUN_STEP_IN);
 }
 
 static void
@@ -162,6 +164,8 @@ ide_debug_manager_action_step_over (GSimpleAction *action,
   g_assert (IDE_IS_DEBUG_MANAGER (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
 
+  if (self->debugger != NULL)
+    ide_debugger_run (self->debugger, IDE_DEBUGGER_RUN_STEP_OVER);
 }
 
 static void
@@ -174,6 +178,8 @@ ide_debug_manager_action_continue (GSimpleAction *action,
   g_assert (IDE_IS_DEBUG_MANAGER (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
 
+  if (self->debugger != NULL)
+    ide_debugger_run (self->debugger, IDE_DEBUGGER_RUN_CONTINUE);
 }
 
 static void

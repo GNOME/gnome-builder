@@ -37,19 +37,28 @@ typedef enum
   IDE_DEBUGGER_STOP_SIGNALED,
 } IdeDebuggerStopReason;
 
+typedef enum
+{
+  IDE_DEBUGGER_RUN_CONTINUE,
+  IDE_DEBUGGER_RUN_STEP_IN,
+  IDE_DEBUGGER_RUN_STEP_OVER,
+} IdeDebuggerRunType;
+
 struct _IdeDebuggerInterface
 {
   GTypeInterface parent_iface;
 
-  gchar    *(*get_name)        (IdeDebugger           *self);
-  gboolean  (*supports_runner) (IdeDebugger           *self,
-                                IdeRunner             *runner,
-                                gint                  *priority);
-  void      (*stopped)         (IdeDebugger           *self,
-                                IdeDebuggerStopReason  reason,
-                                IdeSourceLocation     *location);
-  void      (*prepare)         (IdeDebugger           *debugger,
-                                IdeRunner             *runner);
+  gchar    *(*get_name)        (IdeDebugger            *self);
+  gboolean  (*supports_runner) (IdeDebugger            *self,
+                                IdeRunner              *runner,
+                                gint                   *priority);
+  void      (*stopped)         (IdeDebugger            *self,
+                                IdeDebuggerStopReason   reason,
+                                IdeSourceLocation      *location);
+  void      (*prepare)         (IdeDebugger            *debugger,
+                                IdeRunner              *runner);
+  void      (*run)             (IdeDebugger            *self,
+                                IdeDebuggerRunType      run_type);
 };
 
 gchar    *ide_debugger_get_name        (IdeDebugger           *self);
@@ -58,6 +67,8 @@ gboolean  ide_debugger_supports_runner (IdeDebugger           *self,
                                         gint                  *priority);
 void      ide_debugger_prepare         (IdeDebugger           *self,
                                         IdeRunner             *runner);
+void      ide_debugger_run             (IdeDebugger           *self,
+                                        IdeDebuggerRunType     run_type);
 void      ide_debugger_emit_stopped    (IdeDebugger           *self,
                                         IdeDebuggerStopReason  reason,
                                         IdeSourceLocation     *location);
