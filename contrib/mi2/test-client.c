@@ -259,8 +259,8 @@ listen_done_cb (GObject      *object,
   g_print ("Listen operation completed\n");
 
   r = mi2_client_listen_finish (MI2_CLIENT (object), result, &error);
-  g_assert_error (error, G_IO_ERROR, G_IO_ERROR_CANCELLED);
-  g_assert_cmpint (r, ==, FALSE);
+  g_assert_no_error (error);
+  g_assert_cmpint (r, ==, TRUE);
 
   g_main_loop_quit (main_loop);
 }
