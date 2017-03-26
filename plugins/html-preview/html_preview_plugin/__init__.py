@@ -273,6 +273,12 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         stack = view.get_ancestor(Ide.LayoutStack)
         stack.add(web_view)
 
+        self.action.set_enabled(False)
+        web_view.connect('destroy', lambda *_: self.web_view_destroyed(web_view))
+
+    def web_view_destroyed(self, web_view):
+        self.action.set_enabled(True)
+
     def search_sphinx_base_dir(self, path):
         context = self.workbench.get_context()
         vcs = context.get_vcs()
