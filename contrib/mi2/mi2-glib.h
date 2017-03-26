@@ -23,6 +23,7 @@
 
 G_BEGIN_DECLS
 
+#include "mi2-client.h"
 #include "mi2-command-message.h"
 #include "mi2-console-message.h"
 #include "mi2-event-message.h"
