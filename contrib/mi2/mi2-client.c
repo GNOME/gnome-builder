@@ -161,8 +161,6 @@ mi2_client_dispose (GObject *object)
   Mi2Client *self = (Mi2Client *)object;
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
 
-  g_print ("*************** dispose\n");
-
   g_clear_object (&priv->io_stream);
   g_clear_object (&priv->input_stream);
   g_clear_object (&priv->output_stream);
@@ -175,8 +173,6 @@ mi2_client_finalize (GObject *object)
 {
   Mi2Client *self = (Mi2Client *)object;
   Mi2ClientPrivate *priv = mi2_client_get_instance_private (self);
-
-  g_print ("*************** finalize\n");
 
   g_assert (priv->exec_commands.length == 0);
   g_assert (priv->exec_commands.head == NULL);
