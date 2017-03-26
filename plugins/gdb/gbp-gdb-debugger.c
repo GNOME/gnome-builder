@@ -27,11 +27,18 @@
 struct _GbpGdbDebugger
 {
   IdeObject       parent;
+
   Mi2Client      *client;
   EggSignalGroup *client_signals;
+
   IdeRunner      *runner;
   EggSignalGroup *runner_signals;
+
   gint            mapped_fd;
+
+  guint           can_step_in : 1;
+  guint           can_step_over : 1;
+  guint           can_continue : 1;
 };
 
 enum {
@@ -277,6 +284,27 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
   g_assert (MI2_IS_EVENT_MESSAGE (message));
   g_assert (MI2_IS_CLIENT (client));
 
+  switch (reason)
+    {
+    case MI2_STOP_BREAKPOINT_HIT:
+      self->can_continue = TRUE;
+      self->can_step_in = TRUE;
+      self->can_step_over = TRUE;
+      break;
+
+    case MI2_STOP_EXITED_NORMALLY:
+    case MI2_STOP_UNKNOWN:
+    default:
+      self->can_continue = FALSE;
+      self->can_step_in = FALSE;
+      self->can_step_over = FALSE;
+      break;
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_CONTINUE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_STEP_IN]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_STEP_OVER]);
+
   IDE_EXIT;
 }
 
@@ -315,12 +343,20 @@ gbp_gdb_debugger_get_property (GObject    *object,
                                GValue     *value,
                                GParamSpec *pspec)
 {
+  GbpGdbDebugger *self = (GbpGdbDebugger *)object;
+
   switch (prop_id)
     {
     case PROP_CAN_STEP_IN:
+      g_value_set_boolean (value, self->can_step_in);
+      break;
+
     case PROP_CAN_STEP_OVER:
+      g_value_set_boolean (value, self->can_step_over);
+      break;
+
     case PROP_CAN_CONTINUE:
-      g_value_set_boolean (value, FALSE);
+      g_value_set_boolean (value, self->can_continue);
       break;
 
     default:
@@ -336,15 +372,20 @@ gbp_gdb_debugger_class_init (GbpGdbDebuggerClass *klass)
   object_class->finalize = gbp_gdb_debugger_finalize;
   object_class->get_property = gbp_gdb_debugger_get_property;
 
-#define REGISTER_BOOLEAN(NAME, name) \
-  properties [NAME] = g_param_spec_boolean (name, NULL, NULL, FALSE, \
-                                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)
+  properties [PROP_CAN_STEP_IN] =
+    g_param_spec_boolean ("can-step-in", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  REGISTER_BOOLEAN (PROP_CAN_STEP_IN, "can-step-in");
-  REGISTER_BOOLEAN (PROP_CAN_STEP_OVER, "can-step-over");
-  REGISTER_BOOLEAN (PROP_CAN_CONTINUE, "can-continue");
+  properties [PROP_CAN_STEP_OVER] =
+    g_param_spec_boolean ("can-step-over", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-#undef REGISTER_BOOLEAN
+  properties [PROP_CAN_CONTINUE] =
+    g_param_spec_boolean ("can-continue", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
