@@ -94,18 +94,6 @@ builtins.open = new_open
 _ = Ide.gettext
 
 
-def is_sphinx_installed():
-    with open(os.devnull, 'w') as devnull:
-        try:
-            if subprocess.call(['sphinx-build', '--version'],
-                               stdout=devnull, stderr=devnull) == 0:
-                return True
-        except FileNotFoundError:
-            pass
-
-        return False
-
-
 class SphinxState():
     def __init__(self, builddir):
         self.builddir = builddir
