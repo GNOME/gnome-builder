@@ -293,7 +293,7 @@ ide_debug_manager_init (IdeDebugManager *self)
 
   BIND_PROPERTY_TO_ACTION ("can-continue", "continue");
   BIND_PROPERTY_TO_ACTION ("can-step-in", "step-in");
-  BIND_PROPERTY_TO_ACTION ("can-step-out", "step-out");
+  BIND_PROPERTY_TO_ACTION ("can-step-over", "step-over");
 
 #undef BIND_PROPERTY_TO_ACTION
 }
