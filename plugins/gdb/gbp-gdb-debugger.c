@@ -56,8 +56,11 @@ static GParamSpec *properties [N_PROPS];
 static void      debugger_iface_init                            (IdeDebuggerInterface *iface);
 static void      gbp_gdb_debugger_finalize                      (GObject              *object);
 static gchar    *gbp_gdb_debugger_get_name                      (IdeDebugger          *debugger);
+static void      gbp_gdb_debugger_notify_properties             (GbpGdbDebugger       *self);
 static void      gbp_gdb_debugger_prepare                       (IdeDebugger          *debugger,
                                                                  IdeRunner            *runner);
+static void      gbp_gdb_debugger_run                           (IdeDebugger          *debugger,
+                                                                 IdeDebuggerRunType    run_type);
 static gboolean  gbp_gdb_debugger_supports_runner               (IdeDebugger          *debugger,
                                                                  IdeRunner            *runner,
                                                                  gint                 *priority);
@@ -86,6 +89,16 @@ static void      gbp_gdb_debugger_on_client_log                 (GbpGdbDebugger 
 /* Type initialization */
 G_DEFINE_TYPE_WITH_CODE (GbpGdbDebugger, gbp_gdb_debugger, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_DEBUGGER, debugger_iface_init))
+
+static void
+gbp_gdb_debugger_notify_properties (GbpGdbDebugger *self)
+{
+  g_assert (GBP_IS_GDB_DEBUGGER (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_CONTINUE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_STEP_IN]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_STEP_OVER]);
+}
 
 static gchar *
 gbp_gdb_debugger_get_name (IdeDebugger *debugger)
@@ -152,10 +165,46 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
 }
 
 static void
+gbp_gdb_debugger_run (IdeDebugger        *debugger,
+                      IdeDebuggerRunType  run_type)
+{
+  GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER (self));
+
+  self->can_continue = FALSE;
+  self->can_step_in = FALSE;
+  self->can_step_over = FALSE;
+
+  gbp_gdb_debugger_notify_properties (self);
+
+  switch (run_type)
+    {
+    case IDE_DEBUGGER_RUN_STEP_IN:
+      break;
+
+    case IDE_DEBUGGER_RUN_STEP_OVER:
+      break;
+
+    case IDE_DEBUGGER_RUN_CONTINUE:
+      mi2_client_continue_async (self->client, FALSE, NULL, NULL, NULL);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  IDE_EXIT;
+}
+
+static void
 debugger_iface_init (IdeDebuggerInterface *iface)
 {
   iface->get_name        = gbp_gdb_debugger_get_name;
   iface->prepare         = gbp_gdb_debugger_prepare;
+  iface->run             = gbp_gdb_debugger_run;
   iface->supports_runner = gbp_gdb_debugger_supports_runner;
 }
 
@@ -301,9 +350,7 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
       break;
     }
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_CONTINUE]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_STEP_IN]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_STEP_OVER]);
+  gbp_gdb_debugger_notify_properties (self);
 
   IDE_EXIT;
 }
