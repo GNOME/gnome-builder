@@ -329,27 +329,27 @@ gbp_gdb_debugger_init (GbpGdbDebugger *self)
 
   self->client_signals = egg_signal_group_new (MI2_TYPE_CLIENT);
 
-  egg_signal_group_connect_object (self->runner_signals,
+  egg_signal_group_connect_object (self->client_signals,
                                    "breakpoint-inserted",
                                    G_CALLBACK (gbp_gdb_debugger_on_client_breakpoint_inserted),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (self->runner_signals,
+  egg_signal_group_connect_object (self->client_signals,
                                    "breakpoint-removed",
                                    G_CALLBACK (gbp_gdb_debugger_on_client_breakpoint_removed),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (self->runner_signals,
+  egg_signal_group_connect_object (self->client_signals,
                                    "event",
                                    G_CALLBACK (gbp_gdb_debugger_on_client_event),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (self->runner_signals,
+  egg_signal_group_connect_object (self->client_signals,
                                    "stopped",
                                    G_CALLBACK (gbp_gdb_debugger_on_client_stopped),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (self->runner_signals,
+  egg_signal_group_connect_object (self->client_signals,
                                    "log",
                                    G_CALLBACK (gbp_gdb_debugger_on_client_log),
                                    self,
