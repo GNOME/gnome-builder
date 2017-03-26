@@ -31,6 +31,7 @@ struct _IdeDebugManager
 {
   IdeObject           parent_instance;
   GSimpleActionGroup *actions;
+  IdeDebugger        *debugger;
   guint               active : 1;
 };
 
@@ -141,6 +142,7 @@ ide_debug_manager_finalize (GObject *object)
   IdeDebugManager *self = (IdeDebugManager *)object;
 
   g_clear_object (&self->actions);
+  g_clear_object (&self->debugger);
 
   G_OBJECT_CLASS (ide_debug_manager_parent_class)->finalize (object);
 }
@@ -291,6 +293,8 @@ ide_debug_manager_start (IdeDebugManager  *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  self->debugger = g_steal_pointer (&debugger);
+
   ide_debug_manager_set_active (self, TRUE);
 
   ret = TRUE;
@@ -303,6 +307,8 @@ void
 ide_debug_manager_stop (IdeDebugManager *self)
 {
   g_return_if_fail (IDE_IS_DEBUG_MANAGER (self));
+
+  g_clear_object (&self->debugger);
 }
 
 gboolean
