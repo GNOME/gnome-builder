@@ -354,7 +354,11 @@ class HtmlPreviewView(Ide.LayoutView):
                 self.rst = True
 
         document.connect('changed', self.on_changed)
+        self.webview.connect('destroy', self.web_view_destroyed)
         self.on_changed(document)
+
+    def web_view_destroyed(self, web_view):
+        self.document.disconnect_by_func(self.on_changed)
 
     def do_get_title(self):
         title = self.document.get_title()
