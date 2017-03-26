@@ -153,6 +153,27 @@ debugger_iface_init (IdeDebuggerInterface *iface)
 }
 
 static void
+gbp_gdb_debugger_client_listen_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  Mi2Client *client = (Mi2Client *)object;
+  g_autoptr(GbpGdbDebugger) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (MI2_IS_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_GDB_DEBUGGER (self));
+
+  if (!mi2_client_listen_finish (client, result, &error))
+    g_warning ("%s", error->message);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_gdb_debugger_on_runner_spawned (GbpGdbDebugger *self,
                                     const gchar    *identifier,
                                     IdeRunner      *runner)
@@ -178,7 +199,10 @@ gbp_gdb_debugger_on_runner_spawned (GbpGdbDebugger *self,
   egg_signal_group_set_target (self->client_signals, self->client);
 
   /* Now ask the mi2 client to start procesing data */
-  mi2_client_listen_async (self->client, NULL, NULL, NULL);
+  mi2_client_listen_async (self->client,
+                           NULL,
+                           gbp_gdb_debugger_client_listen_cb,
+                           g_object_ref (self));
 
   /* Ask gdb to use our mapped in FD for the TTY when spawning the child */
   inferior_command = g_strdup_printf ("-gdb-set inferior-tty /proc/self/fd/%d", self->mapped_fd);
@@ -207,10 +231,13 @@ gbp_gdb_debugger_on_client_breakpoint_inserted (GbpGdbDebugger *self,
                                                 Mi2Breakpoint  *breakpoint,
                                                 Mi2Client      *client)
 {
+  IDE_ENTRY;
+
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (MI2_IS_BREAKPOINT (breakpoint));
   g_assert (MI2_IS_CLIENT (client));
 
+  IDE_EXIT;
 }
 
 static void
@@ -218,10 +245,13 @@ gbp_gdb_debugger_on_client_breakpoint_removed (GbpGdbDebugger *self,
                                                gint            breakpoint_id,
                                                Mi2Client      *client)
 {
+  IDE_ENTRY;
+
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (breakpoint_id > 0);
   g_assert (MI2_IS_CLIENT (client));
 
+  IDE_EXIT;
 }
 
 static void
@@ -241,10 +271,13 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
                                     Mi2EventMessage *message,
                                     Mi2Client       *client)
 {
+  IDE_ENTRY;
+
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (MI2_IS_EVENT_MESSAGE (message));
   g_assert (MI2_IS_CLIENT (client));
 
+  IDE_EXIT;
 }
 
 static void
@@ -256,6 +289,7 @@ gbp_gdb_debugger_on_client_log (GbpGdbDebugger *self,
   g_assert (message != NULL);
   g_assert (MI2_IS_CLIENT (client));
 
+  g_print (">>> %s", message);
 }
 
 static void
@@ -263,12 +297,16 @@ gbp_gdb_debugger_finalize (GObject *object)
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)object;
 
+  IDE_ENTRY;
+
   g_clear_object (&self->client_signals);
   g_clear_object (&self->client);
   g_clear_object (&self->runner_signals);
   g_clear_object (&self->runner);
 
   G_OBJECT_CLASS (gbp_gdb_debugger_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -314,6 +352,8 @@ gbp_gdb_debugger_class_init (GbpGdbDebuggerClass *klass)
 static void
 gbp_gdb_debugger_init (GbpGdbDebugger *self)
 {
+  IDE_ENTRY;
+
   self->runner_signals = egg_signal_group_new (IDE_TYPE_RUNNER);
 
   egg_signal_group_connect_object (self->runner_signals,
@@ -354,4 +394,6 @@ gbp_gdb_debugger_init (GbpGdbDebugger *self)
                                    G_CALLBACK (gbp_gdb_debugger_on_client_log),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  IDE_EXIT;
 }
