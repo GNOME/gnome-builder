@@ -1,6 +1,5 @@
 [Plugin]
-Module=gdb_plugin
-Loader=python3
+Module=gdb-plugin
 Name=Gdb
 Description=Provides integration with the GNU Debugger
 Authors=Christian Hergert <chergert@redhat.com>

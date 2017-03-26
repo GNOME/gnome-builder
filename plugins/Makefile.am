@@ -17,6 +17,7 @@ SUBDIRS =                            \
 	flatpak                      \
 	fpaste                       \
 	gcc                          \
+	gdb                          \
 	gettext                      \
 	git                          \
 	gnome-code-assistance        \
