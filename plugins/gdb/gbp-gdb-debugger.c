@@ -181,7 +181,7 @@ gbp_gdb_debugger_on_runner_spawned (GbpGdbDebugger *self,
   mi2_client_listen_async (self->client, NULL, NULL, NULL);
 
   /* Ask gdb to use our mapped in FD for the TTY when spawning the child */
-  inferior_command = g_strdup_printf ("-gdb-set inferrior-tty /proc/self/fd/%d", self->mapped_fd);
+  inferior_command = g_strdup_printf ("-gdb-set inferior-tty /proc/self/fd/%d", self->mapped_fd);
   mi2_client_exec_async (self->client, inferior_command, NULL, NULL, NULL);
 
   /* Now ask gdb to start running the program */
