@@ -824,7 +824,8 @@ mi2_client_remove_breakpoint_cb (GObject      *object,
     }
 
   id = GPOINTER_TO_INT (g_task_get_task_data (task));
-  g_signal_emit (self, signals [BREAKPOINT_REMOVED], 0, id);
+  if (id != 0)
+    g_signal_emit (self, signals [BREAKPOINT_REMOVED], 0, id);
 
   g_task_return_boolean (task, TRUE);
 }
