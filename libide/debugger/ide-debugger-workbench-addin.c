@@ -164,6 +164,9 @@ ide_debugger_workbench_addin_load (IdeWorkbenchAddin *addin,
   self->perspective = g_object_new (IDE_TYPE_DEBUGGER_PERSPECTIVE,
                                     "visible", TRUE,
                                     NULL);
+  g_object_bind_property (debug_manager, "debugger",
+                          self->perspective, "debugger",
+                          G_BINDING_SYNC_CREATE);
   ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
 
   self->message = g_object_new (IDE_TYPE_WORKBENCH_MESSAGE,

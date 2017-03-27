@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeDebuggerPerspective" parent="IdeLayout">
+    <child internal-child="bottom">
+      <object class="PnlDockBinEdge">
+        <property name="reveal-child">true</property>
+        <child>
+          <object class="PnlDockWidget">
+            <property name="title">Debug Log</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkTextView" id="log_text_view">
+                    <property name="buffer">log_buffer</property>
+                    <property name="editable">false</property>
+                    <property name="monospace">true</property>
+                    <property name="vexpand">true</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
   </template>
+  <object class="GtkTextBuffer" id="log_buffer">
+  </object>
 </interface>
