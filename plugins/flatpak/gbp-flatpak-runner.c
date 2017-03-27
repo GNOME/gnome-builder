@@ -71,8 +71,12 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
         {
           const gchar *arg = finish_args[j];
 
-          /* "flatpak build" does not support require-version */
-          if (!g_str_has_prefix (arg, "--require-version"))
+          /* "flatpak build" does not support all build-finish args */
+          if (!g_str_has_prefix (arg, "--require-version") &&
+              !g_str_has_prefix (arg, "--extension") &&
+              !g_str_has_prefix (arg, "--runtime") &&
+              !g_str_has_prefix (arg, "--sdk") &&
+              !g_str_has_prefix (arg, "--command"))
             ide_subprocess_launcher_insert_argv (launcher, i++, arg);
         }
     }
