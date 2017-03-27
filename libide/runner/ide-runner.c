@@ -399,6 +399,21 @@ ide_runner_real_set_tty (IdeRunner *self,
 }
 
 static void
+ide_runner_real_force_quit (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNNER (self));
+
+  if (priv->subprocess != NULL)
+    ide_subprocess_force_exit (priv->subprocess);
+
+  IDE_EXIT;
+}
+
+static void
 ide_runner_extension_added (PeasExtensionSet *set,
                             PeasPluginInfo   *plugin_info,
                             PeasExtension    *exten,
@@ -578,6 +593,7 @@ ide_runner_class_init (IdeRunnerClass *klass)
   klass->get_stdin = ide_runner_real_get_stdin;
   klass->get_stdout = ide_runner_real_get_stdout;
   klass->get_stderr = ide_runner_real_get_stderr;
+  klass->force_quit = ide_runner_real_force_quit;
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv",
