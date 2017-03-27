@@ -327,6 +327,8 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
                                     Mi2EventMessage *message,
                                     Mi2Client       *client)
 {
+  IdeDebuggerStopReason translated;
+
   IDE_ENTRY;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
@@ -339,18 +341,25 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
       self->can_continue = TRUE;
       self->can_step_in = TRUE;
       self->can_step_over = TRUE;
+      translated = IDE_DEBUGGER_STOP_BREAKPOINT;
       break;
 
     case MI2_STOP_EXITED_NORMALLY:
+      translated = IDE_DEBUGGER_STOP_EXITED_NORMALLY;
+      break;
+
     case MI2_STOP_UNKNOWN:
     default:
       self->can_continue = FALSE;
       self->can_step_in = FALSE;
       self->can_step_over = FALSE;
+      translated = IDE_DEBUGGER_STOP_UNDEFINED;
       break;
     }
 
   gbp_gdb_debugger_notify_properties (self);
+
+  ide_debugger_emit_stopped (IDE_DEBUGGER (self), translated, NULL);
 
   IDE_EXIT;
 }
