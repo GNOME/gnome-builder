@@ -49,12 +49,13 @@ typedef struct
 enum {
   PROP_0,
   PROP_ACTIVE,
+  PROP_DEBUGGER,
   N_PROPS
 };
 
 enum {
   BREAKPOINT_ADDED,
-  BREAKPOING_REMOVED,
+  BREAKPOINT_REMOVED,
   N_SIGNALS
 };
 
@@ -228,6 +229,10 @@ ide_debug_manager_get_property (GObject    *object,
       g_value_set_boolean (value, self->active);
       break;
 
+    case PROP_DEBUGGER:
+      g_value_set_object (value, self->debugger);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -255,6 +260,13 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
                           "If the debugger is running",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DEBUGGER] =
+    g_param_spec_object ("debugger",
+                         "Debugger",
+                         "The current debugger being used",
+                         IDE_TYPE_DEBUGGER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -397,6 +409,8 @@ ide_debug_manager_start (IdeDebugManager  *self,
   egg_binding_group_set_source (self->debugger_bindings, self->debugger);
 
   ide_debug_manager_set_active (self, TRUE);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 
   ret = TRUE;
 
