@@ -364,7 +364,7 @@ gbp_gdb_debugger_on_client_log (GbpGdbDebugger *self,
   g_assert (message != NULL);
   g_assert (MI2_IS_CLIENT (client));
 
-  g_print (">>> %s", message);
+  ide_debugger_emit_log (IDE_DEBUGGER (self), message);
 }
 
 static void
