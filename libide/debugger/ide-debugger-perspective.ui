@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeDebuggerPerspective" parent="IdeLayout">
+    <child>
+      <object class="IdeLayoutGrid" id="layout_grid">
+        <property name="visible">true</property>
+      </object>
+    </child>
     <child internal-child="bottom">
       <object class="PnlDockBinEdge">
         <property name="reveal-child">true</property>
