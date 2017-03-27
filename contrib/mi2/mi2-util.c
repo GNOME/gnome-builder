@@ -200,8 +200,6 @@ mi2_util_parse_list (const gchar  *line,
 
   if (*line != ']')
     {
-      g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
-
       while (*line != ']')
         {
           if (*line == '"')
@@ -211,7 +209,9 @@ mi2_util_parse_list (const gchar  *line,
               if (!(value = mi2_util_parse_string (line, &line)))
                 goto failure;
 
+              g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
               g_variant_builder_add (&builder, "s", value);
+              g_variant_builder_close (&builder);
             }
           else if (*line == '{')
             {
@@ -220,7 +220,9 @@ mi2_util_parse_list (const gchar  *line,
               if (!(v = mi2_util_parse_record (line, &line)))
                 goto failure;
 
+              g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
               g_variant_builder_add_value (&builder, v);
+              g_variant_builder_close (&builder);
             }
           else if (*line == '[')
             {
@@ -229,7 +231,9 @@ mi2_util_parse_list (const gchar  *line,
               if (!(ar = mi2_util_parse_list (line, &line)))
                 goto failure;
 
+              g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
               g_variant_builder_add_value (&builder, ar);
+              g_variant_builder_close (&builder);
             }
           else
             goto failure;
@@ -238,8 +242,6 @@ mi2_util_parse_list (const gchar  *line,
           if (*line == ',')
             line++;
         }
-
-      g_variant_builder_close (&builder);
     }
 
   g_assert (*line == ']');

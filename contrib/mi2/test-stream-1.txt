@@ -38,6 +38,7 @@
 ~"\n"
 ~"Breakpoint 1, 0x00005555555578b0 in main ()\n"
 *stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00005555555578b0",func="main",args=[]},thread-id="1",stopped-threads="all",core="1"
+*stopped,reason="breakpoint-hit",disp="del",bkptno="1",frame={addr="0x00000000004009e0",func="main",args=[{name="argc",value="1"},{name="argv",value="0x7fffffffe9a8"}],file="main.c",fullname="/home/christian/Projects/rtfm/src/main.c",line="26"},thread-id="1",stopped-threads="all",core="2"
 (gdb) 
 &"c\n"
 ~"Continuing.\n"
