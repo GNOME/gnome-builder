@@ -38,7 +38,6 @@ struct _IdeRunManager
   IdeObject                parent_instance;
 
   GCancellable            *cancellable;
-  GSimpleActionGroup      *actions;
   IdeBuildTarget          *build_target;
 
   const IdeRunHandlerInfo *handler;
@@ -47,7 +46,8 @@ struct _IdeRunManager
   guint                    busy : 1;
 };
 
-static void action_group_iface_init (GActionGroupInterface *iface);
+static void action_group_iface_init     (GActionGroupInterface *iface);
+static void ide_run_manager_notify_busy (IdeRunManager         *self);
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
@@ -106,7 +106,6 @@ ide_run_manager_finalize (GObject *object)
   IdeRunManager *self = (IdeRunManager *)object;
 
   g_clear_object (&self->cancellable);
-  g_clear_object (&self->actions);
   g_clear_object (&self->build_target);
 
   g_list_free_full (self->handlers, ide_run_handler_info_free);
@@ -295,6 +294,9 @@ ide_run_manager_run_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  self->busy = FALSE;
 
   if (!ide_runner_run_finish (runner, result, &error))
     g_task_return_error (task, g_steal_pointer (&error));
@@ -302,6 +304,8 @@ ide_run_manager_run_cb (GObject      *object,
     g_task_return_boolean (task, TRUE);
 
   g_signal_emit (self, signals [STOPPED], 0);
+
+  ide_run_manager_notify_busy (self);
 
   IDE_EXIT;
 }
@@ -360,6 +364,9 @@ do_run_async (IdeRunManager *self,
                                "Failed to execute the application");
       IDE_EXIT;
     }
+
+  self->busy = TRUE;
+  ide_run_manager_notify_busy (self);
 
   ide_runner_run_async (runner,
                         cancellable,
