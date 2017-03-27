@@ -362,7 +362,6 @@ register_build_commands_stage (GbpFlatpakPipelineAddin  *self,
   IdeConfiguration *config;
   guint stage_id;
   const gchar * const *build_commands;
-  const gchar *builddir;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
@@ -372,7 +371,8 @@ register_build_commands_stage (GbpFlatpakPipelineAddin  *self,
   if (!GBP_IS_FLATPAK_CONFIGURATION (config))
     return TRUE;
 
-  launcher = create_subprocess_launcher ();
+  if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, error)))
+    return FALSE;
 
   ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
   ide_subprocess_launcher_push_argv (launcher, "-c");
@@ -387,10 +387,6 @@ register_build_commands_stage (GbpFlatpakPipelineAddin  *self,
       build_commands_joined = g_strjoinv (" && ", (gchar **)build_commands);
       ide_subprocess_launcher_push_argv (launcher, build_commands_joined);
     }
-
-  builddir = ide_build_pipeline_get_builddir (pipeline);
-  if (builddir != NULL)
-    ide_subprocess_launcher_set_cwd (launcher, builddir);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "context", context,
@@ -417,7 +413,6 @@ register_post_install_commands_stage (GbpFlatpakPipelineAddin  *self,
   IdeConfiguration *config;
   guint stage_id;
   const gchar * const *post_install_commands;
-  const gchar *builddir;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
@@ -427,7 +422,8 @@ register_post_install_commands_stage (GbpFlatpakPipelineAddin  *self,
   if (!GBP_IS_FLATPAK_CONFIGURATION (config))
     return TRUE;
 
-  launcher = create_subprocess_launcher ();
+  if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, error)))
+    return FALSE;
 
   ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
   ide_subprocess_launcher_push_argv (launcher, "-c");
@@ -442,10 +438,6 @@ register_post_install_commands_stage (GbpFlatpakPipelineAddin  *self,
       post_install_commands_joined = g_strjoinv (" && ", (gchar **)post_install_commands);
       ide_subprocess_launcher_push_argv (launcher, post_install_commands_joined);
     }
-
-  builddir = ide_build_pipeline_get_builddir (pipeline);
-  if (builddir != NULL)
-    ide_subprocess_launcher_set_cwd (launcher, builddir);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "context", context,
