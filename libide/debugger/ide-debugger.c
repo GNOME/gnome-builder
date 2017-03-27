@@ -175,7 +175,6 @@ ide_debugger_emit_stopped (IdeDebugger           *self,
                            IdeSourceLocation     *location)
 {
   g_return_if_fail (IDE_IS_DEBUGGER (self));
-  g_return_if_fail (location != NULL);
 
   g_signal_emit (self, signals [STOPPED], 0, reason, location);
 }
