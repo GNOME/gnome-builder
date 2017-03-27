@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-debug-manager"
 
 #include <egg-binding-group.h>
+#include <egg-signal-group.h>
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
@@ -35,6 +36,8 @@ struct _IdeDebugManager
   GSimpleActionGroup *actions;
   IdeDebugger        *debugger;
   EggBindingGroup    *debugger_bindings;
+  EggSignalGroup     *debugger_signals;
+  IdeRunner          *runner;
 
   guint               active : 1;
 };
@@ -184,6 +187,37 @@ ide_debug_manager_action_continue (GSimpleAction *action,
 }
 
 static void
+ide_debug_manager_debugger_stopped (IdeDebugManager       *self,
+                                    IdeDebuggerStopReason  reason,
+                                    IdeSourceLocation     *location,
+                                    IdeDebugger           *debugger)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (IDE_IS_DEBUGGER (debugger));
+
+  switch (reason)
+    {
+    case IDE_DEBUGGER_STOP_EXITED_FROM_SIGNAL:
+    case IDE_DEBUGGER_STOP_EXITED_NORMALLY:
+      /* Cleanup any lingering debugger process */
+      if (self->runner != NULL)
+        ide_runner_force_quit (self->runner);
+      break;
+
+    case IDE_DEBUGGER_STOP_UNDEFINED:
+    case IDE_DEBUGGER_STOP_BREAKPOINT:
+    case IDE_DEBUGGER_STOP_WATCHPOINT:
+    case IDE_DEBUGGER_STOP_SIGNALED:
+    default:
+      break;
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_debug_manager_action_propagate_enabled (IdeDebugManager *self,
                                             GParamSpec      *pspec,
                                             GSimpleAction   *action)
@@ -211,6 +245,8 @@ ide_debug_manager_finalize (GObject *object)
   g_clear_object (&self->actions);
   g_clear_object (&self->debugger);
   g_clear_object (&self->debugger_bindings);
+  g_clear_object (&self->debugger_signals);
+  g_clear_object (&self->runner);
 
   G_OBJECT_CLASS (ide_debug_manager_parent_class)->finalize (object);
 }
@@ -308,6 +344,14 @@ ide_debug_manager_init (IdeDebugManager *self)
   BIND_PROPERTY_TO_ACTION ("can-step-over", "step-over");
 
 #undef BIND_PROPERTY_TO_ACTION
+
+  self->debugger_signals = egg_signal_group_new (IDE_TYPE_DEBUGGER);
+
+  egg_signal_group_connect_object (self->debugger_signals,
+                                   "stopped",
+                                   G_CALLBACK (ide_debug_manager_debugger_stopped),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
 
 static void
@@ -369,6 +413,8 @@ ide_debug_manager_runner_exited (IdeDebugManager *self,
   g_assert (IDE_IS_DEBUG_MANAGER (self));
   g_assert (IDE_IS_RUNNER (runner));
 
+  g_clear_object (&self->runner);
+
   ide_debug_manager_set_active (self, FALSE);
 }
 
@@ -405,8 +451,11 @@ ide_debug_manager_start (IdeDebugManager  *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  self->runner = g_object_ref (runner);
   self->debugger = g_steal_pointer (&debugger);
+
   egg_binding_group_set_source (self->debugger_bindings, self->debugger);
+  egg_signal_group_set_target (self->debugger_signals, self->debugger);
 
   ide_debug_manager_set_active (self, TRUE);
 
@@ -424,6 +473,7 @@ ide_debug_manager_stop (IdeDebugManager *self)
   g_return_if_fail (IDE_IS_DEBUG_MANAGER (self));
 
   egg_binding_group_set_source (self->debugger_bindings, NULL);
+  egg_signal_group_set_target (self->debugger_signals, NULL);
   g_clear_object (&self->debugger);
 }
 
