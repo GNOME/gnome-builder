@@ -59,6 +59,8 @@ struct _IdeDebuggerInterface
                                 IdeRunner              *runner);
   void      (*run)             (IdeDebugger            *self,
                                 IdeDebuggerRunType      run_type);
+  void      (*log)             (IdeDebugger            *self,
+                                const gchar            *message);
 };
 
 gchar    *ide_debugger_get_name        (IdeDebugger           *self);
@@ -69,6 +71,8 @@ void      ide_debugger_prepare         (IdeDebugger           *self,
                                         IdeRunner             *runner);
 void      ide_debugger_run             (IdeDebugger           *self,
                                         IdeDebuggerRunType     run_type);
+void      ide_debugger_emit_log        (IdeDebugger           *self,
+                                        const gchar           *message);
 void      ide_debugger_emit_stopped    (IdeDebugger           *self,
                                         IdeDebuggerStopReason  reason,
                                         IdeSourceLocation     *location);

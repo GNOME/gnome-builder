@@ -28,6 +28,7 @@
 G_DEFINE_INTERFACE (IdeDebugger, ide_debugger, IDE_TYPE_OBJECT)
 
 enum {
+  LOG,
   STOPPED,
   N_SIGNALS
 };
@@ -74,6 +75,22 @@ ide_debugger_default_init (IdeDebuggerInterface *iface)
                                                              "If we can advance the debugger to the next breakpoint",
                                                              FALSE,
                                                              (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
+
+  /**
+   * IdeDebugger:log:
+   * @self: A #IdeDebugger
+   * @message: the log message
+   *
+   * The "log" signal is emitted when the debugger has informative information
+   * to display to the user.
+   */
+  signals [LOG] =
+    g_signal_new ("log",
+                  G_TYPE_FROM_INTERFACE (iface),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeDebuggerInterface, log),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * IdeDebugger::stopped:
@@ -182,4 +199,14 @@ ide_debugger_run (IdeDebugger        *self,
 
   if (IDE_DEBUGGER_GET_IFACE (self)->run)
     IDE_DEBUGGER_GET_IFACE (self)->run (self, run_type);
+}
+
+void
+ide_debugger_emit_log (IdeDebugger *self,
+                       const gchar *message)
+{
+  g_return_if_fail (IDE_IS_DEBUGGER (self));
+
+  if (message != NULL)
+    g_signal_emit (self, signals [LOG], 0, message);
 }
