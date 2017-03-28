@@ -29,12 +29,10 @@ struct _GbpFlatpakConfiguration
 
   gchar  *branch;
   gchar **build_args;
-  gchar **build_commands;
   gchar  *command;
   gchar **finish_args;
   GFile  *manifest;
   gchar  *platform;
-  gchar **post_install_commands;
   gchar  *primary_module;
   gchar  *sdk;
 };
@@ -45,12 +43,10 @@ enum {
   PROP_0,
   PROP_BRANCH,
   PROP_BUILD_ARGS,
-  PROP_BUILD_COMMANDS,
   PROP_COMMAND,
   PROP_FINISH_ARGS,
   PROP_MANIFEST,
   PROP_PLATFORM,
-  PROP_POST_INSTALL_COMMANDS,
   PROP_PRIMARY_MODULE,
   PROP_SDK,
   N_PROPS
@@ -398,7 +394,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
             }
           g_ptr_array_add (build_commands, NULL);
           build_commands_strv = (gchar **)g_ptr_array_free (build_commands, FALSE);
-          gbp_flatpak_configuration_set_build_commands (self, (const gchar * const *)build_commands_strv);
+          ide_configuration_set_build_commands (IDE_CONFIGURATION (self), (const gchar * const *)build_commands_strv);
         }
       if (json_object_has_member (primary_module_object, "post-install"))
         {
@@ -415,7 +411,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
             }
           g_ptr_array_add (post_install_commands, NULL);
           post_install_commands_strv = (gchar **)g_ptr_array_free (post_install_commands, FALSE);
-          gbp_flatpak_configuration_set_post_install_commands (self, (const gchar * const *)post_install_commands_strv);
+          ide_configuration_set_post_install_commands (IDE_CONFIGURATION (self), (const gchar * const *)post_install_commands_strv);
         }
     }
 
@@ -439,28 +435,6 @@ gbp_flatpak_configuration_set_branch (GbpFlatpakConfiguration *self,
   g_free (self->branch);
   self->branch = g_strdup (branch);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
-}
-
-const gchar * const *
-gbp_flatpak_configuration_get_build_commands (GbpFlatpakConfiguration *self)
-{
-  g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self), NULL);
-
-  return (const gchar * const *)self->build_commands;
-}
-
-void
-gbp_flatpak_configuration_set_build_commands (GbpFlatpakConfiguration *self,
-                                              const gchar * const     *build_commands)
-{
-  g_return_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self));
-
-  if (self->build_commands != (gchar **)build_commands)
-    {
-      g_strfreev (self->build_commands);
-      self->build_commands = g_strdupv ((gchar **)build_commands);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMANDS]);
-    }
 }
 
 const gchar *
@@ -574,28 +548,6 @@ gbp_flatpak_configuration_set_platform (GbpFlatpakConfiguration *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PLATFORM]);
 }
 
-const gchar * const *
-gbp_flatpak_configuration_get_post_install_commands (GbpFlatpakConfiguration *self)
-{
-  g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self), NULL);
-
-  return (const gchar * const *)self->post_install_commands;
-}
-
-void
-gbp_flatpak_configuration_set_post_install_commands (GbpFlatpakConfiguration *self,
-                                                     const gchar * const     *post_install_commands)
-{
-  g_return_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self));
-
-  if (self->post_install_commands != (gchar **)post_install_commands)
-    {
-      g_strfreev (self->post_install_commands);
-      self->post_install_commands = g_strdupv ((gchar **)post_install_commands);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POST_INSTALL_COMMANDS]);
-    }
-}
-
 const gchar *
 gbp_flatpak_configuration_get_primary_module (GbpFlatpakConfiguration *self)
 {
@@ -665,10 +617,6 @@ gbp_flatpak_configuration_get_property (GObject    *object,
       g_value_set_boxed (value, gbp_flatpak_configuration_get_build_args (self));
       break;
 
-    case PROP_BUILD_COMMANDS:
-      g_value_set_boxed (value, gbp_flatpak_configuration_get_build_commands (self));
-      break;
-
     case PROP_COMMAND:
       g_value_set_string (value, gbp_flatpak_configuration_get_command (self));
       break;
@@ -683,10 +631,6 @@ gbp_flatpak_configuration_get_property (GObject    *object,
 
     case PROP_PLATFORM:
       g_value_set_string (value, gbp_flatpak_configuration_get_platform (self));
-      break;
-
-    case PROP_POST_INSTALL_COMMANDS:
-      g_value_set_boxed (value, gbp_flatpak_configuration_get_post_install_commands (self));
       break;
 
     case PROP_PRIMARY_MODULE:
@@ -720,10 +664,6 @@ gbp_flatpak_configuration_set_property (GObject      *object,
       gbp_flatpak_configuration_set_build_args (self, g_value_get_boxed (value));
       break;
 
-    case PROP_BUILD_COMMANDS:
-      gbp_flatpak_configuration_set_build_commands (self, g_value_get_boxed (value));
-      break;
-
     case PROP_COMMAND:
       gbp_flatpak_configuration_set_command (self, g_value_get_string (value));
       break;
@@ -738,10 +678,6 @@ gbp_flatpak_configuration_set_property (GObject      *object,
 
     case PROP_PLATFORM:
       gbp_flatpak_configuration_set_platform (self, g_value_get_string (value));
-      break;
-
-    case PROP_POST_INSTALL_COMMANDS:
-      gbp_flatpak_configuration_set_post_install_commands (self, g_value_get_boxed (value));
       break;
 
     case PROP_PRIMARY_MODULE:
@@ -763,12 +699,10 @@ gbp_flatpak_configuration_finalize (GObject *object)
   GbpFlatpakConfiguration *self = (GbpFlatpakConfiguration *)object;
 
   g_clear_pointer (&self->branch, g_free);
-  g_clear_pointer (&self->build_commands, g_strfreev);
   g_clear_pointer (&self->command, g_free);
   g_clear_pointer (&self->finish_args, g_strfreev);
   g_clear_object (&self->manifest);
   g_clear_pointer (&self->platform, g_free);
-  g_clear_pointer (&self->post_install_commands, g_strfreev);
   g_clear_pointer (&self->primary_module, g_free);
   g_clear_pointer (&self->sdk, g_free);
 
@@ -800,15 +734,6 @@ gbp_flatpak_configuration_class_init (GbpFlatpakConfigurationClass *klass)
     g_param_spec_boxed ("build-args",
                         "Build args",
                         "Build args",
-                        G_TYPE_STRV,
-                        (G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_BUILD_COMMANDS] =
-    g_param_spec_boxed ("build-commands",
-                        "Build commands",
-                        "Build commands",
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
@@ -849,15 +774,6 @@ gbp_flatpak_configuration_class_init (GbpFlatpakConfigurationClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT |
                           G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_POST_INSTALL_COMMANDS] =
-    g_param_spec_boxed ("post-install-commands",
-                        "Post install commands",
-                        "Post install commands",
-                        G_TYPE_STRV,
-                        (G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PRIMARY_MODULE] =
     g_param_spec_string ("primary-module",

@@ -377,7 +377,7 @@ register_build_commands_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
   ide_subprocess_launcher_push_argv (launcher, "-c");
 
-  build_commands = gbp_flatpak_configuration_get_build_commands (GBP_FLATPAK_CONFIGURATION (config));
+  build_commands = ide_configuration_get_build_commands (config);
   if (build_commands == NULL)
     return TRUE;
   else
@@ -428,7 +428,7 @@ register_post_install_commands_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
   ide_subprocess_launcher_push_argv (launcher, "-c");
 
-  post_install_commands = gbp_flatpak_configuration_get_post_install_commands (GBP_FLATPAK_CONFIGURATION (config));
+  post_install_commands = ide_configuration_get_post_install_commands (config);
   if (post_install_commands == NULL)
     return TRUE;
   else
