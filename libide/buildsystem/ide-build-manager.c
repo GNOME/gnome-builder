@@ -701,14 +701,32 @@ ide_build_manager_action_clean (GSimpleAction *action,
 }
 
 static void
+ide_build_manager_action_install (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  IdeBuildManager *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  ide_build_manager_execute_async (self, IDE_BUILD_PHASE_INSTALL, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_manager_init (IdeBuildManager *self)
 {
-  static const gchar *invert_names[] = { "build", "clean", "rebuild" };
+  static const gchar *invert_names[] = { "build", "clean", "install", "rebuild" };
   static const gchar *names[] = { "cancel" };
   static GActionEntry actions[] = {
     { "build", ide_build_manager_action_build },
     { "cancel", ide_build_manager_action_cancel },
     { "clean", ide_build_manager_action_clean },
+    { "install", ide_build_manager_action_install },
     { "rebuild", ide_build_manager_action_rebuild },
   };
 
