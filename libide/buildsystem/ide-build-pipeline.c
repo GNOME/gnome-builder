@@ -143,6 +143,12 @@ struct _IdeBuildPipeline
   GArray *pipeline;
 
   /*
+   * This contains the GBinding objects used to keep the "completed"
+   * property of chained stages updated.
+   */
+  GPtrArray *chained_bindings;
+
+  /*
    * This are used for ErrorFormat registration so that we have a
    * single place to extract "GCC-style" warnings and errors. Other
    * languages can also register these so they show up in the build
@@ -280,6 +286,15 @@ static const gchar *task_type_names[] = {
   "clean",
   "rebuild",
 };
+
+static void
+chained_binding_clear (gpointer data)
+{
+  GBinding *binding = data;
+
+  g_binding_unbind (binding);
+  g_object_unref (binding);
+}
 
 static void
 task_data_free (gpointer data)
@@ -855,6 +870,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_pointer (&self->errfmts, g_array_unref);
   g_clear_pointer (&self->errfmt_top_dir, g_free);
   g_clear_pointer (&self->errfmt_current_dir, g_free);
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_free);
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->finalize (object);
 
@@ -1101,6 +1117,8 @@ ide_build_pipeline_init (IdeBuildPipeline *self)
   self->errfmts = g_array_new (FALSE, FALSE, sizeof (ErrorFormat));
   g_array_set_clear_func (self->errfmts, clear_error_format);
 
+  self->chained_bindings = g_ptr_array_new_with_free_func ((GDestroyNotify)chained_binding_clear);
+
   self->log = ide_build_log_new ();
 }
 
@@ -1130,11 +1148,15 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
                error->message);
       self->failed = TRUE;
       g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
     }
 
-  ide_build_stage_set_completed (stage, TRUE);
-  ide_build_pipeline_tick_execute (self, task);
+  ide_build_stage_set_completed (stage, !self->failed);
+
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_free);
+  self->chained_bindings = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (self->failed == FALSE)
+    ide_build_pipeline_tick_execute (self, task);
 
   IDE_EXIT;
 }
@@ -1151,6 +1173,7 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, position);
       gboolean chained;
+      GBinding *chained_binding;
 
       /*
        * Ignore all future stages if they were not requested by the current
@@ -1174,11 +1197,8 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
       if (!chained)
         return;
 
-      /*
-       * NOTE: We do not mark the chained stage as completed as that is left
-       *       up to the chain implementation. We simply let self->position
-       *       be advanced to point at the index of the cained entry.
-       */
+      chained_binding = g_object_bind_property (stage, "completed", entry->stage, "completed", 0);
+      g_ptr_array_add (self->chained_bindings, g_object_ref (chained_binding));
 
       self->position = position;
     }
