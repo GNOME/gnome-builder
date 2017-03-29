@@ -771,6 +771,88 @@ ide_build_pipeline_extension_removed (PeasExtensionSet *set,
   IDE_EXIT;
 }
 
+static void
+register_build_commands_stage (IdeBuildPipeline *self,
+                               IdeContext       *context)
+{
+  g_autoptr(GError) error = NULL;
+  const gchar * const *build_commands;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_CONFIGURATION (self->configuration));
+
+  build_commands = ide_configuration_get_build_commands (self->configuration);
+  if (build_commands == NULL)
+    return;
+  for (guint i = 0; build_commands[i]; i++)
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeBuildStage) stage = NULL;
+
+      if (NULL == (launcher = ide_build_pipeline_create_launcher (self, &error)))
+        {
+          g_warning ("%s", error->message);
+          return;
+        }
+
+      ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
+      ide_subprocess_launcher_push_argv (launcher, "-c");
+      ide_subprocess_launcher_push_argv (launcher, build_commands[i]);
+
+      stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                            "context", context,
+                            "launcher", launcher,
+                            NULL);
+
+      ide_build_pipeline_connect (self,
+                                  IDE_BUILD_PHASE_BUILD | IDE_BUILD_PHASE_AFTER,
+                                  i,
+                                  stage);
+    }
+}
+
+static void
+register_post_install_commands_stage (IdeBuildPipeline *self,
+                                      IdeContext       *context)
+{
+  g_autoptr(GError) error = NULL;
+  const gchar * const *post_install_commands;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_CONFIGURATION (self->configuration));
+
+  post_install_commands = ide_configuration_get_post_install_commands (self->configuration);
+  if (post_install_commands == NULL)
+    return;
+  for (guint i = 0; post_install_commands[i]; i++)
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeBuildStage) stage = NULL;
+
+      if (NULL == (launcher = ide_build_pipeline_create_launcher (self, &error)))
+        {
+          g_warning ("%s", error->message);
+          return;
+        }
+
+      ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
+      ide_subprocess_launcher_push_argv (launcher, "-c");
+      ide_subprocess_launcher_push_argv (launcher, post_install_commands[i]);
+
+      stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                            "context", context,
+                            "launcher", launcher,
+                            NULL);
+
+      ide_build_pipeline_connect (self,
+                                  IDE_BUILD_PHASE_INSTALL | IDE_BUILD_PHASE_AFTER,
+                                  i,
+                                  stage);
+    }
+}
+
 /**
  * ide_build_pipeline_load:
  *
@@ -791,6 +873,9 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
   g_assert (self->addins == NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+
+  register_build_commands_stage (self, context);
+  register_post_install_commands_stage (self, context);
 
   self->addins = ide_extension_set_new (peas_engine_get_default (),
                                         IDE_TYPE_BUILD_PIPELINE_ADDIN,
