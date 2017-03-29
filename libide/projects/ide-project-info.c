@@ -369,9 +369,9 @@ ide_project_info_set_property (GObject      *object,
 
   switch (prop_id)
     {
-      case PROP_DESCRIPTION:
-        ide_project_info_set_description (self, g_value_get_string (value));
-        break;
+    case PROP_DESCRIPTION:
+      ide_project_info_set_description (self, g_value_get_string (value));
+      break;
 
     case PROP_DIRECTORY:
       ide_project_info_set_directory (self, g_value_get_object (value));
