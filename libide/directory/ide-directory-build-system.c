@@ -179,9 +179,16 @@ ide_directory_build_system_get_id (IdeBuildSystem *build_system)
   return g_strdup ("directory");
 }
 
+static gchar *
+ide_directory_build_system_get_display_name (IdeBuildSystem *build_system)
+{
+  return g_strdup ("Directory");
+}
+
 static void
 build_system_init (IdeBuildSystemInterface *iface)
 {
   iface->get_priority = ide_directory_build_system_get_priority;
   iface->get_id = ide_directory_build_system_get_id;
+  iface->get_display_name = ide_directory_build_system_get_display_name;
 }

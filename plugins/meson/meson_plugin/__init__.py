@@ -62,6 +62,9 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_id(self):
         return 'meson'
 
+    def do_get_display_name(self):
+        return 'Meson'
+
     def do_init_async(self, priority, cancel, callback, data=None):
         task = Gio.Task.new(self, cancel, callback)
         task.set_priority(priority)

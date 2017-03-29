@@ -34,6 +34,9 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_id(self):
         return 'make'
 
+    def do_get_display_name(self):
+        return 'Make'
+
     def do_init_async(self, priority, cancel, callback, data=None):
         task = Gio.Task.new(self, cancel, callback)
         task.set_priority(priority)

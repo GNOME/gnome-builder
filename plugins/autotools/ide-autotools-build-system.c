@@ -642,6 +642,12 @@ ide_autotools_build_system_get_id (IdeBuildSystem *build_system)
   return g_strdup ("autotools");
 }
 
+static gchar *
+ide_autotools_build_system_get_display_name (IdeBuildSystem *build_system)
+{
+  return g_strdup ("Autotools");
+}
+
 static void
 ide_autotools_build_system_finalize (GObject *object)
 {
@@ -707,6 +713,7 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_build_targets_async = ide_autotools_build_system_get_build_targets_async;
   iface->get_build_targets_finish = ide_autotools_build_system_get_build_targets_finish;
   iface->get_id = ide_autotools_build_system_get_id;
+  iface->get_display_name = ide_autotools_build_system_get_display_name;
 }
 
 static void

@@ -38,6 +38,9 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_id(self):
         return 'cargo'
 
+    def do_get_display_name(self):
+        return 'Cargo'
+
     def do_init_async(self, io_priority, cancellable, callback, data):
         task = Gio.Task.new(self, cancellable, callback)
 

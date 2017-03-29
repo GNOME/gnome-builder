@@ -57,6 +57,9 @@ class PHPizeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_id(self):
         return 'phpize'
 
+    def do_get_display_name(self):
+        return 'PHPize'
+
     def do_get_priority(self):
         return 500
 

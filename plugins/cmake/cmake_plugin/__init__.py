@@ -34,6 +34,9 @@ class CMakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_id(self):
         return 'cmake'
 
+    def do_get_display_name(self):
+        return 'Cmake'
+
     def do_init_async(self, priority, cancel, callback, data=None):
         task = Gio.Task.new(self, cancel, callback)
         task.set_priority(priority)
