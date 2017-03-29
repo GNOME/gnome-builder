@@ -31,6 +31,9 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
     make_dir = GObject.Property(type=Gio.File)
 
+    def do_get_id(self):
+        return 'make'
+
     def do_init_async(self, priority, cancel, callback, data=None):
         task = Gio.Task.new(self, cancel, callback)
         task.set_priority(priority)
