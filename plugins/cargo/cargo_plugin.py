@@ -111,6 +111,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
         build_launcher.push_argv(cargo)
         build_launcher.push_argv('build')
+        build_launcher.push_argv('--verbose')
         build_launcher.push_argv('--manifest-path')
         build_launcher.push_argv(cargo_toml)
         build_launcher.push_argv('--message-format')
