@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_RECENT_PROJECTS_GROUP                 "X-GNOME-Builder-Project"
 #define IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX "X-GNOME-Builder-Language:"
+#define IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX "X-GNOME-Builder-Build-System:"
 #define IDE_RECENT_PROJECTS_BOOKMARK_FILENAME     "recent-projects.xbel"
 
 G_DECLARE_FINAL_TYPE (IdeRecentProjects, ide_recent_projects, IDE, RECENT_PROJECTS, GObject)

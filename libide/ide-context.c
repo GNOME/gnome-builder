@@ -1373,6 +1373,17 @@ ide_context_init_add_recent (gpointer             source_object,
 
   g_bookmark_file_set_groups (projects_file, uri, (const gchar **)groups->pdata, groups->len);
 
+  {
+    IdeBuildSystem *build_system;
+    g_autofree gchar *build_system_name = NULL;
+    g_autofree gchar *build_system_group = NULL;
+
+    build_system = ide_context_get_build_system (self);
+    build_system_name = ide_build_system_get_display_name (build_system);
+    build_system_group = g_strdup_printf ("%s%s", IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX, build_system_name);
+    g_bookmark_file_add_group (projects_file, uri, build_system_group);
+  }
+
   IDE_TRACE_MSG ("Registering %s as recent project.", uri);
 
   /* ensure the containing directory exists */

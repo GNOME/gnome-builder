@@ -45,6 +45,7 @@ struct _IdeProjectInfo
   GDateTime  *last_modified_at;
   GFile      *directory;
   GFile      *file;
+  gchar      *build_system_name;
   gchar      *name;
   gchar      *description;
   gchar     **languages;
@@ -58,6 +59,7 @@ G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_BUILD_SYSTEM_NAME,
   PROP_DESCRIPTION,
   PROP_DIRECTORY,
   PROP_DOAP,
@@ -191,6 +193,28 @@ ide_project_info_get_last_modified_at (IdeProjectInfo *self)
 }
 
 const gchar *
+ide_project_info_get_build_system_name (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->build_system_name;
+}
+
+void
+ide_project_info_set_build_system_name (IdeProjectInfo *self,
+                                        const gchar    *build_system_name)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  if (!ide_str_equal0 (self->build_system_name, build_system_name))
+    {
+      g_free (self->build_system_name);
+      self->build_system_name = g_strdup (build_system_name);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_SYSTEM_NAME]);
+    }
+}
+
+const gchar *
 ide_project_info_get_description (IdeProjectInfo *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
@@ -299,6 +323,7 @@ ide_project_info_finalize (GObject *object)
   IdeProjectInfo *self = (IdeProjectInfo *)object;
 
   g_clear_pointer (&self->last_modified_at, g_date_time_unref);
+  g_clear_pointer (&self->build_system_name, g_free);
   g_clear_pointer (&self->description, g_free);
   g_clear_pointer (&self->languages, g_strfreev);
   g_clear_pointer (&self->name, g_free);
@@ -318,6 +343,10 @@ ide_project_info_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_BUILD_SYSTEM_NAME:
+      g_value_set_string (value, ide_project_info_get_build_system_name (self));
+      break;
+
     case PROP_DESCRIPTION:
       g_value_set_string (value, ide_project_info_get_description (self));
       break;
@@ -369,6 +398,10 @@ ide_project_info_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_BUILD_SYSTEM_NAME:
+      ide_project_info_set_build_system_name (self, g_value_get_string (value));
+      break;
+
     case PROP_DESCRIPTION:
       ide_project_info_set_description (self, g_value_get_string (value));
       break;
@@ -418,6 +451,13 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
   object_class->finalize = ide_project_info_finalize;
   object_class->get_property = ide_project_info_get_property;
   object_class->set_property = ide_project_info_set_property;
+
+  properties [PROP_BUILD_SYSTEM_NAME] =
+    g_param_spec_string ("build-system-name",
+                         "Build System name",
+                         "Build System name",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DESCRIPTION] =
     g_param_spec_string ("description",

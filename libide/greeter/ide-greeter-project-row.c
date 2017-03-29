@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "greeter/ide-greeter-project-row.h"
+#include "ide-macros.h"
 
 struct _IdeGreeterProjectRow
 {
@@ -35,7 +36,7 @@ struct _IdeGreeterProjectRow
 
   GtkLabel        *date_label;
   GtkLabel        *description_label;
-  GtkBox          *languages_box;
+  GtkBox          *tags_box;
   GtkLabel        *location_label;
   GtkLabel        *title_label;
   GtkCheckButton  *checkbox;
@@ -137,10 +138,11 @@ ide_greeter_project_row_create_search_text (IdeGreeterProjectRow *self,
 }
 
 static void
-ide_greeter_project_row_add_languages (IdeGreeterProjectRow *self,
-                                       IdeProjectInfo       *project_info)
+ide_greeter_project_row_add_tags (IdeGreeterProjectRow *self,
+                                  IdeProjectInfo       *project_info)
 {
   const gchar * const *languages;
+  const gchar *build_system_name;
 
   g_return_if_fail (IDE_IS_GREETER_PROJECT_ROW (self));
   g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
@@ -161,8 +163,20 @@ ide_greeter_project_row_add_languages (IdeGreeterProjectRow *self,
                                "visible", TRUE,
                                "label", name,
                                NULL);
-          gtk_container_add (GTK_CONTAINER (self->languages_box), pill);
+          gtk_container_add (GTK_CONTAINER (self->tags_box), pill);
         }
+    }
+
+  build_system_name = ide_project_info_get_build_system_name (project_info);
+  if (!ide_str_empty0 (build_system_name))
+    {
+      GtkWidget *pill;
+
+      pill = g_object_new (EGG_TYPE_PILL_BOX,
+                           "visible", TRUE,
+                           "label", build_system_name,
+                           NULL);
+      gtk_container_add (GTK_CONTAINER (self->tags_box), pill);
     }
 }
 
@@ -179,7 +193,7 @@ ide_greeter_project_row_set_project_info (IdeGreeterProjectRow *self,
 
       if (project_info != NULL)
         {
-          ide_greeter_project_row_add_languages (self, project_info);
+          ide_greeter_project_row_add_tags (self, project_info);
           ide_greeter_project_row_create_search_text (self, project_info);
         }
 
@@ -328,7 +342,7 @@ ide_greeter_project_row_class_init (IdeGreeterProjectRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, date_label);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, description_label);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, location_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, languages_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, tags_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterProjectRow, title_label);
 
   properties [PROP_SELECTED] =
