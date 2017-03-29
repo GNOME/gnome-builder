@@ -83,6 +83,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   else
     {
       ide_subprocess_launcher_insert_argv (launcher, i++, "--share=ipc");
+      ide_subprocess_launcher_insert_argv (launcher, i++, "--share=network");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=x11");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=wayland");
     }
