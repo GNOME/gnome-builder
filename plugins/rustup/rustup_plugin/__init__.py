@@ -94,7 +94,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
 
     __gsignals__ = {
         # emitted when a rustup installation is detected
-        'rustup_changed': (GObject.SIGNAL_RUN_FIRST, None, ())
+        'rustup_changed': (GObject.SignalFlags.RUN_FIRST, None, ())
     }
 
     @GObject.Property(type=bool, default=False)
@@ -527,7 +527,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         self.toolchain_listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
 
         def _create_list_item(item, data):
-            return Gtk.Label(item.title, halign='start', valign='center', expand=True, visible=True)
+            return Gtk.Label(label=item.title, halign='start', valign='center', expand=True, visible=True)
 
         self.store = Gio.ListStore.new(ModelItem)
         self.toolchain_listbox.bind_model(self.store, _create_list_item, None)
