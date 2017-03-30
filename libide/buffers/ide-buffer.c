@@ -1085,7 +1085,10 @@ ide_buffer_load_rename_provider (IdeBuffer           *self,
   provider = ide_extension_adapter_get_extension (adapter);
 
   if (provider != NULL)
-    ide_rename_provider_load (provider);
+    {
+      g_object_set (provider, "buffer", self, NULL);
+      ide_rename_provider_load (provider);
+    }
 
   IDE_EXIT;
 }
