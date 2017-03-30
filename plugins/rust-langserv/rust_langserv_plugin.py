@@ -89,7 +89,9 @@ class RustService(Ide.Object, Ide.Service):
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
             path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
-            if not os.path.exists(path_to_rls):
+            if os.path.exists(path_to_rls):
+                launcher.setenv('PATH', os.path.expanduser("~/.cargo/bin"), True)
+            else:
                 path_to_rls = "rls"
 
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
