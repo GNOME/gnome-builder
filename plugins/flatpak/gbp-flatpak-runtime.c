@@ -176,7 +176,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, "build");
 
       if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
-        build_args = gbp_flatpak_configuration_get_build_commands (GBP_FLATPAK_CONFIGURATION (configuration));
+        build_args = gbp_flatpak_configuration_get_build_args (GBP_FLATPAK_CONFIGURATION (configuration));
 
       if (build_args != NULL)
         ide_subprocess_launcher_push_args (ret, build_args);
