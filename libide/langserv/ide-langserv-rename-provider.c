@@ -21,7 +21,9 @@
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"
+#include "ide-macros.h"
 
+#include "buffers/ide-buffer.h"
 #include "files/ide-file.h"
 #include "langserv/ide-langserv-client.h"
 #include "langserv/ide-langserv-rename-provider.h"
@@ -30,6 +32,7 @@
 typedef struct
 {
   IdeLangservClient *client;
+  IdeBuffer         *buffer;
 } IdeLangservRenameProviderPrivate;
 
 static void rename_provider_iface_init (IdeRenameProviderInterface *iface);
@@ -40,11 +43,21 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLangservRenameProvider, ide_langserv_rename
 
 enum {
   PROP_0,
+  PROP_BUFFER,
   PROP_CLIENT,
   N_PROPS
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_langserv_rename_provider_set_buffer (IdeLangservRenameProvider *self,
+                                         IdeBuffer                 *buffer)
+{
+  IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
+
+  ide_set_weak_pointer (&priv->buffer, buffer);
+}
 
 static void
 ide_langserv_rename_provider_finalize (GObject *object)
@@ -53,6 +66,7 @@ ide_langserv_rename_provider_finalize (GObject *object)
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
 
   g_clear_object (&priv->client);
+  ide_clear_weak_pointer (&priv->buffer);
 
   G_OBJECT_CLASS (ide_langserv_rename_provider_parent_class)->finalize (object);
 }
@@ -86,6 +100,10 @@ ide_langserv_rename_provider_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_BUFFER:
+      ide_langserv_rename_provider_set_buffer (self, g_value_get_object (value));
+      break;
+
     case PROP_CLIENT:
       ide_langserv_rename_provider_set_client (self, g_value_get_object (value));
       break;
@@ -110,6 +128,13 @@ ide_langserv_rename_provider_class_init (IdeLangservRenameProviderClass *klass)
                          "The Language Server client",
                          IDE_TYPE_LANGSERV_CLIENT,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_BUFFER] =
+    g_param_spec_object ("buffer",
+                         "Buffer",
+                         "The buffer for renames",
+                         IDE_TYPE_BUFFER,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
