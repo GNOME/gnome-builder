@@ -33,8 +33,8 @@ struct _IdeBuildTargetInterface
 {
   GTypeInterface parent_iface;
 
-  GFile *(*get_install_directory) (IdeBuildTarget *self);
-  gchar *(*get_name)              (IdeBuildTarget *self);
+  GFile  *(*get_install_directory) (IdeBuildTarget *self);
+  gchar  *(*get_name)              (IdeBuildTarget *self);
 
   gpointer _reserved2;
   gpointer _reserved3;
@@ -45,8 +45,8 @@ struct _IdeBuildTargetInterface
   gpointer _reserved8;
 };
 
-GFile *ide_build_target_get_install_directory (IdeBuildTarget *self);
-gchar *ide_build_target_get_name (IdeBuildTarget *self);
+GFile  *ide_build_target_get_install_directory (IdeBuildTarget *self);
+gchar  *ide_build_target_get_name              (IdeBuildTarget *self);
 
 G_END_DECLS
 
