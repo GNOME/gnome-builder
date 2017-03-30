@@ -131,6 +131,7 @@ ide_build_log_init (IdeBuildLog *self)
   self->log_queue = g_async_queue_new ();
 
   self->log_source = g_timeout_source_new (G_MAXINT);
+  g_source_set_priority (self->log_source, G_PRIORITY_LOW);
   g_source_set_ready_time (self->log_source, -1);
   g_source_set_name (self->log_source, "[ide] IdeBuildLog");
   g_source_set_callback (self->log_source, emit_log_from_main, self, NULL);
