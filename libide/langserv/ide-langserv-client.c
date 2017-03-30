@@ -281,6 +281,11 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
+  g_autofree gchar *text = NULL;
+  GtkSourceLanguage *language;
+  const gchar *language_id;
+  GtkTextIter begin;
+  GtkTextIter end;
 
   IDE_ENTRY;
 
@@ -305,9 +310,20 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
 
   uri = ide_buffer_get_uri (buffer);
 
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
+  text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (buffer), &begin, &end, TRUE);
+
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  if (language != NULL)
+    language_id = gtk_source_language_get_id (language);
+  else
+    language_id = "text/plain";
+
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
       "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+      "languageId", JSONRPC_MESSAGE_PUT_STRING (language_id),
+      "text", JSONRPC_MESSAGE_PUT_STRING (text),
     "}"
   );
 
