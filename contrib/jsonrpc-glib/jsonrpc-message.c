@@ -289,6 +289,7 @@ jsonrpc_message_parse_object (GVariantDict *dict,
   else if (valptr->magic.bytes[0] == '[' || IS_GET_ITER (valptr))
     {
       g_autoptr(GVariantIter) subiter = NULL;
+      g_autoptr(GVariant) subvalue = NULL;
 
       if (g_variant_dict_lookup (dict, key, "av", &subiter))
         {
@@ -299,6 +300,11 @@ jsonrpc_message_parse_object (GVariantDict *dict,
               param = va_arg (args, gpointer);
               ret = jsonrpc_message_parse_array_va (subiter, param, args);
             }
+        }
+      else if (NULL != (subvalue = g_variant_dict_lookup_value (dict, key, G_VARIANT_TYPE ("a{sv}"))))
+        {
+          if (IS_GET_ITER (valptr) && NULL != (subiter = g_variant_iter_new (subvalue)))
+            ret = !!(*((JsonrpcMessageGetIter *)valptr)->iterptr = g_steal_pointer (&subiter));
         }
     }
   else if (IS_GET_VARIANT (valptr))
