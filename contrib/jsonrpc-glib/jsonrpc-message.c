@@ -225,7 +225,7 @@ jsonrpc_message_new_valist (gpointer first_param,
   if (first_param != NULL)
     jsonrpc_message_build_object (&builder, first_param, args);
 
-  return g_variant_ref_sink (g_variant_builder_end (&builder));
+  return g_variant_builder_end (&builder);
 }
 
 GVariant *
