@@ -256,9 +256,13 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *text = NULL;
   g_autofree gchar *uri = NULL;
+  GtkTextIter begin;
+  GtkTextIter end;
   IdeFile *ifile;
   GFile *gfile;
+  gint64 version;
   gint line;
   gint column;
 
@@ -288,9 +292,16 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
   line = ide_source_location_get_line (location);
   column = ide_source_location_get_line_offset (location);
 
+  version = ide_buffer_get_change_count (priv->buffer);
+
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (priv->buffer), &begin, &end);
+  text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (priv->buffer), &begin, &end, TRUE);
+
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
       "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+      "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+      "text", JSONRPC_MESSAGE_PUT_STRING (text),
     "}",
     "position", "{",
       "line", JSONRPC_MESSAGE_PUT_INT32 (line),
