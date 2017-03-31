@@ -6027,20 +6027,37 @@ ide_source_view_find_references_cb (GObject      *object,
 
   if (references != NULL && references->len > 0)
     {
+      IdeContext *context = ide_buffer_get_context (priv->buffer);
+      IdeVcs *vcs = ide_context_get_vcs (context);
+      GFile *workdir = ide_vcs_get_working_directory (vcs);
+
       for (guint i = 0; i < references->len; i++)
         {
           IdeSourceRange *range = g_ptr_array_index (references, i);
           IdeSourceLocation *begin = ide_source_range_get_begin (range);
           IdeFile *file = ide_source_location_get_file (begin);
+          GFile *gfile = ide_file_get_file (file);
           guint line = ide_source_location_get_line (begin);
           guint line_offset = ide_source_location_get_line_offset (begin);
-          g_autofree gchar *name = g_file_get_basename (ide_file_get_file (file));
-          g_autofree gchar *text = g_strdup_printf ("%s %u:%u", name, line+1, line_offset+1);
+          g_autofree gchar *name = NULL;
+          g_autofree gchar *text = NULL;
           GtkLabel *label;
+
+          if (g_file_has_prefix (gfile, workdir))
+            name = g_file_get_relative_path (workdir, gfile);
+          else if (g_file_is_native (gfile))
+            name = g_file_get_path (gfile);
+          else
+            name = g_file_get_uri (gfile);
+
+          /* translators: %s is the filename, then line number, column number. <> are pango markup */
+          text = g_strdup_printf (_("<b>%s</b> — <small>Line %u, Column %u</small>"),
+                                  name, line + 1, line_offset + 1);
 
           label = g_object_new (GTK_TYPE_LABEL,
                                 "xalign", 0.0f,
                                 "label", text,
+                                "use-markup", TRUE,
                                 "visible", TRUE,
                                 NULL);
           gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (label));
