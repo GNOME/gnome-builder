@@ -35,6 +35,8 @@ from gi.repository import GObject
 from gi.repository import GtkSource
 from gi.repository import Ide
 
+DEV_MODE = False
+
 class RustService(Ide.Object, Ide.Service):
     _client = None
     _has_started = False
@@ -81,6 +83,8 @@ class RustService(Ide.Object, Ide.Service):
             if sysroot:
                 launcher.setenv("SYS_ROOT", sysroot, True)
                 launcher.setenv("LD_LIBRARY_PATH", os.path.join(sysroot, "lib"), True)
+            if DEV_MODE:
+                launcher.setenv('RUST_LOG', 'debug', True)
 
             # Locate the directory of the project and run rls from there.
             workdir = self.get_context().get_vcs().get_working_directory()
@@ -133,10 +137,11 @@ class RustService(Ide.Object, Ide.Service):
         the tooling. Maybe even the program if flatpak-builder has
         prebuilt our dependencies.
         """
+        flags = Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
+        if not DEV_MODE:
+            flags |= Gio.SubprocessFlags.STDERR_SILENCE
         launcher = Ide.SubprocessLauncher()
-        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE |
-                           Gio.SubprocessFlags.STDOUT_PIPE |
-                           Gio.SubprocessFlags.STDERR_SILENCE)
+        launcher.set_flags(flags)
         launcher.set_cwd(GLib.get_home_dir())
         launcher.set_run_on_host(True)
         return launcher
