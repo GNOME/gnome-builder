@@ -23,6 +23,7 @@
 #include "ide-debug.h"
 
 #include "diagnostics/ide-source-location.h"
+#include "diagnostics/ide-source-range.h"
 #include "files/ide-file.h"
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
@@ -488,10 +489,185 @@ ide_langserv_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolve
 }
 
 static void
+ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeLangservClient *client = (IdeLangservClient *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GPtrArray) references = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeLangservSymbolResolver *self;
+  GVariant *locationv;
+  GVariantIter iter;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+
+  if (!ide_langserv_client_call_finish (client, result, &reply, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (!g_variant_is_of_type (reply, G_VARIANT_TYPE ("av")))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               "Invalid reply type from peer: %s",
+                               g_variant_get_type_string (reply));
+      IDE_EXIT;
+    }
+
+  references = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_source_range_unref);
+
+  g_variant_iter_init (&iter, reply);
+
+  while (g_variant_iter_loop (&iter, "v", &locationv))
+    {
+      g_autoptr(IdeSourceLocation) begin_loc = NULL;
+      g_autoptr(IdeSourceLocation) end_loc = NULL;
+      g_autoptr(IdeSourceRange) range = NULL;
+      g_autoptr(IdeFile) ifile = NULL;
+      const gchar *uri = NULL;
+      GFile *gfile;
+      gboolean success;
+      struct {
+        gint64 line;
+        gint64 line_offset;
+      } begin, end;
+
+      success = JSONRPC_MESSAGE_PARSE (locationv,
+        "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+        "range", "{",
+          "start", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&begin.line_offset),
+          "}",
+          "end", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&end.line_offset),
+          "}",
+        "}"
+      );
+
+      if (!success)
+        {
+          g_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_INVALID_DATA,
+                                   "Failed to parse location object");
+          IDE_EXIT;
+        }
+
+      gfile = g_file_new_for_uri (uri);
+      ifile = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), gfile);
+
+      begin_loc = ide_source_location_new (ifile, begin.line, begin.line_offset, 0);
+      end_loc = ide_source_location_new (ifile, end.line, end.line_offset, 0);
+      range = ide_source_range_new (begin_loc, end_loc);
+
+      g_ptr_array_add (references, g_steal_pointer (&range));
+    }
+
+  g_task_return_pointer (task, g_steal_pointer (&references), (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolver,
+                                                    IdeSourceLocation   *location,
+                                                    GCancellable        *cancellable,
+                                                    GAsyncReadyCallback  callback,
+                                                    gpointer             user_data)
+{
+  IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
+  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *uri = NULL;
+  const gchar *language_id;
+  IdeFile *file;
+  GFile *gfile;
+  guint line;
+  guint line_offset;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (location != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_langserv_symbol_resolver_find_references_async);
+
+  file = ide_source_location_get_file (location);
+  gfile = ide_file_get_file (file);
+  uri = g_file_get_uri (gfile);
+
+  line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
+
+  language_id = ide_file_get_language_id (file);
+  if (language_id == NULL)
+    language_id = "plain";
+
+  params = JSONRPC_MESSAGE_NEW (
+    "textDocument", "{",
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+      "languageId", JSONRPC_MESSAGE_PUT_STRING (language_id),
+    "}",
+    "position", "{",
+      "line", JSONRPC_MESSAGE_PUT_INT32 (line),
+      "character", JSONRPC_MESSAGE_PUT_INT32 (line_offset),
+    "}"
+    "context", "{",
+      "includeDeclaration", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
+    "}"
+  );
+
+  ide_langserv_client_call_async (priv->client,
+                                  "textDocument/references",
+                                  g_steal_pointer (&params),
+                                  cancellable,
+                                  ide_langserv_symbol_resolver_find_references_cb,
+                                  g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static GPtrArray *
+ide_langserv_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
+                                                     GAsyncResult       *result,
+                                                     GError            **error)
+{
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
 symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
 {
   iface->lookup_symbol_async = ide_langserv_symbol_resolver_lookup_symbol_async;
   iface->lookup_symbol_finish = ide_langserv_symbol_resolver_lookup_symbol_finish;
   iface->get_symbol_tree_async = ide_langserv_symbol_resolver_get_symbol_tree_async;
   iface->get_symbol_tree_finish = ide_langserv_symbol_resolver_get_symbol_tree_finish;
+  iface->find_references_async = ide_langserv_symbol_resolver_find_references_async;
+  iface->find_references_finish = ide_langserv_symbol_resolver_find_references_finish;
 }
