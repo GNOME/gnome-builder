@@ -263,13 +263,14 @@ enum {
   CLEAR_SEARCH,
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
-  DUPLICATE_ENTIRE_LINE,
   CYCLE_COMPLETION,
   DECREASE_FONT_SIZE,
   DELETE_SELECTION,
+  DUPLICATE_ENTIRE_LINE,
   END_MACRO,
   END_USER_ACTION,
   FOCUS_LOCATION,
+  FORMAT_SELECTION,
   GOTO_DEFINITION,
   HIDE_COMPLETION,
   INCREASE_FONT_SIZE,
@@ -5913,6 +5914,54 @@ ide_source_view_get_spell_checking (IdeSourceView *self)
 }
 
 static void
+ide_source_view_format_selection_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdeSourceView) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_buffer_format_selection_finish (buffer, result, &error))
+    g_warning ("%s", error->message);
+
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (self), TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_format_selection (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(IdeFormatterOptions) options = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  options = ide_formatter_options_new ();
+  ide_formatter_options_set_tab_width (options,
+    gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (self)));
+  ide_formatter_options_set_insert_spaces (options,
+    gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self)));
+
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (self), FALSE);
+  ide_buffer_format_selection_async (priv->buffer,
+                                     options,
+                                     NULL,
+                                     ide_source_view_format_selection_cb,
+                                     g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -6672,6 +6721,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SOURCE_LOCATION);
+
+  signals [FORMAT_SELECTION] =
+    g_signal_new_class_handler ("format-selection",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_format_selection),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   signals [GOTO_DEFINITION] =
     g_signal_new ("goto-definition",
