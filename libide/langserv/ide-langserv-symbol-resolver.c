@@ -628,7 +628,7 @@ ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolve
     "position", "{",
       "line", JSONRPC_MESSAGE_PUT_INT32 (line),
       "character", JSONRPC_MESSAGE_PUT_INT32 (line_offset),
-    "}"
+    "}",
     "context", "{",
       "includeDeclaration", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
     "}"
