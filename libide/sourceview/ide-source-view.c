@@ -64,6 +64,7 @@
 #include "sourceview/ide-source-view.h"
 #include "sourceview/ide-text-util.h"
 #include "symbols/ide-symbol.h"
+#include "symbols/ide-symbol-resolver.h"
 #include "theatrics/ide-box-theatric.h"
 #include "util/ide-cairo.h"
 #include "util/ide-gdk.h"
@@ -271,6 +272,7 @@ enum {
   END_USER_ACTION,
   FOCUS_LOCATION,
   FORMAT_SELECTION,
+  FIND_REFERENCES,
   GOTO_DEFINITION,
   HIDE_COMPLETION,
   INCREASE_FONT_SIZE,
@@ -5962,6 +5964,135 @@ ide_source_view_real_format_selection (IdeSourceView *self)
 }
 
 static void
+ide_source_view_find_references_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)object;
+  g_autoptr(IdeSourceView) self = user_data;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(GPtrArray) references = NULL;
+  g_autoptr(GError) error = NULL;
+  GtkScrolledWindow *scroller;
+  GtkPopover *popover;
+  GtkListBox *list_box;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GdkRectangle loc;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  references = ide_symbol_resolver_find_references_finish (resolver, result, &error);
+
+  if (error != NULL)
+    g_debug ("%s", error->message);
+
+  /* Ignore popover if we are no longer visible or not top-most */
+  if (!gtk_widget_get_visible (GTK_WIDGET (self)) ||
+      !gtk_widget_get_child_visible (GTK_WIDGET (self)))
+    IDE_EXIT;
+
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &iter, insert);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->buffer), &iter, &iter);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &loc);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (self),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         loc.x, loc.y, &loc.x, &loc.y);
+
+  popover = g_object_new (GTK_TYPE_POPOVER,
+                          "modal", TRUE,
+                          "position", GTK_POS_TOP,
+                          "relative-to", self,
+                          "pointing-to", &loc,
+                          NULL);
+
+  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                           "min-content-height", 35,
+                           "max-content-height", 200,
+                           "propagate-natural-height", TRUE,
+                           "propagate-natural-width", TRUE,
+                           "visible", TRUE,
+                           NULL);
+  gtk_container_add (GTK_CONTAINER (popover), GTK_WIDGET (scroller));
+
+  list_box = g_object_new (GTK_TYPE_LIST_BOX,
+                           "visible", TRUE,
+                           NULL);
+  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (list_box));
+
+  if (references != NULL && references->len > 0)
+    {
+      for (guint i = 0; i < references->len; i++)
+        {
+          IdeSourceRange *range = g_ptr_array_index (references, i);
+          IdeSourceLocation *begin = ide_source_range_get_begin (range);
+          IdeFile *file = ide_source_location_get_file (begin);
+          guint line = ide_source_location_get_line (begin);
+          guint line_offset = ide_source_location_get_line_offset (begin);
+          g_autofree gchar *name = g_file_get_basename (ide_file_get_file (file));
+          g_autofree gchar *text = g_strdup_printf ("%s %u:%u", name, line+1, line_offset+1);
+          GtkLabel *label;
+
+          label = g_object_new (GTK_TYPE_LABEL,
+                                "xalign", 0.0f,
+                                "label", text,
+                                "visible", TRUE,
+                                NULL);
+          gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (label));
+        }
+    }
+  else
+    {
+      GtkLabel *label = g_object_new (GTK_TYPE_LABEL,
+                                      "label", _("No references were found"),
+                                      "visible", TRUE,
+                                      NULL);
+      gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (label));
+    }
+
+  gtk_popover_popup (popover);
+
+  g_signal_connect (popover, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_find_references (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(IdeSourceLocation) location = NULL;
+  IdeSymbolResolver *resolver;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  resolver = ide_buffer_get_symbol_resolver (priv->buffer);
+
+  if (resolver == NULL)
+    {
+      g_debug ("No symbol resolver is available");
+      IDE_EXIT;
+    }
+
+  location = ide_buffer_get_insert_location (priv->buffer);
+
+  ide_symbol_resolver_find_references_async (resolver,
+                                             location,
+                                             NULL,
+                                             ide_source_view_find_references_cb,
+                                             g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -6712,6 +6843,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
+  signals [FIND_REFERENCES] =
+    g_signal_new_class_handler ("find-references",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_find_references),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   signals [FOCUS_LOCATION] =
     g_signal_new ("focus-location",
                   G_TYPE_FROM_CLASS (klass),
@@ -7102,10 +7240,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   0);
 
   binding_set = gtk_binding_set_by_class (klass);
+
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_r,
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "begin-rename", 0);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_space,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "find-references", 0);
 
   /*
    * Escape is wired up by the GtkSourceCompletion by default. However, some
