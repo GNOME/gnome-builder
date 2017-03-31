@@ -5964,6 +5964,27 @@ ide_source_view_real_format_selection (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_find_references_jump (IdeSourceView *self,
+                                           GtkListBoxRow *row,
+                                           GtkListBox    *list_box)
+{
+  IdeSourceLocation *location;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  location = g_object_get_data (G_OBJECT (row), "IDE_SOURCE_LOCATION");
+
+  if (location != NULL)
+    g_signal_emit (self, signals [FOCUS_LOCATION], 0, location);
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_find_references_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
@@ -6023,6 +6044,11 @@ ide_source_view_find_references_cb (GObject      *object,
   list_box = g_object_new (GTK_TYPE_LIST_BOX,
                            "visible", TRUE,
                            NULL);
+  g_signal_connect_object (list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_source_view_real_find_references_jump),
+                           self,
+                           G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (list_box));
 
   if (references != NULL && references->len > 0)
@@ -6041,6 +6067,7 @@ ide_source_view_find_references_cb (GObject      *object,
           guint line_offset = ide_source_location_get_line_offset (begin);
           g_autofree gchar *name = NULL;
           g_autofree gchar *text = NULL;
+          GtkListBoxRow *row;
           GtkLabel *label;
 
           if (g_file_has_prefix (gfile, workdir))
@@ -6060,7 +6087,15 @@ ide_source_view_find_references_cb (GObject      *object,
                                 "use-markup", TRUE,
                                 "visible", TRUE,
                                 NULL);
-          gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (label));
+          row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                              "child", label,
+                              "visible", TRUE,
+                              NULL);
+          g_object_set_data_full (G_OBJECT (row),
+                                  "IDE_SOURCE_LOCATION",
+                                  ide_source_location_ref (begin),
+                                  (GDestroyNotify)ide_source_location_unref);
+          gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
         }
     }
   else
