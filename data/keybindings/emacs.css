@@ -55,6 +55,7 @@
                   "clear-snippets" ()
                   "hide-completion" () };
   bind "<ctrl>x" { "set-mode" ("emacs-x", transient) };
+  bind "<ctrl>c" { "set-mode" ("emacs-c", transient) };
   bind "<ctrl>underscore" { "undo" () };
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
   bind "<ctrl>r" { "action" ("frame", "find", "2") };
@@ -132,6 +133,11 @@
   bind "h" { "select-all" (1) };
 }
 
+@binding-set builder-emacs-source-view-c
+{
+  bind "<ctrl>f" { "format-selection" () };
+}
+
 /*
  * Bindings for GtkTreeView
  */
@@ -190,6 +196,12 @@ idesourceviewmode.emacs-x {
   -IdeSourceViewMode-display-name: "C-x";
 
   -gtk-key-bindings: builder-emacs-source-view-x;
+}
+
+idesourceviewmode.emacs-c {
+  -IdeSourceViewMode-display-name: "C-c";
+
+  -gtk-key-bindings: builder-emacs-source-view-c;
 }
 
 treeview {
