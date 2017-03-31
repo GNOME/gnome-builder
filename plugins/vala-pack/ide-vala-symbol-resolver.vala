@@ -111,6 +111,13 @@ namespace Ide
 		}
 
 		public void load () {}
+
+		public async GLib.GenericArray<weak Ide.SourceRange> find_references_async (Ide.SourceLocation location,
+		                                                                            GLib.Cancellable? cancellable)
+			throws GLib.Error
+		{
+			return new GLib.GenericArray<weak Ide.SourceRange> ();
+		}
 	}
 }
 
