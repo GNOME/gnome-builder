@@ -188,3 +188,7 @@ class RustSymbolResolver(Ide.LangservSymbolResolver):
 class RustHighlighter(Ide.LangservHighlighter):
     def do_load(self):
         RustService.bind_client(self)
+
+class RustFormatter(Ide.LangservFormatter):
+    def do_load(self):
+        RustService.bind_client(self)
