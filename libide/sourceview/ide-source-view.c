@@ -5984,6 +5984,29 @@ ide_source_view_real_find_references_jump (IdeSourceView *self,
   IDE_EXIT;
 }
 
+static gboolean
+insert_mark_within_range (IdeBuffer      *buffer,
+                          IdeSourceRange *range)
+{
+  GtkTextMark *insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  IdeSourceLocation *begin = ide_source_range_get_begin (range);
+  IdeSourceLocation *end = ide_source_range_get_end (range);
+  GtkTextIter iter;
+  GtkTextIter begin_iter;
+  GtkTextIter end_iter;
+
+  if (!begin || !end)
+    return FALSE;
+
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, insert);
+  ide_buffer_get_iter_at_source_location (buffer, &begin_iter, begin);
+  ide_buffer_get_iter_at_source_location (buffer, &end_iter, end);
+
+  return gtk_text_iter_compare (&begin_iter, &iter) <= 0 &&
+         gtk_text_iter_compare (&end_iter, &iter) >= 0;
+
+}
+
 static void
 ide_source_view_find_references_cb (GObject      *object,
                                     GAsyncResult *result,
@@ -6044,11 +6067,6 @@ ide_source_view_find_references_cb (GObject      *object,
   list_box = g_object_new (GTK_TYPE_LIST_BOX,
                            "visible", TRUE,
                            NULL);
-  g_signal_connect_object (list_box,
-                           "row-activated",
-                           G_CALLBACK (ide_source_view_real_find_references_jump),
-                           self,
-                           G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (list_box));
 
   if (references != NULL && references->len > 0)
@@ -6096,6 +6114,9 @@ ide_source_view_find_references_cb (GObject      *object,
                                   ide_source_location_ref (begin),
                                   (GDestroyNotify)ide_source_location_unref);
           gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
+
+          if (insert_mark_within_range (priv->buffer, range))
+            gtk_list_box_select_row (list_box, row);
         }
     }
   else
@@ -6106,6 +6127,12 @@ ide_source_view_find_references_cb (GObject      *object,
                                       NULL);
       gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (label));
     }
+
+  g_signal_connect_object (list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_source_view_real_find_references_jump),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   gtk_popover_popup (popover);
 
