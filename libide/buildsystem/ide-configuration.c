@@ -758,6 +758,7 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
     {
       IdeRuntimeManager *runtime_manager;
       IdeContext *context;
+      IdeRuntime *runtime;
 
       g_free (priv->runtime_id);
       priv->runtime_id = g_strdup (runtime_id);
@@ -768,6 +769,10 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       runtime_manager = ide_context_get_runtime_manager (context);
       ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
+
+      runtime = ide_configuration_get_runtime (self);
+      if (runtime != NULL)
+        ide_runtime_prepare_configuration (runtime, self);
 
       ide_configuration_set_dirty (self, TRUE);
       ide_configuration_emit_changed (self);
