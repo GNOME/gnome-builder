@@ -23,6 +23,8 @@
 
 #include "ide-types.h"
 
+#include "formatting/ide-formatter-options.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_BUFFER (ide_buffer_get_type ())
@@ -60,6 +62,14 @@ struct _IdeBufferClass
   gpointer _reserved8;
 };
 
+void                ide_buffer_format_selection_async        (IdeBuffer            *self,
+                                                              IdeFormatterOptions *options,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+gboolean            ide_buffer_format_selection_finish       (IdeBuffer            *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
 gboolean            ide_buffer_get_busy                      (IdeBuffer            *self);
 gboolean            ide_buffer_get_changed_on_volume         (IdeBuffer            *self);
 gsize               ide_buffer_get_change_count              (IdeBuffer            *self);
