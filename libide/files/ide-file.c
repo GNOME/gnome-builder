@@ -705,3 +705,18 @@ ide_file_compare (const IdeFile *a,
 
   return g_strcmp0 (filea, fileb);
 }
+
+const gchar *
+ide_file_get_language_id (IdeFile *self)
+{
+  GtkSourceLanguage *language;
+
+  g_return_val_if_fail (IDE_IS_FILE (self), NULL);
+
+  language = ide_file_get_language (self);
+
+  if (language != NULL)
+    return gtk_source_language_get_id (language);
+
+  return NULL;
+}
