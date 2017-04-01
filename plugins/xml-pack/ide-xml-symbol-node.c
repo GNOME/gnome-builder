@@ -21,13 +21,20 @@
 
 #include "ide-xml-symbol-node.h"
 
+typedef struct _NodeEntry
+{
+  IdeXmlSymbolNode *node;
+  guint             is_internal : 1;
+} NodeEntry;
+
 struct _IdeXmlSymbolNode
 {
   IdeSymbolNode             parent_instance;
-  GPtrArray                *children;
-  GPtrArray                *internal_children;
+  GArray                   *children;
   gchar                    *value;
   gchar                    *element_name;
+  gint                      nb_children;
+  gint                      nb_internal_children;
   GFile                    *file;
   gint                      line;
   gint                      line_offset;
@@ -85,8 +92,7 @@ ide_xml_symbol_node_finalize (GObject *object)
 {
   IdeXmlSymbolNode *self = (IdeXmlSymbolNode *)object;
 
-  g_clear_pointer (&self->children, g_ptr_array_unref);
-  g_clear_pointer (&self->internal_children, g_ptr_array_unref);
+  g_clear_pointer (&self->children, g_array_unref);
 
   g_clear_pointer (&self->element_name, g_free);
   g_clear_pointer (&self->value, g_free);
@@ -155,22 +161,111 @@ ide_xml_symbol_node_new (const gchar            *name,
 guint
 ide_xml_symbol_node_get_n_children (IdeXmlSymbolNode *self)
 {
+  NodeEntry *entry;
+  guint nb_children = 0;
+
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), 0);
 
-  return self->children != NULL ? self->children->len : 0;
+  if (self->children != NULL)
+    {
+      for (gint n = 0; n < self->children->len; ++n)
+        {
+          entry = &g_array_index (self->children, NodeEntry, n);
+          if (entry->is_internal)
+            {
+              nb_children += ide_xml_symbol_node_get_n_children (entry->node);
+              continue;
+            }
+
+          ++nb_children;
+        }
+    }
+
+  return nb_children;
+}
+
+IdeSymbolNode *
+ide_xml_symbol_node_get_nth_child_deep (IdeXmlSymbolNode *self,
+                                        guint             nth_child,
+                                        guint            *current_pos)
+{
+  IdeSymbolNode *node;
+  NodeEntry *entry;
+
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  if (self->children == NULL)
+    return NULL;
+
+  for (gint n = 0; n < self->children->len; ++n)
+    {
+      entry = &g_array_index (self->children, NodeEntry, n);
+      if (entry->is_internal)
+        {
+          node = ide_xml_symbol_node_get_nth_child_deep (entry->node, nth_child, current_pos);
+          if (node == NULL)
+            continue;
+
+          return IDE_SYMBOL_NODE (g_object_ref (node));
+        }
+      else
+        node = IDE_SYMBOL_NODE (entry->node);
+
+      if (*current_pos == nth_child)
+        return IDE_SYMBOL_NODE (g_object_ref (node));
+
+      ++(*current_pos);
+    }
+
+  return NULL;
+}
+
+static IdeSymbolNode *
+get_nth_child (IdeXmlSymbolNode *self,
+               guint             nth_child,
+               gboolean          internal)
+{
+  NodeEntry *entry;
+  guint pos = 0;
+
+  if (self->children != NULL)
+    {
+      if (internal)
+        {
+          for (gint n = 0; n < self->children->len; ++n)
+            {
+              entry = &g_array_index (self->children, NodeEntry, n);
+              if (entry->is_internal)
+                {
+                  if (pos == nth_child)
+                    return (IdeSymbolNode *)g_object_ref (entry->node);
+
+                  ++pos;
+                }
+            }
+        }
+      else
+        return ide_xml_symbol_node_get_nth_child_deep (self, nth_child, &pos);
+    }
+
+  return NULL;
 }
 
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_child (IdeXmlSymbolNode *self,
                                    guint             nth_child)
 {
+  IdeSymbolNode *child;
+
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  if (self->children != NULL && nth_child < self->children->len)
-    return g_object_ref (g_ptr_array_index (self->children, nth_child));
+  if (NULL == (child = get_nth_child (self, nth_child, FALSE)))
+    {
+      g_warning ("nth child %u is out of bounds", nth_child);
+      return NULL;
+    }
 
-  g_warning ("nth child %u is out of bounds", nth_child);
-  return NULL;
+  return child;
 }
 
 guint
@@ -178,20 +273,53 @@ ide_xml_symbol_node_get_n_internal_children (IdeXmlSymbolNode *self)
 {
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), 0);
 
-  return self->internal_children != NULL ? self->internal_children->len : 0;
+  return self->nb_internal_children;
 }
 
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_internal_child (IdeXmlSymbolNode *self,
                                             guint             nth_child)
 {
+  IdeSymbolNode *child;
+
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  if (self->internal_children != NULL && nth_child < self->internal_children->len)
-    return g_object_ref (g_ptr_array_index (self->internal_children, nth_child));
+  if (NULL == (child = get_nth_child (self, nth_child, TRUE)))
+    {
+      g_warning ("nth child %u is out of bounds", nth_child);
+      return NULL;
+    }
 
-  g_warning ("nth child %u is out of bounds", nth_child);
-  return NULL;
+  return child;
+}
+
+static void
+node_entry_free (gpointer data)
+{
+  NodeEntry *node_entry = (NodeEntry *)data;
+
+  g_assert (node_entry->node != NULL);
+
+  g_object_unref (node_entry->node);
+}
+
+static void
+take_child (IdeXmlSymbolNode *self,
+            IdeXmlSymbolNode *child,
+            gboolean          is_internal)
+{
+  NodeEntry node_entry;
+
+  if (self->children == NULL)
+    {
+      self->children = g_array_new (FALSE, TRUE, sizeof (NodeEntry));
+      g_array_set_clear_func (self->children, node_entry_free);
+    }
+
+  node_entry.node = child;
+  node_entry.is_internal = is_internal;
+
+  g_array_append_val (self->children, node_entry);
 }
 
 void
@@ -201,10 +329,8 @@ ide_xml_symbol_node_take_child (IdeXmlSymbolNode *self,
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (child));
 
-  if (self->children == NULL)
-    self->children = g_ptr_array_new_with_free_func (g_object_unref);
-
-  g_ptr_array_add (self->children, child);
+  take_child (self, child, FALSE);
+  ++self->nb_children;
 }
 
 void
@@ -214,10 +340,8 @@ ide_xml_symbol_node_take_internal_child (IdeXmlSymbolNode *self,
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (child));
 
-  if (self->internal_children == NULL)
-    self->internal_children = g_ptr_array_new_with_free_func (g_object_unref);
-
-  g_ptr_array_add (self->internal_children, child);
+  take_child (self, child, TRUE);
+  ++self->nb_internal_children;
 }
 
 void

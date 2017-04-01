@@ -50,8 +50,8 @@ enum _IdeXmlSaxCallbackType {
 void            ide_xml_sax_clear               (IdeXmlSax              *self);
 gint            ide_xml_sax_get_depth           (IdeXmlSax              *self);
 gboolean        ide_xml_sax_get_location        (IdeXmlSax              *self,
-                                                 gint                   *line,
-                                                 gint                   *line_offset,
+                                                 gint                   *start_line,
+                                                 gint                   *start_line_offset,
                                                  gint                   *end_line,
                                                  gint                   *end_line_offset,
                                                  gsize                  *size);

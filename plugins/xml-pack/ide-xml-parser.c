@@ -172,11 +172,19 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     }
 
   depth = ide_xml_sax_get_depth (self->sax_parser);
+  ide_xml_sax_get_location (self->sax_parser, &line, &line_offset, NULL, NULL, &size);
 
   if (node == NULL)
     {
       if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT)
-        ide_xml_stack_push (self->stack, element_name, NULL, state->parent_node, depth);
+        {
+          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT, NULL, 0, 0, 0);
+          ide_xml_symbol_node_set_location (node, g_object_ref (state->file), line, line_offset, size);
+
+          ide_xml_stack_push (self->stack, element_name, node, state->parent_node, depth);
+          ide_xml_symbol_node_take_internal_child (state->parent_node, node);
+          state->parent_node = node;
+        }
       else if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
         {
           /* TODO: compare current with popped */
@@ -192,11 +200,11 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
         }
 
       state->current_depth = depth;
-      state->current_node = NULL;
+      state->current_node = node;
       return;
     }
 
-  ide_xml_sax_get_location (self->sax_parser, &line, &line_offset, NULL, NULL, &size);
+
   ide_xml_symbol_node_set_location (node, g_object_ref (state->file), line, line_offset, size);
 
   /* TODO: take end elements into account and use:

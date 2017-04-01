@@ -182,15 +182,16 @@ ide_xml_sax_parse (IdeXmlSax   *self,
 
 static void
 get_tag_location (IdeXmlSax *self,
-                  gint       *line,
-                  gint       *line_offset,
-                  gsize      *size)
+                  gint      *line,
+                  gint      *line_offset,
+                  gsize     *size)
 {
   xmlParserInput *input;
   const gchar *base;
   const gchar *current;
   const gchar *line_start;
   gint start_line_number;
+  gint size_offset = 1;
   gunichar ch;
 
   g_assert (IDE_IS_XML_SAX (self));
@@ -205,8 +206,22 @@ get_tag_location (IdeXmlSax *self,
   current = (const gchar *)input->cur;
   start_line_number = xmlSAX2GetLineNumber (self->context);
 
-  if (g_utf8_get_char (current) == '\n' && current > base)
-    --current;
+  /* Adjust the element size, can be a start, a end or an auto-closed one */
+  if (g_utf8_get_char (current) != '>')
+    {
+      /* Auto-closed start element case */
+      if (g_utf8_get_char (current) == '/' && g_utf8_get_char (current + 1) == '>')
+        {
+          ++current;
+          size_offset = 2;
+        }
+      /* End element case */
+      else if (current > base && g_utf8_get_char (current - 1) == '>')
+        {
+          --current;
+          size_offset = 0;
+        }
+    }
 
   if (g_utf8_get_char (current) != '>')
     {
@@ -244,7 +259,7 @@ get_tag_location (IdeXmlSax *self,
 
   *line = start_line_number;
   *line_offset = (current - line_start) + 1;
-  *size = (const gchar *)input->cur - current;
+  *size = (const gchar *)input->cur - current + size_offset;
 }
 
 gboolean

@@ -50,6 +50,9 @@ guint                     ide_xml_symbol_node_get_n_children                (Ide
 guint                     ide_xml_symbol_node_get_n_internal_children       (IdeXmlSymbolNode       *self);
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_child                 (IdeXmlSymbolNode       *self,
                                                                              guint                   nth_child);
+IdeSymbolNode            *ide_xml_symbol_node_get_nth_child_deep            (IdeXmlSymbolNode       *self,
+                                                                             guint                   nth_child,
+                                                                             guint                  *current_pos);
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_internal_child        (IdeXmlSymbolNode       *self,
                                                                              guint                   nth_child);
 const gchar              *ide_xml_symbol_node_get_value                     (IdeXmlSymbolNode       *self);
