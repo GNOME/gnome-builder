@@ -39,6 +39,12 @@ struct _IdeXmlSymbolNode
   gint                      line;
   gint                      line_offset;
   gsize                     size;
+
+  gint                      end_line;
+  gint                      end_line_offset;
+  gsize                     end_size;
+
+  guint                     has_end_tag : 1;
 };
 
 G_DEFINE_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE_TYPE_SYMBOL_NODE)
@@ -389,6 +395,47 @@ ide_xml_symbol_node_get_location (IdeXmlSymbolNode *self,
     *size = self->size;
 
   return self->file;
+}
+
+void
+ide_xml_symbol_node_get_end_tag_location (IdeXmlSymbolNode *self,
+                                          gint             *end_line,
+                                          gint             *end_line_offset,
+                                          gsize            *end_size)
+{
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+
+  if (end_line != NULL)
+    *end_line = self->end_line;
+
+  if (end_line_offset != NULL)
+    *end_line_offset = self->end_line_offset;
+
+  if (end_size != NULL)
+    *end_size = self->end_size;
+}
+
+void
+ide_xml_symbol_node_set_end_tag_location (IdeXmlSymbolNode *self,
+                                          gint              end_line,
+                                          gint              end_line_offset,
+                                          gsize             end_size)
+{
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+
+  self->end_line = end_line;
+  self->end_line_offset = end_line_offset;
+  self->end_size = end_size;
+
+  self->has_end_tag = TRUE;
+}
+
+gboolean
+ide_xml_symbol_node_has_end_tag (IdeXmlSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), FALSE);
+
+  return self->has_end_tag;
 }
 
 const gchar *

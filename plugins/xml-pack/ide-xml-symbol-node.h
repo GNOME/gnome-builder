@@ -46,6 +46,10 @@ GFile *                   ide_xml_symbol_node_get_location                  (Ide
                                                                              gint                   *line,
                                                                              gint                   *line_offset,
                                                                              gsize                  *size);
+void                      ide_xml_symbol_node_get_end_tag_location          (IdeXmlSymbolNode       *self,
+                                                                             gint                   *end_line,
+                                                                             gint                   *end_line_offset,
+                                                                             gsize                  *end_size);
 guint                     ide_xml_symbol_node_get_n_children                (IdeXmlSymbolNode       *self);
 guint                     ide_xml_symbol_node_get_n_internal_children       (IdeXmlSymbolNode       *self);
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_child                 (IdeXmlSymbolNode       *self,
@@ -56,11 +60,16 @@ IdeSymbolNode            *ide_xml_symbol_node_get_nth_child_deep            (Ide
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_internal_child        (IdeXmlSymbolNode       *self,
                                                                              guint                   nth_child);
 const gchar              *ide_xml_symbol_node_get_value                     (IdeXmlSymbolNode       *self);
+gboolean                  ide_xml_symbol_node_has_end_tag                   (IdeXmlSymbolNode       *self);
 void                      ide_xml_symbol_node_set_location                  (IdeXmlSymbolNode       *self,
                                                                              GFile                  *file,
                                                                              gint                    line,
                                                                              gint                    line_offset,
                                                                              gsize                   size);
+void                      ide_xml_symbol_node_set_end_tag_location          (IdeXmlSymbolNode       *self,
+                                                                             gint                    end_line,
+                                                                             gint                    end_line_offset,
+                                                                             gsize                   end_size);
 void                      ide_xml_symbol_node_set_element_name              (IdeXmlSymbolNode       *self,
                                                                              const gchar            *element_name);
 void                      ide_xml_symbol_node_set_value                     (IdeXmlSymbolNode       *self,
