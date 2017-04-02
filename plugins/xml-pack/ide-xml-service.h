@@ -22,6 +22,7 @@
 #include <gtksourceview/gtksource.h>
 #include <egg-task-cache.h>
 
+#include "ide-xml-position.h"
 #include "ide-xml-symbol-node.h"
 #include <ide.h>
 
@@ -31,29 +32,40 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlService, ide_xml_service, IDE, XML_SERVICE, IdeObject)
 
-IdeDiagnostics     *ide_xml_service_get_cached_diagnostics    (IdeXmlService        *self,
-                                                               GFile                *gfile);
-IdeXmlSymbolNode   *ide_xml_service_get_cached_root_node      (IdeXmlService        *self,
-                                                               GFile                *gfile);
-IdeDiagnostics     *ide_xml_service_get_diagnostics_finish    (IdeXmlService        *self,
-                                                               GAsyncResult         *result,
-                                                               GError              **error);
-void                ide_xml_service_get_diagnostics_async     (IdeXmlService        *self,
-                                                               IdeFile              *ifile,
-                                                               IdeBuffer            *buffer,
-                                                               GCancellable         *cancellable,
-                                                               GAsyncReadyCallback   callback,
-                                                               gpointer              user_data);
-void                ide_xml_service_get_root_node_async       (IdeXmlService        *self,
-                                                               IdeFile              *ifile,
-                                                               IdeBuffer            *buffer,
-                                                               GCancellable         *cancellable,
-                                                               GAsyncReadyCallback   callback,
-                                                               gpointer              user_data);
-IdeXmlSymbolNode   *ide_xml_service_get_root_node_finish      (IdeXmlService        *self,
-                                                               GAsyncResult         *result,
-                                                               GError              **error);
-EggTaskCache       *ide_xml_service_get_schemas_cache         (IdeXmlService        *self);
+IdeDiagnostics     *ide_xml_service_get_cached_diagnostics             (IdeXmlService        *self,
+                                                                        GFile                *gfile);
+IdeXmlSymbolNode   *ide_xml_service_get_cached_root_node               (IdeXmlService        *self,
+                                                                        GFile                *gfile);
+IdeDiagnostics     *ide_xml_service_get_diagnostics_finish             (IdeXmlService        *self,
+                                                                        GAsyncResult         *result,
+                                                                        GError              **error);
+void                ide_xml_service_get_diagnostics_async              (IdeXmlService        *self,
+                                                                        IdeFile              *ifile,
+                                                                        IdeBuffer            *buffer,
+                                                                        GCancellable         *cancellable,
+                                                                        GAsyncReadyCallback   callback,
+                                                                        gpointer              user_data);
+void                ide_xml_service_get_position_from_cursor_async     (IdeXmlService        *self,
+                                                                        IdeFile              *ifile,
+                                                                        IdeBuffer            *buffer,
+                                                                        gint                  line,
+                                                                        gint                  line_offset,
+                                                                        GCancellable         *cancellable,
+                                                                        GAsyncReadyCallback   callback,
+                                                                        gpointer              user_data);
+IdeXmlPosition     *ide_xml_service_get_position_from_cursor_finish    (IdeXmlService        *self,
+                                                                        GAsyncResult         *result,
+                                                                        GError              **error);
+void                ide_xml_service_get_root_node_async                (IdeXmlService        *self,
+                                                                        IdeFile              *ifile,
+                                                                        IdeBuffer            *buffer,
+                                                                        GCancellable         *cancellable,
+                                                                        GAsyncReadyCallback   callback,
+                                                                        gpointer              user_data);
+IdeXmlSymbolNode   *ide_xml_service_get_root_node_finish               (IdeXmlService        *self,
+                                                                        GAsyncResult         *result,
+                                                                        GError              **error);
+EggTaskCache       *ide_xml_service_get_schemas_cache                  (IdeXmlService        *self);
 
 G_END_DECLS
 

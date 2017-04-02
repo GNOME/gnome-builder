@@ -187,16 +187,24 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
         }
       else if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
         {
-          /* TODO: compare current with popped */
-          if (ide_xml_stack_is_empty (self->stack))
+          while (TRUE)
             {
-              g_warning ("Xml nodes stack empty\n");
-              return;
-            }
+              if (ide_xml_stack_is_empty (self->stack))
+                {
+                  g_warning ("Xml nodes stack empty\n");
+                  return;
+                }
 
-          popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
-          state->parent_node = parent_node;
-          g_assert (state->parent_node != NULL);
+              popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
+              if (ide_str_equal0 (popped_element_name, element_name))
+                {
+                  ide_xml_symbol_node_set_end_tag_location (popped_node, line, line_offset, size);
+                  state->parent_node = parent_node;
+                  g_assert (state->parent_node != NULL);
+
+                  break;
+                }
+            }
         }
 
       state->current_depth = depth;

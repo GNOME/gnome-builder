@@ -529,6 +529,108 @@ ide_xml_service_context_loaded (IdeService *service)
   IDE_EXIT;
 }
 
+typedef struct
+{
+  GTask         *task;
+  GCancellable  *cancellable;
+  IdeFile       *ifile;
+  IdeBuffer     *buffer;
+  gint           line;
+  gint           line_offset;
+} PositionState;
+
+static void
+position_state_free (PositionState *state)
+{
+  g_assert (state != NULL);
+
+  g_object_unref (state->ifile);
+  g_object_unref (state->buffer);
+}
+
+static void
+ide_xml_service_get_position_from_cursor_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  IdeXmlService *service = (IdeXmlService *)object;
+  PositionState *state = (PositionState *)user_data;
+  g_autoptr(GTask) task = state->task;
+  g_autoptr(IdeXmlSymbolNode) root_node = NULL;
+  IdeXmlPosition *position;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_XML_SERVICE (service));
+
+  root_node = ide_xml_service_get_root_node_finish (service, result, &error);
+  if (root_node != NULL)
+    {
+      /* find the correspoonding node */
+      g_task_return_pointer (task, position, g_object_unref);
+    }
+  else
+    g_task_return_error (task, error);
+
+  position_state_free (state);
+
+  IDE_EXIT;
+}
+
+void
+ide_xml_service_get_position_from_cursor_async (IdeXmlService       *self,
+                                                IdeFile             *ifile,
+                                                IdeBuffer           *buffer,
+                                                gint                 line,
+                                                gint                 line_offset,
+                                                GCancellable        *cancellable,
+                                                GAsyncReadyCallback  callback,
+                                                gpointer             user_data)
+{
+  PositionState *state;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_XML_SERVICE (self));
+  g_return_if_fail (IDE_IS_FILE (ifile));
+  g_return_if_fail (IDE_IS_BUFFER (buffer) || buffer == NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  state = g_slice_new0 (PositionState);
+  state->task = g_steal_pointer (&task);
+  state->cancellable = cancellable;
+  state->ifile = g_object_ref (ifile);
+  state->buffer = g_object_ref (buffer);
+
+  ide_xml_service_get_root_node_async (self,
+                                       ifile,
+                                       buffer,
+                                       cancellable,
+                                       ide_xml_service_get_position_from_cursor_cb,
+                                       g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+IdeXmlPosition *
+ide_xml_service_get_position_from_cursor_finish (IdeXmlService  *self,
+                                                 GAsyncResult   *result,
+                                                 GError        **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (error != NULL, NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
+
 static void
 ide_xml_service_start (IdeService *service)
 {
