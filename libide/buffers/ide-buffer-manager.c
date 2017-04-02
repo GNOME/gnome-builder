@@ -334,6 +334,7 @@ static gboolean
 ide_buffer_manager_auto_save_cb (gpointer data)
 {
   AutoSave *state = data;
+  gboolean saved = FALSE;
 
   g_assert (state);
   g_assert (IDE_IS_BUFFER_MANAGER (state->self));
@@ -345,16 +346,20 @@ ide_buffer_manager_auto_save_cb (gpointer data)
       IdeFile *file = ide_buffer_get_file (state->buffer);
 
       if (file != NULL)
-        ide_buffer_manager_save_file_async (state->self,
-                                            state->buffer,
-                                            file,
-                                            NULL,
-                                            NULL,
-                                            NULL,
-                                            NULL);
+        {
+          ide_buffer_manager_save_file_async (state->self,
+                                              state->buffer,
+                                              file,
+                                              NULL,
+                                              NULL,
+                                              NULL,
+                                              NULL);
+          saved = TRUE;
+        }
     }
 
-  unregister_auto_save (state->self, state->buffer);
+  if (!saved)
+    unregister_auto_save (state->self, state->buffer);
 
   return G_SOURCE_REMOVE;
 }
@@ -1149,6 +1154,8 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
                                 cancellable,
                                 ide_buffer_manager_save_file__load_settings_cb,
                                 g_object_ref (task));
+
+  unregister_auto_save (self, state->buffer);
 }
 
 /**
