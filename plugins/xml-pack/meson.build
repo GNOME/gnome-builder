@@ -3,6 +3,8 @@ if get_option('with_xml_pack')
 xml_pack_sources = [
   'ide-xml-analysis.c',
   'ide-xml-analysis.h',
+  'ide-xml-completion-provider.c',
+  'ide-xml-completion-provider.h',
   'ide-xml-diagnostic-provider.c',
   'ide-xml-diagnostic-provider.h',
   'ide-xml-highlighter.c',
