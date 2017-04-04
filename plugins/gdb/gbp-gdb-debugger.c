@@ -328,6 +328,8 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
                                     Mi2Client       *client)
 {
   IdeDebuggerStopReason translated;
+  g_autoptr(IdeSourceLocation) location = NULL;
+  GVariant *fra;
 
   IDE_ENTRY;
 
@@ -355,6 +357,29 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
       self->can_step_over = FALSE;
       translated = IDE_DEBUGGER_STOP_UNDEFINED;
       break;
+    }
+
+  if (NULL != (fra = mi2_message_get_param (MI2_MESSAGE (message), "frame")) &&
+      g_variant_is_of_type (fra, G_VARIANT_TYPE ("a{sv}")))
+    {
+      GVariantDict dict;
+      const gchar *filename = NULL;
+      const gchar *line = NULL;
+
+      g_variant_dict_init (&dict, fra);
+      g_variant_dict_lookup (&dict, "fullname", "&s", &filename);
+      g_variant_dict_lookup (&dict, "line", "&s", &line);
+
+      if (filename != NULL && line != NULL)
+        {
+          IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+          g_autoptr(GFile) gfile = g_file_new_for_path (filename);
+          g_autoptr(IdeFile) ifile = ide_file_new (context, gfile);
+
+          location = ide_source_location_new (ifile,
+                                              g_ascii_strtoll (line, NULL, 10),
+                                              0, 0);
+        }
     }
 
   gbp_gdb_debugger_notify_properties (self);

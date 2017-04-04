@@ -24,6 +24,7 @@
 
 #include "ide-debug.h"
 
+#include "debugger/ide-breakpoint.h"
 #include "debugger/ide-debug-manager.h"
 #include "debugger/ide-debugger.h"
 #include "plugins/ide-extension-util.h"
@@ -59,6 +60,7 @@ enum {
 enum {
   BREAKPOINT_ADDED,
   BREAKPOINT_REMOVED,
+  BREAKPOINT_REACHED,
   N_SIGNALS
 };
 
