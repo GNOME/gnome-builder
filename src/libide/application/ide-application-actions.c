@@ -296,6 +296,18 @@ ide_application_actions_load_workbench_view (IdeApplication *self,
 }
 
 static void
+ide_application_actions_clone (GSimpleAction *action,
+                               GVariant      *variant,
+                               gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  ide_application_actions_load_workbench_view (self, "IdeGitGenesisAddin", NULL);
+}
+
+static void
 ide_application_actions_new_project (GSimpleAction *action,
                                      GVariant      *variant,
                                      gpointer       user_data)
@@ -413,6 +425,7 @@ ide_application_actions_load_flatpak (GSimpleAction *action,
 
 static const GActionEntry IdeApplicationActions[] = {
   { "about",        ide_application_actions_about },
+  { "clone",        ide_application_actions_clone },
   { "dayhack",      ide_application_actions_dayhack },
   { "nighthack",    ide_application_actions_nighthack },
   { "open-project", ide_application_actions_open_project },

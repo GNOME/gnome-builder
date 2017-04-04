@@ -11,6 +11,10 @@
         <attribute name="label" translatable="yes">_Open Project</attribute>
         <attribute name="action">app.open-project</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">_Clone Repository</attribute>
+        <attribute name="action">app.clone</attribute>
+      </item>
     </section>
     <section id="app-menu-placeholder-1"/>
     <section id="app-menu-preferences-section">
