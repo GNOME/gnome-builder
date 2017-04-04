@@ -51,6 +51,7 @@ typedef enum
   IDE_SYMBOL_STRUCT,
   IDE_SYMBOL_UNION,
   IDE_SYMBOL_VARIABLE,
+  IDE_SYMBOL_KEYWORD,
   IDE_SYMBOL_UI_ATTRIBUTES,
   IDE_SYMBOL_UI_CHILD,
   IDE_SYMBOL_UI_ITEM,
@@ -95,6 +96,7 @@ IdeSymbol         *ide_symbol_new                      (const gchar           *n
                                                         IdeSourceLocation     *declaration_location,
                                                         IdeSourceLocation     *definition_location,
                                                         IdeSourceLocation     *canonical_location);
+const gchar       *ide_symbol_kind_get_icon_name       (IdeSymbolKind          kind);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSymbol, ide_symbol_unref)
 
