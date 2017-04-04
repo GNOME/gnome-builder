@@ -480,7 +480,7 @@ mi2_client_dispatch (Mi2Client  *self,
     }
   else
     {
-      g_warning ("Got message of type %s\n", G_OBJECT_TYPE_NAME (message));
+      g_warning ("Got message of type %s", G_OBJECT_TYPE_NAME (message));
     }
 }
 
