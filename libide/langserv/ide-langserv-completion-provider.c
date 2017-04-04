@@ -24,6 +24,8 @@
 
 #include "buffers/ide-buffer.h"
 #include "langserv/ide-langserv-completion-provider.h"
+#include "langserv/ide-langserv-util.h"
+#include "symbols/ide-symbol.h"
 
 typedef struct
 {
@@ -260,7 +262,9 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
       g_autofree gchar *full_label = NULL;
       const gchar *label;
       const gchar *detail;
+      const gchar *icon_name = NULL;
       gboolean success;
+      gint64 kind = 0;
 
       success = JSONRPC_MESSAGE_PARSE (node,
         "label", JSONRPC_MESSAGE_GET_STRING (&label),
@@ -273,6 +277,12 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
           continue;
         }
 
+      /* Optional kind field */
+      JSONRPC_MESSAGE_PARSE (node, "kind", JSONRPC_MESSAGE_GET_INT64 (&kind));
+      kind = ide_langserv_decode_completion_kind (kind);
+      if (kind != IDE_SYMBOL_NONE)
+        icon_name = ide_symbol_kind_get_icon_name (kind);
+
       if (label != NULL && detail != NULL)
         full_label = g_strdup_printf ("%s : %s", label, detail);
       else
@@ -280,6 +290,7 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
 
       //item = gtk_source_completion_item_new (full_label, label, NULL, NULL);
       item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
+                           "icon-name", icon_name,
                            "label", full_label,
                            "text", label,
                            NULL);
