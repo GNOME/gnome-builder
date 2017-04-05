@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-16 20:45+0000\n"
-"PO-Revision-Date: 2017-03-17 12:50+0100\n"
-"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
+"POT-Creation-Date: 2017-04-05 02:25+0000\n"
+"PO-Revision-Date: 2017-04-06 00:03+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Lokalize 1.2\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -67,7 +67,7 @@ msgstr[1] "Körülbelül %u éve"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:683
+#: libide/greeter/ide-greeter-perspective.c:685
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -99,7 +99,7 @@ msgstr "Tallózás…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -303,7 +303,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5861
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Átnevezés"
@@ -493,12 +493,12 @@ msgstr ""
 "Ha be van kapcsolva, akkor a forráskód mögött rácsvonalakat rajzol a "
 "szerkesztő."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:74
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:78
 #: libide/preferences/ide-preferences-builtin.c:172
 msgid "Show overview map"
 msgstr "Áttekintő térkép megjelenítése"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
@@ -506,11 +506,11 @@ msgstr ""
 "Ha be van kapcsolva, akkor a Builder megjeleníti az áttekintő térképet a "
 "forráskód mellett."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
 msgid "Automatically Hide Overview Map"
 msgstr "Áttekintő térkép automatikus elrejtése"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
@@ -518,20 +518,20 @@ msgstr ""
 "Ha be van kapcsolva, akkor a Builder bizonyos inaktivitás után, vagy ha  az "
 "egér elhagyja a szerkesztőt, automatikusan elrejti az áttekintő térképet."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
 msgid "Draw Spaces"
 msgstr "Szóközök kirajzolása"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
 msgid "The various types of space to draw in the editor."
 msgstr "A különböző szóközök kirajzolása a szerkesztőben."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
 #: libide/preferences/ide-preferences-builtin.c:161
 msgid "Overscroll"
 msgstr "Túlgörgetés"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "A túlgörgetés sorainak száma a puffer végén."
 
@@ -585,7 +585,7 @@ msgid "Search directories for projects."
 msgstr "Mappák átvizsgálása projektek után."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:394
 msgid "Projects directory"
 msgstr "Projektek mappa"
 
@@ -862,7 +862,7 @@ msgstr "Mozgatás balra"
 msgid "Move Right"
 msgstr "Mozgatás jobbra"
 
-#: data/gtk/menus.ui:305
+#: data/gtk/menus.ui:305 libide/buildui/ide-build-log-panel.c:739
 msgid "_Save"
 msgstr "_Mentés"
 
@@ -880,7 +880,7 @@ msgstr "_Bezárás"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:547
+#: libide/application/ide-application.c:549
 #: libide/preferences/ide-preferences-builtin.c:144
 #: libide/workbench/ide-workbench.c:566
 msgid "Builder"
@@ -1061,96 +1061,96 @@ msgstr "PARANCS"
 msgid "No commands available"
 msgstr "Nincsenek elérhető parancsok"
 
-#: libide/application/ide-application-command-line.c:374
+#: libide/application/ide-application-command-line.c:387
 msgid "Please provide a command"
 msgstr "Adjon meg egy parancsot"
 
-#: libide/application/ide-application-command-line.c:384
+#: libide/application/ide-application-command-line.c:397
 msgid "No such tool"
 msgstr "Nincs ilyen eszköz"
 
-#: libide/application/ide-application-command-line.c:398
+#: libide/application/ide-application-command-line.c:411
 msgid "Please provide a worker type"
 msgstr "Adja meg az építő típusát"
 
-#: libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:418
 msgid "Please provide a D-Bus address"
 msgstr "Adja meg a D-Bus címet"
 
-#: libide/application/ide-application-command-line.c:414
+#: libide/application/ide-application-command-line.c:427
 msgid "No such worker"
 msgstr "Nincs ilyen építő"
 
-#: libide/buffers/ide-buffer.c:2476
+#: libide/buffers/ide-buffer.c:2517
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó"
 
-#: libide/buffers/ide-buffer-manager.c:672
+#: libide/buffers/ide-buffer-manager.c:678
 msgid "File too large to be opened."
 msgstr "A fájl túl nagy a megnyitáshoz."
 
-#: libide/buffers/ide-buffer-manager.c:1764
+#: libide/buffers/ide-buffer-manager.c:1791
 #, c-format
 msgid "unsaved document %u"
 msgstr "mentetlen dokumentum %u"
 
-#: libide/buffers/ide-buffer-manager.c:1798
+#: libide/buffers/ide-buffer-manager.c:1825
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
 
-#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/buildsystem/ide-build-pipeline.c:2248
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2106
+#: libide/buildsystem/ide-build-pipeline.c:2263
 msgid "Downloading…"
 msgstr "Letöltés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2110
+#: libide/buildsystem/ide-build-pipeline.c:2267
 msgid "Building dependencies…"
 msgstr "Függőségek összeállítása…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2114
+#: libide/buildsystem/ide-build-pipeline.c:2271
 msgid "Bootstrapping…"
 msgstr "Indítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2118
+#: libide/buildsystem/ide-build-pipeline.c:2275
 msgid "Configuring…"
 msgstr "Beállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2122
+#: libide/buildsystem/ide-build-pipeline.c:2279
 msgid "Building…"
 msgstr "Összeállítás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2126
+#: libide/buildsystem/ide-build-pipeline.c:2283
 msgid "Installing…"
 msgstr "Telepítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2130
+#: libide/buildsystem/ide-build-pipeline.c:2287
 msgid "Exporting…"
 msgstr "Exportálás…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2134
-#: libide/buildsystem/ide-build-pipeline.c:2138
+#: libide/buildsystem/ide-build-pipeline.c:2291
+#: libide/buildsystem/ide-build-pipeline.c:2295
 msgid "Success"
 msgstr "Sikeres"
 
-#: libide/buildsystem/ide-build-pipeline.c:2142
-#: libide/workbench/ide-omni-bar.ui:332
+#: libide/buildsystem/ide-build-pipeline.c:2299
+#: libide/workbench/ide-omni-bar.ui:360
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: libide/buildsystem/ide-build-pipeline.c:2146
+#: libide/buildsystem/ide-build-pipeline.c:2303
 msgid "Preparing…"
 msgstr "Előkészítés…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2150
+#: libide/buildsystem/ide-build-pipeline.c:2307
 msgid "Ready"
 msgstr "Kész"
 
 #: libide/buildsystem/ide-configuration-manager.c:76
-#: libide/preferences/ide-preferences-builtin.c:337
-#: libide/preferences/ide-preferences-builtin.c:355
+#: libide/preferences/ide-preferences-builtin.c:338
+#: libide/preferences/ide-preferences-builtin.c:356
 msgid "Default"
 msgstr "Alapértelmezett"
 
@@ -1163,8 +1163,8 @@ msgid "Delete the configuration"
 msgstr "Beállítások törlése"
 
 #: libide/buildui/ide-build-configuration-view.ui:11
-#: libide/preferences/ide-preferences-builtin.c:316
-#: libide/preferences/ide-preferences-builtin.c:377
+#: libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:378
 msgid "General"
 msgstr "Általános"
 
@@ -1206,7 +1206,19 @@ msgstr "Futtatókörnyezet"
 msgid "Environment"
 msgstr "Környezet"
 
-#: libide/buildui/ide-build-log-panel.c:732
+#: libide/buildui/ide-build-log-panel.c:736
+#| msgid "_New File"
+msgid "Save File"
+msgstr "Fájl mentése"
+
+#: libide/buildui/ide-build-log-panel.c:740 libide/editor/ide-editor-view.ui:31
+#: libide/greeter/ide-greeter-perspective.ui:317
+#: libide/greeter/ide-greeter-perspective.ui:365
+#: libide/workbench/ide-omni-bar.ui:388
+msgid "_Cancel"
+msgstr "_Mégse"
+
+#: libide/buildui/ide-build-log-panel.c:772
 msgid "Build Output"
 msgstr "Összeállítás kimenete"
 
@@ -1218,6 +1230,11 @@ msgstr "Összeállítás kimenetének törlése"
 #: libide/workbench/ide-omni-bar.ui:133
 msgid "Cancel build"
 msgstr "Összeállítás megszakítása"
+
+#: libide/buildui/ide-build-log-panel.ui:59
+#| msgid "Clear build log"
+msgid "Save build log"
+msgstr "Összeállítás kimenetének mentése"
 
 #: libide/buildui/ide-build-panel.c:86
 #, c-format
@@ -1234,8 +1251,8 @@ msgstr[0] "%d hiba"
 msgstr[1] "%d hiba"
 
 #: libide/buildui/ide-build-panel.c:521
-#: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:386
+#: libide/preferences/ide-preferences-builtin.c:376
+#: libide/workbench/ide-omni-bar.ui:414
 msgid "Build"
 msgstr "Összeállítás"
 
@@ -1596,7 +1613,7 @@ msgid "Auto indent"
 msgstr "Automatikus behúzás"
 
 #: libide/editor/ide-editor-tweak-widget.ui:99
-#: libide/preferences/ide-preferences-builtin.c:324
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Indentation"
 msgstr "Behúzás"
 
@@ -1638,13 +1655,6 @@ msgstr "Dokumentum mentése más néven"
 msgid "_Reload"
 msgstr "Új_ratöltés"
 
-#: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:317
-#: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:360
-msgid "_Cancel"
-msgstr "_Mégse"
-
 #: libide/editor/ide-editor-view.ui:44
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
@@ -1657,11 +1667,11 @@ msgstr ""
 msgid "Failed to load the project"
 msgstr "A projekt nem tölthető be"
 
-#: libide/greeter/ide-greeter-perspective.c:678
+#: libide/greeter/ide-greeter-perspective.c:680
 msgid "Open Project"
 msgstr "Projekt megnyitása"
 
-#: libide/greeter/ide-greeter-perspective.c:694
+#: libide/greeter/ide-greeter-perspective.c:696
 msgid "All Project Types"
 msgstr "Minden projekttípus"
 
@@ -1736,11 +1746,11 @@ msgstr "Az alapbeállítások előkészítése meghiúsult."
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: libide/ide-context.c:2017
+#: libide/ide-context.c:2028
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: libide/ide-context.c:2136
+#: libide/ide-context.c:2147
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
@@ -2332,10 +2342,18 @@ msgstr ""
 "Szókiegészítési javaslatok miközben szavakat ír be bármelyik dokumentumban"
 
 #: libide/preferences/ide-preferences-builtin.c:195
+msgid "Minimum word size"
+msgstr "Minimális szóhossz"
+
+#: libide/preferences/ide-preferences-builtin.c:195
+msgid "Minimum word size for word completion"
+msgstr "Minimális szóhossz a szókiegészítéshez"
+
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest completions using Ctags"
 msgstr "Kiegészítési javaslatok Ctags alapján"
 
-#: libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
@@ -2343,150 +2361,150 @@ msgstr ""
 "Létrehoz és kezel egy Ctags adatbázist osztálynevek, függvények stb. "
 "kiegészítésére."
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Kiegészítési javaslatok Clang alapján (kísérleti)"
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Használja a Clanget kiegészítésre C és C++ nyelvek esetén."
 
-#: libide/preferences/ide-preferences-builtin.c:198
+#: libide/preferences/ide-preferences-builtin.c:199
 msgid "Diagnostics"
 msgstr "Diagnosztika"
 
-#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/preferences/ide-preferences-builtin.c:205
 #: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Töredékek"
 
-#: libide/preferences/ide-preferences-builtin.c:207
+#: libide/preferences/ide-preferences-builtin.c:208
 msgid "Code snippets"
 msgstr "Kódtöredékek"
 
-#: libide/preferences/ide-preferences-builtin.c:207
+#: libide/preferences/ide-preferences-builtin.c:208
 msgid "Use code fragments to increase typing efficiency"
 msgstr "Kódtöredékek használata a gépelés hatékonyságának növelése érdekében"
 
-#: libide/preferences/ide-preferences-builtin.c:251
+#: libide/preferences/ide-preferences-builtin.c:252
 msgid "Programming Languages"
 msgstr "Programozási nyelvek"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: libide/preferences/ide-preferences-builtin.c:262
+#: libide/preferences/ide-preferences-builtin.c:263
 msgid "Search languages…"
 msgstr "Nyelvek keresése…"
 
-#: libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Trim trailing whitespace"
 msgstr "Sorvégi üres karakterek levágása"
 
-#: libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:318
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Mentéskor a módosított sorokban a sorvégi helykitöltő karakterek levágásra "
 "kerülnek."
 
-#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:319
 msgid "Overwrite Braces"
 msgstr "Zárójelek felülírása"
 
-#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:319
 msgid "Overwrite closing braces"
 msgstr "Záró zárójelek felülírása"
 
-#: libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Margins"
 msgstr "Margók"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Show right margin"
 msgstr "Jobb margó megjelenítése"
 
-#: libide/preferences/ide-preferences-builtin.c:322
+#: libide/preferences/ide-preferences-builtin.c:323
 msgid "Right margin position"
 msgstr "Jobb margó pozíciója"
 
-#: libide/preferences/ide-preferences-builtin.c:322
+#: libide/preferences/ide-preferences-builtin.c:323
 msgid "Position in spaces for the right margin"
 msgstr "Jobb margó pozíciójának megadása szóközökkel számolva"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Tab width"
 msgstr "Tabulátor szélessége"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Width of a tab character in spaces"
 msgstr "A tabulátor karakter szélessége szóközökben"
 
-#: libide/preferences/ide-preferences-builtin.c:326
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Insert spaces instead of tabs"
 msgstr "Szóközök beillesztése tabulátorok helyett"
 
-#: libide/preferences/ide-preferences-builtin.c:326
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Prefer spaces over use of tabs"
 msgstr "Szóközök előnyben részesítése a tabulátorok helyett"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Automatically indent"
 msgstr "Automatikus behúzás"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Indent source code as you type"
 msgstr "A forráskód behúzása gépelés közben"
 
-#: libide/preferences/ide-preferences-builtin.c:342
-#: libide/preferences/ide-preferences-builtin.c:360
+#: libide/preferences/ide-preferences-builtin.c:343
+#: libide/preferences/ide-preferences-builtin.c:361
 msgid "Number of CPU"
 msgstr "CPU-k száma"
 
-#: libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:379
 msgid "Build Workers"
 msgstr "Építők"
 
-#: libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:379
 msgid "Number of parallel build workers"
 msgstr "Párhuzamos építők száma"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:391
 msgid "Projects"
 msgstr "Projektek"
 
-#: libide/preferences/ide-preferences-builtin.c:392
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "Workspace"
 msgstr "Munkaterület"
 
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:394
 msgid "A place for all your projects"
 msgstr "Az összes projektjének helye"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:395
 msgid "Restore previously opened files"
 msgstr "Korábban megnyitott fájlok visszaállítása"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:395
 msgid "Open previously opened files when loading a project"
 msgstr "Korábban megnyitott fájlok megnyitása projekt betöltésekor"
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Project Discovery"
 msgstr "Projektek feltérképezése"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:398
 msgid "Discover projects on my computer"
 msgstr "A számítógépen lévő projektek feltérképezése"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:398
 msgid "Scan your computer for existing projects"
 msgstr "Átvizsgálja a számítógépet meglévő projektek után"
 
-#: libide/preferences/ide-preferences-builtin.c:518
+#: libide/preferences/ide-preferences-builtin.c:519
 #: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "Version Control"
 msgstr "Verziókövetés"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:530
+#: libide/preferences/ide-preferences-builtin.c:531
 msgid "SDKs"
 msgstr "SDK-k"
 
@@ -2510,7 +2528,7 @@ msgstr "A célfájlnak a projektfán belül kell lennie."
 msgid "File must be within the project tree."
 msgstr "A fájlnak a projektfán belül kell lennie."
 
-#: libide/projects/ide-recent-projects.c:396
+#: libide/projects/ide-recent-projects.c:402
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "A(z) %s() csak egyszer hajtható végre"
@@ -2531,11 +2549,11 @@ msgstr "Futtatás"
 msgid "Cannot run target, another target is running"
 msgstr "A cél nem futtatható, egy másik cél már fut"
 
-#: libide/runner/ide-run-manager.c:324
+#: libide/runner/ide-run-manager.c:326
 msgid "Failed to locate runtime"
 msgstr "A futtatókörnyezet nem található"
 
-#: libide/runner/ide-runner.c:165
+#: libide/runner/ide-runner.c:173
 msgid "Process quit unexpectedly"
 msgstr "A folyamat váratlanul kilépett"
 
@@ -2561,23 +2579,34 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5317
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5319
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5433
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5860
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: libide/sourceview/ide-source-view.c:6099
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr "<b>%s</b> — <small>%u. sor, %u. oszlop</small>"
+
+#: libide/sourceview/ide-source-view.c:6125
+#| msgid "No projects found"
+msgid "No references were found"
+msgstr "Nem találhatók hivatkozások"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -2710,27 +2739,32 @@ msgstr "Projekt"
 msgid "Branch"
 msgstr "Ág"
 
-#: libide/workbench/ide-omni-bar.ui:236
+#: libide/workbench/ide-omni-bar.ui:229
+#| msgid "Builder"
+msgid "Build System"
+msgstr "Összeállító-rendszer"
+
+#: libide/workbench/ide-omni-bar.ui:264
 msgid "Build Profile"
 msgstr "Összeállítási profil"
 
-#: libide/workbench/ide-omni-bar.ui:282
+#: libide/workbench/ide-omni-bar.ui:310
 msgid "Last build"
 msgstr "Legutóbbi összeállítás"
 
-#: libide/workbench/ide-omni-bar.ui:349
+#: libide/workbench/ide-omni-bar.ui:377
 msgid "View Output"
 msgstr "Kimenet megtekintése"
 
-#: libide/workbench/ide-omni-bar.ui:396
+#: libide/workbench/ide-omni-bar.ui:424
 msgid "Rebuild"
 msgstr "Újra-összeállítás"
 
-#: libide/workbench/ide-omni-bar.ui:406
+#: libide/workbench/ide-omni-bar.ui:434
 msgid "Clean"
 msgstr "Tisztítás"
 
-#: libide/workbench/ide-omni-bar.ui:420
+#: libide/workbench/ide-omni-bar.ui:448
 msgid "Build project"
 msgstr "Projekt összeállítása"
 
@@ -3291,16 +3325,17 @@ msgstr "A hálózat nem elérhető, letöltések kihagyása"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:119
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
-#: plugins/rustup/rustup_plugin/__init__.py:596
+#: plugins/html-preview/html_preview_plugin/__init__.py:303
+#: plugins/html-preview/html_preview_plugin/__init__.py:313
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+#: plugins/rustup/rustup_plugin/__init__.py:615
 msgid "Install"
 msgstr "Telepítés"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Frissítés"
 
@@ -3322,12 +3357,12 @@ msgstr[1] "Még %u futtatókörnyezet megjelenítése"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak futtatókörnyezetek"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:714
+#: plugins/flatpak/gbp-flatpak-runtime.c:722
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:716
+#: plugins/flatpak/gbp-flatpak-runtime.c:724
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3493,9 +3528,14 @@ msgstr ""
 msgid "Preview as HTML"
 msgstr "Előnézet HTML-ként"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:115
+#: plugins/html-preview/html_preview_plugin/__init__.py:299
 msgid "Your computer is missing python3-docutils"
 msgstr "A python3-docutils hiányzik a számítógépéről"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:309
+#| msgid "Your computer is missing python3-docutils"
+msgid "Your computer is missing python3-sphinx"
+msgstr "A python3-sphinx hiányzik a számítógépéről"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3631,101 +3671,105 @@ msgstr "Az aktuális kijelölésre illeszkedő összes szó kiemelése"
 msgid "quick highlight words matching current selection"
 msgstr "az aktuális kijelölésre illeszkedő összes szó gyors kiemelése"
 
-#: plugins/rustup/rustup_plugin/__init__.py:80
+#: plugins/retab/gtk/menus.ui:9
+msgid "Retab"
+msgstr "Retab"
+
+#: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
 msgstr "A rustup nincs telepítve"
 
-#: plugins/rustup/rustup_plugin/__init__.py:277
+#: plugins/rustup/rustup_plugin/__init__.py:282
 msgid "Installing rustup"
 msgstr "Rustup telepítése"
 
-#: plugins/rustup/rustup_plugin/__init__.py:279
+#: plugins/rustup/rustup_plugin/__init__.py:284
 msgid "Updating rustup"
 msgstr "Rustup frissítése"
 
-#: plugins/rustup/rustup_plugin/__init__.py:281
+#: plugins/rustup/rustup_plugin/__init__.py:286
 msgid "Installing rust "
 msgstr "Rust telepítése "
 
-#: plugins/rustup/rustup_plugin/__init__.py:283
+#: plugins/rustup/rustup_plugin/__init__.py:288
 msgid "Checking system"
 msgstr "Rendszer ellenőrzése"
 
-#: plugins/rustup/rustup_plugin/__init__.py:337
+#: plugins/rustup/rustup_plugin/__init__.py:357
 msgid "Downloading rustup-init"
 msgstr "Rustup-init letöltése"
 
-#: plugins/rustup/rustup_plugin/__init__.py:342
+#: plugins/rustup/rustup_plugin/__init__.py:362
 msgid "Syncing channel updates"
 msgstr "Csatornafrissítések szinkronizálása"
 
-#: plugins/rustup/rustup_plugin/__init__.py:348
+#: plugins/rustup/rustup_plugin/__init__.py:368
 msgid "Downloading "
 msgstr "Letöltés "
 
-#: plugins/rustup/rustup_plugin/__init__.py:355
+#: plugins/rustup/rustup_plugin/__init__.py:375
 msgid "Installing "
 msgstr "Telepítés alatt "
 
-#: plugins/rustup/rustup_plugin/__init__.py:361
+#: plugins/rustup/rustup_plugin/__init__.py:381
 msgid "Checking for rustup updates"
 msgstr "Rustup frissítések keresése"
 
-#: plugins/rustup/rustup_plugin/__init__.py:366
+#: plugins/rustup/rustup_plugin/__init__.py:386
 msgid "Downloading rustup update"
 msgstr "Rustup frissítése letöltése"
 
-#: plugins/rustup/rustup_plugin/__init__.py:403
+#: plugins/rustup/rustup_plugin/__init__.py:423
 msgid "Error installing "
 msgstr "Hiba a telepítéskor "
 
-#: plugins/rustup/rustup_plugin/__init__.py:405
+#: plugins/rustup/rustup_plugin/__init__.py:425
 msgid "Error"
 msgstr "Hiba"
 
-#: plugins/rustup/rustup_plugin/__init__.py:411
+#: plugins/rustup/rustup_plugin/__init__.py:430
 msgid "Cancelled"
 msgstr "Megszakítva"
 
-#: plugins/rustup/rustup_plugin/__init__.py:419
+#: plugins/rustup/rustup_plugin/__init__.py:438
 msgid "Finished"
 msgstr "Elkészült"
 
-#: plugins/rustup/rustup_plugin/__init__.py:433
+#: plugins/rustup/rustup_plugin/__init__.py:452
 msgid "Rustup"
 msgstr "Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:434
+#: plugins/rustup/rustup_plugin/__init__.py:453
 msgid "Rustup Toolchains"
 msgstr "Rustup eszközláncok"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Updating"
 msgstr "Frissítés"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Installing"
 msgstr "Telepítés"
 
 #. set default toolchain button
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Make default"
 msgstr "Alapértelmezetté tétel"
 
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Makes the selected toolchain the default rust installation"
 msgstr "A kiválasztott eszközláncot az alapértelmezett rust telepítéssé teszi"
 
-#: plugins/rustup/rustup_plugin/__init__.py:595
+#: plugins/rustup/rustup_plugin/__init__.py:614
 msgid "Install Rust Channel"
 msgstr "Rust csatorna telepítése"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: plugins/rustup/rustup_plugin/__init__.py:600
+#: plugins/rustup/rustup_plugin/__init__.py:619
 msgid "Enter name of rust channel"
 msgstr "Adja meg a rust csatorna nevét"
 
-#: plugins/rustup/rustup_plugin/__init__.py:601
+#: plugins/rustup/rustup_plugin/__init__.py:620
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -3741,15 +3785,15 @@ msgstr ""
 "                         <dátum>       = YYYY-MM-DD\n"
 "                         <gazda>       = <cél-hármas>"
 
-#: plugins/rustup/rustup_plugin/__init__.py:626
+#: plugins/rustup/rustup_plugin/__init__.py:645
 msgid "Install Rustup to manage toolchains here!"
 msgstr "Telepítse a Rustupot az eszközláncok kezeléséhez itt!"
 
-#: plugins/rustup/rustup_plugin/__init__.py:633
+#: plugins/rustup/rustup_plugin/__init__.py:652
 msgid "No toolchain installed. Click"
 msgstr "Nincs eszközlánc telepítve. Kattintson"
 
-#: plugins/rustup/rustup_plugin/__init__.py:634
+#: plugins/rustup/rustup_plugin/__init__.py:653
 msgid "to add a new toolchain!"
 msgstr "egy új eszközlánc telepítéséhez!"
 
@@ -3859,7 +3903,7 @@ msgstr "Hi_vatkozás megnyitása"
 msgid "_Copy Link Address"
 msgstr "Hivatkozás _címének másolása"
 
-#: plugins/todo/todo_plugin/__init__.py:193
+#: plugins/todo/todo_plugin/__init__.py:195
 msgid "Todo"
 msgstr "Tennivalók"
 
@@ -3888,3 +3932,4 @@ msgstr "Puffer betöltve, de nincs a pufferkezelőben."
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Az XML fa létrehozása meghiúsult."
+
