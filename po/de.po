@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-12-20 17:02+0000\n"
-"PO-Revision-Date: 2016-12-20 20:15+0100\n"
+"POT-Creation-Date: 2017-03-11 17:34+0000\n"
+"PO-Revision-Date: 2017-04-05 04:22+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -2597,7 +2597,7 @@ msgstr "Umgebung"
 
 #: plugins/build-tools/gbp-build-log-panel.c:254
 msgid "Build Output"
-msgstr "Erstellungs-Ausgabe"
+msgstr "Erstellungsausgabe"
 
 #: plugins/build-tools/gbp-build-panel.c:83
 #, c-format
@@ -3639,7 +3639,7 @@ msgstr "Unbenanntes Terminal"
 
 #: plugins/terminal/gb-terminal-workbench-addin.c:120
 msgid "Run Output"
-msgstr "Erstellungs-Ausgabe"
+msgstr "Laufzeitausgabe"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
