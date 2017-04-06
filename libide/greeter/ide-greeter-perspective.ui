@@ -375,6 +375,8 @@
     </child>
     <child>
       <object class="GtkButton" id="genesis_continue_button">
+        <property name="can-default">true</property>
+        <property name="receives-default">true</property>
         <style>
           <class name="suggested-action"/>
         </style>

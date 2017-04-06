@@ -1068,6 +1068,8 @@ ide_greeter_perspective_genesis_changed (IdeGreeterPerspective *self,
   g_assert (GTK_IS_STACK (stack));
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
+  gtk_widget_grab_default (GTK_WIDGET (self->genesis_continue_button));
+
   state.self = self;
   state.name = gtk_stack_get_visible_child_name (self->genesis_stack);
 

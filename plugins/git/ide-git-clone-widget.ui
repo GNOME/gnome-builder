@@ -58,6 +58,7 @@
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkEntry" id="clone_uri_entry">
+                        <property name="activates-default">true</property>
                         <property name="hexpand">true</property>
                         <property name="width-chars">35</property>
                         <property name="max-width-chars">50</property>
