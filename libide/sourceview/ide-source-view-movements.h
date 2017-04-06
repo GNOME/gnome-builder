@@ -32,7 +32,7 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       gunichar               command,
                                       gunichar               modifier,
                                       gunichar               search_char,
-                                      gint                  *target_offset);
+                                      guint                 *target_column);
 
 void _ide_source_view_select_inner   (IdeSourceView *self,
                                       gunichar       inner_left,

@@ -39,12 +39,11 @@
 typedef struct
 {
   IdeSourceView         *self;
-  /* The target_offset contains the ideal character line_offset. This can
-   * sometimes be further forward than designed when the line does not have
-   * enough characters to get back to the original position. -1 indicates
-   * no preference.
+  /* The target_column contains the ideal character column (visual offset).
+   * This can sometimes be further forward than designed when the line does not
+   * have enough characters to get back to the original position.
    */
-  gint                  *target_offset;
+  guint                 *target_column;
   IdeSourceViewMovement  type;                        /* Type of movement */
   GtkTextIter            insert;                      /* Current insert cursor location */
   GtkTextIter            selection;                   /* Current selection cursor location */
@@ -56,7 +55,7 @@ typedef struct
   guint                  extend_selection : 1;        /* If selection should be extended */
   guint                  exclusive : 1;               /* See ":help exclusive" in vim */
   guint                  ignore_select : 1;           /* Don't update selection after movement */
-  guint                  ignore_target_offset : 1;    /* Don't propagate new line offset */
+  guint                  ignore_target_column : 1;    /* Don't propagate new line column */
   guint                  ignore_scroll_to_insert : 1; /* Don't scroll to insert mark */
 } Movement;
 
@@ -500,7 +499,7 @@ ide_source_view_movements_next_line (Movement *mv)
   GtkTextBuffer *buffer;
   gboolean has_selection;
   guint line;
-  guint offset = 0;
+  guint column = *mv->target_column;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
 
@@ -508,9 +507,6 @@ ide_source_view_movements_next_line (Movement *mv)
   has_selection = !gtk_text_iter_equal (&mv->insert, &mv->selection) || !mv->exclusive;
 
   line = gtk_text_iter_get_line (&mv->insert);
-
-  if ((*mv->target_offset) > 0)
-    offset = *mv->target_offset;
 
   /*
    * If we have a whole line selected (from say `V`), then we need to swap
@@ -542,10 +538,14 @@ ide_source_view_movements_next_line (Movement *mv)
   if (is_single_char_selection (&mv->insert, &mv->selection))
     {
       if (gtk_text_iter_compare (&mv->insert, &mv->selection) < 0)
-        *mv->target_offset = ++offset;
+        *mv->target_column = ++column;
     }
 
-  gtk_text_buffer_get_iter_at_line_offset (buffer, &mv->insert, line + 1, offset);
+  gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line + 1);
+  if (gtk_text_iter_get_line (&mv->insert) == line + 1)
+    ide_source_view_get_iter_at_visual_column (mv->self, *mv->target_column, &mv->insert);
+  else
+    gtk_text_buffer_get_end_iter (buffer, &mv->insert);
 
 select_to_end:
 
@@ -573,7 +573,7 @@ ide_source_view_movements_previous_line (Movement *mv)
   GtkTextBuffer *buffer;
   gboolean has_selection;
   guint line;
-  guint offset = 0;
+  guint column = 0;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
 
@@ -582,8 +582,8 @@ ide_source_view_movements_previous_line (Movement *mv)
 
   line = gtk_text_iter_get_line (&mv->insert);
 
-  if ((*mv->target_offset) > 0)
-    offset = *mv->target_offset;
+  if ((*mv->target_column) > 0)
+    column = *mv->target_column;
 
   if (line == 0)
     return FALSE;
@@ -607,16 +607,16 @@ ide_source_view_movements_previous_line (Movement *mv)
     {
       if (gtk_text_iter_compare (&mv->insert, &mv->selection) > 0)
         {
-          if (offset)
-            --offset;
-          *mv->target_offset = offset;
+          if (column)
+            --column;
+          *mv->target_column = column;
         }
     }
 
   gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line - 1);
   if (line == ((guint)gtk_text_iter_get_line (&mv->insert) + 1))
     {
-      gtk_text_buffer_get_iter_at_line_offset (buffer, &mv->insert, line - 1, offset);
+      ide_source_view_get_iter_at_visual_column (mv->self, column, &mv->insert);
 
       if (has_selection)
         {
@@ -1936,7 +1936,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                                  gunichar               command,
                                  gunichar               modifier,
                                  gunichar               search_char,
-                                 gint                  *target_offset)
+                                 guint                 *target_column)
 {
   Movement mv = { 0 };
   GtkTextBuffer *buffer;
@@ -1945,6 +1945,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   gint min_count = 1;
   gint end_line;
   gsize i;
+  guint line;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
@@ -1981,13 +1982,13 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   end_line = gtk_text_iter_get_line (&end_iter);
 
   mv.self = self;
-  mv.target_offset = target_offset;
+  mv.target_column = target_column;
   mv.type = movement;
   mv.extend_selection = extend_selection;
   mv.exclusive = exclusive;
   mv.count = count;
   mv.ignore_select = FALSE;
-  mv.ignore_target_offset = FALSE;
+  mv.ignore_target_column = FALSE;
   mv.command_str = command_str;
   mv.command = command;
   mv.modifier = modifier;
@@ -2115,7 +2116,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE:
-      mv.ignore_target_offset = TRUE;
+      mv.ignore_target_column = TRUE;
       mv.ignore_select = TRUE;
       mv.count = MIN (mv.count, end_line);
       /*
@@ -2129,7 +2130,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE:
-      mv.ignore_target_offset = TRUE;
+      mv.ignore_target_column = TRUE;
       mv.ignore_select = TRUE;
       mv.count = MIN (mv.count, end_line);
       /*
@@ -2269,8 +2270,8 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   if (!mv.ignore_select)
     ide_source_view_movements_select_range (&mv);
 
-  if (!mv.ignore_target_offset)
-    *target_offset = gtk_text_iter_get_line_offset (&mv.insert);
+  if (!mv.ignore_target_column)
+    ide_source_view_get_visual_position (mv.self, &line, target_column);
 
   if (!mv.ignore_scroll_to_insert)
     ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);

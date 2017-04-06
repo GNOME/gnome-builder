@@ -131,7 +131,7 @@ typedef struct
 
   guint                        change_sequence;
 
-  gint                         target_line_offset;
+  guint                        target_line_column;
   GString                     *command_str;
   gunichar                     command;
   gunichar                     modifier;
@@ -145,9 +145,9 @@ typedef struct
   gint                         cached_char_width;
 
   guint                        saved_line;
-  guint                        saved_line_offset;
+  guint                        saved_line_column;
   guint                        saved_selection_line;
-  guint                        saved_selection_line_offset;
+  guint                        saved_selection_line_column;
 
   GdkRGBA                      bubble_color1;
   GdkRGBA                      bubble_color2;
@@ -337,7 +337,7 @@ static void ide_source_view_real_restore_insert_mark (IdeSourceView         *sel
 static void ide_source_view_real_set_mode            (IdeSourceView         *self,
                                                       const gchar           *name,
                                                       IdeSourceViewModeType  type);
-static void ide_source_view_save_offset              (IdeSourceView         *self);
+static void ide_source_view_save_column              (IdeSourceView         *self);
 static void ide_source_view_maybe_overwrite          (IdeSourceView         *self,
                                                       GtkTextIter           *iter,
                                                       const gchar           *text,
@@ -1480,9 +1480,10 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
 
-  /* Store the line offset so movements are correct. */
+  /* Store the line column (visual offset) so movements are correct. */
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, insert);
-  priv->target_line_offset = gtk_text_iter_get_line_offset (&iter);
+  priv->target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
+                                                                &iter);
 
   /* Only scroll if the user hasn't started an intermediate scroll */
   adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
@@ -2672,10 +2673,10 @@ ide_source_view_real_button_press_event (GtkWidget      *widget,
     }
 
   /*
-   * Update our target offset so movements don't cause us to revert
-   * to the previous offset.
+   * Update our target column so movements don't cause us to revert
+   * to the previous column.
    */
-  ide_source_view_save_offset (self);
+  ide_source_view_save_column (self);
 
   return ret;
 }
@@ -3163,7 +3164,7 @@ ide_source_view_real_delete_selection (IdeSourceView *self)
       gtk_text_buffer_delete_selection (buffer, TRUE, editable);
     }
 
-  ide_source_view_save_offset (self);
+  ide_source_view_save_column (self);
 }
 
 static void
@@ -3326,7 +3327,7 @@ ide_source_view_real_jump (IdeSourceView     *self,
   GtkTextBuffer *buffer;
   gchar *fragment;
   guint line;
-  guint line_offset;
+  guint line_column;
 
   IDE_ENTRY;
 
@@ -3334,9 +3335,9 @@ ide_source_view_real_jump (IdeSourceView     *self,
   g_assert (location);
 
   line = gtk_text_iter_get_line (location);
-  line_offset = gtk_text_iter_get_line_offset (location);
+  line_column = ide_source_view_get_visual_column (self, location);
 
-  IDE_TRACE_MSG ("Jump to %d:%d", line + 1, line_offset + 1);
+  IDE_TRACE_MSG ("Jump to %d:%d", line + 1, line_column + 1);
 
   if (priv->back_forward_list == NULL)
     IDE_EXIT;
@@ -3353,7 +3354,7 @@ ide_source_view_real_jump (IdeSourceView     *self,
     IDE_EXIT;
 
   uri = ide_uri_new_from_file (ide_file_get_file (file));
-  fragment = g_strdup_printf ("L%u_%u", line + 1, line_offset + 1);
+  fragment = g_strdup_printf ("L%u_%u", line + 1, line_column + 1);
   ide_uri_set_fragment (uri, fragment);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   mark = gtk_text_buffer_create_mark (buffer, NULL, location, FALSE);
@@ -3381,7 +3382,7 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
   GtkTextMark *insert;
   GtkTextIter iter;
   guint target_line;
-  guint target_line_offset;
+  guint target_line_column;
 
   /*
    * NOTE:
@@ -3406,7 +3407,7 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
 
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
   target_line = gtk_text_iter_get_line (&iter);
-  target_line_offset = gtk_text_iter_get_line_offset (&iter);
+  target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
 
   gtk_text_buffer_begin_user_action (buffer);
 
@@ -3453,7 +3454,8 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
         {
           gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
           target_line = gtk_text_iter_get_line (&iter);
-          target_line_offset = gtk_text_iter_get_line_offset (&iter);
+          target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
+                                                                  &iter);
         }
 
       gtk_clipboard_set_text (clipboard, trimmed, -1);
@@ -3476,11 +3478,13 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
         {
           gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
           target_line = gtk_text_iter_get_line (&iter);
-          target_line_offset = gtk_text_iter_get_line_offset (&iter);
+          target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
+                                                                  &iter);
         }
     }
 
-  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, target_line, target_line_offset);
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, target_line, 0);
+  ide_source_view_get_iter_at_visual_column (self, target_line_column, &iter);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   gtk_text_buffer_end_user_action (buffer);
@@ -3527,7 +3531,7 @@ ide_source_view_real_selection_theatric (IdeSourceView         *self,
 }
 
 static void
-ide_source_view_save_offset (IdeSourceView *self)
+ide_source_view_save_column (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
@@ -3540,7 +3544,7 @@ ide_source_view_save_offset (IdeSourceView *self)
   buffer = gtk_text_view_get_buffer (text_view);
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-  priv->target_line_offset = gtk_text_iter_get_line_offset (&iter);
+  priv->target_line_column = ide_source_view_get_visual_column (self, &iter);
 }
 
 static void
@@ -3588,7 +3592,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   }
 #endif
 
-  ide_source_view_save_offset (self);
+  ide_source_view_save_column (self);
 
   if (priv->mode)
     {
@@ -3679,7 +3683,7 @@ ide_source_view_real_movement (IdeSourceView         *self,
                                    priv->command,
                                    priv->modifier,
                                    priv->search_char,
-                                   &priv->target_line_offset);
+                                   &priv->target_line_column);
 }
 
 static void
@@ -4036,11 +4040,15 @@ ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
-  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, priv->saved_line, priv->saved_line_offset);
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, priv->saved_line, 0);
+  ide_source_view_get_iter_at_visual_column (self, priv->saved_line_column, &iter);
   gtk_text_buffer_get_iter_at_line_offset (buffer,
                                            &selection,
                                            priv->saved_selection_line,
-                                           priv->saved_selection_line_offset);
+                                           0);
+  ide_source_view_get_iter_at_visual_column (self,
+                                             priv->saved_selection_line_column,
+                                             &selection);
 
   gtk_text_buffer_select_range (buffer, &iter, &selection);
 
@@ -4081,11 +4089,11 @@ ide_source_view_real_save_insert_mark (IdeSourceView *self)
   gtk_text_buffer_get_iter_at_mark (buffer, &selection, selection_bound);
 
   priv->saved_line = gtk_text_iter_get_line (&iter);
-  priv->saved_line_offset = gtk_text_iter_get_line_offset (&iter);
+  priv->saved_line_column = ide_source_view_get_visual_column (self, &iter);
   priv->saved_selection_line = gtk_text_iter_get_line (&selection);
-  priv->saved_selection_line_offset = gtk_text_iter_get_line_offset (&selection);
+  priv->saved_selection_line_column = ide_source_view_get_visual_column (self, &selection);
 
-  priv->target_line_offset = priv->saved_line_offset;
+  priv->target_line_column = priv->saved_line_column;
 }
 
 static void
@@ -4977,7 +4985,7 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
   if (!workbench || ide_workbench_get_selection_owner (workbench) != G_OBJECT (self))
     {
       priv->saved_selection_line = priv->saved_line;
-      priv->saved_selection_line_offset = priv->saved_line_offset;
+      priv->saved_selection_line_column = priv->saved_line_column;
     }
 
   ide_source_view_real_restore_insert_mark_full (self, FALSE);
@@ -7365,7 +7373,7 @@ ide_source_view_init (IdeSourceView *self)
 
   EGG_COUNTER_INC (instances);
 
-  priv->target_line_offset = -1;
+  priv->target_line_column = 0;
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
   priv->show_line_diagnostics = TRUE;
@@ -7666,6 +7674,39 @@ ide_source_view_get_insert_matching_brace (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
   return priv->insert_matching_brace;
+}
+
+void
+ide_source_view_get_iter_at_visual_column (IdeSourceView *self,
+                                           guint column,
+                                           GtkTextIter *location)
+{
+  gunichar tab_char;
+  guint visual_col = 0;
+  guint tab_width;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  tab_char = g_utf8_get_char ("\t");
+  tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (self));
+  gtk_text_iter_set_line_offset (location, 0);
+
+  while (!gtk_text_iter_ends_line (location))
+    {
+      if (gtk_text_iter_get_char (location) == tab_char)
+        visual_col += (tab_width - (visual_col % tab_width));
+      else
+        ++visual_col;
+
+      if (visual_col > column)
+        break;
+
+      /* FIXME: this does not handle invisible text correctly, but
+       *       * gtk_text_iter_forward_visible_cursor_position is too
+       *       slow */
+      if (!gtk_text_iter_forward_char (location))
+        break;
+    }
 }
 
 const gchar *
@@ -8703,10 +8744,19 @@ ide_source_view_set_highlight_current_line (IdeSourceView *self,
     }
 }
 
+guint
+ide_source_view_get_visual_column (IdeSourceView *self,
+                                   const GtkTextIter *location)
+{
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), 0);
+
+  return gtk_source_view_get_visual_column(GTK_SOURCE_VIEW (self), location);
+}
+
 void
 ide_source_view_get_visual_position (IdeSourceView *self,
                                      guint         *line,
-                                     guint         *column)
+                                     guint         *line_column)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
@@ -8717,7 +8767,10 @@ ide_source_view_get_visual_position (IdeSourceView *self,
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   if (!gtk_widget_has_focus (GTK_WIDGET (self)))
-    gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, priv->saved_line, priv->saved_line_offset);
+    {
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, priv->saved_line, 0);
+      ide_source_view_get_iter_at_visual_column (self, priv->saved_line_column, &iter);
+    }
   else
     {
       GtkTextMark *mark;
@@ -8729,8 +8782,8 @@ ide_source_view_get_visual_position (IdeSourceView *self,
   if (line)
     *line = gtk_text_iter_get_line (&iter);
 
-  if (column)
-    *column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
+  if (line_column)
+    *line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
 }
 
 void
