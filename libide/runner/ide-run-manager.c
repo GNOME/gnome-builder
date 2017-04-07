@@ -265,8 +265,8 @@ ide_run_manager_run_cb (GObject      *object,
 {
   IdeRunner *runner = (IdeRunner *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeRunManager *self;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -276,14 +276,9 @@ ide_run_manager_run_cb (GObject      *object,
   self = g_task_get_source_object (task);
 
   if (!ide_runner_run_finish (runner, result, &error))
-    {
-      g_task_return_error (task, error);
-      IDE_GOTO (failure);
-    }
-
-  g_task_return_boolean (task, TRUE);
-
-failure:
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 
   g_signal_emit (self, signals [STOPPED], 0);
 
@@ -368,7 +363,9 @@ ide_run_manager_run_discover_cb (GObject      *object,
   IdeRunManager *self = (IdeRunManager *)object;
   g_autoptr(IdeBuildTarget) build_target = NULL;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -377,8 +374,8 @@ ide_run_manager_run_discover_cb (GObject      *object,
 
   if (build_target == NULL)
     {
-      g_task_return_error (task, error);
-      return;
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   ide_run_manager_set_build_target (self, build_target);
@@ -386,6 +383,8 @@ ide_run_manager_run_discover_cb (GObject      *object,
   g_task_set_task_data (task, g_steal_pointer (&build_target), g_object_unref);
 
   do_run_async (self, task);
+
+  IDE_EXIT;
 }
 
 static void
@@ -431,6 +430,8 @@ ide_run_manager_install_cb (GObject      *object,
   g_task_set_task_data (task, g_object_ref (build_target), g_object_unref);
 
   do_run_async (self, g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -469,6 +470,8 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
   IdeBuildManager *build_manager;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (G_IS_TASK (task));
 
@@ -495,6 +498,8 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                                    g_object_ref (task));
 
   ide_run_manager_notify_busy (self);
+
+  IDE_EXIT;
 }
 
 void
@@ -506,7 +511,7 @@ ide_run_manager_run_async (IdeRunManager       *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GCancellable) local_cancellable = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -524,7 +529,7 @@ ide_run_manager_run_async (IdeRunManager       *self,
 
   if (ide_run_manager_check_busy (self, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -739,8 +744,8 @@ ide_run_manager_discover_default_target_cb (GObject      *object,
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(GError) error = NULL;
   IdeBuildTarget *best_match;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -751,7 +756,7 @@ ide_run_manager_discover_default_target_cb (GObject      *object,
 
   if (targets == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
