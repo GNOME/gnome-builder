@@ -15,6 +15,7 @@ headers_DATA =                        \
 	egg-column-layout.h           \
 	egg-counter.h                 \
 	egg-date-time.h               \
+	egg-elastic-bin.h             \
 	egg-empty-state.h             \
 	egg-entry-box.h               \
 	egg-file-chooser-entry.h      \
@@ -51,6 +52,7 @@ libegg_private_la_SOURCES =           \
 	egg-column-layout.c           \
 	egg-counter.c                 \
 	egg-date-time.c               \
+	egg-elastic-bin.c             \
 	egg-empty-state.c             \
 	egg-entry-box.c               \
 	egg-file-chooser-entry.c      \
