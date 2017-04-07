@@ -429,7 +429,7 @@ ide_run_manager_install_cb (GObject      *object,
 
   g_task_set_task_data (task, g_object_ref (build_target), g_object_unref);
 
-  do_run_async (self, g_steal_pointer (&task));
+  do_run_async (self, task);
 
   IDE_EXIT;
 }
