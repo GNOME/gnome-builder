@@ -158,8 +158,10 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
   IdeXmlSymbolNode *parent_node;
   G_GNUC_UNUSED IdeXmlSymbolNode *popped_node;
   g_autofree gchar *popped_element_name = NULL;
-  gint line;
-  gint line_offset;
+  gint start_line;
+  gint start_line_offset;
+  gint end_line;
+  gint end_line_offset;
   gsize size;
   gint depth;
 
@@ -172,14 +174,17 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     }
 
   depth = ide_xml_sax_get_depth (self->sax_parser);
-  ide_xml_sax_get_location (self->sax_parser, &line, &line_offset, NULL, NULL, &size);
+  ide_xml_sax_get_location (self->sax_parser, &start_line, &start_line_offset, &end_line, &end_line_offset, &size);
 
   if (node == NULL)
     {
       if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT)
         {
-          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT, NULL, 0, 0, 0);
-          ide_xml_symbol_node_set_location (node, g_object_ref (state->file), line, line_offset, size);
+          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT,
+                                          g_object_ref (state->file),
+                                          start_line, start_line_offset,
+                                          end_line, end_line_offset,
+                                          size);
 
           ide_xml_stack_push (self->stack, element_name, node, state->parent_node, depth);
           ide_xml_symbol_node_take_internal_child (state->parent_node, node);
@@ -198,7 +203,10 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
               popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
               if (ide_str_equal0 (popped_element_name, element_name))
                 {
-                  ide_xml_symbol_node_set_end_tag_location (popped_node, line, line_offset, size);
+                  ide_xml_symbol_node_set_end_tag_location (popped_node,
+                                                            start_line, start_line_offset,
+                                                            end_line, end_line_offset,
+                                                            size);
                   state->parent_node = parent_node;
                   g_assert (state->parent_node != NULL);
 
@@ -212,8 +220,11 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
       return;
     }
 
-
-  ide_xml_symbol_node_set_location (node, g_object_ref (state->file), line, line_offset, size);
+  ide_xml_symbol_node_set_location (node,
+                                    g_object_ref (state->file),
+                                    start_line, start_line_offset,
+                                    end_line, end_line_offset,
+                                    size);
 
   /* TODO: take end elements into account and use:
    * || ABS (depth - current_depth) > 1
@@ -536,7 +547,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->build_state = BUILD_STATE_NORMAL;
 
   state->analysis = ide_xml_analysis_new (-1);
-  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE, NULL, 0, 0, 0);
+  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE, NULL, 0, 0, 0, 0, 0);
   ide_xml_analysis_set_root_node (state->analysis, state->root_node);
 
   state->parent_node = state->root_node;

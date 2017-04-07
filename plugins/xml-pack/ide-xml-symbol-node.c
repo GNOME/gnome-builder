@@ -27,6 +27,15 @@ typedef struct _NodeEntry
   guint             is_internal : 1;
 } NodeEntry;
 
+typedef struct _NodeRange
+{
+  gint  start_line;
+  gint  start_line_offset;
+  gint  end_line;
+  gint  end_line_offset;
+  gsize size;
+} NodeRange;
+
 struct _IdeXmlSymbolNode
 {
   IdeSymbolNode             parent_instance;
@@ -36,13 +45,8 @@ struct _IdeXmlSymbolNode
   gint                      nb_children;
   gint                      nb_internal_children;
   GFile                    *file;
-  gint                      line;
-  gint                      line_offset;
-  gsize                     size;
-
-  gint                      end_line;
-  gint                      end_line_offset;
-  gsize                     end_size;
+  NodeRange                 start_tag;
+  NodeRange                 end_tag;
 
   guint                     has_end_tag : 1;
 };
@@ -74,10 +78,10 @@ ide_xml_symbol_node_get_location_async (IdeSymbolNode       *node,
                         "context", context,
                         NULL);
 
-  /* TODO: libxml2 give us the end of a tag, we need to walk back
-   * in the file content to get the start
-   */
-  ret = ide_source_location_new (ifile, self->line - 1, self->line_offset - 1, 0);
+  ret = ide_source_location_new (ifile,
+                                 self->start_tag.start_line - 1,
+                                 self->start_tag.start_line_offset - 1,
+                                 0);
 
   g_task_return_pointer (task, ret, (GDestroyNotify)ide_source_location_unref);
 }
@@ -131,8 +135,10 @@ ide_xml_symbol_node_new (const gchar            *name,
                          const gchar            *element_name,
                          IdeSymbolKind           kind,
                          GFile                  *file,
-                         gint                    line,
-                         gint                    line_offset,
+                         gint                    start_line,
+                         gint                    start_line_offset,
+                         gint                    end_line,
+                         gint                    end_line_offset,
                          gsize                   size)
 {
   IdeXmlSymbolNode *self;
@@ -158,8 +164,11 @@ ide_xml_symbol_node_new (const gchar            *name,
   if (file != NULL)
     self->file = g_object_ref (file);
 
-  self->line = line;
-  self->line_offset = line_offset;
+  self->start_tag.start_line = start_line;
+  self->start_tag.start_line_offset = start_line_offset;
+  self->start_tag.end_line = end_line;
+  self->start_tag.end_line_offset = end_line_offset;
+  self->start_tag.size = size;
 
   return self;
 }
@@ -353,8 +362,10 @@ ide_xml_symbol_node_take_internal_child (IdeXmlSymbolNode *self,
 void
 ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
                                   GFile            *file,
-                                  gint              line,
-                                  gint              line_offset,
+                                  gint              start_line,
+                                  gint              start_line_offset,
+                                  gint              end_line,
+                                  gint              end_line_offset,
                                   gsize             size)
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
@@ -364,9 +375,11 @@ ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
   if (file != NULL)
     self->file = g_object_ref (file);
 
-  self->line = line;
-  self->line_offset = line_offset;
-  self->size = size;
+  self->start_tag.start_line = start_line;
+  self->start_tag.start_line_offset = start_line_offset;
+  self->start_tag.end_line = end_line;
+  self->start_tag.end_line_offset = end_line_offset;
+  self->start_tag.size = size;
 }
 
 /**
@@ -379,53 +392,73 @@ ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
  */
 GFile *
 ide_xml_symbol_node_get_location (IdeXmlSymbolNode *self,
-                                  gint             *line,
-                                  gint             *line_offset,
+                                  gint             *start_line,
+                                  gint             *start_line_offset,
+                                  gint             *end_line,
+                                  gint             *end_line_offset,
                                   gsize            *size)
 {
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  if (line != NULL)
-    *line = self->line;
+  if (start_line != NULL)
+    *start_line = self->start_tag.start_line;
 
-  if (line_offset != NULL)
-    *line_offset = self->line_offset;
+  if (start_line_offset != NULL)
+    *start_line_offset = self->start_tag.start_line_offset;
+
+  if (end_line != NULL)
+    *end_line = self->start_tag.end_line;
+
+  if (end_line_offset != NULL)
+    *end_line_offset = self->start_tag.end_line_offset;
 
   if (size != NULL)
-    *size = self->size;
+    *size = self->start_tag.size;
 
   return self->file;
 }
 
 void
 ide_xml_symbol_node_get_end_tag_location (IdeXmlSymbolNode *self,
+                                          gint             *start_line,
+                                          gint             *start_line_offset,
                                           gint             *end_line,
                                           gint             *end_line_offset,
-                                          gsize            *end_size)
+                                          gsize            *size)
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
+  if (start_line != NULL)
+    *start_line = self->end_tag.start_line;
+
+  if (start_line_offset != NULL)
+    *start_line_offset = self->end_tag.start_line_offset;
+
   if (end_line != NULL)
-    *end_line = self->end_line;
+    *end_line = self->end_tag.end_line;
 
   if (end_line_offset != NULL)
-    *end_line_offset = self->end_line_offset;
+    *end_line_offset = self->end_tag.end_line_offset;
 
-  if (end_size != NULL)
-    *end_size = self->end_size;
+  if (size != NULL)
+    *size = self->end_tag.size;
 }
 
 void
 ide_xml_symbol_node_set_end_tag_location (IdeXmlSymbolNode *self,
+                                          gint              start_line,
+                                          gint              start_line_offset,
                                           gint              end_line,
                                           gint              end_line_offset,
-                                          gsize             end_size)
+                                          gsize             size)
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
-  self->end_line = end_line;
-  self->end_line_offset = end_line_offset;
-  self->end_size = end_size;
+  self->end_tag.start_line = start_line;
+  self->end_tag.start_line_offset = start_line_offset;
+  self->end_tag.end_line = end_line;
+  self->end_tag.end_line_offset = end_line_offset;
+  self->end_tag.size = size;
 
   self->has_end_tag = TRUE;
 }
