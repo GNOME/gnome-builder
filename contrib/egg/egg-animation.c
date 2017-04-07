@@ -1182,3 +1182,66 @@ egg_object_animate_full (gpointer        object,
 
   return animation;
 }
+
+guint
+egg_animation_calculate_duration (GdkMonitor *monitor,
+                                  gdouble     from_value,
+                                  gdouble     to_value)
+{
+  GdkRectangle geom;
+  gdouble distance_units;
+  gdouble distance_mm;
+  gdouble mm_per_frame;
+  gint height_mm;
+  gint refresh_rate;
+  gint n_frames;
+  guint ret;
+
+#define MM_PER_SECOND       (100.0)
+#define MIN_FRAMES_PER_ANIM (5)
+#define MAX_FRAMES_PER_ANIM (500)
+
+  g_assert (GDK_IS_MONITOR (monitor));
+  g_assert (from_value >= 0.0);
+  g_assert (to_value >= 0.0);
+
+  /*
+   * Get various monitor information we'll need to calculate the duration of
+   * the animation. We need the physical space of the monitor, the refresh
+   * rate, and geometry so that we can limit how many device units we will
+   * traverse per-frame of the animation. Failure to deal with the physical
+   * space results in jittery animations to the user.
+   *
+   * It would also be nice to take into account the acceleration curve so that
+   * we know the max amount of jump per frame, but that is getting into
+   * diminishing returns since we can just average it out.
+   */
+  height_mm = gdk_monitor_get_height_mm (monitor);
+  gdk_monitor_get_geometry (monitor, &geom);
+  refresh_rate = gdk_monitor_get_refresh_rate (monitor);
+  if (refresh_rate == 0)
+    refresh_rate = 60000;
+
+  /*
+   * The goal here is to determine the number of millimeters that we need to
+   * animate given a transition of distance_unit pixels. Since we are dealing
+   * with physical units (mm), we don't need to take into account the device
+   * scale underneath the widget. The equation comes out the same.
+   */
+
+  distance_units = ABS (from_value - to_value);
+  distance_mm = distance_units / (gdouble)geom.height * height_mm;
+  mm_per_frame = MM_PER_SECOND / (refresh_rate / 1000.0);
+  n_frames = (distance_mm / mm_per_frame) + 1;
+
+  ret = n_frames * (1000.0 / (refresh_rate / 1000.0));
+  ret = CLAMP (ret,
+               MIN_FRAMES_PER_ANIM * (1000000.0 / refresh_rate),
+               MAX_FRAMES_PER_ANIM * (1000000.0 / refresh_rate));
+
+  return ret;
+
+#undef MM_PER_SECOND
+#undef MIN_FRAMES_PER_ANIM
+#undef MAX_FRAMES_PER_ANIM
+}
