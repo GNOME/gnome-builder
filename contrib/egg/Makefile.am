@@ -38,6 +38,11 @@ headers_DATA =                        \
 	egg-slider.h                  \
 	egg-state-machine-buildable.h \
 	egg-state-machine.h           \
+	egg-suggestion.h              \
+	egg-suggestion-entry.h        \
+	egg-suggestion-entry-buffer.h \
+	egg-suggestion-popover.h      \
+	egg-suggestion-row.h          \
 	egg-task-cache.h              \
 	egg-three-grid.h              \
 	egg-widget-action-group.h     \
@@ -74,6 +79,11 @@ libegg_private_la_SOURCES =           \
 	egg-slider.c                  \
 	egg-state-machine-buildable.c \
 	egg-state-machine.c           \
+	egg-suggestion.c              \
+	egg-suggestion-entry.c        \
+	egg-suggestion-entry-buffer.c \
+	egg-suggestion-popover.c      \
+	egg-suggestion-row.c          \
 	egg-task-cache.c              \
 	egg-three-grid.c              \
 	egg-widget-action-group.c     \
@@ -99,6 +109,17 @@ libegg_private_la_LIBADD =            \
 	$(SHM_LIB)                    \
 	$(LIBM)                       \
 	$(NULL)
+
+
+TESTS =
+noinst_PROGRAMS =
+
+
+TESTS += test-suggestion-buffer
+noinst_PROGRAMS += test-suggestion-buffer
+test_suggestion_buffer_SOURCES = test-suggestion-buffer.c
+test_suggestion_buffer_CFLAGS = $(EGG_CFLAGS)
+test_suggestion_buffer_LDADD = $(EGG_LIBS) libegg-private.la
 
 
 if HAVE_INTROSPECTION
