@@ -63,6 +63,9 @@ IdeSymbolNode            *ide_xml_symbol_node_get_nth_child                 (Ide
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_child_deep            (IdeXmlSymbolNode       *self,
                                                                              guint                   nth_child,
                                                                              guint                  *current_pos);
+guint                     ide_xml_symbol_node_get_n_direct_children         (IdeXmlSymbolNode       *self);
+IdeSymbolNode            *ide_xml_symbol_node_get_nth_direct_child          (IdeXmlSymbolNode       *self,
+                                                                             guint                   nth_child);
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_internal_child        (IdeXmlSymbolNode       *self,
                                                                              guint                   nth_child);
 const gchar              *ide_xml_symbol_node_get_value                     (IdeXmlSymbolNode       *self);

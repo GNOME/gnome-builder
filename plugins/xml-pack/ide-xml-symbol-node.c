@@ -51,6 +51,13 @@ struct _IdeXmlSymbolNode
   guint                     has_end_tag : 1;
 };
 
+typedef enum
+{
+  NODE_WALKER_DIRECT_ALL,
+  NODE_WALKER_INTERNAL,
+  NODE_WALKER_VISIBLE_DEEP
+} NodeWalker;
+
 G_DEFINE_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 static void
@@ -173,6 +180,9 @@ ide_xml_symbol_node_new (const gchar            *name,
   return self;
 }
 
+/* Return the number of visible chldren, walking down in the hierarchy
+ * by skiping internal ones to find them.
+ */
 guint
 ide_xml_symbol_node_get_n_children (IdeXmlSymbolNode *self)
 {
@@ -199,6 +209,10 @@ ide_xml_symbol_node_get_n_children (IdeXmlSymbolNode *self)
   return nb_children;
 }
 
+/* Return the nth_child visible node, walking down in the hierarchy
+ * by skiping internal ones to find them.
+ * *current_pos is use as a start position and to track the current position
+ * between the recursive calls */
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_child_deep (IdeXmlSymbolNode *self,
                                         guint             nth_child,
@@ -238,15 +252,16 @@ ide_xml_symbol_node_get_nth_child_deep (IdeXmlSymbolNode *self,
 static IdeSymbolNode *
 get_nth_child (IdeXmlSymbolNode *self,
                guint             nth_child,
-               gboolean          internal)
+               NodeWalker        node_walker)
 {
   NodeEntry *entry;
   guint pos = 0;
 
   if (self->children != NULL)
     {
-      if (internal)
+      switch (node_walker)
         {
+        case NODE_WALKER_INTERNAL:
           for (gint n = 0; n < self->children->len; ++n)
             {
               entry = &g_array_index (self->children, NodeEntry, n);
@@ -258,14 +273,33 @@ get_nth_child (IdeXmlSymbolNode *self,
                   ++pos;
                 }
             }
+
+          break;
+
+        case NODE_WALKER_DIRECT_ALL:
+          if (nth_child < self->children->len)
+            {
+              entry = &g_array_index (self->children, NodeEntry, nth_child);
+              return (IdeSymbolNode *)g_object_ref (entry->node);
+            }
+
+          break;
+
+        case NODE_WALKER_VISIBLE_DEEP:
+          return ide_xml_symbol_node_get_nth_child_deep (self, nth_child, &pos);
+          break;
+
+        default:
+          g_assert_not_reached ();
         }
-      else
-        return ide_xml_symbol_node_get_nth_child_deep (self, nth_child, &pos);
     }
 
   return NULL;
 }
 
+/* Return the nth_child visible node, walking down in the hierarchy
+ * by skiping internal ones to find them.
+ */
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_child (IdeXmlSymbolNode *self,
                                    guint             nth_child)
@@ -274,7 +308,7 @@ ide_xml_symbol_node_get_nth_child (IdeXmlSymbolNode *self,
 
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  if (NULL == (child = get_nth_child (self, nth_child, FALSE)))
+  if (NULL == (child = get_nth_child (self, nth_child, NODE_WALKER_VISIBLE_DEEP)))
     {
       g_warning ("nth child %u is out of bounds", nth_child);
       return NULL;
@@ -299,7 +333,34 @@ ide_xml_symbol_node_get_nth_internal_child (IdeXmlSymbolNode *self,
 
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  if (NULL == (child = get_nth_child (self, nth_child, TRUE)))
+  if (NULL == (child = get_nth_child (self, nth_child, NODE_WALKER_INTERNAL)))
+    {
+      g_warning ("nth child %u is out of bounds", nth_child);
+      return NULL;
+    }
+
+  return child;
+}
+
+/* Return the number of direct chldren (visibles and internals) for this particular node */
+guint
+ide_xml_symbol_node_get_n_direct_children (IdeXmlSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), 0);
+
+  return self->nb_children + self->nb_internal_children;
+}
+
+/* Return the nth_child direct node (visible or internal) */
+IdeSymbolNode *
+ide_xml_symbol_node_get_nth_direct_child (IdeXmlSymbolNode *self,
+                                          guint             nth_child)
+{
+  IdeSymbolNode *child;
+
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  if (NULL == (child = get_nth_child (self, nth_child, NODE_WALKER_DIRECT_ALL)))
     {
       g_warning ("nth child %u is out of bounds", nth_child);
       return NULL;
