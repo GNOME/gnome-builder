@@ -1,4 +1,5 @@
 SUBDIRS =               \
+	search          \
 	egg             \
 	gd              \
 	libeditorconfig \
@@ -6,7 +7,6 @@ SUBDIRS =               \
 	nautilus        \
 	pnl             \
 	rg              \
-	search          \
 	gstyle          \
 	tmpl            \
 	xml             \

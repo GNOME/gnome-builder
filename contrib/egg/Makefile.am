@@ -122,6 +122,23 @@ test_suggestion_buffer_CFLAGS = $(EGG_CFLAGS)
 test_suggestion_buffer_LDADD = $(EGG_LIBS) libegg-private.la
 
 
+if ENABLE_WEBKIT
+noinst_PROGRAMS += test-suggestion
+test_suggestion_SOURCES = test-suggestion.c
+test_suggestion_CFLAGS =                             \
+	$(EGG_CFLAGS)                                \
+	$(WEBKIT_CFLAGS)                             \
+	-I$(top_srcdir)/contrib/search               \
+	$(NULL)
+test_suggestion_LDADD =                              \
+	$(EGG_LIBS)                                  \
+	$(WEBKIT_LIBS)                               \
+	libegg-private.la                            \
+	$(top_builddir)/contrib/search/libsearch.la  \
+	$(NULL)
+endif
+
+
 if HAVE_INTROSPECTION
 -include $(INTROSPECTION_MAKEFILE)
 
