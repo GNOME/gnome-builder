@@ -553,7 +553,7 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
                                              GAsyncResult *result,
                                              gpointer      user_data)
 {
-  IdeXmlService *service = (IdeXmlService *)object;
+  IdeXmlService *self = (IdeXmlService *)object;
   PositionState *state = (PositionState *)user_data;
   g_autoptr(GTask) task = state->task;
   g_autoptr(IdeXmlSymbolNode) root_node = NULL;
@@ -563,9 +563,9 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
   IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_XML_SERVICE (service));
+  g_assert (IDE_IS_XML_SERVICE (self));
 
-  root_node = ide_xml_service_get_root_node_finish (service, result, &error);
+  root_node = ide_xml_service_get_root_node_finish (self, result, &error);
   if (root_node != NULL)
     {
       /* find the correspoonding node */
