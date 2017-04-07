@@ -1057,7 +1057,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_execute_async);
 
-  if (self->pipeline == NULL)
+  if (self->pipeline == NULL || self->can_build == FALSE)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
