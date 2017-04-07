@@ -53,6 +53,9 @@ void       fuzzy_remove             (Fuzzy          *fuzzy,
                                      const gchar    *key);
 Fuzzy     *fuzzy_ref                (Fuzzy          *fuzzy);
 void       fuzzy_unref              (Fuzzy          *fuzzy);
+gchar     *fuzzy_highlight          (Fuzzy          *fuzzy,
+                                     const gchar    *str,
+                                     const gchar    *query);
 
 G_END_DECLS
 
