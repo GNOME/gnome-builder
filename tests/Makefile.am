@@ -28,20 +28,6 @@ rg_libs =                                                       \
 	$(RG_LIBS)                                              \
 	$(NULL)
 
-search_cflags =                                                 \
-	$(DEBUG_CFLAGS)                                         \
-	$(SEARCH_CFLAGS)                                        \
-	-I$(top_srcdir)/contrib/search                          \
-	-I$(top_srcdir)/libide/util                             \
-	$(NULL)
-
-search_libs =                                                   \
-	$(SEARCH_LIBS)                                          \
-	$(top_builddir)/contrib/search/libsearch.la             \
-	$(top_builddir)/libide/libide-1.0.la                    \
-	$(top_builddir)/contrib/egg/libegg-private.la           \
-	$(NULL)
-
 tests_cflags =                                                  \
 	$(egg_cflags)                                           \
 	$(LIBIDE_CFLAGS)                                        \
@@ -56,6 +42,7 @@ tests_libs =                                                    \
 	$(LIBIDE_LIBS)                                          \
 	$(top_builddir)/libide/libide-1.0.la                    \
 	$(top_builddir)/contrib/egg/libegg-private.la           \
+	$(top_builddir)/contrib/search/libsearch.la             \
 	$(NULL)
 
 tests_ldflags =                                                 \
