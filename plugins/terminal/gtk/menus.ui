@@ -7,6 +7,11 @@
         <attribute name="action">win.new-terminal</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;t</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">_New Runtime Terminal</attribute>
+        <attribute name="action">win.new-terminal-in-runtime</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;t</attribute>
+      </item>
     </section>
   </menu>
   <menu id="gb-terminal-view-popup-menu">
