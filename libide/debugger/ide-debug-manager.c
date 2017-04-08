@@ -65,6 +65,7 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 ide_debug_manager_set_active (IdeDebugManager *self,
@@ -307,6 +308,27 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [BREAKPOINT_ADDED] =
+    g_signal_new ("breakpoint-added",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_BREAKPOINT);
+
+  signals [BREAKPOINT_REMOVED] =
+    g_signal_new ("breakpoint-rmeoved",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_BREAKPOINT);
+
+  signals [BREAKPOINT_REACHED] =
+    g_signal_new ("breakpoint-reason",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_BREAKPOINT);
 }
 
 static void
