@@ -42,6 +42,7 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
                                                    GCancellable *cancellable)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GPtrArray) child_dirs = NULL;
   gpointer infoptr;
 
   g_assert (G_IS_FILE (directory));
@@ -77,7 +78,12 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
             continue;
 
           if (depth < DISCOVERY_MAX_DEPTH - 1)
-            gbp_flatpak_build_system_discovery_find_manifests (file, results, depth + 1, cancellable);
+            {
+              if (child_dirs == NULL)
+                child_dirs = g_ptr_array_new_with_free_func (g_object_unref);
+              g_ptr_array_add (child_dirs, g_steal_pointer (&file));
+              continue;
+            }
         }
 
       g_regex_match (filename_regex, name, 0, &match_info);
@@ -85,6 +91,19 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
         continue;
 
       g_ptr_array_add (results, g_steal_pointer (&file));
+    }
+
+  if (child_dirs != NULL)
+    {
+      for (guint i = 0; i < child_dirs->len; i++)
+        {
+          GFile *file = g_ptr_array_index (child_dirs, i);
+
+          if (g_cancellable_is_cancelled (cancellable))
+            return;
+
+          gbp_flatpak_build_system_discovery_find_manifests (file, results, depth + 1, cancellable);
+        }
     }
 }
 
