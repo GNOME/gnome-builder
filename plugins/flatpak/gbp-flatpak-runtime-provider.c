@@ -264,6 +264,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   InstallRuntime *install;
   GCancellable *cancellable;
   IdeContext *context;
+  gboolean sdk_matches_runtime = FALSE;
 
   IDE_ENTRY;
 
@@ -317,7 +318,11 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                           g_object_ref (task));
     }
 
-  if (gbp_flatpak_application_addin_has_runtime (app_addin,
+  sdk_matches_runtime = (g_strcmp0 (install->sdk_id, install->id) == 0 &&
+                         g_strcmp0 (install->sdk_arch, install->arch) == 0 &&
+                         g_strcmp0 (install->sdk_branch, install->branch) == 0);
+  if (sdk_matches_runtime ||
+      gbp_flatpak_application_addin_has_runtime (app_addin,
                                                  install->sdk_id,
                                                  install->sdk_arch,
                                                  install->sdk_branch))
