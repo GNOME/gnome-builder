@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-16 20:45+0000\n"
-"PO-Revision-Date: 2017-03-17 15:43+0100\n"
+"POT-Creation-Date: 2017-04-05 07:20+0000\n"
+"PO-Revision-Date: 2017-04-08 00:11+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -77,7 +77,7 @@ msgstr[1] "Omkring %u år siden"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:683
+#: libide/greeter/ide-greeter-perspective.c:685
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -109,7 +109,7 @@ msgstr "Gennemse …"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -319,7 +319,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Indlæs eller generér en palet ifølge indstillingerne"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5861
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Omdøb"
@@ -1072,90 +1072,90 @@ msgstr "KOMMANDO"
 msgid "No commands available"
 msgstr "Ingen kommandoer tilgængelige"
 
-#: libide/application/ide-application-command-line.c:374
+#: libide/application/ide-application-command-line.c:387
 msgid "Please provide a command"
 msgstr "Angiv venligst en kommando"
 
-#: libide/application/ide-application-command-line.c:384
+#: libide/application/ide-application-command-line.c:397
 msgid "No such tool"
 msgstr "Intet sådant værktøj"
 
-#: libide/application/ide-application-command-line.c:398
+#: libide/application/ide-application-command-line.c:411
 msgid "Please provide a worker type"
 msgstr "Angiv venligst en arbejdertype"
 
-#: libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:418
 msgid "Please provide a D-Bus address"
 msgstr "Angiv venligst en D-Bus-adresse"
 
-#: libide/application/ide-application-command-line.c:414
+#: libide/application/ide-application-command-line.c:427
 msgid "No such worker"
 msgstr "Ingen sådan arbejder"
 
-#: libide/buffers/ide-buffer.c:2476
+#: libide/buffers/ide-buffer.c:2517
 msgid "The current language lacks a symbol resolver."
 msgstr "Det nuværende sprog mangler en symbolgenkender."
 
-#: libide/buffers/ide-buffer-manager.c:672
+#: libide/buffers/ide-buffer-manager.c:677
 msgid "File too large to be opened."
 msgstr "Filen er for stor til at kunne åbnes."
 
-#: libide/buffers/ide-buffer-manager.c:1764
+#: libide/buffers/ide-buffer-manager.c:1771
 #, c-format
 msgid "unsaved document %u"
 msgstr "ugemt dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1798
+#: libide/buffers/ide-buffer-manager.c:1805
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Kunne ikke gemme buffer; ignorerer reklamation."
 
-#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/buildsystem/ide-build-pipeline.c:2143
 msgid "Cleaning…"
 msgstr "Rydder op …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2106
+#: libide/buildsystem/ide-build-pipeline.c:2158
 msgid "Downloading…"
 msgstr "Henter …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2110
+#: libide/buildsystem/ide-build-pipeline.c:2162
 msgid "Building dependencies…"
 msgstr "Kompilerer afhængigheder …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2114
+#: libide/buildsystem/ide-build-pipeline.c:2166
 msgid "Bootstrapping…"
 msgstr "Bootstrapper …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2118
+#: libide/buildsystem/ide-build-pipeline.c:2170
 msgid "Configuring…"
 msgstr "Konfigurerer …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2122
+#: libide/buildsystem/ide-build-pipeline.c:2174
 msgid "Building…"
 msgstr "Kompilerer …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2126
+#: libide/buildsystem/ide-build-pipeline.c:2178
 msgid "Installing…"
 msgstr "Installerer …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2130
+#: libide/buildsystem/ide-build-pipeline.c:2182
 msgid "Exporting…"
 msgstr "Eksporterer …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2134
-#: libide/buildsystem/ide-build-pipeline.c:2138
+#: libide/buildsystem/ide-build-pipeline.c:2186
+#: libide/buildsystem/ide-build-pipeline.c:2190
 msgid "Success"
 msgstr "Succes"
 
-#: libide/buildsystem/ide-build-pipeline.c:2142
+#: libide/buildsystem/ide-build-pipeline.c:2194
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Fejlet"
 
-#: libide/buildsystem/ide-build-pipeline.c:2146
+#: libide/buildsystem/ide-build-pipeline.c:2198
 msgid "Preparing…"
 msgstr "Forbereder …"
 
-#: libide/buildsystem/ide-build-pipeline.c:2150
+#: libide/buildsystem/ide-build-pipeline.c:2202
 msgid "Ready"
 msgstr "Klar"
 
@@ -1667,11 +1667,11 @@ msgstr ""
 msgid "Failed to load the project"
 msgstr "Kunne ikke indlæse projektet"
 
-#: libide/greeter/ide-greeter-perspective.c:678
+#: libide/greeter/ide-greeter-perspective.c:680
 msgid "Open Project"
 msgstr "Åbn projekt"
 
-#: libide/greeter/ide-greeter-perspective.c:694
+#: libide/greeter/ide-greeter-perspective.c:696
 msgid "All Project Types"
 msgstr "Alle projekttyper"
 
@@ -2574,23 +2574,33 @@ msgstr "Kunne ikke åbne mappe: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Kunne ikke indlæse fil: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5317
 #, c-format
 msgid "Insert “%s”"
 msgstr "Indsæt “%s”"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5319
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Erstat “%s” med “%s”"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5433
 msgid "Apply Fix-It"
 msgstr "Anvend Fix-It"
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5860
 msgid "Rename symbol"
 msgstr "Omdøb symbol"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: libide/sourceview/ide-source-view.c:6099
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr "<b>%s</b> — <small>Linje %u, kolonne %u</small>"
+
+#: libide/sourceview/ide-source-view.c:6125
+msgid "No references were found"
+msgstr "Ingen referencer blev fundet"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -3298,16 +3308,17 @@ msgstr "Netværket er ikke tilgængeligt; henter ikke"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:119
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
-#: plugins/rustup/rustup_plugin/__init__.py:596
+#: plugins/html-preview/html_preview_plugin/__init__.py:303
+#: plugins/html-preview/html_preview_plugin/__init__.py:313
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+#: plugins/rustup/rustup_plugin/__init__.py:615
 msgid "Install"
 msgstr "Installér"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Opdatér"
 
@@ -3329,12 +3340,12 @@ msgstr[1] "Vis %u runtimes mere"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-runtimes"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:714
+#: plugins/flatpak/gbp-flatpak-runtime.c:722
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:716
+#: plugins/flatpak/gbp-flatpak-runtime.c:724
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3383,7 +3394,9 @@ msgstr "Din computer mangler flatpak-builder"
 msgid ""
 "This program is necessary for building Flatpak applications. Would you like "
 "to install it?"
-msgstr "Dette program er nødvendigt for at kunne kompilere Flatpak-programmer. Vil du installere det?"
+msgstr ""
+"Dette program er nødvendigt for at kunne kompilere Flatpak-programmer. Vil "
+"du installere det?"
 
 #: plugins/flatpak/gtk/menus.ui:6
 msgid "Flatpak"
@@ -3497,9 +3510,13 @@ msgstr ""
 msgid "Preview as HTML"
 msgstr "Forhåndsvis som HTML"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:115
+#: plugins/html-preview/html_preview_plugin/__init__.py:299
 msgid "Your computer is missing python3-docutils"
 msgstr "Din computer mangler python3-docutils"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:309
+msgid "Your computer is missing python3-sphinx"
+msgstr "Din computer mangler python3-sphinx"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3642,47 +3659,47 @@ msgstr "Fremhæv alle forekomster af ord som matcher nuværende markering"
 msgid "quick highlight words matching current selection"
 msgstr "hurtigfremhæv ord matcher nuværende markering"
 
-#: plugins/rustup/rustup_plugin/__init__.py:80
+#: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
 msgstr "Rustup er ikke installeret"
 
-#: plugins/rustup/rustup_plugin/__init__.py:277
+#: plugins/rustup/rustup_plugin/__init__.py:282
 msgid "Installing rustup"
 msgstr "Installerer rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:279
+#: plugins/rustup/rustup_plugin/__init__.py:284
 msgid "Updating rustup"
 msgstr "Opdaterer rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:281
+#: plugins/rustup/rustup_plugin/__init__.py:286
 msgid "Installing rust "
 msgstr "Installerer rust "
 
-#: plugins/rustup/rustup_plugin/__init__.py:283
+#: plugins/rustup/rustup_plugin/__init__.py:288
 msgid "Checking system"
 msgstr "Kontrollerer systemet"
 
-#: plugins/rustup/rustup_plugin/__init__.py:337
+#: plugins/rustup/rustup_plugin/__init__.py:357
 msgid "Downloading rustup-init"
 msgstr "Henter rustup-init"
 
-#: plugins/rustup/rustup_plugin/__init__.py:342
+#: plugins/rustup/rustup_plugin/__init__.py:362
 msgid "Syncing channel updates"
 msgstr "Synkroniserer kanalopdateringer"
 
-#: plugins/rustup/rustup_plugin/__init__.py:348
+#: plugins/rustup/rustup_plugin/__init__.py:368
 msgid "Downloading "
 msgstr "Henter "
 
-#: plugins/rustup/rustup_plugin/__init__.py:355
+#: plugins/rustup/rustup_plugin/__init__.py:375
 msgid "Installing "
 msgstr "Installerer "
 
-#: plugins/rustup/rustup_plugin/__init__.py:361
+#: plugins/rustup/rustup_plugin/__init__.py:381
 msgid "Checking for rustup updates"
 msgstr "Søger efter rustup-opdateringer"
 
-#: plugins/rustup/rustup_plugin/__init__.py:366
+#: plugins/rustup/rustup_plugin/__init__.py:386
 msgid "Downloading rustup update"
 msgstr "Henter rustup-opdatering"
 
@@ -3690,61 +3707,61 @@ msgstr "Henter rustup-opdatering"
 # self.props.status = _('Error installing ') + self.toolchain
 #
 # Dvs. installation af <noget>
-#: plugins/rustup/rustup_plugin/__init__.py:403
+#: plugins/rustup/rustup_plugin/__init__.py:423
 msgid "Error installing "
 msgstr "Fejl under installation af "
 
-#: plugins/rustup/rustup_plugin/__init__.py:405
+#: plugins/rustup/rustup_plugin/__init__.py:425
 msgid "Error"
 msgstr "Fejl"
 
-#: plugins/rustup/rustup_plugin/__init__.py:411
+#: plugins/rustup/rustup_plugin/__init__.py:430
 msgid "Cancelled"
 msgstr "Annulleret"
 
-#: plugins/rustup/rustup_plugin/__init__.py:419
+#: plugins/rustup/rustup_plugin/__init__.py:438
 msgid "Finished"
 msgstr "Færdig"
 
-#: plugins/rustup/rustup_plugin/__init__.py:433
+#: plugins/rustup/rustup_plugin/__init__.py:452
 msgid "Rustup"
 msgstr "Rustup"
 
 # ?
 #
 # https://da.wikipedia.org/wiki/Toolchain
-#: plugins/rustup/rustup_plugin/__init__.py:434
+#: plugins/rustup/rustup_plugin/__init__.py:453
 msgid "Rustup Toolchains"
 msgstr "Rustup-toolchains"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Updating"
 msgstr "Opdaterer"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Installing"
 msgstr "Installerer"
 
 #. set default toolchain button
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Make default"
 msgstr "Angiv som standard"
 
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Makes the selected toolchain the default rust installation"
 msgstr "Angiver den valgte toolchain som standard-rust-installationen"
 
-#: plugins/rustup/rustup_plugin/__init__.py:595
+#: plugins/rustup/rustup_plugin/__init__.py:614
 msgid "Install Rust Channel"
 msgstr "Installér Rust-kanal"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: plugins/rustup/rustup_plugin/__init__.py:600
+#: plugins/rustup/rustup_plugin/__init__.py:619
 msgid "Enter name of rust channel"
 msgstr "Indtast navn på rust-kanal"
 
 # Lidt svært at opsplitte den lange ordforbindelse, men mon ikke det er korrekt sådan her
-#: plugins/rustup/rustup_plugin/__init__.py:601
+#: plugins/rustup/rustup_plugin/__init__.py:620
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -3760,15 +3777,15 @@ msgstr ""
 "                        <dato>          = ÅÅÅÅ-MM-DD\n"
 "                        <vært>          = <mål-tripel>"
 
-#: plugins/rustup/rustup_plugin/__init__.py:626
+#: plugins/rustup/rustup_plugin/__init__.py:645
 msgid "Install Rustup to manage toolchains here!"
 msgstr "Installér Rustup for at håndtere toolchains her!"
 
-#: plugins/rustup/rustup_plugin/__init__.py:633
+#: plugins/rustup/rustup_plugin/__init__.py:652
 msgid "No toolchain installed. Click"
 msgstr "Ingen toolchain installeret. Klik"
 
-#: plugins/rustup/rustup_plugin/__init__.py:634
+#: plugins/rustup/rustup_plugin/__init__.py:653
 msgid "to add a new toolchain!"
 msgstr "for at tilføje en ny toolchain!"
 
@@ -3879,7 +3896,7 @@ msgstr "_Åbn link"
 msgid "_Copy Link Address"
 msgstr "_Kopiér linkadresse"
 
-#: plugins/todo/todo_plugin/__init__.py:193
+#: plugins/todo/todo_plugin/__init__.py:195
 msgid "Todo"
 msgstr "Todo"
 
