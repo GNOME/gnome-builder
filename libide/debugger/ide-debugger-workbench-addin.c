@@ -180,6 +180,8 @@ ide_debugger_workbench_addin_load (IdeWorkbenchAddin *addin,
                                    self,
                                    G_CONNECT_SWAPPED);
 
+  egg_signal_group_set_target (self->debug_manager_signals, debug_manager);
+
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
                                  "transition-duration", 500,
                                  "transition-type", GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT,
