@@ -44,14 +44,20 @@ mi2_console_message_serialize (Mi2Message *message)
 {
   Mi2ConsoleMessage *self = (Mi2ConsoleMessage *)message;
   g_autofree gchar *escaped = NULL;
-  g_autofree gchar *str = NULL;
 
   g_assert (MI2_IS_CONSOLE_MESSAGE (message));
 
   escaped = g_strescape (self->message ? self->message : "", "");
-  str = g_strdup_printf ("~\"%s\"\n", escaped);
 
-  return g_bytes_new_take (g_steal_pointer (&str), strlen (str));
+  if (escaped != NULL)
+    {
+      g_autofree gchar *str = g_strdup_printf ("~\"%s\"\n", escaped);
+
+      if (str != NULL)
+        return g_bytes_new_take (g_steal_pointer (&str), strlen (str));
+    }
+
+  return NULL;
 }
 
 static void
