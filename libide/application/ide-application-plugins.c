@@ -29,6 +29,7 @@
 #include "application/ide-application-addin.h"
 #include "application/ide-application-private.h"
 #include "theming/ide-css-provider.h"
+#include "util/ide-flatpak.h"
 
 static const gchar *blacklisted_plugins[] = {
   "build-tools-plugin", /* Renamed to buildui */
@@ -133,6 +134,22 @@ ide_application_discover_plugins (IdeApplication *self)
       peas_engine_prepend_search_path (engine,
                                        PACKAGE_LIBDIR"/gnome-builder/plugins",
                                        PACKAGE_DATADIR"/gnome-builder/plugins");
+    }
+
+  /*
+   * We have access to ~/.local/share/gnome-builder/ for plugins even when we are
+   * bundled with flatpak, so might as well use it.
+   */
+  if (ide_is_flatpak ())
+    {
+      g_autofree gchar *plugins_dir = g_build_filename (g_get_home_dir (),
+                                                        ".local",
+                                                        "share",
+                                                        "gnome-builder",
+                                                        "plugins",
+                                                        NULL);
+      g_irepository_prepend_search_path (plugins_dir);
+      peas_engine_prepend_search_path (engine, plugins_dir, plugins_dir);
     }
 
   g_irepository_require (NULL, "Ide", "1.0", 0, &error);
