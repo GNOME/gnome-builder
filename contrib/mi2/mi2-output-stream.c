@@ -77,6 +77,15 @@ mi2_output_stream_write_message_async (Mi2OutputStream     *self,
 
   bytes = mi2_message_serialize (message);
 
+  if (bytes == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               "message failed to serialize to bytes");
+      return;
+    }
+
   g_output_stream_write_bytes_async (G_OUTPUT_STREAM (self),
                                      bytes,
                                      G_PRIORITY_LOW,
