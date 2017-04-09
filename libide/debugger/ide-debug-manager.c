@@ -317,14 +317,14 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
                   G_TYPE_NONE, 1, IDE_TYPE_BREAKPOINT);
 
   signals [BREAKPOINT_REMOVED] =
-    g_signal_new ("breakpoint-rmeoved",
+    g_signal_new ("breakpoint-removed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1, IDE_TYPE_BREAKPOINT);
 
   signals [BREAKPOINT_REACHED] =
-    g_signal_new ("breakpoint-reason",
+    g_signal_new ("breakpoint-reached",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
