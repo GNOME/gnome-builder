@@ -1,4 +1,53 @@
 ==============
+Version 3.24.1
+==============
+
+Changes since 3.24.0
+
+ • Support for live editing Sphinx documentation
+ • The "install" action can be activated from the command bar to install your
+   project without running it.
+ • Fix error propagation in autotools and jsonrpc
+ • Defer to ninja for installability of project
+ • Various build system fixes
+ • Lower diagnosis priority to improve UI interactivity
+ • Fix hgih number FD mappings into worker processes
+ • Always build with V=0 for less verbose builds
+ • Translate paths for out-of-tree builds when handling diagnostics
+ • Allow pipeline stages to signify stdout should be checked for errors
+ • Allow network access from fallback flatpak launcher
+ • Use flatpak-builder --run when possible
+ • Use build-args from manifest when building with flatpak build
+ • Various Rust RLS fixes
+ • Floating ref fix for jsonrpc
+ • Rustfmt support for Rust
+ • Support for reformat-selection with gq in vim mode when language
+   supports it. C-c C-f in Emacs mode. Currently only Rust/RLS support
+   exists.
+ • Symbol Resolvers can now support locating all references to a symbol
+   so that the editor can move between them. Currently, only Rust/RLS
+   is supported. Ctrl+shift+space will display the popup.
+ • Configurations will be properly "prepared" again when changing runtimes
+   so that a new --prefix may be applied.
+ • Flatpak manifest discovery has changed to breadth-first search
+ • Flatpak'd versions of Builder will still look for plugins in the host
+   ~/.local/share/gnome-builder/plugins for consistency.
+ • Auto-save of buffer is dismissed when user initiated save occurs
+ • Various memory leaks have been plugged
+ • File monitor improvements during rename events
+ • The greeter will display the build system type to help users transition
+   to new build systems such as Meson.
+ • A menu item to launch a terminal in flatpak has been added. While this
+   is not flatpak specific, it is the general way users think about it.
+ • Documentation improvements
+
+
+Updated transitions:
+
+  Swedish, Danish, Lithuanian, Hungarian, Korean, Spanish, Indonesian, German,
+  Slovak, Polish, Brazilian Portuguese, Latvian, Russian
+
+==============
 Version 3.24.0
 ==============
 
