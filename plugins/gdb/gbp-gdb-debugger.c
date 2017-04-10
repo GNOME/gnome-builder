@@ -327,8 +327,8 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
                                     Mi2EventMessage *message,
                                     Mi2Client       *client)
 {
+  g_autoptr(IdeBreakpoint) breakpoint = NULL;
   IdeDebuggerStopReason translated;
-  g_autoptr(IdeSourceLocation) location = NULL;
   GVariant *fra;
 
   IDE_ENTRY;
@@ -359,32 +359,36 @@ gbp_gdb_debugger_on_client_stopped (GbpGdbDebugger  *self,
       break;
     }
 
-  if (NULL != (fra = mi2_message_get_param (MI2_MESSAGE (message), "frame")) &&
-      g_variant_is_of_type (fra, G_VARIANT_TYPE ("a{sv}")))
+  fra = mi2_message_get_param (MI2_MESSAGE (message), "frame");
+
+  if (fra != NULL && g_variant_is_of_type (fra, G_VARIANT_TYPE ("a{sv}")))
     {
-      GVariantDict dict;
+      const gchar *address = NULL;
       const gchar *filename = NULL;
       const gchar *line = NULL;
+      GVariantDict dict;
 
       g_variant_dict_init (&dict, fra);
       g_variant_dict_lookup (&dict, "fullname", "&s", &filename);
       g_variant_dict_lookup (&dict, "line", "&s", &line);
+      g_variant_dict_lookup (&dict, "addr", "&s", &address);
 
       if (filename != NULL && line != NULL)
         {
-          IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-          g_autoptr(GFile) gfile = g_file_new_for_path (filename);
-          g_autoptr(IdeFile) ifile = ide_file_new (context, gfile);
+          g_autoptr(GFile) file = g_file_new_for_path (filename);
 
-          location = ide_source_location_new (ifile,
-                                              g_ascii_strtoll (line, NULL, 10),
-                                              0, 0);
+          breakpoint = g_object_new (IDE_TYPE_BREAKPOINT,
+                                     "address", address,
+                                     "file", file,
+                                     "line", line,
+                                     "line-offset", 0,
+                                     NULL);
         }
     }
 
   gbp_gdb_debugger_notify_properties (self);
 
-  ide_debugger_emit_stopped (IDE_DEBUGGER (self), translated, NULL);
+  ide_debugger_emit_stopped (IDE_DEBUGGER (self), translated, breakpoint);
 
   IDE_EXIT;
 }

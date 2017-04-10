@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface>
+  <template class="IdeDebuggerView" parent="IdeLayoutView">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkSourceView" id="source_view">
+            <property name="editable">false</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

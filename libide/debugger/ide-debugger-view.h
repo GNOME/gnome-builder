@@ -1,4 +1,4 @@
-/* ide-debugger-perspective.h
+/* ide-debugger-view.h
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -16,23 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DEBUGGER_PERSPECTIVE_H
-#define IDE_DEBUGGER_PERSPECTIVE_H
+#ifndef IDE_DEBUGGER_VIEW_H
+#define IDE_DEBUGGER_VIEW_H
 
-#include "debugger/ide-breakpoint.h"
-#include "workbench/ide-layout.h"
+#include <gtksourceview/gtksource.h>
+
+#include "workbench/ide-layout-view.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_PERSPECTIVE (ide_debugger_perspective_get_type())
+#define IDE_TYPE_DEBUGGER_VIEW (ide_debugger_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerPerspective, ide_debugger_perspective, IDE, DEBUGGER_PERSPECTIVE, IdeLayout)
+G_DECLARE_FINAL_TYPE (IdeDebuggerView, ide_debugger_view, IDE, DEBUGGER_VIEW, IdeLayoutView)
 
-void ide_debugger_perspective_set_debugger           (IdeDebuggerPerspective *self,
-                                                      IdeDebugger            *debugger);
-void ide_debugger_perspective_navigate_to_breakpoint (IdeDebuggerPerspective *self,
-                                                      IdeBreakpoint          *breakpoint);
+GtkWidget       *ide_debugger_view_new        (void);
+GtkSourceBuffer *ide_debugger_view_get_buffer (IdeDebuggerView *self);
+void             ide_debugger_view_set_buffer (IdeDebuggerView *self,
+                                               GtkSourceBuffer *buffer);
 
 G_END_DECLS
 
-#endif /* IDE_DEBUGGER_PERSPECTIVE_H */
+#endif /* IDE_DEBUGGER_VIEW_H */

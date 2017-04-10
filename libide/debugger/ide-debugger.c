@@ -18,11 +18,13 @@
 
 #define G_LOG_DOMAIN "ide-debugger"
 
+#include <glib/gi18n.h>
+
 #include "ide-enums.h"
 #include "ide-debug.h"
 
+#include "debugger/ide-breakpoint.h"
 #include "debugger/ide-debugger.h"
-#include "diagnostics/ide-source-location.h"
 #include "runner/ide-runner.h"
 
 G_DEFINE_INTERFACE (IdeDebugger, ide_debugger, IDE_TYPE_OBJECT)
@@ -50,10 +52,137 @@ ide_debugger_real_supports_runner (IdeDebugger *self,
 }
 
 static void
+ide_debugger_real_load_source_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GtkSourceBuffer *buffer;
+  IdeBreakpoint *breakpoint;
+  GtkTextIter iter;
+  guint line;
+  guint line_offset;
+
+  IDE_ENTRY;
+
+  g_assert (GTK_SOURCE_IS_FILE_LOADER (loader));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!gtk_source_file_loader_load_finish (loader, result, &error))
+    {
+      IDE_TRACE_MSG ("Failed to load buffer: %s", error->message);
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  buffer = gtk_source_file_loader_get_buffer (loader);
+  g_assert (GTK_SOURCE_IS_BUFFER (buffer));
+
+  breakpoint = g_task_get_task_data (task);
+  g_assert (IDE_IS_BREAKPOINT (breakpoint));
+
+  line = ide_breakpoint_get_line (breakpoint);
+  line_offset = ide_breakpoint_get_line_offset (breakpoint);
+
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
+                                           &iter,
+                                           line,
+                                           line_offset);
+
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
+
+  g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_debugger_real_load_source_async (IdeDebugger         *self,
+                                     IdeBreakpoint       *breakpoint,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GtkSourceFileLoader) loader = NULL;
+  g_autoptr(GtkSourceBuffer) buffer = NULL;
+  g_autoptr(GtkSourceFile) source_file = NULL;
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER (self));
+  g_assert (IDE_IS_BREAKPOINT (breakpoint));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (breakpoint), g_object_unref);
+  g_task_set_source_tag (task, ide_debugger_real_load_source_async);
+
+  file = ide_breakpoint_get_file (breakpoint);
+
+  if (file == NULL)
+    {
+      const gchar *address = ide_breakpoint_get_address (breakpoint);
+
+      if (address != NULL)
+        g_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 /* translators: %s will be replaced with the address */
+                                 _("Cannot locate source for address “%s”"),
+                                 address);
+      else
+        g_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 _("Failed to locate source for breakpoint"));
+
+      IDE_EXIT;
+    }
+
+  source_file = gtk_source_file_new ();
+  gtk_source_file_set_location (source_file, file);
+  buffer = gtk_source_buffer_new (NULL);
+  loader = gtk_source_file_loader_new (buffer, source_file);
+
+  gtk_source_file_loader_load_async (loader,
+                                     G_PRIORITY_LOW,
+                                     NULL, NULL, NULL, NULL,
+                                     ide_debugger_real_load_source_cb,
+                                     g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static GtkSourceBuffer *
+ide_debugger_real_load_source_finish (IdeDebugger   *self,
+                                      GAsyncResult  *result,
+                                      GError       **error)
+{
+  GtkSourceBuffer *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER (self));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+  g_assert (!ret || GTK_SOURCE_IS_BUFFER (ret));
+
+  IDE_RETURN (ret);
+}
+
+static void
 ide_debugger_default_init (IdeDebuggerInterface *iface)
 {
   iface->get_name = ide_debugger_real_get_name;
   iface->supports_runner = ide_debugger_real_supports_runner;
+  iface->load_source_async = ide_debugger_real_load_source_async;
+  iface->load_source_finish = ide_debugger_real_load_source_finish;
 
   g_object_interface_install_property (iface,
                                        g_param_spec_boolean ("can-step-in",
@@ -96,11 +225,11 @@ ide_debugger_default_init (IdeDebuggerInterface *iface)
    * IdeDebugger::stopped:
    * @self: An #IdeDebugger
    * @reason: An #IdeDebuggerStopReason for why the stop occurred
-   * @location: An #IdeSourceLocation of where the debugger has stopped
+   * @breakpoint: An #IdeBreakpoint
    *
    * The "stopped" signal should be emitted when the debugger has stopped at a
-   * new location. @reason indicates the reson for the stop, and @location is
-   * the location where the stop has occurred.
+   * new location. @reason indicates the reson for the stop, and @breakpoint
+   * describes the current location within the appliation.
    */
   signals [STOPPED] =
     g_signal_new ("stopped",
@@ -108,8 +237,7 @@ ide_debugger_default_init (IdeDebuggerInterface *iface)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeDebuggerInterface, stopped),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  2, IDE_TYPE_DEBUGGER_STOP_REASON, IDE_TYPE_SOURCE_LOCATION);
+                  G_TYPE_NONE, 2, IDE_TYPE_DEBUGGER_STOP_REASON, IDE_TYPE_BREAKPOINT);
 }
 
 /**
@@ -169,14 +297,47 @@ ide_debugger_get_name (IdeDebugger *self)
   return ret;
 }
 
+/**
+ * ide_debugger_emit_stopped:
+ * @self: A #IdeDebugger
+ * @reason: the reason for the stop
+ * @breakpoint: (nullable): an optional breakpoint that is reached
+ *
+ * This signal should be emitted when the debugger has stopped executing.
+ *
+ * If the stop is not related to the application exiting for any reason, then
+ * you should provide a @breakpoint describing the stop location. That
+ * breakpoint may be transient (see #IdeDebugger:transient) meaning that it is
+ * only created for this stop event.
+ */
 void
 ide_debugger_emit_stopped (IdeDebugger           *self,
                            IdeDebuggerStopReason  reason,
-                           IdeSourceLocation     *location)
+                           IdeBreakpoint         *breakpoint)
 {
   g_return_if_fail (IDE_IS_DEBUGGER (self));
+  g_return_if_fail (!breakpoint || IDE_IS_BREAKPOINT (breakpoint));
 
-  g_signal_emit (self, signals [STOPPED], 0, reason, location);
+#ifdef IDE_ENABLE_TRACE
+  if (breakpoint != NULL)
+    {
+      g_autofree gchar *uri = NULL;
+      const gchar *address;
+      GFile *file;
+
+      address = ide_breakpoint_get_address (breakpoint);
+      file = ide_breakpoint_get_file (breakpoint);
+
+      if (file != NULL)
+        uri = g_file_get_uri (file);
+
+      IDE_TRACE_MSG ("Stopped at breakpoint \"%s\" with address \"%s\"",
+                     uri ? uri : "<none>",
+                     address ? address : "<none>");
+    }
+#endif
+
+  g_signal_emit (self, signals [STOPPED], 0, reason, breakpoint);
 }
 
 void
@@ -208,4 +369,51 @@ ide_debugger_emit_log (IdeDebugger *self,
 
   if (message != NULL)
     g_signal_emit (self, signals [LOG], 0, message);
+}
+
+void
+ide_debugger_load_source_async (IdeDebugger         *self,
+                                IdeBreakpoint       *breakpoint,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_DEBUGGER (self));
+  g_return_if_fail (IDE_IS_BREAKPOINT (breakpoint));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_DEBUGGER_GET_IFACE (self)->load_source_async (self, breakpoint, cancellable, callback, user_data);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_debugger_load_source_finish:
+ * @self: a #IdeDebugger
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to ide_debugger_load_source_async().
+ *
+ * Returns: (nullable) (transfer full): A #GtkSourceBuffer or %NULL
+ */
+GtkSourceBuffer *
+ide_debugger_load_source_finish (IdeDebugger   *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
+{
+  GtkSourceBuffer *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_DEBUGGER (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  ret = IDE_DEBUGGER_GET_IFACE (self)->load_source_finish (self, result, error);
+
+  g_return_val_if_fail (!ret || GTK_SOURCE_IS_BUFFER (ret), NULL);
+
+  IDE_RETURN (ret);
 }

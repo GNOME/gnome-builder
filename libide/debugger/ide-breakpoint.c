@@ -23,17 +23,23 @@
 typedef struct
 {
   gchar *id;
+  gchar *address;
   GFile *file;
   guint  line;
+  guint  line_offset;
   guint  enabled : 1;
+  guint  transient : 1;
 } IdeBreakpointPrivate;
 
 enum {
   PROP_0,
+  PROP_ADDRESS,
   PROP_ENABLED,
   PROP_FILE,
   PROP_ID,
   PROP_LINE,
+  PROP_LINE_OFFSET,
+  PROP_TRANSIENT,
   N_PROPS
 };
 
@@ -47,6 +53,7 @@ ide_breakpoint_finalize (GObject *object)
   IdeBreakpoint *self = (IdeBreakpoint *)object;
   IdeBreakpointPrivate *priv = ide_breakpoint_get_instance_private (self);
 
+  g_clear_pointer (&priv->address, g_free);
   g_clear_object (&priv->file);
   g_clear_pointer (&priv->id, g_free);
 
@@ -63,6 +70,10 @@ ide_breakpoint_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ADDRESS:
+      g_value_set_string (value, ide_breakpoint_get_address (self));
+      break;
+
     case PROP_ENABLED:
       g_value_set_boolean (value, ide_breakpoint_get_enabled (self));
       break;
@@ -77,6 +88,14 @@ ide_breakpoint_get_property (GObject    *object,
 
     case PROP_LINE:
       g_value_set_uint (value, ide_breakpoint_get_line (self));
+      break;
+
+    case PROP_LINE_OFFSET:
+      g_value_set_uint (value, ide_breakpoint_get_line_offset (self));
+      break;
+
+    case PROP_TRANSIENT:
+      g_value_set_boolean (value, ide_breakpoint_get_transient (self));
       break;
 
     default:
@@ -94,6 +113,10 @@ ide_breakpoint_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ADDRESS:
+      ide_breakpoint_set_address (self, g_value_get_string (value));
+      break;
+
     case PROP_ENABLED:
       ide_breakpoint_set_enabled (self, g_value_get_boolean (value));
       break;
@@ -110,6 +133,14 @@ ide_breakpoint_set_property (GObject      *object,
       ide_breakpoint_set_line (self, g_value_get_uint (value));
       break;
 
+    case PROP_LINE_OFFSET:
+      ide_breakpoint_set_line_offset (self, g_value_get_uint (value));
+      break;
+
+    case PROP_TRANSIENT:
+      ide_breakpoint_set_transient (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -123,6 +154,28 @@ ide_breakpoint_class_init (IdeBreakpointClass *klass)
   object_class->finalize = ide_breakpoint_finalize;
   object_class->get_property = ide_breakpoint_get_property;
   object_class->set_property = ide_breakpoint_set_property;
+
+  /**
+   * IdeBreakpoint:address:
+   *
+   * The "address" property is used to denote the position of the program
+   * counter for this breakpoint. Typically, this is only need if the debugger
+   * cannot represent the breakpoint with the #IdeBreakpoint:file and
+   * #IdeBreakpoint:line properties.
+   *
+   * The #IdeDebugger might use this address to disassemble as necessary from
+   * ide_debugger_load_source_async() to retrieve the source.
+   *
+   * The address is a string, so that architectures different from the current
+   * system may be addressed, as those may be outside of the addressable range
+   * on the debugging host.
+   */
+  properties [PROP_ADDRESS] =
+    g_param_spec_string ("address",
+                         "Address",
+                         "Address of the program counter if no source is available",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -145,12 +198,28 @@ ide_breakpoint_class_init (IdeBreakpointClass *klass)
                        0,
                        G_MAXUINT,
                        0,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_LINE_OFFSET] =
+    g_param_spec_uint ("line-offset",
+                       "Line Offset",
+                       "The line offset, starting from 0",
+                       0,
+                       G_MAXUINT,
+                       0,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ENABLED] =
     g_param_spec_boolean ("enabled",
                           "Enabled",
                           "If the breakpoint is enabled",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TRANSIENT] =
+    g_param_spec_boolean ("transient",
+                          "Transient",
+                          "If the breakpoint is transient, and will go away upon continuing debugging",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -266,5 +335,83 @@ ide_breakpoint_set_enabled (IdeBreakpoint *self,
     {
       priv->enabled = enabled;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLED]);
+    }
+}
+
+gboolean
+ide_breakpoint_get_transient (IdeBreakpoint *self)
+{
+  IdeBreakpointPrivate *priv = ide_breakpoint_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BREAKPOINT (self), FALSE);
+
+  return priv->transient;
+}
+
+void
+ide_breakpoint_set_transient (IdeBreakpoint *self,
+                              gboolean       transient)
+{
+  IdeBreakpointPrivate *priv = ide_breakpoint_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BREAKPOINT (self));
+
+  transient = !!transient;
+
+  if (priv->transient != transient)
+    {
+      priv->transient = transient;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRANSIENT]);
+    }
+}
+
+guint
+ide_breakpoint_get_line_offset (IdeBreakpoint *self)
+{
+  IdeBreakpointPrivate *priv = ide_breakpoint_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BREAKPOINT (self), 0);
+
+  return priv->line_offset;
+}
+
+void
+ide_breakpoint_set_line_offset (IdeBreakpoint *self,
+                                guint          line_offset)
+{
+  IdeBreakpointPrivate *priv = ide_breakpoint_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BREAKPOINT (self));
+
+  if (priv->line_offset != line_offset)
+    {
+      priv->line_offset = line_offset;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LINE_OFFSET]);
+    }
+}
+
+const gchar *
+ide_breakpoint_get_address (IdeBreakpoint *self)
+{
+  IdeBreakpointPrivate *priv = ide_breakpoint_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BREAKPOINT (self), NULL);
+
+  return priv->address;
+}
+
+void
+ide_breakpoint_set_address (IdeBreakpoint *self,
+                            const gchar   *address)
+{
+  IdeBreakpointPrivate *priv = ide_breakpoint_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BREAKPOINT (self));
+
+  if (g_strcmp0 (priv->address, address) != 0)
+    {
+      g_free (priv->address);
+      priv->address = g_strdup (address);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ADDRESS]);
     }
 }

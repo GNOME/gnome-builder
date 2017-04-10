@@ -21,9 +21,14 @@
 #include <egg-signal-group.h>
 #include <glib/gi18n.h>
 
+#include "ide-debug.h"
+
 #include "debugger/ide-debugger.h"
 #include "debugger/ide-debugger-perspective.h"
+#include "debugger/ide-debugger-view.h"
 #include "util/ide-pango.h"
+#include "workbench/ide-layout-grid.h"
+#include "workbench/ide-perspective.h"
 
 struct _IdeDebuggerPerspective
 {
@@ -36,6 +41,7 @@ struct _IdeDebuggerPerspective
 
   GtkTextBuffer  *log_buffer;
   GtkTextView    *log_text_view;
+  IdeLayoutGrid  *layout_grid;
 };
 
 enum {
@@ -98,10 +104,12 @@ on_debugger_log (IdeDebuggerPerspective *self,
   gtk_text_view_scroll_to_iter (self->log_text_view, &iter, 0.0, FALSE, 1.0, 1.0);
 }
 
-static void
+void
 ide_debugger_perspective_set_debugger (IdeDebuggerPerspective *self,
                                        IdeDebugger            *debugger)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_DEBUGGER_PERSPECTIVE (self));
   g_return_if_fail (!debugger || IDE_IS_DEBUGGER (debugger));
 
@@ -111,6 +119,8 @@ ide_debugger_perspective_set_debugger (IdeDebuggerPerspective *self,
       gtk_text_buffer_set_text (self->log_buffer, "", 0);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -144,6 +154,24 @@ log_panel_changed_font_name (IdeDebuggerPerspective *self,
     }
 
   g_free (font_name);
+}
+
+static void
+on_debugger_breakpoint_reached (IdeDebuggerPerspective *self,
+                                IdeDebuggerStopReason   reason,
+                                IdeBreakpoint          *breakpoint,
+                                IdeDebugger            *debugger)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER_PERSPECTIVE (self));
+  g_assert (!breakpoint || IDE_IS_BREAKPOINT (breakpoint));
+  g_assert (IDE_IS_DEBUGGER (debugger));
+
+  if (breakpoint != NULL)
+    ide_debugger_perspective_navigate_to_breakpoint (self, breakpoint);
+
+  IDE_EXIT;
 }
 
 static void
@@ -217,7 +245,7 @@ ide_debugger_perspective_class_init (IdeDebuggerPerspectiveClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-perspective.ui");
-
+  gtk_widget_class_bind_template_child (widget_class, IdeDebuggerPerspective, layout_grid);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerPerspective, log_text_view);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerPerspective, log_buffer);
 }
@@ -237,6 +265,12 @@ ide_debugger_perspective_init (IdeDebuggerPerspective *self)
                                    self,
                                    G_CONNECT_SWAPPED);
 
+  egg_signal_group_connect_object (self->debugger_signals,
+                                   "breakpoint-reached",
+                                   G_CALLBACK (on_debugger_breakpoint_reached),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
   self->log_css = gtk_css_provider_new ();
   context = gtk_widget_get_style_context (GTK_WIDGET (self->log_text_view));
   gtk_style_context_add_provider (context,
@@ -250,4 +284,76 @@ ide_debugger_perspective_init (IdeDebuggerPerspective *self)
                            self,
                            G_CONNECT_SWAPPED);
   log_panel_changed_font_name (self, "font-name", self->terminal_settings);
+}
+
+static void
+ide_debugger_perspective_load_source_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeDebugger *debugger = (IdeDebugger *)object;
+  g_autoptr(IdeDebuggerPerspective) self = user_data;
+  g_autoptr(GtkSourceBuffer) buffer = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeLayoutView *view;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER (debugger));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_DEBUGGER_PERSPECTIVE (self));
+
+  buffer = ide_debugger_load_source_finish (debugger, result, &error);
+
+  if (buffer == NULL)
+    {
+      g_warning ("%s", error->message);
+      IDE_GOTO (failure);
+    }
+
+  view = g_object_new (IDE_TYPE_DEBUGGER_VIEW,
+                       "buffer", buffer,
+                       "visible", TRUE,
+                       NULL);
+
+  gtk_container_add (GTK_CONTAINER (self->layout_grid), GTK_WIDGET (view));
+
+failure:
+  IDE_EXIT;
+}
+
+void
+ide_debugger_perspective_navigate_to_breakpoint (IdeDebuggerPerspective *self,
+                                                 IdeBreakpoint          *breakpoint)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_DEBUGGER_PERSPECTIVE (self));
+  g_return_if_fail (IDE_IS_BREAKPOINT (breakpoint));
+  g_return_if_fail (IDE_IS_DEBUGGER (self->debugger));
+
+  /*
+   * To display the source for the breakpoint, first we need to discover what
+   * file contains the source. If there is no file, then we need to ask the
+   * IdeDebugger to retrieve the disassembly for us so that we can show
+   * something "useful" to the developer.
+   *
+   * If we also fail to get the disassembly for the current breakpoint, we
+   * need to load some dummy text into a buffer to denote to the developer
+   * that technically they can click forward, but the behavior is rather
+   * undefined.
+   *
+   * If the file on disk is out of date (due to changes behind the scenes) we
+   * will likely catch that with a CRC check. We will show the file, but the
+   * user will have an infobar displayed that denotes that the file is not
+   * longer in sync with the debugged executable.
+   */
+
+  ide_debugger_load_source_async (self->debugger,
+                                  breakpoint,
+                                  NULL,
+                                  ide_debugger_perspective_load_source_cb,
+                                  g_object_ref (self));
+
+  IDE_EXIT;
 }

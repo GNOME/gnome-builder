@@ -53,6 +53,7 @@
   <gresource prefix="/org/gnome/builder/ui">
     <file compressed="true" alias="ide-debugger-controls.ui">../debugger/ide-debugger-controls.ui</file>
     <file compressed="true" alias="ide-debugger-perspective.ui">../debugger/ide-debugger-perspective.ui</file>
+    <file compressed="true" alias="ide-debugger-view.ui">../debugger/ide-debugger-view.ui</file>
     <file compressed="true" alias="ide-editor-frame.ui">../editor/ide-editor-frame.ui</file>
     <file compressed="true" alias="ide-editor-layout-stack-controls.ui">../editor/ide-editor-layout-stack-controls.ui</file>
     <file compressed="true" alias="ide-editor-perspective.ui">../editor/ide-editor-perspective.ui</file>

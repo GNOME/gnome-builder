@@ -23,6 +23,8 @@
 #include <egg-signal-group.h>
 #include <gtksourceview/gtksource.h>
 
+#include "ide-debug.h"
+
 #include "debugger/ide-breakpoint.h"
 #include "debugger/ide-debug-manager.h"
 #include "debugger/ide-debugger-controls.h"
@@ -112,36 +114,6 @@ controls_notify_child_revealed (IdeDebuggerWorkbenchAddin *self,
 }
 
 static void
-debug_manager_breakpoint_reached (IdeDebuggerWorkbenchAddin *self,
-                                  IdeBreakpoint             *breakpoint,
-                                  IdeDebugger               *debugger)
-{
-  g_autoptr(IdeUri) uri = NULL;
-  GFile *file;
-  guint line;
-
-  g_assert (IDE_IS_DEBUGGER_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_BREAKPOINT (breakpoint));
-  g_assert (IDE_IS_DEBUGGER (debugger));
-
-  if (NULL == (file = ide_breakpoint_get_file (breakpoint)) ||
-      NULL == (uri = ide_uri_new_from_file (file)))
-    return;
-
-  if (0 != (line = ide_breakpoint_get_line (breakpoint)))
-    {
-      g_autofree gchar *fragment = g_strdup_printf ("L%u", line);
-      ide_uri_set_fragment (uri, fragment);
-    }
-
-  ide_workbench_addin_open_async (IDE_WORKBENCH_ADDIN (self),
-                                  uri,
-                                  NULL,
-                                  IDE_WORKBENCH_OPEN_FLAGS_NONE,
-                                  NULL, NULL, NULL);
-}
-
-static void
 ide_debugger_workbench_addin_load (IdeWorkbenchAddin *addin,
                                    IdeWorkbench      *workbench)
 {
@@ -171,12 +143,6 @@ ide_debugger_workbench_addin_load (IdeWorkbenchAddin *addin,
   egg_signal_group_connect_object (self->debug_manager_signals,
                                    "notify::active",
                                    G_CALLBACK (debug_manager_notify_active),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  egg_signal_group_connect_object (self->debug_manager_signals,
-                                   "breakpoint-reached",
-                                   G_CALLBACK (debug_manager_breakpoint_reached),
                                    self,
                                    G_CONNECT_SWAPPED);
 
@@ -256,69 +222,10 @@ ide_debugger_workbench_addin_unload (IdeWorkbenchAddin *addin,
 }
 
 static void
-ide_debugger_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
-                                         IdeUri                *uri,
-                                         const gchar           *content_type,
-                                         IdeWorkbenchOpenFlags  flags,
-                                         GCancellable          *cancellable,
-                                         GAsyncReadyCallback    callback,
-                                         gpointer               user_data)
-{
-  IdeDebuggerWorkbenchAddin *self = (IdeDebuggerWorkbenchAddin *)addin;
-  g_autoptr(GtkSourceFileLoader) loader = NULL;
-  g_autoptr(GtkSourceBuffer) buffer = NULL;
-  g_autoptr(GtkSourceFile) sfile = NULL;
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(GFile) file = NULL;
-  GtkSourceView *view;
-
-  g_assert (IDE_IS_DEBUGGER_WORKBENCH_ADDIN (self));
-  g_assert (uri != NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_debugger_workbench_addin_open_async);
-
-  file = ide_uri_to_file (uri);
-
-  buffer = gtk_source_buffer_new (NULL);
-  view = g_object_new (GTK_SOURCE_TYPE_VIEW,
-                       "buffer", buffer,
-                       "visible", TRUE,
-                       NULL);
-
-  sfile = gtk_source_file_new ();
-  gtk_source_file_set_location (sfile, file);
-
-  loader = gtk_source_file_loader_new (buffer, sfile);
-  gtk_source_file_loader_load_async (loader,
-                                     G_PRIORITY_LOW,
-                                     cancellable,
-                                     NULL,
-                                     NULL,
-                                     NULL,
-                                     NULL,
-                                     NULL);
-}
-
-static gboolean
-ide_debugger_workbench_addin_open_finish (IdeWorkbenchAddin  *addin,
-                                          GAsyncResult       *result,
-                                          GError            **error)
-{
-  g_assert (IDE_IS_DEBUGGER_WORKBENCH_ADDIN (addin));
-  g_assert (G_IS_TASK (result));
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = ide_debugger_workbench_addin_load;
   iface->unload = ide_debugger_workbench_addin_unload;
-  iface->open_async = ide_debugger_workbench_addin_open_async;
-  iface->open_finish = ide_debugger_workbench_addin_open_finish;
 }
 
 G_DEFINE_TYPE_WITH_CODE (IdeDebuggerWorkbenchAddin, ide_debugger_workbench_addin, G_TYPE_OBJECT,

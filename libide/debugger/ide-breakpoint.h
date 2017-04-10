@@ -43,19 +43,28 @@ struct _IdeBreakpointClass
   gpointer _reserved8;
 };
 
-IdeBreakpoint *ide_breakpoint_new         (void);
-const gchar   *ide_breakpoint_get_id      (IdeBreakpoint *self);
-void           ide_breakpoint_set_id      (IdeBreakpoint *self,
-                                           const gchar   *id);
-GFile         *ide_breakpoint_get_file    (IdeBreakpoint *self);
-void           ide_breakpoint_set_file    (IdeBreakpoint *self,
-                                           GFile         *file);
-guint          ide_breakpoint_get_line    (IdeBreakpoint *self);
-void           ide_breakpoint_set_line    (IdeBreakpoint *self,
-                                           guint          line);
-gboolean       ide_breakpoint_get_enabled (IdeBreakpoint *self);
-void           ide_breakpoint_set_enabled (IdeBreakpoint *self,
-                                           gboolean       enabled);
+IdeBreakpoint *ide_breakpoint_new             (void);
+const gchar   *ide_breakpoint_get_id          (IdeBreakpoint *self);
+void           ide_breakpoint_set_id          (IdeBreakpoint *self,
+                                               const gchar   *id);
+const gchar   *ide_breakpoint_get_address     (IdeBreakpoint *self);
+void           ide_breakpoint_set_address     (IdeBreakpoint *self,
+                                               const gchar   *address);
+GFile         *ide_breakpoint_get_file        (IdeBreakpoint *self);
+void           ide_breakpoint_set_file        (IdeBreakpoint *self,
+                                               GFile         *file);
+guint          ide_breakpoint_get_line        (IdeBreakpoint *self);
+void           ide_breakpoint_set_line        (IdeBreakpoint *self,
+                                               guint          line);
+guint          ide_breakpoint_get_line_offset (IdeBreakpoint *self);
+void           ide_breakpoint_set_line_offset (IdeBreakpoint *self,
+                                               guint          line);
+gboolean       ide_breakpoint_get_enabled     (IdeBreakpoint *self);
+void           ide_breakpoint_set_enabled     (IdeBreakpoint *self,
+                                               gboolean       enabled);
+gboolean       ide_breakpoint_get_transient   (IdeBreakpoint *self);
+void           ide_breakpoint_set_transient   (IdeBreakpoint *self,
+                                               gboolean       transient);
 
 G_END_DECLS
 

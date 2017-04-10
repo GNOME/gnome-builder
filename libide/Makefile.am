@@ -57,6 +57,7 @@ libide_1_0_la_public_headers =                                              \
 	debugger/ide-debugger-perspective.h                                 \
 	debugger/ide-debugger-workbench-addin.h                             \
 	debugger/ide-debugger-gutter-renderer.h                             \
+	debugger/ide-debugger-view.h                                        \
 	devices/ide-device-manager.h                                        \
 	devices/ide-device-provider.h                                       \
 	devices/ide-device.h                                                \
@@ -246,6 +247,7 @@ libide_1_0_la_public_sources =                                              \
 	debugger/ide-debugger-perspective.c                                 \
 	debugger/ide-debugger-workbench-addin.c                             \
 	debugger/ide-debugger-gutter-renderer.c                             \
+	debugger/ide-debugger-view.c                                        \
 	devices/ide-device-manager.c                                        \
 	devices/ide-device-provider.c                                       \
 	devices/ide-device.c                                                \

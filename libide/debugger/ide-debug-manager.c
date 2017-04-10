@@ -192,12 +192,13 @@ ide_debug_manager_action_continue (GSimpleAction *action,
 static void
 ide_debug_manager_debugger_stopped (IdeDebugManager       *self,
                                     IdeDebuggerStopReason  reason,
-                                    IdeSourceLocation     *location,
+                                    IdeBreakpoint         *breakpoint,
                                     IdeDebugger           *debugger)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (!breakpoint || IDE_IS_BREAKPOINT (breakpoint));
   g_assert (IDE_IS_DEBUGGER (debugger));
 
   switch (reason)
@@ -209,12 +210,19 @@ ide_debug_manager_debugger_stopped (IdeDebugManager       *self,
         ide_runner_force_quit (self->runner);
       break;
 
-    case IDE_DEBUGGER_STOP_UNDEFINED:
     case IDE_DEBUGGER_STOP_BREAKPOINT:
     case IDE_DEBUGGER_STOP_WATCHPOINT:
+    case IDE_DEBUGGER_STOP_UNDEFINED:
     case IDE_DEBUGGER_STOP_SIGNALED:
-    default:
+      if (breakpoint != NULL)
+        {
+          IDE_TRACE_MSG ("Emitting breakpoint-reached");
+          g_signal_emit (self, signals [BREAKPOINT_REACHED], 0, breakpoint);
+        }
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   IDE_EXIT;

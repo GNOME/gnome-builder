@@ -19,6 +19,8 @@
 #ifndef IDE_DEBUGGER_H
 #define IDE_DEBUGGER_H
 
+#include <gtksourceview/gtksource.h>
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -48,34 +50,50 @@ struct _IdeDebuggerInterface
 {
   GTypeInterface parent_iface;
 
-  gchar    *(*get_name)        (IdeDebugger            *self);
-  gboolean  (*supports_runner) (IdeDebugger            *self,
-                                IdeRunner              *runner,
-                                gint                   *priority);
-  void      (*stopped)         (IdeDebugger            *self,
-                                IdeDebuggerStopReason   reason,
-                                IdeSourceLocation      *location);
-  void      (*prepare)         (IdeDebugger            *debugger,
-                                IdeRunner              *runner);
-  void      (*run)             (IdeDebugger            *self,
-                                IdeDebuggerRunType      run_type);
-  void      (*log)             (IdeDebugger            *self,
-                                const gchar            *message);
+  gchar           *(*get_name)           (IdeDebugger            *self);
+  gboolean         (*supports_runner)    (IdeDebugger            *self,
+                                          IdeRunner              *runner,
+                                          gint                   *priority);
+  void             (*stopped)            (IdeDebugger            *self,
+                                          IdeDebuggerStopReason   reason,
+                                          IdeBreakpoint          *breakpoint);
+  void             (*prepare)            (IdeDebugger            *debugger,
+                                          IdeRunner              *runner);
+  void             (*run)                (IdeDebugger            *self,
+                                          IdeDebuggerRunType      run_type);
+  void             (*log)                (IdeDebugger            *self,
+                                          const gchar            *message);
+  void             (*load_source_async)  (IdeDebugger            *self,
+                                          IdeBreakpoint          *breakpoint,
+                                          GCancellable           *cancellable,
+                                          GAsyncReadyCallback     callback,
+                                          gpointer                user_data);
+  GtkSourceBuffer *(*load_source_finish) (IdeDebugger            *self,
+                                          GAsyncResult           *result,
+                                          GError                **error);
 };
 
-gchar    *ide_debugger_get_name        (IdeDebugger           *self);
-gboolean  ide_debugger_supports_runner (IdeDebugger           *self,
-                                        IdeRunner             *runner,
-                                        gint                  *priority);
-void      ide_debugger_prepare         (IdeDebugger           *self,
-                                        IdeRunner             *runner);
-void      ide_debugger_run             (IdeDebugger           *self,
-                                        IdeDebuggerRunType     run_type);
-void      ide_debugger_emit_log        (IdeDebugger           *self,
-                                        const gchar           *message);
-void      ide_debugger_emit_stopped    (IdeDebugger           *self,
-                                        IdeDebuggerStopReason  reason,
-                                        IdeSourceLocation     *location);
+gchar           *ide_debugger_get_name           (IdeDebugger            *self);
+gboolean         ide_debugger_supports_runner    (IdeDebugger            *self,
+                                                  IdeRunner              *runner,
+                                                  gint                   *priority);
+void             ide_debugger_prepare            (IdeDebugger            *self,
+                                                  IdeRunner              *runner);
+void             ide_debugger_run                (IdeDebugger            *self,
+                                                  IdeDebuggerRunType      run_type);
+void             ide_debugger_emit_log           (IdeDebugger            *self,
+                                                  const gchar            *message);
+void             ide_debugger_emit_stopped       (IdeDebugger            *self,
+                                                  IdeDebuggerStopReason   reason,
+                                                  IdeBreakpoint          *breakpoint);
+void             ide_debugger_load_source_async  (IdeDebugger            *self,
+                                                  IdeBreakpoint          *breakpoint,
+                                                  GCancellable           *cancellable,
+                                                  GAsyncReadyCallback     callback,
+                                                  gpointer                user_data);
+GtkSourceBuffer *ide_debugger_load_source_finish (IdeDebugger            *self,
+                                                  GAsyncResult           *result,
+                                                  GError                **error);
 
 G_END_DECLS
 

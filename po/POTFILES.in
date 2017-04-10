@@ -54,6 +54,7 @@ libide/buildui/ide-build-panel.ui
 libide/buildui/ide-build-perspective.c
 libide/buildui/ide-build-tool.c
 libide/buildui/ide-environment-editor.c
+libide/debugger/ide-debugger.c
 libide/devices/ide-device-manager.c
 libide/directory/ide-directory-vcs.c
 libide/editorconfig/ide-editorconfig-file-settings.c
