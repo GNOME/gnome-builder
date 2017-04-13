@@ -109,8 +109,16 @@ egg_signal_group_set_target_type (EggSignalGroup *self,
   /* The class must be created at least once for the signals
    * to be registered, otherwise g_signal_parse_name() will fail
    */
-  if (g_type_class_peek (target_type) == NULL)
-    g_type_class_unref (g_type_class_ref (target_type));
+  if (G_TYPE_IS_INTERFACE (target_type))
+    {
+      if (g_type_default_interface_peek (target_type) == NULL)
+        g_type_default_interface_unref (g_type_default_interface_ref (target_type));
+    }
+  else
+    {
+      if (g_type_class_peek (target_type) == NULL)
+        g_type_class_unref (g_type_class_ref (target_type));
+    }
 }
 
 static void

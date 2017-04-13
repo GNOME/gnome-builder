@@ -54,6 +54,7 @@ libide/buildui/ide-build-panel.ui
 libide/buildui/ide-build-perspective.c
 libide/buildui/ide-build-tool.c
 libide/buildui/ide-environment-editor.c
+libide/debugger/ide-debugger.c
 libide/devices/ide-device-manager.c
 libide/directory/ide-directory-vcs.c
 libide/editorconfig/ide-editorconfig-file-settings.c
@@ -177,6 +178,7 @@ plugins/project-tree/gb-rename-file-popover.ui
 plugins/project-tree/gtk/menus.ui
 plugins/python-pack/ide-python-format-provider.c
 plugins/quick-highlight/gbp-quick-highlight-preferences.c
+plugins/retab/gtk/menus.ui
 plugins/rustup/rustup_plugin/__init__.py
 plugins/support/gtk/menus.ui
 plugins/support/ide-support-application-addin.c

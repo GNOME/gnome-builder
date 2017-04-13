@@ -139,7 +139,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
       panel = g_object_new (PNL_TYPE_DOCK_WIDGET,
                             "child", self->run_terminal,
                             "expand", TRUE,
-                            "title", _("Run Output"),
+                            "title", _("Application Output"),
                             "visible", TRUE,
                             NULL);
       ide_set_weak_pointer (&self->run_panel, panel);

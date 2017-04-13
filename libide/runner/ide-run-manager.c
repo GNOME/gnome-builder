@@ -38,7 +38,6 @@ struct _IdeRunManager
   IdeObject                parent_instance;
 
   GCancellable            *cancellable;
-  GSimpleActionGroup      *actions;
   IdeBuildTarget          *build_target;
 
   const IdeRunHandlerInfo *handler;
@@ -47,7 +46,8 @@ struct _IdeRunManager
   guint                    busy : 1;
 };
 
-static void action_group_iface_init (GActionGroupInterface *iface);
+static void action_group_iface_init     (GActionGroupInterface *iface);
+static void ide_run_manager_notify_busy (IdeRunManager         *self);
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
@@ -68,6 +68,21 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+ide_run_manager_real_run (IdeRunManager *self,
+                          IdeRunner     *runner)
+{
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_RUNNER (runner));
+
+  /*
+   * If the current handler has a callback specified (our default "run" handler
+   * does not), then we need to allow that handler to prepare the runner.
+   */
+  if (self->handler != NULL && self->handler->handler != NULL)
+    self->handler->handler (self, runner, self->handler->handler_data);
+}
 
 static void
 ide_run_handler_info_free (gpointer data)
@@ -91,7 +106,6 @@ ide_run_manager_finalize (GObject *object)
   IdeRunManager *self = (IdeRunManager *)object;
 
   g_clear_object (&self->cancellable);
-  g_clear_object (&self->actions);
   g_clear_object (&self->build_target);
 
   g_list_free_full (self->handlers, ide_run_handler_info_free);
@@ -186,18 +200,24 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
    * This signal is emitted right before ide_runner_run_async() is called
    * on an #IdeRunner. It can be used by plugins to tweak things right
    * before the runner is executed.
+   *
+   * The current run handler (debugger, profiler, etc) is run as the default
+   * handler for this function. So connect with %G_SIGNAL_AFTER if you want
+   * to be nofied after the run handler has executed. It's unwise to change
+   * things that the run handler might expect. Generally if you want to
+   * change settings, do that before the run handler has exected.
    */
   signals [RUN] =
-    g_signal_new ("run",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  1,
-                  IDE_TYPE_RUNNER);
+    g_signal_new_class_handler ("run",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_run_manager_real_run),
+                                NULL,
+                                NULL,
+                                NULL,
+                                G_TYPE_NONE,
+                                1,
+                                IDE_TYPE_RUNNER);
 
   /**
    * IdeRunManager::stopped:
@@ -265,8 +285,8 @@ ide_run_manager_run_cb (GObject      *object,
 {
   IdeRunner *runner = (IdeRunner *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeRunManager *self;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -274,18 +294,18 @@ ide_run_manager_run_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  self->busy = FALSE;
 
   if (!ide_runner_run_finish (runner, result, &error))
-    {
-      g_task_return_error (task, error);
-      IDE_GOTO (failure);
-    }
-
-  g_task_return_boolean (task, TRUE);
-
-failure:
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 
   g_signal_emit (self, signals [STOPPED], 0);
+
+  ide_run_manager_notify_busy (self);
 
   IDE_EXIT;
 }
@@ -301,6 +321,8 @@ do_run_async (IdeRunManager *self,
   IdeRuntime *runtime;
   g_autoptr(IdeRunner) runner = NULL;
   GCancellable *cancellable;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (G_IS_TASK (task));
@@ -332,19 +354,26 @@ do_run_async (IdeRunManager *self,
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /*
-   * If the current handler has a callback specified (our default "run" handler
-   * does not), then we need to allow that handler to prepare the runner.
-   */
-  if (self->handler != NULL && self->handler->handler != NULL)
-    self->handler->handler (self, runner, self->handler->handler_data);
-
   g_signal_emit (self, signals [RUN], 0, runner);
+
+  if (ide_runner_get_failed (runner))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to execute the application");
+      IDE_EXIT;
+    }
+
+  self->busy = TRUE;
+  ide_run_manager_notify_busy (self);
 
   ide_runner_run_async (runner,
                         cancellable,
                         ide_run_manager_run_cb,
                         g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -355,7 +384,9 @@ ide_run_manager_run_discover_cb (GObject      *object,
   IdeRunManager *self = (IdeRunManager *)object;
   g_autoptr(IdeBuildTarget) build_target = NULL;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -364,8 +395,8 @@ ide_run_manager_run_discover_cb (GObject      *object,
 
   if (build_target == NULL)
     {
-      g_task_return_error (task, error);
-      return;
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   ide_run_manager_set_build_target (self, build_target);
@@ -373,6 +404,8 @@ ide_run_manager_run_discover_cb (GObject      *object,
   g_task_set_task_data (task, g_steal_pointer (&build_target), g_object_unref);
 
   do_run_async (self, task);
+
+  IDE_EXIT;
 }
 
 static void
@@ -417,7 +450,9 @@ ide_run_manager_install_cb (GObject      *object,
 
   g_task_set_task_data (task, g_object_ref (build_target), g_object_unref);
 
-  do_run_async (self, g_steal_pointer (&task));
+  do_run_async (self, task);
+
+  IDE_EXIT;
 }
 
 static void
@@ -456,6 +491,8 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
   IdeBuildManager *build_manager;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (G_IS_TASK (task));
 
@@ -482,6 +519,8 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                                    g_object_ref (task));
 
   ide_run_manager_notify_busy (self);
+
+  IDE_EXIT;
 }
 
 void
@@ -493,7 +532,7 @@ ide_run_manager_run_async (IdeRunManager       *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GCancellable) local_cancellable = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -511,7 +550,7 @@ ide_run_manager_run_async (IdeRunManager       *self,
 
   if (ide_run_manager_check_busy (self, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -726,8 +765,8 @@ ide_run_manager_discover_default_target_cb (GObject      *object,
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(GError) error = NULL;
   IdeBuildTarget *best_match;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -738,7 +777,7 @@ ide_run_manager_discover_default_target_cb (GObject      *object,
 
   if (targets == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 

@@ -42,6 +42,8 @@ typedef struct
 
   GArray *fd_mapping;
 
+  IdeSubprocess *subprocess;
+
   GQueue argv;
 
   GSubprocessFlags flags;
@@ -49,6 +51,7 @@ typedef struct
   int tty_fd;
 
   guint clear_env : 1;
+  guint failed : 1;
   guint run_on_host : 1;
 } IdeRunnerPrivate;
 
@@ -69,6 +72,7 @@ enum {
   PROP_ARGV,
   PROP_CLEAR_ENV,
   PROP_ENV,
+  PROP_FAILED,
   PROP_RUN_ON_HOST,
   N_PROPS
 };
@@ -123,6 +127,7 @@ ide_runner_run_wait_cb (GObject      *object,
                         gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  IdeRunnerPrivate *priv;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
   IdeRunner *self;
@@ -134,8 +139,11 @@ ide_runner_run_wait_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  priv = ide_runner_get_instance_private (self);
 
   g_assert (IDE_IS_RUNNER (self));
+
+  g_clear_object (&priv->subprocess);
 
   g_signal_emit (self, signals [EXITED], 0);
 
@@ -293,8 +301,9 @@ ide_runner_real_run_async (IdeRunner           *self,
       IDE_GOTO (failure);
     }
 
-  identifier = ide_subprocess_get_identifier (subprocess);
+  priv->subprocess = g_object_ref (subprocess);
 
+  identifier = ide_subprocess_get_identifier (subprocess);
   g_signal_emit (self, signals [SPAWNED], 0, identifier);
 
   ide_subprocess_wait_async (subprocess,
@@ -317,6 +326,50 @@ ide_runner_real_run_finish (IdeRunner     *self,
   g_assert (g_task_get_source_tag (G_TASK (result)) == ide_runner_real_run_async);
 
   return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static GOutputStream *
+ide_runner_real_get_stdin (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  if (priv->subprocess)
+    return g_object_ref (ide_subprocess_get_stdin_pipe (priv->subprocess));
+  return NULL;
+}
+
+static GInputStream *
+ide_runner_real_get_stdout (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  if (priv->subprocess)
+    return g_object_ref (ide_subprocess_get_stdout_pipe (priv->subprocess));
+  return NULL;
+}
+
+static GInputStream *
+ide_runner_real_get_stderr (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  if (priv->subprocess)
+    return g_object_ref (ide_subprocess_get_stderr_pipe (priv->subprocess));
+  return NULL;
+}
+
+gint
+ide_runner_steal_tty (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+  gint fd;
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), -1);
+
+  fd = priv->tty_fd;
+  priv->tty_fd = -1;
+
+  return fd;
 }
 
 static void
@@ -343,6 +396,21 @@ ide_runner_real_set_tty (IdeRunner *self,
             g_warning ("Failed to dup() tty_fd: %s", g_strerror (errno));
         }
     }
+}
+
+static void
+ide_runner_real_force_quit (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNNER (self));
+
+  if (priv->subprocess != NULL)
+    ide_subprocess_force_exit (priv->subprocess);
+
+  IDE_EXIT;
 }
 
 static void
@@ -415,6 +483,7 @@ ide_runner_finalize (GObject *object)
   g_queue_foreach (&priv->argv, (GFunc)g_free, NULL);
   g_queue_clear (&priv->argv);
   g_clear_object (&priv->env);
+  g_clear_object (&priv->subprocess);
 
   if (priv->fd_mapping != NULL)
     {
@@ -463,6 +532,10 @@ ide_runner_get_property (GObject    *object,
       g_value_set_object (value, ide_runner_get_environment (self));
       break;
 
+    case PROP_FAILED:
+      g_value_set_boolean (value, ide_runner_get_failed (self));
+      break;
+
     case PROP_RUN_ON_HOST:
       g_value_set_boolean (value, ide_runner_get_run_on_host (self));
       break;
@@ -490,6 +563,10 @@ ide_runner_set_property (GObject      *object,
       ide_runner_set_clear_env (self, g_value_get_boolean (value));
       break;
 
+    case PROP_FAILED:
+      ide_runner_set_failed (self, g_value_get_boolean (value));
+      break;
+
     case PROP_RUN_ON_HOST:
       ide_runner_set_run_on_host (self, g_value_get_boolean (value));
       break;
@@ -513,6 +590,10 @@ ide_runner_class_init (IdeRunnerClass *klass)
   klass->run_finish = ide_runner_real_run_finish;
   klass->set_tty = ide_runner_real_set_tty;
   klass->create_launcher = ide_runner_real_create_launcher;
+  klass->get_stdin = ide_runner_real_get_stdin;
+  klass->get_stdout = ide_runner_real_get_stdout;
+  klass->get_stderr = ide_runner_real_get_stderr;
+  klass->force_quit = ide_runner_real_force_quit;
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv",
@@ -535,6 +616,27 @@ ide_runner_class_init (IdeRunnerClass *klass)
                          IDE_TYPE_ENVIRONMENT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeRunner:failed:
+   *
+   * If the runner has "failed". This should be set if a plugin can determine
+   * that the runner cannot be executed due to an external issue. One such
+   * example might be a debugger plugin that cannot locate a suitable debugger
+   * to run the program.
+   */
+  properties [PROP_FAILED] =
+    g_param_spec_boolean ("failed",
+                          "Failed",
+                          "If the runner has failed",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeRunner:run-on-host:
+   *
+   * The "run-on-host" property indicates the program should be run on the
+   * host machine rather than inside the application sandbox.
+   */
   properties [PROP_RUN_ON_HOST] =
     g_param_spec_boolean ("run-on-host",
                           "Run on Host",
@@ -586,7 +688,7 @@ ide_runner_init (IdeRunner *self)
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
  */
-GInputStream *
+GOutputStream *
 ide_runner_get_stdin (IdeRunner *self)
 {
   g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
@@ -599,7 +701,7 @@ ide_runner_get_stdin (IdeRunner *self)
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
  */
-GOutputStream *
+GInputStream *
 ide_runner_get_stdout (IdeRunner *self)
 {
   g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
@@ -612,7 +714,7 @@ ide_runner_get_stdout (IdeRunner *self)
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
  */
-GOutputStream *
+GInputStream *
 ide_runner_get_stderr (IdeRunner *self)
 {
   g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
@@ -1059,10 +1161,17 @@ ide_runner_take_fd (IdeRunner *self,
    */
   if (dest_fd < 0)
     {
-      if (priv->fd_mapping->len == 0)
-        dest_fd = 3;
-      else
-        dest_fd = g_array_index (priv->fd_mapping, FdMapping, priv->fd_mapping->len - 1).dest_fd + 1;
+      gint max_fd = 2;
+
+      for (guint i = 0; i < priv->fd_mapping->len; i++)
+        {
+          FdMapping *entry = &g_array_index (priv->fd_mapping, FdMapping, i);
+
+          if (entry->dest_fd > max_fd)
+            max_fd = entry->dest_fd;
+        }
+
+      dest_fd = max_fd + 1;
     }
 
   map.source_fd = source_fd;
@@ -1102,4 +1211,62 @@ ide_runner_get_nth_fd_maping (IdeRunner *self,
   *dest_fd = map->dest_fd;
 
   return map->source_fd;
+}
+
+/**
+ * ide_runner_get_runtime:
+ * @self: An #IdeRuntime
+ *
+ * This function will get the #IdeRuntime that will be used to execute the
+ * application. Consumers may want to use this to determine if a particular
+ * program is available (such as gdb, perf, strace, etc).
+ *
+ * Returns: (nullable) (transfer full): An #IdeRuntime or %NULL.
+ */
+IdeRuntime *
+ide_runner_get_runtime (IdeRunner *self)
+{
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  IdeContext *context;
+  IdeRuntime *runtime;
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
+
+  if (IDE_RUNNER_GET_CLASS (self)->get_runtime)
+    return IDE_RUNNER_GET_CLASS (self)->get_runtime (self);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+  runtime = ide_configuration_get_runtime (config);
+
+  return runtime != NULL ? g_object_ref (runtime) : NULL;
+}
+
+gboolean
+ide_runner_get_failed (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), FALSE);
+
+  return priv->failed;
+}
+
+void
+ide_runner_set_failed (IdeRunner *self,
+                       gboolean   failed)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+
+  failed = !!failed;
+
+  if (failed != priv->failed)
+    {
+      priv->failed = failed;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FAILED]);
+    }
 }

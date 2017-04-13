@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' sodipodi:docname='nemiver-symbolic.svg' height='16' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:osb='http://www.openswatchbook.org/uri/2009/osb' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:svg='http://www.w3.org/2000/svg' version='1.1' inkscape:version='0.91 r13725' width='16' xmlns='http://www.w3.org/2000/svg'>
+  <metadata id='metadata90'>
+    <rdf:RDF>
+      <cc:Work rdf:about=''>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage'/>
+        <dc:title>Gnome Symbolic Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview inkscape:bbox-paths='true' bordercolor='#666666' borderopacity='1' inkscape:current-layer='layer9' inkscape:cx='5.1146516' inkscape:cy='-47.54864' gridtolerance='10' inkscape:guide-bbox='true' guidetolerance='10' id='namedview88' inkscape:object-nodes='false' inkscape:object-paths='false' objecttolerance='10' pagecolor='#555753' inkscape:pageopacity='1' inkscape:pageshadow='2' showborder='false' showgrid='false' showguides='true' inkscape:snap-bbox='true' inkscape:snap-bbox-midpoints='false' inkscape:snap-global='true' inkscape:snap-grids='true' inkscape:snap-nodes='true' inkscape:snap-others='false' inkscape:snap-to-guides='true' inkscape:window-height='1376' inkscape:window-maximized='1' inkscape:window-width='2560' inkscape:window-x='0' inkscape:window-y='27' inkscape:zoom='4'>
+    <inkscape:grid empspacing='2' enabled='true' id='grid4866' originx='-162' originy='-382' snapvisiblegridlinesonly='true' spacingx='1px' spacingy='1px' type='xygrid' visible='true'/>
+  </sodipodi:namedview>
+  <title id='title9167'>Gnome Symbolic Icon Theme</title>
+  <defs id='defs7386'>
+    <linearGradient id='linearGradient7212' osb:paint='solid'>
+      <stop id='stop7214' offset='0' style='stop-color:#000000;stop-opacity:1;'/>
+    </linearGradient>
+  </defs>
+  <g inkscape:groupmode='layer' id='layer9' inkscape:label='apps' style='display:inline' transform='translate(-403.0002,165)'>
+
+    <path inkscape:connector-curvature='0' d='m 409.46895,-165 c -0.25969,0 -0.46875,0.20906 -0.46875,0.46875 l 0,1.875 c -1.03854,0.49004 -1.79689,1.48201 -1.96875,2.65625 l 6.9375,0 c -0.17186,-1.17424 -0.93021,-2.16621 -1.96875,-2.65625 l 0,-1.875 c 0,-0.25969 -0.20906,-0.46875 -0.46875,-0.46875 z m 0.0312,1 c 0.27614,0 0.5,0.22386 0.5,0.5 0,0.27614 -0.22386,0.5 -0.5,0.5 -0.27614,0 -0.5,-0.22386 -0.5,-0.5 0,-0.27614 0.22386,-0.5 0.5,-0.5 z m -2.5,5 0,1 4.5,0 c 0.26179,3e-5 0.49997,0.23821 0.5,0.5 l 0,6 c -3e-5,0.26179 -0.23821,0.49997 -0.5,0.5 l -4.5,0 0,0.96875 c 0,0.57402 0.45723,1.03125 1.03125,1.03125 l 4.9375,0 c 0.57402,0 1.03125,-0.45723 1.03125,-1.03125 l 0,-8.96875 z m 0,2 0,5 4,0 0,-5 z' id='rect7914' sodipodi:nodetypes='ssccccsssssssscccccccssssccccccc' style='fill:#bebebe;fill-opacity:1;stroke:none'/>
+  </g>
+</svg>

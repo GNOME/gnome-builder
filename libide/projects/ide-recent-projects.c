@@ -184,6 +184,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
       g_autoptr(IdeProjectInfo) project_info = NULL;
       g_autofree gchar *name = NULL;
       g_autofree gchar *description = NULL;
+      const gchar *build_system_name = NULL;
       const gchar *uri = uris[z];
       time_t modified;
       g_auto(GStrv) groups = NULL;
@@ -221,10 +222,13 @@ ide_recent_projects_load_recent (IdeRecentProjects *self)
         {
           if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX))
             g_ptr_array_add (languages, groups [i] + strlen (IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX));
+          else if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX))
+            build_system_name = groups [i] + strlen (IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX);
         }
       g_ptr_array_add (languages, NULL);
 
       project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
+                                   "build-system-name", build_system_name,
                                    "description", description,
                                    "directory", directory,
                                    "file", project_file,
@@ -387,6 +391,8 @@ ide_recent_projects_discover_async (IdeRecentProjects   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_recent_projects_discover_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->discovered)
     {
@@ -402,7 +408,7 @@ ide_recent_projects_discover_async (IdeRecentProjects   *self,
 
   ide_recent_projects_load_recent (self);
 
-  if (recent_only)
+  if (recent_only || g_getenv ("IDE_DO_NOT_SCAN_PROJECTS") != NULL)
     {
       g_task_return_boolean (task, TRUE);
       return;

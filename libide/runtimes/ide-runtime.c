@@ -199,22 +199,28 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
       name = tmp;
     }
 
-  /* GSettings requires an env var for non-standard dirs */
-  parentdir = g_file_get_parent (installdir);
-  if (parentdir)
+  if (installdir != NULL)
     {
-      parentpath = g_file_get_path (parentdir);
-      schemadir = g_build_filename (parentpath, "share",
-                                "glib-2.0", "schemas", NULL);
+      /* GSettings requires an env var for non-standard dirs */
+      parentdir = g_file_get_parent (installdir);
+      if (parentdir)
+        {
+          parentpath = g_file_get_path (parentdir);
+          schemadir = g_build_filename (parentpath, "share",
+                                    "glib-2.0", "schemas", NULL);
 
-      env = ide_runner_get_environment (runner);
-      ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
+          env = ide_runner_get_environment (runner);
+          ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
+        }
+
+      bin = g_file_get_child (installdir, name);
+      binpath = g_file_get_path (bin);
+
+      ide_runner_append_argv (runner, binpath);
     }
+  else
+    ide_runner_append_argv (runner, name);
 
-  bin = g_file_get_child (installdir, name);
-  binpath = g_file_get_path (bin);
-
-  ide_runner_append_argv (runner, binpath);
 
   return runner;
 }

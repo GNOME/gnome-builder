@@ -117,7 +117,7 @@ gbp_create_project_tool_list_templates (GbpCreateProjectTool *self)
   for (iter = self->project_templates; iter != NULL; iter = iter->next)
     {
       IdeProjectTemplate *template = iter->data;
-      const gchar *id;
+      g_autofree gchar *id = NULL;
 
       if (NULL != (id = ide_project_template_get_id (template)))
         g_print ("  %s\n", id);
@@ -166,7 +166,7 @@ find_template (GbpCreateProjectTool *self)
   for (iter = self->project_templates; iter != NULL; iter = iter->next)
     {
       IdeProjectTemplate *template = IDE_PROJECT_TEMPLATE (iter->data);
-      const gchar *id = ide_project_template_get_id (template);
+      g_autofree gchar *id = ide_project_template_get_id (template);
 
       if (g_strcmp0 (self->template, id) == 0)
         return template;
@@ -413,6 +413,10 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
     g_hash_table_insert (params,
                          g_strdup ("language"),
                          g_variant_ref_sink (g_variant_new_string (self->language)));
+
+  g_hash_table_insert (params,
+                       g_strdup ("versioning"),
+                       g_variant_ref_sink (g_variant_new_string (self->vcs ?: "git")));
 
   ide_project_template_expand_async (template,
                                      params,

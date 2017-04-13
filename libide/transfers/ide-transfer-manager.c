@@ -328,13 +328,22 @@ ide_transfer_manager_get_progress (IdeTransferManager *self)
 
   if (self->transfers->len > 0)
     {
+      guint count = 0;
+
       for (guint i = 0; i < self->transfers->len; i++)
         {
           IdeTransfer *transfer = g_ptr_array_index (self->transfers, i);
           gdouble progress = ide_transfer_get_progress (transfer);
-          total += MAX (0.0, MIN (1.0, progress));
+
+          if (ide_transfer_get_completed (transfer) || ide_transfer_get_active (transfer))
+            {
+              total += MAX (0.0, MIN (1.0, progress));
+              count++;
+            }
         }
-      total /= (gdouble)self->transfers->len;
+
+      if (count != 0)
+        total /= (gdouble)count;
     }
 
   return total;

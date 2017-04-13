@@ -52,7 +52,7 @@ ide_autotools_makecache_stage_makecache_cb (GObject      *object,
 
   if (makecache == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&task));
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 

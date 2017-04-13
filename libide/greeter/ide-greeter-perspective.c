@@ -655,6 +655,8 @@ static void
 ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                                       GtkButton             *open_button)
 {
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *projects_dir = NULL;
   GtkFileChooserDialog *dialog;
   GtkWidget *toplevel;
   PeasEngine *engine;
@@ -763,6 +765,10 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                            G_CONNECT_SWAPPED);
 
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
+
+  settings = g_settings_new ("org.gnome.builder");
+  projects_dir = g_settings_get_string (settings, "projects-directory");
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), projects_dir);
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
@@ -1061,6 +1067,8 @@ ide_greeter_perspective_genesis_changed (IdeGreeterPerspective *self,
 
   g_assert (GTK_IS_STACK (stack));
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  gtk_widget_grab_default (GTK_WIDGET (self->genesis_continue_button));
 
   state.self = self;
   state.name = gtk_stack_get_visible_child_name (self->genesis_stack);

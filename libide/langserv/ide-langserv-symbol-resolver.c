@@ -23,6 +23,7 @@
 #include "ide-debug.h"
 
 #include "diagnostics/ide-source-location.h"
+#include "diagnostics/ide-source-range.h"
 #include "files/ide-file.h"
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
@@ -161,18 +162,19 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
   IdeLangservSymbolResolver *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autoptr(JsonNode) return_value = NULL;
+  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) gfile = NULL;
   g_autoptr(IdeSourceLocation) location = NULL;
-  JsonNode *location_node = NULL;
+  g_autoptr(GVariant) variant = NULL;
+  GVariantIter iter;
   const gchar *uri;
-  gboolean success;
   struct {
-    gint line;
-    gint column;
+    gint64 line;
+    gint64 column;
   } begin, end;
+  gboolean success = FALSE;
 
   IDE_ENTRY;
 
@@ -188,52 +190,31 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  /*
-   * We can either get a Location or a Location[] from the peer. We only
-   * care about the first node in this case, so extract Location[0] if
-   * we need to.
-   */
-  if (JSON_NODE_HOLDS_ARRAY (return_value))
+#if 0
+  {
+    g_autofree gchar *str = g_variant_print (return_value, TRUE);
+    IDE_TRACE_MSG ("Got reply: %s", str);
+  }
+#endif
+
+  g_variant_iter_init (&iter, return_value);
+
+  if (g_variant_iter_next (&iter, "v", &variant))
     {
-      JsonArray *ar = json_node_get_array (return_value);
-      if (json_array_get_length (ar) > 0)
-        {
-          JsonNode *first = json_array_get_element (ar, 0);
-          if (JSON_NODE_HOLDS_OBJECT (first))
-            location_node = first;
-        }
+      success = JSONRPC_MESSAGE_PARSE (variant,
+        "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+        "range", "{",
+          "start", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
+          "}",
+          "end", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
+          "}",
+        "}"
+      );
     }
-  else if (JSON_NODE_HOLDS_OBJECT (return_value))
-    location_node = return_value;
-
-  /*
-   * If we failed to extract the appropriate node, we can just bail
-   * as a failure.
-   */
-  if (location_node == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               "Got invalid reply for textDocument/definition");
-      IDE_EXIT;
-    }
-
-  g_assert (JSON_NODE_HOLDS_OBJECT (location_node));
-
-  success = JCON_EXTRACT (location_node,
-    "uri", JCONE_STRING (uri),
-    "range", "{",
-      "start", "{",
-        "line", JCONE_INT (begin.line),
-        "character", JCONE_INT (begin.column),
-      "}",
-      "end", "{",
-        "line", JCONE_INT (end.line),
-        "character", JCONE_INT (end.column),
-      "}",
-    "}"
-  );
 
   if (!success)
     {
@@ -245,7 +226,7 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
     }
 
   IDE_TRACE_MSG ("Definition location is %s %d:%d",
-                 uri, begin.line + 1, begin.column + 1);
+                 uri, (gint)begin.line + 1, (gint)begin.column + 1);
 
   gfile = g_file_new_for_uri (uri);
   ifile = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), gfile);
@@ -267,7 +248,7 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
   IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   IdeFile *ifile;
   GFile *gfile;
@@ -307,13 +288,13 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   line = ide_source_location_get_line (location);
   column = ide_source_location_get_line_offset (location);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
     "}",
     "position", "{",
-      "line", JCON_INT (line),
-      "character", JCON_INT (column),
+      "line", JSONRPC_MESSAGE_PUT_INT32 (line),
+      "character", JSONRPC_MESSAGE_PUT_INT32 (column),
     "}"
   );
 
@@ -353,10 +334,10 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeLangservSymbolTree) tree = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(JsonNode) return_value = NULL;
+  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GPtrArray) symbols = NULL;
-  JsonArray *array;
-  guint length;
+  GVariantIter iter;
+  GVariant *node;
 
   IDE_ENTRY;
 
@@ -369,8 +350,7 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  if (!JSON_NODE_HOLDS_ARRAY (return_value) ||
-      NULL == (array = json_node_get_array (return_value)))
+  if (!g_variant_is_of_type (return_value, G_VARIANT_TYPE ("av")))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -379,49 +359,51 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  length = json_array_get_length (array);
-
   symbols = g_ptr_array_new_with_free_func (g_object_unref);
 
-  for (guint i = 0; i < length; i++)
+  g_variant_iter_init (&iter, return_value);
+
+  while (g_variant_iter_loop (&iter, "v", &node))
     {
-      JsonNode *node = json_array_get_element (array, i);
       g_autoptr(IdeLangservSymbolNode) symbol = NULL;
       g_autoptr(GFile) file = NULL;
       const gchar *name = NULL;
       const gchar *container_name = NULL;
       const gchar *uri = NULL;
       gboolean success;
-      gint kind = -1;
+      gint64 kind = -1;
       struct {
-        gint line;
-        gint column;
+        gint64 line;
+        gint64 column;
       } begin, end;
 
       /* Mandatory fields */
-      success = JCON_EXTRACT (node,
-        "name", JCONE_STRING (name),
-        "kind", JCONE_INT (kind),
+      success = JSONRPC_MESSAGE_PARSE (node,
+        "name", JSONRPC_MESSAGE_GET_STRING (&name),
+        "kind", JSONRPC_MESSAGE_GET_INT64 (&kind),
         "location", "{",
-          "uri", JCONE_STRING (uri),
+          "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
           "range", "{",
             "start", "{",
-              "line", JCONE_INT (begin.line),
-              "character", JCONE_INT (begin.column),
+              "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+              "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
             "}",
             "end", "{",
-              "line", JCONE_INT (end.line),
-              "character", JCONE_INT (end.column),
+              "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+              "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
             "}",
           "}",
         "}"
       );
 
       if (!success)
-        continue;
+        {
+          IDE_TRACE_MSG ("Failed to parse reply from language server");
+          continue;
+        }
 
       /* Optional fields */
-      JCON_EXTRACT (node, "containerName", JCONE_STRING (container_name));
+      JSONRPC_MESSAGE_PARSE (node, "containerName", JSONRPC_MESSAGE_GET_STRING (&container_name));
 
       file = g_file_new_for_uri (uri);
 
@@ -450,7 +432,7 @@ ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolve
   IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
   IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
-  g_autoptr(JsonNode) params = NULL;
+  g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
 
   IDE_ENTRY;
@@ -473,9 +455,9 @@ ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolve
 
   uri = g_file_get_uri (file);
 
-  params = JCON_NEW (
+  params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
-      "uri", JCON_STRING (uri),
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
     "}"
   );
 
@@ -507,10 +489,185 @@ ide_langserv_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolve
 }
 
 static void
+ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeLangservClient *client = (IdeLangservClient *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GPtrArray) references = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeLangservSymbolResolver *self;
+  GVariant *locationv;
+  GVariantIter iter;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+
+  if (!ide_langserv_client_call_finish (client, result, &reply, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (!g_variant_is_of_type (reply, G_VARIANT_TYPE ("av")))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               "Invalid reply type from peer: %s",
+                               g_variant_get_type_string (reply));
+      IDE_EXIT;
+    }
+
+  references = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_source_range_unref);
+
+  g_variant_iter_init (&iter, reply);
+
+  while (g_variant_iter_loop (&iter, "v", &locationv))
+    {
+      g_autoptr(IdeSourceLocation) begin_loc = NULL;
+      g_autoptr(IdeSourceLocation) end_loc = NULL;
+      g_autoptr(IdeSourceRange) range = NULL;
+      g_autoptr(IdeFile) ifile = NULL;
+      const gchar *uri = NULL;
+      GFile *gfile;
+      gboolean success;
+      struct {
+        gint64 line;
+        gint64 line_offset;
+      } begin, end;
+
+      success = JSONRPC_MESSAGE_PARSE (locationv,
+        "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+        "range", "{",
+          "start", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&begin.line_offset),
+          "}",
+          "end", "{",
+            "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+            "character", JSONRPC_MESSAGE_GET_INT64 (&end.line_offset),
+          "}",
+        "}"
+      );
+
+      if (!success)
+        {
+          g_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_INVALID_DATA,
+                                   "Failed to parse location object");
+          IDE_EXIT;
+        }
+
+      gfile = g_file_new_for_uri (uri);
+      ifile = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), gfile);
+
+      begin_loc = ide_source_location_new (ifile, begin.line, begin.line_offset, 0);
+      end_loc = ide_source_location_new (ifile, end.line, end.line_offset, 0);
+      range = ide_source_range_new (begin_loc, end_loc);
+
+      g_ptr_array_add (references, g_steal_pointer (&range));
+    }
+
+  g_task_return_pointer (task, g_steal_pointer (&references), (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolver,
+                                                    IdeSourceLocation   *location,
+                                                    GCancellable        *cancellable,
+                                                    GAsyncReadyCallback  callback,
+                                                    gpointer             user_data)
+{
+  IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
+  IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *uri = NULL;
+  const gchar *language_id;
+  IdeFile *file;
+  GFile *gfile;
+  guint line;
+  guint line_offset;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (location != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_langserv_symbol_resolver_find_references_async);
+
+  file = ide_source_location_get_file (location);
+  gfile = ide_file_get_file (file);
+  uri = g_file_get_uri (gfile);
+
+  line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
+
+  language_id = ide_file_get_language_id (file);
+  if (language_id == NULL)
+    language_id = "plain";
+
+  params = JSONRPC_MESSAGE_NEW (
+    "textDocument", "{",
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+      "languageId", JSONRPC_MESSAGE_PUT_STRING (language_id),
+    "}",
+    "position", "{",
+      "line", JSONRPC_MESSAGE_PUT_INT32 (line),
+      "character", JSONRPC_MESSAGE_PUT_INT32 (line_offset),
+    "}",
+    "context", "{",
+      "includeDeclaration", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
+    "}"
+  );
+
+  ide_langserv_client_call_async (priv->client,
+                                  "textDocument/references",
+                                  g_steal_pointer (&params),
+                                  cancellable,
+                                  ide_langserv_symbol_resolver_find_references_cb,
+                                  g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static GPtrArray *
+ide_langserv_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
+                                                     GAsyncResult       *result,
+                                                     GError            **error)
+{
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
 symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
 {
   iface->lookup_symbol_async = ide_langserv_symbol_resolver_lookup_symbol_async;
   iface->lookup_symbol_finish = ide_langserv_symbol_resolver_lookup_symbol_finish;
   iface->get_symbol_tree_async = ide_langserv_symbol_resolver_get_symbol_tree_async;
   iface->get_symbol_tree_finish = ide_langserv_symbol_resolver_get_symbol_tree_finish;
+  iface->find_references_async = ide_langserv_symbol_resolver_find_references_async;
+  iface->find_references_finish = ide_langserv_symbol_resolver_find_references_finish;
 }

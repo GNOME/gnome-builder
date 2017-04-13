@@ -21,6 +21,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "buffers/ide-buffer.h"
 #include "rename/ide-rename-provider.h"
 
 G_DEFINE_INTERFACE (IdeRenameProvider, ide_rename_provider, IDE_TYPE_OBJECT)
@@ -66,6 +67,13 @@ ide_rename_provider_default_init (IdeRenameProviderInterface *iface)
 {
   iface->rename_async = ide_rename_provider_real_rename_async;
   iface->rename_finish = ide_rename_provider_real_rename_finish;
+
+  g_object_interface_install_property (iface,
+                                       g_param_spec_object ("buffer",
+                                                            "Buffer",
+                                                            "Buffer",
+                                                            IDE_TYPE_BUFFER,
+                                                            (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS)));
 }
 
 /**

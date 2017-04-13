@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-15 14:05+0000\n"
-"PO-Revision-Date: 2017-03-15 15:07+0100\n"
+"POT-Creation-Date: 2017-04-05 07:20+0000\n"
+"PO-Revision-Date: 2017-04-05 13:53+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -68,7 +68,7 @@ msgstr[2] "Około %u lat temu"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:683
+#: libide/greeter/ide-greeter-perspective.c:685
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -100,7 +100,7 @@ msgstr "Przeglądaj…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -302,7 +302,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Można wczytać lub utworzyć paletę za pomocą preferencji"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5861
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Zmień nazwę"
@@ -1056,90 +1056,90 @@ msgstr "POLECENIE"
 msgid "No commands available"
 msgstr "Brak dostępnych poleceń"
 
-#: libide/application/ide-application-command-line.c:374
+#: libide/application/ide-application-command-line.c:387
 msgid "Please provide a command"
 msgstr "Proszę podać polecenie"
 
-#: libide/application/ide-application-command-line.c:384
+#: libide/application/ide-application-command-line.c:397
 msgid "No such tool"
 msgstr "Nie ma takiego narzędzia"
 
-#: libide/application/ide-application-command-line.c:398
+#: libide/application/ide-application-command-line.c:411
 msgid "Please provide a worker type"
 msgstr "Proszę podać typ wątku roboczego"
 
-#: libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:418
 msgid "Please provide a D-Bus address"
 msgstr "Proszę podać adres usługi D-Bus"
 
-#: libide/application/ide-application-command-line.c:414
+#: libide/application/ide-application-command-line.c:427
 msgid "No such worker"
 msgstr "Nie ma takiego wątku roboczego"
 
-#: libide/buffers/ide-buffer.c:2476
+#: libide/buffers/ide-buffer.c:2517
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie ma mechanizmu rozwiązywania symboli."
 
-#: libide/buffers/ide-buffer-manager.c:672
+#: libide/buffers/ide-buffer-manager.c:677
 msgid "File too large to be opened."
 msgstr "Plik jest za duży, aby go otworzyć."
 
-#: libide/buffers/ide-buffer-manager.c:1764
+#: libide/buffers/ide-buffer-manager.c:1771
 #, c-format
 msgid "unsaved document %u"
 msgstr "niezapisywany dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1798
+#: libide/buffers/ide-buffer-manager.c:1805
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Zapisanie bufora się nie powiodło, ignorowanie nawrotu."
 
-#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/buildsystem/ide-build-pipeline.c:2143
 msgid "Cleaning…"
 msgstr "Czyszczenie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2106
+#: libide/buildsystem/ide-build-pipeline.c:2158
 msgid "Downloading…"
 msgstr "Pobieranie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2110
+#: libide/buildsystem/ide-build-pipeline.c:2162
 msgid "Building dependencies…"
 msgstr "Budowanie zależności…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2114
+#: libide/buildsystem/ide-build-pipeline.c:2166
 msgid "Bootstrapping…"
 msgstr "Zakładanie projektu…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2118
+#: libide/buildsystem/ide-build-pipeline.c:2170
 msgid "Configuring…"
 msgstr "Konfigurowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2122
+#: libide/buildsystem/ide-build-pipeline.c:2174
 msgid "Building…"
 msgstr "Budowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2126
+#: libide/buildsystem/ide-build-pipeline.c:2178
 msgid "Installing…"
 msgstr "Instalowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2130
+#: libide/buildsystem/ide-build-pipeline.c:2182
 msgid "Exporting…"
 msgstr "Eksportowanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2134
-#: libide/buildsystem/ide-build-pipeline.c:2138
+#: libide/buildsystem/ide-build-pipeline.c:2186
+#: libide/buildsystem/ide-build-pipeline.c:2190
 msgid "Success"
 msgstr "Powodzenie"
 
-#: libide/buildsystem/ide-build-pipeline.c:2142
+#: libide/buildsystem/ide-build-pipeline.c:2194
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Niepowodzenie"
 
-#: libide/buildsystem/ide-build-pipeline.c:2146
+#: libide/buildsystem/ide-build-pipeline.c:2198
 msgid "Preparing…"
 msgstr "Przygotowywanie…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2150
+#: libide/buildsystem/ide-build-pipeline.c:2202
 msgid "Ready"
 msgstr "Gotowe"
 
@@ -1650,11 +1650,11 @@ msgstr "Wykryto zmianę pliku w innym programie. Wczytać go ponownie?"
 msgid "Failed to load the project"
 msgstr "Wczytanie projektu się nie powiodło"
 
-#: libide/greeter/ide-greeter-perspective.c:678
+#: libide/greeter/ide-greeter-perspective.c:680
 msgid "Open Project"
 msgstr "Otwarcie projektu"
 
-#: libide/greeter/ide-greeter-perspective.c:694
+#: libide/greeter/ide-greeter-perspective.c:696
 msgid "All Project Types"
 msgstr "Wszystkie typy projektów"
 
@@ -2553,23 +2553,33 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5317
 #, c-format
 msgid "Insert “%s”"
 msgstr "Wstaw „%s”"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5319
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Zmień „%s” na „%s”"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5433
 msgid "Apply Fix-It"
 msgstr "Zastosuj „Fix-It”"
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5860
 msgid "Rename symbol"
 msgstr "Zmiana nazwy symbolu"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: libide/sourceview/ide-source-view.c:6099
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr "<b>%s</b> — <small>Wiersz %u, kolumna %u</small>"
+
+#: libide/sourceview/ide-source-view.c:6125
+msgid "No references were found"
+msgstr "Brak odniesień"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -3275,16 +3285,17 @@ msgstr "Sieć jest niedostępna, pomijanie pobierania"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:112
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
-#: plugins/rustup/rustup_plugin/__init__.py:596
+#: plugins/html-preview/html_preview_plugin/__init__.py:303
+#: plugins/html-preview/html_preview_plugin/__init__.py:313
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+#: plugins/rustup/rustup_plugin/__init__.py:615
 msgid "Install"
 msgstr "Zainstaluj"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Zaktualizuj"
 
@@ -3307,32 +3318,39 @@ msgstr[2] "Wyświetla %u środowisk wykonawczych więcej"
 msgid "Flatpak Runtimes"
 msgstr "Środowisko wykonawcze Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:703
+#: plugins/flatpak/gbp-flatpak-runtime.c:722
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:705
+#: plugins/flatpak/gbp-flatpak-runtime.c:724
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:68
-msgid "Updated "
-msgstr "Zaktualizowano "
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:67
+#, c-format
+msgid "Updated %s %s"
+msgstr "Zaktualizowano %s (%s)"
 
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
 #: plugins/flatpak/gbp-flatpak-transfer.c:70
-msgid "Updating "
-msgstr "Aktualizowanie "
+#, c-format
+msgid "Updating %s %s"
+msgstr "Aktualizowanie %s (%s)"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:75
-msgid "Installed "
-msgstr "Zainstalowano "
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:76
+#, c-format
+msgid "Installed %s %s"
+msgstr "Zainstalowano %s (%s)"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:77
-#: plugins/rustup/rustup_plugin/__init__.py:355
-msgid "Installing "
-msgstr "Instalowanie "
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:79
+#, c-format
+msgid "Installing %s %s"
+msgstr "Instalowanie %s (%s)"
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:101
 msgid "Failed to install runtime"
@@ -3399,7 +3417,7 @@ msgstr "Wymagany jest prawidłowy adres URL systemu git"
 
 #: plugins/git/ide-git-clone-widget.ui:36
 msgid "Use Git to create a local copy of a remotely hosted project."
-msgstr "Użycie systemu git do utworzenia lokalnej kopii zdalnego projektu."
+msgstr "Używanie systemu git do utworzenia lokalnej kopii zdalnego projektu."
 
 #: plugins/git/ide-git-clone-widget.ui:64
 msgid "user@host:repository.git"
@@ -3469,9 +3487,13 @@ msgstr ""
 msgid "Preview as HTML"
 msgstr "Podgląd jako HTML"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:108
+#: plugins/html-preview/html_preview_plugin/__init__.py:299
 msgid "Your computer is missing python3-docutils"
 msgstr "Na komputerze nie ma programu python3-docutils"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:309
+msgid "Your computer is missing python3-sphinx"
+msgstr "Na komputerze nie ma programu python3-sphinx"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3609,97 +3631,101 @@ msgid "quick highlight words matching current selection"
 msgstr ""
 "szybkie wyróżnianie słów słowa wyrazów wyrazy pasujące bieżące zaznaczenie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:80
+#: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
 msgstr "Nie zainstalowano Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:277
+#: plugins/rustup/rustup_plugin/__init__.py:282
 msgid "Installing rustup"
 msgstr "Instalowanie Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:279
+#: plugins/rustup/rustup_plugin/__init__.py:284
 msgid "Updating rustup"
 msgstr "Aktualizowanie Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:281
+#: plugins/rustup/rustup_plugin/__init__.py:286
 msgid "Installing rust "
 msgstr "Instalowanie Rust "
 
-#: plugins/rustup/rustup_plugin/__init__.py:283
+#: plugins/rustup/rustup_plugin/__init__.py:288
 msgid "Checking system"
 msgstr "Sprawdzanie systemu"
 
-#: plugins/rustup/rustup_plugin/__init__.py:337
+#: plugins/rustup/rustup_plugin/__init__.py:357
 msgid "Downloading rustup-init"
 msgstr "Pobieranie „rustup-init”"
 
-#: plugins/rustup/rustup_plugin/__init__.py:342
+#: plugins/rustup/rustup_plugin/__init__.py:362
 msgid "Syncing channel updates"
 msgstr "Synchronizowanie aktualizacji kanałów"
 
-#: plugins/rustup/rustup_plugin/__init__.py:348
+#: plugins/rustup/rustup_plugin/__init__.py:368
 msgid "Downloading "
 msgstr "Pobieranie "
 
-#: plugins/rustup/rustup_plugin/__init__.py:361
+#: plugins/rustup/rustup_plugin/__init__.py:375
+msgid "Installing "
+msgstr "Instalowanie "
+
+#: plugins/rustup/rustup_plugin/__init__.py:381
 msgid "Checking for rustup updates"
 msgstr "Wyszukiwanie aktualizacji Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:366
+#: plugins/rustup/rustup_plugin/__init__.py:386
 msgid "Downloading rustup update"
 msgstr "Pobieranie aktualizacji Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:403
+#: plugins/rustup/rustup_plugin/__init__.py:423
 msgid "Error installing "
 msgstr "Błąd podczas instalowania "
 
-#: plugins/rustup/rustup_plugin/__init__.py:405
+#: plugins/rustup/rustup_plugin/__init__.py:425
 msgid "Error"
 msgstr "Błąd"
 
-#: plugins/rustup/rustup_plugin/__init__.py:411
+#: plugins/rustup/rustup_plugin/__init__.py:430
 msgid "Cancelled"
 msgstr "Anulowano"
 
-#: plugins/rustup/rustup_plugin/__init__.py:419
+#: plugins/rustup/rustup_plugin/__init__.py:438
 msgid "Finished"
 msgstr "Ukończono"
 
-#: plugins/rustup/rustup_plugin/__init__.py:433
+#: plugins/rustup/rustup_plugin/__init__.py:452
 msgid "Rustup"
 msgstr "Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:434
+#: plugins/rustup/rustup_plugin/__init__.py:453
 msgid "Rustup Toolchains"
 msgstr "Zestawy narzędzi Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Updating"
 msgstr "Aktualizowanie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Installing"
 msgstr "Instalowanie"
 
 #. set default toolchain button
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Make default"
 msgstr "Ustaw jako domyślne"
 
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Makes the selected toolchain the default rust installation"
 msgstr "Ustawia zaznaczony zestaw narzędzi jako domyślną instalację Rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:595
+#: plugins/rustup/rustup_plugin/__init__.py:614
 msgid "Install Rust Channel"
 msgstr "Instalacja kanału Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: plugins/rustup/rustup_plugin/__init__.py:600
+#: plugins/rustup/rustup_plugin/__init__.py:619
 msgid "Enter name of rust channel"
 msgstr "Nazwa kanału Rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:601
+#: plugins/rustup/rustup_plugin/__init__.py:620
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -3715,16 +3741,16 @@ msgstr ""
 "                        <data>          = RRRR-MM-DD\n"
 "                        <gospodarz>     = <trójka-docelowa>"
 
-#: plugins/rustup/rustup_plugin/__init__.py:626
+#: plugins/rustup/rustup_plugin/__init__.py:645
 msgid "Install Rustup to manage toolchains here!"
 msgstr ""
 "Zainstalowanie Rustup umożliwia zarządzanie zestawami narzędzi w tym miejscu."
 
-#: plugins/rustup/rustup_plugin/__init__.py:633
+#: plugins/rustup/rustup_plugin/__init__.py:652
 msgid "No toolchain installed. Click"
 msgstr "Żaden zestaw narzędzi nie jest zainstalowany. Kliknięcie"
 
-#: plugins/rustup/rustup_plugin/__init__.py:634
+#: plugins/rustup/rustup_plugin/__init__.py:653
 msgid "to add a new toolchain!"
 msgstr "doda nowy zestaw narzędzi."
 
@@ -3834,7 +3860,7 @@ msgstr "_Otwórz odnośnik"
 msgid "_Copy Link Address"
 msgstr "Skopiuj _adres odnośnika"
 
-#: plugins/todo/todo_plugin/__init__.py:193
+#: plugins/todo/todo_plugin/__init__.py:195
 msgid "Todo"
 msgstr "TODO"
 

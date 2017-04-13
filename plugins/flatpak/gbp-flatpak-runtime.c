@@ -133,8 +133,10 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       g_autofree gchar *project_name = NULL;
       g_autofree gchar *project_path = NULL;
       g_autofree gchar *build_path = NULL;
+      g_autofree gchar *ccache_dir = NULL;
       g_auto(GStrv) new_environ = NULL;
       const gchar *builddir = NULL;
+      const gchar * const *build_args = NULL;
       GFile *project_file;
       IdeContext *context;
       IdeConfigurationManager *config_manager;
@@ -172,7 +174,24 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       /* Add 'flatpak build' and the specified arguments to the launcher */
       ide_subprocess_launcher_push_argv (ret, "flatpak");
       ide_subprocess_launcher_push_argv (ret, "build");
-      ide_subprocess_launcher_push_argv (ret, "--share=network");
+
+      if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
+        build_args = gbp_flatpak_configuration_get_build_args (GBP_FLATPAK_CONFIGURATION (configuration));
+
+      if (build_args != NULL)
+        ide_subprocess_launcher_push_args (ret, build_args);
+      else
+        ide_subprocess_launcher_push_argv (ret, "--share=network");
+
+      /* We might need access to ccache configs inside the build environ.
+       * Usually, this is set by flatpak-builder, but since we are running
+       * the incremental build, we need to take care of that too.
+       *
+       * See https://bugzilla.gnome.org/show_bug.cgi?id=780153
+       */
+      ccache_dir = g_build_filename (project_path, ".flatpak-builder", "ccache", NULL);
+      ide_subprocess_launcher_setenv (ret, "CCACHE_DIR", ccache_dir, FALSE);
+
       if (!ide_str_empty0 (project_path))
         {
           g_autofree gchar *filesystem_option_src = NULL;

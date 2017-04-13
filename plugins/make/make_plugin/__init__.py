@@ -29,6 +29,13 @@ _ = Ide.gettext
 
 class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
+    make_dir = GObject.Property(type=Gio.File)
+
+    def do_get_id(self):
+        return 'make'
+
+    def do_get_display_name(self):
+        return 'Make'
 
     def do_init_async(self, priority, cancel, callback, data=None):
         task = Gio.Task.new(self, cancel, callback)
@@ -37,11 +44,13 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         # TODO: Be async here also
         project_file = self.get_context().get_project_file()
         if project_file.get_basename() == 'Makefile':
+            self.props.make_dir = project_file.get_parent()
             task.return_boolean(True)
         else:
             child = project_file.get_child('Makefile')
             exists = child.query_exists(cancel)
             if exists:
+                self.props.make_dir = project_file
                 self.props.project_file = child
             task.return_boolean(exists)
 
@@ -74,6 +83,8 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         if result.propagate_boolean():
             return result.build_targets
 
+    def get_make_dir(self):
+        return self.props.make_dir
 
 class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
@@ -102,11 +113,13 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         # build of the project when the Ide.BuildPhase.BUILD phase is
         # requested of the pipeline.
         build_launcher = pipeline.create_launcher()
+        build_launcher.set_cwd(build_system.get_make_dir().get_path())
         build_launcher.push_argv(make)
         if config.props.parallelism > 0:
             build_launcher.push_argv('-j{}'.format(config.props.parallelism))
 
         clean_launcher = pipeline.create_launcher()
+        clean_launcher.set_cwd(build_system.get_make_dir().get_path())
         clean_launcher.push_argv(make)
         clean_launcher.push_argv('clean')
 
@@ -119,6 +132,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         # "make install" when the Ide.BuildPhase.INSTALL phase
         # is requested of the pipeline.
         install_launcher = pipeline.create_launcher()
+        install_launcher.set_cwd(build_system.get_make_dir().get_path())
         install_launcher.push_argv(make)
         install_launcher.push_argv('install')
 

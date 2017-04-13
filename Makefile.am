@@ -59,7 +59,7 @@ dist-hook:
 
 .PHONY: AUTHORS
 
-RUNTIME_TYPELIB_PATH = libide:contrib/egg:contrib/pnl:contrib/tmpl:$(GI_TYPELIB_PATH)
+RUNTIME_TYPELIB_PATH = libide:contrib/egg:contrib/pnl:contrib/tmpl:contrib/mi2:$(GI_TYPELIB_PATH)
 
 run:
 	@ LSAN_OPTIONS=suppressions=$(top_srcdir)/build/asan.supp              \
@@ -71,8 +71,12 @@ run:
 	GI_TYPELIB_PATH="$(RUNTIME_TYPELIB_PATH)"                              \
 	GOBJECT_DEBUG=instance-count                                           \
 	PYTHONDONTWRITEBYTECODE=yes                                            \
+	LD_LIBRARY_PATH=contrib/mi2/.libs:$(LD_LIBRARY_PATH)                   \
 	PATH=$(top_builddir)/src:${PATH}                                       \
-	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s $(ARGS)
+	$(LIBTOOL) --mode=execute gdb                                          \
+	    -ex 'handle SIGPIPE nostop noprint pass'                           \
+	    -ex run                                                            \
+	    --args src/gnome-builder -vvvv -s $(ARGS)
 
 strace:
 	@ PEAS_DEBUG=1                                                         \
@@ -98,7 +102,10 @@ debug:
 	GOBJECT_DEBUG=instance-count                                           \
 	PYTHONDONTWRITEBYTECODE=yes                                            \
 	PATH=$(top_builddir)/src:${PATH}                                       \
-	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s $(ARGS)
+	$(LIBTOOL) --mode=execute gdb                                          \
+	    -ex 'handle SIGPIPE nostop noprint pass'                           \
+	    -ex run                                                            \
+	    --args src/gnome-builder -vvvv -s $(ARGS)
 
 valgrind:
 	@ PEAS_DEBUG=1                                                         \

@@ -72,6 +72,10 @@ EggAnimation* egg_object_animate_full     (gpointer          object,
                                            const gchar      *first_property,
                                            ...) G_GNUC_NULL_TERMINATED;
 
+guint egg_animation_calculate_duration (GdkMonitor *monitor,
+                                        gdouble     from_value,
+                                        gdouble     to_value);
+
 G_END_DECLS
 
 #endif /* EGG_ANIMATION_H */

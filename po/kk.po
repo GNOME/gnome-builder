@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-15 14:05+0000\n"
-"PO-Revision-Date: 2017-03-16 08:29+0500\n"
+"POT-Creation-Date: 2017-03-16 20:45+0000\n"
+"PO-Revision-Date: 2017-03-17 08:36+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -2217,7 +2217,7 @@ msgstr ""
 
 #: libide/preferences/ide-preferences-builtin.c:169
 msgid "Matching brackets"
-msgstr ""
+msgstr "Сәйкес жақшалар"
 
 #: libide/preferences/ide-preferences-builtin.c:169
 msgid "Highlight matching brackets based on cursor position"
@@ -2840,7 +2840,7 @@ msgstr "Палитра аты"
 
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
 msgid "Enter a new name for the palette"
-msgstr ""
+msgstr "Палитра үшін жаңа атын енгізіңіз"
 
 #: plugins/color-picker/gb-color-picker-workbench-addin.c:178
 msgid "Colors"
@@ -2848,27 +2848,27 @@ msgstr "Түстер"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 msgid "HSV visibility"
-msgstr ""
+msgstr "HSV көрінуі"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
 msgid "If the HSV components are visible."
-msgstr ""
+msgstr "HSV құрамасы көріне ме."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
 msgid "LAB visibility"
-msgstr ""
+msgstr "LAB көрінуі"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
 msgid "If the LAB components are visible."
-msgstr ""
+msgstr "LAB құрамасы көріне ме."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
 msgid "RGB visibility"
-msgstr ""
+msgstr "RGB көрінуі"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
 msgid "If the RGB components are visible."
-msgstr ""
+msgstr "RGB құрамасы көріне ме."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
 msgid "RGB unit"
@@ -3232,7 +3232,7 @@ msgstr ""
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:112
+#: plugins/html-preview/html_preview_plugin/__init__.py:119
 #: plugins/rustup/rustup_plugin/__init__.py:477
 #: plugins/rustup/rustup_plugin/__init__.py:481
 #: plugins/rustup/rustup_plugin/__init__.py:596
@@ -3262,32 +3262,39 @@ msgstr[0] ""
 msgid "Flatpak Runtimes"
 msgstr "Flatpak орындалу орталары"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:703
+#: plugins/flatpak/gbp-flatpak-runtime.c:714
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:705
+#: plugins/flatpak/gbp-flatpak-runtime.c:716
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:68
-msgid "Updated "
-msgstr "Жаңартылған"
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:67
+#, c-format
+msgid "Updated %s %s"
+msgstr "%s %s жаңартылған"
 
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
 #: plugins/flatpak/gbp-flatpak-transfer.c:70
-msgid "Updating "
-msgstr "Жаңартылуда"
+#, c-format
+msgid "Updating %s %s"
+msgstr "%s %s жаңартылуда"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:75
-msgid "Installed "
-msgstr "Орнатылған"
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:76
+#, c-format
+msgid "Installed %s %s"
+msgstr "%s %s орнатылған"
 
-#: plugins/flatpak/gbp-flatpak-transfer.c:77
-#: plugins/rustup/rustup_plugin/__init__.py:355
-msgid "Installing "
-msgstr "Орнатылуда"
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:79
+#, c-format
+msgid "Installing %s %s"
+msgstr "%s %s орнатылуда"
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:101
 msgid "Failed to install runtime"
@@ -3422,7 +3429,7 @@ msgstr ""
 msgid "Preview as HTML"
 msgstr "HTML ретінде алдын-ала қарау"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:108
+#: plugins/html-preview/html_preview_plugin/__init__.py:115
 msgid "Your computer is missing python3-docutils"
 msgstr "Сіздің компьютеріңізде python3-docutils жоқ"
 
@@ -3591,6 +3598,10 @@ msgstr "Арна жаңартуралын синхрондау"
 #: plugins/rustup/rustup_plugin/__init__.py:348
 msgid "Downloading "
 msgstr "Жүктеліп алынуда"
+
+#: plugins/rustup/rustup_plugin/__init__.py:355
+msgid "Installing "
+msgstr "Орнатылуда"
 
 #: plugins/rustup/rustup_plugin/__init__.py:361
 msgid "Checking for rustup updates"

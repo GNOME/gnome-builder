@@ -3,6 +3,7 @@
   <gresource prefix="/org/gnome/builder/icons">
     <file compressed="true">scalable/actions/builder-build-configure-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-build-symbolic.svg</file>
+    <file compressed="true">scalable/actions/builder-debugger-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-move-left-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-move-right-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-split-tab-left-symbolic.svg</file>

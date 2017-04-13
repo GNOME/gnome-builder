@@ -192,6 +192,7 @@ ide_preferences_builtin_register_code_insight (IdePreferences *preferences)
 
   ide_preferences_add_list_group (preferences, "code-insight", "completion", _("Completion"), GTK_SELECTION_NONE, 100);
   ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "word-completion", NULL, NULL, _("Suggest words found in open files"), _("Suggests completions as you type based on words found in any open document"), NULL, 0);
+  ide_preferences_add_spin_button (preferences, "code-insight", "completion", "org.gnome.builder.editor", "minimum-word-size", NULL, _("Minimum word size"), _("Minimum word size for word completion"), NULL, 5);
   ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "ctags-autocompletion", NULL, NULL, _("Suggest completions using Ctags"), _("Create and manages a Ctags database for completing class names, functions, and more"), NULL, 10);
   ide_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "clang-autocompletion", NULL, NULL, _("Suggest completions using Clang (Experimental)"), _("Use Clang to suggest completions for C and C++ languages"), NULL, 20);
 

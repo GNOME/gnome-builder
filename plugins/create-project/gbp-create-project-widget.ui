@@ -41,6 +41,7 @@
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkEntry" id="project_name_entry">
+                        <property name="activates-default">true</property>
                         <property name="width-chars">50</property>
                         <property name="expand">true</property>
                         <property name="visible">true</property>

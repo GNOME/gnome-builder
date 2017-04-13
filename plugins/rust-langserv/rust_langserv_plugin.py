@@ -35,6 +35,8 @@ from gi.repository import GObject
 from gi.repository import GtkSource
 from gi.repository import Ide
 
+DEV_MODE = False
+
 class RustService(Ide.Object, Ide.Service):
     _client = None
     _has_started = False
@@ -81,11 +83,19 @@ class RustService(Ide.Object, Ide.Service):
             if sysroot:
                 launcher.setenv("SYS_ROOT", sysroot, True)
                 launcher.setenv("LD_LIBRARY_PATH", os.path.join(sysroot, "lib"), True)
+            if DEV_MODE:
+                launcher.setenv('RUST_LOG', 'debug', True)
+
+            # Locate the directory of the project and run rls from there.
+            workdir = self.get_context().get_vcs().get_working_directory()
+            launcher.set_cwd(workdir.get_path())
 
             # If rls was installed with Cargo, try to discover that
             # to save the user having to update PATH.
             path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
-            if not os.path.exists(path_to_rls):
+            if os.path.exists(path_to_rls):
+                launcher.setenv('PATH', os.path.expanduser("~/.cargo/bin"), True)
+            else:
                 path_to_rls = "rls"
 
             # Setup our Argv. We want to communicate over STDIN/STDOUT,
@@ -127,10 +137,11 @@ class RustService(Ide.Object, Ide.Service):
         the tooling. Maybe even the program if flatpak-builder has
         prebuilt our dependencies.
         """
+        flags = Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
+        if not DEV_MODE:
+            flags |= Gio.SubprocessFlags.STDERR_SILENCE
         launcher = Ide.SubprocessLauncher()
-        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE |
-                           Gio.SubprocessFlags.STDOUT_PIPE |
-                           Gio.SubprocessFlags.STDERR_SILENCE)
+        launcher.set_flags(flags)
         launcher.set_cwd(GLib.get_home_dir())
         launcher.set_run_on_host(True)
         return launcher
@@ -168,7 +179,7 @@ class RustDiagnosticProvider(Ide.LangservDiagnosticProvider):
         RustService.bind_client(self)
 
 class RustCompletionProvider(Ide.LangservCompletionProvider):
-    def do_load(self):
+    def do_load(self, context):
         RustService.bind_client(self)
 
 class RustRenameProvider(Ide.LangservRenameProvider):
@@ -180,5 +191,9 @@ class RustSymbolResolver(Ide.LangservSymbolResolver):
         RustService.bind_client(self)
 
 class RustHighlighter(Ide.LangservHighlighter):
+    def do_load(self):
+        RustService.bind_client(self)
+
+class RustFormatter(Ide.LangservFormatter):
     def do_load(self):
         RustService.bind_client(self)

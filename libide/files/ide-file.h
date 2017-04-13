@@ -36,6 +36,7 @@ IdeFile           *ide_file_new_for_path         (IdeContext           *context,
 gboolean           ide_file_get_is_temporary     (IdeFile              *self);
 guint              ide_file_get_temporary_id     (IdeFile              *self);
 GtkSourceLanguage *ide_file_get_language         (IdeFile              *self);
+const gchar       *ide_file_get_language_id      (IdeFile              *self);
 GFile             *ide_file_get_file             (IdeFile              *self);
 guint              ide_file_hash                 (IdeFile              *self);
 gboolean           ide_file_equal                (IdeFile              *self,

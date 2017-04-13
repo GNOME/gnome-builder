@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-selection-section">
+      <submenu id="ide-source-view-popup-menu-selection-submenu">
+        <section id="ide-source-view-popup-menu-selection-retab-section">
+          <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Retab</attribute>
+            <attribute name="action">view.retab</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>

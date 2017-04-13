@@ -32,6 +32,8 @@
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "plugins/ide-extension-set-adapter.h"
 
+#define DEFAULT_DIAGNOSE_DELAY 100
+
 typedef struct
 {
   /*
@@ -523,11 +525,11 @@ ide_diagnostics_group_queue_diagnose (IdeDiagnosticsGroup   *group,
   group->needs_diagnose = TRUE;
 
   if (group->in_diagnose == 0 && self->queued_diagnose_source == 0)
-    self->queued_diagnose_source =
-      gdk_threads_add_idle_full (G_PRIORITY_DEFAULT,
-                                 ide_diagnostics_manager_begin_diagnose,
-                                 g_object_ref (self),
-                                 g_object_unref);
+    self->queued_diagnose_source = g_timeout_add_full (G_PRIORITY_LOW,
+                                                       DEFAULT_DIAGNOSE_DELAY,
+                                                       ide_diagnostics_manager_begin_diagnose,
+                                                       g_object_ref (self),
+                                                       g_object_unref);
 }
 
 static void

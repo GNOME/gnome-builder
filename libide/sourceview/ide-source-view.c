@@ -64,6 +64,7 @@
 #include "sourceview/ide-source-view.h"
 #include "sourceview/ide-text-util.h"
 #include "symbols/ide-symbol.h"
+#include "symbols/ide-symbol-resolver.h"
 #include "theatrics/ide-box-theatric.h"
 #include "util/ide-cairo.h"
 #include "util/ide-gdk.h"
@@ -263,13 +264,15 @@ enum {
   CLEAR_SEARCH,
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
-  DUPLICATE_ENTIRE_LINE,
   CYCLE_COMPLETION,
   DECREASE_FONT_SIZE,
   DELETE_SELECTION,
+  DUPLICATE_ENTIRE_LINE,
   END_MACRO,
   END_USER_ACTION,
   FOCUS_LOCATION,
+  FORMAT_SELECTION,
+  FIND_REFERENCES,
   GOTO_DEFINITION,
   HIDE_COMPLETION,
   INCREASE_FONT_SIZE,
@@ -5913,6 +5916,262 @@ ide_source_view_get_spell_checking (IdeSourceView *self)
 }
 
 static void
+ide_source_view_format_selection_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdeSourceView) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_buffer_format_selection_finish (buffer, result, &error))
+    g_warning ("%s", error->message);
+
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (self), TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_format_selection (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(IdeFormatterOptions) options = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  options = ide_formatter_options_new ();
+  ide_formatter_options_set_tab_width (options,
+    gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (self)));
+  ide_formatter_options_set_insert_spaces (options,
+    gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self)));
+
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (self), FALSE);
+  ide_buffer_format_selection_async (priv->buffer,
+                                     options,
+                                     NULL,
+                                     ide_source_view_format_selection_cb,
+                                     g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_find_references_jump (IdeSourceView *self,
+                                           GtkListBoxRow *row,
+                                           GtkListBox    *list_box)
+{
+  IdeSourceLocation *location;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  location = g_object_get_data (G_OBJECT (row), "IDE_SOURCE_LOCATION");
+
+  if (location != NULL)
+    g_signal_emit (self, signals [FOCUS_LOCATION], 0, location);
+
+  IDE_EXIT;
+}
+
+static gboolean
+insert_mark_within_range (IdeBuffer      *buffer,
+                          IdeSourceRange *range)
+{
+  GtkTextMark *insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  IdeSourceLocation *begin = ide_source_range_get_begin (range);
+  IdeSourceLocation *end = ide_source_range_get_end (range);
+  GtkTextIter iter;
+  GtkTextIter begin_iter;
+  GtkTextIter end_iter;
+
+  if (!begin || !end)
+    return FALSE;
+
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, insert);
+  ide_buffer_get_iter_at_source_location (buffer, &begin_iter, begin);
+  ide_buffer_get_iter_at_source_location (buffer, &end_iter, end);
+
+  return gtk_text_iter_compare (&begin_iter, &iter) <= 0 &&
+         gtk_text_iter_compare (&end_iter, &iter) >= 0;
+
+}
+
+static void
+ide_source_view_find_references_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)object;
+  g_autoptr(IdeSourceView) self = user_data;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(GPtrArray) references = NULL;
+  g_autoptr(GError) error = NULL;
+  GtkScrolledWindow *scroller;
+  GtkPopover *popover;
+  GtkListBox *list_box;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GdkRectangle loc;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  references = ide_symbol_resolver_find_references_finish (resolver, result, &error);
+
+  if (error != NULL)
+    g_debug ("%s", error->message);
+
+  /* Ignore popover if we are no longer visible or not top-most */
+  if (!gtk_widget_get_visible (GTK_WIDGET (self)) ||
+      !gtk_widget_get_child_visible (GTK_WIDGET (self)))
+    IDE_EXIT;
+
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &iter, insert);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->buffer), &iter, &iter);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &loc);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (self),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         loc.x, loc.y, &loc.x, &loc.y);
+
+  popover = g_object_new (GTK_TYPE_POPOVER,
+                          "modal", TRUE,
+                          "position", GTK_POS_TOP,
+                          "relative-to", self,
+                          "pointing-to", &loc,
+                          NULL);
+
+  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                           "min-content-height", 35,
+                           "max-content-height", 200,
+                           "propagate-natural-height", TRUE,
+                           "propagate-natural-width", TRUE,
+                           "visible", TRUE,
+                           NULL);
+  gtk_container_add (GTK_CONTAINER (popover), GTK_WIDGET (scroller));
+
+  list_box = g_object_new (GTK_TYPE_LIST_BOX,
+                           "visible", TRUE,
+                           NULL);
+  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (list_box));
+
+  if (references != NULL && references->len > 0)
+    {
+      IdeContext *context = ide_buffer_get_context (priv->buffer);
+      IdeVcs *vcs = ide_context_get_vcs (context);
+      GFile *workdir = ide_vcs_get_working_directory (vcs);
+
+      for (guint i = 0; i < references->len; i++)
+        {
+          IdeSourceRange *range = g_ptr_array_index (references, i);
+          IdeSourceLocation *begin = ide_source_range_get_begin (range);
+          IdeFile *file = ide_source_location_get_file (begin);
+          GFile *gfile = ide_file_get_file (file);
+          guint line = ide_source_location_get_line (begin);
+          guint line_offset = ide_source_location_get_line_offset (begin);
+          g_autofree gchar *name = NULL;
+          g_autofree gchar *text = NULL;
+          GtkListBoxRow *row;
+          GtkLabel *label;
+
+          if (g_file_has_prefix (gfile, workdir))
+            name = g_file_get_relative_path (workdir, gfile);
+          else if (g_file_is_native (gfile))
+            name = g_file_get_path (gfile);
+          else
+            name = g_file_get_uri (gfile);
+
+          /* translators: %s is the filename, then line number, column number. <> are pango markup */
+          text = g_strdup_printf (_("<b>%s</b> — <small>Line %u, Column %u</small>"),
+                                  name, line + 1, line_offset + 1);
+
+          label = g_object_new (GTK_TYPE_LABEL,
+                                "xalign", 0.0f,
+                                "label", text,
+                                "use-markup", TRUE,
+                                "visible", TRUE,
+                                NULL);
+          row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                              "child", label,
+                              "visible", TRUE,
+                              NULL);
+          g_object_set_data_full (G_OBJECT (row),
+                                  "IDE_SOURCE_LOCATION",
+                                  ide_source_location_ref (begin),
+                                  (GDestroyNotify)ide_source_location_unref);
+          gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
+
+          if (insert_mark_within_range (priv->buffer, range))
+            gtk_list_box_select_row (list_box, row);
+        }
+    }
+  else
+    {
+      GtkLabel *label = g_object_new (GTK_TYPE_LABEL,
+                                      "label", _("No references were found"),
+                                      "visible", TRUE,
+                                      NULL);
+      gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (label));
+    }
+
+  g_signal_connect_object (list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_source_view_real_find_references_jump),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_popover_popup (popover);
+
+  g_signal_connect (popover, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_find_references (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(IdeSourceLocation) location = NULL;
+  IdeSymbolResolver *resolver;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  resolver = ide_buffer_get_symbol_resolver (priv->buffer);
+
+  if (resolver == NULL)
+    {
+      g_debug ("No symbol resolver is available");
+      IDE_EXIT;
+    }
+
+  location = ide_buffer_get_insert_location (priv->buffer);
+
+  ide_symbol_resolver_find_references_async (resolver,
+                                             location,
+                                             NULL,
+                                             ide_source_view_find_references_cb,
+                                             g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -6663,6 +6922,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
+  signals [FIND_REFERENCES] =
+    g_signal_new_class_handler ("find-references",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_find_references),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   signals [FOCUS_LOCATION] =
     g_signal_new ("focus-location",
                   G_TYPE_FROM_CLASS (klass),
@@ -6672,6 +6938,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SOURCE_LOCATION);
+
+  signals [FORMAT_SELECTION] =
+    g_signal_new_class_handler ("format-selection",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_format_selection),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   signals [GOTO_DEFINITION] =
     g_signal_new ("goto-definition",
@@ -7046,10 +7319,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   0);
 
   binding_set = gtk_binding_set_by_class (klass);
+
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_r,
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "begin-rename", 0);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_space,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "find-references", 0);
 
   /*
    * Escape is wired up by the GtkSourceCompletion by default. However, some

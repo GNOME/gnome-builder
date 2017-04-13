@@ -143,6 +143,12 @@ struct _IdeBuildPipeline
   GArray *pipeline;
 
   /*
+   * This contains the GBinding objects used to keep the "completed"
+   * property of chained stages updated.
+   */
+  GPtrArray *chained_bindings;
+
+  /*
    * This are used for ErrorFormat registration so that we have a
    * single place to extract "GCC-style" warnings and errors. Other
    * languages can also register these so they show up in the build
@@ -201,6 +207,13 @@ struct _IdeBuildPipeline
    * If we are in the middle of a clean operation.
    */
   guint in_clean : 1;
+
+  /*
+   * Precalculation if we need to look for errors on stdout. We can't rely
+   * on @current_stage for this, becase log entries might come in
+   * asynchronously and after the processes/stage has completed.
+   */
+  guint errors_on_stdout : 1;
 };
 
 typedef enum
@@ -273,6 +286,15 @@ static const gchar *task_type_names[] = {
   "clean",
   "rebuild",
 };
+
+static void
+chained_binding_clear (gpointer data)
+{
+  GBinding *binding = data;
+
+  g_binding_unbind (binding);
+  g_object_unref (binding);
+}
 
 static void
 task_data_free (gpointer data)
@@ -417,21 +439,31 @@ create_diagnostic (IdeBuildPipeline *self,
 
   parsed.severity = parse_severity (level);
 
-  if (!g_path_is_absolute (filename) && self->errfmt_current_dir != NULL)
+  if (!g_path_is_absolute (filename))
     {
-      const gchar *basedir = self->errfmt_current_dir;
       gchar *path;
 
-      if (g_str_has_prefix (basedir, self->errfmt_top_dir))
+      if (self->errfmt_current_dir != NULL)
         {
-          basedir += strlen (self->errfmt_top_dir);
-          if (*basedir == '/')
-            basedir++;
-        }
+          const gchar *basedir = self->errfmt_current_dir;
 
-      path = g_build_filename (basedir, filename, NULL);
-      g_free (filename);
-      filename = path;
+          if (g_str_has_prefix (basedir, self->errfmt_top_dir))
+            {
+              basedir += strlen (self->errfmt_top_dir);
+              if (*basedir == G_DIR_SEPARATOR)
+                basedir++;
+            }
+
+          path = g_build_filename (basedir, filename, NULL);
+          g_free (filename);
+          filename = path;
+        }
+      else
+        {
+          path = g_build_filename (self->builddir, filename, NULL);
+          g_free (filename);
+          filename = path;
+        }
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -466,15 +498,15 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
                                  gpointer           user_data)
 {
   IdeBuildPipeline *self = user_data;
-  const gchar *enterdir;
   g_autofree gchar *filtered_message = NULL;
+  const gchar *enterdir;
 
   g_assert (stream == IDE_BUILD_LOG_STDOUT || stream == IDE_BUILD_LOG_STDERR);
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (message != NULL);
 
 #define ENTERING_DIRECTORY_BEGIN "Entering directory '"
-#define ENTERING_DIRECTORY_END   "'\n"
+#define ENTERING_DIRECTORY_END   "'"
 
   if (message_len < 0)
     message_len = strlen (message);
@@ -484,43 +516,63 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
 
   filtered_message = ide_build_utils_color_codes_filtering (message);
 
-  /*
-   * This expects LANG=C, which is defined in the autotools Builder.
-   * Not the most ideal decoupling of logic, but we don't have a whole
-   * lot to work with here.
-   */
-  if (NULL != (enterdir = strstr (filtered_message, ENTERING_DIRECTORY_BEGIN)) &&
-      g_str_has_suffix (enterdir, ENTERING_DIRECTORY_END))
+  if (stream == IDE_BUILD_LOG_STDOUT)
     {
-      gssize len;
-
-      enterdir += IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
-      len = strlen (enterdir) - IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
-
-      if (len > 0)
+      /*
+       * This expects LANG=C, which is defined in the autotools Builder.
+       * Not the most ideal decoupling of logic, but we don't have a whole
+       * lot to work with here.
+       */
+      if (NULL != (enterdir = strstr (filtered_message, ENTERING_DIRECTORY_BEGIN)) &&
+          g_str_has_suffix (enterdir, ENTERING_DIRECTORY_END))
         {
-          g_free (self->errfmt_current_dir);
-          self->errfmt_current_dir = g_strndup (enterdir, len);
-          if (self->errfmt_top_dir == NULL)
-            self->errfmt_top_dir = g_strndup (enterdir, len);
-        }
+          gssize len;
 
-      return;
+          enterdir += IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
+
+          /* Translate to relative paths for out-of-tree builds */
+          if (g_str_has_prefix (enterdir, self->builddir))
+            {
+              enterdir += strlen (self->builddir);
+              if (*enterdir == G_DIR_SEPARATOR)
+                enterdir++;
+            }
+
+          len = strlen (enterdir) - IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
+
+          if (len > 0)
+            {
+              g_free (self->errfmt_current_dir);
+              self->errfmt_current_dir = g_strndup (enterdir, len);
+              if (self->errfmt_top_dir == NULL)
+                self->errfmt_top_dir = g_strndup (enterdir, len);
+            }
+
+          return;
+        }
     }
 
-  for (guint i = 0; i < self->errfmts->len; i++)
+  /*
+   * Unfortunately, some build engines such as Ninja refuse to pass errors on
+   * stderr like the tooling they abstract. So we must parse stdout in addition
+   * to stderr to extract errors.
+   */
+  if (stream == IDE_BUILD_LOG_STDERR || self->errors_on_stdout)
     {
-      const ErrorFormat *errfmt = &g_array_index (self->errfmts, ErrorFormat, i);
-      g_autoptr(GMatchInfo) match_info = NULL;
-
-      if (g_regex_match (errfmt->regex, filtered_message, 0, &match_info))
+      for (guint i = 0; i < self->errfmts->len; i++)
         {
-          g_autoptr(IdeDiagnostic) diagnostic = create_diagnostic (self, match_info);
+          const ErrorFormat *errfmt = &g_array_index (self->errfmts, ErrorFormat, i);
+          g_autoptr(GMatchInfo) match_info = NULL;
 
-          if (diagnostic != NULL)
+          if (g_regex_match (errfmt->regex, filtered_message, 0, &match_info))
             {
-              ide_build_pipeline_emit_diagnostic (self, diagnostic);
-              return;
+              g_autoptr(IdeDiagnostic) diagnostic = create_diagnostic (self, match_info);
+
+              if (diagnostic != NULL)
+                {
+                  ide_build_pipeline_emit_diagnostic (self, diagnostic);
+                  return;
+                }
             }
         }
     }
@@ -650,6 +702,19 @@ ide_build_pipeline_real_started (IdeBuildPipeline *self)
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
 
+  self->errors_on_stdout = FALSE;
+
+  for (guint i = 0; i < self->pipeline->len; i++)
+    {
+      PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
+
+      if (ide_build_stage_get_check_stdout (entry->stage))
+        {
+          self->errors_on_stdout = TRUE;
+          break;
+        }
+    }
+
   IDE_EXIT;
 }
 
@@ -706,6 +771,88 @@ ide_build_pipeline_extension_removed (PeasExtensionSet *set,
   IDE_EXIT;
 }
 
+static void
+register_build_commands_stage (IdeBuildPipeline *self,
+                               IdeContext       *context)
+{
+  g_autoptr(GError) error = NULL;
+  const gchar * const *build_commands;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_CONFIGURATION (self->configuration));
+
+  build_commands = ide_configuration_get_build_commands (self->configuration);
+  if (build_commands == NULL)
+    return;
+  for (guint i = 0; build_commands[i]; i++)
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeBuildStage) stage = NULL;
+
+      if (NULL == (launcher = ide_build_pipeline_create_launcher (self, &error)))
+        {
+          g_warning ("%s", error->message);
+          return;
+        }
+
+      ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
+      ide_subprocess_launcher_push_argv (launcher, "-c");
+      ide_subprocess_launcher_push_argv (launcher, build_commands[i]);
+
+      stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                            "context", context,
+                            "launcher", launcher,
+                            NULL);
+
+      ide_build_pipeline_connect (self,
+                                  IDE_BUILD_PHASE_BUILD | IDE_BUILD_PHASE_AFTER,
+                                  i,
+                                  stage);
+    }
+}
+
+static void
+register_post_install_commands_stage (IdeBuildPipeline *self,
+                                      IdeContext       *context)
+{
+  g_autoptr(GError) error = NULL;
+  const gchar * const *post_install_commands;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_CONFIGURATION (self->configuration));
+
+  post_install_commands = ide_configuration_get_post_install_commands (self->configuration);
+  if (post_install_commands == NULL)
+    return;
+  for (guint i = 0; post_install_commands[i]; i++)
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeBuildStage) stage = NULL;
+
+      if (NULL == (launcher = ide_build_pipeline_create_launcher (self, &error)))
+        {
+          g_warning ("%s", error->message);
+          return;
+        }
+
+      ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
+      ide_subprocess_launcher_push_argv (launcher, "-c");
+      ide_subprocess_launcher_push_argv (launcher, post_install_commands[i]);
+
+      stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                            "context", context,
+                            "launcher", launcher,
+                            NULL);
+
+      ide_build_pipeline_connect (self,
+                                  IDE_BUILD_PHASE_INSTALL | IDE_BUILD_PHASE_AFTER,
+                                  i,
+                                  stage);
+    }
+}
+
 /**
  * ide_build_pipeline_load:
  *
@@ -726,6 +873,9 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
   g_assert (self->addins == NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+
+  register_build_commands_stage (self, context);
+  register_post_install_commands_stage (self, context);
 
   self->addins = ide_extension_set_new (peas_engine_get_default (),
                                         IDE_TYPE_BUILD_PIPELINE_ADDIN,
@@ -805,6 +955,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_pointer (&self->errfmts, g_array_unref);
   g_clear_pointer (&self->errfmt_top_dir, g_free);
   g_clear_pointer (&self->errfmt_current_dir, g_free);
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_free);
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->finalize (object);
 
@@ -1051,6 +1202,8 @@ ide_build_pipeline_init (IdeBuildPipeline *self)
   self->errfmts = g_array_new (FALSE, FALSE, sizeof (ErrorFormat));
   g_array_set_clear_func (self->errfmts, clear_error_format);
 
+  self->chained_bindings = g_ptr_array_new_with_free_func ((GDestroyNotify)chained_binding_clear);
+
   self->log = ide_build_log_new ();
 }
 
@@ -1080,11 +1233,15 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
                error->message);
       self->failed = TRUE;
       g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
     }
 
-  ide_build_stage_set_completed (stage, TRUE);
-  ide_build_pipeline_tick_execute (self, task);
+  ide_build_stage_set_completed (stage, !self->failed);
+
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_free);
+  self->chained_bindings = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (self->failed == FALSE)
+    ide_build_pipeline_tick_execute (self, task);
 
   IDE_EXIT;
 }
@@ -1101,6 +1258,7 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
     {
       const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, position);
       gboolean chained;
+      GBinding *chained_binding;
 
       /*
        * Ignore all future stages if they were not requested by the current
@@ -1124,11 +1282,8 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
       if (!chained)
         return;
 
-      /*
-       * NOTE: We do not mark the chained stage as completed as that is left
-       *       up to the chain implementation. We simply let self->position
-       *       be advanced to point at the index of the cained entry.
-       */
+      chained_binding = g_object_bind_property (stage, "completed", entry->stage, "completed", 0);
+      g_ptr_array_add (self->chained_bindings, g_object_ref (chained_binding));
 
       self->position = position;
     }
@@ -1924,6 +2079,8 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
 
       ide_subprocess_launcher_set_clear_env (ret, TRUE);
       ide_subprocess_launcher_overlay_environment (ret, env);
+      /* Always ignore V=1 from configurations */
+      ide_subprocess_launcher_setenv (ret, "V", "0", TRUE);
       ide_subprocess_launcher_set_cwd (ret, ide_build_pipeline_get_builddir (self));
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |

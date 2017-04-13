@@ -76,6 +76,16 @@ struct _IdeSubprocessInterface
                                              GBytes              **stdout_buf,
                                              GBytes              **stderr_buf,
                                              GError              **error);
+  void           (*communicate_utf8_async)  (IdeSubprocess        *self,
+                                             const gchar          *stdin_buf,
+                                             GCancellable         *cancellable,
+                                             GAsyncReadyCallback   callback,
+                                             gpointer              user_data);
+  gboolean       (*communicate_utf8_finish) (IdeSubprocess        *self,
+                                             GAsyncResult         *result,
+                                             gchar               **stdout_buf,
+                                             gchar               **stderr_buf,
+                                             GError              **error);
 };
 
 const gchar   *ide_subprocess_get_identifier     (IdeSubprocess *self);

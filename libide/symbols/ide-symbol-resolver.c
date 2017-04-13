@@ -61,10 +61,43 @@ ide_symbol_resolver_real_get_symbol_tree_finish (IdeSymbolResolver  *self,
 }
 
 static void
+ide_symbol_resolver_real_find_references_async (IdeSymbolResolver   *self,
+                                                IdeSourceLocation   *location,
+                                                GCancellable        *cancellable,
+                                                GAsyncReadyCallback  callback,
+                                                gpointer             user_data)
+{
+  g_assert (IDE_IS_SYMBOL_RESOLVER (self));
+  g_assert (location != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_symbol_resolver_real_find_references_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Finding references is not supported for this language");
+}
+
+static GPtrArray *
+ide_symbol_resolver_real_find_references_finish (IdeSymbolResolver  *self,
+                                                 GAsyncResult       *result,
+                                                 GError            **error)
+{
+  g_assert (IDE_IS_SYMBOL_RESOLVER (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
 ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
 {
   iface->get_symbol_tree_async = ide_symbol_resolver_real_get_symbol_tree_async;
   iface->get_symbol_tree_finish = ide_symbol_resolver_real_get_symbol_tree_finish;
+  iface->find_references_async = ide_symbol_resolver_real_find_references_async;
+  iface->find_references_finish = ide_symbol_resolver_real_find_references_finish;
 }
 
 /**
@@ -165,4 +198,40 @@ ide_symbol_resolver_load (IdeSymbolResolver *self)
 
   if (IDE_SYMBOL_RESOLVER_GET_IFACE (self)->load)
     IDE_SYMBOL_RESOLVER_GET_IFACE (self)->load (self);
+}
+
+void
+ide_symbol_resolver_find_references_async (IdeSymbolResolver   *self,
+                                           IdeSourceLocation   *location,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
+  g_return_if_fail (location != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_SYMBOL_RESOLVER_GET_IFACE (self)->find_references_async (self, location, cancellable, callback, user_data);
+}
+
+/**
+ * ide_symbol_resolver_find_references_finish:
+ * @self: a #IdeSymbolResolver
+ * @result: a #GAsyncResult
+ * @error: a #GError or %NULL
+ *
+ * Completes an asynchronous request to ide_symbol_resolver_find_references_async().
+ *
+ * Returns: (transfer container) (element-type Ide.SourceRange): A #GPtrArray
+ *   of #IdeSourceRange if successful; otherwise %NULL and @error is set.
+ */
+GPtrArray *
+ide_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
+                                            GAsyncResult       *result,
+                                            GError            **error)
+{
+  g_return_val_if_fail (IDE_IS_SYMBOL_RESOLVER (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  return IDE_SYMBOL_RESOLVER_GET_IFACE (self)->find_references_finish (self, result, error);
 }

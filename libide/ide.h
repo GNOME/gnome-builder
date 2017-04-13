@@ -20,6 +20,7 @@
 #define IDE_H
 
 #include <gio/gio.h>
+#include <libpeas/peas.h>
 
 G_BEGIN_DECLS
 
@@ -52,6 +53,9 @@ G_BEGIN_DECLS
 #include "buildsystem/ide-configuration-provider.h"
 #include "buildsystem/ide-environment-variable.h"
 #include "buildsystem/ide-environment.h"
+#include "debugger/ide-breakpoint.h"
+#include "debugger/ide-debug-manager.h"
+#include "debugger/ide-debugger.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device-provider.h"
 #include "devices/ide-device.h"
@@ -87,6 +91,7 @@ G_BEGIN_DECLS
 #include "langserv/ide-langserv-diagnostic-provider.h"
 #include "langserv/ide-langserv-rename-provider.h"
 #include "langserv/ide-langserv-symbol-resolver.h"
+#include "langserv/ide-langserv-util.h"
 #include "local/ide-local-device.h"
 #include "logging/ide-log.h"
 #include "preferences/ide-preferences.h"

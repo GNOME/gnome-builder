@@ -52,9 +52,11 @@ struct _IdeBuildSystemInterface
   gchar      *(*get_builddir)             (IdeBuildSystem       *self,
                                            IdeConfiguration     *configuration);
   gchar      *(*get_id)                   (IdeBuildSystem       *self);
+  gchar      *(*get_display_name)         (IdeBuildSystem       *self);
 };
 
 gchar          *ide_build_system_get_id                   (IdeBuildSystem       *self);
+gchar          *ide_build_system_get_display_name         (IdeBuildSystem       *self);
 void            ide_build_system_new_async                (IdeContext           *context,
                                                            GFile                *project_file,
                                                            const gchar          *build_system_hint,

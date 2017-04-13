@@ -30,16 +30,12 @@ from gi.repository import Ide
 class JhbuildRuntime(Ide.Runtime):
 
     def __init__(self, *args, **kwargs):
-        Ide.Runtime.__init__(self, *args, **kwargs)
+        self.jhbuild_path = kwargs.get('executable_path', None)
+        if self.jhbuild_path is None:
+            raise TypeError('Missing keyword argument: executable_path')
+        del kwargs['executable_path']
 
-    def get_jhbuild_path(self):
-        # Wayland session doesn't have ~/.local/
-        path = os.path.expanduser('~/.local/bin/jhbuild')
-        if os.path.exists(path):
-            return path
-        else:
-            # Rely on search path
-            return 'jhbuild'
+        super().__init__(*args, **kwargs)
 
     def do_create_runner(self, build_target):
         runner = Ide.Runtime.do_create_runner(self, build_target)
@@ -47,18 +43,15 @@ class JhbuildRuntime(Ide.Runtime):
         return runner
 
     def do_create_launcher(self):
-        try:
-            launcher = Ide.Runtime.do_create_launcher(self)
+        launcher = Ide.Runtime.do_create_launcher(self)
 
-            launcher.push_argv(self.get_jhbuild_path())
-            launcher.push_argv('run')
+        launcher.push_argv(self.jhbuild_path)
+        launcher.push_argv('run')
 
-            launcher.set_run_on_host(True)
-            launcher.set_clear_env(False)
+        launcher.set_run_on_host(True)
+        launcher.set_clear_env(False)
 
-            return launcher
-        except GLib.Error:
-            return None
+        return launcher
 
     def do_prepare_configuration(self, configuration):
         launcher = self.create_launcher()
@@ -70,8 +63,8 @@ class JhbuildRuntime(Ide.Runtime):
         prefix = None
         try:
             # FIXME: Async
-            subprocess = launcher.spawn (None)
-            success, output, err_output = subprocess.communicate_utf8 (None, None)
+            subprocess = launcher.spawn(None)
+            success, output, err_output = subprocess.communicate_utf8(None, None)
             if success:
                 prefix = output.strip()
         except GLib.Error:
@@ -88,8 +81,8 @@ class JhbuildRuntime(Ide.Runtime):
         launcher.push_argv(program)
 
         try:
-            subprocess = launcher.spawn (cancellable)
-            return subprocess.wait_check (cancellable)
+            subprocess = launcher.spawn(cancellable)
+            return subprocess.wait_check(cancellable)
         except GLib.Error:
             return False
 
@@ -100,18 +93,33 @@ class JhbuildRuntimeProvider(GObject.Object, Ide.RuntimeProvider):
         self.runtimes = []
 
     @staticmethod
-    def _is_jhbuild_installed():
-        # This could be installed into another path, but their build system
-        # defaults to ~/.local
-        jhbuild_path = os.path.join(GLib.get_home_dir(), '.local', 'bin', 'jhbuild')
-        return os.path.isfile(jhbuild_path)
+    def _get_jhbuild_path():
+        for jhbuild_bin in ['jhbuild', os.path.expanduser('~/.local/bin/jhbuild')]:
+            try:
+                launcher = Ide.SubprocessLauncher.new(Gio.SubprocessFlags.STDOUT_SILENCE |
+                                                      Gio.SubprocessFlags.STDERR_SILENCE)
+                launcher.push_argv('which')
+                launcher.push_argv(jhbuild_bin)
+
+                launcher.set_run_on_host(True)
+                launcher.set_clear_env(False)
+
+                subprocess = launcher.spawn(None)
+                if subprocess.wait_check(None) is True:
+                    return jhbuild_bin
+            except GLib.Error:
+                pass
+
+        return None
 
     def do_load(self, manager):
-        if self._is_jhbuild_installed():
+        jhbuild_path = self._get_jhbuild_path()
+        if jhbuild_path is not None:
             context = manager.get_context()
             runtime = JhbuildRuntime(context=context,
-                                     id="jhbuild",
-                                     display_name="JHBuild")
+                                     id='jhbuild',
+                                     display_name='JHBuild',
+                                     executable_path=jhbuild_path)
             manager.add(runtime)
             self.runtimes.append(runtime)
 

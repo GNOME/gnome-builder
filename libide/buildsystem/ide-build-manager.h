@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeBuildManager, ide_build_manager, IDE, BUILD_MANAGER, IdeObject)
 
 gboolean          ide_build_manager_get_busy            (IdeBuildManager       *self);
+gboolean          ide_build_manager_get_can_build       (IdeBuildManager       *self);
 gchar            *ide_build_manager_get_message         (IdeBuildManager       *self);
 GDateTime        *ide_build_manager_get_last_build_time (IdeBuildManager       *self);
 GTimeSpan         ide_build_manager_get_running_time    (IdeBuildManager       *self);

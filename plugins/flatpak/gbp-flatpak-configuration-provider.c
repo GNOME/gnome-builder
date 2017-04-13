@@ -698,7 +698,9 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
         }
     }
 
-  if (relevant_config == NULL)
+  if (relevant_config == NULL &&
+      event != G_FILE_MONITOR_EVENT_CREATED &&
+      event != G_FILE_MONITOR_EVENT_MOVED_IN)
     IDE_EXIT;
 
   new_config_file = file;
@@ -706,65 +708,67 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
     {
     case G_FILE_MONITOR_EVENT_DELETED:
     case G_FILE_MONITOR_EVENT_MOVED_OUT:
-        ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
-        g_ptr_array_remove_fast (self->configurations, relevant_config);
-        g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
-        break;
+      ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
+      g_ptr_array_remove_fast (self->configurations, relevant_config);
+      break;
 
     case G_FILE_MONITOR_EVENT_RENAMED:
-        filename = g_file_get_basename (other_file);
-        /* The "rename" is just a temporary file created by an editor */
-        if (g_str_has_suffix (filename, "~"))
-          IDE_EXIT;
-        else
-          g_free (filename);
-        new_config_file = other_file;
-        /* Don't break so we can reuse the code below to add the new config */
+      filename = g_file_get_basename (other_file);
+      /* The "rename" is just a temporary file created by an editor */
+      if (g_str_has_suffix (filename, "~"))
+        IDE_EXIT;
+      else
+        g_clear_pointer (&filename, g_free);
+      new_config_file = other_file;
+      IDE_FALLTHROUGH;
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_MOVED_IN:
-        path = g_file_get_path (new_config_file);
-        filename = g_file_get_basename (new_config_file);
-        id = get_manifest_id (path, filename);
+      path = g_file_get_path (new_config_file);
+      filename = g_file_get_basename (new_config_file);
+      id = get_manifest_id (path, filename);
 
-        if (!contains_id (self->configurations, id))
-          {
-            g_autoptr(GbpFlatpakConfiguration) new_config = NULL;
+      if (!contains_id (self->configurations, id))
+        {
+          g_autoptr(GbpFlatpakConfiguration) new_config = NULL;
 
-            new_config = gbp_flatpak_configuration_new (context, id, filename);
-            if (gbp_flatpak_configuration_load_from_file (new_config, new_config_file))
-              {
-                g_autoptr(GFileMonitor) manifest_monitor = NULL;
-                g_autoptr(GError) local_error = NULL;
+          new_config = gbp_flatpak_configuration_new (context, id, filename);
+          if (gbp_flatpak_configuration_load_from_file (new_config, new_config_file))
+            {
+              g_autoptr(GFileMonitor) manifest_monitor = NULL;
+              g_autoptr(GError) local_error = NULL;
 
-                g_signal_connect_object (new_config,
-                                         "changed",
-                                         G_CALLBACK (gbp_flatpak_configuration_provider_config_changed),
-                                         self,
-                                         G_CONNECT_SWAPPED);
+              g_signal_connect_object (new_config,
+                                       "changed",
+                                       G_CALLBACK (gbp_flatpak_configuration_provider_config_changed),
+                                       self,
+                                       G_CONNECT_SWAPPED);
 
-                manifest_monitor = g_file_monitor_file (file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
-                if (manifest_monitor == NULL)
-                  g_warning ("Error encountered trying to monitor flatpak manifest %s: %s", path, local_error->message);
-                else
-                  {
-                    g_signal_connect_object (manifest_monitor,
-                                             "changed",
-                                             G_CALLBACK (gbp_flatpak_configuration_provider_manifest_changed),
-                                             self,
-                                             G_CONNECT_SWAPPED);
-                    g_ptr_array_add (self->manifest_monitors, g_steal_pointer (&manifest_monitor));
-                  }
+              manifest_monitor = g_file_monitor_file (new_config_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
+              if (manifest_monitor == NULL)
+                g_warning ("Error encountered trying to monitor flatpak manifest %s: %s", path, local_error->message);
+              else
+                {
+                  g_signal_connect_object (manifest_monitor,
+                                           "changed",
+                                           G_CALLBACK (gbp_flatpak_configuration_provider_manifest_changed),
+                                           self,
+                                           G_CONNECT_SWAPPED);
+                  g_ptr_array_add (self->manifest_monitors, g_steal_pointer (&manifest_monitor));
+                }
 
-                ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
-                g_ptr_array_remove_fast (self->configurations, relevant_config);
-                g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
-                ide_configuration_manager_add (self->manager, IDE_CONFIGURATION (new_config));
-                ide_configuration_manager_set_current (self->manager, IDE_CONFIGURATION (new_config));
-                g_ptr_array_add (self->configurations, g_steal_pointer (&new_config));
-              }
-          }
-        break;
+              if (relevant_config != NULL)
+                {
+                  ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
+                  g_ptr_array_remove_fast (self->configurations, relevant_config);
+                }
+              g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
+              ide_configuration_manager_add (self->manager, IDE_CONFIGURATION (new_config));
+              ide_configuration_manager_set_current (self->manager, IDE_CONFIGURATION (new_config));
+              g_ptr_array_add (self->configurations, g_steal_pointer (&new_config));
+            }
+        }
+      break;
 
     case G_FILE_MONITOR_EVENT_CHANGED:
     case G_FILE_MONITOR_EVENT_MOVED:

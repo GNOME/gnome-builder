@@ -1,12 +1,13 @@
 SUBDIRS =               \
+	search          \
 	egg             \
 	gd              \
 	libeditorconfig \
 	jsonrpc-glib    \
+	mi2             \
 	nautilus        \
 	pnl             \
 	rg              \
-	search          \
 	gstyle          \
 	tmpl            \
 	xml             \

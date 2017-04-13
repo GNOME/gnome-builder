@@ -19,8 +19,6 @@
 #ifndef IDE_LANGSERV_CLIENT_H
 #define IDE_LANGSERV_CLIENT_H
 
-#include <json-glib/json-glib.h>
-
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -35,7 +33,7 @@ struct _IdeLangservClientClass
 
   void     (*notification)          (IdeLangservClient *self,
                                      const gchar       *method,
-                                     JsonNode          *params);
+                                     GVariant          *params);
   gboolean (*supports_language)     (IdeLangservClient *self,
                                      const gchar       *language_id);
   void     (*published_diagnostics) (IdeLangservClient *self,
@@ -52,40 +50,40 @@ struct _IdeLangservClientClass
   gpointer _reserved8;
 };
 
-IdeLangservClient *ide_langserv_client_new                    (IdeContext           *context,
-                                                               GIOStream            *io_stream);
-void               ide_langserv_client_add_language           (IdeLangservClient    *self,
-                                                               const gchar          *language_id);
-void               ide_langserv_client_start                  (IdeLangservClient    *self);
-void               ide_langserv_client_stop                   (IdeLangservClient    *self);
-void               ide_langserv_client_call_async             (IdeLangservClient    *self,
-                                                               const gchar          *method,
-                                                               JsonNode             *params,
-                                                               GCancellable         *cancellable,
-                                                               GAsyncReadyCallback   callback,
-                                                               gpointer              user_data);
-gboolean           ide_langserv_client_call_finish            (IdeLangservClient    *self,
-                                                               GAsyncResult         *result,
-                                                               JsonNode            **return_value,
-                                                               GError              **error);
+IdeLangservClient *ide_langserv_client_new                      (IdeContext           *context,
+                                                                 GIOStream            *io_stream);
+void               ide_langserv_client_add_language             (IdeLangservClient    *self,
+                                                                 const gchar          *language_id);
+void               ide_langserv_client_start                    (IdeLangservClient    *self);
+void               ide_langserv_client_stop                     (IdeLangservClient    *self);
+void               ide_langserv_client_call_async               (IdeLangservClient    *self,
+                                                                 const gchar          *method,
+                                                                 GVariant             *params,
+                                                                 GCancellable         *cancellable,
+                                                                 GAsyncReadyCallback   callback,
+                                                                 gpointer              user_data);
+gboolean           ide_langserv_client_call_finish              (IdeLangservClient    *self,
+                                                                 GAsyncResult         *result,
+                                                                 GVariant            **return_value,
+                                                                 GError              **error);
 void               ide_langserv_client_send_notification_async  (IdeLangservClient    *self,
                                                                  const gchar          *method,
-                                                                 JsonNode             *params,
+                                                                 GVariant             *params,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   notificationback,
                                                                  gpointer              user_data);
 gboolean           ide_langserv_client_send_notification_finish (IdeLangservClient    *self,
                                                                  GAsyncResult         *result,
                                                                  GError              **error);
-void               ide_langserv_client_get_diagnostics_async  (IdeLangservClient    *self,
-                                                               GFile                *file,
-                                                               GCancellable         *cancellable,
-                                                               GAsyncReadyCallback   callback,
-                                                               gpointer              user_data);
-gboolean           ide_langserv_client_get_diagnostics_finish (IdeLangservClient    *self,
-                                                               GAsyncResult         *result,
-                                                               IdeDiagnostics      **diagnostics,
-                                                               GError              **error);
+void               ide_langserv_client_get_diagnostics_async    (IdeLangservClient    *self,
+                                                                 GFile                *file,
+                                                                 GCancellable         *cancellable,
+                                                                 GAsyncReadyCallback   callback,
+                                                                 gpointer              user_data);
+gboolean           ide_langserv_client_get_diagnostics_finish   (IdeLangservClient    *self,
+                                                                 GAsyncResult         *result,
+                                                                 IdeDiagnostics      **diagnostics,
+                                                                 GError              **error);
 
 G_END_DECLS
 

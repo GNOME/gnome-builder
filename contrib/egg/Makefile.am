@@ -15,6 +15,7 @@ headers_DATA =                        \
 	egg-column-layout.h           \
 	egg-counter.h                 \
 	egg-date-time.h               \
+	egg-elastic-bin.h             \
 	egg-empty-state.h             \
 	egg-entry-box.h               \
 	egg-file-chooser-entry.h      \
@@ -37,6 +38,11 @@ headers_DATA =                        \
 	egg-slider.h                  \
 	egg-state-machine-buildable.h \
 	egg-state-machine.h           \
+	egg-suggestion.h              \
+	egg-suggestion-entry.h        \
+	egg-suggestion-entry-buffer.h \
+	egg-suggestion-popover.h      \
+	egg-suggestion-row.h          \
 	egg-task-cache.h              \
 	egg-three-grid.h              \
 	egg-widget-action-group.h     \
@@ -51,6 +57,7 @@ libegg_private_la_SOURCES =           \
 	egg-column-layout.c           \
 	egg-counter.c                 \
 	egg-date-time.c               \
+	egg-elastic-bin.c             \
 	egg-empty-state.c             \
 	egg-entry-box.c               \
 	egg-file-chooser-entry.c      \
@@ -72,6 +79,11 @@ libegg_private_la_SOURCES =           \
 	egg-slider.c                  \
 	egg-state-machine-buildable.c \
 	egg-state-machine.c           \
+	egg-suggestion.c              \
+	egg-suggestion-entry.c        \
+	egg-suggestion-entry-buffer.c \
+	egg-suggestion-popover.c      \
+	egg-suggestion-row.c          \
 	egg-task-cache.c              \
 	egg-three-grid.c              \
 	egg-widget-action-group.c     \
@@ -97,6 +109,34 @@ libegg_private_la_LIBADD =            \
 	$(SHM_LIB)                    \
 	$(LIBM)                       \
 	$(NULL)
+
+
+TESTS =
+noinst_PROGRAMS =
+
+
+TESTS += test-suggestion-buffer
+noinst_PROGRAMS += test-suggestion-buffer
+test_suggestion_buffer_SOURCES = test-suggestion-buffer.c
+test_suggestion_buffer_CFLAGS = $(EGG_CFLAGS)
+test_suggestion_buffer_LDADD = $(EGG_LIBS) libegg-private.la
+
+
+if ENABLE_WEBKIT
+noinst_PROGRAMS += test-suggestion
+test_suggestion_SOURCES = test-suggestion.c
+test_suggestion_CFLAGS =                             \
+	$(EGG_CFLAGS)                                \
+	$(WEBKIT_CFLAGS)                             \
+	-I$(top_srcdir)/contrib/search               \
+	$(NULL)
+test_suggestion_LDADD =                              \
+	$(EGG_LIBS)                                  \
+	$(WEBKIT_LIBS)                               \
+	libegg-private.la                            \
+	$(top_builddir)/contrib/search/libsearch.la  \
+	$(NULL)
+endif
 
 
 if HAVE_INTROSPECTION

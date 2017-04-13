@@ -271,7 +271,10 @@ ide_simple_subprocess_communicate_cb (GObject      *object,
   gpointer *data;
 
   if (!g_subprocess_communicate_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
   data = g_new0 (gpointer, 2);
   data[0] = g_steal_pointer (&stdout_buf);
@@ -320,6 +323,72 @@ ide_simple_subprocess_communicate_finish (IdeSubprocess  *subprocess,
 }
 
 static void
+ide_simple_subprocess_communicate_utf8_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  GSubprocess *subprocess = (GSubprocess *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+  g_autofree gchar *stderr_buf = NULL;
+  gpointer *data;
+
+  if (!g_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  data = g_new0 (gpointer, 2);
+  data[0] = g_steal_pointer (&stdout_buf);
+  data[1] = g_steal_pointer (&stderr_buf);
+
+  g_task_return_pointer (task, data, free_object_pair);
+}
+
+static void
+ide_simple_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
+                                              const gchar         *stdin_buf,
+                                              GCancellable        *cancellable,
+                                              GAsyncReadyCallback  callback,
+                                              gpointer             user_data)
+{
+  IdeSimpleSubprocess *self = (IdeSimpleSubprocess *)subprocess;
+  GTask *task = g_task_new (self, cancellable, callback, user_data);
+  g_subprocess_communicate_utf8_async (self->subprocess, stdin_buf, cancellable, ide_simple_subprocess_communicate_utf8_cb, task);
+}
+
+static gboolean
+ide_simple_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
+                                               GAsyncResult   *result,
+                                               gchar         **stdout_buf,
+                                               gchar         **stderr_buf,
+                                               GError        **error)
+{
+  gpointer *pair;
+
+  pair = g_task_propagate_pointer (G_TASK (result), error);
+
+  if (pair != NULL)
+    {
+      if (stdout_buf != NULL)
+        *stdout_buf = g_steal_pointer (&pair[0]);
+
+      if (stderr_buf != NULL)
+        *stderr_buf = g_steal_pointer (&pair[1]);
+
+      g_free (pair[0]);
+      g_free (pair[1]);
+      g_free (pair);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
 subprocess_iface_init (IdeSubprocessInterface *iface)
 {
   iface->get_identifier = ide_simple_subprocess_get_identifier;
@@ -341,6 +410,8 @@ subprocess_iface_init (IdeSubprocessInterface *iface)
   iface->communicate_utf8 = ide_simple_subprocess_communicate_utf8;
   iface->communicate_async = ide_simple_subprocess_communicate_async;
   iface->communicate_finish = ide_simple_subprocess_communicate_finish;
+  iface->communicate_utf8_async = ide_simple_subprocess_communicate_utf8_async;
+  iface->communicate_utf8_finish = ide_simple_subprocess_communicate_utf8_finish;
 }
 
 /**

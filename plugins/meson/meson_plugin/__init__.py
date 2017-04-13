@@ -62,6 +62,9 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_id(self):
         return 'meson'
 
+    def do_get_display_name(self):
+        return 'Meson'
+
     def do_init_async(self, priority, cancel, callback, data=None):
         task = Gio.Task.new(self, cancel, callback)
         task.set_priority(priority)
@@ -317,6 +320,7 @@ class MesonPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
         build_stage.set_clean_launcher(clean_launcher)
+        build_stage.set_check_stdout(True)
         build_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
 
@@ -328,6 +332,7 @@ class MesonPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         install_launcher.push_argv('install')
 
         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        install_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
 
     def _query(self, stage, pipeline, cancellable):

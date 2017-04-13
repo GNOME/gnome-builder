@@ -22,6 +22,6 @@ glib_resources_namespace = gd
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 libgd_private_la_CFLAGS = $(GD_CFLAGS)
-libgd_private_la_LIBADD = $(GD_LIBS)
+libgd_private_la_LIBADD = $(GD_LIBS) $(LIBM)
 
 -include $(top_srcdir)/git.mk

@@ -119,6 +119,8 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         the same thing anyway.
         """
         args = ['grep', '-A', '5', '-I', '-H', '-n', '-r']
+        for ignore_dir in ['.flatpak-builder', '.git']:
+            args.append('--exclude-dir={}'.format(ignore_dir))
         for keyword in KEYWORDS:
             args.append('-e')
             args.append(keyword)

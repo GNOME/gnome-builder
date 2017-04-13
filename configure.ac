@@ -5,8 +5,8 @@ dnl ***********************************************************************
 dnl Define Versioning Information
 dnl ***********************************************************************
 m4_define([builder_major_version],[3])
-m4_define([builder_minor_version],[23])
-m4_define([builder_micro_version],[92])
+m4_define([builder_minor_version],[25])
+m4_define([builder_micro_version],[0])
 m4_define([builder_version],[builder_major_version.builder_minor_version.builder_micro_version])
 m4_define([builder_interface_age],[0])
 m4_define([builder_bugreport_url],
@@ -206,6 +206,7 @@ m4_define([pangoft2_required_version], [1.38.0])
 m4_define([peas_required_version], [1.18.0])
 m4_define([json_glib_required_version], [1.2.0])
 m4_define([gspell_required_version], [1.2.0])
+m4_define([enchant_required_version], [1.6.0])
 
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gmodule-2.0 >= glib_required_version
@@ -217,16 +218,20 @@ PKG_CHECK_MODULES(GSTYLE,   [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version])
 PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
-PKG_CHECK_MODULES(JSONRPC,  [json-glib-1.0 >= json_glib_required_version])
+PKG_CHECK_MODULES(JSONRPC,  [json-glib-1.0 >= json_glib_required_version
+                             gio-unix-2.0])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gio-unix-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
                              gspell-1 >= gspell_required_version
+                             enchant >= enchant_required_version
                              json-glib-1.0 >= json_glib_required_version
                              libpeas-1.0 >= peas_required_version
                              libxml-2.0 >= libxml_required_version
                              pangoft2 >= pangoft2_required_version])
+PKG_CHECK_MODULES(MI2,      [gio-2.0 >= glib_required_version
+                             gio-unix-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(PANEL_GTK,[gtk+-3.0 >= gtk_required_version])
@@ -303,6 +308,7 @@ m4_include([plugins/file-search/configure.ac])
 m4_include([plugins/flatpak/configure.ac])
 m4_include([plugins/fpaste/configure.ac])
 m4_include([plugins/gcc/configure.ac])
+m4_include([plugins/gdb/configure.ac])
 m4_include([plugins/gettext/configure.ac])
 m4_include([plugins/git/configure.ac])
 m4_include([plugins/gnome-code-assistance/configure.ac])
@@ -320,6 +326,7 @@ m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
 m4_include([plugins/python-pack/configure.ac])
 m4_include([plugins/quick-highlight/configure.ac])
+m4_include([plugins/retab/configure.ac])
 m4_include([plugins/rust-langserv/configure.ac])
 m4_include([plugins/rustup/configure.ac])
 m4_include([plugins/support/configure.ac])
@@ -511,6 +518,7 @@ AC_CONFIG_FILES([
 	contrib/jsonrpc-glib/Makefile
 	contrib/jsonrpc-glib/jsonrpc-version.h
 	contrib/libeditorconfig/Makefile
+	contrib/mi2/Makefile
 	contrib/nautilus/Makefile
 	contrib/pnl/Makefile
 	contrib/pnl/pnl-version.h
@@ -588,6 +596,7 @@ echo "  Editorconfig ......................... : ${enable_editorconfig}"
 echo "  Flatpak .............................. : ${enable_flatpak_plugin}"
 echo "  Fpaste.org ........................... : ${enable_fpaste_plugin}"
 echo "  GCC .................................. : ${enable_gcc_plugin}"
+echo "  GDB .................................. : ${enable_gdb_plugin}"
 echo "  Gettext .............................. : ${enable_gettext_plugin}"
 echo "  Git Version Control .................. : ${enable_git_plugin}"
 echo "  Global File Search ................... : ${enable_file_search_plugin}"
@@ -606,6 +615,7 @@ echo "  Python GObject Introspection ......... : ${enable_python_gi_imports_comp
 echo "  Python Jedi Autocompletion ........... : ${enable_jedi_plugin}"
 echo "  Python Language Pack ................. : ${enable_python_pack_plugin}"
 echo "  Quick Highlight ...................... : ${enable_quick_highlight_plugin}"
+echo "  Retab................................. : ${enable_retab_plugin}"
 echo "  Rust Language Server ................. : ${enable_rust_langserv_plugin}"
 echo "  RustUp ............................... : ${enable_rustup_plugin}"
 echo "  Support .............................. : ${enable_support_plugin}"

@@ -24,11 +24,12 @@ configure_file(
 )
 
 libjsonrpc_private_sources = [
-  'jcon.c',
+  'jsonrpc-message.c',
 ]
 
 libjsonrpc_deps = [
   libjson_glib_dep,
+  libgiounix_dep,
 ]
 
 libjsonrpc = shared_library('jsonrpc-glib-' + libjsonrpc_api_version,
@@ -44,6 +45,18 @@ libjsonrpc_dep = declare_dependency(
   link_with: libjsonrpc,
   include_directories: include_directories('.'),
 )
+
+test('jsonrpc-test-message', executable('test-message', 'test-message.c',
+  dependencies: [libjsonrpc_deps, libjsonrpc_dep]
+))
+
+test('jsonrpc-test-server', executable('test-server', 'test-server.c',
+  dependencies: [libjsonrpc_deps, libjsonrpc_dep]
+))
+
+test('jsonrpc-test-stress', executable('test-stress', 'test-stress.c',
+  dependencies: [libjsonrpc_deps, libjsonrpc_dep]
+))
 
 if get_option('with_introspection')
 

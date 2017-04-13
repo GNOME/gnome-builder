@@ -29,6 +29,7 @@
 #include "application/ide-application-addin.h"
 #include "application/ide-application-private.h"
 #include "theming/ide-css-provider.h"
+#include "util/ide-flatpak.h"
 
 static const gchar *blacklisted_plugins[] = {
   "build-tools-plugin", /* Renamed to buildui */
@@ -135,6 +136,22 @@ ide_application_discover_plugins (IdeApplication *self)
                                        PACKAGE_DATADIR"/gnome-builder/plugins");
     }
 
+  /*
+   * We have access to ~/.local/share/gnome-builder/ for plugins even when we are
+   * bundled with flatpak, so might as well use it.
+   */
+  if (ide_is_flatpak ())
+    {
+      g_autofree gchar *plugins_dir = g_build_filename (g_get_home_dir (),
+                                                        ".local",
+                                                        "share",
+                                                        "gnome-builder",
+                                                        "plugins",
+                                                        NULL);
+      g_irepository_prepend_search_path (plugins_dir);
+      peas_engine_prepend_search_path (engine, plugins_dir, plugins_dir);
+    }
+
   g_irepository_require (NULL, "Ide", "1.0", 0, &error);
   if (error != NULL)
     {
@@ -215,6 +232,65 @@ _ide_application_plugin_get_settings (IdeApplication *self,
   return settings;
 }
 
+static void
+ide_application_plugins_load_plugin_gresources (IdeApplication *self,
+                                                PeasPluginInfo *plugin_info,
+                                                PeasEngine     *engine)
+{
+  g_autofree gchar *gresources_path = NULL;
+  g_autofree gchar *gresources_basename = NULL;
+  const gchar *module_dir;
+  const gchar *module_name;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  module_dir = peas_plugin_info_get_module_dir (plugin_info);
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  gresources_basename = g_strdup_printf ("%s.gresources", module_name);
+  gresources_path = g_build_filename (module_dir, gresources_basename, NULL);
+
+  if (g_file_test (gresources_path, G_FILE_TEST_IS_REGULAR))
+    {
+      g_autoptr(GError) error = NULL;
+      GResource *resource;
+
+      resource = g_resource_load (gresources_path, &error);
+
+      if (resource == NULL)
+        {
+          g_warning ("Failed to load gresources: %s", error->message);
+          return;
+        }
+
+      g_hash_table_insert (self->plugin_gresources, g_strdup (module_name), resource);
+      g_resources_register (resource);
+    }
+}
+
+static void
+ide_application_plugins_unload_plugin_gresources (IdeApplication *self,
+                                                  PeasPluginInfo *plugin_info,
+                                                  PeasEngine     *engine)
+{
+  const gchar *module_name;
+  GResource *resources;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  resources = g_hash_table_lookup (self->plugin_gresources, module_name);
+
+  if (resources != NULL)
+    {
+      g_resources_unregister (resources);
+      g_hash_table_remove (self->plugin_gresources, module_name);
+    }
+}
+
 void
 ide_application_load_plugins (IdeApplication *self)
 {
@@ -224,6 +300,7 @@ ide_application_load_plugins (IdeApplication *self)
   g_return_if_fail (IDE_IS_APPLICATION (self));
 
   engine = peas_engine_get_default ();
+
   list = peas_engine_get_plugin_list (engine);
 
   for (; list; list = list->next)
@@ -425,7 +502,7 @@ ide_application_unload_plugin_css (IdeApplication *self,
 }
 
 void
-ide_application_init_plugin_menus (IdeApplication *self)
+ide_application_init_plugin_accessories (IdeApplication *self)
 {
   const GList *list;
   PeasEngine *engine;
@@ -433,6 +510,8 @@ ide_application_init_plugin_menus (IdeApplication *self)
   g_assert (IDE_IS_APPLICATION (self));
 
   self->merge_ids = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  self->plugin_gresources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                                   (GDestroyNotify)g_resource_unref);
 
   engine = peas_engine_get_default ();
 
@@ -446,6 +525,11 @@ ide_application_init_plugin_menus (IdeApplication *self)
                            G_CALLBACK (ide_application_load_plugin_css),
                            self,
                            G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+  g_signal_connect_object (engine,
+                           "load-plugin",
+                           G_CALLBACK (ide_application_plugins_load_plugin_gresources),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (engine,
                            "unload-plugin",
@@ -457,6 +541,11 @@ ide_application_init_plugin_menus (IdeApplication *self)
                            G_CALLBACK (ide_application_unload_plugin_css),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (engine,
+                           "unload-plugin",
+                           G_CALLBACK (ide_application_plugins_unload_plugin_gresources),
+                           self,
+                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
   list = peas_engine_get_plugin_list (engine);
 

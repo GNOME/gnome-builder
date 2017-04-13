@@ -50,6 +50,14 @@ struct _IdeSymbolResolverInterface
                                             GAsyncResult         *result,
                                             GError              **error);
   void           (*load)                   (IdeSymbolResolver    *self);
+  void           (*find_references_async)  (IdeSymbolResolver    *self,
+                                            IdeSourceLocation    *location,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+  GPtrArray     *(*find_references_finish) (IdeSymbolResolver    *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
 };
 
 void           ide_symbol_resolver_load                   (IdeSymbolResolver    *self);
@@ -68,6 +76,14 @@ void           ide_symbol_resolver_get_symbol_tree_async  (IdeSymbolResolver    
                                                            GAsyncReadyCallback   callback,
                                                            gpointer              user_data);
 IdeSymbolTree *ide_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver    *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
+void           ide_symbol_resolver_find_references_async  (IdeSymbolResolver    *self,
+                                                           IdeSourceLocation    *location,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+GPtrArray     *ide_symbol_resolver_find_references_finish (IdeSymbolResolver    *self,
                                                            GAsyncResult         *result,
                                                            GError              **error);
 

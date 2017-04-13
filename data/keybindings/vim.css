@@ -1892,6 +1892,8 @@
              "set-mode" ("vim-visual-line", permanent) };
   bind "k" { "movement" (next-line, 1, 1, 0)
              "set-mode" ("vim-visual-line", permanent) };
+
+  bind "q" { "format-selection" () };
 }
 
 @binding-set builder-vim-source-view-insert

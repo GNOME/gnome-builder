@@ -561,3 +561,57 @@ fuzzy_remove (Fuzzy       *fuzzy,
 
   g_clear_pointer (&ar, g_array_unref);
 }
+
+gchar *
+fuzzy_highlight (Fuzzy       *fuzzy,
+                 const gchar *str,
+                 const gchar *match)
+{
+  static const gchar *begin = "<b>";
+  static const gchar *end = "</b>";
+  GString *ret;
+  gunichar str_ch;
+  gunichar match_ch;
+  gboolean element_open = FALSE;
+
+  if (str == NULL || match == NULL)
+    return g_strdup (str);
+
+  ret = g_string_new (NULL);
+
+  for (; *str; str = g_utf8_next_char (str))
+    {
+      str_ch = g_utf8_get_char (str);
+      match_ch = g_utf8_get_char (match);
+
+      if ((str_ch == match_ch) ||
+          (!fuzzy->case_sensitive && g_unichar_tolower (str_ch) == g_unichar_tolower (match_ch)))
+        {
+          if (!element_open)
+            {
+              g_string_append (ret, begin);
+              element_open = TRUE;
+            }
+
+          g_string_append_unichar (ret, str_ch);
+
+          /* TODO: We could seek to the next char and append in a batch. */
+          match = g_utf8_next_char (match);
+        }
+      else
+        {
+          if (element_open)
+            {
+              g_string_append (ret, end);
+              element_open = FALSE;
+            }
+
+          g_string_append_unichar (ret, str_ch);
+        }
+    }
+
+  if (element_open)
+    g_string_append (ret, end);
+
+  return g_string_free (ret, FALSE);
+}

@@ -61,7 +61,7 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
     {
       g_autoptr(IdeSymbolNode) symbol = NULL;
       const gchar *name;
-      const gchar *icon_name = NULL;
+      const gchar *icon_name;
       IdeTreeNode *child;
       IdeSymbolKind kind;
       gboolean has_children;
@@ -71,137 +71,7 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
       name = ide_symbol_node_get_name (symbol);
       kind = ide_symbol_node_get_kind (symbol);
       use_markup = ide_symbol_node_get_use_markup (symbol);
-
-      switch (kind)
-        {
-        case IDE_SYMBOL_FUNCTION:
-          icon_name = "lang-function-symbolic";
-          break;
-
-        case IDE_SYMBOL_ENUM:
-          icon_name = "lang-enum-symbolic";
-          break;
-
-        case IDE_SYMBOL_ENUM_VALUE:
-          icon_name = "lang-enum-value-symbolic";
-          break;
-
-        case IDE_SYMBOL_STRUCT:
-          icon_name = "lang-struct-symbolic";
-          break;
-
-        case IDE_SYMBOL_CLASS:
-          icon_name = "lang-class-symbolic";
-          break;
-
-        case IDE_SYMBOL_METHOD:
-          icon_name = "lang-method-symbolic";
-          break;
-
-        case IDE_SYMBOL_UNION:
-          icon_name = "lang-union-symbolic";
-          break;
-
-        case IDE_SYMBOL_SCALAR:
-        case IDE_SYMBOL_FIELD:
-        case IDE_SYMBOL_VARIABLE:
-          icon_name = "lang-variable-symbolic";
-          break;
-
-        case IDE_SYMBOL_ARRAY:
-        case IDE_SYMBOL_BOOLEAN:
-        case IDE_SYMBOL_CONSTANT:
-        case IDE_SYMBOL_CONSTRUCTOR:
-        case IDE_SYMBOL_FILE:
-        case IDE_SYMBOL_HEADER:
-        case IDE_SYMBOL_INTERFACE:
-        case IDE_SYMBOL_MODULE:
-        case IDE_SYMBOL_NAMESPACE:
-        case IDE_SYMBOL_NUMBER:
-        case IDE_SYMBOL_NONE:
-        case IDE_SYMBOL_PACKAGE:
-        case IDE_SYMBOL_PROPERTY:
-        case IDE_SYMBOL_STRING:
-          icon_name = NULL;
-          break;
-
-        case IDE_SYMBOL_UI_ATTRIBUTES:
-          icon_name = "ui-attributes-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_CHILD:
-          icon_name = "ui-child-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_ITEM:
-          icon_name = "ui-item-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_MENU:
-          icon_name = "ui-menu-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_OBJECT:
-          icon_name = "ui-object-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_PACKING:
-          icon_name = "ui-packing-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_PROPERTY:
-          icon_name = "ui-property-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_SECTION:
-          icon_name = "ui-section-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_SIGNAL:
-          icon_name = "ui-signal-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_STYLE:
-          icon_name = "ui-style-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_SUBMENU:
-          icon_name = "ui-submenu-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_TEMPLATE:
-          icon_name = "ui-template-symbolic";
-          break;
-
-        case IDE_SYMBOL_XML_ATTRIBUTE:
-          icon_name = "xml-attribute-symbolic";
-          break;
-
-        case IDE_SYMBOL_XML_CDATA:
-          icon_name = "xml-cdata-symbolic";
-          break;
-
-        case IDE_SYMBOL_XML_COMMENT:
-          icon_name = "xml-comment-symbolic";
-          break;
-
-        case IDE_SYMBOL_XML_DECLARATION:
-          icon_name = "xml-declaration-symbolic";
-          break;
-
-        case IDE_SYMBOL_XML_ELEMENT:
-          icon_name = "xml-element-symbolic";
-          break;
-
-        case IDE_SYMBOL_UI_MENU_ATTRIBUTE:
-        case IDE_SYMBOL_UI_STYLE_CLASS:
-          icon_name = NULL;
-          break;
-
-        default:
-          icon_name = NULL;
-          break;
-        }
+      icon_name = ide_symbol_kind_get_icon_name (kind);
 
       has_children = !!ide_symbol_tree_get_n_children (symbol_tree, symbol);
 

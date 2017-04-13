@@ -49,6 +49,15 @@ libide_1_0_la_public_headers =                                              \
 	buildsystem/ide-configuration-provider.h                            \
 	buildsystem/ide-environment-variable.h                              \
 	buildsystem/ide-environment.h                                       \
+	debugger/ide-breakpoint.h                                           \
+	debugger/ide-debugger.h                                             \
+	debugger/ide-debug-manager.h                                        \
+	debugger/ide-debugger-breakpoints.h                                 \
+	debugger/ide-debugger-editor-view-addin.h                           \
+	debugger/ide-debugger-perspective.h                                 \
+	debugger/ide-debugger-workbench-addin.h                             \
+	debugger/ide-debugger-gutter-renderer.h                             \
+	debugger/ide-debugger-view.h                                        \
 	devices/ide-device-manager.h                                        \
 	devices/ide-device-provider.h                                       \
 	devices/ide-device.h                                                \
@@ -70,6 +79,8 @@ libide_1_0_la_public_headers =                                              \
 	files/ide-file-settings.h                                           \
 	files/ide-file.h                                                    \
 	files/ide-indent-style.h                                            \
+	formatting/ide-formatter.h                                          \
+	formatting/ide-formatter-options.h                                  \
 	genesis/ide-genesis-addin.h                                         \
 	highlighting/ide-highlight-engine.h                                 \
 	highlighting/ide-highlight-index.h                                  \
@@ -79,11 +90,13 @@ libide_1_0_la_public_headers =                                              \
 	langserv/ide-langserv-client.h                                      \
 	langserv/ide-langserv-completion-provider.h                         \
 	langserv/ide-langserv-diagnostic-provider.h                         \
+	langserv/ide-langserv-formatter.h                                   \
 	langserv/ide-langserv-highlighter.h                                 \
 	langserv/ide-langserv-rename-provider.h                             \
 	langserv/ide-langserv-symbol-node.h                                 \
 	langserv/ide-langserv-symbol-resolver.h                             \
 	langserv/ide-langserv-symbol-tree.h                                 \
+	langserv/ide-langserv-util.h                                        \
 	local/ide-local-device.h                                            \
 	logging/ide-log.h                                                   \
 	plugins/ide-extension-adapter.h                                     \
@@ -226,6 +239,15 @@ libide_1_0_la_public_sources =                                              \
 	buildsystem/ide-configuration-provider.c                            \
 	buildsystem/ide-environment-variable.c                              \
 	buildsystem/ide-environment.c                                       \
+	debugger/ide-breakpoint.c                                           \
+	debugger/ide-debugger.c                                             \
+	debugger/ide-debug-manager.c                                        \
+	debugger/ide-debugger-breakpoints.c                                 \
+	debugger/ide-debugger-editor-view-addin.c                           \
+	debugger/ide-debugger-perspective.c                                 \
+	debugger/ide-debugger-workbench-addin.c                             \
+	debugger/ide-debugger-gutter-renderer.c                             \
+	debugger/ide-debugger-view.c                                        \
 	devices/ide-device-manager.c                                        \
 	devices/ide-device-provider.c                                       \
 	devices/ide-device.c                                                \
@@ -247,6 +269,8 @@ libide_1_0_la_public_sources =                                              \
 	files/ide-file-settings.c                                           \
 	files/ide-file-settings.defs                                        \
 	files/ide-file.c                                                    \
+	formatting/ide-formatter.c                                          \
+	formatting/ide-formatter-options.c                                  \
 	genesis/ide-genesis-addin.c                                         \
 	highlighting/ide-highlight-engine.c                                 \
 	highlighting/ide-highlight-index.c                                  \
@@ -262,6 +286,7 @@ libide_1_0_la_public_sources =                                              \
 	langserv/ide-langserv-client.c                                      \
 	langserv/ide-langserv-completion-provider.c                         \
 	langserv/ide-langserv-diagnostic-provider.c                         \
+	langserv/ide-langserv-formatter.c                                   \
 	langserv/ide-langserv-highlighter.c                                 \
 	langserv/ide-langserv-rename-provider.c                             \
 	langserv/ide-langserv-symbol-node.c                                 \
@@ -269,6 +294,7 @@ libide_1_0_la_public_sources =                                              \
 	langserv/ide-langserv-symbol-resolver.c                             \
 	langserv/ide-langserv-symbol-tree.c                                 \
 	langserv/ide-langserv-symbol-tree-private.h                         \
+	langserv/ide-langserv-util.c                                        \
 	local/ide-local-device.c                                            \
 	logging/ide-log.c                                                   \
 	plugins/ide-extension-adapter.c                                     \
@@ -414,6 +440,9 @@ libide_1_0_la_SOURCES =                                                     \
 	buildui/ide-environment-editor-row.h                                \
 	buildui/ide-environment-editor.c                                    \
 	buildui/ide-environment-editor.h                                    \
+	debugger/ide-debugger-controls.c                                    \
+	debugger/ide-debugger-controls.h                                    \
+	debugger/ide-debugger-plugin.c                                      \
 	editor/ide-editor-frame-actions.c                                   \
 	editor/ide-editor-frame-actions.h                                   \
 	editor/ide-editor-frame-private.h                                   \
@@ -649,6 +678,7 @@ glib_enum_headers =                                                         \
 	buffers/ide-buffer.h                                                \
 	buildsystem/ide-build-log.h                                         \
 	buildsystem/ide-build-pipeline.h                                    \
+	debugger/ide-debugger.h                                             \
 	devices/ide-device.h                                                \
 	diagnostics/ide-diagnostic.h                                        \
 	doap/ide-doap.h                                                     \

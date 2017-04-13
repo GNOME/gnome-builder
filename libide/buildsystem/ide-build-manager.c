@@ -46,6 +46,8 @@ struct _IdeBuildManager
   guint             diagnostic_count;
 
   guint             timer_source;
+
+  guint             can_build : 1;
 };
 
 static void initable_iface_init     (GInitableIface *);
@@ -58,6 +60,7 @@ G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, 0,
 enum {
   PROP_0,
   PROP_BUSY,
+  PROP_CAN_BUILD,
   PROP_HAS_DIAGNOSTICS,
   PROP_LAST_BUILD_TIME,
   PROP_MESSAGE,
@@ -258,6 +261,12 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
       IDE_GOTO (failure);
     }
 
+  if (pipeline != self->pipeline)
+    {
+      IDE_TRACE_MSG ("pipeline is no longer active, ignoring");
+      IDE_GOTO (failure);
+    }
+
   /* This will cause plugins to load on the pipeline. */
   if (!g_initable_init (G_INITABLE (pipeline), NULL, &error))
     {
@@ -265,6 +274,9 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
       IDE_GOTO (failure);
     }
 
+  self->can_build = TRUE;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_BUILD]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
   IDE_EXIT;
@@ -329,6 +341,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    * We will delay the initialization until after the we have ensured the
    * runtime is available (possibly installing it).
    */
+  self->can_build = FALSE;
   self->pipeline = g_object_new (IDE_TYPE_BUILD_PIPELINE,
                                  "context", context,
                                  "configuration", config,
@@ -353,6 +366,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                     ide_build_manager_ensure_runtime_cb,
                                     g_steal_pointer (&task));
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_BUILD]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
@@ -457,6 +471,10 @@ ide_build_manager_get_property (GObject    *object,
       g_value_set_boolean (value, ide_build_manager_get_busy (self));
       break;
 
+    case PROP_CAN_BUILD:
+      g_value_set_boolean (value, ide_build_manager_get_can_build (self));
+      break;
+
     case PROP_MESSAGE:
       g_value_take_string (value, ide_build_manager_get_message (self));
       break;
@@ -489,6 +507,21 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
 
   object_class->finalize = ide_build_manager_finalize;
   object_class->get_property = ide_build_manager_get_property;
+
+  /**
+   * IdeBuildManager:can-build:
+   *
+   * Gets if the build manager can queue a build request.
+   *
+   * This might be false if the required runtime is not available or other
+   * errors in setting up the build pipeline.
+   */
+  properties [PROP_CAN_BUILD] =
+    g_param_spec_boolean ("can-build",
+                          "Can Build",
+                          "If the manager can queue a build",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeBuildManager:busy:
@@ -701,14 +734,32 @@ ide_build_manager_action_clean (GSimpleAction *action,
 }
 
 static void
+ide_build_manager_action_install (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  IdeBuildManager *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  ide_build_manager_execute_async (self, IDE_BUILD_PHASE_INSTALL, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_manager_init (IdeBuildManager *self)
 {
-  static const gchar *invert_names[] = { "build", "clean", "rebuild" };
+  static const gchar *invert_names[] = { "build", "clean", "install", "rebuild" };
   static const gchar *names[] = { "cancel" };
   static GActionEntry actions[] = {
     { "build", ide_build_manager_action_build },
     { "cancel", ide_build_manager_action_cancel },
     { "clean", ide_build_manager_action_clean },
+    { "install", ide_build_manager_action_install },
     { "rebuild", ide_build_manager_action_rebuild },
   };
 
@@ -1006,7 +1057,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_execute_async);
 
-  if (self->pipeline == NULL)
+  if (self->pipeline == NULL || self->can_build == FALSE)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -1337,4 +1388,12 @@ ide_build_manager_rebuild_finish (IdeBuildManager  *self,
   ret = g_task_propagate_boolean (G_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+gboolean
+ide_build_manager_get_can_build (IdeBuildManager *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), FALSE);
+
+  return self->can_build;
 }

@@ -331,7 +331,7 @@ ide_breakout_subprocess_wait_finish (IdeSubprocess  *subprocess,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
-void
+static void
 ide_breakout_subprocess_communicate_utf8_async (IdeSubprocess       *subprocess,
                                                 const char          *stdin_buf,
                                                 GCancellable        *cancellable,
@@ -395,7 +395,7 @@ communicate_result_validate_utf8 (const char            *stream_name,
   IDE_RETURN (TRUE);
 }
 
-gboolean
+static gboolean
 ide_breakout_subprocess_communicate_utf8_finish (IdeSubprocess  *subprocess,
                                                  GAsyncResult   *result,
                                                  char          **stdout_buf,
@@ -864,9 +864,14 @@ ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
   if (success)
     {
       if (stdout_buf)
-        *stdout_buf = g_memory_output_stream_steal_as_bytes (state->stdout_buf);
+        *stdout_buf = state->stdout_buf ?
+                      g_memory_output_stream_steal_as_bytes (state->stdout_buf) :
+                      g_bytes_new (NULL, 0);
+
       if (stderr_buf)
-        *stderr_buf = g_memory_output_stream_steal_as_bytes (state->stderr_buf);
+        *stderr_buf = state->stderr_buf ?
+                      g_memory_output_stream_steal_as_bytes (state->stderr_buf) :
+                      g_bytes_new (NULL, 0);
     }
 
   g_object_unref (task);
@@ -926,6 +931,8 @@ subprocess_iface_init (IdeSubprocessInterface *iface)
   iface->communicate_utf8 = ide_breakout_subprocess_communicate_utf8;
   iface->communicate_async = ide_breakout_subprocess_communicate_async;
   iface->communicate_finish = ide_breakout_subprocess_communicate_finish;
+  iface->communicate_utf8_async = ide_breakout_subprocess_communicate_utf8_async;
+  iface->communicate_utf8_finish = ide_breakout_subprocess_communicate_utf8_finish;
 }
 
 static gboolean
@@ -1782,7 +1789,7 @@ _ide_breakout_subprocess_new (const gchar                 *cwd,
 
   ret->fd_mapping = g_new0 (IdeBreakoutFdMapping, fd_mapping_len);
   ret->fd_mapping_len = fd_mapping_len;
-  memcpy (ret->fd_mapping, fd_mapping, sizeof(gint) * fd_mapping_len);
+  memcpy (ret->fd_mapping, fd_mapping, sizeof(IdeBreakoutFdMapping) * fd_mapping_len);
 
   if (!g_initable_init (G_INITABLE (ret), cancellable, error))
     return NULL;

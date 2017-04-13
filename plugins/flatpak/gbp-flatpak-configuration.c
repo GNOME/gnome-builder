@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-configuration"
 
+#include <json-glib/json-glib.h>
+
 #include "gbp-flatpak-configuration.h"
 #include "gbp-flatpak-runtime.h"
 
@@ -26,7 +28,7 @@ struct _GbpFlatpakConfiguration
   IdeConfiguration parent_instance;
 
   gchar  *branch;
-  gchar **build_commands;
+  gchar **build_args;
   gchar  *command;
   gchar **finish_args;
   GFile  *manifest;
@@ -40,7 +42,7 @@ G_DEFINE_TYPE (GbpFlatpakConfiguration, gbp_flatpak_configuration, IDE_TYPE_CONF
 enum {
   PROP_0,
   PROP_BRANCH,
-  PROP_BUILD_COMMANDS,
+  PROP_BUILD_ARGS,
   PROP_COMMAND,
   PROP_FINISH_ARGS,
   PROP_MANIFEST,
@@ -151,6 +153,34 @@ guess_primary_module (JsonNode    *modules_node,
   return NULL;
 }
 
+static gchar **
+get_strv_from_member (JsonObject  *obj,
+                      const gchar *name)
+{
+  GPtrArray *finish_args = g_ptr_array_new ();
+  JsonNode *node = json_object_get_member (obj, name);
+  JsonArray *ar;
+  guint len;
+
+  if (node == NULL || !JSON_NODE_HOLDS_ARRAY (node))
+    return NULL;
+
+  ar = json_node_get_array (node);
+  len = json_array_get_length (ar);
+
+  for (guint i = 0; i < len; i++)
+    {
+      const gchar *arg = json_array_get_string_element (ar, i);
+
+      if (!ide_str_empty0 (arg))
+        g_ptr_array_add (finish_args, g_strdup (arg));
+    }
+
+  g_ptr_array_add (finish_args, NULL);
+
+  return (gchar **)g_ptr_array_free (finish_args, FALSE);
+}
+
 /**
  * gbp_flatpak_configuration_load_from_file:
  * @self: a #GbpFlatpakConfiguration
@@ -180,7 +210,6 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
   JsonNode *modules_node = NULL;
   JsonNode *primary_module_node = NULL;
   JsonNode *command_node = NULL;
-  JsonNode *finish_args_node = NULL;
   JsonObject *root_object = NULL;
   g_autoptr(GError) local_error = NULL;
   IdeContext *context;
@@ -255,6 +284,12 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
           if (cxxflags != NULL)
             ide_environment_setenv (environment, "CXXFLAGS", cxxflags);
         }
+      if (json_object_has_member (build_options, "build-args"))
+        {
+          g_auto(GStrv) build_args = get_strv_from_member (build_options, "build-args");
+
+          gbp_flatpak_configuration_set_build_args (self, (const gchar * const *)build_args);
+        }
       if (json_object_has_member (build_options, "env"))
         {
           JsonObject *env_vars;
@@ -300,23 +335,11 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
   if (JSON_NODE_HOLDS_VALUE (command_node))
     gbp_flatpak_configuration_set_command (self, json_node_get_string (command_node));
 
-  finish_args_node = json_object_get_member (root_object, "finish-args");
-  if (JSON_NODE_HOLDS_ARRAY (finish_args_node))
+  if (json_object_has_member (root_object, "finish-args"))
     {
-      JsonArray *finish_args_array;
-      GPtrArray *finish_args;
-      g_auto(GStrv) finish_args_strv = NULL;
-      finish_args = g_ptr_array_new ();
-      finish_args_array = json_node_get_array (finish_args_node);
-      for (guint i = 0; i < json_array_get_length (finish_args_array); i++)
-        {
-          const gchar *arg = json_array_get_string_element (finish_args_array, i);
-          if (!ide_str_empty0 (arg))
-            g_ptr_array_add (finish_args, g_strdup (arg));
-        }
-      g_ptr_array_add (finish_args, NULL);
-      finish_args_strv = (gchar **)g_ptr_array_free (finish_args, FALSE);
-      gbp_flatpak_configuration_set_finish_args (self, (const gchar * const *)finish_args_strv);
+      g_auto(GStrv) finish_args = get_strv_from_member (root_object, "finish-args");
+
+      gbp_flatpak_configuration_set_finish_args (self, (const gchar * const *)finish_args);
     }
 
   if (app_id_node != NULL && JSON_NODE_HOLDS_VALUE (app_id_node))
@@ -371,7 +394,24 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
             }
           g_ptr_array_add (build_commands, NULL);
           build_commands_strv = (gchar **)g_ptr_array_free (build_commands, FALSE);
-          gbp_flatpak_configuration_set_build_commands (self, (const gchar * const *)build_commands_strv);
+          ide_configuration_set_build_commands (IDE_CONFIGURATION (self), (const gchar * const *)build_commands_strv);
+        }
+      if (json_object_has_member (primary_module_object, "post-install"))
+        {
+          JsonArray *post_install_commands_array;
+          GPtrArray *post_install_commands;
+          g_auto(GStrv) post_install_commands_strv = NULL;
+          post_install_commands = g_ptr_array_new ();
+          post_install_commands_array = json_object_get_array_member (primary_module_object, "post-install");
+          for (guint i = 0; i < json_array_get_length (post_install_commands_array); i++)
+            {
+              const gchar *arg = json_array_get_string_element (post_install_commands_array, i);
+              if (!ide_str_empty0 (arg))
+                g_ptr_array_add (post_install_commands, g_strdup (arg));
+            }
+          g_ptr_array_add (post_install_commands, NULL);
+          post_install_commands_strv = (gchar **)g_ptr_array_free (post_install_commands, FALSE);
+          ide_configuration_set_post_install_commands (IDE_CONFIGURATION (self), (const gchar * const *)post_install_commands_strv);
         }
     }
 
@@ -397,28 +437,6 @@ gbp_flatpak_configuration_set_branch (GbpFlatpakConfiguration *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
 }
 
-const gchar * const *
-gbp_flatpak_configuration_get_build_commands (GbpFlatpakConfiguration *self)
-{
-  g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self), NULL);
-
-  return (const gchar * const *)self->build_commands;
-}
-
-void
-gbp_flatpak_configuration_set_build_commands (GbpFlatpakConfiguration *self,
-                                              const gchar * const     *build_commands)
-{
-  g_return_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self));
-
-  if (self->build_commands != (gchar **)build_commands)
-    {
-      g_strfreev (self->build_commands);
-      self->build_commands = g_strdupv ((gchar **)build_commands);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMANDS]);
-    }
-}
-
 const gchar *
 gbp_flatpak_configuration_get_command (GbpFlatpakConfiguration *self)
 {
@@ -436,6 +454,28 @@ gbp_flatpak_configuration_set_command (GbpFlatpakConfiguration *self,
   g_free (self->command);
   self->command = g_strdup (command);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COMMAND]);
+}
+
+const gchar * const *
+gbp_flatpak_configuration_get_build_args (GbpFlatpakConfiguration *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self), NULL);
+
+  return (const gchar * const *)self->build_args;
+}
+
+void
+gbp_flatpak_configuration_set_build_args (GbpFlatpakConfiguration *self,
+                                          const gchar * const     *build_args)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self));
+
+  if (self->build_args != (gchar **)build_args)
+    {
+      g_strfreev (self->build_args);
+      self->build_args = g_strdupv ((gchar **)build_args);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_ARGS]);
+    }
 }
 
 const gchar * const *
@@ -573,8 +613,8 @@ gbp_flatpak_configuration_get_property (GObject    *object,
       g_value_set_string (value, gbp_flatpak_configuration_get_branch (self));
       break;
 
-    case PROP_BUILD_COMMANDS:
-      g_value_set_boxed (value, gbp_flatpak_configuration_get_build_commands (self));
+    case PROP_BUILD_ARGS:
+      g_value_set_boxed (value, gbp_flatpak_configuration_get_build_args (self));
       break;
 
     case PROP_COMMAND:
@@ -620,8 +660,8 @@ gbp_flatpak_configuration_set_property (GObject      *object,
       gbp_flatpak_configuration_set_branch (self, g_value_get_string (value));
       break;
 
-    case PROP_BUILD_COMMANDS:
-      gbp_flatpak_configuration_set_build_commands (self, g_value_get_boxed (value));
+    case PROP_BUILD_ARGS:
+      gbp_flatpak_configuration_set_build_args (self, g_value_get_boxed (value));
       break;
 
     case PROP_COMMAND:
@@ -659,7 +699,6 @@ gbp_flatpak_configuration_finalize (GObject *object)
   GbpFlatpakConfiguration *self = (GbpFlatpakConfiguration *)object;
 
   g_clear_pointer (&self->branch, g_free);
-  g_clear_pointer (&self->build_commands, g_strfreev);
   g_clear_pointer (&self->command, g_free);
   g_clear_pointer (&self->finish_args, g_strfreev);
   g_clear_object (&self->manifest);
@@ -691,10 +730,10 @@ gbp_flatpak_configuration_class_init (GbpFlatpakConfigurationClass *klass)
                           G_PARAM_CONSTRUCT |
                           G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_BUILD_COMMANDS] =
-    g_param_spec_boxed ("build-commands",
-                        "Build commands",
-                        "Build commands",
+  properties [PROP_BUILD_ARGS] =
+    g_param_spec_boxed ("build-args",
+                        "Build args",
+                        "Build args",
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |

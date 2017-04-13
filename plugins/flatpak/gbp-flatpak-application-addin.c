@@ -240,7 +240,7 @@ gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self)
    * which is precisely what we want.
    *
    * We can't use flatpak_installation_new_user() since that will not map to
-   * the users real flatpak user installation. It will instead map to the
+   * the user's real flatpak user installation. It will instead map to the
    * reidrected XDG_DATA_DIRS version. Therefore, we synthesize the path to the
    * location we know it should be at.
    */
@@ -372,6 +372,41 @@ gbp_flatpak_application_addin_get_default (void)
   return instance;
 }
 
+/*
+* Ensure we have our repositories that we need to locate various
+* runtimes for GNOME.
+*/
+static gboolean
+ensure_remotes_exist_sync (GCancellable  *cancellable,
+                           GError       **error)
+{
+  for (guint i = 0; i < G_N_ELEMENTS (builtin_flatpak_repos); i++)
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
+      const gchar *name = builtin_flatpak_repos[i].name;
+      const gchar *url = builtin_flatpak_repos[i].url;
+
+      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                              G_SUBPROCESS_FLAGS_STDERR_PIPE);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+      ide_subprocess_launcher_push_argv (launcher, "flatpak");
+      ide_subprocess_launcher_push_argv (launcher, "remote-add");
+      ide_subprocess_launcher_push_argv (launcher, "--user");
+      ide_subprocess_launcher_push_argv (launcher, "--if-not-exists");
+      ide_subprocess_launcher_push_argv (launcher, "--from");
+      ide_subprocess_launcher_push_argv (launcher, name);
+      ide_subprocess_launcher_push_argv (launcher, url);
+
+      subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, error);
+
+      if (subprocess == NULL || !ide_subprocess_wait_check (subprocess, cancellable, error))
+        return FALSE;
+    }
+  return TRUE;
+}
+
 static void
 gbp_flatpak_application_addin_install_completed (GbpFlatpakApplicationAddin *self,
                                                  GParamSpec                 *pspec,
@@ -404,6 +439,7 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
 {
   GbpFlatpakApplicationAddin *self = source_object;
   InstallRequest *request = task_data;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -415,37 +451,10 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
   g_assert (request->branch != NULL);
   g_assert (request->installations != NULL);
 
-  /*
-   * First ensure we have our repositories that we need to locate various
-   * runtimes for GNOME.
-   */
-  for (guint i = 0; i < G_N_ELEMENTS (builtin_flatpak_repos); i++)
+  if (!ensure_remotes_exist_sync (cancellable, &error))
     {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      g_autoptr(IdeSubprocess) subprocess = NULL;
-      g_autoptr(GError) error = NULL;
-      const gchar *name = builtin_flatpak_repos[i].name;
-      const gchar *url = builtin_flatpak_repos[i].url;
-
-      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                              G_SUBPROCESS_FLAGS_STDERR_PIPE);
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-      ide_subprocess_launcher_push_argv (launcher, "flatpak");
-      ide_subprocess_launcher_push_argv (launcher, "remote-add");
-      ide_subprocess_launcher_push_argv (launcher, "--user");
-      ide_subprocess_launcher_push_argv (launcher, "--if-not-exists");
-      ide_subprocess_launcher_push_argv (launcher, "--from");
-      ide_subprocess_launcher_push_argv (launcher, name);
-      ide_subprocess_launcher_push_argv (launcher, url);
-
-      subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
-
-      if (subprocess == NULL || !ide_subprocess_wait_check (subprocess, cancellable, &error))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          IDE_EXIT;
-        }
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   /*
@@ -477,8 +486,6 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
               g_strcmp0 (request->branch, branch) == 0 &&
               g_strcmp0 (request->arch, arch) == 0)
             {
-              g_autoptr(GError) error = NULL;
-
               request->ref = flatpak_installation_update (installation,
                                                           FLATPAK_UPDATE_FLAGS_NONE,
                                                           FLATPAK_REF_KIND_RUNTIME,
@@ -501,8 +508,8 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
     }
 
   /*
-   * We failed to locate a previous install, so instead lets discover the
-   * ref from a remote symmary description.
+   * We failed to locate a previous install, so instead let's discover the
+   * ref from a remote summary description.
    */
   for (guint i = 0; i < request->installations->len; i++)
     {
@@ -511,6 +518,9 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
       g_autoptr(GPtrArray) remotes = NULL;
 
       g_assert (FLATPAK_IS_INSTALLATION (installation));
+
+      /* Refresh in case a new remote was added */
+      flatpak_installation_drop_caches (installation, cancellable, NULL);
 
       remotes = flatpak_installation_list_remotes (installation, cancellable, NULL);
       if (remotes == NULL)
@@ -541,8 +551,6 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
                   g_strcmp0 (request->arch, arch) == 0 &&
                   g_strcmp0 (request->branch, branch) == 0)
                 {
-                  g_autoptr(GError) error = NULL;
-
                   request->ref = flatpak_installation_install (installation,
                                                                name,
                                                                FLATPAK_REF_KIND_RUNTIME,
@@ -640,7 +648,7 @@ gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin
   /*
    * We might want to immediately notify about the ref so that the
    * caller can access the runtime after calling this. Otherwise our
-   * notify:;completed might not have yet run.
+   * notify::completed might not have yet run.
    */
   if (request->ref != NULL && !request->did_added)
     {
@@ -723,7 +731,7 @@ gbp_flatpak_application_addin_class_init (GbpFlatpakApplicationAddinClass *klass
    * @runtime: A #FlatpakInstalledRef
    *
    * This signal is emitted when a new runtime is discovered. No deduplication
-   * is dealth with here, so consumers will need to ensure they have not seen
+   * is dealt with here, so consumers will need to ensure they have not seen
    * the runtime before by deduplicating with id/arch/branch.
    */
   signals [RUNTIME_ADDED] = g_signal_new ("runtime-added",
@@ -746,6 +754,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
                                                  GCancellable *cancellable)
 {
   LocateSdk *locate = task_data;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -791,7 +800,6 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
               g_strcmp0 (locate->arch, arch) == 0 &&
               g_strcmp0 (locate->branch, branch) == 0)
             {
-              g_autoptr(GError) error = NULL;
               g_autoptr(GBytes) bytes = NULL;
               g_autoptr(GKeyFile) keyfile = NULL;
               g_autofree gchar *idstr = NULL;
@@ -840,12 +848,18 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
   /*
    * Look through all of our remote refs and see if we find a match for
    * the runtime for which we need to locate the SDK. Afterwards, we need
-   * to get the metedata for that runtime so that we can find the sdk field
+   * to get the metadata for that runtime so that we can find the sdk field
    * which maps to another runtime.
    *
    * We might have to make a request to the server for the ref if we do not
    * have a cached copy of the file.
    */
+
+  if (!ensure_remotes_exist_sync (cancellable, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
 
   for (guint i = 0; i < locate->installations->len; i++)
     {
@@ -854,6 +868,9 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
       g_autoptr(GPtrArray) remotes = NULL;
 
       g_assert (FLATPAK_IS_INSTALLATION (installation));
+
+      /* Refresh in case a new remote was added */
+      flatpak_installation_drop_caches (installation, cancellable, NULL);
 
       remotes = flatpak_installation_list_remotes (installation, cancellable, NULL);
       if (remotes == NULL)
@@ -882,7 +899,6 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
                   g_strcmp0 (locate->arch, arch) == 0 &&
                   g_strcmp0 (locate->branch, branch) == 0)
                 {
-                  g_autoptr(GError) error = NULL;
                   g_autoptr(GBytes) bytes = NULL;
                   g_autoptr(GKeyFile) keyfile = NULL;
                   g_autofree gchar *idstr = NULL;

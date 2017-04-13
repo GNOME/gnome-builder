@@ -109,6 +109,7 @@ enum {
   PROP_AUTO_SAVE,
   PROP_AUTO_SAVE_TIMEOUT,
   PROP_FOCUS_BUFFER,
+  PROP_MINIMUM_WORD_SIZE,
   LAST_PROP
 };
 
@@ -334,6 +335,7 @@ static gboolean
 ide_buffer_manager_auto_save_cb (gpointer data)
 {
   AutoSave *state = data;
+  gboolean saved = FALSE;
 
   g_assert (state);
   g_assert (IDE_IS_BUFFER_MANAGER (state->self));
@@ -345,16 +347,20 @@ ide_buffer_manager_auto_save_cb (gpointer data)
       IdeFile *file = ide_buffer_get_file (state->buffer);
 
       if (file != NULL)
-        ide_buffer_manager_save_file_async (state->self,
-                                            state->buffer,
-                                            file,
-                                            NULL,
-                                            NULL,
-                                            NULL,
-                                            NULL);
+        {
+          ide_buffer_manager_save_file_async (state->self,
+                                              state->buffer,
+                                              file,
+                                              NULL,
+                                              NULL,
+                                              NULL,
+                                              NULL);
+          saved = TRUE;
+        }
     }
 
-  unregister_auto_save (state->self, state->buffer);
+  if (!saved)
+    unregister_auto_save (state->self, state->buffer);
 
   return G_SOURCE_REMOVE;
 }
@@ -1149,6 +1155,8 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
                                 cancellable,
                                 ide_buffer_manager_save_file__load_settings_cb,
                                 g_object_ref (task));
+
+  unregister_auto_save (self, state->buffer);
 }
 
 /**
@@ -1320,6 +1328,10 @@ ide_buffer_manager_get_property (GObject    *object,
       g_value_set_object (value, ide_buffer_manager_get_focus_buffer (self));
       break;
 
+    case PROP_MINIMUM_WORD_SIZE:
+      g_object_get_property (G_OBJECT (self->word_completion), "minimum-word-size", value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1345,6 +1357,10 @@ ide_buffer_manager_set_property (GObject      *object,
 
     case PROP_FOCUS_BUFFER:
       ide_buffer_manager_set_focus_buffer (self, g_value_get_object (value));
+      break;
+
+    case PROP_MINIMUM_WORD_SIZE:
+      g_object_set_property (G_OBJECT (self->word_completion), "minimum-word-size", value);
       break;
 
     default:
@@ -1384,6 +1400,15 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                          "The currently focused buffer.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_MINIMUM_WORD_SIZE] =
+    g_param_spec_uint ("minimum-word-size",
+                       "Minimum Word Size",
+                       "The minimum word size for word completion.",
+                       0,
+                       G_MAXUINT,
+                       0,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -1551,6 +1576,8 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->word_completion = g_object_new (IDE_TYPE_COMPLETION_WORDS, NULL);
   self->settings = g_settings_new ("org.gnome.builder.editor");
+
+  g_settings_bind (self->settings, "minimum-word-size", self->word_completion, "minimum-word-size", G_SETTINGS_BIND_GET);
 }
 
 static void

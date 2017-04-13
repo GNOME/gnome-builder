@@ -344,3 +344,14 @@ ide_build_system_get_id (IdeBuildSystem *self)
 
   return g_strdup (G_OBJECT_TYPE_NAME (self));
 }
+
+gchar *
+ide_build_system_get_display_name (IdeBuildSystem *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_display_name)
+    return IDE_BUILD_SYSTEM_GET_IFACE (self)->get_display_name (self);
+
+  return ide_build_system_get_id (self);
+}

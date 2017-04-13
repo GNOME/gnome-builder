@@ -1,3 +1,38 @@
+==============
+Version 3.24.0
+==============
+
+It's finally here!
+
+I'm proud to announce that Builder 3.24 is here and ready to rock'n'roll. We
+have been busy fixing as much as we can to ensure our .0 release is a smooth
+one.
+
+Changes since 3.23.92 include:
+
+ • Many documentation improvements
+ • Various Flatpak improvements
+   • Support build-commands and post-install fields of json manifest
+   • Ensure GNOME remotes exist for additional code-paths
+   • Refresh flatpak installations after installations
+   • A number of correctness fixes in subprocess execution via HostCommand
+   • CCache support works again when building under Flatpak
+ • Process supervisor tries harder to prevent flapping of subprocess
+ • HTML preview support for reStruccturedText
+ • rustup improvements when running under Flatpak
+ • phpize build system support
+ • Help will more correctly detect access to the documentation website
+   before falling back to locally installed documentation
+ • Jsonrpc-GLib has been updated to support a GVariant-based API so plugins
+   can upgrade IPC to an encoding format that reduces memory-fragmentation
+ • CTags support has been improved to be more efficient on larger projects
+
+Updated transitions:
+
+  Swedish, Indonesian, Danish, Lithuanian, Hungarian, Kazakh, Korean, Spanish,
+  Friulian, Galician, French, Czech, German, Italian, Slovak, Polish,
+  Brazilian Portuguese
+
 ===============
 Version 3.23.92
 ===============

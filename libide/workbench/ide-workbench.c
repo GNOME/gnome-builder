@@ -574,6 +574,7 @@ ide_workbench_set_context (IdeWorkbench *self,
 {
   g_autoptr(GSettings) settings = NULL;
   IdeBuildManager *build_manager;
+  IdeDebugManager *debug_manager;
   IdeRunManager *run_manager;
   IdeProject *project;
   guint delay_msec;
@@ -595,14 +596,12 @@ ide_workbench_set_context (IdeWorkbench *self,
                                transform_title, NULL, NULL, NULL);
 
   build_manager = ide_context_get_build_manager (context);
-  gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "build-manager",
-                                  G_ACTION_GROUP (build_manager));
-
   run_manager = ide_context_get_run_manager (context);
-  gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "run-manager",
-                                  G_ACTION_GROUP (run_manager));
+  debug_manager = ide_context_get_debug_manager (context);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "build-manager", G_ACTION_GROUP (build_manager));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "debug-manager", G_ACTION_GROUP (debug_manager));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "run-manager", G_ACTION_GROUP (run_manager));
 
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_WORKBENCH_ADDIN,

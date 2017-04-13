@@ -35,6 +35,7 @@
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-build-system-discovery.h"
 #include "buildsystem/ide-configuration-manager.h"
+#include "debugger/ide-debug-manager.h"
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "devices/ide-device-manager.h"
 #include "doap/ide-doap.h"
@@ -68,6 +69,7 @@ struct _IdeContext
   IdeBuildSystem           *build_system;
   gchar                    *build_system_hint;
   IdeConfigurationManager  *configuration_manager;
+  IdeDebugManager          *debug_manager;
   IdeDiagnosticsManager    *diagnostics_manager;
   IdeDeviceManager         *device_manager;
   IdeDoap                  *doap;
@@ -816,6 +818,10 @@ ide_context_init (IdeContext *self)
                                             "context", self,
                                             NULL);
 
+  self->debug_manager = g_object_new (IDE_TYPE_DEBUG_MANAGER,
+                                      "context", self,
+                                      NULL);
+
   self->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
                                        "context", self,
                                        NULL);
@@ -1372,6 +1378,17 @@ ide_context_init_add_recent (gpointer             source_object,
     }
 
   g_bookmark_file_set_groups (projects_file, uri, (const gchar **)groups->pdata, groups->len);
+
+  {
+    IdeBuildSystem *build_system;
+    g_autofree gchar *build_system_name = NULL;
+    g_autofree gchar *build_system_group = NULL;
+
+    build_system = ide_context_get_build_system (self);
+    build_system_name = ide_build_system_get_display_name (build_system);
+    build_system_group = g_strdup_printf ("%s%s", IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX, build_system_name);
+    g_bookmark_file_add_group (projects_file, uri, build_system_group);
+  }
 
   IDE_TRACE_MSG ("Registering %s as recent project.", uri);
 
@@ -2378,4 +2395,20 @@ ide_context_get_diagnostics_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->diagnostics_manager;
+}
+
+/**
+ * ide_context_get_debug_manager:
+ * @self: An #IdeContext
+ *
+ * Gets the debug manager for the context.
+ *
+ * Returns: (transfer none): An #IdeDebugManager
+ */
+IdeDebugManager *
+ide_context_get_debug_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->debug_manager;
 }

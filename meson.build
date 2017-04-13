@@ -19,6 +19,7 @@ conf.set_quoted('PACKAGE_NAME', 'gnome-builder')
 conf.set_quoted('PACKAGE_VERSION', meson.project_version())
 conf.set_quoted('PACKAGE_STRING', 'gnome-builder-' + meson.project_version())
 conf.set_quoted('PACKAGE_DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
+conf.set_quoted('PACKAGE_DOCDIR', join_paths(get_option('prefix'), get_option('datadir'), 'doc/gnome-builder'))
 conf.set_quoted('PACKAGE_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
 conf.set_quoted('PACKAGE_LOCALE_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'locale'))
 conf.set_quoted('PACKAGE_LIBEXECDIR', join_paths(get_option('prefix'), get_option('libexecdir')))
@@ -119,6 +120,7 @@ configure_file(
 
 # Commonly used deps
 libgio_dep = dependency('gio-2.0', version: '>= 2.50.0')
+libgiounix_dep = dependency('gio-unix-2.0')
 libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.18.0')
 libm_dep = cc.find_library('m', required: false)

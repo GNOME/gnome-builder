@@ -54,33 +54,33 @@ static GParamSpec *properties [N_PROPS];
 static void
 gbp_flatpak_transfer_update_title (GbpFlatpakTransfer *self)
 {
-  g_autoptr(GString) str = NULL;
+  g_autofree gchar *title = NULL;
 
   g_return_if_fail (GBP_IS_FLATPAK_TRANSFER (self));
-
-  str = g_string_new (NULL);
 
   if (!self->failed)
     {
       if (self->has_runtime)
         {
           if (self->finished)
-            g_string_append (str, _("Updated "));
+            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
+            title = g_strdup_printf (_("Updated %s %s"), self->id, self->branch);
           else
-            g_string_append (str, _("Updating "));
+            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
+            title = g_strdup_printf (_("Updating %s %s"), self->id, self->branch);
         }
       else
         {
           if (self->finished)
-            g_string_append (str, _("Installed "));
+            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
+            title = g_strdup_printf (_("Installed %s %s"), self->id, self->branch);
           else
-            g_string_append (str, _("Installing "));
+            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
+            title = g_strdup_printf (_("Installing %s %s"), self->id, self->branch);
         }
     }
 
-  g_string_append_printf (str, "%s %s", self->id, self->branch);
-
-  ide_transfer_set_title (IDE_TRANSFER (self), str->str);
+  ide_transfer_set_title (IDE_TRANSFER (self), title);
 }
 
 static void

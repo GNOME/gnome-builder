@@ -17,6 +17,7 @@ SUBDIRS =                            \
 	flatpak                      \
 	fpaste                       \
 	gcc                          \
+	gdb                          \
 	gettext                      \
 	git                          \
 	gnome-code-assistance        \
@@ -34,6 +35,7 @@ SUBDIRS =                            \
 	python-gi-imports-completion \
 	python-pack                  \
 	quick-highlight              \
+	retab                        \
 	rust-langserv                \
 	rustup                       \
 	support                      \

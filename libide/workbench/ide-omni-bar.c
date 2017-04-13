@@ -27,6 +27,7 @@
 
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-pipeline.h"
+#include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "projects/ide-project.h"
@@ -121,6 +122,7 @@ struct _IdeOmniBar
   GtkButton            *popover_build_cancel_button;
   GtkLabel             *popover_build_mode_label;
   GtkLabel             *popover_build_running_time_label;
+  GtkLabel             *popover_build_system_label;
   GtkListBox           *popover_configuration_list_box;
   GtkRevealer          *popover_details_revealer;
   GtkLabel             *popover_failed_label;
@@ -242,6 +244,7 @@ static void
 ide_omni_bar_update (IdeOmniBar *self)
 {
   g_autofree gchar *branch_name = NULL;
+  g_autofree gchar *build_system_name = NULL;
   const gchar *project_name = NULL;
   IdeContext *context;
 
@@ -251,6 +254,7 @@ ide_omni_bar_update (IdeOmniBar *self)
 
   if (IDE_IS_CONTEXT (context))
     {
+      IdeBuildSystem *build_system;
       IdeProject *project;
       IdeVcs *vcs;
 
@@ -259,11 +263,15 @@ ide_omni_bar_update (IdeOmniBar *self)
 
       vcs = ide_context_get_vcs (context);
       branch_name = ide_vcs_get_branch_name (vcs);
+
+      build_system = ide_context_get_build_system (context);
+      build_system_name = ide_build_system_get_display_name (build_system);
     }
 
   gtk_label_set_label (self->project_label, project_name);
   gtk_label_set_label (self->branch_label, branch_name);
   gtk_label_set_label (self->popover_branch_label, branch_name);
+  gtk_label_set_label (self->popover_build_system_label, build_system_name);
 }
 
 static void
@@ -629,6 +637,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_failed_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_system_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_time_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_view_output_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);

@@ -718,10 +718,50 @@ ide_build_log_panel_clear_activate (GSimpleAction *action,
 }
 
 static void
+ide_build_log_panel_save_in_file (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  IdeBuildLogPanel *self = user_data;
+  g_autoptr(GtkFileChooserNative) native = NULL;
+  GtkWidget *window;
+  gint res;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
+
+  window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
+  native = gtk_file_chooser_native_new (_("Save File"),
+                                        GTK_WINDOW (window),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        _("_Save"),
+                                        _("_Cancel"));
+
+  res = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
+
+  if (res == GTK_RESPONSE_ACCEPT)
+    {
+      g_autofree gchar *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (native));
+      g_autofree gchar *text = NULL;
+      GtkTextIter begin;
+      GtkTextIter end;
+
+      gtk_text_buffer_get_bounds (self->buffer, &begin, &end);
+      text = gtk_text_buffer_get_text (self->buffer, &begin, &end, FALSE);
+      g_file_set_contents (filename, text, -1, NULL);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_log_panel_init (IdeBuildLogPanel *self)
 {
   static GActionEntry entries[] = {
     { "clear", ide_build_log_panel_clear_activate },
+    { "save", ide_build_log_panel_save_in_file },
   };
   g_autoptr(GSimpleActionGroup) actions = NULL;
 

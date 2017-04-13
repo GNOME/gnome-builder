@@ -165,7 +165,7 @@ ide_application_register_keybindings (IdeApplication *self)
 }
 
 static void
-ide_application_register_menus (IdeApplication *self)
+ide_application_register_plugin_accessories (IdeApplication *self)
 {
   GMenu *app_menu;
   IDE_ENTRY;
@@ -174,7 +174,8 @@ ide_application_register_menus (IdeApplication *self)
 
   self->menu_manager = egg_menu_manager_new ();
   egg_menu_manager_add_resource (self->menu_manager, "/org/gnome/builder/gtk/menus.ui", NULL);
-  ide_application_init_plugin_menus (self);
+
+  ide_application_init_plugin_accessories (self);
 
   app_menu = egg_menu_manager_get_menu_by_id (self->menu_manager, "app-menu");
   gtk_application_set_app_menu (GTK_APPLICATION (self), G_MENU_MODEL (app_menu));
@@ -412,7 +413,7 @@ ide_application_startup (GApplication *application)
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (application);
 
   if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
-    ide_application_register_menus (self);
+    ide_application_register_plugin_accessories (self);
 
   ide_application_load_addins (self);
 }
@@ -498,6 +499,7 @@ ide_application_finalize (GObject *object)
   g_clear_pointer (&self->plugin_css, g_hash_table_unref);
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_pointer (&self->reapers, g_ptr_array_unref);
+  g_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);

@@ -46,6 +46,10 @@ def get_module_data_path(name):
     data_dir = plugin.get_data_dir()
     return GLib.build_filenamev([data_dir, name])
 
+def close_fds(task, param, fds):
+    for fd in fds:
+        os.close(fd)
+
 def looks_like_channel(channel):
     if not channel:
         return False
@@ -90,7 +94,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
 
     __gsignals__ = {
         # emitted when a rustup installation is detected
-        'rustup_changed': (GObject.SIGNAL_RUN_FIRST, None, ())
+        'rustup_changed': (GObject.SignalFlags.RUN_FIRST, None, ())
     }
 
     @GObject.Property(type=bool, default=False)
@@ -118,7 +122,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             Checks if a rustup installation is available.
         """
         self.rustup_executable = None
-        for rustup_bin in ['rustup', os.path.expanduser('~/.cargo/bin/rustup')]:
+        for rustup_bin in ('rustup', os.path.expanduser('~/.cargo/bin/rustup')):
             try:
                 launcher = Ide.SubprocessLauncher.new(Gio.SubprocessFlags.STDOUT_PIPE)
                 launcher.push_argv(rustup_bin)
@@ -126,9 +130,10 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
                 launcher.set_run_on_host(True)
                 sub_process = launcher.spawn()
 
-                _, stdout, stderr = sub_process.communicate_utf8(None, None)
-                self.rustup_executable = rustup_bin
-                break
+                success, stdout, stderr = sub_process.communicate_utf8(None, None)
+                if stdout:
+                    self.rustup_executable = rustup_bin
+                    break
             except GLib.Error as e:
                 pass
         if self.rustup_executable is None:
@@ -151,7 +156,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             launcher.set_run_on_host(True)
             sub_process = launcher.spawn()
 
-            _, stdout, stderr = sub_process.communicate_utf8(None, None)
+            success, stdout, stderr = sub_process.communicate_utf8(None, None)
             toolchains = []
             for line in iter(stdout.splitlines()):
                 if not 'no installed toolchains' in line:
@@ -172,7 +177,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             launcher.set_run_on_host(True)
             sub_process = launcher.spawn()
 
-            _, stdout, stderr = sub_process.communicate_utf8(None, None)
+            success, stdout, stderr = sub_process.communicate_utf8(None, None)
         except Exception as e:
             print(e)
             pass
@@ -194,7 +199,7 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
             launcher.set_run_on_host(True)
             sub_process = launcher.spawn()
 
-            _, stdout, stderr = sub_process.communicate_utf8(None, None)
+            success, stdout, stderr = sub_process.communicate_utf8(None, None)
         except Exception as e:
             print(e)
             pass
@@ -288,20 +293,28 @@ class RustupInstaller(Ide.Transfer):
 
         task = Gio.Task.new(self, cancellable, callback)
 
-        launcher = Ide.SubprocessLauncher()
-        launcher.set_run_on_host(False)
+        launcher = Ide.SubprocessLauncher.new(0)
         launcher.set_clear_env(False)
+        launcher.set_run_on_host(True)
+        launcher.set_cwd(GLib.get_home_dir())
+
+        stdin_data = None
 
         if self.mode == _MODE_INSTALL:
-            rustup_sh_path = get_module_data_path('resources/rustup.sh')
-            # XXX: ensure that the script is executable
-            #      this should not be neccessary now that we bundle rustup.sh
-            #      and its likely the script is read-only anyway.
-            # st = os.stat(rustup_sh_path)
-            # os.chmod(rustup_sh_path, st.st_mode | stat.S_IEXEC)
-            launcher.push_argv(rustup_sh_path)
-            # install default toolchain automatically
+            # Because our script is inside the application mount namespace, and we
+            # need to execute this on the host (via the subprocess helper), we need
+            # to execute it using bash and reading from stdin.
+
+            launcher.push_argv('bash')
+            launcher.push_argv('--')
+            launcher.push_argv('/dev/stdin')
             launcher.push_argv('-y')
+
+            try:
+                rustup_sh_path = get_module_data_path('resources/rustup.sh')
+                success, stdin_data = GLib.file_get_contents(rustup_sh_path)
+            except:
+                stdin_data = ""
         elif self.mode == _MODE_UPDATE:
             launcher.push_argv(RustupApplicationAddin.instance.rustup_executable)
             launcher.push_argv('update')
@@ -315,19 +328,26 @@ class RustupInstaller(Ide.Transfer):
         (master_fd, slave_fd) = pty.openpty()
         launcher.take_stdin_fd(os.dup(slave_fd))
         launcher.take_stdout_fd(os.dup(slave_fd))
-        launcher.take_stderr_fd(slave_fd)
+        launcher.take_stderr_fd(os.dup(slave_fd))
 
-        data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(master_fd, False))
+        launcher.setenv('TERM', 'xterm-256color', True)
+
+        data_stream = Gio.DataInputStream.new(Gio.UnixInputStream.new(os.dup(master_fd), True))
         # set it to ANY so the progress bars can be parsed
         data_stream.set_newline_type(Gio.DataStreamNewlineType.ANY)
         data_stream.read_line_async(GLib.PRIORITY_DEFAULT, cancellable, self._read_line_cb, cancellable)
 
-        try:
-            sub_process = launcher.spawn()
-        except Exception as ex:
-            task.return_error(GLib.Error(message=repr(ex)))
+        task.connect('notify::completed', close_fds, (master_fd, slave_fd))
 
-        sub_process.wait_async(cancellable, self._wait_cb, task)
+        try:
+            # pass cancellable so that if cancelled, the process force exits
+            sub_process = launcher.spawn(cancellable)
+            if stdin_data:
+                os.write(master_fd, stdin_data)
+            sub_process.wait_async(cancellable, self._wait_cb, task)
+        except Exception as ex:
+            print(repr(ex))
+            task.return_error(GLib.Error(message=repr(ex)))
 
     def _read_line_cb(self, data_stream, result, cancellable):
         try:
@@ -390,13 +410,13 @@ class RustupInstaller(Ide.Transfer):
                 data_stream.read_line_async(GLib.PRIORITY_DEFAULT, cancellable, self._read_line_cb, cancellable)
         except Exception as ex:
             # ignore cancelled error
-            if ex.code is not 19:
+            if getattr(ex, 'code') != Gio.IOErrorEnum.CANCELLED:
                 print('_read_line_cb', ex)
 
     def _wait_cb(self, sub_process, result, task):
         try:
             sub_process.wait_check_finish(result)
-            if sub_process.get_exit_status() == 0:
+            if sub_process.get_if_exited() and sub_process.get_exit_status() == 0:
                 task.return_boolean(True)
             else:
                 if self.mode == _MODE_INSTALL_TOOLCHAIN:
@@ -406,11 +426,10 @@ class RustupInstaller(Ide.Transfer):
                 task.return_boolean(False)
 
         except Exception as ex:
-            # cancelled error
-            if ex.code is 19:
+            if getattr(ex, 'code') == Gio.IOErrorEnum.CANCELLED:
                 self.props.status = _('Cancelled')
             else:
-                print('_wait_cb', ex, ex.code)
+                print('_wait_cb', repr(ex))
             task.return_boolean(False)
         RustupApplicationAddin.instance.check_rustup()
 
@@ -508,7 +527,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         self.toolchain_listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
 
         def _create_list_item(item, data):
-            return Gtk.Label(item.title, halign='start', valign='center', expand=True, visible=True)
+            return Gtk.Label(label=item.title, halign='start', valign='center', expand=True, visible=True)
 
         self.store = Gio.ListStore.new(ModelItem)
         self.toolchain_listbox.bind_model(self.store, _create_list_item, None)

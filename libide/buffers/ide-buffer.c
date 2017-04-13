@@ -37,6 +37,8 @@
 #include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
+#include "formatting/ide-formatter.h"
+#include "formatting/ide-formatter-options.h"
 #include "highlighting/ide-highlight-engine.h"
 #include "highlighting/ide-highlighter.h"
 #include "plugins/ide-extension-adapter.h"
@@ -76,6 +78,7 @@ typedef struct
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
   IdeHighlightEngine     *highlight_engine;
+  IdeExtensionAdapter    *formatter_adapter;
   IdeExtensionAdapter    *rename_provider_adapter;
   IdeExtensionAdapter    *symbol_resolver_adapter;
   GspellChecker          *spellchecker;
@@ -916,6 +919,9 @@ ide_buffer_notify_language (IdeBuffer  *self,
 
   if (priv->symbol_resolver_adapter != NULL)
     ide_extension_adapter_set_value (priv->symbol_resolver_adapter, lang_id);
+
+  if (priv->formatter_adapter != NULL)
+    ide_extension_adapter_set_value (priv->formatter_adapter, lang_id);
 }
 
 static void
@@ -1071,6 +1077,26 @@ ide_buffer_loaded (IdeBuffer *self)
 }
 
 static void
+ide_buffer_load_formatter (IdeBuffer           *self,
+                           GParamSpec          *pspec,
+                           IdeExtensionAdapter *adapter)
+{
+  IdeFormatter *formatter;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
+
+  formatter = ide_extension_adapter_get_extension (adapter);
+
+  if (formatter != NULL)
+    ide_formatter_load (formatter);
+
+  IDE_EXIT;
+}
+
+static void
 ide_buffer_load_rename_provider (IdeBuffer           *self,
                                  GParamSpec          *pspec,
                                  IdeExtensionAdapter *adapter)
@@ -1085,7 +1111,10 @@ ide_buffer_load_rename_provider (IdeBuffer           *self,
   provider = ide_extension_adapter_get_extension (adapter);
 
   if (provider != NULL)
-    ide_rename_provider_load (provider);
+    {
+      g_object_set (provider, "buffer", self, NULL);
+      ide_rename_provider_load (provider);
+    }
 
   IDE_EXIT;
 }
@@ -1196,6 +1225,18 @@ ide_buffer_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 
   priv->highlight_engine = ide_highlight_engine_new (self);
+
+  priv->formatter_adapter = ide_extension_adapter_new (priv->context,
+                                                       NULL,
+                                                       IDE_TYPE_FORMATTER,
+                                                       "Formatter-Languages",
+                                                       NULL);
+
+  g_signal_connect_object (priv->formatter_adapter,
+                           "notify::extension",
+                           G_CALLBACK (ide_buffer_load_formatter),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   priv->rename_provider_adapter = ide_extension_adapter_new (priv->context,
                                                              NULL,
@@ -2776,4 +2817,113 @@ ide_buffer_get_insert_location (IdeBuffer *self)
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), &iter, mark);
 
   return ide_buffer_get_iter_location (self, &iter);
+}
+
+static void
+ide_buffer_format_selection_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  g_autoptr(GError) error = NULL;
+
+  if (!ide_formatter_format_finish (IDE_FORMATTER (object), result, &error))
+    g_task_return_error (user_data, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (user_data, TRUE);
+}
+
+static void
+ide_buffer_format_selection_range_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  g_autoptr(GError) error = NULL;
+
+  if (!ide_formatter_format_range_finish (IDE_FORMATTER (object), result, &error))
+    g_task_return_error (user_data, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (user_data, TRUE);
+}
+
+void
+ide_buffer_format_selection_async (IdeBuffer           *self,
+                                   IdeFormatterOptions *options,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  IdeFormatter *formatter;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (IDE_IS_FORMATTER_OPTIONS (options));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_buffer_format_selection_async);
+
+  formatter = ide_extension_adapter_get_extension (priv->formatter_adapter);
+
+  if (formatter == NULL)
+    {
+      GtkSourceLanguage *language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
+      const gchar *language_id = "none";
+
+      if (language != NULL)
+        language_id = gtk_source_language_get_id (language);
+
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "No formatter registered for language %s",
+                               language_id);
+
+      IDE_EXIT;
+    }
+
+  if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self), &begin, &end))
+    {
+      ide_formatter_format_async (formatter,
+                                  self,
+                                  options,
+                                  cancellable,
+                                  ide_buffer_format_selection_cb,
+                                  g_steal_pointer (&task));
+      IDE_EXIT;
+    }
+
+  gtk_text_iter_order (&begin, &end);
+
+  ide_formatter_format_range_async (formatter,
+                                    self,
+                                    options,
+                                    &begin,
+                                    &end,
+                                    cancellable,
+                                    ide_buffer_format_selection_range_cb,
+                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_buffer_format_selection_finish (IdeBuffer     *self,
+                                    GAsyncResult  *result,
+                                    GError       **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
