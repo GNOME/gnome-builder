@@ -689,6 +689,19 @@ get_smart_home_end (GValue   *value,
   return TRUE;
 }
 
+static gboolean
+get_wrap_mode (GValue   *value,
+               GVariant *variant,
+               gpointer  user_data)
+{
+  if (g_variant_get_boolean (variant))
+    g_value_set_enum (value, GTK_WRAP_WORD);
+  else
+    g_value_set_enum (value, GTK_WRAP_NONE);
+
+  return TRUE;
+}
+
 static void
 keybindings_changed (GSettings     *settings,
                      const gchar   *key,
@@ -1231,6 +1244,7 @@ ide_editor_frame_init (IdeEditorFrame *self)
   g_settings_bind (settings, "show-line-numbers", self->source_view, "show-line-numbers", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "smart-backspace", self->source_view, "smart-backspace", G_SETTINGS_BIND_GET);
   g_settings_bind_with_mapping (settings, "smart-home-end", self->source_view, "smart-home-end", G_SETTINGS_BIND_GET, get_smart_home_end, NULL, NULL, NULL);
+  g_settings_bind_with_mapping (settings, "wrap-text", self->source_view, "wrap-mode", G_SETTINGS_BIND_GET, get_wrap_mode, NULL, NULL, NULL);
   g_settings_bind (settings, "show-map", self, "show-map", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "auto-hide-map", self, "auto-hide-map", G_SETTINGS_BIND_GET);
   g_signal_connect_object (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self, 0);

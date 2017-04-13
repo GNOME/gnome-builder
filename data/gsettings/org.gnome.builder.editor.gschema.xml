@@ -90,5 +90,10 @@
       <summary>Overscroll</summary>
       <description>The number of lines to scroll beyond the end of the buffer.</description>
     </key>
+    <key name="wrap-text" type="b">
+      <default>false</default>
+      <summary>Wrap Text</summary>
+      <description>If enabled, Builder will automatically wrap text so all of the line text is visible.</description>
+    </key>
   </schema>
 </schemalist>
