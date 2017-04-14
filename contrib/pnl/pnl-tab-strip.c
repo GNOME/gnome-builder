@@ -63,8 +63,6 @@ set_tab_state (GSimpleAction *action,
   nth_child = g_list_nth_data (list, stateval);
   g_clear_pointer (&list, g_list_free);
 
-  g_print ("set_tab_state(%d)\n", stateval);
-
   if (nth_child != NULL)
     {
       tab = g_object_get_data (G_OBJECT (nth_child), "PNL_TAB");
@@ -367,6 +365,7 @@ pnl_tab_strip_stack_add (PnlTabStrip *self,
                          GtkStack    *stack)
 {
   PnlTabStripPrivate *priv = pnl_tab_strip_get_instance_private (self);
+  g_autoptr(GVariant) target = g_variant_ref_sink (g_variant_new_int32 (0));
   PnlTab *tab;
 
   g_assert (PNL_IS_TAB_STRIP (self));
@@ -375,6 +374,7 @@ pnl_tab_strip_stack_add (PnlTabStrip *self,
 
   tab = g_object_new (PNL_TYPE_TAB,
                       "action-name", "tab-strip.tab",
+                      "action-target", target,
                       "edge", priv->edge,
                       "widget", widget,
                       NULL);
