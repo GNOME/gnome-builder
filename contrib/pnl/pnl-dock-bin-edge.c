@@ -138,11 +138,7 @@ pnl_dock_bin_edge_add (GtkContainer *container,
   g_assert (GTK_IS_WIDGET (widget));
 
   child = gtk_bin_get_child (GTK_BIN (container));
-
-  if (GTK_IS_CONTAINER (child))
-    gtk_container_add (GTK_CONTAINER (child), widget);
-  else
-    GTK_CONTAINER_CLASS (pnl_dock_bin_edge_parent_class)->add (container, widget);
+  gtk_container_add (GTK_CONTAINER (child), widget);
 }
 
 static void
