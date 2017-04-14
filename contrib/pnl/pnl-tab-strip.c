@@ -45,8 +45,8 @@ set_tab_state (GSimpleAction *action,
 {
   PnlTabStrip *self = user_data;
   PnlTabStripPrivate *priv = pnl_tab_strip_get_instance_private (self);
+  GtkWidget *nth_child;
   PnlTab *tab = NULL;
-  const GList *iter;
   GList *list;
   gint stateval;
 
@@ -60,31 +60,41 @@ set_tab_state (GSimpleAction *action,
   stateval = g_variant_get_int32 (state);
 
   list = gtk_container_get_children (GTK_CONTAINER (priv->stack));
+  nth_child = g_list_nth_data (list, stateval);
+  g_clear_pointer (&list, g_list_free);
 
-  for (iter = list; iter != NULL; iter = iter->next)
+  g_print ("set_tab_state(%d)\n", stateval);
+
+  if (nth_child != NULL)
     {
-      GtkWidget *child = iter->data;
-      gint position = 0;
-
-      gtk_container_child_get (GTK_CONTAINER (priv->stack), GTK_WIDGET (child),
-                               "position", &position,
-                               NULL);
-
-      if (position == stateval)
-        {
-          tab = g_object_get_data (G_OBJECT (child), "PNL_TAB");
-          gtk_stack_set_visible_child (priv->stack, child);
-          break;
-        }
+      tab = g_object_get_data (G_OBJECT (nth_child), "PNL_TAB");
+      gtk_stack_set_visible_child (priv->stack, nth_child);
+      /*
+       * When clicking an active toggle button, we get the state callback but then
+       * the toggle button disables the checked state. So ensure it stays on by
+       * manually setting the state.
+       */
+      if (PNL_IS_TAB (tab))
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tab), TRUE);
     }
+}
 
-  /*
-   * When clicking an active toggle button, we get the state callback but then
-   * the toggle button disables the checked state. So ensure it stays on by
-   * manually setting the state.
-   */
-  if (PNL_IS_TAB (tab))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tab), TRUE);
+static void
+pnl_tab_strip_update_action_targets (PnlTabStrip *self)
+{
+  const GList *iter;
+  GList *list;
+  gint i;
+
+  g_assert (PNL_IS_TAB_STRIP (self));
+
+  list = gtk_container_get_children (GTK_CONTAINER (self));
+
+  for (i = 0, iter = list; iter != NULL; iter = iter->next, i++)
+    {
+      PnlTab *tab = iter->data;
+      gtk_actionable_set_action_target (GTK_ACTIONABLE (tab), "i", i);
+    }
 
   g_list_free (list);
 }
@@ -103,6 +113,22 @@ pnl_tab_strip_add (GtkContainer *container,
     pnl_tab_set_edge (PNL_TAB (widget), priv->edge);
 
   GTK_CONTAINER_CLASS (pnl_tab_strip_parent_class)->add (container, widget);
+
+  pnl_tab_strip_update_action_targets (self);
+}
+
+static void
+pnl_tab_strip_remove (GtkContainer *container,
+                      GtkWidget    *widget)
+{
+  PnlTabStrip *self = (PnlTabStrip *)container;
+
+  g_assert (PNL_IS_TAB_STRIP (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  GTK_CONTAINER_CLASS (pnl_tab_strip_parent_class)->remove (container, widget);
+
+  pnl_tab_strip_update_action_targets (self);
 }
 
 static void
@@ -112,6 +138,8 @@ pnl_tab_strip_destroy (GtkWidget *widget)
   PnlTabStripPrivate *priv = pnl_tab_strip_get_instance_private (self);
 
   g_assert (PNL_IS_TAB_STRIP (self));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "tab-strip", NULL);
 
   pnl_tab_strip_set_stack (self, NULL);
 
@@ -180,6 +208,7 @@ pnl_tab_strip_class_init (PnlTabStripClass *klass)
   widget_class->destroy = pnl_tab_strip_destroy;
 
   container_class->add = pnl_tab_strip_add;
+  container_class->remove = pnl_tab_strip_remove;
 
   properties [PROP_EDGE] =
     g_param_spec_enum ("edge",
@@ -229,7 +258,7 @@ pnl_tab_strip_child_position_changed (PnlTabStrip *self,
   GVariant *state;
   GtkWidget *parent;
   PnlTab *tab;
-  guint position;
+  gint position = -1;
 
   g_assert (PNL_IS_TAB_STRIP (self));
   g_assert (GTK_IS_WIDGET (child));
@@ -237,13 +266,25 @@ pnl_tab_strip_child_position_changed (PnlTabStrip *self,
   tab = g_object_get_data (G_OBJECT (child), "PNL_TAB");
 
   if (!tab || !PNL_IS_TAB (tab))
-    return;
+    {
+      g_warning ("Child %s (%p) is missing backpointer to tab",
+                 G_OBJECT_TYPE_NAME (child), child);
+      return;
+    }
 
   parent = gtk_widget_get_parent (child);
+
+  g_assert (GTK_IS_STACK (parent));
 
   gtk_container_child_get (GTK_CONTAINER (parent), child,
                            "position", &position,
                            NULL);
+
+  if (position < 0)
+    {
+      g_warning ("Improbable position for child, %d", position);
+      return;
+    }
 
   gtk_container_child_set (GTK_CONTAINER (self), GTK_WIDGET (tab),
                            "position", position,
@@ -251,6 +292,8 @@ pnl_tab_strip_child_position_changed (PnlTabStrip *self,
 
   state = g_variant_new_int32 (position);
   gtk_actionable_set_action_target_value (GTK_ACTIONABLE (tab), state);
+
+  pnl_tab_strip_update_action_targets (self);
 }
 
 static void
@@ -271,6 +314,8 @@ pnl_tab_strip_child_title_changed (PnlTabStrip *self,
     return;
 
   parent = gtk_widget_get_parent (child);
+
+  g_assert (GTK_IS_STACK (parent));
 
   gtk_container_child_get (GTK_CONTAINER (parent), child,
                            "title", &title,
@@ -322,23 +367,14 @@ pnl_tab_strip_stack_add (PnlTabStrip *self,
                          GtkStack    *stack)
 {
   PnlTabStripPrivate *priv = pnl_tab_strip_get_instance_private (self);
-  GVariant *target;
   PnlTab *tab;
-  gint position = 0;
 
   g_assert (PNL_IS_TAB_STRIP (self));
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (GTK_IS_STACK (stack));
 
-  gtk_container_child_get (GTK_CONTAINER (stack), widget,
-                           "position", &position,
-                           NULL);
-
-  target = g_variant_new_int32 (position);
-
   tab = g_object_new (PNL_TYPE_TAB,
                       "action-name", "tab-strip.tab",
-                      "action-target", target,
                       "edge", priv->edge,
                       "widget", widget,
                       NULL);
@@ -385,7 +421,10 @@ pnl_tab_strip_stack_remove (PnlTabStrip *self,
   tab = g_object_get_data (G_OBJECT (widget), "PNL_TAB");
 
   if (PNL_IS_TAB (tab))
-    gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (tab));
+    {
+      g_object_set_data (G_OBJECT (widget), "PNL_TAB", NULL);
+      gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (tab));
+    }
 }
 
 GtkWidget *
