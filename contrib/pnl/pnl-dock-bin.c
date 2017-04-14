@@ -1840,6 +1840,8 @@ pnl_dock_bin_get_internal_child (GtkBuildable *buildable,
     return G_OBJECT (pnl_dock_bin_get_bottom_edge (self));
   else if (g_strcmp0 ("right", childname) == 0)
     return G_OBJECT (pnl_dock_bin_get_right_edge (self));
+  else if (g_strcmp0 ("left", childname) == 0)
+    return G_OBJECT (pnl_dock_bin_get_left_edge (self));
 
   return NULL;
 }
