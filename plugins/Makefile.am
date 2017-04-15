@@ -29,6 +29,7 @@ SUBDIRS =                            \
 	meson-templates              \
 	mingw                        \
 	mono                         \
+	notification                 \
 	phpize                       \
 	project-tree                 \
 	python-gi-imports-completion \

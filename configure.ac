@@ -318,6 +318,7 @@ m4_include([plugins/meson/configure.ac])
 m4_include([plugins/meson-templates/configure.ac])
 m4_include([plugins/mingw/configure.ac])
 m4_include([plugins/mono/configure.ac])
+m4_include([plugins/notification/configure.ac])
 m4_include([plugins/phpize/configure.ac])
 m4_include([plugins/project-tree/configure.ac])
 m4_include([plugins/python-gi-imports-completion/configure.ac])
@@ -603,6 +604,7 @@ echo "  Make ................................. : ${enable_make_plugin}"
 echo "  Meson ................................ : ${enable_meson_plugin}"
 echo "  MinGW ................................ : ${enable_mingw_plugin}"
 echo "  Mono ................................. : ${enable_mono_plugin}"
+echo "  Notification ......................... : ${enable_notification_plugin}"
 echo "  PHPize ............................... : ${enable_phpize_plugin}"
 echo "  Project Creation ..................... : ${enable_create_project_plugin}"
 echo "  Project Tree ......................... : ${enable_project_tree_plugin}"
