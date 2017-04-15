@@ -23,6 +23,7 @@
 #include "diagnostics/ide-source-location.h"
 #include "files/ide-file.h"
 #include "history/ide-back-forward-item.h"
+#include "ide-macros.h"
 
 #define NUM_LINES_CHAIN_MAX 5
 
@@ -30,6 +31,7 @@ struct _IdeBackForwardItem
 {
   IdeObject  parent_instance;
   IdeUri    *uri;
+  GtkTextMark *mark;
 };
 
 G_DEFINE_TYPE (IdeBackForwardItem, ide_back_forward_item, IDE_TYPE_OBJECT)
@@ -37,18 +39,21 @@ G_DEFINE_TYPE (IdeBackForwardItem, ide_back_forward_item, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_URI,
+  PROP_MARK,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
 
 IdeBackForwardItem *
-ide_back_forward_item_new (IdeContext *context,
-                           IdeUri     *uri)
+ide_back_forward_item_new (IdeContext  *context,
+			   IdeUri      *uri,
+			   GtkTextMark *mark)
 {
   return g_object_new (IDE_TYPE_BACK_FORWARD_ITEM,
                        "context", context,
                        "uri", uri,
+		       "mark", mark,
                        NULL);
 }
 
@@ -76,11 +81,32 @@ ide_back_forward_item_set_uri (IdeBackForwardItem *self,
 }
 
 static void
+ide_back_forward_item_set_mark (IdeBackForwardItem *self,
+                                GtkTextMark        *mark)
+{
+  g_return_if_fail (IDE_IS_BACK_FORWARD_ITEM (self));
+
+  /* Mark can be NULL as in the case of loading on startup */
+  if (ide_set_weak_pointer (&self->mark, mark))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MARK]);
+}
+
+GtkTextMark *
+ide_back_forward_item_get_mark (IdeBackForwardItem *self)
+{
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (self), NULL);
+
+  return self->mark;
+}
+
+
+static void
 ide_back_forward_item_finalize (GObject *object)
 {
   IdeBackForwardItem *self = (IdeBackForwardItem *)object;
 
   g_clear_pointer (&self->uri, ide_uri_unref);
+  ide_clear_weak_pointer (&self->mark);
 
   G_OBJECT_CLASS (ide_back_forward_item_parent_class)->finalize (object);
 }
@@ -97,6 +123,10 @@ ide_back_forward_item_get_property (GObject    *object,
     {
     case PROP_URI:
       g_value_set_boxed (value, ide_back_forward_item_get_uri (self));
+      break;
+
+    case PROP_MARK:
+      g_value_set_object (value, ide_back_forward_item_get_mark (self));
       break;
 
     default:
@@ -116,6 +146,10 @@ ide_back_forward_item_set_property (GObject      *object,
     {
     case PROP_URI:
       ide_back_forward_item_set_uri (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_MARK:
+      ide_back_forward_item_set_mark (self, g_value_get_object (value));
       break;
 
     default:
@@ -151,6 +185,16 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_MARK] =
+  g_param_spec_object ("mark",
+                       "Mark",
+                       "The GtkTextMark for the location",
+                       GTK_TYPE_TEXT_MARK,
+                       (G_PARAM_READWRITE |
+                        G_PARAM_CONSTRUCT |
+			G_PARAM_STATIC_STRINGS |
+			G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }

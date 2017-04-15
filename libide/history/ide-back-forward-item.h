@@ -19,6 +19,8 @@
 #ifndef IDE_BACK_FORWARD_ITEM_H
 #define IDE_BACK_FORWARD_ITEM_H
 
+#include <gtk/gtk.h>
+
 #include "ide-object.h"
 
 #include "util/ide-uri.h"
@@ -30,7 +32,9 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeBackForwardItem, ide_back_forward_item, IDE, BACK_FORWARD_ITEM, IdeObject)
 
 IdeBackForwardItem *ide_back_forward_item_new     (IdeContext         *context,
-                                                   IdeUri             *uri);
+                                                   IdeUri             *uri,
+						   GtkTextMark	      *mark);
+GtkTextMark        *ide_back_forward_item_get_mark (IdeBackForwardItem *self);
 IdeUri             *ide_back_forward_item_get_uri (IdeBackForwardItem *self);
 gboolean            ide_back_forward_item_chain   (IdeBackForwardItem *self,
                                                    IdeBackForwardItem *other);

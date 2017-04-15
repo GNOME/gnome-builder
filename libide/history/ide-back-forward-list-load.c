@@ -108,7 +108,7 @@ ide_back_forward_list_load_cb (GObject      *object,
           return;
         }
 
-      item = ide_back_forward_item_new (context, uri);
+      item = ide_back_forward_item_new (context, uri, NULL);
       ide_back_forward_list_push (self, item);
     }
 

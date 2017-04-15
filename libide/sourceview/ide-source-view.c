@@ -3322,6 +3322,8 @@ ide_source_view_real_jump (IdeSourceView     *self,
   IdeContext *context;
   IdeFile *file;
   IdeUri *uri;
+  GtkTextMark *mark;
+  GtkTextBuffer *buffer;
   gchar *fragment;
   guint line;
   guint line_offset;
@@ -3353,7 +3355,9 @@ ide_source_view_real_jump (IdeSourceView     *self,
   uri = ide_uri_new_from_file (ide_file_get_file (file));
   fragment = g_strdup_printf ("L%u_%u", line + 1, line_offset + 1);
   ide_uri_set_fragment (uri, fragment);
-  item = ide_back_forward_item_new (context, uri);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  mark = gtk_text_buffer_create_mark (buffer, NULL, location, FALSE);
+  item = ide_back_forward_item_new (context, uri, mark);
   ide_back_forward_list_push (priv->back_forward_list, item);
 
   g_object_unref (item);
