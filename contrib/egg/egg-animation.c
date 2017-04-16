@@ -613,9 +613,14 @@ egg_animation_start (EggAnimation *animation)
   g_object_ref_sink (animation);
   egg_animation_load_begin_values (animation);
 
+  /*
+   * We want the real current time instead of the GdkFrameClocks current time
+   * because if the clock was asleep, it could be innaccurate.
+   */
+  animation->begin_msec = g_get_monotonic_time () / 1000UL;
+
   if (animation->frame_clock)
     {
-      animation->begin_msec = gdk_frame_clock_get_frame_time (animation->frame_clock) / 1000UL;
       animation->tween_handler =
         g_signal_connect (animation->frame_clock,
                           "update",
@@ -630,7 +635,6 @@ egg_animation_start (EggAnimation *animation)
     }
   else
     {
-      animation->begin_msec = g_get_monotonic_time () / 1000UL;
       animation->tween_handler = egg_frame_source_add (FALLBACK_FRAME_RATE,
                                                        egg_animation_timeout_cb,
                                                        animation);
