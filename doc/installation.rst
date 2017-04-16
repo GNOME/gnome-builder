@@ -1,7 +1,7 @@
 
 .. _Installation:
 .. _Flatpak: https://flatpak.org
-.. _Stable: https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref?h=gnome-3-22
+.. _Stable: https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref?h=stable
 .. _Nightly: https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref
 .. _Software: https://wiki.gnome.org/Apps/Software
 .. _GNOME: https://gnome.org/
@@ -38,7 +38,7 @@ You can also use the command line to install Builder:
 
 .. code-block:: sh
 
-   $ flatpak install --user --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref?h=gnome-3-22
+   $ flatpak install --user --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref?h=stable
    $ flatpak run org.gnome.Builder
 
 **Nightly**
