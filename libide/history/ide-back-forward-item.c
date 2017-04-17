@@ -29,8 +29,8 @@
 
 struct _IdeBackForwardItem
 {
-  IdeObject  parent_instance;
-  IdeUri    *uri;
+  IdeObject    parent_instance;
+  IdeUri      *uri;
   GtkTextMark *mark;
 };
 
@@ -47,16 +47,24 @@ static GParamSpec *properties [LAST_PROP];
 
 IdeBackForwardItem *
 ide_back_forward_item_new (IdeContext  *context,
-			   IdeUri      *uri,
-			   GtkTextMark *mark)
+                           IdeUri      *uri,
+                           GtkTextMark *mark)
 {
   return g_object_new (IDE_TYPE_BACK_FORWARD_ITEM,
                        "context", context,
                        "uri", uri,
-		       "mark", mark,
+                       "mark", mark,
                        NULL);
 }
 
+/**
+ * ide_back_forward_item_get_uri:
+ * @self: a #IdeBackForwardItem
+ *
+ * Gets the uri for the #IdeBackForwardItem.
+ *
+ * Returns: (transfer none) (nullable): An #IdeUri or %NULL.
+ */
 IdeUri *
 ide_back_forward_item_get_uri (IdeBackForwardItem *self)
 {
@@ -91,6 +99,14 @@ ide_back_forward_item_set_mark (IdeBackForwardItem *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MARK]);
 }
 
+/**
+ * ide_back_forward_item_get_mark:
+ * @self: a #IdeBackForwardItem
+ *
+ * Gets the text mark or %NULL.
+ *
+ * Returns: (transfer none): A #GtkTextMark or %NULL.
+ */
 GtkTextMark *
 ide_back_forward_item_get_mark (IdeBackForwardItem *self)
 {
@@ -193,8 +209,8 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
                        GTK_TYPE_TEXT_MARK,
                        (G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT |
-			G_PARAM_STATIC_STRINGS |
-			G_PARAM_EXPLICIT_NOTIFY));
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
