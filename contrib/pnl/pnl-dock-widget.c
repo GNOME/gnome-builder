@@ -50,8 +50,8 @@ pnl_dock_widget_grab_focus (GtkWidget *widget)
 
   child = gtk_bin_get_child (GTK_BIN (self));
 
-  if (child != NULL)
-    gtk_widget_child_focus (child, GTK_DIR_TAB_FORWARD);
+  if (child == NULL || !gtk_widget_child_focus (child, GTK_DIR_TAB_FORWARD))
+    GTK_WIDGET_CLASS (pnl_dock_widget_parent_class)->grab_focus (GTK_WIDGET (self));
 }
 
 static void

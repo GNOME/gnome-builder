@@ -24,7 +24,6 @@
 #include "pnl-tab-strip.h"
 #include "pnl-util-private.h"
 
-#define REVEAL_DURATION 300
 #define MNEMONIC_REVEAL_DURATION 200
 
 typedef struct
@@ -33,8 +32,10 @@ typedef struct
   PnlDockOverlayEdge *edges [4];
   GtkAdjustment      *edge_adj [4];
   GtkAdjustment      *edge_handle_adj [4];
+  GtkAllocation       hover_borders [4];
   guint               child_reveal : 4;
   guint               child_revealed : 4;
+  guint               child_transient : 4;
 } PnlDockOverlayPrivate;
 
 static void pnl_dock_overlay_init_dock_iface      (PnlDockInterface     *iface);
@@ -250,7 +251,7 @@ pnl_dock_overlay_toplevel_mnemonics (PnlDockOverlay *self,
       pnl_object_animate (handle_adj,
                           PNL_ANIMATION_EASE_IN_OUT_CUBIC,
                           MNEMONIC_REVEAL_DURATION,
-                          gtk_widget_get_frame_clock (GTK_WIDGET (edge)),
+                          gtk_widget_get_frame_clock (GTK_WIDGET (self)),
                           "value", (gdouble)overlap,
                           NULL);
     }
@@ -312,11 +313,7 @@ pnl_overlay_container_forall_cb (GtkWidget *widget,
       gtk_widget_is_visible (widget) &&
       state->current_grab == widget &&
       pnl_overlay_dock_widget_is_ancestor (widget, GTK_WIDGET (state->edge)))
-    {
-      state->result = TRUE;
-    }
-  else
-    return;
+    state->result = TRUE;
 }
 
 static gboolean
@@ -511,7 +508,8 @@ typedef struct
 {
   PnlDockOverlay  *self;
   GtkWidget       *child;
-  GtkPositionType  edge;
+  GtkPositionType  edge : 2;
+  guint            revealing : 1;
 } ChildRevealState;
 
 static void
@@ -531,14 +529,11 @@ pnl_dock_overlay_child_reveal_done (gpointer user_data)
   ChildRevealState *state = (ChildRevealState *)user_data;
   PnlDockOverlay *self = state->self;
   PnlDockOverlayPrivate *priv = pnl_dock_overlay_get_instance_private (self);
-  gboolean revealed;
 
   g_assert (PNL_IS_DOCK_OVERLAY (self));
   g_assert (GTK_IS_WIDGET (state->child));
 
-  revealed = !!(priv->child_reveal & (1 << state->edge));
-
-  if (revealed)
+  if (state->revealing)
     priv->child_revealed = priv->child_revealed | (1 << state->edge);
   else
     priv->child_revealed = priv->child_revealed & ~(1 << state->edge);
@@ -575,16 +570,45 @@ pnl_dock_overlay_set_child_reveal (PnlDockOverlay *self,
 
   if (priv->child_reveal != child_reveal)
     {
+      GtkAllocation alloc;
+      GdkMonitor *monitor;
+      GdkWindow *window;
+      guint duration = 0;
+
       state = g_slice_new0 (ChildRevealState);
       state->self = g_object_ref (self);
       state->child = g_object_ref (child);
       state->edge = edge;
+      state->revealing = !!reveal;
 
       priv->child_reveal = child_reveal;
 
+      window = gtk_widget_get_window (GTK_WIDGET (self));
+
+      if (window != NULL)
+        {
+          GdkDisplay *display = gtk_widget_get_display (child);
+
+          monitor = gdk_display_get_monitor_at_window (display, window);
+
+          gtk_widget_get_allocation (child, &alloc);
+
+          if (edge == GTK_POS_LEFT || edge == GTK_POS_RIGHT)
+            duration = pnl_animation_calculate_duration (monitor, 0, alloc.width);
+          else
+            duration = pnl_animation_calculate_duration (monitor, 0, alloc.height);
+        }
+
+#if 0
+      g_print ("Animating %s %d msec (currently at value=%lf)\n",
+               reveal ? "in" : "out",
+               duration,
+               gtk_adjustment_get_value (priv->edge_adj [edge]));
+#endif
+
       pnl_object_animate_full (priv->edge_adj [edge],
                                PNL_ANIMATION_EASE_IN_OUT_CUBIC,
-                               REVEAL_DURATION,
+                               duration,
                                gtk_widget_get_frame_clock (child),
                                pnl_dock_overlay_child_reveal_done,
                                state,
@@ -595,6 +619,156 @@ pnl_dock_overlay_set_child_reveal (PnlDockOverlay *self,
                                            child,
                                            child_properties [CHILD_PROP_REVEAL]);
     }
+}
+
+static gboolean
+widget_descendant_contains_focus (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  g_assert (GTK_IS_WIDGET (widget));
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      GtkWidget *focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+
+      if (focus != NULL)
+        return gtk_widget_is_ancestor (focus, widget);
+    }
+
+  return FALSE;
+}
+
+static inline gboolean
+rectangle_contains_point (const GdkRectangle *a, gint x, gint y)
+{
+  return x >= a->x &&
+         x <= (a->x + a->width) &&
+         y >= a->y &&
+         y <= (a->y + a->height);
+}
+
+static gboolean
+pnl_dock_overlay_motion_notify_event (GtkWidget      *widget,
+                                      GdkEventMotion *event)
+{
+  PnlDockOverlay *self = (PnlDockOverlay *)widget;
+  PnlDockOverlayPrivate *priv = pnl_dock_overlay_get_instance_private (self);
+  GdkWindow *iter;
+  GdkWindow *window;
+  gdouble x, y;
+  guint i;
+
+  g_assert (PNL_IS_DOCK_OVERLAY (self));
+  g_assert (event != NULL);
+
+  window = gtk_widget_get_window (widget);
+
+  x = event->x;
+  y = event->y;
+
+  for (iter = event->window; iter != window; iter = gdk_window_get_parent (iter))
+    gdk_window_coords_to_parent (iter, x, y, &x, &y);
+
+  for (i = 0; i < G_N_ELEMENTS (priv->hover_borders); i++)
+    {
+      PnlDockOverlayEdge *edge = priv->edges [i];
+      GtkPositionType edge_type = pnl_dock_overlay_edge_get_position (edge);
+      GtkAllocation *hover_border = &priv->hover_borders [i];
+      guint mask = 1 << edge_type;
+
+      if (rectangle_contains_point (hover_border, x, y))
+        {
+          /* Ignore this edge if it is already revealing */
+          if (pnl_dock_overlay_get_child_reveal (self, GTK_WIDGET (edge)) ||
+              pnl_dock_overlay_get_child_revealed (self, GTK_WIDGET (edge)))
+            continue;
+
+          pnl_dock_overlay_set_child_reveal (self, GTK_WIDGET (edge), TRUE);
+
+          priv->child_transient |= mask;
+        }
+      else if ((priv->child_transient & mask) != 0)
+        {
+          GtkWidget *event_widget = NULL;
+          GtkAllocation alloc;
+          gint rel_x;
+          gint rel_y;
+
+          gdk_window_get_user_data (event->window, (gpointer *)&event_widget);
+          gtk_widget_get_allocation (GTK_WIDGET (edge), &alloc);
+          gtk_widget_translate_coordinates (event_widget,
+                                            GTK_WIDGET (edge),
+                                            event->x,
+                                            event->y,
+                                            &rel_x,
+                                            &rel_y);
+
+          /*
+           * If this edge is transient, and the event window is not a
+           * descendant of the edges window, then we should dismiss the
+           * transient state.
+           */
+          if (pnl_dock_overlay_get_child_revealed (self, GTK_WIDGET (edge)) &&
+              !rectangle_contains_point (&alloc, rel_x, rel_y) &&
+              !widget_descendant_contains_focus (GTK_WIDGET (edge)))
+            {
+              pnl_dock_overlay_set_child_reveal (self, GTK_WIDGET (edge), FALSE);
+              priv->child_transient &= ~mask;
+            }
+        }
+    }
+
+  return GTK_WIDGET_CLASS (pnl_dock_overlay_parent_class)->motion_notify_event (widget, event);
+}
+
+static void
+pnl_dock_overlay_size_allocate (GtkWidget     *widget,
+                                GtkAllocation *alloc)
+{
+  PnlDockOverlay *self = (PnlDockOverlay *)widget;
+  PnlDockOverlayPrivate *priv = pnl_dock_overlay_get_instance_private (self);
+  GtkAllocation copy;
+  GtkAllocation *edge;
+
+  g_assert (PNL_IS_DOCK_OVERLAY (self));
+  g_assert (alloc != NULL);
+
+  copy = *alloc;
+  copy.x = 0;
+  copy.y = 0;
+
+#define GRAB_AREA 15
+
+  edge = &priv->hover_borders [GTK_POS_TOP];
+  edge->x = copy.x;
+  edge->y = copy.y;
+  edge->width = copy.width;
+  edge->height = GRAB_AREA;
+
+  edge = &priv->hover_borders [GTK_POS_LEFT];
+  edge->x = copy.x;
+  edge->y = copy.y;
+  edge->width = GRAB_AREA;
+  edge->height = copy.height;
+
+  edge = &priv->hover_borders [GTK_POS_RIGHT];
+  edge->x = copy.x + copy.width - GRAB_AREA;
+  edge->y = copy.y;
+  edge->width = GRAB_AREA;
+  edge->height = copy.height;
+
+  edge = &priv->hover_borders [GTK_POS_BOTTOM];
+  edge->x = copy.x;
+  edge->y = copy.y + copy.height - GRAB_AREA;
+  edge->width = copy.width;
+  edge->height = GRAB_AREA;
+
+#undef GRAB_AREA
+
+  GTK_WIDGET_CLASS (pnl_dock_overlay_parent_class)->size_allocate (widget, alloc);
 }
 
 static void
@@ -692,6 +866,8 @@ pnl_dock_overlay_class_init (PnlDockOverlayClass *klass)
 
   widget_class->destroy = pnl_dock_overlay_destroy;
   widget_class->hierarchy_changed = pnl_dock_overlay_hierarchy_changed;
+  widget_class->motion_notify_event = pnl_dock_overlay_motion_notify_event;
+  widget_class->size_allocate = pnl_dock_overlay_size_allocate;
 
   container_class->add = pnl_dock_overlay_add;
   container_class->get_child_property = pnl_dock_overlay_get_child_property;
@@ -749,6 +925,8 @@ pnl_dock_overlay_init (PnlDockOverlay *self)
   PnlDockOverlayPrivate *priv = pnl_dock_overlay_get_instance_private (self);
   guint i;
 
+  gtk_widget_add_events (GTK_WIDGET (self), GDK_POINTER_MOTION_MASK);
+
   priv->overlay = g_object_new (GTK_TYPE_OVERLAY,
                                 "visible", TRUE,
                                 NULL);
@@ -777,17 +955,19 @@ pnl_dock_overlay_init (PnlDockOverlay *self)
 
       priv->edge_adj [i] = gtk_adjustment_new (1, 0, 1, 0, 0, 0);
 
-      g_signal_connect_swapped (priv->edge_adj [i],
-                                "value-changed",
-                                G_CALLBACK (gtk_widget_queue_allocate),
-                                priv->overlay);
+      g_signal_connect_object (priv->edge_adj [i],
+                               "value-changed",
+                               G_CALLBACK (gtk_widget_queue_allocate),
+                               priv->overlay,
+                               G_CONNECT_SWAPPED);
 
       priv->edge_handle_adj [i] = gtk_adjustment_new (0, 0, 1000, 0, 0, 0);
 
-      g_signal_connect_swapped (priv->edge_handle_adj [i],
-                                "value-changed",
-                                G_CALLBACK (gtk_widget_queue_allocate),
-                                priv->overlay);
+      g_signal_connect_object (priv->edge_handle_adj [i],
+                               "value-changed",
+                               G_CALLBACK (gtk_widget_queue_allocate),
+                               priv->overlay,
+                               G_CONNECT_SWAPPED);
     }
 }
 

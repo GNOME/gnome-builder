@@ -17,7 +17,10 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#define G_LOG_DOMAIN "pnl-tab"
+
 #include "pnl-tab.h"
+#include "pnl-util-private.h"
 
 struct _PnlTab
 {
@@ -44,11 +47,7 @@ pnl_tab_destroy (GtkWidget *widget)
 {
   PnlTab *self = (PnlTab *)widget;
 
-  if (self->widget)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (self->widget), (gpointer *)&self->widget);
-      self->widget = NULL;
-    }
+  pnl_clear_weak_pointer (&self->widget);
 
   GTK_WIDGET_CLASS (pnl_tab_parent_class)->destroy (widget);
 }
@@ -258,18 +257,9 @@ pnl_tab_set_widget (PnlTab    *self,
 {
   g_return_if_fail (PNL_IS_TAB (self));
 
-  if (self->widget != widget)
+  if (pnl_set_weak_pointer (&self->widget, widget))
     {
-      if (self->widget)
-        g_object_remove_weak_pointer (G_OBJECT (self->widget), (gpointer *)&self->widget);
-
-      self->widget = widget;
-
-      if (widget)
-        g_object_add_weak_pointer (G_OBJECT (self->widget), (gpointer *)&self->widget);
-
       gtk_label_set_mnemonic_widget (self->title, widget);
-
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WIDGET]);
     }
 }

@@ -156,7 +156,7 @@ pnl_dock_stack_init (PnlDockStack *self)
   priv->edge = GTK_POS_TOP;
 
   priv->stack = g_object_new (GTK_TYPE_STACK,
-                              "homogeneous", FALSE,
+                              "homogeneous", TRUE,
                               "visible", TRUE,
                               NULL);
 

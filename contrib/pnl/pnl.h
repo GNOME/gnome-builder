@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 #include "pnl-dock-item.h"
 #include "pnl-dock-manager.h"
 #include "pnl-dock-overlay.h"
+#include "pnl-dock-overlay-edge.h"
 #include "pnl-dock-paned.h"
 #include "pnl-dock-revealer.h"
 #include "pnl-dock-stack.h"

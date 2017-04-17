@@ -178,8 +178,14 @@ pnl_dock_revealer_animation_done (gpointer user_data)
 }
 
 static guint
-size_to_duration (gint size)
+size_to_duration (GdkMonitor *monitor,
+                  gint        size)
 {
+  g_assert (!monitor || GDK_IS_MONITOR (monitor));
+
+  if (monitor != NULL)
+    return pnl_animation_calculate_duration (monitor, 0, size);
+
   return MAX (150, size * 1.2);
 }
 
@@ -188,6 +194,9 @@ pnl_dock_revealer_calculate_duration (PnlDockRevealer *self)
 {
   PnlDockRevealerPrivate *priv = pnl_dock_revealer_get_instance_private (self);
   GtkWidget *child;
+  GdkWindow *window;
+  GdkMonitor *monitor = NULL;
+  GdkDisplay *display;
   GtkRequisition min_size;
   GtkRequisition nat_size;
 
@@ -206,27 +215,32 @@ pnl_dock_revealer_calculate_duration (PnlDockRevealer *self)
 
   gtk_widget_get_preferred_size (child, &min_size, &nat_size);
 
+  display = gtk_widget_get_display (GTK_WIDGET (self));
+  window = gtk_widget_get_window (GTK_WIDGET (self));
+  if (window != NULL)
+    monitor = gdk_display_get_monitor_at_window (display, window);
+
   if (IS_HORIZONTAL (priv->transition_type))
     {
       if (priv->position_set)
         {
           if (priv->position_set && priv->position > min_size.width)
-            return size_to_duration (priv->position);
-          return size_to_duration (min_size.width);
+            return size_to_duration (monitor, priv->position);
+          return size_to_duration (monitor, min_size.width);
         }
 
-      return size_to_duration (nat_size.width);
+      return size_to_duration (monitor, nat_size.width);
     }
   else
     {
       if (priv->position_set)
         {
           if (priv->position_set && priv->position > min_size.height)
-            return size_to_duration (priv->position);
-          return size_to_duration (min_size.height);
+            return size_to_duration (monitor, priv->position);
+          return size_to_duration (monitor, min_size.height);
         }
 
-      return size_to_duration (nat_size.height);
+      return size_to_duration (monitor, nat_size.height);
     }
 }
 
