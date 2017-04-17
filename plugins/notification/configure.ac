@@ -1,7 +1,7 @@
 # --enable-notification-plugin=yes/no
 AC_ARG_ENABLE([notification-plugin],
               [AS_HELP_STRING([--enable-notification-plugin=@<:@yes/no@:>@],
-                              [Build with support for autocompletion in HTML documents.])],
+                              [Build with shell notification support])],
               [enable_notification_plugin=$enableval],
               [enable_notification_plugin=yes])
 
