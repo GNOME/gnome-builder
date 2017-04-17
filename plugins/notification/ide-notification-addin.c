@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-notification-addin"
+
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
@@ -26,8 +28,8 @@
 
 struct _IdeNotificationAddin
 {
-  IdeObject parent_instance;
-  GDBusProxy* proxy;
+  IdeObject   parent_instance;
+  GDBusProxy *proxy;
 };
 
 static void addin_iface_init (IdeBuildPipelineAddinInterface *iface);
@@ -40,19 +42,19 @@ G_DEFINE_TYPE_EXTENDED (IdeNotificationAddin,
                                                addin_iface_init))
 
 static void
-ide_notification_addin_notify (IdeNotificationAddin       *self,
-                               const gchar                *msg)
+ide_notification_addin_notify (IdeNotificationAddin *self,
+                               gboolean              success)
 {
-  GVariant        *result;
-  GVariantBuilder  actions_builder;
-  GVariantBuilder  hints_builder;
-  GtkApplication  *app;
-  GtkWindow       *window;
-  IdeContext      *context;
-  IdeProject      *project;
-  const gchar     *project_name;
-  gchar           *msg_body;
-  gchar           *msg_title;
+  g_autoptr(GVariant) result = NULL;
+  g_autofree gchar *msg_body = NULL;
+  GVariantBuilder actions_builder;
+  GVariantBuilder hints_builder;
+  GtkApplication *app;
+  GtkWindow *window;
+  IdeContext *context;
+  IdeProject *project;
+  const gchar *project_name;
+  const gchar *msg_title;
 
   app = GTK_APPLICATION (g_application_get_default ());
   window = gtk_application_get_active_window (app);
@@ -69,15 +71,15 @@ ide_notification_addin_notify (IdeNotificationAddin       *self,
   if (project_name == NULL)
     return;
 
-  msg_body = g_strconcat ("Build of project ", project_name, " ", msg, NULL);
-  if (msg_body == NULL)
-    return;
-
-  msg_title = g_strconcat ("Build action ", msg, NULL);
-  if (msg_title == NULL)
+  if (success)
     {
-      g_free(msg_body);
-      return;
+      msg_title = _("Build successful");
+      msg_body = g_strdup_printf (_("Project “%s” has completed building"), project_name);
+    }
+  else
+    {
+      msg_title = _("Build failed");
+      msg_body = g_strdup_printf (_("Project “%s” failed to build"), project_name);
     }
 
   g_variant_builder_init (&actions_builder, G_VARIANT_TYPE ("as"));
@@ -85,57 +87,44 @@ ide_notification_addin_notify (IdeNotificationAddin       *self,
 
   result = g_dbus_proxy_call_sync (self->proxy,
                                    "Notify",
-				                           g_variant_new ("(susssasa{sv}i)",
-		                              "org.gnome.Builder", NOTIFY_ID, "",
-				                          msg_title,
-				                          msg_body, &actions_builder,
-				                          &hints_builder, -1),
-				                          G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL);
-  if (result != NULL)
-    g_variant_unref (result);
+                                   g_variant_new ("(susssasa{sv}i)",
+                                                  "org.gnome.Builder", NOTIFY_ID, "",
+                                                  msg_title,
+                                                  msg_body, &actions_builder,
+                                                  &hints_builder, -1),
+                                   G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL);
 
-  g_free(msg_body);
-  g_free(msg_title);
-
-//    "/data/icons/hicolor/16x16/apps/org.gnome.Builder.png",
-//    GNotification *notification;
-//    notification = g_notification_new ("Test");
-//    g_notification_set_body (notification, "body");
-//    g_application_send_notification (G_APPLICATION (app), "test1", notification);
-//    g_object_unref (notification);
+#if 0
+   "/data/icons/hicolor/16x16/apps/org.gnome.Builder.png",
+   GNotification *notification;
+   notification = g_notification_new ("Test");
+   g_notification_set_body (notification, "body");
+   g_application_send_notification (G_APPLICATION (app), "test1", notification);
+   g_object_unref (notification);
+#endif
 }
 static void
-ide_notification_addin_build_failed (IdeNotificationAddin       *self,
-                                     IdeBuildPipeline           *build_pipeline,
-                                     IdeBuildManager            *build_manager)
+ide_notification_addin_build_failed (IdeNotificationAddin *self,
+                                     IdeBuildPipeline     *build_pipeline,
+                                     IdeBuildManager      *build_manager)
 {
-  const gchar *msg_body;
-
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  msg_body = "failed";
-
-  ide_notification_addin_notify(self, msg_body);
-
+  ide_notification_addin_notify (self, FALSE);
 }
 
 static void
-ide_notification_addin_build_finished (IdeNotificationAddin       *self,
-                                       IdeBuildPipeline           *build_pipeline,
-                                       IdeBuildManager            *build_manager)
+ide_notification_addin_build_finished (IdeNotificationAddin *self,
+                                       IdeBuildPipeline     *build_pipeline,
+                                       IdeBuildManager      *build_manager)
 {
-  const gchar *msg_body;
-
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  msg_body = "finished";
-
-  ide_notification_addin_notify(self, msg_body);
-
+  ide_notification_addin_notify (self, TRUE);
 }
 
 static void
@@ -163,7 +152,7 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
                                                "org.freedesktop.Notifications",
                                                NULL,
                                                NULL);
-  g_assert(G_IS_DBUS_PROXY (self->proxy));
+  g_assert (G_IS_DBUS_PROXY (self->proxy));
 
   g_signal_connect_object (build_manager,
                            "build-finished",
@@ -187,8 +176,7 @@ ide_notification_addin_unload (IdeBuildPipelineAddin *addin,
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  if (self->proxy)
-      g_object_unref (self->proxy);
+  g_clear_object (&self->proxy);
 }
 static void
 ide_notification_addin_class_init (IdeNotificationAddinClass *klass)

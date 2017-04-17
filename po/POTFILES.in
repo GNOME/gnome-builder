@@ -168,6 +168,7 @@ plugins/jedi/jedi_plugin.py
 plugins/meson/meson_plugin/__init__.py
 plugins/meson-templates/meson_templates/__init__.py
 plugins/mingw/ide-mingw-device-provider.c
+plugins/notification/ide-notification-addin.c
 plugins/project-tree/gb-new-file-popover.c
 plugins/project-tree/gb-new-file-popover.ui
 plugins/project-tree/gb-project-tree-addin.c
