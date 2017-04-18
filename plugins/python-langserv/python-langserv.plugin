@@ -1,0 +1,12 @@
+[Plugin]
+Module=python_langserv
+Loader=python3
+Name=Python Language Server Integration
+Description=Provides auto-completion, diagnostics, and other IDE features
+Authors=Patrick Griffis <tingping@tingping.se>
+Copyright=Copyright © 2017 Patrick Griffis
+Builtin=true
+X-Completion-Provider-Languages=python3,python
+X-Diagnostic-Provider-Languages=python3,python
+X-Formatter-Languages=python3,python
+X-Symbol-Resolver-Languages=python3,python
