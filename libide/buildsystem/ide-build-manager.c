@@ -316,8 +316,6 @@ failure:
       egg_signal_group_set_target (self->pipeline_signals, NULL);
     }
 
-  ide_build_manager_propagate_action_enabled (self);
-
   IDE_EXIT;
 }
 
@@ -400,8 +398,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
-
-  ide_build_manager_propagate_action_enabled (self);
 
   IDE_EXIT;
 }
@@ -994,8 +990,6 @@ ide_build_manager_execute_cb (GObject      *object,
   g_task_return_boolean (task, TRUE);
 
 failure:
-  ide_build_manager_propagate_action_enabled (self);
-
   IDE_EXIT;
 }
 
@@ -1035,8 +1029,6 @@ ide_build_manager_save_all_cb (GObject      *object,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
-
-  ide_build_manager_propagate_action_enabled (self);
 
   IDE_EXIT;
 }
@@ -1134,8 +1126,6 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
 
-  ide_build_manager_propagate_action_enabled (self);
-
   IDE_EXIT;
 }
 
@@ -1186,15 +1176,9 @@ ide_build_manager_clean_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   if (!ide_build_pipeline_clean_finish (pipeline, result, &error))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      IDE_GOTO (failure);
-    }
-
-  g_task_return_boolean (task, TRUE);
-
-failure:
-  ide_build_manager_propagate_action_enabled (self);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 void
@@ -1238,8 +1222,6 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
                                   g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
-
-  ide_build_manager_propagate_action_enabled (self);
 
   IDE_EXIT;
 }
