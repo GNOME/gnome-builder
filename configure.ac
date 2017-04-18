@@ -108,7 +108,7 @@ channel_guess=distro
 AS_IF([test -d "${srcdir}/.git"],[channel_guess=devel])
 AS_IF([test x$UNDER_JHBUILD != x],[channel_guess=jhbuild])
 AC_ARG_WITH([channel],
-            AS_HELP_STRING([--enable-channel=@<:@devel/distro/jhbuild/flatpak-nightly/flatpak-stable@:>@],
+            AS_HELP_STRING([--with-channel=@<:@devel/distro/jhbuild/flatpak-nightly/flatpak-stable@:>@],
                            [Sets the distribution channel for the build to help developers track down bugs]),
             [channel=$withval],
 	    [channel=$channel_guess])
