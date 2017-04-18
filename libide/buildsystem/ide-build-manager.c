@@ -90,6 +90,7 @@ ide_build_manager_propagate_action_enabled (IdeBuildManager *self)
   g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "build", !busy && can_build);
   g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "rebuild", !busy && can_build);
   g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "clean", !busy && can_build);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "install", !busy && can_build);
 }
 
 static gboolean
