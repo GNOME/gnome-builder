@@ -52,6 +52,7 @@ struct _IdeBuildManager
 
 static void initable_iface_init     (GInitableIface *);
 static void action_group_iface_init (GActionGroupInterface *);
+static void ide_build_manager_set_can_build (IdeBuildManager *self, gboolean can_build);
 
 G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
@@ -301,9 +302,8 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
       IDE_GOTO (failure);
     }
 
-  self->can_build = TRUE;
+  ide_build_manager_set_can_build (self, TRUE);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_BUILD]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
   IDE_EXIT;
@@ -370,7 +370,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    * We will delay the initialization until after the we have ensured the
    * runtime is available (possibly installing it).
    */
-  self->can_build = FALSE;
+  ide_build_manager_set_can_build (self, FALSE);
   self->pipeline = g_object_new (IDE_TYPE_BUILD_PIPELINE,
                                  "context", context,
                                  "configuration", config,
@@ -395,7 +395,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                     ide_build_manager_ensure_runtime_cb,
                                     g_steal_pointer (&task));
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_BUILD]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
@@ -1416,4 +1415,15 @@ ide_build_manager_get_can_build (IdeBuildManager *self)
   g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), FALSE);
 
   return self->can_build;
+}
+
+static void
+ide_build_manager_set_can_build (IdeBuildManager *self,
+                                 gboolean         can_build)
+{
+  g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
+
+  self->can_build = !!can_build;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_BUILD]);
+  ide_build_manager_update_action_enabled (self);
 }
