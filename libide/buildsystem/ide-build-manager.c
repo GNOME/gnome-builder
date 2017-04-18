@@ -79,6 +79,8 @@ enum {
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+static const gchar *action_names[] = { "build", "clean", "install", "rebuild", "cancel" };
+
 static void
 ide_build_manager_propagate_action_enabled (IdeBuildManager *self)
 {
@@ -166,6 +168,29 @@ ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
 }
 
 static void
+ide_build_manager_update_action_enabled (IdeBuildManager *self)
+{
+  gboolean busy;
+  gboolean can_build;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  busy = ide_build_manager_get_busy (self);
+  can_build = ide_build_manager_get_can_build (self);
+  for (guint i = 0; i < G_N_ELEMENTS (action_names); i++)
+    {
+      const gchar *name = action_names [i];
+      if (g_strcmp0 (name, "cancel") != 0)
+        {
+          GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !busy && can_build);
+        }
+    }
+
+  ide_build_manager_propagate_action_enabled (self);
+}
+
+static void
 ide_build_manager_notify_busy (IdeBuildManager  *self,
                                GParamSpec       *pspec,
                                IdeBuildPipeline *pipeline)
@@ -176,7 +201,7 @@ ide_build_manager_notify_busy (IdeBuildManager  *self,
   g_assert (G_IS_PARAM_SPEC (pspec));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  ide_build_manager_propagate_action_enabled (self);
+  ide_build_manager_update_action_enabled (self);
 
   IDE_EXIT;
 }
@@ -757,8 +782,6 @@ ide_build_manager_action_install (GSimpleAction *action,
 static void
 ide_build_manager_init (IdeBuildManager *self)
 {
-  static const gchar *invert_names[] = { "build", "clean", "install", "rebuild" };
-  static const gchar *names[] = { "cancel" };
   static GActionEntry actions[] = {
     { "build", ide_build_manager_action_build },
     { "cancel", ide_build_manager_action_cancel },
@@ -776,19 +799,12 @@ ide_build_manager_init (IdeBuildManager *self)
                                    G_N_ELEMENTS (actions),
                                    self);
 
-  for (guint i = 0; i < G_N_ELEMENTS (invert_names); i++)
-    {
-      const gchar *name = invert_names [i];
-      GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
-      g_object_bind_property (self, "busy", action, "enabled", G_BINDING_INVERT_BOOLEAN);
-    }
+  {
+    GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "cancel");
+    g_object_bind_property (self, "busy", action, "enabled", 0);
+  }
 
-  for (guint i = 0; i < G_N_ELEMENTS (names); i++)
-    {
-      const gchar *name = names [i];
-      GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
-      g_object_bind_property (self, "busy", action, "enabled", 0);
-    }
+  ide_build_manager_update_action_enabled (self);
 
   self->pipeline_signals = egg_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
 
