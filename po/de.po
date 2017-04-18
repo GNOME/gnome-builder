@@ -6,22 +6,23 @@
 # Bernd Homuth <dev@hmt.im>, 2015.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2015-2016.
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2016-2017.
+# Peter Sonntag <peter@sonniger-tag.eu>, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-31 07:36+0000\n"
-"PO-Revision-Date: 2017-04-05 04:24+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
-"Language-Team: Deutsch <gnome-de@gnome.org>\n"
+"POT-Creation-Date: 2017-04-07 08:56+0000\n"
+"PO-Revision-Date: 2017-04-08 07:59+0200\n"
+"Last-Translator: Peter Sonntag <peter@sonniger-tag.eu>\n"
+"Language-Team: Deutsch <>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -1096,16 +1097,16 @@ msgstr "Kein solcher Worker"
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
-#: libide/buffers/ide-buffer-manager.c:673
+#: libide/buffers/ide-buffer-manager.c:678
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: libide/buffers/ide-buffer-manager.c:1784
+#: libide/buffers/ide-buffer-manager.c:1791
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1818
+#: libide/buffers/ide-buffer-manager.c:1825
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Puffer konnte nicht gespeichert werden, Beschwerde wird ignoriert."
 
@@ -2367,11 +2368,11 @@ msgstr ""
 
 #: libide/preferences/ide-preferences-builtin.c:195
 msgid "Minimum word size"
-msgstr ""
+msgstr "Minimale Wortlänge"
 
 #: libide/preferences/ide-preferences-builtin.c:195
 msgid "Minimum word size for word completion"
-msgstr ""
+msgstr "Minimale Wortlänge für Vervollständigung"
 
 #: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest completions using Ctags"
@@ -2524,7 +2525,7 @@ msgid "Scan your computer for existing projects"
 msgstr "Durchsuchen Sie Ihren Rechner nach vorhandenen Projekten"
 
 #: libide/preferences/ide-preferences-builtin.c:519
-#: plugins/create-project/gbp-create-project-widget.ui:153
+#: plugins/create-project/gbp-create-project-widget.ui:154
 msgid "Version Control"
 msgstr "Versionskontrolle"
 
@@ -2575,7 +2576,7 @@ msgid "Cannot run target, another target is running"
 msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
-#: libide/runner/ide-run-manager.c:326
+#: libide/runner/ide-run-manager.c:321
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
@@ -2624,12 +2625,12 @@ msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6054
+#: libide/sourceview/ide-source-view.c:6099
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
-msgstr ""
+msgstr "<b>%s</b> — <small>Zeile %u, Spalte %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6069
+#: libide/sourceview/ide-source-view.c:6125
 #, fuzzy
 #| msgid "No projects found"
 msgid "No references were found"
@@ -3244,7 +3245,7 @@ msgstr "Beim Initialisieren der Versionskontrolle ist ein Fehler aufgetreten"
 msgid "Project Name"
 msgstr "Projektname"
 
-#: plugins/create-project/gbp-create-project-widget.ui:55
+#: plugins/create-project/gbp-create-project-widget.ui:56
 msgid ""
 "Unique name that is used for your project’s folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
@@ -3254,56 +3255,56 @@ msgstr ""
 "Ressourcen verwendet wird. Der Name sollte in Kleinbuchstaben geschrieben "
 "sein, keine Leerzeichen enthalten und darf nicht mit einer Zahl beginnen."
 
-#: plugins/create-project/gbp-create-project-widget.ui:74
+#: plugins/create-project/gbp-create-project-widget.ui:75
 msgid "Project Location"
 msgstr "Ort des Projekts"
 
-#: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:76
+#: plugins/create-project/gbp-create-project-widget.ui:86
+#: plugins/git/ide-git-clone-widget.ui:77
 msgid "Select Project Directory"
 msgstr "Projektordner auswählen"
 
-#: plugins/create-project/gbp-create-project-widget.ui:98
+#: plugins/create-project/gbp-create-project-widget.ui:99
 msgid "Language"
 msgstr "Sprache"
 
-#: plugins/create-project/gbp-create-project-widget.ui:120
+#: plugins/create-project/gbp-create-project-widget.ui:121
 msgid "License"
 msgstr "Lizenz"
 
-#: plugins/create-project/gbp-create-project-widget.ui:135
+#: plugins/create-project/gbp-create-project-widget.ui:136
 msgid "GPLv3+"
 msgstr "GPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:136
+#: plugins/create-project/gbp-create-project-widget.ui:137
 msgid "LGPLv3+"
 msgstr "LGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:137
+#: plugins/create-project/gbp-create-project-widget.ui:138
 msgid "AGPLv3+"
 msgstr "AGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:138
+#: plugins/create-project/gbp-create-project-widget.ui:139
 msgid "MIT/X11"
 msgstr "MIT/X11"
 
-#: plugins/create-project/gbp-create-project-widget.ui:139
+#: plugins/create-project/gbp-create-project-widget.ui:140
 msgid "GPLv2+"
 msgstr "GPLv2+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:140
+#: plugins/create-project/gbp-create-project-widget.ui:141
 msgid "LGPLv2.1+"
 msgstr "LGPLv2.1+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:141
+#: plugins/create-project/gbp-create-project-widget.ui:142
 msgid "No license"
 msgstr "Keine Lizenz"
 
-#: plugins/create-project/gbp-create-project-widget.ui:174
+#: plugins/create-project/gbp-create-project-widget.ui:175
 msgid "Uses the Git version control system"
 msgstr "Verwendet das Versionskontrollsystem Git"
 
-#: plugins/create-project/gbp-create-project-widget.ui:236
+#: plugins/create-project/gbp-create-project-widget.ui:237
 msgid "Select a Template"
 msgstr "Wählen Sie eine Vorlage"
 
@@ -3499,19 +3500,19 @@ msgstr ""
 "Git zum Anlegen einer lokalen Kopie des auf einem entfernten Rechner "
 "verwalteten Projekts verwenden."
 
-#: plugins/git/ide-git-clone-widget.ui:64
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "user@host:repository.git"
 msgstr "Benutzer@Rechner:Archiv.git"
 
-#: plugins/git/ide-git-clone-widget.ui:65
+#: plugins/git/ide-git-clone-widget.ui:66
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Geben Sie die URL des Quellcode-Archivs Ihres Projekts ein."
 
-#: plugins/git/ide-git-clone-widget.ui:92
+#: plugins/git/ide-git-clone-widget.ui:93
 msgid "Repository URL"
 msgstr "Adresse des Archivs"
 
-#: plugins/git/ide-git-clone-widget.ui:100
+#: plugins/git/ide-git-clone-widget.ui:101
 msgid "Project Destination"
 msgstr "Projekt-Ziel"
 
@@ -3930,8 +3931,9 @@ msgid "Untitled terminal"
 msgstr "Unbenanntes Terminal"
 
 #: plugins/terminal/gb-terminal-workbench-addin.c:142
-msgid "Run Output"
-msgstr "Laufzeitausgabe"
+#| msgid "GNOME Application"
+msgid "Application Output"
+msgstr "Anwendungsausgabe"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
@@ -3975,6 +3977,9 @@ msgstr ""
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Der XML-Baum konnte nicht angelegt werden."
+
+#~ msgid "Run Output"
+#~ msgstr "Laufzeitausgabe"
 
 #~ msgid "Build: %s"
 #~ msgstr "Erstellen: %s"
