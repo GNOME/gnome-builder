@@ -1,6 +1,10 @@
 VAPIGEN_CHECK
-PKG_CHECK_MODULES(VALA, [libvala-0.36],[have_libvala=yes],[have_libvala=no])
-VALA_VERSION=0.36
+PKG_CHECK_MODULES(VALA, [libvala-0.38],[have_libvala=yes],[have_libvala=no])
+VALA_VERSION=0.38
+AS_IF([test x$have_libvala = xno],[
+	PKG_CHECK_MODULES(VALA, [libvala-0.36],[have_libvala=yes],[have_libvala=no])
+	VALA_VERSION=0.36
+])
 AS_IF([test x$have_libvala = xno],[
 	PKG_CHECK_MODULES(VALA, [libvala-0.34],[have_libvala=yes],[have_libvala=no])
 	VALA_VERSION=0.34
