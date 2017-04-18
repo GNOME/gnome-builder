@@ -50,9 +50,10 @@ struct _IdeBuildManager
   guint             can_build : 1;
 };
 
-static void initable_iface_init     (GInitableIface *);
-static void action_group_iface_init (GActionGroupInterface *);
-static void ide_build_manager_set_can_build (IdeBuildManager *self, gboolean can_build);
+static void initable_iface_init             (GInitableIface        *iface);
+static void action_group_iface_init         (GActionGroupInterface *iface);
+static void ide_build_manager_set_can_build (IdeBuildManager       *self,
+                                             gboolean               can_build);
 
 G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
@@ -1423,7 +1424,12 @@ ide_build_manager_set_can_build (IdeBuildManager *self,
 {
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
 
-  self->can_build = !!can_build;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_BUILD]);
-  ide_build_manager_update_action_enabled (self);
+  can_build = !!can_build;
+
+  if (self->can_build != can_build)
+    {
+      self->can_build = can_build;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_BUILD]);
+      ide_build_manager_update_action_enabled (self);
+    }
 }
