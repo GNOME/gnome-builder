@@ -47,9 +47,11 @@ struct _IdeRunManager
   guint                    busy : 1;
 };
 
+static void initable_iface_init             (GInitableIface        *iface);
 static void action_group_iface_init (GActionGroupInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
 
 enum {
@@ -98,6 +100,82 @@ ide_run_manager_finalize (GObject *object)
   self->handlers = NULL;
 
   G_OBJECT_CLASS (ide_run_manager_parent_class)->finalize (object);
+}
+
+static void
+ide_run_manager_update_action_enabled (IdeRunManager *self)
+{
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  gboolean can_build;
+  GAction *run_action;
+  GAction *run_with_action;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  can_build = ide_build_manager_get_can_build (build_manager);
+
+  run_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run");
+  run_with_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run-with-handler");
+
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (run_action), self->busy == FALSE && can_build == TRUE);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (run_with_action), self->busy == FALSE && can_build == TRUE);
+
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "run", self->busy == FALSE && can_build == TRUE);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "run-with-handler", self->busy == FALSE && can_build == TRUE);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "stop", self->busy == TRUE);
+}
+
+static void
+ide_run_manager_notify_can_build (IdeRunManager   *self,
+                                  GParamSpec      *pspec,
+                                  IdeBuildManager *build_manager)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (G_IS_PARAM_SPEC (pspec));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  ide_run_manager_update_action_enabled (self);
+
+  IDE_EXIT;
+}
+
+static gboolean
+initable_init (GInitable     *initable,
+               GCancellable  *cancellable,
+               GError       **error)
+{
+  IdeRunManager *self = (IdeRunManager *)initable;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+
+  g_signal_connect_object (build_manager,
+                           "notify::can-build",
+                           G_CALLBACK (ide_run_manager_notify_can_build),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  ide_run_manager_update_action_enabled (self);
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+initable_iface_init (GInitableIface *iface)
+{
+  iface->init = initable_init;
 }
 
 static void
@@ -422,17 +500,6 @@ ide_run_manager_install_cb (GObject      *object,
 }
 
 static void
-ide_run_manager_notify_busy (IdeRunManager *self)
-{
-  g_assert (IDE_IS_RUN_MANAGER (self));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "run", self->busy == FALSE);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "run-with-handler", self->busy == FALSE);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "stop", self->busy == TRUE);
-}
-
-static void
 ide_run_manager_task_completed (IdeRunManager *self,
                                 GParamSpec    *pspec,
                                 GTask         *task)
@@ -444,8 +511,9 @@ ide_run_manager_task_completed (IdeRunManager *self,
   g_assert (G_IS_TASK (task));
 
   self->busy = FALSE;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
-  ide_run_manager_notify_busy (self);
+  ide_run_manager_update_action_enabled (self);
 
   IDE_EXIT;
 }
@@ -471,6 +539,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
    */
 
   self->busy = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
   g_signal_connect_object (task,
                            "notify::completed",
@@ -484,7 +553,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                                    ide_run_manager_install_cb,
                                    g_object_ref (task));
 
-  ide_run_manager_notify_busy (self);
+  ide_run_manager_update_action_enabled (self);
 
   IDE_EXIT;
 }
