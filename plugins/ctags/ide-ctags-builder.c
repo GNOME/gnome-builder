@@ -301,7 +301,6 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
   task_data->ctags = g_settings_get_string (settings, "ctags-path");
   task_data->directory = g_object_ref (directory_or_file);
   task_data->recursive = recursive;
-  task_data->ctags = g_strdup ("ctags");
 
   /*
    * The destination directory for the tags should match the hierarchy
