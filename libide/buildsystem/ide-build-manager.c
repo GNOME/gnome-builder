@@ -778,6 +778,8 @@ ide_build_manager_action_install (GSimpleAction *action,
 static void
 ide_build_manager_init (IdeBuildManager *self)
 {
+  GAction *cancel_action;
+
   static GActionEntry actions[] = {
     { "build", ide_build_manager_action_build },
     { "cancel", ide_build_manager_action_cancel },
@@ -795,10 +797,8 @@ ide_build_manager_init (IdeBuildManager *self)
                                    G_N_ELEMENTS (actions),
                                    self);
 
-  {
-    GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "cancel");
-    g_object_bind_property (self, "busy", action, "enabled", 0);
-  }
+  cancel_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "cancel");
+  g_object_bind_property (self, "busy", cancel_action, "enabled", 0);
 
   ide_build_manager_update_action_enabled (self);
 

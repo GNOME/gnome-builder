@@ -217,19 +217,6 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
                   0);
 }
 
-static void
-ide_run_manager_init (IdeRunManager *self)
-{
-  ide_run_manager_add_handler (self,
-                               "run",
-                               _("Run"),
-                               "media-playback-start-symbolic",
-                               "<Control>F5",
-                               NULL,
-                               NULL,
-                               NULL);
-}
-
 gboolean
 ide_run_manager_get_busy (IdeRunManager *self)
 {
@@ -886,48 +873,17 @@ ide_run_manager_query_action (GActionGroup        *group,
                               GVariant           **state)
 {
   IdeRunManager *self = (IdeRunManager *)group;
-  const GVariantType *real_parameter_type = NULL;
-  gboolean real_enabled = FALSE;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (action_name != NULL);
 
-  if (g_strcmp0 (action_name, "run-with-handler") == 0)
-    {
-      real_enabled = self->busy == FALSE;
-      real_parameter_type = G_VARIANT_TYPE_STRING;
-      goto finish;
-    }
-
-  if (g_strcmp0 (action_name, "run") == 0)
-    {
-      real_enabled = self->busy == FALSE;
-      goto finish;
-    }
-
-  if (g_strcmp0 (action_name, "stop") == 0)
-    {
-      real_enabled = self->busy == TRUE;
-      goto finish;
-    }
-
-finish:
-  if (state_type)
-    *state_type = NULL;
-
-  if (state_hint)
-    *state_hint = NULL;
-
-  if (state)
-    *state = NULL;
-
-  if (enabled)
-    *enabled = real_enabled;
-
-  if (parameter_type)
-    *parameter_type = real_parameter_type;
-
-  return TRUE;
+  return g_action_group_query_action (G_ACTION_GROUP (self->actions),
+                                      action_name,
+                                      enabled,
+                                      parameter_type,
+                                      state_type,
+                                      state_hint,
+                                      state);
 }
 
 static void
@@ -955,44 +911,11 @@ ide_run_manager_activate_action (GActionGroup *group,
                                  GVariant     *parameter)
 {
   IdeRunManager *self = (IdeRunManager *)group;
-  g_autoptr(GVariant) sunk = NULL;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (action_name != NULL);
 
-  if (parameter != NULL && g_variant_is_floating (parameter))
-    sunk = g_variant_ref_sink (parameter);
-
-  if (FALSE) {}
-  else if (g_strcmp0 (action_name, "run-with-handler") == 0)
-    {
-      const gchar *handler = NULL;
-
-      if (parameter != NULL)
-        handler = g_variant_get_string (parameter, NULL);
-
-      /* "" translates to current handler */
-      if (handler && *handler)
-        ide_run_manager_set_handler (self, handler);
-
-      ide_run_manager_run_async (self,
-                                 NULL,
-                                 NULL,
-                                 ide_run_manager_run_action_cb,
-                                 NULL);
-    }
-  else if (g_strcmp0 (action_name, "run") == 0)
-    {
-      ide_run_manager_run_async (self,
-                                 NULL,
-                                 NULL,
-                                 ide_run_manager_run_action_cb,
-                                 NULL);
-    }
-  else if (g_strcmp0 (action_name, "stop") == 0)
-    {
-      ide_run_manager_cancel (self);
-    }
+  g_action_group_activate_action (G_ACTION_GROUP (self->actions), action_name, parameter);
 }
 
 static void
@@ -1002,4 +925,102 @@ action_group_iface_init (GActionGroupInterface *iface)
   iface->list_actions = ide_run_manager_list_actions;
   iface->query_action = ide_run_manager_query_action;
   iface->activate_action = ide_run_manager_activate_action;
+}
+
+static void
+ide_run_manager_action_run (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
+{
+  IdeRunManager *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  ide_run_manager_run_async (self,
+                             NULL,
+                             NULL,
+                             ide_run_manager_run_action_cb,
+                             NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_run_manager_action_run_with_handler (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
+{
+  IdeRunManager *self = user_data;
+  const gchar *handler = NULL;
+  g_autoptr(GVariant) sunk = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  if (parameter != NULL)
+  {
+    handler = g_variant_get_string (parameter, NULL);
+    if (g_variant_is_floating (parameter))
+      sunk = g_variant_ref_sink (parameter);
+  }
+
+  /* translates to current handler */
+  if (handler && *handler)
+    ide_run_manager_set_handler (self, handler);
+
+  ide_run_manager_run_async (self,
+                             NULL,
+                             NULL,
+                             ide_run_manager_run_action_cb,
+                             NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_run_manager_action_stop (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  IdeRunManager *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  ide_run_manager_cancel (self);
+
+  IDE_EXIT;
+}
+
+static void
+ide_run_manager_init (IdeRunManager *self)
+{
+  static GActionEntry actions[] = {
+    { "run", ide_run_manager_action_run },
+    { "run-with-handler", ide_run_manager_action_run_with_handler, "s" },
+    { "stop", ide_run_manager_action_stop }
+  };
+
+  self->actions = g_simple_action_group_new ();
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+
+  ide_run_manager_add_handler (self,
+                               "run",
+                               _("Run"),
+                               "media-playback-start-symbolic",
+                               "<Control>F5",
+                               NULL,
+                               NULL,
+                               NULL);
 }
