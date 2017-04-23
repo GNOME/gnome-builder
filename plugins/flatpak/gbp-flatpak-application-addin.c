@@ -366,6 +366,33 @@ gbp_flatpak_application_addin_get_runtimes (GbpFlatpakApplicationAddin *self)
   IDE_RETURN (ret);
 }
 
+/**
+ * gbp_flatpak_application_addin_get_installations:
+ *
+ * Gets an array of flatpak installations on the system.
+ *
+ * Returns: (transfer container) (element-type Flatpak.Installation): Array of installations
+ */
+GPtrArray *
+gbp_flatpak_application_addin_get_installations (GbpFlatpakApplicationAddin *self)
+{
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
+
+  ret = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (guint i = 0; i < self->installations->len; i++)
+    {
+      InstallInfo *info = g_ptr_array_index (self->installations, i);
+      g_ptr_array_add (ret, g_object_ref (info->installation));
+    }
+
+  IDE_RETURN (ret);
+}
+
 GbpFlatpakApplicationAddin *
 gbp_flatpak_application_addin_get_default (void)
 {

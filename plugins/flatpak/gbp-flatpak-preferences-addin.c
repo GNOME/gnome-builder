@@ -197,11 +197,9 @@ gbp_flatpak_preferences_addin_reload_worker (GTask        *task,
                                              GCancellable *cancellable)
 {
   GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)source_object;
-  g_autoptr(FlatpakInstallation) system = NULL;
-  g_autoptr(FlatpakInstallation) user = NULL;
-  g_autoptr(GFile) file = NULL;
+  g_autoptr(GPtrArray) installations = NULL;
   g_autoptr(GPtrArray) runtimes = NULL;
-  g_autofree gchar *path = NULL;
+  GbpFlatpakApplicationAddin *app_addin;
 
   IDE_ENTRY;
 
@@ -210,15 +208,13 @@ gbp_flatpak_preferences_addin_reload_worker (GTask        *task,
 
   runtimes = g_ptr_array_new_with_free_func (g_object_unref);
 
-  path = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
-  file = g_file_new_for_path (path);
-  user = flatpak_installation_new_for_path (file, TRUE, NULL, NULL);
-  if (user != NULL)
-    populate_runtimes (self, user, runtimes);
-
-  system = flatpak_installation_new_system (NULL, NULL);
-  if (system != NULL)
-    populate_runtimes (self, system, runtimes);
+  app_addin = gbp_flatpak_application_addin_get_default ();
+  installations = gbp_flatpak_application_addin_get_installations (app_addin);
+  for (guint i = 0; i < installations->len; i++)
+    {
+      FlatpakInstallation *installation = g_ptr_array_index (installations, i);
+      populate_runtimes (self, installation, runtimes);
+    }
 
   g_ptr_array_sort (runtimes, compare_refs);
 
