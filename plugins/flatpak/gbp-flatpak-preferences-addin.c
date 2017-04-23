@@ -142,8 +142,12 @@ contains_runtime (GPtrArray  *runtimes,
   for (guint i = 0; i < runtimes->len; i++)
     {
       FlatpakRef *existing_ref = g_ptr_array_index (runtimes, i);
-      if (g_strcmp0 (flatpak_ref_format_ref (existing_ref),
-                     flatpak_ref_format_ref (ref)) == 0)
+      g_autofree gchar *existing_ref_name = NULL;
+      g_autofree gchar *ref_name = NULL;
+
+      existing_ref_name = flatpak_ref_format_ref (existing_ref);
+      ref_name = flatpak_ref_format_ref (ref);
+      if (g_strcmp0 (existing_ref_name, ref_name) == 0)
         return TRUE;
     }
 
