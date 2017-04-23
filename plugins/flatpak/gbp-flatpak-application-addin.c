@@ -73,6 +73,7 @@ typedef struct
 
 enum {
   RUNTIME_ADDED,
+  RELOAD,
   N_SIGNALS
 };
 
@@ -281,6 +282,8 @@ gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self)
           g_signal_emit (self, signals[RUNTIME_ADDED], 0, ref);
         }
     }
+
+  g_signal_emit (self, signals[RELOAD], 0);
 
   IDE_EXIT;
 }
@@ -767,6 +770,21 @@ gbp_flatpak_application_addin_class_init (GbpFlatpakApplicationAddinClass *klass
                                           0,
                                           NULL, NULL, NULL,
                                           G_TYPE_NONE, 1, FLATPAK_TYPE_INSTALLED_REF);
+
+  /**
+   * GbpFlatpakApplicationAddin::reload:
+   * @self: An #GbpFlatpakApplicationAddin
+   *
+   * This signal is emitted when the addin reloads, which is generally
+   * triggered by one of the flatpak installations changing, so other
+   * components can indirectly monitor that.
+   */
+  signals [RELOAD] = g_signal_new ("reload",
+                                   G_TYPE_FROM_CLASS (klass),
+                                   G_SIGNAL_RUN_LAST,
+                                   0,
+                                   NULL, NULL, NULL,
+                                   G_TYPE_NONE, 0);
 }
 
 static void

@@ -101,8 +101,6 @@ create_row (GbpFlatpakPreferencesAddin *self,
   if (gbp_flatpak_application_addin_has_runtime (app_addin, name, arch, branch))
     gtk_button_set_label (GTK_BUTTON (button), _("Update"));
 
-  /* TODO: Update label after transfer completes */
-
   gtk_container_add (GTK_CONTAINER (box), button);
 
   return box;
@@ -340,10 +338,21 @@ gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self)
 }
 
 static void
+app_addin_reload (GbpFlatpakPreferencesAddin *self,
+                  GbpFlatpakApplicationAddin *app_addin)
+{
+  g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
+  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (app_addin));
+
+  gbp_flatpak_preferences_addin_reload (self);
+}
+
+static void
 gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
                                     IdePreferences      *preferences)
 {
   GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)addin;
+  GbpFlatpakApplicationAddin *app_addin;
 
   IDE_ENTRY;
 
@@ -354,6 +363,13 @@ gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
   self->preferences = preferences;
 
   ide_preferences_add_list_group (preferences, "sdk", "flatpak-runtimes", _("Flatpak Runtimes"), GTK_SELECTION_NONE, 0);
+
+  app_addin = gbp_flatpak_application_addin_get_default ();
+  g_signal_connect_object (app_addin,
+                           "reload",
+                           G_CALLBACK (app_addin_reload),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   gbp_flatpak_preferences_addin_reload (self);
 
