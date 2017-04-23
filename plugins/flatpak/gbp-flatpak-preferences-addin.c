@@ -137,6 +137,25 @@ is_old_gnome_version (const gchar *version)
   return g_utf8_collate (MIN_GNOME_VERSION, version) > 0;
 }
 
+static gboolean
+contains_runtime (GPtrArray  *runtimes,
+                  FlatpakRef *ref)
+{
+  for (guint i = 0; i < runtimes->len; i++)
+    {
+      FlatpakRef *existing_ref = g_ptr_array_index (runtimes, i);
+      g_autofree gchar *existing_ref_name = NULL;
+      g_autofree gchar *ref_name = NULL;
+
+      existing_ref_name = flatpak_ref_format_ref (existing_ref);
+      ref_name = flatpak_ref_format_ref (ref);
+      if (g_strcmp0 (existing_ref_name, ref_name) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 populate_runtimes (GbpFlatpakPreferencesAddin *self,
                    FlatpakInstallation        *installation,
@@ -182,7 +201,8 @@ populate_runtimes (GbpFlatpakPreferencesAddin *self,
               if (g_strcmp0 (arch, flatpak_get_default_arch ()) != 0)
                 continue;
 
-              g_ptr_array_add (runtimes, g_object_ref (ref));
+              if (!contains_runtime (runtimes, ref))
+                g_ptr_array_add (runtimes, g_object_ref (ref));
             }
         }
     }
