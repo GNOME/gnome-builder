@@ -226,3 +226,12 @@ executable('gnome-builder-worker', 'src/main.c',
 )
 
 meson.add_install_script('build/meson/meson_post_install.py')
+
+# 'dist' will be used by meson, avoid conflicting
+run_target('builder-dist',
+  command: [
+    find_program('build/meson/meson_dist.sh'),
+    meson.project_version(),
+    meson.project_name(),
+  ]
+)
