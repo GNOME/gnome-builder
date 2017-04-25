@@ -47,7 +47,7 @@ struct _IdeRunManager
   guint                    busy : 1;
 };
 
-static void initable_iface_init             (GInitableIface        *iface);
+static void initable_iface_init     (GInitableIface        *iface);
 static void action_group_iface_init (GActionGroupInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, 0,
