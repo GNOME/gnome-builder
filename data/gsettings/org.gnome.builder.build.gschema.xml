@@ -6,5 +6,10 @@
       <summary>Build Parallelism</summary>
       <description>Number of workers to use when performing builds. -1 for sensible default. 0 for number of CPU.</description>
     </key>
+    <key name="allow-network-when-metered" type="b">
+      <default>false</default>
+      <summary>Allow network when metered</summary>
+      <description>Enable automated transfers upon building such as SDK downloads and dependencies when connection is metered.</description>
+    </key>
   </schema>
 </schemalist>

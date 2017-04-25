@@ -98,11 +98,16 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
 
       if (g_network_monitor_get_network_metered (monitor))
         {
-          g_task_return_new_error (task,
-                                   IDE_TRANSFER_ERROR,
-                                   IDE_TRANSFER_ERROR_CONNECTION_IS_METERED,
-                                   _("Cannot execute transfer while on metered connection"));
-          IDE_EXIT;
+          g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder.build");
+
+          if (!g_settings_get_boolean (settings, "allow-network-when-metered"))
+            {
+              g_task_return_new_error (task,
+                                       IDE_TRANSFER_ERROR,
+                                       IDE_TRANSFER_ERROR_CONNECTION_IS_METERED,
+                                       _("Cannot execute transfer while on metered connection"));
+              IDE_EXIT;
+            }
         }
     }
 
