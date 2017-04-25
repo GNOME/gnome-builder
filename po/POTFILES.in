@@ -43,6 +43,7 @@ libide/buffers/ide-buffer.c
 libide/buffers/ide-buffer-manager.c
 libide/buildsystem/ide-build-manager.c
 libide/buildsystem/ide-build-pipeline.c
+libide/buildsystem/ide-build-stage-transfer.c
 libide/buildsystem/ide-build-system.c
 libide/buildsystem/ide-configuration-manager.c
 libide/buildui/ide-build-configuration-row.ui
