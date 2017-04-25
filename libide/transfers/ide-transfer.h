@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_TRANSFER (ide_transfer_get_type())
+#define IDE_TYPE_TRANSFER  (ide_transfer_get_type())
+#define IDE_TRANSFER_ERROR (ide_transfer_error_quark())
 
 G_DECLARE_DERIVABLE_TYPE (IdeTransfer, ide_transfer, IDE, TRANSFER, GObject)
 
@@ -49,6 +50,13 @@ struct _IdeTransferClass
   gpointer _reserved8;
 };
 
+typedef enum
+{
+  IDE_TRANSFER_ERROR_UNKNOWN = 0,
+  IDE_TRANSFER_ERROR_CONNECTION_IS_METERED = 1,
+} IdeTransferError;
+
+GQuark       ide_transfer_error_quark    (void);
 void         ide_transfer_cancel         (IdeTransfer          *self);
 gboolean     ide_transfer_get_completed  (IdeTransfer          *self);
 gboolean     ide_transfer_get_active     (IdeTransfer          *self);

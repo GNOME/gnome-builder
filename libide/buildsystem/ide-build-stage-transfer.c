@@ -18,7 +18,10 @@
 
 #define G_LOG_DOMAIN "ide-build-stage-transfer"
 
+#include <glib/gi18n.h>
+
 #include "ide-context.h"
+#include "ide-debug.h"
 
 #include "buildsystem/ide-build-stage-transfer.h"
 #include "buildsystem/ide-build-pipeline.h"
@@ -29,11 +32,13 @@ struct _IdeBuildStageTransfer
 {
   IdeBuildStage  parent_instnace;
   IdeTransfer   *transfer;
+  guint          disable_when_metered : 1;
 };
 
 enum {
   PROP_0,
   PROP_TRANSFER,
+  PROP_DISABLE_WHEN_METERED,
   N_PROPS
 };
 
@@ -72,6 +77,8 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
   IdeTransferManager *transfer_manager;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUILD_STAGE_TRANSFER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -82,7 +89,21 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
   if (ide_transfer_get_completed (self->transfer))
     {
       g_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
+    }
+
+  if (self->disable_when_metered)
+    {
+      GNetworkMonitor *monitor = g_network_monitor_get_default ();
+
+      if (g_network_monitor_get_network_metered (monitor))
+        {
+          g_task_return_new_error (task,
+                                   IDE_TRANSFER_ERROR,
+                                   IDE_TRANSFER_ERROR_CONNECTION_IS_METERED,
+                                   _("Cannot execute transfer while on metered connection"));
+          IDE_EXIT;
+        }
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -93,6 +114,8 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
                                       cancellable,
                                       ide_build_stage_transfer_execute_cb,
                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -126,6 +149,10 @@ ide_build_stage_transfer_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DISABLE_WHEN_METERED:
+      g_value_set_boolean (value, self->disable_when_metered);
+      break;
+
     case PROP_TRANSFER:
       g_value_set_object (value, self->transfer);
       break;
@@ -145,6 +172,10 @@ ide_build_stage_transfer_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DISABLE_WHEN_METERED:
+      self->disable_when_metered = g_value_get_boolean (value);
+      break;
+
     case PROP_TRANSFER:
       self->transfer = g_value_dup_object (value);
       break;
@@ -167,6 +198,13 @@ ide_build_stage_transfer_class_init (IdeBuildStageTransferClass *klass)
   build_stage_class->execute_async = ide_build_stage_transfer_execute_async;
   build_stage_class->execute_finish = ide_build_stage_transfer_execute_finish;
 
+  properties [PROP_DISABLE_WHEN_METERED] =
+    g_param_spec_boolean ("disable-when-metered",
+                          "Disable when Metered",
+                          "If the transfer should fail when on a metered connection",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_TRANSFER] =
     g_param_spec_object ("transfer",
                          "Transfer",
@@ -180,4 +218,5 @@ ide_build_stage_transfer_class_init (IdeBuildStageTransferClass *klass)
 static void
 ide_build_stage_transfer_init (IdeBuildStageTransfer *self)
 {
+  self->disable_when_metered = TRUE;
 }
