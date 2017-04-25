@@ -13,7 +13,7 @@
     </key>
 
     <key name="right-visible" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Show Right Panel</summary>
       <description>If enabled, the right panel will be displayed.</description>
     </key>
@@ -25,7 +25,7 @@
     </key>
 
     <key name="bottom-visible" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Show Bottom Panel</summary>
       <description>If enabled, the bottom panel will be displayed.</description>
     </key>
