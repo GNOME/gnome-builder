@@ -457,3 +457,9 @@ ide_transfer_get_active (IdeTransfer *self)
 
   return priv->active;
 }
+
+GQuark
+ide_transfer_error_quark (void)
+{
+  return g_quark_from_static_string ("ide-transfer-error-quark");
+}

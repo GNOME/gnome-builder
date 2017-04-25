@@ -95,6 +95,7 @@ libide/snippets/ide-source-snippet-completion-provider.c
 libide/snippets/ide-source-snippets-manager.c
 libide/sourceview/ide-source-view.c
 libide/transfers/ide-pkcon-transfer.c
+libide/transfers/ide-transfer.c
 libide/transfers/ide-transfers-button.ui
 libide/util/ide-file-manager.c
 libide/util/ide-uri.c

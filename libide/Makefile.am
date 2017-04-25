@@ -666,6 +666,7 @@ glib_enum_headers =                                                         \
 	sourceview/ide-source-view.h                                        \
 	symbols/ide-symbol.h                                                \
 	threading/ide-thread-pool.h                                         \
+	transfers/ide-transfer.h                                            \
 	vcs/ide-vcs-config.h                                                \
 	workbench/ide-layout-stack-split.h                                  \
 	$(NULL)
