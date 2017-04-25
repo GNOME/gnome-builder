@@ -7,7 +7,7 @@ notification_sources = [
 ]
 
 shared_module('notification-plugin', notification_sources,
-  dependencies: notification_deps,
+  dependencies: plugin_deps,
   link_args: plugin_link_args,
   link_depends: plugin_link_deps,
   install: true,
