@@ -488,7 +488,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/libgit2/libgit2.git",
-                    "branch": "maint/v0.25"
+                    "branch": "2fcb8705e584ca61f6c4657525c9d2713f6a39d2"
                 }
             ]
         },
