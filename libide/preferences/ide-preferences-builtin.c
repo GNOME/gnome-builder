@@ -388,6 +388,9 @@ ide_preferences_builtin_register_build (IdePreferences *preferences)
   gtk_entry_set_width_chars (GTK_ENTRY (widget), 20);
   g_signal_connect (widget, "input", G_CALLBACK (workers_input), NULL);
   g_signal_connect (widget, "output", G_CALLBACK (workers_output), NULL);
+
+  ide_preferences_add_list_group (preferences, "build", "network", _("Network"), GTK_SELECTION_NONE, 100);
+  ide_preferences_add_switch (preferences, "build", "network", "org.gnome.builder.build", "allow-network-when-metered", NULL, NULL, _("Allow downloads over metered connections"), _("Allow the use of metered network connections when automatically downloading dependencies"), NULL, 10);
 }
 
 static void
