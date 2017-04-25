@@ -1,1 +1,41 @@
 ==============
+Version 3.25.1
+==============
+
+The road to 3.26 has begun, and 3.25.1 is here to kick that off.
+
+ • A new retab plugin to reindent your source code.
+ • Auto-save can now be configured.
+ • A new notification plugin to notify of build completion.
+ • Preview support for Sphinx.
+ • Improved jump support in the editor.
+ • The "install" action can be run from the command-bar to install
+   your project without running.
+ • Word completion minimum length can now be configured.
+ • Ctags improvements.
+ • A save button has been added to the Build Log.
+ • Release auto-save timeout after a manual save to reduce the
+   number of file-system operations.
+ • Allow jhbuild from alternate PATHs.
+ • Animation improvements, including support for animating based on
+   screen DPI and physical space. This has the potential to make
+   animations smoother, but may cause issues with miss-reporting
+   EDID information. Mitigations are provided.
+ • Do not download SDKs or dependencies when on metered connections.
+   This can be disabled in preferences.
+ • Bump vala requirement to 0.38.
+ • The editor now supports text-wrapping but is not enabled by default
+   due to the performance penalty.
+ • Plugins are discovered in ~/.local/share/gnome-builder/plugins, even
+   when distributed under Flatpak.
+ • Don't take into account failed or cancelled transfers when calculating
+   transfer progress.
+ • Various build tooling widgetry will become insensitive while the build
+   pipeline is not useable.
+ • Language Server Protocol improvements.
+ • Various memory leaks and bug fixes.
+
+Updated translations:
+
+  French, Swedish, Danish, Lithuanian, Hungarian, Korean, German, Spanish,
+  Italian, Slovak, Brazilian Portuguese, Latvian, Russian, Serbian
