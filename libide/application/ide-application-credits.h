@@ -37,6 +37,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Alexander Larsson",
   "Alexandre Franke",
   "Andika Triwidada",
+  "Andreas Brauchli",
   "Andreas Henriksson",
   "Anoop Chandu",
   "Antoine Jacoutot",
