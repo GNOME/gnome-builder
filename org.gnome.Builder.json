@@ -476,7 +476,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/libssh2/libssh2.git",
-                    "branch": "libssh2-1.8.0"
+                    "branch": "30e9c1347e3b8baa2951db612f05e6d87fc8e2f2"
                 }
             ]
         },
