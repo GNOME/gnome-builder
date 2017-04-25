@@ -5,37 +5,37 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-builder master\n"
+"Project-Id-Version: gnome-builder gnome-builder-3-24\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-04-09 00:54+0000\n"
-"PO-Revision-Date: 2017-04-09 08:12+0700\n"
-"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
+"POT-Creation-Date: 2017-04-25 03:33+0000\n"
+"PO-Revision-Date: 2017-04-25 10:49+0700\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0\n"
 
-#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
+#: contrib/egg/egg-animation.c:730 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Tidak dapat menemukan properti %s dalam kelas %s"
 
-#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/egg/egg-animation.c:1077 contrib/egg/egg-animation.c:1083
 #: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Gagal mencari properti %s dalam %s"
 
-#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
+#: contrib/egg/egg-animation.c:1091 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Gagal temukan properti %s dalam %s atau induk %s"
 
-#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
+#: contrib/egg/egg-animation.c:1101 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Gagal mengambil nilai va_list: %s"
@@ -353,6 +353,18 @@ msgstr ""
 "Banyaknya pekerja yang dipakai ketika melakukan build. -1 untuk nilai baku "
 "yang wajar. 0 untuk sejumlah CPU."
 
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Allow network when metered"
+msgstr "Izinkan jaringan ketika memakai kuota"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"Fungsikan transfer otomatis ketika membangun seperti pengunduhan SDK dan "
+"kebergantungan ketika koneksi memakai kuota."
+
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Suggest Snippet Completion"
 msgstr "Sarankan Pelengkapan Snippet"
@@ -578,7 +590,7 @@ msgid "Search directories for projects."
 msgstr "Cari direktori untuk proyek."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Projects directory"
 msgstr "Direktori proyek"
 
@@ -2436,45 +2448,61 @@ msgstr "Pekerja Build"
 msgid "Number of parallel build workers"
 msgstr "Banyaknya pekerja build paralel"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:386
+msgid "Network"
+msgstr "Jaringan"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid "Allow downloads over metered connections"
+msgstr "Izinkan mengunduh melalui koneksi berkuota"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+"Izinkan penggunaan koneksi jaringan berkuota ketika secara otomatis "
+"mengunduh kebergantungan"
+
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "Projects"
 msgstr "Proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:392
+#: libide/preferences/ide-preferences-builtin.c:395
 msgid "Workspace"
 msgstr "Area kerja"
 
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "A place for all your projects"
 msgstr "Suatu tempat untuk semua proyek Anda"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Restore previously opened files"
 msgstr "Pulihkan berkas yang sebelumnya terbuka"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Open previously opened files when loading a project"
 msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Project Discovery"
 msgstr "Penemuan Proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Discover projects on my computer"
 msgstr "Temukan proyek pada komputer ini"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Scan your computer for existing projects"
 msgstr "Pindai komputer Anda untuk proyek yang ada"
 
-#: libide/preferences/ide-preferences-builtin.c:518
+#: libide/preferences/ide-preferences-builtin.c:521
 #: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "Version Control"
 msgstr "Kendali Versi"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:530
+#: libide/preferences/ide-preferences-builtin.c:533
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2519,7 +2547,7 @@ msgstr "Jalankan"
 msgid "Cannot run target, another target is running"
 msgstr "Tidak bisa menjalankan target, target lain sedang berjalan"
 
-#: libide/runner/ide-run-manager.c:324
+#: libide/runner/ide-run-manager.c:319
 msgid "Failed to locate runtime"
 msgstr "Gagal menemukan runtime"
 
@@ -3299,19 +3327,19 @@ msgid "Update"
 msgstr "Pemutakhiran"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:297
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:312
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Tampilkan %u lebih banyak runtime"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:380
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Runtimes"
 
