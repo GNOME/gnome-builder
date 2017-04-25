@@ -985,6 +985,11 @@ ide_source_view__buffer_notify_language_cb (IdeSourceView *self,
    */
   if (priv->completion_providers != NULL)
     ide_extension_set_adapter_set_value (priv->completion_providers, lang_id);
+
+  /*
+   * Make sure the snippet engine reloads for the new language.
+   */
+  ide_source_view_reload_snippets (self);
 }
 
 static void
