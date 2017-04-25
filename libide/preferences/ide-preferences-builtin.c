@@ -181,6 +181,10 @@ ide_preferences_builtin_register_editor (IdePreferences *preferences)
   ide_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"text\"", _("Spaces inside of text"), NULL, NULL, 4);
   ide_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"trailing\"", _("Trailing Only"), NULL, NULL, 5);
   ide_preferences_add_radio (preferences, "editor", "draw-spaces", "org.gnome.builder.editor", "draw-spaces", NULL, "\"leading\"", _("Leading Only"), NULL, NULL, 6);
+
+  ide_preferences_add_list_group (preferences, "editor", "autosave", _("Autosave"), GTK_SELECTION_NONE, 450);
+  ide_preferences_add_switch (preferences, "editor", "autosave", "org.gnome.builder.editor", "auto-save", NULL, NULL,_("Autosave Enabled"), _("Enable or disable autosave feature"), NULL, 1);
+  ide_preferences_add_spin_button (preferences, "editor", "autosave", "org.gnome.builder.editor", "auto-save-timeout", NULL, _("Autosave Frequency"), _("The number of seconds after modification before auto saving"), NULL, 60);
 }
 
 static void

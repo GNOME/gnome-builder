@@ -99,5 +99,16 @@
       <summary>Wrap Text</summary>
       <description>If enabled, Builder will automatically wrap text so all of the line text is visible.</description>
     </key>
+    <key name="auto-save" type="b">
+      <default>true</default>
+      <summary>Autosave Enabled</summary>
+      <description>Enable or disable autosave feature.</description>
+    </key>
+    <key name="auto-save-timeout" type="i">
+      <default>60</default>
+      <range min="1" max="999"/>
+      <summary>Autosave Frequency</summary>
+      <description>The number of seconds after modification before auto saving.</description>
+    </key>
   </schema>
 </schemalist>

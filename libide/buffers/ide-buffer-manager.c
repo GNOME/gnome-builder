@@ -1578,6 +1578,8 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->settings = g_settings_new ("org.gnome.builder.editor");
 
   g_settings_bind (self->settings, "minimum-word-size", self->word_completion, "minimum-word-size", G_SETTINGS_BIND_GET);
+  g_settings_bind (self->settings, "auto-save", self, "auto-save", G_SETTINGS_BIND_GET);
+  g_settings_bind (self->settings, "auto-save-timeout", self, "auto-save-timeout", G_SETTINGS_BIND_GET);
 }
 
 static void
