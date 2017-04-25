@@ -181,7 +181,6 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
   GtkWidget *bottom_pane;
   IdeContext *context;
   IdeRunManager *run_manager;
-  g_autoptr(GSimpleAction) action = NULL;
   static const GActionEntry actions[] = {
     { "new-terminal", new_terminal_activate },
     { "new-terminal-in-runtime", new_terminal_activate },
