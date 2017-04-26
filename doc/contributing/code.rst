@@ -2,13 +2,35 @@
 Contributing Code
 #################
 
-There are a lot of things that need to be written in Builder and we'd love to have your help in doing so.
-Take a look at :ref:`Creating Plugins<creating_plugins>` to learn how to write plugins.
-Most things in Builder are implemented as plugins while the scaffolding is written in C and found in libide_.
+Where to Contribute?
+====================
 
-Plugins can be written in C, C++, Python, or Vala.
+Builder wants to become a powerful tool to enable GNOME developers to build great software.
+To do this we need your help.
 
-If you're interested in working on ``libide``, the core C library behind Builder, you'll want to peruse the libide_ directory in the code-base.
+Do you have knowledge in a particular area of software development?
+You can use that knowledge to help Builder expand it's area of expertise.
+
+Generally, code contributions fall into one of two categories: `Application Plumbing`_ or `Plugins`_.
+
+Application Plumbing
+--------------------
+
+If you like working on application plumbing, which is the infrastructure that makes implementing plugins simple, then you want to look at libide_.
+Many of the core features of Builder are implemented here.
+That includes the application window, plugin interfaces and core machinery of Builder.
+
+Plugins
+-------
+
+Plugins are how we integrate features into Builder for a specific problem.
+For example, the git_ plugin is the glue between the version control abstraction in libide_ and git.
+
+There are many `existing plugins`_ already.
+You might want to contribute to an existing one that does not yet serve your needs well.
+Or maybe you want to `create a new plugin<creating_plugins>` that integrates a feature missing from Builder.
 
 .. _libide: https://git.gnome.org//browse/gnome-builder/tree/libide/
+.. _git: https://git.gnome.org//browse/gnome-builder/tree/plugins/git/
+.. _`existing plugins`: https://git.gnome.org//browse/gnome-builder/tree/plugins/
 
