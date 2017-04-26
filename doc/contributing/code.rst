@@ -28,7 +28,7 @@ For example, the git_ plugin is the glue between the version control abstraction
 
 There are many `existing plugins`_ already.
 You might want to contribute to an existing one that does not yet serve your needs well.
-Or maybe you want to `create a new plugin<creating_plugins>` that integrates a feature missing from Builder.
+Or maybe you want to :ref:`create a new plugin<creating_plugins>` that integrates a feature missing from Builder.
 
 .. _libide: https://git.gnome.org//browse/gnome-builder/tree/libide/
 .. _git: https://git.gnome.org//browse/gnome-builder/tree/plugins/git/
