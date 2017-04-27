@@ -53,7 +53,10 @@
                   "clear-selection" ()
                   "clear-count" ()
                   "clear-snippets" ()
-                  "hide-completion" () };
+                  "hide-completion" ()
+                  "remove-cursors" () };
+  bind "<ctrl><shift>e" { "add-cursor" (column) };
+  bind "<ctrl><shift>d" { "add-cursor" (match) };
   bind "<ctrl>x" { "set-mode" ("emacs-x", transient) };
   bind "<ctrl>c" { "set-mode" ("emacs-c", transient) };
   bind "<ctrl>underscore" { "undo" () };

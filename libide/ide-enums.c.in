@@ -13,6 +13,7 @@
 #include "files/ide-indent-style.h"
 #include "highlighting/ide-highlighter.h"
 #include "runtimes/ide-runtime.h"
+#include "sourceview/ide-cursor.h"
 #include "sourceview/ide-source-view.h"
 #include "symbols/ide-symbol.h"
 #include "threading/ide-thread-pool.h"

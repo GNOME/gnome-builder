@@ -84,7 +84,8 @@
                   "clear-selection" ()
                   "clear-snippets" ()
                   "hide-completion" ()
-                  "set-mode" ("vim-normal", permanent) };
+                  "set-mode" ("vim-normal", permanent)
+                  "remove-cursors" () };
   bind "<ctrl>bracketleft" { "end-macro" ()
                              "set-overwrite" (0)
                              "clear-count" ()
@@ -108,6 +109,8 @@
   bind "<ctrl>plus" { "increase-font-size" () };
   bind "<ctrl>equal" { "increase-font-size" () };
   bind "<ctrl>0" { "reset-font-size" () };
+  bind "<ctrl><shift>e" { "add-cursor" (column) };
+  bind "<ctrl><shift>d" { "add-cursor" (match) };
 
   bind "F4" { "action" ("view", "find-other-file", "") };
 
@@ -1920,7 +1923,8 @@
                   "clear-snippets" ()
                   "hide-completion" ()
                   "movement" (previous-char, 0, 1, 0)
-                  "set-mode" ("vim-normal", permanent) };
+                  "set-mode" ("vim-normal", permanent) 
+                  "remove-cursors" () };
   bind "<ctrl>bracketleft" { "end-macro" ()
                              "set-overwrite" (0)
                              "clear-count" ()

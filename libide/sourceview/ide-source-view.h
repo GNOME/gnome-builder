@@ -298,6 +298,9 @@ struct _IdeSourceViewClass
   void (*decrease_font_size)          (IdeSourceView           *self);
   void (*reset_font_size)             (IdeSourceView           *self);
   void (*begin_rename)                (IdeSourceView           *self);
+  void (*add_cursor)                  (IdeSourceView           *self,
+                                       guint                    type);
+  void (*remove_cursors)              (IdeSourceView           *self);
 
   gpointer _reserved1;
   gpointer _reserved2;

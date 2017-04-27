@@ -63,6 +63,7 @@
 #include "sourceview/ide-source-view-movements.h"
 #include "sourceview/ide-source-view.h"
 #include "sourceview/ide-text-util.h"
+#include "sourceview/ide-cursor.h"
 #include "symbols/ide-symbol.h"
 #include "symbols/ide-symbol-resolver.h"
 #include "theatrics/ide-box-theatric.h"
@@ -174,6 +175,8 @@ typedef struct
 
   GRegex                      *include_regex;
 
+  IdeCursor                   *cursor;
+
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
   guint                        completion_visible : 1;
@@ -253,6 +256,7 @@ enum {
 
 enum {
   ACTION,
+  ADD_CURSOR,
   APPEND_TO_COUNT,
   AUTO_INDENT,
   BEGIN_MACRO,
@@ -290,6 +294,7 @@ enum {
   PUSH_SNIPPET,
   REBUILD_HIGHLIGHT,
   REINDENT,
+  REMOVE_CURSORS,
   REPLAY_MACRO,
   REQUEST_DOCUMENTATION,
   RESET_FONT_SIZE,
@@ -1251,6 +1256,8 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
   g_assert (text != NULL);
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
+  gtk_text_buffer_begin_user_action (buffer);
+
   if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
     {
       ide_source_view_block_handlers (self);
@@ -1270,6 +1277,7 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
+  GtkTextIter insert;
 
   IDE_ENTRY;
 
@@ -1302,6 +1310,17 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
        */
       ide_source_view_maybe_overwrite (self, iter, text, len);
     }
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert, gtk_text_buffer_get_insert(buffer));
+  if (gtk_text_iter_equal (iter, &insert))
+    {
+      ide_source_view_block_handlers (self);
+      ide_cursor_insert_text (priv->cursor, text, len);
+      ide_source_view_unblock_handlers (self);
+      gtk_text_buffer_get_iter_at_mark (buffer, iter, gtk_text_buffer_get_insert (buffer));
+    }
+
+  gtk_text_buffer_end_user_action (buffer);
 
   IDE_EXIT;
 }
@@ -1692,6 +1711,10 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   g_clear_object (&search_settings);
 
+  priv->cursor = g_object_new (IDE_TYPE_CURSOR,
+                               "ide-source-view", self,
+                               NULL);
+
   /* Create scroll mark used by movements and our scrolling helper */
   gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &iter);
   priv->scroll_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
@@ -1756,6 +1779,12 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
                                      self);
 
   egg_signal_group_set_target (priv->completion_providers_signals, NULL);
+
+  if (priv->cursor != NULL)
+    {
+      g_object_run_dispose (G_OBJECT (priv->cursor));
+      g_clear_object (&priv->cursor);
+    }
 
   g_clear_object (&priv->search_context);
   g_clear_object (&priv->indenter_adapter);
@@ -2645,6 +2674,19 @@ ide_source_view_real_button_press_event (GtkWidget      *widget,
   if (ide_source_view_process_press_on_definition (self, event))
     return TRUE;
 
+  if (event->button == GDK_BUTTON_PRIMARY)
+    {
+      if (event->state & GDK_CONTROL_MASK)
+        {
+          if (!ide_cursor_is_enabled (priv->cursor))
+            ide_cursor_add_cursor (priv->cursor, IDE_CURSOR_SELECT);
+        }
+      else if (ide_cursor_is_enabled (priv->cursor))
+        {
+          ide_cursor_remove_cursors (priv->cursor);
+        }
+    }
+
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->button_press_event (widget, event);
 
   /*
@@ -2682,6 +2724,24 @@ ide_source_view_real_button_press_event (GtkWidget      *widget,
    * to the previous column.
    */
   ide_source_view_save_column (self);
+
+  return ret;
+}
+
+static gboolean
+ide_source_view_real_button_release_event (GtkWidget      *widget,
+                                           GdkEventButton *event)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean ret;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->button_release_event (widget, event);
+
+  if ((event->button == GDK_BUTTON_PRIMARY) && (event->state & GDK_CONTROL_MASK))
+    ide_cursor_add_cursor (priv->cursor, IDE_CURSOR_SELECT);
 
   return ret;
 }
@@ -2984,6 +3044,35 @@ ide_source_view_query_tooltip (GtkWidget  *widget,
     }
 
   return FALSE;
+}
+
+static void
+ide_source_view_real_add_cursor (IdeSourceView *self,
+                                 IdeCursorType  type)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_cursor_add_cursor (priv->cursor, type);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_real_remove_cursors (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_cursor_remove_cursors (priv->cursor);
+
+  IDE_EXIT;
 }
 
 static void
@@ -6485,6 +6574,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   object_class->set_property = ide_source_view_set_property;
 
   widget_class->button_press_event = ide_source_view_real_button_press_event;
+  widget_class->button_release_event = ide_source_view_real_button_release_event;
   widget_class->motion_notify_event = ide_source_view_real_motion_notify_event;
   widget_class->draw = ide_source_view_real_draw;
   widget_class->focus_in_event = ide_source_view_focus_in_event;
@@ -6501,6 +6591,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
   text_view_class->populate_popup = ide_source_view_real_populate_popup;
 
+  klass->add_cursor = ide_source_view_real_add_cursor;
+  klass->remove_cursors = ide_source_view_real_remove_cursors;
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->begin_macro = ide_source_view_real_begin_macro;
   klass->begin_rename = ide_source_view_real_begin_rename;
@@ -7331,6 +7423,25 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, swap_selection_bounds),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  signals [ADD_CURSOR] =
+    g_signal_new ("add-cursor",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, add_cursor),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_CURSOR_TYPE);
+
+  signals [REMOVE_CURSORS] =
+    g_signal_new ("remove-cursors",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, remove_cursors),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);

@@ -138,6 +138,7 @@ libide_1_0_la_public_headers =                                              \
 	sourceview/ide-completion-provider.h                                \
 	sourceview/ide-completion-results.h                                 \
 	sourceview/ide-completion-words.h                                   \
+	sourceview/ide-cursor.h                                             \
 	sourceview/ide-indenter.h                                           \
 	sourceview/ide-language.h                                           \
 	sourceview/ide-source-map.h                                         \
@@ -325,6 +326,7 @@ libide_1_0_la_public_sources =                                              \
 	sourceview/ide-completion-provider.c                                \
 	sourceview/ide-completion-results.c                                 \
 	sourceview/ide-completion-words.c                                   \
+	sourceview/ide-cursor.c                                             \
 	sourceview/ide-indenter.c                                           \
 	sourceview/ide-language.c                                           \
 	sourceview/ide-source-map.c                                         \
@@ -663,6 +665,7 @@ glib_enum_headers =                                                         \
 	files/ide-indent-style.h                                            \
 	highlighting/ide-highlighter.h                                      \
 	runtimes/ide-runtime.h                                              \
+	sourceview/ide-cursor.h                                             \
 	sourceview/ide-source-view.h                                        \
 	symbols/ide-symbol.h                                                \
 	threading/ide-thread-pool.h                                         \
