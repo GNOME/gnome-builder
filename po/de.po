@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-04-05 07:20+0000\n"
-"PO-Revision-Date: 2017-04-05 12:12+0200\n"
+"POT-Creation-Date: 2017-04-27 01:02+0000\n"
+"PO-Revision-Date: 2017-04-28 11:56+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -23,23 +23,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.12\n"
 
-#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
+#: contrib/egg/egg-animation.c:730 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Eigenschaft %s konnte nicht in Klasse %s gefunden werden"
 
-#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/egg/egg-animation.c:1077 contrib/egg/egg-animation.c:1083
 #: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Eigenschaft %s konnte nicht in %s gefunden werden"
 
-#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
+#: contrib/egg/egg-animation.c:1091 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Eigenschaft %s konnte nicht in %s oder Elter %s gefunden werden"
 
-#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
+#: contrib/egg/egg-animation.c:1101 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "va_list-Wert konnte nicht geladen werden: %s"
@@ -308,7 +308,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5861
+#: libide/sourceview/ide-source-view.c:5866
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Umbenennen"
@@ -362,6 +362,18 @@ msgid ""
 msgstr ""
 "Anzahl der Arbeits-Threads beim Erstellen. »-1« steht für eine sinnvolle "
 "Vorgabe. »0« steht für die Anzahl an CPUs."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Allow network when metered"
+msgstr "Netzwerknutzung bei getakteten Verbindungen erlauben"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"Automatische Übertragungen über getaktete Verbindungen erlauben, wie "
+"beispielsweise SDK-Downloads und Abhängigkeiten."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Suggest Snippet Completion"
@@ -595,7 +607,7 @@ msgid "Search directories for projects."
 msgstr "Ordner nach Projekten durchsuchen."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Projects directory"
 msgstr "Projekteordner"
 
@@ -762,11 +774,11 @@ msgstr "_Wiederholen"
 msgid "C_ut"
 msgstr "_Ausschneiden"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:33
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:32
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:37
 msgid "_Paste"
 msgstr "_Einfügen"
 
@@ -782,15 +794,15 @@ msgstr "Hervorhebung"
 msgid "Spellchecking"
 msgstr "Rechtschreibprüfung"
 
-#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
+#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:43
 msgid "Selection"
 msgstr "Auswahl"
 
-#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:40
+#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:45
 msgid "Select _All"
 msgstr "_Alle auswählen"
 
-#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:45
+#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:50
 msgid "Select _None"
 msgstr "_Nichts auswählen"
 
@@ -1158,6 +1170,11 @@ msgstr "Wird vorbereitet …"
 #: libide/buildsystem/ide-build-pipeline.c:2202
 msgid "Ready"
 msgstr "Bereit"
+
+#: libide/buildsystem/ide-build-stage-transfer.c:108
+msgid "Cannot execute transfer while on metered connection"
+msgstr ""
+"Übertragung kann über eine getaktete Verbindung nicht ausgeführt werden"
 
 #: libide/buildsystem/ide-configuration-manager.c:76
 #: libide/preferences/ide-preferences-builtin.c:337
@@ -2475,45 +2492,61 @@ msgstr "Erstellungs-Worker"
 msgid "Number of parallel build workers"
 msgstr "Anzahl der parallel laufenden Erstellungs-Worker"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:386
+msgid "Network"
+msgstr "Netzwerk"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid "Allow downloads over metered connections"
+msgstr "Downloads über getaktete Verbindungen zulassen"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+"Die Nutzung getakteter Verbindungen zulassen, wenn Abhängigkeiten "
+"automatisch heruntergeladen werden"
+
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "Projects"
 msgstr "Projekte"
 
-#: libide/preferences/ide-preferences-builtin.c:392
+#: libide/preferences/ide-preferences-builtin.c:395
 msgid "Workspace"
 msgstr "Arbeitsfläche"
 
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "A place for all your projects"
 msgstr "Ein Platz für alle Ihre Projekte"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Restore previously opened files"
 msgstr "Zuvor geöffnete Dateien öffnen"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Open previously opened files when loading a project"
 msgstr "Zuvor geöffnete Dateien beim Laden eines Projekts öffnen."
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Project Discovery"
 msgstr "Projektsuche"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Discover projects on my computer"
 msgstr "Projekte auf diesem Rechner finden"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Scan your computer for existing projects"
 msgstr "Durchsuchen Sie Ihren Rechner nach vorhandenen Projekten"
 
-#: libide/preferences/ide-preferences-builtin.c:518
+#: libide/preferences/ide-preferences-builtin.c:521
 #: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "Version Control"
 msgstr "Versionskontrolle"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:530
+#: libide/preferences/ide-preferences-builtin.c:533
 msgid "SDKs"
 msgstr "SDKs"
 
@@ -2559,7 +2592,7 @@ msgid "Cannot run target, another target is running"
 msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
-#: libide/runner/ide-run-manager.c:324
+#: libide/runner/ide-run-manager.c:319
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
@@ -2589,31 +2622,31 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5317
+#: libide/sourceview/ide-source-view.c:5322
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: libide/sourceview/ide-source-view.c:5319
+#: libide/sourceview/ide-source-view.c:5324
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: libide/sourceview/ide-source-view.c:5433
+#: libide/sourceview/ide-source-view.c:5438
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: libide/sourceview/ide-source-view.c:5860
+#: libide/sourceview/ide-source-view.c:5865
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6099
+#: libide/sourceview/ide-source-view.c:6104
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Zeile %u, Spalte %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6125
+#: libide/sourceview/ide-source-view.c:6130
 msgid "No references were found"
 msgstr "Keine Referenzen gefunden"
 
@@ -3354,20 +3387,20 @@ msgid "Update"
 msgstr "Aktualisieren"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:297
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:312
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "%u weitere Laufzeit zeigen"
 msgstr[1] "%u weitere Laufzeiten zeigen"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:380
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-Laufzeitumgebungen"
 
@@ -3911,11 +3944,15 @@ msgstr "Erstellungs-Ausgabe"
 msgid "_New Terminal"
 msgstr "_Neues Terminal"
 
-#: plugins/terminal/gtk/menus.ui:15
+#: plugins/terminal/gtk/menus.ui:11
+msgid "_New Runtime Terminal"
+msgstr "_Neues Laufzeit-Terminal"
+
+#: plugins/terminal/gtk/menus.ui:20
 msgid "_Open Link"
 msgstr "Verweis ö_ffnen"
 
-#: plugins/terminal/gtk/menus.ui:20
+#: plugins/terminal/gtk/menus.ui:25
 msgid "_Copy Link Address"
 msgstr "Verweisadresse _kopieren"
 
@@ -4260,9 +4297,6 @@ msgstr "Der XML-Baum konnte nicht angelegt werden."
 
 #~ msgid "Packaging:"
 #~ msgstr "Paketierung:"
-
-#~ msgid "framework"
-#~ msgstr "Framework"
 
 #~ msgid "packaging"
 #~ msgstr "Paketierung"
