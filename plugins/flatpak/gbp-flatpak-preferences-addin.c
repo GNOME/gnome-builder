@@ -354,6 +354,8 @@ gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self)
           id = g_array_index (self->ids, guint, i);
           ide_preferences_remove_id (self->preferences, id);
         }
+
+      g_array_remove_range (self->ids, 0, self->ids->len);
     }
 
   task = g_task_new (self, self->cancellable, gbp_flatpak_preferences_addin_reload_cb, NULL);
