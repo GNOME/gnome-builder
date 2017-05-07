@@ -537,7 +537,7 @@ ide_build_log_panel_log_observer (IdeBuildLogStream  stream,
 {
   IdeBuildLogPanel *self = user_data;
   GtkTextMark *insert;
-  GtkTextIter iter;
+  GtkTextIter iter, enditer;
 
   g_assert (IDE_IS_BUILD_LOG_PANEL (self));
   g_assert (message != NULL);
@@ -549,6 +549,9 @@ ide_build_log_panel_log_observer (IdeBuildLogStream  stream,
 
   insert = gtk_text_buffer_get_insert (self->buffer);
   gtk_text_view_scroll_to_mark (self->text_view, insert, 0.0, TRUE, 1.0, 0.0);
+
+  gtk_text_buffer_get_end_iter (self->buffer, &enditer);
+  gtk_text_buffer_place_cursor (self->buffer, &enditer);
 }
 
 void
