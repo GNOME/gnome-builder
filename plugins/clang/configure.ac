@@ -17,7 +17,7 @@ AS_IF([test "$enable_clang_plugin" != "no"],[
 		llvm-config-3.7 llvm-config37 \
 		llvm-config-3.6 llvm-config36 \
 		llvm-config-3.5 llvm-config35 \
-		llvm-config-devel], [])
+		llvm-config-5.0 llvm-config-devel], [])
 	AS_IF([test "x$LLVM_CONFIG" = "x"],[],[
 		CLANG_INCLUDEDIR=`$LLVM_CONFIG --includedir`
 		CLANG_CFLAGS="-I$CLANG_INCLUDEDIR"
