@@ -43,19 +43,18 @@ if ret.returncode() != 0
 endif
 clang_include = ret.stdout().strip()
 
-ret = run_command(llvm_config, '--ldflags')
+ret = run_command(llvm_config, '--libdir')
 if ret.returncode() != 0
   error('clang: Failed to run ' + llvm_config.path())
 endif
-clang_ldflags = ret.stdout().strip().split(' ')
+clang_libdir = ret.stdout().strip().split(' ')
 
-if not cc.has_header('clang-c/Index.h', prefix: clang_include)
+if not cc.has_header('clang-c/Index.h', args: '-I' + clang_include)
   error('clang: Failed to find headers')
 endif
 
 clang_dep = declare_dependency(
-  dependencies: cc.find_library('libclang'),
-  link_args: clang_ldflags,
+  dependencies: cc.find_library('libclang', dirs: clang_libdir),
   include_directories: include_directories(clang_include),
 )
 
