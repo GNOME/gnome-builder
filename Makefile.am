@@ -19,6 +19,7 @@ GITIGNOREFILES =                                                               \
 	**/*.swp                                                               \
 	.flatpak-builder                                                       \
 	*.o                                                                    \
+	**/__pycache__                                                         \
 	aclocal.m4                                                             \
 	build-aux                                                              \
 	ChangeLog                                                              \
