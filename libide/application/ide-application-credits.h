@@ -73,6 +73,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Fabiano Fidêncio",
   "Fangwen Yu",
   "Felix Schwarz",
+  "Fernando Fernandez",
   "Florian Bäuerle",
   "Florian Müllner",
   "Fran Dieguez",
