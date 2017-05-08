@@ -48,6 +48,7 @@ struct _IdeBuildManager
   guint             timer_source;
 
   guint             can_build : 1;
+  guint             building : 1;
 };
 
 static void initable_iface_init             (GInitableIface        *iface);
@@ -235,6 +236,8 @@ ide_build_manager_pipeline_started (IdeBuildManager  *self,
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
+  self->building = TRUE;
+
   g_signal_emit (self, signals [BUILD_STARTED], 0, pipeline);
 
   IDE_EXIT;
@@ -249,6 +252,8 @@ ide_build_manager_pipeline_finished (IdeBuildManager  *self,
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  self->building = FALSE;
 
   if (failed)
     g_signal_emit (self, signals [BUILD_FAILED], 0, pipeline);
@@ -335,6 +340,19 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   IDE_TRACE_MSG ("Reloading pipeline due to configuration change");
+
+  /*
+   * If we are currently building, we need to synthesize the failure
+   * of that build and re-setup the pipeline.
+   */
+  if (self->building)
+    {
+      g_assert (self->pipeline != NULL);
+
+      self->building = FALSE;
+      ide_clear_source (&self->timer_source);
+      g_signal_emit (self, signals [BUILD_FAILED], 0, self->pipeline);
+    }
 
   /*
    * Cancel and clear our previous pipeline and associated components
