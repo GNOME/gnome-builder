@@ -74,7 +74,7 @@ static void
 ide_cursor_dispose (GObject *object)
 {
   IdeCursor *self = (IdeCursor *)object;
-  GtkTextBuffer *buffer;
+  GtkTextBuffer *buffer = NULL;
 
   g_return_if_fail (IDE_IS_CURSOR (self));
 
