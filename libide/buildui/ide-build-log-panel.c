@@ -515,6 +515,7 @@ ide_build_log_panel_reset_view (IdeBuildLogPanel *self)
   self->text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
                                   "bottom-margin", 3,
                                   "buffer", self->buffer,
+                                  "cursor-visible", FALSE,
                                   "editable", FALSE,
                                   "left-margin", 3,
                                   "monospace", TRUE,
