@@ -1,4 +1,29 @@
 ==============
+Version 3.24.2
+==============
+
+Changes since 3.24.1
+
+ • Various panel system fixes including "stuck on" panels.
+ • Some animation jitter has been resolved.
+ • Build buttons will be insensitive when build progress cannot be made.
+ • Transfers while building will now fail when on metered connections.
+   A preference has been added to disable this behavior.
+ • Snippets will now be reloaded when the current language changes.
+ • The build log will try harder to scroll to the correct position.
+ • The todo plugin is more defensive when the workbench is destroyed.
+ • An assertion crash is fixed when the app-id is changed while a build
+   is in progress.
+ • A potential crash was fixed in the flatpak plugin when cleaning up
+   old runtimes.
+ • Ctags plugin has been fixed to use the proper path.
+
+Updated transitions:
+
+  French, Indonesian, Lithuanian, Kazakh, German, Polish, Brazilian Portuguese,
+  Russian, and Serbian.
+
+==============
 Version 3.24.1
 ==============
 
