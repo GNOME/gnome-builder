@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-04-25 03:29+0000\n"
-"PO-Revision-Date: 2017-04-25 16:23+0200\n"
+"POT-Creation-Date: 2017-05-06 12:10+0000\n"
+"PO-Revision-Date: 2017-05-08 12:15+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -301,7 +301,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5873
+#: libide/sourceview/ide-source-view.c:5878
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renombrar"
@@ -358,13 +358,15 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Allow network when metered"
-msgstr ""
+msgstr "Permitir red cuando se esté midiendo"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
+"Activar las transferencias automáticas al construir, como las descargas de "
+"SDK y de dependencias cuando la conexión se está midiendo."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Suggest Snippet Completion"
@@ -543,12 +545,10 @@ msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "El número de líneas que desplazarse más allá del final del búfer."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:99
-#| msgid "Plain Text"
 msgid "Wrap Text"
 msgstr "Ajustar texto"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:100
-#, fuzzy
 #| msgid ""
 #| "If enabled, Builder will automatically hide the overview map when mouse "
 #| "focus leaves the editor, or a timeout occurs."
@@ -556,18 +556,17 @@ msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
 msgstr ""
-"Si se activa, Builder ocultará automáticamente la vista general del mapa "
-"cuando el foco del ratón se retire del editor o pase un intervalo de tiempo."
+"Si se activa, Builder ajustará automáticamente el texto para que todas sus "
+"líneas sean visibles."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:104
 #: libide/preferences/ide-preferences-builtin.c:186
-#| msgid "Enabled"
 msgid "Autosave Enabled"
 msgstr "Guardado automático activado"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:105
 msgid "Enable or disable autosave feature."
-msgstr ""
+msgstr "Activar o desactivar la característica de guardado automático."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 #: libide/preferences/ide-preferences-builtin.c:187
@@ -1195,6 +1194,10 @@ msgstr "Preparando…"
 msgid "Ready"
 msgstr "Preparado"
 
+#: libide/buildsystem/ide-build-stage-transfer.c:108
+msgid "Cannot execute transfer while on metered connection"
+msgstr "No se puede ejecutar la transferencia en una conexión medida"
+
 #: libide/buildsystem/ide-configuration-manager.c:76
 #: libide/preferences/ide-preferences-builtin.c:343
 #: libide/preferences/ide-preferences-builtin.c:361
@@ -1254,7 +1257,6 @@ msgid "Environment"
 msgstr "Entorno"
 
 #: libide/buildui/ide-build-log-panel.c:736
-#| msgid "Unsaved Files"
 msgid "Save File"
 msgstr "Guardar archivo"
 
@@ -1280,7 +1282,6 @@ msgid "Cancel build"
 msgstr "Cancelar instalación"
 
 #: libide/buildui/ide-build-log-panel.ui:59
-#| msgid "Clear build log"
 msgid "Save build log"
 msgstr "Guardar el registro de construcción"
 
@@ -2200,7 +2201,7 @@ msgstr "tipografía monoespaciada del editor"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:111
-#: plugins/terminal/gb-terminal-workbench-addin.c:203
+#: plugins/terminal/gb-terminal-workbench-addin.c:202
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -2276,7 +2277,7 @@ msgstr "Activar ajuste de texto"
 
 #: libide/preferences/ide-preferences-builtin.c:160
 msgid "Wrap text that is too wide to display"
-msgstr ""
+msgstr "Ajustar el texto que sea demasiado ancho para mostrar"
 
 #: libide/preferences/ide-preferences-builtin.c:161
 msgid "Scroll Offset"
@@ -2374,16 +2375,14 @@ msgid "Leading Only"
 msgstr "Sólo al principio"
 
 #: libide/preferences/ide-preferences-builtin.c:185
-#| msgid "Auto Save"
 msgid "Autosave"
 msgstr "Guardado automático"
 
 #: libide/preferences/ide-preferences-builtin.c:186
 msgid "Enable or disable autosave feature"
-msgstr ""
+msgstr "Activa o desactiva la característica de guardado automático"
 
 #: libide/preferences/ide-preferences-builtin.c:187
-#| msgid "The number of seconds after modification before auto saving."
 msgid "The number of seconds after modification before auto saving"
 msgstr ""
 "El número de segundos que deben transcurrir antes del guardado automático "
@@ -2426,7 +2425,7 @@ msgstr "Tamaño mínimo de la palabra"
 
 #: libide/preferences/ide-preferences-builtin.c:200
 msgid "Minimum word size for word completion"
-msgstr ""
+msgstr "Tamaño mínimo para el completado de palabras"
 
 #: libide/preferences/ide-preferences-builtin.c:201
 msgid "Suggest completions using Ctags"
@@ -2546,7 +2545,6 @@ msgid "Number of parallel build workers"
 msgstr "Número de constructores en paralelo"
 
 #: libide/preferences/ide-preferences-builtin.c:392
-#| msgid "framework"
 msgid "Network"
 msgstr "Red"
 
@@ -2559,6 +2557,8 @@ msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr ""
+"Permitir el uso de conexiones de red medidas cuando se descarguen "
+"dependencias automáticamente"
 
 #: libide/preferences/ide-preferences-builtin.c:399
 msgid "Projects"
@@ -2673,32 +2673,31 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5329
+#: libide/sourceview/ide-source-view.c:5334
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: libide/sourceview/ide-source-view.c:5331
+#: libide/sourceview/ide-source-view.c:5336
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: libide/sourceview/ide-source-view.c:5445
+#: libide/sourceview/ide-source-view.c:5450
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: libide/sourceview/ide-source-view.c:5872
+#: libide/sourceview/ide-source-view.c:5877
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6111
+#: libide/sourceview/ide-source-view.c:6116
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6137
-#| msgid "No projects found"
+#: libide/sourceview/ide-source-view.c:6142
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -3442,7 +3441,7 @@ msgid_plural "show %u more runtimes"
 msgstr[0] "Mostrar %u rutina más"
 msgstr[1] "mostrar %u rutinas más"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:386
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:387
 msgid "Flatpak Runtimes"
 msgstr "Rutinas de flatpak"
 
@@ -3624,7 +3623,6 @@ msgid "Your computer is missing python3-docutils"
 msgstr "Su equipo no tiene python3-docutils"
 
 #: plugins/html-preview/html_preview_plugin/__init__.py:309
-#| msgid "Your computer is missing python3-docutils"
 msgid "Your computer is missing python3-sphinx"
 msgstr "Su equipo no tiene python3-sphinx"
 
@@ -3659,7 +3657,7 @@ msgstr "Construcción correcta"
 #: plugins/notification/ide-notification-addin.c:77
 #, c-format
 msgid "Project “%s” has completed building"
-msgstr ""
+msgstr "El proyecto «%s» ha terminado de construirse"
 
 #: plugins/notification/ide-notification-addin.c:81
 msgid "Build failed"
@@ -3668,7 +3666,7 @@ msgstr "Fallo al construir"
 #: plugins/notification/ide-notification-addin.c:82
 #, c-format
 msgid "Project “%s” failed to build"
-msgstr ""
+msgstr "El proyecto «%s» ha fallado al construirse"
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -3784,7 +3782,7 @@ msgstr "rápido resaltar palabras coincidentes actual selección"
 
 #: plugins/retab/gtk/menus.ui:9
 msgid "Retab"
-msgstr ""
+msgstr "Convertir tabuladores en espacios"
 
 #: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
@@ -4002,7 +4000,6 @@ msgid "Untitled terminal"
 msgstr "Terminal sin título"
 
 #: plugins/terminal/gb-terminal-workbench-addin.c:142
-#| msgid "GNOME Application"
 msgid "Application Output"
 msgstr "Salida de la aplicación"
 
@@ -4011,7 +4008,6 @@ msgid "_New Terminal"
 msgstr "_Nueva terminal"
 
 #: plugins/terminal/gtk/menus.ui:11
-#| msgid "_New Terminal"
 msgid "_New Runtime Terminal"
 msgstr "_Nueva terminal en tiempo de ejecución"
 
