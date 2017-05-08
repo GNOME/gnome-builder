@@ -93,16 +93,17 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         return name.endswith('.m4') or name.endswith('.in')
 
     def _post_from_main(self, args):
-        items, prepend = args
+        if self.panel:
+            items, prepend = args
 
-        context = self.workbench.get_context()
-        vcs = context.get_vcs()
+            context = self.workbench.get_context()
+            vcs = context.get_vcs()
 
-        for item in items:
-            file = item.props.file
-            if vcs.is_ignored(file) or self._is_ignored_pattern(file.get_basename()):
-                continue
-            self.panel.add_item(item, prepend=prepend)
+            for item in items:
+                file = item.props.file
+                if vcs.is_ignored(file) or self._is_ignored_pattern(file.get_basename()):
+                    continue
+                self.panel.add_item(item, prepend=prepend)
 
         return GLib.SOURCE_REMOVE
 
@@ -232,6 +233,9 @@ class TodoPanel(Pnl.DockWidget):
         cell.props.text = item.shortdesc
 
     def add_item(self, item, prepend=False):
+        if not self.treeview or not self.treeview.get_selection():
+            return
+
         if prepend:
             iter = self.model.prepend()
         else:
