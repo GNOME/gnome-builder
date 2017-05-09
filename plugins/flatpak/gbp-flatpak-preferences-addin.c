@@ -215,7 +215,6 @@ gbp_flatpak_preferences_addin_reload_worker (GTask        *task,
                                              GCancellable *cancellable)
 {
   GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)source_object;
-  g_autoptr(GPtrArray) installations = NULL;
   g_autoptr(GPtrArray) runtimes = NULL;
   GbpFlatpakApplicationAddin *app_addin;
 
@@ -227,14 +226,25 @@ gbp_flatpak_preferences_addin_reload_worker (GTask        *task,
   runtimes = g_ptr_array_new_with_free_func (g_object_unref);
 
   app_addin = gbp_flatpak_application_addin_get_default ();
-  installations = gbp_flatpak_application_addin_get_installations (app_addin);
-  for (guint i = 0; i < installations->len; i++)
-    {
-      FlatpakInstallation *installation = g_ptr_array_index (installations, i);
-      populate_runtimes (self, installation, runtimes);
-    }
 
-  g_ptr_array_sort (runtimes, compare_refs);
+  /*
+   * If our application addin has not yet been loaded, we won't have any
+   * runtimes loaded yet.
+   */
+  if (app_addin != NULL)
+    {
+      g_autoptr(GPtrArray) installations = NULL;
+
+      installations = gbp_flatpak_application_addin_get_installations (app_addin);
+
+      for (guint i = 0; i < installations->len; i++)
+        {
+          FlatpakInstallation *installation = g_ptr_array_index (installations, i);
+          populate_runtimes (self, installation, runtimes);
+        }
+
+      g_ptr_array_sort (runtimes, compare_refs);
+    }
 
   g_task_return_pointer (task, g_steal_pointer (&runtimes), (GDestroyNotify)g_ptr_array_unref);
 
