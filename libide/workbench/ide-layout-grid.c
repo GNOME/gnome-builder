@@ -698,6 +698,13 @@ ide_layout_grid_toplevel_set_focus (GtkWidget     *toplevel,
     {
       GtkWidget *parent = focus;
 
+      /*
+       * If this focus widget does not belong to us, then we should just
+       * ignore updating any state now.
+       */
+      if (!gtk_widget_is_ancestor (focus, GTK_WIDGET (self)))
+        return;
+
       while (parent && !IDE_IS_LAYOUT_STACK (parent))
         {
           if (GTK_IS_POPOVER (parent))
