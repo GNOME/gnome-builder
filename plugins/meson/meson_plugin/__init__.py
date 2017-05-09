@@ -52,7 +52,7 @@ def extract_flags(command: str, builddir: str):
             # All paths are relative to build
             abspath = path.normpath(path.join(builddir, flag[2:]))
             wanted_flags.append('-I' + abspath)
-        elif flag.startswith(('-isystem', '-W', '-D')):
+        elif flag.startswith(('-isystem', '-W', '-D', '-std')):
             wanted_flags.append(flag)
     return wanted_flags
 
