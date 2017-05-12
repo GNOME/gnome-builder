@@ -37,7 +37,7 @@ _ = Ide.gettext
 
 LINE1 = re.compile('(.*):(\d+):(.*)')
 LINE2 = re.compile('(.*)-(\d+)-(.*)')
-KEYWORDS = ['FIXME', 'XXX', 'TODO']
+KEYWORDS = ['FIXME', 'XXX', 'TODO', 'HACK']
 
 class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     workbench = None
