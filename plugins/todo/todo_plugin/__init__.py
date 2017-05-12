@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 #
 # todo.py
 #
@@ -38,7 +37,7 @@ _ = Ide.gettext
 
 LINE1 = re.compile('(.*):(\d+):(.*)')
 LINE2 = re.compile('(.*)-(\d+)-(.*)')
-KEYWORDS = ['FIXME:', 'XXX:', 'TODO:']
+KEYWORDS = ['FIXME', 'XXX', 'TODO']
 
 class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     workbench = None
@@ -119,12 +118,12 @@ class TodoWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         trying to write anything too complex that would just approximate
         the same thing anyway.
         """
-        args = ['grep', '-A', '5', '-I', '-H', '-n', '-r']
+        args = ['grep', '-A', '5', '-I', '-H', '-n', '-r', '-E']
         for ignore_dir in ['.flatpak-builder', '.git']:
             args.append('--exclude-dir={}'.format(ignore_dir))
         for keyword in KEYWORDS:
             args.append('-e')
-            args.append(keyword)
+            args.append("{0}(:| )".format(keyword))
         args.append(file.get_path())
         p = subprocess.Popen(args, stdout=subprocess.PIPE)
 
