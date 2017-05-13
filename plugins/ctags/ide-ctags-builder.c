@@ -249,6 +249,7 @@ ide_ctags_builder_build_worker (GTask        *task,
   BuildTaskData *task_data = task_data_ptr;
   IdeCtagsBuilder *self = source_object;
   const gchar *ctags;
+  g_autofree gchar *program = NULL;
 
   IDE_ENTRY;
 
@@ -257,7 +258,8 @@ ide_ctags_builder_build_worker (GTask        *task,
   g_assert (G_IS_FILE (task_data->directory));
 
   ctags = task_data->ctags;
-  if (!g_find_program_in_path (ctags))
+  program = g_find_program_in_path (ctags);
+  if (!program)
     ctags = "ctags";
 
   ide_ctags_builder_build (self,
