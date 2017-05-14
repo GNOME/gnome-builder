@@ -26,6 +26,7 @@
 #include "ide-xml-analysis.h"
 #include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-tree-builder.h"
+#include "ide-xml-types.h"
 #include "ide-xml-service.h"
 #include "ide-xml-tree-builder.h"
 

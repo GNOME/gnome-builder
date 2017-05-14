@@ -21,18 +21,12 @@
 
 #include <glib-object.h>
 
+#include "ide-xml-types.h"
 #include "ide-xml-symbol-node.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_XML_POSITION (ide_xml_position_get_type())
-
-typedef enum
-{
-  IDE_XML_POSITION_KIND_IN_START_TAG,
-  IDE_XML_POSITION_KIND_IN_END_TAG,
-  IDE_XML_POSITION_KIND_IN_CONTENT
-} IdeXmlPositionKind;
 
 typedef struct _IdeXmlPosition IdeXmlPosition;
 

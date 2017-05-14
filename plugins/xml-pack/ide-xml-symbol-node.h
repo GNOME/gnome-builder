@@ -19,6 +19,7 @@
 #ifndef IDE_XML_SYMBOL_NODE_H
 #define IDE_XML_SYMBOL_NODE_H
 
+#include "ide-xml-types.h"
 #include "ide-xml-symbol-resolver.h"
 
 #include <ide.h>
