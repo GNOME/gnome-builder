@@ -533,7 +533,6 @@ ide_xml_service_context_loaded (IdeService *service)
 typedef struct
 {
   GTask         *task;
-  GCancellable  *cancellable;
   IdeFile       *ifile;
   IdeBuffer     *buffer;
   gint           line;
@@ -547,6 +546,87 @@ position_state_free (PositionState *state)
 
   g_object_unref (state->ifile);
   g_object_unref (state->buffer);
+}
+
+static IdeXmlPosition *
+get_position (IdeXmlService     *self,
+              IdeXmlSymbolNode  *root_node,
+              gint               line,
+              gint               line_offset)
+{
+  IdeXmlPosition *position = NULL;
+  IdeXmlPositionKind kind;
+  IdeXmlPositionKind candidate_kind = IDE_XML_POSITION_KIND_UNKNOW;
+  IdeXmlSymbolNode *current_node = root_node;
+  IdeXmlSymbolNode *parent_node = NULL;
+  IdeXmlSymbolNode *child_node;
+  IdeXmlSymbolNode *candidate_node = root_node;
+  IdeXmlSymbolNode *previous_sibling_node = NULL;
+  IdeXmlSymbolNode *next_sibling_node = NULL;
+  gint n_children;
+  gint n = 0;
+
+  g_assert (IDE_IS_XML_SERVICE (self));
+  g_assert (IDE_IS_XML_SYMBOL_NODE (root_node));
+
+  while (TRUE)
+    {
+loop:
+      if (0 == (n_children = ide_xml_symbol_node_get_n_direct_children (current_node)))
+        goto result;
+
+      parent_node = current_node;
+      for (n = 0; n < n_children; ++n)
+        {
+          child_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (current_node, n));
+          kind = ide_xml_symbol_node_compare_location (child_node, line, line_offset);
+          printf ("try kind: %s\n", ide_xml_position_kind_get_str (kind));
+          switch (kind)
+            {
+            case IDE_XML_POSITION_KIND_IN_START_TAG:
+            case IDE_XML_POSITION_KIND_IN_END_TAG:
+              candidate_node = child_node;
+              candidate_kind = kind;
+              goto result;
+
+            case IDE_XML_POSITION_KIND_BEFORE:
+              /* We are in between two nodes, so let's take the parent node as candidate */
+              goto result;
+
+            case IDE_XML_POSITION_KIND_AFTER:
+              /* We go to the next for loop iteration to test the next child */
+              break;
+
+            case IDE_XML_POSITION_KIND_IN_CONTENT:
+              candidate_node = current_node = child_node;
+              candidate_kind = kind;
+              goto loop;
+
+            case IDE_XML_POSITION_KIND_UNKNOW:
+            default:
+              g_assert_not_reached ();
+            }
+        }
+    }
+
+result:
+  position = ide_xml_position_new (candidate_node, candidate_kind);
+  if (parent_node != NULL)
+    {
+      n_children = ide_xml_symbol_node_get_n_direct_children (parent_node);
+      if (n_children > 0)
+        {
+          if (n > 0)
+            previous_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (parent_node, n - 1));
+
+          if (n < n_children - 1)
+            next_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (parent_node, n + 1));
+
+          ide_xml_position_set_siblings (position, previous_sibling_node, next_sibling_node);
+        }
+    }
+
+  return position;
 }
 
 static void
@@ -569,7 +649,7 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
   root_node = ide_xml_service_get_root_node_finish (self, result, &error);
   if (root_node != NULL)
     {
-      /* find the correspoonding node */
+      position = get_position (self, root_node, state->line, state->line_offset);
       g_task_return_pointer (task, position, g_object_unref);
     }
   else
@@ -604,16 +684,17 @@ ide_xml_service_get_position_from_cursor_async (IdeXmlService       *self,
 
   state = g_slice_new0 (PositionState);
   state->task = g_steal_pointer (&task);
-  state->cancellable = cancellable;
   state->ifile = g_object_ref (ifile);
   state->buffer = g_object_ref (buffer);
+  state->line = line;
+  state->line_offset = line_offset;
 
   ide_xml_service_get_root_node_async (self,
                                        ifile,
                                        buffer,
                                        cancellable,
                                        ide_xml_service_get_position_from_cursor_cb,
-                                       g_object_ref (task));
+                                       state);
 
   IDE_EXIT;
 }
