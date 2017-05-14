@@ -577,6 +577,22 @@ ide_xml_symbol_node_set_value (IdeXmlSymbolNode *self,
     self->value = g_strdup (value);
 }
 
+/* Return -1 if before, 0 if in, 1 if after the range */
+static inline gint
+is_in_range (NodeRange range,
+             gint      line,
+             gint      line_offset)
+{
+  if (line < range.start_line ||
+      (line == range.start_line && line_offset < range.start_line_offset))
+    return -1;
+
+  if (line > range.end_line ||
+      (line == range.end_line && line_offset > range.end_line_offset))
+    return 1;
+
+  return 0;
+}
 
 static void
 print_node_ranges (IdeXmlSymbolNode *node)
@@ -592,6 +608,37 @@ print_node_ranges (IdeXmlSymbolNode *node)
           node->end_tag.end_line,
           node->end_tag.end_line_offset);
 }
+
+/* Find the relative position of the (line, line_offset) cursor
+ * according to the reference node ref_node
+ */
+IdeXmlPositionKind
+ide_xml_symbol_node_compare_location (IdeXmlSymbolNode *ref_node,
+                                      gint              line,
+                                      gint              line_offset)
+{
+  gint pos;
+
+  print_node_ranges (ref_node);
+
+  pos = is_in_range(ref_node->start_tag, line, line_offset);
+  if (pos == -1)
+    return IDE_XML_POSITION_KIND_BEFORE;
+  else if (pos == 0)
+    return IDE_XML_POSITION_KIND_IN_START_TAG;
+
+  if (ref_node->has_end_tag)
+    {
+      pos = is_in_range(ref_node->end_tag, line, line_offset);
+      if (pos == -1)
+        return IDE_XML_POSITION_KIND_IN_CONTENT;
+      else if (pos == 0)
+        return IDE_XML_POSITION_KIND_IN_END_TAG;
+    }
+
+  return IDE_XML_POSITION_KIND_AFTER;
+}
+
 void
 ide_xml_symbol_node_take_attributes_names (IdeXmlSymbolNode  *self,
                                            gchar            **attributes_names)

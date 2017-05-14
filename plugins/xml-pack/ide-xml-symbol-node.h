@@ -40,6 +40,9 @@ IdeXmlSymbolNode         *ide_xml_symbol_node_new                           (con
                                                                              gint                    end_line,
                                                                              gint                    end_line_offset,
                                                                              gsize                   size);
+IdeXmlPositionKind        ide_xml_symbol_node_compare_location              (IdeXmlSymbolNode       *ref_node,
+                                                                             gint                    line,
+                                                                             gint                    line_offset);
 void                      ide_xml_symbol_node_take_child                    (IdeXmlSymbolNode       *self,
                                                                              IdeXmlSymbolNode       *child);
 void                      ide_xml_symbol_node_take_internal_child           (IdeXmlSymbolNode       *self,
