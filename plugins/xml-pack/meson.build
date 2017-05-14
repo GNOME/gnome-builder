@@ -19,6 +19,8 @@ xml_pack_sources = [
   'ide-xml-parser-generic.h',
   'ide-xml-parser-private.h',
   'ide-xml-parser-ui.c',
+  'ide-xml-path.c',
+  'ide-xml-path.h',
   'ide-xml-position.c',
   'ide-xml-position.h',
   'ide-xml-rng-grammar.c',
