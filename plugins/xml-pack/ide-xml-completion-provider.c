@@ -93,6 +93,7 @@ populate_cb (GObject      *object,
                        NULL);
 
   /* TODO: show position content for debug */
+  ide_xml_position_print (position);
 
   results = g_list_prepend (results, item);
   gtk_source_completion_context_add_proposals (state->completion_context,
@@ -111,7 +112,7 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
   IdeXmlService *service;
   GtkTextIter iter;
   GCancellable *cancellable;
-  GtkTextBuffer *buffer;
+  IdeBuffer *buffer;
   PopulateState *state;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (self));
@@ -125,12 +126,14 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
   cancellable = g_cancellable_new ();
   state = g_slice_new0 (PopulateState);
 
+  buffer = IDE_BUFFER (gtk_text_iter_get_buffer (&iter));
+
   state->self = g_object_ref (self);
   state->completion_context = g_object_ref (completion_context);
-  state->buffer = g_object_ref (gtk_text_iter_get_buffer (&iter));
-  state->ifile = g_object_ref (ide_buffer_get_file (IDE_BUFFER (buffer)));
-  state->line = gtk_text_iter_get_line (&iter);
-  state->line_offset = gtk_text_iter_get_line_offset (&iter);
+  state->buffer = g_object_ref (buffer);
+  state->ifile = g_object_ref (ide_buffer_get_file (buffer));
+  state->line = gtk_text_iter_get_line (&iter) + 1;
+  state->line_offset = gtk_text_iter_get_line_offset (&iter) + 1;
 
   printf ("path:%s at (%i,%i)\n",
           g_file_get_path (ide_file_get_file (state->ifile)),
@@ -139,7 +142,7 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
 
   ide_xml_service_get_position_from_cursor_async (service,
                                                   state->ifile,
-                                                  IDE_BUFFER (buffer),
+                                                  buffer,
                                                   state->line,
                                                   state->line_offset,
                                                   cancellable,
