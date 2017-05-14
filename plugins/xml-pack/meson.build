@@ -23,6 +23,8 @@ xml_pack_sources = [
   'ide-xml-position.h',
   'ide-xml-rng-grammar.c',
   'ide-xml-rng-grammar.h',
+  'ide-xml-rng-parser.c',
+  'ide-xml-rng-parser.h',
   'ide-xml-sax.c',
   'ide-xml-sax.h',
   'ide-xml-schema.c',
