@@ -54,6 +54,7 @@ gboolean        ide_xml_sax_get_location        (IdeXmlSax              *self,
                                                  gint                   *start_line_offset,
                                                  gint                   *end_line,
                                                  gint                   *end_line_offset,
+                                                 const gchar           **content,
                                                  gsize                  *size);
 IdeXmlSax      *ide_xml_sax_new                 (void);
 gboolean        ide_xml_sax_parse               (IdeXmlSax              *self,

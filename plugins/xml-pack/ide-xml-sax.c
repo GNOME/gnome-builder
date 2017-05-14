@@ -181,10 +181,11 @@ ide_xml_sax_parse (IdeXmlSax   *self,
 }
 
 static void
-get_tag_location (IdeXmlSax *self,
-                  gint      *line,
-                  gint      *line_offset,
-                  gsize     *size)
+get_tag_location (IdeXmlSax    *self,
+                  gint         *line,
+                  gint         *line_offset,
+                  const gchar **content,
+                  gsize        *size)
 {
   xmlParserInput *input;
   const gchar *base;
@@ -197,6 +198,7 @@ get_tag_location (IdeXmlSax *self,
   g_assert (IDE_IS_XML_SAX (self));
   g_assert (line != NULL);
   g_assert (line_offset != NULL);
+  g_assert (content != NULL);
   g_assert (size != NULL);
 
   /* TODO: handle other types of line break */
@@ -227,6 +229,7 @@ get_tag_location (IdeXmlSax *self,
     {
       *line = start_line_number;
       *line_offset = xmlSAX2GetColumnNumber (self->context);
+      *content = NULL;
       *size = 0;
 
       return;
@@ -259,33 +262,39 @@ get_tag_location (IdeXmlSax *self,
 
   *line = start_line_number;
   *line_offset = (current - line_start) + 1;
+  *content = current;
   *size = (const gchar *)input->cur - current + size_offset;
 }
 
 gboolean
-ide_xml_sax_get_location (IdeXmlSax *self,
-                          gint      *start_line,
-                          gint      *start_line_offset,
-                          gint      *end_line,
-                          gint      *end_line_offset,
-                          gsize     *size)
+ide_xml_sax_get_location (IdeXmlSax    *self,
+                          gint         *start_line,
+                          gint         *start_line_offset,
+                          gint         *end_line,
+                          gint         *end_line_offset,
+                          const gchar **content,
+                          gsize        *size)
 {
   gint tmp_line;
   gint tmp_line_offset;
   gint tmp_end_line;
   gint tmp_end_line_offset;
+  const gchar *tmp_content;
   gsize tmp_size;
 
   g_return_val_if_fail (IDE_IS_XML_SAX (self), FALSE);
   g_return_val_if_fail (self->context != NULL, FALSE);
 
-  get_tag_location (self, &tmp_line, &tmp_line_offset, &tmp_size);
+  get_tag_location (self, &tmp_line, &tmp_line_offset, &tmp_content, &tmp_size);
 
   if (start_line != NULL)
     *start_line = tmp_line;
 
   if (start_line_offset != NULL)
     *start_line_offset = tmp_line_offset;
+
+  if (content != NULL)
+    *content = tmp_content;
 
   if (size != NULL)
     *size = tmp_size;

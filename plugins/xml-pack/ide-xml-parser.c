@@ -120,6 +120,7 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
   ide_xml_sax_get_location (self->sax_parser,
                             &start_line, &start_line_offset,
                             &end_line, &end_line_offset,
+                            NULL,
                             &size);
 
   ifile = ide_file_new (context, state->file);
@@ -180,6 +181,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
   IdeXmlSymbolNode *parent_node;
   G_GNUC_UNUSED IdeXmlSymbolNode *popped_node;
   g_autofree gchar *popped_element_name = NULL;
+  const gchar *content;
   gint start_line;
   gint start_line_offset;
   gint end_line;
@@ -196,7 +198,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     }
 
   depth = ide_xml_sax_get_depth (self->sax_parser);
-  ide_xml_sax_get_location (self->sax_parser, &start_line, &start_line_offset, &end_line, &end_line_offset, &size);
+  ide_xml_sax_get_location (self->sax_parser, &start_line, &start_line_offset, &end_line, &end_line_offset, &content, &size);
 
   if (node == NULL)
     {
@@ -382,7 +384,7 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
   printf ("internal subset:%s external_id:%s system_id:%s\n", name, external_id, system_id);
 
   entry.schema_kind = SCHEMA_KIND_DTD;
-  ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL);
+  ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL, NULL);
   g_array_append_val (state->schemas, entry);
 }
 
@@ -446,7 +448,7 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           else
             goto fail;
 
-          ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL);
+          ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL, NULL);
           entry.schema_file = get_absolute_schema_file (state->file, schema_url);
           g_array_append_val (state->schemas, entry);
 
