@@ -88,6 +88,9 @@ void                      ide_xml_symbol_node_set_element_name              (Ide
                                                                              const gchar            *element_name);
 void                      ide_xml_symbol_node_set_value                     (IdeXmlSymbolNode       *self,
                                                                              const gchar            *value);
+const gchar             **ide_xml_symbol_node_get_attributes_names          (IdeXmlSymbolNode       *self);
+void                      ide_xml_symbol_node_take_attributes_names         (IdeXmlSymbolNode       *self,
+                                                                             gchar                 **attributes_names);
 
 G_END_DECLS
 

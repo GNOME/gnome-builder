@@ -45,6 +45,7 @@ struct _IdeXmlSymbolNode
   gint                      nb_children;
   gint                      nb_internal_children;
   GFile                    *file;
+  gchar                   **attributes_names;
   NodeRange                 start_tag;
   NodeRange                 end_tag;
 
@@ -115,6 +116,9 @@ ide_xml_symbol_node_finalize (GObject *object)
   g_clear_pointer (&self->value, g_free);
 
   g_clear_object (&self->file);
+
+  if (self->attributes_names != NULL)
+    g_strfreev (self->attributes_names);
 
   G_OBJECT_CLASS (ide_xml_symbol_node_parent_class)->finalize (object);
 }
@@ -571,4 +575,24 @@ ide_xml_symbol_node_set_value (IdeXmlSymbolNode *self,
 
   if (value != NULL)
     self->value = g_strdup (value);
+}
+
+void
+ide_xml_symbol_node_take_attributes_names (IdeXmlSymbolNode  *self,
+                                           gchar            **attributes_names)
+{
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+
+  if (self->attributes_names != NULL)
+    g_strfreev (self->attributes_names);
+
+  self->attributes_names = attributes_names;
+}
+
+const gchar **
+ide_xml_symbol_node_get_attributes_names (IdeXmlSymbolNode  *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  return (const gchar **)self->attributes_names;
 }
