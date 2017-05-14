@@ -40,10 +40,14 @@ struct _IdeXmlPosition
   guint               ref_count;
 };
 
-IdeXmlPosition     *ide_xml_position_new   (void);
-IdeXmlPosition     *ide_xml_position_copy  (IdeXmlPosition *self);
-IdeXmlPosition     *ide_xml_position_ref   (IdeXmlPosition *self);
-void                ide_xml_position_unref (IdeXmlPosition *self);
+IdeXmlPosition     *ide_xml_position_new          (IdeXmlSymbolNode   *self,
+                                                   IdeXmlPositionKind  kind);
+IdeXmlPosition     *ide_xml_position_copy         (IdeXmlPosition     *self);
+IdeXmlPosition     *ide_xml_position_ref          (IdeXmlPosition     *self);
+void                ide_xml_position_unref        (IdeXmlPosition     *self);
+
+void                ide_xml_position_print        (IdeXmlPosition     *self);
+const gchar        *ide_xml_position_kind_get_str (IdeXmlPositionKind  kind);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlPosition, ide_xml_position_unref)
 

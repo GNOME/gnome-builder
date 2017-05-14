@@ -73,3 +73,78 @@ ide_xml_position_unref (IdeXmlPosition *self)
   if (g_atomic_int_dec_and_test (&self->ref_count))
     ide_xml_position_free (self);
 }
+const gchar *
+ide_xml_position_kind_get_str (IdeXmlPositionKind kind)
+{
+  const gchar *kind_str;
+
+  switch (kind)
+    {
+    case IDE_XML_POSITION_KIND_UNKNOW:
+      kind_str = "unknow";
+      break;
+
+    case IDE_XML_POSITION_KIND_IN_START_TAG:
+      kind_str = "in start";
+      break;
+
+    case IDE_XML_POSITION_KIND_IN_END_TAG:
+      kind_str = "in end";
+      break;
+
+    case IDE_XML_POSITION_KIND_BEFORE:
+      kind_str = "before";
+      break;
+
+    case IDE_XML_POSITION_KIND_AFTER:
+      kind_str = "after";
+      break;
+
+    case IDE_XML_POSITION_KIND_IN_CONTENT:
+      kind_str = "in content";
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return kind_str;
+}
+
+void
+ide_xml_position_print (IdeXmlPosition *self)
+{
+  const gchar *p_sibling_str;
+  const gchar *n_sibling_str;
+  const gchar *kind_str;
+
+  p_sibling_str = (self->previous_sibling_node == NULL) ?
+    "None" :
+    ide_xml_symbol_node_get_element_name (self->previous_sibling_node);
+
+  n_sibling_str = (self->next_sibling_node == NULL) ?
+    "None" :
+    ide_xml_symbol_node_get_element_name (self->next_sibling_node);
+
+  kind_str = ide_xml_position_kind_get_str (self->kind);
+
+  printf ("node: %s (between %s and %s) kind:%s\n",
+          ide_xml_symbol_node_get_element_name (self->node),
+          p_sibling_str,
+          n_sibling_str,
+          kind_str);
+
+  if (self->node != NULL)
+    {
+      const gchar **attributes_names;
+
+      if (NULL != (attributes_names = ide_xml_symbol_node_get_attributes_names (self->node)))
+        {
+          while (attributes_names [0] != NULL)
+            {
+              printf ("attr:%s\n", *attributes_names);
+              ++attributes_names;
+            }
+        }
+    }
+}
