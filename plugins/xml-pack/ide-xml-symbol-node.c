@@ -577,6 +577,21 @@ ide_xml_symbol_node_set_value (IdeXmlSymbolNode *self,
     self->value = g_strdup (value);
 }
 
+
+static void
+print_node_ranges (IdeXmlSymbolNode *node)
+{
+  printf ("%s (%i,%i)->(%i,%i) end: (%i,%i)->(%i,%i)\n",
+          node->element_name,
+          node->start_tag.start_line,
+          node->start_tag.start_line_offset,
+          node->start_tag.end_line,
+          node->start_tag.end_line_offset,
+          node->end_tag.start_line,
+          node->end_tag.start_line_offset,
+          node->end_tag.end_line,
+          node->end_tag.end_line_offset);
+}
 void
 ide_xml_symbol_node_take_attributes_names (IdeXmlSymbolNode  *self,
                                            gchar            **attributes_names)
