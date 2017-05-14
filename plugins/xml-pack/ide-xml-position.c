@@ -21,12 +21,18 @@
 G_DEFINE_BOXED_TYPE (IdeXmlPosition, ide_xml_position, ide_xml_position_ref, ide_xml_position_unref)
 
 IdeXmlPosition *
-ide_xml_position_new (void)
+ide_xml_position_new (IdeXmlSymbolNode   *node,
+                      IdeXmlPositionKind  kind)
 {
   IdeXmlPosition *self;
 
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (node), NULL);
+
   self = g_slice_new0 (IdeXmlPosition);
   self->ref_count = 1;
+
+  self->node = node;
+  self->kind = kind;
 
   return self;
 }
@@ -39,7 +45,8 @@ ide_xml_position_copy (IdeXmlPosition *self)
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (self->ref_count, NULL);
 
-  copy = ide_xml_position_new ();
+  copy = ide_xml_position_new (self->node,
+                               self->kind);
 
   return copy;
 }
@@ -73,6 +80,16 @@ ide_xml_position_unref (IdeXmlPosition *self)
   if (g_atomic_int_dec_and_test (&self->ref_count))
     ide_xml_position_free (self);
 }
+
+void
+ide_xml_position_set_siblings    (IdeXmlPosition   *self,
+                                  IdeXmlSymbolNode *previous_sibling_node,
+                                  IdeXmlSymbolNode *next_sibling_node)
+{
+  self->previous_sibling_node = previous_sibling_node;
+  self->next_sibling_node = next_sibling_node;
+}
+
 const gchar *
 ide_xml_position_kind_get_str (IdeXmlPositionKind kind)
 {

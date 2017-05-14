@@ -34,7 +34,8 @@ struct _IdeXmlPosition
 {
   IdeXmlSymbolNode   *root_node;
   IdeXmlSymbolNode   *node;
-  IdeXmlSymbolNode   *parent_node;
+  IdeXmlSymbolNode   *previous_sibling_node;
+  IdeXmlSymbolNode   *next_sibling_node;
   IdeXmlPositionKind  kind;
 
   guint               ref_count;
@@ -45,6 +46,10 @@ IdeXmlPosition     *ide_xml_position_new          (IdeXmlSymbolNode   *self,
 IdeXmlPosition     *ide_xml_position_copy         (IdeXmlPosition     *self);
 IdeXmlPosition     *ide_xml_position_ref          (IdeXmlPosition     *self);
 void                ide_xml_position_unref        (IdeXmlPosition     *self);
+
+void                ide_xml_position_set_siblings (IdeXmlPosition     *self,
+                                                   IdeXmlSymbolNode   *previous_sibling_node,
+                                                   IdeXmlSymbolNode   *next_sibling_node);
 
 void                ide_xml_position_print        (IdeXmlPosition     *self);
 const gchar        *ide_xml_position_kind_get_str (IdeXmlPositionKind  kind);
