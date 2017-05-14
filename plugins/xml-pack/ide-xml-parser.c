@@ -147,6 +147,28 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
   return diagnostic;
 }
 
+static gchar **
+fetch_attributes_names (IdeXmlParser  *self,
+                        const gchar  **attributes)
+{
+  GPtrArray *attrs;
+
+  g_assert (IDE_IS_XML_PARSER (self));
+
+  if (attributes == NULL)
+    return NULL;
+
+  attrs = g_ptr_array_new ();
+  while (attributes [0] != NULL)
+    {
+      g_ptr_array_add (attrs, g_strdup (attributes [0]));
+      attributes += 2;
+    }
+
+  g_ptr_array_add (attrs, NULL);
+  return (gchar**)g_ptr_array_free (attrs, FALSE);
+}
+
 void
 ide_xml_parser_state_processing (IdeXmlParser          *self,
                                  ParserState           *state,
@@ -189,6 +211,9 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
           ide_xml_stack_push (self->stack, element_name, node, state->parent_node, depth);
           ide_xml_symbol_node_take_internal_child (state->parent_node, node);
           state->parent_node = node;
+
+          ide_xml_symbol_node_take_attributes_names (node, fetch_attributes_names (self, state->attributes));
+          state->attributes = NULL;
         }
       else if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
         {
@@ -244,6 +269,8 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
         ide_xml_symbol_node_take_child (state->parent_node, node);
 
       state->parent_node = node;
+      ide_xml_symbol_node_take_attributes_names (node, fetch_attributes_names (self, state->attributes));
+      state->attributes = NULL;
     }
   else if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
     {

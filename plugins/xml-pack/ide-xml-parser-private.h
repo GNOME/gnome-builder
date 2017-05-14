@@ -71,6 +71,7 @@ typedef struct _ParserState
   IdeXmlSymbolNode  *root_node;
   IdeXmlSymbolNode  *parent_node;
   IdeXmlSymbolNode  *current_node;
+  const gchar      **attributes;
   BuildState         build_state;
   gint               current_depth;
   GArray            *schemas;

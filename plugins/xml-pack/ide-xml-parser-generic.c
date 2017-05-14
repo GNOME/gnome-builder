@@ -70,6 +70,7 @@ ide_xml_parser_generic_start_element_sax_cb (ParserState    *state,
   node = ide_xml_symbol_node_new (label, NULL, NULL, IDE_SYMBOL_XML_ELEMENT, NULL, 0, 0, 0, 0, 0);
   g_object_set (node, "use-markup", TRUE, NULL);
 
+  state->attributes = (const gchar **)attributes;
   ide_xml_parser_state_processing (self, state, (const gchar *)name, node, IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT, FALSE);
 }
 
