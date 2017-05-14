@@ -25,6 +25,8 @@ xml_pack_sources = [
   'ide-xml-rng-grammar.h',
   'ide-xml-sax.c',
   'ide-xml-sax.h',
+  'ide-xml-schema.c',
+  'ide-xml-schema.h',
   'ide-xml-schema-cache-entry.c',
   'ide-xml-schema-cache-entry.h',
   'ide-xml-service.c',
