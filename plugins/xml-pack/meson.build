@@ -7,6 +7,8 @@ xml_pack_sources = [
   'ide-xml-completion-provider.h',
   'ide-xml-diagnostic-provider.c',
   'ide-xml-diagnostic-provider.h',
+  'ide-xml-hash-table.c',
+  'ide-xml-hash-table.h',
   'ide-xml-highlighter.c',
   'ide-xml-highlighter.h',
   'ide-xml-indenter.c',
