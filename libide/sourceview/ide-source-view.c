@@ -536,9 +536,11 @@ get_rect_for_iters (GtkTextView       *text_view,
   GtkTextIter iter;
 
   g_assert (GTK_IS_TEXT_VIEW (text_view));
-  g_assert (iter1);
-  g_assert (iter2);
-  g_assert (rect);
+  g_assert (iter1 != NULL);
+  g_assert (iter2 != NULL);
+  g_assert (rect != NULL);
+  g_assert (gtk_text_iter_get_buffer (iter1) == gtk_text_iter_get_buffer (iter2));
+  g_assert (gtk_text_view_get_buffer (text_view) == gtk_text_iter_get_buffer (iter1));
 
   begin = *iter1;
   end = *iter2;
@@ -597,8 +599,8 @@ animate_expand (IdeSourceView     *self,
   GdkRectangle rect = { 0 };
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (begin);
-  g_assert (end);
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
 
   get_rect_for_iters (GTK_TEXT_VIEW (self), begin, end, &rect, GTK_TEXT_WINDOW_WIDGET);
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
