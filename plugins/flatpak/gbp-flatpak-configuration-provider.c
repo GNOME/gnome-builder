@@ -414,6 +414,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
               if (g_match_info_matches (match_info) || in_config_opts_array)
                 {
                   gchar *right_bracket;
+                  gchar *next_line;
 
                   right_bracket = g_strstr_len (line, -1, "]");
                   if (g_match_info_matches (match_info))
@@ -456,13 +457,25 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                       continue;
                     }
 
+                  /* Check if we're on the last line of the module */
+                  next_line = g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &error);
+                  if (error != NULL)
+                    {
+                      g_task_return_error (task, error);
+                      IDE_EXIT;
+                    }
+                  if (g_str_has_prefix (next_line, primary_module_right_curly_brace))
+                    right_curly_brace_line = next_line;
+
                   /* At this point it's either a single line or we're on the last line */
                   in_config_opts_array = FALSE;
                   config_opts_replaced = TRUE;
                   if (new_config_opts == NULL)
                     {
-                      g_free (line);
-                      line = g_strdup_printf ("%s],", array_prefix);
+                      if (right_curly_brace_line == NULL)
+                        g_ptr_array_add (new_lines, g_strdup_printf ("%s],", array_prefix));
+                      else
+                        g_ptr_array_add (new_lines, g_strdup_printf ("%s]", array_prefix));
                     }
                   else
                     {
@@ -494,14 +507,31 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                           g_ptr_array_add (config_opts_subset, NULL);
                           opts_this_line = g_strjoinv ("\", \"", (gchar **)config_opts_subset->pdata);
 
-                          new_line = g_strdup_printf ("%s\"%s\"%s,", prefix, opts_this_line, suffix);
+                          if (suffix == array_suffix && right_curly_brace_line != NULL)
+                            new_line = g_strdup_printf ("%s\"%s\"%s", prefix, opts_this_line, suffix);
+                          else
+                            new_line = g_strdup_printf ("%s\"%s\"%s,", prefix, opts_this_line, suffix);
+
                           g_ptr_array_add (new_lines, new_line);
                         }
-
-                      /* Discard the line that was just replaced with the new config-opts array */
-                      g_free (line);
-                      continue;
                     }
+
+                  /* Discard the line that was just replaced with the new config-opts array */
+                  g_free (line);
+
+                  /* If we're on the last line of the module, add the curly brace now */
+                  if (right_curly_brace_line != NULL)
+                    {
+                      g_ptr_array_add (new_lines, right_curly_brace_line);
+                      right_curly_brace_line = NULL;
+                    }
+
+                  /* If the next line isn't a curly brace, add it since we already read it */
+                  if (next_line != NULL &&
+                      !g_str_has_prefix (next_line, primary_module_right_curly_brace))
+                    g_ptr_array_add (new_lines, next_line);
+
+                  continue;
                 }
             }
 
