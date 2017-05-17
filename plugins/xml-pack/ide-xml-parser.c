@@ -204,11 +204,11 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     {
       if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT)
         {
-          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT,
-                                          g_object_ref (state->file),
-                                          start_line, start_line_offset,
-                                          end_line, end_line_offset,
-                                          size);
+          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT);
+          ide_xml_symbol_node_set_location (node, g_object_ref (state->file),
+                                            start_line, start_line_offset,
+                                            end_line, end_line_offset,
+                                            size);
 
           ide_xml_stack_push (self->stack, element_name, node, state->parent_node, depth);
           ide_xml_symbol_node_take_internal_child (state->parent_node, node);
@@ -576,7 +576,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->build_state = BUILD_STATE_NORMAL;
 
   state->analysis = ide_xml_analysis_new (-1);
-  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE, NULL, 0, 0, 0, 0, 0);
+  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE);
   ide_xml_analysis_set_root_node (state->analysis, state->root_node);
 
   state->parent_node = state->root_node;

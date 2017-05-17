@@ -33,13 +33,7 @@ G_DECLARE_FINAL_TYPE (IdeXmlSymbolNode, ide_xml_symbol_node, IDE, XML_SYMBOL_NOD
 IdeXmlSymbolNode         *ide_xml_symbol_node_new                           (const gchar            *name,
                                                                              const gchar            *value,
                                                                              const gchar            *element_name,
-                                                                             IdeSymbolKind           kind,
-                                                                             GFile                  *file,
-                                                                             gint                    start_line,
-                                                                             gint                    start_line_offset,
-                                                                             gint                    end_line,
-                                                                             gint                    end_line_offset,
-                                                                             gsize                   size);
+                                                                             IdeSymbolKind           kind);
 IdeXmlPositionKind        ide_xml_symbol_node_compare_location              (IdeXmlSymbolNode       *ref_node,
                                                                              gint                    line,
                                                                              gint                    line_offset);
@@ -72,6 +66,7 @@ IdeSymbolNode            *ide_xml_symbol_node_get_nth_direct_child          (Ide
                                                                              guint                   nth_child);
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_internal_child        (IdeXmlSymbolNode       *self,
                                                                              guint                   nth_child);
+IdeXmlSymbolNode         *ide_xml_symbol_node_get_parent                    (IdeXmlSymbolNode       *self);
 const gchar              *ide_xml_symbol_node_get_value                     (IdeXmlSymbolNode       *self);
 gboolean                  ide_xml_symbol_node_has_end_tag                   (IdeXmlSymbolNode       *self);
 void                      ide_xml_symbol_node_set_location                  (IdeXmlSymbolNode       *self,

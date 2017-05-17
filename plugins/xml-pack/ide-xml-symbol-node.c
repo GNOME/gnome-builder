@@ -38,18 +38,20 @@ typedef struct _NodeRange
 
 struct _IdeXmlSymbolNode
 {
-  IdeSymbolNode             parent_instance;
-  GArray                   *children;
-  gchar                    *value;
-  gchar                    *element_name;
-  gint                      nb_children;
-  gint                      nb_internal_children;
-  GFile                    *file;
-  gchar                   **attributes_names;
-  NodeRange                 start_tag;
-  NodeRange                 end_tag;
+  IdeSymbolNode      parent_instance;
 
-  guint                     has_end_tag : 1;
+  IdeXmlSymbolNode  *parent;
+  GArray            *children;
+  gchar             *value;
+  gchar             *element_name;
+  gint               nb_children;
+  gint               nb_internal_children;
+  GFile             *file;
+  gchar            **attributes_names;
+  NodeRange          start_tag;
+  NodeRange          end_tag;
+
+  guint              has_end_tag : 1;
 };
 
 typedef enum
@@ -116,6 +118,7 @@ ide_xml_symbol_node_finalize (GObject *object)
   g_clear_pointer (&self->value, g_free);
 
   g_clear_object (&self->file);
+  g_clear_object (&self->parent);
 
   if (self->attributes_names != NULL)
     g_strfreev (self->attributes_names);
@@ -144,19 +147,12 @@ IdeXmlSymbolNode *
 ide_xml_symbol_node_new (const gchar            *name,
                          const gchar            *value,
                          const gchar            *element_name,
-                         IdeSymbolKind           kind,
-                         GFile                  *file,
-                         gint                    start_line,
-                         gint                    start_line_offset,
-                         gint                    end_line,
-                         gint                    end_line_offset,
-                         gsize                   size)
+                         IdeSymbolKind           kind)
 {
   IdeXmlSymbolNode *self;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
 
   g_return_val_if_fail (!ide_str_empty0 (name), NULL);
-  g_return_val_if_fail (G_IS_FILE (file)|| file == NULL, NULL);
 
   self = g_object_new (IDE_TYPE_XML_SYMBOL_NODE,
                        "name", name,
@@ -171,15 +167,6 @@ ide_xml_symbol_node_new (const gchar            *name,
 
   if (!ide_str_empty0 (value))
     self->value = g_strdup (value);
-
-  if (file != NULL)
-    self->file = g_object_ref (file);
-
-  self->start_tag.start_line = start_line;
-  self->start_tag.start_line_offset = start_line_offset;
-  self->start_tag.end_line = end_line;
-  self->start_tag.end_line_offset = end_line_offset;
-  self->start_tag.size = size;
 
   return self;
 }
@@ -400,6 +387,14 @@ take_child (IdeXmlSymbolNode *self,
   node_entry.is_internal = is_internal;
 
   g_array_append_val (self->children, node_entry);
+
+  if (child != self)
+    {
+      if (child->parent != NULL)
+        g_object_unref (child->parent);
+
+      child->parent = g_object_ref (self);
+    }
 }
 
 void
@@ -575,6 +570,14 @@ ide_xml_symbol_node_set_value (IdeXmlSymbolNode *self,
 
   if (value != NULL)
     self->value = g_strdup (value);
+}
+
+IdeXmlSymbolNode *
+ide_xml_symbol_node_get_parent (IdeXmlSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  return self->parent;
 }
 
 /* Return -1 if before, 0 if in, 1 if after the range */

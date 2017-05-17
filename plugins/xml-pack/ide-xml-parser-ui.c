@@ -65,8 +65,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           ide_str_equal0 (parent_name, "template"))
         {
           value = get_attribute (attributes, "name", NULL);
-          node = ide_xml_symbol_node_new (value, NULL, "property",
-                                          IDE_SYMBOL_UI_PROPERTY, NULL, 0, 0, 0, 0, 0);
+          node = ide_xml_symbol_node_new (value, NULL, "property", IDE_SYMBOL_UI_PROPERTY);
           is_internal = TRUE;
           state->build_state = BUILD_STATE_GET_CONTENT;
         }
@@ -78,8 +77,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           ide_str_equal0 (parent_name, "item"))
         {
           value = get_attribute (attributes, "name", NULL);
-          node = ide_xml_symbol_node_new (value, NULL, "attribute",
-                                          IDE_SYMBOL_UI_MENU_ATTRIBUTE, NULL, 0, 0, 0, 0, 0);
+          node = ide_xml_symbol_node_new (value, NULL, "attribute", IDE_SYMBOL_UI_MENU_ATTRIBUTE);
           is_internal = TRUE;
           state->build_state = BUILD_STATE_GET_CONTENT;
         }
@@ -87,8 +85,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   else if (ide_str_equal0 (name, "class") && ide_str_equal0 (parent_name, "style"))
     {
       value = get_attribute (attributes, "name", NULL);
-      node = ide_xml_symbol_node_new (value, NULL, "class",
-                                      IDE_SYMBOL_UI_STYLE_CLASS, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new (value, NULL, "class", IDE_SYMBOL_UI_STYLE_CLASS);
       is_internal = TRUE;
     }
   else if (ide_str_equal0 (name, "child"))
@@ -109,8 +106,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           g_string_append (string, value);
         }
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "child",
-                                      IDE_SYMBOL_UI_CHILD, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new (string->str, NULL, "child", IDE_SYMBOL_UI_CHILD);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (ide_str_equal0 (name, "object"))
@@ -128,8 +124,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           g_string_append (string, value);
         }
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "object",
-                                      IDE_SYMBOL_UI_OBJECT, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new (string->str, NULL, "object", IDE_SYMBOL_UI_OBJECT);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (ide_str_equal0 (name, "template"))
@@ -145,19 +140,16 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, (const gchar *)name,
-                                      IDE_SYMBOL_UI_TEMPLATE, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new (string->str, NULL, (const gchar *)name, IDE_SYMBOL_UI_TEMPLATE);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (ide_str_equal0 (name, "packing"))
     {
-      node = ide_xml_symbol_node_new ("packing", NULL, "packing",
-                                      IDE_SYMBOL_UI_PACKING, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new ("packing", NULL, "packing", IDE_SYMBOL_UI_PACKING);
     }
   else if (ide_str_equal0 (name, "style"))
     {
-      node = ide_xml_symbol_node_new ("style", NULL, "style",
-                                      IDE_SYMBOL_UI_STYLE, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new ("style", NULL, "style", IDE_SYMBOL_UI_STYLE);
     }
   else if (ide_str_equal0 (name, "menu"))
     {
@@ -166,8 +158,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "menu",
-                                      IDE_SYMBOL_UI_MENU, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new (string->str, NULL, "menu", IDE_SYMBOL_UI_MENU);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (ide_str_equal0 (name, "submenu"))
@@ -177,8 +168,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "submenu",
-                                      IDE_SYMBOL_UI_SUBMENU, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new (string->str, NULL, "submenu", IDE_SYMBOL_UI_SUBMENU);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (ide_str_equal0 (name, "section"))
@@ -188,14 +178,12 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "section",
-                                      IDE_SYMBOL_UI_SECTION, NULL, 0, 0, 0, 0, 0);
+      node = ide_xml_symbol_node_new (string->str, NULL, "section", IDE_SYMBOL_UI_SECTION);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (ide_str_equal0 (name, "item"))
     {
-      node = ide_xml_symbol_node_new ("item", NULL, "item",
-                                      IDE_SYMBOL_UI_ITEM, NULL, 0, 0, 0, 00, 0);
+      node = ide_xml_symbol_node_new ("item", NULL, "item", IDE_SYMBOL_UI_ITEM);
     }
 
   state->attributes = (const gchar **)attributes;
