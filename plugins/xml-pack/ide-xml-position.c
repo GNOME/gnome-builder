@@ -31,7 +31,7 @@ ide_xml_position_new (IdeXmlSymbolNode   *node,
   self = g_slice_new0 (IdeXmlPosition);
   self->ref_count = 1;
 
-  self->node = node;
+  self->node = g_object_ref (node);
   self->kind = kind;
 
   return self;
@@ -57,6 +57,13 @@ ide_xml_position_free (IdeXmlPosition *self)
   g_assert (self);
   g_assert_cmpint (self->ref_count, ==, 0);
 
+  if (self->analysis != NULL)
+    ide_xml_analysis_unref (self->analysis);
+
+  g_clear_object (&self->node);
+  g_clear_object (&self->previous_sibling_node);
+  g_clear_object (&self->next_sibling_node);
+
   g_slice_free (IdeXmlPosition, self);
 }
 
@@ -81,11 +88,50 @@ ide_xml_position_unref (IdeXmlPosition *self)
     ide_xml_position_free (self);
 }
 
+IdeXmlAnalysis *
+ide_xml_position_get_analysis (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->analysis;
+}
+
+void
+ide_xml_position_set_analysis (IdeXmlPosition *self,
+                               IdeXmlAnalysis *analysis)
+{
+  g_return_if_fail (self);
+
+  self->analysis = ide_xml_analysis_ref (analysis);
+}
+
+IdeXmlSymbolNode *
+ide_xml_position_get_next_sibling (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->next_sibling_node;
+}
+
+IdeXmlSymbolNode *
+ide_xml_position_get_previous_sibling (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->previous_sibling_node;
+}
+
 void
 ide_xml_position_set_siblings    (IdeXmlPosition   *self,
                                   IdeXmlSymbolNode *previous_sibling_node,
                                   IdeXmlSymbolNode *next_sibling_node)
 {
+  if (previous_sibling_node != NULL)
+    g_object_ref (previous_sibling_node);
+
+  if (next_sibling_node != NULL)
+    g_object_ref (next_sibling_node);
+
   self->previous_sibling_node = previous_sibling_node;
   self->next_sibling_node = next_sibling_node;
 }
@@ -164,4 +210,20 @@ ide_xml_position_print (IdeXmlPosition *self)
             }
         }
     }
+}
+
+IdeXmlSymbolNode *
+ide_xml_position_get_node (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->node;
+}
+
+IdeXmlPositionKind
+ide_xml_position_get_kind (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, IDE_XML_POSITION_KIND_UNKNOW);
+
+  return self->kind;
 }
