@@ -722,7 +722,10 @@ ide_clang_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
   g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
   g_assert (IDE_IS_SOURCE_VIEW (self->view));
 
-  ide_source_view_push_snippet (self->view, snippet, NULL);
+  ide_source_view_push_snippet (self->view, snippet, iter);
+
+  /* ensure @iter is kept valid */
+  gtk_text_buffer_get_iter_at_mark (buffer, iter, gtk_text_buffer_get_insert (buffer));
 
   IDE_RETURN (TRUE);
 }
