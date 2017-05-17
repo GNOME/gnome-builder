@@ -23,11 +23,16 @@
 
 #include "ide-types.h"
 
+#include "buildconfig/ide-buildconfig-configuration.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILDCONFIG_CONFIGURATION_PROVIDER (ide_buildconfig_configuration_provider_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeBuildconfigConfigurationProvider, ide_buildconfig_configuration_provider, IDE, BUILDCONFIG_CONFIGURATION_PROVIDER, GObject)
+
+void ide_buildconfig_configuration_provider_track_config (IdeBuildconfigConfigurationProvider *self,
+                                                          IdeBuildconfigConfiguration         *config);
 
 G_END_DECLS
 

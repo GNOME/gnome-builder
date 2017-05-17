@@ -36,7 +36,6 @@ struct _GbpFlatpakConfigurationProvider
 {
   GObject                  parent_instance;
   IdeConfigurationManager *manager;
-  GCancellable            *cancellable;
   GPtrArray               *configurations;
   GPtrArray               *manifest_monitors;
 
@@ -45,8 +44,6 @@ struct _GbpFlatpakConfigurationProvider
 };
 
 static void configuration_provider_iface_init         (IdeConfigurationProviderInterface  *iface);
-static void gbp_flatpak_configuration_provider_load   (IdeConfigurationProvider           *provider,
-                                                       IdeConfigurationManager            *manager);
 static void gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider           *provider,
                                                        IdeConfigurationManager            *manager);
 
@@ -999,16 +996,18 @@ gbp_flatpak_configuration_provider_load_cb (GObject      *object,
   GPtrArray *ret;
   GError *error = NULL;
   guint i;
+  g_autoptr(GTask) task = user_data;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
 
   if (!(ret = g_task_propagate_pointer (G_TASK (result), &error)))
     {
       g_warning ("%s", error->message);
-      g_clear_error (&error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -1022,31 +1021,50 @@ gbp_flatpak_configuration_provider_load_cb (GObject      *object,
 
   self->configurations = ret;
 
+  g_task_return_boolean (task, TRUE);
+
   IDE_EXIT;
 }
 
 static void
-gbp_flatpak_configuration_provider_load (IdeConfigurationProvider *provider,
-                                         IdeConfigurationManager  *manager)
+gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provider,
+                                               IdeConfigurationManager  *manager,
+                                               GCancellable             *cancellable,
+                                               GAsyncReadyCallback       callback,
+                                               gpointer                  user_data)
 {
   GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
+  g_autoptr(GTask) parent_task = NULL;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ide_set_weak_pointer (&self->manager, manager);
 
   self->manifest_monitors = g_ptr_array_new_with_free_func (g_object_unref);
 
-  self->cancellable = g_cancellable_new ();
-
-  task = g_task_new (self, self->cancellable, gbp_flatpak_configuration_provider_load_cb, NULL);
+  parent_task = g_task_new (self, cancellable, callback, user_data);
+  task = g_task_new (self, cancellable, gbp_flatpak_configuration_provider_load_cb, g_steal_pointer (&parent_task));
   g_task_run_in_thread (task, gbp_flatpak_configuration_provider_load_worker);
 
   IDE_EXIT;
+}
+
+gboolean
+gbp_flatpak_configuration_provider_load_finish (IdeConfigurationProvider  *provider,
+                                                GAsyncResult              *result,
+                                                GError                   **error)
+{
+  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
@@ -1076,11 +1094,6 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider,
 
   g_clear_pointer (&self->manifest_monitors, g_ptr_array_unref);
 
-  if (self->cancellable != NULL)
-    g_cancellable_cancel (self->cancellable);
-
-  g_clear_object (&self->cancellable);
-
   ide_clear_weak_pointer (&self->manager);
 
   IDE_EXIT;
@@ -1102,7 +1115,8 @@ gbp_flatpak_configuration_provider_init (GbpFlatpakConfigurationProvider *self)
 static void
 configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
 {
-  iface->load = gbp_flatpak_configuration_provider_load;
+  iface->load_async = gbp_flatpak_configuration_provider_load_async;
+  iface->load_finish = gbp_flatpak_configuration_provider_load_finish;
   iface->unload = gbp_flatpak_configuration_provider_unload;
   iface->save_async = gbp_flatpak_configuration_provider_save_async;
   iface->save_finish = gbp_flatpak_configuration_provider_save_finish;

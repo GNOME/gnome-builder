@@ -33,8 +33,14 @@ struct _IdeConfigurationProviderInterface
 {
   GTypeInterface parent;
 
-  void     (*load)        (IdeConfigurationProvider  *self,
-                           IdeConfigurationManager   *manager);
+  void     (*load_async)  (IdeConfigurationProvider  *self,
+                           IdeConfigurationManager   *manager,
+                           GCancellable              *cancellable,
+                           GAsyncReadyCallback        callback,
+                           gpointer                   user_data);
+  gboolean (*load_finish) (IdeConfigurationProvider  *self,
+                           GAsyncResult              *result,
+                           GError                   **error);
   void     (*unload)      (IdeConfigurationProvider  *self,
                            IdeConfigurationManager   *manager);
   void     (*save_async)  (IdeConfigurationProvider  *self,
@@ -46,8 +52,14 @@ struct _IdeConfigurationProviderInterface
                            GError                   **error);
 };
 
-void     ide_configuration_provider_load        (IdeConfigurationProvider  *self,
-                                                 IdeConfigurationManager   *manager);
+void     ide_configuration_provider_load_async  (IdeConfigurationProvider  *self,
+                                                 IdeConfigurationManager   *manager,
+                                                 GCancellable              *cancellable,
+                                                 GAsyncReadyCallback        callback,
+                                                 gpointer                   user_data);
+gboolean ide_configuration_provider_load_finish (IdeConfigurationProvider  *self,
+                                                 GAsyncResult              *result,
+                                                 GError                   **error);
 void     ide_configuration_provider_unload      (IdeConfigurationProvider  *self,
                                                  IdeConfigurationManager   *manager);
 void     ide_configuration_provider_save_async  (IdeConfigurationProvider  *self,
