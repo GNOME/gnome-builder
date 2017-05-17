@@ -41,7 +41,6 @@ struct _IdeBuildconfigConfigurationProvider
   GObject                  parent_instance;
 
   IdeConfigurationManager *manager;
-  GCancellable            *cancellable;
   GPtrArray               *configurations;
   GKeyFile                *key_file;
 
@@ -55,7 +54,6 @@ G_DEFINE_TYPE_EXTENDED (IdeBuildconfigConfigurationProvider, ide_buildconfig_con
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
                                                configuration_provider_iface_init))
 
-static void ide_buildconfig_configuration_provider_load (IdeConfigurationProvider *provider, IdeConfigurationManager *manager);
 static void ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provider, IdeConfigurationManager *manager);
 
 static void
@@ -511,11 +509,13 @@ ide_buildconfig_configuration_provider_load_cb (GObject      *object,
   IdeBuildconfigConfigurationProvider *self;
   g_autoptr(GPtrArray) ar = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (object));
   g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
 
   ar = g_task_propagate_pointer (G_TASK (result), &error);
   self = g_task_get_source_object (G_TASK (result));
@@ -544,33 +544,55 @@ ide_buildconfig_configuration_provider_load_cb (GObject      *object,
   self->configurations = g_steal_pointer (&ar);
 
   if (error != NULL)
-    g_warning ("Failed to restore configuration: %s", error->message);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
 
 static void
-ide_buildconfig_configuration_provider_load (IdeConfigurationProvider *provider,
-                                             IdeConfigurationManager  *manager)
+ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *provider,
+                                                   IdeConfigurationManager  *manager,
+                                                   GCancellable             *cancellable,
+                                                   GAsyncReadyCallback       callback,
+                                                   gpointer                  user_data)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  g_autoptr(GTask) parent_task = NULL;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ide_set_weak_pointer (&self->manager, manager);
 
-  self->cancellable = g_cancellable_new ();
+  /* This task is needed so the caller knows when the load finishes */
+  parent_task = g_task_new (self, cancellable, callback, user_data);
 
-  task = g_task_new (self, self->cancellable, ide_buildconfig_configuration_provider_load_cb, NULL);
-  g_task_set_source_tag (task, ide_buildconfig_configuration_provider_load);
+  /* This task is used to run the load_worker in its own thread */
+  task = g_task_new (self, cancellable, ide_buildconfig_configuration_provider_load_cb, g_steal_pointer (&parent_task));
+  g_task_set_source_tag (task, ide_buildconfig_configuration_provider_load_async);
   g_task_set_task_data (task, g_object_ref (manager), g_object_unref);
   g_task_run_in_thread (task, ide_buildconfig_configuration_provider_load_worker);
 
   IDE_EXIT;
+}
+
+gboolean
+ide_buildconfig_configuration_provider_load_finish (IdeConfigurationProvider  *provider,
+                                                    GAsyncResult              *result,
+                                                    GError                   **error)
+{
+  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+
+  g_return_val_if_fail (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
@@ -598,13 +620,25 @@ ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provide
 
   g_clear_pointer (&self->configurations, g_ptr_array_unref);
 
-  if (self->cancellable != NULL)
-    g_cancellable_cancel (self->cancellable);
-  g_clear_object (&self->cancellable);
-
   ide_clear_weak_pointer (&self->manager);
 
   IDE_EXIT;
+}
+
+void
+ide_buildconfig_configuration_provider_track_config (IdeBuildconfigConfigurationProvider *self,
+                                                     IdeBuildconfigConfiguration         *config)
+{
+  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_return_if_fail (IDE_IS_BUILDCONFIG_CONFIGURATION (config));
+
+  g_signal_connect_object (config,
+                           "changed",
+                           G_CALLBACK (ide_buildconfig_configuration_provider_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_ptr_array_add (self->configurations, config);
 }
 
 static void
@@ -620,7 +654,8 @@ ide_buildconfig_configuration_provider_init (IdeBuildconfigConfigurationProvider
 static void
 configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
 {
-  iface->load = ide_buildconfig_configuration_provider_load;
+  iface->load_async = ide_buildconfig_configuration_provider_load_async;
+  iface->load_finish = ide_buildconfig_configuration_provider_load_finish;
   iface->unload = ide_buildconfig_configuration_provider_unload;
   iface->save_async = ide_buildconfig_configuration_provider_save_async;
   iface->save_finish = ide_buildconfig_configuration_provider_save_finish;

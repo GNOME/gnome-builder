@@ -30,6 +30,9 @@
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-provider.h"
 
+#include "buildconfig/ide-buildconfig-configuration.h"
+#include "buildconfig/ide-buildconfig-configuration-provider.h"
+
 struct _IdeConfigurationManager
 {
   GObject           parent_instance;
@@ -37,6 +40,8 @@ struct _IdeConfigurationManager
   GPtrArray        *configurations;
   IdeConfiguration *current;
   PeasExtensionSet *extensions;
+  GCancellable     *cancellable;
+  guint             providers_loading;
 };
 
 static void async_initable_iface_init           (GAsyncInitableIface *iface);
@@ -65,19 +70,24 @@ static guint signals [N_SIGNALS];
 static void
 ide_configuration_manager_add_default (IdeConfigurationManager *self)
 {
-  g_autoptr(IdeConfiguration) config = NULL;
+  g_autoptr(IdeBuildconfigConfiguration) config = NULL;
   IdeContext *context;
 
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  config = ide_configuration_new (context, "default", "local", "host");
-  ide_configuration_set_display_name (config, _("Default"));
-  ide_configuration_manager_add (self, config);
+  config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
+                         "id", "default",
+                         "context", context,
+                         "device-id", "local",
+                         "runtime-id", "host",
+                         NULL);
+  ide_configuration_set_display_name (IDE_CONFIGURATION (config), _("Default"));
+  ide_configuration_manager_add (self, IDE_CONFIGURATION (config));
 
   if (self->configurations->len == 1)
-    ide_configuration_manager_set_current (self, config);
+    ide_configuration_manager_set_current (self, IDE_CONFIGURATION (config));
 }
 
 static void
@@ -254,6 +264,10 @@ ide_configuration_manager_finalize (GObject *object)
       g_clear_object (&self->current);
     }
 
+  if (self->cancellable != NULL)
+    g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+
   G_OBJECT_CLASS (ide_configuration_manager_parent_class)->finalize (object);
 }
 
@@ -383,6 +397,79 @@ list_model_iface_init (GListModelInterface *iface)
 }
 
 static void
+ide_configuration_manager_track_buildconfig (PeasExtensionSet *set,
+                                             PeasPluginInfo   *plugin_info,
+                                             PeasExtension    *exten,
+                                             gpointer          user_data)
+{
+  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)exten;
+  IdeConfiguration *config = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+
+  if (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (provider) && config != NULL)
+    ide_buildconfig_configuration_provider_track_config ((IdeBuildconfigConfigurationProvider *)provider,
+                                                         (IdeBuildconfigConfiguration *)g_object_ref (config));
+}
+
+static void
+ide_configuration_manager_load_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeConfigurationProvider *provider = (IdeConfigurationProvider *)object;
+  IdeConfigurationManager *self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
+  g_assert (G_IS_TASK (result));
+
+  if (!ide_configuration_provider_load_finish (provider, result, &error))
+    g_warning ("%s: %s", G_OBJECT_TYPE_NAME (provider), error->message);
+
+  self->providers_loading--;
+  if (self->providers_loading == 0)
+    {
+      IdeConfiguration *default_config;
+      gboolean restored_buildconfig = FALSE;
+
+      for (guint i = 0; i < self->configurations->len; i++)
+        {
+          IdeConfiguration *configuration = g_ptr_array_index (self->configurations, i);
+
+          if (IDE_IS_BUILDCONFIG_CONFIGURATION (configuration) &&
+              g_strcmp0 ("default", ide_configuration_get_id (configuration)) != 0)
+            restored_buildconfig = TRUE;
+        }
+
+      /*
+       * If the default config was added by the manager rather than the provider,
+       * let the provider know about it so changes are persisted to the disk.
+       */
+      default_config = ide_configuration_manager_get_configuration (self, "default");
+      if (!restored_buildconfig)
+        {
+          if (default_config == NULL)
+            {
+              ide_configuration_manager_add_default (self);
+              default_config = ide_configuration_manager_get_configuration (self, "default");
+            }
+
+          peas_extension_set_foreach (self->extensions,
+                                      ide_configuration_manager_track_buildconfig,
+                                      default_config);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_configuration_manager_extension_added (PeasExtensionSet *set,
                                            PeasPluginInfo   *plugin_info,
                                            PeasExtension    *exten,
@@ -395,7 +482,12 @@ ide_configuration_manager_extension_added (PeasExtensionSet *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
 
-  ide_configuration_provider_load (provider, self);
+  self->providers_loading++;
+  ide_configuration_provider_load_async (provider,
+                                         self,
+                                         self->cancellable,
+                                         ide_configuration_manager_load_cb,
+                                         self);
 }
 
 static void
@@ -431,6 +523,10 @@ ide_configuration_manager_init_worker (GTask        *task,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
+
+  self->providers_loading = 0;
+
+  self->cancellable = g_cancellable_new ();
 
   self->extensions = peas_extension_set_new (peas_engine_get_default (),
                                              IDE_TYPE_CONFIGURATION_PROVIDER,
@@ -566,6 +662,15 @@ ide_configuration_manager_add (IdeConfigurationManager *self,
 
   g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (self));
   g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
+
+  /* Allow the default config to be overridden by one from a provider */
+  if (g_strcmp0 ("default", ide_configuration_get_id (configuration)) == 0)
+    {
+      IdeConfiguration *default_config;
+      default_config = ide_configuration_manager_get_configuration (self, "default");
+      if (default_config != NULL)
+        g_ptr_array_remove_fast (self->configurations, default_config);
+    }
 
   position = self->configurations->len;
   g_ptr_array_add (self->configurations, g_object_ref (configuration));
