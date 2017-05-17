@@ -7987,30 +7987,35 @@ ide_source_view_push_snippet (IdeSourceView     *self,
   ide_source_view_unblock_handlers (self);
   gtk_text_buffer_end_user_action (buffer);
 
-  {
-    GtkTextMark *mark_begin;
-    GtkTextMark *mark_end;
-    GtkTextIter begin;
-    GtkTextIter end;
+  if (!ide_source_view_can_animate (self))
+    {
+      GtkTextMark *mark_begin;
+      GtkTextMark *mark_end;
 
-    mark_begin = ide_source_snippet_get_mark_begin (snippet);
-    mark_end = ide_source_snippet_get_mark_end (snippet);
+      mark_begin = ide_source_snippet_get_mark_begin (snippet);
+      mark_end = ide_source_snippet_get_mark_end (snippet);
 
-    gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark_begin);
-    gtk_text_buffer_get_iter_at_mark (buffer, &end, mark_end);
+      if (mark_begin != NULL && mark_end != NULL)
+        {
+          GtkTextIter begin;
+          GtkTextIter end;
 
-    /*
-     * HACK:
-     *
-     * We need to let the GtkTextView catch up with us so that we can get a realistic area back for
-     * the location of the end iter.  Without pumping the main loop, GtkTextView will clamp the
-     * result to the height of the insert line.
-     */
-    while (gtk_events_pending ())
-      gtk_main_iteration ();
+          gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark_begin);
+          gtk_text_buffer_get_iter_at_mark (buffer, &end, mark_end);
 
-    animate_expand (self, &begin, &end);
-  }
+          /*
+           * HACK:
+           *
+           * We need to let the GtkTextView catch up with us so that we can get a realistic area back for
+           * the location of the end iter.  Without pumping the main loop, GtkTextView will clamp the
+           * result to the height of the insert line.
+           */
+          while (gtk_events_pending ())
+            gtk_main_iteration ();
+
+          animate_expand (self, &begin, &end);
+        }
+    }
 
   if (!has_more_tab_stops)
     ide_source_view_pop_snippet (self);
