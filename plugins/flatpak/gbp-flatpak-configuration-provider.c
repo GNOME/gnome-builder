@@ -398,9 +398,12 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                   if (!config_opts_replaced && new_config_opts != NULL)
                     {
                       gchar *previous_line;
+                      gchar *new_line;
 
-                      previous_line = (gchar *)g_ptr_array_remove_index (new_lines, new_lines->len - 1);
-                      g_ptr_array_add (new_lines, g_strdup_printf ("%s,", previous_line));
+                      previous_line = (gchar *)g_ptr_array_index (new_lines, new_lines->len - 1);
+                      new_line = g_strdup_printf ("%s,", previous_line);
+                      g_ptr_array_remove_index (new_lines, new_lines->len - 1);
+                      g_ptr_array_add (new_lines, new_line);
                       right_curly_brace_line = line;
                       line = g_strdup_printf ("%s\"config-opts\": []", primary_module_indent);
                     }
