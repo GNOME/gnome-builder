@@ -69,6 +69,9 @@ IdeSymbolNode            *ide_xml_symbol_node_get_nth_internal_child        (Ide
 IdeXmlSymbolNode         *ide_xml_symbol_node_get_parent                    (IdeXmlSymbolNode       *self);
 const gchar              *ide_xml_symbol_node_get_value                     (IdeXmlSymbolNode       *self);
 gboolean                  ide_xml_symbol_node_has_end_tag                   (IdeXmlSymbolNode       *self);
+void                      ide_xml_symbol_node_print                         (IdeXmlSymbolNode       *self,
+                                                                             gboolean                show_value,
+                                                                             gboolean                show_attributes);
 void                      ide_xml_symbol_node_set_location                  (IdeXmlSymbolNode       *self,
                                                                              GFile                  *file,
                                                                              gint                    start_line,

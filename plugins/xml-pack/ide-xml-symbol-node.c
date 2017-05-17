@@ -661,3 +661,28 @@ ide_xml_symbol_node_get_attributes_names (IdeXmlSymbolNode  *self)
 
   return (const gchar **)self->attributes_names;
 }
+
+void
+ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
+                           gboolean           show_value,
+                           gboolean           show_attributes)
+{
+  gchar **attributes = self->attributes_names;
+
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+
+  printf ("%s(%d:%d->%d:%d)\n",
+          self->element_name,
+          self->start_tag.start_line, self->start_tag.start_line_offset,
+          self->end_tag.start_line, self->end_tag.start_line_offset);
+
+  if (show_attributes && self->attributes_names != NULL)
+    while (*attributes != NULL)
+      {
+        printf ("%s\n", *attributes);
+        ++attributes;
+      }
+
+  if (show_value && self->value != NULL)
+    printf ("\t%s\n", self->value);
+}
