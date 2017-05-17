@@ -21,53 +21,36 @@
 G_DEFINE_BOXED_TYPE (IdeXmlPath, ide_xml_path, ide_xml_path_ref, ide_xml_path_unref)
 
 void
-ide_xml_path_append_node (IdeXmlPath *self,
-                          xmlNode    *node)
+ide_xml_path_append_node (IdeXmlPath       *self,
+                          IdeXmlSymbolNode *node)
 {
   g_return_if_fail (self);
-  g_return_if_fail (node);
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (node));
 
-  g_ptr_array_add (self->nodes, node);
+  g_ptr_array_add (self->nodes, g_object_ref (node));
 }
 
 void
-ide_xml_path_prepend_node (IdeXmlPath *self,
-                           xmlNode    *node)
+ide_xml_path_prepend_node (IdeXmlPath       *self,
+                           IdeXmlSymbolNode *node)
 {
   g_return_if_fail (self);
-  g_return_if_fail (node);
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (node));
 
-  g_ptr_array_insert (self->nodes, 0, node);
+  g_ptr_array_insert (self->nodes, 0, g_object_ref (node));
 }
 
 void
 ide_xml_path_dump (IdeXmlPath *self)
 {
-  xmlNode *node;
-  const gchar *type_name;
+  IdeXmlSymbolNode *node;
 
   g_return_if_fail (self);
 
   for (gint i = 0; i < self->nodes->len; ++i)
     {
       node = g_ptr_array_index (self->nodes, i);
-      if (node->type == XML_ELEMENT_NODE)
-        type_name = "element";
-      else if (node->type == XML_ATTRIBUTE_NODE)
-        type_name = "attribute";
-      else if (node->type == XML_TEXT_NODE)
-        type_name = "text";
-      else if (node->type == XML_CDATA_SECTION_NODE)
-        type_name = "cdata";
-      else if (node->type == XML_PI_NODE)
-        type_name = "PI";
-      else
-        type_name = "----";
-
-      if (node->name != NULL)
-        printf ("%s: %s\n", type_name, node->name);
-      else
-        printf ("%s\n", type_name);
+      ide_xml_symbol_node_print (node, TRUE, TRUE);
     }
 }
 
@@ -79,25 +62,25 @@ ide_xml_path_new (void)
   self = g_slice_new0 (IdeXmlPath);
   self->ref_count = 1;
 
-  self->nodes = g_ptr_array_sized_new (8);
+  self->nodes = g_ptr_array_new_full (8, g_object_unref);
 
   return self;
 }
 
 IdeXmlPath *
-ide_xml_path_new_from_node (xmlNode *node)
+ide_xml_path_new_from_node (IdeXmlSymbolNode *node)
 {
   IdeXmlPath *self;
 
   g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (node, NULL);
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (node), NULL);
 
   self = ide_xml_path_new ();
 
   do
     {
       ide_xml_path_append_node (self, node);
-      node = node->parent;
+      //node = node->parent;
     } while (node != NULL);
 
   return self;
