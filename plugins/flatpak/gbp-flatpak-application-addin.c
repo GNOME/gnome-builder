@@ -681,10 +681,16 @@ gbp_flatpak_application_addin_has_runtime (GbpFlatpakApplicationAddin *self,
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
-  g_assert (id != NULL);
-  g_assert (arch != NULL);
-  g_assert (branch != NULL);
+  g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
+
+  if (id == NULL)
+    return FALSE;
+
+  if (arch == NULL)
+    arch = flatpak_get_default_arch ();
+
+  if (branch == NULL)
+    branch = "master";
 
   IDE_TRACE_MSG ("Looking for runtime %s/%s/%s", id, arch, branch);
 
