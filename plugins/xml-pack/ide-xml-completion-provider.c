@@ -21,6 +21,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-xml-completion-provider.h"
+#include "ide-xml-path.h"
 #include "ide-xml-position.h"
 #include "ide-xml-service.h"
 
@@ -66,6 +67,31 @@ populate_state_free (PopulateState *state)
   g_object_unref (state->buffer);
 }
 
+static IdeXmlPath *
+get_path (IdeXmlSymbolNode *node,
+          IdeXmlSymbolNode *root_node)
+{
+  IdeXmlPath *path;
+  IdeXmlSymbolNode *current = node;
+
+  g_assert (IDE_IS_XML_SYMBOL_NODE (node));
+  g_assert (IDE_IS_XML_SYMBOL_NODE (root_node));
+
+  path = ide_xml_path_new ();
+  while (current != NULL && current != root_node)
+    {
+      ide_xml_path_prepend_node (path, current);
+      current = ide_xml_symbol_node_get_parent (current);
+    }
+
+  if (current == root_node)
+    ide_xml_path_prepend_node (path, current);
+  else
+    g_warning ("partial path, we don't reach the root node");
+
+  return path;
+}
+
 static void
 populate_cb (GObject      *object,
              GAsyncResult *result,
@@ -75,6 +101,10 @@ populate_cb (GObject      *object,
   PopulateState *state = (PopulateState *)user_data;
   IdeXmlCompletionProvider *self = state->self;
   g_autoptr (IdeXmlPosition) position = NULL;
+  IdeXmlSymbolNode *root_node, *node;
+  IdeXmlAnalysis *analysis;
+  IdeXmlPositionKind kind;
+  IdeXmlPath *path;
   GtkSourceCompletionItem *item;
   g_autofree gchar *text = NULL;
   g_autofree gchar *label = NULL;
@@ -85,6 +115,13 @@ populate_cb (GObject      *object,
   g_assert (IDE_IS_XML_SERVICE (service));
 
   position = ide_xml_service_get_position_from_cursor_finish (service, result, &error);
+  analysis = ide_xml_position_get_analysis (position);
+  root_node = ide_xml_analysis_get_root_node (analysis);
+  node = ide_xml_position_get_node (position);
+  kind = ide_xml_position_get_kind (position);
+
+  path = get_path (node, root_node);
+
   text = g_strdup ("xml item text");
   label = g_strdup ("xml item label");
   item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
@@ -92,8 +129,8 @@ populate_cb (GObject      *object,
                        "label", label,
                        NULL);
 
-  /* TODO: show position content for debug */
   ide_xml_position_print (position);
+  ide_xml_path_dump (path);
 
   results = g_list_prepend (results, item);
   gtk_source_completion_context_add_proposals (state->completion_context,
