@@ -549,26 +549,28 @@ position_state_free (PositionState *state)
 }
 
 static IdeXmlPosition *
-get_position (IdeXmlService     *self,
-              IdeXmlSymbolNode  *root_node,
-              gint               line,
-              gint               line_offset)
+get_position (IdeXmlService   *self,
+              IdeXmlAnalysis  *analysis,
+              gint             line,
+              gint             line_offset)
 {
   IdeXmlPosition *position = NULL;
+  IdeXmlSymbolNode *root_node;
   IdeXmlPositionKind kind;
   IdeXmlPositionKind candidate_kind = IDE_XML_POSITION_KIND_UNKNOW;
-  IdeXmlSymbolNode *current_node = root_node;
+  IdeXmlSymbolNode *current_node;
   IdeXmlSymbolNode *parent_node = NULL;
   IdeXmlSymbolNode *child_node;
   IdeXmlSymbolNode *candidate_node = root_node;
   IdeXmlSymbolNode *previous_sibling_node = NULL;
   IdeXmlSymbolNode *next_sibling_node = NULL;
-  gint n_children;
+  guint n_children;
   gint n = 0;
 
   g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (IDE_IS_XML_SYMBOL_NODE (root_node));
+  g_assert (analysis != NULL);
 
+  current_node = root_node = ide_xml_analysis_get_root_node (analysis);
   while (TRUE)
     {
 loop:
@@ -611,6 +613,8 @@ loop:
 
 result:
   position = ide_xml_position_new (candidate_node, candidate_kind);
+  ide_xml_position_set_analysis (position, analysis);
+
   if (parent_node != NULL)
     {
       n_children = ide_xml_symbol_node_get_n_direct_children (parent_node);
@@ -637,8 +641,8 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
   IdeXmlService *self = (IdeXmlService *)object;
   PositionState *state = (PositionState *)user_data;
   g_autoptr(GTask) task = state->task;
-  g_autoptr(IdeXmlSymbolNode) root_node = NULL;
   IdeXmlPosition *position;
+  IdeXmlAnalysis *analysis = NULL;
   GError *error = NULL;
 
   IDE_ENTRY;
@@ -646,10 +650,10 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_XML_SERVICE (self));
 
-  root_node = ide_xml_service_get_root_node_finish (self, result, &error);
-  if (root_node != NULL)
+  analysis = ide_xml_service_get_analysis_finish (self, result, &error);
+  if (analysis != NULL)
     {
-      position = get_position (self, root_node, state->line, state->line_offset);
+      position = get_position (self, analysis, state->line, state->line_offset);
       g_task_return_pointer (task, position, g_object_unref);
     }
   else
@@ -689,12 +693,12 @@ ide_xml_service_get_position_from_cursor_async (IdeXmlService       *self,
   state->line = line;
   state->line_offset = line_offset;
 
-  ide_xml_service_get_root_node_async (self,
-                                       ifile,
-                                       buffer,
-                                       cancellable,
-                                       ide_xml_service_get_position_from_cursor_cb,
-                                       state);
+  ide_xml_service_get_analysis_async (self,
+                                      ifile,
+                                      buffer,
+                                      cancellable,
+                                      ide_xml_service_get_position_from_cursor_cb,
+                                      state);
 
   IDE_EXIT;
 }
