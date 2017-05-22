@@ -10,34 +10,34 @@ msgstr ""
 "Project-Id-Version: gnome-builder 3.24\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-04-05 07:20+0000\n"
-"PO-Revision-Date: 2017-04-05 23:58+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"POT-Creation-Date: 2017-05-18 03:16+0000\n"
+"PO-Revision-Date: 2017-05-21 10:42+0200\n"
+"Last-Translator: Meskó Balázs <meskobalazs@fedoraproject.org>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Poedit 2.0.2\n"
 
-#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
+#: contrib/egg/egg-animation.c:730 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "A(z) %s tulajdonság nem található a(z) %s osztályban"
 
-#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/egg/egg-animation.c:1077 contrib/egg/egg-animation.c:1083
 #: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Nem található a(z) %s tulajdonság itt: %s"
 
-#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
+#: contrib/egg/egg-animation.c:1091 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Nem található a(z) %s tulajdonság itt: %s, vagy a szülőben: %s"
 
-#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
+#: contrib/egg/egg-animation.c:1101 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "A va_list érték lekérése meghiúsult: %s"
@@ -303,7 +303,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5861
+#: libide/sourceview/ide-source-view.c:5866
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Átnevezés"
@@ -357,6 +357,18 @@ msgid ""
 msgstr ""
 "Dolgozók száma az összeállítások elvégzésekor. -1 az értelmes "
 "alapbeállításokhoz, 0 a CPU-k számához."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Allow network when metered"
+msgstr "Hálózat engedélyezése forgalomkorlátos kapcsolaton"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"Az automatizált adatátvitelek engedélyezése, mint például az SDK-k és "
+"függőségek letöltése, forgalomkorlátos kapcsolat esetén is."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Suggest Snippet Completion"
@@ -585,7 +597,7 @@ msgid "Search directories for projects."
 msgstr "Mappák átvizsgálása projektek után."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Projects directory"
 msgstr "Projektek mappa"
 
@@ -754,11 +766,11 @@ msgstr "Új_ra"
 msgid "C_ut"
 msgstr "_Kivágás"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:33
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:32
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:37
 msgid "_Paste"
 msgstr "_Beillesztés"
 
@@ -774,15 +786,15 @@ msgstr "Kiemelés"
 msgid "Spellchecking"
 msgstr "Helyesírás-ellenőrzés"
 
-#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
+#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:43
 msgid "Selection"
 msgstr "Kijelölés"
 
-#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:40
+#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:45
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:45
+#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:50
 msgid "Select _None"
 msgstr "Kijelölés _megszüntetése"
 
@@ -1148,7 +1160,11 @@ msgstr "Előkészítés…"
 msgid "Ready"
 msgstr "Kész"
 
-#: libide/buildsystem/ide-configuration-manager.c:76
+#: libide/buildsystem/ide-build-stage-transfer.c:108
+msgid "Cannot execute transfer while on metered connection"
+msgstr "Nem hajtható végre az átvitel forgalomkorlátos kapcsolaton"
+
+#: libide/buildsystem/ide-configuration-manager.c:86
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1206,7 +1222,7 @@ msgstr "Futtatókörnyezet"
 msgid "Environment"
 msgstr "Környezet"
 
-#: libide/buildui/ide-build-log-panel.c:732
+#: libide/buildui/ide-build-log-panel.c:736
 msgid "Build Output"
 msgstr "Összeállítás kimenete"
 
@@ -2448,45 +2464,61 @@ msgstr "Építők"
 msgid "Number of parallel build workers"
 msgstr "Párhuzamos építők száma"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:386
+msgid "Network"
+msgstr "Hálózat"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid "Allow downloads over metered connections"
+msgstr "Letöltések engedélyezése forgalomkorlátos kapcsolaton"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+"A forgalomkorlátos kapcsolatok használatának engedélyezése a függőségek "
+"automatikus letöltésekor"
+
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "Projects"
 msgstr "Projektek"
 
-#: libide/preferences/ide-preferences-builtin.c:392
+#: libide/preferences/ide-preferences-builtin.c:395
 msgid "Workspace"
 msgstr "Munkaterület"
 
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "A place for all your projects"
 msgstr "Az összes projektjének helye"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Restore previously opened files"
 msgstr "Korábban megnyitott fájlok visszaállítása"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Open previously opened files when loading a project"
 msgstr "Korábban megnyitott fájlok megnyitása projekt betöltésekor"
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Project Discovery"
 msgstr "Projektek feltérképezése"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Discover projects on my computer"
 msgstr "A számítógépen lévő projektek feltérképezése"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Scan your computer for existing projects"
 msgstr "Átvizsgálja a számítógépet meglévő projektek után"
 
-#: libide/preferences/ide-preferences-builtin.c:518
+#: libide/preferences/ide-preferences-builtin.c:521
 #: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "Version Control"
 msgstr "Verziókövetés"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:530
+#: libide/preferences/ide-preferences-builtin.c:533
 msgid "SDKs"
 msgstr "SDK-k"
 
@@ -2531,7 +2563,7 @@ msgstr "Futtatás"
 msgid "Cannot run target, another target is running"
 msgstr "A cél nem futtatható, egy másik cél már fut"
 
-#: libide/runner/ide-run-manager.c:324
+#: libide/runner/ide-run-manager.c:319
 msgid "Failed to locate runtime"
 msgstr "A futtatókörnyezet nem található"
 
@@ -2561,32 +2593,31 @@ msgstr "A(z) „%s” könyvtár megnyitása meghiúsult"
 msgid "Failed to load file: %s: %s"
 msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
 
-#: libide/sourceview/ide-source-view.c:5317
+#: libide/sourceview/ide-source-view.c:5322
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: libide/sourceview/ide-source-view.c:5319
+#: libide/sourceview/ide-source-view.c:5324
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: libide/sourceview/ide-source-view.c:5433
+#: libide/sourceview/ide-source-view.c:5438
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: libide/sourceview/ide-source-view.c:5860
+#: libide/sourceview/ide-source-view.c:5865
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6099
+#: libide/sourceview/ide-source-view.c:6104
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u. sor, %u. oszlop</small>"
 
-#: libide/sourceview/ide-source-view.c:6125
-#| msgid "No projects found"
+#: libide/sourceview/ide-source-view.c:6130
 msgid "No references were found"
 msgstr "Nem találhatók hivatkozások"
 
@@ -3317,20 +3348,20 @@ msgid "Update"
 msgstr "Frissítés"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:297
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:312
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Még %u futtatókörnyezet megjelenítése"
 msgstr[1] "Még %u futtatókörnyezet megjelenítése"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:382
 msgid "Flatpak Runtimes"
 msgstr "Flatpak futtatókörnyezetek"
 
@@ -3510,7 +3541,6 @@ msgid "Your computer is missing python3-docutils"
 msgstr "A python3-docutils hiányzik a számítógépéről"
 
 #: plugins/html-preview/html_preview_plugin/__init__.py:309
-#| msgid "Your computer is missing python3-docutils"
 msgid "Your computer is missing python3-sphinx"
 msgstr "A python3-sphinx hiányzik a számítógépéről"
 
@@ -3868,15 +3898,19 @@ msgstr "Futtatás kimenete"
 msgid "_New Terminal"
 msgstr "Új _terminál"
 
-#: plugins/terminal/gtk/menus.ui:15
+#: plugins/terminal/gtk/menus.ui:11
+msgid "_New Runtime Terminal"
+msgstr "Új _futtatókörnyezeti terminál"
+
+#: plugins/terminal/gtk/menus.ui:20
 msgid "_Open Link"
 msgstr "Hi_vatkozás megnyitása"
 
-#: plugins/terminal/gtk/menus.ui:20
+#: plugins/terminal/gtk/menus.ui:25
 msgid "_Copy Link Address"
 msgstr "Hivatkozás _címének másolása"
 
-#: plugins/todo/todo_plugin/__init__.py:195
+#: plugins/todo/todo_plugin/__init__.py:196
 msgid "Todo"
 msgstr "Tennivalók"
 
@@ -3905,4 +3939,3 @@ msgstr "Puffer betöltve, de nincs a pufferkezelőben."
 #: plugins/xml-pack/ide-xml-tree-builder.c:204
 msgid "Failed to create the XML tree."
 msgstr "Az XML fa létrehozása meghiúsult."
-
