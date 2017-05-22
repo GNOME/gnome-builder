@@ -59,12 +59,12 @@ ide_xml_analysis_get_root_node (IdeXmlAnalysis *self)
 
 /**
  * ide_xml_analysis_get_schemas:
- * @self: A #GArray.
+ * @self: A #GPtrArray.
  *
- * Returns: (nullable) (transfer none): The schemas entries #GArray contained by the analysis.
+ * Returns: (nullable) (transfer none): The schemas entries #GPtrArray contained by the analysis.
  *
  */
-GArray *
+GPtrArray *
 ide_xml_analysis_get_schemas (IdeXmlAnalysis *self)
 {
   g_return_val_if_fail (self, NULL);
@@ -96,14 +96,14 @@ ide_xml_analysis_set_root_node (IdeXmlAnalysis   *self,
 
 void
 ide_xml_analysis_set_schemas (IdeXmlAnalysis *self,
-                              GArray         *schemas)
+                              GPtrArray      *schemas)
 {
   g_return_if_fail (self != NULL);
 
-  g_clear_pointer (&self->schemas, g_array_unref);
+  g_clear_pointer (&self->schemas, g_ptr_array_unref);
 
   if (schemas != NULL)
-    self->schemas = g_array_ref (schemas);
+    self->schemas = g_ptr_array_ref (schemas);
 }
 
 void

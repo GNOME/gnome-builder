@@ -21,12 +21,13 @@
 #include <glib.h>
 #include <ide.h>
 
+#include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-symbol-node.h"
 #include "ide-xml-validator.h"
 
 G_BEGIN_DECLS
 
-const gchar  *get_schema_kind_string     (SchemaKind          kind);
+const gchar  *get_schema_kind_string     (IdeXmlSchemaKind    kind);
 gchar        *get_schema_url             (const gchar        *data);
 const gchar  *list_get_attribute         (const guchar      **attributes,
                                           const gchar        *name);

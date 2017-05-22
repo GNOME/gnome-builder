@@ -20,8 +20,10 @@
 #define IDE_XML_VALIDATOR_H
 
 #include <glib-object.h>
-#include <ide.h>
 #include <libxml/parser.h>
+
+#include <ide.h>
+#include "ide-xml-schema-cache-entry.h"
 
 G_BEGIN_DECLS
 
@@ -29,28 +31,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlValidator, ide_xml_validator, IDE, XML_VALIDATOR, IdeObject)
 
-typedef enum
-{
-  SCHEMA_KIND_NONE,
-  SCHEMA_KIND_DTD,
-  SCHEMA_KIND_RNG,
-  SCHEMA_KIND_XML_SCHEMA,
-} SchemaKind;
-
-typedef struct _SchemaEntry
-{
-  GFile      *schema_file;
-  GBytes     *schema_content;
-  gchar      *error_message;
-  SchemaKind  schema_kind;
-  gint32      schema_line;
-  gint32      schema_col;
-} SchemaEntry;
-
 IdeXmlValidator       *ide_xml_validator_new        (IdeContext       *context);
-SchemaKind             ide_xml_validator_get_kind   (IdeXmlValidator  *self);
+IdeXmlSchemaKind       ide_xml_validator_get_kind   (IdeXmlValidator  *self);
 gboolean               ide_xml_validator_set_schema (IdeXmlValidator  *self,
-                                                     SchemaKind        kind,
+                                                     IdeXmlSchemaKind  kind,
                                                      const gchar      *data,
                                                      gsize             size);
 

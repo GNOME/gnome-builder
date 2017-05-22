@@ -24,6 +24,7 @@
 #include <math.h>
 
 #include "ide-xml-analysis.h"
+#include "ide-xml-rng-parser.h"
 #include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-tree-builder.h"
 #include "ide-xml-types.h"
@@ -106,32 +107,99 @@ ide_xml_service_build_tree_cb (DzlTaskCache  *cache,
   IDE_EXIT;
 }
 
+typedef struct
+{
+  IdeXmlService          *self;
+  GTask                  *task;
+  IdeXmlSchemaCacheEntry *cache_entry;
+} SchemaState;
+
+/* Parse schema phase */
 static void
-ide_xml_service_load_schema_cb2 (GObject      *object,
+ide_xml_service_load_schema_cb3 (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
   GFile *file = (GFile *)object;
-  g_autoptr(GTask) task = user_data;
+  SchemaState *state = (SchemaState *)user_data;
+  GTask *task;
+  IdeXmlSchema *schema;
+  g_autoptr (IdeXmlRngParser) rng_parser = NULL;
   IdeXmlSchemaCacheEntry *cache_entry;
+  IdeXmlSchemaKind kind;
   GError *error = NULL;
   gchar *content;
   gsize len;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (state != NULL);
 
-  cache_entry = ide_xml_schema_cache_entry_new ();
+  task = state->task;
+  cache_entry = state->cache_entry;
+  kind = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (file), "kind"));
 
   if (!g_file_load_contents_finish (file, result, &content, &len, NULL, &error))
-    cache_entry->error_message = g_strdup (error->message);
+    {
+      cache_entry->error_message = g_strdup (error->message);
+      cache_entry->state = SCHEMA_STATE_CANT_LOAD;
+    }
   else
-    cache_entry->content = g_bytes_new_take (content, len);
+    {
+      cache_entry->content = g_bytes_new_take (content, len);
+      if (kind == SCHEMA_KIND_RNG)
+        {
+          rng_parser = ide_xml_rng_parser_new ();
+          if (NULL != (schema = ide_xml_rng_parser_parse (rng_parser, content, len, file)))
+            {
+              cache_entry->schema = schema;
+              cache_entry->state = SCHEMA_STATE_PARSED;
+            }
+          else
+            {
+              /* TODO: get parse error ? */
+              g_clear_pointer (&cache_entry->content, g_bytes_unref);
+              cache_entry->state = SCHEMA_STATE_CANT_PARSE;
+            }
+        }
+      else
+        {
+          /* TODO: set error message */
+          g_clear_pointer (&cache_entry->content, g_bytes_unref);
+          cache_entry->state = SCHEMA_STATE_WRONG_FILE_TYPE;
+        }
+    }
 
+  g_object_unref (state->task);
+  g_slice_free (SchemaState, state);
   g_task_return_pointer (task, cache_entry, (GDestroyNotify)ide_xml_schema_cache_entry_unref);
 }
 
+/* Get content phase */
+static void
+ide_xml_service_load_schema_cb2 (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  SchemaState *state = (SchemaState *)user_data;
+  g_autoptr (GFileInfo) file_info = NULL;
+  GError *error = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_TASK (result));
+  g_assert (state != NULL);
+
+  if (NULL != (file_info = g_file_query_info_finish (file, result, &error)))
+    state->cache_entry->mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  g_file_load_contents_async (file,
+                              g_task_get_cancellable (state->task),
+                              ide_xml_service_load_schema_cb3,
+                              state);
+}
+
+/* Get mtime phase */
 static void
 ide_xml_service_load_schema_cb (DzlTaskCache  *cache,
                                 gconstpointer  key,
@@ -140,6 +208,7 @@ ide_xml_service_load_schema_cb (DzlTaskCache  *cache,
 {
   IdeXmlService *self = user_data;
   GFile *file = (GFile *)key;
+  SchemaState *state;
 
   IDE_ENTRY;
 
@@ -148,10 +217,20 @@ ide_xml_service_load_schema_cb (DzlTaskCache  *cache,
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_FILE (file));
 
-  g_file_load_contents_async (file,
-                              g_task_get_cancellable (task),
-                              ide_xml_service_load_schema_cb2,
-                              g_object_ref (task));
+  state = g_slice_new0 (SchemaState);
+  state->self = self;
+  state->task = g_object_ref (task);
+  state->cache_entry = ide_xml_schema_cache_entry_new ();
+
+  state->cache_entry->file = g_object_ref (file);
+
+  g_file_query_info_async (file,
+                           G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           g_task_get_cancellable (state->task),
+                           ide_xml_service_load_schema_cb2,
+                           state);
 
   IDE_EXIT;
 }

@@ -74,7 +74,7 @@ typedef struct _ParserState
   const gchar      **attributes;
   BuildState         build_state;
   gint               current_depth;
-  GArray            *schemas;
+  GPtrArray         *schemas;
   gint64             sequence;
 } ParserState;
 

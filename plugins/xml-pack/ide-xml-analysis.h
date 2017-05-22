@@ -35,14 +35,14 @@ struct _IdeXmlAnalysis
   guint             ref_count;
   IdeXmlSymbolNode *root_node;
   IdeDiagnostics   *diagnostics;
-  GArray           *schemas;
+  GPtrArray        *schemas;       // array of IdeXmlSchemaCacheEntry
   gint64            sequence;
 };
 
 IdeDiagnostics     *ide_xml_analysis_get_diagnostics     (IdeXmlAnalysis   *self);
 IdeXmlSymbolNode   *ide_xml_analysis_get_root_node       (IdeXmlAnalysis   *self);
 gint64              ide_xml_analysis_get_sequence        (IdeXmlAnalysis   *self);
-GArray             *ide_xml_analysis_get_schemas         (IdeXmlAnalysis   *self);
+GPtrArray          *ide_xml_analysis_get_schemas         (IdeXmlAnalysis   *self);
 void                ide_xml_analysis_set_diagnostics     (IdeXmlAnalysis   *self,
                                                           IdeDiagnostics   *diagnostics);
 void                ide_xml_analysis_set_root_node       (IdeXmlAnalysis   *self,
@@ -50,7 +50,7 @@ void                ide_xml_analysis_set_root_node       (IdeXmlAnalysis   *self
 void                ide_xml_analysis_set_sequence        (IdeXmlAnalysis   *self,
                                                           gint64            sequence);
 void                ide_xml_analysis_set_schemas         (IdeXmlAnalysis   *self,
-                                                          GArray           *schemas);
+                                                          GPtrArray        *schemas);
 IdeXmlAnalysis     *ide_xml_analysis_new                 (gint64            sequence);
 IdeXmlAnalysis     *ide_xml_analysis_ref                 (IdeXmlAnalysis   *self);
 void                ide_xml_analysis_unref               (IdeXmlAnalysis   *self);

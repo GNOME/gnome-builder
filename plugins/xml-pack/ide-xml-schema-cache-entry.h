@@ -19,7 +19,10 @@
 #ifndef IDE_XML_SCHEMA_CACHE_ENTRY_H
 #define IDE_XML_SCHEMA_CACHE_ENTRY_H
 
-#include <glib-object.h>
+#include <gio/gio.h>
+#include <glib.h>
+
+#include "ide-xml-schema.h"
 
 G_BEGIN_DECLS
 
@@ -27,12 +30,37 @@ G_BEGIN_DECLS
 
 typedef struct _IdeXmlSchemaCacheEntry IdeXmlSchemaCacheEntry;
 
+typedef enum
+{
+  SCHEMA_KIND_NONE,
+  SCHEMA_KIND_DTD,
+  SCHEMA_KIND_RNG,
+  SCHEMA_KIND_XML_SCHEMA,
+} IdeXmlSchemaKind;
+
+typedef enum
+{
+  SCHEMA_STATE_NONE,
+  SCHEMA_STATE_WRONG_FILE_TYPE,
+  SCHEMA_STATE_CANT_LOAD,
+  SCHEMA_STATE_CANT_VALIDATE,
+  SCHEMA_STATE_CANT_PARSE,
+  SCHEMA_STATE_PARSED
+} IdeXmlSchemaState;
+
 struct _IdeXmlSchemaCacheEntry
 {
   guint ref_count;
 
-  GBytes *content;
-  gchar  *error_message;
+  GFile             *file;
+  GBytes            *content;
+  IdeXmlSchema      *schema;
+  gchar             *error_message;
+  IdeXmlSchemaKind   kind;
+  IdeXmlSchemaState  state;
+  gint32             line;
+  gint32             col;
+  guint64            mtime;
 };
 
 IdeXmlSchemaCacheEntry     *ide_xml_schema_cache_entry_new           (void);

@@ -66,6 +66,15 @@ ide_xml_schema_cache_entry_copy (IdeXmlSchemaCacheEntry *self)
   if (self->error_message != NULL)
     copy->error_message = g_strdup (self->error_message);
 
+  if (self->file != NULL)
+    copy->file = g_object_ref (self->file);
+
+  copy->kind = self->kind;
+  copy->state = self->state;
+  copy->line = self->line;
+  copy->col = self->col;
+  copy->mtime = self->mtime;
+
   return copy;
 }
 
@@ -76,6 +85,7 @@ ide_xml_schema_cache_entry_free (IdeXmlSchemaCacheEntry *self)
   g_assert_cmpint (self->ref_count, ==, 0);
 
   g_clear_pointer (&self->content, g_bytes_unref);
+  g_clear_object (&self->file);
   g_clear_pointer (&self->error_message, g_free);
 
   g_slice_free (IdeXmlSchemaCacheEntry, self);

@@ -17,15 +17,16 @@
  */
 
 #include <glib/gi18n.h>
+#include <glib-object.h>
 
 #include "ide-xml-parser.h"
 #include "ide-xml-parser-generic.h"
 #include "ide-xml-parser-ui.h"
 #include "ide-xml-parser-private.h"
 #include "ide-xml-sax.h"
+#include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-stack.h"
 #include "ide-xml-tree-builder-utils-private.h"
-#include "ide-xml-validator.h"
 
 typedef struct _ColorTag
 {
@@ -377,15 +378,16 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
                                        const xmlChar *system_id)
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
-  SchemaEntry entry = {0};
+  IdeXmlSchemaCacheEntry *entry;
 
   g_assert (IDE_IS_XML_PARSER (self));
 
   printf ("internal subset:%s external_id:%s system_id:%s\n", name, external_id, system_id);
 
-  entry.schema_kind = SCHEMA_KIND_DTD;
-  ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL, NULL);
-  g_array_append_val (state->schemas, entry);
+  entry = ide_xml_schema_cache_entry_new ();
+  entry->kind = SCHEMA_KIND_DTD;
+  ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
+  g_ptr_array_add (state->schemas, entry);
 }
 
 void
@@ -432,7 +434,8 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
   IdeDiagnostic *diagnostic;
   g_autofree gchar *schema_url = NULL;
   const gchar *extension;
-  SchemaEntry entry = {0};
+  IdeXmlSchemaCacheEntry *entry;
+  IdeXmlSchemaKind kind;
 
   g_assert (IDE_IS_XML_PARSER (self));
 
@@ -442,15 +445,22 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
         {
           ++extension;
           if (ide_str_equal0 (extension, "rng"))
-            entry.schema_kind = SCHEMA_KIND_RNG;
+            kind = SCHEMA_KIND_RNG;
           else if (ide_str_equal0 (extension, "xsd"))
-            entry.schema_kind = SCHEMA_KIND_XML_SCHEMA;
+            kind = SCHEMA_KIND_XML_SCHEMA;
           else
             goto fail;
 
-          ide_xml_sax_get_location (self->sax_parser, &entry.schema_line, &entry.schema_col, NULL, NULL, NULL, NULL);
-          entry.schema_file = get_absolute_schema_file (state->file, schema_url);
-          g_array_append_val (state->schemas, entry);
+          entry = ide_xml_schema_cache_entry_new ();
+          entry->kind = kind;
+
+          ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
+          entry->file = get_absolute_schema_file (state->file, schema_url);
+
+          /* Needed to pass the kind to the service schema fetcher */
+          g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
+
+          g_ptr_array_add (state->schemas, entry);
 
           return;
         }
@@ -536,16 +546,6 @@ ide_xml_parser_get_analysis_worker (GTask        *task,
   g_task_return_pointer (task, analysis, (GDestroyNotify)ide_xml_analysis_unref);
 }
 
-static void
-schemas_free (gpointer *data)
-{
-  SchemaEntry *entry = (SchemaEntry *)data;
-
-  g_clear_object (&entry->schema_file);
-  g_clear_pointer (&entry->schema_content, g_bytes_unref);
-  g_clear_pointer (&entry->error_message, g_free);
-}
-
 void
 ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
                                    GFile               *file,
@@ -570,8 +570,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->content = g_bytes_ref (content);
   state->sequence = sequence;
   state->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
-  state->schemas = g_array_new (TRUE, TRUE, sizeof (SchemaEntry));
-  g_array_set_clear_func (state->schemas, (GDestroyNotify)schemas_free);
+  state->schemas = g_ptr_array_new_with_free_func (g_object_unref);
 
   state->build_state = BUILD_STATE_NORMAL;
 

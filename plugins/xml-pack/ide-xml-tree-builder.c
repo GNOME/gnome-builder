@@ -23,7 +23,9 @@
 #include <string.h>
 
 #include "ide-xml-parser.h"
+#include "ide-xml-rng-parser.h"
 #include "ide-xml-sax.h"
+#include "ide-xml-schema.h"
 #include "ide-xml-service.h"
 #include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-tree-builder-utils-private.h"
@@ -117,7 +119,7 @@ typedef struct _FetchSchemasState
 {
   IdeXmlTreeBuilder *self;
   GTask             *task;
-  GArray            *schemas;
+  GPtrArray         *schemas;
   guint              index;
 } FetchSchemasState;
 
@@ -125,7 +127,7 @@ static void
 fetch_schema_state_free (FetchSchemasState *state)
 {
   g_object_unref (state->self);
-  g_array_unref (state->schemas);
+  g_ptr_array_unref (state->schemas);
 
   g_slice_free (FetchSchemasState, state);
 }
@@ -140,7 +142,7 @@ fetch_schemas_cb (GObject      *object,
   g_autoptr (IdeXmlSchemaCacheEntry) cache_entry = NULL;
   GTask *task = state->task;
   guint count;
-  SchemaEntry *entry;
+  IdeXmlSchemaCacheEntry *entry;
   GError *error = NULL;
 
   g_assert (DZL_IS_TASK_CACHE (schemas_cache));
@@ -148,12 +150,19 @@ fetch_schemas_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   cache_entry = dzl_task_cache_get_finish (schemas_cache, result, &error);
-  entry = &g_array_index (state->schemas, SchemaEntry, state->index);
+  entry = g_ptr_array_index (state->schemas, state->index);
 
   if (cache_entry->content != NULL)
-    entry->schema_content = g_bytes_ref (cache_entry->content);
-  else
+    entry->content = g_bytes_ref (cache_entry->content);
+
+  if (cache_entry->error_message != NULL)
     entry->error_message = g_strdup (cache_entry->error_message);
+
+  if (cache_entry->schema != NULL)
+    entry->schema = ide_xml_schema_ref (cache_entry->schema);
+
+  entry->state = cache_entry->state;
+  entry->mtime = cache_entry->mtime;
 
   fetch_schema_state_free (state);
   count = GPOINTER_TO_UINT (g_task_get_task_data (task));
@@ -169,7 +178,7 @@ fetch_schemas_cb (GObject      *object,
 
 static gboolean
 fetch_schemas_async (IdeXmlTreeBuilder   *self,
-                     GArray              *schemas,
+                     GPtrArray           *schemas,
                      GCancellable        *cancellable,
                      GAsyncReadyCallback  callback,
                      gpointer             user_data)
@@ -197,17 +206,17 @@ fetch_schemas_async (IdeXmlTreeBuilder   *self,
 
   for (gint i = 0; i < schemas->len; ++i)
     {
-      SchemaEntry *entry;
+      IdeXmlSchemaCacheEntry *entry;
       FetchSchemasState *state;
 
-      entry = &g_array_index (schemas, SchemaEntry, i);
+      entry = g_ptr_array_index (schemas, i);
       /* Check if it's an internal schema */
-      if (entry->schema_file == NULL)
+      if (entry->file == NULL)
         continue;
 
       state = g_slice_new0 (FetchSchemasState);
       state->self = g_object_ref (self);
-      state->schemas = g_array_ref (schemas);
+      state->schemas = g_ptr_array_ref (schemas);
       state->task = task;
 
       ++count;
@@ -217,13 +226,13 @@ fetch_schemas_async (IdeXmlTreeBuilder   *self,
       state->index = i;
       /* TODO: peek schemas if it's already in cache */
       dzl_task_cache_get_async (schemas_cache,
-                                entry->schema_file,
+                                entry->file,
                                 FALSE,
                                 cancellable,
                                 fetch_schemas_cb,
                                 state);
 
-      printf ("fetching schema URL:%s\n", g_file_get_uri (entry->schema_file));
+      printf ("fetching schema URL:%s\n", g_file_get_uri (entry->file));
     }
 
   if (!has_external_schemas)
@@ -255,11 +264,11 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
   TreeBuilderState *state;
   IdeContext *context;
   g_autoptr(GTask) task = user_data;
-  g_autoptr (GArray) schemas = NULL;
+  g_autoptr (GPtrArray) schemas = NULL;
   const gchar *doc_data;
   xmlDoc *doc;
   gsize doc_size;
-  SchemaKind kind;
+  IdeXmlSchemaKind kind;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (result));
@@ -276,31 +285,30 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
 
   state = g_task_get_task_data (task);
   schemas = ide_xml_analysis_get_schemas (state->analysis);
-  ide_xml_analysis_set_schemas (state->analysis, NULL);
-
   context = ide_object_get_context (IDE_OBJECT (self));
 
   doc_data = g_bytes_get_data (state->content, &doc_size);
   if (NULL != (doc = xmlParseMemory (doc_data, doc_size)))
     {
       doc->URL = (guchar *)g_file_get_uri (state->file);
+
       for (gint i = 0; i < schemas->len; ++i)
         {
-          SchemaEntry *entry;
+          IdeXmlSchemaCacheEntry *entry;
           const gchar *schema_data;
           gsize schema_size;
           g_autoptr (IdeDiagnostics) diagnostics = NULL;
           g_autoptr (IdeDiagnostic) diagnostic = NULL;
           gboolean schema_ret;
 
-          entry = &g_array_index (schemas, SchemaEntry, i);
-          kind = entry->schema_kind;
+          entry = g_ptr_array_index (schemas, i);
+          kind = entry->kind;
 
           if (kind == SCHEMA_KIND_RNG || kind == SCHEMA_KIND_XML_SCHEMA)
             {
-              if (entry->schema_content != NULL)
+              if (entry->content != NULL)
                 {
-                  schema_data = g_bytes_get_data (entry->schema_content, &schema_size);
+                  schema_data = g_bytes_get_data (entry->content, &schema_size);
                   schema_ret = ide_xml_validator_set_schema (self->validator,
                                                              kind,
                                                              schema_data,
@@ -313,8 +321,8 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
                   diagnostic = create_diagnostic (context,
                                                   entry->error_message,
                                                   state->file,
-                                                  entry->schema_line,
-                                                  entry->schema_col,
+                                                  entry->line,
+                                                  entry->col,
                                                   IDE_DIAGNOSTIC_ERROR);
                   ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
                   continue;
@@ -332,13 +340,13 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
               g_autofree gchar *uri = NULL;
               g_autofree gchar *msg = NULL;
 
-              uri = g_file_get_uri (entry->schema_file);
+              uri = g_file_get_uri (entry->file);
               msg = g_strdup_printf ("Can't parse the schema: '%s'", uri);
               diagnostic = create_diagnostic (context,
                                               msg,
                                               state->file,
-                                              entry->schema_line,
-                                              entry->schema_col,
+                                              entry->line,
+                                              entry->col,
                                               IDE_DIAGNOSTIC_ERROR);
               ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
               continue;
@@ -347,7 +355,10 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
           if (ide_xml_validator_validate (self->validator, doc, &diagnostics))
             printf ("validated\n");
           else
-            printf ("NOT validated\n");
+            {
+              printf ("NOT validated\n");
+              entry->state = SCHEMA_STATE_CANT_VALIDATE;
+            }
 
           ide_diagnostics_merge (state->analysis->diagnostics, diagnostics);
         }

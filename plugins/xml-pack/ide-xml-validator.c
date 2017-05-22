@@ -29,28 +29,28 @@
 
 struct _IdeXmlValidator
 {
-  IdeObject      parent_instance;
+  IdeObject         parent_instance;
 
-  GPtrArray     *diagnostics_array;
-  xmlDtd        *dtd;
-  xmlRelaxNG    *rng;
-  xmlSchema     *xml_schema;
+  GPtrArray        *diagnostics_array;
+  xmlDtd           *dtd;
+  xmlRelaxNG       *rng;
+  xmlSchema        *xml_schema;
 
-  SchemaKind     kind;
-  guint          dtd_use_subsets : 1;
+  IdeXmlSchemaKind  kind;
+  guint             dtd_use_subsets : 1;
 };
 
 typedef struct _ValidState
 {
-  IdeXmlValidator *self;
-  SchemaKind       kind;
-  xmlValidCtxt    *dtd_valid_context;
-  xmlDoc          *doc;
+  IdeXmlValidator  *self;
+  IdeXmlSchemaKind  kind;
+  xmlValidCtxt     *dtd_valid_context;
+  xmlDoc           *doc;
 } ValidState;
 
 G_DEFINE_TYPE (IdeXmlValidator, ide_xml_validator, IDE_TYPE_OBJECT)
 
-SchemaKind
+IdeXmlSchemaKind
 ide_xml_validator_get_kind (IdeXmlValidator *self)
 {
   g_return_val_if_fail (IDE_IS_XML_VALIDATOR (self), SCHEMA_KIND_NONE);
@@ -214,10 +214,10 @@ end:
  * subsets (internal/external) will be used for the validation.
  */
 gboolean
-ide_xml_validator_set_schema (IdeXmlValidator *self,
-                              SchemaKind       kind,
-                              const gchar     *data,
-                              gsize            size)
+ide_xml_validator_set_schema (IdeXmlValidator  *self,
+                              IdeXmlSchemaKind  kind,
+                              const gchar      *data,
+                              gsize             size)
 {
   xmlDoc *dtd_doc;
   xmlRelaxNGParserCtxt *rng_parser;

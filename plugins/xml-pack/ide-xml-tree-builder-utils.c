@@ -104,7 +104,7 @@ get_schema_url (const gchar *data)
 }
 
 const gchar *
-get_schema_kind_string (SchemaKind kind)
+get_schema_kind_string (IdeXmlSchemaKind kind)
 {
   if (kind == SCHEMA_KIND_NONE)
     return "No schema";
