@@ -1,0 +1,26 @@
+diff --git a/gtksourceview/gtksourcegutter.c b/gtksourceview/gtksourcegutter.c
+index 0db2b598..3d59553c 100644
+--- a/gtksourceview/gtksourcegutter.c
++++ b/gtksourceview/gtksourcegutter.c
+@@ -520,7 +520,7 @@ gtk_source_gutter_class_init (GtkSourceGutterClass *klass)
+ 	                                                    "Window Type",
+ 	                                                    "The gutters' text window type",
+ 	                                                    GTK_TYPE_TEXT_WINDOW_TYPE,
+-	                                                    0,
++	                                                    GTK_TEXT_WINDOW_LEFT,
+ 	                                                    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+ 
+ 	/**
+diff --git a/gtksourceview/gtksourcegutterrenderer.c b/gtksourceview/gtksourcegutterrenderer.c
+index 510f8d90..d1781053 100644
+--- a/gtksourceview/gtksourcegutterrenderer.c
++++ b/gtksourceview/gtksourcegutterrenderer.c
+@@ -764,7 +764,7 @@ gtk_source_gutter_renderer_class_init (GtkSourceGutterRendererClass *klass)
+ 	                                                    "Window Type",
+ 	                                                    "The window type",
+ 	                                                    GTK_TYPE_TEXT_WINDOW_TYPE,
+-	                                                    GTK_TEXT_WINDOW_PRIVATE,
++	                                                    GTK_TEXT_WINDOW_LEFT,
+ 	                                                    G_PARAM_READABLE));
+ 
+ 	g_object_class_install_property (object_class,
