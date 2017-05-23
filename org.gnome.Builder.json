@@ -517,11 +517,7 @@
                     "type": "git",
                     "url": "https://git.gnome.org/browse/gtksourceview",
                     "branch": "gnome-3-24"
-                },
-		{
-                    "type": "patch",
-                    "path": "build/flatpak/default-enum.patch"
-		}
+                }
             ]
         },
         {
