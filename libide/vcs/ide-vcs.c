@@ -24,6 +24,14 @@
 #include "buffers/ide-buffer-change-monitor.h"
 #include "vcs/ide-vcs.h"
 
+/**
+ * SECTION: idevcs
+ * @Short_description - Builder interface to various version control systems e.g. git
+ * @Title: IdeVcs
+ *
+ * IdeVcs is provides interfaces that interact with the underlying version control system.
+ */
+
 G_DEFINE_INTERFACE (IdeVcs, ide_vcs, IDE_TYPE_OBJECT)
 
 enum {
@@ -81,6 +89,14 @@ ide_vcs_default_init (IdeVcsInterface *iface)
                   G_STRUCT_OFFSET (IdeVcsInterface, changed),
                   NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
+
+/*
+ * ide_vcs_is_ignored:
+ *
+ * Determines if a file is being tracked by the underlying VCS.
+ *
+ * Returns: %TRUE if tracked by the VCS and %FALSE if not.
+ */
 
 gboolean
 ide_vcs_is_ignored (IdeVcs  *self,
@@ -179,6 +195,12 @@ sort_by_priority (gconstpointer a,
   return ide_vcs_get_priority (vcs_a) - ide_vcs_get_priority (vcs_b);
 }
 
+/**
+ * ide_vcs_new_async:
+ *
+ * Create a new vcs context.
+ *
+ */
 void
 ide_vcs_new_async (IdeContext           *context,
                    int                   io_priority,
@@ -217,6 +239,13 @@ ide_vcs_new_finish (GAsyncResult  *result,
   return IDE_VCS (ret);
 }
 
+/**
+ * ide_vcs_emit_changed:
+ *
+ * Signals that a context has changed to the underlying VCS.
+ *
+ * Returns: (null)
+ */
 void
 ide_vcs_emit_changed (IdeVcs *self)
 {
