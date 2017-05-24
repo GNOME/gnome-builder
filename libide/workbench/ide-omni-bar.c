@@ -648,6 +648,10 @@ ide_omni_bar_init (IdeOmniBar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_container_set_reallocate_redraws (GTK_CONTAINER (self), TRUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   gtk_widget_set_direction (GTK_WIDGET (self->branch_box), GTK_TEXT_DIR_LTR);
 
   g_signal_connect_object (self->build_button,
