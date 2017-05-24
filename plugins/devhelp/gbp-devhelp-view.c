@@ -21,12 +21,20 @@
 #include <webkit2/webkit2.h>
 
 #include "gbp-devhelp-view.h"
+#include "gbp-devhelp-search.h"
 
 struct _GbpDevhelpView
 {
-  IdeLayoutView  parent_instance;
-  WebKitWebView *web_view1;
-};
+  IdeLayoutView         parent_instance;
+
+  WebKitWebView        *web_view1;
+  WebKitFindController *web_controller;
+  GtkClipboard         *clipboard;
+
+  GtkOverlay           *devhelp_overlay;
+  GtkRevealer          *search_revealer;
+  GbpDevhelpSearch     *search;
+ };
 
 enum {
   PROP_0,
@@ -34,9 +42,15 @@ enum {
   LAST_PROP
 };
 
+enum {
+  SEARCH_REVEAL,
+  LAST_SIGNAL
+};
+
 G_DEFINE_TYPE (GbpDevhelpView, gbp_devhelp_view, IDE_TYPE_LAYOUT_VIEW)
 
 static GParamSpec *properties [LAST_PROP];
+static guint signals [LAST_SIGNAL];
 
 void
 gbp_devhelp_view_set_uri (GbpDevhelpView *self,
@@ -110,6 +124,25 @@ gbp_devhelp_view_set_property (GObject      *object,
 }
 
 static void
+gbp_devhelp_search_reveal (GbpDevhelpView *self)
+{
+  g_assert (GBP_IS_DEVHELP_VIEW (self));
+
+  webkit_web_view_can_execute_editing_command (self->web_view1, WEBKIT_EDITING_COMMAND_COPY, NULL, NULL, NULL);
+  gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
+}
+
+static void
+gbp_devhelp_focus_in_event (GbpDevhelpView *self,
+                            GdkEvent       *event)
+{
+  g_assert (GBP_IS_DEVHELP_VIEW (self));
+
+  webkit_find_controller_search_finish (self->web_controller);
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+}
+
+static void
 gbp_devhelp_view_class_init (GbpDevhelpViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -128,10 +161,24 @@ gbp_devhelp_view_class_init (GbpDevhelpViewClass *klass)
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
+  signals [SEARCH_REVEAL] =
+    g_signal_new_class_handler ("search-reveal",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gbp_devhelp_search_reveal),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE, 0);
+
+  gtk_binding_entry_add_signal (gtk_binding_set_by_class (klass),
+                                GDK_KEY_f,
+                                GDK_CONTROL_MASK,
+                                "search-reveal", 0);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/devhelp-plugin/gbp-devhelp-view.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpView, web_view1);
+  gtk_widget_class_bind_template_child (widget_class, GbpDevhelpView, devhelp_overlay);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
@@ -141,9 +188,26 @@ gbp_devhelp_view_init (GbpDevhelpView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  self->search = g_object_new (GBP_TYPE_DEVHELP_SEARCH, NULL);
+  self->search_revealer = gbp_devhelp_search_get_revealer (self->search);
+  self->clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
+  self->web_controller = webkit_web_view_get_find_controller (self->web_view1);
+
+  gtk_overlay_add_overlay (self->devhelp_overlay,
+                           GTK_WIDGET (self->search_revealer));
+
+  gbp_devhelp_search_set_devhelp (self->search,
+                                  self->web_controller,
+                                  self->clipboard);
+
   g_signal_connect_object (self->web_view1,
                            "notify::title",
                            G_CALLBACK (gbp_devhelp_view_notify_title),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->web_view1,
+                          "focus-in-event",
+                           G_CALLBACK (gbp_devhelp_focus_in_event),
                            self,
                            G_CONNECT_SWAPPED);
 }

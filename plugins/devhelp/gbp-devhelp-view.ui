@@ -8,14 +8,16 @@
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="WebKitWebView" id="web_view1">
-            <property name="visible">true</property>
+          <object class="GtkOverlay" id="devhelp_overlay">
             <property name="expand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="WebKitWebView" id="web_view1">
+                <property name="visible">true</property>
+                <property name="expand">true</property>
+              </object>
+            </child>
           </object>
-          <packing>
-          <property name="resize">true</property>
-          <property name="shrink">false</property>
-          </packing>
         </child>
       </object>
     </child>

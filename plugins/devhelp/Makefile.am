@@ -15,6 +15,9 @@ libdevhelp_plugin_la_SOURCES =          \
 	gbp-devhelp-panel.c             \
 	gbp-devhelp-panel.h             \
 	gbp-devhelp-plugin.c            \
+	gbp-devhelp-search.c            \
+	gbp-devhelp-search.h            \
+	gbp-devhelp-search-private.h    \
 	gbp-devhelp-view.c              \
 	gbp-devhelp-view.h              \
 	gbp-devhelp-workbench-addin.c   \

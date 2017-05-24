@@ -3,5 +3,6 @@
   <gresource prefix="/org/gnome/builder/plugins/devhelp-plugin">
     <file>theme/shared.css</file>
     <file>gbp-devhelp-view.ui</file>
+    <file>gbp-devhelp-search.ui</file>
   </gresource>
 </gresources>
