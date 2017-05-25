@@ -61,11 +61,11 @@ search_text_changed_cb (GdTaggedEntry    *search_entry,
 
   search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
   webkit_find_controller_search (self->web_controller,
-                                search_text,
-                                WEBKIT_FIND_OPTIONS_BACKWARDS
-                                | WEBKIT_FIND_OPTIONS_WRAP_AROUND
-                                | WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE,
-                                MAX_SEARCH);
+                                 search_text,
+                                 WEBKIT_FIND_OPTIONS_BACKWARDS |
+                                 WEBKIT_FIND_OPTIONS_WRAP_AROUND |
+                                 WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE,
+                                 MAX_SEARCH);
 }
 
 static void
@@ -122,7 +122,7 @@ gbp_devhelp_search_set_devhelp (GbpDevhelpSearch     *self,
                                 WebKitFindController *web_controller,
                                 GtkClipboard         *clipboard)
 {
-  g_assert (GBP_IS_DEVHELP_SEARCH (self));
+  g_return_if_fail (GBP_IS_DEVHELP_SEARCH (self));
 
   self->clipboard = clipboard;
   self->web_controller = web_controller;
