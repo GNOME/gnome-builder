@@ -30,4 +30,12 @@
       <gnome:userid>chergert</gnome:userid>
     </foaf:Person>
   </maintainer>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Sébastien Lafargue</foaf:name>
+      <foaf:mbox rdf:resource="mailto:slafargue@gnome.org" />
+      <gnome:userid>slafargue</gnome:userid>
+    </foaf:Person>
+  </maintainer>
 </Project>
