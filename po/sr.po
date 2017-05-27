@@ -10,17 +10,18 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-04-29 18:27+0000\n"
-"PO-Revision-Date: 2017-05-04 06:45+0200\n"
-"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"POT-Creation-Date: 2017-05-18 03:16+0000\n"
+"PO-Revision-Date: 2017-05-20 16:39+0200\n"
+"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: contrib/egg/egg-animation.c:730 contrib/pnl/pnl-animation.c:701
 #, c-format
@@ -490,9 +491,7 @@ msgstr "Паметни „Home“ и „End“ тастери"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid "Whether or not Home moves to first non-space character."
-msgstr ""
-"Укључује/искључује помак на први знак који није размак приликом притистка "
-"„Home“ тастера."
+msgstr "Да ли тастер Home помера на први знак који није размак."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 msgid "Show grid lines"
@@ -1158,7 +1157,7 @@ msgstr "Спреман"
 msgid "Cannot execute transfer while on metered connection"
 msgstr "Не могу да обавим пренос на мереној вези"
 
-#: libide/buildsystem/ide-configuration-manager.c:76
+#: libide/buildsystem/ide-configuration-manager.c:86
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1216,7 +1215,7 @@ msgstr "Извршно окружење"
 msgid "Environment"
 msgstr "Окружење"
 
-#: libide/buildui/ide-build-log-panel.c:732
+#: libide/buildui/ide-build-log-panel.c:736
 msgid "Build Output"
 msgstr "Излаз поступка градње"
 
@@ -1679,8 +1678,8 @@ msgstr "Све врсте пројеката"
 #: libide/greeter/ide-greeter-perspective.ui:52
 msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 msgstr ""
-"Зашто не бисте <a href=\"action://app.new-project\">направили нови "
-"пројекат</a>?"
+"Зашто не бисте <a href=\"action://app.new-project\">направили нови пројекат</"
+"a>?"
 
 #: libide/greeter/ide-greeter-perspective.ui:53
 msgid "No projects found"
@@ -2469,7 +2468,6 @@ msgid "Number of parallel build workers"
 msgstr "Број упоредних радника на градњи"
 
 #: libide/preferences/ide-preferences-builtin.c:386
-#| msgid "framework"
 msgid "Network"
 msgstr "Мрежа"
 
@@ -2623,7 +2621,6 @@ msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u. ред, %u. колона</small>"
 
 #: libide/sourceview/ide-source-view.c:6130
-#| msgid "No document were found"
 msgid "No references were found"
 msgstr "Нисам нашао ниједну упуту"
 
@@ -2807,7 +2804,7 @@ msgstr "Прикажи изборник радног стола"
 
 #: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
-msgstr "Притисните Ктрл+. да претражите"
+msgstr "Притисните Ctrl+. да претражите"
 
 #: plugins/autotools/ide-autotools-makecache-stage.c:194
 msgid "Building cache…"
@@ -3373,7 +3370,7 @@ msgstr[1] "прикажи још %u извршна окружења"
 msgstr[2] "прикажи још %u извршних окружења"
 msgstr[3] "Прикажи још %u извршно окружење"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:380
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:382
 msgid "Flatpak Runtimes"
 msgstr "Флетпек извршна окружења"
 
@@ -3560,7 +3557,6 @@ msgid "Your computer is missing python3-docutils"
 msgstr "На вашем рачунару недостаје програм „python3-docutils“"
 
 #: plugins/html-preview/html_preview_plugin/__init__.py:309
-#| msgid "Your computer is missing python3-docutils"
 msgid "Your computer is missing python3-sphinx"
 msgstr "На вашем рачунару недостаје програм „python3-sphinx“"
 
@@ -3867,8 +3863,8 @@ msgid ""
 "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
 "profiler</a> from the run menu to begin"
 msgstr ""
-"Изаберите <a href=\"action://run-manager.run-with-handler::profiler\">"
-"Покрени са профилатором</a> из изборника покретања да бисте почели"
+"Изаберите <a href=\"action://run-manager.run-with-handler::profiler"
+"\">Покрени са профилатором</a> из изборника покретања да бисте почели"
 
 #: plugins/sysprof/gbp-sysprof-perspective.ui:81
 msgid "CPU"
@@ -3923,7 +3919,6 @@ msgid "_New Terminal"
 msgstr "_Нови терминал"
 
 #: plugins/terminal/gtk/menus.ui:11
-#| msgid "_New Terminal"
 msgid "_New Runtime Terminal"
 msgstr "_Нови терминал извршног окружења"
 
@@ -3935,7 +3930,7 @@ msgstr "_Отвори везу"
 msgid "_Copy Link Address"
 msgstr "_Копирај адресу везе"
 
-#: plugins/todo/todo_plugin/__init__.py:195
+#: plugins/todo/todo_plugin/__init__.py:196
 msgid "Todo"
 msgstr "Роковник"
 
