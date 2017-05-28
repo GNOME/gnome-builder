@@ -54,6 +54,7 @@ void                      ide_xml_symbol_node_get_end_tag_location          (Ide
                                                                              gint                   *end_line,
                                                                              gint                   *end_line_offset,
                                                                              gsize                  *size);
+const gchar              *ide_xml_symbol_node_get_namespace                 (IdeXmlSymbolNode       *self);
 guint                     ide_xml_symbol_node_get_n_children                (IdeXmlSymbolNode       *self);
 guint                     ide_xml_symbol_node_get_n_internal_children       (IdeXmlSymbolNode       *self);
 IdeSymbolNode            *ide_xml_symbol_node_get_nth_child                 (IdeXmlSymbolNode       *self,

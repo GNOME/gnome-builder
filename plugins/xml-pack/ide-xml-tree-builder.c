@@ -355,10 +355,7 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
           if (ide_xml_validator_validate (self->validator, doc, &diagnostics))
             printf ("validated\n");
           else
-            {
-              printf ("NOT validated\n");
-              entry->state = SCHEMA_STATE_CANT_VALIDATE;
-            }
+            printf ("NOT validated\n");
 
           ide_diagnostics_merge (state->analysis->diagnostics, diagnostics);
         }

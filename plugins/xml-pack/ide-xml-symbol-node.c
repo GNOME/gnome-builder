@@ -48,6 +48,7 @@ struct _IdeXmlSymbolNode
   gint               nb_internal_children;
   GFile             *file;
   gchar            **attributes_names;
+  gchar             *ns;
   NodeRange          start_tag;
   NodeRange          end_tag;
 
@@ -685,4 +686,12 @@ ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
 
   if (show_value && self->value != NULL)
     printf ("\t%s\n", self->value);
+}
+
+const gchar *
+ide_xml_symbol_node_get_namespace (IdeXmlSymbolNode  *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  return self->ns;
 }

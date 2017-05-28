@@ -46,6 +46,14 @@ static gchar *type_names [] =
   "except"
 };
 
+const gchar *
+ide_xml_rng_define_get_type_name (IdeXmlRngDefine *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+
+  return type_names [self->type];
+}
+
 static void
 dump_tree (IdeXmlRngDefine *self,
            gint             indent)
@@ -58,8 +66,10 @@ dump_tree (IdeXmlRngDefine *self,
   pad = g_strnfill (indent, ' ');
   while (def != NULL)
     {
-      type_name = type_names [def->type];
-      if (def->type == IDE_XML_RNG_DEFINE_REF || def->type == IDE_XML_RNG_DEFINE_PARENTREF)
+      type_name = ide_xml_rng_define_get_type_name (def);
+      if (def->type == IDE_XML_RNG_DEFINE_REF ||
+          def->type == IDE_XML_RNG_DEFINE_PARENTREF ||
+          def->type == IDE_XML_RNG_DEFINE_EXTERNALREF)
         {
           if (def->node != NULL &&
               NULL != (name = xmlGetProp (def->node, (const guchar *)"name")))
@@ -217,4 +227,63 @@ ide_xml_rng_define_propagate_parent (IdeXmlRngDefine *self,
       last->parent = parent;
       last = last->next;
     } while (last != NULL);
+}
+
+gboolean
+ide_xml_rng_define_is_nameclass_match (IdeXmlRngDefine  *define,
+                                       IdeXmlSymbolNode *node)
+{
+  const gchar *name;
+  const gchar *namespace;
+  IdeXmlRngDefine *nc;
+  IdeXmlRngDefine *content;
+
+  g_assert (IDE_IS_XML_SYMBOL_NODE (node));
+  g_assert (define != NULL);
+
+  name = ide_xml_symbol_node_get_element_name (node);
+  namespace = ide_xml_symbol_node_get_namespace (node);
+
+  if (define->name != NULL && !ide_str_equal0 (name, define->name))
+    return FALSE;
+
+  if (!ide_str_empty0 ((const gchar *)define->ns))
+    {
+      if (namespace == NULL || !ide_str_equal0 (define->ns, namespace))
+        return FALSE;
+    }
+  else if (namespace != NULL && (define->name != NULL || define->ns != NULL))
+    return FALSE;
+
+ if (NULL == (nc = define->name_class))
+   return TRUE;
+
+  if (nc->type == IDE_XML_RNG_DEFINE_EXCEPT)
+    {
+      content = nc->content;
+      while (content != NULL)
+        {
+          if (ide_xml_rng_define_is_nameclass_match (content, node))
+            return FALSE;
+
+          content = content->next;
+        }
+
+      return TRUE;
+    }
+  else if (nc->type == IDE_XML_RNG_DEFINE_CHOICE)
+    {
+      content = define->name_class;
+      while (content != NULL)
+        {
+          if (ide_xml_rng_define_is_nameclass_match (content, node))
+            return TRUE;
+
+          content = content->next;
+        }
+
+      return FALSE;
+    }
+  else
+    g_assert_not_reached ();
 }

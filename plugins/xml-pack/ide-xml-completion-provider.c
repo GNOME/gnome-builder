@@ -21,8 +21,11 @@
 #include <libpeas/peas.h>
 
 #include "ide-xml-completion-provider.h"
+
+#include "ide.h"
 #include "ide-xml-path.h"
 #include "ide-xml-position.h"
+#include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-service.h"
 
 struct _IdeXmlCompletionProvider
@@ -84,12 +87,140 @@ get_path (IdeXmlSymbolNode *node,
       current = ide_xml_symbol_node_get_parent (current);
     }
 
-  if (current == root_node)
-    ide_xml_path_prepend_node (path, current);
-  else
+  if (current != root_node)
     g_warning ("partial path, we don't reach the root node");
 
   return path;
+}
+
+static void
+move_candidates (GPtrArray *array,
+                 GPtrArray *sub_array)
+{
+  if (sub_array->len == 0)
+    return;
+
+  for (gint i = 0; i < sub_array->len; ++i)
+    g_ptr_array_add (array, g_ptr_array_index (sub_array, i));
+
+  g_ptr_array_remove_range (sub_array, 0, sub_array->len);
+}
+
+static void
+get_matching_nodes (IdeXmlPath       *path,
+                    gint              index,
+                    IdeXmlRngDefine  *define,
+                    GPtrArray        *candidates)
+{
+  IdeXmlSymbolNode *node;
+  IdeXmlRngDefine *child;
+  IdeXmlRngDefineType type;
+  gint current_index;
+
+  g_assert (path != NULL);
+  g_assert (define != NULL);
+  g_assert (candidates != NULL);
+
+  if (define == NULL)
+    return;
+
+  node = g_ptr_array_index (path->nodes, index);
+
+  while (define != NULL)
+    {
+      child = NULL;
+      current_index = index;
+      type = define->type;
+
+      switch (type)
+        {
+        case IDE_XML_RNG_DEFINE_ELEMENT:
+          if (ide_xml_rng_define_is_nameclass_match (define, node))
+            {
+              ++current_index;
+              child = define->content;
+            }
+
+          break;
+
+        case IDE_XML_RNG_DEFINE_NOOP:
+        case IDE_XML_RNG_DEFINE_NOTALLOWED:
+        case IDE_XML_RNG_DEFINE_TEXT:
+        case IDE_XML_RNG_DEFINE_DATATYPE:
+        case IDE_XML_RNG_DEFINE_VALUE:
+        case IDE_XML_RNG_DEFINE_EMPTY:
+        case IDE_XML_RNG_DEFINE_ATTRIBUTE:
+        case IDE_XML_RNG_DEFINE_START:
+        case IDE_XML_RNG_DEFINE_PARAM:
+        case IDE_XML_RNG_DEFINE_EXCEPT:
+        case IDE_XML_RNG_DEFINE_LIST:
+          break;
+
+        case IDE_XML_RNG_DEFINE_DEFINE:
+        case IDE_XML_RNG_DEFINE_REF:
+        case IDE_XML_RNG_DEFINE_PARENTREF:
+        case IDE_XML_RNG_DEFINE_EXTERNALREF:
+          child = define->content;
+          break;
+
+        case IDE_XML_RNG_DEFINE_ZEROORMORE:
+        case IDE_XML_RNG_DEFINE_ONEORMORE:
+        case IDE_XML_RNG_DEFINE_OPTIONAL:
+        case IDE_XML_RNG_DEFINE_CHOICE:
+        case IDE_XML_RNG_DEFINE_GROUP:
+        case IDE_XML_RNG_DEFINE_INTERLEAVE:
+          child = define->content;
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      if (current_index == path->nodes->len)
+        g_ptr_array_add (candidates, define);
+      else if (child != NULL)
+        get_matching_nodes (path, current_index, child, candidates);
+
+      define = define->next;
+    }
+}
+
+static GPtrArray *
+get_matching_candidates (IdeXmlCompletionProvider *self,
+                         GPtrArray                *schemas,
+                         IdeXmlPath               *path)
+{
+  GPtrArray *candidates;
+  g_autoptr (GPtrArray) candidates_tmp = NULL;
+  g_autoptr (GPtrArray) defines = NULL;
+  IdeXmlSchemaCacheEntry *schema_entry;
+  IdeXmlSchema *schema;
+  IdeXmlRngGrammar *grammar;
+
+  g_assert (IDE_IS_XML_COMPLETION_PROVIDER (self));
+  g_assert (schemas != NULL);
+  g_assert (path != NULL && path->nodes->len > 0);
+
+  candidates = g_ptr_array_new ();
+  candidates_tmp = g_ptr_array_sized_new (16);
+  defines = g_ptr_array_new ();
+
+  for (gint i = 0; i < schemas->len; ++i)
+    {
+      schema_entry = g_ptr_array_index (schemas, i);
+      /* TODO: only RNG for now */
+      if (schema_entry->kind != SCHEMA_KIND_RNG ||
+          schema_entry->state != SCHEMA_STATE_PARSED)
+        continue;
+
+      schema = schema_entry->schema;
+      grammar = schema->top_grammar;
+
+      get_matching_nodes (path, 0, grammar->start_defines, candidates_tmp);
+      move_candidates (candidates, candidates_tmp);
+    }
+
+  return candidates;
 }
 
 static void
@@ -104,11 +235,13 @@ populate_cb (GObject      *object,
   IdeXmlSymbolNode *root_node, *node;
   IdeXmlAnalysis *analysis;
   IdeXmlPositionKind kind;
-  IdeXmlPath *path;
+  g_autoptr (IdeXmlPath) path = NULL;
   GtkSourceCompletionItem *item;
   g_autofree gchar *text = NULL;
   g_autofree gchar *label = NULL;
   g_autoptr (GList) results = NULL;
+  GPtrArray *schemas;
+  g_autoptr (GPtrArray) candidates = NULL;
   GError *error = NULL;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (self));
@@ -116,11 +249,16 @@ populate_cb (GObject      *object,
 
   position = ide_xml_service_get_position_from_cursor_finish (service, result, &error);
   analysis = ide_xml_position_get_analysis (position);
+  schemas = ide_xml_analysis_get_schemas (analysis);
   root_node = ide_xml_analysis_get_root_node (analysis);
   node = ide_xml_position_get_node (position);
   kind = ide_xml_position_get_kind (position);
 
   path = get_path (node, root_node);
+
+  if (schemas != NULL)
+    candidates = get_matching_candidates (self, schemas, path);
+
 
   text = g_strdup ("xml item text");
   label = g_strdup ("xml item label");
