@@ -24,6 +24,7 @@ devhelp_sources = [
 
 devhelp_deps = plugin_deps + [
   dependency('libdevhelp-3.0', version: '>=3.20.0'),
+  libgd_dep,
 ]
 
 shared_module('devhelp-plugin', devhelp_sources,
