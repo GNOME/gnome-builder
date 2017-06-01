@@ -1,4 +1,27 @@
 ==============
+Version 3.25.2
+==============
+
+We anticipate 3.25.2 to be our last release using autotools. Our
+development tree will switch to meson after this release.
+
+Changes since 3.25.1
+
+ • Improvements to the Todo plugin
+ • Support for multiple cursors in the text editor
+ • Improvements to invalidations behind gtk container widgets
+ • Use after free fixes
+ • Memory leak fixes
+ • JSON improvements in flatpak plugin
+ • llvm fixes for FreeBSD
+ • Scroll improvements to build log
+
+Updated Translations:
+
+  Hungarian, Kazakh, Spanish, Indonesian, German, Polish,
+  Brazilian Portuguese, Serbian
+
+==============
 Version 3.25.1
 ==============
 
