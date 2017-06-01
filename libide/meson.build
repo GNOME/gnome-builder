@@ -619,6 +619,7 @@ libide_deps = [
   dependency('pangoft2', version: '>= 1.38.0'),
   dependency('gspell-1', version: '>= 1.2.0'),
   dependency('enchant'),
+  libdazzle_dep,
   libgtksource_dep,
   libgio_dep,
   libgiounix_dep,
