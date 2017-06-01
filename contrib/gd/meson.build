@@ -13,9 +13,11 @@ libgd_deps = [
   libgtk_dep,
 ]
 
-libgd = static_library('gd', libgd_sources,
+libgd = shared_library('gd', libgd_sources,
   dependencies: libgd_deps,
-  pic: true,
+       version: '0.0.0',
+       install: true,
+   install_dir: pkglibdir,
 )
 
 libgd_dep = declare_dependency(
