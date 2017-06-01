@@ -18,8 +18,7 @@
 
 #define G_LOG_DOMAIN "gbp-create-project-widget"
 
-#include <egg-file-chooser-entry.h>
-#include <egg-radio-box.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 #include <libpeas/peas.h>
@@ -33,11 +32,11 @@ struct _GbpCreateProjectWidget
   GtkBin                parent;
 
   GtkEntry             *project_name_entry;
-  EggFileChooserEntry  *project_location_entry;
-  EggRadioBox          *project_language_chooser;
+  DzlFileChooserEntry  *project_location_entry;
+  DzlRadioBox          *project_language_chooser;
   GtkFlowBox           *project_template_chooser;
   GtkSwitch            *versioning_switch;
-  EggRadioBox          *license_chooser;
+  DzlRadioBox          *license_chooser;
 
   guint                 invalid_directory : 1;
 };
@@ -92,7 +91,7 @@ gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
   keys = (const gchar **)g_hash_table_get_keys_as_array (languages, &len);
   qsort (keys, len, sizeof (gchar *), sort_by_name);
   for (i = 0; keys [i]; i++)
-    egg_radio_box_add_item (self->project_language_chooser, keys [i], keys [i]);
+    dzl_radio_box_add_item (self->project_language_chooser, keys [i], keys [i]);
   g_free (keys);
 }
 
@@ -129,7 +128,7 @@ directory_exists (GbpCreateProjectWidget *self,
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
   g_assert (name != NULL);
 
-  directory = egg_file_chooser_entry_get_file (self->project_location_entry);
+  directory = dzl_file_chooser_entry_get_file (self->project_location_entry);
   child = g_file_get_child (directory, name);
 
   self->invalid_directory = g_file_query_exists (child, NULL);
@@ -190,7 +189,7 @@ update_language_sensitivity (GtkWidget *widget,
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
   g_assert (GTK_IS_FLOW_BOX_CHILD (widget));
 
-  language = egg_radio_box_get_active_id (self->project_language_chooser);
+  language = dzl_radio_box_get_active_id (self->project_language_chooser);
 
   if (ide_str_empty0 (language))
     goto apply;
@@ -224,10 +223,10 @@ gbp_create_project_widget_refilter (GbpCreateProjectWidget *self)
 
 static void
 gbp_create_project_widget_language_changed (GbpCreateProjectWidget *self,
-                                            EggRadioBox            *language_chooser)
+                                            DzlRadioBox            *language_chooser)
 {
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (EGG_IS_RADIO_BOX (language_chooser));
+  g_assert (DZL_IS_RADIO_BOX (language_chooser));
 
   gbp_create_project_widget_refilter (self);
 
@@ -302,7 +301,7 @@ gbp_create_project_widget_get_directory (GbpCreateProjectWidget *self)
 {
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  return egg_file_chooser_entry_get_file (self->project_location_entry);
+  return dzl_file_chooser_entry_get_file (self->project_location_entry);
 }
 
 static void
@@ -317,7 +316,7 @@ gbp_create_project_widget_set_directory (GbpCreateProjectWidget *self,
   resolved = ide_path_expand (path);
   file = g_file_new_for_path (resolved);
 
-  egg_file_chooser_entry_set_file (self->project_location_entry, file);
+  dzl_file_chooser_entry_set_file (self->project_location_entry, file);
 }
 
 static void
@@ -336,7 +335,7 @@ gbp_create_project_widget_constructed (GObject *object)
 
   G_OBJECT_CLASS (gbp_create_project_widget_parent_class)->constructed (object);
 
-  egg_radio_box_set_active_id (self->project_language_chooser, "C");
+  dzl_radio_box_set_active_id (self->project_language_chooser, "C");
 }
 
 static void
@@ -365,7 +364,7 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   if (ide_str_empty0 (project_name) || !validate_name (project_name))
     return FALSE;
 
-  language = egg_radio_box_get_active_id (self->project_language_chooser);
+  language = dzl_radio_box_get_active_id (self->project_language_chooser);
 
   if (ide_str_empty0 (language))
     return FALSE;
@@ -625,12 +624,12 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_strdup ("path"),
                        g_variant_ref_sink (g_variant_new_string (path)));
 
-  language = egg_radio_box_get_active_id (self->project_language_chooser);
+  language = dzl_radio_box_get_active_id (self->project_language_chooser);
   g_hash_table_insert (params,
                        g_strdup ("language"),
                        g_variant_ref_sink (g_variant_new_string (language)));
 
-  license_id = egg_radio_box_get_active_id (EGG_RADIO_BOX (self->license_chooser));
+  license_id = dzl_radio_box_get_active_id (DZL_RADIO_BOX (self->license_chooser));
 
   if (!g_str_equal (license_id, "none"))
     {

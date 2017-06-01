@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-ctags-index"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 #include <stdlib.h>
@@ -52,9 +52,9 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsIndex, ide_ctags_index, IDE_TYPE_OBJECT,
                                 G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                        async_initable_iface_init))
 
-EGG_DEFINE_COUNTER (instances, "IdeCtagsIndex", "Instances", "Number of IdeCtagsIndex instances.")
-EGG_DEFINE_COUNTER (index_entries, "IdeCtagsIndex", "N Entries", "Number of entries in indexes.")
-EGG_DEFINE_COUNTER (heap_size, "IdeCtagsIndex", "Heap Size", "Size of index string heaps.")
+DZL_DEFINE_COUNTER (instances, "IdeCtagsIndex", "Instances", "Number of IdeCtagsIndex instances.")
+DZL_DEFINE_COUNTER (index_entries, "IdeCtagsIndex", "N Entries", "Number of entries in indexes.")
+DZL_DEFINE_COUNTER (heap_size, "IdeCtagsIndex", "Heap Size", "Size of index string heaps.")
 
 static GParamSpec *properties [LAST_PROP];
 
@@ -242,8 +242,8 @@ ide_ctags_index_build_index (GTask        *task,
   self->index = index;
   self->buffer = g_bytes_new_take (contents, length);
 
-  EGG_COUNTER_ADD (index_entries, (gint64)index->len);
-  EGG_COUNTER_ADD (heap_size, (gint64)length);
+  DZL_COUNTER_ADD (index_entries, (gint64)index->len);
+  DZL_COUNTER_ADD (heap_size, (gint64)length);
 
   g_task_return_boolean (task, TRUE);
 
@@ -357,12 +357,12 @@ ide_ctags_index_finalize (GObject *object)
   IdeCtagsIndex *self = (IdeCtagsIndex *)object;
 
   if (self->index != NULL)
-    EGG_COUNTER_SUB (index_entries, (gint64)self->index->len);
+    DZL_COUNTER_SUB (index_entries, (gint64)self->index->len);
 
   if (self->buffer != NULL)
     {
       gsize len = g_bytes_get_size (self->buffer);
-      EGG_COUNTER_SUB (heap_size, (gint64)len);
+      DZL_COUNTER_SUB (heap_size, (gint64)len);
     }
 
   g_clear_object (&self->file);
@@ -372,7 +372,7 @@ ide_ctags_index_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_ctags_index_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -418,7 +418,7 @@ ide_ctags_index_class_finalize (IdeCtagsIndexClass *klass)
 static void
 ide_ctags_index_init (IdeCtagsIndex *self)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 }
 
 static void

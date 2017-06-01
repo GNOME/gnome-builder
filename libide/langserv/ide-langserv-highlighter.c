@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-langserv-highlighter"
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"
@@ -43,7 +43,7 @@ typedef struct
 
   IdeLangservClient  *client;
   IdeHighlightIndex  *index;
-  EggSignalGroup     *buffer_signals;
+  DzlSignalGroup     *buffer_signals;
 
   guint               queued_update;
 
@@ -340,7 +340,7 @@ ide_langserv_highlighter_init (IdeLangservHighlighter *self)
 {
   IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
 
-  priv->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
+  priv->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
   /*
    * We sort of cheat here by using ::line-flags-changed instead of :;changed
@@ -350,7 +350,7 @@ ide_langserv_highlighter_init (IdeLangservHighlighter *self)
    * where the language server gives us an empty set back (or at least with
    * the rust language server).
    */
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_langserv_highlighter_buffer_line_flags_changed),
                                    self,
@@ -495,14 +495,14 @@ ide_langserv_highlighter_set_engine (IdeHighlighter     *highlighter,
 
   priv->engine = engine;
 
-  egg_signal_group_set_target (priv->buffer_signals, NULL);
+  dzl_signal_group_set_target (priv->buffer_signals, NULL);
 
   if (engine != NULL)
     {
       IdeBuffer *buffer;
 
       buffer = ide_highlight_engine_get_buffer (engine);
-      egg_signal_group_set_target (priv->buffer_signals, buffer);
+      dzl_signal_group_set_target (priv->buffer_signals, buffer);
       ide_langserv_highlighter_queue_update (self);
     }
 

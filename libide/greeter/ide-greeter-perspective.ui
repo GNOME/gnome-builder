@@ -47,7 +47,7 @@
                     <property name="expand">true</property>
                     <property name="visible">true</property>
                     <child>
-                      <object class="EggEmptyState">
+                      <object class="DzlEmptyState">
                         <property name="icon-name">org.gnome.Builder-symbolic</property>
                         <property name="subtitle" translatable="yes" comments="the action:// link is used to jump to the new-project view">Why not &lt;a href="action://app.new-project"&gt;create a new project&lt;/a&gt;?</property>
                         <property name="title" translatable="yes">No projects found</property>
@@ -71,7 +71,7 @@
                                 <property name="expand">true</property>
                                 <property name="visible">true</property>
                                 <child>
-                                  <object class="EggBox">
+                                  <object class="DzlBox">
                                     <property name="halign">center</property>
                                     <property name="hexpand">false</property>
                                     <property name="margin-bottom">32</property>
@@ -320,7 +320,7 @@
       </object>
     </child>
     <child>
-      <object class="EggPriorityBox" id="genesis_buttons">
+      <object class="DzlPriorityBox" id="genesis_buttons">
         <property name="homogeneous">true</property>
         <property name="spacing">6</property>
         <property name="visible">true</property>
@@ -387,7 +387,7 @@
       </packing>
     </child>
   </object>
-  <object class="EggStateMachine" id="state_machine">
+  <object class="DzlStateMachine" id="state_machine">
     <property name="state">browse</property>
     <states>
       <state name="browse">

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-source-map"
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-macros.h"
@@ -34,8 +34,8 @@ struct _IdeSourceMap
 {
   GtkSourceMap               parent_instance;
 
-  EggSignalGroup            *view_signals;
-  EggSignalGroup            *buffer_signals;
+  DzlSignalGroup            *view_signals;
+  DzlSignalGroup            *buffer_signals;
   GtkSourceGutterRenderer   *line_renderer;
   guint                      delayed_conceal_timeout;
   guint                      show_map : 1;
@@ -194,7 +194,7 @@ ide_source_map__view_notify_buffer (IdeSourceMap  *self,
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   if (IDE_IS_BUFFER (buffer))
-    egg_signal_group_set_target (self->buffer_signals, buffer);
+    dzl_signal_group_set_target (self->buffer_signals, buffer);
 }
 
 static gboolean
@@ -230,7 +230,7 @@ ide_source_map__view_changed (IdeSourceMap *self,
   g_object_bind_property_full (view, "font-desc", self, "font-desc", G_BINDING_SYNC_CREATE,
                                shrink_font, NULL, NULL, NULL);
 
-  egg_signal_group_set_target (self->view_signals, view);
+  dzl_signal_group_set_target (self->view_signals, view);
 }
 
 static void
@@ -289,41 +289,41 @@ ide_source_map_init (IdeSourceMap *self)
   gtk_widget_add_events (GTK_WIDGET (self), GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
 
   /* Buffer */
-  self->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
-  egg_signal_group_connect_object (self->buffer_signals,
+  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  dzl_signal_group_connect_object (self->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_source_map__buffer_line_flags_changed),
                                    self,
                                    G_CONNECT_SWAPPED);
 
   /* View */
-  self->view_signals = egg_signal_group_new (GTK_SOURCE_TYPE_VIEW);
+  self->view_signals = dzl_signal_group_new (GTK_SOURCE_TYPE_VIEW);
 
-  egg_signal_group_connect_object (self->view_signals,
+  dzl_signal_group_connect_object (self->view_signals,
                                    "notify::buffer",
                                    G_CALLBACK (ide_source_map__view_notify_buffer),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->view_signals,
+  dzl_signal_group_connect_object (self->view_signals,
                                    "enter-notify-event",
                                    G_CALLBACK (ide_source_map__enter_notify_event),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->view_signals,
+  dzl_signal_group_connect_object (self->view_signals,
                                    "leave-notify-event",
                                    G_CALLBACK (ide_source_map__leave_notify_event),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->view_signals,
+  dzl_signal_group_connect_object (self->view_signals,
                                    "motion-notify-event",
                                    G_CALLBACK (ide_source_map__motion_notify_event),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->view_signals,
+  dzl_signal_group_connect_object (self->view_signals,
                                    "scroll-event",
                                    G_CALLBACK (ide_source_map__scroll_event),
                                    self,

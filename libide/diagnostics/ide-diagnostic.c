@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-diagnostic"
 
-#include "egg-counter.h"
+#include "dazzle.h"
 
 #include "ide-internal.h"
 
@@ -29,7 +29,7 @@
 
 G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic, ide_diagnostic_ref, ide_diagnostic_unref)
 
-EGG_DEFINE_COUNTER (instances, "IdeDiagnostic", "Instances", "Number of IdeDiagnostic")
+DZL_DEFINE_COUNTER (instances, "IdeDiagnostic", "Instances", "Number of IdeDiagnostic")
 
 struct _IdeDiagnostic
 {
@@ -86,7 +86,7 @@ ide_diagnostic_unref (IdeDiagnostic *self)
       g_clear_pointer (&self->fixits, g_ptr_array_unref);
       g_free (self);
 
-      EGG_COUNTER_DEC (instances);
+      DZL_COUNTER_DEC (instances);
     }
 }
 
@@ -221,7 +221,7 @@ ide_diagnostic_new (IdeDiagnosticSeverity  severity,
   ret->text = g_strdup (text);
   ret->location = location ? ide_source_location_ref (location) : NULL;
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   return ret;
 }

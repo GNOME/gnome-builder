@@ -12,7 +12,7 @@
           <object class="IdeWorkbenchHeaderBar" id="header_bar">
             <property name="visible">true</property>
             <child internal-child="left">
-              <object class="EggPriorityBox">
+              <object class="DzlPriorityBox">
                 <child>
                   <object class="IdePerspectiveMenuButton" id="perspective_menu_button">
                     <property name="focus-on-click">false</property>

@@ -172,12 +172,12 @@ ide_application_register_plugin_accessories (IdeApplication *self)
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  self->menu_manager = egg_menu_manager_new ();
-  egg_menu_manager_add_resource (self->menu_manager, "/org/gnome/builder/gtk/menus.ui", NULL);
+  self->menu_manager = dzl_menu_manager_new ();
+  dzl_menu_manager_add_resource (self->menu_manager, "/org/gnome/builder/gtk/menus.ui", NULL);
 
   ide_application_init_plugin_accessories (self);
 
-  app_menu = egg_menu_manager_get_menu_by_id (self->menu_manager, "app-menu");
+  app_menu = dzl_menu_manager_get_menu_by_id (self->menu_manager, "app-menu");
   gtk_application_set_app_menu (GTK_APPLICATION (self), G_MENU_MODEL (app_menu));
 
   IDE_EXIT;
@@ -450,11 +450,11 @@ ide_application_shutdown (GApplication *application)
 
   for (guint i = 0; i < self->reapers->len; i++)
     {
-      IdeDirectoryReaper *reaper = g_ptr_array_index (self->reapers, i);
+      DzlDirectoryReaper *reaper = g_ptr_array_index (self->reapers, i);
 
-      g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
+      g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
 
-      ide_directory_reaper_execute (reaper, NULL, NULL);
+      dzl_directory_reaper_execute (reaper, NULL, NULL);
     }
 }
 
@@ -775,7 +775,7 @@ ide_application_get_menu_by_id (IdeApplication *self,
   g_return_val_if_fail (id != NULL, NULL);
 
   if (self->menu_manager != NULL)
-    return egg_menu_manager_get_menu_by_id (self->menu_manager, id);
+    return dzl_menu_manager_get_menu_by_id (self->menu_manager, id);
 
   g_critical ("%s() called by non-UI process", G_STRFUNC);
 
@@ -862,10 +862,10 @@ ide_application_get_main_thread (void)
 
 void
 ide_application_add_reaper (IdeApplication     *self,
-                            IdeDirectoryReaper *reaper)
+                            DzlDirectoryReaper *reaper)
 {
   g_return_if_fail (IDE_IS_APPLICATION (self));
-  g_return_if_fail (IDE_IS_DIRECTORY_REAPER (reaper));
+  g_return_if_fail (DZL_IS_DIRECTORY_REAPER (reaper));
 
   g_ptr_array_add (self->reapers, g_object_ref (reaper));
 }

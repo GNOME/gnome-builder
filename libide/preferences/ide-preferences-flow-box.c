@@ -20,10 +20,10 @@
 
 struct _IdePreferencesFlowBox
 {
-  EggColumnLayout parent;
+  DzlColumnLayout parent;
 };
 
-G_DEFINE_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, EGG_TYPE_COLUMN_LAYOUT)
+G_DEFINE_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, DZL_TYPE_COLUMN_LAYOUT)
 
 static void
 ide_preferences_flow_box_class_init (IdePreferencesFlowBoxClass *klass)

@@ -38,7 +38,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeTransferButton, ide_transfer_button, EGG_TYPE_PROGRESS_BUTTON)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeTransferButton, ide_transfer_button, DZL_TYPE_PROGRESS_BUTTON)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -55,7 +55,7 @@ notify_progress_cb (IdeTransferButton *self,
 
   progress = ide_transfer_get_progress (transfer);
 
-  egg_progress_button_set_progress (EGG_PROGRESS_BUTTON (self), progress * 100.0);
+  dzl_progress_button_set_progress (DZL_PROGRESS_BUTTON (self), progress * 100.0);
 }
 
 static void
@@ -130,7 +130,7 @@ ide_transfer_button_execute_cb (GObject      *object,
   ide_transfer_manager_execute_finish (transfer_manager, result, NULL);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
-  egg_progress_button_set_show_progress (EGG_PROGRESS_BUTTON (self), FALSE);
+  dzl_progress_button_set_show_progress (DZL_PROGRESS_BUTTON (self), FALSE);
 
   IDE_EXIT;
 }
@@ -155,7 +155,7 @@ ide_transfer_button_clicked (GtkButton *button)
   if (context == NULL)
     return;
 
-  egg_progress_button_set_show_progress (EGG_PROGRESS_BUTTON (self), TRUE);
+  dzl_progress_button_set_show_progress (DZL_PROGRESS_BUTTON (self), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
 
   transfer_manager = ide_context_get_transfer_manager (context);

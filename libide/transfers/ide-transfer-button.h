@@ -19,9 +19,7 @@
 #ifndef IDE_TRANSFER_BUTTON_H
 #define IDE_TRANSFER_BUTTON_H
 
-#include <gtk/gtk.h>
-
-#include "egg-progress-button.h"
+#include <dazzle.h>
 
 #include "transfers/ide-transfer.h"
 
@@ -29,11 +27,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_BUTTON (ide_transfer_button_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeTransferButton, ide_transfer_button, IDE, TRANSFER_BUTTON, EggProgressButton)
+G_DECLARE_DERIVABLE_TYPE (IdeTransferButton, ide_transfer_button, IDE, TRANSFER_BUTTON, DzlProgressButton)
 
 struct _IdeTransferButtonClass
 {
-  EggProgressButtonClass parent_class;
+  DzlProgressButtonClass parent_class;
 
   gpointer _reserved1;
   gpointer _reserved2;

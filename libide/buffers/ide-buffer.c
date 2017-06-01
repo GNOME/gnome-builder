@@ -18,8 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buffer"
 
-#include <egg-counter.h>
-#include <egg-signal-group.h>
+#include <dazzle.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gspell/gspell.h>
 
@@ -73,7 +73,7 @@ typedef struct
   IdeContext             *context;
   IdeDiagnostics         *diagnostics;
   GHashTable             *diagnostics_line_cache;
-  EggSignalGroup         *diagnostics_manager_signals;
+  DzlSignalGroup         *diagnostics_manager_signals;
   IdeFile                *file;
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
@@ -84,7 +84,7 @@ typedef struct
   GspellChecker          *spellchecker;
   gchar                  *title;
 
-  EggSignalGroup         *file_signals;
+  DzlSignalGroup         *file_signals;
 
   GFileMonitor           *file_monitor;
 
@@ -110,7 +110,7 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
 
-EGG_DEFINE_COUNTER (instances, "IdeBuffer", "Instances", "Number of IdeBuffer instances.")
+DZL_DEFINE_COUNTER (instances, "IdeBuffer", "Instances", "Number of IdeBuffer instances.")
 
 enum {
   PROP_0,
@@ -297,7 +297,7 @@ ide_buffer_set_context (IdeBuffer  *self,
 
   diagnostics_manager = ide_context_get_diagnostics_manager (context);
 
-  egg_signal_group_set_target (priv->diagnostics_manager_signals, diagnostics_manager);
+  dzl_signal_group_set_target (priv->diagnostics_manager_signals, diagnostics_manager);
 }
 
 void
@@ -1306,7 +1306,7 @@ ide_buffer_dispose (GObject *object)
       g_clear_object (&priv->change_monitor);
     }
 
-  egg_signal_group_set_target (priv->diagnostics_manager_signals, NULL);
+  dzl_signal_group_set_target (priv->diagnostics_manager_signals, NULL);
 
   g_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
@@ -1349,7 +1349,7 @@ ide_buffer_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 
   IDE_EXIT;
 }
@@ -1618,13 +1618,13 @@ ide_buffer_init (IdeBuffer *self)
 
   priv->highlight_diagnostics = TRUE;
 
-  priv->file_signals = egg_signal_group_new (IDE_TYPE_FILE);
-  egg_signal_group_connect_object (priv->file_signals,
+  priv->file_signals = dzl_signal_group_new (IDE_TYPE_FILE);
+  dzl_signal_group_connect_object (priv->file_signals,
                                    "notify::language",
                                    G_CALLBACK (ide_buffer__file_notify_language),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->file_signals,
+  dzl_signal_group_connect_object (priv->file_signals,
                                    "notify::file",
                                    G_CALLBACK (ide_buffer__file_notify_file),
                                    self,
@@ -1632,14 +1632,14 @@ ide_buffer_init (IdeBuffer *self)
 
   priv->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  priv->diagnostics_manager_signals = egg_signal_group_new (IDE_TYPE_DIAGNOSTICS_MANAGER);
-  egg_signal_group_connect_object (priv->diagnostics_manager_signals,
+  priv->diagnostics_manager_signals = dzl_signal_group_new (IDE_TYPE_DIAGNOSTICS_MANAGER);
+  dzl_signal_group_connect_object (priv->diagnostics_manager_signals,
                                    "changed",
                                    G_CALLBACK (ide_buffer__diagnostics_manager__changed),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   IDE_EXIT;
 }
@@ -1708,7 +1708,7 @@ ide_buffer_set_file (IdeBuffer *self,
 
   if (g_set_object (&priv->file, file))
     {
-      egg_signal_group_set_target (priv->file_signals, file);
+      dzl_signal_group_set_target (priv->file_signals, file);
       ide_file_load_settings_async (priv->file,
                                     NULL,
                                     ide_buffer__file_load_settings_cb,

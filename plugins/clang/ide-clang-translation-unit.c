@@ -19,7 +19,7 @@
 #define G_LOG_DOMAIN "clang-translation-unit"
 
 #include <clang-c/Index.h>
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 
@@ -57,7 +57,7 @@ typedef struct
 } GetSymbolsState;
 
 G_DEFINE_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE_TYPE_OBJECT)
-EGG_DEFINE_COUNTER (instances, "Clang", "Translation Units", "Number of clang translation units")
+DZL_DEFINE_COUNTER (instances, "Clang", "Translation Units", "Number of clang translation units")
 
 enum {
   PROP_0,
@@ -491,7 +491,7 @@ ide_clang_translation_unit_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_clang_translation_unit_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 
   IDE_EXIT;
 }
@@ -598,7 +598,7 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
 static void
 ide_clang_translation_unit_init (IdeClangTranslationUnit *self)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   self->diagnostics = g_hash_table_new_full ((GHashFunc)g_file_hash,
                                              (GEqualFunc)g_file_equal,

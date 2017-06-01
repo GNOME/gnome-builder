@@ -16,12 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <egg-file-chooser-entry.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 #include <ide.h>
-
-#include "egg-animation.h"
 
 #include "ide-macros.h"
 #include "ide-git-clone-widget.h"
@@ -35,7 +33,7 @@ struct _IdeGitCloneWidget
 
   gchar                *child_name;
 
-  EggFileChooserEntry  *clone_location_entry;
+  DzlFileChooserEntry  *clone_location_entry;
   GtkEntry             *clone_uri_entry;
   GtkLabel             *clone_error_label;
   GtkProgressBar       *clone_progress;
@@ -249,7 +247,7 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
     projects_dir = g_steal_pointer (&path);
 
   file = g_file_new_for_path (projects_dir);
-  egg_file_chooser_entry_set_file (self->clone_location_entry, file);
+  dzl_file_chooser_entry_set_file (self->clone_location_entry, file);
 
   g_signal_connect_object (self->clone_uri_entry,
                            "changed",
@@ -307,8 +305,8 @@ finish_animation_in_idle (gpointer data)
   self = g_task_get_source_object (task);
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
 
-  egg_object_animate_full (self->clone_progress,
-                           EGG_ANIMATION_EASE_IN_OUT_QUAD,
+  dzl_object_animate_full (self->clone_progress,
+                           DZL_ANIMATION_EASE_IN_OUT_QUAD,
                            ANIMATION_DURATION_MSEC,
                            NULL,
                            (GDestroyNotify)ide_widget_hide_with_fade,
@@ -417,7 +415,7 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   gtk_label_set_label (self->clone_error_label, NULL);
 
   uristr = g_strstrip (g_strdup (gtk_entry_get_text (self->clone_uri_entry)));
-  location = egg_file_chooser_entry_get_file (EGG_FILE_CHOOSER_ENTRY (self->clone_location_entry));
+  location = dzl_file_chooser_entry_get_file (DZL_FILE_CHOOSER_ENTRY (self->clone_location_entry));
 
   uri = ide_vcs_uri_new (uristr);
 

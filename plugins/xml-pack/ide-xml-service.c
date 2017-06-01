@@ -18,15 +18,14 @@
 
 #define G_LOG_DOMAIN "ide-xml-service"
 
-#include <egg-task-cache.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <math.h>
 
 #include "ide-xml-analysis.h"
-#include "ide-xml-tree-builder.h"
-
 #include "ide-xml-service.h"
+#include "ide-xml-tree-builder.h"
 
 gboolean _ide_buffer_get_loading (IdeBuffer *self);
 
@@ -36,7 +35,7 @@ struct _IdeXmlService
 {
   IdeObject          parent_instance;
 
-  EggTaskCache      *analyses;
+  DzlTaskCache      *analyses;
   IdeXmlTreeBuilder *tree_builder;
   GCancellable      *cancellable;
 };
@@ -67,7 +66,7 @@ ide_xml_service_build_tree_cb2 (GObject      *object,
 }
 
 static void
-ide_xml_service_build_tree_cb (EggTaskCache  *cache,
+ide_xml_service_build_tree_cb (DzlTaskCache  *cache,
                                gconstpointer  key,
                                GTask         *task,
                                gpointer       user_data)
@@ -79,7 +78,7 @@ ide_xml_service_build_tree_cb (EggTaskCache  *cache,
 
   IDE_ENTRY;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_XML_SERVICE (self));
   g_assert (IDE_IS_FILE (ifile));
   g_assert (G_IS_TASK (task));
@@ -108,16 +107,16 @@ ide_xml_service_get_analysis_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
-  EggTaskCache *cache = (EggTaskCache *)object;
+  DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
   GError *error = NULL;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
-  if (NULL == (analysis = egg_task_cache_get_finish (cache, result, &error)))
+  if (NULL == (analysis = dzl_task_cache_get_finish (cache, result, &error)))
     g_task_return_error (task, error);
   else
     g_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
@@ -146,7 +145,7 @@ ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
 
   g_signal_handlers_disconnect_by_func (buffer, ide_xml_service__buffer_loaded_cb, state);
 
-  egg_task_cache_get_async (self->analyses,
+  dzl_task_cache_get_async (self->analyses,
                             state->ifile,
                             TRUE,
                             state->cancellable,
@@ -208,7 +207,7 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
                         state);
     }
   else
-    egg_task_cache_get_async (self->analyses,
+    dzl_task_cache_get_async (self->analyses,
                               ifile,
                               TRUE,
                               cancellable,
@@ -290,7 +289,7 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
    * If we have a cached analysis with a valid root_node,
    * and it is new enough, then re-use it.
    */
-  if (NULL != (cached = egg_task_cache_peek (self->analyses, ifile)))
+  if (NULL != (cached = dzl_task_cache_peek (self->analyses, ifile)))
     {
       IdeContext *context;
       IdeUnsavedFiles *unsaved_files;
@@ -404,7 +403,7 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
    * If we have a cached analysis with some diagnostics,
    * and it is new enough, then re-use it.
    */
-  if (NULL != (cached = egg_task_cache_peek (self->analyses, ifile)))
+  if (NULL != (cached = dzl_task_cache_peek (self->analyses, ifile)))
     {
       IdeContext *context;
       IdeUnsavedFiles *unsaved_files;
@@ -484,7 +483,7 @@ ide_xml_service_start (IdeService *service)
 
   g_assert (IDE_IS_XML_SERVICE (self));
 
-  self->analyses = egg_task_cache_new ((GHashFunc)ide_file_hash,
+  self->analyses = dzl_task_cache_new ((GHashFunc)ide_file_hash,
                                        (GEqualFunc)ide_file_equal,
                                        g_object_ref,
                                        g_object_unref,
@@ -495,7 +494,7 @@ ide_xml_service_start (IdeService *service)
                                        self,
                                        NULL);
 
-  egg_task_cache_set_name (self->analyses, "xml analysis cache");
+  dzl_task_cache_set_name (self->analyses, "xml analysis cache");
 }
 
 static void
@@ -576,7 +575,7 @@ ide_xml_service_get_cached_root_node (IdeXmlService *self,
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (gfile), NULL);
 
-  if (NULL != (analysis = egg_task_cache_peek (self->analyses, gfile)) &&
+  if (NULL != (analysis = dzl_task_cache_peek (self->analyses, gfile)) &&
       NULL != (cached = ide_xml_analysis_get_root_node (analysis)))
     return g_object_ref (cached);
 
@@ -600,7 +599,7 @@ ide_xml_service_get_cached_diagnostics (IdeXmlService *self,
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (gfile), NULL);
 
-  if (NULL != (analysis = egg_task_cache_peek (self->analyses, gfile)) &&
+  if (NULL != (analysis = dzl_task_cache_peek (self->analyses, gfile)) &&
       NULL != (cached = ide_xml_analysis_get_diagnostics (analysis)))
     return ide_diagnostics_ref (cached);
 

@@ -18,16 +18,16 @@
 
 #define G_LOG_DOMAIN "ide-transfer-row"
 
-#include <egg-binding-group.h>
+#include <dazzle.h>
 
-#include "ide-transfer-row.h"
+#include "transfers/ide-transfer-row.h"
 
 struct _IdeTransferRow
 {
   GtkListBoxRow    parent_instance;
 
   IdeTransfer     *transfer;
-  EggBindingGroup *bindings;
+  DzlBindingGroup *bindings;
 
   GtkLabel        *status;
   GtkLabel        *title;
@@ -161,29 +161,29 @@ ide_transfer_row_init (IdeTransferRow *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->bindings = egg_binding_group_new ();
+  self->bindings = dzl_binding_group_new ();
 
-  egg_binding_group_bind (self->bindings, "active",
+  dzl_binding_group_bind (self->bindings, "active",
                           self->progress, "visible",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings, "active",
+  dzl_binding_group_bind (self->bindings, "active",
                           self->cancel, "visible",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings, "title",
+  dzl_binding_group_bind (self->bindings, "title",
                           self->title, "label",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings, "status",
+  dzl_binding_group_bind (self->bindings, "status",
                           self->status, "label",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings, "progress",
+  dzl_binding_group_bind (self->bindings, "progress",
                           self->progress, "fraction",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->bindings, "icon-name",
+  dzl_binding_group_bind (self->bindings, "icon-name",
                           self->image, "icon-name",
                           G_BINDING_SYNC_CREATE);
 }
@@ -210,7 +210,7 @@ ide_transfer_row_set_transfer (IdeTransferRow *self,
 
   if (g_set_object (&self->transfer, transfer))
     {
-      egg_binding_group_set_source (self->bindings, transfer);
+      dzl_binding_group_set_source (self->bindings, transfer);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRANSFER]);
     }
 }

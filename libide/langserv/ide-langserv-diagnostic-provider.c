@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-langserv-diagnostic-provider"
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 #include <json-glib/json-glib.h>
 
 #include "ide-context.h"
@@ -33,7 +33,7 @@
 typedef struct
 {
   IdeLangservClient *client;
-  EggSignalGroup    *client_signals;
+  DzlSignalGroup    *client_signals;
 } IdeLangservDiagnosticProviderPrivate;
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -207,9 +207,9 @@ ide_langserv_diagnostic_provider_init (IdeLangservDiagnosticProvider *self)
 {
   IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
 
-  priv->client_signals = egg_signal_group_new (IDE_TYPE_LANGSERV_CLIENT);
+  priv->client_signals = dzl_signal_group_new (IDE_TYPE_LANGSERV_CLIENT);
 
-  egg_signal_group_connect_object (priv->client_signals,
+  dzl_signal_group_connect_object (priv->client_signals,
                                    "published-diagnostics",
                                    G_CALLBACK (ide_diagnostic_provider_emit_invalidated),
                                    self,
@@ -250,7 +250,7 @@ ide_langserv_diagnostic_provider_set_client (IdeLangservDiagnosticProvider *self
 
   if (g_set_object (&priv->client, client))
     {
-      egg_signal_group_set_target (priv->client_signals, client);
+      dzl_signal_group_set_target (priv->client_signals, client);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
     }
 }

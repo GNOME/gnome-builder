@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-editor-view"
 
-#include <egg-simple-popover.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
 

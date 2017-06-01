@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-build-manager"
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -39,7 +39,7 @@ struct _IdeBuildManager
   GDateTime        *last_build_time;
   GCancellable     *cancellable;
   GActionGroup     *actions;
-  EggSignalGroup   *pipeline_signals;
+  DzlSignalGroup   *pipeline_signals;
 
   GTimer           *running_time;
 
@@ -124,7 +124,7 @@ ide_build_manager_start_timer (IdeBuildManager *self)
     self->running_time = g_timer_new ();
 
   /*
-   * We use the EggFrameSource for our timer callback because we only want to
+   * We use the DzlFrameSource for our timer callback because we only want to
    * update at a rate somewhat close to a typical monitor refresh rate.
    * Additionally, we want to handle drift (which that source does) so that we
    * don't constantly fall behind.
@@ -318,7 +318,7 @@ failure:
   if (pipeline == self->pipeline)
     {
       g_clear_object (&self->pipeline);
-      egg_signal_group_set_target (self->pipeline_signals, NULL);
+      dzl_signal_group_set_target (self->pipeline_signals, NULL);
     }
 
   IDE_EXIT;
@@ -392,7 +392,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                  "context", context,
                                  "configuration", config,
                                  NULL);
-  egg_signal_group_set_target (self->pipeline_signals, self->pipeline);
+  dzl_signal_group_set_target (self->pipeline_signals, self->pipeline);
 
   /*
    * This next part of the pipeline setup is asynchronous, as we need to
@@ -820,33 +820,33 @@ ide_build_manager_init (IdeBuildManager *self)
 
   ide_build_manager_update_action_enabled (self);
 
-  self->pipeline_signals = egg_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
+  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
 
-  egg_signal_group_connect_object (self->pipeline_signals,
+  dzl_signal_group_connect_object (self->pipeline_signals,
                                    "diagnostic",
                                    G_CALLBACK (ide_build_manager_handle_diagnostic),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->pipeline_signals,
+  dzl_signal_group_connect_object (self->pipeline_signals,
                                    "notify::busy",
                                    G_CALLBACK (ide_build_manager_notify_busy),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->pipeline_signals,
+  dzl_signal_group_connect_object (self->pipeline_signals,
                                    "notify::message",
                                    G_CALLBACK (ide_build_manager_notify_message),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->pipeline_signals,
+  dzl_signal_group_connect_object (self->pipeline_signals,
                                    "started",
                                    G_CALLBACK (ide_build_manager_pipeline_started),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->pipeline_signals,
+  dzl_signal_group_connect_object (self->pipeline_signals,
                                    "finished",
                                    G_CALLBACK (ide_build_manager_pipeline_finished),
                                    self,

@@ -28,7 +28,7 @@
 
 struct _IdeBuildConfigurationView
 {
-  EggColumnLayout       parent_instance;
+  DzlColumnLayout       parent_instance;
 
   IdeConfiguration     *configuration;
 
@@ -50,7 +50,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, EGG_TYPE_COLUMN_LAYOUT)
+G_DEFINE_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, DZL_TYPE_COLUMN_LAYOUT)
 
 static GParamSpec *properties [LAST_PROP];
 

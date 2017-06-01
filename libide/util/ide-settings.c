@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-settings"
 
-#include <egg-settings-sandwich.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
@@ -47,7 +47,7 @@ struct _IdeSettings
 {
   IdeObject            parent_instance;
 
-  EggSettingsSandwich *settings_sandwich;
+  DzlSettingsSandwich *settings_sandwich;
   gchar               *relative_path;
   gchar               *schema_id;
   guint                ignore_project_settings : 1;
@@ -181,7 +181,7 @@ ide_settings_constructed (GObject *object)
   project_id = ide_project_get_id (project);
 
   full_path = g_strdup_printf ("/org/gnome/builder/%s", self->relative_path);
-  self->settings_sandwich = egg_settings_sandwich_new (self->schema_id, full_path);
+  self->settings_sandwich = dzl_settings_sandwich_new (self->schema_id, full_path);
 
   /* Add our project relative settings */
   if (self->ignore_project_settings == FALSE)
@@ -189,14 +189,14 @@ ide_settings_constructed (GObject *object)
       path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
                               project_id, self->relative_path);
       settings = g_settings_new_with_path (self->schema_id, path);
-      egg_settings_sandwich_append (self->settings_sandwich, settings);
+      dzl_settings_sandwich_append (self->settings_sandwich, settings);
       g_clear_object (&settings);
       g_free (path);
     }
 
   /* Add our application global (user defaults) settings */
   settings = g_settings_new_with_path (self->schema_id, full_path);
-  egg_settings_sandwich_append (self->settings_sandwich, settings);
+  dzl_settings_sandwich_append (self->settings_sandwich, settings);
   g_clear_object (&settings);
 
   IDE_EXIT;
@@ -372,7 +372,7 @@ ide_settings_get_default_value (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return egg_settings_sandwich_get_default_value (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_default_value (self->settings_sandwich, key);
 }
 
 GVariant *
@@ -382,7 +382,7 @@ ide_settings_get_user_value (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return egg_settings_sandwich_get_user_value (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_user_value (self->settings_sandwich, key);
 }
 
 GVariant *
@@ -392,7 +392,7 @@ ide_settings_get_value (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return egg_settings_sandwich_get_value (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_value (self->settings_sandwich, key);
 }
 
 void
@@ -403,7 +403,7 @@ ide_settings_set_value (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  return egg_settings_sandwich_set_value (self->settings_sandwich, key, value);
+  return dzl_settings_sandwich_set_value (self->settings_sandwich, key, value);
 }
 
 gboolean
@@ -413,7 +413,7 @@ ide_settings_get_boolean (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
   g_return_val_if_fail (key != NULL, FALSE);
 
-  return egg_settings_sandwich_get_boolean (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_boolean (self->settings_sandwich, key);
 }
 
 gdouble
@@ -423,7 +423,7 @@ ide_settings_get_double (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0.0);
   g_return_val_if_fail (key != NULL, 0.0);
 
-  return egg_settings_sandwich_get_double (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_double (self->settings_sandwich, key);
 }
 
 gint
@@ -433,7 +433,7 @@ ide_settings_get_int (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
   g_return_val_if_fail (key != NULL, 0);
 
-  return egg_settings_sandwich_get_int (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_int (self->settings_sandwich, key);
 }
 
 gchar *
@@ -443,7 +443,7 @@ ide_settings_get_string (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return egg_settings_sandwich_get_string (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_string (self->settings_sandwich, key);
 }
 
 guint
@@ -453,7 +453,7 @@ ide_settings_get_uint (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
   g_return_val_if_fail (key != NULL, 0);
 
-  return egg_settings_sandwich_get_uint (self->settings_sandwich, key);
+  return dzl_settings_sandwich_get_uint (self->settings_sandwich, key);
 }
 
 void
@@ -464,7 +464,7 @@ ide_settings_set_boolean (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  egg_settings_sandwich_set_boolean (self->settings_sandwich, key, val);
+  dzl_settings_sandwich_set_boolean (self->settings_sandwich, key, val);
 }
 
 void
@@ -475,7 +475,7 @@ ide_settings_set_double (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  egg_settings_sandwich_set_double (self->settings_sandwich, key, val);
+  dzl_settings_sandwich_set_double (self->settings_sandwich, key, val);
 }
 
 void
@@ -486,7 +486,7 @@ ide_settings_set_int (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  egg_settings_sandwich_set_int (self->settings_sandwich, key, val);
+  dzl_settings_sandwich_set_int (self->settings_sandwich, key, val);
 }
 
 void
@@ -497,7 +497,7 @@ ide_settings_set_string (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  egg_settings_sandwich_set_string (self->settings_sandwich, key, val);
+  dzl_settings_sandwich_set_string (self->settings_sandwich, key, val);
 }
 
 void
@@ -508,7 +508,7 @@ ide_settings_set_uint (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  egg_settings_sandwich_set_uint (self->settings_sandwich, key, val);
+  dzl_settings_sandwich_set_uint (self->settings_sandwich, key, val);
 }
 
 void
@@ -523,7 +523,7 @@ ide_settings_bind (IdeSettings        *self,
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
 
-  egg_settings_sandwich_bind (self->settings_sandwich, key, object, property, flags);
+  dzl_settings_sandwich_bind (self->settings_sandwich, key, object, property, flags);
 }
 
 /**
@@ -559,7 +559,7 @@ ide_settings_bind_with_mapping (IdeSettings             *self,
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
 
-  egg_settings_sandwich_bind_with_mapping (self->settings_sandwich, key, object, property, flags,
+  dzl_settings_sandwich_bind_with_mapping (self->settings_sandwich, key, object, property, flags,
                                            get_mapping, set_mapping, user_data, destroy);
 }
 
@@ -570,5 +570,5 @@ ide_settings_unbind (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (property != NULL);
 
-  egg_settings_sandwich_unbind (self->settings_sandwich, property);
+  dzl_settings_sandwich_unbind (self->settings_sandwich, property);
 }

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-file"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
@@ -52,7 +52,7 @@ enum {
   LAST_PROP
 };
 
-EGG_DEFINE_COUNTER (instances, "IdeFile", "Instances", "Number of IdeFile instances.")
+DZL_DEFINE_COUNTER (instances, "IdeFile", "Instances", "Number of IdeFile instances.")
 
 G_DEFINE_TYPE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
@@ -390,7 +390,7 @@ ide_file_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_file_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 
   IDE_EXIT;
 }
@@ -511,7 +511,7 @@ ide_file_class_init (IdeFileClass *klass)
 static void
 ide_file_init (IdeFile *file)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 }
 
 static gboolean

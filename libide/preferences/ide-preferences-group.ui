@@ -33,7 +33,7 @@
             <child>
               <object class="GtkFrame" id="list_box_frame">
                 <child>
-                  <object class="EggScrolledWindow">
+                  <object class="DzlScrolledWindow">
                     <!-- propagate-natural-height on GtkScrolledWindow doesn't work for
                          us because it doesn't seem to take into account HfW properly. -->
                     <property name="visible">true</property>

@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <gtk/gtk.h>
 #include <ide.h>
 #include <string.h>
@@ -34,7 +34,7 @@ str_to_key (const gchar *str)
 }
 
 static void
-counter_arena_foreach_cb (EggCounter *counter,
+counter_arena_foreach_cb (DzlCounter *counter,
                           gpointer    user_data)
 {
   GString *str = (GString *)user_data;
@@ -43,7 +43,7 @@ counter_arena_foreach_cb (EggCounter *counter,
 
   g_string_append_printf (str,
                           "%s.%s = %"G_GINT64_FORMAT"\n",
-                          category, name, egg_counter_get (counter));
+                          category, name, dzl_counter_get (counter));
 }
 
 gchar *
@@ -165,7 +165,7 @@ ide_get_support_log (void)
    * Log the counters.
    */
   g_string_append (str, "[runtime.counters]\n");
-  egg_counter_arena_foreach (egg_counter_arena_get_default (),
+  dzl_counter_arena_foreach (dzl_counter_arena_get_default (),
                              counter_arena_foreach_cb, str);
 
   g_string_append (str, "\n\n");

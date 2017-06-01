@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-build-workbench-addin"
 
-#include <egg-binding-group.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-build-log-panel.h"

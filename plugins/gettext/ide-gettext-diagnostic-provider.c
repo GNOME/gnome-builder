@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-gettext-diagnostic-provider"
 
-#include <egg-task-cache.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
@@ -34,7 +34,7 @@ struct _IdeGettextDiagnostics
 struct _IdeGettextDiagnosticProvider
 {
   IdeObject     parent_instance;
-  EggTaskCache *diagnostics_cache;
+  DzlTaskCache *diagnostics_cache;
 };
 
 typedef struct
@@ -176,15 +176,15 @@ get_diagnostics_cb (GObject      *source_object,
                     GAsyncResult *res,
                     gpointer      user_data)
 {
-  EggTaskCache *cache = EGG_TASK_CACHE (source_object);
+  DzlTaskCache *cache = DZL_TASK_CACHE (source_object);
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeGettextDiagnostics) diags = NULL;
   GError *error = NULL;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (G_IS_TASK (task));
 
-  diags = egg_task_cache_get_finish (cache, res, &error);
+  diags = dzl_task_cache_get_finish (cache, res, &error);
 
   if (diags == NULL)
     g_task_return_error (task, error);
@@ -211,7 +211,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_gettext_diagnostic_provider_diagnose_async);
 
-  if (NULL != (cached = egg_task_cache_peek (self->diagnostics_cache, file)))
+  if (NULL != (cached = dzl_task_cache_peek (self->diagnostics_cache, file)))
     {
       unsaved_file = get_unsaved_file (self, file);
 
@@ -222,7 +222,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
         }
     }
 
-  egg_task_cache_get_async (self->diagnostics_cache,
+  dzl_task_cache_get_async (self->diagnostics_cache,
                             file,
                             TRUE,
                             cancellable,
@@ -386,7 +386,7 @@ id_to_xgettext_language (const gchar *id)
 }
 
 static void
-populate_cache (EggTaskCache  *cache,
+populate_cache (DzlTaskCache  *cache,
                 gconstpointer  key,
                 GTask         *task,
                 gpointer       user_data)
@@ -404,7 +404,7 @@ populate_cache (EggTaskCache  *cache,
   GError *error = NULL;
   GPtrArray *args;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_FILE (file));
   g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
 
@@ -490,7 +490,7 @@ populate_cache (EggTaskCache  *cache,
 static void
 ide_gettext_diagnostic_provider_init (IdeGettextDiagnosticProvider *self)
 {
-  self->diagnostics_cache = egg_task_cache_new ((GHashFunc)ide_file_hash,
+  self->diagnostics_cache = dzl_task_cache_new ((GHashFunc)ide_file_hash,
                                                 (GEqualFunc)ide_file_equal,
                                                 g_object_ref,
                                                 g_object_unref,
@@ -501,5 +501,5 @@ ide_gettext_diagnostic_provider_init (IdeGettextDiagnosticProvider *self)
                                                 self,
                                                 NULL);
 
-  egg_task_cache_set_name (self->diagnostics_cache, "gettext diagnostic cache");
+  dzl_task_cache_set_name (self->diagnostics_cache, "gettext diagnostic cache");
 }

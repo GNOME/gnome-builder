@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-source-view-movements"
 
+#include <dazzle.h>
 #include <string.h>
 
 #include "ide-enums.h"
@@ -27,7 +28,6 @@
 #include "sourceview/ide-source-iter.h"
 #include "sourceview/ide-source-view-movements.h"
 #include "sourceview/ide-text-iter.h"
-#include "util/ide-cairo.h"
 
 #define ANCHOR_BEGIN "SELECTION_ANCHOR_BEGIN"
 #define ANCHOR_END   "SELECTION_ANCHOR_END"
@@ -715,7 +715,7 @@ ide_source_view_movements_scroll_by_chars (Movement *mv,
 
   if (chars > 0 && (rect.x < (gint)new_value))
     gtk_text_view_get_iter_at_location (text_view, &mv->insert, new_value, rect.y);
-  else if (_ide_cairo_rectangle_x2 (&rect) > (gint)(new_value + page_size))
+  else if (dzl_cairo_rectangle_x2 (&rect) > (gint)(new_value + page_size))
     gtk_text_view_get_iter_at_location (text_view, &mv->insert, new_value + page_size - rect.width, rect.y);
 }
 
@@ -1419,7 +1419,7 @@ ide_source_view_movements_scroll_to_horizontal_bounds (Movement *mv)
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT:
-      offset = _ide_cairo_rectangle_x2 (&screen_rect) - _ide_cairo_rectangle_x2 (&insert_rect);
+      offset = dzl_cairo_rectangle_x2 (&screen_rect) - dzl_cairo_rectangle_x2 (&insert_rect);
       break;
 
     default:

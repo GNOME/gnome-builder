@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "ide-xml-highlighter.h"
 #include "ide-xml.h"
+#include "ide-xml-highlighter.h"
 
 #define HIGHLIGH_TIMEOUT_MSEC    35
 #define XML_TAG_MATCH_STYLE_NAME "xml:tag-match"
@@ -29,7 +29,7 @@ struct _IdeXmlHighlighter
 {
   IdeObject           parent_instance;
 
-  EggSignalGroup     *signal_group;
+  DzlSignalGroup     *signal_group;
   GtkTextMark        *iter_mark;
   IdeHighlightEngine *engine;
   GtkTextBuffer      *buffer;
@@ -131,13 +131,13 @@ cleanup:
 static void
 ide_xml_highlighter_bind_buffer_cb (IdeXmlHighlighter  *self,
                                     IdeBuffer          *buffer,
-                                    EggSignalGroup     *group)
+                                    DzlSignalGroup     *group)
 {
   GtkTextIter begin;
 
   g_assert (IDE_IS_XML_HIGHLIGHTER (self));
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (EGG_IS_SIGNAL_GROUP (group));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
 
   ide_set_weak_pointer (&self->buffer, GTK_TEXT_BUFFER (buffer));
 
@@ -147,10 +147,10 @@ ide_xml_highlighter_bind_buffer_cb (IdeXmlHighlighter  *self,
 
 static void
 ide_xml_highlighter_unbind_buffer_cb (IdeXmlHighlighter  *self,
-                                      EggSignalGroup     *group)
+                                      DzlSignalGroup     *group)
 {
   g_assert (IDE_IS_XML_HIGHLIGHTER (self));
-  g_assert (EGG_IS_SIGNAL_GROUP (group));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
   g_assert (self->buffer != NULL);
 
   if (self->highlight_timeout != 0)
@@ -192,7 +192,7 @@ ide_xml_highlighter_set_buffer (IdeXmlHighlighter *highlighter,
   g_assert (IDE_IS_HIGHLIGHTER (self));
   g_assert (!buffer || IDE_IS_BUFFER (buffer));
 
-  egg_signal_group_set_target (self->signal_group, buffer);
+  dzl_signal_group_set_target (self->signal_group, buffer);
 }
 
 static void
@@ -270,8 +270,8 @@ ide_xml_highlighter_class_finalize (IdeXmlHighlighterClass *klass)
 static void
 ide_xml_highlighter_init (IdeXmlHighlighter *self)
 {
-  self->signal_group = egg_signal_group_new (IDE_TYPE_BUFFER);
-  egg_signal_group_connect_object (self->signal_group,
+  self->signal_group = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  dzl_signal_group_connect_object (self->signal_group,
                                    "cursor-moved",
                                    G_CALLBACK (ide_xml_highlighter_cursor_moved_cb),
                                    self,

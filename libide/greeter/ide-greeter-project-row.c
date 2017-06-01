@@ -18,9 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-greeter-project-row"
 
-#include <egg-binding-group.h>
-#include <egg-date-time.h>
-#include <egg-pill-box.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "greeter/ide-greeter-project-row.h"
@@ -31,7 +29,7 @@ struct _IdeGreeterProjectRow
   GtkListBoxRow    parent_instance;
 
   IdeProjectInfo  *project_info;
-  EggBindingGroup *bindings;
+  DzlBindingGroup *bindings;
   gchar           *search_text;
 
   GtkLabel        *date_label;
@@ -159,7 +157,7 @@ ide_greeter_project_row_add_tags (IdeGreeterProjectRow *self,
           const gchar *name = languages [i - 1];
           GtkWidget *pill;
 
-          pill = g_object_new (EGG_TYPE_PILL_BOX,
+          pill = g_object_new (DZL_TYPE_PILL_BOX,
                                "visible", TRUE,
                                "label", name,
                                NULL);
@@ -172,7 +170,7 @@ ide_greeter_project_row_add_tags (IdeGreeterProjectRow *self,
     {
       GtkWidget *pill;
 
-      pill = g_object_new (EGG_TYPE_PILL_BOX,
+      pill = g_object_new (DZL_TYPE_PILL_BOX,
                            "visible", TRUE,
                            "label", build_system_name,
                            NULL);
@@ -189,7 +187,7 @@ ide_greeter_project_row_set_project_info (IdeGreeterProjectRow *self,
 
   if (g_set_object (&self->project_info, project_info))
     {
-      egg_binding_group_set_source (self->bindings, project_info);
+      dzl_binding_group_set_source (self->bindings, project_info);
 
       if (project_info != NULL)
         {
@@ -216,7 +214,7 @@ humanize_date_time (GBinding     *binding,
   if (!(dt = g_value_get_boxed (from_value)))
     return FALSE;
 
-  str = egg_date_time_format_for_display (dt);
+  str = dzl_g_date_time_format_for_display (dt);
   g_value_take_string (to_value, str);
 
   return TRUE;
@@ -376,14 +374,14 @@ ide_greeter_project_row_init (IdeGreeterProjectRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->bindings = egg_binding_group_new ();
+  self->bindings = dzl_binding_group_new ();
 
-  egg_binding_group_bind (self->bindings, "name", self->title_label, "label", 0);
-  egg_binding_group_bind_full (self->bindings, "last-modified-at", self->date_label, "label", 0,
+  dzl_binding_group_bind (self->bindings, "name", self->title_label, "label", 0);
+  dzl_binding_group_bind_full (self->bindings, "last-modified-at", self->date_label, "label", 0,
                                humanize_date_time, NULL, NULL, NULL);
-  egg_binding_group_bind_full (self->bindings, "directory", self->location_label, "label", 0,
+  dzl_binding_group_bind_full (self->bindings, "directory", self->location_label, "label", 0,
                                truncate_location, NULL, NULL, NULL);
-  egg_binding_group_bind (self->bindings, "description", self->description_label, "label", 0);
+  dzl_binding_group_bind (self->bindings, "description", self->description_label, "label", 0);
 
   g_object_bind_property (self->checkbox, "active", self, "selected", 0);
 }

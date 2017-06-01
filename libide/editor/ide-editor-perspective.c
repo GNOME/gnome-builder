@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-editor-perspective"
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
@@ -46,7 +46,7 @@ struct _IdeEditorPerspective
   IdeLayoutGrid         *grid;
   GSimpleActionGroup    *actions;
 
-  EggSignalGroup        *buffer_manager_signals;
+  DzlSignalGroup        *buffer_manager_signals;
 
   gint                   right_pane_position;
   guint                  spellchecker_opened : 1;
@@ -159,7 +159,7 @@ ide_editor_perspective_context_set (GtkWidget  *widget,
   if (context != NULL)
     buffer_manager = ide_context_get_buffer_manager (context);
 
-  egg_signal_group_set_target (self->buffer_manager_signals, buffer_manager);
+  dzl_signal_group_set_target (self->buffer_manager_signals, buffer_manager);
 }
 
 static void
@@ -468,15 +468,15 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
   GActionGroup *actions;
   guint i;
 
-  self->buffer_manager_signals = egg_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
+  self->buffer_manager_signals = dzl_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
-  egg_signal_group_connect_object (self->buffer_manager_signals,
+  dzl_signal_group_connect_object (self->buffer_manager_signals,
                                    "load-buffer",
                                    G_CALLBACK (ide_editor_perspective_load_buffer),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->buffer_manager_signals,
+  dzl_signal_group_connect_object (self->buffer_manager_signals,
                                    "notify::focus-buffer",
                                    G_CALLBACK (ide_editor_perspective_notify_focus_buffer),
                                    self,

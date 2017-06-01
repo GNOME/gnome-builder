@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-symbol"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 
 #include "diagnostics/ide-source-location.h"
 #include "symbols/ide-symbol.h"
@@ -38,7 +38,7 @@ struct _IdeSymbol
 
 G_DEFINE_BOXED_TYPE (IdeSymbol, ide_symbol, ide_symbol_ref, ide_symbol_unref)
 
-EGG_DEFINE_COUNTER (instances, "IdeSymbol", "Instances", "Number of symbol instances")
+DZL_DEFINE_COUNTER (instances, "IdeSymbol", "Instances", "Number of symbol instances")
 
 /**
  * ide_symbol_new:
@@ -76,7 +76,7 @@ ide_symbol_new (const gchar       *name,
   if (canonical_location)
     ret->canonical_location = ide_source_location_ref (canonical_location);
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   return ret;
 }
@@ -180,7 +180,7 @@ ide_symbol_unref (IdeSymbol *self)
       g_clear_pointer (&self->name, g_free);
       g_slice_free (IdeSymbol, self);
 
-      EGG_COUNTER_DEC (instances);
+      DZL_COUNTER_DEC (instances);
     }
 }
 

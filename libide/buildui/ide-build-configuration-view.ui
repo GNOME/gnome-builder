@@ -1,5 +1,5 @@
 <interface>
-  <template class="IdeBuildConfigurationView" parent="EggColumnLayout">
+  <template class="IdeBuildConfigurationView" parent="DzlColumnLayout">
     <property name="border-width">24</property>
     <child>
       <object class="GtkBox">

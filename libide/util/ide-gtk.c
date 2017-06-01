@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-gtk"
 
-#include <egg-animation.h>
+#include <dazzle.h>
 
 #include "ide-debug.h"
 
@@ -216,7 +216,7 @@ void
 ide_widget_hide_with_fade (GtkWidget *widget)
 {
   GdkFrameClock *frame_clock;
-  EggAnimation *anim;
+  DzlAnimation *anim;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -224,11 +224,11 @@ ide_widget_hide_with_fade (GtkWidget *widget)
     {
       anim = g_object_get_data (G_OBJECT (widget), "FADE_ANIMATION");
       if (anim != NULL)
-        egg_animation_stop (anim);
+        dzl_animation_stop (anim);
 
       frame_clock = gtk_widget_get_frame_clock (widget);
-      anim = egg_object_animate_full (widget,
-                                      EGG_ANIMATION_LINEAR,
+      anim = dzl_object_animate_full (widget,
+                                      DZL_ANIMATION_LINEAR,
                                       1000,
                                       frame_clock,
                                       hide_callback,
@@ -244,7 +244,7 @@ void
 ide_widget_show_with_fade (GtkWidget *widget)
 {
   GdkFrameClock *frame_clock;
-  EggAnimation *anim;
+  DzlAnimation *anim;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -252,13 +252,13 @@ ide_widget_show_with_fade (GtkWidget *widget)
     {
       anim = g_object_get_data (G_OBJECT (widget), "FADE_ANIMATION");
       if (anim != NULL)
-        egg_animation_stop (anim);
+        dzl_animation_stop (anim);
 
       frame_clock = gtk_widget_get_frame_clock (widget);
       gtk_widget_set_opacity (widget, 0.0);
       gtk_widget_show (widget);
-      anim = egg_object_animate_full (widget,
-                                      EGG_ANIMATION_LINEAR,
+      anim = dzl_object_animate_full (widget,
+                                      DZL_ANIMATION_LINEAR,
                                       500,
                                       frame_clock,
                                       show_callback,

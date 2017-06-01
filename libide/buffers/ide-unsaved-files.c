@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-unsaved-files"
 
+#include <dazzle.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <glib/gstdio.h>
@@ -31,7 +32,6 @@
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
 #include "projects/ide-project.h"
-#include "util/ide-directory-reaper.h"
 
 typedef struct
 {
@@ -726,7 +726,7 @@ ide_unsaved_files_set_context (IdeObject  *object,
                                IdeContext *context)
 {
   IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
-  g_autoptr(IdeDirectoryReaper) reaper = NULL;
+  g_autoptr(DzlDirectoryReaper) reaper = NULL;
   g_autoptr(GFile) buffersdir = NULL;
   g_autofree gchar *path = NULL;
 
@@ -735,7 +735,7 @@ ide_unsaved_files_set_context (IdeObject  *object,
 
   IDE_OBJECT_CLASS (ide_unsaved_files_parent_class)->set_context (object, context);
 
-  reaper = ide_directory_reaper_new ();
+  reaper = dzl_directory_reaper_new ();
 
   /*
    * Setup a reaper to cleanup old files in case that we left some around
@@ -743,10 +743,10 @@ ide_unsaved_files_set_context (IdeObject  *object,
    */
   path = get_buffers_dir ();
   buffersdir = g_file_new_for_path (path);
-  ide_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_DAY);
+  dzl_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_DAY);
 
   /* Now cleanup the old files */
-  ide_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
+  dzl_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
 }
 
 static void

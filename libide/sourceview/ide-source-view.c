@@ -18,16 +18,10 @@
 
 #define G_LOG_DOMAIN "ide-source-view"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <gspell/gspell.h>
-
-#include <egg-animation.h>
-#include <egg-binding-group.h>
-#include <egg-counter.h>
-#include <egg-simple-popover.h>
-#include <egg-signal-group.h>
-#include <egg-widget-action-group.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -66,12 +60,7 @@
 #include "sourceview/ide-cursor.h"
 #include "symbols/ide-symbol.h"
 #include "symbols/ide-symbol-resolver.h"
-#include "theatrics/ide-box-theatric.h"
-#include "util/ide-cairo.h"
-#include "util/ide-gdk.h"
 #include "util/ide-gtk.h"
-#include "util/ide-pango.h"
-#include "util/ide-rgba.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-workbench-private.h"
 
@@ -90,11 +79,11 @@
 
 #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
 
-#define _GDK_RECTANGLE_X2(rect) _ide_cairo_rectangle_x2(rect)
-#define _GDK_RECTANGLE_Y2(rect) _ide_cairo_rectangle_y2(rect)
-#define _GDK_RECTANGLE_CONTAINS(rect,other) _ide_cairo_rectangle_contains_rectangle(rect,other)
-#define _GDK_RECTANGLE_CENTER_X(rect) _ide_cairo_rectangle_center(rect)
-#define _GDK_RECTANGLE_CENTER_Y(rect) _ide_cairo_rectangle_middle(rect)
+#define _GDK_RECTANGLE_X2(rect) dzl_cairo_rectangle_x2(rect)
+#define _GDK_RECTANGLE_Y2(rect) dzl_cairo_rectangle_y2(rect)
+#define _GDK_RECTANGLE_CONTAINS(rect,other) dzl_cairo_rectangle_contains_rectangle(rect,other)
+#define _GDK_RECTANGLE_CENTER_X(rect) dzl_cairo_rectangle_center(rect)
+#define _GDK_RECTANGLE_CENTER_Y(rect) dzl_cairo_rectangle_middle(rect)
 #define TRACE_RECTANGLE(name, rect) \
   IDE_TRACE_MSG ("%s = Rectangle(x=%d, y=%d, width=%d, height=%d)", \
                  name, (rect)->x, (rect)->y, (rect)->width, (rect)->height)
@@ -121,14 +110,14 @@ typedef struct
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
   GtkSourceSearchContext      *search_context;
-  EggAnimation                *hadj_animation;
-  EggAnimation                *vadj_animation;
+  DzlAnimation                *hadj_animation;
+  DzlAnimation                *vadj_animation;
 
   IdeExtensionSetAdapter      *completion_providers;
-  EggSignalGroup              *completion_providers_signals;
+  DzlSignalGroup              *completion_providers_signals;
 
-  EggBindingGroup             *file_setting_bindings;
-  EggSignalGroup              *buffer_signals;
+  DzlBindingGroup             *file_setting_bindings;
+  DzlSignalGroup              *buffer_signals;
 
   guint                        change_sequence;
 
@@ -219,7 +208,7 @@ typedef struct
 } DefinitionHighlightData;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
-EGG_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourceView instances")
+DZL_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourceView instances")
 
 enum {
   PROP_0,
@@ -509,7 +498,7 @@ ide_source_view_block_handlers (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  egg_signal_group_block (priv->buffer_signals);
+  dzl_signal_group_block (priv->buffer_signals);
 }
 
 static void
@@ -519,7 +508,7 @@ ide_source_view_unblock_handlers (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  egg_signal_group_unblock (priv->buffer_signals);
+  dzl_signal_group_unblock (priv->buffer_signals);
 }
 
 static void
@@ -594,7 +583,7 @@ animate_expand (IdeSourceView     *self,
                 const GtkTextIter *begin,
                 const GtkTextIter *end)
 {
-  IdeBoxTheatric *theatric;
+  DzlBoxTheatric *theatric;
   GtkAllocation alloc;
   GdkRectangle rect = { 0 };
 
@@ -606,7 +595,7 @@ animate_expand (IdeSourceView     *self,
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
   rect.height = MIN (rect.height, alloc.height - rect.y);
 
-  theatric = g_object_new (IDE_TYPE_BOX_THEATRIC,
+  theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
                            "alpha", 0.3,
                            "background", "#729fcf",
                            "height", rect.height,
@@ -616,8 +605,8 @@ animate_expand (IdeSourceView     *self,
                            "y", rect.y,
                            NULL);
 
-  egg_object_animate_full (theatric,
-                           EGG_ANIMATION_EASE_IN_CUBIC,
+  dzl_object_animate_full (theatric,
+                           DZL_ANIMATION_EASE_IN_CUBIC,
                            250,
                            gtk_widget_get_frame_clock (GTK_WIDGET (self)),
                            g_object_unref,
@@ -635,7 +624,7 @@ animate_shrink (IdeSourceView     *self,
                 const GtkTextIter *begin,
                 const GtkTextIter *end)
 {
-  IdeBoxTheatric *theatric;
+  DzlBoxTheatric *theatric;
   GtkAllocation alloc;
   GdkRectangle rect = { 0 };
   GdkRectangle char_rect = { 0 };
@@ -664,7 +653,7 @@ animate_shrink (IdeSourceView     *self,
                    (gtk_text_iter_starts_line (&copy_begin) &&
                     gtk_text_iter_starts_line (&copy_end)));
 
-  theatric = g_object_new (IDE_TYPE_BOX_THEATRIC,
+  theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
                            "alpha", 0.3,
                            "background", "#729fcf",
                            "height", rect.height,
@@ -675,8 +664,8 @@ animate_shrink (IdeSourceView     *self,
                            NULL);
 
   if (is_whole_line)
-    egg_object_animate_full (theatric,
-                             EGG_ANIMATION_EASE_OUT_QUAD,
+    dzl_object_animate_full (theatric,
+                             DZL_ANIMATION_EASE_OUT_QUAD,
                              150,
                              gtk_widget_get_frame_clock (GTK_WIDGET (self)),
                              g_object_unref,
@@ -688,8 +677,8 @@ animate_shrink (IdeSourceView     *self,
                              "alpha", 0.3,
                              NULL);
   else if (is_single_line)
-    egg_object_animate_full (theatric,
-                             EGG_ANIMATION_EASE_OUT_QUAD,
+    dzl_object_animate_full (theatric,
+                             DZL_ANIMATION_EASE_OUT_QUAD,
                              150,
                              gtk_widget_get_frame_clock (GTK_WIDGET (self)),
                              g_object_unref,
@@ -701,8 +690,8 @@ animate_shrink (IdeSourceView     *self,
                              "alpha", 0.3,
                              NULL);
   else
-    egg_object_animate_full (theatric,
-                             EGG_ANIMATION_EASE_OUT_QUAD,
+    dzl_object_animate_full (theatric,
+                             DZL_ANIMATION_EASE_OUT_QUAD,
                              150,
                              gtk_widget_get_frame_clock (GTK_WIDGET (self)),
                              g_object_unref,
@@ -881,7 +870,7 @@ ide_source_view_set_file_settings (IdeSourceView   *self,
 
   if (file_settings != ide_source_view_get_file_settings (self))
     {
-      egg_binding_group_set_source (priv->file_setting_bindings, file_settings);
+      dzl_binding_group_set_source (priv->file_setting_bindings, file_settings);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_SETTINGS]);
     }
 }
@@ -1035,8 +1024,8 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
 
       g_object_get (search_match_style, "background", &background, NULL);
       gdk_rgba_parse (&color, background);
-      ide_rgba_shade (&color, &priv->bubble_color1, 0.8);
-      ide_rgba_shade (&color, &priv->bubble_color2, 1.1);
+      dzl_rgba_shade (&color, &priv->bubble_color1, 0.8);
+      dzl_rgba_shade (&color, &priv->bubble_color2, 1.1);
     }
   else
     {
@@ -1088,7 +1077,7 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
     }
 
   priv->spellchecker_bubble_bg_color1 = spellchecker_bubble_bg;
-  ide_rgba_shade (&spellchecker_bubble_bg, &priv->spellchecker_bubble_bg_color2, 0.8);
+  dzl_rgba_shade (&spellchecker_bubble_bg, &priv->spellchecker_bubble_bg_color2, 0.8);
 
   priv->spellchecker_bubble_tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (priv->buffer), NULL,
                                                               "foreground-rgba", &spellchecker_bubble_fg,
@@ -1209,7 +1198,7 @@ ide_source_view_rebuild_css (IdeSourceView *self)
           font_desc = copy;
         }
 
-      str = ide_pango_font_description_to_css (font_desc);
+      str = dzl_pango_font_description_to_css (font_desc);
       css = g_strdup_printf ("textview { %s }", str ?: "");
       gtk_css_provider_load_from_data (priv->css_provider, css, -1, NULL);
 
@@ -1619,7 +1608,7 @@ ide_source_view__buffer__notify_can_redo (IdeSourceView *self,
                 NULL);
 
   group = gtk_widget_get_action_group (GTK_WIDGET (self), "sourceview");
-  egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "redo", can_redo);
+  dzl_widget_action_group_set_action_enabled (DZL_WIDGET_ACTION_GROUP (group), "redo", can_redo);
 }
 
 static void
@@ -1638,13 +1627,13 @@ ide_source_view__buffer__notify_can_undo (IdeSourceView *self,
                 NULL);
 
   group = gtk_widget_get_action_group (GTK_WIDGET (self), "sourceview");
-  egg_widget_action_group_set_action_enabled (EGG_WIDGET_ACTION_GROUP (group), "undo", can_undo);
+  dzl_widget_action_group_set_action_enabled (DZL_WIDGET_ACTION_GROUP (group), "undo", can_undo);
 }
 
 static void
 ide_source_view_bind_buffer (IdeSourceView  *self,
                              IdeBuffer      *buffer,
-                             EggSignalGroup *group)
+                             DzlSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceSearchSettings *search_settings;
@@ -1656,7 +1645,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (EGG_IS_SIGNAL_GROUP (group));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
 
   priv->buffer = buffer;
 
@@ -1687,7 +1676,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
                                                               "Completion-Provider-Languages",
                                                               NULL);
 
-  egg_signal_group_set_target (priv->completion_providers_signals,
+  dzl_signal_group_set_target (priv->completion_providers_signals,
                                priv->completion_providers);
 
   ide_extension_set_adapter_foreach (priv->completion_providers,
@@ -1753,14 +1742,14 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
 static void
 ide_source_view_unbind_buffer (IdeSourceView  *self,
-                               EggSignalGroup *group)
+                               DzlSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (EGG_IS_SIGNAL_GROUP (group));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
 
   if (priv->buffer == NULL)
     IDE_EXIT;
@@ -1780,7 +1769,7 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
                                      (IdeExtensionSetAdapterForeachFunc)ide_source_view__completion_provider_removed,
                                      self);
 
-  egg_signal_group_set_target (priv->completion_providers_signals, NULL);
+  dzl_signal_group_set_target (priv->completion_providers_signals, NULL);
 
   if (priv->cursor != NULL)
     {
@@ -4515,7 +4504,7 @@ ide_source_view_real_reindent (IdeSourceView *self)
       gint cursor_offset;
 
       line = g_ptr_array_index (lines, i);
-      event = ide_gdk_synthesize_event_key (window, '\n');
+      event = dzl_gdk_synthesize_event_key (window, '\n');
       indent = ide_indenter_format (indenter, GTK_TEXT_VIEW (self), &begin, &end, &cursor_offset, event);
       gdk_event_free ((GdkEvent *)event);
 
@@ -4707,7 +4696,7 @@ ide_source_view_draw_snippet_background (IdeSourceView    *self,
 
   gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT, r.x, r.y, &r.x, &r.y);
 
-  ide_cairo_rounded_rectangle (cr, &r, 5, 5);
+  dzl_cairo_rounded_rectangle (cr, &r, 5, 5);
 
   cairo_fill (cr);
 }
@@ -4758,7 +4747,7 @@ draw_bezel (cairo_t                     *cr,
   r.height = rect->height + (radius * 2);
 
   gdk_cairo_set_source_rgba (cr, rgba);
-  ide_cairo_rounded_rectangle (cr, &r, radius, radius);
+  dzl_cairo_rounded_rectangle (cr, &r, radius, radius);
   cairo_fill (cr);
 }
 
@@ -5809,17 +5798,17 @@ ide_source_view_real_select_all (IdeSourceView *self,
 
 static void
 ide_source_view_rename_changed (IdeSourceView    *self,
-                                EggSimplePopover *popover)
+                                DzlSimplePopover *popover)
 {
   const gchar *text;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
+  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
 
-  text = egg_simple_popover_get_text (popover);
-  egg_simple_popover_set_ready (popover, text != NULL);
+  text = dzl_simple_popover_get_text (popover);
+  dzl_simple_popover_set_ready (popover, text != NULL);
 
   IDE_EXIT;
 }
@@ -5890,7 +5879,7 @@ ide_source_view_rename_edits_cb (GObject      *object,
 static void
 ide_source_view_rename_activate (IdeSourceView    *self,
                                  const gchar      *text,
-                                 EggSimplePopover *popover)
+                                 DzlSimplePopover *popover)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   g_autoptr(IdeSourceLocation) location = NULL;
@@ -5900,7 +5889,7 @@ ide_source_view_rename_activate (IdeSourceView    *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (text != NULL);
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
+  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
 
   if (NULL == (provider = ide_buffer_get_rename_provider (priv->buffer)))
     IDE_EXIT;
@@ -5928,7 +5917,7 @@ static void
 ide_source_view_real_begin_rename (IdeSourceView *self)
 {
   IdeRenameProvider *provider;
-  EggSimplePopover *popover;
+  DzlSimplePopover *popover;
   g_autofree gchar *uri = NULL;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -5964,7 +5953,7 @@ ide_source_view_real_begin_rename (IdeSourceView *self)
                                          GTK_TEXT_WINDOW_WIDGET,
                                          loc.x, loc.y, &loc.x, &loc.y);
 
-  popover = g_object_new (EGG_TYPE_SIMPLE_POPOVER,
+  popover = g_object_new (DZL_TYPE_SIMPLE_POPOVER,
                           "title", _("Rename symbol"),
                           "button-text", _("Rename"),
                           "relative-to", self,
@@ -6287,13 +6276,13 @@ ide_source_view_dispose (GObject *object)
 
   if (priv->hadj_animation)
     {
-      egg_animation_stop (priv->hadj_animation);
+      dzl_animation_stop (priv->hadj_animation);
       ide_clear_weak_pointer (&priv->hadj_animation);
     }
 
   if (priv->vadj_animation)
     {
-      egg_animation_stop (priv->vadj_animation);
+      dzl_animation_stop (priv->vadj_animation);
       ide_clear_weak_pointer (&priv->vadj_animation);
     }
 
@@ -6338,7 +6327,7 @@ ide_source_view_finalize (GObject *object)
   g_clear_pointer (&priv->include_regex, g_regex_unref);
   g_clear_pointer (&priv->saved_search_text, g_free);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->finalize (object);
 }
@@ -7489,7 +7478,7 @@ ide_source_view_init (IdeSourceView *self)
                                      0,
                                      NULL);
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   priv->target_line_column = 0;
   priv->snippets = g_queue_new ();
@@ -7500,107 +7489,107 @@ ide_source_view_init (IdeSourceView *self)
   priv->command_str = g_string_sized_new (32);
   priv->overscroll_num_lines = DEFAULT_OVERSCROLL_NUM_LINES;
 
-  priv->completion_providers_signals = egg_signal_group_new (IDE_TYPE_EXTENSION_SET_ADAPTER);
+  priv->completion_providers_signals = dzl_signal_group_new (IDE_TYPE_EXTENSION_SET_ADAPTER);
 
-  egg_signal_group_connect_object (priv->completion_providers_signals,
+  dzl_signal_group_connect_object (priv->completion_providers_signals,
                                    "extension-added",
                                    G_CALLBACK (ide_source_view__completion_provider_added),
                                    self,
                                    0);
 
-  egg_signal_group_connect_object (priv->completion_providers_signals,
+  dzl_signal_group_connect_object (priv->completion_providers_signals,
                                    "extension-removed",
                                    G_CALLBACK (ide_source_view__completion_provider_removed),
                                    self,
                                    0);
 
-  priv->file_setting_bindings = egg_binding_group_new ();
-  egg_binding_group_bind (priv->file_setting_bindings, "indent-width",
+  priv->file_setting_bindings = dzl_binding_group_new ();
+  dzl_binding_group_bind (priv->file_setting_bindings, "indent-width",
                           self, "indent-width", G_BINDING_SYNC_CREATE);
-  egg_binding_group_bind (priv->file_setting_bindings, "tab-width",
+  dzl_binding_group_bind (priv->file_setting_bindings, "tab-width",
                           self, "tab-width", G_BINDING_SYNC_CREATE);
-  egg_binding_group_bind (priv->file_setting_bindings, "right-margin-position",
+  dzl_binding_group_bind (priv->file_setting_bindings, "right-margin-position",
                           self, "right-margin-position", G_BINDING_SYNC_CREATE);
-  egg_binding_group_bind (priv->file_setting_bindings, "indent-style",
+  dzl_binding_group_bind (priv->file_setting_bindings, "indent-style",
                           self, "indent-style", G_BINDING_SYNC_CREATE);
-  egg_binding_group_bind (priv->file_setting_bindings, "show-right-margin",
+  dzl_binding_group_bind (priv->file_setting_bindings, "show-right-margin",
                           self, "show-right-margin", G_BINDING_SYNC_CREATE);
-  egg_binding_group_bind (priv->file_setting_bindings, "overwrite-braces",
+  dzl_binding_group_bind (priv->file_setting_bindings, "overwrite-braces",
                           self, "overwrite-braces", G_BINDING_SYNC_CREATE);
 
-  priv->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
+  priv->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "changed",
                                    G_CALLBACK (ide_source_view__buffer_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_source_view__buffer_line_flags_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::can-redo",
                                    G_CALLBACK (ide_source_view__buffer__notify_can_redo),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::can-undo",
                                    G_CALLBACK (ide_source_view__buffer__notify_can_undo),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::highlight-diagnostics",
                                    G_CALLBACK (ide_source_view__buffer_notify_highlight_diagnostics_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::file",
                                    G_CALLBACK (ide_source_view__buffer_notify_file_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::language",
                                    G_CALLBACK (ide_source_view__buffer_notify_language_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::style-scheme",
                                    G_CALLBACK (ide_source_view__buffer_notify_style_scheme_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "insert-text",
                                    G_CALLBACK (ide_source_view__buffer_insert_text_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "insert-text",
                                    G_CALLBACK (ide_source_view__buffer_insert_text_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (ide_source_view__buffer_delete_range_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (ide_source_view__buffer_delete_range_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "mark-set",
                                    G_CALLBACK (ide_source_view__buffer_mark_set_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "loaded",
                                    G_CALLBACK (ide_source_view__buffer_loaded_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
+  dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::has-selection",
                                    G_CALLBACK (ide_source_view__buffer_notify_has_selection_cb),
                                    self,
@@ -7634,7 +7623,7 @@ ide_source_view_init (IdeSourceView *self)
   if (target_list)
     gtk_target_list_add_uri_targets (target_list, TARGET_URI_LIST);
 
-  egg_widget_action_group_attach (self, "sourceview");
+  dzl_widget_action_group_attach (self, "sourceview");
 }
 
 const PangoFontDescription *
@@ -8544,13 +8533,13 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
 
       if (priv->hadj_animation != NULL)
         {
-          egg_animation_stop (priv->hadj_animation);
+          dzl_animation_stop (priv->hadj_animation);
           ide_clear_weak_pointer (&priv->hadj_animation);
         }
 
       priv->hadj_animation =
-        egg_object_animate (hadj,
-                            EGG_ANIMATION_EASE_OUT_CUBIC,
+        dzl_object_animate (hadj,
+                            DZL_ANIMATION_EASE_OUT_CUBIC,
                             duration_msec,
                             frame_clock,
                             "value", (double)xvalue,
@@ -8560,13 +8549,13 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
 
       if (priv->vadj_animation != NULL)
         {
-          egg_animation_stop (priv->vadj_animation);
+          dzl_animation_stop (priv->vadj_animation);
           ide_clear_weak_pointer (&priv->vadj_animation);
         }
 
       priv->vadj_animation =
-        egg_object_animate_full (vadj,
-                                 EGG_ANIMATION_EASE_OUT_CUBIC,
+        dzl_object_animate_full (vadj,
+                                 DZL_ANIMATION_EASE_OUT_CUBIC,
                                  duration_msec,
                                  frame_clock,
                                  (GDestroyNotify)ide_source_view__vadj_animation_completed,
@@ -8830,7 +8819,7 @@ ide_source_view_get_file_settings (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
-  return (IdeFileSettings *)egg_binding_group_get_source (priv->file_setting_bindings);
+  return (IdeFileSettings *)dzl_binding_group_get_source (priv->file_setting_bindings);
 }
 
 gboolean

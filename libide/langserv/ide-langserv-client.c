@@ -18,8 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-langserv-client"
 
-#include <egg-counter.h>
-#include <egg-signal-group.h>
+#include <dazzle.h>
+#include <dazzle.h>
 #include <jsonrpc-glib.h>
 #include <unistd.h>
 
@@ -38,8 +38,8 @@
 
 typedef struct
 {
-  EggSignalGroup *buffer_manager_signals;
-  EggSignalGroup *project_signals;
+  DzlSignalGroup *buffer_manager_signals;
+  DzlSignalGroup *project_signals;
   JsonrpcClient  *rpc_client;
   GIOStream      *io_stream;
   GHashTable     *diagnostics_by_file;
@@ -371,13 +371,13 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
 static void
 ide_langserv_client_buffer_manager_bind (IdeLangservClient *self,
                                          IdeBufferManager  *buffer_manager,
-                                         EggSignalGroup    *signal_group)
+                                         DzlSignalGroup    *signal_group)
 {
   guint n_items;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
-  g_assert (EGG_IS_SIGNAL_GROUP (signal_group));
+  g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (buffer_manager));
 
@@ -392,10 +392,10 @@ ide_langserv_client_buffer_manager_bind (IdeLangservClient *self,
 
 static void
 ide_langserv_client_buffer_manager_unbind (IdeLangservClient *self,
-                                           EggSignalGroup    *signal_group)
+                                           DzlSignalGroup    *signal_group)
 {
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
-  g_assert (EGG_IS_SIGNAL_GROUP (signal_group));
+  g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
 
   /* TODO: We need to track everything we've notified so that we
    *       can notify the peer to release its resources.
@@ -803,19 +803,19 @@ ide_langserv_client_init (IdeLangservClient *self)
                                                      g_object_unref,
                                                      (GDestroyNotify)ide_diagnostics_unref);
 
-  priv->buffer_manager_signals = egg_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
+  priv->buffer_manager_signals = dzl_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
-  egg_signal_group_connect_object (priv->buffer_manager_signals,
+  dzl_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-loaded",
                                    G_CALLBACK (ide_langserv_client_buffer_loaded),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_manager_signals,
+  dzl_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-saved",
                                    G_CALLBACK (ide_langserv_client_buffer_saved),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_manager_signals,
+  dzl_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-unloaded",
                                    G_CALLBACK (ide_langserv_client_buffer_unloaded),
                                    self,
@@ -832,14 +832,14 @@ ide_langserv_client_init (IdeLangservClient *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  priv->project_signals = egg_signal_group_new (IDE_TYPE_PROJECT);
+  priv->project_signals = dzl_signal_group_new (IDE_TYPE_PROJECT);
 
-  egg_signal_group_connect_object (priv->project_signals,
+  dzl_signal_group_connect_object (priv->project_signals,
                                    "file-trashed",
                                    G_CALLBACK (ide_langserv_client_project_file_trashed),
                                    self,
                                    G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->project_signals,
+  dzl_signal_group_connect_object (priv->project_signals,
                                    "file-renamed",
                                    G_CALLBACK (ide_langserv_client_project_file_renamed),
                                    self,
@@ -884,10 +884,10 @@ ide_langserv_client_initialize_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (self));
 
   buffer_manager = ide_context_get_buffer_manager (context);
-  egg_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
+  dzl_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
 
   project = ide_context_get_project (context);
-  egg_signal_group_set_target (priv->project_signals, project);
+  dzl_signal_group_set_target (priv->project_signals, project);
 
   IDE_EXIT;
 }

@@ -19,13 +19,13 @@
 #ifndef IDE_PREFERENCES_FLOW_BOX_H
 #define IDE_PREFERENCES_FLOW_BOX_H
 
-#include "egg-column-layout.h"
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_FLOW_BOX (ide_preferences_flow_box_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, IDE, PREFERENCES_FLOW_BOX, EggColumnLayout)
+G_DECLARE_FINAL_TYPE (IdePreferencesFlowBox, ide_preferences_flow_box, IDE, PREFERENCES_FLOW_BOX, DzlColumnLayout)
 
 GtkWidget *ide_preferences_flow_box_new (void);
 

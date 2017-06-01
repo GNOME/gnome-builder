@@ -19,8 +19,7 @@
 #define G_LOG_DOMAIN "gb-clang-service"
 
 #include <clang-c/Index.h>
-#include <egg-counter.h>
-#include <egg-task-cache.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 
@@ -36,7 +35,7 @@ struct _IdeClangService
 
   CXIndex       index;
   GCancellable *cancellable;
-  EggTaskCache *units_cache;
+  DzlTaskCache *units_cache;
 };
 
 typedef struct
@@ -62,7 +61,7 @@ static void service_iface_init (IdeServiceInterface *iface);
 G_DEFINE_TYPE_EXTENDED (IdeClangService, ide_clang_service, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
 
-EGG_DEFINE_COUNTER (ParseAttempts,
+DZL_DEFINE_COUNTER (ParseAttempts,
                     "Clang",
                     "Total Parse Attempts",
                     "Total number of attempts to create a translation unit.")
@@ -303,7 +302,7 @@ ide_clang_service_parse_worker (GTask        *task,
     g_ptr_array_add (built_argv, request->command_line_args[i]);
   g_ptr_array_add (built_argv, NULL);
 
-  EGG_COUNTER_INC (ParseAttempts);
+  DZL_COUNTER_INC (ParseAttempts);
   code = clang_parseTranslationUnit2 (request->index,
                                       request->source_filename,
                                       (const gchar * const *)built_argv->pdata,
@@ -448,7 +447,7 @@ ide_clang_service_unit_completed_cb (GObject      *object,
 }
 
 static void
-ide_clang_service_get_translation_unit_worker (EggTaskCache  *cache,
+ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
                                                gconstpointer  key,
                                                GTask         *task,
                                                gpointer       user_data)
@@ -525,14 +524,14 @@ ide_clang_service_get_translation_unit_cb (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
 {
-  EggTaskCache *cache = (EggTaskCache *)object;
+  DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(IdeClangTranslationUnit) ret = NULL;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
 
-  if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
+  if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
     g_task_return_error (task, error);
   else
     g_task_return_pointer (task, g_steal_pointer (&ret), g_object_unref);
@@ -592,14 +591,14 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   /*
    * If we have a cached unit, and it is new enough, then re-use it.
    */
-  if ((cached = egg_task_cache_peek (self->units_cache, file)) &&
+  if ((cached = dzl_task_cache_peek (self->units_cache, file)) &&
       (ide_clang_translation_unit_get_serial (cached) >= min_serial))
     {
       g_task_return_pointer (task, g_object_ref (cached), g_object_unref);
       return;
     }
 
-  egg_task_cache_get_async (self->units_cache,
+  dzl_task_cache_get_async (self->units_cache,
                             file,
                             TRUE,
                             cancellable,
@@ -637,7 +636,7 @@ ide_clang_service_start (IdeService *service)
 
   self->cancellable = g_cancellable_new ();
 
-  self->units_cache = egg_task_cache_new ((GHashFunc)ide_file_hash,
+  self->units_cache = dzl_task_cache_new ((GHashFunc)ide_file_hash,
                                           (GEqualFunc)ide_file_equal,
                                           g_object_ref,
                                           g_object_unref,
@@ -648,7 +647,7 @@ ide_clang_service_start (IdeService *service)
                                           g_object_ref (self),
                                           g_object_unref);
 
-  egg_task_cache_set_name (self->units_cache, "clang translation-unit cache");
+  dzl_task_cache_set_name (self->units_cache, "clang translation-unit cache");
 
   self->index = clang_createIndex (0, 0);
   clang_CXIndex_setGlobalOptions (self->index,
@@ -731,7 +730,7 @@ ide_clang_service_get_cached_translation_unit (IdeClangService *self,
   g_return_val_if_fail (IDE_IS_CLANG_SERVICE (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
-  cached = egg_task_cache_peek (self->units_cache, file);
+  cached = dzl_task_cache_peek (self->units_cache, file);
 
   return cached ? g_object_ref (cached) : NULL;
 }

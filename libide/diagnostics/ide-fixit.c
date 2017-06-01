@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "egg-counter.h"
+#include "dazzle.h"
 
 #include "ide-fixit.h"
 #include "ide-source-range.h"
@@ -30,7 +30,7 @@ struct _IdeFixit
   gchar          *text;
 };
 
-EGG_DEFINE_COUNTER (instances, "IdeFixit", "Instances", "Number of fixit instances")
+DZL_DEFINE_COUNTER (instances, "IdeFixit", "Instances", "Number of fixit instances")
 
 IdeFixit *
 _ide_fixit_new (IdeSourceRange *source_range,
@@ -46,7 +46,7 @@ _ide_fixit_new (IdeSourceRange *source_range,
   self->range = ide_source_range_ref (source_range);
   self->text = g_strdup (replacement_text);
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   return self;
 }
@@ -58,7 +58,7 @@ ide_fixit_destroy (IdeFixit *self)
   g_clear_pointer (&self->text, g_free);
   g_slice_free (IdeFixit, self);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 IdeFixit *

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-source-range"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
@@ -26,7 +26,7 @@
 
 G_DEFINE_BOXED_TYPE (IdeSourceRange, ide_source_range, ide_source_range_ref, ide_source_range_unref)
 
-EGG_DEFINE_COUNTER (instances, "IdeSourceRange", "Instances", "Number of IdeSourceRange instances.")
+DZL_DEFINE_COUNTER (instances, "IdeSourceRange", "Instances", "Number of IdeSourceRange instances.")
 
 struct _IdeSourceRange
 {
@@ -52,7 +52,7 @@ ide_source_range_new (IdeSourceLocation *begin,
   ret->begin = ide_source_location_ref (begin);
   ret->end = ide_source_location_ref (end);
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   return ret;
 }
@@ -125,6 +125,6 @@ ide_source_range_unref (IdeSourceRange *self)
       ide_source_location_unref (self->end);
       g_slice_free (IdeSourceRange, self);
 
-      EGG_COUNTER_DEC (instances);
+      DZL_COUNTER_DEC (instances);
     }
 }

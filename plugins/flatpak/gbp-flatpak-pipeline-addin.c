@@ -414,7 +414,7 @@ build_bundle_notify_completed (IdeBuildStage *stage,
   if (ide_build_stage_get_completed (stage))
     {
       g_autoptr(GFile) file = g_file_new_for_path (dest_path);
-      ide_file_manager_show (file, NULL);
+      dzl_file_manager_show (file, NULL);
     }
 }
 

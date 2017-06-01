@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-git-remote-callbacks"
 
-#include <egg-animation.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 
@@ -30,7 +30,7 @@ struct _IdeGitRemoteCallbacks
 {
   GgitRemoteCallbacks  parent_instance;
 
-  EggAnimation        *animation;
+  DzlAnimation        *animation;
   IdeProgress         *progress;
   gdouble              fraction;
   GgitCredtype         tried;
@@ -89,7 +89,7 @@ static gboolean
 ide_git_remote_callbacks__notify_fraction_cb (gpointer data)
 {
   g_autoptr(IdeGitRemoteCallbacks) self = data;
-  EggAnimation *animation;
+  DzlAnimation *animation;
 
   g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (self));
 
@@ -99,11 +99,11 @@ ide_git_remote_callbacks__notify_fraction_cb (gpointer data)
   if ((animation = self->animation))
     {
       ide_clear_weak_pointer (&self->animation);
-      egg_animation_stop (animation);
+      dzl_animation_stop (animation);
     }
 
-  animation = egg_object_animate (self->progress,
-                                  EGG_ANIMATION_EASE_IN_OUT_QUAD,
+  animation = dzl_object_animate (self->progress,
+                                  DZL_ANIMATION_EASE_IN_OUT_QUAD,
                                   ANIMATION_DURATION_MSEC,
                                   NULL,
                                   "fraction", self->fraction,

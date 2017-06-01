@@ -19,7 +19,7 @@
 #define G_LOG_DOMAIN "ide-build-pipeline"
 
 #include <glib/gi18n.h>
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <libpeas/peas.h>
 #include <string.h>
 
@@ -44,10 +44,9 @@
 #include "plugins/ide-extension-util.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
-#include "util/ide-directory-reaper.h"
 #include "vcs/ide-vcs.h"
 
-EGG_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
+DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
 
 /**
  * SECTION:idebuildpipeline
@@ -959,7 +958,7 @@ ide_build_pipeline_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (Instances);
+  DZL_COUNTER_DEC (Instances);
 
   IDE_EXIT;
 }
@@ -1192,7 +1191,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
 static void
 ide_build_pipeline_init (IdeBuildPipeline *self)
 {
-  EGG_COUNTER_INC (Instances);
+  DZL_COUNTER_INC (Instances);
 
   self->position = -1;
 
@@ -2566,7 +2565,7 @@ ide_build_pipeline_reaper_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
-  IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
+  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
   IdeBuildPipeline *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
@@ -2575,7 +2574,7 @@ ide_build_pipeline_reaper_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
@@ -2592,7 +2591,7 @@ ide_build_pipeline_reaper_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_PIPELINE (self));
 
   /* Make sure our reaper completed or else we bail */
-  if (!ide_directory_reaper_execute_finish (reaper, result, &error))
+  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -2614,7 +2613,7 @@ static void
 ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
                                  GTask            *task)
 {
-  g_autoptr(IdeDirectoryReaper) reaper = NULL;
+  g_autoptr(DzlDirectoryReaper) reaper = NULL;
   GCancellable *cancellable;
 
   IDE_ENTRY;
@@ -2632,7 +2631,7 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
   }
 #endif
 
-  reaper = ide_directory_reaper_new ();
+  reaper = dzl_directory_reaper_new ();
 
   /*
    * Check if we can remove the builddir. We don't want to do this if it is the
@@ -2642,7 +2641,7 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
     {
       g_autoptr(GFile) builddir = g_file_new_for_path (self->builddir);
 
-      ide_directory_reaper_add_directory (reaper, builddir, 0);
+      dzl_directory_reaper_add_directory (reaper, builddir, 0);
     }
 
   /*
@@ -2661,7 +2660,7 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Now execute the reaper to clean up the build files. */
-  ide_directory_reaper_execute_async (reaper,
+  dzl_directory_reaper_execute_async (reaper,
                                       cancellable,
                                       ide_build_pipeline_reaper_cb,
                                       g_object_ref (task));

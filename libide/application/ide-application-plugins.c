@@ -406,7 +406,7 @@ ide_application_load_plugin_menus (IdeApplication *self,
    */
   module_name = peas_plugin_info_get_module_name (plugin_info);
   path = g_strdup_printf ("/org/gnome/builder/plugins/%s/gtk/menus.ui", module_name);
-  merge_id = egg_menu_manager_add_resource (self->menu_manager, path, NULL);
+  merge_id = dzl_menu_manager_add_resource (self->menu_manager, path, NULL);
   if (merge_id != 0)
     g_hash_table_insert (self->merge_ids, g_strdup (module_name), GINT_TO_POINTER (merge_id));
   g_free (path);
@@ -420,7 +420,7 @@ ide_application_load_plugin_menus (IdeApplication *self,
       path = g_strdup_printf ("%s/gtk/menus.ui", peas_plugin_info_get_data_dir (plugin_info));
       if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
         {
-          merge_id = egg_menu_manager_add_filename (self->menu_manager, path, NULL);
+          merge_id = dzl_menu_manager_add_filename (self->menu_manager, path, NULL);
           if (merge_id != 0)
             g_hash_table_insert (self->merge_ids, g_strdup (module_name), GINT_TO_POINTER (merge_id));
         }
@@ -443,7 +443,7 @@ ide_application_unload_plugin_menus (IdeApplication *self,
   module_name = peas_plugin_info_get_module_name (plugin_info);
   merge_id = GPOINTER_TO_INT (g_hash_table_lookup (self->merge_ids, module_name));
   if (merge_id != 0)
-    egg_menu_manager_remove (self->menu_manager, merge_id);
+    dzl_menu_manager_remove (self->menu_manager, merge_id);
   g_hash_table_remove (self->merge_ids, module_name);
 }
 

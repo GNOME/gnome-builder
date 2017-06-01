@@ -16,16 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
-
-#include "egg-signal-group.h"
 
 #include "rg-graph.h"
 
 typedef struct
 {
   RgTable         *table;
-  EggSignalGroup  *table_signals;
+  DzlSignalGroup  *table_signals;
   GPtrArray       *renderers;
   cairo_surface_t *surface;
   guint            tick_handler;
@@ -87,7 +86,7 @@ rg_graph_set_table (RgGraph *self,
 
   if (g_set_object (&priv->table, table))
     {
-      egg_signal_group_set_target (priv->table_signals, table);
+      dzl_signal_group_set_target (priv->table_signals, table);
       gtk_widget_queue_allocate (GTK_WIDGET (self));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TABLE]);
     }
@@ -388,27 +387,27 @@ rg_graph_init (RgGraph *self)
 
   priv->renderers = g_ptr_array_new_with_free_func (g_object_unref);
 
-  priv->table_signals = egg_signal_group_new (RG_TYPE_TABLE);
+  priv->table_signals = dzl_signal_group_new (RG_TYPE_TABLE);
 
-  egg_signal_group_connect_object (priv->table_signals,
+  dzl_signal_group_connect_object (priv->table_signals,
                                    "notify::value-max",
                                    G_CALLBACK (gtk_widget_queue_allocate),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (priv->table_signals,
+  dzl_signal_group_connect_object (priv->table_signals,
                                    "notify::value-min",
                                    G_CALLBACK (gtk_widget_queue_allocate),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (priv->table_signals,
+  dzl_signal_group_connect_object (priv->table_signals,
                                    "notify::timespan",
                                    G_CALLBACK (gtk_widget_queue_allocate),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (priv->table_signals,
+  dzl_signal_group_connect_object (priv->table_signals,
                                    "changed",
                                    G_CALLBACK (rg_graph__table_changed),
                                    self,

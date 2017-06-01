@@ -19,7 +19,7 @@
 #ifndef IDE_APPLICATION_PRIVATE_H
 #define IDE_APPLICATION_PRIVATE_H
 
-#include <egg-menu-manager.h>
+#include <dazzle.h>
 #include <gio/gio.h>
 #include <libpeas/peas.h>
 
@@ -55,7 +55,7 @@ struct _IdeApplication
 
   IdeThemeManager     *theme_manager;
 
-  EggMenuManager      *menu_manager;
+  DzlMenuManager      *menu_manager;
   GHashTable          *merge_ids;
 
   GHashTable          *plugin_css;

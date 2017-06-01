@@ -24,7 +24,7 @@ import re
 
 gi.require_version('Ide', '1.0')
 
-from gi.repository import Egg
+from gi.repository import Dzl
 from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import Gtk

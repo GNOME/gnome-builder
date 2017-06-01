@@ -17,7 +17,7 @@
           <object class="GtkStack" id="stack">
             <property name="visible">true</property>
             <child>
-              <object class="EggEmptyState">
+              <object class="DzlEmptyState">
                 <property name="border-width">12</property>
                 <property name="margin-top">12</property>
                 <property name="pixel-size">64</property>

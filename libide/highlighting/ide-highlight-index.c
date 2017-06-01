@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-highlight-index"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <string.h>
 
 #include "ide-debug.h"
@@ -29,7 +29,7 @@
 G_DEFINE_BOXED_TYPE (IdeHighlightIndex, ide_highlight_index,
                      ide_highlight_index_ref, ide_highlight_index_unref)
 
-EGG_DEFINE_COUNTER (instances, "IdeHighlightIndex", "Instances", "Number of indexes")
+DZL_DEFINE_COUNTER (instances, "IdeHighlightIndex", "Instances", "Number of indexes")
 
 struct _IdeHighlightIndex
 {
@@ -53,7 +53,7 @@ ide_highlight_index_new (void)
   ret->strings = g_string_chunk_new (ide_get_system_page_size ());
   ret->index = g_hash_table_new (g_str_hash, g_str_equal);
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   return ret;
 }
@@ -121,7 +121,7 @@ ide_highlight_index_finalize (IdeHighlightIndex *self)
   g_hash_table_unref (self->index);
   g_free (self);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 
   IDE_EXIT;
 }

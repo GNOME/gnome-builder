@@ -20,14 +20,13 @@
 #define IDE_BUILD_CONFIGURATION_VIEW_H
 
 #include <ide.h>
-
-#include "egg-column-layout.h"
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_CONFIGURATION_VIEW (ide_build_configuration_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, IDE, BUILD_CONFIGURATION_VIEW, EggColumnLayout)
+G_DECLARE_FINAL_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, IDE, BUILD_CONFIGURATION_VIEW, DzlColumnLayout)
 
 IdeConfiguration *ide_build_configuration_view_get_configuration (IdeBuildConfigurationView *self);
 void              ide_build_configuration_view_set_configuration (IdeBuildConfigurationView *self,

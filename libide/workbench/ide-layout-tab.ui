@@ -103,7 +103,7 @@
           </object>
         </child>
         <child>
-          <object class="EggPriorityBox" id="controls_container">
+          <object class="DzlPriorityBox" id="controls_container">
             <property name="hexpand">false</property>
             <property name="visible">true</property>
           </object>

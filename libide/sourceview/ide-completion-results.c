@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-completion-results"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <string.h>
 
 #include "ide-debug.h"
@@ -85,7 +85,7 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeCompletionResults, ide_completion_results, G_TYPE_OBJECT)
 
-EGG_DEFINE_COUNTER (instances, "IdeCompletionResults", "Instances", "Number of IdeCompletionResults")
+DZL_DEFINE_COUNTER (instances, "IdeCompletionResults", "Instances", "Number of IdeCompletionResults")
 
 #define GET_ITEM(i) ((IdeCompletionItem *)(g_ptr_array_index((priv)->results, (i))))
 #define GET_ITEM_LINK(item) (&((IdeCompletionItem *)(item))->link)
@@ -139,7 +139,7 @@ ide_completion_results_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_completion_results_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 const gchar *
@@ -446,7 +446,7 @@ ide_completion_results_init (IdeCompletionResults *self)
 {
   IdeCompletionResultsPrivate *priv = ide_completion_results_get_instance_private (self);
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   priv->results = g_ptr_array_new_with_free_func (g_object_unref);
   priv->head = NULL;

@@ -47,7 +47,7 @@
               </object>
             </child>
             <child>
-              <object class="EggSimpleLabel" id="line_label">
+              <object class="DzlSimpleLabel" id="line_label">
                 <property name="label">1</property>
                 <property name="width-chars">3</property>
                 <property name="xalign">1.0</property>
@@ -59,7 +59,7 @@
               </packing>
             </child>
             <child>
-              <object class="EggSimpleLabel" id="column_label">
+              <object class="DzlSimpleLabel" id="column_label">
                 <property name="label">1</property>
                 <property name="width-chars">3</property>
                 <property name="xalign">0.0</property>
@@ -110,7 +110,7 @@
       </object>
     </child>
   </object>
-  <object class="EggSimplePopover" id="goto_line_popover">
+  <object class="DzlSimplePopover" id="goto_line_popover">
     <property name="title" translatable="yes">Go to Line</property>
     <property name="button-text" translatable="yes">Go</property>
   </object>

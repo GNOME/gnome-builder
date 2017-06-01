@@ -26,11 +26,11 @@ import re
 import pty
 import stat
 
-gi.require_version('Egg', '1.0')
+gi.require_version('Dzl', '1.0')
 gi.require_version('Ide', '1.0')
 gi.require_version('Gtk', '3.0')
 
-from gi.repository import Egg
+from gi.repository import Dzl
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
@@ -611,7 +611,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         return list_control
 
     def create_install_popover(self):
-        popover = Egg.SimplePopover(title=_('Install Rust Channel'),
+        popover = Dzl.SimplePopover(title=_('Install Rust Channel'),
                                     button_text=_('Install'),
                                     text='stable',
                                     ready=True,

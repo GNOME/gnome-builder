@@ -76,10 +76,10 @@ document_cursor_moved (IdeEditorLayoutStackControls *self,
   gtk_text_buffer_get_iter_at_mark (buffer, &bounds, mark);
 
   g_snprintf (str, sizeof str, "%d", line + 1);
-  egg_simple_label_set_label (self->line_label, str);
+  dzl_simple_label_set_label (self->line_label, str);
 
   g_snprintf (str, sizeof str, "%d", column + 1);
-  egg_simple_label_set_label (self->column_label, str);
+  dzl_simple_label_set_label (self->column_label, str);
 
   if (!gtk_widget_has_focus (GTK_WIDGET (source_view)) ||
       gtk_text_iter_equal (&bounds, iter) ||
@@ -103,12 +103,12 @@ document_cursor_moved (IdeEditorLayoutStackControls *self,
 static void
 goto_line_activate (IdeEditorLayoutStackControls *self,
                     const gchar                  *text,
-                    EggSimplePopover             *popover)
+                    DzlSimplePopover             *popover)
 {
   gint64 value;
 
   g_assert (IDE_IS_EDITOR_LAYOUT_STACK_CONTROLS (self));
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
+  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
 
   if (self->view == NULL)
     return;
@@ -136,10 +136,10 @@ goto_line_insert_text (IdeEditorLayoutStackControls *self,
                        guint                         position,
                        const gchar                  *chars,
                        guint                         n_chars,
-                       EggSimplePopover             *popover)
+                       DzlSimplePopover             *popover)
 {
   g_assert (IDE_IS_EDITOR_LAYOUT_STACK_CONTROLS (self));
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
+  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
   g_assert (chars != NULL);
 
   for (; *chars; chars = g_utf8_next_char (chars))
@@ -153,7 +153,7 @@ goto_line_insert_text (IdeEditorLayoutStackControls *self,
 
 static void
 goto_line_changed (IdeEditorLayoutStackControls *self,
-                   EggSimplePopover             *popover)
+                   DzlSimplePopover             *popover)
 {
   gchar *message;
   const gchar *text;
@@ -161,12 +161,12 @@ goto_line_changed (IdeEditorLayoutStackControls *self,
   GtkTextIter end;
 
   g_assert (IDE_IS_EDITOR_LAYOUT_STACK_CONTROLS (self));
-  g_assert (EGG_IS_SIMPLE_POPOVER (popover));
+  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
 
   if (self->view == NULL)
     return;
 
-  text = egg_simple_popover_get_text (popover);
+  text = dzl_simple_popover_get_text (popover);
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->view->document), &begin, &end);
 
@@ -180,8 +180,8 @@ goto_line_changed (IdeEditorLayoutStackControls *self,
         {
           if (value <= gtk_text_iter_get_line (&end) + 1)
             {
-              egg_simple_popover_set_message (popover, NULL);
-              egg_simple_popover_set_ready (popover, TRUE);
+              dzl_simple_popover_set_message (popover, NULL);
+              dzl_simple_popover_set_ready (popover, TRUE);
               return;
             }
         }
@@ -190,8 +190,8 @@ goto_line_changed (IdeEditorLayoutStackControls *self,
   /* translators: the user selected a number outside the value range for the document. */
   message = g_strdup_printf (_("Provide a number between 1 and %u"),
                              gtk_text_iter_get_line (&end) + 1);
-  egg_simple_popover_set_message (popover, message);
-  egg_simple_popover_set_ready (popover, FALSE);
+  dzl_simple_popover_set_message (popover, message);
+  dzl_simple_popover_set_ready (popover, FALSE);
 
   g_free (message);
 }
@@ -274,20 +274,20 @@ ide_editor_layout_stack_controls_init (IdeEditorLayoutStackControls *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->document_bindings = egg_binding_group_new ();
+  self->document_bindings = dzl_binding_group_new ();
 
-  egg_binding_group_bind (self->document_bindings, "has-diagnostics",
+  dzl_binding_group_bind (self->document_bindings, "has-diagnostics",
                           self->warning_button, "visible",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind_full (self->document_bindings, "language",
+  dzl_binding_group_bind_full (self->document_bindings, "language",
                                self->tweak_button, "label",
                                G_BINDING_SYNC_CREATE,
                                language_to_string, NULL, NULL, NULL);
 
-  self->document_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
+  self->document_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
-  egg_signal_group_connect_object (self->document_signals,
+  dzl_signal_group_connect_object (self->document_signals,
                                    "cursor-moved",
                                    G_CALLBACK (document_cursor_moved),
                                    self,
@@ -304,8 +304,8 @@ ide_editor_layout_stack_controls_set_view (IdeEditorLayoutStackControls *self,
   if (self->view == view)
     return;
 
-  egg_binding_group_set_source (self->document_bindings, NULL);
-  egg_signal_group_set_target (self->document_signals, NULL);
+  dzl_binding_group_set_source (self->document_bindings, NULL);
+  dzl_signal_group_set_target (self->document_signals, NULL);
 
   if (self->view != NULL)
     {
@@ -322,7 +322,7 @@ ide_editor_layout_stack_controls_set_view (IdeEditorLayoutStackControls *self,
                         "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
                         &self->view);
-      egg_binding_group_set_source (self->document_bindings, view->document);
-      egg_signal_group_set_target (self->document_signals, view->document);
+      dzl_binding_group_set_source (self->document_bindings, view->document);
+      dzl_signal_group_set_target (self->document_signals, view->document);
     }
 }

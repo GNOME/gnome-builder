@@ -18,12 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-build-log-panel"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
-
-#include "util/ide-pango.h"
-
-#include "egg-signal-group.h"
 
 #include "ide-build-log-panel.h"
 
@@ -603,7 +600,7 @@ ide_build_log_panel_changed_font_name (IdeBuildLogPanel *self,
       gchar *fragment;
       gchar *css;
 
-      fragment = ide_pango_font_description_to_css (font_desc);
+      fragment = dzl_pango_font_description_to_css (font_desc);
       css = g_strdup_printf ("textview { %s }", fragment);
 
       gtk_css_provider_load_from_data (self->css, css, -1, NULL);

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-highlight-engine"
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -36,7 +36,7 @@ struct _IdeHighlightEngine
 {
   IdeObject            parent_instance;
 
-  EggSignalGroup      *signal_group;
+  DzlSignalGroup      *signal_group;
   IdeBuffer           *buffer;
   IdeHighlighter      *highlighter;
   GSettings           *settings;
@@ -629,7 +629,7 @@ ide_highlight_engine_clear (IdeHighlightEngine *self)
 static void
 ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
                                       IdeBuffer          *buffer,
-                                      EggSignalGroup     *group)
+                                      DzlSignalGroup     *group)
 {
   GtkTextBuffer *text_buffer = (GtkTextBuffer *)buffer;
   GtkTextIter begin;
@@ -639,7 +639,7 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (EGG_IS_SIGNAL_GROUP (group));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
 
   ide_set_weak_pointer (&self->buffer, buffer);
 
@@ -657,7 +657,7 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
 static void
 ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
-                                        EggSignalGroup      *group)
+                                        DzlSignalGroup      *group)
 {
   GtkTextBuffer *text_buffer;
   GtkTextTagTable *tag_table;
@@ -668,7 +668,7 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (EGG_IS_SIGNAL_GROUP (group));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
 
   text_buffer = GTK_TEXT_BUFFER (self->buffer);
 
@@ -721,7 +721,7 @@ ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
    */
   if (!buffer || IDE_IS_BUFFER (buffer))
     {
-      egg_signal_group_set_target (self->signal_group, buffer);
+      dzl_signal_group_set_target (self->signal_group, buffer);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUFFER]);
     }
 }
@@ -877,27 +877,27 @@ ide_highlight_engine_init (IdeHighlightEngine *self)
 {
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
   self->enabled = g_settings_get_boolean (self->settings, "semantic-highlighting");
-  self->signal_group = egg_signal_group_new (IDE_TYPE_BUFFER);
+  self->signal_group = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
-  egg_signal_group_connect_object (self->signal_group,
+  dzl_signal_group_connect_object (self->signal_group,
                                    "insert-text",
                                    G_CALLBACK (ide_highlight_engine__buffer_insert_text_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  egg_signal_group_connect_object (self->signal_group,
+  dzl_signal_group_connect_object (self->signal_group,
                                    "delete-range",
                                    G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  egg_signal_group_connect_object (self->signal_group,
+  dzl_signal_group_connect_object (self->signal_group,
                                    "notify::language",
                                    G_CALLBACK (ide_highlight_engine__notify_language_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->signal_group,
+  dzl_signal_group_connect_object (self->signal_group,
                                    "notify::style-scheme",
                                    G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
                                    self,

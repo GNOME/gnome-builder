@@ -141,7 +141,7 @@
           <object class="GtkStack" id="stack">
             <property name="visible">true</property>
             <child>
-              <object class="EggEmptyState">
+              <object class="DzlEmptyState">
                 <property name="border-width">12</property>
                 <property name="icon-name">builder-build-symbolic</property>
                 <property name="margin-top">12</property>

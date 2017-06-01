@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-buffer-manager"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <gtksourceview/gtksource.h>
 #include <glib/gi18n.h>
 
@@ -101,7 +101,7 @@ static void list_model_iface_init (GListModelInterface *iface);
 G_DEFINE_TYPE_EXTENDED (IdeBufferManager, ide_buffer_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
-EGG_DEFINE_COUNTER (registered, "IdeBufferManager", "Registered Buffers",
+DZL_DEFINE_COUNTER (registered, "IdeBufferManager", "Registered Buffers",
                     "The number of buffers registered with the buffer manager.")
 
 enum {
@@ -402,7 +402,7 @@ ide_buffer_manager_add_buffer (IdeBufferManager *self,
                            self,
                            (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
 
-  EGG_COUNTER_INC (registered);
+  DZL_COUNTER_INC (registered);
 
   g_list_model_items_changed (G_LIST_MODEL (self), self->buffers->len - 1, 0, 1);
 
@@ -471,7 +471,7 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
 
   g_object_unref (buffer);
 
-  EGG_COUNTER_DEC (registered);
+  DZL_COUNTER_DEC (registered);
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 

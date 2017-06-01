@@ -21,10 +21,8 @@
 
 #include "config.h"
 
-#include "egg-counter.h"
-#include "egg-task-cache.h"
-
 #include <ctype.h>
+#include <dazzle.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <gio/gio.h>
@@ -49,8 +47,8 @@ struct _IdeMakecache
 
   GFile        *parent;
   GMappedFile  *mapped;
-  EggTaskCache *file_targets_cache;
-  EggTaskCache *file_flags_cache;
+  DzlTaskCache *file_targets_cache;
+  DzlTaskCache *file_flags_cache;
   GPtrArray    *build_targets;
   IdeRuntime   *runtime;
   const gchar  *make_name;
@@ -72,7 +70,7 @@ typedef struct
 
 G_DEFINE_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
 
-EGG_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
+DZL_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
 
 static void
 file_flags_lookup_free (gpointer data)
@@ -617,7 +615,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (EGG_IS_TASK_CACHE (source_object));
+  g_assert (DZL_IS_TASK_CACHE (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (G_IS_TASK (task));
   g_assert (lookup != NULL);
@@ -806,7 +804,7 @@ ide_makecache_get_file_targets_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (EGG_IS_TASK_CACHE (source_object));
+  g_assert (DZL_IS_TASK_CACHE (source_object));
   g_assert (G_IS_TASK (task));
   g_assert (lookup != NULL);
   g_assert (lookup->mapped != NULL);
@@ -878,7 +876,7 @@ ide_makecache_get_file_targets_worker (GTask        *task,
 }
 
 static void
-ide_makecache_get_file_targets_dispatch (EggTaskCache  *cache,
+ide_makecache_get_file_targets_dispatch (DzlTaskCache  *cache,
                                          gconstpointer  key,
                                          GTask         *task,
                                          gpointer       user_data)
@@ -887,7 +885,7 @@ ide_makecache_get_file_targets_dispatch (EggTaskCache  *cache,
   FileTargetsLookup *lookup;
   GFile *file = (GFile *)key;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (task));
@@ -970,7 +968,7 @@ ide_makecache_get_file_flags__get_targets_cb (GObject      *object,
 }
 
 static void
-ide_makecache_get_file_flags_dispatch (EggTaskCache  *cache,
+ide_makecache_get_file_flags_dispatch (DzlTaskCache  *cache,
                                        gconstpointer  key,
                                        GTask         *task,
                                        gpointer       user_data)
@@ -1028,7 +1026,7 @@ ide_makecache_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -1042,11 +1040,11 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
 static void
 ide_makecache_init (IdeMakecache *self)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   self->make_name = "make";
 
-  self->file_targets_cache = egg_task_cache_new ((GHashFunc)g_file_hash,
+  self->file_targets_cache = dzl_task_cache_new ((GHashFunc)g_file_hash,
                                                  (GEqualFunc)g_file_equal,
                                                  g_object_ref,
                                                  g_object_unref,
@@ -1057,9 +1055,9 @@ ide_makecache_init (IdeMakecache *self)
                                                  self,
                                                  NULL);
 
-  egg_task_cache_set_name (self->file_targets_cache, "makecache: file-targets-cache");
+  dzl_task_cache_set_name (self->file_targets_cache, "makecache: file-targets-cache");
 
-  self->file_flags_cache = egg_task_cache_new ((GHashFunc)g_file_hash,
+  self->file_flags_cache = dzl_task_cache_new ((GHashFunc)g_file_hash,
                                                (GEqualFunc)g_file_equal,
                                                g_object_ref,
                                                g_object_unref,
@@ -1070,7 +1068,7 @@ ide_makecache_init (IdeMakecache *self)
                                                self,
                                                NULL);
 
-  egg_task_cache_set_name (self->file_flags_cache, "makecache: file-flags-cache");
+  dzl_task_cache_set_name (self->file_flags_cache, "makecache: file-flags-cache");
 }
 
 static void
@@ -1198,12 +1196,12 @@ ide_makecache_get_file_targets__task_cache_get_cb (GObject      *object,
                                                    GAsyncResult *result,
                                                    gpointer      user_data)
 {
-  EggTaskCache *cache = (EggTaskCache *)object;
+  DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
   GPtrArray *ret;
 
-  if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
+  if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
     {
       g_assert (error != NULL);
       g_task_return_error (task, error);
@@ -1229,7 +1227,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  egg_task_cache_get_async (self->file_targets_cache,
+  dzl_task_cache_get_async (self->file_targets_cache,
                             file,
                             FALSE,
                             cancellable,
@@ -1269,12 +1267,12 @@ ide_makecache_get_file_flags__task_cache_get_cb (GObject      *object,
                                                  GAsyncResult *result,
                                                  gpointer      user_data)
 {
-  EggTaskCache *cache = (EggTaskCache *)object;
+  DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
   gchar **ret;
 
-  if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
+  if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
     {
       g_assert (error != NULL);
       g_task_return_error (task, error);
@@ -1300,7 +1298,7 @@ ide_makecache_get_file_flags_async (IdeMakecache        *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  egg_task_cache_get_async (self->file_flags_cache,
+  dzl_task_cache_get_async (self->file_flags_cache,
                             file,
                             FALSE,
                             cancellable,

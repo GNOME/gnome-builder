@@ -16,12 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 #include <libgit2-glib/ggit.h>
 #include <ide.h>
-
-#include "egg-animation.h"
 
 #include "gbp-flatpak-clone-widget.h"
 #include "gbp-flatpak-sources.h"
@@ -270,8 +269,8 @@ gbp_flatpak_clone_widget_worker_completed (GTask      *task,
   if (!g_task_get_completed (task))
     return;
 
-  egg_object_animate_full (self->clone_progress,
-                           EGG_ANIMATION_EASE_IN_OUT_QUAD,
+  dzl_object_animate_full (self->clone_progress,
+                           DZL_ANIMATION_EASE_IN_OUT_QUAD,
                            ANIMATION_DURATION_MSEC,
                            NULL,
                            (GDestroyNotify)ide_widget_hide_with_fade,

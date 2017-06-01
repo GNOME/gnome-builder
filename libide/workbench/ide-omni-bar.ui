@@ -5,7 +5,7 @@
       <class name="linked"/>
     </style>
     <child type="center">
-      <object class="EggEntryBox" id="frame">
+      <object class="DzlEntryBox" id="frame">
         <property name="max-width-chars">50</property>
         <property name="visible">true</property>
         <child>

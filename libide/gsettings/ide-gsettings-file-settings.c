@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-gsettings-file-settings"
 
-#include <egg-signal-group.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
@@ -34,7 +34,7 @@ struct _IdeGsettingsFileSettings
   IdeFileSettings  parent_instance;
 
   IdeSettings     *language_settings;
-  EggSignalGroup  *signal_group;
+  DzlSignalGroup  *signal_group;
 };
 
 typedef struct
@@ -129,7 +129,7 @@ ide_gsettings_file_settings_constructed (GObject *object)
   if (file == NULL)
     IDE_EXIT;
 
-  egg_signal_group_set_target (self->signal_group, file);
+  dzl_signal_group_set_target (self->signal_group, file);
   file_notify_language_cb (self, NULL, file);
 
   IDE_EXIT;
@@ -158,8 +158,8 @@ ide_gsettings_file_settings_class_init (IdeGsettingsFileSettingsClass *klass)
 static void
 ide_gsettings_file_settings_init (IdeGsettingsFileSettings *self)
 {
-  self->signal_group = egg_signal_group_new (IDE_TYPE_FILE);
-  egg_signal_group_connect_object (self->signal_group,
+  self->signal_group = dzl_signal_group_new (IDE_TYPE_FILE);
+  dzl_signal_group_connect_object (self->signal_group,
                                    "notify::language",
                                    G_CALLBACK (file_notify_language_cb),
                                    self,

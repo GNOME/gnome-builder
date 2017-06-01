@@ -19,8 +19,7 @@
 #define G_LOG_DOMAIN "ide-omni-bar"
 
 #include <glib/gi18n.h>
-#include <egg-binding-group.h>
-#include <egg-signal-group.h>
+#include <dazzle.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -31,7 +30,6 @@
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "projects/ide-project.h"
-#include "util/ide-glib.h"
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-omni-bar.h"
@@ -63,31 +61,31 @@ struct _IdeOmniBar
    * This includes various label text and state tracking to determine
    * what actions we can apply and when.
    */
-  EggBindingGroup *build_manager_bindings;
+  DzlBindingGroup *build_manager_bindings;
 
   /*
    * This manages the signals we need for the IdeBuildManager instance.
    * This includes tracking build start/failure/finished.
    */
-  EggSignalGroup *build_manager_signals;
+  DzlSignalGroup *build_manager_signals;
 
   /*
    * This manages the bindings we need for the IdeConfigurationManager
    * such as the current configuration name.
    */
-  EggBindingGroup *config_manager_bindings;
+  DzlBindingGroup *config_manager_bindings;
 
   /*
    * This manages the signals we need from the IdeConfigurationManager
    * such as when the current configuration has been changed.
    */
-  EggSignalGroup *config_manager_signals;
+  DzlSignalGroup *config_manager_signals;
 
   /*
    * This manages the bindings we need for the IdeVcs such as the
    * current branch name.
    */
-  EggBindingGroup *vcs_bindings;
+  DzlBindingGroup *vcs_bindings;
 
   /*
    * This tracks the number of times we have shown the current build
@@ -347,11 +345,11 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       config_manager = ide_context_get_configuration_manager (context);
     }
 
-  egg_binding_group_set_source (self->build_manager_bindings, build_manager);
-  egg_signal_group_set_target (self->build_manager_signals, build_manager);
-  egg_binding_group_set_source (self->config_manager_bindings, config_manager);
-  egg_signal_group_set_target (self->config_manager_signals, config_manager);
-  egg_binding_group_set_source (self->vcs_bindings, vcs);
+  dzl_binding_group_set_source (self->build_manager_bindings, build_manager);
+  dzl_signal_group_set_target (self->build_manager_signals, build_manager);
+  dzl_binding_group_set_source (self->config_manager_bindings, config_manager);
+  dzl_signal_group_set_target (self->config_manager_signals, config_manager);
+  dzl_binding_group_set_source (self->vcs_bindings, vcs);
 
   if (config_manager != NULL)
     {
@@ -664,27 +662,27 @@ ide_omni_bar_init (IdeOmniBar *self)
    * IdeBuildManager bindings and signals.
    */
 
-  self->build_manager_bindings = egg_binding_group_new ();
+  self->build_manager_bindings = dzl_binding_group_new ();
 
-  egg_binding_group_bind (self->build_manager_bindings,
+  dzl_binding_group_bind (self->build_manager_bindings,
                           "busy",
                           self->cancel_button,
                           "visible",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->build_manager_bindings,
+  dzl_binding_group_bind (self->build_manager_bindings,
                           "busy",
                           self->build_button,
                           "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
 
-  egg_binding_group_bind (self->build_manager_bindings,
+  dzl_binding_group_bind (self->build_manager_bindings,
                           "has-diagnostics",
                           self->build_result_diagnostics_image,
                           "visible",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind_full (self->build_manager_bindings,
+  dzl_binding_group_bind_full (self->build_manager_bindings,
                                "last-build-time",
                                self->popover_last_build_time_label,
                                "label",
@@ -694,41 +692,41 @@ ide_omni_bar_init (IdeOmniBar *self)
                                NULL,
                                NULL);
 
-  egg_binding_group_bind (self->build_manager_bindings, "message",
+  dzl_binding_group_bind (self->build_manager_bindings, "message",
                           self->build_result_mode_label, "label",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->build_manager_bindings,
+  dzl_binding_group_bind (self->build_manager_bindings,
                           "message",
                           self->popover_build_mode_label,
                           "label",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind_full (self->build_manager_bindings,
+  dzl_binding_group_bind_full (self->build_manager_bindings,
                                "running-time",
                                self->popover_build_running_time_label,
                                "label",
                                G_BINDING_SYNC_CREATE,
-                               ide_g_time_span_to_label_mapping,
+                               dzl_g_time_span_to_label_mapping,
                                NULL,
                                NULL,
                                NULL);
 
-  self->build_manager_signals = egg_signal_group_new (IDE_TYPE_BUILD_MANAGER);
+  self->build_manager_signals = dzl_signal_group_new (IDE_TYPE_BUILD_MANAGER);
 
-  egg_signal_group_connect_object (self->build_manager_signals,
+  dzl_signal_group_connect_object (self->build_manager_signals,
                                    "build-started",
                                    G_CALLBACK (ide_omni_bar__build_manager__build_started),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->build_manager_signals,
+  dzl_signal_group_connect_object (self->build_manager_signals,
                                    "build-failed",
                                    G_CALLBACK (ide_omni_bar__build_manager__build_failed),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  egg_signal_group_connect_object (self->build_manager_signals,
+  dzl_signal_group_connect_object (self->build_manager_signals,
                                    "build-finished",
                                    G_CALLBACK (ide_omni_bar__build_manager__build_finished),
                                    self,
@@ -738,21 +736,21 @@ ide_omni_bar_init (IdeOmniBar *self)
    * IdeVcs bindings and signals.
    */
 
-  self->vcs_bindings = egg_binding_group_new ();
+  self->vcs_bindings = dzl_binding_group_new ();
 
-  egg_binding_group_bind (self->vcs_bindings,
+  dzl_binding_group_bind (self->vcs_bindings,
                           "branch-name",
                           self->branch_label,
                           "label",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind (self->vcs_bindings,
+  dzl_binding_group_bind (self->vcs_bindings,
                           "branch-name",
                           self->popover_branch_label,
                           "label",
                           G_BINDING_SYNC_CREATE);
 
-  egg_binding_group_bind_full (self->vcs_bindings,
+  dzl_binding_group_bind_full (self->vcs_bindings,
                                "working-directory",
                                self->popover_project_label,
                                "label",
@@ -766,17 +764,17 @@ ide_omni_bar_init (IdeOmniBar *self)
    * IdeConfigurationManager bindings and signals.
    */
 
-  self->config_manager_bindings = egg_binding_group_new ();
+  self->config_manager_bindings = dzl_binding_group_new ();
 
-  egg_binding_group_bind (self->config_manager_bindings,
+  dzl_binding_group_bind (self->config_manager_bindings,
                           "current-display-name",
                           self->config_name_label,
                           "label",
                           G_BINDING_SYNC_CREATE);
 
-  self->config_manager_signals = egg_signal_group_new (IDE_TYPE_CONFIGURATION_MANAGER);
+  self->config_manager_signals = dzl_signal_group_new (IDE_TYPE_CONFIGURATION_MANAGER);
 
-  egg_signal_group_connect_object (self->config_manager_signals,
+  dzl_signal_group_connect_object (self->config_manager_signals,
                                    "notify::current",
                                    G_CALLBACK (ide_omni_bar__config_manager__notify_current),
                                    self,

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-thread-pool"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 
 #include "ide-debug.h"
 
@@ -42,8 +42,8 @@ typedef struct
   };
 } WorkItem;
 
-EGG_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
-EGG_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
+DZL_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
+DZL_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
 
 static GThreadPool *thread_pools [IDE_THREAD_POOL_LAST];
 
@@ -81,7 +81,7 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (func != NULL);
 
-  EGG_COUNTER_INC (TotalTasks);
+  DZL_COUNTER_INC (TotalTasks);
 
   pool = ide_thread_pool_get_pool (kind);
 
@@ -94,7 +94,7 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
       work_item->task.task = g_object_ref (task);
       work_item->task.func = func;
 
-      EGG_COUNTER_INC (QueuedTasks);
+      DZL_COUNTER_INC (QueuedTasks);
 
       g_thread_pool_push (pool, work_item, NULL);
     }
@@ -127,7 +127,7 @@ ide_thread_pool_push (IdeThreadPoolKind kind,
   g_return_if_fail (kind < IDE_THREAD_POOL_LAST);
   g_return_if_fail (func != NULL);
 
-  EGG_COUNTER_INC (TotalTasks);
+  DZL_COUNTER_INC (TotalTasks);
 
   pool = ide_thread_pool_get_pool (kind);
 
@@ -140,7 +140,7 @@ ide_thread_pool_push (IdeThreadPoolKind kind,
       work_item->func.callback = func;
       work_item->func.data = func_data;
 
-      EGG_COUNTER_INC (QueuedTasks);
+      DZL_COUNTER_INC (QueuedTasks);
 
       g_thread_pool_push (pool, work_item, NULL);
     }
@@ -163,7 +163,7 @@ ide_thread_pool_worker (gpointer data,
 
   g_assert (work_item != NULL);
 
-  EGG_COUNTER_DEC (QueuedTasks);
+  DZL_COUNTER_DEC (QueuedTasks);
 
   if (work_item->type == TYPE_TASK)
     {

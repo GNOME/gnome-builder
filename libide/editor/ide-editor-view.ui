@@ -96,7 +96,7 @@
       </object>
     </child>
   </object>
-  <object class="EggSimplePopover" id="goto_line_popover">
+  <object class="DzlSimplePopover" id="goto_line_popover">
     <property name="title" translatable="yes">Go to Line</property>
     <property name="button-text" translatable="yes">Go</property>
   </object>

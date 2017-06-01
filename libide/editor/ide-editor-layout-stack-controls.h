@@ -20,10 +20,7 @@
 #define IDE_EDITOR_LAYOUT_STACK_CONTROLS_H
 
 #include <gtk/gtk.h>
-#include <egg-binding-group.h>
-#include <egg-signal-group.h>
-#include <egg-simple-label.h>
-#include <egg-simple-popover.h>
+#include <dazzle.h>
 
 #include "editor/ide-editor-frame.h"
 #include "editor/ide-editor-tweak-widget.h"
@@ -41,14 +38,14 @@ struct _IdeEditorLayoutStackControls
   GtkBox                parent_instance;
 
   IdeEditorView        *view;
-  EggBindingGroup      *document_bindings;
-  EggSignalGroup       *document_signals;
+  DzlBindingGroup      *document_bindings;
+  DzlSignalGroup       *document_signals;
 
-  EggSimplePopover     *goto_line_popover;
+  DzlSimplePopover     *goto_line_popover;
   GtkMenuButton        *goto_line_button;
   GtkButton            *warning_button;
-  EggSimpleLabel       *line_label;
-  EggSimpleLabel       *column_label;
+  DzlSimpleLabel       *line_label;
+  DzlSimpleLabel       *column_label;
   GtkLabel             *range_label;
   GtkMenuButton        *tweak_button;
   IdeEditorTweakWidget *tweak_widget;

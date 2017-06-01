@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-source-location"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 
 #include "files/ide-file.h"
 #include "diagnostics/ide-source-location.h"
@@ -35,7 +35,7 @@ struct _IdeSourceLocation
   IdeFile       *file;
 };
 
-EGG_DEFINE_COUNTER (instances, "IdeSourceLocation", "Instances", "Number of IdeSourceLocation")
+DZL_DEFINE_COUNTER (instances, "IdeSourceLocation", "Instances", "Number of IdeSourceLocation")
 
 /**
  * ide_source_location_ref:
@@ -69,7 +69,7 @@ ide_source_location_unref (IdeSourceLocation *self)
     {
       g_clear_object (&self->file);
       g_slice_free (IdeSourceLocation, self);
-      EGG_COUNTER_DEC (instances);
+      DZL_COUNTER_DEC (instances);
     }
 }
 
@@ -162,7 +162,7 @@ ide_source_location_new (IdeFile *file,
   ret->line_offset = MIN (G_MAXINT, line_offset);
   ret->offset = offset;
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   return ret;
 }

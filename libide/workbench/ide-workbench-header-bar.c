@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-workbench-header-bar"
 
-#include <egg-priority-box.h>
+#include <dazzle.h>
 
 #include "application/ide-application.h"
 #include "search/ide-omni-search-entry.h"
@@ -30,8 +30,8 @@
 typedef struct
 {
   GtkMenuButton      *menu_button;
-  EggPriorityBox     *right_box;
-  EggPriorityBox     *left_box;
+  DzlPriorityBox     *right_box;
+  DzlPriorityBox     *left_box;
   IdeOmniBar         *omni_bar;
   IdeOmniSearchEntry *search_entry;
 } IdeWorkbenchHeaderBarPrivate;

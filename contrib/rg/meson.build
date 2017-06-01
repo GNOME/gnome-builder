@@ -22,7 +22,7 @@ librg_sources = [
 librg_deps = [
   libgio_dep,
   libgtk_dep,
-  libegg_dep,
+  libdazzle_dep,
 ]
 
 librg_link_args = '-Wl,--version-script=' + join_paths(meson.current_source_dir(), 'rg.map')

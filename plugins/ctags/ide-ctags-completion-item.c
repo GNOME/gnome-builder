@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-ctags-completion-item"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-ctags-completion-item.h"
@@ -41,7 +41,7 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionItem,
                                 0,
                                 G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
-EGG_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances", "Number of IdeCtagsCompletionItems")
+DZL_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances", "Number of IdeCtagsCompletionItems")
 
 IdeCtagsCompletionItem *
 ide_ctags_completion_item_new (IdeCtagsCompletionProvider *provider,
@@ -86,7 +86,7 @@ ide_ctags_completion_item_finalize (GObject *object)
 {
   G_OBJECT_CLASS (ide_ctags_completion_item_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -108,7 +108,7 @@ ide_ctags_completion_item_class_finalize (IdeCtagsCompletionItemClass *klass)
 static void
 ide_ctags_completion_item_init (IdeCtagsCompletionItem *self)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 }
 
 static gchar *

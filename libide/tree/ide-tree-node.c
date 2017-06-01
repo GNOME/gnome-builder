@@ -20,7 +20,7 @@
 
 #include <glib/gi18n.h>
 
-#include "egg-counter.h"
+#include "dazzle.h"
 
 #include "ide-tree.h"
 #include "ide-tree-node.h"
@@ -51,7 +51,7 @@ typedef struct
 } PopupRequest;
 
 G_DEFINE_TYPE (IdeTreeNode, ide_tree_node, G_TYPE_INITIALLY_UNOWNED)
-EGG_DEFINE_COUNTER (instances, "IdeTreeNode", "Instances", "Number of IdeTreeNode instances")
+DZL_DEFINE_COUNTER (instances, "IdeTreeNode", "Instances", "Number of IdeTreeNode instances")
 
 enum {
   PROP_0,
@@ -698,7 +698,7 @@ ide_tree_node_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_tree_node_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -918,7 +918,7 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
 static void
 ide_tree_node_init (IdeTreeNode *node)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   node->needs_build = TRUE;
 }

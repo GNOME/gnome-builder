@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <gio/gio.h>
 #include <gio/gunixsocketaddress.h>
 #include <glib/gi18n.h>
@@ -43,7 +43,7 @@ struct _IdeWorkerManager
 
 G_DEFINE_TYPE (IdeWorkerManager, ide_worker_manager, G_TYPE_OBJECT)
 
-EGG_DEFINE_COUNTER (instances, "IdeWorkerManager", "Instances", "Number of IdeWorkerManager instances")
+DZL_DEFINE_COUNTER (instances, "IdeWorkerManager", "Instances", "Number of IdeWorkerManager instances")
 
 static gboolean
 ide_worker_manager_new_connection_cb (IdeWorkerManager *self,
@@ -165,7 +165,7 @@ ide_worker_manager_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_worker_manager_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -180,7 +180,7 @@ ide_worker_manager_class_init (IdeWorkerManagerClass *klass)
 static void
 ide_worker_manager_init (IdeWorkerManager *self)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   self->plugin_name_to_worker =
     g_hash_table_new_full (g_str_hash,

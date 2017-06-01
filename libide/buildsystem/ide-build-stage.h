@@ -19,13 +19,13 @@
 #ifndef IDE_BUILD_STAGE_H
 #define IDE_BUILD_STAGE_H
 
+#include <dazzle.h>
 #include <gio/gio.h>
 
 #include "ide-types.h"
 #include "ide-object.h"
 
 #include "buildsystem/ide-build-log.h"
-#include "util/ide-directory-reaper.h"
 
 G_BEGIN_DECLS
 
@@ -130,7 +130,7 @@ struct _IdeBuildStageClass
   /**
    * IdeBuildStage::reap:
    * @self: An #IdeBuildStage
-   * @reaper: An #IdeDirectoryReaper
+   * @reaper: An #DzlDirectoryReaper
    *
    * This signal is emitted when a request to rebuild the project has
    * occurred. This allows build stages to ensure that certain files are
@@ -139,7 +139,7 @@ struct _IdeBuildStageClass
    * as part of the next build.
    */
   void     (*reap)           (IdeBuildStage        *self,
-                              IdeDirectoryReaper   *reaper);
+                              DzlDirectoryReaper   *reaper);
 
 
   /**
@@ -219,7 +219,7 @@ gboolean       ide_build_stage_chain            (IdeBuildStage        *self,
 void           ide_build_stage_pause            (IdeBuildStage        *self);
 void           ide_build_stage_unpause          (IdeBuildStage        *self);
 void           ide_build_stage_emit_reap        (IdeBuildStage        *self,
-                                                 IdeDirectoryReaper   *reaper);
+                                                 DzlDirectoryReaper   *reaper);
 
 G_END_DECLS
 

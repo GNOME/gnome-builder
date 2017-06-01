@@ -18,12 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-transfers-button"
 
-#include <egg-animation.h>
+#include <dazzle.h>
 
 #include "ide-debug.h"
 #include "ide-context.h"
 
-#include "theatrics/ide-box-theatric.h"
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-manager.h"
 #include "transfers/ide-transfer-row.h"
@@ -66,7 +65,7 @@ static void
 ide_transfers_button_begin_theatrics (IdeTransfersButton *self)
 {
   g_autoptr(GIcon) icon = NULL;
-  IdeBoxTheatric *theatric;
+  DzlBoxTheatric *theatric;
   GtkAllocation rect;
 
   IDE_ENTRY;
@@ -87,7 +86,7 @@ ide_transfers_button_begin_theatrics (IdeTransfersButton *self)
 
   icon = g_themed_icon_new ("folder-download-symbolic");
 
-  theatric = g_object_new (IDE_TYPE_BOX_THEATRIC,
+  theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
                            "alpha", 1.0,
                            "height", rect.height,
                            "icon", icon,
@@ -97,8 +96,8 @@ ide_transfers_button_begin_theatrics (IdeTransfersButton *self)
                            "y", rect.y,
                            NULL);
 
-  egg_object_animate_full (theatric,
-                           EGG_ANIMATION_EASE_OUT_CUBIC,
+  dzl_object_animate_full (theatric,
+                           DZL_ANIMATION_EASE_OUT_CUBIC,
                            750,
                            gtk_widget_get_frame_clock (GTK_WIDGET (self)),
                            g_object_unref,

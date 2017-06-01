@@ -20,7 +20,7 @@
 
 #include <glib/gi18n.h>
 
-#include "egg-signal-group.h"
+#include "dazzle.h"
 
 #include "ide-extension-adapter.h"
 #include "ide-extension-util.h"
@@ -34,7 +34,7 @@ struct _IdeExtensionAdapter
   gchar          *key;
   gchar          *value;
   GObject        *extension;
-  EggSignalGroup *settings_signals;
+  DzlSignalGroup *settings_signals;
   GSettings      *settings;
 
   PeasPluginInfo *plugin_info;
@@ -78,13 +78,13 @@ ide_extension_adapter_monitor (IdeExtensionAdapter *self,
 {
   g_assert (self != NULL);
 
-  egg_signal_group_set_target (self->settings_signals, NULL);
+  dzl_signal_group_set_target (self->settings_signals, NULL);
   g_clear_object (&self->settings);
 
   if (plugin_info != NULL)
     {
       self->settings = ide_extension_adapter_get_settings (self, plugin_info);
-      egg_signal_group_set_target (self->settings_signals, self->settings);
+      dzl_signal_group_set_target (self->settings_signals, self->settings);
     }
 }
 
@@ -441,8 +441,8 @@ ide_extension_adapter_init (IdeExtensionAdapter *self)
 {
   self->interface_type = G_TYPE_INVALID;
 
-  self->settings_signals = egg_signal_group_new (G_TYPE_SETTINGS);
-  egg_signal_group_connect_object (self->settings_signals,
+  self->settings_signals = dzl_signal_group_new (G_TYPE_SETTINGS);
+  dzl_signal_group_connect_object (self->settings_signals,
                                    "changed::disabled",
                                    G_CALLBACK (ide_extension_adapter__changed_disabled),
                                    self,

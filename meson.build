@@ -174,7 +174,6 @@ subdir('data/fonts')
 subdir('data/gsettings')
 subdir('data/icons')
 subdir('data/style-schemes')
-subdir('contrib/egg')
 subdir('contrib/gd')
 subdir('contrib/jsonrpc-glib')
 subdir('contrib/libeditorconfig')
@@ -188,7 +187,6 @@ subdir('libide')
 subdir('plugins')
 subdir('po')
 subdir('tests')
-subdir('tools')
 
 exe_link_args = [
   '-pie',

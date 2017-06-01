@@ -18,12 +18,9 @@
 
 #define G_LOG_DOMAIN "symbol-tree-panel"
 
-#include <ide.h>
-
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
-
-#include "egg-task-cache.h"
 
 #include "symbol-tree.h"
 #include "symbol-tree-builder.h"
@@ -37,7 +34,7 @@ struct _SymbolTreePanel
   DzlDockWidget   parent_instance;
 
   GCancellable   *cancellable;
-  EggTaskCache   *symbols_cache;
+  DzlTaskCache   *symbols_cache;
   GHashTable     *destroy_connected;
 
   GtkSearchEntry *search_entry;
@@ -67,7 +64,7 @@ get_cached_symbol_tree_cb (GObject      *object,
                            GAsyncResult *result,
                            gpointer      user_data)
 {
-  EggTaskCache *cache = (EggTaskCache *)object;
+  DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(SymbolTreePanel) self = user_data;
   g_autoptr(IdeSymbolTree) symbol_tree = NULL;
   g_autoptr(GError) error = NULL;
@@ -77,11 +74,11 @@ get_cached_symbol_tree_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (SYMBOL_IS_TREE_PANEL (self));
 
-  if (!(symbol_tree = egg_task_cache_get_finish (cache, result, &error)))
+  if (!(symbol_tree = dzl_task_cache_get_finish (cache, result, &error)))
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED) &&
           !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
@@ -131,7 +128,7 @@ symbol_tree_panel_buffer_destroy (SymbolTreePanel *self,
                                         G_CALLBACK (symbol_tree_panel_buffer_destroy),
                                         self);
 
-  egg_task_cache_evict (self->symbols_cache, buffer);
+  dzl_task_cache_evict (self->symbols_cache, buffer);
 }
 
 static void
@@ -201,7 +198,7 @@ refresh_tree (SymbolTreePanel *self)
                                        G_CONNECT_SWAPPED);
             }
 
-          egg_task_cache_get_async (self->symbols_cache,
+          dzl_task_cache_get_async (self->symbols_cache,
                                     document,
                                     FALSE,
                                     self->cancellable,
@@ -242,7 +239,7 @@ get_symbol_tree_cb (GObject      *object,
 }
 
 static void
-populate_cache_cb (EggTaskCache  *cache,
+populate_cache_cb (DzlTaskCache  *cache,
                    gconstpointer  key,
                    GTask         *task,
                    gpointer       user_data)
@@ -253,7 +250,7 @@ populate_cache_cb (EggTaskCache  *cache,
 
   IDE_ENTRY;
 
-  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_BUFFER (document));
   g_assert (G_IS_TASK (task));
 
@@ -336,7 +333,7 @@ symbol_tree_panel_buffer_saved (SymbolTreePanel  *self,
   /* Pop the cache if our current file was saved */
   if (buffer == self->last_document)
     {
-      egg_task_cache_evict (self->symbols_cache, buffer);
+      dzl_task_cache_evict (self->symbols_cache, buffer);
       refresh_tree (self);
     }
 }
@@ -397,7 +394,7 @@ symbol_tree_panel_init (SymbolTreePanel *self)
 
   self->destroy_connected = g_hash_table_new (NULL, NULL);
 
-  self->symbols_cache = egg_task_cache_new (g_direct_hash,
+  self->symbols_cache = dzl_task_cache_new (g_direct_hash,
                                             g_direct_equal,
                                             g_object_ref,
                                             g_object_unref,
@@ -408,7 +405,7 @@ symbol_tree_panel_init (SymbolTreePanel *self)
                                             self,
                                             NULL);
 
-  egg_task_cache_set_name (self->symbols_cache, "symbol-tree symbol cache");
+  dzl_task_cache_set_name (self->symbols_cache, "symbol-tree symbol cache");
 
   gtk_widget_init_template (GTK_WIDGET (self));
 

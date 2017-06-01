@@ -469,7 +469,7 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeBuildStageClass, reap),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, IDE_TYPE_DIRECTORY_REAPER);
+                  G_TYPE_NONE, 1, DZL_TYPE_DIRECTORY_REAPER);
 }
 
 static void
@@ -971,12 +971,12 @@ ide_build_stage_clean_finish (IdeBuildStage  *self,
 
 void
 ide_build_stage_emit_reap (IdeBuildStage      *self,
-                           IdeDirectoryReaper *reaper)
+                           DzlDirectoryReaper *reaper)
 {
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUILD_STAGE (self));
-  g_return_if_fail (IDE_IS_DIRECTORY_REAPER (reaper));
+  g_return_if_fail (DZL_IS_DIRECTORY_REAPER (reaper));
 
   g_signal_emit (self, signals [REAP], 0, reaper);
 

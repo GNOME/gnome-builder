@@ -33,11 +33,6 @@ void         ide_g_task_return_pointer_from_main (GTask          *task,
                                                   GDestroyNotify  notify);
 void         ide_g_task_return_error_from_main   (GTask          *task,
                                                   GError         *error);
-gchar       *ide_g_time_span_to_label            (GTimeSpan       span);
-gboolean     ide_g_time_span_to_label_mapping    (GBinding       *binding,
-                                                  const GValue   *from_value,
-                                                  GValue         *to_value,
-                                                  gpointer        user_data);
 
 G_END_DECLS
 

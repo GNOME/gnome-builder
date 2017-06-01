@@ -21,7 +21,6 @@
 #include <string.h>
 
 #include "application/ide-application-tests.h"
-#include "util/ide-gdk.h"
 
 typedef void (*IndentTestFunc) (IdeContext *context,
                                 GtkWidget  *widget);
@@ -124,7 +123,7 @@ assert_keypress_equal (GtkWidget   *widget,
       while (gtk_events_pending ())
         gtk_main_iteration ();
 
-      event = ide_gdk_synthesize_event_key (window, ch);
+      event = dzl_gdk_synthesize_event_key (window, ch);
       gtk_main_do_event ((GdkEvent *)event);
       gdk_event_free ((GdkEvent *)event);
     }

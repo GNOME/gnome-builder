@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-worker-process"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <libpeas/peas.h>
 
 #include "ide-debug.h"
@@ -44,7 +44,7 @@ struct _IdeWorkerProcess
 
 G_DEFINE_TYPE (IdeWorkerProcess, ide_worker_process, G_TYPE_OBJECT)
 
-EGG_DEFINE_COUNTER (instances, "IdeWorkerProcess", "Instances", "Number of IdeWorkerProcess instances")
+DZL_DEFINE_COUNTER (instances, "IdeWorkerProcess", "Instances", "Number of IdeWorkerProcess instances")
 
 enum {
   PROP_0,
@@ -240,7 +240,7 @@ ide_worker_process_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_worker_process_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -334,7 +334,7 @@ ide_worker_process_class_init (IdeWorkerProcessClass *klass)
 static void
 ide_worker_process_init (IdeWorkerProcess *self)
 {
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 }
 
 gboolean

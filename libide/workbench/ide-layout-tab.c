@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-layout-tab"
 
-#include <egg-priority-box.h>
+#include <dazzle.h>
 
 #include "ide-macros.h"
 
@@ -230,7 +230,7 @@ ide_layout_tab_class_init (IdeLayoutTabClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTab, title_label);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutTab, title_menu_button);
 
-  g_type_ensure (EGG_TYPE_PRIORITY_BOX);
+  g_type_ensure (DZL_TYPE_PRIORITY_BOX);
 }
 
 static void

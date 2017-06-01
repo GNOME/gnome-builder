@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-breakout-subprocess"
 
-#include <egg-counter.h>
+#include <dazzle.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <gio/gunixinputstream.h>
@@ -52,7 +52,7 @@
  * for all subprocesses so that we can have exit-on-close => false).
  */
 
-EGG_DEFINE_COUNTER (instances, "Subprocess", "HostCommand Instances", "Number of IdeBreakoutSubprocess instances")
+DZL_DEFINE_COUNTER (instances, "Subprocess", "HostCommand Instances", "Number of IdeBreakoutSubprocess instances")
 
 struct _IdeBreakoutSubprocess
 {
@@ -1630,7 +1630,7 @@ ide_breakout_subprocess_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_breakout_subprocess_parent_class)->finalize (object);
 
-  EGG_COUNTER_DEC (instances);
+  DZL_COUNTER_DEC (instances);
 
   IDE_EXIT;
 }
@@ -1744,7 +1744,7 @@ ide_breakout_subprocess_init (IdeBreakoutSubprocess *self)
 {
   IDE_ENTRY;
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   self->stdin_fd = -1;
   self->stdout_fd = -1;

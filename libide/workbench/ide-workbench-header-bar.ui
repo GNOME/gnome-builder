@@ -4,7 +4,7 @@
   <template class="IdeWorkbenchHeaderBar" parent="GtkHeaderBar">
     <property name="show-close-button">true</property>
     <child>
-      <object class="EggPriorityBox" id="left_box">
+      <object class="DzlPriorityBox" id="left_box">
         <property name="hexpand">true</property>
         <property name="spacing">30</property>
         <property name="visible">true</property>
@@ -20,7 +20,7 @@
       </object>
     </child>
     <child>
-      <object class="EggPriorityBox" id="right_box">
+      <object class="DzlPriorityBox" id="right_box">
         <property name="hexpand">true</property>
         <property name="spacing">30</property>
         <property name="visible">true</property>

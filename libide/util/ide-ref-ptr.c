@@ -18,13 +18,13 @@
 
 #define G_LOG_DOMAIN "ide-ref-ptr"
 
-#include "egg-counter.h"
+#include "dazzle.h"
 
 #include "ide-ref-ptr.h"
 
 G_DEFINE_BOXED_TYPE (IdeRefPtr, ide_ref_ptr, ide_ref_ptr_ref, ide_ref_ptr_unref)
 
-EGG_DEFINE_COUNTER (instances, "IdeRefPtr", "Instances", "Number of IdeRefPtr instances.")
+DZL_DEFINE_COUNTER (instances, "IdeRefPtr", "Instances", "Number of IdeRefPtr instances.")
 
 struct _IdeRefPtr
 {
@@ -44,7 +44,7 @@ ide_ref_ptr_new (gpointer       data,
   self->data = data;
   self->free_func = free_func;
 
-  EGG_COUNTER_INC (instances);
+  DZL_COUNTER_INC (instances);
 
   return self;
 }
@@ -73,7 +73,7 @@ ide_ref_ptr_unref (IdeRefPtr *self)
 
       g_slice_free (IdeRefPtr, self);
 
-      EGG_COUNTER_DEC (instances);
+      DZL_COUNTER_DEC (instances);
     }
 }
 

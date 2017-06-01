@@ -18,10 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-greeter-perspective"
 
-#include <egg-priority-box.h>
-#include <egg-search-bar.h>
-#include <egg-signal-group.h>
-#include <egg-state-machine.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
@@ -41,7 +38,7 @@ struct _IdeGreeterPerspective
 {
   GtkBin                parent_instance;
 
-  EggSignalGroup       *signal_group;
+  DzlSignalGroup       *signal_group;
   IdeRecentProjects    *recent_projects;
   IdePatternSpec       *pattern_spec;
   GActionMap           *actions;
@@ -69,9 +66,9 @@ struct _IdeGreeterPerspective
   GtkListBox           *other_projects_list_box;
   GtkButton            *remove_button;
   GtkSearchEntry       *search_entry;
-  EggStateMachine      *state_machine;
+  DzlStateMachine      *state_machine;
   GtkScrolledWindow    *scrolled_window;
-  EggPriorityBox       *genesis_buttons;
+  DzlPriorityBox       *genesis_buttons;
 
   gint                  selected_count;
 };
@@ -397,7 +394,7 @@ ide_greeter_perspective_set_recent_projects (IdeGreeterPerspective *self,
 
   if (g_set_object (&self->recent_projects, recent_projects))
     {
-      egg_signal_group_set_target (self->signal_group, recent_projects);
+      dzl_signal_group_set_target (self->signal_group, recent_projects);
 
       if (recent_projects != NULL)
         {
@@ -487,7 +484,7 @@ ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
   g_assert (IDE_IS_GREETER_PROJECT_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
-  if (ide_str_equal0 (egg_state_machine_get_state (self->state_machine), "selection"))
+  if (ide_str_equal0 (dzl_state_machine_get_state (self->state_machine), "selection"))
     {
       gboolean selected = FALSE;
 
@@ -597,7 +594,7 @@ delete_selected_rows (GSimpleAction *action,
   self->selected_count = 0;
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
-  egg_state_machine_set_state (self->state_machine, "browse");
+  dzl_state_machine_set_state (self->state_machine, "browse");
 
   ide_greeter_perspective_apply_filter_all (self);
 }
@@ -780,7 +777,7 @@ ide_greeter_perspective_cancel_clicked (IdeGreeterPerspective *self,
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (GTK_IS_BUTTON (cancel_button));
 
-  egg_state_machine_set_state (self->state_machine, "browse");
+  dzl_state_machine_set_state (self->state_machine, "browse");
   ide_greeter_perspective_apply_filter_all (self);
 }
 
@@ -795,7 +792,7 @@ ide_greeter_perspective_show_genesis_view (IdeGreeterPerspective *self,
 
   addin = gtk_stack_get_child_by_name (self->genesis_stack, genesis_addin_name);
   gtk_stack_set_visible_child (self->genesis_stack, addin);
-  egg_state_machine_set_state (self->state_machine, "genesis");
+  dzl_state_machine_set_state (self->state_machine, "genesis");
 
   if (manifest != NULL)
     {
@@ -827,7 +824,7 @@ ide_greeter_perspective_genesis_cancel_clicked (IdeGreeterPerspective *self,
   g_assert (GTK_IS_BUTTON (genesis_cancel_button));
 
   g_cancellable_cancel (self->cancellable);
-  egg_state_machine_set_state (self->state_machine, "browse");
+  dzl_state_machine_set_state (self->state_machine, "browse");
   ide_greeter_perspective_apply_filter_all (self);
 }
 
@@ -1222,8 +1219,8 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   };
   GAction *action;
 
-  self->signal_group = egg_signal_group_new (IDE_TYPE_RECENT_PROJECTS);
-  egg_signal_group_connect_object (self->signal_group,
+  self->signal_group = dzl_signal_group_new (IDE_TYPE_RECENT_PROJECTS);
+  dzl_signal_group_connect_object (self->signal_group,
                                    "items-changed",
                                    G_CALLBACK (recent_projects_items_changed),
                                    self,
@@ -1324,7 +1321,7 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
 
   self->actions = G_ACTION_MAP (g_simple_action_group_new ());
 
-  action = egg_state_machine_create_action (self->state_machine, "state");
+  action = dzl_state_machine_create_action (self->state_machine, "state");
   g_action_map_add_action (self->actions, action);
   g_object_unref (action);
 

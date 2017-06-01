@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-preferences-builtin"
 
-#include <egg-column-layout.h>
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <libpeas/peas.h>
@@ -311,11 +311,11 @@ ide_preferences_builtin_register_languages (IdePreferences *preferences)
                            group,
                            0);
 
-  flow = gtk_widget_get_ancestor (group, EGG_TYPE_COLUMN_LAYOUT);
+  flow = gtk_widget_get_ancestor (group, DZL_TYPE_COLUMN_LAYOUT);
 
   g_assert (flow != NULL);
 
-  egg_column_layout_set_max_columns (EGG_COLUMN_LAYOUT (flow), 1);
+  dzl_column_layout_set_max_columns (DZL_COLUMN_LAYOUT (flow), 1);
 
   ide_preferences_add_page (preferences, "languages.id", NULL, 0);
 

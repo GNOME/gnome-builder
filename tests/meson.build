@@ -126,26 +126,6 @@ test_cpu_graph = executable('test-cpu-graph',
 #)
 
 
-test_fuzzy = executable('test-fuzzy',
-  'test-fuzzy.c',
-  c_args: ide_test_cflags,
-  dependencies: [libide_dep, libsearch_dep],
-)
-#test('test-fuzzy', test_fuzzy,
-#  env: ide_test_env,
-#)
-
-
-test_egg_slider = executable('test-egg-slider',
-  'test-egg-slider.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-#test('test-egg-slider', test_egg_slider,
-#  env: ide_test_env,
-#)
-
-
 test_snippet_parser = executable('test-snippet-parser',
   'test-snippet-parser.c',
   c_args: ide_test_cflags,
@@ -154,74 +134,4 @@ test_snippet_parser = executable('test-snippet-parser',
 #test('test-snippet-parser', test_snippet_parser,
 #  env: ide_test_env,
 #)
-
-
-test_egg_binding_group = executable('test-egg-binding-group',
-  'test-egg-binding-group.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-test('test-egg-binding-group', test_egg_binding_group,
-  env: ide_test_env,
-)
-
-
-test_egg_menu_manager = executable('test-egg-menu-manager',
-  'test-egg-menu-manager.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-#test('test-egg-menu-manager', test_egg_menu_manager,
-#  env: ide_test_env,
-#)
-
-
-test_egg_state_machine = executable('test-egg-state-machine',
-  'test-egg-state-machine.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-test('test-egg-state-machine', test_egg_state_machine,
-  env: ide_test_env,
-)
-
-
-test_egg_radio_box = executable('test-egg-radio-box',
-  'test-egg-radio-box.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-#test('test-egg-radio-box', test_egg_radio_box,
-#  env: ide_test_env,
-#)
-
-
-test_egg_file_chooser_entry = executable('test-egg-file-chooser-entry',
-  'test-egg-file-chooser-entry.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-#test('test-egg-file-chooser-entry', test_egg_file_chooser_entry,
-#  env: ide_test_env,
-#)
-
-
-test_egg_cache = executable('test-egg-cache',
-  'test-egg-cache.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-test('test-egg-cache', test_egg_cache,
-  env: ide_test_env,
-)
-
-
-test_egg_heap = executable('test-egg-heap',
-  'test-egg-heap.c',
-  c_args: ide_test_cflags,
-  dependencies: libegg_dep,
-)
-test('test-egg-heap', test_egg_heap,
-  env: ide_test_env,
-)
 

@@ -19,8 +19,7 @@
 #ifndef IDE_EDITOR_VIEW_PRIVATE_H
 #define IDE_EDITOR_VIEW_PRIVATE_H
 
-#include <egg-simple-label.h>
-#include <egg-simple-popover.h>
+#include <dazzle.h>
 #include <libpeas/peas.h>
 #include <gtk/gtk.h>
 

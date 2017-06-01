@@ -17,7 +17,7 @@
             <property name="valign">start</property>
             <property name="visible">true</property>
             <child>
-              <object class="EggThreeGrid" id="three_grid">
+              <object class="DzlThreeGrid" id="three_grid">
                 <property name="column-spacing">12</property>
                 <property name="row-spacing">24</property>
                 <property name="visible">true</property>
@@ -81,7 +81,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="EggFileChooserEntry" id="project_location_entry">
+                  <object class="DzlFileChooserEntry" id="project_location_entry">
                     <property name="action">select-folder</property>
                     <property name="title" translatable="yes">Select Project Directory</property>
                     <property name="hexpand">true</property>
@@ -105,7 +105,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="EggRadioBox" id="project_language_chooser">
+                  <object class="DzlRadioBox" id="project_language_chooser">
                     <property name="expand">true</property>
                     <property name="visible">true</property>
                   </object>
@@ -128,7 +128,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="EggRadioBox" id="license_chooser">
+                  <object class="DzlRadioBox" id="license_chooser">
                     <property name="active-id">gpl_3</property>
                     <property name="expand">true</property>
                     <property name="visible">true</property>

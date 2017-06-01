@@ -69,7 +69,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="EggFileChooserEntry" id="clone_location_entry">
+                      <object class="DzlFileChooserEntry" id="clone_location_entry">
                         <property name="hexpand">true</property>
                         <property name="visible">true</property>
                         <property name="valign">baseline</property>

@@ -18,7 +18,7 @@
 
 #include <glib/gi18n.h>
 
-#include "egg-signal-group.h"
+#include "dazzle.h"
 
 #include "ide-layout-pane.h"
 #include "ide-workbench.h"
@@ -29,7 +29,7 @@ struct _IdeLayoutPane
 {
   DzlDockBinEdge    parent_instance;
 
-  EggSignalGroup   *toplevel_signals;
+  DzlSignalGroup   *toplevel_signals;
 
   DzlDockStack     *dock_stack;
 };
@@ -93,7 +93,7 @@ ide_layout_pane_hierarchy_changed (GtkWidget *widget,
   if (!GTK_IS_WINDOW (toplevel))
     toplevel = NULL;
 
-  egg_signal_group_set_target (self->toplevel_signals, toplevel);
+  dzl_signal_group_set_target (self->toplevel_signals, toplevel);
 }
 
 static void
@@ -128,8 +128,8 @@ ide_layout_pane_class_init (IdeLayoutPaneClass *klass)
 static void
 ide_layout_pane_init (IdeLayoutPane *self)
 {
-  self->toplevel_signals = egg_signal_group_new (GTK_TYPE_WINDOW);
-  egg_signal_group_connect_object (self->toplevel_signals,
+  self->toplevel_signals = dzl_signal_group_new (GTK_TYPE_WINDOW);
+  dzl_signal_group_connect_object (self->toplevel_signals,
                                    "set-focus",
                                    G_CALLBACK (workbench_focus_changed),
                                    self,

@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-editor-frame"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
@@ -738,7 +739,7 @@ ide_editor_frame__drag_data_received (IdeEditorFrame    *self,
   switch (info)
     {
     case TARGET_URI_LIST:
-      uri_list = ide_dnd_get_uri_list (selection_data);
+      uri_list = dzl_dnd_get_uri_list (selection_data);
 
       if (uri_list)
         {
