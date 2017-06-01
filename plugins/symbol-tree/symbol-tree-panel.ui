@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.16 -->
-  <template class="SymbolTreePanel" parent="PnlDockWidget">
+  <template class="SymbolTreePanel" parent="DzlDockWidget">
     <property name="vexpand">true</property>
     <property name="visible">true</property>
     <child>

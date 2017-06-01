@@ -22,11 +22,11 @@
 
 struct _GbSysmonPanel
 {
-  PnlDockWidget  parent_instance;
+  DzlDockWidget  parent_instance;
   RgCpuGraph    *cpu_graph;
 };
 
-G_DEFINE_TYPE (GbSysmonPanel, gb_sysmon_panel, PNL_TYPE_DOCK_WIDGET)
+G_DEFINE_TYPE (GbSysmonPanel, gb_sysmon_panel, DZL_TYPE_DOCK_WIDGET)
 
 static void
 gb_sysmon_panel_finalize (GObject *object)

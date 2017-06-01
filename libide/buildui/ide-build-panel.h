@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_PANEL (ide_build_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeBuildPanel, ide_build_panel, IDE, BUILD_PANEL, PnlDockWidget)
+G_DECLARE_FINAL_TYPE (IdeBuildPanel, ide_build_panel, IDE, BUILD_PANEL, DzlDockWidget)
 
 G_END_DECLS
 

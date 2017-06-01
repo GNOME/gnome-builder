@@ -34,7 +34,7 @@
 
 struct _SymbolTreePanel
 {
-  PnlDockWidget   parent_instance;
+  DzlDockWidget   parent_instance;
 
   GCancellable   *cancellable;
   EggTaskCache   *symbols_cache;
@@ -50,7 +50,7 @@ struct _SymbolTreePanel
   guint           refresh_tree_timeout;
 };
 
-G_DEFINE_TYPE (SymbolTreePanel, symbol_tree_panel, PNL_TYPE_DOCK_WIDGET)
+G_DEFINE_TYPE (SymbolTreePanel, symbol_tree_panel, DZL_TYPE_DOCK_WIDGET)
 
 static void refresh_tree (SymbolTreePanel *self);
 

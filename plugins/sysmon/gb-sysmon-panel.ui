@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.16 -->
-  <template class="GbSysmonPanel" parent="PnlDockWidget">
+  <template class="GbSysmonPanel" parent="DzlDockWidget">
     <property name="title" translatable="yes">System Monitor</property>
     <property name="visible">true</property>
     <child>

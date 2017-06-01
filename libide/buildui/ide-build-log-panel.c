@@ -42,7 +42,7 @@ typedef struct _ColorCodeState
 
 struct _IdeBuildLogPanel
 {
-  PnlDockWidget      parent_instance;
+  DzlDockWidget      parent_instance;
 
   IdeBuildPipeline  *pipeline;
   GtkCssProvider    *css;
@@ -69,7 +69,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (IdeBuildLogPanel, ide_build_log_panel, PNL_TYPE_DOCK_WIDGET)
+G_DEFINE_TYPE (IdeBuildLogPanel, ide_build_log_panel, DZL_TYPE_DOCK_WIDGET)
 
 static GParamSpec *properties [LAST_PROP];
 

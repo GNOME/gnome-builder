@@ -1,5 +1,5 @@
 <interface>
-  <template class="IdeBuildLogPanel" parent="PnlDockWidget">
+  <template class="IdeBuildLogPanel" parent="DzlDockWidget">
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

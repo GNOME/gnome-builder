@@ -1,5 +1,5 @@
 <interface>
-  <template class="IdeBuildPanel" parent="PnlDockWidget">
+  <template class="IdeBuildPanel" parent="DzlDockWidget">
     <child>
       <object class="GtkBox" id="toplevel">
         <property name="visible">true</property>

@@ -136,7 +136,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
                            NULL);
       ide_set_weak_pointer (&self->run_terminal, view);
 
-      panel = g_object_new (PNL_TYPE_DOCK_WIDGET,
+      panel = g_object_new (DZL_TYPE_DOCK_WIDGET,
                             "child", self->run_terminal,
                             "expand", TRUE,
                             "title", _("Application Output"),
@@ -197,7 +197,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   if (self->panel_terminal == NULL)
     {
-      self->panel_dock_widget = g_object_new (PNL_TYPE_DOCK_WIDGET,
+      self->panel_dock_widget = g_object_new (DZL_TYPE_DOCK_WIDGET,
                                               "expand", TRUE,
                                               "title", _("Terminal"),
                                               "visible", TRUE,

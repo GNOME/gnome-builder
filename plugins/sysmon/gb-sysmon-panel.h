@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_SYSMON_PANEL (gb_sysmon_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbSysmonPanel, gb_sysmon_panel, GB, SYSMON_PANEL, PnlDockWidget)
+G_DECLARE_FINAL_TYPE (GbSysmonPanel, gb_sysmon_panel, GB, SYSMON_PANEL, DzlDockWidget)
 
 G_END_DECLS
 

@@ -100,7 +100,7 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
   g_object_add_weak_pointer (G_OBJECT (self->tree), (gpointer *)&self->tree);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree));
 
-  self->panel = g_object_new (PNL_TYPE_DOCK_WIDGET,
+  self->panel = g_object_new (DZL_TYPE_DOCK_WIDGET,
                               "expand", TRUE,
                               "title", _("Project"),
                               "visible", TRUE,

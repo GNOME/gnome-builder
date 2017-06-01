@@ -25,7 +25,7 @@
 
 struct _IdeBuildPanel
 {
-  PnlDockWidget        parent_instance;
+  DzlDockWidget        parent_instance;
 
   GHashTable          *diags_hash;
   IdeBuildPipeline    *pipeline;
@@ -45,7 +45,7 @@ struct _IdeBuildPanel
   guint                warning_count;
 };
 
-G_DEFINE_TYPE (IdeBuildPanel, ide_build_panel, PNL_TYPE_DOCK_WIDGET)
+G_DEFINE_TYPE (IdeBuildPanel, ide_build_panel, DZL_TYPE_DOCK_WIDGET)
 
 enum {
   COLUMN_DIAGNOSTIC,

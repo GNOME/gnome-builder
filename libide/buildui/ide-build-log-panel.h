@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_LOG_PANEL (ide_build_log_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeBuildLogPanel, ide_build_log_panel, IDE, BUILD_LOG_PANEL, PnlDockWidget)
+G_DECLARE_FINAL_TYPE (IdeBuildLogPanel, ide_build_log_panel, IDE, BUILD_LOG_PANEL, DzlDockWidget)
 
 void ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
                                        IdeBuildPipeline *pipeline);

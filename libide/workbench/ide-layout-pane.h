@@ -19,13 +19,13 @@
 #ifndef IDE_LAYOUT_PANE_H
 #define IDE_LAYOUT_PANE_H
 
-#include <pnl.h>
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_PANE (ide_layout_pane_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeLayoutPane, ide_layout_pane, IDE, LAYOUT_PANE, PnlDockBinEdge)
+G_DECLARE_FINAL_TYPE (IdeLayoutPane, ide_layout_pane, IDE, LAYOUT_PANE, DzlDockBinEdge)
 
 G_END_DECLS
 

@@ -27,14 +27,14 @@
 
 struct _IdeLayoutPane
 {
-  PnlDockBinEdge    parent_instance;
+  DzlDockBinEdge    parent_instance;
 
   EggSignalGroup   *toplevel_signals;
 
-  PnlDockStack     *dock_stack;
+  DzlDockStack     *dock_stack;
 };
 
-G_DEFINE_TYPE (IdeLayoutPane, ide_layout_pane, PNL_TYPE_DOCK_BIN_EDGE)
+G_DEFINE_TYPE (IdeLayoutPane, ide_layout_pane, DZL_TYPE_DOCK_BIN_EDGE)
 
 static void
 ide_layout_pane_add (GtkContainer *container,
@@ -44,7 +44,7 @@ ide_layout_pane_add (GtkContainer *container,
 
   g_assert (IDE_IS_LAYOUT_PANE (self));
 
-  if (PNL_IS_DOCK_WIDGET (widget))
+  if (DZL_IS_DOCK_WIDGET (widget))
     gtk_container_add (GTK_CONTAINER (self->dock_stack), widget);
   else
     GTK_CONTAINER_CLASS (ide_layout_pane_parent_class)->add (container, widget);

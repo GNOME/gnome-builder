@@ -19,8 +19,8 @@
 #ifndef IDE_EDITOR_PERSPECTIVE_H
 #define IDE_EDITOR_PERSPECTIVE_H
 
+#include <dazzle.h>
 #include <gtk/gtk.h>
-#include <pnl.h>
 
 #include "diagnostics/ide-source-location.h"
 #include "sourceview/ide-source-view.h"
@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PERSPECTIVE (ide_editor_perspective_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, PnlDockOverlay)
+G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, DzlDockOverlay)
 
 void                 ide_editor_perspective_focus_location                 (IdeEditorPerspective   *self,
                                                                             IdeSourceLocation      *location);
@@ -46,7 +46,7 @@ GtkWidget           *ide_editor_perspective_get_left_edge                  (IdeE
 GtkWidget           *ide_editor_perspective_get_bottom_edge                (IdeEditorPerspective   *self);
 GtkWidget           *ide_editor_perspective_get_right_edge                 (IdeEditorPerspective   *self);
 
-PnlDockOverlayEdge  *ide_editor_perspective_get_overlay_edge               (IdeEditorPerspective   *self,
+DzlDockOverlayEdge  *ide_editor_perspective_get_overlay_edge               (IdeEditorPerspective   *self,
                                                                             GtkPositionType         position);
 
 void                 ide_editor_perspective_show_spellchecker              (IdeEditorPerspective   *self,

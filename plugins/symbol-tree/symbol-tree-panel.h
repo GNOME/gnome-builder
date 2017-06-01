@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define SYMBOL_TYPE_TREE_PANEL (symbol_tree_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTreePanel, symbol_tree_panel, SYMBOL, TREE_PANEL, PnlDockWidget)
+G_DECLARE_FINAL_TYPE (SymbolTreePanel, symbol_tree_panel, SYMBOL, TREE_PANEL, DzlDockWidget)
 
 void symbol_tree_panel_reset (SymbolTreePanel *self);
 

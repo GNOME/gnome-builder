@@ -20,7 +20,6 @@
 
 #include <egg-signal-group.h>
 #include <glib/gi18n.h>
-#include <pnl.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -40,7 +39,7 @@
 
 struct _IdeEditorPerspective
 {
-  PnlDockOverlay         parent_instance;
+  DzlDockOverlay         parent_instance;
 
   GtkWidget             *active_view;
   IdeLayout             *layout;
@@ -66,7 +65,7 @@ static void ide_editor_perspective_focus_location_full (IdeEditorPerspective    
                                                         IdeSourceLocation       *location,
                                                         gboolean                 open_if_not_found);
 
-G_DEFINE_TYPE_EXTENDED (IdeEditorPerspective, ide_editor_perspective, PNL_TYPE_DOCK_OVERLAY, 0,
+G_DEFINE_TYPE_EXTENDED (IdeEditorPerspective, ide_editor_perspective, DZL_TYPE_DOCK_OVERLAY, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
 
 enum {
@@ -97,23 +96,23 @@ ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
 
   settings = g_settings_new ("org.gnome.builder.workbench");
 
-  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (self->layout));
+  pane = dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self->layout));
   reveal = g_settings_get_boolean (settings, "left-visible");
   position = g_settings_get_int (settings, "left-position");
-  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), reveal);
-  pnl_dock_revealer_set_position (PNL_DOCK_REVEALER (pane), position);
+  dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (pane), reveal);
+  dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
 
-  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout));
+  pane = dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self->layout));
   reveal = g_settings_get_boolean (settings, "right-visible");
   position = g_settings_get_int (settings, "right-position");
-  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), reveal);
-  pnl_dock_revealer_set_position (PNL_DOCK_REVEALER (pane), position);
+  dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (pane), reveal);
+  dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
 
-  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (self->layout));
+  pane = dzl_dock_bin_get_bottom_edge (DZL_DOCK_BIN (self->layout));
   reveal = g_settings_get_boolean (settings, "bottom-visible");
   position = g_settings_get_int (settings, "bottom-position");
-  pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (pane), reveal);
-  pnl_dock_revealer_set_position (PNL_DOCK_REVEALER (pane), position);
+  dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (pane), reveal);
+  dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
 }
 
 static void
@@ -128,21 +127,21 @@ ide_editor_perspective_save_panel_state (IdeEditorPerspective *self)
 
   settings = g_settings_new ("org.gnome.builder.workbench");
 
-  pane = pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (self->layout));
-  position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
-  reveal = pnl_dock_revealer_get_reveal_child (PNL_DOCK_REVEALER (pane));
+  pane = dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self->layout));
+  position = dzl_dock_revealer_get_position (DZL_DOCK_REVEALER (pane));
+  reveal = dzl_dock_revealer_get_reveal_child (DZL_DOCK_REVEALER (pane));
   g_settings_set_boolean (settings, "left-visible", reveal);
   g_settings_set_int (settings, "left-position", position);
 
-  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout));
-  position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
-  reveal = pnl_dock_revealer_get_reveal_child (PNL_DOCK_REVEALER (pane));
+  pane = dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self->layout));
+  position = dzl_dock_revealer_get_position (DZL_DOCK_REVEALER (pane));
+  reveal = dzl_dock_revealer_get_reveal_child (DZL_DOCK_REVEALER (pane));
   g_settings_set_boolean (settings, "right-visible", reveal);
   g_settings_set_int (settings, "right-position", position);
 
-  pane = pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (self->layout));
-  position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
-  reveal = pnl_dock_revealer_get_reveal_child (PNL_DOCK_REVEALER (pane));
+  pane = dzl_dock_bin_get_bottom_edge (DZL_DOCK_BIN (self->layout));
+  position = dzl_dock_revealer_get_position (DZL_DOCK_REVEALER (pane));
+  reveal = dzl_dock_revealer_get_reveal_child (DZL_DOCK_REVEALER (pane));
   g_settings_set_boolean (settings, "bottom-visible", reveal);
   g_settings_set_int (settings, "bottom-position", position);
 }
@@ -756,7 +755,7 @@ ide_editor_perspective_get_center_widget (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
-  return pnl_dock_bin_get_center_widget (PNL_DOCK_BIN (self->layout));
+  return dzl_dock_bin_get_center_widget (DZL_DOCK_BIN (self->layout));
 }
 
 /**
@@ -768,7 +767,7 @@ ide_editor_perspective_get_top_edge (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
-  return pnl_dock_bin_get_top_edge (PNL_DOCK_BIN (self->layout));
+  return dzl_dock_bin_get_top_edge (DZL_DOCK_BIN (self->layout));
 }
 
 /**
@@ -780,7 +779,7 @@ ide_editor_perspective_get_left_edge (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
-  return pnl_dock_bin_get_left_edge (PNL_DOCK_BIN (self->layout));
+  return dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self->layout));
 }
 
 /**
@@ -792,7 +791,7 @@ ide_editor_perspective_get_bottom_edge (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
-  return pnl_dock_bin_get_bottom_edge (PNL_DOCK_BIN (self->layout));
+  return dzl_dock_bin_get_bottom_edge (DZL_DOCK_BIN (self->layout));
 }
 
 /**
@@ -804,7 +803,7 @@ ide_editor_perspective_get_right_edge (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
-  return pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout));
+  return dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self->layout));
 }
 
 /**
@@ -812,15 +811,15 @@ ide_editor_perspective_get_right_edge (IdeEditorPerspective *self)
  * self: an #IdeEditorPerspective.
  * position: a #GtkPositionType.
  *
- * Returns: (transfer none): A #PnlDockOverlayEdge
+ * Returns: (transfer none): A #DzlDockOverlayEdge
  */
-PnlDockOverlayEdge *
+DzlDockOverlayEdge *
 ide_editor_perspective_get_overlay_edge (IdeEditorPerspective *self,
                                          GtkPositionType       position)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
-  return pnl_dock_overlay_get_edge (PNL_DOCK_OVERLAY (self), position);
+  return dzl_dock_overlay_get_edge (DZL_DOCK_OVERLAY (self), position);
 }
 
 static GtkOrientation
@@ -836,13 +835,13 @@ get_orientation_from_position_type (GtkPositionType position_type)
 static void
 overlay_child_reveal_notify_cb (IdeEditorPerspective *self,
                                 GParamSpec           *pspec,
-                                PnlDockOverlayEdge   *edge)
+                                DzlDockOverlayEdge   *edge)
 {
   IdeLayoutPane *pane;
   gboolean reveal;
 
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
-  g_assert (PNL_IS_DOCK_OVERLAY_EDGE (edge));
+  g_assert (DZL_IS_DOCK_OVERLAY_EDGE (edge));
 
   gtk_container_child_get (GTK_CONTAINER (self), GTK_WIDGET (edge),
                            "reveal", &reveal,
@@ -854,8 +853,8 @@ overlay_child_reveal_notify_cb (IdeEditorPerspective *self,
                                             overlay_child_reveal_notify_cb,
                                             self);
 
-      pane = IDE_LAYOUT_PANE (pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout)));
-      pnl_dock_revealer_animate_to_position (PNL_DOCK_REVEALER (pane),
+      pane = IDE_LAYOUT_PANE (dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self->layout)));
+      dzl_dock_revealer_animate_to_position (DZL_DOCK_REVEALER (pane),
                                              self->right_pane_position,
                                              OVERLAY_REVEAL_DURATION);
     }
@@ -865,13 +864,13 @@ overlay_child_reveal_notify_cb (IdeEditorPerspective *self,
 static void
 overlay_child_revealed_notify_cb (IdeEditorPerspective *self,
                                   GParamSpec           *pspec,
-                                  PnlDockOverlayEdge   *edge)
+                                  DzlDockOverlayEdge   *edge)
 {
   GtkWidget *child;
   gboolean revealed;
 
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
-  g_assert (PNL_IS_DOCK_OVERLAY_EDGE (edge));
+  g_assert (DZL_IS_DOCK_OVERLAY_EDGE (edge));
 
   gtk_container_child_get (GTK_CONTAINER (self), GTK_WIDGET (edge),
                            "revealed", &revealed,
@@ -894,7 +893,7 @@ overlay_child_revealed_notify_cb (IdeEditorPerspective *self,
 
 static void
 show_spell_checker (IdeEditorPerspective *self,
-                    PnlDockOverlayEdge   *overlay_edge,
+                    DzlDockOverlayEdge   *overlay_edge,
                     IdeLayoutPane        *pane)
 {
   GtkOrientation pane_orientation;
@@ -906,16 +905,16 @@ show_spell_checker (IdeEditorPerspective *self,
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_assert (gtk_bin_get_child (GTK_BIN (overlay_edge)) != NULL);
 
-  pane_position_type = pnl_dock_bin_edge_get_edge (PNL_DOCK_BIN_EDGE (pane));
-  overlay_position_type = pnl_dock_overlay_edge_get_edge (overlay_edge);
+  pane_position_type = dzl_dock_bin_edge_get_edge (DZL_DOCK_BIN_EDGE (pane));
+  overlay_position_type = dzl_dock_overlay_edge_get_edge (overlay_edge);
 
   pane_orientation = get_orientation_from_position_type (pane_position_type);
   overlay_orientation = get_orientation_from_position_type (overlay_position_type);
 
   g_assert (pane_orientation == overlay_orientation);
 
-  if (pnl_dock_revealer_get_position_set (PNL_DOCK_REVEALER (pane)))
-    self->right_pane_position = pnl_dock_revealer_get_position (PNL_DOCK_REVEALER (pane));
+  if (dzl_dock_revealer_get_position_set (DZL_DOCK_REVEALER (pane)))
+    self->right_pane_position = dzl_dock_revealer_get_position (DZL_DOCK_REVEALER (pane));
   else
     {
       if (overlay_orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -940,7 +939,7 @@ show_spell_checker (IdeEditorPerspective *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  pnl_dock_revealer_animate_to_position (PNL_DOCK_REVEALER (pane),
+  dzl_dock_revealer_animate_to_position (DZL_DOCK_REVEALER (pane),
                                          overlay_size,
                                          OVERLAY_REVEAL_DURATION);
   gtk_container_child_set (GTK_CONTAINER (self), GTK_WIDGET (overlay_edge),
@@ -979,7 +978,7 @@ ide_editor_perspective_show_spellchecker (IdeEditorPerspective *self,
                                           IdeSourceView        *source_view)
 {
   GtkWidget *spellchecker_widget;
-  PnlDockOverlayEdge *overlay_edge;
+  DzlDockOverlayEdge *overlay_edge;
   IdeLayoutPane *pane;
 
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
@@ -990,11 +989,11 @@ ide_editor_perspective_show_spellchecker (IdeEditorPerspective *self,
       self->spellchecker_opened = TRUE;
       spellchecker_widget = create_spellchecker_widget (source_view);
 
-      pnl_overlay_add_child (PNL_DOCK_OVERLAY (self), spellchecker_widget, "right");
+      dzl_overlay_add_child (DZL_DOCK_OVERLAY (self), spellchecker_widget, "right");
       overlay_edge = ide_editor_perspective_get_overlay_edge (self, GTK_POS_RIGHT);
       gtk_widget_set_child_visible (GTK_WIDGET (overlay_edge), TRUE);
 
-      pane = IDE_LAYOUT_PANE (pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (self->layout)));
+      pane = IDE_LAYOUT_PANE (dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self->layout)));
       show_spell_checker (self, overlay_edge, pane);
     }
 }

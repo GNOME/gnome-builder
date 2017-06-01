@@ -27,13 +27,13 @@
 
 struct _GbpDevhelpPanel
 {
-  PnlDockWidget  parent_instance;
+  DzlDockWidget  parent_instance;
 
   DhBookManager *books;
   DhSidebar     *sidebar;
 };
 
-G_DEFINE_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, PNL_TYPE_DOCK_WIDGET)
+G_DEFINE_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, DZL_TYPE_DOCK_WIDGET)
 
 enum {
   PROP_0,

@@ -941,7 +941,7 @@ ide_workbench_show_parents (GtkWidget *widget)
   parent = gtk_widget_get_parent (widget);
 
   if (IDE_IS_LAYOUT_PANE (widget))
-    pnl_dock_revealer_set_reveal_child (PNL_DOCK_REVEALER (widget), TRUE);
+    dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (widget), TRUE);
 
   if (IDE_IS_PERSPECTIVE (widget))
     ide_workbench_set_visible_perspective (ide_widget_get_workbench (widget),

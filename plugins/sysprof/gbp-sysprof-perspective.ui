@@ -70,7 +70,7 @@
               </packing>
             </child>
             <child>
-              <object class="PnlMultiPaned">
+              <object class="DzlMultiPaned">
                 <property name="visible">true</property>
                 <child>
                   <object class="SpVisualizerView" id="visualizers">

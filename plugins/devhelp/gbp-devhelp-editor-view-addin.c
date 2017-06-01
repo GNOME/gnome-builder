@@ -45,7 +45,7 @@ request_documentation_cb (GbpDevhelpEditorViewAddin *self,
   if (layout == NULL)
     return;
 
-  pane = pnl_dock_bin_get_right_edge (PNL_DOCK_BIN (layout));
+  pane = dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (layout));
   panel = ide_widget_find_child_typed (pane, GBP_TYPE_DEVHELP_PANEL);
   gbp_devhelp_panel_focus_search (GBP_DEVHELP_PANEL (panel), word);
 }

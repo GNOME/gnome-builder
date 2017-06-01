@@ -22,7 +22,7 @@
 #include "ide-editor-spell-language-popover.h"
 
 #include <glib/gi18n.h>
-#include <pnl.h>
+#include <dazzle.h>
 
 #include "util/ide-gtk.h"
 #include "workbench/ide-workbench.h"
@@ -355,8 +355,8 @@ ide_editor_spell_language_popover_map (GtkWidget *widget)
   workbench = ide_widget_get_workbench (widget);
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  if (NULL != (edge = gtk_widget_get_ancestor (widget, PNL_TYPE_DOCK_OVERLAY_EDGE)))
-    self->edge_side = pnl_dock_overlay_edge_get_edge (PNL_DOCK_OVERLAY_EDGE (edge));
+  if (NULL != (edge = gtk_widget_get_ancestor (widget, DZL_TYPE_DOCK_OVERLAY_EDGE)))
+    self->edge_side = dzl_dock_overlay_edge_get_edge (DZL_DOCK_OVERLAY_EDGE (edge));
 
   self->editor = ide_workbench_get_perspective_by_name (workbench, "editor");
 }

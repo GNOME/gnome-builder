@@ -19,13 +19,13 @@
 #ifndef GBP_DEVHELP_PANEL_H
 #define GBP_DEVHELP_PANEL_H
 
-#include <pnl.h>
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_DEVHELP_PANEL (gbp_devhelp_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GBP, DEVHELP_PANEL, PnlDockWidget)
+G_DECLARE_FINAL_TYPE (GbpDevhelpPanel, gbp_devhelp_panel, GBP, DEVHELP_PANEL, DzlDockWidget)
 
 void gbp_devhelp_panel_set_uri      (GbpDevhelpPanel *self,
                                      const gchar     *uri);

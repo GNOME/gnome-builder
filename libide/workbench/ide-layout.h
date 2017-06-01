@@ -19,17 +19,17 @@
 #ifndef IDE_LAYOUT_H
 #define IDE_LAYOUT_H
 
-#include <pnl.h>
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT (ide_layout_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeLayout, ide_layout, IDE, LAYOUT, PnlDockBin)
+G_DECLARE_DERIVABLE_TYPE (IdeLayout, ide_layout, IDE, LAYOUT, DzlDockBin)
 
 struct _IdeLayoutClass
 {
-  PnlDockBinClass parent_class;
+  DzlDockBinClass parent_class;
 };
 
 GtkWidget *ide_layout_get_active_view (IdeLayout *self);

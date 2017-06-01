@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
-  <template class="IdeEditorPerspective" parent="PnlDockOverlay">
+  <template class="IdeEditorPerspective" parent="DzlDockOverlay">
     <child>
       <object class="IdeLayout" id="layout">
         <property name="visible">true</property>
