@@ -178,10 +178,9 @@ subdir('contrib/gd')
 subdir('contrib/jsonrpc-glib')
 subdir('contrib/libeditorconfig')
 subdir('contrib/nautilus')
-subdir('contrib/search')
 subdir('contrib/tmpl')
 subdir('contrib/xml')
-subdir('contrib/gstyle') # Depends on libsearch/libxml
+subdir('contrib/gstyle') # Depends on libxml
 subdir('libide')
 subdir('plugins')
 subdir('po')

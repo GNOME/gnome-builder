@@ -612,7 +612,6 @@ libide_deps = [
   libdazzle_dep,
   libtmpl_dep,
   libxml_dep,
-  libsearch_dep,
   libgd_dep,
   libnautilus_dep,
   libjson_glib_dep,

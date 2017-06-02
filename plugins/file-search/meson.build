@@ -9,12 +9,8 @@ file_search_sources = [
   'gb-file-search-index.h',
 ]
 
-file_search_deps = plugin_deps + [
-  libsearch_dep,
-]
-
 shared_module('file-search', file_search_sources,
-  dependencies: file_search_deps,
+  dependencies: plugin_deps,
   link_args: plugin_link_args,
   link_depends: plugin_link_deps,
   install: true,

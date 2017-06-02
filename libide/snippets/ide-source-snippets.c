@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -24,13 +25,11 @@
 #include "ide-source-snippet-parser.h"
 #include "ide-source-snippets.h"
 
-#include "trie.h"
-
 struct _IdeSourceSnippets
 {
   GObject  parent_instance;
 
-  Trie    *snippets;
+  DzlTrie *snippets;
 };
 
 
@@ -49,23 +48,23 @@ ide_source_snippets_clear (IdeSourceSnippets *snippets)
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS (snippets));
 
-  trie_destroy (snippets->snippets);
-  snippets->snippets = trie_new (g_object_unref);
+  dzl_trie_destroy (snippets->snippets);
+  snippets->snippets = dzl_trie_new (g_object_unref);
 }
 
 static gboolean
-copy_into (Trie        *trie,
+copy_into (DzlTrie     *trie,
            const gchar *key,
            gpointer     value,
            gpointer     user_data)
 {
   IdeSourceSnippet *snippet = value;
-  Trie *dest = user_data;
+  DzlTrie *dest = user_data;
 
   g_assert (dest);
   g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
 
-  trie_insert (dest, key, g_object_ref (snippet));
+  dzl_trie_insert (dest, key, g_object_ref (snippet));
 
   return FALSE;
 }
@@ -77,13 +76,13 @@ ide_source_snippets_merge (IdeSourceSnippets *snippets,
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS (snippets));
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS (other));
 
-  trie_traverse (other->snippets,
-                 "",
-                 G_PRE_ORDER,
-                 G_TRAVERSE_LEAVES,
-                 -1,
-                 copy_into,
-                 snippets->snippets);
+  dzl_trie_traverse (other->snippets,
+                     "",
+                     G_PRE_ORDER,
+                     G_TRAVERSE_LEAVES,
+                     -1,
+                     copy_into,
+                     snippets->snippets);
 }
 
 void
@@ -96,11 +95,11 @@ ide_source_snippets_add (IdeSourceSnippets *snippets,
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (snippet));
 
   trigger = ide_source_snippet_get_trigger (snippet);
-  trie_insert (snippets->snippets, trigger, g_object_ref (snippet));
+  dzl_trie_insert (snippets->snippets, trigger, g_object_ref (snippet));
 }
 
 static gboolean
-ide_source_snippets_foreach_cb (Trie        *trie,
+ide_source_snippets_foreach_cb (DzlTrie     *trie,
                                 const gchar *key,
                                 gpointer     value,
                                 gpointer     user_data)
@@ -131,13 +130,13 @@ ide_source_snippets_foreach (IdeSourceSnippets *snippets,
   if (!prefix)
     prefix = "";
 
-  trie_traverse (snippets->snippets,
-                 prefix,
-                 G_PRE_ORDER,
-                 G_TRAVERSE_LEAVES,
-                 -1,
-                 ide_source_snippets_foreach_cb,
-                 (gpointer) closure);
+  dzl_trie_traverse (snippets->snippets,
+                     prefix,
+                     G_PRE_ORDER,
+                     G_TRAVERSE_LEAVES,
+                     -1,
+                     ide_source_snippets_foreach_cb,
+                     (gpointer) closure);
 }
 
 static void
@@ -145,7 +144,7 @@ ide_source_snippets_finalize (GObject *object)
 {
   IdeSourceSnippets *self = IDE_SOURCE_SNIPPETS (object);
 
-  g_clear_pointer (&self->snippets, (GDestroyNotify) trie_destroy);
+  g_clear_pointer (&self->snippets, (GDestroyNotify) dzl_trie_unref);
 
   G_OBJECT_CLASS (ide_source_snippets_parent_class)->finalize (object);
 }
@@ -162,11 +161,11 @@ ide_source_snippets_class_init (IdeSourceSnippetsClass *klass)
 static void
 ide_source_snippets_init (IdeSourceSnippets *snippets)
 {
-  snippets->snippets = trie_new (g_object_unref);
+  snippets->snippets = dzl_trie_new (g_object_unref);
 }
 
 static gboolean
-increment_count (Trie        *trie,
+increment_count (DzlTrie     *trie,
                  const gchar *key,
                  gpointer     value,
                  gpointer     user_data)
@@ -183,13 +182,13 @@ ide_source_snippets_count (IdeSourceSnippets *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPETS (self), 0);
 
-  trie_traverse (self->snippets,
-                 "",
-                 G_PRE_ORDER,
-                 G_TRAVERSE_LEAVES,
-                 -1,
-                 increment_count,
-                 &count);
+  dzl_trie_traverse (self->snippets,
+                     "",
+                     G_PRE_ORDER,
+                     G_TRAVERSE_LEAVES,
+                     -1,
+                     increment_count,
+                     &count);
 
   return count;
 }

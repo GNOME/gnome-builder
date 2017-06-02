@@ -71,7 +71,7 @@ libgstyle_sources = [
 
 libgstyle_deps = [
   libgtk_dep,
-  libsearch_dep,
+  libdazzle_dep,
   libxml_dep,
   libm_dep,
 ]

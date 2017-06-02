@@ -21,7 +21,7 @@
 
 #include <glib-object.h>
 
-#include <fuzzy.h>
+#include <dazzle.h>
 
 #include "gstyle-cielab.h"
 #include "gstyle-color.h"
@@ -76,7 +76,7 @@ struct _GstyleColorPanel
   GtkWidget                           *search_strings_popover;
   GtkWidget                           *search_strings_list;
 
-  Fuzzy                               *fuzzy;
+  DzlFuzzyMutableIndex                *fuzzy;
 
   GtkToggleButton                     *components_toggle;
   GtkToggleButton                     *strings_toggle;

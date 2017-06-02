@@ -18,16 +18,15 @@
 
 #define G_LOG_DOMAIN "html-completion"
 
+#include <dazzle.h>
 #include <libpeas/peas.h>
 #include <string.h>
 
 #include "ide-html-completion-provider.h"
 
-#include "trie.h"
-
 static GHashTable *element_attrs;
-static Trie *css_styles;
-static Trie *elements;
+static DzlTrie *css_styles;
+static DzlTrie *elements;
 
 enum {
   MODE_NONE,
@@ -270,7 +269,7 @@ get_mode (GtkSourceCompletionContext *context)
 }
 
 static gboolean
-traverse_cb (Trie        *trie,
+traverse_cb (DzlTrie        *trie,
              const gchar *key,
              gpointer     value,
              gpointer     user_data)
@@ -367,7 +366,7 @@ ide_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
                                       GtkSourceCompletionContext  *context)
 {
   SearchState state = { 0 };
-  Trie *trie = NULL;
+  DzlTrie *trie = NULL;
   gchar *word;
   gint mode;
 
@@ -418,7 +417,7 @@ ide_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
    */
   if (trie && word)
     {
-      trie_traverse (trie, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
+      dzl_trie_traverse (trie, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
                      traverse_cb, &state);
     }
 
@@ -427,10 +426,10 @@ ide_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
    */
   if (mode == MODE_ATTRIBUTE_NAME)
     {
-      Trie *global;
+      DzlTrie *global;
 
       global = g_hash_table_lookup (element_attrs, "*");
-      trie_traverse (global, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
+      dzl_trie_traverse (global, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
                      traverse_cb, &state);
     }
 
@@ -462,20 +461,20 @@ ide_html_completion_provider_class_finalize (IdeHtmlCompletionProviderClass *kla
 static void
 ide_html_completion_provider_class_init (IdeHtmlCompletionProviderClass *klass)
 {
-  elements = trie_new (NULL);
+  elements = dzl_trie_new (NULL);
   element_attrs = g_hash_table_new (g_str_hash, g_str_equal);
-  css_styles = trie_new (NULL);
+  css_styles = dzl_trie_new (NULL);
 
-#define ADD_ELEMENT(str)        trie_insert(elements,str,str)
-#define ADD_STRING(dict, str)   trie_insert(dict,str,str)
+#define ADD_ELEMENT(str)        dzl_trie_insert(elements,str,str)
+#define ADD_STRING(dict, str)   dzl_trie_insert(dict,str,str)
 #define ADD_ATTRIBUTE(ele,attr) \
   G_STMT_START { \
-    Trie *t = g_hash_table_lookup (element_attrs, ele); \
+    DzlTrie *t = g_hash_table_lookup (element_attrs, ele); \
     if (!t) { \
-      t = trie_new (NULL); \
+      t = dzl_trie_new (NULL); \
       g_hash_table_insert (element_attrs, ele, t); \
     } \
-    trie_insert (t,attr,attr); \
+    dzl_trie_insert (t,attr,attr); \
   } G_STMT_END
 
   /*

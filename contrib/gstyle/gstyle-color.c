@@ -20,10 +20,9 @@
 
 #include <math.h>
 
+#include <dazzle.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-
-#include <fuzzy.h>
 
 #include "gstyle-private.h"
 #include "gstyle-colorlexer.h"
@@ -685,25 +684,25 @@ _parse_hsla_string (const gchar      *string,
 }
 
 /* TODO: add a public func to init so we can control the initial starting time ? */
-static Fuzzy *
+static DzlFuzzyMutableIndex *
 _init_predefined_table (void)
 {
-  static Fuzzy *predefined_table;
+  static DzlFuzzyMutableIndex *predefined_table;
   NamedColor *item;
 
   if (predefined_table == NULL)
     {
-      predefined_table = fuzzy_new (TRUE);
+      predefined_table = dzl_fuzzy_mutable_index_new (TRUE);
 
-      fuzzy_begin_bulk_insert (predefined_table);
+      dzl_fuzzy_mutable_index_begin_bulk_insert (predefined_table);
       for (guint i = 0; i < G_N_ELEMENTS (predefined_colors_table); ++i)
         {
           item = &predefined_colors_table [i];
           item->index = i;
-          fuzzy_insert (predefined_table, item->name, (gpointer)item);
+          dzl_fuzzy_mutable_index_insert (predefined_table, item->name, (gpointer)item);
         }
 
-      fuzzy_end_bulk_insert (predefined_table);
+      dzl_fuzzy_mutable_index_end_bulk_insert (predefined_table);
     }
 
   return predefined_table;
@@ -716,15 +715,15 @@ _parse_predefined_color (const gchar  *color_string,
 {
   g_autoptr (GArray) results = NULL;
   NamedColor *item = NULL;
-  FuzzyMatch *match;
   gint len;
-  Fuzzy *predefined_table = _init_predefined_table ();
+  DzlFuzzyMutableIndex *predefined_table = _init_predefined_table ();
 
-  results = fuzzy_match (predefined_table, color_string, 10);
+  results = dzl_fuzzy_mutable_index_match (predefined_table, color_string, 10);
   len = results->len;
   for (gint i = 0; i < len; ++i)
     {
-      match = &g_array_index (results, FuzzyMatch, i);
+      const DzlFuzzyMutableIndexMatch *match = &g_array_index (results, DzlFuzzyMutableIndexMatch, i);
+
       if (g_strcmp0 (color_string, match->key) == 0)
         {
           item = match->value;
@@ -753,20 +752,20 @@ gstyle_color_fuzzy_parse_color_string (const gchar *color_string)
 {
   g_autoptr (GArray) fuzzy_results = NULL;
   GPtrArray *results;
-  FuzzyMatch *match;
   NamedColor *item;
   GstyleColor *color;
   GdkRGBA rgba;
   gint len;
 
-  Fuzzy *predefined_table = _init_predefined_table ();
+  DzlFuzzyMutableIndex *predefined_table = _init_predefined_table ();
 
   results = g_ptr_array_new_with_free_func (g_object_unref);
-  fuzzy_results = fuzzy_match (predefined_table, color_string, GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN);
+  fuzzy_results = dzl_fuzzy_mutable_index_match (predefined_table, color_string, GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN);
   len = MIN (GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN, fuzzy_results->len);
   for (gint i = 0; i < len; ++i)
     {
-      match = &g_array_index (fuzzy_results, FuzzyMatch, i);
+      const DzlFuzzyMutableIndexMatch *match = &g_array_index (fuzzy_results, DzlFuzzyMutableIndexMatch, i);
+
       item = match->value;
       rgba.red = item->red / 255.0;
       rgba.green = item->green / 255.0;
