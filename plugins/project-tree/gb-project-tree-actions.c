@@ -243,7 +243,7 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
 
   file = gb_project_file_get_file (GB_PROJECT_FILE (item));
 
-  ide_file_manager_show (file, NULL);
+  dzl_file_manager_show (file, NULL);
 }
 
 /* Based on gdesktopappinfo.c in GIO */
