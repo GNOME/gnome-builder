@@ -5,7 +5,7 @@
     <property name="title" translatable="yes">System Monitor</property>
     <property name="visible">true</property>
     <child>
-      <object class="RgCpuGraph" id="cpu_graph">
+      <object class="DzlCpuGraph" id="cpu_graph">
         <property name="expand">true</property>
         <property name="visible">true</property>
         <property name="timespan">30000000</property>

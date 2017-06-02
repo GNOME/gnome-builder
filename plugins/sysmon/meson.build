@@ -15,12 +15,8 @@ sysmon_sources = [
   'gb-sysmon-addin.h',
 ]
 
-sysmon_deps = plugin_deps + [
-  librg_dep,
-]
-
 shared_module('sysmon', sysmon_sources,
-  dependencies: sysmon_deps,
+  dependencies: plugin_deps,
   link_args: plugin_link_args,
   link_depends: plugin_link_deps,
   install: true,

@@ -116,16 +116,6 @@ test('test-vim', test_vim,
 )
 
 
-test_cpu_graph = executable('test-cpu-graph',
-  'test-cpu-graph.c',
-  c_args: ide_test_cflags,
-  dependencies: [libide_dep, librg_dep],
-)
-#test('test-cpu-graph', test_cpu_graph,
-#  env: ide_test_env,
-#)
-
-
 test_snippet_parser = executable('test-snippet-parser',
   'test-snippet-parser.c',
   c_args: ide_test_cflags,
