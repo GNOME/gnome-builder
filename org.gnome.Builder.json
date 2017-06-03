@@ -581,8 +581,47 @@
             ]
         },
         {
+            "name": "template-glib",
+            "config-opts": [ "--libdir=/app/lib" ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://git.gnome.org/browse/template-glib"
+                }
+            ]
+        },
+        {
+            "name": "jsonrpc-glib",
+            "config-opts": [ "--libdir=/app/lib" ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://git.gnome.org/browse/jsonrpc-glib"
+                }
+            ]
+        },
+        {
+            "name": "libdazzle",
+            "config-opts": [ "--libdir=/app/lib" ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://git.gnome.org/browse/libdazzle"
+                }
+            ]
+        },
+        {
             "name": "gnome-builder",
-            "config-opts": [ "--enable-tracing", "--enable-debug", "--with-channel=flatpak-nightly" ],
+            "config-opts": [ "--libdir=/app/lib" ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "config-opts": [ "-Denable-tracing=true", "-Denable-debug=true", "-Dwith-channel=flatpak-nightly" ],
             "sources": [
                 {
                     "type": "git",
