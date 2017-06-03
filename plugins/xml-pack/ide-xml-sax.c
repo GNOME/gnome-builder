@@ -184,16 +184,21 @@ static void
 get_tag_location (IdeXmlSax    *self,
                   gint         *line,
                   gint         *line_offset,
+                  gint         *end_line_offset,
                   const gchar **content,
                   gsize        *size)
 {
   xmlParserInput *input;
   const gchar *base;
   const gchar *current;
+  const gchar *end_current;
   const gchar *line_start;
+  const gchar *end_line_start;
   gint start_line_number;
+  gint end_line_number;
   gint size_offset = 1;
   gunichar ch;
+  gboolean end_line_found = FALSE;
 
   g_assert (IDE_IS_XML_SAX (self));
   g_assert (line != NULL);
@@ -206,7 +211,7 @@ get_tag_location (IdeXmlSax    *self,
   input = self->context->input;
   base = (const gchar *)input->base;
   current = (const gchar *)input->cur;
-  start_line_number = xmlSAX2GetLineNumber (self->context);
+  end_line_number = start_line_number = xmlSAX2GetLineNumber (self->context);
 
   /* Adjust the element size, can be a start, a end or an auto-closed one */
   if (g_utf8_get_char (current) != '>')
@@ -225,10 +230,11 @@ get_tag_location (IdeXmlSax    *self,
         }
     }
 
+  end_current = current;
   if (g_utf8_get_char (current) != '>')
     {
       *line = start_line_number;
-      *line_offset = xmlSAX2GetColumnNumber (self->context);
+      *line_offset = *end_line_offset = xmlSAX2GetColumnNumber (self->context);
       *content = NULL;
       *size = 0;
 
@@ -242,7 +248,14 @@ get_tag_location (IdeXmlSax    *self,
         break;
 
       if (ch == '\n')
-        --start_line_number;
+        {
+          --start_line_number;
+          if (!end_line_found )
+            {
+              end_line_start = current + 1;
+              end_line_found = TRUE;
+            }
+        }
 
       current = g_utf8_prev_char (current);
     }
@@ -254,6 +267,9 @@ get_tag_location (IdeXmlSax    *self,
       if (ch == '\n')
         {
           ++line_start;
+          if (!end_line_found )
+            end_line_start = line_start;
+
           break;
         }
 
@@ -262,6 +278,7 @@ get_tag_location (IdeXmlSax    *self,
 
   *line = start_line_number;
   *line_offset = (current - line_start) + 1;
+  *end_line_offset = (end_current - end_line_start) + 1;
   *content = current;
   *size = (const gchar *)input->cur - current + size_offset;
 }
@@ -285,7 +302,7 @@ ide_xml_sax_get_location (IdeXmlSax    *self,
   g_return_val_if_fail (IDE_IS_XML_SAX (self), FALSE);
   g_return_val_if_fail (self->context != NULL, FALSE);
 
-  get_tag_location (self, &tmp_line, &tmp_line_offset, &tmp_content, &tmp_size);
+  get_tag_location (self, &tmp_line, &tmp_line_offset, &tmp_end_line_offset, &tmp_content, &tmp_size);
 
   if (start_line != NULL)
     *start_line = tmp_line;
@@ -300,7 +317,7 @@ ide_xml_sax_get_location (IdeXmlSax    *self,
     *size = tmp_size;
 
   tmp_end_line = xmlSAX2GetLineNumber (self->context);
-  tmp_end_line_offset = xmlSAX2GetColumnNumber (self->context);
+  //tmp_end_line_offset = xmlSAX2GetColumnNumber (self->context);
 
   if (end_line != NULL)
     *end_line = tmp_end_line;

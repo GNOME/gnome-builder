@@ -431,6 +431,7 @@ ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
   g_return_if_fail (G_IS_FILE (file) || file == NULL);
+  g_return_if_fail (size >= 2);
 
   g_clear_object (&self->file);
   if (file != NULL)
@@ -514,6 +515,7 @@ ide_xml_symbol_node_set_end_tag_location (IdeXmlSymbolNode *self,
                                           gsize             size)
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+  g_return_if_fail (size >= 2);
 
   self->end_tag.start_line = start_line;
   self->end_tag.start_line_offset = start_line_offset;
@@ -588,7 +590,7 @@ is_in_range (NodeRange range,
              gint      line_offset)
 {
   if (line < range.start_line ||
-      (line == range.start_line && line_offset < range.start_line_offset))
+      (line == range.start_line && line_offset <= range.start_line_offset))
     return -1;
 
   if (line > range.end_line ||
@@ -616,7 +618,7 @@ print_node_ranges (IdeXmlSymbolNode *node)
 /* Find the relative position of the (line, line_offset) cursor
  * according to the reference node ref_node
  */
-IdeXmlPositionKind
+IdeXmlSymbolNodeRelativePosition
 ide_xml_symbol_node_compare_location (IdeXmlSymbolNode *ref_node,
                                       gint              line,
                                       gint              line_offset)
@@ -627,20 +629,20 @@ ide_xml_symbol_node_compare_location (IdeXmlSymbolNode *ref_node,
 
   pos = is_in_range(ref_node->start_tag, line, line_offset);
   if (pos == -1)
-    return IDE_XML_POSITION_KIND_BEFORE;
+    return IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_BEFORE;
   else if (pos == 0)
-    return IDE_XML_POSITION_KIND_IN_START_TAG;
+    return IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_START_TAG;
 
   if (ref_node->has_end_tag)
     {
       pos = is_in_range(ref_node->end_tag, line, line_offset);
       if (pos == -1)
-        return IDE_XML_POSITION_KIND_IN_CONTENT;
+        return IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_CONTENT;
       else if (pos == 0)
-        return IDE_XML_POSITION_KIND_IN_END_TAG;
+        return IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_END_TAG;
     }
 
-  return IDE_XML_POSITION_KIND_AFTER;
+  return IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_AFTER;
 }
 
 void
@@ -672,10 +674,12 @@ ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
 
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
-  printf ("%s(%d:%d->%d:%d)\n",
+  printf ("%s(%d:%d->%d:%d)-(%d:%d->%d:%d)\n",
           self->element_name,
           self->start_tag.start_line, self->start_tag.start_line_offset,
-          self->end_tag.start_line, self->end_tag.start_line_offset);
+          self->start_tag.end_line, self->start_tag.end_line_offset,
+          self->end_tag.start_line, self->end_tag.start_line_offset,
+          self->end_tag.end_line, self->end_tag.end_line_offset);
 
   if (show_attributes && self->attributes_names != NULL)
     while (*attributes != NULL)
