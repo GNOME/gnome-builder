@@ -603,7 +603,6 @@ libide_deps = [
   dependency('pangoft2', version: '>= 1.38.0'),
   dependency('gspell-1', version: '>= 1.2.0'),
   dependency('enchant'),
-  libdazzle_dep,
   libgtksource_dep,
   libgio_dep,
   libgiounix_dep,
@@ -615,7 +614,7 @@ libide_deps = [
   libgd_dep,
   libnautilus_dep,
   libjson_glib_dep,
-  libjsonrpc_dep,
+  libjsonrpc_glib_dep,
 ]
 
 contrib_dir = join_paths(meson.source_root(), 'contrib/')
@@ -685,9 +684,9 @@ libide_dep = declare_dependency(
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
-                         libdazzle_dep,
                          libtemplate_glib_dep,
-                         libjson_glib_dep ],
+                         libjson_glib_dep,
+                         libjsonrpc_glib_dep ],
             link_with: libide,
   include_directories: include_directories('.'),
 )
@@ -700,9 +699,9 @@ libide_plugin_dep = declare_dependency(
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
-                         libdazzle_dep,
                          libtemplate_glib_dep,
-                         libjson_glib_dep ],
+                         libjson_glib_dep,
+                         libjsonrpc_glib_dep ],
 )
 
 if get_option('with_introspection')
