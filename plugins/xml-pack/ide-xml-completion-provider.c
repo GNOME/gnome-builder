@@ -90,6 +90,9 @@ get_path (IdeXmlSymbolNode *node,
   if (current != root_node)
     g_warning ("partial path, we don't reach the root node");
 
+  if (path->nodes->len == 0)
+    ide_xml_path_prepend_node (path, root_node);
+
   return path;
 }
 
