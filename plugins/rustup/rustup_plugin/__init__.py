@@ -26,11 +26,11 @@ import re
 import pty
 import stat
 
-gi.require_version('Dzl', '1.0')
+gi.require_version('Dazzle', '1.0')
 gi.require_version('Ide', '1.0')
 gi.require_version('Gtk', '3.0')
 
-from gi.repository import Dzl
+from gi.repository import Dazzle
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
@@ -611,13 +611,13 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         return list_control
 
     def create_install_popover(self):
-        popover = Dzl.SimplePopover(title=_('Install Rust Channel'),
-                                    button_text=_('Install'),
-                                    text='stable',
-                                    ready=True,
-                                    # translators: channel is stable, beta, nightly, with optional architecture and date
-                                    message=_('Enter name of rust channel'),
-                                    tooltip_text=_('''Standard release channel toolchain names have the following form:
+        popover = Dazzle.SimplePopover(title=_('Install Rust Channel'),
+                                       button_text=_('Install'),
+                                       text='stable',
+                                       ready=True,
+                                       # translators: channel is stable, beta, nightly, with optional architecture and date
+                                       message=_('Enter name of rust channel'),
+                                       tooltip_text=_('''Standard release channel toolchain names have the following form:
                         <channel>[-<date>][-<host>]
 
                         <channel>    = stable|beta|nightly|<version>

@@ -20,6 +20,7 @@
 
 import gi
 
+gi.require_version('Dazzle', '1.0')
 gi.require_version('Ide', '1.0')
 
 from gi.repository import Ide
@@ -27,7 +28,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Dzl
+from gi.repository import Dazzle
 
 import re
 import subprocess
@@ -188,7 +189,7 @@ class TodoItem(GObject.Object):
             return msg[:msg.index('\n')].strip()
         return msg.strip()
 
-class TodoPanel(Dzl.DockWidget):
+class TodoPanel(Dazzle.DockWidget):
     def __init__(self, basedir, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
