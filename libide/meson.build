@@ -610,7 +610,7 @@ libide_deps = [
   libgtk_dep,
   libpeas_dep,
   libdazzle_dep,
-  libtmpl_dep,
+  libtemplate_glib_dep,
   libxml_dep,
   libgd_dep,
   libnautilus_dep,
@@ -686,6 +686,7 @@ libide_dep = declare_dependency(
                          libgtk_dep,
                          libgtksource_dep,
                          libdazzle_dep,
+                         libtemplate_glib_dep,
                          libjson_glib_dep ],
             link_with: libide,
   include_directories: include_directories('.'),
@@ -700,6 +701,7 @@ libide_plugin_dep = declare_dependency(
                          libgtk_dep,
                          libgtksource_dep,
                          libdazzle_dep,
+                         libtemplate_glib_dep,
                          libjson_glib_dep ],
 )
 
@@ -711,8 +713,7 @@ if get_option('with_introspection')
               namespace: 'Ide',
           symbol_prefix: 'ide',
       identifier_prefix: 'Ide',
-              link_with: [ libtmpl ],
-               includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', 'Dazzle-1.0', 'Json-1.0', libtmpl_gir[0] ],
+               includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', 'Dazzle-1.0', 'Json-1.0', 'Template-1.0' ],
                 install: true,
         install_dir_gir: pkggirdir,
     install_dir_typelib: pkgtypelibdir,
@@ -734,14 +735,14 @@ if get_option('with_introspection')
           install: true,
       install_dir: pkgvapidir,
          packages: [
-        'gio-2.0',
-        'gtk+-3.0',
-        'gtksourceview-3.0',
-        'libpeas-1.0',
-        'json-glib-1.0',
-        'libdazzle-1.0',
-        libtmpl_vapi,
-      ],
+           'gio-2.0',
+           'gtk+-3.0',
+           'gtksourceview-3.0',
+           'json-glib-1.0',
+           'libdazzle-1.0',
+           'libpeas-1.0',
+           'template-glib-1.0',
+         ],
     )
 
   endif
