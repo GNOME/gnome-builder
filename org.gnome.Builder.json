@@ -536,8 +536,9 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/json-glib",
-                    "branch": "json-glib-1-2"
+                    "buildsystem": "meson",
+                    "builddir": true,
+                    "url": "https://git.gnome.org/browse/json-glib"
                 }
             ]
         },
