@@ -633,17 +633,17 @@ get_position (IdeXmlService   *self,
               gint             line,
               gint             line_offset)
 {
-  IdeXmlPosition *position = NULL;
+  IdeXmlPosition *position;
   IdeXmlSymbolNode *root_node;
-  IdeXmlPositionKind kind;
-  IdeXmlPositionKind candidate_kind = IDE_XML_POSITION_KIND_UNKNOW;
+  IdeXmlSymbolNodeRelativePosition rel_pos;
+  IdeXmlPositionKind candidate_kind;
   IdeXmlSymbolNode *current_node;
-  IdeXmlSymbolNode *parent_node = NULL;
   IdeXmlSymbolNode *child_node;
-  IdeXmlSymbolNode *candidate_node = root_node;
+  IdeXmlSymbolNode *candidate_node;
   IdeXmlSymbolNode *previous_sibling_node = NULL;
   IdeXmlSymbolNode *next_sibling_node = NULL;
   guint n_children;
+  gint child_pos = -1;
   gint n = 0;
 
   g_assert (IDE_IS_XML_SERVICE (self));
@@ -656,31 +656,44 @@ loop:
       if (0 == (n_children = ide_xml_symbol_node_get_n_direct_children (current_node)))
         goto result;
 
-      parent_node = current_node;
       for (n = 0; n < n_children; ++n)
         {
           child_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (current_node, n));
-          kind = ide_xml_symbol_node_compare_location (child_node, line, line_offset);
-          printf ("try kind: %s\n", ide_xml_position_kind_get_str (kind));
-          switch (kind)
+          rel_pos = ide_xml_symbol_node_compare_location (child_node, line, line_offset);
+          printf ("node:%s rel pos:%d\n", ide_xml_symbol_node_get_element_name (child_node), rel_pos);
+          switch (rel_pos)
             {
-            case IDE_XML_POSITION_KIND_IN_START_TAG:
-            case IDE_XML_POSITION_KIND_IN_END_TAG:
+            case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_START_TAG:
               candidate_node = child_node;
-              candidate_kind = kind;
+              candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
               goto result;
 
-            case IDE_XML_POSITION_KIND_BEFORE:
-              /* We are in between two nodes, so let's take the parent node as candidate */
+            case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_END_TAG:
+              candidate_node = child_node;
+              candidate_kind = IDE_XML_POSITION_KIND_IN_END_TAG;
               goto result;
 
-            case IDE_XML_POSITION_KIND_AFTER:
-              /* We go to the next for loop iteration to test the next child */
+            case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_BEFORE:
+              child_pos = n;
+              candidate_node = current_node;
+              candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
+              goto result;
+
+            case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_AFTER:
+              if (n == (n_children - 1))
+                {
+                  child_pos = (n_children + 1);
+                  candidate_node = current_node;
+                  candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
+                  goto result;
+                }
+              else
+                continue;
+
               break;
 
-            case IDE_XML_POSITION_KIND_IN_CONTENT:
-              candidate_node = current_node = child_node;
-              candidate_kind = kind;
+            case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_CONTENT:
+              current_node = child_node;
               goto loop;
 
             case IDE_XML_POSITION_KIND_UNKNOW:
@@ -691,22 +704,29 @@ loop:
     }
 
 result:
+  if (candidate_node == NULL)
+    {
+      /* Empty tree case */
+      candidate_node = root_node;
+      candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
+    }
+
   position = ide_xml_position_new (candidate_node, candidate_kind);
   ide_xml_position_set_analysis (position, analysis);
 
-  if (parent_node != NULL)
+  if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT)
     {
-      n_children = ide_xml_symbol_node_get_n_direct_children (parent_node);
-      if (n_children > 0)
+      if (child_pos > 0)
         {
-          if (n > 0)
-            previous_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (parent_node, n - 1));
-
-          if (n < n_children - 1)
-            next_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (parent_node, n + 1));
-
-          ide_xml_position_set_siblings (position, previous_sibling_node, next_sibling_node);
+        previous_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos - 1));
+          printf ("previous sibling:%p at %d\n", previous_sibling_node, child_pos - 1);
         }
+
+      if (child_pos <= n_children)
+        next_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos));
+
+      ide_xml_position_set_siblings (position, previous_sibling_node, next_sibling_node);
+      ide_xml_position_set_child_pos (position, child_pos);
     }
 
   return position;
