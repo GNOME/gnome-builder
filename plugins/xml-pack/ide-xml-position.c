@@ -31,8 +31,9 @@ ide_xml_position_new (IdeXmlSymbolNode   *node,
   self = g_slice_new0 (IdeXmlPosition);
   self->ref_count = 1;
 
-  self->node = g_object_ref (node);
+  self->node = (IDE_IS_XML_SYMBOL_NODE (node)) ? g_object_ref (node) : NULL;
   self->kind = kind;
+  self->child_pos = -1;
 
   return self;
 }
@@ -47,6 +48,17 @@ ide_xml_position_copy (IdeXmlPosition *self)
 
   copy = ide_xml_position_new (self->node,
                                self->kind);
+
+  if (self->analysis != NULL)
+    copy->analysis = ide_xml_analysis_ref (self->analysis);
+
+  if (self->next_sibling_node != NULL)
+    copy->next_sibling_node = g_object_ref (self->next_sibling_node);
+
+  if (self->previous_sibling_node != NULL)
+    copy->previous_sibling_node = g_object_ref (self->previous_sibling_node);
+
+  copy->child_pos = self->child_pos;
 
   return copy;
 }
@@ -155,14 +167,6 @@ ide_xml_position_kind_get_str (IdeXmlPositionKind kind)
       kind_str = "in end";
       break;
 
-    case IDE_XML_POSITION_KIND_BEFORE:
-      kind_str = "before";
-      break;
-
-    case IDE_XML_POSITION_KIND_AFTER:
-      kind_str = "after";
-      break;
-
     case IDE_XML_POSITION_KIND_IN_CONTENT:
       kind_str = "in content";
       break;
@@ -180,22 +184,48 @@ ide_xml_position_print (IdeXmlPosition *self)
   const gchar *p_sibling_str;
   const gchar *n_sibling_str;
   const gchar *kind_str;
+  IdeXmlSymbolNode *parent_node;
+  gint n_children;
 
   p_sibling_str = (self->previous_sibling_node == NULL) ?
-    "None" :
+    "none" :
     ide_xml_symbol_node_get_element_name (self->previous_sibling_node);
 
   n_sibling_str = (self->next_sibling_node == NULL) ?
-    "None" :
+    "none" :
     ide_xml_symbol_node_get_element_name (self->next_sibling_node);
 
   kind_str = ide_xml_position_kind_get_str (self->kind);
 
-  printf ("node: %s (between %s and %s) kind:%s\n",
-          ide_xml_symbol_node_get_element_name (self->node),
-          p_sibling_str,
-          n_sibling_str,
+  parent_node = ide_xml_symbol_node_get_parent (self->node);
+  printf ("POSITION: parent: %s node: %s kind:%s",
+          (parent_node != NULL) ? ide_xml_symbol_node_get_element_name (parent_node) : "none",
+          (self->node != NULL) ? ide_xml_symbol_node_get_element_name (self->node) : "none",
           kind_str);
+
+  if (self->child_pos != -1)
+    {
+      printf (" (between %s and %s)", p_sibling_str, n_sibling_str);
+      n_children = ide_xml_symbol_node_get_n_direct_children (self->node);
+      if (self->child_pos == 0)
+        {
+          if (n_children == 1)
+            printf (" pos: |0\n");
+          else
+            printf (" pos: |0..%d\n", n_children - 1);
+        }
+      else if (self->child_pos == (n_children + 1))
+        {
+          if (n_children == 1)
+            printf (" pos: 0|\n");
+          else
+            printf (" pos: 0..%d|\n", n_children - 1);
+        }
+      else
+        printf (" pos: %d|%d\n", self->child_pos - 1, self->child_pos);
+    }
+  else
+    printf ("\n");
 
   if (self->node != NULL)
     {
@@ -226,4 +256,20 @@ ide_xml_position_get_kind (IdeXmlPosition *self)
   g_return_val_if_fail (self, IDE_XML_POSITION_KIND_UNKNOW);
 
   return self->kind;
+}
+
+gint
+ide_xml_position_get_child_pos (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, -1);
+
+  return self->child_pos;
+}
+
+void ide_xml_position_set_child_pos (IdeXmlPosition *self,
+                                     gint            child_pos)
+{
+  g_return_if_fail (self);
+
+  self->child_pos = child_pos;
 }
