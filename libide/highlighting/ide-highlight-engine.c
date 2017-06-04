@@ -228,6 +228,7 @@ create_tag_from_style (IdeHighlightEngine *self,
   g_assert (style_name != NULL);
 
   tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), style_name, NULL);
+  gtk_text_tag_set_priority (tag, 0);
   style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self->buffer));
   sync_tag_style (style_scheme, tag);
 
