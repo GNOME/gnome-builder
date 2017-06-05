@@ -619,10 +619,9 @@
         },
         {
             "name": "gnome-builder",
-            "config-opts": [ "--libdir=/app/lib" ],
             "buildsystem": "meson",
             "builddir": true,
-            "config-opts": [ "-Denable-tracing=true", "-Denable-debug=true", "-Dwith-channel=flatpak-nightly" ],
+            "config-opts": [ "--libdir=/app/lib", "-Denable-tracing=true", "-Denable-debug=true", "-Dwith-channel=flatpak-nightly" ],
             "sources": [
                 {
                     "type": "git",
