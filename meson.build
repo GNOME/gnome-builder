@@ -14,6 +14,12 @@ MAJOR_VERSION = version_split[0]
 MINOR_VERSION = version_split[1]
 MICRO_VERSION = version_split[2]
 
+pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
+pkglibdir = join_paths(get_option('libdir'), 'gnome-builder')
+pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
+pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
+pkgvapidir = join_paths(get_option('datadir'), 'gnome-builder/vapi')
+
 conf = configuration_data()
 conf.set_quoted('PACKAGE_NAME', 'gnome-builder')
 conf.set_quoted('PACKAGE_VERSION', meson.project_version())
@@ -133,6 +139,8 @@ libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.25.2',
 
 libgd = subproject('libgd',
   default_options: [
+    'static=false',
+    'pkglibdir=' + pkglibdir,
     'with-tagged-entry=true'
   ]
 )
@@ -172,12 +180,6 @@ if get_option('with_flatpak') or get_option('with_git')
   endif
 endif
 
-
-pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
-pkglibdir = join_paths(get_option('libdir'), 'gnome-builder')
-pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
-pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
-pkgvapidir = join_paths(get_option('datadir'), 'gnome-builder/vapi')
 gnome = import('gnome')
 
 subdir('data')
