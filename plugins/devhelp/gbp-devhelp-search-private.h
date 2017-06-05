@@ -19,7 +19,7 @@
 #ifndef GBP_DEVHELP_SEARCH_PRIVATE_H
 #define GBP_DEVHELP_SEARCH_PRIVATE_H
 
-#include <gd-tagged-entry.h>
+#include <libgd/gd.h>
 #include <ide.h>
 
 G_BEGIN_DECLS

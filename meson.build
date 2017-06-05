@@ -129,6 +129,13 @@ libdazzle_dep = dependency('libdazzle-1.0', version: '>= 0.1.0')
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.25.2')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.25.2')
 
+libgd = subproject('libgd',
+  default_options: [
+    'with-tagged-entry=true'
+  ]
+)
+libgd_dep = libgd.get_variable('libgd_dep')
+
 if get_option('with_flatpak') or get_option('with_git')
   libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
 
@@ -176,7 +183,6 @@ subdir('data/fonts')
 subdir('data/gsettings')
 subdir('data/icons')
 subdir('data/style-schemes')
-subdir('contrib/gd')
 subdir('contrib/libeditorconfig')
 subdir('contrib/nautilus')
 subdir('contrib/xml')

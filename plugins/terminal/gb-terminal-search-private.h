@@ -19,7 +19,7 @@
 #ifndef GB_TERMINAL_SEARCH_PRIVATE_H
 #define GB_TERMINAL_SEARCH_PRIVATE_H
 
-#include <gd-tagged-entry.h>
+#include <libgd/gd.h>
 #include <ide.h>
 #include <vte/vte.h>
 
