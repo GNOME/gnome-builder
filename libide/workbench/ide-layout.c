@@ -175,8 +175,6 @@ ide_layout_class_init (IdeLayoutClass *klass)
 
   dock_bin_class->create_edge = ide_layout_create_edge;
 
-  gtk_widget_class_set_css_name (widget_class, "layout");
-
   properties [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",
                          "Active View",

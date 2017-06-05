@@ -119,8 +119,6 @@ ide_layout_pane_class_init (IdeLayoutPaneClass *klass)
 
   container_class->add = ide_layout_pane_add;
 
-  gtk_widget_class_set_css_name (widget_class, "layoutpane");
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-pane.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutPane, dock_stack);
 }
