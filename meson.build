@@ -127,7 +127,9 @@ libm_dep = cc.find_library('m', required: false)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 0.1.0')
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.25.2')
-libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.25.2')
+libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.25.2',
+  fallback: ['jsonrpc-glib', 'libjsonrpc_glib_dep']
+)
 
 libgd = subproject('libgd',
   default_options: [

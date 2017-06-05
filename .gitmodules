@@ -1,3 +1,6 @@
 [submodule "subprojects/libgd"]
 	path = subprojects/libgd
 	url = https://git.gnome.org/browse/libgd
+[submodule "subprojects/jsonrpc-glib"]
+	path = subprojects/jsonrpc-glib
+	url = https://git.gnome.org/browse/jsonrpc-glib
