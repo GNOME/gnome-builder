@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 struct _IdeApplication
 {
-  GtkApplication       parent_instance;
+  DzlApplication       parent_instance;
 
   IdeApplicationMode   mode;
 

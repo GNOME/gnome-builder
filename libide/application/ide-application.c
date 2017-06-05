@@ -48,7 +48,7 @@
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"
 
-G_DEFINE_TYPE (IdeApplication, ide_application, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
 
 static GThread *main_thread;
 

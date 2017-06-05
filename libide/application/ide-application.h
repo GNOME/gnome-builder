@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 #define IDE_APPLICATION_DEFAULT (IDE_APPLICATION (g_application_get_default()))
 #define IDE_IS_MAIN_THREAD()    (g_thread_self() == ide_application_get_main_thread())
 
-G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, GtkApplication)
+G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, DzlApplication)
 
 typedef enum
 {
