@@ -389,116 +389,41 @@ ide_application_load_addins (IdeApplication *self)
 }
 
 static void
-ide_application_load_plugin_menus (IdeApplication *self,
-                                   PeasPluginInfo *plugin_info,
-                                   PeasEngine     *engine)
+ide_application_load_plugin_resources (IdeApplication *self,
+                                       PeasPluginInfo *plugin_info,
+                                       PeasEngine     *engine)
 {
+  g_autofree gchar *path = NULL;
   const gchar *module_name;
-  gchar *path;
-  guint merge_id;
 
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (plugin_info != NULL);
   g_assert (PEAS_IS_ENGINE (engine));
 
-  /*
-   * First check embedded resource for menus.ui.
-   */
-  module_name = peas_plugin_info_get_module_name (plugin_info);
-  path = g_strdup_printf ("/org/gnome/builder/plugins/%s/gtk/menus.ui", module_name);
-  merge_id = dzl_menu_manager_add_resource (self->menu_manager, path, NULL);
-  if (merge_id != 0)
-    g_hash_table_insert (self->merge_ids, g_strdup (module_name), GINT_TO_POINTER (merge_id));
-  g_free (path);
+  ide_application_plugins_load_plugin_gresources (self, plugin_info, engine);
 
-  /*
-   * Maybe this is python and embedded resources are annoying to build.
-   * Could be a file on disk.
-   */
-  if (merge_id == 0)
-    {
-      path = g_strdup_printf ("%s/gtk/menus.ui", peas_plugin_info_get_data_dir (plugin_info));
-      if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
-        {
-          merge_id = dzl_menu_manager_add_filename (self->menu_manager, path, NULL);
-          if (merge_id != 0)
-            g_hash_table_insert (self->merge_ids, g_strdup (module_name), GINT_TO_POINTER (merge_id));
-        }
-      g_free (path);
-    }
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  path = g_strdup_printf ("/org/gnome/builder/plugins/%s", module_name);
+  dzl_application_add_resource_path (DZL_APPLICATION (self), path);
 }
 
 static void
-ide_application_unload_plugin_menus (IdeApplication *self,
-                                     PeasPluginInfo *plugin_info,
-                                     PeasEngine     *engine)
+ide_application_unload_plugin_resources (IdeApplication *self,
+                                         PeasPluginInfo *plugin_info,
+                                         PeasEngine     *engine)
 {
+  g_autofree gchar *path = NULL;
   const gchar *module_name;
-  guint merge_id;
 
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (plugin_info != NULL);
   g_assert (PEAS_IS_ENGINE (engine));
 
   module_name = peas_plugin_info_get_module_name (plugin_info);
-  merge_id = GPOINTER_TO_INT (g_hash_table_lookup (self->merge_ids, module_name));
-  if (merge_id != 0)
-    dzl_menu_manager_remove (self->menu_manager, merge_id);
-  g_hash_table_remove (self->merge_ids, module_name);
-}
+  path = g_strdup_printf ("/org/gnome/builder/plugins/%s", module_name);
+  dzl_application_remove_resource_path (DZL_APPLICATION (self), path);
 
-static void
-ide_application_load_plugin_css (IdeApplication *self,
-                                 PeasPluginInfo *plugin_info,
-                                 PeasEngine     *engine)
-{
-  g_autofree gchar *base_path = NULL;
-  GtkCssProvider *provider;
-  const gchar *module_name;
-  GdkScreen *screen;
-
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (plugin_info != NULL);
-  g_assert (PEAS_IS_ENGINE (engine));
-
-  if (self->plugin_css == NULL)
-    self->plugin_css = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
-
-  module_name = peas_plugin_info_get_module_name (plugin_info);
-  base_path = g_strdup_printf ("/org/gnome/builder/plugins/%s", module_name);
-  provider = ide_css_provider_new (base_path);
-
-  screen = gdk_screen_get_default ();
-  gtk_style_context_add_provider_for_screen (screen,
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
-
-  g_hash_table_insert (self->plugin_css, plugin_info, provider);
-}
-
-static void
-ide_application_unload_plugin_css (IdeApplication *self,
-                                   PeasPluginInfo *plugin_info,
-                                   PeasEngine     *engine)
-{
-  GtkStyleProvider *provider;
-
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (plugin_info != NULL);
-  g_assert (PEAS_IS_ENGINE (engine));
-
-  if (self->plugin_css == NULL)
-    self->plugin_css = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
-
-  provider = g_hash_table_lookup (self->plugin_css, plugin_info);
-
-  if (provider != NULL)
-    {
-      GdkScreen *screen = gdk_screen_get_default ();
-
-      gtk_style_context_remove_provider_for_screen (screen, provider);
-      g_hash_table_remove (self->plugin_css, plugin_info);
-    }
+  ide_application_plugins_unload_plugin_gresources (self, plugin_info, engine);
 }
 
 void
@@ -509,7 +434,6 @@ ide_application_init_plugin_accessories (IdeApplication *self)
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  self->merge_ids = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   self->plugin_gresources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                    (GDestroyNotify)g_resource_unref);
 
@@ -517,35 +441,15 @@ ide_application_init_plugin_accessories (IdeApplication *self)
 
   g_signal_connect_object (engine,
                            "load-plugin",
-                           G_CALLBACK (ide_application_load_plugin_menus),
+                           G_CALLBACK (ide_application_load_plugin_resources),
                            self,
                            G_CONNECT_AFTER | G_CONNECT_SWAPPED);
-  g_signal_connect_object (engine,
-                           "load-plugin",
-                           G_CALLBACK (ide_application_load_plugin_css),
-                           self,
-                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
-  g_signal_connect_object (engine,
-                           "load-plugin",
-                           G_CALLBACK (ide_application_plugins_load_plugin_gresources),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (engine,
                            "unload-plugin",
-                           G_CALLBACK (ide_application_unload_plugin_menus),
+                           G_CALLBACK (ide_application_unload_plugin_resources),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (engine,
-                           "unload-plugin",
-                           G_CALLBACK (ide_application_unload_plugin_css),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (engine,
-                           "unload-plugin",
-                           G_CALLBACK (ide_application_plugins_unload_plugin_gresources),
-                           self,
-                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
   list = peas_engine_get_plugin_list (engine);
 
@@ -560,6 +464,6 @@ ide_application_init_plugin_accessories (IdeApplication *self)
       if (!g_settings_get_boolean (settings, "enabled"))
         continue;
 
-      ide_application_load_plugin_menus (self, list->data, engine);
+      ide_application_load_plugin_resources (self, plugin_info, engine);
     }
 }
