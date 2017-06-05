@@ -128,7 +128,7 @@ ide_preferences_builtin_register_appearance (IdePreferences *preferences)
       ide_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
     }
 
-  if (ide_application_get_disable_theme_tracking (IDE_APPLICATION_DEFAULT))
+  if (g_getenv ("GTK_THEME") != NULL)
     {
       bin = ide_preferences_get_widget (preferences, dark_mode);
       gtk_widget_set_sensitive (bin, FALSE);

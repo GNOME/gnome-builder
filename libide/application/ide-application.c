@@ -92,61 +92,6 @@ ide_application_make_skeleton_dirs (IdeApplication *self)
 }
 
 static void
-ide_application_register_theme_overrides (IdeApplication *self)
-{
-  g_autoptr(GSettings) settings = NULL;
-  GtkSettings *gtk_settings;
-  GdkScreen *screen;
-  gboolean wants_dark_theme = FALSE;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  screen = gdk_screen_get_default ();
-  gtk_settings = gtk_settings_get_for_screen (screen);
-  settings = g_settings_new ("org.gnome.builder");
-
-  /*
-   * As early as possible, overwrite the gtk theme if we are running in
-   * flatpak. We want to ensure that we provide the best visual appearance
-   * that we can, for which we only support the internal Gtk theme currently.
-   *
-   * If we can get a designer that manages other themes and keeps them up
-   * to date and working inside flatpak, we can consider doing something
-   * different here.
-   */
-  if (ide_is_flatpak () && g_getenv ("GTK_THEME") == NULL)
-    {
-      g_object_set (gtk_settings,
-                    "gtk-theme-name", "Adwaita",
-                    NULL);
-    }
-
-  self->theme_manager = ide_theme_manager_new ();
-
-  /*
-   * Some users override the "default to dark theme" in gnome-tweak-tool,
-   * which means if they haven't selected the dark theme, we will
-   * inadvertantly set the application to light-mode. If we detect this,
-   * we will avoid tracking the dark status.
-   */
-  g_object_get (gtk_settings,
-                "gtk-application-prefer-dark-theme", &wants_dark_theme,
-                NULL);
-
-  if (wants_dark_theme || g_getenv ("GTK_THEME") != NULL)
-    self->disable_theme_tracking = TRUE;
-
-  if (!self->disable_theme_tracking)
-    g_settings_bind (settings, "night-mode",
-                     gtk_settings, "gtk-application-prefer-dark-theme",
-                     G_SETTINGS_BIND_DEFAULT);
-
-  IDE_EXIT;
-}
-
-static void
 ide_application_register_keybindings (IdeApplication *self)
 {
   g_autoptr(GSettings) settings = NULL;
@@ -374,6 +319,29 @@ ide_application_language_defaults_cb (GObject      *object,
 }
 
 static void
+ide_application_register_settings (IdeApplication *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  if (g_getenv ("GTK_THEME") == NULL)
+    {
+      g_autoptr(GSettings) settings = NULL;
+      GtkSettings *gtk_settings;
+
+      settings = g_settings_new ("org.gnome.builder");
+      gtk_settings = gtk_settings_get_default ();
+
+      g_settings_bind (settings, "night-mode",
+                     gtk_settings, "gtk-application-prefer-dark-theme",
+                     G_SETTINGS_BIND_DEFAULT);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_application_startup (GApplication *application)
 {
   IdeApplication *self = (IdeApplication *)application;
@@ -394,7 +362,7 @@ ide_application_startup (GApplication *application)
     {
       ide_application_make_skeleton_dirs (self);
       ide_language_defaults_init_async (NULL, ide_application_language_defaults_cb, NULL);
-      ide_application_register_theme_overrides (self);
+      ide_application_register_settings (self);
       ide_application_register_keybindings (self);
       ide_application_actions_init (self);
 
@@ -495,7 +463,6 @@ ide_application_finalize (GObject *object)
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
-  g_clear_object (&self->theme_manager);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }
@@ -801,14 +768,6 @@ ide_application_open_project (IdeApplication *self,
     return TRUE;
   else
     return FALSE;
-}
-
-gboolean
-ide_application_get_disable_theme_tracking (IdeApplication *self)
-{
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
-
-  return self->disable_theme_tracking;
 }
 
 /**
