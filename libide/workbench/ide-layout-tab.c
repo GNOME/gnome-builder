@@ -243,7 +243,7 @@ ide_layout_tab_init (IdeLayoutTab *self)
 
   gtk_widget_add_events (GTK_WIDGET (self), GDK_ENTER_NOTIFY | GDK_LEAVE_NOTIFY);
 
-  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-layout-stack-menu");
+  menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "ide-layout-stack-menu");
   popover = gtk_popover_new_from_model (self->title_menu_button, G_MENU_MODEL (menu));
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (self->title_menu_button), popover);
 }

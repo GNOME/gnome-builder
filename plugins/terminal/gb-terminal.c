@@ -109,7 +109,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       terminal->url  = vte_terminal_match_check_event (VTE_TERMINAL (terminal), (GdkEvent *)popup_info->event, NULL);
 
-      menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gb-terminal-view-popup-menu");
+      menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-terminal-view-popup-menu");
       terminal->popup_menu = gtk_menu_new_from_model (G_MENU_MODEL (menu));
 
       group = gtk_widget_get_action_group (GTK_WIDGET (terminal), "terminal");

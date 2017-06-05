@@ -134,7 +134,7 @@ view_populate_submenu (GbBeautifierWorkbenchAddin *self,
       g_object_set_data_full (G_OBJECT (view), "gb-beautifier-default-action", NULL, g_free);
     }
 
-  default_menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gb-beautify-default-section");
+  default_menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-beautify-default-section");
   g_menu_remove_all (default_menu);
 
   lang_id = gb_beautifier_helper_get_lang_id (self, view);
@@ -209,7 +209,7 @@ view_populate_popup (GbBeautifierWorkbenchAddin *self,
   g_assert (GTK_IS_WIDGET (popup));
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
-  submenu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gb-beautify-profiles-section");
+  submenu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-beautify-profiles-section");
   g_menu_remove_all (submenu);
   view_populate_submenu (self, source_view, submenu, self->entries);
 }

@@ -70,7 +70,7 @@ ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  model = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gear-menu");
+  model = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gear-menu");
   popover = gtk_popover_new_from_model (NULL, G_MENU_MODEL (model));
   gtk_widget_set_size_request (popover, 225, -1);
   gtk_menu_button_set_popover (priv->menu_button, popover);

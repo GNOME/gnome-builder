@@ -5489,7 +5489,7 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
   if (!IDE_IS_BUFFER (buffer))
     return;
 
-  model = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-source-view-popup-menu");
+  model = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "ide-source-view-popup-menu");
   gtk_menu_shell_bind_model (GTK_MENU_SHELL (popup), G_MENU_MODEL (model), NULL, TRUE);
 
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);

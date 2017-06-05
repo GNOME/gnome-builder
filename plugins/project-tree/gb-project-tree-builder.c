@@ -308,7 +308,7 @@ gb_project_tree_builder_node_popup (IdeTreeBuilder *builder,
     {
       GMenu *mime_section;
 
-      mime_section = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT,
+      mime_section = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT,
                                                      "gb-project-tree-open-by-mime-section");
       populate_mime_handlers (mime_section, GB_PROJECT_FILE (item));
     }

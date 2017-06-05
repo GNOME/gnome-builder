@@ -974,7 +974,7 @@ ide_editor_frame__search_populate_popup (IdeEditorFrame *self,
 
       group = gtk_widget_get_action_group (GTK_WIDGET (self->search_frame), "search-entry");
 
-      menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-frame-search-menu");
+      menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "ide-editor-frame-search-menu");
       gtk_menu_shell_bind_model (GTK_MENU_SHELL (popup), G_MENU_MODEL (menu), NULL, TRUE);
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD);

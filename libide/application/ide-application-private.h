@@ -55,9 +55,6 @@ struct _IdeApplication
 
   IdeThemeManager     *theme_manager;
 
-  DzlMenuManager      *menu_manager;
-  GHashTable          *merge_ids;
-
   GHashTable          *plugin_css;
   GHashTable          *plugin_gresources;
 
