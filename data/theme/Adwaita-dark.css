@@ -1,16 +1,6 @@
 @import url("resource:///org/gnome/builder/theme/Adwaita-shared.css");
 
 
-eggsearchbar box.search-bar {
-  background-color: #2c3133;
-  box-shadow: 0 4px 3px -5px #2c3030 inset,
-              0 -1px 0 #1c1f1f inset;
-}
-eggsearchbar:backdrop box.search-bar {
-  box-shadow: 0 -1px 0 #2c3030 inset;
-}
-
-
 perspectiveswitcher {
   background-color: #272c2e;
 }
