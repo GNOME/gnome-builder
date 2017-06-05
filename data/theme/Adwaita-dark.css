@@ -26,11 +26,6 @@ perspectiveswitcher button:hover {
 }
 
 
-pillbox {
-  background-color: #333435;
-}
-
-
 layouttabbar {
   background-color: #272c2e;
   box-shadow: 0 4px 3px -5px #2c3030 inset,
@@ -48,19 +43,6 @@ layouttab:backdrop {
   border-right-color: alpha(@borders, 0.5);
   border-left-color: alpha(@borders, 0.5);
   box-shadow: none;
-}
-
-
-docktabstrip {
-  background-color: #272c2e;
-  box-shadow: 0 4px 3px -5px #2c3030 inset,
-              0 -1px 0 #1c1f1f inset;
-}
-docktabstrip:backdrop {
-  box-shadow: 0 -1px 0 #2c3030 inset;
-}
-docktabstrip docktab:checked {
-  box-shadow: 0 -2px 0 #215d9c inset;
 }
 
 

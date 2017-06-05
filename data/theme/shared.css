@@ -154,15 +154,6 @@ eggsearchbar entry {
   min-height: 24px;
 }
 
-
-/*
- * Pillbox is used to render "languages" in the greeter.
- */
-pillbox {
-  border-radius: 3px;
-}
-
-
 /*
  * Styling in the genesis (create project) perspective.
  */
