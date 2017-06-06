@@ -681,6 +681,19 @@ libide_plugin_dep = declare_dependency(
                          libjsonrpc_glib_dep ],
 )
 
+pkgg = import('pkgconfig')
+
+pkgg.generate(
+    libraries: [libide],
+      subdirs: [ 'gnome-builder-@0@/libide'.format(meson.project_version()) ],
+      version: meson.project_version(),
+         name: 'Libide',
+     filebase: 'libide-1.0',
+  description: 'Libide contains the components used to build the GNOME Builder IDE.',
+     requires: [ 'gtk+-3.0', 'gtksourceview-3.0', 'libdazzle-1.0', 'template-glib-1.0', 'jsonrpc-glib-1.0' ],
+  install_dir: join_paths(pkglibdir, 'pkgconfig'),
+)
+
 if get_option('with_introspection')
 
   libide_gir = gnome.generate_gir(libide,

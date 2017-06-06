@@ -33,22 +33,3 @@ configure_file(
 	install: true,
 	install_dir: join_paths(get_option('datadir'), 'dbus-1', 'services'),
 )
-
-# pkg-config files.
-pkgpkgconfdir = join_paths(get_option('libdir'), 'gnome-builder', 'pkgconfig')
-
-pkgconf = configuration_data()
-pkgconf.set('prefix', get_option('prefix'))
-pkgconf.set('libdir', join_paths('${exec_prefix}', get_option('libdir')))
-pkgconf.set('VERSION', meson.project_version())
-
-# TODO: Use the pkgconfig module to generate these
-
-configure_file(
-	input: 'libide-1.0.pc.in',
-	output: 'libide-1.0.pc',
-	configuration: pkgconf,
-	install: true,
-	install_dir: pkgpkgconfdir,
-)
-
