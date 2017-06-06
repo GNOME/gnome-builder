@@ -52,11 +52,3 @@ configure_file(
 	install_dir: pkgpkgconfdir,
 )
 
-configure_file(
-	input: 'template-glib-1.0.pc.in',
-	output: 'template-glib-1.0.pc',
-	configuration: pkgconf,
-	install: true,
-	install_dir: pkgpkgconfdir,
-)
-
