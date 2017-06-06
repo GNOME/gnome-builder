@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define SYMBOL_TYPE_TREE_BUILDER (symbol_tree_builder_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTreeBuilder, symbol_tree_builder, SYMBOL, TREE_BUILDER, IdeTreeBuilder)
+G_DECLARE_FINAL_TYPE (SymbolTreeBuilder, symbol_tree_builder, SYMBOL, TREE_BUILDER, DzlTreeBuilder)
 
 G_END_DECLS
 

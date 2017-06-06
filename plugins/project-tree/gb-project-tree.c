@@ -27,7 +27,7 @@
 #include "gb-project-tree-builder.h"
 #include "gb-project-tree-private.h"
 
-G_DEFINE_TYPE (GbProjectTree, gb_project_tree, IDE_TYPE_TREE)
+G_DEFINE_TYPE (GbProjectTree, gb_project_tree, DZL_TYPE_TREE)
 
 enum {
   PROP_0,
@@ -46,13 +46,13 @@ gb_project_tree_new (void)
 IdeContext *
 gb_project_tree_get_context (GbProjectTree *self)
 {
-  IdeTreeNode *root;
+  DzlTreeNode *root;
   GObject *item;
 
   g_return_val_if_fail (GB_IS_PROJECT_TREE (self), NULL);
 
-  if ((root = ide_tree_get_root (IDE_TREE (self))) &&
-      (item = ide_tree_node_get_item (root)) &&
+  if ((root = dzl_tree_get_root (DZL_TREE (self))) &&
+      (item = dzl_tree_node_get_item (root)) &&
       IDE_IS_CONTEXT (item))
     return IDE_CONTEXT (item);
 
@@ -72,7 +72,7 @@ gb_project_tree_project_file_renamed (GbProjectTree *self,
   g_assert (G_IS_FILE (dst_file));
   g_assert (IDE_IS_PROJECT (project));
 
-  ide_tree_rebuild (IDE_TREE (self));
+  dzl_tree_rebuild (DZL_TREE (self));
   gb_project_tree_reveal (self, dst_file, FALSE, FALSE);
 
   IDE_EXIT;
@@ -105,7 +105,7 @@ gb_project_tree_project_file_trashed (GbProjectTree *self,
                                       GFile         *file,
                                       IdeProject    *project)
 {
-  IdeTreeNode *node;
+  DzlTreeNode *node;
 
   IDE_ENTRY;
 
@@ -113,15 +113,15 @@ gb_project_tree_project_file_trashed (GbProjectTree *self,
   g_assert (G_IS_FILE (file));
   g_assert (IDE_IS_PROJECT (project));
 
-  node = ide_tree_find_custom (IDE_TREE (self), compare_to_file, file);
+  node = dzl_tree_find_custom (DZL_TREE (self), compare_to_file, file);
 
   if (node != NULL)
     {
-      IdeTreeNode *parent = ide_tree_node_get_parent (node);
+      DzlTreeNode *parent = dzl_tree_node_get_parent (node);
 
-      ide_tree_node_invalidate (parent);
-      ide_tree_node_expand (parent, TRUE);
-      ide_tree_node_select (parent);
+      dzl_tree_node_invalidate (parent);
+      dzl_tree_node_expand (parent, TRUE);
+      dzl_tree_node_select (parent);
     }
 
   IDE_EXIT;
@@ -148,7 +148,7 @@ gb_project_tree_buffer_saved_cb (GbProjectTree    *self,
 {
   IdeContext *context;
   IdeVcs *vcs;
-  IdeTreeNode *node;
+  DzlTreeNode *node;
   IdeFile *ifile;
   GFile *gfile;
   GFile *workdir;
@@ -165,8 +165,8 @@ gb_project_tree_buffer_saved_cb (GbProjectTree    *self,
   if (NULL != (workdir = ide_vcs_get_working_directory (vcs)) &&
       g_file_has_prefix (gfile, workdir))
     {
-      if (NULL == (node = ide_tree_find_custom (IDE_TREE (self), compare_to_file, gfile)))
-        ide_tree_rebuild (IDE_TREE (self));
+      if (NULL == (node = dzl_tree_find_custom (DZL_TREE (self), compare_to_file, gfile)))
+        dzl_tree_rebuild (DZL_TREE (self));
 
       gb_project_tree_reveal (self, gfile, FALSE, FALSE);
     }
@@ -178,7 +178,7 @@ gb_project_tree_set_context (GbProjectTree *self,
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
-  IdeTreeNode *root;
+  DzlTreeNode *root;
   IdeProject *project;
   IdeBufferManager *buffer_manager;
   IdeVcs *vcs;
@@ -217,9 +217,9 @@ gb_project_tree_set_context (GbProjectTree *self,
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (self));
 
-  root = ide_tree_node_new ();
-  ide_tree_node_set_item (root, G_OBJECT (context));
-  ide_tree_set_root (IDE_TREE (self), root);
+  root = dzl_tree_node_new ();
+  dzl_tree_node_set_item (root, G_OBJECT (context));
+  dzl_tree_set_root (DZL_TREE (self), root);
 
   /*
    * If we only have one toplevel item (underneath root), expand it.
@@ -227,11 +227,11 @@ gb_project_tree_set_context (GbProjectTree *self,
   if ((gtk_tree_model_iter_n_children (model, NULL) == 1) &&
       gtk_tree_model_get_iter_first (model, &iter))
     {
-      g_autoptr(IdeTreeNode) node = NULL;
+      g_autoptr(DzlTreeNode) node = NULL;
 
       gtk_tree_model_get (model, &iter, 0, &node, -1);
       if (node != NULL)
-        ide_tree_node_expand (node, FALSE);
+        dzl_tree_node_expand (node, FALSE);
     }
 }
 
@@ -315,7 +315,7 @@ static void
 gb_project_tree_init (GbProjectTree *self)
 {
   GtkStyleContext *style_context;
-  IdeTreeBuilder *builder;
+  DzlTreeBuilder *builder;
   GMenu *menu;
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
@@ -331,7 +331,7 @@ gb_project_tree_init (GbProjectTree *self)
                    G_SETTINGS_BIND_DEFAULT);
 
   builder = gb_project_tree_builder_new ();
-  ide_tree_add_builder (IDE_TREE (self), builder);
+  dzl_tree_add_builder (DZL_TREE (self), builder);
 
   g_signal_connect (self,
                     "notify::selection",
@@ -341,7 +341,7 @@ gb_project_tree_init (GbProjectTree *self)
   gb_project_tree_actions_init (self);
 
   menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-project-tree-popup-menu");
-  ide_tree_set_context_menu (IDE_TREE (self), G_MENU_MODEL (menu));
+  dzl_tree_set_context_menu (DZL_TREE (self), G_MENU_MODEL (menu));
 }
 
 gboolean
@@ -364,24 +364,24 @@ gb_project_tree_set_show_ignored_files (GbProjectTree *self,
     {
       self->show_ignored_files = show_ignored_files;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_IGNORED_FILES]);
-      ide_tree_rebuild (IDE_TREE (self));
+      dzl_tree_rebuild (DZL_TREE (self));
     }
 }
 
 static gboolean
-find_child_node (IdeTree     *tree,
-                 IdeTreeNode *node,
-                 IdeTreeNode *child,
+find_child_node (DzlTree     *tree,
+                 DzlTreeNode *node,
+                 DzlTreeNode *child,
                  gpointer    user_data)
 {
   const gchar *name = user_data;
   GObject *item;
 
-  g_assert (IDE_IS_TREE (tree));
-  g_assert (IDE_IS_TREE_NODE (node));
-  g_assert (IDE_IS_TREE_NODE (child));
+  g_assert (DZL_IS_TREE (tree));
+  g_assert (DZL_IS_TREE_NODE (node));
+  g_assert (DZL_IS_TREE_NODE (child));
 
-  item = ide_tree_node_get_item (child);
+  item = dzl_tree_node_get_item (child);
 
   if (GB_IS_PROJECT_FILE (item))
     {
@@ -396,18 +396,18 @@ find_child_node (IdeTree     *tree,
 }
 
 static gboolean
-find_files_node (IdeTree     *tree,
-                 IdeTreeNode *node,
-                 IdeTreeNode *child,
+find_files_node (DzlTree     *tree,
+                 DzlTreeNode *node,
+                 DzlTreeNode *child,
                  gpointer    user_data)
 {
   GObject *item;
 
-  g_assert (IDE_IS_TREE (tree));
-  g_assert (IDE_IS_TREE_NODE (node));
-  g_assert (IDE_IS_TREE_NODE (child));
+  g_assert (DZL_IS_TREE (tree));
+  g_assert (DZL_IS_TREE_NODE (node));
+  g_assert (DZL_IS_TREE_NODE (child));
 
-  item = ide_tree_node_get_item (child);
+  item = dzl_tree_node_get_item (child);
 
   return GB_IS_PROJECT_FILE (item);
 }
@@ -431,8 +431,8 @@ gb_project_tree_reveal (GbProjectTree *self,
   g_autofree gchar *relpath = NULL;
   g_auto(GStrv) parts = NULL;
   IdeContext *context;
-  IdeTreeNode *node = NULL;
-  IdeTreeNode *last_node = NULL;
+  DzlTreeNode *node = NULL;
+  DzlTreeNode *last_node = NULL;
   IdeVcs *vcs;
   GFile *workdir;
   guint i;
@@ -447,7 +447,7 @@ gb_project_tree_reveal (GbProjectTree *self,
   if (context == NULL)
     return;
 
-  node = ide_tree_find_child_node (IDE_TREE (self), NULL, find_files_node, NULL);
+  node = dzl_tree_find_child_node (DZL_TREE (self), NULL, find_files_node, NULL);
   if (node == NULL)
     return;
 
@@ -466,7 +466,7 @@ gb_project_tree_reveal (GbProjectTree *self,
       last_node = node;
       for (i = 0; parts [i]; i++)
         {
-          node = ide_tree_find_child_node (IDE_TREE (self), node, find_child_node, parts [i]);
+          node = dzl_tree_find_child_node (DZL_TREE (self), node, find_child_node, parts [i]);
           if (node == NULL)
             {
               node = last_node;
@@ -482,12 +482,12 @@ gb_project_tree_reveal (GbProjectTree *self,
 
   /* If the specified node wasn't found, still expand its ancestor */
   if (expand_folder || reveal_parent)
-    ide_tree_node_expand (node, TRUE);
+    dzl_tree_node_expand (node, TRUE);
   else
-    ide_tree_expand_to_node (IDE_TREE (self), node);
+    dzl_tree_expand_to_node (DZL_TREE (self), node);
 
-  ide_tree_scroll_to_node (IDE_TREE (self), node);
-  ide_tree_node_select (node);
+  dzl_tree_scroll_to_node (DZL_TREE (self), node);
+  dzl_tree_node_select (node);
 
   if (focus_tree_view)
     ide_workbench_focus (ide_widget_get_workbench (GTK_WIDGET (self)), GTK_WIDGET (self));

@@ -39,7 +39,7 @@ struct _SymbolTreePanel
 
   GtkSearchEntry *search_entry;
   GtkStack       *stack;
-  IdeTree        *tree;
+  DzlTree        *tree;
 
   IdeBuffer      *last_document;
   gsize           last_change_count;
@@ -68,7 +68,7 @@ get_cached_symbol_tree_cb (GObject      *object,
   g_autoptr(SymbolTreePanel) self = user_data;
   g_autoptr(IdeSymbolTree) symbol_tree = NULL;
   g_autoptr(GError) error = NULL;
-  IdeTreeNode *root;
+  DzlTreeNode *root;
   GtkTreeIter iter;
   GtkTreeModel *model;
 
@@ -91,10 +91,10 @@ get_cached_symbol_tree_cb (GObject      *object,
                                               refresh_tree_timeout,
                                               self);
 
-  root = g_object_new (IDE_TYPE_TREE_NODE,
+  root = g_object_new (DZL_TYPE_TREE_NODE,
                        "item", symbol_tree,
                        NULL);
-  ide_tree_set_root (self->tree, root);
+  dzl_tree_set_root (self->tree, root);
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
 
@@ -102,11 +102,11 @@ get_cached_symbol_tree_cb (GObject      *object,
     {
       do
         {
-          g_autoptr(IdeTreeNode) node = NULL;
+          g_autoptr(DzlTreeNode) node = NULL;
 
           gtk_tree_model_get (model, &iter, 0, &node, -1);
           if (node != NULL)
-            ide_tree_node_expand (node, FALSE);
+            dzl_tree_node_expand (node, FALSE);
         }
       while (gtk_tree_model_iter_next (model, &iter));
     }
@@ -172,7 +172,7 @@ refresh_tree (SymbolTreePanel *self)
        * TODO: Get cross compile names for nodes so that we can
        *       recompute the open state.
        */
-      ide_tree_set_root (self->tree, ide_tree_node_new ());
+      dzl_tree_set_root (self->tree, dzl_tree_node_new ());
 
       /*
        * Fetch the symbols via the transparent cache.
@@ -276,18 +276,18 @@ populate_cache_cb (DzlTaskCache  *cache,
 }
 
 static gboolean
-filter_symbols_cb (IdeTree     *tree,
-                   IdeTreeNode *node,
+filter_symbols_cb (DzlTree     *tree,
+                   DzlTreeNode *node,
                    gpointer     user_data)
 {
   IdePatternSpec *spec = user_data;
   const gchar *text;
 
-  g_assert (IDE_IS_TREE (tree));
-  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (DZL_IS_TREE (tree));
+  g_assert (DZL_IS_TREE_NODE (node));
   g_assert (spec != NULL);
 
-  if ((text = ide_tree_node_get_text (node)) != NULL)
+  if ((text = dzl_tree_node_get_text (node)) != NULL)
     return ide_pattern_spec_match (spec, text);
 
   return FALSE;
@@ -306,14 +306,14 @@ symbol_tree__search_entry_changed (SymbolTreePanel *self,
 
   if (ide_str_empty0 (text))
     {
-      ide_tree_set_filter (self->tree, NULL, NULL, NULL);
+      dzl_tree_set_filter (self->tree, NULL, NULL, NULL);
     }
   else
     {
       IdePatternSpec *spec;
 
       spec = ide_pattern_spec_new (text);
-      ide_tree_set_filter (self->tree,
+      dzl_tree_set_filter (self->tree,
                            filter_symbols_cb,
                            spec,
                            (GDestroyNotify)ide_pattern_spec_unref);
@@ -389,8 +389,8 @@ symbol_tree_panel_class_init (SymbolTreePanelClass *klass)
 static void
 symbol_tree_panel_init (SymbolTreePanel *self)
 {
-  IdeTreeNode *root;
-  IdeTreeBuilder *builder;
+  DzlTreeNode *root;
+  DzlTreeBuilder *builder;
 
   self->destroy_connected = g_hash_table_new (NULL, NULL);
 
@@ -411,11 +411,11 @@ symbol_tree_panel_init (SymbolTreePanel *self)
 
   g_object_set (self, "title", _("Symbols"), NULL);
 
-  root = ide_tree_node_new ();
-  ide_tree_set_root (self->tree, root);
+  root = dzl_tree_node_new ();
+  dzl_tree_set_root (self->tree, root);
 
   builder = g_object_new (SYMBOL_TYPE_TREE_BUILDER, NULL);
-  ide_tree_add_builder (self->tree, builder);
+  dzl_tree_add_builder (self->tree, builder);
 
   g_signal_connect_object (self->search_entry,
                            "changed",

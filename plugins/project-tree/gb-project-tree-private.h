@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 struct _GbProjectTree
 {
-  IdeTree     parent_instance;
+  DzlTree     parent_instance;
 
   GSettings *settings;
 

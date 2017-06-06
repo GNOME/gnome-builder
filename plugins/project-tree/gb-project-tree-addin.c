@@ -30,7 +30,7 @@ struct _GbProjectTreeAddin
 {
   GObject    parent_instance;
 
-  IdeTree   *tree;
+  DzlTree   *tree;
   GtkWidget *panel;
 };
 

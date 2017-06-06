@@ -25,32 +25,32 @@
 
 struct _SymbolTreeBuilder
 {
-  IdeTreeBuilder parent_instance;
+  DzlTreeBuilder parent_instance;
 };
 
-G_DEFINE_TYPE (SymbolTreeBuilder, symbol_tree_builder, IDE_TYPE_TREE_BUILDER)
+G_DEFINE_TYPE (SymbolTreeBuilder, symbol_tree_builder, DZL_TYPE_TREE_BUILDER)
 
 static void
-symbol_tree_builder_build_node (IdeTreeBuilder *builder,
-                                IdeTreeNode    *node)
+symbol_tree_builder_build_node (DzlTreeBuilder *builder,
+                                DzlTreeNode    *node)
 {
   IdeSymbolNode *parent = NULL;
   IdeSymbolTree *symbol_tree;
-  IdeTree *tree;
-  IdeTreeNode *root;
+  DzlTree *tree;
+  DzlTreeNode *root;
   GObject *item;
   guint n_children;
   guint i;
 
-  g_assert (IDE_IS_TREE_BUILDER (builder));
-  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (DZL_IS_TREE_BUILDER (builder));
+  g_assert (DZL_IS_TREE_NODE (node));
 
-  if (!(tree = ide_tree_builder_get_tree (builder)) ||
-      !(root = ide_tree_get_root (tree)) ||
-      !(symbol_tree = IDE_SYMBOL_TREE (ide_tree_node_get_item (root))))
+  if (!(tree = dzl_tree_builder_get_tree (builder)) ||
+      !(root = dzl_tree_get_root (tree)) ||
+      !(symbol_tree = IDE_SYMBOL_TREE (dzl_tree_node_get_item (root))))
     return;
 
-  item = ide_tree_node_get_item (node);
+  item = dzl_tree_node_get_item (node);
 
   if (IDE_IS_SYMBOL_NODE (item))
     parent = IDE_SYMBOL_NODE (item);
@@ -62,7 +62,7 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
       g_autoptr(IdeSymbolNode) symbol = NULL;
       const gchar *name;
       const gchar *icon_name;
-      IdeTreeNode *child;
+      DzlTreeNode *child;
       IdeSymbolKind kind;
       gboolean has_children;
       gboolean use_markup;
@@ -75,14 +75,14 @@ symbol_tree_builder_build_node (IdeTreeBuilder *builder,
 
       has_children = !!ide_symbol_tree_get_n_children (symbol_tree, symbol);
 
-      child = g_object_new (IDE_TYPE_TREE_NODE,
+      child = g_object_new (DZL_TYPE_TREE_NODE,
                             "children-possible", has_children,
                             "text", name,
                             "use-markup", use_markup,
                             "icon-name", icon_name,
                             "item", symbol,
                             NULL);
-      ide_tree_node_append (node, child);
+      dzl_tree_node_append (node, child);
     }
 }
 
@@ -97,7 +97,7 @@ symbol_tree_builder_get_location_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdePerspective *editor;
   IdeWorkbench *workbench;
-  IdeTree *tree;
+  DzlTree *tree;
 
   IDE_ENTRY;
 
@@ -112,7 +112,7 @@ symbol_tree_builder_get_location_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  tree = ide_tree_builder_get_tree (IDE_TREE_BUILDER (self));
+  tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
   workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
 
@@ -122,8 +122,8 @@ symbol_tree_builder_get_location_cb (GObject      *object,
 }
 
 static gboolean
-symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
-                                    IdeTreeNode    *node)
+symbol_tree_builder_node_activated (DzlTreeBuilder *builder,
+                                    DzlTreeNode    *node)
 {
   SymbolTreeBuilder *self = (SymbolTreeBuilder *)builder;
   GObject *item;
@@ -132,7 +132,7 @@ symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
 
   g_assert (SYMBOL_IS_TREE_BUILDER (self));
 
-  item = ide_tree_node_get_item (node);
+  item = dzl_tree_node_get_item (node);
 
   if (IDE_IS_SYMBOL_NODE (item))
     {
@@ -152,7 +152,7 @@ symbol_tree_builder_node_activated (IdeTreeBuilder *builder,
 static void
 symbol_tree_builder_class_init (SymbolTreeBuilderClass *klass)
 {
-  IdeTreeBuilderClass *builder_class = IDE_TREE_BUILDER_CLASS (klass);
+  DzlTreeBuilderClass *builder_class = DZL_TREE_BUILDER_CLASS (klass);
 
   builder_class->build_node = symbol_tree_builder_build_node;
   builder_class->node_activated = symbol_tree_builder_node_activated;

@@ -170,7 +170,7 @@ workbench_addin_init (IdeWorkbenchAddinInterface *iface)
 static void
 symbol_tree_class_init (SymbolTreeClass *klass)
 {
-  g_type_ensure (IDE_TYPE_TREE);
+  g_type_ensure (DZL_TYPE_TREE);
 }
 
 static void

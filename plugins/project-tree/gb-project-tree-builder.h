@@ -25,9 +25,9 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_PROJECT_TREE_BUILDER (gb_project_tree_builder_get_type())
 
-G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB, PROJECT_TREE_BUILDER, IdeTreeBuilder)
+G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB, PROJECT_TREE_BUILDER, DzlTreeBuilder)
 
-IdeTreeBuilder *gb_project_tree_builder_new (void);
+DzlTreeBuilder *gb_project_tree_builder_new (void);
 
 G_END_DECLS
 
