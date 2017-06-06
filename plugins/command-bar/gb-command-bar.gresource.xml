@@ -2,6 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/command-bar">
     <file>gb-command-bar.ui</file>
-    <file>theme/shared.css</file>
+    <file>themes/shared.css</file>
   </gresource>
 </gresources>

@@ -1,6 +1,0 @@
-rggraph {
-  background-color: #f6f7f8;
-  background-size: 8px 8px;
-  background-image: repeating-linear-gradient(0deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 8px),
-                    repeating-linear-gradient(-90deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 8px);
-}

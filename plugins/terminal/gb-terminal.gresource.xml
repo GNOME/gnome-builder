@@ -4,6 +4,6 @@
     <file>gb-terminal-view.ui</file>
     <file>gb-terminal-search.ui</file>
     <file>gtk/menus.ui</file>
-    <file>theme/shared.css</file>
+    <file>themes/shared.css</file>
   </gresource>
 </gresources>

@@ -2,6 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/git-plugin">
     <file>ide-git-clone-widget.ui</file>
-    <file>theme/shared.css</file>
+    <file>themes/shared.css</file>
   </gresource>
 </gresources>

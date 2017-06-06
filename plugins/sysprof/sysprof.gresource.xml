@@ -2,7 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/sysprof-plugin">
     <file>gtk/menus.ui</file>
-    <file>theme/shared.css</file>
+    <file>themes/shared.css</file>
     <file>gbp-sysprof-perspective.ui</file>
   </gresource>
 </gresources>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/sysmon">
-    <file>theme/Adwaita.css</file>
-    <file>theme/Adwaita-dark.css</file>
     <file>gb-sysmon-panel.ui</file>
   </gresource>
 </gresources>

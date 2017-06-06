@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/color-picker-plugin">
-    <file>theme/Adwaita.css</file>
-    <file>theme/Adwaita-dark.css</file>
-    <file>theme/shared.css</file>
+    <file>themes/Adwaita.css</file>
+    <file>themes/Adwaita-dark.css</file>
+    <file>themes/shared.css</file>
 
     <file>gtk/color-picker.ui</file>
     <file>gtk/color-picker-prefs.ui</file>
