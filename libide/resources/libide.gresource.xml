@@ -18,20 +18,20 @@
     <file compressed="true" alias="menus.ui">../../data/gtk/menus.ui</file>
   </gresource>
 
-  <gresource prefix="/org/gnome/builder/theme">
-    <file compressed="true" alias="Adwaita.css">../../data/theme/Adwaita.css</file>
-    <file compressed="true" alias="Adwaita-dark.css">../../data/theme/Adwaita-dark.css</file>
-    <file compressed="true" alias="Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
+  <gresource prefix="/org/gnome/builder/themes">
+    <file compressed="true" alias="Adwaita.css">../../data/themes/Adwaita.css</file>
+    <file compressed="true" alias="Adwaita-dark.css">../../data/themes/Adwaita-dark.css</file>
+    <file compressed="true" alias="Adwaita-shared.css">../../data/themes/Adwaita-shared.css</file>
 
-    <file compressed="true" alias="Arc.css">../../data/theme/Arc.css</file>
-    <file compressed="true" alias="Arc-Dark.css">../../data/theme/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-Darker.css">../../data/theme/Arc-Darker.css</file>
-    <file compressed="true" alias="Arc-dark.css">../../data/theme/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-Dark-dark.css">../../data/theme/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-Darker-dark.css">../../data/theme/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-shared.css">../../data/theme/Arc-shared.css</file>
+    <file compressed="true" alias="Arc.css">../../data/themes/Arc.css</file>
+    <file compressed="true" alias="Arc-Dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Darker.css">../../data/themes/Arc-Darker.css</file>
+    <file compressed="true" alias="Arc-dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Dark-dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Darker-dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-shared.css">../../data/themes/Arc-shared.css</file>
 
-    <file compressed="true" alias="shared.css">../../data/theme/shared.css</file>
+    <file compressed="true" alias="shared.css">../../data/themes/shared.css</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/modelines">
