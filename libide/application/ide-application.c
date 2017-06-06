@@ -42,8 +42,6 @@
 #include "application/ide-application-tool.h"
 #include "modelines/modeline-parser.h"
 #include "resources/ide-resources.h"
-#include "theming/ide-css-provider.h"
-#include "theming/ide-theme-manager.h"
 #include "util/ide-flatpak.h"
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"

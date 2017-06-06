@@ -28,7 +28,6 @@
 #include "application/ide-application.h"
 #include "application/ide-application-addin.h"
 #include "application/ide-application-private.h"
-#include "theming/ide-css-provider.h"
 #include "util/ide-flatpak.h"
 
 static const gchar *blacklisted_plugins[] = {
