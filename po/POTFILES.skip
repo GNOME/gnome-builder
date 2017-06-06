@@ -1,16 +1,4 @@
 # List of source files that should *not* be translated.
 # Please keep this file sorted alphabetically.
-contrib/tmpl/tmpl-expr-parser.c
-plugins/vala-pack/ide-vala-preferences-addin.c
-sub/plugins/vala-pack/ide-vala-preferences-addin.c
-tests/menus.ui
-tools/ide-build.c
-tools/ide-list-build-flags.c
-tools/ide-list-devices.c
-tools/ide-list-diagnostics.c
-tools/ide-list-file-settings.c
-tools/ide-list-files.c
-tools/ide-mine-projects.c
-tools/ide-search.c
 data/org.gnome.Builder.desktop.in
-sub/data/org.gnome.Builder.desktop.in
+plugins/vala-pack/ide-vala-preferences-addin.c

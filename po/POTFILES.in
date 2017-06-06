@@ -1,9 +1,5 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-contrib/egg/egg-animation.c
-contrib/egg/egg-date-time.c
-contrib/egg/egg-file-chooser-entry.c
-contrib/egg/egg-search-bar.c
 contrib/gstyle/data/palettes/basic.gstyle.xml
 contrib/gstyle/gstyle-color-panel.c
 contrib/gstyle/gstyle-color-plane.c
@@ -15,11 +11,6 @@ contrib/gstyle/tests/data/palette.gstyle.xml
 contrib/gstyle/ui/gstyle-color-panel.ui
 contrib/gstyle/ui/gstyle-color-widget.ui
 contrib/gstyle/ui/gstyle-rename-popover.ui
-contrib/pnl/pnl-animation.c
-contrib/search/trie.c
-contrib/tmpl/tmpl-parser.c
-contrib/tmpl/tmpl-template.c
-contrib/tmpl/tmpl-template-locator.c
 contrib/xml/xml-reader.c
 data/gsettings/org.gnome.builder.build.gschema.xml
 data/gsettings/org.gnome.builder.code-insight.gschema.xml.in
@@ -41,10 +32,8 @@ libide/application/ide-application.c
 libide/application/ide-application-command-line.c
 libide/buffers/ide-buffer.c
 libide/buffers/ide-buffer-manager.c
-libide/buildsystem/ide-build-manager.c
 libide/buildsystem/ide-build-pipeline.c
 libide/buildsystem/ide-build-stage-transfer.c
-libide/buildsystem/ide-build-system.c
 libide/buildsystem/ide-configuration-manager.c
 libide/buildui/ide-build-configuration-row.ui
 libide/buildui/ide-build-configuration-view.ui
@@ -70,7 +59,6 @@ libide/editor/ide-editor-spell-widget.c
 libide/editor/ide-editor-spell-widget.ui
 libide/editor/ide-editor-tweak-widget.ui
 libide/editor/ide-editor-view-actions.c
-libide/editor/ide-editor-view.c
 libide/editor/ide-editor-view.ui
 libide/greeter/ide-greeter-perspective.c
 libide/greeter/ide-greeter-perspective.ui
@@ -80,30 +68,23 @@ libide/ide-context.c
 libide/ide-object.c
 libide/keybindings/ide-shortcuts-window.ui
 libide/preferences/ide-preferences-builtin.c
-libide/preferences/ide-preferences-font-button.ui
 libide/preferences/ide-preferences-perspective.c
-libide/preferences/ide-preferences-perspective.ui
 libide/projects/ide-project.c
 libide/projects/ide-recent-projects.c
-libide/runner/ide-run-button.c
 libide/runner/ide-run-button.ui
 libide/runner/ide-run-manager.c
 libide/runner/ide-runner.c
 libide/runtimes/ide-runtime-manager.c
 libide/search/ide-omni-search-display.c
-libide/snippets/ide-source-snippet.c
 libide/snippets/ide-source-snippet-completion-provider.c
 libide/snippets/ide-source-snippets-manager.c
 libide/sourceview/ide-source-view.c
 libide/transfers/ide-pkcon-transfer.c
-libide/transfers/ide-transfer.c
 libide/transfers/ide-transfers-button.ui
-libide/util/ide-file-manager.c
 libide/util/ide-uri.c
 libide/workbench/ide-layout-tab-bar.ui
 libide/workbench/ide-layout-tab.ui
 libide/workbench/ide-layout-view.c
-libide/workbench/ide-omni-bar.c
 libide/workbench/ide-omni-bar-row.c
 libide/workbench/ide-omni-bar-row.ui
 libide/workbench/ide-omni-bar.ui
@@ -111,13 +92,10 @@ libide/workbench/ide-perspective-menu-button.ui
 libide/workbench/ide-workbench-actions.c
 libide/workbench/ide-workbench.c
 libide/workbench/ide-workbench-header-bar.ui
-plugins/autotools/ide-autotools-build-system.c
 plugins/autotools/ide-autotools-makecache-stage.c
-plugins/autotools/ide-makecache.c
 plugins/autotools-templates/autotools_templates/__init__.py
 plugins/beautifier/gb-beautifier-workbench-addin.c
 plugins/beautifier/gtk/menus.ui
-plugins/cargo/cargo_plugin.py
 plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
@@ -148,7 +126,6 @@ plugins/flatpak/gbp-flatpak-clone-widget.ui
 plugins/flatpak/gbp-flatpak-genesis-addin.c
 plugins/flatpak/gbp-flatpak-pipeline-addin.c
 plugins/flatpak/gbp-flatpak-preferences-addin.c
-plugins/flatpak/gbp-flatpak-runner.c
 plugins/flatpak/gbp-flatpak-runtime.c
 plugins/flatpak/gbp-flatpak-transfer.c
 plugins/flatpak/gbp-flatpak-workbench-addin.c
@@ -167,7 +144,6 @@ plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xm
 plugins/html-preview/html_preview_plugin/gtk/menus.ui
 plugins/html-preview/html_preview_plugin/__init__.py
 plugins/jedi/jedi_plugin.py
-plugins/meson/meson_plugin/__init__.py
 plugins/meson-templates/meson_templates/__init__.py
 plugins/mingw/ide-mingw-device-provider.c
 plugins/notification/ide-notification-addin.c
