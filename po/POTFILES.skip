@@ -2,3 +2,4 @@
 # Please keep this file sorted alphabetically.
 data/org.gnome.Builder.desktop.in
 plugins/vala-pack/ide-vala-preferences-addin.c
+subprojects
