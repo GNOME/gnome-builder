@@ -132,10 +132,24 @@ libpeas_dep = dependency('libpeas-1.0', version: '>= 1.18.0')
 libm_dep = cc.find_library('m', required: false)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 0.1.0')
-libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.25.2')
+libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.25.2', required: false)
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.25.2',
   fallback: ['jsonrpc-glib', 'libjsonrpc_glib_dep']
 )
+
+libtemplate_glib_gir = 'Template-1.0'
+libtemplate_glib_vapi = 'template-glib-1.0'
+if not libtemplate_glib_dep.found()
+  libtemplate_glib = subproject('template-glib',
+    default_options: [
+      'with_introspection=true',
+      'with_vapi=true'
+    ]
+  )
+  libtemplate_glib_dep = libtemplate_glib.get_variable('libtemplate_glib_dep')
+  libtemplate_glib_gir = libtemplate_glib.get_variable('libtemplate_glib_gir')[0]
+  libtemplate_glib_vapi = libtemplate_glib.get_variable('libtemplate_glib_vapi')
+endif
 
 libgd = subproject('libgd',
   default_options: [

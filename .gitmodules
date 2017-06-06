@@ -4,3 +4,6 @@
 [submodule "subprojects/jsonrpc-glib"]
 	path = subprojects/jsonrpc-glib
 	url = https://git.gnome.org/browse/jsonrpc-glib
+[submodule "subprojects/template-glib"]
+	path = subprojects/template-glib
+	url = https://git.gnome.org/browse/template-glib

@@ -702,7 +702,7 @@ if get_option('with_introspection')
               namespace: 'Ide',
           symbol_prefix: 'ide',
       identifier_prefix: 'Ide',
-               includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', 'Dazzle-1.0', 'Json-1.0', 'Template-1.0' ],
+               includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', 'Dazzle-1.0', 'Json-1.0', libtemplate_glib_gir ],
                 install: true,
         install_dir_gir: pkggirdir,
     install_dir_typelib: pkgtypelibdir,
@@ -730,7 +730,7 @@ if get_option('with_introspection')
            'json-glib-1.0',
            'libdazzle-1.0',
            'libpeas-1.0',
-           'template-glib-1.0',
+           libtemplate_glib_vapi,
          ],
     )
 
