@@ -16,17 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-preferences.h"
+#define G_LOG_DOMAIN "ide-preferences-language-row"
+
 #include "ide-preferences-language-row.h"
 
 struct _IdePreferencesLanguageRow
 {
-  IdePreferencesBin parent_instance;
+  DzlPreferencesBin parent_instance;
   gchar *id;
   GtkLabel *title;
 };
 
-G_DEFINE_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, IDE_TYPE_PREFERENCES_BIN)
+G_DEFINE_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, DZL_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,
@@ -54,13 +55,13 @@ ide_preferences_language_row_activate (IdePreferencesLanguageRow *self)
   if (self->id == NULL)
     return;
 
-  preferences = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_PREFERENCES);
+  preferences = gtk_widget_get_ancestor (GTK_WIDGET (self), DZL_TYPE_PREFERENCES);
   if (preferences == NULL)
     return;
 
   map = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
   g_hash_table_insert (map, "{id}", g_strdup (self->id));
-  ide_preferences_set_page (IDE_PREFERENCES (preferences), "languages.id", map);
+  dzl_preferences_set_page (DZL_PREFERENCES (preferences), "languages.id", map);
   g_hash_table_unref (map);
 }
 

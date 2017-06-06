@@ -19,9 +19,8 @@
 #ifndef IDE_PREFERENCES_ADDIN_H
 #define IDE_PREFERENCES_ADDIN_H
 
+#include <dazzle.h>
 #include <gtk/gtk.h>
-
-#include "ide-preferences.h"
 
 G_BEGIN_DECLS
 
@@ -34,15 +33,15 @@ struct _IdePreferencesAddinInterface
   GTypeInterface parent_interface;
 
   void (*load)   (IdePreferencesAddin *self,
-                  IdePreferences      *preferences);
+                  DzlPreferences      *preferences);
   void (*unload) (IdePreferencesAddin *self,
-                  IdePreferences      *preferences);
+                  DzlPreferences      *preferences);
 };
 
 void ide_preferences_addin_load   (IdePreferencesAddin *self,
-                                   IdePreferences      *preferences);
+                                   DzlPreferences      *preferences);
 void ide_preferences_addin_unload (IdePreferencesAddin *self,
-                                   IdePreferences      *preferences);
+                                   DzlPreferences      *preferences);
 
 G_END_DECLS
 

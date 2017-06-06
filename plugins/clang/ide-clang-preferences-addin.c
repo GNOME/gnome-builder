@@ -45,14 +45,14 @@ ide_clang_preferences_addin_init (IdeClangPreferencesAddin *self)
 
 static void
 ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
-                                  IdePreferences      *preferences)
+                                  DzlPreferences      *preferences)
 {
   IdeClangPreferencesAddin *self = (IdeClangPreferencesAddin *)addin;
 
   g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
-  self->diagnose_id = ide_preferences_add_switch (preferences,
+  self->diagnose_id = dzl_preferences_add_switch (preferences,
                                                   "code-insight",
                                                   "diagnostics",
                                                   "org.gnome.builder.extension-type",
@@ -68,14 +68,14 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
 
 static void
 ide_clang_preferences_addin_unload (IdePreferencesAddin *addin,
-                                    IdePreferences      *preferences)
+                                    DzlPreferences      *preferences)
 {
   IdeClangPreferencesAddin *self = (IdeClangPreferencesAddin *)addin;
 
   g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
-  ide_preferences_remove_id (preferences, self->diagnose_id);
+  dzl_preferences_remove_id (preferences, self->diagnose_id);
 }
 
 static void

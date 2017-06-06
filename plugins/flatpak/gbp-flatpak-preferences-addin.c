@@ -31,7 +31,7 @@ struct _GbpFlatpakPreferencesAddin
   GObject         parent_instance;
 
   GArray         *ids;
-  IdePreferences *preferences;
+  DzlPreferences *preferences;
   GCancellable   *cancellable;
 
   guint           show_all : 1;
@@ -41,10 +41,10 @@ static void gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *se
 
 static void
 gbp_flatpak_preferences_addin_view_more (GbpFlatpakPreferencesAddin *self,
-                                         IdePreferencesBin          *bin)
+                                         DzlPreferencesBin          *bin)
 {
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES_BIN (bin));
+  g_assert (DZL_IS_PREFERENCES_BIN (bin));
 
   self->show_all = !self->show_all;
   if (self->preferences != NULL)
@@ -301,7 +301,7 @@ gbp_flatpak_preferences_addin_reload_cb (GObject      *object,
       keywords = g_strdup_printf (_("flatpak %s %s %s"), name, branch, arch);
 
       row = create_row (self, name, arch, branch);
-      id = ide_preferences_add_custom (self->preferences, "sdk", "flatpak-runtimes", row, keywords, j);
+      id = dzl_preferences_add_custom (self->preferences, "sdk", "flatpak-runtimes", row, keywords, j);
       g_array_append_val (self->ids, id);
     }
 
@@ -321,7 +321,7 @@ gbp_flatpak_preferences_addin_reload_cb (GObject      *object,
                             "tooltip-text", tooltip,
                             "visible", TRUE,
                             NULL);
-      row = g_object_new (IDE_TYPE_PREFERENCES_BIN,
+      row = g_object_new (DZL_TYPE_PREFERENCES_BIN,
                           "child", image,
                           "visible", TRUE,
                           NULL);
@@ -330,7 +330,7 @@ gbp_flatpak_preferences_addin_reload_cb (GObject      *object,
                                G_CALLBACK (gbp_flatpak_preferences_addin_view_more),
                                self,
                                G_CONNECT_SWAPPED);
-      id = ide_preferences_add_custom (self->preferences, "sdk", "flatpak-runtimes", row, NULL, G_MAXINT);
+      id = dzl_preferences_add_custom (self->preferences, "sdk", "flatpak-runtimes", row, NULL, G_MAXINT);
       g_array_append_val (self->ids, id);
     }
 
@@ -346,7 +346,7 @@ gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self)
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (self->preferences));
+  g_assert (DZL_IS_PREFERENCES (self->preferences));
 
   g_clear_object (&self->cancellable);
   self->cancellable = g_cancellable_new ();
@@ -356,7 +356,7 @@ gbp_flatpak_preferences_addin_reload (GbpFlatpakPreferencesAddin *self)
       for (guint i = 0; i < self->ids->len; i++)
         {
           id = g_array_index (self->ids, guint, i);
-          ide_preferences_remove_id (self->preferences, id);
+          dzl_preferences_remove_id (self->preferences, id);
         }
 
       g_array_remove_range (self->ids, 0, self->ids->len);
@@ -381,7 +381,7 @@ app_addin_reload (GbpFlatpakPreferencesAddin *self,
 
 static void
 gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
-                                    IdePreferences      *preferences)
+                                    DzlPreferences      *preferences)
 {
   GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)addin;
   GbpFlatpakApplicationAddin *app_addin;
@@ -389,12 +389,12 @@ gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
   self->ids = g_array_new (FALSE, FALSE, sizeof (guint));
   self->preferences = preferences;
 
-  ide_preferences_add_list_group (preferences, "sdk", "flatpak-runtimes", _("Flatpak Runtimes"), GTK_SELECTION_NONE, 0);
+  dzl_preferences_add_list_group (preferences, "sdk", "flatpak-runtimes", _("Flatpak Runtimes"), GTK_SELECTION_NONE, 0);
 
   app_addin = gbp_flatpak_application_addin_get_default ();
   g_signal_connect_object (app_addin,
@@ -410,14 +410,14 @@ gbp_flatpak_preferences_addin_load (IdePreferencesAddin *addin,
 
 static void
 gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
-                                      IdePreferences      *preferences)
+                                      DzlPreferences      *preferences)
 {
   GbpFlatpakPreferencesAddin *self = (GbpFlatpakPreferencesAddin *)addin;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
@@ -426,7 +426,7 @@ gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
     {
       guint id = g_array_index (self->ids, guint, i);
 
-      ide_preferences_remove_id (preferences, id);
+      dzl_preferences_remove_id (preferences, id);
     }
 
   g_clear_pointer (&self->ids, g_array_unref);

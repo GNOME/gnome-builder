@@ -18,20 +18,18 @@
 #ifndef GB_COLOR_PICKER_PREFS_PALETTE_ROW_H
 #define GB_COLOR_PICKER_PREFS_PALETTE_ROW_H
 
-#include <glib-object.h>
-
-#include "preferences/ide-preferences-bin.h"
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_COLOR_PICKER_PREFS_PALETTE_ROW (gb_color_picker_prefs_palette_row_get_type())
 
-G_DECLARE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, GB, COLOR_PICKER_PREFS_PALETTE_ROW, IdePreferencesBin)
+G_DECLARE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, GB, COLOR_PICKER_PREFS_PALETTE_ROW, DzlPreferencesBin)
 
-gboolean                           gb_color_picker_prefs_palette_row_get_needs_attention    (GbColorPickerPrefsPaletteRow    *self);
-void                               gb_color_picker_prefs_palette_row_set_needs_attention    (GbColorPickerPrefsPaletteRow    *self,
-                                                                                             gboolean                         needs_attention);
-GbColorPickerPrefsPaletteRow      *gb_color_picker_prefs_palette_row_new                    (void);
+gboolean                      gb_color_picker_prefs_palette_row_get_needs_attention (GbColorPickerPrefsPaletteRow    *self);
+void                          gb_color_picker_prefs_palette_row_set_needs_attention (GbColorPickerPrefsPaletteRow    *self,
+                                                                                     gboolean                         needs_attention);
+GbColorPickerPrefsPaletteRow *gb_color_picker_prefs_palette_row_new                 (void);
 
 G_END_DECLS
 

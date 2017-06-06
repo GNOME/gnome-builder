@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
-  <template class="IdePreferencesLanguageRow" parent="IdePreferencesBin">
+  <template class="IdePreferencesLanguageRow" parent="DzlPreferencesBin">
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

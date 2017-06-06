@@ -18,8 +18,7 @@
 
 #include <glib/gi18n.h>
 
-#include "preferences/ide-preferences-switch.h"
-#include "ide.h"
+#include <ide.h>
 
 #include "gb-color-picker-prefs.h"
 #include "gb-color-picker-prefs-list.h"

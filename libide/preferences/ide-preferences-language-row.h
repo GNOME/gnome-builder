@@ -19,13 +19,13 @@
 #ifndef IDE_PREFERENCES_LANGUAGE_ROW_H
 #define IDE_PREFERENCES_LANGUAGE_ROW_H
 
-#include "ide-preferences-bin.h"
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_LANGUAGE_ROW (ide_preferences_language_row_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, IDE, PREFERENCES_LANGUAGE_ROW, IdePreferencesBin)
+G_DECLARE_FINAL_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, IDE, PREFERENCES_LANGUAGE_ROW, DzlPreferencesBin)
 
 G_END_DECLS
 

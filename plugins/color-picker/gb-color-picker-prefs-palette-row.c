@@ -18,15 +18,15 @@
 
 #include <gdk/gdk.h>
 #include "glib/gi18n.h"
-
 #include <ide.h>
+
 #include "gstyle-rename-popover.h"
 
 #include "gb-color-picker-prefs-palette-row.h"
 
 struct _GbColorPickerPrefsPaletteRow
 {
-  IdePreferencesBin  parent_instance;
+  DzlPreferencesBin  parent_instance;
 
   GtkLabel          *palette_name;
   GtkImage          *image;
@@ -45,7 +45,7 @@ struct _GbColorPickerPrefsPaletteRow
   guint              needs_attention : 1;
 };
 
-G_DEFINE_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, IDE_TYPE_PREFERENCES_BIN)
+G_DEFINE_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, DZL_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,
@@ -187,7 +187,7 @@ gb_color_picker_prefs_palette_row_edit (GbColorPickerPrefsPaletteRow *self)
 }
 
 static void
-gb_color_picker_prefs_palette_row_connect (IdePreferencesBin *bin,
+gb_color_picker_prefs_palette_row_connect (DzlPreferencesBin *bin,
                                            GSettings         *settings)
 {
   GbColorPickerPrefsPaletteRow *self = (GbColorPickerPrefsPaletteRow *)bin;
@@ -209,7 +209,7 @@ gb_color_picker_prefs_palette_row_connect (IdePreferencesBin *bin,
 }
 
 static void
-gb_color_picker_prefs_palette_row_disconnect (IdePreferencesBin *bin,
+gb_color_picker_prefs_palette_row_disconnect (DzlPreferencesBin *bin,
                                               GSettings         *settings)
 {
   GbColorPickerPrefsPaletteRow *self = (GbColorPickerPrefsPaletteRow *)bin;
@@ -336,7 +336,7 @@ gb_color_picker_prefs_palette_row_finalize (GObject *object)
   GbColorPickerPrefsPaletteRow *self = (GbColorPickerPrefsPaletteRow *)object;
 
   if (self->settings != NULL)
-    gb_color_picker_prefs_palette_row_disconnect (IDE_PREFERENCES_BIN (self), self->settings);
+    gb_color_picker_prefs_palette_row_disconnect (DZL_PREFERENCES_BIN (self), self->settings);
 
   g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->target, g_variant_unref);
@@ -421,7 +421,7 @@ gb_color_picker_prefs_palette_row_class_init (GbColorPickerPrefsPaletteRowClass 
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  IdePreferencesBinClass *bin_class = IDE_PREFERENCES_BIN_CLASS (klass);
+  DzlPreferencesBinClass *bin_class = DZL_PREFERENCES_BIN_CLASS (klass);
 
   object_class->finalize = gb_color_picker_prefs_palette_row_finalize;
   object_class->get_property = gb_color_picker_prefs_palette_row_get_property;

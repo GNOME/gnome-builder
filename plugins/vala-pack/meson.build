@@ -77,6 +77,7 @@ shared_module('vala-pack-plugin', vala_pack_sources,
   ],
   vala_args: [
     '--pkg=posix',
+    '--pkg=libdazzle-1.0',
     '--pkg=libpeas-1.0',
     '--pkg=gtksourceview-3.0',
     '--pkg=gio-2.0',

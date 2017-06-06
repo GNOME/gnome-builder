@@ -45,14 +45,14 @@ ide_gca_preferences_addin_init (IdeGcaPreferencesAddin *self)
 
 static void
 ide_gca_preferences_addin_load (IdePreferencesAddin *addin,
-                                IdePreferences      *preferences)
+                                DzlPreferences      *preferences)
 {
   IdeGcaPreferencesAddin *self = (IdeGcaPreferencesAddin *)addin;
 
   g_assert (IDE_IS_GCA_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
-  self->pylint = ide_preferences_add_switch (preferences,
+  self->pylint = dzl_preferences_add_switch (preferences,
                                              "code-insight",
                                              "diagnostics",
                                              "org.gnome.builder.gnome-code-assistance",
@@ -68,14 +68,14 @@ ide_gca_preferences_addin_load (IdePreferencesAddin *addin,
 
 static void
 ide_gca_preferences_addin_unload (IdePreferencesAddin *addin,
-                                  IdePreferences      *preferences)
+                                  DzlPreferences      *preferences)
 {
   IdeGcaPreferencesAddin *self = (IdeGcaPreferencesAddin *)addin;
 
   g_assert (IDE_IS_GCA_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
-  ide_preferences_remove_id (preferences, self->pylint);
+  dzl_preferences_remove_id (preferences, self->pylint);
 }
 
 static void

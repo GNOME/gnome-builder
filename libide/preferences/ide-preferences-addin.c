@@ -16,19 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-preferences-addin.h"
+#define G_LOG_DOMAIN "ide-preferences-addin"
+
+#include "preferences/ide-preferences-addin.h"
 
 G_DEFINE_INTERFACE (IdePreferencesAddin, ide_preferences_addin, G_TYPE_OBJECT)
 
 static void
 ide_preferences_addin_real_load (IdePreferencesAddin *self,
-                                 IdePreferences      *preferences)
+                                 DzlPreferences      *preferences)
 {
 }
 
 static void
 ide_preferences_addin_real_unload (IdePreferencesAddin *self,
-                                   IdePreferences      *preferences)
+                                   DzlPreferences      *preferences)
 {
 }
 
@@ -46,17 +48,17 @@ ide_preferences_addin_default_init (IdePreferencesAddinInterface *iface)
  *
  * This interface method is called when a preferences addin is initialized. It could be
  * initialized from multiple preferences implementations, so consumers should use the
- * #IdePreferences interface to add their preferences controls to the container.
+ * #DzlPreferences interface to add their preferences controls to the container.
  *
  * Such implementations might include a preferences dialog window, or a preferences
  * widget which could be rendered as a perspective.
  */
 void
 ide_preferences_addin_load (IdePreferencesAddin *self,
-                            IdePreferences      *preferences)
+                            DzlPreferences      *preferences)
 {
   g_return_if_fail (IDE_IS_PREFERENCES_ADDIN (self));
-  g_return_if_fail (IDE_IS_PREFERENCES (preferences));
+  g_return_if_fail (DZL_IS_PREFERENCES (preferences));
 
   IDE_PREFERENCES_ADDIN_GET_IFACE (self)->load (self, preferences);
 }
@@ -72,10 +74,10 @@ ide_preferences_addin_load (IdePreferencesAddin *self,
  */
 void
 ide_preferences_addin_unload (IdePreferencesAddin *self,
-                              IdePreferences      *preferences)
+                              DzlPreferences      *preferences)
 {
   g_return_if_fail (IDE_IS_PREFERENCES_ADDIN (self));
-  g_return_if_fail (IDE_IS_PREFERENCES (preferences));
+  g_return_if_fail (DZL_IS_PREFERENCES (preferences));
 
   IDE_PREFERENCES_ADDIN_GET_IFACE (self)->unload (self, preferences);
 }

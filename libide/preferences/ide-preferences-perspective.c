@@ -20,23 +20,15 @@
 
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
+#include <dazzle.h>
 
 #include "ide-macros.h"
 
 #include "search/ide-pattern-spec.h"
 #include "workbench/ide-perspective.h"
-#include "preferences/ide-preferences.h"
 #include "preferences/ide-preferences-addin.h"
 #include "preferences/ide-preferences-builtin.h"
-#include "preferences/ide-preferences-file-chooser-button.h"
-#include "preferences/ide-preferences-font-button.h"
-#include "preferences/ide-preferences-group.h"
-#include "preferences/ide-preferences-group-private.h"
-#include "preferences/ide-preferences-page.h"
-#include "preferences/ide-preferences-page-private.h"
 #include "preferences/ide-preferences-perspective.h"
-#include "preferences/ide-preferences-spin-button.h"
-#include "preferences/ide-preferences-switch.h"
 #include "workbench/ide-workbench-header-bar.h"
 
 struct _IdePreferencesPerspective
@@ -57,35 +49,35 @@ struct _IdePreferencesPerspective
   GtkStack              *subpage_stack;
 };
 
-static void ide_preferences_iface_init (IdePreferencesInterface *iface);
+static void dzl_preferences_iface_init (DzlPreferencesInterface *iface);
 static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdePreferencesPerspective, ide_preferences_perspective, GTK_TYPE_BIN, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES, ide_preferences_iface_init)
+                        G_IMPLEMENT_INTERFACE (DZL_TYPE_PREFERENCES, dzl_preferences_iface_init)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, ide_perspective_iface_init))
 
 static void
 ide_preferences_perspective_refilter_cb (GtkWidget *widget,
                                          gpointer   user_data)
 {
-  IdePreferencesPage *page = (IdePreferencesPage *)widget;
-  IdePatternSpec *spec = user_data;
+  DzlPreferencesPage *page = (DzlPreferencesPage *)widget;
+  DzlPatternSpec *spec = user_data;
 
-  g_assert (IDE_IS_PREFERENCES_PAGE (page));
+  g_assert (DZL_IS_PREFERENCES_PAGE (page));
 
-  _ide_preferences_page_refilter (page, spec);
+  dzl_preferences_page_refilter (page, spec);
 }
 
 static void
 ide_preferences_perspective_refilter (IdePreferencesPerspective *self,
                                       const gchar               *search_text)
 {
-  IdePatternSpec *spec = NULL;
+  DzlPatternSpec *spec = NULL;
 
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
   if (!ide_str_empty0 (search_text))
-    spec = ide_pattern_spec_new (search_text);
+    spec = dzl_pattern_spec_new (search_text);
 
   gtk_container_foreach (GTK_CONTAINER (self->page_stack),
                          ide_preferences_perspective_refilter_cb,
@@ -94,7 +86,7 @@ ide_preferences_perspective_refilter (IdePreferencesPerspective *self,
                          ide_preferences_perspective_refilter_cb,
                          spec);
 
-  g_clear_pointer (&spec, ide_pattern_spec_unref);
+  g_clear_pointer (&spec, dzl_pattern_spec_unref);
 }
 
 static gint
@@ -125,7 +117,7 @@ ide_preferences_perspective_extension_added (PeasExtensionSet *set,
   g_assert (IDE_IS_PREFERENCES_ADDIN (extension));
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
-  ide_preferences_addin_load (IDE_PREFERENCES_ADDIN (extension), IDE_PREFERENCES (self));
+  ide_preferences_addin_load (IDE_PREFERENCES_ADDIN (extension), DZL_PREFERENCES (self));
 
   text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
   ide_preferences_perspective_refilter (self, text);
@@ -145,7 +137,7 @@ ide_preferences_perspective_extension_removed (PeasExtensionSet *set,
   g_assert (IDE_IS_PREFERENCES_ADDIN (extension));
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
 
-  ide_preferences_addin_unload (IDE_PREFERENCES_ADDIN (extension), IDE_PREFERENCES (self));
+  ide_preferences_addin_unload (IDE_PREFERENCES_ADDIN (extension), DZL_PREFERENCES (self));
 
   text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
   ide_preferences_perspective_refilter (self, text);
@@ -156,7 +148,8 @@ ide_preferences_perspective_notify_visible_child (IdePreferencesPerspective *sel
                                                   GParamSpec                *pspec,
                                                   GtkStack                  *stack)
 {
-  IdePreferencesPage *page;
+#if 0
+  DzlPreferencesPage *page;
   GHashTableIter iter;
   gpointer value;
 
@@ -173,17 +166,17 @@ ide_preferences_perspective_notify_visible_child (IdePreferencesPerspective *sel
    * the subpage to potentially reappear.
    */
 
-  if (NULL == (page = IDE_PREFERENCES_PAGE (gtk_stack_get_visible_child (stack))))
+  if (NULL == (page = DZL_PREFERENCES_PAGE (gtk_stack_get_visible_child (stack))))
     return;
 
   g_hash_table_iter_init (&iter, page->groups_by_name);
 
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
-      IdePreferencesGroup *group = value;
+      DzlPreferencesGroup *group = value;
       GtkSelectionMode mode = GTK_SELECTION_NONE;
 
-      g_assert (IDE_IS_PREFERENCES_GROUP (group));
+      g_assert (DZL_IS_PREFERENCES_GROUP (group));
 
       if (!group->is_list)
         continue;
@@ -202,6 +195,7 @@ ide_preferences_perspective_notify_visible_child (IdePreferencesPerspective *sel
             break;
         }
     }
+#endif
 }
 
 static void
@@ -211,7 +205,7 @@ ide_preferences_perspective_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_preferences_perspective_parent_class)->constructed (object);
 
-  _ide_preferences_builtin_register (IDE_PREFERENCES (self));
+  _ide_preferences_builtin_register (DZL_PREFERENCES (self));
 
   self->extensions = peas_extension_set_new (peas_engine_get_default (),
                                              IDE_TYPE_PREFERENCES_ADDIN,
@@ -359,18 +353,18 @@ ide_preferences_perspective_get_page (IdePreferencesPerspective *self,
 }
 
 static void
-ide_preferences_perspective_add_page (IdePreferences *preferences,
+ide_preferences_perspective_add_page (DzlPreferences *preferences,
                                       const gchar    *page_name,
                                       const gchar    *title,
                                       gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesPage *page;
+  DzlPreferencesPage *page;
   GSequenceIter *iter;
   GtkStack *stack;
   gint position = -1;
 
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
   g_assert (page_name != NULL);
   g_assert (title != NULL || strchr (page_name, '.'));
@@ -383,7 +377,7 @@ ide_preferences_perspective_add_page (IdePreferences *preferences,
   if (gtk_stack_get_child_by_name (stack, page_name))
     return;
 
-  page = g_object_new (IDE_TYPE_PREFERENCES_PAGE,
+  page = g_object_new (DZL_TYPE_PREFERENCES_PAGE,
                        "priority", priority,
                        "visible", TRUE,
                        NULL);
@@ -402,14 +396,14 @@ ide_preferences_perspective_add_page (IdePreferences *preferences,
 }
 
 static void
-ide_preferences_perspective_add_group (IdePreferences *preferences,
+ide_preferences_perspective_add_group (DzlPreferences *preferences,
                                        const gchar    *page_name,
                                        const gchar    *group_name,
                                        const gchar    *title,
                                        gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesGroup *group;
+  DzlPreferencesGroup *group;
   GtkWidget *page;
 
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
@@ -424,17 +418,17 @@ ide_preferences_perspective_add_group (IdePreferences *preferences,
       return;
     }
 
-  group = g_object_new (IDE_TYPE_PREFERENCES_GROUP,
+  group = g_object_new (DZL_TYPE_PREFERENCES_GROUP,
                         "name", group_name,
                         "priority", priority,
                         "title", title,
                         "visible", TRUE,
                         NULL);
-  ide_preferences_page_add_group (IDE_PREFERENCES_PAGE (page), group);
+  dzl_preferences_page_add_group (DZL_PREFERENCES_PAGE (page), group);
 }
 
 static void
-ide_preferences_perspective_add_list_group (IdePreferences   *preferences,
+ide_preferences_perspective_add_list_group (DzlPreferences   *preferences,
                                             const gchar      *page_name,
                                             const gchar      *group_name,
                                             const gchar      *title,
@@ -442,7 +436,7 @@ ide_preferences_perspective_add_list_group (IdePreferences   *preferences,
                                             gint              priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesGroup *group;
+  DzlPreferencesGroup *group;
   GtkWidget *page;
 
   g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
@@ -457,7 +451,7 @@ ide_preferences_perspective_add_list_group (IdePreferences   *preferences,
       return;
     }
 
-  group = g_object_new (IDE_TYPE_PREFERENCES_GROUP,
+  group = g_object_new (DZL_TYPE_PREFERENCES_GROUP,
                         "is-list", TRUE,
                         "mode", mode,
                         "name", group_name,
@@ -465,11 +459,11 @@ ide_preferences_perspective_add_list_group (IdePreferences   *preferences,
                         "title", title,
                         "visible", TRUE,
                         NULL);
-  ide_preferences_page_add_group (IDE_PREFERENCES_PAGE (page), group);
+  dzl_preferences_page_add_group (DZL_PREFERENCES_PAGE (page), group);
 }
 
 static guint
-ide_preferences_perspective_add_radio (IdePreferences *preferences,
+ide_preferences_perspective_add_radio (DzlPreferences *preferences,
                                        const gchar    *page_name,
                                        const gchar    *group_name,
                                        const gchar    *schema_id,
@@ -482,8 +476,8 @@ ide_preferences_perspective_add_radio (IdePreferences *preferences,
                                        gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesSwitch *widget;
-  IdePreferencesGroup *group;
+  DzlPreferencesSwitch *widget;
+  DzlPreferencesGroup *group;
   g_autoptr(GVariant) variant = NULL;
   GtkWidget *page;
   guint widget_id;
@@ -503,7 +497,7 @@ ide_preferences_perspective_add_radio (IdePreferences *preferences,
       return 0;
     }
 
-  group = ide_preferences_page_get_group (IDE_PREFERENCES_PAGE (page), group_name);
+  group = dzl_preferences_page_get_group (DZL_PREFERENCES_PAGE (page), group_name);
 
   if (group == NULL)
     {
@@ -524,7 +518,7 @@ ide_preferences_perspective_add_radio (IdePreferences *preferences,
         g_variant_ref_sink (variant);
     }
 
-  widget = g_object_new (IDE_TYPE_PREFERENCES_SWITCH,
+  widget = g_object_new (DZL_TYPE_PREFERENCES_SWITCH,
                          "is-radio", TRUE,
                          "key", key,
                          "keywords", keywords,
@@ -537,7 +531,7 @@ ide_preferences_perspective_add_radio (IdePreferences *preferences,
                          "visible", TRUE,
                          NULL);
 
-  ide_preferences_group_add (group, GTK_WIDGET (widget));
+  dzl_preferences_group_add (group, GTK_WIDGET (widget));
 
   widget_id = ++self->last_widget_id;
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
@@ -546,7 +540,7 @@ ide_preferences_perspective_add_radio (IdePreferences *preferences,
 }
 
 static guint
-ide_preferences_perspective_add_switch (IdePreferences *preferences,
+ide_preferences_perspective_add_switch (DzlPreferences *preferences,
                                         const gchar    *page_name,
                                         const gchar    *group_name,
                                         const gchar    *schema_id,
@@ -559,8 +553,8 @@ ide_preferences_perspective_add_switch (IdePreferences *preferences,
                                         gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesSwitch *widget;
-  IdePreferencesGroup *group;
+  DzlPreferencesSwitch *widget;
+  DzlPreferencesGroup *group;
   g_autoptr(GVariant) variant = NULL;
   GtkWidget *page;
   guint widget_id;
@@ -580,7 +574,7 @@ ide_preferences_perspective_add_switch (IdePreferences *preferences,
       return 0;
     }
 
-  group = ide_preferences_page_get_group (IDE_PREFERENCES_PAGE (page), group_name);
+  group = dzl_preferences_page_get_group (DZL_PREFERENCES_PAGE (page), group_name);
 
   if (group == NULL)
     {
@@ -601,7 +595,7 @@ ide_preferences_perspective_add_switch (IdePreferences *preferences,
         g_variant_ref_sink (variant);
     }
 
-  widget = g_object_new (IDE_TYPE_PREFERENCES_SWITCH,
+  widget = g_object_new (DZL_TYPE_PREFERENCES_SWITCH,
                          "key", key,
                          "keywords", keywords,
                          "path", path,
@@ -613,7 +607,7 @@ ide_preferences_perspective_add_switch (IdePreferences *preferences,
                          "visible", TRUE,
                          NULL);
 
-  ide_preferences_group_add (group, GTK_WIDGET (widget));
+  dzl_preferences_group_add (group, GTK_WIDGET (widget));
 
   widget_id = ++self->last_widget_id;
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
@@ -622,7 +616,7 @@ ide_preferences_perspective_add_switch (IdePreferences *preferences,
 }
 
 static guint
-ide_preferences_perspective_add_spin_button (IdePreferences *preferences,
+ide_preferences_perspective_add_spin_button (DzlPreferences *preferences,
                                              const gchar    *page_name,
                                              const gchar    *group_name,
                                              const gchar    *schema_id,
@@ -634,8 +628,8 @@ ide_preferences_perspective_add_spin_button (IdePreferences *preferences,
                                              gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesSpinButton *widget;
-  IdePreferencesGroup *group;
+  DzlPreferencesSpinButton *widget;
+  DzlPreferencesGroup *group;
   GtkWidget *page;
   guint widget_id;
 
@@ -654,7 +648,7 @@ ide_preferences_perspective_add_spin_button (IdePreferences *preferences,
       return 0;
     }
 
-  group = ide_preferences_page_get_group (IDE_PREFERENCES_PAGE (page), group_name);
+  group = dzl_preferences_page_get_group (DZL_PREFERENCES_PAGE (page), group_name);
 
 
   if (group == NULL)
@@ -664,7 +658,7 @@ ide_preferences_perspective_add_spin_button (IdePreferences *preferences,
       return 0;
     }
 
-  widget = g_object_new (IDE_TYPE_PREFERENCES_SPIN_BUTTON,
+  widget = g_object_new (DZL_TYPE_PREFERENCES_SPIN_BUTTON,
                          "key", key,
                          "keywords", keywords,
                          "path", path,
@@ -675,7 +669,7 @@ ide_preferences_perspective_add_spin_button (IdePreferences *preferences,
                          "visible", TRUE,
                          NULL);
 
-  ide_preferences_group_add (group, GTK_WIDGET (widget));
+  dzl_preferences_group_add (group, GTK_WIDGET (widget));
 
   widget_id = ++self->last_widget_id;
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
@@ -684,7 +678,7 @@ ide_preferences_perspective_add_spin_button (IdePreferences *preferences,
 }
 
 static guint
-ide_preferences_perspective_add_font_button (IdePreferences *preferences,
+ide_preferences_perspective_add_font_button (DzlPreferences *preferences,
                                              const gchar    *page_name,
                                              const gchar    *group_name,
                                              const gchar    *schema_id,
@@ -694,8 +688,8 @@ ide_preferences_perspective_add_font_button (IdePreferences *preferences,
                                              gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesSwitch *widget;
-  IdePreferencesGroup *group;
+  DzlPreferencesSwitch *widget;
+  DzlPreferencesGroup *group;
   GtkWidget *page;
   guint widget_id;
 
@@ -714,7 +708,7 @@ ide_preferences_perspective_add_font_button (IdePreferences *preferences,
       return 0;
     }
 
-  group = ide_preferences_page_get_group (IDE_PREFERENCES_PAGE (page), group_name);
+  group = dzl_preferences_page_get_group (DZL_PREFERENCES_PAGE (page), group_name);
 
   if (group == NULL)
     {
@@ -723,7 +717,7 @@ ide_preferences_perspective_add_font_button (IdePreferences *preferences,
       return 0;
     }
 
-  widget = g_object_new (IDE_TYPE_PREFERENCES_FONT_BUTTON,
+  widget = g_object_new (DZL_TYPE_PREFERENCES_FONT_BUTTON,
                          "key", key,
                          "keywords", keywords,
                          "priority", priority,
@@ -732,7 +726,7 @@ ide_preferences_perspective_add_font_button (IdePreferences *preferences,
                          "visible", TRUE,
                          NULL);
 
-  ide_preferences_group_add (group, GTK_WIDGET (widget));
+  dzl_preferences_group_add (group, GTK_WIDGET (widget));
 
   widget_id = ++self->last_widget_id;
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
@@ -741,7 +735,7 @@ ide_preferences_perspective_add_font_button (IdePreferences *preferences,
 }
 
 static guint
-ide_preferences_perspective_add_file_chooser (IdePreferences      *preferences,
+ide_preferences_perspective_add_file_chooser (DzlPreferences      *preferences,
                                               const gchar         *page_name,
                                               const gchar         *group_name,
                                               const gchar         *schema_id,
@@ -754,8 +748,8 @@ ide_preferences_perspective_add_file_chooser (IdePreferences      *preferences,
                                               gint                 priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesFileChooserButton *widget;
-  IdePreferencesGroup *group;
+  DzlPreferencesFileChooserButton *widget;
+  DzlPreferencesGroup *group;
   GtkWidget *page;
   guint widget_id;
 
@@ -774,7 +768,7 @@ ide_preferences_perspective_add_file_chooser (IdePreferences      *preferences,
       return 0;
     }
 
-  group = ide_preferences_page_get_group (IDE_PREFERENCES_PAGE (page), group_name);
+  group = dzl_preferences_page_get_group (DZL_PREFERENCES_PAGE (page), group_name);
 
   if (group == NULL)
     {
@@ -783,7 +777,7 @@ ide_preferences_perspective_add_file_chooser (IdePreferences      *preferences,
       return 0;
     }
 
-  widget = g_object_new (IDE_TYPE_PREFERENCES_FILE_CHOOSER_BUTTON,
+  widget = g_object_new (DZL_TYPE_PREFERENCES_FILE_CHOOSER_BUTTON,
                          "action", action,
                          "key", key,
                          "priority", priority,
@@ -795,7 +789,7 @@ ide_preferences_perspective_add_file_chooser (IdePreferences      *preferences,
                          "visible", TRUE,
                          NULL);
 
-  ide_preferences_group_add (group, GTK_WIDGET (widget));
+  dzl_preferences_group_add (group, GTK_WIDGET (widget));
 
   widget_id = ++self->last_widget_id;
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
@@ -804,7 +798,7 @@ ide_preferences_perspective_add_file_chooser (IdePreferences      *preferences,
 }
 
 static guint
-ide_preferences_perspective_add_custom (IdePreferences *preferences,
+ide_preferences_perspective_add_custom (DzlPreferences *preferences,
                                         const gchar    *page_name,
                                         const gchar    *group_name,
                                         GtkWidget      *widget,
@@ -812,8 +806,8 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
                                         gint            priority)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
-  IdePreferencesBin *container;
-  IdePreferencesGroup *group;
+  DzlPreferencesBin *container;
+  DzlPreferencesGroup *group;
   GtkWidget *page;
   guint widget_id;
 
@@ -830,7 +824,7 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
       return 0;
     }
 
-  group = ide_preferences_page_get_group (IDE_PREFERENCES_PAGE (page), group_name);
+  group = dzl_preferences_page_get_group (DZL_PREFERENCES_PAGE (page), group_name);
 
   if (group == NULL)
     {
@@ -844,17 +838,17 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
   gtk_widget_show (widget);
   gtk_widget_show (GTK_WIDGET (group));
 
-  if (IDE_IS_PREFERENCES_BIN (widget))
-    container = IDE_PREFERENCES_BIN (widget);
+  if (DZL_IS_PREFERENCES_BIN (widget))
+    container = DZL_PREFERENCES_BIN (widget);
   else
-    container = g_object_new (IDE_TYPE_PREFERENCES_BIN,
+    container = g_object_new (DZL_TYPE_PREFERENCES_BIN,
                               "child", widget,
                               "keywords", keywords,
                               "priority", priority,
                               "visible", TRUE,
                               NULL);
 
-  ide_preferences_group_add (group, GTK_WIDGET (container));
+  dzl_preferences_group_add (group, GTK_WIDGET (container));
 
   g_hash_table_insert (self->widgets, GINT_TO_POINTER (widget_id), widget);
 
@@ -862,7 +856,7 @@ ide_preferences_perspective_add_custom (IdePreferences *preferences,
 }
 
 static gboolean
-ide_preferences_perspective_remove_id (IdePreferences *preferences,
+ide_preferences_perspective_remove_id (DzlPreferences *preferences,
                                        guint           widget_id)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
@@ -894,7 +888,7 @@ ide_preferences_perspective_remove_id (IdePreferences *preferences,
 }
 
 static void
-ide_preferences_perspective_set_page (IdePreferences *preferences,
+ide_preferences_perspective_set_page (DzlPreferences *preferences,
                                       const gchar    *page_name,
                                       GHashTable     *map)
 {
@@ -914,7 +908,7 @@ ide_preferences_perspective_set_page (IdePreferences *preferences,
 
   if (strchr (page_name, '.') != NULL)
     {
-      _ide_preferences_page_set_map (IDE_PREFERENCES_PAGE (page), map);
+      dzl_preferences_page_set_map (DZL_PREFERENCES_PAGE (page), map);
       gtk_stack_set_visible_child (self->subpage_stack, page);
       gtk_widget_show (GTK_WIDGET (self->subpage_stack));
     }
@@ -926,7 +920,7 @@ ide_preferences_perspective_set_page (IdePreferences *preferences,
 }
 
 static GtkWidget *
-ide_preferences_perspective_get_widget (IdePreferences *preferences,
+ide_preferences_perspective_get_widget (DzlPreferences *preferences,
                                         guint           widget_id)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)preferences;
@@ -937,11 +931,11 @@ ide_preferences_perspective_get_widget (IdePreferences *preferences,
 }
 
 static void
-ide_preferences_iface_init (IdePreferencesInterface *iface)
+dzl_preferences_iface_init (DzlPreferencesInterface *iface)
 {
   iface->add_page = ide_preferences_perspective_add_page;
   iface->add_group = ide_preferences_perspective_add_group;
-  iface->add_list_group  = ide_preferences_perspective_add_list_group ;
+  iface->add_list_group  = ide_preferences_perspective_add_list_group;
   iface->add_radio = ide_preferences_perspective_add_radio;
   iface->add_font_button = ide_preferences_perspective_add_font_button;
   iface->add_switch = ide_preferences_perspective_add_switch;

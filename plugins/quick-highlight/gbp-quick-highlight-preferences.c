@@ -30,15 +30,15 @@ struct _GbpQuickHighlightPreferences
 
 static void
 gbp_quick_highlight_preferences_load (IdePreferencesAddin *addin,
-                                      IdePreferences      *preferences)
+                                      DzlPreferences      *preferences)
 {
   GbpQuickHighlightPreferences *self = (GbpQuickHighlightPreferences *)addin;
 
   g_assert (IDE_IS_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
   self->enable_switch =
-    ide_preferences_add_switch (preferences,
+    dzl_preferences_add_switch (preferences,
                                 "editor",
                                 "highlight",
                                 "org.gnome.builder.extension-type",
@@ -54,14 +54,14 @@ gbp_quick_highlight_preferences_load (IdePreferencesAddin *addin,
 
 static void
 gbp_quick_highlight_preferences_unload (IdePreferencesAddin *addin,
-                                        IdePreferences      *preferences)
+                                        DzlPreferences      *preferences)
 {
   GbpQuickHighlightPreferences *self = (GbpQuickHighlightPreferences *)addin;
 
   g_assert (IDE_IS_PREFERENCES_ADDIN (self));
-  g_assert (IDE_IS_PREFERENCES (preferences));
+  g_assert (DZL_IS_PREFERENCES (preferences));
 
-  ide_preferences_remove_id (preferences, self->enable_switch);
+  dzl_preferences_remove_id (preferences, self->enable_switch);
   self->enable_switch = 0;
 }
 

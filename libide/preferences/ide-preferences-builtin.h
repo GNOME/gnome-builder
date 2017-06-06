@@ -19,11 +19,11 @@
 #ifndef IDE_PREFERENCES_BUILTIN_H
 #define IDE_PREFERENCES_BUILTIN_H
 
-#include "ide-preferences.h"
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
-void _ide_preferences_builtin_register (IdePreferences *preferences);
+void _ide_preferences_builtin_register (DzlPreferences *preferences);
 
 G_END_DECLS
 

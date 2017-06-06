@@ -23,7 +23,7 @@ namespace Ide {
 	public class ValaPreferencesAddin: GLib.Object, Ide.PreferencesAddin {
 		uint enabled_switch;
 
-		public void load (Ide.Preferences preferences) {
+		public void load (Dzl.Preferences preferences) {
 			this.enabled_switch = preferences.add_switch ("code-insight",
 			                                              "diagnostics",
 			                                              "org.gnome.builder.extension-type",
@@ -37,7 +37,7 @@ namespace Ide {
 			                                              100);
 		}
 
-		public void unload (Ide.Preferences preferences) {
+		public void unload (Dzl.Preferences preferences) {
 			/* TODO: preferences.remove (self.enabled_switch); */
 		}
 	}

@@ -68,15 +68,8 @@
     <file compressed="true" alias="ide-omni-search-group.ui">../search/ide-omni-search-group.ui</file>
     <file compressed="true" alias="ide-omni-search-row.ui">../search/ide-omni-search-row.ui</file>
     <file compressed="true" alias="ide-perspective-menu-button.ui">../workbench/ide-perspective-menu-button.ui</file>
-    <file compressed="true" alias="ide-preferences-entry.ui">../preferences/ide-preferences-entry.ui</file>
-    <file compressed="true" alias="ide-preferences-file-chooser-button.ui">../preferences/ide-preferences-file-chooser-button.ui</file>
-    <file compressed="true" alias="ide-preferences-font-button.ui">../preferences/ide-preferences-font-button.ui</file>
-    <file compressed="true" alias="ide-preferences-group.ui">../preferences/ide-preferences-group.ui</file>
     <file compressed="true" alias="ide-preferences-language-row.ui">../preferences/ide-preferences-language-row.ui</file>
-    <file compressed="true" alias="ide-preferences-page.ui">../preferences/ide-preferences-page.ui</file>
     <file compressed="true" alias="ide-preferences-perspective.ui">../preferences/ide-preferences-perspective.ui</file>
-    <file compressed="true" alias="ide-preferences-spin-button.ui">../preferences/ide-preferences-spin-button.ui</file>
-    <file compressed="true" alias="ide-preferences-switch.ui">../preferences/ide-preferences-switch.ui</file>
     <file compressed="true" alias="ide-run-button.ui">../runner/ide-run-button.ui</file>
     <file compressed="true" alias="ide-transfer-row.ui">../transfers/ide-transfer-row.ui</file>
     <file compressed="true" alias="ide-transfers-button.ui">../transfers/ide-transfers-button.ui</file>
