@@ -21,7 +21,6 @@
   <gresource prefix="/org/gnome/builder/theme">
     <file compressed="true" alias="Adwaita.css">../../data/theme/Adwaita.css</file>
     <file compressed="true" alias="Adwaita-dark.css">../../data/theme/Adwaita-dark.css</file>
-    <file compressed="true" alias="Adwaita-panels.css">../../data/theme/Adwaita-panels.css</file>
     <file compressed="true" alias="Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
 
     <file compressed="true" alias="Arc.css">../../data/theme/Arc.css</file>
