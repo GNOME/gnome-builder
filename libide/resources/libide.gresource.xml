@@ -69,7 +69,6 @@
     <file compressed="true" alias="ide-omni-search-row.ui">../search/ide-omni-search-row.ui</file>
     <file compressed="true" alias="ide-perspective-menu-button.ui">../workbench/ide-perspective-menu-button.ui</file>
     <file compressed="true" alias="ide-preferences-language-row.ui">../preferences/ide-preferences-language-row.ui</file>
-    <file compressed="true" alias="ide-preferences-perspective.ui">../preferences/ide-preferences-perspective.ui</file>
     <file compressed="true" alias="ide-run-button.ui">../runner/ide-run-button.ui</file>
     <file compressed="true" alias="ide-transfer-row.ui">../transfers/ide-transfer-row.ui</file>
     <file compressed="true" alias="ide-transfers-button.ui">../transfers/ide-transfers-button.ui</file>
