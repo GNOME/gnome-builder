@@ -154,21 +154,6 @@ popover.omnibar list row:last-child {
 }
 
 
-entry.preferences-search {
-  border: none;
-  border-right: 1px solid alpha(@borders, 0.55);
-  border-bottom: 1px solid alpha(@borders, 0.55);
-  border-radius: 0;
-}
-preferences stacksidebar list {
-  background-color: @content_view_bg;
-  border-right: 1px solid alpha(@borders, 0.55);
-}
-preferences stacksidebar list separator {
-  background-color: transparent;
-}
-
-
 popover.messagepopover.background {
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px;
@@ -279,7 +264,6 @@ configurationview list row:last-child {
   border-bottom: none;
 }
 
-preferences list row entry,
 configurationview list row entry {
   background: transparent;
   border: none;
@@ -289,7 +273,6 @@ configurationview list row entry {
   margin: -5px;
 }
 
-preferences list row spinbutton entry,
 configurationview list row spinbutton entry {
   margin-left: 2px;
 }

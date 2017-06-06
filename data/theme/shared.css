@@ -204,26 +204,6 @@ omnisearchdisplay omnisearchgroup omnisearchrow:selected {
 
 
 /*
- * Preferences styling
- *
- * The following tweaks our preferences styling in the
- * preferences perspective, including groups, rows,
- * sidebar, etc.
- */
-window.workbench preferences preferencesgroup list row {
-  padding: 10px;
-  border-bottom: 1px solid alpha(@borders, 0.2);
-}
-window.workbench preferences preferencesgroup list row:last-child {
-  border-bottom: none;
-}
-window.workbench preferences preferencesgroup list entry {
-  background: none;
-  min-height: 0px;
-}
-
-
-/*
  * Perspectives switcher
  *
  * The following tweaks the left-most sidebar containing
