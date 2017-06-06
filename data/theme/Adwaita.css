@@ -16,20 +16,6 @@ layouttab:backdrop {
   border-left-color: alpha(@borders, 0.5);
 }
 
-
-docktabstrip {
-  background-color: #d6d6d6;
-  box-shadow: 0 4px 3px -5px #aaa inset,
-              0 -1px 0 #a1a1a1 inset;
-}
-docktabstrip:backdrop {
-  box-shadow: 0 -1px 0 #a1a1a1 inset;
-}
-docktabstrip docktab:checked {
-  box-shadow: 0 -2px 0 #4a90d9 inset;
-}
-
-
 entry.search-missing {
   border-color: #aa0000;
 }
