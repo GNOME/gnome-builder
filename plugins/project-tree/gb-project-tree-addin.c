@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 
@@ -81,7 +82,7 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
   content = ide_editor_perspective_get_center_widget (IDE_EDITOR_PERSPECTIVE (editor));
   g_assert (content != NULL);
 
-  grid = ide_widget_find_child_typed (content, IDE_TYPE_LAYOUT_GRID);
+  grid = dzl_gtk_widget_find_child_typed (content, IDE_TYPE_LAYOUT_GRID);
   g_assert (grid != NULL);
 
   g_signal_connect_object (grid,

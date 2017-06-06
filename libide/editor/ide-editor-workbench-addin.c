@@ -97,7 +97,7 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
                                                                    "icon-name", "document-new-symbolic",
                                                                    NULL),
                                             NULL);
-  ide_widget_add_style_class (self->new_document_button, "image-button");
+  dzl_gtk_widget_add_style_class (self->new_document_button, "image-button");
 
   ide_workbench_header_bar_insert_left (header,
                                         self->new_document_button,

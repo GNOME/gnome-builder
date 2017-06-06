@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-tree"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
@@ -717,7 +718,7 @@ ide_tree_real_action (IdeTree     *self,
         }
     }
 
-  ide_widget_action (GTK_WIDGET (self), prefix, action_name, variant);
+  dzl_gtk_widget_action (GTK_WIDGET (self), prefix, action_name, variant);
 }
 
 static gboolean

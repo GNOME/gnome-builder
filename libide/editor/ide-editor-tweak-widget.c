@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "editor-tweak"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
@@ -111,7 +112,7 @@ ide_editor_tweak_widget_row_activated (IdeEditorTweakWidget *self,
     {
       lang_id = gtk_source_language_get_id (lang);
       param = g_variant_new_string (lang_id);
-      ide_widget_action (GTK_WIDGET (self), "view", "language", param);
+      dzl_gtk_widget_action (GTK_WIDGET (self), "view", "language", param);
     }
 }
 

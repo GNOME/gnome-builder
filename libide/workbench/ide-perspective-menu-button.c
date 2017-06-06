@@ -18,9 +18,10 @@
 
 #define G_LOG_DOMAIN "ide-perspective-menu-button"
 
+#include <dazzle.h>
+
 #include "ide-macros.h"
 
-#include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-perspective-menu-button.h"
 #include "workbench/ide-workbench.h"
@@ -117,8 +118,8 @@ ide_perspective_menu_button_create_row (IdePerspectiveMenuButton *self,
                             "visible", TRUE,
                             "xalign", 0.0f,
                             NULL);
-      ide_widget_add_style_class (GTK_WIDGET (label), "dim-label");
-      ide_widget_add_style_class (GTK_WIDGET (label), "accel");
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "dim-label");
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "accel");
       gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (label),
                                          "pack-type", GTK_PACK_END,
                                          NULL);

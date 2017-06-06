@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-editor-view"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -200,7 +201,7 @@ save_file_cb (GObject      *object,
     }
 
   if (self->progress_bar)
-    ide_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+    dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
 }
 
 static void
@@ -498,7 +499,7 @@ ide_editor_view_actions_close (GSimpleAction *action,
     }
   else
     {
-      ide_widget_action (GTK_WIDGET (self), "view-stack", "close", NULL);
+      dzl_gtk_widget_action (GTK_WIDGET (self), "view-stack", "close", NULL);
     }
 }
 
@@ -568,7 +569,7 @@ ide_editor_view_actions_reload_buffer_cb (GObject      *object,
                                FALSE);
     }
 
-  ide_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+  dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
 }
 
 static void

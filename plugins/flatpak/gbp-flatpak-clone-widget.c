@@ -273,7 +273,7 @@ gbp_flatpak_clone_widget_worker_completed (GTask      *task,
                            DZL_ANIMATION_EASE_IN_OUT_QUAD,
                            ANIMATION_DURATION_MSEC,
                            NULL,
-                           (GDestroyNotify)ide_widget_hide_with_fade,
+                           (GDestroyNotify)dzl_gtk_widget_hide_with_fade,
                            self->clone_progress,
                            "fraction", 1.0,
                            NULL);

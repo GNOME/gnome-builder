@@ -18,7 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-tab-bar"
 
-#include "util/ide-gtk.h"
+#include <dazzle.h>
+
 #include "workbench/ide-layout-stack.h"
 #include "workbench/ide-layout-tab-bar.h"
 #include "workbench/ide-layout-tab-bar-private.h"
@@ -54,7 +55,7 @@ ide_layout_tab_bar_close_clicked (IdeLayoutTabBar *self,
   g_assert (IDE_IS_LAYOUT_VIEW (view));
 
   gtk_stack_set_visible_child (self->stack, view);
-  ide_widget_action (view, "view-stack", "close", NULL);
+  dzl_gtk_widget_action (view, "view-stack", "close", NULL);
 }
 
 static GtkWidget *

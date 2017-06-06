@@ -120,7 +120,7 @@ gbp_devhelp_panel_constructed (GObject *object)
 
   self->sidebar = DH_SIDEBAR (dh_sidebar_new (self->books));
 
-  entry = ide_widget_find_child_typed (GTK_WIDGET (self->sidebar), GTK_TYPE_ENTRY);
+  entry = dzl_gtk_widget_find_child_typed (GTK_WIDGET (self->sidebar), GTK_TYPE_ENTRY);
   if (entry != NULL)
     {
       g_object_set (entry, "margin", 0, NULL);

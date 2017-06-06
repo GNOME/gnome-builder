@@ -264,7 +264,7 @@ gb_terminal_real_search_reveal (GbTerminal *self)
 
   if (parent_overlay != NULL)
     {
-      GtkRevealer *revealer = ide_widget_find_child_typed (parent_overlay, GTK_TYPE_REVEALER);
+      GtkRevealer *revealer = dzl_gtk_widget_find_child_typed (parent_overlay, GTK_TYPE_REVEALER);
 
       if (revealer != NULL && !gtk_revealer_get_child_revealed (revealer))
         gtk_revealer_set_reveal_child (revealer, TRUE);

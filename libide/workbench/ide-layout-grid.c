@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "util/ide-gtk.h"
@@ -261,7 +262,7 @@ ide_layout_grid_stack_empty (IdeLayoutGrid  *self,
 
   if (g_list_length (stacks) == 1)
     {
-      ide_widget_action (GTK_WIDGET (self), "win", "global-search", NULL);
+      dzl_gtk_widget_action (GTK_WIDGET (self), "win", "global-search", NULL);
       g_signal_emit (self, signals [EMPTY], 0);
       goto cleanup;
     }

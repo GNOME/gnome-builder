@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-run-button"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
@@ -97,8 +98,8 @@ create_row (const IdeRunHandlerInfo *info,
                             "visible", TRUE,
                             "xalign", 0.0f,
                             NULL);
-      ide_widget_add_style_class (GTK_WIDGET (label), "dim-label");
-      ide_widget_add_style_class (GTK_WIDGET (label), "accel");
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "dim-label");
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (label), "accel");
       gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (label),
                                          "pack-type", GTK_PACK_END,
                                          NULL);
@@ -208,7 +209,7 @@ ide_run_button_row_activated (IdeRunButton  *self,
       gtk_popover_popdown (self->popover);
 
       /* Now run the action */
-      ide_widget_action (GTK_WIDGET (self), "run-manager", "run-with-handler", g_variant_new_string (id));
+      dzl_gtk_widget_action (GTK_WIDGET (self), "run-manager", "run-with-handler", g_variant_new_string (id));
     }
 }
 

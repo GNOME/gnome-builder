@@ -380,9 +380,9 @@ ide_layout_stack_swipe (IdeLayoutStack  *self,
   if (ABS (velocity_x) > ABS (velocity_y))
     {
       if (velocity_x < 0)
-        ide_widget_action (GTK_WIDGET (self), "view-stack", "previous-view", NULL);
+        dzl_gtk_widget_action (GTK_WIDGET (self), "view-stack", "previous-view", NULL);
       else if (velocity_x > 0)
-        ide_widget_action (GTK_WIDGET (self), "view-stack", "next-view", NULL);
+        dzl_gtk_widget_action (GTK_WIDGET (self), "view-stack", "next-view", NULL);
     }
 }
 

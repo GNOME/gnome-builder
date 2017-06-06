@@ -30,29 +30,10 @@ G_BEGIN_DECLS
 typedef void (*IdeWidgetContextHandler) (GtkWidget  *widget,
                                          IdeContext *context);
 
-gboolean      ide_widget_action              (GtkWidget               *widget,
-                                              const gchar             *group,
-                                              const gchar             *name,
-                                              GVariant                *param);
-gboolean      ide_widget_action_with_string  (GtkWidget               *widget,
-                                              const gchar             *group,
-                                              const gchar             *name,
-                                              const gchar             *param);
 void          ide_widget_set_context_handler (gpointer                 widget,
                                               IdeWidgetContextHandler  handler);
 IdeContext   *ide_widget_get_context         (GtkWidget               *widget);
-void          ide_widget_hide_with_fade      (GtkWidget               *widget);
-void          ide_widget_show_with_fade      (GtkWidget               *widget);
-void          ide_widget_add_style_class     (GtkWidget               *widget,
-                                              const gchar             *class_name);
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
-gpointer      ide_widget_find_child_typed    (GtkWidget               *widget,
-                                              GType                    type);
-void          ide_gtk_text_buffer_remove_tag (GtkTextBuffer           *buffer,
-                                              GtkTextTag              *tag,
-                                              const GtkTextIter       *start,
-                                              const GtkTextIter       *end,
-                                              gboolean                 minimal_damage);
 
 G_END_DECLS
 

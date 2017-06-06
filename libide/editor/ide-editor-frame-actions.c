@@ -351,7 +351,7 @@ ide_editor_frame_actions_replace (GSimpleAction *action,
           g_clear_error (&error);
         }
 
-      ide_widget_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
+      dzl_gtk_widget_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
     }
 
   g_free (unescaped_replace_text);

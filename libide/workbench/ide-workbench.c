@@ -372,7 +372,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
     g_signal_new_class_handler ("action",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (ide_widget_action_with_string),
+                                G_CALLBACK (dzl_gtk_widget_action_with_string),
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 3,

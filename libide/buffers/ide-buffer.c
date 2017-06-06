@@ -331,16 +331,16 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
   table = gtk_text_buffer_get_tag_table (buffer);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_NOTE)))
-    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
+    dzl_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_WARNING)))
-    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
+    dzl_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_DEPRECATED)))
-    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
+    dzl_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_ERROR)))
-    ide_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
+    dzl_gtk_text_buffer_remove_tag (buffer, tag, &begin, &end, TRUE);
 }
 
 static void

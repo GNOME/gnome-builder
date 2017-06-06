@@ -509,7 +509,7 @@ gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
   self->zoom_controls = g_object_new (GTK_TYPE_BOX,
                                       "orientation", GTK_ORIENTATION_HORIZONTAL,
                                       NULL);
-  ide_widget_add_style_class (GTK_WIDGET (self->zoom_controls), "linked");
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->zoom_controls), "linked");
   gtk_container_add (GTK_CONTAINER (self->zoom_controls),
                      g_object_new (GTK_TYPE_BUTTON,
                                    "action-name", "profiler-zoom.zoom-out",

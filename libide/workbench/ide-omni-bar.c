@@ -205,7 +205,7 @@ on_configure_row (IdeOmniBar    *self,
    *       in the "activate" signal (using something like action-name).
    */
 
-  ide_widget_action (GTK_WIDGET (self),
+  dzl_gtk_widget_action (GTK_WIDGET (self),
                      "buildui",
                      "configure",
                      g_variant_new_string (id));

@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-devhelp-editor-view-addin"
+
 #include "gbp-devhelp-editor-view-addin.h"
 #include "gbp-devhelp-panel.h"
 
@@ -46,7 +48,7 @@ request_documentation_cb (GbpDevhelpEditorViewAddin *self,
     return;
 
   pane = dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (layout));
-  panel = ide_widget_find_child_typed (pane, GBP_TYPE_DEVHELP_PANEL);
+  panel = dzl_gtk_widget_find_child_typed (pane, GBP_TYPE_DEVHELP_PANEL);
   gbp_devhelp_panel_focus_search (GBP_DEVHELP_PANEL (panel), word);
 }
 

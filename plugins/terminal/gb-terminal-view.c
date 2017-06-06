@@ -162,7 +162,7 @@ gb_terminal_view_wait_cb (GObject      *object,
   if (self == NULL)
     IDE_GOTO (failure);
 
-  if (!ide_widget_action (GTK_WIDGET (self), "view-stack", "close", NULL))
+  if (!dzl_gtk_widget_action (GTK_WIDGET (self), "view-stack", "close", NULL))
     {
       if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
         gb_terminal_respawn (self, terminal);
