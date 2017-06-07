@@ -643,21 +643,24 @@ libide = shared_library('ide-' + libide_api_version,
 libide_dep = declare_dependency(
               sources: libide_generated_headers,
          dependencies: [ libdazzle_dep,
+                         libgd_dep,
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
-                         libtemplate_glib_dep,
                          libjson_glib_dep,
+                         libtemplate_glib_dep,
                          libjsonrpc_glib_dep ],
             link_with: libide,
   include_directories: include_directories('.'),
 )
 
 # Doesn't link to libide
+# TODO: I think we can remove most of the links here and just setup includes
 libide_plugin_dep = declare_dependency(
               sources: libide_generated_headers,
   include_directories: include_directories('.'),
          dependencies: [ libdazzle_dep,
+                         libgd_dep,
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
@@ -685,6 +688,7 @@ if get_option('with_introspection')
                 sources: libide_generated_headers + libide_public_headers + libide_public_sources,
               nsversion: libide_api_version,
               namespace: 'Ide',
+           dependencies: [ libgd_dep ],
           symbol_prefix: 'ide',
       identifier_prefix: 'Ide',
                includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', libdazzle_gir, 'Json-1.0', libtemplate_glib_gir ],
