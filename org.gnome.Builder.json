@@ -145,11 +145,11 @@
                 },
                 {
                     "type": "patch",
-                    "path": "build/flatpak/polkit-build-Add-option-to-build-without-polkitd.patch"
+                    "path": "build-aux/flatpak/polkit-build-Add-option-to-build-without-polkitd.patch"
                 },
                 {
                     "type": "file",
-                    "path": "build/flatpak/polkit-autogen",
+                    "path": "build-aux/flatpak/polkit-autogen",
                     "dest-filename": "autogen.sh"
                 }
             ]
@@ -175,7 +175,7 @@
                 },
                 {
                     "type": "file",
-                    "path": "build/flatpak/setuptools-makefile",
+                    "path": "build-aux/flatpak/setuptools-makefile",
                     "dest-filename": "Makefile"
                 }
             ]
@@ -199,12 +199,12 @@
                 },
                 {
                     "type": "file",
-                    "path": "build/flatpak/setuptools-makefile",
+                    "path": "build-aux/flatpak/setuptools-makefile",
                     "dest-filename": "Makefile"
                 },
                 {
                     "type": "patch",
-                    "path": "build/flatpak/lxml-Fix-getting-lib-version-when-using-pkg-config.patch"
+                    "path": "build-aux/flatpak/lxml-Fix-getting-lib-version-when-using-pkg-config.patch"
                 }
             ]
         },
@@ -349,7 +349,7 @@
                 },
                 {
                     "type": "file",
-                    "path": "build/flatpak/setuptools-makefile",
+                    "path": "build-aux/flatpak/setuptools-makefile",
                     "dest-filename": "Makefile"
                 }
             ]
@@ -565,7 +565,7 @@
                 },
                 {
                     "type": "file",
-                    "path": "build/flatpak/setuptools-makefile",
+                    "path": "build-aux/flatpak/setuptools-makefile",
                     "dest-filename": "Makefile"
                 }
             ]
