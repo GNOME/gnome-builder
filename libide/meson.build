@@ -16,8 +16,7 @@ libide_enum_headers = [
   'workbench/ide-layout-stack-split.h',
 ]
 
-libide_header_subdir = 'gnome-builder-' + meson.project_version() + '/libide'
-libide_header_dir = join_paths(get_option('includedir'), libide_header_subdir)
+libide_header_dir = pkgincludedir + '/libide'
 
 libide_enums = gnome.mkenums('ide-enums',
   h_template: 'ide-enums.h.in',
@@ -212,10 +211,10 @@ libide_debug_h = configure_file(
 foreach header: libide_public_headers
   header_split = header.split('/')
   if header_split.length() == 2
-    header_path = join_paths(libide_header_subdir, header_split[0])
-    install_headers(header, subdir: header_path)
+    header_path = join_paths(libide_header_dir, header_split[0])
+    install_headers(header, install_dir: header_path)
   else
-    install_headers(header, subdir: libide_header_subdir)
+    install_headers(header, install_dir: libide_header_dir)
   endif
 endforeach
 

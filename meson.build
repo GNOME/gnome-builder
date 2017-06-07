@@ -16,6 +16,7 @@ MICRO_VERSION = version_split[2]
 
 pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
 pkglibdir = join_paths(get_option('libdir'), 'gnome-builder')
+pkgincludedir = join_paths(get_option('includedir'), 'gnome-builder-' + meson.project_version())
 pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
 pkgvapidir = join_paths(get_option('datadir'), 'gnome-builder/vapi')
@@ -143,7 +144,12 @@ if not libtemplate_glib_dep.found()
   libtemplate_glib = subproject('template-glib',
     default_options: [
       'with_introspection=true',
-      'with_vapi=true'
+      'with_vapi=true',
+      'pkglibdir=' + pkglibdir,
+      'pkgincludedir=' + pkgincludedir,
+      'pkggirdir=' + pkggirdir,
+      'pkgvapidir=' + pkgvapidir,
+      'pkgtypelibdir=' + pkgtypelibdir,
     ]
   )
   libtemplate_glib_dep = libtemplate_glib.get_variable('libtemplate_glib_dep')
