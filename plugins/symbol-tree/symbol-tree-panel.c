@@ -280,7 +280,7 @@ filter_symbols_cb (DzlTree     *tree,
                    DzlTreeNode *node,
                    gpointer     user_data)
 {
-  IdePatternSpec *spec = user_data;
+  DzlPatternSpec *spec = user_data;
   const gchar *text;
 
   g_assert (DZL_IS_TREE (tree));
@@ -288,7 +288,7 @@ filter_symbols_cb (DzlTree     *tree,
   g_assert (spec != NULL);
 
   if ((text = dzl_tree_node_get_text (node)) != NULL)
-    return ide_pattern_spec_match (spec, text);
+    return dzl_pattern_spec_match (spec, text);
 
   return FALSE;
 }
@@ -310,13 +310,13 @@ symbol_tree__search_entry_changed (SymbolTreePanel *self,
     }
   else
     {
-      IdePatternSpec *spec;
+      DzlPatternSpec *spec;
 
-      spec = ide_pattern_spec_new (text);
+      spec = dzl_pattern_spec_new (text);
       dzl_tree_set_filter (self->tree,
                            filter_symbols_cb,
                            spec,
-                           (GDestroyNotify)ide_pattern_spec_unref);
+                           (GDestroyNotify)dzl_pattern_spec_unref);
       gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
     }
 }

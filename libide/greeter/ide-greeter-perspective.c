@@ -28,7 +28,6 @@
 #include "genesis/ide-genesis-addin.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "greeter/ide-greeter-project-row.h"
-#include "search/ide-pattern-spec.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench-private.h"
@@ -40,7 +39,7 @@ struct _IdeGreeterPerspective
 
   DzlSignalGroup       *signal_group;
   IdeRecentProjects    *recent_projects;
-  IdePatternSpec       *pattern_spec;
+  DzlPatternSpec       *pattern_spec;
   GActionMap           *actions;
   PeasExtensionSet     *genesis_set;
 
@@ -195,9 +194,9 @@ ide_greeter_perspective_apply_filter_all (IdeGreeterPerspective *self)
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
-  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
+  g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
   if ((text = gtk_entry_get_text (GTK_ENTRY (self->search_entry))))
-    self->pattern_spec = ide_pattern_spec_new (text);
+    self->pattern_spec = dzl_pattern_spec_new (text);
 
   ide_greeter_perspective_apply_filter (self,
                                   self->my_projects_list_box,
@@ -426,7 +425,7 @@ ide_greeter_perspective_filter_row (GtkListBoxRow *row,
     return TRUE;
 
   search_text = ide_greeter_project_row_get_search_text (project_row);
-  ret = ide_pattern_spec_match (self->pattern_spec, search_text);
+  ret = dzl_pattern_spec_match (self->pattern_spec, search_text);
 
   return ret;
 }
@@ -1117,7 +1116,7 @@ ide_greeter_perspective_finalize (GObject *object)
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
 
   ide_clear_weak_pointer (&self->ready_binding);
-  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
+  g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
   g_clear_object (&self->signal_group);
   g_clear_object (&self->recent_projects);
   g_clear_object (&self->cancellable);
