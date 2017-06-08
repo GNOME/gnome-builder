@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <ide.h>
+#include <string.h>
 
 #include "gb-file-search-index.h"
 #include "gb-file-search-result.h"
@@ -333,14 +334,27 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
         {
           g_autoptr(GbFileSearchResult) result = NULL;
           g_autofree gchar *markup = NULL;
+          g_autofree gchar *free_me = NULL;
+          const gchar *filename = match->key;
+          const gchar *icon_name = "text-x-generic-symbolic";
+          const gchar *content_type;
 
           markup = dzl_fuzzy_highlight (match->key, delimited->str, FALSE);
 
+          /*
+           * Try to get a more appropriate icon, but by filename only.
+           * Sniffing would be way too slow here.
+           */
+          content_type = g_content_type_guess (filename, NULL, 0, NULL);
+          if (content_type != NULL)
+            icon_name = free_me = g_content_type_get_generic_icon_name (content_type);
+
           result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
                                  "context", context,
+                                 "icon-name", icon_name,
                                  "score", match->score,
                                  "title", markup,
-                                 "path", match->key,
+                                 "path", filename,
                                  NULL);
           ide_search_reducer_take (&reducer, g_steal_pointer (&result));
         }
