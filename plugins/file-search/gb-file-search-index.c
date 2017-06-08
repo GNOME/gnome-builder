@@ -333,13 +333,15 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
       if (ide_search_reducer_accepts (&reducer, match->score))
         {
           g_autoptr(GbFileSearchResult) result = NULL;
+          g_autofree gchar *escaped = NULL;
           g_autofree gchar *markup = NULL;
           g_autofree gchar *free_me = NULL;
           const gchar *filename = match->key;
           const gchar *icon_name = "text-x-generic-symbolic";
           const gchar *content_type;
 
-          markup = dzl_fuzzy_highlight (match->key, delimited->str, FALSE);
+          escaped = g_markup_escape_text (match->key, -1);
+          markup = dzl_fuzzy_highlight (escaped, delimited->str, FALSE);
 
           /*
            * Try to get a more appropriate icon, but by filename only.
