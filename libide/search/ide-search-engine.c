@@ -24,6 +24,8 @@
 #include "ide-search-provider.h"
 #include "ide-search-result.h"
 
+#define DEFAULT_MAX_RESULTS 50
+
 struct _IdeSearchEngine
 {
   IdeObject         parent_instance;
@@ -244,6 +246,7 @@ ide_search_engine_search_foreach (PeasExtensionSet *set,
 void
 ide_search_engine_search_async (IdeSearchEngine     *self,
                                 const gchar         *query,
+                                guint                max_results,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
@@ -256,13 +259,15 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   g_return_if_fail (query != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  max_results = max_results ? max_results : DEFAULT_MAX_RESULTS;
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_search_engine_search_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
 
   r = request_new ();
   r->query = g_strdup (query);
-  r->max_results = 25;
+  r->max_results = max_results;
   r->task = task;
   r->store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
   r->outstanding = 0;

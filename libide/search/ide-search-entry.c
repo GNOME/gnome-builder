@@ -28,12 +28,23 @@
 #include "util/ide-gtk.h"
 #include "workbench/ide-workbench.h"
 
+#define DEFAULT_SEARCH_MAX 25
+
 struct _IdeSearchEntry
 {
   DzlSuggestionEntry parent_instance;
+  guint max_results;
 };
 
 G_DEFINE_TYPE (IdeSearchEntry, ide_search_entry, DZL_TYPE_SUGGESTION_ENTRY)
+
+enum {
+  PROP_0,
+  PROP_MAX_RESULTS,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 
 static void
 ide_search_entry_search_cb (GObject      *object,
@@ -88,6 +99,7 @@ ide_search_entry_changed (IdeSearchEntry *self)
 
   ide_search_engine_search_async (engine,
                                   typed_text,
+                                  self->max_results,
                                   NULL,
                                   ide_search_entry_search_cb,
                                   g_object_ref (self));
@@ -114,15 +126,70 @@ suggestion_activated (DzlSuggestionEntry *entry,
 }
 
 static void
+ide_search_entry_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  IdeSearchEntry *self = IDE_SEARCH_ENTRY (object);
+
+  switch (prop_id)
+    {
+    case PROP_MAX_RESULTS:
+      g_value_set_uint (value, self->max_results);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_search_entry_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  IdeSearchEntry *self = IDE_SEARCH_ENTRY (object);
+
+  switch (prop_id)
+    {
+    case PROP_MAX_RESULTS:
+      self->max_results = g_value_get_uint (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_search_entry_class_init (IdeSearchEntryClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   DzlSuggestionEntryClass *suggestion_entry_class = DZL_SUGGESTION_ENTRY_CLASS (klass);
 
+  object_class->get_property = ide_search_entry_get_property;
+  object_class->set_property = ide_search_entry_set_property;
+
   suggestion_entry_class->suggestion_activated = suggestion_activated;
+
+  properties [PROP_MAX_RESULTS] =
+    g_param_spec_uint ("max-results",
+                       "Max Results",
+                       "Maximum number of search results to display",
+                       1,
+                       1000,
+                       DEFAULT_SEARCH_MAX,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_search_entry_init (IdeSearchEntry *self)
 {
+  self->max_results = DEFAULT_SEARCH_MAX;
+
   g_signal_connect (self, "changed", G_CALLBACK (ide_search_entry_changed), NULL);
 }

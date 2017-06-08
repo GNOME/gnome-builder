@@ -31,6 +31,7 @@ IdeSearchEngine *ide_search_engine_new           (void);
 gboolean         ide_search_engine_get_busy      (IdeSearchEngine      *self);
 void             ide_search_engine_search_async  (IdeSearchEngine      *self,
                                                   const gchar          *query,
+                                                  guint                 max_results,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
