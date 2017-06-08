@@ -1,6 +1,6 @@
 /* ide-search-provider.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015-2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,6 @@
 #ifndef IDE_SEARCH_PROVIDER_H
 #define IDE_SEARCH_PROVIDER_H
 
-#include <gtk/gtk.h>
-
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -31,36 +29,28 @@ G_DECLARE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE, SEARCH_PROVIDE
 
 struct _IdeSearchProviderInterface
 {
-  GTypeInterface parent_iface;
+  GTypeInterface parent_interface;
 
-  gunichar     (*get_prefix)   (IdeSearchProvider *provider);
-  gint         (*get_priority) (IdeSearchProvider *provider);
-  const gchar *(*get_verb)     (IdeSearchProvider *provider);
-  void         (*populate)     (IdeSearchProvider *provider,
-                                IdeSearchContext  *context,
-                                const gchar       *search_terms,
-                                gsize              max_results,
-                                GCancellable      *cancellable);
-  GtkWidget  *(*create_row)    (IdeSearchProvider *provider,
-                                IdeSearchResult   *result);
-  void        (*activate)      (IdeSearchProvider *provider,
-                                GtkWidget         *row,
-                                IdeSearchResult   *result);
+  void       (*search_async)  (IdeSearchProvider    *self,
+                               const gchar          *query,
+                               guint                 max_results,
+                               GCancellable         *cancellable,
+                               GAsyncReadyCallback   callback,
+                               gpointer              user_data);
+  GPtrArray *(*search_finish) (IdeSearchProvider    *self,
+                               GAsyncResult         *result,
+                               GError              **error);
 };
 
-gunichar     ide_search_provider_get_prefix   (IdeSearchProvider *provider);
-gint         ide_search_provider_get_priority (IdeSearchProvider *provider);
-const gchar *ide_search_provider_get_verb     (IdeSearchProvider *provider);
-void         ide_search_provider_populate     (IdeSearchProvider *provider,
-                                               IdeSearchContext  *context,
-                                               const gchar       *search_terms,
-                                               gsize              max_results,
-                                               GCancellable      *cancellable);
-GtkWidget   *ide_search_provider_create_row   (IdeSearchProvider *provider,
-                                               IdeSearchResult   *result);
-void         ide_search_provider_activate     (IdeSearchProvider *provider,
-                                               GtkWidget         *row,
-                                               IdeSearchResult   *result);
+void       ide_search_provider_search_async  (IdeSearchProvider    *self,
+                                              const gchar          *query,
+                                              guint                 max_results,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+GPtrArray *ide_search_provider_search_finish (IdeSearchProvider    *self,
+                                              GAsyncResult         *result,
+                                              GError              **error);
 
 G_END_DECLS
 

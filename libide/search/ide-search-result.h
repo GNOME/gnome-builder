@@ -1,6 +1,6 @@
 /* ide-search-result.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,34 +19,43 @@
 #ifndef IDE_SEARCH_RESULT_H
 #define IDE_SEARCH_RESULT_H
 
-#include "ide-object.h"
+#include <gio/gio.h>
+#include <dazzle.h>
 
-#include "ide-search-provider.h"
+#include "diagnostics/ide-source-location.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_RESULT (ide_search_result_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeSearchResult, ide_search_result, IDE, SEARCH_RESULT, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeSearchResult, ide_search_result, IDE, SEARCH_RESULT, DzlSuggestion)
 
 struct _IdeSearchResultClass
 {
-  IdeObjectClass parent;
+  DzlSuggestionClass parent_class;
 
-  void (*activate) (IdeSearchResult *result);
+  IdeSourceLocation *(*get_source_location) (IdeSearchResult *self);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
-IdeSearchResult   *ide_search_result_new          (IdeSearchProvider     *provider,
-                                                   const gchar           *title,
-                                                   const gchar           *subtitle,
-                                                   gfloat                 score);
-IdeSearchProvider *ide_search_result_get_provider (IdeSearchResult       *result);
-gfloat             ide_search_result_get_score    (IdeSearchResult       *result);
-const gchar       *ide_search_result_get_title    (IdeSearchResult       *result);
-const gchar       *ide_search_result_get_subtitle (IdeSearchResult       *result);
-gint               ide_search_result_compare      (const IdeSearchResult *a,
-                                                   const IdeSearchResult *b);
-void               ide_search_result_activate     (IdeSearchResult       *result);
+IdeSearchResult   *ide_search_result_new                 (void);
+IdeSourceLocation *ide_search_result_get_source_location (IdeSearchResult       *self);
+gint               ide_search_result_compare             (gconstpointer          a,
+                                                          gconstpointer          b);
+gint               ide_search_result_get_priority        (IdeSearchResult       *self);
+void               ide_search_result_set_priority        (IdeSearchResult       *self,
+                                                          gint                   priority);
+gfloat             ide_search_result_get_score           (IdeSearchResult       *self);
+void               ide_search_result_set_score           (IdeSearchResult       *self,
+                                                          gfloat                 score);
 
 G_END_DECLS
 

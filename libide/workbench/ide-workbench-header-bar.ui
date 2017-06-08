@@ -68,7 +68,7 @@
           </packing>
         </child>
         <child>
-          <object class="IdeOmniSearchEntry" id="search_entry">
+          <object class="IdeSearchEntry" id="search_entry">
             <property name="max-width-chars">30</property>
             <property name="placeholder-text" translatable="yes">Press Ctrl+. to search</property>
             <property name="visible">true</property>

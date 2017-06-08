@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 
+#include "ide-context.h"
+
 #include "files/ide-file.h"
 #include "diagnostics/ide-source-location.h"
 
@@ -220,4 +222,19 @@ guint
 ide_source_location_hash (IdeSourceLocation *self)
 {
   return ide_file_hash (self->file) ^ g_int_hash (&self->line) ^ g_int_hash (&self->line_offset);
+}
+
+IdeSourceLocation *
+ide_source_location_new_for_path (IdeContext  *context,
+                                  const gchar *path,
+                                  guint        line,
+                                  guint        line_offset)
+{
+  g_autoptr(IdeFile) ifile = NULL;
+
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+
+  ifile = ide_file_new_for_path (context, path);
+
+  return ide_source_location_new (ifile, line, line_offset, 0);
 }

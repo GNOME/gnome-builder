@@ -35,33 +35,45 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbFileSearchProvider,
                                 gb_file_search_provider,
                                 IDE_TYPE_OBJECT,
                                 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER,
-                                                       search_provider_iface_init))
-
-static const gchar *
-gb_file_search_provider_get_verb (IdeSearchProvider *provider)
-{
-  return _("Switch To");
-}
+                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
 
 static void
-gb_file_search_provider_populate (IdeSearchProvider *provider,
-                                  IdeSearchContext  *context,
-                                  const gchar       *search_terms,
-                                  gsize              max_results,
-                                  GCancellable      *cancellable)
+gb_file_search_provider_search_async (IdeSearchProvider   *provider,
+                                      const gchar         *search_terms,
+                                      guint                max_results,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
 {
   GbFileSearchProvider *self = (GbFileSearchProvider *)provider;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) results = NULL;
 
-  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
-  g_assert (IDE_IS_SEARCH_CONTEXT (context));
+  g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (search_terms != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (self->index != NULL)
-    gb_file_search_index_populate (self->index, context, provider, search_terms);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gb_file_search_provider_search_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
-  ide_search_context_provider_completed (context, provider);
+  if (self->index != NULL)
+    results = gb_file_search_index_populate (self->index, search_terms, max_results);
+  else
+    results = g_ptr_array_new_with_free_func (g_object_unref);
+
+  g_task_return_pointer (task, g_steal_pointer (&results), (GDestroyNotify)g_ptr_array_unref);
+}
+
+static GPtrArray *
+gb_file_search_provider_search_finish (IdeSearchProvider  *provider,
+                                       GAsyncResult       *result,
+                                       GError            **error)
+{
+  g_assert (GB_IS_FILE_SEARCH_PROVIDER (provider));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -167,20 +179,7 @@ gb_file_search_provider_build_cb (GObject      *object,
   g_set_object (&self->index, index);
 }
 
-static GtkWidget *
-gb_file_search_provider_create_row (IdeSearchProvider *provider,
-                                    IdeSearchResult   *result)
-{
-  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
-  g_assert (IDE_IS_SEARCH_RESULT (result));
-
-  return g_object_new (IDE_TYPE_OMNI_SEARCH_ROW,
-                       "icon-name", "text-x-generic-symbolic",
-                       "result", result,
-                       "visible", TRUE,
-                       NULL);
-}
-
+#if 0
 static void
 gb_file_search_provider_activate (IdeSearchProvider *provider,
                                   GtkWidget         *row,
@@ -218,12 +217,7 @@ gb_file_search_provider_activate (IdeSearchProvider *provider,
                                       NULL);
     }
 }
-
-static gint
-gb_file_search_provider_get_priority (IdeSearchProvider *provider)
-{
-  return 0;
-}
+#endif
 
 static void
 gb_file_search_provider_vcs_changed_cb (GbFileSearchProvider *self,
@@ -342,11 +336,8 @@ gb_file_search_provider_init (GbFileSearchProvider *self)
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
-  iface->populate = gb_file_search_provider_populate;
-  iface->get_verb = gb_file_search_provider_get_verb;
-  iface->create_row = gb_file_search_provider_create_row;
-  iface->activate = gb_file_search_provider_activate;
-  iface->get_priority = gb_file_search_provider_get_priority;
+  iface->search_async = gb_file_search_provider_search_async;
+  iface->search_finish = gb_file_search_provider_search_finish;
 }
 
 void

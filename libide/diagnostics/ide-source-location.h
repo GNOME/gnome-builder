@@ -34,6 +34,10 @@ IdeSourceLocation *ide_source_location_new             (IdeFile                 
                                                         guint                    line,
                                                         guint                    line_offset,
                                                         guint                    offset);
+IdeSourceLocation *ide_source_location_new_for_path    (IdeContext              *context,
+                                                        const gchar             *path,
+                                                        guint                    line,
+                                                        guint                    line_offset);
 guint              ide_source_location_get_line        (IdeSourceLocation       *self);
 guint              ide_source_location_get_line_offset (IdeSourceLocation       *self);
 guint              ide_source_location_get_offset      (IdeSourceLocation       *self);

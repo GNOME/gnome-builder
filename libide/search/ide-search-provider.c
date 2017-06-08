@@ -1,6 +1,6 @@
 /* ide-search-provider.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,127 +16,83 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib/gi18n.h>
+#define G_LOG_DOMAIN "ide-search-provider"
 
-#include "ide-context.h"
-#include "ide-search-context.h"
 #include "ide-search-provider.h"
-#include "ide-search-result.h"
 
 G_DEFINE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE_TYPE_OBJECT)
 
-static const gchar *
-ide_search_provider_real_get_verb (IdeSearchProvider *self)
-{
-  return "";
-}
-
-static gint
-ide_search_provider_real_get_priority (IdeSearchProvider *self)
-{
-  return -1;
-}
-
-static gunichar
-ide_search_provider_real_get_prefix (IdeSearchProvider *self)
-{
-  return '\0';
-}
-
-static GtkWidget *
-ide_search_provider_real_create_row (IdeSearchProvider *self,
-                                     IdeSearchResult   *result)
-{
-  return NULL;
-}
-
 static void
-ide_search_provider_real_activate (IdeSearchProvider *self,
-                                   GtkWidget         *row,
-                                   IdeSearchResult   *result)
+ide_search_provider_real_search_async (IdeSearchProvider   *self,
+                                       const gchar         *query,
+                                       guint                max_results,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
 {
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_SEARCH_PROVIDER (self));
+  g_assert (query != NULL);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "search not implemented");
+}
+
+static GPtrArray *
+ide_search_provider_real_search_finish (IdeSearchProvider  *self,
+                                        GAsyncResult       *result,
+                                        GError            **error)
+{
+  g_assert (IDE_IS_SEARCH_PROVIDER (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
 ide_search_provider_default_init (IdeSearchProviderInterface *iface)
 {
-  iface->get_verb = ide_search_provider_real_get_verb;
-  iface->get_priority = ide_search_provider_real_get_priority;
-  iface->get_prefix = ide_search_provider_real_get_prefix;
-  iface->create_row = ide_search_provider_real_create_row;
-  iface->activate = ide_search_provider_real_activate;
-}
-
-const gchar *
-ide_search_provider_get_verb (IdeSearchProvider *provider)
-{
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), NULL);
-
-  return IDE_SEARCH_PROVIDER_GET_IFACE (provider)->get_verb (provider);
-}
-
-gint
-ide_search_provider_get_priority (IdeSearchProvider *provider)
-{
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), -1);
-
-  return IDE_SEARCH_PROVIDER_GET_IFACE (provider)->get_priority (provider);
-}
-
-gunichar
-ide_search_provider_get_prefix (IdeSearchProvider *provider)
-{
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), -1);
-
-  return IDE_SEARCH_PROVIDER_GET_IFACE (provider)->get_prefix (provider);
+  iface->search_async = ide_search_provider_real_search_async;
+  iface->search_finish = ide_search_provider_real_search_finish;
 }
 
 void
-ide_search_provider_populate (IdeSearchProvider *provider,
-                              IdeSearchContext  *context,
-                              const gchar       *search_terms,
-                              gsize              max_results,
-                              GCancellable      *cancellable)
+ide_search_provider_search_async (IdeSearchProvider   *self,
+                                  const gchar         *query,
+                                  guint                max_results,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
-  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
-  g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
-  g_return_if_fail (search_terms != NULL);
+  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (self));
+  g_return_if_fail (query != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  return IDE_SEARCH_PROVIDER_GET_IFACE (provider)->populate (provider,
-                                                             context,
-                                                             search_terms,
-                                                             max_results,
-                                                             cancellable);
+  IDE_SEARCH_PROVIDER_GET_IFACE (self)->search_async (self, query, max_results, cancellable, callback, user_data);
 }
 
 /**
- * ide_search_provider_create_row:
- * @provider: A #IdeSearchProvider.
- * @result: A #IdeSearchResult.
+ * ide_search_provider_search_finish:
+ * @self: a #IdeSearchProvider
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError, or %NULL
  *
- * Create a row to display the search result.
+ * Completes a request to a search provider.
  *
- * Returns: (transfer full): A #GtkWidget.
+ * Returns: (transfer container) (element-type Ide.SearchResult): A #GPtrArray
+ *    of #IdeSearchResult elements.
  */
-GtkWidget *
-ide_search_provider_create_row (IdeSearchProvider *self,
-                                IdeSearchResult   *result)
+GPtrArray *
+ide_search_provider_search_finish (IdeSearchProvider  *self,
+                                   GAsyncResult       *result,
+                                   GError            **error)
 {
   g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), NULL);
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  return IDE_SEARCH_PROVIDER_GET_IFACE (self)->create_row (self, result);
-}
-
-void
-ide_search_provider_activate (IdeSearchProvider *self,
-                              GtkWidget         *row,
-                              IdeSearchResult   *result)
-{
-  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (self));
-  g_return_if_fail (GTK_IS_WIDGET (row));
-  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
-
-  return IDE_SEARCH_PROVIDER_GET_IFACE (self)->activate (self, row, result);
+  return IDE_SEARCH_PROVIDER_GET_IFACE (self)->search_finish (self, result, error);
 }

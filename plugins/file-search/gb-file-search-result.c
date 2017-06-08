@@ -22,26 +22,49 @@
 
 struct _GbFileSearchResult
 {
-  IdeSearchResult parent_instance;
-  gchar *path;
+  IdeSearchResult  parent_instance;
+
+  IdeContext      *context;
+  gchar           *path;
 };
 
 G_DEFINE_TYPE (GbFileSearchResult, gb_file_search_result, IDE_TYPE_SEARCH_RESULT)
 
 enum {
   PROP_0,
+  PROP_CONTEXT,
   PROP_PATH,
   LAST_PROP
 };
 
 static GParamSpec *properties [LAST_PROP];
 
+static IdeSourceLocation *
+gb_file_search_result_get_source_location (IdeSearchResult *result)
+{
+  GbFileSearchResult *self = (GbFileSearchResult *)result;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_return_val_if_fail (GB_IS_FILE_SEARCH_RESULT (self), NULL);
+
+  vcs = ide_context_get_vcs (self->context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  file = g_file_get_child (workdir, self->path);
+  ifile = ide_file_new (self->context, file);
+
+  return ide_source_location_new (ifile, 0, 0, 0);
+}
+
 static void
 gb_file_search_result_finalize (GObject *object)
 {
   GbFileSearchResult *self = (GbFileSearchResult *)object;
 
-  g_free (self->path);
+  ide_clear_weak_pointer (&self->context);
+  g_clear_pointer (&self->path, g_free);
 
   G_OBJECT_CLASS (gb_file_search_result_parent_class)->finalize (object);
 }
@@ -75,6 +98,10 @@ gb_file_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT:
+      ide_set_weak_pointer (&self->context, g_value_get_object (value));
+      break;
+
     case PROP_PATH:
       self->path = g_value_dup_string (value);
       break;
@@ -88,10 +115,20 @@ static void
 gb_file_search_result_class_init (GbFileSearchResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeSearchResultClass *result_class = IDE_SEARCH_RESULT_CLASS (klass);
 
   object_class->finalize = gb_file_search_result_finalize;
   object_class->get_property = gb_file_search_result_get_property;
   object_class->set_property = gb_file_search_result_set_property;
+
+  result_class->get_source_location = gb_file_search_result_get_source_location;
+
+  properties [PROP_CONTEXT] =
+    g_param_spec_object ("context",
+                         "Context",
+                         "The context for the result",
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PATH] =
     g_param_spec_string ("path",

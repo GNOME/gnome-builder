@@ -27,23 +27,22 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbFileSearchIndex, gb_file_search_index, GB, FILE_SEARCH_INDEX, IdeObject)
 
-void     gb_file_search_index_populate     (GbFileSearchIndex    *self,
-                                            IdeSearchContext     *context,
-                                            IdeSearchProvider    *provider,
-                                            const gchar          *query);
-void     gb_file_search_index_build_async  (GbFileSearchIndex    *self,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
-gboolean gb_file_search_index_build_finish (GbFileSearchIndex    *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
-gboolean gb_file_search_index_contains     (GbFileSearchIndex    *self,
-                                            const gchar          *relative_path);
-void     gb_file_search_index_insert       (GbFileSearchIndex    *self,
-                                            const gchar          *relative_path);
-void     gb_file_search_index_remove       (GbFileSearchIndex    *self,
-                                            const gchar          *relative_path);
+GPtrArray *gb_file_search_index_populate     (GbFileSearchIndex    *self,
+                                              const gchar          *query,
+                                              gsize                 max_results);
+void       gb_file_search_index_build_async  (GbFileSearchIndex    *self,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+gboolean   gb_file_search_index_build_finish (GbFileSearchIndex    *self,
+                                              GAsyncResult         *result,
+                                              GError              **error);
+gboolean   gb_file_search_index_contains     (GbFileSearchIndex    *self,
+                                              const gchar          *relative_path);
+void       gb_file_search_index_insert       (GbFileSearchIndex    *self,
+                                              const gchar          *relative_path);
+void       gb_file_search_index_remove       (GbFileSearchIndex    *self,
+                                              const gchar          *relative_path);
 
 G_END_DECLS
 

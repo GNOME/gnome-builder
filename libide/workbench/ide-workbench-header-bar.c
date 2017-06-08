@@ -21,7 +21,7 @@
 #include <dazzle.h>
 
 #include "application/ide-application.h"
-#include "search/ide-omni-search-entry.h"
+#include "search/ide-search-entry.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench.h"
@@ -29,11 +29,11 @@
 
 typedef struct
 {
-  GtkMenuButton      *menu_button;
-  DzlPriorityBox     *right_box;
-  DzlPriorityBox     *left_box;
-  IdeOmniBar         *omni_bar;
-  IdeOmniSearchEntry *search_entry;
+  GtkMenuButton   *menu_button;
+  DzlPriorityBox  *right_box;
+  DzlPriorityBox  *left_box;
+  IdeOmniBar      *omni_bar;
+  IdeSearchEntry  *search_entry;
 } IdeWorkbenchHeaderBarPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -59,6 +59,8 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, search_entry);
+
+  g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
 }
 
 static void

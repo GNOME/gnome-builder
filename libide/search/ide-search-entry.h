@@ -1,6 +1,6 @@
-/* ide-omni-search-row.h
+/* ide-search-entry.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015-2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_SEARCH_ROW_H
-#define IDE_OMNI_SEARCH_ROW_H
+#ifndef IDE_SEARCH_ENTRY_H
+#define IDE_SEARCH_ENTRY_H
 
-#include <gtk/gtk.h>
-
-#include "ide-search-result.h"
+#include <dazzle.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_OMNI_SEARCH_ROW (ide_omni_search_row_get_type())
+#define IDE_TYPE_SEARCH_ENTRY (ide_search_entry_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeOmniSearchRow, ide_omni_search_row, IDE, OMNI_SEARCH_ROW, GtkListBoxRow)
+G_DECLARE_FINAL_TYPE (IdeSearchEntry, ide_search_entry, IDE, SEARCH_ENTRY, DzlSuggestionEntry)
 
-IdeSearchResult *ide_omni_search_row_get_result (IdeOmniSearchRow *row);
-void             ide_omni_search_row_set_result (IdeOmniSearchRow *row,
-                                                 IdeSearchResult  *result);
+GtkWidget *ide_search_entry_new (void);
 
 G_END_DECLS
 
-#endif /* IDE_OMNI_SEARCH_ROW_H */
+#endif /* IDE_SEARCH_ENTRY_H */

@@ -261,6 +261,8 @@ gb_file_search_index_build_async (GbFileSearchIndex   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gb_file_search_index_build_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->root_directory == NULL)
     {
@@ -289,31 +291,27 @@ gb_file_search_index_build_finish (GbFileSearchIndex  *self,
   return g_task_propagate_boolean (task, error);
 }
 
-void
+GPtrArray *
 gb_file_search_index_populate (GbFileSearchIndex *self,
-                               IdeSearchContext  *context,
-                               IdeSearchProvider *provider,
-                               const gchar       *query)
+                               const gchar       *query,
+                               gsize              max_results)
 {
-  g_autoptr(GArray) ar = NULL;
   g_auto(IdeSearchReducer) reducer = { 0 };
   g_autoptr(GString) delimited = NULL;
+  g_autoptr(GArray) ar = NULL;
   const gchar *iter = query;
-  IdeContext *icontext;
-  gsize max_matches;
+  IdeContext *context;
   gsize i;
 
-  g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
-  g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
-  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
-  g_return_if_fail (query != NULL);
+  g_return_val_if_fail (GB_IS_FILE_SEARCH_INDEX (self), NULL);
+  g_return_val_if_fail (query != NULL, NULL);
 
   if (self->fuzzy == NULL)
-    return;
+    return g_ptr_array_new_with_free_func (g_object_unref);
 
-  icontext = ide_object_get_context (IDE_OBJECT (provider));
-  max_matches = ide_search_context_get_max_results (context);
-  ide_search_reducer_init (&reducer, context, provider, max_matches);
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  ide_search_reducer_init (&reducer, max_results);
 
   delimited = g_string_new (NULL);
 
@@ -325,13 +323,11 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
         g_string_append_unichar (delimited, ch);
     }
 
-  ar = dzl_fuzzy_mutable_index_match (self->fuzzy, delimited->str, max_matches);
+  ar = dzl_fuzzy_mutable_index_match (self->fuzzy, delimited->str, max_results);
 
   for (i = 0; i < ar->len; i++)
     {
-      const DzlFuzzyMutableIndexMatch *match;
-
-      match = &g_array_index (ar, DzlFuzzyMutableIndexMatch, i);
+      const DzlFuzzyMutableIndexMatch *match = &g_array_index (ar, DzlFuzzyMutableIndexMatch, i);
 
       if (ide_search_reducer_accepts (&reducer, match->score))
         {
@@ -339,16 +335,18 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           g_autofree gchar *markup = NULL;
 
           markup = dzl_fuzzy_highlight (match->key, delimited->str, FALSE);
+
           result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
-                                 "context", icontext,
-                                 "provider", provider,
+                                 "context", context,
                                  "score", match->score,
                                  "title", markup,
                                  "path", match->key,
                                  NULL);
-          ide_search_reducer_push (&reducer, IDE_SEARCH_RESULT (result));
+          ide_search_reducer_take (&reducer, g_steal_pointer (&result));
         }
     }
+
+  return ide_search_reducer_free (&reducer, FALSE);
 }
 
 gboolean

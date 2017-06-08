@@ -25,22 +25,22 @@ G_BEGIN_DECLS
 
 typedef struct
 {
-  IdeSearchContext  *context;
-  IdeSearchProvider *provider;
-  GSequence         *sequence;
-  gsize              max_results;
-  gsize              count;
+  GSequence *sequence;
+  gsize      max_results;
+  gsize      count;
 } IdeSearchReducer;
 
-void     ide_search_reducer_init    (IdeSearchReducer  *reducer,
-                                     IdeSearchContext  *context,
-                                     IdeSearchProvider *provider,
-                                     gsize              max_results);
-gboolean ide_search_reducer_accepts (IdeSearchReducer  *reducer,
-                                     gfloat             score);
-void     ide_search_reducer_push    (IdeSearchReducer  *reducer,
-                                     IdeSearchResult   *result);
-void     ide_search_reducer_destroy (IdeSearchReducer  *reducer);
+void       ide_search_reducer_init    (IdeSearchReducer  *reducer,
+                                       gsize              max_results);
+gboolean   ide_search_reducer_accepts (IdeSearchReducer  *reducer,
+                                       gfloat             score);
+void       ide_search_reducer_take    (IdeSearchReducer  *reducer,
+                                       IdeSearchResult   *result);
+void       ide_search_reducer_push    (IdeSearchReducer  *reducer,
+                                       IdeSearchResult   *result);
+void       ide_search_reducer_destroy (IdeSearchReducer  *reducer);
+GPtrArray *ide_search_reducer_free    (IdeSearchReducer  *reducer,
+                                       gboolean           free_results);
 
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (IdeSearchReducer, ide_search_reducer_destroy)
 

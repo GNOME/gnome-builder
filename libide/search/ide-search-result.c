@@ -1,6 +1,6 @@
 /* ide-search-result.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,192 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib/gi18n.h>
+#define G_LOG_DOMAIN "ide-search-result"
 
-#include "ide-context.h"
 #include "ide-search-result.h"
 
 typedef struct
 {
-  IdeSearchProvider *provider;
-  gchar             *title;
-  gchar             *subtitle;
-  gfloat             score;
+  gfloat score;
+  guint  priority;
 } IdeSearchResultPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchResult, ide_search_result, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_PROVIDER,
   PROP_SCORE,
-  PROP_SUBTITLE,
-  PROP_TITLE,
-  LAST_PROP
+  PROP_PRIORITY,
+  N_PROPS
 };
 
-static GParamSpec *properties [LAST_PROP];
+G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchResult, ide_search_result, DZL_TYPE_SUGGESTION)
 
-IdeSearchResult *
-ide_search_result_new (IdeSearchProvider *provider,
-                       const gchar       *title,
-                       const gchar       *subtitle,
-                       gfloat             score)
-{
-  IdeSearchResult *self;
-  IdeContext *context;
-
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), NULL);
-
-  context = ide_object_get_context (IDE_OBJECT (provider));
-
-  self = g_object_new (IDE_TYPE_SEARCH_RESULT,
-                       "context", context,
-                       "provider", provider,
-                       "score", score,
-                       "subtitle", subtitle,
-                       "title", title,
-                       NULL);
-
-  return self;
-}
-
-/**
- * ide_search_result_get_provider:
- * @result: A #IdeSearchResult.
- *
- * Gets the provider that created the search result.
- *
- * Returns: (transfer none): An #IdeSearchProvider.
- */
-IdeSearchProvider *
-ide_search_result_get_provider (IdeSearchResult *self)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
-
-  return priv->provider;
-}
-
-static void
-ide_search_result_set_provider (IdeSearchResult   *self,
-                                IdeSearchProvider *provider)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
-  g_return_if_fail (!provider || IDE_IS_SEARCH_PROVIDER (provider));
-
-  g_set_object (&priv->provider, provider);
-}
-
-const gchar *
-ide_search_result_get_title (IdeSearchResult *self)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
-
-  return priv->title;
-}
-
-const gchar *
-ide_search_result_get_subtitle (IdeSearchResult *self)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
-
-  return priv->subtitle;
-}
-
-gfloat
-ide_search_result_get_score (IdeSearchResult *self)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), 0.0);
-
-  return priv->score;
-}
-
-static void
-ide_search_result_set_title (IdeSearchResult *self,
-                             const gchar     *title)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
-
-  if (priv->title != title)
-    {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
-    }
-}
-
-static void
-ide_search_result_set_subtitle (IdeSearchResult *self,
-                                const gchar     *subtitle)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
-
-  if (priv->subtitle != subtitle)
-    {
-      g_free (priv->subtitle);
-      priv->subtitle = g_strdup (subtitle);
-    }
-}
-
-static void
-ide_search_result_set_score (IdeSearchResult *self,
-                             gfloat           score)
-{
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
-  g_return_if_fail (score >= 0.0);
-  g_return_if_fail (score <= 1.0);
-
-  priv->score = score;
-}
-
-gint
-ide_search_result_compare (const IdeSearchResult *a,
-                           const IdeSearchResult *b)
-{
-  gfloat fa;
-  gfloat fb;
-
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT ((IdeSearchResult*)a), 0);
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT ((IdeSearchResult*)b), 0);
-
-  fa = ide_search_result_get_score ((IdeSearchResult *)a);
-  fb = ide_search_result_get_score ((IdeSearchResult *)b);
-
-  if (fa < fb)
-    return -1;
-  else if (fa > fb)
-    return 1;
-  else
-    return 0;
-}
-
-static void
-ide_search_result_finalize (GObject *object)
-{
-  IdeSearchResult *self = (IdeSearchResult *)object;
-  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
-
-  g_clear_object (&priv->provider);
-  g_clear_pointer (&priv->title, g_free);
-  g_clear_pointer (&priv->subtitle, g_free);
-
-  G_OBJECT_CLASS (ide_search_result_parent_class)->finalize (object);
-}
+static GParamSpec *properties [N_PROPS];
 
 static void
 ide_search_result_get_property (GObject    *object,
@@ -213,20 +47,12 @@ ide_search_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_PROVIDER:
-      g_value_set_object (value, ide_search_result_get_provider (self));
-      break;
-
-    case PROP_TITLE:
-      g_value_set_string (value, ide_search_result_get_title (self));
-      break;
-
-    case PROP_SUBTITLE:
-      g_value_set_string (value, ide_search_result_get_subtitle (self));
-      break;
-
     case PROP_SCORE:
       g_value_set_float (value, ide_search_result_get_score (self));
+      break;
+
+    case PROP_PRIORITY:
+      g_value_set_int (value, ide_search_result_get_priority (self));
       break;
 
     default:
@@ -244,20 +70,12 @@ ide_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_PROVIDER:
-      ide_search_result_set_provider (self, g_value_get_object (value));
-      break;
-
-    case PROP_TITLE:
-      ide_search_result_set_title (self, g_value_get_string (value));
-      break;
-
-    case PROP_SUBTITLE:
-      ide_search_result_set_subtitle (self, g_value_get_string (value));
-      break;
-
     case PROP_SCORE:
       ide_search_result_set_score (self, g_value_get_float (value));
+      break;
+
+    case PROP_PRIORITY:
+      ide_search_result_set_priority (self, g_value_get_int (value));
       break;
 
     default:
@@ -270,50 +88,134 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_search_result_finalize;
   object_class->get_property = ide_search_result_get_property;
   object_class->set_property = ide_search_result_set_property;
-
-  properties [PROP_PROVIDER] =
-    g_param_spec_object ("provider",
-                         "Provider",
-                         "The Search Provider",
-                         IDE_TYPE_SEARCH_PROVIDER,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_TITLE] =
-    g_param_spec_string ("title",
-                         "Title",
-                         "The title of the search result.",
-                         NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SUBTITLE] =
-    g_param_spec_string ("subtitle",
-                         "Subtitle",
-                         "The subtitle of the search result.",
-                         NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SCORE] =
     g_param_spec_float ("score",
                         "Score",
-                        "The score of the search result.",
-                        0.0,
-                        1.0,
-                        0.0,
-                        (G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS));
+                        "The score of the result",
+                        -G_MINFLOAT,
+                        G_MAXFLOAT,
+                        0.0f,
+                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  properties [PROP_PRIORITY] =
+    g_param_spec_int ("priority",
+                      "Priority",
+                      "The priority of search result group",
+                      G_MININT,
+                      G_MAXINT,
+                      0,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_search_result_init (IdeSearchResult *self)
 {
+}
+
+IdeSearchResult *
+ide_search_result_new (void)
+{
+  return g_object_new (IDE_TYPE_SEARCH_RESULT, NULL);
+}
+
+gint
+ide_search_result_compare (gconstpointer a,
+                           gconstpointer b)
+{
+  IdeSearchResult *ra = (IdeSearchResult *)a;
+  IdeSearchResult *rb = (IdeSearchResult *)b;
+  IdeSearchResultPrivate *priva = ide_search_result_get_instance_private (ra);
+  IdeSearchResultPrivate *privb = ide_search_result_get_instance_private (rb);
+  gint ret;
+
+  ret = priva->priority - privb->priority;
+
+  if (ret == 0)
+    {
+      if (priva->score < privb->score)
+        priva->score = -1;
+      else if (priva->score > privb->score)
+        priva->score = 1;
+    }
+
+  return ret;
+}
+
+gfloat
+ide_search_result_get_score (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), 0.0f);
+
+  return priv->score;
+}
+
+void
+ide_search_result_set_score (IdeSearchResult *self,
+                             gfloat           score)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+
+  if (priv->score != score)
+    {
+      priv->score = score;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SCORE]);
+    }
+}
+
+gint
+ide_search_result_get_priority (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), 0.0);
+
+  return priv->priority;
+}
+
+void
+ide_search_result_set_priority (IdeSearchResult *self,
+                                gint             priority)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+
+  if (priv->priority != priority)
+    {
+      priv->priority = priority;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIORITY]);
+    }
+}
+
+/**
+ * ide_search_result_get_source_location:
+ * @self: a #IdeSearchResult
+ *
+ * Gets the file associated with the search result if any.
+ *
+ * Many search providers ultimately just open a file, so this may
+ * be used in lieu of handling the activate signal.
+ *
+ * Returns: (transfer full): An #IdeUri
+ */
+IdeSourceLocation *
+ide_search_result_get_source_location (IdeSearchResult *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+
+  if (IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location != NULL)
+    return IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location (self);
+
+  g_print ("nope\n");
+
+  return NULL;
 }

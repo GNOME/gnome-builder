@@ -1,6 +1,6 @@
 /* ide-search-engine.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015-2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
 
-IdeSearchContext *ide_search_engine_search (IdeSearchEngine   *self,
-                                            const gchar       *search_terms);
+IdeSearchEngine *ide_search_engine_new           (void);
+gboolean         ide_search_engine_get_busy      (IdeSearchEngine      *self);
+void             ide_search_engine_search_async  (IdeSearchEngine      *self,
+                                                  const gchar          *query,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+GListModel      *ide_search_engine_search_finish (IdeSearchEngine      *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
 
 G_END_DECLS
 
