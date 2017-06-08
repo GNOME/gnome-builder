@@ -75,7 +75,6 @@ libide/runner/ide-run-button.ui
 libide/runner/ide-run-manager.c
 libide/runner/ide-runner.c
 libide/runtimes/ide-runtime-manager.c
-libide/search/ide-omni-search-display.c
 libide/snippets/ide-source-snippet-completion-provider.c
 libide/snippets/ide-source-snippets-manager.c
 libide/sourceview/ide-source-view.c
