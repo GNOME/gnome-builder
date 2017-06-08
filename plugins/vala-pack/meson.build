@@ -76,6 +76,7 @@ shared_module('vala-pack-plugin', vala_pack_sources,
     libide_vapi,
   ],
   vala_args: [
+    '--target-glib=2.52',
     '--pkg=posix',
     '--pkg=libdazzle-1.0',
     '--pkg=libpeas-1.0',
