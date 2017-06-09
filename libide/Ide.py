@@ -62,6 +62,8 @@ def DBusMethod(dbus_interface, in_signature=None, out_signature=None, async=Fals
         return func
     return decorator
 
+Ide.DBusMethod = DBusMethod
+
 class DBusService:
     class _DBusInfo:
         object_path = None
@@ -132,7 +134,7 @@ class DBusService:
         try:
             info = self.__dbus_info.methods[iface_name][method_name]
         except KeyError:
-            invocation.return_error_literal(Gio.dbus_error_quark(), 
+            invocation.return_error_literal(Gio.dbus_error_quark(),
                                             Gio.DBusError.UNKNOWN_METHOD,
                                             'No such interface or method: %s.%s' % (iface_name, method_name))
             return
@@ -145,7 +147,7 @@ class DBusService:
                 ret = func(*parameters.unpack())
                 invocation.return_value(GLib.Variant('(' + info['out_signature'] + ')', (ret,)))
         except Exception as e:
-            invocation.return_error_literal(Gio.dbus_error_quark(), 
+            invocation.return_error_literal(Gio.dbus_error_quark(),
                                             Gio.DBusError.IO_ERROR,
                                             'Method %s.%s failed with: %s' % (iface_name, method_name, str(e)))
 
@@ -157,12 +159,12 @@ class DBusService:
         error = GLib.Error.new_literal(GLib.io_channel_error_quark(), 1, 'Not implemented yet')
         return False
 
+Ide.DBusService = DBusService
+
 def NotSupportedError():
     return GLib.Error.new_literal(Gio.io_error_quark(), 'not supported', Gio.IOErrorEnum.NOT_SUPPORTED)
 
 Ide.NotSupportedError = NotSupportedError
-Ide.DBusService = DBusService
-Ide.DBusMethod = DBusMethod
 
 #
 # GLib logging wrappers
