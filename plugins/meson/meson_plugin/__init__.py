@@ -158,7 +158,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
                         except:
                             pass
 
-            print('Meson: Warning: No flags found')
+            Ide.debug('No flags found for file', infile)
 
             task.return_boolean(True)
 
