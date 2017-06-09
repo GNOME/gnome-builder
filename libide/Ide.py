@@ -163,3 +163,39 @@ def NotSupportedError():
 Ide.NotSupportedError = NotSupportedError
 Ide.DBusService = DBusService
 Ide.DBusMethod = DBusMethod
+
+#
+# GLib logging wrappers
+#
+
+def _modname():
+    import inspect
+    frm = inspect.stack()[2]
+    mod = inspect.getmodule(frm[0])
+    return mod.__name__
+
+def _log(domain, level, *messages):
+    message = ' '.join(messages)
+    v = GLib.Variant('a{sv}', {'MESSAGE': GLib.Variant.new_string(message)})
+    GLib.log_variant(domain, level, v)
+
+def critical(*messages):
+    _log(_modname(), GLib.LogLevelFlags.LEVEL_CRITICAL, *messages)
+
+def warning(*messages):
+    _log(_modname(), GLib.LogLevelFlags.LEVEL_WARNING, *messages)
+
+def debug(*messages):
+    _log(_modname(), GLib.LogLevelFlags.LEVEL_DEBUG, *messages)
+
+def message(*messages):
+    _log(_modname(), GLib.LogLevelFlags.LEVEL_MESSAGE, *messages)
+
+def info(*messages):
+    _log(_modname(), GLib.LogLevelFlags.LEVEL_INFO, *messages)
+
+Ide.critical = critical
+Ide.debug = debug
+Ide.info = info
+Ide.message = message
+Ide.warning = warning
