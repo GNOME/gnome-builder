@@ -29,8 +29,7 @@ libgstyle_headers = [
   'gstyle-xyz.h',
 ]
 
-libgstyle_header_dir = join_paths(get_option('includedir'),
-  'gnome-builder-' + meson.project_version(), 'gstyle')
+libgstyle_header_dir = join_paths(pkgincludedir, 'gstyle')
 
 install_headers(libgstyle_headers,
   install_dir: libgstyle_header_dir,
