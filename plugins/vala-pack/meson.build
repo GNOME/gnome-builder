@@ -70,15 +70,22 @@ vala_pack_sources = [
   'vala-pack-plugin.vala',
 ]
 
+vala_pack_deps = [
+  libvala,
+  libide_vapi,
+]
+
+if libdazzle_bundled
+  vala_pack_deps += libdazzle_vapi
+else
+  vala_extra_args += '--pkg=libdazzle-1.0'
+endif
+
 shared_module('vala-pack-plugin', vala_pack_sources,
-  dependencies: plugin_deps + [
-    libvala,
-    libide_vapi,
-  ],
+  dependencies: plugin_deps + vala_pack_deps,
   vala_args: [
     '--target-glib=2.52',
     '--pkg=posix',
-    '--pkg=libdazzle-1.0',
     '--pkg=libpeas-1.0',
     '--pkg=gtksourceview-3.0',
     '--pkg=gio-2.0',

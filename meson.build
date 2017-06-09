@@ -159,16 +159,19 @@ endif
 
 libdazzle_gir = 'Dazzle-1.0'
 libdazzle_vapi = 'libdazzle-1.0'
+libdazzle_bundled = false
 if not libdazzle_dep.found()
   libdazzle = subproject('libdazzle',
     default_options: [
       'with_introspection=true',
-      'with_vapi=true'
+      'with_vapi=true',
+      'package_subdir=' + meson.project_name()
     ]
   )
   libdazzle_dep = libdazzle.get_variable('libdazzle_dep')
   libdazzle_gir = libdazzle.get_variable('libdazzle_gir')[0]
   libdazzle_vapi = libdazzle.get_variable('libdazzle_vapi')
+  libdazzle_bundled = true
 endif
 
 
