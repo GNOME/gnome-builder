@@ -145,11 +145,7 @@ if not libtemplate_glib_dep.found()
     default_options: [
       'with_introspection=true',
       'with_vapi=true',
-      'pkglibdir=' + pkglibdir,
-      'pkgincludedir=' + pkgincludedir,
-      'pkggirdir=' + pkggirdir,
-      'pkgvapidir=' + pkgvapidir,
-      'pkgtypelibdir=' + pkgtypelibdir,
+      'package_subdir=' + meson.project_name()
     ]
   )
   libtemplate_glib_dep = libtemplate_glib.get_variable('libtemplate_glib_dep')
