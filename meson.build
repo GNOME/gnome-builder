@@ -135,7 +135,12 @@ libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 0.1.0', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.25.2', required: false)
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.25.2',
-  fallback: ['jsonrpc-glib', 'libjsonrpc_glib_dep']
+  fallback: ['jsonrpc-glib', 'libjsonrpc_glib_dep'],
+  default_options: [
+    'with_introspection=false',
+    'with_vapi=false',
+    'package_subdir=' + meson.project_name()
+  ],
 )
 
 libtemplate_glib_gir = 'Template-1.0'
