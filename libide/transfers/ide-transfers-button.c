@@ -100,6 +100,8 @@ ide_transfers_button_update_visibility (IdeTransfersButton *self)
       NULL != (transfer_manager = ide_context_get_transfer_manager (context)))
     visible = !!g_list_model_get_n_items (G_LIST_MODEL (transfer_manager));
 
+  dzl_progress_menu_button_reset_theatrics (DZL_PROGRESS_MENU_BUTTON (self));
+
   gtk_widget_set_visible (GTK_WIDGET (self), visible);
 
   IDE_EXIT;
