@@ -129,7 +129,7 @@ configure_file(
 libgio_dep = dependency('gio-2.0', version: '>= 2.50.0')
 libgiounix_dep = dependency('gio-unix-2.0')
 libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
-libpeas_dep = dependency('libpeas-1.0', version: '>= 1.18.0')
+libpeas_dep = dependency('libpeas-1.0', version: '>= 1.21.0')
 libm_dep = cc.find_library('m', required: false)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 0.1.0', required: false)
