@@ -121,6 +121,13 @@ Keeping up with these requires updating much of the GNOME desktop.
 
 Please install via Flatpak, which does not have this restriction.
 
+We use Meson (and thereby Ninja) to build Builder.
+
+.. code-block:: sh
+
+   $ meson . build
+   $ ninja -C build install
+
 
 Troubleshooting
 ---------------
