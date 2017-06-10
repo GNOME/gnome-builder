@@ -32,84 +32,18 @@
 
 struct _IdeTransfersButton
 {
-  GtkMenuButton             parent_instance;
+  DzlProgressMenuButton  parent_instance;
 
-  GtkPopover               *popover;
-  GtkListBox               *list_box;
-  IdeTransfersProgressIcon *icon;
+  GtkPopover            *popover;
+  GtkListBox            *list_box;
 };
 
-G_DEFINE_TYPE (IdeTransfersButton, ide_transfers_button, GTK_TYPE_MENU_BUTTON)
-
-static void ide_transfers_button_begin_theatrics (IdeTransfersButton *self);
+G_DEFINE_TYPE (IdeTransfersButton, ide_transfers_button, DZL_TYPE_PROGRESS_MENU_BUTTON)
 
 GtkWidget *
 ide_transfers_button_new (void)
 {
   return g_object_new (IDE_TYPE_TRANSFERS_BUTTON, NULL);
-}
-
-static gboolean
-begin_theatrics_from_main (gpointer user_data)
-{
-  g_autoptr(IdeTransfersButton) self = user_data;
-
-  g_assert (IDE_IS_TRANSFERS_BUTTON (self));
-
-  ide_transfers_button_begin_theatrics (self);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-ide_transfers_button_begin_theatrics (IdeTransfersButton *self)
-{
-  g_autoptr(GIcon) icon = NULL;
-  DzlBoxTheatric *theatric;
-  GtkAllocation rect;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TRANSFERS_BUTTON (self));
-
-  gtk_widget_get_allocation (GTK_WIDGET (self), &rect);
-
-  if (rect.x == -1 && rect.y == -1)
-    {
-      /* Delay this until our widget has been mapped/realized/displayed */
-      g_timeout_add (50, begin_theatrics_from_main, g_object_ref (self));
-      return;
-    }
-
-  rect.x = 0;
-  rect.y = 0;
-
-  icon = g_themed_icon_new ("folder-download-symbolic");
-
-  theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
-                           "alpha", 1.0,
-                           "height", rect.height,
-                           "icon", icon,
-                           "target", self,
-                           "width", rect.width,
-                           "x", rect.x,
-                           "y", rect.y,
-                           NULL);
-
-  dzl_object_animate_full (theatric,
-                           DZL_ANIMATION_EASE_OUT_CUBIC,
-                           750,
-                           gtk_widget_get_frame_clock (GTK_WIDGET (self)),
-                           g_object_unref,
-                           theatric,
-                           "x", rect.x - 60,
-                           "width", rect.width + 120,
-                           "y", rect.y,
-                           "height", rect.height + 120,
-                           "alpha", 0.0,
-                           NULL);
-
-  IDE_EXIT;
 }
 
 static void
@@ -185,14 +119,8 @@ ide_transfers_button_context_set (GtkWidget  *widget,
 
   transfer_manager = ide_context_get_transfer_manager (context);
 
-  g_signal_connect_object (transfer_manager,
-                           "all-transfers-completed",
-                           G_CALLBACK (ide_transfers_button_begin_theatrics),
-                           self,
-                           G_CONNECT_SWAPPED);
-
   g_object_bind_property (transfer_manager, "progress",
-                          self->icon, "progress",
+                          self, "progress",
                           G_BINDING_SYNC_CREATE);
 
   g_signal_connect_object (transfer_manager,
@@ -236,7 +164,6 @@ ide_transfers_button_class_init (IdeTransfersButtonClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-transfers-button.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTransfersButton, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeTransfersButton, popover);
-  gtk_widget_class_bind_template_child (widget_class, IdeTransfersButton, icon);
 }
 
 static void

@@ -45,15 +45,10 @@
       </object>
     </child>
   </object>
-  <template class="IdeTransfersButton" parent="GtkMenuButton">
+  <template class="IdeTransfersButton" parent="DzlProgressMenuButton">
     <property name="popover">popover</property>
     <style>
       <class name="image-button"/>
     </style>
-    <child>
-      <object class="IdeTransfersProgressIcon" id="icon">
-        <property name="visible">true</property>
-      </object>
-    </child>
   </template>
 </interface>
