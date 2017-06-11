@@ -73,8 +73,7 @@ gbp_devhelp_workbench_addin_load (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  self->books = dh_book_manager_new ();
-  dh_book_manager_populate (self->books);
+  self->books = g_object_ref (dh_book_manager_get_singleton ());
 
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));

@@ -23,16 +23,16 @@ devhelp_sources = [
 ]
 
 devhelp_deps = plugin_deps + [
-  dependency('libdevhelp-3.0', version: '>=3.20.0'),
+  dependency('libdevhelp-3.0', version: '>=3.25.2'),
   libgd_dep,
 ]
 
 shared_module('devhelp-plugin', devhelp_sources,
   dependencies: devhelp_deps,
-  link_args: plugin_link_args,
+     link_args: plugin_link_args,
   link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
+       install: true,
+   install_dir: plugindir,
 )
 
 install_data('devhelp.plugin', install_dir: plugindir)
