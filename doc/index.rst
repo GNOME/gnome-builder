@@ -20,6 +20,7 @@ Contents
    exploring
    projects/index
    plugins/index
+   howto/index
    api/index
    contributing/index
    credits
