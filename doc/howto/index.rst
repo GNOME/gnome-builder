@@ -13,4 +13,5 @@ Contents
    :titlesonly:
 
    indentation
+   search_and_replace
 
