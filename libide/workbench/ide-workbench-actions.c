@@ -18,7 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-workbench"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
+#include <unistd.h>
 
 #include "ide-debug.h"
 
@@ -196,6 +198,32 @@ ide_workbench_actions_global_search (GSimpleAction *action,
   ide_workbench_header_bar_focus_search (self->header_bar);
 }
 
+static void
+ide_workbench_actions_counters (GSimpleAction *action,
+                                GVariant      *variant,
+                                gpointer       user_data)
+{
+  IdeWorkbench *self = user_data;
+  DzlCounterArena *arena;
+  GtkWindow *window;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  arena = dzl_counter_arena_new_for_pid (getpid ());
+  window = g_object_new (DZL_TYPE_COUNTERS_WINDOW,
+                         "title", _("Builder Statistics"),
+                         "default-width", 800,
+                         "default-height", 600,
+                         "transient-for", self,
+                         "modal", FALSE,
+                         NULL);
+  dzl_counters_window_set_arena (DZL_COUNTERS_WINDOW (window), arena);
+  gtk_window_present (window);
+
+  dzl_counter_arena_unref (arena);
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
@@ -206,6 +234,7 @@ ide_workbench_actions_init (IdeWorkbench *self)
     { "open-with-dialog", ide_workbench_actions_open_with_dialog },
     { "save-all", ide_workbench_actions_save_all },
     { "save-all-quit", ide_workbench_actions_save_all_quit },
+    { "counters", ide_workbench_actions_counters },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
