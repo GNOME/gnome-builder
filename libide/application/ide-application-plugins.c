@@ -393,6 +393,7 @@ ide_application_load_plugin_resources (IdeApplication *self,
                                        PeasEngine     *engine)
 {
   g_autofree gchar *path = NULL;
+  const gchar *data_dir;
   const gchar *module_name;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -402,8 +403,15 @@ ide_application_load_plugin_resources (IdeApplication *self,
   ide_application_plugins_load_plugin_gresources (self, plugin_info, engine);
 
   module_name = peas_plugin_info_get_module_name (plugin_info);
-  path = g_strdup_printf ("/org/gnome/builder/plugins/%s", module_name);
-  dzl_application_add_resource_path (DZL_APPLICATION (self), path);
+  data_dir = peas_plugin_info_get_data_dir (plugin_info);
+
+  /* Add embedded resources path */
+  path = g_strdup_printf ("resource:///org/gnome/builder/plugins/%s", module_name);
+  dzl_application_add_resources (DZL_APPLICATION (self), path);
+
+  /* If the data dir is not also a resource, add it */
+  if (!g_str_has_prefix (data_dir, "resource://"))
+    dzl_application_add_resources (DZL_APPLICATION (self), data_dir);
 }
 
 static void
@@ -412,6 +420,7 @@ ide_application_unload_plugin_resources (IdeApplication *self,
                                          PeasEngine     *engine)
 {
   g_autofree gchar *path = NULL;
+  const gchar *data_dir;
   const gchar *module_name;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -419,8 +428,15 @@ ide_application_unload_plugin_resources (IdeApplication *self,
   g_assert (PEAS_IS_ENGINE (engine));
 
   module_name = peas_plugin_info_get_module_name (plugin_info);
-  path = g_strdup_printf ("/org/gnome/builder/plugins/%s", module_name);
-  dzl_application_remove_resource_path (DZL_APPLICATION (self), path);
+  data_dir = peas_plugin_info_get_data_dir (plugin_info);
+
+  /* Remove embedded gresources */
+  path = g_strdup_printf ("resource:///org/gnome/builder/plugins/%s", module_name);
+  dzl_application_remove_resources (DZL_APPLICATION (self), path);
+
+  /* Remove on disk resources */
+  if (!g_str_has_prefix (data_dir, "resource://"))
+    dzl_application_remove_resources (DZL_APPLICATION (self), data_dir);
 
   ide_application_plugins_unload_plugin_gresources (self, plugin_info, engine);
 }
