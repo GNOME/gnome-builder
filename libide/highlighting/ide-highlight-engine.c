@@ -386,10 +386,19 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
   if ((self->highlighter == NULL) || (self->buffer == NULL) || (self->work_timeout != 0))
     return;
 
-  self->work_timeout =  gdk_threads_add_idle_full (G_PRIORITY_LOW,
-                                                   ide_highlight_engine_work_timeout_handler,
-                                                   self,
-                                                   NULL);
+  /*
+   * NOTE: It would be really nice if we could use the GdkFrameClock here to
+   *       drive the next update instead of a timeout. It's possible that our
+   *       callback could get scheduled right before the frame processing would
+   *       begin. However, since that gets driven by something like a Wayland
+   *       callback, it won't yet be scheduled. So instead our function gets
+   *       called and we potentially cause a frame to drop.
+   */
+
+  self->work_timeout = gdk_threads_add_idle_full (G_PRIORITY_LOW + 1,
+                                                  ide_highlight_engine_work_timeout_handler,
+                                                  self,
+                                                  NULL);
 }
 
 static gboolean
