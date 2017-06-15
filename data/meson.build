@@ -1,6 +1,6 @@
 
 # Desktop launcher and description file.
-i18n.merge_file(
+desktop_file = i18n.merge_file(
   input: 'org.gnome.Builder.desktop.in.in',
   output: 'org.gnome.Builder.desktop',
   type: 'desktop',
@@ -9,14 +9,29 @@ i18n.merge_file(
   install_dir: join_paths(get_option('datadir'), 'applications'),
 )
 
+desktop_utils = find_program('desktop-file-validate', required: false)
+if desktop_utils.found()
+  test('Validate desktop file', desktop_utils,
+    args: [desktop_file]
+  )
+endif
+
 # Appdata file.
-i18n.merge_file(
+appdata_file = i18n.merge_file(
   input: 'org.gnome.Builder.appdata.xml.in',
   output: 'org.gnome.Builder.appdata.xml',
   po_dir: '../po',
   install: true,
   install_dir: join_paths(get_option('datadir'), 'appdata'),
 )
+
+appstream_util = find_program('appstream-util', required: false)
+if appstream_util.found()
+  test('Validate appstream file', appstream_util,
+    # FIXME: Screenshots are wrong size for 'validate'
+    args: ['validate-relax', appdata_file]
+  )
+endif
 
 # D-Bus service file.
 dbusconf = configuration_data()
