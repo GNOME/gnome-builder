@@ -220,6 +220,7 @@ if get_option('with_flatpak') or get_option('with_git')
 endif
 
 gnome = import('gnome')
+i18n = import('i18n')
 
 subdir('data')
 subdir('data/fonts')
