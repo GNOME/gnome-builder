@@ -7,108 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-04-25 19:59+0000\n"
-"PO-Revision-Date: 2017-05-06 17:09+0500\n"
+"builder&keywords=I18N+L10N&component=translations (i18n)\n"
+"POT-Creation-Date: 2017-06-14 08:21+0000\n"
+"PO-Revision-Date: 2017-06-17 17:34+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 2.0.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-#: contrib/egg/egg-animation.c:730 contrib/pnl/pnl-animation.c:701
-#, c-format
-msgid "Cannot locate property %s in class %s"
-msgstr "%s қасиетін %s класы ішінен табу мүмкін емес"
-
-#: contrib/egg/egg-animation.c:1077 contrib/egg/egg-animation.c:1083
-#: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
-#, c-format
-msgid "Failed to find property %s in %s"
-msgstr "%s қасиетін %s ішінен табу сәтсіз аяқталды"
-
-#: contrib/egg/egg-animation.c:1091 contrib/pnl/pnl-animation.c:1067
-#, c-format
-msgid "Failed to find property %s in %s or parent %s"
-msgstr "%s қасиетін %s немесе аталық %s ішінен табу сәтсіз аяқталды"
-
-#: contrib/egg/egg-animation.c:1101 contrib/pnl/pnl-animation.c:1077
-#, c-format
-msgid "Failed to retrieve va_list value: %s"
-msgstr "va_list мәнін алу сәтсіз аяқталды: %s"
-
-#: contrib/egg/egg-date-time.c:55
-msgid "Just now"
-msgstr "Жаңа ғана"
-
-#: contrib/egg/egg-date-time.c:57
-msgid "An hour ago"
-msgstr "Бір сағат бұрын"
-
-#: contrib/egg/egg-date-time.c:59
-msgid "Yesterday"
-msgstr "Кеше"
-
-#: contrib/egg/egg-date-time.c:65
-msgid "About a year ago"
-msgstr "Шамамен бір жыл бұрын"
-
-#: contrib/egg/egg-date-time.c:69
-#, c-format
-msgid "About %u year ago"
-msgid_plural "About %u years ago"
-msgstr[0] "Шамамен %u жыл бұрын"
-
-#: contrib/egg/egg-file-chooser-entry.c:100
-#: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:685
-#: libide/workbench/ide-workbench-actions.c:76
-#: plugins/color-picker/gb-color-picker-prefs.c:210
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
-msgid "Open"
-msgstr "Ашу"
-
-#: contrib/egg/egg-file-chooser-entry.c:104
-msgid "Select"
-msgstr "Таңдау"
-
-#: contrib/egg/egg-file-chooser-entry.c:108
-#: plugins/create-project/gbp-create-project-genesis-addin.c:229
-msgid "Create"
-msgstr "Жасау"
-
-#: contrib/egg/egg-file-chooser-entry.c:112
-#: libide/editor/ide-editor-view-actions.c:316
-#: libide/editor/ide-editor-view-actions.c:447
-#: plugins/color-picker/gb-color-picker-prefs.c:237
-#: plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: plugins/terminal/gb-terminal-view-actions.c:306
-msgid "Save"
-msgstr "Сақтау"
-
-#: contrib/egg/egg-file-chooser-entry.c:455
-msgid "Browse…"
-msgstr "Шолу…"
-
-#: contrib/egg/egg-file-chooser-entry.c:488
-#: libide/editor/ide-editor-view-actions.c:315
-#: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:684
-#: libide/workbench/ide-workbench-actions.c:77
-#: plugins/color-picker/gb-color-picker-prefs.c:98
-#: plugins/color-picker/gb-color-picker-prefs.c:214
-#: plugins/color-picker/gb-color-picker-prefs.c:241
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
-#: plugins/terminal/gb-terminal-view-actions.c:305
-msgid "Cancel"
-msgstr "Бас тарту"
-
-#: contrib/egg/egg-search-bar.c:378
-msgid "Search"
-msgstr "Іздеу"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
@@ -298,7 +207,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Баптауларды қолданып, палитраны жүктеу немесе генерациялау"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5866
+#: libide/sourceview/ide-source-view.c:5958
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Атын ауыстыру"
@@ -313,29 +222,6 @@ msgstr "Өшіру"
 #: plugins/project-tree/gtk/menus.ui:57
 msgid "_Rename"
 msgstr "Атын ауысты_ру"
-
-#: contrib/search/trie.c:790
-#, c-format
-msgid "Traversal order %u is not supported on Trie."
-msgstr ""
-
-#: contrib/tmpl/tmpl-parser.c:199
-#, c-format
-msgid "%s() may only be called once"
-msgstr "%s() тек бір рет шақыруға болады"
-
-#: contrib/tmpl/tmpl-parser.c:211
-msgid "Parser does not contain an input stream"
-msgstr "Талдаушыда кіріс ағыны жоқ"
-
-#: contrib/tmpl/tmpl-template.c:454
-msgid "Must parse template before expanding"
-msgstr ""
-
-#: contrib/tmpl/tmpl-template-locator.c:105
-#, c-format
-msgid "Failed to locate template “%s”"
-msgstr "\"%s\" шаблонын табу сәтсіз аяқталды"
 
 #: contrib/xml/xml-reader.c:327
 msgid "Could not parse XML from stream"
@@ -461,7 +347,7 @@ msgstr "Іске қосылған болса, түзеткіш жолдар нө
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 #: libide/editor/ide-editor-tweak-widget.ui:91
-#: libide/preferences/ide-preferences-builtin.c:150
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid "Smart Backspace"
 msgstr "Ақылды Backspace"
 
@@ -474,7 +360,7 @@ msgstr ""
 "өшіретін болады."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: libide/preferences/ide-preferences-builtin.c:149
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Smart Home and End"
 msgstr "Ақылды Home және End пернелері"
 
@@ -490,42 +376,70 @@ msgstr "Тор сызықтарын көрсету"
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Іске қосылған болса, түзеткіш құжатта тор сызықтарын көрсетеді."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:74
-#: libide/preferences/ide-preferences-builtin.c:172
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:78
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Show overview map"
 msgstr "Көрініс картасын көрсету"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
 msgid "Automatically Hide Overview Map"
 msgstr "Көрініс картасын автожасыру"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
 msgid "Draw Spaces"
 msgstr "Бос аралықтарды салу"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
 msgid "The various types of space to draw in the editor."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
-#: libide/preferences/ide-preferences-builtin.c:161
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
+#: libide/preferences/ide-preferences-builtin.c:158
 msgid "Overscroll"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
 msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
+msgid "Wrap Text"
+msgstr "Мәтіндік аймалау"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+msgid ""
+"If enabled, Builder will automatically wrap text so all of the line text is "
+"visible."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
+#: libide/preferences/ide-preferences-builtin.c:182
+msgid "Autosave Enabled"
+msgstr "Автосақтау іске қосулы"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+msgid "Enable or disable autosave feature."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
+#: libide/preferences/ide-preferences-builtin.c:183
+msgid "Autosave Frequency"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+msgid "The number of seconds after modification before auto saving."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -578,7 +492,7 @@ msgid "Search directories for projects."
 msgstr "Бумадардан жобаларды іздеу."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:398
 msgid "Projects directory"
 msgstr "Жобалар бумасы"
 
@@ -756,7 +670,7 @@ msgstr "Кірі_стіру"
 msgid "_Delete"
 msgstr "Ө_шіру"
 
-#: data/gtk/menus.ui:151 libide/preferences/ide-preferences-builtin.c:190
+#: data/gtk/menus.ui:151 libide/preferences/ide-preferences-builtin.c:191
 msgid "Highlighting"
 msgstr "Түспен ерекшелеу"
 
@@ -852,7 +766,7 @@ msgstr "Солға жылжыту"
 msgid "Move Right"
 msgstr "Оңға жылжыту"
 
-#: data/gtk/menus.ui:305
+#: data/gtk/menus.ui:305 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
 msgstr "_Сақтау"
 
@@ -870,8 +784,8 @@ msgstr "_Жабу"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:547
-#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/application/ide-application.c:505
+#: libide/preferences/ide-preferences-builtin.c:140
 #: libide/workbench/ide-workbench.c:566
 msgid "Builder"
 msgstr "Құрастырушы"
@@ -1069,66 +983,66 @@ msgstr ""
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
-#: libide/buffers/ide-buffer-manager.c:677
+#: libide/buffers/ide-buffer-manager.c:678
 msgid "File too large to be opened."
 msgstr "Файл ашуға үшін тым үлкен."
 
-#: libide/buffers/ide-buffer-manager.c:1771
+#: libide/buffers/ide-buffer-manager.c:1793
 #, c-format
 msgid "unsaved document %u"
 msgstr "сақталмаған құжат %u"
 
-#: libide/buffers/ide-buffer-manager.c:1805
+#: libide/buffers/ide-buffer-manager.c:1827
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
-#: libide/buildsystem/ide-build-pipeline.c:2143
+#: libide/buildsystem/ide-build-pipeline.c:2247
 msgid "Cleaning…"
 msgstr "Тазарту…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2158
+#: libide/buildsystem/ide-build-pipeline.c:2262
 msgid "Downloading…"
 msgstr "Жүктелуде…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2162
+#: libide/buildsystem/ide-build-pipeline.c:2266
 msgid "Building dependencies…"
 msgstr "Тәуелділіктерді құрастыру…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2166
+#: libide/buildsystem/ide-build-pipeline.c:2270
 msgid "Bootstrapping…"
 msgstr "Ортаны дайындау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2170
+#: libide/buildsystem/ide-build-pipeline.c:2274
 msgid "Configuring…"
 msgstr "Баптау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2174
+#: libide/buildsystem/ide-build-pipeline.c:2278
 msgid "Building…"
 msgstr "Жинау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2178
+#: libide/buildsystem/ide-build-pipeline.c:2282
 msgid "Installing…"
 msgstr "Орнату…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2182
+#: libide/buildsystem/ide-build-pipeline.c:2286
 msgid "Exporting…"
 msgstr "Экспорттау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2186
-#: libide/buildsystem/ide-build-pipeline.c:2190
+#: libide/buildsystem/ide-build-pipeline.c:2290
+#: libide/buildsystem/ide-build-pipeline.c:2294
 msgid "Success"
 msgstr "Сәтті аяқталды"
 
-#: libide/buildsystem/ide-build-pipeline.c:2194
-#: libide/workbench/ide-omni-bar.ui:332
+#: libide/buildsystem/ide-build-pipeline.c:2298
+#: libide/workbench/ide-omni-bar.ui:360
 msgid "Failed"
 msgstr "Сәтсіз"
 
-#: libide/buildsystem/ide-build-pipeline.c:2198
+#: libide/buildsystem/ide-build-pipeline.c:2302
 msgid "Preparing…"
 msgstr "Дайындау…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2202
+#: libide/buildsystem/ide-build-pipeline.c:2306
 msgid "Ready"
 msgstr "Дайын"
 
@@ -1136,9 +1050,9 @@ msgstr "Дайын"
 msgid "Cannot execute transfer while on metered connection"
 msgstr ""
 
-#: libide/buildsystem/ide-configuration-manager.c:76
-#: libide/preferences/ide-preferences-builtin.c:337
-#: libide/preferences/ide-preferences-builtin.c:355
+#: libide/buildsystem/ide-configuration-manager.c:86
+#: libide/preferences/ide-preferences-builtin.c:339
+#: libide/preferences/ide-preferences-builtin.c:357
 msgid "Default"
 msgstr "Стандартты"
 
@@ -1151,8 +1065,8 @@ msgid "Delete the configuration"
 msgstr ""
 
 #: libide/buildui/ide-build-configuration-view.ui:11
-#: libide/preferences/ide-preferences-builtin.c:316
-#: libide/preferences/ide-preferences-builtin.c:377
+#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:379
 msgid "General"
 msgstr "Жалпы"
 
@@ -1194,7 +1108,18 @@ msgstr "Орындалу ортасы"
 msgid "Environment"
 msgstr "Қоршам"
 
-#: libide/buildui/ide-build-log-panel.c:732
+#: libide/buildui/ide-build-log-panel.c:737
+msgid "Save File"
+msgstr "Файлды сақтау"
+
+#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:31
+#: libide/greeter/ide-greeter-perspective.ui:317
+#: libide/greeter/ide-greeter-perspective.ui:365
+#: libide/workbench/ide-omni-bar.ui:388
+msgid "_Cancel"
+msgstr "Ба_с тарту"
+
+#: libide/buildui/ide-build-log-panel.c:773
 msgid "Build Output"
 msgstr "Құрастыру шығысы"
 
@@ -1206,6 +1131,10 @@ msgstr "Құрастыру журналын тазарту"
 #: libide/workbench/ide-omni-bar.ui:133
 msgid "Cancel build"
 msgstr "Құрастыруды тоқтату"
+
+#: libide/buildui/ide-build-log-panel.ui:59
+msgid "Save build log"
+msgstr "Құрастыру журналын сақтау"
 
 #: libide/buildui/ide-build-panel.c:86
 #, c-format
@@ -1220,8 +1149,8 @@ msgid_plural "%d errors"
 msgstr[0] "%d қате"
 
 #: libide/buildui/ide-build-panel.c:521
-#: libide/preferences/ide-preferences-builtin.c:375
-#: libide/workbench/ide-omni-bar.ui:386
+#: libide/preferences/ide-preferences-builtin.c:377
+#: libide/workbench/ide-omni-bar.ui:414
 msgid "Build"
 msgstr "Жинау"
 
@@ -1387,12 +1316,12 @@ msgstr "нұсқасыз"
 msgid "No file was provided."
 msgstr "Файл ұсынылмады."
 
-#: libide/editor/ide-editor-frame.c:138
+#: libide/editor/ide-editor-frame.c:139
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "Жол %u, баған %u"
 
-#: libide/editor/ide-editor-frame.c:310
+#: libide/editor/ide-editor-frame.c:311
 #, c-format
 msgid "%u of %u"
 msgstr "%u, барлығы %u"
@@ -1460,9 +1389,9 @@ msgstr "Жолға өту"
 msgid "Go"
 msgstr "Өту"
 
-#: libide/editor/ide-editor-perspective.c:523
-#: libide/preferences/ide-preferences-builtin.c:109
-#: libide/preferences/ide-preferences-builtin.c:156
+#: libide/editor/ide-editor-perspective.c:522
+#: libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
 msgstr "Түзетуші"
 
@@ -1484,24 +1413,24 @@ msgid ""
 "installed."
 msgstr ""
 
-#: libide/editor/ide-editor-spell-widget.c:201
+#: libide/editor/ide-editor-spell-widget.c:202
 msgid "No suggestions"
 msgstr "Ұсыныстар жоқ"
 
-#: libide/editor/ide-editor-spell-widget.c:278
+#: libide/editor/ide-editor-spell-widget.c:279
 msgid "Completed spell checking"
 msgstr "Емлені тексеру аяқталды"
 
-#: libide/editor/ide-editor-spell-widget.c:636
+#: libide/editor/ide-editor-spell-widget.c:637
 msgid "This word is already in the personal dictionary"
 msgstr "Бұл сөз жеке сөздікте бар болып тұр"
 
-#: libide/editor/ide-editor-spell-widget.c:639
+#: libide/editor/ide-editor-spell-widget.c:640
 #, c-format
 msgid "This word is already in the %s dictionary"
 msgstr "Бұл сөз %s сөздігінде бар болып тұр"
 
-#: libide/editor/ide-editor-spell-widget.c:1270
+#: libide/editor/ide-editor-spell-widget.c:1271
 msgid "The word is not in the dictionary"
 msgstr "Бұл сөз сөздікте емес"
 
@@ -1574,17 +1503,17 @@ msgid "Auto indent"
 msgstr "Автошегіну"
 
 #: libide/editor/ide-editor-tweak-widget.ui:99
-#: libide/preferences/ide-preferences-builtin.c:324
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Indentation"
 msgstr "Шегіну"
 
 #: libide/editor/ide-editor-tweak-widget.ui:127
-#: libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Spaces"
 msgstr "Бос аралықтар"
 
 #: libide/editor/ide-editor-tweak-widget.ui:137
-#: libide/preferences/ide-preferences-builtin.c:177
+#: libide/preferences/ide-preferences-builtin.c:174
 msgid "Tabs"
 msgstr "Табуляция"
 
@@ -1604,24 +1533,37 @@ msgstr "4"
 msgid "8"
 msgstr "8"
 
-#: libide/editor/ide-editor-view-actions.c:309
+#: libide/editor/ide-editor-view-actions.c:310
 msgid "Save Document"
 msgstr "Құжатты сақтау"
 
-#: libide/editor/ide-editor-view-actions.c:435
+#: libide/editor/ide-editor-view-actions.c:316
+#: libide/editor/ide-editor-view-actions.c:447
+#: libide/greeter/ide-greeter-perspective.c:680
+#: libide/workbench/ide-workbench-actions.c:79
+#: plugins/color-picker/gb-color-picker-prefs.c:97
+#: plugins/color-picker/gb-color-picker-prefs.c:213
+#: plugins/color-picker/gb-color-picker-prefs.c:240
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
+#: plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Бас тарту"
+
+#: libide/editor/ide-editor-view-actions.c:317
+#: libide/editor/ide-editor-view-actions.c:448
+#: plugins/color-picker/gb-color-picker-prefs.c:236
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Сақтау"
+
+#: libide/editor/ide-editor-view-actions.c:436
 msgid "Save Document As"
 msgstr "Құжатты қалайша сақтау"
 
 #: libide/editor/ide-editor-view.ui:23
 msgid "_Reload"
 msgstr "Қа_йта жүктеу"
-
-#: libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:317
-#: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:360
-msgid "_Cancel"
-msgstr "Ба_с тарту"
 
 #: libide/editor/ide-editor-view.ui:44
 msgid ""
@@ -1631,15 +1573,22 @@ msgstr ""
 "Құрастырушы бұл файл сыртқы қолданбамен өзгертілгенін анықтады. Бұл файлды "
 "қайта жүктеуді қалайсыз ба?"
 
-#: libide/greeter/ide-greeter-perspective.c:457
+#: libide/greeter/ide-greeter-perspective.c:453
 msgid "Failed to load the project"
 msgstr "Жобаны жүктеу сәтсіз аяқталды"
 
-#: libide/greeter/ide-greeter-perspective.c:680
+#: libide/greeter/ide-greeter-perspective.c:676
 msgid "Open Project"
 msgstr "Жобаны ашу"
 
-#: libide/greeter/ide-greeter-perspective.c:696
+#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/workbench/ide-workbench-actions.c:78
+#: plugins/color-picker/gb-color-picker-prefs.c:209
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
+msgid "Open"
+msgstr "Ашу"
+
+#: libide/greeter/ide-greeter-perspective.c:692
 msgid "All Project Types"
 msgstr "Барлық жобалар түрлері"
 
@@ -1712,11 +1661,11 @@ msgstr ""
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: libide/ide-context.c:2017
+#: libide/ide-context.c:2050
 msgid "An unload request is already pending"
 msgstr ""
 
-#: libide/ide-context.c:2136
+#: libide/ide-context.c:2169
 msgid "Context has already been restored."
 msgstr ""
 
@@ -2075,240 +2024,268 @@ msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Терминалдан мәтінді табу"
 
-#: libide/preferences/ide-preferences-builtin.c:65
-#: libide/preferences/ide-preferences-builtin.c:66
+#: libide/preferences/ide-preferences-builtin.c:61
+#: libide/preferences/ide-preferences-builtin.c:62
 msgid "Extensions"
 msgstr "Кеңейтулер"
 
-#: libide/preferences/ide-preferences-builtin.c:102
+#: libide/preferences/ide-preferences-builtin.c:98
 msgid "Appearance"
 msgstr "Сыртқы түрі"
 
-#: libide/preferences/ide-preferences-builtin.c:104
+#: libide/preferences/ide-preferences-builtin.c:100
 msgid "Themes"
 msgstr "Темалар"
 
-#: libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:101
 msgid "Dark Theme"
 msgstr "Күңгірт тема"
 
-#: libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:101
 msgid "Whether Builder should use a dark theme"
 msgstr "Құрастырушы күңгірт теманы қолдану керек пе"
 
-#: libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:101
 msgid "dark theme"
 msgstr "күңгірт тема"
 
-#: libide/preferences/ide-preferences-builtin.c:106
+#: libide/preferences/ide-preferences-builtin.c:102
 msgid "Grid Pattern"
 msgstr "Тор оюы"
 
-#: libide/preferences/ide-preferences-builtin.c:106
+#: libide/preferences/ide-preferences-builtin.c:102
 msgid "Display a grid pattern underneath source code"
 msgstr "Бастапқы кода артында тор оюын көрсету"
 
-#: libide/preferences/ide-preferences-builtin.c:108
+#: libide/preferences/ide-preferences-builtin.c:104
 msgid "Font"
 msgstr "Қаріп"
 
-#: libide/preferences/ide-preferences-builtin.c:109
+#: libide/preferences/ide-preferences-builtin.c:105
 msgctxt "Keywords"
 msgid "editor font monospace"
 msgstr ""
 
 #. XXX: This belongs in terminal addin
-#: libide/preferences/ide-preferences-builtin.c:111
-#: plugins/terminal/gb-terminal-workbench-addin.c:203
+#: libide/preferences/ide-preferences-builtin.c:107
+#: plugins/terminal/gb-terminal-workbench-addin.c:202
 msgid "Terminal"
 msgstr "Терминал"
 
-#: libide/preferences/ide-preferences-builtin.c:111
+#: libide/preferences/ide-preferences-builtin.c:107
 msgctxt "Keywords"
 msgid "terminal font monospace"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:116
+#: libide/preferences/ide-preferences-builtin.c:112
 msgid "Color Scheme"
 msgstr "Түстер схемасы"
 
-#: libide/preferences/ide-preferences-builtin.c:141
+#: libide/preferences/ide-preferences-builtin.c:137
 msgid "Keyboard"
 msgstr "Пернетақта"
 
-#: libide/preferences/ide-preferences-builtin.c:143
+#: libide/preferences/ide-preferences-builtin.c:139
 msgid "Emulation"
 msgstr "Эмуляция"
 
-#: libide/preferences/ide-preferences-builtin.c:144
+#: libide/preferences/ide-preferences-builtin.c:140
 msgid "Default keybinding mode which mimics gedit"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:145
+#: libide/preferences/ide-preferences-builtin.c:141
 msgid "Emacs"
 msgstr "Emacs"
 
-#: libide/preferences/ide-preferences-builtin.c:145
+#: libide/preferences/ide-preferences-builtin.c:141
 msgid "Emulates the Emacs text editor"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:146
+#: libide/preferences/ide-preferences-builtin.c:142
 msgid "Vim"
 msgstr "Vim"
 
-#: libide/preferences/ide-preferences-builtin.c:146
+#: libide/preferences/ide-preferences-builtin.c:142
 msgid "Emulates the Vim text editor"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:148
+#: libide/preferences/ide-preferences-builtin.c:144
 msgid "Movement"
 msgstr "Жылжу"
 
-#: libide/preferences/ide-preferences-builtin.c:149
+#: libide/preferences/ide-preferences-builtin.c:145
 msgid "Home moves to first non-whitespace character"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:150
+#: libide/preferences/ide-preferences-builtin.c:146
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:158
+#: libide/preferences/ide-preferences-builtin.c:154
 msgid "Cursor"
 msgstr "Курсор"
 
-#: libide/preferences/ide-preferences-builtin.c:159
+#: libide/preferences/ide-preferences-builtin.c:155
 msgid "Restore cursor position"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:159
+#: libide/preferences/ide-preferences-builtin.c:155
 msgid "Restore cursor position when a file is reopened"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:156
+msgid "Enable text wrapping"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:156
+msgid "Wrap text that is too wide to display"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:157
 msgid "Scroll Offset"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:160
+#: libide/preferences/ide-preferences-builtin.c:157
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:161
+#: libide/preferences/ide-preferences-builtin.c:158
 msgid "Allow the editor to scroll past the end of the buffer"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:163
+#: libide/preferences/ide-preferences-builtin.c:160
 msgid "Line Information"
 msgstr "Жол ақпараты"
 
-#: libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Line numbers"
 msgstr "Жолдар нөмірлері"
 
-#: libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:161
 msgid "Show line number at beginning of each line"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:162
 msgid "Line changes"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:162
 msgid "Show if a line was added or modified next to line number"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:167
+#: libide/preferences/ide-preferences-builtin.c:164
 msgid "Highlight"
 msgstr "Түспен ерекшелеу"
 
-#: libide/preferences/ide-preferences-builtin.c:168
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Current line"
 msgstr "Ағымдағы жол"
 
-#: libide/preferences/ide-preferences-builtin.c:168
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Make current line stand out with highlights"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:169
+#: libide/preferences/ide-preferences-builtin.c:166
 msgid "Matching brackets"
 msgstr "Сәйкес жақшалар"
 
-#: libide/preferences/ide-preferences-builtin.c:169
+#: libide/preferences/ide-preferences-builtin.c:166
 msgid "Highlight matching brackets based on cursor position"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:171
+#: libide/preferences/ide-preferences-builtin.c:168
 msgid "Code Overview"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:172
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "A zoomed out view to enhance navigating source code"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:173
+#: libide/preferences/ide-preferences-builtin.c:170
 msgid "Automatically hide overview map"
 msgstr "Көрініс картасын автожасыру"
 
-#: libide/preferences/ide-preferences-builtin.c:173
+#: libide/preferences/ide-preferences-builtin.c:170
 msgid "Automatically hide map when editor loses focus"
 msgstr "Түзеткіш фокусты жоғалтқан кезде көрініс картасын автожасыру"
 
-#: libide/preferences/ide-preferences-builtin.c:175
+#: libide/preferences/ide-preferences-builtin.c:172
 msgid "Whitespace Characters"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:178
+#: libide/preferences/ide-preferences-builtin.c:175
 msgid "New line and carriage return"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:179
+#: libide/preferences/ide-preferences-builtin.c:176
 msgid "Non-breaking spaces"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:180
+#: libide/preferences/ide-preferences-builtin.c:177
 msgid "Spaces inside of text"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:181
+#: libide/preferences/ide-preferences-builtin.c:178
 msgid "Trailing Only"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:182
+#: libide/preferences/ide-preferences-builtin.c:179
 msgid "Leading Only"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:188
+#: libide/preferences/ide-preferences-builtin.c:181
+msgid "Autosave"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:182
+msgid "Enable or disable autosave feature"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:183
+msgid "The number of seconds after modification before auto saving"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:189
 msgid "Code Insight"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:191
+#: libide/preferences/ide-preferences-builtin.c:192
 msgid "Semantic Highlighting"
 msgstr "Семантикалық түспен ерекшелеу"
 
-#: libide/preferences/ide-preferences-builtin.c:191
+#: libide/preferences/ide-preferences-builtin.c:192
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:193
+#: libide/preferences/ide-preferences-builtin.c:194
 msgid "Completion"
 msgstr "Толықтыру"
 
-#: libide/preferences/ide-preferences-builtin.c:194
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid "Suggest words found in open files"
 msgstr "Ашық файлдардан табылған сөздерді ұсыну"
 
-#: libide/preferences/ide-preferences-builtin.c:194
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:196
+msgid "Minimum word size"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:196
+msgid "Minimum word size for word completion"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid "Suggest completions using Ctags"
 msgstr "Ctags көмегімен толықтыруларды ұсыну (сынамалы)"
 
-#: libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
@@ -2316,176 +2293,168 @@ msgstr ""
 "Кластар атауларын, функцияларды және т.б. толықтыру үшін Ctags дерекқорын "
 "жасау және басқару"
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Clang көмегімен толықтыруларды ұсыну (сынамалы)"
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "C және C++тілдерінде толықтыруларды ұсыну үшін Clang қолдану"
 
-#: libide/preferences/ide-preferences-builtin.c:198
+#: libide/preferences/ide-preferences-builtin.c:200
 msgid "Diagnostics"
 msgstr "Диагностика"
 
-#: libide/preferences/ide-preferences-builtin.c:204
+#: libide/preferences/ide-preferences-builtin.c:206
 #: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Снипеттер"
 
-#: libide/preferences/ide-preferences-builtin.c:207
+#: libide/preferences/ide-preferences-builtin.c:209
 msgid "Code snippets"
 msgstr "Код снипеттері"
 
-#: libide/preferences/ide-preferences-builtin.c:207
+#: libide/preferences/ide-preferences-builtin.c:209
 msgid "Use code fragments to increase typing efficiency"
 msgstr "Теру жылдамдығын арттыру үшін код бөліктерін қолдану"
 
-#: libide/preferences/ide-preferences-builtin.c:251
+#: libide/preferences/ide-preferences-builtin.c:253
 msgid "Programming Languages"
 msgstr "Бағдарламалау тілдері"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: libide/preferences/ide-preferences-builtin.c:262
+#: libide/preferences/ide-preferences-builtin.c:264
 msgid "Search languages…"
 msgstr "Тілдерді іздеу…"
 
-#: libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:319
 msgid "Trim trailing whitespace"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:317
+#: libide/preferences/ide-preferences-builtin.c:319
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Overwrite Braces"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Overwrite closing braces"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Margins"
 msgstr "Шет өрістері"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:323
 msgid "Show right margin"
 msgstr "Оң жақ шет өрісін көрсету"
 
-#: libide/preferences/ide-preferences-builtin.c:322
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Right margin position"
 msgstr "Оң жақ шет өрісінің орны"
 
-#: libide/preferences/ide-preferences-builtin.c:322
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Position in spaces for the right margin"
 msgstr "Оң жақ шет өрісінің бос аралықтармен есептелген орны"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Tab width"
 msgstr "Табуляция ені"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Width of a tab character in spaces"
 msgstr "Табуляцияның бос аралықтармен есептелген ені"
 
-#: libide/preferences/ide-preferences-builtin.c:326
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Insert spaces instead of tabs"
 msgstr "Табуляция орнына бос аралықтарды енгізу"
 
-#: libide/preferences/ide-preferences-builtin.c:326
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Prefer spaces over use of tabs"
 msgstr "Табуляцияның орнына бос аралықтарды қолдану"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Automatically indent"
 msgstr "Автошегіну"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Indent source code as you type"
 msgstr "Бастапқы кодты теріп отырған кезде шегіну"
 
-#: libide/preferences/ide-preferences-builtin.c:342
-#: libide/preferences/ide-preferences-builtin.c:360
+#: libide/preferences/ide-preferences-builtin.c:344
+#: libide/preferences/ide-preferences-builtin.c:362
 msgid "Number of CPU"
 msgstr "Процессорлар саны"
 
-#: libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:380
 msgid "Build Workers"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:380
 msgid "Number of parallel build workers"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:386
+#: libide/preferences/ide-preferences-builtin.c:388
 msgid "Network"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:387
+#: libide/preferences/ide-preferences-builtin.c:389
 msgid "Allow downloads over metered connections"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:387
+#: libide/preferences/ide-preferences-builtin.c:389
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr ""
 
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:395
 msgid "Projects"
 msgstr "Жобалар"
 
-#: libide/preferences/ide-preferences-builtin.c:395
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Workspace"
 msgstr "Жұмыс орны"
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:398
 msgid "A place for all your projects"
 msgstr "Жобаларыңыз үшін орын"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Restore previously opened files"
 msgstr "Алдында ашылған файлдарды қалпына келтіру"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Open previously opened files when loading a project"
 msgstr "Жобаны жүктеу кезінде алдында ашылған файлдарды ашу"
 
-#: libide/preferences/ide-preferences-builtin.c:399
+#: libide/preferences/ide-preferences-builtin.c:401
 msgid "Project Discovery"
 msgstr "Жобаларды табу"
 
-#: libide/preferences/ide-preferences-builtin.c:400
+#: libide/preferences/ide-preferences-builtin.c:402
 msgid "Discover projects on my computer"
 msgstr "Компьютерімдегі жобаларды табу"
 
-#: libide/preferences/ide-preferences-builtin.c:400
+#: libide/preferences/ide-preferences-builtin.c:402
 msgid "Scan your computer for existing projects"
 msgstr "Компьютеріңізден бар болып тұрған жобаларды іздеу"
 
-#: libide/preferences/ide-preferences-builtin.c:521
-#: plugins/create-project/gbp-create-project-widget.ui:153
+#: libide/preferences/ide-preferences-builtin.c:523
+#: plugins/create-project/gbp-create-project-widget.ui:154
 msgid "Version Control"
 msgstr "Нұсқаларды басқару"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:533
+#: libide/preferences/ide-preferences-builtin.c:535
 msgid "SDKs"
 msgstr ""
 
-#: libide/preferences/ide-preferences-font-button.ui:57
-msgid "_Select"
-msgstr "Таң_дау"
-
-#: libide/preferences/ide-preferences-perspective.c:965
+#: libide/preferences/ide-preferences-perspective.c:124
 msgid "Preferences"
 msgstr "Баптаулар"
-
-#: libide/preferences/ide-preferences-perspective.ui:15
-msgid "Search Preferences"
-msgstr "Іздеу баптаулары"
 
 #: libide/projects/ide-project.c:527
 msgid "Destination file must be within the project tree."
@@ -2495,7 +2464,7 @@ msgstr "Мақсат файлы жоба ағашының ішінде болу�
 msgid "File must be within the project tree."
 msgstr "Файл жоба ағашының ішінде болуы тиіс."
 
-#: libide/projects/ide-recent-projects.c:396
+#: libide/projects/ide-recent-projects.c:402
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() тек бір рет орындауға болады"
@@ -2508,32 +2477,24 @@ msgstr "Орындалуын тоқтату"
 msgid "Change run options"
 msgstr "Орындалу баптауларын өзгерту"
 
-#: libide/runner/ide-run-manager.c:225
-msgid "Run"
-msgstr "Жөнелту"
-
-#: libide/runner/ide-run-manager.c:254
+#: libide/runner/ide-run-manager.c:319
 msgid "Cannot run target, another target is running"
 msgstr ""
 
-#: libide/runner/ide-run-manager.c:319
+#: libide/runner/ide-run-manager.c:386
 msgid "Failed to locate runtime"
 msgstr ""
 
-#: libide/runner/ide-runner.c:165
+#: libide/runner/ide-run-manager.c:1089
+msgid "Run"
+msgstr "Жөнелту"
+
+#: libide/runner/ide-runner.c:173
 msgid "Process quit unexpectedly"
 msgstr ""
 
 #: libide/runtimes/ide-runtime-manager.c:114
 msgid "Host operating system"
-msgstr ""
-
-#: libide/search/ide-omni-search-display.c:267
-msgid "Cannot add provider more than once."
-msgstr ""
-
-#: libide/search/ide-omni-search-display.c:343
-msgid "The provider could not be found."
 msgstr ""
 
 #: libide/snippets/ide-source-snippets-manager.c:96
@@ -2546,32 +2507,31 @@ msgstr "Буманы ашу сәтсіз аяқталды: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Файлды жүктеу сәтсіз аяқталды: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5322
+#: libide/sourceview/ide-source-view.c:5414
 #, c-format
 msgid "Insert “%s”"
 msgstr "\"%s\" кірістіру"
 
-#: libide/sourceview/ide-source-view.c:5324
+#: libide/sourceview/ide-source-view.c:5416
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr ""
 
-#: libide/sourceview/ide-source-view.c:5438
+#: libide/sourceview/ide-source-view.c:5530
 msgid "Apply Fix-It"
 msgstr ""
 
-#: libide/sourceview/ide-source-view.c:5865
+#: libide/sourceview/ide-source-view.c:5957
 msgid "Rename symbol"
 msgstr "Таңба атын ауыстыру"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6104
+#: libide/sourceview/ide-source-view.c:6196
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr ""
 
-#: libide/sourceview/ide-source-view.c:6130
-#| msgid "No projects found"
+#: libide/sourceview/ide-source-view.c:6222
 msgid "No references were found"
 msgstr ""
 
@@ -2584,31 +2544,6 @@ msgstr[0] "%u дестені орнату"
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
 msgstr "Барлығын _тазарту"
-
-#: libide/util/ide-file-manager.c:64
-msgid "File path is NULL"
-msgstr ""
-
-#: libide/util/ide-file-manager.c:73 libide/util/ide-file-manager.c:84
-msgid "Error converting UTF-8 filename to wide char"
-msgstr ""
-
-#: libide/util/ide-file-manager.c:92
-msgid "ILCreateFromPath() failed"
-msgstr "ILCreateFromPath() сәтсіз аяқталды"
-
-#: libide/util/ide-file-manager.c:129
-#, c-format
-msgid "Cannot convert “%s” into a valid NSURL."
-msgstr ""
-
-#: libide/util/ide-file-manager.c:157
-msgid "Connecting to org.freedesktop.FileManager1 failed: "
-msgstr ""
-
-#: libide/util/ide-file-manager.c:181
-msgid "Calling ShowItems failed: "
-msgstr ""
 
 #: libide/util/ide-uri.c:181
 #, no-c-format
@@ -2697,7 +2632,7 @@ msgid "Edit build configuration"
 msgstr "Құрастыру баптауларын түзету"
 
 #: libide/workbench/ide-omni-bar.ui:177
-#: plugins/project-tree/gb-project-tree-addin.c:105
+#: plugins/project-tree/gb-project-tree-addin.c:106
 msgid "Project"
 msgstr "Жоба"
 
@@ -2705,27 +2640,31 @@ msgstr "Жоба"
 msgid "Branch"
 msgstr "Бұтақ"
 
-#: libide/workbench/ide-omni-bar.ui:236
+#: libide/workbench/ide-omni-bar.ui:229
+msgid "Build System"
+msgstr "Жинау жүйесі"
+
+#: libide/workbench/ide-omni-bar.ui:264
 msgid "Build Profile"
 msgstr "Құрастыру профилі"
 
-#: libide/workbench/ide-omni-bar.ui:282
+#: libide/workbench/ide-omni-bar.ui:310
 msgid "Last build"
 msgstr "Соңғы құрастыру"
 
-#: libide/workbench/ide-omni-bar.ui:349
+#: libide/workbench/ide-omni-bar.ui:377
 msgid "View Output"
 msgstr "Шығысын қарау"
 
-#: libide/workbench/ide-omni-bar.ui:396
+#: libide/workbench/ide-omni-bar.ui:424
 msgid "Rebuild"
 msgstr "Қайта құрастыру"
 
-#: libide/workbench/ide-omni-bar.ui:406
+#: libide/workbench/ide-omni-bar.ui:434
 msgid "Clean"
 msgstr "Тазарту"
 
-#: libide/workbench/ide-omni-bar.ui:420
+#: libide/workbench/ide-omni-bar.ui:448
 msgid "Build project"
 msgstr "Жобаны құрастыру"
 
@@ -2733,9 +2672,13 @@ msgstr "Жобаны құрастыру"
 msgid "Switch perspective"
 msgstr ""
 
-#: libide/workbench/ide-workbench-actions.c:73
+#: libide/workbench/ide-workbench-actions.c:75
 msgid "Open File"
 msgstr "Файлды ашу"
+
+#: libide/workbench/ide-workbench-actions.c:215
+msgid "Builder Statistics"
+msgstr ""
 
 #: libide/workbench/ide-workbench.c:564
 #, c-format
@@ -2808,28 +2751,28 @@ msgstr ""
 msgid "clang diagnostics warnings errors"
 msgstr ""
 
-#: plugins/clang/ide-clang-service.c:326
+#: plugins/clang/ide-clang-service.c:325
 msgid "Unknown failure"
 msgstr "Белгісіз қате"
 
-#: plugins/clang/ide-clang-service.c:330
+#: plugins/clang/ide-clang-service.c:329
 msgid "Clang crashed"
 msgstr "Clang құлап түсті"
 
-#: plugins/clang/ide-clang-service.c:334
+#: plugins/clang/ide-clang-service.c:333
 msgid "Invalid arguments"
 msgstr "Аргументтер қате"
 
-#: plugins/clang/ide-clang-service.c:338
+#: plugins/clang/ide-clang-service.c:337
 msgid "AST read error"
 msgstr "AST оқу қатесі"
 
-#: plugins/clang/ide-clang-service.c:350
+#: plugins/clang/ide-clang-service.c:349
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr ""
 
-#: plugins/clang/ide-clang-service.c:481 plugins/xml-pack/ide-xml-service.c:93
+#: plugins/clang/ide-clang-service.c:480 plugins/xml-pack/ide-xml-service.c:92
 msgid "File must be saved locally to parse."
 msgstr "Файлды талдау үшін ол жергілікті сақталған болуы тиіс."
 
@@ -2841,35 +2784,35 @@ msgstr "анонимды"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() тек жергілікті файлдармен жұмыс жасайды"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:97
+#: plugins/color-picker/gb-color-picker-prefs.c:96
 msgid "Close without Saving"
 msgstr "Сақтамай-ақ жабу"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:99
+#: plugins/color-picker/gb-color-picker-prefs.c:98
 msgid "Save As…"
 msgstr "Қалайша сақтау…"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:207
+#: plugins/color-picker/gb-color-picker-prefs.c:206
 msgid "Load palette"
 msgstr "Палитраны жүктеу"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:234
+#: plugins/color-picker/gb-color-picker-prefs.c:233
 msgid "Save palette"
 msgstr "Палитраны сақтау"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:725
+#: plugins/color-picker/gb-color-picker-prefs.c:724
 msgid "All files"
 msgstr "Барлық файлдар"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:729
+#: plugins/color-picker/gb-color-picker-prefs.c:728
 msgid "All supported palettes formats"
 msgstr "Қолдауы бар барлық палитралар пішімдері"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:734
+#: plugins/color-picker/gb-color-picker-prefs.c:733
 msgid "GIMP palette"
 msgstr "GIMP палитрасы"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:738
+#: plugins/color-picker/gb-color-picker-prefs.c:737
 msgid "GNOME Builder palette"
 msgstr "GNOME құрастырушысы палитрасы"
 
@@ -3108,6 +3051,10 @@ msgstr "Жаңа жоба"
 msgid "New…"
 msgstr "Жаңа…"
 
+#: plugins/create-project/gbp-create-project-genesis-addin.c:229
+msgid "Create"
+msgstr "Жасау"
+
 #: plugins/create-project/gbp-create-project-tool.c:136
 msgid "List available templates"
 msgstr "Қолжетерлік үлгілерді тізіп шығару"
@@ -3144,16 +3091,16 @@ msgstr "Жоба атауын көрсетіңіз.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr ""
 
-#: plugins/create-project/gbp-create-project-widget.c:157
+#: plugins/create-project/gbp-create-project-widget.c:156
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
 
-#: plugins/create-project/gbp-create-project-widget.c:164
+#: plugins/create-project/gbp-create-project-widget.c:163
 msgid "Directory already exists with that name"
 msgstr "Осылай аталатын бума бар болып тұр"
 
-#: plugins/create-project/gbp-create-project-widget.c:569
+#: plugins/create-project/gbp-create-project-widget.c:568
 msgid "A failure occurred while initializing version control"
 msgstr ""
 
@@ -3161,63 +3108,63 @@ msgstr ""
 msgid "Project Name"
 msgstr "Жоба атауы"
 
-#: plugins/create-project/gbp-create-project-widget.ui:55
+#: plugins/create-project/gbp-create-project-widget.ui:56
 msgid ""
 "Unique name that is used for your project’s folder and other technical "
 "resources. Should be in lower case without spaces and may not start with a "
 "number."
 msgstr ""
 
-#: plugins/create-project/gbp-create-project-widget.ui:74
+#: plugins/create-project/gbp-create-project-widget.ui:75
 msgid "Project Location"
 msgstr "Жоба орналасуы"
 
-#: plugins/create-project/gbp-create-project-widget.ui:85
-#: plugins/git/ide-git-clone-widget.ui:76
+#: plugins/create-project/gbp-create-project-widget.ui:86
+#: plugins/git/ide-git-clone-widget.ui:77
 msgid "Select Project Directory"
 msgstr "Жоба бумасын таңдаңыз"
 
-#: plugins/create-project/gbp-create-project-widget.ui:98
+#: plugins/create-project/gbp-create-project-widget.ui:99
 msgid "Language"
 msgstr "Тіл"
 
-#: plugins/create-project/gbp-create-project-widget.ui:120
+#: plugins/create-project/gbp-create-project-widget.ui:121
 msgid "License"
 msgstr "Лицензиясы"
 
-#: plugins/create-project/gbp-create-project-widget.ui:135
+#: plugins/create-project/gbp-create-project-widget.ui:136
 msgid "GPLv3+"
 msgstr "GPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:136
+#: plugins/create-project/gbp-create-project-widget.ui:137
 msgid "LGPLv3+"
 msgstr "LGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:137
+#: plugins/create-project/gbp-create-project-widget.ui:138
 msgid "AGPLv3+"
 msgstr "AGPLv3+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:138
+#: plugins/create-project/gbp-create-project-widget.ui:139
 msgid "MIT/X11"
 msgstr "MIT/X11"
 
-#: plugins/create-project/gbp-create-project-widget.ui:139
+#: plugins/create-project/gbp-create-project-widget.ui:140
 msgid "GPLv2+"
 msgstr "GPLv2+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:140
+#: plugins/create-project/gbp-create-project-widget.ui:141
 msgid "LGPLv2.1+"
 msgstr "LGPLv2.1+"
 
-#: plugins/create-project/gbp-create-project-widget.ui:141
+#: plugins/create-project/gbp-create-project-widget.ui:142
 msgid "No license"
 msgstr "Лицензиясы жоқ"
 
-#: plugins/create-project/gbp-create-project-widget.ui:174
+#: plugins/create-project/gbp-create-project-widget.ui:175
 msgid "Uses the Git version control system"
 msgstr "Git нұсқаларды басқару жүйесін қолданады"
 
-#: plugins/create-project/gbp-create-project-widget.ui:236
+#: plugins/create-project/gbp-create-project-widget.ui:237
 msgid "Select a Template"
 msgstr "Үлгіні таңдау"
 
@@ -3225,16 +3172,16 @@ msgstr "Үлгіні таңдау"
 msgid "Documentation"
 msgstr "Құжаттама"
 
-#: plugins/eslint/eslint_plugin/__init__.py:106
+#: plugins/eslint/eslint_plugin/__init__.py:105
 msgid "ESlint"
 msgstr "ESlint"
 
-#: plugins/eslint/eslint_plugin/__init__.py:107
+#: plugins/eslint/eslint_plugin/__init__.py:106
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 
 #. translators: these are keywords used to search for preferences
-#: plugins/eslint/eslint_plugin/__init__.py:109
+#: plugins/eslint/eslint_plugin/__init__.py:108
 msgid "eslint javascript lint code execute execution"
 msgstr ""
 
@@ -3247,10 +3194,6 @@ msgid ""
 "Enable the use of eslint to find additional diagnostics in JavaScript files. "
 "This may result in the execution of code in your project."
 msgstr ""
-
-#: plugins/file-search/gb-file-search-provider.c:44
-msgid "Switch To"
-msgstr "Ауысу"
 
 #: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
 msgid "Downloading application sources…"
@@ -3286,19 +3229,19 @@ msgid "Update"
 msgstr "Жаңарту"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:297
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:301
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:312
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:316
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] ""
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:380
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:397
 msgid "Flatpak Runtimes"
 msgstr "Flatpak орындалу орталары"
 
@@ -3380,24 +3323,24 @@ msgstr "Fpaste.org қызметіне жіберу"
 msgid "The following URL has been copied to the clipboard"
 msgstr "Келесі сілтеме алмасу буферіне көшірілді"
 
-#: plugins/git/ide-git-buffer-change-monitor.c:162
+#: plugins/git/ide-git-buffer-change-monitor.c:161
 msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 
-#: plugins/git/ide-git-buffer-change-monitor.c:568
+#: plugins/git/ide-git-buffer-change-monitor.c:567
 msgid "Repository does not have a working directory."
 msgstr "Репозиторийдің жұмыс бумасы жоқ."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:579
+#: plugins/git/ide-git-buffer-change-monitor.c:578
 msgid "File is not under control of git working directory."
 msgstr ""
 
-#: plugins/git/ide-git-buffer-change-monitor.c:645
+#: plugins/git/ide-git-buffer-change-monitor.c:644
 msgid "The requested file does not exist within the git index."
 msgstr ""
 
-#: plugins/git/ide-git-clone-widget.c:164
-#: plugins/git/ide-git-clone-widget.c:429
+#: plugins/git/ide-git-clone-widget.c:162
+#: plugins/git/ide-git-clone-widget.c:427
 msgid "A valid Git URL is required"
 msgstr "Жарамды Git сілтемесі керек"
 
@@ -3405,19 +3348,19 @@ msgstr "Жарамды Git сілтемесі керек"
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr ""
 
-#: plugins/git/ide-git-clone-widget.ui:64
+#: plugins/git/ide-git-clone-widget.ui:65
 msgid "user@host:repository.git"
 msgstr "user@host:repository.git"
 
-#: plugins/git/ide-git-clone-widget.ui:65
+#: plugins/git/ide-git-clone-widget.ui:66
 msgid "Enter the URL of your project’s source code repository"
 msgstr ""
 
-#: plugins/git/ide-git-clone-widget.ui:92
+#: plugins/git/ide-git-clone-widget.ui:93
 msgid "Repository URL"
 msgstr "Репозиторий сілтемесі"
 
-#: plugins/git/ide-git-clone-widget.ui:100
+#: plugins/git/ide-git-clone-widget.ui:101
 msgid "Project Destination"
 msgstr "Жоба мақсаты"
 
@@ -3500,6 +3443,24 @@ msgstr "MinGW 64-бит"
 #: plugins/mingw/ide-mingw-device-provider.c:106
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-бит"
+
+#: plugins/notification/ide-notification-addin.c:76
+msgid "Build successful"
+msgstr "Құрастыру сәтті аяқталды"
+
+#: plugins/notification/ide-notification-addin.c:77
+#, c-format
+msgid "Project “%s” has completed building"
+msgstr ""
+
+#: plugins/notification/ide-notification-addin.c:81
+msgid "Build failed"
+msgstr "Құрастыру сәтсіз аяқталды"
+
+#: plugins/notification/ide-notification-addin.c:82
+#, c-format
+msgid "Project “%s” failed to build"
+msgstr ""
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -3610,6 +3571,10 @@ msgstr ""
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
 msgid "quick highlight words matching current selection"
 msgstr "ағымдағы таңдауға сәйкес келетін сөздерді түспен жылдам ерекшелеу"
+
+#: plugins/retab/gtk/menus.ui:9
+msgid "Retab"
+msgstr ""
 
 #: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
@@ -3740,11 +3705,11 @@ msgstr ""
 "Қолдау көрсету журналы \"%s\" файлына жазылды. Бұл файлды сіздің ақаулық "
 "жөніндегі хабарламаға немесе қолдау көрсету сұранымыңызға қосып жіберіңіз."
 
-#: plugins/symbol-tree/symbol-tree-panel.c:275
+#: plugins/symbol-tree/symbol-tree-panel.c:272
 msgid "Current language does not support symbol resolvers"
 msgstr ""
 
-#: plugins/symbol-tree/symbol-tree-panel.c:415
+#: plugins/symbol-tree/symbol-tree-panel.c:412
 msgid "Symbols"
 msgstr "Таңбалар"
 
@@ -3797,7 +3762,7 @@ msgstr "Профильді ашу…"
 
 #: plugins/terminal/gb-terminal-search.ui:152
 msgid "Regex"
-msgstr ""
+msgstr "Тұрақты өрнек"
 
 #: plugins/terminal/gb-terminal-search.ui:180
 msgid "Match whole word"
@@ -3816,15 +3781,14 @@ msgid "Untitled terminal"
 msgstr "Атаусыз терминал"
 
 #: plugins/terminal/gb-terminal-workbench-addin.c:142
-msgid "Run Output"
-msgstr "Жөнелту шығысы"
+msgid "Application Output"
+msgstr "Қолданба шығысы"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
 msgstr "Жаңа тер_минал"
 
 #: plugins/terminal/gtk/menus.ui:11
-#| msgid "_New Terminal"
 msgid "_New Runtime Terminal"
 msgstr ""
 
@@ -3836,7 +3800,7 @@ msgstr "Сі_лтемені ашу"
 msgid "_Copy Link Address"
 msgstr "Сілтеме адр_есін көшіру"
 
-#: plugins/todo/todo_plugin/__init__.py:195
+#: plugins/todo/todo_plugin/__init__.py:196
 msgid "Todo"
 msgstr "Жасау үшін"
 
@@ -3857,7 +3821,7 @@ msgstr ""
 msgid "Run with Valgrind"
 msgstr "Valgrind көмегімен жөнелту"
 
-#: plugins/xml-pack/ide-xml-service.c:193
+#: plugins/xml-pack/ide-xml-service.c:192
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 
@@ -3866,8 +3830,66 @@ msgstr ""
 msgid "Failed to create the XML tree."
 msgstr "XML ағашын жасау сәтсіз аяқталды."
 
-#~ msgid "Build: %s"
-#~ msgstr "Жинақ: %s"
+#~ msgid "Cannot locate property %s in class %s"
+#~ msgstr "%s қасиетін %s класы ішінен табу мүмкін емес"
+
+#~ msgid "Failed to find property %s in %s"
+#~ msgstr "%s қасиетін %s ішінен табу сәтсіз аяқталды"
+
+#~ msgid "Failed to find property %s in %s or parent %s"
+#~ msgstr "%s қасиетін %s немесе аталық %s ішінен табу сәтсіз аяқталды"
+
+#~ msgid "Failed to retrieve va_list value: %s"
+#~ msgstr "va_list мәнін алу сәтсіз аяқталды: %s"
+
+#~ msgid "Just now"
+#~ msgstr "Жаңа ғана"
+
+#~ msgid "An hour ago"
+#~ msgstr "Бір сағат бұрын"
+
+#~ msgid "Yesterday"
+#~ msgstr "Кеше"
+
+#~ msgid "About a year ago"
+#~ msgstr "Шамамен бір жыл бұрын"
+
+#~ msgid "About %u year ago"
+#~ msgid_plural "About %u years ago"
+#~ msgstr[0] "Шамамен %u жыл бұрын"
+
+#~ msgid "Select"
+#~ msgstr "Таңдау"
+
+#~ msgid "Browse…"
+#~ msgstr "Шолу…"
+
+#~ msgid "Search"
+#~ msgstr "Іздеу"
+
+#~ msgid "%s() may only be called once"
+#~ msgstr "%s() тек бір рет шақыруға болады"
+
+#~ msgid "Parser does not contain an input stream"
+#~ msgstr "Талдаушыда кіріс ағыны жоқ"
+
+#~ msgid "Failed to locate template “%s”"
+#~ msgstr "\"%s\" шаблонын табу сәтсіз аяқталды"
+
+#~ msgid "_Select"
+#~ msgstr "Таң_дау"
+
+#~ msgid "Search Preferences"
+#~ msgstr "Іздеу баптаулары"
+
+#~ msgid "ILCreateFromPath() failed"
+#~ msgstr "ILCreateFromPath() сәтсіз аяқталды"
+
+#~ msgid "Switch To"
+#~ msgstr "Ауысу"
+
+#~ msgid "Run Output"
+#~ msgstr "Жөнелту шығысы"
 
 #~ msgid "Target"
 #~ msgstr "Мақсаты"
@@ -3893,12 +3915,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 
 #~ msgid "Build cancelled"
 #~ msgstr "Құрастыру тоқтатылды"
-
-#~ msgid "Build failed"
-#~ msgstr "Құрастыру сәтсіз аяқталды"
-
-#~ msgid "Build successful"
-#~ msgstr "Құрастыру сәтті аяқталды"
 
 #~ msgid "Install failed"
 #~ msgstr "Орнату сәтсіз аяқталды"
