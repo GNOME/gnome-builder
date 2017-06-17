@@ -5,12 +5,6 @@
         <property name="visible">true</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkSeparator">
-            <property name="orientation">horizontal</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkRevealer" id="status_revealer">
             <property name="transition-type">slide-down</property>
             <property name="visible">true</property>
@@ -21,6 +15,12 @@
                 <style>
                   <class name="build-status"/>
                 </style>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
                 <child>
                   <object class="GtkGrid">
                     <property name="border-width">12</property>
