@@ -1,12 +1,12 @@
 project('gnome-builder', 'c',
-  license: 'GPL3+',
-  version: '3.25.2',
-  meson_version: '>= 0.37.0',
+          license: 'GPL3+',
+          version: '3.25.2',
+    meson_version: '>= 0.37.0',
   default_options: [
-    'c_std=gnu11',
-    'cpp_std=c++11',
-    'warning_level=2',
-  ],
+                     'c_std=gnu11',
+                     'cpp_std=c++11',
+                     'warning_level=2',
+                   ],
 )
 
 version_split = meson.project_version().split('.')
