@@ -63,9 +63,8 @@ ide_get_support_log (void)
 
   g_string_append (str, "[runtime.version]\n");
   g_string_append_printf (str, "version = \"%s\"\n", PACKAGE_VERSION);
-#ifdef COMMIT_ID
-  g_string_append_printf (str, "commit = \"%s\"\n", COMMIT_ID);
-#endif
+  g_string_append_printf (str, "channel = \"%s\"\n", IDE_BUILD_CHANNEL);
+  g_string_append_printf (str, "identifier = \"%s\"\n", IDE_BUILD_IDENTIFIER);
   g_string_append (str, "\n");
 
   /*
