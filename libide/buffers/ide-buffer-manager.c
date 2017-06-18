@@ -542,7 +542,6 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
        */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
-          _ide_buffer_set_loading (state->buffer, FALSE);
           g_task_return_error (task, error);
           return;
         }
@@ -618,7 +617,6 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
     _ide_file_set_content_type (state->file, content_type);
 
 emit_signal:
-  _ide_buffer_set_loading (state->buffer, FALSE);
 
   if (!_ide_context_is_restoring (context))
     ide_buffer_manager_set_focus_buffer (self, state->buffer);
@@ -660,7 +658,6 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
-          _ide_buffer_set_loading (state->buffer, FALSE);
           g_task_return_error (task, error);
           IDE_EXIT;
         }
@@ -849,7 +846,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
 
   _ide_buffer_set_mtime (state->buffer, NULL);
   _ide_buffer_set_changed_on_volume (state->buffer, FALSE);
-  _ide_buffer_set_loading (state->buffer, TRUE);
 
   g_task_set_task_data (task, state, load_state_free);
 
@@ -1213,6 +1209,8 @@ ide_buffer_manager_real_buffer_loaded (IdeBufferManager *self,
   recent_data.is_private = FALSE;
 
   gtk_recent_manager_add_full (recent_manager, uri, &recent_data);
+
+  _ide_buffer_set_loading (buffer, FALSE);
 }
 
 static IdeBuffer *

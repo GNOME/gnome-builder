@@ -617,7 +617,7 @@ ide_buffer_reload_change_monitor (IdeBuffer *self)
       g_clear_object (&priv->change_monitor);
     }
 
-  if (priv->context && priv->file)
+  if (!priv->loading && priv->context && priv->file)
     {
       IdeVcs *vcs;
 
@@ -1073,6 +1073,9 @@ ide_buffer_loaded (IdeBuffer *self)
   if (priv->change_monitor != NULL)
     ide_buffer_change_monitor_reload (priv->change_monitor);
 
+  /* This is suspended until we've loaded */
+  ide_highlight_engine_unpause (priv->highlight_engine);
+
   IDE_EXIT;
 }
 
@@ -1225,6 +1228,7 @@ ide_buffer_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 
   priv->highlight_engine = ide_highlight_engine_new (self);
+  ide_highlight_engine_pause (priv->highlight_engine);
 
   priv->formatter_adapter = ide_extension_adapter_new (priv->context,
                                                        NULL,
@@ -1615,6 +1619,8 @@ ide_buffer_init (IdeBuffer *self)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   IDE_ENTRY;
+
+  priv->loading = TRUE;
 
   priv->highlight_diagnostics = TRUE;
 
@@ -2438,7 +2444,7 @@ ide_buffer_rehighlight (IdeBuffer *self)
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   /* In case we are disposing */
-  if (priv->highlight_engine == NULL)
+  if (priv->highlight_engine == NULL || priv->loading)
     IDE_EXIT;
 
   if (gtk_source_buffer_get_highlight_syntax (GTK_SOURCE_BUFFER (self)))
