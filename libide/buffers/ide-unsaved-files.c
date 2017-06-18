@@ -209,6 +209,8 @@ ide_unsaved_files_save_worker (GTask        *task,
 
       uri = g_file_get_uri (uf->file);
 
+      IDE_TRACE_MSG ("saving draft for unsaved file \"%s\"", uri);
+
       g_string_append_printf (manifest, "%s\n", uri);
 
       hash = hash_uri (uri);
@@ -481,6 +483,8 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
   IdeUnsavedFilesPrivate *priv = ide_unsaved_files_get_instance_private (self);
   guint i;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (G_IS_FILE (file));
 
@@ -494,9 +498,11 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
         {
           ide_unsaved_files_remove_draft (self, file);
           g_ptr_array_remove_index_fast (priv->unsaved_files, i);
-          break;
+          IDE_EXIT;
         }
     }
+
+  IDE_EXIT;
 }
 
 static void
