@@ -319,3 +319,12 @@ ide_perspective_get_accelerator (IdePerspective *self)
 
   return NULL;
 }
+
+void
+ide_perspective_restore_state (IdePerspective *self)
+{
+  g_return_if_fail (IDE_IS_PERSPECTIVE (self));
+
+  if (IDE_PERSPECTIVE_GET_IFACE (self)->restore_state)
+    IDE_PERSPECTIVE_GET_IFACE (self)->restore_state (self);
+}

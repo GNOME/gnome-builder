@@ -46,6 +46,7 @@ struct _IdePerspectiveInterface
                                         GtkCallback     callback,
                                         gpointer        user_data);
   gchar        *(*get_accelerator)     (IdePerspective *self);
+  void          (*restore_state)       (IdePerspective *self);
 };
 
 gboolean      ide_perspective_agree_to_shutdown   (IdePerspective *self);
@@ -63,6 +64,7 @@ void          ide_perspective_views_foreach       (IdePerspective *self,
                                                    GtkCallback     callback,
                                                    gpointer        user_data);
 gchar        *ide_perspective_get_accelerator     (IdePerspective *self);
+void          ide_perspective_restore_state       (IdePerspective *self);
 
 G_END_DECLS
 
