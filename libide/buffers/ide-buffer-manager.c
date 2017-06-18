@@ -381,15 +381,13 @@ ide_buffer_manager_buffer_changed (IdeBufferManager *self,
 }
 
 static void
-ide_buffer_manager_add_buffer (IdeBufferManager *self,
-                               IdeBuffer        *buffer)
+ide_buffer_manager_track_buffer (IdeBufferManager *self,
+                                 IdeBuffer        *buffer)
 {
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
-
-  g_ptr_array_add (self->buffers, g_object_ref (buffer));
 
   if (self->auto_save)
     register_auto_save (self, buffer);
@@ -413,10 +411,6 @@ static void
 ide_buffer_manager_remove_buffer (IdeBufferManager *self,
                                   IdeBuffer        *buffer)
 {
-  IdeUnsavedFiles *unsaved_files;
-  IdeContext *context;
-  IdeFile *file;
-  GFile *gfile;
   gint position = -1;
 
   IDE_ENTRY;
@@ -426,7 +420,9 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
 
   for (guint i = 0; i < self->buffers->len; i++)
     {
-      if ((gpointer)buffer == g_ptr_array_index (self->buffers, i))
+      IdeBuffer *ele = g_ptr_array_index (self->buffers, i);
+
+      if (ele == buffer)
         {
           position = i;
           break;
@@ -434,16 +430,13 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
     }
 
   if (position == -1)
-    IDE_EXIT;
+    {
+      IDE_TRACE_MSG ("failed to locate buffer %p within buffer manager", buffer);
+      IDE_EXIT;
+    }
 
+  /* Stealing ownership from self->buffers */
   g_ptr_array_remove_index (self->buffers, position);
-
-  file = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (file);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  unsaved_files = ide_context_get_unsaved_files (context);
-  ide_unsaved_files_remove (unsaved_files, gfile);
 
   gtk_source_completion_words_unregister (self->word_completion, GTK_TEXT_BUFFER (buffer));
 
@@ -469,6 +462,7 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
   g_signal_emit_by_name (buffer, "destroy");
   g_object_run_dispose (G_OBJECT (buffer));
 
+  /* We stole ownership from self->buffers */
   g_object_unref (buffer);
 
   DZL_COUNTER_DEC (registered);
@@ -535,10 +529,20 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
+  /*
+   * Always track the buffer so that we can clean things up
+   * properly when teh buffer is disposed.
+   */
+  if (state->is_new)
+    g_ptr_array_add (self->buffers, g_object_ref (state->buffer));
+
   if (!gtk_source_file_loader_load_finish (loader, result, &error))
     {
       /*
        * It's okay if we fail because the file does not exist yet.
+       *
+       * TODO: Add "Failed" state to buffers so we can display something
+       *       other than the sourceview in the editor perspective.
        */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
@@ -562,7 +566,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
     }
 
   if (state->is_new)
-    ide_buffer_manager_add_buffer (self, state->buffer);
+    ide_buffer_manager_track_buffer (self, state->buffer);
 
   /*
    * If we have a navigation item for this buffer, restore the insert mark to
@@ -1230,6 +1234,38 @@ ide_buffer_manager_real_create_buffer (IdeBufferManager *self,
                        NULL);
 }
 
+static void
+ide_buffer_manager_real_buffer_unloaded (IdeBufferManager *self,
+                                         IdeBuffer        *buffer)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  /*
+   * If this buffer is not modified, then we want to release any
+   * drafts associated with it as they are not necessary anymore.
+   */
+
+  if (!gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+    {
+      IdeUnsavedFiles *unsaved_files;
+      IdeContext *context;
+      IdeFile *file;
+      GFile *gfile;
+
+      context = ide_buffer_get_context (buffer);
+      unsaved_files = ide_context_get_unsaved_files (context);
+
+      if (NULL != (file = ide_buffer_get_file (buffer)) &&
+          NULL != (gfile = ide_file_get_file (file)))
+        ide_unsaved_files_remove (unsaved_files, gfile);
+    }
+
+  IDE_EXIT;
+}
+
 static GType
 ide_buffer_manager_get_item_type (GListModel *self)
 {
@@ -1484,14 +1520,14 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * changes from the host file-system.
    */
   signals [LOAD_BUFFER] = g_signal_new ("load-buffer",
-                                         G_TYPE_FROM_CLASS (klass),
-                                         G_SIGNAL_RUN_LAST,
-                                         0,
-                                         NULL, NULL, NULL,
-                                         G_TYPE_NONE,
-                                         2,
-                                         IDE_TYPE_BUFFER,
-                                         G_TYPE_BOOLEAN);
+                                        G_TYPE_FROM_CLASS (klass),
+                                        G_SIGNAL_RUN_LAST,
+                                        0,
+                                        NULL, NULL, NULL,
+                                        G_TYPE_NONE,
+                                        2,
+                                        IDE_TYPE_BUFFER,
+                                        G_TYPE_BOOLEAN);
 
   /**
    * IdeBufferManager::buffer-loaded:
@@ -1551,14 +1587,16 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * @buffer: An #IdeBuffer
    *
    * This signal is emitted when the buffer is unloaded. This allows consumers to access the
-   * buffer before the items-changed signal is emitted for which it is too late to get
-   * a pointer to the buffer.
+   * buffer before the items-changed signal is emitted; at which point it will be too late to
+   * get a pointer to the buffer.
    */
-  signals [BUFFER_UNLOADED] = g_signal_new ("buffer-unloaded",
-                                            G_TYPE_FROM_CLASS (klass),
-                                            G_SIGNAL_RUN_LAST,
-                                            0, NULL, NULL, NULL,
-                                            G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
+  signals [BUFFER_UNLOADED] =
+    g_signal_new_class_handler ("buffer-unloaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_buffer_manager_real_buffer_unloaded),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
 
   g_type_ensure (GTK_SOURCE_TYPE_FILE_LOADER);
   g_type_ensure (GTK_SOURCE_TYPE_FILE_SAVER);
@@ -1800,7 +1838,10 @@ ide_buffer_manager_create_temporary_buffer (IdeBufferManager *self)
 
   g_signal_emit (self, signals [CREATE_BUFFER], 0, file, &buffer);
   g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer, TRUE);
-  ide_buffer_manager_add_buffer (self, buffer);
+
+  g_ptr_array_add (self->buffers, g_object_ref (buffer));
+  ide_buffer_manager_track_buffer (self, buffer);
+
   g_signal_emit (self, signals [BUFFER_LOADED], 0, buffer);
 
   return buffer;
