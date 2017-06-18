@@ -700,7 +700,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
   g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, create_new_view);
 
   gtk_source_file_loader_load_async (state->loader,
-                                     G_PRIORITY_DEFAULT,
+                                     G_PRIORITY_LOW,
                                      g_task_get_cancellable (task),
                                      ide_progress_file_progress_callback,
                                      g_object_ref (state->progress),
