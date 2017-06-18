@@ -528,14 +528,37 @@ ide_workbench_get_context (IdeWorkbench *self)
   return self->context;
 }
 
+static void
+ide_workbench_restore_perspectives (IdePerspective *perspective,
+                                    IdeWorkbench   *self)
+{
+  g_assert (IDE_IS_PERSPECTIVE (perspective));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  ide_perspective_restore_state (perspective);
+}
+
 static gboolean
 restore_in_timeout (gpointer data)
 {
-  g_autoptr(IdeContext) context = data;
+  g_autoptr(IdeWorkbench) self = data;
 
-  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_WORKBENCH (self));
 
-  ide_context_restore_async (context, NULL, NULL, NULL);
+  if (self->context != NULL)
+    {
+      g_autoptr(GSettings) settings = NULL;
+
+      /* Ask perspectives to restore state */
+      gtk_container_foreach (GTK_CONTAINER (self->perspectives_stack),
+                             (GtkCallback) ide_workbench_restore_perspectives,
+                             self);
+
+      /* Restore previous files when needed */
+      settings = g_settings_new ("org.gnome.builder");
+      if (g_settings_get_boolean (settings, "restore-previous-files"))
+        ide_context_restore_async (self->context, NULL, NULL, NULL);
+    }
 
   return G_SOURCE_REMOVE;
 }
@@ -572,19 +595,17 @@ void
 ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
 {
-  g_autoptr(GSettings) settings = NULL;
   IdeBuildManager *build_manager;
   IdeRunManager *run_manager;
   IdeProject *project;
   guint delay_msec;
+  guint duration = 0;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (self->context == NULL);
-
-  settings = g_settings_new ("org.gnome.builder");
 
   g_set_object (&self->context, context);
 
@@ -636,14 +657,9 @@ ide_workbench_set_context (IdeWorkbench *self,
    * the stack transition results in non-smooth transitions. So instead,
    * we will delay until the transition has completed.
    */
-  if (g_settings_get_boolean (settings, "restore-previous-files"))
-    {
-      guint duration = 0;
-
-      if (!self->disable_greeter)
-        duration = gtk_stack_get_transition_duration (self->perspectives_stack);
-      g_timeout_add (delay_msec + duration, restore_in_timeout, g_object_ref (context));
-    }
+  if (!self->disable_greeter)
+    delay_msec = gtk_stack_get_transition_duration (self->perspectives_stack);
+  g_timeout_add (delay_msec + duration, restore_in_timeout, g_object_ref (self));
 
   IDE_EXIT;
 }
