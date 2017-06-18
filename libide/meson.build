@@ -419,13 +419,6 @@ libide_generated_headers = [
 ]
 
 libide_args = []
-# TODO
-#libide_vcs_version = vcs_tag(
-#  input: 'ide-vcs-version.h.in',
-#  output: 'ide-vcs-version.h',
-#  command: '../build-aux/meson/meson_vcs_tag.sh',
-#  fallback: '',
-#)
 
 libide_sources = libide_generated_headers + libide_public_sources + [
   'application/ide-application-actions.c',
