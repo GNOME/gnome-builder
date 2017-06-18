@@ -400,8 +400,6 @@ ide_buffer_manager_track_buffer (IdeBufferManager *self,
                            self,
                            (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
 
-  DZL_COUNTER_INC (registered);
-
   g_list_model_items_changed (G_LIST_MODEL (self), self->buffers->len - 1, 0, 1);
 
   IDE_EXIT;
@@ -534,7 +532,10 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
    * properly when teh buffer is disposed.
    */
   if (state->is_new)
-    g_ptr_array_add (self->buffers, g_object_ref (state->buffer));
+    {
+      g_ptr_array_add (self->buffers, g_object_ref (state->buffer));
+      DZL_COUNTER_INC (registered);
+    }
 
   if (!gtk_source_file_loader_load_finish (loader, result, &error))
     {
@@ -1840,6 +1841,7 @@ ide_buffer_manager_create_temporary_buffer (IdeBufferManager *self)
   g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer, TRUE);
 
   g_ptr_array_add (self->buffers, g_object_ref (buffer));
+  DZL_COUNTER_INC (registered);
   ide_buffer_manager_track_buffer (self, buffer);
 
   g_signal_emit (self, signals [BUFFER_LOADED], 0, buffer);
