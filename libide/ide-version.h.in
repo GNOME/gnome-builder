@@ -23,8 +23,6 @@
 # error "Only <ide.h> can be included directly."
 #endif
 
-#include "ide-build-ident.h"
-
 /**
  * SECTION:jsonrpc-version
  * @short_description: libide version checking

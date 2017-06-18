@@ -23,6 +23,7 @@
 #include <dazzle.h>
 #include <gtk/gtk.h>
 #include <ide.h>
+#include <ide-build-ident.h>
 #include <string.h>
 
 #include "ide-support.h"

@@ -25,10 +25,16 @@ G_BEGIN_DECLS
 
 #define IDE_INSIDE
 
-#include "ide-build-ident.h"
-#include "ide-version.h"
-
 #include "ide-types.h"
+
+#include "ide-context.h"
+#include "ide-debug.h"
+#include "ide-enums.h"
+#include "ide-global.h"
+#include "ide-macros.h"
+#include "ide-object.h"
+#include "ide-service.h"
+#include "ide-version.h"
 
 #include "application/ide-application-addin.h"
 #include "application/ide-application-tool.h"
@@ -77,14 +83,6 @@ G_BEGIN_DECLS
 #include "highlighting/ide-highlighter.h"
 #include "history/ide-back-forward-item.h"
 #include "history/ide-back-forward-list.h"
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-enums.h"
-#include "ide-global.h"
-#include "ide-macros.h"
-#include "ide-object.h"
-#include "ide-service.h"
-#include "ide-types.h"
 #include "langserv/ide-langserv-client.h"
 #include "langserv/ide-langserv-completion-provider.h"
 #include "langserv/ide-langserv-diagnostic-provider.h"

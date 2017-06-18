@@ -23,6 +23,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-build-ident.h"
 #include "ide-debug.h"
 #include "ide-version.h"
 
