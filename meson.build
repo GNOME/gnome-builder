@@ -44,6 +44,7 @@ add_global_arguments([
   '-DHAVE_CONFIG_H',
   '-I' + meson.build_root(), # config.h
   '-D_GNU_SOURCE',
+  '-DIDE_COMPILATION',
 ], language: 'c')
 
 cc = meson.get_compiler('c')

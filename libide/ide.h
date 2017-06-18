@@ -25,6 +25,9 @@ G_BEGIN_DECLS
 
 #define IDE_INSIDE
 
+#include "ide-build-ident.h"
+#include "ide-version.h"
+
 #include "ide-types.h"
 
 #include "application/ide-application-addin.h"

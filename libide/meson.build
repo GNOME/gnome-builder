@@ -1,3 +1,26 @@
+libide_header_dir = pkgincludedir + '/libide'
+
+version_data = configuration_data()
+version_data.set('MAJOR_VERSION', MAJOR_VERSION)
+version_data.set('MINOR_VERSION', MINOR_VERSION)
+version_data.set('MICRO_VERSION', MICRO_VERSION)
+version_data.set('VERSION', meson.project_version())
+version_data.set_quoted('BUILD_TYPE', get_option('buildtype'))
+
+libide_version_h = configure_file(
+          input: 'ide-version.h.in',
+         output: 'ide-version.h',
+    install_dir: libide_header_dir,
+        install: true,
+  configuration: version_data)
+
+vcs_tag(
+        input: 'ide-build-ident.h.in',
+       output: 'ide-build-ident.h',
+      install: true,
+  install_dir: libide_header_dir,
+)
+
 libide_enum_headers = [
   'buffers/ide-buffer.h',
   'buildsystem/ide-build-log.h',
@@ -15,8 +38,6 @@ libide_enum_headers = [
   'vcs/ide-vcs-config.h',
   'workbench/ide-layout-stack-split.h',
 ]
-
-libide_header_dir = pkgincludedir + '/libide'
 
 libide_enums = gnome.mkenums('ide-enums',
   h_template: 'ide-enums.h.in',
@@ -392,6 +413,7 @@ libide_generated_headers = [
   libide_icons_resources[1],
   libide_enums[1],
   libide_debug_h,
+  libide_version_h,
 ]
 
 libide_args = []

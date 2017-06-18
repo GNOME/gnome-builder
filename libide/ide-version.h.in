@@ -1,0 +1,106 @@
+/* ide-version.h.in
+ *
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef IDE_VERSION_H
+#define IDE_VERSION_H
+
+#if !defined(IDE_INSIDE) && !defined(IDE_COMPILATION)
+# error "Only <ide.h> can be included directly."
+#endif
+
+#include "ide-build-ident.h"
+
+/**
+ * SECTION:jsonrpc-version
+ * @short_description: libide version checking
+ *
+ * libide provides macros to check the version of the library
+ * at compile-time
+ */
+
+/**
+ * IDE_BUILD_TYPE:
+ *
+ * The build type of the installed build.
+ */
+#define IDE_BUILD_TYPE @BUILD_TYPE@
+
+/**
+ * IDE_MAJOR_VERSION:
+ *
+ * libide major version component (e.g. 1 if %IDE_VERSION is 1.2.3)
+ */
+#define IDE_MAJOR_VERSION (@MAJOR_VERSION@)
+
+/**
+ * IDE_MINOR_VERSION:
+ *
+ * libide minor version component (e.g. 2 if %IDE_VERSION is 1.2.3)
+ */
+#define IDE_MINOR_VERSION (@MINOR_VERSION@)
+
+/**
+ * IDE_MICRO_VERSION:
+ *
+ * libide micro version component (e.g. 3 if %IDE_VERSION is 1.2.3)
+ */
+#define IDE_MICRO_VERSION (@MICRO_VERSION@)
+
+/**
+ * IDE_VERSION
+ *
+ * libide version.
+ */
+#define IDE_VERSION (@VERSION@)
+
+/**
+ * IDE_VERSION_S:
+ *
+ * libide version, encoded as a string, useful for printing and
+ * concatenation.
+ */
+#define IDE_VERSION_S "@VERSION@"
+
+#define IDE_ENCODE_VERSION(major,minor,micro) \
+        ((major) << 24 | (minor) << 16 | (micro) << 8)
+
+/**
+ * IDE_VERSION_HEX:
+ *
+ * libide version, encoded as an hexadecimal number, useful for
+ * integer comparisons.
+ */
+#define IDE_VERSION_HEX \
+        (IDE_ENCODE_VERSION (IDE_MAJOR_VERSION, IDE_MINOR_VERSION, IDE_MICRO_VERSION))
+
+/**
+ * IDE_CHECK_VERSION:
+ * @major: required major version
+ * @minor: required minor version
+ * @micro: required micro version
+ *
+ * Compile-time version checking. Evaluates to %TRUE if the version
+ * of libide is greater than the required one.
+ */
+#define IDE_CHECK_VERSION(major,minor,micro)   \
+        (IDE_MAJOR_VERSION > (major) || \
+         (IDE_MAJOR_VERSION == (major) && IDE_MINOR_VERSION > (minor)) || \
+         (IDE_MAJOR_VERSION == (major) && IDE_MINOR_VERSION == (minor) && \
+          IDE_MICRO_VERSION >= (micro)))
+
+#endif /* IDE_VERSION_H */
