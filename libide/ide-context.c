@@ -97,8 +97,9 @@ struct _IdeContext
 static void async_initable_init (GAsyncInitableIface *);
 
 G_DEFINE_TYPE_EXTENDED (IdeContext, ide_context, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                               async_initable_init))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_init))
+
+DZL_DEFINE_COUNTER (instances, "Context", "N contexts", "Number of contexts")
 
 enum {
   PROP_0,
@@ -564,6 +565,8 @@ ide_context_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_context_parent_class)->finalize (object);
 
+  DZL_COUNTER_DEC (instances);
+
   _ide_battery_monitor_shutdown ();
 
   IDE_EXIT;
@@ -785,6 +788,8 @@ static void
 ide_context_init (IdeContext *self)
 {
   IDE_ENTRY;
+
+  DZL_COUNTER_INC (instances);
 
   g_mutex_init (&self->unload_mutex);
 
@@ -2039,6 +2044,7 @@ ide_context_unload_async (IdeContext          *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_unload_async);
 
   g_mutex_lock (&self->unload_mutex);
 
