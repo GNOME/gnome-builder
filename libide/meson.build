@@ -16,6 +16,7 @@ libide_version_h = configure_file(
   configuration: version_data)
 
 vcs_tag(
+     fallback: meson.project_version(),
         input: 'ide-build-ident.h.in',
        output: 'ide-build-ident.h',
       install: true,
