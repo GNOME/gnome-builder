@@ -121,10 +121,8 @@ ide_application_actions_about (GSimpleAction *action,
   else
     g_string_append (version, PACKAGE_VERSION);
 
-#ifdef CHANNEL
-  if (g_strcmp0 (CHANNEL, "distro") != 0)
-    g_string_append (version, " ("CHANNEL")");
-#endif
+  if (g_strcmp0 (IDE_BUILD_CHANNEL, "other") != 0)
+    g_string_append (version, "\n" IDE_BUILD_CHANNEL);
 
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "artists", ide_application_credits_artists,
