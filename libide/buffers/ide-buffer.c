@@ -1287,6 +1287,19 @@ ide_buffer_dispose (GObject *object)
 
   IDE_ENTRY;
 
+  if (priv->reclamation_handler != 0)
+    {
+      g_source_remove (priv->reclamation_handler);
+      priv->reclamation_handler = 0;
+    }
+
+  if (priv->context != NULL)
+    {
+      IdeBufferManager *buffer_manager = ide_context_get_buffer_manager (priv->context);
+
+      _ide_buffer_manager_reclaim (buffer_manager, self);
+    }
+
   if (priv->check_modified_timeout != 0)
     {
       g_source_remove (priv->check_modified_timeout);
@@ -1322,14 +1335,6 @@ ide_buffer_dispose (GObject *object)
   g_clear_object (&priv->symbol_resolver_adapter);
   g_clear_object (&priv->spellchecker);
 
-  if (priv->context != NULL)
-    {
-      g_object_weak_unref (G_OBJECT (priv->context),
-                           ide_buffer_release_context,
-                           self);
-      priv->context = NULL;
-    }
-
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 
   IDE_EXIT;
@@ -1343,13 +1348,13 @@ ide_buffer_finalize (GObject *object)
 
   IDE_ENTRY;
 
-  if (priv->reclamation_handler != 0)
+  if (priv->context != NULL)
     {
-      g_source_remove (priv->reclamation_handler);
-      priv->reclamation_handler = 0;
+      g_object_weak_unref (G_OBJECT (priv->context),
+                           ide_buffer_release_context,
+                           self);
+      priv->context = NULL;
     }
-
-  ide_clear_weak_pointer (&priv->context);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);
 
