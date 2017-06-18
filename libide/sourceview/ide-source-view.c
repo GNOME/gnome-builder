@@ -1240,12 +1240,13 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
-  IDE_ENTRY;
-
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (iter != NULL);
   g_assert (text != NULL);
-  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (_ide_buffer_get_loading (IDE_BUFFER (buffer)))
+    return;
 
   gtk_text_buffer_begin_user_action (buffer);
 
@@ -1255,8 +1256,6 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
       ide_source_snippet_before_insert_text (snippet, buffer, iter, text, len);
       ide_source_view_unblock_handlers (self);
     }
-
-  IDE_EXIT;
 }
 
 static void
@@ -1270,12 +1269,13 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
   IdeSourceSnippet *snippet;
   GtkTextIter insert;
 
-  IDE_ENTRY;
-
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (iter != NULL);
   g_assert (text != NULL);
-  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (_ide_buffer_get_loading (IDE_BUFFER (buffer)))
+    return;
 
   if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
     {
@@ -1313,7 +1313,7 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
 
   gtk_text_buffer_end_user_action (buffer);
 
-  IDE_EXIT;
+  return;
 }
 
 static void
