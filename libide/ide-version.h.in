@@ -41,6 +41,14 @@
 #define IDE_BUILD_TYPE @BUILD_TYPE@
 
 /**
+ * IDE_BUILD_CHANNEL:
+ *
+ * The release channel of Builder. This should be a string such as
+ * "other", "flatpak-stable", or "flatpak-nightly".
+ */
+#define IDE_BUILD_CHANNEL @BUILD_CHANNEL@
+
+/**
  * IDE_MAJOR_VERSION:
  *
  * libide major version component (e.g. 1 if %IDE_VERSION is 1.2.3)

@@ -6,6 +6,7 @@ project('gnome-builder', 'c',
                      'c_std=gnu11',
                      'cpp_std=c++11',
                      'warning_level=2',
+                     'with_channel=other',
                    ],
 )
 

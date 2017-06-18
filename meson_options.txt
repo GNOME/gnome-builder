@@ -5,6 +5,12 @@ option('enable_rdtscp', type: 'boolean', value: false,
   description: 'High performance counters'
 )
 
+option('with_channel',
+          type: 'combo',
+       choices: [ 'other', 'flatpak-stable', 'flatpak-nightly' ],
+   description: 'The distribution channel for Builder',
+)
+
 option('with_editorconfig', type: 'boolean')
 option('with_webkit', type: 'boolean')
 option('with_introspection', type: 'boolean')

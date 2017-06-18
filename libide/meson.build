@@ -5,6 +5,7 @@ version_data.set('MAJOR_VERSION', MAJOR_VERSION)
 version_data.set('MINOR_VERSION', MINOR_VERSION)
 version_data.set('MICRO_VERSION', MICRO_VERSION)
 version_data.set('VERSION', meson.project_version())
+version_data.set_quoted('BUILD_CHANNEL', get_option('with_channel'))
 version_data.set_quoted('BUILD_TYPE', get_option('buildtype'))
 
 libide_version_h = configure_file(
