@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
+#include "ide-version.h"
 
 #include "application/ide-application.h"
 #include "application/ide-application-actions.h"
@@ -113,11 +114,12 @@ ide_application_actions_about (GSimpleAction *action,
         }
     }
 
-  version = g_string_new (PACKAGE_VERSION);
+  version = g_string_new (NULL);
 
-#ifdef COMMIT_ID
-  g_string_append (version, "+"COMMIT_ID);
-#endif
+  if (g_str_has_prefix (IDE_BUILD_TYPE, "debug"))
+    g_string_append (version, IDE_BUILD_IDENTIFIER);
+  else
+    g_string_append (version, PACKAGE_VERSION);
 
 #ifdef CHANNEL
   if (g_strcmp0 (CHANNEL, "distro") != 0)
