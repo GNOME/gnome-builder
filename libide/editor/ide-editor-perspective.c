@@ -85,6 +85,20 @@ enum {
 static guint signals [LAST_SIGNAL];
 
 static void
+set_reveal_child_without_transition (DzlDockRevealer *revealer,
+                                     gboolean         reveal)
+{
+  DzlDockRevealerTransitionType type;
+
+  g_assert (DZL_IS_DOCK_REVEALER (revealer));
+
+  type = dzl_dock_revealer_get_transition_type (revealer);
+  dzl_dock_revealer_set_transition_type (revealer, DZL_DOCK_REVEALER_TRANSITION_TYPE_NONE);
+  dzl_dock_revealer_set_reveal_child (revealer, reveal);
+  dzl_dock_revealer_set_transition_type (revealer, type);
+}
+
+static void
 ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
 {
   g_autoptr(GSettings) settings = NULL;
@@ -99,20 +113,20 @@ ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
   pane = dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self->layout));
   reveal = g_settings_get_boolean (settings, "left-visible");
   position = g_settings_get_int (settings, "left-position");
-  dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (pane), reveal);
   dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
+  set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), reveal);
 
   pane = dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self->layout));
   reveal = g_settings_get_boolean (settings, "right-visible");
   position = g_settings_get_int (settings, "right-position");
-  dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (pane), reveal);
   dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
+  set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), reveal);
 
   pane = dzl_dock_bin_get_bottom_edge (DZL_DOCK_BIN (self->layout));
   reveal = g_settings_get_boolean (settings, "bottom-visible");
   position = g_settings_get_int (settings, "bottom-position");
-  dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (pane), reveal);
   dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
+  set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), reveal);
 }
 
 static void
@@ -503,8 +517,6 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
       g_action_map_add_action (G_ACTION_MAP (self->actions), action);
     }
 
-  ide_editor_perspective_restore_panel_state (self);
-
   ide_widget_set_context_handler (GTK_WIDGET (self),
                                   ide_editor_perspective_context_set);
 
@@ -568,6 +580,16 @@ ide_editor_perspective_agree_to_shutdown (IdePerspective *perspective)
   return TRUE;
 }
 
+static void
+ide_editor_perspective_restore_state (IdePerspective *perspective)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)perspective;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  ide_editor_perspective_restore_panel_state (self);
+}
+
 static gchar *
 ide_editor_perspective_get_accelerator (IdePerspective *perspective)
 {
@@ -584,6 +606,7 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_title = ide_editor_perspective_get_title;
   iface->views_foreach = ide_editor_perspective_views_foreach;
   iface->get_accelerator = ide_editor_perspective_get_accelerator;
+  iface->restore_state = ide_editor_perspective_restore_state;
 }
 
 static void
