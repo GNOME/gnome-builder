@@ -212,7 +212,10 @@ foreach header: libide_public_headers
   endif
 endforeach
 
-subdir('resources')
+libide_resources = gnome.compile_resources('ide-resources',
+  'libide.gresource.xml',
+  c_name: 'ide',
+)
 
 libide_icons_resources = gnome.compile_resources('ide-icons-resources',
   join_paths(meson.source_root(), 'data/icons/hicolor/icons.gresource.xml'),

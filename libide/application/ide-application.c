@@ -34,6 +34,7 @@
 #include "ide-global.h"
 #include "ide-internal.h"
 #include "ide-macros.h"
+#include "ide-resources.h"
 
 #include "application/ide-application.h"
 #include "application/ide-application-actions.h"
@@ -41,7 +42,6 @@
 #include "application/ide-application-tests.h"
 #include "application/ide-application-tool.h"
 #include "modelines/modeline-parser.h"
-#include "resources/ide-resources.h"
 #include "util/ide-flatpak.h"
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"
