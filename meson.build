@@ -22,6 +22,37 @@ pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
 pkgvapidir = join_paths(get_option('datadir'), 'gnome-builder/vapi')
 
+
+status = [
+  '', '',
+  'gnome-builder @0@ (@1@)'.format(meson.project_version(), get_option('with_channel')),
+  '', '',
+]
+
+# Message of doom
+if (version_split[1].to_int() % 2 == 1)
+  status += [
+    'You are building a debug version of GNOME builder. There may be more',
+    'bugs in this version that you are comfortable with. Addtionally, there',
+    'is a chance it will eat all of your work and leave you sad and alone.',
+    '', ''
+  ]
+endif
+
+status += [
+  'Version ............... : @0@'.format(meson.project_version()),
+  'Channel ............... : @0@'.format(get_option('with_channel')),
+  'Build Type ............ : @0@'.format(get_option('buildtype')),
+  '',
+  'Prefix ................ : @0@'.format(get_option('prefix')),
+  'Libdir ................ : @0@'.format(join_paths(get_option('prefix'), get_option('libdir'))),
+  '',
+  'Tracing ............... : @0@'.format(get_option('enable_tracing')),
+  'Profiling ............. : @0@'.format(get_option('enable_profiling')),
+  'RDTSCP ................ : @0@'.format(get_option('enable_rdtscp')),
+  '', ''
+]
+
 conf = configuration_data()
 conf.set_quoted('PACKAGE_NAME', 'gnome-builder')
 conf.set_quoted('PACKAGE_VERSION', meson.project_version())
@@ -283,3 +314,5 @@ run_target('builder-dist',
     meson.project_name(),
   ]
 )
+
+message('\n  '.join(status))
