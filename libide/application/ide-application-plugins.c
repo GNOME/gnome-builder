@@ -151,11 +151,10 @@ ide_application_discover_plugins (IdeApplication *self)
       peas_engine_prepend_search_path (engine, plugins_dir, plugins_dir);
     }
 
-  g_irepository_require (NULL, "Ide", "1.0", 0, &error);
-  if (error != NULL)
-    {
-      g_warning ("Cannot enable Python 3 plugins: %s", error->message);
-    }
+  if (!g_irepository_require (NULL, "Ide", "1.0", 0, &error) ||
+      !g_irepository_require (NULL, "Gtk", "3.0", 0, &error) ||
+      !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error))
+    g_warning ("Cannot enable Python 3 plugins: %s", error->message);
   else
     {
       /* Avoid spamming stderr with Ide import tracebacks */
