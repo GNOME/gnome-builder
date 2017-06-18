@@ -1071,3 +1071,19 @@ ide_highlight_engine_get_style (IdeHighlightEngine *self,
 {
   return get_tag_from_style (self, style_name, FALSE);
 }
+
+void
+ide_highlight_engine_pause (IdeHighlightEngine *self)
+{
+  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
+
+  dzl_signal_group_block (self->signal_group);
+}
+
+void
+ide_highlight_engine_unpause (IdeHighlightEngine *self)
+{
+  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
+
+  dzl_signal_group_unblock (self->signal_group);
+}

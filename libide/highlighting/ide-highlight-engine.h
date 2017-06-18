@@ -39,6 +39,8 @@ void                ide_highlight_engine_invalidate      (IdeHighlightEngine *se
                                                           const GtkTextIter  *end);
 GtkTextTag         *ide_highlight_engine_get_style       (IdeHighlightEngine *self,
                                                           const gchar        *style_name);
+void                ide_highlight_engine_pause           (IdeHighlightEngine *self);
+void                ide_highlight_engine_unpause         (IdeHighlightEngine *self);
 
 G_END_DECLS
 
