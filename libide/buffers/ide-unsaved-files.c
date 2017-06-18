@@ -171,11 +171,12 @@ ide_unsaved_files_save_worker (GTask        *task,
                                gpointer      task_data,
                                GCancellable *cancellable)
 {
-  GString *manifest;
-  AsyncState *state = task_data;
   g_autofree gchar *manifest_path = NULL;
-  GError *error = NULL;
-  gsize i;
+  g_autoptr(GString) manifest = NULL;
+  g_autoptr(GError) write_error = NULL;
+  AsyncState *state = task_data;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_UNSAVED_FILES (source_object));
@@ -184,11 +185,11 @@ ide_unsaved_files_save_worker (GTask        *task,
   /* ensure that the directory exists */
   if (g_mkdir_with_parents (state->drafts_directory, 0700) != 0)
     {
-      error = g_error_new_literal (G_IO_ERROR,
-                                   g_io_error_from_errno (errno),
-                                   "Failed to create drafts directory");
-      g_task_return_error (task, error);
-      return;
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               g_io_error_from_errno (errno),
+                               "Failed to create drafts directory");
+      IDE_EXIT;
     }
 
   manifest = g_string_new (NULL);
@@ -196,8 +197,9 @@ ide_unsaved_files_save_worker (GTask        *task,
                                     "manifest",
                                     NULL);
 
-  for (i = 0; i < state->unsaved_files->len; i++)
+  for (guint i = 0; i < state->unsaved_files->len; i++)
     {
+      g_autoptr(GError) error = NULL;
       g_autofree gchar *path = NULL;
       g_autofree gchar *uri = NULL;
       g_autofree gchar *hash = NULL;
@@ -213,24 +215,18 @@ ide_unsaved_files_save_worker (GTask        *task,
       path = g_build_filename (state->drafts_directory, hash, NULL);
 
       if (!unsaved_file_save (uf, path, &error))
-        {
-          g_task_return_error (task, error);
-          goto cleanup;
-        }
+        g_warning ("%s", error->message);
     }
 
-  if (!g_file_set_contents (manifest_path,
-                            manifest->str, manifest->len,
-                            &error))
+  if (!g_file_set_contents (manifest_path, manifest->str, manifest->len, &write_error))
     {
-      g_task_return_error (task, error);
-      goto cleanup;
+      g_task_return_error (task, write_error);
+      IDE_EXIT;
     }
 
   g_task_return_boolean (task, TRUE);
 
-cleanup:
-  g_string_free (manifest, TRUE);
+  IDE_EXIT;
 }
 
 static AsyncState *
@@ -261,6 +257,8 @@ ide_unsaved_files_save_async (IdeUnsavedFiles     *files,
   AsyncState *state;
   gsize i;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_UNSAVED_FILES (files));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -281,6 +279,8 @@ ide_unsaved_files_save_async (IdeUnsavedFiles     *files,
   task = g_task_new (files, cancellable, callback, user_data);
   g_task_set_task_data (task, state, async_state_free);
   g_task_run_in_thread (task, ide_unsaved_files_save_worker);
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -288,10 +288,16 @@ ide_unsaved_files_save_finish (IdeUnsavedFiles  *files,
                                GAsyncResult     *result,
                                GError          **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (files), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
