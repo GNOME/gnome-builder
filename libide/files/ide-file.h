@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FILE (ide_file_get_type())
 
+#define IDE_FILE_ATTRIBUTE_POSITION "metadata::libide-position"
+
 G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
 
 IdeFile           *ide_file_new                  (IdeContext           *context,
