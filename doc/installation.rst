@@ -18,6 +18,7 @@ The preferred installation method for Builder is `via Flatpak`_.
 This provides a bandwidth efficient and safe to use installation method that can be easily kept up to date.
 It is also the engine behind Builder's powerful SDK!
 
+.. _via_flatpak:
 
 via Flatpak
 -----------
