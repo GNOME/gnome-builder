@@ -111,9 +111,9 @@ test_vim = executable('test-vim',
   c_args: ide_test_cflags,
   dependencies: libide_dep,
 )
-test('test-vim', test_vim,
-  env: ide_test_env,
-)
+#test('test-vim', test_vim,
+#  env: ide_test_env,
+#)
 
 
 test_snippet_parser = executable('test-snippet-parser',
