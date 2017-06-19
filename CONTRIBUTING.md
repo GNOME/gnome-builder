@@ -93,3 +93,18 @@ and parameters. Add additional documentation when it makes sense.
 If you find you come across something particularly tricky, or are being clever,
 please add a comment denoting such.
 
+
+## Making a Release
+
+ - Update NEWS for release notes
+ - Update meson.build for the new version number
+ - Update doc/conf.py to reflect the updated version number
+ - Update any necessary tags in org.gnome.Builder.json for Flatpak
+ - Make sure documentation builds, tests pass
+ - Commit release changes, add a signed tag (git tag -s -u $keyid)
+ - Configure meson as normal, ensure docs are built
+ - From the build directory, run `ninja dist` to generate the tarball
+ - Push changes to master (or branch), push tag
+ - scp the tarball to master.gnome.org
+ - Run ftpadmin install `gnome-builder-*.tar.xz`.
+
