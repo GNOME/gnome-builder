@@ -192,6 +192,19 @@ ide_workbench_delete_event (GtkWidget   *widget,
 }
 
 static void
+ide_workbench_grab_focus (GtkWidget *widget)
+{
+  IdeWorkbench *self = (IdeWorkbench *)widget;
+  GtkWidget *child;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  child = gtk_stack_get_visible_child (self->perspectives_stack);
+  if (child != NULL)
+    gtk_widget_grab_focus (child);
+}
+
+static void
 ide_workbench_constructed (GObject *object)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
@@ -299,6 +312,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   object_class->get_property = ide_workbench_get_property;
   object_class->set_property = ide_workbench_set_property;
 
+  widget_class->grab_focus = ide_workbench_grab_focus;
   widget_class->delete_event = ide_workbench_delete_event;
 
   /**

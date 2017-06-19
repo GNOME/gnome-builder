@@ -389,6 +389,16 @@ ide_editor_perspective_grid_empty (IdeEditorPerspective *self,
 }
 
 static void
+ide_editor_perspective_grab_focus (GtkWidget *widget)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)widget;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->grid));
+}
+
+static void
 ide_editor_perspective_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
@@ -416,6 +426,8 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 
   object_class->get_property = ide_editor_perspective_get_property;
   object_class->finalize = ide_editor_perspective_finalize;
+
+  widget_class->grab_focus = ide_editor_perspective_grab_focus;
 
   container_class->add = ide_editor_perspective_add;
 
