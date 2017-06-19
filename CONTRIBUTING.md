@@ -101,6 +101,7 @@ please add a comment denoting such.
  - Update doc/conf.py to reflect the updated version number
  - Update any necessary tags in org.gnome.Builder.json for Flatpak
  - Make sure documentation builds, tests pass
+ - Make sure flatpak bundle builds
  - Commit release changes, add a signed tag (git tag -s -u $keyid)
  - Configure meson as normal, ensure docs are built
  - From the build directory, run `ninja dist` to generate the tarball
