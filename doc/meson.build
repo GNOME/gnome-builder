@@ -1,19 +1,22 @@
 if get_option('with_docs')
 
-sphinx = find_program('sphinx-build-3', required: false)
-if not sphinx.found()
-    sphinx = find_program('sphinx-build', required: false)
-endif
+conf_py_data = configuration_data()
+conf_py_data.set_quoted('VERSION', meson.project_version())
+
+configure_file(
+         input: 'conf.py.in',
+        output: 'conf.py',
+ configuration: conf_py_data,
+)
+
+sphinx = find_program(['sphinx-build-3', 'sphinx-build'], required: false)
 
 if sphinx.found()
-    docs_sources = [
-    ]
-
     custom_target('en user documentation',
-                  command: [sphinx, '-b', 'html', meson.current_source_dir(), '@OUTPUT@'],
-                    input: docs_sources,
+                  command: [sphinx, '-b', 'html', '-c', meson.current_build_dir(), meson.current_source_dir(), '@OUTPUT@'],
                    output: 'en',
          build_by_default: true)
+
 
     install_subdir(meson.current_build_dir() + '/en', install_dir: pkgdocdir_abs)
 endif
