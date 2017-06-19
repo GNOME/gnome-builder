@@ -14,3 +14,4 @@ tools/ide-mine-projects.c
 tools/ide-search.c
 data/org.gnome.Builder.desktop.in
 sub/data/org.gnome.Builder.desktop.in
+subprojects
