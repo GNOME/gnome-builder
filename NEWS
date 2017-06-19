@@ -1,4 +1,55 @@
 ==============
+Version 3.25.3
+==============
+
+This release includes some major changes for packagers. Builder is now built
+using the Meson build system. Given the number of GNOME packages following this
+trend, chances are that packagers will have existing scripts to help make this
+a smooth transition.
+
+Changes since 3.25.2
+
+ • The "egg" contrib package has been broken out into libdazzle. If you do
+   not have libdazzle, it will be built as a subproject.
+   http://git.gnome.org/browse/libdazzle
+ • The "jsonrpc-glib" contrib package has been broken out into a standalone
+   project. It will be built as a subproject if you do not have it installed.
+   http://git.gnome.org/browse/jsonrpc-glib
+ • The "template-glib" contrib package has been broken out into a standalone
+   project. It will be built as a subproject if you do not have it installed.
+   http://git.gnome.org/browse/template-glib
+ • Ctags completion priority has been lowered
+ • Many internals have been moved to an updated libdazzle. This includes lots
+   of theming fixes as well as improved panels and theming integration. Many
+   search data structures were also broken out into libdazzle.
+ • The search provider has been rewritten to use libdazzle and the new
+   suggestion entry. We expect more changes here before 3.26.
+ • Builder now uses GVFS metadata to store the cursor position. This should
+   improve the chances you end up on the right position when re-opening a
+   buffer.
+ • Panels now properly maintain their visibility state between runs of Builder.
+ • The flatpak plugin now properly ignores runtimes ending in ".Sources".
+ • Builder properly cleans up drafts fixing an issue where files with encoding
+   errors would continually re-open when restoring Builder's internal state.
+ • A "counters" window has been added to aide in debugging.
+ • Builder now tries to do significantly less work while the buffer is opening.
+   This should speed up file-loading on larger files.
+ • Various async operation priority have been lowered to avoid stalling the
+   Gtk main loop.
+ • UI files now strip their empty space which should reduce the size of libide
+   a small amount.
+ • IdePerspective now has a restore_state vfunc. This helps ensure that the
+   widget restores state after the UI has settled. This can help avoid hickups
+   in the UI at startup.
+ • Python Ide.py overrides now have helpers to log using g_warning() etc. See
+   Ide.warning(), Ide.debug(), Ide.critical(), etc.
+ • Additional documentation.
+
+Updated Translations:
+
+  Spanish, Kazakh
+
+==============
 Version 3.25.2
 ==============
 
