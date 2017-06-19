@@ -15,7 +15,7 @@ libide_version_h = configure_file(
         install: true,
   configuration: version_data)
 
-vcs_tag(
+libide_build_ident_h = vcs_tag(
      fallback: meson.project_version(),
         input: 'ide-build-ident.h.in',
        output: 'ide-build-ident.h',
@@ -411,6 +411,7 @@ libide_public_sources = [
 ]
 
 libide_generated_headers = [
+  libide_build_ident_h,
   libide_resources[1],
   libide_icons_resources[1],
   libide_enums[1],
