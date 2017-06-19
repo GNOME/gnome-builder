@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-util"
 
+#include <flatpak.h>
+
 #include "gbp-flatpak-util.h"
 
 gchar *
@@ -71,3 +73,16 @@ gbp_flatpak_get_staging_dir (IdeConfiguration *configuration)
                            runtime_id,
                            NULL);
 }
+
+gboolean
+gbp_flatpak_is_ignored (const gchar *name)
+{
+  if (name == NULL)
+    return TRUE;
+
+  return g_str_has_suffix (name, ".Locale") ||
+         g_str_has_suffix (name, ".Debug") ||
+         g_str_has_suffix (name, ".Sources") ||
+         g_str_has_suffix (name, ".Var");
+}
+

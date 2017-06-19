@@ -22,6 +22,7 @@
 
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-runtime.h"
+#include "gbp-flatpak-util.h"
 
 typedef struct
 {
@@ -85,16 +86,6 @@ static BuiltinFlatpakRepo builtin_flatpak_repos[] = {
 };
 
 static void gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self);
-
-static gboolean
-is_ignored (FlatpakRef *ref)
-{
-  const gchar *name = flatpak_ref_get_name (ref);
-
-  return g_str_has_suffix (name, ".Locale") ||
-         g_str_has_suffix (name, ".Debug") ||
-         g_str_has_suffix (name, ".Var");
-}
 
 static void
 install_info_installation_changed (GFileMonitor      *monitor,
@@ -359,8 +350,9 @@ gbp_flatpak_application_addin_get_runtimes (GbpFlatpakApplicationAddin *self)
           for (guint j = 0; j < ar->len; j++)
             {
               FlatpakInstalledRef *ref = g_ptr_array_index (ar, j);
+              const gchar *name = flatpak_ref_get_name (ref);
 
-              if (!is_ignored (FLATPAK_REF (ref)))
+              if (!gbp_flatpak_is_ignored (name))
                 g_ptr_array_add (ret, g_object_ref (ref));
             }
         }
