@@ -44,7 +44,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  UNFOCUS,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 ide_search_entry_search_cb (GObject      *object,
@@ -126,6 +132,18 @@ suggestion_activated (DzlSuggestionEntry *entry,
 }
 
 static void
+ide_search_entry_unfocus (IdeSearchEntry *self)
+{
+  GtkWidget *toplevel;
+
+  g_assert (IDE_IS_SEARCH_ENTRY (self));
+
+  g_signal_emit_by_name (self, "hide-suggestions");
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  gtk_widget_grab_focus (toplevel);
+}
+
+static void
 ide_search_entry_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
@@ -168,6 +186,7 @@ ide_search_entry_class_init (IdeSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   DzlSuggestionEntryClass *suggestion_entry_class = DZL_SUGGESTION_ENTRY_CLASS (klass);
+  GtkBindingSet *bindings;
 
   object_class->get_property = ide_search_entry_get_property;
   object_class->set_property = ide_search_entry_set_property;
@@ -184,6 +203,16 @@ ide_search_entry_class_init (IdeSearchEntryClass *klass)
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [UNFOCUS] =
+    g_signal_new_class_handler ("unfocus",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_search_entry_unfocus),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  bindings = gtk_binding_set_by_class (klass);
+  gtk_binding_entry_add_signal (bindings, GDK_KEY_Escape, 0, "unfocus", 0);
 }
 
 static void
