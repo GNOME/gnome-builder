@@ -180,16 +180,16 @@ ide_application_actions_help_cb (GObject      *object,
    * We failed to reach the online site for some reason (offline, transient error, etc),
    * so instead try to load the local documentation.
    */
-  if (g_file_test (PACKAGE_DOCDIR"/html/index.html", G_FILE_TEST_IS_REGULAR))
+  if (g_file_test (PACKAGE_DOCDIR"/en/index.html", G_FILE_TEST_IS_REGULAR))
     {
       const gchar *uri;
       g_autofree gchar *real_uri = NULL;
       g_autoptr(GError) error = NULL;
 
       if (ide_is_flatpak ())
-        uri = real_uri = ide_flatpak_get_app_path ("/share/doc/gnome-builder/html/index.html");
+        uri = real_uri = ide_flatpak_get_app_path ("/share/doc/gnome-builder/en/index.html");
       else
-        uri = "file://"PACKAGE_DOCDIR"/html/index.html";
+        uri = "file://"PACKAGE_DOCDIR"/en/index.html";
 
       if (!gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
         g_warning ("Failed to load documentation: %s", error->message);
