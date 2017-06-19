@@ -25,6 +25,7 @@
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-preferences-addin.h"
 #include "gbp-flatpak-transfer.h"
+#include "gbp-flatpak-util.h"
 
 struct _GbpFlatpakPreferencesAddin
 {
@@ -49,14 +50,6 @@ gbp_flatpak_preferences_addin_view_more (GbpFlatpakPreferencesAddin *self,
   self->show_all = !self->show_all;
   if (self->preferences != NULL)
     gbp_flatpak_preferences_addin_reload (self);
-}
-
-static gboolean
-is_ignored (const gchar *name)
-{
-  return g_str_has_suffix (name, ".Locale") ||
-         g_str_has_suffix (name, ".Debug") ||
-         g_str_has_suffix (name, ".Var");
 }
 
 static GtkWidget *
@@ -283,7 +276,7 @@ gbp_flatpak_preferences_addin_reload_cb (GObject      *object,
       GtkWidget *row;
       guint id;
 
-      if (is_ignored (name))
+      if (gbp_flatpak_is_ignored (name))
         continue;
 
       /* Don't show this item by default if it's not GNOME or an old branch */
