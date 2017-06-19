@@ -74,8 +74,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/libfuse/libfuse/releases/download/fuse_2_9_5/fuse-2.9.5.tar.gz",
-                    "sha256": "579f371cc5ffc1afca7057512bf7d52988a9ede57859a7c55e5b9f72435cdbb5"
+                    "url": "https://github.com/libfuse/libfuse/releases/download/fuse-2.9.7/fuse-2.9.7.tar.gz",
+                    "sha256": "832432d1ad4f833c20e13b57cf40ce5277a9d33e483205fc63c78111b3358874"
                 }
             ]
         },
@@ -194,8 +194,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/39/e8/a8e0b1fa65dd021d48fe21464f71783655f39a41f218293c1c590d54eb82/lxml-3.7.3.tar.gz",
-                    "sha256": "aa502d78a51ee7d127b4824ff96500f0181d3c7826e6ee7b800d068be79361c7"
+                    "url": "https://pypi.python.org/packages/20/b3/9f245de14b7696e2d2a386c0b09032a2ff6625270761d6543827e667d8de/lxml-3.8.0.tar.gz",
+                    "sha256": "736f72be15caad8116891eb6aa4a078b590d231fdc63818c40c21624ac71db96"
                 },
                 {
                     "type": "file",
@@ -621,7 +621,7 @@
             "name": "gnome-builder",
             "buildsystem": "meson",
             "builddir": true,
-            "config-opts": [ "--libdir=/app/lib", "-Denable_tracing=true", "-Denable_debug=true", "-Dwith_channel=flatpak-nightly" ],
+            "config-opts": [ "--libdir=/app/lib", "-Denable_tracing=true", "-Denable_debug=true", "-Dwith_docs=true", "-Dwith_channel=flatpak-nightly" ],
             "sources": [
                 {
                     "type": "git",
