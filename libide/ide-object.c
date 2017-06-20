@@ -43,6 +43,7 @@ typedef struct
 typedef struct
 {
   GPtrArray *plugins;
+  GType      plugin_type;
   gint       position;
   gint       io_priority;
 } InitExtensionAsyncState;
@@ -354,8 +355,10 @@ extension_init_cb (GObject      *object,
 {
   g_autoptr(GTask) task = user_data;
   GAsyncInitable *initable = (GAsyncInitable *)object;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   InitExtensionAsyncState *state;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_INITABLE (initable));
@@ -364,18 +367,24 @@ extension_init_cb (GObject      *object,
 
   if (!g_async_initable_init_finish (initable, result, &error))
     {
+      IDE_TRACE_MSG ("extension for %s failed to initialize: %s",
+                     G_OBJECT_TYPE_NAME (initable), error->message);
+
       if ((guint)state->position == state->plugins->len)
         {
-          g_task_return_error (task, error);
-          return;
+          g_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
         }
 
-      g_clear_error (&error);
       ide_object_new_for_extension_async_try_next (task);
-      return;
+      IDE_EXIT;
     }
 
+  IDE_TRACE_MSG ("initialization of %s was successful", G_OBJECT_TYPE_NAME (initable));
+
   g_task_return_pointer (task, g_object_ref (initable), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -384,17 +393,21 @@ ide_object_new_for_extension_async_try_next (GTask *task)
   InitExtensionAsyncState *state;
   GAsyncInitable *initable;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
 
   state = g_task_get_task_data (task);
 
   if ((guint)state->position == state->plugins->len)
     {
+      IDE_TRACE_MSG ("No more %s extensions to try", g_type_name (state->plugin_type));
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("Failed to locate build system plugin."));
-      return;
+                               _("Failed to locate %s plugin."),
+                               g_type_name (state->plugin_type));
+      IDE_EXIT;
     }
 
   initable = g_ptr_array_index (state->plugins, state->position++);
@@ -406,6 +419,8 @@ ide_object_new_for_extension_async_try_next (GTask *task)
                                g_task_get_cancellable (task),
                                extension_init_cb,
                                g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 /**
@@ -445,6 +460,7 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
   state->plugins = g_ptr_array_new_with_free_func (g_object_unref);
   state->position = 0;
   state->io_priority = io_priority;
+  state->plugin_type = interface_gtype;
 
   peas_extension_set_foreach (set, extensions_foreach_cb, state);
 
