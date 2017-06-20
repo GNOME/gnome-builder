@@ -155,7 +155,7 @@ if cc.has_function('sched_getcpu')
 endif
 
 configure_file(
-  output: 'config.h',
+         output: 'config.h',
   configuration: conf
 )
 
@@ -271,39 +271,35 @@ subdir('po')
 subdir('tests')
 subdir('doc')
 
-exe_link_args = [
-  '-pie',
-]
-exe_c_args = [
-  '-fPIE',
-]
+exe_link_args = [ '-pie' ]
+exe_c_args = [ '-fPIE' ]
 
 executable('gnome-builder', 'src/main.c',
-  gui_app: true,
-  install: true,
-  c_args: exe_c_args,
-  link_args: exe_link_args,
+        gui_app: true,
+        install: true,
+         c_args: exe_c_args,
+      link_args: exe_link_args,
   install_rpath: pkglibdir_abs,
-  dependencies: libide_deps + [libide_dep],
+   dependencies: libide_deps + [libide_dep],
 )
 
 executable('gnome-builder-cli', 'src/main.c',
-  gui_app: false,
-  install: true,
-  c_args: exe_c_args,
-  link_args: exe_link_args,
+        gui_app: false,
+        install: true,
+         c_args: exe_c_args,
+      link_args: exe_link_args,
   install_rpath: pkglibdir_abs,
-  dependencies: libide_deps + [libide_dep],
+   dependencies: libide_deps + [libide_dep],
 )
 
 executable('gnome-builder-worker', 'src/main.c',
-  gui_app: false,
-  install: true,
-  install_dir: get_option('libexecdir'),
-  c_args: exe_c_args,
-  link_args: exe_link_args,
+        gui_app: false,
+        install: true,
+    install_dir: get_option('libexecdir'),
+         c_args: exe_c_args,
+      link_args: exe_link_args,
   install_rpath: pkglibdir_abs,
-  dependencies: libide_deps + [libide_dep],
+   dependencies: libide_deps + [libide_dep],
 )
 
 meson.add_install_script('build-aux/meson/meson_post_install.py')
