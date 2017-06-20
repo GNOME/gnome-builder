@@ -367,6 +367,12 @@ extension_init_cb (GObject      *object,
 
   if (!g_async_initable_init_finish (initable, result, &error))
     {
+      if (error == NULL)
+        error = g_error_new (G_IO_ERROR,
+                             G_IO_ERROR_FAILED,
+                             "Unknown error while initializing %s",
+                             G_OBJECT_TYPE_NAME (initable));
+
       IDE_TRACE_MSG ("extension for %s failed to initialize: %s",
                      G_OBJECT_TYPE_NAME (initable), error->message);
 
