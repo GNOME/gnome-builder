@@ -25,9 +25,9 @@ gstyle_color_panel = executable('test-gstyle-color-panel',
   c_args: gstyle_test_cflags,
   dependencies: libgstyle_dep,
 )
-test('test-gstyle-color-panel', gstyle_color_panel,
-  env: gstyle_test_env
-)
+#test('test-gstyle-color-panel', gstyle_color_panel,
+  #env: gstyle_test_env
+#)
 
 
 gstyle_color_plane = executable('test-gstyle-color-plane',
@@ -85,9 +85,9 @@ gstyle_palette_widget = executable('test-gstyle-palette-widget',
   c_args: gstyle_test_cflags,
   dependencies: libgstyle_dep,
 )
-test('test-gstyle-color-palette-widget', gstyle_palette_widget,
-  env: gstyle_test_env
-)
+#test('test-gstyle-color-palette-widget', gstyle_palette_widget,
+  #env: gstyle_test_env
+#)
 
 
 gstyle_parse = executable('test-gstyle-color-parse',
