@@ -10,7 +10,7 @@ ide_test_env = [
 #  'MALLOC_PERTURB_=$((${RANDOM:-256} % 256))',
 ]
 ide_test_cflags = [
-	'-DTEST_DATA_DIR="@0@/data"'.format(meson.current_source_dir()),
+  '-DTEST_DATA_DIR="@0@/data/"'.format(meson.current_source_dir()),
 ]
 
 ide_context = executable('test-ide-context',

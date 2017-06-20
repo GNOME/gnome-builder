@@ -104,6 +104,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  static const gchar *required_plugins[] = { "autotools-plugin", "directory-plugin", NULL };
   IdeApplication *app;
   gint ret;
 
@@ -113,7 +114,7 @@ main (gint   argc,
   ide_log_set_verbosity (4);
 
   app = ide_application_new ();
-  ide_application_add_test (app, "/Ide/Buffer/basic", test_buffer_basic, NULL);
+  ide_application_add_test (app, "/Ide/Buffer/basic", test_buffer_basic, NULL, required_plugins);
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 

@@ -28,10 +28,11 @@
 
 typedef struct
 {
-  IdeApplication               *self;
-  gchar                        *name;
-  IdeApplicationTest            test_func;
-  IdeApplicationTestCompletion  test_completion;
+  IdeApplication                *self;
+  gchar                         *name;
+  gchar                        **required_plugins;
+  IdeApplicationTest             test_func;
+  IdeApplicationTestCompletion   test_completion;
 } AsyncTest;
 
 static void ide_application_run_next_test (IdeApplication *self);
@@ -73,6 +74,46 @@ ide_application_run_tests_cb (GObject      *object,
 }
 
 static void
+ide_application_tests_update_plugins (IdeApplication *self,
+                                      AsyncTest      *test)
+{
+  g_auto(GStrv) loaded = NULL;
+  PeasEngine *engine;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (test != NULL);
+
+  engine = peas_engine_get_default ();
+  loaded = peas_engine_get_loaded_plugins (engine);
+
+  if (loaded != NULL)
+    {
+      for (guint i = 0; loaded[i]; i++)
+        {
+          PeasPluginInfo *info = peas_engine_get_plugin_info (engine, loaded[i]);
+
+          g_debug ("Unloading plugin %s", loaded[i]);
+          peas_engine_unload_plugin (engine, info);
+        }
+    }
+
+  if (test->required_plugins != NULL)
+    {
+      for (guint i = 0; test->required_plugins[i]; i++)
+        {
+          PeasPluginInfo *info = peas_engine_get_plugin_info (engine, test->required_plugins[i]);
+
+          g_debug ("Loading plugin %s [%p] for test", test->required_plugins[i], info);
+
+          if (info == NULL)
+            g_error ("No such plugin %s", test->required_plugins[i]);
+
+          peas_engine_load_plugin (engine, info);
+        }
+    }
+}
+
+static void
 ide_application_run_next_test (IdeApplication *self)
 {
   g_autoptr(GCancellable) cancellable = NULL;
@@ -86,8 +127,17 @@ ide_application_run_next_test (IdeApplication *self)
 
   test = self->test_funcs->data;
   test->self = g_object_ref (self);
+
+  /* ensure proper plugins are loaded */
+  ide_application_tests_update_plugins (self, test);
+
+  /* run the async test */
   test->test_func (cancellable, ide_application_run_tests_cb, test);
 
+  /* remove it from our todo list. this is safe to do after calling
+   * our async func because the finish cannot be called until we
+   * return from this function and yield to the main loop.
+   */
   self->test_funcs = g_list_delete_link (self->test_funcs, self->test_funcs);
 
   IDE_EXIT;
@@ -123,7 +173,8 @@ void
 ide_application_add_test (IdeApplication               *self,
                           const gchar                  *test_name,
                           IdeApplicationTest            test_func,
-                          IdeApplicationTestCompletion  test_completion)
+                          IdeApplicationTestCompletion  test_completion,
+                          const gchar * const          *required_plugins)
 {
   AsyncTest *test;
 
@@ -140,6 +191,7 @@ ide_application_add_test (IdeApplication               *self,
   test->name = g_strdup (test_name);
   test->test_func = test_func;
   test->test_completion = test_completion;
+  test->required_plugins = g_strdupv ((gchar **)required_plugins);
 
   self->test_funcs = g_list_append (self->test_funcs, test);
 

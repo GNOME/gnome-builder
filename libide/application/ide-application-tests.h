@@ -32,7 +32,8 @@ typedef gboolean (*IdeApplicationTestCompletion) (GAsyncResult         *result,
 void ide_application_add_test (IdeApplication               *self,
                                const gchar                  *test_name,
                                IdeApplicationTest            test_func,
-                               IdeApplicationTestCompletion  test_completion);
+                               IdeApplicationTestCompletion  test_completion,
+                               const gchar * const          *required_plugins);
 
 G_END_DECLS
 

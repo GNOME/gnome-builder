@@ -55,13 +55,10 @@ test_new_async (GCancellable        *cancellable,
 {
   g_autofree gchar *path = NULL;
   g_autoptr(GFile) project_file = NULL;
-  const gchar *srcdir;
   GTask *task;
 
-  srcdir = g_getenv ("G_TEST_SRCDIR");
-
   task = g_task_new (NULL, cancellable, callback, user_data);
-  path = g_build_filename (srcdir, "data", "project1", "configure.ac", NULL);
+  path = g_build_filename (TEST_DATA_DIR, "project1", "configure.ac", NULL);
   project_file = g_file_new_for_path (path);
 
   ide_context_new_async (project_file,
@@ -74,6 +71,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  static const gchar *required_plugins[] = { "autotools-plugin", "directory-plugin", NULL };
   IdeApplication *app;
   gint ret;
 
@@ -83,7 +81,7 @@ main (gint   argc,
   ide_log_set_verbosity (4);
 
   app = ide_application_new ();
-  ide_application_add_test (app, "/Ide/Context/new_async", test_new_async, NULL);
+  ide_application_add_test (app, "/Ide/Context/new_async", test_new_async, NULL, required_plugins);
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 

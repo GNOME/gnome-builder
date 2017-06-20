@@ -180,7 +180,7 @@ ide_build_system_new_async (IdeContext          *context,
 
   ide_object_new_for_extension_async (IDE_TYPE_BUILD_SYSTEM,
                                       sort_priority, (gpointer)build_system_hint,
-                                      G_PRIORITY_DEFAULT,
+                                      G_PRIORITY_LOW,
                                       cancellable,
                                       callback,
                                       user_data,
@@ -203,11 +203,20 @@ ide_build_system_new_finish (GAsyncResult  *result,
 {
   IdeObject *ret;
 
+  IDE_ENTRY;
+
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   ret = ide_object_new_finish (result, error);
 
-  return ret ? IDE_BUILD_SYSTEM (ret) : NULL;
+#ifdef IDE_ENABLE_TRACE
+  if (ret)
+    IDE_TRACE_MSG ("BuildSystem is %s", G_OBJECT_TYPE_NAME (ret));
+  else
+    IDE_TRACE_MSG ("BuildSystem creation failed");
+#endif
+
+  IDE_RETURN (IDE_BUILD_SYSTEM (ret));
 }
 
 void

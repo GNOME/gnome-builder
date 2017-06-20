@@ -36,19 +36,6 @@ struct {
 };
 
 static void
-load_vim_css (void)
-{
-  GtkCssProvider *provider;
-
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/org/gnome/builder/keybindings/vim.css");
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_clear_object (&provider);
-}
-
-static void
 new_context_cb (GObject      *object,
                 GAsyncResult *result,
                 gpointer      user_data)
@@ -109,10 +96,9 @@ test_vim_basic (GCancellable        *cancellable,
   g_autoptr(GFile) project_file = NULL;
   GTask *task;
 
-  load_vim_css ();
-
   task = g_task_new (NULL, cancellable, callback, user_data);
-  project_file = g_file_new_for_path (TEST_DATA_DIR"/project1/configure.ac");
+  project_file = g_file_new_for_path (TEST_DATA_DIR "/project1/configure.ac");
+  g_assert (g_file_query_exists (project_file, NULL));
   ide_context_new_async (project_file,
                          NULL,
                          new_context_cb,
@@ -193,6 +179,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  static const gchar *required_plugins[] = { "autotools-plugin", "directory-plugin", NULL };
   IdeApplication *app;
   gint ret;
 
@@ -202,7 +189,7 @@ main (gint   argc,
   ide_log_set_verbosity (4);
 
   app = ide_application_new ();
-  ide_application_add_test (app, "/Ide/Vim/basic", test_vim_basic, NULL);
+  ide_application_add_test (app, "/Ide/Vim/basic", test_vim_basic, NULL, required_plugins);
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
