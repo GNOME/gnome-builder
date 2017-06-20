@@ -321,6 +321,14 @@ ide_application_load_plugins (IdeApplication *self)
       if (!g_settings_get_boolean (settings, "enabled"))
         continue;
 
+      /*
+       * If we are running the unit tests, we don't want to load plugins here,
+       * but defer until the test is loading to perform the loading.  However,
+       * we do want all of the other machinery above to be setup.
+       */
+      if (self->mode == IDE_APPLICATION_MODE_TESTS)
+        continue;
+
       if (ide_application_can_load_plugin (self, plugin_info))
         {
           g_debug ("Loading plugin \"%s\"",
