@@ -845,6 +845,8 @@ ide_autotools_build_system_init_async (GAsyncInitable      *initable,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (initable, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_system_init_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   context = ide_object_get_context (IDE_OBJECT (system));
   project_file = ide_context_get_project_file (context);
 
