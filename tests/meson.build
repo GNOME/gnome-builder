@@ -81,9 +81,9 @@ ide_indenter = executable('test-ide-indenter',
     libpeas_dep,
   ],
 )
-test('test-ide-indenter', ide_indenter,
-  env: ide_test_env,
-)
+#test('test-ide-indenter', ide_indenter,
+  #env: ide_test_env,
+#)
 
 
 ide_vcs_uri = executable('test-ide-vcs-uri',
