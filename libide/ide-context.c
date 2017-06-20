@@ -991,16 +991,23 @@ ide_context_init_build_system_cb (GObject      *object,
 {
   g_autoptr(IdeBuildSystem) build_system = NULL;
   g_autoptr(GTask) task = user_data;
-  IdeContext *self;
   g_autoptr(GFile) project_file = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeContext *self;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
 
   self = g_task_get_source_object (task);
 
-  if (!(build_system = ide_build_system_new_finish (result, &error)))
+  g_assert (IDE_IS_CONTEXT (self));
+
+  if (NULL == (build_system = ide_build_system_new_finish (result, &error)))
     {
-      g_task_return_error (task, error);
-      return;
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   self->build_system = g_object_ref (build_system);
@@ -1013,6 +1020,8 @@ ide_context_init_build_system_cb (GObject      *object,
     ide_context_set_project_file (self, project_file);
 
   g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -1028,13 +1037,14 @@ ide_context_init_build_system (gpointer             source_object,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_context_init_build_system);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   ide_build_system_new_async (self,
                               self->project_file,
                               self->build_system_hint,
                               cancellable,
                               ide_context_init_build_system_cb,
-                              g_object_ref (task));
+                              g_steal_pointer (&task));
 }
 
 static void
