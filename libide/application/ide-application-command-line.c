@@ -305,7 +305,7 @@ ide_application_local_command_line (GApplication   *application,
     {
       self->mode = IDE_APPLICATION_MODE_WORKER;
     }
-  else if (g_str_has_prefix (prgname, "test-"))
+  else if (strstr (prgname, "test-") != NULL)
     {
       self->mode = IDE_APPLICATION_MODE_TESTS;
 
