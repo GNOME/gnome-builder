@@ -14,7 +14,7 @@ ctags_sources = [
   'ide-ctags-index.h',
   'ide-ctags-service.c',
   'ide-ctags-service.h',
-	'ide-ctags-symbol-node.c',
+  'ide-ctags-symbol-node.c',
   'ide-ctags-symbol-resolver.c',
   'ide-ctags-symbol-resolver.h',
   'ide-ctags-symbol-tree.c',
@@ -31,6 +31,12 @@ shared_module('ctags-plugin', ctags_sources,
   install_dir: plugindir,
 )
 
-install_data('ctags.plugin', install_dir: plugindir)
+configure_file(
+          input: 'ctags.plugin',
+         output: 'ctags.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

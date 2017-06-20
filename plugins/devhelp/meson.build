@@ -35,6 +35,12 @@ shared_module('devhelp-plugin', devhelp_sources,
    install_dir: plugindir,
 )
 
-install_data('devhelp.plugin', install_dir: plugindir)
+configure_file(
+          input: 'devhelp.plugin',
+         output: 'devhelp.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

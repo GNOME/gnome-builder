@@ -16,6 +16,12 @@ shared_module('quick-highlight-plugin', quick_highlight_sources,
   install_dir: plugindir,
 )
 
-install_data('quick-highlight.plugin', install_dir: plugindir)
+configure_file(
+          input: 'quick-highlight.plugin',
+         output: 'quick-highlight.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

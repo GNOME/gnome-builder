@@ -13,6 +13,12 @@ shared_module('html-completion-plugin', html_completion_sources,
   install_dir: plugindir,
 )
 
-install_data('html-completion.plugin', install_dir: plugindir)
+configure_file(
+          input: 'html-completion.plugin',
+         output: 'html-completion.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

@@ -66,6 +66,12 @@ shared_module('clang-plugin', clang_sources,
   install_dir: plugindir,
 )
 
-install_data('clang.plugin', install_dir: plugindir)
+configure_file(
+          input: 'clang.plugin',
+         output: 'clang.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

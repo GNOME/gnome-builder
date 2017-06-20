@@ -14,6 +14,12 @@ shared_module('notification-plugin', notification_sources,
   install_dir: plugindir,
 )
 
-install_data('notification.plugin', install_dir: plugindir)
+configure_file(
+          input: 'notification.plugin',
+         output: 'notification.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

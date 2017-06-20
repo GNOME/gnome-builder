@@ -21,6 +21,12 @@ shared_module('comment-code-plugin', comment_code_sources,
   install_dir: plugindir,
 )
 
-install_data('comment-code.plugin', install_dir: plugindir)
+configure_file(
+          input: 'comment-code.plugin',
+         output: 'comment-code.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

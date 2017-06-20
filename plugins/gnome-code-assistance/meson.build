@@ -24,7 +24,13 @@ shared_module('gnome-code-assistance-plugin', gnome_code_assistance_sources,
   install_dir: plugindir,
 )
 
-install_data('gnome-code-assistance.plugin', install_dir: plugindir)
+configure_file(
+          input: 'gnome-code-assistance.plugin',
+         output: 'gnome-code-assistance.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 install_data('org.gnome.builder.gnome-code-assistance.gschema.xml',
   install_dir: schema_dir)

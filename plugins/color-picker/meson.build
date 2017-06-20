@@ -39,9 +39,16 @@ shared_module('color-picker-plugin', color_picker_sources,
   install_dir: plugindir,
 )
 
-install_data('color-picker.plugin', install_dir: plugindir)
 install_data('gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml',
   install_dir: schema_dir,
+)
+
+configure_file(
+          input: 'color-picker.plugin',
+         output: 'color-picker.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
 )
 
 endif

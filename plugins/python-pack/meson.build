@@ -16,6 +16,12 @@ shared_module('python-pack-plugin', python_pack_sources,
   install_dir: plugindir,
 )
 
-install_data('python-pack.plugin', install_dir: plugindir)
+configure_file(
+          input: 'python-pack.plugin',
+         output: 'python-pack.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

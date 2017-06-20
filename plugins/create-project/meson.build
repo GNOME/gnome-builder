@@ -27,6 +27,12 @@ shared_module('create-project-plugin', create_project_sources,
   install_dir: plugindir,
 )
 
-install_data('create-project.plugin', install_dir: plugindir)
+configure_file(
+          input: 'create-project.plugin',
+         output: 'create-project.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

@@ -16,6 +16,12 @@ shared_module('mingw-plugin', mingw_sources,
   install_dir: plugindir,
 )
 
-install_data('mingw.plugin', install_dir: plugindir)
+configure_file(
+          input: 'mingw.plugin',
+         output: 'mingw.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

@@ -20,6 +20,13 @@ shared_module('retab-plugin', retab_sources,
   install: true,
   install_dir: plugindir,
 )
-install_data('retab.plugin', install_dir: plugindir)
+
+configure_file(
+          input: 'retab.plugin',
+         output: 'retab.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

@@ -23,6 +23,12 @@ shared_module('support-plugin', support_sources,
   install_dir: plugindir,
 )
 
-install_data('support.plugin', install_dir: plugindir)
+configure_file(
+          input: 'support.plugin',
+         output: 'support.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

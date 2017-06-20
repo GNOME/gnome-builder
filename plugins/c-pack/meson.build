@@ -18,6 +18,12 @@ shared_module('c-pack-plugin', c_pack_sources,
   install_dir: plugindir,
 )
 
-install_data('c-pack.plugin', install_dir: plugindir)
+configure_file(
+          input: 'c-pack.plugin',
+         output: 'c-pack.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

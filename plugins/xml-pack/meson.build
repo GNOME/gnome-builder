@@ -46,6 +46,12 @@ shared_module('xml-pack-plugin', xml_pack_sources,
   install_dir: plugindir,
 )
 
-install_data('xml-pack.plugin', install_dir: plugindir)
+configure_file(
+          input: 'xml-pack.plugin',
+         output: 'xml-pack.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

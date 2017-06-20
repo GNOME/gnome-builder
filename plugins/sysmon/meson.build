@@ -23,6 +23,12 @@ shared_module('sysmon', sysmon_sources,
   install_dir: plugindir,
 )
 
-install_data('sysmon.plugin', install_dir: plugindir)
+configure_file(
+          input: 'sysmon.plugin',
+         output: 'sysmon.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

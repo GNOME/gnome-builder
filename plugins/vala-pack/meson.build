@@ -105,6 +105,12 @@ shared_module('vala-pack-plugin', vala_pack_sources,
   install_dir: plugindir,
 )
 
-install_data('vala-pack.plugin', install_dir: plugindir)
+configure_file(
+          input: 'vala-pack.plugin',
+         output: 'vala-pack.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

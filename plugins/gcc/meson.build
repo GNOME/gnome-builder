@@ -14,6 +14,12 @@ shared_module('gcc-plugin', gcc_sources,
   install_dir: plugindir,
 )
 
-install_data('gcc.plugin', install_dir: plugindir)
+configure_file(
+          input: 'gcc.plugin',
+         output: 'gcc.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

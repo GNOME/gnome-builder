@@ -28,6 +28,12 @@ shared_module('sysprof-plugin', sysprof_sources,
   install_dir: plugindir,
 )
 
-install_data('sysprof.plugin', install_dir: plugindir)
+configure_file(
+          input: 'sysprof.plugin',
+         output: 'sysprof.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

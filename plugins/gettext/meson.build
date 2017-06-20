@@ -14,6 +14,12 @@ shared_module('gettext-plugin', gettext_sources,
   install_dir: plugindir,
 )
 
-install_data('gettext.plugin', install_dir: plugindir)
+configure_file(
+          input: 'gettext.plugin',
+         output: 'gettext.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

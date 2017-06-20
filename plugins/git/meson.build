@@ -37,6 +37,12 @@ shared_module('git-plugin', git_sources,
   install_dir: plugindir,
 )
 
-install_data('git.plugin', install_dir: plugindir)
+configure_file(
+          input: 'git.plugin',
+         output: 'git.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

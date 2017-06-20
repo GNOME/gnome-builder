@@ -25,6 +25,12 @@ shared_module('symbol-tree', symbol_tree_sources,
   install_dir: plugindir,
 )
 
-install_data('symbol-tree.plugin', install_dir: plugindir)
+configure_file(
+          input: 'symbol-tree.plugin',
+         output: 'symbol-tree.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

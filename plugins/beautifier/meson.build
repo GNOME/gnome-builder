@@ -29,7 +29,14 @@ shared_module('beautifier_plugin', beautifier_sources,
   install_dir: plugindir,
 )
 
-install_data('beautifier.plugin', install_dir: plugindir)
 install_subdir('data', install_dir: beautifier_datadir)
+
+configure_file(
+          input: 'beautifier.plugin',
+         output: 'beautifier.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif

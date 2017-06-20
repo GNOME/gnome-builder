@@ -17,6 +17,12 @@ shared_module('file-search', file_search_sources,
   install_dir: plugindir,
 )
 
-install_data('file-search.plugin', install_dir: plugindir)
+configure_file(
+          input: 'file-search.plugin',
+         output: 'file-search.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
 
 endif
