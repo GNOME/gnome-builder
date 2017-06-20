@@ -89,6 +89,8 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
   g_autoptr(GFile) configure_in = NULL;
   GFile *file = task_data;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -103,7 +105,7 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
   if (is_configure (file) && g_file_query_exists (file, cancellable))
     {
       g_task_return_pointer (task, g_object_ref (file), g_object_unref);
-      return;
+      IDE_EXIT;
     }
 
   if (g_file_query_file_type (file, 0, cancellable) == G_FILE_TYPE_DIRECTORY)
@@ -115,20 +117,22 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
   if (g_file_query_exists (configure_ac, cancellable))
     {
       g_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
-      return;
+      IDE_EXIT;
     }
 
   configure_in = g_file_get_child (parent, "configure.in");
   if (g_file_query_exists (configure_in, cancellable))
     {
       g_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
-      return;
+      IDE_EXIT;
     }
 
   g_task_return_new_error (task,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_FOUND,
                            "Failed to locate configure.ac");
+
+  IDE_EXIT;
 }
 
 static void
@@ -140,12 +144,16 @@ ide_autotools_build_system_discover_file_async (IdeAutotoolsBuildSystem *system,
 {
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (system, cancellable, callback, user_data);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
   g_task_run_in_thread (task, ide_autotools_build_system_discover_file_worker);
+
+  IDE_EXIT;
 }
 
 static GFile *
@@ -807,17 +815,20 @@ discover_file_cb (GObject      *object,
   IdeAutotoolsBuildSystem *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GFile) file = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_return_if_fail (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
   file = ide_autotools_build_system_discover_file_finish (self, result, &error);
 
-  if (!file)
+  if (error != NULL)
     {
-      g_task_return_error (task, error);
-      return;
+      g_debug ("Not an autotools build system: %s", error->message);
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   g_object_set (self, "project-file", file, NULL);
@@ -827,6 +838,8 @@ discover_file_cb (GObject      *object,
                                           g_task_get_cancellable (task),
                                           parse_cb,
                                           g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -841,12 +854,15 @@ ide_autotools_build_system_init_async (GAsyncInitable      *initable,
   IdeContext *context;
   GFile *project_file;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (initable, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_autotools_build_system_init_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
+
   context = ide_object_get_context (IDE_OBJECT (system));
   project_file = ide_context_get_project_file (context);
 
@@ -855,6 +871,8 @@ ide_autotools_build_system_init_async (GAsyncInitable      *initable,
                                                   cancellable,
                                                   discover_file_cb,
                                                   g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static gboolean
