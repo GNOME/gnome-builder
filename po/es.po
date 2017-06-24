@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-06-19 02:28+0000\n"
-"PO-Revision-Date: 2017-06-19 11:54+0200\n"
+"POT-Creation-Date: 2017-06-20 00:28+0000\n"
+"PO-Revision-Date: 2017-06-21 13:43+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -1703,28 +1703,30 @@ msgstr "Falló al inicializar los parámetros predeterminados."
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: libide/ide-context.c:2056
+#: libide/ide-context.c:2066
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: libide/ide-context.c:2175
+#: libide/ide-context.c:2185
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
-#: libide/ide-object.c:304
+#: libide/ide-object.c:305
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "No hay implementaciones para el punto de extensión «%s»."
 
-#: libide/ide-object.c:396
-msgid "Failed to locate build system plugin."
-msgstr "Falló al buscar el complemento del sistema de construcción."
+#: libide/ide-object.c:408
+#, c-format
+#| msgid "Failed to locate build system plugin."
+msgid "Failed to locate %s plugin."
+msgstr "Falló al buscar el complemento %s."
 
-#: libide/ide-object.c:493
+#: libide/ide-object.c:509
 msgid "No such extension point."
 msgstr "No existe el punto de extensión."
 
-#: libide/ide-object.c:503
+#: libide/ide-object.c:519
 msgid "No implementations of extension point."
 msgstr "No hay implementaciones para el punto de extensión."
 
@@ -2737,7 +2739,6 @@ msgid "Open File"
 msgstr "Abrir archivo"
 
 #: libide/workbench/ide-workbench-actions.c:215
-#| msgid "Builder Dark"
 msgid "Builder Statistics"
 msgstr "Estadísticas del constructor"
 
