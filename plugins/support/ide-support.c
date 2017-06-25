@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <ide.h>
 #include <ide-build-ident.h>
+#include <libpeas/peas.h>
 #include <string.h>
 
 #include "ide-support.h"
@@ -50,6 +51,8 @@ counter_arena_foreach_cb (DzlCounter *counter,
 gchar *
 ide_get_support_log (void)
 {
+  PeasEngine *engine = peas_engine_get_default ();
+  const GList *plugins;
   GChecksum *checksum;
   GDateTime *now;
   GDateTime *started_at;
@@ -132,6 +135,22 @@ ide_get_support_log (void)
       gdk_monitor_get_geometry (monitor, &geom);
       g_string_append_printf (str, "geometry[%u] = [%u,%u]\n",
                               i, geom.width, geom.height);
+    }
+  g_string_append (str, "\n");
+
+  /*
+   * Log the list of plugins and if they are enabled.
+   */
+  g_string_append (str, "[runtime.plugins]\n");
+  plugins = peas_engine_get_plugin_list (engine);
+  for (const GList *iter = plugins; iter; iter = iter->next)
+    {
+      const PeasPluginInfo *info = iter->data;
+      const gchar *name = peas_plugin_info_get_module_name (info);
+
+      g_string_append_printf (str, "%s = %s\n",
+                              name,
+                              peas_plugin_info_is_loaded (info) ? "loaded" : "unloaded");
     }
   g_string_append (str, "\n");
 
