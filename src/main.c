@@ -18,8 +18,14 @@
 
 #define G_LOG_DOMAIN "builder"
 
+#include <execinfo.h>
 #include <ide.h>
 #include <gtksourceview/gtksource.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "bug-buddy.h"
 
 static gboolean
 verbose_cb (const gchar  *option_name,
@@ -89,6 +95,8 @@ main (int   argc,
 {
   IdeApplication *app;
   int ret;
+
+  bug_buddy_init ();
 
   ide_log_init (TRUE, NULL);
   early_verbose_check (&argc, &argv);

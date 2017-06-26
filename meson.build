@@ -274,7 +274,13 @@ subdir('doc')
 exe_link_args = [ '-pie' ]
 exe_c_args = [ '-fPIE' ]
 
-executable('gnome-builder', 'src/main.c',
+gnome_builder_sources = [
+  'src/main.c',
+  'src/bug-buddy.c',
+  'src/bug-buddy.h',
+]
+
+executable('gnome-builder', gnome_builder_sources,
         gui_app: true,
         install: true,
          c_args: exe_c_args,
@@ -283,7 +289,7 @@ executable('gnome-builder', 'src/main.c',
    dependencies: libide_deps + [libide_dep],
 )
 
-executable('gnome-builder-cli', 'src/main.c',
+executable('gnome-builder-cli', gnome_builder_sources,
         gui_app: false,
         install: true,
          c_args: exe_c_args,
@@ -292,7 +298,7 @@ executable('gnome-builder-cli', 'src/main.c',
    dependencies: libide_deps + [libide_dep],
 )
 
-executable('gnome-builder-worker', 'src/main.c',
+executable('gnome-builder-worker', gnome_builder_sources,
         gui_app: false,
         install: true,
     install_dir: get_option('libexecdir'),
