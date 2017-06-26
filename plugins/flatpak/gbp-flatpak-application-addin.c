@@ -379,14 +379,18 @@ gbp_flatpak_application_addin_get_installations (GbpFlatpakApplicationAddin *sel
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
-  for (guint i = 0; i < self->installations->len; i++)
+  /* Might be NULL before things have loaded at startup */
+  if (self->installations != NULL)
     {
-      InstallInfo *info = g_ptr_array_index (self->installations, i);
+      for (guint i = 0; i < self->installations->len; i++)
+        {
+          InstallInfo *info = g_ptr_array_index (self->installations, i);
 
-      g_assert (info != NULL);
-      g_assert (FLATPAK_IS_INSTALLATION (info->installation));
+          g_assert (info != NULL);
+          g_assert (FLATPAK_IS_INSTALLATION (info->installation));
 
-      g_ptr_array_add (ret, g_object_ref (info->installation));
+          g_ptr_array_add (ret, g_object_ref (info->installation));
+        }
     }
 
   IDE_RETURN (ret);
