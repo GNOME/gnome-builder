@@ -18,12 +18,8 @@
 
 #define G_LOG_DOMAIN "builder"
 
-#include <execinfo.h>
 #include <ide.h>
 #include <gtksourceview/gtksource.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "bug-buddy.h"
 

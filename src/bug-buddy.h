@@ -19,8 +19,6 @@
 #ifndef BUG_BUDDY_H
 #define BUG_BUDDY_H
 
-#include <glib.h>
-
 G_BEGIN_DECLS
 
 void bug_buddy_init (void);

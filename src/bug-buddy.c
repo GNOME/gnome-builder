@@ -17,10 +17,10 @@
  */
 
 #include <signal.h>
-#include <string.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+#include <glib.h>
 
 #include "bug-buddy.h"
 
@@ -33,55 +33,23 @@
  * unexpectedly exits.
  */
 
-static struct
-{
-  /* Our stashed path to the GDB binary */
-  gchar gdb_path[1024];
-  gchar commands[1024];
-} bug_buddy_state;
+static gchar **gdb_argv = NULL;
 
 static void
 bug_buddy_sigsegv_handler (int signum)
 {
-  gchar gdb_filename[] = "/tmp/gnome-builder-gdb-commands.XXXXXX";
-  gchar *argv[8] = { NULL };
-  GPid pid;
-  int fd = -1;
-  int status;
-
-  /* Only proceed if we have a gdb path to execute */
-  if (bug_buddy_state.gdb_path[0] == '\0')
-    goto failure;
-
-  if (-1 == (fd = g_mkstemp (gdb_filename)))
-    goto failure;
-
-  /* Call once, hope for the best. */
-  write (fd, bug_buddy_state.commands, strlen (bug_buddy_state.commands));
-  fsync (fd);
-
-  argv[0] = bug_buddy_state.gdb_path;
-  argv[1] = "-batch";
-  argv[2] = "-x";
-  argv[3] = gdb_filename;
-  argv[4] = "-nx";
-
-  close (fd);
-  fd = -1;
+  int pid;
 
   pid = fork ();
 
   if (pid == 0)
     {
-      execv (argv[0], (gchar **)argv);
+      execv (gdb_argv[0], gdb_argv);
     }
   else
     {
-      waitpid (pid, &status, 0);
-      unlink (gdb_filename);
+      waitpid (pid, NULL, 0);
     }
-
-failure:
 
   _exit (-1);
 }
@@ -89,8 +57,8 @@ failure:
 void
 bug_buddy_init (void)
 {
-  GString *str = NULL;
-  gchar *gdb_path = NULL;
+  gchar *gdb_path;
+  GPtrArray *argv;
 
   /*
    * Everything needs to be prepared at startup so that we can avoid using
@@ -100,32 +68,27 @@ bug_buddy_init (void)
    */
 
   gdb_path = g_find_program_in_path ("gdb");
-  if (strlen (gdb_path) < ((sizeof bug_buddy_state.gdb_path) - 1))
-    g_strlcpy (bug_buddy_state.gdb_path, gdb_path, sizeof bug_buddy_state.gdb_path);
-  else
-    goto cleanup;
+  if (gdb_path == NULL)
+    return;
 
-  /*
-   * Build our commands list. Since we know our process up front, we can just
-   * use getpid() to prepare the commands now.
-   */
-  str = g_string_new (NULL);
-  g_string_append_printf (str, "attach %"G_PID_FORMAT"\n", getpid ());
-  g_string_append (str, "info threads\n");
-  g_string_append (str, "thread apply all bt\n");
-  g_string_append (str, "info sharedlibrary\n");
-  g_assert (str->len < sizeof bug_buddy_state.commands);
-  g_strlcpy (bug_buddy_state.commands, str->str, sizeof bug_buddy_state.commands);
+  argv = g_ptr_array_sized_new (12);
+  g_ptr_array_add (argv, gdb_path);
+  g_ptr_array_add (argv, "-batch");
+  g_ptr_array_add (argv, "-nx");
+  g_ptr_array_add (argv, "-ex");
+  g_ptr_array_add (argv, g_strdup_printf ("attach %"G_PID_FORMAT, getpid ()));
+  g_ptr_array_add (argv, "-ex");
+  g_ptr_array_add (argv, "info threads");
+  g_ptr_array_add (argv, "-ex");
+  g_ptr_array_add (argv, "thread apply all bt");
+  g_ptr_array_add (argv, "-ex");
+  g_ptr_array_add (argv, "info sharedlibrary");
+  g_ptr_array_add (argv, NULL);
+  gdb_argv = (gchar **)g_ptr_array_free (argv, FALSE);
 
   /*
    * Now register our signal handler so that we get called on SIGSEGV.
    * We'll use that signal callback to extract the backtrace with gdb.
    */
   signal (SIGSEGV, bug_buddy_sigsegv_handler);
-
-cleanup:
-  g_free (gdb_path);
-  if (str != NULL)
-    g_string_free (str, TRUE);
-
 }
