@@ -1,6 +1,6 @@
-/* ide-layout-tab-bar.h
+/* ide-back-forward-controls.h
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LAYOUT_TAB_BAR_H
-#define IDE_LAYOUT_TAB_BAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LAYOUT_TAB_BAR (ide_tab_layout_bar_get_type())
+#define IDE_TYPE_BACK_FORWARD_CONTROLS (ide_back_forward_controls_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeLayoutTabBar, ide_tab_layout_bar, IDE, LAYOUT_TAB_BAR, GtkEventBox)
+G_DECLARE_FINAL_TYPE (IdeBackForwardControls, ide_back_forward_controls, IDE, BACK_FORWARD_CONTROLS, GtkBox)
 
-void ide_layout_tab_bar_set_view  (IdeLayoutTabBar *self,
-                                   GtkWidget       *view);
-void ide_layout_tab_bar_show_list (IdeLayoutTabBar *self);
+GtkWidget *ide_back_forward_controls_new (void);
 
 G_END_DECLS
-
-#endif /* IDE_LAYOUT_TAB_BAR_H */

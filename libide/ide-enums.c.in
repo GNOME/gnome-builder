@@ -19,7 +19,6 @@
 #include "threading/ide-thread-pool.h"
 #include "transfers/ide-transfer.h"
 #include "vcs/ide-vcs-config.h"
-#include "workbench/ide-layout-stack-split.h"
 
 /*** END file-header ***/
 

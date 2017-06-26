@@ -23,8 +23,8 @@
 #include <gtk/gtk.h>
 
 #include "diagnostics/ide-source-location.h"
+#include "layout/ide-layout.h"
 #include "sourceview/ide-source-view.h"
-#include "workbench/ide-layout.h"
 #include "workbench/ide-perspective.h"
 
 G_BEGIN_DECLS

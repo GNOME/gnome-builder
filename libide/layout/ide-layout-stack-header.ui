@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkPopover" id="document_popover">
+    <property name="width-request">250</property>
+    <property name="border-width">10</property>
+    <style>
+      <class name="document-popover"/>
+    </style>
+  </object>
+  <object class="GtkPopover" id="title_popover">
+    <property name="width-request">350</property>
+    <property name="border-width">18</property>
+    <style>
+      <class name="title-popover"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkBox" id="title_views_box">
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Open Pages</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="propagate-natural-height">true</property>
+                <property name="propagate-natural-width">true</property>
+                <property name="max-content-height">600</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkListBox" id="title_list_box">
+                    <property name="selection-mode">none</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="homogeneous">true</property>
+            <property name="spacing">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">editor.open-file</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">document-open-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">true</property>
+                <property name="action-name">editor.new-file</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">document-new-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">editor.new-terminal</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">utilities-terminal-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">win.new-devhelp</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">devhelp-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <template class="IdeLayoutStackHeader" parent="DzlPriorityBox">
+    <child>
+      <object class="DzlPriorityBox" id="title_box">
+        <property name="hexpand">true</property>
+        <property name="homogeneous">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkMenuButton" id="title_button">
+            <property name="popover">title_popover</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">true</property>
+                <child type="center">
+                  <object class="GtkLabel" id="title_label">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="title_modified">
+                    <property name="halign">start</property>
+                    <property name="hexpand">true</property>
+                    <property name="margin-start">8</property>
+                    <property name="margin-end">8</property>
+                    <property name="label">•</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="close_button">
+        <property name="action-name">layoutgridcolumn.close</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">window-close-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="document_button">
+        <property name="focus-on-click">false</property>
+        <property name="popover">document_popover</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">pan-down-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+  </template>
+</interface>

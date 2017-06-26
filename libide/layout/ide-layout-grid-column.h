@@ -1,6 +1,6 @@
-/* ide-layout-tab-private.h
+/* ide-layout-grid-column.h
  *
- * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LAYOUT_TAB_PRIVATE_H
-#define IDE_LAYOUT_TAB_PRIVATE_H
+#pragma once
 
-#include <gtk/gtk.h>
+#include <dazzle.h>
 
-#include "ide-layout-view.h"
+#include "ide-layout-stack.h"
 
 G_BEGIN_DECLS
 
-struct _IdeLayoutTab
-{
-  GtkEventBox    parent_instance;
+#define IDE_TYPE_LAYOUT_GRID_COLUMN (ide_layout_grid_column_get_type())
 
-  IdeLayoutView *view;
-  GBinding      *modified_binding;
-  GBinding      *title_binding;
+G_DECLARE_FINAL_TYPE (IdeLayoutGridColumn, ide_layout_grid_column, IDE, LAYOUT_GRID_COLUMN, DzlMultiPaned)
 
-  GtkWidget     *backward_button;
-  GtkWidget     *controls_container;
-  GtkWidget     *close_button;
-  GtkWidget     *forward_button;
-  GtkWidget     *modified_label;
-  GtkWidget     *title_menu_button;
-  GtkWidget     *title_label;
-};
+GtkWidget      *ide_layout_grid_column_new               (void);
+IdeLayoutStack *ide_layout_grid_column_get_current_stack (IdeLayoutGridColumn *self);
+void            ide_layout_grid_column_set_current_stack (IdeLayoutGridColumn *self,
+                                                          IdeLayoutStack      *stack);
 
 G_END_DECLS
-
-#endif /* IDE_LAYOUT_TAB_PRIVATE_H */

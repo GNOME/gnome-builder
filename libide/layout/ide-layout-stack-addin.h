@@ -21,8 +21,8 @@
 
 #include <gtk/gtk.h>
 
-#include "workbench/ide-layout-stack.h"
-#include "workbench/ide-layout-view.h"
+#include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

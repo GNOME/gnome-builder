@@ -26,6 +26,7 @@
 #include "ide-macros.h"
 
 #include "buffers/ide-buffer-manager.h"
+#include "diagnostics/ide-source-location.h"
 #include "editor/ide-editor-frame-private.h"
 #include "editor/ide-editor-view-actions.h"
 #include "editor/ide-editor-view-addin.h"

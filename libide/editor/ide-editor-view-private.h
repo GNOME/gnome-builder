@@ -26,7 +26,7 @@
 #include "buffers/ide-buffer.h"
 #include "editor/ide-editor-frame.h"
 #include "editor/ide-editor-tweak-widget.h"
-#include "workbench/ide-layout-view.h"
+#include "layout/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

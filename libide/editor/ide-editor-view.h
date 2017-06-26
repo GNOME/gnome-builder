@@ -20,8 +20,8 @@
 #define IDE_EDITOR_VIEW_H
 
 #include "buffers/ide-buffer.h"
+#include "layout/ide-layout-view.h"
 #include "sourceview/ide-source-view.h"
-#include "workbench/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

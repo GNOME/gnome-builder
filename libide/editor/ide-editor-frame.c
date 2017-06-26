@@ -33,7 +33,6 @@
 #include "history/ide-back-forward-list.h"
 #include "util/ide-dnd.h"
 #include "util/ide-gtk.h"
-#include "workbench/ide-layout-stack.h"
 #include "workbench/ide-workbench.h"
 
 #define MINIMAP_HIDE_DURATION 1000
