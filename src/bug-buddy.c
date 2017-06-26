@@ -113,6 +113,7 @@ bug_buddy_init (void)
   g_string_append_printf (str, "attach %"G_PID_FORMAT"\n", getpid ());
   g_string_append (str, "info threads\n");
   g_string_append (str, "thread apply all bt\n");
+  g_string_append (str, "info sharedlibrary\n");
   g_assert (str->len < sizeof bug_buddy_state.commands);
   g_strlcpy (bug_buddy_state.commands, str->str, sizeof bug_buddy_state.commands);
 
