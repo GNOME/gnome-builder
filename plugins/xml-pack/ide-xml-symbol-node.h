@@ -89,6 +89,8 @@ IdeXmlSymbolNodeState             ide_xml_symbol_node_get_state                 
 const gchar                      *ide_xml_symbol_node_get_value                     (IdeXmlSymbolNode       *self);
 gboolean                          ide_xml_symbol_node_has_end_tag                   (IdeXmlSymbolNode       *self);
 void                              ide_xml_symbol_node_print                         (IdeXmlSymbolNode       *self,
+                                                                                     guint                   depth,
+                                                                                     gboolean                recurse,
                                                                                      gboolean                show_value,
                                                                                      gboolean                show_attributes);
 void                              ide_xml_symbol_node_set_location                  (IdeXmlSymbolNode       *self,

@@ -622,16 +622,17 @@ is_in_range (NodeRange range,
 static void
 print_node_ranges (IdeXmlSymbolNode *node)
 {
-  printf ("%s (%i,%i)->(%i,%i) end: (%i,%i)->(%i,%i)\n",
-          node->element_name,
+  printf ("(%i,%i)->(%i,%i) s:%ld end: (%i,%i)->(%i,%i) s:%ld\n",
           node->start_tag.start_line,
           node->start_tag.start_line_offset,
           node->start_tag.end_line,
           node->start_tag.end_line_offset,
+          node->start_tag.size,
           node->end_tag.start_line,
           node->end_tag.start_line_offset,
           node->end_tag.end_line,
-          node->end_tag.end_line_offset);
+          node->end_tag.end_line_offset,
+          node->end_tag.size);
 }
 
 /* Find the relative position of the (line, line_offset) cursor
@@ -686,29 +687,47 @@ ide_xml_symbol_node_get_attributes_names (IdeXmlSymbolNode  *self)
 
 void
 ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
+                           guint              depth,
+                           gboolean           recurse,
                            gboolean           show_value,
                            gboolean           show_attributes)
 {
+  g_autofree gchar *spacer;
   gchar **attributes = self->attributes_names;
+  guint n_children;
+  IdeXmlSymbolNode *child;
 
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
-  printf ("%s(%d:%d->%d:%d)-(%d:%d->%d:%d)\n",
-          self->element_name,
-          self->start_tag.start_line, self->start_tag.start_line_offset,
-          self->start_tag.end_line, self->start_tag.end_line_offset,
-          self->end_tag.start_line, self->end_tag.start_line_offset,
-          self->end_tag.end_line, self->end_tag.end_line_offset);
+  if (self == NULL)
+    {
+      g_warning ("Node NULL");
+      return;
+    }
+
+  spacer = g_strnfill (depth, '\t');
+  printf ("%s%s state:%d ", spacer, self->element_name, self->state);
+  print_node_ranges (self);
 
   if (show_attributes && self->attributes_names != NULL)
     while (*attributes != NULL)
       {
-        printf ("%s\n", *attributes);
+        printf ("%s%s\n", spacer, *attributes);
         ++attributes;
       }
 
   if (show_value && self->value != NULL)
-    printf ("\t%s\n", self->value);
+    printf ("%svalue:%s\n", spacer, self->value);
+
+  if (recurse)
+    {
+      n_children = ide_xml_symbol_node_get_n_direct_children (self);
+      for (gint i = 0; i < n_children; ++i)
+        {
+          child = (IdeXmlSymbolNode *)ide_xml_symbol_node_get_nth_direct_child (self, i);
+          ide_xml_symbol_node_print (child, depth + 1, recurse, show_value, show_attributes);
+        }
+    }
 }
 
 const gchar *
