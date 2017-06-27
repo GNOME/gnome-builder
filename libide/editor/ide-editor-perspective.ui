@@ -1,71 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.18 -->
-  <template class="IdeEditorPerspective" parent="DzlDockOverlay">
+  <template class="IdeEditorPerspective" parent="IdeLayout">
     <child>
-      <object class="IdeLayout" id="layout">
+      <object class="IdeLayoutGrid" id="grid">
         <property name="visible">true</property>
-        <child type="center">
-          <object class="GtkStack" id="content_stack">
-            <property name="visible">true</property>
-            <child>
-              <object class="GtkBox">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
-                <property name="visible">true</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">text-editor-symbolic</property>
-                    <property name="pixel-size">128</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">No open files</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                    <attributes>
-                      <attribute name="scale" value="2.0"/>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Try opening a file by typing in the search box at the top</property>
-                    <property name="wrap">true</property>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="name">empty_state</property>
-              </packing>
-            </child>
-            <child>
-              <object class="IdeLayoutGrid" id="grid">
-                <property name="visible">true</property>
-              </object>
-              <packing>
-                <property name="name">grid</property>
-              </packing>
-            </child>
-          </object>
-        </child>
       </object>
     </child>
   </template>
-  <object class="GSimpleActionGroup" id="actions">
-  </object>
 </interface>

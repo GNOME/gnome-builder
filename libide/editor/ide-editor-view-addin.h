@@ -1,6 +1,6 @@
 /* ide-editor-view-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015-2017 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_VIEW_ADDIN_H
-#define IDE_EDITOR_VIEW_ADDIN_H
+#pragma once
 
 #include "ide-editor-view.h"
 
@@ -37,12 +36,13 @@ struct _IdeEditorViewAddinInterface
                               IdeEditorView      *view);
   void (*language_changed)   (IdeEditorViewAddin *self,
                               const gchar        *language_id);
-  void (*load_source_view)   (IdeEditorViewAddin *self,
-                              IdeSourceView      *source_view);
-  void (*unload_source_view) (IdeEditorViewAddin *self,
-                              IdeSourceView      *source_view);
 };
 
-G_END_DECLS
+void ide_editor_view_addin_load             (IdeEditorViewAddin *self,
+                                             IdeEditorView      *view);
+void ide_editor_view_addin_unload           (IdeEditorViewAddin *self,
+                                             IdeEditorView      *view);
+void ide_editor_view_addin_language_changed (IdeEditorViewAddin *self,
+                                             const gchar        *language_id);
 
-#endif /* IDE_EDITOR_VIEW_ADDIN_H */
+G_END_DECLS

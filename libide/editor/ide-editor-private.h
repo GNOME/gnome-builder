@@ -1,6 +1,6 @@
-/* ide-editor-frame-actions.h
+/* ide-editor-private.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,15 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_FRAME_ACTIONS_H
-#define IDE_EDITOR_FRAME_ACTIONS_H
+#pragma once
 
-#include "ide-editor-frame.h"
+#include "ide-editor-view.h"
 
 G_BEGIN_DECLS
 
-void ide_editor_frame_actions_init (IdeEditorFrame *self);
+void _ide_editor_view_init_actions   (IdeEditorView *self);
+void _ide_editor_view_init_settings  (IdeEditorView *self);
+void _ide_editor_view_init_shortcuts (IdeEditorView *self);
 
 G_END_DECLS
-
-#endif /* IDE_EDITOR_FRAME_ACTIONS_H */

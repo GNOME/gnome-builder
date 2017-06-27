@@ -1,6 +1,6 @@
 /* ide-editor-view.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_VIEW_H
-#define IDE_EDITOR_VIEW_H
+#pragma once
+
+#include <gtksourceview/gtksource.h>
 
 #include "buffers/ide-buffer.h"
 #include "layout/ide-layout-view.h"
@@ -29,9 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayoutView)
 
-IdeBuffer      *ide_editor_view_get_document              (IdeEditorView *self);
-IdeSourceView  *ide_editor_view_get_active_source_view    (IdeEditorView *self);
+IdeBuffer       *ide_editor_view_get_buffer      (IdeEditorView *self);
+IdeSourceView   *ide_editor_view_get_source_view (IdeEditorView *self);
 
 G_END_DECLS
-
-#endif /* IDE_EDITOR_VIEW_H */

@@ -1,6 +1,6 @@
-/* ide-editor-layout-stack-addin.h
+/* ide-editor-view-shortcuts.c
  *
- * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_LAYOUT_STACK_ADDIN_H
-#define IDE_EDITOR_LAYOUT_STACK_ADDIN_H
+#include "config.h"
 
-#include <gtk/gtk.h>
+#include <dazzle.h>
 
-#include "layout/ide-layout-stack-addin.h"
+#include "ide-editor-private.h"
 
-G_BEGIN_DECLS
+static DzlShortcutEntry editor_view_shortcuts[] = {
+};
 
-#define IDE_TYPE_EDITOR_LAYOUT_STACK_ADDIN (ide_editor_layout_stack_addin_get_type())
+void
+_ide_editor_view_init_shortcuts (IdeEditorView *self)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
 
-G_DECLARE_FINAL_TYPE (IdeEditorLayoutStackAddin, ide_editor_layout_stack_addin, IDE, EDITOR_LAYOUT_STACK_ADDIN, GObject)
-
-G_END_DECLS
-
-#endif /* IDE_EDITOR_LAYOUT_STACK_ADDIN_H */
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             editor_view_shortcuts,
+                                             G_N_ELEMENTS (editor_view_shortcuts),
+                                             GETTEXT_PACKAGE);
+}

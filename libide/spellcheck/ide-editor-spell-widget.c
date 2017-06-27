@@ -24,10 +24,10 @@
 
 #include "ide-debug.h"
 #include "buffers/ide-buffer.h"
-#include "editor/ide-editor-spell-dict.h"
-#include "editor/ide-editor-spell-language-popover.h"
-#include "editor/ide-editor-spell-navigator.h"
-#include "editor/ide-editor-spell-widget.h"
+#include "spellcheck/ide-editor-spell-dict.h"
+#include "spellcheck/ide-editor-spell-language-popover.h"
+#include "spellcheck/ide-editor-spell-navigator.h"
+#include "spellcheck/ide-editor-spell-widget.h"
 #include "util/ide-gtk.h"
 
 typedef enum

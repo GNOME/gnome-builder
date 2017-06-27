@@ -26,6 +26,7 @@
 
 #include "buffers/ide-buffer-manager.h"
 #include "buffers/ide-buffer.h"
+#include "diagnostics/ide-source-location.h"
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-workbench-addin.h"
 #include "util/ide-gtk.h"

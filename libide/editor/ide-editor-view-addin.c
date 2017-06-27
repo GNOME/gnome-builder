@@ -56,25 +56,3 @@ ide_editor_view_addin_language_changed (IdeEditorViewAddin *self,
   if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->language_changed)
     IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->language_changed (self, language_id);
 }
-
-void
-ide_editor_view_addin_load_source_view (IdeEditorViewAddin *self,
-                                        IdeSourceView      *source_view)
-{
-  g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
-
-  if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->load_source_view)
-    IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->load_source_view (self, source_view);
-}
-
-void
-ide_editor_view_addin_unload_source_view (IdeEditorViewAddin *self,
-                                          IdeSourceView      *source_view)
-{
-  g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
-
-  if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload_source_view)
-    IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->unload_source_view (self, source_view);
-}

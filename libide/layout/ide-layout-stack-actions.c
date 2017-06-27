@@ -316,6 +316,9 @@ _ide_layout_stack_update_actions (IdeLayoutStack *self)
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "layoutstack", "open-in-new-frame",
                              "enabled", can_split_view,
                              NULL);
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "layoutstack", "split-view",
+                             "enabled", can_split_view,
+                             NULL);
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "layoutstack", "close-stack",
                              "enabled", can_close_stack,
                              NULL);

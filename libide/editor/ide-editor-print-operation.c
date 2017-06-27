@@ -114,7 +114,7 @@ ide_editor_print_operation_begin_print (GtkPrintOperation *operation,
 
 static gboolean
 ide_editor_print_operation_paginate (GtkPrintOperation *operation,
-                                    GtkPrintContext   *context)
+                                     GtkPrintContext   *context)
 {
   IdeEditorPrintOperation *self = IDE_EDITOR_PRINT_OPERATION (operation);
   gboolean finished;
@@ -134,8 +134,8 @@ ide_editor_print_operation_paginate (GtkPrintOperation *operation,
 
 static void
 ide_editor_print_operation_draw_page (GtkPrintOperation *operation,
-                                     GtkPrintContext   *context,
-                                     gint               page_nr)
+                                      GtkPrintContext   *context,
+                                      gint               page_nr)
 {
   IdeEditorPrintOperation *self = IDE_EDITOR_PRINT_OPERATION (operation);
 
@@ -144,7 +144,7 @@ ide_editor_print_operation_draw_page (GtkPrintOperation *operation,
 
 static void
 ide_editor_print_operation_end_print (GtkPrintOperation *operation,
-                                     GtkPrintContext   *context)
+                                      GtkPrintContext   *context)
 {
   IdeEditorPrintOperation *self = IDE_EDITOR_PRINT_OPERATION (operation);
 
