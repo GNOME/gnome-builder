@@ -50,7 +50,7 @@ ide_xml_path_dump (IdeXmlPath *self)
   for (gint i = 0; i < self->nodes->len; ++i)
     {
       node = g_ptr_array_index (self->nodes, i);
-      ide_xml_symbol_node_print (node, TRUE, TRUE);
+      ide_xml_symbol_node_print (node, 0, FALSE, TRUE, TRUE);
     }
 }
 

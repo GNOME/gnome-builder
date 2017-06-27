@@ -630,24 +630,30 @@ position_state_free (PositionState *state)
 static IdeXmlPosition *
 get_position (IdeXmlService   *self,
               IdeXmlAnalysis  *analysis,
+              GtkTextBuffer   *buffer,
               gint             line,
               gint             line_offset)
 {
   IdeXmlPosition *position;
   IdeXmlSymbolNode *root_node;
-  IdeXmlSymbolNodeRelativePosition rel_pos;
-  IdeXmlPositionKind candidate_kind;
-  IdeXmlSymbolNode *current_node;
-  IdeXmlSymbolNode *child_node;
-  IdeXmlSymbolNode *candidate_node;
+  IdeXmlSymbolNode *current_node, *child_node, *candidate_node;
+  IdeXmlSymbolNode *previous_node = NULL;
   IdeXmlSymbolNode *previous_sibling_node = NULL;
   IdeXmlSymbolNode *next_sibling_node = NULL;
+  IdeXmlSymbolNodeRelativePosition rel_pos;
+  IdeXmlPositionKind candidate_kind;
+  IdeXmlPositionDetail detail = IDE_XML_POSITION_DETAIL_NONE;
+  g_autofree gchar *prefix = NULL;
+  GtkTextIter start, end;
+  gint start_line, start_line_offset;
   guint n_children;
   gint child_pos = -1;
   gint n = 0;
+  gboolean has_prefix = FALSE;
 
   g_assert (IDE_IS_XML_SERVICE (self));
   g_assert (analysis != NULL);
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
   current_node = root_node = ide_xml_analysis_get_root_node (analysis);
   while (TRUE)
@@ -659,6 +665,7 @@ loop:
       for (n = 0; n < n_children; ++n)
         {
           child_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (current_node, n));
+          child_pos = n;
           rel_pos = ide_xml_symbol_node_compare_location (child_node, line, line_offset);
           printf ("node:%s rel pos:%d\n", ide_xml_symbol_node_get_element_name (child_node), rel_pos);
           switch (rel_pos)
@@ -666,34 +673,37 @@ loop:
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_START_TAG:
               candidate_node = child_node;
               candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
+              detail = IDE_XML_POSITION_DETAIL_IN_NAME;
+              has_prefix = TRUE;
               goto result;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_END_TAG:
               candidate_node = child_node;
               candidate_kind = IDE_XML_POSITION_KIND_IN_END_TAG;
+              detail = IDE_XML_POSITION_DETAIL_IN_NAME;
+              has_prefix = TRUE;
               goto result;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_BEFORE:
-              child_pos = n;
               candidate_node = current_node;
               candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
               goto result;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_AFTER:
+              previous_node = child_node;
+
               if (n == (n_children - 1))
                 {
-                  child_pos = (n_children + 1);
+                  child_pos = n_children;
                   candidate_node = current_node;
                   candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
                   goto result;
                 }
-              else
-                continue;
 
               break;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_CONTENT:
-              current_node = child_node;
+              current_node = previous_node = child_node;
               goto loop;
 
             case IDE_XML_POSITION_KIND_UNKNOW:
@@ -710,24 +720,59 @@ result:
       candidate_node = root_node;
       candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
     }
+  else if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT &&
+           previous_node != NULL &&
+           ide_xml_symbol_node_get_state (previous_node) == IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED)
+    {
+      candidate_node = previous_node;
+      /* TODO: fetch detail and more infos */
+      /* TODO: detect the IN_END_TAG case */
+      candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
+      detail = IDE_XML_POSITION_DETAIL_IN_NAME;
+      has_prefix = TRUE;
+    }
 
-  position = ide_xml_position_new (candidate_node, candidate_kind);
-  ide_xml_position_set_analysis (position, analysis);
+  if (has_prefix)
+    {
+      ide_xml_symbol_node_get_location (candidate_node, &start_line, &start_line_offset, NULL, NULL, NULL);
+      gtk_text_buffer_get_iter_at_line_index (buffer, &start, start_line - 1, start_line_offset - 1);
+      gtk_text_buffer_get_iter_at_line_index (buffer, &end, line - 1, line_offset - 1);
+
+      if (gtk_text_iter_get_char (&start) == '<')
+        gtk_text_iter_forward_char (&start);
+
+      if (!gtk_text_iter_equal (&start, &end))
+        prefix = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+    }
 
   if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT)
     {
-      if (child_pos > 0)
-        {
-        previous_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos - 1));
-          printf ("previous sibling:%p at %d\n", previous_sibling_node, child_pos - 1);
-        }
-
-      if (child_pos <= n_children)
-        next_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos));
-
-      ide_xml_position_set_siblings (position, previous_sibling_node, next_sibling_node);
+      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail);
+      ide_xml_position_set_analysis (position, analysis);
       ide_xml_position_set_child_pos (position, child_pos);
     }
+  else if (candidate_kind == IDE_XML_POSITION_KIND_IN_START_TAG ||
+           candidate_kind == IDE_XML_POSITION_KIND_IN_END_TAG)
+    {
+      child_node = candidate_node;
+      candidate_node = ide_xml_symbol_node_get_parent (child_node);
+
+      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail);
+      ide_xml_position_set_analysis (position, analysis);
+      ide_xml_position_set_child_node (position, child_node);
+    }
+  else
+    g_assert_not_reached ();
+
+  if (child_pos > 0)
+    {
+    previous_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos - 1));
+    }
+
+  if (child_pos < n_children)
+    next_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos));
+
+  ide_xml_position_set_siblings (position, previous_sibling_node, next_sibling_node);
 
   return position;
 }
@@ -752,7 +797,7 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
   analysis = ide_xml_service_get_analysis_finish (self, result, &error);
   if (analysis != NULL)
     {
-      position = get_position (self, analysis, state->line, state->line_offset);
+      position = get_position (self, analysis, (GtkTextBuffer *)state->buffer, state->line, state->line_offset);
       g_task_return_pointer (task, position, g_object_unref);
     }
   else

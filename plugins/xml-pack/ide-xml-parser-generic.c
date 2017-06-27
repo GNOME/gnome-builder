@@ -67,7 +67,7 @@ ide_xml_parser_generic_start_element_sax_cb (ParserState    *state,
   attr = collect_attributes (self, (const gchar **)attributes);
   label = g_strconcat ((const gchar *)name, attr, NULL);
 
-  node = ide_xml_symbol_node_new (label, NULL, NULL, IDE_SYMBOL_XML_ELEMENT);
+  node = ide_xml_symbol_node_new (label, NULL, (gchar *)name, IDE_SYMBOL_XML_ELEMENT);
   g_object_set (node, "use-markup", TRUE, NULL);
 
   state->attributes = (const gchar **)attributes;

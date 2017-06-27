@@ -433,7 +433,6 @@ ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
   g_return_if_fail (G_IS_FILE (file) || file == NULL);
-  g_return_if_fail (size >= 2);
 
   g_clear_object (&self->file);
   if (file != NULL)
