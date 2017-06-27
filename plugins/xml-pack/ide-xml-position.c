@@ -21,8 +21,10 @@
 G_DEFINE_BOXED_TYPE (IdeXmlPosition, ide_xml_position, ide_xml_position_ref, ide_xml_position_unref)
 
 IdeXmlPosition *
-ide_xml_position_new (IdeXmlSymbolNode   *node,
-                      IdeXmlPositionKind  kind)
+ide_xml_position_new (IdeXmlSymbolNode     *node,
+                      const gchar          *prefix,
+                      IdeXmlPositionKind    kind,
+                      IdeXmlPositionDetail  detail)
 {
   IdeXmlPosition *self;
 
@@ -32,7 +34,11 @@ ide_xml_position_new (IdeXmlSymbolNode   *node,
   self->ref_count = 1;
 
   self->node = (IDE_IS_XML_SYMBOL_NODE (node)) ? g_object_ref (node) : NULL;
+  if (!ide_str_empty0 (prefix))
+    self->prefix = g_strdup (prefix);
+
   self->kind = kind;
+  self->detail = detail;
   self->child_pos = -1;
 
   return self;
@@ -47,7 +53,9 @@ ide_xml_position_copy (IdeXmlPosition *self)
   g_return_val_if_fail (self->ref_count, NULL);
 
   copy = ide_xml_position_new (self->node,
-                               self->kind);
+                               self->prefix,
+                               self->kind,
+                               self->detail);
 
   if (self->analysis != NULL)
     copy->analysis = ide_xml_analysis_ref (self->analysis);
@@ -72,7 +80,10 @@ ide_xml_position_free (IdeXmlPosition *self)
   if (self->analysis != NULL)
     ide_xml_analysis_unref (self->analysis);
 
+  g_clear_pointer (&self->prefix, g_free);
+
   g_clear_object (&self->node);
+  g_clear_object (&self->child_node);
   g_clear_object (&self->previous_sibling_node);
   g_clear_object (&self->next_sibling_node);
 
@@ -178,12 +189,43 @@ ide_xml_position_kind_get_str (IdeXmlPositionKind kind)
   return kind_str;
 }
 
+const gchar *
+ide_xml_position_detail_get_str (IdeXmlPositionDetail detail)
+{
+  const gchar *detail_str;
+
+  switch (detail)
+    {
+    case IDE_XML_POSITION_DETAIL_NONE:
+      detail_str = "none";
+      break;
+
+    case IDE_XML_POSITION_DETAIL_IN_NAME:
+      detail_str = "in name";
+      break;
+
+    case IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME:
+      detail_str = "in attribute name";
+      break;
+
+    case IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_VALUE:
+      detail_str = "in attribute value";
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return detail_str;
+}
+
 void
 ide_xml_position_print (IdeXmlPosition *self)
 {
   const gchar *p_sibling_str;
   const gchar *n_sibling_str;
   const gchar *kind_str;
+  const gchar *detail_str;
   IdeXmlSymbolNode *parent_node;
   gint n_children;
 
@@ -196,12 +238,15 @@ ide_xml_position_print (IdeXmlPosition *self)
     ide_xml_symbol_node_get_element_name (self->next_sibling_node);
 
   kind_str = ide_xml_position_kind_get_str (self->kind);
+  detail_str = ide_xml_position_detail_get_str (self->detail);
 
   parent_node = ide_xml_symbol_node_get_parent (self->node);
-  printf ("POSITION: parent: %s node: %s kind:%s",
+  printf ("POSITION: parent: %s node: %s kind:%s detail:'%s' prefix:'%s'\n",
           (parent_node != NULL) ? ide_xml_symbol_node_get_element_name (parent_node) : "none",
           (self->node != NULL) ? ide_xml_symbol_node_get_element_name (self->node) : "none",
-          kind_str);
+          kind_str,
+          detail_str,
+          self->prefix);
 
   if (self->child_pos != -1)
     {
@@ -214,7 +259,7 @@ ide_xml_position_print (IdeXmlPosition *self)
           else
             printf (" pos: |0..%d\n", n_children - 1);
         }
-      else if (self->child_pos == (n_children + 1))
+      else if (self->child_pos == n_children)
         {
           if (n_children == 1)
             printf (" pos: 0|\n");
@@ -224,12 +269,15 @@ ide_xml_position_print (IdeXmlPosition *self)
       else
         printf (" pos: %d|%d\n", self->child_pos - 1, self->child_pos);
     }
+  else if (self->child_node != NULL)
+    printf (" child node:%s\n", ide_xml_symbol_node_get_element_name (self->child_node));
   else
     printf ("\n");
 
   if (self->node != NULL)
     {
       const gchar **attributes_names;
+      IdeXmlSymbolNode *node;
 
       if (NULL != (attributes_names = ide_xml_symbol_node_get_attributes_names (self->node)))
         {
@@ -238,6 +286,15 @@ ide_xml_position_print (IdeXmlPosition *self)
               printf ("attr:%s\n", *attributes_names);
               ++attributes_names;
             }
+        }
+
+      if ((n_children = ide_xml_symbol_node_get_n_direct_children (self->node)) > 0)
+        printf ("children: %d\n", n_children);
+
+      for (gint i = 0; i < n_children; ++i)
+        {
+          node = (IdeXmlSymbolNode *)ide_xml_symbol_node_get_nth_direct_child (self->node, i);
+          printf ("name:'%s'\n", ide_xml_symbol_node_get_element_name (node));
         }
     }
 }
@@ -258,6 +315,22 @@ ide_xml_position_get_kind (IdeXmlPosition *self)
   return self->kind;
 }
 
+IdeXmlPositionDetail
+ide_xml_position_get_detail (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, IDE_XML_POSITION_DETAIL_NONE);
+
+  return self->detail;
+}
+
+const gchar *
+ide_xml_position_get_prefix (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->prefix;
+}
+
 gint
 ide_xml_position_get_child_pos (IdeXmlPosition *self)
 {
@@ -272,4 +345,22 @@ void ide_xml_position_set_child_pos (IdeXmlPosition *self,
   g_return_if_fail (self);
 
   self->child_pos = child_pos;
+}
+
+IdeXmlSymbolNode *
+ide_xml_position_get_child_node (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->child_node;
+}
+
+/* TODO: ide_xml_position_take_child_node ? */
+void ide_xml_position_set_child_node (IdeXmlPosition   *self,
+                                      IdeXmlSymbolNode *child_node)
+{
+  g_return_if_fail (self);
+
+  g_clear_object (&self->child_node);
+  self->child_node = child_node;
 }
