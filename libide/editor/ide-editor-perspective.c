@@ -81,19 +81,49 @@ ide_editor_perspective_focus_location (IdeEditorPerspective *self,
   /* TODO: */
 }
 
+static void
+locate_view_for_buffer (GtkWidget *widget,
+                        gpointer   user_data)
+{
+  struct {
+    IdeBuffer     *buffer;
+    IdeLayoutView *view;
+  } *lookup = user_data;
+
+  if (lookup->view != NULL)
+    return;
+
+  if (IDE_IS_EDITOR_VIEW (widget))
+    {
+      if (ide_editor_view_get_buffer (IDE_EDITOR_VIEW (widget)) == lookup->buffer)
+        lookup->view = IDE_LAYOUT_VIEW (widget);
+    }
+}
+
 void
 ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
                                                       IdeBuffer            *buffer)
 {
   IdeLayoutStack *stack;
   IdeEditorView *view;
+  struct {
+    IdeBuffer     *buffer;
+    IdeLayoutView *view;
+  } lookup = { buffer };
 
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
   stack = ide_layout_grid_get_current_stack (self->grid);
 
-  /* TODO: Check if buffer is in stack */
+  ide_layout_stack_foreach_view (stack, locate_view_for_buffer, &lookup);
+
+  if (lookup.view != NULL)
+    {
+      ide_layout_stack_set_visible_child (stack, lookup.view);
+      gtk_widget_grab_focus (GTK_WIDGET (lookup.view));
+      return;
+    }
 
   view = g_object_new (IDE_TYPE_EDITOR_VIEW,
                        "buffer", buffer,
