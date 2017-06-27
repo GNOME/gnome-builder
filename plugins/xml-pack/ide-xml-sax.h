@@ -21,6 +21,8 @@
 
 #include <glib-object.h>
 
+#include <libxml/parser.h>
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_XML_SAX (ide_xml_sax_get_type())
@@ -48,6 +50,7 @@ enum _IdeXmlSaxCallbackType {
 };
 
 void            ide_xml_sax_clear               (IdeXmlSax              *self);
+xmlParserCtxt  *ide_xml_sax_get_context         (IdeXmlSax              *self);
 gint            ide_xml_sax_get_depth           (IdeXmlSax              *self);
 gboolean        ide_xml_sax_get_location        (IdeXmlSax              *self,
                                                  gint                   *start_line,

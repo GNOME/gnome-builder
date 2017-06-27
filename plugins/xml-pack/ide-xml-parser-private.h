@@ -76,6 +76,8 @@ typedef struct _ParserState
   gint               current_depth;
   GPtrArray         *schemas;
   gint64             sequence;
+
+  guint              error_missing_tag_end : 1;
 } ParserState;
 
 void             ide_xml_parser_set_post_processing_callback     (IdeXmlParser           *self,

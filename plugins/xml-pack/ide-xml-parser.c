@@ -19,6 +19,8 @@
 #include <glib/gi18n.h>
 #include <glib-object.h>
 
+#include <libxml/xmlerror.h>
+
 #include "ide-xml-parser.h"
 #include "ide-xml-parser-generic.h"
 #include "ide-xml-parser-ui.h"
@@ -182,6 +184,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
   IdeXmlSymbolNode *parent_node;
   G_GNUC_UNUSED IdeXmlSymbolNode *popped_node;
   g_autofree gchar *popped_element_name = NULL;
+  const gchar *erroneous_element_name;
   const gchar *content;
   gint start_line;
   gint start_line_offset;
@@ -198,9 +201,28 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
       return;
     }
 
+  if (state->error_missing_tag_end)
+    {
+      erroneous_element_name = ide_xml_symbol_node_get_element_name (state->parent_node);
+      /* TODO: we need better node comparaison (ns) here */
+      if (!ide_str_equal0 (erroneous_element_name, element_name))
+        {
+          if (ide_xml_stack_is_empty (self->stack))
+            goto error;
+
+          popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
+          ide_xml_symbol_node_set_state (popped_node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
+          g_clear_pointer (&popped_element_name, g_free);
+
+          state->parent_node = parent_node;
+          g_assert (state->parent_node != NULL);
+        }
+    }
+
   depth = ide_xml_sax_get_depth (self->sax_parser);
   ide_xml_sax_get_location (self->sax_parser, &start_line, &start_line_offset, &end_line, &end_line_offset, &content, &size);
 
+  /* No node mean not created by one of the specific parser */
   if (node == NULL)
     {
       if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT)
@@ -223,10 +245,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
           while (TRUE)
             {
               if (ide_xml_stack_is_empty (self->stack))
-                {
-                  g_warning ("Xml nodes stack empty\n");
-                  return;
-                }
+                goto error;
 
               popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
               if (ide_str_equal0 (popped_element_name, element_name))
@@ -245,6 +264,8 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
 
       state->current_depth = depth;
       state->current_node = node;
+      state->error_missing_tag_end = FALSE;
+
       return;
     }
 
@@ -279,10 +300,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     {
       /* TODO: compare current with popped */
       if (ide_xml_stack_is_empty (self->stack))
-        {
-          g_warning ("Xml nodes stack empty\n");
-          return;
-        }
+        goto error;
 
       popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
       state->parent_node = parent_node;
@@ -293,6 +311,13 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
 
   state->current_depth = depth;
   state->current_node = node;
+  state->error_missing_tag_end = FALSE;
+
+  return;
+
+error:
+  g_warning ("Xml nodes stack empty\n");
+  return;
 }
 
 void
@@ -336,6 +361,10 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
   IdeDiagnostic *diagnostic;
+  xmlParserCtxt *context;
+  xmlError *error;
+  const gchar *base;
+  const gchar *current;
   g_autofree gchar *msg = NULL;
   va_list var_args;
 
@@ -347,6 +376,45 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
 
   diagnostic = ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_ERROR);
   g_ptr_array_add (state->diagnostics_array, diagnostic);
+
+  context = ide_xml_sax_get_context (self->sax_parser);
+  base = (const gchar *)context->input->base;
+  current = (const gchar *)context->input->cur;
+  error = xmlCtxtGetLastError (context);
+  if (error != NULL && error->domain == XML_FROM_PARSER)
+    {
+      if (error->code == XML_ERR_GT_REQUIRED)
+        {
+          /* If a tag is not closed, we want the following nodes to be siblings, not children */
+          state->error_missing_tag_end = TRUE;
+        }
+      else if (error->code == XML_ERR_NAME_REQUIRED && context->instate == XML_PARSER_CONTENT)
+        {
+          const gchar *prev;
+          IdeXmlSymbolNode *node;
+          gint start_line, start_line_offset;
+          gint end_line, end_line_offset;
+          gsize size;
+
+          prev = current - 1;
+          if (prev >= base && *prev == '<')
+            {
+              /* '<' only case, no name tag, node not created, we need to do it ourself */
+              node = ide_xml_symbol_node_new ("internal", NULL, NULL, IDE_SYMBOL_XML_ELEMENT);
+              ide_xml_symbol_node_set_state (node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
+              ide_xml_symbol_node_take_internal_child (state->parent_node, node);
+
+              ide_xml_sax_get_location (self->sax_parser,
+                                        &start_line, &start_line_offset,
+                                        &end_line, &end_line_offset,
+                                        NULL, &size);
+              ide_xml_symbol_node_set_location (node, g_object_ref (state->file),
+                                                start_line, start_line_offset,
+                                                end_line, end_line_offset,
+                                                size);
+            }
+        }
+    }
 }
 
 void
