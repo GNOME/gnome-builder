@@ -726,7 +726,7 @@ gb_project_tree_actions_close_views_cb (GtkWidget *widget,
     {
       IdeBuffer *buffer;
 
-      buffer = ide_editor_view_get_document (IDE_EDITOR_VIEW (view));
+      buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (view));
 
       if (buffer == removal->document)
         removal->views = g_list_prepend (removal->views, g_object_ref (view));

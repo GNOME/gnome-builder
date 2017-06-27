@@ -63,5 +63,8 @@ void           ide_layout_stack_agree_to_close_async  (IdeLayoutStack       *sel
 gboolean       ide_layout_stack_agree_to_close_finish (IdeLayoutStack       *self,
                                                        GAsyncResult         *result,
                                                        GError              **error);
+void           ide_layout_stack_foreach_view          (IdeLayoutStack       *self,
+                                                       GtkCallback           callback,
+                                                       gpointer              user_data);
 
 G_END_DECLS

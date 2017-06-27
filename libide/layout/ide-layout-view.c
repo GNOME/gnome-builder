@@ -249,6 +249,8 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
    *
    * This signal will only be emitted when #IdeLayoutView:can-split is
    * set to %TRUE. The default is %FALSE.
+   *
+   * Returns: (transfer full): A newly created #IdeLayoutView
    */
   signals [CREATE_SPLIT_VIEW] =
     g_signal_new (g_intern_static_string ("create-split-view"),

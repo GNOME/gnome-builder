@@ -61,27 +61,6 @@
         <attribute name="verb-icon">builder-view-right-pane-symbolic</attribute>
       </item>
     </section>
-<!--
-    <section>
-      <attribute name="id">juntion-section</attribute>
-      <attribute name="display-hint">horizontal-buttons</attribute>
-      <item>
-        <attribute name="label" translatable="yes">_Reload</attribute>
-        <attribute name="action">win.revert</attribute>
-        <attribute name="verb-icon">view-refresh-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Print…</attribute>
-        <attribute name="action">win.print</attribute>
-        <attribute name="verb-icon">printer-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Fullscreen</attribute>
-        <attribute name="action">win.fullscreen</attribute>
-        <attribute name="verb-icon">view-fullscreen-symbolic</attribute>
-      </item>
-    </section>
--->
     <section id="gear-menu-new-section">
       <item>
         <attribute name="label" translatable="yes">_New File</attribute>
@@ -262,61 +241,50 @@
       </item>
     </section>
   </menu>
-  <menu id="ide-layout-stack-menu">
-    <section id="ide-layout-stack-menu-splits-section">
-      <attribute name="display-hint">horizontal-buttons</attribute>
-      <attribute name="label" translatable="yes">Split</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Split Left</attribute>
-        <attribute name="action">view-stack.split-left</attribute>
-        <attribute name="verb-icon">builder-split-tab-left-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Split Right</attribute>
-        <attribute name="action">view-stack.split-right</attribute>
-        <attribute name="verb-icon">builder-split-tab-right-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Split Down</attribute>
-        <attribute name="action">view-stack.split-down</attribute>
-        <attribute name="verb-icon">builder-split-tab-symbolic</attribute>
-      </item>
-    </section>
-    <section id="ide-layout-stack-menu-move-section">
-      <attribute name="display-hint">horizontal-buttons</attribute>
-      <attribute name="label" translatable="yes">Move</attribute>
+  <menu id="ide-layout-stack-frame-menu">
+    <section id="ide-layout-stack-frame-section">
+      <attribute name="label" translatable="yes">Frame</attribute>
       <item>
         <attribute name="label" translatable="yes">Move Left</attribute>
-        <attribute name="action">view-stack.move-left</attribute>
-        <attribute name="verb-icon">builder-move-left-symbolic</attribute>
+        <attribute name="action">layoutstack.move-left</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Move Right</attribute>
-        <attribute name="action">view-stack.move-right</attribute>
-        <attribute name="verb-icon">builder-move-right-symbolic</attribute>
+        <attribute name="action">layoutstack.move-right</attribute>
+      </item>
+      <item>
+        <attribute name="action">layoutstack.split-view</attribute>
+        <attribute name="label" translatable="yes">Split</attribute>
+      </item>
+      <item>
+        <attribute name="action">layoutgrid.close-stack</attribute>
+        <attribute name="label" translatable="yes">Close</attribute>
       </item>
     </section>
-    <section id="ide-layout-stack-menu-preview-section"/>
-    <section id="ide-layout-stack-menu-save-section">
+  </menu>
+  <menu id="ide-editor-view-document-menu">
+    <section id="editor-document-section">
+      <attribute name="label" translatable="yes">Document</attribute>
       <item>
-        <attribute name="label" translatable="yes">_Save</attribute>
-        <attribute name="action">view.save</attribute>
+        <attribute name="label" translatable="yes">Open in New Frame</attribute>
+        <attribute name="action">layoutstack.open-in-new-frame</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_Save As</attribute>
-        <attribute name="action">view.save-as</attribute>
+        <attribute name="label" translatable="yes">Open Preview</attribute>
       </item>
-    </section>
-    <section id="ide-layout-stack-menu-print-section">
       <item>
-        <attribute name="label" translatable="yes">_Print</attribute>
-        <attribute name="action">view.print</attribute>
+        <attribute name="label" translatable="yes">Print…</attribute>
       </item>
     </section>
-    <section id="ide-layout-stack-menu-close-section">
+    <section id="editor-document-preferences-section">
       <item>
-        <attribute name="label" translatable="yes">_Close</attribute>
-        <attribute name="action">view-stack.close</attribute>
+        <attribute name="label" translatable="yes">Document Preferences</attribute>
+      </item>
+    </section>
+    <section id="editor-document-close-section">
+      <item>
+        <attribute name="action">layoutstack.close-view</attribute>
+        <attribute name="label" translatable="yes">Close</attribute>
       </item>
     </section>
   </menu>

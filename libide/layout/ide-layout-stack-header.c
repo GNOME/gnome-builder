@@ -415,6 +415,7 @@ ide_layout_stack_header_new (void)
  * ide_layout_stack_header_add_custom_title:
  * @self: a #IdeLayoutStackHeader
  * @widget: A #GtkWidget
+ * @priority: the sort priority
  *
  * This will add @widget to the title area with @priority determining the
  * sort order of the child.

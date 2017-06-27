@@ -141,7 +141,7 @@ get_view_monitor (GbColorPickerWorkbenchAddin *self,
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
-  buffer = ide_editor_view_get_document (view);
+  buffer = ide_editor_view_get_buffer (view);
   if (buffer == NULL)
     return NULL;
 
@@ -237,7 +237,7 @@ monitor_color_found_cb (GbColorPickerWorkbenchAddin  *self,
   if (self->active_view == NULL)
     return;
 
-  active_buffer = ide_editor_view_get_document (IDE_EDITOR_VIEW (self->active_view));
+  active_buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (self->active_view));
   if (active_buffer != NULL && self->dock != NULL)
     {
       gstyle_color_fill_rgba (color, &rgba);
@@ -337,7 +337,7 @@ activate_color_picker_action_cb (GbColorPickerWorkbenchAddin *self,
       else
         init_dock (self);
 
-      buffer = ide_editor_view_get_document (view);
+      buffer = ide_editor_view_get_buffer (view);
       monitor = g_object_get_data (G_OBJECT (buffer), "monitor");
       if (monitor == NULL)
         {
@@ -460,30 +460,30 @@ gb_color_picker_workbench_addin_load (IdeWorkbenchAddin *addin,
                                       IdeWorkbench      *workbench)
 {
   GbColorPickerWorkbenchAddin *self = (GbColorPickerWorkbenchAddin *)addin;
-  IdeLayout *layout;
+  IdeLayoutGrid *grid;
 
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   ide_set_weak_pointer (&self->workbench, workbench);
   self->editor = IDE_EDITOR_PERSPECTIVE (ide_workbench_get_perspective_by_name (workbench, "editor"));
-  layout = ide_editor_perspective_get_layout (self->editor);
+  grid = ide_editor_perspective_get_grid (self->editor);
 
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)setup_view_cb, self);
-  self->active_view = ide_editor_perspective_get_active_view (self->editor);
+  self->active_view = ide_layout_grid_get_current_view (grid);
 
-  g_signal_connect_object (self->editor,
+  g_signal_connect_object (grid,
                            "view-added",
                            G_CALLBACK (view_added_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->editor,
+  g_signal_connect_object (grid,
                            "view-removed",
                            G_CALLBACK (view_removed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (layout,
-                           "notify::active-view",
+  g_signal_connect_object (grid,
+                           "notify::current-view",
                            G_CALLBACK (active_view_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);

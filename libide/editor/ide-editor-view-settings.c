@@ -21,6 +21,7 @@
 #include "ide-editor-private.h"
 
 static GSettings *editor_settings;
+static GSettings *insight_settings;
 
 static gboolean
 get_smart_home_end (GValue   *value,
@@ -58,7 +59,7 @@ _ide_editor_view_init_settings (IdeEditorView *self)
   if (editor_settings == NULL)
     editor_settings = g_settings_new ("org.gnome.builder.editor");
 
-  source_view = ide_editor_view_get_source_view (self);
+  source_view = ide_editor_view_get_view (self);
   buffer = ide_editor_view_get_buffer (self);
 
   g_settings_bind (editor_settings, "highlight-current-line",
@@ -113,5 +114,12 @@ _ide_editor_view_init_settings (IdeEditorView *self)
 
   g_settings_bind (editor_settings, "auto-hide-map",
                    self, "auto-hide-map",
+                   G_SETTINGS_BIND_GET);
+
+  if (insight_settings == NULL)
+    insight_settings = g_settings_new ("org.gnome.builder.code-insight");
+
+  g_settings_bind (insight_settings, "word-completion",
+                   source_view, "enable-word-completion",
                    G_SETTINGS_BIND_GET);
 }

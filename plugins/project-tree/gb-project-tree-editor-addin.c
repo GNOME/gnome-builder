@@ -63,7 +63,7 @@ gb_project_tree_editor_addin_reveal (GSimpleAction *action,
   tree = g_object_get_data (G_OBJECT (workbench), "GB_PROJECT_TREE");
   g_assert (GB_IS_PROJECT_TREE (tree));
 
-  buffer = ide_editor_view_get_document (self->view);
+  buffer = ide_editor_view_get_buffer (self->view);
   g_assert (IDE_IS_BUFFER (buffer));
 
   ifile = ide_buffer_get_file (buffer);

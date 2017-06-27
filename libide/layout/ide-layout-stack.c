@@ -821,3 +821,26 @@ _ide_layout_stack_transfer (IdeLayoutStack *self,
   gtk_container_add (GTK_CONTAINER (dest_priv->stack), GTK_WIDGET (view));
   g_object_unref (view);
 }
+
+/**
+ * ide_layout_stack_foreach_view:
+ * @self: a #IdeLayoutStack
+ * @callback: (scope call) (closure user_data): A callback for each view
+ * @user_data: user data for @callback
+ *
+ * This function will call @callback for every view found in @self.
+ *
+ * Since: 3.26
+ */
+void
+ide_layout_stack_foreach_view (IdeLayoutStack *self,
+                               GtkCallback     callback,
+                               gpointer        user_data)
+{
+  IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LAYOUT_STACK (self));
+  g_return_if_fail (callback != NULL);
+
+  gtk_container_foreach (GTK_CONTAINER (priv->stack), callback, user_data);
+}

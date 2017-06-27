@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include "diagnostics/ide-source-location.h"
 #include "layout/ide-layout.h"
 #include "layout/ide-layout-grid.h"
 
@@ -27,6 +28,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
 
-IdeLayoutGrid *ide_editor_perspective_get_grid (IdeEditorPerspective *self);
+IdeLayoutGrid *ide_editor_perspective_get_grid                      (IdeEditorPerspective *self);
+void           ide_editor_perspective_focus_location                (IdeEditorPerspective *self,
+                                                                     IdeSourceLocation    *location);
+void           ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
+                                                                     IdeBuffer            *buffer);
+IdeLayoutView *ide_editor_perspective_get_active_view               (IdeEditorPerspective *self);
+
+/* We want this to use "classifications" rather than "edges" */
+GtkWidget     *ide_editor_perspective_get_right_edge                (IdeEditorPerspective *self);
+GtkWidget     *ide_editor_perspective_get_bottom_edge               (IdeEditorPerspective *self);
+
 
 G_END_DECLS

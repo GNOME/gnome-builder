@@ -280,8 +280,8 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
 
   g_assert (G_IS_SIMPLE_ACTION (action));
 
-  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_document (editor_view));
-  source_view = ide_editor_view_get_active_source_view (editor_view);
+  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_buffer (editor_view));
+  source_view = ide_editor_view_get_view (editor_view);
   if (source_view == NULL || !GTK_SOURCE_IS_VIEW (source_view))
     return;
 

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LAYOUT_H
-#define IDE_LAYOUT_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -30,10 +29,15 @@ G_DECLARE_DERIVABLE_TYPE (IdeLayout, ide_layout, IDE, LAYOUT, DzlDockBin)
 struct _IdeLayoutClass
 {
   DzlDockBinClass parent_class;
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
 };
 
-GtkWidget *ide_layout_get_active_view (IdeLayout *self);
-
 G_END_DECLS
-
-#endif /* IDE_LAYOUT_H */

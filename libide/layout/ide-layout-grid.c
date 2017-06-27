@@ -23,14 +23,23 @@
 
 typedef struct
 {
+  /* Owned references */
   DzlSignalGroup *toplevel_signals;
   GQueue          focus_column;
+
+  /*
+   * This unowned reference is simply used to compare to a new focus
+   * view to see if we have changed our current view. It is not to
+   * be used directly, only for pointer comparison.
+   */
+  IdeLayoutView  *_last_focused_view;
 } IdeLayoutGridPrivate;
 
 enum {
   PROP_0,
   PROP_CURRENT_COLUMN,
   PROP_CURRENT_STACK,
+  PROP_CURRENT_VIEW,
   N_PROPS
 };
 
@@ -110,18 +119,33 @@ ide_layout_grid_after_set_focus (IdeLayoutGrid *self,
                                  GtkWidget     *widget,
                                  GtkWidget     *toplevel)
 {
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+
   g_assert (IDE_IS_LAYOUT_GRID (self));
   g_assert (!widget || GTK_IS_WIDGET (widget));
   g_assert (GTK_IS_WINDOW (toplevel));
 
   if (widget != NULL)
     {
+      GtkWidget *view;
+
       if (gtk_widget_is_ancestor (widget, GTK_WIDGET (self)))
         {
           GtkWidget *column = gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_GRID_COLUMN);
 
           if (column != NULL)
             ide_layout_grid_set_current_column (self, IDE_LAYOUT_GRID_COLUMN (column));
+        }
+
+      /*
+       * self->_last_focused_view is an unowned reference, we only
+       * use it for pointer comparison, nothing more.
+       */
+      view = gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_VIEW);
+      if (view != (GtkWidget *)priv->_last_focused_view)
+        {
+          priv->_last_focused_view = (IdeLayoutView *)view;
+          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_VIEW]);
         }
     }
 }
@@ -339,16 +363,31 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
   properties [PROP_CURRENT_STACK] =
     g_param_spec_object ("current-stack",
                          "Current Stack",
-                         "The most recent focused IdeLayoutStack",
+                         "The most recently focused IdeLayoutStack",
                          IDE_TYPE_LAYOUT_STACK,
-                         (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CURRENT_VIEW] =
+    g_param_spec_object ("current-view",
+                         "Current View",
+                         "The most recently focused IdeLayoutView",
+                         IDE_TYPE_LAYOUT_VIEW,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "idelayoutgrid");
 
+  /**
+   * IdeLayoutGrid::create-stack:
+   * @self: an #IdeLayoutGrid
+   *
+   * Creates a new stack to be added to the grid.
+   *
+   * Returns: (transfer full): A newly created #IdeLayoutStack
+   */
   signals [CREATE_STACK] =
-    g_signal_new ("create-stack",
+    g_signal_new (g_intern_static_string ("create-stack"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeLayoutGridClass, create_stack),
@@ -570,4 +609,88 @@ ide_layout_grid_set_current_column (IdeLayoutGrid       *self,
 
   g_warning ("%s does not contain %s",
              G_OBJECT_TYPE_NAME (self), G_OBJECT_TYPE_NAME (column));
+}
+
+/**
+ * ide_layout_grid_get_current_view:
+ * @self: a #IdeLayoutGrid
+ *
+ * Gets the most recent view used by the user as determined by tracking
+ * the window focus.
+ *
+ * Returns: (transfer none): An #IdeLayoutView or %NULL
+ *
+ * Since: 3.26
+ */
+IdeLayoutView *
+ide_layout_grid_get_current_view (IdeLayoutGrid *self)
+{
+  IdeLayoutStack *stack;
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_GRID (self), NULL);
+
+  stack = ide_layout_grid_get_current_stack (self);
+
+  if (stack != NULL)
+    ide_layout_stack_get_visible_child (stack);
+
+  return NULL;
+}
+
+static void
+collect_views (GtkWidget *widget,
+               GPtrArray *ar)
+{
+  if (IDE_IS_LAYOUT_VIEW (widget))
+    g_ptr_array_add (ar, widget);
+}
+
+/**
+ * ide_layout_grid_foreach_view:
+ * @self: a #IdeLayoutGrid
+ * @callback: (scope call) (closure user_data): A callback for each view
+ * @user_data: user data for @callback
+ *
+ * This function will call @callback for every view found in @self.
+ *
+ * Since: 3.26
+ */
+void
+ide_layout_grid_foreach_view (IdeLayoutGrid *self,
+                              GtkCallback    callback,
+                              gpointer       user_data)
+{
+  g_autoptr(GPtrArray) views = NULL;
+  guint n_columns;
+
+  g_return_if_fail (IDE_IS_LAYOUT_GRID (self));
+  g_return_if_fail (callback != NULL);
+
+  views = g_ptr_array_new ();
+
+  n_columns = dzl_multi_paned_get_n_children (DZL_MULTI_PANED (self));
+
+  for (guint i = 0; i < n_columns; i++)
+    {
+      GtkWidget *column = dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), i);
+      guint n_stacks;
+
+      g_assert (IDE_IS_LAYOUT_GRID_COLUMN (column));
+
+      n_stacks = dzl_multi_paned_get_n_children (DZL_MULTI_PANED (column));
+
+      for (guint j = 0; j < n_stacks; j++)
+        {
+          GtkWidget *stack = dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), j);
+
+          g_assert (IDE_IS_LAYOUT_STACK (stack));
+
+          ide_layout_stack_foreach_view (IDE_LAYOUT_STACK (stack),
+                                         (GtkCallback) collect_views,
+                                         views);
+        }
+    }
+
+  for (guint i = 0; i < views->len; i++)
+    callback (g_ptr_array_index (views, i), user_data);
 }

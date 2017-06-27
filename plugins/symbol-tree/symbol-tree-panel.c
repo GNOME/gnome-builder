@@ -152,7 +152,7 @@ refresh_tree (SymbolTreePanel *self)
   if ((active_view = ide_editor_perspective_get_active_view (IDE_EDITOR_PERSPECTIVE (perspective))) &&
       IDE_IS_EDITOR_VIEW (active_view))
     {
-      document = ide_editor_view_get_document (IDE_EDITOR_VIEW  (active_view));
+      document = ide_editor_view_get_buffer (IDE_EDITOR_VIEW  (active_view));
       if (IDE_IS_BUFFER (document))
         change_count = ide_buffer_get_change_count (IDE_BUFFER (document));
     }

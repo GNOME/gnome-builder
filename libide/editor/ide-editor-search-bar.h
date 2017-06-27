@@ -1,4 +1,4 @@
-/* ide-layout-stack-header.h
+/* ide-editor-search-bar.h
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -20,17 +20,21 @@
 
 #include <dazzle.h>
 
+#include "buffers/ide-buffer.h"
+#include "sourceview/ide-source-view.h"
+
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LAYOUT_STACK_HEADER (ide_layout_stack_header_get_type())
+#define IDE_TYPE_EDITOR_SEARCH_BAR (ide_editor_search_bar_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeLayoutStackHeader, ide_layout_stack_header, IDE, LAYOUT_STACK_HEADER, DzlPriorityBox)
+G_DECLARE_FINAL_TYPE (IdeEditorSearchBar, ide_editor_search_bar, IDE, EDITOR_SEARCH_BAR, DzlBin)
 
-GtkWidget *ide_layout_stack_header_new              (void);
-void       ide_layout_stack_header_set_title        (IdeLayoutStackHeader *self,
-                                                     const gchar          *title);
-void       ide_layout_stack_header_add_custom_title (IdeLayoutStackHeader *self,
-                                                     GtkWidget            *widget,
-                                                     gint                  priority);
+GtkWidget     *ide_editor_search_bar_new        (void);
+IdeBuffer     *ide_editor_search_bar_get_buffer (IdeEditorSearchBar *self);
+void           ide_editor_search_bar_set_buffer (IdeEditorSearchBar *self,
+                                                 IdeBuffer          *buffer);
+IdeSourceView *ide_editor_search_bar_get_view   (IdeEditorSearchBar *self);
+void           ide_editor_search_bar_set_view   (IdeEditorSearchBar *self,
+                                                 IdeSourceView      *view);
 
 G_END_DECLS

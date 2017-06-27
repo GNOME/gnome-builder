@@ -71,7 +71,7 @@ view_activate_beautify_action_cb (GSimpleAction *action,
   if (view == NULL || !IDE_IS_EDITOR_VIEW (view))
     return;
 
-  source_view = ide_editor_view_get_active_source_view (view);
+  source_view = ide_editor_view_get_view (view);
   if (!GTK_SOURCE_IS_VIEW (source_view))
     {
       g_warning ("Beautifier Plugin: the view is not a GtkSourceView");
@@ -244,7 +244,7 @@ setup_view_cb (GtkWidget                  *widget,
 
   g_object_set_data (G_OBJECT (view), "gb-beautifier-workbench-addin", self);
 
-  source_view = ide_editor_view_get_active_source_view (view);
+  source_view = ide_editor_view_get_view (view);
   g_signal_connect_object (source_view,
                            "populate-popup",
                            G_CALLBACK (view_populate_popup),

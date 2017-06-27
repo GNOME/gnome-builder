@@ -1,0 +1,80 @@
+idelayoutstackheader {
+  min-height: 26px;
+}
+
+idelayoutstackheader button {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+idelayoutstackheader button:not(:disabled) image {
+  opacity: 0.55;
+}
+
+idelayoutstackheader button:checked image,
+idelayoutstackheader button:not(:disabled):hover image {
+  opacity: 1;
+}
+
+idelayoutstackheader button:checked,
+idelayoutstackheader button:hover {
+  background: shade(@theme_bg_color, 0.9);
+}
+
+idelayoutstackheader button:active {
+  background: shade(@theme_bg_color, 0.85);
+}
+
+idelayoutstackheader > button {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+idelayoutstackheader * button:first-child > image,
+idelayoutstackheader * button:last-child:dir(rtl) > image {
+  padding-left: 12px;
+  padding-right: 10px;
+}
+
+idelayoutstackheader * button:first-child:dir(rtl) > image,
+idelayoutstackheader * button:last-child > image {
+  padding-right: 12px;
+  padding-left: 9px;
+}
+
+idelayoutgrid.handle {
+  border: 1px solid @borders;
+}
+
+popover.symbols-button {
+  padding: 12px;
+}
+
+popover.symbols-button treeview {
+  background: transparent;
+  color: @theme_text_color;
+}
+
+popover.title-popover scrolledwindow {
+  min-width: 300px;
+}
+
+popover.title-popover list {
+  background: transparent;
+}
+
+popover.title-popover list row {
+  padding: 6px;
+}
+
+popover.title-popover list row button {
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}

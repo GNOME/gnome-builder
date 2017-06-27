@@ -4,6 +4,20 @@
     <child>
       <object class="GtkOverlay" id="overlay">
         <property name="visible">true</property>
+        <child type="overlay">
+          <object class="GtkRevealer" id="search_revealer">
+            <property name="halign">end</property>
+            <property name="margin-right">24</property>
+            <property name="reveal-child">false</property>
+            <property name="valign">start</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="IdeEditorSearchBar" id="search_bar">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
         <child>
           <object class="GtkScrolledWindow" id="scroller">
             <property name="visible">true</property>

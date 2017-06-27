@@ -22,6 +22,7 @@
 
 #include "ide-layout-grid-column.h"
 #include "ide-layout-stack.h"
+#include "ide-layout-view.h"
 
 G_BEGIN_DECLS
 
@@ -50,5 +51,9 @@ IdeLayoutGridColumn *ide_layout_grid_get_current_column (IdeLayoutGrid       *se
 void                 ide_layout_grid_set_current_column (IdeLayoutGrid       *self,
                                                          IdeLayoutGridColumn *column);
 IdeLayoutStack      *ide_layout_grid_get_current_stack  (IdeLayoutGrid       *self);
+IdeLayoutView       *ide_layout_grid_get_current_view   (IdeLayoutGrid       *self);
+void                 ide_layout_grid_foreach_view       (IdeLayoutGrid       *self,
+                                                         GtkCallback          callback,
+                                                         gpointer             user_data);
 
 G_END_DECLS

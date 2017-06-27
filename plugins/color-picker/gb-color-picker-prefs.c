@@ -370,7 +370,7 @@ generate_palette_button_clicked_cb (GbColorPickerPrefs *self,
   g_assert (GTK_IS_BUTTON (button));
 
   view = IDE_EDITOR_VIEW (self->addin->active_view);
-  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_document (view));
+  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_buffer (view));
 
   palette = gstyle_palette_new_from_buffer (buffer, NULL, NULL, NULL, NULL);
   if (palette != NULL)

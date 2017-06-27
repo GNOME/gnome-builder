@@ -30,7 +30,7 @@ struct _GbColorPickerWorkbenchAddin
   GHashTable            *views;
   IdeWorkbench          *workbench;
   IdeEditorPerspective  *editor;
-  GtkWidget             *active_view;
+  IdeLayoutView         *active_view;
   GtkWidget             *dock;
   GtkWidget             *color_panel;
   GbColorPickerPrefs    *prefs;

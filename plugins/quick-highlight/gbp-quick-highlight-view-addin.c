@@ -103,7 +103,7 @@ gbp_quick_highlight_view_addin_match (GbpQuickHighlightViewAddin *self)
 
   g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
 
-  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_document (self->editor_view));
+  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_buffer (self->editor_view));
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
     {
@@ -200,7 +200,7 @@ gbp_quick_highlight_view_addin_enabled_changed (GbpQuickHighlightViewAddin *self
   g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
   g_assert (G_IS_SETTINGS (settings));
 
-  buffer = ide_editor_view_get_document (self->editor_view);
+  buffer = ide_editor_view_get_buffer (self->editor_view);
   enabled = g_settings_get_boolean (settings, "enabled");
 
   if (!self->enabled && enabled)
@@ -235,7 +235,7 @@ gbp_quick_highlight_view_addin_load (IdeEditorViewAddin *addin,
 
   self->editor_view = view;
 
-  buffer = GTK_SOURCE_BUFFER (ide_editor_view_get_document (view));
+  buffer = GTK_SOURCE_BUFFER (ide_editor_view_get_buffer (view));
 
   self->insert_mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
 
@@ -300,7 +300,7 @@ gbp_quick_highlight_view_addin_unload (IdeEditorViewAddin *addin,
 
   g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
 
-  buffer = GTK_SOURCE_BUFFER (ide_editor_view_get_document (view));
+  buffer = GTK_SOURCE_BUFFER (ide_editor_view_get_buffer (view));
 
   ide_clear_source (&self->queued_update);
 

@@ -1,0 +1,32 @@
+
+ - Search entry context menu (use a GMenu and merging this time)
+   Might also require DzlWidgetActionGroup.
+
+ - Enter, Up, and Down accelerators for search/replace entries.
+
+ - perspective focus_location
+
+ - other perspective interface methods
+
+ - can we make perspectives the plugin interface?
+
+ - Check if buffer is already in visible stack before adding new view
+
+ - view-added/removed/etc on IdeLayoutGrid
+
+ - Remove get_right_edge() etc, switch with "classification" for panels
+
+ - Ability to disable plugin by default
+
+ - Plugins to fix for API
+   - devhelp
+   - command bar / vim
+   - project-tree
+   - terminal
+   - symbol-tree
+
+ - Remove accelerators from perspective, use shortcut engine
+
+ - Move panel position settings to org.gnome.builder.editor maybe
+
+

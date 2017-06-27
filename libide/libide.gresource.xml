@@ -32,6 +32,7 @@
     <file compressed="true" alias="Arc-shared.css">../data/themes/Arc-shared.css</file>
 
     <file compressed="true" alias="shared.css">../data/themes/shared.css</file>
+    <file compressed="true" alias="shared/shared-layout.css">../data/themes/shared/shared-layout.css</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/modelines">
@@ -54,6 +55,7 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack-header.ui">layout/ide-layout-stack-header.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack.ui">layout/ide-layout-stack.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-perspective.ui">editor/ide-editor-perspective.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-search-bar.ui">editor/ide-editor-search-bar.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-spell-widget.ui">spellcheck/ide-editor-spell-widget.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-view.ui">editor/ide-editor-view.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-greeter-perspective.ui">greeter/ide-greeter-perspective.ui</file>

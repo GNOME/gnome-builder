@@ -53,7 +53,7 @@ notify_active_view_cb (SymbolTree  *self,
                        GParamFlags *pspec,
                        IdeLayout   *layout)
 {
-  GtkWidget *active_view;
+  IdeLayotuView *active_view = NULL;
   IdeBuffer *buffer;
 
   IDE_ENTRY;
@@ -72,10 +72,12 @@ notify_active_view_cb (SymbolTree  *self,
       ide_clear_weak_pointer (&self->buffer);
     }
 
-  active_view = ide_layout_get_active_view (layout);
+  if (IDE_IS_EDITOR_PERSPECTIVE (layout))
+    active_view = ide_editor_perspective_get_active_view (IDE_EDITOR_PERPSECTIVE (layout));
+
   if (IDE_IS_EDITOR_VIEW (active_view))
     {
-      buffer = ide_editor_view_get_document (IDE_EDITOR_VIEW (active_view));
+      buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (active_view));
       if (ide_buffer_get_symbol_resolver (buffer) == NULL)
         {
           ide_set_weak_pointer (&self->buffer, buffer);

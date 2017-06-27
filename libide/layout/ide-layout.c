@@ -16,121 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-layout.h"
-#include "ide-layout-pane.h"
-#include "ide-layout-view.h"
+#define G_LOG_DOMAIN "ide-layout"
 
-typedef struct
-{
-  GtkWidget *active_view;
+#include "layout/ide-layout.h"
+#include "layout/ide-layout-pane.h"
+#include "layout/ide-layout-view.h"
 
-  gulong     focus_handler;
-} IdeLayoutPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeLayout, ide_layout, DZL_TYPE_DOCK_BIN)
-
-enum {
-  PROP_0,
-  PROP_ACTIVE_VIEW,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
-
-static void
-ide_layout_active_view_weak_cb (IdeLayout *self,
-                                GtkWidget *where_view_was)
-{
-  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
-
-  g_assert (IDE_IS_LAYOUT (self));
-
-  if (where_view_was == priv->active_view)
-    {
-      priv->active_view = NULL;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
-    }
-}
-
-static void
-ide_layout_set_active_view (IdeLayout *self,
-                            GtkWidget *active_view)
-{
-  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
-
-  g_assert (IDE_IS_LAYOUT (self));
-  g_assert (!active_view || GTK_IS_WIDGET (active_view));
-
-  if (active_view != priv->active_view)
-    {
-      if (priv->active_view != NULL)
-        {
-          g_object_weak_unref (G_OBJECT (priv->active_view),
-                               (GWeakNotify)ide_layout_active_view_weak_cb,
-                               self);
-          priv->active_view = NULL;
-        }
-
-      if (active_view != NULL)
-        {
-          priv->active_view = active_view;
-          g_object_weak_ref (G_OBJECT (priv->active_view),
-                             (GWeakNotify)ide_layout_active_view_weak_cb,
-                             self);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_VIEW]);
-    }
-}
-
-static void
-ide_layout_toplevel_set_focus (IdeLayout *self,
-                               GtkWidget *widget,
-                               GtkWidget *toplevel)
-{
-  g_assert (IDE_IS_LAYOUT (self));
-
-  if (widget != NULL && !IDE_IS_LAYOUT_VIEW (widget))
-    widget = gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_VIEW);
-
-  if (widget != NULL)
-    ide_layout_set_active_view (self, widget);
-}
-
-static void
-ide_layout_hierarchy_changed (GtkWidget *widget,
-                              GtkWidget *old_toplevel)
-{
-  IdeLayout *self = (IdeLayout *)widget;
-  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
-  GtkWidget *toplevel;
-
-  g_assert (IDE_IS_LAYOUT (self));
-  g_assert (!old_toplevel || GTK_IS_WIDGET (old_toplevel));
-
-  if ((old_toplevel != NULL) && (priv->focus_handler != 0))
-    {
-      g_signal_handler_disconnect (old_toplevel, priv->focus_handler);
-      priv->focus_handler = 0;
-
-      if (priv->active_view)
-        {
-          g_object_weak_unref (G_OBJECT (priv->active_view),
-                               (GWeakNotify)ide_layout_active_view_weak_cb,
-                               self);
-          priv->active_view = NULL;
-        }
-    }
-
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (GTK_IS_WINDOW (toplevel))
-    priv->focus_handler =
-      g_signal_connect_swapped (toplevel,
-                                "set-focus",
-                                G_CALLBACK (ide_layout_toplevel_set_focus),
-                                self);
-}
+G_DEFINE_TYPE (IdeLayout, ide_layout, DZL_TYPE_DOCK_BIN)
 
 static GtkWidget *
 ide_layout_create_edge (DzlDockBin      *dock,
@@ -146,63 +38,14 @@ ide_layout_create_edge (DzlDockBin      *dock,
 }
 
 static void
-ide_layout_get_property (GObject    *object,
-                         guint       prop_id,
-                         GValue     *value,
-                         GParamSpec *pspec)
-{
-  IdeLayout *self = IDE_LAYOUT (object);
-
-  switch (prop_id)
-    {
-    case PROP_ACTIVE_VIEW:
-      g_value_set_object (value, ide_layout_get_active_view (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-    }
-}
-
-static void
 ide_layout_class_init (IdeLayoutClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   DzlDockBinClass *dock_bin_class = DZL_DOCK_BIN_CLASS (klass);
 
-  object_class->get_property = ide_layout_get_property;
-
-  widget_class->hierarchy_changed = ide_layout_hierarchy_changed;
-
   dock_bin_class->create_edge = ide_layout_create_edge;
-
-  properties [PROP_ACTIVE_VIEW] =
-    g_param_spec_object ("active-view",
-                         "Active View",
-                         "Active View",
-                         GTK_TYPE_WIDGET,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
 ide_layout_init (IdeLayout *self)
 {
-}
-
-/**
- * ide_layout_get_active_view:
- *
- * Returns: (transfer none) (nullable): An #IdeLayoutView or %NULL.
- */
-GtkWidget *
-ide_layout_get_active_view (IdeLayout *self)
-{
-  IdeLayoutPrivate *priv = ide_layout_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_LAYOUT (self), NULL);
-
-  return priv->active_view;
 }
