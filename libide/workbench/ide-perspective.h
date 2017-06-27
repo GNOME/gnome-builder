@@ -32,7 +32,6 @@ struct _IdePerspectiveInterface
   GTypeInterface parent;
 
   gboolean      (*agree_to_shutdown)   (IdePerspective *self);
-  GActionGroup *(*get_actions)         (IdePerspective *self);
   gchar        *(*get_icon_name)       (IdePerspective *self);
   gchar        *(*get_id)              (IdePerspective *self);
   gboolean      (*get_needs_attention) (IdePerspective *self);
@@ -50,7 +49,6 @@ struct _IdePerspectiveInterface
 };
 
 gboolean      ide_perspective_agree_to_shutdown   (IdePerspective *self);
-GActionGroup *ide_perspective_get_actions         (IdePerspective *self);
 gchar        *ide_perspective_get_icon_name       (IdePerspective *self);
 gchar        *ide_perspective_get_id              (IdePerspective *self);
 gboolean      ide_perspective_get_needs_attention (IdePerspective *self);

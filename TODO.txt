@@ -2,6 +2,10 @@
  - Search entry context menu (use a GMenu and merging this time)
    Might also require DzlWidgetActionGroup.
 
+ - Make sure search entry actually works
+
+ - Be able to add an editor view
+
  - Enter, Up, and Down accelerators for search/replace entries.
 
  - perspective focus_location
@@ -9,8 +13,6 @@
  - other perspective interface methods
 
  - can we make perspectives the plugin interface?
-
- - Check if buffer is already in visible stack before adding new view
 
  - view-added/removed/etc on IdeLayoutGrid
 
@@ -30,3 +32,8 @@
  - Move panel position settings to org.gnome.builder.editor maybe
 
 
+
+Done
+
+ - Check if buffer is already in visible stack before adding new view
+ - Perspective actions, copy them across

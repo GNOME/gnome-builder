@@ -39,7 +39,7 @@
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkButton" id="duplicate">
-                    <property name="action-name">perspective.duplicate-configuration</property>
+                    <property name="action-name">build-preferences.duplicate-configuration</property>
                     <property name="tooltip-text" translatable="yes">Duplicate the configuration</property>
                     <property name="visible">true</property>
                     <style>
@@ -55,7 +55,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="delete">
-                    <property name="action-name">perspective.delete-configuration</property>
+                    <property name="action-name">build-preferences.delete-configuration</property>
                     <property name="tooltip-text" translatable="yes">Delete the configuration</property>
                     <property name="visible">true</property>
                     <style>

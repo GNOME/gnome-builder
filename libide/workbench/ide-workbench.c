@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-workbench"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
@@ -123,19 +124,17 @@ ide_workbench_notify_visible_child (IdeWorkbench *self,
                                     GParamSpec   *pspec,
                                     GtkStack     *stack)
 {
-  GActionGroup *actions = NULL;
   IdePerspective *perspective;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (GTK_IS_STACK (stack));
 
   perspective = IDE_PERSPECTIVE (gtk_stack_get_visible_child (stack));
-  if (perspective != NULL)
-    actions = ide_perspective_get_actions (perspective);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
-
-  g_clear_object (&actions);
+  /* Mux the actions from the perspective for the header bar */
+  dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self),
+                                    perspective ? GTK_WIDGET (perspective) : NULL,
+                                    "IDE_PERSPECTIVE_ACTIONS");
 }
 
 static gint
@@ -973,9 +972,6 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
     gtk_stack_set_visible_child (self->header_stack, titlebar);
   else
     gtk_stack_set_visible_child (self->header_stack, GTK_WIDGET (self->header_bar));
-
-  actions = ide_perspective_get_actions (perspective);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "perspective", actions);
 
   /*
    * If we are transitioning to the editor the first time, we can

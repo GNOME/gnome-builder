@@ -28,7 +28,6 @@ struct _IdeBuildPerspective
 {
   GtkBin                     parent_instance;
 
-  GActionGroup              *actions;
   IdeConfiguration          *configuration;
   IdeConfigurationManager   *configuration_manager;
 
@@ -260,7 +259,6 @@ ide_build_perspective_finalize (GObject *object)
 {
   IdeBuildPerspective *self = (IdeBuildPerspective *)object;
 
-  g_clear_object (&self->actions);
   g_clear_object (&self->configuration);
 
   G_OBJECT_CLASS (ide_build_perspective_parent_class)->finalize (object);
@@ -346,13 +344,15 @@ ide_build_perspective_class_init (IdeBuildPerspectiveClass *klass)
   g_type_ensure (IDE_TYPE_BUILD_CONFIGURATION_VIEW);
 }
 
+static const GActionEntry actions[] = {
+  { "delete-configuration", delete_configuration },
+  { "duplicate-configuration", duplicate_configuration },
+};
+
 static void
 ide_build_perspective_init (IdeBuildPerspective *self)
 {
-  static GActionEntry actions[] = {
-    { "delete-configuration", delete_configuration },
-    { "duplicate-configuration", duplicate_configuration },
-  };
+  g_autoptr(GSimpleActionGroup) group = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -368,9 +368,9 @@ ide_build_perspective_init (IdeBuildPerspective *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->actions = G_ACTION_GROUP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (G_ACTION_MAP (self->actions), actions,
-                                   G_N_ELEMENTS (actions), self);
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "build-preferences", G_ACTION_GROUP (group));
 }
 
 GtkWidget *
@@ -450,16 +450,6 @@ ide_build_perspective_get_priority (IdePerspective *perspective)
   return 80000;
 }
 
-static GActionGroup *
-ide_build_perspective_get_actions (IdePerspective *perspective)
-{
-  IdeBuildPerspective *self = (IdeBuildPerspective *)perspective;
-
-  g_assert (IDE_IS_BUILD_PERSPECTIVE (self));
-
-  return g_object_ref (self->actions);
-}
-
 static gchar *
 ide_build_perspective_get_accelerator (IdePerspective *perspective)
 {
@@ -469,7 +459,6 @@ ide_build_perspective_get_accelerator (IdePerspective *perspective)
 static void
 perspective_iface_init (IdePerspectiveInterface *iface)
 {
-  iface->get_actions = ide_build_perspective_get_actions;
   iface->get_icon_name = ide_build_perspective_get_icon_name;
   iface->get_title = ide_build_perspective_get_title;
   iface->get_id = ide_build_perspective_get_id;

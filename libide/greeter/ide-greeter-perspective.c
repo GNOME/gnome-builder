@@ -40,7 +40,6 @@ struct _IdeGreeterPerspective
   DzlSignalGroup       *signal_group;
   IdeRecentProjects    *recent_projects;
   DzlPatternSpec       *pattern_spec;
-  GActionMap           *actions;
   PeasExtensionSet     *genesis_set;
 
   GBinding             *ready_binding;
@@ -94,12 +93,6 @@ ide_greeter_perspective_get_titlebar (IdePerspective *perspective)
   return IDE_GREETER_PERSPECTIVE (perspective)->titlebar;
 }
 
-static GActionGroup *
-ide_greeter_perspective_get_actions (IdePerspective *perspective)
-{
-  return g_object_ref (IDE_GREETER_PERSPECTIVE (perspective)->actions);
-}
-
 static gchar *
 ide_greeter_perspective_get_id (IdePerspective *perspective)
 {
@@ -116,7 +109,6 @@ static void
 ide_perspective_iface_init (IdePerspectiveInterface *iface)
 {
   iface->get_id = ide_greeter_perspective_get_id;
-  iface->get_actions = ide_greeter_perspective_get_actions;
   iface->get_titlebar = ide_greeter_perspective_get_titlebar;
   iface->is_early = ide_greeter_perspective_is_early;
 }
@@ -301,7 +293,6 @@ ide_greeter_perspective__row_notify_selected (IdeGreeterPerspective *self,
                                               IdeGreeterProjectRow  *row)
 {
   gboolean selected = FALSE;
-  GAction *action;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (pspec != NULL);
@@ -310,8 +301,9 @@ ide_greeter_perspective__row_notify_selected (IdeGreeterPerspective *self,
   g_object_get (row, "selected", &selected, NULL);
   self->selected_count += selected ? 1 : -1;
 
-  action = g_action_map_lookup_action (self->actions, "delete-selected-rows");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (self->selected_count > 0));
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "delete-selected-rows",
+                             "enabled", self->selected_count > 0,
+                             NULL);
 }
 
 static void
@@ -1222,13 +1214,15 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, no_projects_found);
 }
 
+static const GActionEntry actions[] = {
+  { "delete-selected-rows", delete_selected_rows },
+};
+
 static void
 ide_greeter_perspective_init (IdeGreeterPerspective *self)
 {
-  GActionEntry actions[] = {
-    { "delete-selected-rows", delete_selected_rows },
-  };
-  GAction *action;
+  g_autoptr(GSimpleActionGroup) group = NULL;
+  g_autoptr(GAction) state = NULL;
 
   self->signal_group = dzl_signal_group_new (IDE_TYPE_RECENT_PROJECTS);
   dzl_signal_group_connect_object (self->signal_group,
@@ -1330,14 +1324,13 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
                                 ide_greeter_perspective_filter_row,
                                 self, NULL);
 
-  self->actions = G_ACTION_MAP (g_simple_action_group_new ());
+  group = g_simple_action_group_new ();
+  state = dzl_state_machine_create_action (self->state_machine, "state");
+  g_action_map_add_action (G_ACTION_MAP (group), state);
+  g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "greeter", G_ACTION_GROUP (group));
 
-  action = dzl_state_machine_create_action (self->state_machine, "state");
-  g_action_map_add_action (self->actions, action);
-  g_object_unref (action);
-
-  g_action_map_add_action_entries (self->actions, actions, G_N_ELEMENTS (actions), self);
-
-  action = g_action_map_lookup_action (self->actions, "delete-selected-rows");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "delete-selected-rows",
+                             "enabled", FALSE,
+                             NULL);
 }

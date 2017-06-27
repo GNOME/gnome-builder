@@ -130,18 +130,6 @@ ide_preferences_perspective_get_icon_name (IdePerspective *perspective)
   return g_strdup ("preferences-system-symbolic");
 }
 
-static GActionGroup *
-ide_preferences_perspective_get_actions (IdePerspective *perspective)
-{
-  IdePreferencesPerspective *self = (IdePreferencesPerspective *)perspective;
-
-  g_assert (IDE_IS_PREFERENCES_PERSPECTIVE (self));
-
-  /* TODO: Get the action group for the back button */
-
-  return NULL;
-}
-
 static gint
 ide_preferences_perspective_get_priority (IdePerspective *perspective)
 {
@@ -160,7 +148,6 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_id = ide_preferences_perspective_get_id;
   iface->get_icon_name = ide_preferences_perspective_get_icon_name;
   iface->get_title = ide_preferences_perspective_get_title;
-  iface->get_actions = ide_preferences_perspective_get_actions;
   iface->get_priority = ide_preferences_perspective_get_priority;
   iface->get_accelerator = ide_preferences_perspective_get_accelerator;
 }
