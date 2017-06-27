@@ -38,21 +38,22 @@ typedef struct _NodeRange
 
 struct _IdeXmlSymbolNode
 {
-  IdeSymbolNode      parent_instance;
+  IdeSymbolNode           parent_instance;
 
-  IdeXmlSymbolNode  *parent;
-  GArray            *children;
-  gchar             *value;
-  gchar             *element_name;
-  gint               nb_children;
-  gint               nb_internal_children;
-  GFile             *file;
-  gchar            **attributes_names;
-  gchar             *ns;
-  NodeRange          start_tag;
-  NodeRange          end_tag;
+  IdeXmlSymbolNode       *parent;
+  GArray                 *children;
+  gchar                  *value;
+  gchar                  *element_name;
+  gint                    nb_children;
+  gint                    nb_internal_children;
+  GFile                  *file;
+  gchar                 **attributes_names;
+  gchar                  *ns;
+  IdeXmlSymbolNodeState   state;
+  NodeRange               start_tag;
+  NodeRange               end_tag;
 
-  guint              has_end_tag : 1;
+  guint                   has_end_tag : 1;
 };
 
 typedef enum
@@ -142,6 +143,7 @@ ide_xml_symbol_node_class_init (IdeXmlSymbolNodeClass *klass)
 static void
 ide_xml_symbol_node_init (IdeXmlSymbolNode *self)
 {
+  self->state = IDE_XML_SYMBOL_NODE_STATE_OK;
 }
 
 IdeXmlSymbolNode *
@@ -553,6 +555,23 @@ ide_xml_symbol_node_set_element_name (IdeXmlSymbolNode *self,
 
   if (element_name != NULL)
     self->element_name = g_strdup (element_name);
+}
+
+IdeXmlSymbolNodeState
+ide_xml_symbol_node_get_state (IdeXmlSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self),  IDE_XML_SYMBOL_NODE_STATE_UNKNOW);
+
+  return self->state;
+}
+
+void
+ide_xml_symbol_node_set_state (IdeXmlSymbolNode      *self,
+                               IdeXmlSymbolNodeState  state)
+{
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+
+    self->state = state;
 }
 
 const gchar *

@@ -40,6 +40,13 @@ typedef enum
   IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_CONTENT
 } IdeXmlSymbolNodeRelativePosition;
 
+typedef enum
+{
+  IDE_XML_SYMBOL_NODE_STATE_UNKNOW,
+  IDE_XML_SYMBOL_NODE_STATE_OK,
+  IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED
+} IdeXmlSymbolNodeState;
+
 IdeXmlSymbolNode                 *ide_xml_symbol_node_new                           (const gchar            *name,
                                                                                      const gchar            *value,
                                                                                      const gchar            *element_name,
@@ -78,6 +85,7 @@ IdeSymbolNode                    *ide_xml_symbol_node_get_nth_direct_child      
 IdeSymbolNode                    *ide_xml_symbol_node_get_nth_internal_child        (IdeXmlSymbolNode       *self,
                                                                                      guint                   nth_child);
 IdeXmlSymbolNode                 *ide_xml_symbol_node_get_parent                    (IdeXmlSymbolNode       *self);
+IdeXmlSymbolNodeState             ide_xml_symbol_node_get_state                     (IdeXmlSymbolNode       *self);
 const gchar                      *ide_xml_symbol_node_get_value                     (IdeXmlSymbolNode       *self);
 gboolean                          ide_xml_symbol_node_has_end_tag                   (IdeXmlSymbolNode       *self);
 void                              ide_xml_symbol_node_print                         (IdeXmlSymbolNode       *self,
@@ -98,6 +106,8 @@ void                              ide_xml_symbol_node_set_end_tag_location      
                                                                                      gsize                   size);
 void                              ide_xml_symbol_node_set_element_name              (IdeXmlSymbolNode       *self,
                                                                                      const gchar            *element_name);
+void                              ide_xml_symbol_node_set_state                     (IdeXmlSymbolNode       *self,
+                                                                                     IdeXmlSymbolNodeState   state);
 void                              ide_xml_symbol_node_set_value                     (IdeXmlSymbolNode       *self,
                                                                                      const gchar            *value);
 const gchar                     **ide_xml_symbol_node_get_attributes_names          (IdeXmlSymbolNode       *self);
