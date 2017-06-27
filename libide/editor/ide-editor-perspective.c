@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-private.h"
 #include "editor/ide-editor-view.h"
 #include "workbench/ide-perspective.h"
 
@@ -50,6 +51,8 @@ static void
 ide_editor_perspective_init (IdeEditorPerspective *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  _ide_editor_perspective_init_actions (self);
 }
 
 /**

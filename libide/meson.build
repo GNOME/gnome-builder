@@ -290,6 +290,7 @@ libide_public_sources = [
   'doap/ide-doap-person.c',
   'doap/ide-doap.c',
   'editor/ide-editor-perspective.c',
+  'editor/ide-editor-perspective-actions.c',
   'editor/ide-editor-view-addin.c',
   'editor/ide-editor-view.c',
   'files/ide-file-settings.c',
