@@ -23,9 +23,6 @@
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
 
-#include "editor/ide-editor-frame-private.h"
-#include "editor/ide-editor-view-private.h"
-
 #include "gb-vim.h"
 
 G_DEFINE_QUARK (gb-vim-error-quark, gb_vim_error)
@@ -334,7 +331,7 @@ gb_vim_command_set (GtkWidget      *active_widget,
                     const gchar    *options,
                     GError        **error)
 {
-  GtkSourceView *source_view;
+  IdeSourceView *source_view;
   gboolean ret = FALSE;
   gchar **parts;
   gsize i;
@@ -344,7 +341,7 @@ gb_vim_command_set (GtkWidget      *active_widget,
   g_assert (options);
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
-    source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+    source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
   else
     return gb_vim_set_source_view_error (error);
 
@@ -385,7 +382,7 @@ gb_vim_command_set (GtkWidget      *active_widget,
           goto cleanup;
         }
 
-      if (!set->func (source_view, key, value, error))
+      if (!set->func (GTK_SOURCE_VIEW (source_view), key, value, error))
         goto cleanup;
     }
 
@@ -411,7 +408,7 @@ gb_vim_command_colorscheme (GtkWidget      *active_widget,
       GtkSourceStyleScheme *style_scheme;
       GtkTextBuffer *buffer;
       g_autofree gchar *trimmed = NULL;
-      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       trimmed = g_strstrip (g_strdup (options));
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
@@ -506,7 +503,7 @@ gb_vim_command_quit (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       dzl_gtk_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
     }
@@ -625,7 +622,7 @@ gb_vim_command_write (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       dzl_gtk_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
 
@@ -661,7 +658,7 @@ gb_vim_command_nohl (GtkWidget      *active_widget,
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
       GtkSourceSearchContext *context = NULL;
-      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       g_object_get (source_view, "search-context", &context, NULL);
       g_object_set (context, "highlight", FALSE, NULL);
@@ -697,7 +694,7 @@ gb_vim_command_syntax (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       if (g_str_equal (options, "enable") || g_str_equal (options, "on"))
         g_object_set (source_view, "highlight-syntax", TRUE, NULL);
@@ -729,7 +726,7 @@ gb_vim_command_sort (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceView *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       g_signal_emit_by_name (source_view, "sort", FALSE, FALSE);
       g_signal_emit_by_name (source_view, "clear-selection");
@@ -800,7 +797,7 @@ gb_vim_command_cnext (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       g_signal_emit_by_name (source_view, "move-error", GTK_DIR_DOWN);
 
@@ -820,7 +817,7 @@ gb_vim_command_cprevious (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
       g_signal_emit_by_name (source_view, "move-error", GTK_DIR_UP);
 
@@ -853,7 +850,7 @@ gb_vim_jump_to_line (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceView  *source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
       GtkTextBuffer *buffer;
       gboolean extend_selection;
       gint line;
@@ -1011,7 +1008,7 @@ gb_vim_command_search (GtkWidget      *active_widget,
                        const gchar    *options,
                        GError        **error)
 {
-  GtkSourceView  *source_view;
+  IdeSourceView  *source_view;
   GtkTextBuffer *buffer;
   const gchar *search_begin = NULL;
   const gchar *search_end = NULL;
@@ -1026,7 +1023,7 @@ gb_vim_command_search (GtkWidget      *active_widget,
   g_assert (g_str_has_prefix (command, "%s") || g_str_has_prefix (command, "s"));
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
-    source_view = GTK_SOURCE_VIEW (IDE_EDITOR_VIEW (active_widget)->frame1->source_view);
+    source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
   else
     return gb_vim_set_source_view_error (error);
 
@@ -1124,10 +1121,8 @@ gb_vim_command_search (GtkWidget      *active_widget,
       g_variant_builder_add (&builder, "s", replace_text);
       variant = g_variant_builder_end (&builder);
 
-      dzl_gtk_widget_action (GTK_WIDGET (IDE_EDITOR_VIEW (active_widget)->frame1),
-                         "frame",
-                         "replace-confirm",
-                         variant);
+      dzl_gtk_widget_action (active_widget, "editor-view", "replace-confirm", variant);
+
       return TRUE;
     }
 
