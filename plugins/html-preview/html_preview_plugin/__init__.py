@@ -198,7 +198,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         actions = view.get_action_group('view')
         actions.add_action(self.action)
 
-        document = view.get_document()
+        document = view.get_buffer()
         language = document.get_language()
         language_id = language.get_id() if language else None
 

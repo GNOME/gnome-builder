@@ -20,6 +20,7 @@
         </child>
         <child>
           <object class="GtkScrolledWindow" id="scroller">
+            <property name="expand">true</property>
             <property name="visible">true</property>
             <child>
               <object class="IdeSourceView" id="source_view">

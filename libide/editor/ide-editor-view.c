@@ -21,26 +21,28 @@
 #include <dazzle.h>
 #include <libpeas/peas.h>
 
-#include "ide-editor-private.h"
-#include "ide-editor-search-bar.h"
-#include "ide-editor-view.h"
-#include "ide-editor-view-addin.h"
+#include "editor/ide-editor-private.h"
+#include "editor/ide-editor-search-bar.h"
+#include "editor/ide-editor-view.h"
+#include "editor/ide-editor-view-addin.h"
+#include "plugins/ide-extension-set-adapter.h"
+#include "util/ide-gtk.h"
 
 struct _IdeEditorView
 {
-  IdeLayoutView       parent_instance;
+  IdeLayoutView            parent_instance;
 
-  PeasExtensionSet   *addins;
+  IdeExtensionSetAdapter  *addins;
 
-  IdeBuffer          *buffer;
-  DzlBindingGroup    *buffer_bindings;
-  DzlSignalGroup     *buffer_signals;
+  IdeBuffer               *buffer;
+  DzlBindingGroup         *buffer_bindings;
+  DzlSignalGroup          *buffer_signals;
 
-  GtkOverlay         *overlay;
-  IdeSourceView      *source_view;
-  GtkScrolledWindow  *scroller;
-  IdeEditorSearchBar *search_bar;
-  GtkRevealer        *search_revealer;
+  GtkOverlay              *overlay;
+  IdeSourceView           *source_view;
+  GtkScrolledWindow       *scroller;
+  IdeEditorSearchBar      *search_bar;
+  GtkRevealer             *search_revealer;
 };
 
 enum {
@@ -137,14 +139,14 @@ ide_editor_view_buffer_modified_changed (IdeEditorView   *self,
 }
 
 static void
-ide_editor_view_buffer_notify_language_cb (PeasExtensionSet *set,
-                                           PeasPluginInfo   *plugin_info,
-                                           PeasExtension    *exten,
-                                           gpointer          user_data)
+ide_editor_view_buffer_notify_language_cb (IdeExtensionSetAdapter *set,
+                                           PeasPluginInfo         *plugin_info,
+                                           PeasExtension          *exten,
+                                           gpointer                user_data)
 {
   const gchar *language_id = user_data;
 
-  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
 
@@ -168,9 +170,11 @@ ide_editor_view_buffer_notify_language (IdeEditorView   *self,
   if (NULL != (language = gtk_source_buffer_get_language (buffer)))
     language_id = gtk_source_language_get_id (language);
 
-  peas_extension_set_foreach (self->addins,
-                              ide_editor_view_buffer_notify_language_cb,
-                              (gpointer)language_id);
+  ide_extension_set_adapter_set_value (self->addins, language_id);
+
+  ide_extension_set_adapter_foreach (self->addins,
+                                     ide_editor_view_buffer_notify_language_cb,
+                                     (gpointer)language_id);
 }
 
 static void
@@ -194,7 +198,12 @@ ide_editor_view_set_buffer (IdeEditorView *self,
   g_assert (!buffer || IDE_IS_BUFFER (buffer));
 
   if (g_set_object (&self->buffer, buffer))
-    dzl_signal_group_set_target (self->buffer_signals, buffer);
+    {
+      dzl_signal_group_set_target (self->buffer_signals, buffer);
+      dzl_binding_group_set_source (self->buffer_bindings, buffer);
+      gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->source_view),
+                                GTK_TEXT_BUFFER (buffer));
+    }
 }
 
 static IdeLayoutView *
@@ -211,14 +220,14 @@ ide_editor_view_create_split_view (IdeLayoutView *view)
 }
 
 static void
-ide_editor_view_addin_added (PeasExtensionSet *set,
-                             PeasPluginInfo   *plugin_info,
-                             PeasExtension    *exten,
-                             gpointer          user_data)
+ide_editor_view_addin_added (IdeExtensionSetAdapter *set,
+                             PeasPluginInfo         *plugin_info,
+                             PeasExtension          *exten,
+                             gpointer                user_data)
 {
   IdeEditorView *self = user_data;
 
-  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
   g_assert (IDE_IS_EDITOR_VIEW (self));
@@ -227,14 +236,14 @@ ide_editor_view_addin_added (PeasExtensionSet *set,
 }
 
 static void
-ide_editor_view_addin_removed (PeasExtensionSet *set,
-                               PeasPluginInfo   *plugin_info,
-                               PeasExtension    *exten,
-                               gpointer          user_data)
+ide_editor_view_addin_removed (IdeExtensionSetAdapter *set,
+                               PeasPluginInfo         *plugin_info,
+                               PeasExtension          *exten,
+                               gpointer                user_data)
 {
   IdeEditorView *self = user_data;
 
-  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
   g_assert (IDE_IS_EDITOR_VIEW (self));
@@ -247,15 +256,24 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
                                    GtkWidget *old_toplevel)
 {
   IdeEditorView *self = (IdeEditorView *)widget;
+  IdeContext *context;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (!old_toplevel || GTK_IS_WIDGET (old_toplevel));
 
-  GTK_WIDGET_CLASS (ide_editor_view_parent_class)->hierarchy_changed (widget, old_toplevel);
+  /* Make sure we chain up if things change in the future */
+  if (GTK_WIDGET_CLASS (ide_editor_view_parent_class)->hierarchy_changed)
+    GTK_WIDGET_CLASS (ide_editor_view_parent_class)->hierarchy_changed (widget, old_toplevel);
 
-  if (self->addins == NULL)
+  context = ide_widget_get_context (GTK_WIDGET (self));
+
+  if (context != NULL && self->addins == NULL)
     {
-      self->addins = peas_extension_set_new (NULL, IDE_TYPE_EDITOR_VIEW_ADDIN, NULL);
+      self->addins = ide_extension_set_adapter_new (context,
+                                                    peas_engine_get_default (),
+                                                    IDE_TYPE_EDITOR_VIEW_ADDIN,
+                                                    "Editor-View-Languages",
+                                                    ide_editor_view_get_language_id (self));
 
       g_signal_connect (self->addins,
                         "extension-added",
@@ -267,9 +285,9 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
                         G_CALLBACK (ide_editor_view_addin_removed),
                         self);
 
-      peas_extension_set_foreach (self->addins,
-                                  ide_editor_view_addin_added,
-                                  self);
+      ide_extension_set_adapter_foreach (self->addins,
+                                         ide_editor_view_addin_added,
+                                         self);
     }
 }
 
@@ -486,4 +504,32 @@ ide_editor_view_get_view (IdeEditorView *self)
   g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), NULL);
 
   return self->source_view;
+}
+
+/**
+ * ide_editor_view_get_language_id:
+ * @self: a #IdeEditorView
+ *
+ * This is a helper to get the language-id of the underlying buffer.
+ *
+ * Returns: (nullable): the language-id as a string, or %NULL
+ *
+ * Since: 3.26
+ */
+const gchar *
+ide_editor_view_get_language_id (IdeEditorView *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), NULL);
+
+  if (self->buffer != NULL)
+    {
+      GtkSourceLanguage *language;
+
+      language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self->buffer));
+
+      if (language != NULL)
+        return gtk_source_language_get_id (language);
+    }
+
+  return NULL;
 }

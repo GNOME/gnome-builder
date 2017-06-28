@@ -73,6 +73,12 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
 
       values = peas_plugin_info_get_external_data (plugin_info, key);
       values_array = g_strsplit (values ? values : "", ",", 0);
+
+      /* An empty value implies "*" to match anything */
+      if (!values || g_strv_contains ((const gchar * const *)values_array, "*"))
+        return TRUE;
+
+      /* Otherwise actually check that the key/value matches */
       if (!g_strv_contains ((const gchar * const *)values_array, value))
         return FALSE;
 

@@ -47,6 +47,25 @@ get_wrap_mode (GValue   *value,
   return TRUE;
 }
 
+static void
+on_keybindings_changed (IdeEditorView *self,
+                        const gchar   *key,
+                        GSettings     *settings)
+{
+  IdeSourceView *source_view;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (g_strcmp0 (key, "keybindings") == 0);
+  g_assert (G_IS_SETTINGS (settings));
+
+  source_view = ide_editor_view_get_view (self);
+
+  g_signal_emit_by_name (source_view,
+                         "set-mode",
+                         NULL,
+                         IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+}
+
 void
 _ide_editor_view_init_settings (IdeEditorView *self)
 {
@@ -87,6 +106,10 @@ _ide_editor_view_init_settings (IdeEditorView *self)
                                 G_SETTINGS_BIND_GET,
                                 get_smart_home_end, NULL, NULL, NULL);
 
+  g_settings_bind (editor_settings, "style-scheme-name",
+                   buffer, "style-scheme-name",
+                   G_SETTINGS_BIND_GET);
+
   g_settings_bind (editor_settings, "font-name",
                    source_view, "font-name",
                    G_SETTINGS_BIND_GET);
@@ -115,6 +138,14 @@ _ide_editor_view_init_settings (IdeEditorView *self)
   g_settings_bind (editor_settings, "auto-hide-map",
                    self, "auto-hide-map",
                    G_SETTINGS_BIND_GET);
+
+  g_signal_connect_object (editor_settings,
+                           "changed::keybindings",
+                           G_CALLBACK (on_keybindings_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  on_keybindings_changed (self, "keybindings", editor_settings);
 
   if (insight_settings == NULL)
     insight_settings = g_settings_new ("org.gnome.builder.code-insight");

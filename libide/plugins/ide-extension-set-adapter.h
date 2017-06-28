@@ -34,23 +34,23 @@ typedef void (*IdeExtensionSetAdapterForeachFunc) (IdeExtensionSetAdapter *set,
                                                    PeasExtension          *extension,
                                                    gpointer                user_data);
 
-IdeExtensionSetAdapter *ide_extension_set_adapter_new                (IdeContext             *context,
-                                                                      PeasEngine             *engine,
-                                                                      GType                   interface_type,
-                                                                      const gchar            *key,
-                                                                      const gchar            *value);
-PeasEngine             *ide_extension_set_adapter_get_engine         (IdeExtensionSetAdapter *self);
-GType                   ide_extension_set_adapter_get_interface_type (IdeExtensionSetAdapter *self);
-const gchar            *ide_extension_set_adapter_get_key            (IdeExtensionSetAdapter *self);
-void                    ide_extension_set_adapter_set_key            (IdeExtensionSetAdapter *self,
-                                                                      const gchar            *key);
-const gchar            *ide_extension_set_adapter_get_value          (IdeExtensionSetAdapter *self);
-void                    ide_extension_set_adapter_set_value          (IdeExtensionSetAdapter *self,
-                                                                      const gchar            *value);
-guint                   ide_extension_set_adapter_get_n_extensions   (IdeExtensionSetAdapter *self);
-void                    ide_extension_set_adapter_foreach            (IdeExtensionSetAdapter *self,
-                                                                      IdeExtensionSetAdapterForeachFunc foreach_func,
-                                                                      gpointer                user_data);
+IdeExtensionSetAdapter *ide_extension_set_adapter_new                (IdeContext                        *context,
+                                                                      PeasEngine                        *engine,
+                                                                      GType                              interface_type,
+                                                                      const gchar                       *key,
+                                                                      const gchar                       *value);
+PeasEngine             *ide_extension_set_adapter_get_engine         (IdeExtensionSetAdapter            *self);
+GType                   ide_extension_set_adapter_get_interface_type (IdeExtensionSetAdapter            *self);
+const gchar            *ide_extension_set_adapter_get_key            (IdeExtensionSetAdapter            *self);
+void                    ide_extension_set_adapter_set_key            (IdeExtensionSetAdapter            *self,
+                                                                      const gchar                       *key);
+const gchar            *ide_extension_set_adapter_get_value          (IdeExtensionSetAdapter            *self);
+void                    ide_extension_set_adapter_set_value          (IdeExtensionSetAdapter            *self,
+                                                                      const gchar                       *value);
+guint                   ide_extension_set_adapter_get_n_extensions   (IdeExtensionSetAdapter            *self);
+void                    ide_extension_set_adapter_foreach            (IdeExtensionSetAdapter            *self,
+                                                                      IdeExtensionSetAdapterForeachFunc  foreach_func,
+                                                                      gpointer                           user_data);
 
 G_END_DECLS
 

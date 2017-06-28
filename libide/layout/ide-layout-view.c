@@ -265,10 +265,16 @@ static void
 ide_layout_view_init (IdeLayoutView *self)
 {
   IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+  g_autoptr(GSimpleActionGroup) group = g_simple_action_group_new ();
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
 
   priv->icon_name = g_intern_string ("text-x-generic-symbolic");
+
+  /* Add an action group out of convenience to plugins that want to
+   * stash a simple action somewhere.
+   */
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (group));
 }
 
 GtkWidget *

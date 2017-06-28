@@ -30,7 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayoutView)
 
-IdeBuffer     *ide_editor_view_get_buffer (IdeEditorView *self);
-IdeSourceView *ide_editor_view_get_view   (IdeEditorView *self);
+IdeBuffer     *ide_editor_view_get_buffer      (IdeEditorView *self);
+IdeSourceView *ide_editor_view_get_view        (IdeEditorView *self);
+const gchar   *ide_editor_view_get_language_id (IdeEditorView *self);
 
 G_END_DECLS
