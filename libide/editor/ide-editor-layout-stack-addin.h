@@ -1,6 +1,6 @@
-/* ide-editor-plugin.c
+/* ide-editor-layout-stack-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-editor-plugin"
+#pragma once
 
-#include <libpeas/peas.h>
+#include "layout/ide-layout-stack-addin.h"
 
-#include "editor/ide-editor-layout-stack-addin.h"
-#include "editor/ide-editor-workbench-addin.h"
+G_BEGIN_DECLS
 
-void
-ide_editor_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_LAYOUT_STACK_ADDIN, IDE_TYPE_EDITOR_LAYOUT_STACK_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_WORKBENCH_ADDIN, IDE_TYPE_EDITOR_WORKBENCH_ADDIN);
-}
+#define IDE_TYPE_EDITOR_LAYOUT_STACK_ADDIN (ide_editor_layout_stack_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeEditorLayoutStackAddin, ide_editor_layout_stack_addin, IDE, EDITOR_LAYOUT_STACK_ADDIN, GObject)
+
+G_END_DECLS

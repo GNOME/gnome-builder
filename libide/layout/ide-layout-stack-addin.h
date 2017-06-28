@@ -16,13 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LAYOUT_STACK_ADDIN_H
-#define IDE_LAYOUT_STACK_ADDIN_H
+#pragma once
 
 #include <gtk/gtk.h>
 
-#include "layout/ide-layout-stack.h"
-#include "layout/ide-layout-view.h"
+#include "ide-layout-stack.h"
+#include "ide-layout-view.h"
 
 G_BEGIN_DECLS
 
@@ -50,5 +49,3 @@ void ide_layout_stack_addin_set_view (IdeLayoutStackAddin *self,
                                       IdeLayoutView       *view);
 
 G_END_DECLS
-
-#endif /* IDE_LAYOUT_STACK_ADDIN_H */

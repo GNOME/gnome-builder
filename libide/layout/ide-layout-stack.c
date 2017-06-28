@@ -20,8 +20,10 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-layout-stack.h"
+#include "ide-layout-stack-addin.h"
 #include "ide-layout-stack-header.h"
 #include "ide-layout-private.h"
 #include "ide-shortcut-label.h"
@@ -49,6 +51,7 @@ typedef struct
   DzlBindingGroup      *bindings;
   DzlSignalGroup       *signals;
   GPtrArray            *views;
+  PeasExtensionSet     *addins;
 
   DzlBox               *empty_state;
   DzlEmptyState        *failed_state;
@@ -124,6 +127,23 @@ ide_layout_stack_bindings_notify_source (IdeLayoutStack  *self,
 }
 
 static void
+ide_layout_stack_notify_addin_of_view (PeasExtensionSet *set,
+                                       PeasPluginInfo   *plugin_info,
+                                       PeasExtension    *exten,
+                                       gpointer          user_data)
+{
+  IdeLayoutStackAddin *addin = (IdeLayoutStackAddin *)exten;
+  IdeLayoutView *view = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK_ADDIN (addin));
+  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+
+  ide_layout_stack_addin_set_view (addin, view);
+}
+
+static void
 ide_layout_stack_notify_visible_child (IdeLayoutStack *self,
                                        GParamSpec     *pspec,
                                        GtkStack       *stack)
@@ -133,6 +153,9 @@ ide_layout_stack_notify_visible_child (IdeLayoutStack *self,
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
   g_assert (GTK_IS_STACK (stack));
+
+  if (gtk_widget_in_destruction (GTK_WIDGET (self)))
+    return;
 
   visible_child = gtk_stack_get_visible_child (priv->stack);
 
@@ -161,6 +184,10 @@ ide_layout_stack_notify_visible_child (IdeLayoutStack *self,
 
   /* Ensure action state is up to date */
   _ide_layout_stack_update_actions (self);
+
+  peas_extension_set_foreach (priv->addins,
+                              ide_layout_stack_notify_addin_of_view,
+                              visible_child);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VISIBLE_CHILD]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_VIEW]);
@@ -311,12 +338,83 @@ ide_layout_stack_real_agree_to_close_finish (IdeLayoutStack *self,
 }
 
 static void
+ide_layout_stack_addin_added (PeasExtensionSet *set,
+                              PeasPluginInfo   *plugin_info,
+                              PeasExtension    *exten,
+                              gpointer          user_data)
+{
+  IdeLayoutStackAddin *addin = (IdeLayoutStackAddin *)exten;
+  IdeLayoutStack *self = user_data;
+  IdeLayoutView *visible_child;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK_ADDIN (addin));
+
+  ide_layout_stack_addin_load (addin, self);
+
+  visible_child = ide_layout_stack_get_visible_child (self);
+
+  if (visible_child != NULL)
+    ide_layout_stack_addin_set_view (addin, visible_child);
+}
+
+static void
+ide_layout_stack_addin_removed (PeasExtensionSet *set,
+                                PeasPluginInfo   *plugin_info,
+                                PeasExtension    *exten,
+                                gpointer          user_data)
+{
+  IdeLayoutStackAddin *addin = (IdeLayoutStackAddin *)exten;
+  IdeLayoutStack *self = user_data;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK_ADDIN (addin));
+
+  ide_layout_stack_addin_unload (addin, self);
+}
+
+static void
+ide_layout_stack_constructed (GObject *object)
+{
+  IdeLayoutStack *self = (IdeLayoutStack *)object;
+  IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+
+  G_OBJECT_CLASS (ide_layout_stack_parent_class)->constructed (object);
+
+  priv->addins = peas_extension_set_new (peas_engine_get_default (),
+                                         IDE_TYPE_LAYOUT_STACK_ADDIN,
+                                         NULL);
+
+  g_signal_connect (priv->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_layout_stack_addin_added),
+                    self);
+
+  g_signal_connect (priv->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_layout_stack_addin_removed),
+                    self);
+
+  peas_extension_set_foreach (priv->addins,
+                              ide_layout_stack_addin_added,
+                              self);
+}
+
+static void
 ide_layout_stack_destroy (GtkWidget *widget)
 {
   IdeLayoutStack *self = (IdeLayoutStack *)widget;
   IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
+
+  g_clear_object (&priv->addins);
 
   if (priv->bindings != NULL)
     {
@@ -384,6 +482,7 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
+  object_class->constructed = ide_layout_stack_constructed;
   object_class->get_property = ide_layout_stack_get_property;
   object_class->set_property = ide_layout_stack_set_property;
 
