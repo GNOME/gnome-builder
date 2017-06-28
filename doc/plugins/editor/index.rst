@@ -6,6 +6,7 @@ Extending the Editor
    :maxdepth: 1
    :titlesonly:
 
+   view
    buffers
    highlighting
    diagnostics
