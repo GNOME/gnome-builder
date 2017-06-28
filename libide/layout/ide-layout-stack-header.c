@@ -311,7 +311,7 @@ ide_layout_stack_header_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_MODIFIED:
-      gtk_widget_set_visible (GTK_WIDGET (self->title_modified), g_value_get_boolean (value));
+      _ide_layout_stack_header_set_modified (self, g_value_get_boolean (value));
       break;
 
     case PROP_SHOW_CLOSE_BUTTON:
@@ -319,7 +319,7 @@ ide_layout_stack_header_set_property (GObject      *object,
       break;
 
     case PROP_TITLE:
-      ide_layout_stack_header_set_title (self, g_value_get_string (value));
+      _ide_layout_stack_header_set_title (self, g_value_get_string (value));
       break;
 
     default:
@@ -350,7 +350,7 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
                           "Modified",
                           "If the current document is modified",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -439,11 +439,21 @@ ide_layout_stack_header_add_custom_title (IdeLayoutStackHeader *self,
 }
 
 void
-ide_layout_stack_header_set_title (IdeLayoutStackHeader *self,
-                                   const gchar          *title)
+_ide_layout_stack_header_set_title (IdeLayoutStackHeader *self,
+                                    const gchar          *title)
 {
   g_return_if_fail (IDE_IS_LAYOUT_STACK_HEADER (self));
 
   gtk_label_set_label (GTK_LABEL (self->title_label), title);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+}
+
+void
+_ide_layout_stack_header_set_modified (IdeLayoutStackHeader *self,
+                                       gboolean              modified)
+{
+  g_return_if_fail (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->title_modified), modified);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODIFIED]);
 }

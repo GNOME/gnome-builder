@@ -51,5 +51,9 @@ void            _ide_layout_stack_header_hide             (IdeLayoutStackHeader 
 void            _ide_layout_stack_header_popdown          (IdeLayoutStackHeader *self);
 void            _ide_layout_stack_header_set_views        (IdeLayoutStackHeader *self,
                                                            GListModel           *model);
+void            _ide_layout_stack_header_set_title        (IdeLayoutStackHeader *self,
+                                                           const gchar          *title);
+void            _ide_layout_stack_header_set_modified     (IdeLayoutStackHeader *self,
+                                                           gboolean              modified);
 
 G_END_DECLS

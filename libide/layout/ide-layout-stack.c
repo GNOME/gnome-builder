@@ -115,8 +115,12 @@ ide_layout_stack_bindings_notify_source (IdeLayoutStack  *self,
   g_assert (IDE_IS_LAYOUT_STACK (self));
 
   source = dzl_binding_group_get_source (bindings);
+
   if (source == NULL)
-    ide_layout_stack_header_set_title (priv->header, _("No Open Pages"));
+    {
+      _ide_layout_stack_header_set_title (priv->header, _("No Open Pages"));
+      _ide_layout_stack_header_set_modified (priv->header, FALSE);
+    }
 }
 
 static void

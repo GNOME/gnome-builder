@@ -27,8 +27,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeLayoutStackHeader, ide_layout_stack_header, IDE, LAYOUT_STACK_HEADER, DzlPriorityBox)
 
 GtkWidget *ide_layout_stack_header_new              (void);
-void       ide_layout_stack_header_set_title        (IdeLayoutStackHeader *self,
-                                                     const gchar          *title);
 void       ide_layout_stack_header_add_custom_title (IdeLayoutStackHeader *self,
                                                      GtkWidget            *widget,
                                                      gint                  priority);
