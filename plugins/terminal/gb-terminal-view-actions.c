@@ -160,16 +160,8 @@ save_as_cb (GObject      *object,
     }
   else
     {
-      if (view->bottom_has_focus && view->terminal_bottom != NULL)
-        {
-          g_clear_object (&view->save_as_file_bottom);
-          view->save_as_file_bottom = file;
-        }
-      else
-        {
-          g_clear_object (&view->save_as_file_top);
-          view->save_as_file_top = file;
-        }
+      g_clear_object (&view->save_as_file_top);
+      view->save_as_file_top = file;
     }
 }
 
@@ -193,12 +185,7 @@ get_last_focused_terminal_file (GbTerminalView *view)
 {
   GFile *file = NULL;
 
-  if (view->bottom_has_focus)
-    {
-      if (G_IS_FILE (view->save_as_file_bottom))
-        file = view->save_as_file_bottom;
-    }
-  else if G_IS_FILE (view->save_as_file_top)
+  if (G_IS_FILE (view->save_as_file_top))
     file = view->save_as_file_top;
 
   return file;
@@ -207,18 +194,12 @@ get_last_focused_terminal_file (GbTerminalView *view)
 static VteTerminal *
 get_last_focused_terminal (GbTerminalView *view)
 {
-  VteTerminal *terminal;
-
-  if (view->bottom_has_focus && view->terminal_bottom != NULL)
-    terminal = view->terminal_bottom;
-  else
-    terminal = view->terminal_top;
-
-  return terminal;
+  return view->terminal_top;
 }
 
 static gchar *
-gb_terminal_get_selected_text (GbTerminalView *view, VteTerminal **terminal_p)
+gb_terminal_get_selected_text (GbTerminalView  *view,
+                               VteTerminal    **terminal_p)
 {
   VteTerminal *terminal;
   gchar *buf = NULL;

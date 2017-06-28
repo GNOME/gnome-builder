@@ -39,9 +39,27 @@ G_DEFINE_TYPE_WITH_CODE (IdeEditorPerspective, ide_editor_perspective, IDE_TYPE_
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, perspective_iface_init))
 
 static void
+ide_editor_perspective_add (GtkContainer *container,
+                            GtkWidget    *widget)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)container;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  if (IDE_IS_LAYOUT_VIEW (widget))
+    gtk_container_add (GTK_CONTAINER (self->grid), widget);
+  else
+    GTK_CONTAINER_CLASS (ide_editor_perspective_parent_class)->add (container, widget);
+}
+
+static void
 ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+
+  container_class->add = ide_editor_perspective_add;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);

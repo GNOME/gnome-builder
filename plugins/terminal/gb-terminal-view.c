@@ -396,9 +396,8 @@ gb_terminal_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-gb_terminal_set_needs_attention (GbTerminalView  *self,
-                                 gboolean         needs_attention,
-                                 GtkPositionType  position)
+gb_terminal_set_needs_attention (GbTerminalView *self,
+                                 gboolean        needs_attention)
 {
   GtkWidget *parent;
 
@@ -410,22 +409,11 @@ gb_terminal_set_needs_attention (GbTerminalView  *self,
       !gtk_widget_in_destruction (GTK_WIDGET (self)) &&
       !gtk_widget_in_destruction (parent))
     {
-      if (position == GTK_POS_TOP &&
-          !gtk_widget_in_destruction (GTK_WIDGET (self->terminal_top)))
-        {
-          self->top_has_needs_attention = TRUE;
-        }
-      else if (position == GTK_POS_BOTTOM &&
-               self->terminal_bottom != NULL &&
-               !gtk_widget_in_destruction (GTK_WIDGET (self->terminal_bottom)))
-        {
-          self->bottom_has_needs_attention = TRUE;
-        }
+      if (!gtk_widget_in_destruction (GTK_WIDGET (self->terminal_top)))
+        self->top_has_needs_attention = !!needs_attention;
 
       gtk_container_child_set (GTK_CONTAINER (parent), GTK_WIDGET (self),
-                               "needs-attention",
-                               !!(self->top_has_needs_attention || self->bottom_has_needs_attention) &&
-                               needs_attention,
+                               "needs-attention", needs_attention,
                                NULL);
     }
 }
@@ -440,31 +428,7 @@ notification_received_cb (VteTerminal    *terminal,
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
   if (!gtk_widget_has_focus (GTK_WIDGET (terminal)))
-    {
-      if (terminal == self->terminal_top)
-        gb_terminal_set_needs_attention (self, TRUE, GTK_POS_TOP);
-      else if (terminal == self->terminal_bottom)
-        gb_terminal_set_needs_attention (self, TRUE, GTK_POS_BOTTOM);
-    }
-}
-
-static gchar *
-gb_terminal_get_title (IdeLayoutView *view)
-{
-  const gchar *title = NULL;
-  GbTerminalView *self = (GbTerminalView *)view;
-
-  g_assert (GB_IS_TERMINAL_VIEW (self));
-
-  if (self->bottom_has_focus)
-    title = vte_terminal_get_window_title (self->terminal_bottom);
-  else
-    title = vte_terminal_get_window_title (self->terminal_top);
-
-  if (title == NULL)
-    title = _("Untitled terminal");
-
-  return g_strdup (title);
+    gb_terminal_set_needs_attention (self, TRUE);
 }
 
 static gboolean
@@ -475,20 +439,9 @@ focus_in_event_cb (VteTerminal    *terminal,
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
-  self->bottom_has_focus = (terminal != self->terminal_top);
-
-  if (terminal == self->terminal_top)
-    {
-      self->top_has_needs_attention = FALSE;
-      gb_terminal_set_needs_attention (self, FALSE, GTK_POS_TOP);
-      gtk_revealer_set_reveal_child (self->search_revealer_top, FALSE);
-    }
-  else if (terminal == self->terminal_bottom)
-    {
-      self->bottom_has_needs_attention = FALSE;
-      gb_terminal_set_needs_attention (self, FALSE, GTK_POS_BOTTOM);
-      gtk_revealer_set_reveal_child (self->search_revealer_bottom, FALSE);
-    }
+  self->top_has_needs_attention = FALSE;
+  gb_terminal_set_needs_attention (self, FALSE);
+  gtk_revealer_set_reveal_child (self->search_revealer_top, FALSE);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -497,10 +450,17 @@ static void
 window_title_changed_cb (VteTerminal    *terminal,
                          GbTerminalView *self)
 {
+  const gchar *title;
+
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
-  g_object_notify (G_OBJECT (self), "title");
+  title = vte_terminal_get_window_title (self->terminal_top);
+
+  if (title == NULL)
+    title = _("Untitled terminal");
+
+  ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), title);
 }
 
 static void
@@ -522,23 +482,15 @@ style_context_changed (GtkStyleContext *style_context,
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (bg.alpha == 0.0)
-    {
-      gdk_rgba_parse (&bg, "#f6f7f8");
-    }
+    gdk_rgba_parse (&bg, "#f6f7f8");
 
   vte_terminal_set_colors (self->terminal_top, &fg, &bg,
                            solarized_palette,
                            G_N_ELEMENTS (solarized_palette));
-
-  if (self->terminal_bottom)
-    vte_terminal_set_colors (self->terminal_bottom, &fg, &bg,
-                             solarized_palette,
-                             G_N_ELEMENTS (solarized_palette));
 }
 
 static IdeLayoutView *
-gb_terminal_create_split (IdeLayoutView *view,
-                          GFile         *file)
+gb_terminal_create_split_view (IdeLayoutView *view)
 {
   IdeLayoutView *new_view;
 
@@ -555,102 +507,19 @@ static void
 gb_terminal_view_set_font_name (GbTerminalView *self,
                                 const gchar    *font_name)
 {
-  PangoFontDescription *font_desc = NULL;
-
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
   if (font_name != NULL)
-    font_desc = pango_font_description_from_string (font_name);
-
-  if (font_desc != NULL)
     {
-      vte_terminal_set_font (self->terminal_top, font_desc);
+      PangoFontDescription *font_desc = NULL;
 
-      if (self->terminal_bottom)
-        vte_terminal_set_font (self->terminal_bottom, font_desc);
+      font_desc = pango_font_description_from_string (font_name);
 
-      pango_font_description_free (font_desc);
-    }
-}
-
-static gboolean
-gb_terminal_get_split_view (IdeLayoutView *view)
-{
-  GbTerminalView *self = (GbTerminalView *)view;
-
-  g_assert (GB_IS_TERMINAL_VIEW (self));
-
-  return (self->terminal_bottom != NULL);
-}
-
-static void
-gb_terminal_set_split_view (IdeLayoutView   *view,
-                            gboolean         split_view)
-{
-  GbTerminalView *self = (GbTerminalView *)view;
-  GtkStyleContext *style_context;
-
-  g_assert (GB_IS_TERMINAL_VIEW (self));
-  g_return_if_fail (GB_IS_TERMINAL_VIEW (self));
-
-  if (split_view && (self->terminal_bottom != NULL))
-    return;
-
-  if (!split_view && (self->terminal_bottom == NULL))
-    return;
-
-  if (split_view)
-    {
-      style_context = gtk_widget_get_style_context (GTK_WIDGET (view));
-
-      self->terminal_bottom = g_object_new (GB_TYPE_TERMINAL,
-                                            "audible-bell", FALSE,
-                                            "scrollback-lines", G_MAXUINT,
-                                            "expand", TRUE,
-                                            "visible", TRUE,
-                                            NULL);
-      gtk_container_add_with_properties (GTK_CONTAINER (self->bottom_container),
-                                         GTK_WIDGET (self->terminal_bottom),
-                                         "position", 0,
-                                         NULL);
-      gtk_widget_show ( GTK_WIDGET (self->terminal_overlay_bottom));
-
-      self->bsearch = g_object_new (GB_TYPE_TERMINAL_SEARCH, NULL);
-      self->search_revealer_bottom = gb_terminal_search_get_revealer (self->bsearch);
-
-      gtk_overlay_add_overlay (self->terminal_overlay_bottom,
-                               GTK_WIDGET (self->search_revealer_bottom));
-
-      gb_terminal_view_connect_terminal (self, self->terminal_bottom);
-
-      gb_terminal_search_set_terminal (self->bsearch, self->terminal_bottom);
-
-      style_context_changed (style_context, GB_TERMINAL_VIEW (view));
-
-      gtk_widget_grab_focus (GTK_WIDGET (self->terminal_bottom));
-
-      if (!self->bottom_has_spawned)
+      if (font_desc != NULL)
         {
-          self->bottom_has_spawned = TRUE;
-          gb_terminal_respawn (self, self->terminal_bottom);
+          vte_terminal_set_font (self->terminal_top, font_desc);
+          pango_font_description_free (font_desc);
         }
-    }
-  else
-    {
-      gtk_container_remove (GTK_CONTAINER (self->terminal_overlay_bottom),
-                            GTK_WIDGET (self->search_revealer_bottom));
-      gtk_container_remove (GTK_CONTAINER (self->bottom_container),
-                            GTK_WIDGET (self->terminal_bottom));
-      gtk_widget_hide ( GTK_WIDGET (self->terminal_overlay_bottom));
-
-      self->terminal_bottom = NULL;
-      self->search_revealer_bottom = NULL;
-      self->bottom_has_focus = FALSE;
-      self->bottom_has_spawned = FALSE;
-      self->bottom_has_needs_attention = FALSE;
-      g_clear_object (&self->save_as_file_bottom);
-      g_clear_object (&self->bsearch);
-      gtk_widget_grab_focus (GTK_WIDGET (self->terminal_top));
     }
 }
 
@@ -661,10 +530,7 @@ gb_terminal_grab_focus (GtkWidget *widget)
 
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
-  if (self->bottom_has_focus && self->terminal_bottom)
-    gtk_widget_grab_focus (GTK_WIDGET (self->terminal_bottom));
-  else
-    gtk_widget_grab_focus (GTK_WIDGET (self->terminal_top));
+  gtk_widget_grab_focus (GTK_WIDGET (self->terminal_top));
 }
 
 static void
@@ -675,10 +541,7 @@ gb_terminal_view_connect_terminal (GbTerminalView *self,
 
   vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (terminal));
 
-  if (terminal == self->terminal_top)
-    gtk_range_set_adjustment (GTK_RANGE (self->top_scrollbar), vadj);
-  else
-    gtk_range_set_adjustment (GTK_RANGE (self->bottom_scrollbar), vadj);
+  gtk_range_set_adjustment (GTK_RANGE (self->top_scrollbar), vadj);
 
   g_signal_connect_object (terminal,
                            "size-allocate",
@@ -714,7 +577,6 @@ gb_terminal_view_finalize (GObject *object)
   GbTerminalView *self = GB_TERMINAL_VIEW (object);
 
   g_clear_object (&self->save_as_file_top);
-  g_clear_object (&self->save_as_file_bottom);
   g_clear_pointer (&self->selection_buffer, g_free);
   g_clear_object (&self->pty);
   g_clear_object (&self->runtime);
@@ -796,18 +658,12 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   widget_class->get_preferred_height = gb_terminal_get_preferred_height;
   widget_class->grab_focus = gb_terminal_grab_focus;
 
-  view_class->get_title = gb_terminal_get_title;
-  view_class->create_split = gb_terminal_create_split;
-  view_class->get_split_view =  gb_terminal_get_split_view;
-  view_class->set_split_view =  gb_terminal_set_split_view;
+  view_class->create_split_view = gb_terminal_create_split_view;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-view.ui");
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_top);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, bottom_container);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, top_scrollbar);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, bottom_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_overlay_top);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_overlay_bottom);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
 

@@ -39,26 +39,19 @@ struct _GbTerminalView
   IdeRuntime          *runtime;
 
   GtkOverlay          *terminal_overlay_top;
-  GtkOverlay          *terminal_overlay_bottom;
 
   GtkRevealer         *search_revealer_top;
-  GtkRevealer         *search_revealer_bottom;
 
   VteTerminal         *terminal_top;
-  VteTerminal         *terminal_bottom;
 
   GtkScrollbar        *top_scrollbar;
-  GtkScrollbar        *bottom_scrollbar;
 
   GbTerminalSearch    *tsearch;
   GbTerminalSearch    *bsearch;
 
   GFile               *save_as_file_top;
-  GFile               *save_as_file_bottom;
 
   gchar               *selection_buffer;
-
-  GtkWidget           *bottom_container;
 
   VtePty              *pty;
 
@@ -66,10 +59,7 @@ struct _GbTerminalView
 
   guint                manage_spawn : 1;
   guint                top_has_spawned : 1;
-  guint                bottom_has_spawned : 1;
-  guint                bottom_has_focus : 1;
   guint                top_has_needs_attention : 1;
-  guint                bottom_has_needs_attention : 1;
 };
 
 G_END_DECLS
