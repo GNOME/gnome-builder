@@ -6290,6 +6290,7 @@ ide_source_view_real_reset (IdeSourceView *self)
   g_signal_emit (self, signals [CLEAR_SNIPPETS], 0);
   g_signal_emit (self, signals [HIDE_COMPLETION], 0);
   g_signal_emit (self, signals [REMOVE_CURSORS], 0);
+  g_signal_emit (self, signals [SET_MODE], 0, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 }
 
 static void
