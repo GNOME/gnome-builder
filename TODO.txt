@@ -4,8 +4,6 @@
 
  - Make sure search entry actually works
 
- - Be able to add an editor view
-
  - Enter, Up, and Down accelerators for search/replace entries.
 
  - perspective focus_location
@@ -37,3 +35,4 @@ Done
 
  - Check if buffer is already in visible stack before adding new view
  - Perspective actions, copy them across
+ - Be able to add an editor view
