@@ -91,6 +91,7 @@ ide_layout_stack_actions_move (IdeLayoutStack *self,
   dest = _ide_layout_grid_get_nth_stack (IDE_LAYOUT_GRID (grid), index + direction);
 
   g_return_if_fail (dest != NULL);
+  g_return_if_fail (dest != self);
   g_return_if_fail (IDE_IS_LAYOUT_STACK (dest));
 
   _ide_layout_stack_transfer (self, dest, view);
