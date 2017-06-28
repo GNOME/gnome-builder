@@ -84,7 +84,7 @@
             <child>
               <object class="IdeShortcutLabel">
                 <property name="title" translatable="yes">New terminal</property>
-                <property name="action">editor.new-terminal</property>
+                <property name="action">win.new-terminal</property>
                 <property name="visible">true</property>
                 <!-- Remove after auto accel tracking -->
                 <property name="accel">Ctrl+Shift+T</property>
@@ -105,7 +105,7 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="action-name">editor.new-terminal</property>
+                    <property name="action-name">win.new-terminal</property>
                     <property name="label" translatable="yes">New Terminal</property>
                     <property name="visible">true</property>
                   </object>

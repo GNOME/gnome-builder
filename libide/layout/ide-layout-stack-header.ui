@@ -82,7 +82,7 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="action-name">editor.new-terminal</property>
+                <property name="action-name">win.new-terminal</property>
                 <property name="visible">true</property>
                 <style>
                   <class name="image-button"/>
