@@ -64,30 +64,23 @@ gbp_devhelp_view_set_uri (GbpDevhelpView *self,
   webkit_web_view_load_uri (self->web_view1, uri);
 }
 
-static gchar *
-gbp_devhelp_view_get_title (IdeLayoutView *view)
-{
-  GbpDevhelpView *self = (GbpDevhelpView *)view;
-
-  g_assert (GBP_IS_DEVHELP_VIEW (view));
-
-  return g_strdup (webkit_web_view_get_title (self->web_view1));
-}
-
 static void
 gbp_devhelp_view_notify_title (GbpDevhelpView *self,
                                GParamSpec     *pspec,
                                WebKitWebView  *web_view)
 {
+  const gchar *title;
+
   g_assert (GBP_IS_DEVHELP_VIEW (self));
   g_assert (WEBKIT_IS_WEB_VIEW (web_view));
 
-  g_object_notify (G_OBJECT (self), "title");
+  title = webkit_web_view_get_title (self->web_view1);
+
+  ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), title);
 }
 
 static IdeLayoutView *
-gbp_devhelp_view_create_split (IdeLayoutView *view,
-                               GFile         *file)
+gbp_devhelp_view_create_split_view (IdeLayoutView *view)
 {
   GbpDevhelpView *self = (GbpDevhelpView *)view;
   GbpDevhelpView *other;
@@ -151,8 +144,7 @@ gbp_devhelp_view_class_init (GbpDevhelpViewClass *klass)
 
   object_class->set_property = gbp_devhelp_view_set_property;
 
-  view_class->get_title = gbp_devhelp_view_get_title;
-  view_class->create_split = gbp_devhelp_view_create_split;
+  view_class->create_split_view = gbp_devhelp_view_create_split_view;
 
   properties [PROP_URI] =
     g_param_spec_string ("uri",
