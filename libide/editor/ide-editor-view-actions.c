@@ -18,10 +18,142 @@
 
 #define G_LOG_DOMAIN "ide-editor-view-actions"
 
-#include "ide-editor-private.h"
+#include <glib/gi18n.h>
+
+#include "files/ide-file.h"
+#include "buffers/ide-buffer.h"
+#include "buffers/ide-buffer-manager.h"
+#include "editor/ide-editor-private.h"
+#include "util/ide-progress.h"
+#include "vcs/ide-vcs.h"
+
+static void
+ide_editor_view_actions_save_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(IdeEditorView) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  if (!ide_buffer_manager_save_file_finish (bufmgr, result, &error))
+    {
+      // ide_layout_view_set_failure_message (IDE_LAYOUT_VIEW (self), error->message);
+      ide_layout_view_set_failed (IDE_LAYOUT_VIEW (self), TRUE);
+    }
+
+  dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+}
+
+static void
+ide_editor_view_actions_save (GSimpleAction *action,
+                              GVariant      *variant,
+                              gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+  IdeBufferManager *buffer_manager;
+  g_autoptr(IdeProgress) progress = NULL;
+  g_autoptr(IdeFile) local_file = NULL;
+  IdeContext *context;
+  IdeBuffer *buffer;
+  IdeFile *file;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  buffer = ide_editor_view_get_buffer (self);
+  g_return_if_fail (IDE_IS_BUFFER (buffer));
+
+  context = ide_buffer_get_context (buffer);
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+
+  file = ide_buffer_get_file (buffer);
+  g_return_if_fail (IDE_IS_FILE (file));
+
+  buffer_manager = ide_context_get_buffer_manager (context);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_FILE (workdir));
+
+  if (ide_file_get_is_temporary (file))
+    {
+      GtkFileChooserNative *dialog;
+      g_autoptr(GFile) gfile = NULL;
+      GtkWidget *toplevel;
+      gint ret;
+
+      toplevel = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
+
+      dialog = gtk_file_chooser_native_new (_("Save Document"),
+                                            GTK_WINDOW (toplevel),
+                                            GTK_FILE_CHOOSER_ACTION_SAVE,
+                                            _("Save"), _("Cancel"));
+
+      g_object_set (dialog,
+                    "do-overwrite-confirmation", TRUE,
+                    "local-only", FALSE,
+                    "modal", TRUE,
+                    "select-multiple", FALSE,
+                    "show-hidden", FALSE,
+                    NULL);
+
+      gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), workdir, NULL);
+
+      ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog));
+
+      if (ret == GTK_RESPONSE_ACCEPT)
+        {
+          gfile = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+          file = local_file = ide_file_new (context, gfile);
+        }
+
+      gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
+
+      if (local_file == NULL)
+        return;
+    }
+
+  ide_buffer_manager_save_file_async (buffer_manager,
+                                      buffer,
+                                      file,
+                                      &progress,
+                                      NULL,
+                                      ide_editor_view_actions_save_cb,
+                                      g_object_ref (self));
+
+  g_object_bind_property (progress, "fraction",
+                          self->progress_bar, "fraction",
+                          G_BINDING_SYNC_CREATE);
+
+  gtk_widget_show (GTK_WIDGET (self->progress_bar));
+}
+
+static const GActionEntry editor_view_entries[] = {
+  { "save", ide_editor_view_actions_save },
+};
 
 void
 _ide_editor_view_init_actions (IdeEditorView *self)
 {
+  g_autoptr(GSimpleActionGroup) group = NULL;
+
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   editor_view_entries,
+                                   G_N_ELEMENTS (editor_view_entries),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "editor-view",
+                                  G_ACTION_GROUP (group));
 }

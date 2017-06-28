@@ -41,6 +41,7 @@ struct _IdeEditorView
   GtkScrolledWindow       *scroller;
   IdeEditorSearchBar      *search_bar;
   GtkRevealer             *search_revealer;
+  GtkProgressBar          *progress_bar;
 };
 
 void _ide_editor_view_init_actions          (IdeEditorView        *self);

@@ -19,6 +19,12 @@
             </child>
           </object>
         </child>
+        <child type="overlay">
+          <object class="GtkProgressBar" id="progress_bar">
+            <property name="hexpand">true</property>
+            <property name="valign">start</property>
+          </object>
+        </child>
         <child>
           <object class="GtkScrolledWindow" id="scroller">
             <property name="expand">true</property>

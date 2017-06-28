@@ -26,6 +26,12 @@
 #define I_(s) (g_intern_static_string(s))
 
 static DzlShortcutEntry editor_view_shortcuts[] = {
+  { "org.gnome.builder.editor-view.save",
+    "<Primary>s",
+    N_("Editor"),
+    N_("Files"),
+    N_("Save the document") },
+
   { "org.gnome.builder.editor-view.find",
     "<Primary>f",
     N_("Editor"),
@@ -101,6 +107,11 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
                                               I_("org.gnome.builder.editor-view.clear-highlight"),
                                               NULL,
                                               I_("editor-view.clear-highlight"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.save"),
+                                              NULL,
+                                              I_("editor-view.save"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              editor_view_shortcuts,

@@ -408,6 +408,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, overlay);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, progress_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_revealer);
