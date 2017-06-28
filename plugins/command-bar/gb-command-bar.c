@@ -16,6 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gb-command-bar"
+
+#include "config.h"
+
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 #include <libpeas/peas.h>
@@ -54,6 +59,8 @@ struct _GbCommandBar
   gboolean           saved_position_valid;
 };
 
+#define I_(s) g_intern_static_string(s)
+
 static void workbench_addin_init (IdeWorkbenchAddinInterface *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER, 0,
@@ -69,26 +76,6 @@ enum {
 };
 
 static guint signals [LAST_SIGNAL];
-
-static gboolean
-key_press_event_cb (IdeWorkbench  *workbench,
-                    GdkEventKey  *event,
-                    GbCommandBar *self)
-{
-  if (event->keyval == GDK_KEY_colon)
-    {
-      IdeApplication *application = IDE_APPLICATION (g_application_get_default ());
-      const gchar *mode = ide_application_get_keybindings_mode (application);
-
-      if (g_strcmp0 ("vim", mode) == 0)
-        {
-          g_action_activate (G_ACTION (self->show_action), NULL);
-          return GDK_EVENT_STOP;
-        }
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
 
 static void
 gb_command_bar_load (IdeWorkbenchAddin *addin,
@@ -118,12 +105,6 @@ gb_command_bar_load (IdeWorkbenchAddin *addin,
   gtk_overlay_add_overlay (GTK_OVERLAY (box), GTK_WIDGET (self));
 
   g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (self->show_action));
-
-  g_signal_connect_object (workbench,
-                           "key-press-event",
-                           G_CALLBACK (key_press_event_cb),
-                           self,
-                           G_CONNECT_AFTER);
 
   gtk_widget_show (GTK_WIDGET (self));
 }
@@ -728,9 +709,19 @@ gb_command_bar_class_finalize (GbCommandBarClass *klass)
 {
 }
 
+static const DzlShortcutEntry shortcuts[] = {
+  { "org.gnome.builder.show-command-bar",
+    "<Control>Return",
+    N_("Editor"),
+    N_("General"),
+    N_("Command Bar") },
+};
+
 static void
 gb_command_bar_init (GbCommandBar *self)
 {
+  DzlShortcutController *controller;
+
   self->history = g_queue_new ();
   self->command_manager = gb_command_manager_new ();
 
@@ -742,6 +733,17 @@ gb_command_bar_init (GbCommandBar *self)
                            0);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.show-command-bar"),
+                                              NULL,
+                                              I_("win.show-command-bar"));
+
+  dzl_shortcut_manager_add_shortcut_entries (NULL, shortcuts, G_N_ELEMENTS (shortcuts),
+                                             GETTEXT_PACKAGE);
+
 }
 
 static void
