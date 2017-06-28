@@ -10,7 +10,6 @@
                   "hide-completion" ()
                   "remove-cursors" () };
   bind "<shift>F7" { "action" ("frame", "show-spellcheck", "1") };
-  bind "<ctrl>f" { "action" ("frame", "find", "3") };
   bind "<ctrl><shift>e" { "add-cursor" (column) };
   bind "<ctrl><shift>d" { "add-cursor" (match) };
   bind "<ctrl>h" { "action" ("frame", "find-replace", "3") };

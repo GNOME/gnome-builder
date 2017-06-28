@@ -520,6 +520,8 @@ libide_sources = libide_generated_headers + libide_public_sources + [
   'sourceview/ide-source-view-capture.h',
   'sourceview/ide-source-view-movements.c',
   'sourceview/ide-source-view-movements.h',
+  'sourceview/ide-source-view-private.h',
+  'sourceview/ide-source-view-shortcuts.c',
   'sourceview/ide-text-iter.c',
   'sourceview/ide-text-iter.h',
   'sourceview/ide-text-util.c',

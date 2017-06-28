@@ -55,6 +55,7 @@
 #include "sourceview/ide-source-view-capture.h"
 #include "sourceview/ide-source-view-mode.h"
 #include "sourceview/ide-source-view-movements.h"
+#include "sourceview/ide-source-view-private.h"
 #include "sourceview/ide-source-view.h"
 #include "sourceview/ide-text-util.h"
 #include "sourceview/ide-cursor.h"
@@ -4570,6 +4571,8 @@ ide_source_view_constructed (GObject *object)
   gboolean visible;
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
+
+  _ide_source_view_init_shortcuts (self);
 
   ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 

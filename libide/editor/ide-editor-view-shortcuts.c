@@ -19,16 +19,88 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 
 #include "ide-editor-private.h"
 
+#define I_(s) (g_intern_static_string(s))
+
 static DzlShortcutEntry editor_view_shortcuts[] = {
+  { "org.gnome.builder.editor-view.find",
+    "<Primary>f",
+    N_("Editor"),
+    N_("Find and replace"),
+    N_("Find") },
+
+  { "org.gnome.builder.editor-view.find-and-replace",
+    "<Primary>h",
+    N_("Editor"),
+    N_("Find and replace"),
+    N_("Find and replace") },
+
+  { "org.gnome.builder.editor-view.next-match",
+    "<Primary>g",
+    N_("Editor"),
+    N_("Find and replace"),
+    N_("Find the next match") },
+
+  { "org.gnome.builder.editor-view.prev-match",
+    "<Primary><Shift>g",
+    N_("Editor"),
+    N_("Find and replace"),
+    N_("Find the next match") },
+
+  { "org.gnome.builder.editor-view.clear-highlight",
+    "<Primary><Shift>k",
+    N_("Editor"),
+    N_("Find and replace"),
+    N_("Find the next match") },
 };
+
+static void
+ide_editor_view_shortcuts_find (GtkWidget *widget,
+                                gpointer   user_data)
+{
+  IdeEditorView *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  g_print ("TYPE: %s\n", G_OBJECT_TYPE_NAME (widget));
+}
 
 void
 _ide_editor_view_init_shortcuts (IdeEditorView *self)
 {
+  DzlShortcutController *controller;
+
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+
+  dzl_shortcut_controller_add_command_callback (controller,
+                                                I_("org.gnome.builder.editor-view.find"),
+                                                NULL,
+                                                ide_editor_view_shortcuts_find, self, NULL);
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.find-and-replace"),
+                                              NULL,
+                                              I_("editor-view.find-and-replace"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.next-match"),
+                                              NULL,
+                                              I_("editor-view.next-match"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.prev-match"),
+                                              NULL,
+                                              I_("editor-view.prev-match"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.clear-highlight"),
+                                              NULL,
+                                              I_("editor-view.clear-highlight"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              editor_view_shortcuts,
