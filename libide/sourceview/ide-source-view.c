@@ -286,6 +286,7 @@ enum {
   REMOVE_CURSORS,
   REPLAY_MACRO,
   REQUEST_DOCUMENTATION,
+  RESET,
   RESET_FONT_SIZE,
   RESTORE_INSERT_MARK,
   SAVE_COMMAND,
@@ -6275,6 +6276,20 @@ ide_source_view_real_find_references (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_reset (IdeSourceView *self)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  g_signal_emit (self, signals [CLEAR_SEARCH], 0);
+  g_signal_emit (self, signals [CLEAR_MODIFIER], 0);
+  g_signal_emit (self, signals [CLEAR_SELECTION], 0);
+  g_signal_emit (self, signals [CLEAR_COUNT], 0);
+  g_signal_emit (self, signals [CLEAR_SNIPPETS], 0);
+  g_signal_emit (self, signals [HIDE_COMPLETION], 0);
+  g_signal_emit (self, signals [REMOVE_CURSORS], 0);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -7298,6 +7313,22 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  /**
+   * IdeSourceView::reset:
+   *
+   * This is a helper signal that will try to reset keyboard input
+   * and various stateful settings of the sourceview. This is a good
+   * signal to map to the "Escape" key.
+   *
+   * Since: 3.26
+   */
+  signals [RESET] =
+    g_signal_new_class_handler ("reset",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_real_reset),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   signals [RESET_FONT_SIZE] =
     g_signal_new ("reset-font-size",
