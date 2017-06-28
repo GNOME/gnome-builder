@@ -65,7 +65,7 @@ ide_editor_view_shortcuts_find (GtkWidget *widget,
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
-  g_print ("TYPE: %s\n", G_OBJECT_TYPE_NAME (widget));
+  gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
 }
 
 void

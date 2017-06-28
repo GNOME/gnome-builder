@@ -350,6 +350,16 @@ on_notify_regex_enabled (IdeEditorSearchBar      *self,
 }
 
 static void
+ide_editor_search_bar_grab_focus (GtkWidget *widget)
+{
+  IdeEditorSearchBar *self = (IdeEditorSearchBar *)widget;
+
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+}
+
+static void
 ide_editor_search_bar_finalize (GObject *object)
 {
   IdeEditorSearchBar *self = (IdeEditorSearchBar *)object;
@@ -420,6 +430,8 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
   object_class->finalize = ide_editor_search_bar_finalize;
   object_class->get_property = ide_editor_search_bar_get_property;
   object_class->set_property = ide_editor_search_bar_set_property;
+
+  widget_class->grab_focus = ide_editor_search_bar_grab_focus;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/ide-editor-search-bar.ui");

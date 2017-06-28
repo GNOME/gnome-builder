@@ -18,14 +18,16 @@
 
 #define G_LOG_DOMAIN "ide-editor-perspective-actions"
 
+#include <glib/gi18n.h>
+
 #include "buffers/ide-buffer-manager.h"
 #include "editor/ide-editor-private.h"
 #include "util/ide-gtk.h"
 
 static void
-ide_editor_perspective_actions_new_document (GSimpleAction *action,
-                                             GVariant      *variant,
-                                             gpointer       user_data)
+ide_editor_perspective_actions_new_file (GSimpleAction *action,
+                                         GVariant      *variant,
+                                         gpointer       user_data)
 {
   IdeEditorPerspective *self = user_data;
   IdeWorkbench *workbench;
@@ -44,8 +46,59 @@ ide_editor_perspective_actions_new_document (GSimpleAction *action,
   g_clear_object (&buffer);
 }
 
+static void
+ide_editor_perspective_actions_open_file (GSimpleAction *action,
+                                          GVariant      *variant,
+                                          gpointer       user_data)
+{
+  IdeEditorPerspective *self = user_data;
+  GtkFileChooserNative *chooser;
+  IdeWorkbench *workbench;
+  gint ret;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+  if (workbench == NULL)
+    {
+      g_warning ("Failed to locate workbench");
+      return;
+    }
+
+  chooser = gtk_file_chooser_native_new (_("Open File"),
+                                         GTK_WINDOW (workbench),
+                                         GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         _("Open"),
+                                         _("Cancel"));
+  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), FALSE);
+
+  ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (chooser));
+
+  if (ret == GTK_RESPONSE_ACCEPT)
+    {
+      g_autoptr(GFile) file = NULL;
+
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser));
+
+      if (file != NULL)
+        {
+          ide_workbench_open_files_async (workbench,
+                                          &file,
+                                          1,
+                                          "editor",
+                                          IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                          NULL, NULL, NULL);
+        }
+    }
+
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (chooser));
+}
+
 static const GActionEntry editor_actions[] = {
-  { "new-document", ide_editor_perspective_actions_new_document },
+  { "new-file", ide_editor_perspective_actions_new_file },
+  { "open-file", ide_editor_perspective_actions_open_file },
 };
 
 void

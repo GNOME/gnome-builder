@@ -23,41 +23,38 @@
 #include "ide-layout-stack.h"
 #include "ide-layout-private.h"
 
+#define I_(s) g_intern_static_string(s)
+
 static const DzlShortcutEntry stack_shortcuts[] = {
   { "org.gnome.builder.layoutstack.move-right",
     NULL,
-    N_("Editing"),
-    N_("Navigation"),
-    N_("Move document right"),
-    N_("Move the document to the frame on the right") },
+    N_("Editor"),
+    N_("Files"),
+    N_("Move document to the right") },
 
   { "org.gnome.builder.layoutstack.move-left",
     NULL,
-    N_("Editing"),
-    N_("Navigation"),
-    N_("Move document left"),
-    N_("Move the document to the frame on the left") },
+    N_("Editor"),
+    N_("Files"),
+    N_("Move document to the left") },
 
   { "org.gnome.builder.layoutstack.previous-document",
     NULL,
-    N_("Editing"),
-    N_("Navigation"),
-    N_("Focus next document"),
-    N_("Focus the next document in the stack") },
+    N_("Editor"),
+    N_("Files"),
+    N_("Search to the previous document") },
 
-  { "org.gnome.builder.layoutstack.previous-document",
+  { "org.gnome.builder.layoutstack.next-document",
     NULL,
-    N_("Editing"),
-    N_("Navigation"),
-    N_("Focus next document"),
-    N_("Focus the next document in the stack") },
+    N_("Editor"),
+    N_("Files"),
+    N_("Switch to the next document") },
 
   { "org.gnome.builder.layoutstack.close-view",
     NULL,
-    N_("Editing"),
-    N_("Navigation"),
-    N_("Close current view"),
-    N_("Closes the currently focused view") },
+    N_("Editor"),
+    N_("Files"),
+    N_("Close the document") },
 };
 
 void
@@ -75,29 +72,29 @@ _ide_layout_stack_init_shortcuts (IdeLayoutStack *self)
   controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
 
   dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.layoutstack.move-right",
-                                              "<Control><Alt>Page_Down",
-                                              "layoutstack.move-right");
+                                              I_("org.gnome.builder.layoutstack.move-right"),
+                                              I_("<Primary><Alt>Page_Down"),
+                                              I_("layoutstack.move-right"));
 
   dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.layoutstack.move-left",
-                                              "<Control><Alt>Page_Up",
-                                              "layoutstack.move-left");
+                                              I_("org.gnome.builder.layoutstack.move-left"),
+                                              I_("<Primary><Alt>Page_Up"),
+                                              I_("layoutstack.move-left"));
 
   dzl_shortcut_controller_add_command_signal (controller,
-                                              "org.gnome.builder.layoutstack.next-document",
-                                              "<Control><Shift>Page_Down",
-                                              "change-current-page", 1,
-                                              G_TYPE_INT, 1);
+                                              I_("org.gnome.builder.layoutstack.next-document"),
+                                              I_("<Primary><Shift>Page_Down"),
+                                              I_("change-current-page"),
+                                              1, G_TYPE_INT, 1);
 
   dzl_shortcut_controller_add_command_signal (controller,
-                                              "org.gnome.builder.layoutstack.previous-document",
-                                              "<Control><Shift>Page_Up",
-                                              "change-current-page", 1,
-                                              G_TYPE_INT, -1);
+                                              I_("org.gnome.builder.layoutstack.previous-document"),
+                                              I_("<Primary><Shift>Page_Up"),
+                                              I_("change-current-page"),
+                                              1, G_TYPE_INT, -1);
 
   dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.layoutstack.close-view",
-                                              "<Control>w",
-                                              "layoutstack.close-view");
+                                              I_("org.gnome.builder.layoutstack.close-view"),
+                                              I_("<Primary>w"),
+                                              I_("layoutstack.close-view"));
 }

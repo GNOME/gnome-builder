@@ -22,28 +22,7 @@
 #include <libpeas/peas.h>
 
 #include "editor/ide-editor-private.h"
-#include "editor/ide-editor-search-bar.h"
-#include "editor/ide-editor-view.h"
-#include "editor/ide-editor-view-addin.h"
-#include "plugins/ide-extension-set-adapter.h"
 #include "util/ide-gtk.h"
-
-struct _IdeEditorView
-{
-  IdeLayoutView            parent_instance;
-
-  IdeExtensionSetAdapter  *addins;
-
-  IdeBuffer               *buffer;
-  DzlBindingGroup         *buffer_bindings;
-  DzlSignalGroup          *buffer_signals;
-
-  GtkOverlay              *overlay;
-  IdeSourceView           *source_view;
-  GtkScrolledWindow       *scroller;
-  IdeEditorSearchBar      *search_bar;
-  GtkRevealer             *search_revealer;
-};
 
 enum {
   PROP_0,
@@ -59,6 +38,18 @@ enum {
 G_DEFINE_TYPE (IdeEditorView, ide_editor_view, IDE_TYPE_LAYOUT_VIEW)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_editor_view_notify_child_revealed (IdeEditorView *self,
+                                       GParamSpec    *pspec,
+                                       GtkRevealer   *revealer)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (GTK_IS_REVEALER (revealer));
+
+  if (gtk_revealer_get_child_revealed (revealer))
+    gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
+}
 
 static void
 ide_editor_view_drag_data_received (IdeEditorView    *self,
@@ -421,6 +412,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, source_view);
+  gtk_widget_class_bind_template_callback (widget_class, ide_editor_view_notify_child_revealed);
 
   g_type_ensure (IDE_TYPE_SOURCE_VIEW);
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);

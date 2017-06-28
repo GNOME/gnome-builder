@@ -18,14 +18,35 @@
 
 #pragma once
 
-#include "ide-editor-perspective.h"
-#include "ide-editor-view.h"
+#include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-search-bar.h"
+#include "editor/ide-editor-view-addin.h"
+#include "editor/ide-editor-view.h"
+#include "plugins/ide-extension-set-adapter.h"
 
 G_BEGIN_DECLS
 
-void _ide_editor_view_init_actions        (IdeEditorView        *self);
-void _ide_editor_view_init_settings       (IdeEditorView        *self);
-void _ide_editor_view_init_shortcuts      (IdeEditorView        *self);
-void _ide_editor_perspective_init_actions (IdeEditorPerspective *self);
+struct _IdeEditorView
+{
+  IdeLayoutView            parent_instance;
+
+  IdeExtensionSetAdapter  *addins;
+
+  IdeBuffer               *buffer;
+  DzlBindingGroup         *buffer_bindings;
+  DzlSignalGroup          *buffer_signals;
+
+  GtkOverlay              *overlay;
+  IdeSourceView           *source_view;
+  GtkScrolledWindow       *scroller;
+  IdeEditorSearchBar      *search_bar;
+  GtkRevealer             *search_revealer;
+};
+
+void _ide_editor_view_init_actions          (IdeEditorView        *self);
+void _ide_editor_view_init_settings         (IdeEditorView        *self);
+void _ide_editor_view_init_shortcuts        (IdeEditorView        *self);
+void _ide_editor_perspective_init_actions   (IdeEditorPerspective *self);
+void _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self);
 
 G_END_DECLS

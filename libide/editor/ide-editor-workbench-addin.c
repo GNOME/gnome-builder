@@ -148,7 +148,7 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
   header = ide_workbench_get_headerbar (workbench);
 
   self->new_document_button = g_object_new (GTK_TYPE_BUTTON,
-                                            "action-name", "editor.new-document",
+                                            "action-name", "editor.new-file",
                                             "child", g_object_new (GTK_TYPE_IMAGE,
                                                                    "visible", TRUE,
                                                                    "icon-name", "document-new-symbolic",
