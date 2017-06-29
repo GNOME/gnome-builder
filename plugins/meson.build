@@ -41,6 +41,7 @@ subdir('meson-templates')
 subdir('mingw')
 subdir('mono')
 subdir('notification')
+subdir('npm')
 subdir('phpize')
 subdir('project-tree')
 subdir('python-gi-imports-completion')
@@ -91,6 +92,7 @@ status += [
   'MinGW ................. : @0@'.format(get_option('with_mingw')),
   'Mono .................. : @0@'.format(get_option('with_mono')),
   'Notifications ......... : @0@'.format(get_option('with_notification')),
+  'Node Package Manager .. : @0@'.format(get_option('with_npm')),
   'PHPize ................ : @0@'.format(get_option('with_phpize')),
   'Project Tree .......... : @0@'.format(get_option('with_project_tree')),
   'Python GI Completion .. : @0@'.format(get_option('with_python_gi_imports_completion')),
