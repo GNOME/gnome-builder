@@ -21,6 +21,8 @@
 #include <dazzle.h>
 #include <libpeas/peas.h>
 
+#include "ide-internal.h"
+
 #include "editor/ide-editor-private.h"
 #include "util/ide-gtk.h"
 
@@ -116,15 +118,16 @@ ide_editor_view_focus_in_event (IdeEditorView *self,
 }
 
 static void
-ide_editor_view_buffer_modified_changed (IdeEditorView   *self,
-                                         GtkSourceBuffer *buffer)
+ide_editor_view_buffer_modified_changed (IdeEditorView *self,
+                                         IdeBuffer     *buffer)
 {
-  gboolean modified;
+  gboolean modified = FALSE;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  modified = gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer));
+  if (!_ide_buffer_get_loading (buffer))
+    modified = gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer));
 
   ide_layout_view_set_modified (IDE_LAYOUT_VIEW (self), modified);
 }
@@ -145,9 +148,9 @@ ide_editor_view_buffer_notify_language_cb (IdeExtensionSetAdapter *set,
 }
 
 static void
-ide_editor_view_buffer_notify_language (IdeEditorView   *self,
-                                        GParamSpec      *pspec,
-                                        GtkSourceBuffer *buffer)
+ide_editor_view_buffer_notify_language (IdeEditorView *self,
+                                        GParamSpec    *pspec,
+                                        IdeBuffer     *buffer)
 {
   GtkSourceLanguage *language;
   const gchar *language_id = NULL;
@@ -158,20 +161,20 @@ ide_editor_view_buffer_notify_language (IdeEditorView   *self,
   if (self->addins == NULL)
     return;
 
-  if (NULL != (language = gtk_source_buffer_get_language (buffer)))
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  if (language != NULL)
     language_id = gtk_source_language_get_id (language);
 
   ide_extension_set_adapter_set_value (self->addins, language_id);
-
   ide_extension_set_adapter_foreach (self->addins,
                                      ide_editor_view_buffer_notify_language_cb,
                                      (gpointer)language_id);
 }
 
 static void
-ide_editor_view_bind_signals (IdeEditorView   *self,
-                              GtkSourceBuffer *buffer,
-                              DzlSignalGroup  *buffer_signals)
+ide_editor_view_bind_signals (IdeEditorView  *self,
+                              IdeBuffer      *buffer,
+                              DzlSignalGroup *buffer_signals)
 {
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
