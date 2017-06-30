@@ -79,8 +79,13 @@ ide_layout_grid_column_add (GtkContainer *container,
     }
   else if (IDE_IS_LAYOUT_STACK (widget))
     {
+      GtkWidget *grid;
+
       g_queue_push_head (&self->focus_stack, widget);
       GTK_CONTAINER_CLASS (ide_layout_grid_column_parent_class)->add (container, widget);
+
+      if (IDE_IS_LAYOUT_GRID (grid = gtk_widget_get_parent (GTK_WIDGET (self))))
+        _ide_layout_grid_stack_added (IDE_LAYOUT_GRID (grid), IDE_LAYOUT_STACK (widget));
     }
   else
     {
@@ -95,9 +100,13 @@ ide_layout_grid_column_remove (GtkContainer *container,
                                GtkWidget    *widget)
 {
   IdeLayoutGridColumn *self = (IdeLayoutGridColumn *)container;
+  GtkWidget *grid;
 
   g_assert (IDE_IS_LAYOUT_GRID_COLUMN (self));
   g_assert (IDE_IS_LAYOUT_STACK (widget));
+
+  if (IDE_IS_LAYOUT_GRID (grid = gtk_widget_get_parent (GTK_WIDGET (self))))
+    _ide_layout_grid_stack_removed (IDE_LAYOUT_GRID (grid), IDE_LAYOUT_STACK (widget));
 
   g_queue_remove (&self->focus_stack, widget);
 

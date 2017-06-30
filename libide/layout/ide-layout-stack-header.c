@@ -190,7 +190,6 @@ create_document_row (gpointer item,
                       "visible", TRUE,
                       NULL);
   box = g_object_new (GTK_TYPE_BOX,
-                      "spacing", 6,
                       "visible", TRUE,
                       NULL);
   image = g_object_new (GTK_TYPE_IMAGE,
@@ -267,6 +266,9 @@ ide_layout_stack_header_destroy (GtkWidget *widget)
   IdeLayoutStackHeader *self = (IdeLayoutStackHeader *)widget;
 
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  if (self->title_list_box != NULL)
+    gtk_list_box_bind_model (self->title_list_box, NULL, NULL, NULL, NULL);
 
   g_clear_object (&self->menu);
 

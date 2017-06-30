@@ -21,11 +21,34 @@
 #include "ide-layout-grid.h"
 #include "ide-layout-private.h"
 
+/**
+ * SECTION:ide-layout-grid
+ * @title: IdeLayoutGrid
+ * @short_description: A grid for #IdeLayoutView
+ *
+ * The #IdeLayoutGrid provides a grid of views that the user may
+ * manipulate.
+ *
+ * Internally, this is implemented with #IdeLayoutGrid at the top
+ * containing one or more of #IdeLayoutGridColumn. Those columns
+ * contain one or more #IdeLayoutStack. The stack can contain many
+ * #IdeLayoutView.
+ *
+ * #IdeLayoutGrid implements the #GListModel interface to simplify
+ * the process of listing (with deduplication) the views that are
+ * contianed within the #IdeLayoutGrid. If you would instead like
+ * to see all possible views in the stack, use the
+ * ide_layout_grid_foreach_view() API.
+ *
+ * Since: 3.26
+ */
+
 typedef struct
 {
   /* Owned references */
   DzlSignalGroup *toplevel_signals;
   GQueue          focus_column;
+  GArray         *stack_info;
 
   /*
    * This unowned reference is simply used to compare to a new focus
@@ -34,6 +57,12 @@ typedef struct
    */
   IdeLayoutView  *_last_focused_view;
 } IdeLayoutGridPrivate;
+
+typedef struct
+{
+  IdeLayoutStack *stack;
+  guint           len;
+} StackInfo;
 
 enum {
   PROP_0,
@@ -48,7 +77,11 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeLayoutGrid, ide_layout_grid, DZL_TYPE_MULTI_PANED)
+static void list_model_iface_init (GListModelInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdeLayoutGrid, ide_layout_grid, DZL_TYPE_MULTI_PANED,
+                         G_ADD_PRIVATE (IdeLayoutGrid)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
@@ -199,10 +232,20 @@ ide_layout_grid_add (GtkContainer *container,
 
   if (IDE_IS_LAYOUT_GRID_COLUMN (widget))
     {
+      GList *children;
+
+      /* Add our column to the grid */
       g_queue_push_head (&priv->focus_column, widget);
       GTK_CONTAINER_CLASS (ide_layout_grid_parent_class)->add (container, widget);
       ide_layout_grid_set_current_column (self, IDE_LAYOUT_GRID_COLUMN (widget));
       _ide_layout_grid_column_update_actions (IDE_LAYOUT_GRID_COLUMN (widget));
+
+      /* Start monitoring all the stacks in the grid for views */
+      children = gtk_container_get_children (GTK_CONTAINER (widget));
+      for (const GList *iter = children; iter; iter = iter->next)
+        if (IDE_IS_LAYOUT_STACK (iter->data))
+          _ide_layout_grid_stack_added (self, iter->data);
+      g_list_free (children);
     }
   else if (IDE_IS_LAYOUT_STACK (widget))
     {
@@ -283,11 +326,11 @@ ide_layout_grid_finalize (GObject *object)
   IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
 
   g_assert (IDE_IS_LAYOUT_GRID (self));
-
   g_assert (priv->focus_column.head == NULL);
   g_assert (priv->focus_column.tail == NULL);
   g_assert (priv->focus_column.length == 0);
 
+  g_clear_pointer (&priv->stack_info, g_array_unref);
   g_clear_object (&priv->toplevel_signals);
 
   G_OBJECT_CLASS (ide_layout_grid_parent_class)->finalize (object);
@@ -400,6 +443,8 @@ ide_layout_grid_init (IdeLayoutGrid *self)
 {
   IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
 
+  priv->stack_info = g_array_new (FALSE, FALSE, sizeof (StackInfo));
+
   priv->toplevel_signals = dzl_signal_group_new (GTK_TYPE_WINDOW);
 
   dzl_signal_group_connect_object (priv->toplevel_signals,
@@ -409,6 +454,15 @@ ide_layout_grid_init (IdeLayoutGrid *self)
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 }
 
+/**
+ * ide_layout_grid_new:
+ *
+ * Creates a new #IdeLayoutGrid.
+ *
+ * Returns: (transfer full): A newly created #IdeLayoutGrid
+ *
+ * Since: 3.26
+ */
 GtkWidget *
 ide_layout_grid_new (void)
 {
@@ -693,4 +747,138 @@ ide_layout_grid_foreach_view (IdeLayoutGrid *self,
 
   for (guint i = 0; i < views->len; i++)
     callback (g_ptr_array_index (views, i), user_data);
+}
+
+static GType
+ide_layout_grid_get_item_type (GListModel *model)
+{
+  return IDE_TYPE_LAYOUT_VIEW;
+}
+
+static guint
+ide_layout_grid_get_n_items (GListModel *model)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)model;
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+  guint n_items = 0;
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+
+  for (guint i = 0; i < priv->stack_info->len; i++)
+    n_items += g_array_index (priv->stack_info, StackInfo, i).len;
+
+  return n_items;
+}
+
+static gpointer
+ide_layout_grid_get_item (GListModel *model,
+                          guint       position)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)model;
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+  g_assert (position < ide_layout_grid_get_n_items (model));
+
+  for (guint i = 0; i < priv->stack_info->len; i++)
+    {
+      const StackInfo *info = &g_array_index (priv->stack_info, StackInfo, i);
+
+      if (position >= info->len)
+        {
+          position -= info->len;
+          continue;
+        }
+
+      return g_list_model_get_item (G_LIST_MODEL (info->stack), position);
+    }
+
+  g_warning ("Failed to locate position %u within %s",
+             position, G_OBJECT_TYPE_NAME (self));
+
+  return NULL;
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = ide_layout_grid_get_item_type;
+  iface->get_n_items = ide_layout_grid_get_n_items;
+  iface->get_item = ide_layout_grid_get_item;
+}
+
+static void
+ide_layout_grid_stack_items_changed (IdeLayoutGrid  *self,
+                                     guint           position,
+                                     guint           removed,
+                                     guint           added,
+                                     IdeLayoutStack *stack)
+{
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+  guint real_position = 0;
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+  g_assert (IDE_IS_LAYOUT_STACK (stack));
+
+  for (guint i = 0; i < priv->stack_info->len; i++)
+    {
+      StackInfo *info = &g_array_index (priv->stack_info, StackInfo, i);
+
+      if (info->stack == stack)
+        {
+          info->len -= removed;
+          info->len += added;
+
+          g_list_model_items_changed (G_LIST_MODEL (self),
+                                      real_position + position,
+                                      removed,
+                                      added);
+
+          return;
+        }
+
+      real_position += info->len;
+    }
+
+  g_warning ("Failed to locate %s within %s",
+             G_OBJECT_TYPE_NAME (stack), G_OBJECT_TYPE_NAME (self));
+}
+
+void
+_ide_layout_grid_stack_added (IdeLayoutGrid  *self,
+                              IdeLayoutStack *stack)
+{
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+  StackInfo info = { 0 };
+  guint n_items;
+
+  g_return_if_fail (IDE_IS_LAYOUT_GRID (self));
+  g_return_if_fail (IDE_IS_LAYOUT_STACK (stack));
+  g_return_if_fail (G_IS_LIST_MODEL (stack));
+
+  info.stack = stack;
+  info.len = 0;
+
+  g_array_append_val (priv->stack_info, info);
+
+  g_signal_connect_object (stack,
+                           "items-changed",
+                           G_CALLBACK (ide_layout_grid_stack_items_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (stack));
+  ide_layout_grid_stack_items_changed (self, 0, 0, n_items, stack);
+}
+
+void
+_ide_layout_grid_stack_removed (IdeLayoutGrid  *self,
+                                IdeLayoutStack *stack)
+{
+  g_return_if_fail (IDE_IS_LAYOUT_GRID (self));
+  g_return_if_fail (IDE_IS_LAYOUT_STACK (stack));
+
+  g_signal_handlers_disconnect_by_func (stack,
+                                        G_CALLBACK (ide_layout_grid_stack_items_changed),
+                                        self);
 }

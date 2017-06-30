@@ -414,6 +414,12 @@ ide_layout_stack_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
 
+  if (priv->views != NULL)
+    {
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, priv->views->len, 0);
+      g_clear_pointer (&priv->views, g_ptr_array_unref);
+    }
+
   g_clear_object (&priv->addins);
 
   if (priv->bindings != NULL)
@@ -427,8 +433,6 @@ ide_layout_stack_destroy (GtkWidget *widget)
       dzl_signal_group_set_target (priv->signals, NULL);
       g_clear_object (&priv->signals);
     }
-
-  g_clear_pointer (&priv->views, g_ptr_array_unref);
 
   GTK_WIDGET_CLASS (ide_layout_stack_parent_class)->destroy (widget);
 }
