@@ -782,11 +782,10 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
    */
   for (iter = removal.views; iter; iter = iter->next)
     {
-      GtkWidget *stack;
+      IdeLayoutView *view = iter->data;
 
-      stack = gtk_widget_get_ancestor (iter->data, IDE_TYPE_LAYOUT_STACK);
-      if (stack != NULL)
-        ide_layout_stack_remove (IDE_LAYOUT_STACK (stack), iter->data);
+      if (IDE_IS_EDITOR_VIEW (view))
+        gtk_widget_destroy (GTK_WIDGET (view));
     }
 
   g_list_free_full (removal.views, g_object_unref);
