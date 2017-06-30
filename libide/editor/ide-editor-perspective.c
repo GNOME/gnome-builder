@@ -22,15 +22,17 @@
 
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-private.h"
+#include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-view.h"
 #include "workbench/ide-perspective.h"
 
 struct _IdeEditorPerspective
 {
-  IdeLayout      parent_instance;
+  IdeLayout         parent_instance;
 
   /* Template widgets */
-  IdeLayoutGrid *grid;
+  IdeLayoutGrid    *grid;
+  IdeEditorSidebar *sidebar;
 };
 
 static void perspective_iface_init (IdePerspectiveInterface *iface);
@@ -63,12 +65,18 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, sidebar);
+
+  g_type_ensure (IDE_TYPE_EDITOR_SIDEBAR);
+  g_type_ensure (IDE_TYPE_LAYOUT_GRID);
 }
 
 static void
 ide_editor_perspective_init (IdeEditorPerspective *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  _ide_editor_sidebar_set_open_pages (self->sidebar, G_LIST_MODEL (self->grid));
 
   _ide_editor_perspective_init_actions (self);
   _ide_editor_perspective_init_shortcuts (self);

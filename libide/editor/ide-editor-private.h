@@ -20,6 +20,7 @@
 
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-search-bar.h"
+#include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-view-addin.h"
 #include "editor/ide-editor-view.h"
 #include "plugins/ide-extension-set-adapter.h"
@@ -47,6 +48,8 @@ struct _IdeEditorView
 void _ide_editor_view_init_actions          (IdeEditorView        *self);
 void _ide_editor_view_init_settings         (IdeEditorView        *self);
 void _ide_editor_view_init_shortcuts        (IdeEditorView        *self);
+void _ide_editor_sidebar_set_open_pages     (IdeEditorSidebar     *self,
+                                             GListModel           *open_pages);
 void _ide_editor_perspective_init_actions   (IdeEditorPerspective *self);
 void _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self);
 
