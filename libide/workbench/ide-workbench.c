@@ -40,6 +40,7 @@
 #include "workbench/ide-workbench.h"
 
 #define STABLIZE_DELAY_MSEC 50
+#define SHOW_HEADER_OFFSET  5
 
 G_DEFINE_TYPE (IdeWorkbench, ide_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
@@ -47,6 +48,7 @@ enum {
   PROP_0,
   PROP_CONTEXT,
   PROP_DISABLE_GREETER,
+  PROP_FOCUS_MODE,
   PROP_VISIBLE_PERSPECTIVE,
   PROP_VISIBLE_PERSPECTIVE_NAME,
   LAST_PROP
@@ -61,6 +63,61 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
+
+static void
+ide_workbench_event_box_notify (GtkWidget    *revealer,
+                                GParamSpec   *pspec,
+                                IdeWorkbench *self)
+{
+  gboolean visible;
+
+  /* Hack to show and hide the revealer when its child is not visible */
+  visible = gtk_revealer_get_reveal_child (GTK_REVEALER (revealer)) ||
+            gtk_revealer_get_child_revealed (GTK_REVEALER (revealer));
+
+  gtk_widget_set_visible (revealer, visible);
+}
+
+static gboolean
+ide_workbench_event_box_motion_notify_event (GtkEventBox    *event_box,
+                                             GdkEventMotion *event,
+                                             IdeWorkbench   *self)
+{
+  GtkWidget *focus_widget;
+  GdkWindow *window;
+  gdouble x, y;
+
+  x = event->x;
+  y = event->y;
+
+  /* Find the (x, y) values relative to the workbench */
+  window = event->window;
+  while (window != NULL && window != gtk_widget_get_window (GTK_WIDGET (event_box)))
+    {
+      gdk_window_coords_to_parent (window, x, y, &x, &y);
+      window = gdk_window_get_parent (window);
+    }
+
+  if (window == NULL)
+    return GDK_EVENT_PROPAGATE;
+
+  /* If any widget in the header is focused, don't hide it */
+  focus_widget = gtk_window_get_focus (GTK_WINDOW (self));
+
+  if (focus_widget &&
+      gtk_widget_get_ancestor (focus_widget, IDE_TYPE_WORKBENCH_HEADER_BAR) != NULL)
+    {
+      return GDK_EVENT_PROPAGATE;
+    }
+
+  /* Show the header with a small offset below */
+  if (y < SHOW_HEADER_OFFSET)
+    gtk_widget_show (GTK_WIDGET (self->header_revealer));
+
+  gtk_revealer_set_reveal_child (self->header_revealer, y < SHOW_HEADER_OFFSET);
+
+  return GDK_EVENT_PROPAGATE;
+}
 
 static void
 ide_workbench_notify_visible_child (IdeWorkbench *self,
@@ -261,6 +318,10 @@ ide_workbench_get_property (GObject    *object,
       g_value_set_boolean (value, self->disable_greeter);
       break;
 
+    case PROP_FOCUS_MODE:
+      g_value_set_boolean (value, self->focus_mode);
+      break;
+
     case PROP_VISIBLE_PERSPECTIVE:
       g_value_set_object (value, ide_workbench_get_visible_perspective (self));
       break;
@@ -286,6 +347,10 @@ ide_workbench_set_property (GObject      *object,
     {
     case PROP_DISABLE_GREETER:
       self->disable_greeter = g_value_get_boolean (value);
+      break;
+
+    case PROP_FOCUS_MODE:
+      ide_workbench_set_focus_mode (self, g_value_get_boolean (value));
       break;
 
     case PROP_VISIBLE_PERSPECTIVE:
@@ -368,6 +433,19 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   /**
+   * IdeWorkbench:focus-mode:
+   *
+   * Whether this workbench is in focus mode. Focus mode turns the workbench
+   * into a fullscreen window with a floating headerbar.
+   */
+  properties [PROP_FOCUS_MODE] =
+    g_param_spec_boolean ("focus-mode",
+                          "Focus mode",
+                          "If the workbench is in focus mode",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  /**
    * IdeWorkbench:visible-perspective-name:
    *
    * This property is just like #IdeWorkbench:visible-perspective except that
@@ -420,12 +498,17 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                   1, IDE_TYPE_CONTEXT);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, fullscreen_eventbox);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_container);
+  gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_size_group);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, header_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, message_box);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspective_menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeWorkbench, perspectives_stack);
+
+  gtk_widget_class_bind_template_callback (widget_class, ide_workbench_event_box_notify);
 }
 
 static void
@@ -1082,4 +1165,54 @@ ide_workbench_pop_message (IdeWorkbench *self,
     }
 
   return FALSE;
+}
+
+gboolean
+ide_workbench_get_focus_mode (IdeWorkbench *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), FALSE);
+
+  return self->focus_mode;
+}
+
+void
+ide_workbench_set_focus_mode (IdeWorkbench *self,
+                              gboolean      focus_mode)
+{
+  focus_mode = !!focus_mode;
+
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+
+  if (focus_mode == self->focus_mode)
+    return;
+
+  self->focus_mode = focus_mode;
+
+  g_object_ref (self->header_stack);
+
+  if (focus_mode)
+    {
+      gtk_container_remove (self->header_container, GTK_WIDGET (self->header_stack));
+      gtk_container_add (GTK_CONTAINER (self->header_revealer), GTK_WIDGET (self->header_stack));
+      gtk_window_fullscreen (GTK_WINDOW (self));
+
+      g_signal_connect (self->fullscreen_eventbox,
+                        "motion-notify-event",
+                        G_CALLBACK (ide_workbench_event_box_motion_notify_event),
+                        self);
+    }
+  else
+    {
+      g_signal_handlers_disconnect_by_func (self->fullscreen_eventbox,
+                                            ide_workbench_event_box_motion_notify_event,
+                                            self);
+      gtk_container_remove (GTK_CONTAINER (self->header_revealer), GTK_WIDGET (self->header_stack));
+      gtk_container_add (self->header_container, GTK_WIDGET (self->header_stack));
+      gtk_revealer_set_reveal_child (self->header_revealer, FALSE);
+      gtk_window_unfullscreen (GTK_WINDOW (self));
+    }
+
+  g_object_unref (self->header_stack);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOCUS_MODE]);
 }

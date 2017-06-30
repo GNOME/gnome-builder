@@ -103,6 +103,9 @@ void                   ide_workbench_push_message                 (IdeWorkbench 
                                                                    IdeWorkbenchMessage    *message);
 gboolean               ide_workbench_pop_message                  (IdeWorkbench           *self,
                                                                    const gchar            *message_id);
+gboolean               ide_workbench_get_focus_mode               (IdeWorkbench           *self);
+void                   ide_workbench_set_focus_mode               (IdeWorkbench           *self,
+                                                                   gboolean                focus_mode);
 
 G_END_DECLS
 

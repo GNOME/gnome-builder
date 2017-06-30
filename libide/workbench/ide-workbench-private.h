@@ -33,6 +33,7 @@ struct _IdeWorkbench
   GtkApplicationWindow       parent;
 
   guint                      unloading : 1;
+  guint                      focus_mode : 1;
   guint                      disable_greeter : 1;
   guint                      early_perspectives_removed : 1;
   guint                      did_initial_editor_transition : 1;
@@ -46,12 +47,15 @@ struct _IdeWorkbench
    */
   GListStore                *perspectives;
 
+  GtkContainer              *header_container;
+  GtkRevealer               *header_revealer;
   GtkStack                  *header_stack;
   IdeWorkbenchHeaderBar     *header_bar;
   IdePerspectiveMenuButton  *perspective_menu_button;
   GtkStack                  *perspectives_stack;
   GtkSizeGroup              *header_size_group;
   GtkBox                    *message_box;
+  GtkEventBox               *fullscreen_eventbox;
 
   GObject                   *selection_owner;
 };
