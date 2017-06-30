@@ -425,6 +425,7 @@ ide_application_actions_init (IdeApplication *self)
   static const gchar *help[] = { "F1", NULL };
   static const gchar *command_bar[] = { "<ctrl>Return", "<ctrl>KP_Enter", NULL };
   static const gchar *build[] = { "<ctrl>F7", NULL };
+  static const gchar *fullscreen[] = { "F11", NULL };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), IdeApplicationActions,
                                    G_N_ELEMENTS (IdeApplicationActions), self);
@@ -438,6 +439,7 @@ ide_application_actions_init (IdeApplication *self)
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.left-visible", left);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.right-visible", right);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.new-file", new_file);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.fullscreen", fullscreen);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.global-search", global_search);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.show-command-bar", command_bar);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "build-manager.build", build);

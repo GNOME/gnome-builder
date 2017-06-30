@@ -19,7 +19,6 @@
 @binding-set builder-workbench-bindings
 {
   bind "<ctrl>comma" { "set-perspective" ("preferences") };
-  bind "F11" { "action" ("win", "toggle-focus-mode", "") };
 }
 
 entry.gb-command-bar-entry {
