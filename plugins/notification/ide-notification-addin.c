@@ -56,6 +56,11 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   const gchar *project_name;
   const gchar *msg_title;
 
+  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
+
+  if (self->proxy == NULL)
+    return;
+
   app = GTK_APPLICATION (g_application_get_default ());
   window = gtk_application_get_active_window (app);
   if(gtk_window_has_toplevel_focus (window))
@@ -152,7 +157,12 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
                                                "org.freedesktop.Notifications",
                                                NULL,
                                                NULL);
-  g_assert (G_IS_DBUS_PROXY (self->proxy));
+
+  if (self->proxy == NULL)
+    {
+      g_message ("Failed to locate org.freedesktop.Notifications");
+      return;
+    }
 
   g_signal_connect_object (build_manager,
                            "build-finished",
