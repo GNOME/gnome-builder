@@ -100,15 +100,12 @@
         <attribute name="action">win.save-all</attribute>
       </item>
     </section>
-<!--
-    <section>
-      <attribute name="id">close-section</attribute>
+    <section id="gear-menu-fullscreen-section">
       <item>
-        <attribute name="label" translatable="yes">_Close All</attribute>
-        <attribute name="action">workbench.close-all</attribute>
+        <attribute name="label" translatable="yes">_Fullscreen</attribute>
+        <attribute name="action">win.fullscreen</attribute>
       </item>
     </section>
--->
   </menu>
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-jump-section">
