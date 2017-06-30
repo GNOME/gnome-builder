@@ -9,20 +9,21 @@ symbol_tree_resources = gnome.compile_resources(
 symbol_tree_sources = [
   symbol_tree_resources[0],
   symbol_tree_resources[1],
-  'symbol-tree-builder.c',
-  'symbol-tree-builder.h',
-  'symbol-tree-panel.c',
-  'symbol-tree-panel.h',
-  'symbol-tree.c',
-  'symbol-tree.h',
+  'gbp-symbol-layout-stack-addin.c',
+  'gbp-symbol-layout-stack-addin.h',
+  'gbp-symbol-menu-button.c',
+  'gbp-symbol-menu-button.h',
+  'gbp-symbol-tree-builder.c',
+  'gbp-symbol-tree-builder.h',
+  'symbol-tree-plugin.c',
 ]
 
-shared_module('symbol-tree', symbol_tree_sources,
+shared_module('symbol-tree-plugin', symbol_tree_sources,
   dependencies: plugin_deps,
-  link_args: plugin_link_args,
+     link_args: plugin_link_args,
   link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
+       install: true,
+   install_dir: plugindir,
 )
 
 configure_file(

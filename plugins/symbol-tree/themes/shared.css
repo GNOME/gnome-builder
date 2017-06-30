@@ -1,4 +1,10 @@
-symboltreepanel entry {
-  border-radius: 0;
-  border-width: 0 0 1px 0;
-}
+popover.symbols-button {
+  padding: 12px;
+  }
+popover.symbols-button treeview {
+  background: transparent;
+  color: @theme_fg_color;
+  }
+popover.symbols-button treeview:backdrop {
+  color: @theme_unfocused_fg_color;
+  }

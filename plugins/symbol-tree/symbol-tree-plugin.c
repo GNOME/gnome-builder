@@ -1,6 +1,6 @@
-/* symbol-tree-panel.h
+/* symbol-tree-plugin.c
  *
- * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYMBOL_TREE_PANEL_H
-#define SYMBOL_TREE_PANEL_H
-
+#include <libpeas/peas.h>
 #include <ide.h>
 
-G_BEGIN_DECLS
+#include "gbp-symbol-layout-stack-addin.h"
 
-#define SYMBOL_TYPE_TREE_PANEL (symbol_tree_panel_get_type())
-
-G_DECLARE_FINAL_TYPE (SymbolTreePanel, symbol_tree_panel, SYMBOL, TREE_PANEL, DzlDockWidget)
-
-void symbol_tree_panel_reset (SymbolTreePanel *self);
-
-G_END_DECLS
-
-#endif /* SYMBOL_TREE_PANEL_H */
+void
+peas_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_LAYOUT_STACK_ADDIN,
+                                              GBP_TYPE_SYMBOL_LAYOUT_STACK_ADDIN);
+}

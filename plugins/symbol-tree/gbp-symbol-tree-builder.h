@@ -1,4 +1,4 @@
-/* symbol-tree-builder.h
+/* gbp-symbol-tree-builder.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -22,8 +22,8 @@
 
 G_BEGIN_DECLS
 
-#define SYMBOL_TYPE_TREE_BUILDER (symbol_tree_builder_get_type())
+#define GBP_TYPE_SYMBOL_TREE_BUILDER (gbp_symbol_tree_builder_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTreeBuilder, symbol_tree_builder, SYMBOL, TREE_BUILDER, DzlTreeBuilder)
+G_DECLARE_FINAL_TYPE (GbpSymbolTreeBuilder, gbp_symbol_tree_builder, GBP, SYMBOL_TREE_BUILDER, DzlTreeBuilder)
 
 G_END_DECLS

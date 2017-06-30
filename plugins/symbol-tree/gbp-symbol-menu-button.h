@@ -1,6 +1,6 @@
-/* symbol-tree-builder.h
+/* gbp-symbol-menu-button.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,12 @@
 
 G_BEGIN_DECLS
 
-#define SYMBOL_TYPE_TREE_BUILDER (symbol_tree_builder_get_type())
+#define GBP_TYPE_SYMBOL_MENU_BUTTON (gbp_symbol_menu_button_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTreeBuilder, symbol_tree_builder, SYMBOL, TREE_BUILDER, DzlTreeBuilder)
+G_DECLARE_FINAL_TYPE (GbpSymbolMenuButton, gbp_symbol_menu_button, GBP, SYMBOL_MENU_BUTTON, GtkMenuButton)
+
+IdeSymbolTree *gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self);
+void           gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,
+                                                       IdeSymbolTree       *symbol_tree);
 
 G_END_DECLS

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkPopover" id="popover">
+    <style>
+      <class name="symbols-button"/>
+    </style>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="propagate-natural-width">true</property>
+        <property name="propagate-natural-height">true</property>
+        <property name="max-content-height">600</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="DzlTree" id="tree">
+            <property name="headers-visible">false</property>
+            <property name="activate-on-single-click">true</property>
+            <property name="visible">true</property>
+            <child type="builder">
+              <object class="GbpSymbolTreeBuilder" id="tree_builder"/>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <template class="GbpSymbolMenuButton" parent="GtkMenuButton">
+    <property name="label">Symbols</property>
+    <property name="popover">popover</property>
+  </template>
+</interface>

@@ -50,15 +50,6 @@ idelayoutgrid.handle {
   border: 1px solid @borders;
 }
 
-popover.symbols-button {
-  padding: 12px;
-}
-
-popover.symbols-button treeview {
-  background: transparent;
-  color: @theme_text_color;
-}
-
 popover.title-popover scrolledwindow {
   min-width: 300px;
 }

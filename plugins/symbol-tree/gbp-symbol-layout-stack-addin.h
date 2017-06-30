@@ -1,6 +1,6 @@
-/* symbol-tree.h
+/* gbp-symbol-layout-stack-addin.h
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYMBOL_TREE_H
-#define SYMBOL_TREE_H
+#pragma once
 
-#include <glib-object.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define SYMBOL_TYPE_TREE (symbol_tree_get_type())
+#define GBP_TYPE_SYMBOL_LAYOUT_STACK_ADDIN (gbp_symbol_layout_stack_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (SymbolTree, symbol_tree, SYMBOL, TREE, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpSymbolLayoutStackAddin, gbp_symbol_layout_stack_addin, GBP, SYMBOL_LAYOUT_STACK_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* SYMBOL_TREE_H */

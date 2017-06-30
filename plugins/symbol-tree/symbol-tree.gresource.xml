@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins/symbol-tree">
+  <gresource prefix="/org/gnome/builder/plugins/symbol-tree-plugin">
     <file>themes/shared.css</file>
-    <file>symbol-tree-panel.ui</file>
+    <file>gbp-symbol-menu-button.ui</file>
   </gresource>
 </gresources>
