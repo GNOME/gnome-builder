@@ -73,24 +73,28 @@ ide_editor_perspective_actions_open_file (GSimpleAction *action,
                                          _("Open"),
                                          _("Cancel"));
   gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), FALSE);
+  gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), TRUE);
 
   ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (chooser));
 
   if (ret == GTK_RESPONSE_ACCEPT)
     {
-      g_autoptr(GFile) file = NULL;
+      g_autoptr(GPtrArray) ar = NULL;
+      GSList *files;
 
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser));
+      ar = g_ptr_array_new_with_free_func (g_object_unref);
+      files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (chooser));
+      for (const GSList *iter = files; iter; iter = iter->next)
+        g_ptr_array_add (ar, iter->data);
+      g_slist_free (files);
 
-      if (file != NULL)
-        {
-          ide_workbench_open_files_async (workbench,
-                                          &file,
-                                          1,
-                                          "editor",
-                                          IDE_WORKBENCH_OPEN_FLAGS_NONE,
-                                          NULL, NULL, NULL);
-        }
+      if (ar->len > 0)
+        ide_workbench_open_files_async (workbench,
+                                        (GFile **)ar->pdata,
+                                        ar->len,
+                                        "editor",
+                                        IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                        NULL, NULL, NULL);
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (chooser));
