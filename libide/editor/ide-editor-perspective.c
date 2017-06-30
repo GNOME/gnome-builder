@@ -186,6 +186,24 @@ ide_editor_perspective_get_active_view (IdeEditorPerspective *self)
 }
 
 /**
+ * ide_editor_perspective_get_sidebar:
+ * @self: a #IdeEditorPerspective
+ *
+ * Gets the #IdeEditorSidebar for the editor perspective.
+ *
+ * Returns: (transfer none): A #IdeEditorSidebar
+ *
+ * Since: 3.26
+ */
+IdeEditorSidebar *
+ide_editor_perspective_get_sidebar (IdeEditorPerspective *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
+
+  return self->sidebar;
+}
+
+/**
  * ide_editor_perspective_get_right_edge:
  *
  * Returns: (transfer none): A #GtkWidget
