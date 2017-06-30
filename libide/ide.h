@@ -73,6 +73,7 @@ G_BEGIN_DECLS
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
 #include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-view-addin.h"
 #include "editor/ide-editor-view.h"
 #include "files/ide-file-settings.h"
