@@ -875,10 +875,25 @@ void
 _ide_layout_grid_stack_removed (IdeLayoutGrid  *self,
                                 IdeLayoutStack *stack)
 {
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+  guint position = 0;
+
   g_return_if_fail (IDE_IS_LAYOUT_GRID (self));
   g_return_if_fail (IDE_IS_LAYOUT_STACK (stack));
 
   g_signal_handlers_disconnect_by_func (stack,
                                         G_CALLBACK (ide_layout_grid_stack_items_changed),
                                         self);
+
+  for (guint i = 0; i < priv->stack_info->len; i++)
+    {
+      const StackInfo info = g_array_index (priv->stack_info, StackInfo, i);
+
+      if (info.stack == stack)
+        {
+          g_array_remove_index (priv->stack_info, i);
+          g_list_model_items_changed (G_LIST_MODEL (self), position, info.len, 0);
+          break;
+        }
+    }
 }
