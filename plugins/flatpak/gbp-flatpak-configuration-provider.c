@@ -31,6 +31,7 @@
 #include "gbp-flatpak-configuration.h"
 
 #define WRITEBACK_TIMEOUT_SECS 2
+#define DISCOVERY_MAX_DEPTH 3
 
 struct _GbpFlatpakConfigurationProvider
 {
@@ -812,14 +813,16 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
   IDE_EXIT;
 }
 
-static gboolean
+static void
 gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvider  *self,
                                                    GFile                            *directory,
                                                    GPtrArray                        *configs,
+                                                   gint                              depth,
                                                    GCancellable                     *cancellable,
                                                    GError                          **error)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GPtrArray) child_dirs = NULL;
   GFileInfo *file_info = NULL;
   IdeContext *context;
 
@@ -827,6 +830,7 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
   g_assert (G_IS_FILE (directory));
   g_assert (configs != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (depth < DISCOVERY_MAX_DEPTH);
 
   context = ide_object_get_context (IDE_OBJECT (self->manager));
 
@@ -836,7 +840,7 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
                                           cancellable,
                                           error);
   if (!enumerator)
-    return FALSE;
+    return;
 
   while ((file_info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
@@ -864,9 +868,14 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
         {
           if (g_strcmp0 (filename, ".git") == 0 || g_strcmp0 (filename, ".flatpak-builder") == 0)
             continue;
-          else if (!gbp_flatpak_configuration_provider_find_manifests (self, file, configs, cancellable, error))
-            return FALSE;
-          continue;
+
+          if (depth < DISCOVERY_MAX_DEPTH - 1)
+            {
+              if (child_dirs == NULL)
+                child_dirs = g_ptr_array_new_with_free_func (g_object_unref);
+              g_ptr_array_add (child_dirs, g_steal_pointer (&file));
+              continue;
+            }
         }
 
       /* Check if the filename resembles APP_ID.json */
@@ -907,10 +916,23 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
       g_ptr_array_add (configs, g_steal_pointer (&possible_config));
     }
 
-  return TRUE;
+  if (child_dirs != NULL)
+    {
+      for (guint i = 0; i < child_dirs->len; i++)
+        {
+          GFile *file = g_ptr_array_index (child_dirs, i);
+
+          if (g_cancellable_is_cancelled (cancellable))
+            return;
+
+          gbp_flatpak_configuration_provider_find_manifests (self, file, configs, depth + 1, cancellable, error);
+        }
+    }
+
+  return;
 }
 
-static gboolean
+static void
 gbp_flatpak_configuration_provider_load_manifests (GbpFlatpakConfigurationProvider  *self,
                                                    GPtrArray                        *configurations,
                                                    GCancellable                     *cancellable,
@@ -936,23 +958,25 @@ gbp_flatpak_configuration_provider_load_manifests (GbpFlatpakConfigurationProvid
                                  error);
 
   if (file_info == NULL)
-    return FALSE;
+    return;
 
   if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
     project_dir = g_object_ref (project_file);
   else
     project_dir = g_file_get_parent (project_file);
 
-  if (!gbp_flatpak_configuration_provider_find_manifests (self,
-                                                          project_dir,
-                                                          configurations,
-                                                          cancellable,
-                                                          error))
-    return FALSE;
+  gbp_flatpak_configuration_provider_find_manifests (self,
+                                                     project_dir,
+                                                     configurations,
+                                                     0,
+                                                     cancellable,
+                                                     error);
+  if (error != NULL)
+    return;
 
   IDE_TRACE_MSG ("Found %u flatpak manifests", configurations->len);
 
-  return TRUE;
+  return;
 }
 
 static void
@@ -976,7 +1000,8 @@ gbp_flatpak_configuration_provider_load_worker (GTask        *task,
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
   /* Load flatpak manifests in the repo */
-  if (!gbp_flatpak_configuration_provider_load_manifests (self, ret, cancellable, &error))
+  gbp_flatpak_configuration_provider_load_manifests (self, ret, cancellable, &error);
+  if (error != NULL)
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
