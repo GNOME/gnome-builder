@@ -50,6 +50,9 @@ get_layout (IdeCellRendererFancy *self,
 {
   PangoLayout *l;
   PangoAttrList *attrs;
+  GtkStyleContext *style = gtk_widget_get_style_context (widget);
+  GtkStateFlags state = gtk_style_context_get_state (style);
+  GdkRGBA rgba;
 
   l = gtk_widget_create_pango_layout (widget, text);
 
@@ -58,18 +61,11 @@ get_layout (IdeCellRendererFancy *self,
 
   attrs = pango_attr_list_new ();
 
-  if ((flags & GTK_CELL_RENDERER_SELECTED) != 0)
-    {
-      GtkStyleContext *style = gtk_widget_get_style_context (widget);
-      GtkStateFlags state = gtk_style_context_get_state (style);
-      GdkRGBA rgba;
-
-      gtk_style_context_get_color (style, state, &rgba);
-      pango_attr_list_insert (attrs,
-                              pango_attr_foreground_new (rgba.red * 65535,
-                                                         rgba.green * 65535,
-                                                         rgba.blue * 65535));
-    }
+  gtk_style_context_get_color (style, state, &rgba);
+  pango_attr_list_insert (attrs,
+                          pango_attr_foreground_new (rgba.red * 65535,
+                                                     rgba.green * 65535,
+                                                     rgba.blue * 65535));
 
   if (is_title)
     {
