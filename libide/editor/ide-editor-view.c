@@ -60,13 +60,16 @@ ide_editor_view_load_fonts (IdeEditorView *self)
 
   if (g_once_init_enter (&localFontConfig))
     {
-      const gchar *font_path = PACKAGE_DATADIR"/gnome-builder/fonts/BuilderBlocks.ttf";
+      const gchar *font_path = PACKAGE_DATADIR "/gnome-builder/fonts/BuilderBlocks.ttf";
       FcConfig *config = FcInitLoadConfigAndFonts ();
 
       if (g_getenv ("GB_IN_TREE_FONTS") != NULL)
         font_path = "data/fonts/BuilderBlocks.ttf";
 
-      FcConfigAppFontAddFile (localFontConfig, (const FcChar8 *)font_path);
+      if (!g_file_test (font_path, G_FILE_TEST_IS_REGULAR))
+        g_warning ("Failed to locate \"%s\"", font_path);
+
+      FcConfigAppFontAddFile (config, (const FcChar8 *)font_path);
 
       g_once_init_leave (&localFontConfig, config);
     }
@@ -74,12 +77,16 @@ ide_editor_view_load_fonts (IdeEditorView *self)
   font_map = pango_cairo_font_map_new_for_font_type (CAIRO_FONT_TYPE_FT);
   pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (font_map), localFontConfig);
   gtk_widget_set_font_map (GTK_WIDGET (self->map), font_map);
-
   font_desc = pango_font_description_from_string ("Builder Blocks 1");
+
+  g_assert (localFontConfig != NULL);
+  g_assert (font_map != NULL);
+  g_assert (font_desc != NULL);
+
   g_object_set (self->map, "font-desc", font_desc, NULL);
 
-  g_object_unref (font_map);
   pango_font_description_free (font_desc);
+  g_object_unref (font_map);
 }
 
 static void
@@ -394,6 +401,8 @@ ide_editor_view_constructed (GObject *object)
                             "motion-notify-event",
                             G_CALLBACK (ide_editor_view_source_view_event),
                             self);
+
+  ide_editor_view_load_fonts (self);
 }
 
 static void
@@ -586,7 +595,6 @@ ide_editor_view_init (IdeEditorView *self)
     gtk_target_list_add_uri_targets (target_list, DND_TARGET_URI_LIST);
 
   /* Load our custom font for the overview map. */
-  ide_editor_view_load_fonts (self);
   gtk_source_map_set_view (self->map, GTK_SOURCE_VIEW (self->source_view));
 }
 
