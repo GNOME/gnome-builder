@@ -49,6 +49,8 @@ static void ide_editor_view_update_reveal_timer (IdeEditorView *self);
 
 G_DEFINE_TYPE (IdeEditorView, ide_editor_view, IDE_TYPE_LAYOUT_VIEW)
 
+DZL_DEFINE_COUNTER (instances, "Editor", "N Views", "Number of editor views");
+
 static GParamSpec *properties [N_PROPS];
 static FcConfig *localFontConfig;
 
@@ -433,6 +435,14 @@ ide_editor_view_destroy (GtkWidget *widget)
 }
 
 static void
+ide_editor_view_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (ide_editor_view_parent_class)->finalize (object);
+
+  DZL_COUNTER_DEC (instances);
+}
+
+static void
 ide_editor_view_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
@@ -497,6 +507,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   IdeLayoutViewClass *layout_view_class = IDE_LAYOUT_VIEW_CLASS (klass);
 
+  object_class->finalize = ide_editor_view_finalize;
   object_class->constructed = ide_editor_view_constructed;
   object_class->get_property = ide_editor_view_get_property;
   object_class->set_property = ide_editor_view_set_property;
@@ -556,6 +567,8 @@ static void
 ide_editor_view_init (IdeEditorView *self)
 {
   GtkTargetList *target_list;
+
+  DZL_COUNTER_INC (instances);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
