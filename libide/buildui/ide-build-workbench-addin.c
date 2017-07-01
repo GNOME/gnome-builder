@@ -21,10 +21,12 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "ide-build-log-panel.h"
-#include "ide-build-panel.h"
-#include "ide-build-perspective.h"
-#include "ide-build-workbench-addin.h"
+#include "buildui/ide-build-log-panel.h"
+#include "buildui/ide-build-panel.h"
+#include "buildui/ide-build-perspective.h"
+#include "buildui/ide-build-workbench-addin.h"
+#include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-sidebar.h"
 
 struct _IdeBuildWorkbenchAddin
 {
@@ -128,6 +130,7 @@ ide_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   IdeConfigurationManager *configuration_manager;
   IdeBuildWorkbenchAddin *self = (IdeBuildWorkbenchAddin *)addin;
   IdeConfiguration *configuration;
+  IdeEditorSidebar *sidebar;
   IdeBuildManager *build_manager;
   IdePerspective *editor;
   IdeContext *context;
@@ -153,14 +156,28 @@ ide_build_workbench_addin_load (IdeWorkbenchAddin *addin,
   configuration = ide_configuration_manager_get_current (configuration_manager);
 
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-  pane = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (editor));
+  sidebar = ide_editor_perspective_get_sidebar (IDE_EDITOR_PERSPECTIVE (editor));
+
   self->panel = g_object_new (IDE_TYPE_BUILD_PANEL,
                               "visible", TRUE,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->panel));
+  g_signal_connect (self->panel,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->panel);
+  ide_editor_sidebar_add_section (sidebar,
+                                  "build-issues",
+                                  _("Build Issues"),
+                                  "builder-build-symbolic",
+                                  NULL, NULL,
+                                  GTK_WIDGET (self->panel));
 
   pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (editor));
   self->build_log_panel = g_object_new (IDE_TYPE_BUILD_LOG_PANEL, NULL);
+  g_signal_connect (self->build_log_panel,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->build_log_panel);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (self->build_log_panel));
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "buildui",
@@ -188,8 +205,11 @@ ide_build_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   gtk_widget_insert_action_group (GTK_WIDGET (workbench), "buildui", NULL);
 
-  gtk_widget_destroy (GTK_WIDGET (self->panel));
-  self->panel = NULL;
+  if (self->panel != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->panel));
+
+  if (self->build_log_panel != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->build_log_panel));
 }
 
 static void
