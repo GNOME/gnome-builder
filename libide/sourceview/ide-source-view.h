@@ -431,6 +431,7 @@ void                        ide_source_view_scroll_to_iter            (IdeSource
                                                                        gdouble                     xalign,
                                                                        gdouble                     yalign,
                                                                        gboolean                    animate_scroll);
+void                        ide_source_view_scroll_to_insert          (IdeSourceView              *self);
 
 G_END_DECLS
 

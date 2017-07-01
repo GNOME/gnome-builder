@@ -549,5 +549,5 @@ ide_editor_view_scroll_to_line (IdeEditorView *self,
 
   gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), &iter, line);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
-  ide_source_view_scroll_to_iter (self->source_view, &iter, 0.0, TRUE, 1.0, 0.5, FALSE);
+  ide_source_view_scroll_to_insert (self->source_view);
 }

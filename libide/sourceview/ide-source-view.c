@@ -706,7 +706,7 @@ animate_shrink (IdeSourceView     *self,
                              NULL);
 }
 
-static void
+void
 ide_source_view_scroll_to_insert (IdeSourceView *self)
 {
   GtkTextBuffer *buffer;
@@ -717,6 +717,7 @@ ide_source_view_scroll_to_insert (IdeSourceView *self)
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  _ide_buffer_cancel_cursor_restore (IDE_BUFFER (buffer));
   mark = gtk_text_buffer_get_insert (buffer);
   ide_source_view_scroll_mark_onscreen (self, mark, TRUE, 0.5, 0.5);
 
