@@ -52,6 +52,7 @@
 #include "sourceview/ide-indenter.h"
 #include "sourceview/ide-line-change-gutter-renderer.h"
 #include "sourceview/ide-line-diagnostics-gutter-renderer.h"
+#include "sourceview/ide-source-iter.h"
 #include "sourceview/ide-source-view-capture.h"
 #include "sourceview/ide-source-view-mode.h"
 #include "sourceview/ide-source-view-movements.h"
@@ -259,6 +260,7 @@ enum {
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
   CYCLE_COMPLETION,
+  DOCUMENTATION_REQUESTED,
   DECREASE_FONT_SIZE,
   DELETE_SELECTION,
   DUPLICATE_ENTIRE_LINE,
@@ -6280,6 +6282,36 @@ ide_source_view_real_find_references (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_request_documentation (IdeSourceView *self)
+{
+  g_autofree gchar *word = NULL;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  if (!gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
+    {
+      gtk_text_iter_order (&begin, &end);
+
+      if (!_ide_source_iter_starts_extra_natural_word (&begin))
+        {
+          _ide_source_iter_backward_extra_natural_word_start (&begin);
+          end = begin;
+        }
+
+      _ide_source_iter_forward_extra_natural_word_end (&end);
+    }
+
+  word = gtk_text_iter_get_slice (&begin, &end);
+
+  g_signal_emit (self, signals [DOCUMENTATION_REQUESTED], 0, word);
+}
+
+static void
 ide_source_view_real_reset (IdeSourceView *self)
 {
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -6637,6 +6669,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->push_selection = ide_source_view_real_push_selection;
   klass->rebuild_highlight = ide_source_view_real_rebuild_highlight;
   klass->replay_macro = ide_source_view_real_replay_macro;
+  klass->request_documentation = ide_source_view_real_request_documentation;
   klass->reset_font_size = ide_source_view_real_reset_font_size;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_command = ide_source_view_real_save_command;
@@ -7002,6 +7035,21 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
+
+  /**
+   * IdeSourceView:documentation-requested:
+   * @self: A #IdeSourceView
+   * @word: the word that was requested
+   *
+   * This is emitted by the default request-documentation handler to
+   * locate the documentation for the currently selected word.
+   */
+  signals [DOCUMENTATION_REQUESTED] =
+    g_signal_new ("documentation-requested",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1, G_TYPE_STRING);
 
   signals [DECREASE_FONT_SIZE] =
     g_signal_new ("decrease-font-size",
