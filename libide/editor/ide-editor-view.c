@@ -210,24 +210,6 @@ ide_editor_view_buffer_notify_language_cb (IdeExtensionSetAdapter *set,
   ide_editor_view_addin_language_changed (IDE_EDITOR_VIEW_ADDIN (exten), language_id);
 }
 
-static gboolean
-ide_editor_view_source_view_event (IdeEditorView *self,
-                                   GdkEvent      *event,
-                                   IdeSourceView *source_view)
-{
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (event != NULL);
-  g_assert (IDE_IS_SOURCE_VIEW (source_view) || GTK_SOURCE_IS_MAP (source_view));
-
-  if (self->auto_hide_map)
-    {
-      ide_editor_view_update_reveal_timer (self);
-      gtk_revealer_set_reveal_child (self->map_revealer, TRUE);
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 static void
 ide_editor_view_buffer_notify_language (IdeEditorView *self,
                                         GParamSpec    *pspec,
@@ -250,6 +232,24 @@ ide_editor_view_buffer_notify_language (IdeEditorView *self,
   ide_extension_set_adapter_foreach (self->addins,
                                      ide_editor_view_buffer_notify_language_cb,
                                      (gpointer)language_id);
+}
+
+static gboolean
+ide_editor_view_source_view_event (IdeEditorView *self,
+                                   GdkEvent      *event,
+                                   IdeSourceView *source_view)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (event != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (source_view) || GTK_SOURCE_IS_MAP (source_view));
+
+  if (self->auto_hide_map)
+    {
+      ide_editor_view_update_reveal_timer (self);
+      gtk_revealer_set_reveal_child (self->map_revealer, TRUE);
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
