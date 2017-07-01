@@ -118,6 +118,19 @@ ide_editor_view_focus_in_event (IdeEditorView *self,
 }
 
 static void
+ide_editor_view_buffer_loaded (IdeEditorView *self,
+                               IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  /* Scroll to the insertion location once the buffer
+   * has loaded. This is useful if it is not onscreen.
+   */
+  ide_source_view_scroll_to_insert (self->source_view);
+}
+
+static void
 ide_editor_view_buffer_modified_changed (IdeEditorView *self,
                                          IdeBuffer     *buffer)
 {
@@ -436,6 +449,11 @@ ide_editor_view_init (IdeEditorView *self)
    * Setup signals to monitor on the buffer.
    */
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "loaded",
+                                    G_CALLBACK (ide_editor_view_buffer_loaded),
+                                    self);
 
   dzl_signal_group_connect_swapped (self->buffer_signals,
                                     "modified-changed",
