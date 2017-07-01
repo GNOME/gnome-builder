@@ -20,9 +20,6 @@
 
 #include "ide-editor-private.h"
 
-static GSettings *editor_settings;
-static GSettings *insight_settings;
-
 static gboolean
 get_smart_home_end (GValue   *value,
                     GVariant *variant,
@@ -73,84 +70,83 @@ _ide_editor_view_init_settings (IdeEditorView *self)
   IdeBuffer *buffer;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (!editor_settings || G_IS_SETTINGS (editor_settings));
-
-  if (editor_settings == NULL)
-    editor_settings = g_settings_new ("org.gnome.builder.editor");
+  g_assert (self->editor_settings == NULL);
+  g_assert (self->insight_settings == NULL);
 
   source_view = ide_editor_view_get_view (self);
   buffer = ide_editor_view_get_buffer (self);
 
-  g_settings_bind (editor_settings, "highlight-current-line",
+  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
+
+  g_settings_bind (self->editor_settings, "highlight-current-line",
                    source_view, "highlight-current-line",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "highlight-matching-brackets",
+  g_settings_bind (self->editor_settings, "highlight-matching-brackets",
                    buffer, "highlight-matching-brackets",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "show-line-changes",
+  g_settings_bind (self->editor_settings, "show-line-changes",
                    source_view, "show-line-changes",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "show-line-numbers",
+  g_settings_bind (self->editor_settings, "show-line-numbers",
                    source_view, "show-line-numbers",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "smart-backspace",
+  g_settings_bind (self->editor_settings, "smart-backspace",
                    source_view, "smart-backspace",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind_with_mapping (editor_settings, "smart-home-end",
+  g_settings_bind_with_mapping (self->editor_settings, "smart-home-end",
                                 source_view, "smart-home-end",
                                 G_SETTINGS_BIND_GET,
                                 get_smart_home_end, NULL, NULL, NULL);
 
-  g_settings_bind (editor_settings, "style-scheme-name",
+  g_settings_bind (self->editor_settings, "style-scheme-name",
                    buffer, "style-scheme-name",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "font-name",
+  g_settings_bind (self->editor_settings, "font-name",
                    source_view, "font-name",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "overscroll",
+  g_settings_bind (self->editor_settings, "overscroll",
                    source_view, "overscroll",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "scroll-offset",
+  g_settings_bind (self->editor_settings, "scroll-offset",
                    source_view, "scroll-offset",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "show-grid-lines",
+  g_settings_bind (self->editor_settings, "show-grid-lines",
                    source_view, "show-grid-lines",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind_with_mapping (editor_settings, "wrap-text",
+  g_settings_bind_with_mapping (self->editor_settings, "wrap-text",
                                 source_view, "wrap-mode",
                                 G_SETTINGS_BIND_GET,
                                 get_wrap_mode, NULL, NULL, NULL);
 
-  g_settings_bind (editor_settings, "show-map",
+  g_settings_bind (self->editor_settings, "show-map",
                    self, "show-map",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (editor_settings, "auto-hide-map",
+  g_settings_bind (self->editor_settings, "auto-hide-map",
                    self, "auto-hide-map",
                    G_SETTINGS_BIND_GET);
 
-  g_signal_connect_object (editor_settings,
+  g_signal_connect_object (self->editor_settings,
                            "changed::keybindings",
                            G_CALLBACK (on_keybindings_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
-  on_keybindings_changed (self, "keybindings", editor_settings);
+  on_keybindings_changed (self, "keybindings", self->editor_settings);
 
-  if (insight_settings == NULL)
-    insight_settings = g_settings_new ("org.gnome.builder.code-insight");
+  self->insight_settings = g_settings_new ("org.gnome.builder.code-insight");
 
-  g_settings_bind (insight_settings, "word-completion",
+  g_settings_bind (self->insight_settings, "word-completion",
                    source_view, "enable-word-completion",
                    G_SETTINGS_BIND_GET);
 }

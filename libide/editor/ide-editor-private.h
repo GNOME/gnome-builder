@@ -33,6 +33,9 @@ struct _IdeEditorView
 
   IdeExtensionSetAdapter  *addins;
 
+  GSettings               *editor_settings;
+  GSettings               *insight_settings;
+
   IdeBuffer               *buffer;
   DzlBindingGroup         *buffer_bindings;
   DzlSignalGroup          *buffer_signals;

@@ -414,7 +414,14 @@ ide_editor_view_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
+  ide_clear_source (&self->toggle_map_source);
+
   g_clear_object (&self->addins);
+
+  g_clear_object (&self->editor_settings);
+  g_clear_object (&self->insight_settings);
+
+  g_clear_object (&self->buffer);
 
   if (self->buffer_bindings != NULL)
     {
@@ -427,9 +434,6 @@ ide_editor_view_destroy (GtkWidget *widget)
       dzl_signal_group_set_target (self->buffer_signals, NULL);
       g_clear_object (&self->buffer_signals);
     }
-
-  g_clear_object (&self->buffer);
-  ide_clear_source (&self->toggle_map_source);
 
   GTK_WIDGET_CLASS (ide_editor_view_parent_class)->destroy (widget);
 }
