@@ -177,6 +177,32 @@ fixup_stack_switcher_button (GtkWidget *widget,
   gtk_widget_set_hexpand (widget, TRUE);
 }
 
+static gint
+find_position (IdeEditorSidebar *self,
+               gint              priority)
+{
+  GList *children;
+  gint position = 0;
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
+
+  for (const GList *iter = children; iter != NULL; iter = iter->next)
+    {
+      GtkWidget *widget = iter->data;
+      gint widget_prio = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget),
+                                                             "IDE_EDITOR_SIDEBAR_PRIORITY"));
+
+      if (widget_prio > priority)
+        break;
+
+      position++;
+    }
+
+  g_list_free (children);
+
+  return position;
+}
+
 /**
  * ide_editor_sidebar_add_section:
  * @self: a #IdeEditorSidebar
@@ -205,12 +231,19 @@ ide_editor_sidebar_add_section (IdeEditorSidebar *self,
                                 const gchar      *icon_name,
                                 const gchar      *menu_id,
                                 const gchar      *menu_icon_name,
-                                GtkWidget        *section)
+                                GtkWidget        *section,
+                                gint              priority)
 {
+  gint position;
+
   g_return_if_fail (IDE_IS_EDITOR_SIDEBAR (self));
   g_return_if_fail (title != NULL);
   g_return_if_fail (icon_name != NULL);
   g_return_if_fail (GTK_IS_WIDGET (section));
+
+  g_object_set_data (G_OBJECT (section),
+                     "IDE_EDITOR_SIDEBAR_PRIORITY",
+                     GINT_TO_POINTER (priority));
 
   g_object_set_data (G_OBJECT (section),
                      "IDE_EDITOR_SIDEBAR_MENU_ID",
@@ -220,10 +253,13 @@ ide_editor_sidebar_add_section (IdeEditorSidebar *self,
                      "IDE_EDITOR_SIDEBAR_MENU_ICON_NAME",
                      (gpointer) g_intern_string (menu_icon_name));
 
+  position = find_position (self, priority);
+
   gtk_container_add_with_properties (GTK_CONTAINER (self->stack), section,
-                                     "name", id,
-                                     "title", title,
                                      "icon-name", icon_name,
+                                     "name", id,
+                                     "position", position,
+                                     "title", title,
                                      NULL);
 
   gtk_container_foreach (GTK_CONTAINER (self->stack_switcher),
@@ -231,6 +267,13 @@ ide_editor_sidebar_add_section (IdeEditorSidebar *self,
                          NULL);
 
   ide_editor_sidebar_update_title (self);
+
+  /* Whenever we add a position 0, select it. We don't
+   * have an otherwise good hueristic to ensure that our
+   * first panel is selected at startup.
+   */
+  if (position == 0)
+    gtk_stack_set_visible_child (self->stack, section);
 }
 
 /**

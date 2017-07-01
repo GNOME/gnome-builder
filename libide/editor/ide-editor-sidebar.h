@@ -36,6 +36,7 @@ void         ide_editor_sidebar_add_section    (IdeEditorSidebar *self,
                                                 const gchar      *icon_name,
                                                 const gchar      *menu_id,
                                                 const gchar      *menu_icon_name,
-                                                GtkWidget        *section);
+                                                GtkWidget        *section,
+                                                gint              priority);
 
 G_END_DECLS

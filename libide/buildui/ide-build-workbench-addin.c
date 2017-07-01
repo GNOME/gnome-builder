@@ -170,7 +170,8 @@ ide_build_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   _("Build Issues"),
                                   "builder-build-symbolic",
                                   NULL, NULL,
-                                  GTK_WIDGET (self->panel));
+                                  GTK_WIDGET (self->panel),
+                                  100);
 
   pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (editor));
   self->build_log_panel = g_object_new (IDE_TYPE_BUILD_LOG_PANEL, NULL);

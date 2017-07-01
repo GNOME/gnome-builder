@@ -86,7 +86,8 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
                                   _("Project Tree"),
                                   "view-list-symbolic",
                                   NULL, NULL,
-                                  GTK_WIDGET (scroller));
+                                  GTK_WIDGET (scroller),
+                                  0);
 
   ide_widget_set_context_handler (self->tree, gb_project_tree_addin_context_set);
 

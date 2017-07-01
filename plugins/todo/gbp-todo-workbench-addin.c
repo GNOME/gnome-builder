@@ -115,7 +115,8 @@ gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   _("TODO/FIXMEs"),
                                   "emblem-ok-symbolic",
                                   NULL, NULL,
-                                  GTK_WIDGET (self->panel));
+                                  GTK_WIDGET (self->panel),
+                                  200);
 
   gbp_todo_model_mine_async (self->model,
                              workdir,
