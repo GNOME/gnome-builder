@@ -29,9 +29,6 @@ struct _GbpTodoPanel
 
   GtkTreeView  *tree_view;
   GbpTodoModel *model;
-
-  guint         last_width;
-  guint         relayout_source;
 };
 
 G_DEFINE_TYPE (GbpTodoPanel, gbp_todo_panel, GTK_TYPE_BIN)
@@ -202,68 +199,6 @@ gbp_todo_panel_query_tooltip (GbpTodoPanel *self,
   return FALSE;
 }
 
-static gboolean
-queue_relayout_in_idle (gpointer user_data)
-{
-  GbpTodoPanel *self = user_data;
-  GtkAllocation alloc;
-  guint n_columns;
-
-  g_assert (GBP_IS_TODO_PANEL (self));
-
-  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
-
-  if (alloc.width == self->last_width)
-    goto cleanup;
-
-  self->last_width = alloc.width;
-
-  n_columns = gtk_tree_view_get_n_columns (self->tree_view);
-
-  for (guint i = 0; i < n_columns; i++)
-    {
-      GtkTreeViewColumn *column;
-
-      column = gtk_tree_view_get_column (self->tree_view, i);
-      gtk_tree_view_column_queue_resize (column);
-    }
-
-cleanup:
-  self->relayout_source = 0;
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-gbp_todo_panel_size_allocate (GtkWidget     *widget,
-                              GtkAllocation *alloc)
-{
-  GbpTodoPanel *self = (GbpTodoPanel *)widget;
-
-  g_assert (GBP_IS_TODO_PANEL (self));
-  g_assert (alloc != NULL);
-
-  GTK_WIDGET_CLASS (gbp_todo_panel_parent_class)->size_allocate (widget, alloc);
-
-  if (self->last_width != alloc->width)
-    {
-      /*
-       * We must perform our queued relayout from an idle callback
-       * so that we don't affect this draw cycle. If we do that, we
-       * will get empty content flashes for the current frame. This
-       * allows us to draw the current frame slightly incorrect but
-       * fixup on the next frame (which looks much nicer from a user
-       * point of view).
-       */
-      if (self->relayout_source == 0)
-        self->relayout_source =
-          gdk_threads_add_idle_full (G_PRIORITY_LOW + 100,
-                                     queue_relayout_in_idle,
-                                     g_object_ref (self),
-                                     g_object_unref);
-    }
-}
-
 static void
 gbp_todo_panel_destroy (GtkWidget *widget)
 {
@@ -274,7 +209,6 @@ gbp_todo_panel_destroy (GtkWidget *widget)
   if (self->tree_view != NULL)
     gtk_tree_view_set_model (self->tree_view, NULL);
 
-  ide_clear_source (&self->relayout_source);
   g_clear_object (&self->model);
 
   GTK_WIDGET_CLASS (gbp_todo_panel_parent_class)->destroy (widget);
@@ -328,7 +262,6 @@ gbp_todo_panel_class_init (GbpTodoPanelClass *klass)
   object_class->set_property = gbp_todo_panel_set_property;
 
   widget_class->destroy = gbp_todo_panel_destroy;
-  widget_class->size_allocate = gbp_todo_panel_size_allocate;
 
   properties [PROP_MODEL] =
     g_param_spec_object ("model",
@@ -344,8 +277,6 @@ static void
 gbp_todo_panel_init (GbpTodoPanel *self)
 {
   GtkWidget *scroller;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *cell;
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
@@ -353,10 +284,8 @@ gbp_todo_panel_init (GbpTodoPanel *self)
                            NULL);
   gtk_container_add (GTK_CONTAINER (self), scroller);
 
-  self->tree_view = g_object_new (GTK_TYPE_TREE_VIEW,
-                                  "activate-on-single-click", TRUE,
+  self->tree_view = g_object_new (IDE_TYPE_FANCY_TREE_VIEW,
                                   "has-tooltip", TRUE,
-                                  "headers-visible", FALSE,
                                   "visible", TRUE,
                                   NULL);
   g_signal_connect (self->tree_view,
@@ -373,24 +302,8 @@ gbp_todo_panel_init (GbpTodoPanel *self)
                             self);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree_view));
 
-  column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
-                         "expand", TRUE,
-                         "visible", TRUE,
-                         NULL);
-  gtk_tree_view_append_column (self->tree_view, column);
-
-  cell = g_object_new (IDE_TYPE_CELL_RENDERER_FANCY,
-                       "visible", TRUE,
-                       "xalign", 0.0f,
-                       "xpad", 4,
-                       "ypad", 6,
-                       NULL);
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
-
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column),
-                                      cell,
-                                      gbp_todo_panel_cell_data_func,
-                                      NULL, NULL);
+  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->tree_view),
+                                     gbp_todo_panel_cell_data_func, NULL, NULL);
 }
 
 /**
