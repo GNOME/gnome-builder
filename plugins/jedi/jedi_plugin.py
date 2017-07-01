@@ -298,7 +298,11 @@ class DocumentationDB(object):
                         cursor.execute('UPDATE girfiles SET last_modified=? WHERE file=?', (mtime, filename))
                 parser = lxml.etree.XMLParser(recover=True)
                 tree = lxml.etree.parse(filename, parser=parser)
-                namespace = tree.find('core:namespace', namespaces=ns)
+                try:
+                    namespace = tree.find('core:namespace', namespaces=ns)
+                except:
+                    print("Failed to parse", filename)
+                    continue
                 library_version = namespace.attrib['version']
                 for node in namespace.findall('core:class', namespaces=ns):
                     doc = node.find('core:doc', namespaces=ns)
