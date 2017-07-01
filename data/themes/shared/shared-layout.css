@@ -62,6 +62,10 @@ ideeditorsidebar > stackswitcher {
   margin: 6px;
 }
 
+dzldockpaned ideeditorsidebar .handle {
+ border: 1px solid alpha(@borders, 0.3);
+}
+
 ideeditorsidebar label.title {
   margin: 8px 6px 3px 6px;
   font-weight: bold;
