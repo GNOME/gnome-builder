@@ -1,8 +1,8 @@
 [Plugin]
-Module=todo_plugin
-Loader=python3
-Name=Todo Tracker
-Description=Extract todo items from source code
+Module=todo-plugin
+Name=To-Do Tracker
+Description=Find and present To-Do items from source code
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
+Copyright=Copyright © 2015-2017 Christian Hergert
 Builtin=true
+Depends=editor
