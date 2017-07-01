@@ -40,6 +40,8 @@ void                _ide_buffer_set_changed_on_volume       (IdeBuffer          
 gboolean            _ide_buffer_get_loading                 (IdeBuffer             *self);
 void                _ide_buffer_set_loading                 (IdeBuffer             *self,
                                                              gboolean               loading);
+void                _ide_buffer_cancel_cursor_restore       (IdeBuffer             *self);
+gboolean            _ide_buffer_can_restore_cursor          (IdeBuffer             *self);
 void                _ide_buffer_set_mtime                   (IdeBuffer             *self,
                                                              const GTimeVal        *mtime);
 void                _ide_buffer_set_read_only               (IdeBuffer             *buffer,

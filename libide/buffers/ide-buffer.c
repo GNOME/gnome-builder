@@ -100,6 +100,7 @@ typedef struct
 
   gsize                   change_count;
 
+  guint                   cancel_cursor_restore : 1;
   guint                   changed_on_volume : 1;
   guint                   highlight_diagnostics : 1;
   guint                   loading : 1;
@@ -2936,4 +2937,20 @@ ide_buffer_format_selection_finish (IdeBuffer     *self,
   ret = g_task_propagate_boolean (G_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+void
+_ide_buffer_cancel_cursor_restore (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  priv->cancel_cursor_restore = TRUE;
+}
+
+gboolean
+_ide_buffer_can_restore_cursor (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+  return !priv->cancel_cursor_restore;
 }

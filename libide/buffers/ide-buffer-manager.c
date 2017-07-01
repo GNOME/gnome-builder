@@ -602,10 +602,13 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   else
     gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (state->buffer), &iter);
 
-  IDE_TRACE_MSG ("Restoring insert mark to %u:%u",
-                 gtk_text_iter_get_line (&iter) + 1,
-                 gtk_text_iter_get_line_offset (&iter) + 1);
-  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (state->buffer), &iter, &iter);
+  if (_ide_buffer_can_restore_cursor (state->buffer))
+    {
+      IDE_TRACE_MSG ("Restoring insert mark to %u:%u",
+                     gtk_text_iter_get_line (&iter) + 1,
+                     gtk_text_iter_get_line_offset (&iter) + 1);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (state->buffer), &iter, &iter);
+    }
 
   /*
    * Try to discover the content type more accurately now that we have access to the
