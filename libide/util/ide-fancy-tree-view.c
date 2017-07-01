@@ -115,7 +115,7 @@ ide_fancy_tree_view_size_allocate (GtkWidget *widget,
        */
       if (priv->relayout_source == 0)
         priv->relayout_source =
-          gdk_threads_add_idle_full (G_PRIORITY_LOW + 100,
+          gdk_threads_add_idle_full (G_PRIORITY_HIGH,
                                      queue_relayout_in_idle,
                                      g_object_ref (self),
                                      g_object_unref);
