@@ -6,8 +6,6 @@
 
  - Enter, Up, and Down accelerators for search/replace entries.
 
- - perspective focus_location
-
  - other perspective interface methods
 
  - can we make perspectives the plugin interface?
@@ -18,17 +16,19 @@
 
  - Ability to disable plugin by default
 
- - Plugins to fix for API
-   - devhelp
-   - command bar / vim
-   - project-tree
-   - terminal
-   - symbol-tree
-
  - Remove accelerators from perspective, use shortcut engine
 
  - Move panel position settings to org.gnome.builder.editor maybe
 
+ - What to do about devhelp/color on right panel?
+
+ - Escape in vim mode, keybindings in general.
+
+ - New project tree
+
+ - Keybindings editor into preferences
+
+ - Escape in command-bar
 
 
 Done
@@ -36,3 +36,12 @@ Done
  - Check if buffer is already in visible stack before adding new view
  - Perspective actions, copy them across
  - Be able to add an editor view
+ - perspective focus_location
+
+ - Plugins to fix for API
+   - devhelp
+   - command bar / vim
+   - project-tree
+   - terminal
+   - symbol-tree
+
