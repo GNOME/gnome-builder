@@ -25,15 +25,31 @@
             <property name="valign">start</property>
           </object>
         </child>
+        <child type="overlay">
+          <object class="GtkRevealer" id="map_revealer">
+            <property name="halign">end</property>
+            <property name="transition-type">slide-left</property>
+            <property name="vexpand">true</property>
+          </object>
+        </child>
         <child>
-          <object class="GtkScrolledWindow" id="scroller">
-            <property name="expand">true</property>
+          <object class="GtkBox" id="scroller_box">
+            <property name="orientation">horizontal</property>
             <property name="visible">true</property>
             <child>
-              <object class="IdeSourceView" id="source_view">
-                <property name="show-line-numbers">true</property>
+              <object class="GtkScrolledWindow" id="scroller">
+                <property name="expand">true</property>
                 <property name="visible">true</property>
+                <child>
+                  <object class="IdeSourceView" id="source_view">
+                    <property name="show-line-numbers">true</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
+            </child>
+            <child>
+              <object class="GtkSourceMap" id="map"/>
             </child>
           </object>
         </child>

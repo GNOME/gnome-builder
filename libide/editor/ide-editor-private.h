@@ -37,12 +37,20 @@ struct _IdeEditorView
   DzlBindingGroup         *buffer_bindings;
   DzlSignalGroup          *buffer_signals;
 
+  GtkSourceMap            *map;
+  GtkRevealer             *map_revealer;
   GtkOverlay              *overlay;
+  GtkProgressBar          *progress_bar;
   IdeSourceView           *source_view;
   GtkScrolledWindow       *scroller;
+  GtkBox                  *scroller_box;
   IdeEditorSearchBar      *search_bar;
   GtkRevealer             *search_revealer;
-  GtkProgressBar          *progress_bar;
+
+  guint                    toggle_map_source;
+
+  guint                    auto_hide_map : 1;
+  guint                    show_map : 1;
 };
 
 void _ide_editor_view_init_actions          (IdeEditorView        *self);

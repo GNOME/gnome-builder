@@ -18,17 +18,25 @@
 
 #define G_LOG_DOMAIN "ide-editor-view"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <libpeas/peas.h>
+#include <pango/pangofc-fontmap.h>
 
 #include "ide-internal.h"
+#include "ide-macros.h"
 
 #include "editor/ide-editor-private.h"
 #include "util/ide-gtk.h"
 
+#define AUTO_HIDE_TIMEOUT_SECONDS 5
+
 enum {
   PROP_0,
+  PROP_AUTO_HIDE_MAP,
   PROP_BUFFER,
+  PROP_SHOW_MAP,
   PROP_VIEW,
   N_PROPS
 };
@@ -37,9 +45,42 @@ enum {
   DND_TARGET_URI_LIST = 100,
 };
 
+static void ide_editor_view_update_reveal_timer (IdeEditorView *self);
+
 G_DEFINE_TYPE (IdeEditorView, ide_editor_view, IDE_TYPE_LAYOUT_VIEW)
 
 static GParamSpec *properties [N_PROPS];
+static FcConfig *localFontConfig;
+
+static void
+ide_editor_view_load_fonts (IdeEditorView *self)
+{
+  PangoFontMap *font_map;
+  PangoFontDescription *font_desc;
+
+  if (g_once_init_enter (&localFontConfig))
+    {
+      const gchar *font_path = PACKAGE_DATADIR"/gnome-builder/fonts/BuilderBlocks.ttf";
+      FcConfig *config = FcInitLoadConfigAndFonts ();
+
+      if (g_getenv ("GB_IN_TREE_FONTS") != NULL)
+        font_path = "data/fonts/BuilderBlocks.ttf";
+
+      FcConfigAppFontAddFile (localFontConfig, (const FcChar8 *)font_path);
+
+      g_once_init_leave (&localFontConfig, config);
+    }
+
+  font_map = pango_cairo_font_map_new_for_font_type (CAIRO_FONT_TYPE_FT);
+  pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (font_map), localFontConfig);
+  gtk_widget_set_font_map (GTK_WIDGET (self->map), font_map);
+
+  font_desc = pango_font_description_from_string ("Builder Blocks 1");
+  g_object_set (self->map, "font-desc", font_desc, NULL);
+
+  g_object_unref (font_map);
+  pango_font_description_free (font_desc);
+}
 
 static void
 ide_editor_view_notify_child_revealed (IdeEditorView *self,
@@ -158,6 +199,24 @@ ide_editor_view_buffer_notify_language_cb (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
 
   ide_editor_view_addin_language_changed (IDE_EDITOR_VIEW_ADDIN (exten), language_id);
+}
+
+static gboolean
+ide_editor_view_source_view_event (IdeEditorView *self,
+                                   GdkEvent      *event,
+                                   IdeSourceView *source_view)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (event != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (source_view) || GTK_SOURCE_IS_MAP (source_view));
+
+  if (self->auto_hide_map)
+    {
+      ide_editor_view_update_reveal_timer (self);
+      gtk_revealer_set_reveal_child (self->map_revealer, TRUE);
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -320,6 +379,21 @@ ide_editor_view_constructed (GObject *object)
                             "focus-in-event",
                             G_CALLBACK (ide_editor_view_focus_in_event),
                             self);
+
+  g_signal_connect_swapped (self->source_view,
+                            "motion-notify-event",
+                            G_CALLBACK (ide_editor_view_source_view_event),
+                            self);
+
+  g_signal_connect_swapped (self->source_view,
+                            "scroll-event",
+                            G_CALLBACK (ide_editor_view_source_view_event),
+                            self);
+
+  g_signal_connect_swapped (self->map,
+                            "motion-notify-event",
+                            G_CALLBACK (ide_editor_view_source_view_event),
+                            self);
 }
 
 static void
@@ -344,6 +418,7 @@ ide_editor_view_destroy (GtkWidget *widget)
     }
 
   g_clear_object (&self->buffer);
+  ide_clear_source (&self->toggle_map_source);
 
   GTK_WIDGET_CLASS (ide_editor_view_parent_class)->destroy (widget);
 }
@@ -358,12 +433,20 @@ ide_editor_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_HIDE_MAP:
+      g_value_set_boolean (value, ide_editor_view_get_auto_hide_map (self));
+      break;
+
     case PROP_BUFFER:
       g_value_set_object (value, ide_editor_view_get_buffer (self));
       break;
 
     case PROP_VIEW:
       g_value_set_object (value, ide_editor_view_get_view (self));
+      break;
+
+    case PROP_SHOW_MAP:
+      g_value_set_boolean (value, ide_editor_view_get_show_map (self));
       break;
 
     default:
@@ -381,8 +464,16 @@ ide_editor_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_HIDE_MAP:
+      ide_editor_view_set_auto_hide_map (self, g_value_get_boolean (value));
+      break;
+
     case PROP_BUFFER:
       ide_editor_view_set_buffer (self, g_value_get_object (value));
+      break;
+
+    case PROP_SHOW_MAP:
+      ide_editor_view_set_show_map (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -413,6 +504,20 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_SHOW_MAP] =
+    g_param_spec_boolean ("show-map",
+                          "Show Map",
+                          "If the overview map should be shown",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_AUTO_HIDE_MAP] =
+    g_param_spec_boolean ("auto-hide-map",
+                          "Auto Hide Map",
+                          "If the overview map should be auto-hidden",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_VIEW] =
     g_param_spec_object ("view",
                          "View",
@@ -423,9 +528,12 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-view.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, map);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, map_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, progress_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, scroller);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, scroller_box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, source_view);
@@ -445,9 +553,7 @@ ide_editor_view_init (IdeEditorView *self)
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "ide-editor-view-document-menu");
 
-  /*
-   * Setup signals to monitor on the buffer.
-   */
+  /* Setup signals to monitor on the buffer. */
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
   dzl_signal_group_connect_swapped (self->buffer_signals,
@@ -470,18 +576,18 @@ ide_editor_view_init (IdeEditorView *self)
                             G_CALLBACK (ide_editor_view_bind_signals),
                             self);
 
-  /*
-   * Setup bindings for the buffer.
-   */
+  /* Setup bindings for the buffer. */
   self->buffer_bindings = dzl_binding_group_new ();
   dzl_binding_group_bind (self->buffer_bindings, "title", self, "title", 0);
 
-  /*
-   * Setup Drag and Drop support.
-   */
+  /* Setup Drag and Drop support. */
   target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (self->source_view));
   if (target_list != NULL)
     gtk_target_list_add_uri_targets (target_list, DND_TARGET_URI_LIST);
+
+  /* Load our custom font for the overview map. */
+  ide_editor_view_load_fonts (self);
+  gtk_source_map_set_view (self->map, GTK_SOURCE_VIEW (self->source_view));
 }
 
 /**
@@ -568,4 +674,114 @@ ide_editor_view_scroll_to_line (IdeEditorView *self,
   gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), &iter, line);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
   ide_source_view_scroll_to_insert (self->source_view);
+}
+
+gboolean
+ide_editor_view_get_auto_hide_map (IdeEditorView *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), FALSE);
+
+  return self->auto_hide_map;
+}
+
+static gboolean
+ide_editor_view_auto_hide_cb (gpointer user_data)
+{
+  IdeEditorView *self = user_data;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  self->toggle_map_source = 0;
+  gtk_revealer_set_reveal_child (self->map_revealer, FALSE);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_editor_view_update_reveal_timer (IdeEditorView *self)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  ide_clear_source (&self->toggle_map_source);
+
+  if (self->auto_hide_map && gtk_revealer_get_reveal_child (self->map_revealer))
+    {
+      self->toggle_map_source =
+        gdk_threads_add_timeout_seconds_full (G_PRIORITY_LOW,
+                                              AUTO_HIDE_TIMEOUT_SECONDS,
+                                              ide_editor_view_auto_hide_cb,
+                                              g_object_ref (self),
+                                              g_object_unref);
+    }
+}
+
+static void
+ide_editor_view_update_map (IdeEditorView *self)
+{
+  GtkWidget *parent;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (self->map));
+
+  g_object_ref (self->map);
+
+  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self->map));
+
+  if (self->auto_hide_map)
+    gtk_container_add (GTK_CONTAINER (self->map_revealer), GTK_WIDGET (self->map));
+  else
+    gtk_container_add (GTK_CONTAINER (self->scroller_box), GTK_WIDGET (self->map));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->map_revealer), self->show_map);
+  gtk_widget_set_visible (GTK_WIDGET (self->map), self->show_map);
+  gtk_revealer_set_reveal_child (self->map_revealer, self->show_map);
+
+  g_object_set (self->scroller,
+                "vscrollbar-policy", self->show_map ? GTK_POLICY_EXTERNAL : GTK_POLICY_AUTOMATIC,
+                NULL);
+
+  ide_editor_view_update_reveal_timer (self);
+
+  g_object_unref (self->map);
+}
+
+void
+ide_editor_view_set_auto_hide_map (IdeEditorView *self,
+                                   gboolean       auto_hide_map)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+
+  auto_hide_map = !!auto_hide_map;
+
+  if (auto_hide_map != self->auto_hide_map)
+    {
+      self->auto_hide_map = auto_hide_map;
+      ide_editor_view_update_map (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTO_HIDE_MAP]);
+    }
+}
+
+gboolean
+ide_editor_view_get_show_map (IdeEditorView *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), FALSE);
+
+  return self->show_map;
+}
+
+void
+ide_editor_view_set_show_map (IdeEditorView *self,
+                              gboolean       show_map)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+
+  show_map = !!show_map;
+
+  if (show_map != self->show_map)
+    {
+      self->show_map = show_map;
+      ide_editor_view_update_map (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTO_HIDE_MAP]);
+    }
 }
