@@ -32,18 +32,20 @@ G_DEFINE_TYPE_EXTENDED (GbpDevhelpEditorViewAddin, gbp_devhelp_editor_view_addin
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, iface_init))
 
 static void
-request_documentation_cb (GbpDevhelpEditorViewAddin *self,
-                          const gchar               *word,
-                          IdeEditorView             *view)
+documentation_requested_cb (GbpDevhelpEditorViewAddin *self,
+                            const gchar               *word,
+                            IdeSourceView             *source_view)
 {
   GtkWidget *layout;
   GtkWidget *panel;
   GtkWidget *pane;
 
-  g_assert (IDE_IS_EDITOR_VIEW (view));
   g_assert (GBP_IS_DEVHELP_EDITOR_VIEW_ADDIN (self));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
-  layout = gtk_widget_get_ancestor (GTK_WIDGET (view), IDE_TYPE_LAYOUT);
+  /* TODO: This would be much better as a GAction */
+
+  layout = gtk_widget_get_ancestor (GTK_WIDGET (source_view), IDE_TYPE_LAYOUT);
   if (layout == NULL)
     return;
 
@@ -59,9 +61,9 @@ gbp_devhelp_editor_view_addin_load (IdeEditorViewAddin *addin,
   g_assert (GBP_IS_DEVHELP_EDITOR_VIEW_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
-  g_signal_connect_object (view,
-                           "request-documentation",
-                           G_CALLBACK (request_documentation_cb),
+  g_signal_connect_object (ide_editor_view_get_view (view),
+                           "documentation-requested",
+                           G_CALLBACK (documentation_requested_cb),
                            addin,
                            G_CONNECT_SWAPPED);
 }
