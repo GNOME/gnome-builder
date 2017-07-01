@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-internal.h"
+
 #include "editor/ide-editor-layout-stack-controls.h"
 #include "editor/ide-editor-private.h"
 
@@ -43,6 +45,9 @@ document_cursor_moved (IdeEditorLayoutStackControls *self,
   g_assert (IDE_IS_BUFFER (buffer));
 
   if (self->view == NULL)
+    return;
+
+  if (_ide_buffer_get_loading (IDE_BUFFER (buffer)))
     return;
 
   source_view = ide_editor_view_get_view (self->view);
