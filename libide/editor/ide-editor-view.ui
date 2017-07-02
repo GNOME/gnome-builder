@@ -23,6 +23,9 @@
           <object class="GtkProgressBar" id="progress_bar">
             <property name="hexpand">true</property>
             <property name="valign">start</property>
+            <style>
+              <class name="osd"/>
+            </style>
           </object>
         </child>
         <child type="overlay">
