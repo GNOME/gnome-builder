@@ -118,6 +118,13 @@ namespace Ide
 		{
 			return new GLib.GenericArray<weak Ide.SourceRange> ();
 		}
+
+		public async Ide.Symbol? find_nearest_scope_async (Ide.SourceLocation location,
+		                                                   GLib.Cancellable? cancellable)
+			throws GLib.Error
+		{
+			throw new GLib.IOError.NOT_SUPPORTED ("finding nearest scope is not yet supported");
+		}
 	}
 }
 
