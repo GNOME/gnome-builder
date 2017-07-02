@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkPopover" id="popover">
+    <!--
+         Unfortunately we can't use propagate-natural-width/height
+         inside the scrolled window because it doesn't propagate
+         properly from the sidebar.
+    -->
+    <property name="height-request">600</property>
+    <property name="width-request">420</property>
+    <style>
+      <class name="devhelp"/>
+    </style>
+    <child>
+      <object class="DhSidebar" id="sidebar">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </object>
+  <template class="GbpDevhelpMenuButton" parent="GtkMenuButton">
+    <property name="popover">popover</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">Documentation</property>
+        <property name="visible">true</property>
+        <property name="xalign">0.5</property>
+      </object>
+    </child>
+  </template>
+</interface>

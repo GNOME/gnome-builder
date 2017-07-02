@@ -7,6 +7,11 @@ devhelp_resources = gnome.compile_resources(
 )
 
 devhelp_sources = [
+  'gbp-devhelp-menu-button.c',
+  'gbp-devhelp-menu-button.h',
+  'gbp-devhelp-layout-stack-addin.c',
+  'gbp-devhelp-layout-stack-addin.h',
+
   'gbp-devhelp-editor-view-addin.c',
   'gbp-devhelp-editor-view-addin.h',
   'gbp-devhelp-panel.c',

@@ -1,4 +1,10 @@
-devhelppanel entry {
-  border-radius: 0;
-  border-width: 0 0 1px 0;
+popover.devhelp {
+  padding: 12px;
+}
+popover.devhelp treeview {
+  background: transparent;
+  color: @theme_fg_color;
+}
+popover.devhelp treeview:backdrop {
+  color: @theme_unfocused_fg_color;
 }

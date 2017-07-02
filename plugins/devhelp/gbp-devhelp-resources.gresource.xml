@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/devhelp-plugin">
     <file>themes/shared.css</file>
+    <file>gbp-devhelp-menu-button.ui</file>
     <file>gbp-devhelp-view.ui</file>
     <file>gbp-devhelp-search.ui</file>
   </gresource>
