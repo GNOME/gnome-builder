@@ -31,7 +31,8 @@ struct _GbpSymbolMenuButton
   /* Template references */
   DzlTree        *tree;
   DzlTreeBuilder *tree_builder;
-  GtkWidget      *popover;
+  GtkPopover     *popover;
+  GtkSearchEntry *search_entry;
 };
 
 enum {
@@ -43,6 +44,46 @@ enum {
 G_DEFINE_TYPE (GbpSymbolMenuButton, gbp_symbol_menu_button, GTK_TYPE_MENU_BUTTON)
 
 static GParamSpec *properties [N_PROPS];
+
+static gboolean
+filter_symbols_cb (DzlTree     *tree,
+                   DzlTreeNode *node,
+                   gpointer     user_data)
+{
+  DzlPatternSpec *spec = user_data;
+  const gchar *text;
+
+  if G_LIKELY (NULL != (text = dzl_tree_node_get_text (node)))
+    return dzl_pattern_spec_match (spec, text);
+
+  return FALSE;
+}
+
+static void
+gbp_symbol_menu_button_search_changed (GbpSymbolMenuButton *self,
+                                       GtkSearchEntry      *search_entry)
+{
+  DzlPatternSpec *spec;
+  const gchar *text;
+
+  g_assert (GBP_IS_SYMBOL_MENU_BUTTON (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+
+  if (ide_str_empty0 (text))
+    {
+      dzl_tree_set_filter (self->tree, NULL, NULL, NULL);
+      return;
+    }
+
+  spec = dzl_pattern_spec_new (text);
+  dzl_tree_set_filter (self->tree,
+                       filter_symbols_cb,
+                       spec,
+                       (GDestroyNotify)dzl_pattern_spec_unref);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
+}
 
 static void
 gbp_symbol_menu_button_destroy (GtkWidget *widget)
@@ -108,6 +149,7 @@ gbp_symbol_menu_button_class_init (GbpSymbolMenuButtonClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree-plugin/gbp-symbol-menu-button.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, popover);
+  gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, tree);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, tree_builder);
 
@@ -127,6 +169,11 @@ static void
 gbp_symbol_menu_button_init (GbpSymbolMenuButton *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_swapped (self->search_entry,
+                            "changed",
+                            G_CALLBACK (gbp_symbol_menu_button_search_changed),
+                            self);
 }
 
 /**

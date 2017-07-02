@@ -5,19 +5,31 @@
       <class name="symbols-button"/>
     </style>
     <child>
-      <object class="GtkScrolledWindow">
-        <property name="propagate-natural-width">true</property>
-        <property name="propagate-natural-height">true</property>
-        <property name="max-content-height">600</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="DzlTree" id="tree">
-            <property name="headers-visible">false</property>
-            <property name="show-icons">true</property>
-            <property name="activate-on-single-click">true</property>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="margin">6</property>
             <property name="visible">true</property>
-            <child type="builder">
-              <object class="GbpSymbolTreeBuilder" id="tree_builder"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-width">true</property>
+            <property name="propagate-natural-height">true</property>
+            <property name="max-content-height">600</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="DzlTree" id="tree">
+                <property name="headers-visible">false</property>
+                <property name="show-icons">true</property>
+                <property name="activate-on-single-click">true</property>
+                <property name="visible">true</property>
+                <child type="builder">
+                  <object class="GbpSymbolTreeBuilder" id="tree_builder"/>
+                </child>
+              </object>
             </child>
           </object>
         </child>
