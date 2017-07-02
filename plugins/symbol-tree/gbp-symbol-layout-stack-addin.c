@@ -18,50 +18,28 @@
 
 #define G_LOG_DOMAIN "gbp-symbol-layout-stack-addin"
 
+#include <glib/gi18n.h>
+
 #include "gbp-symbol-layout-stack-addin.h"
 #include "gbp-symbol-menu-button.h"
 
 struct _GbpSymbolLayoutStackAddin {
   GObject              parent_instance;
+
   GbpSymbolMenuButton *button;
   GCancellable        *cancellable;
+  DzlSignalGroup      *buffer_signals;
 };
 
 static void
-gbp_symbol_layout_stack_addin_load (IdeLayoutStackAddin *addin,
-                                    IdeLayoutStack      *stack)
+gbp_symbol_layout_stack_addin_cursor_moved (GbpSymbolLayoutStackAddin *self,
+                                            const GtkTextIter         *location,
+                                            IdeBuffer                 *buffer)
 {
-  GbpSymbolLayoutStackAddin *self = (GbpSymbolLayoutStackAddin *)addin;
-  GtkWidget *header;
-
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (location != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
 
-  header = ide_layout_stack_get_titlebar (stack);
-  self->button = g_object_new (GBP_TYPE_SYMBOL_MENU_BUTTON, NULL);
-  g_signal_connect (self->button,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->button);
-  ide_layout_stack_header_add_custom_title (IDE_LAYOUT_STACK_HEADER (header),
-                                            GTK_WIDGET (self->button),
-                                            100);
-}
-
-static void
-gbp_symbol_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
-                                      IdeLayoutStack      *stack)
-{
-  GbpSymbolLayoutStackAddin *self = (GbpSymbolLayoutStackAddin *)addin;
-
-  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
-
-  g_cancellable_cancel (self->cancellable);
-  g_clear_object (&self->cancellable);
-
-  if (self->button != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->button));
 }
 
 static void
@@ -96,32 +74,17 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
     }
 
   gbp_symbol_menu_button_set_symbol_tree (self->button, tree);
+  gtk_widget_show (GTK_WIDGET (self->button));
 }
 
 static void
-gbp_symbol_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
-                                        IdeLayoutView       *view)
+gbp_symbol_layout_stack_addin_change_settled (GbpSymbolLayoutStackAddin *self,
+                                              IdeBuffer                 *buffer)
 {
-  GbpSymbolLayoutStackAddin *self = (GbpSymbolLayoutStackAddin *)addin;
   IdeSymbolResolver *symbol_resolver;
-  IdeBuffer *buffer;
   IdeFile *file;
 
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
-
-  g_cancellable_cancel (self->cancellable);
-  g_clear_object (&self->cancellable);
-
-  gbp_symbol_menu_button_set_symbol_tree (self->button, NULL);
-
-  if (!IDE_IS_EDITOR_VIEW (view))
-    {
-      gtk_widget_hide (GTK_WIDGET (self->button));
-      return;
-    }
-
-  buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (view));
   g_assert (IDE_IS_BUFFER (buffer));
 
   symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
@@ -136,16 +99,116 @@ gbp_symbol_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
   file = ide_buffer_get_file (buffer);
   g_assert (IDE_IS_FILE (file));
 
-  self->cancellable = g_cancellable_new ();
-
   ide_symbol_resolver_get_symbol_tree_async (symbol_resolver,
                                              ide_file_get_file (file),
                                              buffer,
                                              self->cancellable,
                                              gbp_symbol_layout_stack_addin_get_symbol_tree_cb,
                                              g_object_ref (self));
+}
 
-  gtk_widget_show (GTK_WIDGET (self->button));
+static void
+gbp_symbol_layout_stack_addin_bind (GbpSymbolLayoutStackAddin *self,
+                                    IdeBuffer                 *buffer,
+                                    DzlSignalGroup            *buffer_signals)
+{
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));
+
+  self->cancellable = g_cancellable_new ();
+
+  gbp_symbol_layout_stack_addin_change_settled (self, buffer);
+}
+
+static void
+gbp_symbol_layout_stack_addin_unbind (GbpSymbolLayoutStackAddin *self,
+                                      DzlSignalGroup            *buffer_signals)
+{
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+  gtk_widget_hide (GTK_WIDGET (self->button));
+}
+
+static void
+gbp_symbol_layout_stack_addin_load (IdeLayoutStackAddin *addin,
+                                    IdeLayoutStack      *stack)
+{
+  GbpSymbolLayoutStackAddin *self = (GbpSymbolLayoutStackAddin *)addin;
+  GtkWidget *header;
+
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (IDE_IS_LAYOUT_STACK (stack));
+
+  /* Add our menu button to the header */
+  header = ide_layout_stack_get_titlebar (stack);
+  self->button = g_object_new (GBP_TYPE_SYMBOL_MENU_BUTTON, NULL);
+  g_signal_connect (self->button,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->button);
+  ide_layout_stack_header_add_custom_title (IDE_LAYOUT_STACK_HEADER (header),
+                                            GTK_WIDGET (self->button),
+                                            100);
+
+  /* Setup our signals to the buffer */
+  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+
+  g_signal_connect_swapped (self->buffer_signals,
+                            "bind",
+                            G_CALLBACK (gbp_symbol_layout_stack_addin_bind),
+                            self);
+
+  g_signal_connect_swapped (self->buffer_signals,
+                            "unbind",
+                            G_CALLBACK (gbp_symbol_layout_stack_addin_unbind),
+                            self);
+
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "cursor-moved",
+                                    G_CALLBACK (gbp_symbol_layout_stack_addin_cursor_moved),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "change-settled",
+                                    G_CALLBACK (gbp_symbol_layout_stack_addin_change_settled),
+                                    self);
+}
+
+static void
+gbp_symbol_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
+                                      IdeLayoutStack      *stack)
+{
+  GbpSymbolLayoutStackAddin *self = (GbpSymbolLayoutStackAddin *)addin;
+
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (IDE_IS_LAYOUT_STACK (stack));
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+  g_clear_object (&self->buffer_signals);
+
+  if (self->button != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->button));
+}
+
+static void
+gbp_symbol_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
+                                        IdeLayoutView       *view)
+{
+  GbpSymbolLayoutStackAddin *self = (GbpSymbolLayoutStackAddin *)addin;
+  IdeBuffer *buffer = NULL;
+
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+
+  if (IDE_IS_EDITOR_VIEW (view))
+    buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (view));
+
+  dzl_signal_group_set_target (self->buffer_signals, buffer);
 }
 
 static void
