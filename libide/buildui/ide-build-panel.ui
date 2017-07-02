@@ -161,27 +161,12 @@
                 <property name="vexpand">true</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkTreeView" id="diagnostics_tree_view">
+                  <object class="IdeFancyTreeView" id="diagnostics_tree_view">
                     <property name="activate-on-single-click">true</property>
                     <property name="tooltip-column">1</property>
                     <property name="model">diagnostics_store</property>
                     <property name="headers-visible">false</property>
                     <property name="visible">true</property>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="diagnostics_column">
-                        <property name="expand">true</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="diagnostics_text">
-                            <property name="yalign">0.0</property>
-                            <property name="xalign">0.0</property>
-                            <property name="ypad">6</property>
-                            <property name="width-chars">0</property>
-                            <property name="ellipsize">end</property>
-                            <property name="wrap-mode">word-char</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>

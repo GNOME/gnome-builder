@@ -21,7 +21,9 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "ide-build-panel.h"
+#include "buildui/ide-build-panel.h"
+#include "util/ide-fancy-tree-view.h"
+#include "util/ide-cell-renderer-fancy.h"
 
 struct _IdeBuildPanel
 {
@@ -31,8 +33,6 @@ struct _IdeBuildPanel
   IdeBuildPipeline    *pipeline;
 
   GtkListStore        *diagnostics_store;
-  GtkCellRendererText *diagnostics_text;
-  GtkTreeViewColumn   *diagnostics_column;
   GtkTreeView         *diagnostics_tree_view;
   GtkLabel            *errors_label;
   GtkLabel            *running_time_label;
@@ -319,6 +319,7 @@ ide_build_panel_text_func (GtkCellLayout   *layout,
                            GtkTreeIter     *iter,
                            gpointer         user_data)
 {
+  IdeCellRendererFancy *fancy = (IdeCellRendererFancy *)renderer;
   g_autoptr(IdeDiagnostic) diagnostic = NULL;
   g_auto(GValue) value = { 0 };
 
@@ -330,10 +331,10 @@ ide_build_panel_text_func (GtkCellLayout   *layout,
 
   if G_LIKELY (diagnostic != NULL)
     {
-      GString *str;
-      const gchar *text;
+      g_autofree gchar *title = NULL;
       g_autofree gchar *name = NULL;
       IdeSourceLocation *location;
+      const gchar *text;
       GFile *gfile = NULL;
       guint line = 0;
       guint column = 0;
@@ -356,19 +357,11 @@ ide_build_panel_text_func (GtkCellLayout   *layout,
 
         }
 
-      str = g_string_new (NULL);
-
-      if (name != NULL)
-        g_string_append_printf (str, "<b>%s:%u:%u</b>\n",
-                                name, line + 1, column + 1);
+      title = g_strdup_printf ("%s:%u:%u", name ?: "", line + 1, column + 1);
+      ide_cell_renderer_fancy_take_title (fancy, g_steal_pointer (&title));
 
       text = ide_diagnostic_get_text (diagnostic);
-
-      if (text != NULL)
-        g_string_append (str, text);
-
-      g_value_take_string (&value, g_string_free (str, FALSE));
-      g_object_set_property (G_OBJECT (renderer), "markup", &value);
+      ide_cell_renderer_fancy_set_body (fancy, text);
 
       return;
     }
@@ -497,9 +490,7 @@ ide_build_panel_class_init (IdeBuildPanelClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-panel.ui");
   gtk_widget_class_set_css_name (widget_class, "buildpanel");
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, diagnostics_column);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, diagnostics_store);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, diagnostics_text);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, diagnostics_tree_view);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, errors_label);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, running_time_label);
@@ -508,7 +499,9 @@ ide_build_panel_class_init (IdeBuildPanelClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, status_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, warnings_label);
 
+  g_type_ensure (IDE_TYPE_CELL_RENDERER_FANCY);
   g_type_ensure (IDE_TYPE_DIAGNOSTIC);
+  g_type_ensure (IDE_TYPE_FANCY_TREE_VIEW);
 }
 
 static void
@@ -528,8 +521,6 @@ ide_build_panel_init (IdeBuildPanel *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->diagnostics_column),
-                                      GTK_CELL_RENDERER (self->diagnostics_text),
-                                      ide_build_panel_text_func,
-                                      self, NULL);
+  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->diagnostics_tree_view),
+                                     ide_build_panel_text_func, self, NULL);
 }
