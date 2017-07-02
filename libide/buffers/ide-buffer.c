@@ -51,6 +51,7 @@
 #include "vcs/ide-vcs.h"
 
 #define DEFAULT_DIAGNOSE_TIMEOUT_MSEC          333
+#define SETTLING_DELAY_MSEC                    333
 #define DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC 5000
 #define RECLAIMATION_TIMEOUT_SECS              1
 #define MODIFICATION_TIMEOUT_SECS              1
@@ -98,6 +99,8 @@ typedef struct
   gint                    hold_count;
   guint                   reclamation_handler;
 
+  guint                   settling_handler;
+
   gsize                   change_count;
 
   guint                   cancel_cursor_restore : 1;
@@ -127,6 +130,7 @@ enum {
 };
 
 enum {
+  CHANGE_SETTLED,
   CURSOR_MOVED,
   DESTROY,
   LINE_FLAGS_CHANGED,
@@ -138,6 +142,33 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
+
+static gboolean
+ide_buffer_settled_cb (gpointer user_data)
+{
+  IdeBuffer *self = user_data;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  priv->settling_handler = 0;
+  g_signal_emit (self, signals [CHANGE_SETTLED], 0);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_buffer_delay_settling (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  ide_clear_source (&priv->settling_handler);
+  priv->settling_handler = gdk_threads_add_timeout (SETTLING_DELAY_MSEC,
+                                                    ide_buffer_settled_cb,
+                                                    self);
+}
 
 void
 ide_buffer_set_spell_checking (IdeBuffer *self,
@@ -687,6 +718,8 @@ ide_buffer_changed (GtkTextBuffer *buffer)
   priv->change_count++;
 
   g_clear_pointer (&priv->content, g_bytes_unref);
+
+  ide_buffer_delay_settling (self);
 }
 
 static void
@@ -1287,11 +1320,9 @@ ide_buffer_dispose (GObject *object)
 
   IDE_ENTRY;
 
-  if (priv->reclamation_handler != 0)
-    {
-      g_source_remove (priv->reclamation_handler);
-      priv->reclamation_handler = 0;
-    }
+  ide_clear_source (&priv->settling_handler);
+  ide_clear_source (&priv->reclamation_handler);
+  ide_clear_source (&priv->check_modified_timeout);
 
   if (priv->context != NULL)
     {
@@ -1300,13 +1331,7 @@ ide_buffer_dispose (GObject *object)
       _ide_buffer_manager_reclaim (buffer_manager, self);
     }
 
-  if (priv->check_modified_timeout != 0)
-    {
-      g_source_remove (priv->check_modified_timeout);
-      priv->check_modified_timeout = 0;
-    }
-
-  if (priv->file_monitor)
+  if (priv->file_monitor != NULL)
     {
       g_file_monitor_cancel (priv->file_monitor);
       g_clear_object (&priv->file_monitor);
@@ -1317,7 +1342,7 @@ ide_buffer_dispose (GObject *object)
   if (priv->highlight_engine != NULL)
     g_object_run_dispose (G_OBJECT (priv->highlight_engine));
 
-  if (priv->change_monitor)
+  if (priv->change_monitor != NULL)
     {
       ide_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
       g_clear_object (&priv->change_monitor);
@@ -1528,6 +1553,25 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  /**
+   * IdeBuffer::change-settled:
+   * @self: An #IdeBuffer
+   *
+   * This signal is emitted as short period of time after changes have
+   * occurred. It provides plugins a convenient way to wait for the editor
+   * to settle before performing expensive work.
+   *
+   * You should probably use this instead of implementing your own
+   * settling management.
+   *
+   * Since: 3.26
+   */
+  signals [CHANGE_SETTLED] =
+    g_signal_new ("change-settled",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   /**
    * IdeBuffer::cursor-moved:
