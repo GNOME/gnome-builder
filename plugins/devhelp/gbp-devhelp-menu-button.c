@@ -144,6 +144,7 @@ monkey_patch_devhelp (GbpDevhelpMenuButton *self)
   GtkCellRenderer *cell;
   GtkTreeModel *model;
   GType column_type;
+  GtkSearchEntry *search;
 
   g_assert (GBP_IS_DEVHELP_MENU_BUTTON (self));
 
@@ -187,6 +188,19 @@ monkey_patch_devhelp (GbpDevhelpMenuButton *self)
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell,
                                       gbp_devhelp_menu_button_pixbuf_data_func,
                                       NULL, NULL);
+
+  /*
+   * Now find the GtkSearchEntry and adjust the margins on it to match
+   * our style and align the search icon with our icon cell renderer.
+   */
+  search = dzl_gtk_widget_find_child_typed (GTK_WIDGET (self->sidebar), GTK_TYPE_SEARCH_ENTRY);
+  if (search != NULL)
+    g_object_set (search,
+                  "margin-top", 0,
+                  "margin-end", 0,
+                  "margin-start", 0,
+                  "margin-bottom", 6,
+                  NULL);
 }
 
 static void
