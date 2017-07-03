@@ -216,7 +216,7 @@ gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,
       if (symbol_tree != NULL)
         dzl_tree_node_set_item (root, G_OBJECT (symbol_tree));
       dzl_tree_set_root (self->tree, root);
-
+      gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_TREE]);
     }
 }

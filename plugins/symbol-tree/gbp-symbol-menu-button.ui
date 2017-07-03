@@ -10,14 +10,18 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
-            <property name="margin">6</property>
+            <property name="margin-start">14</property>
+            <property name="margin-end">14</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <property name="visible">true</property>
           </object>
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="propagate-natural-width">true</property>
             <property name="propagate-natural-height">true</property>
+            <property name="propagate-natural-width">true</property>
+            <property name="min-content-height">300</property>
             <property name="max-content-height">600</property>
             <property name="visible">true</property>
             <child>

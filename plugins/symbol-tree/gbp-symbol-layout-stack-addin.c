@@ -40,6 +40,7 @@ gbp_symbol_layout_stack_addin_cursor_moved (GbpSymbolLayoutStackAddin *self,
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
+  /* TODO: Delay a bit so we aren't super active */
 }
 
 static void
@@ -52,9 +53,9 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
   g_autoptr(IdeSymbolTree) tree = NULL;
   g_autoptr(GError) error = NULL;
 
+  g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_ASYNC_RESULT (result));
 
   tree = ide_symbol_resolver_get_symbol_tree_finish (symbol_resolver, result, &error);
 
@@ -67,19 +68,12 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
   if (self->button == NULL)
     return;
 
-  if (tree == NULL)
-    {
-      gtk_widget_hide (GTK_WIDGET (self->button));
-      return;
-    }
-
   gbp_symbol_menu_button_set_symbol_tree (self->button, tree);
-  gtk_widget_show (GTK_WIDGET (self->button));
 }
 
 static void
-gbp_symbol_layout_stack_addin_change_settled (GbpSymbolLayoutStackAddin *self,
-                                              IdeBuffer                 *buffer)
+gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
+                                           IdeBuffer                 *buffer)
 {
   IdeSymbolResolver *symbol_resolver;
   IdeFile *file;
@@ -87,17 +81,21 @@ gbp_symbol_layout_stack_addin_change_settled (GbpSymbolLayoutStackAddin *self,
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  /* Cancel any in-flight work */
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+
   symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
   g_assert (!symbol_resolver || IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
 
+  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
   if (symbol_resolver == NULL)
-    {
-      gtk_widget_hide (GTK_WIDGET (self->button));
-      return;
-    }
+    return;
 
   file = ide_buffer_get_file (buffer);
   g_assert (IDE_IS_FILE (file));
+
+  self->cancellable = g_cancellable_new ();
 
   ide_symbol_resolver_get_symbol_tree_async (symbol_resolver,
                                              ide_file_get_file (file),
@@ -108,17 +106,54 @@ gbp_symbol_layout_stack_addin_change_settled (GbpSymbolLayoutStackAddin *self,
 }
 
 static void
+gbp_symbol_layout_stack_addin_change_settled (GbpSymbolLayoutStackAddin *self,
+                                              IdeBuffer                 *buffer)
+{
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  /* Ignore this request unless the button is active */
+  if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->button)))
+    return;
+
+  gbp_symbol_layout_stack_addin_update_tree (self, buffer);
+}
+
+static void
+gbp_symbol_layout_stack_addin_button_toggled (GbpSymbolLayoutStackAddin *self,
+                                              GtkMenuButton             *button)
+{
+  IdeBuffer *buffer;
+
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (GTK_IS_MENU_BUTTON (button));
+
+  buffer = dzl_signal_group_get_target (self->buffer_signals);
+  g_assert (!buffer || IDE_IS_BUFFER (buffer));
+
+  if (buffer != NULL && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+    gbp_symbol_layout_stack_addin_update_tree (self, buffer);
+}
+
+static void
 gbp_symbol_layout_stack_addin_bind (GbpSymbolLayoutStackAddin *self,
                                     IdeBuffer                 *buffer,
                                     DzlSignalGroup            *buffer_signals)
 {
+  IdeSymbolResolver *symbol_resolver;
+
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));
 
   self->cancellable = g_cancellable_new ();
 
-  gbp_symbol_layout_stack_addin_change_settled (self, buffer);
+  gtk_button_set_label (GTK_BUTTON (self->button), _("Symbols"));
+
+  symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
+  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
+
+  gbp_symbol_layout_stack_addin_update_tree (self, buffer);
 }
 
 static void
@@ -150,6 +185,10 @@ gbp_symbol_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->button);
+  g_signal_connect_swapped (self->button,
+                            "toggled",
+                            G_CALLBACK (gbp_symbol_layout_stack_addin_button_toggled),
+                            self);
   ide_layout_stack_header_add_custom_title (IDE_LAYOUT_STACK_HEADER (header),
                                             GTK_WIDGET (self->button),
                                             100);
