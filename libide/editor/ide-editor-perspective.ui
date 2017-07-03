@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeEditorPerspective" parent="IdeLayout">
-    <child type="left">
-      <object class="IdeEditorSidebar" id="sidebar">
-        <property name="visible">true</property>
+    <child internal-child="left">
+      <object class="IdeLayoutPane">
+        <child>
+          <object class="IdeEditorSidebar" id="sidebar">
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="right">
+      <object class="IdeLayoutPane">
+        <!-- This is a transient panel -->
+        <property name="reveal-child">false</property>
       </object>
     </child>
     <child>

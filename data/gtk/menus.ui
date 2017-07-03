@@ -41,26 +41,6 @@
     </section>
   </menu>
   <menu id="gear-menu">
-    <section id="gear-menu-layout-section">
-      <attribute name="id">panel-section</attribute>
-      <attribute name="display-hint">horizontal-buttons</attribute>
-      <attribute name="text-direction">ltr</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Show left panel</attribute>
-        <attribute name="action">perspective.left-visible</attribute>
-        <attribute name="verb-icon">builder-view-left-pane-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Show bottom panel</attribute>
-        <attribute name="action">perspective.bottom-visible</attribute>
-        <attribute name="verb-icon">builder-view-bottom-pane-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Show right panel</attribute>
-        <attribute name="action">perspective.right-visible</attribute>
-        <attribute name="verb-icon">builder-view-right-pane-symbolic</attribute>
-      </item>
-    </section>
     <section id="gear-menu-new-section">
       <item>
         <attribute name="label" translatable="yes">_New File</attribute>

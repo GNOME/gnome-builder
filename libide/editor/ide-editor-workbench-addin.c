@@ -45,7 +45,8 @@ struct _IdeEditorWorkbenchAddin
   /* Borrowed references */
   IdeWorkbench         *workbench;
   IdeEditorPerspective *perspective;
-  GtkWidget            *new_document_button;
+  GtkButton            *new_document_button;
+  GtkBox               *panels_box;
 };
 
 typedef struct
@@ -124,6 +125,66 @@ ide_editor_workbench_addin_init (IdeEditorWorkbenchAddin *self)
 }
 
 static void
+ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
+                                        IdeWorkbenchHeaderBar   *header)
+{
+  GtkWidget *button;
+
+  g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKBENCH_HEADER_BAR (header));
+
+  self->new_document_button = g_object_new (GTK_TYPE_BUTTON,
+                                            "action-name", "editor.new-file",
+                                            "child", g_object_new (GTK_TYPE_IMAGE,
+                                                                   "visible", TRUE,
+                                                                   "icon-name", "document-new-symbolic",
+                                                                   NULL),
+                                            NULL);
+  g_signal_connect (self->new_document_button,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->new_document_button);
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->new_document_button), "image-button");
+  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->new_document_button), GTK_PACK_START, 0);
+
+  self->panels_box = g_object_new (GTK_TYPE_BOX,
+                                   "visible", TRUE,
+                                   NULL);
+  g_signal_connect (self->panels_box,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->panels_box);
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->panels_box), "linked");
+  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->panels_box), GTK_PACK_START, 10);
+
+  button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                         "action-name", "dockbin.left-visible",
+                         "focus-on-click", FALSE,
+                         "child", g_object_new (GTK_TYPE_IMAGE,
+                                                "icon-name", "panel-left-pane-symbolic",
+                                                "margin-start", 12,
+                                                "margin-end", 12,
+                                                "visible", TRUE,
+                                                NULL),
+                         "visible", TRUE,
+                         NULL);
+  gtk_container_add (GTK_CONTAINER (self->panels_box), button);
+
+  button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                         "action-name", "dockbin.bottom-visible",
+                         "focus-on-click", FALSE,
+                         "child", g_object_new (GTK_TYPE_IMAGE,
+                                                "icon-name", "panel-bottom-pane-symbolic",
+                                                "margin-start", 12,
+                                                "margin-end", 12,
+                                                "visible", TRUE,
+                                                NULL),
+                         "visible", TRUE,
+                         NULL);
+  gtk_container_add (GTK_CONTAINER (self->panels_box), button);
+}
+
+static void
 ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
                                  IdeWorkbench      *workbench)
 {
@@ -147,22 +208,8 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   header = ide_workbench_get_headerbar (workbench);
 
-  self->new_document_button = g_object_new (GTK_TYPE_BUTTON,
-                                            "action-name", "editor.new-file",
-                                            "child", g_object_new (GTK_TYPE_IMAGE,
-                                                                   "visible", TRUE,
-                                                                   "icon-name", "document-new-symbolic",
-                                                                   NULL),
-                                            NULL);
-  g_signal_connect (self->new_document_button,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->new_document_button);
-  dzl_gtk_widget_add_style_class (self->new_document_button, "image-button");
-  ide_workbench_header_bar_insert_left (header,
-                                        self->new_document_button,
-                                        GTK_PACK_START,
-                                        0);
+  ide_editor_workbench_addin_add_buttons (self, header);
+
 
   self->perspective = g_object_new (IDE_TYPE_EDITOR_PERSPECTIVE,
                                     "manager", self->manager,
@@ -376,11 +423,14 @@ ide_editor_workbench_addin_perspective_set (IdeWorkbenchAddin *addin,
                                             IdePerspective    *perspective)
 {
   IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)addin;
+  gboolean visible;
 
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
 
-  gtk_widget_set_visible (self->new_document_button,
-                          IDE_IS_EDITOR_PERSPECTIVE (perspective));
+  visible = IDE_IS_EDITOR_PERSPECTIVE (perspective);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->new_document_button), visible);
+  gtk_widget_set_visible (GTK_WIDGET (self->panels_box), visible);
 }
 
 static void
