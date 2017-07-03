@@ -367,6 +367,33 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
+ide_editor_view_update_map (IdeEditorView *self)
+{
+  GtkWidget *parent;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (self->map));
+
+  g_object_ref (self->map);
+
+  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self->map));
+
+  if (self->auto_hide_map)
+    gtk_container_add (GTK_CONTAINER (self->map_revealer), GTK_WIDGET (self->map));
+  else
+    gtk_container_add (GTK_CONTAINER (self->scroller_box), GTK_WIDGET (self->map));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->map_revealer), self->show_map && self->auto_hide_map);
+  gtk_widget_set_visible (GTK_WIDGET (self->map), self->show_map);
+  gtk_revealer_set_reveal_child (self->map_revealer, self->show_map);
+
+  ide_editor_view_update_reveal_timer (self);
+
+  g_object_unref (self->map);
+}
+
+static void
 ide_editor_view_constructed (GObject *object)
 {
   IdeEditorView *self = (IdeEditorView *)object;
@@ -405,6 +432,7 @@ ide_editor_view_constructed (GObject *object)
                             self);
 
   ide_editor_view_load_fonts (self);
+  ide_editor_view_update_map (self);
 }
 
 static void
@@ -740,37 +768,6 @@ ide_editor_view_update_reveal_timer (IdeEditorView *self)
     }
 }
 
-static void
-ide_editor_view_update_map (IdeEditorView *self)
-{
-  GtkWidget *parent;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (self->map));
-
-  g_object_ref (self->map);
-
-  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self->map));
-
-  if (self->auto_hide_map)
-    gtk_container_add (GTK_CONTAINER (self->map_revealer), GTK_WIDGET (self->map));
-  else
-    gtk_container_add (GTK_CONTAINER (self->scroller_box), GTK_WIDGET (self->map));
-
-  gtk_widget_set_visible (GTK_WIDGET (self->map_revealer), self->show_map);
-  gtk_widget_set_visible (GTK_WIDGET (self->map), self->show_map);
-  gtk_revealer_set_reveal_child (self->map_revealer, self->show_map);
-
-  g_object_set (self->scroller,
-                "vscrollbar-policy", self->show_map ? GTK_POLICY_EXTERNAL : GTK_POLICY_AUTOMATIC,
-                NULL);
-
-  ide_editor_view_update_reveal_timer (self);
-
-  g_object_unref (self->map);
-}
-
 void
 ide_editor_view_set_auto_hide_map (IdeEditorView *self,
                                    gboolean       auto_hide_map)
@@ -806,6 +803,9 @@ ide_editor_view_set_show_map (IdeEditorView *self,
   if (show_map != self->show_map)
     {
       self->show_map = show_map;
+      g_object_set (self->scroller,
+                    "vscrollbar-policy", show_map ? GTK_POLICY_EXTERNAL : GTK_POLICY_AUTOMATIC,
+                    NULL);
       ide_editor_view_update_map (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTO_HIDE_MAP]);
     }
