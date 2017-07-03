@@ -63,7 +63,6 @@ static void
 gbp_symbol_menu_button_search_changed (GbpSymbolMenuButton *self,
                                        GtkSearchEntry      *search_entry)
 {
-  DzlPatternSpec *spec;
   const gchar *text;
 
   g_assert (GBP_IS_SYMBOL_MENU_BUTTON (self));
@@ -72,16 +71,13 @@ gbp_symbol_menu_button_search_changed (GbpSymbolMenuButton *self,
   text = gtk_entry_get_text (GTK_ENTRY (search_entry));
 
   if (ide_str_empty0 (text))
-    {
-      dzl_tree_set_filter (self->tree, NULL, NULL, NULL);
-      return;
-    }
+    dzl_tree_set_filter (self->tree, NULL, NULL, NULL);
+  else
+    dzl_tree_set_filter (self->tree,
+                         filter_symbols_cb,
+                         dzl_pattern_spec_new (text),
+                         (GDestroyNotify)dzl_pattern_spec_unref);
 
-  spec = dzl_pattern_spec_new (text);
-  dzl_tree_set_filter (self->tree,
-                       filter_symbols_cb,
-                       spec,
-                       (GDestroyNotify)dzl_pattern_spec_unref);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
 }
 
