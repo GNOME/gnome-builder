@@ -93,10 +93,10 @@ ide_symbol_resolver_real_find_references_finish (IdeSymbolResolver  *self,
 
 static void
 ide_symbol_resolver_real_find_nearest_scope_async (IdeSymbolResolver   *self,
-                                                IdeSourceLocation   *location,
-                                                GCancellable        *cancellable,
-                                                GAsyncReadyCallback  callback,
-                                                gpointer             user_data)
+                                                   IdeSourceLocation   *location,
+                                                   GCancellable        *cancellable,
+                                                   GAsyncReadyCallback  callback,
+                                                   gpointer             user_data)
 {
   g_assert (IDE_IS_SYMBOL_RESOLVER (self));
   g_assert (location != NULL);
@@ -113,8 +113,8 @@ ide_symbol_resolver_real_find_nearest_scope_async (IdeSymbolResolver   *self,
 
 static IdeSymbol *
 ide_symbol_resolver_real_find_nearest_scope_finish (IdeSymbolResolver  *self,
-                                                 GAsyncResult       *result,
-                                                 GError            **error)
+                                                    GAsyncResult       *result,
+                                                    GError            **error)
 {
   g_assert (IDE_IS_SYMBOL_RESOLVER (self));
   g_assert (G_IS_TASK (result));
