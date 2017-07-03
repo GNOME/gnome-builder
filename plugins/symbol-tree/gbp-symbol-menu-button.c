@@ -202,7 +202,7 @@ gbp_symbol_menu_button_init (GbpSymbolMenuButton *self)
                             self);
 
   g_object_set (gbp_symbol_menu_button_get_icon_cell (self),
-                "width", 28,
+                "width", 36,
                 "xalign", 1.0f,
                 NULL);
 }

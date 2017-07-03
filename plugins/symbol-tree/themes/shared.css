@@ -1,5 +1,8 @@
 popover.symbols-button {
-  padding: 12px;
+  padding: 18px 6px 6px 6px;
+}
+popover.symbols-button entry {
+  margin: 0 8px;
 }
 popover.symbols-button treeview {
   -GtkTreeView-expander-size: 0;

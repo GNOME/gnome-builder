@@ -9,6 +9,20 @@
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Document Outline</property>
+            <property name="margin-bottom">12</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+              <attribute name="scale" value="0.8333"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="margin-bottom">6</property>
             <property name="visible">true</property>
