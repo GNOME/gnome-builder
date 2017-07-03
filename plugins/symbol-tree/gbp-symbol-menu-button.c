@@ -81,6 +81,36 @@ gbp_symbol_menu_button_search_changed (GbpSymbolMenuButton *self,
   gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
 }
 
+static GtkCellRenderer *
+gbp_symbol_menu_button_get_icon_cell (GbpSymbolMenuButton *self)
+{
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *cell = NULL;
+
+  g_assert (GBP_IS_SYMBOL_MENU_BUTTON (self));
+  g_assert (GTK_IS_TREE_VIEW (self->tree));
+
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (self->tree), 0);
+
+  if (column != NULL)
+    {
+      GList *cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
+
+      for (const GList *iter = cells; iter; iter = iter->next)
+        {
+          if (GTK_IS_CELL_RENDERER_PIXBUF (iter->data))
+            {
+              cell = iter->data;
+              break;
+            }
+        }
+
+      g_list_free (cells);
+    }
+
+  return cell;
+}
+
 static void
 gbp_symbol_menu_button_destroy (GtkWidget *widget)
 {
@@ -170,6 +200,11 @@ gbp_symbol_menu_button_init (GbpSymbolMenuButton *self)
                             "changed",
                             G_CALLBACK (gbp_symbol_menu_button_search_changed),
                             self);
+
+  g_object_set (gbp_symbol_menu_button_get_icon_cell (self),
+                "width", 28,
+                "xalign", 1.0f,
+                NULL);
 }
 
 /**

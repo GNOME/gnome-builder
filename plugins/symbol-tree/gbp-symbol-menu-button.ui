@@ -10,9 +10,6 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
-            <property name="margin-start">14</property>
-            <property name="margin-end">14</property>
-            <property name="margin-top">6</property>
             <property name="margin-bottom">6</property>
             <property name="visible">true</property>
           </object>
@@ -21,11 +18,13 @@
           <object class="GtkScrolledWindow">
             <property name="propagate-natural-height">true</property>
             <property name="propagate-natural-width">true</property>
+            <property name="min-content-width">250</property>
             <property name="min-content-height">300</property>
             <property name="max-content-height">600</property>
             <property name="visible">true</property>
             <child>
               <object class="DzlTree" id="tree">
+                <property name="level-indentation">16</property>
                 <property name="headers-visible">false</property>
                 <property name="show-icons">true</property>
                 <property name="activate-on-single-click">true</property>
