@@ -198,6 +198,21 @@ warning_button_clicked (IdeEditorLayoutStackControls *self,
 }
 
 static void
+ide_editor_layout_stack_controls_bind (IdeEditorLayoutStackControls *self,
+                                       GtkTextBuffer                *buffer,
+                                       DzlSignalGroup               *buffer_signals)
+{
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_EDITOR_LAYOUT_STACK_CONTROLS (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
+  document_cursor_moved (self, &iter, buffer);
+}
+
+static void
 ide_editor_layout_stack_controls_finalize (GObject *object)
 {
   IdeEditorLayoutStackControls *self = (IdeEditorLayoutStackControls *)object;
@@ -263,6 +278,11 @@ ide_editor_layout_stack_controls_init (IdeEditorLayoutStackControls *self)
                           G_BINDING_SYNC_CREATE);
 
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+
+  g_signal_connect_swapped (self->buffer_signals,
+                            "bind",
+                            G_CALLBACK (ide_editor_layout_stack_controls_bind),
+                            self);
 
   dzl_signal_group_connect_object (self->buffer_signals,
                                    "cursor-moved",
