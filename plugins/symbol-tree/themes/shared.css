@@ -7,6 +7,7 @@ popover.symbols-button entry {
 popover.symbols-button treeview {
   -GtkTreeView-expander-size: 0;
   -GtkTreeView-horizontal-separator: 0;
+  -GtkTreeView-vertical-separator: 6;
   -gtk-icon-source: none;
   background: transparent;
   color: @theme_fg_color;

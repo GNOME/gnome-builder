@@ -54,7 +54,7 @@
     </child>
   </object>
   <template class="GbpSymbolMenuButton" parent="GtkMenuButton">
-    <property name="label">Symbols</property>
+    <property name="label" translatable="yes">Document Outline</property>
     <property name="popover">popover</property>
   </template>
 </interface>

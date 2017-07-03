@@ -148,7 +148,7 @@ gbp_symbol_layout_stack_addin_bind (GbpSymbolLayoutStackAddin *self,
 
   self->cancellable = g_cancellable_new ();
 
-  gtk_button_set_label (GTK_BUTTON (self->button), _("Symbols"));
+  gtk_button_set_label (GTK_BUTTON (self->button), _("Document Outline"));
 
   symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
   gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
