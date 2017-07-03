@@ -54,7 +54,24 @@
     </child>
   </object>
   <template class="GbpSymbolMenuButton" parent="GtkMenuButton">
-    <property name="label" translatable="yes">Document Outline</property>
     <property name="popover">popover</property>
+    <child>
+      <object class="GtkBox">
+        <property name="hexpand">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkImage" id="symbol_icon">
+            <property name="hexpand">true</property>
+            <property name="halign">end</property>
+          </object>
+        </child>
+        <child type="center">
+          <object class="GtkLabel" id="symbol_title">
+            <property name="label" translatable="yes">Document Outline</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
   </template>
 </interface>

@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "gbp-symbol-menu-button.h"
+#define G_LOG_DOMAIN "gbp-symbol-menu-button"
+
+#include <glib/gi18n.h>
 
 #include "gbp-symbol-menu-button.h"
 #include "gbp-symbol-tree-builder.h"
@@ -33,6 +35,8 @@ struct _GbpSymbolMenuButton
   DzlTreeBuilder *tree_builder;
   GtkPopover     *popover;
   GtkSearchEntry *search_entry;
+  GtkImage       *symbol_icon;
+  GtkLabel       *symbol_title;
 };
 
 enum {
@@ -173,6 +177,8 @@ gbp_symbol_menu_button_class_init (GbpSymbolMenuButtonClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree-plugin/gbp-symbol-menu-button.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, symbol_icon);
+  gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, symbol_title);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, tree);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, tree_builder);
 
@@ -247,4 +253,31 @@ gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,
       gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_TREE]);
     }
+}
+
+void
+gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
+                                   IdeSymbol           *symbol)
+{
+  const gchar *title = _("Document Outline");
+  const gchar *icon_name = NULL;
+
+  g_assert (GBP_IS_SYMBOL_MENU_BUTTON (self));
+
+  if (symbol != NULL)
+    {
+      IdeSymbolKind kind = ide_symbol_get_kind (symbol);
+
+      icon_name = ide_symbol_kind_get_icon_name (kind);
+    }
+
+  g_object_set (self->symbol_icon,
+                "icon-name", icon_name,
+                "visible", (symbol != NULL),
+                NULL);
+
+  g_object_set (self->symbol_title,
+                "label", title,
+                "visible", (symbol != NULL),
+                NULL);
 }

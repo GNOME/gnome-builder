@@ -26,6 +26,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSymbolMenuButton, gbp_symbol_menu_button, GBP, SYMBOL_MENU_BUTTON, GtkMenuButton)
 
+void           gbp_symbol_menu_button_set_symbol      (GbpSymbolMenuButton *self,
+                                                       IdeSymbol           *symbol);
 IdeSymbolTree *gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self);
 void           gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,
                                                        IdeSymbolTree       *symbol_tree);

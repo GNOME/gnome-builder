@@ -23,24 +23,107 @@
 #include "gbp-symbol-layout-stack-addin.h"
 #include "gbp-symbol-menu-button.h"
 
+#define CURSOR_MOVED_DELAY_MSEC 500
+
 struct _GbpSymbolLayoutStackAddin {
   GObject              parent_instance;
 
   GbpSymbolMenuButton *button;
   GCancellable        *cancellable;
+  GCancellable        *scope_cancellable;
   DzlSignalGroup      *buffer_signals;
+
+  guint                cursor_moved_handler;
 };
+
+static void
+gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
+  g_autoptr(GbpSymbolLayoutStackAddin) self = user_data;
+  g_autoptr(IdeSymbol) symbol = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+
+  symbol = ide_symbol_resolver_find_nearest_scope_finish (symbol_resolver, result, &error);
+
+  if (error != NULL &&
+      !(g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
+        g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED)))
+    g_warning ("Failed to find nearest scope: %s", error->message);
+
+  if (self->button != NULL)
+    gbp_symbol_menu_button_set_symbol (self->button, symbol);
+}
+
+static gboolean
+gbp_symbol_layout_stack_addin_cursor_moved_cb (gpointer user_data)
+{
+  GbpSymbolLayoutStackAddin *self = user_data;
+  IdeBuffer *buffer;
+
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+
+  g_cancellable_cancel (self->scope_cancellable);
+  g_clear_object (&self->scope_cancellable);
+
+  buffer = dzl_signal_group_get_target (self->buffer_signals);
+
+  if (buffer != NULL)
+    {
+      IdeSymbolResolver *symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
+
+      if (symbol_resolver != NULL)
+        {
+          g_autoptr(IdeSourceLocation) location = ide_buffer_get_insert_location (buffer);
+
+          self->scope_cancellable = g_cancellable_new ();
+
+          ide_symbol_resolver_find_nearest_scope_async (symbol_resolver,
+                                                        location,
+                                                        self->scope_cancellable,
+                                                        gbp_symbol_layout_stack_addin_find_scope_cb,
+                                                        g_object_ref (self));
+        }
+    }
+
+  self->cursor_moved_handler = 0;
+
+  return G_SOURCE_REMOVE;
+}
 
 static void
 gbp_symbol_layout_stack_addin_cursor_moved (GbpSymbolLayoutStackAddin *self,
                                             const GtkTextIter         *location,
                                             IdeBuffer                 *buffer)
 {
+  GSource *source;
+  gint64 ready_time;
+
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  /* TODO: Delay a bit so we aren't super active */
+  if (self->cursor_moved_handler == 0)
+    {
+      self->cursor_moved_handler =
+        gdk_threads_add_timeout_full (G_PRIORITY_LOW,
+                                      CURSOR_MOVED_DELAY_MSEC,
+                                      gbp_symbol_layout_stack_addin_cursor_moved_cb,
+                                      g_object_ref (self),
+                                      g_object_unref);
+      return;
+    }
+
+  /* Try to reuse our existing GSource if we can */
+  ready_time = g_get_monotonic_time () + (CURSOR_MOVED_DELAY_MSEC * 1000);
+  source = g_main_context_find_source_by_id (NULL, self->cursor_moved_handler);
+  g_source_set_ready_time (source, ready_time);
 }
 
 static void
@@ -163,8 +246,14 @@ gbp_symbol_layout_stack_addin_unbind (GbpSymbolLayoutStackAddin *self,
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));
 
+  ide_clear_source (&self->cursor_moved_handler);
+
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
+
+  g_cancellable_cancel (self->scope_cancellable);
+  g_clear_object (&self->scope_cancellable);
+
   gtk_widget_hide (GTK_WIDGET (self->button));
 }
 
