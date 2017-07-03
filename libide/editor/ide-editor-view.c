@@ -711,8 +711,10 @@ ide_editor_view_get_language_id (IdeEditorView *self)
  * ide_editor_view_scroll_to_line:
  * @self: a #IdeEditorView
  *
- * This is a helper to quickly jump to a given line without all the
- * frills.
+ * This is a helper to quickly jump to a given line without all the frills. It
+ * will also ensure focus on the editor view, so that refocusing the view
+ * afterwards does not cause the view to restore the cursor to the previous
+ * location.
  */
 void
 ide_editor_view_scroll_to_line (IdeEditorView *self,
@@ -723,6 +725,8 @@ ide_editor_view_scroll_to_line (IdeEditorView *self,
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
   g_return_if_fail (self->buffer != NULL);
   g_return_if_fail (line <= G_MAXINT);
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
 
   gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), &iter, line);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);

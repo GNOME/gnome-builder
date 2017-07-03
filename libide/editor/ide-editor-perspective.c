@@ -234,7 +234,6 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
   stack = gtk_widget_get_ancestor (GTK_WIDGET (lookup.view), IDE_TYPE_LAYOUT_STACK);
   ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack), IDE_LAYOUT_VIEW (lookup.view));
   ide_editor_view_scroll_to_line (lookup.view, line);
-  gtk_widget_grab_focus (GTK_WIDGET (lookup.view));
 }
 
 void
