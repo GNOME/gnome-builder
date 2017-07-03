@@ -51,12 +51,9 @@ filter_symbols_cb (DzlTree     *tree,
                    gpointer     user_data)
 {
   DzlPatternSpec *spec = user_data;
-  const gchar *text;
+  const gchar *text = dzl_tree_node_get_text (node);
 
-  if G_LIKELY (NULL != (text = dzl_tree_node_get_text (node)))
-    return dzl_pattern_spec_match (spec, text);
-
-  return FALSE;
+  return dzl_pattern_spec_match (spec, text);
 }
 
 static void
