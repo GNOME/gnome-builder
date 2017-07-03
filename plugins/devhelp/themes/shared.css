@@ -1,9 +1,10 @@
 popover.devhelp {
-  padding: 12px;
+  padding: 18px 12px 12px 6px;
 }
 popover.devhelp treeview {
   background: transparent;
   color: @theme_fg_color;
+  -GtkTreeView-vertical-separator: 6;
 }
 popover.devhelp treeview:backdrop {
   color: @theme_unfocused_fg_color;
