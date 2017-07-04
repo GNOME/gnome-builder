@@ -54,6 +54,7 @@ gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
 
   if (error != NULL &&
       !(g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
+        g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND) ||
         g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED)))
     g_warning ("Failed to find nearest scope: %s", error->message);
 

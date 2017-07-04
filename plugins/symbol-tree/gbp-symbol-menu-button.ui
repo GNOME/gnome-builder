@@ -57,18 +57,20 @@
     <property name="popover">popover</property>
     <child>
       <object class="GtkBox">
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="spacing">6</property>
         <property name="hexpand">true</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkImage" id="symbol_icon">
-            <property name="margin-start">8</property>
-            <property name="margin-end">8</property>
             <property name="hexpand">true</property>
             <property name="halign">end</property>
           </object>
         </child>
         <child type="center">
           <object class="GtkLabel" id="symbol_title">
+            <property name="ellipsize">end</property>
             <property name="label" translatable="yes">Document Outline</property>
             <property name="visible">true</property>
           </object>

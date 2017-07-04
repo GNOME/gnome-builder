@@ -259,7 +259,7 @@ void
 gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
                                    IdeSymbol           *symbol)
 {
-  const gchar *title = _("Document Outline");
+  const gchar *title = NULL;
   const gchar *icon_name = NULL;
 
   IDE_ENTRY;
@@ -274,15 +274,19 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
       title = ide_symbol_get_name (symbol);
     }
 
+  if (ide_str_empty0 (title))
+    {
+      title = _("Document Outline");
+      icon_name = NULL;
+      symbol = NULL;
+    }
+
   g_object_set (self->symbol_icon,
                 "icon-name", icon_name,
                 "visible", (symbol != NULL),
                 NULL);
 
-  g_object_set (self->symbol_title,
-                "label", title,
-                "visible", (symbol != NULL),
-                NULL);
+  gtk_label_set_label (self->symbol_title, title);
 
   IDE_EXIT;
 }
