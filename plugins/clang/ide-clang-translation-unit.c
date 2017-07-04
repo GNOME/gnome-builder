@@ -1141,3 +1141,83 @@ ide_clang_translation_unit_get_symbol_tree_finish (IdeClangTranslationUnit  *sel
 
   return g_task_propagate_pointer (task, error);
 }
+
+/**
+ * ide_clang_translation_unit_find_nearest_scope:
+ * @self: a #IdeClangTranslationUnit
+ * @location: An #IdeSourceLocation within the unit
+ * @error: A location for a #GError or %NULL
+ *
+ * This locates the nearest scope for @location and returns it
+ * as an #IdeSymbol.
+ *
+ * Returns: (transfer full): An #IdeSymbol or %NULL and @error is set.
+ *
+ * Since: 3.26
+ */
+IdeSymbol *
+ide_clang_translation_unit_find_nearest_scope (IdeClangTranslationUnit  *self,
+                                               IdeSourceLocation        *location,
+                                               GError                  **error)
+{
+  g_autoptr(IdeSourceLocation) symbol_location = NULL;
+  g_auto(CXString) cxname = { 0 };
+  CXTranslationUnit unit;
+  CXSourceLocation loc;
+  CXCursor cursor;
+  IdeSymbolKind symkind;
+  IdeSymbolFlags symflags;
+  IdeSymbol *ret;
+  CXFile file;
+  IdeFile *ifile;
+  guint line;
+  guint line_offset;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+  g_return_val_if_fail (location != NULL, NULL);
+
+  ifile = ide_source_location_get_file (location);
+  line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
+
+  if (NULL == (file = get_file_for_location (self, location)))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Failed to locate file in translation unit");
+      IDE_RETURN (ret);
+    }
+
+  unit = ide_ref_ptr_get (self->native);
+  loc = clang_getLocation (unit, file, line + 1, line_offset + 1);
+  cursor = clang_getCursor (unit, loc);
+
+  if (clang_Cursor_isNull (cursor))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Location was not found in translation unit");
+      IDE_RETURN (ret);
+    }
+
+  cursor = clang_getCursorSemanticParent (cursor);
+
+  symbol_location = ide_source_location_new (ifile, line - 1, line_offset - 1, 0);
+  cxname = clang_getCursorSpelling (cursor);
+  symkind = get_symbol_kind (cursor, &symflags);
+
+  ret = ide_symbol_new (clang_getCString (cxname),
+                        symkind,
+                        symflags,
+                        NULL,
+                        NULL,
+                        symbol_location);
+
+  IDE_TRACE_MSG ("Symbol = %p", ret);
+
+  IDE_RETURN (ret);
+}

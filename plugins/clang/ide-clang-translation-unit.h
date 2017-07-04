@@ -55,6 +55,9 @@ IdeSymbol         *ide_clang_translation_unit_lookup_symbol            (IdeClang
                                                                         GError                  **error);
 GPtrArray         *ide_clang_translation_unit_get_symbols              (IdeClangTranslationUnit  *self,
                                                                         IdeFile                  *file);
+IdeSymbol         *ide_clang_translation_unit_find_nearest_scope       (IdeClangTranslationUnit  *self,
+                                                                        IdeSourceLocation        *location,
+                                                                        GError                  **error);
 
 G_END_DECLS
 
