@@ -1280,7 +1280,7 @@ ide_clang_translation_unit_find_nearest_scope (IdeClangTranslationUnit  *self,
     }
 
   symbol_location = ide_source_location_new (ifile, line - 1, line_offset - 1, 0);
-  cxname = clang_getCursorDisplayName (cursor);
+  cxname = clang_getCursorSpelling (cursor);
   symkind = get_symbol_kind (cursor, &symflags);
 
   ret = ide_symbol_new (clang_getCString (cxname),
