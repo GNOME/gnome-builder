@@ -61,6 +61,8 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkImage" id="symbol_icon">
+            <property name="margin-start">8</property>
+            <property name="margin-end">8</property>
             <property name="hexpand">true</property>
             <property name="halign">end</property>
           </object>

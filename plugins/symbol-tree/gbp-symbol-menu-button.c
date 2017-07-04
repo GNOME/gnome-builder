@@ -262,6 +262,8 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
   const gchar *title = _("Document Outline");
   const gchar *icon_name = NULL;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_SYMBOL_MENU_BUTTON (self));
 
   if (symbol != NULL)
@@ -269,6 +271,7 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
       IdeSymbolKind kind = ide_symbol_get_kind (symbol);
 
       icon_name = ide_symbol_kind_get_icon_name (kind);
+      title = ide_symbol_get_name (symbol);
     }
 
   g_object_set (self->symbol_icon,
@@ -280,4 +283,6 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
                 "label", title,
                 "visible", (symbol != NULL),
                 NULL);
+
+  IDE_EXIT;
 }
