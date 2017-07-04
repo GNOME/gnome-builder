@@ -1142,6 +1142,51 @@ ide_clang_translation_unit_get_symbol_tree_finish (IdeClangTranslationUnit  *sel
   return g_task_propagate_pointer (task, error);
 }
 
+static gboolean
+is_ignored_kind (enum CXCursorKind kind)
+{
+  switch ((int)kind)
+    {
+    case CXCursor_CXXMethod:
+    case CXCursor_ClassDecl:
+    case CXCursor_ClassTemplate:
+    case CXCursor_Constructor:
+    case CXCursor_Destructor:
+    case CXCursor_EnumConstantDecl:
+    case CXCursor_EnumDecl:
+    case CXCursor_FunctionDecl:
+    case CXCursor_FunctionTemplate:
+    case CXCursor_Namespace:
+    case CXCursor_NamespaceAlias:
+    case CXCursor_StructDecl:
+    case CXCursor_TranslationUnit:
+    case CXCursor_TypeAliasDecl:
+    case CXCursor_TypedefDecl:
+    case CXCursor_UnionDecl:
+      return FALSE;
+
+    default:
+      return TRUE;
+    }
+}
+
+static CXCursor
+move_to_previous_sibling (CXTranslationUnit unit,
+                          CXCursor          cursor)
+{
+  CXSourceRange range = clang_getCursorExtent (cursor);
+  CXSourceLocation begin = clang_getRangeStart (range);
+  CXSourceLocation loc;
+  CXFile file;
+  unsigned line;
+  unsigned column;
+
+  clang_getFileLocation (begin, &file, &line, &column, NULL);
+  loc = clang_getLocation (unit, file, line, column - 1);
+
+  return clang_getCursor (unit, loc);
+}
+
 /**
  * ide_clang_translation_unit_find_nearest_scope:
  * @self: a #IdeClangTranslationUnit
@@ -1165,6 +1210,7 @@ ide_clang_translation_unit_find_nearest_scope (IdeClangTranslationUnit  *self,
   CXTranslationUnit unit;
   CXSourceLocation loc;
   CXCursor cursor;
+  enum CXCursorKind kind;
   IdeSymbolKind symkind;
   IdeSymbolFlags symflags;
   IdeSymbol *ret;
@@ -1204,10 +1250,37 @@ ide_clang_translation_unit_find_nearest_scope (IdeClangTranslationUnit  *self,
       IDE_RETURN (ret);
     }
 
-  cursor = clang_getCursorSemanticParent (cursor);
+  /*
+   * Macros sort of mess us up and result in us thinking
+   * we are in some sort of InvalidFile condition.
+   */
+  kind = clang_getCursorKind (cursor);
+  if (kind == CXCursor_MacroExpansion)
+    cursor = move_to_previous_sibling (unit, cursor);
+
+  /*
+   * The semantic parent may still be uninteresting to us,
+   * so possibly keep walking up the AST until we get to
+   * something better.
+   */
+  do
+    {
+      cursor = clang_getCursorSemanticParent (cursor);
+      kind = clang_getCursorKind (cursor);
+    }
+  while (!clang_Cursor_isNull (cursor) && is_ignored_kind (kind));
+
+  if (kind == CXCursor_TranslationUnit)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   "The location does not have a semantic parent");
+      IDE_RETURN (NULL);
+    }
 
   symbol_location = ide_source_location_new (ifile, line - 1, line_offset - 1, 0);
-  cxname = clang_getCursorSpelling (cursor);
+  cxname = clang_getCursorDisplayName (cursor);
   symkind = get_symbol_kind (cursor, &symflags);
 
   ret = ide_symbol_new (clang_getCString (cxname),
