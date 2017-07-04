@@ -83,6 +83,25 @@ code_complete_state_free (gpointer data)
     }
 }
 
+static CXFile
+get_file_for_location (IdeClangTranslationUnit *self,
+                       IdeSourceLocation       *location)
+{
+  g_autofree gchar *filename = NULL;
+  IdeFile *file;
+  GFile *gfile;
+
+  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (self));
+  g_assert (location != NULL);
+
+  if (!(file = ide_source_location_get_file (location)) ||
+      !(gfile = ide_file_get_file (file)) ||
+      !(filename = g_file_get_path (gfile)))
+    return NULL;
+
+  return clang_getFile (ide_ref_ptr_get (self->native), filename);
+}
+
 /**
  * ide_clang_translation_unit_get_index:
  * @self: A #IdeClangTranslationUnit.
@@ -915,10 +934,7 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   line = ide_source_location_get_line (location);
   line_offset = ide_source_location_get_line_offset (location);
 
-  if (!(file = ide_source_location_get_file (location)) ||
-      !(gfile = ide_file_get_file (file)) ||
-      !(filename = g_file_get_path (gfile)) ||
-      !(cxfile = clang_getFile (tu, filename)))
+  if (NULL == (cxfile = get_file_for_location (self, location)))
     IDE_RETURN (NULL);
 
   cxlocation = clang_getLocation (tu, cxfile, line + 1, line_offset + 1);
