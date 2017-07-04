@@ -41,8 +41,8 @@ ide_clang_symbol_resolver_lookup_symbol_cb (GObject      *object,
   g_autoptr(IdeClangTranslationUnit) unit = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
+  g_autoptr(GError) error = NULL;
   IdeSourceLocation *location;
-  GError *error = NULL;
 
   g_assert (IDE_IS_CLANG_SERVICE (service));
   g_assert (G_IS_TASK (task));
@@ -53,7 +53,7 @@ ide_clang_symbol_resolver_lookup_symbol_cb (GObject      *object,
 
   if (unit == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -61,11 +61,11 @@ ide_clang_symbol_resolver_lookup_symbol_cb (GObject      *object,
 
   if (symbol == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  g_task_return_pointer (task, ide_symbol_ref (symbol), (GDestroyNotify)ide_symbol_unref);
+  g_task_return_pointer (task, g_steal_pointer (&symbol), (GDestroyNotify)ide_symbol_unref);
 }
 
 static void
@@ -91,6 +91,7 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   file = ide_source_location_get_file (location);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, ide_source_location_ref (location),
                         (GDestroyNotify)ide_source_location_unref);
 
@@ -99,7 +100,7 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
                                                 0,
                                                 cancellable,
                                                 ide_clang_symbol_resolver_lookup_symbol_cb,
-                                                g_object_ref (task));
+                                                g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -128,14 +129,16 @@ ide_clang_symbol_resolver_get_symbol_tree_cb2 (GObject      *object,
                                                gpointer      user_data)
 {
   IdeClangTranslationUnit *unit = (IdeClangTranslationUnit *)object;
-  IdeSymbolTree *ret;
-  GError *error = NULL;
+  g_autoptr(IdeSymbolTree) ret = NULL;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
 
-  if (!(ret = ide_clang_translation_unit_get_symbol_tree_finish (unit, result, &error)))
-    g_task_return_error (task, error);
+  ret = ide_clang_translation_unit_get_symbol_tree_finish (unit, result, &error);
+
+  if (ret == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, ret, g_object_unref);
+    g_task_return_pointer (task, g_steal_pointer (&ret), g_object_unref);
 }
 
 static void
@@ -146,8 +149,8 @@ ide_clang_symbol_resolver_get_symbol_tree_cb (GObject      *object,
   IdeClangService *service = (IdeClangService *)object;
   g_autoptr(IdeClangTranslationUnit) unit = NULL;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   GFile *file;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -158,7 +161,7 @@ ide_clang_symbol_resolver_get_symbol_tree_cb (GObject      *object,
 
   if (unit == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -198,6 +201,7 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   ifile = g_object_new (IDE_TYPE_FILE,
@@ -210,7 +214,7 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                 0,
                                                 cancellable,
                                                 ide_clang_symbol_resolver_get_symbol_tree_cb,
-                                                g_object_ref (task));
+                                                g_steal_pointer (&task));
 
   IDE_EXIT;
 }
