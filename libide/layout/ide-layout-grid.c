@@ -494,25 +494,26 @@ ide_layout_grid_get_current_stack (IdeLayoutGrid *self)
   return NULL;
 }
 
-/*
- * _ide_layout_grid_get_nth_stack:
+/**
+ * ide_layout_grid_get_nth_column:
+ * @self: a #IdeLayoutGrid
+ * @nth: the index of the column, or -1
  *
- * This will get the @nth stack. If it does not yet exist,
- * it will be created.
+ * Gets the @nth column from the grid.
  *
- * If nth == -1, a new stack will be created at index 0.
+ * If @nth is -1, then a new column at the beginning of the
+ * grid is created.
  *
- * If nth >= the number of stacks, a new stack will be created
- * at the end of the grid.
+ * If @nth is >= the number of columns in the grid, then a new
+ * column at the end of the grid is created.
  *
- * Returns: (not nullable) (transfer none): An #IdeLayoutStack.
+ * Returns: (transfer none): An #IdeLayoutGridColumn.
  */
-IdeLayoutStack *
-_ide_layout_grid_get_nth_stack (IdeLayoutGrid *self,
+IdeLayoutGridColumn *
+ide_layout_grid_get_nth_column (IdeLayoutGrid *self,
                                 gint           nth)
 {
-  GtkWidget *column = NULL;
-  IdeLayoutStack *stack;
+  GtkWidget *column;
 
   g_return_val_if_fail (IDE_IS_LAYOUT_GRID (self), NULL);
 
@@ -533,11 +534,37 @@ _ide_layout_grid_get_nth_stack (IdeLayoutGrid *self,
       column = dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), nth);
     }
 
-  g_assert (IDE_IS_LAYOUT_GRID_COLUMN (column));
+  g_return_val_if_fail (IDE_IS_LAYOUT_GRID_COLUMN (column), NULL);
 
+  return IDE_LAYOUT_GRID_COLUMN (column);
+}
+
+/*
+ * _ide_layout_grid_get_nth_stack:
+ *
+ * This will get the @nth stack. If it does not yet exist,
+ * it will be created.
+ *
+ * If nth == -1, a new stack will be created at index 0.
+ *
+ * If nth >= the number of stacks, a new stack will be created
+ * at the end of the grid.
+ *
+ * Returns: (not nullable) (transfer none): An #IdeLayoutStack.
+ */
+IdeLayoutStack *
+_ide_layout_grid_get_nth_stack (IdeLayoutGrid *self,
+                                gint           nth)
+{
+  IdeLayoutGridColumn *column;
+  IdeLayoutStack *stack;
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_GRID (self), NULL);
+
+  column = ide_layout_grid_get_nth_column (self, nth);
   stack = ide_layout_grid_column_get_current_stack (IDE_LAYOUT_GRID_COLUMN (column));
 
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_return_val_if_fail (IDE_IS_LAYOUT_STACK (stack), NULL);
 
   return stack;
 }
