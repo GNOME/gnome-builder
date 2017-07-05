@@ -25,6 +25,7 @@ subdir('ctags')
 subdir('devhelp')
 subdir('eslint')
 subdir('file-search')
+subdir('find-other-file')
 subdir('flatpak')
 subdir('fpaste')
 subdir('gcc')
@@ -77,6 +78,7 @@ status += [
   'Devhelp ............... : @0@'.format(get_option('with_devhelp')),
   'ESLint ................ : @0@'.format(get_option('with_eslint')),
   'File Search ........... : @0@'.format(get_option('with_file_search')),
+  'Find other file ....... : @0@'.format(get_option('with_find_other_file')),
   'Flatpak ............... : @0@'.format(get_option('with_flatpak')),
   'Fpaste ................ : @0@'.format(get_option('with_fpaste')),
   'GCC ................... : @0@'.format(get_option('with_gcc')),
