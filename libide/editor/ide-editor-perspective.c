@@ -269,30 +269,72 @@ locate_view_for_buffer (GtkWidget *widget,
     }
 }
 
+static gboolean
+ide_editor_perspective_focus_if_found (IdeEditorPerspective *self,
+                                       IdeBuffer            *buffer,
+                                       gboolean              any_stack)
+{
+  IdeLayoutStack *stack;
+  struct {
+    IdeBuffer     *buffer;
+    IdeLayoutView *view;
+  } lookup = { buffer };
+
+  g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_BUFFER (buffer), FALSE);
+
+  stack = ide_layout_grid_get_current_stack (self->grid);
+
+  if (any_stack)
+    ide_layout_grid_foreach_view (self->grid, locate_view_for_buffer, &lookup);
+  else
+    ide_layout_stack_foreach_view (stack, locate_view_for_buffer, &lookup);
+
+  if (lookup.view != NULL)
+    {
+      stack = IDE_LAYOUT_STACK (gtk_widget_get_ancestor (GTK_WIDGET (lookup.view),
+                                                         IDE_TYPE_LAYOUT_STACK));
+      ide_layout_stack_set_visible_child (stack, lookup.view);
+      gtk_widget_grab_focus (GTK_WIDGET (lookup.view));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+void
+ide_editor_perspective_focus_buffer (IdeEditorPerspective *self,
+                                     IdeBuffer            *buffer)
+{
+  IdeEditorView *view;
+
+  g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_return_if_fail (IDE_IS_BUFFER (buffer));
+
+  if (ide_editor_perspective_focus_if_found (self, buffer, TRUE))
+    return;
+
+  view = g_object_new (IDE_TYPE_EDITOR_VIEW,
+                       "buffer", buffer,
+                       "visible", TRUE,
+                       NULL);
+  gtk_container_add (GTK_CONTAINER (self->grid), GTK_WIDGET (view));
+}
+
 void
 ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
                                                       IdeBuffer            *buffer)
 {
   IdeLayoutStack *stack;
   IdeEditorView *view;
-  struct {
-    IdeBuffer     *buffer;
-    IdeLayoutView *view;
-  } lookup = { buffer };
 
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
+  if (ide_editor_perspective_focus_if_found (self, buffer, FALSE))
+    return;
+
   stack = ide_layout_grid_get_current_stack (self->grid);
-
-  ide_layout_stack_foreach_view (stack, locate_view_for_buffer, &lookup);
-
-  if (lookup.view != NULL)
-    {
-      ide_layout_stack_set_visible_child (stack, lookup.view);
-      gtk_widget_grab_focus (GTK_WIDGET (lookup.view));
-      return;
-    }
 
   view = g_object_new (IDE_TYPE_EDITOR_VIEW,
                        "buffer", buffer,

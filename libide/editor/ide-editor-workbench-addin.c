@@ -92,7 +92,7 @@ ide_editor_workbench_addin_on_load_buffer (IdeEditorWorkbenchAddin *self,
 
   IDE_TRACE_MSG ("Loading %s", ide_buffer_get_title (buffer));
 
-  ide_editor_perspective_focus_buffer_in_current_stack (self->perspective, buffer);
+  ide_editor_perspective_focus_buffer (self->perspective, buffer);
 }
 
 static void
