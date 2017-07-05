@@ -27,19 +27,11 @@ modules.
 
 ----
 
-Builder can be built from tarball releases using the traditional autotools
-manner.
+Builder is built using meson:
 
-If you checked the code out from git, you will need to bootstrap the build
-system like so:
-
-  ./autogen.sh
-
-Then, a typical build might look like so:
-
-  ./configure --prefix=/usr
-  make
-  sudo make install
+  meson _build --prefix=/usr
+  ninja -C _build
+  sudo ninja -C _build install
 
 ----
 
@@ -48,7 +40,7 @@ unfamiliar with jhbuild, the following will help you get started.
 
   git clone git://git.gnome.org/jhbuild.git
   cd jhbuild
-  ./autogen.sh
+  ./autogen.sh --simple-install
   make
   make install
   jhbuild build gnome-builder
