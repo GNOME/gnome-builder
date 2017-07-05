@@ -59,6 +59,7 @@ IdeConfiguration      *ide_build_pipeline_get_configuration   (IdeBuildPipeline 
 const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline       *self);
 const gchar           *ide_build_pipeline_get_srcdir          (IdeBuildPipeline       *self);
 gchar                 *ide_build_pipeline_get_message         (IdeBuildPipeline       *self);
+IdeBuildPhase          ide_build_pipeline_get_phase           (IdeBuildPipeline       *self);
 IdeSubprocessLauncher *ide_build_pipeline_create_launcher     (IdeBuildPipeline       *self,
                                                                GError                **error);
 gchar                 *ide_build_pipeline_build_srcdir_path   (IdeBuildPipeline       *self,

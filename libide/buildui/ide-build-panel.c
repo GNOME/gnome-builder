@@ -29,17 +29,19 @@ struct _IdeBuildPanel
 {
   DzlDockWidget        parent_instance;
 
+  /* Owned references */
   GHashTable          *diags_hash;
   IdeBuildPipeline    *pipeline;
 
+  /* Template widgets */
+  GtkLabel            *build_status_label;
+  GtkLabel            *time_completed_label;
+  GtkNotebook         *notebook;
+  GtkScrolledWindow   *errors_page;
+  IdeFancyTreeView    *errors_tree_view;
+  GtkScrolledWindow   *warnings_page;
+  IdeFancyTreeView    *warnings_tree_view;
   GtkListStore        *diagnostics_store;
-  GtkTreeView         *diagnostics_tree_view;
-  GtkLabel            *errors_label;
-  GtkLabel            *running_time_label;
-  GtkStack            *stack;
-  GtkRevealer         *status_revealer;
-  GtkLabel            *status_label;
-  GtkLabel            *warnings_label;
 
   guint                error_count;
   guint                warning_count;
@@ -49,7 +51,6 @@ G_DEFINE_TYPE (IdeBuildPanel, ide_build_panel, DZL_TYPE_DOCK_WIDGET)
 
 enum {
   COLUMN_DIAGNOSTIC,
-  COLUMN_TEXT,
   LAST_COLUMN
 };
 
@@ -60,6 +61,24 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+set_warnings_label (IdeBuildPanel *self,
+                    const gchar   *label)
+{
+  gtk_container_child_set (GTK_CONTAINER (self->notebook), GTK_WIDGET (self->warnings_page),
+                           "tab-label", label,
+                           NULL);
+}
+
+static void
+set_errors_label (IdeBuildPanel *self,
+                  const gchar   *label)
+{
+  gtk_container_child_set (GTK_CONTAINER (self->notebook), GTK_WIDGET (self->errors_page),
+                           "tab-label", label,
+                           NULL);
+}
 
 static void
 ide_build_panel_diagnostic (IdeBuildPanel    *self,
@@ -79,66 +98,41 @@ ide_build_panel_diagnostic (IdeBuildPanel    *self,
 
   if (severity == IDE_DIAGNOSTIC_WARNING)
     {
-      g_autofree gchar *str = NULL;
+      g_autofree gchar *label = NULL;
 
       self->warning_count++;
 
-      str = g_strdup_printf (ngettext ("%d warning", "%d warnings", self->warning_count), self->warning_count);
-      gtk_label_set_label (self->warnings_label, str);
+      label = g_strdup_printf ("%s (%u)", _("Warnings"), self->warning_count);
+      set_warnings_label (self, label);
     }
   else if (severity == IDE_DIAGNOSTIC_ERROR || severity == IDE_DIAGNOSTIC_FATAL)
     {
-      g_autofree gchar *str = NULL;
+      g_autofree gchar *label = NULL;
 
       self->error_count++;
 
-      str = g_strdup_printf (ngettext ("%d error", "%d errors", self->error_count), self->error_count);
-      gtk_label_set_label (self->errors_label, str);
+      label = g_strdup_printf ("%s (%u)", _("Errors"), self->error_count);
+      set_errors_label (self, label);
+    }
+  else
+    {
+      /* TODO: Figure out design for "Others" Column like Notes? */
     }
 
   hash = ide_diagnostic_hash (diagnostic);
 
   if (g_hash_table_insert (self->diags_hash, GUINT_TO_POINTER (hash), NULL))
     {
-      GtkTreeModel *model = GTK_TREE_MODEL (self->diagnostics_store);
       GtkTreeIter iter;
-      gint left = 0;
-      gint right = gtk_tree_model_iter_n_children (model, NULL) - 1;
-      gint middle = 0;
-      gint cmpval = 1;
 
-      /* Binary search to locate the target position. */
-      while (left <= right)
-        {
-          g_autoptr(IdeDiagnostic) item = NULL;
-
-          middle = (left + right) / 2;
-
-          gtk_tree_model_iter_nth_child (model, &iter, NULL, middle);
-          gtk_tree_model_get (model, &iter,
-                              COLUMN_DIAGNOSTIC, &item,
-                              -1);
-
-          cmpval = ide_diagnostic_compare (item, diagnostic);
-
-          if (cmpval < 0)
-            left = middle + 1;
-          else if (cmpval > 0)
-            right = middle - 1;
-          else
-            break;
-        }
-
-      /* If we binary searched and middle was compared previous
-       * to our new diagnostic, advance one position.
-       */
-      if (cmpval < 0)
-        middle++;
-
-      gtk_list_store_insert (self->diagnostics_store, &iter, middle);
+      dzl_gtk_list_store_insert_sorted (self->diagnostics_store,
+                                        &iter,
+                                        diagnostic,
+                                        COLUMN_DIAGNOSTIC,
+                                        (GCompareDataFunc)ide_diagnostic_compare,
+                                        NULL);
       gtk_list_store_set (self->diagnostics_store, &iter,
                           COLUMN_DIAGNOSTIC, diagnostic,
-                          COLUMN_TEXT, ide_diagnostic_get_text (diagnostic),
                           -1);
     }
 
@@ -163,9 +157,10 @@ ide_build_panel_update_running_time (IdeBuildPanel *self)
 
       span = ide_build_manager_get_running_time (build_manager);
       text = dzl_g_time_span_to_label (span);
+      gtk_label_set_label (self->time_completed_label, text);
     }
-
-  gtk_label_set_label (self->running_time_label, text);
+  else
+    gtk_label_set_label (self->time_completed_label, "—");
 }
 
 static void
@@ -183,8 +178,8 @@ ide_build_panel_started (IdeBuildPanel    *self,
       self->error_count = 0;
       self->warning_count = 0;
 
-      gtk_label_set_label (self->warnings_label, "—");
-      gtk_label_set_label (self->errors_label, "—");
+      set_warnings_label (self, _("Warnings"));
+      set_errors_label (self, _("Errors"));
 
       gtk_list_store_clear (self->diagnostics_store);
       g_hash_table_remove_all (self->diags_hash);
@@ -205,8 +200,11 @@ ide_build_panel_connect (IdeBuildPanel    *self,
   self->error_count = 0;
   self->warning_count = 0;
 
-  gtk_label_set_label (self->warnings_label, "—");
-  gtk_label_set_label (self->errors_label, "—");
+  set_warnings_label (self, _("Warnings"));
+  set_errors_label (self, _("Errors"));
+
+  gtk_label_set_label (self->time_completed_label, "—");
+  gtk_label_set_label (self->build_status_label, "—");
 
   g_signal_connect_object (pipeline,
                            "diagnostic",
@@ -219,10 +217,6 @@ ide_build_panel_connect (IdeBuildPanel    *self,
                            G_CALLBACK (ide_build_panel_started),
                            self,
                            G_CONNECT_SWAPPED);
-
-  gtk_revealer_set_reveal_child (self->status_revealer, TRUE);
-
-  gtk_stack_set_visible_child_name (self->stack, "diagnostics");
 }
 
 static void
@@ -236,11 +230,8 @@ ide_build_panel_disconnect (IdeBuildPanel *self)
                                         self);
   g_clear_object (&self->pipeline);
 
-  gtk_revealer_set_reveal_child (self->status_revealer, FALSE);
-
   g_hash_table_remove_all (self->diags_hash);
   gtk_list_store_clear (self->diagnostics_store);
-  gtk_stack_set_visible_child_name (self->stack, "empty-state");
 }
 
 void
@@ -321,13 +312,10 @@ ide_build_panel_text_func (GtkCellLayout   *layout,
 {
   IdeCellRendererFancy *fancy = (IdeCellRendererFancy *)renderer;
   g_autoptr(IdeDiagnostic) diagnostic = NULL;
-  g_auto(GValue) value = { 0 };
 
   gtk_tree_model_get (model, iter,
                       COLUMN_DIAGNOSTIC, &diagnostic,
                       -1);
-
-  g_value_init (&value, G_TYPE_STRING);
 
   if G_LIKELY (diagnostic != NULL)
     {
@@ -362,11 +350,37 @@ ide_build_panel_text_func (GtkCellLayout   *layout,
 
       text = ide_diagnostic_get_text (diagnostic);
       ide_cell_renderer_fancy_set_body (fancy, text);
-
-      return;
     }
+  else
+    {
+      ide_cell_renderer_fancy_set_title (fancy, NULL);
+      ide_cell_renderer_fancy_set_body (fancy, NULL);
+    }
+}
 
-  g_object_set_property (G_OBJECT (renderer), "text", &value);
+static void
+ide_build_panel_notify_message (IdeBuildPanel   *self,
+                                GParamSpec      *pspec,
+                                IdeBuildManager *build_manager)
+{
+  g_autofree gchar *message = NULL;
+  IdeBuildPipeline *pipeline;
+  GtkStyleContext *style;
+
+  g_assert (IDE_IS_BUILD_PANEL (self));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  message = ide_build_manager_get_message (build_manager);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  gtk_label_set_label (self->build_status_label, message);
+
+  style = gtk_widget_get_style_context (GTK_WIDGET (self->build_status_label));
+
+  if (ide_build_pipeline_get_phase (pipeline) == IDE_BUILD_PHASE_FAILED)
+    gtk_style_context_add_class (style, GTK_STYLE_CLASS_ERROR);
+  else
+    gtk_style_context_remove_class (style, GTK_STYLE_CLASS_ERROR);
 }
 
 static void
@@ -386,9 +400,11 @@ ide_build_panel_context_handler (GtkWidget  *widget,
 
   build_manager = ide_context_get_build_manager (context);
 
-  g_object_bind_property (build_manager, "message",
-                          self->status_label, "label",
-                          G_BINDING_SYNC_CREATE);
+  g_signal_connect_object (build_manager,
+                           "notify::message",
+                           G_CALLBACK (ide_build_panel_notify_message),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (build_manager,
                            "notify::running-time",
@@ -415,6 +431,78 @@ ide_build_panel_context_handler (GtkWidget  *widget,
                            G_CONNECT_SWAPPED);
 
   IDE_EXIT;
+}
+
+static gboolean
+ide_build_panel_diagnostic_tooltip (IdeBuildPanel *self,
+                                    gint           x,
+                                    gint           y,
+                                    gboolean       keyboard_mode,
+                                    GtkTooltip    *tooltip,
+                                    GtkTreeView   *tree_view)
+{
+  GtkTreeModel *model = NULL;
+  GtkTreeIter iter;
+
+  g_assert (IDE_IS_BUILD_PANEL (self));
+  g_assert (GTK_IS_TOOLTIP (tooltip));
+  g_assert (GTK_IS_TREE_VIEW (tree_view));
+
+  if (gtk_tree_view_get_tooltip_context (tree_view, &x, &y, keyboard_mode, &model, NULL, &iter))
+    {
+      g_autoptr(IdeDiagnostic) diag = NULL;
+
+      gtk_tree_model_get (model, &iter,
+                          COLUMN_DIAGNOSTIC, &diag,
+                          -1);
+
+      if (diag != NULL)
+        {
+          g_autofree gchar *text = ide_diagnostic_get_text_for_display (diag);
+
+          gtk_tooltip_set_text (tooltip, text);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+diagnostic_is_warning (GtkTreeModel *model,
+                       GtkTreeIter  *iter,
+                       gpointer      user_data)
+{
+  g_autoptr(IdeDiagnostic) diag = NULL;
+  IdeDiagnosticSeverity severity = 0;
+
+  gtk_tree_model_get (model, iter,
+                      COLUMN_DIAGNOSTIC, &diag,
+                      -1);
+
+  if (diag != NULL)
+    severity = ide_diagnostic_get_severity (diag);
+
+  return severity <= IDE_DIAGNOSTIC_WARNING;
+}
+
+static gboolean
+diagnostic_is_error (GtkTreeModel *model,
+                     GtkTreeIter  *iter,
+                     gpointer      user_data)
+{
+  g_autoptr(IdeDiagnostic) diag = NULL;
+  IdeDiagnosticSeverity severity = 0;
+
+  gtk_tree_model_get (model, iter,
+                      COLUMN_DIAGNOSTIC, &diag,
+                      -1);
+
+  if (diag != NULL)
+    severity = ide_diagnostic_get_severity (diag);
+
+  return severity > IDE_DIAGNOSTIC_WARNING;
 }
 
 static void
@@ -490,14 +578,14 @@ ide_build_panel_class_init (IdeBuildPanelClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-panel.ui");
   gtk_widget_class_set_css_name (widget_class, "buildpanel");
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, build_status_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, time_completed_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, notebook);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, errors_page);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, errors_tree_view);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, warnings_page);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, warnings_tree_view);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, diagnostics_store);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, diagnostics_tree_view);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, errors_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, running_time_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, status_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, status_revealer);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, warnings_label);
 
   g_type_ensure (IDE_TYPE_CELL_RENDERER_FANCY);
   g_type_ensure (IDE_TYPE_DIAGNOSTIC);
@@ -507,20 +595,51 @@ ide_build_panel_class_init (IdeBuildPanelClass *klass)
 static void
 ide_build_panel_init (IdeBuildPanel *self)
 {
+  GtkTreeModel *filter;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->diags_hash = g_hash_table_new (NULL, NULL);
 
-  g_object_set (self, "title", _("Build"), NULL);
+  g_object_set (self, "title", _("Build Issues"), NULL);
 
   ide_widget_set_context_handler (self, ide_build_panel_context_handler);
 
-  g_signal_connect_object (self->diagnostics_tree_view,
+  g_signal_connect_swapped (self->warnings_tree_view,
                            "row-activated",
                            G_CALLBACK (ide_build_panel_diagnostic_activated),
-                           self,
-                           G_CONNECT_SWAPPED);
+                           self);
 
-  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->diagnostics_tree_view),
+  g_signal_connect_swapped (self->warnings_tree_view,
+                           "query-tooltip",
+                           G_CALLBACK (ide_build_panel_diagnostic_tooltip),
+                           self);
+
+  g_signal_connect_swapped (self->errors_tree_view,
+                           "row-activated",
+                           G_CALLBACK (ide_build_panel_diagnostic_activated),
+                           self);
+
+  g_signal_connect_swapped (self->errors_tree_view,
+                           "query-tooltip",
+                           G_CALLBACK (ide_build_panel_diagnostic_tooltip),
+                           self);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (self->diagnostics_store), NULL);
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                          diagnostic_is_warning, NULL, NULL);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (self->warnings_tree_view), GTK_TREE_MODEL (filter));
+  g_object_unref (filter);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (self->diagnostics_store), NULL);
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                          diagnostic_is_error, NULL, NULL);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (self->errors_tree_view), GTK_TREE_MODEL (filter));
+  g_object_unref (filter);
+
+  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->warnings_tree_view),
+                                     ide_build_panel_text_func, self, NULL);
+
+  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->errors_tree_view),
                                      ide_build_panel_text_func, self, NULL);
 }

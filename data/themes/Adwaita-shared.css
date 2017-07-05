@@ -50,4 +50,10 @@ popover.messagepopover .popover-content-area {
   margin: 24px;
 }
 
-
+/* buildui panel */
+ideeditorsidebar notebook header {
+  background: transparent;
+}
+ideeditorsidebar notebook header tab {
+  padding: 0;
+}

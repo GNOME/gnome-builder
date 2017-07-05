@@ -364,9 +364,11 @@ popover.transfers list row > box {
   padding: 10px;
 }
 
-ideeditorspellwidget {
-  background: @theme_bg_color;
+
+ideeditorsidebar label.error {
+  color: @error_color;
+  font-weight: bold;
 }
-ideeditorspellwidget:backdrop {
-  background: @theme_unfocused_bg_color;
+ideeditorsidebar label.error:backdrop {
+  font-weight: normal;
 }
