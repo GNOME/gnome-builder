@@ -46,7 +46,6 @@ struct _IdeEditorWorkbenchAddin
   /* Borrowed references */
   IdeWorkbench         *workbench;
   IdeEditorPerspective *perspective;
-  GtkButton            *new_document_button;
   GtkBox               *panels_box;
 };
 
@@ -133,20 +132,6 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
 
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH_HEADER_BAR (header));
-
-  self->new_document_button = g_object_new (GTK_TYPE_BUTTON,
-                                            "action-name", "editor.new-file",
-                                            "child", g_object_new (GTK_TYPE_IMAGE,
-                                                                   "visible", TRUE,
-                                                                   "icon-name", "document-new-symbolic",
-                                                                   NULL),
-                                            NULL);
-  g_signal_connect (self->new_document_button,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->new_document_button);
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->new_document_button), "image-button");
-  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->new_document_button), GTK_PACK_START, 0);
 
   self->panels_box = g_object_new (GTK_TYPE_BOX,
                                    "visible", TRUE,
@@ -235,12 +220,11 @@ ide_editor_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   dzl_signal_group_set_target (self->buffer_manager_signals, NULL);
-  gtk_widget_destroy (GTK_WIDGET (self->new_document_button));
-  gtk_widget_destroy (GTK_WIDGET (self->perspective));
-  g_clear_object (&self->manager);
 
-  g_assert (self->new_document_button == NULL);
-  g_assert (self->perspective == NULL);
+  gtk_widget_destroy (GTK_WIDGET (self->perspective));
+  gtk_widget_destroy (GTK_WIDGET (self->panels_box));
+
+  g_clear_object (&self->manager);
 
   self->workbench = NULL;
 }
@@ -426,14 +410,11 @@ ide_editor_workbench_addin_perspective_set (IdeWorkbenchAddin *addin,
                                             IdePerspective    *perspective)
 {
   IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)addin;
-  gboolean visible;
 
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
 
-  visible = IDE_IS_EDITOR_PERSPECTIVE (perspective);
-
-  gtk_widget_set_visible (GTK_WIDGET (self->new_document_button), visible);
-  gtk_widget_set_visible (GTK_WIDGET (self->panels_box), visible);
+  gtk_widget_set_visible (GTK_WIDGET (self->panels_box),
+                          IDE_IS_EDITOR_PERSPECTIVE (perspective));
 }
 
 static void
