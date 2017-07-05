@@ -24,8 +24,75 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
 #include "editor/ide-editor-private.h"
+#include "editor/ide-editor-print-operation.h"
 #include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
+
+static void
+handle_print_result (IdeEditorView           *self,
+                     GtkPrintOperation       *operation,
+                     GtkPrintOperationResult  result)
+{
+  if (result == GTK_PRINT_OPERATION_RESULT_ERROR)
+    {
+      g_autoptr(GError) error = NULL;
+
+      gtk_print_operation_get_error (operation, &error);
+
+      /* info bar */
+      g_warning ("%s", error->message);
+      // ide_layout_view_add_error (...);
+    }
+}
+
+static void
+print_done (GtkPrintOperation       *operation,
+            GtkPrintOperationResult  result,
+            gpointer                 user_data)
+{
+  IdeEditorView *self = user_data;
+
+  g_assert (GTK_IS_PRINT_OPERATION (operation));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  handle_print_result (self, operation, result);
+
+  g_object_unref (operation);
+  g_object_unref (self);
+}
+
+static void
+ide_editor_view_actions_print (GSimpleAction *action,
+                               GVariant      *param,
+                               gpointer       user_data)
+{
+  g_autoptr(IdeEditorPrintOperation) operation = NULL;
+  IdeEditorView *self = user_data;
+  IdeSourceView *source_view;
+  GtkWidget *toplevel;
+  GtkPrintOperationResult result;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  toplevel = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
+
+  source_view = ide_editor_view_get_view (self);
+  operation = ide_editor_print_operation_new (source_view);
+
+  /* keep a ref until "done" is emitted */
+  g_object_ref (operation);
+  g_signal_connect_after (g_object_ref (operation),
+                          "done",
+                          G_CALLBACK (print_done),
+                          g_object_ref (self));
+
+  result = gtk_print_operation_run (GTK_PRINT_OPERATION (operation),
+                                    GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                    GTK_WINDOW (toplevel),
+                                    NULL);
+
+  handle_print_result (self, GTK_PRINT_OPERATION (operation), result);
+}
 
 static void
 ide_editor_view_actions_save_cb (GObject      *object,
@@ -139,6 +206,7 @@ ide_editor_view_actions_save (GSimpleAction *action,
 
 static const GActionEntry editor_view_entries[] = {
   { "save", ide_editor_view_actions_save },
+  { "print", ide_editor_view_actions_print },
 };
 
 void

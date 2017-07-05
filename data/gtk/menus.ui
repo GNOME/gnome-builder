@@ -254,6 +254,7 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">Print…</attribute>
+        <attribute name="action">editor-view.print</attribute>
       </item>
     </section>
     <section id="editor-document-preferences-section">
