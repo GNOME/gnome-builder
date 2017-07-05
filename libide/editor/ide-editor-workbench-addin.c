@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-editor-workbench-addin"
 
+#include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
@@ -160,6 +161,7 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
   button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                          "action-name", "dockbin.left-visible",
                          "focus-on-click", FALSE,
+                         "tooltip-text", _("Toggle navigation panel"),
                          "child", g_object_new (GTK_TYPE_IMAGE,
                                                 "icon-name", "panel-left-pane-symbolic",
                                                 "margin-start", 12,
@@ -173,6 +175,7 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
   button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                          "action-name", "dockbin.bottom-visible",
                          "focus-on-click", FALSE,
+                         "tooltip-text", _("Toggle utilities panel"),
                          "child", g_object_new (GTK_TYPE_IMAGE,
                                                 "icon-name", "panel-bottom-pane-symbolic",
                                                 "margin-start", 12,
