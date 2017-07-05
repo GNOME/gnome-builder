@@ -38,6 +38,10 @@ struct _IdeEditorPerspective
   /* Template widgets */
   IdeLayoutGrid    *grid;
   IdeEditorSidebar *sidebar;
+
+  /* State before entering focus mode */
+  guint             prefocus_had_left : 1;
+  guint             prefocus_had_bottom : 1;
 };
 
 typedef struct
@@ -498,6 +502,41 @@ ide_editor_perspective_agree_to_shutdown (IdePerspective *perspective)
 }
 
 static void
+ide_editor_perspective_set_fullscreen (IdePerspective *perspective,
+                                       gboolean        fullscreen)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)perspective;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  if (fullscreen)
+    {
+      gboolean left_visible;
+      gboolean bottom_visible;
+
+      g_object_get (self,
+                    "left-visible", &left_visible,
+                    "bottom-visible", &bottom_visible,
+                    NULL);
+
+      self->prefocus_had_left = left_visible;
+      self->prefocus_had_bottom = bottom_visible;
+
+      g_object_set (self,
+                    "left-visible", FALSE,
+                    "bottom-visible", FALSE,
+                    NULL);
+    }
+  else
+    {
+      g_object_set (self,
+                    "left-visible", self->prefocus_had_left,
+                    "bottom-visible", self->prefocus_had_bottom,
+                    NULL);
+    }
+}
+
+static void
 perspective_iface_init (IdePerspectiveInterface *iface)
 {
   iface->agree_to_shutdown = ide_editor_perspective_agree_to_shutdown;
@@ -507,4 +546,5 @@ perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_title = ide_editor_perspective_get_title;
   iface->restore_state = ide_editor_perspective_restore_state;
   iface->views_foreach = ide_editor_perspective_views_foreach;
+  iface->set_fullscreen = ide_editor_perspective_set_fullscreen;
 }
