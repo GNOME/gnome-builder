@@ -331,7 +331,7 @@ ide_editor_view_actions_save_as (GSimpleAction *action,
   dialog = gtk_file_chooser_native_new (_("Save File As"),
                                         GTK_WINDOW (toplevel),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("Save"),
+                                        _("Save As"),
                                         _("Cancel"));
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
