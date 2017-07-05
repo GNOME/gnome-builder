@@ -45,6 +45,12 @@ static const DzlShortcutEntry editor_perspective_entries[] = {
     N_("Editor"),
     N_("Panels"),
     N_("Toggle navigation panel") },
+
+  { "org.gnome.builder.editor.utilities-panel",
+    NULL,
+    N_("Editor"),
+    N_("Panels"),
+    N_("Toggle utilities panel") },
 };
 
 void
@@ -70,6 +76,11 @@ _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self)
                                               I_("org.gnome.builder.editor.navigation-panel"),
                                               I_("F9"),
                                               I_("dockbin.left-visible"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor.utilities-panel"),
+                                              I_("<Control>F9"),
+                                              I_("dockbin.bottom-visible"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              editor_perspective_entries,
