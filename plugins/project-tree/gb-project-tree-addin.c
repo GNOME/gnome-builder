@@ -73,12 +73,14 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
 
   self->tree = g_object_new (GB_TYPE_PROJECT_TREE,
                              "headers-visible", FALSE,
+                             "level-indentation", 22,
                              "visible", TRUE,
                              NULL);
   g_signal_connect (self->tree,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->tree);
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->tree), "project-tree");
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree));
 
   ide_editor_sidebar_add_section (sidebar,

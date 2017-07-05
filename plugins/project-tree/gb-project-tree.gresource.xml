@@ -4,5 +4,6 @@
     <file>gb-new-file-popover.ui</file>
     <file>gb-rename-file-popover.ui</file>
     <file>gtk/menus.ui</file>
+    <file>themes/shared.css</file>
   </gresource>
 </gresources>

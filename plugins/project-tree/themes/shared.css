@@ -1,0 +1,12 @@
+ideeditorsidebar treeview.project-tree:not(:selected) {
+  -GtkTreeView-expander-size: 0;
+  -GtkTreeView-horizontal-separator: 0;
+  -GtkTreeView-vertical-separator: 6;
+  -gtk-icon-source: none;
+  background: transparent;
+  color: @theme_fg_color;
+  padding-left: 6px;
+}
+ideeditorsidebar treeview.project-tree:not(:selected):backdrop {
+  color: @theme_unfocused_fg_color;
+}
