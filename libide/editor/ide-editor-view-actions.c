@@ -29,6 +29,70 @@
 #include "vcs/ide-vcs.h"
 
 static void
+ide_editor_view_actions_reload_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(IdeEditorView) self = user_data;
+  g_autoptr(IdeBuffer) buffer = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+
+  if (!(buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
+    {
+      // ide_layout_view_set_failure_message (IDE_LAYOUT_VIEW (self), error->message);
+      g_warning ("%s", error->message);
+      ide_layout_view_set_failed (IDE_LAYOUT_VIEW (self), TRUE);
+    }
+  else
+    {
+      ide_editor_view_scroll_to_line (self, 0);
+    }
+}
+
+static void
+ide_editor_view_actions_reload (GSimpleAction *action,
+                                GVariant      *param,
+                                gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+  g_autoptr(IdeProgress) progress = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+  IdeBuffer *buffer;
+  IdeFile *file;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  buffer = ide_editor_view_get_buffer (self);
+  context = ide_buffer_get_context (buffer);
+  buffer_manager = ide_context_get_buffer_manager (context);
+  file = ide_buffer_get_file (buffer);
+
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), 0.0);
+  gtk_widget_show (GTK_WIDGET (self->progress_bar));
+
+  ide_buffer_manager_load_file_async (buffer_manager,
+                                      file,
+                                      TRUE,
+                                      IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                      &progress,
+                                      NULL,
+                                      ide_editor_view_actions_reload_cb,
+                                      g_object_ref (self));
+
+  g_object_bind_property (progress, "fraction",
+                          self->progress_bar, "fraction",
+                          G_BINDING_SYNC_CREATE);
+}
+
+static void
 handle_print_result (IdeEditorView           *self,
                      GtkPrintOperation       *operation,
                      GtkPrintOperationResult  result)
@@ -205,8 +269,9 @@ ide_editor_view_actions_save (GSimpleAction *action,
 }
 
 static const GActionEntry editor_view_entries[] = {
-  { "save", ide_editor_view_actions_save },
   { "print", ide_editor_view_actions_print },
+  { "reload", ide_editor_view_actions_reload },
+  { "save", ide_editor_view_actions_save },
 };
 
 void
