@@ -166,6 +166,7 @@ class HtmlWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         try:
             from docutils.core import publish_string
         except ImportError:
+            Ide.warning("Failed to load docutils.core module")
             return
 
         can_preview_rst = True
@@ -178,6 +179,7 @@ class HtmlWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         try:
             import sphinx
         except ImportError:
+            Ide.warning("Failed to load sphinx module")
             return
 
         can_preview_sphinx = True
@@ -192,11 +194,11 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         self.sphinx_basedir = None
         self.sphinx_builddir = None
 
+        group = view.get_action_group('editor-view')
+
         self.action = Gio.SimpleAction(name='preview-as-html', enabled=True)
         self.action.connect('activate', lambda *_: self.preview_activated(view))
-
-        actions = view.get_action_group('view')
-        actions.add_action(self.action)
+        group.add_action(self.action)
 
         document = view.get_buffer()
         language = document.get_language()
@@ -205,8 +207,11 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         self.do_language_changed(language_id)
 
     def do_unload(self, view):
-        actions = view.get_action_group('view')
-        actions.remove_action('preview-as-html')
+        group = view.get_action_group('editor-view')
+        group.remove_action('preview-as-html')
+
+        self.view = None
+        self.workbench = None
 
     def do_language_changed(self, language_id):
         enabled = (language_id in ('html', 'markdown', 'rst'))
@@ -216,7 +221,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
 
         if self.lang_id == 'rst':
             if not self.sphinx_basedir:
-                document = self.view.get_document()
+                document = self.view.get_buffer()
                 path = document.get_file().get_file().get_path()
                 self.sphinx_basedir = self.search_sphinx_base_dir(path)
 
@@ -252,14 +257,21 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
                 self.show_missing_docutils_message(view)
                 return
 
-        document = view.get_document()
+        document = view.get_buffer()
         web_view = HtmlPreviewView(document,
                                    self.sphinx_basedir,
                                    self.sphinx_builddir,
                                    visible=True)
 
-        stack = view.get_ancestor(Ide.LayoutStack)
-        stack.add(web_view)
+        column = view.get_ancestor(Ide.LayoutGridColumn)
+        grid = column.get_ancestor(Ide.LayoutGrid)
+        index = grid.child_get_property(column, 'index')
+
+        # If we are past first stack, use the 0 column stack
+        # otherwise create or reuse a stack to the right.
+        index += -1 if index > 0 else 1
+        column = grid.get_nth_column(index)
+        column.add(web_view)
 
         self.action.set_enabled(False)
         web_view.connect('destroy', lambda *_: self.web_view_destroyed(web_view))
@@ -341,19 +353,18 @@ class HtmlPreviewView(Ide.LayoutView):
             elif id == 'rst':
                 self.rst = True
 
+        document.connect('notify::title', self.on_title_changed)
         document.connect('changed', self.on_changed)
         self.webview.connect('destroy', self.web_view_destroyed)
+
         self.on_changed(document)
+        self.on_title_changed(document)
+
+    def on_title_changed(self, buffer):
+        self.set_title("%s %s" % (buffer.get_title(), _("(Preview)")))
 
     def web_view_destroyed(self, web_view):
         self.document.disconnect_by_func(self.on_changed)
-
-    def do_get_title(self):
-        title = self.document.get_title()
-        return '%s (Preview)' % title
-
-    def do_get_document(self):
-        return self.document
 
     def get_markdown(self, text):
         text = text.replace("\"", "\\\"").replace("\n", "\\n")

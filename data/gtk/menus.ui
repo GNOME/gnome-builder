@@ -246,11 +246,9 @@
     <section id="editor-document-section">
       <attribute name="label" translatable="yes">Document</attribute>
       <item>
+        <attribute name="id">editor-document-open-in-new-frame</attribute>
         <attribute name="label" translatable="yes">Open in New Frame</attribute>
         <attribute name="action">layoutstack.open-in-new-frame</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Open Preview</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Print…</attribute>
