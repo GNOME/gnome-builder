@@ -18,25 +18,32 @@
 
 #define G_LOG_DOMAIN "ide-layout-view"
 
-#include "ide-layout-view.h"
+#include <string.h>
+
+#include "layout/ide-layout-view.h"
 
 typedef struct
 {
   const gchar *menu_id;
   const gchar *icon_name;
   gchar       *title;
+
+  GdkRGBA      primary_color;
+
   guint        failed : 1;
   guint        modified : 1;
   guint        can_split : 1;
+  guint        primary_color_set : 1;
 } IdeLayoutViewPrivate;
 
 enum {
   PROP_0,
   PROP_CAN_SPLIT,
+  PROP_FAILED,
   PROP_ICON_NAME,
   PROP_MENU_ID,
   PROP_MODIFIED,
-  PROP_FAILED,
+  PROP_PRIMARY_COLOR,
   PROP_TITLE,
   N_PROPS
 };
@@ -134,6 +141,10 @@ ide_layout_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_layout_view_get_modified (self));
       break;
 
+    case PROP_PRIMARY_COLOR:
+      g_value_set_boxed (value, ide_layout_view_get_primary_color (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, ide_layout_view_get_title (self));
       break;
@@ -171,6 +182,10 @@ ide_layout_view_set_property (GObject      *object,
 
     case PROP_MODIFIED:
       ide_layout_view_set_modified (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_PRIMARY_COLOR:
+      ide_layout_view_set_primary_color (self, g_value_get_boxed (value));
       break;
 
     case PROP_TITLE:
@@ -230,6 +245,24 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
                           "If the view has been modified from the saved content",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeLayoutView:primary-color:
+   *
+   * The "primary-color" property should describe the primary color
+   * of the content of the view (if any).
+   *
+   * This can be used by the layout stack to alter the color of the
+   * header to match that of the content.
+   *
+   * Since: 3.26
+   */
+  properties [PROP_PRIMARY_COLOR] =
+    g_param_spec_boxed ("primary-color",
+                        "Primary Color",
+                        "The primary color of the content",
+                        GDK_TYPE_RGBA,
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -495,4 +528,66 @@ ide_layout_view_create_split_view (IdeLayoutView *self)
     }
 
   return ret;
+}
+
+/**
+ * ide_layout_view_get_primary_color:
+ * @self: a #IdeLayoutView
+ *
+ * Gets the #IdeLayoutView:primary-color property if it has been set.
+ *
+ * The primary-color can be used to alter the color of the layout
+ * stack header to match the document contents.
+ *
+ * Returns: (transfer none) (nullable): A #GdkRGBA or %NULL.
+ *
+ * Since: 3.26
+ */
+const GdkRGBA *
+ide_layout_view_get_primary_color (IdeLayoutView *self)
+{
+  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
+
+  return priv->primary_color_set ?  &priv->primary_color : NULL;
+}
+
+/**
+ * ide_layout_view_set_primary_color:
+ * @self: a #IdeLayoutView
+ * @primary_color: (nullable): A #GdkRGBA or %NULL
+ *
+ * Sets the #IdeLayoutView:primary-color property.
+ * If @primary_color is %NULL, the property is unset.
+ *
+ * Since: 3.26
+ */
+void
+ide_layout_view_set_primary_color (IdeLayoutView *self,
+                                   const GdkRGBA *primary_color)
+{
+  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+  gboolean old_set;
+  GdkRGBA old;
+
+  g_return_if_fail (IDE_IS_LAYOUT_VIEW (self));
+
+  old_set = priv->primary_color_set;
+  old = priv->primary_color;
+
+  if (primary_color != NULL)
+    {
+      priv->primary_color = *primary_color;
+      priv->primary_color_set = TRUE;
+    }
+  else
+    {
+      memset (&priv->primary_color, 0, sizeof priv->primary_color);
+      priv->primary_color_set = FALSE;
+    }
+
+  if (old_set != priv->primary_color_set ||
+      !gdk_rgba_equal (&old, &priv->primary_color))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR]);
 }
