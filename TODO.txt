@@ -3,7 +3,6 @@
    Might also require DzlWidgetActionGroup.
 
  - Make sure search entry actually works
-
  - Enter, Up, and Down accelerators for search/replace entries.
 
  - other perspective interface methods
@@ -14,8 +13,6 @@
 
  - Remove get_right_edge() etc, switch with "classification" for panels
 
- - Ability to disable plugin by default
-
  - Remove accelerators from perspective, use shortcut engine
 
  - Move panel position settings to org.gnome.builder.editor maybe
@@ -24,11 +21,19 @@
 
  - Escape in vim mode, keybindings in general.
 
- - New project tree
+ - New project tree based on stacklist
+ - Ability to disable plugin by default (and disable treeview project tree)
 
  - Keybindings editor into preferences
 
  - Escape in command-bar
+
+ - Document perferences
+
+ - ide_layout_view_add_error() or similar
+ - ide_layout_view_add_error_with_action() maybe so that we can
+   specify a label and action name (reload for example) to possibly
+   fix any sort of error.
 
 
 Done
@@ -44,4 +49,5 @@ Done
    - project-tree
    - terminal
    - symbol-tree
+   - retab
 
