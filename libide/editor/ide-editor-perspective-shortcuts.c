@@ -40,11 +40,11 @@ static const DzlShortcutEntry editor_perspective_entries[] = {
     N_("Files"),
     N_("Open a document") },
 
-  { "org.gnome.builder.editor.show-sidebar",
+  { "org.gnome.builder.editor.navigation-panel",
     NULL,
     N_("Editor"),
     N_("Panels"),
-    N_("Toggle left sidebar") },
+    N_("Toggle navigation panel") },
 };
 
 void
@@ -67,7 +67,7 @@ _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self)
                                               I_("editor.open-file"));
 
   dzl_shortcut_controller_add_command_action (controller,
-                                              I_("org.gnome.builder.editor.show-sidebar"),
+                                              I_("org.gnome.builder.editor.navigation-panel"),
                                               I_("F9"),
                                               I_("dockbin.left-visible"));
 
