@@ -59,5 +59,7 @@ void            _ide_layout_stack_header_set_title           (IdeLayoutStackHead
                                                               const gchar          *title);
 void            _ide_layout_stack_header_set_modified        (IdeLayoutStackHeader *self,
                                                               gboolean              modified);
+void            _ide_layout_stack_header_set_background_rgba (IdeLayoutStackHeader *self,
+                                                              const GdkRGBA        *background_rgba);
 
 G_END_DECLS

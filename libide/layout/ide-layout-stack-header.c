@@ -27,6 +27,8 @@ struct _IdeLayoutStackHeader
 {
   DzlPriorityBox  parent_instance;
 
+  GtkCssProvider *background_css;
+
   GtkButton      *close_button;
   GtkMenuButton  *document_button;
   GtkPopover     *document_popover;
@@ -43,6 +45,7 @@ struct _IdeLayoutStackHeader
 
 enum {
   PROP_0,
+  PROP_BACKGROUND_RGBA,
   PROP_MODIFIED,
   PROP_SHOW_CLOSE_BUTTON,
   PROP_TITLE,
@@ -260,6 +263,41 @@ ide_layout_stack_header_view_row_activated (GtkListBox           *list_box,
                                         IDE_LAYOUT_VIEW (view));
 }
 
+void
+_ide_layout_stack_header_set_background_rgba (IdeLayoutStackHeader *self,
+                                              const GdkRGBA        *background_rgba)
+{
+  GtkStyleContext *style_context;
+  g_autoptr(GString) str = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  if (self->background_css == NULL)
+    {
+      self->background_css = gtk_css_provider_new ();
+      gtk_style_context_add_provider (style_context,
+                                      GTK_STYLE_PROVIDER (self->background_css),
+                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+  str = g_string_new (NULL);
+
+  if (background_rgba != NULL)
+    {
+      g_autofree gchar *rgbastr = gdk_rgba_to_string (background_rgba);
+
+      if (rgbastr != NULL)
+        g_string_append_printf (str, "idelayoutstackheader { background: %s; }", rgbastr);
+    }
+
+  if (!gtk_css_provider_load_from_data (self->background_css, str->str, str->len, &error))
+    g_warning ("Failed to load background-rgba CSS: %s: %s",
+               str->str, error->message);
+}
+
 static void
 ide_layout_stack_header_destroy (GtkWidget *widget)
 {
@@ -271,6 +309,7 @@ ide_layout_stack_header_destroy (GtkWidget *widget)
     gtk_list_box_bind_model (self->title_list_box, NULL, NULL, NULL, NULL);
 
   g_clear_object (&self->menu);
+  g_clear_object (&self->background_css);
 
   GTK_WIDGET_CLASS (ide_layout_stack_header_parent_class)->destroy (widget);
 }
@@ -312,6 +351,10 @@ ide_layout_stack_header_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_BACKGROUND_RGBA:
+      _ide_layout_stack_header_set_background_rgba (self, g_value_get_boxed (value));
+      break;
+
     case PROP_MODIFIED:
       _ide_layout_stack_header_set_modified (self, g_value_get_boolean (value));
       break;
@@ -339,6 +382,24 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
   object_class->set_property = ide_layout_stack_header_set_property;
 
   widget_class->destroy = ide_layout_stack_header_destroy;
+
+  /**
+   * IdeLayoutStackHeader:background-rgba:
+   *
+   * The "background-rgba" property can be used to set the background
+   * color of the header. This should be set to the
+   * #IdeLayoutView:primary-color of the active view.
+   *
+   * Set to %NULL to unset the primary-color.
+   *
+   * Since: 3.26
+   */
+  properties [PROP_BACKGROUND_RGBA] =
+    g_param_spec_boxed ("background-rgba",
+                        "Background RGBA",
+                        "The background color to use for the header",
+                        GDK_TYPE_RGBA,
+                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SHOW_CLOSE_BUTTON] =
     g_param_spec_boolean ("show-close-button",
