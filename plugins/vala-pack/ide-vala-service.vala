@@ -65,6 +65,10 @@ namespace Ide
 				FileInfo file_info;
 				while ((file_info = enumerator.next_file ()) != null) {
 					var name = file_info.get_name ();
+
+					if (name == ".flatpak-builder" || name == ".git")
+						continue;
+
 					if (file_info.get_file_type () == GLib.FileType.DIRECTORY) {
 						directories.add (directory.get_child (file_info.get_name ()));
 					} else if (name.has_suffix (".vala") || name.has_suffix (".vapi")) {
