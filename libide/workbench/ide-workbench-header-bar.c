@@ -76,6 +76,7 @@ ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
   popover = gtk_popover_new_from_model (NULL, G_MENU_MODEL (model));
   gtk_widget_set_size_request (popover, 225, -1);
   gtk_menu_button_set_popover (priv->menu_button, popover);
+  gtk_container_set_border_width (GTK_CONTAINER (popover), 10);
 }
 
 void
