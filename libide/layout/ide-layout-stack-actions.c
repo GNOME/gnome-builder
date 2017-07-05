@@ -132,6 +132,7 @@ ide_layout_stack_actions_open_in_new_frame (GSimpleAction *action,
   IdeLayoutView *view;
   IdeLayoutStack *dest;
   GtkWidget *grid;
+  GtkWidget *column;
   gint index = 0;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
@@ -156,7 +157,12 @@ ide_layout_stack_actions_open_in_new_frame (GSimpleAction *action,
   g_return_if_fail (grid != NULL);
   g_return_if_fail (IDE_IS_LAYOUT_GRID (grid));
 
-  gtk_container_child_get (GTK_CONTAINER (grid), GTK_WIDGET (self),
+  column = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_LAYOUT_GRID_COLUMN);
+
+  g_return_if_fail (column != NULL);
+  g_return_if_fail (IDE_IS_LAYOUT_GRID_COLUMN (column));
+
+  gtk_container_child_get (GTK_CONTAINER (grid), GTK_WIDGET (column),
                            "index", &index,
                            NULL);
 
