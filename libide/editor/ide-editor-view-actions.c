@@ -173,6 +173,7 @@ ide_editor_view_actions_save_cb (GObject      *object,
 
   if (!ide_buffer_manager_save_file_finish (bufmgr, result, &error))
     {
+      g_warning ("%s", error->message);
       // ide_layout_view_set_failure_message (IDE_LAYOUT_VIEW (self), error->message);
       ide_layout_view_set_failed (IDE_LAYOUT_VIEW (self), TRUE);
     }
@@ -224,7 +225,7 @@ ide_editor_view_actions_save (GSimpleAction *action,
 
       toplevel = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
 
-      dialog = gtk_file_chooser_native_new (_("Save Document"),
+      dialog = gtk_file_chooser_native_new (_("Save File"),
                                             GTK_WINDOW (toplevel),
                                             GTK_FILE_CHOOSER_ACTION_SAVE,
                                             _("Save"), _("Cancel"));
@@ -268,10 +269,117 @@ ide_editor_view_actions_save (GSimpleAction *action,
   gtk_widget_show (GTK_WIDGET (self->progress_bar));
 }
 
+
+static void
+ide_editor_view_actions_save_as_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(IdeEditorView) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  if (!ide_buffer_manager_save_file_finish (buffer_manager, result, &error))
+    {
+      /* In this case, the editor view hasn't failed since this is for an
+       * alternate file (which maybe we just don't have access to on the
+       * network or something).
+       *
+       * But we do still need to notify the user of the error.
+       */
+      g_warning ("%s", error->message);
+      //ide_layout_view_add_error(...);
+    }
+
+  dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+}
+
+static void
+ide_editor_view_actions_save_as (GSimpleAction *action,
+                                 GVariant      *param,
+                                 gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+  GtkFileChooserNative *dialog;
+  IdeContext *context;
+  IdeBuffer *buffer;
+  GtkWidget *toplevel;
+  IdeFile *file;
+  GFile *gfile;
+  gint ret;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  buffer = ide_editor_view_get_buffer (self);
+  file = ide_buffer_get_file (buffer);
+
+  /* Just redirect to the save flow if we have a temporary
+   * file currently. That way we can avoid splitting the
+   * flow to handle both cases here.
+   */
+  if (ide_file_get_is_temporary (file))
+    {
+      ide_editor_view_actions_save (action, NULL, user_data);
+      return;
+    }
+
+  toplevel = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
+  dialog = gtk_file_chooser_native_new (_("Save File As"),
+                                        GTK_WINDOW (toplevel),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        _("Save"),
+                                        _("Cancel"));
+
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+  gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (dialog), FALSE);
+
+  context = ide_buffer_get_context (buffer);
+  gfile = ide_file_get_file (file);
+
+  if (gfile != NULL)
+    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (dialog), gfile, NULL);
+
+  ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog));
+
+  if (ret == GTK_RESPONSE_ACCEPT)
+    {
+      g_autoptr(GFile) target = NULL;
+      g_autoptr(IdeFile) save_as = NULL;
+      g_autoptr(IdeProgress) progress = NULL;
+      IdeBufferManager *buffer_manager;
+
+      target = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      save_as = ide_file_new (context, target);
+      buffer_manager = ide_context_get_buffer_manager (context);
+
+      ide_buffer_manager_save_file_async (buffer_manager,
+                                          buffer,
+                                          save_as,
+                                          &progress,
+                                          NULL,
+                                          ide_editor_view_actions_save_as_cb,
+                                          g_object_ref (self));
+
+      g_object_bind_property (progress, "fraction",
+                              self->progress_bar, "fraction",
+                              G_BINDING_SYNC_CREATE);
+
+      gtk_widget_show (GTK_WIDGET (self->progress_bar));
+    }
+
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
+}
+
 static const GActionEntry editor_view_entries[] = {
   { "print", ide_editor_view_actions_print },
   { "reload", ide_editor_view_actions_reload },
   { "save", ide_editor_view_actions_save },
+  { "save-as", ide_editor_view_actions_save_as },
 };
 
 void
