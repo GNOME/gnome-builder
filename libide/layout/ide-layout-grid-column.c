@@ -301,13 +301,13 @@ _ide_layout_grid_column_is_empty (IdeLayoutGridColumn *self)
    * That means we are in our "initial/empty" state.
    */
 
-  if (dzl_multi_paned_get_n_children (DZL_MULTI_PANED (self)) == 0)
+  if (dzl_multi_paned_get_n_children (DZL_MULTI_PANED (self)) == 1)
     {
       GtkWidget *child = dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), 0);
 
       g_assert (IDE_IS_LAYOUT_STACK (child));
 
-      return ide_layout_stack_get_has_view (IDE_LAYOUT_STACK (child));
+      return !ide_layout_stack_get_has_view (IDE_LAYOUT_STACK (child));
     }
 
   return FALSE;
