@@ -28,36 +28,36 @@
 
 G_BEGIN_DECLS
 
-void            _ide_layout_stack_init_actions            (IdeLayoutStack       *self);
-void            _ide_layout_stack_init_shortcuts          (IdeLayoutStack       *self);
-void            _ide_layout_stack_update_actions          (IdeLayoutStack       *self);
-void            _ide_layout_stack_transfer                (IdeLayoutStack       *self,
-                                                           IdeLayoutStack       *dest,
-                                                           IdeLayoutView        *view);
-void            _ide_layout_grid_column_init_actions      (IdeLayoutGridColumn  *self);
-void            _ide_layout_grid_column_update_actions    (IdeLayoutGridColumn  *self);
-gboolean        _ide_layout_grid_column_is_empty          (IdeLayoutGridColumn  *self);
-void            _ide_layout_grid_column_try_close         (IdeLayoutGridColumn  *self);
-IdeLayoutStack *_ide_layout_grid_get_nth_stack            (IdeLayoutGrid        *self,
-                                                           gint                  nth);
-IdeLayoutStack *_ide_layout_grid_get_nth_stack_for_column (IdeLayoutGrid        *self,
-                                                           IdeLayoutGridColumn  *column,
-                                                           gint                  nth);
-void            _ide_layout_grid_stack_added              (IdeLayoutGrid        *self,
-                                                           IdeLayoutStack       *stack);
-void            _ide_layout_grid_stack_removed            (IdeLayoutGrid        *self,
-                                                           IdeLayoutStack       *stack);
-void            _ide_layout_stack_request_close           (IdeLayoutStack       *stack,
-                                                           IdeLayoutView        *view);
-void            _ide_layout_stack_header_update           (IdeLayoutStackHeader *self,
-                                                           IdeLayoutView        *view);
-void            _ide_layout_stack_header_hide             (IdeLayoutStackHeader *self);
-void            _ide_layout_stack_header_popdown          (IdeLayoutStackHeader *self);
-void            _ide_layout_stack_header_set_views        (IdeLayoutStackHeader *self,
-                                                           GListModel           *model);
-void            _ide_layout_stack_header_set_title        (IdeLayoutStackHeader *self,
-                                                           const gchar          *title);
-void            _ide_layout_stack_header_set_modified     (IdeLayoutStackHeader *self,
-                                                           gboolean              modified);
+void            _ide_layout_stack_init_actions               (IdeLayoutStack       *self);
+void            _ide_layout_stack_init_shortcuts             (IdeLayoutStack       *self);
+void            _ide_layout_stack_update_actions             (IdeLayoutStack       *self);
+void            _ide_layout_stack_transfer                   (IdeLayoutStack       *self,
+                                                              IdeLayoutStack       *dest,
+                                                              IdeLayoutView        *view);
+void            _ide_layout_grid_column_init_actions         (IdeLayoutGridColumn  *self);
+void            _ide_layout_grid_column_update_actions       (IdeLayoutGridColumn  *self);
+gboolean        _ide_layout_grid_column_is_empty             (IdeLayoutGridColumn  *self);
+void            _ide_layout_grid_column_try_close            (IdeLayoutGridColumn  *self);
+IdeLayoutStack *_ide_layout_grid_get_nth_stack               (IdeLayoutGrid        *self,
+                                                              gint                  nth);
+IdeLayoutStack *_ide_layout_grid_get_nth_stack_for_column    (IdeLayoutGrid        *self,
+                                                              IdeLayoutGridColumn  *column,
+                                                              gint                  nth);
+void            _ide_layout_grid_stack_added                 (IdeLayoutGrid        *self,
+                                                              IdeLayoutStack       *stack);
+void            _ide_layout_grid_stack_removed               (IdeLayoutGrid        *self,
+                                                              IdeLayoutStack       *stack);
+void            _ide_layout_stack_request_close              (IdeLayoutStack       *stack,
+                                                              IdeLayoutView        *view);
+void            _ide_layout_stack_header_update              (IdeLayoutStackHeader *self,
+                                                              IdeLayoutView        *view);
+void            _ide_layout_stack_header_hide                (IdeLayoutStackHeader *self);
+void            _ide_layout_stack_header_popdown             (IdeLayoutStackHeader *self);
+void            _ide_layout_stack_header_set_views           (IdeLayoutStackHeader *self,
+                                                              GListModel           *model);
+void            _ide_layout_stack_header_set_title           (IdeLayoutStackHeader *self,
+                                                              const gchar          *title);
+void            _ide_layout_stack_header_set_modified        (IdeLayoutStackHeader *self,
+                                                              gboolean              modified);
 
 G_END_DECLS
