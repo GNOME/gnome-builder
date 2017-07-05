@@ -47,7 +47,7 @@
               "request-documentation" ()
               "clear-count" ()
               "clear-selection" () };
-  bind "F4" { "action" ("view", "find-other-file", "") };
+  bind "F4" { "action" ("win", "find-other-file", "") };
 
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };

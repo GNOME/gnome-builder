@@ -93,7 +93,7 @@
                    "clear-modifier" () };
 
   /* swap between header/source */
-  bind "<alt>o" { "action" ("view", "find-other-file", "") };
+  bind "<alt>o" { "action" ("win", "find-other-file", "") };
 
   /* cycle "tabs" */
   bind "<ctrl><alt>Page_Up" { "action" ("view-stack", "previous-view", "") };
