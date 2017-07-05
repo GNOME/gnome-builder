@@ -1175,6 +1175,18 @@ ide_workbench_get_focus_mode (IdeWorkbench *self)
   return self->focus_mode;
 }
 
+static void
+ide_workbench_notify_addins_fullscreen (GtkWidget *perspective,
+                                        gpointer   user_data)
+{
+  IdeWorkbench *self = user_data;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (IDE_IS_PERSPECTIVE (perspective));
+
+  ide_perspective_set_fullscreen (IDE_PERSPECTIVE (perspective),self->focus_mode);
+}
+
 void
 ide_workbench_set_focus_mode (IdeWorkbench *self,
                               gboolean      focus_mode)
@@ -1213,6 +1225,10 @@ ide_workbench_set_focus_mode (IdeWorkbench *self,
     }
 
   g_object_unref (self->header_stack);
+
+  gtk_container_foreach (GTK_CONTAINER (self->perspectives_stack),
+                         ide_workbench_notify_addins_fullscreen,
+                         self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOCUS_MODE]);
 }
