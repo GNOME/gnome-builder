@@ -416,9 +416,6 @@ static const GActionEntry IdeApplicationActions[] = {
 void
 ide_application_actions_init (IdeApplication *self)
 {
-  static const gchar *left[] = { "F9", NULL };
-  static const gchar *right[] = { "<shift>F9", NULL };
-  static const gchar *bottom[] = { "<control>F9", NULL };
   static const gchar *global_search[] = { "<control>period", NULL };
   static const gchar *new_file[] = { "<control>n", NULL };
   static const gchar *shortcuts[] = { "<control>F1", "<control><shift>question", NULL };
@@ -435,9 +432,6 @@ ide_application_actions_init (IdeApplication *self)
    */
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.help", help);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.shortcuts", shortcuts);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.bottom-visible", bottom);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.left-visible", left);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "dockbin.right-visible", right);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.new-file", new_file);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.fullscreen", fullscreen);
   gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.global-search", global_search);
