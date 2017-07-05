@@ -234,6 +234,40 @@ ide_editor_view_buffer_notify_language (IdeEditorView *self,
                                      (gpointer)language_id);
 }
 
+static void
+ide_editor_view_buffer_notify_style_scheme (IdeEditorView *self,
+                                            GParamSpec    *pspec,
+                                            IdeBuffer     *buffer)
+{
+  g_autofree gchar *background = NULL;
+  GtkSourceStyleScheme *scheme;
+  GtkSourceStyle *style;
+  gboolean background_set = FALSE;
+  GdkRGBA rgba;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (NULL == (scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) ||
+      NULL == (style = gtk_source_style_scheme_get_style (scheme, "text")))
+    goto unset_primary_color;
+
+  g_object_get (style,
+                "background-set", &background_set,
+                "background", &background,
+                NULL);
+
+  if (!background_set || background == NULL || !gdk_rgba_parse (&rgba, background))
+    goto unset_primary_color;
+
+  ide_layout_view_set_primary_color (IDE_LAYOUT_VIEW (self), &rgba);
+
+  return;
+
+unset_primary_color:
+  ide_layout_view_set_primary_color (IDE_LAYOUT_VIEW (self), NULL);
+}
+
 static gboolean
 ide_editor_view_source_view_event (IdeEditorView *self,
                                    GdkEvent      *event,
@@ -263,6 +297,7 @@ ide_editor_view_bind_signals (IdeEditorView  *self,
 
   ide_editor_view_buffer_modified_changed (self, buffer);
   ide_editor_view_buffer_notify_language (self, NULL, buffer);
+  ide_editor_view_buffer_notify_style_scheme (self, NULL, buffer);
 }
 
 static void
@@ -623,6 +658,11 @@ ide_editor_view_init (IdeEditorView *self)
   dzl_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::language",
                                     G_CALLBACK (ide_editor_view_buffer_notify_language),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "notify::style-scheme",
+                                    G_CALLBACK (ide_editor_view_buffer_notify_style_scheme),
                                     self);
 
   g_signal_connect_swapped (self->buffer_signals,
