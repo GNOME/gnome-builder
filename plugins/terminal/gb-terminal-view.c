@@ -718,6 +718,7 @@ gb_terminal_view_init (GbTerminalView *self)
 
   ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "utilities-terminal-symbolic");
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
+  ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "terminal-view-document-menu");
 
   gtk_overlay_add_overlay (self->terminal_overlay_top,
                            GTK_WIDGET (self->search_revealer_top));

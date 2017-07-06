@@ -54,4 +54,23 @@
       </submenu>
     </section>
   </menu>
+  <menu id="terminal-view-document-menu">
+    <section id="terminal-document-section">
+      <attribute name="label" translatable="yes">Terminal</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Frame</attribute>
+        <attribute name="action">layoutstack.open-in-new-frame</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Split</attribute>
+        <attribute name="action">layoutstack.split-view</attribute>
+      </item>
+    </section>
+    <section id="terminal-close-section">
+      <item>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">layoutstack.close-view</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
