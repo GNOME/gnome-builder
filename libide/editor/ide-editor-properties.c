@@ -87,6 +87,7 @@ ide_editor_properties_class_init (IdeEditorPropertiesClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/ide-editor-properties.ui");
+  gtk_widget_class_set_css_name (widget_class, "ideeditorproperties");
 }
 
 static void

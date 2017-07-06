@@ -63,3 +63,6 @@ ideeditorsidebar label.error {
 ideeditorsidebar label.error:backdrop {
   font-weight: normal;
 }
+ideeditorproperties modelbutton {
+  padding: 0;
+}
