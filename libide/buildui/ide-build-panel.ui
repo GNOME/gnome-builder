@@ -90,6 +90,11 @@
                   <object class="IdeFancyTreeView" id="warnings_tree_view">
                     <property name="has-tooltip">true</property>
                     <property name="visible">true</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection">
+                        <property name="mode">none</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -106,6 +111,11 @@
                   <object class="IdeFancyTreeView" id="errors_tree_view">
                     <property name="has-tooltip">true</property>
                     <property name="visible">true</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection">
+                        <property name="mode">none</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
