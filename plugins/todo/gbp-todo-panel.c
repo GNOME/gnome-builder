@@ -277,6 +277,7 @@ static void
 gbp_todo_panel_init (GbpTodoPanel *self)
 {
   GtkWidget *scroller;
+  GtkTreeSelection *selection;
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
@@ -301,6 +302,9 @@ gbp_todo_panel_init (GbpTodoPanel *self)
                             G_CALLBACK (gbp_todo_panel_query_tooltip),
                             self);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree_view));
+
+  selection = gtk_tree_view_get_selection (self->tree_view);
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_NONE);
 
   ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->tree_view),
                                      gbp_todo_panel_cell_data_func, NULL, NULL);
