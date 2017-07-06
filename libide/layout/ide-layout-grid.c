@@ -18,8 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid"
 
-#include "ide-layout-grid.h"
-#include "ide-layout-private.h"
+#include "layout/ide-layout-grid.h"
+#include "layout/ide-layout-private.h"
 
 /**
  * SECTION:ide-layout-grid
