@@ -37,6 +37,52 @@ namespace Ide
 			return symbol_tree;
 		}
 
+		Ide.Symbol? create_symbol (Ide.File file, Vala.Symbol symbol)
+		{
+			var kind = Ide.SymbolKind.NONE;
+			if (symbol is Vala.Class)
+				kind = Ide.SymbolKind.CLASS;
+			else if (symbol is Vala.Subroutine) {
+				if (symbol.is_instance_member ())
+					kind = Ide.SymbolKind.METHOD;
+				else
+					kind = Ide.SymbolKind.FUNCTION;
+			}
+			else if (symbol is Vala.Struct) kind = Ide.SymbolKind.STRUCT;
+			else if (symbol is Vala.Field) kind = Ide.SymbolKind.FIELD;
+			else if (symbol is Vala.Enum) kind = Ide.SymbolKind.ENUM;
+			else if (symbol is Vala.EnumValue) kind = Ide.SymbolKind.ENUM_VALUE;
+			else if (symbol is Vala.Variable) kind = Ide.SymbolKind.VARIABLE;
+			else if (symbol is Vala.Namespace) kind = Ide.SymbolKind.NAMESPACE;
+
+			var flags = Ide.SymbolFlags.NONE;
+			if (symbol.is_instance_member ())
+				flags |= Ide.SymbolFlags.IS_MEMBER;
+
+			var binding = get_member_binding (symbol);
+			if (binding != null && binding == Vala.MemberBinding.STATIC)
+				flags |= Ide.SymbolFlags.IS_STATIC;
+
+#if ENABLE_VALA_SYMBOL_GET_DEPRECATED
+			if (symbol.deprecated)
+#else
+			if (symbol.version.deprecated)
+#endif
+				flags |= Ide.SymbolFlags.IS_DEPRECATED;
+
+			var source_reference = symbol.source_reference;
+
+			if (source_reference != null) {
+				var loc = new Ide.SourceLocation (file,
+												  source_reference.begin.line - 1,
+												  source_reference.begin.column - 1,
+												  0);
+				return new Ide.Symbol (symbol.name, kind, flags, loc, loc, loc);
+			}
+
+			return null;
+		}
+
 		public async Ide.Symbol? lookup_symbol_async (Ide.SourceLocation location,
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
@@ -50,46 +96,8 @@ namespace Ide
 
 			Vala.Symbol? symbol = yield index.find_symbol_at (file.get_file (), line, column);
 
-			if (symbol != null) {
-				var kind = Ide.SymbolKind.NONE;
-				if (symbol is Vala.Class) kind = Ide.SymbolKind.CLASS;
-				else if (symbol is Vala.Subroutine) {
-					if (symbol.is_instance_member ())
-						kind = Ide.SymbolKind.METHOD;
-					else
-						kind = Ide.SymbolKind.FUNCTION;
-				}
-				else if (symbol is Vala.Struct) kind = Ide.SymbolKind.STRUCT;
-				else if (symbol is Vala.Field) kind = Ide.SymbolKind.FIELD;
-				else if (symbol is Vala.Enum) kind = Ide.SymbolKind.ENUM;
-				else if (symbol is Vala.EnumValue) kind = Ide.SymbolKind.ENUM_VALUE;
-				else if (symbol is Vala.Variable) kind = Ide.SymbolKind.VARIABLE;
-
-				var flags = Ide.SymbolFlags.NONE;
-				if (symbol.is_instance_member ())
-					flags |= Ide.SymbolFlags.IS_MEMBER;
-
-				var binding = get_member_binding (symbol);
-				if (binding != null && binding == Vala.MemberBinding.STATIC)
-					flags |= Ide.SymbolFlags.IS_STATIC;
-
-#if ENABLE_VALA_SYMBOL_GET_DEPRECATED
-				if (symbol.deprecated)
-#else
-				if (symbol.version.deprecated)
-#endif
-					flags |= Ide.SymbolFlags.IS_DEPRECATED;
-
-				var source_reference = symbol.source_reference;
-
-				if (source_reference != null) {
-					var loc = new Ide.SourceLocation (file,
-					                                  source_reference.begin.line - 1,
-					                                  source_reference.begin.column - 1,
-					                                  0);
-					return new Ide.Symbol (symbol.name, kind, flags, loc, loc, loc);
-				}
-			}
+			if (symbol != null)
+				return create_symbol (file, symbol);
 
 			return null;
 		}
@@ -123,7 +131,32 @@ namespace Ide
 		                                                   GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			throw new GLib.IOError.NOT_SUPPORTED ("finding nearest scope is not yet supported");
+			var context = this.get_context ();
+			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var index = service.index;
+			var file = location.get_file ();
+			var line = (int)location.get_line () + 1;
+			var column = (int)location.get_line_offset () + 1;
+
+			var symbol = yield index.find_symbol_at (file.get_file (), line, column);
+
+			while (symbol != null) {
+				if (symbol is Vala.Class ||
+					symbol is Vala.Subroutine ||
+					symbol is Vala.Namespace ||
+					symbol is Vala.Struct)
+					break;
+
+				if (symbol.owner != null)
+					symbol = symbol.owner.owner;
+				else
+					symbol = symbol.parent_symbol;
+			}
+
+			if (symbol != null)
+				return create_symbol (file, symbol);
+
+			throw new GLib.IOError.NOT_FOUND ("Failed to locate nearest scope");
 		}
 	}
 }
