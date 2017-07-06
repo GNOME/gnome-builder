@@ -61,5 +61,7 @@ void            _ide_layout_stack_header_set_modified        (IdeLayoutStackHead
                                                               gboolean              modified);
 void            _ide_layout_stack_header_set_background_rgba (IdeLayoutStackHeader *self,
                                                               const GdkRGBA        *background_rgba);
+void            _ide_layout_stack_header_set_foreground_rgba (IdeLayoutStackHeader *self,
+                                                              const GdkRGBA        *foreground_rgba);
 
 G_END_DECLS

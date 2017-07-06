@@ -124,6 +124,7 @@ ide_layout_stack_bindings_notify_source (IdeLayoutStack  *self,
       _ide_layout_stack_header_set_title (priv->header, _("No Open Pages"));
       _ide_layout_stack_header_set_modified (priv->header, FALSE);
       _ide_layout_stack_header_set_background_rgba (priv->header, NULL);
+      _ide_layout_stack_header_set_foreground_rgba (priv->header, NULL);
     }
 }
 
@@ -568,8 +569,12 @@ ide_layout_stack_init (IdeLayoutStack *self)
                           priv->header, "modified",
                           G_BINDING_SYNC_CREATE);
 
-  dzl_binding_group_bind (priv->bindings, "primary-color",
+  dzl_binding_group_bind (priv->bindings, "primary-color-bg",
                           priv->header, "background-rgba",
+                          G_BINDING_SYNC_CREATE);
+
+  dzl_binding_group_bind (priv->bindings, "primary-color-fg",
+                          priv->header, "foreground-rgba",
                           G_BINDING_SYNC_CREATE);
 
   g_signal_connect_object (priv->stack,

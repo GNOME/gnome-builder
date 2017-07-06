@@ -28,12 +28,14 @@ typedef struct
   const gchar *icon_name;
   gchar       *title;
 
-  GdkRGBA      primary_color;
+  GdkRGBA      primary_color_bg;
+  GdkRGBA      primary_color_fg;
 
   guint        failed : 1;
   guint        modified : 1;
   guint        can_split : 1;
-  guint        primary_color_set : 1;
+  guint        primary_color_bg_set : 1;
+  guint        primary_color_fg_set : 1;
 } IdeLayoutViewPrivate;
 
 enum {
@@ -43,7 +45,8 @@ enum {
   PROP_ICON_NAME,
   PROP_MENU_ID,
   PROP_MODIFIED,
-  PROP_PRIMARY_COLOR,
+  PROP_PRIMARY_COLOR_BG,
+  PROP_PRIMARY_COLOR_FG,
   PROP_TITLE,
   N_PROPS
 };
@@ -141,8 +144,12 @@ ide_layout_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_layout_view_get_modified (self));
       break;
 
-    case PROP_PRIMARY_COLOR:
-      g_value_set_boxed (value, ide_layout_view_get_primary_color (self));
+    case PROP_PRIMARY_COLOR_BG:
+      g_value_set_boxed (value, ide_layout_view_get_primary_color_bg (self));
+      break;
+
+    case PROP_PRIMARY_COLOR_FG:
+      g_value_set_boxed (value, ide_layout_view_get_primary_color_fg (self));
       break;
 
     case PROP_TITLE:
@@ -184,8 +191,12 @@ ide_layout_view_set_property (GObject      *object,
       ide_layout_view_set_modified (self, g_value_get_boolean (value));
       break;
 
-    case PROP_PRIMARY_COLOR:
-      ide_layout_view_set_primary_color (self, g_value_get_boxed (value));
+    case PROP_PRIMARY_COLOR_BG:
+      ide_layout_view_set_primary_color_bg (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_PRIMARY_COLOR_FG:
+      ide_layout_view_set_primary_color_fg (self, g_value_get_boxed (value));
       break;
 
     case PROP_TITLE:
@@ -247,9 +258,9 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
-   * IdeLayoutView:primary-color:
+   * IdeLayoutView:primary-color-bg:
    *
-   * The "primary-color" property should describe the primary color
+   * The "primary-color-bg" property should describe the primary color
    * of the content of the view (if any).
    *
    * This can be used by the layout stack to alter the color of the
@@ -257,10 +268,28 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
    *
    * Since: 3.26
    */
-  properties [PROP_PRIMARY_COLOR] =
-    g_param_spec_boxed ("primary-color",
-                        "Primary Color",
-                        "The primary color of the content",
+  properties [PROP_PRIMARY_COLOR_BG] =
+    g_param_spec_boxed ("primary-color-bg",
+                        "Primary Color Background",
+                        "The primary foreground color of the content",
+                        GDK_TYPE_RGBA,
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeLayoutView:primary-color-fg:
+   *
+   * The "primary-color-fg" property should describe the foreground
+   * to use for content above primary-color-bg.
+   *
+   * This can be used by the layout stack to alter the color of the
+   * foreground to match that of the content.
+   *
+   * Since: 3.26
+   */
+  properties [PROP_PRIMARY_COLOR_FG] =
+    g_param_spec_boxed ("primary-color-fg",
+                        "Primary Color Foreground",
+                        "The primary foreground color of the content",
                         GDK_TYPE_RGBA,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -531,12 +560,12 @@ ide_layout_view_create_split_view (IdeLayoutView *self)
 }
 
 /**
- * ide_layout_view_get_primary_color:
+ * ide_layout_view_get_primary_color_bg:
  * @self: a #IdeLayoutView
  *
- * Gets the #IdeLayoutView:primary-color property if it has been set.
+ * Gets the #IdeLayoutView:primary-color-bg property if it has been set.
  *
- * The primary-color can be used to alter the color of the layout
+ * The primary-color-bg can be used to alter the color of the layout
  * stack header to match the document contents.
  *
  * Returns: (transfer none) (nullable): A #GdkRGBA or %NULL.
@@ -544,28 +573,28 @@ ide_layout_view_create_split_view (IdeLayoutView *self)
  * Since: 3.26
  */
 const GdkRGBA *
-ide_layout_view_get_primary_color (IdeLayoutView *self)
+ide_layout_view_get_primary_color_bg (IdeLayoutView *self)
 {
   IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
 
-  return priv->primary_color_set ?  &priv->primary_color : NULL;
+  return priv->primary_color_bg_set ?  &priv->primary_color_bg : NULL;
 }
 
 /**
- * ide_layout_view_set_primary_color:
+ * ide_layout_view_set_primary_color_bg:
  * @self: a #IdeLayoutView
- * @primary_color: (nullable): A #GdkRGBA or %NULL
+ * @primary_color_bg: (nullable): A #GdkRGBA or %NULL
  *
- * Sets the #IdeLayoutView:primary-color property.
- * If @primary_color is %NULL, the property is unset.
+ * Sets the #IdeLayoutView:primary-color-bg property.
+ * If @primary_color_bg is %NULL, the property is unset.
  *
  * Since: 3.26
  */
 void
-ide_layout_view_set_primary_color (IdeLayoutView *self,
-                                   const GdkRGBA *primary_color)
+ide_layout_view_set_primary_color_bg (IdeLayoutView *self,
+                                      const GdkRGBA *primary_color_bg)
 {
   IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
   gboolean old_set;
@@ -573,21 +602,83 @@ ide_layout_view_set_primary_color (IdeLayoutView *self,
 
   g_return_if_fail (IDE_IS_LAYOUT_VIEW (self));
 
-  old_set = priv->primary_color_set;
-  old = priv->primary_color;
+  old_set = priv->primary_color_bg_set;
+  old = priv->primary_color_bg;
 
-  if (primary_color != NULL)
+  if (primary_color_bg != NULL)
     {
-      priv->primary_color = *primary_color;
-      priv->primary_color_set = TRUE;
+      priv->primary_color_bg = *primary_color_bg;
+      priv->primary_color_bg_set = TRUE;
     }
   else
     {
-      memset (&priv->primary_color, 0, sizeof priv->primary_color);
-      priv->primary_color_set = FALSE;
+      memset (&priv->primary_color_bg, 0, sizeof priv->primary_color_bg);
+      priv->primary_color_bg_set = FALSE;
     }
 
-  if (old_set != priv->primary_color_set ||
-      !gdk_rgba_equal (&old, &priv->primary_color))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR]);
+  if (old_set != priv->primary_color_bg_set ||
+      !gdk_rgba_equal (&old, &priv->primary_color_bg))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR_BG]);
+}
+
+/**
+ * ide_layout_view_get_primary_color_fg:
+ * @self: a #IdeLayoutView
+ *
+ * Gets the #IdeLayoutView:primary-color-fg property if it has been set.
+ *
+ * The primary-color-fg can be used to alter the foreground color of the layout
+ * stack header to match the document contents.
+ *
+ * Returns: (transfer none) (nullable): A #GdkRGBA or %NULL.
+ *
+ * Since: 3.26
+ */
+const GdkRGBA *
+ide_layout_view_get_primary_color_fg (IdeLayoutView *self)
+{
+  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
+
+  return priv->primary_color_fg_set ?  &priv->primary_color_fg : NULL;
+}
+
+/**
+ * ide_layout_view_set_primary_color_fg:
+ * @self: a #IdeLayoutView
+ * @primary_color_fg: (nullable): A #GdkRGBA or %NULL
+ *
+ * Sets the #IdeLayoutView:primary-color-fg property.
+ * If @primary_color_fg is %NULL, the property is unset.
+ *
+ * Since: 3.26
+ */
+void
+ide_layout_view_set_primary_color_fg (IdeLayoutView *self,
+                                      const GdkRGBA *primary_color_fg)
+{
+  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+  gboolean old_set;
+  GdkRGBA old;
+
+  g_return_if_fail (IDE_IS_LAYOUT_VIEW (self));
+
+  old_set = priv->primary_color_fg_set;
+  old = priv->primary_color_fg;
+
+  if (primary_color_fg != NULL)
+    {
+      priv->primary_color_fg = *primary_color_fg;
+      priv->primary_color_fg_set = TRUE;
+    }
+  else
+    {
+      memset (&priv->primary_color_fg, 0, sizeof priv->primary_color_fg);
+      priv->primary_color_fg_set = FALSE;
+    }
+
+  if (old_set != priv->primary_color_fg_set ||
+      !gdk_rgba_equal (&old, &priv->primary_color_fg))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR_FG]);
 }

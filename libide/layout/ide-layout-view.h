@@ -73,9 +73,12 @@ void           ide_layout_view_set_modified          (IdeLayoutView        *self
 const gchar   *ide_layout_view_get_title             (IdeLayoutView        *self);
 void           ide_layout_view_set_title             (IdeLayoutView        *self,
                                                       const gchar          *title);
-const GdkRGBA *ide_layout_view_get_primary_color     (IdeLayoutView        *self);
-void           ide_layout_view_set_primary_color     (IdeLayoutView        *self,
-                                                      const GdkRGBA        *primary_color);
+const GdkRGBA *ide_layout_view_get_primary_color_bg  (IdeLayoutView        *self);
+void           ide_layout_view_set_primary_color_bg  (IdeLayoutView        *self,
+                                                      const GdkRGBA        *primary_color_bg);
+const GdkRGBA *ide_layout_view_get_primary_color_fg  (IdeLayoutView        *self);
+void           ide_layout_view_set_primary_color_fg  (IdeLayoutView        *self,
+                                                      const GdkRGBA        *primary_color_fg);
 void           ide_layout_view_agree_to_close_async  (IdeLayoutView        *self,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,

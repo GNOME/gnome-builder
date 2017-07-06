@@ -28,6 +28,13 @@ struct _IdeLayoutStackHeader
   DzlPriorityBox  parent_instance;
 
   GtkCssProvider *background_css;
+  gchar          *css_identifier;
+
+  GdkRGBA         background_rgba;
+  GdkRGBA         foreground_rgba;
+
+  guint           background_rgba_set : 1;
+  guint           foreground_rgba_set : 1;
 
   GtkButton      *close_button;
   GtkMenuButton  *document_button;
@@ -46,6 +53,7 @@ struct _IdeLayoutStackHeader
 enum {
   PROP_0,
   PROP_BACKGROUND_RGBA,
+  PROP_FOREGROUND_RGBA,
   PROP_MODIFIED,
   PROP_SHOW_CLOSE_BUTTON,
   PROP_TITLE,
@@ -263,39 +271,94 @@ ide_layout_stack_header_view_row_activated (GtkListBox           *list_box,
                                         IDE_LAYOUT_VIEW (view));
 }
 
-void
-_ide_layout_stack_header_set_background_rgba (IdeLayoutStackHeader *self,
-                                              const GdkRGBA        *background_rgba)
+static void
+ide_layout_stack_header_update_css (IdeLayoutStackHeader *self)
 {
-  GtkStyleContext *style_context;
   g_autoptr(GString) str = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-
   if (self->background_css == NULL)
     {
       self->background_css = gtk_css_provider_new ();
-      gtk_style_context_add_provider (style_context,
-                                      GTK_STYLE_PROVIDER (self->background_css),
-                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                                 GTK_STYLE_PROVIDER (self->background_css),
+                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 100);
     }
 
   str = g_string_new (NULL);
 
-  if (background_rgba != NULL)
+  if (self->background_rgba_set)
     {
-      g_autofree gchar *rgbastr = gdk_rgba_to_string (background_rgba);
+      g_autofree gchar *bgstr = gdk_rgba_to_string (&self->background_rgba);
 
-      if (rgbastr != NULL)
-        g_string_append_printf (str, "idelayoutstackheader { background: %s; }", rgbastr);
+      if (bgstr != NULL)
+        g_string_append_printf (str,
+                                "%s { background: none; background-color: %s }\n"
+                                "%s button:checked,\n"
+                                "%s button:hover { background: none; background-color: shade(%s,.85); }\n",
+                                self->css_identifier, bgstr,
+                                self->css_identifier,
+                                self->css_identifier, bgstr);
+
+      /* only use foreground when background is set */
+      if (self->foreground_rgba_set)
+        {
+          g_autofree gchar *fgstr = gdk_rgba_to_string (&self->foreground_rgba);
+
+          if (fgstr != NULL)
+            g_string_append_printf (str,
+                                    "%s button image,\n"
+                                    "%s button label {\n"
+                                    "  -gtk-icon-shadow: 0 -1px alpha(%s,0.543529);\n"
+                                    "  text-shadow: none;\n"
+                                    "  text-shadow: 0 -1px alpha(%s,0.05);\n"
+                                    "  color: %s;\n"
+                                    "}",
+                                    self->css_identifier,
+                                    self->css_identifier,
+                                    fgstr, fgstr, fgstr);
+        }
     }
 
   if (!gtk_css_provider_load_from_data (self->background_css, str->str, str->len, &error))
-    g_warning ("Failed to load background-rgba CSS: %s: %s",
+    g_warning ("Failed to load CSS: '%s': %s",
                str->str, error->message);
+}
+
+void
+_ide_layout_stack_header_set_background_rgba (IdeLayoutStackHeader *self,
+                                              const GdkRGBA        *background_rgba)
+{
+  g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  self->background_rgba_set = FALSE;
+
+  if (background_rgba)
+    {
+      self->background_rgba = *background_rgba;
+      self->background_rgba_set = TRUE;
+    }
+
+  ide_layout_stack_header_update_css (self);
+}
+
+void
+_ide_layout_stack_header_set_foreground_rgba (IdeLayoutStackHeader *self,
+                                              const GdkRGBA        *foreground_rgba)
+{
+  g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  self->foreground_rgba_set = FALSE;
+
+  if (foreground_rgba)
+    {
+      self->foreground_rgba = *foreground_rgba;
+      self->foreground_rgba_set = TRUE;
+    }
+
+  ide_layout_stack_header_update_css (self);
 }
 
 static void
@@ -305,11 +368,17 @@ ide_layout_stack_header_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
 
+  if (self->background_css != NULL)
+    {
+      gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
+                                                    GTK_STYLE_PROVIDER (self->background_css));
+      g_clear_object (&self->background_css);
+    }
+
   if (self->title_list_box != NULL)
     gtk_list_box_bind_model (self->title_list_box, NULL, NULL, NULL, NULL);
 
   g_clear_object (&self->menu);
-  g_clear_object (&self->background_css);
 
   GTK_WIDGET_CLASS (ide_layout_stack_header_parent_class)->destroy (widget);
 }
@@ -353,6 +422,10 @@ ide_layout_stack_header_set_property (GObject      *object,
     {
     case PROP_BACKGROUND_RGBA:
       _ide_layout_stack_header_set_background_rgba (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_FOREGROUND_RGBA:
+      _ide_layout_stack_header_set_foreground_rgba (self, g_value_get_boxed (value));
       break;
 
     case PROP_MODIFIED:
@@ -401,6 +474,21 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
                         GDK_TYPE_RGBA,
                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeLayoutStackHeader:foreground-rgba:
+   *
+   * Sets the foreground color to use when
+   * #IdeLayoutStackHeader:background-rgba is used for the background.
+   *
+   * Since: 3.26
+   */
+  properties [PROP_FOREGROUND_RGBA] =
+    g_param_spec_boxed ("foreground-rgba",
+                        "Foreground RGBA",
+                        "The foreground color to use with background-rgba",
+                        GDK_TYPE_RGBA,
+                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_SHOW_CLOSE_BUTTON] =
     g_param_spec_boolean ("show-close-button",
                           "Show Close Button",
@@ -441,9 +529,21 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
 static void
 ide_layout_stack_header_init (IdeLayoutStackHeader *self)
 {
+  g_autofree gchar *class_name = NULL;
+  static guint sequence;
   GMenu *frame_section;
 
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  /*
+   * So that we can use global CSS styling but apply to a single stack,
+   * we generate a unique sequence number to this header. We then use
+   * that from the CSS generation to attach to this instance.
+   */
+  class_name = g_strdup_printf ("stack-header-%u", ++sequence);
+  self->css_identifier = g_strdup_printf ("idelayoutstackheader.%s", class_name);
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), class_name);
 
   /*
    * Create our menu for the document controls popover. It has two sections.

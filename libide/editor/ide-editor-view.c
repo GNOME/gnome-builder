@@ -240,9 +240,11 @@ ide_editor_view_buffer_notify_style_scheme (IdeEditorView *self,
                                             IdeBuffer     *buffer)
 {
   g_autofree gchar *background = NULL;
+  g_autofree gchar *foreground = NULL;
   GtkSourceStyleScheme *scheme;
   GtkSourceStyle *style;
   gboolean background_set = FALSE;
+  gboolean foreground_set = FALSE;
   GdkRGBA rgba;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
@@ -255,17 +257,28 @@ ide_editor_view_buffer_notify_style_scheme (IdeEditorView *self,
   g_object_get (style,
                 "background-set", &background_set,
                 "background", &background,
+                "foreground-set", &foreground_set,
+                "foreground", &foreground,
                 NULL);
 
   if (!background_set || background == NULL || !gdk_rgba_parse (&rgba, background))
     goto unset_primary_color;
 
-  ide_layout_view_set_primary_color (IDE_LAYOUT_VIEW (self), &rgba);
+  if (background_set && background != NULL && gdk_rgba_parse (&rgba, background))
+    ide_layout_view_set_primary_color_bg (IDE_LAYOUT_VIEW (self), &rgba);
+  else
+    goto unset_primary_color;
+
+  if (foreground_set && foreground != NULL && gdk_rgba_parse (&rgba, foreground))
+    ide_layout_view_set_primary_color_fg (IDE_LAYOUT_VIEW (self), &rgba);
+  else
+    ide_layout_view_set_primary_color_fg (IDE_LAYOUT_VIEW (self), NULL);
 
   return;
 
 unset_primary_color:
-  ide_layout_view_set_primary_color (IDE_LAYOUT_VIEW (self), NULL);
+  ide_layout_view_set_primary_color_bg (IDE_LAYOUT_VIEW (self), NULL);
+  ide_layout_view_set_primary_color_fg (IDE_LAYOUT_VIEW (self), NULL);
 }
 
 static gboolean
