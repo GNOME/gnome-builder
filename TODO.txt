@@ -7,6 +7,8 @@
 
  - other perspective interface methods
 
+ - snippets are broken
+
  - can we make perspectives the plugin interface?
 
  - view-added/removed/etc on IdeLayoutGrid
