@@ -336,6 +336,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           g_autofree gchar *escaped = NULL;
           g_autofree gchar *markup = NULL;
           g_autofree gchar *free_me = NULL;
+          g_autofree gchar *free_me_sym = NULL;
           const gchar *filename = match->key;
           const gchar *icon_name = "text-x-generic-symbolic";
           const gchar *content_type;
@@ -350,6 +351,13 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           content_type = g_content_type_guess (filename, NULL, 0, NULL);
           if (content_type != NULL)
             icon_name = free_me = g_content_type_get_generic_icon_name (content_type);
+
+          /* Cheat and simply append -symbolic to the name.  This isn't
+           * strictly correct, but seems to work and doesn't require that we
+           * create lots of GIcon instances and pass them around.
+           */
+          if (!g_str_has_suffix (icon_name, "-symbolic"))
+            icon_name = free_me_sym = g_strdup_printf ("%s-symbolic", icon_name);
 
           result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
                                  "context", context,
