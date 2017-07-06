@@ -233,10 +233,6 @@
         <attribute name="action">layoutstack.move-right</attribute>
       </item>
       <item>
-        <attribute name="action">layoutstack.split-view</attribute>
-        <attribute name="label" translatable="yes">Split</attribute>
-      </item>
-      <item>
         <attribute name="action">layoutgrid.close-stack</attribute>
         <attribute name="label" translatable="yes">Close</attribute>
       </item>
@@ -249,6 +245,10 @@
         <attribute name="id">editor-document-open-in-new-frame</attribute>
         <attribute name="label" translatable="yes">Open in New Frame</attribute>
         <attribute name="action">layoutstack.open-in-new-frame</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Split</attribute>
+        <attribute name="action">layoutstack.split-view</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Print…</attribute>

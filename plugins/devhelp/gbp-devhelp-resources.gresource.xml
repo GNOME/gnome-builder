@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/devhelp-plugin">
+    <file>gtk/menus.ui</file>
     <file>themes/shared.css</file>
     <file>gbp-devhelp-menu-button.ui</file>
     <file>gbp-devhelp-view.ui</file>
