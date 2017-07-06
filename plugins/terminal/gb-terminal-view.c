@@ -487,6 +487,9 @@ style_context_changed (GtkStyleContext *style_context,
   vte_terminal_set_colors (self->terminal_top, &fg, &bg,
                            solarized_palette,
                            G_N_ELEMENTS (solarized_palette));
+
+  ide_layout_view_set_primary_color_fg (IDE_LAYOUT_VIEW (self), &fg);
+  ide_layout_view_set_primary_color_bg (IDE_LAYOUT_VIEW (self), &bg);
 }
 
 static IdeLayoutView *
