@@ -843,11 +843,25 @@ _ide_layout_stack_transfer (IdeLayoutStack *self,
 {
   IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
   IdeLayoutStackPrivate *dest_priv = ide_layout_stack_get_instance_private (dest);
+  const GdkRGBA *fg;
+  const GdkRGBA *bg;
 
   g_return_if_fail (IDE_IS_LAYOUT_STACK (self));
   g_return_if_fail (IDE_IS_LAYOUT_STACK (dest));
   g_return_if_fail (IDE_IS_LAYOUT_VIEW (view));
   g_return_if_fail (GTK_WIDGET (priv->stack) == gtk_widget_get_parent (GTK_WIDGET (view)));
+
+  /*
+   * Inform the destination stack about our new primary colors so that it can
+   * begin a transition to the new colors. We also want to do this upfront so
+   * that we can reduce the amount of style invalidation caused during the
+   * transitions.
+   */
+
+  fg = ide_layout_view_get_primary_color_fg (view);
+  bg = ide_layout_view_get_primary_color_bg (view);
+  _ide_layout_stack_header_set_foreground_rgba (dest_priv->header, fg);
+  _ide_layout_stack_header_set_background_rgba (dest_priv->header, bg);
 
   /*
    * If both the old and the new stacks are mapped, we can animate
