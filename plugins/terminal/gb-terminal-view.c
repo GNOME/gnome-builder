@@ -716,6 +716,7 @@ gb_terminal_view_init (GbTerminalView *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "utilities-terminal-symbolic");
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
 
   gtk_overlay_add_overlay (self->terminal_overlay_top,
