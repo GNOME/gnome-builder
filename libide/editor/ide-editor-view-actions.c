@@ -382,6 +382,12 @@ static const GActionEntry editor_view_entries[] = {
   { "save-as", ide_editor_view_actions_save_as },
 };
 
+static const gchar *source_view_property_actions[] = {
+  "show-line-numbers",
+  "show-right-margin",
+  "highlight-current-line",
+};
+
 void
 _ide_editor_view_init_actions (IdeEditorView *self)
 {
@@ -394,7 +400,21 @@ _ide_editor_view_init_actions (IdeEditorView *self)
                                    editor_view_entries,
                                    G_N_ELEMENTS (editor_view_entries),
                                    self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "editor-view",
-                                  G_ACTION_GROUP (group));
+
+  for (guint i = 0; i < G_N_ELEMENTS (source_view_property_actions); i++)
+    {
+      const gchar *name = source_view_property_actions[i];
+      g_autoptr(GPropertyAction) action = NULL;
+
+      /* Warning: GPropertyAction takes a reference on the object, which in
+       * this case is our sourceview. That means we must be diligent in
+       * removing/destroying our actions when GtkWidgetClass.destroy() is
+       * called.
+       */
+
+      action = g_property_action_new (name, self->source_view, name);
+      g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+    }
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view", G_ACTION_GROUP (group));
 }
