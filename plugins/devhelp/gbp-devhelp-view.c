@@ -181,6 +181,7 @@ gbp_devhelp_view_init (GbpDevhelpView *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
+  ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "devhelp-symbolic");
 
   self->search = g_object_new (GBP_TYPE_DEVHELP_SEARCH, NULL);
   self->search_revealer = gbp_devhelp_search_get_revealer (self->search);
