@@ -25,17 +25,31 @@
 #include "layout/ide-layout-private.h"
 #include "layout/ide-layout-stack-header.h"
 
+#define CSS_PROVIDER_PRIORITY (GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 100)
+
+/**
+ * SECTION:ide-layout-stack-header
+ * @title: IdeLayoutStackHeader
+ * @short_description: The header above document stacks
+ *
+ * The IdeLayoutStackHeader is the titlebar widget above stacks of documents.
+ * It is used to add state when a given document is in view.
+ *
+ * It can also track the primary color of the content and update it's
+ * styling to match.
+ *
+ * Since: 3.26
+ */
+
 struct _IdeLayoutStackHeader
 {
   DzlPriorityBox  parent_instance;
 
-  GtkCssProvider *background_css;
-  gchar          *css_identifier;
+  GtkCssProvider *css_provider;
+  guint           update_css_handler;
 
   GdkRGBA         background_rgba;
   GdkRGBA         foreground_rgba;
-
-  guint           update_css_handler;
 
   guint           background_rgba_set : 1;
   guint           foreground_rgba_set : 1;
@@ -282,51 +296,49 @@ ide_layout_stack_header_update_css (IdeLayoutStackHeader *self)
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
-
-  if (self->background_css == NULL)
-    {
-      self->background_css = gtk_css_provider_new ();
-      gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                                 GTK_STYLE_PROVIDER (self->background_css),
-                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 100);
-    }
+  g_assert (self->css_provider != NULL);
+  g_assert (GTK_IS_CSS_PROVIDER (self->css_provider));
 
   str = g_string_new (NULL);
+
+  /*
+   * We set various styles on this provider so that we can update multiple
+   * widgets using the same CSS style. That includes ourself, various buttons,
+   * labels, and some images.
+   */
 
   if (self->background_rgba_set)
     {
       g_autofree gchar *bgstr = gdk_rgba_to_string (&self->background_rgba);
 
-      if (bgstr != NULL)
-        g_string_append_printf (str,
-                                "%s { background: none; background-color: %s }\n"
-                                "%s button:checked,\n"
-                                "%s button:hover { background: none; background-color: shade(%s,.85); }\n",
-                                self->css_identifier, bgstr,
-                                self->css_identifier,
-                                self->css_identifier, bgstr);
+      g_string_append        (str, "idelayoutstackheader {\n");
+      g_string_append        (str, "  background: none;\n");
+      g_string_append_printf (str, "  background-color: %s;\n", bgstr);
+      g_string_append        (str, "  transition: background-color 400ms;\n");
+      g_string_append        (str, "  transition-timing-function: ease; }\n");
+      g_string_append        (str, "button { background: transparent; }\n");
+      g_string_append        (str, "button:hover, button:checked {\n");
+      g_string_append_printf (str, "  background: none; background-color: shade(%s,.85); }\n", bgstr);
 
       /* only use foreground when background is set */
       if (self->foreground_rgba_set)
         {
+          static const gchar *names[] = { "image", "label" };
           g_autofree gchar *fgstr = gdk_rgba_to_string (&self->foreground_rgba);
 
-          if (fgstr != NULL)
-            g_string_append_printf (str,
-                                    "%s button image,\n"
-                                    "%s button label {\n"
-                                    "  -gtk-icon-shadow: 0 -1px alpha(%s,0.543529);\n"
-                                    "  text-shadow: none;\n"
-                                    "  text-shadow: 0 -1px alpha(%s,0.05);\n"
-                                    "  color: %s;\n"
-                                    "}",
-                                    self->css_identifier,
-                                    self->css_identifier,
-                                    fgstr, fgstr, fgstr);
+          for (guint i = 0; i < G_N_ELEMENTS (names); i++)
+            {
+              g_string_append_printf (str, "%s { ", names[i]);
+              g_string_append_printf (str, "  -gtk-icon-shadow: 0 -1px alpha(%s,0.543529);\n", fgstr);
+              g_string_append        (str, "  text-shadow: none;\n");
+              g_string_append_printf (str, "  text-shadow: 0 -1px alpha(%s,0.05);\n", fgstr);
+              g_string_append_printf (str, "  color: %s;\n", fgstr);
+              g_string_append        (str, "}\n");
+            }
         }
     }
 
-  if (!gtk_css_provider_load_from_data (self->background_css, str->str, str->len, &error))
+  if (!gtk_css_provider_load_from_data (self->css_provider, str->str, str->len, &error))
     g_warning ("Failed to load CSS: '%s': %s", str->str, error->message);
 
   self->update_css_handler = 0;
@@ -339,14 +351,12 @@ ide_layout_stack_header_queue_update_css (IdeLayoutStackHeader *self)
 {
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
 
-  ide_clear_source (&self->update_css_handler);
-
-  /* So low priority we don't really care */
-  self->update_css_handler = gdk_threads_add_timeout_full (G_PRIORITY_HIGH,
-                                                           0,
-                                                           (GSourceFunc) ide_layout_stack_header_update_css,
-                                                           g_object_ref (self),
-                                                           g_object_unref);
+  if (self->update_css_handler == 0)
+    self->update_css_handler =
+      gdk_threads_add_idle_full (G_PRIORITY_HIGH,
+                                 (GSourceFunc) ide_layout_stack_header_update_css,
+                                 g_object_ref (self),
+                                 g_object_unref);
 }
 
 void
@@ -392,6 +402,54 @@ _ide_layout_stack_header_set_foreground_rgba (IdeLayoutStackHeader *self,
 }
 
 static void
+update_widget_providers (GtkWidget            *widget,
+                         IdeLayoutStackHeader *self)
+{
+  g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  /*
+   * The goal here is to explore the widget hierarchy a bit to find widget
+   * types that we care about styling. This is the second half to our CSS
+   * strategy to assign specific CSS providers to widgets instead of a global
+   * CSS provider. The goal here is to avoid the giant CSS invalidation that
+   * happens when invalidating the global CSS tree.
+   */
+
+  if (GTK_IS_BUTTON (widget) ||
+      GTK_IS_LABEL (widget) ||
+      GTK_IS_IMAGE (widget) ||
+      DZL_IS_SIMPLE_LABEL (widget))
+    {
+      GtkStyleContext *style_context;
+
+      style_context = gtk_widget_get_style_context (widget);
+      gtk_style_context_add_provider (style_context,
+                                      GTK_STYLE_PROVIDER (self->css_provider),
+                                      CSS_PROVIDER_PRIORITY);
+    }
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+                           (GtkCallback) update_widget_providers,
+                           self);
+}
+
+static void
+ide_layout_stack_header_add (GtkContainer *container,
+                             GtkWidget    *widget)
+{
+  IdeLayoutStackHeader *self = (IdeLayoutStackHeader *)container;
+
+  g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  GTK_CONTAINER_CLASS (ide_layout_stack_header_parent_class)->add (container, widget);
+
+  update_widget_providers (widget, self);
+}
+
+static void
 ide_layout_stack_header_destroy (GtkWidget *widget)
 {
   IdeLayoutStackHeader *self = (IdeLayoutStackHeader *)widget;
@@ -399,13 +457,7 @@ ide_layout_stack_header_destroy (GtkWidget *widget)
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
 
   ide_clear_source (&self->update_css_handler);
-
-  if (self->background_css != NULL)
-    {
-      gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
-                                                    GTK_STYLE_PROVIDER (self->background_css));
-      g_clear_object (&self->background_css);
-    }
+  g_clear_object (&self->css_provider);
 
   if (self->title_list_box != NULL)
     gtk_list_box_bind_model (self->title_list_box, NULL, NULL, NULL, NULL);
@@ -482,11 +534,14 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->get_property = ide_layout_stack_header_get_property;
   object_class->set_property = ide_layout_stack_header_set_property;
 
   widget_class->destroy = ide_layout_stack_header_destroy;
+
+  container_class->add = ide_layout_stack_header_add;
 
   /**
    * IdeLayoutStackHeader:background-rgba:
@@ -561,21 +616,24 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
 static void
 ide_layout_stack_header_init (IdeLayoutStackHeader *self)
 {
-  g_autofree gchar *class_name = NULL;
-  static guint sequence;
+  GtkStyleContext *style_context;
   GMenu *frame_section;
 
+  /*
+   * To keep our foreground/background colors up to date, we use a CSS
+   * provider. However, attaching the provider globally causes much CSS
+   * style cascading exactly at the moment we want to animate. To avbid
+   * that, and keep animations snappy, we add the provider directly to
+   * our widget and to the children widgets we care about (buttons, their
+   * labels, etc).
+   */
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  self->css_provider = gtk_css_provider_new ();
+  gtk_style_context_add_provider (style_context,
+                                  GTK_STYLE_PROVIDER (self->css_provider),
+                                  CSS_PROVIDER_PRIORITY);
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  /*
-   * So that we can use global CSS styling but apply to a single stack,
-   * we generate a unique sequence number to this header. We then use
-   * that from the CSS generation to attach to this instance.
-   */
-  class_name = g_strdup_printf ("stack-header-%u", ++sequence);
-  self->css_identifier = g_strdup_printf ("idelayoutstackheader.%s", class_name);
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), class_name);
 
   /*
    * Create our menu for the document controls popover. It has two sections.
@@ -635,6 +693,8 @@ ide_layout_stack_header_add_custom_title (IdeLayoutStackHeader *self,
   gtk_container_add_with_properties (GTK_CONTAINER (self->title_box), widget,
                                      "priority", priority,
                                      NULL);
+
+  update_widget_providers (widget, self);
 }
 
 void
