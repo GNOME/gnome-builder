@@ -325,6 +325,8 @@ ide_layout_stack_header_update_css (IdeLayoutStackHeader *self)
   if (!gtk_css_provider_load_from_data (self->background_css, str->str, str->len, &error))
     g_warning ("Failed to load CSS: '%s': %s",
                str->str, error->message);
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 void
@@ -566,6 +568,10 @@ ide_layout_stack_header_init (IdeLayoutStackHeader *self)
                     "row-activated",
                     G_CALLBACK (ide_layout_stack_header_view_row_activated),
                     self);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_container_set_reallocate_redraws (GTK_CONTAINER (self), TRUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 GtkWidget *
