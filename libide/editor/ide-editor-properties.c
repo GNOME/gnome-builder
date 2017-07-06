@@ -124,7 +124,8 @@ void
 ide_editor_properties_set_view (IdeEditorProperties *self,
                                 IdeEditorView       *view)
 {
-  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+  g_return_if_fail (IDE_IS_EDITOR_PROPERTIES (self));
+  g_return_if_fail (!view || IDE_IS_EDITOR_VIEW (view));
 
   dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self),
                                     view ? GTK_WIDGET (view) : NULL,
