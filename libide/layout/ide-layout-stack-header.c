@@ -20,8 +20,10 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-layout-private.h"
-#include "ide-layout-stack-header.h"
+#include "ide-macros.h"
+
+#include "layout/ide-layout-private.h"
+#include "layout/ide-layout-stack-header.h"
 
 struct _IdeLayoutStackHeader
 {
@@ -32,6 +34,8 @@ struct _IdeLayoutStackHeader
 
   GdkRGBA         background_rgba;
   GdkRGBA         foreground_rgba;
+
+  guint           update_css_handler;
 
   guint           background_rgba_set : 1;
   guint           foreground_rgba_set : 1;
@@ -271,7 +275,7 @@ ide_layout_stack_header_view_row_activated (GtkListBox           *list_box,
                                         IDE_LAYOUT_VIEW (view));
 }
 
-static void
+static gboolean
 ide_layout_stack_header_update_css (IdeLayoutStackHeader *self)
 {
   g_autoptr(GString) str = NULL;
@@ -323,44 +327,68 @@ ide_layout_stack_header_update_css (IdeLayoutStackHeader *self)
     }
 
   if (!gtk_css_provider_load_from_data (self->background_css, str->str, str->len, &error))
-    g_warning ("Failed to load CSS: '%s': %s",
-               str->str, error->message);
+    g_warning ("Failed to load CSS: '%s': %s", str->str, error->message);
 
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  self->update_css_handler = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_layout_stack_header_queue_update_css (IdeLayoutStackHeader *self)
+{
+  g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  ide_clear_source (&self->update_css_handler);
+
+  /* So low priority we don't really care */
+  self->update_css_handler = gdk_threads_add_timeout_full (G_PRIORITY_HIGH,
+                                                           0,
+                                                           (GSourceFunc) ide_layout_stack_header_update_css,
+                                                           g_object_ref (self),
+                                                           g_object_unref);
 }
 
 void
 _ide_layout_stack_header_set_background_rgba (IdeLayoutStackHeader *self,
                                               const GdkRGBA        *background_rgba)
 {
+  GdkRGBA old;
+  gboolean old_set;
+
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
 
-  self->background_rgba_set = FALSE;
+  old_set = self->background_rgba_set;
+  old = self->background_rgba;
 
-  if (background_rgba)
-    {
-      self->background_rgba = *background_rgba;
-      self->background_rgba_set = TRUE;
-    }
+  if (background_rgba != NULL)
+    self->background_rgba = *background_rgba;
 
-  ide_layout_stack_header_update_css (self);
+  self->background_rgba_set = !!background_rgba;
+
+  if (self->background_rgba_set != old_set || !gdk_rgba_equal (&self->background_rgba, &old))
+    ide_layout_stack_header_queue_update_css (self);
 }
 
 void
 _ide_layout_stack_header_set_foreground_rgba (IdeLayoutStackHeader *self,
                                               const GdkRGBA        *foreground_rgba)
 {
+  GdkRGBA old;
+  gboolean old_set;
+
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
 
-  self->foreground_rgba_set = FALSE;
+  old_set = self->foreground_rgba_set;
+  old = self->foreground_rgba;
 
-  if (foreground_rgba)
-    {
-      self->foreground_rgba = *foreground_rgba;
-      self->foreground_rgba_set = TRUE;
-    }
+  if (foreground_rgba != NULL)
+    self->foreground_rgba = *foreground_rgba;
 
-  ide_layout_stack_header_update_css (self);
+  self->foreground_rgba_set = !!foreground_rgba;
+
+  if (self->background_rgba_set != old_set || !gdk_rgba_equal (&self->foreground_rgba, &old))
+    ide_layout_stack_header_queue_update_css (self);
 }
 
 static void
@@ -369,6 +397,8 @@ ide_layout_stack_header_destroy (GtkWidget *widget)
   IdeLayoutStackHeader *self = (IdeLayoutStackHeader *)widget;
 
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  ide_clear_source (&self->update_css_handler);
 
   if (self->background_css != NULL)
     {
