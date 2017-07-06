@@ -1,0 +1,65 @@
+ideeditorsidebar > stackswitcher {
+  margin: 6px;
+}
+ideeditorsidebar .handle {
+ border: 1px solid alpha(@borders, 0.3);
+}
+ideeditorsidebar label.title {
+  margin: 8px 6px 3px 6px;
+  font-weight: bold;
+  font-size: 0.8em;
+}
+ideeditorsidebar dzlstacklist list row,
+ideeditorsidebar list.open-pages row {
+  padding: 1px 0;
+  color: @theme_fg_color;
+}
+ideeditorsidebar dzlstacklist list row:selected,
+ideeditorsidebar list.open-pages row:selected {
+  color: @theme_selected_fg_color;
+}
+ideeditorsidebar dzlstacklist list row:backdrop,
+ideeditorsidebar list.open-pages row:backdrop {
+  color: @theme_unfocused_fg_color;
+}
+ideeditorsidebar dzlstacklist list:not(.stack-header) row box > image:first-child,
+ideeditorsidebar list.open-pages row box > image:first-child {
+  opacity: 0.55;
+}
+ideeditorsidebar dzlstacklist row box > image:first-child,
+ideeditorsidebar list.open-pages row box > image:first-child {
+  margin: 6px 8px;
+  min-height: 16px;
+  min-width: 16px;
+}
+ideeditorsidebar dzlstacklist row box > button:last-child,
+ideeditorsidebar list.open-pages row box > button:last-child {
+  background: none;
+  box-shadow: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0 6px;
+  color: @theme_fg_color;
+  opacity: 0.55;
+}
+ideeditorsidebar dzlstacklist row box > button:last-child:hover,
+ideeditorsidebar list.open-pages row box > button:last-child:hover {
+  opacity: 1;
+}
+ideeditorsidebar dzlstacklist row box > button:last-child image,
+ideeditorsidebar list.open-pages row box > button:last-child image {
+  min-height: 16px;
+  min-width: 16px;
+}
+ideeditorsidebar dzlstacklist row box > button:last-child:backdrop,
+ideeditorsidebar list.open-pages row box > button:last-child:backdrop {
+  color: @theme_unfocused_fg_color;
+}
+ideeditorsidebar label.error {
+  color: @error_color;
+  font-weight: bold;
+}
+ideeditorsidebar label.error:backdrop {
+  font-weight: normal;
+}

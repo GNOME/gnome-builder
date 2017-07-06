@@ -1,7 +1,6 @@
 idelayoutstackheader {
   min-height: 26px;
 }
-
 idelayoutstackheader button {
   border: none;
   border-radius: 0;
@@ -10,99 +9,56 @@ idelayoutstackheader button {
   padding: 0;
   margin: 0;
 }
-
 idelayoutstackheader button:not(:disabled) image {
   opacity: 0.55;
 }
-
 idelayoutstackheader button:checked image,
 idelayoutstackheader button:not(:disabled):hover image {
   opacity: 1;
 }
-
 idelayoutstackheader button:checked,
 idelayoutstackheader button:hover {
   background: shade(@theme_bg_color, 0.9);
 }
-
 idelayoutstackheader button:active {
   background: shade(@theme_bg_color, 0.85);
 }
-
 idelayoutstackheader > button {
   padding-left: 12px;
   padding-right: 12px;
 }
-
 idelayoutstackheader * button:first-child > image,
 idelayoutstackheader * button:last-child:dir(rtl) > image {
   padding-left: 12px;
   padding-right: 10px;
 }
-
 idelayoutstackheader * button:first-child:dir(rtl) > image,
 idelayoutstackheader * button:last-child > image {
   padding-right: 12px;
   padding-left: 9px;
 }
-
 idelayoutgridcolumn.handle,
 idelayoutgrid.handle {
   border: 1px solid @borders;
 }
-
-popover.title-popover scrolledwindow {
+idelayoutgrid idelayoutstack popover.title-popover list row {
+  padding: 1px 0;
+}
+idelayoutgrid idelayoutstack popover.title-popover scrolledwindow {
   min-width: 300px;
 }
-
-popover.title-popover list {
+idelayoutgrid idelayoutstack popover.title-popover list {
   background: transparent;
 }
-
-ideeditorsidebar > stackswitcher {
-  margin: 6px;
-}
-
-dzldockpaned ideeditorsidebar .handle {
- border: 1px solid alpha(@borders, 0.3);
-}
-
-ideeditorsidebar label.title {
-  margin: 8px 6px 3px 6px;
-  font-weight: bold;
-  font-size: 0.8em;
-}
-popover.title-popover list row {
-  padding: 1px 0;
-}
-ideeditorsidebar dzlstacklist list row,
-ideeditorsidebar list.open-pages row {
-  padding: 1px 0;
-  color: @theme_fg_color;
-}
-ideeditorsidebar dzlstacklist list row:selected,
-ideeditorsidebar list.open-pages row:selected {
-  color: @theme_selected_fg_color;
-}
-ideeditorsidebar dzlstacklist list row:backdrop,
-ideeditorsidebar list.open-pages row:backdrop {
-  color: @theme_unfocused_fg_color;
-}
-popover.title-popover list row box > image:first-child,
-ideeditorsidebar dzlstacklist list:not(.stack-header) row box > image:first-child,
-ideeditorsidebar list.open-pages row box > image:first-child {
+popover.title-popover list row box > image:first-child {
   opacity: 0.55;
 }
-popover.title-popover list row box > image:first-child,
-ideeditorsidebar dzlstacklist row box > image:first-child,
-ideeditorsidebar list.open-pages row box > image:first-child {
+popover.title-popover list row box > image:first-child {
   margin: 6px 8px;
   min-height: 16px;
   min-width: 16px;
 }
-popover.title-popover list row button:last-child,
-ideeditorsidebar dzlstacklist row box > button:last-child,
-ideeditorsidebar list.open-pages row box > button:last-child {
+popover.title-popover list row button:last-child {
   background: none;
   box-shadow: none;
   border: none;
@@ -112,19 +68,13 @@ ideeditorsidebar list.open-pages row box > button:last-child {
   color: @theme_fg_color;
   opacity: 0.55;
 }
-popover.title-popover list row button:last-child:hover,
-ideeditorsidebar dzlstacklist row box > button:last-child:hover,
-ideeditorsidebar list.open-pages row box > button:last-child:hover {
+popover.title-popover list row button:last-child:hover {
   opacity: 1;
 }
-popover.title-popover list row button image,
-ideeditorsidebar dzlstacklist row box > button:last-child image,
-ideeditorsidebar list.open-pages row box > button:last-child image {
+popover.title-popover list row button image {
   min-height: 16px;
   min-width: 16px;
 }
-popover.title-popover list row button image,
-ideeditorsidebar dzlstacklist row box > button:last-child:backdrop,
-ideeditorsidebar list.open-pages row box > button:last-child:backdrop {
+popover.title-popover list row button image {
   color: @theme_unfocused_fg_color;
 }

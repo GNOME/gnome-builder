@@ -1,4 +1,5 @@
 @import url("resource:///org/gnome/builder/themes/shared/shared-layout.css");
+@import url("resource:///org/gnome/builder/themes/shared/shared-editor.css");
 
 /* work around some gtk padding issue */
 filechooser actionbar button.combo {
@@ -130,16 +131,6 @@ popover list row button:hover:not(.circular) {
 
 
 /*
- * Tweaks for the editortweak popover in the editor.
- */
-editortweak button {
-  padding: 0 6px 0 6px;
-}
-editortweak list row {
-  padding: 0;
-}
-
-/*
  * Styling in the genesis (create project) perspective.
  */
 genesisperspective stack > box:first-child list row {
@@ -165,28 +156,6 @@ greeter list row:last-child {
 greeter frame border {
   border-color: alpha(@borders, 0.6);
 }
-
-/*
- * Global search results styling
- *
- * The following tweaks the sizing of listbox rows in the
- * global search results to have a bit more padding and
- * row separators after each line. Additionally, we tweak
- * the selection color to ensure it has priority.
- */
-omnisearchdisplay omnisearchgroup omnisearchrow {
-  background: transparent;
-  padding: 9px 12px 9px 12px;
-  border-bottom: 1px solid alpha(@borders, 0.2);
-}
-omnisearchdisplay omnisearchgroup omnisearchrow:last-child {
-  border-bottom: none;
-}
-omnisearchdisplay omnisearchgroup omnisearchrow:selected {
-  background-color: @theme_selected_bg_color;
-  color: @theme_selected_fg_color;
-}
-
 
 /*
  * Perspectives switcher
@@ -267,34 +236,6 @@ omnibar:active entry {
 }
 
 
-list.buildpanel row {
-  padding: 10px;
-  border-bottom: 1px solid alpha(@borders, 0.4);
-}
-
-list.buildpanel row:last-child {
-  border-bottom: none;
-}
-
-buildpanel list row {
-  padding: 6px;
-  border-bottom: 1px solid alpha(@borders, 0.4);
-}
-
-buildpanel list row:last-child {
-  border-bottom: none;
-}
-
-buildpanel list row label.file {
-  opacity: 0.5;
-}
-
-
-buildpanel box.build-status {
-  background: shade(@theme_bg_color, 0.96);
-}
-
-
 buildperspective list.sidebar row:selected button:hover {
   border-color: transparent;
   box-shadow: none;
@@ -338,16 +279,8 @@ configurationview list row button {
 
 
 /* hrmm, we can use this to get row separators */
-buildpanel treeview,
 configurationview treeview {
   border-bottom: 1px solid alpha(@borders, 0.4);
-}
-
-
-buildpanel list > label {
-  font-weight: bold;
-  opacity: 0.55;
-  margin: 6px 10px 0px 10px;
 }
 
 
@@ -365,10 +298,3 @@ popover.transfers list row > box {
 }
 
 
-ideeditorsidebar label.error {
-  color: @error_color;
-  font-weight: bold;
-}
-ideeditorsidebar label.error:backdrop {
-  font-weight: normal;
-}
