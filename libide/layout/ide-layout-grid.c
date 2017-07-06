@@ -713,7 +713,7 @@ ide_layout_grid_get_current_view (IdeLayoutGrid *self)
   stack = ide_layout_grid_get_current_stack (self);
 
   if (stack != NULL)
-    ide_layout_stack_get_visible_child (stack);
+    return ide_layout_stack_get_visible_child (stack);
 
   return NULL;
 }
