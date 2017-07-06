@@ -14,6 +14,16 @@
       <object class="IdeLayoutPane">
         <!-- This is a transient panel -->
         <property name="reveal-child">false</property>
+        <child>
+          <object class="DzlDockWidget">
+            <property name="visible">true</property>
+            <child>
+              <object class="IdeEditorProperties" id="properties">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>
