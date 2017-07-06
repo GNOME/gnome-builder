@@ -280,6 +280,8 @@ class DocumentationDB(object):
         # I would use scandir for better performance, but it requires newer Python
         for gir_path in GIR_PATH_LIST:
             for gir_file in os.listdir(gir_path):
+                if not gir_file.endswith('.gir'):
+                    continue
                 if gir_file in processed_gir_files:
                     continue
                 processed_gir_files[gir_file] = None
