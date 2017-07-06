@@ -61,6 +61,25 @@ G_DEFINE_TYPE_WITH_CODE (IdeEditorPerspective, ide_editor_perspective, IDE_TYPE_
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, perspective_iface_init))
 
 static void
+ide_editor_perspective_notify_current_view (IdeEditorPerspective *self,
+                                            GParamSpec           *pspec,
+                                            IdeLayoutGrid        *grid)
+{
+  IdeLayoutView *view;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (pspec != NULL);
+  g_assert (IDE_IS_LAYOUT_GRID (grid));
+
+  view = ide_layout_grid_get_current_view (grid);
+
+  if (IDE_IS_EDITOR_VIEW (view))
+    ide_editor_properties_set_view (self->properties, IDE_EDITOR_VIEW (view));
+  else
+    ide_editor_properties_set_view (self->properties, NULL);
+}
+
+static void
 ide_editor_perspective_add (GtkContainer *container,
                             GtkWidget    *widget)
 {
@@ -103,6 +122,11 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
 
   _ide_editor_perspective_init_actions (self);
   _ide_editor_perspective_init_shortcuts (self);
+
+  g_signal_connect_swapped (self->grid,
+                            "notify::current-view",
+                            G_CALLBACK (ide_editor_perspective_notify_current_view),
+                            self);
 }
 
 /**
