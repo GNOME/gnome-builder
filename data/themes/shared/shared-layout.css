@@ -46,6 +46,7 @@ idelayoutstackheader * button:last-child > image {
   padding-left: 9px;
 }
 
+idelayoutgridcolumn.handle,
 idelayoutgrid.handle {
   border: 1px solid @borders;
 }

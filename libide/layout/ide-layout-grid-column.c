@@ -167,6 +167,7 @@ static void
 ide_layout_grid_column_class_init (IdeLayoutGridColumnClass *klass)
 {
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_layout_grid_column_finalize;
@@ -184,6 +185,8 @@ ide_layout_grid_column_class_init (IdeLayoutGridColumnClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  gtk_widget_class_set_css_name (widget_class, "idelayoutgridcolumn");
 }
 
 static void
