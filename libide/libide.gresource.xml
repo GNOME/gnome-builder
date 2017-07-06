@@ -55,6 +55,7 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack-header.ui">layout/ide-layout-stack-header.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack.ui">layout/ide-layout-stack.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-perspective.ui">editor/ide-editor-perspective.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-properties.ui">editor/ide-editor-properties.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-layout-stack-controls.ui">editor/ide-editor-layout-stack-controls.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-search-bar.ui">editor/ide-editor-search-bar.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-sidebar.ui">editor/ide-editor-sidebar.ui</file>
