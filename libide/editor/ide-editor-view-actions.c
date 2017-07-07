@@ -386,7 +386,6 @@ static const gchar *source_view_property_actions[] = {
   "auto-indent",
   "smart-backspace",
   "highlight-current-line",
-  "insert-spaces-instead-of-tabs",
   "show-line-numbers",
   "show-right-margin",
   "tab-width",
@@ -415,6 +414,10 @@ _ide_editor_view_init_actions (IdeEditorView *self)
       const gchar *name = source_view_property_actions[i];
       dzl_properties_group_add_property (properties, name, name);
     }
+  dzl_properties_group_add_property_full (properties,
+                                          "use-spaces",
+                                          "insert-spaces-instead-of-tabs",
+                                          DZL_PROPERTIES_FLAGS_STATEFUL_BOOLEANS);
 
   /* Our groups will be copied up to be accessed outside of our widget
    * hierarchy. So we expose them all on the IdeEditorView directly

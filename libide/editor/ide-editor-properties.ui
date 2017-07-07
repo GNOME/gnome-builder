@@ -102,24 +102,24 @@
                       <class name="linked"/>
                     </style>
                     <child>
-                      <object class="GtkRadioButton">
+                      <object class="GtkToggleButton">
                         <property name="draw-indicator">false</property>
                         <property name="visible">true</property>
                         <property name="label" translatable="yes">Spaces</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.insert-spaces-instead-of-tabs</property>
+                        <property name="action-name">source-view.use-spaces</property>
                         <property name="action-target">true</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="tabs_button">
+                      <object class="GtkToggleButton" id="tabs_button">
                         <property name="draw-indicator">false</property>
                         <property name="visible">true</property>
                         <property name="label" translatable="yes">Tabs</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.insert-spaces-instead-of-tabs</property>
+                        <property name="action-name">source-view.use-spaces</property>
                         <property name="action-target">false</property>
                       </object>
                     </child>
