@@ -396,6 +396,7 @@ void
 _ide_editor_view_init_actions (IdeEditorView *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
+  g_autoptr(DzlPropertiesGroup) properties = NULL;
 
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
 
@@ -405,20 +406,20 @@ _ide_editor_view_init_actions (IdeEditorView *self)
                                    G_N_ELEMENTS (editor_view_entries),
                                    self);
 
+  /* We want to access some settings properties as stateful GAction so they
+   * manipulated using regular Gtk widgets from the properties panel.
+   */
+  properties = dzl_properties_group_new (G_OBJECT (self->source_view));
   for (guint i = 0; i < G_N_ELEMENTS (source_view_property_actions); i++)
     {
       const gchar *name = source_view_property_actions[i];
-      g_autoptr(GPropertyAction) action = NULL;
-
-      /* Warning: GPropertyAction takes a reference on the object, which in
-       * this case is our sourceview. That means we must be diligent in
-       * removing/destroying our actions when GtkWidgetClass.destroy() is
-       * called.
-       */
-
-      action = g_property_action_new (name, self->source_view, name);
-      g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+      dzl_properties_group_add_property (properties, name, name);
     }
 
+  /* Our groups will be copied up to be accessed outside of our widget
+   * hierarchy. So we expose them all on the IdeEditorView directly
+   * for that purpose.
+   */
   gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view", G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "source-view", G_ACTION_GROUP (properties));
 }

@@ -31,7 +31,7 @@
                 <property name="text" translatable="yes">Show line numbers</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.show-line-numbers</property>
+                <property name="action-name">source-view.show-line-numbers</property>
               </object>
             </child>
             <child>
@@ -40,7 +40,7 @@
                 <property name="text" translatable="yes">Show right margin</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.show-right-margin</property>
+                <property name="action-name">source-view.show-right-margin</property>
               </object>
             </child>
             <child>
@@ -49,7 +49,7 @@
                 <property name="text" translatable="yes">Highlight current line</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.highlight-current-line</property>
+                <property name="action-name">source-view.highlight-current-line</property>
               </object>
             </child>
             <child>
@@ -72,7 +72,7 @@
                 <property name="visible">true</property>
                 <property name="text" translatable="yes">Auto indent</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.auto-indent</property>
+                <property name="action-name">source-view.auto-indent</property>
               </object>
             </child>
             <child>
@@ -80,7 +80,7 @@
                 <property name="visible">true</property>
                 <property name="text" translatable="yes">Smart Backspace</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.smart-backspace</property>
+                <property name="action-name">source-view.smart-backspace</property>
               </object>
             </child>
             <child>
@@ -102,22 +102,24 @@
                       <class name="linked"/>
                     </style>
                     <child>
-                      <object class="GtkToggleButton">
+                      <object class="GtkRadioButton">
+                        <property name="draw-indicator">false</property>
                         <property name="visible">true</property>
                         <property name="label" translatable="yes">Spaces</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.insert-spaces-instead-of-tabs</property>
+                        <property name="action-name">source-view.insert-spaces-instead-of-tabs</property>
                         <property name="action-target">true</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkToggleButton" id="tabs_button">
+                      <object class="GtkRadioButton" id="tabs_button">
+                        <property name="draw-indicator">false</property>
                         <property name="visible">true</property>
                         <property name="label" translatable="yes">Tabs</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.insert-spaces-instead-of-tabs</property>
+                        <property name="action-name">source-view.insert-spaces-instead-of-tabs</property>
                         <property name="action-target">false</property>
                       </object>
                     </child>
@@ -137,7 +139,7 @@
                         <property name="label" translatable="yes">2</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">source-view.tab-width</property>
                         <property name="action-target">uint32 2</property>
                       </object>
                     </child>
@@ -147,7 +149,7 @@
                         <property name="label" translatable="yes">3</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">source-view.tab-width</property>
                         <property name="action-target">uint32 3</property>
                       </object>
                     </child>
@@ -157,7 +159,7 @@
                         <property name="label" translatable="yes">4</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">source-view.tab-width</property>
                         <property name="action-target">uint32 4</property>
                       </object>
                     </child>
@@ -167,7 +169,7 @@
                         <property name="label" translatable="yes">8</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">source-view.tab-width</property>
                         <property name="action-target">uint32 8</property>
                       </object>
                     </child>
