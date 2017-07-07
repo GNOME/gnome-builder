@@ -2107,6 +2107,7 @@ ide_source_view_do_indent (IdeSourceView *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (priv->auto_indent == TRUE);
   g_assert (event);
   g_assert (!indenter || IDE_IS_INDENTER (indenter));
 
@@ -2126,15 +2127,13 @@ ide_source_view_do_indent (IdeSourceView *self,
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &begin, insert);
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &end, insert);
 
-  if (indenter == NULL)
-    IDE_EXIT;
-
   /*
-   * Let the formatter potentially set the replacement text.
+   * Let the formatter potentially set the replacement text. If we don't have a
+   * formatter, use our simple formatter which tries to mimic GtkSourceView.
    */
   indent = ide_indenter_format (indenter, text_view, &begin, &end, &cursor_offset, event);
 
-  if (indent)
+  if (indent != NULL)
     {
       /*
        * Insert the indention text.
@@ -2393,7 +2392,6 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   IdeSourceSnippet *snippet;
-  IdeIndenter *indenter;
   gboolean ret = FALSE;
   guint change_sequence;
 
@@ -2535,14 +2533,22 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    * chain up to the parent class to insert the character, and then let the
    * auto-indenter fix things up.
    */
-  if ((priv->buffer != NULL) &&
-      (priv->auto_indent != FALSE) &&
-      (indenter = ide_source_view_get_indenter (self)) &&
-      ide_indenter_is_trigger (indenter, event))
+  if (priv->buffer != NULL && priv->auto_indent)
     {
-      ide_source_view_do_indent (self, event, indenter);
-      ret = TRUE;
-      goto cleanup;
+      IdeIndenter *indenter = ide_source_view_get_indenter (self);
+
+      /*
+       * Indenter may be NULL and that is okay, the IdeIdenter API
+       * knows how to deal with that situation by emulating GtkSourceView
+       * indentation style.
+       */
+
+      if (ide_indenter_is_trigger (indenter, event))
+        {
+          ide_source_view_do_indent (self, event, indenter);
+          ret = TRUE;
+          goto cleanup;
+        }
     }
 
   /*
@@ -4450,8 +4456,8 @@ ide_source_view_real_reindent (IdeSourceView *self)
   if (priv->buffer == NULL)
     return;
 
-  if (NULL == (indenter = ide_source_view_get_indenter (self)))
-    return;
+  /* indenter may be NULL and that is okay */
+  indenter = ide_source_view_get_indenter (self);
 
   buffer = GTK_TEXT_BUFFER (priv->buffer);
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (self), GTK_TEXT_WINDOW_TEXT);
