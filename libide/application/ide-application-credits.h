@@ -85,6 +85,7 @@ static const gchar *ide_application_credits_authors[] = {
   "Gennady Kovalev",
   "Georg Vienna",
   "Giovanni Campagna",
+  "Günther Wutz",
   "Hashem Nasarat",
   "heroin",
   "Hylke Bons",
