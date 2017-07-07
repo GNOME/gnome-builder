@@ -383,9 +383,13 @@ static const GActionEntry editor_view_entries[] = {
 };
 
 static const gchar *source_view_property_actions[] = {
+  "auto-indent",
+  "smart-backspace",
+  "highlight-current-line",
+  "insert-spaces-instead-of-tabs",
   "show-line-numbers",
   "show-right-margin",
-  "highlight-current-line",
+  "tab-width",
 };
 
 void

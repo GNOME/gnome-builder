@@ -55,7 +55,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Behavior</property>
+                <property name="label" translatable="yes">Indentation</property>
                 <property name="margin-top">12</property>
                 <property name="xalign">0</property>
                 <style>
@@ -84,21 +84,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">true</property>
-                <property name="label" translatable="yes">Indentation</property>
-                <property name="margin-top">12</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-                <attributes>
-                  <attribute name="scale" value="0.8333"/>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="visible">true</property>
                 <property name="orientation">vertical</property>
@@ -109,6 +94,7 @@
                 </style>
                 <child>
                   <object class="GtkBox">
+                    <property name="margin-top">12</property>
                     <property name="visible">true</property>
                     <property name="orientation">horizontal</property>
                     <property name="halign">center</property>
@@ -121,7 +107,7 @@
                         <property name="label" translatable="yes">Spaces</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.use-spaces</property>
+                        <property name="action-name">editor-view.insert-spaces-instead-of-tabs</property>
                         <property name="action-target">true</property>
                       </object>
                     </child>
@@ -131,7 +117,7 @@
                         <property name="label" translatable="yes">Tabs</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.use-spaces</property>
+                        <property name="action-name">editor-view.insert-spaces-instead-of-tabs</property>
                         <property name="action-target">false</property>
                       </object>
                     </child>
@@ -152,7 +138,7 @@
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">editor-view.tab-width</property>
-                        <property name="action-target">2</property>
+                        <property name="action-target">uint32 2</property>
                       </object>
                     </child>
                     <child>
@@ -162,7 +148,7 @@
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">editor-view.tab-width</property>
-                        <property name="action-target">3</property>
+                        <property name="action-target">uint32 3</property>
                       </object>
                     </child>
                     <child>
@@ -172,7 +158,7 @@
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">editor-view.tab-width</property>
-                        <property name="action-target">4</property>
+                        <property name="action-target">uint32 4</property>
                       </object>
                     </child>
                     <child>
@@ -182,7 +168,7 @@
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
                         <property name="action-name">editor-view.tab-width</property>
-                        <property name="action-target">8</property>
+                        <property name="action-target">uint32 8</property>
                       </object>
                     </child>
                   </object>
