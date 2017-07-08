@@ -4,15 +4,9 @@
     <section id="devhelp-document-section">
       <attribute name="label" translatable="yes">Documentation</attribute>
       <item>
-        <attribute name="label" translatable="yes">Open in New Frame</attribute>
-        <attribute name="action">layoutstack.open-in-new-frame</attribute>
+        <attribute name="label" translatable="yes">Print…</attribute>
+        <attribute name="action">devhelp-view.print</attribute>
       </item>
-      <item>
-        <attribute name="label" translatable="yes">Split</attribute>
-        <attribute name="action">layoutstack.split-view</attribute>
-      </item>
-    </section>
-    <section id="devhelp-close-section">
       <item>
         <attribute name="label" translatable="yes">Close</attribute>
         <attribute name="action">layoutstack.close-view</attribute>

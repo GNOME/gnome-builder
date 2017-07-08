@@ -98,6 +98,23 @@ gbp_devhelp_view_create_split_view (IdeLayoutView *view)
 }
 
 static void
+gbp_devhelp_view_actions_print (GSimpleAction *action,
+                                GVariant      *param,
+                                gpointer       user_data)
+{
+  GbpDevhelpView *self = user_data;
+  WebKitPrintOperation *operation;
+  GtkWidget *window;
+
+  g_assert (GBP_IS_DEVHELP_VIEW (self));
+
+  operation = webkit_print_operation_new (self->web_view1);
+  window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
+  webkit_print_operation_run_dialog (operation, GTK_WINDOW (window));
+  g_object_unref (operation);
+}
+
+static void
 gbp_devhelp_view_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
@@ -175,9 +192,15 @@ gbp_devhelp_view_class_init (GbpDevhelpViewClass *klass)
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
 
+static const GActionEntry actions[] = {
+  { "print", gbp_devhelp_view_actions_print },
+};
+
 static void
 gbp_devhelp_view_init (GbpDevhelpView *self)
 {
+  g_autoptr(GSimpleActionGroup) group = NULL;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
@@ -206,4 +229,13 @@ gbp_devhelp_view_init (GbpDevhelpView *self)
                            G_CALLBACK (gbp_devhelp_focus_in_event),
                            self,
                            G_CONNECT_SWAPPED);
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "devhelp-view",
+                                  G_ACTION_GROUP (group));
 }
