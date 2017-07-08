@@ -4,17 +4,4 @@ ideeditorsidebar treeview.project-tree {
   -GtkTreeView-vertical-separator: 6;
   -gtk-icon-source: none;
   padding-left: 6px;
-  color: @theme_fg_color;
-}
-ideeditorsidebar treeview.project-tree:not(:selected) {
-  background: transparent;
-}
-ideeditorsidebar treeview.project-tree:selected {
-  color: @theme_selected_fg_color;
-}
-ideeditorsidebar treeview.project-tree:backdrop {
-  color: @theme_unfocused_fg_color;
-}
-ideeditorsidebar treeview.project-tree:selected:backdrop {
-  color: @theme_unfocused_selected_fg_color;
 }

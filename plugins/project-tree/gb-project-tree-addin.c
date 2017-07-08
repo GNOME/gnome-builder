@@ -81,6 +81,7 @@ gb_project_tree_addin_load (IdeWorkbenchAddin *addin,
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->tree);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->tree), "project-tree");
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->tree), "i-wanna-be-listbox");
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->tree));
 
   ide_editor_sidebar_add_section (sidebar,

@@ -261,6 +261,9 @@
                     <property name="headers-visible">false</property>
                     <property name="model">languages</property>
                     <property name="visible">true</property>
+                    <style>
+                      <class name="i-wanna-be-listbox"/>
+                    </style>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection">
                         <property name="mode">browse</property>
