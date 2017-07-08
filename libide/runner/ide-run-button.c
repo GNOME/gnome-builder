@@ -58,7 +58,6 @@ create_row (const IdeRunHandlerInfo *info,
   g_assert (IDE_IS_RUN_BUTTON (self));
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "can-focus", FALSE,
                       "selectable", FALSE,
                       "visible", TRUE,
                       NULL);

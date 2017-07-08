@@ -69,7 +69,6 @@ ide_perspective_menu_button_create_row (IdePerspectiveMenuButton *self,
   icon_name = ide_perspective_get_icon_name (perspective);
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "can-focus", FALSE,
                       "selectable", FALSE,
                       "visible", TRUE,
                       NULL);
