@@ -25,7 +25,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="show_line_numbers">
                 <property name="visible">true</property>
                 <property name="action-name">source-view.show-line-numbers</property>
                 <child>
@@ -38,7 +38,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="show_right_margin">
                 <property name="visible">true</property>
                 <property name="action-name">file-settings.show-right-margin</property>
                 <child>
@@ -51,7 +51,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="highlight_current_line">
                 <property name="visible">true</property>
                 <property name="action-name">source-view.highlight-current-line</property>
                 <child>
@@ -64,7 +64,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="insert_trailing_newline">
                 <property name="visible">true</property>
                 <property name="action-name">file-settings.insert-trailing-newline</property>
                 <child>
@@ -77,7 +77,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="overwrite_braces">
                 <property name="visible">true</property>
                 <property name="action-name">file-settings.overwrite-braces</property>
                 <child>
@@ -196,7 +196,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="auto_indent">
                 <property name="margin-top">6</property>
                 <property name="visible">true</property>
                 <property name="halign">fill</property>
@@ -211,7 +211,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton">
+              <object class="GtkCheckButton" id="smart_backspace">
                 <property name="visible">true</property>
                 <property name="halign">fill</property>
                 <property name="action-name">source-view.smart-backspace</property>

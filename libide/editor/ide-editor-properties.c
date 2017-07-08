@@ -36,7 +36,15 @@
 
 struct _IdeEditorProperties
 {
-  GtkBin parent_instance;
+  GtkBin    parent_instance;
+
+  GtkCheckButton *show_line_numbers;
+  GtkCheckButton *show_right_margin;
+  GtkCheckButton *highlight_current_line;
+  GtkCheckButton *insert_trailing_newline;
+  GtkCheckButton *overwrite_braces;
+  GtkCheckButton *auto_indent;
+  GtkCheckButton *smart_backspace;
 };
 
 enum {
@@ -87,13 +95,35 @@ ide_editor_properties_class_init (IdeEditorPropertiesClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/ide-editor-properties.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorProperties, show_line_numbers);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorProperties, show_right_margin);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorProperties, highlight_current_line);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorProperties, insert_trailing_newline);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorProperties, overwrite_braces);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorProperties, auto_indent);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorProperties, smart_backspace);
+
   gtk_widget_class_set_css_name (widget_class, "ideeditorproperties");
 }
 
 static void
 ide_editor_properties_init (IdeEditorProperties *self)
 {
+  GtkTextDirection dir;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  /* Swap direction so check is at opposite end of checkbutton */
+  dir = gtk_widget_get_direction (GTK_WIDGET (self));
+  dir = (dir != GTK_TEXT_DIR_RTL) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+  gtk_widget_set_direction (GTK_WIDGET (self->show_line_numbers), dir);
+  gtk_widget_set_direction (GTK_WIDGET (self->show_right_margin), dir);
+  gtk_widget_set_direction (GTK_WIDGET (self->highlight_current_line), dir);
+  gtk_widget_set_direction (GTK_WIDGET (self->insert_trailing_newline), dir);
+  gtk_widget_set_direction (GTK_WIDGET (self->overwrite_braces), dir);
+  gtk_widget_set_direction (GTK_WIDGET (self->auto_indent), dir);
+  gtk_widget_set_direction (GTK_WIDGET (self->smart_backspace), dir);
 }
 
 /**
