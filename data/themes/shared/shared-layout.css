@@ -41,13 +41,13 @@ idelayoutgridcolumn.handle,
 idelayoutgrid.handle {
   border: 1px solid @borders;
 }
-idelayoutgrid idelayoutstack popover.title-popover list row {
+popover.title-popover list row {
   padding: 1px 0;
 }
-idelayoutgrid idelayoutstack popover.title-popover scrolledwindow {
+popover.title-popover scrolledwindow {
   min-width: 300px;
 }
-idelayoutgrid idelayoutstack popover.title-popover list {
+popover.title-popover list {
   background: transparent;
 }
 popover.title-popover list row box > image:first-child {
