@@ -62,6 +62,7 @@ test_filesettings (void)
   g_assert_true (ide_file_settings_get_insert_trailing_newline (settings));
 
   ide_file_settings_set_newline_type (settings, GTK_SOURCE_NEWLINE_TYPE_CR);
+  g_assert_true (ide_file_settings_get_newline_type_set (settings));
   g_assert_cmpint (ide_file_settings_get_newline_type (settings), ==, GTK_SOURCE_NEWLINE_TYPE_CR);
   ide_file_settings_set_newline_type (settings, GTK_SOURCE_NEWLINE_TYPE_CR_LF);
   g_assert_cmpint (ide_file_settings_get_newline_type (settings), ==, GTK_SOURCE_NEWLINE_TYPE_CR_LF);
@@ -80,6 +81,7 @@ test_filesettings (void)
   g_assert_false (ide_file_settings_get_trim_trailing_whitespace (settings));
 
   ide_file_settings_set_show_right_margin (settings, TRUE);
+  g_assert_true (ide_file_settings_get_show_right_margin_set (settings));
   g_assert_true (ide_file_settings_get_show_right_margin (settings));
   ide_file_settings_set_show_right_margin (settings, FALSE);
   g_assert_false (ide_file_settings_get_show_right_margin (settings));
