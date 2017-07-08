@@ -37,7 +37,7 @@
                 <property name="visible">true</property>
                 <property name="label" translatable="yes">Show right margin</property>
                 <property name="halign">fill</property>
-                <property name="action-name">source-view.show-right-margin</property>
+                <property name="action-name">file-settings.show-right-margin</property>
               </object>
             </child>
             <child>
@@ -116,7 +116,7 @@
                         <property name="label" translatable="yes">2</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.tab-width</property>
+                        <property name="action-name">file-settings.tab-width</property>
                         <property name="action-target">uint32 2</property>
                       </object>
                     </child>
@@ -126,7 +126,7 @@
                         <property name="label" translatable="yes">3</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.tab-width</property>
+                        <property name="action-name">file-settings.tab-width</property>
                         <property name="action-target">uint32 3</property>
                       </object>
                     </child>
@@ -136,7 +136,7 @@
                         <property name="label" translatable="yes">4</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.tab-width</property>
+                        <property name="action-name">file-settings.tab-width</property>
                         <property name="action-target">uint32 4</property>
                       </object>
                     </child>
@@ -146,7 +146,7 @@
                         <property name="label" translatable="yes">8</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.tab-width</property>
+                        <property name="action-name">file-settings.tab-width</property>
                         <property name="action-target">uint32 8</property>
                       </object>
                     </child>

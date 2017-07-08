@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "files/ide-file.h"
+#include "files/ide-file-settings.h"
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
 #include "editor/ide-editor-private.h"
@@ -375,6 +376,26 @@ ide_editor_view_actions_save_as (GSimpleAction *action,
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (dialog));
 }
 
+static void
+ide_editor_view_actions_notify_file_settings (IdeEditorView *self,
+                                              GParamSpec    *pspec,
+                                              IdeSourceView *source_view)
+{
+  IdeFileSettings *file_settings;
+  GActionGroup *group;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "file-settings");
+  g_assert (DZL_IS_PROPERTIES_GROUP (group));
+
+  file_settings = ide_source_view_get_file_settings (source_view);
+  g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
+
+  g_object_set (group, "object", file_settings, NULL);
+}
+
 static const GActionEntry editor_view_entries[] = {
   { "print", ide_editor_view_actions_print },
   { "reload", ide_editor_view_actions_reload },
@@ -395,34 +416,48 @@ void
 _ide_editor_view_init_actions (IdeEditorView *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
-  g_autoptr(DzlPropertiesGroup) properties = NULL;
+  g_autoptr(DzlPropertiesGroup) sv_props = NULL;
+  g_autoptr(DzlPropertiesGroup) file_props = NULL;
+  IdeSourceView *source_view;
 
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
 
+  source_view = ide_editor_view_get_view (self);
+
+  /* Setup our user-facing actions */
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group),
                                    editor_view_entries,
                                    G_N_ELEMENTS (editor_view_entries),
                                    self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view", G_ACTION_GROUP (group));
 
   /* We want to access some settings properties as stateful GAction so they
    * manipulated using regular Gtk widgets from the properties panel.
    */
-  properties = dzl_properties_group_new (G_OBJECT (self->source_view));
+  sv_props = dzl_properties_group_new (G_OBJECT (source_view));
   for (guint i = 0; i < G_N_ELEMENTS (source_view_property_actions); i++)
     {
       const gchar *name = source_view_property_actions[i];
-      dzl_properties_group_add_property (properties, name, name);
+      dzl_properties_group_add_property (sv_props, name, name);
     }
-  dzl_properties_group_add_property_full (properties,
+  dzl_properties_group_add_property_full (sv_props,
                                           "use-spaces",
                                           "insert-spaces-instead-of-tabs",
                                           DZL_PROPERTIES_FLAGS_STATEFUL_BOOLEANS);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "source-view", G_ACTION_GROUP (sv_props));
 
-  /* Our groups will be copied up to be accessed outside of our widget
-   * hierarchy. So we expose them all on the IdeEditorView directly
-   * for that purpose.
+  /*
+   * We want to bind our file-settings, used to tweak values in the
+   * source-view, to a GActionGroup that can be manipulated by the properties
+   * editor. Make sure we get notified of changes and sink the current state.
    */
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view", G_ACTION_GROUP (group));
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "source-view", G_ACTION_GROUP (properties));
+  file_props = dzl_properties_group_new_for_type (IDE_TYPE_FILE_SETTINGS);
+  dzl_properties_group_add_all_properties (file_props);
+  g_signal_connect_swapped (source_view,
+                            "notify::file-settings",
+                            G_CALLBACK (ide_editor_view_actions_notify_file_settings),
+                            self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "file-settings", G_ACTION_GROUP (file_props));
+  ide_editor_view_actions_notify_file_settings (self, NULL, source_view);
 }
