@@ -27,31 +27,72 @@
             <child>
               <object class="GtkCheckButton">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Show line numbers</property>
-                <property name="halign">fill</property>
                 <property name="action-name">source-view.show-line-numbers</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">Show line numbers</property>
+                    <property name="wrap">true</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkCheckButton">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Show right margin</property>
-                <property name="halign">fill</property>
                 <property name="action-name">file-settings.show-right-margin</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">Show right margin</property>
+                    <property name="wrap">true</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkCheckButton">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Highlight current line</property>
-                <property name="halign">fill</property>
                 <property name="action-name">source-view.highlight-current-line</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">Highlight current line</property>
+                    <property name="wrap">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton">
+                <property name="visible">true</property>
+                <property name="action-name">file-settings.insert-trailing-newline</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">Insert trailing newline</property>
+                    <property name="wrap">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton">
+                <property name="visible">true</property>
+                <property name="action-name">file-settings.overwrite-braces</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">Overwrite trailing braces and quotations</property>
+                    <property name="wrap">true</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkLabel">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Indentation</property>
+                <property name="label" translatable="yes">Tabs and Indentation</property>
                 <property name="margin-top">12</property>
                 <property name="xalign">0</property>
                 <style>
@@ -158,17 +199,30 @@
               <object class="GtkCheckButton">
                 <property name="margin-top">6</property>
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Auto indent</property>
                 <property name="halign">fill</property>
                 <property name="action-name">source-view.auto-indent</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">Auto indent new lines</property>
+                    <property name="wrap">true</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkCheckButton">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Smart Backspace</property>
                 <property name="halign">fill</property>
                 <property name="action-name">source-view.smart-backspace</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">Smart backspace</property>
+                    <property name="tooltip-text" translatable="yes">Enabling smart backspace will treat multiple spaces as a tabs</property>
+                    <property name="wrap">true</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -184,7 +238,7 @@
                 <property name="shadow-type">none</property>
                 <property name="propagate-natural-height">true</property>
                 <child>
-                  <object class="GtkListBox" id="list_box">
+                  <object class="GtkTreeView" id="tree_view">
                     <property name="visible">true</property>
                   </object>
                 </child>
