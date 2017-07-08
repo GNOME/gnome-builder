@@ -108,7 +108,7 @@ void ide_file_settings_set_##name (IdeFileSettings *self, \
 { \
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self); \
   g_return_if_fail (IDE_IS_FILE_SETTINGS (self)); \
-  assign_stmt \
+  G_STMT_START { assign_stmt } G_STMT_END; \
   priv->name##_set = TRUE; \
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_##NAME]); \
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_##NAME##_SET]); \
