@@ -79,4 +79,15 @@
       </item>
     </section>
   </menu>
+  <menu id="new-document-menu">
+    <section id="new-document-section">
+      <item>
+        <attribute name="id">new-terminal</attribute>
+        <attribute name="after">new-file</attribute>
+        <attribute name="before">new-documentation-page</attribute>
+        <attribute name="label" translatable="yes">New Terminal</attribute>
+        <attribute name="action">win.new-terminal</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

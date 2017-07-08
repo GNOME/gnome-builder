@@ -13,4 +13,14 @@
       </item>
     </section>
   </menu>
+  <menu id="new-document-menu">
+    <section id="new-document-section">
+      <item>
+        <attribute name="id">new-documentation-page</attribute>
+        <attribute name="after">new-file</attribute>
+        <attribute name="label" translatable="yes">New Documentation Page</attribute>
+        <attribute name="action">devhelp.new-view</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

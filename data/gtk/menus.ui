@@ -238,6 +238,22 @@
       </item>
     </section>
   </menu>
+  <menu id="new-document-menu">
+    <section id="new-document-section">
+      <item>
+        <attribute name="id">new-file</attribute>
+        <attribute name="label" translatable="yes">New File</attribute>
+        <attribute name="action">editor.new-file</attribute>
+      </item>
+    </section>
+    <section id="open-document-section">
+      <item>
+        <attribute name="id">open-file</attribute>
+        <attribute name="label" translatable="yes">Open File…</attribute>
+        <attribute name="action">win.open-with-dialog</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="ide-editor-view-document-menu">
     <section id="editor-document-section">
       <attribute name="label" translatable="yes">Document</attribute>
