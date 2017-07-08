@@ -67,10 +67,20 @@ ideeditorproperties button {
   padding: 2px 12px;
 }
 ideeditorproperties checkbutton {
- margin: 8px 0 0 0;
- outline-offset: 2px;
- padding: 0;
+  margin: 8px 0 0 0;
+  outline-offset: 2px;
+  padding: 0;
 }
 ideeditorproperties checkbutton check {
- margin: 0 8px 0 0;
+  margin: 0 8px 0 0;
+}
+ideeditorproperties treeview {
+  color: @theme_fg_color;
+}
+ideeditorproperties treeview:selected:backdrop,
+ideeditorproperties treeview:selected {
+  color: @theme_selected_fg_color;
+}
+ideeditorproperties treeview:backdrop {
+  color: @theme_unfocused_fg_color;
 }

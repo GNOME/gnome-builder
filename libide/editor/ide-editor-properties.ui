@@ -289,7 +289,6 @@
             </child>
             <child>
               <object class="GtkSearchEntry" id="entry">
-                <property name="has-frame">false</property>
                 <property name="visible">true</property>
                 <property name="placeholder-text" translatable="yes">Search languages…</property>
               </object>
