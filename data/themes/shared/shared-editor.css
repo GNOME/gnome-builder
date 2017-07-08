@@ -67,8 +67,9 @@ ideeditorproperties button {
   padding: 2px 12px;
 }
 ideeditorproperties checkbutton {
- padding: 0;
  margin: 8px 0 0 0;
+ outline-offset: 2px;
+ padding: 0;
 }
 ideeditorproperties checkbutton check {
  margin: 0 8px 0 0;
