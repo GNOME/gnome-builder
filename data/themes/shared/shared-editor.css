@@ -63,9 +63,13 @@ ideeditorsidebar label.error {
 ideeditorsidebar label.error:backdrop {
   font-weight: normal;
 }
-ideeditorproperties modelbutton {
-  padding: 0;
-}
 ideeditorproperties button {
   padding: 2px 12px;
+}
+ideeditorproperties checkbutton {
+ padding: 0;
+ margin: 8px 0 0 0;
+}
+ideeditorproperties checkbutton check {
+ margin: 0 8px 0 0;
 }

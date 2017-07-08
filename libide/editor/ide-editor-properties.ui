@@ -9,7 +9,6 @@
           <object class="GtkBox">
             <property name="visible">true</property>
             <property name="margin">12</property>
-            <property name="spacing">0</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel">
@@ -26,28 +25,25 @@
               </object>
             </child>
             <child>
-              <object class="GtkModelButton">
+              <object class="GtkCheckButton">
                 <property name="visible">true</property>
-                <property name="text" translatable="yes">Show line numbers</property>
-                <property name="role">check</property>
+                <property name="label" translatable="yes">Show line numbers</property>
                 <property name="halign">fill</property>
                 <property name="action-name">source-view.show-line-numbers</property>
               </object>
             </child>
             <child>
-              <object class="GtkModelButton">
+              <object class="GtkCheckButton">
                 <property name="visible">true</property>
-                <property name="text" translatable="yes">Show right margin</property>
-                <property name="role">check</property>
+                <property name="label" translatable="yes">Show right margin</property>
                 <property name="halign">fill</property>
                 <property name="action-name">source-view.show-right-margin</property>
               </object>
             </child>
             <child>
-              <object class="GtkModelButton">
+              <object class="GtkCheckButton">
                 <property name="visible">true</property>
-                <property name="text" translatable="yes">Highlight current line</property>
-                <property name="role">check</property>
+                <property name="label" translatable="yes">Highlight current line</property>
                 <property name="halign">fill</property>
                 <property name="action-name">source-view.highlight-current-line</property>
               </object>
@@ -68,30 +64,10 @@
               </object>
             </child>
             <child>
-              <object class="GtkModelButton">
-                <property name="visible">true</property>
-                <property name="text" translatable="yes">Auto indent</property>
-                <property name="halign">fill</property>
-                <property name="action-name">source-view.auto-indent</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkModelButton">
-                <property name="visible">true</property>
-                <property name="text" translatable="yes">Smart Backspace</property>
-                <property name="halign">fill</property>
-                <property name="action-name">source-view.smart-backspace</property>
-              </object>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="visible">true</property>
                 <property name="orientation">vertical</property>
                 <property name="halign">center</property>
-                <property name="spacing">12</property>
-                <style>
-                  <class name="indentation"/>
-                </style>
                 <child>
                   <object class="GtkBox">
                     <property name="margin-top">12</property>
@@ -127,6 +103,7 @@
                 </child>
                 <child>
                   <object class="GtkBox">
+                    <property name="margin-top">6</property>
                     <property name="visible">true</property>
                     <property name="orientation">horizontal</property>
                     <property name="halign">center</property>
@@ -177,6 +154,23 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="GtkCheckButton">
+                <property name="margin-top">6</property>
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Auto indent</property>
+                <property name="halign">fill</property>
+                <property name="action-name">source-view.auto-indent</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Smart Backspace</property>
+                <property name="halign">fill</property>
+                <property name="action-name">source-view.smart-backspace</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -197,7 +191,14 @@
               </object>
             </child>
             <child>
+              <object class="GtkSeparator">
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkSearchEntry" id="entry">
+                <property name="has-frame">false</property>
                 <property name="visible">true</property>
                 <property name="placeholder-text" translatable="yes">Search highlight mode…</property>
               </object>
