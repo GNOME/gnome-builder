@@ -196,9 +196,6 @@ ide_workbench_actions_global_search (GSimpleAction *action,
   g_assert (IDE_IS_WORKBENCH (self));
 
   ide_workbench_header_bar_focus_search (self->header_bar);
-
-  if (self->focus_mode)
-    gtk_revealer_set_reveal_child (self->header_revealer, TRUE);
 }
 
 static void
@@ -227,20 +224,6 @@ ide_workbench_actions_counters (GSimpleAction *action,
   dzl_counter_arena_unref (arena);
 }
 
-static void
-ide_workbench_actions_fullscreen (GSimpleAction *action,
-                                  GVariant      *state,
-                                  gpointer       user_data)
-{
-  IdeWorkbench *self = user_data;
-
-  g_assert (IDE_IS_WORKBENCH (self));
-  g_assert (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN));
-
-  ide_workbench_set_focus_mode (self, g_variant_get_boolean (state));
-  g_simple_action_set_state (action, state);
-}
-
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
@@ -252,7 +235,6 @@ ide_workbench_actions_init (IdeWorkbench *self)
     { "save-all", ide_workbench_actions_save_all },
     { "save-all-quit", ide_workbench_actions_save_all_quit },
     { "counters", ide_workbench_actions_counters },
-    { "fullscreen", NULL, NULL, "false", ide_workbench_actions_fullscreen },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);

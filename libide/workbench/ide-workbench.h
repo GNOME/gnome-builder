@@ -19,7 +19,7 @@
 #ifndef IDE_WORKBENCH_H
 #define IDE_WORKBENCH_H
 
-#include <gtk/gtk.h>
+#include <dazzle.h>
 
 #include "ide-context.h"
 
@@ -38,7 +38,7 @@ typedef enum
 
 #define IDE_TYPE_WORKBENCH (ide_workbench_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, GtkApplicationWindow)
+G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, DzlApplicationWindow)
 
 void                   ide_workbench_open_project_async           (IdeWorkbench           *self,
                                                                    GFile                  *file_or_directory,
@@ -92,9 +92,6 @@ void                   ide_workbench_set_visible_perspective      (IdeWorkbench 
 const gchar           *ide_workbench_get_visible_perspective_name (IdeWorkbench           *self);
 void                   ide_workbench_set_visible_perspective_name (IdeWorkbench           *self,
                                                                    const gchar            *name);
-gboolean               ide_workbench_get_fullscreen               (IdeWorkbench           *self);
-void                   ide_workbench_set_fullscreen               (IdeWorkbench           *self,
-                                                                   gboolean                fullscreen);
 void                   ide_workbench_views_foreach                (IdeWorkbench           *self,
                                                                    GtkCallback             callback,
                                                                    gpointer                user_data);

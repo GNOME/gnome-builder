@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 struct _IdeWorkbench
 {
-  GtkApplicationWindow       parent;
+  DzlApplicationWindow       parent;
 
   guint                      unloading : 1;
   guint                      focus_mode : 1;
@@ -47,15 +47,12 @@ struct _IdeWorkbench
    */
   GListStore                *perspectives;
 
-  GtkContainer              *header_container;
-  GtkRevealer               *header_revealer;
   GtkStack                  *header_stack;
   IdeWorkbenchHeaderBar     *header_bar;
   IdePerspectiveMenuButton  *perspective_menu_button;
   GtkStack                  *perspectives_stack;
   GtkSizeGroup              *header_size_group;
   GtkBox                    *message_box;
-  GtkEventBox               *fullscreen_eventbox;
 
   GObject                   *selection_owner;
 };
