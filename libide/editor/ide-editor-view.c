@@ -869,3 +869,40 @@ ide_editor_view_set_show_map (IdeEditorView *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTO_HIDE_MAP]);
     }
 }
+
+/**
+ * ide_editor_view_set_language:
+ * @self: a #IdeEditorView
+ *
+ * This is a convenience function to set the language on the underlying
+ * #IdeBuffer text buffer.
+ *
+ * Since: 3.26
+ */
+void
+ide_editor_view_set_language (IdeEditorView     *self,
+                              GtkSourceLanguage *language)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+  g_return_if_fail (!language || GTK_SOURCE_IS_LANGUAGE (language));
+
+  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self->buffer), language);
+}
+
+/**
+ * ide_editor_view_get_language:
+ * @self: a #IdeEditorView
+ *
+ * Gets the #GtkSourceLanguage that is used by the underlying buffer.
+ *
+ * Returns: (transfer none) (nullable): A #GtkSourceLanguage or %NULL.
+ *
+ * Since: 3.26
+ */
+GtkSourceLanguage *
+ide_editor_view_get_language (IdeEditorView *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), NULL);
+
+  return gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self->buffer));
+}
