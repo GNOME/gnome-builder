@@ -58,15 +58,21 @@
     <section id="terminal-document-section">
       <attribute name="label" translatable="yes">Terminal</attribute>
       <item>
-        <attribute name="label" translatable="yes">Open in New Frame</attribute>
-        <attribute name="action">layoutstack.open-in-new-frame</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">Split</attribute>
         <attribute name="action">layoutstack.split-view</attribute>
       </item>
-    </section>
-    <section id="terminal-close-section">
+      <item>
+        <attribute name="label" translatable="yes">Reset</attribute>
+        <attribute name="action">terminal-view.reset</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Reset and Clear</attribute>
+        <attribute name="action">terminal-view.reset-and-clear</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Save As</attribute>
+        <attribute name="action">terminal-view.save-as</attribute>
+      </item>
       <item>
         <attribute name="label" translatable="yes">Close</attribute>
         <attribute name="action">layoutstack.close-view</attribute>
