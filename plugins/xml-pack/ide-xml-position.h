@@ -39,9 +39,12 @@ struct _IdeXmlPosition
   IdeXmlSymbolNode     *previous_sibling_node;
   IdeXmlSymbolNode     *next_sibling_node;
   gchar                *prefix;
+  gchar                *detail_name;
+  gchar                *detail_value;
   IdeXmlPositionKind    kind;
   IdeXmlPositionDetail  detail;
   gint                  child_pos;
+  gchar                 quote;
 
   guint                 ref_count;
 };
@@ -49,13 +52,18 @@ struct _IdeXmlPosition
 IdeXmlPosition           *ide_xml_position_new                  (IdeXmlSymbolNode      *node,
                                                                  const gchar           *prefix,
                                                                  IdeXmlPositionKind     kind,
-                                                                 IdeXmlPositionDetail   detail);
+                                                                 IdeXmlPositionDetail   detail,
+                                                                 const gchar           *detail_name,
+                                                                 const gchar           *detail_value,
+                                                                 gchar                  quote);
 IdeXmlPosition           *ide_xml_position_copy                 (IdeXmlPosition        *self);
 IdeXmlPosition           *ide_xml_position_ref                  (IdeXmlPosition        *self);
 void                      ide_xml_position_unref                (IdeXmlPosition        *self);
 IdeXmlAnalysis           *ide_xml_position_get_analysis         (IdeXmlPosition        *self);
 gint                      ide_xml_position_get_child_pos        (IdeXmlPosition        *self);
 IdeXmlPositionDetail      ide_xml_position_get_detail           (IdeXmlPosition        *self);
+const gchar              *ide_xml_position_get_detail_name      (IdeXmlPosition        *self);
+const gchar              *ide_xml_position_get_detail_value     (IdeXmlPosition        *self);
 IdeXmlPositionKind        ide_xml_position_get_kind             (IdeXmlPosition        *self);
 IdeXmlSymbolNode         *ide_xml_position_get_next_sibling     (IdeXmlPosition        *self);
 IdeXmlSymbolNode         *ide_xml_position_get_child_node       (IdeXmlPosition        *self);

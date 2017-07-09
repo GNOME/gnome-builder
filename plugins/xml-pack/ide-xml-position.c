@@ -24,7 +24,10 @@ IdeXmlPosition *
 ide_xml_position_new (IdeXmlSymbolNode     *node,
                       const gchar          *prefix,
                       IdeXmlPositionKind    kind,
-                      IdeXmlPositionDetail  detail)
+                      IdeXmlPositionDetail  detail,
+                      const gchar          *detail_name,
+                      const gchar          *detail_value,
+                      gchar                 quote)
 {
   IdeXmlPosition *self;
 
@@ -34,12 +37,20 @@ ide_xml_position_new (IdeXmlSymbolNode     *node,
   self->ref_count = 1;
 
   self->node = (IDE_IS_XML_SYMBOL_NODE (node)) ? g_object_ref (node) : NULL;
+
   if (!ide_str_empty0 (prefix))
     self->prefix = g_strdup (prefix);
+
+  if (!ide_str_empty0 (detail_name))
+    self->detail_name = g_strdup (detail_name);
+
+  if (!ide_str_empty0 (detail_value))
+    self->detail_value = g_strdup (detail_value);
 
   self->kind = kind;
   self->detail = detail;
   self->child_pos = -1;
+  self->quote = quote;
 
   return self;
 }
@@ -55,7 +66,10 @@ ide_xml_position_copy (IdeXmlPosition *self)
   copy = ide_xml_position_new (self->node,
                                self->prefix,
                                self->kind,
-                               self->detail);
+                               self->detail,
+                               self->detail_name,
+                               self->detail_value,
+                               self->quote);
 
   if (self->analysis != NULL)
     copy->analysis = ide_xml_analysis_ref (self->analysis);
@@ -81,6 +95,8 @@ ide_xml_position_free (IdeXmlPosition *self)
     ide_xml_analysis_unref (self->analysis);
 
   g_clear_pointer (&self->prefix, g_free);
+  g_clear_pointer (&self->detail_name, g_free);
+  g_clear_pointer (&self->detail_value, g_free);
 
   g_clear_object (&self->node);
   g_clear_object (&self->child_node);
@@ -241,12 +257,16 @@ ide_xml_position_print (IdeXmlPosition *self)
   detail_str = ide_xml_position_detail_get_str (self->detail);
 
   parent_node = ide_xml_symbol_node_get_parent (self->node);
-  printf ("POSITION: parent: %s node: %s kind:%s detail:'%s' prefix:'%s'\n",
+  printf ("POSITION: parent: %s node: %s kind:%s detail:'%s'\n \
+           prefix:'%s' detail name:'%s' detail value:'%s' quote:'%c'\n",
           (parent_node != NULL) ? ide_xml_symbol_node_get_element_name (parent_node) : "none",
           (self->node != NULL) ? ide_xml_symbol_node_get_element_name (self->node) : "none",
           kind_str,
           detail_str,
-          self->prefix);
+          self->prefix,
+          self->detail_name,
+          self->detail_value,
+          self->quote);
 
   if (self->child_pos != -1)
     {
@@ -329,6 +349,22 @@ ide_xml_position_get_prefix (IdeXmlPosition *self)
   g_return_val_if_fail (self, NULL);
 
   return self->prefix;
+}
+
+const gchar *
+ide_xml_position_get_detail_name (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->detail_name;
+}
+
+const gchar *
+ide_xml_position_get_detail_value (IdeXmlPosition *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->detail_value;
 }
 
 gint
