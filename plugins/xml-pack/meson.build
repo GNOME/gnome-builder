@@ -49,6 +49,8 @@ xml_pack_sources = [
   'ide-xml-tree-builder.h',
   'ide-xml-tree-builder-utils.c',
   'ide-xml-tree-builder-utils-private.h',
+  'ide-xml-utils.c',
+  'ide-xml-utils.c',
   'ide-xml-validator.c',
   'ide-xml-validator.h',
   'ide-xml.c',

@@ -28,6 +28,7 @@
 #include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-tree-builder.h"
 #include "ide-xml-types.h"
+#include "ide-xml-utils.h"
 #include "ide-xml-service.h"
 #include "ide-xml-tree-builder.h"
 
@@ -627,6 +628,161 @@ position_state_free (PositionState *state)
   g_object_unref (state->buffer);
 }
 
+static inline gboolean
+skip_whitespaces (const gchar **cursor)
+{
+  const gchar *p = *cursor;
+  gunichar ch;
+
+  g_assert (cursor != NULL && *cursor != NULL);
+
+  while ((ch = g_utf8_get_char (*cursor)) && g_unichar_isspace (ch))
+    *cursor = g_utf8_next_char (*cursor);
+
+  return (p != *cursor);
+}
+
+static inline void
+skip_all_name (const gchar **cursor)
+{
+  gunichar ch;
+
+  g_assert (cursor != NULL && *cursor != NULL);
+
+  while ((ch = g_utf8_get_char (*cursor)) && !g_unichar_isspace (ch))
+    *cursor = g_utf8_next_char (*cursor);
+}
+
+static IdeXmlPositionDetail
+get_detail (IdeXmlSymbolNode  *node,
+            const gchar       *prefix,
+            gunichar           next_ch,
+            gchar            **name,
+            gchar            **value,
+            gchar             *quote)
+{
+  IdeXmlPositionDetail detail;
+  const gchar *cursor, *start;
+  const gchar *name_start;
+  gsize name_size;
+  gboolean has_spaces = FALSE;
+
+  g_assert (IDE_IS_XML_SYMBOL_NODE (node));
+  g_assert (prefix != NULL);
+  g_assert (value != NULL);
+
+  *name = NULL;
+  *value = NULL;
+  *quote = 0;
+
+  cursor = prefix;
+  detail =  IDE_XML_POSITION_DETAIL_IN_NAME;
+  if (!ide_xml_utils_skip_element_name (&cursor))
+    return IDE_XML_POSITION_DETAIL_NONE;
+
+  if (*cursor == 0)
+    {
+      if (!g_unichar_isspace (next_ch) && next_ch != '<' && next_ch != '>')
+        return IDE_XML_POSITION_DETAIL_NONE;
+      else
+        {
+          *name = g_strdup (prefix);
+          return detail;
+        }
+    }
+
+  detail =  IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME;
+  /* Whitespaces after the element name */
+  skip_whitespaces (&cursor);
+  if (*cursor == 0)
+    return detail;
+
+  while (TRUE)
+    {
+      *quote = 0;
+      start = cursor;
+      /* Attribute name */
+      if (!ide_xml_utils_skip_attribute_name (&cursor))
+        continue;
+
+      if (*cursor == 0)
+        {
+          if (!g_unichar_isspace (next_ch) && next_ch != '=')
+            return IDE_XML_POSITION_DETAIL_NONE;
+
+          *name = g_strndup (start, cursor - start);
+          return detail;
+        }
+
+      name_start = start;
+      name_size = cursor - start;
+      /* Whitespaces between the name and the = */
+      skip_whitespaces (&cursor);
+      if (*cursor == 0)
+        return detail;
+
+      if (*cursor != '=')
+        continue;
+      else
+        cursor++;
+
+      /* Whitespaces after the = */
+      /* TODO: at this point we need to add quoted around the value */
+      detail =  IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_VALUE;
+      skip_whitespaces (&cursor);
+      if (*cursor == 0)
+        {
+          *name = g_strndup (name_start, name_size);
+          return detail;
+        }
+
+      *quote = *cursor;
+      start = ++cursor;
+      if (*quote != '"' && *quote != '\'')
+        {
+          *quote = 0;
+          if (!g_unichar_isspace(*(cursor -1)))
+            {
+              skip_all_name (&cursor);
+              if (*cursor == 0)
+                return IDE_XML_POSITION_DETAIL_NONE;
+
+              skip_whitespaces (&cursor);
+              if (*cursor == 0)
+                return IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME;
+            }
+
+          continue;
+        }
+
+      /* Attribute value */
+      if (!ide_xml_utils_skip_attribute_value (&cursor, *quote))
+        {
+          *name = g_strndup (name_start, name_size);
+          *value = g_strndup (start, cursor - start);
+          return detail;
+        }
+
+      detail =  IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME;
+      /* Whitespaces after the attribute value */
+      if (skip_whitespaces (&cursor))
+        has_spaces = TRUE;
+
+      if (*cursor == 0)
+        {
+          *quote = 0;
+          return (has_spaces) ? IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME : IDE_XML_POSITION_DETAIL_NONE;
+        }
+
+      if (!has_spaces)
+        {
+          skip_all_name (&cursor);
+          if (*cursor == 0)
+            return IDE_XML_POSITION_DETAIL_NONE;
+        }
+    };
+}
+
 static IdeXmlPosition *
 get_position (IdeXmlService   *self,
               IdeXmlAnalysis  *analysis,
@@ -636,7 +792,8 @@ get_position (IdeXmlService   *self,
 {
   IdeXmlPosition *position;
   IdeXmlSymbolNode *root_node;
-  IdeXmlSymbolNode *current_node, *child_node, *candidate_node;
+  IdeXmlSymbolNode *current_node, *child_node;
+  IdeXmlSymbolNode *candidate_node = NULL;
   IdeXmlSymbolNode *previous_node = NULL;
   IdeXmlSymbolNode *previous_sibling_node = NULL;
   IdeXmlSymbolNode *next_sibling_node = NULL;
@@ -644,11 +801,15 @@ get_position (IdeXmlService   *self,
   IdeXmlPositionKind candidate_kind;
   IdeXmlPositionDetail detail = IDE_XML_POSITION_DETAIL_NONE;
   g_autofree gchar *prefix = NULL;
+  g_autofree gchar *detail_name = NULL;
+  g_autofree gchar *detail_value = NULL;
   GtkTextIter start, end;
+  gunichar next_ch = 0;
   gint start_line, start_line_offset;
   guint n_children;
   gint child_pos = -1;
   gint n = 0;
+  gchar quote = 0;
   gboolean has_prefix = FALSE;
 
   g_assert (IDE_IS_XML_SERVICE (self));
@@ -673,14 +834,12 @@ loop:
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_START_TAG:
               candidate_node = child_node;
               candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
-              detail = IDE_XML_POSITION_DETAIL_IN_NAME;
               has_prefix = TRUE;
               goto result;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_END_TAG:
               candidate_node = child_node;
               candidate_kind = IDE_XML_POSITION_KIND_IN_END_TAG;
-              detail = IDE_XML_POSITION_DETAIL_IN_NAME;
               has_prefix = TRUE;
               goto result;
 
@@ -703,7 +862,8 @@ loop:
               break;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_CONTENT:
-              current_node = previous_node = child_node;
+              candidate_node = current_node = previous_node = child_node;
+              candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
               goto loop;
 
             case IDE_XML_POSITION_KIND_UNKNOW:
@@ -720,16 +880,16 @@ result:
       candidate_node = root_node;
       candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
     }
-  else if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT &&
-           previous_node != NULL &&
-           ide_xml_symbol_node_get_state (previous_node) == IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED)
+  else if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT)
     {
-      candidate_node = previous_node;
-      /* TODO: fetch detail and more infos */
-      /* TODO: detect the IN_END_TAG case */
-      candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
-      detail = IDE_XML_POSITION_DETAIL_IN_NAME;
-      has_prefix = TRUE;
+      if (previous_node != NULL &&
+          ide_xml_symbol_node_get_state (previous_node) == IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED)
+        {
+          candidate_node = previous_node;
+          /* TODO: detect the IN_END_TAG case */
+          candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
+          has_prefix = TRUE;
+        }
     }
 
   if (has_prefix)
@@ -741,13 +901,19 @@ result:
       if (gtk_text_iter_get_char (&start) == '<')
         gtk_text_iter_forward_char (&start);
 
+      next_ch = gtk_text_iter_get_char (&end);
       if (!gtk_text_iter_equal (&start, &end))
-        prefix = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+        {
+          prefix = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+          detail = get_detail (candidate_node, prefix, next_ch, &detail_name, &detail_value, &quote);
+        }
+      else
+        detail = IDE_XML_POSITION_DETAIL_IN_NAME;
     }
 
   if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT)
     {
-      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail);
+      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail, detail_name, detail_value, quote);
       ide_xml_position_set_analysis (position, analysis);
       ide_xml_position_set_child_pos (position, child_pos);
     }
@@ -757,7 +923,7 @@ result:
       child_node = candidate_node;
       candidate_node = ide_xml_symbol_node_get_parent (child_node);
 
-      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail);
+      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail, detail_name, detail_value, quote);
       ide_xml_position_set_analysis (position, analysis);
       ide_xml_position_set_child_node (position, child_node);
     }
