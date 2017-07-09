@@ -220,15 +220,28 @@ get_tag_location (IdeXmlSax    *self,
   ch = g_utf8_get_char (current);
   if (ch != '>')
     {
+      /* End element case */
+      if (current > base && g_utf8_get_char (current - 1) == '>')
+        {
+          --current;
+          size_offset = 0;
+        }
+      /* Auto-closed start element case */
+      else if (ch == '/' && g_utf8_get_char (current + 1) == '>')
+        {
+          ++current;
+          size_offset = 2;
+        }
       /* Not properly closed tag */
-      if (ch == '<' || ch == 0)
+      else
         {
           ch = g_utf8_get_char (--current);
           if (ch == '<')
             {
               /* Empty node */
               *line = *end_line = end_line_number;
-              *line_offset = *end_line_offset = xmlSAX2GetColumnNumber (self->context);
+              *line_offset = *end_line_offset = xmlSAX2GetColumnNumber (self->context) - 1;
+              *size = 1;
               return;
             }
           else
@@ -250,18 +263,6 @@ get_tag_location (IdeXmlSax    *self,
               size_offset = 0;
               goto next;
             }
-        }
-      /* Auto-closed start element case */
-      else if (ch == '/' && g_utf8_get_char (current + 1) == '>')
-        {
-          ++current;
-          size_offset = 2;
-        }
-      /* End element case */
-      else if (current > base && g_utf8_get_char (current - 1) == '>')
-        {
-          --current;
-          size_offset = 0;
         }
     }
 
