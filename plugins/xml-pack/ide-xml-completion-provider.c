@@ -23,10 +23,13 @@
 #include "ide-xml-completion-provider.h"
 
 #include "ide.h"
+#include "ide-xml-completion-attributes.h"
 #include "ide-xml-path.h"
 #include "ide-xml-position.h"
+#include "ide-xml-rng-define.h"
 #include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-service.h"
+#include "ide-xml-symbol-node.h"
 #include "ide-xml-types.h"
 
 struct _IdeXmlCompletionProvider
@@ -69,8 +72,8 @@ typedef struct
 
 typedef struct _CompletionItem
 {
-  gchar *label;
-  gchar *content;
+  gchar           *label;
+  IdeXmlRngDefine *define;
 } CompletionItem;
 
 static void      completion_provider_init (GtkSourceCompletionProviderIface *);
@@ -295,6 +298,7 @@ get_matching_nodes (IdeXmlPath       *path,
         case IDE_XML_RNG_DEFINE_PARAM:
         case IDE_XML_RNG_DEFINE_EXCEPT:
         case IDE_XML_RNG_DEFINE_LIST:
+        case IDE_XML_RNG_DEFINE_ATTRIBUTES_GROUP:
           break;
 
         case IDE_XML_RNG_DEFINE_DEFINE:
@@ -365,18 +369,18 @@ get_matching_candidates (IdeXmlCompletionProvider *self,
 }
 
 static CompletionItem *
-completion_item_new (const gchar *label,
-                     const gchar *content)
+completion_item_new (const gchar     *label,
+                     IdeXmlRngDefine *define)
 {
   CompletionItem *item;
 
   g_assert (!ide_str_empty0 (label));
-  g_assert (!ide_str_empty0 (content));
+  g_assert (define != NULL);
 
   item = g_slice_new0 (CompletionItem);
 
   item->label = g_strdup (label);
-  item->content = g_strdup (content);
+  item->define = ide_xml_rng_define_ref (define);
 
   return item;
 }
@@ -385,7 +389,7 @@ static void
 completion_item_free (CompletionItem *item)
 {
   g_clear_pointer (&item->label, g_free);
-  g_clear_pointer (&item->content, g_free);
+  g_clear_pointer (&item->define, ide_xml_rng_define_unref);
 }
 
 static MatchingState *
@@ -441,8 +445,6 @@ matching_state_copy (MatchingState *state)
       for (gint i = 0; i < state->children->len; ++i)
         g_ptr_array_add (new_state->children, g_ptr_array_index (state->children, i));
     }
-
-  new_state->items = state->items;
 
   return new_state;
 }
@@ -531,7 +533,7 @@ is_element_matching (MatchingState *state)
           state->candidate_node = NULL;
           state->retry = TRUE;
 
-          item = completion_item_new (name, name);
+          item = completion_item_new (name, state->define);
           g_ptr_array_add (state->items, item);
 
           return TRUE;
@@ -723,6 +725,7 @@ process_matching_state (MatchingState   *state,
     case IDE_XML_RNG_DEFINE_PARAM:
     case IDE_XML_RNG_DEFINE_EXCEPT:
     case IDE_XML_RNG_DEFINE_LIST:
+    case IDE_XML_RNG_DEFINE_ATTRIBUTES_GROUP:
       is_matching = FALSE;
       break;
 
@@ -760,6 +763,78 @@ process_matching_state (MatchingState   *state,
   return is_matching;
 }
 
+static GList *
+get__element_proposals (IdeXmlPosition *position,
+                        GPtrArray      *items)
+{
+  CompletionItem *completion_item;
+  GtkSourceCompletionItem *item;
+  GList *results = NULL;
+  gchar *start = "";
+
+  g_assert (position != NULL);
+  g_assert (items != NULL);
+
+  if (ide_xml_position_get_kind (position) == IDE_XML_POSITION_KIND_IN_CONTENT)
+    start = "<";
+
+  for (gint j = 0; j < items->len; ++j)
+    {
+      g_autofree gchar *label = NULL;
+      g_autofree gchar *text = NULL;
+
+      completion_item = g_ptr_array_index (items, j);
+      label = g_strconcat ("<", completion_item->label, ">", NULL);
+      text = g_strconcat (start, completion_item->label, ">", "</", completion_item->label, ">", NULL);
+      item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
+                           "text", text,
+                           "label", label,
+                           NULL);
+
+      results = g_list_prepend (results, item);
+    }
+
+  return results;
+}
+
+static GList *
+get_attributes_proposals (IdeXmlPosition  *position,
+                          IdeXmlRngDefine *define)
+{
+  IdeXmlSymbolNode *node;
+  GtkSourceCompletionItem *item;
+  g_autoptr(GPtrArray) attributes = NULL;
+  GList *results = NULL;
+
+  node = ide_xml_position_get_child_node (position);
+  if (NULL != (attributes = ide_xml_completion_attributes_get_matches (define, node)))
+    {
+      for (gint j = 0; j < attributes->len; ++j)
+        {
+          g_autofree gchar *name = NULL;
+          g_autofree gchar *text = NULL;
+          MatchItem *match_item;
+
+          match_item = g_ptr_array_index (attributes, j);
+          /* XXX: can't get the markup working, add () */
+          if (match_item->is_optional)
+            name = g_strconcat ("<i>(", match_item->name, ")</i>", NULL);
+          else
+            name = g_strdup (match_item->name);
+
+          text = g_strconcat (match_item->name, "=\"\"", NULL);
+          item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
+                               "markup", name,
+                               "text", text,
+                               NULL);
+
+          results = g_list_prepend (results, item);
+        }
+    }
+
+  return results;
+}
+
 static void
 populate_cb (GObject      *object,
              GAsyncResult *result,
@@ -774,16 +849,14 @@ populate_cb (GObject      *object,
   IdeXmlPositionKind kind;
   IdeXmlPositionDetail detail;
   g_autoptr (IdeXmlPath) path = NULL;
-  GtkSourceCompletionItem *item;
-  g_autoptr (GList) results = NULL;
   GPtrArray *schemas;
   g_autoptr (GPtrArray) candidates = NULL;
   IdeXmlRngDefine *def;
   MatchingState *initial_state;
   g_autoptr (GPtrArray) items = NULL;
-  CompletionItem *completion_item;
   GError *error = NULL;
   gint child_pos;
+  gboolean complete_attributes;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_XML_SERVICE (service));
@@ -797,49 +870,69 @@ populate_cb (GObject      *object,
   detail = ide_xml_position_get_detail (position);
   child_pos = ide_xml_position_get_child_pos (position);
 
-  path = get_path (node, root_node);
+  complete_attributes = ((kind == IDE_XML_POSITION_KIND_IN_START_TAG || kind == IDE_XML_POSITION_KIND_IN_END_TAG) &&
+                         detail == IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME);
+
+  if (complete_attributes)
+    {
+      IdeXmlSymbolNode *child_node;
+
+      child_node = ide_xml_position_get_child_node (position);
+      g_assert (child_node != NULL);
+
+      path = get_path (child_node, root_node);
+    }
+  else
+    path = get_path (node, root_node);
 
   if (schemas == NULL)
     goto cleanup;
 
-  candidates = get_matching_candidates (self, schemas, path);
-  if (candidates != NULL)
+  if (NULL != (candidates = get_matching_candidates (self, schemas, path)))
     {
 
-      if (child_pos != -1)
+      if (complete_attributes)
         {
-          candidate_node = ide_xml_symbol_node_new ("internal", NULL, "", IDE_SYMBOL_XML_ELEMENT);
-          ide_xml_position_set_child_node (position, candidate_node);
-        }
+          for (gint i = 0; i < candidates->len; ++i)
+            {
+              g_autoptr (GList) results = NULL;
 
-      items = g_ptr_array_new_with_free_func ((GDestroyNotify)completion_item_free);
-      for (gint i = 0; i < candidates->len; ++i)
+              def = g_ptr_array_index (candidates, i);
+              results = get_attributes_proposals (position, def);
+              gtk_source_completion_context_add_proposals (state->completion_context,
+                                                           GTK_SOURCE_COMPLETION_PROVIDER (self),
+                                                           results,
+                                                           TRUE);
+            }
+        }
+      else
         {
-          def = g_ptr_array_index (candidates, i);
-          ide_xml_rng_define_dump_tree (def, FALSE);
+          g_autoptr (GList) results = NULL;
 
-          initial_state = create_initial_matching_state (position, def, items);
-          process_matching_state (initial_state, def);
-          matching_state_free (initial_state);
+          items = g_ptr_array_new_with_free_func ((GDestroyNotify)completion_item_free);
+          if (child_pos != -1)
+            {
+              candidate_node = ide_xml_symbol_node_new ("internal", NULL, "", IDE_SYMBOL_XML_ELEMENT);
+              ide_xml_position_set_child_node (position, candidate_node);
+            }
 
-          printf ("----------\n");
+          for (gint i = 0; i < candidates->len; ++i)
+            {
+              def = g_ptr_array_index (candidates, i);
+              ide_xml_rng_define_dump_tree (def, FALSE);
+              printf ("----------\n");
+
+              initial_state = create_initial_matching_state (position, def, items);
+              process_matching_state (initial_state, def);
+              matching_state_free (initial_state);
+            }
+
+          results = get__element_proposals (position, items);
+          gtk_source_completion_context_add_proposals (state->completion_context,
+                                                       GTK_SOURCE_COMPLETION_PROVIDER (self),
+                                                       results,
+                                                       TRUE);
         }
-
-      for (gint j = 0; j < items->len; ++j)
-        {
-          completion_item = g_ptr_array_index (items, j);
-          item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
-                               "text", completion_item->content,
-                               "label", completion_item->label,
-                               NULL);
-
-          results = g_list_prepend (results, item);
-        }
-
-      gtk_source_completion_context_add_proposals (state->completion_context,
-                                                   GTK_SOURCE_COMPLETION_PROVIDER (self),
-                                                   results,
-                                                   TRUE);
     }
 
 cleanup:

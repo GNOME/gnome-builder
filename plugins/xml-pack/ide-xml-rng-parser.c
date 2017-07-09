@@ -703,7 +703,7 @@ parse_name_class (IdeXmlRngParser *self,
       _xmlfree (&def->ns);
 
       def->name = _strip (xmlNodeGetContent(node));
-      def->ns = xmlGetProp(node, NS_PROP);
+      def->ns = xmlGetProp (node, NS_PROP);
     }
   else if (is_valid_rng_node (node, "anyName"))
     {
@@ -1011,6 +1011,7 @@ parse_attribute (IdeXmlRngParser *self,
             ide_xml_rng_define_unref (current);
             break;
 
+          case IDE_XML_RNG_DEFINE_ATTRIBUTES_GROUP:
           default:
             g_assert_not_reached ();
           }
@@ -1246,6 +1247,7 @@ parse_element (IdeXmlRngParser *self,
             case IDE_XML_RNG_DEFINE_NOOP:
               break;
 
+            case IDE_XML_RNG_DEFINE_ATTRIBUTES_GROUP:
             default:
               g_assert_not_reached ();
             }
