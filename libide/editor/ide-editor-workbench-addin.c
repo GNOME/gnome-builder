@@ -171,6 +171,20 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
                          "visible", TRUE,
                          NULL);
   gtk_container_add (GTK_CONTAINER (self->panels_box), button);
+
+  self->new_button = g_object_new (DZL_TYPE_MENU_BUTTON,
+                                   "icon-name", "document-new-symbolic",
+                                   "show-arrow", TRUE,
+                                   "show-icons", FALSE,
+                                   "show-accels", FALSE,
+                                   "menu-id", "new-document-menu",
+                                   "visible", TRUE,
+                                   NULL);
+  g_signal_connect (self->new_button,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->new_button);
+  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->new_button), GTK_PACK_START, 5);
 }
 
 static void
@@ -199,7 +213,6 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   ide_editor_workbench_addin_add_buttons (self, header);
 
-
   self->perspective = g_object_new (IDE_TYPE_EDITOR_PERSPECTIVE,
                                     "manager", self->manager,
                                     "visible", TRUE,
@@ -209,20 +222,6 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->perspective);
   ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
-
-  self->new_button = g_object_new (DZL_TYPE_MENU_BUTTON,
-                                   "icon-name", "document-new-symbolic",
-                                   "show-arrow", TRUE,
-                                   "show-icons", FALSE,
-                                   "show-accels", FALSE,
-                                   "menu-id", "new-document-menu",
-                                   "visible", TRUE,
-                                   NULL);
-  g_signal_connect (self->new_button,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->new_button);
-  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->new_button), GTK_PACK_START, 5);
 }
 
 static void
