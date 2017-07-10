@@ -488,7 +488,7 @@ gb_vim_command_tabe (GtkWidget      *active_widget,
   if (!ide_str_empty0 (options))
     return gb_vim_command_edit (active_widget, command, options, error);
 
-  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "perspective", "new-file", NULL);
+  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "editor", "new-file", NULL);
 
   return TRUE;
 }
@@ -505,10 +505,10 @@ gb_vim_command_quit (GtkWidget      *active_widget,
     {
       IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
-      dzl_gtk_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
+      dzl_gtk_widget_action (GTK_WIDGET (source_view), "editor-view", "save", NULL);
     }
 
-  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "view", "close", NULL);
+  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "close-view", NULL);
 
   return TRUE;
 }
@@ -522,7 +522,7 @@ gb_vim_command_split (GtkWidget      *active_widget,
   g_assert (GTK_IS_WIDGET (active_widget));
 
   if (IDE_IS_LAYOUT_VIEW (active_widget))
-    dzl_gtk_widget_action (GTK_WIDGET (active_widget), "view-stack", "split-down", NULL);
+    dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "split-view", NULL);
   else
     return gb_vim_set_no_view_error (error);
 
@@ -543,7 +543,7 @@ gb_vim_command_vsplit_cb (GObject      *object,
   file_path = split_callback_data->file_path;
   variant = g_variant_new_string (file_path);
 
-  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "view-stack", "split-left", variant);
+  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "open-in-new-frame", variant);
 
   g_object_unref (split_callback_data->active_widget);
   g_free (split_callback_data->file_path);
@@ -573,7 +573,7 @@ gb_vim_command_vsplit (GtkWidget      *active_widget,
   if (ide_str_empty0 (options))
     {
       variant = g_variant_new_string ("");
-      dzl_gtk_widget_action (GTK_WIDGET (active_widget), "view-stack", "split-left", variant);
+      dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "open-in-new-frame", variant);
     }
   else
     {
@@ -624,7 +624,7 @@ gb_vim_command_write (GtkWidget      *active_widget,
     {
       IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
 
-      dzl_gtk_widget_action (GTK_WIDGET (source_view), "view", "save", NULL);
+      dzl_gtk_widget_action (GTK_WIDGET (source_view), "editor-view", "save", NULL);
 
       return TRUE;
     }
@@ -679,7 +679,7 @@ gb_vim_command_make (GtkWidget      *active_widget,
   g_assert (GTK_IS_WIDGET (active_widget));
 
   /* TODO: check for an open project */
-  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "workbench", "build", NULL);
+  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "build-manager", "build", NULL);
 
   return TRUE;
 }
@@ -758,7 +758,7 @@ gb_vim_command_bnext (GtkWidget      *active_widget,
   n_buffers = ide_buffer_manager_get_n_buffers (bufmgr);
 
   if (n_buffers > 0)
-    dzl_gtk_widget_action (GTK_WIDGET (active_widget), "view-stack", "next-view", NULL);
+    dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "next-view", NULL);
 
   return TRUE;
 }
@@ -782,7 +782,7 @@ gb_vim_command_bprevious (GtkWidget      *active_widget,
   n_buffers = ide_buffer_manager_get_n_buffers (bufmgr);
 
   if (n_buffers > 0)
-    dzl_gtk_widget_action (GTK_WIDGET (active_widget), "view-stack", "previous-view", NULL);
+    dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "previous-view", NULL);
 
   return TRUE;
 }
@@ -835,7 +835,7 @@ gb_vim_command_buffers (GtkWidget      *active_widget,
 {
   g_assert (GTK_IS_WIDGET (active_widget));
 
-  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "view-stack", "show-list", NULL);
+  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "show-list", NULL);
 
   return TRUE;
 }
