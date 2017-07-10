@@ -68,17 +68,27 @@ ide_workbench_notify_visible_child (IdeWorkbench *self,
                                     GParamSpec   *pspec,
                                     GtkStack     *stack)
 {
-  IdePerspective *perspective;
+  GtkWidget *perspective;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (GTK_IS_STACK (stack));
 
-  perspective = IDE_PERSPECTIVE (gtk_stack_get_visible_child (stack));
+  perspective = gtk_stack_get_visible_child (stack);
+
+  if (perspective != NULL)
+    {
+      g_autofree gchar *icon_name = NULL;
+
+      gtk_container_child_get (GTK_CONTAINER (stack), perspective,
+                               "icon-name", &icon_name,
+                               NULL);
+      g_object_set (self->perspective_menu_button,
+                    "icon-name", icon_name,
+                    NULL);
+    }
 
   /* Mux the actions from the perspective for the header bar */
-  dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self),
-                                    perspective ? GTK_WIDGET (perspective) : NULL,
-                                    "IDE_PERSPECTIVE_ACTIONS");
+  dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self), perspective, "IDE_PERSPECTIVE_ACTIONS");
 }
 
 static gint

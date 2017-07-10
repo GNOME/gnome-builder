@@ -22,7 +22,6 @@
 #include <libpeas/peas.h>
 
 #include "workbench/ide-perspective.h"
-#include "workbench/ide-perspective-menu-button.h"
 #include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
 
@@ -49,7 +48,7 @@ struct _IdeWorkbench
 
   GtkStack                  *header_stack;
   IdeWorkbenchHeaderBar     *header_bar;
-  IdePerspectiveMenuButton  *perspective_menu_button;
+  DzlMenuButton             *perspective_menu_button;
   GtkStack                  *perspectives_stack;
   GtkSizeGroup              *header_size_group;
   GtkBox                    *message_box;

@@ -67,7 +67,6 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-greeter-project-row.ui">greeter/ide-greeter-project-row.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-omni-bar.ui">workbench/ide-omni-bar.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-omni-bar-row.ui">workbench/ide-omni-bar-row.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-perspective-menu-button.ui">workbench/ide-perspective-menu-button.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-preferences-language-row.ui">preferences/ide-preferences-language-row.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-run-button.ui">runner/ide-run-button.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-transfer-row.ui">transfers/ide-transfer-row.ui</file>
