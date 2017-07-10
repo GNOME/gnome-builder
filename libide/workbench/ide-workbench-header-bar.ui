@@ -5,7 +5,7 @@
     <property name="show-close-button">true</property>
     <child>
       <object class="GtkBox" id="primary">
-        <property name="spacing">12</property>
+        <property name="spacing">10</property>
         <property name="visible">true</property>
         <property name="margin-end">24</property>
       </object>
