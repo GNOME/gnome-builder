@@ -56,12 +56,6 @@ ide_perspective_real_get_titlebar (IdePerspective *self)
   return NULL;
 }
 
-static gint
-ide_perspective_real_get_priority (IdePerspective *self)
-{
-  return 0;
-}
-
 static void
 ide_perspective_real_set_fullscreen (IdePerspective *self,
                                      gboolean        fullscreen)
@@ -82,7 +76,6 @@ ide_perspective_default_init (IdePerspectiveInterface *iface)
   iface->get_icon_name = ide_perspective_real_get_icon_name;
   iface->get_id = ide_perspective_real_get_id;
   iface->get_needs_attention = ide_perspective_real_get_needs_attention;
-  iface->get_priority = ide_perspective_real_get_priority;
   iface->get_title = ide_perspective_real_get_title;
   iface->get_titlebar = ide_perspective_real_get_titlebar;
   iface->set_fullscreen = ide_perspective_real_set_fullscreen;
@@ -249,14 +242,6 @@ ide_perspective_views_foreach (IdePerspective *self,
   g_return_if_fail (callback != NULL);
 
   IDE_PERSPECTIVE_GET_IFACE (self)->views_foreach (self, callback, user_data);
-}
-
-gint
-ide_perspective_get_priority (IdePerspective *self)
-{
-  g_return_val_if_fail (IDE_IS_PERSPECTIVE (self), 0);
-
-  return IDE_PERSPECTIVE_GET_IFACE (self)->get_priority (self);
 }
 
 /**

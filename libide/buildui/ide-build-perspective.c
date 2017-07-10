@@ -444,12 +444,6 @@ ide_build_perspective_get_id (IdePerspective *perspective)
   return g_strdup ("buildperspective");
 }
 
-static gint
-ide_build_perspective_get_priority (IdePerspective *perspective)
-{
-  return 80000;
-}
-
 static gchar *
 ide_build_perspective_get_accelerator (IdePerspective *perspective)
 {
@@ -462,6 +456,5 @@ perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_icon_name = ide_build_perspective_get_icon_name;
   iface->get_title = ide_build_perspective_get_title;
   iface->get_id = ide_build_perspective_get_id;
-  iface->get_priority = ide_build_perspective_get_priority;
   iface->get_accelerator = ide_build_perspective_get_accelerator;
 }

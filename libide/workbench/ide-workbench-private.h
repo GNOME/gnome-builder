@@ -40,11 +40,6 @@ struct _IdeWorkbench
   IdeContext                *context;
   GCancellable              *cancellable;
   PeasExtensionSet          *addins;
-  /*
-   * This does not contain all perspectives, just those
-   * that should be visible via the perspective selector.
-   */
-  GListStore                *perspectives;
 
   GtkStack                  *header_stack;
   IdeWorkbenchHeaderBar     *header_bar;

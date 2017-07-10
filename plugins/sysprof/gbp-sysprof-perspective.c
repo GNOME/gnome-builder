@@ -141,12 +141,6 @@ gbp_sysprof_perspective_get_id (IdePerspective *perspective)
   return g_strdup ("profiler");
 }
 
-static gint
-gbp_sysprof_perspective_get_priority (IdePerspective *perspective)
-{
-  return 70000;
-}
-
 static gchar *
 gbp_sysprof_perspective_get_accelerator (IdePerspective *perspective)
 {
@@ -159,7 +153,6 @@ perspective_iface_init (IdePerspectiveInterface *iface)
   iface->get_icon_name = gbp_sysprof_perspective_get_icon_name;
   iface->get_title = gbp_sysprof_perspective_get_title;
   iface->get_id = gbp_sysprof_perspective_get_id;
-  iface->get_priority = gbp_sysprof_perspective_get_priority;
   iface->get_accelerator = gbp_sysprof_perspective_get_accelerator;
 }
 

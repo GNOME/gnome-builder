@@ -91,18 +91,6 @@ ide_workbench_notify_visible_child (IdeWorkbench *self,
   dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self), perspective, "IDE_PERSPECTIVE_ACTIONS");
 }
 
-static gint
-ide_workbench_compare_perspective (gconstpointer a,
-                                   gconstpointer b,
-                                   gpointer      data_unused)
-{
-  IdePerspective *perspective_a = (IdePerspective *)a;
-  IdePerspective *perspective_b = (IdePerspective *)b;
-
-  return (ide_perspective_get_priority (perspective_a) -
-          ide_perspective_get_priority (perspective_b));
-}
-
 static void
 ide_workbench_unload_cb (GObject      *object,
                          GAsyncResult *result,
@@ -270,7 +258,6 @@ ide_workbench_finalize (GObject *object)
 
   g_clear_object (&self->context);
   g_clear_object (&self->cancellable);
-  g_clear_object (&self->perspectives);
 
   G_OBJECT_CLASS (ide_workbench_parent_class)->finalize (object);
 }
@@ -469,8 +456,6 @@ ide_workbench_init (IdeWorkbench *self)
   g_autoptr(GtkWindowGroup) window_group = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->perspectives = g_list_store_new (IDE_TYPE_PERSPECTIVE);
 
   ide_window_settings_register (GTK_WINDOW (self));
 
@@ -749,21 +734,6 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
                                        "name", id,
                                        NULL);
 
-  if (!IDE_IS_GREETER_PERSPECTIVE (perspective))
-    {
-      guint position = 0;
-
-      gtk_container_child_get (GTK_CONTAINER (self->perspectives_stack),
-                               GTK_WIDGET (perspective),
-                               "position", &position,
-                               NULL);
-
-      g_list_store_append (self->perspectives, perspective);
-      g_list_store_sort (self->perspectives,
-                         ide_workbench_compare_perspective,
-                         NULL);
-    }
-
   accel = ide_perspective_get_accelerator (perspective);
 
   if (accel != NULL)
@@ -782,28 +752,10 @@ void
 ide_workbench_remove_perspective (IdeWorkbench   *self,
                                   IdePerspective *perspective)
 {
-  guint n_items;
-  guint i;
-
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_PERSPECTIVE (perspective));
   g_assert (gtk_widget_get_parent (GTK_WIDGET (perspective)) ==
             GTK_WIDGET (self->perspectives_stack));
-
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->perspectives));
-
-  for (i = 0; i < n_items; i++)
-    {
-      g_autoptr(IdePerspective) item = NULL;
-
-      item = g_list_model_get_item (G_LIST_MODEL (self->perspectives), i);
-
-      if (item == perspective)
-        {
-          g_list_store_remove (self->perspectives, i);
-          break;
-        }
-    }
 
   gtk_container_remove (GTK_CONTAINER (self->perspectives_stack),
                         GTK_WIDGET (perspective));

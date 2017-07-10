@@ -35,7 +35,6 @@ struct _IdePerspectiveInterface
   gchar        *(*get_icon_name)       (IdePerspective *self);
   gchar        *(*get_id)              (IdePerspective *self);
   gboolean      (*get_needs_attention) (IdePerspective *self);
-  gint          (*get_priority)        (IdePerspective *self);
   gchar        *(*get_title)           (IdePerspective *self);
   GtkWidget    *(*get_titlebar)        (IdePerspective *self);
   gboolean      (*is_early)            (IdePerspective *self);
@@ -52,7 +51,6 @@ gboolean      ide_perspective_agree_to_shutdown   (IdePerspective *self);
 gchar        *ide_perspective_get_icon_name       (IdePerspective *self);
 gchar        *ide_perspective_get_id              (IdePerspective *self);
 gboolean      ide_perspective_get_needs_attention (IdePerspective *self);
-gint          ide_perspective_get_priority        (IdePerspective *self);
 gchar        *ide_perspective_get_title           (IdePerspective *self);
 GtkWidget    *ide_perspective_get_titlebar        (IdePerspective *self);
 gboolean      ide_perspective_is_early            (IdePerspective *self);
