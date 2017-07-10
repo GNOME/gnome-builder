@@ -46,6 +46,8 @@ struct _IdeWorkbenchHeaderBarClass
 GtkWidget  *ide_workbench_header_bar_new          (void);
 IdeOmniBar *ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self);
 void        ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
+void        ide_workbench_header_bar_add_primary  (IdeWorkbenchHeaderBar *self,
+                                                   GtkWidget             *widget);
 void        ide_workbench_header_bar_insert_left  (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget,
                                                    GtkPackType            pack_type,

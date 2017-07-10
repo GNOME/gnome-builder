@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 
+#include "ide-macros.h"
+
 #include "application/ide-application.h"
 #include "search/ide-search-entry.h"
 #include "util/ide-gtk.h"
@@ -34,6 +36,7 @@ typedef struct
   DzlPriorityBox  *left_box;
   IdeOmniBar      *omni_bar;
   IdeSearchEntry  *search_entry;
+  GtkBox          *primary;
 } IdeWorkbenchHeaderBarPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
@@ -57,6 +60,7 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, primary);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, search_entry);
 
@@ -107,6 +111,28 @@ ide_workbench_header_bar_insert_left (IdeWorkbenchHeaderBar *self,
                                      NULL);
 }
 
+/**
+ * ide_workbench_header_bar_add_primary:
+ * @self: a #IdeWorkbenchHeaderBar
+ *
+ * This will add @widget to the special box at the top left of the window next
+ * to the perspective selector. This is a special location in that the spacing
+ * is treated differently than other locations on the header bar.
+ *
+ * Since: 3.26
+ */
+void
+ide_workbench_header_bar_add_primary (IdeWorkbenchHeaderBar *self,
+                                      GtkWidget             *widget)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_container_add (GTK_CONTAINER (priv->primary), widget);
+}
+
 void
 ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
                                        GtkWidget             *widget,
@@ -146,9 +172,33 @@ ide_workbench_header_bar_get_internal_child (GtkBuildable *buildable,
 }
 
 static void
+ide_workbench_header_bar_add_child (GtkBuildable *buildable,
+                                    GtkBuilder   *builder,
+                                    GObject      *object,
+                                    const gchar  *type)
+{
+  IdeWorkbenchHeaderBar *self = (IdeWorkbenchHeaderBar *)buildable;
+  GtkBuildableIface *parent;
+
+  g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_if_fail (GTK_IS_WIDGET (object));
+
+  if (ide_str_equal0 (type, "primary"))
+    {
+      ide_workbench_header_bar_add_primary (self, GTK_WIDGET (object));
+      return;
+    }
+
+  parent = g_type_interface_peek_parent (GTK_BUILDABLE_GET_IFACE (self));
+  parent->add_child (buildable, builder, object, type);
+}
+
+static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->get_internal_child = ide_workbench_header_bar_get_internal_child;
+  iface->add_child = ide_workbench_header_bar_add_child;
 }
 
 /**

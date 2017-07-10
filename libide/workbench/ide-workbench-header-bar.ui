@@ -4,9 +4,16 @@
   <template class="IdeWorkbenchHeaderBar" parent="GtkHeaderBar">
     <property name="show-close-button">true</property>
     <child>
+      <object class="GtkBox" id="primary">
+        <property name="spacing">12</property>
+        <property name="visible">true</property>
+        <property name="margin-end">24</property>
+      </object>
+    </child>
+    <child>
       <object class="DzlPriorityBox" id="left_box">
         <property name="hexpand">true</property>
-        <property name="spacing">30</property>
+        <property name="spacing">24</property>
         <property name="visible">true</property>
       </object>
       <packing>
@@ -22,7 +29,7 @@
     <child>
       <object class="DzlPriorityBox" id="right_box">
         <property name="hexpand">true</property>
-        <property name="spacing">30</property>
+        <property name="spacing">24</property>
         <property name="visible">true</property>
         <child>
           <object class="IdeRunButton">
@@ -69,7 +76,7 @@
         </child>
         <child>
           <object class="IdeSearchEntry" id="search_entry">
-            <property name="max-width-chars">30</property>
+            <property name="max-width-chars">24</property>
             <property name="placeholder-text" translatable="yes">Press Ctrl+. to search</property>
             <property name="visible">true</property>
           </object>
