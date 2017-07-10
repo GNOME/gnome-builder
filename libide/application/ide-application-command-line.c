@@ -252,6 +252,8 @@ ide_application_local_command_line (GApplication   *application,
   *exit_status = EXIT_SUCCESS;
 
   prgname = g_get_prgname ();
+  if (prgname == NULL)
+    prgname = "gnome-builder";
 
   /*
    * Sometimes we can get a path like "/foo/bar/lt-test-foo"
@@ -263,7 +265,7 @@ ide_application_local_command_line (GApplication   *application,
       prgname = path_copy;
     }
 
-  if (prgname && g_str_has_prefix (prgname, "lt-"))
+  if (g_str_has_prefix (prgname, "lt-"))
     prgname += strlen ("lt-");
 
   if (g_str_equal (prgname, "gnome-builder-cli"))
