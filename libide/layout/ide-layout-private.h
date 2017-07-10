@@ -51,6 +51,7 @@ void            _ide_layout_stack_request_close              (IdeLayoutStack    
                                                               IdeLayoutView        *view);
 void            _ide_layout_stack_header_update              (IdeLayoutStackHeader *self,
                                                               IdeLayoutView        *view);
+void            _ide_layout_stack_header_focus_list          (IdeLayoutStackHeader *self);
 void            _ide_layout_stack_header_hide                (IdeLayoutStackHeader *self);
 void            _ide_layout_stack_header_popdown             (IdeLayoutStackHeader *self);
 void            _ide_layout_stack_header_set_views           (IdeLayoutStackHeader *self,

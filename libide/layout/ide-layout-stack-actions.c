@@ -277,6 +277,21 @@ ide_layout_stack_actions_close_stack (GSimpleAction *action,
                                          NULL);
 }
 
+static void
+ide_layout_stack_actions_show_list (GSimpleAction *action,
+                                    GVariant      *variant,
+                                    gpointer       user_data)
+{
+  IdeLayoutStack *self = user_data;
+  IdeLayoutStackHeader *header;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+
+  header = IDE_LAYOUT_STACK_HEADER (ide_layout_stack_get_titlebar (self));
+  _ide_layout_stack_header_focus_list (header);
+}
+
 static const GActionEntry actions[] = {
   { "open-in-new-frame", ide_layout_stack_actions_open_in_new_frame },
   { "close-stack",       ide_layout_stack_actions_close_stack },
@@ -286,6 +301,7 @@ static const GActionEntry actions[] = {
   { "move-right",        ide_layout_stack_actions_move_right },
   { "move-left",         ide_layout_stack_actions_move_left },
   { "split-view",        ide_layout_stack_actions_split_view },
+  { "show-list",         ide_layout_stack_actions_show_list },
 };
 
 void

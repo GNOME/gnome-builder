@@ -83,6 +83,15 @@ G_DEFINE_TYPE (IdeLayoutStackHeader, ide_layout_stack_header, DZL_TYPE_PRIORITY_
 static GParamSpec *properties [N_PROPS];
 
 void
+_ide_layout_stack_header_focus_list (IdeLayoutStackHeader *self)
+{
+  g_return_if_fail (IDE_IS_LAYOUT_STACK_HEADER (self));
+
+  gtk_popover_popup (self->title_popover);
+  gtk_widget_grab_focus (GTK_WIDGET (self->title_list_box));
+}
+
+void
 _ide_layout_stack_header_hide (IdeLayoutStackHeader *self)
 {
   g_return_if_fail (IDE_IS_LAYOUT_STACK_HEADER (self));
