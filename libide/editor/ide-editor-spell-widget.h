@@ -19,8 +19,7 @@
 #ifndef IDE_EDITOR_SPELL_WIDGET_H
 #define IDE_EDITOR_SPELL_WIDGET_H
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
+#include <dazzle.h>
 
 #include "sourceview/ide-source-view.h"
 
@@ -28,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_SPELL_WIDGET (ide_editor_spell_widget_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, IDE, EDITOR_SPELL_WIDGET, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, IDE, EDITOR_SPELL_WIDGET, DzlBin)
 
 GtkWidget       *ide_editor_spell_widget_new          (IdeSourceView           *source_view);
 GtkWidget       *ide_editor_spell_widget_get_entry    (IdeEditorSpellWidget    *self);

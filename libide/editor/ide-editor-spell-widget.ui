@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.15 -->
-  <template class="IdeEditorSpellWidget" parent="GtkBin">
+  <template class="IdeEditorSpellWidget" parent="DzlBin">
     <child>
       <object class="GtkGrid">
         <property name="visible">true</property>

@@ -39,7 +39,7 @@ typedef enum
 
 struct _IdeEditorSpellWidget
 {
-  GtkBin                 parent_instance;
+  DzlBin                 parent_instance;
 
   GspellNavigator       *navigator;
   IdeSourceView         *view;
@@ -89,7 +89,7 @@ struct _IdeEditorSpellWidget
   guint                  spellchecking_status : 1;
 };
 
-G_DEFINE_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, GTK_TYPE_BIN)
+G_DEFINE_TYPE (IdeEditorSpellWidget, ide_editor_spell_widget, DZL_TYPE_BIN)
 
 #define CHECK_WORD_INTERVAL_MIN 100
 #define DICT_CHECK_WORD_INTERVAL_MIN 100
@@ -1256,6 +1256,8 @@ ide_editor_spell_widget_class_init (IdeEditorSpellWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, dict_words_list);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSpellWidget, count_box);
+
+  gtk_widget_class_set_css_name (widget_class, "ideeditorspellwidget");
 }
 
 static void
