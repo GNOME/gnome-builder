@@ -173,7 +173,7 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
   gtk_container_add (GTK_CONTAINER (self->panels_box), button);
 
   self->new_button = g_object_new (DZL_TYPE_MENU_BUTTON,
-                                   "icon-name", "document-new-symbolic",
+                                   "icon-name", "document-open-symbolic",
                                    "focus-on-click", FALSE,
                                    "show-arrow", TRUE,
                                    "show-icons", FALSE,
