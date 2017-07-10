@@ -519,6 +519,11 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions), entries,
                                    G_N_ELEMENTS (entries), self);
 
+  /* Ensure panels are created up front */
+  (void)ide_editor_perspective_get_left_edge (self);
+  (void)ide_editor_perspective_get_bottom_edge (self);
+  (void)ide_editor_perspective_get_right_edge (self);
+
   actions = gtk_widget_get_action_group (GTK_WIDGET (self->layout), "dockbin");
 
   for (i = 0; proxy_actions[i]; i++)
