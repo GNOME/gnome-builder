@@ -174,6 +174,7 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
 
   self->new_button = g_object_new (DZL_TYPE_MENU_BUTTON,
                                    "icon-name", "document-new-symbolic",
+                                   "focus-on-click", FALSE,
                                    "show-arrow", TRUE,
                                    "show-icons", FALSE,
                                    "show-accels", FALSE,
@@ -184,7 +185,7 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->new_button);
-  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->new_button), GTK_PACK_START, 5);
+  ide_workbench_header_bar_add_primary (header, GTK_WIDGET (self->new_button));
 }
 
 static void
@@ -428,6 +429,8 @@ ide_editor_workbench_addin_perspective_set (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
 
   gtk_widget_set_visible (GTK_WIDGET (self->panels_box),
+                          IDE_IS_EDITOR_PERSPECTIVE (perspective));
+  gtk_widget_set_visible (GTK_WIDGET (self->new_button),
                           IDE_IS_EDITOR_PERSPECTIVE (perspective));
 }
 
