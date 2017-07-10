@@ -603,13 +603,13 @@ is_n_matching (MatchingState *state)
             type == IDE_XML_RNG_DEFINE_ONEORMORE ||
             type == IDE_XML_RNG_DEFINE_OPTIONAL);
 
+  state_stack_push (state);
+
+loop:
   /* Only ZeroOrMore or optionnal match if there's no children */
   if (NULL == (defines = state->define->content))
     return !(type == IDE_XML_RNG_DEFINE_ONEORMORE);
 
-  state_stack_push (state);
-
-loop:
   is_child_matching = TRUE;
   while (defines != NULL)
     {
