@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
-  <template class="GbColorPickerPrefsPaletteRow" parent="IdePreferencesBin">
+  <template class="GbColorPickerPrefsPaletteRow" parent="DzlPreferencesBin">
     <property name="vexpand">false</property>
     <child>
       <object class="GtkBox">

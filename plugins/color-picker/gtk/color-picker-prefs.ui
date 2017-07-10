@@ -77,7 +77,7 @@
                   <object class="GbColorPickerPrefsList">
                     <property name="visible">True</property>
                     <child>
-                      <object class="IdePreferencesSwitch" id="hsv_switch">
+                      <object class="DzlPreferencesSwitch" id="hsv_switch">
                         <property name="visible">True</property>
                         <property name="key">hsv-visible</property>
                         <property name="is-radio">True</property>
@@ -95,7 +95,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="lab_switch">
+                      <object class="DzlPreferencesSwitch" id="lab_switch">
                         <property name="visible">True</property>
                         <property name="key">lab-visible</property>
                         <property name="is-radio">True</property>
@@ -113,7 +113,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="rgb_switch">
+                      <object class="DzlPreferencesSwitch" id="rgb_switch">
                         <property name="visible">True</property>
                         <property name="key">rgb-visible</property>
                         <property name="is-radio">True</property>
@@ -170,7 +170,7 @@
                   <object class="GbColorPickerPrefsList">
                     <property name="visible">True</property>
                     <child>
-                      <object class="IdePreferencesSwitch" id="unit_switch">
+                      <object class="DzlPreferencesSwitch" id="unit_switch">
                         <property name="visible">True</property>
                         <property name="key">rgb-unit</property>
                         <property name="is-radio">True</property>
@@ -187,7 +187,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="percent_switch">
+                      <object class="DzlPreferencesSwitch" id="percent_switch">
                         <property name="visible">True</property>
                         <property name="key">rgb-unit</property>
                         <property name="is-radio">True</property>
@@ -243,7 +243,7 @@
                   <object class="GbColorPickerPrefsList">
                     <property name="visible">True</property>
                     <child>
-                      <object class="IdePreferencesSwitch" id="none-filter_switch">
+                      <object class="DzlPreferencesSwitch" id="none-filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -260,7 +260,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="achromatopsia_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="achromatopsia_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -277,7 +277,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="achromatomaly_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="achromatomaly_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -294,7 +294,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="deuteranopia_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="deuteranopia_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -311,7 +311,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="deuteranomaly_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="deuteranomaly_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -328,7 +328,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="protanopia_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="protanopia_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -345,7 +345,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="protanomaly_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="protanomaly_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -362,7 +362,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="tritanopia_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="tritanopia_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -379,7 +379,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="tritanomaly_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="tritanomaly_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -396,7 +396,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="IdePreferencesSwitch" id="websafe_filter_switch">
+                      <object class="DzlPreferencesSwitch" id="websafe_filter_switch">
                         <property name="visible">True</property>
                         <property name="key">filter</property>
                         <property name="is-radio">True</property>
@@ -481,7 +481,7 @@
       <object class="GbColorPickerPrefsList">
         <property name="visible">True</property>
         <child>
-          <object class="IdePreferencesSwitch">
+          <object class="DzlPreferencesSwitch">
             <property name="visible">True</property>
             <property name="key">strings-visible</property>
             <property name="is-radio">True</property>
@@ -498,7 +498,7 @@
           </packing>
         </child>
         <child>
-          <object class="IdePreferencesSwitch">
+          <object class="DzlPreferencesSwitch">
             <property name="visible">True</property>
             <property name="key">strings-visible</property>
             <property name="is-radio">True</property>
@@ -515,7 +515,7 @@
           </packing>
         </child>
         <child>
-          <object class="IdePreferencesSwitch">
+          <object class="DzlPreferencesSwitch">
             <property name="visible">True</property>
             <property name="key">strings-visible</property>
             <property name="is-radio">True</property>
@@ -532,7 +532,7 @@
           </packing>
         </child>
         <child>
-          <object class="IdePreferencesSwitch">
+          <object class="DzlPreferencesSwitch">
             <property name="visible">True</property>
             <property name="key">strings-visible</property>
             <property name="is-radio">True</property>
@@ -549,7 +549,7 @@
           </packing>
         </child>
         <child>
-          <object class="IdePreferencesSwitch">
+          <object class="DzlPreferencesSwitch">
             <property name="visible">True</property>
             <property name="key">strings-visible</property>
             <property name="is-radio">True</property>
@@ -566,7 +566,7 @@
           </packing>
         </child>
         <child>
-          <object class="IdePreferencesSwitch">
+          <object class="DzlPreferencesSwitch">
             <property name="visible">True</property>
             <property name="key">strings-visible</property>
             <property name="is-radio">True</property>
