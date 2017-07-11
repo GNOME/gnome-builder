@@ -327,4 +327,16 @@
       </item>
     </section>
   </menu>
+  <menu id="run-menu">
+    <section id="run-menu-section">
+      <item>
+        <attribute name="id">default-run-handler</attribute>
+        <attribute name="action">run-manager.run-with-handler</attribute>
+        <attribute name="target">run</attribute>
+        <attribute name="label" translatable="yes">Run</attribute>
+        <attribute name="verb-icon-name">media-playback-start-symbolic</attribute>
+        <attribute name="accel">&lt;Control&gt;F5</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

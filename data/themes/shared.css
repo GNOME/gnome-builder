@@ -298,4 +298,6 @@ popover.transfers list row > box {
   padding: 10px;
 }
 
-
+button.run-arrow-button {
+  padding: 0px;
+}

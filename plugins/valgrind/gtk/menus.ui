@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="run-menu">
+    <section id="run-menu-section">
+      <item>
+        <attribute name="id">valgrind-run-handler</attribute>
+        <attribute name="after">default-run-handler</attribute>
+        <attribute name="action">run-manager.run-with-handler</attribute>
+        <attribute name="target">valgrind</attribute>
+        <attribute name="label" translatable="yes">Run with Valgrind</attribute>
+        <attribute name="verb-icon-name">system-run-symbolic</attribute>
+        <attribute name="accel">&lt;Control&gt;F10</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

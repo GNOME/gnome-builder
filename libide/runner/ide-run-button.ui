@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkPopover" id="popover">
-    <style>
-      <class name="popover-selector"/>
-    </style>
-    <child>
-      <object class="GtkListBox" id="list_box">
-        <property name="visible">true</property>
-      </object>
-    </child>
-  </object>
   <object class="GtkShortcutsShortcut" id="run_shortcut">
   </object>
   <template class="IdeRunButton" parent="GtkBox">
@@ -51,25 +41,20 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuButton" id="menu_button">
+      <object class="DzlMenuButton" id="menu_button">
         <property name="focus-on-click">false</property>
-        <property name="popover">popover</property>
+        <property name="icon-name">pan-down-symbolic</property>
+        <property name="menu-id">run-menu</property>
+        <property name="show-accels">true</property>
+        <property name="show-arrow">false</property>
+        <property name="show-icons">true</property>
         <property name="tooltip-text" translatable="yes">Change run options</property>
         <property name="visible">true</property>
         <style>
           <class name="image-button"/>
           <class name="run-arrow-button"/>
         </style>
-        <child>
-          <object class="GtkImage" id="menu_button_image">
-            <property name="icon-name">pan-down-symbolic</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="accel_size_group">
-    <property name="mode">horizontal</property>
-  </object>
 </interface>
