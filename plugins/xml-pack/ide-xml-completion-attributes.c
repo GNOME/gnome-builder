@@ -22,7 +22,6 @@
 
 typedef struct _MatchingState
 {
-  GArray           *stack;
   IdeXmlSymbolNode *node;
   IdeXmlRngDefine  *define;
   GPtrArray        *node_attr;
@@ -31,11 +30,6 @@ typedef struct _MatchingState
   guint             is_initial_state : 1;
   guint             is_optional : 1;
 } MatchingState;
-
-typedef struct _StateStackItem
-{
-  GPtrArray        *children;
-} StateStackItem;
 
 static GPtrArray * process_matching_state (MatchingState   *state,
                                            IdeXmlRngDefine *define);
@@ -93,90 +87,6 @@ match_children_add (GPtrArray *to_children,
     }
 }
 
-static void
-state_stack_item_free (gpointer *data)
-{
-  StateStackItem *item;
-
-  g_assert (data != NULL);
-
-  item = (StateStackItem *)data;
-  g_ptr_array_unref (item->children);
-}
-
-static GArray *
-state_stack_new (void)
-{
-  GArray *stack;
-
-  stack = g_array_new (FALSE, TRUE, sizeof (StateStackItem));
-  g_array_set_clear_func (stack, (GDestroyNotify)state_stack_item_free);
-
-  return stack;
-}
-
-static void
-state_stack_push (MatchingState *state)
-{
-  StateStackItem item;
-
-  g_assert (state->stack != NULL);
-
-  g_array_append_val (state->stack, item);
-}
-
-static gboolean
-state_stack_pop (MatchingState *state)
-{
-  StateStackItem *item;
-  guint len;
-
-  g_assert (state->stack != NULL);
-
-  if (0 == (len = state->stack->len))
-    return FALSE;
-
-  item = &g_array_index (state->stack, StateStackItem, len - 1);
-  //g_clear_pointer (&state->children, g_ptr_array_unref);
-
-  //state->children = item->children;
-
-  g_array_remove_index (state->stack, len - 1);
-  return TRUE;
-}
-
-static gboolean
-state_stack_drop (MatchingState *state)
-{
-  guint len;
-
-  g_assert (state->stack != NULL);
-
-  if (0 == (len = state->stack->len))
-    return FALSE;
-
-  g_array_remove_index (state->stack, len - 1);
-  return TRUE;
-}
-
-static gboolean
-state_stack_copy (MatchingState *state)
-{
-  StateStackItem *item;
-  guint len;
-
-  g_assert (state->stack != NULL);
-
-  if (0 == (len = state->stack->len))
-    return FALSE;
-
-  item = &g_array_index (state->stack, StateStackItem, len - 1);
-  //state->children = copy_children (item->children);
-
-  g_array_remove_index (state->stack, len - 1);
-  return TRUE;
-}
-
 static MatchingState *
 matching_state_new (IdeXmlRngDefine  *define,
                     IdeXmlSymbolNode *node)
@@ -191,7 +101,6 @@ matching_state_new (IdeXmlRngDefine  *define,
   state->node = node;
 
   state->node_attr = g_ptr_array_new_with_free_func (g_free);
-  state->stack = state_stack_new ();
   state->is_initial_state = FALSE;
   state->is_optional = FALSE;
 
@@ -204,7 +113,6 @@ matching_state_free (MatchingState *state)
   g_clear_object (&state->node);
 
   g_clear_pointer (&state->node_attr, g_ptr_array_unref);
-  g_clear_pointer (&state->stack, g_array_unref);
 }
 
 static GPtrArray *
@@ -349,7 +257,6 @@ process_group (MatchingState *state)
       defines = defines->next;
     }
 
-  //state->retry = FALSE;
   return match_children;
 }
 
