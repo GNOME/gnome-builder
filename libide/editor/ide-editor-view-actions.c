@@ -47,8 +47,10 @@ ide_editor_view_actions_reload_cb (GObject      *object,
 
   if (!(buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
     {
-      // ide_layout_view_set_failure_message (IDE_LAYOUT_VIEW (self), error->message);
       g_warning ("%s", error->message);
+      ide_layout_view_report_error (IDE_LAYOUT_VIEW (self),
+                                    /* translators: %s is the error message */
+                                    _("Failed to load file: %s"), error->message);
       ide_layout_view_set_failed (IDE_LAYOUT_VIEW (self), TRUE);
     }
   else
@@ -98,15 +100,19 @@ handle_print_result (IdeEditorView           *self,
                      GtkPrintOperation       *operation,
                      GtkPrintOperationResult  result)
 {
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (GTK_IS_PRINT_OPERATION (operation));
+
   if (result == GTK_PRINT_OPERATION_RESULT_ERROR)
     {
       g_autoptr(GError) error = NULL;
 
       gtk_print_operation_get_error (operation, &error);
 
-      /* info bar */
       g_warning ("%s", error->message);
-      // ide_layout_view_add_error (...);
+      ide_layout_view_report_error (IDE_LAYOUT_VIEW (self),
+                                    /* translators: %s is the error message */
+                                    _("Print failed: %s"), error->message);
     }
 }
 
@@ -175,7 +181,9 @@ ide_editor_view_actions_save_cb (GObject      *object,
   if (!ide_buffer_manager_save_file_finish (bufmgr, result, &error))
     {
       g_warning ("%s", error->message);
-      // ide_layout_view_set_failure_message (IDE_LAYOUT_VIEW (self), error->message);
+      ide_layout_view_report_error (IDE_LAYOUT_VIEW (self),
+                                    /* translators: %s is the error message */
+                                    _("Failed to save file: %s"), error->message);
       ide_layout_view_set_failed (IDE_LAYOUT_VIEW (self), TRUE);
     }
 
@@ -293,7 +301,10 @@ ide_editor_view_actions_save_as_cb (GObject      *object,
        * But we do still need to notify the user of the error.
        */
       g_warning ("%s", error->message);
-      //ide_layout_view_add_error(...);
+      ide_layout_view_report_error (IDE_LAYOUT_VIEW (self),
+                                    /* translators: %s is the underlying error message */
+                                    _("Failed to save file: %s"),
+                                    error->message);
     }
 
   dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
