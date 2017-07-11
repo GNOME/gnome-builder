@@ -52,6 +52,35 @@ ide_workbench_header_bar_new (void)
 }
 
 static void
+search_popover_position_func (DzlSuggestionEntry *entry,
+                              GdkRectangle       *area,
+                              gboolean           *is_absolute,
+                              gpointer            user_data)
+{
+  gint new_width;
+
+  g_assert (DZL_IS_SUGGESTION_ENTRY (entry));
+  g_assert (area != NULL);
+  g_assert (is_absolute != NULL);
+  g_assert (user_data == NULL);
+
+#define RIGHT_MARGIN 6
+
+  /* We want the search area to be the right 2/5ths of the window, with a bit
+   * of margin on the popover.
+   */
+
+  dzl_suggestion_entry_window_position_func (entry, area, is_absolute, NULL);
+
+  new_width = (area->width * 2 / 5);
+  area->x += area->width - new_width;
+  area->width = new_width - RIGHT_MARGIN;
+  area->y -= 3;
+
+#undef RIGHT_MARGIN
+}
+
+static void
 ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -81,6 +110,9 @@ ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
   gtk_widget_set_size_request (popover, 225, -1);
   gtk_menu_button_set_popover (priv->menu_button, popover);
   gtk_container_set_border_width (GTK_CONTAINER (popover), 10);
+
+  dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (priv->search_entry),
+                                          search_popover_position_func, NULL, NULL);
 }
 
 void
