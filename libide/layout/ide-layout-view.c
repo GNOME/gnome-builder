@@ -682,3 +682,61 @@ ide_layout_view_set_primary_color_fg (IdeLayoutView *self,
       !gdk_rgba_equal (&old, &priv->primary_color_fg))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR_FG]);
 }
+
+/**
+ * ide_layout_view_report_error:
+ * @self: a #IdeLayoutView
+ * @format: a printf-style format string
+ *
+ * This function reports an error to the user in the layout view.
+ *
+ * @format should be a printf-style format string followed by the
+ * arguments for the format.
+ *
+ * Since: 3.26
+ */
+void
+ide_layout_view_report_error (IdeLayoutView *self,
+                              const gchar   *format,
+                              ...)
+{
+  g_autofree gchar *message = NULL;
+  GtkInfoBar *infobar;
+  GtkWidget *content_area;
+  GtkLabel *label;
+  va_list args;
+
+  g_return_if_fail (IDE_IS_LAYOUT_VIEW (self));
+
+  va_start (args, format);
+  message = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  infobar = g_object_new (GTK_TYPE_INFO_BAR,
+                          "message-type", GTK_MESSAGE_WARNING,
+                          "show-close-button", TRUE,
+                          "visible", TRUE,
+                          NULL);
+  g_signal_connect (infobar,
+                    "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
+  g_signal_connect (infobar,
+                    "close",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
+
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "label", message,
+                        "visible", TRUE,
+                        "wrap", TRUE,
+                        "xalign", 0.0f,
+                        NULL);
+
+  content_area = gtk_info_bar_get_content_area (infobar);
+  gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (label));
+
+  gtk_container_add_with_properties (GTK_CONTAINER (self), GTK_WIDGET (infobar),
+                                     "position", 0,
+                                     NULL);
+}

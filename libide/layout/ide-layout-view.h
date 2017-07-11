@@ -86,5 +86,8 @@ void           ide_layout_view_agree_to_close_async  (IdeLayoutView        *self
 gboolean       ide_layout_view_agree_to_close_finish (IdeLayoutView        *self,
                                                       GAsyncResult         *result,
                                                       GError              **error);
+void           ide_layout_view_report_error          (IdeLayoutView        *self,
+                                                      const gchar          *format,
+                                                      ...) G_GNUC_PRINTF (2, 3);
 
 G_END_DECLS
