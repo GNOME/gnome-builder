@@ -295,6 +295,7 @@
       <item>
         <attribute name="label" translatable="yes">Split</attribute>
         <attribute name="action">layoutstack.split-view</attribute>
+        <attribute name="verb-icon-name">builder-split-tab-symbolic</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Print…</attribute>
@@ -302,11 +303,13 @@
       </item>
     </section>
     <section id="editor-document-preferences-section">
+      <attribute name="after">editor-document-section</attribute>
       <item>
         <attribute name="label" translatable="yes">Document Preferences</attribute>
       </item>
     </section>
     <section id="editor-document-save-section">
+      <attribute name="after">editor-document-preferences-section</attribute>
       <item>
         <attribute name="action">editor-view.save</attribute>
         <attribute name="label" translatable="yes">_Save</attribute>
@@ -317,6 +320,7 @@
       </item>
     </section>
     <section id="editor-document-close-section">
+      <attribute name="after">editor-document-save-section</attribute>
       <item>
         <attribute name="action">layoutstack.close-view</attribute>
         <attribute name="label" translatable="yes">Close</attribute>
