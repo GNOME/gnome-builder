@@ -43,30 +43,33 @@
   <menu id="perspectives-menu">
     <section id="perspectives-menu-section">
       <item>
-        <attribute name="id">perspective-menu-editor</attribute>
-        <attribute name="label" translatable="yes">Editor</attribute>
-        <attribute name="verb-icon-name">builder-editor-symbolic</attribute>
         <attribute name="accel">&lt;alt&gt;1</attribute>
         <attribute name="action">win.perspective</attribute>
+        <attribute name="id">perspective-menu-editor</attribute>
+        <attribute name="label" translatable="yes">Editor</attribute>
+        <attribute name="role">normal</attribute>
         <attribute name="target">editor</attribute>
+        <attribute name="verb-icon-name">builder-editor-symbolic</attribute>
       </item>
     </section>
     <section id="perspectives-menu-prefs-section">
       <item>
+        <attribute name="accel">&lt;alt&gt;comma</attribute>
+        <attribute name="action">win.perspective</attribute>
         <attribute name="id">perspective-menu-build-prefs</attribute>
         <attribute name="label" translatable="yes">Build Preferences</attribute>
-        <attribute name="verb-icon-name">builder-build-configure-symbolic</attribute>
-        <attribute name="action">win.perspective</attribute>
+        <attribute name="role">normal</attribute>
         <attribute name="target">buildperspective</attribute>
-        <attribute name="accel">&lt;alt&gt;comma</attribute>
+        <attribute name="verb-icon-name">builder-build-configure-symbolic</attribute>
       </item>
       <item>
+        <attribute name="accel">&lt;primary&gt;comma</attribute>
+        <attribute name="action">win.perspective</attribute>
         <attribute name="id">perspective-menu-prefs</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>
-        <attribute name="verb-icon-name">preferences-system-symbolic</attribute>
-        <attribute name="action">win.perspective</attribute>
+        <attribute name="role">normal</attribute>
         <attribute name="target">preferences</attribute>
-        <attribute name="accel">&lt;primary&gt;comma</attribute>
+        <attribute name="verb-icon-name">preferences-system-symbolic</attribute>
       </item>
     </section>
   </menu>

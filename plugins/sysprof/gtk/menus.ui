@@ -11,13 +11,14 @@
   <menu id="perspectives-menu">
     <section id="perspectives-menu-section">
       <item>
-        <attribute name="id">perspective-menu-profiler</attribute>
-        <attribute name="after">perspective-menu-editor</attribute>
-        <attribute name="label" translatable="yes">Profiler</attribute>
-        <attribute name="verb-icon-name">utilities-system-monitor-symbolic</attribute>
         <attribute name="accel">&lt;alt&gt;3</attribute>
         <attribute name="action">win.perspective</attribute>
+        <attribute name="after">perspective-menu-editor</attribute>
+        <attribute name="id">perspective-menu-profiler</attribute>
+        <attribute name="label" translatable="yes">Profiler</attribute>
+        <attribute name="role">normal</attribute>
         <attribute name="target">profiler</attribute>
+        <attribute name="verb-icon-name">utilities-system-monitor-symbolic</attribute>
       </item>
     </section>
   </menu>
