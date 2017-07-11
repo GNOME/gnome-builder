@@ -71,8 +71,13 @@ struct _IdeXmlRngDefine
   IdeXmlRngDefineType  type;
 
   gint16               depth;
+  gint                 pos;
+
   guint                is_external_ref : 1;
   guint                is_ref_simplified : 1;
+
+  /* This field is relevant only for the current completion */
+  guint                is_mandatory : 1;
 };
 
 IdeXmlRngDefine     *ide_xml_rng_define_new                 (xmlNode             *node,

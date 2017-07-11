@@ -39,6 +39,7 @@ static gchar *type_names [] =
   "optional",
   "choice",
   "group",
+  "attribute group",
   "interleave",
   "attribute",
   "start",

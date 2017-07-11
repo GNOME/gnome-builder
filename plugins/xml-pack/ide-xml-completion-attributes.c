@@ -24,6 +24,7 @@ typedef struct _MatchingState
 {
   IdeXmlSymbolNode *node;
   IdeXmlRngDefine  *define;
+  IdeXmlRngDefine  *orig_define;
   GPtrArray        *node_attr;
   GPtrArray        *match_children;
 
@@ -98,6 +99,7 @@ matching_state_new (IdeXmlRngDefine  *define,
   state = g_slice_new0 (MatchingState);
 
   state->define = define;
+  state->orig_define = define;
   state->node = node;
 
   state->node_attr = g_ptr_array_new_with_free_func (g_free);
@@ -121,7 +123,6 @@ process_attribute (MatchingState *state)
   GPtrArray *match_children;
   MatchItem *item;
   const gchar *name;
-  const gchar *attr;
 
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_ATTRIBUTE);
 
@@ -131,19 +132,7 @@ process_attribute (MatchingState *state)
   if (ide_str_empty0 (name))
     return match_children;
 
-  for (gint i = 0; i < state->node_attr->len; i++)
-    {
-      attr = g_ptr_array_index (state->node_attr, i);
-      if (ide_str_equal0 (name, attr))
-        {
-          item = match_item_new (name, i, state->is_optional);
-          g_ptr_array_add (match_children, item);
-
-          return match_children;
-        }
-    }
-
-  item = match_item_new (name, -1, state->is_optional);
+  item = match_item_new (name, state->define->pos, state->is_optional);
   g_ptr_array_add (match_children, item);
 
   return match_children;
@@ -344,7 +333,9 @@ process_matching_state (MatchingState   *state,
     case IDE_XML_RNG_DEFINE_ONEORMORE:
     case IDE_XML_RNG_DEFINE_OPTIONAL:
       old_optional = state->is_optional;
-      if (type == IDE_XML_RNG_DEFINE_ZEROORMORE || type == IDE_XML_RNG_DEFINE_OPTIONAL)
+      if (define->is_mandatory)
+        state->is_optional = FALSE;
+      else if (type == IDE_XML_RNG_DEFINE_ZEROORMORE || type == IDE_XML_RNG_DEFINE_OPTIONAL)
         state->is_optional = TRUE;
 
       match_children = process_group (state);
@@ -413,7 +404,18 @@ compare_attribute_names (gpointer a,
   return ide_str_equal0 (match->name, attr_name);
 }
 
-/* Remove completion items already in the current node */
+static gint
+alphabetical_sort_func (gpointer *a,
+                        gpointer *b)
+{
+  MatchItem *match_a = (MatchItem *)*a;
+  MatchItem *match_b = (MatchItem *)*b;
+
+  return g_ascii_strcasecmp (match_b->name, match_a->name);
+}
+
+/* Remove completion items already in the current node and
+ * filter the list by alphabetical order. */
 static void
 match_children_filter (GPtrArray *match_children,
                        GPtrArray *node_attributes)
@@ -433,6 +435,128 @@ match_children_filter (GPtrArray *match_children,
       else
         ++i;
     }
+
+  g_ptr_array_sort (match_children, (GCompareFunc)alphabetical_sort_func);
+}
+
+static void
+propagate_mandatory (MatchingState *state)
+{
+  IdeXmlRngDefine *define = state->define;
+
+  g_assert (state != NULL);
+
+  while (define != state->orig_define)
+    {
+      if (define->type == IDE_XML_RNG_DEFINE_OPTIONAL || define->type == IDE_XML_RNG_DEFINE_ZEROORMORE)
+        define->is_mandatory = TRUE;
+
+      define = define->parent;
+    }
+}
+
+static void
+set_position (MatchingState *state)
+{
+  const gchar *attribute;
+  guint index;
+
+  g_assert (state != NULL);
+
+  if (NULL == (attribute = (const gchar *)state->define->name) ||
+      !g_ptr_array_find_with_equal_func (state->node_attr, attribute, (GEqualFunc)g_str_equal, &index))
+    {
+      index = -1;
+    }
+  else
+    {
+      propagate_mandatory (state);
+    }
+
+  state->define->pos = index;
+}
+
+static void
+set_attributes_position (MatchingState   *state,
+                         IdeXmlRngDefine *define)
+{
+  IdeXmlRngDefine *child_define;
+  IdeXmlRngDefine *old_define;
+  IdeXmlRngDefineType type;
+
+  g_assert (state != NULL);
+  g_assert (define != NULL);
+
+  old_define = state->define;
+  state->define = define;
+
+  /* Reset the value from a previous completion */
+  define->is_mandatory = FALSE;
+
+  if (state->is_initial_state)
+    {
+      state->is_initial_state = FALSE;
+      type = IDE_XML_RNG_DEFINE_ATTRIBUTES_GROUP;
+    }
+  else
+    type = define->type;
+
+  switch (type)
+    {
+    case IDE_XML_RNG_DEFINE_ATTRIBUTE:
+      set_position (state);
+      break;
+
+    case IDE_XML_RNG_DEFINE_NOOP:
+    case IDE_XML_RNG_DEFINE_NOTALLOWED:
+    case IDE_XML_RNG_DEFINE_TEXT:
+    case IDE_XML_RNG_DEFINE_DATATYPE:
+    case IDE_XML_RNG_DEFINE_VALUE:
+    case IDE_XML_RNG_DEFINE_EMPTY:
+    case IDE_XML_RNG_DEFINE_ELEMENT:
+    case IDE_XML_RNG_DEFINE_START:
+    case IDE_XML_RNG_DEFINE_PARAM:
+    case IDE_XML_RNG_DEFINE_EXCEPT:
+    case IDE_XML_RNG_DEFINE_LIST:
+      break;
+
+    case IDE_XML_RNG_DEFINE_DEFINE:
+    case IDE_XML_RNG_DEFINE_REF:
+    case IDE_XML_RNG_DEFINE_PARENTREF:
+    case IDE_XML_RNG_DEFINE_EXTERNALREF:
+      set_attributes_position (state, define->content);
+      break;
+
+    case IDE_XML_RNG_DEFINE_INTERLEAVE:
+    case IDE_XML_RNG_DEFINE_GROUP:
+    case IDE_XML_RNG_DEFINE_CHOICE:
+    case IDE_XML_RNG_DEFINE_ZEROORMORE:
+    case IDE_XML_RNG_DEFINE_ONEORMORE:
+    case IDE_XML_RNG_DEFINE_OPTIONAL:
+      child_define = state->define->content;
+      while (child_define != NULL)
+        {
+          set_attributes_position (state, child_define);
+          child_define = child_define->next;
+        }
+
+      break;
+
+    case IDE_XML_RNG_DEFINE_ATTRIBUTES_GROUP:
+      child_define = state->define->attributes;
+      while (child_define != NULL)
+        {
+          set_attributes_position (state, child_define);
+          child_define = child_define->next;
+        }
+
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  state->define = old_define;
 }
 
 /* Return an array of MatchItem */
@@ -450,6 +574,9 @@ ide_xml_completion_attributes_get_matches (IdeXmlRngDefine  *define,
     return NULL;
 
   initial_state = create_initial_matching_state (define, node);
+  set_attributes_position (initial_state, define);
+
+  initial_state->is_initial_state = TRUE;
   match_children = process_matching_state (initial_state, define);
   match_children_filter (match_children, initial_state->node_attr);
 
