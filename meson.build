@@ -262,7 +262,6 @@ subdir('data/gsettings')
 subdir('data/icons')
 subdir('data/style-schemes')
 subdir('contrib/libeditorconfig')
-subdir('contrib/nautilus')
 subdir('contrib/xml')
 subdir('contrib/gstyle') # Depends on libxml
 subdir('libide')

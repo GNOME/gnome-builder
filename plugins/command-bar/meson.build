@@ -33,7 +33,6 @@ command_bar_sources = [
 
 command_bar_deps = plugin_deps + [
   libgd_dep,
-  libnautilus_dep,
 ]
 
 shared_module('command-bar', command_bar_sources,

@@ -591,7 +591,6 @@ libide_deps = [
   libtemplate_glib_dep,
   libxml_dep,
   libgd_dep,
-  libnautilus_dep,
   libjson_glib_dep,
   libjsonrpc_glib_dep,
 ]
