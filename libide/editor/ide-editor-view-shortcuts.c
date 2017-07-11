@@ -69,17 +69,6 @@ static DzlShortcutEntry editor_view_shortcuts[] = {
     N_("Find the next match") },
 };
 
-static void
-ide_editor_view_shortcuts_find (GtkWidget *widget,
-                                gpointer   user_data)
-{
-  IdeEditorView *self = user_data;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-
-  gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
-}
-
 void
 _ide_editor_view_init_shortcuts (IdeEditorView *self)
 {
@@ -89,10 +78,10 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
 
   controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
 
-  dzl_shortcut_controller_add_command_callback (controller,
-                                                I_("org.gnome.builder.editor-view.find"),
-                                                NULL,
-                                                ide_editor_view_shortcuts_find, self, NULL);
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.find"),
+                                              NULL,
+                                              I_("editor-view.focus-search"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.find-and-replace"),

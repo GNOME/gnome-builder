@@ -388,6 +388,34 @@ ide_editor_view_actions_save_as (GSimpleAction *action,
 }
 
 static void
+ide_editor_view_actions_focus_search (GSimpleAction *action,
+                                      GVariant      *variant,
+                                      gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
+}
+
+static void
+ide_editor_view_actions_hide_search (GSimpleAction *action,
+                                     GVariant      *variant,
+                                     gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+}
+
+static void
 ide_editor_view_actions_notify_file_settings (IdeEditorView *self,
                                               GParamSpec    *pspec,
                                               IdeSourceView *source_view)
@@ -408,6 +436,8 @@ ide_editor_view_actions_notify_file_settings (IdeEditorView *self,
 }
 
 static const GActionEntry editor_view_entries[] = {
+  { "focus-search", ide_editor_view_actions_focus_search },
+  { "hide-search", ide_editor_view_actions_hide_search },
   { "print", ide_editor_view_actions_print },
   { "reload", ide_editor_view_actions_reload },
   { "save", ide_editor_view_actions_save },

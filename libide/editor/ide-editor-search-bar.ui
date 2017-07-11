@@ -190,7 +190,7 @@
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="visible">true</property>
-                <property name="action-name">search-entry.exit-search</property>
+                <property name="action-name">editor-view.hide-search</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="focus_on_click">false</property>
