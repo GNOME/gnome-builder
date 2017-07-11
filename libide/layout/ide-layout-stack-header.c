@@ -55,8 +55,7 @@ struct _IdeLayoutStackHeader
   guint           foreground_rgba_set : 1;
 
   GtkButton      *close_button;
-  GtkMenuButton  *document_button;
-  GtkPopover     *document_popover;
+  DzlMenuButton  *document_button;
   GtkMenuButton  *title_button;
   GtkPopover     *title_popover;
   GtkListBox     *title_list_box;
@@ -94,22 +93,32 @@ _ide_layout_stack_header_focus_list (IdeLayoutStackHeader *self)
 void
 _ide_layout_stack_header_hide (IdeLayoutStackHeader *self)
 {
+  GtkPopover *popover;
+
   g_return_if_fail (IDE_IS_LAYOUT_STACK_HEADER (self));
 
   /* This is like _ide_layout_stack_header_popdown() but we hide the
    * popovers immediately without performing the popdown animation.
    */
 
-  gtk_widget_hide (GTK_WIDGET (self->document_popover));
+  popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (self->document_button));
+  if (popover != NULL)
+    gtk_widget_hide (GTK_WIDGET (popover));
+
   gtk_widget_hide (GTK_WIDGET (self->title_popover));
 }
 
 void
 _ide_layout_stack_header_popdown (IdeLayoutStackHeader *self)
 {
+  GtkPopover *popover;
+
   g_return_if_fail (IDE_IS_LAYOUT_STACK_HEADER (self));
 
-  gtk_popover_popdown (self->document_popover);
+  popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (self->document_button));
+  if (popover != NULL)
+    gtk_popover_popdown (popover);
+
   gtk_popover_popdown (self->title_popover);
 }
 
@@ -611,7 +620,6 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
   gtk_widget_class_set_css_name (widget_class, "idelayoutstackheader");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-stack-header.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutStackHeader, close_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutStackHeader, document_popover);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutStackHeader, document_button);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutStackHeader, title_box);
   gtk_widget_class_bind_template_child (widget_class, IdeLayoutStackHeader, title_button);
@@ -652,8 +660,9 @@ ide_layout_stack_header_init (IdeLayoutStackHeader *self)
    */
 
   self->menu = dzl_joined_menu_new ();
-  gtk_popover_bind_model (self->document_popover, G_MENU_MODEL (self->menu), NULL);
-  frame_section = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "ide-layout-stack-frame-menu");
+  dzl_menu_button_set_model (self->document_button, G_MENU_MODEL (self->menu));
+  frame_section = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT,
+                                                  "ide-layout-stack-frame-menu");
   dzl_joined_menu_append_menu (self->menu, G_MENU_MODEL (frame_section));
 
   /*
