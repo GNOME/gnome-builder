@@ -34,6 +34,7 @@
     <file compressed="true" alias="shared.css">../data/themes/shared.css</file>
     <file compressed="true" alias="shared/shared-editor.css">../data/themes/shared/shared-editor.css</file>
     <file compressed="true" alias="shared/shared-layout.css">../data/themes/shared/shared-layout.css</file>
+    <file compressed="true" alias="shared/shared-search.css">../data/themes/shared/shared-search.css</file>
     <file compressed="true" alias="shared/shared-treeview.css">../data/themes/shared/shared-treeview.css</file>
   </gresource>
 

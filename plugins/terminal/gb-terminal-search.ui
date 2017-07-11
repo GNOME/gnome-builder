@@ -11,7 +11,7 @@
             <property name="visible">true</property>
             <property name="margin-end">12</property>
             <style>
-              <class name="gb-search-frame"/>
+              <class name="search-frame"/>
             </style>
             <child>
               <object class="GtkBox">
