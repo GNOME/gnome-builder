@@ -246,7 +246,7 @@ ide_application_plugins_load_plugin_gresources (IdeApplication *self,
 
   module_dir = peas_plugin_info_get_module_dir (plugin_info);
   module_name = peas_plugin_info_get_module_name (plugin_info);
-  gresources_basename = g_strdup_printf ("%s.gresources", module_name);
+  gresources_basename = g_strdup_printf ("%s.gresource", module_name);
   gresources_path = g_build_filename (module_dir, gresources_basename, NULL);
 
   if (g_file_test (gresources_path, G_FILE_TEST_IS_REGULAR))
