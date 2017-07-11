@@ -187,6 +187,15 @@
                                         </child>
                                       </object>
                                     </child>
+                                    <child>
+                                      <object class="DzlEmptyState" id="no_projects_found">
+                                        <property name="icon-name">org.gnome.Builder-symbolic</property>
+                                        <property name="title" translatable="yes">No projects found</property>
+                                        <property name="visible">false</property>
+                                        <property name="vexpand">true</property>
+                                        <property name="valign">center</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>

@@ -68,6 +68,7 @@ struct _IdeGreeterPerspective
   DzlStateMachine      *state_machine;
   GtkScrolledWindow    *scrolled_window;
   DzlPriorityBox       *genesis_buttons;
+  DzlEmptyState        *no_projects_found;
 
   gint                  selected_count;
 };
@@ -204,6 +205,16 @@ ide_greeter_perspective_apply_filter_all (IdeGreeterPerspective *self)
   ide_greeter_perspective_apply_filter (self,
                                   self->other_projects_list_box,
                                   GTK_WIDGET (self->other_projects_container));
+
+  if (gtk_widget_get_visible (GTK_WIDGET (self->my_projects_container)) == FALSE &&
+      gtk_widget_get_visible (GTK_WIDGET (self->other_projects_container)) == FALSE)
+    {
+      gtk_widget_set_visible (GTK_WIDGET (self->no_projects_found), TRUE);
+    }
+  else
+    {
+      gtk_widget_set_visible (GTK_WIDGET (self->no_projects_found), FALSE);
+    }
 }
 
 static void
@@ -1208,6 +1219,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, titlebar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, top_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, viewport);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, no_projects_found);
 }
 
 static void
