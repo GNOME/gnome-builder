@@ -23,6 +23,7 @@
 
 #include "ide-macros.h"
 
+#include "application/ide-application.h"
 #include "editor/ide-editor-search-bar.h"
 
 struct _IdeEditorSearchBar
@@ -549,6 +550,23 @@ ide_editor_search_bar_bind_settings (IdeEditorSearchBar      *self,
 }
 
 static void
+search_entry_populate_popup (IdeEditorSearchBar *self,
+                             GtkWidget          *widget,
+                             GdTaggedEntry      *entry)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (GTK_IS_MENU (widget));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  if (GTK_IS_MENU (widget))
+    {
+      DzlApplication *app = DZL_APPLICATION (IDE_APPLICATION_DEFAULT);
+      GMenu *menu = dzl_application_get_menu_by_id (app, "ide-editor-search-bar-entry-menu");
+      gtk_menu_shell_bind_model (GTK_MENU_SHELL (widget), G_MENU_MODEL (menu), NULL, TRUE);
+    }
+}
+
+static void
 ide_editor_search_bar_destroy (GtkWidget *widget)
 {
   IdeEditorSearchBar *self = (IdeEditorSearchBar *)widget;
@@ -718,6 +736,13 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                                    G_N_ELEMENTS (search_bar_actions),
                                    self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "search-bar", G_ACTION_GROUP (actions));
+
+  dzl_widget_action_group_attach (self->search_entry, "entry");
+
+  g_signal_connect_swapped (self->search_entry,
+                            "populate-popup",
+                            G_CALLBACK (search_entry_populate_popup),
+                            self);
 }
 
 GtkWidget *

@@ -222,35 +222,47 @@
       </submenu>
     </section>
   </menu>
-  <menu id="ide-editor-frame-search-menu">
-    <section id="ide-editor-frame-search-menu-settings-section">
+  <menu id="ide-editor-search-bar-entry-menu">
+    <section id="ide-editor-search-bar-entry-menu-settings-section">
+      <item>
+        <attribute name="label" translatable="yes">Regular expressions</attribute>
+        <attribute name="action">search-settings.regex-enabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Case sensitive</attribute>
+        <attribute name="action">search-settings.case-sensitive</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Match whole word only</attribute>
+        <attribute name="action">search-settings.at-word-boundaries</attribute>
+      </item>
       <item>
         <attribute name="label" translatable="yes">_Wrap Around</attribute>
-        <attribute name="action">search-entry.change-wrap-around</attribute>
+        <attribute name="action">search-settings.wrap-around</attribute>
       </item>
     </section>
-    <section id="ide-editor-frame-search-menu-clipboard-section">
+    <section id="ide-editor-search-bar-entry-menu-clipboard-section">
       <item>
         <attribute name="label" translatable="yes">Cu_t</attribute>
-        <attribute name="action">search-entry.cut-clipboard</attribute>
+        <attribute name="action">entry.cut-clipboard</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Copy</attribute>
-        <attribute name="action">search-entry.copy-clipboard</attribute>
+        <attribute name="action">entry.copy-clipboard</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Paste</attribute>
-        <attribute name="action">search-entry.paste-clipboard</attribute>
+        <attribute name="action">entry.paste-clipboard</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Delete</attribute>
-        <attribute name="action">search-entry.delete-selection</attribute>
+        <attribute name="action">entry.delete-selection</attribute>
       </item>
     </section>
-    <section id="ide-editor-frame-search-menu-selection-section">
+    <section id="ide-editor-search-bar-entry-menu-selection-section">
       <item>
         <attribute name="label" translatable="yes">Select _All</attribute>
-        <attribute name="action">search-entry.select-all</attribute>
+        <attribute name="action">entry.select-all</attribute>
       </item>
     </section>
   </menu>
