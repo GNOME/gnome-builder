@@ -523,7 +523,11 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           entry->kind = kind;
 
           ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
-          entry->file = get_absolute_schema_file (state->file, schema_url);
+          /* We skip adding gtkbuilder.rng here and add it from gresources after the parsing */
+          if (g_str_has_suffix (schema_url, "gtkbuilder.rng"))
+            return;
+          else
+            entry->file = get_absolute_schema_file (state->file, schema_url);
 
           /* Needed to pass the kind to the service schema fetcher */
           g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
@@ -568,6 +572,7 @@ ide_xml_parser_get_analysis_worker (GTask        *task,
   IdeXmlParser *self = (IdeXmlParser *)source_object;
   ParserState *state = (ParserState *)task_data;
   IdeXmlAnalysis *analysis;
+  IdeXmlSchemaCacheEntry *entry;
   g_autoptr(IdeDiagnostics) diagnostics = NULL;
   g_autofree gchar *uri = NULL;
   const gchar *doc_data;
@@ -583,7 +588,8 @@ ide_xml_parser_get_analysis_worker (GTask        *task,
 
   doc_data = g_bytes_get_data (state->content, &doc_size);
 
-  if (ide_xml_parser_file_is_ui (state->file, doc_data, doc_size))
+  state->file_is_ui = ide_xml_parser_file_is_ui (state->file, doc_data, doc_size);
+  if (state->file_is_ui)
     ide_xml_parser_ui_setup (self, state);
   else
     ide_xml_parser_generic_setup (self, state);
@@ -606,6 +612,15 @@ ide_xml_parser_get_analysis_worker (GTask        *task,
 
   diagnostics = ide_diagnostics_new (g_steal_pointer (&state->diagnostics_array));
   ide_xml_analysis_set_diagnostics (analysis, diagnostics);
+
+  if (state->file_is_ui)
+    {
+      entry = ide_xml_schema_cache_entry_new ();
+      entry->kind = SCHEMA_KIND_RNG;
+      entry->file = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/xml-pack-plugin/schemas/gtkbuilder.rng");
+      g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
+      g_ptr_array_add (state->schemas, entry);
+    }
 
   if (state->schemas != NULL && state->schemas->len > 0)
     ide_xml_analysis_set_schemas (analysis, g_steal_pointer (&state->schemas));

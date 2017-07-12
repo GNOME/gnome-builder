@@ -78,6 +78,7 @@ typedef struct _ParserState
   gint64             sequence;
 
   guint              error_missing_tag_end : 1;
+  guint              file_is_ui : 1;
 } ParserState;
 
 void             ide_xml_parser_set_post_processing_callback     (IdeXmlParser           *self,

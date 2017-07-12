@@ -1,6 +1,12 @@
 if get_option('with_xml_pack')
 
+xml_pack_resources = gnome.compile_resources(
+  'ide-xml-resources',
+  'ide-xml.gresource.xml',
+  c_name: 'ide_xml'
+)
 xml_pack_sources = [
+  xml_pack_resources,
   'ide-xml-analysis.c',
   'ide-xml-analysis.h',
   'ide-xml-completion-attributes.c',
