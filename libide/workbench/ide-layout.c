@@ -133,11 +133,13 @@ ide_layout_hierarchy_changed (GtkWidget *widget,
 }
 
 static GtkWidget *
-ide_layout_create_edge (DzlDockBin *dock)
+ide_layout_create_edge (DzlDockBin      *dock,
+                        GtkPositionType  edge)
 {
   g_assert (IDE_IS_LAYOUT (dock));
 
   return g_object_new (IDE_TYPE_LAYOUT_PANE,
+                       "edge", edge,
                        "visible", TRUE,
                        "reveal-child", FALSE,
                        NULL);
