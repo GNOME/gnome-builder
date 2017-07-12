@@ -314,12 +314,11 @@ gb_project_tree_class_init (GbProjectTreeClass *klass)
 static void
 gb_project_tree_init (GbProjectTree *self)
 {
-  GtkStyleContext *style_context;
   DzlTreeBuilder *builder;
   GMenu *menu;
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_add_class (style_context, "project-tree");
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "project-tree");
+  gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (self), TRUE);
 
   self->settings = g_settings_new ("org.gnome.builder.project-tree");
 
