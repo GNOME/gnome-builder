@@ -23,24 +23,24 @@
 #include "ide-layout-pane.h"
 #include "ide-macros.h"
 
-struct _IdeLayoutPane
+typedef struct
 {
-  DzlDockBinEdge  parent_instance;
-  DzlDockStack   *dock_stack;
-};
+  DzlDockStack *dock_stack;
+} IdeLayoutPanePrivate;
 
-G_DEFINE_TYPE (IdeLayoutPane, ide_layout_pane, DZL_TYPE_DOCK_BIN_EDGE)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeLayoutPane, ide_layout_pane, DZL_TYPE_DOCK_BIN_EDGE)
 
 static void
 ide_layout_pane_add (GtkContainer *container,
                      GtkWidget    *widget)
 {
   IdeLayoutPane *self = (IdeLayoutPane *)container;
+  IdeLayoutPanePrivate *priv = ide_layout_pane_get_instance_private (self);
 
   g_assert (IDE_IS_LAYOUT_PANE (self));
 
   if (DZL_IS_DOCK_WIDGET (widget))
-    gtk_container_add (GTK_CONTAINER (self->dock_stack), widget);
+    gtk_container_add (GTK_CONTAINER (priv->dock_stack), widget);
   else
     GTK_CONTAINER_CLASS (ide_layout_pane_parent_class)->add (container, widget);
 }
@@ -54,7 +54,7 @@ ide_layout_pane_class_init (IdeLayoutPaneClass *klass)
   container_class->add = ide_layout_pane_add;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-layout-pane.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeLayoutPane, dock_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeLayoutPane, dock_stack);
 }
 
 static void

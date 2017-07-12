@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LAYOUT_PANE_H
-#define IDE_LAYOUT_PANE_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -25,8 +24,20 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_PANE (ide_layout_pane_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeLayoutPane, ide_layout_pane, IDE, LAYOUT_PANE, DzlDockBinEdge)
+G_DECLARE_DERIVABLE_TYPE (IdeLayoutPane, ide_layout_pane, IDE, LAYOUT_PANE, DzlDockBinEdge)
+
+struct _IdeLayoutPaneClass
+{
+  DzlDockBinEdgeClass parent_class;
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
+};
 
 G_END_DECLS
-
-#endif /* IDE_LAYOUT_PANE_H */
