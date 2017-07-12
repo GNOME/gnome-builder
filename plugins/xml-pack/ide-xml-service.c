@@ -18,7 +18,6 @@
 
 #define G_LOG_DOMAIN "ide-xml-service"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <math.h>

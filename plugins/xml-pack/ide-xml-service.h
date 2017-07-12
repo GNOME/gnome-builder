@@ -19,9 +19,8 @@
 #ifndef IDE_XML_SERVICE_H
 #define IDE_XML_SERVICE_H
 
+#include <dazzle.h>
 #include <gtksourceview/gtksource.h>
-#include <egg-task-cache.h>
-
 #include "ide-xml-position.h"
 #include "ide-xml-symbol-node.h"
 #include <ide.h>
@@ -65,7 +64,7 @@ void                ide_xml_service_get_root_node_async                (IdeXmlSe
 IdeXmlSymbolNode   *ide_xml_service_get_root_node_finish               (IdeXmlService        *self,
                                                                         GAsyncResult         *result,
                                                                         GError              **error);
-EggTaskCache       *ide_xml_service_get_schemas_cache                  (IdeXmlService        *self);
+DzlTaskCache       *ide_xml_service_get_schemas_cache                  (IdeXmlService        *self);
 
 G_END_DECLS
 
