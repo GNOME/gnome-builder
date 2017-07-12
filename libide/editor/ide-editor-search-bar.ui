@@ -187,28 +187,6 @@
                 <property name="top_attach">0</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="visible">true</property>
-                <property name="action-name">editor-view.hide-search</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="focus_on_click">false</property>
-                <style>
-                  <class name="close"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">true</property>
-                    <property name="icon_name">window-close-symbolic</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">4</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">false</property>
