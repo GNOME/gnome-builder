@@ -51,8 +51,10 @@ typedef struct
   DzlBindingGroup      *bindings;
   DzlSignalGroup       *signals;
   GPtrArray            *views;
+  GPtrArray            *in_transition;
   PeasExtensionSet     *addins;
 
+  /* Template references */
   DzlBox               *empty_state;
   DzlEmptyState        *failed_state;
   IdeLayoutStackHeader *header;
@@ -254,7 +256,7 @@ ide_layout_stack_view_added (IdeLayoutStack *self,
                              IdeLayoutView  *view)
 {
   IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
-  gint position;
+  guint position;
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
   g_assert (IDE_IS_LAYOUT_VIEW (view));
@@ -269,10 +271,8 @@ ide_layout_stack_view_added (IdeLayoutStack *self,
   /* Notify GListModel consumers of the new view and it's position within
    * our stack of view widgets.
    */
-  gtk_container_child_get (GTK_CONTAINER (priv->stack), GTK_WIDGET (view),
-                           "position", &position,
-                           NULL);
-  g_ptr_array_insert (priv->views, position, view);
+  position = priv->views->len;
+  g_ptr_array_add (priv->views, view);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 
   /*
@@ -294,18 +294,27 @@ ide_layout_stack_view_removed (IdeLayoutStack *self,
 
   if (priv->views != NULL)
     {
+      guint position = 0;
+
       /* If this is the last view, hide the popdown now.  We use our hide
        * variant instead of popdown so that we don't have jittery animations.
        */
       if (priv->views->len == 1)
         _ide_layout_stack_header_hide (priv->header);
 
-      for (guint i = 0; i < priv->views->len; i++)
+      /*
+       * Only remove the view if it is not in transition. We hold onto the
+       * view during the transition so that we keep the list stable.
+       */
+      if (!g_ptr_array_find_with_equal_func (priv->in_transition, view, NULL, &position))
         {
-          if (view == (IdeLayoutView *)g_ptr_array_index (priv->views, i))
+          for (guint i = 0; i < priv->views->len; i++)
             {
-              g_ptr_array_remove_index (priv->views, i);
-              g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+              if ((gpointer)view == g_ptr_array_index (priv->views, i))
+                {
+                  g_ptr_array_remove_index (priv->views, i);
+                  g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+                }
             }
         }
     }
@@ -415,6 +424,8 @@ ide_layout_stack_destroy (GtkWidget *widget)
   IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
+
+  g_clear_pointer (&priv->in_transition, g_ptr_array_unref);
 
   if (priv->views != NULL)
     {
@@ -545,6 +556,7 @@ ide_layout_stack_init (IdeLayoutStack *self)
   _ide_layout_stack_init_shortcuts (self);
 
   priv->views = g_ptr_array_new ();
+  priv->in_transition = g_ptr_array_new_with_free_func (g_object_unref);
 
   priv->signals = dzl_signal_group_new (IDE_TYPE_LAYOUT_VIEW);
 
@@ -816,11 +828,33 @@ ide_layout_stack_agree_to_close_finish (IdeLayoutStack *self,
 static void
 animation_state_complete (gpointer data)
 {
+  IdeLayoutStackPrivate *priv;
   AnimationState *state = data;
 
   g_assert (state != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK (state->source));
+  g_assert (IDE_IS_LAYOUT_STACK (state->dest));
+  g_assert (IDE_IS_LAYOUT_VIEW (state->view));
 
+  /* Add the widget to the new stack */
   gtk_container_add (GTK_CONTAINER (state->dest), GTK_WIDGET (state->view));
+
+  /* Now remove it from our temporary transition. Be careful in case we were
+   * destroyed in the mean time.
+   */
+  priv = ide_layout_stack_get_instance_private (state->source);
+
+  if (priv->in_transition != NULL)
+    {
+      guint position = 0;
+
+      if (g_ptr_array_find_with_equal_func (priv->views, state->view, NULL, &position))
+        {
+          g_ptr_array_remove (priv->in_transition, state->view);
+          g_ptr_array_remove_index (priv->views, position);
+          g_list_model_items_changed (G_LIST_MODEL (state->source), position, 1, 0);
+        }
+    }
 
   g_clear_object (&state->source);
   g_clear_object (&state->dest);
@@ -939,6 +973,11 @@ _ide_layout_stack_transfer (IdeLayoutStack *self,
                                    "height", dest_alloc.height,
                                    NULL);
 
+          /*
+           * Mark the view as in-transition so that when we remove it
+           * we can ignore the items-changed until the animation completes.
+           */
+          g_ptr_array_add (priv->in_transition, g_object_ref (view));
           gtk_container_remove (GTK_CONTAINER (priv->stack), GTK_WIDGET (view));
 
           cairo_surface_destroy (surface);
