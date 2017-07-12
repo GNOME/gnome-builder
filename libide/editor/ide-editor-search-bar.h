@@ -29,12 +29,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorSearchBar, ide_editor_search_bar, IDE, EDITOR_SEARCH_BAR, DzlBin)
 
-GtkWidget     *ide_editor_search_bar_new        (void);
-IdeBuffer     *ide_editor_search_bar_get_buffer (IdeEditorSearchBar *self);
-void           ide_editor_search_bar_set_buffer (IdeEditorSearchBar *self,
-                                                 IdeBuffer          *buffer);
-IdeSourceView *ide_editor_search_bar_get_view   (IdeEditorSearchBar *self);
-void           ide_editor_search_bar_set_view   (IdeEditorSearchBar *self,
-                                                 IdeSourceView      *view);
+GtkWidget *ide_editor_search_bar_new              (void);
+void       ide_editor_search_bar_set_replace_mode (IdeEditorSearchBar      *self,
+                                                   gboolean                 replace_mode);
+void       ide_editor_search_bar_set_context      (IdeEditorSearchBar      *self,
+                                                   GtkSourceSearchContext  *context);
+void       ide_editor_search_bar_set_settings     (IdeEditorSearchBar      *self,
+                                                   GtkSourceSearchSettings *settings);
 
 G_END_DECLS

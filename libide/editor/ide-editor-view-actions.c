@@ -388,7 +388,22 @@ ide_editor_view_actions_save_as (GSimpleAction *action,
 }
 
 static void
-ide_editor_view_actions_focus_search (GSimpleAction *action,
+ide_editor_view_actions_find (GSimpleAction *action,
+                              GVariant      *variant,
+                              gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  ide_editor_search_bar_set_replace_mode (self->search_bar, FALSE);
+  gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
+}
+
+static void
+ide_editor_view_actions_find_replace (GSimpleAction *action,
                                       GVariant      *variant,
                                       gpointer       user_data)
 {
@@ -397,6 +412,7 @@ ide_editor_view_actions_focus_search (GSimpleAction *action,
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
+  ide_editor_search_bar_set_replace_mode (self->search_bar, TRUE);
   gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
 }
@@ -435,9 +451,46 @@ ide_editor_view_actions_notify_file_settings (IdeEditorView *self,
   g_object_set (group, "object", file_settings, NULL);
 }
 
+static void
+ide_editor_view_actions_move_next_error (GSimpleAction *action,
+                                         GVariant      *variant,
+                                         gpointer       user_data)
+{
+  ide_editor_view_move_next_error (user_data);
+}
+
+static void
+ide_editor_view_actions_move_previous_error (GSimpleAction *action,
+                                             GVariant      *variant,
+                                             gpointer       user_data)
+{
+  ide_editor_view_move_previous_error (user_data);
+}
+
+static void
+ide_editor_view_actions_move_next_search_result (GSimpleAction *action,
+                                                 GVariant      *variant,
+                                                 gpointer       user_data)
+{
+  ide_editor_view_move_next_search_result (user_data);
+}
+
+static void
+ide_editor_view_actions_move_previous_search_result (GSimpleAction *action,
+                                                     GVariant      *variant,
+                                                     gpointer       user_data)
+{
+  ide_editor_view_move_previous_search_result (user_data);
+}
+
 static const GActionEntry editor_view_entries[] = {
-  { "focus-search", ide_editor_view_actions_focus_search },
+  { "find", ide_editor_view_actions_find },
+  { "find-replace", ide_editor_view_actions_find_replace },
   { "hide-search", ide_editor_view_actions_hide_search },
+  { "move-next-error", ide_editor_view_actions_move_next_error },
+  { "move-next-search-result", ide_editor_view_actions_move_next_search_result },
+  { "move-previous-error", ide_editor_view_actions_move_previous_error },
+  { "move-previous-search-result", ide_editor_view_actions_move_previous_search_result },
   { "print", ide_editor_view_actions_print },
   { "reload", ide_editor_view_actions_reload },
   { "save", ide_editor_view_actions_save },
@@ -501,4 +554,11 @@ _ide_editor_view_init_actions (IdeEditorView *self)
                             self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "file-settings", G_ACTION_GROUP (file_props));
   ide_editor_view_actions_notify_file_settings (self, NULL, source_view);
+}
+
+void
+_ide_editor_view_update_actions (IdeEditorView *self)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+
 }

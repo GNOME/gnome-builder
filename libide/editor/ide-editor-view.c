@@ -384,12 +384,21 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (!old_toplevel || GTK_IS_WIDGET (old_toplevel));
 
-  /* Make sure we chain up if things change in the future */
+  /*
+   * We don't need to chain up today, but if IdeLayoutView starts
+   * using the hierarchy_changed signal to handle anything, we want
+   * to make sure we aren't surprised.
+   */
   if (GTK_WIDGET_CLASS (ide_editor_view_parent_class)->hierarchy_changed)
     GTK_WIDGET_CLASS (ide_editor_view_parent_class)->hierarchy_changed (widget, old_toplevel);
 
   context = ide_widget_get_context (GTK_WIDGET (self));
 
+  /*
+   * We don't want to create addins until the widget has been placed into
+   * the widget tree. That way the addins can get access to the context
+   * or other useful details.
+   */
   if (context != NULL && self->addins == NULL)
     {
       self->addins = ide_extension_set_adapter_new (context,
@@ -442,6 +451,52 @@ ide_editor_view_update_map (IdeEditorView *self)
 }
 
 static void
+search_revealer_notify_reveal_child (IdeEditorView *self,
+                                     GParamSpec    *pspec,
+                                     GtkRevealer   *revealer)
+{
+  GtkSourceCompletion *completion;
+
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+  g_return_if_fail (pspec != NULL);
+  g_return_if_fail (GTK_IS_REVEALER (revealer));
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->source_view));
+
+  if (!gtk_revealer_get_reveal_child (revealer))
+    {
+      /*
+       * Cancel any pending work by the context and release it. We don't need
+       * to hold onto these when they aren't being used because they handle
+       * buffer signals and other extraneous operations.
+       */
+      ide_editor_search_bar_set_context (self->search_bar, NULL);
+      g_clear_object (&self->search_context);
+
+      /* Restore completion that we blocked below. */
+      gtk_source_completion_unblock_interactive (completion);
+    }
+  else
+    {
+      g_assert (self->search_context == NULL);
+
+      self->search_context = g_object_new (GTK_SOURCE_TYPE_SEARCH_CONTEXT,
+                                           "buffer", self->buffer,
+                                           "highlight", TRUE,
+                                           "settings", self->search_settings,
+                                           NULL);
+      ide_editor_search_bar_set_context (self->search_bar, self->search_context);
+
+      /*
+       * Block the completion while the search bar is set. It only
+       * slows things down like search/replace functionality. We'll
+       * restore it above when we clear state.
+       */
+      gtk_source_completion_block_interactive (completion);
+    }
+}
+
+static void
 ide_editor_view_constructed (GObject *object)
 {
   IdeEditorView *self = (IdeEditorView *)object;
@@ -479,6 +534,18 @@ ide_editor_view_constructed (GObject *object)
                             G_CALLBACK (ide_editor_view_source_view_event),
                             self);
 
+  /*
+   * We want to track when the search revealer is visible. We will discard
+   * the search context when the revealer is not visible so that we don't
+   * continue performing expensive buffer operations.
+   */
+  g_signal_connect_swapped (self->search_revealer,
+                            "notify::reveal-child",
+                            G_CALLBACK (search_revealer_notify_reveal_child),
+                            self);
+
+  ide_editor_search_bar_set_settings (self->search_bar, self->search_settings);
+
   ide_editor_view_load_fonts (self);
   ide_editor_view_update_map (self);
 }
@@ -496,6 +563,11 @@ ide_editor_view_destroy (GtkWidget *widget)
 
   g_clear_object (&self->addins);
 
+  g_cancellable_cancel (self->destroy_cancellable);
+  g_clear_object (&self->destroy_cancellable);
+
+  g_clear_object (&self->search_settings);
+  g_clear_object (&self->search_context);
   g_clear_object (&self->editor_settings);
   g_clear_object (&self->insight_settings);
 
@@ -657,6 +729,8 @@ ide_editor_view_init (IdeEditorView *self)
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "ide-editor-view-document-menu");
 
+  self->destroy_cancellable = g_cancellable_new ();
+
   /* Setup signals to monitor on the buffer. */
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 
@@ -684,6 +758,23 @@ ide_editor_view_init (IdeEditorView *self)
                             "bind",
                             G_CALLBACK (ide_editor_view_bind_signals),
                             self);
+
+  /*
+   * Setup our search context. The sourceview has it's own search
+   * infrastructure that we want to reserve for use by vim keybindings
+   * and other transient keybinding features. Instead, we have our own
+   * that can have separate state from those.
+   *
+   * We try to avoid creating/maintaining the search-context except
+   * when necessary because has some expensive operations associated
+   * with it's handling of changes to the underlying buffer.
+   */
+  self->search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
+                                        "at-word-boundaries", FALSE,
+                                        "case-sensitive", FALSE,
+                                        "wrap-around", TRUE,
+                                        NULL);
+
 
   /* Setup bindings for the buffer. */
   self->buffer_bindings = dzl_binding_group_new ();
@@ -905,4 +996,150 @@ ide_editor_view_get_language (IdeEditorView *self)
   g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), NULL);
 
   return gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self->buffer));
+}
+
+/**
+ * ide_editor_view_move_next_error:
+ * @self: a #IdeEditorView
+ *
+ * Moves to the next error, if any.
+ *
+ * If there is no error, the insertion cursor is not moved.
+ *
+ * Since: 3.26
+ */
+void
+ide_editor_view_move_next_error (IdeEditorView *self)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+
+  g_signal_emit_by_name (self->source_view, "move-error", GTK_DIR_DOWN);
+}
+
+/**
+ * ide_editor_view_move_previous_error:
+ * @self: a #IdeEditorView
+ *
+ * Moves the insertion cursor to the previous error.
+ *
+ * If there is no error, the insertion cursor is not moved.
+ *
+ * Since: 3.26
+ */
+void
+ide_editor_view_move_previous_error (IdeEditorView *self)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+
+  g_signal_emit_by_name (self->source_view, "move-error", GTK_DIR_UP);
+}
+
+static void
+ide_editor_view_move_next_search_result_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
+{
+  GtkSourceSearchContext *context = (GtkSourceSearchContext *)object;
+  g_autoptr(IdeEditorView) self = user_data;
+  g_autoptr(GError) error = NULL;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean has_wrapped = FALSE;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (self->buffer == NULL)
+    return;
+
+  if (gtk_source_search_context_forward_finish2 (context, result, &begin, &end, &has_wrapped, &error))
+    gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+}
+
+/**
+ * ide_editor_view_move_next_search_result:
+ * @self: a #IdeEditorView
+ *
+ * Moves the insertion cursor to the next search result.
+ *
+ * If there is no search result, the insertion cursor is not moved.
+ *
+ * Since: 3.26
+ */
+void
+ide_editor_view_move_next_search_result (IdeEditorView *self)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+  g_return_if_fail (self->destroy_cancellable != NULL);
+  g_return_if_fail (self->buffer != NULL);
+
+  if (self->search_context == NULL)
+    return;
+
+  if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
+    gtk_text_iter_order (&begin, &end);
+
+  gtk_source_search_context_forward_async (self->search_context,
+                                           &end,
+                                           self->destroy_cancellable,
+                                           ide_editor_view_move_next_search_result_cb,
+                                           g_object_ref (self));
+}
+
+static void
+ide_editor_view_move_previous_search_result_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  GtkSourceSearchContext *context = (GtkSourceSearchContext *)object;
+  g_autoptr(IdeEditorView) self = user_data;
+  g_autoptr(GError) error = NULL;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean has_wrapped = FALSE;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (self->buffer == NULL)
+    return;
+
+  if (gtk_source_search_context_backward_finish2 (context, result, &begin, &end, &has_wrapped, &error))
+    gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+}
+
+/**
+ * ide_editor_view_move_previous_search_result:
+ * @self: a #IdeEditorView
+ *
+ * Moves the insertion cursor to the previous search result.
+ *
+ * If there is no search result, the insertion cursor is not moved.
+ *
+ * Since: 3.26
+ */
+void
+ide_editor_view_move_previous_search_result (IdeEditorView *self)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
+  g_return_if_fail (self->destroy_cancellable != NULL);
+  g_return_if_fail (self->buffer != NULL);
+
+  if (self->search_context == NULL)
+    return;
+
+  if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
+    gtk_text_iter_order (&begin, &end);
+
+  gtk_source_search_context_backward_async (self->search_context,
+                                            &begin,
+                                            self->destroy_cancellable,
+                                            ide_editor_view_move_previous_search_result_cb,
+                                            g_object_ref (self));
 }

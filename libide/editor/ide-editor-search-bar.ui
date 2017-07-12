@@ -57,7 +57,7 @@
                 </style>
                 <child>
                   <object class="GtkButton">
-                    <property name="action-name">frame.previous-search-result</property>
+                    <property name="action-name">editor-view.move-previous-search-result</property>
                     <property name="visible">true</property>
                     <property name="can_focus">false</property>
                     <property name="receives_default">true</property>
@@ -78,7 +78,7 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="action-name">frame.next-search-result</property>
+                    <property name="action-name">editor-view.move-next-search-result</property>
                     <property name="visible">true</property>
                     <property name="can_focus">false</property>
                     <property name="receives_default">true</property>
@@ -106,7 +106,7 @@
             <child>
               <object class="GtkButton" id="replace_button">
                 <property name="label" translatable="yes">Replace</property>
-                <property name="action-name">search-entry.replace</property>
+                <property name="action-name">search-bar.replace</property>
                 <property name="visible">false</property>
                 <property name="can_focus">true</property>
                 <property name="receives_default">true</property>
@@ -119,7 +119,7 @@
             <child>
               <object class="GtkButton" id="replace_all_button">
                 <property name="label" translatable="yes">Replace All</property>
-                <property name="action-name">search-entry.replace-all</property>
+                <property name="action-name">search-bar.replace-all</property>
                 <property name="visible">false</property>
                 <property name="can_focus">true</property>
                 <property name="receives_default">true</property>
@@ -138,7 +138,7 @@
                 <property name="spacing">8</property>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="action-name">search-entry.toggle-search-replace</property>
+                    <property name="action-name">search-bar.toggle-search-replace</property>
                     <property name="action-target">true</property>
                     <property name="tooltip-text" translatable="yes">Switch between Search and Search-and-Replace</property>
                     <property name="visible">true</property>
@@ -161,7 +161,7 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="action-name">search-entry.toggle-search-options</property>
+                    <property name="action-name">search-bar.toggle-search-options</property>
                     <property name="action-target">true</property>
                     <property name="tooltip-text" translatable="yes">Show or hide search options such as case sensitivity</property>
                     <property name="visible">true</property>
@@ -223,7 +223,7 @@
             <property name="column_spacing">8</property>
             <child>
               <object class="GtkCheckButton" id="use_regex">
-                <property name="action-name">search-entry.regex-enabled</property>
+                <property name="action-name">search-settings.regex-enabled</property>
                 <property name="label" translatable="yes">Regular expressions</property>
                 <property name="visible">true</property>
                 <property name="can_focus">false</property>
@@ -238,7 +238,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="case_sensitive">
-                <property name="action-name">search-entry.case-sensitive</property>
+                <property name="action-name">search-settings.case-sensitive</property>
                 <property name="label" translatable="yes">Case sensitive</property>
                 <property name="visible">true</property>
                 <property name="can_focus">false</property>
@@ -253,7 +253,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="whole_word">
-                <property name="action-name">search-entry.at-word-boundaries</property>
+                <property name="action-name">search-settings.at-word-boundaries</property>
                 <property name="label" translatable="yes">Match whole word only</property>
                 <property name="visible">true</property>
                 <property name="can_focus">false</property>

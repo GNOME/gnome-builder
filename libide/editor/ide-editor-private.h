@@ -40,6 +40,11 @@ struct _IdeEditorView
   DzlBindingGroup         *buffer_bindings;
   DzlSignalGroup          *buffer_signals;
 
+  GtkSourceSearchSettings *search_settings;
+  GtkSourceSearchContext  *search_context;
+
+  GCancellable            *destroy_cancellable;
+
   GtkSourceMap            *map;
   GtkRevealer             *map_revealer;
   GtkOverlay              *overlay;
@@ -59,6 +64,7 @@ struct _IdeEditorView
 void _ide_editor_view_init_actions          (IdeEditorView        *self);
 void _ide_editor_view_init_settings         (IdeEditorView        *self);
 void _ide_editor_view_init_shortcuts        (IdeEditorView        *self);
+void _ide_editor_view_update_actions        (IdeEditorView        *self);
 void _ide_editor_sidebar_set_open_pages     (IdeEditorSidebar     *self,
                                              GListModel           *open_pages);
 void _ide_editor_perspective_init_actions   (IdeEditorPerspective *self);

@@ -12,7 +12,7 @@
   bind "<shift>F7" { "action" ("frame", "show-spellcheck", "1") };
   bind "<ctrl><shift>e" { "add-cursor" (column) };
   bind "<ctrl><shift>d" { "add-cursor" (match) };
-  bind "<ctrl>h" { "action" ("frame", "find-replace", "3") };
+  bind "<ctrl>h" { "action" ("editor-view", "find-replace", "") };
   bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };

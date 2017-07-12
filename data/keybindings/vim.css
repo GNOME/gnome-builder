@@ -104,7 +104,7 @@
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
   bind "<ctrl><shift>o" { "action" ("win", "open-with-dialog", "") };
-  bind "<ctrl>k" { "action" ("view-stack", "show-list", "") };
+  bind "<ctrl>k" { "action" ("layoutstack", "show-list", "") };
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
   bind "<ctrl>equal" { "increase-font-size" () };
@@ -173,20 +173,21 @@
   bind "colon" { "action" ("win", "show-command-bar", "") };
 
   /* cycle "tabs" */
-  bind "<ctrl><alt>Page_Up" { "action" ("view-stack", "previous-view", "") };
-  bind "<ctrl><alt>KP_Page_Up" { "action" ("view-stack", "previous-view", "") };
-  bind "<ctrl><alt>Page_Down" { "action" ("view-stack", "next-view", "") };
-  bind "<ctrl><alt>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
+  bind "<ctrl><alt>Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl><alt>KP_Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl><alt>Page_Down" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl><alt>KP_Page_Down" { "action" ("layoutstack", "next-view", "") };
 
   /* replay the last recording */
   bind "period" { "replay-macro" (1) };
 
   /* start search backward */
-  bind "question" { "action" ("frame", "find", "2") };
+  /* TODO: use internal sourceview search */
+  bind "question" { "action" ("editor-view", "find", "") };
 
   /* start search */
-  bind "slash" { "action" ("frame", "find", "3") };
-  bind "KP_Divide" { "action" ("frame", "find", "3") };
+  bind "slash" { "action" ("editor-view", "find", "") };
+  bind "KP_Divide" { "action" ("editor-view", "find", "") };
 
   /* insert at cursor */
   bind "i" { "begin-macro" ()
@@ -553,8 +554,8 @@
   bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
 
   /* navigation */
-  bind "<ctrl>o" { "action" ("view-stack", "go-backward", "") };
-  bind "<ctrl>i" { "action" ("view-stack", "go-forward", "") };
+  bind "<ctrl>o" { "action" ("layoutstack", "go-backward", "") };
+  bind "<ctrl>i" { "action" ("layoutstack", "go-forward", "") };
 
   /* window controls */
   bind "<ctrl>w" { "set-mode" ("vim-normal-ctrl-w", transient) };
@@ -1517,8 +1518,8 @@
   bind "<shift>u" { "set-mode" ("vim-normal-g-u", transient) };
 
   /* cycle "tabs" */
-  bind "<shift>t" { "action" ("view-stack", "previous-view", "") };
-  bind "t" { "action" ("view-stack", "next-view", "") };
+  bind "<shift>t" { "action" ("layoutstack", "previous-view", "") };
+  bind "t" { "action" ("layoutstack", "next-view", "") };
 }
 
 @binding-set builder-vim-source-view-normal-g-u
@@ -1849,12 +1850,12 @@
 
 @binding-set builder-vim-source-view-normal-ctrl-w
 {
-  bind "v" { "action" ("view-stack", "split-right", "") "grab_focus" () };
-  bind "<ctrl>v" { "action" ("view-stack", "split-right", "") "grab_focus" () };
+  bind "v" { "action" ("layoutstack", "split-right", "") "grab_focus" () };
+  bind "<ctrl>v" { "action" ("layoutstack", "split-right", "") "grab_focus" () };
 
-  bind "c" { "action" ("view", "close", "") };
+  bind "c" { "action" ("layoutstack", "close-view", "") };
 
-  bind "s" { "action" ("view-stack", "split-down", "") };
+  bind "s" { "action" ("layoutstack", "split-view", "") };
 
   bind "w" { "action" ("view-grid", "focus-neighbor", "0") };
   bind "<ctrl>w" { "action" ("view-grid", "focus-neighbor", "0") };
