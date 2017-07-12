@@ -1,8 +1,3 @@
-
- - Search entry context menu (use a GMenu and merging this time)
-   Might also require DzlWidgetActionGroup.
-
- - Make sure search entry actually works
  - Enter, Up, and Down accelerators for search/replace entries.
 
  - other perspective interface methods
@@ -12,6 +7,7 @@
  - can we make perspectives the plugin interface?
 
  - view-added/removed/etc on IdeLayoutGrid
+   We can probably change this to set-view in workbench-addin
 
  - Remove get_right_edge() etc, switch with "classification" for panels
 
@@ -30,26 +26,4 @@
 
  - Escape in command-bar
 
- - Document perferences
-
- - ide_layout_view_add_error() or similar
- - ide_layout_view_add_error_with_action() maybe so that we can
-   specify a label and action name (reload for example) to possibly
-   fix any sort of error.
-
-
-Done
-
- - Check if buffer is already in visible stack before adding new view
- - Perspective actions, copy them across
- - Be able to add an editor view
- - perspective focus_location
-
- - Plugins to fix for API
-   - devhelp
-   - command bar / vim
-   - project-tree
-   - terminal
-   - symbol-tree
-   - retab
-
+ - Document perferences to show transient right-sidebar
