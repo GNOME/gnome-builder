@@ -54,13 +54,25 @@ static DzlShortcutEntry editor_view_shortcuts[] = {
     "<Primary>g",
     N_("Editor"),
     N_("Find and replace"),
-    N_("Find the next match") },
+    N_("Move to the next match") },
 
   { "org.gnome.builder.editor-view.prev-match",
     "<Primary><Shift>g",
     N_("Editor"),
     N_("Find and replace"),
-    N_("Find the next match") },
+    N_("Move to the previous match") },
+
+  { "org.gnome.builder.editor-view.next-error",
+    NULL,
+    N_("Editor"),
+    N_("Find and replace"),
+    N_("Move to the next error") },
+
+  { "org.gnome.builder.editor-view.prev-error",
+    NULL,
+    N_("Editor"),
+    N_("Find and replace"),
+    N_("Move to the previous error") },
 
   { "org.gnome.builder.editor-view.clear-highlight",
     "<Primary><Shift>k",
@@ -81,7 +93,7 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.find"),
                                               NULL,
-                                              I_("editor-view.focus-search"));
+                                              I_("editor-view.find"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.find-and-replace"),
@@ -91,12 +103,22 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.next-match"),
                                               NULL,
-                                              I_("editor-view.next-match"));
+                                              I_("editor-view.move-next-search-result"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.prev-match"),
                                               NULL,
-                                              I_("editor-view.prev-match"));
+                                              I_("editor-view.move-prevous-search-result"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.next-error"),
+                                              NULL,
+                                              I_("editor-view.move-next-error"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor-view.prev-error"),
+                                              NULL,
+                                              I_("editor-view.move-prevous-error"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.clear-highlight"),
