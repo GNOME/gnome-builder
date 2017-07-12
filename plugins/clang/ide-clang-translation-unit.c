@@ -1213,7 +1213,7 @@ ide_clang_translation_unit_find_nearest_scope (IdeClangTranslationUnit  *self,
   enum CXCursorKind kind;
   IdeSymbolKind symkind;
   IdeSymbolFlags symflags;
-  IdeSymbol *ret;
+  IdeSymbol *ret = NULL;
   CXFile file;
   IdeFile *ifile;
   guint line;
