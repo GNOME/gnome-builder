@@ -497,15 +497,6 @@ static const GActionEntry editor_view_entries[] = {
   { "save-as", ide_editor_view_actions_save_as },
 };
 
-static const gchar *source_view_property_actions[] = {
-  "auto-indent",
-  "smart-backspace",
-  "highlight-current-line",
-  "show-line-numbers",
-  "show-right-margin",
-  "tab-width",
-};
-
 void
 _ide_editor_view_init_actions (IdeEditorView *self)
 {
@@ -530,11 +521,7 @@ _ide_editor_view_init_actions (IdeEditorView *self)
    * manipulated using regular Gtk widgets from the properties panel.
    */
   sv_props = dzl_properties_group_new (G_OBJECT (source_view));
-  for (guint i = 0; i < G_N_ELEMENTS (source_view_property_actions); i++)
-    {
-      const gchar *name = source_view_property_actions[i];
-      dzl_properties_group_add_property (sv_props, name, name);
-    }
+  dzl_properties_group_add_all_properties (sv_props);
   dzl_properties_group_add_property_full (sv_props,
                                           "use-spaces",
                                           "insert-spaces-instead-of-tabs",
