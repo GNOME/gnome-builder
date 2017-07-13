@@ -21,6 +21,7 @@
 #include <dazzle.h>
 
 #include "layout/ide-layout-pane.h"
+#include "layout/ide-layout-view.h"
 
 G_BEGIN_DECLS
 
@@ -41,5 +42,8 @@ struct _IdeLayoutTransientSidebarClass
   gpointer _reserved7;
   gpointer _reserved8;
 };
+
+void ide_layout_transient_sidebar_set_view (IdeLayoutTransientSidebar *self,
+                                            IdeLayoutView             *view);
 
 G_END_DECLS
