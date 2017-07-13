@@ -664,9 +664,14 @@ void
 _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
                                          IdeEditorView        *view)
 {
+  IdeLayoutTransientSidebar *sidebar;
+
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_return_if_fail (!view || IDE_IS_EDITOR_VIEW (view));
 
+  sidebar = ide_editor_perspective_get_transient_sidebar (self);
+
   ide_editor_properties_set_view (self->properties, view);
+  ide_layout_transient_sidebar_set_view (sidebar, (IdeLayoutView *)view);
   g_object_set (self, "right-visible", view != NULL, NULL);
 }
