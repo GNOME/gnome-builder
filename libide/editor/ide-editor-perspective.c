@@ -443,15 +443,25 @@ ide_editor_perspective_get_sidebar (IdeEditorPerspective *self)
 }
 
 /**
- * ide_editor_perspective_get_right_edge:
+ * ide_editor_perspective_get_transient_sidebar:
+ * @self: a #IdeEditorPerspective
  *
- * Returns: (transfer none): A #GtkWidget
+ * Gets the transient sidebar for the editor perspective.
+ *
+ * The transient sidebar is a sidebar on the right side of the perspective. It
+ * is displayed only when necessary. It animates in and out of view based on
+ * focus tracking and other heuristics.
+ *
+ * Returns: (transfer none): An #IdeLayoutTransientSidebar
+ *
+ * Since: 3.26
  */
-GtkWidget *
-ide_editor_perspective_get_right_edge (IdeEditorPerspective *self)
+IdeLayoutTransientSidebar *
+ide_editor_perspective_get_transient_sidebar (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
-  return dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self));
+
+  return IDE_LAYOUT_TRANSIENT_SIDEBAR (dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self)));
 }
 
 /**

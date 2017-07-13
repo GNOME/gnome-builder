@@ -170,7 +170,7 @@ color_panel_rgba_set_cb (GbColorPickerWorkbenchAddin *self,
 static gboolean
 init_dock (GbColorPickerWorkbenchAddin *self)
 {
-  GtkWidget *panel;
+  IdeLayoutTransientSidebar *sidebar;
 
   g_assert (GB_IS_COLOR_PICKER_WORKBENCH_ADDIN (self));
 
@@ -190,8 +190,8 @@ init_dock (GbColorPickerWorkbenchAddin *self)
 
   init_palettes (self);
 
-  panel = ide_editor_perspective_get_right_edge (IDE_EDITOR_PERSPECTIVE (self->editor));
-  gtk_container_add (GTK_CONTAINER (panel), GTK_WIDGET (self->dock));
+  sidebar = ide_editor_perspective_get_transient_sidebar (IDE_EDITOR_PERSPECTIVE (self->editor));
+  gtk_container_add (GTK_CONTAINER (sidebar), GTK_WIDGET (self->dock));
   gtk_container_add (GTK_CONTAINER (self->dock), self->color_panel);
 
   g_signal_connect_object (self->color_panel,

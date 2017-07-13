@@ -22,6 +22,7 @@
 #include "editor/ide-editor-sidebar.h"
 #include "layout/ide-layout.h"
 #include "layout/ide-layout-grid.h"
+#include "layout/ide-layout-transient-sidebar.h"
 
 G_BEGIN_DECLS
 
@@ -29,18 +30,18 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
 
-void              ide_editor_perspective_focus_buffer                  (IdeEditorPerspective *self,
-                                                                        IdeBuffer            *buffer);
-void              ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
-                                                                        IdeBuffer            *buffer);
-void              ide_editor_perspective_focus_location                (IdeEditorPerspective *self,
-                                                                        IdeSourceLocation    *location);
-IdeLayoutView    *ide_editor_perspective_get_active_view               (IdeEditorPerspective *self);
-IdeLayoutGrid    *ide_editor_perspective_get_grid                      (IdeEditorPerspective *self);
-IdeEditorSidebar *ide_editor_perspective_get_sidebar                   (IdeEditorPerspective *self);
+void                       ide_editor_perspective_focus_buffer                  (IdeEditorPerspective *self,
+                                                                                 IdeBuffer            *buffer);
+void                       ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
+                                                                                 IdeBuffer            *buffer);
+void                       ide_editor_perspective_focus_location                (IdeEditorPerspective *self,
+                                                                                 IdeSourceLocation    *location);
+IdeLayoutView             *ide_editor_perspective_get_active_view               (IdeEditorPerspective *self);
+IdeLayoutGrid             *ide_editor_perspective_get_grid                      (IdeEditorPerspective *self);
+IdeEditorSidebar          *ide_editor_perspective_get_sidebar                   (IdeEditorPerspective *self);
+IdeLayoutTransientSidebar *ide_editor_perspective_get_transient_sidebar         (IdeEditorPerspective *self);
 
 /* We want this to use "classifications" rather than "edges" */
-GtkWidget        *ide_editor_perspective_get_right_edge                (IdeEditorPerspective *self);
 GtkWidget        *ide_editor_perspective_get_bottom_edge               (IdeEditorPerspective *self);
 
 
