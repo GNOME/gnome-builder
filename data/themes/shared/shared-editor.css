@@ -84,3 +84,9 @@ ideeditorproperties treeview:selected {
 ideeditorproperties treeview:backdrop {
   color: @theme_unfocused_fg_color;
 }
+ideeditorproperties button.control.flat {
+  padding: 0;
+  margin: 0 8px 0 0;
+  min-width: 16px;
+  min-height: 16px;
+}
