@@ -39,7 +39,6 @@ has_view_related_focus (IdeLayoutTransientSidebar *self)
   GtkWidget *focus_view;
   GtkWidget *toplevel;
   GtkWidget *focus;
-  GtkWidget *stack;
 
   g_assert (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
 
@@ -73,12 +72,12 @@ has_view_related_focus (IdeLayoutTransientSidebar *self)
   if (focus_view && focus_view != GTK_WIDGET (view))
     return FALSE;
 
-  /* If the focus has ended up in layout stack, we're okay too */
-  stack = dzl_gtk_widget_get_relative (focus, IDE_TYPE_LAYOUT_STACK);
-  if (dzl_gtk_widget_is_ancestor_or_relative (focus, stack))
-    return TRUE;
+  /* Focus hasn't landed anywhere that indicates to us that the
+   * view definitely isn't visible anymore, so we can just keep
+   * the panel visible for now.
+   */
 
-  return FALSE;
+  return TRUE;
 }
 
 static void
