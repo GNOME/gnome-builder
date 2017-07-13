@@ -24,7 +24,9 @@
 #include "files/ide-file-settings.h"
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
+#include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-private.h"
+#include "layout/ide-layout-transient-sidebar.h"
 #include "editor/ide-editor-print-operation.h"
 #include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
@@ -483,6 +485,20 @@ ide_editor_view_actions_move_previous_search_result (GSimpleAction *action,
   ide_editor_view_move_previous_search_result (user_data);
 }
 
+static void
+ide_editor_view_actions_properties (GSimpleAction *action,
+                                    GVariant      *variant,
+                                    gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+  GtkWidget *editor;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  editor = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_EDITOR_PERSPECTIVE);
+  _ide_editor_perspective_show_properties (IDE_EDITOR_PERSPECTIVE (editor), self);
+}
+
 static const GActionEntry editor_view_entries[] = {
   { "find", ide_editor_view_actions_find },
   { "find-replace", ide_editor_view_actions_find_replace },
@@ -491,6 +507,7 @@ static const GActionEntry editor_view_entries[] = {
   { "move-next-search-result", ide_editor_view_actions_move_next_search_result },
   { "move-previous-error", ide_editor_view_actions_move_previous_error },
   { "move-previous-search-result", ide_editor_view_actions_move_previous_search_result },
+  { "properties", ide_editor_view_actions_properties },
   { "print", ide_editor_view_actions_print },
   { "reload", ide_editor_view_actions_reload },
   { "save", ide_editor_view_actions_save },

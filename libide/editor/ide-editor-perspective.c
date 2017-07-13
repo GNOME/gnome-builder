@@ -659,3 +659,14 @@ perspective_iface_init (IdePerspectiveInterface *iface)
   iface->views_foreach = ide_editor_perspective_views_foreach;
   iface->set_fullscreen = ide_editor_perspective_set_fullscreen;
 }
+
+void
+_ide_editor_perspective_show_properties (IdeEditorPerspective *self,
+                                         IdeEditorView        *view)
+{
+  g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_return_if_fail (!view || IDE_IS_EDITOR_VIEW (view));
+
+  ide_editor_properties_set_view (self->properties, view);
+  g_object_set (self, "right-visible", view != NULL, NULL);
+}

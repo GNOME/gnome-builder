@@ -61,13 +61,15 @@ struct _IdeEditorView
   guint                    show_map : 1;
 };
 
-void _ide_editor_view_init_actions          (IdeEditorView        *self);
-void _ide_editor_view_init_settings         (IdeEditorView        *self);
-void _ide_editor_view_init_shortcuts        (IdeEditorView        *self);
-void _ide_editor_view_update_actions        (IdeEditorView        *self);
-void _ide_editor_sidebar_set_open_pages     (IdeEditorSidebar     *self,
-                                             GListModel           *open_pages);
-void _ide_editor_perspective_init_actions   (IdeEditorPerspective *self);
-void _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self);
+void _ide_editor_view_init_actions           (IdeEditorView        *self);
+void _ide_editor_view_init_settings          (IdeEditorView        *self);
+void _ide_editor_view_init_shortcuts         (IdeEditorView        *self);
+void _ide_editor_view_update_actions         (IdeEditorView        *self);
+void _ide_editor_sidebar_set_open_pages      (IdeEditorSidebar     *self,
+                                              GListModel           *open_pages);
+void _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
+                                              IdeEditorView        *view);
+void _ide_editor_perspective_init_actions    (IdeEditorPerspective *self);
+void _ide_editor_perspective_init_shortcuts  (IdeEditorPerspective *self);
 
 G_END_DECLS

@@ -321,6 +321,7 @@
       <attribute name="after">editor-document-section</attribute>
       <item>
         <attribute name="label" translatable="yes">Document Preferences</attribute>
+        <attribute name="action">editor-view.properties</attribute>
       </item>
     </section>
     <section id="editor-document-save-section">
