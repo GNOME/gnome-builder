@@ -92,8 +92,6 @@ enum {
   N_PROPS
 };
 
-static GParamSpec *properties [N_PROPS];
-
 static void
 populate_state_free (PopulateState *state)
 {
@@ -420,7 +418,7 @@ matching_state_new (IdeXmlPosition  *position,
   return state;
 }
 
-static MatchingState *
+G_GNUC_UNUSED static MatchingState *
 matching_state_copy (MatchingState *state)
 {
   MatchingState *new_state;
@@ -992,7 +990,7 @@ ide_xml_completion_provider_new (void)
 static void
 ide_xml_completion_provider_finalize (GObject *object)
 {
-  IdeXmlCompletionProvider *self = (IdeXmlCompletionProvider *)object;
+  G_GNUC_UNUSED IdeXmlCompletionProvider *self = (IdeXmlCompletionProvider *)object;
 
   G_OBJECT_CLASS (ide_xml_completion_provider_parent_class)->finalize (object);
 }
@@ -1003,7 +1001,7 @@ ide_xml_completion_provider_get_property (GObject    *object,
                                           GValue     *value,
                                           GParamSpec *pspec)
 {
-  IdeXmlCompletionProvider *self = IDE_XML_COMPLETION_PROVIDER (object);
+  G_GNUC_UNUSED IdeXmlCompletionProvider *self = IDE_XML_COMPLETION_PROVIDER (object);
 
   switch (prop_id)
     {
@@ -1018,7 +1016,7 @@ ide_xml_completion_provider_set_property (GObject      *object,
                                           const GValue *value,
                                           GParamSpec   *pspec)
 {
-  IdeXmlCompletionProvider *self = IDE_XML_COMPLETION_PROVIDER (object);
+  G_GNUC_UNUSED IdeXmlCompletionProvider *self = IDE_XML_COMPLETION_PROVIDER (object);
 
   switch (prop_id)
     {

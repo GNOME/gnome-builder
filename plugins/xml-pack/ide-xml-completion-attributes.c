@@ -170,7 +170,7 @@ process_choice (MatchingState *state)
   GPtrArray *tmp_matches;
   GPtrArray *min_pos_match = NULL;
   IdeXmlRngDefine *defines;
-  gboolean node_has_attr;
+  gboolean node_has_attr G_GNUC_UNUSED;
   gint min_pos = G_MAXINT;
   gint pos;
 

@@ -116,7 +116,7 @@ _autofree_cleanup_xmlFree (void *p)
 
 #define g_autoxmlfree __attribute__((cleanup(_autofree_cleanup_xmlFree)))
 
-static void
+G_GNUC_UNUSED static void
 xml_document_free (XmlDocument *doc)
 {
   g_assert (doc != NULL);
@@ -1975,8 +1975,6 @@ ide_xml_rng_parser_parse (IdeXmlRngParser *self,
   g_autofree gchar *url;
   xmlDoc *doc;
   xmlNode *root;
-  guchar *mem;
-  gint size;
   gint options;
 
   g_return_val_if_fail (IDE_IS_XML_RNG_PARSER (self), NULL);
