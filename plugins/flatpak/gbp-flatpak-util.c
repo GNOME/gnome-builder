@@ -83,6 +83,7 @@ gbp_flatpak_is_ignored (const gchar *name)
   return g_str_has_suffix (name, ".Locale") ||
          g_str_has_suffix (name, ".Debug") ||
          g_str_has_suffix (name, ".Sources") ||
-         g_str_has_suffix (name, ".Var");
+         g_str_has_suffix (name, ".Var") ||
+         g_str_has_prefix (name, "org.gtk.Gtk3theme.");
 }
 
