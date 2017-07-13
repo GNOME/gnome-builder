@@ -97,6 +97,7 @@ G_BEGIN_DECLS
 #include "layout/ide-layout-stack-addin.h"
 #include "layout/ide-layout-stack-header.h"
 #include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-transient-sidebar.h"
 #include "layout/ide-layout-view.h"
 #include "layout/ide-layout.h"
 #include "local/ide-local-device.h"
