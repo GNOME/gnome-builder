@@ -231,8 +231,6 @@ fetch_schemas_async (IdeXmlTreeBuilder   *self,
                                 cancellable,
                                 fetch_schemas_cb,
                                 state);
-
-      printf ("fetching schema URL:%s\n", g_file_get_uri (entry->file));
     }
 
   if (!has_external_schemas)
@@ -299,6 +297,8 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
           gsize schema_size;
           g_autoptr (IdeDiagnostics) diagnostics = NULL;
           g_autoptr (IdeDiagnostic) diagnostic = NULL;
+          g_autofree gchar *uri = NULL;
+          g_autofree gchar *msg = NULL;
           gboolean schema_ret;
 
           entry = g_ptr_array_index (schemas, i);
@@ -337,9 +337,6 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
 
           if (!schema_ret)
             {
-              g_autofree gchar *uri = NULL;
-              g_autofree gchar *msg = NULL;
-
               uri = g_file_get_uri (entry->file);
               msg = g_strdup_printf ("Can't parse the schema: '%s'", uri);
               diagnostic = create_diagnostic (context,
@@ -352,10 +349,18 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
               continue;
             }
 
-          if (ide_xml_validator_validate (self->validator, doc, &diagnostics))
-            printf ("validated\n");
-          else
-            printf ("NOT validated\n");
+          if (!ide_xml_validator_validate (self->validator, doc, &diagnostics))
+            {
+              uri = g_file_get_uri (entry->file);
+              msg = g_strdup_printf ("Can't validate the schema: '%s'", uri);
+              diagnostic = create_diagnostic (context,
+                                              msg,
+                                              state->file,
+                                              entry->line,
+                                              entry->col,
+                                              IDE_DIAGNOSTIC_ERROR);
+              ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
+            }
 
           ide_diagnostics_merge (state->analysis->diagnostics, diagnostics);
         }
@@ -365,7 +370,7 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
   else
     {
       /* TODO: set error */
-      printf ("can't create xmlDoc\n");
+      g_debug ("can't create xmlDoc\n");
     }
 
   g_task_return_pointer (task, state->analysis, (GDestroyNotify)ide_xml_analysis_unref);

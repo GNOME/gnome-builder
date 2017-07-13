@@ -1583,7 +1583,6 @@ merge_refs_func (const gchar *name,
     return;
 
   /* TODO: grammar->defines need to be linked by hash  ? */
-  printf ("ref lookup:%s\n", name);
   if (NULL != (def_array = ide_xml_hash_table_lookup (grammar->defines, name)))
     {
       def = g_ptr_array_index (def_array, 0);
@@ -1995,12 +1994,6 @@ ide_xml_rng_parser_parse (IdeXmlRngParser *self,
     /* TODO: transfer other self fields to schema */
 
     /* TODO: code at L7546 */
-
-    xmlDocDumpMemory (doc, &mem, &size);
-    xmlFree (mem);
-
-    if (self->grammars != NULL)
-      ide_xml_rng_grammar_dump_tree (self->grammars);
   }
 
 end:

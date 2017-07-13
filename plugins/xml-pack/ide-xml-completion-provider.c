@@ -890,7 +890,6 @@ populate_cb (GObject      *object,
 
   if (NULL != (candidates = get_matching_candidates (self, schemas, path)))
     {
-
       if (complete_attributes)
         {
           for (gint i = 0; i < candidates->len; ++i)
@@ -919,8 +918,6 @@ populate_cb (GObject      *object,
           for (gint i = 0; i < candidates->len; ++i)
             {
               def = g_ptr_array_index (candidates, i);
-              ide_xml_rng_define_dump_tree (def, FALSE);
-              printf ("----------\n");
 
               initial_state = create_initial_matching_state (position, def, items);
               process_matching_state (initial_state, def);
@@ -969,11 +966,6 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
   state->ifile = g_object_ref (ide_buffer_get_file (buffer));
   state->line = gtk_text_iter_get_line (&iter) + 1;
   state->line_offset = gtk_text_iter_get_line_offset (&iter) + 1;
-
-  printf ("path:%s at (%i,%i)\n",
-          g_file_get_path (ide_file_get_file (state->ifile)),
-          state->line,
-          state->line_offset);
 
   ide_xml_service_get_position_from_cursor_async (service,
                                                   state->ifile,
@@ -1053,7 +1045,7 @@ ide_xml_completion_provider_class_init (IdeXmlCompletionProviderClass *klass)
 static void
 ide_xml_completion_provider_init (IdeXmlCompletionProvider *self)
 {
-  printf ("xml completion provider init\n");
+  ;
 }
 
 static void

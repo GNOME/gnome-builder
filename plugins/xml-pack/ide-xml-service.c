@@ -827,7 +827,7 @@ loop:
           child_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (current_node, n));
           child_pos = n;
           rel_pos = ide_xml_symbol_node_compare_location (child_node, line, line_offset);
-          printf ("node:%s rel pos:%d\n", ide_xml_symbol_node_get_element_name (child_node), rel_pos);
+
           switch (rel_pos)
             {
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_START_TAG:
@@ -930,9 +930,7 @@ result:
     g_assert_not_reached ();
 
   if (child_pos > 0)
-    {
     previous_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos - 1));
-    }
 
   if (child_pos < n_children)
     next_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos));

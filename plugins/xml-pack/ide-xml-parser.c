@@ -119,7 +119,6 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
   g_assert (IDE_IS_XML_PARSER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-
   ide_xml_sax_get_location (self->sax_parser,
                             &start_line, &start_line_offset,
                             &end_line, &end_line_offset,
@@ -450,8 +449,6 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
 
   g_assert (IDE_IS_XML_PARSER (self));
 
-  printf ("internal subset:%s external_id:%s system_id:%s\n", name, external_id, system_id);
-
   entry = ide_xml_schema_cache_entry_new ();
   entry->kind = SCHEMA_KIND_DTD;
   ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
@@ -467,8 +464,6 @@ ide_xml_parser_external_subset_sax_cb (ParserState   *state,
   IdeXmlParser *self = (IdeXmlParser *)state->self;
 
   g_assert (IDE_IS_XML_PARSER (self));
-
-  printf ("external subset:%s external_id:%s system_id:%s\n", name, external_id, system_id);
 }
 
 static GFile *
@@ -484,12 +479,10 @@ get_absolute_schema_file (GFile       *file,
   if (scheme == NULL)
     {
       parent = g_file_get_parent (file);
-      printf ("parent:%s\n", g_file_get_uri (parent));
       if (NULL == (abs_file = g_file_resolve_relative_path (parent, schema_url)))
         abs_file = g_file_new_for_path (schema_url);
     }
 
-  printf ("url:%s file url:%s\n", schema_url, (abs_file) ? g_file_get_uri (abs_file) : NULL);
   return abs_file;
 }
 

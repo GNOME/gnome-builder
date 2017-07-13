@@ -300,8 +300,6 @@ process_matching_state (MatchingState   *state,
   else
     type = define->type;
 
-  printf ("ATTR process_matching_state: def:%s\n", ide_xml_rng_define_get_type_name (define));
-
   switch (type)
     {
     case IDE_XML_RNG_DEFINE_ATTRIBUTE:
@@ -379,10 +377,7 @@ create_initial_matching_state (IdeXmlRngDefine  *define,
       if (NULL != (attributes = ide_xml_symbol_node_get_attributes_names (node)))
         {
           for (gint i = 0; attributes [i] != NULL; i++)
-            {
-              printf ("orig ATTR:'%s'\n", attributes [i]);
-              g_ptr_array_add (state->node_attr, (gchar *)attributes [i]);
-            }
+            g_ptr_array_add (state->node_attr, (gchar *)attributes [i]);
         }
     }
 
@@ -469,9 +464,7 @@ set_position (MatchingState *state)
       index = -1;
     }
   else
-    {
-      propagate_mandatory (state);
-    }
+    propagate_mandatory (state);
 
   state->define->pos = index;
 }

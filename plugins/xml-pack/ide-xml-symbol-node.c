@@ -644,8 +644,6 @@ ide_xml_symbol_node_compare_location (IdeXmlSymbolNode *ref_node,
 {
   gint pos;
 
-  print_node_ranges (ref_node);
-
   pos = is_in_range(ref_node->start_tag, line, line_offset);
   if (pos == -1)
     return IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_BEFORE;
