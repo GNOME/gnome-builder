@@ -38,7 +38,6 @@ struct _IdeEditorPerspective
 
   /* Template widgets */
   IdeLayoutGrid       *grid;
-  IdeEditorSidebar    *sidebar;
   IdeEditorProperties *properties;
 
   /* State before entering focus mode */
@@ -94,19 +93,38 @@ ide_editor_perspective_add (GtkContainer *container,
     GTK_CONTAINER_CLASS (ide_editor_perspective_parent_class)->add (container, widget);
 }
 
+static GtkWidget *
+ide_editor_perspective_create_edge (DzlDockBin      *dock_bin,
+                                    GtkPositionType  edge)
+{
+  g_assert (DZL_IS_DOCK_BIN (dock_bin));
+  g_assert (edge >= GTK_POS_LEFT);
+  g_assert (edge <= GTK_POS_BOTTOM);
+
+  if (edge == GTK_POS_LEFT)
+    return g_object_new (IDE_TYPE_EDITOR_SIDEBAR,
+                         "edge", edge,
+                         "reveal-child", FALSE,
+                         "visible", TRUE,
+                         NULL);
+
+  return DZL_DOCK_BIN_CLASS (ide_editor_perspective_parent_class)->create_edge (dock_bin, edge);
+}
+
 static void
 ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  DzlDockBinClass *dock_bin_class = DZL_DOCK_BIN_CLASS (klass);
 
   container_class->add = ide_editor_perspective_add;
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/ide-editor-perspective.ui");
+  dock_bin_class->create_edge = ide_editor_perspective_create_edge;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, properties);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, sidebar);
 
   g_type_ensure (IDE_TYPE_EDITOR_PROPERTIES);
   g_type_ensure (IDE_TYPE_EDITOR_SIDEBAR);
@@ -116,9 +134,12 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 static void
 ide_editor_perspective_init (IdeEditorPerspective *self)
 {
+  IdeEditorSidebar *sidebar;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  _ide_editor_sidebar_set_open_pages (self->sidebar, G_LIST_MODEL (self->grid));
+  sidebar = ide_editor_perspective_get_sidebar (self);
+  _ide_editor_sidebar_set_open_pages (sidebar, G_LIST_MODEL (self->grid));
 
   _ide_editor_perspective_init_actions (self);
   _ide_editor_perspective_init_shortcuts (self);
@@ -410,7 +431,7 @@ ide_editor_perspective_get_sidebar (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
-  return self->sidebar;
+  return IDE_EDITOR_SIDEBAR (dzl_dock_bin_get_left_edge (DZL_DOCK_BIN (self)));
 }
 
 /**

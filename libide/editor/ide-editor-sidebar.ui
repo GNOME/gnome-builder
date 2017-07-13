@@ -1,72 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeEditorSidebar" parent="GtkBox">
-    <property name="orientation">vertical</property>
+  <template class="IdeEditorSidebar" parent="IdeLayoutPane">
     <child>
-      <object class="GtkStackSwitcher" id="stack_switcher">
-        <property name="halign">fill</property>
-        <property name="hexpand">true</property>
-        <property name="stack">stack</property>
-        <property name="visible">true</property>
-      </object>
-    </child>
-    <child>
-      <object class="DzlMultiPaned">
+      <object class="GtkBox" id="box">
+        <property name="vexpand">true</property>
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkBox" id="open_pages_section">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Open Pages</property>
-                <property name="xalign">0.0</property>
-                <property name="visible">true</property>
-                <style>
-                  <class name="dim-label"/>
-                  <class name="title"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="DzlElasticBin">
-                <property name="visible">true</property>
-                <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="propagate-natural-height">true</property>
-                    <property name="min-content-height">30</property>
-                    <property name="visible">true</property>
-                    <child>
-                      <object class="GtkListBox" id="open_pages_list_box">
-                        <property name="selection-mode">none</property>
-                        <property name="visible">true</property>
-                        <style>
-                          <class name="open-pages"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
+          <object class="GtkStackSwitcher" id="stack_switcher">
+            <property name="halign">fill</property>
+            <property name="hexpand">true</property>
+            <property name="stack">stack</property>
+            <property name="visible">true</property>
           </object>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="vexpand">true</property>
+          <object class="DzlMultiPaned">
             <property name="orientation">vertical</property>
             <property name="visible">true</property>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">horizontal</property>
-                <property name="spacing">6</property>
-                <property name="visible">true</property>
+              <object class="GtkBox" id="open_pages_section">
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="section_title">
-                    <property name="hexpand">true</property>
-                    <property name="visible">true</property>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Open Pages</property>
                     <property name="xalign">0.0</property>
+                    <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
                       <class name="title"/>
@@ -74,14 +33,23 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkMenuButton" id="section_menu_button">
-                    <style>
-                      <class name="image-button"/>
-                      <class name="flat"/>
-                    </style>
+                  <object class="DzlElasticBin">
+                    <property name="visible">true</property>
                     <child>
-                      <object class="GtkImage" id="section_image">
+                      <object class="GtkScrolledWindow">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="propagate-natural-height">true</property>
+                        <property name="min-content-height">30</property>
                         <property name="visible">true</property>
+                        <child>
+                          <object class="GtkListBox" id="open_pages_list_box">
+                            <property name="selection-mode">none</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="open-pages"/>
+                            </style>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -89,11 +57,49 @@
               </object>
             </child>
             <child>
-              <object class="GtkStack" id="stack">
-                <property name="interpolate-size">false</property>
-                <property name="homogeneous">false</property>
+              <object class="GtkBox">
                 <property name="vexpand">true</property>
+                <property name="orientation">vertical</property>
                 <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">6</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel" id="section_title">
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">0.0</property>
+                        <style>
+                          <class name="dim-label"/>
+                          <class name="title"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="section_menu_button">
+                        <style>
+                          <class name="image-button"/>
+                          <class name="flat"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage" id="section_image">
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStack" id="stack">
+                    <property name="interpolate-size">false</property>
+                    <property name="homogeneous">false</property>
+                    <property name="vexpand">true</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

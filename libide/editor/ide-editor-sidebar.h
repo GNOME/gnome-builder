@@ -18,13 +18,13 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include "layout/ide-layout-pane.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_SIDEBAR (ide_editor_sidebar_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, GtkBox)
+G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, IdeLayoutPane)
 
 GtkWidget   *ide_editor_sidebar_new            (void);
 const gchar *ide_editor_sidebar_get_section_id (IdeEditorSidebar *self);

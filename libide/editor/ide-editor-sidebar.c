@@ -39,9 +39,10 @@
 
 struct _IdeEditorSidebar
 {
-  GtkBox             parent_instance;
+  IdeLayoutPane      parent_instance;
 
   /* Template widgets */
+  GtkBox            *box;
   GtkStackSwitcher  *stack_switcher;
   GtkListBox        *open_pages_list_box;
   GtkBox            *open_pages_section;
@@ -50,7 +51,7 @@ struct _IdeEditorSidebar
   GtkStack          *stack;
 };
 
-G_DEFINE_TYPE (IdeEditorSidebar, ide_editor_sidebar, GTK_TYPE_BOX)
+G_DEFINE_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE_TYPE_LAYOUT_PANE)
 
 static void
 ide_editor_sidebar_update_title (IdeEditorSidebar *self)
@@ -122,6 +123,7 @@ ide_editor_sidebar_class_init (IdeEditorSidebarClass *klass)
   widget_class->destroy = ide_editor_sidebar_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-sidebar.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_section);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, section_menu_button);
@@ -135,8 +137,6 @@ static void
 ide_editor_sidebar_init (IdeEditorSidebar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
 
   g_signal_connect_swapped (self->open_pages_list_box,
                             "row-activated",

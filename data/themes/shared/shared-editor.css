@@ -1,4 +1,4 @@
-ideeditorsidebar > stackswitcher {
+ideeditorsidebar > dzldockpaned:first-child stackswitcher {
   margin: 6px;
 }
 ideeditorsidebar .handle {
