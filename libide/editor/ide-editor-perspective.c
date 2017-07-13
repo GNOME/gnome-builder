@@ -28,6 +28,7 @@
 #include "editor/ide-editor-properties.h"
 #include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-view.h"
+#include "layout/ide-layout-transient-sidebar.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench.h"
 #include "util/ide-gtk.h"
@@ -103,6 +104,13 @@ ide_editor_perspective_create_edge (DzlDockBin      *dock_bin,
 
   if (edge == GTK_POS_LEFT)
     return g_object_new (IDE_TYPE_EDITOR_SIDEBAR,
+                         "edge", edge,
+                         "reveal-child", FALSE,
+                         "visible", TRUE,
+                         NULL);
+
+  if (edge == GTK_POS_RIGHT)
+    return g_object_new (IDE_TYPE_LAYOUT_TRANSIENT_SIDEBAR,
                          "edge", edge,
                          "reveal-child", FALSE,
                          "visible", TRUE,
