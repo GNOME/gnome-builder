@@ -194,7 +194,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
 
   g_assert (IDE_IS_XML_SYMBOL_NODE (node) || node == NULL);
 
-  if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_CHAR)
+  if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_CHAR && IDE_IS_XML_SYMBOL_NODE (node))
     {
       ide_xml_symbol_node_set_value (state->current_node, element_name);
       return;

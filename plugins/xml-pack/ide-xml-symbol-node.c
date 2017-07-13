@@ -155,8 +155,6 @@ ide_xml_symbol_node_new (const gchar            *name,
   IdeXmlSymbolNode *self;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
 
-  g_return_val_if_fail (!ide_str_empty0 (name), NULL);
-
   self = g_object_new (IDE_TYPE_XML_SYMBOL_NODE,
                        "name", name,
                        "kind", kind,
