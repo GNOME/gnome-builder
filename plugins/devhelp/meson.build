@@ -22,8 +22,6 @@ devhelp_sources = [
   'gbp-devhelp-search-private.h',
   'gbp-devhelp-view.c',
   'gbp-devhelp-view.h',
-  'gbp-devhelp-workbench-addin.c',
-  'gbp-devhelp-workbench-addin.h',
   devhelp_resources[0],
 ]
 
