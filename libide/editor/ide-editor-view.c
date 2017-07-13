@@ -1053,7 +1053,10 @@ ide_editor_view_move_next_search_result_cb (GObject      *object,
     return;
 
   if (gtk_source_search_context_forward_finish2 (context, result, &begin, &end, &has_wrapped, &error))
-    gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+    {
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+      ide_source_view_scroll_to_insert (self->source_view);
+    }
 }
 
 /**
@@ -1108,7 +1111,10 @@ ide_editor_view_move_previous_search_result_cb (GObject      *object,
     return;
 
   if (gtk_source_search_context_backward_finish2 (context, result, &begin, &end, &has_wrapped, &error))
-    gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+    {
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+      ide_source_view_scroll_to_insert (self->source_view);
+    }
 }
 
 /**
