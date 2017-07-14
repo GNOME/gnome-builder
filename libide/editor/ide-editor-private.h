@@ -18,14 +18,34 @@
 
 #pragma once
 
+#include <libpeas/peas.h>
+
 #include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-properties.h"
 #include "editor/ide-editor-search-bar.h"
 #include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-view-addin.h"
 #include "editor/ide-editor-view.h"
+#include "layout/ide-layout-grid.h"
+#include "layout/ide-layout-view.h"
 #include "plugins/ide-extension-set-adapter.h"
 
 G_BEGIN_DECLS
+
+struct _IdeEditorPerspective
+{
+  IdeLayout            parent_instance;
+
+  PeasExtensionSet    *addins;
+
+  /* Template widgets */
+  IdeLayoutGrid       *grid;
+  IdeEditorProperties *properties;
+
+  /* State before entering focus mode */
+  guint                prefocus_had_left : 1;
+  guint                prefocus_had_bottom : 1;
+};
 
 struct _IdeEditorView
 {

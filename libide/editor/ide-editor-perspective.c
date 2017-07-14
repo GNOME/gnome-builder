@@ -33,19 +33,6 @@
 #include "workbench/ide-workbench.h"
 #include "util/ide-gtk.h"
 
-struct _IdeEditorPerspective
-{
-  IdeLayout            parent_instance;
-
-  /* Template widgets */
-  IdeLayoutGrid       *grid;
-  IdeEditorProperties *properties;
-
-  /* State before entering focus mode */
-  guint                prefocus_had_left : 1;
-  guint                prefocus_had_bottom : 1;
-};
-
 typedef struct
 {
   IdeEditorPerspective *self;

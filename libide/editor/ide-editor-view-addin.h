@@ -38,11 +38,13 @@ struct _IdeEditorViewAddinInterface
                               const gchar        *language_id);
 };
 
-void ide_editor_view_addin_load             (IdeEditorViewAddin *self,
-                                             IdeEditorView      *view);
-void ide_editor_view_addin_unload           (IdeEditorViewAddin *self,
-                                             IdeEditorView      *view);
-void ide_editor_view_addin_language_changed (IdeEditorViewAddin *self,
-                                             const gchar        *language_id);
+void                ide_editor_view_addin_load                (IdeEditorViewAddin *self,
+                                                               IdeEditorView      *view);
+void                ide_editor_view_addin_unload              (IdeEditorViewAddin *self,
+                                                               IdeEditorView      *view);
+void                ide_editor_view_addin_language_changed    (IdeEditorViewAddin *self,
+                                                               const gchar        *language_id);
+IdeEditorViewAddin *ide_editor_view_addin_find_by_module_name (IdeEditorView      *view,
+                                                               const gchar        *module_name);
 
 G_END_DECLS
