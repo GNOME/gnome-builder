@@ -84,6 +84,7 @@ ide_editor_view_addin_find_by_module_name (IdeEditorView *view,
   PeasPluginInfo *plugin_info;
 
   g_return_val_if_fail (IDE_IS_EDITOR_VIEW (view), NULL);
+  g_return_val_if_fail (view->addins != NULL, NULL);
   g_return_val_if_fail (module_name != NULL, NULL);
 
   plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), module_name);
