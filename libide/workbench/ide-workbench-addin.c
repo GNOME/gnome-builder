@@ -18,7 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-workbench-addin"
 
-#include "ide-workbench-addin.h"
+#include "workbench/ide-workbench-addin.h"
+#include "workbench/ide-workbench-private.h"
 
 G_DEFINE_INTERFACE (IdeWorkbenchAddin, ide_workbench_addin, G_TYPE_OBJECT)
 
