@@ -56,6 +56,9 @@ struct _IdeWorkbenchAddinInterface
                                 IdePerspective         *perspective);
 };
 
+IdeWorkbenchAddin *ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
+                                                            const gchar  *addin_name);
+
 gchar    *ide_workbench_addin_get_id          (IdeWorkbenchAddin      *self);
 void      ide_workbench_addin_load            (IdeWorkbenchAddin      *self,
                                                IdeWorkbench           *workbench);

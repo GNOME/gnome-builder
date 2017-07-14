@@ -216,3 +216,32 @@ ide_workbench_addin_perspective_set (IdeWorkbenchAddin *self,
 
   IDE_WORKBENCH_ADDIN_GET_IFACE (self)->perspective_set (self, perspective);
 }
+
+/**
+ * ide_workbench_addin_find_by_module_name:
+ * @workbench: a #IdeWorkbench
+ * @addin_name: the name of the addin
+ *
+ * This locates a loaded #IdeWorkbenchAddin based on the module name.
+ * If the module is missing or has not been loaded, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeWorkbenchAddin or %NULL
+ *
+ * Since: 3.26
+ */
+IdeWorkbenchAddin *
+ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
+                                         const gchar  *module_name)
+{
+  PeasPluginInfo *plugin_info;
+  PeasExtension *exten = NULL;
+
+  g_return_val_if_fail (IDE_IS_WORKBENCH (workbench), NULL);
+  g_return_val_if_fail (module_name != NULL, NULL);
+
+  plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), module_name);
+  if (plugin_info != NULL)
+    exten = peas_extension_set_get_extension (workbench->addins, plugin_info);
+
+  return exten ? IDE_WORKBENCH_ADDIN (exten) : NULL;
+}
