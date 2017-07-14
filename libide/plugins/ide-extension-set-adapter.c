@@ -550,3 +550,46 @@ ide_extension_set_adapter_new (IdeContext  *context,
                        "value", value,
                        NULL);
 }
+
+static void
+locate_extension_by_plugin_info (IdeExtensionSetAdapter *self,
+                                 PeasPluginInfo         *plugin_info,
+                                 PeasExtension          *exten,
+                                 gpointer                user_data)
+{
+  struct {
+    PeasPluginInfo *plugin_info;
+    PeasExtension  *exten;
+  } *lookup = user_data;
+
+  if (lookup->plugin_info == plugin_info)
+    lookup->exten = exten;
+}
+
+/**
+ * ide_extension_set_adapter_get_extension:
+ * @self: a #IdeExtensionSetAdapter
+ * @plugin_info: a #PeasPluginInfo
+ *
+ * Locates the extension owned by @plugin_info if such extension exists.
+ *
+ * Returns: (transfer none) (nullable): A #PeasExtension or %NULL
+ */
+PeasExtension *
+ide_extension_set_adapter_get_extension (IdeExtensionSetAdapter *self,
+                                         PeasPluginInfo         *plugin_info)
+{
+  struct {
+    PeasPluginInfo *plugin_info;
+    PeasExtension  *exten;
+  } lookup = { 0 };
+
+  g_return_val_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self), NULL);
+  g_return_val_if_fail (plugin_info != NULL, NULL);
+
+  ide_extension_set_adapter_foreach (self,
+                                     locate_extension_by_plugin_info,
+                                     &lookup);
+
+  return lookup.exten;
+}

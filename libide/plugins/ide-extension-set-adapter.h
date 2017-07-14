@@ -51,6 +51,8 @@ guint                   ide_extension_set_adapter_get_n_extensions   (IdeExtensi
 void                    ide_extension_set_adapter_foreach            (IdeExtensionSetAdapter            *self,
                                                                       IdeExtensionSetAdapterForeachFunc  foreach_func,
                                                                       gpointer                           user_data);
+PeasExtension          *ide_extension_set_adapter_get_extension      (IdeExtensionSetAdapter            *self,
+                                                                      PeasPluginInfo                    *plugin_info);
 
 G_END_DECLS
 
