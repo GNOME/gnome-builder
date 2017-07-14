@@ -23,6 +23,7 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
 #include "diagnostics/ide-source-location.h"
+#include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-private.h"
 #include "editor/ide-editor-properties.h"
@@ -48,6 +49,107 @@ G_DEFINE_TYPE_WITH_CODE (IdeEditorPerspective, ide_editor_perspective, IDE_TYPE_
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, perspective_iface_init))
 
 static void
+ide_editor_perspective_addin_added (PeasExtensionSet *set,
+                                    PeasPluginInfo   *plugin_info,
+                                    PeasExtension    *exten,
+                                    gpointer          user_data)
+{
+  IdeEditorPerspective *self = user_data;
+  IdeEditorAddin *addin = (IdeEditorAddin *)exten;
+  IdeLayoutView *view;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (IDE_IS_EDITOR_ADDIN (addin));
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+
+  ide_editor_addin_load (addin, self);
+
+  view = ide_layout_grid_get_current_view (self->grid);
+  if (view != NULL)
+    ide_editor_addin_view_set (addin, view);
+}
+
+static void
+ide_editor_perspective_addin_removed (PeasExtensionSet *set,
+                                      PeasPluginInfo   *plugin_info,
+                                      PeasExtension    *exten,
+                                      gpointer          user_data)
+{
+  IdeEditorPerspective *self = user_data;
+  IdeEditorAddin *addin = (IdeEditorAddin *)exten;
+  IdeLayoutView *view;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (IDE_IS_EDITOR_ADDIN (addin));
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+
+  view = ide_layout_grid_get_current_view (self->grid);
+  if (view != NULL)
+    ide_editor_addin_view_set (addin, NULL);
+
+  ide_editor_addin_unload (addin, self);
+}
+
+static void
+ide_editor_perspective_hierarchy_changed (GtkWidget *widget,
+                                          GtkWidget *old_toplevel)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)widget;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (!old_toplevel || GTK_IS_WIDGET (old_toplevel));
+
+  if (self->addins == NULL)
+    {
+      GtkWidget *toplevel;
+
+      /*
+       * If we just got a new toplevel and it is a workbench,
+       * and we have not yet created our addins, do so now.
+       */
+
+      toplevel = gtk_widget_get_ancestor (widget, IDE_TYPE_WORKBENCH);
+
+      if (toplevel != NULL)
+        {
+          self->addins = peas_extension_set_new (peas_engine_get_default (),
+                                                 IDE_TYPE_EDITOR_ADDIN,
+                                                 NULL);
+          g_signal_connect (self->addins,
+                            "extension-added",
+                            G_CALLBACK (ide_editor_perspective_addin_added),
+                            self);
+          g_signal_connect (self->addins,
+                            "extension-removed",
+                            G_CALLBACK (ide_editor_perspective_addin_removed),
+                            self);
+          peas_extension_set_foreach (self->addins,
+                                      ide_editor_perspective_addin_added,
+                                      self);
+        }
+    }
+}
+
+static void
+ide_editor_perspective_addins_view_set (PeasExtensionSet *set,
+                                        PeasPluginInfo   *plugin_info,
+                                        PeasExtension    *exten,
+                                        gpointer          user_data)
+{
+  IdeEditorAddin *addin = (IdeEditorAddin *)exten;
+  IdeLayoutView *view = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_EDITOR_ADDIN (addin));
+  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+
+  ide_editor_addin_view_set (addin, view);
+}
+
+static void
 ide_editor_perspective_notify_current_view (IdeEditorPerspective *self,
                                             GParamSpec           *pspec,
                                             IdeLayoutGrid        *grid)
@@ -64,6 +166,10 @@ ide_editor_perspective_notify_current_view (IdeEditorPerspective *self,
     ide_editor_properties_set_view (self->properties, IDE_EDITOR_VIEW (view));
   else
     ide_editor_properties_set_view (self->properties, NULL);
+
+  peas_extension_set_foreach (self->addins,
+                              ide_editor_perspective_addins_view_set,
+                              view);
 }
 
 static void
@@ -107,11 +213,26 @@ ide_editor_perspective_create_edge (DzlDockBin      *dock_bin,
 }
 
 static void
+ide_editor_perspective_destroy (GtkWidget *widget)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)widget;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  g_clear_object (&self->addins);
+
+  GTK_WIDGET_CLASS (ide_editor_perspective_parent_class)->destroy (widget);
+}
+
+static void
 ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   DzlDockBinClass *dock_bin_class = DZL_DOCK_BIN_CLASS (klass);
+
+  widget_class->destroy = ide_editor_perspective_destroy;
+  widget_class->hierarchy_changed = ide_editor_perspective_hierarchy_changed;
 
   container_class->add = ide_editor_perspective_add;
 

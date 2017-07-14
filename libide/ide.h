@@ -72,6 +72,7 @@ G_BEGIN_DECLS
 #include "diagnostics/ide-source-range.h"
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
+#include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-view-addin.h"
