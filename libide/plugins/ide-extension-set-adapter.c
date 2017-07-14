@@ -562,6 +562,12 @@ locate_extension_by_plugin_info (IdeExtensionSetAdapter *self,
     PeasExtension  *exten;
   } *lookup = user_data;
 
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (exten != NULL);
+  g_assert (lookup != NULL);
+  g_assert (lookup->plugin_info != NULL);
+
   if (lookup->plugin_info == plugin_info)
     lookup->exten = exten;
 }
@@ -582,7 +588,7 @@ ide_extension_set_adapter_get_extension (IdeExtensionSetAdapter *self,
   struct {
     PeasPluginInfo *plugin_info;
     PeasExtension  *exten;
-  } lookup = { 0 };
+  } lookup = { plugin_info, NULL };
 
   g_return_val_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self), NULL);
   g_return_val_if_fail (plugin_info != NULL, NULL);
