@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid"
 
+#include "ide-object.h"
+
 #include "layout/ide-layout-grid.h"
 #include "layout/ide-layout-private.h"
 
@@ -178,7 +180,7 @@ ide_layout_grid_after_set_focus (IdeLayoutGrid *self,
       if (view != (GtkWidget *)priv->_last_focused_view)
         {
           priv->_last_focused_view = (IdeLayoutView *)view;
-          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_VIEW]);
+          ide_object_notify_in_main (self, properties [PROP_CURRENT_VIEW]);
         }
     }
 }
