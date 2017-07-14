@@ -19,7 +19,6 @@
 #define G_LOG_DOMAIN "ide-buffer"
 
 #include <dazzle.h>
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gspell/gspell.h>
 
