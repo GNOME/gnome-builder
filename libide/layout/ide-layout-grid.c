@@ -630,13 +630,13 @@ IdeLayoutGridColumn *
 ide_layout_grid_get_current_column (IdeLayoutGrid *self)
 {
   IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
-  GtkWidget *ret;
+  GtkWidget *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_LAYOUT_GRID (self), NULL);
 
   if (priv->focus_column.head != NULL)
     ret = priv->focus_column.head->data;
-  else
+  else if (dzl_multi_paned_get_n_children (DZL_MULTI_PANED (self)) > 0)
     ret = dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), 0);
 
   if (ret == NULL)
