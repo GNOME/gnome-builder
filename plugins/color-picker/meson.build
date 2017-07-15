@@ -21,9 +21,6 @@ color_picker_sources = [
   'gb-color-picker-prefs-palette-row.c',
   'gb-color-picker-prefs-palette-row.h',
   'gb-color-picker-private.h',
-  'gb-color-picker-workbench-addin.c',
-  'gb-color-picker-workbench-addin.h',
-  'gb-color-picker-workbench-addin-private.h',
   color_picker_resources[0],
 ]
 
