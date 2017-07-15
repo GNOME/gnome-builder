@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <dazzle.h>
 
 #include "editor/ide-editor-view.h"
 
@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PROPERTIES (ide_editor_properties_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorProperties, ide_editor_properties, IDE, EDITOR_PROPERTIES, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeEditorProperties, ide_editor_properties, IDE, EDITOR_PROPERTIES, DzlDockWidget)
 
 GtkWidget *ide_editor_properties_new      (void);
 void       ide_editor_properties_set_view (IdeEditorProperties *self,

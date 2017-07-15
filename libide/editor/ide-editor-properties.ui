@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeEditorProperties" parent="GtkBin">
+  <template class="IdeEditorProperties" parent="DzlDockWidget">
+    <property name="title" translatable="yes">Properties</property>
+    <property name="icon-name">document-properties-symbolic</property>
+    <property name="vexpand">true</property>
     <child>
       <object class="GtkBox">
         <property name="visible">true</property>

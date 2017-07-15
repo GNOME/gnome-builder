@@ -39,7 +39,7 @@
 
 struct _IdeEditorProperties
 {
-  GtkBin               parent_instance;
+  DzlDockWidget        parent_instance;
 
   DzlSignalGroup      *buffer_signals;
 
@@ -67,7 +67,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeEditorProperties, ide_editor_properties, GTK_TYPE_BIN)
+G_DEFINE_TYPE (IdeEditorProperties, ide_editor_properties, DZL_TYPE_DOCK_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
