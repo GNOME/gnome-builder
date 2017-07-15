@@ -30,19 +30,19 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbColorPickerDocumentMonitor, gb_color_picker_document_monitor, GB, COLOR_PICKER_DOCUMENT_MONITOR, GObject)
 
-GbColorPickerDocumentMonitor *gb_color_picker_document_monitor_new                        (IdeBuffer *buffer);
-void                          gb_color_picker_document_monitor_colorize                   (GbColorPickerDocumentMonitor *self,
-                                                                                           GtkTextIter                  *begin,
-                                                                                           GtkTextIter                  *end);
+GbColorPickerDocumentMonitor *gb_color_picker_document_monitor_new                        (IdeBuffer                    *buffer);
 IdeBuffer                    *gb_color_picker_document_monitor_get_buffer                 (GbColorPickerDocumentMonitor *self);
 void                          gb_color_picker_document_monitor_set_buffer                 (GbColorPickerDocumentMonitor *self,
                                                                                            IdeBuffer                    *buffer);
 
 void                          gb_color_picker_document_monitor_set_color_tag_at_cursor    (GbColorPickerDocumentMonitor *self,
                                                                                            GstyleColor                  *color);
-void                          gb_color_picker_document_monitor_uncolorize                 (GbColorPickerDocumentMonitor *self,
-                                                                                           GtkTextIter                  *begin,
-                                                                                           GtkTextIter                  *end);
+void                          gb_color_picker_document_monitor_queue_colorize             (GbColorPickerDocumentMonitor *self,
+                                                                                           const GtkTextIter            *begin,
+                                                                                           const GtkTextIter            *end);
+void                          gb_color_picker_document_monitor_queue_uncolorize           (GbColorPickerDocumentMonitor *self,
+                                                                                           const GtkTextIter            *begin,
+                                                                                           const GtkTextIter            *end);
 
 G_END_DECLS
 
