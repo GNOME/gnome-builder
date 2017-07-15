@@ -186,7 +186,7 @@ gb_color_picker_editor_addin_notify_rgba (GbColorPickerEditorAddin *self,
                                           GstyleColorPanel         *panel)
 {
   g_autoptr(GstyleColor) color = NULL;
-  GbColorPickerEditorViewAddin *view_addin;
+  GbColorPickerEditorViewAddin *view_addin = NULL;
   GdkRGBA rgba;
 
   g_assert (GB_IS_COLOR_PICKER_EDITOR_ADDIN (self));
@@ -196,7 +196,8 @@ gb_color_picker_editor_addin_notify_rgba (GbColorPickerEditorAddin *self,
   gstyle_color_panel_get_rgba (self->panel, &rgba);
   color = gstyle_color_new_from_rgba (NULL, GSTYLE_COLOR_KIND_RGB_HEX6, &rgba);
 
-  view_addin = dzl_signal_group_get_target (self->view_addin_signals);
+  if (self->view_addin_signals != NULL)
+    view_addin = dzl_signal_group_get_target (self->view_addin_signals);
 
   if (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (view_addin))
     gb_color_picker_editor_view_addin_set_color (view_addin, color);
