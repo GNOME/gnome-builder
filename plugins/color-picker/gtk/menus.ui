@@ -4,8 +4,9 @@
     <section id="ide-source-view-popup-menu-highlighting-section">
       <submenu id="ide-source-view-popup-menu-highlighting-submenu">
         <item>
-          <attribute name="label" translatable="yes">Enable color picker</attribute>
-          <attribute name="action">view.activate-color-picker</attribute>
+          <attribute name="label" translatable="yes">Highlight colors</attribute>
+          <attribute name="action">color-picker.enabled</attribute>
+          <attribute name="role">check</attribute>
         </item>
       </submenu>
     </section>

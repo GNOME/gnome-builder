@@ -20,12 +20,11 @@
 
 #include <ide.h>
 
+#include "gb-color-picker-editor-addin.h"
 #include "gb-color-picker-prefs.h"
 #include "gb-color-picker-prefs-list.h"
 #include "gb-color-picker-prefs-palette-list.h"
 #include "gb-color-picker-prefs-palette-row.h"
-#include "gb-color-picker-workbench-addin.h"
-#include "gb-color-picker-workbench-addin-private.h"
 
 struct _GbColorPickerPrefs
 {
@@ -37,7 +36,6 @@ struct _GbColorPickerPrefs
   GtkWidget                      *palettes_list_page;
 
   GstyleColorPanel               *panel;
-  GbColorPickerWorkbenchAddin    *addin;
   GstylePaletteWidget            *palette_widget;
   GListStore                     *palettes_store;
   GbColorPickerPrefsPaletteList  *palettes_box;
@@ -62,10 +60,8 @@ struct _GbColorPickerPrefs
 
 G_DEFINE_TYPE (GbColorPickerPrefs, gb_color_picker_prefs, G_TYPE_OBJECT)
 
-enum
-{
+enum {
   PROP_0,
-  PROP_ADDIN,
   PROP_PANEL,
   N_PROPS
 };
@@ -362,22 +358,19 @@ static void
 generate_palette_button_clicked_cb (GbColorPickerPrefs *self,
                                     GtkButton          *button)
 {
-  IdeEditorView *view;
-  GtkTextBuffer *buffer;
-  GstylePalette *palette;
+  g_autoptr(GstylePalette) palette = NULL;
+  IdeEditorAddin *addin;
+  GtkWidget *editor;
 
   g_assert (GB_IS_COLOR_PICKER_PREFS (self));
   g_assert (GTK_IS_BUTTON (button));
 
-  view = IDE_EDITOR_VIEW (self->addin->active_view);
-  buffer = GTK_TEXT_BUFFER (ide_editor_view_get_buffer (view));
+  editor = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_EDITOR_PERSPECTIVE);
+  addin = ide_editor_addin_find_by_module_name (IDE_EDITOR_PERSPECTIVE (editor), "color-picker-plugin");
+  palette = gb_color_picker_editor_addin_create_palette (GB_COLOR_PICKER_EDITOR_ADDIN (addin));
 
-  palette = gstyle_palette_new_from_buffer (buffer, NULL, NULL, NULL, NULL);
   if (palette != NULL)
-    {
-      gstyle_palette_widget_add (self->palette_widget, palette);
-      g_object_unref (palette);
-    }
+    gstyle_palette_widget_add (self->palette_widget, palette);
 }
 
 static void
@@ -605,10 +598,6 @@ gb_color_picker_prefs_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ADDIN:
-      g_value_set_object (value, self->addin);
-      break;
-
     case PROP_PANEL:
       g_value_set_object (value, gb_color_picker_prefs_get_panel (self));
       break;
@@ -628,10 +617,6 @@ gb_color_picker_prefs_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ADDIN:
-      self->addin = g_value_get_object (value);
-      break;
-
     case PROP_PANEL:
       gb_color_picker_prefs_set_panel (self, g_value_get_object (value));
       break;
@@ -680,13 +665,6 @@ gb_color_picker_prefs_class_init (GbColorPickerPrefsClass *klass)
                          "Color panel",
                          GSTYLE_TYPE_COLOR_PANEL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_ADDIN] =
-    g_param_spec_object ("addin",
-                         "addin",
-                         "Colorpicker worbench addin",
-                         GB_TYPE_COLOR_PICKER_WORKBENCH_ADDIN,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

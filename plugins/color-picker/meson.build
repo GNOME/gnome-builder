@@ -7,6 +7,10 @@ color_picker_resources = gnome.compile_resources(
 )
 
 color_picker_sources = [
+  'gb-color-picker-editor-addin.c',
+  'gb-color-picker-editor-addin.h',
+  'gb-color-picker-editor-view-addin.c',
+  'gb-color-picker-editor-view-addin.h',
   'gb-color-picker-helper.c',
   'gb-color-picker-helper.h',
   'gb-color-picker-plugin.c',

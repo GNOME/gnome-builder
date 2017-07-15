@@ -19,12 +19,16 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
-#include "gb-color-picker-workbench-addin.h"
+#include "gb-color-picker-editor-addin.h"
+#include "gb-color-picker-editor-view-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GB_TYPE_COLOR_PICKER_WORKBENCH_ADDIN);
+                                              IDE_TYPE_EDITOR_ADDIN,
+                                              GB_TYPE_COLOR_PICKER_EDITOR_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
+                                              GB_TYPE_COLOR_PICKER_EDITOR_VIEW_ADDIN);
 }
