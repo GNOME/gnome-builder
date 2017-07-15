@@ -542,13 +542,13 @@ gb_color_picker_prefs_set_panel (GbColorPickerPrefs *self,
           gb_color_picker_prefs_unbind_settings (self);
           gstyle_color_panel_set_prefs_pages (self->panel, NULL, NULL, NULL, NULL);
           gtk_list_box_bind_model (GTK_LIST_BOX (self->palettes_listbox), NULL, NULL, NULL, NULL);
-          self->panel = NULL;
+          ide_clear_weak_pointer (&self->panel);
           self->palette_widget = NULL;
         }
 
-      self->panel = panel;
       if (panel != NULL && GSTYLE_IS_COLOR_PANEL (panel))
         {
+          ide_set_weak_pointer (&self->panel, panel);
           self->palette_widget = gstyle_color_panel_get_palette_widget (self->panel);
           self->palettes_store = gstyle_palette_widget_get_store (self->palette_widget);
           gtk_list_box_bind_model (GTK_LIST_BOX (self->palettes_listbox),
@@ -631,7 +631,7 @@ gb_color_picker_prefs_finalize (GObject *object)
 {
   GbColorPickerPrefs *self = (GbColorPickerPrefs *)object;
 
-  gb_color_picker_prefs_set_panel (self, NULL);
+  ide_clear_weak_pointer (&self->panel);
 
   g_clear_object (&self->components_page);
   g_clear_object (&self->color_strings_page);
