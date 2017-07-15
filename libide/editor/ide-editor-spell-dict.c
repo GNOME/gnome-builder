@@ -35,10 +35,7 @@ struct _IdeEditorSpellDict
   GObject               parent_instance;
 
   GspellChecker        *checker;
-  EnchantBroker        *broker;
-  EnchantDict          *dict;
   const GspellLanguage *language;
-
   GHashTable           *words;
 
   InitStatus            init_status;
@@ -170,7 +167,7 @@ ide_editor_spell_dict_personal_contains (IdeEditorSpellDict *self,
   if (ide_str_empty0 (word))
     return FALSE;
 
-  if (self->dict != NULL)
+  if (self->checker != NULL && self->language != NULL)
     {
       if (self->words == NULL)
         return FALSE;
@@ -188,15 +185,18 @@ gboolean
 ide_editor_spell_dict_add_word_to_personal (IdeEditorSpellDict *self,
                                             const gchar        *word)
 {
+  EnchantDict *dict;
+
   g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
   g_assert (!ide_str_empty0 (word));
 
- if (self->dict != NULL)
+ if (self->checker != NULL && self->language != NULL)
     {
       if (ide_editor_spell_dict_personal_contains (self, word))
         return FALSE;
 
-      enchant_dict_add (self->dict, word, -1);
+      dict = gspell_checker_get_enchant_dict (self->checker);
+      enchant_dict_add (dict, word, -1);
       g_hash_table_add (self->words, g_strdup (word));
       return TRUE;
     }
@@ -211,15 +211,18 @@ gboolean
 ide_editor_spell_dict_remove_word_from_personal (IdeEditorSpellDict *self,
                                                  const gchar        *word)
 {
+  EnchantDict *dict;
+
   g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
   g_assert (!ide_str_empty0 (word));
 
-  if (self->dict != NULL)
+  if (self->checker != NULL && self->language != NULL)
     {
       if (!ide_editor_spell_dict_personal_contains (self, word) || self->words == NULL)
         return FALSE;
 
-      enchant_dict_remove (self->dict, word, -1);
+      dict = gspell_checker_get_enchant_dict (self->checker);
+      enchant_dict_remove (dict, word, -1);
       g_hash_table_remove (self->words, word);
       return TRUE;
     }
@@ -347,18 +350,12 @@ ide_editor_spell_dict_get_dict_words_cb (GObject      *object,
 }
 
 static void
-ide_editor_spell_dict_set_dict (IdeEditorSpellDict    *self,
-                                const GspellLanguage  *language)
+ide_editor_spell_dict_fetch_words (IdeEditorSpellDict *self)
 {
-  const gchar *lang_code;
-
   g_assert (IDE_IS_EDITOR_SPELL_DICT (self));
 
-  if (language != NULL)
+  if (self->checker != NULL && self->language != NULL)
     {
-      lang_code = gspell_language_get_code (language);
-      self->dict = enchant_broker_request_dict (self->broker, lang_code);
-
       if (self->init_status == INIT_PROCESSING)
         self->update_needed = TRUE;
       else
@@ -370,13 +367,8 @@ ide_editor_spell_dict_set_dict (IdeEditorSpellDict    *self,
                                                  self);
         }
     }
-  else if (self->dict != NULL)
-    {
-      enchant_broker_free_dict (self->broker, self->dict);
-      self->dict = NULL;
-
-      g_clear_pointer (&self->words, g_hash_table_unref);
-    }
+  else
+    g_clear_pointer (&self->words, g_hash_table_unref);
 }
 
 static void
@@ -396,7 +388,7 @@ language_notify_cb (IdeEditorSpellDict  *self,
       0 != gspell_language_compare (language, self->language))
     {
       self->language = language;
-      ide_editor_spell_dict_set_dict (self, language);
+      ide_editor_spell_dict_fetch_words (self);
     }
 }
 
@@ -410,7 +402,7 @@ checker_weak_ref_cb (gpointer data,
 
   self->checker = NULL;
   self->language = NULL;
-  ide_editor_spell_dict_set_dict (self, NULL);
+  g_clear_pointer (&self->words, g_hash_table_unref);
 }
 
 GspellChecker *
@@ -434,12 +426,14 @@ ide_editor_spell_dict_set_checker (IdeEditorSpellDict  *self,
 
       if (checker == NULL)
         {
+          g_clear_pointer (&self->words, g_hash_table_unref);
           checker_weak_ref_cb (self, NULL);
           return;
         }
 
       self->checker = checker;
       g_object_weak_ref (G_OBJECT (self->checker), checker_weak_ref_cb, self);
+
       g_signal_connect_object (self->checker,
                                "notify::language",
                                G_CALLBACK (language_notify_cb),
@@ -463,14 +457,6 @@ static void
 ide_editor_spell_dict_finalize (GObject *object)
 {
   IdeEditorSpellDict *self = (IdeEditorSpellDict *)object;
-
-  if (self->broker != NULL)
-    {
-      if (self->dict != NULL)
-        enchant_broker_free_dict (self->broker, self->dict);
-
-      enchant_broker_free (self->broker);
-    }
 
   if (self->words != NULL)
     {
@@ -560,5 +546,5 @@ ide_editor_spell_dict_class_init (IdeEditorSpellDictClass *klass)
 static void
 ide_editor_spell_dict_init (IdeEditorSpellDict *self)
 {
-  self->broker = enchant_broker_init ();
+  ;
 }
