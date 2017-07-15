@@ -153,6 +153,8 @@ static void
 ide_layout_transient_sidebar_init (IdeLayoutTransientSidebar *self)
 {
   IdeLayoutTransientSidebarPrivate *priv = ide_layout_transient_sidebar_get_instance_private (self);
+  GtkWidget *paned;
+  GtkWidget *stack;
 
   g_weak_ref_init (&priv->view_ref, NULL);
 
@@ -164,6 +166,18 @@ ide_layout_transient_sidebar_init (IdeLayoutTransientSidebar *self)
                                  self, NULL,
                                  G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
+  if (NULL != (paned = gtk_bin_get_child (GTK_BIN (self))) &&
+      DZL_IS_MULTI_PANED (paned) &&
+      NULL != (stack = dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (paned), 0)) &&
+      DZL_IS_DOCK_STACK (stack))
+    {
+      GtkWidget *tab_strip;
+
+      /* We want to hide the tab strip in the stack for the transient bar */
+      tab_strip = dzl_gtk_widget_find_child_typed (stack, DZL_TYPE_TAB_STRIP);
+      if (tab_strip != NULL)
+        gtk_widget_hide (tab_strip);
+    }
 }
 
 /**
