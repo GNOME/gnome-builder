@@ -23,6 +23,7 @@
 
 #include "gb-color-picker-editor-addin.h"
 #include "gb-color-picker-editor-view-addin.h"
+#include "gb-color-picker-prefs.h"
 
 struct _GbColorPickerEditorAddin
 {
@@ -33,6 +34,13 @@ struct _GbColorPickerEditorAddin
    * load/unload vfuncs are called.
    */
   IdeEditorPerspective *editor;
+
+  /*
+   * Out preferences to use in conjunction with the pane. This needs
+   * to be attached to the panel for the proper preferences to be
+   * shown in the sidebar widgetry.
+   */
+  GbColorPickerPrefs *prefs;
 
   /*
    * Our transient panel which we will slide into visibility when
@@ -251,6 +259,10 @@ gb_color_picker_editor_addin_load (IdeEditorAddin       *addin,
                            G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (self->dock), GTK_WIDGET (self->panel));
 
+  self->prefs = g_object_new (GB_TYPE_COLOR_PICKER_PREFS,
+                              "panel", self->panel,
+                              NULL);
+
   self->view_addin_signals = dzl_signal_group_new (GB_TYPE_COLOR_PICKER_EDITOR_VIEW_ADDIN);
 
   dzl_signal_group_connect_swapped (self->view_addin_signals,
@@ -282,6 +294,8 @@ gb_color_picker_editor_addin_unload (IdeEditorAddin       *addin,
 
   if (self->panel != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->panel));
+
+  g_clear_object (&self->prefs);
 
   self->editor = NULL;
 }
