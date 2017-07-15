@@ -187,3 +187,20 @@ ide_layout_transient_sidebar_set_view (IdeLayoutTransientSidebar *self,
 
   g_weak_ref_set (&priv->view_ref, view);
 }
+
+void
+ide_layout_transient_sidebar_set_panel (IdeLayoutTransientSidebar *self,
+                                        GtkWidget                 *panel)
+{
+  GtkWidget *stack;
+
+  g_return_if_fail (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
+  g_return_if_fail (GTK_IS_WIDGET (panel));
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (panel));
+
+  if (GTK_IS_STACK (stack))
+    gtk_stack_set_visible_child (GTK_STACK (stack), panel);
+  else
+    g_warning ("Failed to locate stack containing panel");
+}

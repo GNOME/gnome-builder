@@ -43,7 +43,9 @@ struct _IdeLayoutTransientSidebarClass
   gpointer _reserved8;
 };
 
-void ide_layout_transient_sidebar_set_view (IdeLayoutTransientSidebar *self,
-                                            IdeLayoutView             *view);
+void ide_layout_transient_sidebar_set_panel (IdeLayoutTransientSidebar *self,
+                                             GtkWidget                 *panel);
+void ide_layout_transient_sidebar_set_view  (IdeLayoutTransientSidebar *self,
+                                             IdeLayoutView             *view);
 
 G_END_DECLS
