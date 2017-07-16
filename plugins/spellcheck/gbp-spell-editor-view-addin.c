@@ -105,3 +105,57 @@ static void
 gbp_spell_editor_view_addin_init (GbpSpellEditorViewAddin *self)
 {
 }
+
+/**
+ * gbp_spell_editor_view_addin_begin_checking:
+ * @self: a #GbpSpellEditorViewAddin
+ *
+ * This function should be called by the #GbpSpellWidget to enable
+ * spellchecking on the textview and underlying buffer. Doing so allows the
+ * inline-spellchecking and language-menu to be dynamically enabled even if
+ * spellchecking is typically disabled in the buffer.
+ *
+ * The caller should call gbp_spell_editor_view_addin_end_checking() when they
+ * have completed the spellchecking process.
+ *
+ * Since: 3.26
+ */
+void
+gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self)
+{
+  GObject *buffer_addin;
+
+  g_return_if_fail (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
+
+  buffer_addin = dzl_binding_group_get_source (self->buffer_addin_bindings);
+
+  if (buffer_addin == NULL)
+    {
+      g_warning ("Attempt to start spellchecking after disposal");
+      return;
+    }
+
+  gbp_spell_buffer_addin_begin_checking (GBP_SPELL_BUFFER_ADDIN (buffer_addin));
+}
+
+/**
+ * gbp_spell_editor_view_addin_end_checking:
+ * @self: a #GbpSpellEditorViewAddin
+ *
+ * Completes a spellcheck operation and potentially restores the buffer to
+ * the visual state before spellchecking started.
+ *
+ * Since: 3.26
+ */
+void
+gbp_spell_editor_view_addin_end_checking (GbpSpellEditorViewAddin *self)
+{
+  GObject *buffer_addin;
+
+  g_return_if_fail (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
+
+  buffer_addin = dzl_binding_group_get_source (self->buffer_addin_bindings);
+
+  if (GBP_IS_SPELL_BUFFER_ADDIN (buffer_addin))
+    gbp_spell_buffer_addin_end_checking (GBP_SPELL_BUFFER_ADDIN (buffer_addin));
+}
