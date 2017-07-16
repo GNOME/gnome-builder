@@ -16,6 +16,8 @@ spellcheck_sources = [
   'gbp-spell-editor-addin.h',
   'gbp-spell-editor-view-addin.c',
   'gbp-spell-editor-view-addin.h',
+  'gbp-spell-utils.c',
+  'gbp-spell-utils.h',
   spellcheck_resources[0],
 ]
 
