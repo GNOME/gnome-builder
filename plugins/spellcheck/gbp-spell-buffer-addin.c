@@ -30,6 +30,14 @@ struct _GbpSpellBufferAddin
   /* Owned spellchecker instance */
   GspellChecker *spellchecker;
 
+  /* To allow for dynamic enabling of the inline spellcheck, we keep
+   * track of how many views need it. We will enable the feature in
+   * the buffer if it has manually been enabled (see @enabled) or if
+   * this value is >= 1.
+   */
+  gint count;
+
+  /* Manual enabling of inline checking */
   guint enabled : 1;
 };
 
@@ -38,6 +46,14 @@ enum {
   PROP_ENABLED,
   N_PROPS
 };
+
+static gboolean
+gbp_spell_buffer_addin_get_enabled (GbpSpellBufferAddin *self)
+{
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  return self->enabled || self->count > 0;
+}
 
 static void
 gbp_spell_buffer_addin_apply (GbpSpellBufferAddin *self)
@@ -48,21 +64,28 @@ gbp_spell_buffer_addin_apply (GbpSpellBufferAddin *self)
 
   g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
 
-  if (self->enabled == FALSE || self->buffer == NULL)
+  /* We might be disposed */
+  if (self->buffer == NULL)
+    return;
+
+  spell_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self->buffer));
+
+  if (!gbp_spell_buffer_addin_get_enabled (self))
     {
+      gspell_text_buffer_set_spell_checker (spell_buffer, NULL);
       g_clear_object (&self->spellchecker);
       return;
     }
 
-  /* The returned GspellTextBuffer is owned by self->buffer */
-  spell_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self->buffer));
-  g_assert (GSPELL_IS_TEXT_BUFFER (spell_buffer));
+  if (self->spellchecker == NULL)
+    {
 
-  /* Setup the spell checker for the buffer. We retrain the spellchecker
-   * instance so that we can add words/modify the dictionary at runtime.
-   */
-  self->spellchecker = gspell_checker_new (NULL);
-  gspell_text_buffer_set_spell_checker (spell_buffer, self->spellchecker);
+      /* Setup the spell checker for the buffer. We retrain the spellchecker
+       * instance so that we can add words/modify the dictionary at runtime.
+       */
+      self->spellchecker = gspell_checker_new (NULL);
+      gspell_text_buffer_set_spell_checker (spell_buffer, self->spellchecker);
+    }
 
   IDE_EXIT;
 }
@@ -126,7 +149,7 @@ gbp_spell_buffer_addin_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_ENABLED:
-      g_value_set_boolean (value, self->enabled);
+      g_value_set_boolean (value, gbp_spell_buffer_addin_get_enabled (self));
       break;
 
     default:
@@ -194,4 +217,67 @@ gbp_spell_buffer_addin_get_checker (GbpSpellBufferAddin *self)
   g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
 
   return self->spellchecker;
+}
+
+/**
+ * gbp_spell_buffer_addin_begin_checking:
+ * @self: a #GbpSpellBufferAddin
+ *
+ * Views should call this function when they begin their spellchecking
+ * process. It dynamically enables various features on the buffer that
+ * are necessary for spellchecking.
+ *
+ * When done, the consumer MUST call gbp_spell_buffer_addin_end_checking()
+ * to complete the process. If no more views are active, spellchecking
+ * may be disabled on the buffer.
+ *
+ * Since: 3.26
+ */
+void
+gbp_spell_buffer_addin_begin_checking (GbpSpellBufferAddin *self)
+{
+  gboolean before_state;
+  gboolean after_state;
+
+  g_return_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self));
+  g_return_if_fail (self->count >= 0);
+
+  before_state = gbp_spell_buffer_addin_get_enabled (self);
+  self->count++;
+  after_state = gbp_spell_buffer_addin_get_enabled (self);
+
+  if (before_state != after_state)
+    {
+      gbp_spell_buffer_addin_apply (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLED]);
+    }
+}
+
+/**
+ * gbp_spell_buffer_addin_end_checking:
+ * @self: a #GbpSpellBufferAddin
+ *
+ * Completes a spellcheck operation. The buffer will return to it's original
+ * state. Thay may mean inline checking is disabled.
+ *
+ * Returns:
+ */
+void
+gbp_spell_buffer_addin_end_checking (GbpSpellBufferAddin *self)
+{
+  gboolean before_state;
+  gboolean after_state;
+
+  g_return_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self));
+  g_return_if_fail (self->count >= 0);
+
+  before_state = gbp_spell_buffer_addin_get_enabled (self);
+  self->count--;
+  after_state = gbp_spell_buffer_addin_get_enabled (self);
+
+  if (before_state != after_state)
+    {
+      gbp_spell_buffer_addin_apply (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLED]);
+    }
 }
