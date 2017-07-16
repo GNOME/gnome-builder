@@ -20,7 +20,6 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
-#include <gspell/gspell.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -81,7 +80,6 @@ typedef struct
   IdeExtensionAdapter    *formatter_adapter;
   IdeExtensionAdapter    *rename_provider_adapter;
   IdeExtensionAdapter    *symbol_resolver_adapter;
-  GspellChecker          *spellchecker;
   gchar                  *title;
 
   DzlSignalGroup         *file_signals;
@@ -168,48 +166,6 @@ ide_buffer_delay_settling (IdeBuffer *self)
   priv->settling_handler = gdk_threads_add_timeout (SETTLING_DELAY_MSEC,
                                                     ide_buffer_settled_cb,
                                                     self);
-}
-
-void
-ide_buffer_set_spell_checking (IdeBuffer *self,
-                               gboolean   enable)
-{
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  GspellTextBuffer *spell_text_buffer;
-
-  g_return_if_fail (IDE_IS_BUFFER (self));
-
-  if (enable)
-    {
-      if (!GSPELL_IS_CHECKER (priv->spellchecker))
-        {
-          priv->spellchecker = gspell_checker_new (NULL);
-          spell_text_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self));
-          gspell_text_buffer_set_spell_checker (spell_text_buffer, priv->spellchecker);
-        }
-    }
-  else
-    {
-      if (GSPELL_IS_CHECKER (priv->spellchecker))
-        {
-          spell_text_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self));
-          gspell_text_buffer_set_spell_checker (spell_text_buffer, NULL);
-          g_clear_object (&priv->spellchecker);
-        }
-    }
-}
-
-gboolean
-ide_buffer_get_spell_checking (IdeBuffer *self)
-{
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
-
-  /* We keep a ref on the spellchecker because using gspell_text_buffer_get_from_gtk_text_buffer
-   * and gspell_text_buffer_get_spell_checker always return a valid spellchecker
-   */
-  return GSPELL_IS_CHECKER (priv->spellchecker);
 }
 
 /**
@@ -1358,7 +1314,6 @@ ide_buffer_dispose (GObject *object)
   g_clear_object (&priv->highlight_engine);
   g_clear_object (&priv->rename_provider_adapter);
   g_clear_object (&priv->symbol_resolver_adapter);
-  g_clear_object (&priv->spellchecker);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 

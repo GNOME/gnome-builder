@@ -138,10 +138,6 @@
     <section id="ide-source-view-popup-menu-highlighting-section">
       <submenu id="ide-source-view-popup-menu-highlighting-submenu">
         <attribute name="label" translatable="yes">Highlighting</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Spellchecking</attribute>
-          <attribute name="action">view.spellchecking</attribute>
-        </item>
       </submenu>
     </section>
     <section id="ide-source-view-popup-menu-selection-section">
