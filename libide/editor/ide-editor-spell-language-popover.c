@@ -97,8 +97,8 @@ populate_popover (IdeEditorSpellLanguagePopover *self)
   for (const GList *l = available_langs; l != NULL; l = l->next)
     {
       name = gspell_language_get_name (l->data);
-      gtk_list_store_append (GTK_LIST_STORE (self->store), &iter);
-      gtk_list_store_set (GTK_LIST_STORE (self->store), &iter,
+      gtk_tree_store_append (GTK_TREE_STORE (self->store), &iter, NULL);
+      gtk_tree_store_set (GTK_TREE_STORE (self->store), &iter,
                           COLUMN_LANGUAGE_NAME, name,
                           COLUMN_LANGUAGE_POINTER, l->data,
                           -1);
@@ -142,7 +142,7 @@ create_popover (IdeEditorSpellLanguagePopover *self)
   self->selection = gtk_tree_view_get_selection (self->treeview);
   gtk_tree_selection_set_mode (self->selection, GTK_SELECTION_BROWSE);
 
-  self->store = GTK_TREE_STORE (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, GSPELL_TYPE_LANGUAGE));
+  self->store = GTK_TREE_STORE (gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, GSPELL_TYPE_LANGUAGE));
   gtk_tree_view_set_model (self->treeview, GTK_TREE_MODEL (self->store));
   gtk_tree_view_insert_column_with_attributes (self->treeview, -1, NULL,
                                                gtk_cell_renderer_text_new (),
