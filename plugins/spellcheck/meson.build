@@ -18,6 +18,8 @@ spellcheck_sources = [
   'gbp-spell-editor-view-addin.h',
   'gbp-spell-language-popover.c',
   'gbp-spell-language-popover.h',
+  'gbp-spell-navigator.c',
+  'gbp-spell-navigator.h',
   'gbp-spell-utils.c',
   'gbp-spell-utils.h',
   spellcheck_resources[0],
