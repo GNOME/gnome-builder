@@ -24,7 +24,7 @@
 struct _GbpSpellEditorViewAddin
 {
   GObject          parent_instance;
-  DzlBindingGroup *bindings;
+  DzlBindingGroup *buffer_addin_bindings;
 };
 
 static void
@@ -57,10 +57,14 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
   g_assert (wrapper != NULL);
   g_assert (GSPELL_IS_TEXT_VIEW (wrapper));
 
-  self->bindings = dzl_binding_group_new ();
-  dzl_binding_group_bind (self->bindings, "enabled", wrapper, "enable-language-menu", 0);
-  dzl_binding_group_bind (self->bindings, "enabled", wrapper, "inline-spell-checking", 0);
-  dzl_binding_group_set_source (self->bindings, buffer_addin);
+  self->buffer_addin_bindings = dzl_binding_group_new ();
+  dzl_binding_group_bind (self->buffer_addin_bindings, "enabled",
+                          wrapper, "enable-language-menu",
+                          G_BINDING_SYNC_CREATE);
+  dzl_binding_group_bind (self->buffer_addin_bindings, "enabled",
+                          wrapper, "inline-spell-checking",
+                          G_BINDING_SYNC_CREATE);
+  dzl_binding_group_set_source (self->buffer_addin_bindings, buffer_addin);
 
   group = dzl_properties_group_new (G_OBJECT (buffer_addin));
   dzl_properties_group_add_all_properties (group);
@@ -77,8 +81,8 @@ gbp_spell_editor_view_addin_unload (IdeEditorViewAddin *addin,
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
   gtk_widget_insert_action_group (GTK_WIDGET (view), "spellcheck", NULL);
-  dzl_binding_group_set_source (self->bindings, NULL);
-  g_clear_object (&self->bindings);
+  dzl_binding_group_set_source (self->buffer_addin_bindings, NULL);
+  g_clear_object (&self->buffer_addin_bindings);
 }
 
 static void
