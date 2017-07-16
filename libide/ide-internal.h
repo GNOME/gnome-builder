@@ -23,6 +23,7 @@
 
 #include "ide-types.h"
 
+#include "buffers/ide-buffer-private.h"
 #include "highlighting/ide-highlight-engine.h"
 #include "history/ide-back-forward-item.h"
 #include "history/ide-back-forward-list.h"
@@ -35,19 +36,6 @@ G_BEGIN_DECLS
 
 void                _ide_battery_monitor_init               (void);
 void                _ide_battery_monitor_shutdown           (void);
-void                _ide_buffer_set_changed_on_volume       (IdeBuffer             *self,
-                                                             gboolean               changed_on_volume);
-gboolean            _ide_buffer_get_loading                 (IdeBuffer             *self);
-void                _ide_buffer_set_loading                 (IdeBuffer             *self,
-                                                             gboolean               loading);
-void                _ide_buffer_cancel_cursor_restore       (IdeBuffer             *self);
-gboolean            _ide_buffer_can_restore_cursor          (IdeBuffer             *self);
-void                _ide_buffer_set_mtime                   (IdeBuffer             *self,
-                                                             const GTimeVal        *mtime);
-void                _ide_buffer_set_read_only               (IdeBuffer             *buffer,
-                                                             gboolean               read_only);
-void                _ide_buffer_manager_reclaim             (IdeBufferManager      *self,
-                                                             IdeBuffer             *buffer);
 void                _ide_build_system_set_project_file      (IdeBuildSystem        *self,
                                                              GFile                 *project_file);
 void                _ide_configuration_set_prebuild         (IdeConfiguration      *self,

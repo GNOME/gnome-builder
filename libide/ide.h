@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 #include "application/ide-application-addin.h"
 #include "application/ide-application-tool.h"
 #include "application/ide-application.h"
+#include "buffers/ide-buffer-addin.h"
 #include "buffers/ide-buffer-change-monitor.h"
 #include "buffers/ide-buffer-manager.h"
 #include "buffers/ide-buffer.h"

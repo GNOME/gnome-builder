@@ -25,18 +25,20 @@
 #include "ide-debug.h"
 #include "ide-internal.h"
 
+#include "buffers/ide-buffer-addin.h"
 #include "buffers/ide-buffer-change-monitor.h"
-#include "buffers/ide-buffer.h"
+#include "buffers/ide-buffer-manager.h"
+#include "buffers/ide-buffer-private.h"
 #include "buffers/ide-unsaved-files.h"
 #include "diagnostics/ide-diagnostic.h"
-#include "diagnostics/ide-diagnostics.h"
 #include "diagnostics/ide-diagnostics-manager.h"
+#include "diagnostics/ide-diagnostics.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
-#include "formatting/ide-formatter.h"
 #include "formatting/ide-formatter-options.h"
+#include "formatting/ide-formatter.h"
 #include "highlighting/ide-highlight-engine.h"
 #include "highlighting/ide-highlighter.h"
 #include "plugins/ide-extension-adapter.h"
@@ -80,6 +82,7 @@ typedef struct
   IdeExtensionAdapter    *formatter_adapter;
   IdeExtensionAdapter    *rename_provider_adapter;
   IdeExtensionAdapter    *symbol_resolver_adapter;
+  PeasExtensionSet       *addins;
   gchar                  *title;
 
   DzlSignalGroup         *file_signals;
@@ -1135,6 +1138,46 @@ ide_buffer_load_symbol_resolver (IdeBuffer           *self,
 }
 
 static void
+ide_buffer_addin_added (PeasExtensionSet *set,
+                        PeasPluginInfo   *plugin_info,
+                        PeasExtension    *exten,
+                        gpointer          user_data)
+{
+  IdeBufferAddin *addin = (IdeBufferAddin *)exten;
+  IdeBuffer *self = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_BUFFER_ADDIN (addin));
+  g_assert (IDE_IS_BUFFER (self));
+
+  g_debug ("loading IdeBufferAddin from %s",
+           peas_plugin_info_get_module_name (plugin_info));
+
+  ide_buffer_addin_load (addin, self);
+}
+
+static void
+ide_buffer_addin_removed (PeasExtensionSet *set,
+                          PeasPluginInfo   *plugin_info,
+                          PeasExtension    *exten,
+                          gpointer          user_data)
+{
+  IdeBufferAddin *addin = (IdeBufferAddin *)exten;
+  IdeBuffer *self = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_BUFFER_ADDIN (addin));
+  g_assert (IDE_IS_BUFFER (self));
+
+  g_debug ("unloading IdeBufferAddin from %s",
+           peas_plugin_info_get_module_name (plugin_info));
+
+  ide_buffer_addin_unload (addin, self);
+}
+
+static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
@@ -1218,6 +1261,22 @@ ide_buffer_constructed (GObject *object)
 
   priv->highlight_engine = ide_highlight_engine_new (self);
   ide_highlight_engine_pause (priv->highlight_engine);
+
+  priv->addins = peas_extension_set_new (peas_engine_get_default (),
+                                         IDE_TYPE_BUFFER_ADDIN,
+                                         NULL);
+
+  g_signal_connect (priv->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_buffer_addin_added),
+                    self);
+
+  g_signal_connect (priv->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_buffer_addin_removed),
+                    self);
+
+  peas_extension_set_foreach (priv->addins, ide_buffer_addin_added, self);
 
   priv->formatter_adapter = ide_extension_adapter_new (priv->context,
                                                        NULL,
@@ -1311,6 +1370,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_pointer (&priv->content, g_bytes_unref);
   g_clear_pointer (&priv->title, g_free);
   g_clear_object (&priv->file);
+  g_clear_object (&priv->addins);
   g_clear_object (&priv->highlight_engine);
   g_clear_object (&priv->rename_provider_adapter);
   g_clear_object (&priv->symbol_resolver_adapter);
@@ -2952,4 +3012,14 @@ _ide_buffer_can_restore_cursor (IdeBuffer *self)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
   return !priv->cancel_cursor_restore;
+}
+
+PeasExtensionSet *
+_ide_buffer_get_addins (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return priv->addins;
 }
