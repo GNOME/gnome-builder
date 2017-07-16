@@ -22,6 +22,8 @@ spellcheck_sources = [
   'gbp-spell-navigator.h',
   'gbp-spell-utils.c',
   'gbp-spell-utils.h',
+  'gbp-spell-widget.c',
+  'gbp-spell-widget.h',
   spellcheck_resources[0],
 ]
 

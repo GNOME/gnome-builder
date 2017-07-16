@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.15 -->
+  <template class="GbpSpellWidget" parent="GtkBin">
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">true</property>
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">6</property>
+        <property name="margin">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Misspelled</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="word_label">
+                <property name="visible">true</property>
+                <property name="halign">start</property>
+                <property name="hexpand">true</property>
+                <property name="margin_left">10</property>
+                <property name="selectable">True</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="count_box">
+                <child>
+                  <object class="GtkLabel" id="count_label">
+                    <property name="visible">true</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="countbox"/>
+                </style>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="ignore_box">
+            <property name="visible">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="hexpand">true</property>
+            <property name="homogeneous">true</property>
+            <child>
+              <object class="GtkButton" id="ignore_button">
+                <property name="label" translatable="yes">_Ignore</property>
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="ignore_all_button">
+                <property name="label" translatable="yes">Ignore _All</property>
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <style>
+              <class name="linked"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Change _to</property>
+            <property name="xalign">0</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">word_entry</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="word_entry">
+            <property name="visible">true</property>
+            <property name="can_default">true</property>
+            <property name="can_focus">true</property>
+            <property name="width-chars">20</property>
+            <property name="max-width-chars">30</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="change_box">
+            <property name="visible">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="hexpand">true</property>
+            <property name="homogeneous">true</property>
+            <child>
+              <object class="GtkButton" id="change_button">
+                <property name="label" translatable="yes">Cha_nge</property>
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="change_all_button">
+                <property name="label" translatable="yes">Change A_ll</property>
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <style>
+              <class name="linked"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">_Suggestions</property>
+            <property name="margin-top">6</property>
+            <property name="xalign">0</property>
+            <property name="valign">start</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">suggestions_box</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">true</property>
+            <property name="expand">true</property>
+            <property name="shadow_type">in</property>
+            <property name="min-content-height">110</property>
+            <property name="max-content-height">110</property>
+            <property name="propagate-natural-height">true</property>
+            <child>
+              <object class="GtkListBox" id="suggestions_box">
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="activate-on-single-click">false</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Add Word</property>
+            <property name="xalign">0</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">word_entry</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkEntry" id="dict_word_entry">
+                <property name="visible">true</property>
+                <property name="hexpand">true</property>
+                <property name="can_focus">true</property>
+                <property name="width-chars">20</property>
+                <property name="max-width-chars">20</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="dict_add_button">
+                <property name="label" translatable="yes">A_dd</property>
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">5</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Dictionary</property>
+            <property name="margin-top">6</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+            <property name="wrap">true</property>
+            <property name="wrap-mode">word</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">true</property>
+            <property name="expand">true</property>
+            <property name="shadow_type">in</property>
+            <property name="min-content-height">110</property>
+            <property name="max-content-height">110</property>
+            <property name="propagate-natural-height">true</property>
+            <child>
+              <object class="GtkListBox" id="dict_words_list">
+                <property name="visible">true</property>
+                <property name="can_default">true</property>
+                <property name="can_focus">true</property>
+                <property name="activate-on-single-click">false</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">6</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Options</property>
+            <property name="xalign">0</property>
+            <property name="expand">false</property>
+            <property name="use_underline">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="orientation">horizontal</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">8</property>
+            <property name="width">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">_Language</property>
+            <property name="xalign">0</property>
+            <property name="expand">false</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">language_chooser_button</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GbpSpellLanguagePopover" id="language_chooser_button">
+            <property name="visible">true</property>
+            <property name="can_focus">true</property>
+            <property name="hexpand">true</property>
+            <property name="valign">fill</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">9</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">_Highlight</property>
+            <property name="xalign">0</property>
+            <property name="expand">false</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">highlight_switch</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="highlight_switch">
+            <property name="visible">true</property>
+            <property name="can_focus">true</property>
+            <property name="halign">start</property>
+            <property name="expand">false</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">10</property>
+          </packing>
+        </child>
+        <style>
+          <class name="gb-spellchecker"/>
+        </style>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="change_box"/>
+      <widget name="ignore_box"/>
+    </widgets>
+  </object>
+</interface>
