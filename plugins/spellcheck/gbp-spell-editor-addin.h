@@ -1,4 +1,4 @@
-/* spellcheck-plugin.c
+/* gbp-spell-editor-addin.h
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -16,17 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#pragma once
+
 #include <ide.h>
 
-#include "gbp-spell-buffer-addin.h"
-#include "gbp-spell-editor-addin.h"
-#include "gbp-spell-editor-view-addin.h"
+G_BEGIN_DECLS
 
-void
-peas_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUFFER_ADDIN, GBP_TYPE_SPELL_BUFFER_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_ADDIN, GBP_TYPE_SPELL_EDITOR_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_VIEW_ADDIN, GBP_TYPE_SPELL_EDITOR_VIEW_ADDIN);
-}
+#define GBP_TYPE_SPELL_EDITOR_ADDIN (gbp_spell_editor_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpSpellEditorAddin, gbp_spell_editor_addin, GBP, SPELL_EDITOR_ADDIN, GObject)
+
+G_END_DECLS

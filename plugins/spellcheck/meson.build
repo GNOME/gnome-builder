@@ -10,6 +10,8 @@ spellcheck_sources = [
   'spellcheck-plugin.c',
   'gbp-spell-buffer-addin.c',
   'gbp-spell-buffer-addin.h',
+  'gbp-spell-editor-addin.c',
+  'gbp-spell-editor-addin.h',
   'gbp-spell-editor-view-addin.c',
   'gbp-spell-editor-view-addin.h',
   spellcheck_resources[0],
