@@ -863,7 +863,7 @@ ide_layout_grid_stack_items_changed (IdeLayoutGrid  *self,
                                       removed,
                                       added);
 
-          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_VIEW]);
+          ide_object_notify_in_main (G_OBJECT (self), properties [PROP_CURRENT_VIEW]);
 
           return;
         }
