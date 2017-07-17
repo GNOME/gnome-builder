@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "gbp-spell-buffer-addin.h"
 #include "gbp-spell-navigator.h"
 #include "gbp-spell-utils.h"
 
@@ -72,6 +73,51 @@ words_count_state_free (gpointer user_data)
   g_clear_object (&state->navigator);
   g_clear_object (&state->words_count_region);
   g_slice_free (WordsCountState, state);
+}
+
+static GtkTextTag *
+get_misspelled_tag (GbpSpellNavigator *self)
+{
+  IdeBufferAddin *buffer_addin;
+
+  g_assert (GBP_IS_SPELL_NAVIGATOR (self));
+  g_assert (self->buffer != NULL);
+  g_assert (IDE_IS_BUFFER (self->buffer));
+
+  buffer_addin = ide_buffer_addin_find_by_module_name (IDE_BUFFER (self->buffer), "spellcheck-plugin");
+  if (buffer_addin != NULL)
+    return gbp_spell_buffer_addin_get_misspelled_tag (GBP_SPELL_BUFFER_ADDIN (buffer_addin));
+
+  return NULL;
+}
+
+static void
+gbp_spell_navigator_select_misspelled_word (GbpSpellNavigator *self)
+{
+  GtkTextTag *tag;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (GBP_IS_SPELL_NAVIGATOR (self));
+
+  if (self->view == NULL)
+    return;
+
+  if (self->buffer != NULL && NULL != (tag = get_misspelled_tag (self)))
+    {
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &begin, self->start_boundary);
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &end, self->end_boundary);
+      gtk_text_buffer_remove_tag (self->buffer, tag, &begin, &end);
+
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &begin, self->word_start);
+      gtk_text_buffer_get_iter_at_mark (self->buffer, &end, self->word_end);
+      gtk_text_buffer_apply_tag (self->buffer, tag, &begin, &end);
+
+      gtk_widget_queue_draw (GTK_WIDGET (self->view));
+
+      ide_source_view_scroll_to_mark (IDE_SOURCE_VIEW (self->view), self->word_start,
+                                      0.25, TRUE, 1.0, 0.0, TRUE);
+    }
 }
 
 static gboolean
@@ -238,9 +284,6 @@ gbp_spell_navigator_dispose (GObject *object)
 {
   GbpSpellNavigator *self = (GbpSpellNavigator *)object;
 
-  ide_source_view_set_misspelled_word (IDE_SOURCE_VIEW (self->view), NULL, NULL);
-  gtk_widget_queue_resize (GTK_WIDGET (self->view));
-
   g_clear_object (&self->view);
   g_clear_pointer (&self->words_count, g_hash_table_unref);
 
@@ -302,7 +345,7 @@ set_view (GbpSpellNavigator *self,
       gtk_text_buffer_get_iter_at_mark (self->buffer, &end, self->end_boundary);
       self->words_count = gbp_spell_navigator_count_words (self, &start, &end);
 
-      g_object_notify (G_OBJECT (self), "view");
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VIEW]);
     }
 }
 
@@ -359,12 +402,12 @@ gbp_spell_navigator_class_init (GbpSpellNavigatorClass *klass)
 
   properties [PROP_VIEW] =
     g_param_spec_object ("view",
-                        "View",
-                        "the view",
-                        GTK_TYPE_TEXT_VIEW,
-                        G_PARAM_READWRITE |
-                        G_PARAM_CONSTRUCT_ONLY |
-                        G_PARAM_STATIC_STRINGS);
+                         "View",
+                         "the view",
+                         GTK_TYPE_TEXT_VIEW,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
 
   properties [PROP_WORDS_COUNTED] =
     g_param_spec_boolean ("words-counted",
@@ -379,30 +422,6 @@ gbp_spell_navigator_class_init (GbpSpellNavigatorClass *klass)
 static void
 gbp_spell_navigator_init (GbpSpellNavigator *self)
 {
-}
-
-static void
-select_misspelled_word (GbpSpellNavigator *self)
-{
-  GtkTextIter word_start;
-  GtkTextIter word_end;
-
-  g_assert (GBP_IS_SPELL_NAVIGATOR (self));
-
-  gtk_text_buffer_get_iter_at_mark (self->buffer, &word_start, self->word_start);
-  gtk_text_buffer_get_iter_at_mark (self->buffer, &word_end, self->word_end);
-
-  ide_source_view_set_misspelled_word (IDE_SOURCE_VIEW (self->view), &word_start, &word_end);
-  gtk_widget_queue_draw (GTK_WIDGET (self->view));
-
-  g_return_if_fail (gtk_text_view_get_buffer (self->view) == self->buffer);
-
-  gtk_text_view_scroll_to_mark (self->view,
-                                self->word_start,
-                                0.25,
-                                FALSE,
-                                0.0,
-                                0.0);
 }
 
 /* Go to the start of the current checked word so that
@@ -535,7 +554,7 @@ gbp_spell_navigator_goto_next (GspellNavigator  *navigator,
             /* Found! */
             gtk_text_buffer_move_mark (self->buffer, self->word_start, &word_start);
             gtk_text_buffer_move_mark (self->buffer, self->word_end, &word_end);
-            select_misspelled_word (self);
+            gbp_spell_navigator_select_misspelled_word (self);
 
             if (spell_checker_p != NULL)
               *spell_checker_p = g_object_ref (spell_checker);

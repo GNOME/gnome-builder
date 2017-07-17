@@ -65,10 +65,10 @@ ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
       g_snprintf (defname, sizeof defname, "def%s", colon);
 
       style = gtk_source_style_scheme_get_style (style_scheme, defname);
-
-      if (style == NULL)
-        return FALSE;
     }
+
+  if (style == NULL)
+    return FALSE;
 
   g_object_get (style,
                 "background", &background,

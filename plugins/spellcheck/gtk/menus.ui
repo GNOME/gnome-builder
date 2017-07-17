@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-spellcheck-section">
+      <item>
+        <attribute name="label" translatable="yes">Check _Spelling</attribute>
+        <attribute name="action">spellcheck.spellcheck</attribute>
+      </item>
+    </section>
     <section id="ide-source-view-popup-menu-highlighting-section">
       <submenu id="ide-source-view-popup-menu-highlighting-submenu">
         <attribute name="label" translatable="yes">Highlighting</attribute>

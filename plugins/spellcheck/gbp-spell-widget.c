@@ -26,66 +26,8 @@
 #include "gbp-spell-dict.h"
 #include "gbp-spell-language-popover.h"
 #include "gbp-spell-navigator.h"
+#include "gbp-spell-private.h"
 #include "gbp-spell-widget.h"
-
-typedef enum
-{
-  CHECK_WORD_NONE,
-  CHECK_WORD_CHECKING,
-  CHECK_WORD_IDLE
-} CheckWordState;
-
-struct _GbpSpellWidget
-{
-  GtkBin                 parent_instance;
-
-  GspellNavigator       *navigator;
-  IdeSourceView         *view;
-  IdeBuffer             *buffer;
-  GspellChecker         *checker;
-  GbpSpellDict          *dict;
-  GPtrArray             *words_array;
-  const GspellLanguage  *spellchecker_language;
-
-  GtkLabel              *word_label;
-  GtkLabel              *count_label;
-  GtkEntry              *word_entry;
-  GtkButton             *ignore_button;
-  GtkButton             *ignore_all_button;
-  GtkButton             *change_button;
-  GtkButton             *change_all_button;
-  GtkListBox            *suggestions_box;
-  GtkBox                *count_box;
-
-  GtkWidget             *dict_word_entry;
-  GtkWidget             *dict_add_button;
-  GtkWidget             *dict_words_list;
-
-  GtkButton             *highlight_switch;
-  GtkButton             *language_chooser_button;
-
-  GtkWidget             *placeholder;
-  GAction               *view_spellchecking_action;
-
-  guint                  current_word_count;
-  guint                  check_word_timeout_id;
-  guint                  dict_check_word_timeout_id;
-  CheckWordState         check_word_state;
-  CheckWordState         dict_check_word_state;
-
-  guint                  view_spellchecker_set : 1;
-
-  guint                  is_checking_word : 1;
-  guint                  is_check_word_invalid : 1;
-  guint                  is_check_word_idle : 1;
-  guint                  is_word_entry_valid : 1;
-
-  guint                  is_dict_checking_word : 1;
-  guint                  is_dict_check_word_invalid : 1;
-  guint                  is_dict_check_word_idle : 1;
-
-  guint                  spellchecking_status : 1;
-};
 
 G_DEFINE_TYPE (GbpSpellWidget, gbp_spell_widget, GTK_TYPE_BIN)
 
@@ -95,7 +37,7 @@ G_DEFINE_TYPE (GbpSpellWidget, gbp_spell_widget, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
-  PROP_VIEW,
+  PROP_EDITOR,
   N_PROPS
 };
 
@@ -104,14 +46,11 @@ static GParamSpec *properties [N_PROPS];
 static void
 clear_suggestions_box (GbpSpellWidget *self)
 {
-  GList *children;
-
   g_assert (GBP_IS_SPELL_WIDGET (self));
 
-  children = gtk_container_get_children (GTK_CONTAINER (self->suggestions_box));
-
-  for (GList *l = children; l != NULL; l = g_list_next (l))
-    gtk_widget_destroy (GTK_WIDGET (l->data));
+  gtk_container_foreach (GTK_CONTAINER (self->suggestions_box),
+                         (GtkCallback)gtk_widget_destroy,
+                         NULL);
 }
 
 static void
@@ -122,35 +61,11 @@ update_global_sensiblility (GbpSpellWidget *self,
 
   gtk_entry_set_text (self->word_entry, "");
   clear_suggestions_box (self);
-
-  gtk_widget_set_sensitive (GTK_WIDGET (self->word_entry), sensibility);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->ignore_button), sensibility);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->ignore_all_button), sensibility);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->change_button), sensibility);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->change_all_button), sensibility);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), sensibility);
-}
-
-static void
-update_change_ignore_sensibility (GbpSpellWidget *self)
-{
-  gboolean entry_sensitivity;
-
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-
-  entry_sensitivity = (gtk_entry_get_text_length (self->word_entry) > 0);
-
-  gtk_widget_set_sensitive (GTK_WIDGET (self->change_button),
-                            entry_sensitivity);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->change_all_button),
-                            entry_sensitivity && (self->current_word_count > 1));
-
-  gtk_widget_set_sensitive (GTK_WIDGET (self->ignore_all_button),
-                            self->current_word_count > 1);
+  _gbp_spell_widget_update_actions (self);
 }
 
 GtkWidget *
-gbp_spell_widget_get_entry (GbpSpellWidget *self)
+_gbp_spell_widget_get_entry (GbpSpellWidget *self)
 {
   g_return_val_if_fail (GBP_IS_SPELL_WIDGET (self), NULL);
 
@@ -161,18 +76,14 @@ static GtkWidget *
 create_suggestion_row (GbpSpellWidget *self,
                        const gchar    *word)
 {
-  GtkWidget *row;
-
   g_assert (GBP_IS_SPELL_WIDGET (self));
   g_assert (!ide_str_empty0 (word));
 
-  row = g_object_new (GTK_TYPE_LABEL,
-                      "label", word,
-                      "visible", TRUE,
-                      "halign", GTK_ALIGN_START,
-                      NULL);
-
-  return row;
+  return g_object_new (GTK_TYPE_LABEL,
+                       "label", word,
+                       "visible", TRUE,
+                       "xalign", 0.0f,
+                       NULL);
 }
 
 static void
@@ -180,6 +91,7 @@ fill_suggestions_box (GbpSpellWidget  *self,
                       const gchar     *word,
                       gchar          **first_result)
 {
+  GspellChecker *checker;
   GSList *suggestions = NULL;
   GtkWidget *item;
 
@@ -189,13 +101,20 @@ fill_suggestions_box (GbpSpellWidget  *self,
   *first_result = NULL;
 
   clear_suggestions_box (self);
+
   if (ide_str_empty0 (word))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), FALSE);
       return;
     }
 
-  if (NULL == (suggestions = gspell_checker_get_suggestions (self->checker, word, -1)))
+  if (self->editor_view_addin != NULL)
+    {
+      checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
+      suggestions = gspell_checker_get_suggestions (checker, word, -1);
+    }
+
+  if (suggestions == NULL)
     {
       gtk_label_set_text (GTK_LABEL (self->placeholder), _("No suggestions"));
       gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), FALSE);
@@ -203,10 +122,13 @@ fill_suggestions_box (GbpSpellWidget  *self,
   else
     {
       *first_result = g_strdup (suggestions->data);
+
       gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), TRUE);
-      for (GSList *l = (GSList *)suggestions; l != NULL; l = l->next)
+
+      for (const GSList *iter = suggestions; iter; iter = iter->next)
         {
-          item = create_suggestion_row (self, l->data);
+          const gchar *iter_word = iter->data;
+          item = create_suggestion_row (self, iter_word);
           gtk_list_box_insert (self->suggestions_box, item, -1);
         }
 
@@ -217,13 +139,20 @@ fill_suggestions_box (GbpSpellWidget  *self,
 static void
 update_count_label (GbpSpellWidget *self)
 {
+  GspellNavigator *navigator;
   const gchar *word;
   guint count;
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
 
+  if (self->editor_view_addin == NULL)
+    return;
+
+  navigator = gbp_spell_editor_view_addin_get_navigator (self->editor_view_addin);
   word = gtk_label_get_text (self->word_label);
-  if (0 != (count = gbp_spell_navigator_get_count (GBP_SPELL_NAVIGATOR (self->navigator), word)))
+  count = gbp_spell_navigator_get_count (GBP_SPELL_NAVIGATOR (navigator), word);
+
+  if (count > 0)
     {
       g_autofree gchar *count_text = NULL;
 
@@ -239,28 +168,34 @@ update_count_label (GbpSpellWidget *self)
     gtk_widget_set_visible (GTK_WIDGET (self->count_box), TRUE);
 
   self->current_word_count = count;
-  update_change_ignore_sensibility (self);
+
+  _gbp_spell_widget_update_actions (self);
 }
 
-static gboolean
-jump_to_next_misspelled_word (GbpSpellWidget *self)
+gboolean
+_gbp_spell_widget_move_next_word (GbpSpellWidget *self)
 {
-  GspellChecker *checker = NULL;
   g_autofree gchar *word = NULL;
   g_autofree gchar *first_result = NULL;
-  GtkListBoxRow *row;
   g_autoptr(GError) error = NULL;
+  GspellNavigator *navigator;
+  GtkListBoxRow *row;
   gboolean ret = FALSE;
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
 
-  gtk_widget_grab_focus (GTK_WIDGET (self->word_entry));
-  if ((ret = gspell_navigator_goto_next (self->navigator, &word, &checker, &error)))
+  if (self->editor_view_addin == NULL)
+    return FALSE;
+
+  navigator = gbp_spell_editor_view_addin_get_navigator (self->editor_view_addin);
+
+  if ((ret = gspell_navigator_goto_next (navigator, &word, NULL, &error)))
     {
       gtk_label_set_text (self->word_label, word);
       update_count_label (self);
 
       fill_suggestions_box (self, word, &first_result);
+
       if (!ide_str_empty0 (first_result))
         {
           row = gtk_list_box_get_row_at_index (self->suggestions_box, 0);
@@ -275,71 +210,46 @@ jump_to_next_misspelled_word (GbpSpellWidget *self)
       self->spellchecking_status = FALSE;
 
       gtk_label_set_text (GTK_LABEL (self->placeholder), _("Completed spell checking"));
-      gtk_widget_grab_focus (self->dict_word_entry);
       update_global_sensiblility (self, FALSE);
     }
 
+  _gbp_spell_widget_update_actions (self);
+
   return ret;
-}
-
-GtkWidget *
-gbp_spell_widget_new (IdeSourceView *source_view)
-{
-  return g_object_new (GBP_TYPE_SPELL_WIDGET,
-                       "view", source_view,
-                       NULL);
-}
-
-static IdeSourceView *
-gbp_spell_widget_get_view (GbpSpellWidget *self)
-{
-  g_return_val_if_fail (GBP_IS_SPELL_WIDGET (self), NULL);
-
-  return self->view;
-}
-
-static void
-gbp_spell_widget_set_view (GbpSpellWidget *self,
-                           IdeSourceView  *view)
-{
-  g_return_if_fail (GBP_IS_SPELL_WIDGET (self));
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (view));
-
-  ide_set_weak_pointer (&self->view, view);
-  if (GSPELL_IS_NAVIGATOR (self->navigator))
-    g_clear_object (&self->navigator);
-
-  self->navigator = gbp_spell_navigator_new (GTK_TEXT_VIEW (view));
 }
 
 static gboolean
 check_word_timeout_cb (GbpSpellWidget *self)
 {
-  const gchar *word;
   g_autoptr(GError) error = NULL;
-  gchar *icon_name;
+  GspellChecker *checker;
+  const gchar *icon_name = "";
+  const gchar *word;
   gboolean ret = TRUE;
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
+  g_assert (self->editor_view_addin != NULL);
+
+  checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
 
   self->check_word_state = CHECK_WORD_CHECKING;
 
   word = gtk_entry_get_text (self->word_entry);
+
   if (!ide_str_empty0 (word))
     {
       /* FIXME: suggestions can give a multiple-words suggestion
        * that failed to the checkword test, ex: auto tools
        */
-      ret = gspell_checker_check_word (self->checker, word, -1, &error);
+      ret = gspell_checker_check_word (checker, word, -1, &error);
       if (error != NULL)
         {
           g_message ("check error:%s\n", error->message);
         }
 
-      icon_name = ret ? "" : "dialog-warning-symbolic";
+      if (!ret)
+        icon_name = "dialog-warning-symbolic";
     }
-  else
-    icon_name = "";
 
   gtk_entry_set_icon_from_icon_name (self->word_entry,
                                      GTK_ENTRY_ICON_SECONDARY,
@@ -349,13 +259,14 @@ check_word_timeout_cb (GbpSpellWidget *self)
   self->is_word_entry_valid = ret;
 
   self->check_word_timeout_id = 0;
+
   if (self->is_check_word_invalid == TRUE)
     {
-      self->check_word_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT,
+      self->check_word_timeout_id = g_timeout_add_full (G_PRIORITY_LOW,
                                                         CHECK_WORD_INTERVAL_MIN,
                                                         (GSourceFunc)check_word_timeout_cb,
-                                                        self,
-                                                        NULL);
+                                                        g_object_ref (self),
+                                                        g_object_unref);
       self->check_word_state = CHECK_WORD_IDLE;
       self->is_check_word_invalid = FALSE;
     }
@@ -372,7 +283,7 @@ gbp_spell_widget__word_entry_changed_cb (GbpSpellWidget *self,
   g_assert (GBP_IS_SPELL_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
 
-  update_change_ignore_sensibility (self);
+  _gbp_spell_widget_update_actions (self);
 
   word = gtk_entry_get_text (self->word_entry);
   if (ide_str_empty0 (word) && self->spellchecking_status == TRUE)
@@ -389,89 +300,17 @@ gbp_spell_widget__word_entry_changed_cb (GbpSpellWidget *self,
       return;
     }
 
-  if (self->check_word_state == CHECK_WORD_IDLE)
+  ide_clear_source (&self->check_word_timeout_id);
+
+  if (self->editor_view_addin != NULL)
     {
-      g_source_remove (self->check_word_timeout_id);
-      self->check_word_timeout_id = 0;
+      self->check_word_timeout_id = g_timeout_add_full (G_PRIORITY_LOW,
+                                                        CHECK_WORD_INTERVAL_MIN,
+                                                        (GSourceFunc)check_word_timeout_cb,
+                                                        g_object_ref (self),
+                                                        g_object_unref);
+      self->check_word_state = CHECK_WORD_IDLE;
     }
-
-  self->check_word_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT,
-                                                    CHECK_WORD_INTERVAL_MIN,
-                                                    (GSourceFunc)check_word_timeout_cb,
-                                                    self,
-                                                    NULL);
-  self->check_word_state = CHECK_WORD_IDLE;
-}
-
-static void
-gbp_spell_widget__ignore_button_clicked_cb (GbpSpellWidget *self,
-                                            GtkButton      *button)
-{
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  jump_to_next_misspelled_word (self);
-}
-
-static void
-gbp_spell_widget__ignore_all_button_clicked_cb (GbpSpellWidget *self,
-                                                GtkButton      *button)
-{
-  const gchar *word;
-
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  word = gtk_label_get_text (self->word_label);
-  g_assert (!ide_str_empty0 (word));
-
-  gspell_checker_add_word_to_session (self->checker, word, -1);
-  jump_to_next_misspelled_word (self);
-}
-
-static void
-change_misspelled_word (GbpSpellWidget *self,
-                        gboolean        change_all)
-{
-  const gchar *word;
-  g_autofree gchar *change_to = NULL;
-
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-
-  word = gtk_label_get_text (self->word_label);
-  g_assert (!ide_str_empty0 (word));
-
-  change_to = g_strdup (gtk_entry_get_text (self->word_entry));
-  g_assert (!ide_str_empty0 (change_to));
-
-  gspell_checker_set_correction (self->checker, word, -1, change_to, -1);
-
-  if (change_all)
-    gspell_navigator_change_all (self->navigator, word, change_to);
-  else
-    gspell_navigator_change (self->navigator, word, change_to);
-
-  jump_to_next_misspelled_word (self);
-}
-
-static void
-gbp_spell_widget__change_button_clicked_cb (GbpSpellWidget *self,
-                                            GtkButton      *button)
-{
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  change_misspelled_word (self, FALSE);
-}
-
-static void
-gbp_spell_widget__change_all_button_clicked_cb (GbpSpellWidget *self,
-                                                GtkButton      *button)
-{
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-  g_assert (GTK_IS_BUTTON (button));
-
-  change_misspelled_word (self, TRUE);
 }
 
 static void
@@ -495,7 +334,7 @@ gbp_spell_widget__row_selected_cb (GbpSpellWidget *self,
 
       gtk_entry_set_text (self->word_entry, word);
       gtk_editable_set_position (GTK_EDITABLE (self->word_entry), -1);
-      update_change_ignore_sensibility (self);
+      _gbp_spell_widget_update_actions (self);
 
       g_signal_handlers_unblock_by_func (self->word_entry, gbp_spell_widget__word_entry_changed_cb, self);
     }
@@ -511,71 +350,7 @@ gbp_spell_widget__row_activated_cb (GbpSpellWidget *self,
   g_assert (GTK_IS_LIST_BOX (listbox));
 
   if (row != NULL)
-    change_misspelled_word (self, FALSE);
-}
-
-static gboolean
-gbp_spell_widget__key_press_event_cb (GbpSpellWidget *self,
-                                      GdkEventKey    *event)
-{
-  g_assert (IDE_IS_SOURCE_VIEW (self->view));
-  g_assert (event != NULL);
-
-  switch (event->keyval)
-    {
-    case GDK_KEY_Escape:
-      dzl_gtk_widget_action (GTK_WIDGET (self->view),
-                         "frame", "show-spellcheck",
-                         g_variant_new_int32 (0));
-      return GDK_EVENT_STOP;
-
-    default:
-      break;
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static void
-gbp_spell__widget_mapped_cb (GbpSpellWidget *self)
-{
-  GActionGroup *group = NULL;
-  GtkWidget *widget = GTK_WIDGET (self->view);
-  g_autoptr (GVariant) value = NULL;
-
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-
-  while ((group == NULL) && (widget != NULL))
-    {
-      group = gtk_widget_get_action_group (widget, "view");
-      widget = gtk_widget_get_parent (widget);
-    }
-
-  if (group != NULL &&
-      NULL != (self->view_spellchecking_action = g_action_map_lookup_action (G_ACTION_MAP (group),
-                                                                             "spellchecking")))
-    {
-      value = g_action_get_state (self->view_spellchecking_action);
-      self->view_spellchecker_set = g_variant_get_boolean (value);
-      gtk_switch_set_active (GTK_SWITCH (self->highlight_switch), self->view_spellchecker_set);
-    }
-
-  jump_to_next_misspelled_word (self);
-}
-
-static void
-gbp_spell_widget__highlight_switch_toggled_cb (GbpSpellWidget *self,
-                                               gboolean        state,
-                                               GtkSwitch      *switch_button)
-{
-  GspellTextView *spell_text_view;
-
-  g_assert (GBP_IS_SPELL_WIDGET (self));
-  g_assert (GTK_IS_SWITCH (switch_button));
-
-  gtk_switch_set_state (switch_button, state);
-  spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self->view));
-  gspell_text_view_set_inline_spell_checking (spell_text_view, state);
+    _gbp_spell_widget_change (self, FALSE);
 }
 
 static void
@@ -619,12 +394,22 @@ get_next_row_to_focus (GtkListBox    *listbox,
 static gboolean
 dict_check_word_timeout_cb (GbpSpellWidget *self)
 {
-  const gchar *word;
   g_autofree gchar *tooltip = NULL;
-  gchar *icon_name;
+  GspellChecker *checker;
+  const gchar *icon_name = "";
+  const gchar *word;
   gboolean valid = FALSE;
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
+
+  if (self->editor_view_addin == NULL)
+    {
+      /* lost our chance */
+      self->dict_check_word_timeout_id = 0;
+      return G_SOURCE_REMOVE;
+    }
+
+  checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
 
   self->dict_check_word_state = CHECK_WORD_CHECKING;
 
@@ -633,9 +418,9 @@ dict_check_word_timeout_cb (GbpSpellWidget *self)
     {
       if (gbp_spell_dict_personal_contains (self->dict, word))
         gtk_widget_set_tooltip_text (self->dict_word_entry, _("This word is already in the personal dictionary"));
-      else if (gspell_checker_check_word (self->checker, word, -1, NULL))
+      else if (gspell_checker_check_word (checker, word, -1, NULL))
         {
-          tooltip = g_strdup_printf (_("This word is already in the %s dictionary"), gspell_language_get_name (self->spellchecker_language));
+          tooltip = g_strdup_printf (_("This word is already in the %s dictionary"), gspell_language_get_name (self->language));
           gtk_widget_set_tooltip_text (self->dict_word_entry, tooltip);
         }
       else
@@ -644,10 +429,9 @@ dict_check_word_timeout_cb (GbpSpellWidget *self)
           gtk_widget_set_tooltip_text (self->dict_word_entry, NULL);
         }
 
-      icon_name = valid ? "" : "dialog-warning-symbolic";
+      if (!valid)
+        icon_name = "dialog-warning-symbolic";
     }
-  else
-    icon_name = "";
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->dict_add_button), valid);
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (self->dict_word_entry),
@@ -755,8 +539,8 @@ dict_row_key_pressed_event_cb (GbpSpellWidget *self,
   g_assert (event != NULL);
   g_assert (GTK_IS_LIST_BOX (listbox));
 
-  if (NULL != (row = gtk_list_box_get_selected_row (listbox)) &&
-      event->keyval == GDK_KEY_Delete)
+  if (event->keyval == GDK_KEY_Delete &&
+      NULL != (row = gtk_list_box_get_selected_row (listbox)))
     {
       remove_dict_row (self, GTK_LIST_BOX (self->dict_words_list), GTK_LIST_BOX_ROW (row));
       return GDK_EVENT_STOP;
@@ -810,7 +594,7 @@ check_dict_available (GbpSpellWidget *self)
 {
   g_assert (GBP_IS_SPELL_WIDGET (self));
 
-  return (self->checker != NULL && self->spellchecker_language != NULL);
+  return (self->editor_view_addin != NULL && self->language != NULL);
 }
 
 static void
@@ -826,6 +610,7 @@ gbp_spell_widget__add_button_clicked_cb (GbpSpellWidget *self,
   g_assert (GTK_IS_BUTTON (button));
 
   word = gtk_entry_get_text (GTK_ENTRY (self->dict_word_entry));
+
   /* TODO: check if word already in dict */
   if (check_dict_available (self) && !ide_str_empty0 (word))
     {
@@ -845,7 +630,6 @@ gbp_spell_widget__add_button_clicked_cb (GbpSpellWidget *self,
         }
 
       gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), "");
-
     }
 }
 
@@ -892,16 +676,24 @@ gbp_spell_widget__language_notify_cb (GbpSpellWidget *self,
   const GspellLanguage *spell_language;
   g_autofree gchar *word = NULL;
   g_autofree gchar *first_result = NULL;
+  GspellNavigator *navigator;
+  GspellChecker *checker;
   GtkListBoxRow *row;
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
   g_assert (GTK_IS_BUTTON (language_chooser_button));
 
-  current_language = gspell_checker_get_language (self->checker);
+  if (self->editor_view_addin == NULL)
+    return;
+
+  checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
+  navigator = gbp_spell_editor_view_addin_get_navigator (self->editor_view_addin);
+
+  current_language = gspell_checker_get_language (checker);
   spell_language = gspell_language_chooser_get_language (GSPELL_LANGUAGE_CHOOSER (language_chooser_button));
   if (gspell_language_compare (current_language, spell_language) != 0)
     {
-      gspell_checker_set_language (self->checker, spell_language);
+      gspell_checker_set_language (checker, spell_language);
       fill_suggestions_box (self, word, &first_result);
       if (!ide_str_empty0 (first_result))
         {
@@ -910,6 +702,7 @@ gbp_spell_widget__language_notify_cb (GbpSpellWidget *self,
         }
 
       g_clear_pointer (&self->words_array, g_ptr_array_unref);
+
       if (current_language == NULL)
         {
           dict_clean_listbox (self);
@@ -922,8 +715,9 @@ gbp_spell_widget__language_notify_cb (GbpSpellWidget *self,
       gbp_spell_widget__dict_word_entry_changed_cb (self, GTK_ENTRY (self->dict_word_entry));
       gtk_widget_set_sensitive (GTK_WIDGET (self->dict_words_list), TRUE);
 
-      gbp_spell_navigator_goto_word_start (GBP_SPELL_NAVIGATOR (self->navigator));
-      jump_to_next_misspelled_word (self);
+      gbp_spell_navigator_goto_word_start (GBP_SPELL_NAVIGATOR (navigator));
+
+      _gbp_spell_widget_move_next_word (self);
     }
 }
 
@@ -942,7 +736,7 @@ gbp_spell_widget__word_entry_suggestion_activate (GbpSpellWidget *self,
 
   gtk_entry_set_text (self->word_entry, word);
   gtk_editable_set_position (GTK_EDITABLE (self->word_entry), -1);
-  update_change_ignore_sensibility (self);
+  _gbp_spell_widget_update_actions (self);
 
   g_signal_handlers_unblock_by_func (self->word_entry, gbp_spell_widget__word_entry_changed_cb, self);
 }
@@ -953,18 +747,25 @@ gbp_spell_widget__populate_popup_cb (GbpSpellWidget *self,
                                      GtkEntry       *entry)
 {
   GSList *suggestions = NULL;
+  GspellChecker *checker;
   const gchar *text;
   GtkWidget *item;
-  gint count = 0;
+  guint count = 0;
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
   g_assert (GTK_IS_WIDGET (popup));
   g_assert (GTK_IS_ENTRY (entry));
 
+  if (self->editor_view_addin == NULL)
+    return;
+
+  checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
   text = gtk_entry_get_text (entry);
-  if (self->is_word_entry_valid ||
-      ide_str_empty0 (text) ||
-      NULL == (suggestions = gspell_checker_get_suggestions (self->checker, text, -1)))
+
+  if (self->is_word_entry_valid || ide_str_empty0 (text))
+    suggestions = gspell_checker_get_suggestions (checker, text, -1);
+
+  if (suggestions == NULL)
     return;
 
   item = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
@@ -973,13 +774,16 @@ gbp_spell_widget__populate_popup_cb (GbpSpellWidget *self,
   gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), item);
 
   suggestions = g_slist_reverse (suggestions);
-  for (GSList *l = (GSList *)suggestions; l != NULL; l = l->next)
+
+  for (const GSList *iter = suggestions; iter; iter = iter->next)
     {
+      const gchar *word = iter->data;
+
       item = g_object_new (GTK_TYPE_MENU_ITEM,
-                           "label", l->data,
+                           "label", word,
                            "visible", TRUE,
                            NULL);
-      g_object_set_data (G_OBJECT (item), "word", g_strdup (l->data));
+      g_object_set_data (G_OBJECT (item), "word", g_strdup (word));
       gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), item);
       g_signal_connect_object (item,
                                "activate",
@@ -1028,27 +832,8 @@ static void
 gbp_spell_widget_constructed (GObject *object)
 {
   GbpSpellWidget *self = (GbpSpellWidget *)object;
-  GspellTextBuffer *spell_buffer;
 
-  g_assert (IDE_IS_SOURCE_VIEW (self->view));
-
-  self->buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view)));
-  ide_buffer_set_spell_checking (self->buffer, TRUE);
-
-  self->spellchecking_status = TRUE;
-
-  spell_buffer = gspell_text_buffer_get_from_gtk_text_buffer (GTK_TEXT_BUFFER (self->buffer));
-  self->checker = gspell_text_buffer_get_spell_checker (spell_buffer);
-  gbp_spell_dict_set_checker (self->dict, self->checker);
-
-  self->spellchecker_language = gspell_checker_get_language (self->checker);
-  gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button),
-                                        self->spellchecker_language);
-
-  g_signal_connect_swapped (self->navigator,
-                            "notify::words-counted",
-                            G_CALLBACK (gbp_spell_widget__words_counted_cb),
-                            self);
+  _gbp_spell_widget_init_actions (self);
 
   g_signal_connect_swapped (self->word_entry,
                             "changed",
@@ -1060,26 +845,6 @@ gbp_spell_widget_constructed (GObject *object)
                             G_CALLBACK (gbp_spell_widget__populate_popup_cb),
                             self);
 
-  g_signal_connect_swapped (self->ignore_button,
-                            "clicked",
-                            G_CALLBACK (gbp_spell_widget__ignore_button_clicked_cb),
-                            self);
-
-  g_signal_connect_swapped (self->ignore_all_button,
-                            "clicked",
-                            G_CALLBACK (gbp_spell_widget__ignore_all_button_clicked_cb),
-                            self);
-
-  g_signal_connect_swapped (self->change_button,
-                            "clicked",
-                            G_CALLBACK (gbp_spell_widget__change_button_clicked_cb),
-                            self);
-
-  g_signal_connect_swapped (self->change_all_button,
-                            "clicked",
-                            G_CALLBACK (gbp_spell_widget__change_all_button_clicked_cb),
-                            self);
-
   g_signal_connect_swapped (self->suggestions_box,
                             "row-selected",
                             G_CALLBACK (gbp_spell_widget__row_selected_cb),
@@ -1088,16 +853,6 @@ gbp_spell_widget_constructed (GObject *object)
   g_signal_connect_swapped (self->suggestions_box,
                             "row-activated",
                             G_CALLBACK (gbp_spell_widget__row_activated_cb),
-                            self);
-
-  g_signal_connect_swapped (self,
-                            "key-press-event",
-                            G_CALLBACK (gbp_spell_widget__key_press_event_cb),
-                            self);
-
-  g_signal_connect_swapped (self->highlight_switch,
-                            "state-set",
-                            G_CALLBACK (gbp_spell_widget__highlight_switch_toggled_cb),
                             self);
 
   g_signal_connect_object (self->language_chooser_button,
@@ -1120,16 +875,6 @@ gbp_spell_widget_constructed (GObject *object)
   gtk_widget_set_visible (self->placeholder, TRUE);
   gtk_list_box_set_placeholder (self->suggestions_box, self->placeholder);
 
-  /* Due to the change of focus between the view and the spellchecker widget,
-   * we need to start checking only when the widget is mapped,
-   * so the view can keep the selection on the first word.
-   */
-  g_signal_connect_object (self,
-                           "map",
-                           G_CALLBACK (gbp_spell__widget_mapped_cb),
-                           NULL,
-                           G_CONNECT_AFTER);
-
   g_signal_connect_swapped (self->dict,
                             "loaded",
                             G_CALLBACK (gbp_spell_widget__dict__loaded_cb),
@@ -1143,42 +888,73 @@ gbp_spell_widget_constructed (GObject *object)
 }
 
 static void
-gbp_spell_widget_finalize (GObject *object)
+gbp_spell_widget_bind_addin (GbpSpellWidget          *self,
+                             GbpSpellEditorViewAddin *editor_view_addin,
+                             DzlSignalGroup          *editor_view_addin_signals)
 {
-  GbpSpellWidget *self = (GbpSpellWidget *)object;
-  GspellTextView *spell_text_view;
-  const GspellLanguage *spell_language;
-  GtkTextBuffer *buffer;
+  GspellChecker *checker;
+
+  g_assert (GBP_IS_SPELL_WIDGET (self));
+  g_assert (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (editor_view_addin));
+  g_assert (DZL_IS_SIGNAL_GROUP (editor_view_addin_signals));
+  g_assert (self->editor_view_addin == NULL);
+
+  self->editor_view_addin = g_object_ref (editor_view_addin);
+
+  gbp_spell_editor_view_addin_begin_checking (editor_view_addin);
+
+  checker = gbp_spell_editor_view_addin_get_checker (editor_view_addin);
+  gbp_spell_dict_set_checker (self->dict, checker);
+
+  self->language = gspell_checker_get_language (checker);
+  gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button), self->language);
+
+  self->spellchecking_status = TRUE;
+
+  _gbp_spell_widget_move_next_word (self);
+}
+
+static void
+gbp_spell_widget_unbind_addin (GbpSpellWidget *self,
+                               DzlSignalGroup *editor_view_addin_signals)
+{
+  g_assert (GBP_IS_SPELL_WIDGET (self));
+  g_assert (DZL_IS_SIGNAL_GROUP (editor_view_addin_signals));
+  g_assert (self->editor_view_addin != NULL);
+
+  gbp_spell_editor_view_addin_end_checking (self->editor_view_addin);
+  gbp_spell_dict_set_checker (self->dict, NULL);
+  self->language = NULL;
+  gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button), NULL);
+
+  g_clear_object (&self->editor_view_addin);
+
+  _gbp_spell_widget_update_actions (self);
+}
+
+static void
+gbp_spell_widget_destroy (GtkWidget *widget)
+{
+  GbpSpellWidget *self = (GbpSpellWidget *)widget;
+
+  g_assert (GBP_IS_SPELL_WIDGET (self));
 
   ide_clear_source (&self->check_word_timeout_id);
+  ide_clear_source (&self->dict_check_word_timeout_id);
 
-  /* Set back the view spellchecking previous state */
-  if (self->view != NULL)
-    {
-      spell_text_view = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (self->view));
+  if (self->editor != NULL)
+    gbp_spell_widget_set_editor (self, NULL);
 
-      if (self->view_spellchecker_set)
-        {
-          gspell_text_view_set_inline_spell_checking (spell_text_view, TRUE);
-          spell_language = gspell_checker_get_language (self->checker);
-          if (gspell_language_compare (self->spellchecker_language, spell_language) != 0)
-            gspell_checker_set_language (self->checker, self->spellchecker_language);
-        }
-      else
-        {
-          gspell_text_view_set_inline_spell_checking (spell_text_view, FALSE);
-          gspell_text_view_set_enable_language_menu (spell_text_view, FALSE);
+  self->language = NULL;
 
-          buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view));
-          ide_buffer_set_spell_checking (IDE_BUFFER (buffer), FALSE);
-        }
+  /* Ensure reference holding things are released */
+  g_clear_object (&self->editor);
+  g_clear_object (&self->editor_view_addin);
+  g_clear_object (&self->editor_view_addin_signals);
+  g_clear_object (&self->dict);
+  g_clear_pointer (&self->words_array, g_ptr_array_unref);
 
-      ide_clear_weak_pointer (&self->view);
-    }
-
-  g_clear_object (&self->navigator);
-
-  G_OBJECT_CLASS (gbp_spell_widget_parent_class)->finalize (object);
+  GTK_WIDGET_CLASS (gbp_spell_widget_parent_class)->destroy (widget);
 }
 
 static void
@@ -1191,8 +967,8 @@ gbp_spell_widget_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_VIEW:
-      g_value_set_object (value, gbp_spell_widget_get_view (self));
+    case PROP_EDITOR:
+      g_value_set_object (value, gbp_spell_widget_get_editor (self));
       break;
 
     default:
@@ -1210,8 +986,8 @@ gbp_spell_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_VIEW:
-      gbp_spell_widget_set_view (self, g_value_get_object (value));
+    case PROP_EDITOR:
+      gbp_spell_widget_set_editor (self, g_value_get_object (value));
       break;
 
     default:
@@ -1226,16 +1002,15 @@ gbp_spell_widget_class_init (GbpSpellWidgetClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gbp_spell_widget_constructed;
-  object_class->finalize = gbp_spell_widget_finalize;
   object_class->get_property = gbp_spell_widget_get_property;
   object_class->set_property = gbp_spell_widget_set_property;
 
-  properties [PROP_VIEW] =
-    g_param_spec_object ("view",
-                         "View",
-                         "The source view.",
-                         IDE_TYPE_SOURCE_VIEW,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  widget_class->destroy = gbp_spell_widget_destroy;
+
+  properties [PROP_EDITOR] =
+    g_param_spec_object ("editor", NULL, NULL,
+                         IDE_TYPE_EDITOR_VIEW,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -1244,26 +1019,23 @@ gbp_spell_widget_class_init (GbpSpellWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, word_label);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, count_label);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, word_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, ignore_button);
-  gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, ignore_all_button);
-  gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, change_button);
-  gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, change_all_button);
-  gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, highlight_switch);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, language_chooser_button);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, suggestions_box);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, dict_word_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, dict_add_button);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, dict_words_list);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, count_box);
+
+  g_type_ensure (GBP_TYPE_SPELL_LANGUAGE_POPOVER);
 }
 
 static void
 gbp_spell_widget_init (GbpSpellWidget *self)
 {
-  gtk_widget_init_template (GTK_WIDGET (self));
   self->dict = gbp_spell_dict_new (NULL);
 
-  self->view_spellchecker_set = FALSE;
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   /* FIXME: do not work, Gtk+ bug */
   gtk_entry_set_icon_tooltip_text (self->word_entry,
                                    GTK_ENTRY_ICON_SECONDARY,
@@ -1273,4 +1045,105 @@ gbp_spell_widget_init (GbpSpellWidget *self)
                             "key-press-event",
                             G_CALLBACK (dict_row_key_pressed_event_cb),
                             self);
+
+  self->editor_view_addin_signals = dzl_signal_group_new (GBP_TYPE_SPELL_EDITOR_VIEW_ADDIN);
+
+  dzl_signal_group_connect_swapped (self->editor_view_addin_signals,
+                                    "notify::words-counted",
+                                    G_CALLBACK (gbp_spell_widget__words_counted_cb),
+                                    self);
+
+  g_signal_connect_swapped (self->editor_view_addin_signals,
+                            "bind",
+                            G_CALLBACK (gbp_spell_widget_bind_addin),
+                            self);
+
+  g_signal_connect_swapped (self->editor_view_addin_signals,
+                            "unbind",
+                            G_CALLBACK (gbp_spell_widget_unbind_addin),
+                            self);
 }
+
+/**
+ * gbp_spell_widget_get_editor:
+ * @self: a #GbpSpellWidget
+ *
+ * Gets the editor that is currently being spellchecked.
+ *
+ * Returns: (nullable) (transfer none): An #IdeEditorView or %NULL
+ *
+ * Since: 3.26
+ */
+IdeEditorView *
+gbp_spell_widget_get_editor (GbpSpellWidget *self)
+{
+  g_return_val_if_fail (GBP_IS_SPELL_WIDGET (self), NULL);
+
+  return self->editor;
+}
+
+void
+gbp_spell_widget_set_editor (GbpSpellWidget *self,
+                             IdeEditorView  *editor)
+{
+  g_return_if_fail (GBP_IS_SPELL_WIDGET (self));
+  g_return_if_fail (!editor || IDE_IS_EDITOR_VIEW (editor));
+
+  if (g_set_object (&self->editor, editor))
+    {
+      IdeEditorViewAddin *addin = NULL;
+
+      if (editor != NULL)
+        addin = ide_editor_view_addin_find_by_module_name (editor, "spellcheck-plugin");
+
+      dzl_signal_group_set_target (self->editor_view_addin_signals, addin);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EDITOR]);
+    }
+}
+
+GtkWidget *
+gbp_spell_widget_new (IdeEditorView *editor)
+{
+  g_return_val_if_fail (!editor || IDE_IS_EDITOR_VIEW (editor), NULL);
+
+  return g_object_new (GBP_TYPE_SPELL_WIDGET,
+                       "editor", editor,
+                       NULL);
+}
+
+void
+_gbp_spell_widget_change (GbpSpellWidget *self,
+                          gboolean        change_all)
+{
+  g_autofree gchar *change_to = NULL;
+  GspellNavigator *navigator;
+  GspellChecker *checker;
+  const gchar *word;
+
+  g_assert (GBP_IS_SPELL_WIDGET (self));
+  g_assert (IDE_IS_EDITOR_VIEW (self->editor));
+  g_assert (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self->editor_view_addin));
+
+  checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
+  g_assert (GSPELL_IS_CHECKER (checker));
+
+  word = gtk_label_get_text (self->word_label);
+  g_assert (!ide_str_empty0 (word));
+
+  change_to = g_strdup (gtk_entry_get_text (self->word_entry));
+  g_assert (!ide_str_empty0 (change_to));
+
+  navigator = gbp_spell_editor_view_addin_get_navigator (self->editor_view_addin);
+  g_assert (navigator != NULL);
+
+  gspell_checker_set_correction (checker, word, -1, change_to, -1);
+
+  if (change_all)
+    gspell_navigator_change_all (navigator, word, change_to);
+  else
+    gspell_navigator_change (navigator, word, change_to);
+
+  _gbp_spell_widget_move_next_word (self);
+}
+

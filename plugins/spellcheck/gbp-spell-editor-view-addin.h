@@ -27,8 +27,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSpellEditorViewAddin, gbp_spell_editor_view_addin, GBP, SPELL_EDITOR_VIEW_ADDIN, GObject)
 
-void           gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self);
-void           gbp_spell_editor_view_addin_end_checking   (GbpSpellEditorViewAddin *self);
-GspellChecker *gbp_spell_editor_view_addin_get_checker    (GbpSpellEditorViewAddin *self);
+void             gbp_spell_editor_view_addin_begin_checking     (GbpSpellEditorViewAddin *self);
+void             gbp_spell_editor_view_addin_end_checking       (GbpSpellEditorViewAddin *self);
+GspellChecker   *gbp_spell_editor_view_addin_get_checker        (GbpSpellEditorViewAddin *self);
+GspellNavigator *gbp_spell_editor_view_addin_get_navigator      (GbpSpellEditorViewAddin *self);
+guint            gbp_spell_editor_view_addin_get_count          (GbpSpellEditorViewAddin *self,
+                                                                 const gchar             *word);
+gboolean         gbp_spell_editor_view_addin_move_to_word_start (GbpSpellEditorViewAddin *self);
 
 G_END_DECLS

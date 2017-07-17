@@ -73,8 +73,16 @@ gbp_spell_buffer_addin_apply (GbpSpellBufferAddin *self)
 
   if (!gbp_spell_buffer_addin_get_enabled (self))
     {
+      GtkTextIter begin;
+      GtkTextIter end;
+
       gspell_text_buffer_set_spell_checker (spell_buffer, NULL);
       g_clear_object (&self->spellchecker);
+
+      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+      gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self->buffer),
+                                  self->misspelled_tag, &begin, &end);
+
       return;
     }
 

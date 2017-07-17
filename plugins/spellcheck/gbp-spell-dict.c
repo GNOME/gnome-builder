@@ -175,21 +175,10 @@ gbp_spell_dict_personal_contains (GbpSpellDict *self,
 {
   g_assert (GBP_IS_SPELL_DICT (self));
 
-  if (ide_str_empty0 (word))
-    return FALSE;
+  if (self->words != NULL && !ide_str_empty0 (word))
+    return g_hash_table_contains (self->words, word);
 
-  if (self->dict != NULL)
-    {
-      if (self->words == NULL)
-        return FALSE;
-
-      return (NULL != g_hash_table_lookup (self->words, word));
-    }
-  else
-    {
-      g_warning ("No dictionaries loaded");
-      return FALSE;
-    }
+  return FALSE;
 }
 
 gboolean
@@ -210,7 +199,7 @@ gbp_spell_dict_add_word_to_personal (GbpSpellDict *self,
     }
   else
     {
-      g_warning ("No dictionaries loaded");
+      g_warning ("No dictionaries loaded, cannot add word");
       return FALSE;
     }
 }

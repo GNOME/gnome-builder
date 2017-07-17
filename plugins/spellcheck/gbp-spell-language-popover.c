@@ -34,7 +34,7 @@ struct _GbpSpellLanguagePopover
   GtkPopover           *popover;
   GtkTreeView          *treeview;
   GtkTreeSelection     *selection;
-  GtkTreeStore         *store;
+  GtkTreeModel         *store;
   GtkScrolledWindow    *scrolled_window;
   const GspellLanguage *language;
 
@@ -142,7 +142,7 @@ create_popover (GbpSpellLanguagePopover *self)
   self->selection = gtk_tree_view_get_selection (self->treeview);
   gtk_tree_selection_set_mode (self->selection, GTK_SELECTION_BROWSE);
 
-  self->store = GTK_TREE_STORE (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, GSPELL_TYPE_LANGUAGE));
+  self->store = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, GSPELL_TYPE_LANGUAGE));
   gtk_tree_view_set_model (self->treeview, GTK_TREE_MODEL (self->store));
   gtk_tree_view_insert_column_with_attributes (self->treeview, -1, NULL,
                                                gtk_cell_renderer_text_new (),

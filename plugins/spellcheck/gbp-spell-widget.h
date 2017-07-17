@@ -16,13 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_SPELL_WIDGET_H
-#define GBP_SPELL_WIDGET_H
+#pragma once
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
-
-#include "sourceview/ide-source-view.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
@@ -30,9 +26,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSpellWidget, gbp_spell_widget, GBP, SPELL_WIDGET, GtkBin)
 
-GtkWidget       *gbp_spell_widget_new          (IdeSourceView           *source_view);
-GtkWidget       *gbp_spell_widget_get_entry    (GbpSpellWidget    *self);
+GtkWidget     *gbp_spell_widget_new        (IdeEditorView  *editor);
+IdeEditorView *gbp_spell_widget_get_editor (GbpSpellWidget *self);
+void           gbp_spell_widget_set_editor (GbpSpellWidget *self,
+                                            IdeEditorView  *editor);
 
 G_END_DECLS
-
-#endif /* GBP_SPELL_WIDGET_H */

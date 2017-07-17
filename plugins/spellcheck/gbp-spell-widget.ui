@@ -8,6 +8,9 @@
         <property name="row_spacing">6</property>
         <property name="column_spacing">6</property>
         <property name="margin">6</property>
+        <style>
+          <class name="gb-spellchecker"/>
+        </style>
         <child>
           <object class="GtkLabel">
             <property name="visible">true</property>
@@ -61,19 +64,21 @@
             <property name="hexpand">true</property>
             <property name="homogeneous">true</property>
             <child>
-              <object class="GtkButton" id="ignore_button">
+              <object class="GtkButton">
+                <property name="action-name">spell-widget.ignore</property>
                 <property name="label" translatable="yes">_Ignore</property>
                 <property name="visible">true</property>
-                <property name="can_focus">true</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">true</property>
+                <property name="use-underline">True</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="ignore_all_button">
+              <object class="GtkButton">
+                <property name="action-name">spell-widget.ignore-all</property>
                 <property name="label" translatable="yes">Ignore _All</property>
                 <property name="visible">true</property>
-                <property name="can_focus">true</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">true</property>
+                <property name="use-underline">True</property>
               </object>
             </child>
             <style>
@@ -91,8 +96,8 @@
             <property name="visible">true</property>
             <property name="label" translatable="yes">Change _to</property>
             <property name="xalign">0</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">word_entry</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">word_entry</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -103,7 +108,7 @@
           <object class="GtkEntry" id="word_entry">
             <property name="visible">true</property>
             <property name="can_default">true</property>
-            <property name="can_focus">true</property>
+            <property name="can-focus">true</property>
             <property name="width-chars">20</property>
             <property name="max-width-chars">30</property>
           </object>
@@ -120,19 +125,21 @@
             <property name="hexpand">true</property>
             <property name="homogeneous">true</property>
             <child>
-              <object class="GtkButton" id="change_button">
+              <object class="GtkButton">
+                <property name="action-name">spell-widget.change</property>
                 <property name="label" translatable="yes">Cha_nge</property>
                 <property name="visible">true</property>
-                <property name="can_focus">true</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">true</property>
+                <property name="use-underline">True</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="change_all_button">
+              <object class="GtkButton">
+                <property name="action-name">spell-widget.change-all</property>
                 <property name="label" translatable="yes">Change A_ll</property>
                 <property name="visible">true</property>
-                <property name="can_focus">true</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">true</property>
+                <property name="use-underline">True</property>
               </object>
             </child>
             <style>
@@ -152,8 +159,8 @@
             <property name="margin-top">6</property>
             <property name="xalign">0</property>
             <property name="valign">start</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">suggestions_box</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">suggestions_box</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -171,7 +178,7 @@
             <child>
               <object class="GtkListBox" id="suggestions_box">
                 <property name="visible">true</property>
-                <property name="can_focus">true</property>
+                <property name="can-focus">true</property>
                 <property name="activate-on-single-click">false</property>
               </object>
             </child>
@@ -187,8 +194,8 @@
             <property name="visible">true</property>
             <property name="label" translatable="yes">Add Word</property>
             <property name="xalign">0</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">word_entry</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">word_entry</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -203,7 +210,7 @@
               <object class="GtkEntry" id="dict_word_entry">
                 <property name="visible">true</property>
                 <property name="hexpand">true</property>
-                <property name="can_focus">true</property>
+                <property name="can-focus">true</property>
                 <property name="width-chars">20</property>
                 <property name="max-width-chars">20</property>
               </object>
@@ -212,8 +219,8 @@
               <object class="GtkButton" id="dict_add_button">
                 <property name="label" translatable="yes">A_dd</property>
                 <property name="visible">true</property>
-                <property name="can_focus">true</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">true</property>
+                <property name="use-underline">True</property>
               </object>
             </child>
           </object>
@@ -250,7 +257,7 @@
               <object class="GtkListBox" id="dict_words_list">
                 <property name="visible">true</property>
                 <property name="can_default">true</property>
-                <property name="can_focus">true</property>
+                <property name="can-focus">true</property>
                 <property name="activate-on-single-click">false</property>
               </object>
             </child>
@@ -259,19 +266,6 @@
             <property name="left_attach">1</property>
             <property name="top_attach">6</property>
             <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">true</property>
-            <property name="label" translatable="yes">Options</property>
-            <property name="xalign">0</property>
-            <property name="expand">false</property>
-            <property name="use_underline">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
@@ -292,8 +286,8 @@
             <property name="label" translatable="yes">_Language</property>
             <property name="xalign">0</property>
             <property name="expand">false</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">language_chooser_button</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">language_chooser_button</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -303,7 +297,7 @@
         <child>
           <object class="GbpSpellLanguagePopover" id="language_chooser_button">
             <property name="visible">true</property>
-            <property name="can_focus">true</property>
+            <property name="can-focus">true</property>
             <property name="hexpand">true</property>
             <property name="valign">fill</property>
           </object>
@@ -313,35 +307,6 @@
             <property name="width">2</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">true</property>
-            <property name="label" translatable="yes">_Highlight</property>
-            <property name="xalign">0</property>
-            <property name="expand">false</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">highlight_switch</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">10</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSwitch" id="highlight_switch">
-            <property name="visible">true</property>
-            <property name="can_focus">true</property>
-            <property name="halign">start</property>
-            <property name="expand">false</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">10</property>
-          </packing>
-        </child>
-        <style>
-          <class name="gb-spellchecker"/>
-        </style>
       </object>
     </child>
   </template>
