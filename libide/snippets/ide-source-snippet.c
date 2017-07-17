@@ -845,7 +845,7 @@ ide_source_snippet_after_insert_text (IdeSourceSnippet *self,
 
   ide_source_snippet_update_tags (self);
 
-#if 1
+#if 0
   ide_source_snippet_context_dump (self->snippet_context);
 #endif
 
@@ -949,7 +949,7 @@ ide_source_snippet_after_delete_range (IdeSourceSnippet *self,
 
   ide_source_snippet_update_tags (self);
 
-#if 1
+#if 0
   ide_source_snippet_context_dump (self->snippet_context);
 #endif
 
