@@ -27,8 +27,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSpellBufferAddin, gbp_spell_buffer_addin, GBP, SPELL_BUFFER_ADDIN, GObject)
 
-GspellChecker *gbp_spell_buffer_addin_get_checker    (GbpSpellBufferAddin *self);
-void           gbp_spell_buffer_addin_begin_checking (GbpSpellBufferAddin *self);
-void           gbp_spell_buffer_addin_end_checking   (GbpSpellBufferAddin *self);
+GspellChecker *gbp_spell_buffer_addin_get_checker        (GbpSpellBufferAddin *self);
+void           gbp_spell_buffer_addin_begin_checking     (GbpSpellBufferAddin *self);
+void           gbp_spell_buffer_addin_end_checking       (GbpSpellBufferAddin *self);
+GtkTextTag    *gbp_spell_buffer_addin_get_misspelled_tag (GbpSpellBufferAddin *self);
 
 G_END_DECLS

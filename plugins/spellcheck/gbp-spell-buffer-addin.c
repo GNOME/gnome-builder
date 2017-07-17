@@ -26,6 +26,7 @@ struct _GbpSpellBufferAddin
 
   /* Unowned reference to buffer */
   IdeBuffer *buffer;
+  GtkTextTag *misspelled_tag;
 
   /* Owned spellchecker instance */
   GspellChecker *spellchecker;
@@ -91,6 +92,24 @@ gbp_spell_buffer_addin_apply (GbpSpellBufferAddin *self)
 }
 
 static void
+update_style_scheme (GbpSpellBufferAddin *self,
+                     GParamSpec          *pspec,
+                     IdeBuffer           *buffer)
+{
+  GtkSourceStyleScheme *scheme;
+
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+
+  if (!ide_source_style_scheme_apply_style (scheme, "misspelled-match", self->misspelled_tag))
+    g_object_set (self->misspelled_tag,
+                  "underline", PANGO_UNDERLINE_SINGLE,
+                  NULL);
+}
+
+static void
 gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
                              IdeBuffer      *buffer)
 {
@@ -102,6 +121,13 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
   g_assert (IDE_IS_BUFFER (buffer));
 
   self->buffer = buffer;
+
+  self->misspelled_tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (buffer), NULL, NULL);
+  g_signal_connect_swapped (self->buffer,
+                            "notify::style-scheme",
+                            G_CALLBACK (update_style_scheme),
+                            self);
+  update_style_scheme (self, NULL, self->buffer);
 
   gbp_spell_buffer_addin_apply (self);
 
@@ -119,8 +145,14 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
   g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  self->buffer = NULL;
+  g_signal_handlers_disconnect_by_func (buffer,
+                                        G_CALLBACK (update_style_scheme),
+                                        self);
+  gtk_text_tag_table_remove (gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (buffer)),
+                            self->misspelled_tag);
+  self->misspelled_tag = NULL;
 
+  self->buffer = NULL;
   gbp_spell_buffer_addin_apply (self);
 
   IDE_EXIT;
@@ -280,4 +312,20 @@ gbp_spell_buffer_addin_end_checking (GbpSpellBufferAddin *self)
       gbp_spell_buffer_addin_apply (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLED]);
     }
+}
+
+/**
+ * gbp_spell_buffer_addin_get_misspelled_tag:
+ * @self: a #GbpSpellBufferAddin
+ *
+ * Gets the tag to use for the current misspelled word.
+ *
+ * Returns: (nullable) (transfer none): A #GtkTextTag or %NULL.
+ */
+GtkTextTag *
+gbp_spell_buffer_addin_get_misspelled_tag (GbpSpellBufferAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
+
+  return self->misspelled_tag;
 }
