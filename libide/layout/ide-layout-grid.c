@@ -863,6 +863,8 @@ ide_layout_grid_stack_items_changed (IdeLayoutGrid  *self,
                                       removed,
                                       added);
 
+          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_VIEW]);
+
           return;
         }
 
@@ -925,4 +927,23 @@ _ide_layout_grid_stack_removed (IdeLayoutGrid  *self,
           break;
         }
     }
+}
+
+static void
+count_views_cb (GtkWidget *widget,
+                gpointer   data)
+{
+  (*(guint *)data)++;
+}
+
+guint
+ide_layout_grid_count_views (IdeLayoutGrid *self)
+{
+  guint count = 0;
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_GRID (self), 0);
+
+  ide_layout_grid_foreach_view (self, count_views_cb, &count);
+
+  return count;
 }
