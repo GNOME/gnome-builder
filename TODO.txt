@@ -6,16 +6,9 @@
 
  - can we make perspectives the plugin interface?
 
- - view-added/removed/etc on IdeLayoutGrid
-   We can probably change this to set-view in workbench-addin
-
- - Remove get_right_edge() etc, switch with "classification" for panels
-
  - Remove accelerators from perspective, use shortcut engine
 
  - Move panel position settings to org.gnome.builder.editor maybe
-
- - What to do about devhelp/color on right panel?
 
  - Escape in vim mode, keybindings in general.
 
@@ -25,5 +18,3 @@
  - Keybindings editor into preferences
 
  - Escape in command-bar
-
- - Document perferences to show transient right-sidebar
