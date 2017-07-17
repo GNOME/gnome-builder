@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-layout-transient-sidebar"
 
 #include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-grid.h"
 #include "layout/ide-layout-transient-sidebar.h"
 
 typedef struct
@@ -39,6 +40,7 @@ has_view_related_focus (IdeLayoutTransientSidebar *self)
   GtkWidget *focus_view;
   GtkWidget *toplevel;
   GtkWidget *focus;
+  GtkWidget *grid;
 
   g_assert (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
 
@@ -70,6 +72,14 @@ has_view_related_focus (IdeLayoutTransientSidebar *self)
   /* If the focus has entered another view, then we can release. */
   focus_view = gtk_widget_get_ancestor (focus, IDE_TYPE_LAYOUT_VIEW);
   if (focus_view && focus_view != GTK_WIDGET (view))
+    return FALSE;
+
+  /* If we found ourselves a grid, and it has no views in it, we shall
+   * expect that there are no more views to apply.
+   */
+  grid = gtk_widget_get_ancestor (focus, IDE_TYPE_LAYOUT_GRID);
+  if (grid != NULL &&
+      ide_layout_grid_count_views (IDE_LAYOUT_GRID (grid)) == 0)
     return FALSE;
 
   /* Focus hasn't landed anywhere that indicates to us that the
