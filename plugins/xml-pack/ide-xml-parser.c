@@ -490,16 +490,15 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           else
             goto fail;
 
-          entry = ide_xml_schema_cache_entry_new ();
-          entry->kind = kind;
-
-          ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
           /* We skip adding gtkbuilder.rng here and add it from gresources after the parsing */
           if (g_str_has_suffix (schema_url, "gtkbuilder.rng"))
             return;
-          else
-            entry->file = get_absolute_schema_file (state->file, schema_url);
 
+          entry = ide_xml_schema_cache_entry_new ();
+          entry->file = get_absolute_schema_file (state->file, schema_url);;
+          entry->kind = kind;
+
+          ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
           /* Needed to pass the kind to the service schema fetcher */
           g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
 
