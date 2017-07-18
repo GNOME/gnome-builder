@@ -183,20 +183,34 @@ ide_xml_service_load_schema_cb2 (GObject      *object,
 {
   GFile *file = (GFile *)object;
   SchemaState *state = (SchemaState *)user_data;
+  IdeXmlSchemaCacheEntry *cache_entry;
   g_autoptr (GFileInfo) file_info = NULL;
+  GTask *task;
   GError *error = NULL;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (result));
   g_assert (state != NULL);
 
+  task = state->task;
+  cache_entry = state->cache_entry;
   if (NULL != (file_info = g_file_query_info_finish (file, result, &error)))
-    state->cache_entry->mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+    {
+      cache_entry->mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+      g_file_load_contents_async (file,
+                                  g_task_get_cancellable (state->task),
+                                  ide_xml_service_load_schema_cb3,
+                                  state);
+    }
+  else
+    {
+      cache_entry->error_message = g_strdup (error->message);
+      cache_entry->state = SCHEMA_STATE_CANT_LOAD;
 
-  g_file_load_contents_async (file,
-                              g_task_get_cancellable (state->task),
-                              ide_xml_service_load_schema_cb3,
-                              state);
+      g_object_unref (state->task);
+      g_slice_free (SchemaState, state);
+      g_task_return_pointer (task, cache_entry, (GDestroyNotify)ide_xml_schema_cache_entry_unref);
+    }
 }
 
 /* Get mtime phase */
