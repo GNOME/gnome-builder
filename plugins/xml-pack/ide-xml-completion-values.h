@@ -1,4 +1,4 @@
-/* ide-xml-completion-attributes.h
+/* ide-xml-completion-values.h
  *
  * Copyright (C) 2017 Sebastien Lafargue <slafargue@gnome.org>
  *
@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_COMPLETION_ATTRIBUTES_H
-#define IDE_XML_COMPLETION_ATTRIBUTES_H
+#ifndef IDE_XML_COMPLETION_VALUES_H
+#define IDE_XML_COMPLETION_VALUES_H
 
 #include <glib.h>
 
@@ -28,18 +28,15 @@
 
 G_BEGIN_DECLS
 
-typedef struct _MatchItem
+typedef struct _ValueMatchItem
 {
-  IdeXmlRngDefine *define;
-  gchar           *name;
-  gint             pos;
-  gboolean         is_optional;
-} MatchItem;
+  gchar    *name;
+} ValueMatchItem;
 
-GPtrArray           *ide_xml_completion_attributes_get_matches       (IdeXmlRngDefine     *define,
-                                                                      IdeXmlSymbolNode    *node,
-                                                                      gboolean             filtered);
+GPtrArray           *ide_xml_completion_values_get_matches       (IdeXmlRngDefine *define,
+                                                                  const gchar     *values,
+                                                                  const gchar     *prefix);
 
 G_END_DECLS
 
-#endif /* IDE_XML_COMPLETION_ATTRIBUTES_H */
+#endif /* IDE_XML_COMPLETION_VALUES_H */

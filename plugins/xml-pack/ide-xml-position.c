@@ -296,16 +296,25 @@ ide_xml_position_print (IdeXmlPosition *self)
 
   if (self->node != NULL)
     {
-      const gchar **attributes_names;
+      gchar **attributes_names;
+      gchar **attributes_names_cursor;
       IdeXmlSymbolNode *node;
 
       if (NULL != (attributes_names = ide_xml_symbol_node_get_attributes_names (self->node)))
         {
-          while (attributes_names [0] != NULL)
+          attributes_names_cursor = attributes_names;
+          while (attributes_names_cursor [0] != NULL)
             {
-              printf ("attr:%s\n", *attributes_names);
-              ++attributes_names;
+              g_autofree gchar *name = NULL;
+              const gchar *value;
+
+              name = g_strdup (attributes_names [0]);
+              value = ide_xml_symbol_node_get_attribute_value (self->node, name);
+              printf ("attr:%s=%s\n", name, value);
+              ++attributes_names_cursor;
             }
+
+          g_strfreev (attributes_names);
         }
 
       if ((n_children = ide_xml_symbol_node_get_n_direct_children (self->node)) > 0)

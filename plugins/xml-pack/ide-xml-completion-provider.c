@@ -24,6 +24,7 @@
 
 #include "ide.h"
 #include "ide-xml-completion-attributes.h"
+#include "ide-xml-completion-values.h"
 #include "ide-xml-path.h"
 #include "ide-xml-position.h"
 #include "ide-xml-rng-define.h"
@@ -776,12 +777,12 @@ get__element_proposals (IdeXmlPosition *position,
   if (ide_xml_position_get_kind (position) == IDE_XML_POSITION_KIND_IN_CONTENT)
     start = "<";
 
-  for (gint j = 0; j < items->len; ++j)
+  for (gint i = 0; i < items->len; ++i)
     {
       g_autofree gchar *label = NULL;
       g_autofree gchar *text = NULL;
 
-      completion_item = g_ptr_array_index (items, j);
+      completion_item = g_ptr_array_index (items, i);
       label = g_strconcat ("<", completion_item->label, ">", NULL);
       text = g_strconcat (start, completion_item->label, ">", "</", completion_item->label, ">", NULL);
       item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
@@ -805,15 +806,15 @@ get_attributes_proposals (IdeXmlPosition  *position,
   GList *results = NULL;
 
   node = ide_xml_position_get_child_node (position);
-  if (NULL != (attributes = ide_xml_completion_attributes_get_matches (define, node)))
+  if (NULL != (attributes = ide_xml_completion_attributes_get_matches (define, node, TRUE)))
     {
-      for (gint j = 0; j < attributes->len; ++j)
+      for (gint i = 0; i < attributes->len; ++i)
         {
           g_autofree gchar *name = NULL;
           g_autofree gchar *text = NULL;
           MatchItem *match_item;
 
-          match_item = g_ptr_array_index (attributes, j);
+          match_item = g_ptr_array_index (attributes, i);
           /* XXX: can't get the markup working, add () */
           if (match_item->is_optional)
             name = g_strconcat ("<i>(", match_item->name, ")</i>", NULL);
@@ -827,6 +828,65 @@ get_attributes_proposals (IdeXmlPosition  *position,
                                NULL);
 
           results = g_list_prepend (results, item);
+        }
+    }
+
+  return results;
+}
+
+static GList *
+get_values_proposals (IdeXmlPosition  *position,
+                      IdeXmlRngDefine *define)
+{
+  IdeXmlSymbolNode *node;
+  IdeXmlRngDefine *attr_define = NULL;
+  g_autoptr(GPtrArray) attributes = NULL;
+  g_autoptr(GPtrArray) values = NULL;
+  GtkSourceCompletionItem *item;
+  GList *results = NULL;
+
+  node = ide_xml_position_get_child_node (position);
+  g_assert (!ide_str_empty0 (position->detail_name));
+
+  if (NULL != (attributes = ide_xml_completion_attributes_get_matches (define, node, FALSE)))
+    {
+      MatchItem *match_item;
+      const gchar *detail_name;
+      const gchar *detail_value;
+      const gchar *content;
+
+      detail_name = ide_xml_position_get_detail_name (position);
+      detail_value = ide_xml_position_get_detail_value (position);
+
+      for (gint j = 0; j < attributes->len; ++j)
+        {
+          match_item = g_ptr_array_index (attributes, j);
+          if (ide_str_equal0 (detail_name, match_item->name))
+            {
+              attr_define = match_item->define;
+              break;
+            }
+        }
+
+      if (attr_define != NULL)
+        {
+          ide_xml_symbol_node_print (node, 0, FALSE, TRUE, TRUE);
+          content = ide_xml_symbol_node_get_attribute_value (node, match_item->name);
+
+          if (NULL != (values = ide_xml_completion_values_get_matches (attr_define, content, detail_value)))
+            {
+              for (gint i = 0; i < values->len; ++i)
+                {
+                  ValueMatchItem *value_match_item = g_ptr_array_index (values, i);
+
+                  item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
+                                       "markup", value_match_item->name,
+                                       "text", value_match_item->name,
+                                       NULL);
+
+                  results = g_list_prepend (results, item);
+                }
+            }
         }
     }
 
@@ -854,7 +914,8 @@ populate_cb (GObject      *object,
   g_autoptr (GPtrArray) items = NULL;
   GError *error = NULL;
   gint child_pos;
-  gboolean complete_attributes;
+  gboolean complete_attributes = FALSE;
+  gboolean complete_values = FALSE;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_XML_SERVICE (service));
@@ -868,10 +929,15 @@ populate_cb (GObject      *object,
   detail = ide_xml_position_get_detail (position);
   child_pos = ide_xml_position_get_child_pos (position);
 
-  complete_attributes = ((kind == IDE_XML_POSITION_KIND_IN_START_TAG || kind == IDE_XML_POSITION_KIND_IN_END_TAG) &&
-                         detail == IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME);
+  if (kind == IDE_XML_POSITION_KIND_IN_START_TAG || kind == IDE_XML_POSITION_KIND_IN_END_TAG)
+    {
+      if (detail == IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME)
+        complete_attributes = TRUE;
+      else if (detail == IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_VALUE)
+        complete_values = TRUE;
+    }
 
-  if (complete_attributes)
+  if (complete_attributes || complete_values)
     {
       IdeXmlSymbolNode *child_node;
 
@@ -896,6 +962,20 @@ populate_cb (GObject      *object,
 
               def = g_ptr_array_index (candidates, i);
               results = get_attributes_proposals (position, def);
+              gtk_source_completion_context_add_proposals (state->completion_context,
+                                                           GTK_SOURCE_COMPLETION_PROVIDER (self),
+                                                           results,
+                                                           TRUE);
+            }
+        }
+      else if (complete_values)
+        {
+          for (gint i = 0; i < candidates->len; ++i)
+            {
+              g_autoptr (GList) results = NULL;
+
+              def = g_ptr_array_index (candidates, i);
+              results = get_values_proposals (position, def);
               gtk_source_completion_context_add_proposals (state->completion_context,
                                                            GTK_SOURCE_COMPLETION_PROVIDER (self),
                                                            results,

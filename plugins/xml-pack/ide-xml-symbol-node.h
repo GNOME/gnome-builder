@@ -112,9 +112,11 @@ void                              ide_xml_symbol_node_set_state                 
                                                                                      IdeXmlSymbolNodeState   state);
 void                              ide_xml_symbol_node_set_value                     (IdeXmlSymbolNode       *self,
                                                                                      const gchar            *value);
-const gchar                     **ide_xml_symbol_node_get_attributes_names          (IdeXmlSymbolNode       *self);
-void                              ide_xml_symbol_node_take_attributes_names         (IdeXmlSymbolNode       *self,
-                                                                                     gchar                 **attributes_names);
+gchar                           **ide_xml_symbol_node_get_attributes_names          (IdeXmlSymbolNode       *self);
+const gchar                      *ide_xml_symbol_node_get_attribute_value           (IdeXmlSymbolNode       *self,
+                                                                                     const gchar            *name);
+void                              ide_xml_symbol_node_set_attributes                (IdeXmlSymbolNode       *self,
+                                                                                     const gchar           **attributes);
 
 G_END_DECLS
 

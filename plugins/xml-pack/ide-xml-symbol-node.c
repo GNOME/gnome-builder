@@ -21,6 +21,12 @@
 
 #include "ide-xml-symbol-node.h"
 
+typedef struct _Attribute
+{
+  gchar *name;
+  gchar *value;
+} Attribute;
+
 typedef struct _NodeEntry
 {
   IdeXmlSymbolNode *node;
@@ -47,7 +53,7 @@ struct _IdeXmlSymbolNode
   gint                    nb_children;
   gint                    nb_internal_children;
   GFile                  *file;
-  gchar                 **attributes_names;
+  GArray                 *attributes;
   gchar                  *ns;
   IdeXmlSymbolNodeState   state;
   NodeRange               start_tag;
@@ -115,15 +121,13 @@ ide_xml_symbol_node_finalize (GObject *object)
   IdeXmlSymbolNode *self = (IdeXmlSymbolNode *)object;
 
   g_clear_pointer (&self->children, g_array_unref);
+  g_clear_pointer (&self->attributes, g_array_unref);
 
   g_clear_pointer (&self->element_name, g_free);
   g_clear_pointer (&self->value, g_free);
 
   g_clear_object (&self->file);
   g_clear_object (&self->parent);
-
-  if (self->attributes_names != NULL)
-    g_strfreev (self->attributes_names);
 
   G_OBJECT_CLASS (ide_xml_symbol_node_parent_class)->finalize (object);
 }
@@ -661,23 +665,69 @@ ide_xml_symbol_node_compare_location (IdeXmlSymbolNode *ref_node,
 }
 
 void
-ide_xml_symbol_node_take_attributes_names (IdeXmlSymbolNode  *self,
-                                           gchar            **attributes_names)
+ide_xml_symbol_node_set_attributes (IdeXmlSymbolNode  *self,
+                                    const gchar      **attributes)
 {
+  Attribute attr;
+
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
-  if (self->attributes_names != NULL)
-    g_strfreev (self->attributes_names);
+  g_clear_pointer (&self->attributes, g_array_unref);
+  if (attributes == NULL)
+    return;
 
-  self->attributes_names = attributes_names;
+  self->attributes = g_array_new (FALSE, FALSE, sizeof (Attribute));
+  while (attributes [0] != NULL)
+    {
+      attr.name = g_strdup (attributes [0]);
+      attr.value = (attributes [1] != NULL) ? g_strdup (attributes [1]) : NULL;
+      g_array_append_val (self->attributes, attr);
+      attributes += 2;
+    }
 }
 
-const gchar **
+gchar **
 ide_xml_symbol_node_get_attributes_names (IdeXmlSymbolNode  *self)
 {
+  Attribute *attr;
+  GPtrArray *ar_names;
+
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  return (const gchar **)self->attributes_names;
+  if (self->attributes == NULL)
+    return NULL;
+
+  ar_names = g_ptr_array_new ();
+  for (gint i = 0; i < self->attributes->len; ++i)
+    {
+      attr = &g_array_index (self->attributes, Attribute, i);
+      g_ptr_array_add (ar_names, g_strdup (attr->name));
+    }
+
+  g_ptr_array_add (ar_names, NULL);
+
+  return (gchar **)g_ptr_array_free (ar_names, FALSE);
+}
+
+const gchar *
+ide_xml_symbol_node_get_attribute_value (IdeXmlSymbolNode *self,
+                                         const gchar      *name)
+{
+  Attribute *attr;
+
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
+
+  if (self->attributes == NULL || name == NULL)
+    return NULL;
+
+  for (gint i = 0; i < self->attributes->len; ++i)
+    {
+      attr = &g_array_index (self->attributes, Attribute, i);
+      if (ide_str_equal0 (name, attr->name))
+        return attr->value;
+    }
+
+  return NULL;
 }
 
 void
@@ -688,9 +738,9 @@ ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
                            gboolean           show_attributes)
 {
   g_autofree gchar *spacer;
-  gchar **attributes = self->attributes_names;
   guint n_children;
   IdeXmlSymbolNode *child;
+  Attribute *attr;
 
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
@@ -704,12 +754,14 @@ ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
   printf ("%s%s state:%d ", spacer, self->element_name, self->state);
   print_node_ranges (self);
 
-  if (show_attributes && self->attributes_names != NULL)
-    while (*attributes != NULL)
-      {
-        printf ("%s%s\n", spacer, *attributes);
-        ++attributes;
-      }
+  if (show_attributes && self->attributes != NULL)
+    {
+      for (gint i = 0; i < self->attributes->len; ++i)
+        {
+          attr = &g_array_index (self->attributes, Attribute, i);
+          printf ("attr '%s':'%s'\n", attr->name, attr->value);
+        }
+    }
 
   if (show_value && self->value != NULL)
     printf ("%svalue:%s\n", spacer, self->value);

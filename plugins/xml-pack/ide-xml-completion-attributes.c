@@ -36,9 +36,10 @@ static GPtrArray * process_matching_state (MatchingState   *state,
                                            IdeXmlRngDefine *define);
 
 static MatchItem *
-match_item_new (const gchar *attr_name,
-                gint         attr_pos,
-                gboolean     is_optional)
+match_item_new (IdeXmlRngDefine *define,
+                const gchar     *attr_name,
+                gint             attr_pos,
+                gboolean         is_optional)
 {
   MatchItem *item;
 
@@ -46,6 +47,7 @@ match_item_new (const gchar *attr_name,
 
   item = g_slice_new0 (MatchItem);
 
+  item->define = define;
   item->name = g_strdup (attr_name);
   item->pos = attr_pos;
   item->is_optional = is_optional;
@@ -83,7 +85,7 @@ match_children_add (GPtrArray *to_children,
   for (gint i = 0; i < from_children->len; ++i)
     {
       from_item = g_ptr_array_index (from_children, i);
-      to_item = match_item_new (from_item->name, from_item->pos, from_item->is_optional);
+      to_item = match_item_new (from_item->define, from_item->name, from_item->pos, from_item->is_optional);
       g_ptr_array_add (to_children, to_item);
     }
 }
@@ -132,7 +134,7 @@ process_attribute (MatchingState *state)
   if (ide_str_empty0 (name))
     return match_children;
 
-  item = match_item_new (name, state->define->pos, state->is_optional);
+  item = match_item_new (state->define, name, state->define->pos, state->is_optional);
   g_ptr_array_add (match_children, item);
 
   return match_children;
@@ -367,7 +369,7 @@ create_initial_matching_state (IdeXmlRngDefine  *define,
                                IdeXmlSymbolNode *node)
 {
   MatchingState *state;
-  const gchar **attributes;
+  gchar **attributes;
 
   g_assert (define != NULL);
 
@@ -378,6 +380,8 @@ create_initial_matching_state (IdeXmlRngDefine  *define,
         {
           for (gint i = 0; attributes [i] != NULL; i++)
             g_ptr_array_add (state->node_attr, (gchar *)attributes [i]);
+
+          g_free (attributes);
         }
     }
 
@@ -555,7 +559,8 @@ set_attributes_position (MatchingState   *state,
 /* Return an array of MatchItem */
 GPtrArray *
 ide_xml_completion_attributes_get_matches (IdeXmlRngDefine  *define,
-                                           IdeXmlSymbolNode *node)
+                                           IdeXmlSymbolNode *node,
+                                           gboolean          filtered)
 {
   MatchingState *initial_state;
   GPtrArray *match_children;
@@ -571,7 +576,9 @@ ide_xml_completion_attributes_get_matches (IdeXmlRngDefine  *define,
 
   initial_state->is_initial_state = TRUE;
   match_children = process_matching_state (initial_state, define);
-  match_children_filter (match_children, initial_state->node_attr);
+
+  if (filtered)
+    match_children_filter (match_children, initial_state->node_attr);
 
   matching_state_free (initial_state);
   return match_children;

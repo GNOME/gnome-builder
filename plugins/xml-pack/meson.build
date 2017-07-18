@@ -11,6 +11,8 @@ xml_pack_sources = [
   'ide-xml-analysis.h',
   'ide-xml-completion-attributes.c',
   'ide-xml-completion-attributes.h',
+  'ide-xml-completion-values.c',
+  'ide-xml-completion-values.h',
   'ide-xml-completion-provider.c',
   'ide-xml-completion-provider.h',
   'ide-xml-diagnostic-provider.c',

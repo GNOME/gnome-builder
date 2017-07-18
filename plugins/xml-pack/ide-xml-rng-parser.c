@@ -809,11 +809,14 @@ parse_value (IdeXmlRngParser *self,
              xmlNode         *node)
 {
   IdeXmlRngDefine *def = NULL;
+  guchar *name;
 
   g_assert (IDE_IS_XML_RNG_PARSER (self));
   g_assert (node != NULL);
 
-  /* TODO: not done for now */
+  /* TODO: datatype library part */
+  name = _strip (xmlNodeGetContent(node));
+  def = ide_xml_rng_define_new (node, self->current_def, name, IDE_XML_RNG_DEFINE_VALUE);
 
   return def;
 }

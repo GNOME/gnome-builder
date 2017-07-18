@@ -170,10 +170,10 @@ ide_xml_rng_define_free (IdeXmlRngDefine *self)
   if (self->content != NULL)
     ide_xml_rng_define_unref (self->content);
 
-  if (self->content != NULL)
+  if (self->attributes != NULL)
     ide_xml_rng_define_unref (self->attributes);
 
-  if (self->content != NULL)
+  if (self->name_class != NULL)
     ide_xml_rng_define_unref (self->name_class);
 
   g_slice_free (IdeXmlRngDefine, self);
