@@ -351,8 +351,14 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
 
           if (!ide_xml_validator_validate (self->validator, doc, &diagnostics))
             {
-              uri = g_file_get_uri (entry->file);
-              msg = g_strdup_printf ("Can't validate the schema: '%s'", uri);
+              if (entry->file == NULL)
+                msg = g_strdup_printf ("Can't validate the internal schema");
+              else
+                {
+                  uri = g_file_get_uri (entry->file);
+                  msg = g_strdup_printf ("Can't validate the schema: '%s'", uri);
+                }
+
               diagnostic = create_diagnostic (context,
                                               msg,
                                               state->file,
