@@ -160,7 +160,7 @@ configure_file(
 )
 
 # Commonly used deps
-libgio_dep = dependency('gio-2.0', version: '>= 2.50.0')
+libgio_dep = dependency('gio-2.0', version: '>= 2.53.2')
 libgiounix_dep = dependency('gio-unix-2.0')
 libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.21.0')
