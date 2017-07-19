@@ -33,6 +33,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Ide', '1.0')
 gi.require_version('WebKit2', '4.0')
 
+from gi.repository import Dazzle
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Gtk
@@ -205,6 +206,13 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         language_id = language.get_id() if language else None
 
         self.do_language_changed(language_id)
+
+        # Add a shortcut for activation inside the editor
+        controller = Dazzle.ShortcutController.find(view)
+        controller.add_command_action('org.gnome.builder.html-preview.preview',
+                                      '<Control><Alt>p',
+                                      Dazzle.ShortcutPhase.CAPTURE,
+                                      'editor-view.preview-as-html')
 
     def do_unload(self, view):
         group = view.get_action_group('editor-view')
