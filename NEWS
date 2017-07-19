@@ -1,4 +1,65 @@
 ==============
+Version 3.25.4
+==============
+
+This release of Builder contains the largest UI change since the creation of
+Builder. As this is mid-development cycle towards GNOME 3.26, we anticipate
+breakage in this release. However, we value the time that people put into
+testing things for us and doubly so for those that file bugs.
+
+Generally, we try to keep the master branch fairly stable and usable. This
+release will almost certainly have regressions due to the nature of the
+redesign.
+
+ • A new keybinding engine is being used. It is very young but maturing
+   quickly. Great pain has been experienced to merge the desires for
+   features we need with the backwards compatability to keep existing
+   features working such as the Vim compatability engine.
+ • A new layout engine has been added. It has a few tricks up it's sleeve.
+   It can animate widgets between grid locations. It also can highlight
+   the view header to match the primary contents of the view. Under the
+   hood, the implementation has been vastly simplified.
+ • Over/under splits can now contain separate documents and you are no
+   longer limited to two.
+ • The project tree has been modified to look/feel more like a listbox.
+   Future releases of Builder will keep the project-tree, but it will
+   likely be disabled by default in favor of a DzlStackList-based
+   navigation.
+ • The TODO plugin has been ported to C. It goes through a reasonable
+   amount of effort to keep memory allocations contiguous and footprint low.
+ • Spellcheck has been moved into a plugin.
+ • Color picker and spellcheck have been ported to use the new
+   "transient sidebar". They come into focus when it makes sense for them
+   to be visible based on context.
+ • The symbol panel has been moved into the document header. It has also
+   been styled to feel more like a listbox with hover state.
+ • Devhelp browsing has been moved into the document header for the
+   devhelp documentation view. It's a little bare at first, and we anticipate
+   this to improve in future snapshots.
+ • The terminal supports the "primary-color" feature to style the document
+   header inline with the document content.
+ • The build panel has been redsigned. It is placed on the left now to keep
+   our workflow something like Left->Right.
+ • The global search has been replaced to fit with the mockups, on the
+   top-right corner of the window. We expect more improvements to search
+   in upcoming releases.
+ • The "new-document" button has been replaced with a menu for various
+   types of new documents.
+ • Manu previous extension points now use menus.ui to populate their menu
+   content. This makes extending menus much more consistent across Builder.
+ • Document preferences (tab size, spaces, language, etc) have been moved
+   into a transient sidebar. You can activate this with the menu item from
+   the document header.
+ • An "Open Pages" section has been added to the panel. It's not yet clear
+   if this will continue to be enabled by default or if it will be a plugin
+   that can be enabled.
+ • The beautifier plugin has yet to be ported to the new engine, and therefore
+   is disabled by default in this release.
+
+Thanks in advance to all of our testers!
+
+
+==============
 Version 3.25.3
 ==============
 
