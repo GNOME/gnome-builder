@@ -194,7 +194,7 @@ get_tag_location (IdeXmlSax    *self,
   const gchar *current;
   const gchar *end_current;
   const gchar *line_start;
-  const gchar *end_line_start = NULL;
+  const gchar *end_line_start;
   gint start_line_number;
   gint end_line_number;
   gint size_offset = 1;
@@ -278,6 +278,7 @@ get_tag_location (IdeXmlSax    *self,
     }
 
 next:
+  /* Search back the tag start and adjust the start and end line */
   while (current > base)
     {
       ch = g_utf8_get_char (current);
@@ -297,6 +298,7 @@ next:
       current = g_utf8_prev_char (current);
     }
 
+  /* Search back the tag start offset */
   line_start = current;
   while (line_start > base)
     {
@@ -305,7 +307,10 @@ next:
         {
           ++line_start;
           if (!end_line_found )
-            end_line_start = line_start;
+            {
+              end_line_start = line_start;
+              end_line_found = TRUE;
+            }
 
           break;
         }
@@ -313,7 +318,8 @@ next:
       line_start = g_utf8_prev_char (line_start);
     }
 
-  g_assert (end_line_start != NULL);
+  if (!end_line_found)
+    end_line_start = line_start;
 
   *line = start_line_number;
   *line_offset = (current - line_start) + 1;
