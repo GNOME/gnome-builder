@@ -623,7 +623,7 @@ is_in_range (NodeRange range,
 static void
 print_node_ranges (IdeXmlSymbolNode *node)
 {
-  printf ("(%i,%i)->(%i,%i) s:%ld end: (%i,%i)->(%i,%i) s:%ld\n",
+  printf ("(%i,%i)->(%i,%i) s:%"G_GSIZE_FORMAT" end: (%i,%i)->(%i,%i) s:%"G_GSIZE_FORMAT"\n",
           node->start_tag.start_line,
           node->start_tag.start_line_offset,
           node->start_tag.end_line,
