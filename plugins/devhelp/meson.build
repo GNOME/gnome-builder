@@ -23,7 +23,7 @@ devhelp_sources = [
 ]
 
 devhelp_deps = plugin_deps + [
-  dependency('libdevhelp-3.0', version: '>=3.25.2'),
+  dependency('libdevhelp-3.0', version: '>=3.25.1'),
   libgd_dep,
 ]
 
