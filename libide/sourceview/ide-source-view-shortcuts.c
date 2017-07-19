@@ -38,7 +38,9 @@ _ide_source_view_init_shortcuts (IdeSourceView *self)
 
   dzl_shortcut_controller_add_command_signal (controller,
                                               "org.gnome.builder.sourceview.reset",
-                                              "Escape", "reset", 0);
+                                              "Escape",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              "reset", 0);
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              source_view_shortcuts,

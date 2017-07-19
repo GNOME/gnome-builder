@@ -74,27 +74,32 @@ _ide_layout_stack_init_shortcuts (IdeLayoutStack *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.layoutstack.move-right"),
                                               I_("<Primary><Alt>Page_Down"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("layoutstack.move-right"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.layoutstack.move-left"),
                                               I_("<Primary><Alt>Page_Up"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("layoutstack.move-left"));
 
   dzl_shortcut_controller_add_command_signal (controller,
                                               I_("org.gnome.builder.layoutstack.next-document"),
                                               I_("<Primary><Shift>Page_Down"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("change-current-page"),
                                               1, G_TYPE_INT, 1);
 
   dzl_shortcut_controller_add_command_signal (controller,
                                               I_("org.gnome.builder.layoutstack.previous-document"),
                                               I_("<Primary><Shift>Page_Up"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("change-current-page"),
                                               1, G_TYPE_INT, -1);
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.layoutstack.close-view"),
                                               I_("<Primary>w"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("layoutstack.close-view"));
 }

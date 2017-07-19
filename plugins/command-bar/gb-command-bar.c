@@ -711,7 +711,7 @@ gb_command_bar_class_finalize (GbCommandBarClass *klass)
 
 static const DzlShortcutEntry shortcuts[] = {
   { "org.gnome.builder.show-command-bar",
-    "<Control>Return",
+    "<Primary>Return",
     N_("Editor"),
     N_("General"),
     N_("Command Bar") },
@@ -739,9 +739,12 @@ gb_command_bar_init (GbCommandBar *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.show-command-bar"),
                                               NULL,
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("win.show-command-bar"));
 
-  dzl_shortcut_manager_add_shortcut_entries (NULL, shortcuts, G_N_ELEMENTS (shortcuts),
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             shortcuts,
+                                             G_N_ELEMENTS (shortcuts),
                                              GETTEXT_PACKAGE);
 
 }
