@@ -29,25 +29,25 @@
 
 static const DzlShortcutEntry editor_perspective_entries[] = {
   { "org.gnome.builder.editor.new-file",
-    NULL,
+    0, NULL,
     N_("Editor"),
     N_("Files"),
     N_("Create a new document") },
 
   { "org.gnome.builder.editor.open-file",
-    NULL,
+    0, NULL,
     N_("Editor"),
     N_("Files"),
     N_("Open a document") },
 
   { "org.gnome.builder.editor.navigation-panel",
-    NULL,
+    0, NULL,
     N_("Editor"),
     N_("Panels"),
     N_("Toggle navigation panel") },
 
   { "org.gnome.builder.editor.utilities-panel",
-    NULL,
+    0, NULL,
     N_("Editor"),
     N_("Panels"),
     N_("Toggle utilities panel") },
@@ -65,25 +65,25 @@ _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor.new-file"),
                                               I_("<Primary>n"),
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("editor.new-file"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor.open-file"),
                                               I_("<Primary>o"),
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("editor.open-file"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor.navigation-panel"),
                                               I_("F9"),
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("dockbin.left-visible"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor.utilities-panel"),
                                               I_("<Control>F9"),
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("dockbin.bottom-visible"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
