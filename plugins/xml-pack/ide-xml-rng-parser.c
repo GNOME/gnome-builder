@@ -1124,7 +1124,9 @@ parse_pattern (IdeXmlRngParser *self,
     def = ide_xml_rng_define_new (node, parent, NULL, IDE_XML_RNG_DEFINE_NOTALLOWED);
   else if (is_valid_rng_node (node, "grammar"))
     {
-      parent_grammar = self->parent_grammar;
+      if (self->grammars != NULL)
+        parent_grammar = self->parent_grammar;
+
       self->parent_grammar = old_grammar = self->grammars;
 
       grammar = parse_grammar (self, node->children);
