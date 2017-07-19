@@ -194,7 +194,7 @@ get_tag_location (IdeXmlSax    *self,
   const gchar *current;
   const gchar *end_current;
   const gchar *line_start;
-  const gchar *end_line_start;
+  const gchar *end_line_start = NULL;
   gint start_line_number;
   gint end_line_number;
   gint size_offset = 1;
@@ -312,6 +312,8 @@ next:
 
       line_start = g_utf8_prev_char (line_start);
     }
+
+  g_assert (end_line_start != NULL);
 
   *line = start_line_number;
   *line_offset = (current - line_start) + 1;

@@ -98,6 +98,8 @@ jump_to_next_attribute (const gchar **cursor)
   if (skip_whitespaces (&p))
     has_spaces = TRUE;
 
+  ch = g_utf8_get_char (p);
+
   if (ch == '"' || ch == '\'')
     {
       term = ch;

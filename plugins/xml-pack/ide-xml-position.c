@@ -242,7 +242,7 @@ ide_xml_position_print (IdeXmlPosition *self)
   const gchar *n_sibling_str;
   const gchar *kind_str;
   const gchar *detail_str;
-  IdeXmlSymbolNode *parent_node;
+  IdeXmlSymbolNode *parent_node = NULL;
   gint n_children;
 
   p_sibling_str = (self->previous_sibling_node == NULL) ?
@@ -256,7 +256,9 @@ ide_xml_position_print (IdeXmlPosition *self)
   kind_str = ide_xml_position_kind_get_str (self->kind);
   detail_str = ide_xml_position_detail_get_str (self->detail);
 
-  parent_node = ide_xml_symbol_node_get_parent (self->node);
+  if (self->node != NULL)
+    parent_node = ide_xml_symbol_node_get_parent (self->node);
+
   printf ("POSITION: parent: %s node: %s kind:%s detail:'%s'\n \
            prefix:'%s' detail name:'%s' detail value:'%s' quote:'%c'\n",
           (parent_node != NULL) ? ide_xml_symbol_node_get_element_name (parent_node) : "none",

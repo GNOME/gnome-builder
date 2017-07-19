@@ -72,16 +72,21 @@ ide_xml_path_new_from_node (IdeXmlSymbolNode *node)
 {
   IdeXmlPath *self;
 
-  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (node != NULL, NULL);
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (node), NULL);
 
   self = ide_xml_path_new ();
 
+#if 0
   do
     {
       ide_xml_path_append_node (self, node);
       //node = node->parent;
     } while (node != NULL);
+#else
+  if (node != NULL)
+    ide_xml_path_append_node (self, node);
+#endif
 
   return self;
 }
