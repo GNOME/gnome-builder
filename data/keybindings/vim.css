@@ -101,9 +101,6 @@
                    "hide-completion" ()
                    "set-mode" ("vim-normal", permanent) };
 
-  bind "<ctrl>s" { "action" ("view", "save", "") };
-  bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
-  bind "<ctrl><shift>o" { "action" ("win", "open-with-dialog", "") };
   bind "<ctrl>k" { "action" ("layoutstack", "show-list", "") };
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
@@ -1850,8 +1847,8 @@
 
 @binding-set builder-vim-source-view-normal-ctrl-w
 {
-  bind "v" { "action" ("layoutstack", "split-right", "") "grab_focus" () };
-  bind "<ctrl>v" { "action" ("layoutstack", "split-right", "") "grab_focus" () };
+  bind "v" { "action" ("layoutstack", "open-in-new-frame", "") "grab_focus" () };
+  bind "<ctrl>v" { "action" ("layoutstack", "open-in-new-frame", "") "grab_focus" () };
 
   bind "c" { "action" ("layoutstack", "close-view", "") };
 

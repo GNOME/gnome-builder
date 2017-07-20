@@ -70,14 +70,14 @@ static DzlShortcutEntry editor_view_shortcuts[] = {
 
   { "org.gnome.builder.editor-view.next-error",
     DZL_SHORTCUT_PHASE_BUBBLE,
-    NULL,
+    "<alt>n",
     N_("Editor"),
     N_("Find and replace"),
     N_("Move to the next error") },
 
   { "org.gnome.builder.editor-view.prev-error",
     DZL_SHORTCUT_PHASE_BUBBLE,
-    NULL,
+    "<alt>p",
     N_("Editor"),
     N_("Find and replace"),
     N_("Move to the previous error") },

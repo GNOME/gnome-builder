@@ -68,7 +68,7 @@
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };
   bind "<ctrl>j" { "action" ("view-grid", "focus-neighbor", "3") };
-  bind "<shift><ctrl>j" { "action" ("view-stack", "split-down", "") };
+  bind "<shift><ctrl>j" { "action" ("layoutstack", "split-view", "") };
   bind "F2" { "clear-selection" ()
               "movement" (previous-word-end, 0, 1, 1)
               "movement" (next-word-start, 0, 1, 0)
@@ -96,10 +96,10 @@
   bind "<alt>o" { "action" ("win", "find-other-file", "") };
 
   /* cycle "tabs" */
-  bind "<ctrl><alt>Page_Up" { "action" ("view-stack", "previous-view", "") };
-  bind "<ctrl><alt>KP_Page_Up" { "action" ("view-stack", "previous-view", "") };
-  bind "<ctrl><alt>Page_Down" { "action" ("view-stack", "next-view", "") };
-  bind "<ctrl><alt>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
+  bind "<ctrl><alt>Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl><alt>KP_Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl><alt>Page_Down" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl><alt>KP_Page_Down" { "action" ("layoutstack", "next-view", "") };
 
   bind "<alt>0" { "append-to-count" (0) };
   bind "<alt>1" { "append-to-count" (1) };
@@ -121,16 +121,16 @@
 @binding-set builder-emacs-source-view-x
 {
   bind "<ctrl>c" { "action" ("app", "quit", "") };
-  bind "0" { "action" ("view", "close", "") };
-  bind "k" { "action" ("view", "close", "") };
+  bind "0" { "action" ("layoutstack", "close-view", "") };
+  bind "k" { "action" ("layoutstack", "close-view", "") };
   bind "<ctrl>f" { "action" ("win", "open-with-dialog", "") };
-  bind "<ctrl>s" { "action" ("view", "save", "") };
+  bind "<ctrl>s" { "action" ("editor-view", "save", "") };
   bind "s" { "action" ("win", "save-all", "") };
-  bind "<ctrl>b" { "action" ("view-stack", "show-list", "") };
-  bind "<ctrl>w" { "action" ("view", "save-as", "") };
+  bind "<ctrl>b" { "action" ("layoutstack", "show-list", "") };
+  bind "<ctrl>w" { "action" ("editor-view", "save-as", "") };
   bind "u" { "redo" () };
-  bind "2" { "action" ("view-stack", "split-down", "") };
-  bind "3" { "action" ("view-stack", "split-right", "") };
+  bind "2" { "action" ("lyaoutstack", "split-view", "") };
+  bind "3" { "action" ("layoutstack", "open-in-new-frame", "") };
   bind "o" { "action" ("view-grid", "focus-neighbor", "0") };
   bind "grave" { "move-error" (down) };
   bind "h" { "select-all" (1) };
