@@ -401,6 +401,33 @@ toplevel_is_offscreen (GdkWindow *window)
   return FALSE;
 }
 
+static gboolean
+can_supress (const GdkEventKey *event)
+{
+  /*
+   * This is rather tricky because we don't know what can be activated
+   * in the bubble up phase of event delivery. Looking at ->string isn't
+   * very safe when input methods are in play. So we just hard code some
+   * things we know about common keybindings.
+   *
+   * If you are wondering why you're getting beeps in the editor while
+   * activating some keybinding you've added, you found the right spot!
+   */
+  if ((event->state & GDK_MODIFIER_MASK) != 0)
+    return FALSE;
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_F1: case GDK_KEY_F2: case GDK_KEY_F3: case GDK_KEY_F4:
+    case GDK_KEY_F5: case GDK_KEY_F6: case GDK_KEY_F7: case GDK_KEY_F8:
+    case GDK_KEY_F9: case GDK_KEY_F10: case GDK_KEY_F11: case GDK_KEY_F12:
+      return FALSE;
+
+    default:
+      return TRUE;
+    }
+}
+
 gboolean
 _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
                                 GdkEventKey       *event,
@@ -447,8 +474,8 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 
     case IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT:
       {
-        /* don't block possible accelerators, but supress others */
-        if (!handled && suppress_unbound && ((event->state & GDK_MODIFIER_MASK) == 0))
+        /* Don't block possible accelerators, but supress others. */
+        if (!handled && suppress_unbound && can_supress (event))
           {
             if (!is_modifier_key (event) && !toplevel_is_offscreen (event->window))
               gdk_window_beep (event->window);
