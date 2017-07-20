@@ -146,9 +146,9 @@ ide_source_view_mode_get_keep_mark_on_char (IdeSourceViewMode *self)
 }
 
 static void
-ide_source_view_mode_finalize (GObject *object)
+ide_source_view_mode_destroy (GtkWidget *widget)
 {
-  IdeSourceViewMode *self = IDE_SOURCE_VIEW_MODE (object);
+  IdeSourceViewMode *self = IDE_SOURCE_VIEW_MODE (widget);
 
   g_clear_object (&self->view);
   g_clear_pointer (&self->name, g_free);
@@ -156,7 +156,7 @@ ide_source_view_mode_finalize (GObject *object)
   g_clear_pointer (&self->display_name, g_free);
   self->type = 0;
 
-  G_OBJECT_CLASS (ide_source_view_mode_parent_class)->finalize (object);
+  GTK_WIDGET_CLASS (ide_source_view_mode_parent_class)->destroy (widget);
 }
 
 static void
@@ -247,8 +247,9 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
   GtkBindingSet *binding_set, *parent_binding_set;
   GType type;
 
-  object_class->finalize = ide_source_view_mode_finalize;
   object_class->get_property = ide_source_view_mode_get_property;
+
+  widget_class->destroy = ide_source_view_mode_destroy;
 
   gtk_widget_class_set_css_name (widget_class, "idesourceviewmode");
 
