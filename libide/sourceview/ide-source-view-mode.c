@@ -20,6 +20,7 @@
 #define G_LOG_DOMAIN "ide-source-view-mode"
 
 #include <glib/gi18n.h>
+#include <string.h>
 
 #include "ide-debug.h"
 
@@ -167,35 +168,75 @@ proxy_closure_marshal (GClosure     *closure,
                        gpointer      invocation_hint,
                        gpointer      marshal_data)
 {
+  g_autoptr(IdeSourceViewMode) self = NULL;
   GValue *param_copy;
-  IdeSourceViewMode *mode = IDE_SOURCE_VIEW_MODE (g_value_get_object (&param_values[0]));
 
-  param_copy = g_memdup (param_values, sizeof (GValue) * n_param_values);
+  g_assert (closure != NULL);
+  g_assert (param_values != NULL);
 
-  param_copy[0].data[0].v_pointer = mode->view;
-  g_signal_emitv (param_copy,
-                  GPOINTER_TO_INT (closure->data),
-                  0,
-                  return_value);
-  g_free (param_copy);
+  /*
+   * To be absolutely sure about reference counting with GValue and other
+   * ownership mishaps, this proxy makes a full copy of all parameters. It is
+   * certainly slower, but we are only activated from keybindings and the user
+   * can only type so fast...
+   */
+
+  self = g_value_dup_object (&param_values[0]);
+  g_assert (IDE_IS_SOURCE_VIEW_MODE (self));
+
+  if (self->view == NULL)
+    {
+      g_warning ("Cannot proxy signal after destroy has been called");
+      return;
+    }
+
+  /* Just spill to the stack, we only have a small number of params */
+  param_copy = g_alloca (sizeof (GValue) * n_param_values);
+  memset (param_copy, 0, sizeof (GValue) * n_param_values);
+
+  /* Swap the first object into the IdeSourceView */
+  g_value_init (&param_copy[0], G_OBJECT_TYPE (self->view));
+  g_value_set_object (&param_copy[0], self->view);
+
+  /* Copy the rest of the parameters across */
+  for (guint i = 1; i < n_param_values; i++)
+    {
+      g_value_init (&param_copy[i], G_VALUE_TYPE (&param_values[i]));
+      g_value_copy (&param_values[i], &param_copy[i]);
+    }
+
+  /* Emit the signal on the source view */
+  g_signal_emitv (param_copy, GPOINTER_TO_UINT (closure->data), 0, return_value);
+
+  /* Cleanup, dropping our references. */
+  for (guint i = 0; i < n_param_values; i++)
+    g_value_unset (&param_copy[i]);
 }
 
 static void
 proxy_all_action_signals (GType type)
 {
-  GClosure *proxy;
-  guint *signals;
-  guint n_signals, i;
+  g_autofree guint *signals = NULL;
   GSignalQuery query;
+  guint n_signals = 0;
+
+  g_assert (g_type_is_a (type, G_TYPE_OBJECT));
 
   signals = g_signal_list_ids (type, &n_signals);
 
-  for (i = 0; i < n_signals; i++)
+  for (guint i = 0; i < n_signals; i++)
     {
       g_signal_query (signals[i], &query);
 
+      /* We don't support detailed signals */
+      if (query.signal_flags & G_SIGNAL_DETAILED)
+        continue;
+
+      /* Only proxy keybinding action signals */
       if (query.signal_flags & G_SIGNAL_ACTION)
         {
+          GClosure *proxy;
+
           proxy = g_closure_new_simple (sizeof (GClosure), GINT_TO_POINTER (query.signal_id));
           g_closure_set_meta_marshal (proxy, NULL, proxy_closure_marshal);
           g_signal_newv (query.signal_name,
@@ -206,10 +247,9 @@ proxy_all_action_signals (GType type)
                          query.return_type,
                          query.n_params,
                          (GType *)query.param_types);
+          /* Proxy ownership is stolen when sinking the closure */
         }
     }
-
-  g_free (signals);
 }
 
 const gchar *
