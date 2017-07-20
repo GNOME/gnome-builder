@@ -27,64 +27,55 @@
 
 static DzlShortcutEntry editor_view_shortcuts[] = {
   { "org.gnome.builder.editor-view.save",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<Primary>s",
+    0, NULL,
     N_("Editor"),
     N_("Files"),
     N_("Save the document") },
 
   { "org.gnome.builder.editor-view.save-as",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<Primary><shift>s",
+    0, NULL,
     N_("Editor"),
     N_("Files"),
     N_("Save the document with a new name") },
 
   { "org.gnome.builder.editor-view.find",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<Primary>f",
+    0, NULL,
     N_("Editor"),
     N_("Find and replace"),
     N_("Find") },
 
   { "org.gnome.builder.editor-view.find-and-replace",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<Primary>h",
+    0, NULL,
     N_("Editor"),
     N_("Find and replace"),
     N_("Find and replace") },
 
   { "org.gnome.builder.editor-view.next-match",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<Primary>g",
+    0, NULL,
     N_("Editor"),
     N_("Find and replace"),
     N_("Move to the next match") },
 
   { "org.gnome.builder.editor-view.prev-match",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<Primary><Shift>g",
+    0, NULL,
     N_("Editor"),
     N_("Find and replace"),
     N_("Move to the previous match") },
 
   { "org.gnome.builder.editor-view.next-error",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<alt>n",
+    0, NULL,
     N_("Editor"),
     N_("Find and replace"),
     N_("Move to the next error") },
 
   { "org.gnome.builder.editor-view.prev-error",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<alt>p",
+    0, NULL,
     N_("Editor"),
     N_("Find and replace"),
     N_("Move to the previous error") },
 
   { "org.gnome.builder.editor-view.clear-highlight",
-    DZL_SHORTCUT_PHASE_BUBBLE,
-    "<Primary><Shift>k",
+    0, NULL,
     N_("Editor"),
     N_("Find and replace"),
     N_("Find the next match") },
@@ -101,55 +92,55 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.find"),
-                                              NULL,
+                                              "<Primary>f",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.find"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.find-and-replace"),
-                                              NULL,
+                                              "<Primary>h",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.find-and-replace"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.next-match"),
-                                              NULL,
+                                              "<Primary>g",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.move-next-search-result"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.prev-match"),
-                                              NULL,
+                                              "<Primary><Shift>g",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.move-prevous-search-result"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.next-error"),
-                                              NULL,
+                                              "<alt>n",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.move-next-error"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.prev-error"),
-                                              NULL,
+                                              "<alt>p",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.move-prevous-error"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.clear-highlight"),
-                                              NULL,
+                                              "<Primary><Shift>k",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.clear-highlight"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.save"),
-                                              NULL,
+                                              "<Primary>s",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.save"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.save-as"),
-                                              NULL,
+                                              "<Primary><Shift>s",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.save-as"));
 
