@@ -49,6 +49,8 @@ struct _IdeLayoutGridClass
 GtkWidget           *ide_layout_grid_new                (void);
 IdeLayoutGridColumn *ide_layout_grid_get_nth_column     (IdeLayoutGrid       *self,
                                                          gint                 nth);
+IdeLayoutView       *ide_layout_grid_focus_neighbor     (IdeLayoutGrid       *self,
+                                                         GtkDirectionType     dir);
 IdeLayoutGridColumn *ide_layout_grid_get_current_column (IdeLayoutGrid       *self);
 void                 ide_layout_grid_set_current_column (IdeLayoutGrid       *self,
                                                          IdeLayoutGridColumn *column);

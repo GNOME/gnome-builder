@@ -958,3 +958,107 @@ ide_layout_grid_count_views (IdeLayoutGrid *self)
 
   return count;
 }
+
+/**
+ * ide_layout_grid_focus_neighbor:
+ * @self: An #IdeLayoutGrid
+ * @dir: the direction for the focus change
+ *
+ * Attempts to focus a neighbor #IdeLayoutView in the grid based on
+ * the direction requested.
+ *
+ * If an #IdeLayoutView was focused, it will be returned to the caller.
+ *
+ * Returns: (transfer none) (nullable): An #IdeLayoutView or %NULL
+ */
+IdeLayoutView *
+ide_layout_grid_focus_neighbor (IdeLayoutGrid    *self,
+                                GtkDirectionType  dir)
+{
+  IdeLayoutGridColumn *column;
+  IdeLayoutStack *stack;
+  IdeLayoutView *view = NULL;
+  guint stack_pos = 0;
+  guint column_pos = 0;
+  guint n_children;
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_GRID (self), NULL);
+  g_return_val_if_fail (dir <= GTK_DIR_RIGHT, NULL);
+
+  /* Make sure we have a current view and stack */
+  if (NULL == (stack = ide_layout_grid_get_current_stack (self)) ||
+      NULL == (column = ide_layout_grid_get_current_column (self)))
+    return NULL;
+
+  gtk_container_child_get (GTK_CONTAINER (self), GTK_WIDGET (column),
+                           "index", &column_pos,
+                           NULL);
+
+  gtk_container_child_get (GTK_CONTAINER (column), GTK_WIDGET (stack),
+                           "index", &stack_pos,
+                           NULL);
+
+  switch (dir)
+    {
+    case GTK_DIR_DOWN:
+      n_children = dzl_multi_paned_get_n_children (DZL_MULTI_PANED (column));
+      if (n_children - stack_pos == 1)
+        return NULL;
+      stack = IDE_LAYOUT_STACK (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), stack_pos + 1));
+      view = ide_layout_stack_get_visible_child (stack);
+      break;
+
+    case GTK_DIR_RIGHT:
+      n_children = dzl_multi_paned_get_n_children (DZL_MULTI_PANED (self));
+      if (n_children - column_pos == 1)
+        return NULL;
+      column = IDE_LAYOUT_GRID_COLUMN (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), column_pos + 1));
+      stack = IDE_LAYOUT_STACK (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), 0));
+      view = ide_layout_stack_get_visible_child (stack);
+      break;
+
+    case GTK_DIR_UP:
+      if (stack_pos == 0)
+        return NULL;
+      stack = IDE_LAYOUT_STACK (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), stack_pos - 1));
+      view = ide_layout_stack_get_visible_child (stack);
+      break;
+
+    case GTK_DIR_LEFT:
+      if (column_pos == 0)
+        return NULL;
+      column = IDE_LAYOUT_GRID_COLUMN (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), column_pos - 1));
+      stack = IDE_LAYOUT_STACK (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), 0));
+      view = ide_layout_stack_get_visible_child (stack);
+      break;
+
+    case GTK_DIR_TAB_FORWARD:
+      if (!ide_layout_grid_focus_neighbor (self, GTK_DIR_DOWN) &&
+          !ide_layout_grid_focus_neighbor (self, GTK_DIR_RIGHT))
+        {
+          column = IDE_LAYOUT_GRID_COLUMN (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), 0));
+          stack = IDE_LAYOUT_STACK (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), 0));
+          view = ide_layout_stack_get_visible_child (stack);
+        }
+      break;
+
+    case GTK_DIR_TAB_BACKWARD:
+      if (!ide_layout_grid_focus_neighbor (self, GTK_DIR_UP) &&
+          !ide_layout_grid_focus_neighbor (self, GTK_DIR_LEFT))
+        {
+          n_children = dzl_multi_paned_get_n_children (DZL_MULTI_PANED (self));
+          column = IDE_LAYOUT_GRID_COLUMN (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), n_children - 1));
+          stack = IDE_LAYOUT_STACK (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), 0));
+          view = ide_layout_stack_get_visible_child (stack);
+        }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  if (view != NULL)
+    gtk_widget_child_focus (GTK_WIDGET (view), GTK_DIR_TAB_FORWARD);
+
+  return view;
+}
