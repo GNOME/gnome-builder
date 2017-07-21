@@ -333,6 +333,23 @@ ide_layout_grid_remove (GtkContainer *container,
 }
 
 static void
+ide_layout_grid_grab_focus (GtkWidget *widget)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)widget;
+  IdeLayoutView *view;
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+
+  if (NULL != (view = ide_layout_grid_get_current_view (self)))
+    {
+      gtk_widget_grab_focus (GTK_WIDGET (view));
+      return;
+    }
+
+  GTK_WIDGET_CLASS (ide_layout_grid_parent_class)->grab_focus (widget);
+}
+
+static void
 ide_layout_grid_finalize (GObject *object)
 {
   IdeLayoutGrid *self = (IdeLayoutGrid *)object;
@@ -402,6 +419,7 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
   object_class->get_property = ide_layout_grid_get_property;
   object_class->set_property = ide_layout_grid_set_property;
 
+  widget_class->grab_focus = ide_layout_grid_grab_focus;
   widget_class->hierarchy_changed = ide_layout_grid_hierarchy_changed;
 
   container_class->add = ide_layout_grid_add;
