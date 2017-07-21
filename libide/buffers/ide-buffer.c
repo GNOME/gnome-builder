@@ -1068,6 +1068,9 @@ ide_buffer_loaded (IdeBuffer *self)
   /* This is suspended until we've loaded */
   ide_highlight_engine_unpause (priv->highlight_engine);
 
+  /* Unblock our previously blocked signals */
+  dzl_signal_group_unblock (priv->diagnostics_manager_signals);
+
   IDE_EXIT;
 }
 
@@ -1708,6 +1711,8 @@ ide_buffer_init (IdeBuffer *self)
                                    G_CALLBACK (ide_buffer__diagnostics_manager__changed),
                                    self,
                                    G_CONNECT_SWAPPED);
+  /* Block signals until we've been loaded */
+  dzl_signal_group_block (priv->diagnostics_manager_signals);
 
   DZL_COUNTER_INC (instances);
 
