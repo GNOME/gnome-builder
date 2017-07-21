@@ -86,7 +86,8 @@ ide_indenter_mimic_source_view (GtkTextView *text_view,
   copy_end = copy_begin;
   while (g_unichar_isspace (gtk_text_iter_get_char (&copy_end)))
     {
-      if (!gtk_text_iter_forward_char (&copy_end))
+      if (gtk_text_iter_ends_line (&copy_end) ||
+          !gtk_text_iter_forward_char (&copy_end))
         break;
     }
 
