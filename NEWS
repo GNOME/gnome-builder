@@ -1,4 +1,29 @@
 ==============
+Version 3.25.5
+==============
+
+We are releasing 3.25.5 as a quick followup to 3.25.4. It fixes a number of
+issues that were discovered and fixed shortly after merging the new layout
+branch.
+
+ • HTML Preview shortcut is fixed
+ • Various keybindings have been improved in libdazzle
+ • We now bundle the proper libdazzle version as a subproject
+ • IdeSourceViewMode now holds a reference to the view and copies all
+   GValues when marshaling to the proxied closure
+ • Focus tracking has been fixed for stacks in a single column
+ • The focus-neighbor action works again, allowing ^w^w and other Vim style
+   keybindings to work correctly
+ • Activation of F-keys while in vim "normal mode" has been fixed
+ • Builder now depends on the proper version of GLib for access to
+   g_ptr_array_find_with_equal_func()
+ • MIT/X11 license has been updated to include a missing stanza
+ • Cross-architecture printf fixes
+
+Thanks to all our early testers who reported bugs!
+
+
+==============
 Version 3.25.4
 ==============
 
