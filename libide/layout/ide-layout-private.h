@@ -43,6 +43,7 @@ IdeLayoutStack *_ide_layout_grid_get_nth_stack               (IdeLayoutGrid     
 IdeLayoutStack *_ide_layout_grid_get_nth_stack_for_column    (IdeLayoutGrid        *self,
                                                               IdeLayoutGridColumn  *column,
                                                               gint                  nth);
+void            _ide_layout_grid_init_actions                (IdeLayoutGrid        *self);
 void            _ide_layout_grid_stack_added                 (IdeLayoutGrid        *self,
                                                               IdeLayoutStack       *stack);
 void            _ide_layout_grid_stack_removed               (IdeLayoutGrid        *self,

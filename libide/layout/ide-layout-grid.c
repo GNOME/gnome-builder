@@ -465,6 +465,8 @@ ide_layout_grid_init (IdeLayoutGrid *self)
                                    G_CALLBACK (ide_layout_grid_after_set_focus),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  _ide_layout_grid_init_actions (self);
 }
 
 /**

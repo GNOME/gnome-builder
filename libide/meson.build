@@ -505,6 +505,7 @@ libide_sources = libide_generated_headers + libide_public_sources + [
   'keybindings/ide-keybindings.h',
   'keybindings/ide-shortcuts-window.c',
   'keybindings/ide-shortcuts-window.h',
+  'layout/ide-layout-grid-actions.c',
   'layout/ide-layout-grid-column-actions.c',
   'layout/ide-layout-private.h',
   'layout/ide-layout-stack-actions.c',
