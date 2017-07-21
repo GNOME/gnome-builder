@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="gear-menu">
-    <section id="gear-menu-open-section">
+  <menu id="new-document-menu">
+    <section id="open-document-section">
       <item>
-        <attribute name="label" translatable="yes">Open Profile…</attribute>
+        <attribute name="id">open-sysprof-capture</attribute>
+        <attribute name="after">open-file</attribute>
+        <attribute name="label" translatable="yes">Open Sysprof Capture…</attribute>
         <attribute name="action">profiler.open-profile</attribute>
       </item>
     </section>

@@ -74,18 +74,6 @@
     </section>
   </menu>
   <menu id="gear-menu">
-    <section id="gear-menu-new-section">
-      <item>
-        <attribute name="label" translatable="yes">_New File</attribute>
-        <attribute name="action">editor.new-file</attribute>
-      </item>
-    </section>
-    <section id="gear-menu-open-section">
-      <item>
-        <attribute name="label" translatable="yes">_Open File…</attribute>
-        <attribute name="action">win.open-with-dialog</attribute>
-      </item>
-    </section>
     <section id="gear-menu-save-section">
       <item>
         <attribute name="label" translatable="yes">Save _All</attribute>
