@@ -162,11 +162,12 @@ ide_layout_grid_after_set_focus (IdeLayoutGrid *self,
 
   if (widget != NULL)
     {
+      GtkWidget *column = NULL;
       GtkWidget *view;
 
       if (gtk_widget_is_ancestor (widget, GTK_WIDGET (self)))
         {
-          GtkWidget *column = gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_GRID_COLUMN);
+          column = gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_GRID_COLUMN);
 
           if (column != NULL)
             ide_layout_grid_set_current_column (self, IDE_LAYOUT_GRID_COLUMN (column));
@@ -181,6 +182,16 @@ ide_layout_grid_after_set_focus (IdeLayoutGrid *self,
         {
           priv->_last_focused_view = (IdeLayoutView *)view;
           ide_object_notify_in_main (self, properties [PROP_CURRENT_VIEW]);
+
+          if (view != NULL && column != NULL)
+            {
+              GtkWidget *stack;
+
+              stack = gtk_widget_get_ancestor (GTK_WIDGET (view), IDE_TYPE_LAYOUT_STACK);
+              if (stack != NULL)
+                ide_layout_grid_column_set_current_stack (IDE_LAYOUT_GRID_COLUMN (column),
+                                                          IDE_LAYOUT_STACK (stack));
+            }
         }
     }
 }
