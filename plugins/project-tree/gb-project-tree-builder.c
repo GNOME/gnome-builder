@@ -77,6 +77,7 @@ build_context (GbProjectTreeBuilder *self,
   child = g_object_new (DZL_TYPE_TREE_NODE,
                         "item", item,
                         "icon-name", "folder-symbolic",
+                        "expanded-icon-name", "folder-open-symbolic",
                         NULL);
   g_object_bind_property (project, "name", child, "text", G_BINDING_SYNC_CREATE);
   dzl_tree_node_append (node, child);
@@ -165,6 +166,7 @@ build_file (GbProjectTreeBuilder *self,
       const gchar *name;
       const gchar *display_name;
       const gchar *icon_name;
+      const gchar *expanded = NULL;
       gboolean ignored;
 
       name = g_file_info_get_name (item_file_info);
@@ -179,8 +181,12 @@ build_file (GbProjectTreeBuilder *self,
       display_name = gb_project_file_get_display_name (item);
       icon_name = gb_project_file_get_icon_name (item);
 
+      if (g_strcmp0 (icon_name, "folder-symbolic") == 0)
+        expanded = "folder-open-symbolic";
+
       child = g_object_new (DZL_TYPE_TREE_NODE,
                             "icon-name", icon_name,
+                            "expanded-icon-name", expanded,
                             "text", display_name,
                             "item", item,
                             "use-dim-label", ignored,
