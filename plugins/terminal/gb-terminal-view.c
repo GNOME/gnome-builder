@@ -197,6 +197,8 @@ gb_terminal_respawn (GbTerminalView *self,
   g_autofree gchar *shell = NULL;
   GtkWidget *toplevel;
   GError *error = NULL;
+  IdeBuildManager *build_manager;
+  IdeBuildPipeline *pipeline;
   IdeContext *context;
   IdeVcs *vcs;
   VtePty *pty = NULL;
@@ -226,6 +228,9 @@ gb_terminal_respawn (GbTerminalView *self,
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
   workpath = g_file_get_path (workdir);
+
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
 
   shell = gb_terminal_view_discover_shell (self, NULL, &error);
 
@@ -283,6 +288,12 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
   ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
   ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
+
+  if (pipeline != NULL)
+    {
+      ide_subprocess_launcher_setenv (launcher, "BUILDDIR", ide_build_pipeline_get_builddir (pipeline), TRUE);
+      ide_subprocess_launcher_setenv (launcher, "SRCDIR", ide_build_pipeline_get_srcdir (pipeline), TRUE);
+    }
 
   tty_fd = -1;
   stdout_fd = -1;
