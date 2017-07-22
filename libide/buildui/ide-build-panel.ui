@@ -90,6 +90,9 @@
                   <object class="IdeFancyTreeView" id="warnings_tree_view">
                     <property name="has-tooltip">true</property>
                     <property name="visible">true</property>
+                    <style>
+                      <class name="i-wanna-be-listbox"/>
+                    </style>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection">
                         <property name="mode">none</property>
