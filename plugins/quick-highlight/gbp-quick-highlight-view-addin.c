@@ -139,7 +139,8 @@ gbp_quick_highlight_view_addin_do_update (gpointer data)
 
   self->queued_update = 0;
 
-  gbp_quick_highlight_view_addin_match (self);
+  if (self->editor_view != NULL)
+    gbp_quick_highlight_view_addin_match (self);
 
   return G_SOURCE_REMOVE;
 }
@@ -150,13 +151,11 @@ gbp_quick_highlight_view_addin_queue_update (GbpQuickHighlightViewAddin *self)
   g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
 
   if (self->queued_update == 0)
-    {
-      self->queued_update =
-        gdk_threads_add_idle_full (G_PRIORITY_LOW,
-                                   gbp_quick_highlight_view_addin_do_update,
-                                   self,
-                                   NULL);
-    }
+    self->queued_update =
+      gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                                 gbp_quick_highlight_view_addin_do_update,
+                                 g_object_ref (self),
+                                 g_object_unref);
 }
 
 static void
