@@ -96,6 +96,7 @@ please add a comment denoting such.
 
 ## Making a Release
 
+ - Update subprojects like libdazzle/etc for recent releases
  - Update NEWS for release notes
  - Update meson.build for the new version number
  - Update doc/conf.py to reflect the updated version number
