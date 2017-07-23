@@ -279,6 +279,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="popover_runtime_label">
+                        <property name="use-markup">true</property>
                         <property name="hexpand">true</property>
                         <property name="visible">true</property>
                         <property name="xalign">0.0</property>
