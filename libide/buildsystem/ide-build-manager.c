@@ -28,6 +28,7 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
+#include "diagnostics/ide-diagnostic.h"
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 
@@ -44,6 +45,8 @@ struct _IdeBuildManager
   GTimer           *running_time;
 
   guint             diagnostic_count;
+  guint             error_count;
+  guint             warning_count;
 
   guint             timer_source;
 
@@ -64,11 +67,13 @@ enum {
   PROP_0,
   PROP_BUSY,
   PROP_CAN_BUILD,
+  PROP_ERROR_COUNT,
   PROP_HAS_DIAGNOSTICS,
   PROP_LAST_BUILD_TIME,
   PROP_MESSAGE,
   PROP_PIPELINE,
   PROP_RUNNING_TIME,
+  PROP_WARNING_COUNT,
   N_PROPS
 };
 
@@ -163,9 +168,19 @@ ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   self->diagnostic_count++;
-
   if (self->diagnostic_count == 1)
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_DIAGNOSTICS]);
+
+  if (ide_diagnostic_get_severity (diagnostic) > IDE_DIAGNOSTIC_WARNING)
+    {
+      self->error_count++;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
+    }
+  else
+    {
+      self->warning_count++;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
+    }
 
   IDE_EXIT;
 }
@@ -370,6 +385,8 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   g_clear_pointer (&self->running_time, g_timer_destroy);
 
   self->diagnostic_count = 0;
+  self->error_count = 0;
+  self->warning_count = 0;
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -412,10 +429,12 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                     ide_build_manager_ensure_runtime_cb,
                                     g_steal_pointer (&task));
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
 
   IDE_EXIT;
 }
@@ -534,6 +553,14 @@ ide_build_manager_get_property (GObject    *object,
       g_value_set_boolean (value, self->diagnostic_count > 0);
       break;
 
+    case PROP_ERROR_COUNT:
+      g_value_set_uint (value, self->error_count);
+      break;
+
+    case PROP_WARNING_COUNT:
+      g_value_set_uint (value, self->warning_count);
+      break;
+
     case PROP_PIPELINE:
       g_value_set_object (value, self->pipeline);
       break;
@@ -580,6 +607,13 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                           "If a build is actively executing",
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  properties [PROP_ERROR_COUNT] =
+    g_param_spec_uint ("error-count",
+                       "Error Count",
+                       "The number of errors that have been seen in the current build",
+                       0, G_MAXUINT, 0,
+                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeBuildManager:has-diagnostics:
@@ -648,6 +682,13 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                         G_MAXINT64,
                         0,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  properties [PROP_WARNING_COUNT] =
+    g_param_spec_uint ("warning-count",
+                       "Warning Count",
+                       "The number of warnings that have been seen in the current build",
+                       0, G_MAXUINT, 0,
+                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -1116,6 +1157,8 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
       g_clear_pointer (&self->last_build_time, g_date_time_unref);
       self->last_build_time = g_date_time_new_now_local ();
       self->diagnostic_count = 0;
+      self->warning_count = 0;
+      self->error_count = 0;
     }
 
   /*
@@ -1140,9 +1183,11 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
                                     ide_build_manager_execute_cb,
                                     g_steal_pointer (&task));
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
 
   IDE_EXIT;
 }
@@ -1232,6 +1277,8 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
   g_set_object (&self->cancellable, cancellable);
 
   self->diagnostic_count = 0;
+  self->error_count = 0;
+  self->warning_count = 0;
 
   ide_build_pipeline_clean_async (self->pipeline,
                                   phase,
@@ -1239,7 +1286,9 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
                                   ide_build_manager_clean_cb,
                                   g_steal_pointer (&task));
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
 
   IDE_EXIT;
 }
