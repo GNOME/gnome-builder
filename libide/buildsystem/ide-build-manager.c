@@ -51,6 +51,7 @@ struct _IdeBuildManager
   guint             timer_source;
 
   guint             can_build : 1;
+  guint             can_export : 1;
   guint             building : 1;
 };
 
@@ -87,20 +88,28 @@ enum {
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
-static const gchar *action_names[] = { "build", "clean", "install", "rebuild", "cancel" };
+static const gchar *build_action_names[] = {
+  "build", "clean", "install", "rebuild",
+};
+static const gchar *all_action_names[] = {
+  "build", "clean", "install", "rebuild", "export", "cancel",
+};
 
 static void
 ide_build_manager_propagate_action_enabled (IdeBuildManager *self)
 {
-  gboolean busy = ide_build_manager_get_busy (self);
-  gboolean can_build = ide_build_manager_get_can_build (self);
+  g_assert (IDE_IS_BUILD_MANAGER (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "cancel", busy);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "build", !busy && can_build);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "rebuild", !busy && can_build);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "clean", !busy && can_build);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "install", !busy && can_build);
+
+  for (guint i = 0; i < G_N_ELEMENTS (all_action_names); i++)
+    {
+      const gchar *name = all_action_names[i];
+      gboolean enabled;
+
+      enabled = g_action_group_get_action_enabled (G_ACTION_GROUP (self->actions), name);
+      g_action_group_action_enabled_changed (G_ACTION_GROUP (self), name, enabled);
+    }
 }
 
 static gboolean
@@ -188,22 +197,29 @@ ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
 static void
 ide_build_manager_update_action_enabled (IdeBuildManager *self)
 {
+  GAction *action;
   gboolean busy;
   gboolean can_build;
+  gboolean can_export = FALSE;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   busy = ide_build_manager_get_busy (self);
   can_build = ide_build_manager_get_can_build (self);
-  for (guint i = 0; i < G_N_ELEMENTS (action_names); i++)
+
+  if (self->pipeline != NULL)
+    can_export = ide_build_pipeline_get_can_export (self->pipeline);
+
+  for (guint i = 0; i < G_N_ELEMENTS (build_action_names); i++)
     {
-      const gchar *name = action_names [i];
-      if (g_strcmp0 (name, "cancel") != 0)
-        {
-          GAction *action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
-          g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !busy && can_build);
-        }
+      const gchar *name = build_action_names [i];
+
+      action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !busy && can_build);
     }
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "export");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !busy && can_build && can_export);
 
   ide_build_manager_propagate_action_enabled (self);
 }
@@ -835,6 +851,23 @@ ide_build_manager_action_install (GSimpleAction *action,
 }
 
 static void
+ide_build_manager_action_export (GSimpleAction *action,
+                                 GVariant      *param,
+                                 gpointer       user_data)
+{
+  IdeBuildManager *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  ide_build_manager_execute_async (self, IDE_BUILD_PHASE_EXPORT, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_manager_init (IdeBuildManager *self)
 {
   GAction *cancel_action;
@@ -843,6 +876,7 @@ ide_build_manager_init (IdeBuildManager *self)
     { "build", ide_build_manager_action_build },
     { "cancel", ide_build_manager_action_cancel },
     { "clean", ide_build_manager_action_clean },
+    { "export", ide_build_manager_action_export },
     { "install", ide_build_manager_action_install },
     { "rebuild", ide_build_manager_action_rebuild },
   };
