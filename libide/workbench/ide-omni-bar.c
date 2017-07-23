@@ -407,6 +407,8 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
   gtk_label_set_attributes (self->popover_build_result_label, NULL);
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
+
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "building");
 }
 
 static void
@@ -420,6 +422,8 @@ ide_omni_bar__build_manager__build_failed (IdeOmniBar       *self,
 
   gtk_label_set_label (self->popover_build_result_label, _("Failed"));
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
+
+  dzl_gtk_widget_remove_style_class (GTK_WIDGET (self), "building");
 }
 
 static void
@@ -433,6 +437,8 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
 
   gtk_label_set_label (self->popover_build_result_label, _("Success"));
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
+
+  dzl_gtk_widget_remove_style_class (GTK_WIDGET (self), "building");
 }
 
 static void

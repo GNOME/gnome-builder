@@ -6,3 +6,17 @@ popover.messagepopover label.success {
   color: shade(@success_color, 0.8);
   font-weight: bold;
 }
+omnibar entry {
+  background-color: @theme_bg_color;
+  color: alpha(@theme_fg_color, 0.8);
+}
+omnibar.building:active entry,
+omnibar.building entry {
+  background-color: mix(@warning_color, @theme_bg_color, 0.9);
+  color: alpha(@theme_fg_color, 0.8);
+}
+omnibar:hover entry,
+omnibar:active entry {
+  background-color: mix(@theme_bg_color, @content_view_bg, 0.9);
+  color: @theme_fg_color;
+}
