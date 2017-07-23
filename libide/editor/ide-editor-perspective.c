@@ -353,6 +353,7 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
   } lookup = { 0 };
   GtkWidget *stack;
   guint line;
+  guint line_offset;
 
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_return_if_fail (location != NULL);
@@ -400,10 +401,11 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
     }
 
   line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
 
   stack = gtk_widget_get_ancestor (GTK_WIDGET (lookup.view), IDE_TYPE_LAYOUT_STACK);
   ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack), IDE_LAYOUT_VIEW (lookup.view));
-  ide_editor_view_scroll_to_line (lookup.view, line);
+  ide_editor_view_scroll_to_line_offset (lookup.view, line, line_offset);
 }
 
 void
