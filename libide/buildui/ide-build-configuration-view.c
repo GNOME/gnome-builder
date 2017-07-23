@@ -43,6 +43,7 @@ struct _IdeBuildConfigurationView
   IdeEnvironmentEditor *environment_editor;
   GtkEntry             *prefix_entry;
   GtkListBox           *runtime_list_box;
+  GtkEntry             *workdir_entry;
 };
 
 enum {
@@ -376,6 +377,7 @@ ide_build_configuration_view_class_init (IdeBuildConfigurationViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, environment_editor);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, prefix_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, runtime_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, workdir_entry);
 
   g_type_ensure (IDE_TYPE_ENVIRONMENT_EDITOR);
 }
@@ -418,8 +420,12 @@ ide_build_configuration_view_set_configuration (IdeBuildConfigurationView *self,
       IdeContext *context = ide_object_get_context (IDE_OBJECT (configuration));
       IdeBuildSystem *build_system = ide_context_get_build_system (context);
       g_autofree gchar *name = ide_build_system_get_display_name (build_system);
+      IdeVcs *vcs = ide_context_get_vcs (context);
+      GFile *workdir = ide_vcs_get_working_directory (vcs);
+      g_autofree gchar *path = g_file_get_path (workdir);
 
       gtk_entry_set_text (self->build_system_entry, name);
+      gtk_entry_set_text (self->workdir_entry, path);
     }
 
   if (self->configuration != configuration)

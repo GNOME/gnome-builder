@@ -85,6 +85,36 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">true</property>
+                        <child>
+                          <object class="GtkLabel" id="label5">
+                            <property name="label" translatable="yes">Source Directory</property>
+                            <property name="visible">true</property>
+                            <property name="xalign">0.0</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="workdir_entry">
+                            <property name="sensitive">false</property>
+                            <property name="visible">true</property>
+                            <property name="has-frame">false</property>
+                            <property name="hexpand">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
                     <property name="tooltip-text" translatable="yes">The prefix to use when installing the project</property>
                     <property name="visible">true</property>
                     <child>
@@ -240,6 +270,7 @@
       <widget name="label2"/>
       <widget name="label3"/>
       <widget name="label4"/>
+      <widget name="label5"/>
     </widgets>
   </object>
   <object class="GtkListStore" id="environ_list_store">
