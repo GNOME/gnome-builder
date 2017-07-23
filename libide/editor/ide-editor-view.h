@@ -35,6 +35,9 @@ IdeSourceView     *ide_editor_view_get_view                    (IdeEditorView   
 const gchar       *ide_editor_view_get_language_id             (IdeEditorView     *self);
 void               ide_editor_view_scroll_to_line              (IdeEditorView     *self,
                                                                 guint              line);
+void               ide_editor_view_scroll_to_line_offset       (IdeEditorView     *self,
+                                                                guint              line,
+                                                                guint              line_offset);
 gboolean           ide_editor_view_get_auto_hide_map           (IdeEditorView     *self);
 void               ide_editor_view_set_auto_hide_map           (IdeEditorView     *self,
                                                                 gboolean           auto_hide_map);

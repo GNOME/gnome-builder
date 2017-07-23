@@ -856,15 +856,41 @@ ide_editor_view_get_language_id (IdeEditorView *self)
 /**
  * ide_editor_view_scroll_to_line:
  * @self: a #IdeEditorView
+ * @line: the line to scroll to
  *
  * This is a helper to quickly jump to a given line without all the frills. It
  * will also ensure focus on the editor view, so that refocusing the view
  * afterwards does not cause the view to restore the cursor to the previous
  * location.
+ *
+ * This will move the insert cursor.
+ *
+ * Lines start from 0.
  */
 void
 ide_editor_view_scroll_to_line (IdeEditorView *self,
                                 guint          line)
+{
+  ide_editor_view_scroll_to_line_offset (self, line, 0);
+}
+
+/**
+ * ide_editor_view_scroll_to_line_offset:
+ * @self: a #IdeEditorView
+ * @line: the line to scroll to
+ * @line_offset: the line offset
+ *
+ * Like ide_editor_view_scroll_to_line() but allows specifying the
+ * line offset (column) to place the cursor on.
+ *
+ * This will move the insert cursor.
+ *
+ * Lines and offsets start from 0.
+ */
+void
+ide_editor_view_scroll_to_line_offset (IdeEditorView *self,
+                                       guint          line,
+                                       guint          line_offset)
 {
   GtkTextIter iter;
 
@@ -874,7 +900,8 @@ ide_editor_view_scroll_to_line (IdeEditorView *self,
 
   gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
 
-  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), &iter, line);
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self->buffer), &iter,
+                                           line, line_offset);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
   ide_source_view_scroll_to_insert (self->source_view);
 }
