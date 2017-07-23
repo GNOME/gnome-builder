@@ -255,6 +255,16 @@ delete_configuration (GSimpleAction *action,
 }
 
 static void
+ide_build_perspective_grab_focus (GtkWidget *widget)
+{
+  IdeBuildPerspective *self = (IdeBuildPerspective *)widget;
+
+  g_assert (IDE_IS_BUILD_PERSPECTIVE (self));
+
+  gtk_widget_child_focus (GTK_WIDGET (self->list_box), GTK_DIR_TAB_FORWARD);
+}
+
+static void
 ide_build_perspective_finalize (GObject *object)
 {
   IdeBuildPerspective *self = (IdeBuildPerspective *)object;
@@ -319,6 +329,8 @@ ide_build_perspective_class_init (IdeBuildPerspectiveClass *klass)
   object_class->finalize = ide_build_perspective_finalize;
   object_class->get_property = ide_build_perspective_get_property;
   object_class->set_property = ide_build_perspective_set_property;
+
+  widget_class->grab_focus = ide_build_perspective_grab_focus;
 
   properties [PROP_CONFIGURATION_MANAGER] =
     g_param_spec_object ("configuration-manager",
