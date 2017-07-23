@@ -60,6 +60,7 @@ const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline 
 const gchar           *ide_build_pipeline_get_srcdir          (IdeBuildPipeline       *self);
 gchar                 *ide_build_pipeline_get_message         (IdeBuildPipeline       *self);
 IdeBuildPhase          ide_build_pipeline_get_phase           (IdeBuildPipeline       *self);
+gboolean               ide_build_pipeline_get_can_export      (IdeBuildPipeline       *self);
 IdeSubprocessLauncher *ide_build_pipeline_create_launcher     (IdeBuildPipeline       *self,
                                                                GError                **error);
 gchar                 *ide_build_pipeline_build_srcdir_path   (IdeBuildPipeline       *self,

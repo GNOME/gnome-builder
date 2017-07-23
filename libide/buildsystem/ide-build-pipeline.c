@@ -2714,3 +2714,30 @@ ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,
 
   IDE_RETURN (ret);
 }
+
+/**
+ * ide_build_pipeline_get_can_export:
+ * @self: a #IdeBuildPipeline
+ *
+ * This function is useful to discover if there are any pipeline addins
+ * which implement the export phase. UI or GAction implementations may
+ * want to use this value to set the enabled state of the action or
+ * sensitivity of a button.
+ *
+ * Returns: %TRUE if there are export pipeline stages.
+ */
+gboolean
+ide_build_pipeline_get_can_export (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+
+  for (guint i = 0; i < self->pipeline->len; i++)
+    {
+      const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
+
+      if ((entry->phase & IDE_BUILD_PHASE_EXPORT) != 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
