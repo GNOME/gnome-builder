@@ -162,126 +162,131 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="spacing">20</property>
             <property name="visible">true</property>
             <style>
               <class name="popover-content-area"/>
             </style>
             <child>
-              <object class="GtkGrid">
-                <property name="column-spacing">20</property>
-                <property name="row-spacing">10</property>
-                <property name="visible">true</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Project</property>
-                    <property name="visible">true</property>
-                    <property name="xalign">0.0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="popover_project_label">
-                    <property name="hexpand">true</property>
-                    <property name="visible">true</property>
-                    <property name="xalign">0.0</property>
-                    <property name="ellipsize">start</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Branch</property>
-                    <property name="visible">true</property>
-                    <property name="xalign">0.0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="popover_branch_label">
-                    <property name="hexpand">true</property>
-                    <property name="visible">true</property>
-                    <property name="xalign">0.0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Build System</property>
-                    <property name="visible">true</property>
-                    <property name="xalign">0.0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="popover_build_system_label">
-                    <property name="hexpand">true</property>
-                    <property name="visible">true</property>
-                    <property name="xalign">0.0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
-                <property name="spacing">10</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Build Profile</property>
+                  <object class="GtkBox">
+                    <property name="hexpand">true</property>
+                    <property name="orientation">horizontal</property>
                     <property name="visible">true</property>
-                    <property name="xalign">0.0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <child>
+                      <object class="GtkLabel" id="popover_project_label">
+                        <property name="valign">baseline</property>
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">0.0</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="focus-on-click">false</property>
+                        <property name="halign">end</property>
+                        <property name="valign">baseline</property>
+                        <property name="action-name">win.perspective</property>
+                        <property name="action-target">'buildperspective'</property>
+                        <property name="tooltip-text" translatable="yes">Configure build preferences</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">builder-build-configure-symbolic</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="shadow-type">in</property>
-                    <property name="max-content-height">200</property>
-                    <property name="max-content-width">500</property>
-                    <property name="propagate-natural-height">true</property>
-                    <property name="propagate-natural-width">true</property>
+                  <object class="GtkGrid">
+                    <property name="column-spacing">18</property>
+                    <property name="row-spacing">6</property>
                     <property name="visible">true</property>
                     <child>
-                      <object class="GtkListBox" id="popover_configuration_list_box">
-                        <property name="selection-mode">none</property>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Branch</property>
                         <property name="visible">true</property>
+                        <property name="xalign">1.0</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
                       </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="popover_branch_label">
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="build_profile_title">
+                        <property name="label" translatable="yes">Build Profile</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">1.0</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="popover_config_label">
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="runtime_title">
+                        <property name="label" translatable="yes">Runtime</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">1.0</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="popover_runtime_label">
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -293,150 +298,207 @@
                 <property name="reveal-child">false</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="spacing">12</property>
+                    <property name="margin-top">24</property>
+                    <property name="orientation">vertical</property>
                     <property name="visible">true</property>
                     <child>
-                      <object class="GtkStack" id="popover_time_stack">
-                        <property name="interpolate-size">true</property>
+                      <object class="GtkBox">
+                        <property name="hexpand">true</property>
+                        <property name="orientation">horizontal</property>
                         <property name="visible">true</property>
                         <child>
-                          <object class="GtkBox">
-                            <property name="orientation">vertical</property>
-                            <property name="valign">center</property>
-                            <property name="visible">true</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">true</property>
-                                <property name="label" translatable="yes">Last build</property>
-                                <property name="xalign">0.0</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="popover_last_build_time_label">
-                                <property name="xalign">0.0</property>
-                                <property name="visible">true</property>
-                                <attributes>
-                                  <attribute name="scale" value="0.8333"/>
-                                </attributes>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="name">last-build</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="orientation">horizontal</property>
+                          <object class="GtkLabel">
+                            <property name="valign">baseline</property>
                             <property name="hexpand">true</property>
                             <property name="visible">true</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label" translatable="yes">Build status</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="focus-on-click">false</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="action-name">buildui.view-output</property>
+                            <property name="tooltip-text" translatable="yes">View build console contents</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="image-button"/>
+                            </style>
                             <child>
-                              <object class="GtkLabel" id="popover_build_mode_label">
-                                <property name="visible">true</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="popover_build_running_time_label">
-                                <property name="xalign">1.0</property>
-                                <property name="margin-end">8</property>
-                                <property name="margin-start">8</property>
-                                <property name="hexpand">true</property>
+                              <object class="GtkImage">
+                                <property name="icon-name">utilities-terminal-symbolic</property>
                                 <property name="visible">true</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="name">current-build</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="popover_failed_label">
-                        <property name="label" translatable="yes">Failed</property>
-                        <property name="xalign">1.0</property>
-                        <property name="margin-end">8</property>
-                        <property name="margin-start">8</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                          <attribute name="foreground" value="red"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="position">2</property>
-                        <property name="pack-type">end</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="popover_view_output_button">
-                        <property name="action-name">buildui.view-output</property>
-                        <property name="label" translatable="yes">View Output</property>
+                      <object class="GtkGrid" id="build_status_grid">
+                        <property name="column-spacing">18</property>
+                        <property name="row-spacing">6</property>
                         <property name="visible">true</property>
+                        <child>
+                          <object class="GtkLabel" id="last_build_title">
+                            <property name="label" translatable="yes">Last build</property>
+                            <property name="hexpand">false</property>
+                            <property name="xalign">1.0</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="popover_last_build_time_label">
+                            <property name="hexpand">true</property>
+                            <property name="xalign">0.0</property>
+                            <property name="visible">true</property>
+                            <property name="width-chars">10</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="build_result_title">
+                            <property name="label" translatable="yes">Build result</property>
+                            <property name="hexpand">false</property>
+                            <property name="xalign">1.0</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="popover_build_result_label">
+                            <property name="hexpand">true</property>
+                            <property name="xalign">0.0</property>
+                            <property name="visible">true</property>
+                            <property name="width-chars">10</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="error_title">
+                            <property name="label" translatable="yes">Errors</property>
+                            <property name="hexpand">false</property>
+                            <property name="xalign">1.0</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="popover_errors_label">
+                            <property name="label">0</property>
+                            <property name="hexpand">true</property>
+                            <property name="xalign">0.0</property>
+                            <property name="visible">true</property>
+                            <property name="width-chars">10</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">3</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="warning_title">
+                            <property name="label" translatable="yes">Warnings</property>
+                            <property name="hexpand">false</property>
+                            <property name="xalign">1.0</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="popover_warnings_label">
+                            <property name="label">0</property>
+                            <property name="hexpand">true</property>
+                            <property name="xalign">0.0</property>
+                            <property name="visible">true</property>
+                            <property name="width-chars">10</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">3</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                        <property name="pack-type">end</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="popover_build_cancel_button">
-                        <property name="action-name">build-manager.cancel</property>
-                        <property name="label" translatable="yes">_Cancel</property>
-                        <property name="use-underline">true</property>
-                        <style>
-                          <class name="destructive-action"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="position">0</property>
-                        <property name="pack-type">end</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">true</property>
-            <style>
-              <class name="popover-action-area"/>
-            </style>
             <child>
-              <object class="GtkButton">
-                <property name="action-name">build-manager.build</property>
-                <property name="label" translatable="yes">Build</property>
+              <object class="GtkBox">
+                <property name="margin-top">24</property>
+                <property name="orientation">horizontal</property>
                 <property name="visible">true</property>
+                <property name="homogeneous">true</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">build-manager.build</property>
+                    <property name="label" translatable="yes">Build</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">build-manager.rebuild</property>
+                    <property name="label" translatable="yes">Rebuild</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">build-manager.clean</property>
+                    <property name="label" translatable="yes">Clean</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">build-manager.export</property>
+                    <property name="label" translatable="yes">Export</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                </child>
               </object>
-              <packing>
-                <property name="expand">true</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">build-manager.rebuild</property>
-                <property name="label" translatable="yes">Rebuild</property>
-                <property name="visible">true</property>
-              </object>
-              <packing>
-                <property name="expand">true</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">build-manager.clean</property>
-                <property name="label" translatable="yes">Clean</property>
-                <property name="visible">true</property>
-              </object>
-              <packing>
-                <property name="expand">true</property>
-              </packing>
             </child>
           </object>
         </child>
@@ -447,5 +509,16 @@
     <property name="accelerator">&lt;primary&gt;F7</property>
     <property name="title" translatable="yes">Build project</property>
     <property name="visible">true</property>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="build_profile_title"/>
+      <widget name="build_result_title"/>
+      <widget name="error_title"/>
+      <widget name="last_build_title"/>
+      <widget name="runtime_title"/>
+      <widget name="warning_title"/>
+    </widgets>
   </object>
 </interface>

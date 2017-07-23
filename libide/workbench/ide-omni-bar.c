@@ -30,6 +30,7 @@
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "projects/ide-project.h"
+#include "runtimes/ide-runtime.h"
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-omni-bar.h"
@@ -82,6 +83,12 @@ struct _IdeOmniBar
   DzlSignalGroup *config_manager_signals;
 
   /*
+   * This manages the bindings we need for the IdeProject which binds
+   * some information to the popover.
+   */
+  DzlBindingGroup *project_bindings;
+
+  /*
    * This manages the bindings we need for the IdeVcs such as the
    * current branch name.
    */
@@ -108,7 +115,6 @@ struct _IdeOmniBar
   GtkEventBox          *event_box;
   GtkLabel             *project_label;
   GtkBox               *branch_box;
-  GtkLabel             *build_result_mode_label;
   GtkImage             *build_result_diagnostics_image;
   GtkButton            *build_button;
   GtkShortcutsShortcut *build_button_shortcut;
@@ -117,17 +123,14 @@ struct _IdeOmniBar
   GtkStack             *message_stack;
   GtkPopover           *popover;
   GtkLabel             *popover_branch_label;
-  GtkButton            *popover_build_cancel_button;
-  GtkLabel             *popover_build_mode_label;
-  GtkLabel             *popover_build_running_time_label;
-  GtkLabel             *popover_build_system_label;
-  GtkListBox           *popover_configuration_list_box;
+  GtkLabel             *popover_config_label;
+  GtkLabel             *popover_build_result_label;
   GtkRevealer          *popover_details_revealer;
-  GtkLabel             *popover_failed_label;
+  GtkLabel             *popover_errors_label;
   GtkLabel             *popover_last_build_time_label;
-  GtkStack             *popover_time_stack;
-  GtkButton            *popover_view_output_button;
+  GtkLabel             *popover_runtime_label;
   GtkLabel             *popover_project_label;
+  GtkLabel             *popover_warnings_label;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
@@ -147,102 +150,15 @@ date_time_to_label (GBinding     *binding,
   g_assert (G_VALUE_HOLDS (to_value, G_TYPE_STRING));
 
   if (NULL != (dt = g_value_get_boxed (from_value)))
-    g_value_take_string (to_value,
-                         g_date_time_format (dt, "%a %B %e, %X"));
+    g_value_take_string (to_value, g_date_time_format (dt, "%X"));
 
   return TRUE;
-}
-
-static gboolean
-file_to_relative_path (GBinding     *binding,
-                       const GValue *from_value,
-                       GValue       *to_value,
-                       gpointer      user_data)
-{
-  GFile *file;
-
-  g_assert (G_IS_BINDING (binding));
-  g_assert (from_value != NULL);
-  g_assert (G_VALUE_HOLDS (from_value, G_TYPE_FILE));
-  g_assert (to_value != NULL);
-  g_assert (G_VALUE_HOLDS (to_value, G_TYPE_STRING));
-
-  if (NULL != (file = g_value_get_object (from_value)))
-    {
-      g_autoptr(GFile) home = NULL;
-      gchar *path;
-
-      home = g_file_new_for_path (g_get_home_dir ());
-
-      if (g_file_has_prefix (file, home))
-        path = g_file_get_relative_path (home, file);
-      else if (g_file_is_native (file))
-        path = g_file_get_path (file);
-      else
-        path = g_file_get_uri (file);
-
-      g_value_take_string (to_value, path);
-    }
-
-  return TRUE;
-}
-
-static void
-on_configure_row (IdeOmniBar    *self,
-                  IdeOmniBarRow *row)
-{
-  IdeConfiguration *config;
-  const gchar *id;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (IDE_IS_OMNI_BAR_ROW (row));
-
-  config = ide_omni_bar_row_get_item (row);
-  id = ide_configuration_get_id (config);
-
-  /*
-   * TODO: This can be removed once GtkListBoxRow can activate actions
-   *       in the "activate" signal (using something like action-name).
-   */
-
-  dzl_gtk_widget_action (GTK_WIDGET (self),
-                     "buildui",
-                     "configure",
-                     g_variant_new_string (id));
-
-  gtk_widget_hide (GTK_WIDGET (self->popover));
-}
-
-static GtkWidget *
-create_configuration_row (gpointer item,
-                          gpointer user_data)
-{
-  IdeConfiguration *configuration = item;
-  IdeOmniBar *self = user_data;
-  GtkWidget *ret;
-
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_OMNI_BAR (self));
-
-  ret = g_object_new (IDE_TYPE_OMNI_BAR_ROW,
-                      "item", configuration,
-                      "visible", TRUE,
-                      NULL);
-
-  g_signal_connect_object (ret,
-                           "configure",
-                           G_CALLBACK (on_configure_row),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  return ret;
 }
 
 static void
 ide_omni_bar_update (IdeOmniBar *self)
 {
   g_autofree gchar *branch_name = NULL;
-  g_autofree gchar *build_system_name = NULL;
   const gchar *project_name = NULL;
   IdeContext *context;
 
@@ -252,7 +168,6 @@ ide_omni_bar_update (IdeOmniBar *self)
 
   if (IDE_IS_CONTEXT (context))
     {
-      IdeBuildSystem *build_system;
       IdeProject *project;
       IdeVcs *vcs;
 
@@ -261,28 +176,11 @@ ide_omni_bar_update (IdeOmniBar *self)
 
       vcs = ide_context_get_vcs (context);
       branch_name = ide_vcs_get_branch_name (vcs);
-
-      build_system = ide_context_get_build_system (context);
-      build_system_name = ide_build_system_get_display_name (build_system);
     }
 
   gtk_label_set_label (self->project_label, project_name);
   gtk_label_set_label (self->branch_label, branch_name);
   gtk_label_set_label (self->popover_branch_label, branch_name);
-  gtk_label_set_label (self->popover_build_system_label, build_system_name);
-}
-
-static void
-ide_omni_bar_select_current_config (GtkWidget *widget,
-                                    gpointer   user_data)
-{
-  IdeConfiguration *current = user_data;
-  IdeOmniBarRow *row = (IdeOmniBarRow *)widget;
-
-  g_assert (IDE_IS_OMNI_BAR_ROW (row));
-  g_assert (IDE_IS_CONFIGURATION (current));
-
-  ide_omni_bar_row_set_active (row, (current == ide_omni_bar_row_get_item (row)));
 }
 
 static void
@@ -291,35 +189,21 @@ ide_omni_bar__config_manager__notify_current (IdeOmniBar              *self,
                                               IdeConfigurationManager *config_manager)
 {
   IdeConfiguration *current;
+  IdeRuntime *runtime;
 
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (config_manager));
 
   current = ide_configuration_manager_get_current (config_manager);
+  runtime = ide_configuration_get_runtime (current);
 
-  gtk_container_foreach (GTK_CONTAINER (self->popover_configuration_list_box),
-                         ide_omni_bar_select_current_config,
-                         current);
-}
+  if (runtime != NULL)
+    gtk_label_set_label (self->popover_runtime_label, ide_runtime_get_display_name (runtime));
+  else
+    gtk_label_set_label (self->popover_runtime_label, "");
 
-static void
-ide_omni_bar_row_activated (IdeOmniBar    *self,
-                            IdeOmniBarRow *row,
-                            GtkListBox    *list_box)
-{
-  IdeConfiguration *config;
-  IdeConfigurationManager *config_manager;
-  IdeContext *context;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (IDE_IS_OMNI_BAR_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
-
-  context = ide_widget_get_context (GTK_WIDGET (self));
-  config_manager = ide_context_get_configuration_manager (context);
-  config = ide_omni_bar_row_get_item (row);
-
-  ide_configuration_manager_set_current (config_manager, config);
+  gtk_label_set_label (self->popover_config_label,
+                       ide_configuration_get_display_name (current));
 }
 
 static void
@@ -329,6 +213,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   IdeOmniBar *self = (IdeOmniBar *)widget;
   IdeConfigurationManager *config_manager = NULL;
   IdeBuildManager *build_manager = NULL;
+  IdeProject *project = NULL;
   IdeVcs *vcs = NULL;
 
   IDE_ENTRY;
@@ -343,24 +228,18 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       vcs = ide_context_get_vcs (context);
       build_manager = ide_context_get_build_manager (context);
       config_manager = ide_context_get_configuration_manager (context);
+      project = ide_context_get_project (context);
     }
 
   dzl_binding_group_set_source (self->build_manager_bindings, build_manager);
   dzl_signal_group_set_target (self->build_manager_signals, build_manager);
   dzl_binding_group_set_source (self->config_manager_bindings, config_manager);
   dzl_signal_group_set_target (self->config_manager_signals, config_manager);
+  dzl_binding_group_set_source (self->project_bindings, project);
   dzl_binding_group_set_source (self->vcs_bindings, vcs);
 
   if (config_manager != NULL)
-    {
-      gtk_list_box_bind_model (self->popover_configuration_list_box,
-                               G_LIST_MODEL (config_manager),
-                               create_configuration_row,
-                               self,
-                               NULL);
-
-      ide_omni_bar__config_manager__notify_current (self, NULL, config_manager);
-    }
+    ide_omni_bar__config_manager__notify_current (self, NULL, config_manager);
 
   IDE_EXIT;
 }
@@ -522,12 +401,12 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
   self->did_build = TRUE;
   self->seen_count = 0;
 
-  gtk_widget_hide (GTK_WIDGET (self->popover_failed_label));
-  gtk_widget_show (GTK_WIDGET (self->popover_build_cancel_button));
-
-  gtk_stack_set_visible_child_name (self->popover_time_stack, "current-build");
-
   gtk_revealer_set_reveal_child (self->popover_details_revealer, TRUE);
+
+  gtk_label_set_label (self->popover_build_result_label, _("Building"));
+  gtk_label_set_attributes (self->popover_build_result_label, NULL);
+  dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
+  dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
 }
 
 static void
@@ -539,11 +418,8 @@ ide_omni_bar__build_manager__build_failed (IdeOmniBar       *self,
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  gtk_widget_set_visible (GTK_WIDGET (self->popover_failed_label), TRUE);
-
-  gtk_stack_set_visible_child_name (self->popover_time_stack, "last-build");
-
-  gtk_widget_hide (GTK_WIDGET (self->popover_build_cancel_button));
+  gtk_label_set_label (self->popover_build_result_label, _("Failed"));
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
 }
 
 static void
@@ -555,9 +431,8 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  gtk_widget_hide (GTK_WIDGET (self->popover_build_cancel_button));
-
-  gtk_stack_set_visible_child_name (self->popover_time_stack, "last-build");
+  gtk_label_set_label (self->popover_build_result_label, _("Success"));
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
 }
 
 static void
@@ -576,20 +451,6 @@ ide_omni_bar__build_button__query_tooltip (IdeOmniBar *self,
 }
 
 static void
-ide_omni_bar_finalize (GObject *object)
-{
-  IdeOmniBar *self = (IdeOmniBar *)object;
-
-  g_clear_object (&self->build_manager_bindings);
-  g_clear_object (&self->build_manager_signals);
-  g_clear_object (&self->config_manager_bindings);
-  g_clear_object (&self->config_manager_signals);
-  g_clear_object (&self->vcs_bindings);
-
-  G_OBJECT_CLASS (ide_omni_bar_parent_class)->finalize (object);
-}
-
-static void
 ide_omni_bar_destroy (GtkWidget *widget)
 {
   IdeOmniBar *self = (IdeOmniBar *)widget;
@@ -598,6 +459,13 @@ ide_omni_bar_destroy (GtkWidget *widget)
 
   g_clear_pointer (&self->looper_source, g_source_destroy);
   g_clear_object (&self->gesture);
+
+  g_clear_object (&self->build_manager_bindings);
+  g_clear_object (&self->build_manager_signals);
+  g_clear_object (&self->config_manager_bindings);
+  g_clear_object (&self->config_manager_signals);
+  g_clear_object (&self->project_bindings);
+  g_clear_object (&self->vcs_bindings);
 
   GTK_WIDGET_CLASS (ide_omni_bar_parent_class)->destroy (widget);
 }
@@ -609,7 +477,6 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_omni_bar_constructed;
-  object_class->finalize = ide_omni_bar_finalize;
 
   widget_class->destroy = ide_omni_bar_destroy;
 
@@ -620,24 +487,20 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button_shortcut);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_cancel_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_mode_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_running_time_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_configuration_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_result_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_config_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_details_revealer);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_failed_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_errors_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_system_label);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_time_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_view_output_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_runtime_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_warnings_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
 }
 
@@ -682,32 +545,20 @@ ide_omni_bar_init (IdeOmniBar *self)
                           "visible",
                           G_BINDING_SYNC_CREATE);
 
+  dzl_binding_group_bind (self->build_manager_bindings, "error-count",
+                          self->popover_errors_label, "label",
+                          G_BINDING_SYNC_CREATE);
+
+  dzl_binding_group_bind (self->build_manager_bindings, "warning-count",
+                          self->popover_warnings_label, "label",
+                          G_BINDING_SYNC_CREATE);
+
   dzl_binding_group_bind_full (self->build_manager_bindings,
                                "last-build-time",
                                self->popover_last_build_time_label,
                                "label",
                                G_BINDING_SYNC_CREATE,
                                date_time_to_label,
-                               NULL,
-                               NULL,
-                               NULL);
-
-  dzl_binding_group_bind (self->build_manager_bindings, "message",
-                          self->build_result_mode_label, "label",
-                          G_BINDING_SYNC_CREATE);
-
-  dzl_binding_group_bind (self->build_manager_bindings,
-                          "message",
-                          self->popover_build_mode_label,
-                          "label",
-                          G_BINDING_SYNC_CREATE);
-
-  dzl_binding_group_bind_full (self->build_manager_bindings,
-                               "running-time",
-                               self->popover_build_running_time_label,
-                               "label",
-                               G_BINDING_SYNC_CREATE,
-                               dzl_g_time_span_to_label_mapping,
                                NULL,
                                NULL,
                                NULL);
@@ -733,6 +584,16 @@ ide_omni_bar_init (IdeOmniBar *self)
                                    G_CONNECT_SWAPPED);
 
   /*
+   * Project bindings.
+   */
+
+  self->project_bindings = dzl_binding_group_new ();
+
+  dzl_binding_group_bind (self->project_bindings, "name",
+                          self->popover_project_label, "label",
+                          G_BINDING_SYNC_CREATE);
+
+  /*
    * IdeVcs bindings and signals.
    */
 
@@ -749,16 +610,6 @@ ide_omni_bar_init (IdeOmniBar *self)
                           self->popover_branch_label,
                           "label",
                           G_BINDING_SYNC_CREATE);
-
-  dzl_binding_group_bind_full (self->vcs_bindings,
-                               "working-directory",
-                               self->popover_project_label,
-                               "label",
-                               G_BINDING_SYNC_CREATE,
-                               file_to_relative_path,
-                               NULL,
-                               NULL,
-                               NULL);
 
   /*
    * IdeConfigurationManager bindings and signals.
@@ -779,12 +630,6 @@ ide_omni_bar_init (IdeOmniBar *self)
                                    G_CALLBACK (ide_omni_bar__config_manager__notify_current),
                                    self,
                                    G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->popover_configuration_list_box,
-                           "row-activated",
-                           G_CALLBACK (ide_omni_bar_row_activated),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   /*
    * Enable various events for state tracking.

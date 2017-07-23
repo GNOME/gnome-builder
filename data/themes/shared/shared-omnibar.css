@@ -1,0 +1,8 @@
+popover.messagepopover label.error {
+  color: @error_color;
+  font-weight: bold;
+}
+popover.messagepopover label.success {
+  color: shade(@success_color, 0.8);
+  font-weight: bold;
+}
