@@ -36,6 +36,7 @@ struct _IdeBuildConfigurationView
   GBinding             *display_name_binding;
   GBinding             *prefix_binding;
 
+  GtkEntry             *build_system_entry;
   GtkEntry             *configure_entry;
   GtkListBox           *device_list_box;
   GtkEntry             *display_name_entry;
@@ -368,6 +369,7 @@ ide_build_configuration_view_class_init (IdeBuildConfigurationViewClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-configuration-view.ui");
   gtk_widget_class_set_css_name (widget_class, "configurationview");
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, build_system_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, configure_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, device_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, display_name_entry);
@@ -410,6 +412,15 @@ ide_build_configuration_view_set_configuration (IdeBuildConfigurationView *self,
 {
   g_return_if_fail (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_return_if_fail (!configuration || IDE_IS_CONFIGURATION (configuration));
+
+  if (configuration != NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (configuration));
+      IdeBuildSystem *build_system = ide_context_get_build_system (context);
+      g_autofree gchar *name = ide_build_system_get_display_name (build_system);
+
+      gtk_entry_set_text (self->build_system_entry, name);
+    }
 
   if (self->configuration != configuration)
     {
