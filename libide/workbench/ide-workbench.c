@@ -908,6 +908,8 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
    * as the preferences state.
    */
   ide_application_actions_update (IDE_APPLICATION_DEFAULT);
+
+  gtk_widget_grab_focus (GTK_WIDGET (perspective));
 }
 
 const gchar *
