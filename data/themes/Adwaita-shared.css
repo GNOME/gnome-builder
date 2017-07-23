@@ -20,36 +20,6 @@ treeview.image { color: alpha(currentColor, 0.8); }
 treeview.image:selected { color: alpha(@theme_selected_fg_color, 0.9); }
 
 
-popover.messagepopover.background {
-  border-bottom-left-radius: 9px;
-  border-bottom-right-radius: 9px;
-  padding: 0;
-}
-
-popover.messagepopover .popover-action-area button {
-  padding: 7px 14px;;
-  border-radius: 0;
-  border-left-style: solid;
-  border-right-style: none;
-  border-bottom-style: none;
-}
-
-popover.messagepopover .popover-action-area button:first-child {
-  border-left-style: none;
-  border-bottom-left-radius: 7px;
-  -gtk-outline-bottom-left-radius: 5px;
-}
-
-popover.messagepopover .popover-action-area button:last-child {
-  border-right-style: none;
-  border-bottom-right-radius: 7px;
-  -gtk-outline-bottom-right-radius: 5px;
-}
-
-popover.messagepopover .popover-content-area {
-  margin: 24px;
-}
-
 /* buildui panel */
 ideeditorsidebar notebook header {
   background: transparent;

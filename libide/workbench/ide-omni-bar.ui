@@ -151,6 +151,7 @@
   <object class="GtkPopover" id="popover">
     <property name="relative-to">event_box</property>
     <property name="position">bottom</property>
+    <property name="border-width">24</property>
     <property name="width-request">525</property>
     <style>
       <class name="messagepopover"/>
