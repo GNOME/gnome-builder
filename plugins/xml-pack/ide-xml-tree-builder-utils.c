@@ -78,7 +78,7 @@ get_schema_kind_string (IdeXmlSchemaKind kind)
   else if (kind == SCHEMA_KIND_XML_SCHEMA)
     return "XML schema (.xsd)";
 
-  g_assert_not_reached ();
+  g_return_val_if_reached (NULL);
 }
 
 

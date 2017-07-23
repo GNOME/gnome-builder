@@ -987,7 +987,7 @@ get_adj_id (GstyleColorPlane *self,
     if (adj == priv->comp [i].adj)
       return i;
 
-  g_assert_not_reached ();
+  g_return_val_if_reached (0);
 }
 
 static void

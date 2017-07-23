@@ -286,5 +286,5 @@ ide_xml_rng_define_is_nameclass_match (IdeXmlRngDefine  *define,
       return FALSE;
     }
   else
-    g_assert_not_reached ();
+    g_return_val_if_reached (FALSE);
 }

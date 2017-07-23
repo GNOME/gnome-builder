@@ -116,7 +116,7 @@ gb_color_picker_prefs_get_page (GbColorPickerPrefs    *self,
   else if (prefs_type == GSTYLE_COLOR_PANEL_PREFS_PALETTES_LIST)
     return self->palettes_list_page;
   else
-    g_assert_not_reached ();
+    g_return_val_if_reached (NULL);
 }
 
 static GVariant *
