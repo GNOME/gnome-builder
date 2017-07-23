@@ -8,10 +8,6 @@
           <attribute name="label" translatable="yes">_Download Dependencies</attribute>
           <attribute name="action">flatpak.update-dependencies</attribute>
         </item>
-        <item>
-          <attribute name="label" translatable="yes">_Export as Bundle</attribute>
-          <attribute name="action">flatpak.export</attribute>
-        </item>
       </submenu>
     </section>
   </menu>

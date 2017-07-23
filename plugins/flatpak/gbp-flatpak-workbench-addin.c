@@ -133,45 +133,6 @@ gbp_flatpak_workbench_addin_update_dependencies (GSimpleAction *action,
 }
 
 static void
-gbp_flatpak_workbench_addin_export_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
-{
-  IdeBuildManager *manager = (IdeBuildManager *)object;
-  g_autoptr(GbpFlatpakWorkbenchAddin) self = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (!ide_build_manager_execute_finish (manager, result, &error))
-    {
-      g_warning ("%s", error->message);
-      return;
-    }
-}
-
-static void
-gbp_flatpak_workbench_addin_export (GSimpleAction *action,
-                                    GVariant      *param,
-                                    gpointer       user_data)
-{
-  GbpFlatpakWorkbenchAddin *self = user_data;
-  IdeBuildManager *manager;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
-
-  manager = ide_context_get_build_manager (ide_workbench_get_context (self->workbench));
-
-  ide_build_manager_execute_async (manager,
-                                   IDE_BUILD_PHASE_EXPORT,
-                                   NULL,
-                                   gbp_flatpak_workbench_addin_export_cb,
-                                   g_object_ref (self));
-}
-
-static void
 gbp_flatpak_workbench_addin_install_cb (GObject      *object,
                                         GAsyncResult *result,
                                         gpointer      user_data)
@@ -271,7 +232,6 @@ gbp_flatpak_workbench_addin_init (GbpFlatpakWorkbenchAddin *self)
 {
   static const GActionEntry actions[] = {
     { "update-dependencies", gbp_flatpak_workbench_addin_update_dependencies },
-    { "export", gbp_flatpak_workbench_addin_export },
     { "install-flatpak-builder", gbp_flatpak_workbench_addin_install_flatpak_builder },
   };
 
