@@ -120,6 +120,7 @@ plugins/create-project/gbp-create-project-widget.c
 plugins/create-project/gbp-create-project-widget.ui
 plugins/devhelp/gbp-devhelp-menu-button.ui
 plugins/devhelp/gbp-devhelp-panel.c
+plugins/devhelp/gbp-devhelp-view.c
 plugins/devhelp/gtk/menus.ui
 plugins/eslint/eslint_plugin/__init__.py
 plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml
