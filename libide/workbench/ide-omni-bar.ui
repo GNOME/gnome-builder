@@ -493,7 +493,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="action-name">build-manager.export</property>
-                    <property name="label" translatable="yes">Export</property>
+                    <property name="label" translatable="yes">Export Bundle</property>
                     <property name="visible">true</property>
                     <style>
                       <class name="suggested-action"/>
