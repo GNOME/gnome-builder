@@ -3,5 +3,6 @@
   <gresource prefix="/org/gnome/builder/plugins/spellcheck-plugin">
     <file compressed="true" preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">gbp-spell-widget.ui</file>
+    <file compressed="true">themes/shared.css</file>
   </gresource>
 </gresources>

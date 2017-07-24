@@ -14,29 +14,6 @@ filechooser actionbar button.combo {
     color: @warning_color;
 }
 
-/* styling for spellchecker */
-.gb-spellchecker list button.close:disabled,
-.gb-spellchecker list button.close {
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-.gb-spellchecker list row label {
-  padding: 7px;
-}
-.gb-spellchecker list row {
-  border-bottom: 1px solid alpha(@borders, 0.2);
-}
-.gb-spellchecker list row:last-child {
-  border-bottom: none;
-}
-.countbox {
-  background-color: #b3d4fc;
-  border-radius: 3px;
-  padding: 3px;
-}
 
 
 
