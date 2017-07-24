@@ -204,6 +204,7 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="visible">true</property>
             <property name="orientation">horizontal</property>
             <property name="spacing">6</property>
             <child>
