@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-07-23 02:15+0000\n"
-"PO-Revision-Date: 2017-07-23 09:42+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"POT-Creation-Date: 2017-07-24 01:29+0000\n"
+"PO-Revision-Date: 2017-07-24 10:43+0700\n"
+"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
@@ -632,7 +632,7 @@ msgstr "Tent_ang"
 msgid "_Quit"
 msgstr "_Keluar"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:700
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:702
 #: libide/editor/ide-editor-perspective-shortcuts.c:33
 #: libide/editor/ide-editor-perspective-shortcuts.c:39
 #: libide/editor/ide-editor-perspective-shortcuts.c:45
@@ -844,7 +844,7 @@ msgstr "Jalankan"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:505
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:628
+#: libide/workbench/ide-workbench.c:630
 msgid "Builder"
 msgstr "Builder"
 
@@ -1092,10 +1092,12 @@ msgstr "Mengekspor…"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
+#: libide/workbench/ide-omni-bar.c:438
 msgid "Success"
 msgstr "Berhasil"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
+#: libide/workbench/ide-omni-bar.c:423
 msgid "Failed"
 msgstr "Gagal"
 
@@ -1170,7 +1172,7 @@ msgid "Device"
 msgstr "Perangkat"
 
 #: libide/buildui/ide-build-configuration-view.ui:217
-#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:268
+#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:269
 msgid "Runtime"
 msgstr "Runtime"
 
@@ -1208,13 +1210,13 @@ msgstr "Simpan log bangun"
 
 #: libide/buildui/ide-build-panel.c:105 libide/buildui/ide-build-panel.c:181
 #: libide/buildui/ide-build-panel.c:203 libide/buildui/ide-build-panel.ui:106
-#: libide/workbench/ide-omni-bar.ui:431
+#: libide/workbench/ide-omni-bar.ui:433
 msgid "Warnings"
 msgstr "Peringatan"
 
 #: libide/buildui/ide-build-panel.c:114 libide/buildui/ide-build-panel.c:182
 #: libide/buildui/ide-build-panel.c:204 libide/buildui/ide-build-panel.ui:127
-#: libide/workbench/ide-omni-bar.ui:403
+#: libide/workbench/ide-omni-bar.ui:405
 msgid "Errors"
 msgstr "Kesalahan"
 
@@ -2510,7 +2512,7 @@ msgid "Number of CPU"
 msgstr "Banyaknya CPU"
 
 #: libide/preferences/ide-preferences-builtin.c:377
-#: libide/workbench/ide-omni-bar.ui:473
+#: libide/workbench/ide-omni-bar.ui:475
 msgid "Build"
 msgstr "Bangun"
 
@@ -2722,6 +2724,10 @@ msgstr "Tidak dapat menguraikan \"%s\" sebagai URI absolut"
 msgid "URI “%s” has no host component"
 msgstr "URI \"%s\" tidak memiliki komponen host"
 
+#: libide/workbench/ide-omni-bar.c:406
+msgid "Building"
+msgstr "Membangun"
+
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:90
 msgid "missing"
@@ -2731,47 +2737,47 @@ msgstr "kurang"
 msgid "Edit build configuration"
 msgstr "Sunting konfigurasi bangun"
 
-#: libide/workbench/ide-omni-bar.ui:196
+#: libide/workbench/ide-omni-bar.ui:197
 msgid "Configure build preferences"
 msgstr "Tata preferensi bangun"
 
-#: libide/workbench/ide-omni-bar.ui:218
+#: libide/workbench/ide-omni-bar.ui:219
 msgid "Branch"
 msgstr "Branch"
 
-#: libide/workbench/ide-omni-bar.ui:243
+#: libide/workbench/ide-omni-bar.ui:244
 msgid "Build Profile"
 msgstr "Profil Bangun"
 
-#: libide/workbench/ide-omni-bar.ui:315
+#: libide/workbench/ide-omni-bar.ui:317
 msgid "Build status"
 msgstr "Status bangun"
 
-#: libide/workbench/ide-omni-bar.ui:327
+#: libide/workbench/ide-omni-bar.ui:329
 msgid "View build console contents"
 msgstr "Tilik isi konsole bangun"
 
-#: libide/workbench/ide-omni-bar.ui:349
+#: libide/workbench/ide-omni-bar.ui:351
 msgid "Last build"
 msgstr "Bangun terakhir"
 
-#: libide/workbench/ide-omni-bar.ui:376
+#: libide/workbench/ide-omni-bar.ui:378
 msgid "Build result"
 msgstr "Hasil bangun"
 
-#: libide/workbench/ide-omni-bar.ui:480
+#: libide/workbench/ide-omni-bar.ui:482
 msgid "Rebuild"
 msgstr "Bangun Ulang"
 
-#: libide/workbench/ide-omni-bar.ui:487
+#: libide/workbench/ide-omni-bar.ui:489
 msgid "Clean"
 msgstr "Bersihkan"
 
-#: libide/workbench/ide-omni-bar.ui:494
-msgid "Export"
-msgstr "Ekspor"
+#: libide/workbench/ide-omni-bar.ui:496
+msgid "Export Bundle"
+msgstr "Ekspor Bundel"
 
-#: libide/workbench/ide-omni-bar.ui:510
+#: libide/workbench/ide-omni-bar.ui:512
 msgid "Build project"
 msgstr "Bangun proyek"
 
@@ -2779,7 +2785,7 @@ msgstr "Bangun proyek"
 msgid "Builder Statistics"
 msgstr "Stastistik Builder"
 
-#: libide/workbench/ide-workbench.c:626
+#: libide/workbench/ide-workbench.c:628
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
@@ -2792,7 +2798,7 @@ msgstr "Transfer"
 msgid "Show workbench menu"
 msgstr "Tampilkan menu meja kerja"
 
-#: libide/workbench/ide-workbench-header-bar.ui:80
+#: libide/workbench/ide-workbench-header-bar.ui:95
 msgid "Press Ctrl+. to search"
 msgstr "Tekan Ctrl+. untuk mencari"
 
@@ -3434,10 +3440,6 @@ msgstr "Flatpak"
 msgid "_Download Dependencies"
 msgstr "Unduh _Dependensi"
 
-#: plugins/flatpak/gtk/menus.ui:12
-msgid "_Export as Bundle"
-msgstr "_Ekspor sebagai bundel"
-
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
 msgstr "Kirim-ke Fpaste.org"
@@ -4060,3 +4062,6 @@ msgstr "Gagal membuat pohon XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer dimuat tapi tidak di pengelola buffer."
+
+#~ msgid "Export"
+#~ msgstr "Ekspor"
