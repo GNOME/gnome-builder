@@ -121,6 +121,7 @@ struct _IdeOmniBar
   GtkButton            *cancel_button;
   GtkLabel             *config_name_label;
   GtkStack             *message_stack;
+  GtkListBox           *operations_list;
   GtkPopover           *popover;
   GtkLabel             *popover_branch_label;
   GtkLabel             *popover_config_label;
@@ -497,6 +498,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, operations_list);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_result_label);
