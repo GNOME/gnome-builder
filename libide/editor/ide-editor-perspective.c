@@ -621,7 +621,6 @@ ide_editor_perspective_restore_panel_state (IdeEditorPerspective *self)
   set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), reveal);
 
   pane = dzl_dock_bin_get_right_edge (DZL_DOCK_BIN (self));
-  reveal = g_settings_get_boolean (settings, "right-visible");
   position = g_settings_get_int (settings, "right-position");
   dzl_dock_revealer_set_position (DZL_DOCK_REVEALER (pane), position);
   set_reveal_child_without_transition (DZL_DOCK_REVEALER (pane), FALSE);
