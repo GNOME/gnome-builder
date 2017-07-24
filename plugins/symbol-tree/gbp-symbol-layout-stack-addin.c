@@ -34,6 +34,8 @@ struct _GbpSymbolLayoutStackAddin {
   DzlSignalGroup      *buffer_signals;
 
   guint                cursor_moved_handler;
+
+  guint                resolver_loaded : 1;
 };
 
 static void
@@ -170,6 +172,7 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
   g_clear_object (&self->cancellable);
 
   symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
+
   g_assert (!symbol_resolver || IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
 
   gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
@@ -234,9 +237,13 @@ gbp_symbol_layout_stack_addin_bind (GbpSymbolLayoutStackAddin *self,
 
   gbp_symbol_menu_button_set_symbol (self->button, NULL);
 
-  symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
-  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
+  if (self->resolver_loaded)
+    return;
 
+  if (NULL != (symbol_resolver = ide_buffer_get_symbol_resolver (buffer)))
+    self->resolver_loaded = TRUE;
+
+  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
   gbp_symbol_layout_stack_addin_update_tree (self, buffer);
 }
 
@@ -256,6 +263,26 @@ gbp_symbol_layout_stack_addin_unbind (GbpSymbolLayoutStackAddin *self,
   g_clear_object (&self->scope_cancellable);
 
   gtk_widget_hide (GTK_WIDGET (self->button));
+  self->resolver_loaded = FALSE;
+}
+
+static void
+gbp_symbol_layout_stack_addin_symbol_resolver_loaded (GbpSymbolLayoutStackAddin *self,
+                                                      IdeBuffer                 *buffer)
+{
+  IdeSymbolResolver *symbol_resolver;
+
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (self->resolver_loaded)
+    return;
+
+  symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
+  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
+  self->resolver_loaded = TRUE;
+
+  gbp_symbol_layout_stack_addin_update_tree (self, buffer);
 }
 
 static void
@@ -304,6 +331,10 @@ gbp_symbol_layout_stack_addin_load (IdeLayoutStackAddin *addin,
   dzl_signal_group_connect_swapped (self->buffer_signals,
                                     "change-settled",
                                     G_CALLBACK (gbp_symbol_layout_stack_addin_change_settled),
+                                    self);
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "symbol-resolver-loaded",
+                                    G_CALLBACK (gbp_symbol_layout_stack_addin_symbol_resolver_loaded),
                                     self);
 }
 
