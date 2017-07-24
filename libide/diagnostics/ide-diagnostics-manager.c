@@ -950,8 +950,6 @@ ide_diagnostics_manager_buffer_loaded (IdeDiagnosticsManager *self,
                                        IdeBufferManager      *buffer_manager)
 {
   IdeDiagnosticsGroup *group;
-  GtkSourceLanguage *language;
-  const gchar *language_id = NULL;
   IdeContext *context;
   IdeFile *ifile;
   GFile *gfile;
@@ -1001,39 +999,47 @@ ide_diagnostics_manager_buffer_loaded (IdeDiagnosticsManager *self,
       g_hash_table_insert (self->groups_by_file, group->file, group);
     }
 
-  g_weak_ref_init (&group->buffer_wr, buffer);
+  g_weak_ref_set (&group->buffer_wr, buffer);
 
-  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  if (group->diagnostics_by_provider == NULL)
+    {
+      group->diagnostics_by_provider =
+        g_hash_table_new_full (NULL, NULL, NULL, free_diagnostics);
+    }
 
-  if (language != NULL)
-    language_id = gtk_source_language_get_id (language);
+  if (group->adapter == NULL)
+    {
+      GtkSourceLanguage *language;
+      const gchar *language_id = NULL;
 
-  group->diagnostics_by_provider = g_hash_table_new_full (NULL,
-                                                          NULL,
-                                                          NULL,
-                                                          free_diagnostics);
+      language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+      if (language != NULL)
+        language_id = gtk_source_language_get_id (language);
 
-  group->adapter = ide_extension_set_adapter_new (context,
-                                                  peas_engine_get_default (),
-                                                  IDE_TYPE_DIAGNOSTIC_PROVIDER,
-                                                  "Diagnostic-Provider-Languages",
-                                                  language_id);
+      group->adapter = ide_extension_set_adapter_new (context,
+                                                      peas_engine_get_default (),
+                                                      IDE_TYPE_DIAGNOSTIC_PROVIDER,
+                                                      "Diagnostic-Provider-Languages",
+                                                      language_id);
 
-  g_signal_connect_object (group->adapter,
-                           "extension-added",
-                           G_CALLBACK (ide_diagnostics_manager_extension_added),
-                           self,
-                           0);
+      g_signal_connect_object (group->adapter,
+                               "extension-added",
+                               G_CALLBACK (ide_diagnostics_manager_extension_added),
+                               self,
+                               0);
 
-  g_signal_connect_object (group->adapter,
-                           "extension-removed",
-                           G_CALLBACK (ide_diagnostics_manager_extension_removed),
-                           self,
-                           0);
+      g_signal_connect_object (group->adapter,
+                               "extension-removed",
+                               G_CALLBACK (ide_diagnostics_manager_extension_removed),
+                               self,
+                               0);
 
-  ide_extension_set_adapter_foreach (group->adapter,
-                                     ide_diagnostics_manager_extension_added,
-                                     self);
+      ide_extension_set_adapter_foreach (group->adapter,
+                                         ide_diagnostics_manager_extension_added,
+                                         self);
+    }
+
+  g_assert (g_hash_table_lookup (self->groups_by_file, gfile) == group);
 
   ide_diagnostics_group_queue_diagnose (group, self);
 
@@ -1125,11 +1131,16 @@ ide_diagnostics_manager_initable_init (GInitable     *initable,
   context = ide_object_get_context (IDE_OBJECT (self));
   buffer_manager = ide_context_get_buffer_manager (context);
 
+  /* We can start processing things when the buffer is loaded,
+   * but we do so after buffer-loaded because we don't really
+   * care to be before other subscribers. Our plugins might be
+   * dependent on other things that are buffer specific.
+   */
   g_signal_connect_object (buffer_manager,
                            "buffer-loaded",
                            G_CALLBACK (ide_diagnostics_manager_buffer_loaded),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (buffer_manager,
                            "buffer-unloaded",
