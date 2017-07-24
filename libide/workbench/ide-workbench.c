@@ -222,6 +222,8 @@ ide_workbench_set_fullscreen (DzlApplicationWindow *window,
   gtk_container_foreach (GTK_CONTAINER (self->perspectives_stack),
                          ide_workbench_notify_fullscreen,
                          GINT_TO_POINTER (fullscreen));
+
+  _ide_workbench_header_bar_set_fullscreen (self->header_bar, fullscreen);
 }
 
 static void

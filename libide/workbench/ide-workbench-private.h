@@ -51,12 +51,15 @@ struct _IdeWorkbench
   GObject                   *selection_owner;
 };
 
-void     ide_workbench_set_context         (IdeWorkbench *workbench,
-                                            IdeContext   *context);
-void     ide_workbench_actions_init        (IdeWorkbench *self);
-void     ide_workbench_set_selection_owner (IdeWorkbench *self,
-                                            GObject      *object);
-GObject *ide_workbench_get_selection_owner (IdeWorkbench *self);
+void     ide_workbench_set_context                (IdeWorkbench          *workbench,
+                                                   IdeContext            *context);
+void     ide_workbench_actions_init               (IdeWorkbench          *self);
+void     ide_workbench_set_selection_owner        (IdeWorkbench          *self,
+                                                   GObject               *object);
+GObject *ide_workbench_get_selection_owner        (IdeWorkbench          *self);
+
+void     _ide_workbench_header_bar_set_fullscreen (IdeWorkbenchHeaderBar *self,
+                                                   gboolean               fullscreen);
 
 G_END_DECLS
 

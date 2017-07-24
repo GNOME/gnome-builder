@@ -31,6 +31,7 @@
 
 typedef struct
 {
+  GtkToggleButton *fullscreen_button;
   GtkMenuButton   *menu_button;
   DzlPriorityBox  *right_box;
   DzlPriorityBox  *left_box;
@@ -86,6 +87,7 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench-header-bar.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, fullscreen_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
@@ -246,4 +248,16 @@ ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self)
   g_return_val_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self), NULL);
 
   return priv->omni_bar;
+}
+
+void
+_ide_workbench_header_bar_set_fullscreen (IdeWorkbenchHeaderBar *self,
+                                          gboolean               fullscreen)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
+
+  gtk_widget_set_visible (GTK_WIDGET (priv->fullscreen_button), fullscreen);
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (self), !fullscreen);
 }
