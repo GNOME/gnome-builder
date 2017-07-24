@@ -15,31 +15,6 @@ filechooser actionbar button.combo {
 }
 
 
-
-
-/*
- * For our pattern of popover with lists (and close buttons).
- */
-popover list row {
-  padding: 6px;
-}
-popover list row button:not(.circular) {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  margin: 0;
-  padding: 0;
-  opacity: 0.25;
-}
-popover list row:selected button:not(.circular),
-popover list row:selected button:hover:not(.circular) {
-  color: @theme_selected_fg_color;
-}
-popover list row button:hover:not(.circular) {
-  opacity: 1;
-}
-
-
 /*
  * Styling in the genesis (create project) perspective.
  */
@@ -97,33 +72,6 @@ treeview.dim-label {
 
 button.run-arrow-button {
   min-width: 12px;
-}
-
-
-popover.popover-selector list {
-  padding: 12px;
-}
-
-popover.popover-selector list row {
-  padding: 8px;
-}
-
-popover.popover-selector list row image {
-  min-height: 16px;
-  min-width: 16px;
-  margin-right: 12px;
-}
-popover.popover-selector list row image:dir(rtl) {
-  margin-right: 0px;
-  margin-left: 12px;
-}
-popover.popover-selector list row .accel {
-  margin-left: 20px;
-  margin-right: 0;
-}
-popover.popover-selector list row .accel:dir(rtl) {
-  margin-left: 0;
-  margin-right: 20px;
 }
 
 
