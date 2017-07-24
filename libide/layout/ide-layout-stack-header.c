@@ -305,6 +305,8 @@ ide_layout_stack_header_view_row_activated (GtkListBox           *list_box,
   if (stack != NULL && view != NULL)
     ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack),
                                         IDE_LAYOUT_VIEW (view));
+
+  _ide_layout_stack_header_popdown (self);
 }
 
 static gboolean
