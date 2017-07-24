@@ -33,3 +33,12 @@ ideeditorproperties entry:last-child {
   border-right: none;
   border-left: none;
 }
+
+
+popover.messagepopover {
+  padding: 0;
+}
+popover.messagepopover list {
+  border-top: 1px solid @borders;
+  border-radius: 0 0 5px 5px;
+}
