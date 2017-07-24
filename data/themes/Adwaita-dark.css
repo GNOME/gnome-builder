@@ -16,26 +16,6 @@ perspectiveswitcher button:hover {
 }
 
 
-layouttabbar {
-  background-color: #272c2e;
-  box-shadow: 0 4px 3px -5px #2c3030 inset,
-              0 -1px 0 #1c1f1f inset;
-}
-layouttabbar:backdrop {
-  box-shadow: 0 -1px 0 #2c3030 inset;
-}
-layouttab {
-  border-bottom-color: #215d9c;
-  box-shadow: 0 4px 3px -5px #2c3030 inset;
-}
-layouttab:backdrop {
-  background-color: #393f3f;
-  border-right-color: alpha(@borders, 0.5);
-  border-left-color: alpha(@borders, 0.5);
-  box-shadow: none;
-}
-
-
 entry.search-missing {
   border-color: #330000;
 }

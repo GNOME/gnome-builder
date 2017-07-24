@@ -151,7 +151,6 @@
   <object class="GtkPopover" id="popover">
     <property name="relative-to">event_box</property>
     <property name="position">bottom</property>
-    <property name="border-width">24</property>
     <property name="width-request">525</property>
     <style>
       <class name="messagepopover"/>
@@ -171,6 +170,9 @@
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <property name="visible">true</property>
+                <property name="margin-top">24</property>
+                <property name="margin-start">24</property>
+                <property name="margin-end">24</property>
                 <child>
                   <object class="GtkBox">
                     <property name="hexpand">true</property>
@@ -301,6 +303,8 @@
                 <child>
                   <object class="GtkBox">
                     <property name="margin-top">24</property>
+                    <property name="margin-start">24</property>
+                    <property name="margin-end">24</property>
                     <property name="orientation">vertical</property>
                     <property name="visible">true</property>
                     <child>
@@ -464,7 +468,7 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="margin-top">24</property>
+                <property name="margin">24</property>
                 <property name="orientation">horizontal</property>
                 <property name="visible">true</property>
                 <property name="homogeneous">true</property>

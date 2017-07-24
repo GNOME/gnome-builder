@@ -1,21 +1,6 @@
 @import url("resource:///org/gnome/builder/themes/Adwaita-shared.css");
 
 
-layouttabbar {
-  background-color: #d6d6d6;
-  border-bottom: 1px solid #a1a1a1;
-  box-shadow: 0 4px 3px -5px #aaa inset;
-}
-layouttab {
-  border-bottom-color: #4a90d9;
-  box-shadow: 0 4px 3px -5px #aaa inset;
-}
-layouttab:backdrop {
-  background-color: #efefef;
-  border-right-color: alpha(@borders, 0.5);
-  border-left-color: alpha(@borders, 0.5);
-}
-
 entry.search-missing {
   border-color: #aa0000;
 }

@@ -38,71 +38,6 @@ perspectiveswitcher button:checked:backdrop {
 }
 
 
-/*
- * Layout tab and tab bar tweaks
- *
- * The following makes the layout stack header look similar to a tab bar.
- */
-layouttabbar {
-  border-bottom: 1px solid @borders;
-}
-layouttabbar > box > button {
-  opacity: 0.5;
-}
-layouttabbar > box > button:hover,
-layouttabbar > box > button:active {
-  color: @theme_fg_color;
-  opacity: 0.75;
-}
-layouttabbar > box > button:checked {
-  color: @theme_fg_color;
-  opacity: 1;
-}
-layouttabbar button {
-  border: none;
-  box-shadow: none;
-  background: transparent;
-}
-layouttabbar > box {
-  border-top: 3px solid @theme_bg_color;
-}
-
-layouttab label {
-  padding: 5px;
-}
-layouttab {
-  border: 1px solid @borders;
-}
-layouttab separator.vertical {
-  margin-top: 7px;
-  margin-bottom: 7px;
-  opacity: 0.75;
-}
-layouttab separator.vertical:backdrop {
-  opacity: 0.3;
-}
-layouttab button:disabled,
-layouttab button {
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-layouttab button:checked,
-layouttab button:active {
-  color: @theme_fg_color;
-}
-
-/* Close button */
-layouttab > box > button:last-child image {
-  opacity: 0.75;
-}
-layouttab > box > button:last-child:hover image {
-  color: red;
-}
-
-
 layoutpane stackswitcher button {
   color: @theme_fg_color;
   background-color: transparent;
@@ -132,4 +67,11 @@ window.workbench buildperspective list row {
 }
 window.workbench buildperspective list row:last-child {
   border-bottom: none;
+}
+
+
+/* omnibar popover, remove popover padding */
+popover.messagepopover > * > * {
+  margin: 0;
+  padding: 0;
 }
