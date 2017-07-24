@@ -276,7 +276,7 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
 
   if (ide_str_empty0 (title))
     {
-      title = _("Document Outline");
+      title = _("Select Symbol");
       icon_name = NULL;
       symbol = NULL;
     }
