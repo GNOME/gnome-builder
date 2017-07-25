@@ -15,6 +15,7 @@
             <child>
               <object class="IdeEditorSearchBar" id="search_bar">
                 <property name="visible">true</property>
+                <signal name="stop-search" handler="ide_editor_view_stop_search" swapped="true" object="IdeEditorView"/>
               </object>
             </child>
           </object>

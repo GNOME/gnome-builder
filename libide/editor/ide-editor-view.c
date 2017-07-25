@@ -92,6 +92,17 @@ ide_editor_view_load_fonts (IdeEditorView *self)
 }
 
 static void
+ide_editor_view_stop_search (IdeEditorView      *self,
+                             IdeEditorSearchBar *search_bar)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (search_bar));
+
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+}
+
+static void
 ide_editor_view_notify_child_revealed (IdeEditorView *self,
                                        GParamSpec    *pspec,
                                        GtkRevealer   *revealer)
@@ -712,6 +723,7 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, source_view);
   gtk_widget_class_bind_template_callback (widget_class, ide_editor_view_notify_child_revealed);
+  gtk_widget_class_bind_template_callback (widget_class, ide_editor_view_stop_search);
 
   g_type_ensure (IDE_TYPE_SOURCE_VIEW);
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
