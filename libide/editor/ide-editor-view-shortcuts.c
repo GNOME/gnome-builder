@@ -44,7 +44,7 @@ static DzlShortcutEntry editor_view_shortcuts[] = {
     N_("Find and replace"),
     N_("Find") },
 
-  { "org.gnome.builder.editor-view.find-and-replace",
+  { "org.gnome.builder.editor-view.find-replace",
     0, NULL,
     N_("Editor"),
     N_("Find and replace"),
@@ -97,10 +97,10 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
                                               I_("editor-view.find"));
 
   dzl_shortcut_controller_add_command_action (controller,
-                                              I_("org.gnome.builder.editor-view.find-and-replace"),
+                                              I_("org.gnome.builder.editor-view.find-replace"),
                                               "<Primary>h",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
-                                              I_("editor-view.find-and-replace"));
+                                              I_("editor-view.find-replace"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.next-match"),
