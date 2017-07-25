@@ -32,7 +32,7 @@ ide_layout_create_edge (DzlDockBin      *dock,
 
   return g_object_new (IDE_TYPE_LAYOUT_PANE,
                        "edge", edge,
-                       "visible", TRUE,
+                       "visible", FALSE,
                        "reveal-child", FALSE,
                        NULL);
 }

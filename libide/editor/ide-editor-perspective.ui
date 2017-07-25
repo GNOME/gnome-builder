@@ -3,7 +3,6 @@
   <template class="IdeEditorPerspective" parent="IdeLayout">
     <child internal-child="right">
       <object class="IdeLayoutTransientSidebar">
-        <property name="reveal-child">false</property>
         <child>
           <object class="IdeEditorProperties" id="properties">
             <property name="sensitive">false</property>
