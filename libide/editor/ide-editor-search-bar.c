@@ -778,3 +778,16 @@ ide_editor_search_bar_set_context (IdeEditorSearchBar     *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
     }
 }
+
+void
+ide_editor_search_bar_set_search_text (IdeEditorSearchBar *self,
+                                       const gchar        *search_text)
+{
+  g_return_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self));
+
+  if (search_text == NULL)
+    search_text = "";
+
+  if (self->settings != NULL)
+    gtk_source_search_settings_set_search_text (self->settings, search_text);
+}
