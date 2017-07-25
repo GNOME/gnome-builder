@@ -56,9 +56,15 @@ enum {
   N_PROPS
 };
 
+enum {
+  STOP_SEARCH,
+  N_SIGNALS
+};
+
 G_DEFINE_TYPE (IdeEditorSearchBar, ide_editor_search_bar, DZL_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 ide_editor_search_bar_toggle_search_options (GSimpleAction *action,
@@ -567,6 +573,16 @@ search_entry_populate_popup (IdeEditorSearchBar *self,
 }
 
 static void
+search_entry_stop_search (IdeEditorSearchBar *self,
+                          GtkSearchEntry     *entry)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+
+  g_signal_emit (self, signals [STOP_SEARCH], 0);
+}
+
+static void
 ide_editor_search_bar_destroy (GtkWidget *widget)
 {
   IdeEditorSearchBar *self = (IdeEditorSearchBar *)widget;
@@ -655,6 +671,15 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  signals [STOP_SEARCH] =
+    g_signal_new ("stop-search",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-search-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, case_sensitive);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_all_button);
@@ -742,6 +767,11 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
   g_signal_connect_swapped (self->search_entry,
                             "populate-popup",
                             G_CALLBACK (search_entry_populate_popup),
+                            self);
+
+  g_signal_connect_swapped (self->search_entry,
+                            "stop-search",
+                            G_CALLBACK (search_entry_stop_search),
                             self);
 }
 
