@@ -28,6 +28,9 @@ typedef struct
   GWeakRef        view_ref;
 } IdeLayoutTransientSidebarPrivate;
 
+static void ide_layout_transient_sidebar_view_destroyed (IdeLayoutTransientSidebar *self,
+                                                         IdeLayoutView             *view);
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLayoutTransientSidebar,
                             ide_layout_transient_sidebar,
                             IDE_TYPE_LAYOUT_PANE)
@@ -98,7 +101,7 @@ ide_layout_transient_sidebar_after_set_focus (IdeLayoutTransientSidebar *self,
   IdeLayoutTransientSidebarPrivate *priv = ide_layout_transient_sidebar_get_instance_private (self);
 
   g_assert (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
-  g_assert (GTK_IS_WINDOW (toplevel));
+  g_assert (!toplevel || GTK_IS_WINDOW (toplevel));
 
   /*
    * If we are currently visible, then check to see if the focus has gone
@@ -112,10 +115,35 @@ ide_layout_transient_sidebar_after_set_focus (IdeLayoutTransientSidebar *self,
     {
       if (!has_view_related_focus (self))
         {
+          g_autoptr(GtkWidget) old_view = g_weak_ref_get (&priv->view_ref);
+
+          if (old_view != NULL)
+            g_signal_handlers_disconnect_by_func (old_view,
+                                                  G_CALLBACK (ide_layout_transient_sidebar_view_destroyed),
+                                                  self);
+
           dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (self), FALSE);
           g_weak_ref_set (&priv->view_ref, NULL);
         }
     }
+}
+
+static void
+ide_layout_transient_sidebar_view_destroyed (IdeLayoutTransientSidebar *self,
+                                             IdeLayoutView             *view)
+{
+  IdeLayoutTransientSidebarPrivate *priv = ide_layout_transient_sidebar_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
+  g_assert (IDE_IS_LAYOUT_VIEW (view));
+
+  g_signal_handlers_disconnect_by_func (view,
+                                        G_CALLBACK (ide_layout_transient_sidebar_view_destroyed),
+                                        self);
+
+  g_weak_ref_set (&priv->view_ref, NULL);
+
+  ide_layout_transient_sidebar_after_set_focus (self, NULL, NULL);
 }
 
 static void
@@ -205,9 +233,23 @@ ide_layout_transient_sidebar_set_view (IdeLayoutTransientSidebar *self,
                                        IdeLayoutView             *view)
 {
   IdeLayoutTransientSidebarPrivate *priv = ide_layout_transient_sidebar_get_instance_private (self);
+  g_autoptr(GtkWidget) old_view = NULL;
 
   g_return_if_fail (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
   g_return_if_fail (!view || IDE_IS_LAYOUT_VIEW (view));
+
+  old_view = g_weak_ref_get (&priv->view_ref);
+  if (old_view != NULL)
+    g_signal_handlers_disconnect_by_func (old_view,
+                                          G_CALLBACK (ide_layout_transient_sidebar_view_destroyed),
+                                          self);
+
+  if (view != NULL)
+    g_signal_connect_object (view,
+                             "destroy",
+                             G_CALLBACK (ide_layout_transient_sidebar_view_destroyed),
+                             self,
+                             G_CONNECT_SWAPPED);
 
   g_weak_ref_set (&priv->view_ref, view);
 }
