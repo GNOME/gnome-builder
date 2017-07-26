@@ -176,13 +176,6 @@
             <attribute name="target" type="(bb)">(false,false)</attribute>
           </item>
         </section>
-        <section id="ide-source-view-popup-menu-spellchecking-section">
-          <item>
-            <attribute name="label" translatable="yes">Spellchecking</attribute>
-            <attribute name="action">frame.show-spellcheck</attribute>
-            <attribute name="target" type="i">1</attribute>
-          </item>
-        </section>
       </submenu>
     </section>
     <section id="ide-source-view-popup-menu-zoom-section">
