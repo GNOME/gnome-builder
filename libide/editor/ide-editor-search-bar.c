@@ -630,6 +630,7 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                             self);
 
   _ide_editor_search_bar_init_actions (self);
+  _ide_editor_search_bar_init_shortcuts (self);
 }
 
 GtkWidget *
