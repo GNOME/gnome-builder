@@ -782,5 +782,6 @@ _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
 
   ide_editor_properties_set_view (self->properties, view);
   ide_layout_transient_sidebar_set_view (sidebar, (IdeLayoutView *)view);
+  ide_layout_transient_sidebar_set_panel (sidebar, GTK_WIDGET (self->properties));
   g_object_set (self, "right-visible", view != NULL, NULL);
 }
