@@ -845,22 +845,13 @@ ide_source_view_update_auto_indent_override (IdeSourceView *self)
 
   /*
    * Updates our override of auto-indent from the GtkSourceView underneath us.
-   * Also updates our mode which needs to know if we have an indenter to
-   * provide different CSS selectors.
+   * Since we do our own mimicing of GtkSourceView, we always disable it. Also
+   * updates our mode which needs to know if we have an indenter to provide
+   * different CSS selectors.
    */
-
-  if (priv->auto_indent && (indenter == NULL))
-    {
-      gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), TRUE);
-      if (priv->mode != NULL)
-        ide_source_view_mode_set_has_indenter (priv->mode, FALSE);
-    }
-  else
-    {
-      gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), FALSE);
-      if (priv->mode != NULL)
-        ide_source_view_mode_set_has_indenter (priv->mode, (indenter != NULL));
-    }
+  gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), FALSE);
+  if (priv->mode != NULL)
+    ide_source_view_mode_set_has_indenter (priv->mode, !!indenter);
 }
 
 static void
