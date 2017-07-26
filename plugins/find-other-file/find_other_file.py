@@ -94,9 +94,6 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
         parent = file.get_parent()
 
         basename = file.get_basename()
-        if '.' in basename:
-            basename = basename[:basename.rindex('.')+1]
-
         parent.enumerate_children_async(_ATTRIBUTES,
                                         Gio.FileQueryInfoFlags.NONE,
                                         GLib.PRIORITY_LOW,
@@ -104,17 +101,20 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
                                         self.on_enumerator_loaded,
                                         basename)
 
-    def on_enumerator_loaded(self, parent, result, prefix):
+    def on_enumerator_loaded(self, parent, result, basename):
         try:
             files = []
 
             enumerator = parent.enumerate_children_finish(result)
             info = enumerator.next_file(None)
+            if '.' in basename:
+                prefix = basename[:basename.rindex('.')+1]
+            else:
+                prefix = basename
 
             while info is not None:
                 name = info.get_name()
-
-                if name.startswith(prefix):
+                if name != basename and name.startswith(prefix):
                     content_type = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE)
                     display_name = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
                     icon = info.get_attribute_object(Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON)
@@ -126,7 +126,9 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
 
             enumerator.close()
 
-            if files:
+            if len(files) == 1:
+                self.workbench.open_files_async([files[0].file], 'editor', 0, None, None)
+            elif files:
                 self.present_results(files)
 
         except Exception as ex:
