@@ -454,6 +454,19 @@ search_entry_stop_search (IdeEditorSearchBar *self,
 }
 
 static void
+ide_editor_search_bar_activate (IdeEditorSearchBar *self,
+                                GtkSearchEntry     *search_entry)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  dzl_gtk_widget_action (GTK_WIDGET (self),
+                         "editor-view",
+                         "activate-next-search-result",
+                         NULL);
+}
+
+static void
 ide_editor_search_bar_destroy (GtkWidget *widget)
 {
   IdeEditorSearchBar *self = (IdeEditorSearchBar *)widget;
@@ -570,6 +583,11 @@ static void
 ide_editor_search_bar_init (IdeEditorSearchBar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_swapped (self->search_entry,
+                            "activate",
+                            G_CALLBACK (ide_editor_search_bar_activate),
+                            self);
 
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
 

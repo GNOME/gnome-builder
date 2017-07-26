@@ -486,6 +486,25 @@ ide_editor_view_actions_move_previous_error (GSimpleAction *action,
 }
 
 static void
+ide_editor_view_actions_activate_next_search_result (GSimpleAction *action,
+                                                     GVariant      *variant,
+                                                     gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  ide_editor_view_move_next_search_result (self);
+
+  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+  ide_source_view_scroll_to_insert (self->source_view);
+}
+
+static void
 ide_editor_view_actions_move_next_search_result (GSimpleAction *action,
                                                  GVariant      *variant,
                                                  gpointer       user_data)
@@ -516,6 +535,7 @@ ide_editor_view_actions_properties (GSimpleAction *action,
 }
 
 static const GActionEntry editor_view_entries[] = {
+  { "activate-next-search-result", ide_editor_view_actions_activate_next_search_result },
   { "find", ide_editor_view_actions_find },
   { "find-replace", ide_editor_view_actions_find_replace },
   { "hide-search", ide_editor_view_actions_hide_search },
