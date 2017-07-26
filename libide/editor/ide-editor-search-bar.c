@@ -19,35 +19,12 @@
 #define G_LOG_DOMAIN "ide-editor-search-bar"
 
 #include <glib/gi18n.h>
-#include <libgd/gd-tagged-entry.h>
 
 #include "ide-macros.h"
 
 #include "application/ide-application.h"
+#include "editor/ide-editor-private.h"
 #include "editor/ide-editor-search-bar.h"
-
-struct _IdeEditorSearchBar
-{
-  DzlBin                   parent_instance;
-
-  /* Owned references */
-  DzlSignalGroup          *buffer_signals;
-  GtkSourceSearchContext  *context;
-  DzlSignalGroup          *context_signals;
-  GtkSourceSearchSettings *settings;
-  DzlSignalGroup          *settings_signals;
-  GdTaggedEntryTag        *search_entry_tag;
-
-  /* Template widgets */
-  GtkCheckButton          *case_sensitive;
-  GtkButton               *replace_all_button;
-  GtkButton               *replace_button;
-  GtkSearchEntry          *replace_entry;
-  GdTaggedEntry           *search_entry;
-  GtkGrid                 *search_options;
-  GtkCheckButton          *use_regex;
-  GtkCheckButton          *whole_word;
-};
 
 enum {
   PROP_0,
@@ -66,20 +43,6 @@ G_DEFINE_TYPE (IdeEditorSearchBar, ide_editor_search_bar, DZL_TYPE_BIN)
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
-static void
-ide_editor_search_bar_toggle_search_options (GSimpleAction *action,
-                                             GVariant      *state,
-                                             gpointer       user_data)
-{
-  IdeEditorSearchBar *self = user_data;
-  gboolean visible;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-
-  visible = !gtk_widget_get_visible (GTK_WIDGET (self->search_options));
-  gtk_widget_set_visible (GTK_WIDGET (self->search_options), visible);
-}
-
 gboolean
 ide_editor_search_bar_get_replace_mode (IdeEditorSearchBar *self)
 {
@@ -97,98 +60,6 @@ ide_editor_search_bar_set_replace_mode (IdeEditorSearchBar *self,
   gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), replace_mode);
   gtk_widget_set_visible (GTK_WIDGET (self->replace_button), replace_mode);
   gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), replace_mode);
-}
-
-static void
-ide_editor_search_bar_toggle_search_replace (GSimpleAction *action,
-                                             GVariant      *state,
-                                             gpointer       user_data)
-{
-  IdeEditorSearchBar *self = user_data;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-
-  ide_editor_search_bar_set_replace_mode (self, !ide_editor_search_bar_get_replace_mode (self));
-}
-
-static void
-ide_editor_search_bar_replace (GSimpleAction *action,
-                               GVariant      *state,
-                               gpointer       user_data)
-{
-  IdeEditorSearchBar *self = user_data;
-  g_autofree gchar *unescaped_replace_text = NULL;
-  g_autoptr(GError) error = NULL;
-  GtkSourceBuffer *buffer;
-  const gchar *replace_text;
-  const gchar *search_text;
-  GtkTextIter begin;
-  GtkTextIter end;
-  gint position;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-
-  if (self->settings == NULL || self->context == NULL)
-    return;
-
-  search_text = gtk_source_search_settings_get_search_text (self->settings);
-  replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
-
-  if (ide_str_empty0 (search_text) || replace_text == NULL)
-    return;
-
-  unescaped_replace_text = gtk_source_utils_unescape_search_text (replace_text);
-
-  buffer = gtk_source_search_context_get_buffer (self->context);
-  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
-  position = gtk_source_search_context_get_occurrence_position (self->context, &begin, &end);
-
-  if (position > 0)
-    {
-      /* Temporarily disable updating the search position label to prevent flickering */
-      dzl_signal_group_block (self->buffer_signals);
-
-      gtk_source_search_context_replace2 (self->context, &begin, &end,
-                                          unescaped_replace_text, -1, &error);
-
-      /* Re-enable updating the search position label. The next-search-result action
-       * below will cause it to update. */
-      dzl_signal_group_unblock (self->buffer_signals);
-
-      if (error != NULL)
-        g_warning ("%s", error->message);
-
-      dzl_gtk_widget_action (GTK_WIDGET (self), "editor-view", "move-next-search-result", NULL);
-    }
-}
-
-static void
-ide_editor_search_bar_replace_all (GSimpleAction *action,
-                                   GVariant      *state,
-                                   gpointer       user_data)
-{
-  IdeEditorSearchBar *self = user_data;
-  g_autofree gchar *unescaped_replace_text = NULL;
-  g_autoptr(GError) error = NULL;
-  const gchar *replace_text;
-  const gchar *search_text;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-
-  if (self->settings == NULL || self->context == NULL)
-    return;
-
-  search_text = gtk_source_search_settings_get_search_text (self->settings);
-  replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
-
-  if (ide_str_empty0 (search_text) || replace_text == NULL)
-    return;
-
-  unescaped_replace_text = gtk_source_utils_unescape_search_text (replace_text);
-  gtk_source_search_context_replace_all (self->context, unescaped_replace_text, -1, &error);
-
-  if (error != NULL)
-    g_warning ("%s", error->message);
 }
 
 static gboolean
@@ -695,18 +566,9 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
   g_type_ensure (GD_TYPE_TAGGED_ENTRY);
 }
 
-static const GActionEntry search_bar_actions[] = {
-  { "toggle-search-options", NULL, "b", "false", ide_editor_search_bar_toggle_search_options },
-  { "toggle-search-replace", NULL, "b", "false", ide_editor_search_bar_toggle_search_replace },
-  { "replace", ide_editor_search_bar_replace },
-  { "replace-all", ide_editor_search_bar_replace_all },
-};
-
 static void
 ide_editor_search_bar_init (IdeEditorSearchBar *self)
 {
-  g_autoptr(GSimpleActionGroup) actions = NULL;
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
@@ -755,13 +617,6 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                             G_CALLBACK (ide_editor_search_bar_bind_settings),
                             self);
 
-  actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (actions),
-                                   search_bar_actions,
-                                   G_N_ELEMENTS (search_bar_actions),
-                                   self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "search-bar", G_ACTION_GROUP (actions));
-
   dzl_widget_action_group_attach (self->search_entry, "entry");
 
   g_signal_connect_swapped (self->search_entry,
@@ -773,6 +628,8 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                             "stop-search",
                             G_CALLBACK (search_entry_stop_search),
                             self);
+
+  _ide_editor_search_bar_init_actions (self);
 }
 
 GtkWidget *

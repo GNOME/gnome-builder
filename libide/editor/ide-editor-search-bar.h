@@ -32,6 +32,7 @@ G_DECLARE_FINAL_TYPE (IdeEditorSearchBar, ide_editor_search_bar, IDE, EDITOR_SEA
 GtkWidget *ide_editor_search_bar_new              (void);
 void       ide_editor_search_bar_set_search_text  (IdeEditorSearchBar      *self,
                                                    const gchar             *word);
+gboolean   ide_editor_search_bar_get_replace_mode (IdeEditorSearchBar      *self);
 void       ide_editor_search_bar_set_replace_mode (IdeEditorSearchBar      *self,
                                                    gboolean                 replace_mode);
 void       ide_editor_search_bar_set_context      (IdeEditorSearchBar      *self,

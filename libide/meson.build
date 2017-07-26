@@ -484,6 +484,7 @@ libide_sources = libide_generated_headers + libide_public_sources + [
   'editor/ide-editor-properties.c',
   'editor/ide-editor-properties.h',
   'editor/ide-editor-search-bar.c',
+  'editor/ide-editor-search-bar-actions.c',
   'editor/ide-editor-search-bar.h',
   'editor/ide-editor-view-actions.c',
   'editor/ide-editor-view-settings.c',
