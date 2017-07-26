@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeEditorLayoutStackControls">
+  <template class="IdeEditorLayoutStackControls" parent="GtkBox">
     <property name="orientation">horizontal</property>
     <child>
       <object class="GtkButton" id="warning_button">
