@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-06-14 08:21+0000\n"
-"PO-Revision-Date: 2017-06-17 17:34+0500\n"
+"POT-Creation-Date: 2017-07-26 14:38+0000\n"
+"PO-Revision-Date: 2017-07-27 10:40+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 1.8.12\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
@@ -207,7 +207,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Баптауларды қолданып, палитраны жүктеу немесе генерациялау"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5958
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Атын ауыстыру"
@@ -318,7 +318,7 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-#: libide/editor/ide-editor-tweak-widget.ui:74
+#: libide/editor/ide-editor-properties.ui:88
 msgid "Highlight current line"
 msgstr "Ағымдағы жолды түспен ерекшелеу"
 
@@ -338,6 +338,7 @@ msgstr ""
 "Іске қосылған болса, түзеткіш сәйкес жақшаларды түспен ерекшелейтін болады."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+#: libide/editor/ide-editor-properties.ui:62
 msgid "Show line numbers"
 msgstr "Жол нөмірлерін көрсету"
 
@@ -346,7 +347,6 @@ msgid "If enabled, the editor will show line numbers."
 msgstr "Іске қосылған болса, түзеткіш жолдар нөмірлерін көрсетеді."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
-#: libide/editor/ide-editor-tweak-widget.ui:91
 #: libide/preferences/ide-preferences-builtin.c:146
 msgid "Smart Backspace"
 msgstr "Ақылды Backspace"
@@ -618,180 +618,221 @@ msgstr "Осы тур_алы"
 msgid "_Quit"
 msgstr "_Шығу"
 
-#: data/gtk/menus.ui:49
-msgid "Show left panel"
-msgstr "Сол жақ панельді көрсету"
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
+#: libide/editor/ide-editor-perspective-shortcuts.c:33
+#: libide/editor/ide-editor-perspective-shortcuts.c:39
+#: libide/editor/ide-editor-perspective-shortcuts.c:45
+#: libide/editor/ide-editor-perspective-shortcuts.c:51
+#: libide/editor/ide-editor-view-shortcuts.c:31
+#: libide/editor/ide-editor-view-shortcuts.c:37
+#: libide/editor/ide-editor-view-shortcuts.c:43
+#: libide/editor/ide-editor-view-shortcuts.c:49
+#: libide/editor/ide-editor-view-shortcuts.c:55
+#: libide/editor/ide-editor-view-shortcuts.c:61
+#: libide/editor/ide-editor-view-shortcuts.c:67
+#: libide/editor/ide-editor-view-shortcuts.c:73
+#: libide/editor/ide-editor-view-shortcuts.c:79
+#: libide/layout/ide-layout-stack-shortcuts.c:32
+#: libide/layout/ide-layout-stack-shortcuts.c:39
+#: libide/layout/ide-layout-stack-shortcuts.c:46
+#: libide/layout/ide-layout-stack-shortcuts.c:53
+#: libide/layout/ide-layout-stack-shortcuts.c:60
+#: libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:152
+#: plugins/command-bar/gb-command-bar.c:715
+msgid "Editor"
+msgstr "Түзетуші"
 
-#: data/gtk/menus.ui:54
-msgid "Show bottom panel"
-msgstr "Төменгі панельді көрсету"
+#: data/gtk/menus.ui:60 libide/buildui/ide-build-perspective.c:450
+msgid "Build Preferences"
+msgstr "Құрастыру баптаулары"
 
-#: data/gtk/menus.ui:59
-msgid "Show right panel"
-msgstr "Оң жақ панельді көрсету"
+#: data/gtk/menus.ui:69 libide/preferences/ide-preferences-perspective.c:124
+msgid "Preferences"
+msgstr "Баптаулар"
 
-#: data/gtk/menus.ui:87
-msgid "_New File"
-msgstr "_Жаңа файл"
-
-#: data/gtk/menus.ui:93
-msgid "_Open File…"
-msgstr "Файлды а_шу…"
-
-#: data/gtk/menus.ui:99
+#: data/gtk/menus.ui:79
 msgid "Save _All"
 msgstr "Б_арлығын сақтау"
 
-#: data/gtk/menus.ui:116
+#: data/gtk/menus.ui:85
+msgid "_Fullscreen"
+msgstr "Т_олық экранға"
+
+#: data/gtk/menus.ui:93
 msgid "_Go to Definition"
 msgstr "Анықтамасына ө_ту"
 
-#: data/gtk/menus.ui:122
+#: data/gtk/menus.ui:99
 msgid "_Undo"
 msgstr "Бол_дырмау"
 
-#: data/gtk/menus.ui:126
+#: data/gtk/menus.ui:103
 msgid "_Redo"
 msgstr "Қай_талау"
 
-#: data/gtk/menus.ui:132
+#: data/gtk/menus.ui:109
 msgid "C_ut"
 msgstr "Қ_иып алу"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:33
+#: data/gtk/menus.ui:114 data/gtk/menus.ui:229 plugins/terminal/gtk/menus.ui:19
 msgid "_Copy"
 msgstr "_Көшіріп алу"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:37
+#: data/gtk/menus.ui:118 data/gtk/menus.ui:233 plugins/terminal/gtk/menus.ui:23
 msgid "_Paste"
 msgstr "Кірі_стіру"
 
-#: data/gtk/menus.ui:145 data/gtk/menus.ui:257
+#: data/gtk/menus.ui:122 data/gtk/menus.ui:237
 msgid "_Delete"
 msgstr "Ө_шіру"
 
-#: data/gtk/menus.ui:151 libide/preferences/ide-preferences-builtin.c:191
+#: data/gtk/menus.ui:130 libide/preferences/ide-preferences-builtin.c:191
+#: plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Түспен ерекшелеу"
 
-#: data/gtk/menus.ui:153 data/gtk/menus.ui:206
-msgid "Spellchecking"
-msgstr "Емлені тексеру"
-
-#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:43
+#: data/gtk/menus.ui:135 plugins/terminal/gtk/menus.ui:29
 msgid "Selection"
 msgstr "Таңдалған"
 
-#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:45
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:243 plugins/terminal/gtk/menus.ui:31
 msgid "Select _All"
 msgstr "Барлығын _таңдау"
 
-#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:50
+#: data/gtk/menus.ui:142 plugins/terminal/gtk/menus.ui:36
 msgid "Select _None"
 msgstr "Е_штеңе таңдамау"
 
-#: data/gtk/menus.ui:173
+#: data/gtk/menus.ui:148
 msgid "All _Upper Case"
 msgstr "Барлығын _бас әріпті қылу"
 
-#: data/gtk/menus.ui:178
+#: data/gtk/menus.ui:153
 msgid "All _Lower Case"
 msgstr "Барлығын _кіші әріпті қылу"
 
-#: data/gtk/menus.ui:183
+#: data/gtk/menus.ui:158
 msgid "_Invert Case"
 msgstr "Регистрді т_ерістеу"
 
-#: data/gtk/menus.ui:188
+#: data/gtk/menus.ui:163
 msgid "_Title Case"
 msgstr ""
 
-#: data/gtk/menus.ui:195
+#: data/gtk/menus.ui:170
 msgid "Join Lines"
 msgstr "Жолдарды біріктіру"
 
-#: data/gtk/menus.ui:199
+#: data/gtk/menus.ui:174
 msgid "Sort Lines"
 msgstr "Жолдарды сұрыптау"
 
-#: data/gtk/menus.ui:215
+#: data/gtk/menus.ui:183
 msgid "Zoom"
 msgstr "Масштабтау"
 
-#: data/gtk/menus.ui:217
+#: data/gtk/menus.ui:185
 msgid "Zoom _In"
 msgstr "Үлке_йту"
 
-#: data/gtk/menus.ui:222
+#: data/gtk/menus.ui:190
 msgid "Zoom _Out"
 msgstr "Кі_шірейту"
 
-#: data/gtk/menus.ui:228
+#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:51
 msgid "Reset"
 msgstr "Тастау"
 
-#: data/gtk/menus.ui:239
+#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:205
+msgid "Regular expressions"
+msgstr "Тұрақты өрнек"
+
+#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:220
+#: plugins/terminal/gb-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "Регистрді ескеру"
+
+#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:235
+msgid "Match whole word only"
+msgstr "Тек толық сөз сәйкестіктері"
+
+#: data/gtk/menus.ui:219
 msgid "_Wrap Around"
 msgstr "_Соңына жеткенде басына өту"
 
-#: data/gtk/menus.ui:245
+#: data/gtk/menus.ui:225
 msgid "Cu_t"
 msgstr "Қ_иып алу"
 
-#: data/gtk/menus.ui:271
-msgid "Split"
-msgstr "Бөлу"
+#: data/gtk/menus.ui:250
+msgid "Frame"
+msgstr "Фрейм"
 
-#: data/gtk/menus.ui:273
-msgid "Split Left"
-msgstr "Сол жақтан бөлу"
-
-#: data/gtk/menus.ui:278
-msgid "Split Right"
-msgstr "Оң жақтан бөлу"
-
-#: data/gtk/menus.ui:283
-msgid "Split Down"
-msgstr "Төменнен бөлу"
-
-#: data/gtk/menus.ui:290
-msgid "Move"
-msgstr "Жылжыту"
-
-#: data/gtk/menus.ui:292
+#: data/gtk/menus.ui:252
 msgid "Move Left"
 msgstr "Солға жылжыту"
 
-#: data/gtk/menus.ui:297
+#: data/gtk/menus.ui:256
 msgid "Move Right"
 msgstr "Оңға жылжыту"
 
-#: data/gtk/menus.ui:305 libide/buildui/ide-build-log-panel.c:740
+#: data/gtk/menus.ui:261 data/gtk/menus.ui:321 plugins/devhelp/gtk/menus.ui:11
+#: plugins/terminal/gtk/menus.ui:63
+msgid "Close"
+msgstr "Жабу"
+
+#: data/gtk/menus.ui:269
+msgid "New File"
+msgstr "Жаңа файл"
+
+#: data/gtk/menus.ui:276 libide/layout/ide-layout-stack.ui:102
+msgid "Open File…"
+msgstr "Файлды ашу…"
+
+#: data/gtk/menus.ui:283
+msgid "Document"
+msgstr "Құжат"
+
+#: data/gtk/menus.ui:286
+#| msgid "_Open in Terminal"
+msgid "Open in New Frame"
+msgstr "Жаңа фреймде ашу"
+
+#: data/gtk/menus.ui:290 plugins/terminal/gtk/menus.ui:47
+msgid "Split"
+msgstr "Бөлу"
+
+#: data/gtk/menus.ui:295 plugins/devhelp/gtk/menus.ui:7
+msgid "Print…"
+msgstr "Баспаға шығару…"
+
+#: data/gtk/menus.ui:302
+msgid "Document Preferences"
+msgstr "Құжат баптаулары"
+
+#: data/gtk/menus.ui:310 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
 msgstr "_Сақтау"
 
-#: data/gtk/menus.ui:309
-msgid "_Save As"
+#: data/gtk/menus.ui:314
+msgid "Save _As"
 msgstr "Қала_йша сақтау"
 
-#: data/gtk/menus.ui:315
-msgid "_Print"
-msgstr "Бас_паға шығару"
-
-#: data/gtk/menus.ui:321 plugins/sysprof/gbp-sysprof-perspective.ui:28
-msgid "_Close"
-msgstr "_Жабу"
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1089
+msgid "Run"
+msgstr "Жөнелту"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:505
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:566
+#: libide/workbench/ide-workbench.c:630
 msgid "Builder"
 msgstr "Құрастырушы"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: libide/application/ide-application-actions.c:130
+#: libide/application/ide-application-actions.c:131
 msgid "An IDE for GNOME"
 msgstr "GNOME үшін IDE"
 
@@ -894,19 +935,19 @@ msgstr "org.gnome.Builder"
 msgid "Build;Develop;"
 msgstr "Құрастыру;Өндіру;"
 
-#: libide/application/ide-application-actions.c:136
+#: libide/application/ide-application-actions.c:137
 msgid "GNOME Builder"
 msgstr "GNOME құрастырушысы"
 
-#: libide/application/ide-application-actions.c:138
+#: libide/application/ide-application-actions.c:139
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
-#: libide/application/ide-application-actions.c:142
+#: libide/application/ide-application-actions.c:143
 msgid "Learn more about GNOME Builder"
 msgstr "GNOME құрастырушысы туралы көбірек біліңіз"
 
-#: libide/application/ide-application-actions.c:145
+#: libide/application/ide-application-actions.c:146
 msgid "Funded By"
 msgstr "Демеушілер"
 
@@ -951,48 +992,48 @@ msgstr "МАНИФЕСТІ бойынша берілген жобаны клон
 msgid "MANIFEST"
 msgstr "МАНИФЕСТ"
 
-#: libide/application/ide-application-command-line.c:273
+#: libide/application/ide-application-command-line.c:275
 msgid "COMMAND"
 msgstr "КОМАНДА"
 
-#: libide/application/ide-application-command-line.c:344
+#: libide/application/ide-application-command-line.c:346
 msgid "No commands available"
 msgstr "Қолжетерлік командалар жоқ"
 
-#: libide/application/ide-application-command-line.c:387
+#: libide/application/ide-application-command-line.c:389
 msgid "Please provide a command"
 msgstr "Команданы көрсетіңіз"
 
-#: libide/application/ide-application-command-line.c:397
+#: libide/application/ide-application-command-line.c:399
 msgid "No such tool"
 msgstr "Ондай сайман жоқ"
 
-#: libide/application/ide-application-command-line.c:411
+#: libide/application/ide-application-command-line.c:413
 msgid "Please provide a worker type"
 msgstr ""
 
-#: libide/application/ide-application-command-line.c:418
+#: libide/application/ide-application-command-line.c:420
 msgid "Please provide a D-Bus address"
 msgstr "D-Bus адресін көрсетіңіз"
 
-#: libide/application/ide-application-command-line.c:427
+#: libide/application/ide-application-command-line.c:429
 msgid "No such worker"
 msgstr ""
 
-#: libide/buffers/ide-buffer.c:2517
+#: libide/buffers/ide-buffer.c:2595
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
-#: libide/buffers/ide-buffer-manager.c:678
+#: libide/buffers/ide-buffer-manager.c:683
 msgid "File too large to be opened."
 msgstr "Файл ашуға үшін тым үлкен."
 
-#: libide/buffers/ide-buffer-manager.c:1793
+#: libide/buffers/ide-buffer-manager.c:1847
 #, c-format
 msgid "unsaved document %u"
 msgstr "сақталмаған құжат %u"
 
-#: libide/buffers/ide-buffer-manager.c:1827
+#: libide/buffers/ide-buffer-manager.c:1885
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
@@ -1030,11 +1071,12 @@ msgstr "Экспорттау…"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
+#: libide/workbench/ide-omni-bar.c:439
 msgid "Success"
 msgstr "Сәтті аяқталды"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
-#: libide/workbench/ide-omni-bar.ui:360
+#: libide/workbench/ide-omni-bar.c:424
 msgid "Failed"
 msgstr "Сәтсіз"
 
@@ -1067,6 +1109,7 @@ msgstr ""
 #: libide/buildui/ide-build-configuration-view.ui:11
 #: libide/preferences/ide-preferences-builtin.c:318
 #: libide/preferences/ide-preferences-builtin.c:379
+#: plugins/command-bar/gb-command-bar.c:716
 msgid "General"
 msgstr "Жалпы"
 
@@ -1078,44 +1121,52 @@ msgstr ""
 msgid "Name"
 msgstr "Атауы"
 
-#: libide/buildui/ide-build-configuration-view.ui:58
+#: libide/buildui/ide-build-configuration-view.ui:66
+msgid "Build System"
+msgstr "Жинау жүйесі"
+
+#: libide/buildui/ide-build-configuration-view.ui:96
+msgid "Source Directory"
+msgstr "Қайнар көз бумасы"
+
+#: libide/buildui/ide-build-configuration-view.ui:118
 msgid "The prefix to use when installing the project"
 msgstr ""
 
-#: libide/buildui/ide-build-configuration-view.ui:67
+#: libide/buildui/ide-build-configuration-view.ui:127
 msgid "Installation Prefix"
 msgstr "Орнату префиксі"
 
-#: libide/buildui/ide-build-configuration-view.ui:88
+#: libide/buildui/ide-build-configuration-view.ui:148
 msgid "Options to use when bootstrapping the project"
 msgstr ""
 
-#: libide/buildui/ide-build-configuration-view.ui:97
+#: libide/buildui/ide-build-configuration-view.ui:157
 msgid "Configure Options"
 msgstr "Баптау опциялары"
 
-#: libide/buildui/ide-build-configuration-view.ui:129
+#: libide/buildui/ide-build-configuration-view.ui:189
 #: libide/workbench/ide-omni-bar-row.ui:54
 msgid "Device"
 msgstr "Құрылғы"
 
-#: libide/buildui/ide-build-configuration-view.ui:157
-#: libide/workbench/ide-omni-bar-row.ui:85
+#: libide/buildui/ide-build-configuration-view.ui:217
+#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
 msgid "Runtime"
 msgstr "Орындалу ортасы"
 
-#: libide/buildui/ide-build-configuration-view.ui:185
+#: libide/buildui/ide-build-configuration-view.ui:245
 msgid "Environment"
 msgstr "Қоршам"
 
 #: libide/buildui/ide-build-log-panel.c:737
+#: libide/editor/ide-editor-view-actions.c:239
 msgid "Save File"
 msgstr "Файлды сақтау"
 
-#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:31
-#: libide/greeter/ide-greeter-perspective.ui:317
-#: libide/greeter/ide-greeter-perspective.ui:365
-#: libide/workbench/ide-omni-bar.ui:388
+#: libide/buildui/ide-build-log-panel.c:741
+#: libide/greeter/ide-greeter-perspective.ui:326
+#: libide/greeter/ide-greeter-perspective.ui:374
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
@@ -1136,54 +1187,34 @@ msgstr "Құрастыруды тоқтату"
 msgid "Save build log"
 msgstr "Құрастыру журналын сақтау"
 
-#: libide/buildui/ide-build-panel.c:86
-#, c-format
-msgid "%d warning"
-msgid_plural "%d warnings"
-msgstr[0] "%d ескерту"
+#: libide/buildui/ide-build-panel.c:105 libide/buildui/ide-build-panel.c:181
+#: libide/buildui/ide-build-panel.c:203 libide/buildui/ide-build-panel.ui:106
+#: libide/workbench/ide-omni-bar.ui:437
+msgid "Warnings"
+msgstr "Ескертулер"
 
-#: libide/buildui/ide-build-panel.c:95
-#, c-format
-msgid "%d error"
-msgid_plural "%d errors"
-msgstr[0] "%d қате"
+#: libide/buildui/ide-build-panel.c:114 libide/buildui/ide-build-panel.c:182
+#: libide/buildui/ide-build-panel.c:204 libide/buildui/ide-build-panel.ui:127
+#: libide/workbench/ide-omni-bar.ui:409
+msgid "Errors"
+msgstr "Қателер"
 
-#: libide/buildui/ide-build-panel.c:521
-#: libide/preferences/ide-preferences-builtin.c:377
-#: libide/workbench/ide-omni-bar.ui:414
-msgid "Build"
-msgstr "Жинау"
+#: libide/buildui/ide-build-panel.c:604
+#: libide/buildui/ide-build-workbench-addin.c:170
+msgid "Build Issues"
+msgstr "Құрастыру мәселелері"
 
-#: libide/buildui/ide-build-panel.ui:33
-msgid "Status:"
-msgstr "Қалып-күйі:"
+#: libide/buildui/ide-build-panel.ui:17
+msgid "Build status:"
+msgstr "Құрастыру қалып-күйі:"
 
-#: libide/buildui/ide-build-panel.ui:58
-msgid "Running Time:"
-msgstr "Орындалған уақыты:"
-
-#: libide/buildui/ide-build-panel.ui:82
-msgid "Warnings:"
-msgstr "Ескертулер:"
-
-#: libide/buildui/ide-build-panel.ui:106
-msgid "Errors:"
-msgstr "Қателер:"
-
-#: libide/buildui/ide-build-panel.ui:149
-msgid "No Diagnostics"
-msgstr "Диагностика жоқ"
-
-#. the action:// link is used to execute a build
-#: libide/buildui/ide-build-panel.ui:150
-msgid ""
-"<a href=\"action://build-manager.build\">Build your project</a> to show "
-"diagnostics here"
+#: libide/buildui/ide-build-panel.ui:34
+msgid "Time completed:"
 msgstr ""
 
-#: libide/buildui/ide-build-perspective.c:438
-msgid "Build Preferences"
-msgstr "Құрастыру баптаулары"
+#: libide/buildui/ide-build-panel.ui:51 libide/buildui/ide-build-panel.ui:66
+msgid "—"
+msgstr ""
 
 #: libide/buildui/ide-build-tool.c:103 libide/buildui/ide-build-tool.c:116
 msgid "========================\n"
@@ -1316,279 +1347,273 @@ msgstr "нұсқасыз"
 msgid "No file was provided."
 msgstr "Файл ұсынылмады."
 
-#: libide/editor/ide-editor-frame.c:139
-#, c-format
-msgid "Line %u, Column %u"
-msgstr "Жол %u, баған %u"
-
-#: libide/editor/ide-editor-frame.c:311
-#, c-format
-msgid "%u of %u"
-msgstr "%u, барлығы %u"
-
-#. OVR indicates we are in overwite mode
-#: libide/editor/ide-editor-frame.ui:17
-msgid "OVR"
-msgstr "ҮСТЖЗ"
-
-#: libide/editor/ide-editor-frame.ui:166
-msgid "Replace"
-msgstr "Алмастыру"
-
-#: libide/editor/ide-editor-frame.ui:179
-msgid "Replace All"
-msgstr "Барлығын алмастыру"
-
-#: libide/editor/ide-editor-frame.ui:201
-msgid "Switch between Search and Search-and-Replace"
-msgstr "Іздеу және іздеу мен алмастыру арасында ауысу"
-
-#: libide/editor/ide-editor-frame.ui:224
-#: plugins/terminal/gb-terminal-search.ui:100
-msgid "Show or hide search options such as case sensitivity"
-msgstr ""
-
-#: libide/editor/ide-editor-frame.ui:285
-msgid "Regular expressions"
-msgstr "Тұрақты өрнек"
-
-#: libide/editor/ide-editor-frame.ui:300
-#: plugins/terminal/gb-terminal-search.ui:166
-msgid "Case sensitive"
-msgstr "Регистрді ескеру"
-
-#: libide/editor/ide-editor-frame.ui:315
-msgid "Match whole word only"
-msgstr "Тек толық сөз сәйкестіктері"
-
-#: libide/editor/ide-editor-layout-stack-controls.c:46
-msgid "Plain Text"
-msgstr "Ашық мәтін"
-
 #. translators: the user selected a number outside the value range for the document.
-#: libide/editor/ide-editor-layout-stack-controls.c:191
+#: libide/editor/ide-editor-layout-stack-controls.c:175
 #, c-format
 msgid "Provide a number between 1 and %u"
 msgstr "1 және %u арасындағы санды көрсетіңіз"
 
-#: libide/editor/ide-editor-layout-stack-controls.ui:31
+#: libide/editor/ide-editor-layout-stack-controls.ui:23
 msgid "Go to line number"
 msgstr "Нөмірі берілген жолға өту"
 
-#: libide/editor/ide-editor-layout-stack-controls.ui:100
-msgid "Change editor settings and language"
-msgstr "Түзеткіш баптауларын және тілін өзгерту"
-
-#: libide/editor/ide-editor-layout-stack-controls.ui:114
-#: libide/editor/ide-editor-view.ui:100
+#: libide/editor/ide-editor-layout-stack-controls.ui:82
 msgid "Go to Line"
 msgstr "Жолға өту"
 
-#: libide/editor/ide-editor-layout-stack-controls.ui:115
-#: libide/editor/ide-editor-view.ui:101
+#: libide/editor/ide-editor-layout-stack-controls.ui:83
 msgid "Go"
 msgstr "Өту"
 
-#: libide/editor/ide-editor-perspective.c:522
-#: libide/preferences/ide-preferences-builtin.c:105
-#: libide/preferences/ide-preferences-builtin.c:152
-msgid "Editor"
-msgstr "Түзетуші"
+#: libide/editor/ide-editor-perspective-actions.c:70
+#: libide/workbench/ide-workbench-actions.c:75
+msgid "Open File"
+msgstr "Файлды ашу"
 
-#: libide/editor/ide-editor-perspective.ui:30
-msgid "No open files"
-msgstr "Ашық файлдар жоқ"
-
-#: libide/editor/ide-editor-perspective.ui:43
-msgid "Try opening a file by typing in the search box at the top"
-msgstr "Жоғарыдағы іздеу өрісіне теру арқылы файлды ашып көріңіз"
-
-#: libide/editor/ide-editor-spell-language-popover.c:232
-msgid "No language selected"
-msgstr "Тіл таңдалмады"
-
-#: libide/editor/ide-editor-spell-navigator.c:458
-msgid ""
-"Spell checker error: no language set. It’s maybe because no dictionaries are "
-"installed."
-msgstr ""
-
-#: libide/editor/ide-editor-spell-widget.c:202
-msgid "No suggestions"
-msgstr "Ұсыныстар жоқ"
-
-#: libide/editor/ide-editor-spell-widget.c:279
-msgid "Completed spell checking"
-msgstr "Емлені тексеру аяқталды"
-
-#: libide/editor/ide-editor-spell-widget.c:637
-msgid "This word is already in the personal dictionary"
-msgstr "Бұл сөз жеке сөздікте бар болып тұр"
-
-#: libide/editor/ide-editor-spell-widget.c:640
-#, c-format
-msgid "This word is already in the %s dictionary"
-msgstr "Бұл сөз %s сөздігінде бар болып тұр"
-
-#: libide/editor/ide-editor-spell-widget.c:1271
-msgid "The word is not in the dictionary"
-msgstr "Бұл сөз сөздікте емес"
-
-#: libide/editor/ide-editor-spell-widget.ui:14
-msgid "Misspelled"
-msgstr "Қате жазылған"
-
-#: libide/editor/ide-editor-spell-widget.ui:65
-msgid "_Ignore"
-msgstr "Еле_меу"
-
-#: libide/editor/ide-editor-spell-widget.ui:73
-msgid "Ignore _All"
-msgstr "Б_арлығын елемеу"
-
-#: libide/editor/ide-editor-spell-widget.ui:92
-msgid "Change _to"
-msgstr "Келесіге өз_герту"
-
-#: libide/editor/ide-editor-spell-widget.ui:124
-msgid "Cha_nge"
-msgstr "Ө_згерту"
-
-#: libide/editor/ide-editor-spell-widget.ui:132
-msgid "Change A_ll"
-msgstr "Б_арлығын өзгерту"
-
-#: libide/editor/ide-editor-spell-widget.ui:151
-msgid "_Suggestions"
-msgstr "Ұ_сыныстар"
-
-#: libide/editor/ide-editor-spell-widget.ui:188
-msgid "Add Word"
-msgstr "Сөзді қосу"
-
-#: libide/editor/ide-editor-spell-widget.ui:213
-msgid "A_dd"
-msgstr "Қ_осу"
-
-#: libide/editor/ide-editor-spell-widget.ui:229
-msgid "Dictionary"
-msgstr "Сөздік"
-
-#: libide/editor/ide-editor-spell-widget.ui:267
-msgid "Options"
-msgstr "Опциялар"
-
-#: libide/editor/ide-editor-spell-widget.ui:292
-msgid "_Language"
-msgstr "_Тіл"
-
-#: libide/editor/ide-editor-spell-widget.ui:319
-msgid "_Highlight"
-msgstr "Түспен ерек_шелеу"
-
-#: libide/editor/ide-editor-tweak-widget.ui:22
-msgid "Search highlight mode…"
-msgstr "Іздеуді түспен ерекшелеу режимі…"
-
-#: libide/editor/ide-editor-tweak-widget.ui:56
-msgid "Display line numbers"
-msgstr "Жол нөмірлерін көрсету"
-
-#: libide/editor/ide-editor-tweak-widget.ui:65
-msgid "Display right margin"
-msgstr "Оң жақ шет өрісін көрсету"
-
-#: libide/editor/ide-editor-tweak-widget.ui:83
-msgid "Auto indent"
-msgstr "Автошегіну"
-
-#: libide/editor/ide-editor-tweak-widget.ui:99
-#: libide/preferences/ide-preferences-builtin.c:326
-msgid "Indentation"
-msgstr "Шегіну"
-
-#: libide/editor/ide-editor-tweak-widget.ui:127
-#: libide/preferences/ide-preferences-builtin.c:173
-msgid "Spaces"
-msgstr "Бос аралықтар"
-
-#: libide/editor/ide-editor-tweak-widget.ui:137
-#: libide/preferences/ide-preferences-builtin.c:174
-msgid "Tabs"
-msgstr "Табуляция"
-
-#: libide/editor/ide-editor-tweak-widget.ui:157
-msgid "2"
-msgstr "2"
-
-#: libide/editor/ide-editor-tweak-widget.ui:167
-msgid "3"
-msgstr "3"
-
-#: libide/editor/ide-editor-tweak-widget.ui:177
-msgid "4"
-msgstr "4"
-
-#: libide/editor/ide-editor-tweak-widget.ui:187
-msgid "8"
-msgstr "8"
-
-#: libide/editor/ide-editor-view-actions.c:310
-msgid "Save Document"
-msgstr "Құжатты сақтау"
-
-#: libide/editor/ide-editor-view-actions.c:316
-#: libide/editor/ide-editor-view-actions.c:447
-#: libide/greeter/ide-greeter-perspective.c:680
-#: libide/workbench/ide-workbench-actions.c:79
-#: plugins/color-picker/gb-color-picker-prefs.c:97
-#: plugins/color-picker/gb-color-picker-prefs.c:213
-#: plugins/color-picker/gb-color-picker-prefs.c:240
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
-#: plugins/terminal/gb-terminal-view-actions.c:305
-msgid "Cancel"
-msgstr "Бас тарту"
-
-#: libide/editor/ide-editor-view-actions.c:317
-#: libide/editor/ide-editor-view-actions.c:448
-#: plugins/color-picker/gb-color-picker-prefs.c:236
-#: plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: plugins/terminal/gb-terminal-view-actions.c:306
-msgid "Save"
-msgstr "Сақтау"
-
-#: libide/editor/ide-editor-view-actions.c:436
-msgid "Save Document As"
-msgstr "Құжатты қалайша сақтау"
-
-#: libide/editor/ide-editor-view.ui:23
-msgid "_Reload"
-msgstr "Қа_йта жүктеу"
-
-#: libide/editor/ide-editor-view.ui:44
-msgid ""
-"Builder has discovered that this file has been modified externally. Would "
-"you like to reload the file?"
-msgstr ""
-"Құрастырушы бұл файл сыртқы қолданбамен өзгертілгенін анықтады. Бұл файлды "
-"қайта жүктеуді қалайсыз ба?"
-
-#: libide/greeter/ide-greeter-perspective.c:453
-msgid "Failed to load the project"
-msgstr "Жобаны жүктеу сәтсіз аяқталды"
-
-#: libide/greeter/ide-greeter-perspective.c:676
-msgid "Open Project"
-msgstr "Жобаны ашу"
-
-#: libide/greeter/ide-greeter-perspective.c:681
+#: libide/editor/ide-editor-perspective-actions.c:73
+#: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:78
-#: plugins/color-picker/gb-color-picker-prefs.c:209
+#: plugins/color-picker/gb-color-picker-prefs.c:205
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
 msgid "Open"
 msgstr "Ашу"
 
-#: libide/greeter/ide-greeter-perspective.c:692
+#: libide/editor/ide-editor-perspective-actions.c:74
+#: libide/editor/ide-editor-view-actions.c:242
+#: libide/editor/ide-editor-view-actions.c:349
+#: libide/greeter/ide-greeter-perspective.c:683
+#: libide/workbench/ide-workbench-actions.c:79
+#: plugins/color-picker/gb-color-picker-prefs.c:93
+#: plugins/color-picker/gb-color-picker-prefs.c:209
+#: plugins/color-picker/gb-color-picker-prefs.c:236
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
+#: plugins/terminal/gb-terminal-view-actions.c:271
+msgid "Cancel"
+msgstr "Бас тарту"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:34
+#: libide/editor/ide-editor-perspective-shortcuts.c:40
+#: libide/editor/ide-editor-view-shortcuts.c:32
+#: libide/editor/ide-editor-view-shortcuts.c:38
+#: libide/layout/ide-layout-stack-shortcuts.c:33
+#: libide/layout/ide-layout-stack-shortcuts.c:40
+#: libide/layout/ide-layout-stack-shortcuts.c:47
+#: libide/layout/ide-layout-stack-shortcuts.c:54
+#: libide/layout/ide-layout-stack-shortcuts.c:61
+msgid "Files"
+msgstr "Файлдар"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:35
+msgid "Create a new document"
+msgstr "Жаңа құжатты жасау"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:41
+msgid "Open a document"
+msgstr "Құжатты ашу"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:46
+#: libide/editor/ide-editor-perspective-shortcuts.c:52
+msgid "Panels"
+msgstr "Панельдер"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:47
+#: libide/editor/ide-editor-workbench-addin.c:150
+msgid "Toggle navigation panel"
+msgstr "Навигация панелін көрсету/жасыру"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:53
+#: libide/editor/ide-editor-workbench-addin.c:164
+msgid "Toggle utilities panel"
+msgstr "Утилиталар панельін көрсету/жасыру"
+
+#: libide/editor/ide-editor-properties.ui:4
+msgid "Properties"
+msgstr "Қасиеттері"
+
+#: libide/editor/ide-editor-properties.ui:25
+msgid "Display"
+msgstr "Көрсету"
+
+#: libide/editor/ide-editor-properties.ui:75
+#: libide/preferences/ide-preferences-builtin.c:323
+msgid "Show right margin"
+msgstr "Оң жақ шет өрісін көрсету"
+
+#: libide/editor/ide-editor-properties.ui:101
+msgid "Insert trailing newline"
+msgstr ""
+
+#: libide/editor/ide-editor-properties.ui:114
+msgid "Overwrite trailing braces and quotations"
+msgstr ""
+
+#: libide/editor/ide-editor-properties.ui:123
+msgid "Tabs and Indentation"
+msgstr "Табуляция және шегіну"
+
+#: libide/editor/ide-editor-properties.ui:153
+#: libide/preferences/ide-preferences-builtin.c:173
+msgid "Spaces"
+msgstr "Бос аралықтар"
+
+#: libide/editor/ide-editor-properties.ui:164
+#: libide/preferences/ide-preferences-builtin.c:174
+msgid "Tabs"
+msgstr "Табуляция"
+
+#: libide/editor/ide-editor-properties.ui:185
+msgid "2"
+msgstr "2"
+
+#: libide/editor/ide-editor-properties.ui:195
+msgid "3"
+msgstr "3"
+
+#: libide/editor/ide-editor-properties.ui:205
+msgid "4"
+msgstr "4"
+
+#: libide/editor/ide-editor-properties.ui:215
+msgid "8"
+msgstr "8"
+
+#: libide/editor/ide-editor-properties.ui:235
+msgid "Auto indent new lines"
+msgstr "Жаңа жолдарда автошегіну"
+
+#: libide/editor/ide-editor-properties.ui:249
+msgid "Smart backspace"
+msgstr "Ақылды backspace"
+
+#: libide/editor/ide-editor-properties.ui:250
+msgid "Enabling smart backspace will treat multiple spaces as a tabs"
+msgstr ""
+
+#: libide/editor/ide-editor-properties.ui:265
+msgid "Language Syntax"
+msgstr "Тіл синтаксисі"
+
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: libide/editor/ide-editor-properties.ui:321
+#: libide/preferences/ide-preferences-builtin.c:264
+msgid "Search languages…"
+msgstr "Тілдерді іздеу…"
+
+#. translators: first %u is the Nth position of second %u N occurrences
+#: libide/editor/ide-editor-search-bar.c:247
+#, c-format
+msgid "%u of %u"
+msgstr "%u, барлығы %u"
+
+#: libide/editor/ide-editor-search-bar.ui:108
+msgid "Replace"
+msgstr "Алмастыру"
+
+#: libide/editor/ide-editor-search-bar.ui:121
+msgid "Replace All"
+msgstr "Барлығын алмастыру"
+
+#: libide/editor/ide-editor-search-bar.ui:143
+msgid "Switch between Search and Search-and-Replace"
+msgstr "Іздеу және іздеу мен алмастыру арасында ауысу"
+
+#: libide/editor/ide-editor-search-bar.ui:166
+#: plugins/terminal/gb-terminal-search.ui:100
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+
+#: libide/editor/ide-editor-sidebar.ui:26
+#: libide/layout/ide-layout-stack-header.ui:21
+msgid "Open Pages"
+msgstr ""
+
+#. translators: %s is the error message
+#: libide/editor/ide-editor-view-actions.c:55
+#, c-format
+msgid "Failed to load file: %s"
+msgstr "Файлды жүктеу сәтсіз аяқталды: %s"
+
+#. translators: %s is the error message
+#: libide/editor/ide-editor-view-actions.c:117
+#, c-format
+msgid "Print failed: %s"
+msgstr "Баспаға шығару сәтсіз аяқталды: %s"
+
+#. translators: %s is the error message
+#. translators: %s is the underlying error message
+#: libide/editor/ide-editor-view-actions.c:188
+#: libide/editor/ide-editor-view-actions.c:308
+#, c-format
+msgid "Failed to save file: %s"
+msgstr "Файлды сақтау сәтсіз аяқталды: %s"
+
+#: libide/editor/ide-editor-view-actions.c:242
+#: plugins/color-picker/gb-color-picker-prefs.c:232
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:272
+msgid "Save"
+msgstr "Сақтау"
+
+#: libide/editor/ide-editor-view-actions.c:345
+msgid "Save File As"
+msgstr "Файлды қалайша сақтау"
+
+#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:59
+msgid "Save As"
+msgstr "Қалайша сақтау"
+
+#: libide/editor/ide-editor-view-shortcuts.c:33
+msgid "Save the document"
+msgstr "Құжатты сақтау"
+
+#: libide/editor/ide-editor-view-shortcuts.c:39
+msgid "Save the document with a new name"
+msgstr "Құжатты жаңа файл атымен сақтау"
+
+#: libide/editor/ide-editor-view-shortcuts.c:44
+#: libide/editor/ide-editor-view-shortcuts.c:50
+#: libide/editor/ide-editor-view-shortcuts.c:51
+#: libide/editor/ide-editor-view-shortcuts.c:56
+#: libide/editor/ide-editor-view-shortcuts.c:62
+#: libide/editor/ide-editor-view-shortcuts.c:68
+#: libide/editor/ide-editor-view-shortcuts.c:74
+#: libide/editor/ide-editor-view-shortcuts.c:80
+msgid "Find and replace"
+msgstr "Табу және алмастыру"
+
+#: libide/editor/ide-editor-view-shortcuts.c:45
+msgid "Find"
+msgstr "Іздеу"
+
+#: libide/editor/ide-editor-view-shortcuts.c:57
+msgid "Move to the next match"
+msgstr "Келесі сәйкестікке жылжу"
+
+#: libide/editor/ide-editor-view-shortcuts.c:63
+msgid "Move to the previous match"
+msgstr "Алдыңғы сәйкестікке жылжу"
+
+#: libide/editor/ide-editor-view-shortcuts.c:69
+msgid "Move to the next error"
+msgstr "Келесі қатеге жылжу"
+
+#: libide/editor/ide-editor-view-shortcuts.c:75
+msgid "Move to the previous error"
+msgstr "Алдыңғы қатеге жылжу"
+
+#: libide/editor/ide-editor-view-shortcuts.c:81
+msgid "Find the next match"
+msgstr "Келесі сәйкестікті табу"
+
+#: libide/greeter/ide-greeter-perspective.c:456
+msgid "Failed to load the project"
+msgstr "Жобаны жүктеу сәтсіз аяқталды"
+
+#: libide/greeter/ide-greeter-perspective.c:679
+msgid "Open Project"
+msgstr "Жобаны ашу"
+
+#: libide/greeter/ide-greeter-perspective.c:695
 msgid "All Project Types"
 msgstr "Барлық жобалар түрлері"
 
@@ -1598,6 +1623,7 @@ msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 msgstr "<a href=\"action://app.new-project\">Жаңа жобаны</a> неге жасамасқа?"
 
 #: libide/greeter/ide-greeter-perspective.ui:53
+#: libide/greeter/ide-greeter-perspective.ui:193
 msgid "No projects found"
 msgstr "Жобалар табылмады"
 
@@ -1614,27 +1640,27 @@ msgstr "Жаңартылған"
 msgid "Other Projects"
 msgstr "Басқа жобалар"
 
-#: libide/greeter/ide-greeter-perspective.ui:206
+#: libide/greeter/ide-greeter-perspective.ui:215
 msgid "_Remove"
 msgstr "Ө_шіру"
 
-#: libide/greeter/ide-greeter-perspective.ui:290
+#: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
 msgstr "Жобаны таңдау"
 
-#: libide/greeter/ide-greeter-perspective.ui:299
+#: libide/greeter/ide-greeter-perspective.ui:308
 msgid "Click an item to select"
 msgstr "Нәрсені таңдау үшін оның үстіне шертіңіз"
 
-#: libide/greeter/ide-greeter-perspective.ui:329
+#: libide/greeter/ide-greeter-perspective.ui:338
 msgid "Open…"
 msgstr "Ашу…"
 
-#: libide/greeter/ide-greeter-perspective.ui:344
+#: libide/greeter/ide-greeter-perspective.ui:353
 msgid "Select projects for removal"
 msgstr "Өшіру үшін жобаны таңдау"
 
-#: libide/greeter/ide-greeter-perspective.ui:364
+#: libide/greeter/ide-greeter-perspective.ui:373
 msgid "Return to project selection"
 msgstr "Жобаны таңдауға оралу"
 
@@ -1661,28 +1687,29 @@ msgstr ""
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: libide/ide-context.c:2050
+#: libide/ide-context.c:2066
 msgid "An unload request is already pending"
 msgstr ""
 
-#: libide/ide-context.c:2169
+#: libide/ide-context.c:2185
 msgid "Context has already been restored."
 msgstr ""
 
-#: libide/ide-object.c:304
+#: libide/ide-object.c:305
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr ""
 
-#: libide/ide-object.c:396
-msgid "Failed to locate build system plugin."
-msgstr ""
+#: libide/ide-object.c:414
+#, c-format
+msgid "Failed to locate %s plugin."
+msgstr "%s плагинін табу мүмкін емес."
 
-#: libide/ide-object.c:493
+#: libide/ide-object.c:515
 msgid "No such extension point."
 msgstr ""
 
-#: libide/ide-object.c:503
+#: libide/ide-object.c:525
 msgid "No implementations of extension point."
 msgstr ""
 
@@ -1692,337 +1719,404 @@ msgid "Editor Shortcuts"
 msgstr "Түзеткіш жарлықтары"
 
 #: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:452
+#: libide/keybindings/ide-shortcuts-window.ui:459
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Жалпы"
 
 #: libide/keybindings/ide-shortcuts-window.ui:18
-#: libide/keybindings/ide-shortcuts-window.ui:456
+#: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Глобалды іздеу"
 
 #: libide/keybindings/ide-shortcuts-window.ui:25
-#: libide/keybindings/ide-shortcuts-window.ui:463
+#: libide/keybindings/ide-shortcuts-window.ui:470
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Баптаулар"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
-#: libide/keybindings/ide-shortcuts-window.ui:470
+#: libide/keybindings/ide-shortcuts-window.ui:477
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Командалар панелі"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
-#: libide/keybindings/ide-shortcuts-window.ui:477
+#: libide/keybindings/ide-shortcuts-window.ui:484
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Терминал"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
-#: libide/keybindings/ide-shortcuts-window.ui:484
+#: libide/keybindings/ide-shortcuts-window.ui:491
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr ""
 
 #: libide/keybindings/ide-shortcuts-window.ui:53
-#: libide/keybindings/ide-shortcuts-window.ui:491
+#: libide/keybindings/ide-shortcuts-window.ui:498
 msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Пернетақта жарлықтары"
 
-#: libide/keybindings/ide-shortcuts-window.ui:62
+#: libide/keybindings/ide-shortcuts-window.ui:60
+msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr ""
+
+#: libide/keybindings/ide-shortcuts-window.ui:69
 msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Панельдер"
 
-#: libide/keybindings/ide-shortcuts-window.ui:66
+#: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Сол жақ панельді көрсету/жасыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:73
+#: libide/keybindings/ide-shortcuts-window.ui:80
 msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Оң жақ панельді көрсету/жасыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:80
+#: libide/keybindings/ide-shortcuts-window.ui:87
 msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Төменгі панельді көрсету/жасыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:89
+#: libide/keybindings/ide-shortcuts-window.ui:96
 msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Тачпад ым қимылдары"
 
-#: libide/keybindings/ide-shortcuts-window.ui:94
-#: libide/keybindings/ide-shortcuts-window.ui:142
+#: libide/keybindings/ide-shortcuts-window.ui:101
+#: libide/keybindings/ide-shortcuts-window.ui:149
 msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Келесі құжатқа ауысу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:101
-#: libide/keybindings/ide-shortcuts-window.ui:149
+#: libide/keybindings/ide-shortcuts-window.ui:108
+#: libide/keybindings/ide-shortcuts-window.ui:156
 msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Алдыңғы құжатқа ауысу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:109
+#: libide/keybindings/ide-shortcuts-window.ui:116
 msgctxt "shortcut window"
 msgid "Files"
 msgstr "Файлдар"
 
-#: libide/keybindings/ide-shortcuts-window.ui:114
+#: libide/keybindings/ide-shortcuts-window.ui:121
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Жаңа құжатты жасау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:121
+#: libide/keybindings/ide-shortcuts-window.ui:128
 msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Құжатты ашу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:128
+#: libide/keybindings/ide-shortcuts-window.ui:135
 msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Құжатты сақтау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:135
+#: libide/keybindings/ide-shortcuts-window.ui:142
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Құжатты жабу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:156
+#: libide/keybindings/ide-shortcuts-window.ui:163
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Ашық құжаттар тізімін көрсету"
 
-#: libide/keybindings/ide-shortcuts-window.ui:164
-#: libide/keybindings/ide-shortcuts-window.ui:176
+#: libide/keybindings/ide-shortcuts-window.ui:171
+#: libide/keybindings/ide-shortcuts-window.ui:183
 msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Табу және алмастыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:169
+#: libide/keybindings/ide-shortcuts-window.ui:176
 msgctxt "shortcut window"
 msgid "Find"
 msgstr "Табу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:183
+#: libide/keybindings/ide-shortcuts-window.ui:190
 msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Келесі сәйкестікті табу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:190
+#: libide/keybindings/ide-shortcuts-window.ui:197
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Алдыңғы сәйкестікті табу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:197
+#: libide/keybindings/ide-shortcuts-window.ui:204
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Түспен ерекшелеуді тастау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:205
-#: libide/keybindings/ide-shortcuts-window.ui:500
+#: libide/keybindings/ide-shortcuts-window.ui:212
+#: libide/keybindings/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Көшіріп алу және кірістіру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:210
-#: libide/keybindings/ide-shortcuts-window.ui:505
+#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Таңдалған мәтінді алмасу буферіне көшіру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:224
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Таңдалған мәтінді алмасу буферіне қиып алу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:224
-#: libide/keybindings/ide-shortcuts-window.ui:512
+#: libide/keybindings/ide-shortcuts-window.ui:231
+#: libide/keybindings/ide-shortcuts-window.ui:519
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Алмасу буферінен мәтінді кірістіру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:231
+#: libide/keybindings/ide-shortcuts-window.ui:238
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Ағымдағы жолды немесе таңдауды қосарлау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:239
+#: libide/keybindings/ide-shortcuts-window.ui:246
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Болдырмау және қайталау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:244
+#: libide/keybindings/ide-shortcuts-window.ui:251
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Алдыңғы команданы болдырмау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:251
+#: libide/keybindings/ide-shortcuts-window.ui:258
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Алдыңғы команданы қайталау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:259
+#: libide/keybindings/ide-shortcuts-window.ui:266
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Түзету"
 
-#: libide/keybindings/ide-shortcuts-window.ui:264
+#: libide/keybindings/ide-shortcuts-window.ui:271
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Курсор астындағы санды арттыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:271
+#: libide/keybindings/ide-shortcuts-window.ui:278
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Курсор астындағы санды кеміту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:278
+#: libide/keybindings/ide-shortcuts-window.ui:285
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Таңдалған жолдарды біріктіру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:285
+#: libide/keybindings/ide-shortcuts-window.ui:292
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Толықтырулар терезесін көрсету"
 
-#: libide/keybindings/ide-shortcuts-window.ui:292
+#: libide/keybindings/ide-shortcuts-window.ui:299
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Үстінен жазу режимін ауыстыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:299
+#: libide/keybindings/ide-shortcuts-window.ui:306
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Жолды қайта шегіндіру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
+#: libide/keybindings/ide-shortcuts-window.ui:313
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Жолды өшіру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:313
+#: libide/keybindings/ide-shortcuts-window.ui:320
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Таңба атын ауыстыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:314
+#: libide/keybindings/ide-shortcuts-window.ui:321
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr ""
 
-#: libide/keybindings/ide-shortcuts-window.ui:322
+#: libide/keybindings/ide-shortcuts-window.ui:329
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Навигация"
 
-#: libide/keybindings/ide-shortcuts-window.ui:327
+#: libide/keybindings/ide-shortcuts-window.ui:334
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Файлдағы келесі қатеге жылжу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:341
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Файлдағы алдыңғы қатеге жылжу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:348
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Алдыңғы түзету орнына жылжыту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:355
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Келесі түзету орнына жылжыту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:362
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Таңбаның анықтамасына өту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:369
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Көріну аймағын файл бойымен жоғары жылжыту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:376
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Көріну аймағын файл бойымен төмен жылжыту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:376
+#: libide/keybindings/ide-shortcuts-window.ui:383
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Көріну аймағын файл соңына жылжыту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:383
+#: libide/keybindings/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Көріну аймағын файл басына жылжыту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:390
+#: libide/keybindings/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Сәйкес жақшаға жылжыту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:398
+#: libide/keybindings/ide-shortcuts-window.ui:405
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Таңдаулар"
 
-#: libide/keybindings/ide-shortcuts-window.ui:403
+#: libide/keybindings/ide-shortcuts-window.ui:410
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Барлығын таңдау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:410
+#: libide/keybindings/ide-shortcuts-window.ui:417
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Барлығынан таңдауды алып тастау"
 
-#: libide/keybindings/ide-shortcuts-window.ui:418
+#: libide/keybindings/ide-shortcuts-window.ui:425
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Құрастыру және жөнелту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:423
+#: libide/keybindings/ide-shortcuts-window.ui:430
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Құрастыру"
 
-#: libide/keybindings/ide-shortcuts-window.ui:430
+#: libide/keybindings/ide-shortcuts-window.ui:437
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Жөнелту"
 
-#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/keybindings/ide-shortcuts-window.ui:444
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Профиль"
 
-#: libide/keybindings/ide-shortcuts-window.ui:448
+#: libide/keybindings/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Терминал жарлықтары"
 
-#: libide/keybindings/ide-shortcuts-window.ui:520
+#: libide/keybindings/ide-shortcuts-window.ui:527
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Іздеу"
 
-#: libide/keybindings/ide-shortcuts-window.ui:525
+#: libide/keybindings/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Терминалдан мәтінді табу"
+
+#: libide/layout/ide-layout-stack.c:126 libide/layout/ide-layout-stack.ui:8
+msgid "No Open Pages"
+msgstr ""
+
+#: libide/layout/ide-layout-stack-shortcuts.c:34
+msgid "Move document to the right"
+msgstr ""
+
+#: libide/layout/ide-layout-stack-shortcuts.c:41
+msgid "Move document to the left"
+msgstr ""
+
+#: libide/layout/ide-layout-stack-shortcuts.c:48
+msgid "Search to the previous document"
+msgstr ""
+
+#: libide/layout/ide-layout-stack-shortcuts.c:55
+#| msgctxt "shortcut window"
+#| msgid "Switch to the next document"
+msgid "Switch to the next document"
+msgstr ""
+
+#: libide/layout/ide-layout-stack-shortcuts.c:62
+msgid "Close the document"
+msgstr "Құжатты жабу"
+
+#: libide/layout/ide-layout-stack.ui:30
+msgid "Open a File or Terminal"
+msgstr "Файл немесе терминалды ашу"
+
+#: libide/layout/ide-layout-stack.ui:44
+msgid "Use the page switcher above or use one of the following:"
+msgstr ""
+
+#: libide/layout/ide-layout-stack.ui:59
+msgid "Search"
+msgstr "Іздеу"
+
+#: libide/layout/ide-layout-stack.ui:68
+msgid "Project sidebar"
+msgstr "Жобаның бүйір панелі"
+
+#: libide/layout/ide-layout-stack.ui:77
+msgid "File chooser"
+msgstr ""
+
+#: libide/layout/ide-layout-stack.ui:86
+msgid "New terminal"
+msgstr "Жаңа терминал"
+
+#: libide/layout/ide-layout-stack.ui:109
+msgid "New Terminal"
+msgstr "Жаңа терминал"
+
+#: libide/layout/ide-layout-stack.ui:121
+msgid "Uh oh, something went wrong"
+msgstr ""
+
+#: libide/layout/ide-layout-stack.ui:122
+msgid "There was a failure while trying to perform the operation."
+msgstr ""
 
 #: libide/preferences/ide-preferences-builtin.c:61
 #: libide/preferences/ide-preferences-builtin.c:62
@@ -2069,6 +2163,7 @@ msgstr ""
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
 #: plugins/terminal/gb-terminal-workbench-addin.c:202
+#: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -2236,7 +2331,7 @@ msgstr ""
 
 #: libide/preferences/ide-preferences-builtin.c:181
 msgid "Autosave"
-msgstr ""
+msgstr "Автосақтау"
 
 #: libide/preferences/ide-preferences-builtin.c:182
 msgid "Enable or disable autosave feature"
@@ -2322,11 +2417,6 @@ msgstr "Теру жылдамдығын арттыру үшін код бөлі�
 msgid "Programming Languages"
 msgstr "Бағдарламалау тілдері"
 
-#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: libide/preferences/ide-preferences-builtin.c:264
-msgid "Search languages…"
-msgstr "Тілдерді іздеу…"
-
 #: libide/preferences/ide-preferences-builtin.c:319
 msgid "Trim trailing whitespace"
 msgstr ""
@@ -2347,10 +2437,6 @@ msgstr ""
 msgid "Margins"
 msgstr "Шет өрістері"
 
-#: libide/preferences/ide-preferences-builtin.c:323
-msgid "Show right margin"
-msgstr "Оң жақ шет өрісін көрсету"
-
 #: libide/preferences/ide-preferences-builtin.c:324
 msgid "Right margin position"
 msgstr "Оң жақ шет өрісінің орны"
@@ -2358,6 +2444,10 @@ msgstr "Оң жақ шет өрісінің орны"
 #: libide/preferences/ide-preferences-builtin.c:324
 msgid "Position in spaces for the right margin"
 msgstr "Оң жақ шет өрісінің бос аралықтармен есептелген орны"
+
+#: libide/preferences/ide-preferences-builtin.c:326
+msgid "Indentation"
+msgstr "Шегіну"
 
 #: libide/preferences/ide-preferences-builtin.c:327
 msgid "Tab width"
@@ -2388,6 +2478,11 @@ msgstr "Бастапқы кодты теріп отырған кезде шег�
 msgid "Number of CPU"
 msgstr "Процессорлар саны"
 
+#: libide/preferences/ide-preferences-builtin.c:377
+#: libide/workbench/ide-omni-bar.ui:479
+msgid "Build"
+msgstr "Жинау"
+
 #: libide/preferences/ide-preferences-builtin.c:380
 msgid "Build Workers"
 msgstr ""
@@ -2398,7 +2493,7 @@ msgstr ""
 
 #: libide/preferences/ide-preferences-builtin.c:388
 msgid "Network"
-msgstr ""
+msgstr "Желі"
 
 #: libide/preferences/ide-preferences-builtin.c:389
 msgid "Allow downloads over metered connections"
@@ -2452,10 +2547,6 @@ msgstr "Нұсқаларды басқару"
 msgid "SDKs"
 msgstr ""
 
-#: libide/preferences/ide-preferences-perspective.c:124
-msgid "Preferences"
-msgstr "Баптаулар"
-
 #: libide/projects/ide-project.c:527
 msgid "Destination file must be within the project tree."
 msgstr "Мақсат файлы жоба ағашының ішінде болуы тиіс."
@@ -2469,11 +2560,11 @@ msgstr "Файл жоба ағашының ішінде болуы тиіс."
 msgid "%s() may only be executed once"
 msgstr "%s() тек бір рет орындауға болады"
 
-#: libide/runner/ide-run-button.ui:41
+#: libide/runner/ide-run-button.ui:31
 msgid "Stop running"
 msgstr "Орындалуын тоқтату"
 
-#: libide/runner/ide-run-button.ui:57
+#: libide/runner/ide-run-button.ui:51
 msgid "Change run options"
 msgstr "Орындалу баптауларын өзгерту"
 
@@ -2484,10 +2575,6 @@ msgstr ""
 #: libide/runner/ide-run-manager.c:386
 msgid "Failed to locate runtime"
 msgstr ""
-
-#: libide/runner/ide-run-manager.c:1089
-msgid "Run"
-msgstr "Жөнелту"
 
 #: libide/runner/ide-runner.c:173
 msgid "Process quit unexpectedly"
@@ -2507,31 +2594,31 @@ msgstr "Буманы ашу сәтсіз аяқталды: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Файлды жүктеу сәтсіз аяқталды: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5414
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "\"%s\" кірістіру"
 
-#: libide/sourceview/ide-source-view.c:5416
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr ""
 
-#: libide/sourceview/ide-source-view.c:5530
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr ""
 
-#: libide/sourceview/ide-source-view.c:5957
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Таңба атын ауыстыру"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6196
+#: libide/sourceview/ide-source-view.c:6061
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr ""
 
-#: libide/sourceview/ide-source-view.c:6222
+#: libide/sourceview/ide-source-view.c:6087
 msgid "No references were found"
 msgstr ""
 
@@ -2602,25 +2689,9 @@ msgstr ""
 msgid "URI “%s” has no host component"
 msgstr ""
 
-#: libide/workbench/ide-layout-tab-bar.ui:33
-msgid "List open files"
-msgstr "Ашық құжаттар тізімін көрсету"
-
-#: libide/workbench/ide-layout-tab.ui:19
-msgid "Jump to previous location"
-msgstr "Алдыңғы орналасуға өту"
-
-#: libide/workbench/ide-layout-tab.ui:33
-msgid "Jump to next location"
-msgstr "Келесі орналасуға өту"
-
-#: libide/workbench/ide-layout-tab.ui:125
-msgid "Close the current document"
-msgstr "Ағымдағы құжатты жабу"
-
-#: libide/workbench/ide-layout-view.c:142
-msgid "untitled document"
-msgstr "атаусыз құжат"
+#: libide/workbench/ide-omni-bar.c:407
+msgid "Building"
+msgstr "Құрастыру"
 
 #. Translators, missing means we could not locate the runtime
 #: libide/workbench/ide-omni-bar-row.c:90
@@ -2631,69 +2702,68 @@ msgstr "жетіспейді"
 msgid "Edit build configuration"
 msgstr "Құрастыру баптауларын түзету"
 
-#: libide/workbench/ide-omni-bar.ui:177
-#: plugins/project-tree/gb-project-tree-addin.c:106
-msgid "Project"
-msgstr "Жоба"
+#: libide/workbench/ide-omni-bar.ui:199
+msgid "Configure build preferences"
+msgstr "Құрастыру баптауларын түзету"
 
-#: libide/workbench/ide-omni-bar.ui:201
+#: libide/workbench/ide-omni-bar.ui:221
 msgid "Branch"
 msgstr "Бұтақ"
 
-#: libide/workbench/ide-omni-bar.ui:229
-msgid "Build System"
-msgstr "Жинау жүйесі"
-
-#: libide/workbench/ide-omni-bar.ui:264
+#: libide/workbench/ide-omni-bar.ui:246
 msgid "Build Profile"
 msgstr "Құрастыру профилі"
 
-#: libide/workbench/ide-omni-bar.ui:310
+#: libide/workbench/ide-omni-bar.ui:321
+msgid "Build status"
+msgstr "Құрастыру қалып-күйі"
+
+#: libide/workbench/ide-omni-bar.ui:333
+msgid "View build console contents"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar.ui:355
 msgid "Last build"
 msgstr "Соңғы құрастыру"
 
-#: libide/workbench/ide-omni-bar.ui:377
-msgid "View Output"
-msgstr "Шығысын қарау"
+#: libide/workbench/ide-omni-bar.ui:382
+msgid "Build result"
+msgstr "Құрастыру нәтижесі"
 
-#: libide/workbench/ide-omni-bar.ui:424
+#: libide/workbench/ide-omni-bar.ui:486
 msgid "Rebuild"
 msgstr "Қайта құрастыру"
 
-#: libide/workbench/ide-omni-bar.ui:434
+#: libide/workbench/ide-omni-bar.ui:493
 msgid "Clean"
 msgstr "Тазарту"
 
-#: libide/workbench/ide-omni-bar.ui:448
-msgid "Build project"
-msgstr "Жобаны құрастыру"
-
-#: libide/workbench/ide-perspective-menu-button.ui:15
-msgid "Switch perspective"
+#: libide/workbench/ide-omni-bar.ui:500
+msgid "Export Bundle"
 msgstr ""
 
-#: libide/workbench/ide-workbench-actions.c:75
-msgid "Open File"
-msgstr "Файлды ашу"
+#: libide/workbench/ide-omni-bar.ui:581
+msgid "Build project"
+msgstr "Жобаны құрастыру"
 
 #: libide/workbench/ide-workbench-actions.c:215
 msgid "Builder Statistics"
 msgstr ""
 
-#: libide/workbench/ide-workbench.c:564
+#: libide/workbench/ide-workbench.c:628
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Құрастырушы"
 
-#: libide/workbench/ide-workbench-header-bar.ui:43
+#: libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Transfers"
 msgstr ""
 
-#: libide/workbench/ide-workbench-header-bar.ui:50
+#: libide/workbench/ide-workbench-header-bar.ui:57
 msgid "Show workbench menu"
 msgstr ""
 
-#: libide/workbench/ide-workbench-header-bar.ui:73
+#: libide/workbench/ide-workbench-header-bar.ui:95
 msgid "Press Ctrl+. to search"
 msgstr "Іздеу үшін Ctrl+. басыңыз"
 
@@ -2772,7 +2842,7 @@ msgstr "AST оқу қатесі"
 msgid "Failed to create translation unit: %s"
 msgstr ""
 
-#: plugins/clang/ide-clang-service.c:480 plugins/xml-pack/ide-xml-service.c:92
+#: plugins/clang/ide-clang-service.c:480 plugins/xml-pack/ide-xml-service.c:97
 msgid "File must be saved locally to parse."
 msgstr "Файлды талдау үшін ол жергілікті сақталған болуы тиіс."
 
@@ -2780,39 +2850,43 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 msgid "anonymous"
 msgstr "анонимды"
 
-#: plugins/clang/ide-clang-translation-unit.c:642
+#: plugins/clang/ide-clang-translation-unit.c:661
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() тек жергілікті файлдармен жұмыс жасайды"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:96
+#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+msgid "Colors"
+msgstr "Түстер"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:92
 msgid "Close without Saving"
 msgstr "Сақтамай-ақ жабу"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:98
+#: plugins/color-picker/gb-color-picker-prefs.c:94
 msgid "Save As…"
 msgstr "Қалайша сақтау…"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:206
+#: plugins/color-picker/gb-color-picker-prefs.c:202
 msgid "Load palette"
 msgstr "Палитраны жүктеу"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:233
+#: plugins/color-picker/gb-color-picker-prefs.c:229
 msgid "Save palette"
 msgstr "Палитраны сақтау"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:724
+#: plugins/color-picker/gb-color-picker-prefs.c:702
 msgid "All files"
 msgstr "Барлық файлдар"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:728
+#: plugins/color-picker/gb-color-picker-prefs.c:706
 msgid "All supported palettes formats"
 msgstr "Қолдауы бар барлық палитралар пішімдері"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:733
+#: plugins/color-picker/gb-color-picker-prefs.c:711
 msgid "GIMP palette"
 msgstr "GIMP палитрасы"
 
-#: plugins/color-picker/gb-color-picker-prefs.c:737
+#: plugins/color-picker/gb-color-picker-prefs.c:715
 msgid "GNOME Builder palette"
 msgstr "GNOME құрастырушысы палитрасы"
 
@@ -2823,10 +2897,6 @@ msgstr "Палитра аты"
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
 msgid "Enter a new name for the palette"
 msgstr "Палитра үшін жаңа атын енгізіңіз"
-
-#: plugins/color-picker/gb-color-picker-workbench-addin.c:178
-msgid "Colors"
-msgstr "Түстер"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 msgid "HSV visibility"
@@ -2968,64 +3038,68 @@ msgid "Try loading or generating a palette using the menu"
 msgstr ""
 
 #: plugins/color-picker/gtk/menus.ui:7
-msgid "Enable color picker"
-msgstr "Түстер таңдаушысын іске қосу"
+msgid "Highlight colors"
+msgstr "Ерекшелеу түстері"
 
-#: plugins/command-bar/gb-command-bar.c:302
+#: plugins/command-bar/gb-command-bar.c:283
 #, c-format
 msgid "Command not found: %s"
 msgstr "Команда табылмады: %s"
 
-#: plugins/command-bar/gb-command-bar.c:612
+#: plugins/command-bar/gb-command-bar.c:593
 msgid "Use the entry below to execute a command"
 msgstr ""
 
-#: plugins/command-bar/gb-vim.c:90
+#: plugins/command-bar/gb-command-bar.c:717
+msgid "Command Bar"
+msgstr ""
+
+#: plugins/command-bar/gb-vim.c:87
 msgid "Number required"
 msgstr "Сан керек"
 
-#: plugins/command-bar/gb-vim.c:100
+#: plugins/command-bar/gb-vim.c:97
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s %s үшін жарамсыз"
 
-#: plugins/command-bar/gb-vim.c:158
+#: plugins/command-bar/gb-vim.c:155
 #, c-format
 msgid "Cannot find language “%s”"
 msgstr "\"%s\" тілін табу мүмкін емес"
 
-#: plugins/command-bar/gb-vim.c:315
+#: plugins/command-bar/gb-vim.c:312
 msgid "This command requires a GtkSourceView to be focused"
 msgstr ""
 
-#: plugins/command-bar/gb-vim.c:326
+#: plugins/command-bar/gb-vim.c:323
 msgid "This command requires a view to be focused"
 msgstr ""
 
-#: plugins/command-bar/gb-vim.c:383
+#: plugins/command-bar/gb-vim.c:380
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Белгісіз опция: %s"
 
-#: plugins/command-bar/gb-vim.c:426
+#: plugins/command-bar/gb-vim.c:423
 #, c-format
 msgid "Cannot find colorscheme “%s”"
 msgstr "\"%s\" түстер схемасын табу сәтсіз аяқталды"
 
-#: plugins/command-bar/gb-vim.c:467 plugins/command-bar/gb-vim.c:591
+#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:588
 msgid "Failed to locate working directory"
 msgstr ""
 
-#: plugins/command-bar/gb-vim.c:711
+#: plugins/command-bar/gb-vim.c:708
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr ""
 
-#: plugins/command-bar/gb-vim.c:1154
+#: plugins/command-bar/gb-vim.c:1149
 msgid "Invalid search and replace request"
 msgstr "Іздеу және алмастыруға сұраным қате"
 
-#: plugins/command-bar/gb-vim.c:1260
+#: plugins/command-bar/gb-vim.c:1255
 #, c-format
 msgid "Not a command: %s"
 msgstr "Команда емес: %s"
@@ -3168,9 +3242,18 @@ msgstr "Git нұсқаларды басқару жүйесін қолданад�
 msgid "Select a Template"
 msgstr "Үлгіні таңдау"
 
+#: plugins/devhelp/gbp-devhelp-menu-button.ui:25
+msgid "Select Documentation…"
+msgstr "Құжаттаманы таңдау…"
+
 #: plugins/devhelp/gbp-devhelp-panel.c:194
+#: plugins/devhelp/gbp-devhelp-view.c:206 plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Құжаттама"
+
+#: plugins/devhelp/gtk/menus.ui:21
+msgid "New Documentation Page"
+msgstr "Құжаттаманың жаңа парағы"
 
 #: plugins/eslint/eslint_plugin/__init__.py:105
 msgid "ESlint"
@@ -3195,6 +3278,10 @@ msgid ""
 "This may result in the execution of code in your project."
 msgstr ""
 
+#: plugins/find-other-file/find_other_file.py:50
+msgid "Find other file"
+msgstr "Басқа файлды табу"
+
 #: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
 msgid "Downloading application sources…"
 msgstr ""
@@ -3212,36 +3299,36 @@ msgstr "Клондау"
 msgid "Network is not available, skipping downloads"
 msgstr ""
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:89
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:303
-#: plugins/html-preview/html_preview_plugin/__init__.py:313
+#: plugins/html-preview/html_preview_plugin/__init__.py:323
+#: plugins/html-preview/html_preview_plugin/__init__.py:333
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 #: plugins/rustup/rustup_plugin/__init__.py:615
 msgid "Install"
 msgstr "Орнату"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Жаңарту"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:301
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:316
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:309
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] ""
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:397
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:390
 msgid "Flatpak Runtimes"
 msgstr "Flatpak орындалу орталары"
 
@@ -3310,10 +3397,6 @@ msgstr "Flatpak"
 #: plugins/flatpak/gtk/menus.ui:8
 msgid "_Download Dependencies"
 msgstr "Тәуелділіктерді жү_ктеп алу"
-
-#: plugins/flatpak/gtk/menus.ui:12
-msgid "_Export as Bundle"
-msgstr ""
 
 #: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
 msgid "Send to Fpaste.org"
@@ -3408,23 +3491,27 @@ msgid ""
 "This may result in the execution of code in your project."
 msgstr ""
 
-#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
-msgid "Preview as HTML"
-msgstr "HTML ретінде алдын-ала қарау"
+#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:7
+msgid "Open Preview"
+msgstr "Алдын-ала қарауды ашу"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:299
+#: plugins/html-preview/html_preview_plugin/__init__.py:319
 msgid "Your computer is missing python3-docutils"
 msgstr "Сіздің компьютеріңізде python3-docutils жоқ"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:309
+#: plugins/html-preview/html_preview_plugin/__init__.py:329
 msgid "Your computer is missing python3-sphinx"
 msgstr "Сіздің компьютеріңізде python3-sphinx жоқ"
 
-#: plugins/jedi/jedi_plugin.py:732
+#: plugins/html-preview/html_preview_plugin/__init__.py:372
+msgid "(Preview)"
+msgstr ""
+
+#: plugins/jedi/jedi_plugin.py:738
 msgid "Suggest Python completions"
 msgstr "Python толықтыруларын ұсыну"
 
-#: plugins/jedi/jedi_plugin.py:733
+#: plugins/jedi/jedi_plugin.py:739
 msgid "Use Jedi to provide completions for the Python language"
 msgstr ""
 
@@ -3444,20 +3531,20 @@ msgstr "MinGW 64-бит"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-бит"
 
-#: plugins/notification/ide-notification-addin.c:76
+#: plugins/notification/ide-notification-addin.c:81
 msgid "Build successful"
 msgstr "Құрастыру сәтті аяқталды"
 
-#: plugins/notification/ide-notification-addin.c:77
+#: plugins/notification/ide-notification-addin.c:82
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr ""
 
-#: plugins/notification/ide-notification-addin.c:81
+#: plugins/notification/ide-notification-addin.c:86
 msgid "Build failed"
 msgstr "Құрастыру сәтсіз аяқталды"
 
-#: plugins/notification/ide-notification-addin.c:82
+#: plugins/notification/ide-notification-addin.c:87
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr ""
@@ -3486,7 +3573,11 @@ msgstr "Бума атауы"
 msgid "_Create"
 msgstr "Жа_сау"
 
-#: plugins/project-tree/gb-project-tree-builder.c:207
+#: plugins/project-tree/gb-project-tree-addin.c:89
+msgid "Project Tree"
+msgstr "Жоба ағашы"
+
+#: plugins/project-tree/gb-project-tree-builder.c:213
 msgid "Empty"
 msgstr "Бос"
 
@@ -3573,7 +3664,7 @@ msgid "quick highlight words matching current selection"
 msgstr "ағымдағы таңдауға сәйкес келетін сөздерді түспен жылдам ерекшелеу"
 
 #: plugins/retab/gtk/menus.ui:9
-msgid "Retab"
+msgid "Reformat tabs"
 msgstr ""
 
 #: plugins/rustup/rustup_plugin/__init__.py:84
@@ -3692,6 +3783,91 @@ msgstr ""
 msgid "to add a new toolchain!"
 msgstr ""
 
+#: plugins/spellcheck/gbp-spell-editor-addin.c:51
+msgid "Spelling"
+msgstr "Емле"
+
+#: plugins/spellcheck/gbp-spell-language-popover.c:232
+msgid "No language selected"
+msgstr "Тіл таңдалмады"
+
+#: plugins/spellcheck/gbp-spell-navigator.c:480
+msgid "No language set. Check your dictionary installation."
+msgstr ""
+
+#: plugins/spellcheck/gbp-spell-widget.c:119
+msgid "No suggestions"
+msgstr "Ұсыныстар жоқ"
+
+#: plugins/spellcheck/gbp-spell-widget.c:212
+msgid "Completed spell checking"
+msgstr "Емлені тексеру аяқталды"
+
+#: plugins/spellcheck/gbp-spell-widget.c:420
+msgid "This word is already in the personal dictionary"
+msgstr "Бұл сөз жеке сөздікте бар болып тұр"
+
+#: plugins/spellcheck/gbp-spell-widget.c:423
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "Бұл сөз %s сөздігінде бар болып тұр"
+
+#: plugins/spellcheck/gbp-spell-widget.c:1042
+msgid "The word is not in the dictionary"
+msgstr "Бұл сөз сөздікте емес"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:17
+msgid "Misspelled"
+msgstr "Қате жазылған"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:86
+msgid "_Ignore"
+msgstr "Еле_меу"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:95
+msgid "Ignore _All"
+msgstr "Б_арлығын елемеу"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:114
+msgid "Change _to"
+msgstr "Келесіге өз_герту"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:147
+msgid "Cha_nge"
+msgstr "Ө_згерту"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:156
+msgid "Change A_ll"
+msgstr "Б_арлығын өзгерту"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:175
+msgid "_Suggestions"
+msgstr "Ұ_сыныстар"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:212
+msgid "Add Word"
+msgstr "Сөзді қосу"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:238
+msgid "A_dd"
+msgstr "Қ_осу"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:254
+msgid "Dictionary"
+msgstr "Сөздік"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:304
+msgid "_Language"
+msgstr "_Тіл"
+
+#: plugins/spellcheck/gtk/menus.ui:6
+msgid "Check _Spelling"
+msgstr "Е_млені тексеру"
+
+#: plugins/spellcheck/gtk/menus.ui:14
+msgid "Underline misspelled words"
+msgstr "Қате жазылған сөздердің астын сызу"
+
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
 msgstr "Қолдау көрсету журналын жасау"
@@ -3705,29 +3881,27 @@ msgstr ""
 "Қолдау көрсету журналы \"%s\" файлына жазылды. Бұл файлды сіздің ақаулық "
 "жөніндегі хабарламаға немесе қолдау көрсету сұранымыңызға қосып жіберіңіз."
 
-#: plugins/symbol-tree/symbol-tree-panel.c:272
-msgid "Current language does not support symbol resolvers"
-msgstr ""
+#: plugins/symbol-tree/gbp-symbol-menu-button.c:279
+msgid "Select Symbol…"
+msgstr "Таңбаны таңдау…"
 
-#: plugins/symbol-tree/symbol-tree-panel.c:412
-msgid "Symbols"
-msgstr "Таңбалар"
-
-#: plugins/symbol-tree/symbol-tree-panel.ui:25
-msgid "No symbols"
-msgstr "Таңбалар жоқ"
-
-#: plugins/symbol-tree/symbol-tree-panel.ui:26
-msgid "Open a file to see symbols within the file"
-msgstr "Файлдағы таңбаларды қарау үшін файлды ашыңыз"
+#: plugins/symbol-tree/gbp-symbol-menu-button.ui:13
+#: plugins/symbol-tree/gbp-symbol-menu-button.ui:75
+msgid "Document Outline"
+msgstr "Құжат құрылымы"
 
 #: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
 msgstr "Жүйелік бақылаушы"
 
 #: plugins/sysprof/gbp-sysprof-perspective.c:135
+#: plugins/sysprof/gtk/menus.ui:20
 msgid "Profiler"
 msgstr "Профильдеуші"
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:28
+msgid "_Close"
+msgstr "_Жабу"
 
 #. the action:// link is used to run the project
 #: plugins/sysprof/gbp-sysprof-perspective.ui:49
@@ -3753,12 +3927,14 @@ msgid "All Files"
 msgstr "Барлық файлдар"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
+#: plugins/sysprof/gtk/menus.ui:34
 msgid "Run with Profiler"
 msgstr "Профильдеушімен жөнелту"
 
-#: plugins/sysprof/gtk/menus.ui:6
-msgid "Open Profile…"
-msgstr "Профильді ашу…"
+#: plugins/sysprof/gtk/menus.ui:8
+#| msgid "Open Profile…"
+msgid "Open Sysprof Capture…"
+msgstr ""
 
 #: plugins/terminal/gb-terminal-search.ui:152
 msgid "Regex"
@@ -3772,11 +3948,11 @@ msgstr "Тек толық сөзді сәйкестеу"
 msgid "Wrap around"
 msgstr "Соңына жеткенде басына өту"
 
-#: plugins/terminal/gb-terminal-view-actions.c:297
+#: plugins/terminal/gb-terminal-view-actions.c:263
 msgid "Save Terminal Content As"
 msgstr "Терминал құрамасын қалайша сақтау"
 
-#: plugins/terminal/gb-terminal-view.c:465
+#: plugins/terminal/gb-terminal-view.c:472
 msgid "Untitled terminal"
 msgstr "Атаусыз терминал"
 
@@ -3785,24 +3961,28 @@ msgid "Application Output"
 msgstr "Қолданба шығысы"
 
 #: plugins/terminal/gtk/menus.ui:6
-msgid "_New Terminal"
-msgstr "Жаңа тер_минал"
-
-#: plugins/terminal/gtk/menus.ui:11
-msgid "_New Runtime Terminal"
-msgstr ""
-
-#: plugins/terminal/gtk/menus.ui:20
 msgid "_Open Link"
 msgstr "Сі_лтемені ашу"
 
-#: plugins/terminal/gtk/menus.ui:25
+#: plugins/terminal/gtk/menus.ui:11
 msgid "_Copy Link Address"
 msgstr "Сілтеме адр_есін көшіру"
 
-#: plugins/todo/todo_plugin/__init__.py:196
-msgid "Todo"
-msgstr "Жасау үшін"
+#: plugins/terminal/gtk/menus.ui:55
+msgid "Reset and Clear"
+msgstr "Тастау мен тазарту"
+
+#: plugins/terminal/gtk/menus.ui:74
+msgid "New _Terminal"
+msgstr "Жаңа _терминал"
+
+#: plugins/terminal/gtk/menus.ui:82
+msgid "New _Build Terminal"
+msgstr "Жаңа құ_растыру терминалы"
+
+#: plugins/todo/gbp-todo-workbench-addin.c:115
+msgid "TODO/FIXMEs"
+msgstr ""
 
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
@@ -3817,18 +3997,141 @@ msgstr "Vala ұсынған қателер мен ескертулерді кө�
 msgid "vala diagnostics warnings errors"
 msgstr ""
 
-#: plugins/valgrind/valgrind_plugin/__init__.py:52
+#: plugins/valgrind/gtk/menus.ui:10 plugins/valgrind/valgrind_plugin.py:52
 msgid "Run with Valgrind"
 msgstr "Valgrind көмегімен жөнелту"
 
-#: plugins/xml-pack/ide-xml-service.c:192
+#: plugins/xml-pack/ide-xml-parser.c:579
+#: plugins/xml-pack/ide-xml-tree-builder.c:447
+msgid "Failed to create the XML tree."
+msgstr "XML ағашын жасау сәтсіз аяқталды."
+
+#: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 
-#: plugins/xml-pack/ide-xml-tree-builder.c:172
-#: plugins/xml-pack/ide-xml-tree-builder.c:204
-msgid "Failed to create the XML tree."
-msgstr "XML ағашын жасау сәтсіз аяқталды."
+#~ msgid "Show left panel"
+#~ msgstr "Сол жақ панельді көрсету"
+
+#~ msgid "Show bottom panel"
+#~ msgstr "Төменгі панельді көрсету"
+
+#~ msgid "Show right panel"
+#~ msgstr "Оң жақ панельді көрсету"
+
+#~ msgid "Split Left"
+#~ msgstr "Сол жақтан бөлу"
+
+#~ msgid "Split Right"
+#~ msgstr "Оң жақтан бөлу"
+
+#~ msgid "Split Down"
+#~ msgstr "Төменнен бөлу"
+
+#~ msgid "Move"
+#~ msgstr "Жылжыту"
+
+#~ msgid "_Print"
+#~ msgstr "Бас_паға шығару"
+
+#~ msgid "%d warning"
+#~ msgid_plural "%d warnings"
+#~ msgstr[0] "%d ескерту"
+
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "%d қате"
+
+#~ msgid "Status:"
+#~ msgstr "Қалып-күйі:"
+
+#~ msgid "Running Time:"
+#~ msgstr "Орындалған уақыты:"
+
+#~ msgid "Warnings:"
+#~ msgstr "Ескертулер:"
+
+#~ msgid "No Diagnostics"
+#~ msgstr "Диагностика жоқ"
+
+#~ msgid "Line %u, Column %u"
+#~ msgstr "Жол %u, баған %u"
+
+#~ msgid "OVR"
+#~ msgstr "ҮСТЖЗ"
+
+#~ msgid "Plain Text"
+#~ msgstr "Ашық мәтін"
+
+#~ msgid "Change editor settings and language"
+#~ msgstr "Түзеткіш баптауларын және тілін өзгерту"
+
+#~ msgid "Try opening a file by typing in the search box at the top"
+#~ msgstr "Жоғарыдағы іздеу өрісіне теру арқылы файлды ашып көріңіз"
+
+#~ msgid "Options"
+#~ msgstr "Опциялар"
+
+#~ msgid "_Highlight"
+#~ msgstr "Түспен ерек_шелеу"
+
+#~ msgid "Search highlight mode…"
+#~ msgstr "Іздеуді түспен ерекшелеу режимі…"
+
+#~ msgid "Display line numbers"
+#~ msgstr "Жол нөмірлерін көрсету"
+
+#~ msgid "Display right margin"
+#~ msgstr "Оң жақ шет өрісін көрсету"
+
+#~ msgid "Save Document As"
+#~ msgstr "Құжатты қалайша сақтау"
+
+#~ msgid "_Reload"
+#~ msgstr "Қа_йта жүктеу"
+
+#~ msgid ""
+#~ "Builder has discovered that this file has been modified externally. Would "
+#~ "you like to reload the file?"
+#~ msgstr ""
+#~ "Құрастырушы бұл файл сыртқы қолданбамен өзгертілгенін анықтады. Бұл "
+#~ "файлды қайта жүктеуді қалайсыз ба?"
+
+#~ msgid "Jump to previous location"
+#~ msgstr "Алдыңғы орналасуға өту"
+
+#~ msgid "Jump to next location"
+#~ msgstr "Келесі орналасуға өту"
+
+#~ msgid "Close the current document"
+#~ msgstr "Ағымдағы құжатты жабу"
+
+#~ msgid "untitled document"
+#~ msgstr "атаусыз құжат"
+
+#~ msgid "Project"
+#~ msgstr "Жоба"
+
+#~ msgid "View Output"
+#~ msgstr "Шығысын қарау"
+
+#~ msgid "Enable color picker"
+#~ msgstr "Түстер таңдаушысын іске қосу"
+
+#~ msgid "Preview as HTML"
+#~ msgstr "HTML ретінде алдын-ала қарау"
+
+#~ msgid "Symbols"
+#~ msgstr "Таңбалар"
+
+#~ msgid "No symbols"
+#~ msgstr "Таңбалар жоқ"
+
+#~ msgid "Open a file to see symbols within the file"
+#~ msgstr "Файлдағы таңбаларды қарау үшін файлды ашыңыз"
+
+#~ msgid "Todo"
+#~ msgstr "Жасау үшін"
 
 #~ msgid "Cannot locate property %s in class %s"
 #~ msgstr "%s қасиетін %s класы ішінен табу мүмкін емес"
@@ -3864,9 +4167,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 #~ msgid "Browse…"
 #~ msgstr "Шолу…"
 
-#~ msgid "Search"
-#~ msgstr "Іздеу"
-
 #~ msgid "%s() may only be called once"
 #~ msgstr "%s() тек бір рет шақыруға болады"
 
@@ -3894,10 +4194,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 #~ msgid "Target"
 #~ msgstr "Мақсаты"
 
-#~| msgid "Failed to load file: %s: %s"
-#~ msgid "Failed to locate %s/%s/%s"
-#~ msgstr "%s/%s/%s табу мүмкін емес"
-
 #~ msgid "%s does not support building"
 #~ msgstr "%s құрастыруды қолдамайды"
 
@@ -3915,9 +4211,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 
 #~ msgid "Build cancelled"
 #~ msgstr "Құрастыру тоқтатылды"
-
-#~ msgid "Install failed"
-#~ msgstr "Орнату сәтсіз аяқталды"
 
 #~ msgid "Install successful"
 #~ msgstr "Орнату сәтті аяқталды"
@@ -3965,9 +4258,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 #~ msgid "Failed to locate configure.ac"
 #~ msgstr "configure.ac табылмады"
 
-#~ msgid "Warnings"
-#~ msgstr "Ескертулер"
-
 #~ msgid "Notes"
 #~ msgstr "Жазбалар"
 
@@ -3979,12 +4269,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 
 #~ msgid "Bundled Extensions"
 #~ msgstr "Құрамындағы кеңейтулер"
-
-#~ msgid "_Print…"
-#~ msgstr "Бас_паға шығару…"
-
-#~ msgid "_Fullscreen"
-#~ msgstr "Т_олық экранға"
 
 #~ msgid "_Close All"
 #~ msgstr "Ба_рлығын жабу"
@@ -4003,9 +4287,6 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 
 #~ msgid "Versioning"
 #~ msgstr "Нұсқаларды басқару"
-
-#~ msgid "Directory"
-#~ msgstr "Бума"
 
 #~ msgid "_New Document"
 #~ msgstr "Жаңа құ_жат"
