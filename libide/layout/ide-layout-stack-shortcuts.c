@@ -45,7 +45,7 @@ static const DzlShortcutEntry stack_shortcuts[] = {
     NULL,
     N_("Editor"),
     N_("Files"),
-    N_("Search to the previous document") },
+    N_("Switch to the previous document") },
 
   { "org.gnome.builder.layoutstack.next-document",
     DZL_SHORTCUT_PHASE_CAPTURE,
