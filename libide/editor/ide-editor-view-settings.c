@@ -20,6 +20,8 @@
 
 #include "ide-editor-private.h"
 
+#include <gtksourceview/gtksource.h>
+
 static gboolean
 get_smart_home_end (GValue   *value,
                     GVariant *variant,
@@ -61,6 +63,65 @@ on_keybindings_changed (IdeEditorView *self,
                          "set-mode",
                          NULL,
                          IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+}
+
+static void
+on_draw_spaces_changed (IdeEditorView *self,
+                        const gchar   *key,
+                        GSettings     *settings)
+{
+  GtkSourceView *source_view;
+  GtkSourceSpaceDrawer *drawer;
+  guint flags;
+  GtkSourceSpaceLocationFlags location_flags = GTK_SOURCE_SPACE_LOCATION_NONE;
+  GtkSourceSpaceTypeFlags type_flags = GTK_SOURCE_SPACE_TYPE_NONE;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (g_strcmp0 (key, "draw-spaces") == 0);
+  g_assert (G_IS_SETTINGS (settings));
+
+  source_view = GTK_SOURCE_VIEW (ide_editor_view_get_view (self));
+  drawer = gtk_source_view_get_space_drawer (source_view);
+  flags = g_settings_get_flags (settings, "draw-spaces");
+
+  if (flags == 0)
+    {
+      gtk_source_space_drawer_set_enable_matrix (drawer, FALSE);
+      return;
+    }
+
+  /* Reset the matrix before setting it */
+  gtk_source_space_drawer_set_types_for_locations (drawer, GTK_SOURCE_SPACE_LOCATION_ALL, GTK_SOURCE_SPACE_TYPE_NONE);
+
+  if (flags & 1)
+    type_flags |= GTK_SOURCE_SPACE_TYPE_SPACE;
+
+  if (flags & 2)
+    type_flags |= GTK_SOURCE_SPACE_TYPE_TAB;
+
+  if (flags & 4)
+    {
+      gtk_source_space_drawer_set_types_for_locations (drawer, GTK_SOURCE_SPACE_LOCATION_ALL, GTK_SOURCE_SPACE_TYPE_NEWLINE);
+      type_flags |= GTK_SOURCE_SPACE_TYPE_NEWLINE;
+    }
+
+  if (flags & 8)
+    type_flags |= GTK_SOURCE_SPACE_TYPE_NBSP;
+
+  if (flags & 16)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_LEADING;
+
+  if (flags & 32)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_INSIDE_TEXT;
+
+  if (flags & 64)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_TRAILING;
+
+  if (type_flags > 0 && location_flags == 0)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_ALL;
+
+  gtk_source_space_drawer_set_enable_matrix (drawer, TRUE);
+  gtk_source_space_drawer_set_types_for_locations (drawer, location_flags, type_flags);
 }
 
 void
@@ -143,6 +204,14 @@ _ide_editor_view_init_settings (IdeEditorView *self)
                            G_CONNECT_SWAPPED);
 
   on_keybindings_changed (self, "keybindings", self->editor_settings);
+
+  g_signal_connect_object (self->editor_settings,
+                           "changed::draw-spaces",
+                           G_CALLBACK (on_draw_spaces_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  on_draw_spaces_changed (self, "draw-spaces", self->editor_settings);
 
   self->insight_settings = g_settings_new ("org.gnome.builder.code-insight");
 
