@@ -246,10 +246,16 @@ check_word_timeout_cb (GbpSpellWidget *self)
         {
           g_message ("check error:%s\n", error->message);
         }
-
-      if (!ret)
-        icon_name = "dialog-warning-symbolic";
     }
+
+  if (!ret)
+    {
+      icon_name = "dialog-warning-symbolic";
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self->word_entry),
+                                   _("The word is not in the dictionary"));
+    }
+  else
+    gtk_widget_set_tooltip_text (GTK_WIDGET (self->word_entry), NULL);
 
   gtk_entry_set_icon_from_icon_name (self->word_entry,
                                      GTK_ENTRY_ICON_SECONDARY,
@@ -1052,8 +1058,7 @@ gbp_spell_widget_init (GbpSpellWidget *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gtk_widget_set_tooltip_text (GTK_WIDGET (self->word_entry),
-                               _("The word is not in the dictionary"));
+  gbp_spell_widget__word_entry_changed_cb (self, self->word_entry);
 
   g_signal_connect_swapped (self->dict_words_list,
                             "key-press-event",
