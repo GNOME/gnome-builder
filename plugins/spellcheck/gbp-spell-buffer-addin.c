@@ -22,11 +22,11 @@
 
 struct _GbpSpellBufferAddin
 {
-  GObject parent_instance;
+  GObject        parent_instance;
 
   /* Unowned reference to buffer */
-  IdeBuffer *buffer;
-  GtkTextTag *misspelled_tag;
+  IdeBuffer     *buffer;
+  GtkTextTag    *misspelled_tag;
 
   /* Owned spellchecker instance */
   GspellChecker *spellchecker;
@@ -36,10 +36,10 @@ struct _GbpSpellBufferAddin
    * the buffer if it has manually been enabled (see @enabled) or if
    * this value is >= 1.
    */
-  gint count;
+  gint           count;
 
   /* Manual enabling of inline checking */
-  guint enabled : 1;
+  guint          enabled : 1;
 };
 
 enum {
@@ -157,7 +157,7 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
                                         G_CALLBACK (update_style_scheme),
                                         self);
   gtk_text_tag_table_remove (gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (buffer)),
-                            self->misspelled_tag);
+                             self->misspelled_tag);
   self->misspelled_tag = NULL;
 
   self->buffer = NULL;
@@ -299,8 +299,6 @@ gbp_spell_buffer_addin_begin_checking (GbpSpellBufferAddin *self)
  *
  * Completes a spellcheck operation. The buffer will return to it's original
  * state. Thay may mean inline checking is disabled.
- *
- * Returns:
  */
 void
 gbp_spell_buffer_addin_end_checking (GbpSpellBufferAddin *self)

@@ -186,8 +186,8 @@ gbp_spell_navigator_words_count_cb (WordsCountState *state)
 /* Always process start and end by init_boudaries before */
 static GHashTable *
 gbp_spell_navigator_count_words (GbpSpellNavigator *self,
-                                        GtkTextIter             *start,
-                                        GtkTextIter             *end)
+                                 GtkTextIter       *start,
+                                 GtkTextIter       *end)
 {
   GHashTable *table;
   GtkSourceRegion *words_count_region;

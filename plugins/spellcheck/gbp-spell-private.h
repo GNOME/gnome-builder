@@ -38,7 +38,7 @@ typedef enum
 
 struct _GbpSpellWidget
 {
-  GtkBin                 parent_instance;
+  GtkBin                   parent_instance;
 
   /* Owned references */
   IdeEditorView           *editor;
@@ -48,38 +48,38 @@ struct _GbpSpellWidget
   GbpSpellDict            *dict;
 
   /* Borrowed references */
-  const GspellLanguage  *language;
+  const GspellLanguage    *language;
 
   /* Template references */
-  GtkLabel              *word_label;
-  GtkLabel              *count_label;
-  GtkEntry              *word_entry;
-  GtkListBox            *suggestions_box;
-  GtkBox                *count_box;
-  GtkWidget             *dict_word_entry;
-  GtkWidget             *dict_add_button;
-  GtkWidget             *dict_words_list;
-  GtkButton             *language_chooser_button;
-  GtkWidget             *placeholder;
+  GtkLabel                *word_label;
+  GtkLabel                *count_label;
+  GtkEntry                *word_entry;
+  GtkListBox              *suggestions_box;
+  GtkBox                  *count_box;
+  GtkWidget               *dict_word_entry;
+  GtkWidget               *dict_add_button;
+  GtkWidget               *dict_words_list;
+  GtkButton               *language_chooser_button;
+  GtkWidget               *placeholder;
 
   /* GSource identifiers */
-  guint                  check_word_timeout_id;
-  guint                  dict_check_word_timeout_id;
+  guint                    check_word_timeout_id;
+  guint                    dict_check_word_timeout_id;
 
-  guint                  current_word_count;
-  CheckWordState         check_word_state;
-  CheckWordState         dict_check_word_state;
+  guint                    current_word_count;
+  CheckWordState           check_word_state;
+  CheckWordState           dict_check_word_state;
 
-  guint                  is_checking_word : 1;
-  guint                  is_check_word_invalid : 1;
-  guint                  is_check_word_idle : 1;
-  guint                  is_word_entry_valid : 1;
+  guint                    is_checking_word : 1;
+  guint                    is_check_word_invalid : 1;
+  guint                    is_check_word_idle : 1;
+  guint                    is_word_entry_valid : 1;
 
-  guint                  is_dict_checking_word : 1;
-  guint                  is_dict_check_word_invalid : 1;
-  guint                  is_dict_check_word_idle : 1;
+  guint                    is_dict_checking_word : 1;
+  guint                    is_dict_check_word_invalid : 1;
+  guint                    is_dict_check_word_idle : 1;
 
-  guint                  spellchecking_status : 1;
+  guint                    spellchecking_status : 1;
 };
 
 void       _gbp_spell_widget_init_actions   (GbpSpellWidget *self);
