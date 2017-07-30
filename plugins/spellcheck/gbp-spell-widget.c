@@ -1036,10 +1036,8 @@ gbp_spell_widget_init (GbpSpellWidget *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  /* FIXME: do not work, Gtk+ bug */
-  gtk_entry_set_icon_tooltip_text (self->word_entry,
-                                   GTK_ENTRY_ICON_SECONDARY,
-                                   _("The word is not in the dictionary"));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (self->word_entry),
+                               _("The word is not in the dictionary"));
 
   g_signal_connect_swapped (self->dict_words_list,
                             "key-press-event",
