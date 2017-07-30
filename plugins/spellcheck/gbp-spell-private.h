@@ -60,6 +60,7 @@ struct _GbpSpellWidget
   GtkWidget               *dict_add_button;
   GtkWidget               *dict_words_list;
   GtkButton               *language_chooser_button;
+  GtkButton               *close_button;
   GtkWidget               *placeholder;
 
   /* GSource identifiers */

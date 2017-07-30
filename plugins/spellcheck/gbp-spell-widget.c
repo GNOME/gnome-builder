@@ -829,6 +829,16 @@ gbp_spell_widget__word_label_notify_cb (GbpSpellWidget *self,
 }
 
 static void
+gbp_spell_widget__close_button_clicked_cb (GbpSpellWidget *self,
+                                           GtkButton      *close_button)
+{
+  g_assert (GBP_IS_SPELL_WIDGET (self));
+  g_assert (GTK_IS_BUTTON (close_button));
+
+  gbp_spell_widget_set_editor (self, NULL);
+}
+
+static void
 gbp_spell_widget_constructed (GObject *object)
 {
   GbpSpellWidget *self = (GbpSpellWidget *)object;
@@ -869,6 +879,11 @@ gbp_spell_widget_constructed (GObject *object)
   g_signal_connect_swapped (self->dict_word_entry,
                             "changed",
                             G_CALLBACK (gbp_spell_widget__dict_word_entry_changed_cb),
+                            self);
+
+  g_signal_connect_swapped (self->close_button,
+                            "clicked",
+                            G_CALLBACK (gbp_spell_widget__close_button_clicked_cb),
                             self);
 
   self->placeholder = gtk_label_new (NULL);
@@ -1025,6 +1040,7 @@ gbp_spell_widget_class_init (GbpSpellWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, dict_add_button);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, dict_words_list);
   gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, count_box);
+  gtk_widget_class_bind_template_child (widget_class, GbpSpellWidget, close_button);
 
   g_type_ensure (GBP_TYPE_SPELL_LANGUAGE_POPOVER);
 }

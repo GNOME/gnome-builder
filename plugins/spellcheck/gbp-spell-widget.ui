@@ -51,7 +51,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="close_button">
                 <property name="action-name">dockbin.right-visible</property>
                 <property name="visible">true</property>
                 <style>
