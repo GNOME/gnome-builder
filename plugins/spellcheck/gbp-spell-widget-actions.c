@@ -20,6 +20,7 @@
 #define G_LOG_DOMAIN "gbp-spell-widget-actions"
 
 #include "gbp-spell-dict.h"
+#include "gbp-spell-navigator.h"
 #include "gbp-spell-private.h"
 
 static void
@@ -123,6 +124,8 @@ _gbp_spell_widget_init_actions (GbpSpellWidget *self)
 void
 _gbp_spell_widget_update_actions (GbpSpellWidget *self)
 {
+  GspellNavigator *navigator = NULL;
+  gboolean word_counted = FALSE;
   gboolean can_change = FALSE;
   gboolean can_change_all = FALSE;
   gboolean can_ignore = FALSE;
@@ -141,8 +144,21 @@ _gbp_spell_widget_update_actions (GbpSpellWidget *self)
       can_change_all = TRUE;
       can_move_next_word = TRUE;
 
-      can_ignore = self->current_word_count > 0;
-      can_ignore_all = self->current_word_count > 1;
+      if (self->editor_view_addin != NULL)
+        {
+          if (NULL != (navigator = gbp_spell_editor_view_addin_get_navigator (self->editor_view_addin)))
+            word_counted = gbp_spell_navigator_get_is_words_counted (GBP_SPELL_NAVIGATOR (navigator));
+        }
+
+      if (word_counted)
+        {
+          can_ignore = self->current_word_count > 0;
+          can_ignore_all = self->current_word_count > 1;
+        }
+      else
+        {
+          can_ignore = can_ignore_all = TRUE;
+        }
     }
 
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "spell-widget", "change",
