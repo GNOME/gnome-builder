@@ -5,13 +5,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-builder master\n"
+"Project-Id-Version: gnome-builder gnome-3.24\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-16 20:45+0000\n"
-"PO-Revision-Date: 2017-03-18 09:42+0100\n"
+"builder&keywords=I18N+L10N&component=translations (i18n)\n"
+"POT-Creation-Date: 2017-06-19 01:31+0000\n"
+"PO-Revision-Date: 2017-07-28 22:55+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,23 +19,23 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: contrib/egg/egg-animation.c:726 contrib/pnl/pnl-animation.c:701
+#: contrib/egg/egg-animation.c:730 contrib/pnl/pnl-animation.c:701
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Nelze najít vlastnost %s ve třídě %s"
 
-#: contrib/egg/egg-animation.c:1073 contrib/egg/egg-animation.c:1079
+#: contrib/egg/egg-animation.c:1077 contrib/egg/egg-animation.c:1083
 #: contrib/pnl/pnl-animation.c:1053 contrib/pnl/pnl-animation.c:1059
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Selhalo vyhledání vlastnosti %s v %s"
 
-#: contrib/egg/egg-animation.c:1087 contrib/pnl/pnl-animation.c:1067
+#: contrib/egg/egg-animation.c:1091 contrib/pnl/pnl-animation.c:1067
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Selhalo vyhledání vlastnosti %s v %s nebo rodiči %s"
 
-#: contrib/egg/egg-animation.c:1097 contrib/pnl/pnl-animation.c:1077
+#: contrib/egg/egg-animation.c:1101 contrib/pnl/pnl-animation.c:1077
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Selhalo získání hodnoty va_list: %s"
@@ -66,7 +66,7 @@ msgstr[2] "Před %u roky"
 
 #: contrib/egg/egg-file-chooser-entry.c:100
 #: contrib/egg/egg-file-chooser-entry.c:489
-#: libide/greeter/ide-greeter-perspective.c:683
+#: libide/greeter/ide-greeter-perspective.c:685
 #: libide/workbench/ide-workbench-actions.c:76
 #: plugins/color-picker/gb-color-picker-prefs.c:210
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
@@ -98,7 +98,7 @@ msgstr "Procházet…"
 #: contrib/egg/egg-file-chooser-entry.c:488
 #: libide/editor/ide-editor-view-actions.c:315
 #: libide/editor/ide-editor-view-actions.c:446
-#: libide/greeter/ide-greeter-perspective.c:682
+#: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:77
 #: plugins/color-picker/gb-color-picker-prefs.c:98
 #: plugins/color-picker/gb-color-picker-prefs.c:214
@@ -300,7 +300,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5866
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -354,6 +354,18 @@ msgid ""
 msgstr ""
 "Počet procesů použitých pri sestavování. -1 pro vhodný výchozí. 0 pro "
 "celkový počet procesorových jader."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Allow network when metered"
+msgstr "Povolit síť při měření"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"Povolit automatické přenosy během sestavování, jako je stahování SDK a "
+"závislostí, i když jsou u spojení přenosy měřené."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Suggest Snippet Completion"
@@ -581,7 +593,7 @@ msgid "Search directories for projects."
 msgstr "Vyhledávat ve složkách projekty."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Projects directory"
 msgstr "Složka s projekty"
 
@@ -748,11 +760,11 @@ msgstr "Z_novu"
 msgid "C_ut"
 msgstr "_Vyjmout"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:28
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:249 plugins/terminal/gtk/menus.ui:33
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:32
+#: data/gtk/menus.ui:141 data/gtk/menus.ui:253 plugins/terminal/gtk/menus.ui:37
 msgid "_Paste"
 msgstr "V_ložit"
 
@@ -768,15 +780,15 @@ msgstr "Zvýrazňování"
 msgid "Spellchecking"
 msgstr "Kontrola pravopisu"
 
-#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:38
+#: data/gtk/menus.ui:160 plugins/terminal/gtk/menus.ui:43
 msgid "Selection"
 msgstr "Výběr"
 
-#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:40
+#: data/gtk/menus.ui:162 data/gtk/menus.ui:263 plugins/terminal/gtk/menus.ui:45
 msgid "Select _All"
 msgstr "Vybrat vš_e"
 
-#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:45
+#: data/gtk/menus.ui:167 plugins/terminal/gtk/menus.ui:50
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
@@ -1053,94 +1065,98 @@ msgstr "PŘÍKAZ"
 msgid "No commands available"
 msgstr "Nejsou k dispozici žádné příkazy"
 
-#: libide/application/ide-application-command-line.c:374
+#: libide/application/ide-application-command-line.c:387
 msgid "Please provide a command"
 msgstr "Zadejte prosím příkaz"
 
-#: libide/application/ide-application-command-line.c:384
+#: libide/application/ide-application-command-line.c:397
 msgid "No such tool"
 msgstr "Takový nástroj neexistuje"
 
-#: libide/application/ide-application-command-line.c:398
+#: libide/application/ide-application-command-line.c:411
 msgid "Please provide a worker type"
 msgstr "Zadejte prosím typ sestavovacího procesu"
 
-#: libide/application/ide-application-command-line.c:405
+#: libide/application/ide-application-command-line.c:418
 msgid "Please provide a D-Bus address"
 msgstr "Zadejte prosím adresu D-Bus"
 
-#: libide/application/ide-application-command-line.c:414
+#: libide/application/ide-application-command-line.c:427
 msgid "No such worker"
 msgstr "Takový sestavovací proces neexistuje"
 
-#: libide/buffers/ide-buffer.c:2476
+#: libide/buffers/ide-buffer.c:2517
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
-#: libide/buffers/ide-buffer-manager.c:672
+#: libide/buffers/ide-buffer-manager.c:677
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: libide/buffers/ide-buffer-manager.c:1764
+#: libide/buffers/ide-buffer-manager.c:1771
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1798
+#: libide/buffers/ide-buffer-manager.c:1805
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Selhalo uložení vyrovnávací paměti, ignoruje se opětovné použití."
 
-#: libide/buildsystem/ide-build-pipeline.c:2091
+#: libide/buildsystem/ide-build-pipeline.c:2143
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2106
+#: libide/buildsystem/ide-build-pipeline.c:2158
 msgid "Downloading…"
 msgstr "Stahuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2110
+#: libide/buildsystem/ide-build-pipeline.c:2162
 msgid "Building dependencies…"
 msgstr "Sestavují se závislosti…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2114
+#: libide/buildsystem/ide-build-pipeline.c:2166
 msgid "Bootstrapping…"
 msgstr "Připravuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2118
+#: libide/buildsystem/ide-build-pipeline.c:2170
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2122
+#: libide/buildsystem/ide-build-pipeline.c:2174
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2126
+#: libide/buildsystem/ide-build-pipeline.c:2178
 msgid "Installing…"
 msgstr "Instaluje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2130
+#: libide/buildsystem/ide-build-pipeline.c:2182
 msgid "Exporting…"
 msgstr "Exportuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2134
-#: libide/buildsystem/ide-build-pipeline.c:2138
+#: libide/buildsystem/ide-build-pipeline.c:2186
+#: libide/buildsystem/ide-build-pipeline.c:2190
 msgid "Success"
 msgstr "Úspěšné"
 
-#: libide/buildsystem/ide-build-pipeline.c:2142
+#: libide/buildsystem/ide-build-pipeline.c:2194
 #: libide/workbench/ide-omni-bar.ui:332
 msgid "Failed"
 msgstr "Selhalo"
 
-#: libide/buildsystem/ide-build-pipeline.c:2146
+#: libide/buildsystem/ide-build-pipeline.c:2198
 msgid "Preparing…"
 msgstr "Připravuje se…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2150
+#: libide/buildsystem/ide-build-pipeline.c:2202
 msgid "Ready"
 msgstr "Připraveno"
 
-#: libide/buildsystem/ide-configuration-manager.c:76
+#: libide/buildsystem/ide-build-stage-transfer.c:108
+msgid "Cannot execute transfer while on metered connection"
+msgstr "Na měřeném připojení nelze provádět přenosy"
+
+#: libide/buildsystem/ide-configuration-manager.c:86
 #: libide/preferences/ide-preferences-builtin.c:337
 #: libide/preferences/ide-preferences-builtin.c:355
 msgid "Default"
@@ -1198,7 +1214,7 @@ msgstr "Běhové prostředí"
 msgid "Environment"
 msgstr "Proměnné prostředí"
 
-#: libide/buildui/ide-build-log-panel.c:732
+#: libide/buildui/ide-build-log-panel.c:736
 msgid "Build Output"
 msgstr "Výpis ze sestavení"
 
@@ -1649,11 +1665,11 @@ msgstr ""
 msgid "Failed to load the project"
 msgstr "Selhalo načtení projektu"
 
-#: libide/greeter/ide-greeter-perspective.c:678
+#: libide/greeter/ide-greeter-perspective.c:680
 msgid "Open Project"
 msgstr "Otevření projektu"
 
-#: libide/greeter/ide-greeter-perspective.c:694
+#: libide/greeter/ide-greeter-perspective.c:696
 msgid "All Project Types"
 msgstr "Všechny typy projektů"
 
@@ -2439,45 +2455,61 @@ msgstr "Sestavovací procesy"
 msgid "Number of parallel build workers"
 msgstr "Počet souběžných sestavovacích procesů"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:386
+msgid "Network"
+msgstr "Síť"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid "Allow downloads over metered connections"
+msgstr "Povolit stahování přes měřená připojení"
+
+#: libide/preferences/ide-preferences-builtin.c:387
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+"Povolit použití měřených síťových připojení, když se automaticky stahují "
+"závislosti"
+
+#: libide/preferences/ide-preferences-builtin.c:393
 msgid "Projects"
 msgstr "Projekty"
 
-#: libide/preferences/ide-preferences-builtin.c:392
+#: libide/preferences/ide-preferences-builtin.c:395
 msgid "Workspace"
 msgstr "Pracovní plocha"
 
-#: libide/preferences/ide-preferences-builtin.c:393
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "A place for all your projects"
 msgstr "Místo pro všechny vaše projekty"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Restore previously opened files"
 msgstr "Obnovovat naposledy otevřené soubory"
 
-#: libide/preferences/ide-preferences-builtin.c:394
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Open previously opened files when loading a project"
 msgstr "Po načtení projektu otevřít naposledy otevřené soubory"
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Project Discovery"
 msgstr "Vyhledávání projektů"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Discover projects on my computer"
 msgstr "Vyhledávat projekty v mém počítači"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Scan your computer for existing projects"
 msgstr "Procházet můj počítač a hledat v něm stávající projekty"
 
-#: libide/preferences/ide-preferences-builtin.c:518
+#: libide/preferences/ide-preferences-builtin.c:521
 #: plugins/create-project/gbp-create-project-widget.ui:153
 msgid "Version Control"
 msgstr "Systém správy verzí"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:530
+#: libide/preferences/ide-preferences-builtin.c:533
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2522,7 +2554,7 @@ msgstr "Spustit"
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: libide/runner/ide-run-manager.c:324
+#: libide/runner/ide-run-manager.c:319
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
@@ -2552,23 +2584,34 @@ msgstr "Selhalo otevření složky: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5322
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5324
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5438
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5865
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: libide/sourceview/ide-source-view.c:6104
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
+
+#: libide/sourceview/ide-source-view.c:6130
+#| msgid "No projects found"
+msgid "No references were found"
+msgstr "Nebyly nalezeny žádné odkazy"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -3276,29 +3319,30 @@ msgstr "Klonovat"
 msgid "Network is not available, skipping downloads"
 msgstr "Síť není dostupná, přeskakuje se stahování"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:96
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:89
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:119
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
-#: plugins/rustup/rustup_plugin/__init__.py:596
+#: plugins/html-preview/html_preview_plugin/__init__.py:303
+#: plugins/html-preview/html_preview_plugin/__init__.py:313
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+#: plugins/rustup/rustup_plugin/__init__.py:615
 msgid "Install"
 msgstr "Instalovat"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:102
-#: plugins/rustup/rustup_plugin/__init__.py:477
-#: plugins/rustup/rustup_plugin/__init__.py:481
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Aktualizovat"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:277
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:290
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:292
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:305
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
@@ -3306,16 +3350,16 @@ msgstr[0] "Zobrazit %u další běhové prostředí"
 msgstr[1] "Zobrazit %u další běhová prostředí"
 msgstr[2] "Zobrazit %u dalších běhových prostředí"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:360
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:375
 msgid "Flatpak Runtimes"
 msgstr "Běhová prostředí Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:714
+#: plugins/flatpak/gbp-flatpak-runtime.c:722
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:716
+#: plugins/flatpak/gbp-flatpak-runtime.c:724
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3479,9 +3523,13 @@ msgstr ""
 msgid "Preview as HTML"
 msgstr "Náhled v podobě HTML"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:115
+#: plugins/html-preview/html_preview_plugin/__init__.py:299
 msgid "Your computer is missing python3-docutils"
 msgstr "Ve vašem počítači schází python3-docutils"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:309
+msgid "Your computer is missing python3-sphinx"
+msgstr "Ve vašem počítači schází python3-sphinx"
 
 #: plugins/jedi/jedi_plugin.py:732
 msgid "Suggest Python completions"
@@ -3617,103 +3665,103 @@ msgstr "Zvýrazňovat všechny výskyty slov shodující se s aktuálním výbě
 msgid "quick highlight words matching current selection"
 msgstr "rychlé zvýraznění slova odpovídající vyhovující aktuálnímu výběru"
 
-#: plugins/rustup/rustup_plugin/__init__.py:80
+#: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
 msgstr "Rustup není nainstalován"
 
-#: plugins/rustup/rustup_plugin/__init__.py:277
+#: plugins/rustup/rustup_plugin/__init__.py:282
 msgid "Installing rustup"
 msgstr "Instaluje se rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:279
+#: plugins/rustup/rustup_plugin/__init__.py:284
 msgid "Updating rustup"
 msgstr "Aktualizuje se rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:281
+#: plugins/rustup/rustup_plugin/__init__.py:286
 msgid "Installing rust "
 msgstr "Instaluje se rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:283
+#: plugins/rustup/rustup_plugin/__init__.py:288
 msgid "Checking system"
 msgstr "Kontroluje se systém"
 
-#: plugins/rustup/rustup_plugin/__init__.py:337
+#: plugins/rustup/rustup_plugin/__init__.py:357
 msgid "Downloading rustup-init"
 msgstr "Stahuje se rustup-init"
 
-#: plugins/rustup/rustup_plugin/__init__.py:342
+#: plugins/rustup/rustup_plugin/__init__.py:362
 msgid "Syncing channel updates"
 msgstr "Synchronizují se aktualizace kanálu"
 
-#: plugins/rustup/rustup_plugin/__init__.py:348
+#: plugins/rustup/rustup_plugin/__init__.py:368
 msgid "Downloading "
 msgstr "Stahuje se "
 
-#: plugins/rustup/rustup_plugin/__init__.py:355
+#: plugins/rustup/rustup_plugin/__init__.py:375
 msgid "Installing "
 msgstr "Instaluje se "
 
-#: plugins/rustup/rustup_plugin/__init__.py:361
+#: plugins/rustup/rustup_plugin/__init__.py:381
 msgid "Checking for rustup updates"
 msgstr "Kontrolují se aktualizace pro rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:366
+#: plugins/rustup/rustup_plugin/__init__.py:386
 msgid "Downloading rustup update"
 msgstr "Stahuje se aktualizace rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:403
+#: plugins/rustup/rustup_plugin/__init__.py:423
 msgid "Error installing "
 msgstr "Chyba při instalaci"
 
-#: plugins/rustup/rustup_plugin/__init__.py:405
+#: plugins/rustup/rustup_plugin/__init__.py:425
 msgid "Error"
 msgstr "Chyba"
 
-#: plugins/rustup/rustup_plugin/__init__.py:411
+#: plugins/rustup/rustup_plugin/__init__.py:430
 msgid "Cancelled"
 msgstr "Zrušeno"
 
-#: plugins/rustup/rustup_plugin/__init__.py:419
+#: plugins/rustup/rustup_plugin/__init__.py:438
 msgid "Finished"
 msgstr "Dokončeno"
 
-#: plugins/rustup/rustup_plugin/__init__.py:433
+#: plugins/rustup/rustup_plugin/__init__.py:452
 msgid "Rustup"
 msgstr "Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:434
+#: plugins/rustup/rustup_plugin/__init__.py:453
 msgid "Rustup Toolchains"
 msgstr "Sada programátorských nástrojů Rustup"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Updating"
 msgstr "Aktualizuje se"
 
-#: plugins/rustup/rustup_plugin/__init__.py:489
+#: plugins/rustup/rustup_plugin/__init__.py:508
 msgid "Installing"
 msgstr "Instaluje se"
 
 #. set default toolchain button
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Make default"
 msgstr "Natavit jako výchozí"
 
-#: plugins/rustup/rustup_plugin/__init__.py:580
+#: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Makes the selected toolchain the default rust installation"
 msgstr ""
 "Natavit vybranou sadu programátorských nástrojů jako výchozí pro instalaci "
 "jazyka rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:595
+#: plugins/rustup/rustup_plugin/__init__.py:614
 msgid "Install Rust Channel"
 msgstr "Instalace kanálu Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: plugins/rustup/rustup_plugin/__init__.py:600
+#: plugins/rustup/rustup_plugin/__init__.py:619
 msgid "Enter name of rust channel"
 msgstr "Zadejte název kanálu rust"
 
-#: plugins/rustup/rustup_plugin/__init__.py:601
+#: plugins/rustup/rustup_plugin/__init__.py:620
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -3730,17 +3778,17 @@ msgstr ""
 "                        <datum>     = RRRR-MM-DD\n"
 "                        <hostitel>  = <trojice-cíle>"
 
-#: plugins/rustup/rustup_plugin/__init__.py:626
+#: plugins/rustup/rustup_plugin/__init__.py:645
 msgid "Install Rustup to manage toolchains here!"
 msgstr ""
 "Nainstalujte Rustup, abyste zde mohli spravovat sadu programátorských "
 "nástrojů!"
 
-#: plugins/rustup/rustup_plugin/__init__.py:633
+#: plugins/rustup/rustup_plugin/__init__.py:652
 msgid "No toolchain installed. Click"
 msgstr "Není nainstalována žádná sada programátorských nástrojů. Klikněte na"
 
-#: plugins/rustup/rustup_plugin/__init__.py:634
+#: plugins/rustup/rustup_plugin/__init__.py:653
 msgid "to add a new toolchain!"
 msgstr "pro přidání nové sady programátorských nástrojů."
 
@@ -3842,15 +3890,19 @@ msgstr "Výpis z běhu"
 msgid "_New Terminal"
 msgstr "_Nový terminál"
 
-#: plugins/terminal/gtk/menus.ui:15
+#: plugins/terminal/gtk/menus.ui:11
+msgid "_New Runtime Terminal"
+msgstr "_Nový běhový terminál"
+
+#: plugins/terminal/gtk/menus.ui:20
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: plugins/terminal/gtk/menus.ui:20
+#: plugins/terminal/gtk/menus.ui:25
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: plugins/todo/todo_plugin/__init__.py:193
+#: plugins/todo/todo_plugin/__init__.py:196
 msgid "Todo"
 msgstr "Úkoly"
 
