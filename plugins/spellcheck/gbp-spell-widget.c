@@ -1046,11 +1046,6 @@ gbp_spell_widget_init (GbpSpellWidget *self)
 
   self->editor_view_addin_signals = dzl_signal_group_new (GBP_TYPE_SPELL_EDITOR_VIEW_ADDIN);
 
-  dzl_signal_group_connect_swapped (self->editor_view_addin_signals,
-                                    "notify::words-counted",
-                                    G_CALLBACK (gbp_spell_widget__words_counted_cb),
-                                    self);
-
   g_signal_connect_swapped (self->editor_view_addin_signals,
                             "bind",
                             G_CALLBACK (gbp_spell_widget_bind_addin),
@@ -1084,6 +1079,8 @@ void
 gbp_spell_widget_set_editor (GbpSpellWidget *self,
                              IdeEditorView  *editor)
 {
+  GspellNavigator *navigator;
+
   g_return_if_fail (GBP_IS_SPELL_WIDGET (self));
   g_return_if_fail (!editor || IDE_IS_EDITOR_VIEW (editor));
 
@@ -1092,7 +1089,15 @@ gbp_spell_widget_set_editor (GbpSpellWidget *self,
       IdeEditorViewAddin *addin = NULL;
 
       if (editor != NULL)
-        addin = ide_editor_view_addin_find_by_module_name (editor, "spellcheck-plugin");
+        {
+          addin = ide_editor_view_addin_find_by_module_name (editor, "spellcheck-plugin");
+          navigator = gbp_spell_editor_view_addin_get_navigator (GBP_SPELL_EDITOR_VIEW_ADDIN (addin));
+          g_signal_connect_object (navigator,
+                                   "notify::words-counted",
+                                   G_CALLBACK (gbp_spell_widget__words_counted_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
 
       dzl_signal_group_set_target (self->editor_view_addin_signals, addin);
 
