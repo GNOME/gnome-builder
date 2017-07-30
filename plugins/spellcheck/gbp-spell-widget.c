@@ -850,6 +850,7 @@ gbp_spell_widget_constructed (GObject *object)
   GbpSpellWidget *self = (GbpSpellWidget *)object;
 
   _gbp_spell_widget_init_actions (self);
+  gbp_spell_widget__word_entry_changed_cb (self, self->word_entry);
 
   g_signal_connect_swapped (self->word_entry,
                             "changed",
@@ -1057,8 +1058,6 @@ gbp_spell_widget_init (GbpSpellWidget *self)
   self->dict = gbp_spell_dict_new (NULL);
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  gbp_spell_widget__word_entry_changed_cb (self, self->word_entry);
 
   g_signal_connect_swapped (self->dict_words_list,
                             "key-press-event",
