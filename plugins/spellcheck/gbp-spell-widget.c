@@ -768,7 +768,7 @@ gbp_spell_widget__populate_popup_cb (GbpSpellWidget *self,
   checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
   text = gtk_entry_get_text (entry);
 
-  if (self->is_word_entry_valid || ide_str_empty0 (text))
+  if (!self->is_word_entry_valid && !ide_str_empty0 (text))
     suggestions = gspell_checker_get_suggestions (checker, text, -1);
 
   if (suggestions == NULL)
