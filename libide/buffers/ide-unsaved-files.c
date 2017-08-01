@@ -32,6 +32,7 @@
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
 #include "projects/ide-project.h"
+#include "util/ide-line-reader.h"
 
 typedef struct
 {
@@ -311,10 +312,11 @@ ide_unsaved_files_restore_worker (GTask        *task,
   AsyncState *state = task_data;
   g_autofree gchar *manifest_contents = NULL;
   g_autofree gchar *manifest_path = NULL;
-  gchar **lines;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeLineReader reader;
+  gchar *line;
+  gsize line_len;
   gsize len;
-  gsize i;
 
   IDE_ENTRY;
 
@@ -336,13 +338,22 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
   if (!g_file_get_contents (manifest_path, &manifest_contents, &len, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  lines = g_strsplit (manifest_contents, "\n", 0);
+  if (len > G_MAXSSIZE)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NO_SPACE,
+                               "File is too large to load");
+      return;
+    }
 
-  for (i = 0; lines [i]; i++)
+  ide_line_reader_init (&reader, manifest_contents, len);
+
+  while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
     {
       g_autoptr(GFile) file = NULL;
       gchar *contents = NULL;
@@ -351,17 +362,19 @@ ide_unsaved_files_restore_worker (GTask        *task,
       UnsavedFile *unsaved;
       gsize data_len;
 
-      if (!*lines [i])
+      line[line_len] = '\0';
+
+      if (ide_str_empty0 (line))
         continue;
 
-      file = g_file_new_for_uri (lines [i]);
+      file = g_file_new_for_uri (line);
       if (!file || !g_file_query_exists (file, NULL))
         continue;
 
-      hash = hash_uri (lines [i]);
+      hash = hash_uri (line);
       path = g_build_filename (state->drafts_directory, hash, NULL);
 
-      g_debug ("Loading draft for \"%s\" from \"%s\"", lines [i], path);
+      g_debug ("Loading draft for \"%s\" from \"%s\"", line, path);
 
       if (!g_file_get_contents (path, &contents, &data_len, &error))
         {
@@ -376,8 +389,6 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       g_ptr_array_add (state->unsaved_files, unsaved);
     }
-
-  g_strfreev (lines);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -398,6 +409,7 @@ ide_unsaved_files_restore_async (IdeUnsavedFiles     *files,
   state = async_state_new (files);
 
   task = g_task_new (files, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, state, async_state_free);
   g_task_run_in_thread (task, ide_unsaved_files_restore_worker);
 }
