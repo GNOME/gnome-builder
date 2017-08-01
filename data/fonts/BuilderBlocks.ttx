@@ -6,6 +6,7 @@
     <GlyphID id="0" name=".notdef"/>
     <GlyphID id="1" name="block"/>
     <GlyphID id="2" name="empty"/>
+    <GlyphID id="3" name="smallblock"/>
   </GlyphOrder>
 
   <head>
@@ -52,7 +53,7 @@
   <maxp>
     <!-- Most of this table will be recalculated by the compiler -->
     <tableVersion value="0x10000"/>
-    <numGlyphs value="2"/>
+    <numGlyphs value="4"/>
     <maxPoints value="0"/>
     <maxContours value="0"/>
     <maxCompositePoints value="0"/>
@@ -72,6 +73,7 @@
     <mtx name=".notdef" width="1024" lsb="0"/>
     <mtx name="block" width="1024" lsb="0"/>
     <mtx name="empty" width="1024" lsb="0"/>
+    <mtx name="smallblock" width="1024" lsb="0"/>
   </hmtx>
 
   <loca>
@@ -86,6 +88,15 @@
         <pt x="1024" y="0" on="1"/>
         <pt x="1024" y="2048" on="1"/>
         <pt x="0" y="2048" on="1"/>
+      </contour>
+      <instructions><assembly></assembly></instructions>
+    </TTGlyph>
+    <TTGlyph name="smallblock">
+      <contour>
+        <pt x="0" y="0" on="1"/>
+        <pt x="1024" y="0" on="1"/>
+        <pt x="1024" y="1024" on="1"/>
+        <pt x="0" y="1024" on="1"/>
       </contour>
       <instructions><assembly></assembly></instructions>
     </TTGlyph>
@@ -105,13 +116,19 @@
         0003 000A <!-- platformID encodingID -->
         0000000C  <!-- offset -->
           000D 0000 <!-- format reserved -->
-          00000028  <!-- length -->
+          00000040  <!-- length -->
           00000000  <!-- language -->
-          00000002  <!-- nGroups -->
+          00000004  <!-- nGroups -->
             00000001  <!-- startCharCode -->
             00000020  <!-- endCharCode -->
             00000002  <!-- glyphID -->
             00000021  <!-- startCharCode -->
+            00000060  <!-- endCharCode -->
+            00000001  <!-- glyphID -->
+            00000061  <!-- startCharCode -->
+            0000007A  <!-- endCharCode -->
+            00000003  <!-- glyphID -->
+            0000007B  <!-- startCharCode -->
             0010FFFE  <!-- endCharCode -->
             00000001  <!-- glyphID -->
     </hexdata>
