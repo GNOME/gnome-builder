@@ -45,6 +45,7 @@
             <property name="visible">true</property>
             <child>
               <object class="GtkButton">
+                <property name="tooltip-text" translatable="yes">Open file</property>
                 <property name="action-name">editor.open-file</property>
                 <property name="visible">true</property>
                 <style>
@@ -61,6 +62,7 @@
             <child>
               <object class="GtkButton">
                 <property name="visible">true</property>
+                <property name="tooltip-text" translatable="yes">New file</property>
                 <property name="action-name">editor.new-file</property>
                 <style>
                   <class name="image-button"/>
@@ -75,6 +77,7 @@
             </child>
             <child>
               <object class="GtkButton">
+                <property name="tooltip-text" translatable="yes">New terminal</property>
                 <property name="action-name">win.new-terminal</property>
                 <property name="visible">true</property>
                 <style>
@@ -90,6 +93,7 @@
             </child>
             <child>
               <object class="GtkButton">
+                <property name="tooltip-text" translatable="yes">New documentation</property>
                 <property name="action-name">devhelp.new-view</property>
                 <property name="visible">true</property>
                 <style>
