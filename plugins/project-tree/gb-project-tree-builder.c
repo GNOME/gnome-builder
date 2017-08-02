@@ -27,7 +27,7 @@ struct _GbProjectTreeBuilder
 {
   DzlTreeBuilder  parent_instance;
 
-  GSettings      *file_chooser_settings;
+  GSettings      *settings;
 
   guint           sort_directories_first : 1;
 };
@@ -390,7 +390,7 @@ gb_project_tree_builder_finalize (GObject *object)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)object;
 
-  g_clear_object (&self->file_chooser_settings);
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (gb_project_tree_builder_parent_class)->finalize (object);
 }
@@ -411,11 +411,10 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
 static void
 gb_project_tree_builder_init (GbProjectTreeBuilder *self)
 {
-  self->file_chooser_settings = g_settings_new ("org.gtk.Settings.FileChooser");
-  self->sort_directories_first = g_settings_get_boolean (self->file_chooser_settings,
-                                                         "sort-directories-first");
+  self->settings = g_settings_new ("org.gnome.builder.project-tree");
+  self->sort_directories_first = g_settings_get_boolean (self->settings, "sort-directories-first");
 
-  g_signal_connect_object (self->file_chooser_settings,
+  g_signal_connect_object (self->settings,
                            "changed::sort-directories-first",
                            G_CALLBACK (gb_project_tree_builder_rebuild),
                            self,

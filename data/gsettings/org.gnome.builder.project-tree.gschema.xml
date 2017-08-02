@@ -10,5 +10,10 @@
       <summary>Show Ignored Files</summary>
       <description>If enabled, the project tree will display files that are ignored by the VCS.</description>
     </key>
+    <key name="sort-directories-first" type="b">
+      <default>true</default>
+      <summary>Sort Directories First</summary>
+      <description>If enabled, the project tree will sort directories before regular files.</description>
+    </key>
   </schema>
 </schemalist>

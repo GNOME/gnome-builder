@@ -832,27 +832,21 @@ static GActionEntry GbProjectTreeActions[] = {
 void
 gb_project_tree_actions_init (GbProjectTree *self)
 {
-  g_autoptr(GSettings) settings = NULL;
   g_autoptr(GSettings) tree_settings = NULL;
   g_autoptr(GSimpleActionGroup) actions = NULL;
   GAction *action;
 
   actions = g_simple_action_group_new ();
-
-  settings = g_settings_new ("org.gtk.Settings.FileChooser");
-  action = g_settings_create_action (settings, "sort-directories-first");
-  g_action_map_add_action (G_ACTION_MAP (actions), action);
-  g_clear_object (&action);
-
   g_action_map_add_action_entries (G_ACTION_MAP (actions),
                                    GbProjectTreeActions,
                                    G_N_ELEMENTS (GbProjectTreeActions),
                                    self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "project-tree",
-                                  G_ACTION_GROUP (actions));
 
   tree_settings = g_settings_new ("org.gnome.builder.project-tree");
+
+  action = g_settings_create_action (tree_settings, "sort-directories-first");
+  g_action_map_add_action (G_ACTION_MAP (actions), action);
+  g_clear_object (&action);
 
   action = g_settings_create_action (tree_settings, "show-ignored-files");
   g_action_map_add_action (G_ACTION_MAP (actions), action);
@@ -861,6 +855,10 @@ gb_project_tree_actions_init (GbProjectTree *self)
   action = g_settings_create_action (tree_settings, "show-icons");
   g_action_map_add_action (G_ACTION_MAP (actions), action);
   g_clear_object (&action);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "project-tree",
+                                  G_ACTION_GROUP (actions));
 
   gb_project_tree_actions_update (self);
 }
