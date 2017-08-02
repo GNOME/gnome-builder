@@ -1,10 +1,5 @@
 <schemalist>
   <schema id="org.gnome.builder.project-tree" path="/org/gnome/builder/project-tree/" gettext-domain="gnome-builder">
-    <key name="show" type="b">
-      <default>true</default>
-      <summary>Show Project Sidebar</summary>
-      <description>If enabled, the sidebar will be visible in the editor workspace.</description>
-    </key>
     <key name="show-icons" type="b">
       <default>true</default>
       <summary>Show Icons</summary>
