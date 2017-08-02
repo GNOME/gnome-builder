@@ -123,7 +123,10 @@ static void
 ide_application_register_search_paths (IdeApplication *self)
 {
   GtkSourceStyleSchemeManager *manager;
+  GtkSourceLanguageManager *languages;
   g_autofree gchar *gedit_path = NULL;
+  g_autofree gchar *lang_path = NULL;
+  const gchar * const *path;
 
   g_assert (IDE_IS_APPLICATION (self));
 
@@ -138,6 +141,27 @@ ide_application_register_search_paths (IdeApplication *self)
 
   if (g_getenv ("GB_IN_TREE_STYLE_SCHEMES") != NULL)
     gtk_source_style_scheme_manager_prepend_search_path (manager, SRCDIR"/data/style-schemes");
+
+  /* Make sure we load user-installed style schemes if using non-standard dirs */
+  languages = gtk_source_language_manager_get_default ();
+  path = gtk_source_language_manager_get_search_path (languages);
+  lang_path = g_build_filename (g_get_home_dir (),
+                                ".local",
+                                "share",
+                                "gtksourceview-3.0",
+                                "language-specs",
+                                NULL);
+  if (!g_strv_contains (path, lang_path))
+    {
+      g_autoptr(GPtrArray) ar = g_ptr_array_new ();
+
+      g_ptr_array_add (ar, lang_path);
+      for (guint i = 0; path[i]; i++)
+        g_ptr_array_add (ar, (gchar *)path[i]);
+      g_ptr_array_add (ar, NULL);
+
+      gtk_source_language_manager_set_search_path (languages, (gchar **)(gpointer)ar->pdata);
+    }
 }
 
 static void
