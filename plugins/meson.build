@@ -60,6 +60,7 @@ subdir('sysprof')
 subdir('terminal')
 subdir('todo')
 subdir('vala-pack')
+subdir('vala-langserv')
 subdir('valgrind')
 subdir('xml-pack')
 
@@ -113,6 +114,7 @@ status += [
   'Terminal .............. : @0@'.format(get_option('with_terminal')),
   'Todo .................. : @0@'.format(get_option('with_todo')),
   'Vala Language Pack .... : @0@'.format(get_option('with_vala_pack')),
+  'Vala Language Sever ... : @0@'.format(get_option('with_vala_langserv')),
   'Valgrind .............. : @0@'.format(get_option('with_valgrind')),
   'XML Language Pack ..... : @0@'.format(get_option('with_xml_pack')),
   '', '',

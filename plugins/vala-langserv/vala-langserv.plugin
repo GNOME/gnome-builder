@@ -1,0 +1,14 @@
+[Plugin]
+Module=vala_langserv_plugin
+Loader=python3
+Name=Vala Language Server Integration
+Description=Provides auto-completion, diagnostics, and other IDE features
+Authors=Ben Iofel <iofelben@gmail.com>
+Copyright=Copyright © 2017 Ben Iofel
+Builtin=true
+X-Completion-Provider-Languages=vala
+X-Diagnostic-Provider-Languages=vala
+X-Formatter-Languages=vala
+X-Highlighter-Languages=vala
+X-Rename-Provider-Languages=vala
+X-Symbol-Resolver-Languages=vala
