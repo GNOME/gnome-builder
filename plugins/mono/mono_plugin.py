@@ -5,7 +5,7 @@ import gi
 from gi.repository import Ide
 from gi.repository import GLib
 
-_ERROR_REGEX = ("(?<filename>[a-zA-Z0-9\\-\\.\\/]+.cs)" +
+_ERROR_REGEX = ("(?<filename>[a-zA-Z0-9\\-\\.\\/_]+.cs)" +
                 "\\((?<line>\\d+),(?<column>\\d+)\\): " +
                 "(?<level>[\\w\\s]+) " +
                 "(?<code>CS[0-9]+): " +

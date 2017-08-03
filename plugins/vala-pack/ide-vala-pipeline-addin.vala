@@ -27,7 +27,7 @@ namespace Ide
 	{
 		// main.vala:24.30-24.30: error: initializer list used for `Gtk.WindowType', which is neither array nor struct
 		const string ERROR_FORMAT_REGEX =
-			"(?<filename>[a-zA-Z0-9\\-\\.\\/]+.vala):" +
+			"(?<filename>[a-zA-Z0-9\\-\\.\\/_]+.vala):" +
 			"(?<line>\\d+).(?<column>\\d+)-(?<line2>\\d+).(?<column2>\\d+): " +
 			"(?<level>[\\w\\s]+): " +
 			"(?<message>.*)";

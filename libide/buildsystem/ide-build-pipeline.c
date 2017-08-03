@@ -2146,7 +2146,7 @@ ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,
  * For example, to extract warnings from GCC you might do something
  * like the following:
  *
- *   "(?<filename>[a-zA-Z0-9\\-\\.\\/]+):"
+ *   "(?<filename>[a-zA-Z0-9\\-\\.\\/_]+):"
  *   "(?<line>\\d+):"
  *   "(?<column>\\d+): "
  *   "(?<level>[\\w\\s]+): "
