@@ -17,7 +17,6 @@
 
 from os import path
 import threading
-import shutil
 import json
 import gi
 
@@ -32,7 +31,8 @@ from gi.repository import (
 
 _ = Ide.gettext
 
-_NINJA_NAMES = [ 'ninja-build', 'ninja' ]
+_NINJA_NAMES = ['ninja-build', 'ninja']
+
 
 def execInRuntime(runtime, *args, **kwargs):
     directory = kwargs.get('directory', None)
@@ -43,6 +43,7 @@ def execInRuntime(runtime, *args, **kwargs):
     proc = launcher.spawn(None)
     _, stdout, stderr = proc.communicate_utf8(None, None)
     return stdout
+
 
 def extract_flags(command: str, builddir: str):
     flags = GLib.shell_parse_argv(command)[1] # Raises on failure
@@ -57,6 +58,7 @@ def extract_flags(command: str, builddir: str):
         elif flag == '-include':
             wanted_flags += [flag, flags[i + 1]]
     return wanted_flags
+
 
 class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
