@@ -185,7 +185,13 @@ ide_xml_utils_skip_attribute_name (const gchar **cursor)
     return TRUE;
 
   if (!is_name_start_char (ch))
-    return (g_unichar_isspace (ch));
+    {
+      if (g_unichar_isspace (ch))
+        return TRUE;
+
+      *cursor = g_utf8_next_char (*cursor);
+      return FALSE;
+    }
 
   p = g_utf8_next_char (p);
   while ((ch = g_utf8_get_char (p)))

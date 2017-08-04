@@ -695,7 +695,10 @@ get_detail (IdeXmlSymbolNode  *node,
 
   if (*cursor == 0)
     {
-      if (!g_unichar_isspace (next_ch) && next_ch != '<' && next_ch != '>')
+      if (!g_unichar_isspace (next_ch) &&
+          next_ch != '<' &&
+          next_ch != '>' &&
+          next_ch != '/')
         return IDE_XML_POSITION_DETAIL_NONE;
       else
         {
