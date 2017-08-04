@@ -764,8 +764,8 @@ ide_python_indenter_is_trigger (IdeIndenter *indenter,
 {
   switch (event->keyval)
     {
-    case GDK_KEY_e:
-    case GDK_KEY_f:
+    case GDK_KEY_colon:
+    case GDK_KEY_space:
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
       return TRUE;
