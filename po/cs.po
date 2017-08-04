@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-07-24 09:01+0000\n"
-"PO-Revision-Date: 2017-07-29 23:17+0200\n"
+"POT-Creation-Date: 2017-08-02 00:34+0000\n"
+"PO-Revision-Date: 2017-08-04 07:52+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
 "Language: cs\n"
@@ -207,7 +207,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5867
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -529,35 +529,37 @@ msgid "If the plugin should be enabled"
 msgstr "Jestli má být zásuvný modul povolen"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-msgid "Show Project Sidebar"
-msgstr "Zobrazit boční panel projektu."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "If enabled, the sidebar will be visible in the editor workspace."
-msgstr ""
-"Když je zapnuto, bude v pracovní oblasti editoru viditelný postranní panel."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:84
 msgid "Show Icons"
 msgstr "Zobrazovat ikony"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the project tree will display icons next to each item."
 msgstr ""
 "Když je zapnuto, bude projektový strom vedle každé položky zobrazovat ikonu."
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:88
 msgid "Show Ignored Files"
 msgstr "Zobrazovat ignorované soubory"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
 "Když je zapnuto, bude projektový strom zobrazovat soubory, které jsou "
 "ignorovány systémem pro správu verzí."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:92
+msgid "Sort Directories First"
+msgstr "Složky zobrazovat na začátku"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"Když je zapnuto, budou se v projektovém stromě řadit složky před soubory."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
@@ -635,7 +637,7 @@ msgstr "O _aplikaci"
 msgid "_Quit"
 msgstr "U_končit"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:702
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
 #: libide/editor/ide-editor-perspective-shortcuts.c:33
 #: libide/editor/ide-editor-perspective-shortcuts.c:39
 #: libide/editor/ide-editor-perspective-shortcuts.c:45
@@ -692,15 +694,15 @@ msgstr "Z_novu"
 msgid "C_ut"
 msgstr "_Vyjmout"
 
-#: data/gtk/menus.ui:114 data/gtk/menus.ui:236 plugins/terminal/gtk/menus.ui:19
+#: data/gtk/menus.ui:114 data/gtk/menus.ui:229 plugins/terminal/gtk/menus.ui:19
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: data/gtk/menus.ui:118 data/gtk/menus.ui:240 plugins/terminal/gtk/menus.ui:23
+#: data/gtk/menus.ui:118 data/gtk/menus.ui:233 plugins/terminal/gtk/menus.ui:23
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: data/gtk/menus.ui:122 data/gtk/menus.ui:244
+#: data/gtk/menus.ui:122 data/gtk/menus.ui:237
 msgid "_Delete"
 msgstr "_Smazat"
 
@@ -713,7 +715,7 @@ msgstr "Zvýrazňování"
 msgid "Selection"
 msgstr "Výběr"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:250 plugins/terminal/gtk/menus.ui:31
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:243 plugins/terminal/gtk/menus.ui:31
 msgid "Select _All"
 msgstr "Vybrat vš_e"
 
@@ -745,102 +747,97 @@ msgstr "Spojit řádky"
 msgid "Sort Lines"
 msgstr "Seřadit řádky"
 
-#: data/gtk/menus.ui:181
-msgid "Spellchecking"
-msgstr "Kontrola pravopisu"
-
-#: data/gtk/menus.ui:190
+#: data/gtk/menus.ui:183
 msgid "Zoom"
 msgstr "Přiblížení"
 
-#: data/gtk/menus.ui:192
+#: data/gtk/menus.ui:185
 msgid "Zoom _In"
 msgstr "Přiblíž_it"
 
-#: data/gtk/menus.ui:197
+#: data/gtk/menus.ui:190
 msgid "Zoom _Out"
 msgstr "_Oddálit"
 
-#: data/gtk/menus.ui:203 plugins/terminal/gtk/menus.ui:51
+#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:51
 msgid "Reset"
 msgstr "Výchozí"
 
-#: data/gtk/menus.ui:214 libide/editor/ide-editor-search-bar.ui:205
+#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:205
 msgid "Regular expressions"
 msgstr "Regulární výraz"
 
-#: data/gtk/menus.ui:218 libide/editor/ide-editor-search-bar.ui:220
+#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:220
 #: plugins/terminal/gb-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "Rozlišovat velikost písmen"
 
-#: data/gtk/menus.ui:222 libide/editor/ide-editor-search-bar.ui:235
+#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:235
 msgid "Match whole word only"
 msgstr "Pouze shoda celých slov"
 
-#: data/gtk/menus.ui:226
+#: data/gtk/menus.ui:219
 msgid "_Wrap Around"
 msgstr "_Cyklicky přecházet přes okraj"
 
-#: data/gtk/menus.ui:232
+#: data/gtk/menus.ui:225
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: data/gtk/menus.ui:257
+#: data/gtk/menus.ui:250
 msgid "Frame"
 msgstr "Rám"
 
-#: data/gtk/menus.ui:259
+#: data/gtk/menus.ui:252
 msgid "Move Left"
 msgstr "Přesunout doleva"
 
-#: data/gtk/menus.ui:263
+#: data/gtk/menus.ui:256
 msgid "Move Right"
 msgstr "Přesunout doprava"
 
-#: data/gtk/menus.ui:268 data/gtk/menus.ui:328 plugins/devhelp/gtk/menus.ui:11
+#: data/gtk/menus.ui:261 data/gtk/menus.ui:321 plugins/devhelp/gtk/menus.ui:11
 #: plugins/terminal/gtk/menus.ui:63
 msgid "Close"
 msgstr "Zavřít"
 
-#: data/gtk/menus.ui:276
+#: data/gtk/menus.ui:269
 msgid "New File"
 msgstr "Nový soubor"
 
-#: data/gtk/menus.ui:283 libide/layout/ide-layout-stack.ui:102
+#: data/gtk/menus.ui:276 libide/layout/ide-layout-stack.ui:102
 msgid "Open File…"
 msgstr "Otevřít soubor…"
 
-#: data/gtk/menus.ui:290
+#: data/gtk/menus.ui:283
 msgid "Document"
 msgstr "Dokument"
 
-#: data/gtk/menus.ui:293
-#| msgid "_Open in Terminal"
+#: data/gtk/menus.ui:286
 msgid "Open in New Frame"
 msgstr "Otevřít v novém rámu"
 
-#: data/gtk/menus.ui:297 plugins/terminal/gtk/menus.ui:47
+#: data/gtk/menus.ui:290 plugins/terminal/gtk/menus.ui:47
 msgid "Split"
 msgstr "Rozdělit"
 
-#: data/gtk/menus.ui:302 plugins/devhelp/gtk/menus.ui:7
+#: data/gtk/menus.ui:295 plugins/devhelp/gtk/menus.ui:7
 msgid "Print…"
 msgstr "Tisk…"
 
-#: data/gtk/menus.ui:309
+#: data/gtk/menus.ui:302
 msgid "Document Preferences"
 msgstr "Předvolby dokumentu"
 
-#: data/gtk/menus.ui:317 libide/buildui/ide-build-log-panel.c:740
+#: data/gtk/menus.ui:310 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
 msgstr "_Uložit"
 
-#: data/gtk/menus.ui:321
+#: data/gtk/menus.ui:314
 msgid "Save _As"
 msgstr "Uložit j_ako"
 
-#: data/gtk/menus.ui:338 libide/runner/ide-run-manager.c:1089
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1089
 msgid "Run"
 msgstr "Spustit"
 
@@ -1448,8 +1445,6 @@ msgstr "Přepnout navigační panel"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:53
 #: libide/editor/ide-editor-workbench-addin.c:164
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle utilities panel"
 msgstr "Přepnout panel s pomůckami"
 
@@ -1527,7 +1522,7 @@ msgid "Search languages…"
 msgstr "Vyhledat jazyky…"
 
 #. translators: first %u is the Nth position of second %u N occurrences
-#: libide/editor/ide-editor-search-bar.c:370
+#: libide/editor/ide-editor-search-bar.c:247
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
@@ -1553,7 +1548,6 @@ msgstr ""
 
 #: libide/editor/ide-editor-sidebar.ui:26
 #: libide/layout/ide-layout-stack-header.ui:21
-#| msgid "Open Project"
 msgid "Open Pages"
 msgstr "Otevřené stránky"
 
@@ -2090,6 +2084,23 @@ msgstr "Hledat text v terminálu"
 msgid "No Open Pages"
 msgstr "Nejsou otevřené žádné stránky"
 
+#: libide/layout/ide-layout-stack-header.ui:48
+msgid "Open file"
+msgstr "Otevřít soubor"
+
+#: libide/layout/ide-layout-stack-header.ui:65
+msgid "New file"
+msgstr "Nový soubor"
+
+#: libide/layout/ide-layout-stack-header.ui:80
+#: libide/layout/ide-layout-stack.ui:86
+msgid "New terminal"
+msgstr "Nový terminál"
+
+#: libide/layout/ide-layout-stack-header.ui:96
+msgid "New documentation"
+msgstr "Nová dokumentace"
+
 #: libide/layout/ide-layout-stack-shortcuts.c:34
 msgid "Move document to the right"
 msgstr "Přesunout dokument doprava"
@@ -2099,7 +2110,7 @@ msgid "Move document to the left"
 msgstr "Přesunout dokument doleva"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:48
-msgid "Search to the previous document"
+msgid "Switch to the previous document"
 msgstr "Přepnout na předchozí dokument"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:55
@@ -2129,10 +2140,6 @@ msgstr "Postranní panel projektu."
 #: libide/layout/ide-layout-stack.ui:77
 msgid "File chooser"
 msgstr "Výběr souborů"
-
-#: libide/layout/ide-layout-stack.ui:86
-msgid "New terminal"
-msgstr "Nový terminál"
 
 #: libide/layout/ide-layout-stack.ui:109
 msgid "New Terminal"
@@ -2336,8 +2343,8 @@ msgid "Automatically hide map when editor loses focus"
 msgstr "Když editor není zaměřený, automaticky skrýt přehledovou mapu"
 
 #: libide/preferences/ide-preferences-builtin.c:172
-msgid "Whitespace Characters"
-msgstr "Bílé znaky"
+msgid "Visible Whitespace Characters"
+msgstr "Viditelné bílé znaky"
 
 #: libide/preferences/ide-preferences-builtin.c:175
 msgid "New line and carriage return"
@@ -2631,31 +2638,31 @@ msgstr "Selhalo otevření složky: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5323
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: libide/sourceview/ide-source-view.c:5325
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: libide/sourceview/ide-source-view.c:5439
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: libide/sourceview/ide-source-view.c:5866
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6070
+#: libide/sourceview/ide-source-view.c:6061
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6096
+#: libide/sourceview/ide-source-view.c:6087
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
@@ -3293,7 +3300,8 @@ msgstr "Vyberte šablonu"
 msgid "Select Documentation…"
 msgstr "Vybrat dokumentaci"
 
-#: plugins/devhelp/gbp-devhelp-panel.c:194 plugins/devhelp/gtk/menus.ui:5
+#: plugins/devhelp/gbp-devhelp-panel.c:194
+#: plugins/devhelp/gbp-devhelp-view.c:206 plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Dokumentace"
 
@@ -3690,10 +3698,6 @@ msgstr "_Znovu sestavit"
 msgid "Display Options"
 msgstr "Zobrazovat volby"
 
-#: plugins/project-tree/gtk/menus.ui:92
-msgid "Sort Directories First"
-msgstr "Složky zobrazovat na začátku"
-
 #: plugins/project-tree/gtk/menus.ui:98
 msgid "_Collapse All Nodes"
 msgstr "S_balit všechny uzly"
@@ -3866,60 +3870,60 @@ msgstr "Žádné návrhy"
 msgid "Completed spell checking"
 msgstr "Dokončena kontrola pravopisu"
 
-#: plugins/spellcheck/gbp-spell-widget.c:420
+#: plugins/spellcheck/gbp-spell-widget.c:255
+msgid "The word is not in the dictionary"
+msgstr "Slovo není ve slovníku"
+
+#: plugins/spellcheck/gbp-spell-widget.c:426
 msgid "This word is already in the personal dictionary"
 msgstr "Toto slovo již v osobním slovníku je"
 
-#: plugins/spellcheck/gbp-spell-widget.c:423
+#: plugins/spellcheck/gbp-spell-widget.c:429
 #, c-format
 msgid "This word is already in the %s dictionary"
 msgstr "Toto slovo již ve slovníku %s je"
-
-#: plugins/spellcheck/gbp-spell-widget.c:1042
-msgid "The word is not in the dictionary"
-msgstr "Slovo není ve slovníku"
 
 #: plugins/spellcheck/gbp-spell-widget.ui:17
 msgid "Misspelled"
 msgstr "Chyba v pravopisu"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:69
+#: plugins/spellcheck/gbp-spell-widget.ui:86
 msgid "_Ignore"
 msgstr "_Ignorovat"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:78
+#: plugins/spellcheck/gbp-spell-widget.ui:95
 msgid "Ignore _All"
 msgstr "Ignorovat _vše"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:97
+#: plugins/spellcheck/gbp-spell-widget.ui:114
 msgid "Change _to"
 msgstr "Změni_t na"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:130
+#: plugins/spellcheck/gbp-spell-widget.ui:147
 msgid "Cha_nge"
 msgstr "Změ_nit"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:139
+#: plugins/spellcheck/gbp-spell-widget.ui:156
 msgid "Change A_ll"
 msgstr "Změnit vš_e"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:158
+#: plugins/spellcheck/gbp-spell-widget.ui:175
 msgid "_Suggestions"
 msgstr "Návr_hy"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:195
+#: plugins/spellcheck/gbp-spell-widget.ui:212
 msgid "Add Word"
 msgstr "Přidat slovo"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:220
+#: plugins/spellcheck/gbp-spell-widget.ui:238
 msgid "A_dd"
 msgstr "Při_dat"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:236
+#: plugins/spellcheck/gbp-spell-widget.ui:254
 msgid "Dictionary"
 msgstr "Slovník"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:286
+#: plugins/spellcheck/gbp-spell-widget.ui:304
 msgid "_Language"
 msgstr "_Jazyk"
 
@@ -3949,8 +3953,7 @@ msgid "Select Symbol…"
 msgstr "Vybrat symbol…"
 
 #: plugins/symbol-tree/gbp-symbol-menu-button.ui:13
-#: plugins/symbol-tree/gbp-symbol-menu-button.ui:75
-#| msgid "Documentation"
+#: plugins/symbol-tree/gbp-symbol-menu-button.ui:76
 msgid "Document Outline"
 msgstr "Obsah dokumentace"
 
@@ -4075,3 +4078,4 @@ msgstr "Selhalo vytvoření stromu XML"
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Vyrovnávací paměť byla načtena, ale není ve správci vyrovnávacích pamětí."
+
