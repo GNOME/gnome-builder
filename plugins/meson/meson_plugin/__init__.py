@@ -121,9 +121,17 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
                 return
 
             infile = task.ifile.get_path()
+            # If this is a header file we want the flags for a C/C++/Objc file.
+            # (Extensions Match GtkSourceViews list)
+            is_header = infile.endswith(('.h', '.hpp', '.hh', '.h++', '.hp'))
+            if is_header:
+                # So just try to find a compilable file with the same prefix as
+                # that is *probably* correct.
+                infile = infile.rpartition('.')[0] + '.'
             for c in commands:
                 filepath = path.normpath(path.join(c['directory'], c['file']))
-                if filepath == infile:
+                if (is_header is False and filepath == infile) or \
+                   (is_header is True and filepath.startswith(infile)):
                     try:
                         task.build_flags = extract_flags(c['command'], builddir)
                     except GLib.Error as e:
