@@ -47,13 +47,15 @@ def execInRuntime(runtime, *args, **kwargs):
 def extract_flags(command: str, builddir: str):
     flags = GLib.shell_parse_argv(command)[1] # Raises on failure
     wanted_flags = []
-    for flag in flags:
+    for i, flag in enumerate(flags):
         if flag.startswith('-I'):
             # All paths are relative to build
             abspath = path.normpath(path.join(builddir, flag[2:]))
             wanted_flags.append('-I' + abspath)
         elif flag.startswith(('-isystem', '-W', '-D', '-std')):
             wanted_flags.append(flag)
+        elif flag == '-include':
+            wanted_flags += [flag, flags[i + 1]]
     return wanted_flags
 
 class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
