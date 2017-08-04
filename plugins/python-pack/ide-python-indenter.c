@@ -762,10 +762,18 @@ static gboolean
 ide_python_indenter_is_trigger (IdeIndenter *indenter,
                                            GdkEventKey          *event)
 {
+  guint modifier_state;
+
+  modifier_state = gdk_keymap_get_modifier_state (gdk_keymap_get_default ());
+  if (modifier_state & GDK_SHIFT_MASK ||
+      modifier_state & GDK_CONTROL_MASK ||
+      modifier_state & GDK_MOD1_MASK)
+    return FALSE;
+
   switch (event->keyval)
     {
-    case GDK_KEY_colon:
-    case GDK_KEY_space:
+    case GDK_KEY_e:
+    case GDK_KEY_f:
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
       return TRUE;
