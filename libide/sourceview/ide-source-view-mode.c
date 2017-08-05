@@ -443,7 +443,7 @@ toplevel_is_offscreen (GdkWindow *window)
 }
 
 static gboolean
-can_supress (const GdkEventKey *event)
+can_suppress (const GdkEventKey *event)
 {
   /*
    * This is rather tricky because we don't know what can be activated
@@ -515,8 +515,8 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 
     case IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT:
       {
-        /* Don't block possible accelerators, but supress others. */
-        if (!handled && suppress_unbound && can_supress (event))
+        /* Don't block possible accelerators, but suppress others. */
+        if (!handled && suppress_unbound && can_suppress (event))
           {
             if (!is_modifier_key (event) && !toplevel_is_offscreen (event->window))
               gdk_window_beep (event->window);
@@ -564,7 +564,7 @@ _ide_source_view_mode_new (GtkWidget             *view,
   mode->default_mode = get_string_param (mode, "default-mode");
   mode->display_name = get_string_param (mode, "display-name");
 
-  IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
+  IDE_TRACE_MSG ("suppress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
   IDE_TRACE_MSG ("block_cursor = %d", ide_source_view_mode_get_block_cursor (mode));
   IDE_TRACE_MSG ("type = %d", (int)mode->type);
   IDE_TRACE_MSG ("default_mode = %s", mode->default_mode ?: "(null)");
