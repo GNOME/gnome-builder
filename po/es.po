@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-07-28 07:51+0000\n"
-"PO-Revision-Date: 2017-07-28 12:18+0200\n"
+"POT-Creation-Date: 2017-08-02 00:34+0000\n"
+"PO-Revision-Date: 2017-08-03 09:45+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -532,35 +532,38 @@ msgid "If the plugin should be enabled"
 msgstr "Si se debe activar el complemento"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-msgid "Show Project Sidebar"
-msgstr "Mostrar la barra lateral del proyecto"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "If enabled, the sidebar will be visible in the editor workspace."
-msgstr ""
-"Si se activa, la barra lateral será visible en el espacio de trabajo del "
-"editor."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:84
 msgid "Show Icons"
 msgstr "Mostrar iconos"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the project tree will display icons next to each item."
 msgstr ""
 "Si se activa, el árbol de proyectos mostrará iconos junto a cada elemento."
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:88
 msgid "Show Ignored Files"
 msgstr "Mostrar archivos ignorados"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
 "Si se activa, el árbol de proyectos mostrará archivos ignorados por el VCS."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:92
+msgid "Sort Directories First"
+msgstr "Mostrar las carpetas primero"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+#| msgid "If enabled, the project tree will display icons next to each item."
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"Si se activa, el árbol de proyectos ordenará las carpetas antes de los "
+"archivos regulares."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
@@ -2097,6 +2100,26 @@ msgstr "Buscar texto en la terminal"
 msgid "No Open Pages"
 msgstr "No hay páginas abiertas"
 
+#: libide/layout/ide-layout-stack-header.ui:48
+#| msgid "Open File"
+msgid "Open file"
+msgstr "Abrir archivo"
+
+#: libide/layout/ide-layout-stack-header.ui:65
+#| msgid "New File"
+msgid "New file"
+msgstr "Archivo nuevo"
+
+#: libide/layout/ide-layout-stack-header.ui:80
+#: libide/layout/ide-layout-stack.ui:86
+msgid "New terminal"
+msgstr "Nueva terminal"
+
+#: libide/layout/ide-layout-stack-header.ui:96
+#| msgid "New Documentation Page"
+msgid "New documentation"
+msgstr "Nueva documentación"
+
 #: libide/layout/ide-layout-stack-shortcuts.c:34
 msgid "Move document to the right"
 msgstr "Mover documento a la derecha"
@@ -2106,8 +2129,6 @@ msgid "Move document to the left"
 msgstr "Mover documento a la izquierda"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:48
-#| msgctxt "shortcut window"
-#| msgid "Switch to the previous document"
 msgid "Switch to the previous document"
 msgstr "Cambiar al documento anterior"
 
@@ -2138,10 +2159,6 @@ msgstr "Barra lateral del proyecto"
 #: libide/layout/ide-layout-stack.ui:77
 msgid "File chooser"
 msgstr "Selector de archivos"
-
-#: libide/layout/ide-layout-stack.ui:86
-msgid "New terminal"
-msgstr "Nueva terminal"
 
 #: libide/layout/ide-layout-stack.ui:109
 msgid "New Terminal"
@@ -2350,8 +2367,9 @@ msgid "Automatically hide map when editor loses focus"
 msgstr "Ocultar el mapa automáticamente cuando el editor pierde el foco"
 
 #: libide/preferences/ide-preferences-builtin.c:172
-msgid "Whitespace Characters"
-msgstr "Caracteres de espacios en blanco"
+#| msgid "Whitespace Characters"
+msgid "Visible Whitespace Characters"
+msgstr "Caracteres de espacios en blanco visibles"
 
 #: libide/preferences/ide-preferences-builtin.c:175
 msgid "New line and carriage return"
@@ -3711,10 +3729,6 @@ msgstr "_Reconstruir"
 msgid "Display Options"
 msgstr "Opciones de visualización"
 
-#: plugins/project-tree/gtk/menus.ui:92
-msgid "Sort Directories First"
-msgstr "Mostrar las carpetas primero"
-
 #: plugins/project-tree/gtk/menus.ui:98
 msgid "_Collapse All Nodes"
 msgstr "_Contraer todos los nodos"
@@ -3887,18 +3901,18 @@ msgstr "No hay sugerencias"
 msgid "Completed spell checking"
 msgstr "Comprobación de ortografía finalizada"
 
-#: plugins/spellcheck/gbp-spell-widget.c:420
+#: plugins/spellcheck/gbp-spell-widget.c:255
+msgid "The word is not in the dictionary"
+msgstr "La palabra no está en el diccionario"
+
+#: plugins/spellcheck/gbp-spell-widget.c:426
 msgid "This word is already in the personal dictionary"
 msgstr "Esta palabra ya está en el diccionario personal"
 
-#: plugins/spellcheck/gbp-spell-widget.c:423
+#: plugins/spellcheck/gbp-spell-widget.c:429
 #, c-format
 msgid "This word is already in the %s dictionary"
 msgstr "Esta palabra ya está en el diccionario %s"
-
-#: plugins/spellcheck/gbp-spell-widget.c:1042
-msgid "The word is not in the dictionary"
-msgstr "La palabra no está en el diccionario"
 
 #: plugins/spellcheck/gbp-spell-widget.ui:17
 msgid "Misspelled"
@@ -3970,7 +3984,7 @@ msgid "Select Symbol…"
 msgstr "Seleccionar símbolo…"
 
 #: plugins/symbol-tree/gbp-symbol-menu-button.ui:13
-#: plugins/symbol-tree/gbp-symbol-menu-button.ui:75
+#: plugins/symbol-tree/gbp-symbol-menu-button.ui:76
 msgid "Document Outline"
 msgstr "Esquema del documento"
 
@@ -4094,6 +4108,14 @@ msgstr "Falló al crear el árbol XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero no en el gestor de búferes."
+
+#~ msgid "Show Project Sidebar"
+#~ msgstr "Mostrar la barra lateral del proyecto"
+
+#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
+#~ msgstr ""
+#~ "Si se activa, la barra lateral será visible en el espacio de trabajo del "
+#~ "editor."
 
 #~ msgid "Spellchecking"
 #~ msgstr "Comprobación de ortografía"
