@@ -875,11 +875,6 @@ ide_buffer__file_notify_language (IdeBuffer  *self,
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_FILE (file));
 
-  /*
-   * FIXME: Workaround for 3.16.3
-   *        This should be refactored as part of the move to libpeas.
-   */
-
   language = ide_file_get_language (file);
   gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), language);
 
