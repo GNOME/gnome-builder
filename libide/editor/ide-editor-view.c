@@ -28,6 +28,7 @@
 #include "ide-macros.h"
 
 #include "editor/ide-editor-private.h"
+#include "sourceview/ide-line-change-gutter-renderer.h"
 #include "util/ide-gtk.h"
 
 #define AUTO_HIDE_TIMEOUT_SECONDS 5
@@ -511,10 +512,20 @@ static void
 ide_editor_view_constructed (GObject *object)
 {
   IdeEditorView *self = (IdeEditorView *)object;
+  GtkSourceGutterRenderer *renderer;
+  GtkSourceGutter *gutter;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
   G_OBJECT_CLASS (ide_editor_view_parent_class)->constructed (object);
+
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->map), GTK_TEXT_WINDOW_LEFT);
+  renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                           "show-line-deletions", TRUE,
+                           "size", 1,
+                           "visible", TRUE,
+                           NULL);
+  gtk_source_gutter_insert (gutter, renderer, 0);
 
   _ide_editor_view_init_actions (self);
   _ide_editor_view_init_shortcuts (self);
