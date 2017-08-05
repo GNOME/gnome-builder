@@ -109,9 +109,9 @@ line_ends_with (const GtkTextIter *iter,
 
 static gchar *
 copy_indent (IdePythonIndenter *python,
-             GtkTextIter                *begin,
-             GtkTextIter                *end,
-             GtkTextIter                *copy)
+             GtkTextIter       *begin,
+             GtkTextIter       *end,
+             GtkTextIter       *copy)
 {
   GString *str;
 
@@ -226,10 +226,10 @@ backtrack_to_open_pair (GtkTextIter *iter)
 
 static gchar *
 copy_indent_minus_tab (IdePythonIndenter *python,
-                       GtkTextView                *view,
-                       GtkTextIter                *begin,
-                       GtkTextIter                *end,
-                       GtkTextIter                *copy)
+                       GtkTextView       *view,
+                       GtkTextIter       *begin,
+                       GtkTextIter       *end,
+                       GtkTextIter       *copy)
 {
   GString *str;
   gchar *copied;
@@ -296,10 +296,10 @@ find_paren (gunichar ch,
 
 static gchar *
 indent_colon (IdePythonIndenter *python,
-              GtkTextView                *view,
-              GtkTextIter                *begin,
-              GtkTextIter                *end,
-              GtkTextIter                *iter)
+              GtkTextView       *view,
+              GtkTextIter       *begin,
+              GtkTextIter       *end,
+              GtkTextIter       *iter)
 {
   GString *str;
   gboolean is_colon;
@@ -401,10 +401,10 @@ indent_colon (IdePythonIndenter *python,
 
 static gchar *
 indent_parens (IdePythonIndenter *python,
-               GtkTextView                *view,
-               GtkTextIter                *begin,
-               GtkTextIter                *end,
-               GtkTextIter                *iter)
+               GtkTextView       *view,
+               GtkTextIter       *begin,
+               GtkTextIter       *end,
+               GtkTextIter       *iter)
 {
   GtkTextIter copy;
   GString *str;
@@ -444,10 +444,10 @@ indent_parens (IdePythonIndenter *python,
 
 static gchar *
 indent_previous_stmt (IdePythonIndenter *python,
-                      GtkTextView                *text_view,
-                      GtkTextIter                *begin,
-                      GtkTextIter                *end,
-                      GtkTextIter                *iter)
+                      GtkTextView       *text_view,
+                      GtkTextIter       *begin,
+                      GtkTextIter       *end,
+                      GtkTextIter       *iter)
 {
   gint count = 1;
 
@@ -483,11 +483,11 @@ indent_previous_stmt (IdePythonIndenter *python,
 
 static gchar *
 indent_for_pair (IdePythonIndenter *python,
-                 GtkTextView                *text_view,
-                 GtkTextIter                *begin,
-                 GtkTextIter                *end,
-                 GtkTextIter                *iter,
-                 gint                       *cursor_offset)
+                 GtkTextView       *text_view,
+                 GtkTextIter       *begin,
+                 GtkTextIter       *end,
+                 GtkTextIter       *iter,
+                 gint              *cursor_offset)
 {
   GtkTextIter copy = *iter;
   gunichar ch;
@@ -651,11 +651,11 @@ failure:
 
 static gchar *
 ide_python_indenter_format (IdeIndenter *indenter,
-                            GtkTextView          *text_view,
-                            GtkTextIter          *begin,
-                            GtkTextIter          *end,
-                            gint                 *cursor_offset,
-                            GdkEventKey          *event)
+                            GtkTextView *text_view,
+                            GtkTextIter *begin,
+                            GtkTextIter *end,
+                            gint        *cursor_offset,
+                            GdkEventKey *event)
 {
   IdePythonIndenter *python = (IdePythonIndenter *)indenter;
   GtkTextIter iter = *begin;
@@ -760,7 +760,7 @@ ide_python_indenter_format (IdeIndenter *indenter,
 
 static gboolean
 ide_python_indenter_is_trigger (IdeIndenter *indenter,
-                                           GdkEventKey          *event)
+                                GdkEventKey *event)
 {
   guint modifier_state;
 
