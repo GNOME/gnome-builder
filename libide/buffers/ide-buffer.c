@@ -1066,6 +1066,11 @@ ide_buffer_loaded (IdeBuffer *self)
   /* Unblock our previously blocked signals */
   dzl_signal_group_unblock (priv->diagnostics_manager_signals);
 
+  /* Now we can reload the change monitor which was probably skipped
+   * during the early initializtion.
+   */
+  ide_buffer_reload_change_monitor (self);
+
   IDE_EXIT;
 }
 
