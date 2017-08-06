@@ -49,6 +49,7 @@
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=/var/lib/flatpak"
     ],
+    "x-run-args" : [ "--standalone", "-vvvv" ],
     "build-options" : {
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g",
