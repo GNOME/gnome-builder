@@ -157,6 +157,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
       PERSIST_STRING_KEY ("device", get_device_id);
       PERSIST_STRING_KEY ("runtime", get_runtime_id);
       PERSIST_STRING_KEY ("config-opts", get_config_opts);
+      PERSIST_STRING_KEY ("run-opts", get_run_opts);
       PERSIST_STRING_KEY ("prefix", get_prefix);
       PERSIST_STRING_KEY ("app-id", get_app_id);
 #undef PERSIST_STRING_KEY
@@ -370,6 +371,7 @@ ide_buildconfig_configuration_provider_load_group (IdeBuildconfigConfigurationPr
   load_string (configuration, key_file, group, "config-opts", "config-opts");
   load_string (configuration, key_file, group, "device", "device-id");
   load_string (configuration, key_file, group, "name", "display-name");
+  load_string (configuration, key_file, group, "run-opts", "run-opts");
   load_string (configuration, key_file, group, "runtime", "runtime-id");
   load_string (configuration, key_file, group, "prefix", "prefix");
   load_string (configuration, key_file, group, "app-id", "app-id");

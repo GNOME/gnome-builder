@@ -104,6 +104,9 @@ void                  ide_configuration_set_prefix                (IdeConfigurat
 const gchar          *ide_configuration_get_config_opts           (IdeConfiguration   *self);
 void                  ide_configuration_set_config_opts           (IdeConfiguration   *self,
                                                                    const gchar        *config_opts);
+const gchar          *ide_configuration_get_run_opts              (IdeConfiguration   *self);
+void                  ide_configuration_set_run_opts              (IdeConfiguration   *self,
+                                                                   const gchar        *run_opts);
 const gchar * const  *ide_configuration_get_build_commands        (IdeConfiguration   *self);
 void                  ide_configuration_set_build_commands        (IdeConfiguration   *self,
                                                                    const gchar *const *build_commands);

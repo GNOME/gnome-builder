@@ -42,6 +42,7 @@ typedef struct
   gchar          *id;
   gchar         **post_install_commands;
   gchar          *prefix;
+  gchar          *run_opts;
   gchar          *runtime_id;
 
   IdeEnvironment *environment;
@@ -81,6 +82,7 @@ enum {
   PROP_POST_INSTALL_COMMANDS,
   PROP_PREFIX,
   PROP_READY,
+  PROP_RUN_OPTS,
   PROP_RUNTIME,
   PROP_RUNTIME_ID,
   PROP_APP_ID,
@@ -417,6 +419,10 @@ ide_configuration_get_property (GObject    *object,
       g_value_set_string (value, ide_configuration_get_runtime_id (self));
       break;
 
+    case PROP_RUN_OPTS:
+      g_value_set_string (value, ide_configuration_get_run_opts (self));
+      break;
+
     case PROP_APP_ID:
       g_value_set_string (value, ide_configuration_get_app_id (self));
       break;
@@ -486,6 +492,10 @@ ide_configuration_set_property (GObject      *object,
 
     case PROP_RUNTIME_ID:
       ide_configuration_set_runtime_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_RUN_OPTS:
+      ide_configuration_set_run_opts (self, g_value_get_string (value));
       break;
 
     case PROP_APP_ID:
@@ -604,6 +614,13 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                           "If the configuration can be used for building",
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_RUN_OPTS] =
+    g_param_spec_string ("run-opts",
+                         "Run Options",
+                         "The options for running the target application",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RUNTIME] =
     g_param_spec_object ("runtime",
@@ -1605,4 +1622,53 @@ ide_configuration_supports_runtime (IdeConfiguration *self,
     ret = IDE_CONFIGURATION_GET_CLASS (self)->supports_runtime (self, runtime);
 
   IDE_RETURN (ret);
+}
+
+/**
+ * ide_configuration_get_run_opts:
+ * @self: a #IdeConfiguration
+ *
+ * Gets the command line options to use when running the target application.
+ * The result should be parsed with g_shell_parse_argv() to convert the run
+ * options to an array suitable for use in argv.
+ *
+ * Returns: (transfer none) (nullable): A string containing the run options
+ *   or %NULL if none have been set.
+ *
+ * Since: 3.26
+ */
+const gchar *
+ide_configuration_get_run_opts (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return priv->run_opts;
+}
+
+/**
+ * ide_configuration_set_run_opts:
+ * @self: a #IdeConfiguration
+ * @run_opts: (nullable): the run options for the target application
+ *
+ * Sets the run options to use when running the target application.
+ * See ide_configuration_get_run_opts() for more information.
+ *
+ * Since: 3.26
+ */
+void
+ide_configuration_set_run_opts (IdeConfiguration *self,
+                                const gchar      *run_opts)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+
+  if (g_strcmp0 (run_opts, priv->run_opts) != 0)
+    {
+      g_free (priv->run_opts);
+      priv->run_opts = g_strdup (run_opts);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUN_OPTS]);
+    }
 }

@@ -181,6 +181,24 @@ get_strv_from_member (JsonObject  *obj,
   return (gchar **)g_ptr_array_free (finish_args, FALSE);
 }
 
+static gchar *
+get_argv_from_member (JsonObject  *obj,
+                      const gchar *name)
+{
+  g_auto(GStrv) argv = NULL;
+
+  if (NULL == (argv = get_strv_from_member (obj, name)))
+    return NULL;
+
+  for (guint i = 0; argv[i]; i++)
+    {
+      g_autofree gchar *freeme = argv[i];
+      argv[i] = g_shell_quote (argv[i]);
+    }
+
+  return g_strjoinv (" ", argv);
+}
+
 /**
  * gbp_flatpak_configuration_load_from_file:
  * @self: a #GbpFlatpakConfiguration
@@ -342,6 +360,14 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
       gbp_flatpak_configuration_set_finish_args (self, (const gchar * const *)finish_args);
     }
 
+  /* Our custom extension to store run options in the .json */
+  if (json_object_has_member (root_object, "x-run-args"))
+    {
+      g_autofree gchar *run_args = get_argv_from_member (root_object, "x-run-args");
+
+      ide_configuration_set_run_opts (IDE_CONFIGURATION (self), run_args);
+    }
+
   if (app_id_node != NULL && JSON_NODE_HOLDS_VALUE (app_id_node))
     ide_configuration_set_app_id (IDE_CONFIGURATION (self), json_node_get_string (app_id_node));
   else
@@ -353,32 +379,15 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
     {
       const gchar *primary_module_name;
       JsonObject *primary_module_object;
+      g_autofree gchar *config_opts = NULL;
+
       primary_module_object = json_node_get_object (primary_module_node);
       primary_module_name = json_object_get_string_member (primary_module_object, "name");
       gbp_flatpak_configuration_set_primary_module (self, primary_module_name);
-      if (json_object_has_member (primary_module_object, "config-opts"))
-        {
-          JsonArray *config_opts_array;
-          config_opts_array = json_object_get_array_member (primary_module_object, "config-opts");
-          if (config_opts_array != NULL)
-            {
-              g_autoptr(GPtrArray) config_opts_strv = NULL;
-              config_opts_strv = g_ptr_array_new_with_free_func (g_free);
-              for (guint i = 0; i < json_array_get_length (config_opts_array); i++)
-                {
-                  const gchar *next_option;
-                  next_option = json_array_get_string_element (config_opts_array, i);
-                  g_ptr_array_add (config_opts_strv, g_strdup (next_option));
-                }
-              g_ptr_array_add (config_opts_strv, NULL);
-              if (config_opts_strv->len > 1)
-                {
-                  const gchar *config_opts;
-                  config_opts = g_strjoinv (" ", (gchar **)config_opts_strv->pdata);
-                  ide_configuration_set_config_opts (IDE_CONFIGURATION (self), config_opts);
-                }
-            }
-        }
+
+      config_opts = get_argv_from_member (primary_module_object, "config-opts");
+      ide_configuration_set_config_opts (IDE_CONFIGURATION (self), config_opts);
+
       if (json_object_has_member (primary_module_object, "build-commands"))
         {
           JsonArray *build_commands_array;
@@ -396,6 +405,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
           build_commands_strv = (gchar **)g_ptr_array_free (build_commands, FALSE);
           ide_configuration_set_build_commands (IDE_CONFIGURATION (self), (const gchar * const *)build_commands_strv);
         }
+
       if (json_object_has_member (primary_module_object, "post-install"))
         {
           JsonArray *post_install_commands_array;
