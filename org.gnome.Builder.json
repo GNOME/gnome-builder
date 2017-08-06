@@ -533,11 +533,11 @@
         },
         {
             "name": "json-glib",
+	    "buildsystem": "meson",
+	    "builddir": true,
             "sources": [
                 {
                     "type": "git",
-                    "buildsystem": "meson",
-                    "builddir": true,
                     "url": "https://git.gnome.org/browse/json-glib"
                 }
             ]
