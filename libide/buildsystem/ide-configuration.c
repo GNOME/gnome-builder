@@ -517,58 +517,56 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                         "Build commands",
                         "Build commands",
                         G_TYPE_STRV,
-                        (G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CONFIG_OPTS] =
     g_param_spec_string ("config-opts",
                          "Config Options",
                          "Parameters to bootstrap the project",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DEBUG] =
     g_param_spec_boolean ("debug",
                           "Debug",
                           "Debug",
                           TRUE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DEVICE] =
     g_param_spec_object ("device",
                          "Device",
                          "Device",
                          IDE_TYPE_DEVICE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DEVICE_ID] =
     g_param_spec_string ("device-id",
                          "Device Id",
                          "The identifier of the device",
                          "local",
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DIRTY] =
     g_param_spec_boolean ("dirty",
                           "Dirty",
                           "If the configuration has been changed.",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
                          "Display Name",
                          "Display Name",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ENVIRON] =
     g_param_spec_boxed ("environ",
                         "Environ",
                         "Environ",
                         G_TYPE_STRV,
-                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -584,23 +582,21 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                       -1,
                       G_MAXINT,
                       -1,
-                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                      (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_POST_INSTALL_COMMANDS] =
     g_param_spec_boxed ("post-install-commands",
                         "Post install commands",
                         "Post install commands",
                         G_TYPE_STRV,
-                        (G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PREFIX] =
     g_param_spec_string ("prefix",
                          "Prefix",
                          "Prefix",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_READY] =
     g_param_spec_boolean ("ready",
@@ -614,21 +610,21 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                          "Runtime",
                          "Runtime",
                          IDE_TYPE_RUNTIME,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RUNTIME_ID] =
     g_param_spec_string ("runtime-id",
                          "Runtime Id",
                          "The identifier of the runtime",
                          "host",
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_APP_ID] =
     g_param_spec_string ("app-id",
                          "App ID",
                          "The application ID (such as org.gnome.Builder)",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
