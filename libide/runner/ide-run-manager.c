@@ -354,6 +354,7 @@ static void
 do_run_async (IdeRunManager *self,
               GTask         *task)
 {
+  g_auto(GStrv) run_argv = NULL;
   IdeBuildTarget *build_target;
   IdeContext *context;
   IdeConfigurationManager *config_manager;
@@ -361,6 +362,7 @@ do_run_async (IdeRunManager *self,
   IdeRuntime *runtime;
   g_autoptr(IdeRunner) runner = NULL;
   GCancellable *cancellable;
+  const gchar *run_opts;
 
   IDE_ENTRY;
 
@@ -393,6 +395,19 @@ do_run_async (IdeRunManager *self,
 
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* Add our run arguments if specified in the config. */
+  if (NULL != (run_opts = ide_configuration_get_run_opts (config)))
+    {
+      g_auto(GStrv) argv = NULL;
+      gint argc;
+
+      if (g_shell_parse_argv (run_opts, &argc, &argv, NULL))
+        {
+          for (gint i = 0; i < argc; i++)
+            ide_runner_append_argv (runner, argv[i]);
+        }
+    }
 
   /*
    * If the current handler has a callback specified (our default "run" handler
