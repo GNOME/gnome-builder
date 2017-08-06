@@ -52,9 +52,6 @@ IdeFixit           *_ide_fixit_new                          (IdeSourceRange     
 void                _ide_project_set_name                   (IdeProject            *project,
                                                              const gchar           *name);
 void                _ide_runtime_manager_unload             (IdeRuntimeManager     *self);
-void                _ide_search_context_add_provider        (IdeSearchContext      *context,
-                                                             IdeSearchProvider     *provider,
-                                                             gsize                  max_results);
 void                _ide_service_emit_context_loaded        (IdeService            *service);
 IdeSettings        *_ide_settings_new                       (IdeContext            *context,
                                                              const gchar           *schema_id,

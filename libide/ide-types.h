@@ -26,13 +26,10 @@
 G_BEGIN_DECLS
 
 typedef struct _IdeBackForwardItem             IdeBackForwardItem;
-
 typedef struct _IdeBackForwardList             IdeBackForwardList;
 
 typedef struct _IdeBuffer                      IdeBuffer;
-
 typedef struct _IdeBufferChangeMonitor         IdeBufferChangeMonitor;
-
 typedef struct _IdeBufferManager               IdeBufferManager;
 
 typedef struct _IdeBuildCommand                IdeBuildCommand;
@@ -59,8 +56,6 @@ typedef struct _IdeDiagnosticProvider          IdeDiagnosticProvider;
 typedef struct _IdeDiagnostics                 IdeDiagnostics;
 typedef struct _IdeDiagnosticsManager          IdeDiagnosticsManager;
 
-typedef struct _IdeEditorFrame                 IdeEditorFrame;
-
 typedef struct _IdeEnvironment                 IdeEnvironment;
 typedef struct _IdeEnvironmentVariable         IdeEnvironmentVariable;
 
@@ -71,6 +66,7 @@ typedef struct _IdeFileSettings                IdeFileSettings;
 typedef struct _IdeFixit                       IdeFixit;
 
 typedef struct _IdeHighlighter                 IdeHighlighter;
+typedef struct _IdeHighlightEngine             IdeHighlightEngine;
 
 typedef struct _IdeIndenter                    IdeIndenter;
 
@@ -97,16 +93,8 @@ typedef struct _IdeRuntime                     IdeRuntime;
 typedef struct _IdeRuntimeManager              IdeRuntimeManager;
 typedef struct _IdeRuntimeProvider             IdeRuntimeProvider;
 
-typedef struct _IdeScript                      IdeScript;
-
-typedef struct _IdeScriptManager               IdeScriptManager;
-
-typedef struct _IdeSearchContext               IdeSearchContext;
-
 typedef struct _IdeSearchEngine                IdeSearchEngine;
-
 typedef struct _IdeSearchProvider              IdeSearchProvider;
-
 typedef struct _IdeSearchResult                IdeSearchResult;
 
 typedef struct _IdeService                     IdeService;
@@ -114,37 +102,27 @@ typedef struct _IdeService                     IdeService;
 typedef struct _IdeSettings                    IdeSettings;
 
 typedef struct _IdeSourceLocation              IdeSourceLocation;
-
 typedef struct _IdeSourceRange                 IdeSourceRange;
 
 typedef struct _IdeSourceSnippet               IdeSourceSnippet;
-
 typedef struct _IdeSourceSnippetChunk          IdeSourceSnippetChunk;
-
 typedef struct _IdeSourceSnippetContext        IdeSourceSnippetContext;
-
 typedef struct _IdeSourceSnippets              IdeSourceSnippets;
-
 typedef struct _IdeSourceSnippetsManager       IdeSourceSnippetsManager;
 
 typedef struct _IdeSubprocess                  IdeSubprocess;
 typedef struct _IdeSubprocessLauncher          IdeSubprocessLauncher;
 
 typedef struct _IdeSymbol                      IdeSymbol;
-
 typedef struct _IdeSymbolResolver              IdeSymbolResolver;
-typedef struct _IdeSymbolResolverInterface     IdeSymbolResolverInterface;
 
 typedef struct _IdeTransferManager             IdeTransferManager;
 typedef struct _IdeTransfer                    IdeTransfer;
 
+typedef struct _IdeUnsavedFile                 IdeUnsavedFile;
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 
-typedef struct _IdeUnsavedFile                 IdeUnsavedFile;
-
 typedef struct _IdeVcs                         IdeVcs;
-
-typedef struct _IdeHighlightEngine             IdeHighlightEngine;
 
 G_END_DECLS
 
