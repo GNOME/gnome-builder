@@ -34,6 +34,7 @@
 
 typedef struct
 {
+  gchar          *app_id;
   gchar         **build_commands;
   gchar          *config_opts;
   gchar          *device_id;
@@ -42,7 +43,6 @@ typedef struct
   gchar         **post_install_commands;
   gchar          *prefix;
   gchar          *runtime_id;
-  gchar          *app_id;
 
   IdeEnvironment *environment;
 
