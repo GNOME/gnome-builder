@@ -112,7 +112,7 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
                                               I_("org.gnome.builder.editor-view.prev-match"),
                                               "<Primary><Shift>g",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
-                                              I_("editor-view.move-prevous-search-result"));
+                                              I_("editor-view.move-previous-search-result"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.next-error"),
@@ -124,7 +124,7 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
                                               I_("org.gnome.builder.editor-view.prev-error"),
                                               "<alt>p",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
-                                              I_("editor-view.move-prevous-error"));
+                                              I_("editor-view.move-previous-error"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.clear-highlight"),
