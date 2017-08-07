@@ -454,11 +454,37 @@ search_entry_stop_search (IdeEditorSearchBar *self,
 }
 
 static void
-ide_editor_search_bar_activate (IdeEditorSearchBar *self,
-                                GtkSearchEntry     *search_entry)
+search_entry_previous_match (IdeEditorSearchBar *self,
+                             GtkSearchEntry     *entry)
 {
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+
+  dzl_gtk_widget_action (GTK_WIDGET (self),
+                         "editor-view",
+                         "move-previous-search-result",
+                         NULL);
+}
+
+static void
+search_entry_next_match (IdeEditorSearchBar *self,
+                         GtkSearchEntry     *entry)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+
+  dzl_gtk_widget_action (GTK_WIDGET (self),
+                         "editor-view",
+                         "move-next-search-result",
+                         NULL);
+}
+
+static void
+search_entry_activate (IdeEditorSearchBar *self,
+                       GtkSearchEntry     *entry)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
 
   dzl_gtk_widget_action (GTK_WIDGET (self),
                          "editor-view",
@@ -586,7 +612,7 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
 
   g_signal_connect_swapped (self->search_entry,
                             "activate",
-                            G_CALLBACK (ide_editor_search_bar_activate),
+                            G_CALLBACK (search_entry_activate),
                             self);
 
   self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
@@ -645,6 +671,16 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
   g_signal_connect_swapped (self->search_entry,
                             "stop-search",
                             G_CALLBACK (search_entry_stop_search),
+                            self);
+
+  g_signal_connect_swapped (self->search_entry,
+                            "previous-match",
+                            G_CALLBACK (search_entry_previous_match),
+                            self);
+
+  g_signal_connect_swapped (self->search_entry,
+                            "next-match",
+                            G_CALLBACK (search_entry_next_match),
                             self);
 
   _ide_editor_search_bar_init_actions (self);
