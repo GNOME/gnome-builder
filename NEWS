@@ -1,3 +1,37 @@
+===============
+Version 3.25.90
+===============
+
+Changes since last release:
+
+ • Indentation fixes when using the fallback indenter.
+ • Various UI changes as we progress on the UI revamp.
+ • Diagnostics checks now blocked until the buffer has fully loaded.
+ • Highlight engine fixes for the recently added pause support.
+ • "Export" has been moved to a generic operation from the omnibar.
+ • A crash in the diagnostics manager has been fixed due to incorrect
+   assertions at runtime.
+ • Many keyboard shortcut fixes.
+ • The search bar has had missing pieces from the revamp ported.
+   This includes better keyboard interactions.
+ • Search navigation has been restored from the source editor.
+ • Our BuilderBlocks font has been improved to support both lower
+   and upper-case glyphs.
+ • Builder no longer uses Gtk's setting for sort-directories-first.
+ • Builder now supports a "run-opts" in .buildconfig files or
+   x-run-args in flatpak json files to pass arguments when running
+   the target application.
+ • The spellchecker has had a number of fixes that were broken during
+   the UI revamp.
+ • find-other-file will jump right to the matching file if only one
+   is matched. This more closely matches our previous implementation.
+ • The build pipeline now recognizes filenames with _ in them when
+   generating diagnostics.
+
+Translations:
+
+ Hungarian, Kazakh, German, Spanish, Indonesian, Czech, Slovenian
+
 ==============
 Version 3.25.5
 ==============
