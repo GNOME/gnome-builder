@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-07-24 01:29+0000\n"
-"PO-Revision-Date: 2017-07-24 10:43+0700\n"
+"POT-Creation-Date: 2017-08-05 22:34+0000\n"
+"PO-Revision-Date: 2017-08-06 21:02+0700\n"
 "Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
@@ -207,7 +207,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5867
+#: libide/sourceview/ide-source-view.c:5858
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Ubah nama"
@@ -527,34 +527,38 @@ msgid "If the plugin should be enabled"
 msgstr "Bila pengaya mesti difungsikan"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-msgid "Show Project Sidebar"
-msgstr "Tampilkan Bilah Sisi Proyek"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "If enabled, the sidebar will be visible in the editor workspace."
-msgstr "Bila difungsikan, bilah sisi akan tampak dalam ruang kerja penyunting."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:84
 msgid "Show Icons"
 msgstr "Tampilkan Ikon"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "If enabled, the project tree will display icons next to each item."
 msgstr ""
 "Bila difungsikan, pohon proyek akan menampilkan ikon di sebelah setiap butir."
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: plugins/project-tree/gtk/menus.ui:88
 msgid "Show Ignored Files"
 msgstr "Tampilkan Berkas yang Diabaikan"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
 "Bila difungsikan, pohon proyek akan menampilkan berkas yang diabaikan oleh "
 "VCS."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:92
+msgid "Sort Directories First"
+msgstr "Urutkan Direktori Di Awal"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"Bila difungsikan, pohon proyek akan mengurutkan direktori sebelum berkas "
+"biasa."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
@@ -632,7 +636,7 @@ msgstr "Tent_ang"
 msgid "_Quit"
 msgstr "_Keluar"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:702
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
 #: libide/editor/ide-editor-perspective-shortcuts.c:33
 #: libide/editor/ide-editor-perspective-shortcuts.c:39
 #: libide/editor/ide-editor-perspective-shortcuts.c:45
@@ -689,15 +693,15 @@ msgstr "_Jadi Lagi"
 msgid "C_ut"
 msgstr "_Potong"
 
-#: data/gtk/menus.ui:114 data/gtk/menus.ui:236 plugins/terminal/gtk/menus.ui:19
+#: data/gtk/menus.ui:114 data/gtk/menus.ui:229 plugins/terminal/gtk/menus.ui:19
 msgid "_Copy"
 msgstr "_Salin"
 
-#: data/gtk/menus.ui:118 data/gtk/menus.ui:240 plugins/terminal/gtk/menus.ui:23
+#: data/gtk/menus.ui:118 data/gtk/menus.ui:233 plugins/terminal/gtk/menus.ui:23
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: data/gtk/menus.ui:122 data/gtk/menus.ui:244
+#: data/gtk/menus.ui:122 data/gtk/menus.ui:237
 msgid "_Delete"
 msgstr "_Hapus"
 
@@ -710,7 +714,7 @@ msgstr "Penyorotan"
 msgid "Selection"
 msgstr "Pilihan"
 
-#: data/gtk/menus.ui:137 data/gtk/menus.ui:250 plugins/terminal/gtk/menus.ui:31
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:243 plugins/terminal/gtk/menus.ui:31
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
@@ -742,107 +746,103 @@ msgstr "Gabung Baris"
 msgid "Sort Lines"
 msgstr "Urutkan Baris"
 
-#: data/gtk/menus.ui:181
-msgid "Spellchecking"
-msgstr "Pemeriksaan ejaan"
-
-#: data/gtk/menus.ui:190
+#: data/gtk/menus.ui:183
 msgid "Zoom"
 msgstr "Zum"
 
-#: data/gtk/menus.ui:192
+#: data/gtk/menus.ui:185
 msgid "Zoom _In"
 msgstr "Per_besar"
 
-#: data/gtk/menus.ui:197
+#: data/gtk/menus.ui:190
 msgid "Zoom _Out"
 msgstr "Per_kecil"
 
-#: data/gtk/menus.ui:203 plugins/terminal/gtk/menus.ui:51
+#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:51
 msgid "Reset"
 msgstr "Reset"
 
-#: data/gtk/menus.ui:214 libide/editor/ide-editor-search-bar.ui:205
+#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:205
 msgid "Regular expressions"
 msgstr "Ekspresi reguler"
 
-#: data/gtk/menus.ui:218 libide/editor/ide-editor-search-bar.ui:220
+#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:220
 #: plugins/terminal/gb-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "Peka huruf besar kecil"
 
-#: data/gtk/menus.ui:222 libide/editor/ide-editor-search-bar.ui:235
+#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:235
 msgid "Match whole word only"
 msgstr "Cocok seluruh kata"
 
-#: data/gtk/menus.ui:226
+#: data/gtk/menus.ui:219
 msgid "_Wrap Around"
 msgstr "_Melipat"
 
-#: data/gtk/menus.ui:232
+#: data/gtk/menus.ui:225
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: data/gtk/menus.ui:257
+#: data/gtk/menus.ui:250
 msgid "Frame"
 msgstr "Bingkai"
 
-#: data/gtk/menus.ui:259
+#: data/gtk/menus.ui:252
 msgid "Move Left"
 msgstr "Pindah Ke Kiri"
 
-#: data/gtk/menus.ui:263
+#: data/gtk/menus.ui:256
 msgid "Move Right"
 msgstr "Pindah Ke Kanan"
 
-#: data/gtk/menus.ui:268 data/gtk/menus.ui:328 plugins/devhelp/gtk/menus.ui:11
+#: data/gtk/menus.ui:261 data/gtk/menus.ui:321 plugins/devhelp/gtk/menus.ui:11
 #: plugins/terminal/gtk/menus.ui:63
 msgid "Close"
 msgstr "Tutup"
 
-#: data/gtk/menus.ui:276
+#: data/gtk/menus.ui:269
 msgid "New File"
 msgstr "Berkas Baru"
 
-#: data/gtk/menus.ui:283 libide/layout/ide-layout-stack.ui:102
+#: data/gtk/menus.ui:276 libide/layout/ide-layout-stack.ui:102
 msgid "Open File…"
 msgstr "Buka Berkas…"
 
-#: data/gtk/menus.ui:290
+#: data/gtk/menus.ui:283
 msgid "Document"
 msgstr "Dokumen"
 
-#: data/gtk/menus.ui:293
+#: data/gtk/menus.ui:286
 msgid "Open in New Frame"
 msgstr "Buka dalam Bingkai Baru"
 
-#: data/gtk/menus.ui:297 plugins/terminal/gtk/menus.ui:47
+#: data/gtk/menus.ui:290 plugins/terminal/gtk/menus.ui:47
 msgid "Split"
 msgstr "Belah"
 
-#: data/gtk/menus.ui:302 plugins/devhelp/gtk/menus.ui:7
+#: data/gtk/menus.ui:295 plugins/devhelp/gtk/menus.ui:7
 msgid "Print…"
 msgstr "Cetak…"
 
-#: data/gtk/menus.ui:309
+#: data/gtk/menus.ui:302
 msgid "Document Preferences"
 msgstr "Preferensi Dokumen"
 
-#: data/gtk/menus.ui:317 libide/buildui/ide-build-log-panel.c:740
+#: data/gtk/menus.ui:310 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
 msgstr "_Simpan"
 
-#: data/gtk/menus.ui:321
+#: data/gtk/menus.ui:314
 msgid "Save _As"
 msgstr "Simpan Seb_agai"
 
-#: data/gtk/menus.ui:338 libide/runner/ide-run-manager.c:1089
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1089
 msgid "Run"
 msgstr "Jalankan"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:505
+#: libide/application/ide-application.c:529
 #: libide/preferences/ide-preferences-builtin.c:140
 #: libide/workbench/ide-workbench.c:630
 msgid "Builder"
@@ -1041,7 +1041,7 @@ msgstr "Harap sediakan alamat D-Bus"
 msgid "No such worker"
 msgstr "Tidak ada pekerja sedemikian"
 
-#: libide/buffers/ide-buffer.c:2595
+#: libide/buffers/ide-buffer.c:2604
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -1049,12 +1049,12 @@ msgstr "Bahasa saat ini kekurangan pengurai simbol."
 msgid "File too large to be opened."
 msgstr "Berkas terlalu besar untuk dibuka."
 
-#: libide/buffers/ide-buffer-manager.c:1847
+#: libide/buffers/ide-buffer-manager.c:1846
 #, c-format
 msgid "unsaved document %u"
 msgstr "dokumen tanpa judul %u"
 
-#: libide/buffers/ide-buffer-manager.c:1885
+#: libide/buffers/ide-buffer-manager.c:1884
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Gagal menyimpan penyangga, mengabaikan reklamasi."
 
@@ -1092,12 +1092,12 @@ msgstr "Mengekspor…"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
-#: libide/workbench/ide-omni-bar.c:438
+#: libide/workbench/ide-omni-bar.c:439
 msgid "Success"
 msgstr "Berhasil"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
-#: libide/workbench/ide-omni-bar.c:423
+#: libide/workbench/ide-omni-bar.c:424
 msgid "Failed"
 msgstr "Gagal"
 
@@ -1172,7 +1172,7 @@ msgid "Device"
 msgstr "Perangkat"
 
 #: libide/buildui/ide-build-configuration-view.ui:217
-#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:269
+#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
 msgid "Runtime"
 msgstr "Runtime"
 
@@ -1210,13 +1210,13 @@ msgstr "Simpan log bangun"
 
 #: libide/buildui/ide-build-panel.c:105 libide/buildui/ide-build-panel.c:181
 #: libide/buildui/ide-build-panel.c:203 libide/buildui/ide-build-panel.ui:106
-#: libide/workbench/ide-omni-bar.ui:433
+#: libide/workbench/ide-omni-bar.ui:437
 msgid "Warnings"
 msgstr "Peringatan"
 
 #: libide/buildui/ide-build-panel.c:114 libide/buildui/ide-build-panel.c:182
 #: libide/buildui/ide-build-panel.c:204 libide/buildui/ide-build-panel.ui:127
-#: libide/workbench/ide-omni-bar.ui:405
+#: libide/workbench/ide-omni-bar.ui:409
 msgid "Errors"
 msgstr "Kesalahan"
 
@@ -1522,7 +1522,7 @@ msgid "Search languages…"
 msgstr "Cari bahasa…"
 
 #. translators: first %u is the Nth position of second %u N occurrences
-#: libide/editor/ide-editor-search-bar.c:370
+#: libide/editor/ide-editor-search-bar.c:247
 #, c-format
 msgid "%u of %u"
 msgstr "%u dari %u"
@@ -2086,6 +2086,23 @@ msgstr "Cari teks dalam terminal"
 msgid "No Open Pages"
 msgstr "Tidak Ada Halaman yang Terbuka"
 
+#: libide/layout/ide-layout-stack-header.ui:48
+msgid "Open file"
+msgstr "Buka berkas"
+
+#: libide/layout/ide-layout-stack-header.ui:65
+msgid "New file"
+msgstr "Berkas baru"
+
+#: libide/layout/ide-layout-stack-header.ui:80
+#: libide/layout/ide-layout-stack.ui:86
+msgid "New terminal"
+msgstr "Terminal baru"
+
+#: libide/layout/ide-layout-stack-header.ui:96
+msgid "New documentation"
+msgstr "Dokumentasi baru"
+
 #: libide/layout/ide-layout-stack-shortcuts.c:34
 msgid "Move document to the right"
 msgstr "Pindahkan dokumen ke kanan"
@@ -2095,8 +2112,8 @@ msgid "Move document to the left"
 msgstr "Pindahkan dokumen ke kiri"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:48
-msgid "Search to the previous document"
-msgstr "Cari ke dokumen sebelumnya"
+msgid "Switch to the previous document"
+msgstr "Beralih ke dokumen sebelumnya"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:55
 msgid "Switch to the next document"
@@ -2126,10 +2143,6 @@ msgstr "Bilah sisi proyek"
 #: libide/layout/ide-layout-stack.ui:77
 msgid "File chooser"
 msgstr "Pemilih berkas"
-
-#: libide/layout/ide-layout-stack.ui:86
-msgid "New terminal"
-msgstr "Terminal baru"
 
 #: libide/layout/ide-layout-stack.ui:109
 msgid "New Terminal"
@@ -2334,8 +2347,8 @@ msgid "Automatically hide map when editor loses focus"
 msgstr "Secara otomatis menyembunyikan peta ketika penyunting kehilangan fokus"
 
 #: libide/preferences/ide-preferences-builtin.c:172
-msgid "Whitespace Characters"
-msgstr "Karakter Whitespace"
+msgid "Visible Whitespace Characters"
+msgstr "Karakter Whitespace Terlihat"
 
 #: libide/preferences/ide-preferences-builtin.c:175
 msgid "New line and carriage return"
@@ -2512,7 +2525,7 @@ msgid "Number of CPU"
 msgstr "Banyaknya CPU"
 
 #: libide/preferences/ide-preferences-builtin.c:377
-#: libide/workbench/ide-omni-bar.ui:475
+#: libide/workbench/ide-omni-bar.ui:479
 msgid "Build"
 msgstr "Bangun"
 
@@ -2629,31 +2642,31 @@ msgstr "Gagal membuka direktori: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Gagal memuat berkas: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5323
+#: libide/sourceview/ide-source-view.c:5314
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5325
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5439
+#: libide/sourceview/ide-source-view.c:5430
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: libide/sourceview/ide-source-view.c:5866
+#: libide/sourceview/ide-source-view.c:5857
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6070
+#: libide/sourceview/ide-source-view.c:6061
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6096
+#: libide/sourceview/ide-source-view.c:6087
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
 
@@ -2724,7 +2737,7 @@ msgstr "Tidak dapat menguraikan \"%s\" sebagai URI absolut"
 msgid "URI “%s” has no host component"
 msgstr "URI \"%s\" tidak memiliki komponen host"
 
-#: libide/workbench/ide-omni-bar.c:406
+#: libide/workbench/ide-omni-bar.c:407
 msgid "Building"
 msgstr "Membangun"
 
@@ -2737,47 +2750,47 @@ msgstr "kurang"
 msgid "Edit build configuration"
 msgstr "Sunting konfigurasi bangun"
 
-#: libide/workbench/ide-omni-bar.ui:197
+#: libide/workbench/ide-omni-bar.ui:199
 msgid "Configure build preferences"
 msgstr "Tata preferensi bangun"
 
-#: libide/workbench/ide-omni-bar.ui:219
+#: libide/workbench/ide-omni-bar.ui:221
 msgid "Branch"
 msgstr "Branch"
 
-#: libide/workbench/ide-omni-bar.ui:244
+#: libide/workbench/ide-omni-bar.ui:246
 msgid "Build Profile"
 msgstr "Profil Bangun"
 
-#: libide/workbench/ide-omni-bar.ui:317
+#: libide/workbench/ide-omni-bar.ui:321
 msgid "Build status"
 msgstr "Status bangun"
 
-#: libide/workbench/ide-omni-bar.ui:329
+#: libide/workbench/ide-omni-bar.ui:333
 msgid "View build console contents"
 msgstr "Tilik isi konsole bangun"
 
-#: libide/workbench/ide-omni-bar.ui:351
+#: libide/workbench/ide-omni-bar.ui:355
 msgid "Last build"
 msgstr "Bangun terakhir"
 
-#: libide/workbench/ide-omni-bar.ui:378
+#: libide/workbench/ide-omni-bar.ui:382
 msgid "Build result"
 msgstr "Hasil bangun"
 
-#: libide/workbench/ide-omni-bar.ui:482
+#: libide/workbench/ide-omni-bar.ui:486
 msgid "Rebuild"
 msgstr "Bangun Ulang"
 
-#: libide/workbench/ide-omni-bar.ui:489
+#: libide/workbench/ide-omni-bar.ui:493
 msgid "Clean"
 msgstr "Bersihkan"
 
-#: libide/workbench/ide-omni-bar.ui:496
+#: libide/workbench/ide-omni-bar.ui:500
 msgid "Export Bundle"
 msgstr "Ekspor Bundel"
 
-#: libide/workbench/ide-omni-bar.ui:512
+#: libide/workbench/ide-omni-bar.ui:581
 msgid "Build project"
 msgstr "Bangun proyek"
 
@@ -3284,7 +3297,11 @@ msgid "Select a Template"
 msgstr "Pilih Templat"
 
 #: plugins/devhelp/gbp-devhelp-menu-button.ui:25
-#: plugins/devhelp/gbp-devhelp-panel.c:194 plugins/devhelp/gtk/menus.ui:5
+msgid "Select Documentation…"
+msgstr "Pilih Dokumentasi…"
+
+#: plugins/devhelp/gbp-devhelp-panel.c:194
+#: plugins/devhelp/gbp-devhelp-view.c:206 plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Dokumentasi"
 
@@ -3687,10 +3704,6 @@ msgstr "Bangun _Ulang"
 msgid "Display Options"
 msgstr "Opsi Tampilan"
 
-#: plugins/project-tree/gtk/menus.ui:92
-msgid "Sort Directories First"
-msgstr "Urutkan Direktori Di Awal"
-
 #: plugins/project-tree/gtk/menus.ui:98
 msgid "_Collapse All Nodes"
 msgstr "_Lipat Semua Simpul"
@@ -3858,60 +3871,60 @@ msgstr "Tidak ada saran"
 msgid "Completed spell checking"
 msgstr "Pemeriksaan ejaan selesai"
 
-#: plugins/spellcheck/gbp-spell-widget.c:420
+#: plugins/spellcheck/gbp-spell-widget.c:255
+msgid "The word is not in the dictionary"
+msgstr "Kata tersebut tidak ada dalam kamus"
+
+#: plugins/spellcheck/gbp-spell-widget.c:426
 msgid "This word is already in the personal dictionary"
 msgstr "Kata ini sudah ada dalam kamus pribadi"
 
-#: plugins/spellcheck/gbp-spell-widget.c:423
+#: plugins/spellcheck/gbp-spell-widget.c:429
 #, c-format
 msgid "This word is already in the %s dictionary"
 msgstr "Kata ini sudah ada dalam kamus %s"
-
-#: plugins/spellcheck/gbp-spell-widget.c:1042
-msgid "The word is not in the dictionary"
-msgstr "Kata tersebut tidak ada dalam kamus"
 
 #: plugins/spellcheck/gbp-spell-widget.ui:17
 msgid "Misspelled"
 msgstr "Salah eja"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:69
+#: plugins/spellcheck/gbp-spell-widget.ui:86
 msgid "_Ignore"
 msgstr "Aba_ikan"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:78
+#: plugins/spellcheck/gbp-spell-widget.ui:95
 msgid "Ignore _All"
 msgstr "_Abaikan Semua"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:97
+#: plugins/spellcheck/gbp-spell-widget.ui:114
 msgid "Change _to"
 msgstr "Ubah _ke"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:130
+#: plugins/spellcheck/gbp-spell-widget.ui:147
 msgid "Cha_nge"
 msgstr "Uba_h"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:139
+#: plugins/spellcheck/gbp-spell-widget.ui:156
 msgid "Change A_ll"
 msgstr "Ubah _Semua"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:158
+#: plugins/spellcheck/gbp-spell-widget.ui:175
 msgid "_Suggestions"
 msgstr "_Saran"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:195
+#: plugins/spellcheck/gbp-spell-widget.ui:212
 msgid "Add Word"
 msgstr "Tambah Kata"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:220
+#: plugins/spellcheck/gbp-spell-widget.ui:238
 msgid "A_dd"
 msgstr "T_ambah"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:236
+#: plugins/spellcheck/gbp-spell-widget.ui:254
 msgid "Dictionary"
 msgstr "Kamus"
 
-#: plugins/spellcheck/gbp-spell-widget.ui:286
+#: plugins/spellcheck/gbp-spell-widget.ui:304
 msgid "_Language"
 msgstr "_Bahasa"
 
@@ -3937,8 +3950,11 @@ msgstr ""
 "sebagai lampiran pada laporan kutu atau permintaan dukungan Anda."
 
 #: plugins/symbol-tree/gbp-symbol-menu-button.c:279
+msgid "Select Symbol…"
+msgstr "Pilih Simbol…"
+
 #: plugins/symbol-tree/gbp-symbol-menu-button.ui:13
-#: plugins/symbol-tree/gbp-symbol-menu-button.ui:75
+#: plugins/symbol-tree/gbp-symbol-menu-button.ui:76
 msgid "Document Outline"
 msgstr "Garis Besar Dokumentasi"
 
@@ -4062,6 +4078,19 @@ msgstr "Gagal membuat pohon XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer dimuat tapi tidak di pengelola buffer."
+
+#~ msgid "Show Project Sidebar"
+#~ msgstr "Tampilkan Bilah Sisi Proyek"
+
+#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
+#~ msgstr ""
+#~ "Bila difungsikan, bilah sisi akan tampak dalam ruang kerja penyunting."
+
+#~ msgid "Spellchecking"
+#~ msgstr "Pemeriksaan ejaan"
+
+#~ msgid "Search to the previous document"
+#~ msgstr "Cari ke dokumen sebelumnya"
 
 #~ msgid "Export"
 #~ msgstr "Ekspor"
