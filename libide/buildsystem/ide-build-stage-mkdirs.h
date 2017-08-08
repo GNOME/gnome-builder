@@ -41,7 +41,8 @@ IdeBuildStage *ide_build_stage_mkdirs_new      (IdeContext          *context);
 void           ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
                                                 const gchar         *path,
                                                 gboolean             with_parents,
-                                                gint                 mode);
+                                                gint                 mode,
+                                                gboolean             remove_on_rebuild);
 
 G_END_DECLS
 

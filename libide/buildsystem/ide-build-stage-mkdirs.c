@@ -35,6 +35,7 @@ typedef struct
   gchar    *path;
   gboolean  with_parents;
   gint      mode;
+  guint     remove_on_rebuild : 1;
 } Path;
 
 typedef struct
@@ -127,6 +128,28 @@ ide_build_stage_mkdirs_execute (IdeBuildStage     *stage,
 }
 
 static void
+ide_build_stage_mkdirs_reap (IdeBuildStage      *stage,
+                             DzlDirectoryReaper *reaper)
+{
+  IdeBuildStageMkdirs *self = (IdeBuildStageMkdirs *)stage;
+  IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
+
+  g_assert (IDE_IS_BUILD_STAGE_MKDIRS (self));
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+
+  for (guint i = 0; i < priv->paths->len; i++)
+    {
+      const Path *path = &g_array_index (priv->paths, Path, i);
+
+      if (path->remove_on_rebuild)
+        {
+          g_autoptr(GFile) file = g_file_new_for_path (path->path);
+          dzl_directory_reaper_add_directory (reaper, file, 0);
+        }
+    }
+}
+
+static void
 ide_build_stage_mkdirs_finalize (GObject *object)
 {
   IdeBuildStageMkdirs *self = (IdeBuildStageMkdirs *)object;
@@ -147,6 +170,7 @@ ide_build_stage_mkdirs_class_init (IdeBuildStageMkdirsClass *klass)
 
   stage_class->execute = ide_build_stage_mkdirs_execute;
   stage_class->query = ide_build_stage_mkdirs_query;
+  stage_class->reap = ide_build_stage_mkdirs_reap;
 }
 
 static void
@@ -170,7 +194,8 @@ void
 ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
                                  const gchar         *path,
                                  gboolean             with_parents,
-                                 gint                 mode)
+                                 gint                 mode,
+                                 gboolean             remove_on_rebuild)
 {
   IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
   Path ele = { 0 };
@@ -181,6 +206,7 @@ ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
   ele.path = g_strdup (path);
   ele.with_parents = with_parents;
   ele.mode = mode;
+  ele.remove_on_rebuild = !!remove_on_rebuild;
 
   g_array_append_val (priv->paths, ele);
 }
