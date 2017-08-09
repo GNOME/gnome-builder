@@ -11,7 +11,8 @@ devhelp_sources = [
   'gbp-devhelp-menu-button.h',
   'gbp-devhelp-layout-stack-addin.c',
   'gbp-devhelp-layout-stack-addin.h',
-
+  'gbp-devhelp-editor-addin.c',
+  'gbp-devhelp-editor-addin.h',
   'gbp-devhelp-editor-view-addin.c',
   'gbp-devhelp-editor-view-addin.h',
   'gbp-devhelp-plugin.c',
