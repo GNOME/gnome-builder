@@ -57,6 +57,7 @@ struct _IdeBufferManager
   IdeBuffer                *focus_buffer;
   GtkSourceCompletionWords *word_completion;
   GSettings                *settings;
+  GHashTable               *loading;
 
   gsize                     max_file_size;
 
@@ -775,6 +776,27 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static void
+ide_buffer_manager_load_task_completed (IdeBufferManager *self,
+                                        GParamSpec       *pspec,
+                                        GTask            *task)
+{
+  LoadState *state;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (pspec != NULL);
+  g_assert (g_strcmp0 ("completed", pspec->name) == 0);
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (state->file != NULL);
+  g_assert (IDE_IS_FILE (state->file));
+
+  if (self->loading != NULL)
+    g_hash_table_remove (self->loading, state->file);
+}
+
 /**
  * ide_buffer_manager_load_file_async:
  * @progress: (out) (nullable): A location for an #IdeProgress or %NULL.
@@ -814,6 +836,17 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_source_tag (task, ide_buffer_manager_load_file_async);
+
+  if (g_hash_table_contains (self->loading, file))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_BUSY,
+                               "The file is already loading");
+      IDE_EXIT;
+    }
 
   context = ide_object_get_context (IDE_OBJECT (self));
   ide_context_hold_for_object (context, task);
@@ -870,6 +903,14 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
   _ide_buffer_set_changed_on_volume (state->buffer, FALSE);
 
   g_task_set_task_data (task, state, load_state_free);
+
+  g_hash_table_insert (self->loading, g_object_ref (file), NULL);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_buffer_manager_load_task_completed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   if (progress)
     *progress = g_object_ref (state->progress);
@@ -1352,6 +1393,7 @@ ide_buffer_manager_finalize (GObject *object)
     g_warning ("Not all buffers have been destroyed.");
 
   g_clear_pointer (&self->buffers, g_ptr_array_unref);
+  g_clear_pointer (&self->loading, g_hash_table_unref);
   g_clear_pointer (&self->timeouts, g_hash_table_unref);
   g_clear_object (&self->settings);
 
@@ -1630,6 +1672,9 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->word_completion = g_object_new (IDE_TYPE_COMPLETION_WORDS, NULL);
   self->settings = g_settings_new ("org.gnome.builder.editor");
+  self->loading = g_hash_table_new_full ((GHashFunc)ide_file_hash,
+                                         (GEqualFunc)ide_file_equal,
+                                         g_object_unref, NULL);
 
   g_settings_bind (self->settings, "minimum-word-size", self->word_completion, "minimum-word-size", G_SETTINGS_BIND_GET);
   g_settings_bind (self->settings, "auto-save", self, "auto-save", G_SETTINGS_BIND_GET);
