@@ -2149,7 +2149,7 @@ restore_in_idle (gpointer user_data)
   ifile = ide_project_get_project_file (self->project, file);
   g_ptr_array_remove_index (ar, ar->len - 1);
 
-  flags = IDE_WORKBENCH_OPEN_FLAGS_NONE;
+  flags = IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND;
 
   ide_buffer_manager_load_file_async (self->buffer_manager,
                                       ifile,
