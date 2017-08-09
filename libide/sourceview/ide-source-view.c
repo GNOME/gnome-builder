@@ -7441,6 +7441,8 @@ ide_source_view_init (IdeSourceView *self)
                           self, "indent-style", G_BINDING_SYNC_CREATE);
   dzl_binding_group_bind (priv->file_setting_bindings, "show-right-margin",
                           self, "show-right-margin", G_BINDING_SYNC_CREATE);
+  dzl_binding_group_bind (priv->file_setting_bindings, "insert-matching-brace",
+                          self, "insert-matching-brace", G_BINDING_SYNC_CREATE);
   dzl_binding_group_bind (priv->file_setting_bindings, "overwrite-braces",
                           self, "overwrite-braces", G_BINDING_SYNC_CREATE);
 

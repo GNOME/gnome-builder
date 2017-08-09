@@ -45,6 +45,17 @@ IDE_FILE_SETTINGS_PROPERTY (INSERT_TRAILING_NEWLINE, insert_trailing_newline,
                             priv->insert_trailing_newline = !!insert_trailing_newline;,
                             boolean)
 
+IDE_FILE_SETTINGS_PROPERTY (INSERT_MATCHING_BRACE, insert_matching_brace,
+                            gboolean, gboolean,
+                            "insert-matching-brace",
+                            g_param_spec_boolean ("insert-matching-brace",
+                                                  "Insert Matching Brace",
+                                                  "Insert Matching Brace",
+                                                  FALSE,
+                                                  (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)),
+                            priv->insert_matching_brace = !!insert_matching_brace;,
+                            boolean)
+
 IDE_FILE_SETTINGS_PROPERTY (OVERWRITE_BRACES, overwrite_braces,
                             gboolean, gboolean,
                             "overwrite-braces",
