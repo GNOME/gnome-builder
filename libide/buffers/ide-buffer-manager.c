@@ -647,7 +647,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
   LoadState *state;
   GError *error = NULL;
   gsize size = 0;
-  gboolean create_new_view;
+  gboolean create_new_view = FALSE;
 
   IDE_ENTRY;
 
@@ -715,7 +715,9 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
         }
     }
 
-  create_new_view = (state->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND) ? FALSE : state->is_new;
+  if (state->is_new || (state->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND) == 0)
+    create_new_view = TRUE;
+
   g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, create_new_view);
 
   gtk_source_file_loader_load_async (state->loader,
