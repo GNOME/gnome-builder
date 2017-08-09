@@ -19,7 +19,6 @@
 #define G_LOG_DOMAIN "gbp-devhelp-editor-view-addin"
 
 #include "gbp-devhelp-editor-view-addin.h"
-#include "gbp-devhelp-panel.h"
 
 struct _GbpDevhelpEditorViewAddin
 {
