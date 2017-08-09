@@ -318,6 +318,7 @@ ide_preferences_builtin_register_languages (DzlPreferences *preferences)
   dzl_preferences_add_list_group (preferences, "languages.id", "basic", _("General"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "trim-trailing-whitespace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Trim trailing whitespace"), _("Upon saving, trailing whitespace from modified lines will be trimmed."), NULL, 10);
   dzl_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "overwrite-braces", "/org/gnome/builder/editor/language/{id}/", NULL, _("Overwrite Braces"), _("Overwrite closing braces"), NULL, 20);
+  dzl_preferences_add_switch (preferences, "languages.id", "basic", "org.gnome.builder.editor.language", "insert-matching-brace", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert Matching Brace"), _("Insert matching character for { [ ( or \""), NULL, 20);
 
   dzl_preferences_add_list_group (preferences, "languages.id", "margin", _("Margins"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_radio (preferences, "languages.id", "margin", "org.gnome.builder.editor.language", "show-right-margin", "/org/gnome/builder/editor/language/{id}/", NULL, _("Show right margin"), NULL, NULL, 0);
