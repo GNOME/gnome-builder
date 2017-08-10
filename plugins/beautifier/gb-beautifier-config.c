@@ -46,7 +46,10 @@ config_entry_clear_func (gpointer data)
 
   g_assert (entry != NULL);
 
-  g_object_unref (entry->config_file);
+  /* Some entries don't have a config file */
+  if (entry->config_file != NULL)
+    g_object_unref (entry->config_file);
+
   g_free (entry->name);
   g_free (entry->lang_id);
 
