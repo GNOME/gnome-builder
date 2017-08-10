@@ -23,23 +23,23 @@
 
 #include "ide.h"
 
-#include "gb-beautifier-workbench-addin.h"
+#include "gb-beautifier-editor-addin.h"
 
 G_BEGIN_DECLS
 
-void          gb_beautifier_helper_create_tmp_file_async    (GbBeautifierWorkbenchAddin  *self,
-                                                             const gchar                 *text,
-                                                             GAsyncReadyCallback          callback,
-                                                             GCancellable                *cancellable,
-                                                             gpointer                     user_data);
-GFile        *gb_beautifier_helper_create_tmp_file_finish   (GbBeautifierWorkbenchAddin  *self,
-                                                             GAsyncResult                *result,
-                                                             GError                     **error);
+void          gb_beautifier_helper_create_tmp_file_async    (GbBeautifierEditorAddin  *self,
+                                                             const gchar              *text,
+                                                             GAsyncReadyCallback       callback,
+                                                             GCancellable             *cancellable,
+                                                             gpointer                  user_data);
+GFile        *gb_beautifier_helper_create_tmp_file_finish   (GbBeautifierEditorAddin  *self,
+                                                             GAsyncResult             *result,
+                                                             GError                  **error);
 
-const gchar  *gb_beautifier_helper_get_lang_id              (GbBeautifierWorkbenchAddin  *self,
-                                                             IdeSourceView               *view);
-void          gb_beautifier_helper_remove_tmp_file          (GbBeautifierWorkbenchAddin  *self,
-                                                             GFile                       *tmp_file);
+const gchar  *gb_beautifier_helper_get_lang_id              (GbBeautifierEditorAddin  *self,
+                                                             IdeSourceView            *view);
+void          gb_beautifier_helper_remove_tmp_file          (GbBeautifierEditorAddin  *self,
+                                                             GFile                    *tmp_file);
 
 G_END_DECLS
 

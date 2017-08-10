@@ -23,7 +23,7 @@ option('with_docs', type: 'boolean')
 #   https://github.com/mesonbuild/meson/issues/707
 option('with_autotools', type: 'boolean')
 option('with_autotools_templates', type: 'boolean')
-option('with_beautifier', type: 'boolean', value: false)
+option('with_beautifier', type: 'boolean')
 option('with_c_pack', type: 'boolean')
 option('with_cargo', type: 'boolean')
 option('with_clang', type: 'boolean')

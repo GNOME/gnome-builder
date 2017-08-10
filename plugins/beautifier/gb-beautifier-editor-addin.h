@@ -1,4 +1,4 @@
-/* gb-beautifier-workbench-addin.h
+/* gb-beautifier-editor-addin.h
  *
  * Copyright (C) 2016 sebastien lafargue <slafargue@gnome.org>
  *
@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_BEAUTIFIER_WORKBENCH_ADDIN_H
-#define GB_BEAUTIFIER_WORKBENCH_ADDIN_H
+#ifndef GB_BEAUTIFIER_EDITOR_ADDIN_H
+#define GB_BEAUTIFIER_EDITOR_ADDIN_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_BEAUTIFIER_WORKBENCH_ADDIN (gb_beautifier_workbench_addin_get_type())
+#define GB_TYPE_BEAUTIFIER_EDITOR_ADDIN (gb_beautifier_editor_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbBeautifierWorkbenchAddin, gb_beautifier_workbench_addin, GB, BEAUTIFIER_WORKBENCH_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbBeautifierEditorAddin, gb_beautifier_editor_addin, GB, BEAUTIFIER_EDITOR_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* GB_BEAUTIFIER_WORKBENCH_ADDIN_H */
+#endif /* GB_BEAUTIFIER_EDITOR_ADDIN_H */

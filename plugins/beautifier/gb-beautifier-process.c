@@ -27,19 +27,19 @@
 
 typedef struct
 {
-  GbBeautifierWorkbenchAddin *self;
-  IdeSourceView              *source_view;
-  GtkTextMark                *begin_mark;
-  GtkTextMark                *end_mark;
-  GbBeautifierConfigCommand   command;
-  GPtrArray                  *command_args;
-  GFile                      *src_file;
-  GFile                      *config_file;
-  GFile                      *tmp_workdir_file;
-  GFile                      *tmp_src_file;
-  GFile                      *tmp_config_file;
-  gchar                      *lang_id;
-  gchar                      *text;
+  GbBeautifierEditorAddin   *self;
+  IdeSourceView             *source_view;
+  GtkTextMark               *begin_mark;
+  GtkTextMark               *end_mark;
+  GbBeautifierConfigCommand  command;
+  GPtrArray                 *command_args;
+  GFile                     *src_file;
+  GFile                     *config_file;
+  GFile                     *tmp_workdir_file;
+  GFile                     *tmp_src_file;
+  GFile                     *tmp_config_file;
+  gchar                     *lang_id;
+  gchar                     *text;
 } ProcessState;
 
 static void
@@ -112,9 +112,9 @@ match_and_replace (const gchar *str,
 }
 
 static void
-command_args_expand (GbBeautifierWorkbenchAddin *self,
-                     GPtrArray                  *args,
-                     ProcessState               *state)
+command_args_expand (GbBeautifierEditorAddin *self,
+                     GPtrArray               *args,
+                     ProcessState            *state)
 {
   g_autofree gchar *src_path = NULL;
   g_autofree gchar *config_path = NULL;
@@ -146,14 +146,14 @@ command_args_expand (GbBeautifierWorkbenchAddin *self,
 }
 
 static GSubprocess *
-gb_beautifier_process_create_generic (GbBeautifierWorkbenchAddin *self,
-                                      ProcessState               *state,
-                                      GError                     *error)
+gb_beautifier_process_create_generic (GbBeautifierEditorAddin *self,
+                                      ProcessState            *state,
+                                      GError                  *error)
 {
   GSubprocess *subprocess = NULL;
   g_autofree gchar *src_path = NULL;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (state != NULL);
 
   src_path = g_file_get_path (state->src_file);
@@ -171,9 +171,9 @@ gb_beautifier_process_create_generic (GbBeautifierWorkbenchAddin *self,
 }
 
 static GSubprocess *
-gb_beautifier_process_create_for_clang_format (GbBeautifierWorkbenchAddin *self,
-                                               ProcessState               *state,
-                                               GError                     *error)
+gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin *self,
+                                               ProcessState            *state,
+                                               GError                  *error)
 {
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   GSubprocess *subprocess = NULL;
@@ -184,7 +184,7 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierWorkbenchAddin *self,
   g_autofree gchar *tmp_config_path = NULL;
   g_autofree gchar *tmp_src_path = NULL;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (state != NULL);
 
   config_path = g_file_get_path (state->config_file);
@@ -312,14 +312,14 @@ create_tmp_file_cb (GObject      *object,
                     GAsyncResult *result,
                     gpointer      user_data)
 {
-  GbBeautifierWorkbenchAddin  *self = (GbBeautifierWorkbenchAddin  *)object;
+  GbBeautifierEditorAddin  *self = (GbBeautifierEditorAddin  *)object;
   g_autoptr (GTask) task = (GTask *)user_data;
   g_autoptr(GError) error = NULL;
   ProcessState *state;
   GSubprocess *process;
   GCancellable *cancellable;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
@@ -371,21 +371,21 @@ command_args_copy (GPtrArray *args)
 }
 
 void
-gb_beautifier_process_launch_async (GbBeautifierWorkbenchAddin  *self,
-                                    IdeSourceView               *source_view,
-                                    GtkTextIter                 *begin,
-                                    GtkTextIter                 *end,
-                                    GbBeautifierConfigEntry     *entry,
-                                    GAsyncReadyCallback          callback,
-                                    GCancellable                *cancellable,
-                                    gpointer                     user_data)
+gb_beautifier_process_launch_async (GbBeautifierEditorAddin  *self,
+                                    IdeSourceView            *source_view,
+                                    GtkTextIter              *begin,
+                                    GtkTextIter              *end,
+                                    GbBeautifierConfigEntry  *entry,
+                                    GAsyncReadyCallback       callback,
+                                    GCancellable             *cancellable,
+                                    gpointer                  user_data)
 {
   GtkTextBuffer *buffer;
   ProcessState *state;
   g_autoptr(GTask) task = NULL;
   const gchar *lang_id;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (entry != NULL);
@@ -431,11 +431,11 @@ gb_beautifier_process_launch_async (GbBeautifierWorkbenchAddin  *self,
 }
 
 gboolean
-gb_beautifier_process_launch_finish (GbBeautifierWorkbenchAddin  *self,
-                                     GAsyncResult                *result,
-                                     GError                     **error)
+gb_beautifier_process_launch_finish (GbBeautifierEditorAddin  *self,
+                                     GAsyncResult             *result,
+                                     GError                  **error)
 {
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (g_task_is_valid (result, self));
 
   return g_task_propagate_boolean (G_TASK (result), error);

@@ -25,12 +25,13 @@
 
 G_BEGIN_DECLS
 
-struct _GbBeautifierWorkbenchAddin
+struct _GbBeautifierEditorAddin
 {
   GObject                parent_instance;
 
-  IdeWorkbench          *workbench;
+  IdeContext            *context;
   IdeEditorPerspective  *editor;
+  IdeLayoutView         *current_view;
   GArray                *entries;
 };
 

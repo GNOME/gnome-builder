@@ -22,21 +22,21 @@
 #include <glib-object.h>
 
 #include "gb-beautifier-config.h"
-#include "gb-beautifier-workbench-addin.h"
+#include "gb-beautifier-editor-addin.h"
 
 G_BEGIN_DECLS
 
-void          gb_beautifier_process_launch_async      (GbBeautifierWorkbenchAddin  *self,
-                                                       IdeSourceView               *source_view,
-                                                       GtkTextIter                 *begin,
-                                                       GtkTextIter                 *end,
-                                                       GbBeautifierConfigEntry     *entry,
-                                                       GAsyncReadyCallback          callback,
-                                                       GCancellable                *cancellable,
-                                                       gpointer                     user_data);
-gboolean      gb_beautifier_process_launch_finish     (GbBeautifierWorkbenchAddin  *self,
-                                                       GAsyncResult                *result,
-                                                       GError                     **error);
+void          gb_beautifier_process_launch_async      (GbBeautifierEditorAddin  *self,
+                                                       IdeSourceView            *source_view,
+                                                       GtkTextIter              *begin,
+                                                       GtkTextIter              *end,
+                                                       GbBeautifierConfigEntry  *entry,
+                                                       GAsyncReadyCallback       callback,
+                                                       GCancellable             *cancellable,
+                                                       gpointer                  user_data);
+gboolean      gb_beautifier_process_launch_finish     (GbBeautifierEditorAddin  *self,
+                                                       GAsyncResult             *result,
+                                                       GError                  **error);
 
 G_END_DECLS
 

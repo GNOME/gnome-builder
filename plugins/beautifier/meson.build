@@ -16,8 +16,8 @@ beautifier_sources = [
   'gb-beautifier-private.h',
   'gb-beautifier-process.c',
   'gb-beautifier-process.h',
-  'gb-beautifier-workbench-addin.c',
-  'gb-beautifier-workbench-addin.h',
+  'gb-beautifier-editor-addin.c',
+  'gb-beautifier-editor-addin.h',
 ]
 
 beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier')

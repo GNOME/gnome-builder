@@ -67,12 +67,12 @@ map_entry_clear_func (gpointer data)
 }
 
 static gboolean
-gb_beautifier_config_check_duplicates (GbBeautifierWorkbenchAddin *self,
-                                       GArray                     *entries,
-                                       const gchar                *lang_id,
-                                       const gchar                *display_name)
+gb_beautifier_config_check_duplicates (GbBeautifierEditorAddin *self,
+                                       GArray                  *entries,
+                                       const gchar             *lang_id,
+                                       const gchar             *display_name)
 {
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (entries != NULL);
   g_assert (!ide_str_empty0 (lang_id));
   g_assert (!ide_str_empty0 (display_name));
@@ -94,11 +94,11 @@ gb_beautifier_config_check_duplicates (GbBeautifierWorkbenchAddin *self,
 }
 
 static gboolean
-gb_beautifier_map_check_duplicates (GbBeautifierWorkbenchAddin *self,
-                                    GArray                     *map,
-                                    const gchar                *lang_id)
+gb_beautifier_map_check_duplicates (GbBeautifierEditorAddin *self,
+                                    GArray                  *map,
+                                    const gchar             *lang_id)
 {
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (map != NULL);
   g_assert (!ide_str_empty0 (lang_id));
 
@@ -118,13 +118,13 @@ gb_beautifier_map_check_duplicates (GbBeautifierWorkbenchAddin *self,
 }
 
 static gboolean
-add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
-                                  const gchar                *base_path,
-                                  const gchar                *lang_id,
-                                  const gchar                *real_lang_id,
-                                  GArray                     *entries,
-                                  const gchar                *map_default,
-                                  gboolean                    is_from_map)
+add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
+                                  const gchar             *base_path,
+                                  const gchar             *lang_id,
+                                  const gchar             *real_lang_id,
+                                  GArray                  *entries,
+                                  const gchar             *map_default,
+                                  gboolean                 is_from_map)
 {
   g_autoptr(GKeyFile) key_file = NULL;
   g_autofree gchar *ini_path = NULL;
@@ -134,7 +134,7 @@ add_entries_from_config_ini_file (GbBeautifierWorkbenchAddin *self,
   gsize nb_profiles;
   GError *error = NULL;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!ide_str_empty0 (base_path));
   g_assert (!ide_str_empty0 (lang_id));
   g_assert (!ide_str_empty0 (real_lang_id));
@@ -279,8 +279,8 @@ fail:
 }
 
 static gboolean
-is_a_lang_id (GbBeautifierWorkbenchAddin *self,
-              const gchar                *lang_id)
+is_a_lang_id (GbBeautifierEditorAddin *self,
+              const gchar             *lang_id)
 {
   GtkSourceLanguageManager *lang_manager;
   const gchar * const * lang_ids = NULL;
@@ -292,10 +292,10 @@ is_a_lang_id (GbBeautifierWorkbenchAddin *self,
 }
 
 static gboolean
-add_entries_from_base_path (GbBeautifierWorkbenchAddin *self,
-                            const gchar                *base_path,
-                            GArray                     *entries,
-                            GArray                     *map)
+add_entries_from_base_path (GbBeautifierEditorAddin *self,
+                            const gchar             *base_path,
+                            GArray                  *entries,
+                            GArray                  *map)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GFile) parent_file = NULL;
@@ -303,7 +303,7 @@ add_entries_from_base_path (GbBeautifierWorkbenchAddin *self,
   GError *error = NULL;
   gboolean ret = FALSE;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!ide_str_empty0 (base_path));
   g_assert (entries != NULL);
   g_assert (map != NULL);
@@ -364,8 +364,8 @@ add_entries_from_base_path (GbBeautifierWorkbenchAddin *self,
 }
 
 static GArray *
-gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
-                              const gchar                *path)
+gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
+                              const gchar             *path)
 {
   GArray *map;
   g_autofree gchar *file_name = NULL;
@@ -374,7 +374,7 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
   gsize nb_lang_ids;
   GError *error = NULL;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!ide_str_empty0 (path));
 
   map = g_array_new (TRUE, TRUE, sizeof (GbBeautifierMapEntry));
@@ -420,7 +420,7 @@ gb_beautifier_config_get_map (GbBeautifierWorkbenchAddin *self,
 }
 
 GArray *
-gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self)
+gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self)
 {
   IdeContext *context;
   IdeVcs *vcs;
@@ -431,7 +431,7 @@ gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self)
   const gchar *datadir;
   g_autofree gchar *configdir = NULL;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
   entries = g_array_new (TRUE, TRUE, sizeof (GbBeautifierConfigEntry));
   g_array_set_clear_func (entries, config_entry_clear_func);
@@ -447,7 +447,7 @@ gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self)
     g_array_free (map, TRUE);
 
   /* Project wide config */
-  if (NULL != (context = ide_workbench_get_context (self->workbench)) &&
+  if (NULL != (context = self->context) &&
       NULL != (vcs = ide_context_get_vcs (context)))
     {
       GFile *workdir;

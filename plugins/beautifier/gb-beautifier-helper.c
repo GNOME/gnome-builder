@@ -24,10 +24,10 @@
 
 typedef struct
 {
-  GbBeautifierWorkbenchAddin *self;
-  GFile                      *file;
-  GFileIOStream              *stream;
-  gsize                       len;
+  GbBeautifierEditorAddin *self;
+  GFile                   *file;
+  GFileIOStream           *stream;
+  gsize                    len;
 } SaveTmpState;
 
 static void
@@ -68,11 +68,11 @@ gb_beautifier_helper_create_tmp_file_cb (GObject      *object,
 }
 
 void
-gb_beautifier_helper_create_tmp_file_async (GbBeautifierWorkbenchAddin *self,
-                                            const gchar                *text,
-                                            GAsyncReadyCallback         callback,
-                                            GCancellable               *cancellable,
-                                            gpointer                    user_data)
+gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
+                                            const gchar             *text,
+                                            GAsyncReadyCallback      callback,
+                                            GCancellable            *cancellable,
+                                            gpointer                 user_data)
 {
   SaveTmpState *state;
   GFile *file = NULL;
@@ -81,7 +81,7 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierWorkbenchAddin *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GError) error = NULL;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!ide_str_empty0 (text));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (callback != NULL);
@@ -113,35 +113,35 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierWorkbenchAddin *self,
 }
 
 GFile *
-gb_beautifier_helper_create_tmp_file_finish (GbBeautifierWorkbenchAddin  *self,
-                                             GAsyncResult                *result,
-                                             GError                     **error)
+gb_beautifier_helper_create_tmp_file_finish (GbBeautifierEditorAddin  *self,
+                                             GAsyncResult             *result,
+                                             GError                  **error)
 {
   GTask *task = (GTask *)result;
 
-  g_return_val_if_fail (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self), NULL);
+  g_return_val_if_fail (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self), NULL);
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
 
   return g_task_propagate_pointer (task, error);
 }
 
 void
-gb_beautifier_helper_remove_tmp_file (GbBeautifierWorkbenchAddin *self,
-                                      GFile                      *tmp_file)
+gb_beautifier_helper_remove_tmp_file (GbBeautifierEditorAddin *self,
+                                      GFile                   *tmp_file)
 {
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
   g_file_delete (tmp_file, NULL, NULL);
 }
 
 const gchar *
-gb_beautifier_helper_get_lang_id (GbBeautifierWorkbenchAddin *self,
-                                  IdeSourceView              *view)
+gb_beautifier_helper_get_lang_id (GbBeautifierEditorAddin *self,
+                                  IdeSourceView           *view)
 {
   GtkTextBuffer *buffer;
   GtkSourceLanguage *lang;
 
-  g_assert (GB_IS_BEAUTIFIER_WORKBENCH_ADDIN (self));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
   buffer = GTK_TEXT_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));

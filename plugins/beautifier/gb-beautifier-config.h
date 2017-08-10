@@ -21,7 +21,7 @@
 
 #include <glib.h>
 
-#include "gb-beautifier-workbench-addin.h"
+#include "gb-beautifier-editor-addin.h"
 
 G_BEGIN_DECLS
 
@@ -48,7 +48,7 @@ typedef struct
   gchar *default_profile;
 } GbBeautifierMapEntry;
 
-GArray *gb_beautifier_config_get_entries (GbBeautifierWorkbenchAddin *self);
+GArray *gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self);
 
 G_END_DECLS
 

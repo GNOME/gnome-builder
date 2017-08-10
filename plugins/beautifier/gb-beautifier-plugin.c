@@ -19,12 +19,12 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 
-#include "gb-beautifier-workbench-addin.h"
+#include "gb-beautifier-editor-addin.h"
 
 void
 peas_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GB_TYPE_BEAUTIFIER_WORKBENCH_ADDIN);
+                                              IDE_TYPE_EDITOR_ADDIN,
+                                              GB_TYPE_BEAUTIFIER_EDITOR_ADDIN);
 }
