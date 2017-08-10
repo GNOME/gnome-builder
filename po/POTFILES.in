@@ -94,7 +94,7 @@ libide/workbench/ide-workbench.c
 libide/workbench/ide-workbench-header-bar.ui
 plugins/autotools/ide-autotools-makecache-stage.c
 plugins/autotools-templates/autotools_templates/__init__.py
-plugins/beautifier/gb-beautifier-workbench-addin.c
+plugins/beautifier/gb-beautifier-editor-addin.c
 plugins/beautifier/gtk/menus.ui
 plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
