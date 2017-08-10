@@ -29,7 +29,8 @@ shared_module('beautifier_plugin', beautifier_sources,
   install_dir: plugindir,
 )
 
-install_subdir('data', install_dir: beautifier_datadir)
+install_subdir('beautifier_plugin/data', install_dir: beautifier_datadir)
+install_subdir('beautifier_plugin/internal', install_dir: beautifier_datadir)
 
 configure_file(
           input: 'beautifier.plugin',
