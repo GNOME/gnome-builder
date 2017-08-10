@@ -20,7 +20,7 @@ beautifier_sources = [
   'gb-beautifier-editor-addin.h',
 ]
 
-beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier')
+beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier_plugin')
 shared_module('beautifier_plugin', beautifier_sources,
   dependencies: plugin_deps,
   link_args: plugin_link_args,
