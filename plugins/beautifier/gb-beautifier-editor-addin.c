@@ -338,7 +338,7 @@ gb_beautifier_editor_addin_view_set (IdeEditorAddin *addin,
 
   if (self->current_view != NULL)
     {
-      if (view == IDE_LAYOUT_VIEW (self->current_view))
+      if (view == self->current_view)
         return;
 
       if (view != NULL)
