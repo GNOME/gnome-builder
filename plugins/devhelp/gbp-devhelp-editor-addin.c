@@ -56,17 +56,17 @@ gbp_devhelp_editor_addin_load (IdeEditorAddin       *addin,
                                IdeEditorPerspective *editor)
 {
   GbpDevhelpEditorAddin *self = (GbpDevhelpEditorAddin *)addin;
-  GtkWidget *win;
+  IdeWorkbench *workbench;
 
   g_assert (GBP_IS_DEVHELP_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
 
   self->editor = editor;
 
-  win = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
 
-  if (G_IS_ACTION_MAP (win))
-    g_action_map_add_action_entries (G_ACTION_MAP (win), actions, G_N_ELEMENTS (actions), self);
+  if (workbench != NULL)
+    g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions, G_N_ELEMENTS (actions), self);
 }
 
 static void
