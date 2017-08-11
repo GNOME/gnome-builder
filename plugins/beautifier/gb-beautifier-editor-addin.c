@@ -262,7 +262,9 @@ cleanup_view_cb (GtkWidget               *widget,
   gchar *default_action_name;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+
+  if (!IDE_IS_EDITOR_VIEW (view))
+    return;
 
   app = GTK_APPLICATION (g_application_get_default ());
 
@@ -330,6 +332,9 @@ gb_beautifier_editor_addin_view_set (IdeEditorAddin *addin,
   /* If there is currently a view set, and this is
    * a new view, then we want to clean it up.
    */
+
+  if (!IDE_IS_EDITOR_VIEW (view))
+    return;
 
   if (self->current_view != NULL)
     {
