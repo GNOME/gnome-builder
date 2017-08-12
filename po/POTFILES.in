@@ -92,6 +92,7 @@ libide/workbench/ide-omni-bar.ui
 libide/workbench/ide-workbench-actions.c
 libide/workbench/ide-workbench.c
 libide/workbench/ide-workbench-header-bar.ui
+libide/workbench/ide-workbench-shortcuts.c
 plugins/autotools/ide-autotools-makecache-stage.c
 plugins/autotools-templates/autotools_templates/__init__.py
 plugins/beautifier/gb-beautifier-editor-addin.c
