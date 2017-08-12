@@ -60,6 +60,8 @@ GObject *ide_workbench_get_selection_owner        (IdeWorkbench          *self);
 
 void     _ide_workbench_header_bar_set_fullscreen (IdeWorkbenchHeaderBar *self,
                                                    gboolean               fullscreen);
+void     _ide_workbench_add_perspective_shortcut  (IdeWorkbench          *self,
+                                                   IdePerspective        *perspective);
 
 G_END_DECLS
 

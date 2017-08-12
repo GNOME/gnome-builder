@@ -709,7 +709,6 @@ void
 ide_workbench_add_perspective (IdeWorkbench   *self,
                                IdePerspective *perspective)
 {
-  g_autofree gchar *accel= NULL;
   g_autofree gchar *icon_name = NULL;
   g_autofree gchar *id = NULL;
   g_autofree gchar *title = NULL;
@@ -736,18 +735,7 @@ ide_workbench_add_perspective (IdeWorkbench   *self,
                                        "name", id,
                                        NULL);
 
-  accel = ide_perspective_get_accelerator (perspective);
-
-  if (accel != NULL)
-    {
-      const gchar *accel_map[] = { accel, NULL };
-      g_autofree gchar *action_name = NULL;
-
-      action_name = g_strdup_printf ("win.perspective('%s')", id);
-      gtk_application_set_accels_for_action (GTK_APPLICATION (IDE_APPLICATION_DEFAULT),
-                                             action_name, accel_map);
-
-    }
+  _ide_workbench_add_perspective_shortcut (self, perspective);
 }
 
 void

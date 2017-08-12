@@ -570,6 +570,7 @@ libide_sources = libide_generated_headers + libide_public_sources + [
   'workbench/ide-omni-bar-row.h',
   'workbench/ide-workbench-actions.c',
   'workbench/ide-workbench-private.h',
+  'workbench/ide-workbench-shortcuts.c',
   'workers/ide-worker-manager.c',
   'workers/ide-worker-manager.h',
   'workers/ide-worker-process.c',
