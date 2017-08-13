@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name={{name}}
+Exec={{exec_name}}
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

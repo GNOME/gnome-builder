@@ -1,0 +1,52 @@
+{
+  "app-id": "{{appid}}",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "3.24",
+  "sdk": "org.gnome.Sdk",
+  "command": "{{exec_name}}",
+  "finish-args": [
+    "--share=network",
+    "--share=ipc",
+    "--socket=x11",
+    "--socket=wayland",
+    "--filesystem=xdg-run/dconf",
+    "--filesystem=~/.config/dconf:ro",
+    "--talk-name=ca.desrt.dconf",
+    "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+  ],
+  "build-options": {
+    "cflags": "-O2 -g",
+    "cxxflags": "-O2 -g",
+    "env": {
+      "V": "1"
+    }
+  },
+  "cleanup": [
+    "/include",
+    "/lib/pkgconfig",
+    "/man",
+    "/share/doc",
+    "/share/gtk-doc",
+    "/share/man",
+    "/share/pkgconfig",
+{{if language == "vala"}}    "/share/vala",{{end}}
+    "*.la",
+    "*.a"
+  ],
+  "modules": [
+    {
+      "name": "{{name}}",
+      "buildsystem": "meson",
+      "config-opts": [
+        "--libdir=lib"
+      ],
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "file://{{project_path}}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="{{appid_path}}/js">
+    <file>main.js</file>
+    <file>window.js</file>
+  </gresource>
+</gresources>

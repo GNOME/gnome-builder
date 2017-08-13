@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="{{name}}">
+	<schema id="{{appid}}" path="{{appid_path}}/">
+	</schema>
+</schemalist>
