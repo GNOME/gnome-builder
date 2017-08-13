@@ -25,6 +25,7 @@
 #include "ide-source-view.h"
 
 static const DzlShortcutEntry source_view_shortcuts[] = {
+  { NULL }
 };
 
 void
