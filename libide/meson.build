@@ -653,6 +653,7 @@ libide = shared_library('ide-' + libide_api_version,
      link_args: [ '-Wl,--version-script,' + join_paths(meson.current_source_dir(), 'ide.map') ],
        install: true,
    install_dir: pkglibdir,
+ install_rpath: pkglibdir_abs,
 )
 
 libide_dep = declare_dependency(

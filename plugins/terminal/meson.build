@@ -39,6 +39,7 @@ shared_module('terminal', terminal_sources,
   link_depends: plugin_link_deps,
   install: true,
   install_dir: plugindir,
+  install_rpath: pkglibdir_abs,
 )
 
 configure_file(
