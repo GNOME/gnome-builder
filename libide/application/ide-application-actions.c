@@ -416,27 +416,8 @@ static const GActionEntry IdeApplicationActions[] = {
 void
 ide_application_actions_init (IdeApplication *self)
 {
-  static const gchar *global_search[] = { "<control>period", NULL };
-  static const gchar *new_file[] = { "<control>n", NULL };
-  static const gchar *shortcuts[] = { "<control>F1", "<control><shift>question", NULL };
-  static const gchar *help[] = { "F1", NULL };
-  static const gchar *command_bar[] = { "<ctrl>Return", "<ctrl>KP_Enter", NULL };
-  static const gchar *build[] = { "<ctrl>F7", NULL };
-  static const gchar *fullscreen[] = { "F11", NULL };
-
   g_action_map_add_action_entries (G_ACTION_MAP (self), IdeApplicationActions,
                                    G_N_ELEMENTS (IdeApplicationActions), self);
-
-  /*
-   * FIXME: Once we get a new shortcuts engine, port these to that.
-   */
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.help", help);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "app.shortcuts", shortcuts);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "perspective.new-file", new_file);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.fullscreen", fullscreen);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.global-search", global_search);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "win.show-command-bar", command_bar);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self), "build-manager.build", build);
 
   ide_application_actions_update (self);
 }

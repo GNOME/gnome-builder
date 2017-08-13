@@ -387,6 +387,7 @@ ide_application_startup (GApplication *application)
       ide_application_register_settings (self);
       ide_application_register_keybindings (self);
       ide_application_actions_init (self);
+      _ide_application_init_shortcuts (self);
 
       modeline_parser_init ();
     }

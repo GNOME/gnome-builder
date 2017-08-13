@@ -443,6 +443,7 @@ libide_sources = libide_generated_headers + libide_public_sources + [
   'application/ide-application-command-line.c',
   'application/ide-application-plugins.c',
   'application/ide-application-private.h',
+  'application/ide-application-shortcuts.c',
   'application/ide-application-tests.c',
   'application/ide-application-tests.h',
   'buffers/ide-buffer-private.h',

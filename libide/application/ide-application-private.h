@@ -80,6 +80,7 @@ void     ide_application_open_async                 (IdeApplication        *self
 gboolean ide_application_open_finish                (IdeApplication        *self,
                                                      GAsyncResult          *reuslt,
                                                      GError               **error);
+void     _ide_application_init_shortcuts            (IdeApplication        *self);
 
 G_END_DECLS
 
