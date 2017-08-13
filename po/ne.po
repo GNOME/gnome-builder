@@ -1,0 +1,4451 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gnome Nepali Translation Project\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=translations (i18n)\n"
+"POT-Creation-Date: 2017-08-12 18:57+0000\n"
+"PO-Revision-Date: 2017-08-13 15:46+0545\n"
+"Language-Team: Nepali Translation Team <chautari@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.3\n"
+"Last-Translator: Pawan Chitrakar <chautari@gmail.com>\n"
+"Language: ne\n"
+
+#: contrib/gstyle/gstyle-color-panel.c:953
+msgid "Palette: "
+msgstr "रङ्गदानी"
+
+#: contrib/gstyle/gstyle-color-panel.c:955
+msgid "Palette"
+msgstr "रङदानी"
+
+#: contrib/gstyle/gstyle-color-plane.c:1601
+#, fuzzy
+msgid "Color Plane"
+msgstr "प्लेन"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:66
+msgid "Color name"
+msgstr "रङ्गको नाम"
+
+#: contrib/gstyle/gstyle-color-widget-actions.c:68
+#, fuzzy
+msgid "Enter a new name for the color"
+msgstr "नयाँ ग्रेडियन्ट फ्लेयरका लागि नाम प्रविष्ट गर्नुहोस्"
+
+#: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
+#, fuzzy, c-format
+msgid "failed to parse line %i\n"
+msgstr "जिपिजि प्रयोगकर्ता आइडी संकेत पद वर्णन गर्न असफल भयो ।"
+
+#: contrib/gstyle/gstyle-palette.c:613
+#, fuzzy, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s: रित्तो"
+
+#: contrib/gstyle/gstyle-palette.c:719
+#, fuzzy, c-format
+msgid "%s: failed to parse\n"
+msgstr "%sतर्कहरू पार्स गर्न असफल\n"
+
+#: contrib/gstyle/gstyle-palette.c:727
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "'%s' खोल्न अक्षम\n"
+
+#: contrib/gstyle/gstyle-palette.c:765
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s:यो फाइल ढाँचा असमर्थित भयो ।\n"
+
+#: contrib/gstyle/gstyle-palette.c:822
+#, fuzzy
+msgid "failed to parse\n"
+msgstr "जिपिजि प्रयोगकर्ता आइडी संकेत पद वर्णन गर्न असफल भयो ।"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: contrib/gstyle/gstyle-palette.c:829
+#, fuzzy
+msgid "Generated"
+msgstr "प्रोफाईल बनाउन सकिएन"
+
+#: contrib/gstyle/gstyle-palette.c:932
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "बचत गर्न अक्षम %s\n"
+
+#: contrib/gstyle/gstyle-palette-widget.c:983
+#, fuzzy, c-format
+msgid "Unsaved palette %u"
+msgstr "%u:%u:%u"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
+#, fuzzy
+msgid "Hue"
+msgstr "ह्यु"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:75
+msgid "Saturation"
+msgstr "स्याचुरेसन"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+msgid "Value"
+msgstr "मान:"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
+#, fuzzy
+msgid "Cielab l"
+msgstr "बायाँतिर"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr ""
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
+#, fuzzy
+msgid "Cielab b"
+msgstr "<b>तेर्सो पङ्क्तिबद्धता</b>"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
+msgid "Red"
+msgstr "रातो"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr "हरियो"
+
+#: contrib/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr "नीलो"
+
+#: contrib/gstyle/tests/data/palette.gstyle.xml:20
+#: plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "आधारभूत"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:157
+#, fuzzy
+msgid "Color Components"
+msgstr "सिभिल इन्जिनियरिङ अवयवहरू"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:573
+#: plugins/color-picker/gtk/color-picker-prefs.ui:433
+#, fuzzy
+msgid "Color strings"
+msgstr "स्ट्रिङ"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:634
+msgid "HEX3"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:645
+msgid "HEX6"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:656
+msgid "RGB"
+msgstr "आर जि बि"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:667
+msgid "RGBA"
+msgstr "RGBA"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:678
+msgid "HSL"
+msgstr "HSL"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:689
+msgid "HSLA"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "रङदानीहरू"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:946
+#: plugins/color-picker/gtk/color-picker.ui:49
+#, fuzzy
+msgid "No open palettes"
+msgstr "रङ्गदानीहरू:"
+
+#: contrib/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr ""
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:13
+#: libide/sourceview/ide-source-view.c:5858
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "पुन: नामकरण गर्नुहोस्"
+
+#: contrib/gstyle/ui/gstyle-color-widget.ui:19
+#: plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "हटाउने"
+
+#: contrib/gstyle/ui/gstyle-rename-popover.ui:35
+#: plugins/project-tree/gb-rename-file-popover.ui:35
+#: plugins/project-tree/gtk/menus.ui:57
+msgid "_Rename"
+msgstr "_पुन: नामकरण गर्नुहोस्"
+
+#: contrib/xml/xml-reader.c:327
+#, fuzzy
+msgid "Could not parse XML from stream"
+msgstr "स्ट्रिमबाट डेटा प्राप्त गर्न सकेन"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+#, fuzzy
+msgid "Build Parallelism"
+msgstr "निर्माण"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Allow network when metered"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+#, fuzzy
+msgid "Suggest Snippet Completion"
+msgstr "संलग्नताको स्वचालित प्रदर्शन सुझाव दिनुहोस्"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Allow snippets to be inserted into the document."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Clang based autocompletion (Experimental)"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+#, fuzzy
+msgid "Ctags based autocompletion"
+msgstr "स्वत: सम्पन्न"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+#, fuzzy
+msgid "Use Ctags for autocompletion."
+msgstr "स्वत: सम्पन्न"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
+msgid "Enable auto-completion of words in document"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
+#, fuzzy
+msgid "Enable semantic highlighting"
+msgstr "विकिवर्ड हाइलाइटिङ् सक्षम पार्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
+#, fuzzy
+msgid "Path to ctags executable"
+msgstr "यस फाइलका लागि कार्यान्वयनयोग्य छैन ।"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
+msgid "The path to the ctags executable on the system."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+#, fuzzy
+msgid "Restore last position"
+msgstr "अघिल्लो कर्सर स्थिति पुन: भण्डारण गर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid "Jump to the last position when reopening a file"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+#, fuzzy
+msgid "Show modified lines"
+msgstr "परिमार्जन गरिएको देखाउनुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+#: libide/editor/ide-editor-properties.ui:88
+#, fuzzy
+msgid "Highlight current line"
+msgstr "हालको लाइन हाइलाइट गर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+#, fuzzy
+msgid "Highlight matching brackets"
+msgstr "मिल्ने कोष्ठकलाई हाइलाइट गर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+#, fuzzy
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "मिल्ने कोष्ठकलाई हाइलाइट गर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+#: libide/editor/ide-editor-properties.ui:62
+msgid "Show line numbers"
+msgstr "लाइन नम्बरहरू देखाउनुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+#, fuzzy
+msgid "If enabled, the editor will show line numbers."
+msgstr "लाइन नम्बर देखाउनुहोस्/लुकाउनुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: libide/preferences/ide-preferences-builtin.c:146
+#, fuzzy
+msgid "Smart Backspace"
+msgstr "backspace"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: libide/preferences/ide-preferences-builtin.c:145
+#, fuzzy
+msgid "Smart Home and End"
+msgstr "छरितो गृह समाप्ति"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid "Whether or not Home moves to first non-space character."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#, fuzzy
+msgid "Show grid lines"
+msgstr "ग्रिड लाइनहरू"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:78
+#: libide/preferences/ide-preferences-builtin.c:169
+#, fuzzy
+msgid "Show overview map"
+msgstr "अधिलेखन हेर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
+#, fuzzy
+msgid "Automatically Hide Overview Map"
+msgstr "कुनाम प्यानल स्वचालित रूपमा लुकाउनुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
+#, fuzzy
+msgid "Draw Spaces"
+msgstr "खालीस्थान घुसाउनुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
+msgid "The various types of space to draw in the editor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
+#: libide/preferences/ide-preferences-builtin.c:158
+msgid "Overscroll"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
+#, fuzzy
+msgid "Wrap Text"
+msgstr "पाठ बेर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+msgid ""
+"If enabled, Builder will automatically wrap text so all of the line text is "
+"visible."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
+#: libide/preferences/ide-preferences-builtin.c:182
+#, fuzzy
+msgid "Autosave Enabled"
+msgstr "स्वत: बचत"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+#, fuzzy
+msgid "Enable or disable autosave feature."
+msgstr "अझै टाइप गर्नुपर्ने खोजी विशेषता सक्षम पार्नुहोस् वा अक्षम पार्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
+#: libide/preferences/ide-preferences-builtin.c:183
+#, fuzzy
+msgid "Autosave Frequency"
+msgstr "स्वत: बचत"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+msgid "The number of seconds after modification before auto saving."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Enabled"
+msgstr "सक्षम बनाइयो ।"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+#, fuzzy
+msgid "If the type within the extension is enabled."
+msgstr "XKB विस्तार सक्षम पारिएको छैन"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "सञ्झ्याल साइज"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "सञ्झ्यालको नाप( उचाइ र चौडाई )"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window position"
+msgstr "संझ्यालको स्थिति"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr "सन्झ्यालको स्थान (x र y)"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr "सञ्झ्यालको अधिकतम स्थिति"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr "विनडोज उच्च सिमासम्म पुर्‍याईएको अवस्था"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+#, fuzzy
+msgid "Night Mode"
+msgstr "मोड:"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+msgid "Prefer dark application chrome."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+#, fuzzy
+msgid "Mine projects"
+msgstr "परियोजनाहरू"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+#, fuzzy
+msgid "Search directories for projects."
+msgstr "डाइरेक्टरी"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:30
+#: libide/preferences/ide-preferences-builtin.c:399
+#, fuzzy
+msgid "Projects directory"
+msgstr "परियोजनाहरू"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:31
+msgid "Directory for all Builder projects."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:35
+#, fuzzy
+msgid "Restore Previous Files"
+msgstr "अघिल्लो कर्सर स्थिति पुन: भण्डारण गर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:36
+msgid "Restore previously opened files when loading a project."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+#, fuzzy
+msgid "If the plugin should be enabled"
+msgstr "सक्षम बनाइयो ।"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: plugins/project-tree/gtk/menus.ui:84
+#, fuzzy
+msgid "Show Icons"
+msgstr "प्रतिमा मात्र देखाउनुहोस्"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: plugins/project-tree/gtk/menus.ui:88
+#, fuzzy
+msgid "Show Ignored Files"
+msgstr "उपेक्षा गरिएका फाइलहरू देखाउनुहोस्"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: plugins/project-tree/gtk/menus.ui:92
+#, fuzzy
+msgid "Sort Directories First"
+msgstr "डाइरेक्टरी"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+#, fuzzy
+msgid "Show Left Panel"
+msgstr "बायाँ किनारा प्यानल"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+#, fuzzy
+msgid "If enabled, the left panel will be displayed."
+msgstr "बायाँ विस्तारित किनारा प्यानल"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+#, fuzzy
+msgid "Left Panel Position"
+msgstr "प्यानलमा वस्तुको स्थिति"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+msgid "The width in pixel units of the left panel."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+#, fuzzy
+msgid "Show Right Panel"
+msgstr "दायाँ किनारा प्यानल"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+#, fuzzy
+msgid "If enabled, the right panel will be displayed."
+msgstr "दायाँ विस्तारित किनारा प्यानल"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+#, fuzzy
+msgid "Right Panel Position"
+msgstr "प्यानलमा वस्तुको स्थिति"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+msgid "The width in pixel units of the right panel."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+#, fuzzy
+msgid "Show Bottom Panel"
+msgstr "_तल प्यानल"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+#, fuzzy
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "तल विस्तारित किनारा प्यानल"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+#, fuzzy
+msgid "Bottom Panel Position"
+msgstr "तल विस्तारित किनारा प्यानल"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr ""
+
+#: data/gtk/menus.ui:7
+msgid "_New Project"
+msgstr "नयाँ परियोजना"
+
+#: data/gtk/menus.ui:11
+#, fuzzy
+msgid "_Open Project"
+msgstr "परियोजना खोल्नुहोस्"
+
+#: data/gtk/menus.ui:18
+msgid "_Preferences"
+msgstr "प्राथमिकता"
+
+#: data/gtk/menus.ui:26
+#, fuzzy
+msgid "Keyboard _Shortcuts"
+msgstr "कुञ्जीपाटी सटकर्ट"
+
+#: data/gtk/menus.ui:30
+msgid "_Help"
+msgstr "_सहयोग"
+
+#: data/gtk/menus.ui:34
+msgid "_About"
+msgstr "बारेमा"
+
+#: data/gtk/menus.ui:38
+msgid "_Quit"
+msgstr "_बन्द गर्नुहोस्"
+
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
+#: libide/editor/ide-editor-perspective-shortcuts.c:33
+#: libide/editor/ide-editor-perspective-shortcuts.c:39
+#: libide/editor/ide-editor-perspective-shortcuts.c:45
+#: libide/editor/ide-editor-perspective-shortcuts.c:51
+#: libide/editor/ide-editor-view-shortcuts.c:31
+#: libide/editor/ide-editor-view-shortcuts.c:37
+#: libide/editor/ide-editor-view-shortcuts.c:43
+#: libide/editor/ide-editor-view-shortcuts.c:49
+#: libide/editor/ide-editor-view-shortcuts.c:55
+#: libide/editor/ide-editor-view-shortcuts.c:61
+#: libide/editor/ide-editor-view-shortcuts.c:67
+#: libide/editor/ide-editor-view-shortcuts.c:73
+#: libide/editor/ide-editor-view-shortcuts.c:79
+#: libide/layout/ide-layout-stack-shortcuts.c:32
+#: libide/layout/ide-layout-stack-shortcuts.c:39
+#: libide/layout/ide-layout-stack-shortcuts.c:46
+#: libide/layout/ide-layout-stack-shortcuts.c:53
+#: libide/layout/ide-layout-stack-shortcuts.c:60
+#: libide/preferences/ide-preferences-builtin.c:105
+#: libide/preferences/ide-preferences-builtin.c:152
+#: plugins/command-bar/gb-command-bar.c:715
+#, fuzzy
+msgid "Editor"
+msgstr "सम्पादक"
+
+#: data/gtk/menus.ui:60 libide/buildui/ide-build-perspective.c:450
+#, fuzzy
+msgid "Build Preferences"
+msgstr "प्राथमिकता"
+
+#: data/gtk/menus.ui:69 libide/preferences/ide-preferences-perspective.c:124
+#, fuzzy
+msgid "Preferences"
+msgstr "प्राथमिकता"
+
+#: data/gtk/menus.ui:79
+#, fuzzy
+msgid "Save _All"
+msgstr "सबै बचत गर्नुहोस्"
+
+#: data/gtk/menus.ui:85
+msgid "_Fullscreen"
+msgstr "पूरा पर्दा॒"
+
+#: data/gtk/menus.ui:93
+#, fuzzy
+msgid "_Go to Definition"
+msgstr "परिभाषा"
+
+#: data/gtk/menus.ui:99
+msgid "_Undo"
+msgstr "पूर्वस्थितिमा फर्काउनुहोस्"
+
+#: data/gtk/menus.ui:103
+msgid "_Redo"
+msgstr "फेरि गर्नुहोस्"
+
+#: data/gtk/menus.ui:109
+msgid "C_ut"
+msgstr "काट्नुहोस्"
+
+#: data/gtk/menus.ui:114 data/gtk/menus.ui:229 plugins/terminal/gtk/menus.ui:19
+msgid "_Copy"
+msgstr "प्रतिलिपि"
+
+#: data/gtk/menus.ui:118 data/gtk/menus.ui:233 plugins/terminal/gtk/menus.ui:23
+msgid "_Paste"
+msgstr "_टाँस्नुहोस्"
+
+#: data/gtk/menus.ui:122 data/gtk/menus.ui:237
+msgid "_Delete"
+msgstr "मेटाउ"
+
+#: data/gtk/menus.ui:130 libide/preferences/ide-preferences-builtin.c:191
+#: plugins/spellcheck/gtk/menus.ui:12
+msgid "Highlighting"
+msgstr "हाइलाइटिङ"
+
+#: data/gtk/menus.ui:135 plugins/terminal/gtk/menus.ui:29
+#, fuzzy
+msgid "Selection"
+msgstr "चयन"
+
+#: data/gtk/menus.ui:137 data/gtk/menus.ui:243 plugins/terminal/gtk/menus.ui:31
+msgid "Select _All"
+msgstr "सबै छान्नुहोस्"
+
+#: data/gtk/menus.ui:142 plugins/terminal/gtk/menus.ui:36
+#, fuzzy
+msgid "Select _None"
+msgstr "कुनै पनि चयन नगर्नुहोस्"
+
+#: data/gtk/menus.ui:148
+#, fuzzy
+msgid "All _Upper Case"
+msgstr "माथिल्लो"
+
+#: data/gtk/menus.ui:153
+#, fuzzy
+msgid "All _Lower Case"
+msgstr "सबै चयन गरिएका तह(हरू) न्यून गर्नुहोस्"
+
+#: data/gtk/menus.ui:158
+#, fuzzy
+msgid "_Invert Case"
+msgstr "उल्ट्याउनुहोस्"
+
+#: data/gtk/menus.ui:163
+#, fuzzy
+msgid "_Title Case"
+msgstr "शीर्षक:"
+
+#: data/gtk/menus.ui:170
+#, fuzzy
+msgid "Join Lines"
+msgstr "सामेल हुनुहोस्…"
+
+#: data/gtk/menus.ui:174
+#, fuzzy
+msgid "Sort Lines"
+msgstr "क्रमबद्ध..."
+
+#: data/gtk/menus.ui:183
+msgid "Zoom"
+msgstr "जुम गर्नुहोस्"
+
+#: data/gtk/menus.ui:185
+#, fuzzy
+msgid "Zoom _In"
+msgstr "जुम बढाउनुहोस्"
+
+#: data/gtk/menus.ui:190
+msgid "Zoom _Out"
+msgstr "बाहिरी जुम"
+
+#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:51
+#, fuzzy
+msgid "Reset"
+msgstr "रिसेट गर्नुहोस्"
+
+#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:205
+#, fuzzy
+msgid "Regular expressions"
+msgstr "नियमित अभिव्यक्तिहरू प्रयोग गरेर खोजी गर्नुहोस् र बदल्नुहोस्"
+
+#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:220
+#: plugins/terminal/gb-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "केस संवेदनशिल"
+
+#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:235
+#, fuzzy
+msgid "Match whole word only"
+msgstr "सम्पूर्ण शब्द मिलाउनुहोस्"
+
+#: data/gtk/menus.ui:219
+msgid "_Wrap Around"
+msgstr "वरिपरि बेर्नुहोस्"
+
+#: data/gtk/menus.ui:225
+msgid "Cu_t"
+msgstr "काट्नुहोस्"
+
+#: data/gtk/menus.ui:250
+#, fuzzy
+msgid "Frame"
+msgstr "फ्रेम"
+
+#: data/gtk/menus.ui:252
+#, fuzzy
+msgid "Move Left"
+msgstr "बाँया सार्नुहोस्"
+
+#: data/gtk/menus.ui:256
+#, fuzzy
+msgid "Move Right"
+msgstr "दाँया सार्नुहोस्"
+
+#: data/gtk/menus.ui:261 data/gtk/menus.ui:321 plugins/devhelp/gtk/menus.ui:11
+#: plugins/terminal/gtk/menus.ui:63
+msgid "Close"
+msgstr "बन्दगर्नुहोस्"
+
+#: data/gtk/menus.ui:269
+#, fuzzy
+msgid "New File"
+msgstr "नयाँ फाइल"
+
+#: data/gtk/menus.ui:276 libide/layout/ide-layout-stack.ui:102
+#, fuzzy
+msgid "Open File…"
+msgstr "फाइल खोल्नुहोस्"
+
+#: data/gtk/menus.ui:283
+msgid "Document"
+msgstr "कागजात"
+
+#: data/gtk/menus.ui:286
+#, fuzzy
+msgid "Open in New Frame"
+msgstr "नयाँ सन्देश सञ्झ्याल खोल्नुहोस्"
+
+#: data/gtk/menus.ui:290 plugins/terminal/gtk/menus.ui:47
+msgid "Split"
+msgstr "विभाजन गर्नुहोस्"
+
+#: data/gtk/menus.ui:295 plugins/devhelp/gtk/menus.ui:7
+msgid "Print…"
+msgstr "मुद्रण गर्नुहोस्…"
+
+#: data/gtk/menus.ui:302
+#, fuzzy
+msgid "Document Preferences"
+msgstr "कागजात"
+
+#: data/gtk/menus.ui:310 libide/buildui/ide-build-log-panel.c:740
+#, fuzzy
+msgid "_Save"
+msgstr "सङ्ग्रह गर्नुहोस्"
+
+#: data/gtk/menus.ui:314
+#, fuzzy
+msgid "Save _As"
+msgstr "बचत गर्नुहोस्..."
+
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1104
+#, fuzzy
+msgid "Run"
+msgstr "चलाउनुहोस्"
+
+#: data/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: libide/application/ide-application.c:529
+#: libide/preferences/ide-preferences-builtin.c:140
+#: libide/workbench/ide-workbench.c:630
+msgid "Builder"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:8
+#: libide/application/ide-application-actions.c:131
+#, fuzzy
+msgid "An IDE for GNOME"
+msgstr "अन्जुता IDE अन्त्य गर्नुहोस्"
+
+#: data/org.gnome.Builder.appdata.xml.in:11
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:17
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:21
+msgid "Features:"
+msgstr "विशेषता:"
+
+#: data/org.gnome.Builder.appdata.xml.in:23
+msgid "Built in syntax highlighting for many languages"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:52
+#, fuzzy
+msgid "Side-by-side code editors"
+msgstr "कालो पक्ष"
+
+#: data/org.gnome.Builder.appdata.xml.in:25
+#, fuzzy
+msgid "Integration with Git"
+msgstr "प्रणाली एकीकरण"
+
+#: data/org.gnome.Builder.appdata.xml.in:26
+#, fuzzy
+msgid "Integration with Autotools"
+msgstr "प्रणाली एकीकरण"
+
+#: data/org.gnome.Builder.appdata.xml.in:27
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:28
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:29
+#, fuzzy
+msgid "Vala based auto-completion and diagnostics"
+msgstr "इतिहास आधारित स्वत: समाप्त सक्षम पार्नुहोस्"
+
+#: data/org.gnome.Builder.appdata.xml.in:30
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:31
+msgid "HTML/Markdown live preview"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:32
+msgid "Optional Vim-style editing"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:33
+msgid "An integrated software profiler for native applications"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+#, fuzzy
+msgid "Support for building with jhbuild"
+msgstr "भवन:"
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Preview support for building with Flatpak runtimes"
+msgstr ""
+
+#: data/org.gnome.Builder.appdata.xml.in:44
+#, fuzzy
+msgid "Fast global search"
+msgstr "विश्वव्यापी"
+
+#: data/org.gnome.Builder.appdata.xml.in:48
+#, fuzzy
+msgid "Integrated project tree"
+msgstr "एकीकृत फर्मवेयर"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+#, fuzzy
+msgid "Build software for GNOME"
+msgstr "जिनोमका सफ्टवेयर ब्यानर डिजाइनर"
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.Builder.desktop.in.in:7
+msgid "org.gnome.Builder"
+msgstr ""
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+#, fuzzy
+msgid "Build;Develop;"
+msgstr "निर्माण."
+
+#: libide/application/ide-application-actions.c:137
+msgid "GNOME Builder"
+msgstr "जिनोम बिल्डर"
+
+#: libide/application/ide-application-actions.c:139
+msgid "translator-credits"
+msgstr ""
+"Mahesh Subedi<submanesh@gmail.com>Shiva Pokharel<pokharelshiva@hotmail."
+"com>Shyam Krishna Bal<shyam@mpp.org.np>Pawan Chitrakar<pawan@mpp.org.np>"
+
+#: libide/application/ide-application-actions.c:143
+#, fuzzy
+msgid "Learn more about GNOME Builder"
+msgstr "रङ्ग प्रबन्धको अधिक जानकारि"
+
+#: libide/application/ide-application-actions.c:146
+msgid "Funded By"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "आदेशहरू:"
+
+#: libide/application/ide-application-command-line.c:187
+#, fuzzy
+msgid "List available subcommands"
+msgstr "उपलब्ध रङ्गदानीहरूको सूची"
+
+#: libide/application/ide-application-command-line.c:194
+#, fuzzy
+msgid "Run Builder in standalone mode"
+msgstr "प्रस्तुति मोडमा इभान्स चलाउनुहोस्"
+
+#: libide/application/ide-application-command-line.c:201
+msgid "Show the application’s version"
+msgstr "एप्लिकेशनको संसकरण देखाउनुहोस्"
+
+#: libide/application/ide-application-command-line.c:220
+msgid "Increase verbosity, may be specified multiple times"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:227
+#, fuzzy
+msgid "Enter GApplication Service mode"
+msgstr "ढिलाई मोड प्रविष्ट"
+
+#: libide/application/ide-application-command-line.c:234
+#, fuzzy
+msgid "Opens the project specified by PATH"
+msgstr "डेटास्रोत कन्फिगरेसन त्रुटि:निर्दिष्ट नगरेको प्रदायक\n"
+
+#: libide/application/ide-application-command-line.c:235
+#: libide/buildui/ide-build-tool.c:282
+msgid "PATH"
+msgstr "मार्ग"
+
+#: libide/application/ide-application-command-line.c:242
+msgid "Clones the project specified by MANIFEST"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:243
+msgid "MANIFEST"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:275
+msgid "COMMAND"
+msgstr "आदेश"
+
+#: libide/application/ide-application-command-line.c:346
+#, fuzzy
+msgid "No commands available"
+msgstr ""
+"\n"
+"आदेशहरू:\n"
+
+#: libide/application/ide-application-command-line.c:389
+#, fuzzy
+msgid "Please provide a command"
+msgstr "तपाईँले उपकरण आदेश उपलब्ध गराउनु पर्छ !"
+
+#: libide/application/ide-application-command-line.c:399
+#, fuzzy
+msgid "No such tool"
+msgstr "उपकरण"
+
+#: libide/application/ide-application-command-line.c:413
+#, fuzzy
+msgid "Please provide a worker type"
+msgstr "कृपया तपाईँको सम्पर्कको किसिम रोज्नुहोस्:"
+
+#: libide/application/ide-application-command-line.c:420
+msgid "Please provide a D-Bus address"
+msgstr ""
+
+#: libide/application/ide-application-command-line.c:429
+#, fuzzy
+msgid "No such worker"
+msgstr "जिनोम प्रदर्शन प्रबन्धक सेसन कारक"
+
+#: libide/buffers/ide-buffer.c:2604
+msgid "The current language lacks a symbol resolver."
+msgstr ""
+
+#: libide/buffers/ide-buffer-manager.c:684
+#, fuzzy
+msgid "File too large to be opened."
+msgstr "एक्सपोनेन्ट निकै ठूलो"
+
+#: libide/buffers/ide-buffer-manager.c:1893
+#, fuzzy, c-format
+msgid "unsaved document %u"
+msgstr "%s कागजाता बचत नगरिएको परिवर्तनहरू उल्टाउनुहुन्छ?"
+
+#: libide/buffers/ide-buffer-manager.c:1931
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr ""
+
+#: libide/buildsystem/ide-build-pipeline.c:2247
+#, fuzzy
+msgid "Cleaning…"
+msgstr "प्याकेज सफा गर्दै"
+
+#: libide/buildsystem/ide-build-pipeline.c:2262
+#, fuzzy
+msgid "Downloading…"
+msgstr "डाउनलोड हुँदैछ"
+
+#: libide/buildsystem/ide-build-pipeline.c:2266
+#, fuzzy
+msgid "Building dependencies…"
+msgstr "भवन:"
+
+#: libide/buildsystem/ide-build-pipeline.c:2270
+msgid "Bootstrapping…"
+msgstr ""
+
+#: libide/buildsystem/ide-build-pipeline.c:2274
+msgid "Configuring…"
+msgstr ""
+
+#: libide/buildsystem/ide-build-pipeline.c:2278
+#, fuzzy
+msgid "Building…"
+msgstr "भवन:"
+
+#: libide/buildsystem/ide-build-pipeline.c:2282
+#, fuzzy
+msgid "Installing…"
+msgstr "स्थापना गर्दै"
+
+#: libide/buildsystem/ide-build-pipeline.c:2286
+#, fuzzy
+msgid "Exporting…"
+msgstr "कुञ्जी डेटा आयात"
+
+#: libide/buildsystem/ide-build-pipeline.c:2290
+#: libide/buildsystem/ide-build-pipeline.c:2294
+#: libide/workbench/ide-omni-bar.c:439
+msgid "Success"
+msgstr "सफलता"
+
+#: libide/buildsystem/ide-build-pipeline.c:2298
+#: libide/workbench/ide-omni-bar.c:424
+msgid "Failed"
+msgstr "असफल"
+
+#: libide/buildsystem/ide-build-pipeline.c:2302
+#, fuzzy
+msgid "Preparing…"
+msgstr "तयारी गर्दैछ..."
+
+#: libide/buildsystem/ide-build-pipeline.c:2306
+msgid "Ready"
+msgstr "तयार"
+
+#: libide/buildsystem/ide-build-stage-transfer.c:108
+msgid "Cannot execute transfer while on metered connection"
+msgstr ""
+
+#: libide/buildsystem/ide-configuration-manager.c:86
+#: libide/preferences/ide-preferences-builtin.c:340
+#: libide/preferences/ide-preferences-builtin.c:358
+msgid "Default"
+msgstr "निर्धारित कुञ्जीवद्धता"
+
+#: libide/buildui/ide-build-configuration-row.ui:43
+#, fuzzy
+msgid "Duplicate the configuration"
+msgstr "कन्फिगरेसन"
+
+#: libide/buildui/ide-build-configuration-row.ui:59
+#, fuzzy
+msgid "Delete the configuration"
+msgstr "कन्फिगरेसन"
+
+#: libide/buildui/ide-build-configuration-view.ui:11
+#: libide/preferences/ide-preferences-builtin.c:318
+#: libide/preferences/ide-preferences-builtin.c:380
+#: plugins/command-bar/gb-command-bar.c:716
+msgid "General"
+msgstr "सामान्य"
+
+#: libide/buildui/ide-build-configuration-view.ui:28
+#, fuzzy
+msgid "The name of the build configuration"
+msgstr "कन्फिगरेसन"
+
+#: libide/buildui/ide-build-configuration-view.ui:37
+msgid "Name"
+msgstr "नाम"
+
+#: libide/buildui/ide-build-configuration-view.ui:66
+#, fuzzy
+msgid "Build System"
+msgstr "परियोजना निर्माण प्रणालीका लागि विकल्पहरू"
+
+#: libide/buildui/ide-build-configuration-view.ui:96
+#, fuzzy
+msgid "Source Directory"
+msgstr "स्रोत:"
+
+#: libide/buildui/ide-build-configuration-view.ui:118
+msgid "The prefix to use when installing the project"
+msgstr ""
+
+#: libide/buildui/ide-build-configuration-view.ui:127
+#, fuzzy
+msgid "Installation Prefix"
+msgstr "PREFIX"
+
+#: libide/buildui/ide-build-configuration-view.ui:148
+#, fuzzy
+msgid "Options to use when bootstrapping the project"
+msgstr "यन्त्र ताला खोल्न विकल्पहरू"
+
+#: libide/buildui/ide-build-configuration-view.ui:157
+#, fuzzy
+msgid "Configure Options"
+msgstr "कन्फिगर"
+
+#: libide/buildui/ide-build-configuration-view.ui:189
+#: libide/workbench/ide-omni-bar-row.ui:54
+#, fuzzy
+msgid "Device"
+msgstr "यन्त्र:"
+
+#: libide/buildui/ide-build-configuration-view.ui:217
+#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
+msgid "Runtime"
+msgstr "रनटाइम"
+
+#: libide/buildui/ide-build-configuration-view.ui:245
+msgid "Environment"
+msgstr "परिवेश"
+
+#: libide/buildui/ide-build-log-panel.c:737
+#: libide/editor/ide-editor-view-actions.c:239
+msgid "Save File"
+msgstr "फाइल बचत गर्नुहोस्"
+
+#: libide/buildui/ide-build-log-panel.c:741
+#: libide/greeter/ide-greeter-perspective.ui:326
+#: libide/greeter/ide-greeter-perspective.ui:374
+msgid "_Cancel"
+msgstr "_रद्द गर्नुहोस्"
+
+#: libide/buildui/ide-build-log-panel.c:773
+#, fuzzy
+msgid "Build Output"
+msgstr "निर्माण"
+
+#: libide/buildui/ide-build-log-panel.ui:25
+#, fuzzy
+msgid "Clear build log"
+msgstr "सफा गर्नुहोस्"
+
+#: libide/buildui/ide-build-log-panel.ui:42
+#: libide/workbench/ide-omni-bar.ui:133
+#, fuzzy
+msgid "Cancel build"
+msgstr "_रद्द गर्नुहोस्"
+
+#: libide/buildui/ide-build-log-panel.ui:59
+#, fuzzy
+msgid "Save build log"
+msgstr "लग बचत गर्नुहोस्"
+
+#: libide/buildui/ide-build-panel.c:105 libide/buildui/ide-build-panel.c:181
+#: libide/buildui/ide-build-panel.c:203 libide/buildui/ide-build-panel.ui:106
+#: libide/workbench/ide-omni-bar.ui:437
+#, fuzzy
+msgid "Warnings"
+msgstr "चेतावनी:"
+
+#: libide/buildui/ide-build-panel.c:114 libide/buildui/ide-build-panel.c:182
+#: libide/buildui/ide-build-panel.c:204 libide/buildui/ide-build-panel.ui:127
+#: libide/workbench/ide-omni-bar.ui:409
+msgid "Errors"
+msgstr "त्रुटिहरू"
+
+#: libide/buildui/ide-build-panel.c:604
+#: libide/buildui/ide-build-workbench-addin.c:170
+#, fuzzy
+msgid "Build Issues"
+msgstr "निर्माण"
+
+#: libide/buildui/ide-build-panel.ui:17
+#, fuzzy
+msgid "Build status:"
+msgstr "वस्तुस्थिति"
+
+#: libide/buildui/ide-build-panel.ui:34
+#, fuzzy
+msgid "Time completed:"
+msgstr " (पूरा भयो "
+
+#: libide/buildui/ide-build-panel.ui:51 libide/buildui/ide-build-panel.ui:66
+msgid "—"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:103 libide/buildui/ide-build-tool.c:116
+msgid "========================\n"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:104
+#, fuzzy, c-format
+msgid "           Project Name: %s\n"
+msgstr "परियोजनाको नाम सम्पादन गर्नुहोस्"
+
+#: libide/buildui/ide-build-tool.c:105
+#, fuzzy, c-format
+msgid " Version Control System: %s\n"
+msgstr "संस्करणले प्रणाली प्लगइनलाई नियन्त्रण गर्दछ"
+
+#: libide/buildui/ide-build-tool.c:106
+#, fuzzy, c-format
+msgid "           Build System: %s\n"
+msgstr "निर्माण (%s)"
+
+#: libide/buildui/ide-build-tool.c:107
+#, fuzzy, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "निर्माण (%s)"
+
+#: libide/buildui/ide-build-tool.c:108
+#, fuzzy, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "यन्त्र उपलब्ध छैन: %s"
+
+#: libide/buildui/ide-build-tool.c:113
+#, fuzzy, c-format
+msgid "            Environment: %s\n"
+msgstr "वातावरणमा अवैध स्ट्रीङ: %s"
+
+#: libide/buildui/ide-build-tool.c:143 libide/buildui/ide-build-tool.c:147
+msgid "===============\n"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:144
+#, fuzzy, c-format
+msgid " Build Failure: %s\n"
+msgstr "असफल कारण : %s"
+
+#: libide/buildui/ide-build-tool.c:145
+#, fuzzy
+msgid " Build ran for: %"
+msgstr "निर्माण"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: libide/buildui/ide-build-tool.c:158 libide/buildui/ide-build-tool.c:162
+msgid "=================\n"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:159
+#, fuzzy
+msgid " Build Successful\n"
+msgstr "निर्माण गर्नुहोस्"
+
+#: libide/buildui/ide-build-tool.c:160
+#, fuzzy
+msgid "   Build ran for: %"
+msgstr "निर्माण"
+
+#: libide/buildui/ide-build-tool.c:212
+#, fuzzy, c-format
+msgid "Failed to locate device “%s”"
+msgstr "सञ्जाल यन्त्र:\t%s\n"
+
+#: libide/buildui/ide-build-tool.c:222
+#, fuzzy, c-format
+msgid "Failed to locate runtime “%s”"
+msgstr ""
+"'%s' खोल्न असफल:\n"
+"\n"
+"%s"
+
+#: libide/buildui/ide-build-tool.c:267
+#, fuzzy
+msgid "Clean the project"
+msgstr "पूरै परियोजना हटाउनुहोस्"
+
+#: libide/buildui/ide-build-tool.c:269
+msgid "The ID of the device to build for"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:270
+msgid "local"
+msgstr "स्थानीय"
+
+#: libide/buildui/ide-build-tool.c:272
+#, fuzzy
+msgid "The runtime to use for building"
+msgstr "भवन:"
+
+#: libide/buildui/ide-build-tool.c:273
+msgid "host"
+msgstr "होस्ट"
+
+#: libide/buildui/ide-build-tool.c:275
+msgid "Number of workers to use when building"
+msgstr ""
+
+#: libide/buildui/ide-build-tool.c:276
+msgid "N"
+msgstr "N"
+
+#: libide/buildui/ide-build-tool.c:278
+#, fuzzy
+msgid "The configuration to use from .buildconfig"
+msgstr "गिम्पआरसिबाट अडियो उपकरण कन्फिगरेसन लोड गर्नुहोस्"
+
+#: libide/buildui/ide-build-tool.c:279
+#, fuzzy
+msgid "CONFIG_ID"
+msgstr "pkg-कन्फिग"
+
+#: libide/buildui/ide-build-tool.c:281
+msgid "Path to project file, defaults to current directory"
+msgstr ""
+
+#: libide/buildui/ide-environment-editor.c:67
+#, fuzzy
+msgid "New variable…"
+msgstr "चल"
+
+#: libide/devices/ide-device-manager.c:148
+#, fuzzy, c-format
+msgid "The device “%s” could not be found."
+msgstr "\"%s\" फेला पर्न सकेन"
+
+#: libide/directory/ide-directory-vcs.c:55
+#, fuzzy
+msgid "unversioned"
+msgstr "संस्करण नभएको फाइलहरू देखाउनुहोस्"
+
+#: libide/editorconfig/ide-editorconfig-file-settings.c:159
+#, fuzzy
+msgid "No file was provided."
+msgstr "स्क्रिनसट प्रदान गरिएको छैन"
+
+#. translators: the user selected a number outside the value range for the document.
+#: libide/editor/ide-editor-layout-stack-controls.c:175
+#, fuzzy, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "अल्फा मान ० र १ बिचको सङ्ख्या हुनुपर्दछ"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:23
+#, fuzzy
+msgid "Go to line number"
+msgstr "पृष्ठमा सङ्ख्यामा जानुहोस्"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:82
+msgid "Go to Line"
+msgstr "लाइनमा जानुहोस्"
+
+#: libide/editor/ide-editor-layout-stack-controls.ui:83
+msgid "Go"
+msgstr "जानुहोस्"
+
+#: libide/editor/ide-editor-perspective-actions.c:70
+#: libide/workbench/ide-workbench-actions.c:75
+msgid "Open File"
+msgstr "फाइल खोल्नुहोस्"
+
+#: libide/editor/ide-editor-perspective-actions.c:73
+#: libide/greeter/ide-greeter-perspective.c:684
+#: libide/workbench/ide-workbench-actions.c:78
+#: plugins/color-picker/gb-color-picker-prefs.c:205
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
+msgid "Open"
+msgstr "खुला"
+
+#: libide/editor/ide-editor-perspective-actions.c:74
+#: libide/editor/ide-editor-view-actions.c:242
+#: libide/editor/ide-editor-view-actions.c:349
+#: libide/greeter/ide-greeter-perspective.c:683
+#: libide/workbench/ide-workbench-actions.c:79
+#: plugins/color-picker/gb-color-picker-prefs.c:93
+#: plugins/color-picker/gb-color-picker-prefs.c:209
+#: plugins/color-picker/gb-color-picker-prefs.c:236
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
+#: plugins/terminal/gb-terminal-view-actions.c:271
+msgid "Cancel"
+msgstr "रद्द गर्ने"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:34
+#: libide/editor/ide-editor-perspective-shortcuts.c:40
+#: libide/editor/ide-editor-view-shortcuts.c:32
+#: libide/editor/ide-editor-view-shortcuts.c:38
+#: libide/layout/ide-layout-stack-shortcuts.c:33
+#: libide/layout/ide-layout-stack-shortcuts.c:40
+#: libide/layout/ide-layout-stack-shortcuts.c:47
+#: libide/layout/ide-layout-stack-shortcuts.c:54
+#: libide/layout/ide-layout-stack-shortcuts.c:61
+msgid "Files"
+msgstr "फाइल"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:35
+msgid "Create a new document"
+msgstr "एउटा नयाँ कागजात सिर्जना गर्नुहोस्"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:41
+msgid "Open a document"
+msgstr "कागजात  खोल्नुहोस्"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:46
+#: libide/editor/ide-editor-perspective-shortcuts.c:52
+msgid "Panels"
+msgstr "प्यानल"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:47
+#: libide/editor/ide-editor-workbench-addin.c:150
+#, fuzzy
+msgid "Toggle navigation panel"
+msgstr "उल्टनू"
+
+#: libide/editor/ide-editor-perspective-shortcuts.c:53
+#: libide/editor/ide-editor-workbench-addin.c:164
+#, fuzzy
+msgid "Toggle utilities panel"
+msgstr "उपयोगिता"
+
+#: libide/editor/ide-editor-properties.ui:4
+msgid "Properties"
+msgstr "गुण"
+
+#: libide/editor/ide-editor-properties.ui:25
+msgid "Display"
+msgstr "प्रदर्शन"
+
+#: libide/editor/ide-editor-properties.ui:75
+#: libide/preferences/ide-preferences-builtin.c:324
+#, fuzzy
+msgid "Show right margin"
+msgstr "दाहिने किनारा"
+
+#: libide/editor/ide-editor-properties.ui:101
+#, fuzzy
+msgid "Insert trailing newline"
+msgstr "नयाँ रेखालाई ट्रेल नगरिकन अभिव्यक्ति मुद्रण गर्दछ"
+
+#: libide/editor/ide-editor-properties.ui:114
+msgid "Overwrite trailing braces and quotations"
+msgstr ""
+
+#: libide/editor/ide-editor-properties.ui:123
+#, fuzzy
+msgid "Tabs and Indentation"
+msgstr "इन्डेन्टेसनका लागि ट्याब प्रयोग गर्नुहोस्"
+
+#: libide/editor/ide-editor-properties.ui:153
+#: libide/preferences/ide-preferences-builtin.c:173
+#, fuzzy
+msgid "Spaces"
+msgstr "ट्याबहरूको सट्टा खालीस्थान घुसाउनुहोस्"
+
+#: libide/editor/ide-editor-properties.ui:164
+#: libide/preferences/ide-preferences-builtin.c:174
+msgid "Tabs"
+msgstr "ट्याबहरु"
+
+#: libide/editor/ide-editor-properties.ui:185
+msgid "2"
+msgstr "२"
+
+#: libide/editor/ide-editor-properties.ui:195
+msgid "3"
+msgstr "३"
+
+#: libide/editor/ide-editor-properties.ui:205
+msgid "4"
+msgstr "४"
+
+#: libide/editor/ide-editor-properties.ui:215
+msgid "8"
+msgstr "८"
+
+#: libide/editor/ide-editor-properties.ui:235
+msgid "Auto indent new lines"
+msgstr ""
+
+#: libide/editor/ide-editor-properties.ui:249
+#, fuzzy
+msgid "Smart backspace"
+msgstr "backspace"
+
+#: libide/editor/ide-editor-properties.ui:250
+msgid "Enabling smart backspace will treat multiple spaces as a tabs"
+msgstr ""
+
+#: libide/editor/ide-editor-properties.ui:265
+#, fuzzy
+msgid "Language Syntax"
+msgstr "भाषा"
+
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: libide/editor/ide-editor-properties.ui:321
+#: libide/preferences/ide-preferences-builtin.c:264
+#, fuzzy
+msgid "Search languages…"
+msgstr "भाषाहरु"
+
+#. translators: first %u is the Nth position of second %u N occurrences
+#: libide/editor/ide-editor-search-bar.c:247
+#, c-format
+msgid "%u of %u"
+msgstr "%u of %u"
+
+#: libide/editor/ide-editor-search-bar.ui:108
+msgid "Replace"
+msgstr "बदलनुहोस्"
+
+#: libide/editor/ide-editor-search-bar.ui:121
+msgid "Replace All"
+msgstr "सबै बदलनुहोस्"
+
+#: libide/editor/ide-editor-search-bar.ui:143
+#, fuzzy
+msgid "Switch between Search and Search-and-Replace"
+msgstr "क्वेरि खोजी गर्नुहोस् र बदल्नुहोस्"
+
+#: libide/editor/ide-editor-search-bar.ui:166
+#: plugins/terminal/gb-terminal-search.ui:100
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+
+#: libide/editor/ide-editor-sidebar.ui:26
+#: libide/layout/ide-layout-stack-header.ui:21
+#, fuzzy
+msgid "Open Pages"
+msgstr "यस रुपमा पृष्ठहरू खोल्नुहोस्"
+
+#. translators: %s is the error message
+#: libide/editor/ide-editor-view-actions.c:55
+#, fuzzy, c-format
+msgid "Failed to load file: %s"
+msgstr "%s लोड गर्न असफल भयो: %s\n"
+
+#. translators: %s is the error message
+#: libide/editor/ide-editor-view-actions.c:117
+#, c-format
+msgid "Print failed: %s"
+msgstr "मुद्रण गर्न असफल : %s"
+
+#. translators: %s is the error message
+#. translators: %s is the underlying error message
+#: libide/editor/ide-editor-view-actions.c:188
+#: libide/editor/ide-editor-view-actions.c:308
+#, fuzzy, c-format
+msgid "Failed to save file: %s"
+msgstr "PPM फाइल '%s' बचत गर्न असफल भयो: %s"
+
+#: libide/editor/ide-editor-view-actions.c:242
+#: plugins/color-picker/gb-color-picker-prefs.c:232
+#: plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: plugins/terminal/gb-terminal-view-actions.c:272
+msgid "Save"
+msgstr "सङ्ग्रह गर्नुहोस्"
+
+#: libide/editor/ide-editor-view-actions.c:345
+msgid "Save File As"
+msgstr "यस रूपमा फाइल बचत गर्नुहोस्"
+
+#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:59
+msgid "Save As"
+msgstr "...यस रुपमा बचत गर्नुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:33
+msgid "Save the document"
+msgstr "कागजात बचत गर्नुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:39
+#, fuzzy
+msgid "Save the document with a new name"
+msgstr "एउटा नयाँ नाममा कागजात बचत गर्नुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:44
+#: libide/editor/ide-editor-view-shortcuts.c:50
+#: libide/editor/ide-editor-view-shortcuts.c:51
+#: libide/editor/ide-editor-view-shortcuts.c:56
+#: libide/editor/ide-editor-view-shortcuts.c:62
+#: libide/editor/ide-editor-view-shortcuts.c:68
+#: libide/editor/ide-editor-view-shortcuts.c:74
+#: libide/editor/ide-editor-view-shortcuts.c:80
+msgid "Find and replace"
+msgstr "फेला पार्नुहोस् र प्रतिस्थापन गर्नुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:45
+msgid "Find"
+msgstr "फेला पार"
+
+#: libide/editor/ide-editor-view-shortcuts.c:57
+#, fuzzy
+msgid "Move to the next match"
+msgstr "पछिल्लो जोडामा जानुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:63
+#, fuzzy
+msgid "Move to the previous match"
+msgstr "अघिल्लो जोडामा जानुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:69
+#, fuzzy
+msgid "Move to the next error"
+msgstr "पछिल्लो चालका लागि सङ्केत दिनुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:75
+#, fuzzy
+msgid "Move to the previous error"
+msgstr "अघिल्लो चाल देखाउनुहोस्"
+
+#: libide/editor/ide-editor-view-shortcuts.c:81
+#, fuzzy
+msgid "Find the next match"
+msgstr "पछिल्लो जोडामा जानुहोस्"
+
+#: libide/greeter/ide-greeter-perspective.c:456
+#, fuzzy
+msgid "Failed to load the project"
+msgstr "प्रमाणपत्र लोड गर्न असफल: %s"
+
+#: libide/greeter/ide-greeter-perspective.c:679
+msgid "Open Project"
+msgstr "परियोजना खोल्नुहोस्"
+
+#: libide/greeter/ide-greeter-perspective.c:695
+#, fuzzy
+msgid "All Project Types"
+msgstr "सबै समर्थित प्रकार"
+
+#. the action:// link is used to jump to the new-project view
+#: libide/greeter/ide-greeter-perspective.ui:52
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+
+#: libide/greeter/ide-greeter-perspective.ui:53
+#: libide/greeter/ide-greeter-perspective.ui:193
+#, fuzzy
+msgid "No projects found"
+msgstr "परियोजनाहरू"
+
+#: libide/greeter/ide-greeter-perspective.ui:100
+#, fuzzy
+msgid "Recent Projects"
+msgstr "परियोजनाहरू"
+
+#: libide/greeter/ide-greeter-perspective.ui:115
+#: libide/greeter/ide-greeter-perspective.ui:165
+msgid "Updated"
+msgstr "अद्यावधिक गरियो"
+
+#: libide/greeter/ide-greeter-perspective.ui:150
+msgid "Other Projects"
+msgstr "अन्य परियोजनाहरू"
+
+#: libide/greeter/ide-greeter-perspective.ui:215
+msgid "_Remove"
+msgstr "_हटाउनुहोस्"
+
+#: libide/greeter/ide-greeter-perspective.ui:299
+msgid "Select a Project"
+msgstr "एउटा परियोजना चयन गर्नुहोस्"
+
+#: libide/greeter/ide-greeter-perspective.ui:308
+#, fuzzy
+msgid "Click an item to select"
+msgstr "वस्तुहरू चयनका लागि क्लिक गर्नुहोस्"
+
+#: libide/greeter/ide-greeter-perspective.ui:338
+#, fuzzy
+msgid "Open…"
+msgstr "खोल्नुहोस्:"
+
+#: libide/greeter/ide-greeter-perspective.ui:353
+#, fuzzy
+msgid "Select projects for removal"
+msgstr "परियोजनाहरू"
+
+#: libide/greeter/ide-greeter-perspective.ui:373
+#, fuzzy
+msgid "Return to project selection"
+msgstr "परियोजना"
+
+#: libide/gsettings/ide-language-defaults.c:178
+#, fuzzy, c-format
+msgid "%s contained invalid ASCII"
+msgstr "\"%s\" मा रहेका केहि फोल्डर स्क्यान गर्न सकेन"
+
+#: libide/gsettings/ide-language-defaults.c:193
+#, fuzzy, c-format
+msgid "Failed to parse integer from “%s”"
+msgstr "%sतर्कहरू पार्स गर्न असफल\n"
+
+#: libide/gsettings/ide-language-defaults.c:271
+msgid "language defaults missing version in [global] group."
+msgstr ""
+
+#: libide/gsettings/ide-language-defaults.c:363
+#, fuzzy
+msgid "Failed to initialize defaults."
+msgstr "सुरु गर्न असफल भयो"
+
+#: libide/ide.c:58
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr ""
+
+#: libide/ide-context.c:2066
+msgid "An unload request is already pending"
+msgstr ""
+
+#: libide/ide-context.c:2185
+#, fuzzy
+msgid "Context has already been restored."
+msgstr "पासवर्ड पहिला नै प्रयोग गरिएको छ । अन्य पासवर्ड रोज्नुहोस् ।"
+
+#: libide/ide-object.c:305
+#, fuzzy, c-format
+msgid "No implementations of extension point “%s”."
+msgstr "'%s' बाट विस्तार पढ्न सकिँदैन"
+
+#: libide/ide-object.c:414
+#, fuzzy, c-format
+msgid "Failed to locate %s plugin."
+msgstr "प्लगइन सक्रिय गर्न असफल: %s"
+
+#: libide/ide-object.c:515
+#, fuzzy
+msgid "No such extension point."
+msgstr "बिन्दु"
+
+#: libide/ide-object.c:525
+#, fuzzy
+msgid "No implementations of extension point."
+msgstr "बिन्दु"
+
+#: libide/keybindings/ide-shortcuts-window.ui:10
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "सर्टकटहरू"
+
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:459
+msgctxt "shortcut window"
+msgid "General"
+msgstr "सामान्य"
+
+#: libide/keybindings/ide-shortcuts-window.ui:18
+#: libide/keybindings/ide-shortcuts-window.ui:463
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "विश्वव्यापी खोज"
+
+#: libide/keybindings/ide-shortcuts-window.ui:25
+#: libide/keybindings/ide-shortcuts-window.ui:470
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "प्राथमिकता"
+
+#: libide/keybindings/ide-shortcuts-window.ui:32
+#: libide/keybindings/ide-shortcuts-window.ui:477
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "आदेश:"
+
+#: libide/keybindings/ide-shortcuts-window.ui:39
+#: libide/keybindings/ide-shortcuts-window.ui:484
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "टर्मिनल"
+
+#: libide/keybindings/ide-shortcuts-window.ui:46
+#: libide/keybindings/ide-shortcuts-window.ui:491
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr "रनटाइम"
+
+#: libide/keybindings/ide-shortcuts-window.ui:53
+#: libide/keybindings/ide-shortcuts-window.ui:498
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "कुञ्जीपाटी सर्टकटहरू"
+
+#: libide/keybindings/ide-shortcuts-window.ui:60
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr "टासिने केन्द्रीयता मुद्रालाई सक्षम बनाउ ।"
+
+#: libide/keybindings/ide-shortcuts-window.ui:69
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "प्यानल"
+
+#: libide/keybindings/ide-shortcuts-window.ui:73
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "बायाँ केन्द्रित प्यानल"
+
+#: libide/keybindings/ide-shortcuts-window.ui:80
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Toggle right panel"
+msgstr "दायाँ केन्द्रित प्यानल"
+
+#: libide/keybindings/ide-shortcuts-window.ui:87
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "_तल प्यानल"
+
+#: libide/keybindings/ide-shortcuts-window.ui:96
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "टचप्याड सुचारु"
+
+#: libide/keybindings/ide-shortcuts-window.ui:101
+#: libide/keybindings/ide-shortcuts-window.ui:149
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "पछिल्लो आगत श्रोतमा जानुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:108
+#: libide/keybindings/ide-shortcuts-window.ui:156
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "अघिल्लो श्रोतमा जाने"
+
+#: libide/keybindings/ide-shortcuts-window.ui:116
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "फाइल"
+
+#: libide/keybindings/ide-shortcuts-window.ui:121
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "नयाँ कागजात सिर्जना गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:128
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "कागजात  खोल्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:135
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "कागजात बचत गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:142
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "यो कागजात बन्द गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:163
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "भर्खरैका कागजात सूचीको साइज:"
+
+#: libide/keybindings/ide-shortcuts-window.ui:171
+#: libide/keybindings/ide-shortcuts-window.ui:183
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "फेला पार्नुहोस् र प्रतिस्थापन गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:176
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "फेला पार"
+
+#: libide/keybindings/ide-shortcuts-window.ui:190
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "पछिल्लो जोडामा जानुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:197
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "अघिल्लो जोडामा जानुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:204
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "हाइलाइट खाली गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:212
+#: libide/keybindings/ide-shortcuts-window.ui:507
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "प्रतिलिपि बनाउनुहोस् र टाँस्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:512
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "चयन गरिएको पाठ क्लिपबोर्डमा प्रतिलिपि बनाउनुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:224
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "क्लिपबोर्डमा चयन गरिएको पाठ काट्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:231
+#: libide/keybindings/ide-shortcuts-window.ui:519
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "क्लिपबोर्डबाट पाठ टाँस्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:238
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "हालको चयन"
+
+#: libide/keybindings/ide-shortcuts-window.ui:246
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr ""
+"gedit ले पूर्वस्थितिमा फर्काउन वा रिडू गर्न सक्षम हुने कार्यहरूको अधिकतम सङ्ख्या । "
+"कार्यहरूको असिमित सङ्ख्याका लागि \"-१\" प्रयोग गर्नुहोस् ।"
+
+#: libide/keybindings/ide-shortcuts-window.ui:251
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "पूर्वास्थितिमा फर्काउनुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:258
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "फेरि गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:266
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "सम्पादन गर्ने"
+
+#: libide/keybindings/ide-shortcuts-window.ui:271
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "बढोत्तरी:"
+
+#: libide/keybindings/ide-shortcuts-window.ui:278
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "कर्सर"
+
+#: libide/keybindings/ide-shortcuts-window.ui:285
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "लाइन"
+
+#: libide/keybindings/ide-shortcuts-window.ui:292
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "सञ्झ्याल विकल्पहरू देखाउनुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:299
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "उल्टनू"
+
+#: libide/keybindings/ide-shortcuts-window.ui:306
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "लाइनमा: "
+
+#: libide/keybindings/ide-shortcuts-window.ui:313
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "मेट्नुहोस्..."
+
+#: libide/keybindings/ide-shortcuts-window.ui:320
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "पुन: नामाकरण गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:321
+msgctxt "shortcut window"
+msgid "Requires semantic language support"
+msgstr ""
+
+#: libide/keybindings/ide-shortcuts-window.ui:329
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "नेभिगेशन"
+
+#: libide/keybindings/ide-shortcuts-window.ui:334
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "पछिल्लो चालका लागि सङ्केत दिनुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:341
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "अघिल्लो चाल देखाउनुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:348
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "पछिल्लो पुस्तिका चिनो भएको स्थानमा जान्छ ।"
+
+#: libide/keybindings/ide-shortcuts-window.ui:355
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "अघिल्लो पुस्तिका चिनो भएको स्थानमा जान्छ ।"
+
+#: libide/keybindings/ide-shortcuts-window.ui:362
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "प्रतीक"
+
+#: libide/keybindings/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr ""
+
+#: libide/keybindings/ide-shortcuts-window.ui:376
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr ""
+
+#: libide/keybindings/ide-shortcuts-window.ui:383
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr "फाइलको अन्त्य"
+
+#: libide/keybindings/ide-shortcuts-window.ui:390
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr "फाइलको सुरुआतमा पुग्यो"
+
+#: libide/keybindings/ide-shortcuts-window.ui:397
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "मिल्दो ब्रेस"
+
+#: libide/keybindings/ide-shortcuts-window.ui:405
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "स्रोत छविमा चयनहरूलाई कसरी ह्याण्डल गर्ने"
+
+#: libide/keybindings/ide-shortcuts-window.ui:410
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "सबै चयन गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:417
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "सबै चयन हटाउनुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:425
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "निर्माण गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:430
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "निर्माण गर्नुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:437
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "चलाउनुहोस्"
+
+#: libide/keybindings/ide-shortcuts-window.ui:444
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "प्रोफाइल"
+
+#: libide/keybindings/ide-shortcuts-window.ui:455
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "टर्मिनल सर्टकट"
+
+#: libide/keybindings/ide-shortcuts-window.ui:527
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "_खो"
+
+#: libide/keybindings/ide-shortcuts-window.ui:532
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "अभिव्यक्तिहरू भित्र पाठ खोजी गर्नुहोस्"
+
+#: libide/layout/ide-layout-stack.c:126 libide/layout/ide-layout-stack.ui:8
+#, fuzzy
+msgid "No Open Pages"
+msgstr "यस रुपमा पृष्ठहरू खोल्नुहोस्"
+
+#: libide/layout/ide-layout-stack-header.ui:48
+msgid "Open file"
+msgstr "फाइल खोल्नुहोस्"
+
+#: libide/layout/ide-layout-stack-header.ui:65
+msgid "New file"
+msgstr "नयाँ फाइल"
+
+#: libide/layout/ide-layout-stack-header.ui:80
+#: libide/layout/ide-layout-stack.ui:86
+msgid "New terminal"
+msgstr "नया टर्मिनल"
+
+#: libide/layout/ide-layout-stack-header.ui:96
+#, fuzzy
+msgid "New documentation"
+msgstr "अभिलेखीकरण"
+
+#: libide/layout/ide-layout-stack-shortcuts.c:34
+#, fuzzy
+msgid "Move document to the right"
+msgstr "कर्सरलाई भित्र चलाउनका लागि त्यहाँ कुनै सक्रिय कागजात छैन !"
+
+#: libide/layout/ide-layout-stack-shortcuts.c:41
+#, fuzzy
+msgid "Move document to the left"
+msgstr "कर्सरलाई भित्र चलाउनका लागि त्यहाँ कुनै सक्रिय कागजात छैन !"
+
+#: libide/layout/ide-layout-stack-shortcuts.c:48
+#, fuzzy
+msgid "Switch to the previous document"
+msgstr "अघिल्लो श्रोतमा जाने"
+
+#: libide/layout/ide-layout-stack-shortcuts.c:55
+#, fuzzy
+msgid "Switch to the next document"
+msgstr "पछिल्लो आगत श्रोतमा जानुहोस्"
+
+#: libide/layout/ide-layout-stack-shortcuts.c:62
+msgid "Close the document"
+msgstr "यो कागजात बन्द गर्नुहोस्"
+
+#: libide/layout/ide-layout-stack.ui:30
+msgid "Open a File or Terminal"
+msgstr "टर्मिनल खोल्नुहोस्"
+
+#: libide/layout/ide-layout-stack.ui:44
+msgid "Use the page switcher above or use one of the following:"
+msgstr ""
+
+#: libide/layout/ide-layout-stack.ui:59
+msgid "Search"
+msgstr "_खो"
+
+#: libide/layout/ide-layout-stack.ui:68
+#, fuzzy
+msgid "Project sidebar"
+msgstr "छेउपट्टी"
+
+#: libide/layout/ide-layout-stack.ui:77
+msgid "File chooser"
+msgstr "फाइल चयनकर्ता"
+
+#: libide/layout/ide-layout-stack.ui:109
+msgid "New Terminal"
+msgstr "नया टर्मिनल"
+
+#: libide/layout/ide-layout-stack.ui:121
+#, fuzzy
+msgid "Uh oh, something went wrong"
+msgstr "ओहो, केही गलत भयो।"
+
+#: libide/layout/ide-layout-stack.ui:122
+msgid "There was a failure while trying to perform the operation."
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:61
+#: libide/preferences/ide-preferences-builtin.c:62
+msgid "Extensions"
+msgstr "विस्तारहरू"
+
+#: libide/preferences/ide-preferences-builtin.c:98
+msgid "Appearance"
+msgstr "मोहडा"
+
+#: libide/preferences/ide-preferences-builtin.c:100
+msgid "Themes"
+msgstr "विषयवस्तु"
+
+#: libide/preferences/ide-preferences-builtin.c:101
+#, fuzzy
+msgid "Dark Theme"
+msgstr "विषयवस्तु:"
+
+#: libide/preferences/ide-preferences-builtin.c:101
+msgid "Whether Builder should use a dark theme"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:101
+#, fuzzy
+msgid "dark theme"
+msgstr "विषयवस्तु:"
+
+#: libide/preferences/ide-preferences-builtin.c:102
+#, fuzzy
+msgid "Grid Pattern"
+msgstr "बान्की"
+
+#: libide/preferences/ide-preferences-builtin.c:102
+msgid "Display a grid pattern underneath source code"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:104
+msgid "Font"
+msgstr "वर्ण"
+
+#: libide/preferences/ide-preferences-builtin.c:105
+#, fuzzy
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "मोनोस्पेस"
+
+#. XXX: This belongs in terminal addin
+#: libide/preferences/ide-preferences-builtin.c:107
+#: plugins/terminal/gb-terminal-workbench-addin.c:202
+#: plugins/terminal/gtk/menus.ui:45
+msgid "Terminal"
+msgstr "टर्मिनल"
+
+#: libide/preferences/ide-preferences-builtin.c:107
+#, fuzzy
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "मोनोस्पेस"
+
+#: libide/preferences/ide-preferences-builtin.c:112
+msgid "Color Scheme"
+msgstr "रङ योजना"
+
+#: libide/preferences/ide-preferences-builtin.c:137
+msgid "Keyboard"
+msgstr "कुञ्जीपाटी"
+
+#: libide/preferences/ide-preferences-builtin.c:139
+msgid "Emulation"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:140
+msgid "Default keybinding mode which mimics gedit"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:141
+#, fuzzy
+msgid "Emacs"
+msgstr "gedit का लागि एमाकस, केट र भिम-शैली मोडलाइन समर्थन ।"
+
+#: libide/preferences/ide-preferences-builtin.c:141
+#, fuzzy
+msgid "Emulates the Emacs text editor"
+msgstr "जि-इडिट पाठ सम्पादक"
+
+#: libide/preferences/ide-preferences-builtin.c:142
+#, fuzzy
+msgid "Vim"
+msgstr "gedit का लागि एमाकस, केट र भिम-शैली मोडलाइन समर्थन ।"
+
+#: libide/preferences/ide-preferences-builtin.c:142
+#, fuzzy
+msgid "Emulates the Vim text editor"
+msgstr "जि-इडिट पाठ सम्पादक"
+
+#: libide/preferences/ide-preferences-builtin.c:144
+msgid "Movement"
+msgstr "चाल"
+
+#: libide/preferences/ide-preferences-builtin.c:145
+msgid "Home moves to first non-whitespace character"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:146
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:154
+msgid "Cursor"
+msgstr "कर्सर"
+
+#: libide/preferences/ide-preferences-builtin.c:155
+#, fuzzy
+msgid "Restore cursor position"
+msgstr "अघिल्लो कर्सर स्थिति पुन: भण्डारण गर्नुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:155
+msgid "Restore cursor position when a file is reopened"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:156
+msgid "Enable text wrapping"
+msgstr "पाठ बेराइ सक्षम पार्नुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:156
+#, fuzzy
+msgid "Wrap text that is too wide to display"
+msgstr "जडान गर्नुछ भने, पाठ भेरै फराकिलो भएमा लाईनहरूलाई लपेट्नुस्"
+
+#: libide/preferences/ide-preferences-builtin.c:157
+#, fuzzy
+msgid "Scroll Offset"
+msgstr "स्क्रोल स्थापित गर्नु"
+
+#: libide/preferences/ide-preferences-builtin.c:157
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:158
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:160
+msgid "Line Information"
+msgstr "पङ्क्ति सुचना"
+
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Line numbers"
+msgstr "पङ्क्ति सङ्ख्या"
+
+#: libide/preferences/ide-preferences-builtin.c:161
+msgid "Show line number at beginning of each line"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:162
+msgid "Line changes"
+msgstr "पङ्क्ति परिवर्तनहरु"
+
+#: libide/preferences/ide-preferences-builtin.c:162
+msgid "Show if a line was added or modified next to line number"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:164
+#, fuzzy
+msgid "Highlight"
+msgstr "हाइलाइट:"
+
+#: libide/preferences/ide-preferences-builtin.c:165
+msgid "Current line"
+msgstr "हालको लाइन"
+
+#: libide/preferences/ide-preferences-builtin.c:165
+msgid "Make current line stand out with highlights"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:166
+#, fuzzy
+msgid "Matching brackets"
+msgstr "मिल्ने कोष्ठकलाई हाइलाइट गर्नुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:166
+msgid "Highlight matching brackets based on cursor position"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:168
+#, fuzzy
+msgid "Code Overview"
+msgstr "अधिलेखन गर्नुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:169
+msgid "A zoomed out view to enhance navigating source code"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:170
+#, fuzzy
+msgid "Automatically hide overview map"
+msgstr "कुनाम प्यानल स्वचालित रूपमा लुकाउनुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:170
+msgid "Automatically hide map when editor loses focus"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:172
+#, fuzzy
+msgid "Visible Whitespace Characters"
+msgstr "दृष्य"
+
+#: libide/preferences/ide-preferences-builtin.c:175
+msgid "New line and carriage return"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:176
+#, fuzzy
+msgid "Non-breaking spaces"
+msgstr "क्यारेक्टरहरू (खालीस्थान छैन)"
+
+#: libide/preferences/ide-preferences-builtin.c:177
+#, fuzzy
+msgid "Spaces inside of text"
+msgstr "<%s> तत्वभित्र कुनै पाठलाइ अनुमति छैन"
+
+#: libide/preferences/ide-preferences-builtin.c:178
+#, fuzzy
+msgid "Trailing Only"
+msgstr "अगिल्लो शुन्यहरू देखाउनुस्"
+
+#: libide/preferences/ide-preferences-builtin.c:179
+#, fuzzy
+msgid "Leading Only"
+msgstr "मात्र"
+
+#: libide/preferences/ide-preferences-builtin.c:181
+msgid "Autosave"
+msgstr "स्वत: बचत"
+
+#: libide/preferences/ide-preferences-builtin.c:182
+#, fuzzy
+msgid "Enable or disable autosave feature"
+msgstr "अझै टाइप गर्नुपर्ने खोजी विशेषता सक्षम पार्नुहोस् वा अक्षम पार्नुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:183
+msgid "The number of seconds after modification before auto saving"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:189
+#, fuzzy
+msgid "Code Insight"
+msgstr "जिप/हुलाकी सङ्केत:"
+
+#: libide/preferences/ide-preferences-builtin.c:192
+#, fuzzy
+msgid "Semantic Highlighting"
+msgstr "हाइलाइटिङ"
+
+#: libide/preferences/ide-preferences-builtin.c:192
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:194
+#, fuzzy
+msgid "Completion"
+msgstr "पूरा हुने मिति"
+
+#: libide/preferences/ide-preferences-builtin.c:195
+msgid "Suggest words found in open files"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:195
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:196
+#, fuzzy
+msgid "Minimum word size"
+msgstr "न्यूनतम साइज"
+
+#: libide/preferences/ide-preferences-builtin.c:196
+msgid "Minimum word size for word completion"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:197
+msgid "Suggest completions using Ctags"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:197
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:198
+msgid "Suggest completions using Clang (Experimental)"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:198
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:200
+msgid "Diagnostics"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:206
+#: libide/snippets/ide-source-snippet-completion-provider.c:329
+msgid "Snippets"
+msgstr "स्निप्पेटस्"
+
+#: libide/preferences/ide-preferences-builtin.c:209
+#, fuzzy
+msgid "Code snippets"
+msgstr "स्निप्पेटस्"
+
+#: libide/preferences/ide-preferences-builtin.c:209
+msgid "Use code fragments to increase typing efficiency"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:253
+#, fuzzy
+msgid "Programming Languages"
+msgstr "भाषाहरु"
+
+#: libide/preferences/ide-preferences-builtin.c:319
+#, fuzzy
+msgid "Trim trailing whitespace"
+msgstr "ट्रिम"
+
+#: libide/preferences/ide-preferences-builtin.c:319
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:320
+#, fuzzy
+msgid "Overwrite Braces"
+msgstr "अधिलेखन गर्नुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:320
+#, fuzzy
+msgid "Overwrite closing braces"
+msgstr "इन्डेन्ट बन्द गर्ने ब्रेस"
+
+#: libide/preferences/ide-preferences-builtin.c:321
+#, fuzzy
+msgid "Insert Matching Brace"
+msgstr "मिल्दो ब्रेस"
+
+#: libide/preferences/ide-preferences-builtin.c:321
+#, fuzzy
+msgid "Insert matching character for { [ ( or \""
+msgstr "%s विशेष क्यारेक्टर घुसाउनुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:323
+msgid "Margins"
+msgstr "सीमान्तहरू"
+
+#: libide/preferences/ide-preferences-builtin.c:325
+#, fuzzy
+msgid "Right margin position"
+msgstr "दायाँ सीमान्त स्थिति"
+
+#: libide/preferences/ide-preferences-builtin.c:325
+#, fuzzy
+msgid "Position in spaces for the right margin"
+msgstr "दायाँ सीमान्तको स्थिति निर्दिष्ट गर्दछ ।"
+
+#: libide/preferences/ide-preferences-builtin.c:327
+msgid "Indentation"
+msgstr "इन्डेन्टेसन"
+
+#: libide/preferences/ide-preferences-builtin.c:328
+#, fuzzy
+msgid "Tab width"
+msgstr "ट्याब चौडाइ:"
+
+#: libide/preferences/ide-preferences-builtin.c:328
+#, fuzzy
+msgid "Width of a tab character in spaces"
+msgstr "ट्याब चौडाइ:"
+
+#: libide/preferences/ide-preferences-builtin.c:329
+#, fuzzy
+msgid "Insert spaces instead of tabs"
+msgstr "ट्याबहरूको सट्टा खालीस्थान घुसाउनुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:329
+msgid "Prefer spaces over use of tabs"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:330
+#, fuzzy
+msgid "Automatically indent"
+msgstr "इन्डेन्ट:"
+
+#: libide/preferences/ide-preferences-builtin.c:330
+msgid "Indent source code as you type"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:345
+#: libide/preferences/ide-preferences-builtin.c:363
+msgid "Number of CPU"
+msgstr "सीपीयू (CPU) सङ्ख्या"
+
+#: libide/preferences/ide-preferences-builtin.c:378
+#: libide/workbench/ide-omni-bar.ui:479
+msgid "Build"
+msgstr "निर्माण गर्नुहोस्"
+
+#: libide/preferences/ide-preferences-builtin.c:381
+#, fuzzy
+msgid "Build Workers"
+msgstr "निर्माण"
+
+#: libide/preferences/ide-preferences-builtin.c:381
+msgid "Number of parallel build workers"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:389
+msgid "Network"
+msgstr "सञ्जाल"
+
+#: libide/preferences/ide-preferences-builtin.c:390
+msgid "Allow downloads over metered connections"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:390
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:396
+msgid "Projects"
+msgstr "परियोजनाहरू"
+
+#: libide/preferences/ide-preferences-builtin.c:398
+msgid "Workspace"
+msgstr "कार्यस्थल"
+
+#: libide/preferences/ide-preferences-builtin.c:399
+msgid "A place for all your projects"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:400
+#, fuzzy
+msgid "Restore previously opened files"
+msgstr "प्रक्रिया \"%s\" (PID %u) बाट चलेका फाईलहरू:"
+
+#: libide/preferences/ide-preferences-builtin.c:400
+msgid "Open previously opened files when loading a project"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:402
+#, fuzzy
+msgid "Project Discovery"
+msgstr "स्वत: स्तम्भ खोजी"
+
+#: libide/preferences/ide-preferences-builtin.c:403
+msgid "Discover projects on my computer"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:403
+msgid "Scan your computer for existing projects"
+msgstr ""
+
+#: libide/preferences/ide-preferences-builtin.c:524
+#: plugins/create-project/gbp-create-project-widget.ui:154
+msgid "Version Control"
+msgstr "संस्करण नियन्त्रण"
+
+#. only the page goes here, plugins will fill in the details
+#: libide/preferences/ide-preferences-builtin.c:536
+msgid "SDKs"
+msgstr ""
+
+#: libide/projects/ide-project.c:527
+msgid "Destination file must be within the project tree."
+msgstr ""
+
+#: libide/projects/ide-project.c:662
+msgid "File must be within the project tree."
+msgstr ""
+
+#: libide/projects/ide-recent-projects.c:402
+#, c-format
+msgid "%s() may only be executed once"
+msgstr ""
+
+#: libide/runner/ide-run-button.ui:31
+#, fuzzy
+msgid "Stop running"
+msgstr "रोक्नुहोस्"
+
+#: libide/runner/ide-run-button.ui:51
+#, fuzzy
+msgid "Change run options"
+msgstr "परिवर्तन गर्नुहोस्"
+
+#: libide/runner/ide-run-manager.c:319
+msgid "Cannot run target, another target is running"
+msgstr ""
+
+#: libide/runner/ide-run-manager.c:388
+#, fuzzy
+msgid "Failed to locate runtime"
+msgstr "तोक्नुहोस्"
+
+#: libide/runner/ide-runner.c:173
+#, fuzzy
+msgid "Process quit unexpectedly"
+msgstr "_बन्द गर्नुहोस्"
+
+#: libide/runtimes/ide-runtime-manager.c:114
+#, fuzzy
+msgid "Host operating system"
+msgstr "सञ्चालन प्रणाली"
+
+#: libide/snippets/ide-source-snippets-manager.c:96
+#, fuzzy, c-format
+msgid "Failed to open directory: %s"
+msgstr "%s डाइरेक्टरी सिर्जना गर्न असफल भयो।"
+
+#: libide/snippets/ide-source-snippets-manager.c:109
+#, fuzzy, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "प्रमाणपत्र लोड गर्न असफल: %s"
+
+#: libide/sourceview/ide-source-view.c:5314
+#, fuzzy, c-format
+msgid "Insert “%s”"
+msgstr "\"%s\" घुसाउनुहोस्"
+
+#: libide/sourceview/ide-source-view.c:5316
+#, fuzzy, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "नत्थी \"%s' प्रतिस्थापन गरौँ?"
+
+#: libide/sourceview/ide-source-view.c:5430
+#, fuzzy
+msgid "Apply Fix-It"
+msgstr "_लागू"
+
+#: libide/sourceview/ide-source-view.c:5857
+#, fuzzy
+msgid "Rename symbol"
+msgstr "पुन: नामाकरण गर्नुहोस्"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: libide/sourceview/ide-source-view.c:6061
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr ""
+
+#: libide/sourceview/ide-source-view.c:6087
+#, fuzzy
+msgid "No references were found"
+msgstr "कुनै घटनाहरू फेला परेन ।"
+
+#: libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] ""
+msgstr[1] ""
+
+#: libide/transfers/ide-transfers-button.ui:35
+#, fuzzy
+msgid "Clear _All"
+msgstr "सबै खाली गर्नुहोस्"
+
+#: libide/util/ide-uri.c:181
+#, fuzzy, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "URI मा अवैध क्यारेक्टर अनुक्रम"
+
+#: libide/util/ide-uri.c:219
+#, fuzzy
+msgid "Non-UTF-8 characters in URI"
+msgstr "जहाँ संख्यात्मक नभएको वर्णहरु बेवास्ता गरिन सक्छन"
+
+#: libide/util/ide-uri.c:366 libide/util/ide-uri.c:377
+#, fuzzy, c-format
+msgid "Invalid IP literal “%s” in URI"
+msgstr "अवैध URI: '%s'"
+
+#: libide/util/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal “%s” in URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname “%s” in URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:434
+#, c-format
+msgid "Non-ASCII hostname “%s” forbidden in this URI"
+msgstr ""
+
+#: libide/util/ide-uri.c:457
+#, fuzzy, c-format
+msgid "Could not parse port “%s” in URI"
+msgstr "आदेश-रेखा विकल्प पद वर्णन गर्न सकेन: %s\n"
+
+#: libide/util/ide-uri.c:464
+#, fuzzy, c-format
+msgid "Port “%s” in URI is out of range"
+msgstr "%s अनुमति दिएको दायरा भन्दा बाहिर छ"
+
+#: libide/util/ide-uri.c:590
+#, fuzzy
+msgid "Base URI is not absolute"
+msgstr "[URI] [URI] …"
+
+#: libide/util/ide-uri.c:615
+#, fuzzy
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "प्यानल सुरुआतकर्ता डेस्कटप फाइलका लागि कुनै युआरआई उपलब्ध छैन\n"
+
+#: libide/util/ide-uri.c:660
+#, fuzzy, c-format
+msgid "Could not parse “%s” as absolute URI"
+msgstr "आदेश-रेखा विकल्प पद वर्णन गर्न सकेन: %s\n"
+
+#: libide/util/ide-uri.c:1203
+#, c-format
+msgid "URI “%s” has no host component"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar.c:407
+#, fuzzy
+msgid "Building"
+msgstr "भवन:"
+
+#. Translators, missing means we could not locate the runtime
+#: libide/workbench/ide-omni-bar-row.c:90
+msgid "missing"
+msgstr "नभेटिरहेको"
+
+#: libide/workbench/ide-omni-bar-row.ui:31
+#, fuzzy
+msgid "Edit build configuration"
+msgstr "निर्माण गर्नुहोस्"
+
+#: libide/workbench/ide-omni-bar.ui:199
+#, fuzzy
+msgid "Configure build preferences"
+msgstr "कृपया प्राथमिकता संवादमा समक्रमण कन्फिगर गर्नुहोस् ।"
+
+#: libide/workbench/ide-omni-bar.ui:221
+msgid "Branch"
+msgstr "शाखा"
+
+#: libide/workbench/ide-omni-bar.ui:246
+#, fuzzy
+msgid "Build Profile"
+msgstr "निर्माण"
+
+#: libide/workbench/ide-omni-bar.ui:321
+#, fuzzy
+msgid "Build status"
+msgstr "वस्तुस्थिति"
+
+#: libide/workbench/ide-omni-bar.ui:333
+msgid "View build console contents"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar.ui:355
+#, fuzzy
+msgid "Last build"
+msgstr "निर्माण"
+
+#: libide/workbench/ide-omni-bar.ui:382
+#, fuzzy
+msgid "Build result"
+msgstr "परिणाम"
+
+#: libide/workbench/ide-omni-bar.ui:486
+msgid "Rebuild"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar.ui:493
+msgid "Clean"
+msgstr "सफा"
+
+#: libide/workbench/ide-omni-bar.ui:500
+#, fuzzy
+msgid "Export Bundle"
+msgstr "निर्यात गर्नुहोस्..."
+
+#: libide/workbench/ide-omni-bar.ui:581
+#, fuzzy
+msgid "Build project"
+msgstr "परियोजना निर्माण गर्नुहोस्"
+
+#: libide/workbench/ide-workbench-actions.c:215
+#, fuzzy
+msgid "Builder Statistics"
+msgstr "तथ्याङ्क:"
+
+#: libide/workbench/ide-workbench.c:628
+#, fuzzy, c-format
+msgid "%s — Builder"
+msgstr "%s of %s at %s/s"
+
+#: libide/workbench/ide-workbench-header-bar.ui:50
+#, fuzzy
+msgid "Transfers"
+msgstr "फाईल-ट्रान्स्फर्स"
+
+#: libide/workbench/ide-workbench-header-bar.ui:57
+#, fuzzy
+msgid "Show workbench menu"
+msgstr "सूचीका चित्रहरु देखाऊ"
+
+#: libide/workbench/ide-workbench-header-bar.ui:95
+#, fuzzy
+msgid "Press Ctrl+. to search"
+msgstr "खोजको लागि इन्टर थिच्नुहोस्"
+
+#: libide/workbench/ide-workbench-shortcuts.c:48
+msgid "Workbench"
+msgstr ""
+
+#: libide/workbench/ide-workbench-shortcuts.c:49
+msgid "Perspectives"
+msgstr ""
+
+#: plugins/autotools/ide-autotools-makecache-stage.c:194
+#, fuzzy
+msgid "Building cache…"
+msgstr "भवन:"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:265
+#, fuzzy
+msgid "Shared Library"
+msgstr "साझेदारी लाइब्रेरी समर्थन थप्नुहोस्:"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:267
+msgid "Create a new autotools project with a shared library"
+msgstr ""
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:291
+#, fuzzy
+msgid "Empty Project"
+msgstr ""
+"डाइरेक्टरी \"%s\" खाली छैन । यदि केही फाइलहरू लेख्न नसकेमा परियोजना सिर्जना असफल "
+"हुनसक्छ । तपाईँ निरन्तरता दिन चाहनुहुन्छ ?"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:294
+#, fuzzy
+msgid "Create a new empty autotools project"
+msgstr "नयाँ ग्लेड परियोजान सिर्जना गर्न सकेन"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:308
+#, fuzzy
+msgid "GNOME Application"
+msgstr "जिनोमको मानचित्र अनुप्रयोग"
+
+#: plugins/autotools-templates/autotools_templates/__init__.py:310
+msgid "Create a new flatpak-ready GNOME application"
+msgstr ""
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:190
+#, fuzzy, c-format
+msgid "No beautifier available for “%s”"
+msgstr "%s %s उपलब्ध छ"
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:192
+#, fuzzy
+msgid "No beautifier available"
+msgstr "** उपलब्ध छैन **"
+
+#: plugins/beautifier/gtk/menus.ui:9
+msgid "Beautify"
+msgstr ""
+
+#: plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr ""
+
+#: plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr ""
+
+#. translators: keywords used when searching for preferences
+#: plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr ""
+
+#: plugins/clang/ide-clang-service.c:325
+#, fuzzy
+msgid "Unknown failure"
+msgstr "छवि बचत गर्दा अज्ञात असफलता"
+
+#: plugins/clang/ide-clang-service.c:329
+msgid "Clang crashed"
+msgstr ""
+
+#: plugins/clang/ide-clang-service.c:333
+#, fuzzy
+msgid "Invalid arguments"
+msgstr "अवैध तर्कहरू"
+
+#: plugins/clang/ide-clang-service.c:337
+#, fuzzy
+msgid "AST read error"
+msgstr "फाइल पढ्ने प्रयास गर्दा त्रुटि"
+
+#: plugins/clang/ide-clang-service.c:349
+#, fuzzy, c-format
+msgid "Failed to create translation unit: %s"
+msgstr "%s;%s लगडाइरेक्टरी सिर्जना गर्न असफल भयो"
+
+#: plugins/clang/ide-clang-service.c:480 plugins/xml-pack/ide-xml-service.c:97
+#, fuzzy
+msgid "File must be saved locally to parse."
+msgstr "बचत गरिएका सत्र फाइलको पद वर्णन गर्न असफल: %s\n"
+
+#: plugins/clang/ide-clang-symbol-node.c:149
+#, fuzzy
+msgid "anonymous"
+msgstr "बेनामी"
+
+#: plugins/clang/ide-clang-translation-unit.c:661
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr ""
+
+#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+msgid "Colors"
+msgstr "रङ"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:92
+#, fuzzy
+msgid "Close without Saving"
+msgstr "बचत नगरी बन्द गर्नुहोस्"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:94
+#, fuzzy
+msgid "Save As…"
+msgstr "बचत गर्नुहोस्..."
+
+#: plugins/color-picker/gb-color-picker-prefs.c:202
+#, fuzzy
+msgid "Load palette"
+msgstr "KISS रङदानी लोड गर्नुहोस्"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:229
+#, fuzzy
+msgid "Save palette"
+msgstr "रङ्गदानी:"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:702
+msgid "All files"
+msgstr "सबै फाइल"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:706
+#, fuzzy
+msgid "All supported palettes formats"
+msgstr "समर्थित ध्वनि ढाँचाहरू:"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:711
+#, fuzzy
+msgid "GIMP palette"
+msgstr "गिम्प"
+
+#: plugins/color-picker/gb-color-picker-prefs.c:715
+#, fuzzy
+msgid "GNOME Builder palette"
+msgstr "जिनोम"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+#, fuzzy
+msgid "Palette name"
+msgstr "रङदानीको नाम:"
+
+#: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+#, fuzzy
+msgid "Enter a new name for the palette"
+msgstr "गाभिएको रङदानीका लागि नाम प्रविष्ट गर्नुहोस्"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+#, fuzzy
+msgid "HSV visibility"
+msgstr "दृश्यात्मक"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+#, fuzzy
+msgid "If the HSV components are visible."
+msgstr "HSV हल्ला..."
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+#, fuzzy
+msgid "LAB visibility"
+msgstr "दृश्यात्मक"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+#, fuzzy
+msgid "If the LAB components are visible."
+msgstr "ल्याब डि५०"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+#, fuzzy
+msgid "RGB visibility"
+msgstr "दृश्यात्मकता:"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+#, fuzzy
+msgid "If the RGB components are visible."
+msgstr "दृष्य"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+#, fuzzy
+msgid "RGB unit"
+msgstr "आर जि बि"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr ""
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+#, fuzzy
+msgid "Selected palette ID"
+msgstr "चयन गरिएको रङ्गदानी सम्पादन गर्न क्लिक गर्नुहोस्"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr ""
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+#, fuzzy
+msgid "Color strings visibility"
+msgstr "दृश्यात्मक"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+#, fuzzy
+msgid "The visible color strings."
+msgstr "स्ट्रिङको रूपमा स्ट्रिङ राख्नुहोस्"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+#, fuzzy
+msgid "Color filter"
+msgstr "उच्च व्यतिरेक रङ प्रर्दशक फिल्टर"
+
+#: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:13
+#, fuzzy
+msgid "Color components"
+msgstr "सिभिल इन्जिनियरिङ अवयवहरू"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "दृश्यात्मकता:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "एकाईहरू:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:213
+#, fuzzy
+msgid "Filters:"
+msgstr "फिल्टर"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or “None”."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:597
+#, fuzzy
+msgid "Palettes options"
+msgstr "रङ्गदानीहरू:"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:615
+#, fuzzy
+msgid "Palette view mode:"
+msgstr "८ बिट मोडमा रङदानीको साइज"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "सुची"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "रङ व्यवस्थापन"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "लोड गर्नुहोस्"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "हालको कागजातबाट"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:891
+#, fuzzy
+msgid "No loaded palettes"
+msgstr "रङ्गदानीहरू:"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:45
+#, fuzzy
+msgid "No selected palettes"
+msgstr "रङ्गदानीहरू:"
+
+#: plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "रङदानी फाइल चयन गर्नुहोस्"
+
+#: plugins/color-picker/gtk/color-picker.ui:62
+msgid "Try loading or generating a palette using the menu"
+msgstr ""
+
+#: plugins/color-picker/gtk/menus.ui:7
+#, fuzzy
+msgid "Highlight colors"
+msgstr "हाइलाइट:"
+
+#: plugins/command-bar/gb-command-bar.c:283
+#, fuzzy, c-format
+msgid "Command not found: %s"
+msgstr "आदेश फेला परेन ।"
+
+#: plugins/command-bar/gb-command-bar.c:593
+msgid "Use the entry below to execute a command"
+msgstr ""
+
+#: plugins/command-bar/gb-command-bar.c:717
+#, fuzzy
+msgid "Command Bar"
+msgstr "आदेश:"
+
+#: plugins/command-bar/gb-vim.c:87
+msgid "Number required"
+msgstr "अङ्क आवश्यक"
+
+#: plugins/command-bar/gb-vim.c:97
+#, fuzzy, c-format
+msgid "%s is invalid for %s"
+msgstr "अवैध अनुप्रयोग आईडी: %s"
+
+#: plugins/command-bar/gb-vim.c:155
+#, fuzzy, c-format
+msgid "Cannot find language “%s”"
+msgstr "फोल्डर भेटिएन  “%s”."
+
+#: plugins/command-bar/gb-vim.c:312
+msgid "This command requires a GtkSourceView to be focused"
+msgstr ""
+
+#: plugins/command-bar/gb-vim.c:323
+msgid "This command requires a view to be focused"
+msgstr ""
+
+#: plugins/command-bar/gb-vim.c:380
+#, c-format
+msgid "Unknown option: %s"
+msgstr "अज्ञात विकल्प %s"
+
+#: plugins/command-bar/gb-vim.c:423
+#, fuzzy, c-format
+msgid "Cannot find colorscheme “%s”"
+msgstr "फोल्डर भेटिएन  “%s”."
+
+#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:588
+#, fuzzy
+msgid "Failed to locate working directory"
+msgstr "कार्य डाइरेक्टरी सेट गर्नुहोस्"
+
+#: plugins/command-bar/gb-vim.c:708
+#, fuzzy, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr " --%s का लागि अमान्य मान \"%s\""
+
+#: plugins/command-bar/gb-vim.c:1149
+#, fuzzy
+msgid "Invalid search and replace request"
+msgstr "क्वेरि खोजी गर्नुहोस् र बदल्नुहोस्"
+
+#: plugins/command-bar/gb-vim.c:1255
+#, fuzzy, c-format
+msgid "Not a command: %s"
+msgstr ""
+"अज्ञात आदेश  %s\n"
+"\n"
+
+#: plugins/comment-code/gtk/menus.ui:9
+#, fuzzy
+msgid "Comment code"
+msgstr "टिप्पणी:"
+
+#: plugins/comment-code/gtk/menus.ui:14
+#, fuzzy
+msgid "Uncomment code"
+msgstr "बाकस टिप्पणी गरिएको/टिप्पणी नगरिएको"
+
+#: plugins/c-pack/ide-c-format-provider.c:283
+#: plugins/python-pack/ide-python-format-provider.c:240
+#, fuzzy
+msgid "Format Strings"
+msgstr "स्ट्रिङ"
+
+#: plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "New Project"
+msgstr "नयाँ परियोजना"
+
+#: plugins/create-project/gbp-create-project-genesis-addin.c:223
+msgid "New…"
+msgstr "नयाँ"
+
+#: plugins/create-project/gbp-create-project-genesis-addin.c:229
+msgid "Create"
+msgstr "सिर्जना गर्नुहोस्"
+
+#: plugins/create-project/gbp-create-project-tool.c:136
+#, fuzzy
+msgid "List available templates"
+msgstr "उपलब्ध डेटाबेसको सुची रिलोड गर्नुहोस्"
+
+#: plugins/create-project/gbp-create-project-tool.c:138
+#, fuzzy
+msgid "Project template to generate"
+msgstr "टेम्प्लेट:"
+
+#: plugins/create-project/gbp-create-project-tool.c:140
+#, fuzzy
+msgid "The target language (if supported)"
+msgstr "<b>लक्षित भाषा:</b>"
+
+#: plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or “none” to disable"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-tool.c:143
+msgid "git"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-tool.c:149
+#, fuzzy
+msgid "create-project [OPTION...] PROJECT_NAME"
+msgstr "नयाँ ध्वनि परियोजान सिर्जना गर्ने"
+
+#: plugins/create-project/gbp-create-project-tool.c:198
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-tool.c:372
+#, fuzzy
+msgid "Please specify a project name.\n"
+msgstr "परियोजनाको नाम सम्पादन गर्नुहोस्"
+
+#: plugins/create-project/gbp-create-project-tool.c:388
+#, fuzzy
+msgid "Please specify a project template with --template=\n"
+msgstr "%s मा कुनै परियोजनाको टेम्प्लेट फेला पार्न अक्षम"
+
+#: plugins/create-project/gbp-create-project-widget.c:156
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.c:163
+#, fuzzy
+msgid "Directory already exists with that name"
+msgstr "डाइरेक्टरी '%s' पहिले नै अवस्थित छ"
+
+#: plugins/create-project/gbp-create-project-widget.c:568
+msgid "A failure occurred while initializing version control"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:28
+msgid "Project Name"
+msgstr "परियोजनाको नाम"
+
+#: plugins/create-project/gbp-create-project-widget.ui:56
+msgid ""
+"Unique name that is used for your project’s folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:75
+#, fuzzy
+msgid "Project Location"
+msgstr "स्थान:"
+
+#: plugins/create-project/gbp-create-project-widget.ui:86
+#: plugins/git/ide-git-clone-widget.ui:77
+msgid "Select Project Directory"
+msgstr "परियोजना डाइरेक्टरी  चयन गर्नुहोस्"
+
+#: plugins/create-project/gbp-create-project-widget.ui:99
+msgid "Language"
+msgstr "भाषा"
+
+#: plugins/create-project/gbp-create-project-widget.ui:121
+msgid "License"
+msgstr "अनुमतीपत्र"
+
+#: plugins/create-project/gbp-create-project-widget.ui:136
+msgid "GPLv3+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:137
+msgid "LGPLv3+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:138
+msgid "AGPLv3+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:139
+msgid "MIT/X11"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:140
+msgid "GPLv2+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:141
+msgid "LGPLv2.1+"
+msgstr ""
+
+#: plugins/create-project/gbp-create-project-widget.ui:142
+msgid "No license"
+msgstr "इजाजतपत्र छैन"
+
+#: plugins/create-project/gbp-create-project-widget.ui:175
+#, fuzzy
+msgid "Uses the Git version control system"
+msgstr "संस्करणले प्रणाली प्लगइनलाई नियन्त्रण गर्दछ"
+
+#: plugins/create-project/gbp-create-project-widget.ui:237
+#, fuzzy
+msgid "Select a Template"
+msgstr "टेम्प्लेट:"
+
+#: plugins/devhelp/gbp-devhelp-menu-button.ui:25
+#, fuzzy
+msgid "Select Documentation…"
+msgstr "अभिलेखीकरण"
+
+#: plugins/devhelp/gbp-devhelp-view.c:206 plugins/devhelp/gtk/menus.ui:5
+msgid "Documentation"
+msgstr "अभिलेखीकरण"
+
+#: plugins/devhelp/gtk/menus.ui:21
+#, fuzzy
+msgid "New Documentation Page"
+msgstr "नयाँ ट्याब"
+
+#: plugins/eslint/eslint_plugin/__init__.py:105
+msgid "ESlint"
+msgstr ""
+
+#: plugins/eslint/eslint_plugin/__init__.py:106
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: plugins/eslint/eslint_plugin/__init__.py:108
+msgid "eslint javascript lint code execute execution"
+msgstr ""
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+#, fuzzy
+msgid "Enable ESLint"
+msgstr "सक्षम"
+
+#: plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+
+#: plugins/find-other-file/find_other_file.py:50
+#, fuzzy
+msgid "Find other file"
+msgstr "_अन्य..."
+
+#: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+#, fuzzy
+msgid "Downloading application sources…"
+msgstr "डाउनलोड हुँदैछ"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+#, fuzzy
+msgid "Clone App"
+msgstr "क्लोन"
+
+#: plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "क्लोन"
+
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
+msgid "Network is not available, skipping downloads"
+msgstr ""
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:89
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
+#: plugins/html-preview/html_preview_plugin/__init__.py:323
+#: plugins/html-preview/html_preview_plugin/__init__.py:333
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+#: plugins/rustup/rustup_plugin/__init__.py:615
+msgid "Install"
+msgstr "स्थापना गर्नुहोस्"
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/rustup/rustup_plugin/__init__.py:496
+#: plugins/rustup/rustup_plugin/__init__.py:500
+msgid "Update"
+msgstr "अद्यावधिक"
+
+#. translators: keywords are used to match search keywords in preferences
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#, fuzzy, c-format
+msgid "flatpak %s %s %s"
+msgstr "%s of %s at %s/s"
+
+#. translators: %u is the number of hidden runtimes to be shown
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:309
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:390
+msgid "Flatpak Runtimes"
+msgstr ""
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:722
+#, fuzzy, c-format
+msgid "%s <b>%s</b>"
+msgstr "<b>%s</b> हताईयो"
+
+#: plugins/flatpak/gbp-flatpak-runtime.c:724
+#, c-format
+msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgstr ""
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:67
+#, fuzzy, c-format
+msgid "Updated %s %s"
+msgstr "अन्तिम अद्यावधिक: %s"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:70
+#, fuzzy, c-format
+msgid "Updating %s %s"
+msgstr "अद्यावधिक गर्दै..."
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:76
+#, fuzzy, c-format
+msgid "Installed %s %s"
+msgstr "%s मा स्थापना गरियो"
+
+#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
+#: plugins/flatpak/gbp-flatpak-transfer.c:79
+#, fuzzy, c-format
+msgid "Installing %s %s"
+msgstr "%s स्थापना गरिदैछ"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:101
+#, fuzzy
+msgid "Failed to install runtime"
+msgstr "रनटाइम"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:103
+#, fuzzy
+msgid "Runtime has been updated"
+msgstr "कुञ्जी बन्धन हटाइयो ।"
+
+#: plugins/flatpak/gbp-flatpak-transfer.c:105
+#, fuzzy
+msgid "Runtime has been installed"
+msgstr "अद्यावधिक स्थापना गरियो"
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
+msgid "Your computer is missing flatpak-builder"
+msgstr ""
+
+#: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+
+#: plugins/flatpak/gtk/menus.ui:6
+msgid "Flatpak"
+msgstr ""
+
+#: plugins/flatpak/gtk/menus.ui:8
+#, fuzzy
+msgid "_Download Dependencies"
+msgstr "डाउनलोड"
+
+#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
+#, fuzzy
+msgid "Send to Fpaste.org"
+msgstr "पठाउन लाई:"
+
+#: plugins/fpaste/fpaste_plugin/__init__.py:110
+msgid "The following URL has been copied to the clipboard"
+msgstr ""
+
+#: plugins/git/ide-git-buffer-change-monitor.c:161
+msgid "Cannot provide diff, no backing file provided."
+msgstr ""
+
+#: plugins/git/ide-git-buffer-change-monitor.c:567
+msgid "Repository does not have a working directory."
+msgstr ""
+
+#: plugins/git/ide-git-buffer-change-monitor.c:578
+msgid "File is not under control of git working directory."
+msgstr ""
+
+#: plugins/git/ide-git-buffer-change-monitor.c:644
+msgid "The requested file does not exist within the git index."
+msgstr ""
+
+#: plugins/git/ide-git-clone-widget.c:162
+#: plugins/git/ide-git-clone-widget.c:427
+#, fuzzy
+msgid "A valid Git URL is required"
+msgstr "URL सक्रिय गर्न जब यस क्षेत्रमा क्लिक गरिन्छ: (आवश्यक)"
+
+#: plugins/git/ide-git-clone-widget.ui:36
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr ""
+
+#: plugins/git/ide-git-clone-widget.ui:65
+msgid "user@host:repository.git"
+msgstr ""
+
+#: plugins/git/ide-git-clone-widget.ui:66
+msgid "Enter the URL of your project’s source code repository"
+msgstr ""
+
+#: plugins/git/ide-git-clone-widget.ui:93
+#, fuzzy
+msgid "Repository URL"
+msgstr "URL:"
+
+#: plugins/git/ide-git-clone-widget.ui:101
+#, fuzzy
+msgid "Project Destination"
+msgstr "परियोजना"
+
+#: plugins/git/ide-git-genesis-addin.c:93
+#, fuzzy
+msgid "Clone Project"
+msgstr "क्लोन"
+
+#: plugins/git/ide-git-genesis-addin.c:184
+#, fuzzy
+msgid "Clone…"
+msgstr "क्लोन"
+
+#: plugins/git/ide-git-remote-callbacks.c:193
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
+
+#: plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:377
+msgid "Code assistance requires a local file."
+msgstr ""
+
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr ""
+
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr ""
+
+#: plugins/gnome-code-assistance/ide-gca-service.c:182
+#, fuzzy
+msgid "No language specified"
+msgstr "भाषा"
+
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+#, fuzzy
+msgid "Enable Pylint"
+msgstr "सक्षम"
+
+#: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+
+#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:7
+#, fuzzy
+msgid "Open Preview"
+msgstr "पूर्वावलोकन छैन"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:319
+#, fuzzy
+msgid "Your computer is missing python3-docutils"
+msgstr "तपाईँको कमप्युटरलाई अनधिकृत प्रयोगबाट बचाउनुहोस्"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:329
+#, fuzzy
+msgid "Your computer is missing python3-sphinx"
+msgstr "तपाईँको कमप्युटरलाई अनधिकृत प्रयोगबाट बचाउनुहोस्"
+
+#: plugins/html-preview/html_preview_plugin/__init__.py:372
+#, fuzzy
+msgid "(Preview)"
+msgstr "पूर्वावलोकन:"
+
+#: plugins/jedi/jedi_plugin.py:752
+#, fuzzy
+msgid "Suggest Python completions"
+msgstr "संलग्नताको स्वचालित प्रदर्शन सुझाव दिनुहोस्"
+
+#: plugins/jedi/jedi_plugin.py:753
+msgid "Use Jedi to provide completions for the Python language"
+msgstr ""
+
+#: plugins/meson-templates/meson_templates/__init__.py:206
+#, fuzzy
+msgid "Empty Meson Project"
+msgstr "खाली"
+
+#: plugins/meson-templates/meson_templates/__init__.py:208
+#, fuzzy
+msgid "Create a new empty meson project"
+msgstr "नयाँ परियोजना सिर्जना गर्नुहोस्"
+
+#: plugins/mingw/ide-mingw-device-provider.c:94
+#, fuzzy
+msgid "MinGW 64-bit"
+msgstr "६४-विट"
+
+#: plugins/mingw/ide-mingw-device-provider.c:106
+#, fuzzy
+msgid "MinGW 32-bit"
+msgstr "३२-विट"
+
+#: plugins/notification/ide-notification-addin.c:81
+#, fuzzy
+msgid "Build successful"
+msgstr "निर्माण गर्नुहोस्"
+
+#: plugins/notification/ide-notification-addin.c:82
+#, c-format
+msgid "Project “%s” has completed building"
+msgstr ""
+
+#: plugins/notification/ide-notification-addin.c:86
+#, fuzzy
+msgid "Build failed"
+msgstr "प्याकेज निर्माण प्रक्रिया असफल"
+
+#: plugins/notification/ide-notification-addin.c:87
+#, fuzzy, c-format
+msgid "Project “%s” failed to build"
+msgstr "पूरा परियोजना निर्माण गर्नुहोस्"
+
+#: plugins/project-tree/gb-new-file-popover.c:123
+#: plugins/project-tree/gb-rename-file-popover.c:139
+#, fuzzy
+msgid "A folder with that name already exists."
+msgstr "\"%s\" मा उही नामको नत्थी पहिले नै अवस्थित छ।"
+
+#: plugins/project-tree/gb-new-file-popover.c:126
+#: plugins/project-tree/gb-rename-file-popover.c:142
+#, fuzzy
+msgid "A file with that name already exists."
+msgstr "यो नामको फाइल पहिले नै अवस्थित:`%s'"
+
+#: plugins/project-tree/gb-new-file-popover.c:348
+#: plugins/project-tree/gb-new-file-popover.ui:13
+#: plugins/project-tree/gb-rename-file-popover.ui:13
+msgid "File Name"
+msgstr "फाइलको नाम"
+
+#: plugins/project-tree/gb-new-file-popover.c:350
+msgid "Folder Name"
+msgstr "फोल्डरको नाम"
+
+#: plugins/project-tree/gb-new-file-popover.ui:35
+msgid "_Create"
+msgstr "सिर्जना गर्नुहोस्"
+
+#: plugins/project-tree/gb-project-tree-addin.c:89
+#, fuzzy
+msgid "Project Tree"
+msgstr "परियोजना"
+
+#: plugins/project-tree/gb-project-tree-builder.c:213
+msgid "Empty"
+msgstr "रित्याउनुहोस्"
+
+#: plugins/project-tree/gb-rename-file-popover.c:79
+#, fuzzy, c-format
+msgid "Rename %s"
+msgstr "निर्गत फाइल %s अन्तिममा पुन:नामकरण गर्न सकिँदैन%s: %s\n"
+
+#: plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr ""
+
+#: plugins/project-tree/gtk/menus.ui:14
+msgid "_New"
+msgstr "(नयाँ)"
+
+#: plugins/project-tree/gtk/menus.ui:17
+#, fuzzy
+msgid "_Empty File"
+msgstr "खाली फाइल"
+
+#: plugins/project-tree/gtk/menus.ui:23
+msgid "_New Folder"
+msgstr "नयाँ फोल्डर"
+
+#: plugins/project-tree/gtk/menus.ui:29
+#, fuzzy
+msgid "_Open"
+msgstr "खोल्नुहोस्:"
+
+#: plugins/project-tree/gtk/menus.ui:34
+msgid "Open _With"
+msgstr "यससँग खोल्नुहोस्"
+
+#: plugins/project-tree/gtk/menus.ui:37
+#, fuzzy
+msgid "Source Code Editor"
+msgstr "सम्पादकको सङ्केत टिप्पणी"
+
+#: plugins/project-tree/gtk/menus.ui:47
+#, fuzzy
+msgid "_Open Containing Folder"
+msgstr "स्क्रिप्ट फोल्डर खोल्नुहोस्"
+
+#: plugins/project-tree/gtk/menus.ui:51
+#, fuzzy
+msgid "_Open in Terminal"
+msgstr "टर्मिनल खोल्नुहोस्"
+
+#: plugins/project-tree/gtk/menus.ui:64
+msgid "Mo_ve to Trash"
+msgstr "रद्दीटोकरीमा सार्नुहोस्"
+
+#: plugins/project-tree/gtk/menus.ui:71
+msgid "_Build"
+msgstr "निर्माण"
+
+#: plugins/project-tree/gtk/menus.ui:75
+msgid "_Rebuild"
+msgstr ""
+
+#: plugins/project-tree/gtk/menus.ui:81
+#, fuzzy
+msgid "Display Options"
+msgstr "ब्रासेरोको कुँद्ने पुस्तकालयको बिकल्पहरु देखाउनुहोस्"
+
+#: plugins/project-tree/gtk/menus.ui:98
+#, fuzzy
+msgid "_Collapse All Nodes"
+msgstr "सबै थ्रेडहरू संक्षिप्त गर्नुहोस्"
+
+#: plugins/project-tree/gtk/menus.ui:102
+#, fuzzy
+msgid "_Refresh"
+msgstr "ताजा पार्नुहोस्"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+#, fuzzy
+msgid "Words matching selection"
+msgstr "शब्द"
+
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr ""
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr ""
+
+#: plugins/retab/gtk/menus.ui:9
+#, fuzzy
+msgid "Reformat tabs"
+msgstr "ट्याबहरु"
+
+#: plugins/rustup/rustup_plugin/__init__.py:84
+#, fuzzy
+msgid "Rustup not installed"
+msgstr "स्थापित"
+
+#: plugins/rustup/rustup_plugin/__init__.py:282
+#, fuzzy
+msgid "Installing rustup"
+msgstr "स्थापना गर्दै"
+
+#: plugins/rustup/rustup_plugin/__init__.py:284
+#, fuzzy
+msgid "Updating rustup"
+msgstr "अद्यावधिक गर्दै..."
+
+#: plugins/rustup/rustup_plugin/__init__.py:286
+#, fuzzy
+msgid "Installing rust "
+msgstr "स्थापना गर्दै"
+
+#: plugins/rustup/rustup_plugin/__init__.py:288
+#, fuzzy
+msgid "Checking system"
+msgstr "जाँच"
+
+#: plugins/rustup/rustup_plugin/__init__.py:357
+#, fuzzy
+msgid "Downloading rustup-init"
+msgstr "डाउनलोड हुँदैछ"
+
+#: plugins/rustup/rustup_plugin/__init__.py:362
+#, fuzzy
+msgid "Syncing channel updates"
+msgstr "अद्यावधिक गर्नुहोस्"
+
+#: plugins/rustup/rustup_plugin/__init__.py:368
+#, fuzzy
+msgid "Downloading "
+msgstr "डाउनलोड हुँदैछ"
+
+#: plugins/rustup/rustup_plugin/__init__.py:375
+#, fuzzy
+msgid "Installing "
+msgstr "स्थापना गर्दै"
+
+#: plugins/rustup/rustup_plugin/__init__.py:381
+#, fuzzy
+msgid "Checking for rustup updates"
+msgstr "अद्यावधिक गर्नुहोस्"
+
+#: plugins/rustup/rustup_plugin/__init__.py:386
+#, fuzzy
+msgid "Downloading rustup update"
+msgstr "अद्यावधिक (_U)"
+
+#: plugins/rustup/rustup_plugin/__init__.py:423
+#, fuzzy
+msgid "Error installing "
+msgstr "विषयवस्तु  स्थापना गर्दा त्रुटि"
+
+#: plugins/rustup/rustup_plugin/__init__.py:425
+msgid "Error"
+msgstr "त्रुटी"
+
+#: plugins/rustup/rustup_plugin/__init__.py:430
+msgid "Cancelled"
+msgstr "रद्द भयो"
+
+#: plugins/rustup/rustup_plugin/__init__.py:438
+msgid "Finished"
+msgstr "समाप्त भयो"
+
+#: plugins/rustup/rustup_plugin/__init__.py:452
+msgid "Rustup"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:453
+msgid "Rustup Toolchains"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:508
+#, fuzzy
+msgid "Updating"
+msgstr "अद्यावधिक गर्दै..."
+
+#: plugins/rustup/rustup_plugin/__init__.py:508
+msgid "Installing"
+msgstr "स्थापना गर्दै"
+
+#. set default toolchain button
+#: plugins/rustup/rustup_plugin/__init__.py:599
+#, fuzzy
+msgid "Make default"
+msgstr "डाइरेक्टरी बनाउनुहोस्"
+
+#: plugins/rustup/rustup_plugin/__init__.py:599
+msgid "Makes the selected toolchain the default rust installation"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:614
+#, fuzzy
+msgid "Install Rust Channel"
+msgstr "च्यानल"
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: plugins/rustup/rustup_plugin/__init__.py:619
+#, fuzzy
+msgid "Enter name of rust channel"
+msgstr "यस बफरका लागि नाम प्रविष्ट गर्नुहोस्"
+
+#: plugins/rustup/rustup_plugin/__init__.py:620
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:645
+msgid "Install Rustup to manage toolchains here!"
+msgstr ""
+
+#: plugins/rustup/rustup_plugin/__init__.py:652
+#, fuzzy
+msgid "No toolchain installed. Click"
+msgstr "स्थापित"
+
+#: plugins/rustup/rustup_plugin/__init__.py:653
+#, fuzzy
+msgid "to add a new toolchain!"
+msgstr "नया खाता थप्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-editor-addin.c:51
+msgid "Spelling"
+msgstr "हिज्जे"
+
+#: plugins/spellcheck/gbp-spell-language-popover.c:232
+#, fuzzy
+msgid "No language selected"
+msgstr "भाषा"
+
+#: plugins/spellcheck/gbp-spell-navigator.c:480
+msgid "No language set. Check your dictionary installation."
+msgstr ""
+
+#: plugins/spellcheck/gbp-spell-widget.c:119
+#, fuzzy
+msgid "No suggestions"
+msgstr "(सुझावहरू छैन)"
+
+#: plugins/spellcheck/gbp-spell-widget.c:212
+#, fuzzy
+msgid "Completed spell checking"
+msgstr "हिज्जे जाँच सक्षम पार्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.c:255
+#, fuzzy
+msgid "The word is not in the dictionary"
+msgstr "तपाईँको आफ्नो शब्दकोशमा हालको शब्द थप गर्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.c:426
+#, fuzzy
+msgid "This word is already in the personal dictionary"
+msgstr "तपाईँको आफ्नो शब्दकोशमा हालको शब्द थप गर्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.c:429
+#, fuzzy, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "शब्दकोषमा थप्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:17
+#, fuzzy
+msgid "Misspelled"
+msgstr "गल्ती हिज्जे "
+
+#: plugins/spellcheck/gbp-spell-widget.ui:86
+msgid "_Ignore"
+msgstr "उपेक्षा गर्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:95
+#, fuzzy
+msgid "Ignore _All"
+msgstr "सबै उपेक्षा गर्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:114
+#, fuzzy
+msgid "Change _to"
+msgstr "परिवर्तन छैन"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:147
+#, fuzzy
+msgid "Cha_nge"
+msgstr "दायरा"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:156
+#, fuzzy
+msgid "Change A_ll"
+msgstr "सबै"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:175
+msgid "_Suggestions"
+msgstr "सुझावहरू"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:212
+msgid "Add Word"
+msgstr "शब्द थप्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:238
+msgid "A_dd"
+msgstr "थप्नुहोस्"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:254
+msgid "Dictionary"
+msgstr "शब्दकोश"
+
+#: plugins/spellcheck/gbp-spell-widget.ui:304
+msgid "_Language"
+msgstr "भाषा"
+
+#: plugins/spellcheck/gtk/menus.ui:6
+msgid "Check _Spelling"
+msgstr "र्हिज्जे जाँच गर्नुहोस्"
+
+#: plugins/spellcheck/gtk/menus.ui:14
+#, fuzzy
+msgid "Underline misspelled words"
+msgstr "गल्ती हिज्जे "
+
+#: plugins/support/gtk/menus.ui:7
+#, fuzzy
+msgid "Generate Support Log"
+msgstr "समर्थन गर्नुहोस्"
+
+#: plugins/support/ide-support-application-addin.c:79
+#, c-format
+msgid ""
+"The support log file has been written to “%s”. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+
+#: plugins/symbol-tree/gbp-symbol-menu-button.c:279
+#, fuzzy
+msgid "Select Symbol…"
+msgstr "प्रतिक:"
+
+#: plugins/symbol-tree/gbp-symbol-menu-button.ui:13
+#: plugins/symbol-tree/gbp-symbol-menu-button.ui:76
+#, fuzzy
+msgid "Document Outline"
+msgstr "बाह्य रेखा"
+
+#: plugins/sysmon/gb-sysmon-panel.ui:5
+msgid "System Monitor"
+msgstr "प्रणाली निगरानी"
+
+#: plugins/sysprof/gbp-sysprof-perspective.c:135
+#: plugins/sysprof/gtk/menus.ui:20
+msgid "Profiler"
+msgstr ""
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:28
+msgid "_Close"
+msgstr "_Close"
+
+#. the action:// link is used to run the project
+#: plugins/sysprof/gbp-sysprof-perspective.ui:49
+msgid ""
+"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
+"profiler</a> from the run menu to begin"
+msgstr ""
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:81
+msgid "CPU"
+msgstr "सीपीयू (CPU)"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
+#, fuzzy
+msgid "Open Profile"
+msgstr "प्रोफाइल"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
+#, fuzzy
+msgid "Sysprof Capture (*.syscap)"
+msgstr "समात्नुहोस्"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
+msgid "All Files"
+msgstr "सबै फाइल"
+
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
+#: plugins/sysprof/gtk/menus.ui:34
+#, fuzzy
+msgid "Run with Profiler"
+msgstr "चलाउनुहोस्"
+
+#: plugins/sysprof/gtk/menus.ui:8
+#, fuzzy
+msgid "Open Sysprof Capture…"
+msgstr "समात्नुहोस्"
+
+#: plugins/terminal/gb-terminal-search.ui:152
+msgid "Regex"
+msgstr "रेजेक्स"
+
+#: plugins/terminal/gb-terminal-search.ui:180
+#, fuzzy
+msgid "Match whole word"
+msgstr "सम्पूर्ण शब्द मिलाउनुहोस्"
+
+#: plugins/terminal/gb-terminal-search.ui:194
+#, fuzzy
+msgid "Wrap around"
+msgstr "_बिटो मार्ने "
+
+#: plugins/terminal/gb-terminal-view-actions.c:263
+#, fuzzy
+msgid "Save Terminal Content As"
+msgstr "टर्मिनल"
+
+#: plugins/terminal/gb-terminal-view.c:472
+#, fuzzy
+msgid "Untitled terminal"
+msgstr "<Untitled>"
+
+#: plugins/terminal/gb-terminal-workbench-addin.c:142
+#, fuzzy
+msgid "Application Output"
+msgstr "अनुप्रयोग:"
+
+#: plugins/terminal/gtk/menus.ui:6
+msgid "_Open Link"
+msgstr "लिङ्क खोल्नुहोस्"
+
+#: plugins/terminal/gtk/menus.ui:11
+msgid "_Copy Link Address"
+msgstr "लिङ्क ठेगाना प्रतिलिपि गर्नुहोस्"
+
+#: plugins/terminal/gtk/menus.ui:55
+msgid "Reset and Clear"
+msgstr "रिसेट गर्नुहोस् र खाली गर्नुहोस्"
+
+#: plugins/terminal/gtk/menus.ui:74
+msgid "New _Terminal"
+msgstr "नया टर्मिनल"
+
+#: plugins/terminal/gtk/menus.ui:82
+#, fuzzy
+msgid "New _Build Terminal"
+msgstr "नया ट्याबमा नया टर्मिनलमा खोल्नुहोस्"
+
+#: plugins/todo/gbp-todo-workbench-addin.c:115
+msgid "TODO/FIXMEs"
+msgstr ""
+
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "भाला"
+
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr ""
+
+#. translators: keywords used when searching for preferences
+#: plugins/vala-pack/ide-vala-preferences-addin.vala:36
+msgid "vala diagnostics warnings errors"
+msgstr ""
+
+#: plugins/valgrind/gtk/menus.ui:10 plugins/valgrind/valgrind_plugin.py:52
+#, fuzzy
+msgid "Run with Valgrind"
+msgstr "चलाउनुहोस्"
+
+#: plugins/xml-pack/ide-xml-parser.c:579
+#: plugins/xml-pack/ide-xml-tree-builder.c:447
+#, fuzzy
+msgid "Failed to create the XML tree."
+msgstr "XML ट्रि सिर्जना गर्न सकेन"
+
+#: plugins/xml-pack/ide-xml-service.c:339
+#, fuzzy
+msgid "Buffer loaded but not in the buffer manager."
+msgstr "(नाम नदिइएको बफर)"
