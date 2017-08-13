@@ -679,7 +679,6 @@ libide_plugin_dep = declare_dependency(
                          libgd_dep,
                          libgio_dep,
                          libgtk_dep,
-                         libgd_dep,
                          libgtksource_dep,
                          libtemplate_glib_dep,
                          libjson_glib_dep,
