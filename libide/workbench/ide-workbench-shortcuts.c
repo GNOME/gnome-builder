@@ -39,9 +39,10 @@ _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
     {
       DzlShortcutController *controller;
       g_autofree gchar *id = ide_perspective_get_id (perspective);
+      g_autofree gchar *title = ide_perspective_get_title (perspective);
       g_autofree gchar *command_id = g_strdup_printf ("org.gnome.builder.workbench.perspective('%s')", id);
       g_autofree gchar *action_name = g_strdup_printf ("win.perspective('%s')", id);
-      g_autofree gchar *shortcut_help = g_strdup_printf ("Switch to %s perspective", id);
+      g_autofree gchar *shortcut_help = g_strdup_printf ("Switch to %s perspective", title);
       const DzlShortcutEntry workbench_shortcut_entry[] = {
         { command_id,
           0, NULL,
