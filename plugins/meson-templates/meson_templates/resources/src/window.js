@@ -1,3 +1,5 @@
+{{include "license.js"}}
+
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 
