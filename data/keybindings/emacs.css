@@ -216,6 +216,5 @@ listbox {
 }
 
 treeview.project-tree {
-  -gtk-key-bindings: builder-emacs-tree-view,
-                     builder-gb-project-tree;
+  -gtk-key-bindings: builder-emacs-tree-view;
 }

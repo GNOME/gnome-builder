@@ -338,6 +338,7 @@ gb_project_tree_init (GbProjectTree *self)
                     NULL);
 
   gb_project_tree_actions_init (self);
+  _gb_project_tree_init_shortcuts (self);
 
   menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-project-tree-popup-menu");
   dzl_tree_set_context_menu (DZL_TREE (self), G_MENU_MODEL (menu));

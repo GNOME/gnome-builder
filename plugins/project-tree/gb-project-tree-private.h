@@ -33,6 +33,8 @@ struct _GbProjectTree
   guint      show_ignored_files : 1;
 };
 
+void      _gb_project_tree_init_shortcuts       (GbProjectTree *self);
+
 G_END_DECLS
 
 #endif /* GB_PROJECT_TREE_PRIVATE_H */

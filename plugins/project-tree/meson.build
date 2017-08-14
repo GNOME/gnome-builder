@@ -22,6 +22,7 @@ project_tree_sources = [
   'gb-project-tree-editor-addin.c',
   'gb-project-tree-editor-addin.h',
   'gb-project-tree-private.h',
+  'gb-project-tree-shortcuts.c',
   'gb-rename-file-popover.c',
   'gb-rename-file-popover.h',
   'gb-project-tree-addin.c',
