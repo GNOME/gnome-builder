@@ -273,23 +273,26 @@ ide_xml_position_print (IdeXmlPosition *self)
   if (self->child_pos != -1)
     {
       printf (" (between %s and %s)", p_sibling_str, n_sibling_str);
-      n_children = ide_xml_symbol_node_get_n_direct_children (self->node);
-      if (self->child_pos == 0)
+      if (self->node != NULL)
         {
-          if (n_children == 1)
-            printf (" pos: |0\n");
+          n_children = ide_xml_symbol_node_get_n_direct_children (self->node);
+          if (self->child_pos == 0)
+            {
+              if (n_children == 1)
+                printf (" pos: |0\n");
+              else
+                printf (" pos: |0..%d\n", n_children - 1);
+            }
+          else if (self->child_pos == n_children)
+            {
+              if (n_children == 1)
+                printf (" pos: 0|\n");
+              else
+                printf (" pos: 0..%d|\n", n_children - 1);
+            }
           else
-            printf (" pos: |0..%d\n", n_children - 1);
+            printf (" pos: %d|%d\n", self->child_pos - 1, self->child_pos);
         }
-      else if (self->child_pos == n_children)
-        {
-          if (n_children == 1)
-            printf (" pos: 0|\n");
-          else
-            printf (" pos: 0..%d|\n", n_children - 1);
-        }
-      else
-        printf (" pos: %d|%d\n", self->child_pos - 1, self->child_pos);
     }
   else if (self->child_node != NULL)
     printf (" child node:%s\n", ide_xml_symbol_node_get_element_name (self->child_node));
