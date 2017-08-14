@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-08-05 22:34+0000\n"
-"PO-Revision-Date: 2017-08-06 21:02+0700\n"
+"POT-Creation-Date: 2017-08-13 23:59+0000\n"
+"PO-Revision-Date: 2017-08-14 14:03+0700\n"
 "Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -506,7 +506,7 @@ msgid "Search directories for projects."
 msgstr "Cari direktori untuk proyek."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:398
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Projects directory"
 msgstr "Direktori proyek"
 
@@ -836,7 +836,7 @@ msgstr "_Simpan"
 msgid "Save _As"
 msgstr "Simpan Seb_agai"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1089
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1104
 msgid "Run"
 msgstr "Jalankan"
 
@@ -1045,16 +1045,16 @@ msgstr "Tidak ada pekerja sedemikian"
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
-#: libide/buffers/ide-buffer-manager.c:683
+#: libide/buffers/ide-buffer-manager.c:684
 msgid "File too large to be opened."
 msgstr "Berkas terlalu besar untuk dibuka."
 
-#: libide/buffers/ide-buffer-manager.c:1846
+#: libide/buffers/ide-buffer-manager.c:1893
 #, c-format
 msgid "unsaved document %u"
 msgstr "dokumen tanpa judul %u"
 
-#: libide/buffers/ide-buffer-manager.c:1884
+#: libide/buffers/ide-buffer-manager.c:1931
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Gagal menyimpan penyangga, mengabaikan reklamasi."
 
@@ -1114,8 +1114,8 @@ msgid "Cannot execute transfer while on metered connection"
 msgstr "Tidak dapat melakukan transfer pada koneksi berkuota"
 
 #: libide/buildsystem/ide-configuration-manager.c:86
-#: libide/preferences/ide-preferences-builtin.c:339
-#: libide/preferences/ide-preferences-builtin.c:357
+#: libide/preferences/ide-preferences-builtin.c:340
+#: libide/preferences/ide-preferences-builtin.c:358
 msgid "Default"
 msgstr "Baku"
 
@@ -1129,7 +1129,7 @@ msgstr "Hapus konfigurasi"
 
 #: libide/buildui/ide-build-configuration-view.ui:11
 #: libide/preferences/ide-preferences-builtin.c:318
-#: libide/preferences/ide-preferences-builtin.c:379
+#: libide/preferences/ide-preferences-builtin.c:380
 #: plugins/command-bar/gb-command-bar.c:716
 msgid "General"
 msgstr "Umum"
@@ -1456,7 +1456,7 @@ msgid "Display"
 msgstr "Tampilan"
 
 #: libide/editor/ide-editor-properties.ui:75
-#: libide/preferences/ide-preferences-builtin.c:323
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Show right margin"
 msgstr "Tampilkan marjin kanan"
 
@@ -2479,73 +2479,81 @@ msgstr "Timpa Tanda Kurung"
 msgid "Overwrite closing braces"
 msgstr "Timpa tanda kurung penutup"
 
-#: libide/preferences/ide-preferences-builtin.c:322
+#: libide/preferences/ide-preferences-builtin.c:321
+msgid "Insert Matching Brace"
+msgstr "Sisipkan kurung pasangan"
+
+#: libide/preferences/ide-preferences-builtin.c:321
+msgid "Insert matching character for { [ ( or \""
+msgstr "Sisipkan karakter yang sesuai untuk { [ ( atau \""
+
+#: libide/preferences/ide-preferences-builtin.c:323
 msgid "Margins"
 msgstr "Margin"
 
-#: libide/preferences/ide-preferences-builtin.c:324
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Right margin position"
 msgstr "Posisi marjin kanan"
 
-#: libide/preferences/ide-preferences-builtin.c:324
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Position in spaces for the right margin"
 msgstr "Posisi di ruang untuk margin kanan"
 
-#: libide/preferences/ide-preferences-builtin.c:326
+#: libide/preferences/ide-preferences-builtin.c:327
 msgid "Indentation"
 msgstr "Indentasi"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Tab width"
 msgstr "Lebar tab"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Width of a tab character in spaces"
 msgstr "Lebar dari sebuah karakter tab dalam spasi"
 
-#: libide/preferences/ide-preferences-builtin.c:328
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Insert spaces instead of tabs"
 msgstr "Gunakan spasi, jangan tab"
 
-#: libide/preferences/ide-preferences-builtin.c:328
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Prefer spaces over use of tabs"
 msgstr "Lebih suka spasi daripada tab"
 
-#: libide/preferences/ide-preferences-builtin.c:329
+#: libide/preferences/ide-preferences-builtin.c:330
 msgid "Automatically indent"
 msgstr "Indentasi otomatis"
 
-#: libide/preferences/ide-preferences-builtin.c:329
+#: libide/preferences/ide-preferences-builtin.c:330
 msgid "Indent source code as you type"
 msgstr "Indentasikan kode sumber sembari Anda mengetik"
 
-#: libide/preferences/ide-preferences-builtin.c:344
-#: libide/preferences/ide-preferences-builtin.c:362
+#: libide/preferences/ide-preferences-builtin.c:345
+#: libide/preferences/ide-preferences-builtin.c:363
 msgid "Number of CPU"
 msgstr "Banyaknya CPU"
 
-#: libide/preferences/ide-preferences-builtin.c:377
+#: libide/preferences/ide-preferences-builtin.c:378
 #: libide/workbench/ide-omni-bar.ui:479
 msgid "Build"
 msgstr "Bangun"
 
-#: libide/preferences/ide-preferences-builtin.c:380
+#: libide/preferences/ide-preferences-builtin.c:381
 msgid "Build Workers"
 msgstr "Pekerja Bangun"
 
-#: libide/preferences/ide-preferences-builtin.c:380
+#: libide/preferences/ide-preferences-builtin.c:381
 msgid "Number of parallel build workers"
 msgstr "Banyaknya pekerja bangun paralel"
 
-#: libide/preferences/ide-preferences-builtin.c:388
+#: libide/preferences/ide-preferences-builtin.c:389
 msgid "Network"
 msgstr "Jaringan"
 
-#: libide/preferences/ide-preferences-builtin.c:389
+#: libide/preferences/ide-preferences-builtin.c:390
 msgid "Allow downloads over metered connections"
 msgstr "Izinkan mengunduh melalui koneksi berkuota"
 
-#: libide/preferences/ide-preferences-builtin.c:389
+#: libide/preferences/ide-preferences-builtin.c:390
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2553,45 +2561,45 @@ msgstr ""
 "Izinkan penggunaan koneksi jaringan berkuota ketika secara otomatis "
 "mengunduh kebergantungan"
 
-#: libide/preferences/ide-preferences-builtin.c:395
+#: libide/preferences/ide-preferences-builtin.c:396
 msgid "Projects"
 msgstr "Proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:397
+#: libide/preferences/ide-preferences-builtin.c:398
 msgid "Workspace"
 msgstr "Area kerja"
 
-#: libide/preferences/ide-preferences-builtin.c:398
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "A place for all your projects"
 msgstr "Suatu tempat untuk semua proyek Anda"
 
-#: libide/preferences/ide-preferences-builtin.c:399
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Restore previously opened files"
 msgstr "Pulihkan berkas yang sebelumnya terbuka"
 
-#: libide/preferences/ide-preferences-builtin.c:399
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Open previously opened files when loading a project"
 msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:401
+#: libide/preferences/ide-preferences-builtin.c:402
 msgid "Project Discovery"
 msgstr "Penemuan Proyek"
 
-#: libide/preferences/ide-preferences-builtin.c:402
+#: libide/preferences/ide-preferences-builtin.c:403
 msgid "Discover projects on my computer"
 msgstr "Temukan proyek pada komputer ini"
 
-#: libide/preferences/ide-preferences-builtin.c:402
+#: libide/preferences/ide-preferences-builtin.c:403
 msgid "Scan your computer for existing projects"
 msgstr "Pindai komputer Anda untuk proyek yang ada"
 
-#: libide/preferences/ide-preferences-builtin.c:523
+#: libide/preferences/ide-preferences-builtin.c:524
 #: plugins/create-project/gbp-create-project-widget.ui:154
 msgid "Version Control"
 msgstr "Kendali Versi"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:535
+#: libide/preferences/ide-preferences-builtin.c:536
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2620,7 +2628,7 @@ msgstr "Ubah opsi jalankan"
 msgid "Cannot run target, another target is running"
 msgstr "Tidak bisa menjalankan target, target lain sedang berjalan"
 
-#: libide/runner/ide-run-manager.c:386
+#: libide/runner/ide-run-manager.c:388
 msgid "Failed to locate runtime"
 msgstr "Gagal menemukan runtime"
 
@@ -2815,11 +2823,20 @@ msgstr "Tampilkan menu meja kerja"
 msgid "Press Ctrl+. to search"
 msgstr "Tekan Ctrl+. untuk mencari"
 
+#: libide/workbench/ide-workbench-shortcuts.c:48
+msgid "Workbench"
+msgstr "Meja kerja"
+
+#: libide/workbench/ide-workbench-shortcuts.c:49
+msgid "Perspectives"
+msgstr "Perspektif"
+
 #: plugins/autotools/ide-autotools-makecache-stage.c:194
 msgid "Building cache…"
 msgstr "Membangun tembolok…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
+#: plugins/meson-templates/meson_templates/__init__.py:287
 msgid "Shared Library"
 msgstr "Pustaka Bersama"
 
@@ -2828,6 +2845,7 @@ msgid "Create a new autotools project with a shared library"
 msgstr "Buat suatu proyek autotools baru dengan pustaka bersama"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
+#: plugins/meson-templates/meson_templates/__init__.py:304
 msgid "Empty Project"
 msgstr "Proyek Kosong"
 
@@ -2836,6 +2854,7 @@ msgid "Create a new empty autotools project"
 msgstr "Buat proyek autotools kosong baru"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
+#: plugins/meson-templates/meson_templates/__init__.py:234
 msgid "GNOME Application"
 msgstr "Aplikasi GNOME"
 
@@ -2843,12 +2862,12 @@ msgstr "Aplikasi GNOME"
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Buat suatu aplikasi GNOME baru yang siap-flatpak"
 
-#: plugins/beautifier/gb-beautifier-workbench-addin.c:190
+#: plugins/beautifier/gb-beautifier-editor-addin.c:190
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Tidak ada beautifier yang tersedia untuk \"%s\""
 
-#: plugins/beautifier/gb-beautifier-workbench-addin.c:192
+#: plugins/beautifier/gb-beautifier-editor-addin.c:192
 msgid "No beautifier available"
 msgstr "Tidak ada beautifier yang tersedia"
 
@@ -3300,7 +3319,6 @@ msgstr "Pilih Templat"
 msgid "Select Documentation…"
 msgstr "Pilih Dokumentasi…"
 
-#: plugins/devhelp/gbp-devhelp-panel.c:194
 #: plugins/devhelp/gbp-devhelp-view.c:206 plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Dokumentasi"
@@ -3354,7 +3372,7 @@ msgstr "Klon Aplikasi"
 msgid "Clone"
 msgstr "Klon"
 
-#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
 msgid "Network is not available, skipping downloads"
 msgstr "Jaringan tidak tersedia, lewati unduhan"
 
@@ -3573,21 +3591,25 @@ msgstr "Komputer Anda kekurangan python3-sphinx"
 msgid "(Preview)"
 msgstr "(Pratinjau)"
 
-#: plugins/jedi/jedi_plugin.py:738
+#: plugins/jedi/jedi_plugin.py:752
 msgid "Suggest Python completions"
 msgstr "Sarankan pelengkapan Python"
 
-#: plugins/jedi/jedi_plugin.py:739
+#: plugins/jedi/jedi_plugin.py:753
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Gunakan Jedi untuk pelengkapan dalam bahasa Python"
 
-#: plugins/meson-templates/meson_templates/__init__.py:206
-msgid "Empty Meson Project"
-msgstr "Proyek Meson Kosong"
+#: plugins/meson-templates/meson_templates/__init__.py:236
+msgid "Create a new GNOME application"
+msgstr "Buat suatu aplikasi GNOME baru"
 
-#: plugins/meson-templates/meson_templates/__init__.py:208
-msgid "Create a new empty meson project"
-msgstr "Buat proyek meson kosong baru"
+#: plugins/meson-templates/meson_templates/__init__.py:289
+msgid "Create a new project with a shared library"
+msgstr "Buat suatu proyek baru dengan pustaka bersama"
+
+#: plugins/meson-templates/meson_templates/__init__.py:306
+msgid "Create a new empty project"
+msgstr "Buat proyek kosong baru"
 
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
@@ -4078,6 +4100,9 @@ msgstr "Gagal membuat pohon XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer dimuat tapi tidak di pengelola buffer."
+
+#~ msgid "Empty Meson Project"
+#~ msgstr "Proyek Meson Kosong"
 
 #~ msgid "Show Project Sidebar"
 #~ msgstr "Tampilkan Bilah Sisi Proyek"
