@@ -42,7 +42,6 @@
   bind "F4" { "action" ("win", "find-other-file", "") };
 
   bind "<ctrl><alt>i" { "reindent" () };
-  bind "<shift>F7" { "action" ("spellcheck", "spellcheck", "") };
 }
 
 idesourceviewmode.default {

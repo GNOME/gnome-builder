@@ -19,6 +19,10 @@
 
 #define G_LOG_DOMAIN "gbp-spell-editor-view-addin"
 
+#include "config.h"
+
+#include <dazzle.h>
+
 #include <gspell/gspell.h>
 #include <glib/gi18n.h>
 
@@ -30,6 +34,8 @@
 #include "gbp-spell-utils.h"
 
 #define SPELLCHECKER_SUBREGION_LENGTH 500
+
+#define I_(s) g_intern_static_string(s)
 
 struct _GbpSpellEditorViewAddin
 {
@@ -88,6 +94,14 @@ static const GActionEntry actions[] = {
   { "cancel-spellcheck", gbp_spell_editor_view_addin_cancel },
 };
 
+  static const DzlShortcutEntry spellchecker_shortcut_entry[] = {
+    { "org.gnome.builder.editor-view.spellchecker",
+      0, NULL,
+      NC_("shortcut window", "Editor shortcuts"),
+      NC_("shortcut window", "Editing"),
+      NC_("shortcut window", "Show the spellchecker panel") },
+  };
+
 static void
 gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
                                   IdeEditorView      *view)
@@ -95,6 +109,7 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
   GbpSpellEditorViewAddin *self = (GbpSpellEditorViewAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
   g_autoptr(GPropertyAction) enabled_action = NULL;
+  DzlShortcutController *controller;
   IdeBufferAddin *buffer_addin;
   GspellTextView *wrapper;
   IdeSourceView *source_view;
@@ -135,6 +150,18 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
   g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (enabled_action));
   g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (view), "spellcheck", G_ACTION_GROUP (group));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (view));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.editor-view.spellchecker",
+                                              I_("<shift>F7"),
+                                              DZL_SHORTCUT_PHASE_CAPTURE,
+                                              "spellcheck.spellcheck");
+
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             spellchecker_shortcut_entry,
+                                             G_N_ELEMENTS (spellchecker_shortcut_entry),
+                                             GETTEXT_PACKAGE);
 }
 
 static void
