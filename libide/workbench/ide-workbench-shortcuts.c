@@ -46,9 +46,9 @@ _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
       const DzlShortcutEntry workbench_shortcut_entry[] = {
         { command_id,
           0, NULL,
-          N_("Workbench shortcuts"),
-          N_("Perspectives"),
-          N_(shortcut_help) },
+          NC_("shortcut window", "Workbench shortcuts"),
+          NC_("shortcut window", "Perspectives"),
+          NC_("shortcut window", shortcut_help) },
       };
 
       controller = dzl_shortcut_controller_find (GTK_WIDGET (self));

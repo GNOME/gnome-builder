@@ -40,41 +40,41 @@ _ide_application_init_shortcuts (IdeApplication *self)
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("app.help"),
-                                   N_("Workbench shortcuts"),
-                                   N_("Help"),
-                                   N_("Show the help window"),
+                                   NC_("shortcut window", "Workbench shortcuts"),
+                                   NC_("shortcut window", "Help"),
+                                   NC_("shortcut window", "Show the help window"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme, "app.help", "F1", DZL_SHORTCUT_PHASE_DISPATCH);
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("app.shortcuts"),
-                                   N_("Workbench shortcuts"),
-                                   N_("Help"),
-                                   N_("Show the shortcuts window"),
+                                   NC_("shortcut window", "Workbench shortcuts"),
+                                   NC_("shortcut window", "Help"),
+                                   NC_("shortcut window", "Show the shortcuts window"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme, "app.shortcuts", "<Primary>F1", DZL_SHORTCUT_PHASE_DISPATCH);
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("win.fullscreen"),
-                                   N_("Workbench shortcuts"),
-                                   N_("General"),
-                                   N_("Toggle window to fullscreen"),
+                                   NC_("shortcut window", "Workbench shortcuts"),
+                                   NC_("shortcut window", "General"),
+                                   NC_("shortcut window", "Toggle window to fullscreen"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme, "win.fullscreen", "F11", DZL_SHORTCUT_PHASE_DISPATCH);
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("win.global-search"),
-                                   N_("Workbench shortcuts"),
-                                   N_("Search"),
-                                   N_("Focus to the global search entry"),
+                                   NC_("shortcut window", "Workbench shortcuts"),
+                                   NC_("shortcut window", "Search"),
+                                   NC_("shortcut window", "Focus to the global search entry"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme, "win.global-search", "<Primary>period", DZL_SHORTCUT_PHASE_DISPATCH);
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("build-manager.build"),
-                                   N_("Workbench shortcuts"),
-                                   N_("Build and Run"),
-                                   N_("Trigger a build"),
+                                   NC_("shortcut window", "Workbench shortcuts"),
+                                   NC_("shortcut window", "Build and Run"),
+                                   NC_("shortcut window", "Trigger a build"),
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme, "build-manager.build", "<Control>F7", DZL_SHORTCUT_PHASE_DISPATCH);
 }

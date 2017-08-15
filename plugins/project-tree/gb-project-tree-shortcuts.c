@@ -30,15 +30,15 @@
 static const DzlShortcutEntry gb_project_tree_entries[] = {
   { "org.gnome.builder.project-tree.rename-file",
     0, NULL,
-    N_("Editor shortcuts"),
-    N_("Project tree"),
-    N_("Rename a file") },
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Project tree"),
+    NC_("shortcut window", "Rename a file") },
 
   { "org.gnome.builder.project-tree.move-to-trah",
     0, NULL,
-    N_("Editor shortcuts"),
-    N_("Project tree"),
-    N_("Move a file to the trash") },
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Project tree"),
+    NC_("shortcut window", "Move a file to the trash") },
 };
 
 void
