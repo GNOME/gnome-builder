@@ -30,6 +30,7 @@ data/style-schemes/builder.xml
 libide/application/ide-application-actions.c
 libide/application/ide-application.c
 libide/application/ide-application-command-line.c
+libide/application/ide-application-shortcuts.c
 libide/buffers/ide-buffer.c
 libide/buffers/ide-buffer-manager.c
 libide/buildsystem/ide-build-pipeline.c
@@ -157,6 +158,7 @@ plugins/project-tree/gb-project-tree-addin.c
 plugins/project-tree/gb-project-tree-builder.c
 plugins/project-tree/gb-rename-file-popover.c
 plugins/project-tree/gb-rename-file-popover.ui
+plugins/project-tree/gb-project-tree-shortcuts.c
 plugins/project-tree/gtk/menus.ui
 plugins/python-pack/ide-python-format-provider.c
 plugins/quick-highlight/gbp-quick-highlight-preferences.c
