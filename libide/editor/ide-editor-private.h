@@ -76,6 +76,8 @@ struct _IdeEditorView
   GtkBox                  *scroller_box;
   IdeEditorSearchBar      *search_bar;
   GtkRevealer             *search_revealer;
+  GtkRevealer             *modified_revealer;
+  GtkButton               *modified_cancel_button;
 
   guint                    toggle_map_source;
 

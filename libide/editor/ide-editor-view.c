@@ -293,6 +293,27 @@ unset_primary_color:
   ide_layout_view_set_primary_color_fg (IDE_LAYOUT_VIEW (self), NULL);
 }
 
+static void
+ide_editor_view__buffer_notify_changed_on_volume (IdeEditorView *self,
+                                                  GParamSpec    *pspec,
+                                                  IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  gtk_revealer_set_reveal_child (self->modified_revealer,
+                                 ide_buffer_get_changed_on_volume (buffer));
+}
+
+static void
+ide_editor_view_hide_reload_bar (IdeEditorView *self,
+                                 GtkWidget     *button)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  gtk_revealer_set_reveal_child (self->modified_revealer, FALSE);
+}
+
 static gboolean
 ide_editor_view_source_view_event (IdeEditorView *self,
                                    GdkEvent      *event,
@@ -746,6 +767,8 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, scroller_box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, search_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, modified_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorView, modified_cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorView, source_view);
   gtk_widget_class_bind_template_callback (widget_class, ide_editor_view_notify_child_revealed);
   gtk_widget_class_bind_template_callback (widget_class, ide_editor_view_stop_search);
@@ -790,11 +813,21 @@ ide_editor_view_init (IdeEditorView *self)
                                     "notify::style-scheme",
                                     G_CALLBACK (ide_editor_view_buffer_notify_style_scheme),
                                     self);
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "notify::changed-on-volume",
+                                    G_CALLBACK (ide_editor_view__buffer_notify_changed_on_volume),
+                                    self);
 
   g_signal_connect_swapped (self->buffer_signals,
                             "bind",
                             G_CALLBACK (ide_editor_view_bind_signals),
                             self);
+
+  g_signal_connect_object (self->modified_cancel_button,
+                           "clicked",
+                           G_CALLBACK (ide_editor_view_hide_reload_bar),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /*
    * Setup our search context. The sourceview has it's own search

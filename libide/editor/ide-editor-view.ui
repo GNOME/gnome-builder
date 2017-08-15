@@ -21,6 +21,55 @@
           </object>
         </child>
         <child type="overlay">
+          <object class="GtkRevealer" id="modified_revealer">
+            <property name="halign">fill</property>
+            <property name="valign">start</property>
+            <property name="visible">true</property>
+            <property name="reveal-child">false</property>
+            <child>
+              <object class="GtkInfoBar">
+                <property name="visible">true</property>
+                <child internal-child="action_area">
+                  <object class="GtkButtonBox">
+                    <property name="spacing">6</property>
+                    <property name="layout_style">end</property>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="action-name">editor-view.reload</property>
+                        <property name="label" translatable="yes">_Reload</property>
+                        <property name="visible">true</property>
+                        <property name="receives_default">true</property>
+                        <property name="use_underline">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="modified_cancel_button">
+                        <property name="label" translatable="yes">_Cancel</property>
+                        <property name="visible">true</property>
+                        <property name="use_underline">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child internal-child="content_area">
+                  <object class="GtkBox">
+                    <property name="spacing">16</property>
+                    <child>
+                      <object class="GtkLabel" id="modified_label">
+                        <property name="hexpand">true</property>
+                        <property name="label" translatable="yes">Builder has discovered that this file has been modified externally. Would you like to reload the file?</property>
+                        <property name="visible">true</property>
+                        <property name="wrap">true</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="overlay">
           <object class="GtkProgressBar" id="progress_bar">
             <property name="hexpand">true</property>
             <property name="valign">start</property>
