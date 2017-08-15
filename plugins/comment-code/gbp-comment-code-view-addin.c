@@ -16,14 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <dazzle.h>
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 #include "sourceview/ide-text-iter.h"
 
 #include "gbp-comment-code-view-addin.h"
+
+#define I_(s) g_intern_static_string(s)
 
 struct _GbpCommentCodeViewAddin
 {
@@ -359,12 +364,26 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
     g_assert_not_reached ();
 }
 
+  static const DzlShortcutEntry comment_code_shortcut_entry[] = {
+    { "org.gnome.builder.editor-view.comment-code",
+      0, NULL,
+      NC_("shortcut window", "Editor shortcuts"),
+      NC_("shortcut window", "Editing"),
+      NC_("shortcut window", "Comment the code") },
+
+    { "org.gnome.builder.editor-view.uncomment-code",
+      0, NULL,
+      NC_("shortcut window", "Editor shortcuts"),
+      NC_("shortcut window", "Editing"),
+      NC_("shortcut window", "Uncomment the code") },
+  };
+
 static void
 gbp_comment_code_view_addin_load (IdeEditorViewAddin *addin,
                                   IdeEditorView      *view)
 {
   GbpCommentCodeViewAddin *self;
-  GtkApplication *app;
+  DzlShortcutController *controller;
   GActionGroup *group;
   GSimpleAction *action;
 
@@ -380,9 +399,23 @@ gbp_comment_code_view_addin_load (IdeEditorViewAddin *addin,
   group = gtk_widget_get_action_group (GTK_WIDGET (view), "view");
   g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
 
-  app = GTK_APPLICATION (g_application_get_default ());
-  gtk_application_set_accels_for_action (app, "view.comment-code::0", (const gchar*[]) {"<Control>m", NULL});
-  gtk_application_set_accels_for_action (app, "view.comment-code::1", (const gchar*[]) {"<Control><Shift>m", NULL});
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (view));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.editor-view.comment-code",
+                                              I_("<primary>m"),
+                                              DZL_SHORTCUT_PHASE_CAPTURE,
+                                              "view.comment-code::0");
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.editor-view.uncomment-code",
+                                              I_("<primary><shift>m"),
+                                              DZL_SHORTCUT_PHASE_CAPTURE,
+                                              "view.comment-code::1");
+
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             comment_code_shortcut_entry,
+                                             G_N_ELEMENTS (comment_code_shortcut_entry),
+                                             GETTEXT_PACKAGE);
 }
 
 static void
