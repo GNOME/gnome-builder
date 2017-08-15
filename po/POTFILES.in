@@ -59,6 +59,7 @@ libide/editor/ide-editor-search-bar.ui
 libide/editor/ide-editor-sidebar.ui
 libide/editor/ide-editor-view-actions.c
 libide/editor/ide-editor-view-shortcuts.c
+libide/editor/ide-editor-view.ui
 libide/editor/ide-editor-workbench-addin.c
 libide/greeter/ide-greeter-perspective.c
 libide/greeter/ide-greeter-perspective.ui
