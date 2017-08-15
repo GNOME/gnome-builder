@@ -46,7 +46,7 @@ _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
       const DzlShortcutEntry workbench_shortcut_entry[] = {
         { command_id,
           0, NULL,
-          N_("Workbench"),
+          N_("Workbench shortcuts"),
           N_("Perspectives"),
           N_(shortcut_help) },
       };

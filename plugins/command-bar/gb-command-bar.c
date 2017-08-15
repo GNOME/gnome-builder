@@ -712,7 +712,7 @@ gb_command_bar_class_finalize (GbCommandBarClass *klass)
 static const DzlShortcutEntry shortcuts[] = {
   { "org.gnome.builder.show-command-bar",
     0, NULL,
-    N_("Editor"),
+    N_("Workbench shortcuts"),
     N_("General"),
     N_("Command Bar") },
 };
