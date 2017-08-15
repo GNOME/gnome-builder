@@ -18,11 +18,13 @@
 
 #define G_LOG_DOMAIN "gbp-devhelp-editor-view-addin"
 
+#include <libxml/xmlreader.h>
+
 #include "gbp-devhelp-editor-view-addin.h"
 
 struct _GbpDevhelpEditorViewAddin
 {
-  GObject parent_instance;
+  GObject         parent_instance;
 };
 
 static void
@@ -50,6 +52,7 @@ gbp_devhelp_editor_view_addin_load (IdeEditorViewAddin *addin,
                            G_CALLBACK (documentation_requested_cb),
                            addin,
                            G_CONNECT_SWAPPED);
+
 }
 
 static void

@@ -50,6 +50,7 @@
 #include "search/ide-search-engine.h"
 #include "search/ide-search-provider.h"
 #include "snippets/ide-source-snippets-manager.h"
+#include "documentation/ide-documentation.h"
 #include "transfers/ide-transfer-manager.h"
 #include "util/ide-async-helper.h"
 #include "util/ide-settings.h"
@@ -71,6 +72,7 @@ struct _IdeContext
   IdeDiagnosticsManager    *diagnostics_manager;
   IdeDeviceManager         *device_manager;
   IdeDoap                  *doap;
+  IdeDocumentation         *documentation;
   GtkRecentManager         *recent_manager;
   IdeRunManager            *run_manager;
   IdeRuntimeManager        *runtime_manager;
@@ -108,6 +110,7 @@ enum {
   PROP_BUILD_SYSTEM,
   PROP_CONFIGURATION_MANAGER,
   PROP_DEVICE_MANAGER,
+  PROP_DOCUMENTATION,
   PROP_PROJECT_FILE,
   PROP_PROJECT,
   PROP_ROOT_BUILD_DIR,
@@ -225,6 +228,23 @@ ide_context_get_device_manager (IdeContext *self)
 
   return self->device_manager;
 }
+
+/**
+ * ide_context_get_documentation:
+ * @self: An #IdeContext.
+ *
+ * Returns the #IdeDocumentation for the source view if there is one.
+ *
+ * Returns: (transfer none) (nullable): A #IdeDocumentation or %NULL.
+ */
+IdeDocumentation *
+ide_context_get_documentation (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->documentation;
+}
+
 
 /**
  * ide_context_get_root_build_dir:
@@ -602,6 +622,10 @@ ide_context_get_property (GObject    *object,
       g_value_set_object (value, ide_context_get_device_manager (self));
       break;
 
+    case PROP_DOCUMENTATION:
+      g_value_set_object (value, ide_context_get_documentation (self));
+      break;
+
     case PROP_PROJECT:
       g_value_set_object (value, ide_context_get_project (self));
       break;
@@ -705,6 +729,13 @@ ide_context_class_init (IdeContextClass *klass)
                          "Device Manager",
                          "The device manager for the context.",
                          IDE_TYPE_DEVICE_MANAGER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DOCUMENTATION] =
+    g_param_spec_object ("documentation",
+                         "Documentation",
+                         "The documentation for the context.",
+                         IDE_TYPE_DOCUMENTATION,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PROJECT] =
@@ -1438,6 +1469,26 @@ ide_context_init_search_engine (gpointer             source_object,
 }
 
 static void
+ide_context_init_documentation (gpointer             source_object,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeContext *self = source_object;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  self->documentation = g_object_new (IDE_TYPE_DOCUMENTATION,
+                                     "context", self,
+                                      NULL);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_configuration_manager_cb (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
@@ -1703,6 +1754,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_unsaved_files,
                         ide_context_init_add_recent,
                         ide_context_init_search_engine,
+                        ide_context_init_documentation,
                         ide_context_init_runtimes,
                         ide_context_init_configuration_manager,
                         ide_context_init_build_manager,
