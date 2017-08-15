@@ -690,8 +690,9 @@ ide_run_manager_add_handler (IdeRunManager  *self,
                              GDestroyNotify  user_data_destroy)
 {
   IdeRunHandlerInfo *info;
+  DzlShortcutManager *manager;
+  DzlShortcutTheme *theme;
   g_autofree gchar *action_name = NULL;
-  const gchar *accels[] = { accel, NULL };
   GApplication *app;
 
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
@@ -707,13 +708,22 @@ ide_run_manager_add_handler (IdeRunManager  *self,
   info->handler_data = user_data;
   info->handler_data_destroy = user_data_destroy;
 
+  self->handlers = g_list_append (self->handlers, info);
+
   app = g_application_get_default ();
+  manager = dzl_application_get_shortcut_manager (DZL_APPLICATION (app));
+  theme = g_object_ref (dzl_shortcut_manager_get_theme (manager));
+
   action_name = g_strdup_printf ("run-manager.run-with-handler('%s')", id);
 
-  if (accel != NULL && app != NULL)
-    gtk_application_set_accels_for_action (GTK_APPLICATION (app), action_name, accels);
+  dzl_shortcut_manager_add_action (manager,
+                                   action_name,
+                                   NC_("shortcut winndow", "Workbench shortcuts"),
+                                   NC_("shortcut winndow", "Build and Run"),
+                                   NC_("shortcut winndow", title),
+                                   NULL);
 
-  self->handlers = g_list_append (self->handlers, info);
+  dzl_shortcut_theme_set_accel_for_action (theme, action_name, accel, DZL_SHORTCUT_PHASE_DISPATCH);
 
   if (self->handler == NULL)
     self->handler = info;
@@ -1103,7 +1113,7 @@ ide_run_manager_init (IdeRunManager *self)
                                "run",
                                _("Run"),
                                "media-playback-start-symbolic",
-                               "<Control>F5",
+                               "<primary>F5",
                                NULL,
                                NULL,
                                NULL);

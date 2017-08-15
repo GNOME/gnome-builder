@@ -475,7 +475,7 @@ gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
                                "profiler",
                                _("Run with Profiler"),
                                "utilities-system-monitor-symbolic",
-                               "<Control>F8",
+                               "<primary>F8",
                                profiler_run_handler,
                                self,
                                NULL);

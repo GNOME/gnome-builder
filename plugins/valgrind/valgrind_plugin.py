@@ -49,7 +49,7 @@ class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
             runtime = pipeline.get_configuration().get_runtime()
             if runtime and runtime.contains_program_in_path('valgrind'):
                 if not self.has_handler:
-                    run_manager.add_handler('valgrind', _('Run with Valgrind'), 'system-run-symbolic', '<control>F10', self.valgrind_handler)
+                    run_manager.add_handler('valgrind', _('Run with Valgrind'), 'system-run-symbolic', '<primary>F10', self.valgrind_handler)
                     self.has_handler = True
                 return
 
