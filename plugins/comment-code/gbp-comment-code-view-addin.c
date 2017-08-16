@@ -364,19 +364,19 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
     g_assert_not_reached ();
 }
 
-  static const DzlShortcutEntry comment_code_shortcut_entry[] = {
-    { "org.gnome.builder.editor-view.comment-code",
-      0, NULL,
-      NC_("shortcut window", "Editor shortcuts"),
-      NC_("shortcut window", "Editing"),
-      NC_("shortcut window", "Comment the code") },
+static const DzlShortcutEntry comment_code_shortcut_entries[] = {
+  { "org.gnome.builder.editor-view.comment-code",
+    0, NULL,
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Editing"),
+    NC_("shortcut window", "Comment the code") },
 
-    { "org.gnome.builder.editor-view.uncomment-code",
-      0, NULL,
-      NC_("shortcut window", "Editor shortcuts"),
-      NC_("shortcut window", "Editing"),
-      NC_("shortcut window", "Uncomment the code") },
-  };
+  { "org.gnome.builder.editor-view.uncomment-code",
+    0, NULL,
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Editing"),
+    NC_("shortcut window", "Uncomment the code") },
+};
 
 static void
 gbp_comment_code_view_addin_load (IdeEditorViewAddin *addin,
@@ -413,8 +413,8 @@ gbp_comment_code_view_addin_load (IdeEditorViewAddin *addin,
                                               "view.comment-code::1");
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
-                                             comment_code_shortcut_entry,
-                                             G_N_ELEMENTS (comment_code_shortcut_entry),
+                                             comment_code_shortcut_entries,
+                                             G_N_ELEMENTS (comment_code_shortcut_entries),
                                              GETTEXT_PACKAGE);
 }
 
@@ -422,19 +422,13 @@ static void
 gbp_comment_code_view_addin_unload (IdeEditorViewAddin *addin,
                                     IdeEditorView      *view)
 {
-  GtkApplication *app;
   GActionGroup *group;
-  const gchar *empty_accels[1] = { NULL };
 
   g_assert (GBP_IS_COMMENT_CODE_VIEW_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
   group = gtk_widget_get_action_group (GTK_WIDGET (view), "view");
   g_action_map_remove_action (G_ACTION_MAP (group), "comment-code");
-
-  app = GTK_APPLICATION (g_application_get_default ());
-  gtk_application_set_accels_for_action (app, "view.comment-code::0", empty_accels);
-  gtk_application_set_accels_for_action (app, "view.comment-code::1", empty_accels);
 }
 
 static void
