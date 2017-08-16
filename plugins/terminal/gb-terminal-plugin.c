@@ -19,7 +19,6 @@
 #include <libpeas/peas.h>
 #include <ide.h>
 
-#include "gb-terminal-application-addin.h"
 #include "gb-terminal-private.h"
 #include "gb-terminal-resources.h"
 #include "gb-terminal-workbench-addin.h"
@@ -27,9 +26,6 @@
 void
 peas_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_ADDIN,
-                                              GB_TYPE_TERMINAL_APPLICATION_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GB_TYPE_TERMINAL_WORKBENCH_ADDIN);

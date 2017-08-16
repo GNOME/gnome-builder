@@ -10,8 +10,6 @@ terminal_sources = [
   terminal_resources,
   'gb-terminal.c',
   'gb-terminal.h',
-  'gb-terminal-application-addin.c',
-  'gb-terminal-application-addin.h',
   'gb-terminal-plugin.c',
   'gb-terminal-private.h',
   'gb-terminal-util.c',

@@ -28,6 +28,8 @@
 #include "gb-terminal-view.h"
 #include "gb-terminal-workbench-addin.h"
 
+#define I_(s) g_intern_static_string(s)
+
 struct _GbTerminalWorkbenchAddin
 {
   GObject         parent_instance;
@@ -172,6 +174,49 @@ failure:
   IDE_EXIT;
 }
 
+static const DzlShortcutEntry gb_terminal_shortcut_entries[] = {
+  { "org.gnome.builder.workbench.new-terminal",
+    0, NULL,
+    NC_("shortcut winndow", "Workbench shortcuts"),
+    NC_("shortcut winndow", "General"),
+    NC_("shortcut winndow", "Terminal") },
+
+  { "org.gnome.builder.workbench.new-terminal-in-runtime",
+    0, NULL,
+    NC_("shortcut winndow", "Workbench shortcuts"),
+    NC_("shortcut winndow", "General"),
+    NC_("shortcut winndow", "Terminal in Build Runtime") },
+};
+
+static void
+gb_terminal_workbench_setup_shortcuts (GbTerminalWorkbenchAddin *self,
+                                       IdeWorkbench             *workbench)
+{
+  DzlShortcutController *controller;
+
+  g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (workbench));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.workbench.new-terminal",
+                                              I_("<primary><shift>t"),
+                                              DZL_SHORTCUT_PHASE_DISPATCH,
+                                              "win.new-terminal");
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.workbench.new-terminal-in-runtime",
+                                              I_("<primary><alt><shift>t"),
+                                              DZL_SHORTCUT_PHASE_DISPATCH,
+                                              "win.new-terminal-in-runtime");
+
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             gb_terminal_shortcut_entries,
+                                             G_N_ELEMENTS (gb_terminal_shortcut_entries),
+                                             GETTEXT_PACKAGE);
+}
+
 static void
 gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
@@ -194,6 +239,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
   ide_set_weak_pointer (&self->workbench, workbench);
 
   g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions, G_N_ELEMENTS (actions), self);
+  gb_terminal_workbench_setup_shortcuts (self, workbench);
 
   if (self->panel_terminal == NULL)
     {
