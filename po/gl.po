@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-08-15 21:30+0000\n"
-"PO-Revision-Date: 2017-08-16 09:51+0200\n"
+"POT-Creation-Date: 2017-08-16 21:49+0000\n"
+"PO-Revision-Date: 2017-08-17 00:43+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1028,23 +1028,22 @@ msgstr "Non existe o traballador"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
+#: libide/runner/ide-run-manager.c:721
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:715
-#| msgid "Workbench"
+#: plugins/terminal/gb-terminal-workbench-addin.c:180
+#: plugins/terminal/gb-terminal-workbench-addin.c:186
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Atallos do banco de traballo"
 
 #: libide/application/ide-application-shortcuts.c:44
 #: libide/application/ide-application-shortcuts.c:52
-#| msgid "_Help"
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Axuda"
 
 #: libide/application/ide-application-shortcuts.c:45
-#| msgctxt "shortcut window"
-#| msgid "Show completion window"
 msgctxt "shortcut window"
 msgid "Show the help window"
 msgstr "Mostrar a xanela de axuda"
@@ -1058,6 +1057,8 @@ msgstr "Mostrar a xanela de atallos"
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
 #: plugins/command-bar/gb-command-bar.c:716
+#: plugins/terminal/gb-terminal-workbench-addin.c:181
+#: plugins/terminal/gb-terminal-workbench-addin.c:187
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Xeral"
@@ -1074,19 +1075,18 @@ msgid "Search"
 msgstr "Buscar"
 
 #: libide/application/ide-application-shortcuts.c:69
-#| msgid "Fast global search"
 msgctxt "shortcut window"
 msgid "Focus to the global search entry"
 msgstr "Enfoca o campo de busca global"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:425
+#: libide/runner/ide-run-manager.c:722
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construír e executar"
 
 #: libide/application/ide-application-shortcuts.c:77
-#| msgid "Trigger"
 msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Dispara unha construción"
@@ -1479,10 +1479,12 @@ msgstr "Cancelar"
 #: libide/layout/ide-layout-stack-shortcuts.c:46
 #: libide/layout/ide-layout-stack-shortcuts.c:53
 #: libide/layout/ide-layout-stack-shortcuts.c:60
+#: plugins/beautifier/gb-beautifier-editor-addin.c:332
+#: plugins/comment-code/gbp-comment-code-view-addin.c:370
+#: plugins/comment-code/gbp-comment-code-view-addin.c:376
 #: plugins/project-tree/gb-project-tree-shortcuts.c:33
 #: plugins/project-tree/gb-project-tree-shortcuts.c:39
-#| msgctxt "shortcut window"
-#| msgid "Editor Shortcuts"
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:100
 msgctxt "shortcut window"
 msgid "Editor shortcuts"
 msgstr "Editor de atallos"
@@ -1502,7 +1504,6 @@ msgid "Files"
 msgstr "Ficheiros"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:35
-#| msgid "Create a new document"
 msgctxt "shortcut window"
 msgid "Create a new document"
 msgstr "Crear un novo documento"
@@ -1521,13 +1522,11 @@ msgid "Panels"
 msgstr "Paneles"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:47
-#| msgid "Toggle navigation panel"
 msgctxt "shortcut window"
 msgid "Toggle navigation panel"
 msgstr "Trocar panel de navegación"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:53
-#| msgid "Toggle utilities panel"
 msgctxt "shortcut window"
 msgid "Toggle utilities panel"
 msgstr "Trocar panel de utilidades"
@@ -1677,7 +1676,6 @@ msgid "Save the document"
 msgstr "Gardar o documento"
 
 #: libide/editor/ide-editor-view-shortcuts.c:39
-#| msgid "Save the document with a new name"
 msgctxt "shortcut window"
 msgid "Save the document with a new name"
 msgstr "Gardar o documento con un novo nome"
@@ -1703,25 +1701,21 @@ msgid "Find"
 msgstr "Buscar"
 
 #: libide/editor/ide-editor-view-shortcuts.c:57
-#| msgid "Move to the next match"
 msgctxt "shortcut window"
 msgid "Move to the next match"
 msgstr "Moverse á seguinte coincidencia"
 
 #: libide/editor/ide-editor-view-shortcuts.c:63
-#| msgid "Move to the previous match"
 msgctxt "shortcut window"
 msgid "Move to the previous match"
 msgstr "Moverse á anterior coincidencia"
 
 #: libide/editor/ide-editor-view-shortcuts.c:69
-#| msgid "Move to the next error"
 msgctxt "shortcut window"
 msgid "Move to the next error"
 msgstr "Moverse ao seguinte erro"
 
 #: libide/editor/ide-editor-view-shortcuts.c:75
-#| msgid "Move to the previous error"
 msgctxt "shortcut window"
 msgid "Move to the previous error"
 msgstr "Moverse ao anterior erro"
@@ -1888,12 +1882,14 @@ msgstr "Barra de ordes"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
 #: libide/keybindings/ide-shortcuts-window.ui:484
+#: plugins/terminal/gb-terminal-workbench-addin.c:182
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
 #: libide/keybindings/ide-shortcuts-window.ui:491
+#: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tempo de execución de construción"
@@ -2013,6 +2009,10 @@ msgid "Redo previous command"
 msgstr "Refacer a anterior orde"
 
 #: libide/keybindings/ide-shortcuts-window.ui:266
+#: plugins/beautifier/gb-beautifier-editor-addin.c:333
+#: plugins/comment-code/gbp-comment-code-view-addin.c:371
+#: plugins/comment-code/gbp-comment-code-view-addin.c:377
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:101
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Editando"
@@ -2179,13 +2179,11 @@ msgid "New documentation"
 msgstr "Nova documentación"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:34
-#| msgid "Move document to the right"
 msgctxt "shortcut window"
 msgid "Move document to the right"
 msgstr "Mover documento á dereita"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:41
-#| msgid "Move document to the left"
 msgctxt "shortcut window"
 msgid "Move document to the left"
 msgstr "Mover documento á esquerda"
@@ -2266,7 +2264,7 @@ msgstr "tipo de letra monoespaciado do editor"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
-#: plugins/terminal/gb-terminal-workbench-addin.c:202
+#: plugins/terminal/gb-terminal-workbench-addin.c:248
 #: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Terminal"
@@ -2703,19 +2701,6 @@ msgstr "Non se pode executar o obxectivo, xa hai outro en execución"
 msgid "Failed to locate runtime"
 msgstr "Produciuse un fallo ao localizar o runtime"
 
-#: libide/runner/ide-run-manager.c:721
-#| msgid "Workbench"
-msgctxt "shortcut winndow"
-msgid "Workbench shortcuts"
-msgstr "Atallso do banco de traballo"
-
-#: libide/runner/ide-run-manager.c:722
-#| msgctxt "shortcut window"
-#| msgid "Build and Run"
-msgctxt "shortcut winndow"
-msgid "Build and Run"
-msgstr "Construír e executar"
-
 #: libide/runner/ide-runner.c:173
 msgid "Process quit unexpectedly"
 msgstr "O proceso saíu de forma non esperada"
@@ -2909,7 +2894,6 @@ msgid "Press Ctrl+. to search"
 msgstr "Prema Ctrl+. para buscar"
 
 #: libide/workbench/ide-workbench-shortcuts.c:50
-#| msgid "Switch perspective"
 msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspectivas"
@@ -2945,14 +2929,25 @@ msgstr "Aplicativo de GNOME"
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Crear un novo aplicativo de GNOME listo para flatpak"
 
-#: plugins/beautifier/gb-beautifier-editor-addin.c:190
+#: plugins/beautifier/gb-beautifier-editor-addin.c:235
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Non hai un «beautifier» dispoñíbel para «%s»"
 
-#: plugins/beautifier/gb-beautifier-editor-addin.c:192
+#: plugins/beautifier/gb-beautifier-editor-addin.c:237
 msgid "No beautifier available"
 msgstr "Non hai «beautifiers» dispoñíbeis"
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:334
+#| msgid "Beautify"
+msgctxt "shortcut window"
+msgid "Beautify the code"
+msgstr "Embelecer o código"
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:335
+msgctxt "shortcut window"
+msgid "Trigger the default entry"
+msgstr "Disparador para a entrada por omisión"
 
 #: plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
@@ -3252,6 +3247,18 @@ msgstr "Solicitude de buscar e reemprazar non válida"
 #, c-format
 msgid "Not a command: %s"
 msgstr "Non é unha orde: %s"
+
+#: plugins/comment-code/gbp-comment-code-view-addin.c:372
+#| msgid "Comment code"
+msgctxt "shortcut window"
+msgid "Comment the code"
+msgstr "Comentar o código"
+
+#: plugins/comment-code/gbp-comment-code-view-addin.c:378
+#| msgid "Uncomment code"
+msgctxt "shortcut window"
+msgid "Uncomment the code"
+msgstr "Descomentar o código"
 
 #: plugins/comment-code/gtk/menus.ui:9
 msgid "Comment code"
@@ -3677,17 +3684,14 @@ msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para fornecer o completado do linguaxe Python"
 
 #: plugins/meson-templates/meson_templates/__init__.py:236
-#| msgid "Create a new flatpak-ready GNOME application"
 msgid "Create a new GNOME application"
 msgstr "Crear un novo aplicativo de GNOME"
 
 #: plugins/meson-templates/meson_templates/__init__.py:289
-#| msgid "Create a new autotools project with a shared library"
 msgid "Create a new project with a shared library"
 msgstr "Crea un novo proxecto con unha biblioteca compartida"
 
 #: plugins/meson-templates/meson_templates/__init__.py:306
-#| msgid "Create a new empty meson project"
 msgid "Create a new empty project"
 msgstr "Crear un novo proxecto baleiro"
 
@@ -3756,19 +3760,16 @@ msgstr "Renomear %s"
 
 #: plugins/project-tree/gb-project-tree-shortcuts.c:34
 #: plugins/project-tree/gb-project-tree-shortcuts.c:40
-#| msgid "Project Tree"
 msgctxt "shortcut window"
 msgid "Project tree"
 msgstr "Árbore do proxecto"
 
 #: plugins/project-tree/gb-project-tree-shortcuts.c:35
-#| msgid "Rename %s"
 msgctxt "shortcut window"
 msgid "Rename a file"
 msgstr "Renomear un ficheiro"
 
 #: plugins/project-tree/gb-project-tree-shortcuts.c:41
-#| msgid "Move to the next match"
 msgctxt "shortcut window"
 msgid "Move a file to the trash"
 msgstr "Mover un ficheiro ao lixo"
@@ -3978,6 +3979,12 @@ msgstr "para engadir un novo toolchain!"
 msgid "Spelling"
 msgstr "Verificación ortográfica"
 
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:102
+#| msgid "Show left panel"
+msgctxt "shortcut window"
+msgid "Show the spellchecker panel"
+msgstr "Mostrar o panel de verificación ortográfica"
+
 #: plugins/spellcheck/gbp-spell-language-popover.c:232
 msgid "No language selected"
 msgstr "Non se especificou un linguaxe"
@@ -4148,7 +4155,7 @@ msgstr "Gardar contidos do terminal como"
 msgid "Untitled terminal"
 msgstr "Terminal sen título"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:142
+#: plugins/terminal/gb-terminal-workbench-addin.c:144
 msgid "Application Output"
 msgstr "Saída do aplicativo"
 
@@ -4201,6 +4208,17 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero non no xestor de búfer."
+
+#~| msgid "Workbench"
+#~ msgctxt "shortcut winndow"
+#~ msgid "Workbench shortcuts"
+#~ msgstr "Atallso do banco de traballo"
+
+#~| msgctxt "shortcut window"
+#~| msgid "Build and Run"
+#~ msgctxt "shortcut winndow"
+#~ msgid "Build and Run"
+#~ msgstr "Construír e executar"
 
 #~| msgctxt "shortcut window"
 #~| msgid "Files"
@@ -4314,9 +4332,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 #~ msgstr ""
 #~ "Se está activo, a barra lateral será visíbel no espazo de traballo do "
 #~ "editor."
-
-#~ msgid "Show left panel"
-#~ msgstr "Mostrar panel da esquerda"
 
 #~ msgid "Show bottom panel"
 #~ msgstr "Mostrar panel inferior"
