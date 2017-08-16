@@ -115,6 +115,7 @@ plugins/color-picker/gtk/color-picker.ui
 plugins/color-picker/gtk/menus.ui
 plugins/command-bar/gb-command-bar.c
 plugins/command-bar/gb-vim.c
+plugins/comment-code/gbp-comment-code-view-addin.c
 plugins/comment-code/gtk/menus.ui
 plugins/c-pack/ide-c-format-provider.c
 plugins/create-project/gbp-create-project-genesis-addin.c
@@ -165,6 +166,7 @@ plugins/quick-highlight/gbp-quick-highlight-preferences.c
 plugins/retab/gtk/menus.ui
 plugins/rustup/rustup_plugin/__init__.py
 plugins/spellcheck/gbp-spell-editor-addin.c
+plugins/spellcheck/gbp-spell-editor-view-addin.c
 plugins/spellcheck/gbp-spell-language-popover.c
 plugins/spellcheck/gbp-spell-navigator.c
 plugins/spellcheck/gbp-spell-widget.c
