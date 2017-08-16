@@ -177,15 +177,15 @@ failure:
 static const DzlShortcutEntry gb_terminal_shortcut_entries[] = {
   { "org.gnome.builder.workbench.new-terminal",
     0, NULL,
-    NC_("shortcut winndow", "Workbench shortcuts"),
-    NC_("shortcut winndow", "General"),
-    NC_("shortcut winndow", "Terminal") },
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "General"),
+    NC_("shortcut window", "Terminal") },
 
   { "org.gnome.builder.workbench.new-terminal-in-runtime",
     0, NULL,
-    NC_("shortcut winndow", "Workbench shortcuts"),
-    NC_("shortcut winndow", "General"),
-    NC_("shortcut winndow", "Terminal in Build Runtime") },
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "General"),
+    NC_("shortcut window", "Terminal in Build Runtime") },
 };
 
 static void
