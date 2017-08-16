@@ -127,7 +127,8 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
                                   const gchar             *real_lang_id,
                                   GArray                  *entries,
                                   const gchar             *map_default,
-                                  gboolean                 is_from_map)
+                                  gboolean                 is_from_map,
+                                  gboolean                *has_default)
 {
   g_autoptr(GKeyFile) key_file = NULL;
   g_autofree gchar *ini_path = NULL;
@@ -143,6 +144,7 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
   g_assert (!ide_str_empty0 (real_lang_id));
   g_assert (entries != NULL);
 
+  *has_default = FALSE;
   key_file = g_key_file_new ();
   ini_path = g_build_filename (base_path, real_lang_id, "config.ini", NULL);
 
@@ -263,7 +265,7 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
 
             if (0 == g_strcmp0 (default_profile, profile))
               {
-                entry.is_default = TRUE;
+                *has_default = entry.is_default = TRUE;
                 g_clear_pointer (&default_profile, g_free);
               }
             else
@@ -298,19 +300,22 @@ static gboolean
 add_entries_from_base_path (GbBeautifierEditorAddin *self,
                             const gchar             *base_path,
                             GArray                  *entries,
-                            GArray                  *map)
+                            GArray                  *map,
+                            gboolean                *has_default)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GFile) parent_file = NULL;
   GFileInfo *child_info;
   GError *error = NULL;
   gboolean ret = FALSE;
+  gboolean ret_has_default;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!ide_str_empty0 (base_path));
   g_assert (entries != NULL);
   g_assert (map != NULL);
 
+  *has_default = FALSE;
   parent_file = g_file_new_for_path (base_path);
   if (NULL == (enumerator = g_file_enumerate_children (parent_file,
                                                        G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
@@ -341,8 +346,11 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
                                                 real_lang_id,
                                                 entries,
                                                 NULL,
-                                                FALSE))
+                                                FALSE,
+                                                &ret_has_default))
             ret = TRUE;
+
+          *has_default |= ret_has_default;
 
           for (guint i = 0; i < map->len; ++i)
             {
@@ -354,8 +362,11 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
                                                     real_lang_id,
                                                     entries,
                                                     entry->default_profile,
-                                                    TRUE))
+                                                    TRUE,
+                                                    &ret_has_default))
                 ret = TRUE;
+
+              *has_default |= ret_has_default;
             }
         }
     }
@@ -423,7 +434,8 @@ gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
 }
 
 GArray *
-gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self)
+gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self,
+                                  gboolean                *has_default)
 {
   IdeContext *context;
   IdeVcs *vcs;
@@ -433,6 +445,7 @@ gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self)
   g_autofree gchar *user_config_path = NULL;
   const gchar *datadir;
   g_autofree gchar *configdir = NULL;
+  gboolean ret_has_default;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
@@ -445,7 +458,9 @@ gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self)
                                        "beautifier_plugin",
                                        NULL);
   map = gb_beautifier_config_get_map (self, user_config_path);
-  add_entries_from_base_path (self, user_config_path, entries, map);
+  add_entries_from_base_path (self, user_config_path, entries, map, &ret_has_default);
+  *has_default |= ret_has_default;
+
   if (map != NULL)
     g_array_free (map, TRUE);
 
@@ -462,7 +477,9 @@ gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self)
                                               ".beautifier",
                                               NULL);
       map = gb_beautifier_config_get_map (self, project_config_path);
-      add_entries_from_base_path (self, project_config_path, entries, map);
+      add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
+      *has_default |= ret_has_default;
+
       if (map != NULL)
         g_array_free (map, TRUE);
     }
@@ -473,7 +490,9 @@ gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self)
       configdir = g_build_filename (datadir, "data", NULL);
 
       map = gb_beautifier_config_get_map (self, configdir);
-      add_entries_from_base_path (self, configdir, entries, map);
+      add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
+      *has_default |= ret_has_default;
+
       if (map != NULL)
         g_array_free (map, TRUE);
     }

@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
+#include <dazzle.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
@@ -26,6 +29,8 @@
 #include "gb-beautifier-process.h"
 
 #include "gb-beautifier-editor-addin.h"
+
+#define I_(s) g_intern_static_string(s)
 
 static void editor_addin_iface_init (IdeEditorAddinInterface *iface);
 
@@ -78,6 +83,13 @@ view_activate_beautify_action_cb (GSimpleAction *action,
       return;
     }
 
+  param = g_variant_get_string (variant, NULL);
+  if (g_strcmp0 (param, "none") == 0)
+    {
+      g_warning ("Beautifier Plugin: no default beautifier found");
+      return;
+    }
+
   if (!gtk_text_view_get_editable (GTK_TEXT_VIEW (source_view)))
     {
       g_warning ("Beautifier Plugin: the buffer is not writable");
@@ -92,7 +104,6 @@ view_activate_beautify_action_cb (GSimpleAction *action,
       return;
     }
 
-  param = g_variant_get_string (variant, NULL);
   index = g_ascii_strtod (param, NULL);
   entry = &g_array_index (self->entries, GbBeautifierConfigEntry, index);
   g_assert (entry != NULL);
@@ -109,14 +120,64 @@ view_activate_beautify_action_cb (GSimpleAction *action,
 }
 
 static void
+set_default_keybinding (GbBeautifierEditorAddin *self,
+                        const gchar             *action_name)
+{
+  DzlShortcutController *controller;
+  gchar *accel = "<primary><Alt>b";
+
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+  g_assert (action_name != NULL);
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self->current_view));
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.editor-view.beautifier-default",
+                                              I_(accel),
+                                              DZL_SHORTCUT_PHASE_CAPTURE,
+                                              action_name);
+}
+
+static void
+setup_default_action (GbBeautifierEditorAddin *self,
+                      IdeSourceView           *view)
+{
+  const gchar *lang_id;
+  gchar *default_action_name;
+  gboolean default_set = FALSE;
+
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  lang_id = gb_beautifier_helper_get_lang_id (self, view);
+  for (guint i = 0; i < self->entries->len; ++i)
+    {
+      GbBeautifierConfigEntry *entry;
+      g_autofree gchar *param = NULL;
+
+      entry = &g_array_index (self->entries, GbBeautifierConfigEntry, i);
+      if (entry->is_default &&
+          0 == g_strcmp0 (entry->lang_id, lang_id))
+        {
+          param = g_strdup_printf ("%i", i);
+          default_action_name = g_strdup_printf ("view.beautify-default::%i", i);
+          set_default_keybinding (self, default_action_name);
+          default_set = TRUE;
+
+          break;
+        }
+    }
+
+  if (!default_set)
+    set_default_keybinding (self, "view.beautify-default::none");
+}
+
+static void
 view_populate_submenu (GbBeautifierEditorAddin *self,
                        IdeSourceView           *view,
                        GMenu                   *submenu,
                        GArray                  *entries)
 {
   const gchar *lang_id;
-  GtkApplication *app;
-  gchar *default_action_name;
   GMenu *default_menu;
   gboolean has_entries = FALSE;
   gboolean default_set = FALSE;
@@ -125,14 +186,6 @@ view_populate_submenu (GbBeautifierEditorAddin *self,
   g_assert (IDE_IS_SOURCE_VIEW (view));
   g_assert (G_IS_MENU (submenu));
   g_assert (entries != NULL);
-
-  app = GTK_APPLICATION (g_application_get_default ());
-
-  if (NULL != (default_action_name = g_object_get_data (G_OBJECT (view), "gb-beautifier-default-action")))
-    {
-      gtk_application_set_accels_for_action (app, default_action_name, (const gchar*[]) {NULL});
-      g_object_set_data_full (G_OBJECT (view), "gb-beautifier-default-action", NULL, g_free);
-    }
 
   default_menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-beautify-default-section");
   g_menu_remove_all (default_menu);
@@ -151,17 +204,9 @@ view_populate_submenu (GbBeautifierEditorAddin *self,
           if (!default_set && entry->is_default)
             {
               item = g_menu_item_new (entry->name, NULL);
-              default_action_name = g_strdup_printf ("view.beautify-default::%i", i);
-              g_object_set_data_full (G_OBJECT (view),
-                                      "gb-beautifier-default-action",
-                                      default_action_name,
-                                      g_free);
               g_menu_item_set_action_and_target (item, "view.beautify-default", "s", param);
-              gtk_application_set_accels_for_action (app,
-                                                     default_action_name,
-                                                     (const gchar*[]) {"<Control><Alt>b", NULL});
-
               g_menu_append_item (default_menu, item);
+
               default_set = TRUE;
             }
           else
@@ -250,6 +295,11 @@ setup_view_cb (GtkWidget               *widget,
                            G_CALLBACK (view_populate_popup),
                            self,
                            G_CONNECT_SWAPPED);
+
+  if (self->has_default)
+    setup_default_action (self, IDE_SOURCE_VIEW (source_view));
+  else
+    set_default_keybinding (self, "view.beautify-default::none");
 }
 
 static void
@@ -258,15 +308,11 @@ cleanup_view_cb (GtkWidget               *widget,
 {
   IdeEditorView *view = (IdeEditorView *)widget;
   GActionGroup *actions;
-  GtkApplication *app;
-  gchar *default_action_name;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
   if (!IDE_IS_EDITOR_VIEW (view))
     return;
-
-  app = GTK_APPLICATION (g_application_get_default ());
 
   if (NULL != (actions = gtk_widget_get_action_group (GTK_WIDGET (view), "view")))
     {
@@ -274,12 +320,30 @@ cleanup_view_cb (GtkWidget               *widget,
       g_action_map_remove_action (G_ACTION_MAP (actions), "beautify-default");
     }
 
-  g_object_set_data (G_OBJECT (view), "gb-beautifier-editor-addin", NULL);
-  if (NULL != (default_action_name = g_object_get_data (G_OBJECT (view), "gb-beautifier-default-action")))
-    {
-      gtk_application_set_accels_for_action (app, default_action_name, (const gchar*[]) {NULL});
-      g_object_set_data_full (G_OBJECT (view), "gb-beautifier-default-action", NULL, g_free);
-    }
+  /* TODO: if we close the view we are fine but if we desactivate the plugin, we should remove
+   * the dzl shortcut and action mapping from the controler, dzl do not have this feature yet.
+   */
+}
+
+static const DzlShortcutEntry beautifier_shortcut_entry[] = {
+  { "org.gnome.builder.editor-view.beautifier-default",
+    0,
+    "<primary><Alt>b",
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Editing"),
+    NC_("shortcut window", "Beautify the code"),
+    NC_("shortcut window", "Trigger the default entry") },
+};
+
+static void
+add_shortcut_window_entry (GbBeautifierEditorAddin *self)
+{
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             beautifier_shortcut_entry,
+                                             G_N_ELEMENTS (beautifier_shortcut_entry),
+                                             GETTEXT_PACKAGE);
 }
 
 static void
@@ -295,9 +359,14 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
   ide_set_weak_pointer (&self->editor, editor);
   workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
   self->context = ide_workbench_get_context (workbench);
-  self->entries = gb_beautifier_config_get_entries (self);
+  self->entries = gb_beautifier_config_get_entries (self, &self->has_default);
+
+  if (!self->has_default)
+    set_default_keybinding (self, "view.beautify-default::none");
 
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)setup_view_cb, self);
+
+  add_shortcut_window_entry (self);
 }
 
 static void

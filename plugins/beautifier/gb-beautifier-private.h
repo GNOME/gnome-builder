@@ -33,6 +33,8 @@ struct _GbBeautifierEditorAddin
   IdeEditorPerspective  *editor;
   IdeLayoutView         *current_view;
   GArray                *entries;
+
+  gboolean               has_default;
 };
 
 G_END_DECLS

@@ -48,7 +48,8 @@ typedef struct
   gchar *default_profile;
 } GbBeautifierMapEntry;
 
-GArray *gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self);
+GArray *gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self,
+                                          gboolean                *has_default);
 
 G_END_DECLS
 
