@@ -17,7 +17,7 @@
   bind "<ctrl>j" { "join-lines" () };
   bind "<ctrl>u" { "change-case" (upper) };
   bind "<ctrl>l" { "change-case" (lower) };
-  bind "<ctrl>i" { "action" ("editor-controls", "goto-line", "") };
+  bind "<ctrl>i" { "action" ("editor-view", "goto-line", "") };
   bind "<ctrl>asciitilde" { "change-case" (toggle) };
   bind "<ctrl><alt>d" { "duplicate-entire-line" ()};
 

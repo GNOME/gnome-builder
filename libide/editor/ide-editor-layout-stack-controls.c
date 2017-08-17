@@ -198,6 +198,17 @@ warning_button_clicked (IdeEditorLayoutStackControls *self,
 }
 
 static void
+show_goto_line (GSimpleAction                 *action,
+                GVariant                      *param,
+                IdeEditorLayoutStackControls  *self)
+{
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_LAYOUT_STACK_CONTROLS (self));
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->goto_line_button), TRUE);
+}
+
+static void
 ide_editor_layout_stack_controls_bind (IdeEditorLayoutStackControls *self,
                                        GtkTextBuffer                *buffer,
                                        DzlSignalGroup               *buffer_signals)
@@ -219,6 +230,7 @@ ide_editor_layout_stack_controls_finalize (GObject *object)
 
   g_clear_object (&self->buffer_bindings);
   g_clear_object (&self->buffer_signals);
+  g_clear_object (&self->goto_line_action);
 
   self->view = NULL;
 
@@ -289,12 +301,21 @@ ide_editor_layout_stack_controls_init (IdeEditorLayoutStackControls *self)
                                    G_CALLBACK (document_cursor_moved),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  self->goto_line_action = g_simple_action_new ("goto-line", NULL);
+  g_signal_connect_object (self->goto_line_action,
+                           "activate",
+                           G_CALLBACK (show_goto_line),
+                           self,
+                           0);
 }
 
 void
 ide_editor_layout_stack_controls_set_view (IdeEditorLayoutStackControls *self,
                                            IdeEditorView                *view)
 {
+  GActionGroup *editor_view_group;
+
   g_return_if_fail (IDE_IS_EDITOR_LAYOUT_STACK_CONTROLS (self));
   g_return_if_fail (!view || IDE_IS_EDITOR_VIEW (view));
 
@@ -321,5 +342,8 @@ ide_editor_layout_stack_controls_set_view (IdeEditorLayoutStackControls *self,
                         &self->view);
       dzl_binding_group_set_source (self->buffer_bindings, view->buffer);
       dzl_signal_group_set_target (self->buffer_signals, view->buffer);
+
+      if (NULL != (editor_view_group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-view")))
+        g_action_map_add_action (G_ACTION_MAP (editor_view_group), G_ACTION (self->goto_line_action));
     }
 }

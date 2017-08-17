@@ -43,6 +43,8 @@ struct _IdeEditorLayoutStackControls
   DzlSimpleLabel       *line_label;
   DzlSimpleLabel       *column_label;
   GtkLabel             *range_label;
+
+  GSimpleAction        *goto_line_action;
 };
 
 void ide_editor_layout_stack_controls_set_view (IdeEditorLayoutStackControls *self,
