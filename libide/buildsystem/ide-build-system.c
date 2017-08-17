@@ -36,7 +36,22 @@ enum {
   N_PROPS
 };
 
+typedef struct
+{
+  GPtrArray   *files;
+  GHashTable  *flags;
+  gsize        index;
+} GetBuildFlagsData;
+
 static GParamSpec *properties [N_PROPS];
+
+static void
+get_build_flags_data_free (GetBuildFlagsData *data)
+{
+  g_clear_pointer (&data->files, g_ptr_array_unref);
+  g_clear_pointer (&data->flags, g_hash_table_unref);
+  g_slice_free (GetBuildFlagsData, data);
+}
 
 gint
 ide_build_system_get_priority (IdeBuildSystem *self)
@@ -78,6 +93,91 @@ ide_build_system_real_get_build_flags_finish (IdeBuildSystem  *self,
 }
 
 static void
+get_build_flags_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  IdeBuildSystem *self = (IdeBuildSystem *)object;
+  g_auto(GStrv) flags = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  GetBuildFlagsData *data;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (G_IS_TASK (task));
+
+  flags = ide_build_system_get_build_flags_finish (self, result, &error);
+
+  data = g_task_get_task_data (task);
+
+  if (flags != NULL)
+    g_hash_table_insert (data->flags,
+                         g_object_ref (g_ptr_array_index (data->files, data->index)),
+                         g_steal_pointer (&flags));
+
+  data->index++;
+
+  if (data->index < data->files->len)
+    {
+      GCancellable *cancellable;
+
+      cancellable = g_task_get_cancellable (task);
+
+      ide_build_system_get_build_flags_async (self,
+                                              g_ptr_array_index (data->files, data->index),
+                                              cancellable,
+                                              get_build_flags_cb,
+                                              g_steal_pointer (&task));
+    }
+  else
+    {
+      g_task_return_pointer (task,
+                             g_steal_pointer (&data->flags),
+                             (GDestroyNotify)g_hash_table_unref);
+    }
+}
+
+static void
+ide_build_system_real_get_build_flags_for_files_async (IdeBuildSystem       *self,
+                                                       GPtrArray            *files,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  GetBuildFlagsData *data;
+
+  g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
+  g_return_if_fail (files != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  data = g_slice_new0 (GetBuildFlagsData);
+  data->files = g_ptr_array_ref (files);
+  data->flags = g_hash_table_new_full ((GHashFunc)ide_file_hash,
+                                       (GEqualFunc)ide_file_equal,
+                                       g_object_unref,
+                                       (GDestroyNotify)g_strfreev);
+
+  g_task_set_task_data (task, data, (GDestroyNotify)get_build_flags_data_free);
+
+  ide_build_system_get_build_flags_async (self,
+                                          g_ptr_array_index (files, 0),
+                                          cancellable,
+                                          get_build_flags_cb,
+                                          g_steal_pointer (&task));
+}
+
+static GHashTable *
+ide_build_system_real_get_build_flags_for_files_finish (IdeBuildSystem       *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
 ide_build_system_real_get_build_targets_async (IdeBuildSystem      *self,
                                                GCancellable        *cancellable,
                                                GAsyncReadyCallback  callback,
@@ -105,7 +205,8 @@ ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
   iface->get_build_flags_async = ide_build_system_real_get_build_flags_async;
   iface->get_build_flags_finish = ide_build_system_real_get_build_flags_finish;
-  iface->get_build_targets_finish = ide_build_system_real_get_build_targets_finish;
+  iface->get_build_flags_for_files_async = ide_build_system_real_get_build_flags_for_files_async;
+  iface->get_build_flags_for_files_finish = ide_build_system_real_get_build_flags_for_files_finish;
   iface->get_build_targets_async = ide_build_system_real_get_build_targets_async;
   iface->get_build_targets_finish = ide_build_system_real_get_build_targets_finish;
 
@@ -255,6 +356,59 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
   ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_finish (self, result, error);
+
+  IDE_RETURN (ret);
+}
+
+/**
+ * ide_build_system_get_build_flags_for_files_async:
+ * @self: An #IdeBuildSystem instance.
+ * @files: (element-type Ide.File): array of files whose build flags has to be retrieved.
+ * @cancellable: (allow-none): A #GCancellable to cancel getting build flags.
+ * @callback: function to be called after getting build flags.
+ * @user_data: data to pass to @callback.
+ *
+ * This function will get build flags for all files and returns
+ * map of file and its build flags as #GHashTable.
+ */
+void
+ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
+                                                  GPtrArray            *files,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
+  g_return_if_fail ( files != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_BUILD_SYSTEM_GET_IFACE (self)->
+      get_build_flags_for_files_async (self, files, cancellable, callback, user_data);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_build_system_get_build_flags_for_files_finish:
+ *
+ * Returns: (transfer full): Returns #GHashTable which has a map
+ *   of files and its build flags.
+ */
+GHashTable *
+ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem       *self,
+                                                   GAsyncResult         *result,
+                                                   GError              **error)
+{
+  GHashTable *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_for_files_finish (self, result, error);
 
   IDE_RETURN (ret);
 }
