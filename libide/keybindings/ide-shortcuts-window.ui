@@ -93,26 +93,6 @@
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">true</property>
-            <property name="title" translatable="yes" context="shortcut window">Touchpad gestures</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">true</property>
-                <property name="shortcut-type">gesture-two-finger-swipe-right</property>
-                <property name="title" translatable="yes" context="shortcut window">Switch to the next document</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">true</property>
-                <property name="shortcut-type">gesture-two-finger-swipe-left</property>
-                <property name="title" translatable="yes" context="shortcut window">Switch to the previous document</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkShortcutsGroup">
-            <property name="visible">true</property>
             <property name="title" translatable="yes" context="shortcut window">Files</property>
             <child>
               <object class="GtkShortcutsShortcut">
@@ -445,6 +425,26 @@
                 </object>
               </child>
             </object>
+        </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">true</property>
+            <property name="title" translatable="yes" context="shortcut window">Touchpad gestures</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-right</property>
+                <property name="title" translatable="yes" context="shortcut window">Switch to the next document</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-left</property>
+                <property name="title" translatable="yes" context="shortcut window">Switch to the previous document</property>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
