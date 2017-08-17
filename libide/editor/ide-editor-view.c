@@ -544,6 +544,24 @@ search_revealer_notify_reveal_child (IdeEditorView *self,
 }
 
 static void
+ide_editor_view_focus_location (IdeEditorView     *self,
+                                IdeSourceLocation *location,
+                                IdeSourceView     *source_view)
+{
+  IdeWorkbench *workbench;
+  IdePerspective *editor;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (location != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+
+  ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+}
+
+static void
 ide_editor_view_constructed (GObject *object)
 {
   IdeEditorView *self = (IdeEditorView *)object;
@@ -586,10 +604,17 @@ ide_editor_view_constructed (GObject *object)
                             G_CALLBACK (ide_editor_view_source_view_event),
                             self);
 
+  g_signal_connect_swapped (self->source_view,
+                            "focus-location",
+                            G_CALLBACK (ide_editor_view_focus_location),
+                            self);
+
   g_signal_connect_swapped (self->map,
                             "motion-notify-event",
                             G_CALLBACK (ide_editor_view_source_view_event),
                             self);
+
+
 
   /*
    * We want to track when the search revealer is visible. We will discard
