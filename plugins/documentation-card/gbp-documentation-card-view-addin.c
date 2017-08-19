@@ -88,9 +88,17 @@ search_document_cb (gpointer data)
 
   self->timeout_id = 0;
 
-  window = gtk_widget_get_parent_window (GTK_WIDGET (self->editor_view));
-  display = gdk_window_get_display (window);
-  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  /* Be defensive against widget destruction */
+  if (self->editor_view == NULL ||
+      NULL == (window = gtk_widget_get_parent_window (GTK_WIDGET (self->editor_view))) ||
+      NULL == (display = gdk_window_get_display (window)) ||
+      NULL == (device = gdk_seat_get_pointer (gdk_display_get_default_seat (display))))
+    {
+      if (self->poped_up)
+        self->poped_up = FALSE;
+      gbp_documentation_card_popdown (self->popover);
+      return G_SOURCE_REMOVE;
+    }
 
   gdk_window_get_device_position (window, device, &x, &y, NULL);
 
@@ -219,7 +227,7 @@ gbp_documentation_card_view_addin_unload (IdeEditorViewAddin *addin,
   ide_clear_source (&self->timeout_id);
   ide_clear_signal_handler (self->editor_view, &self->motion_handler_id);
 
-  g_free (self->previous_text);
+  g_clear_pointer (&self->previous_text, g_free);
   gtk_widget_destroy (GTK_WIDGET (self->popover));
   self->popover = NULL;
   self->editor_view = NULL;
