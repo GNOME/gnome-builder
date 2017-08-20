@@ -641,9 +641,9 @@ ide_editor_view_destroy (GtkWidget *widget)
 
   ide_clear_source (&self->toggle_map_source);
 
-  gtk_widget_insert_action_group (widget, "editor-view", NULL);
-
   g_clear_object (&self->addins);
+
+  gtk_widget_insert_action_group (widget, "editor-view", NULL);
 
   g_cancellable_cancel (self->destroy_cancellable);
   g_clear_object (&self->destroy_cancellable);
