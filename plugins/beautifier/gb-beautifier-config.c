@@ -308,7 +308,7 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
   GFileInfo *child_info;
   GError *error = NULL;
   gboolean ret = FALSE;
-  gboolean ret_has_default;
+  gboolean ret_has_default = FALSE;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!ide_str_empty0 (base_path));
