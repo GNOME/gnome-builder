@@ -204,6 +204,10 @@ gbp_documentation_card_view_addin_load (IdeEditorViewAddin *addin,
                                 "position", GTK_POS_TOP,
                                 "modal", FALSE,
                                  NULL);
+  g_signal_connect (self->popover,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->popover);
   self->motion_handler_id =
     g_signal_connect_object (view,
                             "motion-notify-event",
@@ -226,10 +230,11 @@ gbp_documentation_card_view_addin_unload (IdeEditorViewAddin *addin,
 
   ide_clear_source (&self->timeout_id);
   ide_clear_signal_handler (self->editor_view, &self->motion_handler_id);
-
   g_clear_pointer (&self->previous_text, g_free);
-  gtk_widget_destroy (GTK_WIDGET (self->popover));
-  self->popover = NULL;
+
+  if (self->popover != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->popover));
+
   self->editor_view = NULL;
 
 }
