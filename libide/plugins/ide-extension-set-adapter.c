@@ -264,6 +264,38 @@ ide_extension_set_adapter_set_interface_type (IdeExtensionSetAdapter *self,
 }
 
 static void
+ide_extension_set_adapter_dispose (GObject *object)
+{
+  IdeExtensionSetAdapter *self = (IdeExtensionSetAdapter *)object;
+  g_autoptr(GHashTable) extensions = NULL;
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+
+  /*
+   * Steal the extensions so we can be re-entrant safe and not break
+   * any assumptions about extensions being a real pointer.
+   */
+  extensions = g_steal_pointer (&self->extensions);
+  self->extensions = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
+
+  g_hash_table_iter_init (&iter, extensions);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      PeasPluginInfo *plugin_info = key;
+      PeasExtension *exten = value;
+
+      remove_extension (self, plugin_info, exten);
+      g_hash_table_iter_remove (&iter);
+    }
+
+  G_OBJECT_CLASS (ide_extension_set_adapter_parent_class)->dispose (object);
+}
+
+static void
 ide_extension_set_adapter_finalize (GObject *object)
 {
   IdeExtensionSetAdapter *self = (IdeExtensionSetAdapter *)object;
@@ -355,6 +387,7 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = ide_extension_set_adapter_dispose;
   object_class->finalize = ide_extension_set_adapter_finalize;
   object_class->get_property = ide_extension_set_adapter_get_property;
   object_class->set_property = ide_extension_set_adapter_set_property;
