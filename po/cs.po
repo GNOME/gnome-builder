@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-08-09 13:26+0000\n"
-"PO-Revision-Date: 2017-08-11 03:18+0200\n"
+"POT-Creation-Date: 2017-08-20 00:09+0000\n"
+"PO-Revision-Date: 2017-08-21 01:44+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -638,27 +638,8 @@ msgid "_Quit"
 msgstr "U_končit"
 
 #: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
-#: libide/editor/ide-editor-perspective-shortcuts.c:33
-#: libide/editor/ide-editor-perspective-shortcuts.c:39
-#: libide/editor/ide-editor-perspective-shortcuts.c:45
-#: libide/editor/ide-editor-perspective-shortcuts.c:51
-#: libide/editor/ide-editor-view-shortcuts.c:31
-#: libide/editor/ide-editor-view-shortcuts.c:37
-#: libide/editor/ide-editor-view-shortcuts.c:43
-#: libide/editor/ide-editor-view-shortcuts.c:49
-#: libide/editor/ide-editor-view-shortcuts.c:55
-#: libide/editor/ide-editor-view-shortcuts.c:61
-#: libide/editor/ide-editor-view-shortcuts.c:67
-#: libide/editor/ide-editor-view-shortcuts.c:73
-#: libide/editor/ide-editor-view-shortcuts.c:79
-#: libide/layout/ide-layout-stack-shortcuts.c:32
-#: libide/layout/ide-layout-stack-shortcuts.c:39
-#: libide/layout/ide-layout-stack-shortcuts.c:46
-#: libide/layout/ide-layout-stack-shortcuts.c:53
-#: libide/layout/ide-layout-stack-shortcuts.c:60
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
-#: plugins/command-bar/gb-command-bar.c:715
 msgid "Editor"
 msgstr "Editor"
 
@@ -837,13 +818,13 @@ msgstr "_Uložit"
 msgid "Save _As"
 msgstr "Uložit j_ako"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1104
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1114
 msgid "Run"
 msgstr "Spustit"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:529
+#: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:140
 #: libide/workbench/ide-workbench.c:630
 msgid "Builder"
@@ -1042,6 +1023,75 @@ msgstr "Zadejte prosím adresu D-Bus"
 msgid "No such worker"
 msgstr "Takový sestavovací proces neexistuje"
 
+#: libide/application/ide-application-shortcuts.c:43
+#: libide/application/ide-application-shortcuts.c:51
+#: libide/application/ide-application-shortcuts.c:59
+#: libide/application/ide-application-shortcuts.c:67
+#: libide/application/ide-application-shortcuts.c:75
+#: libide/runner/ide-run-manager.c:721
+#: libide/workbench/ide-workbench-shortcuts.c:49
+#: plugins/command-bar/gb-command-bar.c:715
+#: plugins/terminal/gb-terminal-workbench-addin.c:180
+#: plugins/terminal/gb-terminal-workbench-addin.c:186
+msgctxt "shortcut window"
+msgid "Workbench shortcuts"
+msgstr "Klávesové zkratky pracovních nástrojů"
+
+#: libide/application/ide-application-shortcuts.c:44
+#: libide/application/ide-application-shortcuts.c:52
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Nápověda"
+
+#: libide/application/ide-application-shortcuts.c:45
+msgctxt "shortcut window"
+msgid "Show the help window"
+msgstr "Zobrazit okno s nápovědou"
+
+#: libide/application/ide-application-shortcuts.c:53
+msgctxt "shortcut window"
+msgid "Show the shortcuts window"
+msgstr "Zobrazit okno s klávesovými zkratkami"
+
+#: libide/application/ide-application-shortcuts.c:60
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:459
+#: plugins/command-bar/gb-command-bar.c:716
+#: plugins/terminal/gb-terminal-workbench-addin.c:181
+#: plugins/terminal/gb-terminal-workbench-addin.c:187
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Obecné"
+
+#: libide/application/ide-application-shortcuts.c:61
+msgctxt "shortcut window"
+msgid "Toggle window to fullscreen"
+msgstr "Přepnout okno na celou obrazovku"
+
+#: libide/application/ide-application-shortcuts.c:68
+#: libide/keybindings/ide-shortcuts-window.ui:527
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Hledání"
+
+#: libide/application/ide-application-shortcuts.c:69
+#| msgid "Fast global search"
+msgctxt "shortcut window"
+msgid "Focus to the global search entry"
+msgstr "Zaměřit vstupní pole pro globální vyhledávání"
+
+#: libide/application/ide-application-shortcuts.c:76
+#: libide/keybindings/ide-shortcuts-window.ui:405
+#: libide/runner/ide-run-manager.c:722
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Sestavit a spustit"
+
+#: libide/application/ide-application-shortcuts.c:77
+msgctxt "shortcut window"
+msgid "Trigger a build"
+msgstr "Spustit sestavení"
+
 #: libide/buffers/ide-buffer.c:2604
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
@@ -1131,7 +1181,6 @@ msgstr "Smazat konfiguraci"
 #: libide/buildui/ide-build-configuration-view.ui:11
 #: libide/preferences/ide-preferences-builtin.c:318
 #: libide/preferences/ide-preferences-builtin.c:380
-#: plugins/command-bar/gb-command-bar.c:716
 msgid "General"
 msgstr "Obecné"
 
@@ -1186,7 +1235,7 @@ msgstr "Proměnné prostředí"
 msgid "Save File"
 msgstr "Uložení souboru"
 
-#: libide/buildui/ide-build-log-panel.c:741
+#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:47
 #: libide/greeter/ide-greeter-perspective.ui:326
 #: libide/greeter/ide-greeter-perspective.ui:374
 msgid "_Cancel"
@@ -1413,38 +1462,73 @@ msgstr "Otevřít"
 msgid "Cancel"
 msgstr "Zrušit"
 
+#: libide/editor/ide-editor-perspective-shortcuts.c:33
+#: libide/editor/ide-editor-perspective-shortcuts.c:39
+#: libide/editor/ide-editor-perspective-shortcuts.c:45
+#: libide/editor/ide-editor-perspective-shortcuts.c:51
+#: libide/editor/ide-editor-view-shortcuts.c:31
+#: libide/editor/ide-editor-view-shortcuts.c:37
+#: libide/editor/ide-editor-view-shortcuts.c:43
+#: libide/editor/ide-editor-view-shortcuts.c:49
+#: libide/editor/ide-editor-view-shortcuts.c:55
+#: libide/editor/ide-editor-view-shortcuts.c:61
+#: libide/editor/ide-editor-view-shortcuts.c:67
+#: libide/editor/ide-editor-view-shortcuts.c:73
+#: libide/editor/ide-editor-view-shortcuts.c:79
+#: libide/layout/ide-layout-stack-shortcuts.c:32
+#: libide/layout/ide-layout-stack-shortcuts.c:39
+#: libide/layout/ide-layout-stack-shortcuts.c:46
+#: libide/layout/ide-layout-stack-shortcuts.c:53
+#: libide/layout/ide-layout-stack-shortcuts.c:60
+#: plugins/beautifier/gb-beautifier-editor-addin.c:332
+#: plugins/comment-code/gbp-comment-code-view-addin.c:370
+#: plugins/comment-code/gbp-comment-code-view-addin.c:376
+#: plugins/project-tree/gb-project-tree-shortcuts.c:33
+#: plugins/project-tree/gb-project-tree-shortcuts.c:39
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:100
+msgctxt "shortcut window"
+msgid "Editor shortcuts"
+msgstr "Klávesové zkratky editoru"
+
 #: libide/editor/ide-editor-perspective-shortcuts.c:34
 #: libide/editor/ide-editor-perspective-shortcuts.c:40
 #: libide/editor/ide-editor-view-shortcuts.c:32
 #: libide/editor/ide-editor-view-shortcuts.c:38
+#: libide/keybindings/ide-shortcuts-window.ui:96
 #: libide/layout/ide-layout-stack-shortcuts.c:33
 #: libide/layout/ide-layout-stack-shortcuts.c:40
 #: libide/layout/ide-layout-stack-shortcuts.c:47
 #: libide/layout/ide-layout-stack-shortcuts.c:54
 #: libide/layout/ide-layout-stack-shortcuts.c:61
+msgctxt "shortcut window"
 msgid "Files"
 msgstr "Soubory"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:35
+msgctxt "shortcut window"
 msgid "Create a new document"
 msgstr "Vytvořit nový dokument"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:41
+#: libide/keybindings/ide-shortcuts-window.ui:108
+msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Otevřít dokument"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:46
 #: libide/editor/ide-editor-perspective-shortcuts.c:52
+#: libide/keybindings/ide-shortcuts-window.ui:69
+msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Panely"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:47
-#: libide/editor/ide-editor-workbench-addin.c:150
+msgctxt "shortcut window"
 msgid "Toggle navigation panel"
 msgstr "Přepnout navigační panel"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:53
-#: libide/editor/ide-editor-workbench-addin.c:164
+msgctxt "shortcut window"
 msgid "Toggle utilities panel"
 msgstr "Přepnout panel s pomůckami"
 
@@ -1587,10 +1671,13 @@ msgid "Save As"
 msgstr "Uložit jako"
 
 #: libide/editor/ide-editor-view-shortcuts.c:33
+#: libide/keybindings/ide-shortcuts-window.ui:115
+msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Uložit dokument"
 
 #: libide/editor/ide-editor-view-shortcuts.c:39
+msgctxt "shortcut window"
 msgid "Save the document with a new name"
 msgstr "Uložit dokument pod novým názvem"
 
@@ -1602,32 +1689,62 @@ msgstr "Uložit dokument pod novým názvem"
 #: libide/editor/ide-editor-view-shortcuts.c:68
 #: libide/editor/ide-editor-view-shortcuts.c:74
 #: libide/editor/ide-editor-view-shortcuts.c:80
+#: libide/keybindings/ide-shortcuts-window.ui:151
+#: libide/keybindings/ide-shortcuts-window.ui:163
+msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Hledání a nahrazování"
 
 #: libide/editor/ide-editor-view-shortcuts.c:45
+#: libide/keybindings/ide-shortcuts-window.ui:156
+msgctxt "shortcut window"
 msgid "Find"
 msgstr "Hledat"
 
 #: libide/editor/ide-editor-view-shortcuts.c:57
+msgctxt "shortcut window"
 msgid "Move to the next match"
 msgstr "Přejít na následující výskyt"
 
 #: libide/editor/ide-editor-view-shortcuts.c:63
+msgctxt "shortcut window"
 msgid "Move to the previous match"
 msgstr "Přejít na předchozí výskyt"
 
 #: libide/editor/ide-editor-view-shortcuts.c:69
+msgctxt "shortcut window"
 msgid "Move to the next error"
 msgstr "Přejít na následující chybu"
 
 #: libide/editor/ide-editor-view-shortcuts.c:75
+msgctxt "shortcut window"
 msgid "Move to the previous error"
 msgstr "Přejít na předchozí chybu"
 
 #: libide/editor/ide-editor-view-shortcuts.c:81
+#: libide/keybindings/ide-shortcuts-window.ui:170
+msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Najít následující výskyt"
+
+#: libide/editor/ide-editor-view.ui:39
+msgid "_Reload"
+msgstr "Z_novu načíst"
+
+#: libide/editor/ide-editor-view.ui:60
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Builder zjistil, že tento soubor byl externě změněn. Chcete jej znovu načíst?"
+
+#: libide/editor/ide-editor-workbench-addin.c:150
+msgid "Toggle navigation panel"
+msgstr "Přepnout navigační panel"
+
+#: libide/editor/ide-editor-workbench-addin.c:164
+msgid "Toggle utilities panel"
+msgstr "Přepnout panel s pomůckami"
 
 #: libide/greeter/ide-greeter-perspective.c:456
 msgid "Failed to load the project"
@@ -1711,11 +1828,11 @@ msgstr "Selhala inicializace výchozích hodnot."
 msgid "You must call %s() before using libide."
 msgstr "Před použitím libide musíte zavolat %s()."
 
-#: libide/ide-context.c:2066
+#: libide/ide-context.c:2118
 msgid "An unload request is already pending"
 msgstr "Nějaký požadavek na odstranění z paměti již probíhá"
 
-#: libide/ide-context.c:2185
+#: libide/ide-context.c:2237
 msgid "Context has already been restored."
 msgstr "Kontext již byl obnoven."
 
@@ -1742,12 +1859,6 @@ msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Klávesové zkratky editoru"
 
-#: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:459
-msgctxt "shortcut window"
-msgid "General"
-msgstr "Obecné"
-
 #: libide/keybindings/ide-shortcuts-window.ui:18
 #: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
@@ -1762,18 +1873,21 @@ msgstr "Předvolby"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
 #: libide/keybindings/ide-shortcuts-window.ui:477
+#: plugins/command-bar/gb-command-bar.c:717
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Příkazová lišta"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
 #: libide/keybindings/ide-shortcuts-window.ui:484
+#: plugins/terminal/gb-terminal-workbench-addin.c:182
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminál"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
 #: libide/keybindings/ide-shortcuts-window.ui:491
+#: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminál v běhovém prostředí sestavení"
@@ -1788,11 +1902,6 @@ msgstr "Klávesové zkratky"
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
 msgstr "Přepnout režim zaměřování"
-
-#: libide/keybindings/ide-shortcuts-window.ui:69
-msgctxt "shortcut window"
-msgid "Panels"
-msgstr "Panely"
 
 #: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
@@ -1809,271 +1918,237 @@ msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Přepnout spodní panel"
 
-#: libide/keybindings/ide-shortcuts-window.ui:96
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Dotyková gesta"
-
 #: libide/keybindings/ide-shortcuts-window.ui:101
-#: libide/keybindings/ide-shortcuts-window.ui:149
-msgctxt "shortcut window"
-msgid "Switch to the next document"
-msgstr "Přepnout na následující dokument"
-
-#: libide/keybindings/ide-shortcuts-window.ui:108
-#: libide/keybindings/ide-shortcuts-window.ui:156
-msgctxt "shortcut window"
-msgid "Switch to the previous document"
-msgstr "Přepnout na předchozí dokument"
-
-#: libide/keybindings/ide-shortcuts-window.ui:116
-msgctxt "shortcut window"
-msgid "Files"
-msgstr "Soubory"
-
-#: libide/keybindings/ide-shortcuts-window.ui:121
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Vytvořit nový dokument"
 
-#: libide/keybindings/ide-shortcuts-window.ui:128
-msgctxt "shortcut window"
-msgid "Open a document"
-msgstr "Otevřít dokument"
-
-#: libide/keybindings/ide-shortcuts-window.ui:135
-msgctxt "shortcut window"
-msgid "Save the document"
-msgstr "Uložit dokument"
-
-#: libide/keybindings/ide-shortcuts-window.ui:142
+#: libide/keybindings/ide-shortcuts-window.ui:122
+#: libide/layout/ide-layout-stack-shortcuts.c:62
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Zavřít dokument"
 
-#: libide/keybindings/ide-shortcuts-window.ui:163
+#: libide/keybindings/ide-shortcuts-window.ui:129
+#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/layout/ide-layout-stack-shortcuts.c:55
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Přepnout na následující dokument"
+
+#: libide/keybindings/ide-shortcuts-window.ui:136
+#: libide/keybindings/ide-shortcuts-window.ui:444
+#: libide/layout/ide-layout-stack-shortcuts.c:48
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Přepnout na předchozí dokument"
+
+#: libide/keybindings/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Zobrazit seznam otevřených dokumentů"
 
-#: libide/keybindings/ide-shortcuts-window.ui:171
-#: libide/keybindings/ide-shortcuts-window.ui:183
-msgctxt "shortcut window"
-msgid "Find and replace"
-msgstr "Hledání a nahrazování"
-
-#: libide/keybindings/ide-shortcuts-window.ui:176
-msgctxt "shortcut window"
-msgid "Find"
-msgstr "Hledat"
-
-#: libide/keybindings/ide-shortcuts-window.ui:190
-msgctxt "shortcut window"
-msgid "Find the next match"
-msgstr "Najít následující výskyt"
-
-#: libide/keybindings/ide-shortcuts-window.ui:197
+#: libide/keybindings/ide-shortcuts-window.ui:177
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Najít předchozí výskyt"
 
-#: libide/keybindings/ide-shortcuts-window.ui:204
+#: libide/keybindings/ide-shortcuts-window.ui:184
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Zrušit zvýrazňování"
 
-#: libide/keybindings/ide-shortcuts-window.ui:212
+#: libide/keybindings/ide-shortcuts-window.ui:192
 #: libide/keybindings/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopírování a vkládání"
 
-#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:197
 #: libide/keybindings/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Zkopírovat vybraný text do schránky"
 
-#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:204
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Vyjmout vybraný text do schránky"
 
-#: libide/keybindings/ide-shortcuts-window.ui:231
+#: libide/keybindings/ide-shortcuts-window.ui:211
 #: libide/keybindings/ide-shortcuts-window.ui:519
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Vložit vybraný text ze schránky"
 
-#: libide/keybindings/ide-shortcuts-window.ui:238
+#: libide/keybindings/ide-shortcuts-window.ui:218
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Duplikovat aktuální řádek nebo výběr"
 
-#: libide/keybindings/ide-shortcuts-window.ui:246
+#: libide/keybindings/ide-shortcuts-window.ui:226
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Zpět a znovu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:251
+#: libide/keybindings/ide-shortcuts-window.ui:231
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Vrátit zpět předchozí příkaz"
 
-#: libide/keybindings/ide-shortcuts-window.ui:258
+#: libide/keybindings/ide-shortcuts-window.ui:238
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Znovu provést předchozí příkaz"
 
-#: libide/keybindings/ide-shortcuts-window.ui:266
+#: libide/keybindings/ide-shortcuts-window.ui:246
+#: plugins/beautifier/gb-beautifier-editor-addin.c:333
+#: plugins/comment-code/gbp-comment-code-view-addin.c:371
+#: plugins/comment-code/gbp-comment-code-view-addin.c:377
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:101
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Úpravy"
 
-#: libide/keybindings/ide-shortcuts-window.ui:271
+#: libide/keybindings/ide-shortcuts-window.ui:251
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "Zvýšit číslo pod kurozorem"
 
-#: libide/keybindings/ide-shortcuts-window.ui:278
+#: libide/keybindings/ide-shortcuts-window.ui:258
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "Snížit číslo pod kurzorem"
 
-#: libide/keybindings/ide-shortcuts-window.ui:285
+#: libide/keybindings/ide-shortcuts-window.ui:265
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Spojit vybrané řádky"
 
-#: libide/keybindings/ide-shortcuts-window.ui:292
+#: libide/keybindings/ide-shortcuts-window.ui:272
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Zobrazit okno pro dokončování"
 
-#: libide/keybindings/ide-shortcuts-window.ui:299
+#: libide/keybindings/ide-shortcuts-window.ui:279
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Přepnout režim přepisování"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
+#: libide/keybindings/ide-shortcuts-window.ui:286
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Znovu odsadit řádek"
 
-#: libide/keybindings/ide-shortcuts-window.ui:313
+#: libide/keybindings/ide-shortcuts-window.ui:293
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Smazat řádek"
 
-#: libide/keybindings/ide-shortcuts-window.ui:320
+#: libide/keybindings/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
-#: libide/keybindings/ide-shortcuts-window.ui:321
+#: libide/keybindings/ide-shortcuts-window.ui:301
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Vyžaduje podporu sémantiky jazyka"
 
-#: libide/keybindings/ide-shortcuts-window.ui:329
+#: libide/keybindings/ide-shortcuts-window.ui:309
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Pohyb"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Přesunout se v souboru na následující chybu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:321
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Přesunout se v souboru na předchozí chybu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:328
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Přesunout se na předchozí místo úprav"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:335
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Přesunout se na následující místo úprav"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:342
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Přesunout se na definici symbolu"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:349
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Posunout se výše pohledem na soubor"
 
-#: libide/keybindings/ide-shortcuts-window.ui:376
+#: libide/keybindings/ide-shortcuts-window.ui:356
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Posunout se níže pohledem na soubor"
 
-#: libide/keybindings/ide-shortcuts-window.ui:383
+#: libide/keybindings/ide-shortcuts-window.ui:363
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Posunout se na konec pohledem na soubor"
 
-#: libide/keybindings/ide-shortcuts-window.ui:390
+#: libide/keybindings/ide-shortcuts-window.ui:370
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Posunout se na začátek pohledem na soubor"
 
-#: libide/keybindings/ide-shortcuts-window.ui:397
+#: libide/keybindings/ide-shortcuts-window.ui:377
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
 msgstr "Přesunout se na odpovídající závorku"
 
-#: libide/keybindings/ide-shortcuts-window.ui:405
+#: libide/keybindings/ide-shortcuts-window.ui:385
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Výběr"
 
-#: libide/keybindings/ide-shortcuts-window.ui:410
+#: libide/keybindings/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: libide/keybindings/ide-shortcuts-window.ui:417
+#: libide/keybindings/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Zrušit všechen výběr"
 
-#: libide/keybindings/ide-shortcuts-window.ui:425
-msgctxt "shortcut window"
-msgid "Build and Run"
-msgstr "Sestavit a spustit"
-
-#: libide/keybindings/ide-shortcuts-window.ui:430
+#: libide/keybindings/ide-shortcuts-window.ui:410
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "Sestavit"
 
-#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/keybindings/ide-shortcuts-window.ui:417
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Spustit"
 
-#: libide/keybindings/ide-shortcuts-window.ui:444
+#: libide/keybindings/ide-shortcuts-window.ui:424
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profilovat"
+
+#: libide/keybindings/ide-shortcuts-window.ui:432
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Dotyková gesta"
 
 #: libide/keybindings/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Klávesové zkratky terminálu"
-
-#: libide/keybindings/ide-shortcuts-window.ui:527
-msgctxt "shortcut window"
-msgid "Search"
-msgstr "Hledání"
 
 #: libide/keybindings/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
@@ -2102,24 +2177,14 @@ msgid "New documentation"
 msgstr "Nová dokumentace"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:34
+msgctxt "shortcut window"
 msgid "Move document to the right"
 msgstr "Přesunout dokument doprava"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:41
+msgctxt "shortcut window"
 msgid "Move document to the left"
 msgstr "Přesunout dokument doleva"
-
-#: libide/layout/ide-layout-stack-shortcuts.c:48
-msgid "Switch to the previous document"
-msgstr "Přepnout na předchozí dokument"
-
-#: libide/layout/ide-layout-stack-shortcuts.c:55
-msgid "Switch to the next document"
-msgstr "Přepnout na následující dokument"
-
-#: libide/layout/ide-layout-stack-shortcuts.c:62
-msgid "Close the document"
-msgstr "Zavřít dokument"
 
 #: libide/layout/ide-layout-stack.ui:30
 msgid "Open a File or Terminal"
@@ -2197,7 +2262,7 @@ msgstr "editor font písmo monospace"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
-#: plugins/terminal/gb-terminal-workbench-addin.c:202
+#: plugins/terminal/gb-terminal-workbench-addin.c:248
 #: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Terminál"
@@ -2823,19 +2888,26 @@ msgstr "Zobrazovat nabídku pracovních nástrojů"
 msgid "Press Ctrl+. to search"
 msgstr "Zmáčknutím Ctrl+. můžete hledat"
 
+#: libide/workbench/ide-workbench-shortcuts.c:50
+msgctxt "shortcut window"
+msgid "Perspectives"
+msgstr "Pohledy"
+
 #: plugins/autotools/ide-autotools-makecache-stage.c:194
 msgid "Building cache…"
 msgstr "Mezipaměť sestavení…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
+#: plugins/meson-templates/meson_templates/__init__.py:287
 msgid "Shared Library"
 msgstr "Sdílená knihovna"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
-msgstr "Vytvořit nový projekt se sdílenou knihovnou používající autotools"
+msgstr "Vytvořit nový projekt se sdílenou knihovnou a používající autotools"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
+#: plugins/meson-templates/meson_templates/__init__.py:304
 msgid "Empty Project"
 msgstr "Prázdný projekt"
 
@@ -2844,6 +2916,7 @@ msgid "Create a new empty autotools project"
 msgstr "Vytvořit nový prázdný projekt s autotools"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
+#: plugins/meson-templates/meson_templates/__init__.py:234
 msgid "GNOME Application"
 msgstr "Aplikace GNOME"
 
@@ -2851,14 +2924,24 @@ msgstr "Aplikace GNOME"
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Vytvořit novou aplikaci GNOME připravenou pro flatpak"
 
-#: plugins/beautifier/gb-beautifier-workbench-addin.c:190
+#: plugins/beautifier/gb-beautifier-editor-addin.c:235
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "Pro jazyk „%s“ není k dispozici žádné uhlazování kódu"
 
-#: plugins/beautifier/gb-beautifier-workbench-addin.c:192
+#: plugins/beautifier/gb-beautifier-editor-addin.c:237
 msgid "No beautifier available"
 msgstr "Není k dispozici žádné uhlazování kódu"
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:334
+msgctxt "shortcut window"
+msgid "Beautify the code"
+msgstr "Uhladit kód"
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:335
+msgctxt "shortcut window"
+msgid "Trigger the default entry"
+msgstr "Spustit výchozí pole"
 
 #: plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
@@ -3108,10 +3191,6 @@ msgstr "Příkaz nebyl nalezen: %s"
 msgid "Use the entry below to execute a command"
 msgstr "Použijte pole níže k provedení příkazu"
 
-#: plugins/command-bar/gb-command-bar.c:717
-msgid "Command Bar"
-msgstr "Příkazová lišta"
-
 #: plugins/command-bar/gb-vim.c:87
 msgid "Number required"
 msgstr "Požadováno číslo"
@@ -3161,6 +3240,16 @@ msgstr "Neplatný požadavek na hledání a nahrazování"
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nejedná se o příkaz: %s"
+
+#: plugins/comment-code/gbp-comment-code-view-addin.c:372
+msgctxt "shortcut window"
+msgid "Comment the code"
+msgstr "Zakomentovat kód"
+
+#: plugins/comment-code/gbp-comment-code-view-addin.c:378
+msgctxt "shortcut window"
+msgid "Uncomment the code"
+msgstr "Odkomentovat kód"
 
 #: plugins/comment-code/gtk/menus.ui:9
 msgid "Comment code"
@@ -3308,7 +3397,6 @@ msgstr "Vyberte šablonu"
 msgid "Select Documentation…"
 msgstr "Vybrat dokumentaci"
 
-#: plugins/devhelp/gbp-devhelp-panel.c:194
 #: plugins/devhelp/gbp-devhelp-view.c:206 plugins/devhelp/gtk/menus.ui:5
 msgid "Documentation"
 msgstr "Dokumentace"
@@ -3316,6 +3404,12 @@ msgstr "Dokumentace"
 #: plugins/devhelp/gtk/menus.ui:21
 msgid "New Documentation Page"
 msgstr "Nová stránka s dokumentací"
+
+#: plugins/documentation-card/gbp-documentation-card.ui:36
+#| msgid "Show %u more runtime"
+#| msgid_plural "show %u more runtimes"
+msgid "_Show more"
+msgstr "Zobrazit ví_ce"
 
 #: plugins/eslint/eslint_plugin/__init__.py:105
 msgid "ESlint"
@@ -3575,21 +3669,25 @@ msgstr "Ve vašem počítači schází python3-sphinx"
 msgid "(Preview)"
 msgstr "(náhled)"
 
-#: plugins/jedi/jedi_plugin.py:738
+#: plugins/jedi/jedi_plugin.py:752
 msgid "Suggest Python completions"
 msgstr "Navrhovat dokončování pro Python"
 
-#: plugins/jedi/jedi_plugin.py:739
+#: plugins/jedi/jedi_plugin.py:753
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
-#: plugins/meson-templates/meson_templates/__init__.py:206
-msgid "Empty Meson Project"
-msgstr "Prázdný projekt Meson"
+#: plugins/meson-templates/meson_templates/__init__.py:236
+msgid "Create a new GNOME application"
+msgstr "Vytvořit novou aplikaci GNOME"
 
-#: plugins/meson-templates/meson_templates/__init__.py:208
-msgid "Create a new empty meson project"
-msgstr "Vytvořit nový prázdný projekt s meson"
+#: plugins/meson-templates/meson_templates/__init__.py:289
+msgid "Create a new project with a shared library"
+msgstr "Vytvořit nový projekt se sdílenou knihovnou"
+
+#: plugins/meson-templates/meson_templates/__init__.py:306
+msgid "Create a new empty project"
+msgstr "Vytvořit nový prázdný projekt"
 
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
@@ -3653,6 +3751,22 @@ msgstr "Prázdný"
 #, c-format
 msgid "Rename %s"
 msgstr "Přejmenovat %s"
+
+#: plugins/project-tree/gb-project-tree-shortcuts.c:34
+#: plugins/project-tree/gb-project-tree-shortcuts.c:40
+msgctxt "shortcut window"
+msgid "Project tree"
+msgstr "Strom projektu"
+
+#: plugins/project-tree/gb-project-tree-shortcuts.c:35
+msgctxt "shortcut window"
+msgid "Rename a file"
+msgstr "Přejmenovat soubor"
+
+#: plugins/project-tree/gb-project-tree-shortcuts.c:41
+msgctxt "shortcut window"
+msgid "Move a file to the trash"
+msgstr "Přesunout soubor do koše"
 
 #: plugins/project-tree/gtk/menus.ui:6
 msgid "Re_veal in Project Tree"
@@ -3862,6 +3976,11 @@ msgstr "pro přidání nové sady programátorských nástrojů."
 msgid "Spelling"
 msgstr "Pravopis"
 
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:102
+msgctxt "shortcut window"
+msgid "Show the spellchecker panel"
+msgstr "Zobrazovat panel kontroly pravopisu"
+
 #: plugins/spellcheck/gbp-spell-language-popover.c:232
 msgid "No language selected"
 msgstr "Není vybrán žádný jazyk"
@@ -4032,7 +4151,7 @@ msgstr "Uložení obsahu terminálu jako"
 msgid "Untitled terminal"
 msgstr "Nepojmenovaný terminál"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:142
+#: plugins/terminal/gb-terminal-workbench-addin.c:144
 msgid "Application Output"
 msgstr "Výstup aplikace"
 
@@ -4086,3 +4205,39 @@ msgstr "Selhalo vytvoření stromu XML"
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Vyrovnávací paměť byla načtena, ale není ve správci vyrovnávacích pamětí."
+
+#~ msgid "Files"
+#~ msgstr "Soubory"
+
+#~ msgid "Open a document"
+#~ msgstr "Otevřít dokument"
+
+#~ msgid "Panels"
+#~ msgstr "Panely"
+
+#~ msgid "Save the document"
+#~ msgstr "Uložit dokument"
+
+#~ msgid "Find and replace"
+#~ msgstr "Hledání a nahrazování"
+
+#~ msgid "Find"
+#~ msgstr "Hledat"
+
+#~ msgid "Find the next match"
+#~ msgstr "Najít následující výskyt"
+
+#~ msgid "Switch to the previous document"
+#~ msgstr "Přepnout na předchozí dokument"
+
+#~ msgid "Switch to the next document"
+#~ msgstr "Přepnout na následující dokument"
+
+#~ msgid "Close the document"
+#~ msgstr "Zavřít dokument"
+
+#~ msgid "Command Bar"
+#~ msgstr "Příkazová lišta"
+
+#~ msgid "Empty Meson Project"
+#~ msgstr "Prázdný projekt Meson"
