@@ -382,13 +382,14 @@ ide_editor_view_addin_added (IdeExtensionSetAdapter *set,
                              gpointer                user_data)
 {
   IdeEditorView *self = user_data;
+  IdeEditorViewAddin *addin = (IdeEditorViewAddin *)exten;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
+  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
-  ide_editor_view_addin_load (IDE_EDITOR_VIEW_ADDIN (exten), self);
+  ide_editor_view_addin_load (addin, self);
 }
 
 static void
@@ -398,13 +399,14 @@ ide_editor_view_addin_removed (IdeExtensionSetAdapter *set,
                                gpointer                user_data)
 {
   IdeEditorView *self = user_data;
+  IdeEditorViewAddin *addin = (IdeEditorViewAddin *)exten;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (exten));
+  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
-  ide_editor_view_addin_unload (IDE_EDITOR_VIEW_ADDIN (exten), self);
+  ide_editor_view_addin_unload (addin, self);
 }
 
 static void
