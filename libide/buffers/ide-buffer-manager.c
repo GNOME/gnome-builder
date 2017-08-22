@@ -188,7 +188,6 @@ unref_if_non_null (gpointer data)
   if (data != NULL)
     g_object_unref (data);
 }
-
 /**
  * ide_buffer_manager_get_auto_save_timeout:
  *
@@ -395,8 +394,6 @@ ide_buffer_manager_track_buffer (IdeBufferManager *self,
   if (self->auto_save)
     register_auto_save (self, buffer);
 
-  gtk_source_completion_words_register (self->word_completion, GTK_TEXT_BUFFER (buffer));
-
   g_signal_connect_object (buffer,
                            "changed",
                            G_CALLBACK (ide_buffer_manager_buffer_changed),
@@ -476,7 +473,6 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
   /* Stealing ownership from self->buffers */
   g_ptr_array_remove_index (self->buffers, position);
 
-  gtk_source_completion_words_unregister (self->word_completion, GTK_TEXT_BUFFER (buffer));
 
   unregister_auto_save (self, buffer);
 
