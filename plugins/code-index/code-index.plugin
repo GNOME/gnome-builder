@@ -1,0 +1,9 @@
+[Plugin]
+Module=code-index-plugin
+Name=Code Index
+Description=Manages Code Index and does Global Search and Jump to Definition using Code Index.
+Authors=Anoop Chandu <anoopchandu96@gmail.com>
+Copyright=Copyright © 2017 Anoop Chandu
+Builtin=true
+X-Symbol-Resolver-Languages=c,chdr,cpp
+X-Symbol-Resolver-Languages-Priority=200
