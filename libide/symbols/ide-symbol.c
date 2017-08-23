@@ -191,8 +191,12 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
 
   switch (kind)
     {
-    case IDE_SYMBOL_FUNCTION:
-      icon_name = "lang-function-symbolic";
+    case IDE_SYMBOL_ALIAS:
+      icon_name = "lang-typedef-symbolic";
+      break;
+
+    case IDE_SYMBOL_CLASS:
+      icon_name = "lang-class-symbolic";
       break;
 
     case IDE_SYMBOL_ENUM:
@@ -203,26 +207,34 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
       icon_name = "lang-enum-value-symbolic";
       break;
 
-    case IDE_SYMBOL_STRUCT:
-      icon_name = "lang-struct-symbolic";
+    case IDE_SYMBOL_FUNCTION:
+      icon_name = "lang-function-symbolic";
       break;
 
-    case IDE_SYMBOL_CLASS:
-      icon_name = "lang-class-symbolic";
+    case IDE_SYMBOL_MACRO:
+      icon_name = "lang-define-symbolic";
       break;
 
     case IDE_SYMBOL_METHOD:
       icon_name = "lang-method-symbolic";
       break;
 
-    case IDE_SYMBOL_UNION:
-      icon_name = "lang-union-symbolic";
+    case IDE_SYMBOL_NAMESPACE:
+      icon_name = "lang-namespace-symbolic";
+      break;
+
+    case IDE_SYMBOL_STRUCT:
+      icon_name = "lang-struct-symbolic";
       break;
 
     case IDE_SYMBOL_SCALAR:
     case IDE_SYMBOL_FIELD:
     case IDE_SYMBOL_VARIABLE:
       icon_name = "lang-variable-symbolic";
+      break;
+
+    case IDE_SYMBOL_UNION:
+      icon_name = "lang-union-symbolic";
       break;
 
     case IDE_SYMBOL_ARRAY:
@@ -233,12 +245,12 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
     case IDE_SYMBOL_HEADER:
     case IDE_SYMBOL_INTERFACE:
     case IDE_SYMBOL_MODULE:
-    case IDE_SYMBOL_NAMESPACE:
     case IDE_SYMBOL_NUMBER:
     case IDE_SYMBOL_NONE:
     case IDE_SYMBOL_PACKAGE:
     case IDE_SYMBOL_PROPERTY:
     case IDE_SYMBOL_STRING:
+    case IDE_SYMBOL_TEMPLATE:
     case IDE_SYMBOL_KEYWORD:
       icon_name = NULL;
       break;
