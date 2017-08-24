@@ -12,7 +12,7 @@
   bind "<ctrl><shift>e" { "add-cursor" (column) };
   bind "<ctrl><shift>d" { "add-cursor" (match) };
   bind "<alt>period" { "goto-definition" () };
-  bind "<ctrl>k" { "action" ("view-stack", "show-list", "") };
+  bind "<ctrl>k" { "action" ("layoutstack", "show-list", "") };
   bind "<ctrl>d" { "delete-from-cursor" (paragraphs, 1) };
   bind "<ctrl>j" { "join-lines" () };
   bind "<ctrl>u" { "change-case" (upper) };
@@ -27,10 +27,10 @@
   bind "<ctrl>0" { "reset-font-size" () };
 
   /* cycle "tabs" */
-  bind "<ctrl><alt>Page_Up" { "action" ("view-stack", "previous-view", "") };
-  bind "<ctrl><alt>KP_Page_Up" { "action" ("view-stack", "previous-view", "") };
-  bind "<ctrl><alt>Page_Down" { "action" ("view-stack", "next-view", "") };
-  bind "<ctrl><alt>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
+  bind "<ctrl><alt>Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl><alt>KP_Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl><alt>Page_Down" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl><alt>KP_Page_Down" { "action" ("layoutstack", "next-view", "") };
 
   bind "F2" { "clear-selection" ()
               "movement" (previous-word-end, 0, 1, 1)
