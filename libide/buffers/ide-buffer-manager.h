@@ -26,6 +26,7 @@
 
 #include "files/ide-file.h"
 #include "workbench/ide-workbench.h"
+#include "sourceview/ide-word-completion-provider.h"
 
 G_BEGIN_DECLS
 
@@ -67,7 +68,7 @@ IdeBuffer                *ide_buffer_manager_get_focus_buffer    (IdeBufferManag
 void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManager     *self,
                                                                   IdeBuffer            *buffer);
 GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManager     *self);
-GtkSourceCompletionWords *ide_buffer_manager_get_word_completion (IdeBufferManager     *self);
+IdeWordCompletionProvider *ide_buffer_manager_get_word_completion (IdeBufferManager     *self);
 guint                     ide_buffer_manager_get_n_buffers       (IdeBufferManager     *self);
 gboolean                  ide_buffer_manager_has_file            (IdeBufferManager     *self,
                                                                   GFile                *file);

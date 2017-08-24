@@ -56,6 +56,7 @@ struct _IdeBufferManager
   GHashTable               *timeouts;
   IdeBuffer                *focus_buffer;
   GtkSourceCompletionWords *word_completion;
+  IdeWordCompletionProvider *word_completion_provider;
   GSettings                *settings;
   GHashTable               *loading;
 
@@ -1421,7 +1422,7 @@ ide_buffer_manager_get_property (GObject    *object,
       break;
 
     case PROP_MINIMUM_WORD_SIZE:
-      g_object_get_property (G_OBJECT (self->word_completion), "minimum-word-size", value);
+      g_object_get_property (G_OBJECT (self->word_completion_provider), "minimum-word-size", value);
       break;
 
     default:
@@ -1452,7 +1453,7 @@ ide_buffer_manager_set_property (GObject      *object,
       break;
 
     case PROP_MINIMUM_WORD_SIZE:
-      g_object_set_property (G_OBJECT (self->word_completion), "minimum-word-size", value);
+      g_object_set_property (G_OBJECT (self->word_completion_provider), "minimum-word-size", value);
       break;
 
     default:
@@ -1669,6 +1670,7 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->max_file_size = MAX_FILE_SIZE_BYTES_DEFAULT;
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->word_completion = g_object_new (IDE_TYPE_COMPLETION_WORDS, NULL);
+  self->word_completion_provider = g_object_new (IDE_TYPE_WORD_COMPLETION_PROVIDER, NULL);
   self->settings = g_settings_new ("org.gnome.builder.editor");
   self->loading = g_hash_table_new_full ((GHashFunc)ide_file_hash,
                                          (GEqualFunc)ide_file_equal,
@@ -1763,12 +1765,12 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
  *
  * Returns: (transfer none): A #GtkSourceCompletionWords
  */
-GtkSourceCompletionWords *
+IdeWordCompletionProvider *
 ide_buffer_manager_get_word_completion (IdeBufferManager *self)
 {
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
 
-  return self->word_completion;
+  return self->word_completion_provider;
 }
 
 /**

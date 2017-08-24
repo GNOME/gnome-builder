@@ -781,7 +781,7 @@ ide_source_view_reload_word_completion (IdeSourceView *self)
     {
       IdeBufferManager *bufmgr;
       GtkSourceCompletion *completion;
-      GtkSourceCompletionWords *words;
+      IdeWordCompletionProvider *words;
       GList *list;
 
       bufmgr = ide_context_get_buffer_manager (context);
