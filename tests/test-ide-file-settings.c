@@ -18,11 +18,15 @@
 
 #include <ide.h>
 
+#include "application/ide-application-tests.h"
 #include "editorconfig/ide-editorconfig-file-settings.h"
 
 static void
-test_filesettings (void)
+test_filesettings (GCancellable        *cancellable,
+                   GAsyncReadyCallback  callback,
+                   gpointer             user_data)
 {
+  g_autoptr(GTask) task = g_task_new (NULL, cancellable, callback, user_data);
   IdeFileSettings *settings = NULL;
   IdeContext *dummy;
   IdeFile *file;
@@ -91,6 +95,8 @@ test_filesettings (void)
   g_clear_object (&file);
   g_clear_object (&gfile);
   g_clear_object (&dummy);
+
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -99,13 +105,12 @@ test_editorconfig_new_cb (GObject      *object,
                           gpointer      user_data)
 {
   GAsyncInitable *initable = (GAsyncInitable *)object;
-  GMainLoop *main_loop = user_data;
   IdeFileSettings *settings;
+  g_autoptr(GTask) task = user_data;
   GObject *res;
   GError *error = NULL;
 
   g_assert (G_IS_ASYNC_INITABLE (initable));
-  g_assert (main_loop != NULL);
 
   res = g_async_initable_new_finish (initable, result, &error);
   g_assert_no_error (error);
@@ -120,13 +125,15 @@ test_editorconfig_new_cb (GObject      *object,
   g_assert_cmpstr (ide_file_settings_get_encoding (settings), ==, "utf-8");
   g_assert_cmpint (ide_file_settings_get_indent_style (settings), ==, IDE_INDENT_STYLE_SPACES);
 
-  g_main_loop_quit (main_loop);
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
-test_editorconfig (void)
+test_editorconfig (GCancellable        *cancellable,
+                   GAsyncReadyCallback  callback,
+                   gpointer             user_data)
 {
-  GMainLoop *main_loop;
+  g_autoptr(GTask) task = g_task_new (NULL, cancellable, callback, user_data);
   IdeContext *dummy;
   IdeFile *file;
   GFile *gfile;
@@ -139,20 +146,15 @@ test_editorconfig (void)
                        "path", TEST_DATA_DIR"/project1/test.c",
                        NULL);
 
-  main_loop = g_main_loop_new (NULL, FALSE);
-
   g_async_initable_new_async (IDE_TYPE_EDITORCONFIG_FILE_SETTINGS,
                               G_PRIORITY_DEFAULT,
                               NULL,
                               test_editorconfig_new_cb,
-                              main_loop,
+                              g_steal_pointer (&task),
                               "file", file,
                               "context", dummy,
                               NULL);
 
-  g_main_loop_run (main_loop);
-
-  g_main_loop_unref (main_loop);
   g_clear_object (&file);
   g_clear_object (&gfile);
   g_clear_object (&dummy);
@@ -162,8 +164,20 @@ gint
 main (gint argc,
       gchar *argv[])
 {
+  static const gchar *required_plugins[] = { "autotools-plugin", "directory-plugin", NULL };
+  IdeApplication *app;
+  gint ret;
+
   g_test_init (&argc, &argv, NULL);
-  g_test_add_func ("/Ide/FileSettings/basic", test_filesettings);
-  g_test_add_func ("/Ide/EditorconfigFileSettings/basic", test_editorconfig);
-  return g_test_run ();
+
+  ide_log_init (TRUE, NULL);
+  ide_log_set_verbosity (4);
+
+  app = ide_application_new ();
+  ide_application_add_test (app, "/Ide/FileSettings/basic", test_filesettings, NULL, required_plugins);
+  ide_application_add_test (app, "/Ide/EditorconfigFileSettings/basic", test_editorconfig, NULL, required_plugins);
+  ret = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return ret;
 }
