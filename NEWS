@@ -1,4 +1,37 @@
 ===============
+Version 3.25.91
+===============
+
+Changes since last release:
+
+ • Build systems can not implement an optimized path to extract build flags for
+   multiple files at once. This will be useful for upcoming code indexing
+   features.
+ • Mkdir pipeline stages can now request that directories are reaped at cleanup.
+ • The buffer manager can now protect against a single file being requested
+   multiple times while a previous load is in-flight.
+ • Various GAction fixes.
+ • A new documentation-card plugin has been included as part of the Summer '17
+   GSoC work. It provides documentation on functions from devhelp when you hover
+   the mouse pointer over a function or other type. It supports multiple backends,
+   but only Devhelp is currently implemented.
+ • A leak of various editor view plugins due to a bug in IdeExtensionSetAdapter
+   has been plugged.
+ • The beautifier plugin has been ported to the new UI design.
+ • The spellcheck plugin got numerous fixes from fallout during the UI redesign.
+ • The XML plugin got a fix for a potential NULL deref.
+ • The volume monitor has been restored on the editor.
+ • Many widgets and plugins have been ported to the new shortcut engine.
+ • The shortcut window should now work better on smaller screen sizes.
+ • "Insert matching brance" has been moved to a per-language setting.
+
+Updated Translations:
+
+ French, Malayalam, Lithuanian, Hungarian, Kazakh, German, Spanish, Galician,
+ Indonesian, Czech, Turkish, Nepali
+
+
+===============
 Version 3.25.90
 ===============
 
