@@ -47,6 +47,14 @@ typedef struct _IdeConfigurationManager        IdeConfigurationManager;
 
 typedef struct _IdeContext                     IdeContext;
 
+typedef struct _IdeDebugManager                IdeDebugManager;
+typedef struct _IdeDebugger                    IdeDebugger;
+typedef struct _IdeDebuggerBreakpoint          IdeDebuggerBreakpoint;
+typedef struct _IdeDebuggerFrame               IdeDebuggerFrame;
+typedef struct _IdeDebuggerInstruction         IdeDebuggerInstruction;
+typedef struct _IdeDebuggerRegister            IdeDebuggerRegister;
+typedef struct _IdeDebuggerVariable            IdeDebuggerVariable;
+
 typedef struct _IdeDevice                      IdeDevice;
 typedef struct _IdeDeviceManager               IdeDeviceManager;
 typedef struct _IdeDeviceProvider              IdeDeviceProvider;

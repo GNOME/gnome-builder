@@ -55,6 +55,13 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-breakpoints-view.ui">debugger/ide-debugger-breakpoints-view.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-controls.ui">debugger/ide-debugger-controls.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-disassembly-view.ui">debugger/ide-debugger-disassembly-view.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-libraries-view.ui">debugger/ide-debugger-libraries-view.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-locals-view.ui">debugger/ide-debugger-locals-view.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-registers-view.ui">debugger/ide-debugger-registers-view.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-threads-view.ui">debugger/ide-debugger-threads-view.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-pane.ui">layout/ide-layout-pane.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack-header.ui">layout/ide-layout-stack-header.ui</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack.ui">layout/ide-layout-stack.ui</file>
@@ -81,6 +88,11 @@
 
   <gresource prefix="/org/gnome/builder/plugins/buildconfig">
     <file alias="buildconfig.plugin">buildconfig/buildconfig.plugin</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/debugger">
+    <file alias="debugger.plugin">debugger/debugger.plugin</file>
+    <file compressed="true" alias="gtk/menus.ui">debugger/gtk/menus.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/editor">

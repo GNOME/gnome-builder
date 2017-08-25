@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDebuggerLibrariesView" parent="GtkBin">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkTreeView" id="tree_view">
+            <property name="model">list_store</property>
+            <property name="sensitive">false</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeViewColumn" id="target_column">
+                <property name="title" translatable="yes">Library</property>
+                <property name="expand">true</property>
+                <child>
+                  <object class="GtkCellRendererText" id="target_cell">
+                    <property name="ellipsize">start</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="range_column">
+                <property name="title" translatable="yes">Address Range</property>
+                <child>
+                  <object class="GtkCellRendererText" id="range_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkListStore" id="list_store">
+    <columns>
+      <column type="IdeDebuggerLibrary"/>
+    </columns>
+  </object>
+</interface>

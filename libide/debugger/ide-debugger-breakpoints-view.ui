@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDebuggerBreakpointsView" parent="GtkBin">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkTreeView" id="tree_view">
+            <property name="model">list_store</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeViewColumn" id="enabled_column">
+                <child>
+                  <object class="GtkCellRendererToggle" id="enabled_cell">
+                    <property name="xalign">0.5</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="id_column">
+                <property name="title" translatable="yes">ID</property>
+                <child>
+                  <object class="GtkCellRendererText" id="id_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="file_column">
+                <property name="expand">true</property>
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">File</property>
+                <child>
+                  <object class="GtkCellRendererText" id="file_cell">
+                    <property name="ellipsize">start</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="line_column">
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Line</property>
+                <child>
+                  <object class="GtkCellRendererText" id="line_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="function_column">
+                <property name="expand">true</property>
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Function</property>
+                <child>
+                  <object class="GtkCellRendererText" id="function_cell">
+                    <property name="ellipsize">middle</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="address_column">
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Address</property>
+                <child>
+                  <object class="GtkCellRendererText" id="address_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="type_column">
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Type</property>
+                <child>
+                  <object class="GtkCellRendererText" id="type_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="hits_column">
+                <property name="title" translatable="yes">Hits</property>
+                <child>
+                  <object class="GtkCellRendererText" id="hits_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="spec_column">
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Expression</property>
+                <child>
+                  <object class="GtkCellRendererText" id="spec_cell">
+                    <property name="ellipsize">end</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkListStore" id="list_store">
+    <columns>
+      <column type="IdeDebuggerBreakpoint"/>
+    </columns>
+  </object>
+</interface>

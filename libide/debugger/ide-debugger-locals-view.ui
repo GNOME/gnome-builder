@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDebuggerLocalsView" parent="GtkBin">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="min-content-width">300</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkTreeView" id="tree_view">
+            <property name="model">tree_store</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeViewColumn" id="variable_column">
+                <property name="expand">true</property>
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Variable</property>
+                <child>
+                  <object class="GtkCellRendererText" id="variable_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="type_column">
+                <property name="expand">true</property>
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Type</property>
+                <child>
+                  <object class="GtkCellRendererText" id="type_cell">
+                    <property name="ellipsize">end</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="value_column">
+                <property name="expand">true</property>
+                <property name="resizable">true</property>
+                <property name="title" translatable="yes">Value</property>
+                <child>
+                  <object class="GtkCellRendererText" id="value_cell">
+                    <property name="ellipsize">end</property>
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkTreeStore" id="tree_store">
+    <columns>
+      <column type="GObject"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+</interface>

@@ -63,11 +63,14 @@
 #define TAG_NOTE             "diagnostician::note"
 #define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
 #define TAG_DEFINITION       "action::hover-definition"
+#define TAG_CURRENT_BKPT     "debugger::current-breakpoint"
 
 #define DEPRECATED_COLOR "#babdb6"
 #define ERROR_COLOR      "#ff0000"
 #define NOTE_COLOR       "#708090"
 #define WARNING_COLOR    "#fcaf3e"
+#define CURRENT_BKPT_FG  "#fffffe"
+#define CURRENT_BKPT_BG  "#fcaf3e"
 
 typedef struct
 {
@@ -1033,6 +1036,14 @@ ide_buffer_notify_style_scheme (IdeBuffer  *self,
         apply_style (GET_TAG (TAG_DEFINITION),
                      "underline", PANGO_UNDERLINE_SINGLE,
                      NULL);
+
+      if (!ide_source_style_scheme_apply_style (style_scheme,
+                                                TAG_CURRENT_BKPT,
+                                                GET_TAG (TAG_CURRENT_BKPT)))
+        apply_style (GET_TAG (TAG_CURRENT_BKPT),
+                     "paragraph-background", CURRENT_BKPT_BG,
+                     "foreground", CURRENT_BKPT_FG,
+                     NULL);
     }
 
 #undef GET_TAG
@@ -1288,6 +1299,10 @@ ide_buffer_init_tags (IdeBuffer *self)
                               NULL);
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_DEFINITION,
                               "underline", PANGO_UNDERLINE_SINGLE,
+                              NULL);
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_CURRENT_BKPT,
+                              "paragraph-background", CURRENT_BKPT_BG,
+                              "foreground", CURRENT_BKPT_FG,
                               NULL);
 
   g_signal_connect_object (tag_table,

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDebuggerRegistersView" parent="GtkBin">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkTreeView" id="tree_view">
+            <property name="model">list_store</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeViewColumn" id="id_column">
+                <property name="title" translatable="yes">ID</property>
+                <child>
+                  <object class="GtkCellRendererText" id="id_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="name_column">
+                <property name="title" translatable="yes">Register</property>
+                <child>
+                  <object class="GtkCellRendererText" id="name_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="value_column">
+                <property name="expand">true</property>
+                <property name="title" translatable="yes">Value</property>
+                <child>
+                  <object class="GtkCellRendererText" id="value_cell">
+                    <property name="xalign">0.0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkListStore" id="list_store">
+    <columns>
+      <column type="IdeDebuggerRegister"/>
+    </columns>
+  </object>
+</interface>

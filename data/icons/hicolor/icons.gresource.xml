@@ -12,6 +12,8 @@
     <file compressed="true">scalable/actions/builder-view-bottom-pane-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-view-left-pane-symbolic.svg</file>
     <file compressed="true">scalable/actions/builder-view-right-pane-symbolic.svg</file>
+    <file compressed="true">scalable/actions/builder-debugger-symbolic.svg</file>
+    <file compressed="true">scalable/actions/debug-breakpoint-symbolic.svg</file>
     <file compressed="true">scalable/actions/debug-continue-symbolic.svg</file>
     <file compressed="true">scalable/actions/debug-execute-from-cursor-symbolic.svg</file>
     <file compressed="true">scalable/actions/debug-execute-to-cursor-symbolic.svg</file>

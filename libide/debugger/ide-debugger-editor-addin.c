@@ -1,0 +1,645 @@
+/* ide-debugger-editor-addin.c
+ *
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#define G_LOG_DOMAIN "ide-debugger-editor-addin"
+
+#include <glib/gi18n.h>
+
+#include "ide-context.h"
+#include "ide-debug.h"
+
+#include "debugger/ide-debug-manager.h"
+#include "debugger/ide-debugger-breakpoints-view.h"
+#include "debugger/ide-debugger-controls.h"
+#include "debugger/ide-debugger-disassembly-view.h"
+#include "debugger/ide-debugger-editor-addin.h"
+#include "debugger/ide-debugger-libraries-view.h"
+#include "debugger/ide-debugger-locals-view.h"
+#include "debugger/ide-debugger-registers-view.h"
+#include "debugger/ide-debugger-threads-view.h"
+#include "editor/ide-editor-addin.h"
+#include "files/ide-file.h"
+#include "runner/ide-run-manager.h"
+#include "workbench/ide-workbench.h"
+#include "workbench/ide-workbench-message.h"
+#include "util/ide-gtk.h"
+
+/**
+ * SECTION:ide-debugger-editor-addin
+ * @title: IdeDebuggerEditorAddin
+ * @short_description: Debugger hooks for the editor perspective
+ *
+ * This class allows the debugger widgetry to hook into the editor. We add
+ * various panels to the editor perpective and ensure they are only visible
+ * when the process is being debugged.
+ *
+ * Since: 3.26
+ */
+
+struct _IdeDebuggerEditorAddin
+{
+  GObject                     parent_instance;
+
+  DzlSignalGroup             *debug_manager_signals;
+  DzlSignalGroup             *debugger_signals;
+
+  IdeEditorPerspective       *editor;
+  IdeWorkbench               *workbench;
+
+  IdeDebuggerDisassemblyView *disassembly_view;
+  IdeDebuggerControls        *controls;
+  IdeDebuggerBreakpointsView *breakpoints_view;
+  IdeDebuggerLibrariesView   *libraries_view;
+  IdeDebuggerLocalsView      *locals_view;
+  IdeWorkbenchMessage        *message;
+  DzlDockWidget              *panel;
+  IdeDebuggerRegistersView   *registers_view;
+  IdeDebuggerThreadsView     *threads_view;
+  GtkTextView                *log_view;
+};
+
+static void
+debugger_log (IdeDebuggerEditorAddin *self,
+              IdeDebuggerStream       stream,
+              GBytes                 *content,
+              IdeDebugger            *debugger)
+{
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_DEBUGGER_STREAM (stream));
+  g_assert (content != NULL);
+  g_assert (IDE_IS_DEBUGGER (debugger));
+
+  if (stream == IDE_DEBUGGER_CONSOLE)
+    {
+      GtkTextBuffer *buffer;
+      const gchar *str;
+      GtkTextIter iter;
+      gsize len;
+
+      str = (gchar *)g_bytes_get_data (content, &len);
+
+      buffer = gtk_text_view_get_buffer (self->log_view);
+      gtk_text_buffer_get_end_iter (buffer, &iter);
+      gtk_text_buffer_insert (buffer, &iter, str, len);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+      gtk_text_view_scroll_to_iter (self->log_view, &iter, 0.0, FALSE, 1.0, 1.0);
+    }
+}
+
+static void
+debugger_stopped (IdeDebuggerEditorAddin *self,
+                  IdeDebuggerStopReason   reason,
+                  IdeDebuggerBreakpoint  *breakpoint,
+                  IdeDebugger            *debugger)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_DEBUGGER_STOP_REASON (reason));
+  g_assert (!breakpoint || IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
+  g_assert (IDE_IS_DEBUGGER (debugger));
+
+  if (breakpoint != NULL)
+    ide_debugger_editor_addin_navigate_to_breakpoint (self, breakpoint);
+
+  IDE_EXIT;
+}
+
+static void
+debugger_run_handler (IdeRunManager *run_manager,
+                      IdeRunner     *runner,
+                      gpointer       user_data)
+{
+  IdeDebuggerEditorAddin *self = user_data;
+  IdeDebugManager *debug_manager;
+  IdeContext *context;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+
+  /*
+   * Get the currently configured debugger and attach it to our runner.
+   * It might need to prepend arguments like `gdb', `pdb', `mdb', etc.
+   */
+  context = ide_object_get_context (IDE_OBJECT (run_manager));
+  debug_manager = ide_context_get_debug_manager (context);
+
+  if (!ide_debug_manager_start (debug_manager, runner, &error))
+    {
+      ide_workbench_message_set_subtitle (self->message, error->message);
+      gtk_widget_show (GTK_WIDGET (self->message));
+    }
+
+  IDE_EXIT;
+}
+
+static void
+debug_manager_notify_debugger (IdeDebuggerEditorAddin *self,
+                               GParamSpec             *pspec,
+                               IdeDebugManager        *debug_manager)
+{
+  IdeDebugger *debugger;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
+
+  if (!gtk_widget_get_visible (GTK_WIDGET (self->panel)))
+    {
+      GtkWidget *stack = gtk_widget_get_parent (GTK_WIDGET (self->panel));
+
+      gtk_widget_show (GTK_WIDGET (self->panel));
+
+      if (GTK_IS_STACK (stack))
+        gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (self->panel));
+    }
+
+  debugger = ide_debug_manager_get_debugger (debug_manager);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self->workbench),
+                                  "debugger",
+                                  G_ACTION_GROUP (debugger));
+
+  ide_debugger_breakpoints_view_set_debugger (self->breakpoints_view, debugger);
+  ide_debugger_locals_view_set_debugger (self->locals_view, debugger);
+  ide_debugger_libraries_view_set_debugger (self->libraries_view, debugger);
+  ide_debugger_registers_view_set_debugger (self->registers_view, debugger);
+  ide_debugger_threads_view_set_debugger (self->threads_view, debugger);
+
+  dzl_signal_group_set_target (self->debugger_signals, debugger);
+}
+
+static void
+debug_manager_notify_active (IdeDebuggerEditorAddin *self,
+                             GParamSpec             *pspec,
+                             IdeDebugManager        *debug_manager)
+{
+  gboolean reveal_child = FALSE;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
+
+  /*
+   * Instead of using a property binding, we use this signal callback so
+   * that we can adjust the reveal-child and visible. Otherwise the widgets
+   * will take up space+padding when reveal-child is FALSE.
+   */
+
+  if (ide_debug_manager_get_active (debug_manager))
+    {
+      gtk_widget_show (GTK_WIDGET (self->controls));
+      reveal_child = TRUE;
+    }
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls), reveal_child);
+}
+
+static void
+on_frame_activated (IdeDebuggerEditorAddin *self,
+                    IdeDebuggerThread      *thread,
+                    IdeDebuggerFrame       *frame,
+                    IdeDebuggerThreadsView *threads_view)
+{
+  IdeDebuggerAddress addr;
+  const gchar *path;
+  guint line;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_DEBUGGER_THREAD (thread));
+  g_assert (IDE_IS_DEBUGGER_FRAME (frame));
+  g_assert (IDE_IS_DEBUGGER_THREADS_VIEW (threads_view));
+
+  ide_debugger_locals_view_load_async (self->locals_view, thread, frame, NULL, NULL, NULL);
+
+  path = ide_debugger_frame_get_file (frame);
+  line = ide_debugger_frame_get_line (frame);
+
+  if (line > 0)
+    line--;
+
+  if (path != NULL)
+    {
+      g_autoptr(IdeSourceLocation) location = NULL;
+      IdeContext *context = ide_widget_get_context (GTK_WIDGET (threads_view));
+
+      location = ide_source_location_new_for_path (context, path, line, 0);
+      ide_editor_perspective_focus_location (self->editor, location);
+
+      IDE_EXIT;
+    }
+
+  addr = ide_debugger_frame_get_address (frame);
+
+  if (addr != IDE_DEBUGGER_ADDRESS_INVALID)
+    {
+      ide_debugger_editor_addin_navigate_to_address (self, addr);
+      IDE_EXIT;
+    }
+
+  g_warning ("Failed to locate source or memory address for frame");
+
+  IDE_EXIT;
+}
+
+static void
+ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
+{
+  IdeWorkbenchHeaderBar *headerbar;
+  IdeWorkbench *workbench;
+  GtkWidget *scroller;
+  GtkWidget *box;
+  GtkWidget *hpaned;
+  GtkWidget *utilities;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self->editor));
+
+#define OBSERVE_DESTROY(ptr) \
+  g_signal_connect ((ptr), "destroy", G_CALLBACK (gtk_widget_destroyed), &(ptr))
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self->editor));
+  headerbar = ide_workbench_get_headerbar (workbench);
+
+  self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
+                                 "transition-duration", 500,
+                                 "transition-type", GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT,
+                                 "reveal-child", FALSE,
+                                 "visible", FALSE,
+                                 NULL);
+  OBSERVE_DESTROY (self->controls);
+  ide_workbench_header_bar_insert_left (headerbar,
+                                        GTK_WIDGET (self->controls),
+                                        GTK_PACK_START,
+                                        100);
+
+  self->panel = g_object_new (DZL_TYPE_DOCK_WIDGET,
+                              "title", _("Debugger"),
+                              "icon-name", "builder-debugger-symbolic",
+                              "visible", FALSE,
+                              NULL);
+  OBSERVE_DESTROY (self->panel);
+
+  box = g_object_new (GTK_TYPE_NOTEBOOK,
+                      "visible", TRUE,
+                      NULL);
+  gtk_container_add (GTK_CONTAINER (self->panel), box);
+
+  hpaned = g_object_new (DZL_TYPE_MULTI_PANED,
+                         "orientation", GTK_ORIENTATION_HORIZONTAL,
+                         "visible", TRUE,
+                         NULL);
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (hpaned),
+                                     "tab-label", _("Threads"),
+                                     NULL);
+
+  self->threads_view = g_object_new (IDE_TYPE_DEBUGGER_THREADS_VIEW,
+                                     "hexpand", TRUE,
+                                     "visible", TRUE,
+                                     NULL);
+  OBSERVE_DESTROY (self->threads_view);
+  g_signal_connect_swapped (self->threads_view,
+                            "frame-activated",
+                            G_CALLBACK (on_frame_activated),
+                            self);
+  gtk_container_add (GTK_CONTAINER (hpaned), GTK_WIDGET (self->threads_view));
+
+  self->locals_view = g_object_new (IDE_TYPE_DEBUGGER_LOCALS_VIEW,
+                                    "width-request", 250,
+                                    "visible", TRUE,
+                                    NULL);
+  OBSERVE_DESTROY (self->locals_view);
+  gtk_container_add (GTK_CONTAINER (hpaned), GTK_WIDGET (self->locals_view));
+
+  self->breakpoints_view = g_object_new (IDE_TYPE_DEBUGGER_BREAKPOINTS_VIEW,
+                                         "visible", TRUE,
+                                         NULL);
+  OBSERVE_DESTROY (self->breakpoints_view);
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->breakpoints_view),
+                                     "tab-label", _("Breakpoints"),
+                                     NULL);
+
+  self->libraries_view = g_object_new (IDE_TYPE_DEBUGGER_LIBRARIES_VIEW,
+                                       "visible", TRUE,
+                                       NULL);
+  OBSERVE_DESTROY (self->libraries_view);
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->libraries_view),
+                                     "tab-label", _("Libraries"),
+                                     NULL);
+
+  self->registers_view = g_object_new (IDE_TYPE_DEBUGGER_REGISTERS_VIEW,
+                                       "visible", TRUE,
+                                       NULL);
+  OBSERVE_DESTROY (self->registers_view);
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->registers_view),
+                                     "tab-label", _("Registers"),
+                                     NULL);
+
+  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                           "visible", TRUE,
+                           NULL);
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (scroller),
+                                     "tab-label", _("Log"),
+                                     NULL);
+
+  self->log_view = g_object_new (GTK_TYPE_TEXT_VIEW,
+                                 "monospace", TRUE,
+                                 "visible", TRUE,
+                                 NULL);
+  OBSERVE_DESTROY (self->log_view);
+  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->log_view));
+
+  utilities = ide_editor_perspective_get_utilities (self->editor);
+  gtk_container_add (GTK_CONTAINER (utilities), GTK_WIDGET (self->panel));
+
+  self->message = g_object_new (IDE_TYPE_WORKBENCH_MESSAGE,
+                                "id", "org.gnome.builder.debugger.failure",
+                                "show-close-button", TRUE,
+                                "title", _("Failed to initialize the debugger"),
+                                NULL);
+  OBSERVE_DESTROY (self->message);
+  ide_workbench_push_message (workbench, self->message);
+
+#undef OBSERVE_DESTROY
+}
+
+static void
+ide_debugger_editor_addin_load (IdeEditorAddin       *addin,
+                                IdeEditorPerspective *editor)
+{
+  IdeDebuggerEditorAddin *self = (IdeDebuggerEditorAddin *)addin;
+  IdeContext *context;
+  IdeRunManager *run_manager;
+  IdeDebugManager *debug_manager;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+
+  self->editor = editor;
+  self->workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
+
+  context = ide_widget_get_context (GTK_WIDGET (editor));
+  run_manager = ide_context_get_run_manager (context);
+  debug_manager = ide_context_get_debug_manager (context);
+
+  ide_debugger_editor_addin_add_ui (self);
+
+  ide_run_manager_add_handler (run_manager,
+                               "debugger",
+                               _("Run with Debugger"),
+                               "builder-debugger-symbolic",
+                               "F5",
+                               debugger_run_handler,
+                               g_object_ref (self),
+                               g_object_unref);
+
+  self->debugger_signals = dzl_signal_group_new (IDE_TYPE_DEBUGGER);
+
+  dzl_signal_group_connect_swapped (self->debugger_signals,
+                                    "log",
+                                    G_CALLBACK (debugger_log),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->debugger_signals,
+                                    "stopped",
+                                    G_CALLBACK (debugger_stopped),
+                                    self);
+
+  self->debug_manager_signals = dzl_signal_group_new (IDE_TYPE_DEBUG_MANAGER);
+
+  dzl_signal_group_connect_swapped (self->debug_manager_signals,
+                                    "notify::active",
+                                    G_CALLBACK (debug_manager_notify_active),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->debug_manager_signals,
+                                    "notify::debugger",
+                                    G_CALLBACK (debug_manager_notify_debugger),
+                                    self);
+
+  dzl_signal_group_set_target (self->debug_manager_signals, debug_manager);
+
+  IDE_EXIT;
+}
+
+static void
+ide_debugger_editor_addin_unload (IdeEditorAddin       *addin,
+                                  IdeEditorPerspective *editor)
+{
+  IdeDebuggerEditorAddin *self = (IdeDebuggerEditorAddin *)addin;
+  IdeRunManager *run_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+
+  context = ide_workbench_get_context (self->workbench);
+  run_manager = ide_context_get_run_manager (context);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self->workbench), "debugger", NULL);
+
+  /* Remove the handler to initiate the debugger */
+  ide_run_manager_remove_handler (run_manager, "debugger");
+
+  g_clear_object (&self->debugger_signals);
+  g_clear_object (&self->debug_manager_signals);
+
+  if (self->panel != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->panel));
+  if (self->controls != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->controls));
+  if (self->message != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->message));
+  if (self->disassembly_view != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->disassembly_view));
+
+  self->editor = NULL;
+  self->workbench = NULL;
+
+  IDE_EXIT;
+}
+
+static void
+editor_addin_iface_init (IdeEditorAddinInterface *iface)
+{
+  iface->load = ide_debugger_editor_addin_load;
+  iface->unload = ide_debugger_editor_addin_unload;
+}
+
+G_DEFINE_TYPE_WITH_CODE (IdeDebuggerEditorAddin, ide_debugger_editor_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_ADDIN, editor_addin_iface_init))
+
+static void
+ide_debugger_editor_addin_class_init (IdeDebuggerEditorAddinClass *klass)
+{
+}
+
+static void
+ide_debugger_editor_addin_init (IdeDebuggerEditorAddin *self)
+{
+}
+
+void
+ide_debugger_editor_addin_navigate_to_file (IdeDebuggerEditorAddin *self,
+                                            GFile                  *file,
+                                            guint                   line)
+{
+  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  IdeContext *context;
+
+  g_return_if_fail (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  context = ide_widget_get_context (GTK_WIDGET (self->editor));
+  ifile = ide_file_new (context, file);
+  location = ide_source_location_new (ifile, line, 0, 0);
+
+  ide_editor_perspective_focus_location (self->editor, location);
+}
+
+static void
+ide_debugger_editor_addin_disassemble_cb (GObject      *object,
+                                          GAsyncResult *result,
+                                          gpointer      user_data)
+{
+  IdeDebugger *debugger = (IdeDebugger *)object;
+  g_autoptr(IdeDebuggerEditorAddin) self = user_data;
+  g_autoptr(GPtrArray) instructions = NULL;
+  g_autoptr(GError) error = NULL;
+  GtkWidget *stack;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUGGER (debugger));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+
+  instructions = ide_debugger_disassemble_finish (debugger, result, &error);
+
+  if (instructions == NULL)
+    {
+      g_warning ("%s", error->message);
+      IDE_EXIT;
+    }
+
+  if (self->editor == NULL)
+    IDE_EXIT;
+
+  if (self->disassembly_view == NULL)
+    {
+      IdeLayoutGrid *grid = ide_editor_perspective_get_grid (self->editor);
+
+      self->disassembly_view = g_object_new (IDE_TYPE_DEBUGGER_DISASSEMBLY_VIEW,
+                                             "visible", TRUE,
+                                             NULL);
+      g_signal_connect (self->disassembly_view,
+                        "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &self->disassembly_view);
+      gtk_container_add (GTK_CONTAINER (grid), GTK_WIDGET (self->disassembly_view));
+    }
+
+  ide_debugger_disassembly_view_set_instructions (self->disassembly_view, instructions);
+
+  /* TODO: Set current instruction */
+
+  /* FIXME: It would be nice if we had a nicer API for this */
+  stack = gtk_widget_get_ancestor (GTK_WIDGET (self->disassembly_view), IDE_TYPE_LAYOUT_STACK);
+  if (stack != NULL)
+    ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack),
+                                        IDE_LAYOUT_VIEW (self->disassembly_view));
+
+  IDE_EXIT;
+}
+
+void
+ide_debugger_editor_addin_navigate_to_address (IdeDebuggerEditorAddin *self,
+                                               IdeDebuggerAddress      address)
+{
+  IdeDebugger *debugger;
+  IdeDebuggerAddressRange range;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_return_if_fail (address != IDE_DEBUGGER_ADDRESS_INVALID);
+
+  if (NULL == (debugger = dzl_signal_group_get_target (self->debugger_signals)))
+    IDE_EXIT;
+
+  if (address < 0x10)
+    range.from = 0;
+  else
+    range.from = address - 0x10;
+
+  if (G_MAXUINT64 - 0x20 < address)
+    range.to = G_MAXUINT64;
+  else
+    range.to = address + 0x20;
+
+  ide_debugger_disassemble_async (debugger,
+                                  &range,
+                                  NULL,
+                                  ide_debugger_editor_addin_disassemble_cb,
+                                  g_object_ref (self));
+
+  IDE_EXIT;
+
+}
+
+void
+ide_debugger_editor_addin_navigate_to_breakpoint (IdeDebuggerEditorAddin *self,
+                                                  IdeDebuggerBreakpoint  *breakpoint)
+{
+  IdeDebuggerAddress address;
+  const gchar *path;
+  guint line;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+  g_return_if_fail (IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
+
+  address = ide_debugger_breakpoint_get_address (breakpoint);
+  path = ide_debugger_breakpoint_get_file (breakpoint);
+  line = ide_debugger_breakpoint_get_line (breakpoint);
+
+  if (line > 0)
+    line--;
+
+  if (path != NULL)
+    {
+      g_autoptr(GFile) file = g_file_new_for_path (path);
+      ide_debugger_editor_addin_navigate_to_file (self, file, line);
+    }
+  else if (address != IDE_DEBUGGER_ADDRESS_INVALID)
+    {
+      ide_debugger_editor_addin_navigate_to_address (self, address);
+    }
+
+  IDE_EXIT;
+}

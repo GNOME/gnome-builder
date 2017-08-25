@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDebuggerThreadsView" parent="GtkBin">
+    <child>
+      <object class="DzlMultiPaned">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <!-- disable for now -->
+            <property name="visible">false</property>
+            <child>
+              <object class="GtkTreeView" id="thread_groups_tree_view">
+                <property name="activate-on-single-click">true</property>
+                <property name="model">thread_groups_store</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkTreeViewColumn" id="group_column">
+                    <property name="title" translatable="yes">Group</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="group_cell">
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeView" id="threads_tree_view">
+                <property name="activate-on-single-click">true</property>
+                <property name="model">threads_store</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkTreeViewColumn" id="thread_column">
+                    <property name="title" translatable="yes">Thread</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="thread_cell">
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeView" id="frames_tree_view">
+                <property name="activate-on-single-click">true</property>
+                <property name="model">frames_store</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkTreeViewColumn" id="depth_column">
+                    <property name="title" translatable="yes">Frame</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="depth_cell">
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="function_column">
+                    <property name="expand">true</property>
+                    <property name="resizable">true</property>
+                    <property name="title" translatable="yes">Function</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="function_cell">
+                        <property name="ellipsize">middle</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="args_column">
+                    <property name="resizable">true</property>
+                    <property name="title" translatable="yes">Arguments</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="args_cell">
+                        <property name="ellipsize">middle</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="location_column">
+                    <property name="expand">true</property>
+                    <property name="resizable">true</property>
+                    <property name="title" translatable="yes">Location</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="location_cell">
+                        <property name="ellipsize">start</property>
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="binary_column">
+                    <property name="title" translatable="yes">Binary</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="binary_cell">
+                        <property name="xalign">0.0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkListStore" id="thread_groups_store">
+    <columns>
+      <column type="IdeDebuggerThreadGroup"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="threads_store">
+    <columns>
+      <column type="IdeDebuggerThread"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="frames_store">
+    <columns>
+      <column type="IdeDebuggerFrame"/>
+    </columns>
+  </object>
+</interface>

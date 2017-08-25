@@ -1,0 +1,10 @@
+[Plugin]
+Module=debugger
+Name=Debugger
+Description=Debugger integration for Builder
+Authors=Christian Hergert <chergert@redhat.com>
+Copyright=Copyright © 2017 Christian Hergert
+Depends=editor
+Builtin=true
+Hidden=true
+Embedded=ide_debugger_register_types
