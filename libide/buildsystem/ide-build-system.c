@@ -93,9 +93,9 @@ ide_build_system_real_get_build_flags_finish (IdeBuildSystem  *self,
 }
 
 static void
-get_build_flags_cb (GObject      *object,
-                    GAsyncResult *result,
-                    gpointer      user_data)
+ide_build_system_get_build_flags_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
 {
   IdeBuildSystem *self = (IdeBuildSystem *)object;
   g_auto(GStrv) flags = NULL;
@@ -123,10 +123,13 @@ get_build_flags_cb (GObject      *object,
 
       cancellable = g_task_get_cancellable (task);
 
+      if (g_task_return_error_if_cancelled (task))
+        return;
+
       ide_build_system_get_build_flags_async (self,
                                               g_ptr_array_index (data->files, data->index),
                                               cancellable,
-                                              get_build_flags_cb,
+                                              ide_build_system_get_build_flags_cb,
                                               g_steal_pointer (&task));
     }
   else
@@ -162,10 +165,22 @@ ide_build_system_real_get_build_flags_for_files_async (IdeBuildSystem       *sel
 
   g_task_set_task_data (task, data, (GDestroyNotify)get_build_flags_data_free);
 
+  if (g_task_return_error_if_cancelled (task))
+    {
+      return;
+    }
+  else if (!files->len)
+    {
+      g_task_return_pointer (task,
+                             g_steal_pointer (&data->flags),
+                             (GDestroyNotify)g_hash_table_unref);
+      return;
+    }
+
   ide_build_system_get_build_flags_async (self,
                                           g_ptr_array_index (files, 0),
                                           cancellable,
-                                          get_build_flags_cb,
+                                          ide_build_system_get_build_flags_cb,
                                           g_steal_pointer (&task));
 }
 
