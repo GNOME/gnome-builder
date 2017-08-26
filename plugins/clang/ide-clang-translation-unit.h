@@ -58,7 +58,8 @@ GPtrArray         *ide_clang_translation_unit_get_symbols              (IdeClang
 IdeSymbol         *ide_clang_translation_unit_find_nearest_scope       (IdeClangTranslationUnit  *self,
                                                                         IdeSourceLocation        *location,
                                                                         GError                  **error);
-
+gchar            *ide_clang_translation_unit_generate_key              (IdeClangTranslationUnit  *self,
+                                                                        IdeSourceLocation        *location);
 G_END_DECLS
 
 #endif /* IDE_CLANG_TRANSLATION_UNIT_H */

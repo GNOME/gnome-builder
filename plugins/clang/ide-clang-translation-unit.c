@@ -942,7 +942,11 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   if (clang_Cursor_isNull (cursor))
     IDE_RETURN (NULL);
 
-  tmpcursor = clang_getCursorReferenced (cursor);
+  tmpcursor = clang_getCursorDefinition (cursor);
+
+  if (clang_Cursor_isNull (tmpcursor))
+    tmpcursor = clang_getCursorReferenced (cursor);
+
   if (!clang_Cursor_isNull (tmpcursor))
     {
       CXSourceLocation tmploc;
@@ -950,7 +954,11 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
 
       cxrange = clang_getCursorExtent (tmpcursor);
       tmploc = clang_getRangeStart (cxrange);
-      definition = create_location (self, project, workpath, tmploc);
+
+      if (clang_isCursorDefinition (tmpcursor))
+        definition = create_location (self, project, workpath, tmploc);
+      else
+        declaration = create_location (self, project, workpath, tmploc);
     }
 
   symkind = get_symbol_kind (cursor, &symflags);
@@ -975,7 +983,7 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
                                NULL);
 
           g_clear_pointer (&definition, ide_symbol_unref);
-          definition = ide_source_location_new (file, 0, 0, 0);
+          declaration = ide_source_location_new (file, 0, 0, 0);
 
           g_clear_object (&file);
           g_clear_object (&gfile);
@@ -1293,4 +1301,51 @@ ide_clang_translation_unit_find_nearest_scope (IdeClangTranslationUnit  *self,
   IDE_TRACE_MSG ("Symbol = %p", ret);
 
   IDE_RETURN (ret);
+}
+
+gchar *
+ide_clang_translation_unit_generate_key (IdeClangTranslationUnit  *self,
+                                         IdeSourceLocation        *location)
+{
+  CXTranslationUnit unit;
+  CXFile file;
+  CXSourceLocation cx_location;
+  CXCursor reference;
+  CXCursor declaration;
+  CXString cx_usr;
+  const gchar *usr;
+  g_autofree gchar *ret = NULL;
+  guint line = 0;
+  guint column = 0;
+  enum CXLinkageKind linkage;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+
+  unit = ide_ref_ptr_get (self->native);
+
+  file = get_file_for_location (self, location);
+  line = ide_source_location_get_line (location);
+  column = ide_source_location_get_line_offset (location);
+
+  cx_location = clang_getLocation (unit, file, line + 1, column + 1);
+
+  reference = clang_getCursor (unit, cx_location);
+  declaration = clang_getCursorReferenced (reference);
+  cx_usr = clang_getCursorUSR (declaration);
+
+  linkage = clang_getCursorLinkage (declaration);
+
+  if (linkage == CXLinkage_Internal || linkage == CXLinkage_NoLinkage)
+    return NULL;
+
+  usr = clang_getCString (cx_usr);
+
+  if (usr == NULL)
+    return NULL;
+
+  ret = g_strdup (usr);
+
+  clang_disposeString (cx_usr);
+
+  return g_steal_pointer (&ret);
 }
