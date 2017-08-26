@@ -228,23 +228,14 @@ ide_extension_set_new (PeasEngine     *engine,
                        const gchar    *first_property,
                        ...)
 {
-  g_autoptr(GArray) params = NULL;
+  PeasExtensionSet *ret;
   va_list args;
 
-  g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
-  g_return_val_if_fail (G_TYPE_IS_INTERFACE (type), NULL);
-
-  if (engine == NULL)
-    engine = peas_engine_get_default ();
-
   va_start (args, first_property);
-  params = collect_parameters (type, first_property, args);
+  ret = peas_extension_set_new_valist (engine, type, first_property, args);
   va_end (args);
 
-  if (params == NULL)
-    return NULL;
-
-  return peas_extension_set_newv (engine, type, params->len, (GParameter *)params->data);
+  return ret;
 }
 
 PeasExtension *
