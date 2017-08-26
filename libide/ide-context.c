@@ -563,6 +563,8 @@ ide_context_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  g_clear_object (&self->services);
+
   g_clear_pointer (&self->build_system_hint, g_free);
   g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
   g_clear_pointer (&self->root_build_dir, g_free);
@@ -576,7 +578,6 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
   g_clear_object (&self->runtime_manager);
-  g_clear_object (&self->services);
   g_clear_object (&self->transfer_manager);
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
@@ -2041,12 +2042,16 @@ ide_context_unload_cb (GObject      *object,
                        GAsyncResult *result,
                        gpointer      user_data)
 {
+  IdeContext *self = (IdeContext *)object;
   GTask *unload_task = (GTask *)result;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
-  g_assert (IDE_IS_CONTEXT (object));
+  g_assert (IDE_IS_CONTEXT (self));
   g_assert (G_IS_TASK (task));
+
+  g_clear_object (&self->device_manager);
+  g_clear_object (&self->runtime_manager);
 
   if (!g_task_propagate_boolean (unload_task, &error))
     g_task_return_error (task, error);
@@ -2064,9 +2069,6 @@ ide_context_do_unload_locked (IdeContext *self)
 
   task = self->delayed_unload_task;
   self->delayed_unload_task = NULL;
-
-  g_clear_object (&self->device_manager);
-  g_clear_object (&self->runtime_manager);
 
   ide_async_helper_run (self,
                         g_task_get_cancellable (task),
