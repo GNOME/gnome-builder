@@ -99,6 +99,7 @@ void               ide_runner_set_run_on_host (IdeRunner            *self,
                                                gboolean              run_on_host);
 void               ide_runner_set_tty         (IdeRunner            *self,
                                                int                   tty_fd);
+gint               ide_runner_steal_tty       (IdeRunner            *self);
 
 G_END_DECLS
 

@@ -358,6 +358,20 @@ ide_runner_real_get_stderr (IdeRunner *self)
   return NULL;
 }
 
+gint
+ide_runner_steal_tty (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+  gint fd;
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), -1);
+
+  fd = priv->tty_fd;
+  priv->tty_fd = -1;
+
+  return fd;
+}
+
 static void
 ide_runner_real_set_tty (IdeRunner *self,
                          int        tty_fd)
