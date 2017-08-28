@@ -418,6 +418,11 @@ gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
   g_assert (GBP_IS_FLATPAK_PREFERENCES_ADDIN (self));
   g_assert (DZL_IS_PREFERENCES (preferences));
 
+  /* Clear preferences so reload code doesn't try to
+   * make forward progress updating items.
+   */
+  self->preferences = NULL;
+
   app_addin = gbp_flatpak_application_addin_get_default ();
   ide_clear_signal_handler (app_addin, &self->reload_handler);
 
@@ -432,7 +437,6 @@ gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
     }
 
   g_clear_pointer (&self->ids, g_array_unref);
-  self->preferences = NULL;
 
   IDE_EXIT;
 }
