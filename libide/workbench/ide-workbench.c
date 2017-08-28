@@ -469,11 +469,6 @@ ide_workbench_init (IdeWorkbench *self)
 
   window_group = gtk_window_group_new ();
   gtk_window_group_add_window (window_group, GTK_WINDOW (self));
-
-  g_signal_connect_swapped (self,
-                            "key-press-event",
-                            G_CALLBACK (dzl_shortcut_manager_handle_event),
-                            dzl_shortcut_manager_get_default ());
 }
 
 static void
