@@ -224,6 +224,14 @@ ide_workbench_actions_counters (GSimpleAction *action,
   dzl_counter_arena_unref (arena);
 }
 
+static void
+ide_workbench_actions_inspector (GSimpleAction *action,
+                                 GVariant      *variant,
+                                 gpointer       user_data)
+{
+  gtk_window_set_interactive_debugging (TRUE);
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
@@ -235,6 +243,7 @@ ide_workbench_actions_init (IdeWorkbench *self)
     { "save-all", ide_workbench_actions_save_all },
     { "save-all-quit", ide_workbench_actions_save_all_quit },
     { "counters", ide_workbench_actions_counters },
+    { "inspector", ide_workbench_actions_inspector },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
