@@ -39,18 +39,14 @@ static guint signals [LAST_SIGNAL];
 
 IdeBufferLineChange
 ide_buffer_change_monitor_get_change (IdeBufferChangeMonitor *self,
-                                      const GtkTextIter      *iter)
+                                      guint                   line)
 {
   g_return_val_if_fail (IDE_IS_BUFFER_CHANGE_MONITOR (self), IDE_BUFFER_LINE_CHANGE_NONE);
-  g_return_val_if_fail (iter, IDE_BUFFER_LINE_CHANGE_NONE);
 
-  if (IDE_BUFFER_CHANGE_MONITOR_GET_CLASS (self)->get_change)
-    return IDE_BUFFER_CHANGE_MONITOR_GET_CLASS (self)->get_change (self, iter);
-
-  g_warning ("%s does not implement get_change() vfunc",
-             g_type_name (G_TYPE_FROM_INSTANCE (self)));
-
-  return IDE_BUFFER_LINE_CHANGE_NONE;
+  if G_LIKELY (IDE_BUFFER_CHANGE_MONITOR_GET_CLASS (self)->get_change)
+    return IDE_BUFFER_CHANGE_MONITOR_GET_CLASS (self)->get_change (self, line);
+  else
+    return IDE_BUFFER_LINE_CHANGE_NONE;
 }
 
 static void

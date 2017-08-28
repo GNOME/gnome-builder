@@ -44,7 +44,7 @@ struct _IdeBufferChangeMonitorClass
   void                (*set_buffer) (IdeBufferChangeMonitor *self,
                                      IdeBuffer              *buffer);
   IdeBufferLineChange (*get_change) (IdeBufferChangeMonitor *self,
-                                     const GtkTextIter      *iter);
+                                     guint                   line);
   void                (*reload)     (IdeBufferChangeMonitor *self);
 
   gpointer _reserved1;
@@ -58,7 +58,7 @@ struct _IdeBufferChangeMonitorClass
 };
 
 IdeBufferLineChange ide_buffer_change_monitor_get_change   (IdeBufferChangeMonitor *self,
-                                                            const GtkTextIter      *iter);
+                                                            guint                   line);
 void                ide_buffer_change_monitor_emit_changed (IdeBufferChangeMonitor *self);
 void                ide_buffer_change_monitor_reload       (IdeBufferChangeMonitor *self);
 

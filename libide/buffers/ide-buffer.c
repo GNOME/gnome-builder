@@ -1879,10 +1879,7 @@ ide_buffer_get_line_flags (IdeBuffer *self,
 
   if (priv->change_monitor)
     {
-      GtkTextIter iter;
-
-      gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self), &iter, line);
-      change = ide_buffer_change_monitor_get_change (priv->change_monitor, &iter);
+      change = ide_buffer_change_monitor_get_change (priv->change_monitor, line);
 
       switch (change)
         {
@@ -2155,12 +2152,7 @@ ide_buffer_trim_trailing_whitespace (IdeBuffer *self)
       IdeBufferLineChange change = IDE_BUFFER_LINE_CHANGE_CHANGED;
 
       if (priv->change_monitor)
-        {
-          GtkTextIter tmp;
-
-          gtk_text_buffer_get_iter_at_line (buffer, &tmp, line);
-          change = ide_buffer_change_monitor_get_change (priv->change_monitor, &tmp);
-        }
+        change = ide_buffer_change_monitor_get_change (priv->change_monitor, line);
 
       if (change != IDE_BUFFER_LINE_CHANGE_NONE)
         {

@@ -178,16 +178,13 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
 
 static IdeBufferLineChange
 ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
-                                          const GtkTextIter      *iter)
+                                          guint                   line)
 {
   IdeGitBufferChangeMonitor *self = (IdeGitBufferChangeMonitor *)monitor;
   gpointer key;
   gpointer value;
 
-  g_return_val_if_fail (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self), IDE_BUFFER_LINE_CHANGE_NONE);
-  g_return_val_if_fail (iter, IDE_BUFFER_LINE_CHANGE_NONE);
-
-  if (!self->state)
+  if (self->state == NULL)
     {
       /*
        * If the file is within the working directory, synthesize line addition.
@@ -197,7 +194,7 @@ ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
       return IDE_BUFFER_LINE_CHANGE_NONE;
     }
 
-  key = GINT_TO_POINTER (gtk_text_iter_get_line (iter) + 1);
+  key = GINT_TO_POINTER (line + 1);
   value = g_hash_table_lookup (self->state, key);
 
   return GPOINTER_TO_INT (value);
@@ -300,8 +297,8 @@ ide_git_buffer_change_monitor__buffer_delete_range_cb (IdeGitBufferChangeMonitor
   IDE_ENTRY;
 
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
-  g_assert (begin);
-  g_assert (end);
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
   /*
@@ -318,7 +315,8 @@ ide_git_buffer_change_monitor__buffer_delete_range_cb (IdeGitBufferChangeMonitor
   if (gtk_text_iter_get_line (begin) != gtk_text_iter_get_line (end))
     IDE_GOTO (recalculate);
 
-  change = ide_git_buffer_change_monitor_get_change (IDE_BUFFER_CHANGE_MONITOR (self), begin);
+  change = ide_git_buffer_change_monitor_get_change (IDE_BUFFER_CHANGE_MONITOR (self),
+                                                     gtk_text_iter_get_line (begin));
   if (change == IDE_BUFFER_LINE_CHANGE_NONE)
     IDE_GOTO (recalculate);
 
@@ -364,7 +362,8 @@ ide_git_buffer_change_monitor__buffer_insert_text_after_cb (IdeGitBufferChangeMo
   if (NULL != memmem (text, len, "\n", 1))
     IDE_GOTO (recalculate);
 
-  change = ide_git_buffer_change_monitor_get_change (IDE_BUFFER_CHANGE_MONITOR (self), location);
+  change = ide_git_buffer_change_monitor_get_change (IDE_BUFFER_CHANGE_MONITOR (self),
+                                                     gtk_text_iter_get_line (location));
   if (change == IDE_BUFFER_LINE_CHANGE_NONE)
     IDE_GOTO (recalculate);
 
