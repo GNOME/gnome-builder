@@ -250,6 +250,7 @@ enum {
   BEGIN_MACRO,
   BEGIN_RENAME,
   BEGIN_USER_ACTION,
+  BEGIN_WORD_COMPLETION,
   CAPTURE_MODIFIER,
   CLEAR_COUNT,
   CLEAR_MODIFIER,
@@ -5048,6 +5049,33 @@ ide_source_view_focus_out_event (GtkWidget     *widget,
 }
 
 static void
+ide_source_view_real_begin_word_completion (IdeSourceView *self,
+                                            gint           direction)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeContext *context;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if ((priv->buffer != NULL) && (context = ide_buffer_get_context (priv->buffer)))
+    {
+      IdeBufferManager *bufmgr;
+      IdeWordCompletionProvider *words;
+      GValue *value;
+
+      bufmgr = ide_context_get_buffer_manager (context);
+      words = ide_buffer_manager_get_word_completion (bufmgr);
+
+      value = g_new0(GValue, 1);
+      g_value_init (value, G_TYPE_INT);
+      g_value_set_int (value, direction);
+      g_object_set_property (G_OBJECT(words), "direction", value);
+
+      g_signal_emit_by_name (self, "show-completion");
+    }
+}
+
+static void
 ide_source_view_real_begin_macro (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -6559,6 +6587,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->remove_cursors = ide_source_view_real_remove_cursors;
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->begin_macro = ide_source_view_real_begin_macro;
+  klass->begin_word_completion = ide_source_view_real_begin_word_completion;
   klass->begin_rename = ide_source_view_real_begin_rename;
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
@@ -6835,6 +6864,23 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, begin_rename),
                   NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+ /**
+   * IdeSourceView::begin-word-completion:
+   *
+   * This signal is emitted when the user requests word completion using
+   * Ctrl-n for forward matches and Ctrl-p for backward matches as happens
+   * in Vim.
+   */
+  signals [BEGIN_WORD_COMPLETION] =
+    g_signal_new ("begin-word-completion",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, begin_word_completion),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_INT);
 
   signals [BEGIN_USER_ACTION] =
     g_signal_new_class_handler ("begin-user-action",

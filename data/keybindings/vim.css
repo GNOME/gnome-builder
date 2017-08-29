@@ -1900,8 +1900,8 @@
                    "delete-selection" () };
   bind "<ctrl>w" { "movement" (previous-word-start, 1, 1, 0)
                    "delete-selection" () };
-  bind "<ctrl>n" { "cycle-completion" (down) };
-  bind "<ctrl>p" { "cycle-completion" (up) };
+  bind "<ctrl>n" { "begin-word-completion" (1) };
+  bind "<ctrl>p" { "begin-word-completion" (-1) };
 
   bind "<ctrl>e" { "movement" (screen-up, 0, 0, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 0, 0, 1) };
