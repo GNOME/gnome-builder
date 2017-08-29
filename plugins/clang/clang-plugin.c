@@ -19,6 +19,7 @@
 #include <libpeas/peas.h>
 #include <ide.h>
 
+#include "ide-clang-code-indexer.h"
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-provider.h"
 #include "ide-clang-diagnostic-provider.h"
@@ -34,6 +35,9 @@
 void
 peas_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_CODE_INDEXER,
+                                              IDE_TYPE_CLANG_CODE_INDEXER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_HIGHLIGHTER,
                                               IDE_TYPE_CLANG_HIGHLIGHTER);

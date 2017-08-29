@@ -13,3 +13,5 @@ X-Symbol-Resolver-Languages=c,chdr,cpp
 X-Symbol-Resolver-Languages-Priority=100
 X-Diagnostic-Provider-Languages=c,chdr,cpp
 X-Diagnostic-Provider-Languages-Priority=100
+X-Code-Indexer-Languages=c,chdr,cpp,cphdr
+X-Code-Indexer-Languages-Priority=100
