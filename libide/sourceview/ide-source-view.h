@@ -223,6 +223,8 @@ struct _IdeSourceViewClass
                                        gint                     digit);
   void (*auto_indent)                 (IdeSourceView           *self);
   void (*begin_macro)                 (IdeSourceView           *self);
+  void (*begin_word_completion)       (IdeSourceView           *self,
+                                       gint                     direction);
   void (*capture_modifier)            (IdeSourceView           *self);
   void (*clear_count)                 (IdeSourceView           *self);
   void (*clear_modifier)              (IdeSourceView           *self);
