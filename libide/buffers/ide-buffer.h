@@ -21,6 +21,7 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "plugins/ide-extension-set-adapter.h"
 #include "ide-types.h"
 
 #include "formatting/ide-formatter-options.h"
@@ -62,65 +63,65 @@ struct _IdeBufferClass
   gpointer _reserved8;
 };
 
-void                ide_buffer_format_selection_async        (IdeBuffer            *self,
-                                                              IdeFormatterOptions *options,
-                                                              GCancellable         *cancellable,
-                                                              GAsyncReadyCallback   callback,
-                                                              gpointer              user_data);
-gboolean            ide_buffer_format_selection_finish       (IdeBuffer            *self,
-                                                              GAsyncResult         *result,
-                                                              GError              **error);
-gboolean            ide_buffer_get_busy                      (IdeBuffer            *self);
-gboolean            ide_buffer_get_changed_on_volume         (IdeBuffer            *self);
-gsize               ide_buffer_get_change_count              (IdeBuffer            *self);
-GBytes             *ide_buffer_get_content                   (IdeBuffer            *self);
-IdeContext         *ide_buffer_get_context                   (IdeBuffer            *self);
-IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter        (IdeBuffer            *self,
+void                      ide_buffer_format_selection_async        (IdeBuffer            *self,
+                                                                    IdeFormatterOptions *options,
+                                                                    GCancellable         *cancellable,
+                                                                    GAsyncReadyCallback   callback,
+                                                                    gpointer              user_data);
+gboolean                  ide_buffer_format_selection_finish       (IdeBuffer            *self,
+                                                                    GAsyncResult         *result,
+                                                                    GError              **error);
+gboolean                  ide_buffer_get_busy                      (IdeBuffer            *self);
+gboolean                  ide_buffer_get_changed_on_volume         (IdeBuffer            *self);
+gsize                     ide_buffer_get_change_count              (IdeBuffer            *self);
+GBytes                   *ide_buffer_get_content                   (IdeBuffer            *self);
+IdeContext               *ide_buffer_get_context                   (IdeBuffer            *self);
+IdeDiagnostic            *ide_buffer_get_diagnostic_at_iter        (IdeBuffer            *self,
+                                                                    const GtkTextIter    *iter);
+IdeFile                  *ide_buffer_get_file                      (IdeBuffer            *self);
+IdeBufferLineFlags        ide_buffer_get_line_flags                (IdeBuffer            *self,
+                                                                    guint                 line);
+gboolean                  ide_buffer_get_read_only                 (IdeBuffer            *self);
+gboolean                  ide_buffer_get_spell_checking            (IdeBuffer            *self);
+gboolean                  ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
+const gchar              *ide_buffer_get_style_scheme_name         (IdeBuffer            *self);
+const gchar              *ide_buffer_get_title                     (IdeBuffer            *self);
+gchar                    *ide_buffer_get_uri                       (IdeBuffer            *self);
+void                      ide_buffer_set_file                      (IdeBuffer            *self,
+                                                                    IdeFile              *file);
+void                      ide_buffer_set_highlight_diagnostics     (IdeBuffer            *self,
+                                                                    gboolean              highlight_diagnostics);
+void                      ide_buffer_set_spell_checking            (IdeBuffer            *self,
+                                                                    gboolean              enable);
+void                      ide_buffer_set_style_scheme_name         (IdeBuffer            *self,
+                                                                    const gchar          *style_scheme_name);
+void                      ide_buffer_trim_trailing_whitespace      (IdeBuffer            *self);
+void                      ide_buffer_check_for_volume_change       (IdeBuffer            *self);
+IdeSourceLocation        *ide_buffer_get_insert_location           (IdeBuffer            *self);
+IdeSourceLocation        *ide_buffer_get_iter_location             (IdeBuffer            *self,
+                                                                    const GtkTextIter    *iter);
+void                      ide_buffer_get_iter_at_source_location   (IdeBuffer            *self,
+                                                                    GtkTextIter          *iter,
+                                                                    IdeSourceLocation    *location);
+void                      ide_buffer_rehighlight                   (IdeBuffer            *self);
+void                      ide_buffer_get_selection_bounds          (IdeBuffer            *self,
+                                                                    GtkTextIter          *insert,
+                                                                    GtkTextIter          *selection);
+IdeRenameProvider        *ide_buffer_get_rename_provider           (IdeBuffer            *self);
+IdeExtensionSetAdapter   *ide_buffer_get_symbol_resolvers          (IdeBuffer            *self);
+void                      ide_buffer_get_symbol_at_location_async  (IdeBuffer            *self,
+                                                                    const GtkTextIter    *location,
+                                                                    GCancellable         *cancellable,
+                                                                    GAsyncReadyCallback   callback,
+                                                                    gpointer              user_data);
+IdeSymbol                *ide_buffer_get_symbol_at_location_finish (IdeBuffer            *self,
+                                                                    GAsyncResult         *result,
+                                                                    GError              **error);
+void                      ide_buffer_hold                          (IdeBuffer            *self);
+void                      ide_buffer_release                       (IdeBuffer            *self);
+gchar                    *ide_buffer_get_word_at_iter              (IdeBuffer            *self,
                                                               const GtkTextIter    *iter);
-IdeFile            *ide_buffer_get_file                      (IdeBuffer            *self);
-IdeBufferLineFlags  ide_buffer_get_line_flags                (IdeBuffer            *self,
-                                                              guint                 line);
-gboolean            ide_buffer_get_read_only                 (IdeBuffer            *self);
-gboolean            ide_buffer_get_spell_checking            (IdeBuffer            *self);
-gboolean            ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
-const gchar        *ide_buffer_get_style_scheme_name         (IdeBuffer            *self);
-const gchar        *ide_buffer_get_title                     (IdeBuffer            *self);
-gchar              *ide_buffer_get_uri                       (IdeBuffer            *self);
-void                ide_buffer_set_file                      (IdeBuffer            *self,
-                                                              IdeFile              *file);
-void                ide_buffer_set_highlight_diagnostics     (IdeBuffer            *self,
-                                                              gboolean              highlight_diagnostics);
-void                ide_buffer_set_spell_checking            (IdeBuffer            *self,
-                                                              gboolean              enable);
-void                ide_buffer_set_style_scheme_name         (IdeBuffer            *self,
-                                                              const gchar          *style_scheme_name);
-void                ide_buffer_trim_trailing_whitespace      (IdeBuffer            *self);
-void                ide_buffer_check_for_volume_change       (IdeBuffer            *self);
-IdeSourceLocation  *ide_buffer_get_insert_location           (IdeBuffer            *self);
-IdeSourceLocation  *ide_buffer_get_iter_location             (IdeBuffer            *self,
-                                                              const GtkTextIter    *iter);
-void                ide_buffer_get_iter_at_source_location   (IdeBuffer            *self,
-                                                              GtkTextIter          *iter,
-                                                              IdeSourceLocation    *location);
-void                ide_buffer_rehighlight                   (IdeBuffer            *self);
-void                ide_buffer_get_selection_bounds          (IdeBuffer            *self,
-                                                              GtkTextIter          *insert,
-                                                              GtkTextIter          *selection);
-IdeRenameProvider  *ide_buffer_get_rename_provider           (IdeBuffer            *self);
-IdeSymbolResolver  *ide_buffer_get_symbol_resolver           (IdeBuffer            *self);
-void                ide_buffer_get_symbol_at_location_async  (IdeBuffer            *self,
-                                                              const GtkTextIter    *location,
-                                                              GCancellable         *cancellable,
-                                                              GAsyncReadyCallback   callback,
-                                                              gpointer              user_data);
-IdeSymbol          *ide_buffer_get_symbol_at_location_finish (IdeBuffer            *self,
-                                                              GAsyncResult         *result,
-                                                              GError              **error);
-void                ide_buffer_hold                          (IdeBuffer            *self);
-void                ide_buffer_release                       (IdeBuffer            *self);
-gchar              *ide_buffer_get_word_at_iter              (IdeBuffer            *self,
-                                                              const GtkTextIter    *iter);
-void                ide_buffer_sync_to_unsaved_files         (IdeBuffer            *self);
+void                      ide_buffer_sync_to_unsaved_files         (IdeBuffer            *self);
 
 G_END_DECLS
 

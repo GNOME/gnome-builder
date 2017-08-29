@@ -35,8 +35,36 @@ struct _GbpSymbolLayoutStackAddin {
 
   guint                cursor_moved_handler;
 
-  guint                resolver_loaded : 1;
+  guint                resolvers_loaded : 1;
 };
+
+typedef struct
+{
+  GPtrArray         *resolvers;
+
+  IdeBuffer         *buffer;
+  IdeSourceLocation *location;
+} SymbolResolverTaskData;
+
+static void
+symbol_resolver_task_data_free (SymbolResolverTaskData *data)
+{
+  g_clear_pointer (&data->resolvers, g_ptr_array_unref);
+  g_clear_object (&data->buffer);
+  g_clear_pointer (&data->location, ide_source_location_unref);
+  g_slice_free (SymbolResolverTaskData, data);
+}
+
+static void
+get_extension (IdeExtensionSetAdapter *set,
+               PeasPluginInfo         *plugin_info,
+               PeasExtension          *extension,
+               gpointer                user_data)
+{
+  SymbolResolverTaskData *data = user_data;
+
+  g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
+}
 
 static void
 gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
@@ -44,15 +72,37 @@ gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
                                              gpointer      user_data)
 {
   IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
-  g_autoptr(GbpSymbolLayoutStackAddin) self = user_data;
+  GbpSymbolLayoutStackAddin *self;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  SymbolResolverTaskData *data;
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+  g_assert (G_IS_TASK (task));
 
   symbol = ide_symbol_resolver_find_nearest_scope_finish (symbol_resolver, result, &error);
+
+  self = g_task_get_source_object (task);
+  data = g_task_get_task_data (task);
+
+  g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
+
+  /* If symbol is not found and symbol resolvers are left try those */
+  if (symbol == NULL && data->resolvers->len)
+    {
+      IdeSymbolResolver *resolver;
+
+      resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+      ide_symbol_resolver_find_nearest_scope_async (resolver,
+                                                    data->location,
+                                                    self->scope_cancellable,
+                                                    gbp_symbol_layout_stack_addin_find_scope_cb,
+                                                    g_steal_pointer (&task));
+
+      return;
+    }
 
   if (error != NULL &&
       !(g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
@@ -79,19 +129,35 @@ gbp_symbol_layout_stack_addin_cursor_moved_cb (gpointer user_data)
 
   if (buffer != NULL)
     {
-      IdeSymbolResolver *symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
+      IdeExtensionSetAdapter *adapter;
 
-      if (symbol_resolver != NULL)
+      adapter = ide_buffer_get_symbol_resolvers (buffer);
+
+      if (ide_extension_set_adapter_get_n_extensions (adapter))
         {
-          g_autoptr(IdeSourceLocation) location = ide_buffer_get_insert_location (buffer);
+          g_autoptr(GTask) task = NULL;
+          SymbolResolverTaskData *data;
+          IdeSymbolResolver *resolver;
 
           self->scope_cancellable = g_cancellable_new ();
 
-          ide_symbol_resolver_find_nearest_scope_async (symbol_resolver,
-                                                        location,
+          task = g_task_new (self, self->scope_cancellable, NULL, NULL);
+
+          data = g_slice_new0 (SymbolResolverTaskData);
+          data->resolvers = g_ptr_array_new ();
+          data->location = ide_buffer_get_insert_location (buffer);
+
+          ide_extension_set_adapter_foreach (adapter, get_extension, data);
+
+          g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
+
+          resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+          /* Go through symbol resolvers one by one to find nearest scope */
+          ide_symbol_resolver_find_nearest_scope_async (resolver,
+                                                        data->location,
                                                         self->scope_cancellable,
                                                         gbp_symbol_layout_stack_addin_find_scope_cb,
-                                                        g_object_ref (self));
+                                                        g_steal_pointer (&task));
         }
     }
 
@@ -135,34 +201,60 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
                                                   gpointer      user_data)
 {
   IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
-  g_autoptr(GbpSymbolLayoutStackAddin) self = user_data;
+  GbpSymbolLayoutStackAddin *self;
   g_autoptr(IdeSymbolTree) tree = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  SymbolResolverTaskData *data;
 
+  g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
 
   tree = ide_symbol_resolver_get_symbol_tree_finish (symbol_resolver, result, &error);
+
+  self = g_task_get_source_object (task);
+  data = g_task_get_task_data (task);
+
+  g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
+
+  /* If tree is not fetched and symbol resolvers are left then try those */
+  if (tree == NULL && data->resolvers->len)
+    {
+      GFile *file;
+      IdeSymbolResolver *resolver;
+
+      file = ide_file_get_file (ide_buffer_get_file (data->buffer));
+      resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+
+      ide_symbol_resolver_get_symbol_tree_async (resolver,
+                                                 file,
+                                                 data->buffer,
+                                                 self->cancellable,
+                                                 gbp_symbol_layout_stack_addin_get_symbol_tree_cb,
+                                                 g_steal_pointer (&task));
+      return;
+    }
 
   if (error != NULL &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
-    g_warning ("%s", error->message);
+    g_warning ("Failed to get symbol tree%s", error->message);
 
   /* If we were destroyed, short-circuit */
-  if (self->button == NULL)
-    return;
-
-  gbp_symbol_menu_button_set_symbol_tree (self->button, tree);
+  if (self->button != NULL)
+    gbp_symbol_menu_button_set_symbol_tree (self->button, tree);
 }
 
 static void
 gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
                                            IdeBuffer                 *buffer)
 {
-  IdeSymbolResolver *symbol_resolver;
+  IdeExtensionSetAdapter *adapter;
   IdeFile *file;
+  g_autoptr(GTask) task = NULL;
+  SymbolResolverTaskData *data;
+  IdeSymbolResolver *resolver;
 
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -171,12 +263,12 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
 
-  symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
+  adapter = ide_buffer_get_symbol_resolvers (buffer);
 
-  g_assert (!symbol_resolver || IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
+  gtk_widget_set_visible (GTK_WIDGET (self->button),
+                          ide_extension_set_adapter_get_n_extensions (adapter));
 
-  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
-  if (symbol_resolver == NULL)
+  if (!ide_extension_set_adapter_get_n_extensions (adapter))
     return;
 
   file = ide_buffer_get_file (buffer);
@@ -184,12 +276,23 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
 
   self->cancellable = g_cancellable_new ();
 
-  ide_symbol_resolver_get_symbol_tree_async (symbol_resolver,
+  task = g_task_new (self, self->cancellable, NULL, NULL);
+
+  data = g_slice_new0 (SymbolResolverTaskData);
+  data->resolvers = g_ptr_array_new ();
+  data->buffer = g_object_ref (buffer);
+
+  ide_extension_set_adapter_foreach (adapter, get_extension, data);
+
+  g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
+
+  resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+  ide_symbol_resolver_get_symbol_tree_async (resolver,
                                              ide_file_get_file (file),
-                                             buffer,
+                                             data->buffer,
                                              self->cancellable,
                                              gbp_symbol_layout_stack_addin_get_symbol_tree_cb,
-                                             g_object_ref (self));
+                                             g_steal_pointer (&task));
 }
 
 static void
@@ -227,7 +330,8 @@ gbp_symbol_layout_stack_addin_bind (GbpSymbolLayoutStackAddin *self,
                                     IdeBuffer                 *buffer,
                                     DzlSignalGroup            *buffer_signals)
 {
-  IdeSymbolResolver *symbol_resolver;
+  IdeExtensionSetAdapter *adapter;
+  guint n_extensions;
 
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -237,13 +341,16 @@ gbp_symbol_layout_stack_addin_bind (GbpSymbolLayoutStackAddin *self,
 
   gbp_symbol_menu_button_set_symbol (self->button, NULL);
 
-  if (self->resolver_loaded)
+  if (self->resolvers_loaded)
     return;
 
-  if (NULL != (symbol_resolver = ide_buffer_get_symbol_resolver (buffer)))
-    self->resolver_loaded = TRUE;
+  adapter = ide_buffer_get_symbol_resolvers (buffer);
+  n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
 
-  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
+  if (n_extensions)
+    self->resolvers_loaded = TRUE;
+
+  gtk_widget_set_visible (GTK_WIDGET (self->button), n_extensions);
   gbp_symbol_layout_stack_addin_update_tree (self, buffer);
 }
 
@@ -263,24 +370,27 @@ gbp_symbol_layout_stack_addin_unbind (GbpSymbolLayoutStackAddin *self,
   g_clear_object (&self->scope_cancellable);
 
   gtk_widget_hide (GTK_WIDGET (self->button));
-  self->resolver_loaded = FALSE;
+  self->resolvers_loaded = FALSE;
 }
 
 static void
-gbp_symbol_layout_stack_addin_symbol_resolver_loaded (GbpSymbolLayoutStackAddin *self,
-                                                      IdeBuffer                 *buffer)
+gbp_symbol_layout_stack_addin_symbol_resolvers_loaded (GbpSymbolLayoutStackAddin *self,
+                                                       IdeBuffer                 *buffer)
 {
-  IdeSymbolResolver *symbol_resolver;
+  IdeExtensionSetAdapter *adapter;
+  guint n_extensions;
 
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (self->resolver_loaded)
+  if (self->resolvers_loaded)
     return;
 
-  symbol_resolver = ide_buffer_get_symbol_resolver (buffer);
-  gtk_widget_set_visible (GTK_WIDGET (self->button), symbol_resolver != NULL);
-  self->resolver_loaded = TRUE;
+  adapter = ide_buffer_get_symbol_resolvers (buffer);
+  n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->button), n_extensions);
+  self->resolvers_loaded = TRUE;
 
   gbp_symbol_layout_stack_addin_update_tree (self, buffer);
 }
@@ -333,8 +443,8 @@ gbp_symbol_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                                     G_CALLBACK (gbp_symbol_layout_stack_addin_change_settled),
                                     self);
   dzl_signal_group_connect_swapped (self->buffer_signals,
-                                    "symbol-resolver-loaded",
-                                    G_CALLBACK (gbp_symbol_layout_stack_addin_symbol_resolver_loaded),
+                                    "symbol-resolvers-loaded",
+                                    G_CALLBACK (gbp_symbol_layout_stack_addin_symbol_resolvers_loaded),
                                     self);
 }
 

@@ -81,7 +81,7 @@ typedef struct
   IdeHighlightEngine     *highlight_engine;
   IdeExtensionAdapter    *formatter_adapter;
   IdeExtensionAdapter    *rename_provider_adapter;
-  IdeExtensionAdapter    *symbol_resolver_adapter;
+  IdeExtensionSetAdapter *symbol_resolvers_adapter;
   PeasExtensionSet       *addins;
   gchar                  *title;
 
@@ -112,6 +112,15 @@ typedef struct
   guint                   read_only : 1;
 } IdeBufferPrivate;
 
+typedef struct
+{
+  GPtrArray         *resolvers;
+
+  IdeSourceLocation *location;
+
+  IdeSymbol         *symbol;
+} LookUpSymbolData;
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
 
 DZL_DEFINE_COUNTER (instances, "IdeBuffer", "Instances", "Number of IdeBuffer instances.")
@@ -137,12 +146,32 @@ enum {
   LINE_FLAGS_CHANGED,
   LOADED,
   SAVED,
-  SYMBOL_RESOLVER_LOADED,
+  SYMBOL_RESOLVERS_LOADED,
   LAST_SIGNAL
 };
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
+
+static void
+lookup_symbol_task_data_free (LookUpSymbolData *data)
+{
+  g_clear_pointer (&data->resolvers, g_ptr_array_unref);
+  g_clear_pointer (&data->location, ide_source_location_unref);
+  g_clear_pointer (&data->symbol, ide_symbol_unref);
+  g_slice_free (LookUpSymbolData, data);
+}
+
+static void
+lookup_symbol_get_extension (IdeExtensionSetAdapter *set,
+                             PeasPluginInfo         *plugin_info,
+                             PeasExtension          *extension,
+                             gpointer                user_data)
+{
+  LookUpSymbolData *data = user_data;
+
+  g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
+}
 
 static gboolean
 ide_buffer_settled_cb (gpointer user_data)
@@ -904,8 +933,8 @@ ide_buffer_notify_language (IdeBuffer  *self,
   if (priv->rename_provider_adapter != NULL)
     ide_extension_adapter_set_value (priv->rename_provider_adapter, lang_id);
 
-  if (priv->symbol_resolver_adapter != NULL)
-    ide_extension_adapter_set_value (priv->symbol_resolver_adapter, lang_id);
+  if (priv->symbol_resolvers_adapter != NULL)
+    ide_extension_set_adapter_set_value (priv->symbol_resolvers_adapter, lang_id);
 
   if (priv->formatter_adapter != NULL)
     ide_extension_adapter_set_value (priv->formatter_adapter, lang_id);
@@ -1118,24 +1147,31 @@ ide_buffer_load_rename_provider (IdeBuffer           *self,
 }
 
 static void
-ide_buffer_load_symbol_resolver (IdeBuffer           *self,
-                                 GParamSpec          *pspec,
-                                 IdeExtensionAdapter *adapter)
+ide_buffer_load_symbol_resolver (IdeExtensionSetAdapter *adapter,
+                                 PeasPluginInfo         *plugin_info,
+                                 PeasExtension          *extension,
+                                 gpointer                user_data)
 {
-  IdeSymbolResolver *resolver;
+  ide_symbol_resolver_load (IDE_SYMBOL_RESOLVER (extension));
+}
 
+static void
+ide_buffer_load_symbol_resolvers (IdeBuffer              *self,
+                                  IdeExtensionSetAdapter *adapter)
+{
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUFFER (self));
-  g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
 
-  resolver = ide_extension_adapter_get_extension (adapter);
+  if (!ide_extension_set_adapter_get_n_extensions (adapter))
+    return;
 
-  if (resolver != NULL)
-    {
-      ide_symbol_resolver_load (resolver);
-      g_signal_emit (self, signals [SYMBOL_RESOLVER_LOADED], 0);
-    }
+  ide_extension_set_adapter_foreach (adapter,
+                                     ide_buffer_load_symbol_resolver,
+                                     NULL);
+
+  g_signal_emit (self, signals [SYMBOL_RESOLVERS_LOADED], 0);
 
   IDE_EXIT;
 }
@@ -1317,15 +1353,15 @@ ide_buffer_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  priv->symbol_resolver_adapter = ide_extension_adapter_new (priv->context,
-                                                             NULL,
-                                                             IDE_TYPE_SYMBOL_RESOLVER,
-                                                             "Symbol-Resolver-Languages",
-                                                             NULL);
+  priv->symbol_resolvers_adapter = ide_extension_set_adapter_new (priv->context,
+                                                                  peas_engine_get_default (),
+                                                                  IDE_TYPE_SYMBOL_RESOLVER,
+                                                                  "Symbol-Resolver-Languages",
+                                                                  NULL);
 
-  g_signal_connect_object (priv->symbol_resolver_adapter,
-                           "notify::extension",
-                           G_CALLBACK (ide_buffer_load_symbol_resolver),
+  g_signal_connect_object (priv->symbol_resolvers_adapter,
+                           "extensions-loaded",
+                           G_CALLBACK (ide_buffer_load_symbol_resolvers),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -1388,7 +1424,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_object (&priv->addins);
   g_clear_object (&priv->highlight_engine);
   g_clear_object (&priv->rename_provider_adapter);
-  g_clear_object (&priv->symbol_resolver_adapter);
+  g_clear_object (&priv->symbol_resolvers_adapter);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 
@@ -1680,10 +1716,10 @@ ide_buffer_class_init (IdeBufferClass *klass)
   /**
    * IdeBuffer::symbol-resolver-loaded:
    *
-   * This signal is emitted when the buffer has completed loading a new symbol resolver.
+   * This signal is emitted when the buffer has completed loading symbol resolvers.
    */
-  signals [SYMBOL_RESOLVER_LOADED] =
-    g_signal_new_class_handler ("symbol-resolver-loaded",
+  signals [SYMBOL_RESOLVERS_LOADED] =
+    g_signal_new_class_handler ("symbol-resolvers-loaded",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 0,
@@ -2532,26 +2568,66 @@ ide_buffer_rehighlight (IdeBuffer *self)
 }
 
 static void
-ide_buffer__symbol_provider_lookup_symbol_cb (GObject      *object,
-                                              GAsyncResult *result,
-                                              gpointer      user_data)
+ide_buffer_get_symbol_at_location_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
 {
   IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  LookUpSymbolData *data;
 
+  g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_TASK (task));
 
   symbol = ide_symbol_resolver_lookup_symbol_finish (symbol_resolver, result, &error);
 
-  if (symbol == NULL)
+  data = g_task_get_task_data (task);
+
+  if (symbol != NULL)
     {
-      g_task_return_error (task, error);
-      return;
+      /*
+       * Store symbol which has definition location. If no symbol has definition location
+       * then store symbol which has declaration location.
+       */
+      if ((data->symbol == NULL) ||
+          (ide_symbol_get_definition_location (symbol) != NULL) ||
+          (ide_symbol_get_definition_location (data->symbol) == NULL &&
+           ide_symbol_get_declaration_location (symbol)))
+        {
+          g_clear_pointer (&data->symbol, ide_symbol_unref);
+
+          data->symbol = g_steal_pointer (&symbol);
+        }
     }
 
-  g_task_return_pointer (task, ide_symbol_ref (symbol), (GDestroyNotify)ide_symbol_unref);
+  g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
+
+  if (data->resolvers->len)
+    {
+      IdeSymbolResolver *resolver;
+      GCancellable *cancellable;
+
+      resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+      cancellable = g_task_get_cancellable (task);
+
+      ide_symbol_resolver_lookup_symbol_async (resolver,
+                                               data->location,
+                                               cancellable,
+                                               ide_buffer_get_symbol_at_location_cb,
+                                               g_steal_pointer (&task));
+    }
+  else if (data->symbol == NULL)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND, "Symbol not found");
+    }
+  else
+    {
+      g_task_return_pointer (task,
+                             g_steal_pointer (&data->symbol),
+                             (GDestroyNotify)ide_symbol_unref);
+    }
 }
 
 /**
@@ -2573,41 +2649,56 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
                                          gpointer             user_data)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  IdeSymbolResolver *symbol_resolver;
+  IdeExtensionSetAdapter *adapter;
+  IdeSymbolResolver *resolver;
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeSourceLocation) srcloc = NULL;
   guint line;
   guint line_offset;
   guint offset;
+  guint n_extensions;
+  g_autoptr(GPtrArray) extensions = NULL;
+  LookUpSymbolData *data;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (location != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  adapter = ide_buffer_get_symbol_resolvers (self);
+  n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
 
-  symbol_resolver = ide_buffer_get_symbol_resolver (self);
-
-  if (symbol_resolver == NULL)
+  if (!n_extensions)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("The current language lacks a symbol resolver."));
+                               _("The current language lacks symbol resolver."));
       return;
     }
+
+  task = g_task_new (self, cancellable, callback, user_data);
 
   line = gtk_text_iter_get_line (location);
   line_offset = gtk_text_iter_get_line_offset (location);
   offset = gtk_text_iter_get_offset (location);
-
   srcloc = ide_source_location_new (priv->file, line, line_offset, offset);
 
-  ide_symbol_resolver_lookup_symbol_async (symbol_resolver,
-                                           srcloc,
+  data = g_slice_new0 (LookUpSymbolData);
+  data->resolvers = g_ptr_array_new_full (n_extensions, NULL);
+  data->location = ide_source_location_ref (srcloc);
+
+  ide_extension_set_adapter_foreach (adapter, lookup_symbol_get_extension, data);
+
+  g_task_set_task_data (task, data, (GDestroyNotify)lookup_symbol_task_data_free);
+
+  resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+
+  /* Try lookup_symbol on each symbol resolver one by by one. */
+  ide_symbol_resolver_lookup_symbol_async (resolver,
+                                           data->location,
                                            cancellable,
-                                           ide_buffer__symbol_provider_lookup_symbol_cb,
-                                           g_object_ref (task));
+                                           ide_buffer_get_symbol_at_location_cb,
+                                           g_steal_pointer (&task));
 }
 
 /**
@@ -2661,7 +2752,7 @@ ide_buffer_reclaim_timeout (gpointer data)
   priv->reclamation_handler = 0;
 
   g_clear_object (&priv->rename_provider_adapter);
-  g_clear_object (&priv->symbol_resolver_adapter);
+  g_clear_object (&priv->symbol_resolvers_adapter);
 
   buffer_manager = ide_context_get_buffer_manager (priv->context);
 
@@ -2780,24 +2871,21 @@ ide_buffer_get_rename_provider (IdeBuffer *self)
 }
 
 /**
- * ide_buffer_get_symbol_resolver:
+ * ide_buffer_get_symbol_resolvers:
  * @self: A #IdeBuffer.
  *
- * Gets the symbol resolver for the buffer based on the current language.
+ * Gets the symbol resolvers for the buffer based on the current language.
  *
- * Returns: (nullable) (transfer none): An #IdeSymbolResolver or %NULL.
+ * Returns: (nullable) (transfer none): An #IdeExtensionSetAdapter or %NULL.
  */
-IdeSymbolResolver *
-ide_buffer_get_symbol_resolver (IdeBuffer *self)
+IdeExtensionSetAdapter *
+ide_buffer_get_symbol_resolvers (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
-  if (priv->symbol_resolver_adapter != NULL)
-    return ide_extension_adapter_get_extension (priv->symbol_resolver_adapter);
-
-  return NULL;
+  return priv->symbol_resolvers_adapter;
 }
 
 /**

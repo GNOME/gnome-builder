@@ -43,6 +43,7 @@ struct _IdeExtensionSetAdapter
 G_DEFINE_TYPE (IdeExtensionSetAdapter, ide_extension_set_adapter, IDE_TYPE_OBJECT)
 
 enum {
+  EXTENSIONS_LOADED,
   EXTENSION_ADDED,
   EXTENSION_REMOVED,
   LAST_SIGNAL
@@ -208,6 +209,7 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
             remove_extension (self, plugin_info, exten);
         }
     }
+  g_signal_emit (self, signals [EXTENSIONS_LOADED], 0);
 }
 
 static gboolean
@@ -443,6 +445,14 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
                   2,
                   PEAS_TYPE_PLUGIN_INFO,
                   PEAS_TYPE_EXTENSION);
+
+  signals [EXTENSIONS_LOADED] =
+    g_signal_new ("extensions-loaded",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 }
 
 static void

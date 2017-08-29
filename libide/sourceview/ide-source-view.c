@@ -200,6 +200,13 @@ typedef struct
   GtkTextMark      *word_end_mark;
 } DefinitionHighlightData;
 
+typedef struct
+{
+  GPtrArray         *resolvers;
+
+  IdeSourceLocation *location;
+} FindReferencesTaskData;
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
 DZL_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourceView instances")
 
@@ -330,6 +337,25 @@ static void ide_source_view_maybe_overwrite          (IdeSourceView         *sel
                                                       GtkTextIter           *iter,
                                                       const gchar           *text,
                                                       gint                   len);
+
+static void
+find_references_task_data_free (FindReferencesTaskData *data)
+{
+  g_clear_pointer (&data->resolvers, g_ptr_array_unref);
+  g_clear_pointer (&data->location, ide_source_location_unref);
+  g_slice_free (FindReferencesTaskData, data);
+}
+
+static void
+find_references_task_get_extension (IdeExtensionSetAdapter *set,
+                                    PeasPluginInfo         *plugin_info,
+                                    PeasExtension          *extension,
+                                    gpointer                user_data)
+{
+  FindReferencesTaskData *data = user_data;
+
+  g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
+}
 
 static SearchMovement *
 search_movement_ref (SearchMovement *movement)
@@ -2770,6 +2796,10 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
   kind = ide_symbol_get_kind (symbol);
 
   srcloc = ide_symbol_get_definition_location (symbol);
+
+  if (srcloc == NULL)
+    srcloc = ide_symbol_get_declaration_location (symbol);
+
   if (srcloc != NULL)
     {
       GtkTextIter word_start;
@@ -5096,6 +5126,9 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
 
   srcloc = ide_symbol_get_definition_location (symbol);
 
+  if (srcloc == NULL)
+    srcloc = ide_symbol_get_declaration_location (symbol);
+
   if (srcloc != NULL)
     {
       guint line = ide_source_location_get_line (srcloc);
@@ -5974,8 +6007,8 @@ ide_source_view_find_references_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
-  IdeSymbolResolver *resolver = (IdeSymbolResolver *)object;
-  g_autoptr(IdeSourceView) self = user_data;
+  IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
+  IdeSourceView *self;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   g_autoptr(GPtrArray) references = NULL;
   g_autoptr(GError) error = NULL;
@@ -5985,17 +6018,38 @@ ide_source_view_find_references_cb (GObject      *object,
   GtkTextMark *insert;
   GtkTextIter iter;
   GdkRectangle loc;
+  g_autoptr(GTask) task = user_data;
+  FindReferencesTaskData *data;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  references = ide_symbol_resolver_find_references_finish (resolver, result, &error);
+  references = ide_symbol_resolver_find_references_finish (symbol_resolver, result, &error);
 
-  if (error != NULL)
-    g_debug ("%s", error->message);
+  self = g_task_get_source_object (task);
+  data = g_task_get_task_data (task);
+
+  g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
+
+  /* If references are not found and symbol resolvers are left try those */
+  if (references == NULL && data->resolvers->len)
+    {
+      GCancellable *cancellable;
+      IdeSymbolResolver *resolver;
+
+      cancellable = g_task_get_cancellable (task);
+      resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+
+      ide_symbol_resolver_find_references_async (resolver,
+                                                 data->location,
+                                                 cancellable,
+                                                 ide_source_view_find_references_cb,
+                                                 g_steal_pointer (&task));
+      return;
+    }
 
   /* Ignore popover if we are no longer visible or not top-most */
   if (!gtk_widget_get_visible (GTK_WIDGET (self)) ||
@@ -6107,28 +6161,45 @@ static void
 ide_source_view_real_find_references (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(GTask) task = NULL;
+  IdeExtensionSetAdapter *adapter;
+  FindReferencesTaskData *data;
+  guint n_extensions;
   IdeSymbolResolver *resolver;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  resolver = ide_buffer_get_symbol_resolver (priv->buffer);
+  task = g_task_new (self, NULL, NULL, NULL);
 
-  if (resolver == NULL)
+  adapter = ide_buffer_get_symbol_resolvers (priv->buffer);
+  n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
+
+  if (!n_extensions)
     {
       g_debug ("No symbol resolver is available");
+
       IDE_EXIT;
     }
 
-  location = ide_buffer_get_insert_location (priv->buffer);
+  data = g_slice_new (FindReferencesTaskData);
 
+  data->resolvers = g_ptr_array_new_full (n_extensions, NULL);
+  data->location = ide_buffer_get_insert_location (priv->buffer);
+
+  g_task_set_task_data (task, data, (GDestroyNotify)find_references_task_data_free);
+
+  ide_extension_set_adapter_foreach (adapter, find_references_task_get_extension, data);
+
+  resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
+
+  /* Try each symbol resolver one by one to find references. */
   ide_symbol_resolver_find_references_async (resolver,
-                                             location,
+                                             data->location,
                                              NULL,
                                              ide_source_view_find_references_cb,
-                                             g_object_ref (self));
+                                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
