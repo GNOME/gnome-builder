@@ -29,8 +29,9 @@ G_DECLARE_FINAL_TYPE (GbpDocumentationCard, gbp_documentation_card, GBP, DOCUMEN
 
 void gbp_documentation_card_set_info (GbpDocumentationCard *self,
                                       IdeDocumentationInfo *info);
-void gbp_documentation_card_popup    (GbpDocumentationCard *self);
-void gbp_documentation_card_popdown  (GbpDocumentationCard *self);
+void gbp_documentation_card_popup    (GbpDocumentationCard *self,
+                                      gint x,
+                                      gint y);
 G_END_DECLS
 
 #endif /* GB_DOCUMENTATION_CARD_H */

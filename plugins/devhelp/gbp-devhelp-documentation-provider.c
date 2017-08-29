@@ -248,7 +248,7 @@ gbp_devhelp_documentation_provider_get_info (IdeDocumentationProvider *provider,
   if (parse_succ)
     {
       if (G_UNLIKELY (self->proposal == NULL))
-          return;
+        return;
 
       ide_documentation_info_take_proposal (info, g_steal_pointer (&self->proposal));
     }

@@ -46,6 +46,64 @@ static void iface_init (IdeEditorViewAddinInterface *iface);
 G_DEFINE_TYPE_EXTENDED (GbpDocumentationCardViewAddin, gbp_documentation_card_view_addin, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, iface_init))
 
+static void
+documentation_requested_cb (GbpDocumentationCardViewAddin *self,
+                            const gchar                   *word,
+                            IdeSourceView                 *source_view)
+{
+  IdeBuffer *buffer;
+  GtkSourceLanguage *lang;
+  IdeContext *context;
+  IdeDocumentation *doc;
+  IdeDocumentationContext doc_context;
+  g_autoptr(IdeDocumentationInfo) info = NULL;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GdkRectangle begin_location;
+  GdkRectangle end_location;
+  gint x1, x2;
+  gint y1, y2;
+
+  g_assert (GBP_IS_DOCUMENTATION_CARD_VIEW_ADDIN (self));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  buffer = ide_editor_view_get_buffer (self->editor_view);
+  if (buffer == NULL)
+    return;
+
+  context = ide_buffer_get_context (buffer);
+  doc = ide_context_get_documentation (context);
+
+  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (source_view), &begin, &begin_location);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (source_view), &end, &end_location);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (source_view), GTK_TEXT_WINDOW_WIDGET,
+                                         begin_location.x, begin_location.y, &x1, &y1);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (source_view), GTK_TEXT_WINDOW_WIDGET,
+                                         end_location.x, end_location.y, &x2, &y2);
+
+  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  if (lang == NULL)
+    return;
+
+  if (ide_str_equal0 (gtk_source_language_get_id (lang), "c"))
+    doc_context = IDE_DOCUMENTATION_CONTEXT_CARD_C;
+
+  if (g_strcmp0 (word, self->previous_text) != 0)
+    {
+      info = ide_documentation_get_info (doc, word, doc_context);
+      if (ide_documentation_info_get_size (info) == 0)
+        return;
+
+      gbp_documentation_card_set_info (self->popover, info);
+      g_free (self->previous_text);
+      self->previous_text = g_strdup (word);
+    }
+
+  gtk_popover_set_modal (GTK_POPOVER (self->popover), TRUE);
+  gbp_documentation_card_popup (self->popover, (x1 + x2) / 2, y1);
+}
+
 static gboolean
 within_space (GbpDocumentationCardViewAddin *self,
               guint                          x,
@@ -67,7 +125,7 @@ unichar_issymbol (gunichar ch)
 static gboolean
 search_document_cb (gpointer data)
 {
-  GbpDocumentationCardViewAddin *self = GBP_DOCUMENTATION_CARD_VIEW_ADDIN  (data);
+  GbpDocumentationCardViewAddin *self = GBP_DOCUMENTATION_CARD_VIEW_ADDIN (data);
   IdeBuffer *buffer;
   IdeSourceView *source_view;
   GtkSourceLanguage *lang;
@@ -85,6 +143,7 @@ search_document_cb (gpointer data)
   g_autoptr(IdeDocumentationInfo) info = NULL;
   g_autofree gchar *selected_text = NULL;
   gint x, y;
+  gint buf_x, buf_y;
 
   self->timeout_id = 0;
 
@@ -96,7 +155,7 @@ search_document_cb (gpointer data)
     {
       if (self->poped_up)
         self->poped_up = FALSE;
-      gbp_documentation_card_popdown (self->popover);
+      gtk_popover_popdown (GTK_POPOVER (self->popover));
       return G_SOURCE_REMOVE;
     }
 
@@ -107,7 +166,7 @@ search_document_cb (gpointer data)
       if (within_space (self, x, y))
         return G_SOURCE_REMOVE;
       self->poped_up = FALSE;
-      gbp_documentation_card_popdown (self->popover);
+      gtk_popover_popdown (GTK_POPOVER (self->popover));
       return G_SOURCE_REMOVE;
     }
 
@@ -129,14 +188,14 @@ search_document_cb (gpointer data)
   if (lang == NULL)
     return G_SOURCE_REMOVE;
 
-  if (ide_str_equal0 (gtk_source_language_get_id(lang), "c"))
+  if (ide_str_equal0 (gtk_source_language_get_id (lang), "c"))
     doc_context = IDE_DOCUMENTATION_CONTEXT_CARD_C;
   else
     return G_SOURCE_REMOVE;
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (source_view), GTK_TEXT_WINDOW_WIDGET, x, y, &x, &y);
-  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (source_view), &end, x, y);
-  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (source_view), &begin, x, y);
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (source_view), GTK_TEXT_WINDOW_WIDGET, x, y, &buf_x, &buf_y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (source_view), &end, buf_x, buf_y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (source_view), &begin, buf_x, buf_y);
 
   while (unichar_issymbol (gtk_text_iter_get_char (&begin)))
     if (!gtk_text_iter_backward_char (&begin))
@@ -160,7 +219,7 @@ search_document_cb (gpointer data)
       self->previous_text = g_steal_pointer (&selected_text);
     }
 
-  gbp_documentation_card_popup (self->popover);
+  gbp_documentation_card_popup (self->popover, x, y);
   self->poped_up = TRUE;
 
   return G_SOURCE_REMOVE;
@@ -171,7 +230,7 @@ search_document_cb (gpointer data)
 static gboolean
 motion_notify_event_cb (gpointer data)
 {
-  GbpDocumentationCardViewAddin *self = GBP_DOCUMENTATION_CARD_VIEW_ADDIN  (data);
+  GbpDocumentationCardViewAddin *self = GBP_DOCUMENTATION_CARD_VIEW_ADDIN (data);
 
   ide_clear_source (&self->timeout_id);
 
@@ -208,6 +267,7 @@ gbp_documentation_card_view_addin_load (IdeEditorViewAddin *addin,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->popover);
+
   self->motion_handler_id =
     g_signal_connect_object (view,
                             "motion-notify-event",
@@ -215,6 +275,11 @@ gbp_documentation_card_view_addin_load (IdeEditorViewAddin *addin,
                             self,
                             G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (ide_editor_view_get_view (view),
+                           "documentation-requested",
+                           G_CALLBACK (documentation_requested_cb),
+                           addin,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -222,21 +287,26 @@ gbp_documentation_card_view_addin_unload (IdeEditorViewAddin *addin,
                                           IdeEditorView      *view)
 {
   GbpDocumentationCardViewAddin *self;
+  IdeSourceView *source_view;
 
   g_assert (GBP_IS_DOCUMENTATION_CARD_VIEW_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
   self = GBP_DOCUMENTATION_CARD_VIEW_ADDIN (addin);
+  source_view = ide_editor_view_get_view (view);
 
   ide_clear_source (&self->timeout_id);
   ide_clear_signal_handler (self->editor_view, &self->motion_handler_id);
-  g_clear_pointer (&self->previous_text, g_free);
 
-  if (self->popover != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->popover));
-
+  g_free (self->previous_text);
+  gtk_widget_destroy (GTK_WIDGET (self->popover));
+  self->popover = NULL;
   self->editor_view = NULL;
 
+  if (source_view != NULL)
+    g_signal_handlers_disconnect_by_func (source_view,
+                                          G_CALLBACK (documentation_requested_cb),
+                                          addin);
 }
 
 static void

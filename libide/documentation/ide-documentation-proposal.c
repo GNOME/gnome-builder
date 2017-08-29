@@ -103,16 +103,16 @@ ide_documentation_proposal_set_text (IdeDocumentationProposal *self,
   g_return_if_fail (IDE_IS_DOCUMENTATION_PROPOSAL (self));
 
     if (g_strcmp0 (priv->text, text) != 0)
-    {
-      g_free (priv->text);
-      priv->text = g_strdup (text);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEXT]);
-    }
+      {
+        g_free (priv->text);
+        priv->text = g_strdup (text);
+        g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEXT]);
+      }
 }
 
 void
-ide_documentation_proposal_set_uri  (IdeDocumentationProposal *self,
-                                     const gchar              *uri)
+ide_documentation_proposal_set_uri (IdeDocumentationProposal *self,
+                                    const gchar              *uri)
 {
   IdeDocumentationProposalPrivate *priv = ide_documentation_proposal_get_instance_private (self);
 

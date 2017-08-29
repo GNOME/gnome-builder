@@ -97,9 +97,9 @@ ide_documentation_init (IdeDocumentation *self)
  * Returns: (transfer full): An #IdeDocumentationInfo
  */
 IdeDocumentationInfo *
-ide_documentation_get_info    (IdeDocumentation        *self,
-                               const gchar             *input,
-                               IdeDocumentationContext  context)
+ide_documentation_get_info (IdeDocumentation        *self,
+                            const gchar             *input,
+                            IdeDocumentationContext  context)
 {
   IdeDocumentationInfo *info;
 

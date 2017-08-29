@@ -43,30 +43,6 @@ struct _GbpDocumentationCard
 
 G_DEFINE_TYPE (GbpDocumentationCard, gbp_documentation_card, GTK_TYPE_POPOVER)
 
-static gboolean
-card_popup (GbpDocumentationCard *self)
-{
-  GdkRectangle rec = {1, 1, 1, 1};
-
-  gdk_window_get_device_position (self->window, self->pointer, &rec.x, &rec.y, NULL);
-  gtk_popover_set_pointing_to (GTK_POPOVER (self), &rec);
-  gtk_popover_popup (GTK_POPOVER (self));
-
-  return FALSE;
-}
-
-static gboolean
-card_popdown (GbpDocumentationCard *self)
-{
-  gtk_popover_popdown (GTK_POPOVER (self));
-  gtk_popover_set_modal (GTK_POPOVER (self), FALSE);
-
-  gtk_widget_set_visible (GTK_WIDGET (self->text), FALSE);
-  gtk_widget_set_visible (GTK_WIDGET (self->button), TRUE);
-
-  return FALSE;
-}
-
 static void
 gbp_documentation_card__button_clicked (GbpDocumentationCard *self,
                                         GtkButton            *button)
@@ -82,16 +58,31 @@ gbp_documentation_card__button_clicked (GbpDocumentationCard *self,
 
 }
 
+void
+gbp_documentation_card_closed (GtkPopover *popover)
+{
+  GbpDocumentationCard *self = (GbpDocumentationCard *)popover;
+
+  g_assert (GBP_IS_DOCUMENTATION_CARD (self));
+
+  gtk_popover_set_modal (popover, FALSE);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->text), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (self->button), TRUE);
+}
+
 static void
 gbp_documentation_card_class_init (GbpDocumentationCardClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkPopoverClass *popover_class = GTK_POPOVER_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/documentation-card/gbp-documentation-card.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpDocumentationCard, button);
   gtk_widget_class_bind_template_child (widget_class, GbpDocumentationCard, header);
   gtk_widget_class_bind_template_child (widget_class, GbpDocumentationCard, text);
 
+  popover_class->closed = gbp_documentation_card_closed;
 }
 
 static void
@@ -123,24 +114,23 @@ gbp_documentation_card_set_info (GbpDocumentationCard *self,
 }
 
 void
-gbp_documentation_card_popup (GbpDocumentationCard *self)
+gbp_documentation_card_popup (GbpDocumentationCard *self,
+                              gint x,
+                              gint y)
 {
-  GdkDisplay *display;
+  GdkRectangle rec;
 
   g_return_if_fail (GBP_IS_DOCUMENTATION_CARD (self));
 
-  self->window = gtk_widget_get_parent_window (gtk_popover_get_relative_to (GTK_POPOVER (self)));
-  display = gdk_window_get_display (self->window);
-  self->pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  if (x < 0 || y < 0)
+    return;
 
-  card_popup (self);
-}
+  rec.x = x;
+  rec.y = y;
+  rec.width = 1;
+  rec.height = 1;
 
-void
-gbp_documentation_card_popdown (GbpDocumentationCard *self)
-{
-  g_return_if_fail (GBP_IS_DOCUMENTATION_CARD (self));
-
-  card_popdown (self);
+  gtk_popover_set_pointing_to (GTK_POPOVER (self), &rec);
+  gtk_popover_popup (GTK_POPOVER (self));
 }
 
