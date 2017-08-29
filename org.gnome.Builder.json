@@ -54,6 +54,7 @@
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g",
         "env": {
+            "BASH_COMPLETIONSDIR": "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH": "../tmp/",
             "V": "1"
         }
