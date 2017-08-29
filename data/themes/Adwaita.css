@@ -4,3 +4,27 @@
 entry.search-missing {
   border-color: #aa0000;
 }
+
+
+/* Utilities stack switcher: make flat'ish */
+ideeditorutilities > dzldockpaned > box > stackswitcher > button {
+  background-color: @theme_bg_color;
+  background-image: none;
+}
+ideeditorutilities > dzldockpaned > box > stackswitcher > button:checked {
+  background-image: none;
+  background-color: #d9d9d7;
+}
+ideeditorutilities > dzldockpaned > box > stackswitcher > button:hover {
+  background-image: none;
+  background-color: shade(@theme_bg_color, 1.03);
+}
+ideeditorutilities > dzldockpaned > box > stackswitcher > button:checked:hover {
+  background-image: none;
+  background-color: shade(#d9d9d7, 1.03);
+}
+ideeditorutilities > dzldockpaned > box > stackswitcher > button:active:hover,
+ideeditorutilities > dzldockpaned > box > stackswitcher > button:active {
+  background-image: none;
+  background-color: shade(#d9d9d7, 1.01);
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeEditorUtilities" parent="IdeLayoutPane">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkStackSwitcher" id="stack_switcher">
+            <property name="orientation">vertical</property>
+            <property name="stack">stack</property>
+            <property name="vexpand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="transition-type">crossfade</property>
+            <property name="homogeneous">false</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

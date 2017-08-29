@@ -80,6 +80,7 @@ G_BEGIN_DECLS
 #include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-sidebar.h"
+#include "editor/ide-editor-utilities.h"
 #include "editor/ide-editor-view-addin.h"
 #include "editor/ide-editor-view.h"
 #include "files/ide-file-settings.h"

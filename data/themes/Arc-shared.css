@@ -48,11 +48,11 @@ layoutpane stackswitcher button:checked {
 }
 /* All boxes */
 layoutpane > box > box.horizontal > stackswitcher > button:hover {
-	border: 1px solid @borders;
+  border: 1px solid @borders;
 }
 /* Box above file switcher */
 layoutpane > box.vertical:first-child > box.horizontal {
-	border: 1px solid @borders;
+  border: 1px solid @borders;
 }
 
 
@@ -74,4 +74,10 @@ window.workbench buildperspective list row:last-child {
 popover.messagepopover > * > * {
   margin: 0;
   padding: 0;
+}
+
+
+/* utilities stack switcher */
+ideeditorutilities > dzldockpaned > box > stackswitcher {
+  margin: 6px;
 }

@@ -20,6 +20,7 @@
 
 #include "diagnostics/ide-source-location.h"
 #include "editor/ide-editor-sidebar.h"
+#include "editor/ide-editor-utilities.h"
 #include "layout/ide-layout.h"
 #include "layout/ide-layout-grid.h"
 #include "layout/ide-layout-transient-sidebar.h"
@@ -40,9 +41,6 @@ IdeLayoutView             *ide_editor_perspective_get_active_view               
 IdeLayoutGrid             *ide_editor_perspective_get_grid                      (IdeEditorPerspective *self);
 IdeEditorSidebar          *ide_editor_perspective_get_sidebar                   (IdeEditorPerspective *self);
 IdeLayoutTransientSidebar *ide_editor_perspective_get_transient_sidebar         (IdeEditorPerspective *self);
-
-/* We want this to use "classifications" rather than "edges" */
-GtkWidget        *ide_editor_perspective_get_bottom_edge               (IdeEditorPerspective *self);
-
+GtkWidget                 *ide_editor_perspective_get_utilities                 (IdeEditorPerspective *self);
 
 G_END_DECLS

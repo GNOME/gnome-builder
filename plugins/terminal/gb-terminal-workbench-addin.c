@@ -141,6 +141,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
       panel = g_object_new (DZL_TYPE_DOCK_WIDGET,
                             "child", self->run_terminal,
                             "expand", TRUE,
+                            "icon-name", "system-run-symbolic",
                             "title", _("Application Output"),
                             "visible", TRUE,
                             NULL);
@@ -149,7 +150,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
       perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
       g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
 
-      bottom_pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (perspective));
+      bottom_pane = ide_editor_perspective_get_utilities (IDE_EDITOR_PERSPECTIVE (perspective));
       gtk_container_add (GTK_CONTAINER (bottom_pane), GTK_WIDGET (self->run_panel));
     }
   else
@@ -245,6 +246,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
     {
       self->panel_dock_widget = g_object_new (DZL_TYPE_DOCK_WIDGET,
                                               "expand", TRUE,
+                                              "icon-name", "utilities-terminal-symbolic",
                                               "title", _("Terminal"),
                                               "visible", TRUE,
                                               NULL);
@@ -263,7 +265,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
   perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
 
-  bottom_pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (perspective));
+  bottom_pane = ide_editor_perspective_get_utilities (IDE_EDITOR_PERSPECTIVE (perspective));
   gtk_container_add (GTK_CONTAINER (bottom_pane), GTK_WIDGET (self->panel_dock_widget));
 
   run_manager = ide_context_get_run_manager (context);

@@ -53,8 +53,9 @@ gb_sysmon_addin_load (IdeWorkbenchAddin *addin,
   g_assert (editor != NULL);
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
 
-  pane = ide_editor_perspective_get_bottom_edge (IDE_EDITOR_PERSPECTIVE (editor));
+  pane = ide_editor_perspective_get_utilities (IDE_EDITOR_PERSPECTIVE (editor));
   panel = g_object_new (GB_TYPE_SYSMON_PANEL,
+                        "icon-name", "utilities-system-monitor-symbolic",
                         "expand", TRUE,
                         "visible", TRUE,
                         NULL);

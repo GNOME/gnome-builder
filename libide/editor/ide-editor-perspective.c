@@ -28,6 +28,7 @@
 #include "editor/ide-editor-private.h"
 #include "editor/ide-editor-properties.h"
 #include "editor/ide-editor-sidebar.h"
+#include "editor/ide-editor-utilities.h"
 #include "editor/ide-editor-view.h"
 #include "layout/ide-layout-transient-sidebar.h"
 #include "workbench/ide-perspective.h"
@@ -207,6 +208,13 @@ ide_editor_perspective_create_edge (DzlDockBin      *dock_bin,
                          "edge", edge,
                          "reveal-child", FALSE,
                          "visible", FALSE,
+                         NULL);
+
+  if (edge == GTK_POS_BOTTOM)
+    return g_object_new (IDE_TYPE_EDITOR_UTILITIES,
+                         "edge", edge,
+                         "reveal-child", FALSE,
+                         "visible", TRUE,
                          NULL);
 
   return DZL_DOCK_BIN_CLASS (ide_editor_perspective_parent_class)->create_edge (dock_bin, edge);
@@ -575,14 +583,15 @@ ide_editor_perspective_get_transient_sidebar (IdeEditorPerspective *self)
 }
 
 /**
- * ide_editor_perspective_get_bottom_edge:
+ * ide_editor_perspective_get_utilities:
  *
- * Returns: (transfer none): A #GtkWidget
+ * Returns: (transfer none): An #IdeEditorUtilities
  */
 GtkWidget *
-ide_editor_perspective_get_bottom_edge (IdeEditorPerspective *self)
+ide_editor_perspective_get_utilities (IdeEditorPerspective *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
+
   return dzl_dock_bin_get_bottom_edge (DZL_DOCK_BIN (self));
 }
 
