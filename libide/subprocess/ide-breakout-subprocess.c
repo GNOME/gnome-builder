@@ -941,6 +941,8 @@ sigterm_handler (gpointer user_data)
   IdeBreakoutSubprocess *self = user_data;
   g_autoptr(GDBusConnection) bus = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
 
   g_dbus_connection_call_sync (self->connection,
@@ -955,7 +957,7 @@ sigterm_handler (gpointer user_data)
 
   kill (getpid (), SIGTERM);
 
-  return G_SOURCE_CONTINUE;
+  IDE_RETURN (G_SOURCE_CONTINUE);
 }
 
 static gboolean
@@ -963,6 +965,8 @@ sigint_handler (gpointer user_data)
 {
   IdeBreakoutSubprocess *self = user_data;
   g_autoptr(GDBusConnection) bus = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
 
@@ -978,7 +982,7 @@ sigint_handler (gpointer user_data)
 
   kill (getpid (), SIGINT);
 
-  return G_SOURCE_CONTINUE;
+  IDE_RETURN (G_SOURCE_CONTINUE);
 }
 
 static void
