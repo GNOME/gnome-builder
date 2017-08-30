@@ -45,6 +45,7 @@ typedef struct
   gint                           interactive_delay;
   gint                           priority;
   gint                           direction;
+  gint                           word_line;
   guint                          minimum_word_size;
   gboolean                       wrap_around_flag;
 
@@ -172,23 +173,11 @@ backward_search_finished (GtkSourceSearchContext *search_context,
         {
           gint offset;
 
-          offset = gtk_text_iter_get_offset (&insert_iter) - gtk_text_iter_get_offset (&match_start);
+          offset = gtk_text_iter_get_offset (&match_start);
 
           /*  Scan must have wrapped around giving offset as negative */
-          if (offset < 0)
-            {
-              GtkTextIter end_iter;
-
-              gtk_text_buffer_get_end_iter (buffer, &end_iter);
-
-              offset = gtk_text_iter_get_offset (&end_iter) -
-                       gtk_text_iter_get_offset (&match_start) +
-                       gtk_text_iter_get_offset (&insert_iter);
-
+          if ((gtk_text_iter_get_offset (&insert_iter) - offset) < 0)
               priv->wrap_around_flag = TRUE;
-             }
-
-	  g_assert (offset >= 0);
 
 	  proposal = ide_word_completion_item_new (text, offset, NULL);
           ide_completion_results_take_proposal (IDE_COMPLETION_RESULTS (priv->results),
@@ -280,21 +269,11 @@ forward_search_finished (GtkSourceSearchContext *search_context,
         {
           gint offset;
 
-          offset = gtk_text_iter_get_offset (&match_start) - gtk_text_iter_get_offset (&insert_iter);
+          offset = gtk_text_iter_get_offset (&match_start);
 
           /*  Scan must have wrapped around giving offset as negative */
-          if (offset < 0)
-            {
-              GtkTextIter end_iter;
-
-              gtk_text_buffer_get_end_iter (buffer, &end_iter);
-
-              offset = gtk_text_iter_get_offset (&end_iter) -
-                       gtk_text_iter_get_offset (&insert_iter) +
-                       gtk_text_iter_get_offset (&match_start);
-
+          if ((offset - gtk_text_iter_get_offset (&insert_iter)) < 0)
               priv->wrap_around_flag = TRUE;
-             }
 
 	  g_assert (offset >= 0);
 
@@ -383,14 +362,24 @@ ide_word_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   if (priv->results != NULL)
     {
-      if (ide_completion_results_replay (IDE_COMPLETION_RESULTS (priv->results), priv->current_word))
+      if (ide_completion_results_replay (IDE_COMPLETION_RESULTS (priv->results), priv->current_word) &&
+          (priv->word_line == gtk_text_iter_get_line (&insert_iter)))
         {
+          GValue *value;
+
+          value = g_new0(GValue, 1);
+          g_value_init (value, G_TYPE_INT);
+          g_value_set_int (value, priv->direction);
+          g_object_set_property (G_OBJECT (priv->results), "sort-direction", value);
+
           ide_completion_results_present (IDE_COMPLETION_RESULTS (priv->results), provider, context);
           IDE_EXIT;
         }
 
       g_clear_pointer (&priv->results, g_object_unref);
     }
+
+  priv->word_line = gtk_text_iter_get_line (&insert_iter);
 
   priv->search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                                         "at-word-boundaries", TRUE,
@@ -408,7 +397,7 @@ ide_word_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   priv->cancel_id = g_signal_connect_swapped (context, "cancelled", G_CALLBACK (completion_cancelled_cb), self);
   priv->wrap_around_flag = FALSE;
-  priv->results = ide_word_completion_results_new (priv->current_word);
+  priv->results = ide_word_completion_results_new (priv->current_word, priv->direction);
 
   priv->all_proposals = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
