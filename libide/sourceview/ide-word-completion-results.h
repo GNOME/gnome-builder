@@ -29,7 +29,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeWordCompletionResults, ide_word_completion_results, IDE, WORD_COMPLETION_RESULTS, IdeCompletionResults)
 
-IdeWordCompletionResults* ide_word_completion_results_new (const gchar *query);
+IdeWordCompletionResults* ide_word_completion_results_new (const gchar *query,
+                                                           gint         sort_direction);
 
 G_END_DECLS
 

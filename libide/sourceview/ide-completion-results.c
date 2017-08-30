@@ -53,6 +53,14 @@ typedef struct
    */
   GPtrArray *results;
   /*
+   * insert_offset and end_offset helps to determine new relative offsets
+   * in case we can replay the results but in an another location. Hence,
+   * recompute new offsets and sort. See ide_word_completion_results_compare
+   * for details.
+   */
+  gint insert_offset;
+  gint end_offset;
+  /*
    * query is the filtering string that was used to create the
    * initial set of results. All future queries must have this
    * word as a prefix to be reusable.
@@ -362,12 +370,22 @@ ide_completion_results_present (IdeCompletionResults        *self,
                                 GtkSourceCompletionContext  *context)
 {
   IdeCompletionResultsPrivate *priv = ide_completion_results_get_instance_private (self);
+  GtkTextIter insert_iter;
+  GtkTextIter end_iter;
 
   g_return_if_fail (IDE_IS_COMPLETION_RESULTS (self));
   g_return_if_fail (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
   g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_return_if_fail (priv->query != NULL);
   g_return_if_fail (priv->replay != NULL);
+
+  /* Maybe find some "if logic" block to detect that we are doing word-completion */
+  gtk_source_completion_context_get_iter (context, &insert_iter);
+  gtk_text_buffer_get_end_iter (gtk_text_iter_get_buffer (&insert_iter),
+                                &end_iter);
+
+  priv->insert_offset = gtk_text_iter_get_offset (&insert_iter);
+  priv->end_offset = gtk_text_iter_get_offset (&end_iter);
 
   if (priv->needs_refilter)
     {
@@ -461,4 +479,24 @@ ide_completion_results_get_size (IdeCompletionResults *self)
   g_return_val_if_fail (IDE_IS_COMPLETION_RESULTS (self), 0);
 
   return priv->results != NULL ? priv->results->len : 0;
+}
+
+gint
+ide_completion_results_get_insert_offset (IdeCompletionResults *self)
+{
+  IdeCompletionResultsPrivate *priv = ide_completion_results_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_COMPLETION_RESULTS (self), 0);
+
+  return priv->insert_offset;
+}
+
+gint
+ide_completion_results_get_end_offset (IdeCompletionResults *self)
+{
+  IdeCompletionResultsPrivate *priv = ide_completion_results_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_COMPLETION_RESULTS (self), 0);
+
+  return priv->end_offset;
 }
