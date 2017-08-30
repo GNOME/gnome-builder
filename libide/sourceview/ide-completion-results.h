@@ -48,17 +48,19 @@ struct _IdeCompletionResultsClass
                    IdeCompletionItem    *right);
 };
 
-IdeCompletionResults *ide_completion_results_new              (const gchar                 *query);
-const gchar          *ide_completion_results_get_query        (IdeCompletionResults        *self);
-void                  ide_completion_results_invalidate_sort  (IdeCompletionResults        *self);
-void                  ide_completion_results_take_proposal    (IdeCompletionResults        *self,
-                                                               IdeCompletionItem           *proposal);
-void                  ide_completion_results_present          (IdeCompletionResults        *self,
-                                                               GtkSourceCompletionProvider *provider,
-                                                               GtkSourceCompletionContext  *context);
-gboolean              ide_completion_results_replay           (IdeCompletionResults        *self,
-                                                               const gchar                 *query);
-guint                 ide_completion_results_get_size         (IdeCompletionResults        *self);
+IdeCompletionResults *ide_completion_results_new                    (const gchar                 *query);
+const gchar          *ide_completion_results_get_query              (IdeCompletionResults        *self);
+void                  ide_completion_results_invalidate_sort        (IdeCompletionResults        *self);
+void                  ide_completion_results_take_proposal          (IdeCompletionResults        *self,
+                                                                     IdeCompletionItem           *proposal);
+void                  ide_completion_results_present                (IdeCompletionResults        *self,
+                                                                     GtkSourceCompletionProvider *provider,
+                                                                     GtkSourceCompletionContext  *context);
+gboolean              ide_completion_results_replay                 (IdeCompletionResults        *self,
+                                                                     const gchar                 *query);
+guint                 ide_completion_results_get_size               (IdeCompletionResults        *self);
+gint                  ide_completion_results_get_insert_offset      (IdeCompletionResults        *self);
+gint                  ide_completion_results_get_end_offset         (IdeCompletionResults        *self);
 
 G_END_DECLS
 
