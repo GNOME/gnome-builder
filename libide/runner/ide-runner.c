@@ -725,9 +725,14 @@ ide_runner_get_stderr (IdeRunner *self)
 void
 ide_runner_force_quit (IdeRunner *self)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_RUNNER (self));
 
-  IDE_RUNNER_GET_CLASS (self)->force_quit (self);
+  if (IDE_RUNNER_GET_CLASS (self)->force_quit)
+    IDE_RUNNER_GET_CLASS (self)->force_quit (self);
+
+  IDE_EXIT;
 }
 
 void
@@ -874,18 +879,23 @@ ide_runner_run_cb (GObject      *object,
 {
   IdeRunner *self = (IdeRunner *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_RUNNER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
 
   if (!IDE_RUNNER_GET_CLASS (self)->run_finish (self, result, &error))
     {
-      g_task_return_error (task, error);
-      return;
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   ide_runner_tick_posthook (task);
+
+  IDE_EXIT;
 }
 
 static void
@@ -893,14 +903,18 @@ ide_runner_tick_run (GTask *task)
 {
   IdeRunner *self;
 
-  g_assert (G_IS_TASK (task));
+  IDE_ENTRY;
 
+  g_assert (G_IS_TASK (task));
   self = g_task_get_source_object (task);
+  g_assert (IDE_IS_RUNNER (self));
 
   IDE_RUNNER_GET_CLASS (self)->run_async (self,
                                           g_task_get_cancellable (task),
                                           ide_runner_run_cb,
                                           g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -910,24 +924,31 @@ ide_runner_prehook_cb (GObject      *object,
 {
   IdeRunnerAddin *addin = (IdeRunnerAddin *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_RUNNER_ADDIN (addin));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
 
   if (!ide_runner_addin_prehook_finish (addin, result, &error))
     {
-      g_task_return_error (task, error);
-      return;
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   ide_runner_tick_prehook (task);
+
+  IDE_EXIT;
 }
 
 static void
 ide_runner_tick_prehook (GTask *task)
 {
   IdeRunnerRunState *state;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
 
@@ -942,10 +963,12 @@ ide_runner_tick_prehook (GTask *task)
                                       g_task_get_cancellable (task),
                                       ide_runner_prehook_cb,
                                       g_object_ref (task));
-      return;
+      IDE_EXIT;
     }
 
   ide_runner_tick_run (task);
+
+  IDE_EXIT;
 }
 
 void
@@ -957,7 +980,10 @@ ide_runner_run_async (IdeRunner           *self,
   g_autoptr(GTask) task = NULL;
   IdeRunnerRunState *state;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_RUNNER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_runner_run_async);
@@ -975,6 +1001,8 @@ ide_runner_run_async (IdeRunner           *self,
   g_task_set_task_data (task, state, ide_runner_run_state_free);
 
   ide_runner_tick_prehook (task);
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -982,10 +1010,16 @@ ide_runner_run_finish (IdeRunner     *self,
                        GAsyncResult  *result,
                        GError       **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_RUNNER (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 void
@@ -1260,6 +1294,8 @@ ide_runner_set_failed (IdeRunner *self,
 {
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_RUNNER (self));
 
   failed = !!failed;
@@ -1269,4 +1305,6 @@ ide_runner_set_failed (IdeRunner *self,
       priv->failed = failed;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FAILED]);
     }
+
+  IDE_EXIT;
 }
