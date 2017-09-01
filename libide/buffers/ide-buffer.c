@@ -2672,7 +2672,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("The current language lacks symbol resolver."));
+                               _("The current language lacks a symbol resolver."));
       return;
     }
 
