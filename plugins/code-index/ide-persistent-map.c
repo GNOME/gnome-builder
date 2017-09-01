@@ -274,7 +274,10 @@ ide_persistent_map_lookup_value (IdePersistentMap *self,
       else if (cmp > 0)
         l = m + 1;
       else
-        value = g_variant_get_child_value (self->values, self->kvpairs [m].value);
+        {
+          value = g_variant_get_child_value (self->values, self->kvpairs [m].value);
+          break;
+        }
     }
 
   if (value != NULL && self->byte_order != G_BYTE_ORDER)
