@@ -39,15 +39,18 @@ typedef struct
   GHashTable                    *all_proposals;
 
   GIcon                         *icon;
+
   gchar                         *current_word;
-  gulong                         cancel_id;
   gchar                         *name;
+
+  gulong                         cancel_id;
   gint                           interactive_delay;
   gint                           priority;
   gint                           direction;
   gint                           word_line;
   guint                          minimum_word_size;
-  gboolean                       wrap_around_flag;
+
+  guint                          wrap_around_flag : 1;
 
   /* No references, cleared in _finished_cb */
   GtkTextMark                    *start_mark;
@@ -640,8 +643,7 @@ ide_word_completion_provider_dispose (GObject *object)
 
   completion_cleanup (self);
 
-  g_free (priv->name);
-  priv->name = NULL;
+  g_clear_pointer (&priv->name, g_free);
 
   g_clear_object (&priv->icon);
   g_clear_object (&priv->search_context);

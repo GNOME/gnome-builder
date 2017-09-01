@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORD_COMPLETION_PROVIDER_H
-#define IDE_WORD_COMPLETION_PROVIDER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_WORD_COMPLETION_PROVIDER (ide_word_completion_provider_get_type ())
+#define IDE_TYPE_WORD_COMPLETION_PROVIDER (ide_word_completion_provider_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeWordCompletionProvider, ide_word_completion_provider, IDE, WORD_COMPLETION_PROVIDER, GObject)
 
-IdeWordCompletionProvider *ide_word_completion_provider_new (const gchar *name, GIcon *icon);
+IdeWordCompletionProvider *ide_word_completion_provider_new (const gchar *name,
+                                                             GIcon       *icon);
 
 G_END_DECLS
-
-#endif /* IDE_WORD_COMPLETION_PROVIDER_H */
