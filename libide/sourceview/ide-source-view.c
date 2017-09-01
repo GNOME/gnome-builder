@@ -5062,16 +5062,11 @@ ide_source_view_real_begin_word_completion (IdeSourceView *self,
     {
       IdeBufferManager *bufmgr;
       IdeWordCompletionProvider *words;
-      GValue *value;
 
       bufmgr = ide_context_get_buffer_manager (context);
       words = ide_buffer_manager_get_word_completion (bufmgr);
 
-      value = g_new0(GValue, 1);
-      g_value_init (value, G_TYPE_INT);
-      g_value_set_int (value, direction);
-      g_object_set_property (G_OBJECT(words), "direction", value);
-
+      g_object_set (words, "direction", 1, NULL);
       g_signal_emit_by_name (self, "show-completion");
     }
 }
