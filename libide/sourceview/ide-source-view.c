@@ -6863,10 +6863,12 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
  /**
    * IdeSourceView::begin-word-completion:
+   * @self: An #IdeSourceView
+   * @direction: the direction (1 for forward or -1 for backwards)
    *
-   * This signal is emitted when the user requests word completion using
-   * Ctrl-n for forward matches and Ctrl-p for backward matches as happens
-   * in Vim.
+   * This signal is emitted when the user requests word completion with
+   * sorting by distance from the cursor. 1 for forward search, -1 for
+   * backwards search.
    */
   signals [BEGIN_WORD_COMPLETION] =
     g_signal_new ("begin-word-completion",
@@ -6874,9 +6876,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, begin_word_completion),
                   NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  1,
-                  G_TYPE_INT);
+                  G_TYPE_NONE, 1, G_TYPE_INT);
 
   signals [BEGIN_USER_ACTION] =
     g_signal_new_class_handler ("begin-user-action",
