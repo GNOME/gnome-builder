@@ -24,15 +24,16 @@
 #include "ide-notification-addin.h"
 
 #define NOTIFY_TIMEOUT (10000)
-#define NOTIFY_ID      (0)
 
 struct _IdeNotificationAddin
 {
   IdeObject   parent_instance;
   GDBusProxy *proxy;
+  guint       notify_id;
 };
 
 static void addin_iface_init (IdeBuildPipelineAddinInterface *iface);
+static guint last_notify_id;
 
 G_DEFINE_TYPE_EXTENDED (IdeNotificationAddin,
                         ide_notification_addin,
@@ -90,10 +91,16 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   g_variant_builder_init (&actions_builder, G_VARIANT_TYPE ("as"));
   g_variant_builder_init (&hints_builder, G_VARIANT_TYPE ("a{sv}"));
 
+  /*
+   * We use self->notify_id so that notifications simply overwrite
+   * the previous state. This helps keep things from getting out of
+   * hand with lots of notifications for the same project.
+   */
+
   result = g_dbus_proxy_call_sync (self->proxy,
                                    "Notify",
                                    g_variant_new ("(susssasa{sv}i)",
-                                                  "org.gnome.Builder", NOTIFY_ID, "",
+                                                  "org.gnome.Builder", self->notify_id, "",
                                                   msg_title,
                                                   msg_body, &actions_builder,
                                                   &hints_builder, -1),
@@ -196,6 +203,7 @@ ide_notification_addin_class_init (IdeNotificationAddinClass *klass)
 static void
 ide_notification_addin_init (IdeNotificationAddin *self)
 {
+  self->notify_id = ++last_notify_id;
 }
 
 static void
