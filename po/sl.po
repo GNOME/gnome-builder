@@ -2,15 +2,15 @@
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Matej Urbančič <mateju@svn.gnome.org>, 2015-2016.
+# Matej Urbančič <mateju@svn.gnome.org>, 2015-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-05 21:44+0100\n"
-"PO-Revision-Date: 2016-03-22 21:35+0100\n"
+"POT-Creation-Date: 2017-05-04 21:55+0200\n"
+"PO-Revision-Date: 2017-08-30 11:22+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -20,29 +20,55 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.0.1\n"
 
-#: ../contrib/egg/egg-animation.c:723
-#, fuzzy, c-format
+#: ../contrib/egg/egg-animation.c:726 ../contrib/pnl/pnl-animation.c:701
+#, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr "[%s] Lastnost '%s' razreda predmetov '%s' je opuščena"
+msgstr "Ni mogoče najti lastnosti %s v razredu %s."
 
-#: ../contrib/egg/egg-animation.c:1067 ../contrib/egg/egg-animation.c:1073
-#, fuzzy, c-format
+#: ../contrib/egg/egg-animation.c:1073 ../contrib/egg/egg-animation.c:1079
+#: ../contrib/pnl/pnl-animation.c:1053 ../contrib/pnl/pnl-animation.c:1059
+#, c-format
 msgid "Failed to find property %s in %s"
-msgstr "Ni mogoče najti zaznamkov: %s"
+msgstr "Iskanje lastnosti %s v %s je spodletelo."
 
-#: ../contrib/egg/egg-animation.c:1081
-#, fuzzy, c-format
+#: ../contrib/egg/egg-animation.c:1087 ../contrib/pnl/pnl-animation.c:1067
+#, c-format
 msgid "Failed to find property %s in %s or parent %s"
-msgstr "Ni mogoče najti ID mape za nadrejeno mapo %s"
+msgstr "Iskanje lastnosti %s v %s oziroma nadrejeni %s je spodletelo."
 
-#: ../contrib/egg/egg-animation.c:1091
-#, fuzzy, c-format
+#: ../contrib/egg/egg-animation.c:1097 ../contrib/pnl/pnl-animation.c:1077
+#, c-format
 msgid "Failed to retrieve va_list value: %s"
-msgstr "Pridobivanje seznama souporabe s strežnika je spodletelo: %s"
+msgstr "Pridobivanje vrednosti va_list je spodletelo: %s"
 
-#: ../contrib/egg/egg-search-bar.c:371
+#: ../contrib/egg/egg-date-time.c:55
+msgid "Just now"
+msgstr "Takoj"
+
+#: ../contrib/egg/egg-date-time.c:57
+msgid "An hour ago"
+msgstr "Pred eno uro"
+
+#: ../contrib/egg/egg-date-time.c:59
+msgid "Yesterday"
+msgstr "Včeraj"
+
+#: ../contrib/egg/egg-date-time.c:65
+msgid "About a year ago"
+msgstr "Pred enim letom"
+
+#: ../contrib/egg/egg-date-time.c:69
+#, c-format
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Pred približno %u leti"
+msgstr[1] "Pred približno %u letomi"
+msgstr[2] "Pred približno %u letoma"
+msgstr[3] "Pred približno %u leti"
+
+#: ../contrib/egg/egg-search-bar.c:378
 msgid "Search"
 msgstr "Poišči"
 
@@ -51,10 +77,454 @@ msgstr "Poišči"
 msgid "Traversal order %u is not supported on Trie."
 msgstr ""
 
+#: ../contrib/tmpl/tmpl-parser.c:199
+#, c-format
+msgid "%s() may only be called once"
+msgstr "%s() je dovoljeno klicati le enkrat"
+
+#: ../contrib/tmpl/tmpl-parser.c:211
+#, c-format
+msgid "Parser does not contain an input stream"
+msgstr "Razčlenjevalnik ne vključuje vhodnega pretoka"
+
+#: ../contrib/tmpl/tmpl-template.c:451
+#, c-format
+msgid "Must parse template before expanding"
+msgstr "Predlogo je treba razčleniti pred razširjanjem"
+
+#: ../contrib/tmpl/tmpl-template-locator.c:105
+#, c-format
+msgid "Failed to locate template \"%s\""
+msgstr "Iskanje predloge »%s« je spodletelo."
+
 #: ../contrib/xml/xml-reader.c:327
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse XML from stream"
-msgstr "Iz pretoka ni mogoče brati: %s"
+msgstr "Ni mogoče razčleniti zapisa XML iz pretoka"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:1
+#: ../data/org.gnome.Builder.desktop.in.in.h:1
+#: ../data/style-schemes/builder.xml.h:1 ../libide/ide-application.c:449
+#: ../libide/ide-workbench.c:562
+#: ../libide/preferences/ide-preferences-builtin.c:122
+msgid "Builder"
+msgstr "Izgrajevalnik"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:2
+#: ../libide/ide-application-actions.c:114
+msgid "An IDE for GNOME"
+msgstr "IDE za okolje GNOME"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:3
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:4
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:5
+msgid "Features:"
+msgstr "Zmožnosti:"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:6
+msgid "Built in syntax highlighting for many languages"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:7
+msgid "Side-by-side code editors"
+msgstr "Dvostrani urejevelniki kode"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:8
+msgid "Integration with Git"
+msgstr "Povezljivost z Git"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:9
+msgid "Integration with Autotools"
+msgstr "Povezljivost z Autotools"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:10
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:11
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:12
+msgid "Vala based auto-completion and diagnostics"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:13
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr ""
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:14
+#, fuzzy
+msgid "HTML/Markdown live preview"
+msgstr "Predogled HTML"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:15
+#, fuzzy
+msgid "Optional Vim-style editing"
+msgstr "Urejanje sloga %s"
+
+#: ../data/org.gnome.Builder.appdata.xml.in.h:16
+msgid "Preview support for building with Xdg-App runtimes"
+msgstr ""
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:2
+msgid "Build software for GNOME"
+msgstr "Orodje za izgradnjo programov za GNOME"
+
+#: ../data/org.gnome.Builder.desktop.in.in.h:3
+msgid "Build;Develop;"
+msgstr "IZgradnja;Razvoj;"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:1
+#, fuzzy
+#| msgid "Build Failure"
+msgid "Build Parallelism"
+msgstr "Povečaj vzporednost izgradnje"
+
+#: ../data/gsettings/org.gnome.builder.build.gschema.xml.in.h:2
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:1
+msgid "Suggest Snippet Completion"
+msgstr "Predlagaj dopolnjevanje z izrezki"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:2
+msgid "Allow snippets to be inserted into the document."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:3
+#, fuzzy
+#| msgid "Suggest Completions using Clang (Experimental)"
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Predlagaj dopolnjevanje s Clang (preizkusno)"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:4
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:5
+#, fuzzy
+msgid "Ctags based autocompletion"
+msgstr "Samodejno dopolnjevanje"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:6
+#, fuzzy
+msgid "Use Ctags for autocompletion."
+msgstr "Samodejno dopolnjevanje"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:7
+#, fuzzy
+#| msgid "Suggest completion of words found within all open documents."
+msgid "Enable auto-completion of words in document"
+msgstr "Omogoči samodejno dopolnjevanje za besede dokumentov"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:8
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:9
+msgid "Enable semantic highlighting"
+msgstr "Omogoči skladenjsko poudarjanje"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:10
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:11
+#, fuzzy
+#| msgid "autogen.sh is not executable."
+msgid "Path to ctags executable"
+msgstr "Izvedljiva pot"
+
+#: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:12
+#, fuzzy
+msgid "The path to the ctags executable on the system."
+msgstr "Izvedljiva pot"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:1
+msgid "Restore last position"
+msgstr "Povrni zadnji položaj kazalke"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:2
+msgid "Jump to the last position when reopening a file"
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:3
+msgid "Show modified lines"
+msgstr "Pokaži spremenjene vrstice"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:4
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:5
+#: ../data/ui/ide-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Poudari trenutno vrstico"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:6
+#, fuzzy
+#| msgid "Highlight the line containing the cursor."
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr "Poudari vrstico s kazalko"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:7
+msgid "Highlight matching brackets"
+msgstr "Poudari pripadajoče oklepaje"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:8
+#, fuzzy
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "Poudari ujemajoče oklepaje"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:9
+msgid "Show line numbers"
+msgstr "Pokaži številke vrstic"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:10
+#, fuzzy
+msgid "If enabled, the editor will show line numbers."
+msgstr "Pokaži _številke vrstic"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:11
+#: ../data/ui/ide-editor-tweak-widget.ui.h:6
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid "Smart Backspace"
+msgstr "Pametna vračalka"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:12
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
+#: ../libide/preferences/ide-preferences-builtin.c:127
+#, fuzzy
+#| msgid "Smart Home End"
+msgid "Smart Home and End"
+msgstr "Pametni tipki HOME in END"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:14
+msgid "Whether or not Home moves to first non-space character."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:15
+msgid "Show grid lines"
+msgstr "Pokaži mrežne črte"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:16
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:17
+#: ../libide/preferences/ide-preferences-builtin.c:150
+msgid "Show overview map"
+msgstr "Pokaži zemljevidPredogledni zemljevid"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:18
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
+#, fuzzy
+#| msgid "Auto Hide Overview Map"
+msgid "Automatically Hide Overview Map"
+msgstr "Samodejno skrij predogledni zemljevid"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:20
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:21
+msgid "Draw Spaces"
+msgstr "Izriši presledke"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:22
+msgid "The various types of space to draw in the editor."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:23
+#: ../libide/preferences/ide-preferences-builtin.c:139
+msgid "Overscroll"
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:24
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:1
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:1
+msgid "Enabled"
+msgstr "Omogočeno"
+
+#: ../data/gsettings/org.gnome.builder.extension-type.gschema.xml.in.h:2
+#, fuzzy
+msgid "If the type within the extension is enabled."
+msgstr "Privzeta pripona datotek"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:1
+msgid "Window size"
+msgstr "Velikost okna"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:2
+msgid "Window size (width and height)."
+msgstr "Velikost okna (širina in višina)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:3
+msgid "Window position"
+msgstr "Položaj okna"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:4
+msgid "Window position (x and y)."
+msgstr "Položaj okna (osi x in y)."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:5
+msgid "Window maximized"
+msgstr "Razpeto okno"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:6
+msgid "Window maximized state"
+msgstr "Stanje razpetega glavnega okna"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:7
+msgid "Night Mode"
+msgstr "Nočni način"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:8
+#, fuzzy
+msgid "Prefer dark application chrome."
+msgstr "Program daje prednost temnejši temi"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:9
+msgid "Mine projects"
+msgstr "Moji projekti"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:10
+msgid "Search directories for projects."
+msgstr "Poišči mape za projekte."
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:11
+#: ../libide/preferences/ide-preferences-builtin.c:312
+msgid "Projects directory"
+msgstr "Mapa projektov"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:12
+msgid "Directory for all builder projects"
+msgstr "Mapa vseh projektov programa GBuilder"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:13
+msgid "Restore Previous Files"
+msgstr "Obnovi predhodne datoteke"
+
+#: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:14
+msgid "Restore previously opened files when loading a project."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.plugin.gschema.xml.in.h:2
+msgid "If the plugin should be enabled"
+msgstr "Ali naj bo vstavek omogočen"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:1
+msgid "Show Project Sidebar"
+msgstr "Pokaži stransko vrstico projekta"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:2
+msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:3
+#: ../plugins/project-tree/gtk/menus.ui.h:15
+msgid "Show Icons"
+msgstr "Pokaži ikone"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:4
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:5
+#: ../plugins/project-tree/gtk/menus.ui.h:16
+msgid "Show Ignored Files"
+msgstr "Pokaže prezrte datoteke"
+
+#: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.in.h:6
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:1
+msgid "Show Left Panel"
+msgstr "Pokaži levo okno"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:2
+msgid "If enabled, the left panel will be displayed."
+msgstr "Izbrana možnost določa, da bo levo okno prikazano."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:3
+msgid "Left Panel Position"
+msgstr "Položaj levega okna"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:4
+msgid "The width in pixel units of the left panel."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:5
+msgid "Show Right Panel"
+msgstr "Pokaži desno okno"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:6
+msgid "If enabled, the right panel will be displayed."
+msgstr "Izbrana možnost določa, da bo desno okno prikazano."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:7
+msgid "Right Panel Position"
+msgstr "Položaj desnega okna"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:8
+msgid "The width in pixel units of the right panel."
+msgstr ""
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:9
+msgid "Show Bottom Panel"
+msgstr "Pokaži spodnje okno"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:10
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "Izbrana možnost določa, da bo spodnje okno prikazano."
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:11
+#, fuzzy
+msgid "Bottom Panel Position"
+msgstr "Položaj pulta"
+
+#: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:12
+msgid "The height in pixel units of the bottom panel."
+msgstr ""
 
 #: ../data/gtk/menus.ui.h:1
 msgid "_New Project"
@@ -69,13 +539,12 @@ msgid "_Preferences"
 msgstr "_Preferences"
 
 #: ../data/gtk/menus.ui.h:4
-#, fuzzy
-msgid "Generate Support Log"
-msgstr "Prijava"
-
-#: ../data/gtk/menus.ui.h:5
 msgid "Keyboard _Shortcuts"
 msgstr "_Tipkovne bližnjice"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "_Help"
+msgstr "Pomo_č"
 
 #: ../data/gtk/menus.ui.h:6
 msgid "_About"
@@ -85,7 +554,7 @@ msgstr "_O programu"
 msgid "_Quit"
 msgstr "_Končaj"
 
-#: ../data/gtk/menus.ui.h:8 ../data/ui/gb-editor-view.ui.h:1
+#: ../data/gtk/menus.ui.h:8 ../data/ui/ide-editor-view.ui.h:1
 msgid "_Reload"
 msgstr "Ponovno _naloži"
 
@@ -98,12 +567,12 @@ msgid "_Fullscreen"
 msgstr "_Celozaslonski način"
 
 #: ../data/gtk/menus.ui.h:11
-msgid "_New Document"
-msgstr "Nov _dokument"
+msgid "_New File"
+msgstr "Nova _datoteka"
 
 #: ../data/gtk/menus.ui.h:12
-msgid "_Open"
-msgstr "_Odpri"
+msgid "_Open File"
+msgstr "_Odpri datoteko"
 
 #: ../data/gtk/menus.ui.h:13
 msgid "Save _All"
@@ -114,1037 +583,869 @@ msgid "_Close All"
 msgstr "_Zapri vse"
 
 #: ../data/gtk/menus.ui.h:15
-msgid "Display Options"
-msgstr "Možnosti prikaza"
+msgid "_Go to Definition"
+msgstr "_Skoči na določilo"
 
 #: ../data/gtk/menus.ui.h:16
-msgid "Show Icons"
-msgstr "Pokaži ikone"
+msgid "_Undo"
+msgstr "_Razveljavi"
 
 #: ../data/gtk/menus.ui.h:17
-msgid "Show Ignored Files"
-msgstr "Pokaže prezrte datoteke"
+msgid "_Redo"
+msgstr "_Ponovno uveljavi"
 
 #: ../data/gtk/menus.ui.h:18
-msgid "Sort Directories First"
-msgstr "Najprej razvrsti mape"
+msgid "C_ut"
+msgstr "_Izreži"
 
-#: ../data/gtk/menus.ui.h:19
-msgid "_Collapse All Nodes"
-msgstr "_Zloži vse"
+#: ../data/gtk/menus.ui.h:19 ../plugins/terminal/gtk/menus.ui.h:2
+msgid "_Copy"
+msgstr "_Kopiraj"
 
-#: ../data/gtk/menus.ui.h:20
-msgid "_Refresh"
-msgstr "_Osveži"
+#: ../data/gtk/menus.ui.h:20 ../plugins/terminal/gtk/menus.ui.h:3
+msgid "_Paste"
+msgstr "_Prilepi"
 
-#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:3
-msgid "_New"
-msgstr "_Novo"
+#: ../data/gtk/menus.ui.h:21
+msgid "_Delete"
+msgstr "_Izbriši"
 
-#: ../data/gtk/menus.ui.h:22
-msgid "_Empty File"
-msgstr "_Prazna datoteka"
+#: ../data/gtk/menus.ui.h:22 ../plugins/terminal/gtk/menus.ui.h:4
+msgid "Selection"
+msgstr "Izbor"
 
-#: ../data/gtk/menus.ui.h:23
-msgid "_New Folder"
-msgstr "Nova _mapa"
+#: ../data/gtk/menus.ui.h:23 ../plugins/terminal/gtk/menus.ui.h:5
+msgid "Select _All"
+msgstr "Izberi _vse"
 
-#: ../data/gtk/menus.ui.h:24
-msgid "Open _With"
-msgstr "Odpri _z"
+#: ../data/gtk/menus.ui.h:24 ../plugins/terminal/gtk/menus.ui.h:6
+msgid "Select _None"
+msgstr "_Brez izbora"
 
 #: ../data/gtk/menus.ui.h:25
-msgid "Source Code Editor"
-msgstr "Urejevalnik izvorne kode"
+msgid "All _Upper Case"
+msgstr "Vse _velike črke"
 
 #: ../data/gtk/menus.ui.h:26
-msgid "_Open Containing Folder"
-msgstr "_Odpri vsebujočo mapo"
+msgid "All _Lower Case"
+msgstr "Vse _male črke"
 
 #: ../data/gtk/menus.ui.h:27
-msgid "_Open in Terminal"
-msgstr "Odpri _terminal"
+msgid "_Invert Case"
+msgstr "_Obrni velikost črk"
 
-#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
-msgid "_Rename"
-msgstr "P_reimenuj"
+#: ../data/gtk/menus.ui.h:28
+msgid "_Title Case"
+msgstr "_Velike prve črke besed"
 
 #: ../data/gtk/menus.ui.h:29
-msgid "Mo_ve to Trash"
-msgstr "Premakni v _smeti"
+msgid "Join Lines"
+msgstr "Združi vrstice"
 
 #: ../data/gtk/menus.ui.h:30
-msgid "_Build"
-msgstr "_Izgradi"
+msgid "Sort Lines"
+msgstr "Razvrsti vrstice"
 
 #: ../data/gtk/menus.ui.h:31
-msgid "_Rebuild"
-msgstr "_Ponovno izgradi"
+msgid "Zoom"
+msgstr "Približaj"
+
+#: ../data/gtk/menus.ui.h:32
+msgid "Zoom _In"
+msgstr "_Približaj"
+
+#: ../data/gtk/menus.ui.h:33
+msgid "Zoom _Out"
+msgstr "_Oddalji"
+
+#: ../data/gtk/menus.ui.h:34
+msgid "Reset"
+msgstr "Ponastavi"
+
+#: ../data/gtk/menus.ui.h:35
+msgid "_Match Case"
+msgstr "_Upoštevaj velikost črk"
+
+#: ../data/gtk/menus.ui.h:36
+msgid "Match _Entire Word Only"
+msgstr "Poišči le _cele besede"
+
+#: ../data/gtk/menus.ui.h:37
+msgid "Match as _Regular Expression"
+msgstr "Poišči kot _logični izraz"
+
+#: ../data/gtk/menus.ui.h:38
+msgid "_Wrap Around"
+msgstr "_Prelomi vrstice"
+
+#: ../data/gtk/menus.ui.h:39
+msgid "Cu_t"
+msgstr "I_zreži↓"
+
+#: ../data/gtk/menus.ui.h:40
+msgid "Split"
+msgstr "Razdeli"
+
+#: ../data/gtk/menus.ui.h:41
+msgid "Split Left"
+msgstr "Razdeli na levo"
+
+#: ../data/gtk/menus.ui.h:42
+msgid "Split Right"
+msgstr "Razdeli na desno"
+
+#: ../data/gtk/menus.ui.h:43
+msgid "Split Down"
+msgstr "Razdeli navzdol"
+
+#: ../data/gtk/menus.ui.h:44
+msgid "Move"
+msgstr "Premakni"
+
+#: ../data/gtk/menus.ui.h:45
+msgid "Move Left"
+msgstr "Premakni levo"
+
+#: ../data/gtk/menus.ui.h:46
+msgid "Move Right"
+msgstr "Premakni desno"
+
+#: ../data/gtk/menus.ui.h:47
+msgid "_Save"
+msgstr "_Shrani"
+
+#: ../data/gtk/menus.ui.h:48
+msgid "_Save As"
+msgstr "_Shrani kot"
+
+#: ../data/gtk/menus.ui.h:49
+msgid "_Print"
+msgstr "_Natisni"
+
+#: ../data/gtk/menus.ui.h:50
+msgid "_Close"
+msgstr "_Zapri"
 
 #: ../data/style-schemes/builder-dark.xml.h:1
 #, fuzzy
 msgid "Builder Dark"
-msgstr "Builder - Okolje za razvoj programov namizja GNOME"
+msgstr "Izgrajevalnik"
 
 #: ../data/style-schemes/builder-dark.xml.h:2
 #, fuzzy
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Temna barvna shema z barvno paleto tango"
 
-#: ../data/style-schemes/builder.xml.h:1
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
-#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:49
-#: ../src/workbench/gb-workbench.c:153
-msgid "Builder"
-msgstr "Izgrajevalnik"
-
 #: ../data/style-schemes/builder.xml.h:2
-#, fuzzy
 msgid "The default color scheme for Builder"
-msgstr "Datoteke barvnih shem"
+msgstr "Privzeta barvna shema za program Builder"
 
 #. OVR indicates we are in overwite mode
-#: ../data/ui/gb-editor-frame.ui.h:2
+#: ../data/ui/ide-editor-frame.ui.h:2
 msgid "OVR"
 msgstr "PREP"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:1
-msgid "Display right _margin at column:"
-msgstr "Prikaži desni _rob na stolpcu:"
+#: ../data/ui/ide-editor-perspective.ui.h:1
+msgid "No open files"
+msgstr "Ni odprtih datotek"
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:2
-msgid "Trim trailing whitespace when saving document"
+#: ../data/ui/ide-editor-perspective.ui.h:2
+msgid "Try opening a file by typing in the search box at the top"
 msgstr ""
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:3
-msgid "Insert matching brace, bracket, quotation, and parenthesis."
+#: ../data/ui/ide-editor-perspective.ui.h:3
+msgid "Enable / Disable left panel. Shortcut: F9"
 msgstr ""
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:4
-msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+#: ../data/ui/ide-editor-perspective.ui.h:4
+msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
 msgstr ""
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:5
-#: ../data/ui/gb-editor-tweak-widget.ui.h:7
-msgid "Indentation"
-msgstr "Zamikanje"
+#: ../data/ui/ide-editor-perspective.ui.h:5
+msgid "Enable / Disable right panel. Shortcut: Shift + F9"
+msgstr ""
 
-#: ../data/ui/gb-editor-settings-widget.ui.h:6
-msgid "_Tab width:"
-msgstr "Širina _tabulatorja:"
-
-#: ../data/ui/gb-editor-settings-widget.ui.h:7
-msgid "Insert _spaces instead of tabs"
-msgstr "Vstavi _presledke namesto tabulatorjev"
-
-#: ../data/ui/gb-editor-settings-widget.ui.h:8
-msgid "_Enable automatic indentation"
-msgstr "Vključi s_amodejno zamikanje"
-
-#: ../data/ui/gb-editor-settings-widget.ui.h:9
-#, fuzzy
-msgid "Snippets (read-only)"
-msgstr "le za branje"
-
-#: ../data/ui/gb-editor-tweak-widget.ui.h:1
+#: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
 msgstr "Način iskanja s poudarjanjem ..."
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:2
+#: ../data/ui/ide-editor-tweak-widget.ui.h:2
 msgid "Display line numbers"
 msgstr "Prikaži številke vrstic"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:3
+#: ../data/ui/ide-editor-tweak-widget.ui.h:3
 msgid "Display right margin"
 msgstr "Pokaži desni rob"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:4
-msgid "Highlight current line"
-msgstr "Poudari trenutno vrstico"
-
-#: ../data/ui/gb-editor-tweak-widget.ui.h:5
+#: ../data/ui/ide-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
 msgstr "Samodejno zamikanje"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:6
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
-msgid "Smart Backspace"
-msgstr "Pametna vračalka"
+#: ../data/ui/ide-editor-tweak-widget.ui.h:7
+#: ../libide/preferences/ide-preferences-builtin.c:243
+msgid "Indentation"
+msgstr "Zamikanje"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:8
+#: ../data/ui/ide-editor-tweak-widget.ui.h:8
+#: ../libide/preferences/ide-preferences-builtin.c:154
 msgid "Spaces"
 msgstr "Presledki"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:9
+#: ../data/ui/ide-editor-tweak-widget.ui.h:9
+#: ../libide/preferences/ide-preferences-builtin.c:155
 msgid "Tabs"
 msgstr "Zavihki"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:10
+#: ../data/ui/ide-editor-tweak-widget.ui.h:10
 msgid "2"
 msgstr "2"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:11
+#: ../data/ui/ide-editor-tweak-widget.ui.h:11
 msgid "3"
 msgstr "3"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:12
+#: ../data/ui/ide-editor-tweak-widget.ui.h:12
 msgid "4"
 msgstr "4"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:13
+#: ../data/ui/ide-editor-tweak-widget.ui.h:13
 msgid "8"
 msgstr "8"
 
-#: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
-#: ../data/ui/gb-new-project-dialog.ui.h:2
-#: ../data/ui/gb-projects-dialog.ui.h:3
+#: ../data/ui/ide-editor-view.ui.h:2 ../data/ui/ide-greeter-perspective.ui.h:14
 msgid "_Cancel"
 msgstr "_Prekliči"
 
-#: ../data/ui/gb-editor-view.ui.h:3
+#: ../data/ui/ide-editor-view.ui.h:3
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr ""
 
-#: ../data/ui/gb-editor-view.ui.h:4
+#: ../data/ui/ide-editor-view.ui.h:4
+msgid "Go to line number"
+msgstr "Skoči v vrstico"
+
+#: ../data/ui/ide-editor-view.ui.h:5
+msgid "Change editor settings and language"
+msgstr "Spremeni jezik urejevalnika in druge nastavitve"
+
+#: ../data/ui/ide-editor-view.ui.h:6
 msgid "Go to Line"
 msgstr "Pojdi v vrstico"
 
-#: ../data/ui/gb-editor-view.ui.h:5
+#: ../data/ui/ide-editor-view.ui.h:7
 msgid "Go"
 msgstr "Pojdi"
 
-#: ../data/ui/gb-greeter-window.ui.h:1
-msgid "Select a Project"
-msgstr "Izberite projekt"
-
-#: ../data/ui/gb-greeter-window.ui.h:2
-msgid "Click an item to select"
-msgstr "Kliknite za izbor predmeta"
-
-#: ../data/ui/gb-greeter-window.ui.h:5
-msgid "Recent Projects"
-msgstr "Nedavni projekti"
-
-#: ../data/ui/gb-greeter-window.ui.h:6
-msgid "Other Projects"
-msgstr "Drugi projekti"
-
-#: ../data/ui/gb-greeter-window.ui.h:7
-msgid "_Remove"
-msgstr "_Odstrani"
-
-#: ../data/ui/gb-new-file-popover.ui.h:1
-#: ../data/ui/gb-rename-file-popover.ui.h:1
-#: ../src/project-tree/gb-new-file-popover.c:349
-msgid "File Name"
-msgstr "Ime datoteke"
-
-#: ../data/ui/gb-new-file-popover.ui.h:2
-msgid "_Create"
-msgstr "Ustvari"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:1
-#: ../src/dialogs/gb-new-project-dialog.c:354
+#: ../data/ui/ide-genesis-perspective.ui.h:1
 msgid "New Project"
 msgstr "Nov projekt"
 
-#: ../data/ui/gb-new-project-dialog.ui.h:3
-msgid "_Continue"
+#: ../data/ui/ide-genesis-perspective.ui.h:2
+msgid "Co_ntinue"
 msgstr "N_adaljuj"
 
-#: ../data/ui/gb-new-project-dialog.ui.h:4
-#, fuzzy
-msgid "From existing project on this computer"
-msgstr "Projekt iz obstoječih virov"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:5
-#, fuzzy
-msgid "From remote source code repository"
-msgstr "Sprejmi spremembe iz oddaljenega odložišča"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:6
-#: ../data/ui/gb-preferences-page-git.ui.h:3
-msgid "Name"
-msgstr "Ime"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:7
-msgid "Location"
-msgstr "Mesto"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:8
-msgid "GNOME Version"
-msgstr "Različica GNOME"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:9
-msgid "Language"
-msgstr "Jezik"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:10
-msgid "Pattern"
-msgstr "Vzorec"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:11
-msgid "Git"
-msgstr "Git"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:12
-msgid "user@host:repository.git"
-msgstr "uporabnik@gostitelj:skladišče.git"
-
-#: ../data/ui/gb-new-project-dialog.ui.h:13
-msgid "Enter the URL of your project's source code repository."
+#. the action:// link is used to jump to the new-project view
+#: ../data/ui/ide-greeter-perspective.ui.h:2
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 msgstr ""
+"Zakaj ne ustvarite <a href=\"action://app.new-project\">novega projekta</a>?"
 
-#: ../data/ui/gb-new-project-dialog.ui.h:14
-msgid "Directory"
-msgstr "Mapa"
+#: ../data/ui/ide-greeter-perspective.ui.h:3
+msgid "No projects found"
+msgstr "Ni najdenih projektov"
 
-#: ../data/ui/gb-new-project-dialog.ui.h:15
-msgid "Repository"
-msgstr "Skladišče"
+#: ../data/ui/ide-greeter-perspective.ui.h:4
+msgid "Recent Projects"
+msgstr "Nedavni projekti"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:3
-msgid "Editor"
-msgstr "Urednik"
+#: ../data/ui/ide-greeter-perspective.ui.h:5
+msgid "Other Projects"
+msgstr "Drugi projekti"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:2
-msgid "Font"
-msgstr "Pisava"
+#: ../data/ui/ide-greeter-perspective.ui.h:6
+msgid "_Remove"
+msgstr "_Odstrani"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:3
-msgid "Highlighting"
-msgstr "Poudarjanje"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:4
-msgid "Display Document Changes"
-msgstr "Pokaži spremembe dokumenta"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:5
-msgid ""
-"Display whether a line has been added or modified next to the line number."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:6
-msgid "Display Line Numbers"
-msgstr "Pokaži številke vrstic"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:7
-msgid "Display the line numbers next to each line of the document."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:8
-msgid "Highlight Current Line"
-msgstr "Poudari trenutno vrstico"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:9
-msgid "Highlight the line containing the cursor."
-msgstr "Poudari vrstico s kazalko"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:10
-msgid "Highlight Matching Brackets"
-msgstr "Poudari ujemajoče oklepaje"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:11
-msgid "Whether or not matching brackets should be highlighted."
-msgstr "Ali naj bodo poudarjeni ujemajoči oklepaji."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:12
-msgid "Overview Map"
-msgstr "Predogledni zemljevid"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:13
-msgid "Display Overview Map"
-msgstr "Pokaži predogledni zemljevid"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:14
-msgid "Display an overview map next to the source code editor."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:15
-msgid "Auto Hide Overview Map"
-msgstr "Samodejno skrij predogledni zemljevid"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:16
-msgid "Automatically hide the overview map during periods of inactivity."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:17
-msgid "Cursor Placement"
-msgstr "Postavitev kazalke"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:18
-msgid "Restore Cursor Position"
-msgstr "Povrni položaj kazalke"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:19
-msgid ""
-"Restore the insertion cursor to the last position when reopening a file."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:20
-msgid "Scroll Offset"
-msgstr "Drsni odmik"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:21
-msgid "Minimal number of lines to keep above and below the cursor."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:22
-msgid "Draw Spaces"
-msgstr "Izriši presledke"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:23
-msgid "Draw a circle over space characters."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:24
-msgid "Draw an arrow over tab characters."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:25
-msgid "Draw a carriage return over newline characters."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:26
-msgid "Draw indicators for non-breaking spaces."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:27
-msgid "Draw leading space only."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:28
-msgid "Draw trailing space only."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-git.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:8
-msgid "Version Control"
-msgstr "Nadzor različic"
-
-#: ../data/ui/gb-preferences-page-git.ui.h:2
-#, fuzzy
-msgid "Source Code Attribution"
-msgstr "Poudarjanje izvorne kode"
-
-#: ../data/ui/gb-preferences-page-git.ui.h:4
-msgid "Email"
-msgstr "Elektronski naslov"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:5
-#, fuzzy
-msgid "Code Insight"
-msgstr "Koda"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:2
-#, fuzzy
-msgid "Semantic Language Highlighting"
-msgstr "Jezik"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:3
-msgid ""
-"Highlight additional syntax based upon information found in the document."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:4
-msgid "Auto Completion"
-msgstr "Samodejno dopolnjevanje"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:5
-msgid "Suggest Snippet Completion"
-msgstr "Predlagaj dopolnjevanje z izrezki"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:6
-msgid "Allow snippets to be inserted into the document."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:7
-msgid "Suggest Word Completion"
-msgstr "Predlagaj dopolnjevanje besed"
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:8
-msgid "Suggest completion of words found within all open documents."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:9
-msgid "Suggest Completions using Ctags"
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:10
-msgid "Use Ctags for completions in supported languages."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:11
-msgid "Suggest Completions using Clang (Experimental)"
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:12
-msgid "Use Clang for completions in the C and C++ languages."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:13
-msgid "Suggest Completions using Jedi"
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-insight.ui.h:14
-msgid "Use Jedi for completions in the Python language."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:6
-msgid "Keyboard"
-msgstr "Tipkovnica"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
-#, fuzzy
-msgid "Key Binding Emulation"
-msgstr "Tipkovna bližnjica"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
-#, fuzzy
-msgid "The default keybindings for Builder."
-msgstr "Seznam tipkovnih bližnjic po meri"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
-msgid "Emacs Emulation"
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
-msgid "Emulates familiar keybindings from the Emacs text editor."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
-msgid "Vim Emulation"
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
-msgid "Emulates familiar keybindings from the Vim text editor."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
-#, fuzzy
-msgid "Keyboard Movement"
-msgstr "Prag gibanja"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
-#, fuzzy
-msgid "Smart Home End"
-msgstr "Pametni tipki HOME in END"
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
-msgid "Home moves to first non-space character."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
-msgid ""
-"Backspace will remove extra spaces to keep you aligned with your indentation "
-"width."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-language.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:4
-msgid "Programming Languages"
-msgstr "Programski jeziki"
-
-#: ../data/ui/gb-preferences-page-plugins.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:9
-msgid "Plugins"
-msgstr "Vstavki"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:1
-#: ../data/ui/gb-preferences-window.ui.h:7
-msgid "Theme"
-msgstr "Tema"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:2
-msgid "Night Mode"
-msgstr "Nočni način"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:3
-msgid "Use dark colors for the application chrome."
-msgstr ""
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:4
-#, fuzzy
-msgid "Display Grid Pattern"
-msgstr "Pokaži vzorec _mreže"
-
-#: ../data/ui/gb-preferences-page-theme.ui.h:5
-msgid "Display a grid pattern under the source code."
-msgstr ""
-
-#: ../data/ui/gb-preferences-window.ui.h:1
-#: ../data/ui/gb-shortcuts-window.ui.h:4
-msgid "Preferences"
-msgstr "Možnosti"
-
-#: ../data/ui/gb-preferences-window.ui.h:2
-msgid "Search Preferences…"
-msgstr "Možnosti iskanja ..."
-
-#: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:255
-msgid "Select Project"
+#: ../data/ui/ide-greeter-perspective.ui.h:7
+msgid "Select a Project"
 msgstr "Izberite projekt"
 
-#: ../data/ui/gb-projects-dialog.ui.h:2
-msgid "New"
-msgstr "Novo"
+#: ../data/ui/ide-greeter-perspective.ui.h:8
+msgid "Click an item to select"
+msgstr "Kliknite za izbor predmeta"
 
-#: ../data/ui/gb-projects-dialog.ui.h:4
-msgid "Delete"
-msgstr "Izbriši"
+#: ../data/ui/ide-greeter-perspective.ui.h:9
+msgid "Create a new project"
+msgstr "Ustvari nov projekt"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:1
+#: ../data/ui/ide-greeter-perspective.ui.h:10
+#: ../plugins/project-tree/gtk/menus.ui.h:2
+msgid "_New"
+msgstr "_Novo"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:11
+msgid "Search for projects"
+msgstr "Poišči projekte"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:12
+msgid "Select projects for removal"
+msgstr "Izbor projektov za odstranjevanje"
+
+#: ../data/ui/ide-greeter-perspective.ui.h:13
+msgid "Return to project selection"
+msgstr "Vrni se na izbor projekta"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:1
+msgid "List open files"
+msgstr "Izpiši seznam odprtih datotek"
+
+#: ../data/ui/ide-layout-tab-bar.ui.h:2
+msgid "Add a new empty file to your project"
+msgstr "Dodaj novo prazno datoteko k projektu"
+
+#: ../data/ui/ide-layout-tab.ui.h:1
+msgid "Jump to previous location"
+msgstr "Skoči na predhodno mesto"
+
+#: ../data/ui/ide-layout-tab.ui.h:2
+msgid "Jump to next location"
+msgstr "Skoči na naslednje mesto"
+
+#: ../data/ui/ide-layout-tab.ui.h:3
+msgid "Close the current document"
+msgstr "Zapri trenutni dokument"
+
+#: ../data/ui/ide-preferences-font-button.ui.h:1
+msgid "_Select"
+msgstr "_Izberi"
+
+#: ../data/ui/ide-preferences-perspective.ui.h:1
+msgid "Search through preferences"
+msgstr "Poišči med nastavitvami"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:1
+msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Uredi tipkovne bližnjice"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:2
+#: ../data/ui/ide-shortcuts-window.ui.h:2
+msgctxt "shortcut window"
 msgid "General"
 msgstr "Splošno"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:3
+#: ../data/ui/ide-shortcuts-window.ui.h:3
+msgctxt "shortcut window"
 msgid "Global Search"
 msgstr "Splošno iskanje"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:5
+#: ../data/ui/ide-shortcuts-window.ui.h:4
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Možnosti"
+
+#: ../data/ui/ide-shortcuts-window.ui.h:5
+msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Ukazna vrstica"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:6
-#: ../plugins/terminal/gb-terminal-document.c:87
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:96
+#: ../data/ui/ide-shortcuts-window.ui.h:6
+msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:7
+#: ../data/ui/ide-shortcuts-window.ui.h:7
+msgctxt "shortcut window"
 msgid "Keyboard Shortcuts"
 msgstr "Tipkovne bližnjice"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:8
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:8
+msgctxt "shortcut window"
 msgid "Panels"
-msgstr "Vodo&ravna postavitev oken"
+msgstr "Okna"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:9
+#: ../data/ui/ide-shortcuts-window.ui.h:9
+msgctxt "shortcut window"
 msgid "Toggle left panel"
 msgstr "Preklopi levi pladenj"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:10
+#: ../data/ui/ide-shortcuts-window.ui.h:10
+msgctxt "shortcut window"
 msgid "Toggle right panel"
 msgstr "Preklopi desni pladenj"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:11
+#: ../data/ui/ide-shortcuts-window.ui.h:11
+msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Preklopi spodnji pladenj"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:12
+#: ../data/ui/ide-shortcuts-window.ui.h:12
+msgctxt "shortcut window"
 msgid "Touchpad gestures"
 msgstr "Poteze na sledilni ploščici"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:13
+#: ../data/ui/ide-shortcuts-window.ui.h:13
+msgctxt "shortcut window"
 msgid "Switch to the next document"
 msgstr "Preklopi na naslednji dokument"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:14
-msgid "Two finger swipe right"
-msgstr "Dvoprstni poteg v desno"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:15
+#: ../data/ui/ide-shortcuts-window.ui.h:14
+msgctxt "shortcut window"
 msgid "Switch to the previous document"
 msgstr "Preklopi na predhodni dokument"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:16
-msgid "Two finger swipe left"
-msgstr "Dvoprstni poteg v levo"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:17
-#: ../src/project-tree/gb-project-tree-builder.c:79
+#: ../data/ui/ide-shortcuts-window.ui.h:15
+msgctxt "shortcut window"
 msgid "Files"
 msgstr "Datoteke"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:18
+#: ../data/ui/ide-shortcuts-window.ui.h:16
+msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Ustvari nov dokument"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:19
+#: ../data/ui/ide-shortcuts-window.ui.h:17
+msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Odpri dokument"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:20
+#: ../data/ui/ide-shortcuts-window.ui.h:18
+msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Shrani dokument"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:21
+#: ../data/ui/ide-shortcuts-window.ui.h:19
+msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Zapri dokument"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:22
-msgid "Show list of open files"
-msgstr "Pokaži seznam odprtih datotek"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:23
-#, fuzzy
-msgid "Switch to source or header"
-msgstr "Naslovi vira/glave:"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:24
+#: ../data/ui/ide-shortcuts-window.ui.h:20
+msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Najdi in zamenjaj"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:25
+#: ../data/ui/ide-shortcuts-window.ui.h:21
+msgctxt "shortcut window"
 msgid "Find"
 msgstr "Najdi"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:26
+#: ../data/ui/ide-shortcuts-window.ui.h:22
+msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Najdi naslednji predmet"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:27
+#: ../data/ui/ide-shortcuts-window.ui.h:23
+msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Najdi predhodni predmet"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:28
+#: ../data/ui/ide-shortcuts-window.ui.h:24
+msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Počisti poudarjanje"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:29
-msgid "Go to line"
-msgstr "Pojdi v vrstico"
-
-#: ../data/ui/gb-shortcuts-window.ui.h:30
+#: ../data/ui/ide-shortcuts-window.ui.h:25
+msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopiraj in prilepi"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:31
+#: ../data/ui/ide-shortcuts-window.ui.h:26
+msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Kopiraj izbrano besedilo na odložišče"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:32
+#: ../data/ui/ide-shortcuts-window.ui.h:27
+msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Izreži izbrano besedilo v odložišče"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:33
+#: ../data/ui/ide-shortcuts-window.ui.h:28
+msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Prilepi besedilo iz odložišča"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:34
+#: ../data/ui/ide-shortcuts-window.ui.h:29
+msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Razveljavi in ponovno uveljavi"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:35
+#: ../data/ui/ide-shortcuts-window.ui.h:30
+msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Razveljavi predhodni ukaz"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:36
+#: ../data/ui/ide-shortcuts-window.ui.h:31
+msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Ponovno uveljavi predhodni ukaz"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:37
+#: ../data/ui/ide-shortcuts-window.ui.h:32
+msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Editing"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:38
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:33
+msgctxt "shortcut window"
 msgid "Increment number at cursor"
-msgstr "Povečevanje:"
+msgstr "Povečano število ob kazalki"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:39
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:34
+msgctxt "shortcut window"
 msgid "Decrement number at cursor"
-msgstr "Kazalka"
+msgstr "Zmanjšano število ob kazalki"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:40
+#: ../data/ui/ide-shortcuts-window.ui.h:35
+msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Združi izbrane vrstice"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:41
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:36
+msgctxt "shortcut window"
 msgid "Show completion window"
-msgstr "Ali naj bodo okraski okna prikazani"
+msgstr "Pokaži okno dopolnjevanja"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:42
+#: ../data/ui/ide-shortcuts-window.ui.h:37
+msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Preklopi prepisovanje"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:43
+#: ../data/ui/ide-shortcuts-window.ui.h:38
+msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Ponovno zamakni vrstice"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:44
+#: ../data/ui/ide-shortcuts-window.ui.h:39
+msgctxt "shortcut window"
 msgid "Navigation"
-msgstr "Navigation"
+msgstr "Krmarjenje"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:45
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:40
+msgctxt "shortcut window"
 msgid "Move to next error in file"
-msgstr "Pokaži naslednji premik"
+msgstr "Skoči na naslednjo napako v datoteki"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:46
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:41
+msgctxt "shortcut window"
 msgid "Move to previous error in file"
-msgstr "Skoči na predhodni zaznamek v datoteki"
+msgstr "Skoči na predhodno napako v datoteki"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:47
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:42
+msgctxt "shortcut window"
 msgid "Move to previous edit location"
-msgstr "Skok na predhodno mesto zaznamka."
+msgstr "Premakni na predhodno mesto urejanja"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:48
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:43
+msgctxt "shortcut window"
 msgid "Move to next edit location"
-msgstr "Urejanje mesta"
+msgstr "Premakni na naslednje mesto urejanja"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:49
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:44
+msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Skoči na določilo simbola"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:50
+#: ../data/ui/ide-shortcuts-window.ui.h:45
+#, fuzzy
+msgctxt "shortcut window"
 msgid "Move viewport up within the file"
-msgstr ""
+msgstr "Premakni datoteko"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:51
+#: ../data/ui/ide-shortcuts-window.ui.h:46
+#, fuzzy
+msgctxt "shortcut window"
 msgid "Move viewport down within the file"
-msgstr ""
+msgstr "Premakni datoteko"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:52
+#: ../data/ui/ide-shortcuts-window.ui.h:47
 #, fuzzy
+msgctxt "shortcut window"
 msgid "Move viewport to end of file"
-msgstr "Pripni na konec datoteke"
+msgstr "Premakni datoteko"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:53
+#: ../data/ui/ide-shortcuts-window.ui.h:48
 #, fuzzy
+msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Išči skladnost začetka imena datoteke"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:54
-#, fuzzy
+#: ../data/ui/ide-shortcuts-window.ui.h:49
+msgctxt "shortcut window"
 msgid "Move to matching bracket"
-msgstr "Pripadajoči _oklepaj"
+msgstr ""
 
-#: ../data/ui/gb-shortcuts-window.ui.h:55
+#: ../data/ui/ide-shortcuts-window.ui.h:50
+msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Izbire"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:56
+#: ../data/ui/ide-shortcuts-window.ui.h:51
+msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Izberi vse"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:57
+#: ../data/ui/ide-shortcuts-window.ui.h:52
+msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Odstrani izbor vsega"
 
-#: ../data/ui/gb-shortcuts-window.ui.h:58
+#: ../data/ui/ide-shortcuts-window.ui.h:53
+msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Tipkovne bližnjice terminala"
 
-#: ../data/ui/gb-view.ui.h:1
-msgid "Split"
-msgstr "Razdeli"
+#: ../data/ui/ide-workbench-header-bar.ui.h:1
+msgid "Search for files. Shortcut: Ctrl + ."
+msgstr "Iskanje datotek: tipkovna bližnjica: Ctrl + ."
 
-#: ../data/ui/gb-view.ui.h:2
-msgid "Split Left"
-msgstr "Razdeli na levo"
+#: ../data/ui/ide-workbench-header-bar.ui.h:2
+msgid "Drops down a list of file operations"
+msgstr ""
 
-#: ../data/ui/gb-view.ui.h:3
-msgid "Split Right"
-msgstr "Razdeli na desno"
-
-#: ../data/ui/gb-view.ui.h:4
-msgid "Split Down"
-msgstr "Razdeli navzdol"
-
-#: ../data/ui/gb-view.ui.h:5
-msgid "Move"
-msgstr "Premakni"
-
-#: ../data/ui/gb-view.ui.h:6
-msgid "Move Left"
-msgstr "Premakni levo"
-
-#: ../data/ui/gb-view.ui.h:7
-msgid "Move Right"
-msgstr "Premakni desno"
-
-#: ../data/ui/gb-view.ui.h:8
-msgid "_Save"
-msgstr "_Shrani"
-
-#: ../data/ui/gb-view.ui.h:9
-msgid "_Save As"
-msgstr "_Shrani kot"
-
-#: ../data/ui/gb-view.ui.h:10
-msgid "Print"
-msgstr "Natisni"
-
-#: ../data/ui/gb-view.ui.h:11
-msgid "_Close"
-msgstr "_Zapri"
-
-#: ../data/ui/gb-workbench.ui.h:2
-msgid "Project"
-msgstr "Projekt"
+#: ../libide/directory/ide-directory-genesis-addin.c:106
+#, fuzzy
+msgid "From an existing project on this computer"
+msgstr "Projekt iz obstoječih virov"
 
 #: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
-#, fuzzy
 msgid "No file was provided."
-msgstr "Varnostno kopiraj trenutno kazalo/podatkovno zbirko v izbrano datoteko"
+msgstr "Ni podane datoteke"
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:167
-msgid "Cannot provide diff, no backing file provided."
-msgstr ""
-
-#: ../libide/git/ide-git-buffer-change-monitor.c:539
+#: ../libide/editor/ide-editor-frame.c:75
 #, c-format
-msgid "Repository does not have a working directory."
-msgstr ""
+msgid "Line %u, Column %u"
+msgstr "Vrstica %u, stolpec %u"
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:550
+#: ../libide/editor/ide-editor-frame.c:247
 #, c-format
-msgid "File is not under control of git working directory."
-msgstr ""
+msgid "%u of %u"
+msgstr "%u od %u"
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:616
+#: ../libide/editor/ide-editor-frame.c:679
+#: ../plugins/project-tree/gtk/menus.ui.h:1
+#, fuzzy
+msgid "Re_veal in Project Tree"
+msgstr "Ciljna datoteka mora biti znotraj projektnega drevesa."
+
+#: ../libide/editor/ide-editor-perspective.c:447
+#: ../libide/preferences/ide-preferences-builtin.c:105
+#: ../libide/preferences/ide-preferences-builtin.c:134
+msgid "Editor"
+msgstr "Urednik"
+
+#: ../libide/editor/ide-editor-view-actions.c:301
+msgid "Save Document"
+msgstr "Shrani dokument"
+
+#: ../libide/editor/ide-editor-view-actions.c:307
+#: ../libide/editor/ide-editor-view-actions.c:438
+#: ../libide/ide-workbench-actions.c:67
+#: ../plugins/build-tools/gbp-build-panel.ui.h:8
+#: ../plugins/create-project/gbp-create-project-widget.c:489
+#: ../plugins/terminal/gb-terminal-view-actions.c:305
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: ../libide/editor/ide-editor-view-actions.c:308
+#: ../libide/editor/ide-editor-view-actions.c:439
+#: ../plugins/terminal/gb-terminal-view-actions.c:306
+msgid "Save"
+msgstr "Shrani"
+
+#: ../libide/editor/ide-editor-view-actions.c:427
+msgid "Save Document As"
+msgstr "Shrani dokument kot"
+
+#: ../libide/editor/ide-editor-view.c:109
+msgid "Plain Text"
+msgstr "Običajno besedilo"
+
+#. translators: the user selected a number outside the value range for the document.
+#: ../libide/editor/ide-editor-view.c:666
 #, c-format
-msgid "The requested file does not exist within the git index."
-msgstr ""
+msgid "Provide a number between 1 and %u"
+msgstr "Vrednost števila mora biti med 1 in %u."
 
-#: ../libide/gjs/ide-gjs-script.cpp:76
-msgid "Attempt to load a GJS script with no filename."
-msgstr ""
-
-#: ../libide/gjs/ide-gjs-script.cpp:103
-#, fuzzy
-msgid "Failed to create JavaScript context."
-msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
-
-#: ../libide/gjs/ide-gjs-script.cpp:128
-msgid "Failed to set IdeContext in JavaScript runtime."
-msgstr ""
-
-#: ../libide/gjs/ide-gjs-script.cpp:202
-#: ../libide/pygobject/ide-pygobject-script.c:254
-#, fuzzy
-msgid "The filename for the script was not provided."
-msgstr "Skripta"
-
-#: ../libide/gjs/ide-gjs-script.cpp:213
-#: ../libide/pygobject/ide-pygobject-script.c:265
-#, fuzzy
-msgid "The script must be on a local filesystem."
-msgstr "Datoteka skripta mora biti izvedljiva."
-
-#: ../libide/gjs/ide-gjs-script.cpp:222
-#, fuzzy, c-format
-msgid "The script \"%s\" is not a JavaScript file."
-msgstr "Datoteka skripta mora biti izvedljiva."
+#: ../libide/greeter/ide-greeter-perspective.c:436
+msgid "Failed to load the project"
+msgstr "Nalaganje projekta je spodletelo"
 
 #: ../libide/gsettings/ide-language-defaults.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "%s contained invalid ASCII"
-msgstr "%s: Neveljaven URL %s: %s\n"
+msgstr "%s vsebuje neveljavni zapis ASCII"
 
 #: ../libide/gsettings/ide-language-defaults.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse integer from \"%s\""
-msgstr "napaka med razčlenjevanjem %s: %s"
+msgstr "Razčlenjevanje števila \"%s\" je spodletelo"
 
 #: ../libide/gsettings/ide-language-defaults.c:270
 msgid "language defaults missing version in [global] group."
 msgstr ""
 
 #: ../libide/gsettings/ide-language-defaults.c:362
-#, fuzzy
 msgid "Failed to initialize defaults."
-msgstr "Začenjanje upravljalnika podatkov je spodletelo"
+msgstr "Začenjanje postopka s privzetimi vrednostmi je spodletelo"
 
-#: ../libide/ide-back-forward-list.c:722
-msgid "File contained invalid UTF-8"
-msgstr "V datoteki je neveljaven zapis UTF-8!"
+#: ../libide/ide-application-actions.c:120
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
 
-#: ../libide/ide-buffer.c:2071
-msgid "The current language lacks a symbol resolver."
+#: ../libide/ide-application-actions.c:122
+msgid "translator-credits"
+msgstr "Matej Urbančič <mateju@svn.gnome.org>"
+
+#: ../libide/ide-application-actions.c:125
+msgid "Learn more about GNOME Builder"
+msgstr "Več podrobnosti o programu GNOME Builder"
+
+#: ../libide/ide-application-actions.c:129
+msgid "Funded By"
 msgstr ""
 
-#: ../libide/ide-buffer-manager.c:604
+#: ../libide/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "Ukazi:"
+
+#: ../libide/ide-application-command-line.c:186
+#, fuzzy
+msgid "List available subcommands"
+msgstr "Razpoložljivi podrejeni ukazi so ...\n"
+
+#: ../libide/ide-application-command-line.c:193
+msgid "Run Builder in standalone mode"
+msgstr "Zaženi program v samostojnem načinu"
+
+#: ../libide/ide-application-command-line.c:200
+msgid "Show the application's version"
+msgstr "Pokaži različico programa"
+
+#: ../libide/ide-application-command-line.c:219
+msgid "Increase verbosity, may be specified multiple times"
+msgstr ""
+
+#: ../libide/ide-application-command-line.c:226
+#, fuzzy
+msgid "Enter GApplication Service mode"
+msgstr "Vstopi v način GApplication"
+
+#: ../libide/ide-application-command-line.c:233
+#, fuzzy
+msgid "Opens the project specified by PATH"
+msgstr "Korenska pot projekta"
+
+#: ../libide/ide-application-command-line.c:234
+#: ../plugins/build-tools/gbp-build-tool.c:301
+msgid "PATH"
+msgstr "POT"
+
+#: ../libide/ide-application-command-line.c:264
+msgid "COMMAND"
+msgstr "UKAZ"
+
+#: ../libide/ide-application-command-line.c:335
+msgid "No commands available"
+msgstr "Ni ukazov na voljo"
+
+#: ../libide/ide-application-command-line.c:365
+msgid "Please provide a command"
+msgstr "Vnesti je treba ukaz"
+
+#: ../libide/ide-application-command-line.c:375
+msgid "No such tool"
+msgstr "Ni ustreznega orodja"
+
+#: ../libide/ide-application-command-line.c:389
+#, fuzzy
+msgid "Please provide a worker type"
+msgstr "Vnesti je treba zvrst postaje"
+
+#: ../libide/ide-application-command-line.c:396
+#, fuzzy
+msgid "Please provide a D-Bus address"
+msgstr "Poveži s podanim naslovom vodila D-Bus"
+
+#: ../libide/ide-application-command-line.c:405
+#, fuzzy
+msgid "No such worker"
+msgstr "Seja upravljalnika zaslona GNOME."
+
+#: ../libide/ide-buffer.c:2381
+#, fuzzy
+msgid "The current language lacks a symbol resolver."
+msgstr "Trenutno izbrani jezik ne podpira razreševalcev simbolov"
+
+#: ../libide/ide-buffer-manager.c:622
 msgid "File too large to be opened."
 msgstr "Datoteka je prevelika in je ni mogoče odpreti."
 
-#: ../libide/ide-buffer-manager.c:1425
+#: ../libide/ide-buffer-manager.c:1468
 msgid "Words"
 msgstr "Besede"
 
-#: ../libide/ide-buffer-manager.c:1636
+#: ../libide/ide-buffer-manager.c:1680
 #, c-format
 msgid "unsaved document %u"
 msgstr "neshranjen dokument %u"
 
-#: ../libide/ide-buffer-manager.c:1670
+#: ../libide/ide-buffer-manager.c:1714
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr ""
 
-#: ../libide/ide-builder.c:50
-#, fuzzy, c-format
-msgid "%s does not implement build_async()"
-msgstr "Vrsta %s ne vstavlja vmesnika GIcon"
+#: ../libide/ide-builder.c:89
+#, c-format
+msgid "%s does not support building"
+msgstr "%s ne podpira izgradnje"
 
-#: ../libide/ide-builder.c:56
-#, fuzzy
-msgid "No implementation of build_async()"
-msgstr "Dovoli neusklajenost"
-
-#: ../libide/ide-build-result.c:156
-#, fuzzy
+#: ../libide/ide-build-result.c:242
 msgid "Failed to open stderr stream."
-msgstr "Stiskanje toka z ZLIB ni uspelo (%s)."
+msgstr "Ni mogoče odpreti pretoka standardne napake."
 
-#: ../libide/ide-build-result.c:186
-#, fuzzy
+#: ../libide/ide-build-result.c:272
 msgid "Failed to open stdout stream."
-msgstr "Stiskanje toka z ZLIB ni uspelo (%s)."
+msgstr "Ni mogoče odpreti standardnega odvoda pretoka."
 
-#: ../libide/ide-build-system.c:229
-#, fuzzy, c-format
+#: ../libide/ide-build-system.c:122
+#, c-format
 msgid "%s() is not supported on %s build system."
-msgstr "Izgradnja %d: %s"
+msgstr "%s () ni podprt na sistemu %s"
 
-#: ../libide/ide.c:71
+#: ../libide/ide.c:62
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: ../libide/ide.c:136
-msgid "Builder requires libgit2-glib with threading support."
-msgstr ""
+#: ../libide/ide-configuration-manager.c:427
+msgid "Default Configuration"
+msgstr "Privzeta nastavitev"
 
-#: ../libide/ide.c:142
-msgid "Builder requires libgit2-glib with SSH support."
-msgstr ""
-
-#: ../libide/ide-context.c:1666
-msgid "An unload request is already pending"
-msgstr ""
-
-#: ../libide/ide-context.c:1781
+#: ../libide/ide-context.c:1837
 #, fuzzy
-msgid "Context has already been restored."
-msgstr "Dokument je že poslan."
+msgid "An unload request is already pending"
+msgstr "Opravilo je že na čakanju"
 
-#: ../libide/ide-device-manager.c:144
+#: ../libide/ide-context.c:1952
+msgid "Context has already been restored."
+msgstr "Vsebina je že obnovljena."
+
+#: ../libide/ide-device-manager.c:147
 #, c-format
 msgid "The device \"%s\" could not be found."
 msgstr "Naprave \"%s\" ni mogoče najti."
 
+#: ../libide/ide-environment-editor.c:65
+msgid "New variable…"
+msgstr "Nova spremenljivka ..."
+
+#: ../libide/ide-layout-view.c:146
+msgid "untitled document"
+msgstr "neimenovan dokument"
+
 #: ../libide/ide-object.c:288
 #, fuzzy, c-format
 msgid "No implementations of extension point \"%s\"."
-msgstr "Razširitev %s je uspešno posodobljena"
+msgstr "Pogovornega okna razširitve »%s« ni mogoče najti."
 
 #: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
@@ -1160,149 +1461,949 @@ msgstr "Pripona"
 msgid "No implementations of extension point."
 msgstr "Pripona"
 
-#: ../libide/ide-project.c:463
+#: ../libide/ide-project.c:524
 msgid "Destination file must be within the project tree."
-msgstr ""
+msgstr "Ciljna datoteka mora biti znotraj projektnega drevesa."
 
-#: ../libide/ide-project.c:593
+#: ../libide/ide-project.c:659
 msgid "File must be within the project tree."
-msgstr ""
+msgstr "Datoteka mora biti znotraj projektnega drevesa."
 
-#: ../libide/ide-recent-projects.c:382
-#, fuzzy, c-format
+#: ../libide/ide-recent-projects.c:396
+#, c-format
 msgid "%s() may only be executed once"
-msgstr "Možnost %s je dovoljeno uporabiti le enkrat"
+msgstr "%s() je dovoljeno izvesti le enkrat"
+
+#: ../libide/ide-runtime-manager.c:100
+msgid "Host operating system"
+msgstr "Gostiteljski operacijski sistem"
 
 #: ../libide/ide-script.c:205
 #, fuzzy, c-format
 msgid "%s has not implemented GAsyncInitable."
 msgstr "Ni ročnika naslovov URI za \"%s\"."
 
-#: ../libide/ide-source-snippet.c:370
-#, fuzzy
+#: ../libide/ide-source-snippet.c:372
 msgid "Chunk does not belong to snippet."
-msgstr "Kateri od naslednjih športov ne spada v to skupino?"
+msgstr "Del ne pripada nobenemu izrezku"
 
 #: ../libide/ide-source-snippet-completion-provider.c:297
+#: ../libide/preferences/ide-preferences-builtin.c:182
 msgid "Snippets"
 msgstr "Izrezki"
 
-#: ../libide/ide-source-snippet-parser.c:496
-#, c-format
-msgid "Invalid snippet at line %d: %s"
-msgstr "Neveljaven izrezek v vrstici %d: %s"
-
 #: ../libide/ide-source-snippets-manager.c:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open directory: %s"
-msgstr "Ni mogoče ustvariti mape “%s”."
+msgstr "Odpiranje mape je spodletelo: %s"
 
 #: ../libide/ide-source-snippets-manager.c:109
-#, fuzzy, c-format
-msgid "Failed to load file: %s: %s"
-msgstr "Odvisnosti vstavka '%s' ni mogoče naložiti."
-
-#: ../libide/ide-source-view.c:4733
 #, c-format
-msgid "Insert \"%s\""
-msgstr "Vstavi \"%s\""
+msgid "Failed to load file: %s: %s"
+msgstr "Nalaganje datoteke je spodletelo: %s: %s"
 
-#: ../libide/ide-source-view.c:4735
-#, fuzzy, c-format
-msgid "Replace \"%s\" with \"%s\""
-msgstr "Ustvarjanje začasne datoteke za zamenjavo %s: %s."
+#: ../libide/ide-source-view.c:5007
+#, c-format
+msgid "Insert “%s”"
+msgstr "Vstavi »%s«"
 
-#: ../libide/ide-source-view.c:4854
+#: ../libide/ide-source-view.c:5009
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "Zamenjaj »%s« z »%s«"
+
+#: ../libide/ide-source-view.c:5123
 #, fuzzy
 msgid "Apply Fix-It"
-msgstr "Ali naj bo popravljena?"
+msgstr "_Popravi!"
 
-#: ../libide/ide-source-view.c:4897
-msgid "Join Lines"
-msgstr "Združi vrstice"
+#: ../libide/ide-uri.c:181
+#, fuzzy, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "Naslov URI je zapisan v neveljavnem kodnem zapisu."
 
-#: ../libide/ide-source-view.c:4908
-msgid "Sort Lines"
-msgstr "Razvrsti vrstice"
+#: ../libide/ide-uri.c:219
+#, fuzzy
+msgid "Non-UTF-8 characters in URI"
+msgstr "Ali naj bodo ne-številčni znaki prezrti"
 
-#: ../libide/ide-source-view.c:4927
-msgid "Go to Definition"
-msgstr "Skoči na določilo"
+#: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
+#, fuzzy, c-format
+msgid "Invalid IP literal '%s' in URI"
+msgstr "Neveljaven naslov URI mape »%s«"
+
+#: ../libide/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal '%s' in URI"
+msgstr ""
+
+#: ../libide/ide-uri.c:420
+#, fuzzy, c-format
+msgid "Invalid non-ASCII hostname '%s' in URI"
+msgstr "Ime gostitelja naslova URI »%s« ni veljavno"
+
+#: ../libide/ide-uri.c:434
+#, c-format
+msgid "Non-ASCII hostname '%s' forbidden in this URI"
+msgstr ""
+
+#: ../libide/ide-uri.c:457
+#, fuzzy, c-format
+msgid "Could not parse port '%s' in URI"
+msgstr "Ni mogoče razčleniti naslova URI “%s”"
+
+#: ../libide/ide-uri.c:464
+#, fuzzy, c-format
+msgid "Port '%s' in URI is out of range"
+msgstr "%s je izven dovoljenega obsega"
+
+#: ../libide/ide-uri.c:590
+#, fuzzy
+msgid "Base URI is not absolute"
+msgstr "Absolutno"
+
+#: ../libide/ide-uri.c:615
+#, fuzzy
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "Naslov URI »%s« pri uporabi »datotečne« sheme ni absoluten"
+
+#: ../libide/ide-uri.c:660
+#, c-format
+msgid "Could not parse '%s' as absolute URI"
+msgstr "Ni mogoče razčleniti naslova »%s« kot absolutnega naslova URI"
+
+#: ../libide/ide-uri.c:1203
+#, c-format
+msgid "URI '%s' has no host component"
+msgstr "Naslov URL »%s« je brez vpisa gostitelja"
+
+#: ../libide/ide-workbench-actions.c:64
+msgid "Open File"
+msgstr "Odpri datoteko"
+
+#: ../libide/ide-workbench-actions.c:68
+msgid "Open"
+msgstr "Odpri"
+
+#: ../libide/ide-workbench.c:560
+#, c-format
+msgid "%s - Builder"
+msgstr "%s - Izgrajevalnik"
+
+#: ../libide/preferences/ide-preferences-builtin.c:41
+msgid "Extensions"
+msgstr "Razširitve"
+
+#: ../libide/preferences/ide-preferences-builtin.c:42
+msgid "Installed Extensions"
+msgstr "Nameščene razširitve"
+
+#: ../libide/preferences/ide-preferences-builtin.c:43
+msgid "Bundled Extensions"
+msgstr "Združene razširitve"
+
+#: ../libide/preferences/ide-preferences-builtin.c:80
+msgid "Appearance"
+msgstr "Videz"
+
+#: ../libide/preferences/ide-preferences-builtin.c:82
+msgid "Themes"
+msgstr "Teme"
+
+#: ../libide/preferences/ide-preferences-builtin.c:83
+msgid "Dark Theme"
+msgstr "Temna tema"
+
+#: ../libide/preferences/ide-preferences-builtin.c:83
+msgid "Whether Builder should use a dark theme"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:83
+msgid "dark theme"
+msgstr "temna tema"
+
+#: ../libide/preferences/ide-preferences-builtin.c:84
+msgid "Grid Pattern"
+msgstr "Vzorec mreže"
+
+#: ../libide/preferences/ide-preferences-builtin.c:84
+msgid "Display a grid pattern underneath source code"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:104
+msgid "Font"
+msgstr "Pisava"
+
+#: ../libide/preferences/ide-preferences-builtin.c:105
+#, fuzzy
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "Monospace pisava"
+
+#. XXX: This belongs in terminal addin
+#: ../libide/preferences/ide-preferences-builtin.c:107
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:90
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../libide/preferences/ide-preferences-builtin.c:107
+#, fuzzy
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "Monospace pisava"
+
+#: ../libide/preferences/ide-preferences-builtin.c:119
+msgid "Keyboard"
+msgstr "Tipkovnica"
+
+#: ../libide/preferences/ide-preferences-builtin.c:121
+msgid "Emulation"
+msgstr "Posnemovanje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:122
+msgid "Default keybinding mode which mimics gedit"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:123
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:123
+msgid "Emulates the Emacs text editor"
+msgstr "Posnema delovanje urejevalnika Emacs"
+
+#: ../libide/preferences/ide-preferences-builtin.c:124
+msgid "Vim"
+msgstr "Vim"
+
+#: ../libide/preferences/ide-preferences-builtin.c:124
+msgid "Emulates the Vim text editor"
+msgstr "Posnema delovanje urejevalnika Vim"
+
+#: ../libide/preferences/ide-preferences-builtin.c:126
+msgid "Movement"
+msgstr "Premikanje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:127
+msgid "Home moves to first non-whitespace character"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:128
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:136
+msgid "Cursor"
+msgstr "Kazalka"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+#, fuzzy
+#| msgid "Restore Cursor Position"
+msgid "Restore cursor position"
+msgstr "Povrni položaj kazalke"
+
+#: ../libide/preferences/ide-preferences-builtin.c:137
+#, fuzzy
+#| msgid "Restore Cursor Position"
+msgid "Restore cursor position when a file is reopened"
+msgstr "Povrni položaj kazalke"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Scroll Offset"
+msgstr "Drsni odmik"
+
+#: ../libide/preferences/ide-preferences-builtin.c:138
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:139
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:141
+msgid "Line Information"
+msgstr "Podatki vrstic"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+msgid "Line numbers"
+msgstr "Številke vrstic"
+
+#: ../libide/preferences/ide-preferences-builtin.c:142
+#, fuzzy
+msgid "Show line number at beginning of each line"
+msgstr "Išči skladnost začetka imena datoteke"
+
+#: ../libide/preferences/ide-preferences-builtin.c:143
+#, fuzzy
+msgid "Line changes"
+msgstr "Črta"
+
+#: ../libide/preferences/ide-preferences-builtin.c:143
+msgid "Show if a line was added or modified next to line number"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:145
+msgid "Highlight"
+msgstr "Poudari"
+
+#: ../libide/preferences/ide-preferences-builtin.c:146
+msgid "Current line"
+msgstr "Trenutna vrstica"
+
+#: ../libide/preferences/ide-preferences-builtin.c:146
+msgid "Make current line stand out with highlights"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:147
+msgid "Matching brackets"
+msgstr "Ujemajoči oklepaji"
+
+#: ../libide/preferences/ide-preferences-builtin.c:147
+#, fuzzy
+#| msgid "Highlight Matching Brackets"
+msgid "Highlight matching brackets based on cursor position"
+msgstr "Poudari ujemajoče oklepaje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:149
+msgid "Code Overview"
+msgstr "Pregled kode"
+
+#: ../libide/preferences/ide-preferences-builtin.c:150
+msgid "A zoomed out view to enhance navigating source code"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:151
+#, fuzzy
+#| msgid "Auto Hide Overview Map"
+msgid "Automatically hide overview map"
+msgstr "Samodejno skrij predogledni zemljevid"
+
+#: ../libide/preferences/ide-preferences-builtin.c:151
+msgid "Automatically hide map when editor loses focus"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:153
+msgid "Whitespace Characters"
+msgstr "Presledni znaki"
+
+#: ../libide/preferences/ide-preferences-builtin.c:156
+msgid "New line and carriage return"
+msgstr "Znaki za novo vrstico"
+
+#: ../libide/preferences/ide-preferences-builtin.c:157
+msgid "Non-breaking spaces"
+msgstr "Nedeljivi presledki"
+
+#: ../libide/preferences/ide-preferences-builtin.c:158
+msgid "Spaces inside of text"
+msgstr "Presledki znotraj besedila"
+
+#: ../libide/preferences/ide-preferences-builtin.c:159
+msgid "Trailing Only"
+msgstr "Le sledeče"
+
+#: ../libide/preferences/ide-preferences-builtin.c:160
+msgid "Leading Only"
+msgstr "Le vodilne"
+
+#: ../libide/preferences/ide-preferences-builtin.c:166
+#, fuzzy
+msgid "Code Insight"
+msgstr "Koda"
+
+#: ../libide/preferences/ide-preferences-builtin.c:168
+msgid "Highlighting"
+msgstr "Poudarjanje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:169
+msgid "Semantic Highlighting"
+msgstr "Skladenjsko poudarjanje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:169
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:171
+msgid "Completion"
+msgstr "Dopolnjevanje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:172
+msgid "Suggest words found in open files"
+msgstr "Predlagaj dopolnjevanje z besedami, zapisanimi v odprtih dokumentih"
+
+#: ../libide/preferences/ide-preferences-builtin.c:172
+#, fuzzy
+#| msgid "Suggest completion of words found within all open documents."
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr ""
+"Predlagaj dopolnjevanje z besedami, zapisanimi v vseh odprtih dokumentih"
+
+#: ../libide/preferences/ide-preferences-builtin.c:173
+msgid "Suggest completions using Ctags"
+msgstr "Predlagaj dopolnjevanje s Ctags"
+
+#: ../libide/preferences/ide-preferences-builtin.c:173
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:174
+msgid "Suggest completions using Clang (Experimental)"
+msgstr "Predlagaj dopolnjevanje s Clang (preizkusno)"
+
+#: ../libide/preferences/ide-preferences-builtin.c:174
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:176
+msgid "Diagnostics"
+msgstr "Diagnostika"
+
+#: ../libide/preferences/ide-preferences-builtin.c:185
+msgid "Code snippets"
+msgstr "Izrezki kode"
+
+#: ../libide/preferences/ide-preferences-builtin.c:185
+msgid "Use code fragments to increase typing efficiency"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:199
+msgid "Programming Languages"
+msgstr "Programski jeziki"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Trim trailing whitespace"
+msgstr "Obreži končne presledne znake"
+
+#: ../libide/preferences/ide-preferences-builtin.c:236
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:237
+msgid "Overwrite Braces"
+msgstr "Prepiši oklepaje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:237
+msgid "Overwrite closing braces"
+msgstr "Prepiši zaklepaje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:239
+msgid "Margins"
+msgstr "Robovi"
+
+#: ../libide/preferences/ide-preferences-builtin.c:240
+msgid "Show right margin"
+msgstr "Pokaži desni rob"
+
+#: ../libide/preferences/ide-preferences-builtin.c:241
+msgid "Right margin position"
+msgstr "Položaj desnega roba"
+
+#: ../libide/preferences/ide-preferences-builtin.c:241
+msgid "Position in spaces for the right margin"
+msgstr "Položaj desnega roba v presledkih"
+
+#: ../libide/preferences/ide-preferences-builtin.c:244
+msgid "Tab width"
+msgstr "Širina zavihka"
+
+#: ../libide/preferences/ide-preferences-builtin.c:244
+msgid "Width of a tab character in spaces"
+msgstr "Širina tabulatorja v presledkih"
+
+#: ../libide/preferences/ide-preferences-builtin.c:245
+msgid "Insert spaces instead of tabs"
+msgstr "Vstavi presledke namesto tabulatorjev"
+
+#: ../libide/preferences/ide-preferences-builtin.c:245
+msgid "Prefer spaces over use of tabs"
+msgstr "Prednostno uporabi presledke namesto tabulatorjev"
+
+#: ../libide/preferences/ide-preferences-builtin.c:246
+msgid "Automatically indent"
+msgstr "Samodejno zamakni"
+
+#: ../libide/preferences/ide-preferences-builtin.c:246
+msgid "Indent source code as you type"
+msgstr "Zamakni izvorno kodo med tipkanjem"
+
+#: ../libide/preferences/ide-preferences-builtin.c:256
+#: ../libide/preferences/ide-preferences-builtin.c:274
+msgid "Default"
+msgstr "Privzeto"
+
+#: ../libide/preferences/ide-preferences-builtin.c:261
+#: ../libide/preferences/ide-preferences-builtin.c:279
+msgid "Number of CPU"
+msgstr "Število CPE"
+
+#: ../libide/preferences/ide-preferences-builtin.c:294
+#: ../plugins/build-tools/gbp-build-panel.c:426
+msgid "Build"
+msgstr "Datum izgradnje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:296
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:1
+msgid "General"
+msgstr "Splošno"
+
+#: ../libide/preferences/ide-preferences-builtin.c:297
+#, fuzzy
+#| msgid "Builder"
+msgid "Build Workers"
+msgstr "Datum izgradnje"
+
+#: ../libide/preferences/ide-preferences-builtin.c:297
+#, fuzzy
+msgid "Number of parallel build workers"
+msgstr "Številno vzporednih operacij"
+
+#: ../libide/preferences/ide-preferences-builtin.c:309
+msgid "Projects"
+msgstr "Projekti"
+
+#: ../libide/preferences/ide-preferences-builtin.c:311
+msgid "Workspace"
+msgstr "Delovna površina"
+
+#: ../libide/preferences/ide-preferences-builtin.c:312
+msgid "A place for all your projects"
+msgstr "Mesto za vse vaše projekte"
+
+#: ../libide/preferences/ide-preferences-builtin.c:313
+msgid "Restore previously opened files"
+msgstr "Obnovi predhodno odprte datoteke"
+
+#: ../libide/preferences/ide-preferences-builtin.c:313
+msgid "Open previously opened files when loading a project"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-builtin.c:315
+msgid "Project Discovery"
+msgstr "Odkrivanje projekta"
+
+#: ../libide/preferences/ide-preferences-builtin.c:316
+msgid "Discover projects on my computer"
+msgstr "Odkri projekte na računalniku"
+
+#: ../libide/preferences/ide-preferences-builtin.c:316
+msgid "Scan your computer for existing projects"
+msgstr ""
+
+#: ../libide/preferences/ide-preferences-perspective.c:900
+msgid "Preferences"
+msgstr "Možnosti"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
 msgstr ""
 
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr "Ime datoteke za skript ni podano."
+
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr "Datoteka skripta mora biti krajevna datoteka."
+
 #: ../libide/pygobject/ide-pygobject-script.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "The script \"%s\" is not a PyGObject file."
-msgstr "Datoteka skripta mora biti izvedljiva."
+msgstr "Skript \"%s\" ni veljavna datoteka PyGObject."
 
-#: ../plugins/autotools/ide-autotools-build-system.c:182
-#, fuzzy
+#: ../libide/search/ide-omni-search-display.c:269
+msgid "Cannot add provider more than once."
+msgstr "Ponudnika ni mogoče dodati več kot enkrat."
+
+#: ../libide/search/ide-omni-search-display.c:345
+msgid "The provider could not be found."
+msgstr "Ponudnika ni mogoče najti."
+
+#: ../libide/util/ide-file-manager.c:64
+msgid "File path is NULL"
+msgstr "Pot datoteke je PRAZNA VREDNOST"
+
+#: ../libide/util/ide-file-manager.c:73 ../libide/util/ide-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "Napaka pretvarjanja imena datoteke iz UTF-8 v širokoznakovni nabor"
+
+#: ../libide/util/ide-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "Ukaz ILCreateFromPath() je spodletel"
+
+#: ../libide/util/ide-file-manager.c:129
+#, c-format
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr "Ni mogoče pretvoriti '%s' v veljavno kodo NSURL."
+
+#: ../libide/util/ide-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "Povezovanje z org.freedeskotp.filemanager je spodletelo:"
+
+#: ../libide/util/ide-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "Sklic parametra ShowItems je spodletel:"
+
+#: ../plugins/autotools/ide-autotools-builder.c:49
+msgid "Cancelled"
+msgstr "Preklicano"
+
+#: ../plugins/autotools/ide-autotools-builder.c:51
+msgid "Failed"
+msgstr "Napaka"
+
+#: ../plugins/autotools/ide-autotools-builder.c:57
+msgid "Success"
+msgstr "Uspešno zaključeno"
+
+#: ../plugins/autotools/ide-autotools-builder.c:161
+#: ../plugins/autotools/ide-autotools-build-task.c:913
+msgid "Building…"
+msgstr "Poteka izgradnja ..."
+
+#: ../plugins/autotools/ide-autotools-build-system.c:183
 msgid "Failed to locate configure.ac"
-msgstr "Iskanje nepovezanih imenikov je spodletelo."
+msgstr "Iskanje datoteke confugure.ac je spodletelo."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:270
+#: ../plugins/autotools/ide-autotools-build-task.c:177
 msgid "Directory must be on a locally mounted filesystem."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:641
+#: ../plugins/autotools/ide-autotools-build-task.c:556
 msgid "Cannot execute build task more than once."
-msgstr ""
+msgstr "Naloge izgranje ni mgoče izvesti več kot enkrat."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:726
+#: ../plugins/autotools/ide-autotools-build-task.c:683
 msgid "Failed to create build directory."
 msgstr "Napaka med ustvarjanjem mape izgradnje."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:735
+#: ../plugins/autotools/ide-autotools-build-task.c:692
 #, c-format
 msgid "'%s' is not a directory."
 msgstr "'%s' ni mapa."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:774
+#: ../plugins/autotools/ide-autotools-build-task.c:731
 #, c-format
 msgid "autogen.sh is missing from project directory (%s)."
 msgstr ""
 
-#: ../plugins/autotools/ide-autotools-build-task.c:784
+#: ../plugins/autotools/ide-autotools-build-task.c:741
 msgid "autogen.sh is not executable."
 msgstr "autogen.sh ni izvedljiva datoteka."
 
-#: ../plugins/autotools/ide-autotools-build-task.c:814
+#: ../plugins/autotools/ide-autotools-build-task.c:745
+msgid "Running autogen…"
+msgstr "Zaganjanje programa autogen ..."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:779
 #, c-format
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh ni mogoče nastaviti (%s)"
 
-#: ../plugins/autotools/ide-makecache.c:1006
+#: ../plugins/autotools/ide-autotools-build-task.c:814
+msgid "Running configure…"
+msgstr "Zaganjanje nastavitev..."
+
+#: ../plugins/autotools/ide-autotools-build-task.c:911
+msgid "Cleaning…"
+msgstr "Poteka čiščenje ..."
+
+#: ../plugins/autotools/ide-makecache.c:1124
 #, fuzzy
 msgid "Invalid makefile provided, ignoring."
-msgstr "Vpisano je neveljavno uporabniško ime."
+msgstr "Prejet je neveljaven odziv ukazne vrstice. Dejanje bo prezrto."
 
-#: ../plugins/clang/ide-clang-service.c:269
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:243
+msgid "Shared Library"
+msgstr "Souporabna knjižnica"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:245
+msgid "Create a new autotools project with a shared library"
+msgstr ""
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:267
+msgid "Empty Project"
+msgstr "Izprazni projekt"
+
+#: ../plugins/autotools-templates/autotools_templates/__init__.py:270
+#, fuzzy
+msgid "Create a new empty autotools project"
+msgstr "Nov ozadnji program Autotools za upravljanje s projekti"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
+msgid "The name of the build configuration"
+msgstr "Ime nastavitev izgradnje"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:3
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:1
+msgid "Name"
+msgstr "Ime"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:4
+msgid "The prefix to use when installing the project"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
+#, fuzzy
+msgid "Installation Prefix"
+msgstr "PREDPONA"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
+#, fuzzy
+msgid "Options to use when bootstrapping the project"
+msgstr "Možnosti za uporabo med odklepanjem naprave"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:7
+msgid "Configure Options"
+msgstr "Nastavitev možnosti"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:8
+msgid "Duplicate Configuration"
+msgstr "Podvoji nastavitve"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:9
+msgid "Delete Configuration"
+msgstr "Izbriši nastavitve"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:10
+msgid "Device"
+msgstr "Naprava"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:11
+msgid "Runtime"
+msgstr "Čas izvajanja"
+
+#: ../plugins/build-tools/gbp-build-configuration-view.ui.h:12
+msgid "Environment"
+msgstr "Okolje"
+
+#: ../plugins/build-tools/gbp-build-log-panel.c:254
+msgid "Build Output"
+msgstr "Odvod izgradnje"
+
+#: ../plugins/build-tools/gbp-build-panel.c:150
+#, c-format
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d opozoril"
+msgstr[1] "%d opozorilo"
+msgstr[2] "%d opozorili"
+msgstr[3] "%d opozorila"
+
+#: ../plugins/build-tools/gbp-build-panel.c:157
+#, c-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d napak"
+msgstr[1] "%d napaka"
+msgstr[2] "%d napaki"
+msgstr[3] "%d napake"
+
+#: ../plugins/build-tools/gbp-build-panel-row.c:68
+msgid "Unknown file"
+msgstr "Neznana datoteka"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:1
+#: ../plugins/project-tree/gtk/menus.ui.h:12
+msgid "_Build"
+msgstr "_Izgradi"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:13
+msgid "_Rebuild"
+msgstr "_Ponovno izgradi"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:3
+msgid "_Clean"
+msgstr "_Počisti"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:4
+msgid "Status:"
+msgstr "Stanje:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:5
+msgid "Running Time:"
+msgstr "Čas izvajanja:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:6
+msgid "Warnings:"
+msgstr "Opozorila:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:7
+msgid "Errors:"
+msgstr "Napake:"
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:9
+msgid "Deploy"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-panel.ui.h:10
+msgid "Export"
+msgstr "Izvozi"
+
+#: ../plugins/build-tools/gbp-build-tool.c:102
+#: ../plugins/build-tools/gbp-build-tool.c:115
+#, c-format
+msgid "========================\n"
+msgstr "========================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:103
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "\tIme projekta: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:104
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr "Sistem nadzora različic: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:105
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "           Sistem izgradnje: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:106
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr "    Datum in čas izgradnje: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:107
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Izgrajevanje za napravo %s (%s)\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:112
+#, c-format
+msgid "            Environment: %s\n"
+msgstr "            Okolje: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:142
+#: ../plugins/build-tools/gbp-build-tool.c:146
+#, c-format
+msgid "===============\n"
+msgstr "===============\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:143
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr " Spodletela izgradnja: %s\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:144
+msgid " Build ran for: %"
+msgstr " Trajanje izgradnje: %"
+
+#.
+#. * TODO: We should consider supporting packaging/xdg-app/deployment stuff
+#. *       here too. It would be nice if we could say, go build this project,
+#. *       for this device, and then deploy.
+#.
+#: ../plugins/build-tools/gbp-build-tool.c:157
+#: ../plugins/build-tools/gbp-build-tool.c:161
+#, c-format
+msgid "=================\n"
+msgstr "=================\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:158
+#, c-format
+msgid " Build Successful\n"
+msgstr " Izgradnja je uspešno končana\n"
+
+#: ../plugins/build-tools/gbp-build-tool.c:159
+msgid "   Build ran for: %"
+msgstr "   Trajanje izgradnje: %"
+
+#: ../plugins/build-tools/gbp-build-tool.c:212
+#, c-format
+msgid "Failed to locate device \"%s\""
+msgstr "Iskanje naprave »%s« je spodletelo."
+
+#: ../plugins/build-tools/gbp-build-tool.c:222
+#, c-format
+msgid "Failed to locate runtime \"%s\""
+msgstr "Iskanje izvajalnega programa »%s« je spodletelo."
+
+#: ../plugins/build-tools/gbp-build-tool.c:286
+msgid "Clean the project"
+msgstr "Počisti projekt"
+
+#: ../plugins/build-tools/gbp-build-tool.c:288
+msgid "The ID of the device to build for"
+msgstr "ID naprave za izgradnjo"
+
+#: ../plugins/build-tools/gbp-build-tool.c:289
+msgid "local"
+msgstr "krajevno"
+
+#: ../plugins/build-tools/gbp-build-tool.c:291
+msgid "The runtime to use for building"
+msgstr "Izvajalni program za uporabo pri izgradnji"
+
+#: ../plugins/build-tools/gbp-build-tool.c:292
+msgid "host"
+msgstr "gostitelj"
+
+#: ../plugins/build-tools/gbp-build-tool.c:294
+msgid "Number of workers to use when building"
+msgstr ""
+
+#: ../plugins/build-tools/gbp-build-tool.c:295
+msgid "N"
+msgstr "N"
+
+#: ../plugins/build-tools/gbp-build-tool.c:297
+msgid "The configuration to use from .buildconfig"
+msgstr "Nastavitev .buildconfig za uporabo"
+
+#: ../plugins/build-tools/gbp-build-tool.c:298
+msgid "CONFIG_ID"
+msgstr "CONFIG_ID"
+
+#: ../plugins/build-tools/gbp-build-tool.c:300
+msgid "Path to project file, defaults to current directory"
+msgstr ""
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: ../plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Pokaži napake in opozorila Clang"
+
+#. translators: keywords used when searching for preferences
+#: ../plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "napake opozorila clang diagnostika preverjanje"
+
+#: ../plugins/clang/ide-clang-service.c:271
 msgid "Unknown failure"
 msgstr "Neznana napaka"
 
-#: ../plugins/clang/ide-clang-service.c:273
+#: ../plugins/clang/ide-clang-service.c:275
 msgid "Clang crashed"
-msgstr ""
+msgstr "Program Clang se je sedul."
 
-#: ../plugins/clang/ide-clang-service.c:277
+#: ../plugins/clang/ide-clang-service.c:279
 msgid "Invalid arguments"
 msgstr "Neveljavni argumenti"
 
-#: ../plugins/clang/ide-clang-service.c:281
+#: ../plugins/clang/ide-clang-service.c:283
 msgid "AST read error"
 msgstr "Napaka branja AST"
 
-#: ../plugins/clang/ide-clang-service.c:293
+#: ../plugins/clang/ide-clang-service.c:295
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Ni mogoče ustvariti enote prevajanja: %s"
 
-#: ../plugins/clang/ide-clang-service.c:402
+#: ../plugins/clang/ide-clang-service.c:403
 msgid "File must be saved locally to parse."
-msgstr ""
+msgstr "Za razčlenjevanje mora biti datoteka shranjena krajevno."
 
 #: ../plugins/clang/ide-clang-symbol-node.c:149
 msgid "anonymous"
@@ -1312,645 +2413,686 @@ msgstr "brezimno"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr ""
 
-#: ../plugins/command-bar/gb-command-bar.c:316
+#: ../plugins/command-bar/gb-command-bar.c:299
 #, c-format
 msgid "Command not found: %s"
 msgstr "Ukaza ni mogoče najti: %s"
 
-#: ../plugins/command-bar/gb-command-bar.c:620
+#: ../plugins/command-bar/gb-command-bar.c:609
 msgid "Use the entry below to execute a command"
-msgstr ""
+msgstr "Uporabi spodnji vnos za izvajanje ukaza"
 
-#: ../plugins/command-bar/gb-vim.c:83
+#: ../plugins/command-bar/gb-vim.c:86
 #, c-format
 msgid "Number required"
 msgstr "Zahtevana je številka"
 
-#: ../plugins/command-bar/gb-vim.c:93
+#: ../plugins/command-bar/gb-vim.c:96
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s ni veljaven za %s"
 
-#: ../plugins/command-bar/gb-vim.c:151
+#: ../plugins/command-bar/gb-vim.c:154
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "Ni mogoče najti jezika '%s'"
 
-#: ../plugins/command-bar/gb-vim.c:348
+#: ../plugins/command-bar/gb-vim.c:311
+#, fuzzy, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Ukaz zahteva parametre modula."
+
+#: ../plugins/command-bar/gb-vim.c:322
+#, fuzzy, c-format
+msgid "This command requires a view to be focused"
+msgstr "Ukaz zahteva parametre modula."
+
+#: ../plugins/command-bar/gb-vim.c:379
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Neznana možnost: %s"
 
-#: ../plugins/command-bar/gb-vim.c:387
+#: ../plugins/command-bar/gb-vim.c:422
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "Ni mogoče najti barvne sheme '%s'"
 
-#: ../plugins/command-bar/gb-vim.c:423
+#: ../plugins/command-bar/gb-vim.c:463
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Določevanje delovne mape je spodletelo"
 
-#: ../plugins/command-bar/gb-vim.c:547
-#, fuzzy, c-format
+#: ../plugins/command-bar/gb-vim.c:640
+#, c-format
 msgid "Invalid :syntax subcommand: %s"
-msgstr "Neprepoznano ime podukaza »%s«."
+msgstr "Neveljavna skladnja: %s"
 
-#: ../plugins/command-bar/gb-vim.c:874
-#, fuzzy, c-format
+#: ../plugins/command-bar/gb-vim.c:1040
+#, c-format
 msgid "Invalid search and replace request"
-msgstr "Poišči in zamenjaj ..."
+msgstr "Neveljavna zahteva ukaza Poišči in zamenjaj ..."
 
-#: ../plugins/command-bar/gb-vim.c:961
-#, fuzzy, c-format
-msgid "vim mode requires GtkSourceView"
-msgstr "način kopiranja zahteva določitev mape za kopiranje"
+#: ../plugins/command-bar/gb-vim.c:1146
+#, c-format
+msgid "Not a command: %s"
+msgstr "Neznan ukaz: %s"
 
-#: ../plugins/command-bar/gb-vim.c:991
-#, fuzzy, c-format
-msgid "Not an editor command: %s"
-msgstr "Privzeti ukaz za zagon urejevalnika."
+#: ../plugins/comment-code/gtk/menus.ui.h:1
+msgid "Comment code"
+msgstr "Dodaj opombe h kodi"
+
+#: ../plugins/comment-code/gtk/menus.ui.h:2
+msgid "Uncomment code"
+msgstr "Odstrani opombe h kodi"
+
+#: ../plugins/contributing/contributing_plugin/helper.py:76
+#, python-format
+msgid ""
+"Usage:\n"
+"  %(prgname) %(command) OPTIONS\n"
+msgstr ""
+"Uporaba:\n"
+"  %(prgname) %(command) MOŽNOSTI\n"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:54
+msgid "Missing project name"
+msgstr "Manjka ime projekta"
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:68
+msgid ""
+"Usage:\n"
+"  ide contribute PROJECT_NAME\n"
+"\n"
+"  This command will bootstrap your system to begin contributing to the "
+"project\n"
+"  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
+"that\n"
+"  you have the required dependencies to build, and bootstraps the first "
+"build\n"
+"  of the project.\n"
+"\n"
+"Examples:\n"
+"  ide contribute gnome-builder\n"
+"  ide contribute gnome-maps\n"
+"\n"
+msgstr ""
+
+#: ../plugins/contributing/contributing_plugin/__init__.py:226
+msgid "Username"
+msgstr "Uporabniško ime"
 
 #: ../plugins/c-pack/ide-c-format-provider.c:281
 #: ../plugins/python-pack/ide-python-format-provider.c:238
-#, fuzzy
 msgid "Format Strings"
-msgstr "Nizi:"
+msgstr "Zapis nizov"
 
-#: ../plugins/devhelp/gb-devhelp-document.c:71
+#: ../plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "From a project template"
+msgstr "Iz predloge projekta"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:136
+msgid "List available templates"
+msgstr "Izpis razpoložljivih predlog"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:138
+msgid "Project template to generate"
+msgstr "Predloga projekta za ustvarjanje"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:140
+msgid "The target language (if supported)"
+msgstr "Ciljni jezik (če je možnost podprta)"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or \"none\" to disable"
+msgstr ""
+"Izbor sistema za nadzor različic za uporabo oziroma »brez« za onemogočanje"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:143
+#| msgid "Git"
+msgid "git"
+msgstr "git"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:149
+msgid "create-project [OPTION...] PROJECT_NAME"
+msgstr "create-project [MOŽNOET ...] IME_PROJEKTA"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:198
 #, c-format
-msgid "Documentation (%s)"
-msgstr "Dokumentacija (%s)"
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr "Ime datoteke mora biti zapisano v naboru ASCII brez znakov : in ="
 
-#: ../plugins/devhelp/gb-devhelp-document.c:148
-#: ../plugins/devhelp/gb-devhelp-panel.c:144
-#: ../plugins/devhelp/gb-devhelp-search-provider.c:134
+#: ../plugins/create-project/gbp-create-project-tool.c:372
+#, c-format
+msgid "Please specify a project name.\n"
+msgstr "Določiti je treba ime projekta.\n"
+
+#: ../plugins/create-project/gbp-create-project-tool.c:388
+#, c-format
+msgid "Please specify a project template with --template=\n"
+msgstr "Določiti je treba predlogo projekta z zastavico --template=\n"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:320
+msgid "Without version control"
+msgstr "Brez nadzora različic"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:488
+msgid "Select"
+msgstr "Izberi"
+
+#: ../plugins/create-project/gbp-create-project-widget.c:592
+msgid "A failure occurred while initializing version control"
+msgstr ""
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:2
+#: ../plugins/git/ide-git-clone-widget.ui.h:6
+msgid "Location"
+msgstr "Mesto"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:3
+msgid "Language"
+msgstr "Jezik"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:4
+msgid "License"
+msgstr "Dovoljenje"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:5
+msgid "Versioning"
+msgstr "Oštevilčenje različic"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:6
+msgid "No license"
+msgstr "Brez dovoljenja"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:7
+msgid "AGPL version 3 or later"
+msgstr "AGPL, različice 3 ali kasnejše"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:8
+msgid "GPL version 3 or later"
+msgstr "GNU GPL različica 3 ali kasnejša"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:9
+msgid "GPL version 2 or later"
+msgstr "GNU GPL različica 2 ali kasnejša"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:10
+msgid "LGPL version 3 or later"
+msgstr "GNU LGPL različica 3 ali kasnejša"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:11
+msgid "LGPL version 2.1 or later"
+msgstr "GNU LGPL različica 2.1 ali kasnejša"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:12
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: ../plugins/create-project/gbp-create-project-widget.ui.h:13
+msgid "Pattern"
+msgstr "Vzorec"
+
+#: ../plugins/devhelp/gbp-devhelp-panel.c:187
+#: ../plugins/devhelp/gbp-devhelp-search-provider.c:128
 msgid "Documentation"
 msgstr "Dokumentacija"
 
-#: ../plugins/device-manager/gb-device-manager-panel.c:67
-msgid "Device Manager"
-msgstr "Upravljalnik naprav"
-
-#: ../plugins/file-search/gb-file-search-provider.c:45
+#: ../plugins/file-search/gb-file-search-provider.c:44
 msgid "Switch To"
 msgstr "Preklopi na"
 
-#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:336
+#: ../plugins/fpaste/fpaste_plugin/gtk/menus.ui.h:1
+msgid "Send to Fpaste.org"
+msgstr "Pošlji na Fpaste.org"
+
+#: ../plugins/fpaste/fpaste_plugin/__init__.py:110
+msgid "The following URL has been copied to the clipboard"
+msgstr ""
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr ""
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:539
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "Skladišče nima določene delovne mape."
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:550
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr ""
+
+#: ../plugins/git/ide-git-buffer-change-monitor.c:616
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr ""
+
+#: ../plugins/git/ide-git-clone-widget.c:133
+#: ../plugins/git/ide-git-clone-widget.c:378
+msgid "A valid Git URL is required"
+msgstr "Zahtevan je veljaven naslov URL Git."
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:1
+msgid "user@host:repository.git"
+msgstr "uporabnik@gostitelj:skladišče.git"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:2
+msgid "Enter the URL of your project's source code repository"
+msgstr "Vpišite naslov URL skladišča izvorne kode projekta"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:3
+msgid "Directory"
+msgstr "Mapa"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:4
+msgid "Enter the name of the directory to create"
+msgstr "Vpišite ime mape za ustvarjanje"
+
+#: ../plugins/git/ide-git-clone-widget.ui.h:5
+msgid "Repository"
+msgstr "Skladišče"
+
+#: ../plugins/git/ide-git-genesis-addin.c:93
+msgid "From an existing project in a Git repository"
+msgstr "Iz obstoječega projekta v skladišču Git"
+
+#: ../plugins/git/ide-git-preferences-addin.c:108
+msgid "Version Control"
+msgstr "Nadzor različic"
+
+#: ../plugins/git/ide-git-preferences-addin.c:145
+msgid "Attribution"
+msgstr "Zaslužnost"
+
+#: ../plugins/git/ide-git-remote-callbacks.c:176
+#, c-format
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
+
+#: ../plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
+msgstr "Pomočnik kode zahteva krajevno datoteko."
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: ../plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
 msgstr ""
 
 #: ../plugins/gnome-code-assistance/ide-gca-service.c:168
 msgid "No language specified"
 msgstr "Ni določenega jezika"
 
-#: ../plugins/html-preview/html_preview_plugin/__init__.py:88
+#: ../plugins/html-preview/html_preview_plugin/gtk/menus.ui.h:1
 msgid "Preview as HTML"
 msgstr "Predogled HTML"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:95
-msgid "MinGW (64-bit)"
-msgstr "MinGW (64-bit)"
+#: ../plugins/jedi/jedi_plugin.py:731
+msgid "Suggest Python completions"
+msgstr "Predlagaj dopolnjevanje kode za Python"
 
-#: ../plugins/mingw/ide-mingw-device-provider.c:107
-msgid "MinGW (32-bit)"
-msgstr "MinGW (32-bit)"
-
-#: ../plugins/symbol-tree/symbol-tree.c:236
-msgid "Current language does not support symbol resolvers"
+#: ../plugins/jedi/jedi_plugin.py:732
+msgid "Use Jedi to provide completions for the Python language"
 msgstr ""
 
-#: ../plugins/symbol-tree/symbol-tree.c:261
-#, fuzzy
-msgid "Symbol Tree"
-msgstr "Simbol"
+#: ../plugins/mingw/ide-mingw-device-provider.c:95
+#| msgid "MinGW (64-bit)"
+msgid "MinGW 64-bit"
+msgstr "MinGW 64-bit"
 
-#: ../plugins/sysmon/gb-sysmon-addin.c:58
-msgid "System Monitor"
-msgstr "Nadzornik sistema"
+#: ../plugins/mingw/ide-mingw-device-provider.c:107
+#| msgid "MinGW (32-bit)"
+msgid "MinGW 32-bit"
+msgstr "MinGW 32-bit"
 
-#: ../plugins/terminal/gb-terminal-document.c:64
+#: ../plugins/project-tree/gb-new-file-popover.c:123
+#: ../plugins/project-tree/gb-rename-file-popover.c:139
+msgid "A folder with that name already exists."
+msgstr "Mapa z enakim imenom že obstaja."
+
+#: ../plugins/project-tree/gb-new-file-popover.c:126
+#: ../plugins/project-tree/gb-rename-file-popover.c:142
+msgid "A file with that name already exists."
+msgstr "Datoteka s tem imenom že obstaja."
+
+#: ../plugins/project-tree/gb-new-file-popover.c:348
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:1
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:1
+msgid "File Name"
+msgstr "Ime datoteke"
+
+#: ../plugins/project-tree/gb-new-file-popover.c:350
+msgid "Folder Name"
+msgstr "Ime mape"
+
+#: ../plugins/project-tree/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "Ustvari"
+
+#: ../plugins/project-tree/gb-project-tree-addin.c:113
+msgid "Project"
+msgstr "Projekt"
+
+#: ../plugins/project-tree/gb-project-tree-builder.c:207
+msgid "Empty"
+msgstr "Prazno"
+
+#: ../plugins/project-tree/gb-rename-file-popover.c:79
 #, c-format
-msgid "Terminal (%s)"
-msgstr "Terminal (%s)"
+msgid "Rename %s"
+msgstr "Preimenuj %s"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:300
-msgid "Save Terminal Content As"
-msgstr "Shrani vsebino terminala kot"
+#: ../plugins/project-tree/gb-rename-file-popover.ui.h:2
+#: ../plugins/project-tree/gtk/menus.ui.h:10
+msgid "_Rename"
+msgstr "P_reimenuj"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:308
-#: ../src/editor/gb-editor-view-actions.c:310
-#: ../src/editor/gb-editor-view-actions.c:441
-#: ../src/workbench/gb-workbench-actions.c:169
-msgid "Cancel"
-msgstr "Prekliči"
+#: ../plugins/project-tree/gtk/menus.ui.h:3
+msgid "_Empty File"
+msgstr "_Prazna datoteka"
 
-#: ../plugins/terminal/gb-terminal-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:311
-#: ../src/editor/gb-editor-view-actions.c:442
-msgid "Save"
-msgstr "Shrani"
+#: ../plugins/project-tree/gtk/menus.ui.h:4
+msgid "_New Folder"
+msgstr "Nova _mapa"
 
-#: ../src/app/gb-application-actions.c:91
+#: ../plugins/project-tree/gtk/menus.ui.h:5
+msgid "_Open"
+msgstr "_Odpri"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:6
+msgid "Open _With"
+msgstr "Odpri _z"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:7
+msgid "Source Code Editor"
+msgstr "Urejevalnik izvorne kode"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:8
+msgid "_Open Containing Folder"
+msgstr "_Odpri vsebujočo mapo"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:9
+msgid "_Open in Terminal"
+msgstr "Odpri _terminal"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:11
+msgid "Mo_ve to Trash"
+msgstr "Premakni v _smeti"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:14
+msgid "Display Options"
+msgstr "Možnosti prikaza"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:17
+msgid "Sort Directories First"
+msgstr "Najprej razvrsti mape"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:18
+msgid "_Collapse All Nodes"
+msgstr "_Zloži vse"
+
+#: ../plugins/project-tree/gtk/menus.ui.h:19
+msgid "_Refresh"
+msgstr "_Osveži"
+
+#: ../plugins/support/gtk/menus.ui.h:1
+msgid "Generate Support Log"
+msgstr "Ustvari podporni dnevnik"
+
+#: ../plugins/support/ide-support-application-addin.c:79
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
 
-#: ../src/app/gb-application-actions.c:157
-msgid "An IDE for GNOME"
-msgstr "IDE za okolje GNOME"
+#: ../plugins/symbol-tree/symbol-tree-panel.c:267
+msgid "Current language does not support symbol resolvers"
+msgstr "Trenutno izbrani jezik ne podpira razreševalcev simbolov"
 
-#: ../src/app/gb-application-actions.c:162
-msgid "GNOME Builder"
-msgstr "GNOME Builder"
+#: ../plugins/symbol-tree/symbol-tree-panel.c:365
+msgid "Symbols"
+msgstr "Simboli"
 
-#: ../src/app/gb-application-actions.c:164
-msgid "translator-credits"
-msgstr "Matej Urbančič <mateju@svn.gnome.org>"
+#: ../plugins/sysmon/gb-sysmon-panel.ui.h:1
+msgid "System Monitor"
+msgstr "Nadzornik sistema"
 
-#: ../src/app/gb-application-actions.c:167
-msgid "Learn more about GNOME Builder"
-msgstr "Več podrobnosti o programu GNOME Builder"
+#: ../plugins/terminal/gb-terminal-view-actions.c:297
+msgid "Save Terminal Content As"
+msgstr "Shrani vsebino terminala kot"
 
-#: ../src/app/gb-application-actions.c:170
-msgid "Funded By"
-msgstr ""
+#: ../plugins/terminal/gtk/menus.ui.h:1
+msgid "_New Terminal"
+msgstr "_Novo okno terminala"
 
-#: ../src/app/gb-application.c:642
-msgid "Run Builder in standalone mode"
-msgstr "Zaženi program v samostojnem načinu"
+#: ../plugins/todo/todo_plugin/__init__.py:181
+msgid "Todo"
+msgstr "ToDo"
 
-#: ../src/app/gb-application.c:648
-msgid "Show the application's version"
-msgstr "Pokaži različico programa"
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
 
-#: ../src/app/gb-application.c:654
-msgid "Increase verbosity. May be specified multiple times."
-msgstr ""
-
-#: ../src/dialogs/gb-new-project-dialog.c:347
-msgid "Select Project File"
-msgstr "Izberi datoteko projekta"
-
-#: ../src/dialogs/gb-new-project-dialog.c:374
-msgid "Clone Repository"
-msgstr "Kloniraj skladišče"
-
-#: ../src/dialogs/gb-new-project-dialog.c:394
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
 #, fuzzy
-msgid "Autotools Project (configure.ac)"
-msgstr "Nov ozadnji program Autotools za upravljanje s projekti"
+msgid "Show errors and warnings provided by Vala"
+msgstr "Pokaži napake in opozorila"
 
-#: ../src/dialogs/gb-new-project-dialog.c:400
-msgid "Any Directory"
-msgstr "Katerakoli mapa"
-
-#: ../src/dialogs/gb-new-project-dialog.c:527
-msgid "A valid Git URL is required"
-msgstr "Zahtevan je veljaven naslov URL Git."
-
-#: ../src/dialogs/gb-new-project-dialog.c:666
-msgid "Directory|Projects"
-msgstr "Mapa|Projekti"
-
-#: ../src/dialogs/gb-projects-dialog.c:244
-msgid "(Click on items to select them)"
-msgstr "(S klikom se predmeti izberejo)"
-
-#: ../src/editor/gb-editor-frame.c:76
-#, c-format
-msgid "Line %u, Column %u"
-msgstr "Vrstica %u, stolpec %u"
-
-#: ../src/editor/gb-editor-frame.c:244
-#, c-format
-msgid "%u of %u"
-msgstr "%u od %u"
-
-#: ../src/editor/gb-editor-frame.c:662
-msgid "Re_veal in Project Tree"
-msgstr ""
-
-#: ../src/editor/gb-editor-settings-widget.c:189
-#, c-format
-msgid "%s (read-only)"
-msgstr "%s (le za branje)"
-
-#: ../src/editor/gb-editor-view-actions.c:304
-msgid "Save Document"
-msgstr "Shrani dokument"
-
-#: ../src/editor/gb-editor-view-actions.c:430
-msgid "Save Document As"
-msgstr "Shrani dokument kot"
-
-#: ../src/editor/gb-editor-view.c:120
-msgid "Plain Text"
-msgstr "Običajno besedilo"
-
-#. translators: the user selected a number outside the value range for the document.
-#: ../src/editor/gb-editor-view.c:671
-#, c-format
-msgid "Provide a number between 1 and %u"
-msgstr "Vrednost števila mora biti med 1 in %u."
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:123
+#. translators: keywords used when searching for preferences
+#: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
 #, fuzzy
-msgid "restore insert cursor mark"
-msgstr "Povrni prejšnji položaj kazalke"
+msgid "vala diagnostics warnings errors"
+msgstr "Napake in opozorila ..."
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:128
-msgid "diff renderer gutter changes git vcs"
-msgstr ""
+#~ msgid "_New Document"
+#~ msgstr "Nov _dokument"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:133
-msgid "line numbers"
-msgstr "številke vrstic"
+#~ msgid "Display right _margin at column:"
+#~ msgstr "Prikaži desni _rob na stolpcu:"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:138
+#~ msgid "_Enable automatic indentation"
+#~ msgstr "Vključi s_amodejno zamikanje"
+
+#~ msgid "Snippets (read-only)"
+#~ msgstr "Izrezki (le za branje)"
+
+#~ msgid "GNOME Version"
+#~ msgstr "Različica GNOME"
+
+#~ msgid "Display Document Changes"
+#~ msgstr "Pokaži spremembe dokumenta"
+
+#~ msgid "Display Line Numbers"
+#~ msgstr "Pokaži številke vrstic"
+
+#~ msgid "Highlight Current Line"
+#~ msgstr "Poudari trenutno vrstico"
+
+#~ msgid "Whether or not matching brackets should be highlighted."
+#~ msgstr "Ali naj bodo poudarjeni ujemajoči oklepaji."
+
+#~ msgid "Display Overview Map"
+#~ msgstr "Pokaži predogledni zemljevid"
+
+#~ msgid "Cursor Placement"
+#~ msgstr "Postavitev kazalke"
+
+#~ msgid "Draw a circle over space characters."
+#~ msgstr "Izriši krožec prek preslednih znakov."
+
+#~ msgid "Draw an arrow over tab characters."
+#~ msgstr "Izriši puščico prek znakov tabulatorja."
+
+#~ msgid "Draw a carriage return over newline characters."
+#~ msgstr "Izriši znak za novo vrstico."
+
 #, fuzzy
-msgid "line lines highlight current"
-msgstr "Poudari _trenutno vrstico"
+#~ msgid "Draw leading space only."
+#~ msgstr "Izriši krožec prek preslednih znakov."
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:143
 #, fuzzy
-msgid "bracket brackets highlight matching"
-msgstr "Poudari ujemajoče oklepaje"
+#~ msgid "Draw trailing space only."
+#~ msgstr "Izriši krožec prek preslednih znakov."
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:148
-msgid "lines margin scrolloff scroll off"
-msgstr ""
+#~ msgid "Email"
+#~ msgstr "Elektronski naslov"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:154
+#~ msgid "Suggest Completions using Jedi"
+#~ msgstr "Predlagaj dopolnjevanje z Jedi"
+
+#~ msgid "Key Binding Emulation"
+#~ msgstr "Posnemovalnik tipkovnih bližnjic"
+
+#~ msgid "The default keybindings for Builder."
+#~ msgstr "Privzete tipkovne bližnjice za program Builder"
+
+#~ msgid "Emacs Emulation"
+#~ msgstr "Posnemovalnik Emacs"
+
+#~ msgid "Keyboard Movement"
+#~ msgstr "Premikanje s tipkovnico"
+
+#~ msgid "Plugins"
+#~ msgstr "Vstavki"
+
+#~ msgid "Search Preferences…"
+#~ msgstr "Možnosti iskanja ..."
+
+#~ msgid "Select Project"
+#~ msgstr "Izberite projekt"
+
+#~ msgid "New"
+#~ msgstr "Novo"
+
+#~ msgid "Two finger swipe right"
+#~ msgstr "Dvoprstni poteg v desno"
+
+#~ msgid "Two finger swipe left"
+#~ msgstr "Dvoprstni poteg v levo"
+
+#~ msgid "Switch to source or header"
+#~ msgstr "Preklopi na vir ali glavo"
+
 #, fuzzy
-msgid "font document editor monospace"
-msgstr "Ali naj se uporabijo pisave stalne širine"
+#~ msgid "Failed to create JavaScript context."
+#~ msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:159
-msgid "minimap mini map overview over view"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:165
-msgid ""
-"draw spaces space tab newline nbsp non-breaking whitespace trailing leading"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:169
-msgid "git author name surname attribution source code"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-git.c:175
-msgid "git author email mail address attribute source code"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:61
-msgid "word words auto completion suggest found document"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:66
-msgid "experimental clang autocompletion auto complete"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:71
-msgid "exuberant ctags tags autocompletion auto complete"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:76
-msgid "jedi python autocompletion auto complete"
-msgstr ""
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:81
 #, fuzzy
-msgid "snippets autocompletion auto complete"
-msgstr "Samodejno zaključevanje trenutne besede"
+#~ msgid "The script \"%s\" is not a JavaScript file."
+#~ msgstr "Skript \"%s\" ni veljavna datoteka PyGObject."
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-insight.c:86
-msgid "semantic highlighting color goto declaration definition"
-msgstr ""
+#~ msgid "File contained invalid UTF-8"
+#~ msgstr "V datoteki je neveljaven zapis UTF-8!"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:64
-msgid "default builder keybindings"
-msgstr "privzete tipkovne bližnjice"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:69
-msgid "emacs keybindings modal"
-msgstr "privzete tipkovne bližnjice emacs"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:74
-msgid "vim keybindings modal"
-msgstr "privzete tipkovne bližnjice vim"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:80
 #, fuzzy
-msgid "smart home end"
-msgstr "Pametni tipki HOME in END"
+#~ msgid "No implementation of build_async()"
+#~ msgstr "Dovoli neusklajenost"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:85
-msgid "smart back backspace indent align"
-msgstr ""
+#~ msgid "Invalid snippet at line %d: %s"
+#~ msgstr "Neveljaven izrezek v vrstici %d: %s"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-theme.c:114
-msgid "show grid lines"
-msgstr "pokaži mrežne črte"
+#~ msgid "Documentation (%s)"
+#~ msgstr "Dokumentacija (%s)"
 
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-theme.c:119
-msgid "source style scheme source tango solarized builder syntax"
-msgstr ""
+#~ msgid "Terminal (%s)"
+#~ msgstr "Terminal (%s)"
 
-#: ../src/project-tree/gb-new-file-popover.c:124
-#: ../src/project-tree/gb-rename-file-popover.c:142
-msgid "A folder with that name already exists."
-msgstr "Mapa z enakim imenom že obstaja."
+#~ msgid "Clone Repository"
+#~ msgstr "Kloniraj skladišče"
 
-#: ../src/project-tree/gb-new-file-popover.c:127
-#: ../src/project-tree/gb-rename-file-popover.c:145
-msgid "A file with that name already exists."
-msgstr "Datoteka s tem imenom že obstaja."
+#~ msgid "Autotools Project (configure.ac)"
+#~ msgstr "Projekt Autotools (configure.ac)"
 
-#: ../src/project-tree/gb-new-file-popover.c:351
-msgid "Folder Name"
-msgstr "Ime mape"
+#~ msgid "Any Directory"
+#~ msgstr "Katerakoli mapa"
 
-#: ../src/project-tree/gb-rename-file-popover.c:80
-#, c-format
-msgid "Rename %s"
-msgstr "Preimenuj %s"
+#~ msgid "(Click on items to select them)"
+#~ msgstr "(S klikom se predmeti izberejo)"
 
-#: ../src/project-tree/gb-rename-file-popover.c:173
-msgid "File name must not contain subdirectories."
-msgstr "Ime datoteke ne sme vključevati podrejenih map."
+#~ msgid "%s (read-only)"
+#~ msgstr "%s (le za branje)"
 
-#: ../src/search/gb-search-display.c:234
-msgid "Cannot add provider more than once."
-msgstr ""
-
-#: ../src/search/gb-search-display.c:316
-msgid "The provider could not be found."
-msgstr "Ponudnika ni mogoče najti."
-
-#: ../src/search/gb-search-display-group.c:182
-#, c-format
-msgid "%s more"
-msgid_plural "%s more"
-msgstr[0] "%s in več"
-msgstr[1] "%s in več"
-msgstr[2] "%s in več"
-msgstr[3] "%s in več"
-
-#: ../src/shortcuts/gb-shortcuts-dialog.c:937
-msgid "Search Shortcuts"
-msgstr "Iskalne bližnjice"
-
-#: ../src/shortcuts/gb-shortcuts-dialog.c:964
-msgid "Search Results"
-msgstr "Zadetki iskanja"
-
-#: ../src/util/gb-file-manager.c:64
-msgid "File path is NULL"
-msgstr "Pot datoteke je PRAZNA VREDNOST"
-
-#: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
-msgid "Error converting UTF-8 filename to wide char"
-msgstr ""
-
-#: ../src/util/gb-file-manager.c:92
 #, fuzzy
-msgid "ILCreateFromPath() failed"
-msgstr "Spodletel filter:"
+#~ msgid "restore insert cursor mark"
+#~ msgstr "Povrni položaj kazalke"
 
-#: ../src/util/gb-file-manager.c:129
-#, fuzzy, c-format
-msgid "Cannot convert '%s' into a valid NSURL."
-msgstr "Ni mogoče pretvoriti povezav v %s: %s\n"
-
-#: ../src/util/gb-file-manager.c:157
 #, fuzzy
-msgid "Connecting to org.freedesktop.FileManager1 failed: "
-msgstr "Povezovanje ..."
+#~ msgid "line lines highlight current"
+#~ msgstr "Poudari _trenutno vrstico"
 
-#: ../src/util/gb-file-manager.c:181
 #, fuzzy
-msgid "Calling ShowItems failed: "
-msgstr "Napaka med klicanjem predmeta StartServiceByName za %s: "
+#~ msgid "bracket brackets highlight matching"
+#~ msgstr "Poudari ujemajoče oklepaje"
 
-#: ../src/util/gb-glib.c:55
-msgid "Just now"
-msgstr "Takoj"
-
-#: ../src/util/gb-glib.c:57
-msgid "An hour ago"
-msgstr "Pred eno uro"
-
-#: ../src/util/gb-glib.c:59
-msgid "Yesterday"
-msgstr "Včeraj"
-
-#: ../src/util/gb-glib.c:65
-msgid "About a year ago"
-msgstr "Pred enim letom"
-
-#: ../src/util/gb-glib.c:69
-#, c-format
-msgid "About %u year ago"
-msgid_plural "About %u years ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#: ../src/workbench/gb-workbench-actions.c:162
-msgid "Open Document"
-msgstr "Odpri dokument"
-
-#: ../src/workbench/gb-workbench-actions.c:170
-msgid "Open"
-msgstr "Odpri"
-
-#: ../src/workbench/gb-workbench.c:151
-#, c-format
-msgid "%s - Builder"
-msgstr "%s - Izgrajevalnik"
-
-#: ../src/workbench/gb-workbench.c:939
 #, fuzzy
-msgid "Build Failure"
-msgstr "Napaka"
+#~ msgid "snippets autocompletion auto complete"
+#~ msgstr "Samodejno zaključevanje trenutne besede"
 
-#: ../src/workbench/gb-workbench.c:986
-msgid "Project build system does not support building"
-msgstr ""
+#~ msgid "default builder keybindings"
+#~ msgstr "privzete tipkovne bližnjice"
 
-#: ../tools/ide-build.c:81 ../tools/ide-build.c:85
-#, c-format
-msgid "===============\n"
-msgstr "===============\n"
+#~ msgid "emacs keybindings modal"
+#~ msgstr "privzete tipkovne bližnjice emacs"
 
-#: ../tools/ide-build.c:82
-#, fuzzy, c-format
-msgid " Build Failure: %s\n"
-msgstr "Napaka med razčlenjevanjem imena '%s'"
+#~ msgid "vim keybindings modal"
+#~ msgstr "privzete tipkovne bližnjice vim"
 
-#: ../tools/ide-build.c:83
 #, fuzzy
-msgid " Build ran for: %"
-msgstr "Ran_giranje enot"
+#~ msgid "smart home end"
+#~ msgstr "Pametni tipki HOME in END"
 
-#: ../tools/ide-build.c:90 ../tools/ide-build.c:94
-#, c-format
-msgid "=================\n"
-msgstr "=================\n"
+#~ msgid "%s more"
+#~ msgid_plural "%s more"
+#~ msgstr[0] "%s in več"
+#~ msgstr[1] "%s in več"
+#~ msgstr[2] "%s in več"
+#~ msgstr[3] "%s in več"
 
-#: ../tools/ide-build.c:91
-#, c-format
-msgid " Build Successful\n"
-msgstr " Izgradnja je uspešno končana\n"
+#~ msgid "Search Results"
+#~ msgstr "Zadetki iskanja"
 
-#: ../tools/ide-build.c:92
-#, fuzzy
-msgid "   Build ran for: %"
-msgstr "Ran_giranje enot"
+#~ msgid "Open Document"
+#~ msgstr "Odpri dokument"
 
-#: ../tools/ide-build.c:200 ../tools/ide-build.c:206
-#, c-format
-msgid "========================\n"
-msgstr "========================\n"
+#~ msgid "DEVICE_ID"
+#~ msgstr "ID naprave"
 
-#: ../tools/ide-build.c:201
-#, c-format
-msgid "           Project Name: %s\n"
-msgstr "\tIme projekta: %s\n"
+#~ msgid "Increase parallelism in the build."
+#~ msgstr "Povečaj vzporednost izgradnje"
 
-#: ../tools/ide-build.c:202
-#, fuzzy, c-format
-msgid " Version Control System: %s\n"
-msgstr "Vstavek sistema nadzora različic"
+#~ msgid "- Build the project."
+#~ msgstr "-- Izgradi projekt"
 
-#: ../tools/ide-build.c:203
-#, fuzzy, c-format
-msgid "           Build System: %s\n"
-msgstr "Možnosti za sistem izgradnje projekta"
+#~ msgid "- List devices found on the system."
+#~ msgstr "-- Izpiše seznam naprav v sistemu"
 
-#: ../tools/ide-build.c:204
-#, fuzzy, c-format
-msgid "    Build Date and Time: %s\n"
-msgstr "Datuma in časa za datoteko \"%s\" ni mogoče določiti."
+#~ msgid "Failed to diagnose: %s\n"
+#~ msgstr "Preučevanje je spodletelo: %s\n"
 
-#: ../tools/ide-build.c:205
-#, c-format
-msgid "    Building for Device: %s (%s)\n"
-msgstr "    Izgrajevanje za napravo %s (%s)\n"
+#~ msgid "No such file in project: %s\n"
+#~ msgstr "Ni take datoteke v projektu: %s\n"
 
-#: ../tools/ide-build.c:288
-#, c-format
-msgid "Timed out while waiting for devices to settle.\n"
-msgstr ""
+#~ msgid "- List diagnostics for a file."
+#~ msgstr "-- Izpiše podrobnosti diagnostike datoteke"
 
-#: ../tools/ide-build.c:346
-#, c-format
-msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
-msgstr ""
+#~ msgid "- List files found in project."
+#~ msgstr "-- Izpiše seznam datotek projekta"
 
-#: ../tools/ide-build.c:355
-msgid "The target device we are building for."
-msgstr ""
+#~ msgid "No files provided to load settings for.\n"
+#~ msgstr "Ni datotek za nalaganje nastavitev.\n"
 
-#: ../tools/ide-build.c:356
-msgid "DEVICE_ID"
-msgstr "ID naprave"
-
-#: ../tools/ide-build.c:359
-msgid "Clean and rebuild the project."
-msgstr "Počisti in ponovno izgradi celoten projekt"
-
-#: ../tools/ide-build.c:361
-msgid "Increase parallelism in the build."
-msgstr "Povečaj vzporednost izgradnje"
-
-#: ../tools/ide-build.c:362
-msgid "N"
-msgstr "N"
-
-#: ../tools/ide-build.c:373
-#, fuzzy
-msgid "- Build the project."
-msgstr "Projekt _izgradnje"
-
-#: ../tools/ide-list-build-flags.c:115
-msgid "- Get build flags for a project file"
-msgstr ""
-
-#: ../tools/ide-list-devices.c:109
-#, fuzzy
-msgid "- List devices found on the system."
-msgstr "Ali naj se naprava '%s' odstrani s seznama?"
-
-#: ../tools/ide-list-diagnostics.c:187
-#, fuzzy, c-format
-msgid "Failed to diagnose: %s\n"
-msgstr "%s: stat() ni uspel (%s)."
-
-#: ../tools/ide-list-diagnostics.c:250
-#, c-format
-msgid "No such file in project: %s\n"
-msgstr "Ni take datoteke v projektu: %s\n"
-
-#: ../tools/ide-list-diagnostics.c:284
-#, fuzzy
-msgid "- List diagnostics for a file."
-msgstr "Seznam vzorcev datotek za izogibanje"
-
-#: ../tools/ide-list-files.c:127 ../tools/ide-list-file-settings.c:207
-#, fuzzy
-msgid "- List files found in project."
-msgstr "Prikaže rezultate po datotekah najdenih na seznamu"
-
-#: ../tools/ide-list-file-settings.c:182
-#, c-format
-msgid "No files provided to load settings for.\n"
-msgstr "Ni datotek za nalaganje nastavitev.\n"
-
-#: ../tools/ide-mine-projects.c:87
-msgid "- discover projects"
-msgstr "- odkrivanje projektov"
-
-#: ../tools/ide-search.c:68
-#, c-format
-msgid "%s result\n"
-msgid_plural "%s results\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#: ../tools/ide-search.c:120
-msgid "PROJECT_FILE [SEARCH TERMS...]"
-msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
+#~ msgid "PROJECT_FILE [SEARCH TERMS...]"
+#~ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 
 #~ msgid "Duration"
 #~ msgstr "Trajanje"
@@ -2022,10 +3164,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgstr "Ime dejanja"
 
 #, fuzzy
-#~ msgid "The name of the action to execute."
-#~ msgstr "Napaka med izvajanjem autogen: %s"
-
-#, fuzzy
 #~ msgid "Parameters"
 #~ msgstr "Parametri"
 
@@ -2068,10 +3206,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #, fuzzy
 #~ msgid "If the result is an error."
 #~ msgstr "ISNA:funkcija vrne PRAV, v kolikor je @{vrednost} napaka #N/A"
-
-#, fuzzy
-#~ msgid "Is Running"
-#~ msgstr "F-Spot je zagnan"
 
 #, fuzzy
 #~ msgid "If the command is still running."
@@ -2258,16 +3392,9 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgid "Modified"
 #~ msgstr "Spremenjeno"
 
-#~ msgid "Title"
-#~ msgstr "Naslov"
-
 #, fuzzy
 #~ msgid "The title of the document."
 #~ msgstr "Naslov dokumenta"
-
-#, fuzzy
-#~ msgid "Read Only"
-#~ msgstr "Le za branje"
 
 #, fuzzy
 #~ msgid "If the document is read only."
@@ -2328,10 +3455,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgstr "[samo za branje]"
 
 #, fuzzy
-#~ msgid "untitled document %u"
-#~ msgstr "Neimenovan dokument"
-
-#, fuzzy
 #~ msgid "No file was selected."
 #~ msgstr "Slika ni izbrana."
 
@@ -2342,9 +3465,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #, fuzzy
 #~ msgid "The change monitor for the backing file."
 #~ msgstr ".desktop datoteka za nadzornika sistema"
-
-#~ msgid "Error"
-#~ msgstr "Napaka"
 
 #~ msgid "File"
 #~ msgstr "Datoteka"
@@ -2368,10 +3488,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #, fuzzy
 #~ msgid "The style scheme name."
 #~ msgstr "Ime sloga sheme"
-
-#, fuzzy
-#~ msgid "Trim Trailing Whitespace"
-#~ msgstr "Nedeljivi presledek"
 
 #~ msgid "Column"
 #~ msgstr "Stolpec"
@@ -2428,34 +3544,14 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgstr "Odstrani trenutni pogled dokumenta"
 
 #, fuzzy
-#~ msgid "Show Line Numbers"
-#~ msgstr "Pokaži številke vrstic"
-
-#, fuzzy
 #~ msgid "If the line numbers should be shown."
 #~ msgstr "Ali naj bo puščica prikazana, če orodna vrstica ni ustreznih mer"
-
-#, fuzzy
-#~ msgid "Show Right Margin"
-#~ msgstr "Pokaži desni rob"
-
-#, fuzzy
-#~ msgid "Split Enabled"
-#~ msgstr "Onemogočene razširitve"
-
-#, fuzzy
-#~ msgid "If the view split is enabled."
-#~ msgstr "Ali je omogočeno tiskanje pogleda Ganttovega diagrama."
 
 #~ msgid "Tab Width"
 #~ msgstr "Širina tabulatorja"
 
 #~ msgid "Use Spaces"
 #~ msgstr "Uporabi presledke"
-
-#, fuzzy
-#~ msgid "Failed to load git blob"
-#~ msgstr "Nalaganje podatkov slike je spodletelo"
 
 #, fuzzy
 #~ msgid "The text buffer to monitor."
@@ -2508,10 +3604,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #, fuzzy
 #~ msgid "Insert Matching Brace"
 #~ msgstr "Poudari pripadajoče oklepaje"
-
-#, fuzzy
-#~ msgid "Overwrite Braces"
-#~ msgstr "Prepiši &vse"
 
 #, fuzzy
 #~ msgid "Show Shadow"
@@ -2606,20 +3698,12 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgstr "Širina posameznega predmeta"
 
 #, fuzzy
-#~ msgid "Workspace"
-#~ msgstr "Delovna površina"
-
-#, fuzzy
 #~ msgid "Can Go Backward"
 #~ msgstr "Pojdi nazaj v zgodovini"
 
 #, fuzzy
 #~ msgid "Can Go Forward"
 #~ msgstr "Pojdi naprej v zgodovini"
-
-#, fuzzy
-#~ msgid "Current Item"
-#~ msgstr "Predvajaj trenutni posnetek"
 
 #, fuzzy
 #~ msgid "The current item in the navigation list."
@@ -2648,10 +3732,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #, fuzzy
 #~ msgid "vim modal"
 #~ msgstr "_Modalno okno"
-
-#, fuzzy
-#~ msgid "_Help"
-#~ msgstr "Pomo_č"
 
 #, fuzzy
 #~ msgid "Move Document _Left"
@@ -2704,10 +3784,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #, fuzzy
 #~ msgid "Search Documents"
 #~ msgstr "Nedavni dokumenti"
-
-#, fuzzy
-#~ msgid "No documents were found"
-#~ msgstr "Ni zadetkov iskanja."
 
 #, fuzzy
 #~ msgid "Line 1, Column 1"
@@ -2774,19 +3850,8 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgstr "Drsni odmik"
 
 #, fuzzy
-#~ msgid "Search Preferences"
-#~ msgstr "Možnosti iskanja"
-
-#, fuzzy
 #~ msgid "Language Settings"
 #~ msgstr "Jezikovne nastavitve"
-
-#, fuzzy
-#~ msgid "Vim"
-#~ msgstr "Vim"
-
-#~ msgid "Emacs"
-#~ msgstr "Emacs"
 
 #, fuzzy
 #~ msgid "Go back in history"
@@ -2881,10 +3946,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgstr "Sprožilnik '%s' za '%s.%s' razpredelnico:"
 
 #, fuzzy
-#~ msgid "The language for the snippet."
-#~ msgstr "Napaka Enchant za jezik: %s"
-
-#, fuzzy
 #~ msgid "Description"
 #~ msgstr "Opis"
 
@@ -2973,14 +4034,6 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #~ msgstr "Pokaži razvrstitev _opravil"
 
 #, fuzzy
-#~ msgid "Selection"
-#~ msgstr "Izbor"
-
-#, fuzzy
-#~ msgid "The node selection."
-#~ msgstr "_Počisti izbor"
-
-#, fuzzy
 #~ msgid "Icon Name"
 #~ msgstr "Ime ikone"
 
@@ -3031,7 +4084,3 @@ msgstr "DATOTEKA_PROJEKTA [ISKALNI NIZI ...]"
 #, fuzzy
 #~ msgid "The title of the workspace."
 #~ msgstr "Delovna površina programa"
-
-#, fuzzy
-#~ msgid "The name of the icon to use."
-#~ msgstr "Ime uporabljene teme ikon"
