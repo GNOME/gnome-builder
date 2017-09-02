@@ -187,10 +187,17 @@ ide_debugger_gutter_renderer_query_data (IdeDebuggerGutterRenderer    *self,
       break;
 
     case IDE_DEBUGGER_BREAK_NONE:
-      /* Setting pixbuf to NULL via g_object_set() seems to be
-       * the only way to clear this without g_warning()s.
+      /* FIXME: It would be nice if we could apply an alpha here, but seems to
+       *        require more rendering code than I want to deal with right now.
        */
-      g_object_set (self, "pixbuf", NULL, NULL);
+      if ((state & GTK_SOURCE_GUTTER_RENDERER_STATE_PRELIT) != 0)
+        gtk_source_gutter_renderer_pixbuf_set_icon_name (GTK_SOURCE_GUTTER_RENDERER_PIXBUF (self),
+                                                         BREAKPOINT_ICON_NAME);
+      else
+        /* Setting pixbuf to NULL via g_object_set() seems to be
+         * the only way to clear this without g_warning()s.
+         */
+        g_object_set (self, "pixbuf", NULL, NULL);
       break;
 
     default:
