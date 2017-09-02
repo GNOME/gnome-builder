@@ -5062,6 +5062,8 @@ ide_source_view_real_begin_word_completion (IdeSourceView *self,
   GList providers = { 0 };
   GtkTextIter insert;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (direction != 1 && direction != -1)
@@ -5071,6 +5073,13 @@ ide_source_view_real_begin_word_completion (IdeSourceView *self,
     return;
 
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+
+  /* Move to the next row if completion is already visible */
+  if (priv->completion_visible)
+    {
+      g_signal_emit_by_name (completion, "move-cursor", GTK_SCROLL_STEPS, direction);
+      IDE_EXIT;
+    }
 
   if (priv->word_completion_provider == NULL)
     {
@@ -5094,6 +5103,8 @@ ide_source_view_real_begin_word_completion (IdeSourceView *self,
 
   providers.data = priv->word_completion_provider;
   gtk_source_completion_show (completion, &providers, cc);
+
+  IDE_EXIT;
 }
 
 static void
