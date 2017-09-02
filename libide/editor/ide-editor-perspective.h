@@ -42,5 +42,6 @@ IdeLayoutGrid             *ide_editor_perspective_get_grid                      
 IdeEditorSidebar          *ide_editor_perspective_get_sidebar                   (IdeEditorPerspective *self);
 IdeLayoutTransientSidebar *ide_editor_perspective_get_transient_sidebar         (IdeEditorPerspective *self);
 GtkWidget                 *ide_editor_perspective_get_utilities                 (IdeEditorPerspective *self);
+GtkWidget                 *ide_editor_perspective_get_overlay                   (IdeEditorPerspective *self);
 
 G_END_DECLS

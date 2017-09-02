@@ -12,9 +12,14 @@
       </object>
     </child>
     <child>
-      <object class="IdeLayoutGrid" id="grid">
-        <property name="orientation">horizontal</property>
+      <object class="GtkOverlay" id="overlay">
         <property name="visible">true</property>
+        <child>
+          <object class="IdeLayoutGrid" id="grid">
+            <property name="orientation">horizontal</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

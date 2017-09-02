@@ -42,6 +42,7 @@ struct _IdeEditorPerspective
 
   /* Template widgets */
   IdeLayoutGrid       *grid;
+  GtkOverlay          *overlay;
   IdeEditorProperties *properties;
 
   /* State before entering focus mode */

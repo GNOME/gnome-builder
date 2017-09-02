@@ -248,6 +248,7 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-perspective.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, properties);
 
   g_type_ensure (IDE_TYPE_EDITOR_PROPERTIES);
@@ -793,4 +794,21 @@ _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
   ide_layout_transient_sidebar_set_view (sidebar, (IdeLayoutView *)view);
   ide_layout_transient_sidebar_set_panel (sidebar, GTK_WIDGET (self->properties));
   g_object_set (self, "right-visible", view != NULL, NULL);
+}
+
+/**
+ * ide_editor_perspective_get_overlay:
+ * @self: a #IdeEditorPerspective
+ *
+ * Gets the overlay widget which can be used to layer things above all
+ * items in the layout grid.
+ *
+ * Returns: (transfer none) (type Gtk.Overlay): A #GtkWidget
+ */
+GtkWidget *
+ide_editor_perspective_get_overlay (IdeEditorPerspective *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
+
+  return GTK_WIDGET (self->overlay);
 }
