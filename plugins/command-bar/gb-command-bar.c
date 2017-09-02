@@ -542,6 +542,8 @@ show_command_bar (GSimpleAction *action,
                   GVariant      *param,
                   GbCommandBar  *self)
 {
+  g_assert (GB_IS_COMMAND_BAR (self));
+
   gb_command_bar_show (self);
 }
 
@@ -644,7 +646,6 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   object_class->constructed = gb_command_bar_constructed;
   object_class->finalize = gb_command_bar_finalize;
@@ -679,21 +680,6 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                                 1,
                                 GTK_TYPE_DIRECTION_TYPE);
 
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Tab, 0,
-                                "complete", 0);
-
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Up, 0,
-                                "move-history", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_UP);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_Down, 0,
-                                "move-history", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/command-bar/gb-command-bar.ui");
   gtk_widget_class_set_css_name (widget_class, "commandbar");
   gtk_widget_class_bind_template_child (widget_class, GbCommandBar, entry);
@@ -710,7 +696,7 @@ gb_command_bar_class_finalize (GbCommandBarClass *klass)
 }
 
 static const DzlShortcutEntry shortcuts[] = {
-  { "org.gnome.builder.show-command-bar",
+  { "org.gnome.builder.command-bar.show",
     0, NULL,
     NC_("shortcut window", "Workbench shortcuts"),
     NC_("shortcut window", "General"),
@@ -737,10 +723,30 @@ gb_command_bar_init (GbCommandBar *self)
   controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
 
   dzl_shortcut_controller_add_command_action (controller,
-                                              I_("org.gnome.builder.show-command-bar"),
+                                              I_("org.gnome.builder.command-bar.show"),
                                               I_("<Primary>Return"),
                                               DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
-                                              I_("win.show-command-bar"));
+                                              "win.show-command-bar");
+
+  dzl_shortcut_controller_add_command_signal (controller,
+                                              I_("org.gnome.builder.command-bar.complete"),
+                                              I_("Tab"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              "complete", 0);
+
+  dzl_shortcut_controller_add_command_signal (controller,
+                                              I_("org.gnome.builder.command-bar.previous"),
+                                              I_("Up"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              "move-history", 1,
+                                              GTK_TYPE_DIRECTION_TYPE, GTK_DIR_UP);
+
+  dzl_shortcut_controller_add_command_signal (controller,
+                                              I_("org.gnome.builder.command-bar.next"),
+                                              I_("Down"),
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              "move-history", 1,
+                                              GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              shortcuts,
