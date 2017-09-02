@@ -31,6 +31,7 @@ subdir('find-other-file')
 subdir('flatpak')
 subdir('fpaste')
 subdir('gcc')
+subdir('gdb')
 subdir('gettext')
 subdir('git')
 subdir('gnome-code-assistance')
@@ -85,6 +86,7 @@ status += [
   'Flatpak ............... : @0@'.format(get_option('with_flatpak')),
   'Fpaste ................ : @0@'.format(get_option('with_fpaste')),
   'GCC ................... : @0@'.format(get_option('with_gcc')),
+  'GDB ................... : @0@'.format(get_option('with_gdb')),
   'Gettext ............... : @0@'.format(get_option('with_gettext')),
   'Git ................... : @0@'.format(get_option('with_git')),
   'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
