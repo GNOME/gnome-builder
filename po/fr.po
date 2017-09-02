@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-02 02:16+0000\n"
-"PO-Revision-Date: 2017-09-02 17:25+0200\n"
+"POT-Creation-Date: 2017-09-02 18:46+0000\n"
+"PO-Revision-Date: 2017-09-02 20:48+0200\n"
 "Last-Translator: Guillaume Bernard <contact.guib@laposte.net>\n"
 "Language-Team: français <>\n"
 "Language: fr\n"
@@ -1048,7 +1048,7 @@ msgstr "Pas de constructeur de ce type"
 #: libide/application/ide-application-shortcuts.c:75
 #: libide/runner/ide-run-manager.c:735
 #: libide/workbench/ide-workbench-shortcuts.c:49
-#: plugins/command-bar/gb-command-bar.c:715
+#: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
 #: plugins/terminal/gb-terminal-workbench-addin.c:187
 msgctxt "shortcut window"
@@ -1074,7 +1074,7 @@ msgstr "Montrer la fenêtre des raccourcis"
 #: libide/application/ide-application-shortcuts.c:60
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
-#: plugins/command-bar/gb-command-bar.c:716
+#: plugins/command-bar/gb-command-bar.c:702
 #: plugins/terminal/gb-terminal-workbench-addin.c:182
 #: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
@@ -1797,6 +1797,7 @@ msgstr ""
 "Afficher ou cacher les options de recherche telles que la sensibilité à la "
 "casse"
 
+#. List of pages that are open
 #: libide/editor/ide-editor-sidebar.ui:26
 #: libide/layout/ide-layout-stack-header.ui:21
 msgid "Open Pages"
@@ -2043,7 +2044,7 @@ msgstr "Préférences"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
 #: libide/keybindings/ide-shortcuts-window.ui:477
-#: plugins/command-bar/gb-command-bar.c:717
+#: plugins/command-bar/gb-command-bar.c:703
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barre de commande"
@@ -2773,7 +2774,7 @@ msgid "Number of CPU"
 msgstr "Nombre de processeurs"
 
 #: libide/preferences/ide-preferences-builtin.c:378
-#: libide/workbench/ide-omni-bar.ui:479
+#: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "Construire"
 
@@ -2798,7 +2799,8 @@ msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr ""
-"Autoriser l’utilisation des réseaux facturés selon la consommation pour le téléchargement des dépendances."
+"Autoriser l’utilisation des réseaux facturés selon la consommation pour le "
+"téléchargement des dépendances."
 
 #: libide/preferences/ide-preferences-builtin.c:396
 msgid "Projects"
@@ -3035,19 +3037,24 @@ msgstr "Dernière construction"
 msgid "Build result"
 msgstr "Résultat de la construction"
 
-#: libide/workbench/ide-omni-bar.ui:486
+#. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: libide/workbench/ide-omni-bar.ui:475
+msgid "true"
+msgstr "false"
+
+#: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
 msgstr "Reconstruire"
 
-#: libide/workbench/ide-omni-bar.ui:493
+#: libide/workbench/ide-omni-bar.ui:494
 msgid "Clean"
 msgstr "Nettoyer"
 
-#: libide/workbench/ide-omni-bar.ui:500
+#: libide/workbench/ide-omni-bar.ui:501
 msgid "Export Bundle"
 msgstr "Exporter comme application autonome"
 
-#: libide/workbench/ide-omni-bar.ui:581
+#: libide/workbench/ide-omni-bar.ui:582
 msgid "Build project"
 msgstr "Construire le projet"
 
@@ -3377,7 +3384,7 @@ msgstr "Couleurs de surbrillance"
 msgid "Command not found: %s"
 msgstr "Commande non trouvée : %s"
 
-#: plugins/command-bar/gb-command-bar.c:593
+#: plugins/command-bar/gb-command-bar.c:595
 msgid "Use the entry below to execute a command"
 msgstr "Saisissez ci-dessous la commande à exécuter"
 
