@@ -438,7 +438,10 @@ gbp_gdb_debugger_handle_breakpoint (GbpGdbDebugger              *self,
           else if (g_strcmp0 (iter->variable, "func") == 0)
             func = iter->variant.cstring;
           else if (g_strcmp0 (iter->variable, "file") == 0)
-            file = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
+            {
+              g_free (file);
+              file = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
+            }
           else if (g_strcmp0 (iter->variable, "fullname") == 0)
             fullname = iter->variant.cstring;
           else if (g_strcmp0 (iter->variable, "line") == 0)
@@ -557,7 +560,10 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
                       else if (g_strcmp0 (subiter->variable, "address") == 0)
                         address = subiter->variant.cstring;
                       else if (g_strcmp0 (subiter->variable, "file") == 0)
-                        file = gbp_gdb_debugger_translate_path (self, subiter->variant.cstring);
+                        {
+                          g_free (file);
+                          file = gbp_gdb_debugger_translate_path (self, subiter->variant.cstring);
+                        }
                       else if (g_strcmp0 (subiter->variable, "line") == 0)
                         line = g_ascii_strtoll (subiter->variant.cstring, NULL, 10);
                     }
@@ -1497,7 +1503,10 @@ gbp_gdb_debugger_list_frames_cb (GObject      *object,
                           else if (g_strcmp0 (iter->variable, "func") == 0)
                             func = iter->variant.cstring;
                           else if (g_strcmp0 (iter->variable, "file") == 0)
-                            file = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
+                            {
+                              g_free (file);
+                              file = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
+                            }
                           else if (g_strcmp0 (iter->variable, "fullname") == 0)
                             fullname = iter->variant.cstring;
                           else if (g_strcmp0 (iter->variable, "line") == 0)
