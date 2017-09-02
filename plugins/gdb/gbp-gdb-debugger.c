@@ -2609,61 +2609,6 @@ gbp_gdb_debugger_check_ready (GbpGdbDebugger  *self,
 }
 
 static void
-gbp_gdb_debugger_exec_cb (GObject      *object,
-                          GAsyncResult *result,
-                          gpointer      user_data)
-{
-  GbpGdbDebugger *self = (GbpGdbDebugger *)object;
-  SyncHandle *sync_handle = user_data;
-
-  g_assert (GBP_IS_GDB_DEBUGGER (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (sync_handle != NULL);
-
-  sync_handle->output = gbp_gdb_debugger_exec_finish (self, result, sync_handle->error);
-  sync_handle->completed = TRUE;
-
-  g_assert (sync_handle->output != NULL || *sync_handle->error != NULL);
-
-  g_main_context_wakeup (sync_handle->context);
-}
-
-struct gdbwire_mi_output *
-gbp_gdb_debugger_exec (GbpGdbDebugger     *self,
-                       IdeDebuggerThread  *thread,
-                       const gchar        *command,
-                       GCancellable       *cancellable,
-                       GError            **error)
-{
-  SyncHandle sync_handle;
-
-  g_return_val_if_fail (GBP_IS_GDB_DEBUGGER (self), NULL);
-  g_return_val_if_fail (command != NULL, NULL);
-  g_return_val_if_fail (!thread || IDE_IS_DEBUGGER_THREAD (thread), NULL);
-  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
-
-  sync_handle.context = g_main_context_ref_thread_default ();
-  sync_handle.error = error;
-  sync_handle.output = NULL;
-  sync_handle.completed = FALSE;
-
-  gbp_gdb_debugger_exec_async (self,
-                               thread,
-                               command,
-                               cancellable,
-                               gbp_gdb_debugger_exec_cb,
-                               &sync_handle);
-
-  while (!sync_handle.completed)
-    g_main_context_iteration (sync_handle.context, TRUE);
-  g_main_context_unref (sync_handle.context);
-
-  g_assert (sync_handle.output != NULL || *sync_handle.error != NULL);
-
-  return sync_handle.output;
-}
-
-static void
 gbp_gdb_debugger_write_cb (GObject      *object,
                            GAsyncResult *result,
                            gpointer      user_data)

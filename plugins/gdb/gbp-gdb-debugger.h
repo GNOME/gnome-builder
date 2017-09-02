@@ -32,11 +32,6 @@ GbpGdbDebugger           *gbp_gdb_debugger_new                (void);
 void                      gbp_gdb_debugger_connect            (GbpGdbDebugger       *self,
                                                                GIOStream            *io_stream,
                                                                GCancellable         *cancellable);
-struct gdbwire_mi_output *gbp_gdb_debugger_exec               (GbpGdbDebugger       *self,
-                                                               IdeDebuggerThread    *thread,
-                                                               const gchar          *command,
-                                                               GCancellable         *cancellable,
-                                                               GError              **error);
 void                      gbp_gdb_debugger_exec_async         (GbpGdbDebugger       *self,
                                                                IdeDebuggerThread    *thread,
                                                                const gchar          *command,
