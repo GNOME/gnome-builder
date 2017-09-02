@@ -6068,8 +6068,9 @@ ide_source_view_find_references_cb (GObject      *object,
                                     gpointer      user_data)
 {
   IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
+  FindReferencesTaskData *data;
   IdeSourceView *self;
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeSourceViewPrivate *priv;
   g_autoptr(GPtrArray) references = NULL;
   g_autoptr(GError) error = NULL;
   GtkScrolledWindow *scroller;
@@ -6079,18 +6080,22 @@ ide_source_view_find_references_cb (GObject      *object,
   GtkTextIter iter;
   GdkRectangle loc;
   g_autoptr(GTask) task = user_data;
-  FindReferencesTaskData *data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_SOURCE_VIEW (self));
 
   references = ide_symbol_resolver_find_references_finish (symbol_resolver, result, &error);
 
   self = g_task_get_source_object (task);
+  priv = ide_source_view_get_instance_private (self);
   data = g_task_get_task_data (task);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (data != NULL);
+  g_assert (data->resolvers != NULL);
+  g_assert (data->resolvers->len > 0);
 
   g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
 
