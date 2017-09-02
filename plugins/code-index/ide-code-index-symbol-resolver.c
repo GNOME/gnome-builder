@@ -103,6 +103,17 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   code_indexer = ide_code_index_service_get_code_indexer (service, file_name);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_code_index_symbol_resolver_lookup_symbol_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (code_indexer == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to lcoate code indexer");
+      return;
+    }
 
   if (g_task_return_error_if_cancelled (task))
     return;
