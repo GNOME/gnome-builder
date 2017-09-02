@@ -40,14 +40,9 @@ ide_debugger_editor_view_addin_load (IdeEditorViewAddin *addin,
                                      IdeEditorView      *view)
 {
   IdeDebuggerEditorViewAddin *self = (IdeDebuggerEditorViewAddin *)addin;
-  g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
   IdeDebugManager *debug_manager;
-  IdeSourceView *source_view;
-  GtkSourceGutter *gutter;
+  const gchar *language;
   IdeContext *context;
-  IdeBuffer *buffer;
-  IdeFile *file;
-  GFile *gfile;
 
   IDE_ENTRY;
 
@@ -58,24 +53,35 @@ ide_debugger_editor_view_addin_load (IdeEditorViewAddin *addin,
 
   context = ide_widget_get_context (GTK_WIDGET (view));
   debug_manager = ide_context_get_debug_manager (context);
+  language = ide_editor_view_get_language_id (view);
 
-  buffer = ide_editor_view_get_buffer (view);
-  file = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (file);
+  if (ide_debug_manager_supports_language (debug_manager, language))
+    {
+      g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
+      IdeSourceView *source_view;
+      IdeBuffer *buffer;
+      IdeFile *file;
+      GFile *gfile;
 
-  /* Install the breakpoints gutter */
-  breakpoints = ide_debug_manager_get_breakpoints_for_file (debug_manager, gfile);
-  source_view = ide_editor_view_get_view (view);
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (source_view), GTK_TEXT_WINDOW_LEFT);
-  self->renderer = g_object_new (IDE_TYPE_DEBUGGER_GUTTER_RENDERER,
-                                 "debug-manager", debug_manager,
-                                 "breakpoints", breakpoints,
-                                 "size", 16,
-                                 "xpad", 1,
-                                 NULL);
-  gtk_source_gutter_insert (gutter, GTK_SOURCE_GUTTER_RENDERER (self->renderer), -100);
+      GtkSourceGutter *gutter;
+      buffer = ide_editor_view_get_buffer (view);
+      file = ide_buffer_get_file (buffer);
+      gfile = ide_file_get_file (file);
 
-  /* TODO: Monitor IdeBuffer:file? */
+      /* Install the breakpoints gutter */
+      breakpoints = ide_debug_manager_get_breakpoints_for_file (debug_manager, gfile);
+      source_view = ide_editor_view_get_view (view);
+      gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (source_view), GTK_TEXT_WINDOW_LEFT);
+      self->renderer = g_object_new (IDE_TYPE_DEBUGGER_GUTTER_RENDERER,
+                                     "debug-manager", debug_manager,
+                                     "breakpoints", breakpoints,
+                                     "size", 16,
+                                     "xpad", 1,
+                                     NULL);
+      gtk_source_gutter_insert (gutter, GTK_SOURCE_GUTTER_RENDERER (self->renderer), -100);
+
+      /* TODO: Monitor IdeBuffer:file? */
+    }
 
   IDE_EXIT;
 }
@@ -85,17 +91,21 @@ ide_debugger_editor_view_addin_unload (IdeEditorViewAddin *addin,
                                        IdeEditorView      *view)
 {
   IdeDebuggerEditorViewAddin *self = (IdeDebuggerEditorViewAddin *)addin;
-  IdeSourceView *source_view;
-  GtkSourceGutter *gutter;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEBUGGER_EDITOR_VIEW_ADDIN (self));
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
-  source_view = ide_editor_view_get_view (view);
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (source_view), GTK_TEXT_WINDOW_LEFT);
-  gtk_source_gutter_remove (gutter, GTK_SOURCE_GUTTER_RENDERER (self->renderer));
+  if (self->renderer != NULL)
+    {
+      IdeSourceView *source_view;
+      GtkSourceGutter *gutter;
+
+      source_view = ide_editor_view_get_view (view);
+      gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (source_view), GTK_TEXT_WINDOW_LEFT);
+      gtk_source_gutter_remove (gutter, GTK_SOURCE_GUTTER_RENDERER (self->renderer));
+    }
 
   self->renderer = NULL;
   self->view = NULL;
