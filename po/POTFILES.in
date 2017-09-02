@@ -84,6 +84,7 @@ libide/runtimes/ide-runtime-manager.c
 libide/snippets/ide-source-snippet-completion-provider.c
 libide/snippets/ide-source-snippets-manager.c
 libide/sourceview/ide-source-view.c
+libide/sourceview/ide-word-completion-provider.c
 libide/transfers/ide-pkcon-transfer.c
 libide/transfers/ide-transfers-button.ui
 libide/util/ide-uri.c
