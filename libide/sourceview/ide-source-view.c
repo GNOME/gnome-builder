@@ -118,6 +118,8 @@ typedef struct
   IdeExtensionSetAdapter      *completion_providers;
   DzlSignalGroup              *completion_providers_signals;
 
+  IdeWordCompletionProvider   *word_completion_provider;
+
   DzlBindingGroup             *file_setting_bindings;
   DzlSignalGroup              *buffer_signals;
 
@@ -5054,21 +5056,44 @@ ide_source_view_real_begin_word_completion (IdeSourceView *self,
                                             gint           direction)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceCompletionContext *cc;
+  GtkSourceCompletion *completion;
   IdeContext *context;
+  GList providers = { 0 };
+  GtkTextIter insert;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  if ((priv->buffer != NULL) && (context = ide_buffer_get_context (priv->buffer)))
+  if (direction != 1 && direction != -1)
+    direction = 1;
+
+  if (priv->buffer == NULL || NULL == (context = ide_buffer_get_context (priv->buffer)))
+    return;
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+
+  if (priv->word_completion_provider == NULL)
     {
-      IdeBufferManager *bufmgr;
-      IdeWordCompletionProvider *words;
-
-      bufmgr = ide_context_get_buffer_manager (context);
-      words = ide_buffer_manager_get_word_completion (bufmgr);
-
-      g_object_set (words, "direction", 1, NULL);
-      g_signal_emit_by_name (self, "show-completion");
+      priv->word_completion_provider = g_object_new (IDE_TYPE_WORD_COMPLETION_PROVIDER, NULL);
+      gtk_source_completion_add_provider (completion,
+                                          GTK_SOURCE_COMPLETION_PROVIDER (priv->word_completion_provider),
+                                          NULL);
     }
+
+  g_object_set (priv->word_completion_provider,
+                "direction", direction,
+                NULL);
+
+  ide_buffer_get_selection_bounds (priv->buffer, &insert, NULL);
+
+  cc = g_object_new (GTK_SOURCE_TYPE_COMPLETION_CONTEXT,
+                     "activation", GTK_SOURCE_COMPLETION_ACTIVATION_USER_REQUESTED,
+                     "completion", completion,
+                     "iter", &insert,
+                     NULL);
+
+  providers.data = priv->word_completion_provider;
+  gtk_source_completion_show (completion, &providers, cc);
 }
 
 static void
@@ -6308,6 +6333,7 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->file_setting_bindings);
+  g_clear_object (&priv->word_completion_provider);
 
   if (priv->command_str != NULL)
     {
