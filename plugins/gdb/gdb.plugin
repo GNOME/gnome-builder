@@ -6,4 +6,4 @@ Authors=Christian Hergert <chergert@redhat.com>
 Copyright=Copyright © 2017 Christian Hergert
 Depends=debugger;editor;terminal
 Builtin=true
-Hidden=true
+X-Debugger-Languages=c,chdr,cpp,cpphdr,fortran,rust,vala

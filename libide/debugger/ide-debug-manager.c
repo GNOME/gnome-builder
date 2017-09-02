@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "ide-debug.h"
 
@@ -43,6 +45,7 @@ struct _IdeDebugManager
   DzlSignalGroup     *debugger_signals;
   IdeRunner          *runner;
   GQueue              pending_breakpoints;
+  GPtrArray          *supported_languages;
 
   guint               active : 1;
 };
@@ -72,6 +75,155 @@ static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
 G_DEFINE_TYPE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT)
+
+static gint
+compare_language_id (gconstpointer a,
+                     gconstpointer b)
+{
+  const gchar * const *astr = a;
+  const gchar * const *bstr = b;
+
+  return strcmp (*astr, *bstr);
+}
+
+/**
+ * ide_debug_manager_supports_language:
+ * @self: a #IdeDebugManager
+ * @language_id: (nullable): #GtkSourceView based language identifier or %NULL
+ *
+ * This checks to see if there is a debugger that can possibly support a given
+ * language id. This is used to determine if space for breakpoints should be
+ * reserved in the gutter of source code editor.
+ *
+ * This function accepts %NULL for @language_id out of convenience and will
+ * return %NULL in this case.
+ *
+ * Returns: %TRUE if the language is supported; otherwise %FALSE.
+ *
+ * Since: 3.26
+ */
+gboolean
+ide_debug_manager_supports_language (IdeDebugManager *self,
+                                     const gchar     *language_id)
+{
+  const gchar *ret;
+
+  g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), FALSE);
+  g_return_val_if_fail (self->supported_languages != NULL, FALSE);
+
+  if (language_id == NULL)
+    return FALSE;
+
+  ret = bsearch (&language_id,
+                 (gpointer)self->supported_languages->pdata,
+                 self->supported_languages->len,
+                 sizeof (gchar *),
+                 compare_language_id);
+
+  return ret != NULL;
+}
+
+static void
+ide_debug_manager_plugin_loaded (IdeDebugManager *self,
+                                 PeasPluginInfo  *plugin_info,
+                                 PeasEngine      *engine)
+{
+  const gchar *supported;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+  g_assert (self->supported_languages != NULL);
+
+  supported = peas_plugin_info_get_external_data (plugin_info, "Debugger-Languages");
+
+  if (supported != NULL)
+    {
+      gchar **languages = g_strsplit (supported, ",", 0);
+
+      for (guint i = 0; languages[i] != NULL; i++)
+        g_ptr_array_add (self->supported_languages, g_steal_pointer (&languages[i]));
+      g_ptr_array_sort (self->supported_languages, compare_language_id);
+      g_free (languages);
+    }
+}
+
+static void
+ide_debug_manager_remove_supported_language (IdeDebugManager *self,
+                                             const gchar     *language_id)
+{
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (language_id != NULL);
+  g_assert (self->supported_languages != NULL);
+
+  for (guint i = 0; i < self->supported_languages->len; i++)
+    {
+      const gchar *ele = g_ptr_array_index (self->supported_languages, i);
+
+      if (g_strcmp0 (ele, language_id) == 0)
+        {
+          g_ptr_array_remove_index (self->supported_languages, i);
+          break;
+        }
+    }
+}
+
+static void
+ide_debug_manager_plugin_unloaded (IdeDebugManager *self,
+                                   PeasPluginInfo  *plugin_info,
+                                   PeasEngine      *engine)
+{
+  const gchar *supported;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+  g_assert (self->supported_languages != NULL);
+
+  supported = peas_plugin_info_get_external_data (plugin_info, "Debugger-Languages");
+
+  if (supported != NULL)
+    {
+      g_auto(GStrv) languages = g_strsplit (supported, ",", 0);
+
+      for (guint i = 0; languages[i] != NULL; i++)
+        ide_debug_manager_remove_supported_language (self, languages[i]);
+    }
+}
+
+static void
+ide_debug_manager_load_supported_languages (IdeDebugManager *self)
+{
+  PeasEngine *engine;
+  gchar **loaded_plugins;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (self->supported_languages != NULL);
+
+  engine = peas_engine_get_default ();
+
+  g_signal_connect_object (engine,
+                           "load-plugin",
+                           G_CALLBACK (ide_debug_manager_plugin_loaded),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (engine,
+                           "unload-plugin",
+                           G_CALLBACK (ide_debug_manager_plugin_unloaded),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  loaded_plugins = peas_engine_get_loaded_plugins (engine);
+
+  for (guint i = 0; loaded_plugins[i] != NULL; i++)
+    {
+      const gchar *module_name = loaded_plugins[i];
+      PeasPluginInfo *plugin_info = peas_engine_get_plugin_info (engine, module_name);
+
+      ide_debug_manager_plugin_loaded (self, plugin_info, engine);
+    }
+}
 
 static void
 ide_debug_manager_set_active (IdeDebugManager *self,
@@ -498,6 +650,10 @@ static void
 ide_debug_manager_init (IdeDebugManager *self)
 {
   g_queue_init (&self->pending_breakpoints);
+
+  self->supported_languages = g_ptr_array_new_with_free_func (g_free);
+
+  ide_debug_manager_load_supported_languages (self);
 
   self->breakpoints = g_hash_table_new_full ((GHashFunc)g_file_hash,
                                              (GEqualFunc)g_file_equal,

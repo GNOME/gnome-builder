@@ -36,5 +36,7 @@ gboolean                ide_debug_manager_start                    (IdeDebugMana
 void                    ide_debug_manager_stop                     (IdeDebugManager        *self);
 IdeDebuggerBreakpoints *ide_debug_manager_get_breakpoints_for_file (IdeDebugManager        *self,
                                                                     GFile                  *file);
+gboolean                ide_debug_manager_supports_language        (IdeDebugManager        *self,
+                                                                    const gchar            *language_id);
 
 G_END_DECLS
