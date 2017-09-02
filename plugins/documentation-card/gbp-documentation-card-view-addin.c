@@ -55,7 +55,7 @@ documentation_requested_cb (GbpDocumentationCardViewAddin *self,
   GtkSourceLanguage *lang;
   IdeContext *context;
   IdeDocumentation *doc;
-  IdeDocumentationContext doc_context;
+  IdeDocumentationContext doc_context = IDE_DOCUMENTATION_CONTEXT_NONE;
   g_autoptr(IdeDocumentationInfo) info = NULL;
   GtkTextIter begin;
   GtkTextIter end;
