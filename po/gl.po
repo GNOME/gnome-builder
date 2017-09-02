@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-08-20 00:09+0000\n"
-"PO-Revision-Date: 2017-08-23 12:22+0200\n"
+"POT-Creation-Date: 2017-09-02 02:16+0000\n"
+"PO-Revision-Date: 2017-09-02 12:02+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -93,6 +93,8 @@ msgid "Saturation"
 msgstr "Saturación"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+#: libide/debugger/ide-debugger-locals-view.ui:41
+#: libide/debugger/ide-debugger-registers-view.ui:34
 msgid "Value"
 msgstr "Valor"
 
@@ -208,7 +210,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar ou xerar unha paleta usando as preferencias"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5951
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -640,7 +642,7 @@ msgstr "_Sobre"
 msgid "_Quit"
 msgstr "_Saír"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:710
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -768,7 +770,7 @@ msgstr "_Volver ao inicio"
 msgid "Cu_t"
 msgstr "_Cortar"
 
-#: data/gtk/menus.ui:250
+#: data/gtk/menus.ui:250 libide/debugger/ide-debugger-threads-view.ui:64
 msgid "Frame"
 msgstr "Marco"
 
@@ -821,7 +823,7 @@ msgstr "_Gardar"
 msgid "Save _As"
 msgstr "_Gardar como…"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1114
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
 msgid "Run"
 msgstr "Executar"
 
@@ -829,7 +831,7 @@ msgstr "Executar"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:630
+#: libide/workbench/ide-workbench.c:625
 msgid "Builder"
 msgstr "Construtor"
 
@@ -1028,11 +1030,11 @@ msgstr "Non existe o traballador"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:721
+#: libide/runner/ide-run-manager.c:735
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:715
-#: plugins/terminal/gb-terminal-workbench-addin.c:180
-#: plugins/terminal/gb-terminal-workbench-addin.c:186
+#: plugins/terminal/gb-terminal-workbench-addin.c:181
+#: plugins/terminal/gb-terminal-workbench-addin.c:187
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Atallos do banco de traballo"
@@ -1057,8 +1059,8 @@ msgstr "Mostrar a xanela de atallos"
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
 #: plugins/command-bar/gb-command-bar.c:716
-#: plugins/terminal/gb-terminal-workbench-addin.c:181
-#: plugins/terminal/gb-terminal-workbench-addin.c:187
+#: plugins/terminal/gb-terminal-workbench-addin.c:182
+#: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Xeral"
@@ -1081,7 +1083,7 @@ msgstr "Enfoca o campo de busca global"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:722
+#: libide/runner/ide-run-manager.c:736
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construír e executar"
@@ -1091,7 +1093,7 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Dispara unha construción"
 
-#: libide/buffers/ide-buffer.c:2604
+#: libide/buffers/ide-buffer.c:2690
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 
@@ -1403,6 +1405,169 @@ msgstr "Ruta ao ficheiro de proxecto, por omisión está ao cartafol actual"
 #: libide/buildui/ide-environment-editor.c:67
 msgid "New variable…"
 msgstr "Nova variábel…"
+
+#: libide/debugger/gtk/menus.ui:10
+#: libide/debugger/ide-debugger-editor-addin.c:410
+#| msgid "Run with Profiler"
+msgid "Run with Debugger"
+msgstr "Executar co depurador"
+
+#: libide/debugger/ide-debug-manager.c:768
+#| msgid "The provider could not be found."
+msgid "A suitable debugger could not be found."
+msgstr "Non é posíbel atopar un depurador axeitado."
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:22
+#: libide/debugger/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr "ID"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "Ficheiro"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr "Liña"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:58
+#: libide/debugger/ide-debugger-threads-view.ui:76
+#| msgid "Fraction"
+msgid "Function"
+msgstr "Función"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "Enderezo"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:81
+#: libide/debugger/ide-debugger-locals-view.ui:28
+#| msgid "File Type"
+msgid "Type"
+msgstr "Tipo"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:91
+msgid "Hits"
+msgstr "Impactos"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:102
+#| msgid "Extensions"
+msgid "Expression"
+msgstr "Expresión"
+
+#: libide/debugger/ide-debugger-controls.ui:14
+msgid "Interrupt the program"
+msgstr "Interrumpir o programa"
+
+#: libide/debugger/ide-debugger-controls.ui:27
+msgid "Continue running the program"
+msgstr "Continuar a execución do programa"
+
+#: libide/debugger/ide-debugger-controls.ui:40
+#| msgid "Restore cursor position"
+msgid "Execute from the current cursor position"
+msgstr "Executar desde a posición actual do cursor"
+
+#: libide/debugger/ide-debugger-controls.ui:53
+msgid "Execute until reaching the current cursor position"
+msgstr "Executar até acadar a posición actual do cursor"
+
+#: libide/debugger/ide-debugger-controls.ui:66
+msgid "Execute the current line, stepping into any function calls"
+msgstr "Executar a liña actual, saltando dentro de calquera chamada de función"
+
+#: libide/debugger/ide-debugger-controls.ui:79
+msgid "Execute the current line, stepping over any function calls"
+msgstr ""
+"Executar a liña actual, pasando por enriba de calquera chamada de función"
+
+#: libide/debugger/ide-debugger-controls.ui:92
+msgid "Run until the end of the function"
+msgstr "Executar até o final da función"
+
+#: libide/debugger/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr "Desasamblar"
+
+#: libide/debugger/ide-debugger-editor-addin.c:296
+msgid "Debugger"
+msgstr "Depurador"
+
+#: libide/debugger/ide-debugger-editor-addin.c:312
+msgid "Threads"
+msgstr "Fíos"
+
+#: libide/debugger/ide-debugger-editor-addin.c:338
+msgid "Breakpoints"
+msgstr "Puntos de corte"
+
+#: libide/debugger/ide-debugger-editor-addin.c:346
+msgid "Libraries"
+msgstr "Bibliotecas"
+
+#: libide/debugger/ide-debugger-editor-addin.c:354
+msgid "Registers"
+msgstr "Rexistros"
+
+#: libide/debugger/ide-debugger-editor-addin.c:361
+msgid "Log"
+msgstr "Rexistro"
+
+#: libide/debugger/ide-debugger-editor-addin.c:377
+#| msgid "Failed to initialize defaults."
+msgid "Failed to initialize the debugger"
+msgstr "Produciuse un fallo ao iniciar o depurador"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:14
+#| msgid "Shared Library"
+msgid "Library"
+msgstr "Biblioteca"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr "Rango de enderezos"
+
+#: libide/debugger/ide-debugger-locals-view.c:307
+#| msgid "local"
+msgid "Locals"
+msgstr "Locais"
+
+#: libide/debugger/ide-debugger-locals-view.c:361
+msgid "Parameters"
+msgstr "Parámetros"
+
+#: libide/debugger/ide-debugger-locals-view.ui:16
+#| msgid "New variable…"
+msgid "Variable"
+msgstr "Variábeis"
+
+#: libide/debugger/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "Rexistro"
+
+#: libide/debugger/ide-debugger-threads-view.ui:19
+#| msgid "Size Group"
+msgid "Group"
+msgstr "Grupo"
+
+#: libide/debugger/ide-debugger-threads-view.ui:42
+msgid "Thread"
+msgstr "Fío"
+
+#: libide/debugger/ide-debugger-threads-view.ui:88
+#| msgid "Invalid arguments"
+msgid "Arguments"
+msgstr "Argumentos"
+
+#: libide/debugger/ide-debugger-threads-view.ui:101
+#| msgid "Project Location"
+msgid "Location"
+msgstr "Localización"
+
+#: libide/debugger/ide-debugger-threads-view.ui:112
+#| msgid "Dictionary"
+msgid "Binary"
+msgstr "Binario"
 
 #: libide/devices/ide-device-manager.c:148
 #, c-format
@@ -1830,11 +1995,11 @@ msgstr "Produciuse un fallo ao iniciar os parámetros predeterminados."
 msgid "You must call %s() before using libide."
 msgstr "Debe chamar a %s() antes de usar libide."
 
-#: libide/ide-context.c:2118
+#: libide/ide-context.c:2127
 msgid "An unload request is already pending"
 msgstr "Xa hai unha solicitude de descarga pendente."
 
-#: libide/ide-context.c:2237
+#: libide/ide-context.c:2246
 msgid "Context has already been restored."
 msgstr "Xa se restaurou o contexto."
 
@@ -1882,14 +2047,14 @@ msgstr "Barra de ordes"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
 #: libide/keybindings/ide-shortcuts-window.ui:484
-#: plugins/terminal/gb-terminal-workbench-addin.c:182
+#: plugins/terminal/gb-terminal-workbench-addin.c:183
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
 #: libide/keybindings/ide-shortcuts-window.ui:491
-#: plugins/terminal/gb-terminal-workbench-addin.c:188
+#: plugins/terminal/gb-terminal-workbench-addin.c:189
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tempo de execución de construción"
@@ -2264,7 +2429,7 @@ msgstr "tipo de letra monoespaciado do editor"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
-#: plugins/terminal/gb-terminal-workbench-addin.c:248
+#: plugins/terminal/gb-terminal-workbench-addin.c:250
 #: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Terminal"
@@ -2693,11 +2858,11 @@ msgstr "Deter execucución"
 msgid "Change run options"
 msgstr "Cambiar as opcións de execución"
 
-#: libide/runner/ide-run-manager.c:319
+#: libide/runner/ide-run-manager.c:340
 msgid "Cannot run target, another target is running"
 msgstr "Non se pode executar o obxectivo, xa hai outro en execución"
 
-#: libide/runner/ide-run-manager.c:388
+#: libide/runner/ide-run-manager.c:409
 msgid "Failed to locate runtime"
 msgstr "Produciuse un fallo ao localizar o runtime"
 
@@ -2719,33 +2884,38 @@ msgstr "Produciuse un fallo ao abrir o cartafol: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Produciuse un fallo ao cargar o ficheiro: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "Insert “%s”"
 msgstr "Inserir «%s»"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5409
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substituír «%s» con «%s»"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5523
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5950
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6061
+#: libide/sourceview/ide-source-view.c:6180
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Liña %u, Columna %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6087
+#: libide/sourceview/ide-source-view.c:6206
 msgid "No references were found"
 msgstr "Non se atopou ningunha referencia"
+
+#: libide/sourceview/ide-word-completion-provider.c:558
+#| msgid "Enable Word Completion"
+msgid "Builder Word Completion"
+msgstr "Completado de palabras de Construtor"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -2876,7 +3046,7 @@ msgstr "Construír proxecto"
 msgid "Builder Statistics"
 msgstr "Estatísticas do Construtor"
 
-#: libide/workbench/ide-workbench.c:628
+#: libide/workbench/ide-workbench.c:623
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
@@ -3413,8 +3583,6 @@ msgid "New Documentation Page"
 msgstr "Nova páxina de documentación"
 
 #: plugins/documentation-card/gbp-documentation-card.ui:36
-#| msgid "Show %u more runtime"
-#| msgid_plural "show %u more runtimes"
 msgid "_Show more"
 msgstr "_Mostrar máis"
 
@@ -3464,7 +3632,7 @@ msgstr "Clonar"
 msgid "Network is not available, skipping downloads"
 msgstr "A rede non está dispoñíbel, omitindo as descargas"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:89
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
 #: plugins/html-preview/html_preview_plugin/__init__.py:323
 #: plugins/html-preview/html_preview_plugin/__init__.py:333
@@ -3474,27 +3642,27 @@ msgstr "A rede non está dispoñíbel, omitindo as descargas"
 msgid "Install"
 msgstr "Instalar"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:97
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Actualizar"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:296
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:309
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:311
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Mostrar %u runtime máis"
 msgstr[1] "Mostrar %u runtimes máis"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:390
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:393
 msgid "Flatpak Runtimes"
 msgstr "Runtimes de Flatpak"
 
@@ -3576,15 +3744,15 @@ msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 "Imposíbel fornecer diferenzas, non se forneceu ningún ficheiro de respaldo."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:567
+#: plugins/git/ide-git-buffer-change-monitor.c:566
 msgid "Repository does not have a working directory."
 msgstr "O repositorio non ten un cartafol de traballo."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:578
+#: plugins/git/ide-git-buffer-change-monitor.c:577
 msgid "File is not under control of git working directory."
 msgstr "O ficheiro non está baixo o control do cartafol de traballo de git."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:644
+#: plugins/git/ide-git-buffer-change-monitor.c:643
 msgid "The requested file does not exist within the git index."
 msgstr "O ficheiro solicitado non existe dentro do índice de git."
 
@@ -3706,20 +3874,20 @@ msgstr "MinGW 64-bit"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
-#: plugins/notification/ide-notification-addin.c:81
+#: plugins/notification/ide-notification-addin.c:82
 msgid "Build successful"
 msgstr "Construción exitosa"
 
-#: plugins/notification/ide-notification-addin.c:82
+#: plugins/notification/ide-notification-addin.c:83
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "Completouse a construción do proxecto «%s»"
 
-#: plugins/notification/ide-notification-addin.c:86
+#: plugins/notification/ide-notification-addin.c:87
 msgid "Build failed"
 msgstr "Construción fallida"
 
-#: plugins/notification/ide-notification-addin.c:87
+#: plugins/notification/ide-notification-addin.c:88
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "Fallou a construción do proxecto «%s»"
@@ -4157,7 +4325,7 @@ msgstr "Gardar contidos do terminal como"
 msgid "Untitled terminal"
 msgstr "Terminal sen título"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:144
+#: plugins/terminal/gb-terminal-workbench-addin.c:145
 msgid "Application Output"
 msgstr "Saída do aplicativo"
 
@@ -4434,9 +4602,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 
 #~ msgid "Cannot add provider more than once."
 #~ msgstr "Non é posíbel engadir un fornecedor varias veces."
-
-#~ msgid "The provider could not be found."
-#~ msgstr "Non é posíbel atopar o fornecedor"
 
 #~ msgid "File path is NULL"
 #~ msgstr "A ruta do ficheiro é NULL"
@@ -5084,9 +5249,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 #~ msgid "The repository to use for calculating diffs."
 #~ msgstr "O repositorio usado para calcular diferenzas."
 
-#~ msgid "Fraction"
-#~ msgstr "Fracción"
-
 #~ msgid "A fraction containing the operation progress."
 #~ msgstr "Unha francción que contén o progreso da operación."
 
@@ -5129,9 +5291,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 
 #~ msgid "The IdeContext for the buffer."
 #~ msgstr "O IdeContext para o búfer."
-
-#~ msgid "File"
-#~ msgstr "Ficheiro"
 
 #~ msgid "The file represented by the buffer."
 #~ msgstr "O ficheiro representado por o búfer."
@@ -5218,9 +5377,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 
 #~ msgid "The display name of the device."
 #~ msgstr "O nome en pantalla do dispositivo."
-
-#~ msgid "ID"
-#~ msgstr "ID"
 
 #~ msgid "The device identifier."
 #~ msgstr "O identificador do dispositivo."
@@ -5494,9 +5650,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 #~ msgstr ""
 #~ "A descrición do tipo de letra Pango que usar para renderizar a fonte."
 
-#~ msgid "Enable Word Completion"
-#~ msgstr "Activar o completado de palabras"
-
 #~ msgid "If words from all buffers can be used to autocomplete."
 #~ msgstr "Se se poden usar as palabras de todos os búferes para o completado."
 
@@ -5680,9 +5833,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 #~ msgid "Action Name"
 #~ msgstr "Nome da acción"
 
-#~ msgid "Parameters"
-#~ msgstr "Parámetros"
-
 #~ msgid "The parameters for the action."
 #~ msgstr "Os parámetros para a acción."
 
@@ -5812,14 +5962,8 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 #~ msgid "An action-target for the settings action."
 #~ msgstr "O acción-obxectivo para a acción das preferencias"
 
-#~ msgid "Size Group"
-#~ msgstr "Grupo de tamaño"
-
 #~ msgid "The sizing group for the control."
 #~ msgstr "O grupo de tamaño para o control."
-
-#~ msgid "File Type"
-#~ msgstr "Tipo de ficheiro"
 
 #~ msgid "The file type to create."
 #~ msgstr "O tipo de ficheiro a crear."
