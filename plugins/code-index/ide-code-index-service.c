@@ -381,8 +381,6 @@ ide_code_index_service_context_loaded (IdeService *service)
                            G_CONNECT_SWAPPED);
 
   ide_code_index_service_build (self, workdir, TRUE, 1);
-
-  g_debug ("context loaded");
 }
 
 static void
@@ -391,8 +389,6 @@ ide_code_index_service_start (IdeService *service)
   IdeCodeIndexService *self = (IdeCodeIndexService *)service;
 
   self->stopped = FALSE;
-
-  g_debug ("service started");
 }
 
 static void
@@ -411,8 +407,6 @@ ide_code_index_service_stop (IdeService *service)
   g_queue_clear (&self->build_queue);
   g_clear_pointer (&self->build_dirs, g_hash_table_unref);
   g_clear_pointer (&self->code_indexers, g_hash_table_unref);
-
-  g_debug ("service stopped");
 }
 
 static void

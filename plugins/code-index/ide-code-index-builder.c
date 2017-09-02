@@ -599,7 +599,7 @@ ide_code_index_builder_build_cb3 (GObject      *object,
   if (ide_code_index_builder_index_directories_finish (self, result, &error))
     g_task_return_boolean (main_task, TRUE);
   else
-    g_task_return_error (main_task, error);
+    g_task_return_error (main_task, g_steal_pointer (&error));
 }
 
 static void
