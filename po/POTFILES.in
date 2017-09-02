@@ -47,12 +47,17 @@ libide/buildui/ide-build-tool.c
 libide/buildui/ide-build-workbench-addin.c
 libide/buildui/ide-environment-editor.c
 libide/debugger/gtk/menus.ui
+libide/debugger/ide-debug-manager.c
 libide/debugger/ide-debugger-breakpoints-view.ui
 libide/debugger/ide-debugger-controls.ui
 libide/debugger/ide-debugger-disassembly-view.ui
+libide/debugger/ide-debugger-editor-addin.c
+libide/debugger/ide-debugger-gutter-renderer.c
 libide/debugger/ide-debugger-libraries-view.ui
+libide/debugger/ide-debugger-locals-view.c
 libide/debugger/ide-debugger-locals-view.ui
 libide/debugger/ide-debugger-registers-view.ui
+libide/debugger/ide-debugger-threads-view.c
 libide/debugger/ide-debugger-threads-view.ui
 libide/devices/ide-device-manager.c
 libide/directory/ide-directory-vcs.c
