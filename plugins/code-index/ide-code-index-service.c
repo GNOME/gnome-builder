@@ -26,6 +26,7 @@
 #include "ide-code-index-builder.h"
 
 #define DEFAULT_INDEX_TIMEOUT_SECS 5
+#define MAX_TRIALS 3
 
 /*
  * This is a start and stop service which monitors file changes and
@@ -45,7 +46,6 @@ struct _IdeCodeIndexService
   GHashTable             *build_dirs;
 
   GHashTable             *code_indexers;
-  // IdeExtensionSetAdapter *adapter;
 
   GCancellable           *cancellable;
   gboolean                stopped : 1;
@@ -55,13 +55,15 @@ typedef struct
 {
   IdeCodeIndexService *self;
   GFile               *directory;
+  guint                n_trial;
   guint                recursive : 1;
 } BuildData;
 
 static void service_iface_init           (IdeServiceInterface *iface);
 static void ide_code_index_service_build (IdeCodeIndexService *self,
                                           GFile               *directory,
-                                          gboolean             recursive);
+                                          gboolean             recursive,
+                                          guint                n_trial);
 
 G_DEFINE_TYPE_EXTENDED (IdeCodeIndexService, ide_code_index_service, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
@@ -105,7 +107,7 @@ ide_code_index_service_build_cb (GObject      *object,
     {
       g_message ("Failed to build code index, %s, retrying", error->message);
 
-      ide_code_index_service_build (self, bdata->directory, bdata->recursive);
+      ide_code_index_service_build (self, bdata->directory, bdata->recursive, bdata->n_trial + 1);
     }
 
   build_data_free (bdata);
@@ -167,10 +169,14 @@ ide_code_index_serivce_push (BuildData *bdata)
 static void
 ide_code_index_service_build (IdeCodeIndexService *self,
                               GFile               *directory,
-                              gboolean             recursive)
+                              gboolean             recursive,
+                              guint                n_trial)
 {
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (G_IS_FILE (directory));
+
+  if (n_trial > MAX_TRIALS)
+    return;
 
   if (!g_hash_table_lookup (self->build_dirs, directory))
     {
@@ -181,6 +187,7 @@ ide_code_index_service_build (IdeCodeIndexService *self,
       bdata->self = self;
       bdata->directory = g_object_ref (directory);
       bdata->recursive = recursive;
+      bdata->n_trial = n_trial;
 
       source_id = g_timeout_add_seconds (DEFAULT_INDEX_TIMEOUT_SECS,
                                          (GSourceFunc)ide_code_index_serivce_push,
@@ -199,7 +206,7 @@ ide_code_index_service_vcs_changed (IdeCodeIndexService *self,
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (IDE_IS_VCS (vcs));
 
-  ide_code_index_service_build (self, ide_vcs_get_working_directory (vcs), TRUE);
+  ide_code_index_service_build (self, ide_vcs_get_working_directory (vcs), TRUE, 1);
 }
 
 static void
@@ -221,7 +228,7 @@ ide_code_index_service_buffer_saved (IdeCodeIndexService *self,
       g_autoptr(GFile) parent = NULL;
 
       parent = g_file_get_parent (file);
-      ide_code_index_service_build (self, parent, FALSE);
+      ide_code_index_service_build (self, parent, FALSE, 1);
     }
 }
 
@@ -242,7 +249,7 @@ ide_code_index_service_file_trashed (IdeCodeIndexService *self,
       g_autoptr(GFile) parent = NULL;
 
       parent = g_file_get_parent (file);
-      ide_code_index_service_build (self, parent, FALSE);
+      ide_code_index_service_build (self, parent, FALSE, 1);
     }
 }
 
@@ -271,15 +278,15 @@ ide_code_index_service_file_renamed (IdeCodeIndexService *self,
     {
       if (NULL != ide_code_index_service_get_code_indexer (self, src_file_name) ||
           NULL != ide_code_index_service_get_code_indexer (self, dst_file_name))
-        ide_code_index_service_build (self, src_parent, FALSE);
+        ide_code_index_service_build (self, src_parent, FALSE, 1);
     }
   else
     {
       if (NULL != ide_code_index_service_get_code_indexer (self, src_file_name))
-        ide_code_index_service_build (self, src_parent, FALSE);
+        ide_code_index_service_build (self, src_parent, FALSE, 1);
 
       if (NULL != ide_code_index_service_get_code_indexer (self, dst_file_name))
-        ide_code_index_service_build (self, dst_parent, FALSE);
+        ide_code_index_service_build (self, dst_parent, FALSE, 1);
     }
 }
 
@@ -373,7 +380,7 @@ ide_code_index_service_context_loaded (IdeService *service)
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_code_index_service_build (self, workdir, TRUE);
+  ide_code_index_service_build (self, workdir, TRUE, 1);
 
   g_debug ("context loaded");
 }
