@@ -264,12 +264,12 @@ on_frame_activated (IdeDebuggerEditorAddin *self,
 static void
 ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
 {
-  IdeWorkbenchHeaderBar *headerbar;
   IdeWorkbench *workbench;
   GtkWidget *scroller;
   GtkWidget *box;
   GtkWidget *hpaned;
   GtkWidget *utilities;
+  GtkWidget *overlay;
 
   g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (self->editor));
@@ -278,19 +278,18 @@ ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
   g_signal_connect ((ptr), "destroy", G_CALLBACK (gtk_widget_destroyed), &(ptr))
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self->editor));
-  headerbar = ide_workbench_get_headerbar (workbench);
+  overlay = ide_editor_perspective_get_overlay (self->editor);
 
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
                                  "transition-duration", 500,
-                                 "transition-type", GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT,
+                                 "transition-type", GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP,
                                  "reveal-child", FALSE,
-                                 "visible", FALSE,
+                                 "visible", TRUE,
+                                 "halign", GTK_ALIGN_CENTER,
+                                 "valign", GTK_ALIGN_END,
                                  NULL);
   OBSERVE_DESTROY (self->controls);
-  ide_workbench_header_bar_insert_left (headerbar,
-                                        GTK_WIDGET (self->controls),
-                                        GTK_PACK_START,
-                                        100);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (self->controls));
 
   self->panel = g_object_new (DZL_TYPE_DOCK_WIDGET,
                               "title", _("Debugger"),
