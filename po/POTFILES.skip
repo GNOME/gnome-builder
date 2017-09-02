@@ -1,5 +1,6 @@
 # List of source files that should *not* be translated.
 # Please keep this file sorted alphabetically.
 data/org.gnome.Builder.desktop.in
+plugins/gdb/gdbwire.c
 plugins/vala-pack/ide-vala-preferences-addin.c
 subprojects
