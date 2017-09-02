@@ -32,6 +32,7 @@
     <file compressed="true" alias="Arc-shared.css">../data/themes/Arc-shared.css</file>
 
     <file compressed="true" alias="shared.css">../data/themes/shared.css</file>
+    <file compressed="true" alias="shared/shared-debugger.css">../data/themes/shared/shared-debugger.css</file>
     <file compressed="true" alias="shared/shared-editor.css">../data/themes/shared/shared-editor.css</file>
     <file compressed="true" alias="shared/shared-layout.css">../data/themes/shared/shared-layout.css</file>
     <file compressed="true" alias="shared/shared-omnibar.css">../data/themes/shared/shared-omnibar.css</file>

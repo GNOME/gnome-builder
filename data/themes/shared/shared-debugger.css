@@ -1,0 +1,21 @@
+
+idedebuggercontrols frame {
+  background-image: linear-gradient(shade(@theme_bg_color,1.05), @theme_bg_color);
+  padding: 6px;
+  margin-top: 12px;
+  margin-left: 12px;
+  margin-right: 12px;
+  border-style: solid;
+  border-color: @borders;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0px 3px 5px @borders;
+
+}
+
+idedebuggercontrols frame border {
+  border: none;
+}

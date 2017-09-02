@@ -31,6 +31,7 @@ ide_debugger_controls_class_init (IdeDebuggerControlsClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-controls.ui");
+  gtk_widget_class_set_css_name (widget_class, "idedebuggercontrols");
 }
 
 static void
