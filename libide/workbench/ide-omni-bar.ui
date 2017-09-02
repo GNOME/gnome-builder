@@ -471,7 +471,8 @@
                 <property name="margin">24</property>
                 <property name="orientation">horizontal</property>
                 <property name="visible">true</property>
-                <property name="homogeneous">true</property>
+                <!-- translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing -->
+                <property name="homogeneous" translatable="yes">true</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton">
