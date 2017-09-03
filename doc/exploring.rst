@@ -108,6 +108,34 @@ Clicking the cancel button will abort the current build.
    :align: center
 
 
+Editor
+======
+
+When Builder opens your project, it will place you in the editor perspective.
+This is where you develop your project.
+
+Autocompletion
+--------------
+
+Builder has built-in support for various autocompletion engines.
+Start typing to get word suggestions.
+
+.. image:: figures/autocompletion.png
+   :width: 960 px
+   :align: center
+
+Documentation
+-------------
+
+If you hover the pointer over API that Builder knows about, it can show you the documentation.
+You can also use ``F2`` to bring up the documentation with your insertion cursor on the word.
+Use ``Shift+K`` if you're using Vim keybindings.
+
+.. image:: figures/inline-documentation.png
+   :width: 1024 px
+   :align: center
+
+
 Preferences
 ===========
 
