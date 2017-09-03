@@ -17,7 +17,7 @@
                     <child>
                       <object class="GtkLabel" id="info_bar_label">
                         <property name="hexpand">true</property>
-                        <property name="label">Failure</property>
+                        <property name="label" translatable="yes">Failure</property>
                         <property name="visible">true</property>
                         <property name="wrap">true</property>
                         <property name="xalign">0</property>

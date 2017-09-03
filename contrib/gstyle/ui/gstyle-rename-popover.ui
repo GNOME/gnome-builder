@@ -10,7 +10,7 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkLabel" id="label">
-            <property name="label" translatable="yes"></property>
+            <property name="label"></property>
             <property name="xalign">0.0</property>
             <property name="visible">true</property>
             <attributes>

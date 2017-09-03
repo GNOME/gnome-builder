@@ -241,7 +241,7 @@
                                 <property name="visible">true</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Create from existing project</property>
+                                    <property name="label" translatable="yes">Create from existing project</property>
                                     <property name="visible">true</property>
                                     <property name="xalign">0.0</property>
                                   </object>
@@ -253,7 +253,7 @@
                                 <property name="visible">true</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Create a new project</property>
+                                    <property name="label" translatable="yes">Create a new project</property>
                                     <property name="visible">true</property>
                                     <property name="xalign">0.0</property>
                                   </object>
