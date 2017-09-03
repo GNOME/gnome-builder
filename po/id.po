@@ -3369,12 +3369,12 @@ msgid "Protanomaly (red-weak)"
 msgstr "Protanomali (lemah merah)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:371
-msgid "Ttritanopia (blue-blind)"
-msgstr "Ttritanopia (buta biru)"
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopia (buta biru)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:388
-msgid "Ttritanomaly (blue-weak)"
-msgstr "Ttritanomali (lemah biru)"
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomali (lemah biru)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:405
 msgid "Websafe"

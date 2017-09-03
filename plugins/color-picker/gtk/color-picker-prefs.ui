@@ -368,7 +368,7 @@
                         <property name="is-radio">True</property>
                         <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
                         <property name="target">"tritanopia"</property>
-                        <property name="title" translatable="yes">Ttritanopia (blue-blind)</property>
+                        <property name="title" translatable="yes">Tritanopia (blue-blind)</property>
                         <style>
                           <class name="cp-prefs-switch"/>
                         </style>
@@ -385,7 +385,7 @@
                         <property name="is-radio">True</property>
                         <property name="schema-id">org.gnome.builder.plugins.color_picker_plugin</property>
                         <property name="target">"tritanomaly"</property>
-                        <property name="title" translatable="yes">Ttritanomaly (blue-weak)</property>
+                        <property name="title" translatable="yes">Tritanomaly (blue-weak)</property>
                         <style>
                           <class name="cp-prefs-switch"/>
                         </style>
