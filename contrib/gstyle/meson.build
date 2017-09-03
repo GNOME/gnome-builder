@@ -75,14 +75,18 @@ libgstyle_deps = [
   libm_dep,
 ]
 
-libgstyle_link_args = '-Wl,--version-script=' + join_paths(meson.current_source_dir(), 'gstyle.map')
+libgstyle_link_args = []
+if ld_supports_version_script
+libgstyle_link_args += ['-Wl,--version-script=' + join_paths(meson.current_source_dir(), 'gstyle.map')]
+endif
+
 libgstyle = shared_library('gstyle-private', libgstyle_sources,
   dependencies: libgstyle_deps,
-  link_args: libgstyle_link_args,
+     link_args: libgstyle_link_args,
   link_depends: 'gstyle.map',
-  version: '0.0.0',
-  install: true,
-  install_dir: pkglibdir,
+       version: '0.0.0',
+       install: true,
+   install_dir: pkglibdir,
 )
 
 libgstyle_dep = declare_dependency(

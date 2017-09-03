@@ -718,12 +718,17 @@ endif
 
 install_data('Ide.py', install_dir: pygobject_override_dir)
 
+libide_link_args = []
+if ld_supports_version_script
+libide_link_args += [ '-Wl,--version-script,' + join_paths(meson.current_source_dir(), 'ide.map') ]
+endif
+
 libide = shared_library('ide-' + libide_api_version,
   libide_resources + libide_icons_resources + libide_sources,
   dependencies: libide_deps,
   link_depends: 'ide.map',
         c_args: libide_args,
-     link_args: [ '-Wl,--version-script,' + join_paths(meson.current_source_dir(), 'ide.map') ],
+     link_args: libide_link_args,
        install: true,
    install_dir: pkglibdir,
  install_rpath: pkglibdir_abs,
