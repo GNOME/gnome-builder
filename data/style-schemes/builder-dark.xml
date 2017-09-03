@@ -80,6 +80,10 @@
   <style name="snippet::tab-stop"           background="orange3" foreground="aluminium6"/>
   <style name="snippet::area"               background="#rgba(86,114,151,.5)"/>
 
+  <!-- Debugger -->
+  <style
+    name="debugger::current-breakpoint"     foreground="#2e3436" background="#fcaf3e"/>
+
   <!-- Hover links -->
   <style name="action::hover-definition"    background="#41464c" underline="true"/>
 
