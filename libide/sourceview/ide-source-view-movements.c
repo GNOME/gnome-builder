@@ -29,8 +29,9 @@
 #include "sourceview/ide-source-view-movements.h"
 #include "sourceview/ide-text-iter.h"
 
-#define ANCHOR_BEGIN "SELECTION_ANCHOR_BEGIN"
-#define ANCHOR_END   "SELECTION_ANCHOR_END"
+#define ANCHOR_BEGIN   "SELECTION_ANCHOR_BEGIN"
+#define ANCHOR_END     "SELECTION_ANCHOR_END"
+#define JUMP_THRESHOLD 20
 
 #define TRACE_ITER(iter) \
   IDE_TRACE_MSG("%d:%d", gtk_text_iter_get_line(iter), \
@@ -1942,8 +1943,11 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter end_iter;
+  GtkTextIter before_insert;
+  GtkTextIter after_insert;
   gint min_count = 1;
   gint end_line;
+  gint distance;
   gsize i;
   guint line;
 
@@ -1967,6 +1971,8 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &before_insert, insert);
 
   /* specific processing for underscore motion */
   if (g_str_has_suffix (command_str->str, "_"))
@@ -2275,6 +2281,13 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
   if (!mv.ignore_scroll_to_insert)
     ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
+
+  /* Emit a jump if we moved more than JUMP_THRESHOLD lines */
+  gtk_text_buffer_get_iter_at_mark (buffer, &after_insert, insert);
+  distance = gtk_text_iter_get_line (&before_insert) -
+             gtk_text_iter_get_line (&after_insert);
+  if (ABS (distance) > JUMP_THRESHOLD)
+    ide_source_view_jump (self, &after_insert);
 }
 
 void
