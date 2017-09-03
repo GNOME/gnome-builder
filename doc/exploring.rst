@@ -136,6 +136,25 @@ Use ``Shift+K`` if you're using Vim keybindings.
    :align: center
 
 
+Splitting Windows
+-----------------
+
+Builder can show you multiple editors side-by-side.
+In the editor view use "Open in New Frame" to split a document into two views.
+
+.. image:: figures/open-in-new-frame-1.png
+   :width: 396 px
+   :align: center
+
+Afterwards, you'll see the editors side-by-side like such:
+
+.. image:: figures/open-in-new-frame-2.png
+   :width: 1122 px
+   :align: center
+
+To close a split, use the close button in the top right of the editor.
+
+
 Searching
 =========
 
