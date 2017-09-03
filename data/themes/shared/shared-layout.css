@@ -9,6 +9,9 @@ idelayoutstackheader button {
   padding: 0;
   margin: 0;
 }
+idelayoutstackheader button:disabled {
+  color: alpha(currentColor, 0.25);
+}
 idelayoutstackheader button:not(:disabled) image {
   opacity: 0.55;
 }
