@@ -62,7 +62,7 @@ Type a few characters from the file you would like to open and it will fuzzy sea
 Use "Enter" to complete the request and open the file.
 
 To the right of the search box is the workbench menu.
-You can find more options here such as `Showing and Hiding Panels`_.
+You can find less-used features here.
 
 Switching Perspectives
 ======================
