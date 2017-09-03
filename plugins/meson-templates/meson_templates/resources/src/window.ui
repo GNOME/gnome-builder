@@ -4,7 +4,7 @@
     <property name="default-width">600</property>
     <property name="default-height">300</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar">
+      <object class="GtkHeaderBar" id="header_bar">
         <property name="visible">true</property>
         <property name="show-close-button">true</property>
         <property name="title">Hello, World!</property>

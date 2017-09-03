@@ -7,7 +7,7 @@ namespace {{PreFix}} {
 		Gtk.Label label;
 
 		public Window (Gtk.Application app) {
-			Object(application: app);
+			Object (application: app);
 		}
 	}
 }
