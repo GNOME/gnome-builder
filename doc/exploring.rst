@@ -136,6 +136,27 @@ Use ``Shift+K`` if you're using Vim keybindings.
    :align: center
 
 
+Searching
+=========
+
+You can search for files and symbols in your project using the search entry at the top right.
+To focus the search entry with the keyboard use ``Control+.``.
+
+You can fuzzy search for files by typing a few characters from the file name.
+
+.. image:: figures/file-search.png
+   :width: 629 px
+   :align: center
+
+
+Builder will automatically index your project into a database if it uses a supported language.
+You can search this database to jump to code such as functions or classes.
+
+.. image:: figures/symbol-search.png
+   :width: 605 px
+   :align: center
+
+
 Preferences
 ===========
 
