@@ -6,6 +6,5 @@ Description=Live preview of HTML, reStructuredText and Markdown documents.
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Hidden=true
 Depends=webkit
 X-Editor-View-Languages=*

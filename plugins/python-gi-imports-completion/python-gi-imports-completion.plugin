@@ -6,5 +6,4 @@ Description=Provides autocompletion for importing GObject Introspection enabled 
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Hidden=true
 X-Completion-Provider-Languages=python,python3

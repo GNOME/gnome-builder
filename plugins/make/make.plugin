@@ -6,6 +6,5 @@ Description=Provides support for Makefile projects without autotools
 Authors=Matthew Leeds <mleeds@redhat.com>
 Copyright=Copyright © 2017 Matthew Leeds
 Builtin=true
-Hidden=true
 X-Project-File-Filter-Pattern=Makefile
 X-Project-File-Filter-Name=Makefile Project

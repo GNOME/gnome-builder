@@ -6,6 +6,5 @@ Description=Provides integration with the NPM package system
 Authors=Giovanni Campagna <gcampagn@cs.stanford.edu>
 Copyright=Copyright © 2016 Christian Hergert, 2017 Giovanni Campagna
 Builtin=true
-Hidden=true
 X-Project-File-Filter-Pattern=package.json
 X-Project-File-Filter-Name=NPM package (package.json)

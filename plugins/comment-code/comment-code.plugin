@@ -5,7 +5,6 @@ Description=Comment code lines with Builder editor.
 Authors=Sebastien Lafargue <slafargue@gnome.org>
 Copyright=Copyright © 2016 Sebastien Lafargue
 Builtin=true
-Hidden=true
 Depends=editor
 X-Tool-Name=comment-code
 X-Tool-Description=Comment code lines
