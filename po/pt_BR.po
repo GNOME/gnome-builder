@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-02 18:46+0000\n"
-"PO-Revision-Date: 2017-09-02 20:00-0200\n"
+"POT-Creation-Date: 2017-09-03 14:42+0000\n"
+"PO-Revision-Date: 2017-09-03 16:39-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -97,6 +97,7 @@ msgstr "Saturação"
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
 #: libide/debugger/ide-debugger-locals-view.ui:41
 #: libide/debugger/ide-debugger-registers-view.ui:34
+#: plugins/color-picker/gtk/color-picker-prefs.ui:179
 msgid "Value"
 msgstr "Valor"
 
@@ -187,26 +188,33 @@ msgid "Color strings"
 msgstr "Strings de cor"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
+#: plugins/color-picker/gtk/color-picker-prefs.ui:490
 msgid "HEX3"
 msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
+#: plugins/color-picker/gtk/color-picker-prefs.ui:507
 msgid "HEX6"
 msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
+#: plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: plugins/color-picker/gtk/color-picker-prefs.ui:524
 msgid "RGB"
 msgstr "RGB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
+#: plugins/color-picker/gtk/color-picker-prefs.ui:541
 msgid "RGBA"
 msgstr "RGBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
+#: plugins/color-picker/gtk/color-picker-prefs.ui:558
 msgid "HSL"
 msgstr "HSL"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:689
+#: plugins/color-picker/gtk/color-picker-prefs.ui:575
 msgid "HSLA"
 msgstr "HSLA"
 
@@ -320,7 +328,7 @@ msgid ""
 "based on information extracted from the source code."
 msgstr ""
 "Caso habilitado, será oferecido realce adicional nas linguagens suportadas "
-"com base em informações extraídas do código fonte."
+"com base em informações extraídas do código-fonte."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
 msgid "Path to ctags executable"
@@ -348,7 +356,7 @@ msgid ""
 "source code."
 msgstr ""
 "Caso habilitado, o editor irá mostrar linhas acrescentadas e alterações "
-"próximas ao código fonte."
+"próximas ao código-fonte."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 #: libide/editor/ide-editor-properties.ui:88
@@ -660,7 +668,7 @@ msgstr "_Sobre"
 msgid "_Quit"
 msgstr "_Sair"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:710
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -1435,13 +1443,11 @@ msgid "New variable…"
 msgstr "Nova variável…"
 
 #: libide/debugger/gtk/menus.ui:10
-#: libide/debugger/ide-debugger-editor-addin.c:410
-#| msgid "Run with Profiler"
+#: libide/debugger/ide-debugger-editor-addin.c:409
 msgid "Run with Debugger"
 msgstr "Executar com depurador"
 
-#: libide/debugger/ide-debug-manager.c:768
-#| msgid "The provider could not be found."
+#: libide/debugger/ide-debug-manager.c:924
 msgid "A suitable debugger could not be found."
 msgstr "Um depurador adequado não pôde ser encontrado."
 
@@ -1451,8 +1457,6 @@ msgid "ID"
 msgstr "ID"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:34
-#| msgctxt "shortcut window"
-#| msgid "Files"
 msgid "File"
 msgstr "Arquivo"
 
@@ -1479,37 +1483,27 @@ msgid "Hits"
 msgstr "Acertos"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:102
-#| msgid "Extensions"
 msgid "Expression"
 msgstr "Expressão"
 
-#: libide/debugger/ide-debugger-controls.ui:14
+#: libide/debugger/ide-debugger-controls.ui:17
 msgid "Interrupt the program"
 msgstr "Interromper o programa"
 
-#: libide/debugger/ide-debugger-controls.ui:27
+#: libide/debugger/ide-debugger-controls.ui:30
 msgid "Continue running the program"
 msgstr "Continuar executando o programa"
 
-#: libide/debugger/ide-debugger-controls.ui:40
-#| msgid "Restore cursor position"
-msgid "Execute from the current cursor position"
-msgstr "Executar da posição de cursor atual"
-
-#: libide/debugger/ide-debugger-controls.ui:53
-msgid "Execute until reaching the current cursor position"
-msgstr "Executar até alcançar a posição de cursor atual"
-
-#: libide/debugger/ide-debugger-controls.ui:66
+#: libide/debugger/ide-debugger-controls.ui:71
 msgid "Execute the current line, stepping into any function calls"
 msgstr "Executar a linha atual, entrando em quaisquer chamadas de função"
 
-#: libide/debugger/ide-debugger-controls.ui:79
+#: libide/debugger/ide-debugger-controls.ui:84
 msgid "Execute the current line, stepping over any function calls"
 msgstr ""
 "Executar a linha atual, passando por cima de quaisquer chamadas de função"
 
-#: libide/debugger/ide-debugger-controls.ui:92
+#: libide/debugger/ide-debugger-controls.ui:97
 msgid "Run until the end of the function"
 msgstr "Executar até o fim da função"
 
@@ -1517,37 +1511,35 @@ msgstr "Executar até o fim da função"
 msgid "Disassembly"
 msgstr "Desmontagem"
 
-#: libide/debugger/ide-debugger-editor-addin.c:296
+#: libide/debugger/ide-debugger-editor-addin.c:295
 msgid "Debugger"
 msgstr "Depurador"
 
-#: libide/debugger/ide-debugger-editor-addin.c:312
+#: libide/debugger/ide-debugger-editor-addin.c:311
 msgid "Threads"
 msgstr "Threads"
 
-#: libide/debugger/ide-debugger-editor-addin.c:338
+#: libide/debugger/ide-debugger-editor-addin.c:337
 msgid "Breakpoints"
 msgstr "Pontos de interrupção"
 
-#: libide/debugger/ide-debugger-editor-addin.c:346
+#: libide/debugger/ide-debugger-editor-addin.c:345
 msgid "Libraries"
 msgstr "Bibliotecas"
 
-#: libide/debugger/ide-debugger-editor-addin.c:354
+#: libide/debugger/ide-debugger-editor-addin.c:353
 msgid "Registers"
 msgstr "Registradores"
 
-#: libide/debugger/ide-debugger-editor-addin.c:361
+#: libide/debugger/ide-debugger-editor-addin.c:360
 msgid "Log"
 msgstr "Log"
 
-#: libide/debugger/ide-debugger-editor-addin.c:377
-#| msgid "Failed to initialize defaults."
+#: libide/debugger/ide-debugger-editor-addin.c:376
 msgid "Failed to initialize the debugger"
 msgstr "Falha ao inicializar o depurador"
 
 #: libide/debugger/ide-debugger-libraries-view.ui:14
-#| msgid "Shared Library"
 msgid "Library"
 msgstr "Biblioteca"
 
@@ -1556,7 +1548,6 @@ msgid "Address Range"
 msgstr "Intervalo de endereços"
 
 #: libide/debugger/ide-debugger-locals-view.c:307
-#| msgid "local"
 msgid "Locals"
 msgstr "Locais"
 
@@ -1565,7 +1556,6 @@ msgid "Parameters"
 msgstr "Parâmetros"
 
 #: libide/debugger/ide-debugger-locals-view.ui:16
-#| msgid "New variable…"
 msgid "Variable"
 msgstr "Variável"
 
@@ -1574,7 +1564,6 @@ msgid "Register"
 msgstr "Registrador"
 
 #: libide/debugger/ide-debugger-threads-view.ui:19
-#| msgid "Size Group"
 msgid "Group"
 msgstr "Grupo"
 
@@ -1583,17 +1572,14 @@ msgid "Thread"
 msgstr "Thread"
 
 #: libide/debugger/ide-debugger-threads-view.ui:88
-#| msgid "Invalid arguments"
 msgid "Arguments"
 msgstr "Argumentos"
 
 #: libide/debugger/ide-debugger-threads-view.ui:101
-#| msgid "Project Location"
 msgid "Location"
 msgstr "Localização"
 
 #: libide/debugger/ide-debugger-threads-view.ui:112
-#| msgid "Dictionary"
 msgid "Binary"
 msgstr "Binário"
 
@@ -1980,6 +1966,15 @@ msgstr "Outros projetos"
 #: libide/greeter/ide-greeter-perspective.ui:215
 msgid "_Remove"
 msgstr "_Remover"
+
+#: libide/greeter/ide-greeter-perspective.ui:244
+#| msgid "Create a new project"
+msgid "Create from existing project"
+msgstr "Criar de um projeto existente"
+
+#: libide/greeter/ide-greeter-perspective.ui:256
+msgid "Create a new project"
+msgstr "Criar um novo projeto"
 
 #: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
@@ -2445,7 +2440,7 @@ msgstr "Padrão de grade"
 
 #: libide/preferences/ide-preferences-builtin.c:102
 msgid "Display a grid pattern underneath source code"
-msgstr "Mostra um padrão de grade sob o código fonte"
+msgstr "Mostra um padrão de grade sob o código-fonte"
 
 #: libide/preferences/ide-preferences-builtin.c:104
 msgid "Font"
@@ -2594,7 +2589,7 @@ msgstr "Visão geral do código"
 
 #: libide/preferences/ide-preferences-builtin.c:169
 msgid "A zoomed out view to enhance navigating source code"
-msgstr "Uma visão distanciada para melhorar a navegação no código fonte"
+msgstr "Uma visão distanciada para melhorar a navegação no código-fonte"
 
 #: libide/preferences/ide-preferences-builtin.c:170
 msgid "Automatically hide overview map"
@@ -2784,7 +2779,7 @@ msgstr "Recuo automático"
 
 #: libide/preferences/ide-preferences-builtin.c:330
 msgid "Indent source code as you type"
-msgstr "Aplica recuo no código fonte na medida em que você digita"
+msgstr "Aplica recuo no código-fonte na medida em que você digita"
 
 #: libide/preferences/ide-preferences-builtin.c:345
 #: libide/preferences/ide-preferences-builtin.c:363
@@ -2940,7 +2935,6 @@ msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
 #: libide/sourceview/ide-word-completion-provider.c:558
-#| msgid "Completion"
 msgid "Builder Word Completion"
 msgstr "Preenchimento de palavras do Builder"
 
@@ -3070,6 +3064,18 @@ msgstr "Limpar"
 #: libide/workbench/ide-omni-bar.ui:501
 msgid "Export Bundle"
 msgstr "Exportar pacote"
+
+#: libide/workbench/ide-omni-bar.ui:529
+#| msgid "Indent source code as you type"
+msgid "Indexing Source Code"
+msgstr "Recuo de código-fonte"
+
+#: libide/workbench/ide-omni-bar.ui:544
+#| msgid "exuberant ctags tags autocompletion auto complete"
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+"Pesquisa, diagnósticos e autopreenchimento podem ser limitados até a "
+"conclusão."
 
 #: libide/workbench/ide-omni-bar.ui:582
 msgid "Build project"
@@ -3316,6 +3322,28 @@ msgstr ""
 "Selecione os espaços de cor para os quais você deseja ver deslizadores no "
 "painel."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:86
+#| msgid "HSL"
+msgid "HSV"
+msgstr "HSV"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:87
+#| msgid "Saturation"
+msgid "Hue Saturation Value"
+msgstr "Matiz Saturação Valor"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Vermelho Verde Azul"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Unidades:"
@@ -3328,6 +3356,10 @@ msgstr ""
 "Selecione o tipo de unidade que você deseja usar para componentes RGB e "
 "strings no painel."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Percentagem"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Filtros:"
@@ -3335,6 +3367,46 @@ msgstr "Filtros:"
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
 msgstr "Selecione um filtro que aja nas cores ou “None” (para nenhum)."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Nenhum"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Acromatopsia (monocromacia)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Acromatomalia (monocromatismo do cone azul)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deuteranopia (cegueira de verde)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deuteranomalia (fraqueza de verde)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopia (cegueira de vermelho)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomalia (fraqueza de vermelho)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopia (cegueira de azul)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomalia (fraqueza de azul)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Websafe"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3805,7 +3877,7 @@ msgstr "usuário@máquina:repositório.git"
 
 #: plugins/git/ide-git-clone-widget.ui:66
 msgid "Enter the URL of your project’s source code repository"
-msgstr "Digite a URL do repositório de código fonte do seu projeto"
+msgstr "Digite a URL do repositório de código-fonte do seu projeto"
 
 #: plugins/git/ide-git-clone-widget.ui:93
 msgid "Repository URL"
@@ -4003,7 +4075,7 @@ msgstr "Abrir _com"
 
 #: plugins/project-tree/gtk/menus.ui:37
 msgid "Source Code Editor"
-msgstr "Editor de código fonte"
+msgstr "Editor de código-fonte"
 
 # Tradução literal "contenedora" não me pareceu uma boa, então mudei -- Rafael
 #: plugins/project-tree/gtk/menus.ui:47
@@ -4299,6 +4371,10 @@ msgstr "Monitor do sistema"
 msgid "Profiler"
 msgstr "Perfilador"
 
+#: plugins/sysprof/gbp-sysprof-perspective.ui:20
+msgid "Failure"
+msgstr "Falha"
+
 #: plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "Fe_char"
@@ -4410,6 +4486,13 @@ msgstr "Falha ao criar a árvore XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer carregado, mas não no gerenciador de buffer."
+
+#~| msgid "Restore cursor position"
+#~ msgid "Execute from the current cursor position"
+#~ msgstr "Executar da posição de cursor atual"
+
+#~ msgid "Execute until reaching the current cursor position"
+#~ msgstr "Executar até alcançar a posição de cursor atual"
 
 #~ msgid "Cannot locate property %s in class %s"
 #~ msgstr "Não foi possível localizar a propriedade %s na classe %s"
@@ -4819,9 +4902,6 @@ msgstr "Buffer carregado, mas não no gerenciador de buffer."
 #~ msgid "Co_ntinue"
 #~ msgstr "Co_ntinuar"
 
-#~ msgid "Create a new project"
-#~ msgstr "Criar um novo projeto"
-
 #~ msgid "Search for projects"
 #~ msgstr "Pesquisar por projetos"
 
@@ -5129,9 +5209,6 @@ msgstr "Buffer carregado, mas não no gerenciador de buffer."
 
 #~ msgid "experimental clang autocompletion auto complete"
 #~ msgstr "experimental clang completação automática auto-completação"
-
-#~ msgid "exuberant ctags tags autocompletion auto complete"
-#~ msgstr "exuberante ctags completação automática auto-completação"
 
 #~ msgid "jedi python autocompletion auto complete"
 #~ msgstr "jedi python completação automática auto-completação"
