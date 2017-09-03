@@ -27,6 +27,7 @@ static const gchar *ide_application_credits_artists[] = {
   "Allan Day",
   "Hylke Bons",
   "Jakub Steiner",
+  "Sam Hewitt",
   NULL
 };
 
