@@ -98,6 +98,7 @@ ide_indenter_mimic_source_view (GtkTextView *text_view,
 
 /**
  * ide_indenter_format:
+ * @self: (nullable): An #IdeIndenter or %NULL for the fallback
  * @text_view: A #GtkTextView
  * @begin: A #GtkTextIter for the beginning region of text to replace.
  * @end: A #GtkTextIter for the end region of text to replace.
@@ -142,7 +143,7 @@ ide_indenter_format (IdeIndenter *self,
 
 /**
  * ide_indenter_is_trigger:
- * @self: an #IdeIndenter
+ * @self: (nullable): an #IdeIndenter or %NULL for the fallback
  * @event: a #GdkEventKey
  *
  * Determines if @event should trigger an indentation request. If %TRUE is
