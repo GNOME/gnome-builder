@@ -15,6 +15,7 @@ To create a new project, select "New" from the project greeter.
 The project creation guide will be displayed.
 
 .. image:: ../figures/newproject.png
+   :width: 885 px
    :align: center
 
 Give your project a meaningful name, as this is not easily changeable later.
@@ -42,6 +43,7 @@ To clone an existing project, you will need the URL of your **git repository**.
 For example, to clone the Builder project, you could specify: ``git://git.gnome.org/gnome-builder.git``
 
 .. image:: ../figures/clone.png
+   :width: 885 px
    :align: center
 
 After entering the URL, press the "Clone" button in the upper-right corner of
