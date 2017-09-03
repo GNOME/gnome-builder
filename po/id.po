@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-02 02:16+0000\n"
-"PO-Revision-Date: 2017-09-02 09:31+0700\n"
+"POT-Creation-Date: 2017-09-03 00:16+0000\n"
+"PO-Revision-Date: 2017-09-03 14:02+0700\n"
 "Last-Translator: Andika Triwidada <atriwidada@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -94,6 +94,7 @@ msgstr "Saturasi"
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
 #: libide/debugger/ide-debugger-locals-view.ui:41
 #: libide/debugger/ide-debugger-registers-view.ui:34
+#: plugins/color-picker/gtk/color-picker-prefs.ui:179
 msgid "Value"
 msgstr "Nilai"
 
@@ -172,26 +173,33 @@ msgid "Color strings"
 msgstr "String warn"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
+#: plugins/color-picker/gtk/color-picker-prefs.ui:490
 msgid "HEX3"
 msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
+#: plugins/color-picker/gtk/color-picker-prefs.ui:507
 msgid "HEX6"
 msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
+#: plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: plugins/color-picker/gtk/color-picker-prefs.ui:524
 msgid "RGB"
 msgstr "RGB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
+#: plugins/color-picker/gtk/color-picker-prefs.ui:541
 msgid "RGBA"
 msgstr "RGBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
+#: plugins/color-picker/gtk/color-picker-prefs.ui:558
 msgid "HSL"
 msgstr "HSL"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:689
+#: plugins/color-picker/gtk/color-picker-prefs.ui:575
 msgid "HSLA"
 msgstr "HSLA"
 
@@ -638,7 +646,7 @@ msgstr "Tent_ang"
 msgid "_Quit"
 msgstr "_Keluar"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:710
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -1031,7 +1039,7 @@ msgstr "Tidak ada pekerja sedemikian"
 #: libide/application/ide-application-shortcuts.c:75
 #: libide/runner/ide-run-manager.c:735
 #: libide/workbench/ide-workbench-shortcuts.c:49
-#: plugins/command-bar/gb-command-bar.c:715
+#: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
 #: plugins/terminal/gb-terminal-workbench-addin.c:187
 msgctxt "shortcut window"
@@ -1057,7 +1065,7 @@ msgstr "Tampilkan jendela pintasan"
 #: libide/application/ide-application-shortcuts.c:60
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
-#: plugins/command-bar/gb-command-bar.c:716
+#: plugins/command-bar/gb-command-bar.c:702
 #: plugins/terminal/gb-terminal-workbench-addin.c:182
 #: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
@@ -1406,11 +1414,11 @@ msgid "New variable…"
 msgstr "Variabel baru…"
 
 #: libide/debugger/gtk/menus.ui:10
-#: libide/debugger/ide-debugger-editor-addin.c:410
+#: libide/debugger/ide-debugger-editor-addin.c:409
 msgid "Run with Debugger"
 msgstr "Jalankan dengan Pengawakutu"
 
-#: libide/debugger/ide-debug-manager.c:768
+#: libide/debugger/ide-debug-manager.c:924
 msgid "A suitable debugger could not be found."
 msgstr "Pengawakutu yang cocok tidak bisa ditemukan."
 
@@ -1449,32 +1457,32 @@ msgstr "Hit"
 msgid "Expression"
 msgstr "Ekspresi"
 
-#: libide/debugger/ide-debugger-controls.ui:14
+#: libide/debugger/ide-debugger-controls.ui:17
 msgid "Interrupt the program"
 msgstr "Interupsi program"
 
-#: libide/debugger/ide-debugger-controls.ui:27
+#: libide/debugger/ide-debugger-controls.ui:30
 msgid "Continue running the program"
 msgstr "Lanjutkan menjalankan program"
 
-#: libide/debugger/ide-debugger-controls.ui:40
+#: libide/debugger/ide-debugger-controls.ui:43
 msgid "Execute from the current cursor position"
 msgstr "Eksekusi dari posisi kursor saat ini"
 
-#: libide/debugger/ide-debugger-controls.ui:53
+#: libide/debugger/ide-debugger-controls.ui:56
 msgid "Execute until reaching the current cursor position"
 msgstr "Eksekusi sampai ke posisi kursor saat ini"
 
-#: libide/debugger/ide-debugger-controls.ui:66
+#: libide/debugger/ide-debugger-controls.ui:69
 msgid "Execute the current line, stepping into any function calls"
 msgstr ""
 "Eksekusi baris saat ini, melangkah masuk ke dalam sebarang pemanggilan fungsi"
 
-#: libide/debugger/ide-debugger-controls.ui:79
+#: libide/debugger/ide-debugger-controls.ui:82
 msgid "Execute the current line, stepping over any function calls"
 msgstr "Eksekusi baris saat ini, melangkahi sebarang pemanggilan fungsi"
 
-#: libide/debugger/ide-debugger-controls.ui:92
+#: libide/debugger/ide-debugger-controls.ui:95
 msgid "Run until the end of the function"
 msgstr "Jalankan sampai akhir fungsi"
 
@@ -1482,31 +1490,31 @@ msgstr "Jalankan sampai akhir fungsi"
 msgid "Disassembly"
 msgstr "Disassembly"
 
-#: libide/debugger/ide-debugger-editor-addin.c:296
+#: libide/debugger/ide-debugger-editor-addin.c:295
 msgid "Debugger"
 msgstr "Pengawakutu"
 
-#: libide/debugger/ide-debugger-editor-addin.c:312
+#: libide/debugger/ide-debugger-editor-addin.c:311
 msgid "Threads"
 msgstr "Thread"
 
-#: libide/debugger/ide-debugger-editor-addin.c:338
+#: libide/debugger/ide-debugger-editor-addin.c:337
 msgid "Breakpoints"
 msgstr "Breakpoint"
 
-#: libide/debugger/ide-debugger-editor-addin.c:346
+#: libide/debugger/ide-debugger-editor-addin.c:345
 msgid "Libraries"
 msgstr "Pustaka"
 
-#: libide/debugger/ide-debugger-editor-addin.c:354
+#: libide/debugger/ide-debugger-editor-addin.c:353
 msgid "Registers"
 msgstr "Register"
 
-#: libide/debugger/ide-debugger-editor-addin.c:361
+#: libide/debugger/ide-debugger-editor-addin.c:360
 msgid "Log"
 msgstr "Log"
 
-#: libide/debugger/ide-debugger-editor-addin.c:377
+#: libide/debugger/ide-debugger-editor-addin.c:376
 msgid "Failed to initialize the debugger"
 msgstr "Gagal menginisialisasi pengawakutu"
 
@@ -1780,6 +1788,7 @@ msgstr ""
 "Tampilkan atau sembunyikan opsi pencarian seperti misalnya peka huruf besar "
 "kecil"
 
+#. List of pages that are open
 #: libide/editor/ide-editor-sidebar.ui:26
 #: libide/layout/ide-layout-stack-header.ui:21
 msgid "Open Pages"
@@ -1938,6 +1947,14 @@ msgstr "Proyek Lain"
 msgid "_Remove"
 msgstr "_Hapus"
 
+#: libide/greeter/ide-greeter-perspective.ui:244
+msgid "Create from existing project"
+msgstr "Buat dari proyek yang ada"
+
+#: libide/greeter/ide-greeter-perspective.ui:256
+msgid "Create a new project"
+msgstr "Buat proyek baru"
+
 #: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
 msgstr "Pilih Proyek"
@@ -2026,7 +2043,7 @@ msgstr "Preferensi"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
 #: libide/keybindings/ide-shortcuts-window.ui:477
-#: plugins/command-bar/gb-command-bar.c:717
+#: plugins/command-bar/gb-command-bar.c:703
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Bilah Perintah"
@@ -2749,7 +2766,7 @@ msgid "Number of CPU"
 msgstr "Banyaknya CPU"
 
 #: libide/preferences/ide-preferences-builtin.c:378
-#: libide/workbench/ide-omni-bar.ui:479
+#: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "Bangun"
 
@@ -3006,19 +3023,35 @@ msgstr "Bangun terakhir"
 msgid "Build result"
 msgstr "Hasil bangun"
 
-#: libide/workbench/ide-omni-bar.ui:486
+# mesti dites
+#. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: libide/workbench/ide-omni-bar.ui:475
+msgid "true"
+msgstr "true"
+
+#: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
 msgstr "Bangun Ulang"
 
-#: libide/workbench/ide-omni-bar.ui:493
+#: libide/workbench/ide-omni-bar.ui:494
 msgid "Clean"
 msgstr "Bersihkan"
 
-#: libide/workbench/ide-omni-bar.ui:500
+#: libide/workbench/ide-omni-bar.ui:501
 msgid "Export Bundle"
 msgstr "Ekspor Bundel"
 
-#: libide/workbench/ide-omni-bar.ui:581
+#: libide/workbench/ide-omni-bar.ui:529
+msgid "Indexing Source Code"
+msgstr "Mengindeks Kode Sumber"
+
+#: libide/workbench/ide-omni-bar.ui:544
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+"Pencarian, diagnostik, dan pelengkapan otomatis mungkin dibatasi sampai "
+"selesai."
+
+#: libide/workbench/ide-omni-bar.ui:582
 msgid "Build project"
 msgstr "Bangun proyek"
 
@@ -3261,6 +3294,28 @@ msgstr "Visibilitas:"
 msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr "Pilih ruang warna yang ingin Anda lihat slider di panel."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:86
+#| msgid "HSL"
+msgid "HSV"
+msgstr "HSV"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:87
+#| msgid "Saturation"
+msgid "Hue Saturation Value"
+msgstr "Hue Saturation Value"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Red Green Blue"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Unit:"
@@ -3273,6 +3328,10 @@ msgstr ""
 "Pilih tipe unit yang ingin Anda pakai bagi string dan komponen RGB dalam "
 "panel."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Persen"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Penyaring:"
@@ -3280,6 +3339,46 @@ msgstr "Penyaring:"
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
 msgstr "Pilih penyaring yang bekerja pada warna atau \"None\"."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Nihil"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Akromatopsia (monokromasi)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Akromatomali (monokromasi corong biru)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deuteranopia (buta hijau)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deuteranomali (lemah hijau)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopia (buta merah)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomali (lemah merah)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Ttritanopia (blue-blind)"
+msgstr "Ttritanopia (buta biru)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Ttritanomaly (blue-weak)"
+msgstr "Ttritanomali (lemah biru)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Websafe"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3342,7 +3441,7 @@ msgstr "Warna sorot"
 msgid "Command not found: %s"
 msgstr "Perintah tak ditemukan: %s"
 
-#: plugins/command-bar/gb-command-bar.c:593
+#: plugins/command-bar/gb-command-bar.c:595
 msgid "Use the entry below to execute a command"
 msgstr "Gunakan entri di bawah untuk menjalankan suatu perintah"
 
@@ -4246,6 +4345,10 @@ msgstr "Monitor Sistem"
 #: plugins/sysprof/gtk/menus.ui:20
 msgid "Profiler"
 msgstr "Profiler"
+
+#: plugins/sysprof/gbp-sysprof-perspective.ui:20
+msgid "Failure"
+msgstr "Kegagalan"
 
 #: plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
