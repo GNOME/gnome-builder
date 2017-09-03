@@ -1,0 +1,10 @@
+greeter flowboxchild {
+  border-radius: 11px;
+  min-width: 164px;
+  min-height: 164px;
+}
+
+greeter flowboxchild:selected label {
+  color: white;
+  font-weight: bold;
+}
