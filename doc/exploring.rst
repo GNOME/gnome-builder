@@ -50,9 +50,12 @@ The header bar is shown below.
 This contains a button in the top left for `Switching Perspectives`_.
 In the center is the "OmniBar" which can be used to `Build your Project`_.
 
+.. image:: figures/workbench.png
+   :align: center
+
 To the right of the OmniBar is the *Run* button.
 Clicking the arrow next to *Run* allows you to change how Builder will run your application.
-You can run normally, with a profiler, or with Valgrind.
+You can run normally, with a debugger, profiler, or event with Valgrind.
 
 On the right is the search box.
 Type a few characters from the file you would like to open and it will fuzzy search your project tree.
@@ -61,10 +64,6 @@ Use "Enter" to complete the request and open the file.
 To the right of the search box is the workbench menu.
 You can find more options here such as `Showing and Hiding Panels`_.
 
-
-.. image:: figures/workbench.png
-   :align: center
-
 Switching Perspectives
 ======================
 
@@ -72,7 +71,8 @@ To switch perspectives, click the perspective selector button in the top left of
 Perspectives that support a keyboard accelerator will display the appropriate accelerator next to name of the perspective.
 
 .. image:: figures/perspectives.png
-   :width: 249 px
+   :width: 295 px
+   :align: center
 
 Select the row to change perspectives.
 
@@ -80,12 +80,13 @@ Showing and Hiding Panels
 =========================
 
 Sometimes panels get in the way of focusing on code.
-You can move them out of the way using the workbench menu in the top-right.
+You can move them out of the way using the buttons in the top left of the workbench window.
 
-.. image:: figures/gearmenu.png
-   :width: 215 px
+.. image:: figures/panels.png
+   :width: 133 px
+   :align: center
 
-Additionally, you can use the "left-visible", "right-visible", "bottom-visible" commands from the `Command Bar`_ to toggle their visibility.
+Additionally, you can use the "left-visible" or "bottom-visible" commands from the `Command Bar`_ to toggle their visibility.
 
 Build your Project
 ==================
@@ -94,16 +95,16 @@ To build your project, use the OmniBar in the center of the header bar.
 To the right of the OmniBar is a button for starting a build as shown in the image below.
 
 .. image:: figures/omnibar.png
-   :width: 495 px
+   :width: 708 px
    :align: center
 
-You can also use the "build", "rebuild", or "clean" commands from the command bar.
+You can also use the "build", "rebuild", "install", or "clean" commands from the command bar.
 
 While the project is building, the build button will change to a cancel button.
 Clicking the cancel button will abort the current build.
 
 .. image:: figures/building.png
-   :width: 495 px
+   :width: 623 px
    :align: center
 
 
@@ -127,5 +128,6 @@ If Vim-mode is enabled, you can also activate some Vim-inspired commands here.
 The command bar includes tab completion as shown below.
 
 .. image:: figures/commandbar.png
+   :width: 1113 px
    :align: center
 
