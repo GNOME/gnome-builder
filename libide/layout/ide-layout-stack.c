@@ -1014,3 +1014,41 @@ ide_layout_stack_foreach_view (IdeLayoutStack *self,
 
   gtk_container_foreach (GTK_CONTAINER (priv->stack), callback, user_data);
 }
+
+/**
+ * ide_layout_stack_addin_find_by_module_name:
+ * @stack: An #IdeLayoutStack
+ * @module_name: the module name which provides the addin
+ *
+ * This function will locate the #IdeLayoutStackAddin that was registered by
+ * the plugin named @module_name (which should match the "Module" field
+ * provided in the .plugin file).
+ *
+ * If no module was found or that module does not implement the
+ * #IdeLayoutStackAddinInterface, then %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeLayoutStackAddin or %NULL
+ *
+ * Since: 3.26
+ */
+IdeLayoutStackAddin *
+ide_layout_stack_addin_find_by_module_name (IdeLayoutStack *stack,
+                                            const gchar    *module_name)
+{
+  IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (stack);
+  PeasExtension *ret = NULL;
+  PeasPluginInfo *plugin_info;
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_STACK (stack), NULL);
+  g_return_val_if_fail (priv->addins != NULL, NULL);
+  g_return_val_if_fail (module_name != NULL, NULL);
+
+  plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), module_name);
+
+  if (plugin_info != NULL)
+    ret = peas_extension_set_get_extension (priv->addins, plugin_info);
+  else
+    g_warning ("No addin could be found matching module \"%s\"", module_name);
+
+  return ret ? IDE_LAYOUT_STACK_ADDIN (ret) : NULL;
+}
