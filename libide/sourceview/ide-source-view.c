@@ -3388,60 +3388,6 @@ ide_source_view_real_join_lines (IdeSourceView *self)
 }
 
 static void
-ide_source_view_real_jump (IdeSourceView     *self,
-                           const GtkTextIter *location)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeBackForwardItem *item;
-  IdeContext *context;
-  IdeFile *file;
-  IdeUri *uri;
-  GtkTextMark *mark;
-  GtkTextBuffer *buffer;
-  gchar *fragment;
-  guint line;
-  guint line_column;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (location);
-
-  line = gtk_text_iter_get_line (location);
-  line_column = ide_source_view_get_visual_column (self, location);
-
-  IDE_TRACE_MSG ("Jump to %d:%d", line + 1, line_column + 1);
-
-  if (priv->back_forward_list == NULL)
-    IDE_EXIT;
-
-  if (priv->buffer == NULL)
-    IDE_EXIT;
-
-  context = ide_buffer_get_context (priv->buffer);
-  if (context == NULL)
-    IDE_EXIT;
-
-  file = ide_buffer_get_file (priv->buffer);
-  if (file == NULL)
-    IDE_EXIT;
-
-  uri = ide_uri_new_from_file (ide_file_get_file (file));
-  fragment = g_strdup_printf ("L%u_%u", line + 1, line_column + 1);
-  ide_uri_set_fragment (uri, fragment);
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  mark = gtk_text_buffer_create_mark (buffer, NULL, location, FALSE);
-  item = ide_back_forward_item_new (context, uri, mark);
-  ide_back_forward_list_push (priv->back_forward_list, item);
-
-  g_object_unref (item);
-  ide_uri_unref (uri);
-  g_free (fragment);
-
-  IDE_EXIT;
-}
-
-static void
 ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
                                                gboolean       smart_lines,
                                                gboolean       after_cursor,
@@ -5201,7 +5147,7 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
 #endif
 
       /* Stash our current position for jump-back */
-      ide_source_view_jump (self, NULL);
+      ide_source_view_jump (self, NULL, NULL);
 
       /*
        * If we are navigating within this file, just stay captive instead of
@@ -6630,7 +6576,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->increase_font_size = ide_source_view_real_increase_font_size;
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
-  klass->jump = ide_source_view_real_jump;
   klass->move_error = ide_source_view_real_move_error;
   klass->move_search = ide_source_view_real_move_search;
   klass->movement = ide_source_view_real_movement;
@@ -7160,7 +7105,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_STRUCT_OFFSET (IdeSourceViewClass, jump),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
-                  1,
+                  2,
+                  GTK_TYPE_TEXT_ITER,
                   GTK_TYPE_TEXT_ITER);
 
   signals [MOVEMENT] =
@@ -8144,26 +8090,38 @@ ide_source_view_set_snippet_completion (IdeSourceView *self,
 
 void
 ide_source_view_jump (IdeSourceView     *self,
-                      const GtkTextIter *location)
+                      const GtkTextIter *from,
+                      const GtkTextIter *to)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextIter iter;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  if (location == NULL)
+  if (priv->buffer != NULL &&
+      !_ide_buffer_get_loading (priv->buffer))
     {
-      GtkTextMark *mark;
+      GtkTextIter dummy_from;
+      GtkTextIter dummy_to;
 
-      mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
-      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &iter, mark);
-      location = &iter;
+      if (from == NULL)
+        {
+          GtkTextMark *mark;
+
+          mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
+          gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &dummy_from, mark);
+          from = &dummy_from;
+        }
+
+      if (to == NULL)
+        {
+          dummy_to = *from;
+          to = &dummy_to;
+        }
+
+      g_signal_emit (self, signals [JUMP], 0, from, to);
     }
-
-  if (priv->buffer && !_ide_buffer_get_loading (priv->buffer))
-    g_signal_emit (self, signals [JUMP], 0, location);
 
   IDE_EXIT;
 }

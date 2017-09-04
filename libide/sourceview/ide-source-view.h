@@ -246,7 +246,8 @@ struct _IdeSourceViewClass
   void (*insert_modifier)             (IdeSourceView           *self,
                                        gboolean                 use_count);
   void (*jump)                        (IdeSourceView           *self,
-                                       const GtkTextIter       *location);
+                                       const GtkTextIter       *from,
+                                       const GtkTextIter       *to);
   void (*movement)                    (IdeSourceView           *self,
                                        IdeSourceViewMovement    movement,
                                        gboolean                 extend_selection,
@@ -364,7 +365,8 @@ gboolean                    ide_source_view_get_spell_checking        (IdeSource
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
                                                                        GdkRectangle               *visible_rect);
 void                        ide_source_view_jump                      (IdeSourceView              *self,
-                                                                       const GtkTextIter          *location);
+                                                                       const GtkTextIter          *from,
+                                                                       const GtkTextIter          *to);
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
                                                                        IdeSourceSnippet           *snippet,

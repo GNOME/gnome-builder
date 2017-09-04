@@ -2287,7 +2287,12 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   distance = gtk_text_iter_get_line (&before_insert) -
              gtk_text_iter_get_line (&after_insert);
   if (ABS (distance) > JUMP_THRESHOLD)
-    ide_source_view_jump (self, &after_insert);
+    {
+      /* We push both jumps and can rely on the receivers to
+       * chain the locations.
+       */
+      ide_source_view_jump (self, &before_insert, &after_insert);
+    }
 }
 
 void
