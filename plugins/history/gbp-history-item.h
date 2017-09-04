@@ -1,0 +1,37 @@
+/* gbp-history-item.h
+ *
+ * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <ide.h>
+
+G_BEGIN_DECLS
+
+#define GBP_TYPE_HISTORY_ITEM (gbp_history_item_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpHistoryItem, gbp_history_item, GBP, HISTORY_ITEM, GObject)
+
+GbpHistoryItem    *gbp_history_item_new          (GtkTextMark    *mark);
+gchar             *gbp_history_item_get_label    (GbpHistoryItem *self);
+IdeSourceLocation *gbp_history_item_get_location (GbpHistoryItem *self);
+GFile             *gbp_history_item_get_file     (GbpHistoryItem *self);
+guint              gbp_history_item_get_line     (GbpHistoryItem *self);
+gboolean           gbp_history_item_chain        (GbpHistoryItem *self,
+                                                  GbpHistoryItem *other);
+
+G_END_DECLS

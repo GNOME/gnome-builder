@@ -548,8 +548,8 @@
   bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
 
   /* navigation */
-  bind "<ctrl>o" { "action" ("layoutstack", "go-backward", "") };
-  bind "<ctrl>i" { "action" ("layoutstack", "go-forward", "") };
+  bind "<ctrl>o" { "action" ("history", "move-previous-edit", "") };
+  bind "<ctrl>i" { "action" ("history", "move-next-edit", "") };
 
   /* window controls */
   bind "<ctrl>w" { "set-mode" ("vim-normal-ctrl-w", transient) };

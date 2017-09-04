@@ -35,6 +35,7 @@ subdir('gdb')
 subdir('gettext')
 subdir('git')
 subdir('gnome-code-assistance')
+subdir('history')
 subdir('html-completion')
 subdir('html-preview')
 subdir('jedi')
@@ -90,6 +91,7 @@ status += [
   'Gettext ............... : @0@'.format(get_option('with_gettext')),
   'Git ................... : @0@'.format(get_option('with_git')),
   'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
+  'History ............... : @0@'.format(get_option('with_history')),
   'HTML Completion ....... : @0@'.format(get_option('with_html_completion')),
   'HTML Preview .......... : @0@'.format(get_option('with_html_preview')),
   'Python Jedi ........... : @0@'.format(get_option('with_jedi')),
