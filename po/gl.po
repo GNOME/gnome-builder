@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-02 02:16+0000\n"
-"PO-Revision-Date: 2017-09-02 12:02+0200\n"
+"POT-Creation-Date: 2017-09-04 00:14+0000\n"
+"PO-Revision-Date: 2017-09-04 09:22+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -95,6 +95,7 @@ msgstr "Saturación"
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
 #: libide/debugger/ide-debugger-locals-view.ui:41
 #: libide/debugger/ide-debugger-registers-view.ui:34
+#: plugins/color-picker/gtk/color-picker-prefs.ui:179
 msgid "Value"
 msgstr "Valor"
 
@@ -173,26 +174,33 @@ msgid "Color strings"
 msgstr "Cadeas de cor"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
+#: plugins/color-picker/gtk/color-picker-prefs.ui:490
 msgid "HEX3"
 msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
+#: plugins/color-picker/gtk/color-picker-prefs.ui:507
 msgid "HEX6"
 msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
+#: plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: plugins/color-picker/gtk/color-picker-prefs.ui:524
 msgid "RGB"
 msgstr "RGB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
+#: plugins/color-picker/gtk/color-picker-prefs.ui:541
 msgid "RGBA"
 msgstr "RGBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
+#: plugins/color-picker/gtk/color-picker-prefs.ui:558
 msgid "HSL"
 msgstr "HSL"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:689
+#: plugins/color-picker/gtk/color-picker-prefs.ui:575
 msgid "HSLA"
 msgstr "HSLA"
 
@@ -642,7 +650,7 @@ msgstr "_Sobre"
 msgid "_Quit"
 msgstr "_Saír"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:710
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -1032,7 +1040,7 @@ msgstr "Non existe o traballador"
 #: libide/application/ide-application-shortcuts.c:75
 #: libide/runner/ide-run-manager.c:735
 #: libide/workbench/ide-workbench-shortcuts.c:49
-#: plugins/command-bar/gb-command-bar.c:715
+#: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
 #: plugins/terminal/gb-terminal-workbench-addin.c:187
 msgctxt "shortcut window"
@@ -1058,7 +1066,7 @@ msgstr "Mostrar a xanela de atallos"
 #: libide/application/ide-application-shortcuts.c:60
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
-#: plugins/command-bar/gb-command-bar.c:716
+#: plugins/command-bar/gb-command-bar.c:702
 #: plugins/terminal/gb-terminal-workbench-addin.c:182
 #: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
@@ -1407,13 +1415,11 @@ msgid "New variable…"
 msgstr "Nova variábel…"
 
 #: libide/debugger/gtk/menus.ui:10
-#: libide/debugger/ide-debugger-editor-addin.c:410
-#| msgid "Run with Profiler"
+#: libide/debugger/ide-debugger-editor-addin.c:409
 msgid "Run with Debugger"
 msgstr "Executar co depurador"
 
-#: libide/debugger/ide-debug-manager.c:768
-#| msgid "The provider could not be found."
+#: libide/debugger/ide-debug-manager.c:924
 msgid "A suitable debugger could not be found."
 msgstr "Non é posíbel atopar un depurador axeitado."
 
@@ -1432,7 +1438,6 @@ msgstr "Liña"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:58
 #: libide/debugger/ide-debugger-threads-view.ui:76
-#| msgid "Fraction"
 msgid "Function"
 msgstr "Función"
 
@@ -1442,7 +1447,6 @@ msgstr "Enderezo"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:81
 #: libide/debugger/ide-debugger-locals-view.ui:28
-#| msgid "File Type"
 msgid "Type"
 msgstr "Tipo"
 
@@ -1451,37 +1455,27 @@ msgid "Hits"
 msgstr "Impactos"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:102
-#| msgid "Extensions"
 msgid "Expression"
 msgstr "Expresión"
 
-#: libide/debugger/ide-debugger-controls.ui:14
+#: libide/debugger/ide-debugger-controls.ui:17
 msgid "Interrupt the program"
 msgstr "Interrumpir o programa"
 
-#: libide/debugger/ide-debugger-controls.ui:27
+#: libide/debugger/ide-debugger-controls.ui:30
 msgid "Continue running the program"
 msgstr "Continuar a execución do programa"
 
-#: libide/debugger/ide-debugger-controls.ui:40
-#| msgid "Restore cursor position"
-msgid "Execute from the current cursor position"
-msgstr "Executar desde a posición actual do cursor"
-
-#: libide/debugger/ide-debugger-controls.ui:53
-msgid "Execute until reaching the current cursor position"
-msgstr "Executar até acadar a posición actual do cursor"
-
-#: libide/debugger/ide-debugger-controls.ui:66
+#: libide/debugger/ide-debugger-controls.ui:71
 msgid "Execute the current line, stepping into any function calls"
 msgstr "Executar a liña actual, saltando dentro de calquera chamada de función"
 
-#: libide/debugger/ide-debugger-controls.ui:79
+#: libide/debugger/ide-debugger-controls.ui:84
 msgid "Execute the current line, stepping over any function calls"
 msgstr ""
 "Executar a liña actual, pasando por enriba de calquera chamada de función"
 
-#: libide/debugger/ide-debugger-controls.ui:92
+#: libide/debugger/ide-debugger-controls.ui:97
 msgid "Run until the end of the function"
 msgstr "Executar até o final da función"
 
@@ -1489,37 +1483,35 @@ msgstr "Executar até o final da función"
 msgid "Disassembly"
 msgstr "Desasamblar"
 
-#: libide/debugger/ide-debugger-editor-addin.c:296
+#: libide/debugger/ide-debugger-editor-addin.c:295
 msgid "Debugger"
 msgstr "Depurador"
 
-#: libide/debugger/ide-debugger-editor-addin.c:312
+#: libide/debugger/ide-debugger-editor-addin.c:311
 msgid "Threads"
 msgstr "Fíos"
 
-#: libide/debugger/ide-debugger-editor-addin.c:338
+#: libide/debugger/ide-debugger-editor-addin.c:337
 msgid "Breakpoints"
 msgstr "Puntos de corte"
 
-#: libide/debugger/ide-debugger-editor-addin.c:346
+#: libide/debugger/ide-debugger-editor-addin.c:345
 msgid "Libraries"
 msgstr "Bibliotecas"
 
-#: libide/debugger/ide-debugger-editor-addin.c:354
+#: libide/debugger/ide-debugger-editor-addin.c:353
 msgid "Registers"
 msgstr "Rexistros"
 
-#: libide/debugger/ide-debugger-editor-addin.c:361
+#: libide/debugger/ide-debugger-editor-addin.c:360
 msgid "Log"
 msgstr "Rexistro"
 
-#: libide/debugger/ide-debugger-editor-addin.c:377
-#| msgid "Failed to initialize defaults."
+#: libide/debugger/ide-debugger-editor-addin.c:376
 msgid "Failed to initialize the debugger"
 msgstr "Produciuse un fallo ao iniciar o depurador"
 
 #: libide/debugger/ide-debugger-libraries-view.ui:14
-#| msgid "Shared Library"
 msgid "Library"
 msgstr "Biblioteca"
 
@@ -1528,7 +1520,6 @@ msgid "Address Range"
 msgstr "Rango de enderezos"
 
 #: libide/debugger/ide-debugger-locals-view.c:307
-#| msgid "local"
 msgid "Locals"
 msgstr "Locais"
 
@@ -1537,7 +1528,6 @@ msgid "Parameters"
 msgstr "Parámetros"
 
 #: libide/debugger/ide-debugger-locals-view.ui:16
-#| msgid "New variable…"
 msgid "Variable"
 msgstr "Variábeis"
 
@@ -1546,7 +1536,6 @@ msgid "Register"
 msgstr "Rexistro"
 
 #: libide/debugger/ide-debugger-threads-view.ui:19
-#| msgid "Size Group"
 msgid "Group"
 msgstr "Grupo"
 
@@ -1555,17 +1544,14 @@ msgid "Thread"
 msgstr "Fío"
 
 #: libide/debugger/ide-debugger-threads-view.ui:88
-#| msgid "Invalid arguments"
 msgid "Arguments"
 msgstr "Argumentos"
 
 #: libide/debugger/ide-debugger-threads-view.ui:101
-#| msgid "Project Location"
 msgid "Location"
 msgstr "Localización"
 
 #: libide/debugger/ide-debugger-threads-view.ui:112
-#| msgid "Dictionary"
 msgid "Binary"
 msgstr "Binario"
 
@@ -1794,6 +1780,7 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Mostrar ou ocultar as opcións de busca como a sensibilidade a maiúsculas"
 
+#. List of pages that are open
 #: libide/editor/ide-editor-sidebar.ui:26
 #: libide/layout/ide-layout-stack-header.ui:21
 msgid "Open Pages"
@@ -1951,6 +1938,16 @@ msgstr "Outros proxectos"
 msgid "_Remove"
 msgstr "_Renomear"
 
+#: libide/greeter/ide-greeter-perspective.ui:244
+#| msgid "Scan your computer for existing projects"
+msgid "Create from existing project"
+msgstr "Crear desde un proxecto existente"
+
+#: libide/greeter/ide-greeter-perspective.ui:256
+#| msgid "Create a new empty project"
+msgid "Create a new project"
+msgstr "Crear un novo proxecto"
+
 #: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
 msgstr "Seleccione un proxecto"
@@ -2040,7 +2037,7 @@ msgstr "Preferencias"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
 #: libide/keybindings/ide-shortcuts-window.ui:477
-#: plugins/command-bar/gb-command-bar.c:717
+#: plugins/command-bar/gb-command-bar.c:703
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Barra de ordes"
@@ -2767,7 +2764,7 @@ msgid "Number of CPU"
 msgstr "Número de CPU"
 
 #: libide/preferences/ide-preferences-builtin.c:378
-#: libide/workbench/ide-omni-bar.ui:479
+#: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "Construír"
 
@@ -2913,7 +2910,6 @@ msgid "No references were found"
 msgstr "Non se atopou ningunha referencia"
 
 #: libide/sourceview/ide-word-completion-provider.c:558
-#| msgid "Enable Word Completion"
 msgid "Builder Word Completion"
 msgstr "Completado de palabras de Construtor"
 
@@ -3026,19 +3022,34 @@ msgstr "Última construción"
 msgid "Build result"
 msgstr "Resultados da construción"
 
-#: libide/workbench/ide-omni-bar.ui:486
+#. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: libide/workbench/ide-omni-bar.ui:475
+msgid "true"
+msgstr "true"
+
+#: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
 msgstr "Reconstruír"
 
-#: libide/workbench/ide-omni-bar.ui:493
+#: libide/workbench/ide-omni-bar.ui:494
 msgid "Clean"
 msgstr "Limpar"
 
-#: libide/workbench/ide-omni-bar.ui:500
+#: libide/workbench/ide-omni-bar.ui:501
 msgid "Export Bundle"
 msgstr "Exportar paquete"
 
-#: libide/workbench/ide-omni-bar.ui:581
+#: libide/workbench/ide-omni-bar.ui:529
+#| msgid "Indent source code as you type"
+msgid "Indexing Source Code"
+msgstr "Indentar o código fonte"
+
+#: libide/workbench/ide-omni-bar.ui:544
+#| msgid "exuberant ctags tags autocompletion auto complete"
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr "Busar, diagnosticar e autocompletar pode estar limitado ate completar."
+
+#: libide/workbench/ide-omni-bar.ui:582
 msgid "Build project"
 msgstr "Construír proxecto"
 
@@ -3073,27 +3084,27 @@ msgid "Building cache…"
 msgstr "Construíndo caché…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#: plugins/meson-templates/meson_templates/__init__.py:287
-msgid "Shared Library"
-msgstr "Biblioteca compartida"
+#| msgid "Shared Library"
+msgid "Shared Library (Autotools)"
+msgstr "Biblioteca compartida (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Crea un novo proxecto autotools con unha biblioteca compartida"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#: plugins/meson-templates/meson_templates/__init__.py:304
-msgid "Empty Project"
-msgstr "Proxecto baleiro"
+#| msgid "Empty Project"
+msgid "Empty Project (Autotools)"
+msgstr "Proxecto baleiro (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Crear un novo proxecto de autotools baleiro"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#: plugins/meson-templates/meson_templates/__init__.py:234
-msgid "GNOME Application"
-msgstr "Aplicativo de GNOME"
+#| msgid "GNOME Application"
+msgid "GNOME Application (Autotools)"
+msgstr "Aplicativo de GNOME (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
@@ -3282,6 +3293,28 @@ msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr ""
 "Seleccione os espazos de cor para os que quere ver os desprazadores no panel."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:86
+#| msgid "HSL"
+msgid "HSV"
+msgstr "HSV"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:87
+#| msgid "Saturation"
+msgid "Hue Saturation Value"
+msgstr "Valor de saturación de cor"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Vermello Verde Azul"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Unidades:"
@@ -3294,6 +3327,11 @@ msgstr ""
 "Seleccione o tipo de unidade que quere usar para os compoñentes e cadeas RGB "
 "no panel."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:196
+#| msgid "Is Recent"
+msgid "Percent"
+msgstr "Porcentaxe"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Filtros:"
@@ -3301,6 +3339,46 @@ msgstr "Filtros:"
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
 msgstr "Selecione un filtro que actúe nas cores ou «Ningún»."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Ningún"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Acromatopsia (monocromía)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Acromatopsia (monocromía cónica azul)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deuteranopia (cegueira de verdes)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deuteranomalía (verdes débiles)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopia (cegueira de vermello)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomalía (vermellos débiles)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopia (cegueira de azul)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomalía (azuis débiles)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Web seguro"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3363,7 +3441,7 @@ msgstr "Realzar cores"
 msgid "Command not found: %s"
 msgstr "Orde non atopada: %s"
 
-#: plugins/command-bar/gb-command-bar.c:593
+#: plugins/command-bar/gb-command-bar.c:595
 msgid "Use the entry below to execute a command"
 msgstr "Usar a entrada embaixo para executar unha ore"
 
@@ -3854,13 +3932,25 @@ msgstr "Suxerir completado de Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para fornecer o completado do linguaxe Python"
 
+#: plugins/meson-templates/meson_templates/__init__.py:234
+msgid "GNOME Application"
+msgstr "Aplicativo de GNOME"
+
 #: plugins/meson-templates/meson_templates/__init__.py:236
 msgid "Create a new GNOME application"
 msgstr "Crear un novo aplicativo de GNOME"
 
+#: plugins/meson-templates/meson_templates/__init__.py:287
+msgid "Shared Library"
+msgstr "Biblioteca compartida"
+
 #: plugins/meson-templates/meson_templates/__init__.py:289
 msgid "Create a new project with a shared library"
 msgstr "Crea un novo proxecto con unha biblioteca compartida"
+
+#: plugins/meson-templates/meson_templates/__init__.py:304
+msgid "Empty Project"
+msgstr "Proxecto baleiro"
 
 #: plugins/meson-templates/meson_templates/__init__.py:306
 msgid "Create a new empty project"
@@ -4267,6 +4357,11 @@ msgstr "Monitor do sistema"
 msgid "Profiler"
 msgstr "Perfilador"
 
+#: plugins/sysprof/gbp-sysprof-perspective.ui:20
+#| msgid "Failed"
+msgid "Failure"
+msgstr "Fallo"
+
 #: plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Pechar"
@@ -4378,6 +4473,13 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero non no xestor de búfer."
+
+#~| msgid "Restore cursor position"
+#~ msgid "Execute from the current cursor position"
+#~ msgstr "Executar desde a posición actual do cursor"
+
+#~ msgid "Execute until reaching the current cursor position"
+#~ msgstr "Executar até acadar a posición actual do cursor"
 
 #~| msgid "Workbench"
 #~ msgctxt "shortcut winndow"
@@ -5063,9 +5165,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 #~ msgid "experimental clang autocompletion auto complete"
 #~ msgstr "experimental clang autocompletado auto completado"
 
-#~ msgid "exuberant ctags tags autocompletion auto complete"
-#~ msgstr "exuberante ctags tags autocompletado auto completoar"
-
 #~ msgid "jedi python autocompletion auto complete"
 #~ msgstr "experimental jedi autocompletado auto completado"
 
@@ -5501,9 +5600,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 
 #~ msgid "The toplevel project file."
 #~ msgstr "O ficheiro de nivel superior do proxecto."
-
-#~ msgid "Is Recent"
-#~ msgstr "É recente"
 
 #~ msgid "Last Modified At"
 #~ msgstr "Última modificación ás"
