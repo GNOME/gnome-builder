@@ -262,7 +262,7 @@ class LibraryProjectTemplate(AutotoolsTemplate):
     def __init__(self):
         super().__init__(
             'shared-library',
-            _("Shared Library"),
+            _("Shared Library (Autotools)"),
             'pattern-library',
             _("Create a new autotools project with a shared library"),
             ['C', 'C++', 'Vala']
@@ -288,7 +288,7 @@ class EmptyProjectTemplate(AutotoolsTemplate):
     def __init__(self):
         super().__init__(
             'empty',
-            _("Empty Project"),
+            _("Empty Project (Autotools)"),
             # it would be nice to have a different icon here.
             'pattern-library',
             _("Create a new empty autotools project"),
@@ -305,7 +305,7 @@ class GnomeProjectTemplate(AutotoolsTemplate):
     def __init__(self):
         super().__init__(
             'gnome-app',
-            _("GNOME Application"),
+            _("GNOME Application (Autotools)"),
             'pattern-gnome',
             _("Create a new flatpak-ready GNOME application"),
             ['C', 'C++', 'Vala', 'Python']
