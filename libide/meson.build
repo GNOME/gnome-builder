@@ -639,8 +639,6 @@ libide_sources = libide_generated_headers + libide_public_sources + [
   'util/ide-ref-ptr.h',
   'util/ide-window-settings.c',
   'util/ide-window-settings.h',
-  'workbench/ide-omni-bar-row.c',
-  'workbench/ide-omni-bar-row.h',
   'workbench/ide-workbench-actions.c',
   'workbench/ide-workbench-private.h',
   'workbench/ide-workbench-shortcuts.c',

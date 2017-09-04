@@ -34,7 +34,6 @@
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-omni-bar.h"
-#include "workbench/ide-omni-bar-row.h"
 
 #define LOOPER_INTERVAL_SECONDS 5
 #define SETTLE_MESSAGE_COUNT 2
