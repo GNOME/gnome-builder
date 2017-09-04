@@ -407,6 +407,18 @@ ide_editor_view_addin_added (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
   ide_editor_view_addin_load (addin, self);
+
+  /*
+   * Notify of the current stack, but refetch the stack pointer just
+   * to be sure we aren't re-using an old pointer in case we're racing
+   * with a finalizer.
+   */
+  if (self->last_stack_ptr != NULL)
+    {
+      GtkWidget *stack = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_LAYOUT_STACK);
+      if (stack != NULL)
+        ide_editor_view_addin_stack_set (addin, IDE_LAYOUT_STACK (stack));
+    }
 }
 
 static void
