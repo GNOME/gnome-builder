@@ -376,6 +376,23 @@ ide_editor_view_create_split_view (IdeLayoutView *view)
 }
 
 static void
+ide_editor_view_notify_stack_set (IdeExtensionSetAdapter *set,
+                                  PeasPluginInfo         *plugin_info,
+                                  PeasExtension          *exten,
+                                  gpointer                user_data)
+{
+  IdeLayoutStack *stack = user_data;
+  IdeEditorViewAddin *addin = (IdeEditorViewAddin *)exten;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (addin));
+  g_assert (IDE_IS_LAYOUT_STACK (stack));
+
+  ide_editor_view_addin_stack_set (addin, stack);
+}
+
+static void
 ide_editor_view_addin_added (IdeExtensionSetAdapter *set,
                              PeasPluginInfo         *plugin_info,
                              PeasExtension          *exten,
@@ -414,6 +431,7 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
                                    GtkWidget *old_toplevel)
 {
   IdeEditorView *self = (IdeEditorView *)widget;
+  IdeLayoutStack *stack;
   IdeContext *context;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
@@ -428,6 +446,7 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
     GTK_WIDGET_CLASS (ide_editor_view_parent_class)->hierarchy_changed (widget, old_toplevel);
 
   context = ide_widget_get_context (GTK_WIDGET (self));
+  stack = (IdeLayoutStack *)gtk_widget_get_ancestor (widget, IDE_TYPE_LAYOUT_STACK);
 
   /*
    * We don't want to create addins until the widget has been placed into
@@ -455,6 +474,18 @@ ide_editor_view_hierarchy_changed (GtkWidget *widget,
       ide_extension_set_adapter_foreach (self->addins,
                                          ide_editor_view_addin_added,
                                          self);
+    }
+
+  /*
+   * If we have been moved into a new stack, notify the addins of the
+   * hierarchy change.
+   */
+  if (stack != NULL && stack != self->last_stack_ptr && self->addins != NULL)
+    {
+      self->last_stack_ptr = stack;
+      ide_extension_set_adapter_foreach (self->addins,
+                                         ide_editor_view_notify_stack_set,
+                                         stack);
     }
 }
 

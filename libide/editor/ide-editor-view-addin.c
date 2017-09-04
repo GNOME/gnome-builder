@@ -60,6 +60,17 @@ ide_editor_view_addin_language_changed (IdeEditorViewAddin *self,
     IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->language_changed (self, language_id);
 }
 
+void
+ide_editor_view_addin_stack_set (IdeEditorViewAddin *self,
+                                 IdeLayoutStack     *stack)
+{
+  g_return_if_fail (IDE_IS_EDITOR_VIEW_ADDIN (self));
+  g_return_if_fail (IDE_IS_LAYOUT_STACK (stack));
+
+  if (IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->stack_set)
+    IDE_EDITOR_VIEW_ADDIN_GET_IFACE (self)->stack_set (self, stack);
+}
+
 /**
  * ide_editor_view_addin_find_by_module_name:
  * @view: an #IdeEditorView

@@ -80,6 +80,9 @@ struct _IdeEditorView
   GtkRevealer             *modified_revealer;
   GtkButton               *modified_cancel_button;
 
+  /* Raw pointer used to determine when stack changes */
+  IdeLayoutStack          *last_stack_ptr;
+
   guint                    toggle_map_source;
 
   guint                    auto_hide_map : 1;

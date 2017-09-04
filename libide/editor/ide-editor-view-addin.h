@@ -18,7 +18,8 @@
 
 #pragma once
 
-#include "ide-editor-view.h"
+#include "editor/ide-editor-view.h"
+#include "layout/ide-layout-stack.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +37,16 @@ struct _IdeEditorViewAddinInterface
                               IdeEditorView      *view);
   void (*language_changed)   (IdeEditorViewAddin *self,
                               const gchar        *language_id);
+  void (*stack_set)          (IdeEditorViewAddin *self,
+                              IdeLayoutStack     *stack);
 };
 
 void                ide_editor_view_addin_load                (IdeEditorViewAddin *self,
                                                                IdeEditorView      *view);
 void                ide_editor_view_addin_unload              (IdeEditorViewAddin *self,
                                                                IdeEditorView      *view);
+void                ide_editor_view_addin_stack_set           (IdeEditorViewAddin *self,
+                                                               IdeLayoutStack     *stack);
 void                ide_editor_view_addin_language_changed    (IdeEditorViewAddin *self,
                                                                const gchar        *language_id);
 IdeEditorViewAddin *ide_editor_view_addin_find_by_module_name (IdeEditorView      *view,
