@@ -102,8 +102,6 @@ libide/transfers/ide-pkcon-transfer.c
 libide/transfers/ide-transfers-button.ui
 libide/util/ide-uri.c
 libide/workbench/ide-omni-bar.c
-libide/workbench/ide-omni-bar-row.c
-libide/workbench/ide-omni-bar-row.ui
 libide/workbench/ide-omni-bar.ui
 libide/workbench/ide-workbench-actions.c
 libide/workbench/ide-workbench.c
