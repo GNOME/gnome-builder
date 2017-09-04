@@ -170,7 +170,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         modes = {
             'resources/src/hello.js.in': 0o750,
             'resources/src/hello.py.in': 0o750,
-            'resources/meson_post_install.py': 0o750,
+            'resources/build-aux/meson/postinstall.py': 0o750,
         }
 
         expands = {
@@ -244,7 +244,7 @@ class GnomeProjectTemplate(MesonTemplate):
         files['resources/data/hello.appdata.xml.in'] = 'data/%(appid)s.appdata.xml.in'
         files['resources/data/hello.gschema.xml'] = 'data/%(appid)s.gschema.xml'
         files['resources/data/meson.build'] = 'data/meson.build'
-        files['resources/meson_post_install.py'] = 'meson_post_install.py'
+        files['resources/build-aux/meson/postinstall.py'] = 'build-aux/meson/postinstall.py'
         files['resources/po/LINGUAS'] = 'po/LINGUAS'
         files['resources/po/meson.build'] = 'po/meson.build'
         files['resources/po/POTFILES'] = 'po/POTFILES'

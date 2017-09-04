@@ -21,4 +21,4 @@ subdir('data'){{end}}
 subdir('src')
 {{if enable_i18n}}subdir('po'){{end}}
 {{if enable_gnome}}
-meson.add_install_script('meson_post_install.py'){{end}}
+meson.add_install_script('build-aux/meson/postinstall.py'){{end}}
