@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-08-20 00:09+0000\n"
-"PO-Revision-Date: 2017-08-20 18:29+0500\n"
+"POT-Creation-Date: 2017-09-04 00:14+0000\n"
+"PO-Revision-Date: 2017-09-04 20:58+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -92,6 +92,9 @@ msgid "Saturation"
 msgstr "Қаңықтылығы"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+#: libide/debugger/ide-debugger-locals-view.ui:41
+#: libide/debugger/ide-debugger-registers-view.ui:34
+#: plugins/color-picker/gtk/color-picker-prefs.ui:179
 msgid "Value"
 msgstr "Мәні"
 
@@ -170,26 +173,33 @@ msgid "Color strings"
 msgstr "Түстер жолдары"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
+#: plugins/color-picker/gtk/color-picker-prefs.ui:490
 msgid "HEX3"
 msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
+#: plugins/color-picker/gtk/color-picker-prefs.ui:507
 msgid "HEX6"
 msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
+#: plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: plugins/color-picker/gtk/color-picker-prefs.ui:524
 msgid "RGB"
 msgstr "RGB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
+#: plugins/color-picker/gtk/color-picker-prefs.ui:541
 msgid "RGBA"
 msgstr "RGBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
+#: plugins/color-picker/gtk/color-picker-prefs.ui:558
 msgid "HSL"
 msgstr "HSL"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:689
+#: plugins/color-picker/gtk/color-picker-prefs.ui:575
 msgid "HSLA"
 msgstr "HSLA"
 
@@ -207,7 +217,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Баптауларды қолданып, палитраны жүктеу немесе генерациялау"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5951
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Атын ауыстыру"
@@ -619,7 +629,7 @@ msgstr "Осы тур_алы"
 msgid "_Quit"
 msgstr "_Шығу"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -747,7 +757,7 @@ msgstr "_Соңына жеткенде басына өту"
 msgid "Cu_t"
 msgstr "Қ_иып алу"
 
-#: data/gtk/menus.ui:250
+#: data/gtk/menus.ui:250 libide/debugger/ide-debugger-threads-view.ui:64
 msgid "Frame"
 msgstr "Фрейм"
 
@@ -800,7 +810,7 @@ msgstr "_Сақтау"
 msgid "Save _As"
 msgstr "Қала_йша сақтау"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1114
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
 msgid "Run"
 msgstr "Жөнелту"
 
@@ -808,7 +818,7 @@ msgstr "Жөнелту"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:630
+#: libide/workbench/ide-workbench.c:625
 msgid "Builder"
 msgstr "Құрастырушы"
 
@@ -1006,11 +1016,11 @@ msgstr ""
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:721
+#: libide/runner/ide-run-manager.c:735
 #: libide/workbench/ide-workbench-shortcuts.c:49
-#: plugins/command-bar/gb-command-bar.c:715
-#: plugins/terminal/gb-terminal-workbench-addin.c:180
-#: plugins/terminal/gb-terminal-workbench-addin.c:186
+#: plugins/command-bar/gb-command-bar.c:701
+#: plugins/terminal/gb-terminal-workbench-addin.c:181
+#: plugins/terminal/gb-terminal-workbench-addin.c:187
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Жұмыс ортасының жарлықтары"
@@ -1034,9 +1044,9 @@ msgstr ""
 #: libide/application/ide-application-shortcuts.c:60
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
-#: plugins/command-bar/gb-command-bar.c:716
-#: plugins/terminal/gb-terminal-workbench-addin.c:181
-#: plugins/terminal/gb-terminal-workbench-addin.c:187
+#: plugins/command-bar/gb-command-bar.c:702
+#: plugins/terminal/gb-terminal-workbench-addin.c:182
+#: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Жалпы"
@@ -1059,7 +1069,7 @@ msgstr "Глобалды іздеу өрісіне фокусты орнату"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:722
+#: libide/runner/ide-run-manager.c:736
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Құрастыру және жөнелту"
@@ -1069,7 +1079,7 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr ""
 
-#: libide/buffers/ide-buffer.c:2604
+#: libide/buffers/ide-buffer.c:2690
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
@@ -1382,6 +1392,147 @@ msgstr ""
 msgid "New variable…"
 msgstr "Жаңа айнымалы…"
 
+#: libide/debugger/gtk/menus.ui:10
+#: libide/debugger/ide-debugger-editor-addin.c:409
+msgid "Run with Debugger"
+msgstr "Жөндеушімен жөнелту"
+
+#: libide/debugger/ide-debug-manager.c:924
+msgid "A suitable debugger could not be found."
+msgstr "Сай келетін жөндеушіні табу мүмкін емес."
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:22
+#: libide/debugger/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr ""
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "Файл"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr ""
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:58
+#: libide/debugger/ide-debugger-threads-view.ui:76
+msgid "Function"
+msgstr "Функция"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "Адресі"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:81
+#: libide/debugger/ide-debugger-locals-view.ui:28
+msgid "Type"
+msgstr ""
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:91
+msgid "Hits"
+msgstr ""
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:102
+msgid "Expression"
+msgstr "Өрнек"
+
+#: libide/debugger/ide-debugger-controls.ui:17
+msgid "Interrupt the program"
+msgstr ""
+
+#: libide/debugger/ide-debugger-controls.ui:30
+msgid "Continue running the program"
+msgstr ""
+
+#: libide/debugger/ide-debugger-controls.ui:71
+msgid "Execute the current line, stepping into any function calls"
+msgstr ""
+
+#: libide/debugger/ide-debugger-controls.ui:84
+msgid "Execute the current line, stepping over any function calls"
+msgstr ""
+
+#: libide/debugger/ide-debugger-controls.ui:97
+msgid "Run until the end of the function"
+msgstr ""
+
+#: libide/debugger/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr ""
+
+#: libide/debugger/ide-debugger-editor-addin.c:295
+msgid "Debugger"
+msgstr ""
+
+#: libide/debugger/ide-debugger-editor-addin.c:311
+msgid "Threads"
+msgstr ""
+
+#: libide/debugger/ide-debugger-editor-addin.c:337
+msgid "Breakpoints"
+msgstr ""
+
+#: libide/debugger/ide-debugger-editor-addin.c:345
+msgid "Libraries"
+msgstr ""
+
+#: libide/debugger/ide-debugger-editor-addin.c:353
+msgid "Registers"
+msgstr ""
+
+#: libide/debugger/ide-debugger-editor-addin.c:360
+msgid "Log"
+msgstr ""
+
+#: libide/debugger/ide-debugger-editor-addin.c:376
+msgid "Failed to initialize the debugger"
+msgstr "Жөндеушіні іске қосу сәтсіз аяқталды"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:14
+msgid "Library"
+msgstr "Библиотека"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr ""
+
+#: libide/debugger/ide-debugger-locals-view.c:307
+#| msgid "local"
+msgid "Locals"
+msgstr ""
+
+#: libide/debugger/ide-debugger-locals-view.c:361
+msgid "Parameters"
+msgstr "Параметрлер"
+
+#: libide/debugger/ide-debugger-locals-view.ui:16
+msgid "Variable"
+msgstr "Айнымалы"
+
+#: libide/debugger/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "Тіркелу"
+
+#: libide/debugger/ide-debugger-threads-view.ui:19
+msgid "Group"
+msgstr "Топ"
+
+#: libide/debugger/ide-debugger-threads-view.ui:42
+msgid "Thread"
+msgstr ""
+
+#: libide/debugger/ide-debugger-threads-view.ui:88
+msgid "Arguments"
+msgstr "Аргументтер"
+
+#: libide/debugger/ide-debugger-threads-view.ui:101
+msgid "Location"
+msgstr "Орналасуы"
+
+#: libide/debugger/ide-debugger-threads-view.ui:112
+msgid "Binary"
+msgstr "Бинарлы"
+
 #: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
@@ -1605,6 +1756,7 @@ msgstr "Іздеу және іздеу мен алмастыру арасынд�
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 
+#. List of pages that are open
 #: libide/editor/ide-editor-sidebar.ui:26
 #: libide/layout/ide-layout-stack-header.ui:21
 msgid "Open Pages"
@@ -1761,6 +1913,14 @@ msgstr "Басқа жобалар"
 msgid "_Remove"
 msgstr "Ө_шіру"
 
+#: libide/greeter/ide-greeter-perspective.ui:244
+msgid "Create from existing project"
+msgstr "Бар болып тұрған жобадан іздеу"
+
+#: libide/greeter/ide-greeter-perspective.ui:256
+msgid "Create a new project"
+msgstr "Жаңа жобаны жасау"
+
 #: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
 msgstr "Жобаны таңдау"
@@ -1804,11 +1964,11 @@ msgstr ""
 msgid "You must call %s() before using libide."
 msgstr ""
 
-#: libide/ide-context.c:2118
+#: libide/ide-context.c:2127
 msgid "An unload request is already pending"
 msgstr ""
 
-#: libide/ide-context.c:2237
+#: libide/ide-context.c:2246
 msgid "Context has already been restored."
 msgstr ""
 
@@ -1849,21 +2009,21 @@ msgstr "Баптаулар"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
 #: libide/keybindings/ide-shortcuts-window.ui:477
-#: plugins/command-bar/gb-command-bar.c:717
+#: plugins/command-bar/gb-command-bar.c:703
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Командалар панелі"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
 #: libide/keybindings/ide-shortcuts-window.ui:484
-#: plugins/terminal/gb-terminal-workbench-addin.c:182
+#: plugins/terminal/gb-terminal-workbench-addin.c:183
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Терминал"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
 #: libide/keybindings/ide-shortcuts-window.ui:491
-#: plugins/terminal/gb-terminal-workbench-addin.c:188
+#: plugins/terminal/gb-terminal-workbench-addin.c:189
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr ""
@@ -2238,7 +2398,7 @@ msgstr ""
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
-#: plugins/terminal/gb-terminal-workbench-addin.c:248
+#: plugins/terminal/gb-terminal-workbench-addin.c:250
 #: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Терминал"
@@ -2563,7 +2723,7 @@ msgid "Number of CPU"
 msgstr "Процессорлар саны"
 
 #: libide/preferences/ide-preferences-builtin.c:378
-#: libide/workbench/ide-omni-bar.ui:479
+#: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "Жинау"
 
@@ -2652,11 +2812,11 @@ msgstr "Орындалуын тоқтату"
 msgid "Change run options"
 msgstr "Орындалу баптауларын өзгерту"
 
-#: libide/runner/ide-run-manager.c:319
+#: libide/runner/ide-run-manager.c:340
 msgid "Cannot run target, another target is running"
 msgstr ""
 
-#: libide/runner/ide-run-manager.c:388
+#: libide/runner/ide-run-manager.c:409
 msgid "Failed to locate runtime"
 msgstr ""
 
@@ -2678,33 +2838,38 @@ msgstr "Буманы ашу сәтсіз аяқталды: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Файлды жүктеу сәтсіз аяқталды: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "Insert “%s”"
 msgstr "\"%s\" кірістіру"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5409
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "\"%s\" мәнін \"%s\" мәнімен алмастыру"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5523
 msgid "Apply Fix-It"
 msgstr ""
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5950
 msgid "Rename symbol"
 msgstr "Таңба атын ауыстыру"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6061
+#: libide/sourceview/ide-source-view.c:6180
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Жол %u, Баған %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6087
+#: libide/sourceview/ide-source-view.c:6206
 msgid "No references were found"
 msgstr ""
+
+#: libide/sourceview/ide-word-completion-provider.c:558
+#| msgid "Completion"
+msgid "Builder Word Completion"
+msgstr "Builder сөздерді толықтыруы"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -2814,19 +2979,32 @@ msgstr "Соңғы құрастыру"
 msgid "Build result"
 msgstr "Құрастыру нәтижесі"
 
-#: libide/workbench/ide-omni-bar.ui:486
+#. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: libide/workbench/ide-omni-bar.ui:475
+msgid "true"
+msgstr ""
+
+#: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
 msgstr "Қайта құрастыру"
 
-#: libide/workbench/ide-omni-bar.ui:493
+#: libide/workbench/ide-omni-bar.ui:494
 msgid "Clean"
 msgstr "Тазарту"
 
-#: libide/workbench/ide-omni-bar.ui:500
+#: libide/workbench/ide-omni-bar.ui:501
 msgid "Export Bundle"
 msgstr ""
 
-#: libide/workbench/ide-omni-bar.ui:581
+#: libide/workbench/ide-omni-bar.ui:529
+msgid "Indexing Source Code"
+msgstr "Бастапқы кодты индекстеу"
+
+#: libide/workbench/ide-omni-bar.ui:544
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+
+#: libide/workbench/ide-omni-bar.ui:582
 msgid "Build project"
 msgstr "Жобаны құрастыру"
 
@@ -2834,7 +3012,7 @@ msgstr "Жобаны құрастыру"
 msgid "Builder Statistics"
 msgstr "Құрастырушы статистикасы"
 
-#: libide/workbench/ide-workbench.c:628
+#: libide/workbench/ide-workbench.c:623
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Құрастырушы"
@@ -2861,27 +3039,24 @@ msgid "Building cache…"
 msgstr "Кэшті құрастыру…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#: plugins/meson-templates/meson_templates/__init__.py:287
-msgid "Shared Library"
-msgstr "Бөлісетін библиотека"
+msgid "Shared Library (Autotools)"
+msgstr "Бөлісетін библиотека (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Бөлісетін библиотекасы бар жаңа autotools жобасын жасау"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#: plugins/meson-templates/meson_templates/__init__.py:304
-msgid "Empty Project"
-msgstr "Бос жоба"
+msgid "Empty Project (Autotools)"
+msgstr "Бос жоба (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Жаңа бос autotools жобасын жасау"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#: plugins/meson-templates/meson_templates/__init__.py:234
-msgid "GNOME Application"
-msgstr "GNOME қолданбасы"
+msgid "GNOME Application (Autotools)"
+msgstr "GNOME қолданбасы (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
@@ -3069,6 +3244,28 @@ msgstr "Көрінуі:"
 msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr ""
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:86
+#| msgid "HSL"
+msgid "HSV"
+msgstr "HSV"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:87
+#| msgid "Saturation"
+msgid "Hue Saturation Value"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr ""
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Бірліктер:"
@@ -3079,12 +3276,56 @@ msgid ""
 "the panel."
 msgstr ""
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Пайыз"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Сүзгілер:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Ешнәрсе"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr ""
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
 msgstr ""
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
@@ -3148,7 +3389,7 @@ msgstr "Ерекшелеу түстері"
 msgid "Command not found: %s"
 msgstr "Команда табылмады: %s"
 
-#: plugins/command-bar/gb-command-bar.c:593
+#: plugins/command-bar/gb-command-bar.c:595
 msgid "Use the entry below to execute a command"
 msgstr ""
 
@@ -3410,7 +3651,7 @@ msgstr "Клондау"
 msgid "Network is not available, skipping downloads"
 msgstr ""
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:89
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
 #: plugins/html-preview/html_preview_plugin/__init__.py:323
 #: plugins/html-preview/html_preview_plugin/__init__.py:333
@@ -3420,26 +3661,26 @@ msgstr ""
 msgid "Install"
 msgstr "Орнату"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:97
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Жаңарту"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:296
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:309
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:311
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] ""
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:390
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:393
 msgid "Flatpak Runtimes"
 msgstr "Flatpak орындалу орталары"
 
@@ -3521,15 +3762,15 @@ msgstr "Келесі сілтеме алмасу буферіне көшіріл
 msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 
-#: plugins/git/ide-git-buffer-change-monitor.c:567
+#: plugins/git/ide-git-buffer-change-monitor.c:566
 msgid "Repository does not have a working directory."
 msgstr "Репозиторийдің жұмыс бумасы жоқ."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:578
+#: plugins/git/ide-git-buffer-change-monitor.c:577
 msgid "File is not under control of git working directory."
 msgstr ""
 
-#: plugins/git/ide-git-buffer-change-monitor.c:644
+#: plugins/git/ide-git-buffer-change-monitor.c:643
 msgid "The requested file does not exist within the git index."
 msgstr ""
 
@@ -3626,13 +3867,25 @@ msgstr "Python толықтыруларын ұсыну"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Python тілі үшін толықтыруларды ұсыну үшін Jedi қолдану"
 
+#: plugins/meson-templates/meson_templates/__init__.py:234
+msgid "GNOME Application"
+msgstr "GNOME қолданбасы"
+
 #: plugins/meson-templates/meson_templates/__init__.py:236
 msgid "Create a new GNOME application"
 msgstr "Жаңа GNOME қолданбасын жасау"
 
+#: plugins/meson-templates/meson_templates/__init__.py:287
+msgid "Shared Library"
+msgstr "Бөлісетін библиотека"
+
 #: plugins/meson-templates/meson_templates/__init__.py:289
 msgid "Create a new project with a shared library"
 msgstr "Бөлісетін библиотекасы бар жаңа жобаны жасау"
+
+#: plugins/meson-templates/meson_templates/__init__.py:304
+msgid "Empty Project"
+msgstr "Бос жоба"
 
 #: plugins/meson-templates/meson_templates/__init__.py:306
 msgid "Create a new empty project"
@@ -3646,20 +3899,20 @@ msgstr "MinGW 64-бит"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-бит"
 
-#: plugins/notification/ide-notification-addin.c:81
+#: plugins/notification/ide-notification-addin.c:82
 msgid "Build successful"
 msgstr "Құрастыру сәтті аяқталды"
 
-#: plugins/notification/ide-notification-addin.c:82
+#: plugins/notification/ide-notification-addin.c:83
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "\"%s\" жобасының құрастырылуы аяқталды"
 
-#: plugins/notification/ide-notification-addin.c:86
+#: plugins/notification/ide-notification-addin.c:87
 msgid "Build failed"
 msgstr "Құрастыру сәтсіз аяқталды"
 
-#: plugins/notification/ide-notification-addin.c:87
+#: plugins/notification/ide-notification-addin.c:88
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "\"%s\" жобасының құрастырылуы сәтсіз аяқталды"
@@ -4031,6 +4284,10 @@ msgstr "Жүйелік бақылаушы"
 msgid "Profiler"
 msgstr "Профильдеуші"
 
+#: plugins/sysprof/gbp-sysprof-perspective.ui:20
+msgid "Failure"
+msgstr "Сәтсіз аяқталды"
+
 #: plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Жабу"
@@ -4087,7 +4344,7 @@ msgstr "Терминал құрамасын қалайша сақтау"
 msgid "Untitled terminal"
 msgstr "Атаусыз терминал"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:144
+#: plugins/terminal/gb-terminal-workbench-addin.c:145
 msgid "Application Output"
 msgstr "Қолданба шығысы"
 
@@ -4148,9 +4405,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Іске қосылған болса, түзеткіш жұмыс орнында бүйір панель көрсетілетін "
 #~ "болады."
-
-#~ msgid "Files"
-#~ msgstr "Файлдар"
 
 #~ msgid "Open a document"
 #~ msgstr "Құжатты ашу"
