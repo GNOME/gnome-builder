@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-03 07:44+0000\n"
-"PO-Revision-Date: 2017-09-03 16:50+0200\n"
+"POT-Creation-Date: 2017-09-04 00:14+0000\n"
+"PO-Revision-Date: 2017-09-04 03:45+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -3076,27 +3076,24 @@ msgid "Building cache…"
 msgstr "Budowanie pamięci podręcznej…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#: plugins/meson-templates/meson_templates/__init__.py:287
-msgid "Shared Library"
-msgstr "Biblioteka współdzielona"
+msgid "Shared Library (Autotools)"
+msgstr "Biblioteka współdzielona (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Utworzenie nowego projektu Autotools ze współdzieloną biblioteką"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#: plugins/meson-templates/meson_templates/__init__.py:304
-msgid "Empty Project"
-msgstr "Pusty projekt"
+msgid "Empty Project (Autotools)"
+msgstr "Pusty projekt (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Utworzenie nowego pustego projektu Autotools"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#: plugins/meson-templates/meson_templates/__init__.py:234
-msgid "GNOME Application"
-msgstr "Program GNOME"
+msgid "GNOME Application (Autotools)"
+msgstr "Program GNOME (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
@@ -3915,13 +3912,25 @@ msgstr "Sugerowanie uzupełnień języka Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Użycie biblioteki Jedi do uzupełniania w języku Python"
 
+#: plugins/meson-templates/meson_templates/__init__.py:234
+msgid "GNOME Application"
+msgstr "Program GNOME"
+
 #: plugins/meson-templates/meson_templates/__init__.py:236
 msgid "Create a new GNOME application"
 msgstr "Utworzenie nowego programu GNOME"
 
+#: plugins/meson-templates/meson_templates/__init__.py:287
+msgid "Shared Library"
+msgstr "Biblioteka współdzielona"
+
 #: plugins/meson-templates/meson_templates/__init__.py:289
 msgid "Create a new project with a shared library"
 msgstr "Utworzenie nowego projektu z biblioteką współdzieloną"
+
+#: plugins/meson-templates/meson_templates/__init__.py:304
+msgid "Empty Project"
+msgstr "Pusty projekt"
 
 #: plugins/meson-templates/meson_templates/__init__.py:306
 msgid "Create a new empty project"
