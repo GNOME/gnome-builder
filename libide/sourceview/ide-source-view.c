@@ -7106,8 +7106,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
-                  GTK_TYPE_TEXT_ITER,
-                  GTK_TYPE_TEXT_ITER);
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   signals [MOVEMENT] =
     g_signal_new ("movement",
@@ -7231,7 +7231,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_NONE,
                                 2,
                                 IDE_TYPE_SOURCE_SNIPPET,
-                                GTK_TYPE_TEXT_ITER);
+                                GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   signals [REBUILD_HIGHLIGHT] =
     g_signal_new ("rebuild-highlight",
