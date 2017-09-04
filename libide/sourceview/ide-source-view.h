@@ -332,7 +332,6 @@ struct _IdeSourceViewClass
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
 IdeSourceSnippet           *ide_source_view_get_current_snippet       (IdeSourceView              *self);
-IdeBackForwardList         *ide_source_view_get_back_forward_list     (IdeSourceView              *self);
 guint                       ide_source_view_get_visual_column         (IdeSourceView              *self,
                                                                        const GtkTextIter          *location);
 void                        ide_source_view_get_visual_position       (IdeSourceView              *self,
@@ -408,8 +407,6 @@ void                        ide_source_view_set_snippet_completion    (IdeSource
                                                                        gboolean                    snippet_completion);
 void                        ide_source_view_set_spell_checking        (IdeSourceView              *self,
                                                                        gboolean                    enable);
-void                        ide_source_view_set_back_forward_list     (IdeSourceView              *self,
-                                                                       IdeBackForwardList         *back_forward_list);
 gboolean                    ide_source_view_move_mark_onscreen        (IdeSourceView              *self,
                                                                        GtkTextMark                *mark);
 gboolean                    ide_source_view_place_cursor_onscreen     (IdeSourceView              *self);

@@ -36,8 +36,6 @@
 #include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
-#include "history/ide-back-forward-item.h"
-#include "history/ide-back-forward-list.h"
 #include "plugins/ide-extension-adapter.h"
 #include "plugins/ide-extension-set-adapter.h"
 #include "rename/ide-rename-provider.h"
@@ -92,7 +90,6 @@
 
 typedef struct
 {
-  IdeBackForwardList          *back_forward_list;
   IdeBuffer                   *buffer;
   GtkCssProvider              *css_provider;
   PangoFontDescription        *font_desc;
@@ -215,7 +212,6 @@ DZL_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourc
 
 enum {
   PROP_0,
-  PROP_BACK_FORWARD_LIST,
   PROP_COUNT,
   PROP_ENABLE_WORD_COMPLETION,
   PROP_FILE_SETTINGS,
@@ -6394,10 +6390,6 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, priv->auto_indent);
       break;
 
-    case PROP_BACK_FORWARD_LIST:
-      g_value_set_object (value, ide_source_view_get_back_forward_list (self));
-      break;
-
     case PROP_COUNT:
       g_value_set_int (value, ide_source_view_get_count (self));
       break;
@@ -6501,10 +6493,6 @@ ide_source_view_set_property (GObject      *object,
     case PROP_AUTO_INDENT:
       priv->auto_indent = !!g_value_get_boolean (value);
       ide_source_view_update_auto_indent_override (self);
-      break;
-
-    case PROP_BACK_FORWARD_LIST:
-      ide_source_view_set_back_forward_list (self, g_value_get_object (value));
       break;
 
     case PROP_COUNT:
@@ -6667,13 +6655,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->swap_selection_bounds = ide_source_view_real_swap_selection_bounds;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
-
-  properties [PROP_BACK_FORWARD_LIST] =
-    g_param_spec_object ("back-forward-list",
-                         "Back Forward List",
-                         "The back-forward list to track jumps.",
-                         IDE_TYPE_BACK_FORWARD_LIST,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_COUNT] =
     g_param_spec_int ("count",
@@ -8159,37 +8140,6 @@ ide_source_view_set_snippet_completion (IdeSourceView *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SNIPPET_COMPLETION]);
     }
-}
-
-/**
- * ide_source_view_get_back_forward_list:
- *
- * Gets the #IdeSourceView:back-forward-list property. This is the list that is used to manage
- * navigation history between multiple #IdeSourceView.
- *
- * Returns: (transfer none) (nullable): An #IdeBackForwardList or %NULL.
- */
-IdeBackForwardList *
-ide_source_view_get_back_forward_list (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
-
-  return priv->back_forward_list;
-}
-
-void
-ide_source_view_set_back_forward_list (IdeSourceView      *self,
-                                       IdeBackForwardList *back_forward_list)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (!back_forward_list || IDE_IS_BACK_FORWARD_LIST (back_forward_list));
-
-  if (g_set_object (&priv->back_forward_list, back_forward_list))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BACK_FORWARD_LIST]);
 }
 
 void
