@@ -172,7 +172,7 @@ ide_clang_completion_provider_match (GtkSourceCompletionProvider *provider,
 
       ch = gtk_text_iter_get_char (&iter);
 
-      if (!g_unichar_isalnum (ch))
+      if (!g_unichar_isalnum (ch) && ch != '_')
         return FALSE;
     }
 
