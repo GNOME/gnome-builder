@@ -324,12 +324,16 @@ ide_code_index_index_new_search_result (IdeCodeIndexIndex *self,
   g_assert (IDE_IS_CODE_INDEX_INDEX (self));
   g_assert (fuzzy_match != NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  key = dzl_fuzzy_index_match_get_key (fuzzy_match->match);
   value = dzl_fuzzy_index_match_get_document (fuzzy_match->match);
 
   g_variant_get (value, "(uuuuu)", &file_id, &line, &line_offset, &flags, &kind);
+
+  /* Ignore variables in global search */
+  if (kind == IDE_SYMBOL_VARIABLE)
+    return NULL;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  key = dzl_fuzzy_index_match_get_key (fuzzy_match->match);
 
   g_snprintf (num, sizeof num, "%u", file_id);
   path = dzl_fuzzy_index_get_metadata_string (fuzzy_match->index, num);
@@ -420,10 +424,13 @@ ide_code_index_index_query_cb (GObject       *object,
        */
       while (data->max_results && data->fuzzy_matches->len)
         {
+          IdeCodeIndexSearchResult *item;
           FuzzyMatch fuzzy_match;
 
           dzl_heap_extract (data->fuzzy_matches, &fuzzy_match);
-          g_ptr_array_add (results, ide_code_index_index_new_search_result (self, &fuzzy_match));
+          item = ide_code_index_index_new_search_result (self, &fuzzy_match);
+          if (item != NULL)
+            g_ptr_array_add (results, item);
           data->max_results--;
 
           g_clear_object (&fuzzy_match.match);
