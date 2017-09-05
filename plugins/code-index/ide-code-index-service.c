@@ -59,12 +59,14 @@ typedef struct
   guint                recursive : 1;
 } BuildData;
 
+static void build_data_free              (BuildData           *data);
 static void service_iface_init           (IdeServiceInterface *iface);
 static void ide_code_index_service_build (IdeCodeIndexService *self,
                                           GFile               *directory,
                                           gboolean             recursive,
                                           guint                n_trial);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (BuildData, build_data_free)
 G_DEFINE_TYPE_EXTENDED (IdeCodeIndexService, ide_code_index_service, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
 
@@ -77,8 +79,11 @@ remove_source (gpointer source_id)
 static void
 build_data_free (BuildData *data)
 {
-  g_clear_object (&data->directory);
-  g_slice_free (BuildData, data);
+  if (data != NULL)
+    {
+      g_clear_object (&data->directory);
+      g_slice_free (BuildData, data);
+    }
 }
 
 static void
@@ -88,16 +93,16 @@ ide_code_index_service_build_cb (GObject      *object,
 {
   g_autoptr(IdeCodeIndexService) self = user_data;
   IdeCodeIndexBuilder *builder = (IdeCodeIndexBuilder *)object;
+  g_autoptr(BuildData) bdata = NULL;
   g_autoptr(GError) error = NULL;
-  BuildData *bdata;
 
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (IDE_IS_CODE_INDEX_BUILDER (builder));
 
+  bdata = g_queue_pop_head (&self->build_queue);
+
   if (self->stopped)
     return;
-
-  bdata = g_queue_pop_head (&self->build_queue);
 
   if (ide_code_index_builder_build_finish (builder, result, &error))
     {
@@ -110,22 +115,21 @@ ide_code_index_service_build_cb (GObject      *object,
       ide_code_index_service_build (self, bdata->directory, bdata->recursive, bdata->n_trial + 1);
     }
 
-  build_data_free (bdata);
-
   g_clear_object (&self->cancellable);
 
   /* Index next directory */
   if (!g_queue_is_empty (&self->build_queue))
     {
       GCancellable *cancellable;
+      BuildData *peek;
 
-      bdata = g_queue_peek_head (&self->build_queue);
+      peek = g_queue_peek_head (&self->build_queue);
 
       self->cancellable = cancellable = g_cancellable_new ();
 
       ide_code_index_builder_build_async (self->builder,
-                                          bdata->directory,
-                                          bdata->recursive,
+                                          peek->directory,
+                                          peek->recursive,
                                           cancellable,
                                           ide_code_index_service_build_cb,
                                           g_steal_pointer (&self));
