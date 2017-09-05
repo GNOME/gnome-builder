@@ -48,3 +48,6 @@ popover.messagepopover list {
   border-top: 1px solid @borders;
   border-radius: 0 0 5px 5px;
 }
+popover.messagepopover list row:not(:last-child) {
+  border-bottom: 1px solid alpha(@borders, 0.3);
+}
