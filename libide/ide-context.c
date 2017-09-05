@@ -25,6 +25,7 @@
 #include "ide-debug.h"
 #include "ide-global.h"
 #include "ide-internal.h"
+#include "ide-pausable.h"
 #include "ide-service.h"
 
 #include "buffers/ide-buffer-manager.h"
@@ -72,6 +73,7 @@ struct _IdeContext
   IdeDeviceManager         *device_manager;
   IdeDoap                  *doap;
   IdeDocumentation         *documentation;
+  GListStore               *pausables;
   GtkRecentManager         *recent_manager;
   IdeRunManager            *run_manager;
   IdeRuntimeManager        *runtime_manager;
@@ -499,11 +501,11 @@ ide_context_loaded (IdeContext *self)
 static void
 ide_context_dispose (GObject *object)
 {
+  IdeContext *self = (IdeContext *)object;
+
   IDE_ENTRY;
 
-  /*
-   * TODO: Shutdown services.
-   */
+  g_list_store_remove_all (self->pausables);
 
   G_OBJECT_CLASS (ide_context_parent_class)->dispose (object);
 
@@ -518,6 +520,7 @@ ide_context_finalize (GObject *object)
   IDE_ENTRY;
 
   g_clear_object (&self->services);
+  g_clear_object (&self->pausables);
 
   g_clear_pointer (&self->build_system_hint, g_free);
   g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
@@ -768,6 +771,8 @@ ide_context_init (IdeContext *self)
   DZL_COUNTER_INC (instances);
 
   g_mutex_init (&self->unload_mutex);
+
+  self->pausables = g_list_store_new (IDE_TYPE_PAUSABLE);
 
   self->recent_manager = g_object_ref (gtk_recent_manager_get_default ());
 
@@ -2336,4 +2341,67 @@ ide_context_get_debug_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->debug_manager;
+}
+
+/**
+ * ide_context_add_pausable:
+ * @self: an #IdeContext
+ * @pausable: an #IdePausable
+ *
+ * Adds a pausable which can be used to associate pausable actions with the
+ * context. Various UI in Builder may use this to present pausable actions to
+ * the user.
+ *
+ * Since: 3.26
+ */
+void
+ide_context_add_pausable (IdeContext  *self,
+                          IdePausable *pausable)
+{
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (IDE_IS_PAUSABLE (pausable));
+
+  g_list_store_append (self->pausables, pausable);
+}
+
+/**
+ * ide_context_remove_pausable:
+ * @self: an #IdeContext
+ * @pausable: an #IdePausable
+ *
+ * Remove a previously registered #IdePausable.
+ *
+ * Since: 3.26
+ */
+void
+ide_context_remove_pausable (IdeContext  *self,
+                             IdePausable *pausable)
+{
+  guint n_items;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (IDE_IS_PAUSABLE (pausable));
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->pausables));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdePausable) item = NULL;
+
+      item = g_list_model_get_item (G_LIST_MODEL (self->pausables), i);
+
+      if (item == pausable)
+        {
+          g_list_store_remove (self->pausables, i);
+          break;
+        }
+    }
+}
+
+GListModel *
+_ide_context_get_pausables (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return G_LIST_MODEL (self->pausables);
 }

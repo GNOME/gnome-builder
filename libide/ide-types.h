@@ -84,6 +84,8 @@ typedef struct _IdeIndenter                    IdeIndenter;
 
 typedef struct _IdeObject                      IdeObject;
 
+typedef struct _IdePausable                    IdePausable;
+
 typedef struct _IdeProgress                    IdeProgress;
 
 typedef struct _IdeProject                     IdeProject;

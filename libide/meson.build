@@ -49,13 +49,14 @@ libide_enums = gnome.mkenums('ide-enums',
 )
 
 libide_public_headers = [
+  'ide.h',
   'ide-context.h',
   'ide-global.h',
   'ide-macros.h',
   'ide-object.h',
+  'ide-pausable.h',
   'ide-service.h',
   'ide-types.h',
-  'ide.h',
   'application/ide-application-addin.h',
   'application/ide-application-credits.h',
   'application/ide-application-tool.h',
@@ -271,6 +272,11 @@ libide_icons_resources = gnome.compile_resources('ide-icons-resources',
 )
 
 libide_public_sources = [
+  'ide.c',
+  'ide-context.c',
+  'ide-object.c',
+  'ide-pausable.c',
+  'ide-service.c',
   'application/ide-application-addin.c',
   'application/ide-application-tool.c',
   'application/ide-application.c',
@@ -344,10 +350,6 @@ libide_public_sources = [
   'highlighting/ide-highlight-engine.c',
   'highlighting/ide-highlight-index.c',
   'highlighting/ide-highlighter.c',
-  'ide-context.c',
-  'ide-object.c',
-  'ide-service.c',
-  'ide.c',
   'langserv/ide-langserv-client.c',
   'langserv/ide-langserv-completion-provider.c',
   'langserv/ide-langserv-diagnostic-provider.c',

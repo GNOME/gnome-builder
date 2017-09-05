@@ -41,6 +41,7 @@ void                _ide_configuration_set_prebuild         (IdeConfiguration   
 void                _ide_configuration_set_postbuild        (IdeConfiguration      *self,
                                                              IdeBuildCommandQueue  *postbuild);
 gboolean            _ide_context_is_restoring               (IdeContext            *self);
+GListModel         *_ide_context_get_pausables              (IdeContext            *self);
 const gchar        *_ide_file_get_content_type              (IdeFile               *self);
 GtkSourceFile      *_ide_file_set_content_type              (IdeFile               *self,
                                                              const gchar           *content_type);

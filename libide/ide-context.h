@@ -76,6 +76,10 @@ void                      ide_context_restore_async             (IdeContext     
 gboolean                  ide_context_restore_finish            (IdeContext           *self,
                                                                  GAsyncResult         *result,
                                                                  GError              **error);
+void                      ide_context_add_pausable              (IdeContext           *self,
+                                                                 IdePausable          *pausable);
+void                      ide_context_remove_pausable           (IdeContext           *self,
+                                                                 IdePausable          *pausable);
 void                      ide_context_hold                      (IdeContext           *self);
 void                      ide_context_hold_for_object           (IdeContext           *self,
                                                                  gpointer              instance);
