@@ -172,7 +172,7 @@ libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.21.0')
 libm_dep = cc.find_library('m', required: false)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.25.91', required: false)
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.25.92', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.25.3', required: false)
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.25.3',
   fallback: ['jsonrpc-glib', 'libjsonrpc_glib_dep'],
