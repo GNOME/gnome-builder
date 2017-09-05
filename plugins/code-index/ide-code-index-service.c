@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-code-index-service"
 
+#include <glib/gi18n.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
 #include <plugins/ide-extension-adapter.h>
@@ -47,6 +48,7 @@ struct _IdeCodeIndexService
 
   GHashTable             *code_indexers;
 
+  IdePausable            *pausable;
   GCancellable           *cancellable;
 
   guint                   stopped : 1;
@@ -60,12 +62,12 @@ typedef struct
   guint                recursive : 1;
 } BuildData;
 
-static void build_data_free              (BuildData           *data);
-static void service_iface_init           (IdeServiceInterface *iface);
-static void ide_code_index_service_build (IdeCodeIndexService *self,
-                                          GFile               *directory,
-                                          gboolean             recursive,
-                                          guint                n_trial);
+static void build_data_free              (BuildData            *data);
+static void service_iface_init           (IdeServiceInterface  *iface);
+static void ide_code_index_service_build (IdeCodeIndexService  *self,
+                                          GFile                *directory,
+                                          gboolean              recursive,
+                                          guint                 n_trial);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (BuildData, build_data_free)
 G_DEFINE_TYPE_EXTENDED (IdeCodeIndexService, ide_code_index_service, IDE_TYPE_OBJECT, 0,
@@ -88,6 +90,30 @@ build_data_free (BuildData *data)
 }
 
 static void
+register_pausable (IdeCodeIndexService *self)
+{
+  IdeContext *context;
+
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  if (context != NULL && self->pausable != NULL)
+    ide_context_add_pausable (context, self->pausable);
+}
+
+static void
+unregister_pausable (IdeCodeIndexService *self)
+{
+  IdeContext *context;
+
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  if (context != NULL && self->pausable != NULL)
+    ide_context_remove_pausable (context, self->pausable);
+}
+
+static void
 ide_code_index_service_build_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
@@ -106,14 +132,27 @@ ide_code_index_service_build_cb (GObject      *object,
     return;
 
   if (ide_code_index_builder_build_finish (builder, result, &error))
-    {
-      g_debug ("Finished building code index");
-    }
-  else
-    {
-      g_message ("Failed to build code index, %s, retrying", error->message);
+    g_debug ("Finished building code index");
+  else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    g_warning ("Failed to build code index: %s", error->message);
 
-      ide_code_index_service_build (self, bdata->directory, bdata->recursive, bdata->n_trial + 1);
+  /*
+   * If we're paused, push this item back on the queue to
+   * be processed when we unpause.
+   */
+  if (ide_pausable_get_paused (self->pausable))
+    {
+      g_queue_push_head (&self->build_queue, g_steal_pointer (&bdata));
+      return;
+    }
+
+  if (error != NULL &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+      ide_code_index_service_build (self,
+                                    bdata->directory,
+                                    bdata->recursive,
+                                    bdata->n_trial + 1);
     }
 
   g_clear_object (&self->cancellable);
@@ -135,6 +174,8 @@ ide_code_index_service_build_cb (GObject      *object,
                                           ide_code_index_service_build_cb,
                                           g_steal_pointer (&self));
     }
+  else
+    unregister_pausable (self);
 }
 
 static gboolean
@@ -155,6 +196,8 @@ ide_code_index_serivce_push (BuildData *bdata)
       g_clear_object (&self->cancellable);
 
       self->cancellable = g_cancellable_new ();
+
+      register_pausable (self);
 
       ide_code_index_builder_build_async (self->builder,
                                           bdata->directory,
@@ -351,7 +394,8 @@ ide_code_index_service_context_loaded (IdeService *service)
                                    g_steal_pointer (&adapter));
             }
         }
-        plugins = plugins->next;
+
+      plugins = plugins->next;
     }
 
   self->index = ide_code_index_index_new (context);
@@ -397,6 +441,55 @@ ide_code_index_service_start (IdeService *service)
 }
 
 static void
+ide_code_index_service_paused (IdeCodeIndexService *self,
+                               IdePausable         *pausable)
+{
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_PAUSABLE (pausable));
+
+  if (self->stopped)
+    return;
+
+  /*
+   * To pause things, we need to cancel our current task. The completion of
+   * the async task will check for cancelled and leave the build task for
+   * another pass.
+   */
+
+  g_cancellable_cancel (self->cancellable);
+}
+
+static void
+ide_code_index_service_unpaused (IdeCodeIndexService *self,
+                                 IdePausable         *pausable)
+{
+  BuildData *peek;
+
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_PAUSABLE (pausable));
+
+  if (self->stopped)
+    return;
+
+  peek = g_queue_peek_head (&self->build_queue);
+
+  if (peek != NULL)
+    {
+      GCancellable *cancellable;
+
+      g_clear_object (&self->cancellable);
+      self->cancellable = cancellable = g_cancellable_new ();
+
+      ide_code_index_builder_build_async (self->builder,
+                                          peek->directory,
+                                          peek->recursive,
+                                          cancellable,
+                                          ide_code_index_service_build_cb,
+                                          g_object_ref (self));
+    }
+}
+
+static void
 ide_code_index_service_stop (IdeService *service)
 {
   IdeCodeIndexService *self = (IdeCodeIndexService *)service;
@@ -412,11 +505,26 @@ ide_code_index_service_stop (IdeService *service)
   g_queue_clear (&self->build_queue);
   g_clear_pointer (&self->build_dirs, g_hash_table_unref);
   g_clear_pointer (&self->code_indexers, g_hash_table_unref);
+
+  unregister_pausable (self);
+}
+
+static void
+ide_code_index_service_finalize (GObject *object)
+{
+  IdeCodeIndexService *self = (IdeCodeIndexService *)object;
+
+  g_clear_object (&self->pausable);
+
+  G_OBJECT_CLASS (ide_code_index_service_parent_class)->finalize (object);
 }
 
 static void
 ide_code_index_service_class_init (IdeCodeIndexServiceClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_code_index_service_finalize;
 }
 
 static void
@@ -430,6 +538,23 @@ service_iface_init (IdeServiceInterface *iface)
 static void
 ide_code_index_service_init (IdeCodeIndexService *self)
 {
+  self->pausable = g_object_new (IDE_TYPE_PAUSABLE,
+                                 "paused", FALSE,
+                                 "title", _("Indexing Source Code"),
+                                 "subtitle", _("Search, diagnostics and autocompletion may be limited until complete."),
+                                 NULL);
+
+  g_signal_connect_object (self->pausable,
+                           "paused",
+                           G_CALLBACK (ide_code_index_service_paused),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->pausable,
+                           "unpaused",
+                           G_CALLBACK (ide_code_index_service_unpaused),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 IdeCodeIndexIndex *
