@@ -48,7 +48,8 @@ struct _IdeCodeIndexService
   GHashTable             *code_indexers;
 
   GCancellable           *cancellable;
-  gboolean                stopped : 1;
+
+  guint                   stopped : 1;
 };
 
 typedef struct
