@@ -39,8 +39,6 @@
 #include "debugger/ide-debug-manager.h"
 #include "devices/ide-device-manager.h"
 #include "doap/ide-doap.h"
-#include "history/ide-back-forward-list-private.h"
-#include "history/ide-back-forward-list.h"
 #include "plugins/ide-extension-util.h"
 #include "projects/ide-project-files.h"
 #include "projects/ide-project-item.h"
@@ -64,7 +62,6 @@ struct _IdeContext
 {
   GObject                   parent_instance;
 
-  IdeBackForwardList       *back_forward_list;
   IdeBufferManager         *buffer_manager;
   IdeBuildManager          *build_manager;
   IdeBuildSystem           *build_system;
@@ -107,7 +104,6 @@ DZL_DEFINE_COUNTER (instances, "Context", "N contexts", "Number of contexts")
 
 enum {
   PROP_0,
-  PROP_BACK_FORWARD_LIST,
   PROP_BUFFER_MANAGER,
   PROP_BUILD_SYSTEM,
   PROP_CONFIGURATION_MANAGER,
@@ -146,27 +142,6 @@ ide_context_get_recent_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->recent_manager;
-}
-
-/**
- * ide_context_get_back_forward_list:
- *
- * Retrieves the global back forward list for the #IdeContext.
- *
- * Consumers of this should branch the #IdeBackForwardList and merge them
- * when their document stack is closed.
- *
- * See ide_back_forward_list_branch() and ide_back_forward_list_merge() for
- * more information.
- *
- * Returns: (transfer none): An #IdeBackForwardList.
- */
-IdeBackForwardList *
-ide_context_get_back_forward_list (IdeContext *self)
-{
-  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
-
-  return self->back_forward_list;
 }
 
 /**
@@ -500,29 +475,6 @@ ide_context_get_service_typed (IdeContext *self,
   return NULL;
 }
 
-static GFile *
-get_back_forward_list_file (IdeContext *self)
-{
-  const gchar *project_name;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *path = NULL;
-  GFile *file;
-
-  g_assert (IDE_IS_CONTEXT (self));
-
-  project_name = ide_project_get_name (self->project);
-  name = g_strdup_printf ("%s.back-forward-list", project_name);
-  name = g_strdelimit (name, " \t\n", '_');
-  path = g_build_filename (g_get_user_cache_dir (),
-                           "gnome-builder",
-                           "history",
-                           name,
-                           NULL);
-  file = g_file_new_for_path (path);
-
-  return file;
-}
-
 static void
 ide_context_service_notify_loaded (PeasExtensionSet *set,
                                    PeasPluginInfo   *plugin_info,
@@ -606,10 +558,6 @@ ide_context_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_BACK_FORWARD_LIST:
-      g_value_set_object (value, ide_context_get_back_forward_list (self));
-      break;
-
     case PROP_BUFFER_MANAGER:
       g_value_set_object (value, ide_context_get_buffer_manager (self));
       break;
@@ -699,13 +647,6 @@ ide_context_class_init (IdeContextClass *klass)
   object_class->finalize = ide_context_finalize;
   object_class->get_property = ide_context_get_property;
   object_class->set_property = ide_context_set_property;
-
-  properties [PROP_BACK_FORWARD_LIST] =
-    g_param_spec_object ("back-forward-list",
-                         "Back Forward List",
-                         "Back/forward navigation history for the context.",
-                         IDE_TYPE_BACK_FORWARD_LIST,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_BUFFER_MANAGER] =
     g_param_spec_object ("buffer-manager",
@@ -839,10 +780,6 @@ ide_context_init (IdeContext *self)
                                                  ide_get_program_name (),
                                                  IDE_RECENT_PROJECTS_BOOKMARK_FILENAME,
                                                  NULL);
-
-  self->back_forward_list = g_object_new (IDE_TYPE_BACK_FORWARD_LIST,
-                                          "context", self,
-                                          NULL);
 
   self->buffer_manager = g_object_new (IDE_TYPE_BUFFER_MANAGER,
                                        "context", self,
@@ -1182,58 +1119,6 @@ ide_context_init_snippets (gpointer             source_object,
                                           cancellable,
                                           ide_context_init_snippets_cb,
                                           g_object_ref (task));
-}
-
-static void
-ide_context__back_forward_list_load_cb (GObject      *object,
-                                        GAsyncResult *result,
-                                        gpointer      user_data)
-{
-  IdeBackForwardList *back_forward_list = (IdeBackForwardList *)object;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-
-  g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
-  g_assert (G_IS_TASK (task));
-
-  /*
-   * Failing to load the back-forward list is non-fatal. We'll fix it during
-   * our next write to the file.
-   */
-  if (!_ide_back_forward_list_load_finish (back_forward_list, result, &error))
-    {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
-        g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
-
-  g_task_return_boolean (task, TRUE);
-}
-
-static void
-ide_context_init_back_forward_list (gpointer             source_object,
-                                    GCancellable        *cancellable,
-                                    GAsyncReadyCallback  callback,
-                                    gpointer             user_data)
-{
-  IdeContext *self = source_object;
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(GFile) file = NULL;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_CONTEXT (self));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  file = get_back_forward_list_file (self);
-  _ide_back_forward_list_load_async (self->back_forward_list,
-                                     file,
-                                     cancellable,
-                                     ide_context__back_forward_list_load_cb,
-                                     g_object_ref (task));
-
-  IDE_EXIT;
 }
 
 static void
@@ -1757,7 +1642,6 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_vcs,
                         ide_context_init_services,
                         ide_context_init_project_name,
-                        ide_context_init_back_forward_list,
                         ide_context_init_snippets,
                         ide_context_init_unsaved_files,
                         ide_context_init_add_recent,
@@ -1933,57 +1817,6 @@ ide_context_unload_configuration_manager (gpointer             source_object,
 }
 
 static void
-ide_context_unload__back_forward_list_save_cb (GObject      *object,
-                                               GAsyncResult *result,
-                                               gpointer      user_data)
-{
-  IdeBackForwardList *back_forward_list = (IdeBackForwardList *)object;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
-  g_assert (G_IS_TASK (task));
-
-  /* nice to know, but not critical to save process */
-  if (!_ide_back_forward_list_save_finish (back_forward_list, result, &error))
-    g_warning ("%s", error->message);
-
-  g_task_return_boolean (task, TRUE);
-
-  IDE_EXIT;
-}
-
-static void
-ide_context_unload_back_forward_list (gpointer             source_object,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      gpointer             user_data)
-{
-  IdeContext *self = source_object;
-  g_autoptr(GFile) file = NULL;
-  g_autoptr(GTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_CONTEXT (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_context_unload_back_forward_list);
-
-  file = get_back_forward_list_file (self);
-  _ide_back_forward_list_save_async (self->back_forward_list,
-                                     file,
-                                     cancellable,
-                                     ide_context_unload__back_forward_list_save_cb,
-                                     g_steal_pointer (&task));
-
-  IDE_EXIT;
-}
-
-static void
 ide_context_unload__unsaved_files_save_cb (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
@@ -2082,7 +1915,6 @@ ide_context_do_unload_locked (IdeContext *self)
                         ide_context_unload_cb,
                         g_object_ref (task),
                         ide_context_unload_configuration_manager,
-                        ide_context_unload_back_forward_list,
                         ide_context_unload_buffer_manager,
                         ide_context_unload_unsaved_files,
                         ide_context_unload_services,

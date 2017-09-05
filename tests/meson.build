@@ -29,17 +29,6 @@ test('test-ide-context', ide_context,
   env: ide_test_env,
 )
 
-ide_back_forward_list = executable('test-ide-back-forward-list',
-  'test-ide-back-forward-list.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-test('test-ide-back-forward-list', ide_back_forward_list,
-  env: ide_test_env,
-)
-
 
 ide_buffer_manager = executable('test-ide-buffer-manager',
   'test-ide-buffer-manager.c',
