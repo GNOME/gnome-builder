@@ -23,6 +23,7 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
+#include "ide-internal.h"
 
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-pipeline.h"
@@ -34,6 +35,7 @@
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-omni-bar.h"
+#include "workbench/ide-omni-pausable-row.h"
 
 #define LOOPER_INTERVAL_SECONDS 5
 #define SETTLE_MESSAGE_COUNT 2
@@ -120,7 +122,7 @@ struct _IdeOmniBar
   GtkButton            *cancel_button;
   GtkLabel             *config_name_label;
   GtkStack             *message_stack;
-  GtkListBox           *operations_list;
+  DzlListBox           *pausables;
   GtkPopover           *popover;
   GtkLabel             *popover_branch_label;
   GtkLabel             *popover_config_label;
@@ -213,6 +215,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   IdeOmniBar *self = (IdeOmniBar *)widget;
   IdeConfigurationManager *config_manager = NULL;
   IdeBuildManager *build_manager = NULL;
+  GListModel *pausables = NULL;
   IdeProject *project = NULL;
   IdeVcs *vcs = NULL;
 
@@ -229,6 +232,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       build_manager = ide_context_get_build_manager (context);
       config_manager = ide_context_get_configuration_manager (context);
       project = ide_context_get_project (context);
+      pausables = _ide_context_get_pausables (context);
     }
 
   dzl_binding_group_set_source (self->build_manager_bindings, build_manager);
@@ -237,6 +241,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   dzl_signal_group_set_target (self->config_manager_signals, config_manager);
   dzl_binding_group_set_source (self->project_bindings, project);
   dzl_binding_group_set_source (self->vcs_bindings, vcs);
+  dzl_list_box_set_model (self->pausables, pausables);
 
   if (config_manager != NULL)
     ide_omni_bar__config_manager__notify_current (self, NULL, config_manager);
@@ -497,7 +502,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, operations_list);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, pausables);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_result_label);
@@ -509,6 +514,9 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_runtime_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_warnings_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
+
+  g_type_ensure (IDE_TYPE_OMNI_PAUSABLE_ROW);
+  g_type_ensure (DZL_TYPE_LIST_BOX);
 }
 
 static void
