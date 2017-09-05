@@ -304,22 +304,22 @@ static IdeCodeIndexSearchResult *
 ide_code_index_index_new_search_result (IdeCodeIndexIndex *self,
                                         const FuzzyMatch  *fuzzy_match)
 {
+  g_autoptr(IdeFile) file = NULL;
+  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(GString) subtitle = NULL;
+  IdeContext *context;
   const gchar *key;
-  GVariant *value;
   const gchar *icon_name;
+  const gchar *shortname;
+  const gchar *path;
+  GVariant *value;
   gfloat score;
   guint file_id;
-  gchar num [20];
-  const gchar *path;
   guint line;
   guint line_offset;
   guint kind;
   guint flags;
-  const gchar *shortname;
-  IdeContext *context;
-  g_autoptr(IdeFile) file = NULL;
-  g_autoptr(IdeSourceLocation) location = NULL;
-  g_autoptr(GString) subtitle = NULL;
+  gchar num [20];
 
   g_assert (IDE_IS_CODE_INDEX_INDEX (self));
   g_assert (fuzzy_match != NULL);
