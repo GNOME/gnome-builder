@@ -115,6 +115,7 @@ plugins/clang/ide-clang-preferences-addin.c
 plugins/clang/ide-clang-service.c
 plugins/clang/ide-clang-symbol-node.c
 plugins/clang/ide-clang-translation-unit.c
+plugins/code-index/ide-code-index-index.c
 plugins/code-index/ide-code-index-service.c
 plugins/color-picker/data/basic.gstyle.xml
 plugins/color-picker/gb-color-picker-editor-addin.c

@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-code-index-index"
 
 #include <glib/gprintf.h>
+#include <glib/gi18n.h>
 
 #include "ide-code-index-search-result.h"
 #include "ide-code-index-index.h"
@@ -310,31 +311,27 @@ ide_code_index_index_new_search_result (IdeCodeIndexIndex *self,
   guint file_id;
   gchar num [20];
   const gchar *path;
-  g_autofree gchar *title = NULL;
   guint line;
   guint line_offset;
   guint kind;
   guint flags;
+  const gchar *shortname;
   IdeContext *context;
   g_autoptr(IdeFile) file = NULL;
   g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(GString) subtitle = NULL;
 
   g_assert (IDE_IS_CODE_INDEX_INDEX (self));
   g_assert (fuzzy_match != NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
 
   key = dzl_fuzzy_index_match_get_key (fuzzy_match->match);
   value = dzl_fuzzy_index_match_get_document (fuzzy_match->match);
 
   g_variant_get (value, "(uuuuu)", &file_id, &line, &line_offset, &flags, &kind);
 
-  if ((kind == IDE_SYMBOL_FUNCTION) && !(flags & IDE_SYMBOL_FLAGS_IS_DEFINITION))
-    title = g_strconcat (key, " - decl", NULL);
-  else
-    title = g_strdup (key);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  g_snprintf (num, sizeof(num), "%u", file_id);
+  g_snprintf (num, sizeof num, "%u", file_id);
   path = dzl_fuzzy_index_get_metadata_string (fuzzy_match->index, num);
   file = ide_file_new_for_path (context, path);
   location = ide_source_location_new (file, line - 1, line_offset - 1, 0);
@@ -342,8 +339,16 @@ ide_code_index_index_new_search_result (IdeCodeIndexIndex *self,
   icon_name = ide_symbol_kind_get_icon_name (kind);
   score = dzl_fuzzy_index_match_get_score (fuzzy_match->match);
 
+  subtitle = g_string_new (NULL);
+  if (NULL != (shortname = strrchr (path, G_DIR_SEPARATOR)))
+    g_string_append (subtitle, shortname + 1);
+  if ((kind == IDE_SYMBOL_FUNCTION) && !(flags & IDE_SYMBOL_FLAGS_IS_DEFINITION))
+    /* translators: "Declaration" is the forward-declaration (usually a header file), not the implementation */
+    g_string_append_printf (subtitle, " (%s)", _("Declaration"));
+
   return ide_code_index_search_result_new (context,
-                                           title + 2,
+                                           key + 2,
+                                           subtitle->str,
                                            icon_name,
                                            location,
                                            score);

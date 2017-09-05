@@ -143,6 +143,7 @@ ide_code_index_search_result_init (IdeCodeIndexSearchResult *self)
 IdeCodeIndexSearchResult*
 ide_code_index_search_result_new (IdeContext        *context,
                                   const gchar       *title,
+                                  const gchar       *subtitle,
                                   const gchar       *icon_name,
                                   IdeSourceLocation *location,
                                   gfloat             score)
@@ -150,6 +151,7 @@ ide_code_index_search_result_new (IdeContext        *context,
   return g_object_new (IDE_TYPE_CODE_INDEX_SEARCH_RESULT,
                        "context", context,
                        "title", title,
+                       "subtitle", subtitle,
                        "icon-name", icon_name,
                        "location", location,
                        "score", score,

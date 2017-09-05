@@ -30,6 +30,7 @@ G_DECLARE_FINAL_TYPE (IdeCodeIndexSearchResult, ide_code_index_search_result,
 
 IdeCodeIndexSearchResult* ide_code_index_search_result_new (IdeContext        *context,
                                                             const gchar       *title,
+                                                            const gchar       *subtitle,
                                                             const gchar       *icon_name,
                                                             IdeSourceLocation *location,
                                                             gfloat             score);
