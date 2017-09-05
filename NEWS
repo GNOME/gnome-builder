@@ -1,4 +1,50 @@
 ===============
+Version 3.25.92
+===============
+
+Changes since last release:
+
+ • A new word completion provider that uses distance from cursor for sorting.
+   This is currently exposed via ctrl+n/ctrl+p when in Vim mode. We may expand
+   this to other keybindings in the future.
+ • Documentation cards can now be shown using the "request-documentation"
+   keybinding signal in the code editor. "Shift+K" activates this in Vim mode,
+   F2 with traditional keybindings.
+ • A new code indexing engine that will index your project in the background
+   to improve search and code navigation features is now included. Currently,
+   only the clang plugin provides a suitable indexer, but other languages will
+   be supported in the future.
+ • A global search provider using the fuzzy-search code-index allows jumping
+   to a function, class, and other language features.
+ • A symbol resolver based on the code-index allows jumping between source
+   and declarations.
+ • Plugins can now register long running "pausable" operations with the
+   project context. The code-index supports this for background indexing.
+ • A technology preview for debugger integration has landed. It allows
+   debugging projects both on the host as well as applications running inside
+   of flatpak mount/pid/network namespaces.
+ • A reference debugger backend has been implemented using gdb. Although it is
+   entirely expected that Builder will gain support for other debugger backends
+   in a future release.
+ • Builder now tries to reduce the number of shell notifications it generates.
+ • A new history plugin is added to bring back lost history functionality during
+   the UI revamp. It can be activated with ctrl+o/ctrl+i in Vim mode, or via the
+   back/forward buttons in the document stack header.
+ • Documentation improvements.
+ • Various project templates have been improved.
+ • CSS style refinements.
+ • Clang completion provider improvements.
+
+Updated Translations:
+
+ Spanish, Indonesian, Danish, Lithuanian, Kazakh, Korean, Galician, Finnish,
+ Czech, Slovenian, Polish, Brazilian Portuguese, Latvian, Portuguese, Serbian
+
+Thanks to all of our contributors and a special thanks to our three GSoC
+students this summer who did an outstanding job implementing great new features
+for Builder!
+
+===============
 Version 3.25.91
 ===============
 
