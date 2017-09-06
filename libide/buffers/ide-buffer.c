@@ -1418,7 +1418,7 @@ ide_buffer_dispose (GObject *object)
       g_clear_object (&priv->file_monitor);
     }
 
-  g_clear_object (&priv->file_signals);
+  dzl_signal_group_set_target (priv->file_signals, NULL);
 
   if (priv->highlight_engine != NULL)
     g_object_run_dispose (G_OBJECT (priv->highlight_engine));
@@ -1433,9 +1433,6 @@ ide_buffer_dispose (GObject *object)
 
   g_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
-  g_clear_pointer (&priv->content, g_bytes_unref);
-  g_clear_pointer (&priv->title, g_free);
-  g_clear_object (&priv->file);
   g_clear_object (&priv->addins);
   g_clear_object (&priv->highlight_engine);
   g_clear_object (&priv->rename_provider_adapter);
@@ -1453,6 +1450,11 @@ ide_buffer_finalize (GObject *object)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   IDE_ENTRY;
+
+  g_clear_object (&priv->file_signals);
+  g_clear_object (&priv->file);
+  g_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->content, g_bytes_unref);
 
   if (priv->context != NULL)
     {
