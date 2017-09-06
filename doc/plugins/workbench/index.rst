@@ -9,7 +9,6 @@ Extending the Workbench
    basics
    actions
    headerbar
-   widgets
    perspectives
    panels
 
