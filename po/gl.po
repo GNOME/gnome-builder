@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-04 00:14+0000\n"
-"PO-Revision-Date: 2017-09-04 09:22+0200\n"
+"POT-Creation-Date: 2017-09-05 19:29+0000\n"
+"PO-Revision-Date: 2017-09-06 17:13+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -218,7 +218,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar ou xerar unha paleta usando as preferencias"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5951
+#: libide/sourceview/ide-source-view.c:5893
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -1105,16 +1105,16 @@ msgstr "Dispara unha construción"
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 
-#: libide/buffers/ide-buffer-manager.c:684
+#: libide/buffers/ide-buffer-manager.c:681
 msgid "File too large to be opened."
 msgstr "O ficheiro é demasiado grande para poder abrilo."
 
-#: libide/buffers/ide-buffer-manager.c:1893
+#: libide/buffers/ide-buffer-manager.c:1890
 #, c-format
 msgid "unsaved document %u"
 msgstr "Documento %u sen gardar"
 
-#: libide/buffers/ide-buffer-manager.c:1931
+#: libide/buffers/ide-buffer-manager.c:1928
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Produciuse un fallo ao gardar o búfer, ignorando reclamación."
 
@@ -1152,12 +1152,12 @@ msgstr "Exportando…"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
-#: libide/workbench/ide-omni-bar.c:439
+#: libide/workbench/ide-omni-bar.c:443
 msgid "Success"
 msgstr "Éxito"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
-#: libide/workbench/ide-omni-bar.c:424
+#: libide/workbench/ide-omni-bar.c:428
 msgid "Failed"
 msgstr "Fallido"
 
@@ -1226,12 +1226,11 @@ msgid "Configure Options"
 msgstr "Configurar opcións"
 
 #: libide/buildui/ide-build-configuration-view.ui:189
-#: libide/workbench/ide-omni-bar-row.ui:54
 msgid "Device"
 msgstr "Dispositivo"
 
 #: libide/buildui/ide-build-configuration-view.ui:217
-#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
+#: libide/workbench/ide-omni-bar.ui:271
 msgid "Runtime"
 msgstr "Tempo de execución"
 
@@ -1939,12 +1938,10 @@ msgid "_Remove"
 msgstr "_Renomear"
 
 #: libide/greeter/ide-greeter-perspective.ui:244
-#| msgid "Scan your computer for existing projects"
 msgid "Create from existing project"
 msgstr "Crear desde un proxecto existente"
 
 #: libide/greeter/ide-greeter-perspective.ui:256
-#| msgid "Create a new empty project"
 msgid "Create a new project"
 msgstr "Crear un novo proxecto"
 
@@ -1992,11 +1989,11 @@ msgstr "Produciuse un fallo ao iniciar os parámetros predeterminados."
 msgid "You must call %s() before using libide."
 msgstr "Debe chamar a %s() antes de usar libide."
 
-#: libide/ide-context.c:2127
+#: libide/ide-context.c:1964
 msgid "An unload request is already pending"
 msgstr "Xa hai unha solicitude de descarga pendente."
 
-#: libide/ide-context.c:2246
+#: libide/ide-context.c:2083
 msgid "Context has already been restored."
 msgstr "Xa se restaurou o contexto."
 
@@ -2881,31 +2878,31 @@ msgstr "Produciuse un fallo ao abrir o cartafol: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Produciuse un fallo ao cargar o ficheiro: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5407
+#: libide/sourceview/ide-source-view.c:5349
 #, c-format
 msgid "Insert “%s”"
 msgstr "Inserir «%s»"
 
-#: libide/sourceview/ide-source-view.c:5409
+#: libide/sourceview/ide-source-view.c:5351
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substituír «%s» con «%s»"
 
-#: libide/sourceview/ide-source-view.c:5523
+#: libide/sourceview/ide-source-view.c:5465
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: libide/sourceview/ide-source-view.c:5950
+#: libide/sourceview/ide-source-view.c:5892
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6180
+#: libide/sourceview/ide-source-view.c:6122
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Liña %u, Columna %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6206
+#: libide/sourceview/ide-source-view.c:6148
 msgid "No references were found"
 msgstr "Non se atopou ningunha referencia"
 
@@ -2981,18 +2978,9 @@ msgstr "Non foi posíbel analizar o «%s» como URI absoluto"
 msgid "URI “%s” has no host component"
 msgstr "O URI «%s» non ten un compoñente de equipo"
 
-#: libide/workbench/ide-omni-bar.c:407
+#: libide/workbench/ide-omni-bar.c:411
 msgid "Building"
 msgstr "Construíndo"
-
-#. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:90
-msgid "missing"
-msgstr "falta"
-
-#: libide/workbench/ide-omni-bar-row.ui:31
-msgid "Edit build configuration"
-msgstr "Editar a configuración de construción"
 
 #: libide/workbench/ide-omni-bar.ui:199
 msgid "Configure build preferences"
@@ -3039,17 +3027,7 @@ msgstr "Limpar"
 msgid "Export Bundle"
 msgstr "Exportar paquete"
 
-#: libide/workbench/ide-omni-bar.ui:529
-#| msgid "Indent source code as you type"
-msgid "Indexing Source Code"
-msgstr "Indentar o código fonte"
-
-#: libide/workbench/ide-omni-bar.ui:544
-#| msgid "exuberant ctags tags autocompletion auto complete"
-msgid "Search, diagnostics and autocompletion may be limited until complete."
-msgstr "Busar, diagnosticar e autocompletar pode estar limitado ate completar."
-
-#: libide/workbench/ide-omni-bar.ui:582
+#: libide/workbench/ide-omni-bar.ui:526
 msgid "Build project"
 msgstr "Construír proxecto"
 
@@ -3084,7 +3062,6 @@ msgid "Building cache…"
 msgstr "Construíndo caché…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#| msgid "Shared Library"
 msgid "Shared Library (Autotools)"
 msgstr "Biblioteca compartida (Autotools)"
 
@@ -3093,7 +3070,6 @@ msgid "Create a new autotools project with a shared library"
 msgstr "Crea un novo proxecto autotools con unha biblioteca compartida"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#| msgid "Empty Project"
 msgid "Empty Project (Autotools)"
 msgstr "Proxecto baleiro (Autotools)"
 
@@ -3102,7 +3078,6 @@ msgid "Create a new empty autotools project"
 msgstr "Crear un novo proxecto de autotools baleiro"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#| msgid "GNOME Application"
 msgid "GNOME Application (Autotools)"
 msgstr "Aplicativo de GNOME (Autotools)"
 
@@ -3178,6 +3153,20 @@ msgstr "anónimo"
 #: plugins/clang/ide-clang-translation-unit.c:661
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() só funciona en ficheiros locais"
+
+#. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
+#: plugins/code-index/ide-code-index-index.c:347
+#| msgid "Description"
+msgid "Declaration"
+msgstr "Declaración"
+
+#: plugins/code-index/ide-code-index-service.c:543
+msgid "Indexing Source Code"
+msgstr "Indentar o código fonte"
+
+#: plugins/code-index/ide-code-index-service.c:544
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr "Busar, diagnosticar e autocompletar pode estar limitado ate completar."
 
 #: plugins/color-picker/gb-color-picker-editor-addin.c:241
 msgid "Colors"
@@ -3294,12 +3283,10 @@ msgstr ""
 "Seleccione os espazos de cor para os que quere ver os desprazadores no panel."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:86
-#| msgid "HSL"
 msgid "HSV"
 msgstr "HSV"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:87
-#| msgid "Saturation"
 msgid "Hue Saturation Value"
 msgstr "Valor de saturación de cor"
 
@@ -3328,7 +3315,6 @@ msgstr ""
 "no panel."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:196
-#| msgid "Is Recent"
 msgid "Percent"
 msgstr "Porcentaxe"
 
@@ -4358,7 +4344,6 @@ msgid "Profiler"
 msgstr "Perfilador"
 
 #: plugins/sysprof/gbp-sysprof-perspective.ui:20
-#| msgid "Failed"
 msgid "Failure"
 msgstr "Fallo"
 
@@ -4473,6 +4458,12 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero non no xestor de búfer."
+
+#~ msgid "missing"
+#~ msgstr "falta"
+
+#~ msgid "Edit build configuration"
+#~ msgstr "Editar a configuración de construción"
 
 #~| msgid "Restore cursor position"
 #~ msgid "Execute from the current cursor position"
@@ -5326,9 +5317,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 
 #~ msgid "Category"
 #~ msgstr "Categoría"
-
-#~ msgid "Description"
-#~ msgstr "Descrición"
 
 #~ msgid "Homepage"
 #~ msgstr "Páxina web"
