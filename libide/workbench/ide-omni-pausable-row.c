@@ -49,10 +49,20 @@ ide_omni_pausable_row_dispose (GObject *object)
 {
   IdeOmniPausableRow *self = (IdeOmniPausableRow *)object;
 
+  ide_omni_pausable_row_set_pausable (self, NULL);
+
+  G_OBJECT_CLASS (ide_omni_pausable_row_parent_class)->dispose (object);
+}
+
+static void
+ide_omni_pausable_row_finalize (GObject *object)
+{
+  IdeOmniPausableRow *self = (IdeOmniPausableRow *)object;
+
   g_clear_object (&self->group);
   g_clear_object (&self->pausable);
 
-  G_OBJECT_CLASS (ide_omni_pausable_row_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ide_omni_pausable_row_parent_class)->finalize (object);
 }
 
 static void
@@ -100,6 +110,7 @@ ide_omni_pausable_row_class_init (IdeOmniPausableRowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ide_omni_pausable_row_dispose;
+  object_class->finalize = ide_omni_pausable_row_finalize;
   object_class->get_property = ide_omni_pausable_row_get_property;
   object_class->set_property = ide_omni_pausable_row_set_property;
 
