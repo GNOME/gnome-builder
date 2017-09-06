@@ -2664,16 +2664,16 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
                                          gpointer             user_data)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_autoptr(IdeSourceLocation) srcloc = NULL;
+  g_autoptr(GPtrArray) extensions = NULL;
+  g_autoptr(GTask) task = NULL;
   IdeExtensionSetAdapter *adapter;
   IdeSymbolResolver *resolver;
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(IdeSourceLocation) srcloc = NULL;
+  LookUpSymbolData *data;
   guint line;
   guint line_offset;
   guint offset;
   guint n_extensions;
-  g_autoptr(GPtrArray) extensions = NULL;
-  LookUpSymbolData *data;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (location != NULL);
