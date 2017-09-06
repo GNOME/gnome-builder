@@ -5927,7 +5927,10 @@ ide_source_view_format_selection_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_buffer_format_selection_finish (buffer, result, &error))
-    g_warning ("%s", error->message);
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        g_warning ("%s", error->message);
+    }
 
   gtk_text_view_set_editable (GTK_TEXT_VIEW (self), TRUE);
 
