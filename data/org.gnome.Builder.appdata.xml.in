@@ -23,16 +23,16 @@
       <li>Built in syntax highlighting for many languages</li>
       <li>Side-by-side code editors</li>
       <li>Integration with Git</li>
-      <li>Integration with Autotools</li>
+      <li>Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize</li>
       <li>Clang based auto-completion, semantic highlighting, and diagnostics</li>
       <li>Python based auto-completion, semantic highlighting, and diagnostics</li>
       <li>Vala based auto-completion and diagnostics</li>
       <li>Auto indentation support for C, Python, Vala, and XML</li>
-      <li>HTML/Markdown live preview</li>
+      <li>HTML, Markdown, and reStructuredText, and Sphinx live preview</li>
       <li>Optional Vim-style editing</li>
       <li>An integrated software profiler for native applications</li>
-      <li>Support for building with jhbuild</li>
-      <li>Preview support for building with Flatpak runtimes</li>
+      <li>An integrated debugger for native applications</li>
+      <li>Support for building with jhbuild and flatpak runtimes</li>
     </ul>
   </description>
 
