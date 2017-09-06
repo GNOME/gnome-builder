@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-05 19:29+0000\n"
-"PO-Revision-Date: 2017-09-06 01:22+0200\n"
+"POT-Creation-Date: 2017-09-06 17:58+0000\n"
+"PO-Revision-Date: 2017-09-06 20:22+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -881,8 +881,8 @@ msgid "Integration with Git"
 msgstr "Integracja z systemem git"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Autotools"
-msgstr "Integracja z Autotools"
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Integracja z Autotools, Cargo, CMake, Meson, Make i PHPize"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -905,8 +905,8 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Automatyczne wcięcia w językach C, Python, Vala i XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-msgid "HTML/Markdown live preview"
-msgstr "Podgląd HTML/Markdown na żywo"
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "Podgląd HTML, Markdown, reStructuredText i Sphinx na żywo"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -917,12 +917,12 @@ msgid "An integrated software profiler for native applications"
 msgstr "Zintegrowany profiler oprogramowania dla natywnych programów"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-msgid "Support for building with jhbuild"
-msgstr "Obsługa budowania za pomocą jhbuild"
+msgid "An integrated debugger for native applications"
+msgstr "Zintegrowany debuger dla natywnych programów"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-msgid "Preview support for building with Flatpak runtimes"
-msgstr "Testowa obsługa budowania za pomocą środowisk wykonawczych Flatpak"
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr "Obsługa budowania za pomocą JHBuild i środowisk wykonawczych Flatpak"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
 msgid "Fast global search"
@@ -2890,12 +2890,12 @@ msgid "Rename symbol"
 msgstr "Zmiana nazwy symbolu"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6122
+#: libide/sourceview/ide-source-view.c:6125
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Wiersz %u, kolumna %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6148
+#: libide/sourceview/ide-source-view.c:6151
 msgid "No references were found"
 msgstr "Brak odniesień"
 
@@ -3149,7 +3149,7 @@ msgid "clang_codeCompleteAt() only works on local files"
 msgstr "Funkcja „clang_codeCompleteAt()” działania tylko na lokalnych plikach"
 
 #. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
-#: plugins/code-index/ide-code-index-index.c:347
+#: plugins/code-index/ide-code-index-index.c:351
 msgid "Declaration"
 msgstr "Deklaracja"
 
