@@ -369,17 +369,13 @@ ide_debug_manager_unmark_stopped (IdeDebugManager *self,
 }
 
 static void
-ide_debug_manager_debugger_running (IdeDebugManager *self,
-                                    IdeDebugger     *debugger)
+ide_debug_manager_clear_stopped (IdeDebugManager *self)
 {
   IdeBufferManager *bufmgr;
   IdeContext *context;
   guint n_items;
 
-  IDE_ENTRY;
-
   g_assert (IDE_IS_DEBUG_MANAGER (self));
-  g_assert (IDE_IS_DEBUGGER (debugger));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   bufmgr = ide_context_get_buffer_manager (context);
@@ -398,10 +394,25 @@ ide_debug_manager_debugger_running (IdeDebugManager *self,
 
   for (guint i = 0; i < n_items; i++)
     {
-      g_autoptr(IdeBuffer) buffer = g_list_model_get_item (G_LIST_MODEL (bufmgr), i);
+      g_autoptr(IdeBuffer) buffer = NULL;
+
+      buffer = g_list_model_get_item (G_LIST_MODEL (bufmgr), i);
+      g_assert (IDE_IS_BUFFER (buffer));
 
       ide_debug_manager_unmark_stopped (self, buffer);
     }
+}
+
+static void
+ide_debug_manager_debugger_running (IdeDebugManager *self,
+                                    IdeDebugger     *debugger)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (IDE_IS_DEBUGGER (debugger));
+
+  ide_debug_manager_clear_stopped (self);
 
   IDE_EXIT;
 }
@@ -886,6 +897,7 @@ ide_debug_manager_runner_exited (IdeDebugManager *self,
 
   ide_debug_manager_set_active (self, FALSE);
   ide_debug_manager_reset_breakpoints (self);
+  ide_debug_manager_clear_stopped (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 }
