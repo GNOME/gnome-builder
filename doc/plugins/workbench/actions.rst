@@ -21,8 +21,17 @@ Additionally, actions registered on the workbench can be activated using the com
            action.connect('activate', self.hello_activate)
            workbench.add_action(action)
 
+           # If you have a lot of actions to add, you might
+           # consider creating an action group.
+           group = Gio.SimpleActionGroup.new()
+           group.add_action(action)
+           workbench.insert_action_group('my-actions', group)
+
        def do_unload(self, workbench):
            workbench.remove_action('hello')
+
+           # And if you used an action group
+           workbench.insert_action_group('my-actions', None)
 
        def hello_activate(self, action, param):
            print('Hello activated!')
