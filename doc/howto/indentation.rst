@@ -25,7 +25,7 @@ Globally
 --------
 
 If you would like to change the indentation rules for your user, and thereby all projects which do not contain an ``.editorconfig`` file, use the application preferences.
-You can access the preferences through the perspective selector or using the ``Command+,`` keyboard shortcut.
+You can access the preferences through the perspective selector or using the ``Control+,`` keyboard shortcut.
 
 First select “Programming Languages” from the sidebar on the left.
 Then select the programming language from the list of options.
