@@ -13,10 +13,10 @@ the top left along with existing projects in the main content area.
 Project Miners
 ==============
 
-To add projects to the "Other Projects" section of the greeter, you must
-implement a project miner. You might want one of these if you would like to
-show projects that are found through an external service such as gitlab or
-from mining the users home directory.
+To add projects to the project list section of the greeter, you must implement
+a project miner. You might want one of these if you would like to show projects
+that are found through an external service such as gitlab or from mining the
+users home directory.
 
 To do this, we must implement an ``Ide.ProjectMiner`` which emits the
 ``Ide.ProjectMiner::discovered()`` signal when a project has been discovered.
@@ -42,6 +42,10 @@ To do this, we must implement an ``Ide.ProjectMiner`` which emits the
            info.set_name('Secret Project')
            info.set_file(Gio.File.new_for_path('Projects/.secret_project'))
            info.set_languages(['C', 'Python'])
+
+           # If you set the project as recent, it will show up in the upper
+           # section rather than "Other Projects"
+           info.set_is_recent(True)
 
            # See libide/projects/ide-project-info.h for more options you
            # can provide on the Ide.ProjectInfo.
