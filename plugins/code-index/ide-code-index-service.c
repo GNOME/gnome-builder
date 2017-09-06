@@ -160,6 +160,7 @@ ide_code_index_service_build_cb (GObject      *object,
   /* Index next directory */
   if (!g_queue_is_empty (&self->build_queue))
     {
+      IdeCodeIndexBuilder *builder = self->builder;
       GCancellable *cancellable;
       BuildData *peek;
 
@@ -167,7 +168,7 @@ ide_code_index_service_build_cb (GObject      *object,
 
       self->cancellable = cancellable = g_cancellable_new ();
 
-      ide_code_index_builder_build_async (self->builder,
+      ide_code_index_builder_build_async (builder,
                                           peek->directory,
                                           peek->recursive,
                                           cancellable,
