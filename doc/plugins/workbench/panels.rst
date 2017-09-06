@@ -22,6 +22,7 @@ You'll be provided access to the editor perspective with the ``editor`` variable
 
    from gi.repository import GObject
    from gi.repository import Ide
+   from gi.repository import Gtk
    from gi.repository import Dazzle
 
    class MyEditorAddin(GObject.Object, Ide.EditorAddin):
