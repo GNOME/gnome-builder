@@ -12,6 +12,7 @@ You may also chooser to implement extensions in C or Vala.
    :maxdepth: 3
    :titlesonly:
 
+   enabling
    creating
    workbench/index
    greeter
