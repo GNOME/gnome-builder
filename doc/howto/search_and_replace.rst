@@ -16,3 +16,10 @@ Enter the replacement text in the second text entry.
 Select “Replace” to replace the next match or “Replace All” to replace all matches.
 
 .. _g_regex_replace: https://developer.gnome.org/glib/stable/glib-Perl-compatible-regular-expressions.html#g-regex-replace
+
+Using Special Characters
+========================
+
+If you want to insert or replace a tab character using "search and replace", you need to use the escaped form of tab (``\t``).
+You can also do this for new lines with ``\n``.
+
