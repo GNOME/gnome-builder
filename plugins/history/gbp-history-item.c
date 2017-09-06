@@ -102,12 +102,15 @@ gboolean
 gbp_history_item_chain (GbpHistoryItem *self,
                         GbpHistoryItem *other)
 {
+  GtkTextBuffer *buffer;
+
   g_return_val_if_fail (GBP_IS_HISTORY_ITEM (self), FALSE);
   g_return_val_if_fail (GBP_IS_HISTORY_ITEM (other), FALSE);
 
-  if (gtk_text_mark_get_buffer (self->mark) == gtk_text_mark_get_buffer (other->mark))
+  if (self->mark != NULL && other->mark != NULL &&
+      NULL != (buffer = gtk_text_mark_get_buffer (self->mark)) &&
+      buffer == gtk_text_mark_get_buffer (other->mark))
     {
-      GtkTextBuffer *buffer = gtk_text_mark_get_buffer (self->mark);
       GtkTextIter self_iter;
       GtkTextIter other_iter;
 
@@ -116,6 +119,14 @@ gbp_history_item_chain (GbpHistoryItem *self,
 
       if (ABS (gtk_text_iter_get_line (&self_iter) -
                gtk_text_iter_get_line (&other_iter)) < DISTANCE_LINES_THRESH)
+        return TRUE;
+    }
+
+  if (self->file != NULL &&
+      other->file != NULL &&
+      g_file_equal (self->file, other->file))
+    {
+      if (ABS ((gint)self->line - (gint)other->line) < DISTANCE_LINES_THRESH)
         return TRUE;
     }
 
