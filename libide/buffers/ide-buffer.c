@@ -2682,7 +2682,11 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
   adapter = ide_buffer_get_symbol_resolvers (self);
   n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
 
-  if (!n_extensions)
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_source_tag (task, ide_buffer_get_symbol_at_location_async);
+
+  if (n_extensions == 0)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -2690,8 +2694,6 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
                                _("The current language lacks a symbol resolver."));
       return;
     }
-
-  task = g_task_new (self, cancellable, callback, user_data);
 
   line = gtk_text_iter_get_line (location);
   line_offset = gtk_text_iter_get_line_offset (location);
