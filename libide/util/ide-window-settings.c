@@ -28,21 +28,26 @@ static gboolean
 ide_window_settings__window_save_settings_cb (gpointer data)
 {
   GtkWindow *window = data;
-  GdkRectangle geom;
-  gboolean maximized;
 
   g_assert (GTK_IS_WINDOW (window));
   g_assert (G_IS_SETTINGS (settings));
 
-  g_object_set_data (G_OBJECT (window), "SETTINGS_HANDLER_ID", NULL);
+  if (gtk_widget_get_realized (GTK_WIDGET (window)) &&
+      gtk_widget_get_visible (GTK_WIDGET (window)))
+    {
+      GdkRectangle geom;
+      gboolean maximized;
 
-  gtk_window_get_size (window, &geom.width, &geom.height);
-  gtk_window_get_position (window, &geom.x, &geom.y);
-  maximized = gtk_window_is_maximized (window);
+      g_object_set_data (G_OBJECT (window), "SETTINGS_HANDLER_ID", NULL);
 
-  g_settings_set (settings, "window-size", "(ii)", geom.width, geom.height);
-  g_settings_set (settings, "window-position", "(ii)", geom.x, geom.y);
-  g_settings_set_boolean (settings, "window-maximized", maximized);
+      gtk_window_get_size (window, &geom.width, &geom.height);
+      gtk_window_get_position (window, &geom.x, &geom.y);
+      maximized = gtk_window_is_maximized (window);
+
+      g_settings_set (settings, "window-size", "(ii)", geom.width, geom.height);
+      g_settings_set (settings, "window-position", "(ii)", geom.x, geom.y);
+      g_settings_set_boolean (settings, "window-maximized", maximized);
+    }
 
   return G_SOURCE_REMOVE;
 }
