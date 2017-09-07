@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
 import gi
 import json
 import threading
@@ -43,6 +44,14 @@ SEVERITY_MAP = {
 
 
 class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
+    @staticmethod
+    def _get_eslint(srcdir):
+        local_eslint = os.path.join(srcdir, 'node_modules', '.bin', 'eslint')
+        if os.path.exists(local_eslint):
+            return local_eslint
+        else:
+            return 'eslint'  # Just rely on PATH
+
     def do_diagnose_async(self, file, buffer, cancellable, callback, user_data):
         self.diagnostics_list = []
         task = Gio.Task.new(self, cancellable, callback)
@@ -56,24 +65,25 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
         launcher = runtime.create_launcher()
         launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE)
         launcher.set_cwd(srcdir)
-        launcher.push_args(('eslint', '-f', 'json'))
 
         if unsaved_file:
             file_content = unsaved_file.get_content().get_data().decode('utf-8')
         else:
             file_content = None
 
-        if file_content:
-            launcher.push_argv('--stdin')
-            launcher.push_argv('--stdin-filename=' + file.get_path())
-        else:
-            launcher.push_argv(file.get_path())
-
-        threading.Thread(target=self.execute, args=(task, launcher, file, file_content),
+        threading.Thread(target=self.execute, args=(task, launcher, srcdir, file, file_content),
                          name='eslint-thread').start()
 
-    def execute(self, task, launcher, file, file_content):
+    def execute(self, task, launcher, srcdir, file, file_content):
         try:
+            launcher.push_args((self._get_eslint(srcdir), '-f', 'json'))
+
+            if file_content:
+                launcher.push_argv('--stdin')
+                launcher.push_argv('--stdin-filename=' + file.get_path())
+            else:
+                launcher.push_argv(file.get_path())
+
             sub_process = launcher.spawn()
             success, stdout, stderr = sub_process.communicate_utf8(file_content, None)
 
