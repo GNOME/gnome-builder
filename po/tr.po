@@ -9,16 +9,17 @@
 # Çağatay Yiğit Şahin <cyigitsahin@outlook.com>, 2017.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017.
 # Muhammet Kara <muhammetk@gmail.com>, 2015, 2016, 2017.
+# Furkan Tokaç <developmentft@gmail.com>, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-08-13 11:26+0000\n"
-"PO-Revision-Date: 2017-08-13 15:44+0300\n"
-"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
-"Language-Team: Turkish <gnometurk@gnome.org>\n"
+"POT-Creation-Date: 2017-09-06 21:04+0000\n"
+"PO-Revision-Date: 2017-09-06 19:27-0400\n"
+"Last-Translator: Furkan Tokaç <developmentft@gmail.com>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -99,6 +100,9 @@ msgid "Saturation"
 msgstr "Doygunluk"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+#: libide/debugger/ide-debugger-locals-view.ui:41
+#: libide/debugger/ide-debugger-registers-view.ui:34
+#: plugins/color-picker/gtk/color-picker-prefs.ui:179
 msgid "Value"
 msgstr "Değer"
 
@@ -177,26 +181,33 @@ msgid "Color strings"
 msgstr "Renk dizgeleri"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
+#: plugins/color-picker/gtk/color-picker-prefs.ui:490
 msgid "HEX3"
 msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
+#: plugins/color-picker/gtk/color-picker-prefs.ui:507
 msgid "HEX6"
 msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
+#: plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: plugins/color-picker/gtk/color-picker-prefs.ui:524
 msgid "RGB"
 msgstr "RGB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
+#: plugins/color-picker/gtk/color-picker-prefs.ui:541
 msgid "RGBA"
 msgstr "RGBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
+#: plugins/color-picker/gtk/color-picker-prefs.ui:558
 msgid "HSL"
 msgstr "HSL"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:689
+#: plugins/color-picker/gtk/color-picker-prefs.ui:575
 msgid "HSLA"
 msgstr "HSLA"
 
@@ -214,7 +225,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Tercihleri kullanarak bir palet yükle veya üret"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5893
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Yeniden Adlandır"
@@ -345,11 +356,11 @@ msgstr "Eğer etkinleştirilirse, düzenleyici imlecin bulunduğu satırı vurgu
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
-msgstr "Eşleşen ayraçları vurgula"
+msgstr "Eşleşen parantezleri vurgula"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr "Eğer etkinleştirilirse, düzenleyici eşleşen ayraçları vurgular."
+msgstr "Eğer etkinleştirilirse, düzenleyici eşleşen parantezleri vurgular."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 #: libide/editor/ide-editor-properties.ui:62
@@ -639,28 +650,9 @@ msgstr "_Hakkında"
 msgid "_Quit"
 msgstr "_Çıkış"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
-#: libide/editor/ide-editor-perspective-shortcuts.c:33
-#: libide/editor/ide-editor-perspective-shortcuts.c:39
-#: libide/editor/ide-editor-perspective-shortcuts.c:45
-#: libide/editor/ide-editor-perspective-shortcuts.c:51
-#: libide/editor/ide-editor-view-shortcuts.c:31
-#: libide/editor/ide-editor-view-shortcuts.c:37
-#: libide/editor/ide-editor-view-shortcuts.c:43
-#: libide/editor/ide-editor-view-shortcuts.c:49
-#: libide/editor/ide-editor-view-shortcuts.c:55
-#: libide/editor/ide-editor-view-shortcuts.c:61
-#: libide/editor/ide-editor-view-shortcuts.c:67
-#: libide/editor/ide-editor-view-shortcuts.c:73
-#: libide/editor/ide-editor-view-shortcuts.c:79
-#: libide/layout/ide-layout-stack-shortcuts.c:32
-#: libide/layout/ide-layout-stack-shortcuts.c:39
-#: libide/layout/ide-layout-stack-shortcuts.c:46
-#: libide/layout/ide-layout-stack-shortcuts.c:53
-#: libide/layout/ide-layout-stack-shortcuts.c:60
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
-#: plugins/command-bar/gb-command-bar.c:715
 msgid "Editor"
 msgstr "Düzenleyici"
 
@@ -786,7 +778,7 @@ msgstr "_Çevrele"
 msgid "Cu_t"
 msgstr "_Kes"
 
-#: data/gtk/menus.ui:250
+#: data/gtk/menus.ui:250 libide/debugger/ide-debugger-threads-view.ui:64
 msgid "Frame"
 msgstr "Çerçeve"
 
@@ -839,15 +831,15 @@ msgstr "_Kaydet"
 msgid "Save _As"
 msgstr "_Farklı Kaydet"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1104
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
 msgid "Run"
 msgstr "Çalıştır"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:529
+#: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:630
+#: libide/workbench/ide-workbench.c:625
 msgid "Builder"
 msgstr "Builder"
 
@@ -894,8 +886,8 @@ msgid "Integration with Git"
 msgstr "Git tümleştirmesi"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Autotools"
-msgstr "Autotools tümleştirmesi"
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Autotools, Cargo, CMake, Meson, Make ve PHPize ile entegrasyon"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -914,8 +906,8 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "C, Python, Vala ve XML için kendiliğinden girintileme desteği"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-msgid "HTML/Markdown live preview"
-msgstr "HTML/Markdown canlı önizleme"
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "HTML, Markdown, ve reStructuredTest, ve Sphinx canlı önizleme"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -926,12 +918,14 @@ msgid "An integrated software profiler for native applications"
 msgstr "Yerli uygulamalar için bir tümleştirilmiş yazılım profilleyici"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-msgid "Support for building with jhbuild"
-msgstr "jhbuild ile inşa desteği"
+#| msgid "An integrated software profiler for native applications"
+msgid "An integrated debugger for native applications"
+msgstr "Yerli uygulamalar için tümleştirilmiş bir hata ayıklayıcısı"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-msgid "Preview support for building with Flatpak runtimes"
-msgstr "Flatpak çalışma zamanları ile inşa için önizleme desteği"
+#| msgid "Preview support for building with Flatpak runtimes"
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr "Flatpak runtimes ve jhbuild ile inşa desteği"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
 msgid "Fast global search"
@@ -1040,20 +1034,88 @@ msgstr "Lütfen bir D-Bus adresi girin"
 msgid "No such worker"
 msgstr "Böyle bir işçi yok"
 
-#: libide/buffers/ide-buffer.c:2604
+#: libide/application/ide-application-shortcuts.c:43
+#: libide/application/ide-application-shortcuts.c:51
+#: libide/application/ide-application-shortcuts.c:59
+#: libide/application/ide-application-shortcuts.c:67
+#: libide/application/ide-application-shortcuts.c:75
+#: libide/runner/ide-run-manager.c:735
+#: libide/workbench/ide-workbench-shortcuts.c:49
+#: plugins/command-bar/gb-command-bar.c:701
+#: plugins/terminal/gb-terminal-workbench-addin.c:181
+#: plugins/terminal/gb-terminal-workbench-addin.c:187
+msgctxt "shortcut window"
+msgid "Workbench shortcuts"
+msgstr "Çalışma alanı kısayolları"
+
+#: libide/application/ide-application-shortcuts.c:44
+#: libide/application/ide-application-shortcuts.c:52
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "_Yardım"
+
+#: libide/application/ide-application-shortcuts.c:45
+msgctxt "shortcut window"
+msgid "Show the help window"
+msgstr "Yardım penceresini göster"
+
+#: libide/application/ide-application-shortcuts.c:53
+msgctxt "shortcut window"
+msgid "Show the shortcuts window"
+msgstr "Kısayol penceresini göster"
+
+#: libide/application/ide-application-shortcuts.c:60
+#: libide/keybindings/ide-shortcuts-window.ui:14
+#: libide/keybindings/ide-shortcuts-window.ui:459
+#: plugins/command-bar/gb-command-bar.c:702
+#: plugins/terminal/gb-terminal-workbench-addin.c:182
+#: plugins/terminal/gb-terminal-workbench-addin.c:188
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Genel"
+
+#: libide/application/ide-application-shortcuts.c:61
+msgctxt "shortcut window"
+msgid "Toggle window to fullscreen"
+msgstr "Pencereyi tam ekran yap"
+
+#: libide/application/ide-application-shortcuts.c:68
+#: libide/keybindings/ide-shortcuts-window.ui:527
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Ara"
+
+#: libide/application/ide-application-shortcuts.c:69
+msgctxt "shortcut window"
+msgid "Focus to the global search entry"
+msgstr "Genel arama girdisine odaklan"
+
+#: libide/application/ide-application-shortcuts.c:76
+#: libide/keybindings/ide-shortcuts-window.ui:405
+#: libide/runner/ide-run-manager.c:736
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "İnşa Et ve Çalıştır"
+
+#: libide/application/ide-application-shortcuts.c:77
+msgctxt "shortcut window"
+msgid "Trigger a build"
+msgstr "Bir inşayı tetikle"
+
+#: libide/buffers/ide-buffer.c:2696
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
-#: libide/buffers/ide-buffer-manager.c:684
+#: libide/buffers/ide-buffer-manager.c:681
 msgid "File too large to be opened."
 msgstr "Dosya açılamayacak kadar büyük."
 
-#: libide/buffers/ide-buffer-manager.c:1893
+#: libide/buffers/ide-buffer-manager.c:1890
 #, c-format
 msgid "unsaved document %u"
 msgstr "kaydedilmemiş dosya %u"
 
-#: libide/buffers/ide-buffer-manager.c:1931
+#: libide/buffers/ide-buffer-manager.c:1928
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Tampon kaydedilemedi, düzeltme yok sayılıyor."
 
@@ -1091,12 +1153,12 @@ msgstr "Dışa Aktarılıyor…"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
-#: libide/workbench/ide-omni-bar.c:439
+#: libide/workbench/ide-omni-bar.c:443
 msgid "Success"
 msgstr "Başarılı"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
-#: libide/workbench/ide-omni-bar.c:424
+#: libide/workbench/ide-omni-bar.c:428
 msgid "Failed"
 msgstr "Başarısız Oldu"
 
@@ -1129,7 +1191,6 @@ msgstr "Yapılandırmayı sil"
 #: libide/buildui/ide-build-configuration-view.ui:11
 #: libide/preferences/ide-preferences-builtin.c:318
 #: libide/preferences/ide-preferences-builtin.c:380
-#: plugins/command-bar/gb-command-bar.c:716
 msgid "General"
 msgstr "Genel"
 
@@ -1166,12 +1227,11 @@ msgid "Configure Options"
 msgstr "Yapılandırma Seçenekleri"
 
 #: libide/buildui/ide-build-configuration-view.ui:189
-#: libide/workbench/ide-omni-bar-row.ui:54
 msgid "Device"
 msgstr "Aygıt"
 
 #: libide/buildui/ide-build-configuration-view.ui:217
-#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
+#: libide/workbench/ide-omni-bar.ui:271
 msgid "Runtime"
 msgstr "Çalışma Zamanı"
 
@@ -1184,7 +1244,7 @@ msgstr "Ortam"
 msgid "Save File"
 msgstr "Dosyayı Kaydet"
 
-#: libide/buildui/ide-build-log-panel.c:741
+#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:47
 #: libide/greeter/ide-greeter-perspective.ui:326
 #: libide/greeter/ide-greeter-perspective.ui:374
 msgid "_Cancel"
@@ -1354,6 +1414,147 @@ msgstr "Proje dosyasına yol, geçerli dizine öntanımlı"
 msgid "New variable…"
 msgstr "Yeni değişken…"
 
+#: libide/debugger/gtk/menus.ui:10
+#: libide/debugger/ide-debugger-editor-addin.c:409
+msgid "Run with Debugger"
+msgstr "Hata ayıklayıcı ile çalıştır"
+
+#: libide/debugger/ide-debug-manager.c:936
+msgid "A suitable debugger could not be found."
+msgstr "Uygun bir hata ayıklayıcı bulunamadı."
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:22
+#: libide/debugger/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr "ID"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "Dosya"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr "Satır"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:58
+#: libide/debugger/ide-debugger-threads-view.ui:76
+msgid "Function"
+msgstr "Fonksiyon"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "Adres"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:81
+#: libide/debugger/ide-debugger-locals-view.ui:28
+msgid "Type"
+msgstr "Tür"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:91
+#, fuzzy
+msgid "Hits"
+msgstr "Hits"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:102
+msgid "Expression"
+msgstr "İfade"
+
+#: libide/debugger/ide-debugger-controls.ui:17
+msgid "Interrupt the program"
+msgstr "Programı kesintiye uğrat"
+
+#: libide/debugger/ide-debugger-controls.ui:30
+msgid "Continue running the program"
+msgstr "Programın çalışmasına devam et"
+
+#: libide/debugger/ide-debugger-controls.ui:71
+msgid "Execute the current line, stepping into any function calls"
+msgstr "Satırı çalıştır, fonksiyon çağrılarının içine gir"
+
+#: libide/debugger/ide-debugger-controls.ui:84
+msgid "Execute the current line, stepping over any function calls"
+msgstr "Satırı çalıştır, fonksiyon çağrılarının içine girme"
+
+#: libide/debugger/ide-debugger-controls.ui:97
+msgid "Run until the end of the function"
+msgstr "Fonksiyon sonuna kadar çalıştır"
+
+#: libide/debugger/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr "Disassembly"
+
+#: libide/debugger/ide-debugger-editor-addin.c:295
+msgid "Debugger"
+msgstr "Hata Ayıklayıcı"
+
+#: libide/debugger/ide-debugger-editor-addin.c:311
+msgid "Threads"
+msgstr "Kanallar"
+
+#: libide/debugger/ide-debugger-editor-addin.c:337
+msgid "Breakpoints"
+msgstr "Kesme Noktaları"
+
+#: libide/debugger/ide-debugger-editor-addin.c:345
+msgid "Libraries"
+msgstr "Kütüphaneler"
+
+#: libide/debugger/ide-debugger-editor-addin.c:353
+msgid "Registers"
+msgstr "Yazmaçlar"
+
+#: libide/debugger/ide-debugger-editor-addin.c:360
+msgid "Log"
+msgstr "Günlük"
+
+#: libide/debugger/ide-debugger-editor-addin.c:376
+msgid "Failed to initialize the debugger"
+msgstr "Hata ayıklayıcı ilklendirme başarısız"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:14
+msgid "Library"
+msgstr "Kütüphane"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr "Adres Aralığı"
+
+#: libide/debugger/ide-debugger-locals-view.c:307
+msgid "Locals"
+msgstr "Yereller"
+
+#: libide/debugger/ide-debugger-locals-view.c:361
+msgid "Parameters"
+msgstr "Parametreler"
+
+#: libide/debugger/ide-debugger-locals-view.ui:16
+msgid "Variable"
+msgstr "Değişken"
+
+#: libide/debugger/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "Yazmaç"
+
+#: libide/debugger/ide-debugger-threads-view.ui:19
+msgid "Group"
+msgstr "Grup"
+
+#: libide/debugger/ide-debugger-threads-view.ui:42
+msgid "Thread"
+msgstr "Kanal"
+
+#: libide/debugger/ide-debugger-threads-view.ui:88
+msgid "Arguments"
+msgstr "Argümanlar"
+
+#: libide/debugger/ide-debugger-threads-view.ui:101
+msgid "Location"
+msgstr "Konum"
+
+#: libide/debugger/ide-debugger-threads-view.ui:112
+msgid "Binary"
+msgstr "İkilik"
+
 #: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
@@ -1411,38 +1612,73 @@ msgstr "Aç"
 msgid "Cancel"
 msgstr "Vazgeç"
 
+#: libide/editor/ide-editor-perspective-shortcuts.c:33
+#: libide/editor/ide-editor-perspective-shortcuts.c:39
+#: libide/editor/ide-editor-perspective-shortcuts.c:45
+#: libide/editor/ide-editor-perspective-shortcuts.c:51
+#: libide/editor/ide-editor-view-shortcuts.c:31
+#: libide/editor/ide-editor-view-shortcuts.c:37
+#: libide/editor/ide-editor-view-shortcuts.c:43
+#: libide/editor/ide-editor-view-shortcuts.c:49
+#: libide/editor/ide-editor-view-shortcuts.c:55
+#: libide/editor/ide-editor-view-shortcuts.c:61
+#: libide/editor/ide-editor-view-shortcuts.c:67
+#: libide/editor/ide-editor-view-shortcuts.c:73
+#: libide/editor/ide-editor-view-shortcuts.c:79
+#: libide/layout/ide-layout-stack-shortcuts.c:32
+#: libide/layout/ide-layout-stack-shortcuts.c:39
+#: libide/layout/ide-layout-stack-shortcuts.c:46
+#: libide/layout/ide-layout-stack-shortcuts.c:53
+#: libide/layout/ide-layout-stack-shortcuts.c:60
+#: plugins/beautifier/gb-beautifier-editor-addin.c:332
+#: plugins/comment-code/gbp-comment-code-view-addin.c:370
+#: plugins/comment-code/gbp-comment-code-view-addin.c:376
+#: plugins/project-tree/gb-project-tree-shortcuts.c:33
+#: plugins/project-tree/gb-project-tree-shortcuts.c:39
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:100
+msgctxt "shortcut window"
+msgid "Editor shortcuts"
+msgstr "Düzenleyici kısayolları"
+
 #: libide/editor/ide-editor-perspective-shortcuts.c:34
 #: libide/editor/ide-editor-perspective-shortcuts.c:40
 #: libide/editor/ide-editor-view-shortcuts.c:32
 #: libide/editor/ide-editor-view-shortcuts.c:38
+#: libide/keybindings/ide-shortcuts-window.ui:96
 #: libide/layout/ide-layout-stack-shortcuts.c:33
 #: libide/layout/ide-layout-stack-shortcuts.c:40
 #: libide/layout/ide-layout-stack-shortcuts.c:47
 #: libide/layout/ide-layout-stack-shortcuts.c:54
 #: libide/layout/ide-layout-stack-shortcuts.c:61
+msgctxt "shortcut window"
 msgid "Files"
 msgstr "Dosyalar"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:35
+msgctxt "shortcut window"
 msgid "Create a new document"
-msgstr "Yeni belge oluştur"
+msgstr "Yeni bir belge oluştur"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:41
+#: libide/keybindings/ide-shortcuts-window.ui:108
+msgctxt "shortcut window"
 msgid "Open a document"
 msgstr "Belge aç"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:46
 #: libide/editor/ide-editor-perspective-shortcuts.c:52
+#: libide/keybindings/ide-shortcuts-window.ui:69
+msgctxt "shortcut window"
 msgid "Panels"
 msgstr "Paneller"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:47
-#: libide/editor/ide-editor-workbench-addin.c:150
+msgctxt "shortcut window"
 msgid "Toggle navigation panel"
 msgstr "Gezinim panelini aç/kapat"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:53
-#: libide/editor/ide-editor-workbench-addin.c:164
+msgctxt "shortcut window"
 msgid "Toggle utilities panel"
 msgstr "Araçlar panelini aç/kapat"
 
@@ -1544,6 +1780,7 @@ msgid "Show or hide search options such as case sensitivity"
 msgstr ""
 "Büyük/küçük harf duyarlılığı gibi bulma seçeneklerini göster veya gizle"
 
+#. List of pages that are open
 #: libide/editor/ide-editor-sidebar.ui:26
 #: libide/layout/ide-layout-stack-header.ui:21
 msgid "Open Pages"
@@ -1585,10 +1822,13 @@ msgid "Save As"
 msgstr "Farklı Kaydet"
 
 #: libide/editor/ide-editor-view-shortcuts.c:33
+#: libide/keybindings/ide-shortcuts-window.ui:115
+msgctxt "shortcut window"
 msgid "Save the document"
 msgstr "Belgeyi kaydet"
 
 #: libide/editor/ide-editor-view-shortcuts.c:39
+msgctxt "shortcut window"
 msgid "Save the document with a new name"
 msgstr "Belgeyi yeni bir adla kaydet"
 
@@ -1600,32 +1840,63 @@ msgstr "Belgeyi yeni bir adla kaydet"
 #: libide/editor/ide-editor-view-shortcuts.c:68
 #: libide/editor/ide-editor-view-shortcuts.c:74
 #: libide/editor/ide-editor-view-shortcuts.c:80
+#: libide/keybindings/ide-shortcuts-window.ui:151
+#: libide/keybindings/ide-shortcuts-window.ui:163
+msgctxt "shortcut window"
 msgid "Find and replace"
 msgstr "Bul ve değiştir"
 
 #: libide/editor/ide-editor-view-shortcuts.c:45
+#: libide/keybindings/ide-shortcuts-window.ui:156
+msgctxt "shortcut window"
 msgid "Find"
 msgstr "Bul"
 
 #: libide/editor/ide-editor-view-shortcuts.c:57
+msgctxt "shortcut window"
 msgid "Move to the next match"
-msgstr "Sonraki eşleşmeyi bul"
+msgstr "Sonraki eşleşmeye git"
 
 #: libide/editor/ide-editor-view-shortcuts.c:63
+msgctxt "shortcut window"
 msgid "Move to the previous match"
-msgstr "Önceki eşleşmeyi bul"
+msgstr "Önceki eşleşmeye git"
 
 #: libide/editor/ide-editor-view-shortcuts.c:69
+msgctxt "shortcut window"
 msgid "Move to the next error"
 msgstr "Sonraki hataya git"
 
 #: libide/editor/ide-editor-view-shortcuts.c:75
+msgctxt "shortcut window"
 msgid "Move to the previous error"
 msgstr "Önceki hataya git"
 
 #: libide/editor/ide-editor-view-shortcuts.c:81
+#: libide/keybindings/ide-shortcuts-window.ui:170
+msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Sonraki eşleşmeyi bul"
+
+#: libide/editor/ide-editor-view.ui:39
+msgid "_Reload"
+msgstr "Yeniden Y_ükle"
+
+#: libide/editor/ide-editor-view.ui:60
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Builder, bu dosyanın başka bir program tarafından değiştirildiğini saptadı. "
+"Dosyayı yeniden yüklemek ister misiniz?"
+
+#: libide/editor/ide-editor-workbench-addin.c:150
+msgid "Toggle navigation panel"
+msgstr "Gezinim panelini aç/kapat"
+
+#: libide/editor/ide-editor-workbench-addin.c:164
+msgid "Toggle utilities panel"
+msgstr "Araçlar panelini aç/kapat"
 
 #: libide/greeter/ide-greeter-perspective.c:456
 msgid "Failed to load the project"
@@ -1667,6 +1938,14 @@ msgstr "Diğer Projeler"
 #: libide/greeter/ide-greeter-perspective.ui:215
 msgid "_Remove"
 msgstr "Kaldı_r"
+
+#: libide/greeter/ide-greeter-perspective.ui:244
+msgid "Create from existing project"
+msgstr "Var olan projeden oluştur"
+
+#: libide/greeter/ide-greeter-perspective.ui:256
+msgid "Create a new project"
+msgstr "Yeni bir proje oluştur"
 
 #: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
@@ -1711,11 +1990,11 @@ msgstr "Öntanımlıları ilklendirme başarısız oldu."
 msgid "You must call %s() before using libide."
 msgstr "libide kullanmadan önce %s()’i çağırmalısınız."
 
-#: libide/ide-context.c:2066
+#: libide/ide-context.c:1964
 msgid "An unload request is already pending"
 msgstr "Bir yüklemeyi kaldırma isteği zaten beklemede"
 
-#: libide/ide-context.c:2185
+#: libide/ide-context.c:2083
 msgid "Context has already been restored."
 msgstr "Bağlam zaten düzeltildi."
 
@@ -1742,12 +2021,6 @@ msgctxt "shortcut window"
 msgid "Editor Shortcuts"
 msgstr "Düzenleyici Kısayolları"
 
-#: libide/keybindings/ide-shortcuts-window.ui:14
-#: libide/keybindings/ide-shortcuts-window.ui:459
-msgctxt "shortcut window"
-msgid "General"
-msgstr "Genel"
-
 #: libide/keybindings/ide-shortcuts-window.ui:18
 #: libide/keybindings/ide-shortcuts-window.ui:463
 msgctxt "shortcut window"
@@ -1762,18 +2035,21 @@ msgstr "Tercihler"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
 #: libide/keybindings/ide-shortcuts-window.ui:477
+#: plugins/command-bar/gb-command-bar.c:703
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Komut Çubuğu"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
 #: libide/keybindings/ide-shortcuts-window.ui:484
+#: plugins/terminal/gb-terminal-workbench-addin.c:183
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Uçbirim"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
 #: libide/keybindings/ide-shortcuts-window.ui:491
+#: plugins/terminal/gb-terminal-workbench-addin.c:189
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "İnşa Çalışma Ortamında Uçbirim"
@@ -1788,11 +2064,6 @@ msgstr "Klavye Kısayolları"
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
 msgstr "Odak Kipini Değiştir"
-
-#: libide/keybindings/ide-shortcuts-window.ui:69
-msgctxt "shortcut window"
-msgid "Panels"
-msgstr "Paneller"
 
 #: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
@@ -1809,271 +2080,237 @@ msgctxt "shortcut window"
 msgid "Toggle bottom panel"
 msgstr "Dip paneli aç/kapat"
 
-#: libide/keybindings/ide-shortcuts-window.ui:96
-msgctxt "shortcut window"
-msgid "Touchpad gestures"
-msgstr "Dokunmatik yüzey jestleri"
-
 #: libide/keybindings/ide-shortcuts-window.ui:101
-#: libide/keybindings/ide-shortcuts-window.ui:149
-msgctxt "shortcut window"
-msgid "Switch to the next document"
-msgstr "Sonraki belgeye geç"
-
-#: libide/keybindings/ide-shortcuts-window.ui:108
-#: libide/keybindings/ide-shortcuts-window.ui:156
-msgctxt "shortcut window"
-msgid "Switch to the previous document"
-msgstr "Önceki belgeye geç"
-
-#: libide/keybindings/ide-shortcuts-window.ui:116
-msgctxt "shortcut window"
-msgid "Files"
-msgstr "Dosyalar"
-
-#: libide/keybindings/ide-shortcuts-window.ui:121
 msgctxt "shortcut window"
 msgid "Create new document"
 msgstr "Yeni belge oluştur"
 
-#: libide/keybindings/ide-shortcuts-window.ui:128
-msgctxt "shortcut window"
-msgid "Open a document"
-msgstr "Belge aç"
-
-#: libide/keybindings/ide-shortcuts-window.ui:135
-msgctxt "shortcut window"
-msgid "Save the document"
-msgstr "Belgeyi kaydet"
-
-#: libide/keybindings/ide-shortcuts-window.ui:142
+#: libide/keybindings/ide-shortcuts-window.ui:122
+#: libide/layout/ide-layout-stack-shortcuts.c:62
 msgctxt "shortcut window"
 msgid "Close the document"
 msgstr "Belgeyi kapat"
 
-#: libide/keybindings/ide-shortcuts-window.ui:163
+#: libide/keybindings/ide-shortcuts-window.ui:129
+#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/layout/ide-layout-stack-shortcuts.c:55
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Sonraki belgeye geç"
+
+#: libide/keybindings/ide-shortcuts-window.ui:136
+#: libide/keybindings/ide-shortcuts-window.ui:444
+#: libide/layout/ide-layout-stack-shortcuts.c:48
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Önceki belgeye geç"
+
+#: libide/keybindings/ide-shortcuts-window.ui:143
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Açık belgelerin listesini göster"
 
-#: libide/keybindings/ide-shortcuts-window.ui:171
-#: libide/keybindings/ide-shortcuts-window.ui:183
-msgctxt "shortcut window"
-msgid "Find and replace"
-msgstr "Bul ve değiştir"
-
-#: libide/keybindings/ide-shortcuts-window.ui:176
-msgctxt "shortcut window"
-msgid "Find"
-msgstr "Bul"
-
-#: libide/keybindings/ide-shortcuts-window.ui:190
-msgctxt "shortcut window"
-msgid "Find the next match"
-msgstr "Sonraki eşleşmeyi bul"
-
-#: libide/keybindings/ide-shortcuts-window.ui:197
+#: libide/keybindings/ide-shortcuts-window.ui:177
 msgctxt "shortcut window"
 msgid "Find the previous match"
 msgstr "Önceki eşleşmeyi bul"
 
-#: libide/keybindings/ide-shortcuts-window.ui:204
+#: libide/keybindings/ide-shortcuts-window.ui:184
 msgctxt "shortcut window"
 msgid "Clear highlight"
 msgstr "Vurgulamayı temizle"
 
-#: libide/keybindings/ide-shortcuts-window.ui:212
+#: libide/keybindings/ide-shortcuts-window.ui:192
 #: libide/keybindings/ide-shortcuts-window.ui:507
 msgctxt "shortcut window"
 msgid "Copy and Paste"
 msgstr "Kopyala ve Yapıştır"
 
-#: libide/keybindings/ide-shortcuts-window.ui:217
+#: libide/keybindings/ide-shortcuts-window.ui:197
 #: libide/keybindings/ide-shortcuts-window.ui:512
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
 msgstr "Seçili metni panoya kopyala"
 
-#: libide/keybindings/ide-shortcuts-window.ui:224
+#: libide/keybindings/ide-shortcuts-window.ui:204
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
 msgstr "Seçili metni kes ve panoya yapıştır"
 
-#: libide/keybindings/ide-shortcuts-window.ui:231
+#: libide/keybindings/ide-shortcuts-window.ui:211
 #: libide/keybindings/ide-shortcuts-window.ui:519
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
 msgstr "Panodaki metni yapıştır"
 
-#: libide/keybindings/ide-shortcuts-window.ui:238
+#: libide/keybindings/ide-shortcuts-window.ui:218
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
 msgstr "Geçerli satırı veya seçimi ikile."
 
-#: libide/keybindings/ide-shortcuts-window.ui:246
+#: libide/keybindings/ide-shortcuts-window.ui:226
 msgctxt "shortcut window"
 msgid "Undo and Redo"
 msgstr "Geri Al ve Yinele"
 
-#: libide/keybindings/ide-shortcuts-window.ui:251
+#: libide/keybindings/ide-shortcuts-window.ui:231
 msgctxt "shortcut window"
 msgid "Undo previous command"
 msgstr "Önceki komutu geri al"
 
-#: libide/keybindings/ide-shortcuts-window.ui:258
+#: libide/keybindings/ide-shortcuts-window.ui:238
 msgctxt "shortcut window"
 msgid "Redo previous command"
 msgstr "Önceki komutu yinele"
 
-#: libide/keybindings/ide-shortcuts-window.ui:266
+#: libide/keybindings/ide-shortcuts-window.ui:246
+#: plugins/beautifier/gb-beautifier-editor-addin.c:333
+#: plugins/comment-code/gbp-comment-code-view-addin.c:371
+#: plugins/comment-code/gbp-comment-code-view-addin.c:377
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:101
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Düzenleme"
 
-#: libide/keybindings/ide-shortcuts-window.ui:271
+#: libide/keybindings/ide-shortcuts-window.ui:251
 msgctxt "shortcut window"
 msgid "Increment number at cursor"
 msgstr "İmleçteki sayıyı büyüt"
 
-#: libide/keybindings/ide-shortcuts-window.ui:278
+#: libide/keybindings/ide-shortcuts-window.ui:258
 msgctxt "shortcut window"
 msgid "Decrement number at cursor"
 msgstr "İmleçteki sayıyı küçült"
 
-#: libide/keybindings/ide-shortcuts-window.ui:285
+#: libide/keybindings/ide-shortcuts-window.ui:265
 msgctxt "shortcut window"
 msgid "Join selected lines"
 msgstr "Seçili satırları birleştir"
 
-#: libide/keybindings/ide-shortcuts-window.ui:292
+#: libide/keybindings/ide-shortcuts-window.ui:272
 msgctxt "shortcut window"
 msgid "Show completion window"
 msgstr "Tamamlama penceresini göster"
 
-#: libide/keybindings/ide-shortcuts-window.ui:299
+#: libide/keybindings/ide-shortcuts-window.ui:279
 msgctxt "shortcut window"
 msgid "Toggle overwrite"
 msgstr "Üzerine yazmayı aç/kapat"
 
-#: libide/keybindings/ide-shortcuts-window.ui:306
+#: libide/keybindings/ide-shortcuts-window.ui:286
 msgctxt "shortcut window"
 msgid "Reindent line"
 msgstr "Satırı yeniden girintile"
 
-#: libide/keybindings/ide-shortcuts-window.ui:313
+#: libide/keybindings/ide-shortcuts-window.ui:293
 msgctxt "shortcut window"
 msgid "Delete line"
 msgstr "Satırı sil"
 
-#: libide/keybindings/ide-shortcuts-window.ui:320
+#: libide/keybindings/ide-shortcuts-window.ui:300
 msgctxt "shortcut window"
 msgid "Rename symbol"
 msgstr "Simgeyi yeniden adlandır"
 
-#: libide/keybindings/ide-shortcuts-window.ui:321
+#: libide/keybindings/ide-shortcuts-window.ui:301
 msgctxt "shortcut window"
 msgid "Requires semantic language support"
 msgstr "Anlamsal dil desteği gerektiriyor"
 
-#: libide/keybindings/ide-shortcuts-window.ui:329
+#: libide/keybindings/ide-shortcuts-window.ui:309
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Gezinme"
 
-#: libide/keybindings/ide-shortcuts-window.ui:334
+#: libide/keybindings/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Move to next error in file"
 msgstr "Dosyadaki sonraki hataya git"
 
-#: libide/keybindings/ide-shortcuts-window.ui:341
+#: libide/keybindings/ide-shortcuts-window.ui:321
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
 msgstr "Dosyadaki önceki hataya git"
 
-#: libide/keybindings/ide-shortcuts-window.ui:348
+#: libide/keybindings/ide-shortcuts-window.ui:328
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
 msgstr "Önceki düzenleme konumuna git"
 
-#: libide/keybindings/ide-shortcuts-window.ui:355
+#: libide/keybindings/ide-shortcuts-window.ui:335
 msgctxt "shortcut window"
 msgid "Move to next edit location"
 msgstr "Sonraki düzenleme konumuna git"
 
-#: libide/keybindings/ide-shortcuts-window.ui:362
+#: libide/keybindings/ide-shortcuts-window.ui:342
 msgctxt "shortcut window"
 msgid "Jump to definition of symbol"
 msgstr "Simge tanımına git"
 
-#: libide/keybindings/ide-shortcuts-window.ui:369
+#: libide/keybindings/ide-shortcuts-window.ui:349
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
 msgstr "Görüş alanını dosyada yukarı taşı"
 
-#: libide/keybindings/ide-shortcuts-window.ui:376
+#: libide/keybindings/ide-shortcuts-window.ui:356
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
 msgstr "Görüş alanını dosyada aşağı taşı"
 
-#: libide/keybindings/ide-shortcuts-window.ui:383
+#: libide/keybindings/ide-shortcuts-window.ui:363
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
 msgstr "Görüş alanını dosyanın sonuna taşı"
 
-#: libide/keybindings/ide-shortcuts-window.ui:390
+#: libide/keybindings/ide-shortcuts-window.ui:370
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
 msgstr "Görüş alanını dosyanın başına taşı"
 
-#: libide/keybindings/ide-shortcuts-window.ui:397
+#: libide/keybindings/ide-shortcuts-window.ui:377
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
-msgstr "Eşleşen ayraça git"
+msgstr "Eşleşen paranteze git"
 
-#: libide/keybindings/ide-shortcuts-window.ui:405
+#: libide/keybindings/ide-shortcuts-window.ui:385
 msgctxt "shortcut window"
 msgid "Selections"
 msgstr "Seçimler"
 
-#: libide/keybindings/ide-shortcuts-window.ui:410
+#: libide/keybindings/ide-shortcuts-window.ui:390
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Tümünü seç"
 
-#: libide/keybindings/ide-shortcuts-window.ui:417
+#: libide/keybindings/ide-shortcuts-window.ui:397
 msgctxt "shortcut window"
 msgid "Unselect all"
 msgstr "Tüm seçimleri kaldır"
 
-#: libide/keybindings/ide-shortcuts-window.ui:425
-msgctxt "shortcut window"
-msgid "Build and Run"
-msgstr "İnşa Et ve Çalıştır"
-
-#: libide/keybindings/ide-shortcuts-window.ui:430
+#: libide/keybindings/ide-shortcuts-window.ui:410
 msgctxt "shortcut window"
 msgid "Build"
 msgstr "İnşa Et"
 
-#: libide/keybindings/ide-shortcuts-window.ui:437
+#: libide/keybindings/ide-shortcuts-window.ui:417
 msgctxt "shortcut window"
 msgid "Run"
 msgstr "Çalıştır"
 
-#: libide/keybindings/ide-shortcuts-window.ui:444
+#: libide/keybindings/ide-shortcuts-window.ui:424
 msgctxt "shortcut window"
 msgid "Profile"
 msgstr "Profille"
+
+#: libide/keybindings/ide-shortcuts-window.ui:432
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Dokunmatik yüzey jestleri"
 
 #: libide/keybindings/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
 msgid "Terminal Shortcuts"
 msgstr "Uçbirim Kısayolları"
-
-#: libide/keybindings/ide-shortcuts-window.ui:527
-msgctxt "shortcut window"
-msgid "Search"
-msgstr "Ara"
 
 #: libide/keybindings/ide-shortcuts-window.ui:532
 msgctxt "shortcut window"
@@ -2102,24 +2339,14 @@ msgid "New documentation"
 msgstr "Yeni belgelendirme"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:34
+msgctxt "shortcut window"
 msgid "Move document to the right"
 msgstr "Belgeyi sağa taşı"
 
 #: libide/layout/ide-layout-stack-shortcuts.c:41
+msgctxt "shortcut window"
 msgid "Move document to the left"
 msgstr "Belgeyi sola taşı"
-
-#: libide/layout/ide-layout-stack-shortcuts.c:48
-msgid "Switch to the previous document"
-msgstr "Önceki belgeye geç"
-
-#: libide/layout/ide-layout-stack-shortcuts.c:55
-msgid "Switch to the next document"
-msgstr "Sonraki belgeye geç"
-
-#: libide/layout/ide-layout-stack-shortcuts.c:62
-msgid "Close the document"
-msgstr "Belgeyi kapat"
 
 #: libide/layout/ide-layout-stack.ui:30
 msgid "Open a File or Terminal"
@@ -2197,7 +2424,7 @@ msgstr "eşaralıklı düzenleyici yazı tipi"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
-#: plugins/terminal/gb-terminal-workbench-addin.c:202
+#: plugins/terminal/gb-terminal-workbench-addin.c:250
 #: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Uçbirim"
@@ -2319,11 +2546,11 @@ msgstr "Geçerli satırı vurgulayarak belli et"
 
 #: libide/preferences/ide-preferences-builtin.c:166
 msgid "Matching brackets"
-msgstr "Eşleşen ayraçlar"
+msgstr "Eşleşen parantezler"
 
 #: libide/preferences/ide-preferences-builtin.c:166
 msgid "Highlight matching brackets based on cursor position"
-msgstr "Eşleşen ayraçları imleç konumuna dayalı olarak vurgula"
+msgstr "Eşleşen parantezleri imleç konumuna göre vurgula"
 
 #: libide/preferences/ide-preferences-builtin.c:168
 msgid "Code Overview"
@@ -2527,7 +2754,7 @@ msgid "Number of CPU"
 msgstr "CPU Sayısı"
 
 #: libide/preferences/ide-preferences-builtin.c:378
-#: libide/workbench/ide-omni-bar.ui:479
+#: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "İnşa Et"
 
@@ -2618,11 +2845,11 @@ msgstr "Çalıştırmayı durdur"
 msgid "Change run options"
 msgstr "Çalıştırma seçeneklerini değiştir"
 
-#: libide/runner/ide-run-manager.c:319
+#: libide/runner/ide-run-manager.c:340
 msgid "Cannot run target, another target is running"
 msgstr "Hedef çalıştırılamıyor, başka bir hedef çalışıyor"
 
-#: libide/runner/ide-run-manager.c:388
+#: libide/runner/ide-run-manager.c:409
 msgid "Failed to locate runtime"
 msgstr "Çalışma ortamını konumlama başarısız oldu"
 
@@ -2644,33 +2871,37 @@ msgstr "Dizin açma başarısız oldu: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Dosya yükleme başarısız oldu: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5349
 #, c-format
 msgid "Insert “%s”"
 msgstr "“%s” Ekle"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5351
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "“%s” yerine “%s” Koy"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5465
 msgid "Apply Fix-It"
 msgstr "Düzeltme Uygula"
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5892
 msgid "Rename symbol"
 msgstr "Simgeyi yeniden adlandır"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6061
+#: libide/sourceview/ide-source-view.c:6125
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Satır %u, Sütun %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6087
+#: libide/sourceview/ide-source-view.c:6151
 msgid "No references were found"
 msgstr "Referans bulunamadı"
+
+#: libide/sourceview/ide-word-completion-provider.c:558
+msgid "Builder Word Completion"
+msgstr "Builder Sözcük Tamamlama"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -2739,18 +2970,9 @@ msgstr "“%s” mutlak URI olarak ayrıştırılamadı"
 msgid "URI “%s” has no host component"
 msgstr "“%s” URI’sinin ana makine bileşeni yok"
 
-#: libide/workbench/ide-omni-bar.c:407
+#: libide/workbench/ide-omni-bar.c:411
 msgid "Building"
 msgstr "İnşa Ediliyor"
-
-#. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:90
-msgid "missing"
-msgstr "eksik"
-
-#: libide/workbench/ide-omni-bar-row.ui:31
-msgid "Edit build configuration"
-msgstr "İnşa yapılandırmasını düzenle"
 
 #: libide/workbench/ide-omni-bar.ui:199
 msgid "Configure build preferences"
@@ -2780,19 +3002,24 @@ msgstr "Son inşa"
 msgid "Build result"
 msgstr "İnşa sonucu"
 
-#: libide/workbench/ide-omni-bar.ui:486
+#. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: libide/workbench/ide-omni-bar.ui:475
+msgid "true"
+msgstr "true"
+
+#: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
 msgstr "Yeniden İnşa Et"
 
-#: libide/workbench/ide-omni-bar.ui:493
+#: libide/workbench/ide-omni-bar.ui:494
 msgid "Clean"
 msgstr "Temizle"
 
-#: libide/workbench/ide-omni-bar.ui:500
+#: libide/workbench/ide-omni-bar.ui:501
 msgid "Export Bundle"
 msgstr "Paketi Dışa Aktar"
 
-#: libide/workbench/ide-omni-bar.ui:581
+#: libide/workbench/ide-omni-bar.ui:526
 msgid "Build project"
 msgstr "Projeyi inşa et"
 
@@ -2800,7 +3027,7 @@ msgstr "Projeyi inşa et"
 msgid "Builder Statistics"
 msgstr "Builder İstatistikleri"
 
-#: libide/workbench/ide-workbench.c:628
+#: libide/workbench/ide-workbench.c:623
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
@@ -2817,11 +3044,8 @@ msgstr "Tezgâh menüsünü aç"
 msgid "Press Ctrl+. to search"
 msgstr "Aramak için Ctrl+. tuşlarına basın "
 
-#: libide/workbench/ide-workbench-shortcuts.c:48
-msgid "Workbench"
-msgstr "Çalışma Masası"
-
-#: libide/workbench/ide-workbench-shortcuts.c:49
+#: libide/workbench/ide-workbench-shortcuts.c:50
+msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspektifler"
 
@@ -2830,37 +3054,50 @@ msgid "Building cache…"
 msgstr "Önbellek inşa ediliyor…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-msgid "Shared Library"
-msgstr "Paylaşılan Kütüphane"
+#| msgid "Shared Library"
+msgid "Shared Library (Autotools)"
+msgstr "Paylaşılan Kütüphane (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Bir paylaşılan kütüphaneyle yeni bir autotools projesi yarat"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-msgid "Empty Project"
-msgstr "Boş Proje"
+#| msgid "Empty Project"
+msgid "Empty Project (Autotools)"
+msgstr "Boş Proje (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Yeni bir boş autotools projesi oluştur"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-msgid "GNOME Application"
-msgstr "GNOME Uygulaması"
+#| msgid "GNOME Application"
+msgid "GNOME Application (Autotools)"
+msgstr "GNOME Uygulaması (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Flatpak’e hazır yeni bir GNOME uygulaması oluştur"
 
-#: plugins/beautifier/gb-beautifier-editor-addin.c:190
+#: plugins/beautifier/gb-beautifier-editor-addin.c:235
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "“%s” için kullanılabilir güzelleştirici yok"
 
-#: plugins/beautifier/gb-beautifier-editor-addin.c:192
+#: plugins/beautifier/gb-beautifier-editor-addin.c:237
 msgid "No beautifier available"
 msgstr "Kullanılabilir güzelleştirici yok"
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:334
+msgctxt "shortcut window"
+msgid "Beautify the code"
+msgstr "Kodu güzelleştir"
+
+#: plugins/beautifier/gb-beautifier-editor-addin.c:335
+msgctxt "shortcut window"
+msgid "Trigger the default entry"
+msgstr "Öntanımlı girdiyi tetikle"
 
 #: plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
@@ -2911,6 +3148,21 @@ msgstr "anonim"
 #: plugins/clang/ide-clang-translation-unit.c:661
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() yalnızca yerel dosyalar üzerinde çalışır"
+
+#. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
+#: plugins/code-index/ide-code-index-index.c:351
+#| msgid "Saturation"
+msgid "Declaration"
+msgstr "Tanım"
+
+#: plugins/code-index/ide-code-index-service.c:543
+msgid "Indexing Source Code"
+msgstr "Kaynak Kodu Dizinleme"
+
+#: plugins/code-index/ide-code-index-service.c:544
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+"Arama, teşhis ve otomatik tamamlama, tamamlanıncaya kadar sınırlı olabilir."
 
 #: plugins/color-picker/gb-color-picker-editor-addin.c:241
 msgid "Colors"
@@ -3025,6 +3277,26 @@ msgstr "Görünürlük:"
 msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr "Panelde kaydıraçlarını görmek istediğiniz renk uzaylarını seçin."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:86
+msgid "HSV"
+msgstr "HSV"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:87
+msgid "Hue Saturation Value"
+msgstr "Ton Doygunluk Değeri"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Kırmızı Yeşil Mavi"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Birimler:"
@@ -3037,6 +3309,10 @@ msgstr ""
 "Panelde RGB bileşenleri ve dizgeleri için kullanmak isteğiniz birim türünü "
 "seçin."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Yüzde"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Süzgeçler:"
@@ -3044,6 +3320,46 @@ msgstr "Süzgeçler:"
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
 msgstr "Renklere uygulanan bir süzgeç veya “Hiç”i seçin."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Hiçbiri"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Achromatopsia (monokromatizm)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Achromatomaly (mavi koni monokromatizmi)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deuteranopia (yeşil körlüğü)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deuteranomaly (yeşil zayıflığı)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopia (kırmızı körlüğü)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomaly (kırmızı zayıflığı)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopia (mavi körlüğü)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomaly (mavi zayıflığı)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Web Uyumlu"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3106,13 +3422,9 @@ msgstr "Renkleri vurgula"
 msgid "Command not found: %s"
 msgstr "Komut bulunamadı: %s"
 
-#: plugins/command-bar/gb-command-bar.c:593
+#: plugins/command-bar/gb-command-bar.c:595
 msgid "Use the entry below to execute a command"
 msgstr "Bir komut çalıştırmak için alttaki girdiyi kullanın"
-
-#: plugins/command-bar/gb-command-bar.c:717
-msgid "Command Bar"
-msgstr "Komut Çubuğu"
 
 #: plugins/command-bar/gb-vim.c:87
 msgid "Number required"
@@ -3163,6 +3475,16 @@ msgstr "Geçersiz ara ve değiştir isteği"
 #, c-format
 msgid "Not a command: %s"
 msgstr "Bir komut değil: %s"
+
+#: plugins/comment-code/gbp-comment-code-view-addin.c:372
+msgctxt "shortcut window"
+msgid "Comment the code"
+msgstr "Kodu yoruma al"
+
+#: plugins/comment-code/gbp-comment-code-view-addin.c:378
+msgctxt "shortcut window"
+msgid "Uncomment the code"
+msgstr "Kodu yorumdan çıkar"
 
 #: plugins/comment-code/gtk/menus.ui:9
 msgid "Comment code"
@@ -3318,6 +3640,10 @@ msgstr "Belgelendirme"
 msgid "New Documentation Page"
 msgstr "Yeni Belgelendirme Sayfası"
 
+#: plugins/documentation-card/gbp-documentation-card.ui:36
+msgid "_Show more"
+msgstr "Daha fazla gö_ster"
+
 #: plugins/eslint/eslint_plugin/__init__.py:105
 msgid "ESlint"
 msgstr "ESlint"
@@ -3364,7 +3690,7 @@ msgstr "Klonla"
 msgid "Network is not available, skipping downloads"
 msgstr "Ağ kullanılabilir değil, indirmeler atlanıyor"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:89
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
 #: plugins/html-preview/html_preview_plugin/__init__.py:323
 #: plugins/html-preview/html_preview_plugin/__init__.py:333
@@ -3374,26 +3700,26 @@ msgstr "Ağ kullanılabilir değil, indirmeler atlanıyor"
 msgid "Install"
 msgstr "Kur"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:95
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:97
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 msgid "Update"
 msgstr "Güncelle"
 
 #. translators: keywords are used to match search keywords in preferences
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:294
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:296
 #, c-format
 msgid "flatpak %s %s %s"
 msgstr "flatpak %s %s %s"
 
 #. translators: %u is the number of hidden runtimes to be shown
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:309
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:311
 #, c-format
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "%u çalışma ortamı daha göster"
 
-#: plugins/flatpak/gbp-flatpak-preferences-addin.c:390
+#: plugins/flatpak/gbp-flatpak-preferences-addin.c:393
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Çalışma Ortamları"
 
@@ -3475,15 +3801,15 @@ msgstr "Aşağıdaki URL panoya kopyalandı"
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Fark sağlanamıyor, destek dosyası sağlanmamış."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:567
+#: plugins/git/ide-git-buffer-change-monitor.c:566
 msgid "Repository does not have a working directory."
 msgstr "Depo bir çalışma dizinine sahip değil."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:578
+#: plugins/git/ide-git-buffer-change-monitor.c:577
 msgid "File is not under control of git working directory."
 msgstr "Dosya git çalışma dizininin denetimi altında değil."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:644
+#: plugins/git/ide-git-buffer-change-monitor.c:643
 msgid "The requested file does not exist within the git index."
 msgstr "İstenen dosya git dizininde bulunmuyor."
 
@@ -3587,13 +3913,29 @@ msgstr "Python tamamlama öner"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Python dilindeki tamamlamalar için Jedi kullan"
 
-#: plugins/meson-templates/meson_templates/__init__.py:206
-msgid "Empty Meson Project"
-msgstr "Boş Meson Projesi"
+#: plugins/meson-templates/meson_templates/__init__.py:234
+msgid "GNOME Application"
+msgstr "GNOME Uygulaması"
 
-#: plugins/meson-templates/meson_templates/__init__.py:208
-msgid "Create a new empty meson project"
-msgstr "Yeni bir boş meson projesi oluştur"
+#: plugins/meson-templates/meson_templates/__init__.py:236
+msgid "Create a new GNOME application"
+msgstr "Yeni bir GNOME uygulaması oluştur"
+
+#: plugins/meson-templates/meson_templates/__init__.py:287
+msgid "Shared Library"
+msgstr "Paylaşılan Kütüphane"
+
+#: plugins/meson-templates/meson_templates/__init__.py:289
+msgid "Create a new project with a shared library"
+msgstr "Paylaşılan kütüphaneyle yeni bir proje oluştur"
+
+#: plugins/meson-templates/meson_templates/__init__.py:304
+msgid "Empty Project"
+msgstr "Boş Proje"
+
+#: plugins/meson-templates/meson_templates/__init__.py:306
+msgid "Create a new empty project"
+msgstr "Yeni boş bir proje oluştur"
 
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
@@ -3603,20 +3945,20 @@ msgstr "MinGW 64-bit"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
-#: plugins/notification/ide-notification-addin.c:81
+#: plugins/notification/ide-notification-addin.c:82
 msgid "Build successful"
 msgstr "İnşa başarılı oldu"
 
-#: plugins/notification/ide-notification-addin.c:82
+#: plugins/notification/ide-notification-addin.c:83
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "“%s” projesinin inşası tamamlandı"
 
-#: plugins/notification/ide-notification-addin.c:86
+#: plugins/notification/ide-notification-addin.c:87
 msgid "Build failed"
 msgstr "İnşa başarısız oldu"
 
-#: plugins/notification/ide-notification-addin.c:87
+#: plugins/notification/ide-notification-addin.c:88
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "“%s” projesi inşa edilemedi"
@@ -3657,6 +3999,22 @@ msgstr "Boş"
 #, c-format
 msgid "Rename %s"
 msgstr "%s’i Yeniden Adlandır"
+
+#: plugins/project-tree/gb-project-tree-shortcuts.c:34
+#: plugins/project-tree/gb-project-tree-shortcuts.c:40
+msgctxt "shortcut window"
+msgid "Project tree"
+msgstr "Proje ağacı"
+
+#: plugins/project-tree/gb-project-tree-shortcuts.c:35
+msgctxt "shortcut window"
+msgid "Rename a file"
+msgstr "Belgeyi yeniden adlandır"
+
+#: plugins/project-tree/gb-project-tree-shortcuts.c:41
+msgctxt "shortcut window"
+msgid "Move a file to the trash"
+msgstr "Belgeyi çöpe taşı"
 
 #: plugins/project-tree/gtk/menus.ui:6
 msgid "Re_veal in Project Tree"
@@ -3861,6 +4219,11 @@ msgstr "bir araç seti eklemek için tıkla!"
 msgid "Spelling"
 msgstr "Yazım"
 
+#: plugins/spellcheck/gbp-spell-editor-view-addin.c:102
+msgctxt "shortcut window"
+msgid "Show the spellchecker panel"
+msgstr "İmla denetleyici panelini göster"
+
 #: plugins/spellcheck/gbp-spell-language-popover.c:232
 msgid "No language selected"
 msgstr "Hiçbir dil seçilmedi"
@@ -3973,6 +4336,10 @@ msgstr "Sistem Gözlemcisi"
 msgid "Profiler"
 msgstr "Profilleyici"
 
+#: plugins/sysprof/gbp-sysprof-perspective.ui:20
+msgid "Failure"
+msgstr "Başarısızlık"
+
 #: plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Kapat"
@@ -4031,7 +4398,7 @@ msgstr "Uçbirim İçeriğini Farklı Kaydet"
 msgid "Untitled terminal"
 msgstr "Başlıksız uçbirim"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:142
+#: plugins/terminal/gb-terminal-workbench-addin.c:145
 msgid "Application Output"
 msgstr "Uygulama Çıktısı"
 
@@ -4079,11 +4446,59 @@ msgstr "Valgrind’le Çalıştır"
 #: plugins/xml-pack/ide-xml-parser.c:579
 #: plugins/xml-pack/ide-xml-tree-builder.c:447
 msgid "Failed to create the XML tree."
-msgstr "XML ağacı yaratılamadı."
+msgstr "XML ağacı oluşturulamadı."
 
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Tampon yüklü ama tampon yöneticisinde değil."
+
+#~ msgid "Integration with Autotools"
+#~ msgstr "Autotools tümleştirmesi"
+
+#~ msgid "HTML/Markdown live preview"
+#~ msgstr "HTML/Markdown canlı önizleme"
+
+#~ msgid "Support for building with jhbuild"
+#~ msgstr "jhbuild ile inşa desteği"
+
+#~ msgid "missing"
+#~ msgstr "eksik"
+
+#~ msgid "Edit build configuration"
+#~ msgstr "İnşa yapılandırmasını düzenle"
+
+#~ msgid "Open a document"
+#~ msgstr "Belge aç"
+
+#~ msgid "Panels"
+#~ msgstr "Paneller"
+
+#~ msgid "Save the document"
+#~ msgstr "Belgeyi kaydet"
+
+#~ msgid "Find and replace"
+#~ msgstr "Bul ve değiştir"
+
+#~ msgid "Find"
+#~ msgstr "Bul"
+
+#~ msgid "Find the next match"
+#~ msgstr "Sonraki eşleşmeyi bul"
+
+#~ msgid "Switch to the previous document"
+#~ msgstr "Önceki belgeye geç"
+
+#~ msgid "Switch to the next document"
+#~ msgstr "Sonraki belgeye geç"
+
+#~ msgid "Close the document"
+#~ msgstr "Belgeyi kapat"
+
+#~ msgid "Command Bar"
+#~ msgstr "Komut Çubuğu"
+
+#~ msgid "Empty Meson Project"
+#~ msgstr "Boş Meson Projesi"
 
 #~ msgid "Show Project Sidebar"
 #~ msgstr "Proje Kenar Çubuğunu Göster"
@@ -4150,9 +4565,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 #~ msgid "Failed to locate template \"%s\""
 #~ msgstr "\"%s\" şablonu bulunamadı"
 
-#~ msgid "Show left panel"
-#~ msgstr "Sol paneli göster"
-
 #~ msgid "Show bottom panel"
 #~ msgstr "Dip paneli göster"
 
@@ -4211,16 +4623,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 #~ msgid "Save Document As"
 #~ msgstr "Belgeyi Farklı Kaydet"
 
-#~ msgid "_Reload"
-#~ msgstr "Yeniden Y_ükle"
-
-#~ msgid ""
-#~ "Builder has discovered that this file has been modified externally. Would "
-#~ "you like to reload the file?"
-#~ msgstr ""
-#~ "Builder, bu dosyanın başka bir program tarafından değiştirildiğini "
-#~ "saptadı. Dosyayı yeniden yüklemek ister misiniz?"
-
 #~ msgid "_Select"
 #~ msgstr "_Seç"
 
@@ -4232,9 +4634,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
 #~ msgid "Cannot add provider more than once."
 #~ msgstr "Sağlayıcı birden fazla kez eklenemez."
-
-#~ msgid "The provider could not be found."
-#~ msgstr "Sağlayıcı bulanamadı."
 
 #~ msgid "File path is NULL"
 #~ msgstr "Dosya yolu NULL"
@@ -4394,9 +4793,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 #~ msgid "Co_ntinue"
 #~ msgstr "_Devam Et"
 
-#~ msgid "Create a new project"
-#~ msgstr "Yeni bir proje oluştur"
-
 #~ msgid "Search for projects"
 #~ msgstr "Projeleri ara"
 
@@ -4434,7 +4830,7 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 #~ msgstr "Desen"
 
 #~ msgid "From an existing project in a Git repository"
-#~ msgstr "Bir Git deposundaki mevcut projeden"
+#~ msgstr "Bir Git deposunda var olan projeden"
 
 #~ msgid "Attribution"
 #~ msgstr "Atıf"
