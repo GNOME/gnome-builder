@@ -13,9 +13,9 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-08-21 07:35+0000\n"
-"PO-Revision-Date: 2017-08-21 20:22+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2017-09-06 18:55+0000\n"
+"PO-Revision-Date: 2017-09-06 21:28+0200\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -90,7 +90,7 @@ msgstr "%s kann nicht gespeichert werden\n"
 #: contrib/gstyle/gstyle-palette-widget.c:983
 #, c-format
 msgid "Unsaved palette %u"
-msgstr "Ungesichertes Palette %u"
+msgstr "Ungesicherte Palette %u"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:64
 msgid "Hue"
@@ -101,6 +101,9 @@ msgid "Saturation"
 msgstr "Sättigung"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
+#: libide/debugger/ide-debugger-locals-view.ui:41
+#: libide/debugger/ide-debugger-registers-view.ui:34
+#: plugins/color-picker/gtk/color-picker-prefs.ui:179
 msgid "Value"
 msgstr "Wert"
 
@@ -180,26 +183,33 @@ msgid "Color strings"
 msgstr "Farbzeichenketten"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
+#: plugins/color-picker/gtk/color-picker-prefs.ui:490
 msgid "HEX3"
 msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
+#: plugins/color-picker/gtk/color-picker-prefs.ui:507
 msgid "HEX6"
 msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
+#: plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: plugins/color-picker/gtk/color-picker-prefs.ui:524
 msgid "RGB"
 msgstr "RGB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
+#: plugins/color-picker/gtk/color-picker-prefs.ui:541
 msgid "RGBA"
 msgstr "RGBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
+#: plugins/color-picker/gtk/color-picker-prefs.ui:558
 msgid "HSL"
 msgstr "HSL"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:689
+#: plugins/color-picker/gtk/color-picker-prefs.ui:575
 msgid "HSLA"
 msgstr "HSLA"
 
@@ -217,7 +227,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5858
+#: libide/sourceview/ide-source-view.c:5893
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Umbenennen"
@@ -652,7 +662,7 @@ msgstr "_Info"
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:701
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -781,7 +791,7 @@ msgstr "Suche _umbrechen"
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: data/gtk/menus.ui:250
+#: data/gtk/menus.ui:250 libide/debugger/ide-debugger-threads-view.ui:64
 msgid "Frame"
 msgstr "Rahmen"
 
@@ -834,7 +844,7 @@ msgstr "_Speichern"
 msgid "Save _As"
 msgstr "Speichern _unter"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1114
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
 msgid "Run"
 msgstr "Ausführen"
 
@@ -842,7 +852,7 @@ msgstr "Ausführen"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:630
+#: libide/workbench/ide-workbench.c:625
 msgid "Builder"
 msgstr "Builder"
 
@@ -890,8 +900,8 @@ msgid "Integration with Git"
 msgstr "Integration von Git"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Autotools"
-msgstr "Integration von Autotools"
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Integration von Autotools, Cargo, CMake, Meson, Make und PHPize"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -913,8 +923,8 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Unterstützung für automatische Einrückungen in C, Python, Vala und XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-msgid "HTML/Markdown live preview"
-msgstr "Live-Vorschau für HTML/Markdown"
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "Live-Vorschau für HTML, Markdown, reStructuredText und Sphinx"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -925,11 +935,13 @@ msgid "An integrated software profiler for native applications"
 msgstr "Ein integrierter Software-Profiler für native Anwendungen"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-msgid "Support for building with jhbuild"
-msgstr "Unterstützung für Erstellung mit jhbuild"
+msgid "An integrated debugger for native applications"
+msgstr "Ein integrierter Debugger für native Anwendungen"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-msgid "Preview support for building with Flatpak runtimes"
+#, fuzzy
+#| msgid "Preview support for building with Flatpak runtimes"
+msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Vorschau-Unterstützung für Erstellung mit Flatpak-Laufzeitumgebungen"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
@@ -1048,11 +1060,11 @@ msgstr "Kein solcher Worker"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:721
+#: libide/runner/ide-run-manager.c:735
 #: libide/workbench/ide-workbench-shortcuts.c:49
-#: plugins/command-bar/gb-command-bar.c:715
-#: plugins/terminal/gb-terminal-workbench-addin.c:180
-#: plugins/terminal/gb-terminal-workbench-addin.c:186
+#: plugins/command-bar/gb-command-bar.c:701
+#: plugins/terminal/gb-terminal-workbench-addin.c:181
+#: plugins/terminal/gb-terminal-workbench-addin.c:187
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Werkbank-Tastenkombinationen"
@@ -1076,9 +1088,9 @@ msgstr "Tastenkürzel-Fenster anzeigen"
 #: libide/application/ide-application-shortcuts.c:60
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
-#: plugins/command-bar/gb-command-bar.c:716
-#: plugins/terminal/gb-terminal-workbench-addin.c:181
-#: plugins/terminal/gb-terminal-workbench-addin.c:187
+#: plugins/command-bar/gb-command-bar.c:702
+#: plugins/terminal/gb-terminal-workbench-addin.c:182
+#: plugins/terminal/gb-terminal-workbench-addin.c:188
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Allgemein"
@@ -1101,7 +1113,7 @@ msgstr "Globalen Sucheintrag fokussieren"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:722
+#: libide/runner/ide-run-manager.c:736
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Erstellen und ausführen"
@@ -1111,20 +1123,20 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Erstellen"
 
-#: libide/buffers/ide-buffer.c:2604
+#: libide/buffers/ide-buffer.c:2690
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
-#: libide/buffers/ide-buffer-manager.c:684
+#: libide/buffers/ide-buffer-manager.c:681
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: libide/buffers/ide-buffer-manager.c:1893
+#: libide/buffers/ide-buffer-manager.c:1890
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1931
+#: libide/buffers/ide-buffer-manager.c:1928
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Puffer konnte nicht gespeichert werden, Beschwerde wird ignoriert."
 
@@ -1162,12 +1174,12 @@ msgstr "Wird exportiert …"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
-#: libide/workbench/ide-omni-bar.c:439
+#: libide/workbench/ide-omni-bar.c:443
 msgid "Success"
 msgstr "Erfolg"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
-#: libide/workbench/ide-omni-bar.c:424
+#: libide/workbench/ide-omni-bar.c:428
 msgid "Failed"
 msgstr "Gescheitert"
 
@@ -1237,12 +1249,11 @@ msgid "Configure Options"
 msgstr "Configure-Optionen"
 
 #: libide/buildui/ide-build-configuration-view.ui:189
-#: libide/workbench/ide-omni-bar-row.ui:54
 msgid "Device"
 msgstr "Gerät"
 
 #: libide/buildui/ide-build-configuration-view.ui:217
-#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
+#: libide/workbench/ide-omni-bar.ui:271
 msgid "Runtime"
 msgstr "Laufzeit"
 
@@ -1424,6 +1435,148 @@ msgstr "Pfad zur Projektdatei, Vorgabe ist der aktuelle Ordner"
 #: libide/buildui/ide-environment-editor.c:67
 msgid "New variable…"
 msgstr "Neue Variable …"
+
+#: libide/debugger/gtk/menus.ui:10
+#: libide/debugger/ide-debugger-editor-addin.c:409
+msgid "Run with Debugger"
+msgstr "Mit Debugger ausführen"
+
+#: libide/debugger/ide-debug-manager.c:936
+msgid "A suitable debugger could not be found."
+msgstr "Ein nutzbarer Debugger konnte nicht gefunden werden."
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:22
+#: libide/debugger/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr "Kennung"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "Datei"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr "Zeile"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:58
+#: libide/debugger/ide-debugger-threads-view.ui:76
+msgid "Function"
+msgstr "Funktion"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "Adresse"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:81
+#: libide/debugger/ide-debugger-locals-view.ui:28
+msgid "Type"
+msgstr "Type (Datentyp)"
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:91
+msgid "Hits"
+msgstr ""
+
+#: libide/debugger/ide-debugger-breakpoints-view.ui:102
+msgid "Expression"
+msgstr "Ausdruck"
+
+#: libide/debugger/ide-debugger-controls.ui:17
+msgid "Interrupt the program"
+msgstr "Das Programm unterbrechen"
+
+#: libide/debugger/ide-debugger-controls.ui:30
+msgid "Continue running the program"
+msgstr "Ausführung des Programms fortsetzen"
+
+#: libide/debugger/ide-debugger-controls.ui:71
+#, fuzzy
+msgid "Execute the current line, stepping into any function calls"
+msgstr "Aktuelle Zeile schrittweise durch alle Funktionsaufrufe ausführen"
+
+#: libide/debugger/ide-debugger-controls.ui:84
+#, fuzzy
+msgid "Execute the current line, stepping over any function calls"
+msgstr "Aktuelle Zeile schrittweise über alle Funktionsaufrufe ausführen"
+
+#: libide/debugger/ide-debugger-controls.ui:97
+msgid "Run until the end of the function"
+msgstr "Bis zum Ende der Funktion ausführen"
+
+#: libide/debugger/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr "Disassemblieren"
+
+#: libide/debugger/ide-debugger-editor-addin.c:295
+msgid "Debugger"
+msgstr "Debugger"
+
+#: libide/debugger/ide-debugger-editor-addin.c:311
+msgid "Threads"
+msgstr "Threads"
+
+#: libide/debugger/ide-debugger-editor-addin.c:337
+msgid "Breakpoints"
+msgstr "Breakpoints"
+
+#: libide/debugger/ide-debugger-editor-addin.c:345
+msgid "Libraries"
+msgstr "Bibliotheken"
+
+#: libide/debugger/ide-debugger-editor-addin.c:353
+msgid "Registers"
+msgstr "Register"
+
+#: libide/debugger/ide-debugger-editor-addin.c:360
+msgid "Log"
+msgstr "Protokoll"
+
+#: libide/debugger/ide-debugger-editor-addin.c:376
+msgid "Failed to initialize the debugger"
+msgstr "Debugger konnte nicht initialisiert werden"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:14
+msgid "Library"
+msgstr "Bibliothek"
+
+#: libide/debugger/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr "Adressraum"
+
+#: libide/debugger/ide-debugger-locals-view.c:307
+msgid "Locals"
+msgstr "Spracheinstellungen"
+
+#: libide/debugger/ide-debugger-locals-view.c:361
+msgid "Parameters"
+msgstr "Parameter"
+
+#: libide/debugger/ide-debugger-locals-view.ui:16
+msgid "Variable"
+msgstr "Variable"
+
+#: libide/debugger/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "Register"
+
+#: libide/debugger/ide-debugger-threads-view.ui:19
+msgid "Group"
+msgstr "Gruppe"
+
+#: libide/debugger/ide-debugger-threads-view.ui:42
+msgid "Thread"
+msgstr "Thread"
+
+#: libide/debugger/ide-debugger-threads-view.ui:88
+msgid "Arguments"
+msgstr "Argumente"
+
+#: libide/debugger/ide-debugger-threads-view.ui:101
+msgid "Location"
+msgstr "Ort"
+
+#: libide/debugger/ide-debugger-threads-view.ui:112
+msgid "Binary"
+msgstr "Binärdatei"
 
 #: libide/devices/ide-device-manager.c:148
 #, c-format
@@ -1653,6 +1806,7 @@ msgstr ""
 "Suchoptionen anzeigen oder verbergen, wie die Berücksichtigung von Groß- "
 "oder Kleinschreibung"
 
+#. List of pages that are open
 #: libide/editor/ide-editor-sidebar.ui:26
 #: libide/layout/ide-layout-stack-header.ui:21
 msgid "Open Pages"
@@ -1811,6 +1965,14 @@ msgstr "Andere Projekte"
 msgid "_Remove"
 msgstr "_Entfernen"
 
+#: libide/greeter/ide-greeter-perspective.ui:244
+msgid "Create from existing project"
+msgstr "Aus existierendem Projekt erstellen"
+
+#: libide/greeter/ide-greeter-perspective.ui:256
+msgid "Create a new project"
+msgstr "Ein neues anlegen"
+
 #: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
 msgstr "Wählen Sie ein Projekt"
@@ -1854,11 +2016,11 @@ msgstr "Standardwerte konnten nicht initialisiert werden."
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: libide/ide-context.c:2118
+#: libide/ide-context.c:1964
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: libide/ide-context.c:2237
+#: libide/ide-context.c:2083
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -1899,21 +2061,21 @@ msgstr "Einstellungen"
 
 #: libide/keybindings/ide-shortcuts-window.ui:32
 #: libide/keybindings/ide-shortcuts-window.ui:477
-#: plugins/command-bar/gb-command-bar.c:717
+#: plugins/command-bar/gb-command-bar.c:703
 msgctxt "shortcut window"
 msgid "Command Bar"
 msgstr "Befehlsleiste"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
 #: libide/keybindings/ide-shortcuts-window.ui:484
-#: plugins/terminal/gb-terminal-workbench-addin.c:182
+#: plugins/terminal/gb-terminal-workbench-addin.c:183
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
 #: libide/keybindings/ide-shortcuts-window.ui:491
-#: plugins/terminal/gb-terminal-workbench-addin.c:188
+#: plugins/terminal/gb-terminal-workbench-addin.c:189
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal in Erstellungs-Laufzeit"
@@ -2288,7 +2450,7 @@ msgstr "Monospace-Schrift für Editor"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
-#: plugins/terminal/gb-terminal-workbench-addin.c:248
+#: plugins/terminal/gb-terminal-workbench-addin.c:250
 #: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Terminal"
@@ -2634,7 +2796,7 @@ msgid "Number of CPU"
 msgstr "Anzahl der Prozessoren"
 
 #: libide/preferences/ide-preferences-builtin.c:378
-#: libide/workbench/ide-omni-bar.ui:479
+#: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "Erstellen"
 
@@ -2725,12 +2887,12 @@ msgstr "Ausführung anhalten"
 msgid "Change run options"
 msgstr "Ausführungsoptionen ändern"
 
-#: libide/runner/ide-run-manager.c:319
+#: libide/runner/ide-run-manager.c:340
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
-#: libide/runner/ide-run-manager.c:388
+#: libide/runner/ide-run-manager.c:409
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
@@ -2752,33 +2914,37 @@ msgstr "Ordner konnte nicht geöffnet werden: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Datei konnte nicht geladen werden: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5314
+#: libide/sourceview/ide-source-view.c:5349
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: libide/sourceview/ide-source-view.c:5316
+#: libide/sourceview/ide-source-view.c:5351
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: libide/sourceview/ide-source-view.c:5430
+#: libide/sourceview/ide-source-view.c:5465
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: libide/sourceview/ide-source-view.c:5857
+#: libide/sourceview/ide-source-view.c:5892
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6061
+#: libide/sourceview/ide-source-view.c:6125
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Zeile %u, Spalte %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6087
+#: libide/sourceview/ide-source-view.c:6151
 msgid "No references were found"
 msgstr "Keine Referenzen gefunden"
+
+#: libide/sourceview/ide-word-completion-provider.c:558
+msgid "Builder Word Completion"
+msgstr "Builder-Wortvervollständigung"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -2848,18 +3014,9 @@ msgstr "»%s« konnte nicht als absolute Adresse ausgewertet werden"
 msgid "URI “%s” has no host component"
 msgstr "Adresse »%s« hat keine Rechner-Komponente"
 
-#: libide/workbench/ide-omni-bar.c:407
+#: libide/workbench/ide-omni-bar.c:411
 msgid "Building"
 msgstr "Erstellung läuft"
-
-#. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:90
-msgid "missing"
-msgstr "Fehlt"
-
-#: libide/workbench/ide-omni-bar-row.ui:31
-msgid "Edit build configuration"
-msgstr "Erstellungskonfiguration bearbeiten"
 
 #: libide/workbench/ide-omni-bar.ui:199
 msgid "Configure build preferences"
@@ -2889,19 +3046,24 @@ msgstr "Letzte Erstellung"
 msgid "Build result"
 msgstr "Erstellungsergebnis"
 
-#: libide/workbench/ide-omni-bar.ui:486
+#. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: libide/workbench/ide-omni-bar.ui:475
+msgid "true"
+msgstr "wahr"
+
+#: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
 msgstr "Neu erstellen"
 
-#: libide/workbench/ide-omni-bar.ui:493
+#: libide/workbench/ide-omni-bar.ui:494
 msgid "Clean"
 msgstr "Aufräumen"
 
-#: libide/workbench/ide-omni-bar.ui:500
+#: libide/workbench/ide-omni-bar.ui:501
 msgid "Export Bundle"
 msgstr "Bundle exportieren"
 
-#: libide/workbench/ide-omni-bar.ui:581
+#: libide/workbench/ide-omni-bar.ui:526
 msgid "Build project"
 msgstr "Projekt erstellen"
 
@@ -2909,7 +3071,7 @@ msgstr "Projekt erstellen"
 msgid "Builder Statistics"
 msgstr "Builder-Statistiken"
 
-#: libide/workbench/ide-workbench.c:628
+#: libide/workbench/ide-workbench.c:623
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Builder"
@@ -2937,9 +3099,8 @@ msgid "Building cache…"
 msgstr "Cache wird erstellt …"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#: plugins/meson-templates/meson_templates/__init__.py:287
-msgid "Shared Library"
-msgstr "Gemeinsam verwendete Bibliothek"
+msgid "Shared Library (Autotools)"
+msgstr "Gemeinsam verwendete Bibliothek (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
@@ -2948,18 +3109,16 @@ msgstr ""
 "erstellen"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#: plugins/meson-templates/meson_templates/__init__.py:304
-msgid "Empty Project"
-msgstr "Leeres Projekt"
+msgid "Empty Project (Autotools)"
+msgstr "Leeres Projekt (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Ein neues, leeres Autotools-Projekt anlegen"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#: plugins/meson-templates/meson_templates/__init__.py:234
-msgid "GNOME Application"
-msgstr "GNOME-Anwendung"
+msgid "GNOME Application (Autotools)"
+msgstr "GNOME-Anwendung (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
@@ -3033,6 +3192,21 @@ msgstr "anonym"
 #: plugins/clang/ide-clang-translation-unit.c:661
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() funktioniert nur mit lokalen Dateien."
+
+#. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
+#: plugins/code-index/ide-code-index-index.c:351
+msgid "Declaration"
+msgstr "Deklaration"
+
+#: plugins/code-index/ide-code-index-service.c:543
+msgid "Indexing Source Code"
+msgstr "Quellcode wird indiziert"
+
+#: plugins/code-index/ide-code-index-service.c:544
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+"Suche, Diagnostik und Auto-Vervollständigung kann während des Vorgangs "
+"eingeschränkt sein."
 
 #: plugins/color-picker/gb-color-picker-editor-addin.c:241
 msgid "Colors"
@@ -3149,6 +3323,27 @@ msgstr ""
 "Wählen Sie die Farbräume, für die in der Leiste Schieberegler angezeigt "
 "werden sollen."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:86
+msgid "HSV"
+msgstr "HSV"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:87
+#, fuzzy
+msgid "Hue Saturation Value"
+msgstr "Farbton, Sättigung und Wert"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Rot Grün Blau"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Einheiten:"
@@ -3161,6 +3356,10 @@ msgstr ""
 "Wählen Sie den Typ der Einheit, die für RGB-Komponenten und Zeichenketten in "
 "der Leiste angewendet werden soll."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Prozent"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Filter:"
@@ -3171,6 +3370,47 @@ msgid "Select a filter that act on the colors or “None”."
 msgstr ""
 "Wählen Sie einen Filter, der auf die Farben angewendet werden soll, oder "
 "»None«."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Keine"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Achromatopsie (Totalfarbblindheit)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Achromatomalie (»Blue Cone Monochromacy«, BCM)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deuteranopie (Grünblindheit)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deuteranomalie (Grünschwäche)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopie (Rotblindheit)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomalie (Rotschwäche)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopie (Blaublindheit)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomalie (Blauschwäche)"
+
+# Ich vermute, dass das mit den Strings zur Farbenblindheit zusammenhängt.
+#: plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Web-sicher"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3240,7 +3480,7 @@ msgstr "Hervorhebungsfarben"
 msgid "Command not found: %s"
 msgstr "Befehl nicht gefunden: %s"
 
-#: plugins/command-bar/gb-command-bar.c:593
+#: plugins/command-bar/gb-command-bar.c:595
 msgid "Use the entry below to execute a command"
 msgstr "Zum Ausführen eines Befehls den Eintrag unten verwenden"
 
@@ -3626,15 +3866,15 @@ msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 "Erstellung des Vergleichs nicht möglich, keine Sicherungsdatei vorhanden."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:567
+#: plugins/git/ide-git-buffer-change-monitor.c:566
 msgid "Repository does not have a working directory."
 msgstr "Das Archiv hat keinen Arbeitsordner."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:578
+#: plugins/git/ide-git-buffer-change-monitor.c:577
 msgid "File is not under control of git working directory."
-msgstr "Die Datei ist nicht unter der Kontrolle des git-Arbeitsordners"
+msgstr "Die Datei ist nicht unter der Kontrolle des git-Arbeitsordners."
 
-#: plugins/git/ide-git-buffer-change-monitor.c:644
+#: plugins/git/ide-git-buffer-change-monitor.c:643
 msgid "The requested file does not exist within the git index."
 msgstr "Die angeforderte Datei existiert nicht im git-Index."
 
@@ -3655,7 +3895,7 @@ msgstr "Benutzer@Rechner:Archiv.git"
 
 #: plugins/git/ide-git-clone-widget.ui:66
 msgid "Enter the URL of your project’s source code repository"
-msgstr "Geben Sie die URL des Quellcode-Archivs Ihres Projekts ein."
+msgstr "Geben Sie die URL des Quellcode-Archivs Ihres Projekts ein"
 
 #: plugins/git/ide-git-clone-widget.ui:93
 msgid "Repository URL"
@@ -3737,15 +3977,27 @@ msgstr "Python-Vervollständigungen vorschlagen"
 
 #: plugins/jedi/jedi_plugin.py:753
 msgid "Use Jedi to provide completions for the Python language"
-msgstr "Jedi für die Vervollständigung von Python verwenden."
+msgstr "Jedi für die Vervollständigung von Python verwenden"
+
+#: plugins/meson-templates/meson_templates/__init__.py:234
+msgid "GNOME Application"
+msgstr "GNOME-Anwendung"
 
 #: plugins/meson-templates/meson_templates/__init__.py:236
 msgid "Create a new GNOME application"
 msgstr "Eine neue GNOME-Anwendung erstellen"
 
+#: plugins/meson-templates/meson_templates/__init__.py:287
+msgid "Shared Library"
+msgstr "Gemeinsam verwendete Bibliothek"
+
 #: plugins/meson-templates/meson_templates/__init__.py:289
 msgid "Create a new project with a shared library"
 msgstr "Ein neues Projekt mit einer gemeinsam verwendeten Bibliothek erstellen"
+
+#: plugins/meson-templates/meson_templates/__init__.py:304
+msgid "Empty Project"
+msgstr "Leeres Projekt"
 
 #: plugins/meson-templates/meson_templates/__init__.py:306
 msgid "Create a new empty project"
@@ -3759,20 +4011,20 @@ msgstr "MinGW (64-bit)"
 msgid "MinGW 32-bit"
 msgstr "MinGW (32-bit)"
 
-#: plugins/notification/ide-notification-addin.c:81
+#: plugins/notification/ide-notification-addin.c:82
 msgid "Build successful"
 msgstr "Erstellung erfolgreich"
 
-#: plugins/notification/ide-notification-addin.c:82
+#: plugins/notification/ide-notification-addin.c:83
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "Das Projekt »%s« wurde vollständig erstellt"
 
-#: plugins/notification/ide-notification-addin.c:86
+#: plugins/notification/ide-notification-addin.c:87
 msgid "Build failed"
 msgstr "Erstellung fehlgeschlagen"
 
-#: plugins/notification/ide-notification-addin.c:87
+#: plugins/notification/ide-notification-addin.c:88
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "Erstellung des Projekts »%s« ist fehlgeschlagen"
@@ -4151,6 +4403,10 @@ msgstr "Änderungsüberwachung"
 msgid "Profiler"
 msgstr "Profiler"
 
+#: plugins/sysprof/gbp-sysprof-perspective.ui:20
+msgid "Failure"
+msgstr "Fehler"
+
 #: plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Schließen"
@@ -4210,7 +4466,7 @@ msgstr "Terminalinhalt speichern unter"
 msgid "Untitled terminal"
 msgstr "Unbenanntes Terminal"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:144
+#: plugins/terminal/gb-terminal-workbench-addin.c:145
 msgid "Application Output"
 msgstr "Anwendungsausgabe"
 
@@ -4264,3 +4520,12 @@ msgstr "Der XML-Baum konnte nicht angelegt werden."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Der Puffer wurde geladen, ist aber nicht in der Pufferverwaltung vorhanden."
+
+#~ msgid "Integration with Autotools"
+#~ msgstr "Integration von Autotools"
+
+#~ msgid "HTML/Markdown live preview"
+#~ msgstr "Live-Vorschau für HTML/Markdown"
+
+#~ msgid "Support for building with jhbuild"
+#~ msgstr "Unterstützung für Erstellung mit jhbuild"
