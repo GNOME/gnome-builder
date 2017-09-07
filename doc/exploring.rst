@@ -10,11 +10,17 @@ The following sections will help you get to know Builder.
  * `Switching Perspectives`_
  * `Showing and Hiding Panels`_
  * `Build your Project`_
+ * `Editor`_
+ * `Autocompletion`_
+ * `Documentation`_
+ * `Splitting Windows`_
+ * `Searching`_
  * `Preferences`_
  * `Command Bar`_
+ * `Transfers`_
 
 Project Greeter
-===============
+---------------
 
 When you start Builder, you will be asked to select a project to be opened:
 
@@ -35,7 +41,7 @@ then select the row you would like to remove.
 Select the row(s) you'd like to remove and then click "Remove" in the lower left corner of the window.
 
 Workbench Window
-================
+----------------
 
 The application window containing your project is called the "**Workbench Window**".
 The Workbench is split up into two main areas.
@@ -44,7 +50,7 @@ At the top is the `Header Bar`_ and below is the current "**Perspective**".
 Builder has many perspectives, including the Editor, Build Preferences, Application Preferences, and the Profiler.
 
 Header Bar
-==========
+----------
 
 The header bar is shown below.
 This contains a button in the top left for `Switching Perspectives`_.
@@ -65,7 +71,7 @@ To the right of the search box is the workbench menu.
 You can find less-used features here.
 
 Switching Perspectives
-======================
+----------------------
 
 To switch perspectives, click the perspective selector button in the top left of the workbench window.
 Perspectives that support a keyboard accelerator will display the appropriate accelerator next to name of the perspective.
@@ -77,7 +83,7 @@ Perspectives that support a keyboard accelerator will display the appropriate ac
 Select the row to change perspectives.
 
 Showing and Hiding Panels
-=========================
+-------------------------
 
 Sometimes panels get in the way of focusing on code.
 You can move them out of the way using the buttons in the top left of the workbench window.
@@ -89,7 +95,7 @@ You can move them out of the way using the buttons in the top left of the workbe
 Additionally, you can use the "left-visible" or "bottom-visible" commands from the `Command Bar`_ to toggle their visibility.
 
 Build your Project
-==================
+------------------
 
 To build your project, use the OmniBar in the center of the header bar.
 To the right of the OmniBar is a button for starting a build as shown in the image below.
@@ -109,7 +115,7 @@ Clicking the cancel button will abort the current build.
 
 
 Editor
-======
+------
 
 When Builder opens your project, it will place you in the editor perspective.
 This is where you develop your project.
@@ -156,7 +162,7 @@ To close a split, use the close button in the top right of the editor.
 
 
 Searching
-=========
+---------
 
 You can search for files and symbols in your project using the search entry at the top right.
 To focus the search entry with the keyboard use ``Control+.``.
@@ -177,7 +183,7 @@ You can search this database to jump to code such as functions or classes.
 
 
 Preferences
-===========
+-----------
 
 The preferences perspective allows you to change settings for Builder and its plugins.
 You can search for preferences using the keyword search in the top left of the preferences perspective.
@@ -187,7 +193,7 @@ You can search for preferences using the keyword search in the top left of the p
 
 
 Command Bar
-===========
+-----------
 
 The command bar provides a command-line-interface into Builder.
 You can type various actions to activate them.
@@ -197,5 +203,17 @@ The command bar includes tab completion as shown below.
 
 .. image:: figures/commandbar.png
    :width: 1113 px
+   :align: center
+
+
+Transfers
+---------
+
+Sometimes it might be necessary for Builder to download content from the
+internet to build your project. When this happens, you'll see a transfers
+button displaying the progress in the top right.
+
+.. image:: figures/transfers.png
+   :width: 527 px
    :align: center
 
