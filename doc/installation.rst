@@ -23,7 +23,7 @@ It is also the engine behind Builder's powerful SDK!
 via Flatpak
 -----------
 
-If you have a recent Linux distribution, such as Fedora 25, simply download the Stable_ Flatpak and click **Install** when Software_ opens.
+If you have a recent Linux distribution, such as Fedora 26, simply download the Stable_ Flatpak and click **Install** when Software_ opens.
 If Software_ does not automatically open, try opening the Stable_ flatpakref by double clicking it in your file browser.
 
 If you want to track Builder development, you might want the Nightly_ channel instead of Stable_.
