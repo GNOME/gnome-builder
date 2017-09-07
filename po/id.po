@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-04 00:14+0000\n"
-"PO-Revision-Date: 2017-09-04 08:53+0700\n"
-"Last-Translator: Andika Triwidada <atriwidada@gnome.org>\n"
+"POT-Creation-Date: 2017-09-06 21:04+0000\n"
+"PO-Revision-Date: 2017-09-07 09:28+0700\n"
+"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
@@ -217,7 +217,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5951
+#: libide/sourceview/ide-source-view.c:5893
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Ubah nama"
@@ -882,8 +882,8 @@ msgid "Integration with Git"
 msgstr "Integrasi dengan Git"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Autotools"
-msgstr "Integrasi dengan Autotools"
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Integrasi dengan Autotools, Cargo, CMake, Meson, Make, dan PHPize"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -904,8 +904,8 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Dukungan indentasi otomatis untuk C, Python, Vala, dan XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-msgid "HTML/Markdown live preview"
-msgstr "Pratinjau sebagai HTML/Markdown"
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "Pratinjau langsung HTML, Markdown, dan reStructuredText, dan Sphinx"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -916,12 +916,12 @@ msgid "An integrated software profiler for native applications"
 msgstr "Profiler perangkat lunak terpadu untuk aplikasi native"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-msgid "Support for building with jhbuild"
-msgstr "Dukungan untuk membangun dengan jhbuild"
+msgid "An integrated debugger for native applications"
+msgstr "Pengawakutu terpadu untuk aplikasi native"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-msgid "Preview support for building with Flatpak runtimes"
-msgstr "Dukungan pratinjau untuk membangun dengan Flatpak runtimes"
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr "Dukungan untuk membangun dengan jhbuild dan flatpak runtimes"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
 msgid "Fast global search"
@@ -1100,20 +1100,20 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Memicu bangun"
 
-#: libide/buffers/ide-buffer.c:2690
+#: libide/buffers/ide-buffer.c:2696
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
-#: libide/buffers/ide-buffer-manager.c:684
+#: libide/buffers/ide-buffer-manager.c:681
 msgid "File too large to be opened."
 msgstr "Berkas terlalu besar untuk dibuka."
 
-#: libide/buffers/ide-buffer-manager.c:1893
+#: libide/buffers/ide-buffer-manager.c:1890
 #, c-format
 msgid "unsaved document %u"
 msgstr "dokumen tanpa judul %u"
 
-#: libide/buffers/ide-buffer-manager.c:1931
+#: libide/buffers/ide-buffer-manager.c:1928
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Gagal menyimpan penyangga, mengabaikan reklamasi."
 
@@ -1151,12 +1151,12 @@ msgstr "Mengekspor…"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
-#: libide/workbench/ide-omni-bar.c:439
+#: libide/workbench/ide-omni-bar.c:443
 msgid "Success"
 msgstr "Berhasil"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
-#: libide/workbench/ide-omni-bar.c:424
+#: libide/workbench/ide-omni-bar.c:428
 msgid "Failed"
 msgstr "Gagal"
 
@@ -1225,12 +1225,11 @@ msgid "Configure Options"
 msgstr "Opsi Konfigurasi"
 
 #: libide/buildui/ide-build-configuration-view.ui:189
-#: libide/workbench/ide-omni-bar-row.ui:54
 msgid "Device"
 msgstr "Perangkat"
 
 #: libide/buildui/ide-build-configuration-view.ui:217
-#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
+#: libide/workbench/ide-omni-bar.ui:271
 msgid "Runtime"
 msgstr "Runtime"
 
@@ -1418,7 +1417,7 @@ msgstr "Variabel baru…"
 msgid "Run with Debugger"
 msgstr "Jalankan dengan Pengawakutu"
 
-#: libide/debugger/ide-debug-manager.c:924
+#: libide/debugger/ide-debug-manager.c:936
 msgid "A suitable debugger could not be found."
 msgstr "Pengawakutu yang cocok tidak bisa ditemukan."
 
@@ -1990,11 +1989,11 @@ msgstr "Gagal menginisialisasi baku."
 msgid "You must call %s() before using libide."
 msgstr "Anda mesti memanggil %s() sebelum memakai libide."
 
-#: libide/ide-context.c:2127
+#: libide/ide-context.c:1964
 msgid "An unload request is already pending"
 msgstr "Suatu permintaan bongkar masih tertunda"
 
-#: libide/ide-context.c:2246
+#: libide/ide-context.c:2083
 msgid "Context has already been restored."
 msgstr "Konteks telah pernah dipulihkan."
 
@@ -2875,31 +2874,31 @@ msgstr "Gagal membuka direktori: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Gagal memuat berkas: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5407
+#: libide/sourceview/ide-source-view.c:5349
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5409
+#: libide/sourceview/ide-source-view.c:5351
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: libide/sourceview/ide-source-view.c:5523
+#: libide/sourceview/ide-source-view.c:5465
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: libide/sourceview/ide-source-view.c:5950
+#: libide/sourceview/ide-source-view.c:5892
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6180
+#: libide/sourceview/ide-source-view.c:6125
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6206
+#: libide/sourceview/ide-source-view.c:6151
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
 
@@ -2974,18 +2973,9 @@ msgstr "Tidak dapat menguraikan \"%s\" sebagai URI absolut"
 msgid "URI “%s” has no host component"
 msgstr "URI \"%s\" tidak memiliki komponen host"
 
-#: libide/workbench/ide-omni-bar.c:407
+#: libide/workbench/ide-omni-bar.c:411
 msgid "Building"
 msgstr "Membangun"
-
-#. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:90
-msgid "missing"
-msgstr "kurang"
-
-#: libide/workbench/ide-omni-bar-row.ui:31
-msgid "Edit build configuration"
-msgstr "Sunting konfigurasi bangun"
 
 #: libide/workbench/ide-omni-bar.ui:199
 msgid "Configure build preferences"
@@ -3033,17 +3023,7 @@ msgstr "Bersihkan"
 msgid "Export Bundle"
 msgstr "Ekspor Bundel"
 
-#: libide/workbench/ide-omni-bar.ui:529
-msgid "Indexing Source Code"
-msgstr "Mengindeks Kode Sumber"
-
-#: libide/workbench/ide-omni-bar.ui:544
-msgid "Search, diagnostics and autocompletion may be limited until complete."
-msgstr ""
-"Pencarian, diagnostik, dan pelengkapan otomatis mungkin dibatasi sampai "
-"selesai."
-
-#: libide/workbench/ide-omni-bar.ui:582
+#: libide/workbench/ide-omni-bar.ui:526
 msgid "Build project"
 msgstr "Bangun proyek"
 
@@ -3169,6 +3149,21 @@ msgstr "anonim"
 #: plugins/clang/ide-clang-translation-unit.c:661
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() hanya bekerja pada berkas lokal"
+
+#. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
+#: plugins/code-index/ide-code-index-index.c:351
+msgid "Declaration"
+msgstr "Deklarasi"
+
+#: plugins/code-index/ide-code-index-service.c:543
+msgid "Indexing Source Code"
+msgstr "Mengindeks Kode Sumber"
+
+#: plugins/code-index/ide-code-index-service.c:544
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+"Pencarian, diagnostik, dan pelengkapan otomatis mungkin dibatasi sampai "
+"selesai."
 
 #: plugins/color-picker/gb-color-picker-editor-addin.c:241
 msgid "Colors"
@@ -4460,3 +4455,18 @@ msgstr "Gagal membuat pohon XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer dimuat tapi tidak di pengelola buffer."
+
+#~ msgid "Integration with Autotools"
+#~ msgstr "Integrasi dengan Autotools"
+
+#~ msgid "HTML/Markdown live preview"
+#~ msgstr "Pratinjau sebagai HTML/Markdown"
+
+#~ msgid "Support for building with jhbuild"
+#~ msgstr "Dukungan untuk membangun dengan jhbuild"
+
+#~ msgid "missing"
+#~ msgstr "kurang"
+
+#~ msgid "Edit build configuration"
+#~ msgstr "Sunting konfigurasi bangun"
