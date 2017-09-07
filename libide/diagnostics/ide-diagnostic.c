@@ -199,7 +199,7 @@ ide_diagnostic_get_location (IdeDiagnostic *self)
  * ide_diagnostic_new:
  * @severity: the severity of the diagnostic
  * @text: the diagnostic message text
- * @location: the location of the diagnostic
+ * @location: (nullable): the location of the diagnostic
  *
  * Creates a new diagnostic.
  *
