@@ -92,6 +92,8 @@ You can move them out of the way using the buttons in the top left of the workbe
    :width: 133 px
    :align: center
 
+When entering Fullscreen mode, Builder will automatically dismiss the panels for your convenience.
+
 Additionally, you can use the "left-visible" or "bottom-visible" commands from the `Command Bar`_ to toggle their visibility.
 
 Build your Project
