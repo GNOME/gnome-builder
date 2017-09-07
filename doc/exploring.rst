@@ -122,6 +122,17 @@ Editor
 When Builder opens your project, it will place you in the editor perspective.
 This is where you develop your project.
 
+.. image:: figures/editor.png
+   :width: 1415 px
+   :align: center
+
+Along the left is the project sidebar. It contains the project tre, list of
+open documents, todo items, and build errors. Generally, it contains the
+"source" or things to work on in your project.
+
+Along the bottom is the utilities panel. Here you will find things like the
+debugger, terminal, build, and application console.
+
 Autocompletion
 --------------
 
