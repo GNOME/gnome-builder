@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-05 19:29+0000\n"
-"PO-Revision-Date: 2017-09-06 17:13+0200\n"
+"POT-Creation-Date: 2017-09-06 17:58+0000\n"
+"PO-Revision-Date: 2017-09-07 09:58+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -886,8 +886,8 @@ msgid "Integration with Git"
 msgstr "Integración con Git"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Autotools"
-msgstr "Integración con Autotools"
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Integración con Autotools, Cargo, CMake, Meson, Make e PHPize"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -906,8 +906,8 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Compatibilidade de autosangrado para C, Python, Vala e XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-msgid "HTML/Markdown live preview"
-msgstr "Vista previa en vivo para HTML/Markdown"
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "Vista previa en vivo para HTML, Markdown, reStructuredText e Sphinx"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -918,13 +918,15 @@ msgid "An integrated software profiler for native applications"
 msgstr "Un perfilador de software integrado para aplicativos nativos"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-msgid "Support for building with jhbuild"
-msgstr "Compatibilidade para a construción con jhbuild"
+#| msgid "An integrated software profiler for native applications"
+msgid "An integrated debugger for native applications"
+msgstr "Un perfilador integrado para aplicativos nativos"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-msgid "Preview support for building with Flatpak runtimes"
+#| msgid "Preview support for building with Flatpak runtimes"
+msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr ""
-"Compatibilidade de vista previa para a construción conrutinas de Flatpak"
+"Compatibilidade para construír con ambientes de execución jhbuild e flatpak"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
 msgid "Fast global search"
@@ -2897,12 +2899,12 @@ msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6122
+#: libide/sourceview/ide-source-view.c:6125
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Liña %u, Columna %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6148
+#: libide/sourceview/ide-source-view.c:6151
 msgid "No references were found"
 msgstr "Non se atopou ningunha referencia"
 
@@ -3155,8 +3157,7 @@ msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() só funciona en ficheiros locais"
 
 #. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
-#: plugins/code-index/ide-code-index-index.c:347
-#| msgid "Description"
+#: plugins/code-index/ide-code-index-index.c:351
 msgid "Declaration"
 msgstr "Declaración"
 
@@ -4458,6 +4459,15 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero non no xestor de búfer."
+
+#~ msgid "Integration with Autotools"
+#~ msgstr "Integración con Autotools"
+
+#~ msgid "HTML/Markdown live preview"
+#~ msgstr "Vista previa en vivo para HTML/Markdown"
+
+#~ msgid "Support for building with jhbuild"
+#~ msgstr "Compatibilidade para a construción con jhbuild"
 
 #~ msgid "missing"
 #~ msgstr "falta"
