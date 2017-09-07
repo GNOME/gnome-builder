@@ -14,4 +14,6 @@ Contents
 
    indentation
    search_and_replace
+   jump_to_definition
+   search_for_symbol
 
