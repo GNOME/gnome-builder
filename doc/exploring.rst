@@ -195,11 +195,14 @@ You can search for preferences using the keyword search in the top left of the p
 Command Bar
 -----------
 
-The command bar provides a command-line-interface into Builder.
+The command bar provides a command line interface into Builder.
 You can type various actions to activate them.
-If Vim-mode is enabled, you can also activate some Vim-inspired commands here.
 
-The command bar includes tab completion as shown below.
+To display the command bar, use the ``Control+Enter`` keyboard shortcut.
+You can release the command bar by pressing ``Escape`` and return to the editor.
+
+The command bar includes completion using ``Tab``, similar to the terminal.
+Use this to explore the availble commands.
 
 .. image:: figures/commandbar.png
    :width: 1113 px
