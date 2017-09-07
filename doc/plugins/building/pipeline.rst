@@ -112,4 +112,4 @@ loads we will register our stage in the appropriate phase.
            self.track(stage_id)
 
 .. note:: connect() was an unfortunate API choice and will likely be changed in
-          a future release to avoid collections with signals.
+          a future release to avoid collisions with signals.
