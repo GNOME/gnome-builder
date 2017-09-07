@@ -3,7 +3,7 @@
  *
  * This file is an amalgamation of the source files from GDBWIRE.
  *
- * It was created using gdbwire 1.0 and git revision b5ae67f.
+ * It was created using gdbwire 1.0 and git revision 3c5983c.
  *
  * GDBWIRE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
