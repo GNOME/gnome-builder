@@ -61,3 +61,11 @@ In the example provided, the plugin interface would be enabled for ``C`` and ``C
        def do_stack_set(self, stack):
            print("View was moved to document stack", stack)
 
+           # If you have an Ide.LayoutStackAddin, you might want to coordinate
+           # between them. To locate your stack addin, you can fetch it like
+           # the following:
+           #
+           # Note that the module name must match Module= inyour .plugin file.
+           module_name = 'my-plugin-module'
+           other_addin = Ide.LayoutStackAddin.find_by_module_name(stack, module_name)
+
