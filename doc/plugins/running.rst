@@ -32,6 +32,9 @@ Let's take a look at a practical example using the Valgrind plugin.
      </menu>
    </interface>
 
+For more information on embedding resources with Python-based plugins,
+see :ref:`creating embedded GResources<embedding_resources>`.
+
 Now register a run handler to handle the launch request.
 
 .. code-block:: python3

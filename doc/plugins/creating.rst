@@ -72,4 +72,34 @@ Now if we close the window, we should see that our plugin was unloaded.
    hello
    goodbye
 
+.. _embedding_resources:
+
+Embedding Resources
+===================
+
+Sometimes plugins need to embed resources. Builder will automatically
+load a file that matches the name ``$module_name.gresource`` if it
+placed alongside the ``$module_name.plugin`` file.
+
+.. note:: If you are writing an extension in C or Vala, simply embed GResources as normal.
+
+.. code-block:: xml
+   :caption: First we need to create a my-plugin.gresource.xml file describing our resources
+
+   <?xml version="1.0" encoding="UTF-8"?>
+   <gresources>
+     <gresource prefix="/org/gnome/builder/plugins/my-plugin">
+       <file preprocess="xml-stripblanks" compressed="true">gtk/menus.ui</file>
+     </gresource>
+   </gresources>
+
+Next, compile the resources using ``glib-compile-resources``.
+
+.. code-block:: sh
+
+   glib-compile-resources --generate my-plugin.gresource my-plugin.gresource.xml
+
+Now you should have a file named ``my-plugin.gresource`` in the current directory.
+Ship this file along with your ``my-plugin.plugin`` and Python module.
+
 Next, continue on to learn about other interfaces you can implement in Builder to extend it's features!
