@@ -12,6 +12,8 @@ Changes since last release:
  • Fix a crash in the code-index plugin.
  • Fix to ensure rows in the omnibar are recyclable.
  • Fix for non-completing GTask in IdeBuffer.
+ • Fix color picker closing and defer panel creation.
+ • Fix a crash in .ui when creating style classes.
 
 Updated Translations:
 
