@@ -67,6 +67,47 @@
     <kudo>UserDocs</kudo>
   </kudos>
 
-  <update_contact>ignatenko@src.gnome.org</update_contact>
+  <update_contact>chergert@gnome.org</update_contact>
   <translation type="gettext">gnome-builder</translation>
+
+    <!--
+  <releases>
+    <release version="3.26.0" date="2017-09-13">
+      <description>
+        <p>
+          This new release of Builder contains a host of new features and bug fixes.
+          It is the culmination of 6 months of development for GNOME 3.26.
+        </p>
+        <ul>
+          <li>The Builder UI has gone through a substantial design facelift.</li>
+          <li>Improvements to Ctags, Clang, Python, and Word based autocompletion.</li>
+          <li>You can now hover over API in C and C++ files to display their API via devhelp. F2 may also be used.</li>
+          <li>A new code-indexing plugin provides symbol search from global search for C and C++ files.</li>
+          <li>A new Debugger has landed with a reference implementation using the GNU debugger.</li>
+          <li>A new retab plugin to reindent your source code.</li>
+          <li>A new Vim-like word completion provider has been added, available via ctrl+n/ctrl+p in Vim mode.</li>
+          <li>A notification plugin to notify of build completion.</li>
+          <li>Preview support for Sphinx-based documentation.</li>
+          <li>Improvements to spellcheck, beautifier and color plugins.</li>
+          <li>Plugins can now register "pausable" actions which allow the user to temporarily stop heavy background operations.</li>
+          <li>Improved history navigation.</li>
+          <li>Various Language Server Protocol bug fixes.</li>
+          <li>The Todo plugin has been ported to C and uses less memory.</li>
+          <li>Scrolling to the insertion cursor when loading a buffer has been fixed.</li>
+          <li>Improvements to UI responsiveness.</li>
+          <li>Panels now properly maintain their visibility between runs of Builder.</li>
+          <li>A new shortcut engine has landed, allowing for many future improvements.</li>
+          <li>Fixes for the fallback code indenter.</li>
+          <li>Builder no longer uses Gtk's "sort-directories-first" property.</li>
+          <li>The BuilderBlocks font has been improved to support lower and uppercase.</li>
+          <li>Builder will now use gdb if available to inspect itself in event of a crash, simplifying bug reporting by users.</li>
+          <li>The find-ther-file plugin can now switch between files other than C and C++ files.</li>
+          <li>Performance of loading source code has been improved.</li>
+          <li>The eslint plugin has been improved.</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+    -->
+
 </component>
