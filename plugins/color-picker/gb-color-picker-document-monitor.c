@@ -48,6 +48,7 @@ typedef struct
 typedef struct
 {
   GbColorPickerDocumentMonitor *self;
+  GtkTextBuffer                *buffer;
   GtkTextMark                  *begin;
   GtkTextMark                  *end;
   guint                         uncolorize : 1;
@@ -69,6 +70,12 @@ enum {
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+static void block_signals   (GbColorPickerDocumentMonitor *self,
+                             IdeBuffer                    *buffer);
+
+static void unblock_signals (GbColorPickerDocumentMonitor *self,
+                             IdeBuffer                    *buffer);
+
 static void
 position_save (Position          *pos,
               const GtkTextIter *iter)
@@ -83,30 +90,6 @@ position_restore (Position      *pos,
                   GtkTextIter   *iter)
 {
   gtk_text_buffer_get_iter_at_line_offset (buffer, iter, pos->line, pos->line_offset);
-}
-
-static void
-block_signals (GbColorPickerDocumentMonitor *self)
-{
-  g_assert (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
-
-  g_signal_handler_block (self->buffer, self->cursor_notify_handler_id);
-  g_signal_handler_block (self->buffer, self->insert_handler_id);
-  g_signal_handler_block (self->buffer, self->insert_after_handler_id);
-  g_signal_handler_block (self->buffer, self->delete_handler_id);
-  g_signal_handler_block (self->buffer, self->delete_after_handler_id);
-}
-
-static void
-unblock_signals (GbColorPickerDocumentMonitor *self)
-{
-  g_assert (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
-
-  g_signal_handler_unblock (self->buffer, self->cursor_notify_handler_id);
-  g_signal_handler_unblock (self->buffer, self->insert_handler_id);
-  g_signal_handler_unblock (self->buffer, self->insert_after_handler_id);
-  g_signal_handler_unblock (self->buffer, self->delete_handler_id);
-  g_signal_handler_unblock (self->buffer, self->delete_after_handler_id);
 }
 
 void
@@ -129,9 +112,9 @@ gb_color_picker_document_monitor_set_color_tag_at_cursor (GbColorPickerDocumentM
       self->is_in_user_action = TRUE;
     }
 
-  block_signals (self);
+  block_signals (self, self->buffer);
   gb_color_picker_helper_set_color_tag_at_iter (&cursor, color, TRUE);
-  unblock_signals (self);
+  unblock_signals (self, self->buffer);
 }
 
 static void
@@ -150,6 +133,7 @@ collect_tag_names (GtkTextTag *tag,
 
 static void
 gb_color_picker_document_monitor_uncolorize (GbColorPickerDocumentMonitor *self,
+                                             GtkTextBuffer                *buffer,
                                              GtkTextIter                  *begin,
                                              GtkTextIter                  *end)
 {
@@ -158,9 +142,9 @@ gb_color_picker_document_monitor_uncolorize (GbColorPickerDocumentMonitor *self,
   GtkTextIter real_end;
 
   g_return_if_fail (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
-  g_return_if_fail (self->buffer != NULL);
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
+  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (buffer));
 
   if (begin == NULL && end == NULL)
     {
@@ -174,12 +158,12 @@ gb_color_picker_document_monitor_uncolorize (GbColorPickerDocumentMonitor *self,
     }
 
   if (begin == NULL)
-    gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (self->buffer), &real_begin);
+    gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &real_begin);
   else
     real_begin = *begin;
 
   if (end == NULL)
-    gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (self->buffer), &real_end);
+    gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (buffer), &real_end);
   else
     real_end = *end;
 
@@ -220,6 +204,7 @@ gb_color_picker_document_monitor_uncolorize (GbColorPickerDocumentMonitor *self,
 
 static void
 gb_color_picker_document_monitor_colorize (GbColorPickerDocumentMonitor *self,
+                                           GtkTextBuffer                *buffer,
                                            GtkTextIter                  *begin,
                                            GtkTextIter                  *end)
 {
@@ -236,15 +221,15 @@ gb_color_picker_document_monitor_colorize (GbColorPickerDocumentMonitor *self,
   gint pos;
 
   g_return_if_fail (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
-  g_return_if_fail (self->buffer != NULL);
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
   if (begin == NULL)
-    gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (self->buffer), &real_begin);
+    gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &real_begin);
   else
     real_begin = *begin;
 
   if (end == NULL)
-    gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (self->buffer), &real_end);
+    gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (buffer), &real_end);
   else
     real_end = *end;
 
@@ -252,7 +237,7 @@ gb_color_picker_document_monitor_colorize (GbColorPickerDocumentMonitor *self,
     return;
 
   offset = gtk_text_iter_get_offset (&real_begin);
-  text = gtk_text_buffer_get_slice (GTK_TEXT_BUFFER (self->buffer), &real_begin, &real_end, TRUE);
+  text = gtk_text_buffer_get_slice (GTK_TEXT_BUFFER (buffer), &real_begin, &real_end, TRUE);
 
   items = gstyle_color_parse (text);
   for (guint n = 0; n < items->len; ++n)
@@ -261,13 +246,13 @@ gb_color_picker_document_monitor_colorize (GbColorPickerDocumentMonitor *self,
 
       item = g_ptr_array_index (items, n);
       pos = offset + gstyle_color_item_get_start (item);
-      gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (self->buffer), &tag_begin, pos);
+      gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (buffer), &tag_begin, pos);
       len = gstyle_color_item_get_len (item);
-      gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (self->buffer), &tag_end, pos + len);
+      gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (buffer), &tag_end, pos + len);
       color = (GstyleColor *)gstyle_color_item_get_color (item);
 
-      tag = gb_color_picker_helper_create_color_tag (GTK_TEXT_BUFFER (self->buffer), color);
-      gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER (self->buffer), tag, &tag_begin, &tag_end);
+      tag = gb_color_picker_helper_create_color_tag (GTK_TEXT_BUFFER (buffer), color);
+      gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER (buffer), tag, &tag_begin, &tag_end);
       /* FIXME: is the tag added to the tag table or should we handle a hash table/tag table ourself ? */
     }
 }
@@ -479,6 +464,31 @@ start_monitor (GbColorPickerDocumentMonitor *self)
                                                             G_CALLBACK (cursor_moved_cb),
                                                             self,
                                                             G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+static void
+block_signals (GbColorPickerDocumentMonitor *self,
+               IdeBuffer                    *buffer)
+{
+  g_assert (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
+
+  g_signal_handlers_block_by_func (buffer, text_inserted_cb, self);
+  g_signal_handlers_block_by_func (buffer, text_inserted_after_cb, self);
+  g_signal_handlers_block_by_func (buffer, text_deleted_cb, self);
+  g_signal_handlers_block_by_func (buffer, text_deleted_after_cb, self);
+  g_signal_handlers_block_by_func (buffer, cursor_moved_cb, self);
+}
+
+static void
+unblock_signals (GbColorPickerDocumentMonitor *self,
+                 IdeBuffer                    *buffer)
+{
+  g_assert (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
+
+  g_signal_handlers_unblock_by_func (buffer, text_inserted_cb, self);
+  g_signal_handlers_unblock_by_func (buffer, text_inserted_after_cb, self);
+  g_signal_handlers_unblock_by_func (buffer, text_deleted_cb, self);
+  g_signal_handlers_unblock_by_func (buffer, text_deleted_after_cb, self);
+  g_signal_handlers_unblock_by_func (buffer, cursor_moved_cb, self);
 }
 
 static void
@@ -614,6 +624,7 @@ queued_colorize_free (gpointer data)
   QueuedColorize *qc = data;
 
   g_clear_object (&qc->self);
+  g_clear_object (&qc->buffer);
   g_clear_object (&qc->begin);
   g_clear_object (&qc->end);
   g_slice_free (QueuedColorize, qc);
@@ -628,28 +639,28 @@ gb_color_picker_document_monitor_queue_oper_cb (gpointer data)
   g_assert (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (qc->self));
   g_assert (GTK_IS_TEXT_MARK (qc->begin));
   g_assert (GTK_IS_TEXT_MARK (qc->end));
+  g_assert (GTK_TEXT_BUFFER (qc->buffer));
 
-  block_signals (qc->self);
+  block_signals (qc->self, IDE_BUFFER (qc->buffer));
 
-  if (qc->self->buffer != NULL)
+  if (qc->buffer != NULL)
     {
-      GtkTextBuffer *buffer = GTK_TEXT_BUFFER (qc->self->buffer);
       GtkTextIter begin;
       GtkTextIter end;
 
-      gtk_text_buffer_get_iter_at_mark (buffer, &begin, qc->begin);
-      gtk_text_buffer_get_iter_at_mark (buffer, &end, qc->end);
+      gtk_text_buffer_get_iter_at_mark (qc->buffer, &begin, qc->begin);
+      gtk_text_buffer_get_iter_at_mark (qc->buffer, &end, qc->end);
 
       if (qc->uncolorize)
-        gb_color_picker_document_monitor_uncolorize (qc->self, &begin, &end);
+        gb_color_picker_document_monitor_uncolorize (qc->self, qc->buffer, &begin, &end);
       else
-        gb_color_picker_document_monitor_colorize (qc->self, &begin, &end);
+        gb_color_picker_document_monitor_colorize (qc->self, qc->buffer, &begin, &end);
 
-      gtk_text_buffer_delete_mark (buffer, qc->begin);
-      gtk_text_buffer_delete_mark (buffer, qc->end);
+      gtk_text_buffer_delete_mark (qc->buffer, qc->begin);
+      gtk_text_buffer_delete_mark (qc->buffer, qc->end);
     }
 
-  unblock_signals (qc->self);
+  unblock_signals (qc->self, IDE_BUFFER (qc->buffer));
 
   return G_SOURCE_REMOVE;
 }
@@ -691,6 +702,7 @@ gb_color_picker_document_monitor_queue_oper (GbColorPickerDocumentMonitor *self,
     real_end = *end;
 
   queued.self = g_object_ref (self);
+  queued.buffer = g_object_ref (self->buffer);
   queued.begin = g_object_ref (gtk_text_buffer_create_mark (buffer, NULL, &real_begin, TRUE));
   queued.end = g_object_ref (gtk_text_buffer_create_mark (buffer, NULL, &real_end, FALSE));
   queued.uncolorize = !!uncolorize;
