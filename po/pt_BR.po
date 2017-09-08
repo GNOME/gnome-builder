@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-05 19:29+0000\n"
-"PO-Revision-Date: 2017-09-05 21:38-0200\n"
+"POT-Creation-Date: 2017-09-06 17:58+0000\n"
+"PO-Revision-Date: 2017-09-08 11:17-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -905,8 +905,8 @@ msgid "Integration with Git"
 msgstr "Integração com Git"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Autotools"
-msgstr "Integração com Autotools"
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Integração com Autotools, Cargo, CMake, Meson, Make e PHPize"
 
 # Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/org.gnome.Builder.appdata.xml.in:27
@@ -928,8 +928,9 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Suporte a recuo automático para C, Python, Vala e XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-msgid "HTML/Markdown live preview"
-msgstr "Visão instantânea de HTML/redução"
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr ""
+"HTML, Markdown e reStructuredText, e pré-visualização em tempo real de Sphinx"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -940,12 +941,14 @@ msgid "An integrated software profiler for native applications"
 msgstr "Um perfilador de software integrado para aplicativos nativos"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-msgid "Support for building with jhbuild"
-msgstr "Suporte a compilação com jhbuild"
+#| msgid "An integrated software profiler for native applications"
+msgid "An integrated debugger for native applications"
+msgstr "Um depurador integrado para aplicativos nativos"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-msgid "Preview support for building with Flatpak runtimes"
-msgstr "Suporte antecipado a compilação com runtime do Flatpak"
+#| msgid "Preview support for building with Flatpak runtimes"
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr "Suporte a compilação com runtime do flatpak e do jhbuild"
 
 #: data/org.gnome.Builder.appdata.xml.in:44
 msgid "Fast global search"
@@ -2923,12 +2926,12 @@ msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6122
+#: libide/sourceview/ide-source-view.c:6125
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6148
+#: libide/sourceview/ide-source-view.c:6151
 msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
@@ -3182,8 +3185,7 @@ msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() só funciona em arquivos locais"
 
 #. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
-#: plugins/code-index/ide-code-index-index.c:347
-#| msgid "Description"
+#: plugins/code-index/ide-code-index-index.c:351
 msgid "Declaration"
 msgstr "Descrição"
 
@@ -3354,7 +3356,7 @@ msgstr "Filtros:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
-msgstr "Selecione um filtro que aja nas cores ou “None” (para nenhum)."
+msgstr "Selecione um filtro que aja nas cores ou “None” (nenhum)."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
@@ -4486,6 +4488,15 @@ msgstr "Falha ao criar a árvore XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer carregado, mas não no gerenciador de buffer."
+
+#~ msgid "Integration with Autotools"
+#~ msgstr "Integração com Autotools"
+
+#~ msgid "HTML/Markdown live preview"
+#~ msgstr "Visão instantânea de HTML/redução"
+
+#~ msgid "Support for building with jhbuild"
+#~ msgstr "Suporte a compilação com jhbuild"
 
 #~ msgid "missing"
 #~ msgstr "faltando"
