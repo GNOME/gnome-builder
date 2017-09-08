@@ -500,14 +500,15 @@ gb_color_picker_document_monitor_set_buffer (GbColorPickerDocumentMonitor *self,
   g_return_if_fail (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (self));
   g_return_if_fail (!buffer || IDE_IS_BUFFER (buffer));
 
+  if (self->buffer != buffer && self->buffer != NULL)
+    stop_monitor (self);
+
   if (ide_set_weak_pointer (&self->buffer, buffer))
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUFFER]);
 
       if (buffer != NULL)
         start_monitor (self);
-      else
-        stop_monitor (self);
     }
 }
 
