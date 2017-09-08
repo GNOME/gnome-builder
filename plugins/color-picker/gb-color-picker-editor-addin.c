@@ -218,6 +218,8 @@ gb_color_picker_editor_addin_hide_panel (GbColorPickerEditorAddin *self)
   /* For the case we'll add more code here */
   if (self->panel == NULL)
     return;
+
+  g_object_set (self->editor, "right-visible", FALSE, NULL);
 }
 
 static void

@@ -464,6 +464,7 @@ start_monitor (GbColorPickerDocumentMonitor *self)
                                                             G_CALLBACK (cursor_moved_cb),
                                                             self,
                                                             G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+}
 
 static void
 block_signals (GbColorPickerDocumentMonitor *self,
