@@ -544,7 +544,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/json-glib"
+                    "url": "https://gitlab.gnome.org/GNOME/json-glib.git"
                 }
             ]
         },
