@@ -39,7 +39,7 @@ collect_attributes (IdeXmlParser  *self,
     return NULL;
 
   string = g_string_new (NULL);
-  while (l [0] != NULL)
+  while (l [0] != NULL && *l [0] != '\0')
     {
       value = ide_xml_parser_get_color_tag (self, l [0], COLOR_TAG_ATTRIBUTE, TRUE, TRUE, TRUE);
       g_string_append (string, value);

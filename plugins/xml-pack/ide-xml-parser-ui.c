@@ -229,12 +229,16 @@ node_post_processing_collect_style_classes (IdeXmlParser      *self,
   for (gint i = 0; i < n_children; ++i)
     {
       g_autofree gchar *class_tag = NULL;
+      const gchar *name;
 
       child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
       if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_UI_STYLE_CLASS)
         {
-          class_tag = ide_xml_parser_get_color_tag (self, ide_symbol_node_get_name (IDE_SYMBOL_NODE (child)),
-                                                    COLOR_TAG_STYLE_CLASS, TRUE, TRUE, TRUE);
+          name = ide_symbol_node_get_name (IDE_SYMBOL_NODE (child));
+          if (ide_str_empty0 (name))
+            continue;
+
+          class_tag = ide_xml_parser_get_color_tag (self, name, COLOR_TAG_STYLE_CLASS, TRUE, TRUE, TRUE);
           g_string_append (label, class_tag);
           g_string_append (label, " ");
         }
