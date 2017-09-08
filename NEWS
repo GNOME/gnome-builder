@@ -1,3 +1,23 @@
+==============
+Version 3.26.0
+==============
+
+Changes since last release:
+
+ • Various fixes to the eslint plugin.
+ • Various documentation improvements.
+ • Remove unnecessary compression from various .ui files.
+ • Avoid the use of the "mips" constant to fix mips builds.
+ • Clear the stopped breakpoint if the debugger exits uncleanly.
+ • Fix a crash in the code-index plugin.
+ • Fix to ensure rows in the omnibar are recyclable.
+ • Fix for non-completing GTask in IdeBuffer.
+
+Updated Translations:
+
+ Korean, Galician, Turkish, Indonesian, Czech, German, Polish,
+ Brazilian Portuguese, Italian
+
 ===============
 Version 3.25.92
 ===============
