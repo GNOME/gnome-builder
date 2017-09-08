@@ -15,7 +15,7 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/gtk">
-    <file compressed="true" alias="menus.ui">../data/gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks" alias="menus.ui">../data/gtk/menus.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/themes">
@@ -57,35 +57,35 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-breakpoints-view.ui">debugger/ide-debugger-breakpoints-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-controls.ui">debugger/ide-debugger-controls.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-disassembly-view.ui">debugger/ide-debugger-disassembly-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-libraries-view.ui">debugger/ide-debugger-libraries-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-locals-view.ui">debugger/ide-debugger-locals-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-registers-view.ui">debugger/ide-debugger-registers-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-debugger-threads-view.ui">debugger/ide-debugger-threads-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-pane.ui">layout/ide-layout-pane.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack-header.ui">layout/ide-layout-stack-header.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-layout-stack.ui">layout/ide-layout-stack.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-utilities.ui">editor/ide-editor-utilities.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-perspective.ui">editor/ide-editor-perspective.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-properties.ui">editor/ide-editor-properties.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-layout-stack-controls.ui">editor/ide-editor-layout-stack-controls.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-search-bar.ui">editor/ide-editor-search-bar.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-sidebar.ui">editor/ide-editor-sidebar.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-editor-view.ui">editor/ide-editor-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-greeter-perspective.ui">greeter/ide-greeter-perspective.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-greeter-project-row.ui">greeter/ide-greeter-project-row.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-omni-bar.ui">workbench/ide-omni-bar.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-omni-pausable-row.ui">workbench/ide-omni-pausable-row.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-preferences-language-row.ui">preferences/ide-preferences-language-row.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-run-button.ui">runner/ide-run-button.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-transfer-row.ui">transfers/ide-transfer-row.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-transfers-button.ui">transfers/ide-transfers-button.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-shortcuts-window.ui">keybindings/ide-shortcuts-window.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-workbench-header-bar.ui">workbench/ide-workbench-header-bar.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-workbench.ui">workbench/ide-workbench.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-workbench-message.ui">workbench/ide-workbench-message.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-breakpoints-view.ui">debugger/ide-debugger-breakpoints-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-controls.ui">debugger/ide-debugger-controls.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-disassembly-view.ui">debugger/ide-debugger-disassembly-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-libraries-view.ui">debugger/ide-debugger-libraries-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-locals-view.ui">debugger/ide-debugger-locals-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-registers-view.ui">debugger/ide-debugger-registers-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-threads-view.ui">debugger/ide-debugger-threads-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-layout-pane.ui">layout/ide-layout-pane.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-layout-stack-header.ui">layout/ide-layout-stack-header.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-layout-stack.ui">layout/ide-layout-stack.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-editor-utilities.ui">editor/ide-editor-utilities.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-editor-perspective.ui">editor/ide-editor-perspective.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-editor-properties.ui">editor/ide-editor-properties.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-editor-layout-stack-controls.ui">editor/ide-editor-layout-stack-controls.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-editor-search-bar.ui">editor/ide-editor-search-bar.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-editor-sidebar.ui">editor/ide-editor-sidebar.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-editor-view.ui">editor/ide-editor-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-greeter-perspective.ui">greeter/ide-greeter-perspective.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-greeter-project-row.ui">greeter/ide-greeter-project-row.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-omni-bar.ui">workbench/ide-omni-bar.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-omni-pausable-row.ui">workbench/ide-omni-pausable-row.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-preferences-language-row.ui">preferences/ide-preferences-language-row.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-run-button.ui">runner/ide-run-button.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-transfer-row.ui">transfers/ide-transfer-row.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-transfers-button.ui">transfers/ide-transfers-button.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-shortcuts-window.ui">keybindings/ide-shortcuts-window.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-workbench-header-bar.ui">workbench/ide-workbench-header-bar.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-workbench.ui">workbench/ide-workbench.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-workbench-message.ui">workbench/ide-workbench-message.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/buildconfig">
@@ -94,7 +94,7 @@
 
   <gresource prefix="/org/gnome/builder/plugins/debugger">
     <file alias="debugger.plugin">debugger/debugger.plugin</file>
-    <file compressed="true" alias="gtk/menus.ui">debugger/gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks" alias="gtk/menus.ui">debugger/gtk/menus.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/editor">
@@ -111,11 +111,11 @@
 
   <gresource prefix="/org/gnome/builder/plugins/buildui">
     <file alias="buildui.plugin">buildui/buildui.plugin</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-build-configuration-row.ui">buildui/ide-build-configuration-row.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-build-configuration-view.ui">buildui/ide-build-configuration-view.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-build-log-panel.ui">buildui/ide-build-log-panel.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-build-panel.ui">buildui/ide-build-panel.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-build-perspective.ui">buildui/ide-build-perspective.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks" alias="ide-environment-editor-row.ui">buildui/ide-environment-editor-row.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-build-configuration-row.ui">buildui/ide-build-configuration-row.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-build-configuration-view.ui">buildui/ide-build-configuration-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-build-log-panel.ui">buildui/ide-build-log-panel.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-build-panel.ui">buildui/ide-build-panel.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-build-perspective.ui">buildui/ide-build-perspective.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-environment-editor-row.ui">buildui/ide-environment-editor-row.ui</file>
   </gresource>
 </gresources>
