@@ -438,6 +438,7 @@ do_run_async (IdeRunManager *self,
    * for the application.
    */
   environment = ide_runner_get_environment (runner);
+  ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
   ide_environment_copy_into (ide_configuration_get_environment (config), environment, TRUE);
 
   g_signal_emit (self, signals [RUN], 0, runner);
