@@ -18,7 +18,10 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-application-addin"
 
+#include <glib/gstdio.h>
+#include <errno.h>
 #include <flatpak.h>
+#include <unistd.h>
 
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-runtime.h"
@@ -86,6 +89,126 @@ static BuiltinFlatpakRepo builtin_flatpak_repos[] = {
 };
 
 static void gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self);
+
+static void
+copy_devhelp_docs_into_user_data_dir_worker (GTask        *task,
+                                             gpointer      source_object,
+                                             gpointer      task_data,
+                                             GCancellable *cancellable)
+{
+  GPtrArray *paths = task_data;
+  g_autofree gchar *dest_dir = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (source_object));
+  g_assert (paths != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  dest_dir = g_build_filename (g_get_user_data_dir (), "gtk-doc", "html", NULL);
+
+  if (!g_file_test (dest_dir, G_FILE_TEST_IS_DIR))
+    g_mkdir_with_parents (dest_dir, 0750);
+
+  for (guint i = 0; i < paths->len; i++)
+    {
+      const gchar *basedir = g_ptr_array_index (paths, i);
+      g_autofree gchar *parent = g_build_filename (basedir, "files", "gtk-doc", "html", NULL);
+      g_autoptr(GDir) dir = g_dir_open (parent, 0, NULL);
+      const gchar *name;
+
+      if (dir == NULL)
+        continue;
+
+      while (NULL != (name = g_dir_read_name (dir)))
+        {
+          g_autofree gchar *src = g_build_filename (parent, name, NULL);
+          g_autofree gchar *dst = g_build_filename (dest_dir, name, NULL);
+
+          if (g_file_test (dst, G_FILE_TEST_IS_SYMLINK))
+            g_unlink (dst);
+
+          errno = 0;
+          if (symlink (src, dst) == -1)
+            g_warning ("Failed to copy documentation: %s (%s)",
+                       g_strerror (errno), src);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) paths = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
+
+  if (self->installations == NULL)
+    IDE_EXIT;
+
+  /* HACK:
+   *
+   * Devhelp does not provide us adequate API to be able to set the
+   * search path for runtimes. That means that we have no documentation
+   * for users from Devhelp. While we can improve this in the future via
+   * "doc packs" in Devhelp, we need something that can be shipped
+   * immediately for 3.26.
+   *
+   * The hack that seems to be the minimal amount of work which improves
+   * the situation on both Host-installed and Flatpak-installed variants
+   * is to copy documentation from the newest version of runtimes into
+   * the $XDG_DATA_DIR/and will work
+   */
+
+  paths = g_ptr_array_new_with_free_func (g_free);
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_source_tag (task, copy_devhelp_docs_into_user_data_dir);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  /*
+   * Collect the paths to all of the .Docs runtimes.
+   *
+   * TODO: We should try to sort these by importants, so that master
+   *       docs are preferred and if that is not available, the highest
+   *       version number.
+   */
+  for (guint i = 0; i < self->installations->len; i++)
+    {
+      InstallInfo *info = g_ptr_array_index (self->installations, i);
+      g_autoptr(GPtrArray) refs = NULL;
+
+      refs = flatpak_installation_list_installed_refs_by_kind (info->installation,
+                                                               FLATPAK_REF_KIND_RUNTIME,
+                                                               g_task_get_cancellable (task),
+                                                               NULL);
+      if (refs == NULL)
+        continue;
+
+      for (guint j = 0; j < refs->len; j++)
+        {
+          FlatpakInstalledRef *ref = g_ptr_array_index (refs, j);
+          const gchar *name = flatpak_ref_get_name (FLATPAK_REF (ref));
+
+          if (name == NULL || !g_str_has_suffix (name, ".Docs"))
+            continue;
+
+          g_ptr_array_add (paths, g_strdup (flatpak_installed_ref_get_deploy_dir (ref)));
+        }
+    }
+
+  g_task_set_task_data (task, g_steal_pointer (&paths), (GDestroyNotify)g_ptr_array_unref);
+
+  /* Now go copy the the docs over */
+  g_task_run_in_thread (task, copy_devhelp_docs_into_user_data_dir_worker);
+
+  IDE_EXIT;
+}
 
 static void
 install_info_installation_changed (GFileMonitor      *monitor,
@@ -273,6 +396,8 @@ gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self)
           g_signal_emit (self, signals[RUNTIME_ADDED], 0, ref);
         }
     }
+
+  copy_devhelp_docs_into_user_data_dir (self);
 
   g_signal_emit (self, signals[RELOAD], 0);
 
