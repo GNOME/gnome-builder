@@ -42,12 +42,12 @@ install_headers({{name_}}_headers, subdir: '{{name}}')
 pkg = import('pkgconfig')
 
 pkg.generate(
-  libraries: {{name_}}_lib,
-  name: '{{name}}',
-  filebase: '{{name}}-' + api_version,
-  version: meson.project_version(),
-  subdirs: '{{name}}',
-  requires: 'glib-2.0',
-  install: true,
+  description: 'A shared library for ...',
+    libraries: {{name_}}_lib,
+         name: '{{name}}',
+     filebase: '{{name}}-' + api_version,
+      version: meson.project_version(),
+      subdirs: '{{name}}',
+     requires: 'glib-2.0',
   install_dir: join_paths(get_option('libdir'), 'pkgconfig')
 )
