@@ -89,8 +89,8 @@ ide_progress_set_fraction (IdeProgress *self,
   gboolean do_notify = FALSE;
 
   g_return_if_fail (IDE_IS_PROGRESS (self));
-  g_return_if_fail (fraction >= 0.0);
-  g_return_if_fail (fraction <= 1.0);
+
+  fraction = CLAMP (fraction, 0.0, 1.0);
 
   g_mutex_lock (&self->mutex);
   if (self->fraction != fraction)
