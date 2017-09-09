@@ -31,7 +31,6 @@ G_DEFINE_QUARK (gb-flatpak-pipeline-error-quark, gb_flatpak_pipeline_error)
 enum {
   PREPARE_MKDIRS,
   PREPARE_BUILD_INIT,
-  PREPARE_REMOTES,
 };
 
 enum {
