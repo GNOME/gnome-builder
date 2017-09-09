@@ -28,6 +28,7 @@
 #include "buildsystem/ide-build-target.h"
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-manager.h"
+#include "buildsystem/ide-environment.h"
 #include "runner/ide-run-manager.h"
 #include "runner/ide-run-manager-private.h"
 #include "runner/ide-runner.h"
@@ -380,6 +381,7 @@ do_run_async (IdeRunManager *self,
   IdeContext *context;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *config;
+  IdeEnvironment *environment;
   IdeRuntime *runtime;
   g_autoptr(IdeRunner) runner = NULL;
   GCancellable *cancellable;
@@ -429,6 +431,14 @@ do_run_async (IdeRunManager *self,
             ide_runner_append_argv (runner, argv[i]);
         }
     }
+
+  /* Add our environment variables. Currently, these are coming
+   * from the *build* environment because we do not yet have a
+   * way to differentiate between build environment and runtime
+   * for the application.
+   */
+  environment = ide_runner_get_environment (runner);
+  ide_environment_copy_into (ide_configuration_get_environment (config), environment, TRUE);
 
   g_signal_emit (self, signals [RUN], 0, runner);
 
