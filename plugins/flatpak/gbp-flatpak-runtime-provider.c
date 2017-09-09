@@ -252,6 +252,36 @@ gbp_flatpak_runtime_provider_install_cb (GObject      *object,
 }
 
 static void
+gbp_flatpak_runtime_provider_install_docs_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdeTransferManager *transfer_manager = (IdeTransferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  InstallRuntime *install;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TRANSFER_MANAGER (transfer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  install = g_task_get_task_data (task);
+
+  /* This error is not fatal */
+  if (!ide_transfer_manager_execute_finish (transfer_manager, result, &error))
+    g_warning ("Failed to install docs: %s", error->message);
+
+  install->op_count--;
+
+  if (install->op_count == 0 && !install->failed)
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
@@ -259,6 +289,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   GbpFlatpakApplicationAddin *app_addin = (GbpFlatpakApplicationAddin *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  g_autofree gchar *docs_id = NULL;
   GbpFlatpakRuntimeProvider *self;
   IdeTransferManager *transfer_manager;
   InstallRuntime *install;
@@ -296,8 +327,9 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  install->op_count = 2;
+  install->op_count = 3;
 
+  /* Make sure the Platform runtime is installed */
   if (gbp_flatpak_application_addin_has_runtime (app_addin,
                                                  install->id,
                                                  install->arch,
@@ -318,6 +350,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                           g_object_ref (task));
     }
 
+  /* Now make sure the SDK is installed */
   sdk_matches_runtime = (g_strcmp0 (install->sdk_id, install->id) == 0 &&
                          g_strcmp0 (install->sdk_arch, install->arch) == 0 &&
                          g_strcmp0 (install->sdk_branch, install->branch) == 0);
@@ -342,6 +375,29 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                           g_object_ref (task));
     }
 
+  /* If there is a .Docs runtime for the SDK, install that too */
+  docs_id = g_strdup_printf ("%s.Docs", install->sdk_id);
+  if (gbp_flatpak_application_addin_has_runtime (app_addin,
+                                                 docs_id,
+                                                 install->arch,
+                                                 install->branch))
+    install->op_count--;
+  else
+    {
+      g_autoptr(GbpFlatpakTransfer) transfer = NULL;
+
+      transfer = gbp_flatpak_transfer_new (docs_id,
+                                           install->arch,
+                                           install->branch,
+                                           FALSE);
+      ide_transfer_manager_execute_async (transfer_manager,
+                                          IDE_TRANSFER (transfer),
+                                          cancellable,
+                                          gbp_flatpak_runtime_provider_install_docs_cb,
+                                          g_object_ref (task));
+    }
+
+  /* Complete the task now if everything is done */
   if (install->op_count == 0)
     g_task_return_boolean (task, TRUE);
 
