@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-06 21:04+0000\n"
-"PO-Revision-Date: 2017-09-07 09:28+0700\n"
-"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
+"POT-Creation-Date: 2017-09-08 23:38+0000\n"
+"PO-Revision-Date: 2017-09-09 13:23+0700\n"
+"Last-Translator: Andika Triwidada <atriwidada@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
@@ -873,7 +873,6 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Penyorotan sintaks bawaan untuk banyak bahasa"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
-#: data/org.gnome.Builder.appdata.xml.in:52
 msgid "Side-by-side code editors"
 msgstr "Penyunting kode bersisian"
 
@@ -923,13 +922,29 @@ msgstr "Pengawakutu terpadu untuk aplikasi native"
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Dukungan untuk membangun dengan jhbuild dan flatpak runtimes"
 
-#: data/org.gnome.Builder.appdata.xml.in:44
-msgid "Fast global search"
-msgstr "Pencarian global cepat"
+#: data/org.gnome.Builder.appdata.xml.in:41
+msgid "Quickly access your projects"
+msgstr "Secara cepat mengakses proyek Anda"
 
-#: data/org.gnome.Builder.appdata.xml.in:48
-msgid "Integrated project tree"
-msgstr "Pohon proyek terpadu"
+#: data/org.gnome.Builder.appdata.xml.in:45
+msgid "Create new projects from a variety of templates"
+msgstr "Buat proyek baru dari berbagai templat"
+
+#: data/org.gnome.Builder.appdata.xml.in:49
+msgid "Integration with Git to clone your projects"
+msgstr "Integrasi dengan Git untuk mengklon proyek ANda"
+
+#: data/org.gnome.Builder.appdata.xml.in:53
+msgid "The source code editor"
+msgstr "Penyunting kode sumber"
+
+#: data/org.gnome.Builder.appdata.xml.in:57
+msgid "Fast global fuzzy search"
+msgstr "Pencarian fuzzy global yang cepat"
+
+#: data/org.gnome.Builder.appdata.xml.in:61
+msgid "Debug with the GNU debugger"
+msgstr "Mengawakutu dengan GNU debugger"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -3165,7 +3180,7 @@ msgstr ""
 "Pencarian, diagnostik, dan pelengkapan otomatis mungkin dibatasi sampai "
 "selesai."
 
-#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+#: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
 msgstr "Warna"
 
@@ -3645,18 +3660,18 @@ msgstr "Halaman Dokumentasi Baru"
 msgid "_Show more"
 msgstr "Tampilkan _lebih banyak"
 
-#: plugins/eslint/eslint_plugin/__init__.py:105
+#: plugins/eslint/eslint_plugin/__init__.py:139
 msgid "ESlint"
 msgstr "ESlint"
 
-#: plugins/eslint/eslint_plugin/__init__.py:106
+#: plugins/eslint/eslint_plugin/__init__.py:140
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 "Memungkinkan penggunaan ESLint, yang dapat mengeksekusi kode dalam proyek "
 "Anda"
 
 #. translators: these are keywords used to search for preferences
-#: plugins/eslint/eslint_plugin/__init__.py:108
+#: plugins/eslint/eslint_plugin/__init__.py:142
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript kode lint mengeksekusi eksekusi"
 
@@ -4455,18 +4470,3 @@ msgstr "Gagal membuat pohon XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer dimuat tapi tidak di pengelola buffer."
-
-#~ msgid "Integration with Autotools"
-#~ msgstr "Integrasi dengan Autotools"
-
-#~ msgid "HTML/Markdown live preview"
-#~ msgstr "Pratinjau sebagai HTML/Markdown"
-
-#~ msgid "Support for building with jhbuild"
-#~ msgstr "Dukungan untuk membangun dengan jhbuild"
-
-#~ msgid "missing"
-#~ msgstr "kurang"
-
-#~ msgid "Edit build configuration"
-#~ msgstr "Sunting konfigurasi bangun"
