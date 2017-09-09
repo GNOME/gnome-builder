@@ -41,6 +41,9 @@ void            ide_environment_append      (IdeEnvironment         *self,
 void            ide_environment_remove      (IdeEnvironment         *self,
                                              IdeEnvironmentVariable *variable);
 IdeEnvironment *ide_environment_copy        (IdeEnvironment         *self);
+void            ide_environment_copy_into   (IdeEnvironment         *self,
+                                             IdeEnvironment         *dest,
+                                             gboolean                replace);
 
 G_END_DECLS
 

@@ -291,21 +291,31 @@ ide_environment_append (IdeEnvironment         *self,
 IdeEnvironment *
 ide_environment_copy (IdeEnvironment *self)
 {
-  IdeEnvironment *copy;
-  guint i;
+  g_autoptr(IdeEnvironment) copy = NULL;
 
   g_return_val_if_fail (IDE_IS_ENVIRONMENT (self), NULL);
 
   copy = ide_environment_new ();
+  ide_environment_copy_into (self, copy, TRUE);
 
-  for (i = 0; i < self->variables->len; i++)
+  return g_steal_pointer (&copy);
+}
+
+void
+ide_environment_copy_into (IdeEnvironment *self,
+                           IdeEnvironment *dest,
+                           gboolean        replace)
+{
+  g_return_if_fail (IDE_IS_ENVIRONMENT (self));
+  g_return_if_fail (IDE_IS_ENVIRONMENT (dest));
+
+  for (guint i = 0; i < self->variables->len; i++)
     {
       IdeEnvironmentVariable *var = g_ptr_array_index (self->variables, i);
       const gchar *key = ide_environment_variable_get_key (var);
       const gchar *value = ide_environment_variable_get_value (var);
 
-      ide_environment_setenv (copy, key, value);
+      if (replace || ide_environment_getenv (dest, key) == NULL)
+        ide_environment_setenv (dest, key, value);
     }
-
-  return copy;
 }
