@@ -377,6 +377,7 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_flatpak_runtime_provider_install_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (!g_str_has_prefix (runtime_id, "flatpak:"))
     IDE_GOTO (unknown_runtime_id);
@@ -450,6 +451,7 @@ gbp_flatpak_runtime_provider_locate_sdk_async (GbpFlatpakRuntimeProvider *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_flatpak_runtime_provider_locate_sdk_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   IDE_EXIT;
 }
