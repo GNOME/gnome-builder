@@ -10,16 +10,17 @@
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017.
 # Muhammet Kara <muhammetk@gmail.com>, 2015, 2016, 2017.
 # Furkan Tokaç <developmentft@gmail.com>, 2017.
+# Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-06 21:04+0000\n"
-"PO-Revision-Date: 2017-09-06 19:27-0400\n"
-"Last-Translator: Furkan Tokaç <developmentft@gmail.com>\n"
-"Language-Team: Turkish <gnome-turk@gnome.org>\n"
+"POT-Creation-Date: 2017-09-10 09:35+0000\n"
+"PO-Revision-Date: 2017-09-10 15:21+0300\n"
+"Last-Translator: Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>\n"
+"Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -831,7 +832,7 @@ msgstr "_Kaydet"
 msgid "Save _As"
 msgstr "_Farklı Kaydet"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1139
 msgid "Run"
 msgstr "Çalıştır"
 
@@ -877,7 +878,6 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Birçok dil için tümleşik sözdizimi vurgulama"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
-#: data/org.gnome.Builder.appdata.xml.in:52
 msgid "Side-by-side code editors"
 msgstr "Yan yana kod düzenleyiciler"
 
@@ -918,22 +918,36 @@ msgid "An integrated software profiler for native applications"
 msgstr "Yerli uygulamalar için bir tümleştirilmiş yazılım profilleyici"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-#| msgid "An integrated software profiler for native applications"
 msgid "An integrated debugger for native applications"
 msgstr "Yerli uygulamalar için tümleştirilmiş bir hata ayıklayıcısı"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-#| msgid "Preview support for building with Flatpak runtimes"
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Flatpak runtimes ve jhbuild ile inşa desteği"
 
-#: data/org.gnome.Builder.appdata.xml.in:44
-msgid "Fast global search"
-msgstr "Hızlı genel arama"
+#: data/org.gnome.Builder.appdata.xml.in:41
+msgid "Quickly access your projects"
+msgstr "Projelerinize hızlıca erişin"
 
-#: data/org.gnome.Builder.appdata.xml.in:48
-msgid "Integrated project tree"
-msgstr "Tümleşik proje ağacı"
+#: data/org.gnome.Builder.appdata.xml.in:45
+msgid "Create new projects from a variety of templates"
+msgstr "Çeşitli şablonlardan yeni projeler oluşturun"
+
+#: data/org.gnome.Builder.appdata.xml.in:49
+msgid "Integration with Git to clone your projects"
+msgstr "Projelerinizi klonlamak için Git bütünleşmesi"
+
+#: data/org.gnome.Builder.appdata.xml.in:53
+msgid "The source code editor"
+msgstr "Kaynak kod düzenleyici"
+
+#: data/org.gnome.Builder.appdata.xml.in:57
+msgid "Fast global fuzzy search"
+msgstr "Hızlı genel bulanık arama"
+
+#: data/org.gnome.Builder.appdata.xml.in:61
+msgid "Debug with the GNU debugger"
+msgstr "GNU hata ayıklayıcıyla hata ayıklayın"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -1039,7 +1053,7 @@ msgstr "Böyle bir işçi yok"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:735
+#: libide/runner/ide-run-manager.c:746
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
@@ -1092,7 +1106,7 @@ msgstr "Genel arama girdisine odaklan"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:736
+#: libide/runner/ide-run-manager.c:747
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "İnşa Et ve Çalıştır"
@@ -1451,9 +1465,8 @@ msgid "Type"
 msgstr "Tür"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:91
-#, fuzzy
 msgid "Hits"
-msgstr "Hits"
+msgstr "Bulgular"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
@@ -2845,11 +2858,11 @@ msgstr "Çalıştırmayı durdur"
 msgid "Change run options"
 msgstr "Çalıştırma seçeneklerini değiştir"
 
-#: libide/runner/ide-run-manager.c:340
+#: libide/runner/ide-run-manager.c:341
 msgid "Cannot run target, another target is running"
 msgstr "Hedef çalıştırılamıyor, başka bir hedef çalışıyor"
 
-#: libide/runner/ide-run-manager.c:409
+#: libide/runner/ide-run-manager.c:411
 msgid "Failed to locate runtime"
 msgstr "Çalışma ortamını konumlama başarısız oldu"
 
@@ -3054,7 +3067,6 @@ msgid "Building cache…"
 msgstr "Önbellek inşa ediliyor…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#| msgid "Shared Library"
 msgid "Shared Library (Autotools)"
 msgstr "Paylaşılan Kütüphane (Autotools)"
 
@@ -3063,7 +3075,6 @@ msgid "Create a new autotools project with a shared library"
 msgstr "Bir paylaşılan kütüphaneyle yeni bir autotools projesi yarat"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#| msgid "Empty Project"
 msgid "Empty Project (Autotools)"
 msgstr "Boş Proje (Autotools)"
 
@@ -3072,7 +3083,6 @@ msgid "Create a new empty autotools project"
 msgstr "Yeni bir boş autotools projesi oluştur"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#| msgid "GNOME Application"
 msgid "GNOME Application (Autotools)"
 msgstr "GNOME Uygulaması (Autotools)"
 
@@ -3151,7 +3161,6 @@ msgstr "clang_codeCompleteAt() yalnızca yerel dosyalar üzerinde çalışır"
 
 #. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
 #: plugins/code-index/ide-code-index-index.c:351
-#| msgid "Saturation"
 msgid "Declaration"
 msgstr "Tanım"
 
@@ -3164,7 +3173,7 @@ msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
 "Arama, teşhis ve otomatik tamamlama, tamamlanıncaya kadar sınırlı olabilir."
 
-#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+#: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
 msgstr "Renkler"
 
@@ -3644,16 +3653,16 @@ msgstr "Yeni Belgelendirme Sayfası"
 msgid "_Show more"
 msgstr "Daha fazla gö_ster"
 
-#: plugins/eslint/eslint_plugin/__init__.py:105
+#: plugins/eslint/eslint_plugin/__init__.py:139
 msgid "ESlint"
 msgstr "ESlint"
 
-#: plugins/eslint/eslint_plugin/__init__.py:106
+#: plugins/eslint/eslint_plugin/__init__.py:140
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr "Projenizin içinde kod yürütebilen ESLint kullanımını etkinleştirin"
 
 #. translators: these are keywords used to search for preferences
-#: plugins/eslint/eslint_plugin/__init__.py:108
+#: plugins/eslint/eslint_plugin/__init__.py:142
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint kod çalıştır çalıştırma"
 
@@ -3686,7 +3695,7 @@ msgstr "Uygulama Klonla"
 msgid "Clone"
 msgstr "Klonla"
 
-#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:139
 msgid "Network is not available, skipping downloads"
 msgstr "Ağ kullanılabilir değil, indirmeler atlanıyor"
 
@@ -4267,7 +4276,7 @@ msgstr "_Tümünü Yok Say"
 
 #: plugins/spellcheck/gbp-spell-widget.ui:114
 msgid "Change _to"
-msgstr "Olarak değiştir"
+msgstr "_Olarak değiştir"
 
 #: plugins/spellcheck/gbp-spell-widget.ui:147
 msgid "Cha_nge"
@@ -4452,8 +4461,8 @@ msgstr "XML ağacı oluşturulamadı."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
-#~ msgid "Integration with Autotools"
-#~ msgstr "Autotools tümleştirmesi"
+#~ msgid "Integrated project tree"
+#~ msgstr "Tümleşik proje ağacı"
 
 #~ msgid "HTML/Markdown live preview"
 #~ msgstr "HTML/Markdown canlı önizleme"
