@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-06 18:55+0000\n"
-"PO-Revision-Date: 2017-09-06 21:28+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2017-09-10 13:21+0000\n"
+"PO-Revision-Date: 2017-09-10 18:55+0200\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
@@ -844,7 +844,7 @@ msgstr "_Speichern"
 msgid "Save _As"
 msgstr "Speichern _unter"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1139
 msgid "Run"
 msgstr "Ausführen"
 
@@ -891,7 +891,6 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Eingebaute Syntax-Hervorhebung für viele Sprachen"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
-#: data/org.gnome.Builder.appdata.xml.in:52
 msgid "Side-by-side code editors"
 msgstr "Nebeneinander angeordnete Code-Editoren"
 
@@ -939,18 +938,33 @@ msgid "An integrated debugger for native applications"
 msgstr "Ein integrierter Debugger für native Anwendungen"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-#, fuzzy
-#| msgid "Preview support for building with Flatpak runtimes"
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Vorschau-Unterstützung für Erstellung mit Flatpak-Laufzeitumgebungen"
+msgstr ""
+"Unterstützung für Erstellung mit JHbuild- und Flatpak-Laufzeitumgebungen"
 
-#: data/org.gnome.Builder.appdata.xml.in:44
-msgid "Fast global search"
-msgstr "Schnelle globale Suche"
+#: data/org.gnome.Builder.appdata.xml.in:41
+msgid "Quickly access your projects"
+msgstr "Schneller Zugriff auf alle Ihre Projekte"
 
-#: data/org.gnome.Builder.appdata.xml.in:48
-msgid "Integrated project tree"
-msgstr "Integrierter Projektbaum"
+#: data/org.gnome.Builder.appdata.xml.in:45
+msgid "Create new projects from a variety of templates"
+msgstr "Ein neues Projekt aus einer Reihe von Vorlagen erstellen"
+
+#: data/org.gnome.Builder.appdata.xml.in:49
+msgid "Integration with Git to clone your projects"
+msgstr "Integration von Git zum Klonen Ihrer Projekte"
+
+#: data/org.gnome.Builder.appdata.xml.in:53
+msgid "The source code editor"
+msgstr "Der Quellcode-Editor"
+
+#: data/org.gnome.Builder.appdata.xml.in:57
+msgid "Fast global fuzzy search"
+msgstr "Schnelle, globale, fehlertolerante Suche"
+
+#: data/org.gnome.Builder.appdata.xml.in:61
+msgid "Debug with the GNU debugger"
+msgstr "Fehlerdiagnose mit dem GNU Debugger"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -1060,7 +1074,7 @@ msgstr "Kein solcher Worker"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:735
+#: libide/runner/ide-run-manager.c:746
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
@@ -1113,7 +1127,7 @@ msgstr "Globalen Sucheintrag fokussieren"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:736
+#: libide/runner/ide-run-manager.c:747
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Erstellen und ausführen"
@@ -1123,7 +1137,7 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Erstellen"
 
-#: libide/buffers/ide-buffer.c:2690
+#: libide/buffers/ide-buffer.c:2696
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
@@ -1474,7 +1488,7 @@ msgstr "Type (Datentyp)"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:91
 msgid "Hits"
-msgstr ""
+msgstr "Treffer"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
@@ -1488,15 +1502,15 @@ msgstr "Das Programm unterbrechen"
 msgid "Continue running the program"
 msgstr "Ausführung des Programms fortsetzen"
 
+# CHECK
 #: libide/debugger/ide-debugger-controls.ui:71
-#, fuzzy
 msgid "Execute the current line, stepping into any function calls"
-msgstr "Aktuelle Zeile schrittweise durch alle Funktionsaufrufe ausführen"
+msgstr "Aktuelle Zeile ausführen mit Sprung in Funktionsaufrufe"
 
+# CHECK
 #: libide/debugger/ide-debugger-controls.ui:84
-#, fuzzy
 msgid "Execute the current line, stepping over any function calls"
-msgstr "Aktuelle Zeile schrittweise über alle Funktionsaufrufe ausführen"
+msgstr "Aktuelle Zeile ausführen mit Überspringen von Funktionsaufrufen"
 
 #: libide/debugger/ide-debugger-controls.ui:97
 msgid "Run until the end of the function"
@@ -2887,12 +2901,12 @@ msgstr "Ausführung anhalten"
 msgid "Change run options"
 msgstr "Ausführungsoptionen ändern"
 
-#: libide/runner/ide-run-manager.c:340
+#: libide/runner/ide-run-manager.c:341
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
-#: libide/runner/ide-run-manager.c:409
+#: libide/runner/ide-run-manager.c:411
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
@@ -3208,7 +3222,7 @@ msgstr ""
 "Suche, Diagnostik und Auto-Vervollständigung kann während des Vorgangs "
 "eingeschränkt sein."
 
-#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+#: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
 msgstr "Farben"
 
@@ -3327,8 +3341,8 @@ msgstr ""
 msgid "HSV"
 msgstr "HSV"
 
+# CHECK
 #: plugins/color-picker/gtk/color-picker-prefs.ui:87
-#, fuzzy
 msgid "Hue Saturation Value"
 msgstr "Farbton, Sättigung und Wert"
 
@@ -3705,18 +3719,18 @@ msgstr "Neue Dokumentationsseite"
 msgid "_Show more"
 msgstr "_Mehr anzeigen"
 
-#: plugins/eslint/eslint_plugin/__init__.py:105
+#: plugins/eslint/eslint_plugin/__init__.py:139
 msgid "ESlint"
 msgstr "ESLint"
 
-#: plugins/eslint/eslint_plugin/__init__.py:106
+#: plugins/eslint/eslint_plugin/__init__.py:140
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 "Nutzung von ESLint aktivieren, womit Code in Ihrem Projekt ausgeführt werden "
 "kann"
 
 #. translators: these are keywords used to search for preferences
-#: plugins/eslint/eslint_plugin/__init__.py:108
+#: plugins/eslint/eslint_plugin/__init__.py:142
 msgid "eslint javascript lint code execute execution"
 msgstr "ESLint JavaScript lint Code ausführen Ausführung"
 
@@ -3749,7 +3763,7 @@ msgstr "App klonen"
 msgid "Clone"
 msgstr "Klonen"
 
-#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:139
 msgid "Network is not available, skipping downloads"
 msgstr "Netzwerk ist nicht verfügbar, Downloads werden übersprungen"
 
@@ -4520,12 +4534,3 @@ msgstr "Der XML-Baum konnte nicht angelegt werden."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Der Puffer wurde geladen, ist aber nicht in der Pufferverwaltung vorhanden."
-
-#~ msgid "Integration with Autotools"
-#~ msgstr "Integration von Autotools"
-
-#~ msgid "HTML/Markdown live preview"
-#~ msgstr "Live-Vorschau für HTML/Markdown"
-
-#~ msgid "Support for building with jhbuild"
-#~ msgstr "Unterstützung für Erstellung mit jhbuild"
