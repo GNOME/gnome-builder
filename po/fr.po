@@ -1,26 +1,27 @@
 # French translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
+#
 # Alexandre Franke <alexandre.franke@gmail.com>, 2015-2016.
 # Yannick Inizan <inizan.yannick@gmail.com>, 2015.
 # Laurent de Burlet <thevedeburlet@gmail.com>, 2016.
-# Guillaume Bernard <contact.guib@laposte.net>, 2017
-#
+# Guillaume Bernard <contact.guib@laposte.net>, 2017.
+# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-02 18:46+0000\n"
-"PO-Revision-Date: 2017-09-02 20:48+0200\n"
-"Last-Translator: Guillaume Bernard <contact.guib@laposte.net>\n"
-"Language-Team: français <>\n"
+"POT-Creation-Date: 2017-09-09 22:38+0000\n"
+"PO-Revision-Date: 2017-09-06 12:27+0100\n"
+"Last-Translator: Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>\n"
+"Language-Team: French <traduc@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
@@ -97,6 +98,7 @@ msgstr "Saturation"
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:86
 #: libide/debugger/ide-debugger-locals-view.ui:41
 #: libide/debugger/ide-debugger-registers-view.ui:34
+#: plugins/color-picker/gtk/color-picker-prefs.ui:179
 msgid "Value"
 msgstr "Valeur"
 
@@ -175,26 +177,33 @@ msgid "Color strings"
 msgstr "Chaînes de couleur"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:634
+#: plugins/color-picker/gtk/color-picker-prefs.ui:490
 msgid "HEX3"
 msgstr "HEX3"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:645
+#: plugins/color-picker/gtk/color-picker-prefs.ui:507
 msgid "HEX6"
 msgstr "HEX6"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:656
+#: plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: plugins/color-picker/gtk/color-picker-prefs.ui:524
 msgid "RGB"
 msgstr "RVB"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:667
+#: plugins/color-picker/gtk/color-picker-prefs.ui:541
 msgid "RGBA"
 msgstr "RVBA"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:678
+#: plugins/color-picker/gtk/color-picker-prefs.ui:558
 msgid "HSL"
 msgstr "TSL"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:689
+#: plugins/color-picker/gtk/color-picker-prefs.ui:575
 msgid "HSLA"
 msgstr "TSLA"
 
@@ -212,7 +221,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Charger ou générer une palette selon les préférences"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5951
+#: libide/sourceview/ide-source-view.c:5893
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renommer"
@@ -649,7 +658,7 @@ msgstr "À _propos"
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:710
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -830,7 +839,7 @@ msgstr "_Enregistrer"
 msgid "Save _As"
 msgstr "Enregistrer _sous"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1139
 msgid "Run"
 msgstr "Exécuter"
 
@@ -877,7 +886,6 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Coloration syntaxique intégrée pour de nombreux langages"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
-#: data/org.gnome.Builder.appdata.xml.in:52
 msgid "Side-by-side code editors"
 msgstr "Éditeur de code côte à côte"
 
@@ -886,8 +894,8 @@ msgid "Integration with Git"
 msgstr "Intégration avec Git"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
-msgid "Integration with Autotools"
-msgstr "Intégration avec Autotools"
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Integration avec Autotools, Cargo, CMake, Meson, Make et PHPize"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -910,8 +918,8 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Indentation automatique pour C, Python, Vala et XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-msgid "HTML/Markdown live preview"
-msgstr "Aperçu en direct pour HTML/Markdown"
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "Aperçu pour HTML, Markdown, reStructuredText et Sphinx"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -922,21 +930,37 @@ msgid "An integrated software profiler for native applications"
 msgstr "Un logiciel de profilage intégré pour les applications natives"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-msgid "Support for building with jhbuild"
-msgstr "Prise en charge de la construction avec jhbuild"
+msgid "An integrated debugger for native applications"
+msgstr "Un débogueur intégré pour les applications natives"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-msgid "Preview support for building with Flatpak runtimes"
+msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr ""
-"Prise en charge pour la construction d’exécutables Flatpak (pré-version)"
+"Prise en charge pour la construction d’exécutables avec jhbuild et Flatpak"
 
-#: data/org.gnome.Builder.appdata.xml.in:44
-msgid "Fast global search"
-msgstr "Recherche globale rapide"
+#: data/org.gnome.Builder.appdata.xml.in:41
+msgid "Quickly access your projects"
+msgstr "Accédez rapidement à vos projets"
 
-#: data/org.gnome.Builder.appdata.xml.in:48
-msgid "Integrated project tree"
-msgstr "Arbre du projet intégré"
+#: data/org.gnome.Builder.appdata.xml.in:45
+msgid "Create new projects from a variety of templates"
+msgstr "Créer de nouveaux projets avec de nombreux modèles"
+
+#: data/org.gnome.Builder.appdata.xml.in:49
+msgid "Integration with Git to clone your projects"
+msgstr "Intégration avec Git pour cloner vos projets"
+
+#: data/org.gnome.Builder.appdata.xml.in:53
+msgid "The source code editor"
+msgstr "L’éditeur de code source"
+
+#: data/org.gnome.Builder.appdata.xml.in:57
+msgid "Fast global fuzzy search"
+msgstr "Recherche globale floue rapide"
+
+#: data/org.gnome.Builder.appdata.xml.in:61
+msgid "Debug with the GNU debugger"
+msgstr "Déboguer avec le debogueur GNU"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -962,7 +986,8 @@ msgstr ""
 "Alexandre Franke <alexandre.franke@gmail.com>, 2015-2017\n"
 "Yannick Inizan <inizan.yannick@gmail.com>, 2015\n"
 "Laurent de Burlet <thevedeburlet@gmail.com>, 2016\n"
-"Guillaume Bernard <contact.guib@laposte.net>, 2017"
+"Guillaume Bernard <contact.guib@laposte.net>, 2017\n"
+"Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2017"
 
 #: libide/application/ide-application-actions.c:143
 msgid "Learn more about GNOME Builder"
@@ -1046,7 +1071,7 @@ msgstr "Pas de constructeur de ce type"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:735
+#: libide/runner/ide-run-manager.c:746
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
@@ -1099,7 +1124,7 @@ msgstr "Aller au champ de recherche globale"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:736
+#: libide/runner/ide-run-manager.c:747
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Construire et exécuter"
@@ -1109,20 +1134,20 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Déclencher une construction"
 
-#: libide/buffers/ide-buffer.c:2690
+#: libide/buffers/ide-buffer.c:2696
 msgid "The current language lacks a symbol resolver."
 msgstr "Le langage actuel ne possède pas de résolveur de symboles."
 
-#: libide/buffers/ide-buffer-manager.c:684
+#: libide/buffers/ide-buffer-manager.c:681
 msgid "File too large to be opened."
 msgstr "Fichier trop grand pour être ouvert."
 
-#: libide/buffers/ide-buffer-manager.c:1893
+#: libide/buffers/ide-buffer-manager.c:1890
 #, c-format
 msgid "unsaved document %u"
 msgstr "document non enregistré %u"
 
-#: libide/buffers/ide-buffer-manager.c:1931
+#: libide/buffers/ide-buffer-manager.c:1928
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Impossible d’enregistrer le tampon, réclamation ignorée."
 
@@ -1160,12 +1185,12 @@ msgstr "Exportation…"
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 #: libide/buildsystem/ide-build-pipeline.c:2294
-#: libide/workbench/ide-omni-bar.c:439
+#: libide/workbench/ide-omni-bar.c:443
 msgid "Success"
 msgstr "Succès"
 
 #: libide/buildsystem/ide-build-pipeline.c:2298
-#: libide/workbench/ide-omni-bar.c:424
+#: libide/workbench/ide-omni-bar.c:428
 msgid "Failed"
 msgstr "Échec"
 
@@ -1234,12 +1259,11 @@ msgid "Configure Options"
 msgstr "Configurer les options"
 
 #: libide/buildui/ide-build-configuration-view.ui:189
-#: libide/workbench/ide-omni-bar-row.ui:54
 msgid "Device"
 msgstr "Périphérique"
 
 #: libide/buildui/ide-build-configuration-view.ui:217
-#: libide/workbench/ide-omni-bar-row.ui:85 libide/workbench/ide-omni-bar.ui:271
+#: libide/workbench/ide-omni-bar.ui:271
 msgid "Runtime"
 msgstr "Environnement d’exécution"
 
@@ -1423,11 +1447,11 @@ msgid "New variable…"
 msgstr "Nouvelle variable…"
 
 #: libide/debugger/gtk/menus.ui:10
-#: libide/debugger/ide-debugger-editor-addin.c:410
+#: libide/debugger/ide-debugger-editor-addin.c:409
 msgid "Run with Debugger"
 msgstr "Lancer avec le debogueur"
 
-#: libide/debugger/ide-debug-manager.c:768
+#: libide/debugger/ide-debug-manager.c:936
 msgid "A suitable debugger could not be found."
 msgstr "Impossible de trouver un débogueur adapté."
 
@@ -1460,37 +1484,29 @@ msgstr "Type"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:91
 msgid "Hits"
-msgstr ""
+msgstr "Passages"
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
 msgstr "Extension"
 
-#: libide/debugger/ide-debugger-controls.ui:14
+#: libide/debugger/ide-debugger-controls.ui:17
 msgid "Interrupt the program"
 msgstr "Interrompre le programme"
 
-#: libide/debugger/ide-debugger-controls.ui:27
+#: libide/debugger/ide-debugger-controls.ui:30
 msgid "Continue running the program"
 msgstr "Continuer l’exécution du programme"
 
-#: libide/debugger/ide-debugger-controls.ui:40
-msgid "Execute from the current cursor position"
-msgstr "Exécuter depuis la position actuelle du curseur"
-
-#: libide/debugger/ide-debugger-controls.ui:53
-msgid "Execute until reaching the current cursor position"
-msgstr "Exécuter jusqu’à atteindre la position actuelle du curseur"
-
-#: libide/debugger/ide-debugger-controls.ui:66
+#: libide/debugger/ide-debugger-controls.ui:71
 msgid "Execute the current line, stepping into any function calls"
 msgstr "Exécuter la ligne actuelle en entrant dans tout appel de fonction"
 
-#: libide/debugger/ide-debugger-controls.ui:79
+#: libide/debugger/ide-debugger-controls.ui:84
 msgid "Execute the current line, stepping over any function calls"
 msgstr "Exécuter la ligne actuelle en passant tout appel de fonctionn"
 
-#: libide/debugger/ide-debugger-controls.ui:92
+#: libide/debugger/ide-debugger-controls.ui:97
 msgid "Run until the end of the function"
 msgstr "Exécuter jusqu’à la find de la fonction"
 
@@ -1498,31 +1514,31 @@ msgstr "Exécuter jusqu’à la find de la fonction"
 msgid "Disassembly"
 msgstr "Code assembleur"
 
-#: libide/debugger/ide-debugger-editor-addin.c:296
+#: libide/debugger/ide-debugger-editor-addin.c:295
 msgid "Debugger"
 msgstr "Débogueur"
 
-#: libide/debugger/ide-debugger-editor-addin.c:312
+#: libide/debugger/ide-debugger-editor-addin.c:311
 msgid "Threads"
 msgstr "Fils"
 
-#: libide/debugger/ide-debugger-editor-addin.c:338
+#: libide/debugger/ide-debugger-editor-addin.c:337
 msgid "Breakpoints"
 msgstr "Points d’arrêt"
 
-#: libide/debugger/ide-debugger-editor-addin.c:346
+#: libide/debugger/ide-debugger-editor-addin.c:345
 msgid "Libraries"
 msgstr "Bibliothèques"
 
-#: libide/debugger/ide-debugger-editor-addin.c:354
+#: libide/debugger/ide-debugger-editor-addin.c:353
 msgid "Registers"
 msgstr "Registres"
 
-#: libide/debugger/ide-debugger-editor-addin.c:361
+#: libide/debugger/ide-debugger-editor-addin.c:360
 msgid "Log"
 msgstr "Journal"
 
-#: libide/debugger/ide-debugger-editor-addin.c:377
+#: libide/debugger/ide-debugger-editor-addin.c:376
 msgid "Failed to initialize the debugger"
 msgstr "Échec à l’initialisation du débogueur"
 
@@ -1956,6 +1972,14 @@ msgstr "Autres projets"
 msgid "_Remove"
 msgstr "_Retirer"
 
+#: libide/greeter/ide-greeter-perspective.ui:244
+msgid "Create from existing project"
+msgstr "Créer à partir d’un projet existant"
+
+#: libide/greeter/ide-greeter-perspective.ui:256
+msgid "Create a new project"
+msgstr "Créer un nouveau projet"
+
 #: libide/greeter/ide-greeter-perspective.ui:299
 msgid "Select a Project"
 msgstr "Sélectionner un projet"
@@ -1999,11 +2023,11 @@ msgstr "Échec à l’initialisation des options par défaut."
 msgid "You must call %s() before using libide."
 msgstr "Vous devez appeler %s() avant d’utiliser libide."
 
-#: libide/ide-context.c:2127
+#: libide/ide-context.c:1964
 msgid "An unload request is already pending"
 msgstr "Une requète de déchargement est déjà en attente"
 
-#: libide/ide-context.c:2246
+#: libide/ide-context.c:2083
 msgid "Context has already been restored."
 msgstr "Le contexte a déjà été restauré."
 
@@ -2072,7 +2096,7 @@ msgstr "Raccourcis clavier"
 #: libide/keybindings/ide-shortcuts-window.ui:60
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr ""
+msgstr "Bascule du mode de focus"
 
 #: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
@@ -2866,12 +2890,12 @@ msgstr "Stopper l’exécution"
 msgid "Change run options"
 msgstr "Modifier les options d’exécution"
 
-#: libide/runner/ide-run-manager.c:340
+#: libide/runner/ide-run-manager.c:341
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Impossible d’exécuter la cible, une autre cible est en cours d’exécution"
 
-#: libide/runner/ide-run-manager.c:409
+#: libide/runner/ide-run-manager.c:411
 msgid "Failed to locate runtime"
 msgstr "Échec de la localisation de l’environnement d’exécution"
 
@@ -2893,31 +2917,31 @@ msgstr "Échec à l’ouverture du dossier : %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Échec au chargement du fichier %s : %s"
 
-#: libide/sourceview/ide-source-view.c:5407
+#: libide/sourceview/ide-source-view.c:5349
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insérer « %s »"
 
-#: libide/sourceview/ide-source-view.c:5409
+#: libide/sourceview/ide-source-view.c:5351
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Remplacer « %s » par « %s »"
 
-#: libide/sourceview/ide-source-view.c:5523
+#: libide/sourceview/ide-source-view.c:5465
 msgid "Apply Fix-It"
 msgstr "Appliquer la correction automatique"
 
-#: libide/sourceview/ide-source-view.c:5950
+#: libide/sourceview/ide-source-view.c:5892
 msgid "Rename symbol"
 msgstr "Renommer le symbole"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6180
+#: libide/sourceview/ide-source-view.c:6125
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Ligne %u, colonne %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6206
+#: libide/sourceview/ide-source-view.c:6151
 msgid "No references were found"
 msgstr "Aucune référence trouvée"
 
@@ -2996,18 +3020,9 @@ msgstr "Impossible d’analyser « %s » comme URI absolue"
 msgid "URI “%s” has no host component"
 msgstr "L’URI « %s » n’a pas de composant hôte"
 
-#: libide/workbench/ide-omni-bar.c:407
+#: libide/workbench/ide-omni-bar.c:411
 msgid "Building"
 msgstr "Construction"
-
-#. Translators, missing means we could not locate the runtime
-#: libide/workbench/ide-omni-bar-row.c:90
-msgid "missing"
-msgstr "manquant"
-
-#: libide/workbench/ide-omni-bar-row.ui:31
-msgid "Edit build configuration"
-msgstr "Modifier la configuration de construction"
 
 #: libide/workbench/ide-omni-bar.ui:199
 msgid "Configure build preferences"
@@ -3054,7 +3069,7 @@ msgstr "Nettoyer"
 msgid "Export Bundle"
 msgstr "Exporter comme application autonome"
 
-#: libide/workbench/ide-omni-bar.ui:582
+#: libide/workbench/ide-omni-bar.ui:526
 msgid "Build project"
 msgstr "Construire le projet"
 
@@ -3089,27 +3104,24 @@ msgid "Building cache…"
 msgstr "Construction du cache…"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#: plugins/meson-templates/meson_templates/__init__.py:287
-msgid "Shared Library"
-msgstr "Bibliothèque partagée"
+msgid "Shared Library (Autotools)"
+msgstr "Bibliothèque partagée (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Créer un nouveau projet autotools avec une bibliothèque partagée"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#: plugins/meson-templates/meson_templates/__init__.py:304
-msgid "Empty Project"
-msgstr "Projet vide"
+msgid "Empty Project (Autotools)"
+msgstr "Projet vide (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Créer un nouveau projet autotools vide"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#: plugins/meson-templates/meson_templates/__init__.py:234
-msgid "GNOME Application"
-msgstr "Application GNOME"
+msgid "GNOME Application (Autotools)"
+msgstr "Application GNOME (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
@@ -3184,7 +3196,22 @@ msgstr "anonyme"
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() fonctionne uniquement sur les fichiers locaux"
 
-#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+#. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
+#: plugins/code-index/ide-code-index-index.c:351
+msgid "Declaration"
+msgstr "Déclaration"
+
+#: plugins/code-index/ide-code-index-service.c:543
+msgid "Indexing Source Code"
+msgstr "Indexation du code source"
+
+#: plugins/code-index/ide-code-index-service.c:544
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+"La recherche, les diagnostiques et la complétion peuvent être limités le "
+"temps qu’elle termine."
+
+#: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
 msgstr "Couleurs"
 
@@ -3300,6 +3327,26 @@ msgstr ""
 "Sélectionnez les espaces de couleur pour lesquels vous souhaitez voir des "
 "échelles de couleur dans le panneau."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:86
+msgid "HSV"
+msgstr "TSV"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:87
+msgid "Hue Saturation Value"
+msgstr "Teinte, saturation, valeur"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Rouge Vert Bleu"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
 msgstr "Unités :"
@@ -3312,6 +3359,10 @@ msgstr ""
 "Sélectionnez le type d’unités que vous souhaitez utiliser pour les "
 "composants RVB et les chaînes de caractères de couleurs du panneau."
 
+#: plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Pourcentage"
+
 #: plugins/color-picker/gtk/color-picker-prefs.ui:213
 msgid "Filters:"
 msgstr "Filtres :"
@@ -3319,6 +3370,46 @@ msgstr "Filtres :"
 #: plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
 msgstr "Sélectionnez un filtre agissant sur les couleurs ou « None »."
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Aucun"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Achromatopsie (monochromatisme)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Monochromatie au bleu"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deutéranopie (non réception du vert)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deutéranomalie (faible sensibilité au vert)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopie (non réception du rouge)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomalie (faible sensibilité au rouge)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopie (non réception du bleu)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomalie (faible sensibilité au bleu)"
+
+#: plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Conforme pour le Web"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3610,18 +3701,18 @@ msgstr "Nouvelle page de documentation"
 msgid "_Show more"
 msgstr "Afficher _davantage"
 
-#: plugins/eslint/eslint_plugin/__init__.py:105
+#: plugins/eslint/eslint_plugin/__init__.py:139
 msgid "ESlint"
 msgstr "ESLint"
 
-#: plugins/eslint/eslint_plugin/__init__.py:106
+#: plugins/eslint/eslint_plugin/__init__.py:140
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 "Active l’utilisation de ESLint, ce qui peut exécuter du code dans votre "
 "projet"
 
 #. translators: these are keywords used to search for preferences
-#: plugins/eslint/eslint_plugin/__init__.py:108
+#: plugins/eslint/eslint_plugin/__init__.py:142
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint code exécuter exécution"
 
@@ -3655,7 +3746,7 @@ msgstr "Cloner l’application"
 msgid "Clone"
 msgstr "Cloner"
 
-#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:139
 msgid "Network is not available, skipping downloads"
 msgstr "Le réseau n’est pas disponible, abandon des téléchargements"
 
@@ -3884,13 +3975,25 @@ msgstr "Suggérer la complétion Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Utiliser Jedi pour fournir la complétion du language Python"
 
+#: plugins/meson-templates/meson_templates/__init__.py:234
+msgid "GNOME Application"
+msgstr "Application GNOME"
+
 #: plugins/meson-templates/meson_templates/__init__.py:236
 msgid "Create a new GNOME application"
 msgstr "Créer une nouvelle application GNOME"
 
+#: plugins/meson-templates/meson_templates/__init__.py:287
+msgid "Shared Library"
+msgstr "Bibliothèque partagée"
+
 #: plugins/meson-templates/meson_templates/__init__.py:289
 msgid "Create a new project with a shared library"
 msgstr "Créer un nouveau projet avec une bibliothèque partagée"
+
+#: plugins/meson-templates/meson_templates/__init__.py:304
+msgid "Empty Project"
+msgstr "Projet vide"
 
 #: plugins/meson-templates/meson_templates/__init__.py:306
 msgid "Create a new empty project"
@@ -4298,6 +4401,10 @@ msgstr "Moniteur système"
 msgid "Profiler"
 msgstr "Profileur"
 
+#: plugins/sysprof/gbp-sysprof-perspective.ui:20
+msgid "Failure"
+msgstr "Échec"
+
 #: plugins/sysprof/gbp-sysprof-perspective.ui:28
 msgid "_Close"
 msgstr "_Fermer"
@@ -4409,3 +4516,24 @@ msgstr "Échec lors de la création de l’arbre XML"
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Le tampon est chargé mais n’est pas dans le gestionnaire de tampons."
+
+#~ msgid "HTML/Markdown live preview"
+#~ msgstr "Aperçu en direct pour HTML/Markdown"
+
+#~ msgid "Support for building with jhbuild"
+#~ msgstr "Prise en charge de la construction avec jhbuild"
+
+#~ msgid "Integrated project tree"
+#~ msgstr "Arbre du projet intégré"
+
+#~ msgid "Execute from the current cursor position"
+#~ msgstr "Exécuter depuis la position actuelle du curseur"
+
+#~ msgid "Execute until reaching the current cursor position"
+#~ msgstr "Exécuter jusqu’à atteindre la position actuelle du curseur"
+
+#~ msgid "missing"
+#~ msgstr "manquant"
+
+#~ msgid "Edit build configuration"
+#~ msgstr "Modifier la configuration de construction"
