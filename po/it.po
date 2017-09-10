@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-07 20:12+0000\n"
-"PO-Revision-Date: 2017-09-08 10:00+0200\n"
+"POT-Creation-Date: 2017-09-08 23:38+0000\n"
+"PO-Revision-Date: 2017-09-10 15:20+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -874,7 +874,6 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Evidenziazione della sintassi per molti linguaggi di programmazione"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
-#: data/org.gnome.Builder.appdata.xml.in:52
 msgid "Side-by-side code editors"
 msgstr "Editor di testo affiancati"
 
@@ -926,13 +925,29 @@ msgstr "Un debugger integrato per applicazioni native"
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Supporto per la compilazione con jhbuild e flatpack"
 
-#: data/org.gnome.Builder.appdata.xml.in:44
-msgid "Fast global search"
+#: data/org.gnome.Builder.appdata.xml.in:41
+msgid "Quickly access your projects"
+msgstr "Accesso rapido dei progetti"
+
+#: data/org.gnome.Builder.appdata.xml.in:45
+msgid "Create new projects from a variety of templates"
+msgstr "Creazione di nuovi progetti a partire da diversi modelli"
+
+#: data/org.gnome.Builder.appdata.xml.in:49
+msgid "Integration with Git to clone your projects"
+msgstr "Integrazione con Git per clonare i propri progetti"
+
+#: data/org.gnome.Builder.appdata.xml.in:53
+msgid "The source code editor"
+msgstr "Editor codice sorgente"
+
+#: data/org.gnome.Builder.appdata.xml.in:57
+msgid "Fast global fuzzy search"
 msgstr "Efficiente ricerca globale"
 
-#: data/org.gnome.Builder.appdata.xml.in:48
-msgid "Integrated project tree"
-msgstr "Albero progetto integrato"
+#: data/org.gnome.Builder.appdata.xml.in:61
+msgid "Debug with the GNU debugger"
+msgstr "Debug tramite il debugger GNU"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -1043,12 +1058,9 @@ msgstr "Esecutore non trovato"
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
 #: plugins/terminal/gb-terminal-workbench-addin.c:187
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editor Shortcuts"
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
-msgstr "Scorciatoie dell'editor"
+msgstr "Scorciatoie workbench"
 
 #: libide/application/ide-application-shortcuts.c:44
 #: libide/application/ide-application-shortcuts.c:52
@@ -1688,7 +1700,6 @@ msgid "Properties"
 msgstr "Proprietà"
 
 #: libide/editor/ide-editor-properties.ui:25
-#, fuzzy
 msgid "Display"
 msgstr "Visualizza"
 
@@ -3052,14 +3063,13 @@ msgstr "Trasferimenti"
 
 #: libide/workbench/ide-workbench-header-bar.ui:57
 msgid "Show workbench menu"
-msgstr ""
+msgstr "Mostra menù workbench"
 
 #: libide/workbench/ide-workbench-header-bar.ui:95
 msgid "Press Ctrl+. to search"
 msgstr "Premere Ctrl+. per la ricerca"
 
 #: libide/workbench/ide-workbench-shortcuts.c:50
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Prospettive"
@@ -3176,7 +3186,7 @@ msgstr ""
 "Ricerca, diagnostica e completamente automatico potrebbero essere limitati "
 "fino al termine dell'operazione."
 
-#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+#: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
 msgstr "Colori"
 
@@ -4216,6 +4226,12 @@ msgid ""
 "                        <date>          = YYYY-MM-DD\n"
 "                        <host>          = <target-triple>"
 msgstr ""
+"I nomi dei canali di rilascio dei toolchain hanno la forma seguente:\n"
+"                        <canale>[-<data>][-<host>]\n"
+"\n"
+"                        <canale> = stable|beta|nightly|<versione>\n"
+"                        <data>   = YYYY-MM-DD\n"
+"                        <host>   = <target-triple>"
 
 #: plugins/rustup/rustup_plugin/__init__.py:645
 msgid "Install Rustup to manage toolchains here!"
@@ -4466,8 +4482,8 @@ msgstr "Creazione dell'albero XML non riuscita."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer caricato, ma non nel gestore del buffer."
 
-#~ msgid "Integration with Autotools"
-#~ msgstr "Integrazione con autotools"
+#~ msgid "Integrated project tree"
+#~ msgstr "Albero progetto integrato"
 
 #~ msgid "HTML/Markdown live preview"
 #~ msgstr "Anteprima dinamica di HTML/Markdown"
