@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-08 23:38+0000\n"
-"PO-Revision-Date: 2017-09-08 21:10-0200\n"
+"POT-Creation-Date: 2017-09-10 17:46+0000\n"
+"PO-Revision-Date: 2017-09-10 22:32-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -278,45 +278,39 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Suggest Snippet Completion"
-msgstr "Sugerir preenchimento de trecho"
+msgstr "Sugerir completamento de trecho"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
 msgid "Allow snippets to be inserted into the document."
 msgstr "Permite que trechos sejam inseridos no documento."
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 msgid "Clang based autocompletion (Experimental)"
-msgstr "Autopreenchimento baseado em Clang (Experimental)"
+msgstr "Autocompletamento baseado em Clang (Experimental)"
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
 msgid "Use Clang for autocompletion in the C and C++ languages."
-msgstr "Usar Clang para autopreenchimento nas linguagens C e C++."
+msgstr "Usar Clang para autocompletamento nas linguagens C e C++."
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Ctags based autocompletion"
-msgstr "Autopreenchimento baseado em Ctags"
+msgstr "Autocompletamento baseado em Ctags"
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "Use Ctags for autocompletion."
-msgstr "Usar Ctags para autopreenchimento."
+msgstr "Usar Ctags para autocompletamento."
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
 msgid "Enable auto-completion of words in document"
-msgstr "Habilitar autopreenchimento de palavras no documento"
+msgstr "Habilitar autocompletamento de palavras no documento"
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
 msgid ""
 "If enabled, words within the current document will be available for auto-"
 "completion."
 msgstr ""
 "Caso habilitado, as palavras que estão dentro do documento atual estarão "
-"disponíveis para serem preenchidas automaticamente."
+"disponíveis para autocompletamento."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
 msgid "Enable semantic highlighting"
@@ -849,7 +843,7 @@ msgstr "_Salvar"
 msgid "Save _As"
 msgstr "Salvar _como"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
+#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1139
 msgid "Run"
 msgstr "Executar"
 
@@ -907,20 +901,17 @@ msgstr "Integração com Git"
 msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
 msgstr "Integração com Autotools, Cargo, CMake, Meson, Make e PHPize"
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
-msgstr "Autopreenchimento baseado em Clang, realce semântico e diagnósticos"
+msgstr "Autocompletamento baseado em Clang, realce semântico e diagnósticos"
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/org.gnome.Builder.appdata.xml.in:28
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
-msgstr "Autopreenchimento baseado em Python, realce semântico e diagnósticos"
+msgstr "Autocompletamento baseado em Python, realce semântico e diagnósticos"
 
-# Sugiro a tradução de auto-completion ou autocompletion = Autopreenchimento, foi a melhor tradução que vejo em mente para expressar o funcionamento deste recurso --Enrico
 #: data/org.gnome.Builder.appdata.xml.in:29
 msgid "Vala based auto-completion and diagnostics"
-msgstr "Autopreenchimento baseado em Vala, realce semântico e diagnósticos"
+msgstr "Autocompletamento baseado em Vala, realce semântico e diagnósticos"
 
 #: data/org.gnome.Builder.appdata.xml.in:30
 msgid "Auto indentation support for C, Python, Vala, and XML"
@@ -948,32 +939,26 @@ msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Suporte a compilação com runtime do flatpak e do jhbuild"
 
 #: data/org.gnome.Builder.appdata.xml.in:41
-#| msgid "A place for all your projects"
 msgid "Quickly access your projects"
 msgstr "Acesso rápido aos seus projetos"
 
 #: data/org.gnome.Builder.appdata.xml.in:45
-#| msgid "Create a new project with a shared library"
 msgid "Create new projects from a variety of templates"
 msgstr "Crie novos projetos de uma variedade de modelos"
 
 #: data/org.gnome.Builder.appdata.xml.in:49
-#| msgid "Integration with Autotools"
 msgid "Integration with Git to clone your projects"
 msgstr "Integração com Git para clonar seus projetos"
 
 #: data/org.gnome.Builder.appdata.xml.in:53
-#| msgid "Source Code Editor"
 msgid "The source code editor"
 msgstr "O editor de código-fonte"
 
 #: data/org.gnome.Builder.appdata.xml.in:57
-#| msgid "Fast global search"
 msgid "Fast global fuzzy search"
 msgstr "Pesquisa aproximada global rápida"
 
 #: data/org.gnome.Builder.appdata.xml.in:61
-#| msgid "Run with Debugger"
 msgid "Debug with the GNU debugger"
 msgstr "Depuração com o depurador do GNU"
 
@@ -1086,7 +1071,7 @@ msgstr "Trabalho inexistente"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:735
+#: libide/runner/ide-run-manager.c:746
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
@@ -1139,7 +1124,7 @@ msgstr "Foco para a entrada de pesquisa global"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:736
+#: libide/runner/ide-run-manager.c:747
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Compila e executa"
@@ -2239,7 +2224,7 @@ msgstr "Junta as linhas selecionadas"
 #: libide/keybindings/ide-shortcuts-window.ui:272
 msgctxt "shortcut window"
 msgid "Show completion window"
-msgstr "Mostra a janela de preenchimento"
+msgstr "Mostra a janela de completamento"
 
 #: libide/keybindings/ide-shortcuts-window.ui:279
 msgctxt "shortcut window"
@@ -2673,7 +2658,7 @@ msgstr ""
 
 #: libide/preferences/ide-preferences-builtin.c:194
 msgid "Completion"
-msgstr "Preenchimento"
+msgstr "Completamento"
 
 #: libide/preferences/ide-preferences-builtin.c:195
 msgid "Suggest words found in open files"
@@ -2683,7 +2668,7 @@ msgstr "Sugerir palavras encontradas em arquivos abertos"
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
-"Sugere autopreenchimento, enquanto você digita, baseado em palavras "
+"Sugere autocompletamentos, enquanto você digita, baseado em palavras "
 "encontradas em todos documentos abertos"
 
 #: libide/preferences/ide-preferences-builtin.c:196
@@ -2692,23 +2677,23 @@ msgstr "Tamanho mínimo de palavra"
 
 #: libide/preferences/ide-preferences-builtin.c:196
 msgid "Minimum word size for word completion"
-msgstr "Tamanho mínimo da palavra para o preenchimento de palavras"
+msgstr "Tamanho mínimo da palavra para o completamento de palavras"
 
 #: libide/preferences/ide-preferences-builtin.c:197
 msgid "Suggest completions using Ctags"
-msgstr "Sugerir preenchimento usando Ctags"
+msgstr "Sugerir completamentos usando Ctags"
 
 #: libide/preferences/ide-preferences-builtin.c:197
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
 msgstr ""
-"Cria e gerencia um banco de dados de Ctags para preenchimento de nomes de "
+"Cria e gerencia um banco de dados de Ctags para completar de nomes de "
 "classes, funções e mais"
 
 #: libide/preferences/ide-preferences-builtin.c:198
 msgid "Suggest completions using Clang (Experimental)"
-msgstr "Sugerir preenchimento usando Clang (Experimental)"
+msgstr "Sugerir completamentos usando Clang (Experimental)"
 
 #: libide/preferences/ide-preferences-builtin.c:198
 msgid "Use Clang to suggest completions for C and C++ languages"
@@ -2900,11 +2885,11 @@ msgstr "Para execução"
 msgid "Change run options"
 msgstr "Altera opções de execução"
 
-#: libide/runner/ide-run-manager.c:340
+#: libide/runner/ide-run-manager.c:341
 msgid "Cannot run target, another target is running"
 msgstr "Não é possível executar o alvo, pois um outro alvo está em execução"
 
-#: libide/runner/ide-run-manager.c:409
+#: libide/runner/ide-run-manager.c:411
 msgid "Failed to locate runtime"
 msgstr "Falha ao localizar o runtime"
 
@@ -2956,7 +2941,7 @@ msgstr "Nenhuma referência foi localizada"
 
 #: libide/sourceview/ide-word-completion-provider.c:558
 msgid "Builder Word Completion"
-msgstr "Preenchimento de palavras do Builder"
+msgstr "Completamento de palavras do Builder"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -3215,7 +3200,7 @@ msgstr "Recuo de código-fonte"
 #: plugins/code-index/ide-code-index-service.c:544
 msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
-"Pesquisa, diagnósticos e autopreenchimento podem ser limitados até a "
+"Pesquisa, diagnósticos e autocompletamento podem ser limitados até a "
 "conclusão."
 
 #: plugins/color-picker/gb-color-picker-editor-addin.c:288
@@ -3742,7 +3727,7 @@ msgstr "Clonar aplicativo"
 msgid "Clone"
 msgstr "Clonar"
 
-#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:139
 msgid "Network is not available, skipping downloads"
 msgstr "Rede não disponível, pulando os downloads"
 
@@ -3961,11 +3946,11 @@ msgstr "(Pré-visualização)"
 
 #: plugins/jedi/jedi_plugin.py:752
 msgid "Suggest Python completions"
-msgstr "Sugerir preenchimento de Python"
+msgstr "Sugerir completamentos de Python"
 
 #: plugins/jedi/jedi_plugin.py:753
 msgid "Use Jedi to provide completions for the Python language"
-msgstr "Usa Jedi para fornecer preenchimento para a linguagem Python"
+msgstr "Usa Jedi para fornecer completamentos para a linguagem Python"
 
 #: plugins/meson-templates/meson_templates/__init__.py:234
 msgid "GNOME Application"
