@@ -1,9 +1,11 @@
 {
     "app-id": "org.gnome.Builder",
     "runtime": "org.gnome.Sdk",
-    "runtime-version": "3.26",
+    "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
     "command": "gnome-builder",
+    "tags": ["nightly"],
+    "desktop-file-name-prefix": "(Nightly) ",
     "finish-args": [
         /* Require recent flatpak at runtime */
         "--require-version=0.8.0",
@@ -47,6 +49,7 @@
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=/var/lib/flatpak"
     ],
+    "x-run-args" : [ "--standalone", "-vvvv" ],
     "build-options" : {
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g",
@@ -87,8 +90,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libgsystem.git",
-                    "branch": "d606bec68ddfea78de4b03c3f3568afb71bdc1ce"
+                    "url": "https://git.gnome.org/browse/libgsystem.git"
                 }
             ]
         },
@@ -103,8 +105,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/ostreedev/ostree.git",
-                    "branch": "v2017.10"
+                    "url": "https://github.com/ostreedev/ostree.git"
                 }
             ]
         },
@@ -128,8 +129,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/flatpak/flatpak.git",
-                    "branch": "0.9.6"
+                    "url": "https://github.com/flatpak/flatpak.git"
                 }
             ]
         },
@@ -481,7 +481,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/libssh2/libssh2.git",
-                    "branch": "30e9c1347e3b8baa2951db612f05e6d87fc8e2f2"
+                    "branch": "libssh2-1.8.0"
                 }
             ]
         },
@@ -502,8 +502,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libgit2-glib",
-                    "branch": "v0.26.0"
+                    "url": "https://git.gnome.org/browse/libgit2-glib"
                 }
             ]
         },
@@ -513,8 +512,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libpeas",
-                    "branch": "libpeas-1.22.0"
+                    "url": "https://git.gnome.org/browse/libpeas"
                 }
             ]
         },
@@ -535,8 +533,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/devhelp",
-                    "branch": "3.26.0"
+                    "url": "https://git.gnome.org/browse/devhelp"
                 }
             ]
         },
@@ -547,8 +544,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/json-glib.git",
-                    "branch": "9db74a03b96bafbbd7698682d713a57122627e39"
+                    "url": "https://gitlab.gnome.org/GNOME/json-glib.git"
                 }
             ]
         },
@@ -559,8 +555,7 @@
             "sources": [
                 {
                      "type": "git",
-                     "url": "https://git.gnome.org/browse/gspell",
-                     "branch": "1.6.0"
+                     "url": "https://git.gnome.org/browse/gspell"
                 }
             ]
         },
@@ -571,8 +566,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/sysprof",
-                    "branch": "sysprof-3-24"
+                    "url": "https://git.gnome.org/browse/sysprof"
                 }
             ]
         },
@@ -584,8 +578,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/template-glib",
-                    "branch": "template-glib-3-26"
+                    "url": "https://git.gnome.org/browse/template-glib"
                 }
             ]
         },
@@ -597,8 +590,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/jsonrpc-glib",
-                    "branch": "jsonrpc-glib-3-26"
+                    "url": "https://git.gnome.org/browse/jsonrpc-glib"
                 }
             ]
         },
@@ -610,8 +602,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libdazzle",
-                    "branch": "libdazzle-3-26"
+                    "url": "https://git.gnome.org/browse/libdazzle"
                 }
             ]
         },
@@ -619,12 +610,11 @@
             "name": "gnome-builder",
             "buildsystem": "meson",
             "builddir": true,
-            "config-opts": [ "--libdir=/app/lib", "-Denable_tracing=true", "-Denable_debug=true", "-Dwith_docs=true", "-Dwith_channel=flatpak-stable" ],
+            "config-opts": [ "--libdir=/app/lib", "-Denable_tracing=true", "-Denable_debug=true", "-Dwith_docs=true", "-Dwith_channel=flatpak-nightly" ],
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/gnome-builder",
-                    "branch": "gnome-builder-3-26"
+                    "url": "https://git.gnome.org/browse/gnome-builder"
                 }
             ]
         }
