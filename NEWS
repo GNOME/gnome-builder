@@ -14,12 +14,13 @@ Changes since last release:
  • Fix for non-completing GTask in IdeBuffer.
  • Fix color picker closing and defer panel creation.
  • Fix a crash in .ui when creating style classes.
+ • Drop support for Vala versions older than 0.34
 
 Updated Translations:
 
  Korean, Galician, Turkish, Indonesian, Czech, German, Polish,
  Brazilian Portuguese, Italian, Danish, Lithuanian, Hungarian,
- Catalan, Serbian, Serbian Latin, French, Swedish
+ Catalan, Serbian, Serbian Latin, French, Swedish, Spanish
 
 ===============
 Version 3.25.92
