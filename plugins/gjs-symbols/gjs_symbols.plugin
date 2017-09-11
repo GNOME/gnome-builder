@@ -8,3 +8,5 @@ Copyright=Copyright © 2017 Patrick Griffis
 Builtin=true
 X-Symbol-Resolver-Languages=js
 X-Symbol-Resolver-Languages-Priority=0
+X-Code-Indexer-Languages=js
+X-Code-Indexer-Languages-Priority=0
