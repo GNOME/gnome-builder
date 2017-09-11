@@ -73,9 +73,6 @@ namespace Ide
 			this.code_context.basedir = workdir.get_path ();
 			this.code_context.directory = GLib.Environment.get_current_dir ();
 			this.code_context.debug = false;
-#if ENABLE_VALA_CODE_CONTEXT_SET_THREAD
-			this.code_context.thread = true;
-#endif
 			this.code_context.mem_profiler = false;
 			this.code_context.save_temps = false;
 
@@ -256,11 +253,6 @@ namespace Ide
 						} else {
 							this.add_file (GLib.File.new_for_path (param));
 						}
-					}
-					else if (param == "--thread") {
-#if ENABLE_VALA_CODE_CONTEXT_SET_THREAD
-						this.code_context.thread = true;
-#endif
 					}
 				}
 

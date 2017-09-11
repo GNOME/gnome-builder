@@ -11,7 +11,6 @@ libvala_options = [
   ['libvala-0.36', ''],
   ['libvala-0.34', ''],
   ['libvala-0.32', ''],
-  ['libvala-0.30', '>=0.29.3'],
 ]
 
 libvala_found = false
@@ -31,25 +30,7 @@ if not libvala_found
   error('Failed to find suitable libvala')
 endif
 
-# Check for deprecated symbol support
-vala_deprecated_symbol = cc.links('''
-  #include <vala.h>
-  vala_symbol_get_deprecated (NULL);
-''', dependencies: libvala)
-
-# Check for deprecated threading support
-vala_deprecated_threading = cc.links('''
-  #include <vala.h>
-  vala_code_context_set_thread (NULL, TRUE);
-''', dependencies: libvala)
-
 vala_extra_args = []
-if vala_deprecated_symbol
-  vala_extra_args += '--define=ENABLE_VALA_SYMBOL_GET_DEPRECATED'
-endif
-if vala_deprecated_threading
-  vala_extra_args += '--define=ENABLE_VALA_CODE_CONTEXT_SET_THREAD'
-endif
 
 vala_pack_sources = [
   'config.vapi',
