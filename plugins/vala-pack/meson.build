@@ -11,7 +11,6 @@ libvala_options = [
   ['libvala-0.38', ''],
   ['libvala-0.36', ''],
   ['libvala-0.34', ''],
-  ['libvala-0.32', ''],
 ]
 
 libvala_found = false
