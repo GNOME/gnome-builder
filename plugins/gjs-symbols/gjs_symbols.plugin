@@ -1,0 +1,10 @@
+[Plugin]
+Module=gjs_symbols
+Loader=python3
+Name=GJS Symbol Resolver
+Description=Provides a symbol resolver for JavaScript using GJS.
+Authors=Patrick Griffis <tingping@tingping.se>
+Copyright=Copyright © 2017 Patrick Griffis
+Builtin=true
+X-Symbol-Resolver-Languages=js
+X-Symbol-Resolver-Languages-Priority=0

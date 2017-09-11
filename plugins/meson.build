@@ -34,6 +34,7 @@ subdir('gcc')
 subdir('gdb')
 subdir('gettext')
 subdir('git')
+subdir('gjs-symbols')
 subdir('gnome-code-assistance')
 subdir('history')
 subdir('html-completion')
@@ -90,6 +91,7 @@ status += [
   'GDB ................... : @0@'.format(get_option('with_gdb')),
   'Gettext ............... : @0@'.format(get_option('with_gettext')),
   'Git ................... : @0@'.format(get_option('with_git')),
+  'GJS Symbol Resolver ... : @0@'.format(get_option('with_gjs_symbols')),
   'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
   'History ............... : @0@'.format(get_option('with_history')),
   'HTML Completion ....... : @0@'.format(get_option('with_html_completion')),
