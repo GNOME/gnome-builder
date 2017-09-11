@@ -243,7 +243,13 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
 
   /* If we were destroyed, short-circuit */
   if (self->button != NULL)
-    gbp_symbol_menu_button_set_symbol_tree (self->button, tree);
+    {
+      /* Only override if we got a new value (this helps with situations
+       * where the parse tree breaks intermittently.
+       */
+      if (tree != NULL)
+        gbp_symbol_menu_button_set_symbol_tree (self->button, tree);
+    }
 }
 
 static void
