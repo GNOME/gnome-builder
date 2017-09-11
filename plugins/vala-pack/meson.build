@@ -7,6 +7,7 @@ endif
 add_languages('vala')
 
 libvala_options = [
+  ['libvala-0.40', ''],
   ['libvala-0.38', ''],
   ['libvala-0.36', ''],
   ['libvala-0.34', ''],
