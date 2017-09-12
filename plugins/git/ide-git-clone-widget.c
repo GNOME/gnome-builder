@@ -259,9 +259,9 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
 static gboolean
 open_after_timeout (gpointer user_data)
 {
+  GTask *task = user_data;
   IdeGitCloneWidget *self;
   IdeWorkbench *workbench;
-  g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
   CloneRequest *req;
 
@@ -288,15 +288,13 @@ open_after_timeout (gpointer user_data)
       ide_workbench_open_project_async (workbench, req->project_file, NULL, NULL, NULL);
     }
 
-  g_task_return_boolean (task, TRUE);
-
   IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static gboolean
 finish_animation_in_idle (gpointer data)
 {
-  g_autoptr(GTask) task = data;
+  GTask *task = data;
   IdeGitCloneWidget *self;
 
   IDE_ENTRY;
@@ -318,7 +316,11 @@ finish_animation_in_idle (gpointer data)
    * Wait for a second so animations can complete before opening
    * the project. Otherwise, it's pretty jarring to the user.
    */
-  g_timeout_add (ANIMATION_DURATION_MSEC, open_after_timeout, g_object_ref (task));
+  g_timeout_add_full (G_PRIORITY_LOW,
+                      ANIMATION_DURATION_MSEC,
+                      open_after_timeout,
+                      g_object_ref (task),
+                      g_object_unref);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -379,7 +381,16 @@ ide_git_clone_widget_worker (GTask        *task,
     return;
 
   req->project_file = ggit_repository_get_workdir (repository);
-  g_timeout_add (0, finish_animation_in_idle, g_object_ref (task));
+  gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                             finish_animation_in_idle,
+                             g_object_ref (task),
+                             g_object_unref);
+
+  /* We must complete the task in this worker, as GTask does not support
+   * completing the task asynchronously after work completes. Another option
+   * would be to fix things to use mutliple async steps.
+   */
+  g_task_return_boolean (task, TRUE);
 
   g_clear_object (&repository);
 }
