@@ -320,6 +320,13 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
         }.get(node.props.kind, 'x')
         return prefix + '\x1F' + node.props.name
 
+    @staticmethod
+    def _flatten_node_list(root_node):
+        nodes = [root_node]
+        for node in root_node:
+            nodes += GjsCodeIndexer._flatten_node_list(node)
+        return nodes
+
     def do_index_file(self, file_, build_flags, cancellable):
         if 'node_modules' in file_.get_path().split(os.sep):
             return None  # Avoid indexing these
@@ -341,7 +348,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
 
         entries = []
         # TODO: Avoid recreating the same data
-        for node in root_node:
+        for node in self._flatten_node_list(root_node):
             entry = Ide.CodeIndexEntry(
                 key=node.props.file.get_path() + '|' + node.props.name, # Some unique value..
                 name=self._get_node_name(node),
