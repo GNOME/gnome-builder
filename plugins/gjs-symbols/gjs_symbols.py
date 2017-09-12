@@ -88,6 +88,8 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
             name = dict_['key']['name']
             if name == '_init':
                 return None
+            if dict_.get('kind', None) in ('get', 'set'):
+                return None
             return JsSymbolNode([], line=line, col=col,
                                 kind=Ide.SymbolKind.METHOD,
                                 name=name,
@@ -139,6 +141,8 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
         elif type_ == 'ClassMethod':
             name = dict_['name']['name']
             if name in ('constructed', '_init'):
+                return None
+            if dict_.get('kind', None) in ('get', 'set'):
                 return None
             return JsSymbolNode([], line=line, col=col,
                                 kind=Ide.SymbolKind.METHOD,
