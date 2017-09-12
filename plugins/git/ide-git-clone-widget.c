@@ -467,7 +467,7 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
                                    GAsyncResult       *result,
                                    GError            **error)
 {
-  GError *local_error = NULL;
+  g_autoptr(GError) local_error = NULL;
   gboolean ret;
 
   g_return_val_if_fail (IDE_IS_GIT_CLONE_WIDGET (self), FALSE);
@@ -484,7 +484,8 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), TRUE);
 
-  g_propagate_error (error, local_error);
+  if (local_error != NULL)
+    g_propagate_error (error, g_steal_pointer (&local_error));
 
   return ret;
 }
