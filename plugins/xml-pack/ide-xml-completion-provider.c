@@ -65,6 +65,7 @@ typedef struct
 {
   IdeXmlCompletionProvider    *self;
   GtkSourceCompletionContext  *completion_context;
+  GCancellable                *cancellable;
   IdeFile                     *ifile;
   IdeBuffer                   *buffer;
   gint                         line;
@@ -101,6 +102,7 @@ populate_state_free (PopulateState *state)
   g_object_unref (state->self);
   g_object_unref (state->ifile);
   g_object_unref (state->buffer);
+  g_object_unref (state->cancellable);
 }
 
 static GPtrArray *
@@ -928,6 +930,9 @@ populate_cb (GObject      *object,
   detail = ide_xml_position_get_detail (position);
   child_pos = ide_xml_position_get_child_pos (position);
 
+  if (g_cancellable_is_cancelled (state->cancellable))
+    goto cleanup;
+
   if (kind == IDE_XML_POSITION_KIND_IN_START_TAG || kind == IDE_XML_POSITION_KIND_IN_END_TAG)
     {
       if (detail == IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME)
@@ -1020,7 +1025,6 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
   IdeContext *ide_context;
   IdeXmlService *service;
   GtkTextIter iter;
-  GCancellable *cancellable;
   IdeBuffer *buffer;
   PopulateState *state;
 
@@ -1032,24 +1036,30 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
 
   gtk_source_completion_context_get_iter (completion_context, &iter);
 
-  cancellable = g_cancellable_new ();
   state = g_slice_new0 (PopulateState);
 
   buffer = IDE_BUFFER (gtk_text_iter_get_buffer (&iter));
 
   state->self = g_object_ref (self);
   state->completion_context = completion_context;
+  state->cancellable = g_cancellable_new ();
   state->buffer = g_object_ref (buffer);
   state->ifile = g_object_ref (ide_buffer_get_file (buffer));
   state->line = gtk_text_iter_get_line (&iter) + 1;
   state->line_offset = gtk_text_iter_get_line_offset (&iter) + 1;
+
+  g_signal_connect_object (completion_context,
+                           "cancelled",
+                           G_CALLBACK (g_cancellable_cancel),
+                           state->cancellable,
+                           G_CONNECT_SWAPPED);
 
   ide_xml_service_get_position_from_cursor_async (service,
                                                   state->ifile,
                                                   buffer,
                                                   state->line,
                                                   state->line_offset,
-                                                  cancellable,
+                                                  state->cancellable,
                                                   populate_cb,
                                                   state);
 }
