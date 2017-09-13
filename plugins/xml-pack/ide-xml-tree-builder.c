@@ -254,36 +254,33 @@ fetch_schemas_finish (IdeXmlTreeBuilder  *self,
 }
 
 static void
-ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+ide_xml_tree_builder_parse_worker (GTask        *task,
+                                   gpointer      source_object,
+                                   gpointer      task_data,
+                                   GCancellable *cancellable)
 {
-  IdeXmlTreeBuilder *self;
-  TreeBuilderState *state;
-  IdeContext *context;
-  g_autoptr(GTask) task = user_data;
+  IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)source_object;
+  TreeBuilderState *state = (TreeBuilderState *)task_data;
   g_autoptr (GPtrArray) schemas = NULL;
+  IdeContext *context;
   const gchar *doc_data;
   xmlDoc *doc;
   gsize doc_size;
   IdeXmlSchemaKind kind;
-  GError *error = NULL;
 
-  g_assert (G_IS_TASK (result));
-  g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
   g_assert (IDE_IS_XML_TREE_BUILDER (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (state != NULL);
+  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  if (!fetch_schemas_finish (self, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
+  if (g_task_return_error_if_cancelled (task))
+    return;
 
   state = g_task_get_task_data (task);
   schemas = ide_xml_analysis_get_schemas (state->analysis);
   context = ide_object_get_context (IDE_OBJECT (self));
+
+  xmlInitParser ();
 
   doc_data = g_bytes_get_data (state->content, &doc_size);
   if (NULL != (doc = xmlParseMemory (doc_data, doc_size)))
@@ -380,6 +377,30 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
     }
 
   g_task_return_pointer (task, state->analysis, (GDestroyNotify)ide_xml_analysis_unref);
+}
+
+static void
+ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  IdeXmlTreeBuilder *self;
+  GError *error = NULL;
+
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+
+  if (!fetch_schemas_finish (self, result, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_run_in_thread (task, ide_xml_tree_builder_parse_worker);
 }
 
 static void
