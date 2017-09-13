@@ -99,7 +99,6 @@ populate_state_free (PopulateState *state)
   g_assert (state != NULL);
 
   g_object_unref (state->self);
-  g_object_unref (state->completion_context);
   g_object_unref (state->ifile);
   g_object_unref (state->buffer);
 }
@@ -1039,7 +1038,7 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
   buffer = IDE_BUFFER (gtk_text_iter_get_buffer (&iter));
 
   state->self = g_object_ref (self);
-  state->completion_context = g_object_ref (completion_context);
+  state->completion_context = completion_context;
   state->buffer = g_object_ref (buffer);
   state->ifile = g_object_ref (ide_buffer_get_file (buffer));
   state->line = gtk_text_iter_get_line (&iter) + 1;
