@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2017-05-04 21:55+0200\n"
-"PO-Revision-Date: 2017-08-30 11:22+0200\n"
+"PO-Revision-Date: 2017-09-13 12:06+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -75,7 +75,7 @@ msgstr "Poišči"
 #: ../contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
-msgstr ""
+msgstr "Prečna razvrstitev %u na Trie ni podprta."
 
 #: ../contrib/tmpl/tmpl-parser.c:199
 #, c-format
@@ -122,12 +122,17 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
+"Program Builder je del Razvojnega okolja za namizje GNOME. Združuje podporo "
+"za ključne tehnologije okolja GNOME, kot so GTK+, GLib in GNOME API, z "
+"zmnožnostmi, ki bodo močno v pomoč razvilajcem."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:4
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
+"Posodobitve programa Builder bodo na voljo vsakih šest mesecev z objavo nove "
+"različice okolja GNOME."
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:5
 msgid "Features:"
@@ -135,7 +140,7 @@ msgstr "Zmožnosti:"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:6
 msgid "Built in syntax highlighting for many languages"
-msgstr ""
+msgstr "Vgrajeno poudarjanje skladnje za mnogo programskih jezikov"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:7
 msgid "Side-by-side code editors"
@@ -152,18 +157,22 @@ msgstr "Povezljivost z Autotools"
 #: ../data/org.gnome.Builder.appdata.xml.in.h:10
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
+"Podpora za samodejno dopolnjevanje, poudarjanje skladnje in diagnostiko za "
+"jezik Clang"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:11
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
+"Podpora za samodejno dopolnjevanje, poudarjanje skladnje in diagnostiko za "
+"jezik Python"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:12
 msgid "Vala based auto-completion and diagnostics"
-msgstr ""
+msgstr "Podpora za samodejno dopolnjevanje in diagnostiko za jezik Vala"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:13
 msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr ""
+msgstr "Samodejno zamikanje kode za jezike C, Python, Vala in XML"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:14
 #, fuzzy
@@ -177,7 +186,7 @@ msgstr "Urejanje sloga %s"
 
 #: ../data/org.gnome.Builder.appdata.xml.in.h:16
 msgid "Preview support for building with Xdg-App runtimes"
-msgstr ""
+msgstr "Podpora predogleda za izgradnjo prek zagonskih programov Xdg-App"
 
 #: ../data/org.gnome.Builder.desktop.in.in.h:2
 msgid "Build software for GNOME"
@@ -205,7 +214,7 @@ msgstr "Predlagaj dopolnjevanje z izrezki"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:2
 msgid "Allow snippets to be inserted into the document."
-msgstr ""
+msgstr "Dovoli vstavljanje izrezkov kode v dokument"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.in.h:3
 #, fuzzy
@@ -417,9 +426,8 @@ msgid "Night Mode"
 msgstr "Nočni način"
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:8
-#, fuzzy
 msgid "Prefer dark application chrome."
-msgstr "Program daje prednost temnejši temi"
+msgstr "Prednostno uporabi temno različico programa."
 
 #: ../data/gsettings/org.gnome.builder.gschema.xml.in.h:9
 msgid "Mine projects"
@@ -491,7 +499,7 @@ msgstr "Položaj levega okna"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:4
 msgid "The width in pixel units of the left panel."
-msgstr ""
+msgstr "Širina v točkah za levo okno."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:5
 msgid "Show Right Panel"
@@ -507,7 +515,7 @@ msgstr "Položaj desnega okna"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:8
 msgid "The width in pixel units of the right panel."
-msgstr ""
+msgstr "Širina v točkah za desno okno."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:9
 msgid "Show Bottom Panel"
@@ -518,13 +526,12 @@ msgid "If enabled, the bottom panel will be displayed."
 msgstr "Izbrana možnost določa, da bo spodnje okno prikazano."
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:11
-#, fuzzy
 msgid "Bottom Panel Position"
-msgstr "Položaj pulta"
+msgstr "Položaj spodnjega okna"
 
 #: ../data/gsettings/org.gnome.builder.workbench.gschema.xml.in.h:12
 msgid "The height in pixel units of the bottom panel."
-msgstr ""
+msgstr "Višina v točkah za spodnje okno."
 
 #: ../data/gtk/menus.ui.h:1
 msgid "_New Project"
@@ -732,9 +739,8 @@ msgid "Builder Dark"
 msgstr "Izgrajevalnik"
 
 #: ../data/style-schemes/builder-dark.xml.h:2
-#, fuzzy
 msgid "Dark color scheme for Builder using the Tango color palette"
-msgstr "Temna barvna shema z barvno paleto tango"
+msgstr "Temna barvna shema programa Builder z barvno paleto Tango"
 
 #: ../data/style-schemes/builder.xml.h:2
 msgid "The default color scheme for Builder"
@@ -755,15 +761,15 @@ msgstr ""
 
 #: ../data/ui/ide-editor-perspective.ui.h:3
 msgid "Enable / Disable left panel. Shortcut: F9"
-msgstr ""
+msgstr "Omogoči / Onemogoči levo okno; bližnjica: F9"
 
 #: ../data/ui/ide-editor-perspective.ui.h:4
 msgid "Enable / Disable bottom panel. Shortcut: Ctrl + F9"
-msgstr ""
+msgstr "Omogoči / Onemogoči spodnje okno; bližnjica: CTRL + F9"
 
 #: ../data/ui/ide-editor-perspective.ui.h:5
 msgid "Enable / Disable right panel. Shortcut: Shift + F9"
-msgstr ""
+msgstr "Omogoči / Onemogoči desno okno; bližnjica: SHIFT - F9"
 
 #: ../data/ui/ide-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -1146,33 +1152,29 @@ msgid "Jump to definition of symbol"
 msgstr "Skoči na določilo simbola"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:45
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Move viewport up within the file"
-msgstr "Premakni datoteko"
+msgstr "Premakni vidno polje navzgor po datoteki"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:46
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Move viewport down within the file"
-msgstr "Premakni datoteko"
+msgstr "Premakni vidno polje navzdol po datoteki"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:47
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Move viewport to end of file"
-msgstr "Premakni datoteko"
+msgstr "Premakni vidno polje na konec datoteke"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:48
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Move viewport to beginning of file"
-msgstr "Išči skladnost začetka imena datoteke"
+msgstr "Premakni vidno polje na začetek datoteke"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:49
 msgctxt "shortcut window"
 msgid "Move to matching bracket"
-msgstr ""
+msgstr "Premakni na skladen oklepaj"
 
 #: ../data/ui/ide-shortcuts-window.ui.h:50
 msgctxt "shortcut window"
@@ -1200,12 +1202,11 @@ msgstr "Iskanje datotek: tipkovna bližnjica: Ctrl + ."
 
 #: ../data/ui/ide-workbench-header-bar.ui.h:2
 msgid "Drops down a list of file operations"
-msgstr ""
+msgstr "Spustni seznam datotečnih opravil"
 
 #: ../libide/directory/ide-directory-genesis-addin.c:106
-#, fuzzy
 msgid "From an existing project on this computer"
-msgstr "Projekt iz obstoječih virov"
+msgstr "Iz obstoječega projekta na tem računalniku"
 
 #: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
 msgid "No file was provided."
@@ -1223,9 +1224,8 @@ msgstr "%u od %u"
 
 #: ../libide/editor/ide-editor-frame.c:679
 #: ../plugins/project-tree/gtk/menus.ui.h:1
-#, fuzzy
 msgid "Re_veal in Project Tree"
-msgstr "Ciljna datoteka mora biti znotraj projektnega drevesa."
+msgstr "_Pokaži znotraj projektnega drevesa"
 
 #: ../libide/editor/ide-editor-perspective.c:447
 #: ../libide/preferences/ide-preferences-builtin.c:105
@@ -1282,7 +1282,7 @@ msgstr "Razčlenjevanje števila \"%s\" je spodletelo"
 
 #: ../libide/gsettings/ide-language-defaults.c:270
 msgid "language defaults missing version in [global] group."
-msgstr ""
+msgstr "jezik privzeto določa manjkajoči vrednost v skupini [global]."
 
 #: ../libide/gsettings/ide-language-defaults.c:362
 msgid "Failed to initialize defaults."
@@ -1309,9 +1309,8 @@ msgid "Commands:"
 msgstr "Ukazi:"
 
 #: ../libide/ide-application-command-line.c:186
-#, fuzzy
 msgid "List available subcommands"
-msgstr "Razpoložljivi podrejeni ukazi so ...\n"
+msgstr "Izpiši razpoložljive podrejene ukaze"
 
 #: ../libide/ide-application-command-line.c:193
 msgid "Run Builder in standalone mode"
@@ -1362,9 +1361,8 @@ msgid "Please provide a worker type"
 msgstr "Vnesti je treba zvrst postaje"
 
 #: ../libide/ide-application-command-line.c:396
-#, fuzzy
 msgid "Please provide a D-Bus address"
-msgstr "Poveži s podanim naslovom vodila D-Bus"
+msgstr "Navesti je treba naslov vodila D-Bus"
 
 #: ../libide/ide-application-command-line.c:405
 #, fuzzy
@@ -1449,7 +1447,7 @@ msgstr "Pogovornega okna razširitve »%s« ni mogoče najti."
 
 #: ../libide/ide-object.c:380
 msgid "Failed to locate build system plugin."
-msgstr ""
+msgstr "Določevanje mesta vstavka sistema izgradnje je spodletelo."
 
 #: ../libide/ide-object.c:467
 #, fuzzy
@@ -1518,14 +1516,13 @@ msgid "Apply Fix-It"
 msgstr "_Popravi!"
 
 #: ../libide/ide-uri.c:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Invalid %-encoding in URI"
-msgstr "Naslov URI je zapisan v neveljavnem kodnem zapisu."
+msgstr "Neveljavno kodiranje v naslovu URI"
 
 #: ../libide/ide-uri.c:219
-#, fuzzy
 msgid "Non-UTF-8 characters in URI"
-msgstr "Ali naj bodo ne-številčni znaki prezrti"
+msgstr "V naslovu URI so zaznani znaki izven nabora UTF-8"
 
 #: ../libide/ide-uri.c:366 ../libide/ide-uri.c:377
 #, fuzzy, c-format
@@ -1538,9 +1535,10 @@ msgid "Invalid encoded IP literal '%s' in URI"
 msgstr ""
 
 #: ../libide/ide-uri.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid non-ASCII hostname '%s' in URI"
-msgstr "Ime gostitelja naslova URI »%s« ni veljavno"
+msgstr ""
+"Neveljavni znaki izven nabora ASCII v imenu gostitelja naslova URI »%s«"
 
 #: ../libide/ide-uri.c:434
 #, c-format
@@ -1548,14 +1546,14 @@ msgid "Non-ASCII hostname '%s' forbidden in this URI"
 msgstr ""
 
 #: ../libide/ide-uri.c:457
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse port '%s' in URI"
-msgstr "Ni mogoče razčleniti naslova URI “%s”"
+msgstr "Ni mogoče razčleniti vrat v naslovu URI »%s«"
 
 #: ../libide/ide-uri.c:464
-#, fuzzy, c-format
+#, c-format
 msgid "Port '%s' in URI is out of range"
-msgstr "%s je izven dovoljenega obsega"
+msgstr "Vrata »%s« so izven dovoljenega obsega za naslov URI"
 
 #: ../libide/ide-uri.c:590
 #, fuzzy
@@ -1635,10 +1633,9 @@ msgid "Font"
 msgstr "Pisava"
 
 #: ../libide/preferences/ide-preferences-builtin.c:105
-#, fuzzy
 msgctxt "Keywords"
 msgid "editor font monospace"
-msgstr "Monospace pisava"
+msgstr "monospace, pisava, urejevalnik, enotna širina, besedilo"
 
 #. XXX: This belongs in terminal addin
 #: ../libide/preferences/ide-preferences-builtin.c:107
@@ -1647,10 +1644,9 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: ../libide/preferences/ide-preferences-builtin.c:107
-#, fuzzy
 msgctxt "Keywords"
 msgid "terminal font monospace"
-msgstr "Monospace pisava"
+msgstr "terminal monospace pisava cli"
 
 #: ../libide/preferences/ide-preferences-builtin.c:119
 msgid "Keyboard"
@@ -1698,16 +1694,12 @@ msgid "Cursor"
 msgstr "Kazalka"
 
 #: ../libide/preferences/ide-preferences-builtin.c:137
-#, fuzzy
-#| msgid "Restore Cursor Position"
 msgid "Restore cursor position"
 msgstr "Povrni položaj kazalke"
 
 #: ../libide/preferences/ide-preferences-builtin.c:137
-#, fuzzy
-#| msgid "Restore Cursor Position"
 msgid "Restore cursor position when a file is reopened"
-msgstr "Povrni položaj kazalke"
+msgstr "Povrni položaj kazalke, ko se datoteka ponovno odpre"
 
 #: ../libide/preferences/ide-preferences-builtin.c:138
 msgid "Scroll Offset"
@@ -1730,14 +1722,12 @@ msgid "Line numbers"
 msgstr "Številke vrstic"
 
 #: ../libide/preferences/ide-preferences-builtin.c:142
-#, fuzzy
 msgid "Show line number at beginning of each line"
-msgstr "Išči skladnost začetka imena datoteke"
+msgstr "Pokaži številke na začetku vsake vrstice"
 
 #: ../libide/preferences/ide-preferences-builtin.c:143
-#, fuzzy
 msgid "Line changes"
-msgstr "Črta"
+msgstr "Spremembe vrstic"
 
 #: ../libide/preferences/ide-preferences-builtin.c:143
 msgid "Show if a line was added or modified next to line number"
@@ -1760,10 +1750,8 @@ msgid "Matching brackets"
 msgstr "Ujemajoči oklepaji"
 
 #: ../libide/preferences/ide-preferences-builtin.c:147
-#, fuzzy
-#| msgid "Highlight Matching Brackets"
 msgid "Highlight matching brackets based on cursor position"
-msgstr "Poudari ujemajoče oklepaje"
+msgstr "Poudari ujemajoče oklepaje glede na položaj kazalke"
 
 #: ../libide/preferences/ide-preferences-builtin.c:149
 msgid "Code Overview"
@@ -1774,8 +1762,6 @@ msgid "A zoomed out view to enhance navigating source code"
 msgstr ""
 
 #: ../libide/preferences/ide-preferences-builtin.c:151
-#, fuzzy
-#| msgid "Auto Hide Overview Map"
 msgid "Automatically hide overview map"
 msgstr "Samodejno skrij predogledni zemljevid"
 
@@ -2131,9 +2117,8 @@ msgid "Empty Project"
 msgstr "Izprazni projekt"
 
 #: ../plugins/autotools-templates/autotools_templates/__init__.py:270
-#, fuzzy
 msgid "Create a new empty autotools project"
-msgstr "Nov ozadnji program Autotools za upravljanje s projekti"
+msgstr "Ustvari nov prazen projekt autotools"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:2
 msgid "The name of the build configuration"
@@ -2149,9 +2134,8 @@ msgid "The prefix to use when installing the project"
 msgstr ""
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:5
-#, fuzzy
 msgid "Installation Prefix"
-msgstr "PREDPONA"
+msgstr "Predpona namestitve"
 
 #: ../plugins/build-tools/gbp-build-configuration-view.ui.h:6
 #, fuzzy
@@ -2438,14 +2422,14 @@ msgid "Cannot find language '%s'"
 msgstr "Ni mogoče najti jezika '%s'"
 
 #: ../plugins/command-bar/gb-vim.c:311
-#, fuzzy, c-format
+#, c-format
 msgid "This command requires a GtkSourceView to be focused"
-msgstr "Ukaz zahteva parametre modula."
+msgstr "Ukaz zahteva dejaven zagon programa GtkSourceView"
 
 #: ../plugins/command-bar/gb-vim.c:322
-#, fuzzy, c-format
+#, c-format
 msgid "This command requires a view to be focused"
-msgstr "Ukaz zahteva parametre modula."
+msgstr "Ukaz zahteva dejaven pogled"
 
 #: ../plugins/command-bar/gb-vim.c:379
 #, c-format
@@ -2884,15 +2868,13 @@ msgid "Vala"
 msgstr "Vala"
 
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:34
-#, fuzzy
 msgid "Show errors and warnings provided by Vala"
-msgstr "Pokaži napake in opozorila"
+msgstr "Pokaži napake in opozorila prek okolja Vala"
 
 #. translators: keywords used when searching for preferences
 #: ../plugins/vala-pack/ide-vala-preferences-addin.vala:36
-#, fuzzy
 msgid "vala diagnostics warnings errors"
-msgstr "Napake in opozorila ..."
+msgstr "vala, diagnostika, preučevanje, opozorila, napake"
 
 #~ msgid "_New Document"
 #~ msgstr "Nov _dokument"
