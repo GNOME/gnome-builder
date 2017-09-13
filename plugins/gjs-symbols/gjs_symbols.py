@@ -354,8 +354,8 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
                 name=self._get_node_name(node),
                 kind=node.props.kind,
                 flags=node.props.flags,
-                begin_line=node.props.line,
-                begin_line_offset=node.props.col,
+                begin_line=node.props.line + 1,  # Not sure why offset here doesn't match tree
+                begin_line_offset=node.props.col + 1,
             )
             entries.append(entry)
         return JsCodeIndexEntries(entries)
