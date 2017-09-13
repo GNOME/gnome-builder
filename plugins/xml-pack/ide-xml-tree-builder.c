@@ -318,8 +318,8 @@ ide_xml_tree_builder_parse_worker (GTask        *task,
                   diagnostic = create_diagnostic (context,
                                                   entry->error_message,
                                                   state->file,
-                                                  entry->line,
-                                                  entry->col,
+                                                  entry->line + 1,
+                                                  entry->col + 1,
                                                   IDE_DIAGNOSTIC_ERROR);
                   ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
                   continue;
@@ -339,8 +339,8 @@ ide_xml_tree_builder_parse_worker (GTask        *task,
               diagnostic = create_diagnostic (context,
                                               msg,
                                               state->file,
-                                              entry->line,
-                                              entry->col,
+                                              entry->line + 1,
+                                              entry->col + 1,
                                               IDE_DIAGNOSTIC_ERROR);
               ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
               continue;
@@ -359,8 +359,8 @@ ide_xml_tree_builder_parse_worker (GTask        *task,
               diagnostic = create_diagnostic (context,
                                               msg,
                                               state->file,
-                                              entry->line,
-                                              entry->col,
+                                              entry->line + 1,
+                                              entry->col + 1,
                                               IDE_DIAGNOSTIC_ERROR);
               ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
             }
