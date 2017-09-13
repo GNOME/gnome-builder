@@ -23,17 +23,12 @@
 
 #include "ide-notification-addin.h"
 
-#define NOTIFY_TIMEOUT (10000)
-
 struct _IdeNotificationAddin
 {
-  IdeObject   parent_instance;
-  GDBusProxy *proxy;
-  guint       notify_id;
+  IdeObject parent_instance;
 };
 
 static void addin_iface_init (IdeBuildPipelineAddinInterface *iface);
-static guint last_notify_id;
 
 G_DEFINE_TYPE_EXTENDED (IdeNotificationAddin,
                         ide_notification_addin,
@@ -46,36 +41,28 @@ static void
 ide_notification_addin_notify (IdeNotificationAddin *self,
                                gboolean              success)
 {
-  g_autoptr(GVariant) result = NULL;
   g_autofree gchar *msg_body = NULL;
-  GVariantBuilder actions_builder;
-  GVariantBuilder hints_builder;
+  g_autoptr(GNotification) notification = NULL;
+  g_autoptr(GIcon) icon = NULL;
   GtkApplication *app;
-  GtkWindow *window;
-  IdeContext *context;
-  IdeProject *project;
   const gchar *project_name;
   const gchar *msg_title;
+  const gchar *id;
+  IdeContext *context;
+  IdeProject *project;
+  GtkWindow *window;
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
 
-  if (self->proxy == NULL)
-    return;
-
   app = GTK_APPLICATION (g_application_get_default ());
   window = gtk_application_get_active_window (app);
-  if(gtk_window_has_toplevel_focus (window))
+  if(gtk_window_is_active (window))
     return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
-
   project = ide_context_get_project (context);
-  g_assert (IDE_IS_PROJECT (project));
-
   project_name = ide_project_get_name (project);
-  if (project_name == NULL)
-    return;
+  id = ide_project_get_id (project);
 
   if (success)
     {
@@ -88,33 +75,16 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
       msg_body = g_strdup_printf (_("Project “%s” failed to build"), project_name);
     }
 
-  g_variant_builder_init (&actions_builder, G_VARIANT_TYPE ("as"));
-  g_variant_builder_init (&hints_builder, G_VARIANT_TYPE ("a{sv}"));
+  icon = g_themed_icon_new ("org.gnome.Builder");
 
-  /*
-   * We use self->notify_id so that notifications simply overwrite
-   * the previous state. This helps keep things from getting out of
-   * hand with lots of notifications for the same project.
-   */
+  notification = g_notification_new (msg_title);
+  g_notification_set_body (notification, msg_body);
+  g_notification_set_priority (notification, G_NOTIFICATION_PRIORITY_NORMAL);
+  g_notification_set_icon (notification, icon);
 
-  result = g_dbus_proxy_call_sync (self->proxy,
-                                   "Notify",
-                                   g_variant_new ("(susssasa{sv}i)",
-                                                  "org.gnome.Builder", self->notify_id, "",
-                                                  msg_title,
-                                                  msg_body, &actions_builder,
-                                                  &hints_builder, -1),
-                                   G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL);
-
-#if 0
-   "/data/icons/hicolor/16x16/apps/org.gnome.Builder.png",
-   GNotification *notification;
-   notification = g_notification_new ("Test");
-   g_notification_set_body (notification, "body");
-   g_application_send_notification (G_APPLICATION (app), "test1", notification);
-   g_object_unref (notification);
-#endif
+  g_application_send_notification (g_application_get_default (), id, notification);
 }
+
 static void
 ide_notification_addin_build_failed (IdeNotificationAddin *self,
                                      IdeBuildPipeline     *build_pipeline,
@@ -132,11 +102,16 @@ ide_notification_addin_build_finished (IdeNotificationAddin *self,
                                        IdeBuildPipeline     *build_pipeline,
                                        IdeBuildManager      *build_manager)
 {
+  IdeBuildPhase phase;
+
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  ide_notification_addin_notify (self, TRUE);
+  /* Only notify if we were advancing to a build phase */
+  phase = ide_build_pipeline_get_phase (build_pipeline);
+  if (phase >= IDE_BUILD_PHASE_BUILD)
+    ide_notification_addin_notify (self, TRUE);
 }
 
 static void
@@ -144,8 +119,8 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
                              IdeBuildPipeline      *pipeline)
 {
   IdeNotificationAddin *self = (IdeNotificationAddin *)addin;
-  IdeContext* context;
   IdeBuildManager *build_manager;
+  IdeContext *context;
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
@@ -155,21 +130,6 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
 
   build_manager = ide_context_get_build_manager (context);
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-
-  self->proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
-                                               NULL,
-                                               "org.freedesktop.Notifications",
-                                               "/org/freedesktop/Notifications",
-                                               "org.freedesktop.Notifications",
-                                               NULL,
-                                               NULL);
-
-  if (self->proxy == NULL)
-    {
-      g_message ("Failed to locate org.freedesktop.Notifications");
-      return;
-    }
 
   g_signal_connect_object (build_manager,
                            "build-finished",
@@ -185,17 +145,6 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
 }
 
 static void
-ide_notification_addin_unload (IdeBuildPipelineAddin *addin,
-                               IdeBuildPipeline      *pipeline)
-{
-  IdeNotificationAddin *self = (IdeNotificationAddin *)addin;
-
-  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
-
-  g_clear_object (&self->proxy);
-}
-static void
 ide_notification_addin_class_init (IdeNotificationAddinClass *klass)
 {
 }
@@ -203,12 +152,10 @@ ide_notification_addin_class_init (IdeNotificationAddinClass *klass)
 static void
 ide_notification_addin_init (IdeNotificationAddin *self)
 {
-  self->notify_id = ++last_notify_id;
 }
 
 static void
 addin_iface_init (IdeBuildPipelineAddinInterface *iface)
 {
   iface->load = ide_notification_addin_load;
-  iface->unload = ide_notification_addin_unload;
 }
