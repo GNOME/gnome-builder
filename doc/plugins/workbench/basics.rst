@@ -1,5 +1,5 @@
-The Basics
-==========
+Basics
+======
 
 The basic mechanics of extending the workbench requires first creating an ``Ide.WorkbenchAddin``.
 Your subclass will created for each instance of the ``Ide.Workbench``.
