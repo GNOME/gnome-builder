@@ -398,6 +398,8 @@
              "clear-count" () };
   bind "KP_0" { "movement" (first-char, 0, 1, 0)
                 "clear-count" () };
+  bind "Home" { "movement" (first-char, 0, 1, 0)
+                "clear-count" () };
   bind "asciicircum" { "movement" (first-nonspace-char, 0, 1, 0)
                        "clear-count" () };
 
@@ -408,6 +410,8 @@
 
   bind "dollar" { "movement" (last-char, 0, 1, 0)
                   "clear-count" () };
+  bind "End" { "movement" (last-char, 0, 1, 0)
+               "clear-count" () };
   bind "bar" { "movement" (nth-char, 0, 1, 1)
                "clear-count" () };
 
