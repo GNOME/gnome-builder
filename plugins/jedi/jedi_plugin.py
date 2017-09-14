@@ -679,6 +679,160 @@ class JediCompletionRequest:
             self.cancelled = True
             self.invocation.return_error_literal(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED, "Operation was cancelled")
 
+
+class JediSymbolNode(Ide.SymbolNode):
+    line = GObject.Property(type=int, flags=GObject.ParamFlags.CONSTRUCT_ONLY | GObject.ParamFlags.READWRITE)
+    col = GObject.Property(type=int, flags=GObject.ParamFlags.CONSTRUCT_ONLY | GObject.ParamFlags.READWRITE)
+
+    def __init__(self, children, **kwargs):
+        super().__init__(**kwargs)
+        self.children = children
+
+    def do_get_location_async(self, cancellable, callback, user_data=None):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.return_boolean(True)
+
+    def do_get_location_finish(self, result):
+        if result.propagate_boolean():
+            return Ide.SourceLocation.new(self.file, self.line, self.col, 0)
+
+    def __len__(self):
+        return len(self.children)
+
+    def __bool__(self):
+        return True
+
+    def __getitem__(self, key):
+        return self.children[key]
+
+    def __iter__(self):
+        return iter(self.children)
+
+    def __repr__(self):
+        return '<JediSymbolNode {} ({})'.format(self.props.name, self.props.kind)
+
+
+class JediSymbolTree(GObject.Object, Ide.SymbolTree):
+    def __init__(self, variant):
+        super().__init__()
+        self.root_node = self._node_from_variant(variant)
+
+    @staticmethod
+    def _node_from_variant(variant):
+        children = []
+        for i in range(variant.n_children()):
+            name, kind, line, col = variant.get_child_value(i).unpack()
+            children.append(JediSymbolNode([], name=name, kind=kind,
+                                           line=line, col=col))
+        return JediSymbolNode(children)
+
+    def do_get_n_children(self, node):
+        return len(node) if node is not None else len(self.root_node)
+
+    def do_get_nth_child(self, node, nth):
+        return node[nth] if node is not None else self.root_node[nth]
+
+class JediSymbolProvider(Ide.Object, Ide.SymbolResolver):
+    def __init__(self):
+        super().__init__()
+        self.proxy = None
+        self.loading_proxy = False
+
+    def do_lookup_symbol_async(self, location, cancellable, callback, user_data=None):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.return_boolean(False)  # Not implemented
+
+    def do_lookup_symbol_finish(self, result):
+        result.propagate_boolean()
+        return None
+
+    def do_get_symbol_tree_async(self, file_, buffer_, cancellable, callback, user_data=None):
+        task = Gio.Task.new(self, cancellable, callback)
+
+        if not self.proxy and not self.loading_proxy:
+            def get_worker_cb(app, result):
+                self.loading_proxy = False
+                self.proxy = app.get_worker_finish(result)
+            self.loading_proxy = True
+            app = Gio.Application.get_default()
+            app.get_worker_async('jedi_plugin', None, get_worker_cb)
+
+        if not self.proxy:
+            task.return_boolean(False)
+            return
+
+
+        def async_handler(proxy, result, user_data):
+            (self, results, context) = user_data
+
+            try:
+                variant = proxy.call_finish(result)
+                variant = variant.get_child_value(0) # unwrap outer tuple
+                task.symbol_tree = JediSymbolTree(variant)
+                task.return_boolean(True)
+            except GLib.Error as e:
+                task.return_error(e)
+
+        context = self.get_context()
+        unsaved_file = context.get_unsaved_files().get_unsaved_file(file_)
+        if unsaved_file is not None:
+            contents = unsaved_file.get_content().get_data().decode('utf-8')
+        else:
+            contents = ''
+
+        self.proxy.call('GetSymbolTree',
+                        GLib.Variant('(ss)', (file_.get_path(), contents)),
+                        0, 10000, cancellable, async_handler, (self, task, context))
+
+
+    def do_get_symbol_tree_finish(self, result):
+        if result.propagate_boolean():
+            return result.symbol_tree
+
+    def do_load(self):
+        pass
+
+    def do_find_references_async(self, location, cancellable, callback, user_data=None):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.return_boolean(False)  # Not implemented
+
+    def do_find_references_finish(self, result):
+        result.propagate_boolean()
+        return None
+
+    def do_find_nearest_scope_async(self, location, cancellable, callback, user_data=None):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.return_boolean(False)  # Not implemented
+
+    def do_find_nearest_scope_finish(self, result):
+        result.propagate_boolean()
+        return None
+
+
+class JediSymbolTreeRequest:
+    def __init__(self, invocation, filename, content):
+        self.invocation = invocation
+        self.filename = filename
+        self.content = content
+
+    @staticmethod
+    def _jeditype_to_idetype(t):
+        return {
+            'function': Ide.SymbolKind.FUNCTION,
+            'module': Ide.SymbolKind.MODULE,
+            'class': Ide.SymbolKind.CLASS,
+            'instance': Ide.SymbolKind.VARIABLE,
+        }.get(t, Ide.SymbolKind.NONE)
+
+    def run(self):
+        results = []
+        definitions = jedi.api.names(source=self.content, path=self.filename, all_scopes=True)
+        for definition in definitions:
+            results.append((definition.name, self._jeditype_to_idetype(definition.type),
+                            definition.line, definition.column))
+        self.invocation.return_value(GLib.Variant('(a(siii))', (results,)))
+
+
 class JediService(Ide.DBusService):
     queue = None
     handler_id = None
@@ -696,6 +850,11 @@ class JediService(Ide.DBusService):
         self.queue[filename] = JediCompletionRequest(invocation, filename, line, column, content)
         if not self.handler_id:
             self.handler_id = GLib.timeout_add(5, self.process)
+
+    @Ide.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='ss', out_signature='a(siii)', async=True)
+    def GetSymbolTree(self, invocation, filename, content):
+        request = JediSymbolTreeRequest(invocation, filename, content)
+        request.run()
 
     def process(self):
         self.handler_id = 0
