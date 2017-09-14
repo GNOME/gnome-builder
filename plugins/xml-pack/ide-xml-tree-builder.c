@@ -267,6 +267,7 @@ ide_xml_tree_builder_parse_worker (GTask        *task,
   xmlDoc *doc;
   gsize doc_size;
   IdeXmlSchemaKind kind;
+  gint parser_flags;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (self));
   g_assert (G_IS_TASK (task));
@@ -283,7 +284,11 @@ ide_xml_tree_builder_parse_worker (GTask        *task,
   xmlInitParser ();
 
   doc_data = g_bytes_get_data (state->content, &doc_size);
-  if (NULL != (doc = xmlParseMemory (doc_data, doc_size)))
+  parser_flags = XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING | XML_PARSE_COMPACT;
+  if (NULL != (doc = xmlReadMemory (doc_data,
+                                    doc_size,
+                                    NULL, NULL,
+                                    parser_flags)))
     {
       doc->URL = (guchar *)g_file_get_uri (state->file);
 
