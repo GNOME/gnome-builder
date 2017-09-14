@@ -351,7 +351,7 @@ ide_xml_tree_builder_parse_worker (GTask        *task,
               continue;
             }
 
-          if (!ide_xml_validator_validate (self->validator, doc, &diagnostics))
+          if (ide_xml_validator_validate (self->validator, doc, &diagnostics) != 0)
             {
               if (entry->file == NULL)
                 msg = g_strdup_printf ("Can't validate the internal schema");
