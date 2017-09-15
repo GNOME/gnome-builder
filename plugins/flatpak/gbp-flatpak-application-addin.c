@@ -84,6 +84,7 @@ enum {
 static GbpFlatpakApplicationAddin *instance;
 static guint signals [N_SIGNALS];
 static BuiltinFlatpakRepo builtin_flatpak_repos[] = {
+  { "flathub",       "https://flathub.org/repo/flathub.flatpakrepo" },
   { "gnome",         "https://sdk.gnome.org/gnome.flatpakrepo" },
   { "gnome-nightly", "https://sdk.gnome.org/gnome-nightly.flatpakrepo" },
 };
