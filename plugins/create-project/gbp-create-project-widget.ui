@@ -94,7 +94,7 @@
                 </child>
 
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="language_label">
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">Language</property>
                     <property name="visible">true</property>
@@ -191,7 +191,6 @@
                     <property name="row">4</property>
                   </packing>
                 </child>
-
                 <child>
                   <object class="GtkBox">
                     <property name="visible">true</property>
@@ -221,7 +220,35 @@
                     <property name="row">3</property>
                   </packing>
                 </child>
-
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkToggleButton" id="language_more">
+                        <property name="active" bind-source="project_language_chooser" bind-property="show-more" bind-flags="bidirectional"/>
+                        <property name="sensitive" bind-source="project_language_chooser" bind-property="has-more"/>
+                        <property name="valign">start</property>
+                        <property name="vexpand">false</property>
+                        <property name="visible">true</property>
+                        <property name="focus-on-click">false</property>
+                        <style>
+                          <class name="flat"/>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">view-more-symbolic</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="column">right</property>
+                    <property name="row">2</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child>
@@ -268,6 +295,7 @@
       <widget name="project_name_label"/>
       <widget name="project_name_entry"/>
       <widget name="license_label"/>
+      <widget name="language_label"/>
     </widgets>
   </object>
 </interface>
