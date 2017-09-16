@@ -631,7 +631,7 @@
             "name": "gnome-builder",
             "buildsystem": "meson",
             "builddir": true,
-            "config-opts": [ "--libdir=/app/lib", "-Denable_tracing=true", "-Denable_debug=true", "-Dwith_docs=true", "-Dwith_channel=flatpak-stable" ],
+            "config-opts": [ "--libdir=/app/lib", "-Dwith_docs=true", "-Dwith_channel=flatpak-stable" ],
             "sources": [
                 {
                     "type": "git",
