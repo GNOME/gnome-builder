@@ -1,6 +1,7 @@
 {{include "license.c"}}
 
 #include <glib/gi18n.h>
+
 #include "{{prefix}}-config.h"
 #include "{{prefix}}-window.h"
 
