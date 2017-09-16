@@ -45,7 +45,7 @@ def get_module_data_path(name):
 
 class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
-        return [GnomeProjectTemplate(), LibraryProjectTemplate()]
+        return [GnomeProjectTemplate(), LibraryProjectTemplate(), EmptyProjectTemplate()]
 
 
 class MesonTemplateLocator(Template.TemplateLocator):
@@ -108,7 +108,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         else:
             self.language = 'c'
 
-        if self.language not in ('c', 'javascript', 'python', 'vala'):
+        if self.language not in ('c', 'c++', 'javascript', 'python', 'vala'):
             task.return_error(GLib.Error('Language %s not supported' %
                                          self.language))
             return
@@ -304,5 +304,8 @@ class EmptyProjectTemplate(MesonTemplate):
             _('Empty Project'),
             'pattern-library',
             _('Create a new empty project'),
-            ['C']
+            ['C', 'C++', 'JavaScript', 'Python', 'Vala'],
          )
+
+    def prepare_files(self, files):
+        files['resources/src/meson-empty.build'] = 'src/meson.build'
