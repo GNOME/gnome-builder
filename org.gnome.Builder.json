@@ -561,8 +561,14 @@
         },
         {
             "name": "sysprof",
-            "config-opts": [ "--enable-gtk", "--with-sysprofd=host" ],
-            "cleanup": [ "/bin/*", "/libexec/sysprof", "/share/appdata/*", "/share/applications/*", "/share/mime/packages" ],
+            "config-opts": [ "-Denable_gtk=true", "-Dwith_sysprofd=host" ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "cleanup": [ "/bin/*",
+                         "/libexec/sysprof",
+                         "/share/appdata/*",
+                         "/share/applications/*",
+                         "/share/mime/packages" ],
             "sources": [
                 {
                     "type": "git",
