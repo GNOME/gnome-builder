@@ -572,7 +572,7 @@
                 {
                     "type": "git",
                     "url": "https://git.gnome.org/browse/sysprof",
-                    "branch": "sysprof-3-24"
+                    "branch": "sysprof-3-26"
                 }
             ]
         },
