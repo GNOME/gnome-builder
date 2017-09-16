@@ -566,8 +566,8 @@
             "builddir": true,
             "cleanup": [ "/bin/*",
                          "/libexec/sysprof",
-                         "/share/appdata/*",
-                         "/share/applications/*",
+                         "/share/appdata/",
+                         "/share/applications/",
                          "/share/mime/packages" ],
             "sources": [
                 {
