@@ -23,6 +23,7 @@
 #include <ide.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gbp-create-project-template-icon.h"
 #include "gbp-create-project-widget.h"
@@ -51,12 +52,28 @@ static GParamSpec *properties [N_PROPS];
 
 G_DEFINE_TYPE (GbpCreateProjectWidget, gbp_create_project_widget, GTK_TYPE_BIN)
 
+static gboolean
+is_preferred (const gchar *name)
+{
+  return 0 == strcasecmp (name, "c") ||
+         0 == strcasecmp (name, "vala") ||
+         0 == strcasecmp (name, "javascript") ||
+         0 == strcasecmp (name, "python");
+}
+
 static int
 sort_by_name (gconstpointer a,
               gconstpointer b)
 {
   const gchar * const *astr = a;
   const gchar * const *bstr = b;
+  gboolean apref = is_preferred (*astr);
+  gboolean bpref = is_preferred (*bstr);
+
+  if (apref && !bpref)
+    return -1;
+  else if (!apref && bpref)
+    return 1;
 
   return g_utf8_collate (*astr, *bstr);
 }
