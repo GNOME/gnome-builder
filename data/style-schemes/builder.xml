@@ -76,7 +76,7 @@
   <style name="map-overlay"                 background="#rgba(193,203,210,0.55)"/>
   <style name="cursor"                      foreground="aluminium4"/>
   <style name="current-line"                background="#rgba(238,238,236,.75)"/>
-  <style name="current-line-number"         background="#rgba(238,238,236,.75)"/>
+  <style name="current-line-number"         background="#rgba(238,238,236,.75)" bold="true"/>
   <style name="draw-spaces"                 foreground="aluminium3"/>
   <style name="line-numbers"                foreground="line1" background="bg1"/>
   <style name="background-pattern"          background="#rgba(.125,.125,.125,.025)"/>
@@ -86,6 +86,9 @@
   <style name="diagnostician::error"        underline="error" underline-color="red1"/>
   <style name="diagnostician::note"         underline="error" underline-color="blue1"/>
   <style name="diagnostician::warning"      underline="error" underline-color="orange1"/>
+
+  <!-- Debugger -->
+  <style name="debugger::breakpoint"        background="#4a90d9" foreground="#ffffff"/>
 
   <!-- Snippets -->
   <style name="snippet::tab-stop"           background="#fcaf3e" foreground="text1"/>

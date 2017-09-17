@@ -48,8 +48,7 @@
 #include "sourceview/ide-completion-provider.h"
 #include "sourceview/ide-cursor.h"
 #include "sourceview/ide-indenter.h"
-#include "sourceview/ide-line-change-gutter-renderer.h"
-#include "sourceview/ide-line-diagnostics-gutter-renderer.h"
+#include "sourceview/ide-omni-gutter-renderer.h"
 #include "sourceview/ide-source-iter.h"
 #include "sourceview/ide-source-view-capture.h"
 #include "sourceview/ide-source-view-mode.h"
@@ -94,8 +93,6 @@ typedef struct
   GtkCssProvider              *css_provider;
   PangoFontDescription        *font_desc;
   IdeExtensionAdapter         *indenter_adapter;
-  GtkSourceGutterRenderer     *line_change_renderer;
-  GtkSourceGutterRenderer     *line_diagnostics_renderer;
   IdeSourceViewCapture        *capture;
   gchar                       *display_name;
   IdeSourceViewMode           *mode;
@@ -111,6 +108,7 @@ typedef struct
   GtkSourceSearchContext      *search_context;
   DzlAnimation                *hadj_animation;
   DzlAnimation                *vadj_animation;
+  IdeOmniGutterRenderer       *omni_renderer;
 
   IdeExtensionSetAdapter      *completion_providers;
   DzlSignalGroup              *completion_providers_signals;
@@ -174,8 +172,6 @@ typedef struct
   guint                        rubberband_search : 1;
   guint                        scrolling_to_scroll_mark : 1;
   guint                        show_grid_lines : 1;
-  guint                        show_line_changes : 1;
-  guint                        show_line_diagnostics : 1;
   guint                        show_search_bubbles : 1;
   guint                        show_search_shadow : 1;
   guint                        snippet_completion : 1;
@@ -238,7 +234,8 @@ enum {
   /* These are overridden */
   PROP_AUTO_INDENT,
   PROP_HIGHLIGHT_CURRENT_LINE,
-  PROP_OVERWRITE
+  PROP_OVERWRITE,
+  PROP_SHOW_LINE_NUMBERS,
 };
 
 enum {
@@ -1411,39 +1408,16 @@ ide_source_view__buffer_notify_has_selection_cb (IdeSourceView *self,
 }
 
 static void
-ide_source_view__buffer_notify_highlight_diagnostics_cb (IdeSourceView *self,
-                                                         GParamSpec    *pspec,
-                                                         IdeBuffer     *buffer)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (priv->line_diagnostics_renderer != NULL)
-    {
-      gboolean visible;
-
-      visible = (priv->show_line_diagnostics && ide_buffer_get_highlight_diagnostics (buffer));
-      g_object_set (priv->line_diagnostics_renderer,
-                    "visible", visible,
-                    NULL);
-    }
-}
-
-static void
 ide_source_view__buffer_line_flags_changed_cb (IdeSourceView *self,
                                                IdeBuffer     *buffer)
 {
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  gtk_source_gutter_renderer_queue_draw (priv->line_change_renderer);
-  gtk_source_gutter_renderer_queue_draw (priv->line_diagnostics_renderer);
+  gtk_source_gutter_queue_draw (gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self),
+                                                            GTK_TEXT_WINDOW_LEFT));
 
   IDE_EXIT;
 }
@@ -1705,7 +1679,6 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
-  ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_style_scheme_cb (self, NULL, buffer);
   ide_source_view__buffer__notify_can_redo (self, NULL, buffer);
   ide_source_view__buffer__notify_can_undo (self, NULL, buffer);
@@ -4492,9 +4465,8 @@ ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceGutter *gutter;
   GtkSourceCompletion *completion;
-  gboolean visible;
+  GtkSourceGutter *gutter;
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
 
@@ -4519,31 +4491,14 @@ ide_source_view_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
-
-  priv->line_change_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
-                                             "show-line-deletions", TRUE,
-                                             "size", 2,
-                                             "visible", priv->show_line_changes,
-                                             "xpad", 3,
-                                             NULL);
-  g_object_ref (priv->line_change_renderer);
-  gtk_source_gutter_insert (gutter, priv->line_change_renderer, 0);
-
-  visible = ((priv->buffer != NULL) &&
-             priv->show_line_diagnostics &&
-             ide_buffer_get_highlight_diagnostics (priv->buffer));
-  priv->line_diagnostics_renderer = g_object_new (IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER,
-                                                  "size", 16,
-                                                  "visible", visible,
-                                                  "xpad", 2,
-                                                  NULL);
-  g_object_ref (priv->line_diagnostics_renderer);
-  gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_DIAGNOSTICS]);
-
   priv->definition_src_location = NULL;
   ide_source_view_reset_definition_highlight (self);
+
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
+  priv->omni_renderer = g_object_new (IDE_TYPE_OMNI_GUTTER_RENDERER,
+                                      "visible", TRUE,
+                                      NULL);
+  gtk_source_gutter_insert (gutter, g_object_ref_sink (priv->omni_renderer), 0);
 }
 
 static void
@@ -6287,14 +6242,13 @@ ide_source_view_dispose (GObject *object)
 
   g_clear_object (&priv->capture);
   g_clear_object (&priv->indenter_adapter);
-  g_clear_object (&priv->line_change_renderer);
-  g_clear_object (&priv->line_diagnostics_renderer);
   g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->css_provider);
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->file_setting_bindings);
   g_clear_object (&priv->word_completion_provider);
+  g_clear_object (&priv->omni_renderer);
 
   if (priv->command_str != NULL)
     {
@@ -6407,6 +6361,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_show_line_diagnostics (self));
       break;
 
+    case PROP_SHOW_LINE_NUMBERS:
+      g_value_set_boolean (value, ide_source_view_get_show_line_numbers (self));
+      break;
+
     case PROP_SHOW_SEARCH_BUBBLES:
       g_value_set_boolean (value, ide_source_view_get_show_search_bubbles (self));
       break;
@@ -6502,6 +6460,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SHOW_LINE_DIAGNOSTICS:
       ide_source_view_set_show_line_diagnostics (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_LINE_NUMBERS:
+      ide_source_view_set_show_line_numbers (self, g_value_get_boolean (value));
       break;
 
     case PROP_SHOW_SEARCH_BUBBLES:
@@ -6742,6 +6704,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           "If line changes diagnostics should be shown in the left gutter.",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_override_property (object_class, PROP_SHOW_LINE_NUMBERS, "show-line-numbers");
 
   properties [PROP_SHOW_SEARCH_BUBBLES] =
     g_param_spec_boolean ("show-search-bubbles",
@@ -7495,7 +7459,6 @@ ide_source_view_init (IdeSourceView *self)
   priv->target_line_column = 0;
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
-  priv->show_line_diagnostics = TRUE;
   priv->font_scale = FONT_SCALE_NORMAL;
   priv->search_direction = GTK_DIR_DOWN;
   priv->command_str = g_string_sized_new (32);
@@ -7551,11 +7514,6 @@ ide_source_view_init (IdeSourceView *self)
   dzl_signal_group_connect_object (priv->buffer_signals,
                                    "notify::can-undo",
                                    G_CALLBACK (ide_source_view__buffer__notify_can_undo),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (priv->buffer_signals,
-                                   "notify::highlight-diagnostics",
-                                   G_CALLBACK (ide_source_view__buffer_notify_highlight_diagnostics_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->buffer_signals,
@@ -7695,7 +7653,7 @@ ide_source_view_get_show_line_changes (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
-  return priv->show_line_changes;
+  return ide_omni_gutter_renderer_get_show_line_changes (priv->omni_renderer);
 }
 
 void
@@ -7706,15 +7664,8 @@ ide_source_view_set_show_line_changes (IdeSourceView *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  show_line_changes = !!show_line_changes;
-
-  if (show_line_changes != priv->show_line_changes)
-    {
-      priv->show_line_changes = show_line_changes;
-      if (priv->line_change_renderer)
-        gtk_source_gutter_renderer_set_visible (priv->line_change_renderer, show_line_changes);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
-    }
+  ide_omni_gutter_renderer_set_show_line_changes (priv->omni_renderer, show_line_changes);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
 }
 
 gboolean
@@ -7724,7 +7675,7 @@ ide_source_view_get_show_line_diagnostics (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
-  return priv->show_line_diagnostics;
+  return ide_omni_gutter_renderer_get_show_line_diagnostics (priv->omni_renderer);
 }
 
 void
@@ -7735,23 +7686,8 @@ ide_source_view_set_show_line_diagnostics (IdeSourceView *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  show_line_diagnostics = !!show_line_diagnostics;
-
-  if (show_line_diagnostics != priv->show_line_diagnostics)
-    {
-      gboolean visible;
-
-      priv->show_line_diagnostics = show_line_diagnostics;
-
-      if ((priv->buffer != NULL) && (priv->line_diagnostics_renderer != NULL))
-        {
-          visible = (priv->show_line_diagnostics &&
-                     ide_buffer_get_highlight_diagnostics (priv->buffer));
-          gtk_source_gutter_renderer_set_visible (priv->line_diagnostics_renderer, visible);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
-    }
+  ide_omni_gutter_renderer_set_show_line_diagnostics (priv->omni_renderer, show_line_diagnostics);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_DIAGNOSTICS]);
 }
 
 gboolean
@@ -9036,4 +8972,26 @@ ide_source_view_get_current_snippet (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
   return g_queue_peek_head (priv->snippets);
+}
+
+gboolean
+ide_source_view_get_show_line_numbers (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return ide_omni_gutter_renderer_get_show_line_numbers (priv->omni_renderer);
+}
+
+void
+ide_source_view_set_show_line_numbers (IdeSourceView *self,
+                                       gboolean       show_line_numbers)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  ide_omni_gutter_renderer_set_show_line_numbers (priv->omni_renderer, show_line_numbers);
+  g_object_notify (G_OBJECT (self), "show-line-numbers");
 }

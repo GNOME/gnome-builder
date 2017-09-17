@@ -81,8 +81,8 @@
   <style name="snippet::area"               background="#rgba(86,114,151,.5)"/>
 
   <!-- Debugger -->
-  <style
-    name="debugger::current-breakpoint"     foreground="#2e3436" background="#fcaf3e"/>
+  <style name="debugger::current-breakpoint" foreground="#2e3436" background="#fcaf3e"/>
+  <style name="debugger::breakpoint"         foreground="#ffffff" background="#204a87"/>
 
   <!-- Hover links -->
   <style name="action::hover-definition"    background="#41464c" underline="true"/>
