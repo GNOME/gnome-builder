@@ -561,7 +561,7 @@
         },
         {
             "name": "sysprof",
-            "config-opts": [ "-Denable_gtk=true", "-Dwith_sysprofd=host" ],
+            "config-opts": [ "--libdir=/app/lib", "-Denable_gtk=true", "-Dwith_sysprofd=host" ],
             "buildsystem": "meson",
             "builddir": true,
             "cleanup": [ "/bin/*",
