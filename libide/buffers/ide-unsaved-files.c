@@ -130,17 +130,30 @@ unsaved_file_save (UnsavedFile  *uf,
                    const gchar  *path,
                    GError      **error)
 {
-  gboolean ret;
+  g_autoptr(GFile) file = NULL;
 
-  g_assert (uf);
-  g_assert (uf->content);
-  g_assert (path);
+  g_assert (uf != NULL);
+  g_assert (uf->content != NULL);
+  g_assert (path != NULL);
 
-  ret = g_file_set_contents (path,
-                             g_bytes_get_data (uf->content, NULL),
-                             g_bytes_get_size (uf->content),
-                             error);
-  return ret;
+  /*
+   * These files can be accessed by third-party programs. So we need to ensure
+   * those programs see either the old version of the file or the new version
+   * of the file. g_file_replace_contents() conveniently provides the atomic
+   * rename() for us.
+   */
+
+  file = g_file_new_for_path (path);
+
+  return g_file_replace_contents (file,
+                                  g_bytes_get_data (uf->content, NULL),
+                                  g_bytes_get_size (uf->content),
+                                  NULL,
+                                  FALSE,
+                                  G_FILE_CREATE_REPLACE_DESTINATION,
+                                  NULL,
+                                  NULL,
+                                  error);
 }
 
 static gchar *
