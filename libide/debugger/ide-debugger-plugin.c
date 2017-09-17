@@ -19,7 +19,6 @@
 #include <libpeas/peas.h>
 
 #include "debugger/ide-debugger-editor-addin.h"
-#include "debugger/ide-debugger-editor-view-addin.h"
 #include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-view-addin.h"
 
@@ -29,7 +28,4 @@ ide_debugger_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,
                                               IDE_TYPE_DEBUGGER_EDITOR_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              IDE_TYPE_DEBUGGER_EDITOR_VIEW_ADDIN);
 }

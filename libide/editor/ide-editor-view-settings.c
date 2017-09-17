@@ -151,6 +151,10 @@ _ide_editor_view_init_settings (IdeEditorView *self)
                    source_view, "show-line-changes",
                    G_SETTINGS_BIND_GET);
 
+  g_settings_bind (self->editor_settings, "show-line-diagnostics",
+                   source_view, "show-line-diagnostics",
+                   G_SETTINGS_BIND_GET);
+
   g_settings_bind (self->editor_settings, "show-line-numbers",
                    source_view, "show-line-numbers",
                    G_SETTINGS_BIND_GET);
