@@ -13,7 +13,6 @@ option('with_channel',
 
 option('with_editorconfig', type: 'boolean')
 option('with_webkit', type: 'boolean')
-option('with_introspection', type: 'boolean')
 option('with_vapi', type: 'boolean')
 option('with_help', type: 'boolean')
 option('with_docs', type: 'boolean')
