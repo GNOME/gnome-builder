@@ -946,7 +946,7 @@ ide_debugger_breakpoint_compare (IdeDebuggerBreakpoint *a,
    * don't yet have an identifier.
    */
   if (priv_a->id == NULL && priv_b->id == NULL)
-    return FALSE;
+    return a - b;
 
   if (priv_a->id && priv_b->id)
     {
