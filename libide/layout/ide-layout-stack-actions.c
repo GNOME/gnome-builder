@@ -19,6 +19,8 @@
 #include "ide-layout-stack.h"
 #include "ide-layout-private.h"
 
+#include <ide.h>
+
 static void
 ide_layout_stack_actions_next_view (GSimpleAction *action,
                                     GVariant      *variant,
@@ -129,6 +131,9 @@ ide_layout_stack_actions_open_in_new_frame (GSimpleAction *action,
                                             gpointer       user_data)
 {
   IdeLayoutStack *self = user_data;
+
+  const gchar *filepath;
+
   IdeLayoutView *view;
   IdeLayoutStack *dest;
   GtkWidget *grid;
@@ -137,14 +142,37 @@ ide_layout_stack_actions_open_in_new_frame (GSimpleAction *action,
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
-  view = ide_layout_stack_get_visible_child (self);
+  filepath = g_variant_get_string (variant, NULL);
+  if (!ide_str_empty0 (filepath))
+    {
+      IdeContext *context;
+      IdeBufferManager *buffer_manager;
+      g_autoptr (GFile) file = NULL;
+      IdeBuffer *buffer;
 
-  g_return_if_fail (view != NULL);
-  g_return_if_fail (IDE_IS_LAYOUT_VIEW (view));
-  g_return_if_fail (ide_layout_view_get_can_split (view));
+      context = ide_widget_get_context (GTK_WIDGET (self));
+      buffer_manager = ide_context_get_buffer_manager (context);
+      file = g_file_new_for_path (filepath);
+      if (NULL != (buffer = ide_buffer_manager_find_buffer (buffer_manager, file)))
+        view = g_object_new (IDE_TYPE_EDITOR_VIEW,
+                             "buffer", buffer,
+                             "visible", TRUE,
+                             NULL);
+      else
+        return;
+    }
+  else
+    {
+      view = ide_layout_stack_get_visible_child (self);
 
-  view = ide_layout_view_create_split_view (view);
+      g_return_if_fail (view != NULL);
+      g_return_if_fail (IDE_IS_LAYOUT_VIEW (view));
+      g_return_if_fail (ide_layout_view_get_can_split (view));
+
+      view = ide_layout_view_create_split_view (view);
+    }
 
   if (view == NULL)
     {
@@ -293,7 +321,7 @@ ide_layout_stack_actions_show_list (GSimpleAction *action,
 }
 
 static const GActionEntry actions[] = {
-  { "open-in-new-frame", ide_layout_stack_actions_open_in_new_frame },
+  { "open-in-new-frame", ide_layout_stack_actions_open_in_new_frame, "s" },
   { "close-stack",       ide_layout_stack_actions_close_stack },
   { "close-view",        ide_layout_stack_actions_close_view },
   { "next-view",         ide_layout_stack_actions_next_view },
