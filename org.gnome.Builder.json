@@ -544,6 +544,7 @@
             "name": "json-glib",
             "buildsystem": "meson",
             "builddir": true,
+            "config-opts": [ "--libdir=/app/lib", "--buildtype=release" ],
             "sources": [
                 {
                     "type": "git",
@@ -578,7 +579,7 @@
         },
         {
             "name": "template-glib",
-            "config-opts": [ "--libdir=/app/lib" ],
+            "config-opts": [ "--libdir=/app/lib", "--buildtype=release" ],
             "buildsystem": "meson",
             "builddir": true,
             "sources": [
@@ -591,7 +592,7 @@
         },
         {
             "name": "jsonrpc-glib",
-            "config-opts": [ "--libdir=/app/lib" ],
+            "config-opts": [ "--libdir=/app/lib", "--buildtype=release" ],
             "buildsystem": "meson",
             "builddir": true,
             "sources": [
@@ -604,7 +605,7 @@
         },
         {
             "name": "libdazzle",
-            "config-opts": [ "--libdir=/app/lib" ],
+            "config-opts": [ "--libdir=/app/lib", "--buildtype=release" ],
             "buildsystem": "meson",
             "builddir": true,
             "sources": [
@@ -631,7 +632,10 @@
             "name": "gnome-builder",
             "buildsystem": "meson",
             "builddir": true,
-            "config-opts": [ "--libdir=/app/lib", "-Dwith_docs=true", "-Dwith_channel=flatpak-stable" ],
+            "config-opts": [ "--libdir=/app/lib",
+                             "--buildtype=release",
+                             "-Dwith_docs=true",
+                             "-Dwith_channel=flatpak-stable" ],
             "sources": [
                 {
                     "type": "git",
