@@ -513,20 +513,31 @@ gb_vim_command_quit (GtkWidget      *active_widget,
   return TRUE;
 }
 
-static gboolean
-gb_vim_command_split (GtkWidget      *active_widget,
-                      const gchar    *command,
-                      const gchar    *options,
-                      GError        **error)
+static void
+gb_vim_command_split_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
 {
-  g_assert (GTK_IS_WIDGET (active_widget));
+  SplitCallbackData *split_callback_data = (SplitCallbackData *)user_data;
+  IdeWorkbench *workbench;
+  GtkWidget *active_widget;
+  const gchar *file_path;
+  GVariant *variant;
+  g_autoptr(GError) error = NULL;
 
-  if (IDE_IS_LAYOUT_VIEW (active_widget))
-    dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "split-view", NULL);
-  else
-    return gb_vim_set_no_view_error (error);
+  workbench = IDE_WORKBENCH (object);
+  if (ide_workbench_open_files_finish (workbench,result, &error))
+    {
+      active_widget = split_callback_data->active_widget;
+      file_path = split_callback_data->file_path;
+      variant = g_variant_new_string (file_path);
 
-  return TRUE;
+      dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "split-view", variant);
+    }
+
+  g_object_unref (split_callback_data->active_widget);
+  g_free (split_callback_data->file_path);
+  g_slice_free (SplitCallbackData, split_callback_data);
 }
 
 static void
@@ -535,15 +546,21 @@ gb_vim_command_vsplit_cb (GObject      *object,
                           gpointer      user_data)
 {
   SplitCallbackData *split_callback_data = (SplitCallbackData *)user_data;
+  IdeWorkbench *workbench;
   GtkWidget *active_widget;
   const gchar *file_path;
   GVariant *variant;
+  g_autoptr(GError) error = NULL;
 
-  active_widget = split_callback_data->active_widget;
-  file_path = split_callback_data->file_path;
-  variant = g_variant_new_string (file_path);
+  workbench = IDE_WORKBENCH (object);
+  if (ide_workbench_open_files_finish (workbench,result, &error))
+    {
+      active_widget = split_callback_data->active_widget;
+      file_path = split_callback_data->file_path;
+      variant = g_variant_new_string (file_path);
 
-  dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "open-in-new-frame", variant);
+      dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "open-in-new-frame", variant);
+    }
 
   g_object_unref (split_callback_data->active_widget);
   g_free (split_callback_data->file_path);
@@ -551,10 +568,10 @@ gb_vim_command_vsplit_cb (GObject      *object,
 }
 
 static gboolean
-gb_vim_command_vsplit (GtkWidget      *active_widget,
-                       const gchar    *command,
-                       const gchar    *options,
-                       GError        **error)
+load_split_async (GtkWidget            *active_widget,
+                  const gchar          *options,
+                  GAsyncReadyCallback   callback,
+                  GError              **error)
 {
   IdeWorkbench *workbench;
   IdeContext *context;
@@ -563,6 +580,82 @@ gb_vim_command_vsplit (GtkWidget      *active_widget,
   GFile *file = NULL;
   gchar *file_path;
   SplitCallbackData *split_callback_data;
+
+  g_assert (GTK_IS_WIDGET (active_widget));
+  g_assert (options != NULL);
+  g_assert (callback != NULL);
+
+  if (!(workbench = ide_widget_get_workbench (active_widget)) ||
+      !(context = ide_workbench_get_context (workbench)) ||
+      !(vcs = ide_context_get_vcs (context)) ||
+      !(workdir = ide_vcs_get_working_directory (vcs)))
+    {
+      g_set_error (error,
+                   GB_VIM_ERROR,
+                   GB_VIM_ERROR_NOT_SOURCE_VIEW,
+                   _("Failed to locate working directory"));
+      return FALSE;
+    }
+
+  if (!g_path_is_absolute (options))
+    {
+      g_autofree gchar *workdir_path = NULL;
+      workdir_path = g_file_get_path (workdir);
+      file_path = g_build_filename (workdir_path, options, NULL);
+    }
+  else
+    file_path = g_strdup (options);
+
+  file = g_file_new_for_path (file_path);
+
+  split_callback_data = g_slice_new (SplitCallbackData);
+  split_callback_data->active_widget = g_object_ref (active_widget);
+  split_callback_data->file_path = file_path;
+
+  ide_workbench_open_files_async (workbench,
+                                  &file,
+                                  1,
+                                  "editor",
+                                  IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND,
+                                  NULL,
+                                  callback,
+                                  split_callback_data);
+
+  g_clear_object (&file);
+
+  return TRUE;
+}
+
+static gboolean
+gb_vim_command_split (GtkWidget    *active_widget,
+                      const gchar  *command,
+                      const gchar  *options,
+                      GError      **error)
+{
+  GVariant *variant;
+
+  g_assert (GTK_IS_WIDGET (active_widget));
+
+  if (!IDE_IS_LAYOUT_VIEW (active_widget))
+    return gb_vim_set_no_view_error (error);
+
+  if (ide_str_empty0 (options))
+    {
+      variant = g_variant_new_string ("");
+      dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "split-view", variant);
+
+      return TRUE;
+    }
+  else
+    return load_split_async (active_widget, options, gb_vim_command_split_cb, error);
+}
+
+static gboolean
+gb_vim_command_vsplit (GtkWidget    *active_widget,
+                       const gchar  *command,
+                       const gchar  *options,
+                       GError      **error)
+{
   GVariant *variant;
 
   g_assert (GTK_IS_WIDGET (active_widget));
@@ -574,42 +667,11 @@ gb_vim_command_vsplit (GtkWidget      *active_widget,
     {
       variant = g_variant_new_string ("");
       dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "open-in-new-frame", variant);
+
+      return TRUE;
     }
   else
-    {
-      if (!(workbench = ide_widget_get_workbench (active_widget)) ||
-          !(context = ide_workbench_get_context (workbench)) ||
-          !(vcs = ide_context_get_vcs (context)) ||
-          !(workdir = ide_vcs_get_working_directory (vcs)))
-        {
-          g_set_error (error,
-                       GB_VIM_ERROR,
-                       GB_VIM_ERROR_NOT_SOURCE_VIEW,
-                       _("Failed to locate working directory"));
-          return FALSE;
-        }
-
-      if (!g_path_is_absolute (options))
-        {
-          g_autofree gchar *workdir_path = NULL;
-          workdir_path = g_file_get_path (workdir);
-          file_path = g_build_filename (workdir_path, options, NULL);
-        }
-      else
-        file_path = g_strdup (options);
-
-      file = g_file_new_for_path (file_path);
-
-      split_callback_data = g_slice_new (SplitCallbackData);
-      split_callback_data->active_widget = g_object_ref (active_widget);
-      split_callback_data->file_path = file_path;
-
-      ide_workbench_open_files_async (workbench, &file, 1, "editor", IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND, NULL, gb_vim_command_vsplit_cb, split_callback_data);
-
-      g_clear_object (&file);
-    }
-
-  return TRUE;
+    return load_split_async (active_widget, options, gb_vim_command_vsplit_cb, error);
 }
 
 static gboolean
@@ -1552,6 +1614,8 @@ gb_vim_complete (GtkWidget   *active_widget,
           g_str_has_prefix (line, "edit ") ||
           g_str_has_prefix (line, "o ") ||
           g_str_has_prefix (line, "open ") ||
+          g_str_has_prefix (line, "sp ") ||
+          g_str_has_prefix (line, "split ") ||
           g_str_has_prefix (line, "vsp ") ||
           g_str_has_prefix (line, "vsplit ") ||
           g_str_has_prefix (line, "tabe "))
