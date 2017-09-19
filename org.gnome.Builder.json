@@ -541,6 +541,8 @@
             "name": "json-glib",
             "buildsystem": "meson",
             "builddir": true,
+            "config-opts": [ "--libdir=/app/lib",
+                             "--buildtype=debugoptimized" ],
             "sources": [
                 {
                     "type": "git",
@@ -561,7 +563,10 @@
         },
         {
             "name": "sysprof",
-            "config-opts": [ "--libdir=/app/lib", "-Denable_gtk=true", "-Dwith_sysprofd=host" ],
+            "config-opts": [ "--libdir=/app/lib",
+                             "--buildtype=debugoptimized",
+                             "-Denable_gtk=true",
+                             "-Dwith_sysprofd=host" ],
             "buildsystem": "meson",
             "builddir": true,
             "cleanup": [ "/bin/*",
@@ -578,7 +583,8 @@
         },
         {
             "name": "template-glib",
-            "config-opts": [ "--libdir=/app/lib" ],
+            "config-opts": [ "--libdir=/app/lib",
+                             "--buildtype=debugoptimized" ],
             "buildsystem": "meson",
             "builddir": true,
             "sources": [
@@ -590,7 +596,8 @@
         },
         {
             "name": "jsonrpc-glib",
-            "config-opts": [ "--libdir=/app/lib" ],
+            "config-opts": [ "--libdir=/app/lib",
+                             "--buildtype=debugoptimized" ],
             "buildsystem": "meson",
             "builddir": true,
             "sources": [
@@ -602,7 +609,8 @@
         },
         {
             "name": "libdazzle",
-            "config-opts": [ "--libdir=/app/lib" ],
+            "config-opts": [ "--libdir=/app/lib",
+                             "--buildtype=debugoptimized" ],
             "buildsystem": "meson",
             "builddir": true,
             "sources": [
@@ -629,8 +637,8 @@
             "buildsystem": "meson",
             "builddir": true,
             "config-opts": [ "--libdir=/app/lib",
+                             "--buildtype=debugoptimized",
                              "-Denable_tracing=true",
-                             "-Denable_debug=true",
                              "-Dwith_docs=true",
                              "-Dwith_channel=flatpak-nightly" ],
             "sources": [
