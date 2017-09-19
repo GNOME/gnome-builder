@@ -712,7 +712,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
         }
     }
 
-  if (state->is_new || (state->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND) == 0)
+  if (state->is_new && (state->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND) == 0)
     create_new_view = TRUE;
 
   g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, create_new_view);
