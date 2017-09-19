@@ -221,6 +221,16 @@ ide_editor_perspective_create_edge (DzlDockBin      *dock_bin,
 }
 
 static void
+ide_editor_perspective_grab_focus (GtkWidget *widget)
+{
+  IdeEditorPerspective *self = (IdeEditorPerspective *)widget;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->grid));
+}
+
+static void
 ide_editor_perspective_destroy (GtkWidget *widget)
 {
   IdeEditorPerspective *self = (IdeEditorPerspective *)widget;
@@ -241,6 +251,7 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
 
   widget_class->destroy = ide_editor_perspective_destroy;
   widget_class->hierarchy_changed = ide_editor_perspective_hierarchy_changed;
+  widget_class->grab_focus = ide_editor_perspective_grab_focus;
 
   container_class->add = ide_editor_perspective_add;
 

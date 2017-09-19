@@ -197,8 +197,11 @@ ide_workbench_grab_focus (GtkWidget *widget)
   g_assert (IDE_IS_WORKBENCH (self));
 
   child = gtk_stack_get_visible_child (self->perspectives_stack);
+
   if (child != NULL)
     gtk_widget_grab_focus (child);
+  else
+    GTK_WIDGET_CLASS (ide_workbench_parent_class)->grab_focus (widget);
 }
 
 static void
