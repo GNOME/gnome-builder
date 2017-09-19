@@ -68,7 +68,7 @@
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };
   bind "<ctrl>j" { "action" ("layoutgrid", "focus-neighbor", "3") };
-  bind "<shift><ctrl>j" { "action" ("layoutstack", "split-view", "") };
+  bind "<shift><ctrl>j" { "action" ("layoutstack", "split-view", "''") };
   bind "F2" { "clear-selection" ()
               "movement" (previous-word-end, 0, 1, 1)
               "movement" (next-word-start, 0, 1, 0)
@@ -129,8 +129,8 @@
   bind "<ctrl>b" { "action" ("layoutstack", "show-list", "") };
   bind "<ctrl>w" { "action" ("editor-view", "save-as", "") };
   bind "u" { "redo" () };
-  bind "2" { "action" ("lyaoutstack", "split-view", "") };
-  bind "3" { "action" ("layoutstack", "open-in-new-frame", "") };
+  bind "2" { "action" ("lyaoutstack", "split-view", "''") };
+  bind "3" { "action" ("layoutstack", "open-in-new-frame", "''") };
   bind "o" { "action" ("layoutgrid", "focus-neighbor", "0") };
   bind "grave" { "move-error" (down) };
   bind "h" { "select-all" (1) };
