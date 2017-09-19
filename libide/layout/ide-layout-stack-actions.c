@@ -131,9 +131,7 @@ ide_layout_stack_actions_open_in_new_frame (GSimpleAction *action,
                                             gpointer       user_data)
 {
   IdeLayoutStack *self = user_data;
-
   const gchar *filepath;
-
   IdeLayoutView *view;
   IdeLayoutStack *dest;
   GtkWidget *grid;
@@ -211,12 +209,14 @@ ide_layout_stack_actions_split_view (GSimpleAction *action,
   IdeLayoutStack *dest;
   IdeLayoutView *view;
   IdeLayoutView *split_view;
+  const gchar *filepath;
   GtkWidget *column;
   GtkWidget *grid;
   gint index = 0;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
   column = gtk_widget_get_parent (GTK_WIDGET (self));
 
@@ -234,21 +234,42 @@ ide_layout_stack_actions_split_view (GSimpleAction *action,
       return;
     }
 
-  view = ide_layout_stack_get_visible_child (self);
-
-  if (view == NULL)
+  filepath = g_variant_get_string (variant, NULL);
+  if (!ide_str_empty0 (filepath))
     {
-      g_warning ("No view available to split");
-      return;
-    }
+      IdeContext *context;
+      IdeBufferManager *buffer_manager;
+      g_autoptr (GFile) file = NULL;
+      IdeBuffer *buffer;
 
-  if (!ide_layout_view_get_can_split (view))
+      context = ide_widget_get_context (GTK_WIDGET (self));
+      buffer_manager = ide_context_get_buffer_manager (context);
+      file = g_file_new_for_path (filepath);
+      if (NULL != (buffer = ide_buffer_manager_find_buffer (buffer_manager, file)))
+        split_view = g_object_new (IDE_TYPE_EDITOR_VIEW,
+                                  "buffer", buffer,
+                                  "visible", TRUE,
+                                  NULL);
+      else
+        return;
+    }
+  else
     {
-      g_warning ("Attempt to split a view that cannot be split");
-      return;
-    }
+      view = ide_layout_stack_get_visible_child (self);
+      if (view == NULL)
+        {
+          g_warning ("No view available to split");
+          return;
+        }
 
-  split_view = ide_layout_view_create_split_view (view);
+      if (!ide_layout_view_get_can_split (view))
+        {
+          g_warning ("Attempt to split a view that cannot be split");
+          return;
+        }
+
+        split_view = ide_layout_view_create_split_view (view);
+    }
 
   g_assert (IDE_IS_LAYOUT_GRID_COLUMN (column));
 
@@ -328,7 +349,7 @@ static const GActionEntry actions[] = {
   { "previous-view",     ide_layout_stack_actions_previous_view },
   { "move-right",        ide_layout_stack_actions_move_right },
   { "move-left",         ide_layout_stack_actions_move_left },
-  { "split-view",        ide_layout_stack_actions_split_view },
+  { "split-view",        ide_layout_stack_actions_split_view, "s" },
   { "show-list",         ide_layout_stack_actions_show_list },
 };
 
