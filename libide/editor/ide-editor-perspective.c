@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-debug.h"
+
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
 #include "diagnostics/ide-source-location.h"
@@ -340,6 +342,8 @@ ide_editor_perspective_focus_location_cb (GObject      *object,
   FocusLocation *state = user_data;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (state != NULL);
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (state->self));
@@ -350,16 +354,18 @@ ide_editor_perspective_focus_location_cb (GObject      *object,
       /* TODO: display warning breifly to the user in the frame? */
       g_warning ("%s", error->message);
       g_clear_error (&error);
-      goto cleanup;
+      IDE_GOTO (cleanup);
     }
 
   /* try again now that we have loaded */
   ide_editor_perspective_focus_location_full (state->self, state->location, FALSE);
 
 cleanup:
-  g_object_unref (state->self);
-  ide_source_location_unref (state->location);
+  g_clear_object (&state->self);
+  g_clear_pointer (&state->location, ide_source_location_unref);
   g_slice_free (FocusLocation, state);
+
+  IDE_EXIT;
 }
 
 static void
@@ -375,8 +381,10 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
   guint line;
   guint line_offset;
 
-  g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
-  g_return_if_fail (location != NULL);
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (location != NULL);
 
   lookup.file = ide_source_location_get_file (location);
   lookup.view = NULL;
@@ -384,15 +392,23 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
   if (lookup.file == NULL)
     {
       g_warning ("IdeSourceLocation does not contain a file");
-      return;
+      IDE_EXIT;
     }
+
+#ifdef IDE_ENABLE_TRACE
+  {
+    const gchar *path = ide_file_get_path (lookup.file);
+    IDE_TRACE_MSG ("Locating %s, open_if_not_found=%d",
+                   path, open_if_not_found);
+  }
+#endif
 
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self),
                                  ide_editor_perspective_find_source_location,
                                  &lookup);
 
   if (!open_if_not_found && lookup.view == NULL)
-    return;
+    IDE_EXIT;
 
   if (lookup.view == NULL)
     {
@@ -417,7 +433,7 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
                                           NULL,
                                           ide_editor_perspective_focus_location_cb,
                                           state);
-      return;
+      IDE_EXIT;
     }
 
   line = ide_source_location_get_line (location);
@@ -426,16 +442,22 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
   stack = gtk_widget_get_ancestor (GTK_WIDGET (lookup.view), IDE_TYPE_LAYOUT_STACK);
   ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack), IDE_LAYOUT_VIEW (lookup.view));
   ide_editor_view_scroll_to_line_offset (lookup.view, line, line_offset);
+
+  IDE_EXIT;
 }
 
 void
 ide_editor_perspective_focus_location (IdeEditorPerspective *self,
                                        IdeSourceLocation    *location)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_return_if_fail (location != NULL);
 
   ide_editor_perspective_focus_location_full (self, location, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -496,17 +518,21 @@ ide_editor_perspective_focus_buffer (IdeEditorPerspective *self,
 {
   IdeEditorView *view;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
   if (ide_editor_perspective_focus_if_found (self, buffer, TRUE))
-    return;
+    IDE_EXIT;
 
   view = g_object_new (IDE_TYPE_EDITOR_VIEW,
                        "buffer", buffer,
                        "visible", TRUE,
                        NULL);
   gtk_container_add (GTK_CONTAINER (self->grid), GTK_WIDGET (view));
+
+  IDE_EXIT;
 }
 
 void
