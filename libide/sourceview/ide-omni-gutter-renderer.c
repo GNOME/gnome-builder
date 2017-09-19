@@ -739,7 +739,6 @@ ide_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
   g_assert (iter != NULL);
   g_assert (area != NULL);
   g_assert (event != NULL);
-  g_assert (self->breakpoints != NULL);
 
   /* TODO: We could check for event->button.button to see if we
    *       can display a popover with information such as
@@ -747,13 +746,18 @@ ide_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
    */
 
   buffer = gtk_text_iter_get_buffer (iter);
-  context = ide_buffer_get_context (IDE_BUFFER (buffer));
-  debug_manager = ide_context_get_debug_manager (context);
 
   /* Select this row if it isn't currently selected */
   if (!gtk_text_buffer_get_selection_bounds (buffer, &begin, &end) &&
       gtk_text_iter_get_line (&begin) != gtk_text_iter_get_line (iter))
     gtk_text_buffer_select_range (buffer, iter, iter);
+
+  /* Nothing more we can do if this file doesn't support breakpoints */
+  if (self->breakpoints == NULL)
+    return;
+
+  context = ide_buffer_get_context (IDE_BUFFER (buffer));
+  debug_manager = ide_context_get_debug_manager (context);
 
   line = gtk_text_iter_get_line (iter) + 1;
   file = ide_debugger_breakpoints_get_file (self->breakpoints);
