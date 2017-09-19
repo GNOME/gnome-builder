@@ -548,7 +548,7 @@
                 {
                     "type": "git",
                     "url": "https://gitlab.gnome.org/GNOME/json-glib.git",
-                    "branch": "9db74a03b96bafbbd7698682d713a57122627e39"
+                    "branch": "68e90dafac7022fc467bac8d2dd04d3f8a5a88a7"
                 }
             ]
         },
