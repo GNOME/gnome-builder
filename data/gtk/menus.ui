@@ -285,6 +285,7 @@
         <attribute name="id">editor-document-open-in-new-frame</attribute>
         <attribute name="label" translatable="yes">Open in New Frame</attribute>
         <attribute name="action">layoutstack.open-in-new-frame</attribute>
+        <attribute name="target" type="s">""</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Split</attribute>
