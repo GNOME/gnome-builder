@@ -91,6 +91,7 @@
             <property name="visible">true</property>
             <child>
               <object class="GtkScrolledWindow" id="scroller">
+                <property name="resize-mode">queue</property>
                 <property name="expand">true</property>
                 <property name="visible">true</property>
                 <child>
