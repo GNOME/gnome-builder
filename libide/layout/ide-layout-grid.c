@@ -336,17 +336,16 @@ static void
 ide_layout_grid_grab_focus (GtkWidget *widget)
 {
   IdeLayoutGrid *self = (IdeLayoutGrid *)widget;
-  IdeLayoutView *view;
+  IdeLayoutStack *stack;
 
   g_assert (IDE_IS_LAYOUT_GRID (self));
 
-  if (NULL != (view = ide_layout_grid_get_current_view (self)))
-    {
-      gtk_widget_grab_focus (GTK_WIDGET (view));
-      return;
-    }
+  stack = ide_layout_grid_get_current_stack (self);
 
-  GTK_WIDGET_CLASS (ide_layout_grid_parent_class)->grab_focus (widget);
+  if (stack != NULL)
+    gtk_widget_grab_focus (GTK_WIDGET (stack));
+  else
+    GTK_WIDGET_CLASS (ide_layout_grid_parent_class)->grab_focus (widget);
 }
 
 static void

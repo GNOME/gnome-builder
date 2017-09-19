@@ -418,6 +418,22 @@ ide_layout_stack_constructed (GObject *object)
 }
 
 static void
+ide_layout_stack_grab_focus (GtkWidget *widget)
+{
+  IdeLayoutStack *self = (IdeLayoutStack *)widget;
+  IdeLayoutView *child;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+
+  child = ide_layout_stack_get_visible_child (self);
+
+  if (child != NULL)
+    gtk_widget_grab_focus (GTK_WIDGET (child));
+  else
+    GTK_WIDGET_CLASS (ide_layout_stack_parent_class)->grab_focus (widget);
+}
+
+static void
 ide_layout_stack_destroy (GtkWidget *widget)
 {
   IdeLayoutStack *self = (IdeLayoutStack *)widget;
@@ -504,6 +520,7 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
   object_class->set_property = ide_layout_stack_set_property;
 
   widget_class->destroy = ide_layout_stack_destroy;
+  widget_class->grab_focus = ide_layout_stack_grab_focus;
 
   container_class->add = ide_layout_stack_add;
 
