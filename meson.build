@@ -130,7 +130,6 @@ if not get_option('buildtype').startswith('debug')
   add_global_arguments([
     '-DG_DISABLE_CAST_CHECKS',
     '-DG_DISABLE_ASSERT',
-    '-DG_DISABLE_CHECKS',
   ], language: 'c')
 
   test_link_args += [
