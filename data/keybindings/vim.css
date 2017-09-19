@@ -1848,12 +1848,12 @@
 
 @binding-set builder-vim-source-view-normal-ctrl-w
 {
-  bind "v" { "action" ("layoutstack", "open-in-new-frame", "") "grab_focus" () };
-  bind "<ctrl>v" { "action" ("layoutstack", "open-in-new-frame", "") "grab_focus" () };
+  bind "v" { "action" ("layoutstack", "open-in-new-frame", "''") "grab_focus" () };
+  bind "<ctrl>v" { "action" ("layoutstack", "open-in-new-frame", "''") "grab_focus" () };
 
   bind "c" { "action" ("layoutstack", "close-view", "") };
 
-  bind "s" { "action" ("layoutstack", "split-view", "") };
+  bind "s" { "action" ("layoutstack", "split-view", "''") };
 
   bind "w" { "action" ("layoutgrid", "focus-neighbor", "0") };
   bind "<ctrl>w" { "action" ("layoutgrid", "focus-neighbor", "0") };
