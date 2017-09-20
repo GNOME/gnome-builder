@@ -712,8 +712,9 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
         }
     }
 
-  if (state->is_new || (state->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND) == 0)
-    create_new_view = TRUE;
+  if (!(state->flags & IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW))
+    if (state->is_new || (state->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND) == 0)
+      create_new_view = TRUE;
 
   g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, create_new_view);
 
@@ -862,8 +863,9 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
                                   "fraction", 1.0,
                                   NULL);
       g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
-      if (!(flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND))
+      if (!(flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND || flags & IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW))
         ide_buffer_manager_set_focus_buffer (self, buffer);
+
       IDE_EXIT;
     }
 
