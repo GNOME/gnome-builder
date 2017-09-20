@@ -35,14 +35,6 @@ from gi.repository import (
 
 _ = Ide.gettext
 
-
-def get_module_data_path(name):
-    engine = Peas.Engine.get_default()
-    plugin = engine.get_plugin_info('meson_templates')
-    data_dir = plugin.get_data_dir()
-    return path.join(data_dir, name)
-
-
 class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
         return [GnomeProjectTemplate(), LibraryProjectTemplate(), EmptyProjectTemplate()]
@@ -208,8 +200,8 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             if src.startswith('resource://'):
                 self.add_resource(src[11:], destination, scope, modes.get(src, 0))
             else:
-                path = get_module_data_path(src)
-                self.add_path(path, destination, scope, modes.get(src, 0))
+                path = os.path.join('/org/gnome/builder/plugins/meson_templates', src)
+                self.add_resource(path, destination, scope, modes.get(src, 0))
 
         self.expand_all_async(cancellable, self.expand_all_cb, task)
 

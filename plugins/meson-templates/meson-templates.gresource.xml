@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins/meson_templates">
+    <file compressed="true">resources/src/window.ui</file>
+    <file compressed="true">resources/src/window.js</file>
+    <file compressed="true">resources/src/meson-py.build</file>
+    <file compressed="true">resources/src/window.h</file>
+    <file compressed="true">resources/src/hello.js.in</file>
+    <file compressed="true">resources/src/hello.gresource.xml</file>
+    <file compressed="true">resources/src/hello-version.h.in</file>
+    <file compressed="true">resources/src/meson-clib.build</file>
+    <file compressed="true">resources/src/meson-js.build</file>
+    <file compressed="true">resources/src/hello.h</file>
+    <file compressed="true">resources/src/__init__.py</file>
+    <file compressed="true">resources/src/meson-c-vala.build</file>
+    <file compressed="true">resources/src/meson-empty.build</file>
+    <file compressed="true">resources/src/gi_composites.py</file>
+    <file compressed="true">resources/src/main.js</file>
+    <file compressed="true">resources/src/main.c</file>
+    <file compressed="true">resources/src/window.py</file>
+    <file compressed="true">resources/src/window.c</file>
+    <file compressed="true">resources/src/hello.src.gresource.xml</file>
+    <file compressed="true">resources/src/window.vala</file>
+    <file compressed="true">resources/src/main.vala</file>
+    <file compressed="true">resources/src/hello.py.in</file>
+    <file compressed="true">resources/src/main.py</file>
+    <file compressed="true">resources/build-aux/meson/postinstall.py</file>
+    <file compressed="true">resources/meson.build</file>
+    <file compressed="true">resources/flatpak.json</file>
+    <file compressed="true">resources/data/meson.build</file>
+    <file compressed="true">resources/data/hello.gschema.xml</file>
+    <file compressed="true">resources/data/hello.desktop.in</file>
+    <file compressed="true">resources/data/hello.appdata.xml.in</file>
+    <file compressed="true">resources/po/meson.build</file>
+    <file compressed="true">resources/po/POTFILES</file>
+    <file compressed="true">resources/po/LINGUAS</file>
+  </gresource>
+</gresources>
