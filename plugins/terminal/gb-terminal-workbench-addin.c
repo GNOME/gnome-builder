@@ -76,17 +76,24 @@ new_terminal_activate (GSimpleAction *action,
   GbTerminalView *view;
   IdePerspective *perspective;
   IdeRuntime *runtime = NULL;
+  const gchar *name;
+  gboolean run_on_host = TRUE;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
-  if (g_strcmp0 (g_action_get_name (G_ACTION (action)), "new-terminal-in-runtime") == 0)
+  name = g_action_get_name (G_ACTION (action));
+
+  if (g_strcmp0 (name, "new-terminal-in-runtime") == 0)
     runtime = find_runtime (self->workbench);
+  else if (g_strcmp0 (name, "debug-terminal") == 0)
+    run_on_host = FALSE;
 
   perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
   ide_workbench_set_visible_perspective (self->workbench, perspective);
 
   view = g_object_new (GB_TYPE_TERMINAL_VIEW,
+                       "run-on-host", run_on_host,
                        "runtime", runtime,
                        "visible", TRUE,
                        NULL);
@@ -230,6 +237,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
   static const GActionEntry actions[] = {
     { "new-terminal", new_terminal_activate },
     { "new-terminal-in-runtime", new_terminal_activate },
+    { "debug-terminal", new_terminal_activate },
   };
 
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));

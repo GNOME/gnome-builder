@@ -43,6 +43,7 @@ enum {
   PROP_MANAGE_SPAWN,
   PROP_PTY,
   PROP_RUNTIME,
+  PROP_RUN_ON_HOST,
   LAST_PROP
 };
 
@@ -278,7 +279,7 @@ gb_terminal_respawn (GbTerminalView *self,
     launcher = ide_subprocess_launcher_new (0);
 
   ide_subprocess_launcher_set_flags (launcher, 0);
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_run_on_host (launcher, self->run_on_host);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_set_cwd (launcher, workpath);
   ide_subprocess_launcher_push_argv (launcher, shell);
@@ -620,6 +621,10 @@ gb_terminal_view_get_property (GObject    *object,
       g_value_set_object (value, self->runtime);
       break;
 
+    case PROP_RUN_ON_HOST:
+      g_value_set_boolean (value, self->run_on_host);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -649,6 +654,10 @@ gb_terminal_view_set_property (GObject      *object,
 
     case PROP_RUNTIME:
       self->runtime = g_value_dup_object (value);
+      break;
+
+    case PROP_RUN_ON_HOST:
+      self->run_on_host = g_value_get_boolean (value);
       break;
 
     default:
@@ -709,6 +718,13 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
                          IDE_TYPE_RUNTIME,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_RUN_ON_HOST] =
+    g_param_spec_boolean ("run-on-host",
+                          "Run on Host",
+                          "If the process should be spawned on the host",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   g_type_ensure (GB_TYPE_TERMINAL);
@@ -720,6 +736,7 @@ gb_terminal_view_init (GbTerminalView *self)
   GtkStyleContext *style_context;
   g_autoptr(GSettings) settings = NULL;
 
+  self->run_on_host = TRUE;
   self->manage_spawn = TRUE;
 
   self->tsearch = g_object_new (GB_TYPE_TERMINAL_SEARCH, NULL);

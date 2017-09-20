@@ -60,6 +60,7 @@ struct _GbTerminalView
   guint                manage_spawn : 1;
   guint                top_has_spawned : 1;
   guint                top_has_needs_attention : 1;
+  guint                run_on_host : 1;
 };
 
 G_END_DECLS
