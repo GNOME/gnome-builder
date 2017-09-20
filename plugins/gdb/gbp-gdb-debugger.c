@@ -28,7 +28,7 @@
 
 struct _GbpGdbDebugger
 {
-  IdeDebugger  parent_instance;
+  IdeDebugger               parent_instance;
 
   GIOStream                *io_stream;
   gchar                    *read_buffer;
@@ -99,19 +99,37 @@ static gchar *
 gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
                                  const gchar    *path)
 {
-  g_autoptr(GFile) relative = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GFile) result = NULL;
+  IdeRuntime *runtime = NULL;
+  IdeRunner *runner;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
 
   if (path == NULL)
     return NULL;
 
+  /* Discover the current runtime for path translation */
+  runner = dzl_signal_group_get_target (self->runner_signals);
+  if (runner != NULL)
+    runtime = ide_runner_get_runtime (runner);
+
+  /* Generate a path, trying to resolve relative paths to
+   * make things easier on the runtime path translation.
+   */
   if (self->builddir == NULL || g_path_is_absolute (path))
-    return g_strdup (path);
+    file = g_file_new_for_path (path);
+  else
+    file = g_file_resolve_relative_path (self->builddir, path);
 
-  relative = g_file_resolve_relative_path (self->builddir, path);
+  /* If we still have access to the runtime, translate */
+  if (runtime != NULL)
+    {
+      g_autoptr(GFile) freeme = file;
+      file = ide_runtime_translate_file (runtime, file);
+    }
 
-  return g_file_get_path (relative);
+  return g_file_get_path (file);
 }
 
 static void
@@ -401,8 +419,8 @@ gbp_gdb_debugger_handle_breakpoint (GbpGdbDebugger              *self,
 {
   g_autoptr(IdeDebuggerBreakpoint) breakpoint = NULL;
   g_autofree gchar *file = NULL;
+  g_autofree gchar *fullname = NULL;
   const struct gdbwire_mi_result *iter;
-  G_GNUC_UNUSED const gchar *fullname = NULL;
   G_GNUC_UNUSED const gchar *original_location = NULL;
   gboolean enabled = FALSE;
   const gchar *id = NULL;
@@ -443,7 +461,10 @@ gbp_gdb_debugger_handle_breakpoint (GbpGdbDebugger              *self,
               file = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
             }
           else if (g_strcmp0 (iter->variable, "fullname") == 0)
-            fullname = iter->variant.cstring;
+            {
+              g_free (fullname);
+              fullname = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
+            }
           else if (g_strcmp0 (iter->variable, "line") == 0)
             line = iter->variant.cstring;
           else if (g_strcmp0 (iter->variable, "original-location") == 0)
@@ -466,8 +487,12 @@ gbp_gdb_debugger_handle_breakpoint (GbpGdbDebugger              *self,
   ide_debugger_breakpoint_set_disposition (breakpoint, parse_disposition_from_string (disp));
   ide_debugger_breakpoint_set_address (breakpoint, ide_debugger_address_parse (addr));
   ide_debugger_breakpoint_set_function (breakpoint, func);
-  ide_debugger_breakpoint_set_file (breakpoint, file);
   ide_debugger_breakpoint_set_enabled (breakpoint, enabled);
+
+  if (fullname != NULL && g_file_test (fullname, G_FILE_TEST_EXISTS))
+    ide_debugger_breakpoint_set_file (breakpoint, fullname);
+  else
+    ide_debugger_breakpoint_set_file (breakpoint, file);
 
   if (line != NULL)
     ide_debugger_breakpoint_set_line (breakpoint, g_ascii_strtoll (line, NULL, 10));
@@ -502,6 +527,7 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
   IdeDebuggerStopReason stop_reason;
   g_autoptr(IdeDebuggerBreakpoint) breakpoint = NULL;
   g_autofree gchar *file = NULL;
+  g_autofree gchar *fullname = NULL;
   G_GNUC_UNUSED const gchar *thread_id = NULL;
   const struct gdbwire_mi_result *iter;
   const gchar *id = NULL;
@@ -564,6 +590,11 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
                           g_free (file);
                           file = gbp_gdb_debugger_translate_path (self, subiter->variant.cstring);
                         }
+                      else if (g_strcmp0 (subiter->variable, "fullname") == 0)
+                        {
+                          g_free (fullname);
+                          fullname = gbp_gdb_debugger_translate_path (self, subiter->variant.cstring);
+                        }
                       else if (g_strcmp0 (subiter->variable, "line") == 0)
                         line = g_ascii_strtoll (subiter->variant.cstring, NULL, 10);
                     }
@@ -603,9 +634,13 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
   ide_debugger_breakpoint_set_thread (breakpoint, thread_id);
   ide_debugger_breakpoint_set_address (breakpoint, ide_debugger_address_parse (address));
   ide_debugger_breakpoint_set_function (breakpoint, func);
-  ide_debugger_breakpoint_set_file (breakpoint, file);
   ide_debugger_breakpoint_set_line (breakpoint, line);
   ide_debugger_breakpoint_set_disposition (breakpoint, parse_disposition_from_string (disp));
+
+  if (fullname != NULL && g_file_test (fullname, G_FILE_TEST_EXISTS))
+    ide_debugger_breakpoint_set_file (breakpoint, fullname);
+  else
+    ide_debugger_breakpoint_set_file (breakpoint, file);
 
   gbp_gdb_debugger_reload_breakpoints (self);
 
@@ -949,15 +984,24 @@ gbp_gdb_debugger_list_breakpoints_cb (GObject      *object,
         {
           g_autoptr(IdeDebuggerBreakpoint) breakpoint = NULL;
           IdeDebuggerDisposition disp;
+          g_autofree gchar *fullname = NULL;
+          g_autofree gchar *file = NULL;
 
           breakpoint = ide_debugger_breakpoint_new (iter->number);
 
           ide_debugger_breakpoint_set_address (breakpoint,
                                                ide_debugger_address_parse (iter->address));
           ide_debugger_breakpoint_set_function (breakpoint, iter->func_name);
-          ide_debugger_breakpoint_set_file (breakpoint, iter->file);
           ide_debugger_breakpoint_set_line (breakpoint, iter->line);
           ide_debugger_breakpoint_set_count (breakpoint, iter->times);
+
+          fullname = gbp_gdb_debugger_translate_path (self, iter->fullname);
+          file = gbp_gdb_debugger_translate_path (self, iter->file);
+
+          if (fullname != NULL && g_file_test (fullname, G_FILE_TEST_EXISTS))
+            ide_debugger_breakpoint_set_file (breakpoint, fullname);
+          else
+            ide_debugger_breakpoint_set_file (breakpoint, file);
 
           switch (iter->disposition)
             {
@@ -1484,7 +1528,7 @@ gbp_gdb_debugger_list_frames_cb (GObject      *object,
                 {
                   g_autoptr(IdeDebuggerFrame) frame = NULL;
                   g_autofree gchar *file = NULL;
-                  G_GNUC_UNUSED const gchar *fullname = NULL;
+                  g_autofree gchar *fullname = NULL;
                   G_GNUC_UNUSED const gchar *from = NULL;
                   const struct gdbwire_mi_result *iter;
                   const gchar *func = NULL;
@@ -1508,7 +1552,10 @@ gbp_gdb_debugger_list_frames_cb (GObject      *object,
                               file = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
                             }
                           else if (g_strcmp0 (iter->variable, "fullname") == 0)
-                            fullname = iter->variant.cstring;
+                            {
+                              g_free (fullname);
+                              fullname = gbp_gdb_debugger_translate_path (self, iter->variant.cstring);
+                            }
                           else if (g_strcmp0 (iter->variable, "line") == 0)
                             line = g_ascii_strtoll (iter->variant.cstring, NULL, 10);
                           else if (g_strcmp0 (iter->variable, "from") == 0)
@@ -1520,9 +1567,13 @@ gbp_gdb_debugger_list_frames_cb (GObject      *object,
 
                   ide_debugger_frame_set_address (frame, addr);
                   ide_debugger_frame_set_function (frame, func);
-                  ide_debugger_frame_set_file (frame, file);
                   ide_debugger_frame_set_line (frame, line);
                   ide_debugger_frame_set_depth (frame, level);
+
+                  if (fullname != NULL && g_file_test (fullname, G_FILE_TEST_EXISTS))
+                    ide_debugger_frame_set_file (frame, fullname);
+                  else
+                    ide_debugger_frame_set_file (frame, file);
 
                   g_ptr_array_add (ar, g_steal_pointer (&frame));
                 }
