@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# html_preview_plugin.py
+# html_preview.py
 #
 # Copyright (C) 2015 Christian Hergert <chris@dronelabs.com>
 #
@@ -101,16 +101,19 @@ class SphinxState():
         self.is_running = False
         self.need_build = False
 
-
 class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
     MARKDOWN_CSS = None
     MARKED_JS = None
     MARKDOWN_VIEW_JS = None
 
     def do_load(self, app):
-        HtmlPreviewData.MARKDOWN_CSS = self.get_data('markdown.css')
-        HtmlPreviewData.MARKED_JS = self.get_data('marked.js')
-        HtmlPreviewData.MARKDOWN_VIEW_JS = self.get_data('markdown-view.js')
+        HtmlPreviewData.MARKDOWN_CSS = self.get_data('css/markdown.css')
+        HtmlPreviewData.MARKED_JS = self.get_data('js/marked.js')
+        HtmlPreviewData.MARKDOWN_VIEW_JS = self.get_data('js/markdown-view.js')
+
+        assert HtmlPreviewData.MARKDOWN_CSS
+        assert HtmlPreviewData.MARKED_JS
+        assert HtmlPreviewData.MARKDOWN_VIEW_JS
 
     def do_unload(self, app):
         for state in sphinx_states.items():
@@ -120,12 +123,9 @@ class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
                 shutil.rmtree(state.builddir)
 
     def get_data(self, name):
-        engine = Peas.Engine.get_default()
-        info = engine.get_plugin_info('html_preview_plugin')
-        datadir = info.get_data_dir()
-        path = os.path.join(datadir, name)
-        return open(path, 'r').read()
-
+        # Hold onto the GBytes to avoid copying the buffer
+        path = os.path.join('/org/gnome/builder/plugins/html_preview', name)
+        return Gio.resources_lookup_data(path, 0)
 
 class HtmlWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     def do_load(self, workbench):
@@ -376,10 +376,10 @@ class HtmlPreviewView(Ide.LayoutView):
 
     def get_markdown(self, text):
         text = text.replace("\"", "\\\"").replace("\n", "\\n")
-        params = (HtmlPreviewData.MARKDOWN_CSS,
+        params = (HtmlPreviewData.MARKDOWN_CSS.get_data().decode('UTF-8'),
                   text,
-                  HtmlPreviewData.MARKED_JS,
-                  HtmlPreviewData.MARKDOWN_VIEW_JS)
+                  HtmlPreviewData.MARKED_JS.get_data().decode('UTF-8'),
+                  HtmlPreviewData.MARKDOWN_VIEW_JS.get_data().decode('UTF-8'))
 
         return """
 <html>

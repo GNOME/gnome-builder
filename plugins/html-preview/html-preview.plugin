@@ -1,5 +1,5 @@
 [Plugin]
-Module=html_preview_plugin
+Module=html_preview
 Loader=python3
 Name=HTML, reStructuredText and Markdown Preview
 Description=Live preview of HTML, reStructuredText and Markdown documents.
