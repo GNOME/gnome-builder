@@ -97,6 +97,28 @@ ide_editor_workbench_addin_on_load_buffer (IdeEditorWorkbenchAddin *self,
 }
 
 static void
+bind_buffer_manager (IdeEditorWorkbenchAddin *self,
+                     IdeBufferManager        *buffer_manager,
+                     DzlSignalGroup          *signal_group)
+{
+  guint n_items;
+
+  g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (DZL_IS_SIGNAL_GROUP (signal_group));
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (buffer_manager));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeBuffer) buffer = NULL;
+
+      buffer = g_list_model_get_item (G_LIST_MODEL (buffer_manager), i);
+      ide_editor_perspective_focus_buffer (self->perspective, buffer);
+    }
+}
+
+static void
 ide_editor_workbench_addin_finalize (GObject *object)
 {
   IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)object;
@@ -118,6 +140,11 @@ static void
 ide_editor_workbench_addin_init (IdeEditorWorkbenchAddin *self)
 {
   self->buffer_manager_signals = dzl_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
+
+  g_signal_connect_swapped (self->buffer_manager_signals,
+                            "bind",
+                            G_CALLBACK (bind_buffer_manager),
+                            self);
 
   dzl_signal_group_connect_swapped (self->buffer_manager_signals,
                                     "load-buffer",
@@ -208,8 +235,6 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
   context = ide_workbench_get_context (workbench);
   buffer_manager = ide_context_get_buffer_manager (context);
 
-  dzl_signal_group_set_target (self->buffer_manager_signals, buffer_manager);
-
   header = ide_workbench_get_headerbar (workbench);
 
   ide_editor_workbench_addin_add_buttons (self, header);
@@ -223,6 +248,8 @@ ide_editor_workbench_addin_load (IdeWorkbenchAddin *addin,
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->perspective);
   ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
+
+  dzl_signal_group_set_target (self->buffer_manager_signals, buffer_manager);
 }
 
 static void
