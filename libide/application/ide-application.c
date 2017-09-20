@@ -50,6 +50,15 @@ G_DEFINE_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
 
 static GThread *main_thread;
 
+void
+_ide_application_set_mode (IdeApplication     *self,
+                           IdeApplicationMode  mode)
+{
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+
+  self->mode = mode;
+}
+
 static void
 ide_application_make_skeleton_dirs (IdeApplication *self)
 {

@@ -114,7 +114,7 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
 {
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) subprocess = NULL;
-  g_autofree gchar *type = NULL;
+  g_autofree gchar *plugin = NULL;
   g_autofree gchar *dbus_address = NULL;
   g_autoptr(GString) verbosearg = NULL;
   GError *error = NULL;
@@ -127,7 +127,7 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
   g_assert (IDE_IS_WORKER_PROCESS (self));
   g_assert (self->subprocess == NULL);
 
-  type = g_strdup_printf ("--type=%s", self->plugin_name);
+  plugin = g_strdup_printf ("--plugin=%s", self->plugin_name);
   dbus_address = g_strdup_printf ("--dbus-address=%s", self->dbus_address);
 
   verbosearg = g_string_new ("-");
@@ -138,7 +138,8 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
   args = g_ptr_array_new ();
   g_ptr_array_add (args, self->argv0); /* gnome-builder */
-  g_ptr_array_add (args, type); /* --type= */
+  g_ptr_array_add (args, "--type=worker");
+  g_ptr_array_add (args, plugin); /* --plugin= */
   g_ptr_array_add (args, dbus_address); /* --dbus-address= */
   g_ptr_array_add (args, verbosity > 0 ? verbosearg->str : NULL);
   g_ptr_array_add (args, NULL);

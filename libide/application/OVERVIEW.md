@@ -23,12 +23,6 @@ settings, and a bunch of other stuff.
 This interface is used by plugins to hook into the application once-per UI
 process. They will be loaded at startup, and shutdown with the application.
 
-## ide-application-tool.*
-
-This interface is used by plugins that want to expose a command line too
-via the `gnome-builder-cli` command. You can add your own subcommand
-like `gnome-builder-cli build`.
-
 ## ide-application-command-line.c
 
 This file handles the machinery when we are in command-line mode. This includes

@@ -293,25 +293,6 @@ executable('gnome-builder', gnome_builder_sources,
    dependencies: libide_deps + [libide_dep],
 )
 
-executable('gnome-builder-cli', gnome_builder_sources,
-        gui_app: false,
-        install: true,
-         c_args: exe_c_args,
-      link_args: exe_link_args,
-  install_rpath: pkglibdir_abs,
-   dependencies: libide_deps + [libide_dep],
-)
-
-executable('gnome-builder-worker', gnome_builder_sources,
-        gui_app: false,
-        install: true,
-    install_dir: get_option('libexecdir'),
-         c_args: exe_c_args,
-      link_args: exe_link_args,
-  install_rpath: pkglibdir_abs,
-   dependencies: libide_deps + [libide_dep],
-)
-
 meson.add_install_script('build-aux/meson/meson_post_install.py')
 
 # 'dist' will be used by meson, avoid conflicting

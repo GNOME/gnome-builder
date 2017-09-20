@@ -170,7 +170,7 @@ ide_application_local_command_line (GApplication   *application,
   const gchar *shortdesc = NULL;
   const gchar *prgname;
   GError *error = NULL;
-  gchar *type = NULL;
+  gchar *plugin = NULL;
   gchar *dbus_address = NULL;
   gboolean standalone = FALSE;
   gboolean version = FALSE;
@@ -200,11 +200,11 @@ ide_application_local_command_line (GApplication   *application,
       &version,
       N_("Show the application’s version") },
 
-    { "type",
+    { "plugin",
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_STRING,
-      &type },
+      &plugin },
 
     { "dbus-address",
       0,
@@ -268,7 +268,7 @@ ide_application_local_command_line (GApplication   *application,
   if (g_str_has_prefix (prgname, "lt-"))
     prgname += strlen ("lt-");
 
-  if (g_str_equal (prgname, "gnome-builder-cli"))
+  if (self->mode == IDE_APPLICATION_MODE_TOOL)
     {
       g_assert_cmpstr (entries [0].long_name, ==, "list-commands");
       entries [0].flags = 0;
@@ -291,21 +291,13 @@ ide_application_local_command_line (GApplication   *application,
    * If we are the "cli" program, then we want to setup ourselves for
    * verb style commands and add a commands group for help.
    */
-  if (g_str_equal (prgname, "gnome-builder-cli"))
+  if (self->mode == IDE_APPLICATION_MODE_TOOL)
     {
-      gchar *command_help;
-
-      self->mode = IDE_APPLICATION_MODE_TOOL;
+      g_autofree gchar *command_help = NULL;
 
       g_option_context_set_strict_posix (context, TRUE);
-
       command_help = ide_application_get_command_help (self, TRUE);
       g_option_context_set_summary (context, command_help);
-      g_free (command_help);
-    }
-  else if (g_str_equal (prgname, "gnome-builder-worker"))
-    {
-      self->mode = IDE_APPLICATION_MODE_WORKER;
     }
   else if (strstr (prgname, "test-") != NULL)
     {
@@ -408,9 +400,9 @@ ide_application_local_command_line (GApplication   *application,
     {
       PeasPluginInfo *worker_plugin;
 
-      if (type == NULL)
+      if (plugin == NULL)
         {
-          g_printerr ("%s\n", _("Please provide a worker type"));
+          g_printerr ("%s\n", _("Please provide a worker plugin"));
           *exit_status = EXIT_FAILURE;
           goto cleanup;
         }
@@ -422,11 +414,11 @@ ide_application_local_command_line (GApplication   *application,
           goto cleanup;
         }
 
-      worker_plugin = ide_application_locate_worker (self, type);
+      worker_plugin = ide_application_locate_worker (self, plugin);
 
       if (worker_plugin == NULL)
         {
-          g_printerr ("%s: \"%s\"\n", _("No such worker"), type);
+          g_printerr ("%s: \"%s\"\n", _("No such worker"), plugin);
           *exit_status = EXIT_FAILURE;
           goto cleanup;
         }
@@ -493,7 +485,7 @@ ide_application_local_command_line (GApplication   *application,
   g_application_activate (application);
 
 cleanup:
-  g_clear_pointer (&type, g_free);
+  g_clear_pointer (&plugin, g_free);
   g_clear_pointer (&dbus_address, g_free);
   g_clear_error (&error);
   g_option_context_free (context);

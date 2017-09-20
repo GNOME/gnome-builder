@@ -21,7 +21,11 @@
 #include <ide.h>
 #include <gtksourceview/gtksource.h>
 
+#include "application/ide-application-private.h"
+
 #include "bug-buddy.h"
+
+static IdeApplicationMode early_mode;
 
 static gboolean
 verbose_cb (const gchar  *option_name,
@@ -34,12 +38,14 @@ verbose_cb (const gchar  *option_name,
 }
 
 static void
-early_verbose_check (gint    *argc,
-                     gchar ***argv)
+early_params_check (gint    *argc,
+                    gchar ***argv)
 {
-  GOptionContext *context;
-  static const GOptionEntry entries[] = {
+  g_autofree gchar *type = NULL;
+  g_autoptr(GOptionContext) context = NULL;
+  GOptionEntry entries[] = {
     { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, verbose_cb },
+    { "type", 0, 0, G_OPTION_ARG_STRING, &type },
     { NULL }
   };
 
@@ -48,7 +54,11 @@ early_verbose_check (gint    *argc,
   g_option_context_set_help_enabled (context, FALSE);
   g_option_context_add_main_entries (context, entries, NULL);
   g_option_context_parse (context, argc, argv, NULL);
-  g_option_context_free (context);
+
+  if (g_strcmp0 (type, "worker") == 0)
+    early_mode = IDE_APPLICATION_MODE_WORKER;
+  else if (g_strcmp0 (type, "cli") == 0)
+    early_mode = IDE_APPLICATION_MODE_TOOL;
 }
 
 static void
@@ -95,7 +105,7 @@ main (int   argc,
   bug_buddy_init ();
 
   ide_log_init (TRUE, NULL);
-  early_verbose_check (&argc, &argv);
+  early_params_check (&argc, &argv);
 
   early_ssl_check ();
 
@@ -120,6 +130,7 @@ main (int   argc,
   g_type_ensure (G_TYPE_ZLIB_DECOMPRESSOR);
 
   app = ide_application_new ();
+  _ide_application_set_mode (app, early_mode);
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_clear_object (&app);
 
