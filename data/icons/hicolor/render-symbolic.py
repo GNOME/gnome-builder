@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 import sys
 
 _resources = {}
+_aliases = {}
 
 def addResource(directory, name):
     if directory not in _resources:
@@ -17,6 +19,10 @@ def gtkEncodeSymbolicSvg(outdir, path, size):
     print(cmd)
     os.system(cmd)
 
+# These just need to be aliased properly
+for name in os.listdir('scalable/patterns'):
+    _aliases[os.path.join('scalable/actions', name)] = os.path.join('scalable/patterns', name)
+
 # These need to be scaled as symbolic icons into
 # 16 and their 2x and 3x counterparts
 for dirname in ('actions', 'apps'):
@@ -27,18 +33,6 @@ for dirname in ('actions', 'apps'):
             gtkEncodeSymbolicSvg(outdir, path, size)
             symbolic_name = name[:-4] + '.symbolic.png'
             addResource(outdir, symbolic_name)
-
-# These need to be scaled as symbolic icons into
-# 98x98 and 2x/3x.
-for name in os.listdir('scalable/patterns'):
-    for size in (98, 196, 294):
-        outdir = '%dx%d/actions' % (size, size)
-        # GTK won't locate the icons in "patterns", so
-        # we instead put them in "actions".
-        path = os.path.join('scalable/patterns', name)
-        gtkEncodeSymbolicSvg(outdir, path, size)
-        symbolic_name = name[:-4] + '.symbolic.png'
-        addResource(outdir, symbolic_name)
 
 # Now generate our updated .gresources.xml
 with open("icons.gresource.xml", "w") as stream:
@@ -51,6 +45,8 @@ with open("icons.gresource.xml", "w") as stream:
         names.sort()
         for name in names:
             stream.write('    <file>%s/%s</file>\n' % (dirname, name))
+    for alias, name in _aliases.items():
+        stream.write('    <file alias="%s">%s</file>\n' % (alias, name))
     stream.write('''  </gresource>
 </gresources>
 ''')

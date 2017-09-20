@@ -164,23 +164,11 @@
     <file>16x16/apps/org.gnome.Builder-symbolic.symbolic.png</file>
     <file>32x32/apps/org.gnome.Builder-symbolic.symbolic.png</file>
     <file>48x48/apps/org.gnome.Builder-symbolic.symbolic.png</file>
-    <file>98x98/actions/pattern-browse.symbolic.png</file>
-    <file>98x98/actions/pattern-cli.symbolic.png</file>
-    <file>98x98/actions/pattern-gnome.symbolic.png</file>
-    <file>98x98/actions/pattern-grid.symbolic.png</file>
-    <file>98x98/actions/pattern-legacy.symbolic.png</file>
-    <file>98x98/actions/pattern-library.symbolic.png</file>
-    <file>196x196/actions/pattern-browse.symbolic.png</file>
-    <file>196x196/actions/pattern-cli.symbolic.png</file>
-    <file>196x196/actions/pattern-gnome.symbolic.png</file>
-    <file>196x196/actions/pattern-grid.symbolic.png</file>
-    <file>196x196/actions/pattern-legacy.symbolic.png</file>
-    <file>196x196/actions/pattern-library.symbolic.png</file>
-    <file>294x294/actions/pattern-browse.symbolic.png</file>
-    <file>294x294/actions/pattern-cli.symbolic.png</file>
-    <file>294x294/actions/pattern-gnome.symbolic.png</file>
-    <file>294x294/actions/pattern-grid.symbolic.png</file>
-    <file>294x294/actions/pattern-legacy.symbolic.png</file>
-    <file>294x294/actions/pattern-library.symbolic.png</file>
+    <file alias="scalable/actions/pattern-legacy.svg">scalable/patterns/pattern-legacy.svg</file>
+    <file alias="scalable/actions/pattern-browse.svg">scalable/patterns/pattern-browse.svg</file>
+    <file alias="scalable/actions/pattern-library.svg">scalable/patterns/pattern-library.svg</file>
+    <file alias="scalable/actions/pattern-grid.svg">scalable/patterns/pattern-grid.svg</file>
+    <file alias="scalable/actions/pattern-cli.svg">scalable/patterns/pattern-cli.svg</file>
+    <file alias="scalable/actions/pattern-gnome.svg">scalable/patterns/pattern-gnome.svg</file>
   </gresource>
 </gresources>
