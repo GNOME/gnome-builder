@@ -5,11 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-builder master\n"
+"Project-Id-Version: gnome-builder gnome-3.26\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-08 23:38+0000\n"
-"PO-Revision-Date: 2017-09-10 11:33+0200\n"
+"POT-Creation-Date: 2017-09-19 23:33+0000\n"
+"PO-Revision-Date: 2017-09-20 08:44+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -217,7 +217,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5893
+#: libide/sourceview/ide-source-view.c:5848
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -338,37 +338,48 @@ msgstr ""
 "byl řádek přidán nebo změněn."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+msgid "Show diagnostics next to line number"
+msgstr "Zobrazovat diagnostiku vedle čísla řádku"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid ""
+"If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr ""
+"Když je zapnuto, bude editor zobrazovat vlevo vedle čísel řádků diagnostické "
+"informace."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 #: libide/editor/ide-editor-properties.ui:88
 msgid "Highlight current line"
 msgstr "Zvýrazňovat aktuální řádek"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr "Když je zapnuto, bude editor zvýrazňovat řádek obsahující kurzor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Highlight matching brackets"
 msgstr "Zvýrazňovat související závorky"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will highlight matching brackets."
 msgstr "Když je zapnuto, bude editor zvýrazňovat závorky, které si odpovídají."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 #: libide/editor/ide-editor-properties.ui:62
 msgid "Show line numbers"
 msgstr "Zobrazovat čísla řádků"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show line numbers."
 msgstr "Když je zapnuto, bude editor zobrazovat čísla řádků."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: libide/preferences/ide-preferences-builtin.c:146
 msgid "Smart Backspace"
 msgstr "Chytrý Backaspace"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -376,30 +387,30 @@ msgstr ""
 "Backspace bude odstraňovat nadbytečné mezery, aby zůstalo zachováno "
 "zarovnání podle velikosti odsazení."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: libide/preferences/ide-preferences-builtin.c:145
 msgid "Smart Home and End"
 msgstr "Chytrý Home a End"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "Whether or not Home moves to first non-space character."
 msgstr "Jestli má nebo nemá klávesa Home přesouvat na první nebílý znak."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
 msgid "Show grid lines"
 msgstr "Zobrazovat mřížku"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr ""
 "Když je zapnuto, bude editor v dokumentu na pozadí řádků zobrazovat mřížku."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:78
-#: libide/preferences/ide-preferences-builtin.c:169
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
+#: libide/preferences/ide-preferences-builtin.c:170
 msgid "Show overview map"
 msgstr "Zobrazovat přehledovou mapu"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
@@ -407,11 +418,11 @@ msgstr ""
 "Když je zapnuto, bude Builder vedle editoru zobrazovat přehledovou mapu "
 "souboru se zdrojovým kódem."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
 msgid "Automatically Hide Overview Map"
 msgstr "Automaticky skrývat přehledovou mapu"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
@@ -419,29 +430,29 @@ msgstr ""
 "Když je zapnuto, bude Builder automaticky skrývat přehledovou mapu v "
 "situaci, kdy zaměření myši opustí editor nebo uplyne časový limit."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:93
 msgid "Draw Spaces"
 msgstr "Vykreslovat bílé znaky"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
 msgid "The various types of space to draw in the editor."
 msgstr ""
 "Různé typy bílých znaků, které se mají v editoru viditelně vykreslovat."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
 #: libide/preferences/ide-preferences-builtin.c:158
 msgid "Overscroll"
 msgstr "Posun mimo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "Počet řádků, o které je možné se posunout za konec textu."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
 msgid "Wrap Text"
 msgstr "Zalamovat text"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
 msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
@@ -449,21 +460,21 @@ msgstr ""
 "Když je zapnuto, bude Builder automaticky zalamovat text, takže bude vždy "
 "viditelný obsah celého řádku."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
-#: libide/preferences/ide-preferences-builtin.c:182
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:109
+#: libide/preferences/ide-preferences-builtin.c:183
 msgid "Autosave Enabled"
 msgstr "Automatické ukládání povoleno"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 msgid "Enable or disable autosave feature."
 msgstr "Zapne nebo vypne funkci automatického ukládání."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
-#: libide/preferences/ide-preferences-builtin.c:183
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:115
+#: libide/preferences/ide-preferences-builtin.c:184
 msgid "Autosave Frequency"
 msgstr "Četnost automatického ukládání"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "Počet sekund od provedení nějaké změny, než dojde k automatickému uložení."
@@ -518,7 +529,7 @@ msgid "Search directories for projects."
 msgstr "Vyhledávat ve složkách projekty."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:399
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Projects directory"
 msgstr "Složka s projekty"
 
@@ -647,7 +658,7 @@ msgstr "O _aplikaci"
 msgid "_Quit"
 msgstr "U_končit"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:722
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -697,7 +708,7 @@ msgstr "V_ložit"
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: data/gtk/menus.ui:130 libide/preferences/ide-preferences-builtin.c:191
+#: data/gtk/menus.ui:130 libide/preferences/ide-preferences-builtin.c:192
 #: plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Zvýrazňování"
@@ -787,7 +798,7 @@ msgstr "Přesunout doleva"
 msgid "Move Right"
 msgstr "Přesunout doprava"
 
-#: data/gtk/menus.ui:261 data/gtk/menus.ui:321 plugins/devhelp/gtk/menus.ui:11
+#: data/gtk/menus.ui:261 data/gtk/menus.ui:323 plugins/devhelp/gtk/menus.ui:11
 #: plugins/terminal/gtk/menus.ui:63
 msgid "Close"
 msgstr "Zavřít"
@@ -808,27 +819,27 @@ msgstr "Dokument"
 msgid "Open in New Frame"
 msgstr "Otevřít v novém rámu"
 
-#: data/gtk/menus.ui:290 plugins/terminal/gtk/menus.ui:47
+#: data/gtk/menus.ui:291 plugins/terminal/gtk/menus.ui:47
 msgid "Split"
 msgstr "Rozdělit"
 
-#: data/gtk/menus.ui:295 plugins/devhelp/gtk/menus.ui:7
+#: data/gtk/menus.ui:297 plugins/devhelp/gtk/menus.ui:7
 msgid "Print…"
 msgstr "Tisk…"
 
-#: data/gtk/menus.ui:302
+#: data/gtk/menus.ui:304
 msgid "Document Preferences"
 msgstr "Předvolby dokumentu"
 
-#: data/gtk/menus.ui:310 libide/buildui/ide-build-log-panel.c:740
+#: data/gtk/menus.ui:312 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
 msgstr "_Uložit"
 
-#: data/gtk/menus.ui:314
+#: data/gtk/menus.ui:316
 msgid "Save _As"
 msgstr "Uložit j_ako"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
+#: data/gtk/menus.ui:333 libide/runner/ide-run-manager.c:1139
 msgid "Run"
 msgstr "Spustit"
 
@@ -836,7 +847,7 @@ msgstr "Spustit"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:625
+#: libide/workbench/ide-workbench.c:623
 msgid "Builder"
 msgstr "Builder"
 
@@ -1053,7 +1064,7 @@ msgstr "Takový sestavovací proces neexistuje"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:735
+#: libide/runner/ide-run-manager.c:746
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
@@ -1106,7 +1117,7 @@ msgstr "Zaměřit vstupní pole pro globální vyhledávání"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:736
+#: libide/runner/ide-run-manager.c:747
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Sestavit a spustit"
@@ -1189,8 +1200,8 @@ msgid "Cannot execute transfer while on metered connection"
 msgstr "Na měřeném připojení nelze provádět přenosy"
 
 #: libide/buildsystem/ide-configuration-manager.c:86
-#: libide/preferences/ide-preferences-builtin.c:340
-#: libide/preferences/ide-preferences-builtin.c:358
+#: libide/preferences/ide-preferences-builtin.c:341
+#: libide/preferences/ide-preferences-builtin.c:359
 msgid "Default"
 msgstr "Výchozí"
 
@@ -1203,8 +1214,8 @@ msgid "Delete the configuration"
 msgstr "Smazat konfiguraci"
 
 #: libide/buildui/ide-build-configuration-view.ui:11
-#: libide/preferences/ide-preferences-builtin.c:318
-#: libide/preferences/ide-preferences-builtin.c:380
+#: libide/preferences/ide-preferences-builtin.c:319
+#: libide/preferences/ide-preferences-builtin.c:381
 msgid "General"
 msgstr "Obecné"
 
@@ -1704,7 +1715,7 @@ msgid "Display"
 msgstr "Zobrazení"
 
 #: libide/editor/ide-editor-properties.ui:75
-#: libide/preferences/ide-preferences-builtin.c:324
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Show right margin"
 msgstr "Zobrazovat pravý okraj"
 
@@ -1721,12 +1732,12 @@ msgid "Tabs and Indentation"
 msgstr "Tabulátory a odsazení"
 
 #: libide/editor/ide-editor-properties.ui:153
-#: libide/preferences/ide-preferences-builtin.c:173
+#: libide/preferences/ide-preferences-builtin.c:174
 msgid "Spaces"
 msgstr "Mezery"
 
 #: libide/editor/ide-editor-properties.ui:164
-#: libide/preferences/ide-preferences-builtin.c:174
+#: libide/preferences/ide-preferences-builtin.c:175
 msgid "Tabs"
 msgstr "Tabulátory"
 
@@ -1764,7 +1775,7 @@ msgstr "Syntax jazyka"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
 #: libide/editor/ide-editor-properties.ui:321
-#: libide/preferences/ide-preferences-builtin.c:264
+#: libide/preferences/ide-preferences-builtin.c:265
 msgid "Search languages…"
 msgstr "Vyhledat jazyky…"
 
@@ -2543,88 +2554,97 @@ msgstr "Změny řádku"
 msgid "Show if a line was added or modified next to line number"
 msgstr "Vedle čísla řádku zobrazovat, jestli byl řádek přidán nebo změněn."
 
-#: libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:163
+msgid "Line diagnostics"
+msgstr "Diagnostika na řádcích"
+
+#: libide/preferences/ide-preferences-builtin.c:163
+msgid "Show an icon next to line numbers indiciating type of diagnostic"
+msgstr ""
+"Zobrazovat vedle čísla řádku ikonu prezentující typ diagnostické informace"
+
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Highlight"
 msgstr "Zvýrazňovat"
 
-#: libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:166
 msgid "Current line"
 msgstr "Aktuální řádek"
 
-#: libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:166
 msgid "Make current line stand out with highlights"
 msgstr "Aktuální řádek odlišit pomocí zvýraznění"
 
-#: libide/preferences/ide-preferences-builtin.c:166
+#: libide/preferences/ide-preferences-builtin.c:167
 msgid "Matching brackets"
 msgstr "Odpovídající závorky"
 
-#: libide/preferences/ide-preferences-builtin.c:166
+#: libide/preferences/ide-preferences-builtin.c:167
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Zvýrazňovat párové závorky v místě kurzoru"
 
-#: libide/preferences/ide-preferences-builtin.c:168
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Code Overview"
 msgstr "Přehledová mapa"
 
-#: libide/preferences/ide-preferences-builtin.c:169
+#: libide/preferences/ide-preferences-builtin.c:170
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Pohled na zdrojový kód z dálky pro lepší celkový přehled"
 
-#: libide/preferences/ide-preferences-builtin.c:170
+#: libide/preferences/ide-preferences-builtin.c:171
 msgid "Automatically hide overview map"
 msgstr "Automaticky skrývat přehledovou mapu"
 
-#: libide/preferences/ide-preferences-builtin.c:170
+#: libide/preferences/ide-preferences-builtin.c:171
 msgid "Automatically hide map when editor loses focus"
 msgstr "Když editor není zaměřený, automaticky skrýt přehledovou mapu"
 
-#: libide/preferences/ide-preferences-builtin.c:172
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Visible Whitespace Characters"
 msgstr "Viditelné bílé znaky"
 
-#: libide/preferences/ide-preferences-builtin.c:175
+#: libide/preferences/ide-preferences-builtin.c:176
 msgid "New line and carriage return"
 msgstr "Zalomení řádku a návrat kurzoru"
 
-#: libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:177
 msgid "Non-breaking spaces"
 msgstr "Nezalomitelné mezery"
 
-#: libide/preferences/ide-preferences-builtin.c:177
+#: libide/preferences/ide-preferences-builtin.c:178
 msgid "Spaces inside of text"
 msgstr "Mezery v textu"
 
-#: libide/preferences/ide-preferences-builtin.c:178
+#: libide/preferences/ide-preferences-builtin.c:179
 msgid "Trailing Only"
 msgstr "Jen úvodní"
 
-#: libide/preferences/ide-preferences-builtin.c:179
+#: libide/preferences/ide-preferences-builtin.c:180
 msgid "Leading Only"
 msgstr "Jen koncové"
 
-#: libide/preferences/ide-preferences-builtin.c:181
+#: libide/preferences/ide-preferences-builtin.c:182
 msgid "Autosave"
 msgstr "Automatické ukládání"
 
-#: libide/preferences/ide-preferences-builtin.c:182
+#: libide/preferences/ide-preferences-builtin.c:183
 msgid "Enable or disable autosave feature"
 msgstr "Zapnout nebo vypnout funkci automatického ukládání"
 
-#: libide/preferences/ide-preferences-builtin.c:183
+#: libide/preferences/ide-preferences-builtin.c:184
 msgid "The number of seconds after modification before auto saving"
 msgstr ""
 "Počet sekund od provedení nějaké změny, než dojde k automatickému uložení"
 
-#: libide/preferences/ide-preferences-builtin.c:189
+#: libide/preferences/ide-preferences-builtin.c:190
 msgid "Code Insight"
 msgstr "Přehlednost kódu"
 
-#: libide/preferences/ide-preferences-builtin.c:192
+#: libide/preferences/ide-preferences-builtin.c:193
 msgid "Semantic Highlighting"
 msgstr "Zvýrazňování sémantiky"
 
-#: libide/preferences/ide-preferences-builtin.c:192
+#: libide/preferences/ide-preferences-builtin.c:193
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
@@ -2632,34 +2652,34 @@ msgstr ""
 "Používat rozbor kódu ke zvýraznění doplňujících informací objevených v "
 "souboru se zdrojovým kódem"
 
-#: libide/preferences/ide-preferences-builtin.c:194
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid "Completion"
 msgstr "Dokončování"
 
-#: libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest words found in open files"
 msgstr "Navrhovat slova nalezená v otevřených souborech"
 
-#: libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
 "Navrhovat při psaní dokončení slov podle slov nalezených v rámci všech "
 "otevřených dokumentů"
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid "Minimum word size"
 msgstr "Minimální délka slova"
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid "Minimum word size for word completion"
 msgstr "Minimální délka slova pro jeho doplnění"
 
-#: libide/preferences/ide-preferences-builtin.c:197
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid "Suggest completions using Ctags"
 msgstr "Navrhovat dokončení slov pomocí Ctags"
 
-#: libide/preferences/ide-preferences-builtin.c:197
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
@@ -2667,126 +2687,126 @@ msgstr ""
 "Vytvořit a spravovat databázi Ctags pro dokončování názvů tříd, funkcí a "
 "dalších věcí"
 
-#: libide/preferences/ide-preferences-builtin.c:198
+#: libide/preferences/ide-preferences-builtin.c:199
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Navrhovat dokončení slov pomocí Clang (experimentální)"
 
-#: libide/preferences/ide-preferences-builtin.c:198
+#: libide/preferences/ide-preferences-builtin.c:199
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Používat Clang pro návrhy dokončování v jazycích C a C++"
 
-#: libide/preferences/ide-preferences-builtin.c:200
+#: libide/preferences/ide-preferences-builtin.c:201
 msgid "Diagnostics"
 msgstr "Diagnostika"
 
-#: libide/preferences/ide-preferences-builtin.c:206
+#: libide/preferences/ide-preferences-builtin.c:207
 #: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Úryvky"
 
-#: libide/preferences/ide-preferences-builtin.c:209
+#: libide/preferences/ide-preferences-builtin.c:210
 msgid "Code snippets"
 msgstr "Úryvky kódu"
 
-#: libide/preferences/ide-preferences-builtin.c:209
+#: libide/preferences/ide-preferences-builtin.c:210
 msgid "Use code fragments to increase typing efficiency"
 msgstr "Používat fragmenty kódu ke zvýšení výkonnosti psaní"
 
-#: libide/preferences/ide-preferences-builtin.c:253
+#: libide/preferences/ide-preferences-builtin.c:254
 msgid "Programming Languages"
 msgstr "Programovací jazyky"
 
-#: libide/preferences/ide-preferences-builtin.c:319
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Trim trailing whitespace"
 msgstr "Odstraňovat koncové mezery"
 
-#: libide/preferences/ide-preferences-builtin.c:319
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr "Při ukládání u změněných řádků odstranit koncové bílé znaky."
 
-#: libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Overwrite Braces"
 msgstr "Přepisovat závorky"
 
-#: libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Overwrite closing braces"
 msgstr "Přepisovat zavírací závorky"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Insert Matching Brace"
 msgstr "Vkládat odpovídající závorku"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Insert matching character for { [ ( or \""
 msgstr "Vkládat odpovídající znak pro { [ ( nebo \""
 
-#: libide/preferences/ide-preferences-builtin.c:323
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Margins"
 msgstr "Okraje"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Right margin position"
 msgstr "Pozice pravého okraje"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Position in spaces for the right margin"
 msgstr "Pozice pravého okraje v počtu mezer"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Indentation"
 msgstr "Odsazení"
 
-#: libide/preferences/ide-preferences-builtin.c:328
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Tab width"
 msgstr "Šířka tabulátoru"
 
-#: libide/preferences/ide-preferences-builtin.c:328
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Width of a tab character in spaces"
 msgstr "Šířka znaku tabulátor v počtu mezer"
 
-#: libide/preferences/ide-preferences-builtin.c:329
+#: libide/preferences/ide-preferences-builtin.c:330
 msgid "Insert spaces instead of tabs"
 msgstr "Vkládat mezery namísto tabulátorů"
 
-#: libide/preferences/ide-preferences-builtin.c:329
+#: libide/preferences/ide-preferences-builtin.c:330
 msgid "Prefer spaces over use of tabs"
 msgstr "Dávat přednost mezerám před použitím tabulátorů"
 
-#: libide/preferences/ide-preferences-builtin.c:330
+#: libide/preferences/ide-preferences-builtin.c:331
 msgid "Automatically indent"
 msgstr "Automaticky odsazovat"
 
-#: libide/preferences/ide-preferences-builtin.c:330
+#: libide/preferences/ide-preferences-builtin.c:331
 msgid "Indent source code as you type"
 msgstr "Odsazovat zdrojový kód podle toho, jak píšete"
 
-#: libide/preferences/ide-preferences-builtin.c:345
-#: libide/preferences/ide-preferences-builtin.c:363
+#: libide/preferences/ide-preferences-builtin.c:346
+#: libide/preferences/ide-preferences-builtin.c:364
 msgid "Number of CPU"
 msgstr "Počet CPU"
 
-#: libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:379
 #: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "Sestavení"
 
-#: libide/preferences/ide-preferences-builtin.c:381
+#: libide/preferences/ide-preferences-builtin.c:382
 msgid "Build Workers"
 msgstr "Sestavovací procesy"
 
-#: libide/preferences/ide-preferences-builtin.c:381
+#: libide/preferences/ide-preferences-builtin.c:382
 msgid "Number of parallel build workers"
 msgstr "Počet souběžných sestavovacích procesů"
 
-#: libide/preferences/ide-preferences-builtin.c:389
+#: libide/preferences/ide-preferences-builtin.c:390
 msgid "Network"
 msgstr "Síť"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:391
 msgid "Allow downloads over metered connections"
 msgstr "Povolit stahování přes měřená připojení"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:391
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2794,45 +2814,45 @@ msgstr ""
 "Povolit použití měřených síťových připojení, když se automaticky stahují "
 "závislosti"
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Projects"
 msgstr "Projekty"
 
-#: libide/preferences/ide-preferences-builtin.c:398
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Workspace"
 msgstr "Pracovní plocha"
 
-#: libide/preferences/ide-preferences-builtin.c:399
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "A place for all your projects"
 msgstr "Místo pro všechny vaše projekty"
 
-#: libide/preferences/ide-preferences-builtin.c:400
+#: libide/preferences/ide-preferences-builtin.c:401
 msgid "Restore previously opened files"
 msgstr "Obnovovat naposledy otevřené soubory"
 
-#: libide/preferences/ide-preferences-builtin.c:400
+#: libide/preferences/ide-preferences-builtin.c:401
 msgid "Open previously opened files when loading a project"
 msgstr "Po načtení projektu otevřít naposledy otevřené soubory"
 
-#: libide/preferences/ide-preferences-builtin.c:402
+#: libide/preferences/ide-preferences-builtin.c:403
 msgid "Project Discovery"
 msgstr "Vyhledávání projektů"
 
-#: libide/preferences/ide-preferences-builtin.c:403
+#: libide/preferences/ide-preferences-builtin.c:404
 msgid "Discover projects on my computer"
 msgstr "Vyhledávat projekty v mém počítači"
 
-#: libide/preferences/ide-preferences-builtin.c:403
+#: libide/preferences/ide-preferences-builtin.c:404
 msgid "Scan your computer for existing projects"
 msgstr "Procházet můj počítač a hledat v něm stávající projekty"
 
-#: libide/preferences/ide-preferences-builtin.c:524
+#: libide/preferences/ide-preferences-builtin.c:525
 #: plugins/create-project/gbp-create-project-widget.ui:154
 msgid "Version Control"
 msgstr "Systém správy verzí"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:536
+#: libide/preferences/ide-preferences-builtin.c:537
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2857,11 +2877,11 @@ msgstr "Zastavit běh"
 msgid "Change run options"
 msgstr "Změnit volby běhu"
 
-#: libide/runner/ide-run-manager.c:340
+#: libide/runner/ide-run-manager.c:341
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: libide/runner/ide-run-manager.c:409
+#: libide/runner/ide-run-manager.c:411
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
@@ -2883,31 +2903,31 @@ msgstr "Selhalo otevření složky: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5349
+#: libide/sourceview/ide-source-view.c:5304
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: libide/sourceview/ide-source-view.c:5351
+#: libide/sourceview/ide-source-view.c:5306
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: libide/sourceview/ide-source-view.c:5465
+#: libide/sourceview/ide-source-view.c:5420
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: libide/sourceview/ide-source-view.c:5892
+#: libide/sourceview/ide-source-view.c:5847
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6125
+#: libide/sourceview/ide-source-view.c:6080
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6151
+#: libide/sourceview/ide-source-view.c:6106
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
@@ -3043,7 +3063,7 @@ msgstr "Sestavit projekt"
 msgid "Builder Statistics"
 msgstr "Statistiky aplikace Builder"
 
-#: libide/workbench/ide-workbench.c:623
+#: libide/workbench/ide-workbench.c:621
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Builder"
@@ -3471,20 +3491,20 @@ msgstr "Neznámá volba: %s"
 msgid "Cannot find colorscheme “%s”"
 msgstr "Nelze najít barevné schéma „%s“"
 
-#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:588
+#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:596
 msgid "Failed to locate working directory"
 msgstr "Selhalo vyhledání pracovní složky"
 
-#: plugins/command-bar/gb-vim.c:708
+#: plugins/command-bar/gb-vim.c:770
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Neplatná syntax podřízeného příkazu: %s"
 
-#: plugins/command-bar/gb-vim.c:1149
+#: plugins/command-bar/gb-vim.c:1211
 msgid "Invalid search and replace request"
 msgstr "Neplatný požadavek na hledání a nahrazování"
 
-#: plugins/command-bar/gb-vim.c:1255
+#: plugins/command-bar/gb-vim.c:1317
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nejedná se o příkaz: %s"
@@ -3699,7 +3719,7 @@ msgstr "Klonovat aplikaci"
 msgid "Clone"
 msgstr "Klonovat"
 
-#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:139
 msgid "Network is not available, skipping downloads"
 msgstr "Síť není dostupná, přeskakuje se stahování"
 
@@ -3829,7 +3849,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "Požadovaný soubor neexistuje v indexu git."
 
 #: plugins/git/ide-git-clone-widget.c:162
-#: plugins/git/ide-git-clone-widget.c:427
+#: plugins/git/ide-git-clone-widget.c:438
 msgid "A valid Git URL is required"
 msgstr "Je vyžadována platná adresa URL pro Git"
 
@@ -3955,20 +3975,20 @@ msgstr "MinGW 64bitový"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32bitový"
 
-#: plugins/notification/ide-notification-addin.c:82
+#: plugins/notification/ide-notification-addin.c:69
 msgid "Build successful"
 msgstr "Sestavení bylo úspěšné"
 
-#: plugins/notification/ide-notification-addin.c:83
+#: plugins/notification/ide-notification-addin.c:70
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "Projekt „%s“ byl úspěšně zkompilován"
 
-#: plugins/notification/ide-notification-addin.c:87
+#: plugins/notification/ide-notification-addin.c:74
 msgid "Build failed"
 msgstr "Sestavení selhalo"
 
-#: plugins/notification/ide-notification-addin.c:88
+#: plugins/notification/ide-notification-addin.c:75
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "Sestavení projektu „%s“ selhalo"
@@ -4459,7 +4479,7 @@ msgid "Run with Valgrind"
 msgstr "Spustit s nástrojem Valgrind"
 
 #: plugins/xml-pack/ide-xml-parser.c:579
-#: plugins/xml-pack/ide-xml-tree-builder.c:447
+#: plugins/xml-pack/ide-xml-tree-builder.c:473
 msgid "Failed to create the XML tree."
 msgstr "Selhalo vytvoření stromu XML"
 
