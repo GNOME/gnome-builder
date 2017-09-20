@@ -183,11 +183,12 @@ profiler_run_handler (IdeRunManager *run_manager,
    *       type helper from the runtime.
    */
   {
+    /* Put debug directories first so the resolve higher */
     static const gchar *dirs[] = {
-      "/usr/lib",
+      "/app/lib/debug",
       "/usr/lib/debug",
       "/app/lib",
-      "/app/lib/debug",
+      "/usr/lib",
       NULL
     };
 
