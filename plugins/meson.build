@@ -29,7 +29,6 @@ subdir('eslint')
 subdir('file-search')
 subdir('find-other-file')
 subdir('flatpak')
-subdir('fpaste')
 subdir('gcc')
 subdir('gdb')
 subdir('gettext')
@@ -85,7 +84,6 @@ status += [
   'File Search ........... : @0@'.format(get_option('with_file_search')),
   'Find other file ....... : @0@'.format(get_option('with_find_other_file')),
   'Flatpak ............... : @0@'.format(get_option('with_flatpak')),
-  'Fpaste ................ : @0@'.format(get_option('with_fpaste')),
   'GCC ................... : @0@'.format(get_option('with_gcc')),
   'GDB ................... : @0@'.format(get_option('with_gdb')),
   'Gettext ............... : @0@'.format(get_option('with_gettext')),

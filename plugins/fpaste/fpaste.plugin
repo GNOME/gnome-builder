@@ -1,9 +1,0 @@
-[Plugin]
-Module=fpaste_plugin
-Loader=python3
-Name=Fedora Paste
-Description=Paste code to fpaste.org
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Depends=editor
-Builtin=true
