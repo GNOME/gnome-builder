@@ -321,14 +321,18 @@ gbp_flatpak_runtime_get_debug_dir (GbpFlatpakRuntime *self)
 {
   if G_UNLIKELY (self->debug_dir == NULL)
     {
-      const gchar *ids[] = {
-        self->platform,
-        self->sdk,
-      };
+      g_autofree gchar *sdk_name = NULL;
+      const gchar *ids[2];
+
+      sdk_name = gbp_flatpak_runtime_get_sdk_name (self);
+
+      ids[0] = self->platform;
+      ids[1] = sdk_name;
 
       for (guint i = 0; i < G_N_ELEMENTS (ids); i++)
         {
-          g_autofree gchar *name = g_strdup_printf ("%s.Debug", ids[i]);
+          const gchar *id = ids[i];
+          g_autofree gchar *name = g_strdup_printf ("%s.Debug", id);
           g_autofree gchar *deploy_path = NULL;
           g_autofree gchar *path = NULL;
 
