@@ -652,14 +652,7 @@ ide_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), "");
   pango_layout_set_alignment (self->layout, PANGO_ALIGN_RIGHT);
   pango_layout_set_font_description (self->layout, ide_source_view_get_font_desc (view));
-
-  /* Tweak the sizing (for proper alignment) based on the if we are
-   * going to be rendering the breakpoints arrow or not.
-   */
-  if (self->breakpoints != NULL)
-    pango_layout_set_width (self->layout, (cell_area->width - ARROW_WIDTH - 4) * PANGO_SCALE);
-  else
-    pango_layout_set_width (self->layout, (cell_area->width - CHANGE_WIDTH - 2) * PANGO_SCALE);
+  pango_layout_set_width (self->layout, (cell_area->width - ARROW_WIDTH - 4) * PANGO_SCALE);
 }
 
 static gboolean
