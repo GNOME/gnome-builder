@@ -616,7 +616,7 @@ load_split_async (GtkWidget            *active_widget,
                                   &file,
                                   1,
                                   "editor",
-                                  IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND,
+                                  IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
                                   NULL,
                                   callback,
                                   split_callback_data);

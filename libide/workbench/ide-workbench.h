@@ -34,6 +34,7 @@ typedef enum
 {
   IDE_WORKBENCH_OPEN_FLAGS_NONE       = 0,
   IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND = 1 << 0,
+  IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW    = 1 << 1,
 } IdeWorkbenchOpenFlags;
 
 #define IDE_TYPE_WORKBENCH (ide_workbench_get_type())
