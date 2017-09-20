@@ -151,8 +151,6 @@ plugins/flatpak/gbp-flatpak-runtime.c
 plugins/flatpak/gbp-flatpak-transfer.c
 plugins/flatpak/gbp-flatpak-workbench-addin.c
 plugins/flatpak/gtk/menus.ui
-plugins/fpaste/fpaste_plugin/gtk/menus.ui
-plugins/fpaste/fpaste_plugin/__init__.py
 plugins/git/ide-git-buffer-change-monitor.c
 plugins/git/ide-git-clone-widget.c
 plugins/git/ide-git-clone-widget.ui
