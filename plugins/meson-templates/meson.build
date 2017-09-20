@@ -8,9 +8,7 @@ devhelp_resources = gnome.compile_resources(
        install_dir: plugindir,
 )
 
-meson_template_dir = join_paths(plugindir, 'meson_templates')
-
-install_data('meson_templates/__init__.py', install_dir: meson_template_dir)
+install_data('meson_templates.py', install_dir: plugindir)
 
 configure_file(
           input: 'meson-templates.plugin',
