@@ -1086,7 +1086,7 @@ ide_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
 
           cairo_move_to (cr, cell_area->x, cell_area->y);
 
-          if (has_breakpoint || active)
+          if (has_breakpoint || (self->breakpoints != NULL && active))
             {
               gdk_cairo_set_source_rgba (cr, &self->bkpt.fg);
               bold = self->bkpt.bold;
