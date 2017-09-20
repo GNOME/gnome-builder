@@ -198,7 +198,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         group = view.get_action_group('editor-view')
 
         self.action = Gio.SimpleAction(name='preview-as-html', enabled=True)
-        self.action.connect('activate', lambda *_: self.preview_activated(view))
+        self.action.connect('activate', self.preview_activated)
         group.add_action(self.action)
 
         document = view.get_buffer()
@@ -253,8 +253,11 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
 
         return sphinx_builddir
 
-    def preview_activated(self, view):
+    def preview_activated(self):
         global can_preview_rst
+
+        if self.view is None:
+            return
 
         if self.lang_id == 'rst':
             if self.sphinx_basedir:
@@ -282,9 +285,9 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         column.add(web_view)
 
         self.action.set_enabled(False)
-        web_view.connect('destroy', lambda *_: self.web_view_destroyed(web_view))
+        web_view.connect('destroy', self.web_view_destroyed)
 
-    def web_view_destroyed(self, web_view):
+    def web_view_destroyed(self, web_view, *args):
         self.action.set_enabled(True)
 
     def search_sphinx_base_dir(self, path):
