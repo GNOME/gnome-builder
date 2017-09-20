@@ -653,6 +653,7 @@ ide_buffer_reload_change_monitor (IdeBuffer *self)
                                      G_CALLBACK (ide_buffer__change_monitor_changed_cb),
                                      self,
                                      G_CONNECT_SWAPPED);
+          ide_buffer_change_monitor_reload (priv->change_monitor);
         }
     }
 }
@@ -1095,10 +1096,6 @@ ide_buffer_loaded (IdeBuffer *self)
    * Force the views to reload language state.
    */
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
-
-  /* Request the change monitor to reload now */
-  if (priv->change_monitor != NULL)
-    ide_buffer_change_monitor_reload (priv->change_monitor);
 
   /* This is suspended until we've loaded */
   ide_highlight_engine_unpause (priv->highlight_engine);
