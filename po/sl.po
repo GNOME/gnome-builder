@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
 "POT-Creation-Date: 2017-09-19 22:54+0200\n"
-"PO-Revision-Date: 2017-09-19 23:09+0200\n"
+"PO-Revision-Date: 2017-09-20 11:52+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -137,10 +137,9 @@ msgid "Enter a new name for the color"
 msgstr "Vpišite ime nove barve"
 
 #: contrib/gstyle/gstyle-palette.c:492 contrib/gstyle/gstyle-palette.c:558
-#, fuzzy, c-format
-#| msgid "Failed to parse integer from \"%s\""
+#, c-format
 msgid "failed to parse line %i\n"
-msgstr "Razčlenjevanje števila \"%s\" je spodletelo"
+msgstr "razčlenjevanje vrstice %i je spodletelo\n"
 
 #: contrib/gstyle/gstyle-palette.c:613
 #, c-format
@@ -148,10 +147,9 @@ msgid "%s: palette is empty\n"
 msgstr "%s: paleta je prazna\n"
 
 #: contrib/gstyle/gstyle-palette.c:719
-#, fuzzy, c-format
-#| msgid "Failed to diagnose: %s\n"
+#, c-format
 msgid "%s: failed to parse\n"
-msgstr "Preučevanje je spodletelo: %s\n"
+msgstr "%s: razčlenjevanje je spodletelo\n"
 
 #: contrib/gstyle/gstyle-palette.c:727
 #, c-format
@@ -164,17 +162,13 @@ msgid "%s: This file format is not supported\n"
 msgstr "%s: vrsta datoteke ni podprta.\n"
 
 #: contrib/gstyle/gstyle-palette.c:822
-#, fuzzy
-#| msgid "Failed to diagnose: %s\n"
 msgid "failed to parse\n"
-msgstr "Preučevanje je spodletelo: %s\n"
+msgstr "razčlenjevanje je spodletelo\n"
 
 #. To translators: always in singular form like in: generated palette number <generated_count>
 #: contrib/gstyle/gstyle-palette.c:829
-#, fuzzy
-#| msgid "General"
 msgid "Generated"
-msgstr "Splošno"
+msgstr "Ustvarjeno"
 
 #: contrib/gstyle/gstyle-palette.c:932
 #, c-format
@@ -200,15 +194,15 @@ msgstr "Vrednost"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:97
 msgid "Cielab l"
-msgstr ""
+msgstr "Cielab l"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:108
 msgid "Cielab a"
-msgstr ""
+msgstr "Cielab a"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:119
 msgid "Cielab b"
-msgstr ""
+msgstr "Cielab b"
 
 #: contrib/gstyle/tests/data/gstyle-color-editor.ui:130
 msgid "Red"
@@ -225,7 +219,7 @@ msgstr "Modra"
 #: contrib/gstyle/tests/data/palette.gstyle.xml:20
 #: plugins/color-picker/data/basic.gstyle.xml:20
 msgid "Basic"
-msgstr ""
+msgstr "Osnovno"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:157
 msgid "Color Components"
@@ -308,7 +302,7 @@ msgstr "Ni odprtih palet"
 
 #: contrib/gstyle/ui/gstyle-color-panel.ui:959
 msgid "Load or generate a palette using the preferences"
-msgstr ""
+msgstr "Naloži ali ustvari paleto z uporabo nastavitev"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
 #: libide/sourceview/ide-source-view.c:5768
@@ -346,8 +340,7 @@ msgid "Must parse template before expanding"
 msgstr "Predlogo je treba razčleniti pred razširjanjem"
 
 #: contrib/tmpl/tmpl-template-locator.c:105
-#, fuzzy, c-format
-#| msgid "Failed to locate template \"%s\""
+#, c-format
 msgid "Failed to locate template “%s”"
 msgstr "Iskanje predloge »%s« je spodletelo."
 
@@ -600,10 +593,8 @@ msgid "Projects directory"
 msgstr "Mapa projektov"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:31
-#, fuzzy
-#| msgid "Directory for all builder projects"
 msgid "Directory for all Builder projects."
-msgstr "Mapa vseh projektov programa GBuilder"
+msgstr "Mapa vseh projektov programa Builder"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:35
 msgid "Restore Previous Files"
@@ -969,32 +960,23 @@ msgstr "Izbirno urejanje v slogu Vim"
 
 #: data/org.gnome.Builder.appdata.xml.in:33
 msgid "An integrated software profiler for native applications"
-msgstr ""
+msgstr "Programski profilirnik za izvorne programe"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-#, fuzzy
-#| msgid "Preview support for building with Xdg-App runtimes"
 msgid "Support for building with jhbuild"
-msgstr "Podpora predogleda za izgradnjo prek zagonskih programov Xdg-App"
+msgstr "Omogoči podporo za izgradnjo z JHBuild."
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-#, fuzzy
-#| msgid "Preview support for building with Xdg-App runtimes"
 msgid "Preview support for building with Flatpak runtimes"
-msgstr "Podpora predogleda za izgradnjo prek zagonskih programov Xdg-App"
+msgstr "Podpora predogleda za izgradnjo prek zagonskih programov Flatpak."
 
 #: data/org.gnome.Builder.appdata.xml.in:44
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Global Search"
 msgid "Fast global search"
-msgstr "Splošno iskanje"
+msgstr "Hitro splošno iskanje"
 
 #: data/org.gnome.Builder.appdata.xml.in:48
-#, fuzzy
-#| msgid "From a project template"
 msgid "Integrated project tree"
-msgstr "Iz predloge projekta"
+msgstr "Združena drevesna zgradba projekta"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -1003,7 +985,7 @@ msgstr "Orodje za izgradnjo programov za GNOME"
 #. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/org.gnome.Builder.desktop.in.in:7
 msgid "org.gnome.Builder"
-msgstr ""
+msgstr "org.gnome.Builder"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
@@ -1060,14 +1042,12 @@ msgid "PATH"
 msgstr "POT"
 
 #: libide/application/ide-application-command-line.c:242
-#, fuzzy
-#| msgid "Opens the project specified by PATH"
 msgid "Clones the project specified by MANIFEST"
-msgstr "Odpre projekt, ki je določen s POTJO"
+msgstr "Klonira projekt, ki je določen z datoteko MANIFEST."
 
 #: libide/application/ide-application-command-line.c:243
 msgid "MANIFEST"
-msgstr ""
+msgstr "MANIFEST"
 
 #: libide/application/ide-application-command-line.c:273
 msgid "COMMAND"
@@ -1120,10 +1100,8 @@ msgid "%s does not support building"
 msgstr "%s ne podpira izgradnje"
 
 #: libide/buildsystem/ide-build-manager.c:498
-#, fuzzy
-#| msgid "An unload request is already pending"
 msgid "A build is already in progress"
-msgstr "Zahteva za odlaganje je že na čakanju"
+msgstr "Postopek izgradnje je že v teku ..."
 
 #: libide/buildsystem/ide-build-manager.c:912
 msgid "Ready"
@@ -1144,14 +1122,13 @@ msgid "Default"
 msgstr "Privzeto"
 
 #: libide/devices/ide-device-manager.c:147
-#, fuzzy, c-format
-#| msgid "The device \"%s\" could not be found."
+#, c-format
 msgid "The device “%s” could not be found."
-msgstr "Naprave \"%s\" ni mogoče najti."
+msgstr "Naprave »%s« ni mogoče najti."
 
 #: libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
-msgstr ""
+msgstr "brez določene različice"
 
 #: libide/editorconfig/ide-editorconfig-file-settings.c:159
 msgid "No file was provided."
@@ -1182,11 +1159,13 @@ msgstr "Zamenjaj vse"
 
 #: libide/editor/ide-editor-frame.ui:195
 msgid "Switch between Search and Search-and-Replace"
-msgstr ""
+msgstr "Preklop med možnostima Poišči in Poišči in Zamenjaj"
 
 #: libide/editor/ide-editor-frame.ui:218
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
+"Pokaži oziroma skrij možnosti iskanja, kot je na primer iskanje glede na "
+"velikost črk"
 
 #: libide/editor/ide-editor-frame.ui:279
 msgid "Regular expressions"
@@ -1197,10 +1176,8 @@ msgid "Case sensitive"
 msgstr "Razlikovanje velikosti črk"
 
 #: libide/editor/ide-editor-frame.ui:309
-#, fuzzy
-#| msgid "Match _Entire Word Only"
 msgid "Match whole word only"
-msgstr "Poišči le _cele besede"
+msgstr "Poišči le cele besede"
 
 #: libide/editor/ide-editor-layout-stack-controls.c:46
 msgid "Plain Text"
@@ -1379,10 +1356,9 @@ msgid "%s contained invalid ASCII"
 msgstr "%s vsebuje neveljavni zapis ASCII"
 
 #: libide/gsettings/ide-language-defaults.c:193
-#, fuzzy, c-format
-#| msgid "Failed to parse integer from \"%s\""
+#, c-format
 msgid "Failed to parse integer from “%s”"
-msgstr "Razčlenjevanje števila \"%s\" je spodletelo"
+msgstr "Razčlenjevanje števila »%s« je spodletelo"
 
 #: libide/gsettings/ide-language-defaults.c:271
 msgid "language defaults missing version in [global] group."
@@ -1406,8 +1382,7 @@ msgid "Context has already been restored."
 msgstr "Vsebina je že obnovljena."
 
 #: libide/ide-object.c:288
-#, fuzzy, c-format
-#| msgid "No implementations of extension point \"%s\"."
+#, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "Ni podpore za razširitveno točko »%s«."
 
@@ -1527,10 +1502,9 @@ msgid "Close the document"
 msgstr "Zapri dokument"
 
 #: libide/keybindings/ide-shortcuts-window.ui:149
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Show list of open documents"
-msgstr "Naslov dokumenta"
+msgstr "Pokaži seznam odprtih dokumentov"
 
 #: libide/keybindings/ide-shortcuts-window.ui:157
 msgctxt "shortcut window"
@@ -1583,7 +1557,7 @@ msgstr "Prilepi besedilo iz odložišča"
 #: libide/keybindings/ide-shortcuts-window.ui:217
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
-msgstr ""
+msgstr "Podvoji trenutno vrstico ali izbor"
 
 #: libide/keybindings/ide-shortcuts-window.ui:225
 msgctxt "shortcut window"
@@ -1733,7 +1707,7 @@ msgstr "Zaženi"
 #: libide/keybindings/ide-shortcuts-window.ui:416
 msgctxt "shortcut window"
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: libide/keybindings/ide-shortcuts-window.ui:427
 msgctxt "shortcut window"
@@ -2147,10 +2121,8 @@ msgid "Preferences"
 msgstr "Možnosti"
 
 #: libide/preferences/ide-preferences-perspective.ui:15
-#, fuzzy
-#| msgid "Search Preferences…"
 msgid "Search Preferences"
-msgstr "Možnosti iskanja ..."
+msgstr "Možnosti iskanja"
 
 #: libide/projects/ide-project.c:527
 msgid "Destination file must be within the project tree."
@@ -2189,18 +2161,16 @@ msgstr "Zaženi"
 
 #: libide/runner/ide-run-manager.c:254
 msgid "Cannot run target, another target is running"
-msgstr ""
+msgstr "Ni mogoče zagnati ciljne datoteke, ta je že zagnana"
 
 #: libide/runner/ide-run-manager.c:324
 #: plugins/autotools/ide-autotools-build-task.c:479
-#, fuzzy
-#| msgid "Failed to locate runtime \"%s\""
 msgid "Failed to locate runtime"
-msgstr "Iskanje izvajalnega programa »%s« je spodletelo."
+msgstr "Iskanje izvajalnega programa je spodletelo."
 
 #: libide/runner/ide-runner.c:157 plugins/flatpak/gbp-flatpak-runner.c:82
 msgid "Process quit unexpectedly"
-msgstr ""
+msgstr "Opravilo se je nepričakovano končalo"
 
 #: libide/runtimes/ide-runtime-manager.c:107
 msgid "Host operating system"
@@ -2410,10 +2380,8 @@ msgid "Failed"
 msgstr "Napaka"
 
 #: libide/workbench/ide-omni-bar.ui:342
-#, fuzzy
-#| msgid "Build Output"
 msgid "View Output"
-msgstr "Odvod izgradnje"
+msgstr "Pogled odvoda"
 
 #: libide/workbench/ide-omni-bar.ui:389
 msgid "Rebuild"
@@ -2434,16 +2402,15 @@ msgstr "%s - Izgrajevalnik"
 
 #: libide/workbench/ide-workbench-header-bar.ui:43
 msgid "Transfers"
-msgstr ""
+msgstr "Prenosi"
 
 #: libide/workbench/ide-workbench-header-bar.ui:50
-#, fuzzy
 msgid "Show workbench menu"
-msgstr "Višina okna"
+msgstr "Pokaži delovni meni"
 
 #: libide/workbench/ide-workbench-header-bar.ui:73
 msgid "Press Ctrl+. to search"
-msgstr ""
+msgstr "Pritisnite tipki CTRL + . za iskanje"
 
 #: plugins/autotools/ide-autotools-builder.c:235
 msgid "Build cancelled"
@@ -2491,16 +2458,12 @@ msgid "Build Failed: "
 msgstr "Izgradnja je spodletela:"
 
 #: plugins/autotools/ide-autotools-build-task.c:713
-#, fuzzy
-#| msgid "Cannot execute build task more than once."
 msgid "Cannot execute build task more than once"
-msgstr "Naloge izgranje ni mgoče izvesti več kot enkrat."
+msgstr "Naloge izgradnje ni mogoče izvesti več kot enkrat."
 
 #: plugins/autotools/ide-autotools-build-task.c:830
-#, fuzzy
-#| msgid "Failed to locate runtime \"%s\""
 msgid "Failed to access runtime for postbuild"
-msgstr "Iskanje izvajalnega programa »%s« je spodletelo."
+msgstr "Dostop do izvajalnega programa postbuild je spodletelo."
 
 #: plugins/autotools/ide-autotools-build-task.c:986
 msgid "Failed to create build directory."
@@ -2564,7 +2527,7 @@ msgstr "Program GNOME"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
-msgstr ""
+msgstr "Ustvari nov program GNOME s podporo flatpak"
 
 #: plugins/build-tools/gbp-build-configuration-row.ui:43
 msgid "Duplicate the configuration"
@@ -2642,10 +2605,8 @@ msgid "Errors:"
 msgstr "Napake:"
 
 #: plugins/build-tools/gbp-build-panel.ui:149
-#, fuzzy
-#| msgid "Diagnostics"
 msgid "No Diagnostics"
-msgstr "Diagnostika"
+msgstr "Ni diagnostike"
 
 #. the action:// link is used to execute a build
 #: plugins/build-tools/gbp-build-panel.ui:150
@@ -2653,12 +2614,12 @@ msgid ""
 "<a href=\"action://build-manager.build\">Build your project</a> to show "
 "diagnostics here"
 msgstr ""
+"<a href=\"action://build-manager.build\">Izgradite projekt</a> za prikaz "
+"podrobnosti diagnostike"
 
 #: plugins/build-tools/gbp-build-perspective.c:436
-#, fuzzy
-#| msgid "Preferences"
 msgid "Build Preferences"
-msgstr "Možnosti"
+msgstr "Možnosti izgradnje"
 
 #: plugins/build-tools/gbp-build-tool.c:102
 #: plugins/build-tools/gbp-build-tool.c:115
@@ -2728,14 +2689,12 @@ msgid "   Build ran for: %"
 msgstr "   Trajanje izgradnje: %"
 
 #: plugins/build-tools/gbp-build-tool.c:212
-#, fuzzy, c-format
-#| msgid "Failed to locate device \"%s\""
+#, c-format
 msgid "Failed to locate device “%s”"
 msgstr "Iskanje naprave »%s« je spodletelo."
 
 #: plugins/build-tools/gbp-build-tool.c:222
-#, fuzzy, c-format
-#| msgid "Failed to locate runtime \"%s\""
+#, c-format
 msgid "Failed to locate runtime “%s”"
 msgstr "Iskanje izvajalnega programa »%s« je spodletelo."
 
@@ -2786,14 +2745,12 @@ msgstr "Nova spremenljivka ..."
 #: plugins/cargo/cargo_plugin.py:85 plugins/cargo/cargo_plugin.py:112
 #: plugins/cargo/cargo_plugin.py:201 plugins/cargo/cargo_plugin.py:211
 #: plugins/meson/meson_plugin/__init__.py:93
-#, fuzzy
-#| msgid "Success"
 msgid "Successful"
-msgstr "Uspešno zaključeno"
+msgstr "Uspešno končano"
 
 #: plugins/cargo/cargo_plugin.py:209
 msgid "Installing…"
-msgstr ""
+msgstr "Poteka nameščanje ..."
 
 #: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -2842,9 +2799,8 @@ msgid "clang_codeCompleteAt() only works on local files"
 msgstr "Možnost clang_codeCompleteAt() deluje le na krajevnih datotekah"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:97
-#, fuzzy
 msgid "Close without Saving"
-msgstr "Zapri _brez shranjevanja"
+msgstr "Zapri brez shranjevanja"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:99
 msgid "Save As…"
@@ -2856,7 +2812,7 @@ msgstr "Naloži paleto"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:234
 msgid "Save palette"
-msgstr ""
+msgstr "Shrani paleto"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:725
 msgid "All files"
@@ -2871,20 +2827,16 @@ msgid "GIMP palette"
 msgstr "Paleta GIMP"
 
 #: plugins/color-picker/gb-color-picker-prefs.c:738
-#, fuzzy
-#| msgid "GNOME Builder"
 msgid "GNOME Builder palette"
-msgstr "GNOME Builder"
+msgstr "Paleta GNOME Builder"
 
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
 msgstr "Ime palete"
 
 #: plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
-#, fuzzy
-#| msgid "Enter the name of the directory to create"
 msgid "Enter a new name for the palette"
-msgstr "Vpišite ime mape za ustvarjanje"
+msgstr "Vpišite ime za novo paleto"
 
 #: plugins/color-picker/gb-color-picker-workbench-addin.c:178
 msgid "Colors"
@@ -2892,30 +2844,27 @@ msgstr "Barve"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 msgid "HSV visibility"
-msgstr ""
+msgstr "Vidnost HSV"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
-#, fuzzy
 msgid "If the HSV components are visible."
-msgstr "Ali je projekt le za branje"
+msgstr "Ali naj bodo komponente HSV vidne."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
 msgid "LAB visibility"
-msgstr ""
+msgstr "Vidnost LAB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
-#, fuzzy
 msgid "If the LAB components are visible."
-msgstr "Ali je projekt le za branje"
+msgstr "Ali naj bodo komponente LAB vidne."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
 msgid "RGB visibility"
-msgstr ""
+msgstr "Vidnost RGB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
-#, fuzzy
 msgid "If the RGB components are visible."
-msgstr "Ali je projekt le za branje"
+msgstr "Ali naj bodo komponente RGB vidne."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
 msgid "RGB unit"
@@ -2923,27 +2872,23 @@ msgstr "Enota RGB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
 msgid "The unit used by RGB component and strings."
-msgstr ""
+msgstr "Enota, uporabljena pri nizih komponent RGB"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Select all"
 msgid "Selected palette ID"
-msgstr "Izberi vse"
+msgstr "Izbor ID palete"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
 msgid "The selected palette ID among the loaded ones."
-msgstr ""
+msgstr "Izbran ID palete med naloženimi paletami."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
-#, fuzzy
 msgid "Color strings visibility"
-msgstr "Urejanje ikone za oznako {0}"
+msgstr "Vidnost barvnega niza"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
 msgid "The visible color strings."
-msgstr ""
+msgstr "Vidni nizi barv."
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
 msgid "Color filter"
@@ -2951,7 +2896,7 @@ msgstr "Barvni filter"
 
 #: plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
 msgid "The filter used on the color scales and color plane."
-msgstr ""
+msgstr "Filter, uporabljen na barvnih merilih in v barvnem prostoru."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:13
 msgid "Color components"
@@ -2960,11 +2905,11 @@ msgstr "Barvne komponente"
 #: plugins/color-picker/gtk/color-picker-prefs.ui:47
 #: plugins/color-picker/gtk/color-picker-prefs.ui:451
 msgid "Visibility:"
-msgstr ""
+msgstr "Vidnost"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:63
 msgid "Select the color spaces for which you want to see sliders in the panel."
-msgstr ""
+msgstr "Izberite barvni prostor, ki ga želite prikazati z drsniki v oknu"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:140
 msgid "Units:"
@@ -2985,9 +2930,8 @@ msgid "Select a filter that act on the colors or 'None'."
 msgstr "Izbor filtra, ki se odzove na barve »brez«."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
-#, fuzzy
 msgid "Select the color strings you want to see in the panel."
-msgstr "_Izberite dokumente, ki jih želite shraniti: "
+msgstr "Izbor nizov barv za pogled v oknu."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:597
 msgid "Palettes options"
@@ -2995,7 +2939,7 @@ msgstr "Možnosti palet"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:615
 msgid "Palette view mode:"
-msgstr ""
+msgstr "Način pogleda palete:"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:638
 msgid "List"
@@ -3003,7 +2947,7 @@ msgstr "Seznam"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:676
 msgid "Swatches"
-msgstr ""
+msgstr "Izvlečki"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:717
 msgid "Palette management"
@@ -3014,36 +2958,28 @@ msgid "Load"
 msgstr "Naloži"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:836
-#, fuzzy
-#| msgid "Close the current document"
 msgid "From current document"
-msgstr "Zapri trenutni dokument"
+msgstr "Iz trenutnega dokumenta"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:854
 msgid "Select the palette you want to see in the panel or close one."
-msgstr ""
+msgstr "Izberite paleto, ki jo želitev videti v oknu ali pa zaprite paleto."
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:891
 msgid "No loaded palettes"
-msgstr ""
+msgstr "Ni naloženih palet"
 
 #: plugins/color-picker/gtk/color-picker-preview.ui:45
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Join selected lines"
 msgid "No selected palettes"
-msgstr "Združi izbrane vrstice"
+msgstr "Ni izbranih palet"
 
 #: plugins/color-picker/gtk/color-picker-preview.ui:58
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Select all"
 msgid "Select a palette file"
-msgstr "Izberi vse"
+msgstr "Izbor datoteke palete"
 
 #: plugins/color-picker/gtk/color-picker.ui:61
 msgid "Try loading or generating a palette using the menu"
-msgstr ""
+msgstr "Poskusite naložiti ali ustvariti paleto prek menija"
 
 #: plugins/color-picker/gtk/menus.ui:7
 msgid "Enable color picker"
@@ -3192,11 +3128,10 @@ msgid "The target language (if supported)"
 msgstr "Ciljni jezik (če je možnost podprta)"
 
 #: plugins/create-project/gbp-create-project-tool.c:142
-#, fuzzy
-#| msgid "The version control to use or \"none\" to disable"
 msgid "The version control to use or “none” to disable"
 msgstr ""
-"Izbor sistema za nadzor različic za uporabo oziroma »brez« za onemogočanje"
+"Izbor sistema za nadzor različic, ki naj bo uporabljen, oziroma »brez« za "
+"onemogočanje možnosti"
 
 #: plugins/create-project/gbp-create-project-tool.c:143
 msgid "git"
@@ -3222,10 +3157,12 @@ msgstr "Določiti je treba predlogo projekta z zastavico --template=\n"
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
+"V imenu so uporabljeni znaki, ki lahko povzročijo tehnične težave pri "
+"izgradnji"
 
 #: plugins/create-project/gbp-create-project-widget.c:164
 msgid "Directory already exists with that name"
-msgstr ""
+msgstr "Mapa s tem imenom že obstaja."
 
 #: plugins/create-project/gbp-create-project-widget.c:569
 msgid "A failure occurred while initializing version control"
@@ -3241,19 +3178,18 @@ msgid ""
 "resources. Should be in lower case without spaces and may not start with a "
 "number."
 msgstr ""
+"Enoznačno ime, ki bo uporabljeno kot naziv mape projekta in drugih tehničnih "
+"virov. Ime naj bo zapisano le z malimi črkami, brez presledkov in se ne sme "
+"začeti s številko."
 
 #: plugins/create-project/gbp-create-project-widget.ui:74
-#, fuzzy
-#| msgid "Location"
 msgid "Project Location"
-msgstr "Mesto"
+msgstr "Mesto projekta"
 
 #: plugins/create-project/gbp-create-project-widget.ui:85
 #: plugins/git/ide-git-clone-widget.ui:78
-#, fuzzy
-#| msgid "Projects directory"
 msgid "Select Project Directory"
-msgstr "Mapa projektov"
+msgstr "Izbor mape projekta"
 
 #: plugins/create-project/gbp-create-project-widget.ui:98
 msgid "Language"
@@ -3292,10 +3228,8 @@ msgid "No license"
 msgstr "Brez dovoljenja"
 
 #: plugins/create-project/gbp-create-project-widget.ui:174
-#, fuzzy
-#| msgid "Without version control"
 msgid "Uses the Git version control system"
-msgstr "Brez nadzora različic"
+msgstr "Uporablja sistem za nadzor različic Git"
 
 #: plugins/create-project/gbp-create-project-widget.ui:236
 msgid "Select a Template"
@@ -3311,7 +3245,7 @@ msgstr "Preklopi na"
 
 #: plugins/flatpak/gbp-flatpak-clone-widget.ui:38
 msgid "Downloading application sources…"
-msgstr ""
+msgstr "Poteka prejemanje virov programa ..."
 
 #: plugins/flatpak/gbp-flatpak-genesis-addin.c:93
 msgid "Clone App"
@@ -3354,6 +3288,8 @@ msgstr "Zahtevan je veljaven naslov URL Git."
 #: plugins/git/ide-git-clone-widget.ui:38
 msgid "Use Git to create a local copy of a remotely hosted project."
 msgstr ""
+"Uporabi sistem Git za ustvarjanje krajevne kopije projekta na oddaljenem "
+"gostitelju."
 
 #: plugins/git/ide-git-clone-widget.ui:66
 msgid "user@host:repository.git"
@@ -3411,22 +3347,21 @@ msgid "Enable Pylint"
 msgstr "Prezri pylint"
 
 #: plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
-#, fuzzy
-#| msgid "Enable the use of pylint, which may execute code in your project"
 msgid ""
 "Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
 msgstr ""
-"Omogoči uporabo programa pylint, ki lahko izvede kodo v programu projekta"
+"Omogoči uporabo programa pylint, ki lahko izvaja poizvedbe delovanja v "
+"programih Python. S tem bo omogočeno tudi izvajanje kode v programu projekta."
 
 #: plugins/hello-cpp/hellocppapplicationaddin.cc:48
 #, c-format
 msgid "Wow! You've spent with Builder %d second!\n"
 msgid_plural "Wow! You've spent with Builder %d seconds!\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Neverjetno! S programom Builder ste zdržali %d sekund!\n"
+msgstr[1] "Neverjetno! S programom Builder ste zdržali %d sekundo!\n"
+msgstr[2] "Neverjetno! S programom Builder ste zdržali %d sekundi!\n"
+msgstr[3] "Neverjetno! S programom Builder ste zdržali %d sekunde!\n"
 
 #: plugins/html-preview/html_preview_plugin/gtk/menus.ui:6
 msgid "Preview as HTML"
@@ -3443,28 +3378,20 @@ msgstr ""
 "Python"
 
 #: plugins/meson/meson_plugin/__init__.py:346
-#, fuzzy
-#| msgid "Configure Options"
 msgid "Configuring…"
-msgstr "Nastavitev možnosti"
+msgstr "poteka nastavljanje ..."
 
 #: plugins/meson/meson_plugin/__init__.py:378
-#, fuzzy
-#| msgid "Running configure…"
 msgid "Running prebuild…"
-msgstr "Zaganjanje nastavitev..."
+msgstr "Poteka izvajanje ukaza prebuild ..."
 
 #: plugins/meson/meson_plugin/__init__.py:397
-#, fuzzy
-#| msgid "Running autogen…"
 msgid "Running post-install…"
-msgstr "Zaganjanje programa autogen ..."
+msgstr "Poteka izvajanje ukaza post-install ..."
 
 #: plugins/meson/meson_plugin/__init__.py:400
-#, fuzzy
-#| msgid "Running configure…"
 msgid "Running post-build…"
-msgstr "Zaganjanje nastavitev..."
+msgstr "Poteka izvajanje ukaza post-build ..."
 
 #: plugins/meson-templates/meson_templates/__init__.py:206
 msgid "Empty Meson Project"
@@ -3581,16 +3508,16 @@ msgstr "_Osveži"
 
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
 msgid "Words matching selection"
-msgstr ""
+msgstr "Izbiranje po besedah"
 
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
 msgid "Highlight all occurrences of words matching the current selection"
-msgstr ""
+msgstr "Poudari vse pojavitve besed, ki so skladne s trenutnim izborom"
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
 msgid "quick highlight words matching current selection"
-msgstr ""
+msgstr "hitro poudarjanje besede skladnja izbor trenutno"
 
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
@@ -3614,15 +3541,12 @@ msgid "Symbols"
 msgstr "Simboli"
 
 #: plugins/symbol-tree/symbol-tree-panel.ui:25
-#, fuzzy
-#| msgid "Symbols"
 msgid "No symbols"
-msgstr "Simboli"
+msgstr "Ni simbolov"
 
 #: plugins/symbol-tree/symbol-tree-panel.ui:26
-#, fuzzy
 msgid "Open a file to see symbols within the file"
-msgstr "Poudarjanje določene številke vrstice"
+msgstr "Odpri datoteko za prikaz simbolov znotraj vsebine"
 
 #: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
@@ -3630,7 +3554,7 @@ msgstr "Nadzornik sistema"
 
 #: plugins/sysprof/gbp-sysprof-perspective.c:135
 msgid "Profiler"
-msgstr ""
+msgstr "Profiler"
 
 #. the action:// link is used to run the project
 #: plugins/sysprof/gbp-sysprof-perspective.ui:49
@@ -3638,6 +3562,8 @@ msgid ""
 "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
 "profiler</a> from the run menu to begin"
 msgstr ""
+"Izberite možnost <a href=\"action://run-manager.run-with-handler::profiler"
+"\">Zaženi s programom Profiler</a> iz menija za začetek opravila"
 
 #: plugins/sysprof/gbp-sysprof-perspective.ui:81
 msgid "CPU"
@@ -3649,7 +3575,7 @@ msgstr "Odpri profil"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:311
 msgid "Sysprof Capture (*.syscap)"
-msgstr ""
+msgstr "Sysprof Capture (*.syscap)"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:317
 msgid "All Files"
@@ -3657,7 +3583,7 @@ msgstr "Vse datoteke"
 
 #: plugins/sysprof/gbp-sysprof-workbench-addin.c:418
 msgid "Run with Profiler"
-msgstr ""
+msgstr "Zaženi s programom Profiler"
 
 #: plugins/sysprof/gtk/menus.ui:6
 msgid "Open Profile…"
@@ -3672,10 +3598,8 @@ msgid "Untitled terminal"
 msgstr "Neimenovan terminal"
 
 #: plugins/terminal/gb-terminal-workbench-addin.c:120
-#, fuzzy
-#| msgid "Build Output"
 msgid "Run Output"
-msgstr "Odvod izgradnje"
+msgstr "Zaženi odvod"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_New Terminal"
