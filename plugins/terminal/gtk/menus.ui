@@ -46,6 +46,7 @@
       <item>
         <attribute name="label" translatable="yes">Split</attribute>
         <attribute name="action">layoutstack.split-view</attribute>
+        <attribute name="target" type="s">''</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Reset</attribute>
