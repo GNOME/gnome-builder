@@ -253,7 +253,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
 
         return sphinx_builddir
 
-    def preview_activated(self):
+    def preview_activated(self, *args):
         global can_preview_rst
 
         if self.view is None:
