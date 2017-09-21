@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-18 09:45+0000\n"
-"PO-Revision-Date: 2017-09-20 08:44+0200\n"
+"POT-Creation-Date: 2017-09-21 04:24+0000\n"
+"PO-Revision-Date: 2017-09-21 07:32+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -658,7 +658,7 @@ msgstr "O _aplikaci"
 msgid "_Quit"
 msgstr "U_končit"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:748
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -761,7 +761,7 @@ msgstr "Přiblíž_it"
 msgid "Zoom _Out"
 msgstr "_Oddálit"
 
-#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:51
+#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:52
 msgid "Reset"
 msgstr "Výchozí"
 
@@ -798,8 +798,8 @@ msgstr "Přesunout doleva"
 msgid "Move Right"
 msgstr "Přesunout doprava"
 
-#: data/gtk/menus.ui:261 data/gtk/menus.ui:321 plugins/devhelp/gtk/menus.ui:11
-#: plugins/terminal/gtk/menus.ui:63
+#: data/gtk/menus.ui:261 data/gtk/menus.ui:323 plugins/devhelp/gtk/menus.ui:11
+#: plugins/terminal/gtk/menus.ui:64
 msgid "Close"
 msgstr "Zavřít"
 
@@ -819,35 +819,35 @@ msgstr "Dokument"
 msgid "Open in New Frame"
 msgstr "Otevřít v novém rámu"
 
-#: data/gtk/menus.ui:290 plugins/terminal/gtk/menus.ui:47
+#: data/gtk/menus.ui:291 plugins/terminal/gtk/menus.ui:47
 msgid "Split"
 msgstr "Rozdělit"
 
-#: data/gtk/menus.ui:295 plugins/devhelp/gtk/menus.ui:7
+#: data/gtk/menus.ui:297 plugins/devhelp/gtk/menus.ui:7
 msgid "Print…"
 msgstr "Tisk…"
 
-#: data/gtk/menus.ui:302
+#: data/gtk/menus.ui:304
 msgid "Document Preferences"
 msgstr "Předvolby dokumentu"
 
-#: data/gtk/menus.ui:310 libide/buildui/ide-build-log-panel.c:740
+#: data/gtk/menus.ui:312 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
 msgstr "_Uložit"
 
-#: data/gtk/menus.ui:314
+#: data/gtk/menus.ui:316
 msgid "Save _As"
 msgstr "Uložit j_ako"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1139
+#: data/gtk/menus.ui:333 libide/runner/ide-run-manager.c:1139
 msgid "Run"
 msgstr "Spustit"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:530
+#: libide/application/ide-application.c:539
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:625
+#: libide/workbench/ide-workbench.c:623
 msgid "Builder"
 msgstr "Builder"
 
@@ -1035,27 +1035,27 @@ msgstr "MANIFEST"
 msgid "COMMAND"
 msgstr "PŘÍKAZ"
 
-#: libide/application/ide-application-command-line.c:346
+#: libide/application/ide-application-command-line.c:338
 msgid "No commands available"
 msgstr "Nejsou k dispozici žádné příkazy"
 
-#: libide/application/ide-application-command-line.c:389
+#: libide/application/ide-application-command-line.c:381
 msgid "Please provide a command"
 msgstr "Zadejte prosím příkaz"
 
-#: libide/application/ide-application-command-line.c:399
+#: libide/application/ide-application-command-line.c:391
 msgid "No such tool"
 msgstr "Takový nástroj neexistuje"
 
-#: libide/application/ide-application-command-line.c:413
-msgid "Please provide a worker type"
-msgstr "Zadejte prosím typ sestavovacího procesu"
+#: libide/application/ide-application-command-line.c:405
+msgid "Please provide a worker plugin"
+msgstr "Zadejte prosím zásuvný modul pro sestavovací proces"
 
-#: libide/application/ide-application-command-line.c:420
+#: libide/application/ide-application-command-line.c:412
 msgid "Please provide a D-Bus address"
 msgstr "Zadejte prosím adresu D-Bus"
 
-#: libide/application/ide-application-command-line.c:429
+#: libide/application/ide-application-command-line.c:421
 msgid "No such worker"
 msgstr "Takový sestavovací proces neexistuje"
 
@@ -1067,8 +1067,8 @@ msgstr "Takový sestavovací proces neexistuje"
 #: libide/runner/ide-run-manager.c:746
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:701
-#: plugins/terminal/gb-terminal-workbench-addin.c:181
-#: plugins/terminal/gb-terminal-workbench-addin.c:187
+#: plugins/terminal/gb-terminal-workbench-addin.c:188
+#: plugins/terminal/gb-terminal-workbench-addin.c:194
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Klávesové zkratky pracovních nástrojů"
@@ -1093,8 +1093,8 @@ msgstr "Zobrazit okno s klávesovými zkratkami"
 #: libide/keybindings/ide-shortcuts-window.ui:14
 #: libide/keybindings/ide-shortcuts-window.ui:459
 #: plugins/command-bar/gb-command-bar.c:702
-#: plugins/terminal/gb-terminal-workbench-addin.c:182
-#: plugins/terminal/gb-terminal-workbench-addin.c:188
+#: plugins/terminal/gb-terminal-workbench-addin.c:189
+#: plugins/terminal/gb-terminal-workbench-addin.c:195
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Obecné"
@@ -1127,7 +1127,7 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Spustit sestavení"
 
-#: libide/buffers/ide-buffer.c:2696
+#: libide/buffers/ide-buffer.c:2693
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
@@ -1135,12 +1135,12 @@ msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání sym
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: libide/buffers/ide-buffer-manager.c:1890
+#: libide/buffers/ide-buffer-manager.c:1892
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
 
-#: libide/buffers/ide-buffer-manager.c:1928
+#: libide/buffers/ide-buffer-manager.c:1930
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Selhalo uložení vyrovnávací paměti, ignoruje se opětovné použití."
 
@@ -1444,10 +1444,6 @@ msgstr "Nová proměnná…"
 msgid "Run with Debugger"
 msgstr "Spustit s ladicím programem"
 
-#: libide/debugger/ide-debug-manager.c:936
-msgid "A suitable debugger could not be found."
-msgstr "Nezdařilo se najít použitelný ladicí program."
-
 #: libide/debugger/ide-debugger-breakpoints-view.ui:22
 #: libide/debugger/ide-debugger-registers-view.ui:13
 msgid "ID"
@@ -1579,6 +1575,10 @@ msgstr "Umístění"
 msgid "Binary"
 msgstr "Spustitelný program"
 
+#: libide/debugger/ide-debug-manager.c:936
+msgid "A suitable debugger could not be found."
+msgstr "Nezdařilo se najít použitelný ladicí program."
+
 #: libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
@@ -1619,7 +1619,7 @@ msgstr "Otevření souboru"
 #: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:78
 #: plugins/color-picker/gb-color-picker-prefs.c:205
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:365
 msgid "Open"
 msgstr "Otevřít"
 
@@ -1631,7 +1631,7 @@ msgstr "Otevřít"
 #: plugins/color-picker/gb-color-picker-prefs.c:93
 #: plugins/color-picker/gb-color-picker-prefs.c:209
 #: plugins/color-picker/gb-color-picker-prefs.c:236
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:366
 #: plugins/terminal/gb-terminal-view-actions.c:271
 msgid "Cancel"
 msgstr "Zrušit"
@@ -1841,7 +1841,7 @@ msgstr "Uložit"
 msgid "Save File As"
 msgstr "Uložení souboru jako"
 
-#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:59
+#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:60
 msgid "Save As"
 msgstr "Uložit jako"
 
@@ -1913,11 +1913,11 @@ msgid ""
 msgstr ""
 "Builder zjistil, že tento soubor byl externě změněn. Chcete jej znovu načíst?"
 
-#: libide/editor/ide-editor-workbench-addin.c:150
+#: libide/editor/ide-editor-workbench-addin.c:177
 msgid "Toggle navigation panel"
 msgstr "Přepnout navigační panel"
 
-#: libide/editor/ide-editor-workbench-addin.c:164
+#: libide/editor/ide-editor-workbench-addin.c:191
 msgid "Toggle utilities panel"
 msgstr "Přepnout panel s pomůckami"
 
@@ -2063,14 +2063,14 @@ msgstr "Příkazová lišta"
 
 #: libide/keybindings/ide-shortcuts-window.ui:39
 #: libide/keybindings/ide-shortcuts-window.ui:484
-#: plugins/terminal/gb-terminal-workbench-addin.c:183
+#: plugins/terminal/gb-terminal-workbench-addin.c:190
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminál"
 
 #: libide/keybindings/ide-shortcuts-window.ui:46
 #: libide/keybindings/ide-shortcuts-window.ui:491
-#: plugins/terminal/gb-terminal-workbench-addin.c:189
+#: plugins/terminal/gb-terminal-workbench-addin.c:196
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminál v běhovém prostředí sestavení"
@@ -2445,7 +2445,7 @@ msgstr "editor font písmo monospace"
 
 #. XXX: This belongs in terminal addin
 #: libide/preferences/ide-preferences-builtin.c:107
-#: plugins/terminal/gb-terminal-workbench-addin.c:250
+#: plugins/terminal/gb-terminal-workbench-addin.c:258
 #: plugins/terminal/gtk/menus.ui:45
 msgid "Terminal"
 msgstr "Terminál"
@@ -2559,7 +2559,7 @@ msgid "Line diagnostics"
 msgstr "Diagnostika na řádcích"
 
 #: libide/preferences/ide-preferences-builtin.c:163
-msgid "Show an icon next to line numbers indiciating type of diagnostic"
+msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
 "Zobrazovat vedle čísla řádku ikonu prezentující typ diagnostické informace"
 
@@ -3063,7 +3063,7 @@ msgstr "Sestavit projekt"
 msgid "Builder Statistics"
 msgstr "Statistiky aplikace Builder"
 
-#: libide/workbench/ide-workbench.c:623
+#: libide/workbench/ide-workbench.c:621
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Builder"
@@ -3491,20 +3491,20 @@ msgstr "Neznámá volba: %s"
 msgid "Cannot find colorscheme “%s”"
 msgstr "Nelze najít barevné schéma „%s“"
 
-#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:588
+#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:596
 msgid "Failed to locate working directory"
 msgstr "Selhalo vyhledání pracovní složky"
 
-#: plugins/command-bar/gb-vim.c:708
+#: plugins/command-bar/gb-vim.c:770
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Neplatná syntax podřízeného příkazu: %s"
 
-#: plugins/command-bar/gb-vim.c:1149
+#: plugins/command-bar/gb-vim.c:1211
 msgid "Invalid search and replace request"
 msgstr "Neplatný požadavek na hledání a nahrazování"
 
-#: plugins/command-bar/gb-vim.c:1255
+#: plugins/command-bar/gb-vim.c:1317
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nejedná se o příkaz: %s"
@@ -3725,8 +3725,8 @@ msgstr "Síť není dostupná, přeskakuje se stahování"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:323
-#: plugins/html-preview/html_preview_plugin/__init__.py:333
+#: plugins/html-preview/html_preview.py:326
+#: plugins/html-preview/html_preview.py:336
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 #: plugins/rustup/rustup_plugin/__init__.py:615
@@ -3758,12 +3758,12 @@ msgstr[2] "Zobrazit %u dalších běhových prostředí"
 msgid "Flatpak Runtimes"
 msgstr "Běhová prostředí Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:722
+#: plugins/flatpak/gbp-flatpak-runtime.c:729
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:724
+#: plugins/flatpak/gbp-flatpak-runtime.c:731
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3823,14 +3823,6 @@ msgstr "Flatpak"
 #: plugins/flatpak/gtk/menus.ui:8
 msgid "_Download Dependencies"
 msgstr "_Stáhnout závislosti"
-
-#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
-msgid "Send to Fpaste.org"
-msgstr "Odeslat na Fpaste.org"
-
-#: plugins/fpaste/fpaste_plugin/__init__.py:110
-msgid "The following URL has been copied to the clipboard"
-msgstr "Následující adresa URL byla zkopírována do schránky"
 
 #: plugins/git/ide-git-buffer-change-monitor.c:161
 msgid "Cannot provide diff, no backing file provided."
@@ -3919,19 +3911,19 @@ msgstr ""
 "Povolit použití pylint k vyhledávání doplňující diagnostiky v programech v "
 "jazyce Python. Důsledkem může být spouštění kódu vašeho projektu."
 
-#: plugins/html-preview/html_preview_plugin/gtk/menus.ui:7
+#: plugins/html-preview/gtk/menus.ui:7
 msgid "Open Preview"
 msgstr "Otevřít náhled"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:319
+#: plugins/html-preview/html_preview.py:322
 msgid "Your computer is missing python3-docutils"
 msgstr "Ve vašem počítači schází python3-docutils"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:329
+#: plugins/html-preview/html_preview.py:332
 msgid "Your computer is missing python3-sphinx"
 msgstr "Ve vašem počítači schází python3-sphinx"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:372
+#: plugins/html-preview/html_preview.py:375
 msgid "(Preview)"
 msgstr "(náhled)"
 
@@ -3943,27 +3935,27 @@ msgstr "Navrhovat dokončování pro Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
-#: plugins/meson-templates/meson_templates/__init__.py:234
+#: plugins/meson-templates/meson_templates.py:226
 msgid "GNOME Application"
 msgstr "Aplikace GNOME"
 
-#: plugins/meson-templates/meson_templates/__init__.py:236
+#: plugins/meson-templates/meson_templates.py:228
 msgid "Create a new GNOME application"
 msgstr "Vytvořit novou aplikaci GNOME"
 
-#: plugins/meson-templates/meson_templates/__init__.py:287
+#: plugins/meson-templates/meson_templates.py:279
 msgid "Shared Library"
 msgstr "Sdílená knihovna"
 
-#: plugins/meson-templates/meson_templates/__init__.py:289
+#: plugins/meson-templates/meson_templates.py:281
 msgid "Create a new project with a shared library"
 msgstr "Vytvořit nový projekt se sdílenou knihovnou"
 
-#: plugins/meson-templates/meson_templates/__init__.py:304
+#: plugins/meson-templates/meson_templates.py:296
 msgid "Empty Project"
 msgstr "Prázdný projekt"
 
-#: plugins/meson-templates/meson_templates/__init__.py:306
+#: plugins/meson-templates/meson_templates.py:298
 msgid "Create a new empty project"
 msgstr "Vytvořit nový prázdný projekt"
 
@@ -4025,11 +4017,6 @@ msgstr "Strom projektu"
 msgid "Empty"
 msgstr "Prázdný"
 
-#: plugins/project-tree/gb-rename-file-popover.c:79
-#, c-format
-msgid "Rename %s"
-msgstr "Přejmenovat %s"
-
 #: plugins/project-tree/gb-project-tree-shortcuts.c:34
 #: plugins/project-tree/gb-project-tree-shortcuts.c:40
 msgctxt "shortcut window"
@@ -4045,6 +4032,11 @@ msgstr "Přejmenovat soubor"
 msgctxt "shortcut window"
 msgid "Move a file to the trash"
 msgstr "Přesunout soubor do koše"
+
+#: plugins/project-tree/gb-rename-file-popover.c:79
+#, c-format
+msgid "Rename %s"
+msgstr "Přejmenovat %s"
 
 #: plugins/project-tree/gtk/menus.ui:6
 msgid "Re_veal in Project Tree"
@@ -4392,19 +4384,19 @@ msgstr ""
 msgid "CPU"
 msgstr "Procesor"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:362
 msgid "Open Profile"
 msgstr "Otevření záznamu profilování"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:371
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Záznam ze Sysprof (*.syscap)"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:377
 msgid "All Files"
 msgstr "Všechny soubory"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:478
 #: plugins/sysprof/gtk/menus.ui:34
 msgid "Run with Profiler"
 msgstr "Spustit s profilerem"
@@ -4429,11 +4421,11 @@ msgstr "Cyklicky přecházet přes okraj"
 msgid "Save Terminal Content As"
 msgstr "Uložení obsahu terminálu jako"
 
-#: plugins/terminal/gb-terminal-view.c:472
+#: plugins/terminal/gb-terminal-view.c:473
 msgid "Untitled terminal"
 msgstr "Nepojmenovaný terminál"
 
-#: plugins/terminal/gb-terminal-workbench-addin.c:145
+#: plugins/terminal/gb-terminal-workbench-addin.c:152
 msgid "Application Output"
 msgstr "Výstup aplikace"
 
@@ -4445,15 +4437,15 @@ msgstr "_Otevřít odkaz"
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: plugins/terminal/gtk/menus.ui:55
+#: plugins/terminal/gtk/menus.ui:56
 msgid "Reset and Clear"
 msgstr "Výchozí a vymazat"
 
-#: plugins/terminal/gtk/menus.ui:74
+#: plugins/terminal/gtk/menus.ui:75
 msgid "New _Terminal"
 msgstr "Nový _terminál"
 
-#: plugins/terminal/gtk/menus.ui:82
+#: plugins/terminal/gtk/menus.ui:83
 msgid "New _Build Terminal"
 msgstr "_Nový terminál pro sestavování"
 
@@ -4487,3 +4479,9 @@ msgstr "Selhalo vytvoření stromu XML"
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Vyrovnávací paměť byla načtena, ale není ve správci vyrovnávacích pamětí."
+
+#~ msgid "Send to Fpaste.org"
+#~ msgstr "Odeslat na Fpaste.org"
+
+#~ msgid "The following URL has been copied to the clipboard"
+#~ msgstr "Následující adresa URL byla zkopírována do schránky"
