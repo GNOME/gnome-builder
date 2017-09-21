@@ -9,7 +9,7 @@ Develop software for GNOME
  * [Download a Release Tarball](https://download.gnome.org/sources/gnome-builder/)
  * [Browse source code in Git version control](https://git.gnome.org/browse/gnome-builder)
  * [Learn more about Builder](https://wiki.gnome.org/Apps/Builder)
- * [Chat with the developers](irc://irc.gnome.org/#gnome-builder)
+ * [Chat with the developers](irc://irc.gnome.org/#gnome-builder) in #gnome-builder on irc.gnome.org
 
 ----
 
