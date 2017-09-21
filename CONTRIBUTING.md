@@ -20,40 +20,35 @@ Someone will review your patch shortly after doing so.
 
 ## Asking for Help
 
-You can often find the other contributors to GNOME Builder on our IRC channel at
+You can often find Builder contributors on our IRC channel at
 [irc://irc.gimp.net/#gnome-builder](irc://irc.gimp.net/#gnome-builder).
 If you have any questions, we'd be happy to help you.
 
-In particular, if you'd like to start on a new plugin or feature, stop by
-our IRC channel and we'd be happy to get you set off in the right direction.
+If you'd like to start on a new plugin or feature, stop by our IRC channel and we'd be happy get you oriented.
 
 ## Portability
 
-GNOME Builder is primarily focused on **GNU/Linux** with the **GNOME desktop**.
+Builder is primarily focused on **GNU/Linux** with the **GNOME desktop**.
 
-However, we do often accept patches for various BSD-based operating systems
-and alternate desktops. It is important that you can help keep things working
-for your platform, as the Builder team cannot individually test all
-configurations.
+However, we do often accept patches for various BSD-based operating systems and alternate desktops.
+It is important that you help us by keep things working for your platform as the Builder team cannot test all possible configurations.
 
 ## Testing
 
-We use autotools for our build system. It provides support for running unit
-tests with the `make check` command. We run these tests before releasing
-tarballs, so it is important that you check tests and add new tests when it
-makes sense.
+We use meson for our build system.
+It provides support for running unit tests with the `ninja test` command.
+We run these tests often so it is important that you check nothing was broken by your changes.
 
 ## Licensing
 
-Contributions should be licensed under the LGPL-2.1+ or GPL-3. Permissive
-licensed contributions will also be accepted, but we prefer that original
-contributions are either LGPL-2.1+ or GPL-3 licensed.
+Contributions should be licensed under the LGPL-2.1+ or GPL-3.
+Permissively licensed contributions will also be accepted, but we prefer that original contributions are either LGPL-2.1+ or GPL-3 licensed.
 
 ## Coding Style
 
-Our coding style matches that of Gtk+. We consider the Gtk+ project an
-upstream, and often push features into Gtk+. This might feel unfamiliar
-at first, but it works well.
+Our coding style matches that of Gtk+.
+We consider the Gtk+ project an upstream, and often push features into Gtk+.
+This might feel unfamiliar at first, but it works well for us.
 
 We use the recent GNU GCC '11 mode, such as -std=gnu11.
 
@@ -75,24 +70,34 @@ example_object_get_widget (ExampleObject  *object,
 }
 ```
 
-Please use new-style Object declarations. Unless you intend to subclass the
-object, make the object final.
+Please use new-style Object declarations such as `G_DECLARE_FINAL_TYPE()` or `G_DECLARE_DERIVABLE_TYPE()`.
+Unless you intend to subclass the object, make the object final.
 
 ```c
 #define EXAMPLE_TYPE_OBJECT (example_object_get_type())
+
 G_DECLARE_FINAL_TYPE (ExampleObject, example_object, EXAMPLE, OBJECT, GObject)
 ```
 
 Builder's default C mode matches our style guide.
 
+### Be explit about ownership transfers
+
+Since `GLib 2.44`, we've had helpful macros and functions to be explit about ownership transfers.
+Please use them as it drastically saves time when tracking down memory leaks.
+
+These include:
+
+ * `g_autoptr()`, `g_auto()`, and `g_autofree`.
+ * `g_steal_pointer()`
+ * `g_clear_object()` and `g_clear_pointer()`
+
 ## Documentation
 
-Most functions should be obvious what they do from the object type, name,
-and parameters. Add additional documentation when it makes sense.
+Most functions should be obvious what they do from the object type, name, and parameters.
+Add additional documentation when it makes sense.
 
-If you find you come across something particularly tricky, or are being clever,
-please add a comment denoting such.
-
+If you find you come across something particularly tricky, or are being clever, please add a comment denoting such.
 
 ## Making a Release
 
