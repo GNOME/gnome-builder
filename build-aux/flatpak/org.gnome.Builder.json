@@ -81,7 +81,7 @@
                 },
                 {
                     "type": "patch",
-                    "path": "build-aux/flatpak/fuse-2.9.2-namespace-conflict-fix.patch"
+                    "path": "fuse-2.9.2-namespace-conflict-fix.patch"
                 }
             ]
         },
@@ -151,11 +151,11 @@
                 },
                 {
                     "type": "patch",
-                    "path": "build-aux/flatpak/polkit-build-Add-option-to-build-without-polkitd.patch"
+                    "path": "polkit-build-Add-option-to-build-without-polkitd.patch"
                 },
                 {
                     "type": "file",
-                    "path": "build-aux/flatpak/polkit-autogen",
+                    "path": "polkit-autogen",
                     "dest-filename": "autogen.sh"
                 }
             ]
@@ -181,7 +181,7 @@
                 },
                 {
                     "type": "file",
-                    "path": "build-aux/flatpak/setuptools-makefile",
+                    "path": "setuptools-makefile",
                     "dest-filename": "Makefile"
                 }
             ]
@@ -205,12 +205,12 @@
                 },
                 {
                     "type": "file",
-                    "path": "build-aux/flatpak/setuptools-makefile",
+                    "path": "setuptools-makefile",
                     "dest-filename": "Makefile"
                 },
                 {
                     "type": "patch",
-                    "path": "build-aux/flatpak/lxml-Fix-getting-lib-version-when-using-pkg-config.patch"
+                    "path": "lxml-Fix-getting-lib-version-when-using-pkg-config.patch"
                 }
             ]
         },
@@ -355,7 +355,7 @@
                 },
                 {
                     "type": "file",
-                    "path": "build-aux/flatpak/setuptools-makefile",
+                    "path": "setuptools-makefile",
                     "dest-filename": "Makefile"
                 }
             ]
