@@ -19,14 +19,13 @@
 
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
   <programming-language>C</programming-language>
-  <programming-language>C++</programming-language>
   <programming-language>Python</programming-language>
   <programming-language>Vala</programming-language>
 
   <maintainer>
     <foaf:Person>
       <foaf:name>Christian Hergert</foaf:name>
-      <foaf:mbox rdf:resource="mailto:christian@hergert.me" />
+      <foaf:mbox rdf:resource="mailto:chergert@gnome.org" />
       <gnome:userid>chergert</gnome:userid>
     </foaf:Person>
   </maintainer>
