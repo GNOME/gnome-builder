@@ -187,6 +187,7 @@ profiler_run_handler (IdeRunManager *run_manager,
     static const gchar *dirs[] = {
       "/app/lib/debug",
       "/usr/lib/debug",
+      "/app/bin",
       "/app/lib",
       "/usr/lib",
       NULL

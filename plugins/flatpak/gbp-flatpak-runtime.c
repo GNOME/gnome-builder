@@ -342,9 +342,8 @@ gbp_flatpak_runtime_get_debug_dir (GbpFlatpakRuntime *self)
            */
           deploy_path = g_file_get_path (self->deploy_dir_files);
           path = g_build_filename (deploy_path, "..", "..", "..", "..", "..",
-                                   name, self->arch, self->branch, "active", "files",
+                                   name, self->arch, self->branch, "active", "files", "usr", "lib",
                                    NULL);
-
           if (g_file_test (path, G_FILE_TEST_IS_DIR))
             {
               self->debug_dir = g_steal_pointer (&path);
@@ -388,7 +387,8 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
 
   if (debug_dir != NULL)
     {
-      if (g_str_equal (path, "/usr/lib/debug"))
+      if (g_str_equal (path, "/usr/lib/debug") ||
+          g_str_equal (path, "/usr/lib/debug/"))
         return g_file_new_for_path (debug_dir);
 
       if (g_str_has_prefix (path, "/usr/lib/debug/"))
@@ -411,7 +411,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
   build_dir = get_staging_directory (self);
   app_files_path = g_build_filename (build_dir, "files", NULL);
 
-  if (g_str_equal (path, "/app"))
+  if (g_str_equal (path, "/app") || g_str_equal (path, "/app/"))
     return g_file_new_for_path (app_files_path);
 
   if (g_str_has_prefix (path, "/app/"))
