@@ -1,12 +1,3 @@
 [submodule "subprojects/libgd"]
 	path = subprojects/libgd
 	url = https://git.gnome.org/browse/libgd
-[submodule "subprojects/jsonrpc-glib"]
-	path = subprojects/jsonrpc-glib
-	url = https://git.gnome.org/browse/jsonrpc-glib
-[submodule "subprojects/template-glib"]
-	path = subprojects/template-glib
-	url = https://git.gnome.org/browse/template-glib
-[submodule "subprojects/libdazzle"]
-	path = subprojects/libdazzle
-	url = https://git.gnome.org/browse/libdazzle

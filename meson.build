@@ -171,49 +171,9 @@ libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
 libm_dep = cc.find_library('m', required: false)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.26.0', required: false)
-libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.26.0', required: false)
-libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.26.0',
-  fallback: ['jsonrpc-glib', 'libjsonrpc_glib_dep'],
-  default_options: [
-    'with_introspection=false',
-    'with_vapi=false',
-    'package_subdir=' + meson.project_name()
-  ],
-)
-
-libtemplate_glib_gir = 'Template-1.0'
-libtemplate_glib_vapi = 'template-glib-1.0'
-if not libtemplate_glib_dep.found()
-  libtemplate_glib = subproject('template-glib',
-    default_options: [
-      'with_introspection=true',
-      'with_vapi=true',
-      'package_subdir=' + meson.project_name()
-    ]
-  )
-  libtemplate_glib_dep = libtemplate_glib.get_variable('libtemplate_glib_dep')
-  libtemplate_glib_gir = libtemplate_glib.get_variable('libtemplate_glib_gir')[0]
-  libtemplate_glib_vapi = libtemplate_glib.get_variable('libtemplate_glib_vapi')
-endif
-
-libdazzle_gir = 'Dazzle-1.0'
-libdazzle_vapi = 'libdazzle-1.0'
-libdazzle_bundled = false
-if not libdazzle_dep.found()
-  libdazzle = subproject('libdazzle',
-    default_options: [
-      'with_introspection=true',
-      'with_vapi=true',
-      'package_subdir=' + meson.project_name()
-    ]
-  )
-  libdazzle_dep = libdazzle.get_variable('libdazzle_dep')
-  libdazzle_gir = libdazzle.get_variable('libdazzle_gir')[0]
-  libdazzle_vapi = libdazzle.get_variable('libdazzle_vapi')
-  libdazzle_bundled = true
-endif
-
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.26.0')
+libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.26.0')
+libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.26.0')
 
 libgd = subproject('libgd',
   default_options: [

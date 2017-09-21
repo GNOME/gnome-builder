@@ -30,8 +30,6 @@ if not libvala_found
   error('Failed to find suitable libvala')
 endif
 
-vala_extra_args = []
-
 vala_pack_sources = [
   'config.vapi',
   'ide-vala-service.vala',
@@ -56,12 +54,6 @@ vala_pack_deps = [
   libide_vapi,
 ]
 
-if libdazzle_bundled
-  vala_pack_deps += libdazzle_vapi
-else
-  vala_extra_args += '--pkg=libdazzle-1.0'
-endif
-
 shared_module('vala-pack-plugin', vala_pack_sources,
   dependencies: plugin_deps + vala_pack_deps,
   vala_args: [
@@ -71,7 +63,8 @@ shared_module('vala-pack-plugin', vala_pack_sources,
     '--pkg=gtksourceview-3.0',
     '--pkg=gio-2.0',
     '--pkg=libvala-' + libvala_version,
-  ] + vala_extra_args,
+    '--pkg=libdazzle-1.0',
+  ],
   c_args: [
     '-DVALA_VERSION="@0@"'.format(libvala_version),
     '-DLOG_DOMAIN="vala-pack-plugin"',
