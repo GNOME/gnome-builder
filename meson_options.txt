@@ -1,9 +1,6 @@
-# TODO: Add descriptions to all of these
-option('enable_tracing', type: 'boolean', value: false)
-option('enable_profiling', type: 'boolean', value: false)
-option('enable_rdtscp', type: 'boolean', value: false,
-  description: 'High performance counters'
-)
+option('enable_tracing', type: 'boolean', value: false, description: 'Enable tracing of internals for troubleshooting Builder')
+option('enable_profiling', type: 'boolean', value: false, description: 'Enable profiling of the Builder codebase')
+option('enable_rdtscp', type: 'boolean', value: false, description: 'High performance counters')
 
 option('with_channel',
           type: 'combo',
