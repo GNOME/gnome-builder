@@ -77,13 +77,13 @@ _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor.navigation-panel"),
                                               I_("F9"),
-                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("dockbin.left-visible"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor.utilities-panel"),
                                               I_("<Control>F9"),
-                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("dockbin.bottom-visible"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
