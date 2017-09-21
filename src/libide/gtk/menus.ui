@@ -42,15 +42,6 @@
   </menu>
   <menu id="perspectives-menu">
     <section id="perspectives-menu-section">
-      <item>
-        <attribute name="accel">&lt;alt&gt;1</attribute>
-        <attribute name="action">win.perspective</attribute>
-        <attribute name="id">perspective-menu-editor</attribute>
-        <attribute name="label" translatable="yes">Editor</attribute>
-        <attribute name="role">normal</attribute>
-        <attribute name="target">editor</attribute>
-        <attribute name="verb-icon-name">builder-editor-symbolic</attribute>
-      </item>
     </section>
     <section id="perspectives-menu-prefs-section">
       <item>
@@ -201,126 +192,14 @@
       </submenu>
     </section>
   </menu>
-  <menu id="ide-editor-search-bar-entry-menu">
-    <section id="ide-editor-search-bar-entry-menu-settings-section">
-      <item>
-        <attribute name="label" translatable="yes">Regular expressions</attribute>
-        <attribute name="action">search-settings.regex-enabled</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Case sensitive</attribute>
-        <attribute name="action">search-settings.case-sensitive</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Match whole word only</attribute>
-        <attribute name="action">search-settings.at-word-boundaries</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Wrap Around</attribute>
-        <attribute name="action">search-settings.wrap-around</attribute>
-      </item>
-    </section>
-    <section id="ide-editor-search-bar-entry-menu-clipboard-section">
-      <item>
-        <attribute name="label" translatable="yes">Cu_t</attribute>
-        <attribute name="action">entry.cut-clipboard</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Copy</attribute>
-        <attribute name="action">entry.copy-clipboard</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Paste</attribute>
-        <attribute name="action">entry.paste-clipboard</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Delete</attribute>
-        <attribute name="action">entry.delete-selection</attribute>
-      </item>
-    </section>
-    <section id="ide-editor-search-bar-entry-menu-selection-section">
-      <item>
-        <attribute name="label" translatable="yes">Select _All</attribute>
-        <attribute name="action">entry.select-all</attribute>
-      </item>
-    </section>
-  </menu>
-  <menu id="ide-layout-stack-frame-menu">
-    <section id="ide-layout-stack-frame-section">
-      <attribute name="label" translatable="yes">Frame</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Move Left</attribute>
-        <attribute name="action">layoutstack.move-left</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Move Right</attribute>
-        <attribute name="action">layoutstack.move-right</attribute>
-      </item>
-      <item>
-        <attribute name="action">layoutgrid.close-stack</attribute>
-        <attribute name="label" translatable="yes">Close</attribute>
-      </item>
-    </section>
-  </menu>
   <menu id="new-document-menu">
     <section id="new-document-section">
-      <item>
-        <attribute name="id">new-file</attribute>
-        <attribute name="label" translatable="yes">New File</attribute>
-        <attribute name="action">editor.new-file</attribute>
-      </item>
     </section>
     <section id="open-document-section">
       <item>
         <attribute name="id">open-file</attribute>
         <attribute name="label" translatable="yes">Open File…</attribute>
         <attribute name="action">win.open-with-dialog</attribute>
-      </item>
-    </section>
-  </menu>
-  <menu id="ide-editor-view-document-menu">
-    <section id="editor-document-section">
-      <attribute name="label" translatable="yes">Document</attribute>
-      <item>
-        <attribute name="id">editor-document-open-in-new-frame</attribute>
-        <attribute name="label" translatable="yes">Open in New Frame</attribute>
-        <attribute name="action">layoutstack.open-in-new-frame</attribute>
-        <attribute name="target" type="s">""</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Split</attribute>
-        <attribute name="action">layoutstack.split-view</attribute>
-        <attribute name="target" type="s">""</attribute>
-        <attribute name="verb-icon-name">builder-split-tab-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Print…</attribute>
-        <attribute name="action">editor-view.print</attribute>
-      </item>
-    </section>
-    <section id="editor-document-preferences-section">
-      <attribute name="after">editor-document-section</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Document Preferences</attribute>
-        <attribute name="action">editor-view.properties</attribute>
-      </item>
-    </section>
-    <section id="editor-document-save-section">
-      <attribute name="after">editor-document-preferences-section</attribute>
-      <item>
-        <attribute name="action">editor-view.save</attribute>
-        <attribute name="label" translatable="yes">_Save</attribute>
-      </item>
-      <item>
-        <attribute name="action">editor-view.save-as</attribute>
-        <attribute name="label" translatable="yes">Save _As</attribute>
-      </item>
-    </section>
-    <section id="editor-document-close-section">
-      <attribute name="after">editor-document-save-section</attribute>
-      <item>
-        <attribute name="action">layoutstack.close-view</attribute>
-        <attribute name="label" translatable="yes">Close</attribute>
       </item>
     </section>
   </menu>

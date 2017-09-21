@@ -60,6 +60,7 @@ src/libide/debugger/ide-debugger-threads-view.ui
 src/libide/devices/ide-device-manager.c
 src/libide/directory/ide-directory-vcs.c
 src/libide/doap/xml-reader.c
+src/libide/editor/gtk/menus.ui
 src/libide/editor/ide-editor-layout-stack-controls.c
 src/libide/editor/ide-editor-layout-stack-controls.ui
 src/libide/editor/ide-editor-perspective-actions.c

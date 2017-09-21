@@ -99,6 +99,7 @@
 
   <gresource prefix="/org/gnome/builder/plugins/editor">
     <file alias="editor.plugin">editor/editor.plugin</file>
+    <file preprocess="xml-stripblanks" alias="gtk/menus.ui">editor/gtk/menus.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/directory">
