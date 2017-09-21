@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/snippets">
-    <file alias="c.snippets">../data/snippets/c.snippets</file>
-    <file alias="chdr.snippets">../data/snippets/chdr.snippets</file>
-    <file alias="gobject.snippets">../data/snippets/gobject.snippets</file>
-    <file alias="js.snippets">../data/snippets/js.snippets</file>
-    <file alias="licenses.snippets">../data/snippets/licenses.snippets</file>
-    <file alias="main.snippets">../data/snippets/main.snippets</file>
-    <file alias="python.snippets">../data/snippets/python.snippets</file>
-    <file alias="rpmspec.snippets">../data/snippets/rpmspec.snippets</file>
-    <file alias="shebang.snippets">../data/snippets/shebang.snippets</file>
-    <file alias="vala.snippets">../data/snippets/vala.snippets</file>
-    <file alias="xml.snippets">../data/snippets/xml.snippets</file>
+    <file alias="c.snippets">../../data/snippets/c.snippets</file>
+    <file alias="chdr.snippets">../../data/snippets/chdr.snippets</file>
+    <file alias="gobject.snippets">../../data/snippets/gobject.snippets</file>
+    <file alias="js.snippets">../../data/snippets/js.snippets</file>
+    <file alias="licenses.snippets">../../data/snippets/licenses.snippets</file>
+    <file alias="main.snippets">../../data/snippets/main.snippets</file>
+    <file alias="python.snippets">../../data/snippets/python.snippets</file>
+    <file alias="rpmspec.snippets">../../data/snippets/rpmspec.snippets</file>
+    <file alias="shebang.snippets">../../data/snippets/shebang.snippets</file>
+    <file alias="vala.snippets">../../data/snippets/vala.snippets</file>
+    <file alias="xml.snippets">../../data/snippets/xml.snippets</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/gtk">
-    <file preprocess="xml-stripblanks" alias="menus.ui">../data/gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks" alias="menus.ui">gtk/menus.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/themes">
-    <file compressed="true" alias="Adwaita.css">../data/themes/Adwaita.css</file>
-    <file compressed="true" alias="Adwaita-dark.css">../data/themes/Adwaita-dark.css</file>
-    <file compressed="true" alias="Adwaita-shared.css">../data/themes/Adwaita-shared.css</file>
+    <file compressed="true" alias="Adwaita.css">../../data/themes/Adwaita.css</file>
+    <file compressed="true" alias="Adwaita-dark.css">../../data/themes/Adwaita-dark.css</file>
+    <file compressed="true" alias="Adwaita-shared.css">../../data/themes/Adwaita-shared.css</file>
 
-    <file compressed="true" alias="Arc.css">../data/themes/Arc.css</file>
-    <file compressed="true" alias="Arc-Dark.css">../data/themes/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-Darker.css">../data/themes/Arc-Darker.css</file>
-    <file compressed="true" alias="Arc-dark.css">../data/themes/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-Dark-dark.css">../data/themes/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-Darker-dark.css">../data/themes/Arc-Dark.css</file>
-    <file compressed="true" alias="Arc-shared.css">../data/themes/Arc-shared.css</file>
+    <file compressed="true" alias="Arc.css">../../data/themes/Arc.css</file>
+    <file compressed="true" alias="Arc-Dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Darker.css">../../data/themes/Arc-Darker.css</file>
+    <file compressed="true" alias="Arc-dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Dark-dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-Darker-dark.css">../../data/themes/Arc-Dark.css</file>
+    <file compressed="true" alias="Arc-shared.css">../../data/themes/Arc-shared.css</file>
 
-    <file compressed="true" alias="shared.css">../data/themes/shared.css</file>
-    <file compressed="true" alias="shared/shared-debugger.css">../data/themes/shared/shared-debugger.css</file>
-    <file compressed="true" alias="shared/shared-editor.css">../data/themes/shared/shared-editor.css</file>
-    <file compressed="true" alias="shared/shared-greeter.css">../data/themes/shared/shared-greeter.css</file>
-    <file compressed="true" alias="shared/shared-layout.css">../data/themes/shared/shared-layout.css</file>
-    <file compressed="true" alias="shared/shared-omnibar.css">../data/themes/shared/shared-omnibar.css</file>
-    <file compressed="true" alias="shared/shared-search.css">../data/themes/shared/shared-search.css</file>
-    <file compressed="true" alias="shared/shared-treeview.css">../data/themes/shared/shared-treeview.css</file>
+    <file compressed="true" alias="shared.css">../../data/themes/shared.css</file>
+    <file compressed="true" alias="shared/shared-debugger.css">../../data/themes/shared/shared-debugger.css</file>
+    <file compressed="true" alias="shared/shared-editor.css">../../data/themes/shared/shared-editor.css</file>
+    <file compressed="true" alias="shared/shared-greeter.css">../../data/themes/shared/shared-greeter.css</file>
+    <file compressed="true" alias="shared/shared-layout.css">../../data/themes/shared/shared-layout.css</file>
+    <file compressed="true" alias="shared/shared-omnibar.css">../../data/themes/shared/shared-omnibar.css</file>
+    <file compressed="true" alias="shared/shared-search.css">../../data/themes/shared/shared-search.css</file>
+    <file compressed="true" alias="shared/shared-treeview.css">../../data/themes/shared/shared-treeview.css</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/modelines">
@@ -46,14 +46,14 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/file-settings">
-    <file compressed="true" alias="defaults.ini">../data/file-settings/defaults.ini</file>
+    <file compressed="true" alias="defaults.ini">files/defaults.ini</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/keybindings">
-    <file compressed="true" alias="default.css">../data/keybindings/default.css</file>
-    <file compressed="true" alias="emacs.css">../data/keybindings/emacs.css</file>
-    <file compressed="true" alias="shared.css">../data/keybindings/shared.css</file>
-    <file compressed="true" alias="vim.css">../data/keybindings/vim.css</file>
+    <file compressed="true" alias="default.css">keybindings/default.css</file>
+    <file compressed="true" alias="emacs.css">keybindings/emacs.css</file>
+    <file compressed="true" alias="shared.css">keybindings/shared.css</file>
+    <file compressed="true" alias="vim.css">keybindings/vim.css</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">

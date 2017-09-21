@@ -262,17 +262,8 @@ gnome = import('gnome')
 i18n = import('i18n')
 
 subdir('data')
-subdir('data/fonts')
-subdir('data/gsettings')
-subdir('data/icons')
-subdir('data/style-schemes')
-subdir('contrib/libeditorconfig')
-subdir('contrib/xml')
-subdir('contrib/gstyle') # Depends on libxml
-subdir('libide')
-subdir('plugins')
+subdir('src')
 subdir('po')
-subdir('tests')
 subdir('doc')
 
 exe_link_args = [ '-pie' ]

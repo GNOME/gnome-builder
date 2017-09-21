@@ -105,20 +105,16 @@ ide_application_discover_plugins (IdeApplication *self)
     {
       GDir *dir;
 
-      g_irepository_prepend_search_path (BUILDDIR"/contrib/egg");
-      g_irepository_prepend_search_path (BUILDDIR"/contrib/gstyle");
-      g_irepository_prepend_search_path (BUILDDIR"/contrib/jsonrpc-glib");
-      g_irepository_prepend_search_path (BUILDDIR"/contrib/pnl");
-      g_irepository_prepend_search_path (BUILDDIR"/contrib/tmpl");
-      g_irepository_prepend_search_path (BUILDDIR"/libide");
+      g_irepository_prepend_search_path (BUILDDIR"/src/gstyle");
+      g_irepository_prepend_search_path (BUILDDIR"/src/libide");
 
-      if ((dir = g_dir_open (BUILDDIR"/plugins", 0, NULL)))
+      if ((dir = g_dir_open (BUILDDIR"/src/plugins", 0, NULL)))
         {
           const gchar *name;
 
           while ((name = g_dir_read_name (dir)))
             {
-              path = g_build_filename (BUILDDIR, "plugins", name, NULL);
+              path = g_build_filename (BUILDDIR, "src", "plugins", name, NULL);
               peas_engine_prepend_search_path (engine, path, path);
               g_free (path);
             }

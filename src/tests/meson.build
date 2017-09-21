@@ -1,5 +1,5 @@
 ide_test_env = [
-  'GI_TYPELIB_PATH="@0@/libide:@0@/contrib/gstyle:$(GI_TYPELIB_PATH)"'.format(meson.build_root()),
+  'GI_TYPELIB_PATH="@0@/src/libide:@0@/src/gstyle:$(GI_TYPELIB_PATH)"'.format(meson.build_root()),
   'GB_IN_TREE_PLUGINS=1',
   'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
   'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
