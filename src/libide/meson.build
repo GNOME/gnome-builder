@@ -32,6 +32,20 @@ libide_build_ident_h = vcs_tag(
 )
 libide_generated_headers += [libide_build_ident_h]
 
+libide_deps = [
+  libdazzle_dep,
+  libgd_dep,
+  libgio_dep,
+  libgiounix_dep,
+  libgtk_dep,
+  libgtksource_dep,
+  libjson_glib_dep,
+  libjsonrpc_glib_dep,
+  libpangoft2_dep,
+  libpeas_dep,
+  libtemplate_glib_dep,
+  libxml2_dep,
+]
 
 libide_public_headers += [
   'ide.h',
@@ -144,23 +158,6 @@ libide_generated_headers += [libide_icons_resources[1]]
 libide_sources = libide_private_sources + libide_generated_headers + libide_public_sources + [
   'gconstructor.h',
   'ide-internal.h',
-]
-
-libgtksource_dep = dependency('gtksourceview-3.0', version: '>= 3.22.0')
-
-libide_deps = [
-  dependency('pangoft2', version: '>= 1.38.0'),
-  libgtksource_dep,
-  libgio_dep,
-  libgiounix_dep,
-  libgtk_dep,
-  libpeas_dep,
-  libdazzle_dep,
-  libtemplate_glib_dep,
-  libxml_dep,
-  libgd_dep,
-  libjson_glib_dep,
-  libjsonrpc_glib_dep,
 ]
 
 contrib_dir = join_paths(meson.source_root(), 'contrib/')

@@ -69,10 +69,10 @@ libgstyle_sources = [
 ]
 
 libgstyle_deps = [
-  libgtk_dep,
   libdazzle_dep,
-  libxml_dep,
+  libgtk_dep,
   libm_dep,
+  libxml2_dep,
 ]
 
 libgstyle_link_args = []

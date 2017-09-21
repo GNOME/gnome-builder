@@ -70,16 +70,12 @@ xml_pack_sources = [
   'xml-pack-plugin.c',
 ]
 
-xml_pack_deps = plugin_deps + [
-  libxml_dep,
-]
-
 shared_module('xml-pack-plugin', xml_pack_sources,
-  dependencies: xml_pack_deps,
-  link_args: plugin_link_args,
+  dependencies: plugin_deps,
+     link_args: plugin_link_args,
   link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
+       install: true,
+   install_dir: plugindir,
 )
 
 configure_file(

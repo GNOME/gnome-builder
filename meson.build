@@ -165,15 +165,18 @@ ld_supports_version_script = cc.links('''
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.26.0')
 libgio_dep = dependency('gio-2.0', version: '>= 2.53.2')
 libgiounix_dep = dependency('gio-unix-2.0')
 libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
-libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
-libm_dep = cc.find_library('m', required: false)
+libgtksource_dep = dependency('gtksourceview-3.0', version: '>= 3.24.0')
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.26.0')
-libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.26.0')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.26.0')
+libm_dep = cc.find_library('m', required: false)
+libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
+libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
+libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.26.0')
+libxml2_dep = dependency('libxml-2.0', version: '>=2.9.0')
 
 libgd = subproject('libgd',
   default_options: [

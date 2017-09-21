@@ -1,5 +1,4 @@
 subdir('libeditorconfig')
-subdir('xml')
 subdir('gstyle')
 subdir('libide')
 subdir('plugins')
