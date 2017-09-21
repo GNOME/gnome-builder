@@ -256,7 +256,8 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
     def preview_activated(self, *args):
         global can_preview_rst
 
-        if self.view is None:
+        view = self.view
+        if view is None:
             return
 
         if self.lang_id == 'rst':
