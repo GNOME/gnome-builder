@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-19 23:33+0000\n"
-"PO-Revision-Date: 2017-09-19 22:12-0200\n"
+"POT-Creation-Date: 2017-09-21 05:37+0000\n"
+"PO-Revision-Date: 2017-09-21 08:43-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -353,12 +353,10 @@ msgstr ""
 "próximas ao código-fonte."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-#| msgid "Show if a line was added or modified next to line number"
 msgid "Show diagnostics next to line number"
 msgstr "Mostrar diagnósticos próximo ao número da linha"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
-#| msgid "If enabled, the editor will show line numbers."
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
@@ -778,7 +776,7 @@ msgstr "_Ampliar"
 msgid "Zoom _Out"
 msgstr "_Reduzir"
 
-#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:51
+#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:52
 msgid "Reset"
 msgstr "Restaurar"
 
@@ -816,7 +814,7 @@ msgid "Move Right"
 msgstr "Mover para direita"
 
 #: data/gtk/menus.ui:261 data/gtk/menus.ui:323 plugins/devhelp/gtk/menus.ui:11
-#: plugins/terminal/gtk/menus.ui:63
+#: plugins/terminal/gtk/menus.ui:64
 msgid "Close"
 msgstr "Fechar"
 
@@ -1147,7 +1145,7 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Dispara uma compilação"
 
-#: libide/buffers/ide-buffer.c:2696
+#: libide/buffers/ide-buffer.c:2693
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
@@ -1155,12 +1153,12 @@ msgstr "O idioma atual carece de um resolvedor de símbolos."
 msgid "File too large to be opened."
 msgstr "Arquivo grande demais para ser aberto."
 
-#: libide/buffers/ide-buffer-manager.c:1890
+#: libide/buffers/ide-buffer-manager.c:1892
 #, c-format
 msgid "unsaved document %u"
 msgstr "documento não salvo %u"
 
-#: libide/buffers/ide-buffer-manager.c:1928
+#: libide/buffers/ide-buffer-manager.c:1930
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falha ao salvar o buffer, ignorando reclamação."
 
@@ -1642,7 +1640,7 @@ msgstr "Abre arquivo"
 #: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:78
 #: plugins/color-picker/gb-color-picker-prefs.c:205
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:365
 msgid "Open"
 msgstr "Abrir"
 
@@ -1654,7 +1652,7 @@ msgstr "Abrir"
 #: plugins/color-picker/gb-color-picker-prefs.c:93
 #: plugins/color-picker/gb-color-picker-prefs.c:209
 #: plugins/color-picker/gb-color-picker-prefs.c:236
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:366
 #: plugins/terminal/gb-terminal-view-actions.c:271
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1865,7 +1863,7 @@ msgstr "Salvar"
 msgid "Save File As"
 msgstr "Salvar arquivo como"
 
-#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:59
+#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:60
 msgid "Save As"
 msgstr "Salvar como"
 
@@ -1938,11 +1936,11 @@ msgstr ""
 "O Builder descobriu que este arquivo foi modificado externamente. Você "
 "gostaria de recarregar o arquivo?"
 
-#: libide/editor/ide-editor-workbench-addin.c:150
+#: libide/editor/ide-editor-workbench-addin.c:177
 msgid "Toggle navigation panel"
 msgstr "Ativa o painel de navegação"
 
-#: libide/editor/ide-editor-workbench-addin.c:164
+#: libide/editor/ide-editor-workbench-addin.c:191
 msgid "Toggle utilities panel"
 msgstr "Ativa o painel de utilitários"
 
@@ -2582,12 +2580,12 @@ msgstr ""
 "Mostra se uma linha foi adicionada ou modificada próximo ao número da linha"
 
 #: libide/preferences/ide-preferences-builtin.c:163
-#| msgid "Diagnostics"
 msgid "Line diagnostics"
 msgstr "Diagnósticos de linha"
 
 #: libide/preferences/ide-preferences-builtin.c:163
-msgid "Show an icon next to line numbers indiciating type of diagnostic"
+#| msgid "Show an icon next to line numbers indiciating type of diagnostic"
+msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
 "Mostra um ícone próximo aos números de linha indicando o tipo de diagnóstico"
 
@@ -3756,8 +3754,8 @@ msgstr "Rede não disponível, pulando os downloads"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:323
-#: plugins/html-preview/html_preview_plugin/__init__.py:333
+#: plugins/html-preview/html_preview_plugin/__init__.py:326
+#: plugins/html-preview/html_preview_plugin/__init__.py:336
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 #: plugins/rustup/rustup_plugin/__init__.py:615
@@ -3788,12 +3786,12 @@ msgstr[1] "Mostrar mais %u runtimes"
 msgid "Flatpak Runtimes"
 msgstr "Runtimes do Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:722
+#: plugins/flatpak/gbp-flatpak-runtime.c:729
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:724
+#: plugins/flatpak/gbp-flatpak-runtime.c:731
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3853,14 +3851,6 @@ msgstr "Flatpak"
 #: plugins/flatpak/gtk/menus.ui:8
 msgid "_Download Dependencies"
 msgstr "Dependências de _download"
-
-#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
-msgid "Send to Fpaste.org"
-msgstr "Enviar para fpaste.org"
-
-#: plugins/fpaste/fpaste_plugin/__init__.py:110
-msgid "The following URL has been copied to the clipboard"
-msgstr "A seguinte URL foi copiada para a área de transferência"
 
 #: plugins/git/ide-git-buffer-change-monitor.c:161
 msgid "Cannot provide diff, no backing file provided."
@@ -3955,15 +3945,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Abrir visualização"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:319
+#: plugins/html-preview/html_preview_plugin/__init__.py:322
 msgid "Your computer is missing python3-docutils"
 msgstr "Seu computador não possui python3-docutils"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:329
+#: plugins/html-preview/html_preview_plugin/__init__.py:332
 msgid "Your computer is missing python3-sphinx"
 msgstr "Seu computador não possui python3-sphinx"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:372
+#: plugins/html-preview/html_preview_plugin/__init__.py:375
 msgid "(Preview)"
 msgstr "(Visualização)"
 
@@ -4421,19 +4411,19 @@ msgstr ""
 msgid "CPU"
 msgstr "CPU"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:362
 msgid "Open Profile"
 msgstr "Abrir perfil"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:371
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Captura do Sysprof (*.syscap)"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:377
 msgid "All Files"
 msgstr "Todos os arquivos"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:478
 #: plugins/sysprof/gtk/menus.ui:34
 msgid "Run with Profiler"
 msgstr "Executar com perfilador"
@@ -4474,15 +4464,15 @@ msgstr "_Abrir link"
 msgid "_Copy Link Address"
 msgstr "_Copiar endereço do link"
 
-#: plugins/terminal/gtk/menus.ui:55
+#: plugins/terminal/gtk/menus.ui:56
 msgid "Reset and Clear"
 msgstr "Redefinir e limpar"
 
-#: plugins/terminal/gtk/menus.ui:74
+#: plugins/terminal/gtk/menus.ui:75
 msgid "New _Terminal"
 msgstr "Novo _terminal"
 
-#: plugins/terminal/gtk/menus.ui:82
+#: plugins/terminal/gtk/menus.ui:83
 msgid "New _Build Terminal"
 msgstr "_Novo terminal de compilação"
 
@@ -4515,6 +4505,12 @@ msgstr "Falha ao criar a árvore XML."
 #: plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer carregado, mas não no gerenciador de buffer."
+
+#~ msgid "Send to Fpaste.org"
+#~ msgstr "Enviar para fpaste.org"
+
+#~ msgid "The following URL has been copied to the clipboard"
+#~ msgstr "A seguinte URL foi copiada para a área de transferência"
 
 #~ msgid "Integrated project tree"
 #~ msgstr "Árvore de projeto integrada"
