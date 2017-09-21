@@ -244,15 +244,6 @@ executable('gnome-builder', gnome_builder_sources,
    dependencies: libide_deps + [libide_dep],
 )
 
-meson.add_install_script('build-aux/meson/meson_post_install.py')
-
-# 'dist' will be used by meson, avoid conflicting
-run_target('builder-dist',
-  command: [
-    find_program('build-aux/meson/meson_dist.sh'),
-    meson.project_version(),
-    meson.project_name(),
-  ]
-)
+meson.add_install_script('build-aux/meson/post_install.py')
 
 message('\n  '.join(status))
