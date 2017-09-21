@@ -59,6 +59,7 @@ src/libide/debugger/ide-debugger-threads-view.c
 src/libide/debugger/ide-debugger-threads-view.ui
 src/libide/devices/ide-device-manager.c
 src/libide/directory/ide-directory-vcs.c
+src/libide/doap/xml-reader.c
 src/libide/editor/ide-editor-layout-stack-controls.c
 src/libide/editor/ide-editor-layout-stack-controls.ui
 src/libide/editor/ide-editor-perspective-actions.c
@@ -205,4 +206,3 @@ src/plugins/valgrind/valgrind_plugin.py
 src/plugins/xml-pack/ide-xml-parser.c
 src/plugins/xml-pack/ide-xml-service.c
 src/plugins/xml-pack/ide-xml-tree-builder.c
-src/xml/xml-reader.c
