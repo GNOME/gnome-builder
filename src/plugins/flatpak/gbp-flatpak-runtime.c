@@ -38,7 +38,7 @@ struct _GbpFlatpakRuntime
   gchar *deploy_dir;
   gchar *platform;
   gchar *sdk;
-  gchar *debug_dir;
+  gchar *runtime_dir;
   GFile *deploy_dir_files;
 };
 
@@ -317,9 +317,9 @@ gbp_flatpak_runtime_set_deploy_dir (GbpFlatpakRuntime *self,
 }
 
 static const gchar *
-gbp_flatpak_runtime_get_debug_dir (GbpFlatpakRuntime *self)
+gbp_flatpak_runtime_get_runtime_dir (GbpFlatpakRuntime *self)
 {
-  if G_UNLIKELY (self->debug_dir == NULL)
+  if G_UNLIKELY (self->runtime_dir == NULL)
     {
       g_autofree gchar *sdk_name = NULL;
       const gchar *ids[2];
@@ -342,17 +342,17 @@ gbp_flatpak_runtime_get_debug_dir (GbpFlatpakRuntime *self)
            */
           deploy_path = g_file_get_path (self->deploy_dir_files);
           path = g_build_filename (deploy_path, "..", "..", "..", "..", "..",
-                                   name, self->arch, self->branch, "active", "files", "usr", "lib",
+                                   name, self->arch, self->branch, "active", "files",
                                    NULL);
           if (g_file_test (path, G_FILE_TEST_IS_DIR))
             {
-              self->debug_dir = g_steal_pointer (&path);
+              self->runtime_dir = g_steal_pointer (&path);
               break;
             }
         }
     }
 
-  return self->debug_dir;
+  return self->runtime_dir;
 }
 
 static GFile *
@@ -360,10 +360,11 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
                                     GFile      *file)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  const gchar *debug_dir;
+  const gchar *runtime_dir;
   g_autofree gchar *path = NULL;
   g_autofree gchar *build_dir = NULL;
   g_autofree gchar *app_files_path = NULL;
+  g_autofree gchar *debug_dir = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (G_IS_FILE (file));
@@ -383,10 +384,23 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
   if (NULL == (path = g_file_get_path (file)))
     return NULL;
 
-  debug_dir = gbp_flatpak_runtime_get_debug_dir (self);
+  runtime_dir = gbp_flatpak_runtime_get_runtime_dir (self);
 
-  if (debug_dir != NULL)
+  if (runtime_dir != NULL)
     {
+      if (g_str_has_prefix (path, "/run/build-runtime/"))
+        {
+          g_autofree gchar *translated = NULL;
+
+          translated = g_build_filename (runtime_dir,
+                                         "source",
+                                         path + IDE_LITERAL_LENGTH ("/run/build-runtime/"),
+                                         NULL);
+          return g_file_new_for_path (translated);
+        }
+
+      debug_dir = g_build_filename (runtime_dir, "usr", "lib", NULL);
+
       if (g_str_equal (path, "/usr/lib/debug") ||
           g_str_equal (path, "/usr/lib/debug/"))
         return g_file_new_for_path (debug_dir);
@@ -607,7 +621,7 @@ gbp_flatpak_runtime_finalize (GObject *object)
 
   g_clear_pointer (&self->arch, g_free);
   g_clear_pointer (&self->branch, g_free);
-  g_clear_pointer (&self->debug_dir, g_free);
+  g_clear_pointer (&self->runtime_dir, g_free);
   g_clear_pointer (&self->deploy_dir, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->sdk, g_free);
