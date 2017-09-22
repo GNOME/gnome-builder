@@ -15,3 +15,4 @@ X-Diagnostic-Provider-Languages=xml,html
 X-Diagnostic-Provider-Languages-Priority=0
 X-Completion-Provider-Languages=xml,html
 X-Completion-Provider-Languages-Priority=0
+Embedded=ide_xml_register_types

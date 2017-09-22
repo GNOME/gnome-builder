@@ -1,5 +1,11 @@
 if get_option('with_file_search')
 
+file_search_resources = gnome.compile_resources(
+  'file-search-resources',
+  'file-search.gresource.xml',
+  c_name: 'gb_file_search',
+)
+
 file_search_sources = [
   'gb-file-search-provider.c',
   'gb-file-search-provider.h',
@@ -9,20 +15,7 @@ file_search_sources = [
   'gb-file-search-index.h',
 ]
 
-shared_module('file-search', file_search_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'file-search.plugin',
-         output: 'file-search.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(file_search_sources)
+gnome_builder_plugins_sources += file_search_resources[0]
 
 endif

@@ -16,23 +16,9 @@ create_project_sources = [
   'gbp-create-project-tool.h',
   'gbp-create-project-widget.c',
   'gbp-create-project-widget.h',
-  create_project_resources[0],
 ]
 
-shared_module('create-project-plugin', create_project_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'create-project.plugin',
-         output: 'create-project.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(create_project_sources)
+gnome_builder_plugins_sources += create_project_resources[0]
 
 endif

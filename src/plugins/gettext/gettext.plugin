@@ -5,5 +5,6 @@ Description=Provides integration with Gettext
 Authors=Daiki Ueno
 Copyright=Copyright © 2016 Daiki Ueno
 Builtin=true
+Embedded=ide_gettext_register_types
 X-Diagnostic-Provider-Languages=c,chdr,cpp,js,python,vala
 X-Diagnostic-Provider-Languages-Priority=100

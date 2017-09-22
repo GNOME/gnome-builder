@@ -5,4 +5,5 @@ Description=Provides support for building with Flatpak
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2016 Christian Hergert
 Builtin=true
-Depends=git-plugin
+Depends=git-plugin;
+Embedded=gbp_flatpak_register_types

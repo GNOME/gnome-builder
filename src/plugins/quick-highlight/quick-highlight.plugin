@@ -5,3 +5,4 @@ Description=Highlights every occurrences of selected text
 Authors=Martin Blanchard <tchaik@gmx.com>
 Copyright=Copyright © 2016 Martin Blanchard
 Builtin=true
+Embedded=gbp_quick_highlight_register_types

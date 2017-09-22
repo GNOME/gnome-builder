@@ -1,12 +1,12 @@
 if get_option('with_xml_pack')
 
 xml_pack_resources = gnome.compile_resources(
-  'ide-xml-resources',
-  'ide-xml.gresource.xml',
+  'xml-pack-resources',
+  'xml-pack.gresource.xml',
   c_name: 'ide_xml'
 )
+
 xml_pack_sources = [
-  xml_pack_resources,
   'ide-xml-analysis.c',
   'ide-xml-analysis.h',
   'ide-xml-completion-attributes.c',
@@ -70,20 +70,7 @@ xml_pack_sources = [
   'xml-pack-plugin.c',
 ]
 
-shared_module('xml-pack-plugin', xml_pack_sources,
-  dependencies: plugin_deps,
-     link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-       install: true,
-   install_dir: plugindir,
-)
-
-configure_file(
-          input: 'xml-pack.plugin',
-         output: 'xml-pack.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(xml_pack_sources)
+gnome_builder_plugins_sources += xml_pack_resources[0]
 
 endif

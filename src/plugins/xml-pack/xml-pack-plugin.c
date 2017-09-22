@@ -32,7 +32,7 @@ void _ide_xml_symbol_resolver_register_type (GTypeModule *module);
 void _ide_xml_service_register_type (GTypeModule *module);
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_xml_register_types (PeasObjectModule *module)
 {
   _ide_xml_completion_provider_register_type (G_TYPE_MODULE (module));
   _ide_xml_highlighter_register_type (G_TYPE_MODULE (module));

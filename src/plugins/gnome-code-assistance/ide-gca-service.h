@@ -19,8 +19,7 @@
 #ifndef IDE_GCA_SERVICE_H
 #define IDE_GCA_SERVICE_H
 
-#include <gca-service.h>
-
+#include "gca-service.h"
 #include "ide-service.h"
 
 G_BEGIN_DECLS

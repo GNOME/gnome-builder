@@ -25,7 +25,7 @@ void _ide_python_indenter_register_type (GTypeModule *module);
 void _ide_python_format_provider_register_type (GTypeModule *module);
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_python_pack_register_types (PeasObjectModule *module)
 {
   _ide_python_indenter_register_type (G_TYPE_MODULE (module));
   _ide_python_format_provider_register_type (G_TYPE_MODULE (module));

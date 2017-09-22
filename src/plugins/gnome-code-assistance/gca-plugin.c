@@ -24,7 +24,7 @@
 #include "ide-gca-service.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_gca_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SERVICE,

@@ -63,9 +63,8 @@ struct _GbCommandBar
 
 static void workbench_addin_init (IdeWorkbenchAddinInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER, 0,
-                                G_IMPLEMENT_INTERFACE_DYNAMIC (IDE_TYPE_WORKBENCH_ADDIN,
-                                                               workbench_addin_init))
+G_DEFINE_TYPE_EXTENDED (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER, 0,
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_init))
 
 #define HISTORY_LENGTH 30
 
@@ -690,11 +689,6 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbCommandBar, flow_box);
 }
 
-static void
-gb_command_bar_class_finalize (GbCommandBarClass *klass)
-{
-}
-
 static const DzlShortcutEntry shortcuts[] = {
   { "org.gnome.builder.command-bar.show",
     0, NULL,
@@ -762,11 +756,9 @@ workbench_addin_init (IdeWorkbenchAddinInterface *iface)
   iface->unload = gb_command_bar_unload;
 }
 
-G_MODULE_EXPORT void
-peas_register_types (PeasObjectModule *module)
+void
+gb_command_bar_register_types (PeasObjectModule *module)
 {
-  gb_command_bar_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GB_TYPE_COMMAND_BAR);

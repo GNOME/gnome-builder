@@ -341,7 +341,7 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
 }
 
 void
-peas_register_types (PeasObjectModule *module)
+gb_file_search_register_types (PeasObjectModule *module)
 {
   gb_file_search_provider_register_type (G_TYPE_MODULE (module));
 

@@ -23,7 +23,7 @@
 #include "gbp-history-layout-stack-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_history_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_VIEW_ADDIN,

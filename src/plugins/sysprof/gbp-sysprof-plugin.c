@@ -23,7 +23,7 @@
 #include "gbp-sysprof-workbench-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_sysprof_register_types (PeasObjectModule *module)
 {
   sp_clock_init ();
 

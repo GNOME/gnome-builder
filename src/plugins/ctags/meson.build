@@ -1,5 +1,11 @@
 if get_option('with_ctags')
 
+ctags_resources = gnome.compile_resources(
+  'ctags-resources',
+  'ctags.gresource.xml',
+  c_name: 'ide_ctags',
+)
+
 ctags_sources = [
   'ide-ctags-builder.c',
   'ide-ctags-builder.h',
@@ -23,20 +29,7 @@ ctags_sources = [
   'ctags-plugin.c',
 ]
 
-shared_module('ctags-plugin', ctags_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'ctags.plugin',
-         output: 'ctags.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(ctags_sources)
+gnome_builder_plugins_sources += ctags_resources[0]
 
 endif

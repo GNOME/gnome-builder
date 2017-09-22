@@ -22,7 +22,7 @@
 #include "gbp-retab-view-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_retab_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_VIEW_ADDIN,

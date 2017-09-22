@@ -51,7 +51,7 @@ register_ggit (void)
 
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_git_register_types (PeasObjectModule *module)
 {
   if (register_ggit ())
     {

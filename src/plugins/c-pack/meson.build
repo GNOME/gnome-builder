@@ -1,5 +1,11 @@
 if get_option('with_c_pack')
 
+c_pack_resources = gnome.compile_resources(
+  'c-pack-resources',
+  'c-pack.gresource.xml',
+  c_name: 'ide_c',
+)
+
 c_pack_sources = [
   'c-pack-plugin.c',
   'c-parse-helper.c',
@@ -10,20 +16,7 @@ c_pack_sources = [
   'ide-c-format-provider.h',
 ]
 
-shared_module('c-pack-plugin', c_pack_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'c-pack.plugin',
-         output: 'c-pack.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(c_pack_sources)
+gnome_builder_plugins_sources += c_pack_resources[0]
 
 endif

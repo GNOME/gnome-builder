@@ -1,5 +1,11 @@
 if get_option('with_code_index')
 
+code_index_resources = gnome.compile_resources(    
+  'ide-code-index-resources',                      
+  'code-index.gresource.xml',                      
+  c_name: 'ide_code_index',                        
+)                                           
+
 code_index_sources = [
   'code-index-plugin.c',
   'ide-code-index-builder.c',
@@ -20,20 +26,7 @@ code_index_sources = [
   'ide-persistent-map.h',
 ]
 
-shared_module('code-index-plugin', code_index_sources,
-  dependencies: plugin_deps,
-     link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-       install: true,
-   install_dir: plugindir,
-)
-
-configure_file(
-          input: 'code-index.plugin',
-         output: 'code-index.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(code_index_sources)
+gnome_builder_plugins_sources += code_index_resources[0]
 
 endif

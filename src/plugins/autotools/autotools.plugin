@@ -5,6 +5,6 @@ Description=Provides integration with the Autotools build system
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Hidden=true
+Embedded=ide_autotools_register_types
 X-Project-File-Filter-Pattern=configure.ac,configure.in
 X-Project-File-Filter-Name=Autotools Project (configure.ac)

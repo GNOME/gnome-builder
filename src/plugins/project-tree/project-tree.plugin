@@ -7,3 +7,4 @@ Copyright=Copyright © 2015 Christian Hergert
 Depends=editor
 Builtin=true
 Hidden=true
+Embedded=gb_project_tree_register_types

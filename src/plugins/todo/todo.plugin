@@ -6,3 +6,4 @@ Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015-2017 Christian Hergert
 Builtin=true
 Depends=editor
+Embedded=gbp_todo_register_types

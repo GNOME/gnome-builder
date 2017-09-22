@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>sysprof.plugin</file>
+  </gresource>
   <gresource prefix="/org/gnome/builder/plugins/sysprof-plugin">
     <file>gtk/menus.ui</file>
     <file>themes/shared.css</file>

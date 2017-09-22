@@ -1,5 +1,11 @@
 if get_option('with_clang')
 
+clang_resources = gnome.compile_resources(    
+  'ide-clang-resources',                      
+  'clang.gresource.xml',                      
+  c_name: 'ide_clang',                        
+)                                           
+
 clang_sources = [
   'ide-clang-code-index-entries.c',
   'ide-clang-code-index-entries.h',
@@ -58,24 +64,12 @@ if not cc.has_header('clang-c/Index.h', args: '-I' + clang_include)
 endif
 
 clang_dep = declare_dependency(
-  dependencies: cc.find_library('libclang', dirs: clang_libdir),
+         dependencies: cc.find_library('libclang', dirs: clang_libdir),
   include_directories: include_directories(clang_include),
 )
 
-shared_module('clang-plugin', clang_sources,
-  dependencies: plugin_deps + [clang_dep],
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'clang.plugin',
-         output: 'clang.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_deps += [clang_dep]
+gnome_builder_plugins_sources += files(clang_sources)
+gnome_builder_plugins_sources += clang_resources[0]
 
 endif

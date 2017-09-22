@@ -5,3 +5,4 @@ Description=Integration with the Sysprof system profiler
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2016 Christian Hergert
 Builtin=true
+Embedded=gbp_sysprof_register_types

@@ -25,29 +25,14 @@ spellcheck_sources = [
   'gbp-spell-widget.c',
   'gbp-spell-widget.h',
   'gbp-spell-widget-actions.c',
-  spellcheck_resources[0],
 ]
 
-spellcheck_deps = plugin_deps + [
+gnome_builder_plugins_deps += [
   dependency('gspell-1', version: '>= 1.2.0'),
   dependency('enchant'),
 ]
 
-shared_module('spellcheck-plugin', spellcheck_sources,
-   dependencies: spellcheck_deps,
-      link_args: plugin_link_args,
-   link_depends: plugin_link_deps,
-        install: true,
-    install_dir: plugindir,
-  install_rpath: pkglibdir_abs,
-)
-
-configure_file(
-          input: 'spellcheck.plugin',
-         output: 'spellcheck.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(spellcheck_sources)
+gnome_builder_plugins_sources += spellcheck_resources[0]
 
 endif

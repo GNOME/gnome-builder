@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>git.plugin</file>
+  </gresource>
   <gresource prefix="/org/gnome/builder/plugins/git-plugin">
     <file>ide-git-clone-widget.ui</file>
     <file>themes/shared.css</file>

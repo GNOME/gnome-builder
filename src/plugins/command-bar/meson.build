@@ -7,8 +7,6 @@ command_bar_resources = gnome.compile_resources(
 )
 
 command_bar_sources = [
-  command_bar_resources[0],
-  command_bar_resources[1],
   'gb-command-bar.c',
   'gb-command-bar.h',
   'gb-command-gaction-provider.c',
@@ -31,25 +29,8 @@ command_bar_sources = [
   'gb-vim.h',
 ]
 
-command_bar_deps = plugin_deps + [
-  libgd_dep,
-]
-
-shared_module('command-bar', command_bar_sources,
-  dependencies: command_bar_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-  install_rpath: pkglibdir_abs,
-)
-
-configure_file(
-          input: 'command-bar.plugin',
-         output: 'command-bar.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_deps += [libgd_dep]
+gnome_builder_plugins_sources += files(command_bar_sources)
+gnome_builder_plugins_sources += command_bar_resources[0]
 
 endif

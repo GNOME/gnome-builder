@@ -5,6 +5,7 @@ Description=Provides integration with Clang
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
+Embedded=ide_clang_register_types
 X-Completion-Provider-Languages=c,chdr,cpp,cpphdr
 X-Highlighter-Languages=c,chdr,cpp
 X-Highlighter-Languages-Priority=100

@@ -909,7 +909,7 @@ completion_provider_init (GtkSourceCompletionProviderIface *iface)
 }
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_html_completion_register_types (PeasObjectModule *module)
 {
   ide_html_completion_provider_register_type (G_TYPE_MODULE (module));
 

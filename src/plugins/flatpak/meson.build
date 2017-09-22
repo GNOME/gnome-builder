@@ -1,13 +1,12 @@
 if get_option('with_flatpak')
 
-flatpak_res = gnome.compile_resources(
-  'gbp-flatpak-resources',
-  'gbp-flatpak-resources.gresource.xml',
+flatpak_resources = gnome.compile_resources(
+  'flatpak-resources',
+  'flatpak.gresource.xml',
   c_name: 'gbp_flatpak'
 )
 
 flatpak_sources = [
-  flatpak_res,
   'gbp-flatpak-application-addin.c',
   'gbp-flatpak-application-addin.h',
   'gbp-flatpak-build-system-discovery.c',
@@ -43,30 +42,13 @@ flatpak_sources = [
   'gbp-flatpak-workbench-addin.h',
 ]
 
-
-
-flatpak_deps = plugin_deps + [
+gnome_builder_plugins_deps += [
   dependency('flatpak', version: '>= 0.8.0'),
   dependency('libsoup-2.4', version: '>= 2.52.0'),
   libgit_dep,
 ]
 
-# FIXME: Check for libgit thread and ssh support
-
-shared_module('flatpak-plugin', flatpak_sources,
-  dependencies: flatpak_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'flatpak.plugin',
-         output: 'flatpak.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(flatpak_sources)
+gnome_builder_plugins_sources += flatpak_resources[0]
 
 endif

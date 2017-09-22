@@ -5,6 +5,7 @@ Description=Provides integration with Ctags for auto-completion and symbol resol
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
+Embedded=ide_ctags_register_types
 X-Completion-Provider-Languages=c,cpp,chdr,cpphdr,python,python3,js,css,html,ruby
 X-Highlighter-Languages=c,cpp,chdr,python,python3,js,css,html,ruby
 X-Symbol-Resolver-Languages=c,cpp,chdr,python,python3,js,css,html,ruby

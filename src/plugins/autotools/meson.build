@@ -1,5 +1,11 @@
 if get_option('with_autotools')
 
+autotools_resources = gnome.compile_resources(    
+  'ide-autotools-resources',                      
+  'autotools.gresource.xml',                      
+  c_name: 'ide_autotools',                        
+)                                           
+
 autotools_sources = [
   'autotools-plugin.c',
   'ide-autotools-application-addin.c',
@@ -24,26 +30,7 @@ autotools_sources = [
   'ide-makecache-target.h',
 ]
 
-make_exe_name = 'make'
-if find_program('gmake', required: false).found()
-  make_exe_name = 'gmake'
-endif
-
-shared_module('autotools-plugin', autotools_sources,
-  dependencies: plugin_deps,
-  c_args: ['-DGNU_MAKE_NAME="@0@"'.format(make_exe_name)],
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'autotools.plugin',
-         output: 'autotools.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(autotools_sources)       
+gnome_builder_plugins_sources += autotools_resources[0]         
 
 endif

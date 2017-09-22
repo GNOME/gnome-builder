@@ -10,23 +10,9 @@ comment_code_sources = [
   'gbp-comment-code-plugin.c',
   'gbp-comment-code-view-addin.c',
   'gbp-comment-code-view-addin.h',
-  comment_code_resources[0],
 ]
 
-shared_module('comment-code-plugin', comment_code_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'comment-code.plugin',
-         output: 'comment-code.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(comment_code_sources)
+gnome_builder_plugins_sources += comment_code_resources[0]
 
 endif

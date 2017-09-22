@@ -4,5 +4,6 @@ Name=Devhelp
 Description=Integration with devhelp documentation
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
-Depends=editor;webkit
+Depends=editor;webkit;
 Builtin=true
+Embedded=gbp_devhelp_register_types

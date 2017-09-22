@@ -1,25 +1,18 @@
 if get_option('with_gettext')
 
+gettext_resources = gnome.compile_resources(
+  'gettext-resources',
+  'gettext.gresource.xml',
+  c_name: 'ide_gettext',
+)
+
 gettext_sources = [
   'ide-gettext-diagnostic-provider.c',
   'ide-gettext-diagnostic-provider.h',
   'gettext-plugin.c',
 ]
 
-shared_module('gettext-plugin', gettext_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'gettext.plugin',
-         output: 'gettext.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(gettext_sources)
+gnome_builder_plugins_sources += gettext_resources[0]
 
 endif

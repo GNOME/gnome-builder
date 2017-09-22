@@ -25,7 +25,7 @@ void _ide_c_indenter_register_type (GTypeModule *module);
 void _ide_c_format_provider_register_type (GTypeModule *module);
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_c_pack_register_types (PeasObjectModule *module)
 {
   _ide_c_indenter_register_type (G_TYPE_MODULE (module));
   _ide_c_format_provider_register_type (G_TYPE_MODULE (module));

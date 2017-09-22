@@ -5,5 +5,6 @@ Description=Manages Code Index and does Global Search and Jump to Definition usi
 Authors=Anoop Chandu <anoopchandu96@gmail.com>
 Copyright=Copyright © 2017 Anoop Chandu
 Builtin=true
+Embedded=ide_code_index_register_types
 X-Symbol-Resolver-Languages=c,chdr,cpp
 X-Symbol-Resolver-Languages-Priority=200

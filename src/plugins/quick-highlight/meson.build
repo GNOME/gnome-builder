@@ -1,5 +1,11 @@
 if get_option('with_quick_highlight')
 
+quick_highlight_resources = gnome.compile_resources(
+  'quick-highlight-resources',
+  'quick-highlight.gresource.xml',
+  c_name: 'gbp_quick_highlight',
+)
+
 quick_highlight_sources = [
   'gbp-quick-highlight-plugin.c',
   'gbp-quick-highlight-view-addin.c',
@@ -8,20 +14,7 @@ quick_highlight_sources = [
   'gbp-quick-highlight-preferences.h',
 ]
 
-shared_module('quick-highlight-plugin', quick_highlight_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'quick-highlight.plugin',
-         output: 'quick-highlight.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(quick_highlight_sources)
+gnome_builder_plugins_sources += quick_highlight_resources[0]
 
 endif

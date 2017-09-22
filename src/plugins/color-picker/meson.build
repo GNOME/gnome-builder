@@ -25,32 +25,14 @@ color_picker_sources = [
   'gb-color-picker-prefs-palette-row.c',
   'gb-color-picker-prefs-palette-row.h',
   'gb-color-picker-private.h',
-  color_picker_resources[0],
 ]
 
-color_picker_deps = plugin_deps + [
-  libgstyle_dep,
-]
-
-shared_module('color-picker-plugin', color_picker_sources,
-   dependencies: color_picker_deps,
-      link_args: plugin_link_args,
-   link_depends: plugin_link_deps,
-        install: true,
-    install_dir: plugindir,
-  install_rpath: pkglibdir_abs,
-)
+gnome_builder_plugins_deps += [libgstyle_dep]
+gnome_builder_plugins_sources += files(color_picker_sources)
+gnome_builder_plugins_sources += color_picker_resources[0]
 
 install_data('gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml',
   install_dir: schema_dir,
-)
-
-configure_file(
-          input: 'color-picker.plugin',
-         output: 'color-picker.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
 )
 
 endif

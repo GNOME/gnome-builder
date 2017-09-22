@@ -7,7 +7,6 @@ beautifier_resources = gnome.compile_resources(
 )
 
 beautifier_sources = [
-  beautifier_resources,
   'gb-beautifier-config.c',
   'gb-beautifier-config.h',
   'gb-beautifier-helper.c',
@@ -20,24 +19,11 @@ beautifier_sources = [
   'gb-beautifier-editor-addin.h',
 ]
 
-beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier_plugin')
-shared_module('beautifier_plugin', beautifier_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(beautifier_sources)
+gnome_builder_plugins_sources += beautifier_resources[0]
 
+beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier_plugin')
 install_subdir('beautifier_plugin/data', install_dir: beautifier_datadir)
 install_subdir('beautifier_plugin/internal', install_dir: beautifier_datadir)
-
-configure_file(
-          input: 'beautifier.plugin',
-         output: 'beautifier.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
 
 endif

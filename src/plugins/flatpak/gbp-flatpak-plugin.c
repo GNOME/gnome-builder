@@ -29,7 +29,7 @@
 #include "gbp-flatpak-workbench-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_flatpak_register_types (PeasObjectModule *module)
 {
   ide_vcs_register_ignored (".flatpak-builder");
 

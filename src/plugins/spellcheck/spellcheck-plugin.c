@@ -24,7 +24,7 @@
 #include "gbp-spell-editor-view-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_spellcheck_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module, IDE_TYPE_BUFFER_ADDIN, GBP_TYPE_SPELL_BUFFER_ADDIN);
   peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_ADDIN, GBP_TYPE_SPELL_EDITOR_ADDIN);

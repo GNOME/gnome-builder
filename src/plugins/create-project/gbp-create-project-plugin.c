@@ -23,7 +23,7 @@
 #include "gbp-create-project-tool.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_create_project_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_TOOL,

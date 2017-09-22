@@ -4,4 +4,5 @@ Name=GCC
 Description=Provides various GCC integration hooks
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
+Embedded=gbp_gcc_register_types
 Builtin=true

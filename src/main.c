@@ -25,6 +25,9 @@
 
 #include "bug-buddy.h"
 
+/* Keep in sync with gnome-builder-plugins.c */
+extern void gnome_builder_plugins_init (void);
+
 static IdeApplicationMode early_mode;
 
 static gboolean
@@ -102,11 +105,21 @@ main (int   argc,
   IdeApplication *app;
   int ret;
 
+  /* Setup our gdb fork()/exec() helper */
   bug_buddy_init ();
 
+  /* Early init of logging so that we get messages in a consistent
+   * format. If we deferred this to GApplication, we'd get them in
+   * multiple formats.
+   */
   ide_log_init (TRUE, NULL);
+
+  /* Extract options like -vvvv and --type=worker only */
   early_params_check (&argc, &argv);
 
+  /* We might need to prime SSL environment and other bits before
+   * the application has had a chance to setup caches/etc.
+   */
   early_ssl_check ();
 
   g_message ("Initializing with Gtk+ version %d.%d.%d.",
@@ -129,11 +142,26 @@ main (int   argc,
    */
   g_type_ensure (G_TYPE_ZLIB_DECOMPRESSOR);
 
+  /* Setup the application instance */
   app = ide_application_new ();
   _ide_application_set_mode (app, early_mode);
+
+  /* Ensure that our static plugins init routine is called.
+   * This is necessary to ensure that -Wl,--as-needed does not
+   * drop our link to this shared library.
+   */
+  gnome_builder_plugins_init ();
+
+  /* Block until the application exits */
   ret = g_application_run (G_APPLICATION (app), argc, argv);
+
+  /* Force disposal of the application (to help catch cleanup
+   * issues at shutdown) and then (hopefully) finalize the app.
+   */
+  g_object_run_dispose (G_OBJECT (app));
   g_clear_object (&app);
 
+  /* Cleanup logging and flush anything that still needs it */
   ide_log_shutdown ();
 
   return ret;

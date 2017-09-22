@@ -102,7 +102,7 @@ gb_sysmon_addin_init (GbSysmonAddin *self)
 }
 
 void
-peas_register_types (PeasObjectModule *module)
+gb_sysmon_register_types (PeasObjectModule *module)
 {
   gb_sysmon_addin_register_type (G_TYPE_MODULE (module));
 

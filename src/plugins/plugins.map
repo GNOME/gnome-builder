@@ -1,6 +1,7 @@
 {
 global:
-        peas_register_types;
+	gnome_builder_plugins_init;
+        *_register_types;
 local:
         *;
 };

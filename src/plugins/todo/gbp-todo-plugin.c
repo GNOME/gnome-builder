@@ -22,7 +22,7 @@
 #include "gbp-todo-workbench-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_todo_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,

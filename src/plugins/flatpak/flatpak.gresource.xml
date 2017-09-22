@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>flatpak.plugin</file>
+  </gresource>
   <gresource prefix="/org/gnome/builder/plugins/flatpak-plugin">
     <file>gtk/menus.ui</file>
     <file>gbp-flatpak-clone-widget.ui</file>

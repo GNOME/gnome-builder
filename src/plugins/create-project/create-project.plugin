@@ -6,6 +6,7 @@ Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
 Hidden=true
+Embedded=gbp_create_project_register_types
 Depends=git-plugin
 X-Tool-Name=create-project
 X-Tool-Description=Create a new project

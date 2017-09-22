@@ -25,7 +25,7 @@ void _ide_mingw_device_provider_register_type (GTypeModule *module);
 void _ide_mingw_device_register_type (GTypeModule *module);
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_mingw_register_types (PeasObjectModule *module)
 {
   _ide_mingw_device_provider_register_type (G_TYPE_MODULE (module));
   _ide_mingw_device_register_type (G_TYPE_MODULE (module));

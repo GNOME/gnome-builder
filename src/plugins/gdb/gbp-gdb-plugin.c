@@ -21,7 +21,7 @@
 #include "gbp-gdb-debugger.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_gdb_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module, IDE_TYPE_DEBUGGER, GBP_TYPE_GDB_DEBUGGER);
 }

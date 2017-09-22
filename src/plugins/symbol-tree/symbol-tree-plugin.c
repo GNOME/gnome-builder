@@ -22,7 +22,7 @@
 #include "gbp-symbol-layout-stack-addin.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+gbp_symbol_tree_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_LAYOUT_STACK_ADDIN,

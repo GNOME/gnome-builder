@@ -33,7 +33,7 @@
 #include "ide-clang-translation-unit.h"
 
 void
-peas_register_types (PeasObjectModule *module)
+ide_clang_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CODE_INDEXER,

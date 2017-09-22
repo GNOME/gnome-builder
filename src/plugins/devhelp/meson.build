@@ -1,8 +1,8 @@
 if get_option('with_devhelp')
 
 devhelp_resources = gnome.compile_resources(
-  'gbp-devhelp-resources',
-  'gbp-devhelp-resources.gresource.xml',
+  'devhelp-resources',
+  'devhelp.gresource.xml',
   c_name: 'gbp_devhelp',
 )
 
@@ -23,29 +23,13 @@ devhelp_sources = [
   'gbp-devhelp-search-private.h',
   'gbp-devhelp-view.c',
   'gbp-devhelp-view.h',
-  devhelp_resources[0],
 ]
 
-devhelp_deps = plugin_deps + [
+gnome_builder_plugins_deps += [
   dependency('libdevhelp-3.0', version: '>=3.25.1'),
-  libgd_dep,
 ]
 
-shared_module('devhelp-plugin', devhelp_sources,
-  dependencies: devhelp_deps,
-     link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-       install: true,
-   install_dir: plugindir,
- install_rpath: pkglibdir_abs,
-)
-
-configure_file(
-          input: 'devhelp.plugin',
-         output: 'devhelp.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(devhelp_sources)
+gnome_builder_plugins_sources += devhelp_resources[0]
 
 endif

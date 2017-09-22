@@ -1,5 +1,11 @@
 if get_option('with_python_pack')
 
+python_pack_resources = gnome.compile_resources(
+  'python-pack-resources',
+  'python-pack.gresource.xml',
+  c_name: 'ide_python_pack',
+)
+
 python_pack_sources = [
   'ide-python-indenter.c',
   'ide-python-indenter.h',
@@ -8,20 +14,7 @@ python_pack_sources = [
   'python-pack-plugin.c',
 ]
 
-shared_module('python-pack-plugin', python_pack_sources,
-  dependencies: plugin_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'python-pack.plugin',
-         output: 'python-pack.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(python_pack_sources)
+gnome_builder_plugins_sources += python_pack_resources[0]
 
 endif

@@ -1,5 +1,7 @@
 libide_header_subdir = join_paths('gnome-builder', 'libide')
 
+libide_api_version = '1.0'
+
 libide_enum_headers = []
 libide_generated_headers = []
 libide_public_headers = []
@@ -31,21 +33,6 @@ libide_build_ident_h = vcs_tag(
   install_dir: libide_header_subdir,
 )
 libide_generated_headers += [libide_build_ident_h]
-
-libide_deps = [
-  libdazzle_dep,
-  libgd_dep,
-  libgio_dep,
-  libgiounix_dep,
-  libgtk_dep,
-  libgtksource_dep,
-  libjson_glib_dep,
-  libjsonrpc_glib_dep,
-  libpangoft2_dep,
-  libpeas_dep,
-  libtemplate_glib_dep,
-  libxml2_dep,
-]
 
 libide_public_headers += [
   'ide.h',
@@ -164,19 +151,14 @@ contrib_dir = join_paths(meson.source_root(), 'contrib/')
 
 if get_option('with_webkit')
   libide_sources += ['webkit/ide-webkit.c']
-  libide_deps += [dependency('webkit2gtk-4.0', version: '>=2.12.0')]
 endif
 
 if get_option('with_editorconfig')
-  libide_args += '-DENABLE_EDITORCONFIG'
-  libide_deps += libeditorconfig_dep
   libide_sources += [
     'editorconfig/editorconfig-glib.c',
     'editorconfig/ide-editorconfig-file-settings.c',
   ]
 endif
-
-libide_api_version = '1.0'
 
 # We want to find the subdirectory to install our override into:
 python3 = find_program('python3')
@@ -214,6 +196,30 @@ install_data('Ide.py', install_dir: pygobject_override_dir)
 libide_link_args = []
 if ld_supports_version_script
 libide_link_args += [ '-Wl,--version-script,' + join_paths(meson.current_source_dir(), 'ide.map') ]
+endif
+
+libide_deps = [
+  libdazzle_dep,
+  libgd_dep,
+  libgio_dep,
+  libgiounix_dep,
+  libgtk_dep,
+  libgtksource_dep,
+  libjson_glib_dep,
+  libjsonrpc_glib_dep,
+  libpangoft2_dep,
+  libpeas_dep,
+  libtemplate_glib_dep,
+  libxml2_dep,
+]
+
+if get_option('with_webkit')
+  libide_deps += [dependency('webkit2gtk-4.0', version: '>=2.12.0')]
+endif
+
+if get_option('with_editorconfig')
+  libide_args += '-DENABLE_EDITORCONFIG'
+  libide_deps += libeditorconfig_dep
 endif
 
 libide = shared_library('ide-' + libide_api_version,

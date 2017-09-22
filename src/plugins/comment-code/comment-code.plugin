@@ -6,5 +6,6 @@ Authors=Sebastien Lafargue <slafargue@gnome.org>
 Copyright=Copyright © 2016 Sebastien Lafargue
 Builtin=true
 Depends=editor
+Embedded=gbp_comment_code_register_types
 X-Tool-Name=comment-code
 X-Tool-Description=Comment code lines

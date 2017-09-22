@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>terminal.plugin</file>
+  </gresource>
   <gresource prefix="/org/gnome/builder/plugins/terminal">
     <file>gb-terminal-view.ui</file>
     <file>gb-terminal-search.ui</file>

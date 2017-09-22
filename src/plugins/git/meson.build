@@ -1,8 +1,8 @@
 if get_option('with_git')
 
 git_resources = gnome.compile_resources(
-  'ide-git-resources',
-  'ide-git-resources.gresource.xml',
+  'git-resources',
+  'git.gresource.xml',
   c_name: 'ide_git',
 )
 
@@ -22,27 +22,13 @@ git_sources = [
   'ide-git-vcs-config.h',
   'ide-git-vcs-initializer.c',
   'ide-git-vcs-initializer.h',
-  git_resources[0],
 ]
 
-git_deps = plugin_deps + [
+gnome_builder_plugins_deps += [
   libgit_dep,
 ]
 
-shared_module('git-plugin', git_sources,
-  dependencies: git_deps,
-  link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-  install: true,
-  install_dir: plugindir,
-)
-
-configure_file(
-          input: 'git.plugin',
-         output: 'git.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
-)
+gnome_builder_plugins_sources += files(git_sources)
+gnome_builder_plugins_sources += git_resources[0]
 
 endif

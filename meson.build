@@ -229,24 +229,6 @@ subdir('src')
 subdir('po')
 subdir('doc')
 
-exe_link_args = [ '-pie' ]
-exe_c_args = [ '-fPIE' ]
-
-gnome_builder_sources = [
-  'src/main.c',
-  'src/bug-buddy.c',
-  'src/bug-buddy.h',
-]
-
-executable('gnome-builder', gnome_builder_sources,
-        gui_app: true,
-        install: true,
-         c_args: exe_c_args,
-      link_args: exe_link_args,
-  install_rpath: pkglibdir_abs,
-   dependencies: libide_deps + [libide_dep],
-)
-
 meson.add_install_script('build-aux/meson/post_install.py')
 
 message('\n  '.join(status))

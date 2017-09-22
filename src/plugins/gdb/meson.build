@@ -1,5 +1,11 @@
 if get_option('with_gdb')
 
+gdb_resources = gnome.compile_resources(
+  'gdb-resources',
+  'gdb.gresource.xml',
+  c_name: 'gbp_gdb',
+)
+
 gdb_sources = [
   'gbp-gdb-debugger.c',
   'gbp-gdb-debugger.h',
@@ -8,14 +14,7 @@ gdb_sources = [
   'gdbwire.h',
 ]
 
-shared_module('gdb-plugin', gdb_sources,
-  dependencies: plugin_deps,
-     link_args: plugin_link_args,
-  link_depends: plugin_link_deps,
-       install: true,
-   install_dir: plugindir,
-)
-
-install_data('gdb.plugin', install_dir: plugindir)
+gnome_builder_plugins_sources += files(gdb_sources)
+gnome_builder_plugins_sources += gdb_resources[0]
 
 endif
