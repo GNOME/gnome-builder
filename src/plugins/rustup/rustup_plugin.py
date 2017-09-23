@@ -40,6 +40,10 @@ from gi.repository import Peas
 
 _ = Ide.gettext
 
+def get_resource(path):
+    full_path = os.path.join('/org/gnome/builder/plugins/rustup_plugin', path)
+    return Gio.resources_lookup_data(full_path, 0).get_data()
+
 def get_module_data_path(name):
     engine = Peas.Engine.get_default()
     plugin = engine.get_plugin_info('rustup_plugin')
@@ -310,11 +314,7 @@ class RustupInstaller(Ide.Transfer):
             launcher.push_argv('/dev/stdin')
             launcher.push_argv('-y')
 
-            try:
-                rustup_sh_path = get_module_data_path('resources/rustup.sh')
-                success, stdin_data = GLib.file_get_contents(rustup_sh_path)
-            except:
-                stdin_data = ""
+            stdin_data = get_resource('rustup.sh')
         elif self.mode == _MODE_UPDATE:
             launcher.push_argv(RustupApplicationAddin.instance.rustup_executable)
             launcher.push_argv('update')
@@ -397,7 +397,7 @@ class RustupInstaller(Ide.Transfer):
                         try:
                             self.props.progress = float(percent)/100
                         except Exception as te:
-                            print('_read_line_cb', self.state, line)
+                            print('_read_line_cb', self.state, line, te)
                 elif self.state == _STATE_DOWN_COMP or self.state == _STATE_SYNC_UPDATE or self.state == _STATE_CHECK_UPDATE_SELF  or self.state == _STATE_DOWN_UPDATE_SELF:
                     # the first progress can be empty, skip it
                     if length > 0:

@@ -1,6 +1,6 @@
 if get_option('with_make')
 
-install_data('make_plugin/__init__.py', install_dir: join_paths(plugindir, 'make_plugin'))
+install_data('make_plugin.py', install_dir: plugindir)
 
 configure_file(
           input: 'make.plugin',

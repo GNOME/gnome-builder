@@ -1,6 +1,6 @@
 if get_option('with_cmake')
 
-install_data('cmake_plugin/__init__.py', install_dir: join_paths(plugindir, 'cmake_plugin'))
+install_data('cmake_plugin.py', install_dir: plugindir)
 
 configure_file(
           input: 'cmake.plugin',
