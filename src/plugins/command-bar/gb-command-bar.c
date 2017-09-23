@@ -26,7 +26,6 @@
 #include <libpeas/peas.h>
 
 #include "gb-command.h"
-#include "gb-command-bar-resources.h"
 #include "gb-command-bar.h"
 #include "gb-command-gaction-provider.h"
 #include "gb-command-manager.h"

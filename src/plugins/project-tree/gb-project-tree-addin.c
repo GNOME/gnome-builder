@@ -22,7 +22,6 @@
 
 #include "gb-project-tree.h"
 #include "gb-project-tree-addin.h"
-#include "gb-project-tree-resources.h"
 
 static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
@@ -122,7 +121,6 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 static void
 gb_project_tree_addin_class_init (GbProjectTreeAddinClass *klass)
 {
-  g_resources_register (gb_project_tree_get_resource ());
 }
 
 static void

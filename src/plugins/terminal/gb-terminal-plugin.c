@@ -20,7 +20,6 @@
 #include <ide.h>
 
 #include "gb-terminal-private.h"
-#include "gb-terminal-resources.h"
 #include "gb-terminal-workbench-addin.h"
 
 void

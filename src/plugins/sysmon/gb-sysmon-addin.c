@@ -22,7 +22,6 @@
 
 #include "gb-sysmon-addin.h"
 #include "gb-sysmon-panel.h"
-#include "gb-sysmon-resources.h"
 
 struct _GbSysmonAddin
 {
