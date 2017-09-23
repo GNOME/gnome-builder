@@ -123,11 +123,14 @@ static void
 set_default_keybinding (GbBeautifierEditorAddin *self,
                         const gchar             *action_name)
 {
+  static const gchar *accel = "<primary><Alt>b";
   DzlShortcutController *controller;
-  gchar *accel = "<primary><Alt>b";
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (action_name != NULL);
+
+  if (self->current_view == NULL)
+    return;
 
   controller = dzl_shortcut_controller_find (GTK_WIDGET (self->current_view));
   dzl_shortcut_controller_add_command_action (controller,
