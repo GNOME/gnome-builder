@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include "application/ide-application-tests.h"
+#include "plugins/gnome-builder-plugins.h"
 #include "snippets/ide-source-snippet-private.h"
 #include "util/ide-gdk.h"
 
@@ -315,6 +316,7 @@ main (gint   argc,
 
   app = ide_application_new ();
   ide_application_add_test (app, "/Ide/Snippets/basic", test_snippets_basic, NULL);
+  gnome_builder_plugins_init ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 

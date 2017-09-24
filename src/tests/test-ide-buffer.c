@@ -23,6 +23,7 @@
 #include <ide.h>
 
 #include "application/ide-application-tests.h"
+#include "../src/plugins/gnome-builder-plugins.h"
 
 static void
 test_buffer_basic_cb2 (GObject      *object,
@@ -115,6 +116,7 @@ main (gint   argc,
 
   app = ide_application_new ();
   ide_application_add_test (app, "/Ide/Buffer/basic", test_buffer_basic, NULL, required_plugins);
+  gnome_builder_plugins_init ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 

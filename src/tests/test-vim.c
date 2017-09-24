@@ -21,6 +21,8 @@
 
 #include "application/ide-application-tests.h"
 
+#include "../plugins/gnome-builder-plugins.h"
+
 typedef void (*VimTestFunc) (IdeContext *context,
                              GtkWidget  *widget);
 
@@ -190,6 +192,7 @@ main (gint   argc,
 
   app = ide_application_new ();
   ide_application_add_test (app, "/Ide/Vim/basic", test_vim_basic, NULL, required_plugins);
+  gnome_builder_plugins_init ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 

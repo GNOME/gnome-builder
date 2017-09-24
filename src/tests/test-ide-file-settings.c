@@ -21,6 +21,8 @@
 #include "application/ide-application-tests.h"
 #include "editorconfig/ide-editorconfig-file-settings.h"
 
+#include "../plugins/gnome-builder-plugins.h"
+
 static void
 test_filesettings (GCancellable        *cancellable,
                    GAsyncReadyCallback  callback,
@@ -176,6 +178,7 @@ main (gint argc,
   app = ide_application_new ();
   ide_application_add_test (app, "/Ide/FileSettings/basic", test_filesettings, NULL, required_plugins);
   ide_application_add_test (app, "/Ide/EditorconfigFileSettings/basic", test_editorconfig, NULL, required_plugins);
+  gnome_builder_plugins_init ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 

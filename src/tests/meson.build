@@ -16,6 +16,7 @@ ide_test_cflags = [
 ide_test_deps = [
   libide_dep,
   libpeas_dep,
+  gnome_builder_plugins_dep,
 ]
 
 ide_context = executable('test-ide-context',

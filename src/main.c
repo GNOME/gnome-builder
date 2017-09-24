@@ -22,11 +22,9 @@
 #include <gtksourceview/gtksource.h>
 
 #include "application/ide-application-private.h"
+#include "plugins/gnome-builder-plugins.h"
 
 #include "bug-buddy.h"
-
-/* Keep in sync with gnome-builder-plugins.c */
-extern void gnome_builder_plugins_init (void);
 
 static IdeApplicationMode early_mode;
 

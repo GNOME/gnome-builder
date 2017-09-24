@@ -21,6 +21,7 @@
 #include <ide.h>
 
 #include "application/ide-application-tests.h"
+#include "plugins/gnome-builder-plugins.h"
 
 static void
 execute_cb (GObject      *object,
@@ -116,6 +117,7 @@ main (gint   argc,
 
   app = ide_application_new ();
   ide_application_add_test (app, "/Ide/BuildPipeline/basic", test_build_pipeline, NULL);
+  gnome_builder_plugins_init ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 

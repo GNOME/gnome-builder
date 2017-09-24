@@ -20,6 +20,8 @@
 
 #include "application/ide-application-tests.h"
 
+#include "../plugins/gnome-builder-plugins.h"
+
 static void
 test_new_async_cb1 (GObject      *object,
                     GAsyncResult *result,
@@ -82,6 +84,7 @@ main (gint   argc,
 
   app = ide_application_new ();
   ide_application_add_test (app, "/Ide/Context/new_async", test_new_async, NULL, required_plugins);
+  gnome_builder_plugins_init ();
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
