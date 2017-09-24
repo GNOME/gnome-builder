@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>html-preview.plugin</file>
+  </gresource>
   <gresource prefix="/org/gnome/builder/plugins/html_preview">
+    <file>html_preview.py</file>
+    <file>html_preview.pyc</file>
     <file>js/markdown-view.js</file>
     <file>js/marked.js</file>
     <file>css/markdown.css</file>

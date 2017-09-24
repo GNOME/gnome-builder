@@ -1,13 +1,11 @@
 if get_option('with_npm')
 
-install_data('npm_plugin.py', install_dir: plugindir)
-
-configure_file(
-          input: 'npm.plugin',
-         output: 'npm.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+npm_resources = gnome.compile_resources(
+  'npm-resources',
+  'npm.gresource.xml',
+  c_name: 'gbp_npm',
 )
+
+gnome_builder_plugins_sources += npm_resources[0]
 
 endif

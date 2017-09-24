@@ -1,13 +1,11 @@
 if get_option('with_gjs_symbols')
 
-install_data('gjs_symbols.py', install_dir: plugindir)
-
-configure_file(
-          input: 'gjs_symbols.plugin',
-         output: 'gjs_symbols.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+gjs_symbols_resources = gnome.compile_resources(
+  'gjs-symbols-resources',
+  'gjs-symbols.gresource.xml',
+  c_name: 'gjs_symbols',
 )
+
+gnome_builder_plugins_sources += gjs_symbols_resources[0]
 
 endif

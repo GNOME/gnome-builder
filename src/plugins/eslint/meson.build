@@ -1,16 +1,14 @@
 if get_option('with_eslint')
 
-install_data('eslint_plugin.py', install_dir: plugindir)
-
 install_data('org.gnome.builder.plugins.eslint.gschema.xml',
   install_dir: schema_dir)
 
-configure_file(
-          input: 'eslint.plugin',
-         output: 'eslint.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+eslint_resources = gnome.compile_resources(
+  'eslint-resources',
+  'eslint.gresource.xml',
+  c_name: 'gbp_eslint',
 )
+
+gnome_builder_plugins_sources += eslint_resources[0]
 
 endif

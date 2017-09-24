@@ -1,13 +1,11 @@
 if get_option('with_python_gi_imports_completion')
 
-install_data('python_gi_imports_completion.py', install_dir: plugindir)
-
-configure_file(
-          input: 'python-gi-imports-completion.plugin',
-         output: 'python-gi-imports-completion.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+python_gi_imports_completion_resources = gnome.compile_resources(
+  'python-gi-imports-completion-resources',
+  'python-gi-imports-completion.gresource.xml',
+  c_name: 'gbp_python_gi_imports_completion',
 )
+
+gnome_builder_plugins_sources += python_gi_imports_completion_resources[0]
 
 endif

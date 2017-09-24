@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>eslint.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/eslint_plugin">
+    <file>eslint_plugin.py</file>
+    <file>eslint_plugin.pyc</file>
+  </gresource>
+</gresources>

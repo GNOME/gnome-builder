@@ -1,13 +1,11 @@
 if get_option('with_jedi')
 
-install_data('jedi_plugin.py', install_dir: plugindir)
-
-configure_file(
-          input: 'jedi.plugin',
-         output: 'jedi.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+jedi_resources = gnome.compile_resources(
+  'jedi-resources',
+  'jedi.gresource.xml',
+  c_name: 'gbp_jedi',
 )
+
+gnome_builder_plugins_sources += jedi_resources[0]
 
 endif

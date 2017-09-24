@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>find-other-file.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/find_other_file">
+    <file>find_other_file.py</file>
+    <file>find_other_file.pyc</file>
+  </gresource>
+</gresources>

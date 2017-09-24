@@ -1,13 +1,11 @@
 if get_option('with_phpize')
 
-install_data('phpize_plugin.py', install_dir: plugindir)
-
-configure_file(
-          input: 'phpize.plugin',
-         output: 'phpize.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+phpize_resources = gnome.compile_resources(
+  'phpize-resources',
+  'phpize.gresource.xml',
+  c_name: 'gbp_phpize',
 )
+
+gnome_builder_plugins_sources += phpize_resources[0]
 
 endif

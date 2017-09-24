@@ -22,7 +22,11 @@
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
+
+import imp
 import inspect
+import marshal
+import sys
 
 from ..importer import modules
 
@@ -167,6 +171,53 @@ def NotSupportedError():
 Ide.NotSupportedError = NotSupportedError
 
 #
+# Custom module loader from embedded .gresources
+#
+
+_BASE_PLUGINS_PATH = '/org/gnome/builder/plugins'
+class _IdeResourceFinder(object):
+    def find_module(self, fullname, path=None):
+        def _generatePaths(name):
+            children = Gio.resources_enumerate_children(_BASE_PLUGINS_PATH, 0)
+            slashname = fullname.replace('.','/')
+            for child in children:
+                if child.endswith('/'):
+                    yield _BASE_PLUGINS_PATH + '/%s%s.pyc' % (child, slashname)
+                    yield _BASE_PLUGINS_PATH + '/%s%s/__init__.pyc' % (child, slashname)
+                    yield _BASE_PLUGINS_PATH + '/%s%s.py' % (child, slashname)
+                    yield _BASE_PLUGINS_PATH + '/%s%s/__init__.py' % (child, slashname)
+            raise StopIteration
+        for path in _generatePaths(fullname):
+            try:
+                Gio.resources_get_info(path, 0)
+                return _IdeResourceLoader(path)
+            except Exception as ex:
+                continue
+
+sys.meta_path.append(_IdeResourceFinder())
+
+class _IdeResourceLoader(object):
+    def __init__(self, path):
+        self.path = path
+
+    def load_module(self, name):
+        data = Gio.resources_lookup_data(self.path, 0)
+        bytes_data = data.get_data()
+
+        module = imp.new_module(name)
+        module.__name__ = name
+
+        if self.path.endswith('.pyc'):
+            code_object = marshal.loads(bytes_data)
+            exec(code_object, module.__dict__)
+        else:
+            source = bytes_data.decode('utf-8')
+            exec(source, module.__dict__)
+
+        sys.modules[name] = module
+        return module
+
+#
 # GLib logging wrappers
 #
 
@@ -201,3 +252,5 @@ Ide.debug = debug
 Ide.info = info
 Ide.message = message
 Ide.warning = warning
+
+print("Ide.py overrides loaded")

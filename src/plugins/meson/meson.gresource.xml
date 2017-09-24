@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>meson.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/meson_plugin">
+    <file>meson_plugin.py</file>
+    <file>meson_plugin.pyc</file>
+  </gresource>
+</gresources>

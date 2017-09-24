@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>jhbuild.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/jhbuild_plugin">
+    <file>jhbuild_plugin.py</file>
+    <file>jhbuild_plugin.pyc</file>
+  </gresource>
+</gresources>

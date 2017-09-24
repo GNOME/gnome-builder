@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>jedi.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/jedi_plugin">
+    <file>jedi_plugin.py</file>
+    <file>jedi_plugin.pyc</file>
+  </gresource>
+</gresources>

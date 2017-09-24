@@ -1,13 +1,11 @@
 if get_option('with_cargo')
 
-install_data('cargo_plugin.py', install_dir: plugindir)
-
-configure_file(
-          input: 'cargo.plugin',
-         output: 'cargo.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+cargo_resources = gnome.compile_resources(
+  'cargo-resources',
+  'cargo.gresource.xml',
+  c_name: 'gbp_cargo',
 )
+
+gnome_builder_plugins_sources += cargo_resources[0]
 
 endif

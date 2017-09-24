@@ -1,13 +1,11 @@
 if get_option('with_rust_langserv')
 
-install_data('rust_langserv_plugin.py', install_dir: plugindir)
-
-configure_file(
-          input: 'rust-langserv.plugin',
-         output: 'rust-langserv.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+rust_langserv_resources = gnome.compile_resources(
+  'rust-langserv-resources',
+  'rust-langserv.gresource.xml',
+  c_name: 'gbp_rust_langserv',
 )
+
+gnome_builder_plugins_sources += rust_langserv_resources[0]
 
 endif

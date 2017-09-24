@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>rust-langserv.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/rust_langserv_plugin">
+    <file>rust_langserv_plugin.py</file>
+    <file>rust_langserv_plugin.pyc</file>
+  </gresource>
+</gresources>

@@ -1,13 +1,11 @@
 if get_option('with_mono')
 
-install_data('mono_plugin.py', install_dir: plugindir)
-
-configure_file(
-          input: 'mono.plugin',
-         output: 'mono.plugin',
-  configuration: configuration_data(),
-        install: true,
-    install_dir: plugindir,
+mono_resources = gnome.compile_resources(
+  'mono-resources',
+  'mono.gresource.xml',
+  c_name: 'gbp_mono',
 )
+
+gnome_builder_plugins_sources += mono_resources[0]
 
 endif

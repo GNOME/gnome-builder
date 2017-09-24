@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>python-gi-imports-completion.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/python_gi_imports_completion">
+    <file>python_gi_imports_completion.py</file>
+    <file>python_gi_imports_completion.pyc</file>
+  </gresource>
+</gresources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>npm.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/npm_plugin">
+    <file>npm_plugin.py</file>
+    <file>npm_plugin.pyc</file>
+  </gresource>
+</gresources>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>valgrind.plugin</file>
+  </gresource>
   <gresource prefix="/org/gnome/builder/plugins/valgrind_plugin">
     <file>gtk/menus.ui</file>
+    <file>valgrind_plugin.py</file>
+    <file>valgrind_plugin.pyc</file>
   </gresource>
 </gresources>
