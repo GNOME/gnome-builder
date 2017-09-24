@@ -78,8 +78,7 @@ snippet gobject
 	}
 - scope chdr
 - desc Create GObject header
-	#ifndef ${$1|functify|upper}_H
-	#define ${$1|functify|upper}_H
+	#pragma once
 
 	#include ${3:<glib-object.h>}
 
@@ -97,9 +96,6 @@ snippet gobject
 	$1 *${$1|functify}_new (void);
 	$0
 	G_END_DECLS
-
-	#endif /* ${$1|functify|upper}_H */
-
 snippet gobject_final
 - scope c
 - desc Create final GObject
@@ -179,8 +175,7 @@ snippet gobject_final
 	}
 - scope chdr
 - desc Create final GObject header
-	#ifndef ${$1|functify|upper}_H
-	#define ${$1|functify|upper}_H
+	#pragma once
 
 	#include ${3:<glib-object.h>}
 
@@ -193,9 +188,6 @@ snippet gobject_final
 	$1 *${$1|functify}_new (void);
 	$0
 	G_END_DECLS
-
-	#endif /* ${$1|functify|upper}_H */
-
 snippet gobject_boxed_ref
 - scope c
 - desc Create Refed Boxed GObject
@@ -258,8 +250,7 @@ snippet gobject_boxed_ref
 	}
 - scope chdr
 - desc Create Refed Boxed GObject header
-	#ifndef ${$1|functify|upper}_H
-	#define ${$1|functify|upper}_H
+	#pragma once
 
 	#include ${3:<glib-object.h>}
 
@@ -282,9 +273,6 @@ snippet gobject_boxed_ref
 	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_unref)
 	$0
 	G_END_DECLS
-
-	#endif /* ${$1|functify|upper}_H */
-
 snippet gobject_boxed_copy
 - scope c
 - desc Create copy/free Boxed GObject
@@ -323,8 +311,7 @@ snippet gobject_boxed_copy
 	}
 - scope chdr
 - desc Create copy/free Boxed GObject header
-	#ifndef ${$1|functify|upper}_H
-	#define ${$1|functify|upper}_H
+	#pragma once
 
 	#include ${3:<glib-object.h>}
 
@@ -346,13 +333,9 @@ snippet gobject_boxed_copy
 	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_free)
 	$0
 	G_END_DECLS
-
-	#endif /* ${$1|functify|upper}_H */
-
 snippet gobj_guard
 - scope chdr
-	#ifndef ${1:$filename|stripsuffix|functify|upper}_H
-	#define $1_H
+	#pragma once
 
 	#include <glib.h>
 
@@ -361,8 +344,6 @@ snippet gobj_guard
 	$0
 
 	G_END_DECLS
-
-	#endif /* $1_H */
 snippet gobj_interface
 - scope c
 - desc Create GObject Interface
@@ -376,8 +357,7 @@ snippet gobj_interface
 	}
 - scope chdr
 - desc Create GObject Interface header
-	#ifndef ${$1|functify|upper}_H
-	#define ${$1|functify|upper}_H
+	#pragma once
 
 	#include ${3:<glib-object.h>}
 
@@ -395,8 +375,6 @@ snippet gobj_interface
 	};
 
 	G_END_DECLS
-
-	#endif /* ${$1|functify|upper}_H */
 snippet gobj_ref
 - scope c
 - desc GObject ref
