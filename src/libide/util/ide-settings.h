@@ -27,6 +27,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSettings, ide_settings, IDE, SETTINGS, IdeObject)
 
+IdeSettings *_ide_settings_new                        (IdeContext              *context,
+                                                       const gchar             *schema_id,
+                                                       const gchar             *relative_path,
+                                                       gboolean                 ignore_project_settings) G_GNUC_INTERNAL;
 const gchar *ide_settings_get_relative_path           (IdeSettings             *self);
 const gchar *ide_settings_get_schema_id               (IdeSettings             *self);
 gboolean     ide_settings_get_ignore_project_settings (IdeSettings             *self);

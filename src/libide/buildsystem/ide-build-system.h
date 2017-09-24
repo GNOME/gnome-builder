@@ -99,6 +99,8 @@ void            ide_build_system_get_build_targets_async           (IdeBuildSyst
 GPtrArray      *ide_build_system_get_build_targets_finish          (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
+void            _ide_build_system_set_project_file                 (IdeBuildSystem       *self,
+                                                                    GFile                *project_file) G_GNUC_INTERNAL;
 
 G_END_DECLS
 

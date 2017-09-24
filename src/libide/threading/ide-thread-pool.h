@@ -39,6 +39,7 @@ typedef enum
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 
+void     _ide_thread_pool_init     (gboolean              is_worker) G_GNUC_INTERNAL;
 void     ide_thread_pool_push      (IdeThreadPoolKind     kind,
                                     IdeThreadFunc         func,
                                     gpointer              func_data);

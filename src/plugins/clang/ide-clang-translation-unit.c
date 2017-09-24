@@ -28,7 +28,6 @@
 #include "ide-clang-private.h"
 #include "ide-clang-symbol-tree.h"
 #include "ide-clang-translation-unit.h"
-#include "ide-internal.h"
 
 struct _IdeClangTranslationUnit
 {
@@ -444,7 +443,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
                   cxstr = clang_getDiagnosticFixIt (cxdiag, j, &cxrange);
                   range = create_range (self, project, workpath, cxrange);
-                  fixit = _ide_fixit_new (range, clang_getCString (cxstr));
+                  fixit = ide_fixit_new (range, clang_getCString (cxstr));
                   clang_disposeString (cxstr);
 
                   if (fixit != NULL)

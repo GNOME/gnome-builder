@@ -33,8 +33,8 @@ struct _IdeFixit
 DZL_DEFINE_COUNTER (instances, "IdeFixit", "Instances", "Number of fixit instances")
 
 IdeFixit *
-_ide_fixit_new (IdeSourceRange *source_range,
-                const gchar    *replacement_text)
+ide_fixit_new (IdeSourceRange *source_range,
+               const gchar    *replacement_text)
 {
   IdeFixit *self;
 

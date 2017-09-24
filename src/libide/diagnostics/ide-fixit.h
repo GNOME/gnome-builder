@@ -25,12 +25,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FIXIT (ide_fixit_get_type())
 
+IdeFixit       *ide_fixit_new       (IdeSourceRange *source_range,
+                                     const gchar    *replacement_text);
 GType           ide_fixit_get_type  (void);
-IdeFixit       *ide_fixit_ref       (IdeFixit *self);
-void            ide_fixit_unref     (IdeFixit *self);
-void            ide_fixit_apply     (IdeFixit *self);
-const gchar    *ide_fixit_get_text  (IdeFixit *self);
-IdeSourceRange *ide_fixit_get_range (IdeFixit *self);
+IdeFixit       *ide_fixit_ref       (IdeFixit       *self);
+void            ide_fixit_unref     (IdeFixit       *self);
+void            ide_fixit_apply     (IdeFixit       *self);
+const gchar    *ide_fixit_get_text  (IdeFixit       *self);
+IdeSourceRange *ide_fixit_get_range (IdeFixit       *self);
 
 G_END_DECLS
 

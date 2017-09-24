@@ -23,7 +23,6 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-internal.h"
 
 #include "buffers/ide-buffer-addin.h"
 #include "buffers/ide-buffer-change-monitor.h"

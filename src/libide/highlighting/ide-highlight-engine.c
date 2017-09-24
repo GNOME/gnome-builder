@@ -22,8 +22,8 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-internal.h"
 #include "ide-types.h"
 
 #include "highlighting/ide-highlight-engine.h"

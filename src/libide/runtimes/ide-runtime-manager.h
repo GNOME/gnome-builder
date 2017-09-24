@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeRuntimeManager, ide_runtime_manager, IDE, RUNTIME_MANAGER, IdeObject)
 
+void        _ide_runtime_manager_unload       (IdeRuntimeManager    *self) G_GNUC_INTERNAL;
 IdeRuntime *ide_runtime_manager_get_runtime   (IdeRuntimeManager    *self,
                                                const gchar          *id);
 void        ide_runtime_manager_add           (IdeRuntimeManager    *self,

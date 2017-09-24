@@ -24,7 +24,6 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-internal.h"
 
 #include "projects/ide-project.h"
 #include "util/ide-settings.h"

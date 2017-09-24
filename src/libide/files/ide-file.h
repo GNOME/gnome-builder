@@ -60,6 +60,10 @@ IdeFile           *ide_file_find_other_finish    (IdeFile              *self,
                                                   GError              **error);
 gint               ide_file_compare              (const IdeFile        *a,
                                                   const IdeFile        *b);
+const gchar       *_ide_file_get_content_type    (IdeFile              *self) G_GNUC_INTERNAL;
+void               _ide_file_set_content_type    (IdeFile              *self,
+                                                  const gchar          *content_type) G_GNUC_INTERNAL;
+GtkSourceFile     *_ide_file_get_source_file     (IdeFile              *self) G_GNUC_INTERNAL;
 
 
 G_END_DECLS

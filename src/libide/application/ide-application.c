@@ -32,7 +32,6 @@
 
 #include "ide-debug.h"
 #include "ide-global.h"
-#include "ide-internal.h"
 #include "ide-macros.h"
 #include "ide-resources.h"
 
@@ -42,6 +41,8 @@
 #include "application/ide-application-tests.h"
 #include "application/ide-application-tool.h"
 #include "modelines/modeline-parser.h"
+#include "threading/ide-thread-pool.h"
+#include "util/ide-battery-monitor.h"
 #include "util/ide-flatpak.h"
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"
@@ -449,6 +450,8 @@ ide_application_shutdown (GApplication *application)
 
       dzl_directory_reaper_execute (reaper, NULL, NULL);
     }
+
+  _ide_battery_monitor_shutdown ();
 }
 
 static void

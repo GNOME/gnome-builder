@@ -20,8 +20,6 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-internal.h"
-
 #include "gca-diagnostics.h"
 #include "ide-gca-diagnostic-provider.h"
 #include "ide-gca-service.h"

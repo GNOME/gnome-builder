@@ -25,10 +25,10 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-global.h"
-#include "ide-internal.h"
 
 #include "buffers/ide-buffer-manager.h"
 #include "buffers/ide-buffer.h"
+#include "buffers/ide-buffer-private.h"
 #include "buffers/ide-unsaved-files.h"
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "diagnostics/ide-source-location.h"

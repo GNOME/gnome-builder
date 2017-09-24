@@ -25,11 +25,11 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-enums.h"
-#include "ide-internal.h"
 
 #include "application/ide-application.h"
 #include "buffers/ide-buffer-manager.h"
 #include "buffers/ide-buffer.h"
+#include "buffers/ide-buffer-private.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-fixit.h"
 #include "diagnostics/ide-source-location.h"

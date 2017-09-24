@@ -26,6 +26,8 @@ G_BEGIN_DECLS
 gdouble  ide_battery_monitor_get_energy_percentage (void);
 gboolean ide_battery_monitor_get_on_battery        (void);
 gboolean ide_battery_monitor_get_should_conserve   (void);
+void     _ide_battery_monitor_init                 (void) G_GNUC_INTERNAL;
+void     _ide_battery_monitor_shutdown             (void) G_GNUC_INTERNAL;
 
 G_END_DECLS
 

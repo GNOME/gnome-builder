@@ -20,7 +20,6 @@
 
 #include "ide-context.h"
 #include "ide-highlighter.h"
-#include "ide-internal.h"
 
 G_DEFINE_INTERFACE (IdeHighlighter, ide_highlighter, IDE_TYPE_OBJECT)
 

@@ -23,7 +23,6 @@
 
 #include "ide-enums.h"
 #include "ide-debug.h"
-#include "ide-internal.h"
 
 #include "sourceview/ide-source-iter.h"
 #include "sourceview/ide-source-view-movements.h"

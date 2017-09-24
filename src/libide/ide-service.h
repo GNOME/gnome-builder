@@ -37,9 +37,10 @@ struct _IdeServiceInterface
   void         (*stop)           (IdeService *service);
 };
 
-const gchar *ide_service_get_name (IdeService *self);
-void         ide_service_start    (IdeService *self);
-void         ide_service_stop     (IdeService *self);
+const gchar *ide_service_get_name             (IdeService *self);
+void         ide_service_start                (IdeService *self);
+void         ide_service_stop                 (IdeService *self);
+void         _ide_service_emit_context_loaded (IdeService *self) G_GNUC_INTERNAL;
 
 G_END_DECLS
 

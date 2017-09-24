@@ -20,8 +20,6 @@
 
 #include "dazzle.h"
 
-#include "ide-internal.h"
-
 #include "files/ide-file.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-source-location.h"

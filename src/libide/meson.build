@@ -142,10 +142,10 @@ libide_icons_resources = gnome.compile_resources('ide-icons-resources',
 )
 libide_generated_headers += [libide_icons_resources[1]]
 
-libide_sources = libide_private_sources + libide_generated_headers + libide_public_sources + [
-  'gconstructor.h',
-  'ide-internal.h',
-]
+libide_sources = ['gconstructor.h']
+libide_sources += libide_private_sources
+libide_sources += libide_generated_headers
+libide_sources += libide_public_sources
 
 contrib_dir = join_paths(meson.source_root(), 'contrib/')
 

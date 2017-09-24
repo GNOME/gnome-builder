@@ -27,7 +27,6 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-global.h"
-#include "ide-internal.h"
 
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"

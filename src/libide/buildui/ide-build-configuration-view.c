@@ -21,10 +21,8 @@
 #include <ide.h>
 #include <string.h>
 
-#include "ide-build-configuration-view.h"
-
-#include "ide-environment-editor.h"
-#include "ide-internal.h"
+#include "buildui/ide-build-configuration-view.h"
+#include "buildui/ide-environment-editor.h"
 
 struct _IdeBuildConfigurationView
 {

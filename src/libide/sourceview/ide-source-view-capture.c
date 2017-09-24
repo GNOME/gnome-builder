@@ -18,7 +18,6 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-internal.h"
 #include "ide-source-view-capture.h"
 
 typedef struct

@@ -24,7 +24,6 @@
 #include <libpeas/peas.h>
 #include <pango/pangofc-fontmap.h>
 
-#include "ide-internal.h"
 #include "ide-macros.h"
 
 #include "editor/ide-editor-private.h"

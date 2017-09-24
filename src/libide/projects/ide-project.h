@@ -59,6 +59,8 @@ void             ide_project_trash_file_async   (IdeProject           *self,
 gboolean         ide_project_trash_file_finish  (IdeProject           *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
+void             _ide_project_set_name          (IdeProject           *project,
+                                                 const gchar          *name) G_GNUC_INTERNAL;
 
 G_END_DECLS
 

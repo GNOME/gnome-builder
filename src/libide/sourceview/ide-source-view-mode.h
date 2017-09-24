@@ -28,19 +28,24 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_VIEW_MODE (ide_source_view_mode_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSourceViewMode, ide_source_view_mode,
-                      IDE, SOURCE_VIEW_MODE, GtkWidget)
+G_DECLARE_FINAL_TYPE (IdeSourceViewMode, ide_source_view_mode, IDE, SOURCE_VIEW_MODE, GtkWidget)
 
-gboolean               ide_source_view_mode_get_repeat_insert_with_count (IdeSourceViewMode *self);
-gboolean               ide_source_view_mode_get_block_cursor             (IdeSourceViewMode *self);
-gboolean               ide_source_view_mode_get_suppress_unbound         (IdeSourceViewMode *self);
-const gchar           *ide_source_view_mode_get_name                     (IdeSourceViewMode *self);
-const gchar           *ide_source_view_mode_get_default_mode             (IdeSourceViewMode *self);
-const gchar           *ide_source_view_mode_get_display_name             (IdeSourceViewMode *self);
-gboolean               ide_source_view_mode_get_keep_mark_on_char        (IdeSourceViewMode *self);
-IdeSourceViewModeType  ide_source_view_mode_get_mode_type                (IdeSourceViewMode *self);
-void                   ide_source_view_mode_set_has_indenter             (IdeSourceViewMode *self,
-                                                                          gboolean           has_indenter);
+gboolean               ide_source_view_mode_get_repeat_insert_with_count (IdeSourceViewMode     *self);
+gboolean               ide_source_view_mode_get_block_cursor             (IdeSourceViewMode     *self);
+gboolean               ide_source_view_mode_get_suppress_unbound         (IdeSourceViewMode     *self);
+const gchar           *ide_source_view_mode_get_name                     (IdeSourceViewMode     *self);
+const gchar           *ide_source_view_mode_get_default_mode             (IdeSourceViewMode     *self);
+const gchar           *ide_source_view_mode_get_display_name             (IdeSourceViewMode     *self);
+gboolean               ide_source_view_mode_get_keep_mark_on_char        (IdeSourceViewMode     *self);
+IdeSourceViewModeType  ide_source_view_mode_get_mode_type                (IdeSourceViewMode     *self);
+void                   ide_source_view_mode_set_has_indenter             (IdeSourceViewMode     *self,
+                                                                          gboolean               has_indenter);
+IdeSourceViewMode     *_ide_source_view_mode_new                         (GtkWidget             *view,
+                                                                          const char            *mode,
+                                                                          IdeSourceViewModeType  type) G_GNUC_INTERNAL;
+gboolean               _ide_source_view_mode_do_event                    (IdeSourceViewMode     *mode,
+                                                                          GdkEventKey           *event,
+                                                                          gboolean              *remove) G_GNUC_INTERNAL;
 
 G_END_DECLS
 

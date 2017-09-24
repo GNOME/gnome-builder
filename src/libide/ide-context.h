@@ -87,6 +87,8 @@ void                      ide_context_release                   (IdeContext     
 void                      ide_context_warning                   (IdeContext           *self,
                                                                  const gchar          *format,
                                                                  ...) G_GNUC_PRINTF (2, 3);
+GListModel               *_ide_context_get_pausables            (IdeContext           *self) G_GNUC_INTERNAL;
+gboolean                  _ide_context_is_restoring             (IdeContext           *self) G_GNUC_INTERNAL;
 
 G_END_DECLS
 

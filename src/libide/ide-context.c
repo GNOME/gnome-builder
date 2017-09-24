@@ -24,7 +24,6 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-global.h"
-#include "ide-internal.h"
 #include "ide-pausable.h"
 #include "ide-service.h"
 
@@ -545,8 +544,6 @@ ide_context_finalize (GObject *object)
   G_OBJECT_CLASS (ide_context_parent_class)->finalize (object);
 
   DZL_COUNTER_DEC (instances);
-
-  _ide_battery_monitor_shutdown ();
 
   IDE_EXIT;
 }

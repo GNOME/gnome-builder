@@ -436,6 +436,12 @@ void                        ide_source_view_scroll_to_iter            (IdeSource
                                                                        gdouble                     yalign,
                                                                        gboolean                    animate_scroll);
 void                        ide_source_view_scroll_to_insert          (IdeSourceView              *self);
+const gchar                *_ide_source_view_get_mode_name            (IdeSourceView              *self) G_GNUC_INTERNAL;
+void                        _ide_source_view_set_count                (IdeSourceView              *self,
+                                                                       gint                        count) G_GNUC_INTERNAL;
+void                        _ide_source_view_set_modifier             (IdeSourceView              *self,
+                                                                       gunichar                    modifier) G_GNUC_INTERNAL;
+GtkTextMark                *_ide_source_view_get_scroll_mark          (IdeSourceView              *self) G_GNUC_INTERNAL;
 
 G_END_DECLS
 

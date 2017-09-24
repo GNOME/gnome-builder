@@ -23,7 +23,6 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-internal.h"
 
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-pipeline.h"
