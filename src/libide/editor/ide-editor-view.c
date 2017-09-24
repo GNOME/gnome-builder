@@ -26,6 +26,7 @@
 
 #include "ide-macros.h"
 
+#include "buffers/ide-buffer-private.h"
 #include "editor/ide-editor-private.h"
 #include "sourceview/ide-line-change-gutter-renderer.h"
 #include "util/ide-gtk.h"

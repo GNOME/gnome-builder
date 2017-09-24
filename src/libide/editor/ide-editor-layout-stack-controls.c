@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "buffers/ide-buffer-private.h"
 #include "editor/ide-editor-layout-stack-controls.h"
 #include "editor/ide-editor-private.h"
 
