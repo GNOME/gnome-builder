@@ -71,5 +71,3 @@ void                   gstyle_color_widget_set_filter_func           (GstyleColo
                                                                       gpointer                user_data);
 
 G_END_DECLS
-
-#endif /* GSTYLE_TYPE_COLOR_WIDGET */
