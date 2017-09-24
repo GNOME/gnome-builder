@@ -5,6 +5,7 @@ ide_test_env = [
   'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
   'G_DEBUG=gc-friendly',
   'GSETTINGS_BACKEND=memory',
+  'GSETTINGS_SCHEMA_DIR=@0@/data/gsettings:$(GSETTINGS_SCHEMA_DIR)'.format(meson.build_root()),
   'PYTHONDONTWRITEBYTECODE=yes',
   'MALLOC_CHECK_=2',
 #  'MALLOC_PERTURB_=$((${RANDOM:-256} % 256))',
