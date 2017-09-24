@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_VIEW_H
-#define IDE_SOURCE_VIEW_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -444,5 +443,3 @@ void                        _ide_source_view_set_modifier             (IdeSource
 GtkTextMark                *_ide_source_view_get_scroll_mark          (IdeSourceView              *self) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_VIEW_H */

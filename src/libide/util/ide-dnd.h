@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DND_H
-#define IDE_DND_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 gchar **ide_dnd_get_uri_list (GtkSelectionData *selection_data);
 
 G_END_DECLS
-
-#endif /* GB_RGBA_H */

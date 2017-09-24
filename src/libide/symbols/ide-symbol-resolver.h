@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SYMBOL_RESOLVER_H
-#define IDE_SYMBOL_RESOLVER_H
+#pragma once
 
 #include "ide-object.h"
 #include "ide-symbol-tree.h"
@@ -104,5 +103,3 @@ IdeSymbol     *ide_symbol_resolver_find_nearest_scope_finish (IdeSymbolResolver 
                                                               GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_SYMBOL_RESOLVER_H */

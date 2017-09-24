@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_LOG_H
-#define IDE_BUILD_LOG_H
+#pragma once
 
 #include <glib.h>
 
@@ -35,5 +34,3 @@ typedef void (*IdeBuildLogObserver) (IdeBuildLogStream  log_stream,
                                      gpointer           user_data);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_LOG_H */

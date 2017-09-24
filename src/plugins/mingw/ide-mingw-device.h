@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_MINGW_DEVICE_H
-#define IDE_MINGW_DEVICE_H
+#pragma once
 
 #include <ide.h>
 
@@ -33,5 +32,3 @@ IdeDevice *ide_mingw_device_new (IdeContext  *context,
                                  const gchar *system_type);
 
 G_END_DECLS
-
-#endif /* IDE_MINGW_DEVICE_H */

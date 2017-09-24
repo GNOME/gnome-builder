@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_SYMBOL_TREE_H
-#define IDE_CTAGS_SYMBOL_TREE_H
+#pragma once
 
 #include <ide.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeCtagsSymbolTree, ide_ctags_symbol_tree, IDE, CTAGS_SYMB
 IdeCtagsSymbolTree *ide_ctags_symbol_tree_new (GPtrArray *items);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_SYMBOL_TREE_H */

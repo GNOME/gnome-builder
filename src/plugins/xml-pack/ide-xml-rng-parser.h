@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_RNG_PARSER_H
-#define IDE_XML_RNG_PARSER_H
+#pragma once
 
 #include <glib.h>
 #include <ide.h>
@@ -37,6 +36,3 @@ IdeXmlSchema          *ide_xml_rng_parser_parse          (IdeXmlRngParser *self,
                                                           GFile           *file);
 
 G_END_DECLS
-
-#endif /* IDE_XML_RNG_PARSER_H */
-

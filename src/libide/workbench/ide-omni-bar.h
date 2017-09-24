@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_BAR_H
-#define IDE_OMNI_BAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -32,5 +31,3 @@ G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
 GtkWidget *ide_omni_bar_new (void);
 
 G_END_DECLS
-
-#endif /* IDE_OMNI_BAR_H */

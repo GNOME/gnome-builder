@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_SERVICE_H
-#define IDE_CTAGS_SERVICE_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
@@ -43,5 +42,3 @@ void ide_ctags_service_unregister_completion  (IdeCtagsService            *self,
 GPtrArray *ide_ctags_service_get_indexes (IdeCtagsService *self);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_SERVICE_H */

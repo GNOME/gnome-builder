@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_LOCATION_H
-#define IDE_SOURCE_LOCATION_H
+#pragma once
 
 #include "ide-types.h"
 
@@ -50,5 +49,3 @@ guint              ide_source_location_hash            (IdeSourceLocation       
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceLocation, ide_source_location_unref)
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_LOCATION_H */

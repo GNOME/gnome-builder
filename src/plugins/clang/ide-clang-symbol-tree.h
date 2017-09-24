@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_SYMBOL_TREE_H
-#define IDE_CLANG_SYMBOL_TREE_H
+#pragma once
 
 #include <gio/gio.h>
 #include <ide.h>
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (IdeClangSymbolTree, ide_clang_symbol_tree, IDE, CLANG_SYMB
 GFile *ide_clang_symbol_tree_get_file (IdeClangSymbolTree *self);
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_SYMBOL_TREE_H */

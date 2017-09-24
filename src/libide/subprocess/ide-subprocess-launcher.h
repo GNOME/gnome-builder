@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SUBPROCESS_LAUNCHER_H
-#define IDE_SUBPROCESS_LAUNCHER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -99,5 +98,3 @@ void                   ide_subprocess_launcher_take_stderr_fd      (IdeSubproces
                                                                     gint                    stderr_fd);
 
 G_END_DECLS
-
-#endif /* IDE_SUBPROCESS_LAUNCHER_H */

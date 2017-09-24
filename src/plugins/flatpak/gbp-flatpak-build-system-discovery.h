@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_BUILD_SYSTEM_DISCOVERY_H
-#define GBP_FLATPAK_BUILD_SYSTEM_DISCOVERY_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpFlatpakBuildSystemDiscovery, gbp_flatpak_build_system_discovery, GBP, FLATPAK_BUILD_SYSTEM_DISCOVERY, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_BUILD_SYSTEM_DISCOVERY_H */

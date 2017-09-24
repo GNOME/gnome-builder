@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_PROVIDER_H
-#define GB_COMMAND_PROVIDER_H
+#pragma once
 
 #include <gio/gio.h>
 #include <ide.h>
@@ -54,5 +53,3 @@ void               gb_command_provider_complete        (GbCommandProvider *provi
                                                         const gchar       *initial_command_text);
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_PROVIDER_H */

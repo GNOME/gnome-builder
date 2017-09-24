@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROGRESS_H
-#define IDE_PROGRESS_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -43,5 +42,3 @@ void         ide_progress_file_progress_callback    (goffset      current_num_by
                                                      gpointer     user_data);
 
 G_END_DECLS
-
-#endif /* IDE_PROGRESS_H */

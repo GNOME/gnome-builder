@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TEXT_ITER_H
-#define IDE_TEXT_ITER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -62,5 +61,3 @@ gboolean _ide_text_iter_find_chars_forward       (GtkTextIter              *iter
                                                   gboolean                  only_at_start);
 
 G_END_DECLS
-
-#endif /* IDE_TEXT_ITER_H */

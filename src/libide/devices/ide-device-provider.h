@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DEVICE_PROVIDER_H
-#define IDE_DEVICE_PROVIDER_H
+#pragma once
 
 #include "ide-device.h"
 #include "ide-object.h"
@@ -44,5 +43,3 @@ GPtrArray *ide_device_provider_get_devices         (IdeDeviceProvider *provider)
 gboolean   ide_device_provider_get_settled         (IdeDeviceProvider *provider);
 
 G_END_DECLS
-
-#endif /* IDE_DEVICE_PROVIDER_H */

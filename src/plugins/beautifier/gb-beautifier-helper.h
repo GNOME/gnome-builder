@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_BEAUTIFIER_HELPER_H
-#define GB_BEAUTIFIER_HELPER_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -42,5 +41,3 @@ void          gb_beautifier_helper_remove_tmp_file          (GbBeautifierEditorA
                                                              GFile                    *tmp_file);
 
 G_END_DECLS
-
-#endif /* GB_BEAUTIFIER_HELPER_H */

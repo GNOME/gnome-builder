@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CONFIGURATION_H
-#define IDE_CONFIGURATION_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -165,5 +164,3 @@ void                  _ide_configuration_set_postbuild            (IdeConfigurat
                                                                    IdeBuildCommandQueue  *postbuild) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_CONFIGURATION_H */

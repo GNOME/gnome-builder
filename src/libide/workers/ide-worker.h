@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORKER_H
-#define IDE_WORKER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -45,5 +44,3 @@ void        ide_worker_register_service (IdeWorker        *self,
                                          GDBusConnection  *connection);
 
 G_END_DECLS
-
-#endif /* IDE_WORKER_H */

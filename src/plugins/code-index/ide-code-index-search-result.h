@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEX_SEARCH_RESULT_H
-#define IDE_CODE_INDEX_SEARCH_RESULT_H
+#pragma once
 
 #include <ide.h>
 
@@ -36,5 +35,3 @@ IdeCodeIndexSearchResult* ide_code_index_search_result_new (IdeContext        *c
                                                             gfloat             score);
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_SEARCH_RESULT_H */

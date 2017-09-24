@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DEVHELP_SEARCH_PRIVATE_H
-#define GBP_DEVHELP_SEARCH_PRIVATE_H
+#pragma once
 
 #include <libgd/gd.h>
 #include <ide.h>
@@ -44,5 +43,3 @@ struct _GbpDevhelpSearch
 };
 
 G_END_DECLS
-
-#endif /* GBP_DEVHELP_SEARCH_PRIVATE_H */

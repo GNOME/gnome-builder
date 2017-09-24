@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_SYMBOL_TREE_H
-#define IDE_XML_SYMBOL_TREE_H
+#pragma once
 
 #include <ide.h>
 #include "ide-xml-symbol-node.h"
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (IdeXmlSymbolTree, ide_xml_symbol_tree, IDE, XML_SYMBOL_TRE
 IdeXmlSymbolTree *ide_xml_symbol_tree_new (IdeXmlSymbolNode *root_node);
 
 G_END_DECLS
-
-#endif /* IDE_XML_SYMBOL_TREE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_BEAUTIFIER_PRIVATE_H
-#define GB_BEAUTIFIER_PRIVATE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -38,6 +37,3 @@ struct _GbBeautifierEditorAddin
 };
 
 G_END_DECLS
-
-#endif /* GB_BEAUTIFIER_PRIVATE_H */
-

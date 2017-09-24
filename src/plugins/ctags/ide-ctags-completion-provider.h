@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_COMPLETION_PROVIDER_H
-#define IDE_CTAGS_COMPLETION_PROVIDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -36,5 +35,3 @@ void                         ide_ctags_completion_provider_add_index (IdeCtagsCo
                                                                       IdeCtagsIndex              *index);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_COMPLETION_PROVIDER_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_HIGHLIGHTER_H
-#define IDE_CLANG_HIGHLIGHTER_H
+#pragma once
 
 #include <ide.h>
 
@@ -33,5 +32,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeClangHighlighter, ide_clang_highlighter, IDE, CLANG_HIGHLIGHTER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_HIGHLIGHTER_H */

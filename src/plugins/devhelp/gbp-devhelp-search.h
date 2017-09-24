@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DEVHELP_SEARCH_H
-#define GBP_DEVHELP_SEARCH_H
+#pragma once
 
 #include <ide.h>
 
@@ -33,5 +32,3 @@ void         gbp_devhelp_search_set_devhelp     (GbpDevhelpSearch     *self,
 GtkRevealer *gbp_devhelp_search_get_revealer    (GbpDevhelpSearch     *self);
 
 G_END_DECLS
-
-#endif /* GBP_DEVHELP_SEARCH_H */

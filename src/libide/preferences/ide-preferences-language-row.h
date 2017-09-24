@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PREFERENCES_LANGUAGE_ROW_H
-#define IDE_PREFERENCES_LANGUAGE_ROW_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdePreferencesLanguageRow, ide_preferences_language_row, IDE, PREFERENCES_LANGUAGE_ROW, DzlPreferencesBin)
 
 G_END_DECLS
-
-#endif /* IDE_PREFERENCES_LANGUAGE_ROW_H */

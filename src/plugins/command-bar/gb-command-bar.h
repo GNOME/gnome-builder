@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_BAR_H
-#define GB_COMMAND_BAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -32,5 +31,3 @@ void       gb_command_bar_show (GbCommandBar *bar);
 void       gb_command_bar_hide (GbCommandBar *bar);
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_BAR_H */

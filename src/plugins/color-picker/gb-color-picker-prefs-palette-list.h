@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COLOR_PICKER_PREFS_PALETTE_LIST_H
-#define GB_COLOR_PICKER_PREFS_PALETTE_LIST_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -32,6 +31,3 @@ GbColorPickerPrefsPaletteList    *gb_color_picker_prefs_palette_list_new        
 GtkListBox                       *gb_color_picker_prefs_palette_list_get_list_box    (GbColorPickerPrefsPaletteList     *self);
 
 G_END_DECLS
-
-#endif /* GB_COLOR_PICKER_PREFS_PALETTE_LIST_H */
-

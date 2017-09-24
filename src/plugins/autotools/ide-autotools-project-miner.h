@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_AUTOTOOLS_PROJECT_MINER_H
-#define IDE_AUTOTOOLS_PROJECT_MINER_H
+#pragma once
 
 #include <ide.h>
 
@@ -32,5 +31,3 @@ void   ide_autotools_project_miner_set_root_directory (IdeAutotoolsProjectMiner 
                                                        GFile                    *root_directory);
 
 G_END_DECLS
-
-#endif /* IDE_AUTOTOOLS_PROJECT_MINER_H */

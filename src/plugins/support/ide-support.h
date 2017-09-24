@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SUPPORT_H
-#define IDE_SUPPORT_H
+#pragma once
 
 #include <glib.h>
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 gchar *ide_get_support_log (void);
 
 G_END_DECLS
-
-#endif /* IDE_SUPPORT_H */

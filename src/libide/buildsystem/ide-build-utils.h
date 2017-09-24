@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_UTILS_H
-#define IDE_BUILD_UTILS_H
+#pragma once
 
 #include <glib.h>
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 gchar *ide_build_utils_color_codes_filtering (const gchar *txt);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_UTILS_H */

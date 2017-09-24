@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_GACTION_PROVIDER_H
-#define GB_COMMAND_GACTION_PROVIDER_H
+#pragma once
 
 #include "gb-command-provider.h"
 
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
 GbCommandProvider *gb_command_gaction_provider_new (IdeWorkbench *workbench);
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_GACTION_PROVIDER_H */

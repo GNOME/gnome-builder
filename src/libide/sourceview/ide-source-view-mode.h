@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_VIEW_MODE_H
-#define IDE_SOURCE_VIEW_MODE_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -48,5 +47,3 @@ gboolean               _ide_source_view_mode_do_event                    (IdeSou
                                                                           gboolean              *remove) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_VIEW_MODE_H */

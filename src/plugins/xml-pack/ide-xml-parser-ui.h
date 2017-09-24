@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_PARSER_UI_H
-#define IDE_XML_PARSER_UI_H
+#pragma once
 
 #include <glib.h>
 
@@ -29,5 +28,3 @@ void      ide_xml_parser_ui_setup       (IdeXmlParser *self,
                                          ParserState  *state);
 
 G_END_DECLS
-
-#endif /* IDE_XML_PARSER_UI_H */

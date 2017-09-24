@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_POSIX_H
-#define IDE_POSIX_H
+#pragma once
 
 #include <glib.h>
 
@@ -30,5 +29,3 @@ gchar       *ide_path_collapse        (const gchar *path);
 gchar       *ide_path_expand          (const gchar *path);
 
 G_END_DECLS
-
-#endif /* IDE_POSIX_H */

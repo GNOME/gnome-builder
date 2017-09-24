@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_PIPELINE_ADDIN_H
-#define GBP_FLATPAK_PIPELINE_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -37,5 +36,3 @@ typedef enum
 GQuark     gb_flatpak_pipeline_error_quark (void);
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_PIPELINE_ADDIN_H */

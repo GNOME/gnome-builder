@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FIXIT_H
-#define IDE_FIXIT_H
+#pragma once
 
 #include "ide-types.h"
 
@@ -35,5 +34,3 @@ const gchar    *ide_fixit_get_text  (IdeFixit       *self);
 IdeSourceRange *ide_fixit_get_range (IdeFixit       *self);
 
 G_END_DECLS
-
-#endif /* IDE_FIXIT_H */

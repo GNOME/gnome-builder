@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORKBENCH_ADDIN_H
-#define IDE_WORKBENCH_ADDIN_H
+#pragma once
 
 #include "util/ide-uri.h"
 #include "workbench/ide-perspective.h"
@@ -82,5 +81,3 @@ void      ide_workbench_addin_perspective_set (IdeWorkbenchAddin      *self,
                                                IdePerspective         *perspective);
 
 G_END_DECLS
-
-#endif /* IDE_WORKBENCH_ADDIN_H */

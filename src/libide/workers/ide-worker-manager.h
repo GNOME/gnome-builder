@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORKER_MANAGER_H
-#define IDE_WORKER_MANAGER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -39,5 +38,3 @@ GDBusProxy       *ide_worker_manager_get_worker_finish (IdeWorkerManager     *se
                                                         GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_WORKER_MANAGER_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TRANSFERS_PROGRESS_ICON_H
-#define IDE_TRANSFERS_PROGRESS_ICON_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -33,5 +32,3 @@ void       ide_transfers_progress_icon_set_progress (IdeTransfersProgressIcon *s
                                                      gdouble                   progress);
 
 G_END_DECLS
-
-#endif /* IDE_TRANSFERS_PROGRESS_ICON_H */

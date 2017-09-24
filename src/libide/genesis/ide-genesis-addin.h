@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GENESIS_ADDIN_H
-#define IDE_GENESIS_ADDIN_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -61,5 +60,3 @@ gboolean   ide_genesis_addin_run_finish     (IdeGenesisAddin      *self,
                                              GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_GENESIS_ADDIN_H */

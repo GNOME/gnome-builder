@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_CODE_INDEX_ENTRIES_H
-#define IDE_CLANG_CODE_INDEX_ENTRIES_H
+#pragma once
 
 #include <clang-c/Index.h>
 #include <ide.h>
@@ -32,5 +31,3 @@ IdeClangCodeIndexEntries *ide_clang_code_index_entries_new (CXTranslationUnit  t
                                                             const gchar       *source_filename);
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_CODE_INDEX_ENTRIES_H */

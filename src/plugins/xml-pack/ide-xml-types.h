@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_TYPES_H
-#define IDE_XML_TYPES_H
+#pragma once
 
 #include <glib.h>
 
@@ -40,5 +39,3 @@ typedef enum
 } IdeXmlPositionDetail;
 
 G_END_DECLS
-
-#endif /* IDE_XML_TYPES_H */

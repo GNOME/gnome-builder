@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DOCUMENTATION_CARD_H
-#define GBP_DOCUMENTATION_CARD_H
+#pragma once
 
 #include <ide.h>
 
@@ -33,5 +32,3 @@ void gbp_documentation_card_popup    (GbpDocumentationCard *self,
                                       gint x,
                                       gint y);
 G_END_DECLS
-
-#endif /* GB_DOCUMENTATION_CARD_H */

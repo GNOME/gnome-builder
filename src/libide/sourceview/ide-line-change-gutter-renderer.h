@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LINE_CHANGE_GUTTER_RENDERER_H
-#define IDE_LINE_CHANGE_GUTTER_RENDERER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_render
                       IDE, LINE_CHANGE_GUTTER_RENDERER, GtkSourceGutterRenderer);
 
 G_END_DECLS
-
-#endif /* IDE_LINE_CHANGE_GUTTER_RENDERER_H */

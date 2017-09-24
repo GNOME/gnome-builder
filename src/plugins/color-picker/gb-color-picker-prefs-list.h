@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COLOR_PICKER_PREFS_LIST_H
-#define GB_COLOR_PICKER_PREFS_LIST_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -31,6 +30,3 @@ G_DECLARE_FINAL_TYPE (GbColorPickerPrefsList, gb_color_picker_prefs_list, GB, CO
 GbColorPickerPrefsList *gb_color_picker_prefs_list_new (void);
 
 G_END_DECLS
-
-#endif /* GB_COLOR_PICKER_PREFS_LIST_H */
-

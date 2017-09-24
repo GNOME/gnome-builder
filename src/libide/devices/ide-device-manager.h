@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DEVICE_MANAGER_H
-#define IDE_DEVICE_MANAGER_H
+#pragma once
 
 #include "ide-object.h"
 #include "ide-device-manager.h"
@@ -38,5 +37,3 @@ IdeDevice *ide_device_manager_get_device      (IdeDeviceManager  *self,
                                                const gchar       *device_id);
 
 G_END_DECLS
-
-#endif /* IDE_DEVICE_MANAGER_H */

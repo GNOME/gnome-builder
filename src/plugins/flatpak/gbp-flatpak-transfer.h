@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_TRANSFER_H
-#define GBP_FLATPAK_TRANSFER_H
+#pragma once
 
 #include <ide.h>
 
@@ -33,5 +32,3 @@ GbpFlatpakTransfer *gbp_flatpak_transfer_new (const gchar        *id,
                                               gboolean            force_update);
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_TRANSFER_H */

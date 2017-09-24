@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPET_PARSER_H
-#define IDE_SOURCE_SNIPPET_PARSER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -35,5 +34,3 @@ gboolean                ide_source_snippet_parser_load_from_file (IdeSourceSnipp
 GList                  *ide_source_snippet_parser_get_snippets   (IdeSourceSnippetParser  *parser);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPET_PARSER_H */

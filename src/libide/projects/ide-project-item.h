@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_ITEM_H
-#define IDE_PROJECT_ITEM_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -40,5 +39,3 @@ void            ide_project_item_remove       (IdeProjectItem *item,
 GSequence      *ide_project_item_get_children (IdeProjectItem *item);
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_ITEM_H */

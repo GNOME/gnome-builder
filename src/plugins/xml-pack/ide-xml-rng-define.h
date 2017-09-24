@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_RNG_DEFINE_H
-#define IDE_XML_RNG_DEFINE_H
+#pragma once
 
 #include <libxml/tree.h>
 #include <glib-object.h>
@@ -99,6 +98,3 @@ void                 ide_xml_rng_define_dump_tree           (IdeXmlRngDefine    
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlRngDefine, ide_xml_rng_define_unref)
 
 G_END_DECLS
-
-#endif /* IDE_XML_RNG_DEFINE_H */
-

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_CONFIGURATION_PROVIDER_H
-#define GBP_FLATPAK_CONFIGURATION_PROVIDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpFlatpakConfigurationProvider, gbp_flatpak_configuration_provider, GBP, FLATPAK_CONFIGURATION_PROVIDER, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_CONFIGURATION_PROVIDER_H */

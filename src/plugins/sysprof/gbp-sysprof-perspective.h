@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_SYSPROF_PERSPECTIVE_H
-#define GBP_SYSPROF_PERSPECTIVE_H
+#pragma once
 
 #include <ide.h>
 #include <sysprof-ui.h>
@@ -36,5 +35,3 @@ void             gbp_sysprof_perspective_set_reader       (GbpSysprofPerspective
                                                            SpCaptureReader       *reader);
 
 G_END_DECLS
-
-#endif /* GBP_SYSPROF_PERSPECTIVE_H */

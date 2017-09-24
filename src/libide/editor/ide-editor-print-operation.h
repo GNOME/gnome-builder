@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITOR_PRINT_OPERATION_H
-#define IDE_EDITOR_PRINT_OPERATION_H
+#pragma once
 
 #include "ide-editor-view.h"
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, IDE, 
 IdeEditorPrintOperation  *ide_editor_print_operation_new    (IdeSourceView *view);
 
 G_END_DECLS
-
-#endif /* IDE_EDITOR_PRINT_OPERATION_H */

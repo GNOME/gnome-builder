@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_CONFIGURATION_ROW_H
-#define IDE_BUILD_CONFIGURATION_ROW_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -32,5 +31,3 @@ GtkWidget        *ide_build_configuration_row_new               (IdeConfiguratio
 IdeConfiguration *ide_build_configuration_row_get_configuration (IdeBuildConfigurationRow *self);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_CONFIGURATION_ROW_H */

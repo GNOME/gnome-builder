@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SUBPROCESS_H
-#define IDE_SUBPROCESS_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -157,5 +156,3 @@ gboolean       ide_subprocess_communicate_utf8_finish (IdeSubprocess        *sel
                                                        GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_SUBPROCESS_H */

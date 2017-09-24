@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PKCON_TRANSFER_H
-#define IDE_PKCON_TRANSFER_H
+#pragma once
 
 #include "ide-transfer.h"
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdePkconTransfer, ide_pkcon_transfer, IDE, PKCON_TRANSFER,
 IdePkconTransfer *ide_pkcon_transfer_new (const gchar * const *packages);
 
 G_END_DECLS
-
-#endif /* IDE_PKCON_TRANSFER_H */

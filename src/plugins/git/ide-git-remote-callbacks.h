@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GIT_REMOTE_CALLBACKS_H
-#define IDE_GIT_REMOTE_CALLBACKS_H
+#pragma once
 
 #include <libgit2-glib/ggit.h>
 #include <ide.h>
@@ -35,5 +34,3 @@ IdeProgress         *ide_git_remote_callbacks_get_progress (IdeGitRemoteCallback
 void                 ide_git_remote_callbacks_cancel       (IdeGitRemoteCallbacks *self);
 
 G_END_DECLS
-
-#endif /* IDE_GIT_REMOTE_CALLBACKS_H */

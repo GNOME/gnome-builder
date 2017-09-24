@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DOCUMENTATION_CARD_VIEW_ADDIN_H
-#define GBP_DOCUMENTATION_CARD_VIEW_ADDIN_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpDocumentationCardViewAddin, gbp_documentation_card_view_addin, GBP, DOCUMENTATION_CARD_VIEW_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_DOCUMENTATION_CARD_VIEW_ADDIN_H */

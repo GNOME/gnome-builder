@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_SOURCES_H
-#define GBP_FLATPAK_SOURCES_H
+#pragma once
 
 GFile    *fetch_archive (const gchar  *url,
                          const gchar  *sha,
@@ -30,5 +29,3 @@ gboolean  apply_patch (const gchar  *path,
                        GFile        *source_dir,
                        guint         strip_components,
                        GError      **error);
-
-#endif /* GBP_FLATPAK_SOURCES_H */

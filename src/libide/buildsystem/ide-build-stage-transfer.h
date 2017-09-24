@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_STAGE_TRANSFER_H
-#define IDE_BUILD_STAGE_TRANSFER_H
+#pragma once
 
 #include "buildsystem/ide-build-stage.h"
 
@@ -31,5 +30,3 @@ IdeBuildStageTransfer *ide_build_stage_transfer_new (IdeContext  *context,
                                                      IdeTransfer *transfer);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_STAGE_TRANSFER_H */

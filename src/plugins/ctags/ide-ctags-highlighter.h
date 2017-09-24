@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_HIGHLIGHTER_H
-#define IDE_CTAGS_HIGHLIGHTER_H
+#pragma once
 
 #include <ide.h>
 
@@ -37,5 +36,3 @@ void ide_ctags_highlighter_add_index (IdeCtagsHighlighter *self,
                                       IdeCtagsIndex       *index);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_HIGHLIGHTER_H */

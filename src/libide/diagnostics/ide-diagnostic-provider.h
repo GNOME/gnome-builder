@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIAGNOSTIC_PROVIDER_H
-#define IDE_DIAGNOSTIC_PROVIDER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -56,5 +55,3 @@ void            ide_diagnostic_provider_emit_invalidated (IdeDiagnosticProvider 
 void            ide_diagnostic_provider_load             (IdeDiagnosticProvider  *self);
 
 G_END_DECLS
-
-#endif /* IDE_DIAGNOSTIC_PROVIDER_H */

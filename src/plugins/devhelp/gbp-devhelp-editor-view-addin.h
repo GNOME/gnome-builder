@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DEVHELP_EDITOR_VIEW_ADDIN_H
-#define GBP_DEVHELP_EDITOR_VIEW_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpDevhelpEditorViewAddin, gbp_devhelp_editor_view_addin, GBP, DEVHELP_EDITOR_VIEW_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_DEVHELP_EDITOR_VIEW_ADDIN_H */

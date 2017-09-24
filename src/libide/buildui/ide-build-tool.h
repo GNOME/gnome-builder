@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_TOOL_H
-#define IDE_BUILD_TOOL_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeBuildTool, ide_build_tool, IDE, BUILD_TOOL, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_TOOL_H */

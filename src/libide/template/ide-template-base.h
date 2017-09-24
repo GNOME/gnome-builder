@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TEMPLATE_BASE_H
-#define IDE_TEMPLATE_BASE_H
+#pragma once
 
 #include <tmpl-glib.h>
 
@@ -55,5 +54,3 @@ gboolean             ide_template_base_expand_all_finish (IdeTemplateBase       
 void                 ide_template_base_reset             (IdeTemplateBase       *self);
 
 G_END_DECLS
-
-#endif /* IDE_TEMPLATE_BASE_H */

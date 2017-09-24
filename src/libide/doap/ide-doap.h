@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DOAP_H
-#define IDE_DOAP_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -56,5 +55,3 @@ gchar        **ide_doap_get_languages     (IdeDoap        *self);
 GList         *ide_doap_get_maintainers   (IdeDoap        *self);
 
 G_END_DECLS
-
-#endif /* IDE_DOAP_H */

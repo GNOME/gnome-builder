@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_POSITION_H
-#define IDE_XML_POSITION_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -87,5 +86,3 @@ const gchar              *ide_xml_position_kind_get_str         (IdeXmlPositionK
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlPosition, ide_xml_position_unref)
 
 G_END_DECLS
-
-#endif /* IDE_XML_POSITION_H */

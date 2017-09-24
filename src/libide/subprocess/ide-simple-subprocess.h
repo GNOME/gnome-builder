@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SIMPLE_SUBPROCESS_H
-#define IDE_SIMPLE_SUBPROCESS_H
+#pragma once
 
 #include "ide-subprocess.h"
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeSimpleSubprocess, ide_simple_subprocess, IDE, SIMPLE_SU
 IdeSubprocess *ide_simple_subprocess_new (GSubprocess *subprocess);
 
 G_END_DECLS
-
-#endif /* IDE_SIMPLE_SUBPROCESS_H */

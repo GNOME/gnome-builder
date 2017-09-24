@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_UNSAVED_FILE_H
-#define IDE_UNSAVED_FILE_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -43,5 +42,3 @@ IdeUnsavedFile *_ide_unsaved_file_new          (GFile           *file,
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeUnsavedFile, ide_unsaved_file_unref)
 
 G_END_DECLS
-
-#endif /* IDE_UNSAVED_FILE_H */

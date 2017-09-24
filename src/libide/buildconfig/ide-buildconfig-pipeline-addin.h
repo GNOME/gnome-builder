@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILDCONFIG_PIPELINE_ADDIN_H
-#define IDE_BUILDCONFIG_PIPELINE_ADDIN_H
+#pragma once
 
 #include "buildsystem/ide-build-pipeline-addin.h"
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeBuildconfigPipelineAddin, ide_buildconfig_pipeline_addin, IDE, BUILDCONFIG_PIPELINE_ADDIN, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_BUILDCONFIG_PIPELINE_ADDIN_H */

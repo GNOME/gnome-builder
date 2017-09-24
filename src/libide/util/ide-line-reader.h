@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LINE_READER_H
-#define IDE_LINE_READER_H
+#pragma once
 
 #include <glib.h>
 
@@ -37,5 +36,3 @@ gchar *ide_line_reader_next (IdeLineReader *reader,
                              gsize         *length);
 
 G_END_DECLS
-
-#endif /* IDE_LINE_READER_H */

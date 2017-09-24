@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_COMPLETION_VALUES_H
-#define IDE_XML_COMPLETION_VALUES_H
+#pragma once
 
 #include <glib.h>
 
@@ -38,5 +37,3 @@ GPtrArray           *ide_xml_completion_values_get_matches       (IdeXmlRngDefin
                                                                   const gchar     *prefix);
 
 G_END_DECLS
-
-#endif /* IDE_XML_COMPLETION_VALUES_H */

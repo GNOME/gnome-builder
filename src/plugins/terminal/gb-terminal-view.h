@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_VIEW_H
-#define GB_TERMINAL_VIEW_H
+#pragma once
 
 #include <ide.h>
 #include <vte/vte.h>
@@ -32,5 +31,3 @@ void      gb_terminal_view_set_pty        (GbTerminalView *self,
                                            VtePty         *pty);
 
 G_END_DECLS
-
-#endif /* GB_TERMINAL_VIEW_H */

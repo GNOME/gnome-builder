@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_UNSAVED_FILES_H
-#define IDE_UNSAVED_FILES_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -60,5 +59,3 @@ gboolean        ide_unsaved_files_contains          (IdeUnsavedFiles      *self,
                                                      GFile                *file);
 
 G_END_DECLS
-
-#endif /* IDE_UNSAVED_FILES_H */

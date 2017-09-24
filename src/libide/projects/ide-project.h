@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_H
-#define IDE_PROJECT_H
+#pragma once
 
 #include "ide-object.h"
 #include "ide-project-files.h"
@@ -63,5 +62,3 @@ void             _ide_project_set_name          (IdeProject           *project,
                                                  const gchar          *name) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_PATH_H
-#define IDE_XML_PATH_H
+#pragma once
 
 #include "ide-xml-symbol-node.h"
 
@@ -53,6 +52,3 @@ void            ide_xml_path_prepend_node     (IdeXmlPath       *self,
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlPath, ide_xml_path_unref)
 
 G_END_DECLS
-
-#endif /* IDE_XML_PATH_H */
-

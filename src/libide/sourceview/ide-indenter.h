@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_INDENTER_H
-#define IDE_INDENTER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -53,5 +52,3 @@ gchar    *ide_indenter_format     (IdeIndenter *self,
                                    GdkEventKey *event);
 
 G_END_DECLS
-
-#endif /* IDE_INDENTER_H */

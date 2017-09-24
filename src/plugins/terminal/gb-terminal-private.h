@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_PRIVATE_H
-#define GB_TERMINAL_PRIVATE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -27,5 +26,3 @@ void _gb_terminal_application_addin_register_type (GTypeModule *module);
 void _gb_terminal_workbench_addin_register_type   (GTypeModule *module);
 
 G_END_DECLS
-
-#endif /* GB_TERMINAL_PRIVATE_H */

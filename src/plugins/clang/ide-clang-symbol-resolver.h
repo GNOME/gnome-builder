@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_SYMBOL_RESOLVER_H
-#define IDE_CLANG_SYMBOL_RESOLVER_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeClangSymbolResolver, ide_clang_symbol_resolver, IDE, CLANG_SYMBOL_RESOLVER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_SYMBOL_RESOLVER_H */

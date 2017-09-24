@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_MINER_H
-#define IDE_PROJECT_MINER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -55,5 +54,3 @@ gboolean ide_project_miner_mine_finish     (IdeProjectMiner      *self,
                                             GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_MINER_H */

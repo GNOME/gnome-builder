@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_COMPLETION_RESULTS_H
-#define IDE_COMPLETION_RESULTS_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -63,5 +62,3 @@ gint                  ide_completion_results_get_insert_offset      (IdeCompleti
 gint                  ide_completion_results_get_end_offset         (IdeCompletionResults        *self);
 
 G_END_DECLS
-
-#endif /* IDE_COMPLETION_RESULTS_H */

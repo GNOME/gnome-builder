@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_VALIDATOR_H
-#define IDE_XML_VALIDATOR_H
+#pragma once
 
 #include <glib-object.h>
 #include <libxml/parser.h>
@@ -43,6 +42,3 @@ gboolean               ide_xml_validator_validate   (IdeXmlValidator  *self,
                                                      IdeDiagnostics  **diagnostics);
 
 G_END_DECLS
-
-#endif /* IDE_XML_VALIDATOR_H */
-

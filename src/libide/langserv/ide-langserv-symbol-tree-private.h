@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_SYMBOL_TREE_PRIVATE_H
-#define IDE_LANGSERV_SYMBOL_TREE_PRIVATE_H
+#pragma once
 
 #include "ide-langserv-symbol-tree.h"
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 IdeLangservSymbolTree *ide_langserv_symbol_tree_new (GPtrArray *symbols);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_SYMBOL_TREE_PRIVATE_H */

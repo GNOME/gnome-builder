@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPET_H
-#define IDE_SOURCE_SNIPPET_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -59,5 +58,3 @@ void                     ide_source_snippet_set_snippet_text (IdeSourceSnippet  
                                                               const gchar           *snippet_text);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPET_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SEARCH_ENGINE_H
-#define IDE_SEARCH_ENGINE_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -40,5 +39,3 @@ GListModel      *ide_search_engine_search_finish (IdeSearchEngine      *self,
                                                   GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_SEARCH_ENGINE_H */

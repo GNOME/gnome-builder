@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_RESULT_H
-#define GB_COMMAND_RESULT_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -42,5 +41,3 @@ void             gb_command_result_set_result_text  (GbCommandResult *result,
                                                      const gchar     *result_text);
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_RESULT_H */

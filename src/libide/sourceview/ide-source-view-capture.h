@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_VIEW_CAPTURE_H
-#define IDE_SOURCE_VIEW_CAPTURE_H
+#pragma once
 
 #include "ide-source-view.h"
 
@@ -45,5 +44,3 @@ void                  ide_source_view_capture_record_modifier (IdeSourceViewCapt
                                                                gunichar               modifier);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_VIEW_CAPTURE_H */

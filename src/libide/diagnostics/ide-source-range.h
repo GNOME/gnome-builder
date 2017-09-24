@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_RANGE_H
-#define IDE_SOURCE_RANGE_H
+#pragma once
 
 #include "ide-types.h"
 
@@ -36,5 +35,3 @@ IdeSourceRange    *ide_source_range_new       (IdeSourceLocation *begin,
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceRange, ide_source_range_unref)
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_RANGE_H */

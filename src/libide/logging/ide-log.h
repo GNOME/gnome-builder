@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LOG_H
-#define IDE_LOG_H
+#pragma once
 
 #include <glib.h>
 
@@ -31,5 +30,3 @@ void ide_log_set_verbosity      (gint         level);
 void ide_log_shutdown           (void);
 
 G_END_DECLS
-
-#endif /* IDE_LOG_H */

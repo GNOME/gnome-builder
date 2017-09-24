@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_HIGHLIGHTER_H
-#define IDE_LANGSERV_HIGHLIGHTER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -45,6 +44,3 @@ void               ide_langserv_highlighter_set_client (IdeLangservHighlighter *
                                                         IdeLangservClient      *client);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_HIGHLIGHTER_H */
-

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_VIEW_ACTIONS_H
-#define GB_TERMINAL_VIEW_ACTIONS_H
+#pragma once
 
 #include "gb-terminal-view.h"
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 void gb_terminal_view_actions_init   (GbTerminalView *self);
 
 G_END_DECLS
-
-#endif /* GB_TERMINAL_VIEW_ACTIONS_H */

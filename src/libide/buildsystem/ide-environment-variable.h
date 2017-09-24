@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_ENVIRONMENT_VARIABLE_H
-#define IDE_ENVIRONMENT_VARIABLE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -37,5 +36,3 @@ void                    ide_environment_variable_set_value (IdeEnvironmentVariab
                                                             const gchar            *value);
 
 G_END_DECLS
-
-#endif /* IDE_ENVIRONMENT_VARIABLE_H */

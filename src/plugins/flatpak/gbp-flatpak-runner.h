@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_RUNNER_H
-#define GBP_FLATPAK_RUNNER_H
+#pragma once
 
 #include <ide.h>
 
@@ -32,5 +31,3 @@ GbpFlatpakRunner *gbp_flatpak_runner_new (IdeContext  *context,
                                           const gchar *binary_name);
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_RUNNER_H */

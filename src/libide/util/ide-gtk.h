@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GTK_H
-#define IDE_GTK_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -36,5 +35,3 @@ IdeContext   *ide_widget_get_context         (GtkWidget               *widget);
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
 
 G_END_DECLS
-
-#endif /* IDE_GTK_H */

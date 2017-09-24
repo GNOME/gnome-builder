@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FLATPAK_H
-#define IDE_FLATPAK_H
+#pragma once
 
 #include <glib.h>
 
@@ -27,5 +26,3 @@ gboolean  ide_is_flatpak           (void);
 gchar    *ide_flatpak_get_app_path (const gchar *path);
 
 G_END_DECLS
-
-#endif /* IDE_FLATPAK_H */

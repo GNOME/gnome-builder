@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TYPES_H
-#define IDE_TYPES_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -139,5 +138,3 @@ typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 typedef struct _IdeVcs                         IdeVcs;
 
 G_END_DECLS
-
-#endif /* IDE_TYPES_H */

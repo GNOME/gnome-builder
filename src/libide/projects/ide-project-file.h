@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_FILE_H
-#define IDE_PROJECT_FILE_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -42,5 +41,3 @@ const gchar *ide_project_file_get_path         (IdeProjectFile *self);
 gboolean     ide_project_file_get_is_directory (IdeProjectFile *self);
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_FILE_H */

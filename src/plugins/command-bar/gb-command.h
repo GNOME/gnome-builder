@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_H
-#define GB_COMMAND_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -40,5 +39,3 @@ GbCommand       *gb_command_new      (void);
 GbCommandResult *gb_command_execute  (GbCommand *command);
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_H */

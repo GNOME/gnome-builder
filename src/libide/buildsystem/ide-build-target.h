@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_TARGET_H
-#define IDE_BUILD_TARGET_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -49,5 +48,3 @@ GFile  *ide_build_target_get_install_directory (IdeBuildTarget *self);
 gchar  *ide_build_target_get_name              (IdeBuildTarget *self);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_TARGET_H */

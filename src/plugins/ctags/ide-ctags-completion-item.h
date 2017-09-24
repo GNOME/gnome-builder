@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_COMPLETION_ITEM_H
-#define IDE_CTAGS_COMPLETION_ITEM_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
@@ -36,5 +35,3 @@ ide_ctags_completion_item_new (IdeCtagsCompletionProvider *provider,
                                const IdeCtagsIndexEntry   *entry);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_COMPLETION_ITEM_H */

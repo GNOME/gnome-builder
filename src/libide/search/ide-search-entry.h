@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SEARCH_ENTRY_H
-#define IDE_SEARCH_ENTRY_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeSearchEntry, ide_search_entry, IDE, SEARCH_ENTRY, DzlSu
 GtkWidget *ide_search_entry_new (void);
 
 G_END_DECLS
-
-#endif /* IDE_SEARCH_ENTRY_H */

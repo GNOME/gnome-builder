@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_CREATE_PROJECT_TEMPLATE_ICON_H
-#define GBP_CREATE_PROJECT_TEMPLATE_ICON_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -29,5 +28,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, GBP, CREATE_PROJECT_TEMPLATE_ICON, GtkBin)
 
 G_END_DECLS
-
-#endif /* GBP_CREATE_PROJECT_TEMPLATE_ICON_H */

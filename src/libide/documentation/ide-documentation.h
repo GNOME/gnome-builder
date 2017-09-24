@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DOCUMENTATION_H
-#define IDE_DOCUMENTATION_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -37,5 +36,3 @@ IdeDocumentationInfo    *ide_documentation_get_info    (IdeDocumentation        
                                                         IdeDocumentationContext  context);
 
 G_END_DECLS
-
-#endif /* IDE_DOCUMENTATION_H */

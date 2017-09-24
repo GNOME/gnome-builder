@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_FILE_H
-#define GB_PROJECT_FILE_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -44,5 +43,3 @@ gint           gb_project_file_compare                   (GbProjectFile *a,
                                                           GbProjectFile *b);
 
 G_END_DECLS
-
-#endif /* GB_PROJECT_FILE_H */

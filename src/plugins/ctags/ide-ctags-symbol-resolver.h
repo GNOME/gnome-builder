@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_SYMBOL_RESOLVER_H
-#define IDE_CTAGS_SYMBOL_RESOLVER_H
+#pragma once
 
 #include <ide.h>
 
@@ -38,5 +37,3 @@ IdeSourceLocation *ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbol
                                                                   GError                  **error);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_SYMBOL_RESOLVER_H */

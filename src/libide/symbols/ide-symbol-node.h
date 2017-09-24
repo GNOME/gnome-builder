@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SYMBOL_NODE_H
-#define IDE_SYMBOL_NODE_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -65,5 +64,3 @@ IdeSourceLocation *ide_symbol_node_get_location_finish (IdeSymbolNode        *se
                                                         GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_SYMBOL_NODE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_CONFIGURATION_VIEW_H
-#define IDE_BUILD_CONFIGURATION_VIEW_H
+#pragma once
 
 #include <ide.h>
 #include <dazzle.h>
@@ -33,5 +32,3 @@ void              ide_build_configuration_view_set_configuration (IdeBuildConfig
                                                                   IdeConfiguration          *configuration);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_CONFIGURATION_VIEW_H */

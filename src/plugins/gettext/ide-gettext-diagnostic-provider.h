@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GETTEXT_DIAGNOSTIC_PROVIDER_H
-#define IDE_GETTEXT_DIAGNOSTIC_PROVIDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeGettextDiagnostics, ide_gettext_diagnostics, IDE, GETTE
 G_DECLARE_FINAL_TYPE (IdeGettextDiagnosticProvider, ide_gettext_diagnostic_provider, IDE, GETTEXT_DIAGNOSTIC_PROVIDER, IdeObject)
 
 G_END_DECLS
-
-#endif	/* IDE_GETTEXT_DIAGNOSTIC_PROVIDER_H */

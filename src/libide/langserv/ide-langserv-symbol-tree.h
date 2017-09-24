@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_SYMBOL_TREE_H
-#define IDE_LANGSERV_SYMBOL_TREE_H
+#pragma once
 
 #include "symbols/ide-symbol-tree.h"
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeLangservSymbolTree, ide_langserv_symbol_tree, IDE, LANGSERV_SYMBOL_TREE, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_SYMBOL_TREE_H */

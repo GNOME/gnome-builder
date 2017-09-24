@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_SEARCH_PRIVATE_H
-#define GB_TERMINAL_SEARCH_PRIVATE_H
+#pragma once
 
 #include <libgd/gd.h>
 #include <ide.h>
@@ -58,5 +57,3 @@ struct _GbTerminalSearch
 };
 
 G_END_DECLS
-
-#endif /* GB_TERMINAL_SEARCH_PRIVATE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GREETER_PERSPECTIVE_H
-#define IDE_GREETER_PERSPECTIVE_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -34,5 +33,3 @@ void ide_greeter_perspective_show_genesis_view (IdeGreeterPerspective *self,
                                                 const gchar *manifest);
 
 G_END_DECLS
-
-#endif /* IDE_GREETER_PERSPECTIVE_H */

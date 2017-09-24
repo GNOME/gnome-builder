@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DEBUGGER_CONTROLS_H
-#define IDE_DEBUGGER_CONTROLS_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -36,5 +35,3 @@ void         ide_debugger_controls_set_debugger (IdeDebuggerControls *self,
                                                  IdeDebugger         *debugger);
 
 G_END_DECLS
-
-#endif /* IDE_DEBUGGER_CONTROLS_H */

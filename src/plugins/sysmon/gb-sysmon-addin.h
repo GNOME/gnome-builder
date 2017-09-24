@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_SYSMON_ADDIN_H
-#define GB_SYSMON_ADDIN_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbSysmonAddin, gb_sysmon_addin, GB, SYSMON_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GB_SYSMON_ADDIN_H */

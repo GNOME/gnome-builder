@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_CODE_INDEXER_H
-#define IDE_CLANG_CODE_INDEXER_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeClangCodeIndexer, ide_clang_code_indexer, IDE, CLANG_CODE_INDEXER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_CODE_INDEXER_H */

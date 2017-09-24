@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_RNG_GRAMMAR_H
-#define IDE_XML_RNG_GRAMMAR_H
+#pragma once
 
 #include "ide-xml-hash-table.h"
 #include "ide-xml-rng-define.h"
@@ -53,6 +52,3 @@ void                  ide_xml_rng_grammar_unref     (IdeXmlRngGrammar *self);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlRngGrammar, ide_xml_rng_grammar_unref)
 
 G_END_DECLS
-
-#endif /* IDE_XML_RNG_GRAMMAR_H */
-

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEX_INDEX_H
-#define IDE_CODE_INDEX_INDEX_H
+#pragma once
 
 #include <ide.h>
 
@@ -51,5 +50,3 @@ IdeSymbol         *ide_code_index_index_lookup_symbol     (IdeCodeIndexIndex    
                                                            const gchar           *key);
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_INDEX_H */

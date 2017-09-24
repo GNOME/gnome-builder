@@ -19,8 +19,7 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#ifndef IDE_TYPE_PERSISTENT_MAP_BUILDER_H
-#define IDE_TYPE_PERSISTENT_MAP_BUILDER_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -52,5 +51,3 @@ void                      ide_persistent_map_builder_set_metadata_int64   (IdePe
                                                                            gint64                    value);
 
 G_END_DECLS
-
-#endif /* IDE_TYPE_PERSISTENT_MAP_BUILDER_H */

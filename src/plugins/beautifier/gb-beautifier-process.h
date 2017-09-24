@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_BEAUTIFIER_PROCESS_H
-#define GB_BEAUTIFIER_PROCESS_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -39,5 +38,3 @@ gboolean      gb_beautifier_process_launch_finish     (GbBeautifierEditorAddin  
                                                        GError                  **error);
 
 G_END_DECLS
-
-#endif /* GB_BEAUTIFIER_PROCESS_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_PIPELINE_H
-#define IDE_BUILD_PIPELINE_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -126,5 +125,3 @@ gboolean               ide_build_pipeline_rebuild_finish      (IdeBuildPipeline 
                                                                GError                **error);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_PIPELINE_H */

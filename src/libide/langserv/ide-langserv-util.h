@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_UTIL_H
-#define IDE_LANGSERV_UTIL_H
+#pragma once
 
 #include "symbols/ide-symbol.h"
 
@@ -27,5 +26,3 @@ IdeSymbolKind ide_langserv_decode_symbol_kind     (guint kind);
 IdeSymbolKind ide_langserv_decode_completion_kind (guint kind);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_UTIL_H */

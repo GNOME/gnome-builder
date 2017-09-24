@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_TREE_BUILDER_H
-#define GB_PROJECT_TREE_BUILDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB, PROJECT
 DzlTreeBuilder *gb_project_tree_builder_new (void);
 
 G_END_DECLS
-
-#endif /* GB_PROJECT_TREE_BUILDER_H */

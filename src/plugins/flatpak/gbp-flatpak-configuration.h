@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_CONFIGURATION_H
-#define GBP_FLATPAK_CONFIGURATION_H
+#pragma once
 
 #include <ide.h>
 
@@ -56,5 +55,3 @@ const gchar             *gbp_flatpak_configuration_get_sdk            (GbpFlatpa
 void                     gbp_flatpak_configuration_set_sdk            (GbpFlatpakConfiguration *self,
                                                                        const gchar             *sdk);
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_CONFIGURATION_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GREETER_PROJECT_ROW_H
-#define IDE_GREETER_PROJECT_ROW_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -35,5 +34,3 @@ void            ide_greeter_project_row_set_selection_mode (IdeGreeterProjectRow
                                                             gboolean              selection_mode);
 
 G_END_DECLS
-
-#endif /* IDE_GREETER_PROJECT_ROW_H */

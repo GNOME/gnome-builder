@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPET_CONTEXT_H
-#define IDE_SOURCE_SNIPPET_CONTEXT_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -50,5 +49,3 @@ void                     ide_source_snippet_context_set_line_prefix     (IdeSour
 void                     ide_source_snippet_context_dump                (IdeSourceSnippetContext *context);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPET_CONTEXT_H */

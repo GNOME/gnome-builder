@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_RUN_BUTTON_H
-#define IDE_RUN_BUTTON_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeRunButton, ide_run_button, IDE, RUN_BUTTON, GtkBox)
 GtkWidget *ide_run_button_new (void);
 
 G_END_DECLS
-
-#endif /* IDE_RUN_BUTTON_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_PARSER_PRIVATE_H
-#define IDE_XML_PARSER_PRIVATE_H
+#pragma once
 
 #include <glib.h>
 #include <libxml/parser.h>
@@ -125,5 +124,3 @@ void             ide_xml_parser_characters_sax_cb                (ParserState   
                                                                   gint                    len);
 
 G_END_DECLS
-
-#endif /* IDE_XML_PARSER_PRIVATE_H */

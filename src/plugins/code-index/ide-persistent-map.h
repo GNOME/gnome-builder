@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TYPE_PERSISTENT_MAP_H
-#define IDE_TYPE_PERSISTENT_MAP_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -42,5 +41,3 @@ GVariant             *ide_persistent_map_lookup_value                  (IdePersi
                                                                         const gchar         *key);
 gint64                ide_persistent_map_builder_get_metadata_int64    (IdePersistentMap    *self,
                                                                         const gchar         *key);
-
-#endif /* IDE_TYPE_PERSISTENT_MAP_H */

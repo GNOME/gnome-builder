@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GCA_STRUCTS_H
-#define GCA_STRUCTS_H
+#pragma once
 
 #include <glib.h>
 
@@ -63,5 +62,3 @@ typedef struct
 GArray *gca_diagnostics_from_variant (GVariant *variant);
 
 G_END_DECLS
-
-#endif /* GCA_STRUCTS_H */

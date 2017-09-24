@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_VIM_H
-#define GB_COMMAND_VIM_H
+#pragma once
 
 #include "gb-command.h"
 
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (GbCommandVim, gb_command_vim, GB, COMMAND_VIM, GbCommand)
 
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_VIM_H */

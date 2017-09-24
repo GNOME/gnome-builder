@@ -22,8 +22,7 @@
  * GLib at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef IDE_LIST_INLINE_H
-#define IDE_LIST_INLINE_H
+#pragma once
 
 #include <glib.h>
 
@@ -107,5 +106,3 @@ ide_list_sort (GList        *list,
 }
 
 G_END_DECLS
-
-#endif /* IDE_LIST_INLINE_H */

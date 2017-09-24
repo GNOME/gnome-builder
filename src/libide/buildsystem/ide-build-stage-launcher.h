@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_STAGE_LAUNCHER_H
-#define IDE_BUILD_STAGE_LAUNCHER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -55,5 +54,3 @@ void                   ide_build_stage_launcher_set_ignore_exit_status (IdeBuild
                                                                         gboolean               ignore_exit_status);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_STAGE_LAUNCHER_H */

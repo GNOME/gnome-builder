@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_SAX_H
-#define IDE_XML_SAX_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -70,6 +69,3 @@ void            ide_xml_sax_set_callback        (IdeXmlSax              *self,
                                                  gpointer                callback);
 
 G_END_DECLS
-
-#endif /* IDE_XML_SAX_H */
-

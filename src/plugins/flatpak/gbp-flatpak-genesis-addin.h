@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_GENESIS_ADDIN_H
-#define GBP_FLATPAK_GENESIS_ADDIN_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpFlatpakGenesisAddin, gbp_flatpak_genesis_addin, GBP, FLATPAK_GENESIS_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_GENESIS_ADDIN_H */

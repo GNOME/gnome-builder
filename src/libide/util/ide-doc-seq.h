@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DOC_SEQ_H
-#define IDE_DOC_SEQ_H
+#pragma once
 
 #include <glib.h>
 
@@ -27,5 +26,3 @@ guint ide_doc_seq_acquire (void);
 void  ide_doc_seq_release (guint seq_id);
 
 G_END_DECLS
-
-#endif /* IDE_DOC_SEQ_H */

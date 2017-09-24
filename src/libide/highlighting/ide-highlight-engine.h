@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_HIGHLIGHT_ENGINE_H
-#define IDE_HIGHLIGHT_ENGINE_H
+#pragma once
 
 #include "ide-object.h"
 #include "buffers/ide-buffer.h"
@@ -43,5 +42,3 @@ void                ide_highlight_engine_pause           (IdeHighlightEngine *se
 void                ide_highlight_engine_unpause         (IdeHighlightEngine *self);
 
 G_END_DECLS
-
-#endif /* IDE_HIGHLIGHT_ENGINE_H */

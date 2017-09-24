@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EXTENSION_UTIL_H
-#define IDE_EXTENSION_UTIL_H
+#pragma once
 
 #include <libpeas/peas.h>
 
@@ -40,5 +39,3 @@ PeasExtension    *ide_extension_new                (PeasEngine     *engine,
                                                     ...);
 
 G_END_DECLS
-
-#endif /* IDE_EXTENSION_UTIL_H */

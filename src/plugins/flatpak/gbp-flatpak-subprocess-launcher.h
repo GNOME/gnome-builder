@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_SUBPROCESS_LAUNCHER_H
-#define GBP_FLATPAK_SUBPROCESS_LAUNCHER_H
+#pragma once
 
 #include <ide.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (GbpFlatpakSubprocessLauncher, gbp_flatpak_subprocess_launc
 IdeSubprocessLauncher *gbp_flatpak_subprocess_launcher_new (GSubprocessFlags flags);
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_SUBPROCESS_LAUNCHER_H */

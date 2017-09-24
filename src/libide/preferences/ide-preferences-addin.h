@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PREFERENCES_ADDIN_H
-#define IDE_PREFERENCES_ADDIN_H
+#pragma once
 
 #include <dazzle.h>
 #include <gtk/gtk.h>
@@ -44,5 +43,3 @@ void ide_preferences_addin_unload (IdePreferencesAddin *self,
                                    DzlPreferences      *preferences);
 
 G_END_DECLS
-
-#endif /* IDE_PREFERENCES_ADDIN_H */

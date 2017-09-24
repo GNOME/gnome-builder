@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef IDE_XML_TREE_BUILDER_UTILS_PRIVATE_H
-#define IDE_XML_TREE_BUILDER_UTILS_PRIVATE_H
+#pragma once
 
 #include <glib.h>
 #include <ide.h>
@@ -35,6 +34,3 @@ void          print_node                 (IdeXmlSymbolNode   *node,
                                           guint               depth);
 
 G_END_DECLS
-
-#endif /* IDE_XML_TREE_BUILDER_UTILS_PRIVATE_H */
-

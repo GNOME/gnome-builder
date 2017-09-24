@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_PANEL_H
-#define IDE_BUILD_PANEL_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -29,5 +28,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeBuildPanel, ide_build_panel, IDE, BUILD_PANEL, DzlDockWidget)
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_PANEL_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_GCC_PIPELINE_ADDIN_H
-#define GBP_GCC_PIPELINE_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpGccPipelineAddin, gbp_gcc_pipeline_addin, GBP, GCC_PIPELINE_ADDIN, IdeObject)
 
 G_END_DECLS
-
-#endif /* GBP_GCC_PIPELINE_ADDIN_H */

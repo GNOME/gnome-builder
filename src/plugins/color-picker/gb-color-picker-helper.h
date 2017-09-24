@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COLOR_PICKER_HELPER_H
-#define GB_COLOR_PICKER_HELPER_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -48,6 +47,3 @@ GtkTextTag               *gb_color_picker_helper_set_color_tag_at_iter          
                                                                                    gboolean          preserve_cursor);
 
 G_END_DECLS
-
-#endif /* GB_COLOR_PICKER_HELPER_H */
-

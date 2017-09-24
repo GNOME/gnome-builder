@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_COMPLETION_ITEM_H
-#define IDE_CLANG_COMPLETION_ITEM_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
@@ -33,5 +32,3 @@ const gchar      *ide_clang_completion_item_get_typed_text    (IdeClangCompletio
 const gchar      *ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self);
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_COMPLETION_ITEM_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_SERVICE_H
-#define IDE_XML_SERVICE_H
+#pragma once
 
 #include <dazzle.h>
 #include <gtksourceview/gtksource.h>
@@ -67,5 +66,3 @@ IdeXmlSymbolNode   *ide_xml_service_get_root_node_finish               (IdeXmlSe
 DzlTaskCache       *ide_xml_service_get_schemas_cache                  (IdeXmlService        *self);
 
 G_END_DECLS
-
-#endif /* IDE_XML_SERVICE_H */

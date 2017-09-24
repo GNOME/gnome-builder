@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_UTIL_H
-#define GB_TERMINAL_UTIL_H
+#pragma once
 
 #include <vte/vte.h>
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 int gb_vte_pty_create_slave (VtePty *pty);
 
 G_END_DECLS
-
-#endif /* GB_TERMINAL_UTIL_H */

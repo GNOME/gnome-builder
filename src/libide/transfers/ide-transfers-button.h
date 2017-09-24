@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TRANSFERS_BUTTON_H
-#define IDE_TRANSFERS_BUTTON_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -30,6 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeTransfersButton, ide_transfers_button, IDE, TRANSFERS_B
 GtkWidget *ide_transfers_button_new (void);
 
 G_END_DECLS
-
-#endif /* IDE_TRANSFERS_BUTTON_H */
-

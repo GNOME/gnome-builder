@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SEARCH_RESULT_H
-#define IDE_SEARCH_RESULT_H
+#pragma once
 
 #include <gio/gio.h>
 #include <dazzle.h>
@@ -58,5 +57,3 @@ void               ide_search_result_set_score           (IdeSearchResult       
                                                           gfloat                 score);
 
 G_END_DECLS
-
-#endif /* IDE_SEARCH_RESULT_H */

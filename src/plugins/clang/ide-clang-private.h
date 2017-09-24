@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_PRIVATE_H
-#define IDE_CLANG_PRIVATE_H
+#pragma once
 
 #include <clang-c/Index.h>
 #include <ide.h>
@@ -44,5 +43,3 @@ void                     _ide_clang_symbol_node_set_children (IdeClangSymbolNode
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXString, _ide_clang_dispose_string)
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_PRIVATE_H */

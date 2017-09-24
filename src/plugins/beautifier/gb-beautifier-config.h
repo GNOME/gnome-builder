@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_BEAUTIFIER_CONFIG_H
-#define GB_BEAUTIFIER_CONFIG_H
+#pragma once
 
 #include <glib.h>
 
@@ -52,5 +51,3 @@ GArray *gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self,
                                           gboolean                *has_default);
 
 G_END_DECLS
-
-#endif /* GB_BEAUTIFIER_CONFIG_H */

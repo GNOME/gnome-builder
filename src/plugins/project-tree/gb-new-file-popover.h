@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_NEW_FILE_POPOVER_H
-#define GB_NEW_FILE_POPOVER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -35,5 +34,3 @@ void       gb_new_file_popover_set_directory (GbNewFilePopover *self,
 GFile     *gb_new_file_popover_get_directory (GbNewFilePopover *self);
 
 G_END_DECLS
-
-#endif /* GB_NEW_FILE_POPOVER_H */

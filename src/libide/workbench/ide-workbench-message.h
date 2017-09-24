@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORKBENCH_MESSAGE_H
-#define IDE_WORKBENCH_MESSAGE_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -42,5 +41,3 @@ void         ide_workbench_message_add_action   (IdeWorkbenchMessage *self,
                                                  const gchar         *action_name);
 
 G_END_DECLS
-
-#endif /* IDE_WORKBENCH_MESSAGE_H */

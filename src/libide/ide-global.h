@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GLOBAL_H
-#define IDE_GLOBAL_H
+#pragma once
 
 #include <glib.h>
 
@@ -27,5 +26,3 @@ const gchar *ide_get_program_name (void);
 void         ide_set_program_name (const gchar *program_name);
 
 G_END_DECLS
-
-#endif /* IDE_GLOBAL_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EDITORCONFIG_FILE_SETTINGS_H
-#define IDE_EDITORCONFIG_FILE_SETTINGS_H
+#pragma once
 
 #include "files/ide-file-settings.h"
 
@@ -32,5 +31,3 @@ G_DECLARE_FINAL_TYPE (IdeEditorconfigFileSettings,
                       IdeFileSettings)
 
 G_END_DECLS
-
-#endif /* IDE_EDITORCONFIG_FILE_SETTINGS_H */

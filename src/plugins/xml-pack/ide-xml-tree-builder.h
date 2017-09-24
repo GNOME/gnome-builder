@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_TREE_BUILDER_H
-#define IDE_XML_TREE_BUILDER_H
+#pragma once
 
 #include "ide-xml-analysis.h"
 #include "ide-xml-symbol-node.h"
@@ -42,6 +41,3 @@ IdeXmlAnalysis      *ide_xml_tree_builder_build_tree_finish      (IdeXmlTreeBuil
                                                                   GError               **error);
 
 G_END_DECLS
-
-#endif /* IDE_XML_TREE_BUILDER_H */
-

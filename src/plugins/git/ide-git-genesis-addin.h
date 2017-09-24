@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GIT_GENESIS_ADDIN_H
-#define IDE_GIT_GENESIS_ADDIN_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeGitGenesisAddin, ide_git_genesis_addin, IDE, GIT_GENESIS_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_GIT_GENESIS_ADDIN_H */

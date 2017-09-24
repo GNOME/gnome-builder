@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_STYLE_SCHEME_H
-#define IDE_SOURCE_STYLE_SCHEME_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -28,5 +27,3 @@ gboolean ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme
                                               GtkTextTag           *tag);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_STYLE_SCHEME_H */

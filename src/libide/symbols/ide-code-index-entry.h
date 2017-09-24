@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEX_ENTRY_H
-#define IDE_CODE_INDEX_ENTRY_H
+#pragma once
 
 #include "ide-object.h"
 #include "ide-symbol.h"
@@ -44,5 +43,3 @@ void             ide_code_index_entry_get_range (IdeCodeIndexEntry *self,
                                                  guint             *end_line_offset);
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_ENTRY_H */

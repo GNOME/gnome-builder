@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_AUTOTOOLS_MAKECACHE_STAGE_H
-#define IDE_AUTOTOOLS_MAKECACHE_STAGE_H
+#pragma once
 
 #include <ide.h>
 
@@ -34,5 +33,3 @@ IdeBuildStage *ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline 
 IdeMakecache  *ide_autotools_makecache_stage_get_makecache    (IdeAutotoolsMakecacheStage  *self);
 
 G_END_DECLS
-
-#endif /* IDE_AUTOTOOLS_MAKECACHE_STAGE_H */

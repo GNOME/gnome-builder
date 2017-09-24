@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_H
-#define GB_TERMINAL_H
+#pragma once
 
 #include <vte/vte.h>
 
@@ -39,5 +38,3 @@ GType gb_terminal_get_type (void);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbTerminal, g_object_unref)
 
 G_END_DECLS
-
-#endif /* GB_TERMINAL_H */

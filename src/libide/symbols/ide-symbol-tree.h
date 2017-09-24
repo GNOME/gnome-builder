@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SYMBOL_TREE_H
-#define IDE_SYMBOL_TREE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -47,5 +46,3 @@ IdeSymbolNode *ide_symbol_tree_get_nth_child  (IdeSymbolTree *self,
                                                guint          nth);
 
 G_END_DECLS
-
-#endif /* IDE_SYMBOL_TREE_H */

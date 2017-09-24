@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEX_BUILDER_H
-#define IDE_CODE_INDEX_BUILDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -44,5 +43,3 @@ IdeCodeIndexBuilder    *ide_code_index_builder_new             (IdeContext      
                                                                 IdeCodeIndexService     *service);
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_BUILDER_H */

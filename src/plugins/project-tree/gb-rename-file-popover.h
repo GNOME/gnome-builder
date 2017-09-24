@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_RENAME_FILE_POPOVER_H
-#define GB_RENAME_FILE_POPOVER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (GbRenameFilePopover, gb_rename_file_popover,
 GFile *gb_rename_file_popover_get_file (GbRenameFilePopover *self);
 
 G_END_DECLS
-
-#endif /* GB_RENAME_FILE_POPOVER_H */

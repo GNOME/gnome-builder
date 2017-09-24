@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GIT_BUFFER_CHANGE_MONITOR_H
-#define IDE_GIT_BUFFER_CHANGE_MONITOR_H
+#pragma once
 
 #include <ide.h>
 
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (IdeGitBufferChangeMonitor, ide_git_buffer_change_monitor,
                       IDE, GIT_BUFFER_CHANGE_MONITOR, IdeBufferChangeMonitor)
 
 G_END_DECLS
-
-#endif /* IDE_GIT_BUFFER_CHANGE_MONITOR_H */

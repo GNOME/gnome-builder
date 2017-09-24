@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_RUN_MANAGER_H
-#define IDE_RUN_MANAGER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -69,6 +68,3 @@ IdeBuildTarget *ide_run_manager_discover_default_target_finish (IdeRunManager   
                                                                 GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_RUN_MANAGER_H */
-

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_VCS_URI_H
-#define IDE_VCS_URI_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -52,5 +51,3 @@ gboolean     ide_vcs_uri_is_valid   (const gchar     *uri_string);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeVcsUri, ide_vcs_uri_unref)
 
 G_END_DECLS
-
-#endif /* IDE_VCS_URI_H */

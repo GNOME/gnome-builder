@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_STACK_H
-#define IDE_XML_STACK_H
+#pragma once
 
 #include "ide-xml-symbol-node.h"
 
@@ -48,6 +47,3 @@ void                   ide_xml_stack_push          (IdeXmlStack       *self,
                                                     gint               depth);
 
 G_END_DECLS
-
-#endif /* IDE_XML_STACK_H */
-

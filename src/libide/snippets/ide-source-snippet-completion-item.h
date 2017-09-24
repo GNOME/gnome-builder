@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPET_COMPLETION_ITEM_H
-#define IDE_SOURCE_SNIPPET_COMPLETION_ITEM_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -36,5 +35,3 @@ void                         ide_source_snippet_completion_item_set_snippet (Ide
                                                                             IdeSourceSnippet               *snippet);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPET_COMPLETION_ITEM_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_INDENT_STYLE_H
-#define IDE_INDENT_STYLE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -30,5 +29,3 @@ typedef enum
 } IdeIndentStyle;
 
 G_END_DECLS
-
-#endif /* IDE_INDENT_STYLE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_TREE_H
-#define GB_PROJECT_TREE_H
+#pragma once
 
 #include <ide.h>
 
@@ -40,5 +39,3 @@ void        gb_project_tree_reveal                 (GbProjectTree *self,
                                                     gboolean       expand_folder);
 
 G_END_DECLS
-
-#endif /* GB_PROJECT_TREE_H */

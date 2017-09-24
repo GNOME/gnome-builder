@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_FORMATTER_H
-#define IDE_LANGSERV_FORMATTER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -45,5 +44,3 @@ void                  ide_langserv_formatter_set_client (IdeLangservFormatter *s
 IdeLangservClient    *ide_langserv_formatter_get_client (IdeLangservFormatter *self);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_FORMATTER_H */

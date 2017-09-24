@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_TREE_EDITOR_ADDIN_H
-#define GB_PROJECT_TREE_EDITOR_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbProjectTreeEditorAddin, gb_project_tree_editor_addin, GB, PROJECT_TREE_EDITOR_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GB_PROJECT_TREE_EDITOR_ADDIN_H */

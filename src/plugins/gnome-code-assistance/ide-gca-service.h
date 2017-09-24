@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GCA_SERVICE_H
-#define IDE_GCA_SERVICE_H
+#pragma once
 
 #include "gca-service.h"
 #include "ide-service.h"
@@ -38,5 +37,3 @@ GcaService *ide_gca_service_get_proxy_finish (IdeGcaService        *self,
                                               GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_GCA_SERVICE_H */

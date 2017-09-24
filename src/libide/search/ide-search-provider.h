@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SEARCH_PROVIDER_H
-#define IDE_SEARCH_PROVIDER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -53,5 +52,3 @@ GPtrArray *ide_search_provider_search_finish (IdeSearchProvider    *self,
                                               GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_SEARCH_PROVIDER_H */

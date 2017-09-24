@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPETS_MANAGER_H
-#define IDE_SOURCE_SNIPPETS_MANAGER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -42,5 +41,3 @@ IdeSourceSnippets *ide_source_snippets_manager_get_for_language_id (IdeSourceSni
                                                                     const gchar               *language_id);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPETS_MANAGER_H */

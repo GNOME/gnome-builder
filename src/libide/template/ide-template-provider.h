@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TEMPLATE_PROVIDER_H
-#define IDE_TEMPLATE_PROVIDER_H
+#pragma once
 
 #include "ide-project-template.h"
 
@@ -37,5 +36,3 @@ struct _IdeTemplateProviderInterface
 GList *ide_template_provider_get_project_templates (IdeTemplateProvider *self);
 
 G_END_DECLS
-
-#endif /* IDE_TEMPLATE_PROVIDER_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SERVICE_H
-#define IDE_SERVICE_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -43,5 +42,3 @@ void         ide_service_stop                 (IdeService *self);
 void         _ide_service_emit_context_loaded (IdeService *self) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_SERVICE_H */

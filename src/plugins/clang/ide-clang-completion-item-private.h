@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_COMPLETION_ITEM_PRIVATE_H
-#define IDE_CLANG_COMPLETION_ITEM_PRIVATE_H
+#pragma once
 
 #include <clang-c/Index.h>
 #include <glib-object.h>
@@ -94,5 +93,3 @@ IdeClangCompletionItem *ide_clang_completion_item_new (IdeRefPtr *results,
                                                        guint      index);
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_COMPLETION_ITEM_PRIVATE_H */

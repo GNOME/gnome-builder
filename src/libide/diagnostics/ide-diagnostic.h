@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIAGNOSTIC_H
-#define IDE_DIAGNOSTIC_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -71,5 +70,3 @@ const gchar           *ide_diagnostic_severity_to_string   (IdeDiagnosticSeverit
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostic, ide_diagnostic_unref)
 
 G_END_DECLS
-
-#endif /* IDE_DIAGNOSTIC_H */

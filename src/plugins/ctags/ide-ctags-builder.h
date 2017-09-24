@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_BUILDER_H
-#define IDE_CTAGS_BUILDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeCtagsBuilder, ide_ctags_builder, IDE, CTAGS_BUILDER, Id
 IdeTagsBuilder *ide_ctags_builder_new (IdeContext *context);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_BUILDER_H */

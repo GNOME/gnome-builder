@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGUAGE_DEFAULTS_H
-#define IDE_LANGUAGE_DEFAULTS_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -30,5 +29,3 @@ gboolean ide_language_defaults_init_finish (GAsyncResult         *result,
                                             GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_LANGUAGE_DEFAULTS_H */

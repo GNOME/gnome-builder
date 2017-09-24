@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GSETTINGS_FILE_SETTINGS_H
-#define IDE_GSETTINGS_FILE_SETTINGS_H
+#pragma once
 
 #include "files/ide-file-settings.h"
 
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (IdeGsettingsFileSettings, ide_gsettings_file_settings,
                       IDE, GSETTINGS_FILE_SETTINGS, IdeFileSettings)
 
 G_END_DECLS
-
-#endif /* IDE_GSETTINGS_FILE_SETTINGS_H */

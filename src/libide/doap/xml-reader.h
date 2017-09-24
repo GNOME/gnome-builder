@@ -19,8 +19,7 @@
  *   Emmanuele Bassi
  */
 
-#ifndef XML_READER_H
-#define XML_READER_H
+#pragma once
 
 #include <gio/gio.h>
 #include <libxml/xmlreader.h>
@@ -96,5 +95,3 @@ gboolean              xml_reader_move_to_nth_attribute   (XmlReader   *reader,
 gint                  xml_reader_get_line_number         (XmlReader   *reader);
 
 G_END_DECLS
-
-#endif /* XML_READER_H */

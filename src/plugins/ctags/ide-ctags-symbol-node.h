@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_SYMBOL_NODE_H
-#define IDE_CTAGS_SYMBOL_NODE_H
+#pragma once
 
 #include <ide.h>
 
@@ -41,5 +40,3 @@ IdeSymbolNode            *ide_ctags_symbol_node_get_nth_child  (IdeCtagsSymbolNo
 const IdeCtagsIndexEntry *ide_ctags_symbol_node_get_entry      (IdeCtagsSymbolNode       *self);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_SYMBOL_NODE_H */

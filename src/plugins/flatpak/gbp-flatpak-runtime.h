@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_RUNTIME_H
-#define GBP_FLATPAK_RUNTIME_H
+#pragma once
 
 #include <flatpak.h>
 #include <ide.h>
@@ -42,5 +41,3 @@ const gchar         *gbp_flatpak_runtime_get_sdk      (GbpFlatpakRuntime    *sel
 gchar               *gbp_flatpak_runtime_get_sdk_name (GbpFlatpakRuntime    *self);
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_RUNTIME_H */

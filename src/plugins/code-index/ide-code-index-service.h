@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEX_SERVICE_H
-#define IDE_CODE_INDEX_SERVICE_H
+#pragma once
 
 #include <ide.h>
 
@@ -34,5 +33,3 @@ IdeCodeIndexer    *ide_code_index_service_get_code_indexer          (IdeCodeInde
                                                                      const gchar         *file_name);
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_SERVICE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GIT_VCS_H
-#define IDE_GIT_VCS_H
+#pragma once
 
 #include <libgit2-glib/ggit.h>
 #include <ide.h>
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (IdeGitVcs, ide_git_vcs, IDE, GIT_VCS, IdeObject)
 GgitRepository *ide_git_vcs_get_repository (IdeGitVcs *self);
 
 G_END_DECLS
-
-#endif /* IDE_GIT_VCS_H */

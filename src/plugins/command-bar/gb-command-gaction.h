@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_GACTION_H
-#define GB_COMMAND_GACTION_H
+#pragma once
 
 #include "gb-command.h"
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbCommandGaction, gb_command_gaction, GB, COMMAND_GACTION, GbCommand)
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_GACTION_H */

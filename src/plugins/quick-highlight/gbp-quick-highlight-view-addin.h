@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_QUICK_HIGHLIGHT_VIEW_ADDIN_H
-#define GBP_QUICK_HIGHLIGHT_VIEW_ADDIN_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpQuickHighlightViewAddin, gbp_quick_highlight_view_addin, GBP, QUICK_HIGHLIGHT_VIEW_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_QUICK_HIGHLIGHT_VIEW_ADDIN_H */

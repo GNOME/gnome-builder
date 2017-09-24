@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_APPLICATION_TESTS_H
-#define IDE_APPLICATION_TESTS_H
+#pragma once
 
 #include "ide-application.h"
 
@@ -36,5 +35,3 @@ void ide_application_add_test (IdeApplication               *self,
                                const gchar * const          *required_plugins);
 
 G_END_DECLS
-
-#endif /* IDE_APPLICATION_TESTS_H */

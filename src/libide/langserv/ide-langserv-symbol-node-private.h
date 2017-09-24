@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_SYMBOL_NODE_PRIVATE_H
-#define IDE_LANGSERV_SYMBOL_NODE_PRIVATE_H
+#pragma once
 
 #include "ide-langserv-symbol-node.h"
 
@@ -40,5 +39,3 @@ IdeLangservSymbolNode *ide_langserv_symbol_node_new (GFile       *file,
                                                      guint        end_column);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_SYMBOL_NODE_PRIVATE_H */

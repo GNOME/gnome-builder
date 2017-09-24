@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COLOR_PICKER_PRIVATE_H
-#define GB_COLOR_PICKER_PRIVATE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -26,6 +25,3 @@ G_BEGIN_DECLS
 #define COLOR_TAG_PREFIX "cp-gb-"
 
 G_END_DECLS
-
-#endif /* GB_COLOR_PICKER_PRIVATE_H */
-

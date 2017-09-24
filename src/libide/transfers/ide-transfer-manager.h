@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TRANSFER_MANAGER_H
-#define IDE_TRANSFER_MANAGER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -43,6 +42,3 @@ gboolean ide_transfer_manager_execute_finish (IdeTransferManager   *self,
                                               GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_TRANSFER_MANAGER_H */
-

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_MANAGER_H
-#define IDE_BUILD_MANAGER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -64,5 +63,3 @@ gboolean          ide_build_manager_clean_finish        (IdeBuildManager       *
                                                          GError               **error);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_MANAGER_H */

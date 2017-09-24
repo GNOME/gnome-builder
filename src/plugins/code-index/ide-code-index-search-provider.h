@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEX_SEARCH_PROVIDER_H
-#define IDE_CODE_INDEX_SEARCH_PROVIDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (IdeCodeIndexSearchProvider, ide_code_index_search_provider
                       IDE, CODE_INDEX_SEARCH_PROVIDER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_SEARCH_PROVIDER_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_DEVHELP_VIEW_H
-#define GBP_DEVHELP_VIEW_H
+#pragma once
 
 #include <ide.h>
 
@@ -31,5 +30,3 @@ void gbp_devhelp_view_set_uri (GbpDevhelpView *self,
                                const gchar    *uri);
 
 G_END_DECLS
-
-#endif /* GBP_DEVHELP_VIEW_H */

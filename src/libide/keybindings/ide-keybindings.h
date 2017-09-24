@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_KEYBINDINGS_H
-#define IDE_KEYBINDINGS_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -35,5 +34,3 @@ void            ide_keybindings_set_mode        (IdeKeybindings  *self,
                                                 const gchar    *name);
 
 G_END_DECLS
-
-#endif /* IDE_KEYBINDINGS_H */

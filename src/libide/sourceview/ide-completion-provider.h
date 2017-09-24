@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_COMPLETION_PROVIDER_H
-#define IDE_COMPLETION_PROVIDER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -49,5 +48,3 @@ void      ide_completion_provider_load                         (IdeCompletionPro
                                                                 IdeContext                 *context);
 
 G_END_DECLS
-
-#endif /* IDE_COMPLETION_PROVIDER_H */

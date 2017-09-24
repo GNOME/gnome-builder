@@ -8,13 +8,10 @@
  * all present and future rights to this code under copyright law.
  */
 
-#ifndef EDITORCONFIG_GLIB_H
-#define EDITORCONFIG_GLIB_H
+#pragma once
 
 #include <gio/gio.h>
 
 GHashTable *editorconfig_glib_read (GFile         *file,
                                     GCancellable  *cancellable,
                                     GError       **error);
-
-#endif /* EDITORCONFIG_GLIB_H */

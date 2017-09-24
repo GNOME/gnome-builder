@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPET_CHUNK_H
-#define IDE_SOURCE_SNIPPET_CHUNK_H
+#pragma once
 
 #include "ide-types.h"
 
@@ -47,5 +46,3 @@ void                     ide_source_snippet_chunk_set_text_set (IdeSourceSnippet
                                                                 gboolean                text_set);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPET_CHUNK_H */

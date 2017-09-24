@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DOAP_PERSON_H
-#define IDE_DOAP_PERSON_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -36,5 +35,3 @@ void           ide_doap_person_set_email (IdeDoapPerson *self,
                                           const gchar   *email);
 
 G_END_DECLS
-
-#endif /* IDE_DOAP_PERSON_H */

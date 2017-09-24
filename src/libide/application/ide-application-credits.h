@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_APPLICATION_CREDITS_H
-#define IDE_APPLICATION_CREDITS_H
+#pragma once
 
 #include <glib.h>
 
@@ -596,5 +595,3 @@ static const gchar *ide_application_credits_funders[] = {
 };
 
 G_END_DECLS
-
-#endif /* IDE_APPLICATION_CREDITS_H */

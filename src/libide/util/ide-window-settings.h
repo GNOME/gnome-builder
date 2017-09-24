@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WINDOW_SETTINGS_H
-#define IDE_WINDOW_SETTINGS_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 void ide_window_settings_register (GtkWindow *window);
 
 G_END_DECLS
-
-#endif /* IDE_WINDOW_SETTINGS_H */

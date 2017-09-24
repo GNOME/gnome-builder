@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_PIPELINE_ADDIN_H
-#define IDE_BUILD_PIPELINE_ADDIN_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -47,5 +46,3 @@ void ide_build_pipeline_addin_track  (IdeBuildPipelineAddin *self,
                                       guint                  stage_id);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_PIPELINE_ADDIN_H */

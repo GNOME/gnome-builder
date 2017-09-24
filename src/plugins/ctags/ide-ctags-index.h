@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_INDEX_H
-#define IDE_CTAGS_INDEX_H
+#pragma once
 
 #include <gio/gio.h>
 #include <ide.h>
@@ -125,5 +124,3 @@ ide_ctags_index_entry_kind_to_symbol_kind (IdeCtagsIndexEntryKind kind)
 }
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_INDEX_H */

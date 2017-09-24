@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIRECTORY_BUILD_SYSTEM_H
-#define IDE_DIRECTORY_BUILD_SYSTEM_H
+#pragma once
 
 #include "buildsystem/ide-build-system.h"
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeDirectoryBuildSystem, ide_directory_build_system, IDE, DIRECTORY_BUILD_SYSTEM, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_DIRECTORY_BUILD_SYSTEM_H */

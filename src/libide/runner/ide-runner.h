@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_RUNNER_H
-#define IDE_RUNNER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -102,5 +101,3 @@ void               ide_runner_set_tty         (IdeRunner            *self,
 gint               ide_runner_steal_tty       (IdeRunner            *self);
 
 G_END_DECLS
-
-#endif /* IDE_RUNNER_H */

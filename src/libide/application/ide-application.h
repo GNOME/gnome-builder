@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_APPLICATION_H
-#define IDE_APPLICATION_H
+#pragma once
 
 #include <dazzle.h>
 #include <gtk/gtk.h>
@@ -61,5 +60,3 @@ void                ide_application_add_reaper           (IdeApplication       *
                                                           DzlDirectoryReaper   *reaper);
 
 G_END_DECLS
-
-#endif /* IDE_APPLICATION_H */

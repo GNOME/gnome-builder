@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FORMATTER_H
-#define IDE_FORMATTER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -81,5 +80,3 @@ gboolean ide_formatter_format_range_finish (IdeFormatter         *self,
                                             GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_FORMATTER_H */

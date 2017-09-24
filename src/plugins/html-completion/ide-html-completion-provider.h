@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_HTML_COMPLETION_PROVIDER_H
-#define IDE_HTML_COMPLETION_PROVIDER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
@@ -29,5 +28,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeHtmlCompletionProvider, ide_html_completion_provider, IDE, HTML_COMPLETION_PROVIDER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_HTML_COMPLETION_PROVIDER_H */

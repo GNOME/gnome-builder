@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_VIEW_HELPER_H
-#define IDE_SOURCE_VIEW_HELPER_H
+#pragma once
 
 #include "ide-source-view.h"
 
@@ -46,5 +45,3 @@ void _ide_source_view_select_tag     (IdeSourceView *self,
                                       gboolean       exclusive);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_VIEW_HELPER_H */

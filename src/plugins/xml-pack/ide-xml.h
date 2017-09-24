@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_H
-#define IDE_XML_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -54,5 +53,3 @@ IdeXmlElementTagType ide_xml_get_element_tag_type  (const GtkTextIter *start,
                                                     const GtkTextIter *end);
 
 G_END_DECLS
-
-#endif /* IDE_XML_H */

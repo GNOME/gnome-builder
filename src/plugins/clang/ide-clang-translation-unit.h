@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_TRANSLATION_UNIT_H
-#define IDE_CLANG_TRANSLATION_UNIT_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -61,5 +60,3 @@ IdeSymbol         *ide_clang_translation_unit_find_nearest_scope       (IdeClang
 gchar            *ide_clang_translation_unit_generate_key              (IdeClangTranslationUnit  *self,
                                                                         IdeSourceLocation        *location);
 G_END_DECLS
-
-#endif /* IDE_CLANG_TRANSLATION_UNIT_H */

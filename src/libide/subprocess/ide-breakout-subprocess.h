@@ -13,8 +13,7 @@
  * Authors: Christian Hergert <chergert@redhat.com>
  */
 
-#ifndef IDE_BREAKOUT_SUBPROCESS_H
-#define IDE_BREAKOUT_SUBPROCESS_H
+#pragma once
 
 #include "subprocess/ide-subprocess.h"
 
@@ -25,5 +24,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeBreakoutSubprocess, ide_breakout_subprocess, IDE, BREAKOUT_SUBPROCESS, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_BREAKOUT_SUBPROCESS_H */

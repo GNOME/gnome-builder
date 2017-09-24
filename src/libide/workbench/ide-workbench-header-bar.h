@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORKBENCH_HEADER_BAR_H
-#define IDE_WORKBENCH_HEADER_BAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -58,5 +57,3 @@ void        ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
                                                    gint                   priority);
 
 G_END_DECLS
-
-#endif /* IDE_WORKBENCH_HEADER_BAR_H */

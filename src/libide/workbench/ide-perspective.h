@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PERSPECTIVE_H
-#define IDE_PERSPECTIVE_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -63,5 +62,3 @@ gchar        *ide_perspective_get_accelerator     (IdePerspective *self);
 void          ide_perspective_restore_state       (IdePerspective *self);
 
 G_END_DECLS
-
-#endif /* IDE_PERSPECTIVE_H */

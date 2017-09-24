@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FORMATTER_OPTIONS_H
-#define IDE_FORMATTER_OPTIONS_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -36,5 +35,3 @@ void                 ide_formatter_options_set_insert_spaces (IdeFormatterOption
                                                               gboolean             insert_spaces);
 
 G_END_DECLS
-
-#endif /* IDE_FORMATTER_OPTIONS_H */

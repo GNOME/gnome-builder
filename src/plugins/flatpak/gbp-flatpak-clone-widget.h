@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_CLONE_WIDGET_H
-#define GBP_FLATPAK_CLONE_WIDGET_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -36,5 +35,3 @@ gboolean gbp_flatpak_clone_widget_clone_finish (GbpFlatpakCloneWidget *self,
                                                 GError               **error);
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_CLONE_WIDGET_H */

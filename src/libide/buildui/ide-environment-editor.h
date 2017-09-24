@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_ENVIRONMENT_EDITOR_H
-#define IDE_ENVIRONMENT_EDITOR_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -34,5 +33,3 @@ void            ide_environment_editor_set_environment (IdeEnvironmentEditor *se
                                                         IdeEnvironment       *environment);
 
 G_END_DECLS
-
-#endif /* IDE_ENVIRONMENT_EDITOR_H */

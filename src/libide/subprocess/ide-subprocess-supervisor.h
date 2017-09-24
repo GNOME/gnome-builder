@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SUBPROCESS_SUPERVISOR_H
-#define IDE_SUBPROCESS_SUPERVISOR_H
+#pragma once
 
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
@@ -56,5 +55,3 @@ void                     ide_subprocess_supervisor_set_subprocess (IdeSubprocess
                                                                    IdeSubprocess           *subprocess);
 
 G_END_DECLS
-
-#endif /* IDE_SUBPROCESS_SUPERVISOR_H */

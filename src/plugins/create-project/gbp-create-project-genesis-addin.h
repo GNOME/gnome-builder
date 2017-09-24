@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_CREATE_PROJECT_GENESIS_ADDIN_H
-#define GBP_CREATE_PROJECT_GENESIS_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpCreateProjectGenesisAddin, gbp_create_project_genesis_addin, GBP, CREATE_PROJECT_GENESIS_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_CREATE_PROJECT_GENESIS_ADDIN_H */

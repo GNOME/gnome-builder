@@ -1,7 +1,6 @@
 {{include "license.h"}}
 
-#ifndef {{NAME}}_H
-#define {{NAME}}_H
+#pragma once
 
 #include <glib.h>
 
@@ -12,5 +11,3 @@ G_BEGIN_DECLS
 #undef {{NAME}}_INSIDE
 
 G_END_DECLS
-
-#endif /* {{NAME}}_H */

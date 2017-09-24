@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_SERVICE_H
-#define IDE_CLANG_SERVICE_H
+#pragma once
 
 #include "ide-clang-translation-unit.h"
 
@@ -40,5 +39,3 @@ IdeClangTranslationUnit *ide_clang_service_get_cached_translation_unit (IdeClang
                                                                         IdeFile              *file);
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_SERVICE_H */

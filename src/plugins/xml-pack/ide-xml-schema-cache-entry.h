@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_SCHEMA_CACHE_ENTRY_H
-#define IDE_XML_SCHEMA_CACHE_ENTRY_H
+#pragma once
 
 #include <gio/gio.h>
 #include <glib.h>
@@ -73,6 +72,3 @@ void                        ide_xml_schema_cache_entry_unref         (IdeXmlSche
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlSchemaCacheEntry, ide_xml_schema_cache_entry_unref)
 
 G_END_DECLS
-
-#endif /* IDE_XML_SCHEMA_CACHE_ENTRY_H */
-

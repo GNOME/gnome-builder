@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_SCHEMA_H
-#define IDE_XML_SCHEMA_H
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -45,5 +44,3 @@ void              ide_xml_schema_unref (IdeXmlSchema *self);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlSchema, ide_xml_schema_unref)
 
 G_END_DECLS
-
-#endif /* IDE_XML_SCHEMA_H */

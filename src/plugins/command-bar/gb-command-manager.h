@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_MANAGER_H
-#define GB_COMMAND_MANAGER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -39,5 +38,3 @@ void               gb_command_manager_add_provider (GbCommandManager  *manager,
                                                     GbCommandProvider *provider);
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_MANAGER_H */

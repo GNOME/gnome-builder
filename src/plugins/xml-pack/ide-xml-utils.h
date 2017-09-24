@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_UTILS_H
-#define IDE_XML_UTILS_H
+#pragma once
 
 #include <glib.h>
 
@@ -29,5 +28,3 @@ gboolean      ide_xml_utils_skip_attribute_value   (const gchar **cursor,
 gboolean      ide_xml_utils_skip_element_name      (const gchar **cursor);
 
 G_END_DECLS
-
-#endif /* IDE_XML_UTILS_H */

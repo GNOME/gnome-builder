@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_H
-#define IDE_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -191,5 +190,3 @@ G_BEGIN_DECLS
 #undef IDE_INSIDE
 
 G_END_DECLS
-
-#endif /* IDE_H */

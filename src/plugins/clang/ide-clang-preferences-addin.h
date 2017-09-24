@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_PREFERENCES_ADDIN_H
-#define IDE_CLANG_PREFERENCES_ADDIN_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeClangPreferencesAddin, ide_clang_preferences_addin, IDE, CLANG_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_CLANG_PREFERENCES_ADDIN_H */

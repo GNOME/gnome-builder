@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_THREAD_POOL_H
-#define IDE_THREAD_POOL_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -48,5 +47,3 @@ void     ide_thread_pool_push_task (IdeThreadPoolKind     kind,
                                     GTaskThreadFunc       func);
 
 G_END_DECLS
-
-#endif /* IDE_THREAD_POOL_H */

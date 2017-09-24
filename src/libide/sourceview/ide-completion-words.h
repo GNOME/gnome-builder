@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_COMPLETION_WORDS_H
-#define IDE_COMPLETION_WORDS_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -47,5 +46,3 @@ struct _IdeCompletionWordsClass
 GType ide_completion_words_get_type (void);
 
 G_END_DECLS
-
-#endif /* IDE_COMPLETION_WORDS_H */

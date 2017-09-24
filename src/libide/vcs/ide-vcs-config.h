@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_VCS_CONFIG_H
-#define IDE_VCS_CONFIG_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -53,5 +52,3 @@ void ide_vcs_config_set_config (IdeVcsConfig     *self,
                                 const GValue     *value);
 
 G_END_DECLS
-
-#endif /* IDE_VCS_CONFIG_H */

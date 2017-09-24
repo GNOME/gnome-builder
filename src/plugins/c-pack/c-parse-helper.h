@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef C_PARSE_HELPER_H
-#define C_PARSE_HELPER_H
+#pragma once
 
 #include <glib.h>
 
@@ -37,5 +36,3 @@ Parameter *parameter_copy     (const Parameter *src);
 GSList    *parse_parameters   (const gchar     *text);
 
 G_END_DECLS
-
-#endif /* C_PARSE_HELPER_H */

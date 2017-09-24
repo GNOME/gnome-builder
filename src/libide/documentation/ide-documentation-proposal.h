@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DOCUMENTATION_PROPOSAL_H
-#define IDE_DOCUMENTATION_PROPOSAL_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -45,5 +44,3 @@ const gchar              *ide_documentation_proposal_get_uri        (IdeDocument
 
 
 G_END_DECLS
-
-#endif /* IDE_DOCUMENTATION_PROPOSAL_H */

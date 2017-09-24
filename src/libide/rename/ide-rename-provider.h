@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_RENAME_PROVIDER_H
-#define IDE_RENAME_PROVIDER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -59,5 +58,3 @@ gboolean  ide_rename_provider_rename_finish (IdeRenameProvider     *self,
                                              GError               **error);
 
 G_END_DECLS
-
-#endif /* IDE_RENAME_PROVIDER_H */

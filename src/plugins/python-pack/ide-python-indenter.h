@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PYTHON_INDENTER_H
-#define IDE_PYTHON_INDENTER_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdePythonIndenter, ide_python_indenter, IDE, PYTHON_INDENTER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_PYTHON_INDENTER_H */

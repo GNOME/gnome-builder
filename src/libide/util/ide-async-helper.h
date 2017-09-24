@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_ASYNC_HELPER_H
-#define IDE_ASYNC_HELPER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -36,5 +35,3 @@ void ide_async_helper_run (gpointer             source_object,
                            ...);
 
 G_END_DECLS
-
-#endif /* IDE_ASYNC_HELPER_H */

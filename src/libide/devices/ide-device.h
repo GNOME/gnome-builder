@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DEVICE_H
-#define IDE_DEVICE_H
+#pragma once
 
 #include "ide-object.h"
 #include "ide-types.h"
@@ -55,5 +54,3 @@ void         ide_device_prepare_configuration (IdeDevice        *self,
                                                IdeConfiguration *configuration);
 
 G_END_DECLS
-
-#endif /* IDE_DEVICE_H */

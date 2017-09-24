@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BREAKOUT_SUBPROCESS_PRIVATE_H
-#define IDE_BREAKOUT_SUBPROCESS_PRIVATE_H
+#pragma once
 
 #include "subprocess/ide-breakout-subprocess.h"
 
@@ -43,5 +42,3 @@ IdeSubprocess *_ide_breakout_subprocess_new (const gchar                 *cwd,
                                              GError                     **error) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_BREAKOUT_SUBPROCESS_PRIVATE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORKBENCH_PRIVATE_H
-#define IDE_WORKBENCH_PRIVATE_H
+#pragma once
 
 #include <libpeas/peas.h>
 
@@ -64,5 +63,3 @@ void     _ide_workbench_add_perspective_shortcut  (IdeWorkbench          *self,
                                                    IdePerspective        *perspective);
 
 G_END_DECLS
-
-#endif /* IDE_WORKBENCH_PRIVATE_H */

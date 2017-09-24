@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_C_FORMAT_PROVIDER_H
-#define IDE_C_FORMAT_PROVIDER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
@@ -29,5 +28,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeCFormatProvider, ide_c_format_provider, IDE, C_FORMAT_PROVIDER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_C_FORMAT_PROVIDER_H */

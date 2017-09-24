@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUFFER_MANAGER_H
-#define IDE_BUFFER_MANAGER_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <gtksourceview/gtksource.h>
@@ -86,5 +85,3 @@ gboolean                  ide_buffer_manager_apply_edits_finish  (IdeBufferManag
                                                                   GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_BUFFER_MANAGER_H */

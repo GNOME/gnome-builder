@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_STAGE_PRIVATE_H
-#define IDE_BUILD_STAGE_PRIVATE_H
+#pragma once
 
 #include "ide-build-pipeline.h"
 #include "ide-build-stage.h"
@@ -35,5 +34,3 @@ gboolean _ide_build_stage_execute_with_query_finish (IdeBuildStage        *self,
                                                      GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_STAGE_PRIVATE_H */

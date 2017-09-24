@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_RECENT_PROJECTS_H
-#define IDE_RECENT_PROJECTS_H
+#pragma once
 
 #include "ide-project-info.h"
 
@@ -47,5 +46,3 @@ gboolean           ide_recent_projects_discover_finish  (IdeRecentProjects    *s
                                                          GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_RECENT_PROJECTS_H */

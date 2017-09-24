@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TEXT_UTIL_H
-#define IDE_TEXT_UTIL_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -27,5 +26,3 @@ void ide_text_util_delete_line (GtkTextView *text_view,
                                 gint         count);
 
 G_END_DECLS
-
-#endif /* IDE_TEXT_UTIL_H */

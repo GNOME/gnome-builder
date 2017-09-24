@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DEBUGGER_FRAME_H
-#define IDE_DEBUGGER_FRAME_H
+#pragma once
 
 #include "ide-debugger-types.h"
 
@@ -61,6 +60,3 @@ void                 ide_debugger_frame_set_line     (IdeDebuggerFrame    *self,
                                                       guint                line);
 
 G_END_DECLS
-
-#endif /* IDE_DEBUGGER_FRAME_H */
-

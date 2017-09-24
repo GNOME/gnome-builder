@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_STAGE_MKDIRS_H
-#define IDE_BUILD_STAGE_MKDIRS_H
+#pragma once
 
 #include "ide-build-stage.h"
 
@@ -45,5 +44,3 @@ void           ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
                                                 gboolean             remove_on_rebuild);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_STAGE_MKDIRS_H */

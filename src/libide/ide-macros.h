@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_MACROS_H
-#define IDE_MACROS_H
+#pragma once
 
 #include <glib-object.h>
 #include <string.h>
@@ -70,5 +69,3 @@ ide_str_equal0 (gconstpointer a,
 }
 
 G_END_DECLS
-
-#endif /* IDE_MACROS_H */

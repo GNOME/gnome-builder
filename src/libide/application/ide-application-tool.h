@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_APPLICATION_TOOL_H
-#define IDE_APPLICATION_TOOL_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -51,5 +50,3 @@ gint ide_application_tool_run_finish (IdeApplicationTool   *self,
                                       GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_APPLICATION_TOOL_H */

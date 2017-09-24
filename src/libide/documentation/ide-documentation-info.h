@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DOCUMENTATION_INFO_H
-#define IDE_DOCUMENTATION_INFO_H
+#pragma once
 
 #include "ide-documentation-proposal.h"
 
@@ -44,5 +43,3 @@ IdeDocumentationProposal *ide_documentation_info_get_proposal   (IdeDocumentatio
                                                                  guint                        index);
 
 G_END_DECLS
-
-#endif /* IDE_DOCUMENTATION_INFO_H */

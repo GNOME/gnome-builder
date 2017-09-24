@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_PREFERENCES_ADDIN_H
-#define GBP_FLATPAK_PREFERENCES_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpFlatpakPreferencesAddin, gbp_flatpak_preferences_addin, GBP, FLATPAK_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_PREFERENCES_ADDIN_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_FILES_H
-#define IDE_PROJECT_FILES_H
+#pragma once
 
 #include "ide-project-file.h"
 #include "ide-project-item.h"
@@ -42,5 +41,3 @@ IdeProjectItem *ide_project_files_find_file         (IdeProjectFiles *self,
                                                      GFile           *file);
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_FILES_H */

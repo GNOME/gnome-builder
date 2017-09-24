@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_FLATPAK_UTIL_H
-#define GBP_FLATPAK_UTIL_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ gchar    *gbp_flatpak_get_repo_dir    (IdeConfiguration *configuration);
 gchar    *gbp_flatpak_get_staging_dir (IdeConfiguration *configuration);
 
 G_END_DECLS
-
-#endif /* GBP_FLATPAK_UTIL_H */

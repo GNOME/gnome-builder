@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_EDIT_H
-#define IDE_PROJECT_EDIT_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -48,5 +47,3 @@ void            ide_project_edit_set_replacement (IdeProjectEdit *self,
                                                   const gchar    *replacement);
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_EDIT_H */

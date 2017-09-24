@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_HIGHLIGHT_INDEX_H
-#define IDE_HIGHLIGHT_INDEX_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -41,5 +40,3 @@ void               ide_highlight_index_dump     (IdeHighlightIndex *self);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeHighlightIndex, ide_highlight_index_unref)
 
 G_END_DECLS
-
-#endif /* IDE_HIGHLIGHT_INDEX_H */

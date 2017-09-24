@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_APPLICATION_ACTIONS_H
-#define IDE_APPLICATION_ACTIONS_H
+#pragma once
 
 #include "ide-application.h"
 
@@ -27,5 +26,3 @@ void ide_application_actions_init   (IdeApplication *self);
 void ide_application_actions_update (IdeApplication *self);
 
 G_END_DECLS
-
-#endif /* IDE_APPLICATION_ACTIONS_H */

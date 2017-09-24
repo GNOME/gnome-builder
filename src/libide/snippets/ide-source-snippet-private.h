@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPET_PRIVATE_H
-#define IDE_SOURCE_SNIPPET_PRIVATE_H
+#pragma once
 
 #include "ide-source-snippet.h"
 
@@ -55,5 +54,3 @@ void             ide_source_snippet_dump                (IdeSourceSnippet  *self
 
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPET_PRIVATE_H */

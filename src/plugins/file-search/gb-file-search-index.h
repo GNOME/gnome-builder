@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_FILE_SEARCH_INDEX_H
-#define GB_FILE_SEARCH_INDEX_H
+#pragma once
 
 #include <ide.h>
 
@@ -45,5 +44,3 @@ void       gb_file_search_index_remove       (GbFileSearchIndex    *self,
                                               const gchar          *relative_path);
 
 G_END_DECLS
-
-#endif /* GB_FILE_SEARCH_INDEX_H */

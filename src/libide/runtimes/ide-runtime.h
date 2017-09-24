@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_RUNTIME_H
-#define IDE_RUNTIME_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -93,5 +92,3 @@ GFile                 *ide_runtime_translate_file           (IdeRuntime         
                                                              GFile                *file);
 
 G_END_DECLS
-
-#endif /* IDE_RUNTIME_H */

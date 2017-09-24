@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_CLIENT_H
-#define IDE_LANGSERV_CLIENT_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -86,5 +85,3 @@ gboolean           ide_langserv_client_get_diagnostics_finish   (IdeLangservClie
                                                                  GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_CLIENT_H */

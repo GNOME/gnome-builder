@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_SYMBOL_RESOLVER_H
-#define IDE_LANGSERV_SYMBOL_RESOLVER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -49,5 +48,3 @@ void               ide_langserv_symbol_resolver_set_client (IdeLangservSymbolRes
                                                             IdeLangservClient         *client);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_SYMBOL_RESOLVER_H */

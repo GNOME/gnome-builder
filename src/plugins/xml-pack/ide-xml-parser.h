@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_PARSER_H
-#define IDE_XML_PARSER_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -41,6 +40,3 @@ IdeXmlAnalysis    *ide_xml_parser_get_analysis_finish   (IdeXmlParser         *s
                                                          GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_XML_PARSER_H */
-

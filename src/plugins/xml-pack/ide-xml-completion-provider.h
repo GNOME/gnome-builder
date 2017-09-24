@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_COMPLETION_PROVIDER_H
-#define IDE_XML_COMPLETION_PROVIDER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
@@ -31,6 +30,3 @@ G_DECLARE_FINAL_TYPE (IdeXmlCompletionProvider, ide_xml_completion_provider, IDE
 IdeXmlCompletionProvider *ide_xml_completion_provider_new (void);
 
 G_END_DECLS
-
-#endif /* IDE_XML_COMPLETION_PROVIDER_H */
-

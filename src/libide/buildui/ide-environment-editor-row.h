@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_ENVIRONMENT_EDITOR_ROW_H
-#define IDE_ENVIRONMENT_EDITOR_ROW_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <ide.h>
@@ -34,5 +33,3 @@ void                    ide_environment_editor_row_set_variable  (IdeEnvironment
 void                    ide_environment_editor_row_start_editing (IdeEnvironmentEditorRow *self);
 
 G_END_DECLS
-
-#endif /* IDE_ENVIRONMENT_EDITOR_ROW_H */

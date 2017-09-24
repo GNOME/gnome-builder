@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FILE_H
-#define IDE_FILE_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -67,5 +66,3 @@ GtkSourceFile     *_ide_file_get_source_file     (IdeFile              *self) G_
 
 
 G_END_DECLS
-
-#endif /* IDE_FILE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TRANSFER_H
-#define IDE_TRANSFER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -81,5 +80,3 @@ gboolean     ide_transfer_execute_finish (IdeTransfer          *self,
                                           GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_TRANSFER_H */

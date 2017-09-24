@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORD_COMPLETION_ITEM_H
-#define IDE_WORD_COMPLETION_ITEM_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -37,5 +36,3 @@ const gchar           *ide_word_completion_item_get_word   (IdeWordCompletionIte
 gint                   ide_word_completion_item_get_offset (IdeWordCompletionItem *proposal);
 
 G_END_DECLS
-
-#endif /* IDE_WORD_COMPLETION_ITEM_H */

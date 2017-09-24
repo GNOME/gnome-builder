@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SUPPORT_APPLICATION_ADDIN_H
-#define IDE_SUPPORT_APPLICATION_ADDIN_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeSupportApplicationAddin, ide_support_application_addin, IDE, SUPPORT_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_SUPPORT_APPLICATION_ADDIN_H */

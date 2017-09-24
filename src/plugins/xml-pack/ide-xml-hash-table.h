@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_HASH_TABLE_H
-#define IDE_XML_HASH_TABLE_H
+#pragma once
 
 #include <libxml/xmlstring.h>
 
@@ -64,6 +63,3 @@ void                 ide_xml_hash_table_unref       (IdeXmlHashTable            
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlHashTable, ide_xml_hash_table_unref)
 
 G_END_DECLS
-
-#endif /* IDE_XML_HASH_TABLE_H */
-

@@ -17,8 +17,7 @@
  */
 
 
-#ifndef IDE_CODE_INDEX_SYMBOL_RESOLVER_H
-#define IDE_CODE_INDEX_SYMBOL_RESOLVER_H
+#pragma once
 
 #include <ide.h>
 
@@ -29,5 +28,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeCodeIndexSymbolResolver, ide_code_index_symbol_resolver, IDE, CODE_INDEX_SYMBOL_RESOLVER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_SYMBOL_RESOLVER_H */

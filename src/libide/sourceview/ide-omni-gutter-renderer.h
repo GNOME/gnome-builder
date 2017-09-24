@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_GUTTER_RENDERER_H
-#define IDE_OMNI_GUTTER_RENDERER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -39,5 +38,3 @@ void                   ide_omni_gutter_renderer_set_show_line_numbers     (IdeOm
                                                                            gboolean               show_line_numbers);
 
 G_END_DECLS
-
-#endif /* IDE_OMNI_GUTTER_RENDERER_H */

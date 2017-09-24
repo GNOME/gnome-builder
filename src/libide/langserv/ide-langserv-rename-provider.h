@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_RENAME_PROVIDER_H
-#define IDE_LANGSERV_RENAME_PROVIDER_H
+#pragma once
 
 #include "langserv/ide-langserv-client.h"
 #include "rename/ide-rename-provider.h"
@@ -47,5 +46,3 @@ void               ide_langserv_rename_provider_set_client (IdeLangservRenamePro
                                                             IdeLangservClient         *client);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_RENAME_PROVIDER_H */

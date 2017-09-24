@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_TREE_ACTIONS_H
-#define GB_PROJECT_TREE_ACTIONS_H
+#pragma once
 
 #include "gb-project-tree.h"
 
@@ -27,5 +26,3 @@ void gb_project_tree_actions_init   (GbProjectTree *self);
 void gb_project_tree_actions_update (GbProjectTree *self);
 
 G_END_DECLS
-
-#endif /* GB_PROJECT_TREE_ACTIONS_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_CREATE_PROJECT_TOOL_H
-#define GBP_CREATE_PROJECT_TOOL_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpCreateProjectTool, gbp_create_project_tool, GBP, CREATE_PROJECT_TOOL, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_CREATE_PROJECT_TOOL_H */

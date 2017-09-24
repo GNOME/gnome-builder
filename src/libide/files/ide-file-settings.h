@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FILE_SETTINGS_H
-#define IDE_FILE_SETTINGS_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -64,5 +63,3 @@ gboolean         ide_file_settings_get_settled (IdeFileSettings *self);
 #undef IDE_FILE_SETTINGS_PROPERTY
 
 G_END_DECLS
-
-#endif /* IDE_FILE_SETTINGS_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GLIB_H
-#define IDE_GLIB_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -35,5 +34,3 @@ void         ide_g_task_return_error_from_main   (GTask          *task,
                                                   GError         *error);
 
 G_END_DECLS
-
-#endif /* IDE_GLIB_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUFFER_H
-#define IDE_BUFFER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -124,5 +123,3 @@ gchar                    *ide_buffer_get_word_at_iter              (IdeBuffer   
 void                      ide_buffer_sync_to_unsaved_files         (IdeBuffer            *self);
 
 G_END_DECLS
-
-#endif /* IDE_BUFFER_H */

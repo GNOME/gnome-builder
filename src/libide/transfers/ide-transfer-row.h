@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TRANSFER_ROW_H
-#define IDE_TRANSFER_ROW_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -34,5 +33,3 @@ void         ide_transfer_row_set_transfer (IdeTransferRow *self,
                                             IdeTransfer    *transfer);
 
 G_END_DECLS
-
-#endif /* IDE_TRANSFER_ROW_H */

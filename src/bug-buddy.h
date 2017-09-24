@@ -16,13 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BUG_BUDDY_H
-#define BUG_BUDDY_H
+#pragma once
 
 G_BEGIN_DECLS
 
 void bug_buddy_init (void);
 
 G_END_DECLS
-
-#endif /* BUG_BUDDY_H */

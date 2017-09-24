@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIAGNOSTICS_H
-#define IDE_DIAGNOSTICS_H
+#pragma once
 
 #include "ide-types.h"
 
@@ -40,5 +39,3 @@ void            ide_diagnostics_add      (IdeDiagnostics *self,
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostics, ide_diagnostics_unref)
 
 G_END_DECLS
-
-#endif /* IDE_DIAGNOSTICS_H */

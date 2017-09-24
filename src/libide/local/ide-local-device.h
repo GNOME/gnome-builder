@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LOCAL_DEVICE_H
-#define IDE_LOCAL_DEVICE_H
+#pragma once
 
 #include "devices/ide-device.h"
 
@@ -33,5 +32,3 @@ struct _IdeLocalDeviceClass
 };
 
 G_END_DECLS
-
-#endif /* IDE_LOCAL_DEVICE_H */

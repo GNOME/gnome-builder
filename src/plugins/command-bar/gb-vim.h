@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_VIM_H
-#define GB_VIM_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -43,5 +42,3 @@ gchar    **gb_vim_complete    (GtkWidget      *active_widget,
                                const gchar    *line);
 
 G_END_DECLS
-
-#endif /* GB_VIM_H */

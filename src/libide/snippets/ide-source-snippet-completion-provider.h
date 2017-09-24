@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_H
-#define IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -35,5 +34,3 @@ GtkSourceCompletionProvider *ide_source_snippet_completion_provider_new (IdeSour
                                                                          IdeSourceSnippets *snippets);
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_H */

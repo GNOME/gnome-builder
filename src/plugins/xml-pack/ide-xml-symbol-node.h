@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_SYMBOL_NODE_H
-#define IDE_XML_SYMBOL_NODE_H
+#pragma once
 
 #include "ide-xml-types.h"
 #include "ide-xml-symbol-resolver.h"
@@ -119,5 +118,3 @@ void                              ide_xml_symbol_node_set_attributes            
                                                                                      const gchar           **attributes);
 
 G_END_DECLS
-
-#endif /* IDE_XML_SYMBOL_NODE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_UTIL_H
-#define IDE_CTAGS_UTIL_H
+#pragma once
 
 #include "ide-ctags-index.h"
 
@@ -28,5 +27,3 @@ gboolean             ide_ctags_is_allowed           (const IdeCtagsIndexEntry *e
                                                      const gchar * const      *allowed);
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_UTIL_H */

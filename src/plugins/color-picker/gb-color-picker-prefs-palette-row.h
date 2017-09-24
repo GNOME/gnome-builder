@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GB_COLOR_PICKER_PREFS_PALETTE_ROW_H
-#define GB_COLOR_PICKER_PREFS_PALETTE_ROW_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -32,6 +31,3 @@ void                          gb_color_picker_prefs_palette_row_set_needs_attent
 GbColorPickerPrefsPaletteRow *gb_color_picker_prefs_palette_row_new                 (void);
 
 G_END_DECLS
-
-#endif /* GB_COLOR_PICKER_PREFS_PALETTE_ROW_H */
-

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_BEAUTIFIER_EDITOR_ADDIN_H
-#define GB_BEAUTIFIER_EDITOR_ADDIN_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbBeautifierEditorAddin, gb_beautifier_editor_addin, GB, BEAUTIFIER_EDITOR_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GB_BEAUTIFIER_EDITOR_ADDIN_H */

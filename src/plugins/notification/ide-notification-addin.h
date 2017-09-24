@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_NOTIFICATION_ADDIN_H
-#define GBP_NOTIFICATION_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeNotificationAddin, ide_notification_addin, IDE, NOTIFICATION_ADDIN, IdeObject)
 
 G_END_DECLS
-
-#endif /* GBP_NOTIFICATION_ADDIN_H */

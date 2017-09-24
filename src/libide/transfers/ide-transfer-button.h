@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_TRANSFER_BUTTON_H
-#define IDE_TRANSFER_BUTTON_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -42,5 +41,3 @@ struct _IdeTransferButtonClass
 GtkWidget *ide_transfer_button_new (IdeTransfer *transfer);
 
 G_END_DECLS
-
-#endif /* IDE_TRANSFER_BUTTON_H */

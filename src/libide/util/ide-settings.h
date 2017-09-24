@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SETTINGS_H
-#define IDE_SETTINGS_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -86,5 +85,3 @@ void         ide_settings_unbind                      (IdeSettings             *
                                                        const gchar             *property);
 
 G_END_DECLS
-
-#endif /* IDE_SETTINGS_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_HIGHLIGHTER_H
-#define IDE_HIGHLIGHTER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -82,5 +81,3 @@ void _ide_highlighter_set_highlighter_engine (IdeHighlighter       *self,
                                               IdeHighlightEngine   *highlight_engine) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_HIGHLIGHTER_H */

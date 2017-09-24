@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEXER_H
-#define IDE_CODE_INDEXER_H
+#pragma once
 
 #include "ide-object.h"
 #include "ide-code-index-entries.h"
@@ -62,5 +61,3 @@ gchar                *ide_code_indexer_generate_key_finish  (IdeCodeIndexer     
                                                              GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEXER_H */

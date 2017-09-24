@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_SYMBOL_NODE_H
-#define IDE_LANGSERV_SYMBOL_NODE_H
+#pragma once
 
 #include "symbols/ide-symbol-node.h"
 
@@ -32,5 +31,3 @@ gboolean     ide_langserv_symbol_node_is_parent_of    (IdeLangservSymbolNode *se
                                                        IdeLangservSymbolNode *other);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_SYMBOL_NODE_H */

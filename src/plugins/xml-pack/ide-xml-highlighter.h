@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_XML_HIGHLIGHTER_H
-#define IDE_XML_HIGHLIGHTER_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeXmlHighlighter, ide_xml_highlighter, IDE, XML_HIGHLIGHTER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_XML_HIGHLIGHTER_H */

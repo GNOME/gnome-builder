@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SYMBOL_H
-#define IDE_SYMBOL_H
+#pragma once
 
 #include "ide-types.h"
 
@@ -105,5 +104,3 @@ const gchar       *ide_symbol_kind_get_icon_name       (IdeSymbolKind          k
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSymbol, ide_symbol_unref)
 
 G_END_DECLS
-
-#endif /* IDE_SYMBOL_H */

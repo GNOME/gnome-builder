@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORKBENCH_H
-#define IDE_WORKBENCH_H
+#pragma once
 
 #include <dazzle.h>
 
@@ -106,5 +105,3 @@ void                   ide_workbench_set_focus_mode               (IdeWorkbench 
                                                                    gboolean                focus_mode);
 
 G_END_DECLS
-
-#endif /* IDE_WORKBENCH_H */

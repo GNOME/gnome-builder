@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COMMAND_VIM_PROVIDER_H
-#define GB_COMMAND_VIM_PROVIDER_H
+#pragma once
 
 #include "gb-command-provider.h"
 
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (GbCommandVimProvider, gb_command_vim_provider,
                       GB, COMMAND_VIM_PROVIDER, GbCommandProvider)
 
 G_END_DECLS
-
-#endif /* GB_COMMAND_VIM_PROVIDER_H */

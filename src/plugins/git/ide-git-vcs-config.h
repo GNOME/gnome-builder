@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GIT_VCS_CONFIG_H
-#define IDE_GIT_VCS_CONFIG_H
+#pragma once
 
 #include <ide.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeGitVcsConfig, ide_git_vcs_config, IDE, GIT_VCS_CONFIG, 
 IdeGitVcsConfig *ide_git_vcs_config_new (void);
 
 G_END_DECLS
-
-#endif /* IDE_GIT_VCS_CONFIG_H */

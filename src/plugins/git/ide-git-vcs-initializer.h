@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GIT_VCS_INITIALIZER_H
-#define IDE_GIT_VCS_INITIALIZER_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,6 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeGitVcsInitializer, ide_git_vcs_initializer, IDE, GIT_VCS_INITIALIZER, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_GIT_VCS_INITIALIZER_H */
-

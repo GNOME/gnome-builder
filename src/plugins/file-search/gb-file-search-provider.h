@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_FILE_SEARCH_PROVIDER_H
-#define GB_FILE_SEARCH_PROVIDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (GbFileSearchProvider, gb_file_search_provider,
                       GB, FILE_SEARCH_PROVIDER, IdeObject)
 
 G_END_DECLS
-
-#endif /* GB_FILE_SEARCH_PROVIDER_H */

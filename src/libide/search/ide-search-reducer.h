@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SEARCH_REDUCER_H
-#define IDE_SEARCH_REDUCER_H
+#pragma once
 
 #include "ide-types.h"
 
@@ -45,5 +44,3 @@ GPtrArray *ide_search_reducer_free    (IdeSearchReducer  *reducer,
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (IdeSearchReducer, ide_search_reducer_destroy)
 
 G_END_DECLS
-
-#endif /* IDE_SEARCH_REDUCER_H */

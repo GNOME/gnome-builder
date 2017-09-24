@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_TREE_PRIVATE_H
-#define GB_PROJECT_TREE_PRIVATE_H
+#pragma once
 
 #include <ide.h>
 
@@ -36,5 +35,3 @@ struct _GbProjectTree
 void      _gb_project_tree_init_shortcuts       (GbProjectTree *self);
 
 G_END_DECLS
-
-#endif /* GB_PROJECT_TREE_PRIVATE_H */

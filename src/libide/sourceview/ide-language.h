@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGUAGE_H
-#define IDE_LANGUAGE_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -27,5 +26,3 @@ gchar *ide_language_format_header (GtkSourceLanguage *language,
                                    const gchar       *header);
 
 G_END_DECLS
-
-#endif /* IDE_LANGUAGE_H */

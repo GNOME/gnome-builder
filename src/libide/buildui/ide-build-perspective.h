@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_PERSPECTIVE_H
-#define IDE_BUILD_PERSPECTIVE_H
+#pragma once
 
 #include <ide.h>
 
@@ -32,5 +31,3 @@ void              ide_build_perspective_set_configuration (IdeBuildPerspective *
                                                            IdeConfiguration    *configuration);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_PERSPECTIVE_H */

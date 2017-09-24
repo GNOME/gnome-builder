@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_SEARCH_H
-#define GB_TERMINAL_SEARCH_H
+#pragma once
 
 #include <ide.h>
 #include <vte/vte.h>
@@ -35,5 +34,3 @@ void         gb_terminal_search_set_terminal    (GbTerminalSearch *self,
 GtkRevealer *gb_terminal_search_get_revealer    (GbTerminalSearch *self);
 
 G_END_DECLS
-
-#endif /* GB_TERMINAL_SEARCH_H */

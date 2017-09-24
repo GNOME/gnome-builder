@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_MAKECACHE_TARGET_H
-#define IDE_MAKECACHE_TARGET_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -43,5 +42,3 @@ gboolean            ide_makecache_target_equal      (gconstpointer       data1,
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeMakecacheTarget, ide_makecache_target_unref)
 
 G_END_DECLS
-
-#endif /* IDE_MAKECACHE_TARGET_H */

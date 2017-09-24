@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SOURCE_MAP_H
-#define IDE_SOURCE_MAP_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeSourceMap, ide_source_map, IDE, SOURCE_MAP, GtkSourceMap)
 
 G_END_DECLS
-
-#endif /* IDE_SOURCE_MAP_H */

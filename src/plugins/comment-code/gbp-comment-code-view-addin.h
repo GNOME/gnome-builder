@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_COMMENT_CODE_VIEW_ADDIN_H
-#define GBP_COMMENT_CODE_VIEW_ADDIN_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpCommentCodeViewAddin, gbp_comment_code_view_addin, GBP, COMMENT_CODE_VIEW_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_COMMENT_CODE_VIEW_ADDIN_H */

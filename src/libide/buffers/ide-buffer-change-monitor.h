@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUFFER_CHANGE_MONITOR_H
-#define IDE_BUFFER_CHANGE_MONITOR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -63,5 +62,3 @@ void                ide_buffer_change_monitor_emit_changed (IdeBufferChangeMonit
 void                ide_buffer_change_monitor_reload       (IdeBufferChangeMonitor *self);
 
 G_END_DECLS
-
-#endif /* IDE_BUFFER_CHANGE_MONITOR_H */

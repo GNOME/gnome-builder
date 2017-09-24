@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_FILE_SEARCH_RESULT_H
-#define GB_FILE_SEARCH_RESULT_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbFileSearchResult, gb_file_search_result, GB, FILE_SEARCH_RESULT, IdeSearchResult)
 
 G_END_DECLS
-
-#endif /* GB_FILE_SEARCH_RESULT_H */

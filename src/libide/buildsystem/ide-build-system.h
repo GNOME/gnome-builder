@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_SYSTEM_H
-#define IDE_BUILD_SYSTEM_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -103,5 +102,3 @@ void            _ide_build_system_set_project_file                 (IdeBuildSyst
                                                                     GFile                *project_file) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_SYSTEM_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_COLOR_PICKER_DOCUMENT_MONITOR_H
-#define GB_COLOR_PICKER_DOCUMENT_MONITOR_H
+#pragma once
 
 #include <glib-object.h>
 #include <ide.h>
@@ -45,6 +44,3 @@ void                          gb_color_picker_document_monitor_queue_uncolorize 
                                                                                            const GtkTextIter            *end);
 
 G_END_DECLS
-
-#endif /* GB_COLOR_PICKER_VIEW_MONITOR_H */
-

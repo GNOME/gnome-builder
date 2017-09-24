@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EXTENSION_ADAPTER_H
-#define IDE_EXTENSION_ADAPTER_H
+#pragma once
 
 #include <libpeas/peas.h>
 
@@ -45,5 +44,3 @@ void                 ide_extension_adapter_set_value          (IdeExtensionAdapt
                                                                const gchar         *value);
 
 G_END_DECLS
-
-#endif /* IDE_EXTENSION_ADAPTER_H */

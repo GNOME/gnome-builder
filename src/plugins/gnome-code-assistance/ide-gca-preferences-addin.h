@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GCA_PREFERENCES_ADDIN_H
-#define IDE_GCA_PREFERENCES_ADDIN_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeGcaPreferencesAddin, ide_gca_preferences_addin, IDE, GCA_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* IDE_GCA_PREFERENCES_ADDIN_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_REF_PTR_H
-#define IDE_REF_PTR_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -37,5 +36,3 @@ gpointer   ide_ref_ptr_get      (IdeRefPtr      *self);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeRefPtr, ide_ref_ptr_unref)
 
 G_END_DECLS
-
-#endif /* IDE_REF_PTR_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_GCA_DIAGNOSTIC_PROVIDER_H
-#define IDE_GCA_DIAGNOSTIC_PROVIDER_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeGcaDiagnosticProvider, ide_gca_diagnostic_provider, IDE, GCA_DIAGNOSTIC_PROVIDER, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_GCA_DIAGNOSTIC_PROVIDER_H */

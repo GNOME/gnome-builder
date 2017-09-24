@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GBP_SYSPROF_WORKBENCH_ADDIN_H
-#define GBP_SYSPROF_WORKBENCH_ADDIN_H
+#pragma once
 
 #include <ide.h>
 
@@ -28,6 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, GBP, SYSPROF_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS
-
-#endif /* GBP_SYSPROF_WORKBENCH_ADDIN_H */
-

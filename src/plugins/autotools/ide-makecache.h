@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_MAKECACHE_H
-#define IDE_MAKECACHE_H
+#pragma once
 
 #include <ide.h>
 
@@ -62,5 +61,3 @@ GPtrArray           *ide_makecache_get_build_targets_finish  (IdeMakecache      
                                                               GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_MAKECACHE_H */

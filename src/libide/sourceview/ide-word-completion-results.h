@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_WORD_COMPLETION_RESULTS_H
-#define IDE_WORD_COMPLETION_RESULTS_H
+#pragma once
 
 #include <gtksourceview/gtksource.h>
 
@@ -33,5 +32,3 @@ IdeWordCompletionResults* ide_word_completion_results_new (const gchar *query,
                                                            gint         sort_direction);
 
 G_END_DECLS
-
-#endif /* IDE_WORD_COMPLETION_RESULTS_H */

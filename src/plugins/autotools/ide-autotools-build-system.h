@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_AUTOTOOLS_BUILD_SYSTEM_H
-#define IDE_AUTOTOOLS_BUILD_SYSTEM_H
+#pragma once
 
 #include <ide.h>
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (IdeAutotoolsBuildSystem, ide_autotools_build_system, IDE, 
 const gchar *ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self);
 
 G_END_DECLS
-
-#endif /* IDE_AUTOTOOLS_BUILD_SYSTEM_H */

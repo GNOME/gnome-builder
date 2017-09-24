@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIAGNOSTICS_MANAGER_H
-#define IDE_DIAGNOSTICS_MANAGER_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -39,5 +38,3 @@ void            ide_diagnostics_manager_update_group_by_file     (IdeDiagnostics
                                                                   GFile                 *new_file);
 
 G_END_DECLS
-
-#endif /* IDE_DIAGNOSTICS_MANAGER_H */

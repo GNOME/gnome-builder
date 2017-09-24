@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILDCONFIG_CONFIGURATION_H
-#define IDE_BUILDCONFIG_CONFIGURATION_H
+#pragma once
 
 #include "buildsystem/ide-configuration.h"
 
@@ -35,5 +34,3 @@ void                 ide_buildconfig_configuration_set_postbuild (IdeBuildconfig
                                                                   const gchar * const         *postbuild);
 
 G_END_DECLS
-
-#endif /* IDE_BUILDCONFIG_CONFIGURATION_H */

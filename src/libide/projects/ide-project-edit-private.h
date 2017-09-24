@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_EDIT_PRIVATE_H
-#define IDE_PROJECT_EDIT_PRIVATE_H
+#pragma once
 
 #include "buffers/ide-buffer.h"
 #include "projects/ide-project-edit.h"
@@ -30,5 +29,3 @@ void _ide_project_edit_apply   (IdeProjectEdit *self,
                                 IdeBuffer      *buffer);
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_EDIT_PRIVATE_H */

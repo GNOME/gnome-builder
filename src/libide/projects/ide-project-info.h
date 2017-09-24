@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_PROJECT_INFO_H
-#define IDE_PROJECT_INFO_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -60,5 +59,3 @@ void          ide_project_info_set_priority          (IdeProjectInfo  *self,
                                                       gint             priority);
 
 G_END_DECLS
-
-#endif /* IDE_PROJECT_INFO_H */

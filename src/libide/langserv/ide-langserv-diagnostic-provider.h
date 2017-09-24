@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_LANGSERV_DIAGNOSTIC_PROVIDER_H
-#define IDE_LANGSERV_DIAGNOSTIC_PROVIDER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -45,5 +44,3 @@ void               ide_langserv_diagnostic_provider_set_client (IdeLangservDiagn
                                                                 IdeLangservClient             *client);
 
 G_END_DECLS
-
-#endif /* IDE_LANGSERV_DIAGNOSTIC_PROVIDER_H */

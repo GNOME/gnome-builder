@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SHORTCUTS_WINDOW_H
-#define IDE_SHORTCUTS_WINDOW_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeShortcutsWindow, ide_shortcuts_window, IDE, SHORTCUTS_WINDOW, GtkShortcutsWindow)
 
 G_END_DECLS
-
-#endif /* IDE_SHORTCUTS_WINDOW_H */

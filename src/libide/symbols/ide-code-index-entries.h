@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CODE_INDEX_ENTRIES_H
-#define IDE_CODE_INDEX_ENTRIES_H
+#pragma once
 
 #include "ide-object.h"
 #include "ide-symbol.h"
@@ -39,5 +38,3 @@ struct _IdeCodeIndexEntriesInterface
 IdeCodeIndexEntry  *ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self);
 
 G_END_DECLS
-
-#endif /* IDE_CODE_INDEX_ENTRIES_H */

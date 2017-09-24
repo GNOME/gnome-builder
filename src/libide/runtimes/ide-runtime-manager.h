@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_RUNTIME_MANAGER_H
-#define IDE_RUNTIME_MANAGER_H
+#pragma once
 
 #include "ide-object.h"
 
@@ -44,5 +43,3 @@ IdeRuntime *ide_runtime_manager_ensure_finish (IdeRuntimeManager    *self,
                                                GError              **error);
 
 G_END_DECLS
-
-#endif /* IDE_RUNTIME_MANAGER_H */

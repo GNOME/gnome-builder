@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_SYSTEM_DISCOVERY_H
-#define IDE_BUILD_SYSTEM_DISCOVERY_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -47,5 +46,3 @@ gchar *ide_build_system_discovery_discover (IdeBuildSystemDiscovery  *self,
                                             GError                  **error);
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_SYSTEM_DISCOVERY_H */

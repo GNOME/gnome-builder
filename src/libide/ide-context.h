@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CONTEXT_H
-#define IDE_CONTEXT_H
+#pragma once
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -91,5 +90,3 @@ GListModel               *_ide_context_get_pausables            (IdeContext     
 gboolean                  _ide_context_is_restoring             (IdeContext           *self) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_CONTEXT_H */

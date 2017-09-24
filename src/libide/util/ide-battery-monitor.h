@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BATTERY_MONITOR_H
-#define IDE_BATTERY_MONITOR_H
+#pragma once
 
 #include <glib.h>
 
@@ -30,5 +29,3 @@ void     _ide_battery_monitor_init                 (void) G_GNUC_INTERNAL;
 void     _ide_battery_monitor_shutdown             (void) G_GNUC_INTERNAL;
 
 G_END_DECLS
-
-#endif /* IDE_BATTERY_MONITOR_H */

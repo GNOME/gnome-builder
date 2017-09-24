@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OBJECT_H
-#define IDE_OBJECT_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -66,5 +65,3 @@ void        ide_object_notify_in_main          (gpointer              instance,
                                                 GParamSpec           *pspec);
 
 G_END_DECLS
-
-#endif /* IDE_OBJECT_H */

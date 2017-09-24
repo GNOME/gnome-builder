@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CTAGS_COMPLETION_PROVIDER_PRIVATE_H
-#define IDE_CTAGS_COMPLETION_PROVIDER_PRIVATE_H
+#pragma once
 
 #include "ide-ctags-completion-provider.h"
 
@@ -34,5 +33,3 @@ struct _IdeCtagsCompletionProvider
 };
 
 G_END_DECLS
-
-#endif /* IDE_CTAGS_COMPLETION_PROVIDER_PRIVATE_H */

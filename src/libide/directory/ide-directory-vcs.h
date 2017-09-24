@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIRECTORY_VCS_H
-#define IDE_DIRECTORY_VCS_H
+#pragma once
 
 #include "vcs/ide-vcs.h"
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeDirectoryVcs, ide_directory_vcs, IDE, DIRECTORY_VCS, IdeObject)
 
 G_END_DECLS
-
-#endif /* IDE_DIRECTORY_VCS_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILDCONFIG_CONFIGURATION_PROVIDER_H
-#define IDE_BUILDCONFIG_CONFIGURATION_PROVIDER_H
+#pragma once
 
 #include <glib.h>
 
@@ -35,5 +34,3 @@ void ide_buildconfig_configuration_provider_track_config (IdeBuildconfigConfigur
                                                           IdeBuildconfigConfiguration         *config);
 
 G_END_DECLS
-
-#endif /* IDE_BUILDCONFIG_CONFIGURATION_PROVIDER_H */

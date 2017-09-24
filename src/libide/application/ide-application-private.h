@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_APPLICATION_PRIVATE_H
-#define IDE_APPLICATION_PRIVATE_H
+#pragma once
 
 #include <dazzle.h>
 #include <gio/gio.h>
@@ -85,5 +84,3 @@ void     _ide_application_set_mode                  (IdeApplication        *self
                                                      IdeApplicationMode     mode);
 
 G_END_DECLS
-
-#endif /* IDE_APPLICATION_PRIVATE_H */
