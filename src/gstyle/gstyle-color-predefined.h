@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_PREDEFINED_H
-#define GSTYLE_COLOR_PREDEFINED_H
+#pragma once
 
 #include <glib.h>
 
@@ -185,5 +184,3 @@ static NamedColor predefined_colors_table[] =
 };
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_PREDEFINED_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_EYEDROPPER_H
-#define GSTYLE_EYEDROPPER_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (GstyleEyedropper, gstyle_eyedropper, GSTYLE, EYEDROPPER, G
 GstyleEyedropper       *gstyle_eyedropper_new       (GdkEvent       *event);
 
 G_END_DECLS
-
-#endif /* GSTYLE_EYEDROPPER_H */

@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GSTYLE_COLOR_PANEL_ACTIONS_H
-#define GSTYLE_COLOR_PANEL_ACTIONS_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -27,6 +26,3 @@ G_BEGIN_DECLS
 void gstyle_color_panel_actions_init   (GstyleColorPanel *self);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_PANEL_ACTIONS_H */
-

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_WIDGET_ACTIONS_H
-#define GSTYLE_COLOR_WIDGET_ACTIONS_H
+#pragma once
 
 #include <glib.h>
 
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 void gstyle_color_widget_actions_init   (GstyleColorWidget *self);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_WIDGET_ACTIONS_H */

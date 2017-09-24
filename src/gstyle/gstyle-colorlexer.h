@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLORLEXER_H
-#define GSTYLE_COLORLEXER_H
+#pragma once
 
 #include "gstyle-types.h"
 #include "gstyle-color.h"
@@ -44,5 +43,3 @@ typedef enum
 GPtrArray       *gstyle_colorlexer_parse       (const gchar     *data);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLORLEXER_H */

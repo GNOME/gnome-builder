@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_CONVERT_H
-#define GSTYLE_COLOR_CONVERT_H
+#pragma once
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -71,5 +70,3 @@ void                  gstyle_color_convert_xyz_to_hsv       (GstyleXYZ          
                                                              gdouble             *value);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_CONVERT_H */

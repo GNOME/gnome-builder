@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_ANIMATION_H
-#define GSTYLE_ANIMATION_H
+#pragma once
 
 #include <glib.h>
 
@@ -27,5 +26,3 @@ gdouble           gstyle_animation_ease_in_out_cubic         (gdouble   offset);
 gboolean          gstyle_animation_check_enable_animation    (void);
 
 G_END_DECLS
-
-#endif /* GSTYLE_ANIMATION_H */

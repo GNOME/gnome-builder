@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_PALETTE_H
-#define GSTYLE_PALETTE_H
+#pragma once
 
 #include <glib-object.h>
 #include <gio/gio.h>
@@ -91,5 +90,3 @@ void                gstyle_palette_set_id                (GstylePalette  *self,
                                                           const gchar    *id);
 
 G_END_DECLS
-
-#endif /* GSTYLE_PALETTE_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_CSS_PROVIDER_H
-#define GSTYLE_CSS_PROVIDER_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -32,6 +31,3 @@ GstyleCssProvider      *gstyle_css_provider_init_default       (GdkScreen *scree
 GstyleCssProvider      *gstyle_css_provider_new                (void);
 
 G_END_DECLS
-
-#endif /* GSTYLE_CSS_PROVIDER_H */
-

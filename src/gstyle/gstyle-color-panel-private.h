@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_PANEL_PRIVATE_H
-#define GSTYLE_COLOR_PANEL_PRIVATE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -148,6 +147,3 @@ void                  _gstyle_color_panel_update_prefs_page                   (G
                                                                                const gchar            *page_name);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_PANEL_PRIVATE_H */
-

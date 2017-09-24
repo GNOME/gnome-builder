@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_REVEALER_H
-#define GSTYLE_REVEALER_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -33,5 +32,3 @@ void              gstyle_revealer_set_reveal_child     (GstyleRevealer *self,
                                                         gboolean        reveal);
 
 G_END_DECLS
-
-#endif /* GSTYLE_REVEALER_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_RENAME_POPOVER_H
-#define GSTYLE_RENAME_POPOVER_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -40,6 +39,3 @@ void                     gstyle_rename_popover_set_name           (GstyleRenameP
                                                                    const gchar            *name);
 
 G_END_DECLS
-
-#endif /* GSTYLE_RENAME_POPOVER_H */
-

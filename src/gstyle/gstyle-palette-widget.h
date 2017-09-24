@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_PALETTE_WIDGET_H
-#define GSTYLE_PALETTE_WIDGET_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -95,6 +94,3 @@ gboolean                         gstyle_palette_widget_show_palette             
 GstylePaletteWidget             *gstyle_palette_widget_new                       (void);
 
 G_END_DECLS
-
-#endif /* GSTYLE_PALETTE_WIDGET_H */
-

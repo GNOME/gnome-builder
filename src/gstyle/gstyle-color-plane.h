@@ -20,8 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_PLANE_H
-#define GSTYLE_COLOR_PLANE_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -84,6 +83,3 @@ void                   gstyle_color_plane_set_xyz                       (GstyleC
                                                                          const GstyleXYZ        *xyz);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_PLANE_H */
-

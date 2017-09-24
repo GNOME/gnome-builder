@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_SLIDEIN_H
-#define GSTYLE_SLIDEIN_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -60,5 +59,3 @@ void                         gstyle_slidein_set_interpolate_size             (Gs
 void                         gstyle_slidein_set_slide_fraction               (GstyleSlidein               *self,
                                                                               gdouble                      slide_fraction);
 G_END_DECLS
-
-#endif /* GSTYLE_SLIDEIN_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_HSV_H
-#define GSTYLE_HSV_H
+#pragma once
 
 #include <glib.h>
 
@@ -41,5 +40,3 @@ GstyleHSV     *gstyle_hsv_copy                    (const GstyleHSV  *self);
 void           gstyle_hsv_free                    (GstyleHSV        *self);
 
 G_END_DECLS
-
-#endif /* GSTYLE_HSV_H */

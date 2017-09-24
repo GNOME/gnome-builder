@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_CIELAB_H
-#define GSTYLE_CIELAB_H
+#pragma once
 
 #include <glib.h>
 
@@ -41,5 +40,3 @@ GstyleCielab  *gstyle_cielab_copy                    (const GstyleCielab  *self)
 void           gstyle_cielab_free                    (GstyleCielab        *self);
 
 G_END_DECLS
-
-#endif /* GSTYLE_CIELAB_H */

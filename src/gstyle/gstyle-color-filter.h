@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_FILTER_H
-#define GSTYLE_COLOR_FILTER_H
+#pragma once
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -73,6 +72,3 @@ void           gstyle_color_filter_websafe        (GdkRGBA          *rgba,
                                                    gpointer          user_data);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_FILTER_H */
-

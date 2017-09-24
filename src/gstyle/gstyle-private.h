@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_PRIVATE_H
-#define GSTYLE_PRIVATE_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -27,5 +26,3 @@ G_BEGIN_DECLS
 #include "gstyle-utils.h"
 
 G_END_DECLS
-
-#endif /* GSTYLE_PRIVATE_H */

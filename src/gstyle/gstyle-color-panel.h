@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_PANEL_H
-#define GSTYLE_COLOR_PANEL_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -78,6 +77,3 @@ void                        gstyle_color_panel_show_palette                (Gsty
                                                                             GstylePalette       *palette);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_PANEL_H */
-

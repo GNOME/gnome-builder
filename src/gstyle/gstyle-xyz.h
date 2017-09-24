@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_XYZ_H
-#define GSTYLE_XYZ_H
+#pragma once
 
 #include <glib.h>
 
@@ -41,5 +40,3 @@ GstyleXYZ     *gstyle_xyz_copy                    (const GstyleXYZ  *self);
 void           gstyle_xyz_free                    (GstyleXYZ        *self);
 
 G_END_DECLS
-
-#endif /* GSTYLE_XYZ_H */

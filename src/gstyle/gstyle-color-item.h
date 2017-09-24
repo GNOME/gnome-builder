@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_ITEM_H
-#define GSTYLE_COLOR_ITEM_H
+#pragma once
 
 #include <glib.h>
 
@@ -54,5 +53,3 @@ guint                gstyle_color_item_get_start               (GstyleColorItem 
 guint                gstyle_color_item_get_len                 (GstyleColorItem  *self);
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_ITEM_H */

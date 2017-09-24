@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_COLOR_COMPONENT_H
-#define GSTYLE_COLOR_COMPONENT_H
+#pragma once
 
 #include <glib.h>
 
@@ -40,6 +39,3 @@ typedef enum {
 } GstyleColorComponent;
 
 G_END_DECLS
-
-#endif /* GSTYLE_COLOR_COMPONENT_H */
-

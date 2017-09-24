@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GSTYLE_UTILS_H
-#define GSTYLE_UTILS_H
+#pragma once
 
 #include <glib.h>
 #include <cairo.h>
@@ -93,5 +92,3 @@ gstyle_utils_cmp_border (GtkBorder border1,
   ((obj!=*(ptr))?(gstyle_clear_weak_pointer(ptr),*(ptr)=obj,((obj)?g_object_add_weak_pointer((GObject*)obj,(gpointer*)ptr),NULL:NULL),1):0)
 
 G_END_DECLS
-
-#endif /* GSTYLE_UTILS_H */
