@@ -47,6 +47,14 @@ _ide_application_init_shortcuts (IdeApplication *self)
   dzl_shortcut_theme_set_accel_for_action (theme, "app.help", "F1", DZL_SHORTCUT_PHASE_DISPATCH);
 
   dzl_shortcut_manager_add_action (manager,
+                                   I_("app.preferences"),
+                                   NC_("shortcut window", "Workbench shortcuts"),
+                                   NC_("shortcut window", "Preferences"),
+                                   NC_("shortcut window", "Show the preferences window"),
+                                   NULL);
+  dzl_shortcut_theme_set_accel_for_action (theme, "app.preferences", "<Primary>comma", DZL_SHORTCUT_PHASE_DISPATCH);
+
+  dzl_shortcut_manager_add_action (manager,
                                    I_("app.shortcuts"),
                                    NC_("shortcut window", "Workbench shortcuts"),
                                    NC_("shortcut window", "Help"),

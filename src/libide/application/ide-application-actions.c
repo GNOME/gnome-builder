@@ -31,9 +31,10 @@
 #include "application/ide-application-actions.h"
 #include "application/ide-application-credits.h"
 #include "application/ide-application-private.h"
-#include "keybindings/ide-shortcuts-window.h"
-#include "workbench/ide-workbench.h"
 #include "greeter/ide-greeter-perspective.h"
+#include "keybindings/ide-shortcuts-window.h"
+#include "preferences/ide-preferences-perspective.h"
+#include "workbench/ide-workbench.h"
 #include "util/ide-flatpak.h"
 
 static void
@@ -42,34 +43,54 @@ ide_application_actions_preferences (GSimpleAction *action,
                                      gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  IdePreferencesPerspective *perspective;
   GList *windows;
+  GtkWindow *toplevel = NULL;
+  GtkWindow *window;
 
   IDE_ENTRY;
 
+  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
 
-  /*
-   * TODO: Make this work at the greeter screen too.
+  /* Locate a toplevel for a transient-for property, or a previous
+   * preferences window to display.
    */
-
   windows = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  for (; windows; windows = windows->next)
+  for (; windows != NULL; windows = windows->next)
     {
-      GtkWindow *window = windows->data;
-      const gchar *name;
+      GtkWindow *ele = windows->data;
 
-      if (!IDE_IS_WORKBENCH (window))
-        continue;
-
-      name = ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window));
-
-      if (!ide_str_equal0 (name, "greeter") && !ide_str_equal0 (name, "genesis"))
+      if (g_object_get_data (G_OBJECT (ele), "PREFERENCES"))
         {
-          ide_workbench_set_visible_perspective_name (IDE_WORKBENCH (window), "preferences");
-          IDE_EXIT;
+          gtk_window_present (ele);
+          return;
         }
+
+      if (toplevel == NULL && IDE_IS_WORKBENCH (ele))
+        toplevel = ele;
     }
+
+  /* Create a new window for preferences, with enough space for
+   * 2 columns of preferences. The window manager will automatically
+   * maximize the window if necessary.
+   */
+  window = g_object_new (GTK_TYPE_WINDOW,
+                         "transient-for", toplevel,
+                         "title", _("Preferences"),
+                         "default-width", 1300,
+                         "default-height", 800,
+                         "window-position", GTK_WIN_POS_CENTER_ON_PARENT,
+                         NULL);
+  g_object_set_data (G_OBJECT (window), "PREFERENCES", "1");
+  gtk_application_add_window (GTK_APPLICATION (self), window);
+
+  perspective = g_object_new (IDE_TYPE_PREFERENCES_PERSPECTIVE,
+                              "visible", TRUE,
+                              NULL);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (perspective));
+
+  gtk_window_present (GTK_WINDOW (window));
 
   IDE_EXIT;
 }
@@ -425,31 +446,7 @@ ide_application_actions_init (IdeApplication *self)
 void
 ide_application_actions_update (IdeApplication *self)
 {
-  GList *windows;
-  GAction *action;
-  gboolean enabled;
-
   g_assert (IDE_IS_APPLICATION (self));
 
-  /*
-   * We only enable the preferences action if we have a workbench open
-   * that is past the greeter.
-   */
-  action = g_action_map_lookup_action (G_ACTION_MAP (self), "preferences");
-  enabled = FALSE;
-  for (windows = gtk_application_get_windows (GTK_APPLICATION (self));
-       windows != NULL;
-       windows = windows->next)
-    {
-      GtkWindow *window = windows->data;
-
-      if (IDE_IS_WORKBENCH (window) &&
-          !ide_str_equal0 ("greeter",
-                           ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window))))
-        {
-          enabled = TRUE;
-          break;
-        }
-    }
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+  /* Nothing to do currently */
 }

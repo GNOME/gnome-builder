@@ -675,14 +675,6 @@ ide_workbench_set_context (IdeWorkbench *self,
 
   peas_extension_set_foreach (self->addins, ide_workbench_addin_added, self);
 
-  /* We wait to add the preferences perspective until we have a valid
-   * IdeContext for them to potentially use.
-   */
-  ide_workbench_add_perspective (self,
-                                 g_object_new (IDE_TYPE_PREFERENCES_PERSPECTIVE,
-                                               "visible", TRUE,
-                                               NULL));
-
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
 
   /*
