@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "gbp-flatpak-util"
 
 #include <flatpak.h>
+#include <string.h>
 
 #include "gbp-flatpak-util.h"
 
@@ -82,8 +83,15 @@ gbp_flatpak_is_ignored (const gchar *name)
 
   return g_str_has_suffix (name, ".Locale") ||
          g_str_has_suffix (name, ".Debug") ||
+         g_str_has_suffix (name, ".Docs") ||
          g_str_has_suffix (name, ".Sources") ||
          g_str_has_suffix (name, ".Var") ||
-         g_str_has_prefix (name, "org.gtk.Gtk3theme.");
+         g_str_has_prefix (name, "org.gtk.Gtk3theme.") ||
+         strstr (name, ".GL.nvidia") != NULL ||
+         strstr (name, ".GL32.nvidia") != NULL ||
+         strstr (name, ".VAAPI") != NULL ||
+         strstr (name, ".Icontheme") != NULL ||
+         strstr (name, ".Extension") != NULL ||
+         strstr (name, ".Gtk3theme") != NULL;
 }
 
