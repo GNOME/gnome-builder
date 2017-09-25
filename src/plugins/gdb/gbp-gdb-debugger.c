@@ -21,7 +21,11 @@
 #include <dazzle.h>
 #include <string.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wredundant-decls"
 #include "gdbwire.h"
+#pragma GCC diagnostic pop
+
 #include "gbp-gdb-debugger.h"
 
 #define READ_BUFFER_LEN 4096
