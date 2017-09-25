@@ -28,6 +28,7 @@
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-runtime-provider.h"
 #include "gbp-flatpak-transfer.h"
+#include "gbp-flatpak-util.h"
 
 typedef struct
 {
@@ -91,6 +92,7 @@ runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
 {
   g_autoptr(GbpFlatpakRuntime) new_runtime = NULL;
   g_autoptr(GError) error = NULL;
+  const gchar *name;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -99,6 +101,10 @@ runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
   g_assert (FLATPAK_IS_INSTALLED_REF (ref));
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (self->manager));
+
+  name = flatpak_ref_get_name (FLATPAK_REF (ref));
+  if (gbp_flatpak_is_ignored (name))
+    IDE_EXIT;
 
   for (guint i = 0; i < self->runtimes->len; i++)
     {
