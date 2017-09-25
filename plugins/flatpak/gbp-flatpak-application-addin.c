@@ -476,10 +476,8 @@ gbp_flatpak_application_addin_get_runtimes (GbpFlatpakApplicationAddin *self)
           for (guint j = 0; j < ar->len; j++)
             {
               FlatpakInstalledRef *ref = g_ptr_array_index (ar, j);
-              const gchar *name = flatpak_ref_get_name (FLATPAK_REF (ref));
 
-              if (!gbp_flatpak_is_ignored (name))
-                g_ptr_array_add (ret, g_object_ref (ref));
+              g_ptr_array_add (ret, g_object_ref (ref));
             }
         }
     }
