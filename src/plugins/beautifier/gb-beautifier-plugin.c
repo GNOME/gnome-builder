@@ -22,7 +22,7 @@
 #include "gb-beautifier-editor-addin.h"
 
 void
-gb_beautifier_register_types (PeasObjectModule *module)
+peas_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,

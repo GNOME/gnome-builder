@@ -19,9 +19,24 @@ beautifier_sources = [
   'gb-beautifier-editor-addin.h',
 ]
 
-gnome_builder_plugins_sources += files(beautifier_sources)
-gnome_builder_plugins_sources += beautifier_resources[0]
+shared_module('beautifier_plugin', beautifier_sources,
+  dependencies: [libpeas_dep, libide_plugin_dep],
+     link_args: [gnome_builder_plugins_link_args],
+  link_depends: [gnome_builder_plugins_link_deps],
+       install: true,
+   install_dir: plugindir,
+)
 
+configure_file(
+          input: 'beautifier.plugin',
+         output: 'beautifier.plugin',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: plugindir,
+)
+
+# TODO: Make the beautifier work with embedded resources so that
+#       we can statically link the plugin into libgnome-builder-plugins.so
 beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier_plugin')
 install_subdir('beautifier_plugin/data', install_dir: beautifier_datadir)
 install_subdir('beautifier_plugin/internal', install_dir: beautifier_datadir)
