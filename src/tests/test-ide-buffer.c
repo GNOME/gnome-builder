@@ -23,7 +23,7 @@
 #include <ide.h>
 
 #include "application/ide-application-tests.h"
-#include "../src/plugins/gnome-builder-plugins.h"
+#include "../plugins/gnome-builder-plugins.h"
 
 static void
 test_buffer_basic_cb2 (GObject      *object,
