@@ -35,13 +35,14 @@ struct _IdeBuildTargetInterface
   GFile  *(*get_install_directory) (IdeBuildTarget *self);
   gchar  *(*get_name)              (IdeBuildTarget *self);
 
+  /*< private >*/
+  gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;
   gpointer _reserved4;
   gpointer _reserved5;
   gpointer _reserved6;
   gpointer _reserved7;
-  gpointer _reserved8;
 };
 
 GFile  *ide_build_target_get_install_directory (IdeBuildTarget *self);
