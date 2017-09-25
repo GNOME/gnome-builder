@@ -41,6 +41,7 @@ struct _IdeSymbolNodeClass
                                              GAsyncResult         *result,
                                              GError             **error);
 
+  /*< private >*/
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;

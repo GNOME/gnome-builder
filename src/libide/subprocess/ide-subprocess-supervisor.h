@@ -34,6 +34,7 @@ struct _IdeSubprocessSupervisorClass
   void (*spawned) (IdeSubprocessSupervisor *self,
                    IdeSubprocess           *subprocess);
 
+  /*< private >*/
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;

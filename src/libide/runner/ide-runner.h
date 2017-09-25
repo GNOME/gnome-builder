@@ -51,6 +51,7 @@ struct _IdeRunnerClass
                                              IdeSubprocessLauncher *launcher);
   IdeRuntime            *(*get_runtime)     (IdeRunner             *self);
 
+  /*< private >*/
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;

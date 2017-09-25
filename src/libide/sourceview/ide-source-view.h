@@ -304,6 +304,7 @@ struct _IdeSourceViewClass
                                        guint                    type);
   void (*remove_cursors)              (IdeSourceView           *self);
 
+  /*< private >*/
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;

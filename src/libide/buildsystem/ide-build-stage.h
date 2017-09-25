@@ -155,6 +155,7 @@ struct _IdeBuildStageClass
   gboolean (*chain)          (IdeBuildStage        *self,
                               IdeBuildStage        *next);
 
+  /*< private >*/
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;

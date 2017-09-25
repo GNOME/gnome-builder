@@ -39,6 +39,7 @@ struct _IdeLayoutViewClass
                                            GError              **error);
   IdeLayoutView *(*create_split_view)     (IdeLayoutView        *self);
 
+  /*< private >*/
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;

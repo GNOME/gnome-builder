@@ -31,6 +31,7 @@ struct _IdeLangservRenameProviderClass
 {
   IdeObjectClass parent_instance;
 
+  /*< private >*/
   gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;
