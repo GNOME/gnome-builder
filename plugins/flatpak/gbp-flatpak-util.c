@@ -92,6 +92,8 @@ gbp_flatpak_is_ignored (const gchar *name)
          strstr (name, ".VAAPI") != NULL ||
          strstr (name, ".Icontheme") != NULL ||
          strstr (name, ".Extension") != NULL ||
-         strstr (name, ".Gtk3theme") != NULL;
+         strstr (name, ".Gtk3theme") != NULL ||
+         strstr (name, ".KStyle") != NULL ||
+         strstr (name, ".PlatformTheme") != NULL;
 }
 
