@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "beautifier-plugin"
+
 #include "config.h"
 
 #include <dazzle.h>
@@ -24,11 +26,10 @@
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
 
-#include "gb-beautifier-private.h"
-#include "gb-beautifier-helper.h"
-#include "gb-beautifier-process.h"
-
 #include "gb-beautifier-editor-addin.h"
+#include "gb-beautifier-helper.h"
+#include "gb-beautifier-private.h"
+#include "gb-beautifier-process.h"
 
 #define I_(s) g_intern_static_string(s)
 
