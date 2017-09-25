@@ -20,7 +20,10 @@
 
 #include <ide.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wredundant-decls"
 #include "gdbwire.h"
+#pragma GCC diagnostic pop
 
 G_BEGIN_DECLS
 
