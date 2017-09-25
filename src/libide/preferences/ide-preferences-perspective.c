@@ -72,6 +72,16 @@ ide_preferences_perspective_extension_removed (PeasExtensionSet *set,
 }
 
 static void
+ide_preferences_perspective_destroy (GtkWidget *widget)
+{
+  IdePreferencesPerspective *self = (IdePreferencesPerspective *)widget;
+
+  g_clear_object (&self->extensions);
+
+  GTK_WIDGET_CLASS (ide_preferences_perspective_parent_class)->destroy (widget);
+}
+
+static void
 ide_preferences_perspective_constructed (GObject *object)
 {
   IdePreferencesPerspective *self = (IdePreferencesPerspective *)object;
@@ -103,8 +113,11 @@ static void
 ide_preferences_perspective_class_init (IdePreferencesPerspectiveClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_preferences_perspective_constructed;
+
+  widget_class->destroy = ide_preferences_perspective_destroy;
 }
 
 static void
