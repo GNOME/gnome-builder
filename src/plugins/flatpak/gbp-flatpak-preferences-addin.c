@@ -17,7 +17,7 @@
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-preferences-addin"
-#define MIN_GNOME_VERSION "3.22"
+#define MIN_GNOME_VERSION "3.26"
 
 #include <flatpak.h>
 #include <glib/gi18n.h>
