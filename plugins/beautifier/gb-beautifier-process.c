@@ -146,9 +146,9 @@ command_args_expand (GbBeautifierEditorAddin *self,
 }
 
 static GSubprocess *
-gb_beautifier_process_create_generic (GbBeautifierEditorAddin *self,
-                                      ProcessState            *state,
-                                      GError                  *error)
+gb_beautifier_process_create_generic (GbBeautifierEditorAddin  *self,
+                                      ProcessState             *state,
+                                      GError                  **error)
 {
   GSubprocess *subprocess = NULL;
   g_autofree gchar *src_path = NULL;
@@ -165,15 +165,15 @@ gb_beautifier_process_create_generic (GbBeautifierEditorAddin *self,
   subprocess = g_subprocess_newv ((const gchar * const *)state->command_args->pdata,
                                   G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                   G_SUBPROCESS_FLAGS_STDERR_PIPE,
-                                  &error);
+                                  error);
 
   return subprocess;
 }
 
 static GSubprocess *
-gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin *self,
-                                               ProcessState            *state,
-                                               GError                  *error)
+gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
+                                               ProcessState             *state,
+                                               GError                  **error)
 {
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   GSubprocess *subprocess = NULL;
@@ -194,8 +194,7 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin *self,
   g_assert (!ide_str_empty0 (src_path));
   g_assert (!ide_str_empty0 (state->lang_id));
 
-  if (NULL == (tmp_workdir = g_dir_make_tmp ("gnome-builder-beautify-XXXXXX",
-                                             &error)))
+  if (NULL == (tmp_workdir = g_dir_make_tmp ("gnome-builder-beautify-XXXXXX", error)))
     return NULL;
 
   state->tmp_workdir_file = g_file_new_for_path (tmp_workdir);
@@ -207,7 +206,7 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin *self,
                     state->tmp_config_file,
                     G_FILE_COPY_OVERWRITE,
                     NULL, NULL, NULL,
-                    &error))
+                    error))
     return NULL;
 
   tmp_src_path = g_build_filename (tmp_workdir,
@@ -218,7 +217,7 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin *self,
                     state->tmp_src_file,
                     G_FILE_COPY_OVERWRITE,
                     NULL, NULL, NULL,
-                    &error))
+                    error))
     return NULL;
 
   args = g_ptr_array_new ();
@@ -231,7 +230,7 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin *self,
   g_subprocess_launcher_set_cwd (launcher, tmp_workdir);
   subprocess = g_subprocess_launcher_spawnv (launcher,
                                              (const gchar * const *)args->pdata,
-                                             &error);
+                                             error);
 
   g_ptr_array_free (args, TRUE);
   return subprocess;
@@ -328,9 +327,9 @@ create_tmp_file_cb (GObject      *object,
     goto fail;
 
   if (state->command == GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT)
-    process = gb_beautifier_process_create_for_clang_format (self, state, error);
+    process = gb_beautifier_process_create_for_clang_format (self, state, &error);
   else
-    process = gb_beautifier_process_create_generic (self, state, error);
+    process = gb_beautifier_process_create_generic (self, state, &error);
 
   if (process != NULL)
     {
