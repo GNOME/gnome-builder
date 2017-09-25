@@ -1,8 +1,8 @@
 if get_option('with_beautifier')
 
 beautifier_resources = gnome.compile_resources(
-  'gb-beautifier-resources',
-  'gb-beautifier.gresource.xml',
+  'beautifier-resources',
+  'beautifier.gresource.xml',
   c_name: 'gb_beautifier'
 )
 
@@ -21,9 +21,5 @@ beautifier_sources = [
 
 gnome_builder_plugins_sources += files(beautifier_sources)
 gnome_builder_plugins_sources += beautifier_resources[0]
-
-beautifier_datadir = join_paths(get_option('prefix'), plugindatadir, 'beautifier_plugin')
-install_subdir('beautifier_plugin/data', install_dir: beautifier_datadir)
-install_subdir('beautifier_plugin/internal', install_dir: beautifier_datadir)
 
 endif
