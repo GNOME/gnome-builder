@@ -49,7 +49,6 @@
               <object class="IdeTransfersButton" id="transfers_button">
                 <property name="tooltip-text" translatable="yes">Transfers</property>
                 <property name="focus-on-click">false</property>
-                <property name="visible">true</property>
               </object>
             </child>
             <child>
