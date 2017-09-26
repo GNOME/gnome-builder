@@ -921,7 +921,9 @@ ide_workbench_get_visible_perspective_name (IdeWorkbench *self)
       return gtk_stack_get_visible_child_name (GTK_STACK (parent));
     }
 
-  return NULL;
+  /* Return a valid string to be nice to GPropertyAction */
+
+  return "";
 }
 
 void
