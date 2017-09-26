@@ -89,6 +89,7 @@ src/libide/layout/ide-layout-stack.c
 src/libide/layout/ide-layout-stack.ui
 src/libide/preferences/ide-preferences-builtin.c
 src/libide/preferences/ide-preferences-perspective.c
+src/libide/preferences/ide-preferences-window.ui
 src/libide/projects/ide-project.c
 src/libide/projects/ide-recent-projects.c
 src/libide/runner/ide-run-button.ui
