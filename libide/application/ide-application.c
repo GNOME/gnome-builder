@@ -781,6 +781,7 @@ ide_application_open_project (IdeApplication *self,
     {
       workbench = g_object_new (IDE_TYPE_WORKBENCH,
                                 "application", self,
+                                "disable-greeter", TRUE,
                                 NULL);
       ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
     }
