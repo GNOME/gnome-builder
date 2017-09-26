@@ -148,15 +148,13 @@ class HtmlWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
 
     def install_docutils(self):
         transfer = Ide.PkconTransfer(packages=['python3-docutils'])
-        context = self.workbench.get_context()
-        manager = context.get_transfer_manager()
+        manager = Gio.Application.get_default().get_transfer_manager()
 
         manager.execute_async(transfer, None, self.docutils_installed, None)
 
     def install_sphinx(self):
         transfer = Ide.PkconTransfer(packages=['python3-sphinx'])
-        context = self.workbench.get_context()
-        manager = context.get_transfer_manager()
+        manager = Gio.Application.get_default().get_transfer_manager()
 
         manager.execute_async(transfer, None, self.sphinx_installed, None)
 

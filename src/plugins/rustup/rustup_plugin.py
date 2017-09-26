@@ -217,13 +217,10 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
                     RustupApplicationAddin.instance.check_rustup()
         workbench.connect('notify::is-active', is_active)
         # call us if a transfer completes (could be the active_transfer)
-        workbench.get_context().get_transfer_manager().connect('transfer-completed', self.transfer_completed)
-        workbench.get_context().get_transfer_manager().connect('transfer-failed', self.transfer_failed)
+        transfer_manager = Gio.Application.get_default().get_transfer_manager()
+        transfer_manager.connect('transfer-completed', self.transfer_completed)
+        transfer_manager.connect('transfer-failed', self.transfer_failed)
         self.workbenches.add(workbench)
-        # add the current transfer to the new workbench
-        # CJH: This isn't right, so we'll punt on this until we have application level transfers
-        # if self.active_transfer:
-        #    workbench.get_context().get_transfer_manager().execute_async(self.active_transfer, None, None)
 
     def transfer_completed(self, transfer_manager, transfer):
         # reset the active transfer on completion, ensures that new workbenches dont get an old transfer
@@ -240,13 +237,8 @@ class RustupApplicationAddin(GObject.Object, Ide.ApplicationAddin):
     def run_transfer(self, transfer):
         self.active_transfer = transfer
         self.notify('busy')
-        # run it in all transfer managers
-        # TODO: This isn't really correct, but we need to move transfer manager to
-        #       IdeApplication.get_transfer_manager()
-        for workbench in self.workbenches:
-            context = workbench.get_context()
-            transfers = context.get_transfer_manager()
-            transfers.execute_async(transfer)
+        transfer_manager = Gio.Application.get_default().get_transfer_manager()
+        transfer_manager.execute_async(transfer)
 
     def install(self):
         self.run_transfer(RustupInstaller(mode=_MODE_INSTALL))

@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 
 #include "projects/ide-recent-projects.h"
+#include "transfers/ide-transfer-manager.h"
 
 G_BEGIN_DECLS
 
@@ -43,6 +44,7 @@ GThread            *ide_application_get_main_thread      (void);
 IdeApplicationMode  ide_application_get_mode             (IdeApplication       *self);
 IdeApplication     *ide_application_new                  (void);
 GDateTime          *ide_application_get_started_at       (IdeApplication       *self);
+IdeTransferManager *ide_application_get_transfer_manager (IdeApplication       *self);
 IdeRecentProjects  *ide_application_get_recent_projects  (IdeApplication       *self);
 void                ide_application_show_projects_window (IdeApplication       *self);
 const gchar        *ide_application_get_keybindings_mode (IdeApplication       *self);

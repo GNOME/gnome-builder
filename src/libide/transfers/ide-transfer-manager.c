@@ -24,8 +24,6 @@
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-manager.h"
 
-#define DEFAULT_MAX_ACTIVE 1
-
 struct _IdeTransferManager
 {
   GObject    parent_instance;
@@ -34,8 +32,8 @@ struct _IdeTransferManager
 
 static void list_model_iface_init (GListModelInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeTransferManager, ide_transfer_manager, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeTransferManager, ide_transfer_manager, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   PROP_0,

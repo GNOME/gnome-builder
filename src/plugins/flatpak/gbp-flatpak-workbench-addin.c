@@ -179,7 +179,6 @@ gbp_flatpak_workbench_addin_install_flatpak_builder (GSimpleAction *action,
   GbpFlatpakWorkbenchAddin *self = user_data;
   g_autoptr(IdePkconTransfer) transfer = NULL;
   IdeTransferManager *manager;
-  IdeContext *context;
 
   static const gchar *packages[] = {
     "flatpak-builder",
@@ -192,8 +191,7 @@ gbp_flatpak_workbench_addin_install_flatpak_builder (GSimpleAction *action,
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
 
   transfer = ide_pkcon_transfer_new (packages);
-  context = ide_workbench_get_context (self->workbench);
-  manager = ide_context_get_transfer_manager (context);
+  manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
 
   g_simple_action_set_enabled (action, FALSE);
 

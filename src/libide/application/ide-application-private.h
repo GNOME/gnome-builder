@@ -42,6 +42,8 @@ struct _IdeApplication
   PeasPluginInfo      *tool;
   gchar              **tool_arguments;
 
+  IdeTransferManager  *transfer_manager;
+
   PeasPluginInfo      *worker;
   IdeWorkerManager    *worker_manager;
 

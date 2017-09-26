@@ -23,6 +23,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "buildsystem/ide-build-stage-transfer.h"
 #include "buildsystem/ide-build-pipeline.h"
 #include "transfers/ide-transfer-manager.h"
@@ -75,7 +76,6 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
   IdeBuildStageTransfer *self = (IdeBuildStageTransfer *)stage;
   g_autoptr(GTask) task = NULL;
   IdeTransferManager *transfer_manager;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -111,8 +111,7 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
         }
     }
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  transfer_manager = ide_context_get_transfer_manager (context);
+  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
 
   ide_transfer_manager_execute_async (transfer_manager,
                                       self->transfer,

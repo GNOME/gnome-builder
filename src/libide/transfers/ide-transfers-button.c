@@ -21,8 +21,8 @@
 #include <dazzle.h>
 
 #include "ide-debug.h"
-#include "ide-context.h"
 
+#include "application/ide-application.h"
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-manager.h"
 #include "transfers/ide-transfer-row.h"
@@ -89,37 +89,31 @@ static void
 ide_transfers_button_update_visibility (IdeTransfersButton *self)
 {
   IdeTransferManager *transfer_manager;
-  IdeContext *context;
-  gboolean visible = FALSE;
+  gboolean visible;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_TRANSFERS_BUTTON (self));
 
-  if (NULL != (context = ide_widget_get_context (GTK_WIDGET (self))) &&
-      NULL != (transfer_manager = ide_context_get_transfer_manager (context)))
-    visible = !!g_list_model_get_n_items (G_LIST_MODEL (transfer_manager));
-
   dzl_progress_menu_button_reset_theatrics (DZL_PROGRESS_MENU_BUTTON (self));
 
+  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
+  visible = g_list_model_get_n_items (G_LIST_MODEL (transfer_manager)) > 0;
   gtk_widget_set_visible (GTK_WIDGET (self), visible);
 
   IDE_EXIT;
 }
 static void
-ide_transfers_button_context_set (GtkWidget  *widget,
-                                  IdeContext *context)
+ide_transfers_button_constructed (GObject *object)
 {
-  IdeTransfersButton *self = (IdeTransfersButton *)widget;
+  IdeTransfersButton *self = (IdeTransfersButton *)object;
   IdeTransferManager *transfer_manager;
 
   g_assert (IDE_IS_TRANSFERS_BUTTON (self));
-  g_assert (!context || IDE_IS_CONTEXT (context));
 
-  if (context == NULL)
-    return;
+  G_OBJECT_CLASS (ide_transfers_button_parent_class)->constructed (object);
 
-  transfer_manager = ide_context_get_transfer_manager (context);
+  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
 
   g_object_bind_property (transfer_manager, "progress",
                           self, "progress",
@@ -147,21 +141,22 @@ ide_transfers_button_clear (GSimpleAction *action,
 {
   IdeTransfersButton *self = user_data;
   IdeTransferManager *transfer_manager;
-  IdeContext *context;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
 
   gtk_popover_popdown (self->popover);
 
-  if (NULL != (context = ide_widget_get_context (GTK_WIDGET (self))) &&
-      NULL != (transfer_manager = ide_context_get_transfer_manager (context)))
-    ide_transfer_manager_clear (transfer_manager);
+  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
+  ide_transfer_manager_clear (transfer_manager);
 }
 
 static void
 ide_transfers_button_class_init (IdeTransfersButtonClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = ide_transfers_button_constructed;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-transfers-button.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTransfersButton, list_box);
@@ -177,9 +172,6 @@ ide_transfers_button_init (IdeTransfersButton *self)
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  ide_widget_set_context_handler (GTK_WIDGET (self),
-                                  ide_transfers_button_context_set);
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions),

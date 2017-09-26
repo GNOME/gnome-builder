@@ -78,7 +78,6 @@ struct _IdeContext
   IdeRuntimeManager        *runtime_manager;
   IdeSearchEngine          *search_engine;
   IdeSourceSnippetsManager *snippets_manager;
-  IdeTransferManager       *transfer_manager;
   IdeProject               *project;
   GFile                    *project_file;
   gchar                    *root_build_dir;
@@ -535,7 +534,6 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
   g_clear_object (&self->runtime_manager);
-  g_clear_object (&self->transfer_manager);
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
 
@@ -818,10 +816,6 @@ ide_context_init (IdeContext *self)
   self->runtime_manager = g_object_new (IDE_TYPE_RUNTIME_MANAGER,
                                         "context", self,
                                         NULL);
-
-  self->transfer_manager = g_object_new (IDE_TYPE_TRANSFER_MANAGER,
-                                         "context", self,
-                                         NULL);
 
   self->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
                                       "context", self,
@@ -2292,21 +2286,6 @@ ide_context_get_run_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->run_manager;
-}
-
-/**
- * ide_context_get_transfer_manager:
- *
- * Gets the #IdeTransferManager for the context.
- *
- * Returns: (transfer none): An #IdeTransferManager.
- */
-IdeTransferManager *
-ide_context_get_transfer_manager (IdeContext *self)
-{
-  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
-
-  return self->transfer_manager;
 }
 
 /**

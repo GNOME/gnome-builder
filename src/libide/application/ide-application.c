@@ -384,6 +384,8 @@ ide_application_startup (GApplication *application)
 
   if ((self->mode == IDE_APPLICATION_MODE_PRIMARY) || (self->mode == IDE_APPLICATION_MODE_TESTS))
     {
+      self->transfer_manager = g_object_new (IDE_TYPE_TRANSFER_MANAGER, NULL);
+
       ide_application_make_skeleton_dirs (self);
       ide_language_defaults_init_async (NULL, ide_application_language_defaults_cb, NULL);
       ide_application_register_settings (self);
@@ -428,6 +430,8 @@ ide_application_shutdown (GApplication *application)
 
   if (self->worker_manager != NULL)
     ide_worker_manager_shutdown (self->worker_manager);
+
+  g_clear_object (&self->transfer_manager);
 
   if (G_APPLICATION_CLASS (ide_application_parent_class)->shutdown)
     G_APPLICATION_CLASS (ide_application_parent_class)->shutdown (application);
@@ -820,4 +824,22 @@ ide_application_add_reaper (IdeApplication     *self,
   g_return_if_fail (DZL_IS_DIRECTORY_REAPER (reaper));
 
   g_ptr_array_add (self->reapers, g_object_ref (reaper));
+}
+
+/**
+ * ide_application_get_transfer_manager:
+ * @self: a #IdeApplication
+ *
+ * Gets the transfer manager for the application.
+ *
+ * Returns: (transfer none): An #IdeTransferManager
+ *
+ * Since: 3.28
+ */
+IdeTransferManager *
+ide_application_get_transfer_manager (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  return self->transfer_manager;
 }

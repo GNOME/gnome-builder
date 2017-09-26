@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_MANAGER (ide_transfer_manager_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeTransferManager, ide_transfer_manager, IDE, TRANSFER_MANAGER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeTransferManager, ide_transfer_manager, IDE, TRANSFER_MANAGER, GObject)
 
 gdouble  ide_transfer_manager_get_progress   (IdeTransferManager   *self);
 gboolean ide_transfer_manager_get_has_active (IdeTransferManager   *self);

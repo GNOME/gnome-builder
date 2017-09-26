@@ -47,7 +47,6 @@ IdeSettings              *ide_context_get_settings              (IdeContext     
                                                                  const gchar          *schema_id,
                                                                  const gchar          *relative_path);
 IdeSourceSnippetsManager *ide_context_get_snippets_manager      (IdeContext           *self);
-IdeTransferManager       *ide_context_get_transfer_manager      (IdeContext           *self);
 IdeUnsavedFiles          *ide_context_get_unsaved_files         (IdeContext           *self);
 IdeVcs                   *ide_context_get_vcs                   (IdeContext           *self);
 const gchar              *ide_context_get_root_build_dir        (IdeContext           *self);

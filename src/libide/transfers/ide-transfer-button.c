@@ -22,6 +22,7 @@
 
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "transfers/ide-transfer-button.h"
 #include "transfers/ide-transfer-manager.h"
 #include "util/ide-gtk.h"
@@ -141,7 +142,6 @@ ide_transfer_button_clicked (GtkButton *button)
   IdeTransferButton *self = (IdeTransferButton *)button;
   IdeTransferButtonPrivate *priv = ide_transfer_button_get_instance_private (self);
   IdeTransferManager *transfer_manager;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -150,15 +150,10 @@ ide_transfer_button_clicked (GtkButton *button)
   if (priv->transfer == NULL)
     return;
 
-  context = ide_widget_get_context (GTK_WIDGET (self));
-
-  if (context == NULL)
-    return;
-
   dzl_progress_button_set_show_progress (DZL_PROGRESS_BUTTON (self), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
 
-  transfer_manager = ide_context_get_transfer_manager (context);
+  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
 
   /* TODO: Cancellable state */
   g_clear_object (&priv->cancellable);

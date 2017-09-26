@@ -300,7 +300,6 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   IdeTransferManager *transfer_manager;
   InstallRuntime *install;
   GCancellable *cancellable;
-  IdeContext *context;
   gboolean sdk_matches_runtime = FALSE;
 
   IDE_ENTRY;
@@ -319,8 +318,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   g_assert (self != NULL);
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
 
-  context = ide_object_get_context (IDE_OBJECT (self->manager));
-  transfer_manager = ide_context_get_transfer_manager (context);
+  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
 
   if (!gbp_flatpak_application_addin_locate_sdk_finish (app_addin,
                                                         result,
