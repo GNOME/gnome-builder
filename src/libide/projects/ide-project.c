@@ -27,6 +27,9 @@
 #include "projects/ide-project-files.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
+#include "util/ide-flatpak.h"
 #include "vcs/ide-vcs.h"
 
 struct _IdeProject
@@ -597,22 +600,52 @@ ide_project_trash_file__file_trash_cb (GObject      *object,
                                        GAsyncResult *result,
                                        gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
   GFile *file = (GFile *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeProject *self;
-  GError *error = NULL;
 
   g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (!g_file_trash_finish (file, result, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 
   self = g_task_get_source_object (task);
 
   g_assert (IDE_IS_PROJECT (self));
+
+  g_signal_emit (self, signals [FILE_TRASHED], 0, file);
+}
+
+static void
+ide_project_trash_file__wait_check_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeProject *self;
+  GFile *file;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  self = g_task_get_source_object (task);
+  file = g_task_get_task_data (task);
+
+  g_assert (IDE_IS_PROJECT (self));
+  g_assert (G_IS_FILE (file));
 
   g_signal_emit (self, signals [FILE_TRASHED], 0, file);
 }
@@ -653,6 +686,9 @@ ide_project_trash_file_async (IdeProject          *self,
   workdir = ide_vcs_get_working_directory (vcs);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_project_trash_file_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   if (!file_is_ancestor (workdir, file))
     {
@@ -663,13 +699,55 @@ ide_project_trash_file_async (IdeProject          *self,
       IDE_EXIT;
     }
 
-  g_file_trash_async (file,
-                      G_PRIORITY_DEFAULT,
-                      cancellable,
-                      ide_project_trash_file__file_trash_cb,
-                      g_object_ref (task));
+  if (ide_is_flatpak ())
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
+      g_autoptr(GError) error = NULL;
+      g_autofree gchar *uri = g_file_get_uri (file);
 
-  IDE_EXIT;
+      /*
+       * FIXME: Use proper GIO trashing under Flatpak
+       *
+       * This manually trashes the file by running the "gio trash" command
+       * on the host system. This is a pretty bad way to do this, but it is
+       * required until GIO works properly under Flatpak for detecting files
+       * crossing bind mounts.
+       *
+       * https://bugzilla.gnome.org/show_bug.cgi?id=780472
+       */
+
+      launcher = ide_subprocess_launcher_new (0);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_subprocess_launcher_push_argv (launcher, "gio");
+      ide_subprocess_launcher_push_argv (launcher, "trash");
+      ide_subprocess_launcher_push_argv (launcher, uri);
+
+      subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+
+      if (subprocess == NULL)
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
+
+      ide_subprocess_wait_check_async (subprocess,
+                                       cancellable,
+                                       ide_project_trash_file__wait_check_cb,
+                                       g_steal_pointer (&task));
+
+      IDE_EXIT;
+    }
+  else
+    {
+      g_file_trash_async (file,
+                          G_PRIORITY_DEFAULT,
+                          cancellable,
+                          ide_project_trash_file__file_trash_cb,
+                          g_steal_pointer (&task));
+
+      IDE_EXIT;
+    }
 }
 
 gboolean
