@@ -47,10 +47,11 @@ which can be used to install packages on the host machine.
            return task.propagate_boolean()
 
 
-   # From your other plugin code, get the transfer manager for
-   # the Ide.Context and add queue the transfer.
+   # From your other plugin code, get the transfer manager and
+   # queue the transfer.
 
-   xfermgr = context.get_transfer_manager()
+   app = Gio.Application.get_default()
+   xfermgr = app.get_transfer_manager()
 
    xfer = MyTransfer(title='Downloading Foo')
    xfermgr.execute_async(xfer, None, None, None)
