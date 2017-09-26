@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdePreferencesWindow" parent="GtkWindow">
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <property name="title" translatable="yes">Preferences</property>
+        <property name="show-close-button">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="IdeTransfersButton"/>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="IdePreferencesPerspective" id="perspective">
         <property name="visible">true</property>
