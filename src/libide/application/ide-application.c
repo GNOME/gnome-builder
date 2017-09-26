@@ -26,9 +26,6 @@
 #include <ide-icons-resources.h>
 #include <locale.h>
 #include <stdlib.h>
-#ifdef __linux
-# include <sys/prctl.h>
-#endif
 
 #include "ide-debug.h"
 #include "ide-global.h"
@@ -214,11 +211,6 @@ ide_application_activate_worker (IdeApplication *self)
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (self->worker != NULL);
   g_assert (self->dbus_address != NULL);
-
-#ifdef __linux
-  /* Ensure we are killed with our parent */
-  prctl (PR_SET_PDEATHSIG, SIGKILL);
-#endif
 
   IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);
 
