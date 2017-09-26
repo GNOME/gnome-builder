@@ -518,14 +518,19 @@ ide_workbench_addin_added (PeasExtensionSet *set,
                            gpointer          user_data)
 {
   IdeWorkbench *self = user_data;
+  IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)extension;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_WORKBENCH_ADDIN (extension));
+  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_WORKBENCH (self));
 
   IDE_TRACE_MSG ("Loading workbench addin for %s",
                  peas_plugin_info_get_module_name (plugin_info));
+
+  /* Handle extensions that are widgets */
+  if (g_object_is_floating (G_OBJECT (addin)))
+    g_object_ref_sink (addin);
 
   ide_workbench_addin_load (IDE_WORKBENCH_ADDIN (extension), self);
 }
