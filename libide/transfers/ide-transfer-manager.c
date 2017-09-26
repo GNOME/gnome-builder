@@ -28,7 +28,7 @@
 
 struct _IdeTransferManager
 {
-  GObject    parent_instance;
+  IdeObject  parent_instance;
   GPtrArray *transfers;
 };
 
