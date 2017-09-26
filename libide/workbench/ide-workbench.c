@@ -171,8 +171,22 @@ ide_workbench_delete_event (GtkWidget   *widget,
 
   self->unloading = TRUE;
 
-  g_clear_object (&self->addins);
+  /* Notify any listeners we are beginning the unload procedure */
   g_signal_emit (self, signals [UNLOAD], 0, self->context);
+
+  /*
+   * We are going to cheat here immediately hide the window and then
+   * close things in the background so it feels like we are doing the
+   * shutdown faster than we really are. It also avoids flickering
+   * between perspectives as part of the shutdown procedure.
+   */
+  gtk_widget_hide (GTK_WIDGET (self));
+
+  /*
+   * Now start unloading addins, which will cascade into the removal
+   * of perspectives and other bits and pieces (like editor addins).
+   */
+  g_clear_object (&self->addins);
 
   if (self->context != NULL)
     {
