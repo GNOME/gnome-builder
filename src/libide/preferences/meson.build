@@ -1,11 +1,13 @@
 preferences_headers = [
   'ide-preferences-addin.h',
   'ide-preferences-perspective.h',
+  'ide-preferences-window.h',
 ]
 
 preferences_sources = [
   'ide-preferences-addin.c',
   'ide-preferences-perspective.c',
+  'ide-preferences-window.c',
 ]
 
 preferences_private_sources = [

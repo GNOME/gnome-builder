@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdePreferencesWindow" parent="GtkWindow">
+    <child>
+      <object class="IdePreferencesPerspective" id="perspective">
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </template>
+</interface>

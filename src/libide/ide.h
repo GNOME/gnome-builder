@@ -120,6 +120,7 @@ G_BEGIN_DECLS
 #include "logging/ide-log.h"
 #include "preferences/ide-preferences-addin.h"
 #include "preferences/ide-preferences-perspective.h"
+#include "preferences/ide-preferences-window.h"
 #include "projects/ide-project-edit.h"
 #include "projects/ide-project-file.h"
 #include "projects/ide-project-files.h"

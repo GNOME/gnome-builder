@@ -33,7 +33,7 @@
 #include "application/ide-application-private.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "keybindings/ide-shortcuts-window.h"
-#include "preferences/ide-preferences-perspective.h"
+#include "preferences/ide-preferences-window.h"
 #include "workbench/ide-workbench.h"
 #include "util/ide-flatpak.h"
 
@@ -43,10 +43,9 @@ ide_application_actions_preferences (GSimpleAction *action,
                                      gpointer       user_data)
 {
   IdeApplication *self = user_data;
-  IdePreferencesPerspective *perspective;
-  GList *windows;
   GtkWindow *toplevel = NULL;
   GtkWindow *window;
+  GList *windows;
 
   IDE_ENTRY;
 
@@ -59,38 +58,30 @@ ide_application_actions_preferences (GSimpleAction *action,
   windows = gtk_application_get_windows (GTK_APPLICATION (self));
   for (; windows != NULL; windows = windows->next)
     {
-      GtkWindow *ele = windows->data;
+      GtkWindow *win = windows->data;
 
-      if (g_object_get_data (G_OBJECT (ele), "PREFERENCES"))
+      if (IDE_IS_PREFERENCES_WINDOW (win))
         {
-          gtk_window_present (ele);
+          gtk_window_present (win);
           return;
         }
 
-      if (toplevel == NULL && IDE_IS_WORKBENCH (ele))
-        toplevel = ele;
+      if (toplevel == NULL && IDE_IS_WORKBENCH (win))
+        toplevel = win;
     }
 
   /* Create a new window for preferences, with enough space for
    * 2 columns of preferences. The window manager will automatically
    * maximize the window if necessary.
    */
-  window = g_object_new (GTK_TYPE_WINDOW,
+  window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
                          "transient-for", toplevel,
-                         "title", _("Preferences"),
                          "default-width", 1300,
                          "default-height", 800,
                          "window-position", GTK_WIN_POS_CENTER_ON_PARENT,
                          NULL);
-  g_object_set_data (G_OBJECT (window), "PREFERENCES", "1");
   gtk_application_add_window (GTK_APPLICATION (self), window);
-
-  perspective = g_object_new (IDE_TYPE_PREFERENCES_PERSPECTIVE,
-                              "visible", TRUE,
-                              NULL);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (perspective));
-
-  gtk_window_present (GTK_WINDOW (window));
+  gtk_window_present (window);
 
   IDE_EXIT;
 }
