@@ -171,6 +171,7 @@ ide_workbench_delete_event (GtkWidget   *widget,
 
   self->unloading = TRUE;
 
+  g_clear_object (&self->addins);
   g_signal_emit (self, signals [UNLOAD], 0, self->context);
 
   if (self->context != NULL)
@@ -182,8 +183,6 @@ ide_workbench_delete_event (GtkWidget   *widget,
                                 g_object_ref (self));
       return GDK_EVENT_STOP;
     }
-
-  g_clear_object (&self->addins);
 
   return GDK_EVENT_PROPAGATE;
 }
