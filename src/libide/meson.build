@@ -29,8 +29,6 @@ libide_build_ident_h = vcs_tag(
      fallback: meson.project_version(),
         input: 'ide-build-ident.h.in',
        output: 'ide-build-ident.h',
-      install: true,
-  install_dir: libide_header_subdir,
 )
 libide_generated_headers += [libide_build_ident_h]
 
