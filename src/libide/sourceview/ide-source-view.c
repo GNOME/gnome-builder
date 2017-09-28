@@ -3367,6 +3367,7 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
                                                gboolean       place_cursor_at_original)
 
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
   g_autofree gchar *text = NULL;
   GtkClipboard *clipboard;
@@ -3405,84 +3406,91 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
   target_line = gtk_text_iter_get_line (&iter);
   target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
 
+  if (priv->count == 0)
+    priv->count = 1;
+
   gtk_text_buffer_begin_user_action (buffer);
 
-  /*
-   * If we are pasting an entire line, we don't want to paste it at the current location. We want
-   * to insert a new line after the current line, and then paste it there (so move the insert mark
-   * first).
-   */
-  if (smart_lines && text && g_str_has_suffix (text, "\n"))
+  for (; priv->count > 0; priv->count--)
     {
-      g_autofree gchar *trimmed = NULL;
-
       /*
-       * WORKAROUND:
-       *
-       * This is a hack so that we can continue to use the paste code from within GtkTextBuffer.
-       *
-       * We needed to keep the trailing \n in the text so that we know when we are selecting whole
-       * lines. We also need to insert a new line manually based on the context. Furthermore, we
-       * need to remove the trailing line since we already added one.
-       *
-       * Terribly annoying, but the result is something that feels very nice, similar to Vim.
+       * If we are pasting an entire line, we don't want to paste it at the current location. We want
+       * to insert a new line after the current line, and then paste it there (so move the insert mark
+       * first).
        */
-      trimmed = g_strndup (text, strlen (text) - 1);
-
-      if (after_cursor)
+      if (smart_lines && text && g_str_has_suffix (text, "\n"))
         {
-          if (!gtk_text_iter_ends_line (&iter))
-            gtk_text_iter_forward_to_line_end (&iter);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
-          g_signal_emit_by_name (self, "insert-at-cursor", "\n");
+          g_autofree gchar *trimmed = NULL;
+
+          /*
+           * WORKAROUND:
+           *
+           * This is a hack so that we can continue to use the paste code from within GtkTextBuffer.
+           *
+           * We needed to keep the trailing \n in the text so that we know when we are selecting whole
+           * lines. We also need to insert a new line manually based on the context. Furthermore, we
+           * need to remove the trailing line since we already added one.
+           *
+           * Terribly annoying, but the result is something that feels very nice, similar to Vim.
+           */
+          trimmed = g_strndup (text, strlen (text) - 1);
+
+          if (after_cursor)
+            {
+              if (!gtk_text_iter_ends_line (&iter))
+                gtk_text_iter_forward_to_line_end (&iter);
+              gtk_text_buffer_select_range (buffer, &iter, &iter);
+              g_signal_emit_by_name (self, "insert-at-cursor", "\n");
+            }
+          else
+            {
+              gtk_text_iter_set_line_offset (&iter, 0);
+              gtk_text_buffer_select_range (buffer, &iter, &iter);
+              g_signal_emit_by_name (self, "insert-at-cursor", "\n");
+              gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+              gtk_text_iter_backward_line (&iter);
+              gtk_text_buffer_select_range (buffer, &iter, &iter);
+            }
+
+          if (!place_cursor_at_original)
+            {
+              gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+              target_line = gtk_text_iter_get_line (&iter);
+              target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
+                                                                      &iter);
+            }
+
+          gtk_clipboard_set_text (clipboard, trimmed, -1);
+          GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
+          gtk_clipboard_set_text (clipboard, text, -1);
         }
       else
         {
-          gtk_text_iter_set_line_offset (&iter, 0);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
-          g_signal_emit_by_name (self, "insert-at-cursor", "\n");
-          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-          gtk_text_iter_backward_line (&iter);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
+          if (after_cursor)
+            {
+              gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+              if (!gtk_text_iter_ends_line (&iter))
+                gtk_text_iter_forward_char (&iter);
+              gtk_text_buffer_select_range (buffer, &iter, &iter);
+            }
+
+          GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
+
+          if (!place_cursor_at_original)
+            {
+              gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+              target_line = gtk_text_iter_get_line (&iter);
+              target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
+                                                                      &iter);
+            }
         }
 
-      if (!place_cursor_at_original)
-        {
-          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-          target_line = gtk_text_iter_get_line (&iter);
-          target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
-                                                                  &iter);
-        }
-
-      gtk_clipboard_set_text (clipboard, trimmed, -1);
-      GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
-      gtk_clipboard_set_text (clipboard, text, -1);
-    }
-  else
-    {
-      if (after_cursor)
-        {
-          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-          if (!gtk_text_iter_ends_line (&iter))
-            gtk_text_iter_forward_char (&iter);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
-        }
-
-      GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
-
-      if (!place_cursor_at_original)
-        {
-          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-          target_line = gtk_text_iter_get_line (&iter);
-          target_line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self),
-                                                                  &iter);
-        }
+      /* Revalidate the position on our next attempt through the paste */
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, target_line, 0);
+      ide_source_view_get_iter_at_visual_column (self, target_line_column, &iter);
     }
 
-  gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, target_line, 0);
-  ide_source_view_get_iter_at_visual_column (self, target_line_column, &iter);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
-
   gtk_text_buffer_end_user_action (buffer);
 }
 
