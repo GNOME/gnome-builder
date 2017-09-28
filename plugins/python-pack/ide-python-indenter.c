@@ -662,13 +662,25 @@ ide_python_indenter_format (IdeIndenter *indenter,
   gunichar ch;
   gint line;
 
-  /* possibly trying to adjust "else" or "elif". we always return in this
-   * block, since we don't want to process anything else.
-   */
+  /* Figure out the inserted character */
   gtk_text_iter_backward_char (&iter);
   ch = gtk_text_iter_get_char (&iter);
-  if (ch == 'e' || ch == 'f')
-    return maybe_unindent_else_or_elif (python, text_view, begin, end);
+
+  /*
+   * If we triggered from 'e' or 'f', but that is not what was inserted,
+   * short-circuit now. (Such as from é compose keys, etc).
+   */
+  if (event->keyval == GDK_KEY_e || event->keyval == GDK_KEY_f)
+    {
+      if (ch != 'e' && ch != 'f')
+        return NULL;
+
+      /*
+       * Possibly trying to adjust "else" or "elif". we always return in this
+       * block, since we don't want to process anything else.
+       */
+      return maybe_unindent_else_or_elif (python, text_view, begin, end);
+    }
 
   iter = *begin;
   line = gtk_text_iter_get_line (&iter);
