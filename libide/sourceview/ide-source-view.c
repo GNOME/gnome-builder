@@ -3396,6 +3396,10 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD);
   text = gtk_clipboard_wait_for_text (clipboard);
+  /* Possible mismatch between the clipboard content and the utf-8 converted text
+   * so we set back the utf-8 text in the clipboard to be sure.
+   */
+  gtk_clipboard_set_text (clipboard, text, -1);
 
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
   target_line = gtk_text_iter_get_line (&iter);
