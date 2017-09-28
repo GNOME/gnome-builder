@@ -1281,34 +1281,34 @@
                       "clear-count" () };
 
   bind "b" { "begin-macro" ()
-             "movement" (previous-word-end, 1, 0, 1)
+             "movement" (previous-word-end-newline-stop, 1, 1, 1)
              "copy-clipboard" ()
              "delete-selection" ()
              "end-macro" () };
 
   bind "<shift>b" { "begin-macro" ()
-                    "movement" (previous-full-word-end, 1, 0, 1)
+                    "movement" (previous-full-word-end-newline-stop, 1, 1, 1)
                     "copy-clipboard" ()
                     "delete-selection" ()
                     "end-macro" () };
 
   bind "e" { "begin-macro" ()
-             "movement" (next-word-end, 1, 0, 1)
+             "movement" (next-word-end-newline-stop, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" ()
              "end-macro" () };
   bind "<shift>e" { "begin-macro" ()
-                    "movement" (next-full-word-end, 1, 0, 1)
+                    "movement" (next-full-word-end-newline-stop, 1, 0, 1)
                     "copy-clipboard" ()
                     "delete-selection" ()
                     "end-macro" () };
   bind "w" { "begin-macro" ()
-             "movement" (next-word-start, 1, 1, 1)
+             "movement" (next-word-start-newline-stop, 1, 1, 1)
              "copy-clipboard" ()
              "delete-selection" ()
              "end-macro" () };
   bind "<shift>w" { "begin-macro" ()
-                    "movement" (next-full-word-start, 1, 1, 1)
+                    "movement" (next-word-start-newline-stop, 1, 1, 1)
                     "copy-clipboard" ()
                     "delete-selection" ()
                     "end-macro" () };

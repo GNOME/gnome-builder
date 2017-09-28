@@ -34,16 +34,26 @@ gboolean _ide_text_iter_backward_find_char       (GtkTextIter              *iter
                                                   IdeTextIterCharPredicate  pred,
                                                   gpointer                  user_data,
                                                   const GtkTextIter        *limit);
-gboolean _ide_text_iter_forward_word_start       (GtkTextIter              *iter);
-gboolean _ide_text_iter_forward_WORD_start       (GtkTextIter              *iter);
-gboolean _ide_text_iter_forward_word_end         (GtkTextIter              *iter);
-gboolean _ide_text_iter_forward_WORD_end         (GtkTextIter              *iter);
+gboolean _ide_text_iter_forward_word_start       (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
+gboolean _ide_text_iter_forward_WORD_start       (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
+gboolean _ide_text_iter_forward_word_end         (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
+gboolean _ide_text_iter_forward_WORD_end         (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
 gboolean _ide_text_iter_backward_paragraph_start (GtkTextIter              *iter);
 gboolean _ide_text_iter_forward_paragraph_end    (GtkTextIter              *iter);
 gboolean _ide_text_iter_backward_sentence_start  (GtkTextIter              *iter);
 gboolean _ide_text_iter_forward_sentence_end     (GtkTextIter              *iter);
-gboolean _ide_text_iter_backward_WORD_end        (GtkTextIter              *iter);
-gboolean _ide_text_iter_backward_word_end        (GtkTextIter              *iter);
+gboolean _ide_text_iter_backward_WORD_start      (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
+gboolean _ide_text_iter_backward_word_start      (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
+gboolean _ide_text_iter_backward_WORD_end        (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
+gboolean _ide_text_iter_backward_word_end        (GtkTextIter              *iter,
+                                                  gboolean                  newline_stop);
 gboolean _ide_text_iter_in_string                (GtkTextIter              *iter,
                                                   const gchar              *str,
                                                   GtkTextIter              *str_start,

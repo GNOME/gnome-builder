@@ -37,6 +37,7 @@ typedef enum
 enum
 {
   CLASS_0,
+  CLASS_NEWLINE,
   CLASS_SPACE,
   CLASS_SPECIAL,
   CLASS_WORD,
@@ -70,8 +71,48 @@ _ide_text_word_classify (gunichar ch)
 }
 
 static int
+_ide_text_word_classify_newline_stop (gunichar ch)
+{
+  switch (ch)
+    {
+    case ' ':
+    case '\t':
+      return CLASS_SPACE;
+
+    case '\n':
+      return CLASS_NEWLINE;
+
+    case '"': case '\'':
+    case '(': case ')':
+    case '{': case '}':
+    case '[': case ']':
+    case '<': case '>':
+    case '-': case '+': case '*': case '/':
+    case '!': case '@': case '#': case '$': case '%':
+    case '^': case '&': case ':': case ';': case '?':
+    case '|': case '=': case '\\': case '.': case ',':
+      return CLASS_SPECIAL;
+
+    case '_':
+    default:
+      return CLASS_WORD;
+    }
+}
+
+static int
 _ide_text_WORD_classify (gunichar ch)
 {
+  if (g_unichar_isspace (ch))
+    return CLASS_SPACE;
+  return CLASS_WORD;
+}
+
+static int
+_ide_text_WORD_classify_newline_stop (gunichar ch)
+{
+  if (ch == '\n')
+    return CLASS_NEWLINE;
+
   if (g_unichar_isspace (ch))
     return CLASS_SPACE;
   return CLASS_WORD;
@@ -347,7 +388,7 @@ _ide_text_iter_forward_classified_start (GtkTextIter  *iter,
           continue;
         }
 
-      if (cur_class != begin_class)
+      if (cur_class != begin_class || cur_class == CLASS_NEWLINE)
         return TRUE;
     }
 
@@ -355,18 +396,26 @@ _ide_text_iter_forward_classified_start (GtkTextIter  *iter,
 }
 
 gboolean
-_ide_text_iter_forward_word_start (GtkTextIter *iter)
+_ide_text_iter_forward_word_start (GtkTextIter *iter,
+                                   gboolean     newline_stop)
 {
-  return _ide_text_iter_forward_classified_start (iter, _ide_text_word_classify);
+  if (newline_stop)
+    return _ide_text_iter_forward_classified_start (iter, _ide_text_word_classify_newline_stop);
+  else
+    return _ide_text_iter_forward_classified_start (iter, _ide_text_word_classify);
 }
 
 gboolean
-_ide_text_iter_forward_WORD_start (GtkTextIter *iter)
+_ide_text_iter_forward_WORD_start (GtkTextIter *iter,
+                                   gboolean     newline_stop)
 {
-  return _ide_text_iter_forward_classified_start (iter, _ide_text_WORD_classify);
+  if (newline_stop)
+    return _ide_text_iter_forward_classified_start (iter, _ide_text_WORD_classify_newline_stop);
+  else
+    return _ide_text_iter_forward_classified_start (iter, _ide_text_WORD_classify);
 }
 
-gboolean
+static gboolean
 _ide_text_iter_forward_classified_end (GtkTextIter  *iter,
                                        gint        (*classify) (gunichar))
 {
@@ -388,6 +437,12 @@ _ide_text_iter_forward_classified_end (GtkTextIter  *iter,
   ch = gtk_text_iter_get_char (iter);
   begin_class = classify (ch);
 
+  if (begin_class == CLASS_NEWLINE)
+    {
+      gtk_text_iter_backward_char (iter);
+      return TRUE;
+    }
+
   for (;;)
     {
       if (!gtk_text_iter_forward_char (iter))
@@ -396,7 +451,7 @@ _ide_text_iter_forward_classified_end (GtkTextIter  *iter,
       ch = gtk_text_iter_get_char (iter);
       cur_class = classify (ch);
 
-      if (cur_class != begin_class)
+      if (cur_class != begin_class || cur_class == CLASS_NEWLINE)
         {
           gtk_text_iter_backward_char (iter);
           return TRUE;
@@ -407,15 +462,23 @@ _ide_text_iter_forward_classified_end (GtkTextIter  *iter,
 }
 
 gboolean
-_ide_text_iter_forward_word_end (GtkTextIter *iter)
+_ide_text_iter_forward_word_end (GtkTextIter *iter,
+                                 gboolean     newline_stop)
 {
-  return _ide_text_iter_forward_classified_end (iter, _ide_text_word_classify);
+  if (newline_stop)
+    return _ide_text_iter_forward_classified_end (iter, _ide_text_word_classify_newline_stop);
+  else
+    return _ide_text_iter_forward_classified_end (iter, _ide_text_word_classify);
 }
 
 gboolean
-_ide_text_iter_forward_WORD_end (GtkTextIter *iter)
+_ide_text_iter_forward_WORD_end (GtkTextIter *iter,
+                                 gboolean     newline_stop)
 {
-  return _ide_text_iter_forward_classified_end (iter, _ide_text_WORD_classify);
+  if (newline_stop)
+    return _ide_text_iter_forward_classified_end (iter, _ide_text_WORD_classify_newline_stop);
+  else
+    return _ide_text_iter_forward_classified_end (iter, _ide_text_WORD_classify);
 }
 
 static gboolean
@@ -431,6 +494,12 @@ _ide_text_iter_backward_classified_end (GtkTextIter  *iter,
   ch = gtk_text_iter_get_char (iter);
   begin_class = classify (ch);
 
+  if (begin_class == CLASS_NEWLINE)
+  {
+    gtk_text_iter_forward_char (iter);
+    return TRUE;
+  }
+
   for (;;)
     {
       if (!gtk_text_iter_backward_char (iter))
@@ -438,6 +507,12 @@ _ide_text_iter_backward_classified_end (GtkTextIter  *iter,
 
       ch = gtk_text_iter_get_char (iter);
       cur_class = classify (ch);
+
+      if (cur_class == CLASS_NEWLINE)
+      {
+        gtk_text_iter_forward_char (iter);
+        return TRUE;
+      }
 
       /* reset begin_class if we hit space, we can take anything after that */
       if (cur_class == CLASS_SPACE)
@@ -451,15 +526,87 @@ _ide_text_iter_backward_classified_end (GtkTextIter  *iter,
 }
 
 gboolean
-_ide_text_iter_backward_word_end (GtkTextIter *iter)
+_ide_text_iter_backward_word_end (GtkTextIter *iter,
+                                  gboolean     newline_stop)
 {
-  return _ide_text_iter_backward_classified_end (iter, _ide_text_word_classify);
+  if (newline_stop)
+    return _ide_text_iter_backward_classified_end (iter, _ide_text_word_classify_newline_stop);
+  else
+    return _ide_text_iter_backward_classified_end (iter, _ide_text_word_classify);
 }
 
 gboolean
-_ide_text_iter_backward_WORD_end (GtkTextIter *iter)
+_ide_text_iter_backward_WORD_end (GtkTextIter *iter,
+                                  gboolean     newline_stop)
 {
-  return _ide_text_iter_backward_classified_end (iter, _ide_text_WORD_classify);
+  if (newline_stop)
+    return _ide_text_iter_backward_classified_end (iter, _ide_text_WORD_classify_newline_stop);
+  else
+    return _ide_text_iter_backward_classified_end (iter, _ide_text_WORD_classify);
+}
+
+static gboolean
+_ide_text_iter_backward_classified_start (GtkTextIter  *iter,
+                                          gint        (*classify) (gunichar))
+{
+  gunichar ch;
+  gint begin_class;
+  gint cur_class;
+
+  g_assert (iter);
+
+  if (!gtk_text_iter_backward_char (iter))
+    return FALSE;
+
+  /* If we are on space, walk to the end of the previous word. */
+  ch = gtk_text_iter_get_char (iter);
+  if (classify (ch) == CLASS_SPACE)
+    if (!_ide_text_iter_backward_classified_end (iter, classify))
+      return FALSE;
+
+  begin_class = classify (ch);
+  if (begin_class == CLASS_NEWLINE)
+  {
+    gtk_text_iter_forward_char (iter);
+    return TRUE;
+  }
+
+  for (;;)
+    {
+      if (!gtk_text_iter_backward_char (iter))
+        return FALSE;
+
+      ch = gtk_text_iter_get_char (iter);
+      cur_class = classify (ch);
+
+      if (cur_class != begin_class || cur_class == CLASS_NEWLINE)
+        {
+          gtk_text_iter_forward_char (iter);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+gboolean
+_ide_text_iter_backward_word_start (GtkTextIter *iter,
+                                    gboolean     newline_stop)
+{
+  if (newline_stop)
+    return _ide_text_iter_backward_classified_start (iter, _ide_text_word_classify_newline_stop);
+  else
+    return _ide_text_iter_backward_classified_start (iter, _ide_text_word_classify);
+}
+
+gboolean
+_ide_text_iter_backward_WORD_start (GtkTextIter *iter,
+                                    gboolean     newline_stop)
+{
+  if (newline_stop)
+    return _ide_text_iter_backward_classified_start (iter, _ide_text_WORD_classify_newline_stop);
+  else
+    return _ide_text_iter_backward_classified_start (iter, _ide_text_WORD_classify);
 }
 
 static gboolean
