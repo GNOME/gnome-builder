@@ -166,7 +166,7 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
         try:
             callee = dict_['init']['callee']
             return callee['object']['name'].lower() == 'gobject' and callee['property']['name'] == 'registerClass'
-        except KeyError:
+        except (KeyError, TypeError):
             return False
 
     @staticmethod
@@ -174,7 +174,7 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
         try:
             callee = dict_['init']['callee']
             return callee['object']['name'].lower() in ('gobject', 'lang') and callee['property']['name'] == 'Class'
-        except KeyError:
+        except (KeyError, TypeError):
             return False
 
     @staticmethod
