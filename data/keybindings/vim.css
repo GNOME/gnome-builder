@@ -1488,7 +1488,9 @@
                     "restore-insert-mark" ()
                     "clear-count" () };
 
-  bind "t" { "save-insert-mark" ()
+  bind "t" { "begin-macro" ()
+             "save-insert-mark" ()
+             "save-command" ()
              "capture-modifier" ()
              "save-search-char" ()
              "movement" (next-match-modifier, 1, 1, 1)
@@ -1496,7 +1498,21 @@
              "selection-theatric" (expand)
              "clear-modifier" ()
              "restore-insert-mark" ()
-             "clear-count" () };
+             "clear-count" ()
+             "end-macro" () };
+
+  bind "f" { "begin-macro" ()
+             "save-insert-mark" ()
+             "save-command" ()
+             "capture-modifier" ()
+             "save-search-char" ()
+             "movement" (next-match-modifier, 1, 0, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (expand)
+             "clear-modifier" ()
+             "restore-insert-mark" ()
+             "clear-count" ()
+             "end-macro" () };
 
   bind "dollar" { "begin-macro" ()
                   "save-insert-mark" ()
