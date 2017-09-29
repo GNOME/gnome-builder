@@ -1569,10 +1569,7 @@ ide_source_view_movements_previous_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  if (mv->newline_stop)
-    _ide_text_iter_backward_word_start (&mv->insert, TRUE);
-  else
-    _ide_source_iter_backward_visible_word_start (&mv->insert);
+  _ide_text_iter_backward_word_start (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1592,10 +1589,7 @@ ide_source_view_movements_previous_full_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  if (mv->newline_stop)
-    _ide_text_iter_backward_WORD_start (&mv->insert, TRUE);
-  else
-    _ide_source_iter_backward_full_word_start (&mv->insert);
+  _ide_text_iter_backward_WORD_start (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.

@@ -1281,13 +1281,13 @@
                       "clear-count" () };
 
   bind "b" { "begin-macro" ()
-             "movement" (previous-word-end-newline-stop, 1, 1, 1)
+             "movement" (previous-word-start-newline-stop, 1, 1, 1)
              "copy-clipboard" ()
              "delete-selection" ()
              "end-macro" () };
 
   bind "<shift>b" { "begin-macro" ()
-                    "movement" (previous-full-word-end-newline-stop, 1, 1, 1)
+                    "movement" (previous-full-word-start-newline-stop, 1, 1, 1)
                     "copy-clipboard" ()
                     "delete-selection" ()
                     "end-macro" () };

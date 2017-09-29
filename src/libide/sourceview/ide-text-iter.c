@@ -564,6 +564,7 @@ _ide_text_iter_backward_classified_start (GtkTextIter  *iter,
     if (!_ide_text_iter_backward_classified_end (iter, classify))
       return FALSE;
 
+  ch = gtk_text_iter_get_char (iter);
   begin_class = classify (ch);
   if (begin_class == CLASS_NEWLINE)
   {
