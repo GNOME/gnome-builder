@@ -164,6 +164,9 @@
     <file>16x16/apps/org.gnome.Builder-symbolic.symbolic.png</file>
     <file>32x32/apps/org.gnome.Builder-symbolic.symbolic.png</file>
     <file>48x48/apps/org.gnome.Builder-symbolic.symbolic.png</file>
+    <file>128x128/apps/org.gnome.Builder-symbolic.symbolic.png</file>
+    <file>256x256/apps/org.gnome.Builder-symbolic.symbolic.png</file>
+    <file>512x512/apps/org.gnome.Builder-symbolic.symbolic.png</file>
     <file alias="scalable/actions/pattern-legacy.svg">scalable/patterns/pattern-legacy.svg</file>
     <file alias="scalable/actions/pattern-browse.svg">scalable/patterns/pattern-browse.svg</file>
     <file alias="scalable/actions/pattern-library.svg">scalable/patterns/pattern-library.svg</file>

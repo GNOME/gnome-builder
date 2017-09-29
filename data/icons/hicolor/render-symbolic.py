@@ -25,9 +25,19 @@ for name in os.listdir('scalable/patterns'):
 
 # These need to be scaled as symbolic icons into
 # 16 and their 2x and 3x counterparts
-for dirname in ('actions', 'apps'):
+for dirname in ('actions',):
     for name in os.listdir(os.path.join('scalable', dirname)):
         for size in (16, 32, 48):
+            outdir = '%dx%d/%s' % (size, size, dirname)
+            path = os.path.join('scalable', dirname, name)
+            gtkEncodeSymbolicSvg(outdir, path, size)
+            symbolic_name = name[:-4] + '.symbolic.png'
+            addResource(outdir, symbolic_name)
+
+# We need larger versions for apps
+for dirname in ('apps',):
+    for name in os.listdir(os.path.join('scalable', dirname)):
+        for size in (16, 32, 48, 128, 256, 512):
             outdir = '%dx%d/%s' % (size, size, dirname)
             path = os.path.join('scalable', dirname, name)
             gtkEncodeSymbolicSvg(outdir, path, size)
