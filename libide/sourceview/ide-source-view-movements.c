@@ -53,6 +53,9 @@ typedef struct
   gunichar               command;                     /* Command that trigger some movements type. See , and ; in vim */
   gunichar               modifier;                    /* For forward/backward char search */
   gunichar               search_char;                 /* For forward/backward char search according to fFtT vim modifier */
+  guint                  newline_stop : 1;            /* Stop the movement at newline chararacter
+                                                       * currently used by [previous|next]_[word|full_word] functions
+                                                       */
   guint                  extend_selection : 1;        /* If selection should be extended */
   guint                  exclusive : 1;               /* See ":help exclusive" in vim */
   guint                  ignore_select : 1;           /* Don't update selection after movement */
@@ -1495,7 +1498,7 @@ ide_source_view_movements_next_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_word_end (&mv->insert);
+  _ide_text_iter_forward_word_end (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1513,7 +1516,7 @@ ide_source_view_movements_next_full_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_WORD_end (&mv->insert);
+  _ide_text_iter_forward_WORD_end (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1531,7 +1534,7 @@ ide_source_view_movements_next_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_word_start (&mv->insert);
+  _ide_text_iter_forward_word_start (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1549,7 +1552,7 @@ ide_source_view_movements_next_full_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_WORD_start (&mv->insert);
+  _ide_text_iter_forward_WORD_start (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1567,7 +1570,7 @@ ide_source_view_movements_previous_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_source_iter_backward_visible_word_start (&mv->insert);
+  _ide_text_iter_backward_word_start (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1587,7 +1590,7 @@ ide_source_view_movements_previous_full_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_source_iter_backward_full_word_start (&mv->insert);
+  _ide_text_iter_backward_WORD_start (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1607,7 +1610,7 @@ ide_source_view_movements_previous_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_backward_word_end (&mv->insert);
+  _ide_text_iter_backward_word_end (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1631,7 +1634,7 @@ ide_source_view_movements_previous_full_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_backward_WORD_end (&mv->insert);
+ _ide_text_iter_backward_WORD_end (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -2051,7 +2054,19 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
         ide_source_view_movements_previous_full_word_start (&mv);
       break;
 
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_previous_full_word_start (&mv);
+      break;
+
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_next_full_word_start (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_next_full_word_start (&mv);
       break;
@@ -2061,7 +2076,19 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
         ide_source_view_movements_previous_full_word_end (&mv);
       break;
 
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_previous_full_word_end (&mv);
+      break;
+
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_next_full_word_end (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_next_full_word_end (&mv);
       break;
@@ -2080,7 +2107,19 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
         ide_source_view_movements_previous_word_start (&mv);
       break;
 
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_previous_word_start (&mv);
+      break;
+
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_next_word_start (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_next_word_start (&mv);
       break;
@@ -2090,7 +2129,19 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
         ide_source_view_movements_previous_word_end (&mv);
       break;
 
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_previous_word_end (&mv);
+      break;
+
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_next_word_end (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END_NEWLINE_STOP:
+      mv.newline_stop = TRUE;
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_next_word_end (&mv);
       break;
