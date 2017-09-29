@@ -1497,6 +1497,15 @@
              "clear-modifier" ()
              "restore-insert-mark" ()
              "clear-count" () };
+
+  bind "dollar" { "begin-macro" ()
+                  "save-insert-mark" ()
+                  "movement" (line-end, 1, 1, 1)
+                  "copy-clipboard" ()
+                  "selection-theatric" (expand)
+                  "restore-insert-mark" ()
+                  "clear-count" ()
+                  "end-macro" () };
 }
 
 @binding-set builder-vim-source-view-normal-g
