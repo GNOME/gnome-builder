@@ -211,7 +211,9 @@ gbp_quick_highlight_view_addin_enabled_changed (GbpQuickHighlightViewAddin *self
     {
       g_signal_handler_block (buffer, self->notify_style_scheme_handler);
       g_signal_handler_block (buffer, self->mark_set_handler);
+
       gtk_source_search_settings_set_search_text (self->search_settings, NULL);
+
       gtk_source_search_context_set_highlight (self->search_context, FALSE);
     }
 

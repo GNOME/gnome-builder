@@ -383,6 +383,8 @@ void                        ide_source_view_push_snippet              (IdeSource
                                                                        IdeSourceSnippet           *snippet,
                                                                        const GtkTextIter          *location);
 void                        ide_source_view_rollback_search           (IdeSourceView              *self);
+void                        ide_source_view_save_search               (IdeSourceView              *self,
+                                                                       const gchar                *search_text);
 void                        ide_source_view_set_count                 (IdeSourceView              *self,
                                                                        gint                        count);
 void                        ide_source_view_set_enable_word_completion(IdeSourceView              *self,

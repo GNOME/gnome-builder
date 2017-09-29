@@ -165,8 +165,33 @@ on_notify_search_text (IdeEditorSearchBar      *self,
                        GParamSpec              *pspec,
                        GtkSourceSearchSettings *search_settings)
 {
+  GtkWidget *widget;
+  IdeEditorView *editor_view;
+  IdeSourceView *view;
+  GtkSourceSearchContext *view_search_context;
+  GtkSourceSearchSettings *view_search_settings;
+  const gchar *search_text;
+
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
+
+  /* We set the view context search text for keymodes searching */
+  if (self->context == NULL)
+    {
+      if (NULL != (widget = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_EDITOR_VIEW)))
+        {
+          editor_view = IDE_EDITOR_VIEW (widget);
+          view = ide_editor_view_get_view (editor_view);
+
+          search_text = gtk_source_search_settings_get_search_text (search_settings);
+
+          if (NULL != (view_search_context = ide_source_view_get_search_context (view)))
+            {
+              view_search_settings = gtk_source_search_context_get_settings (view_search_context);
+              gtk_source_search_settings_set_search_text (view_search_settings, search_text);
+            }
+        }
+    }
 
   update_replace_actions_sensitivity (self);
 }
@@ -387,6 +412,10 @@ ide_editor_search_bar_bind_context (IdeEditorSearchBar     *self,
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
   g_assert (DZL_IS_SIGNAL_GROUP (context_signals));
 
+  self->quick_highlight_enabled = g_settings_get_boolean (self->quick_highlight_settings, "enabled");
+  if (self->quick_highlight_enabled)
+    g_settings_set_boolean (self->quick_highlight_settings, "enabled", FALSE);
+
   buffer = gtk_source_search_context_get_buffer (context);
   dzl_signal_group_set_target (self->buffer_signals, buffer);
 }
@@ -397,6 +426,9 @@ ide_editor_search_bar_unbind_context (IdeEditorSearchBar *self,
 {
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (DZL_IS_SIGNAL_GROUP (context_signals));
+
+  if (self->quick_highlight_enabled)
+    g_settings_set_boolean (self->quick_highlight_settings, "enabled", TRUE);
 
   if (self->buffer_signals != NULL)
     dzl_signal_group_set_target (self->buffer_signals, NULL);
@@ -503,6 +535,7 @@ ide_editor_search_bar_destroy (GtkWidget *widget)
   g_clear_object (&self->search_entry_tag);
   g_clear_object (&self->settings);
   g_clear_object (&self->settings_signals);
+  g_clear_object (&self->quick_highlight_settings);
 
   GTK_WIDGET_CLASS (ide_editor_search_bar_parent_class)->destroy (widget);
 }
@@ -683,6 +716,10 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                             G_CALLBACK (search_entry_next_match),
                             self);
 
+  self->quick_highlight_settings =
+    g_settings_new_with_path ("org.gnome.builder.extension-type",
+                              "/org/gnome/builder/extension-types/quick-highlight-plugin/GbpQuickHighlightViewAddin/");
+
   _ide_editor_search_bar_init_actions (self);
   _ide_editor_search_bar_init_shortcuts (self);
 }
@@ -713,6 +750,7 @@ ide_editor_search_bar_set_context (IdeEditorSearchBar     *self,
 {
   g_return_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_return_if_fail (!context || GTK_SOURCE_IS_SEARCH_CONTEXT (context));
+
 
   if (g_set_object (&self->context, context))
     {

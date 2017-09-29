@@ -110,6 +110,10 @@ struct _IdeEditorSearchBar
   GtkGrid                 *search_options;
   GtkCheckButton          *use_regex;
   GtkCheckButton          *whole_word;
+
+  GSettings               *quick_highlight_settings;
+
+  guint                    quick_highlight_enabled : 1;
 };
 
 void _ide_editor_view_init_actions           (IdeEditorView        *self);

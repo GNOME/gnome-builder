@@ -3913,6 +3913,7 @@ ide_source_view_real_move_search (IdeSourceView    *self,
     {
       if (priv->saved_search_text == NULL)
         return;
+
       gtk_source_search_settings_set_search_text (settings, priv->saved_search_text);
     }
 
@@ -8862,6 +8863,21 @@ ide_source_view_clear_search (IdeSourceView *self)
     }
 
   gtk_source_search_settings_set_search_text (search_settings, "");
+}
+
+void
+ide_source_view_save_search (IdeSourceView *self,
+                             const gchar   *search_text)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  if (0 != g_strcmp0 (priv->saved_search_text, search_text))
+    {
+      g_free (priv->saved_search_text);
+      priv->saved_search_text = (search_text != NULL) ? g_strdup (search_text) : NULL;
+    }
 }
 
 gint

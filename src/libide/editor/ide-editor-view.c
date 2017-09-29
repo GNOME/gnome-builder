@@ -534,6 +534,7 @@ search_revealer_notify_reveal_child (IdeEditorView *self,
                                      GtkRevealer   *revealer)
 {
   GtkSourceCompletion *completion;
+  GtkSourceSearchContext *view_search_context;
 
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
   g_return_if_fail (pspec != NULL);
@@ -578,6 +579,10 @@ search_revealer_notify_reveal_child (IdeEditorView *self,
 
       gtk_source_search_context_set_highlight (self->search_context, TRUE);
       ide_editor_search_bar_set_context (self->search_bar, self->search_context);
+
+      /* We need to hide the search highlight on the view context */
+      if (NULL != (view_search_context = ide_source_view_get_search_context (self->source_view)))
+        gtk_source_search_context_set_highlight (view_search_context, FALSE);
 
       /*
        * Block the completion while the search bar is set. It only
