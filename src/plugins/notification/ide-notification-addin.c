@@ -23,19 +23,42 @@
 
 #include "ide-notification-addin.h"
 
+#define GRACE_PERIOD_USEC (G_USEC_PER_SEC * 5)
+
 struct _IdeNotificationAddin
 {
-  IdeObject parent_instance;
+  IdeObject  parent_instance;
+
+  gchar     *last_msg_body;
+  gint64     last_time;
 };
 
 static void addin_iface_init (IdeBuildPipelineAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeNotificationAddin,
-                        ide_notification_addin,
-                        IDE_TYPE_OBJECT,
-                        0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN,
-                                               addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeNotificationAddin,
+                         ide_notification_addin,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN, addin_iface_init))
+
+static gboolean
+should_supress_message (IdeNotificationAddin *self,
+                        const gchar          *message)
+{
+  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
+  g_assert (message != NULL);
+
+  if (self->last_msg_body == NULL ||
+      !ide_str_equal0 (self->last_msg_body, message) ||
+      self->last_time + GRACE_PERIOD_USEC < g_get_monotonic_time ())
+    {
+      g_free (self->last_msg_body);
+      self->last_msg_body = g_strdup (message);
+      self->last_time = g_get_monotonic_time ();
+      return FALSE;
+    }
+
+  return TRUE;
+}
 
 static void
 ide_notification_addin_notify (IdeNotificationAddin *self,
@@ -82,7 +105,8 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   g_notification_set_priority (notification, G_NOTIFICATION_PRIORITY_NORMAL);
   g_notification_set_icon (notification, icon);
 
-  g_application_send_notification (g_application_get_default (), id, notification);
+  if (!should_supress_message (self, msg_body))
+    g_application_send_notification (g_application_get_default (), id, notification);
 }
 
 static void
@@ -145,6 +169,18 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
 }
 
 static void
+ide_notification_addin_unload (IdeBuildPipelineAddin *addin,
+                               IdeBuildPipeline      *pipeline)
+{
+  IdeNotificationAddin *self = (IdeNotificationAddin *)addin;
+
+  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  g_clear_pointer (&self->last_msg_body, g_free);
+}
+
+static void
 ide_notification_addin_class_init (IdeNotificationAddinClass *klass)
 {
 }
@@ -158,4 +194,5 @@ static void
 addin_iface_init (IdeBuildPipelineAddinInterface *iface)
 {
   iface->load = ide_notification_addin_load;
+  iface->unload = ide_notification_addin_unload;
 }
