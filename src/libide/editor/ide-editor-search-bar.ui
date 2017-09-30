@@ -20,8 +20,7 @@
                 <property name="visible">true</property>
                 <property name="tag-close-visible">false</property>
                 <property name="can_focus">true</property>
-                <property name="width-chars">20</property>
-                <property name="max-width-chars">30</property>
+                <property name="hexpand">true</property>
                 <property name="primary_icon_name">edit-find-symbolic</property>
                 <property name="primary_icon_activatable">false</property>
                 <property name="primary_icon_sensitive">false</property>
