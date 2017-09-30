@@ -9,7 +9,7 @@
             <property name="width-request">425</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="margin-right">24</property>
+            <property name="margin-right">12</property>
             <property name="reveal-child">false</property>
             <property name="visible">true</property>
             <signal name="notify::child-revealed" handler="ide_editor_view_notify_child_revealed" swapped="true" object="IdeEditorView"/>
