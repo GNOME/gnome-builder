@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-application.h"
+#include "application/ide-application.h"
 
 G_BEGIN_DECLS
 

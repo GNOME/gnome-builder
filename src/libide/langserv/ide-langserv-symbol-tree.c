@@ -18,9 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-langserv-symbol-tree"
 
-#include "ide-langserv-symbol-node.h"
-#include "ide-langserv-symbol-node-private.h"
-#include "ide-langserv-symbol-tree.h"
+#include "langserv/ide-langserv-symbol-node.h"
+#include "langserv/ide-langserv-symbol-node-private.h"
+#include "langserv/ide-langserv-symbol-tree.h"
 
 typedef struct
 {

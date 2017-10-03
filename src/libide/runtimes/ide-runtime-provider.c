@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-runtime-manager.h"
-#include "ide-runtime-provider.h"
+#include "runtimes/ide-runtime-manager.h"
+#include "runtimes/ide-runtime-provider.h"
 
 G_DEFINE_INTERFACE (IdeRuntimeProvider, ide_runtime_provider, G_TYPE_OBJECT)
 

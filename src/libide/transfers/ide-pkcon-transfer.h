@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-transfer.h"
+#include "transfers/ide-transfer.h"
 
 G_BEGIN_DECLS
 

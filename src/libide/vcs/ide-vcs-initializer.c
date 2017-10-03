@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-vcs-initializer.h"
+#include "vcs/ide-vcs-initializer.h"
 
 G_DEFINE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, G_TYPE_OBJECT)
 

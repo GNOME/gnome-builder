@@ -18,7 +18,7 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-project-file.h"
+#include "projects/ide-project-file.h"
 
 typedef struct
 {

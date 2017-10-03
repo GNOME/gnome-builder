@@ -20,10 +20,10 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-#include "ide-source-snippet.h"
-#include "ide-source-snippet-chunk.h"
-#include "ide-source-snippet-parser.h"
-#include "ide-source-snippets.h"
+#include "snippets/ide-source-snippet.h"
+#include "snippets/ide-source-snippet-chunk.h"
+#include "snippets/ide-source-snippet-parser.h"
+#include "snippets/ide-source-snippets.h"
 
 struct _IdeSourceSnippets
 {

@@ -23,7 +23,7 @@
 #include <glib/gi18n.h>
 #include <dazzle.h>
 
-#include "ide-application-private.h"
+#include "application/ide-application-private.h"
 
 #define I_(s) (g_intern_static_string(s))
 

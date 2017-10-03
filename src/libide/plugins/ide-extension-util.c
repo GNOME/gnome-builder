@@ -22,7 +22,7 @@
 #include <gobject/gvaluecollector.h>
 #include <stdlib.h>
 
-#include "ide-extension-util.h"
+#include "plugins/ide-extension-util.h"
 
 gboolean
 ide_extension_util_can_use_plugin (PeasEngine     *engine,

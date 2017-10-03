@@ -18,8 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-search-reducer"
 
-#include "ide-search-reducer.h"
-#include "ide-search-result.h"
+#include "search/ide-search-reducer.h"
+#include "search/ide-search-result.h"
 
 #define DEFAULT_MAX_ITEMS 1000
 

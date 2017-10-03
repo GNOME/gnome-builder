@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-dnd.h"
+#include "util/ide-dnd.h"
 
 /**
  * ide_dnd_get_uri_list:

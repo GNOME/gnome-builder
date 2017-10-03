@@ -20,8 +20,8 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-environment-editor.h"
-#include "ide-environment-editor-row.h"
+#include "buildui/ide-environment-editor.h"
+#include "buildui/ide-environment-editor-row.h"
 
 struct _IdeEnvironmentEditor
 {

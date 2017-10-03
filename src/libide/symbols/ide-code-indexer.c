@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-code-indexer"
 
-#include "ide-code-indexer.h"
+#include "symbols/ide-code-indexer.h"
 
 G_DEFINE_INTERFACE (IdeCodeIndexer, ide_code_indexer, IDE_TYPE_OBJECT)
 

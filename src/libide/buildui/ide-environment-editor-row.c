@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-environment-editor-row"
 
-#include "ide-environment-editor-row.h"
+#include "buildui/ide-environment-editor-row.h"
 
 struct _IdeEnvironmentEditorRow
 {

@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "ide-glib.h"
+#include "util/ide-glib.h"
 
 typedef struct
 {

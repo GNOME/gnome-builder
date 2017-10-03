@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-preferences-language-row"
 
-#include "ide-preferences-language-row.h"
+#include "preferences/ide-preferences-language-row.h"
 
 struct _IdePreferencesLanguageRow
 {

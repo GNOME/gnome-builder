@@ -20,7 +20,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-fixit.h"
+#include "diagnostics/ide-fixit.h"
 #include "ide-types.h"
 
 G_BEGIN_DECLS

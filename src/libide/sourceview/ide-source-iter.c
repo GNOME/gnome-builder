@@ -36,7 +36,7 @@
  * TODO: Once this is made public api, switch to using that instead of a copy.
  */
 
-#include "ide-source-iter.h"
+#include "sourceview/ide-source-iter.h"
 
 /* Go to the end of the next or current "full word". A full word is a group of
  * non-blank chars.

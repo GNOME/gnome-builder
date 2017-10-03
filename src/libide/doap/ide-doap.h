@@ -20,7 +20,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-doap-person.h"
+#include "doap/ide-doap-person.h"
 
 G_BEGIN_DECLS
 

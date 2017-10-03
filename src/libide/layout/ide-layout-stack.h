@@ -20,7 +20,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-layout-view.h"
+#include "layout/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

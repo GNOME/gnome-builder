@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-debugger-types.h"
+#include "debugger/ide-debugger-types.h"
 
 G_BEGIN_DECLS
 

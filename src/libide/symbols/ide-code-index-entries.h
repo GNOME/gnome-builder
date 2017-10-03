@@ -19,8 +19,8 @@
 #pragma once
 
 #include "ide-object.h"
-#include "ide-symbol.h"
-#include "ide-code-index-entry.h"
+#include "symbols/ide-symbol.h"
+#include "symbols/ide-code-index-entry.h"
 
 G_BEGIN_DECLS
 

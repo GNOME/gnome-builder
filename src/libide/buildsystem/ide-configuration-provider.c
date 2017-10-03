@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-configuration-manager.h"
-#include "ide-configuration-provider.h"
+#include "buildsystem/ide-configuration-manager.h"
+#include "buildsystem/ide-configuration-provider.h"
 
 G_DEFINE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, G_TYPE_OBJECT)
 

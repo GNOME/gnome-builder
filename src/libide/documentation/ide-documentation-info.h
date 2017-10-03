@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-documentation-proposal.h"
+#include "documentation/ide-documentation-proposal.h"
 
 G_BEGIN_DECLS
 

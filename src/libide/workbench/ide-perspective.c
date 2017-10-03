@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-perspective.h"
+#include "workbench/ide-perspective.h"
 
 G_DEFINE_INTERFACE (IdePerspective, ide_perspective, G_TYPE_OBJECT)
 

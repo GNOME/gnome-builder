@@ -20,7 +20,7 @@
 
 #include <string.h>
 
-#include "ide-line-reader.h"
+#include "util/ide-line-reader.h"
 
 void
 ide_line_reader_init (IdeLineReader *reader,

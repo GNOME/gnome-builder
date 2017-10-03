@@ -20,9 +20,9 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-doap.h"
+#include "doap/ide-doap.h"
 
-#include "xml-reader.h"
+#include "doap/xml-reader.h"
 
 /*
  * TODO: We don't do any XMLNS checking or anything here.

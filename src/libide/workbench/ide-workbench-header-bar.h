@@ -20,7 +20,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-omni-bar.h"
+#include "workbench/ide-omni-bar.h"
 
 G_BEGIN_DECLS
 

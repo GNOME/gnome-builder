@@ -19,7 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
-#include "ide-device-provider.h"
+#include "devices/ide-device-provider.h"
 
 G_DEFINE_INTERFACE (IdeDeviceProvider, ide_device_provider, IDE_TYPE_OBJECT)
 

@@ -22,7 +22,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "ide-build-log-panel.h"
+#include "buildui/ide-build-log-panel.h"
 
 typedef struct _ColorCodeState
 {

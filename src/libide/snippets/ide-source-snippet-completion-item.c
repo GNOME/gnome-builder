@@ -19,7 +19,7 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 
-#include "ide-source-snippet-completion-item.h"
+#include "snippets/ide-source-snippet-completion-item.h"
 
 struct _IdeSourceSnippetCompletionItem
 {

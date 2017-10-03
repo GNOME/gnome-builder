@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-debugger-types"
 
-#include "ide-debugger-types.h"
+#include "debugger/ide-debugger-types.h"
 
 GType
 ide_debugger_stream_get_type (void)

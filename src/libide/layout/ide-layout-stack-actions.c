@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-layout-stack.h"
-#include "ide-layout-private.h"
+#include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-private.h"
 
 #include <ide.h>
 

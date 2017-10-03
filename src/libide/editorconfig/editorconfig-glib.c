@@ -18,7 +18,7 @@
 
 #include <editorconfig/editorconfig.h>
 
-#include "editorconfig-glib.h"
+#include "editorconfig/editorconfig-glib.h"
 
 static void
 _g_value_free (gpointer data)

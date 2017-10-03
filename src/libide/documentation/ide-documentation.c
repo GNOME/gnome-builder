@@ -19,9 +19,9 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
-#include "ide-documentation.h"
-#include "ide-documentation-provider.h"
-#include "ide-documentation-proposal.h"
+#include "documentation/ide-documentation.h"
+#include "documentation/ide-documentation-provider.h"
+#include "documentation/ide-documentation-proposal.h"
 
 struct _IdeDocumentation
 {

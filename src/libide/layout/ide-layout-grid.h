@@ -20,9 +20,9 @@
 
 #include <dazzle.h>
 
-#include "ide-layout-grid-column.h"
-#include "ide-layout-stack.h"
-#include "ide-layout-view.h"
+#include "layout/ide-layout-grid-column.h"
+#include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

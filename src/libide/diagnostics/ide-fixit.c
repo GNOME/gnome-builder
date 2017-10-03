@@ -18,8 +18,8 @@
 
 #include "dazzle.h"
 
-#include "ide-fixit.h"
-#include "ide-source-range.h"
+#include "diagnostics/ide-fixit.h"
+#include "diagnostics/ide-source-range.h"
 
 G_DEFINE_BOXED_TYPE (IdeFixit, ide_fixit, ide_fixit_ref, ide_fixit_unref)
 

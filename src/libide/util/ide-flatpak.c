@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-flatpak.h"
+#include "util/ide-flatpak.h"
 
 /**
  * ide_is_flatpak:

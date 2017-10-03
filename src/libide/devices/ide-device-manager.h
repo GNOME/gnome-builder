@@ -19,7 +19,7 @@
 #pragma once
 
 #include "ide-object.h"
-#include "ide-device-manager.h"
+#include "devices/ide-device-manager.h"
 
 G_BEGIN_DECLS
 

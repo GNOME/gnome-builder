@@ -21,8 +21,8 @@
 #include <libpeas/peas.h>
 
 #include "ide-global.h"
-#include "ide-project-miner.h"
-#include "ide-recent-projects.h"
+#include "projects/ide-project-miner.h"
+#include "projects/ide-recent-projects.h"
 
 struct _IdeRecentProjects
 {

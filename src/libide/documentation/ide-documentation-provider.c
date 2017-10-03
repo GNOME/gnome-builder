@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-documentation-provider"
 
-#include "ide-documentation-provider.h"
+#include "documentation/ide-documentation-provider.h"
 
 G_DEFINE_INTERFACE (IdeDocumentationProvider, ide_documentation_provider, IDE_TYPE_OBJECT)
 

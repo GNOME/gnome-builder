@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <gtksourceview/gtksource.h>
 
-#include "modeline-parser.h"
+#include "modelines/modeline-parser.h"
 
 #define MODELINES_LANGUAGE_MAPPINGS_FILE "/org/gnome/builder/modelines/language-mappings"
 #define gedit_debug_message(ignored,fmt,...) g_debug(fmt,__VA_ARGS__)

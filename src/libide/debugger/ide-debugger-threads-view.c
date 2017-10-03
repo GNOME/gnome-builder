@@ -21,7 +21,7 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "ide-debugger-threads-view.h"
+#include "debugger/ide-debugger-threads-view.h"
 
 struct _IdeDebuggerThreadsView
 {

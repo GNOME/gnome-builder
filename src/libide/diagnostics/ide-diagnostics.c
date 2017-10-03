@@ -20,8 +20,8 @@
 
 #include "dazzle.h"
 
-#include "ide-diagnostic.h"
-#include "ide-diagnostics.h"
+#include "diagnostics/ide-diagnostic.h"
+#include "diagnostics/ide-diagnostics.h"
 
 G_DEFINE_BOXED_TYPE (IdeDiagnostics, ide_diagnostics, ide_diagnostics_ref, ide_diagnostics_unref)
 

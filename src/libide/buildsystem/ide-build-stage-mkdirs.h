@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-build-stage.h"
+#include "buildsystem/ide-build-stage.h"
 
 G_BEGIN_DECLS
 

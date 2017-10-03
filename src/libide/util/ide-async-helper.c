@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-async-helper.h"
+#include "util/ide-async-helper.h"
 
 static void
 ide_async_helper_cb (GObject      *object,

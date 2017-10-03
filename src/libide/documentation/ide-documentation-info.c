@@ -18,8 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-documentation-info"
 
-#include "ide-documentation-info.h"
-#include "ide-documentation-proposal.h"
+#include "documentation/ide-documentation-info.h"
+#include "documentation/ide-documentation-proposal.h"
 
 struct _IdeDocumentationInfo
 {

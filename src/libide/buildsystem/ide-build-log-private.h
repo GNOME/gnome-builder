@@ -20,7 +20,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-build-log.h"
+#include "buildsystem/ide-build-log.h"
 
 G_BEGIN_DECLS
 

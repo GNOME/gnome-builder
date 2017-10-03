@@ -26,7 +26,7 @@
 #include <string.h>
 
 #include "ide-macros.h"
-#include "ide-project-info.h"
+#include "projects/ide-project-info.h"
 
 /**
  * SECTION:ideprojectinfo:

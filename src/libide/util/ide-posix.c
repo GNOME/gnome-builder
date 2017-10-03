@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <wordexp.h>
 
-#include "ide-posix.h"
+#include "util/ide-posix.h"
 
 const gchar *
 ide_get_system_type (void)

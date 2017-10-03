@@ -21,8 +21,8 @@
 #include <libpeas/peas.h>
 #include <ide.h>
 
-#include "ide-build-tool.h"
-#include "ide-build-workbench-addin.h"
+#include "buildui/ide-build-tool.h"
+#include "buildui/ide-build-workbench-addin.h"
 
 void
 ide_build_tool_register_types (PeasObjectModule *module)

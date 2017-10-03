@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-preferences-window"
 
-#include "ide-preferences-window.h"
+#include "preferences/ide-preferences-window.h"
 
 struct _IdePreferencesWindow
 {

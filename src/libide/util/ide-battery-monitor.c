@@ -18,7 +18,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-battery-monitor.h"
+#include "util/ide-battery-monitor.h"
 
 #define CONSERVE_THRESHOLD 50.0
 

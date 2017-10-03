@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "editorconfig"
 
-#include "editorconfig-glib.h"
+#include "editorconfig/editorconfig-glib.h"
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"

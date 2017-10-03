@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-debugger-frame.h"
+#include "debugger/ide-debugger-frame.h"
 
 typedef struct
 {

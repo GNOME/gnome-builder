@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-application-tool.h"
+#include "application/ide-application-tool.h"
 
 G_DEFINE_INTERFACE (IdeApplicationTool, ide_application_tool, G_TYPE_OBJECT)
 

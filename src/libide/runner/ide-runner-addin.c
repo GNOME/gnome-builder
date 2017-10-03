@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-runner-addin"
 
-#include "ide-runner-addin.h"
+#include "runner/ide-runner-addin.h"
 
 G_DEFINE_INTERFACE (IdeRunnerAddin, ide_runner_addin, G_TYPE_OBJECT)
 

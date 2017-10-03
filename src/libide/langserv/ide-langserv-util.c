@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-langserv-util.h"
+#include "langserv/ide-langserv-util.h"
 
 IdeSymbolKind
 ide_langserv_decode_symbol_kind (guint kind)

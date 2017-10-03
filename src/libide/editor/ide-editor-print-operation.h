@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-editor-view.h"
+#include "editor/ide-editor-view.h"
 
 G_BEGIN_DECLS
 

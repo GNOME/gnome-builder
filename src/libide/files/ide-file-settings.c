@@ -24,8 +24,8 @@
 #include "dazzle.h"
 
 #include "ide-enums.h"
-#include "ide-file.h"
-#include "ide-file-settings.h"
+#include "files/ide-file.h"
+#include "files/ide-file-settings.h"
 
 /*
  * WARNING: This file heavily uses XMACROS.

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-documentation-proposal"
 
-#include "ide-documentation-proposal.h"
+#include "documentation/ide-documentation-proposal.h"
 
 typedef struct
 {

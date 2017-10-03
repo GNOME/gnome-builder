@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-source-view.h"
+#include "sourceview/ide-source-view.h"
 
 G_BEGIN_DECLS
 

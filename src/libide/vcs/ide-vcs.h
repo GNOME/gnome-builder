@@ -21,7 +21,7 @@
 #include <gio/gio.h>
 
 #include "ide-object.h"
-#include "ide-vcs-config.h"
+#include "vcs/ide-vcs-config.h"
 
 G_BEGIN_DECLS
 

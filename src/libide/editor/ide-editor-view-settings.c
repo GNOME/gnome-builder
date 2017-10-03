@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-editor-view-settings"
 
-#include "ide-editor-private.h"
+#include "editor/ide-editor-private.h"
 
 #include <gtksourceview/gtksource.h>
 

@@ -20,7 +20,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-build-pipeline.h"
+#include "buildsystem/ide-build-pipeline.h"
 
 G_BEGIN_DECLS
 

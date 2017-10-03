@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-project-template.h"
+#include "template/ide-project-template.h"
 
 G_BEGIN_DECLS
 

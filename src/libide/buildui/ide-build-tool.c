@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "ide-build-tool.h"
+#include "buildui/ide-build-tool.h"
 
 struct _IdeBuildTool
 {

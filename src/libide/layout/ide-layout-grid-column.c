@@ -18,9 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid-column"
 
-#include "ide-layout-grid-column.h"
-#include "ide-layout-private.h"
-#include "ide-layout-view.h"
+#include "layout/ide-layout-grid-column.h"
+#include "layout/ide-layout-private.h"
+#include "layout/ide-layout-view.h"
 
 struct _IdeLayoutGridColumn
 {

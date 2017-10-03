@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-window-settings.h"
+#include "util/ide-window-settings.h"
 
 #define GB_WINDOW_MIN_WIDTH  1280
 #define GB_WINDOW_MIN_HEIGHT 720

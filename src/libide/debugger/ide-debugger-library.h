@@ -20,7 +20,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-debugger-types.h"
+#include "debugger/ide-debugger-types.h"
 
 G_BEGIN_DECLS
 

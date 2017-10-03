@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-search-provider"
 
-#include "ide-search-provider.h"
+#include "search/ide-search-provider.h"
 
 G_DEFINE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE_TYPE_OBJECT)
 

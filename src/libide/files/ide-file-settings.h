@@ -20,8 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
-#include "ide-file.h"
-#include "ide-indent-style.h"
+#include "files/ide-file.h"
+#include "files/ide-indent-style.h"
 #include "ide-object.h"
 
 G_BEGIN_DECLS

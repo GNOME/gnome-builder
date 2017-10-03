@@ -18,8 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-breakpoint"
 
-#include "ide-debugger-breakpoint.h"
-#include "ide-debugger-types.h"
+#include "debugger/ide-debugger-breakpoint.h"
+#include "debugger/ide-debugger-types.h"
 
 typedef struct
 {

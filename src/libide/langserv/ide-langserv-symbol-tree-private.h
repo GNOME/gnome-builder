@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-langserv-symbol-tree.h"
+#include "langserv/ide-langserv-symbol-tree.h"
 
 G_BEGIN_DECLS
 

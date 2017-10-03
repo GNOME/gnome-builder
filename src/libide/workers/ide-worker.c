@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-worker"
 
-#include "ide-worker.h"
+#include "workers/ide-worker.h"
 
 G_DEFINE_INTERFACE (IdeWorker, ide_worker, G_TYPE_OBJECT)
 

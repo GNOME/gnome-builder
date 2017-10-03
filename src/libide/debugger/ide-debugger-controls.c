@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-debugger-controls.h"
+#include "debugger/ide-debugger-controls.h"
 
 struct _IdeDebuggerControls
 {

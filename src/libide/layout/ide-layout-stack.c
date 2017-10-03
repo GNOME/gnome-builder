@@ -22,11 +22,11 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
-#include "ide-layout-stack.h"
-#include "ide-layout-stack-addin.h"
-#include "ide-layout-stack-header.h"
-#include "ide-layout-private.h"
-#include "ide-shortcut-label.h"
+#include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-stack-addin.h"
+#include "layout/ide-layout-stack-header.h"
+#include "layout/ide-layout-private.h"
+#include "layout/ide-shortcut-label.h"
 
 #define TRANSITION_DURATION 300
 

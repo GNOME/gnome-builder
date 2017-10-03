@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-run-manager.h"
+#include "runner/ide-run-manager.h"
 
 G_BEGIN_DECLS
 

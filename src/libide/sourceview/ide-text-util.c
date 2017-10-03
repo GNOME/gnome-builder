@@ -20,7 +20,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-text-util.h"
+#include "sourceview/ide-text-util.h"
 
 void
 ide_text_util_delete_line (GtkTextView *text_view,

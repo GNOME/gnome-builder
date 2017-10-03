@@ -20,7 +20,7 @@
 
 #include <glib-object.h>
 
-#include "ide-symbol-node.h"
+#include "symbols/ide-symbol-node.h"
 
 G_BEGIN_DECLS
 

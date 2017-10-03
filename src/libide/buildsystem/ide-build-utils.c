@@ -18,7 +18,7 @@
 
 #include <ide.h>
 
-#include "ide-build-utils.h"
+#include "buildsystem/ide-build-utils.h"
 
 static void
 skip_color_codes_values (const gchar **cursor)

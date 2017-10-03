@@ -20,7 +20,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "ide-template-base.h"
+#include "template/ide-template-base.h"
 
 #define TIMEOUT_INTERVAL_MSEC 17
 #define TIMEOUT_DURATION_MSEC  2

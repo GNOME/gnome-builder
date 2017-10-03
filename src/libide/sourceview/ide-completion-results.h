@@ -20,7 +20,7 @@
 
 #include <gtksourceview/gtksource.h>
 
-#include "ide-completion-item.h"
+#include "sourceview/ide-completion-item.h"
 
 G_BEGIN_DECLS
 

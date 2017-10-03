@@ -19,7 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
-#include "ide-highlighter.h"
+#include "highlighting/ide-highlighter.h"
 
 G_DEFINE_INTERFACE (IdeHighlighter, ide_highlighter, IDE_TYPE_OBJECT)
 

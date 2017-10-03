@@ -20,7 +20,7 @@
 #include <string.h>
 #include <libxml/xmlreader.h>
 
-#include "xml-reader.h"
+#include "doap/xml-reader.h"
 
 #define XML_TO_CHAR(s)  ((char *) (s))
 #define CHAR_TO_XML(s)  ((unsigned char *) (s))

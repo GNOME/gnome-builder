@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include "ide-build-pipeline.h"
-#include "ide-build-stage.h"
+#include "buildsystem/ide-build-pipeline.h"
+#include "buildsystem/ide-build-stage.h"
 
 G_BEGIN_DECLS
 

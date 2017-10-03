@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid-column-actions"
 
-#include "ide-layout-private.h"
+#include "layout/ide-layout-private.h"
 
 static void
 ide_layout_grid_column_actions_close (GSimpleAction *action,

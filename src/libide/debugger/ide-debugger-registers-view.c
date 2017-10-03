@@ -20,7 +20,7 @@
 
 #include <dazzle.h>
 
-#include "ide-debugger-registers-view.h"
+#include "debugger/ide-debugger-registers-view.h"
 
 struct _IdeDebuggerRegistersView
 {

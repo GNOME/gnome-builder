@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include "ide-project-file.h"
-#include "ide-project-item.h"
+#include "projects/ide-project-file.h"
+#include "projects/ide-project-item.h"
 
 G_BEGIN_DECLS
 

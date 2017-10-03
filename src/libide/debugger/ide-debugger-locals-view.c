@@ -21,7 +21,7 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "ide-debugger-locals-view.h"
+#include "debugger/ide-debugger-locals-view.h"
 
 struct _IdeDebuggerLocalsView
 {

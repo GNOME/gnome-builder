@@ -20,9 +20,9 @@
 
 #include <libpeas/peas.h>
 
-#include "ide-search-engine.h"
-#include "ide-search-provider.h"
-#include "ide-search-result.h"
+#include "search/ide-search-engine.h"
+#include "search/ide-search-provider.h"
+#include "search/ide-search-result.h"
 
 #define DEFAULT_MAX_RESULTS 50
 

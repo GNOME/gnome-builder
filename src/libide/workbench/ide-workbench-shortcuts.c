@@ -23,7 +23,7 @@
 #include <glib/gi18n.h>
 #include <dazzle.h>
 
-#include "ide-workbench-private.h"
+#include "workbench/ide-workbench-private.h"
 
 void
 _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,

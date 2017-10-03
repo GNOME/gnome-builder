@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid"
 
-#include "ide-layout-grid.h"
+#include "layout/ide-layout-grid.h"
 
 static void
 ide_layout_grid_actions_focus_neighbor (GSimpleAction *action,

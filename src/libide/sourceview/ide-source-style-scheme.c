@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-#include "ide-source-style-scheme.h"
+#include "sourceview/ide-source-style-scheme.h"
 
 gboolean
 ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,

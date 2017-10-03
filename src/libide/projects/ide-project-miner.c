@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-project-miner"
 
-#include "ide-project-miner.h"
+#include "projects/ide-project-miner.h"
 
 G_DEFINE_INTERFACE (IdeProjectMiner, ide_project_miner, G_TYPE_OBJECT)
 

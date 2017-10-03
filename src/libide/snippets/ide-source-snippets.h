@@ -20,7 +20,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-source-snippet.h"
+#include "snippets/ide-source-snippet.h"
 
 G_BEGIN_DECLS
 

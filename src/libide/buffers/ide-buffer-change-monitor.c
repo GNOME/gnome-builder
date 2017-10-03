@@ -18,8 +18,8 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-buffer.h"
-#include "ide-buffer-change-monitor.h"
+#include "buffers/ide-buffer.h"
+#include "buffers/ide-buffer-change-monitor.h"
 
 G_DEFINE_TYPE (IdeBufferChangeMonitor, ide_buffer_change_monitor, IDE_TYPE_OBJECT)
 

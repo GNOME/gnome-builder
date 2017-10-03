@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-template-provider.h"
+#include "template/ide-template-provider.h"
 
 G_DEFINE_INTERFACE (IdeTemplateProvider, ide_template_provider, G_TYPE_OBJECT)
 

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-debugger-instruction"
 
-#include "ide-debugger-instruction.h"
+#include "debugger/ide-debugger-instruction.h"
 
 typedef struct
 {

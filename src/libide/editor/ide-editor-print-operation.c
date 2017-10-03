@@ -21,8 +21,8 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
-#include "ide-editor-print-operation.h"
-#include "ide-editor-view.h"
+#include "editor/ide-editor-print-operation.h"
+#include "editor/ide-editor-view.h"
 
 struct _IdeEditorPrintOperation
 {

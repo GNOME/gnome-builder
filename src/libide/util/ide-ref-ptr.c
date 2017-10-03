@@ -20,7 +20,7 @@
 
 #include "dazzle.h"
 
-#include "ide-ref-ptr.h"
+#include "util/ide-ref-ptr.h"
 
 G_DEFINE_BOXED_TYPE (IdeRefPtr, ide_ref_ptr, ide_ref_ptr_ref, ide_ref_ptr_unref)
 

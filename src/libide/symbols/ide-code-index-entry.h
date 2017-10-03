@@ -19,7 +19,7 @@
 #pragma once
 
 #include "ide-object.h"
-#include "ide-symbol.h"
+#include "symbols/ide-symbol.h"
 
 G_BEGIN_DECLS
 

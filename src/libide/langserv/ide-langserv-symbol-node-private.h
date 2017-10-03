@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-langserv-symbol-node.h"
+#include "langserv/ide-langserv-symbol-node.h"
 
 G_BEGIN_DECLS
 

@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-workbench-message"
 
-#include "ide-workbench-message.h"
+#include "workbench/ide-workbench-message.h"
 
 struct _IdeWorkbenchMessage
 {

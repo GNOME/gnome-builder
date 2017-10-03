@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-build-target"
 
-#include "ide-build-target.h"
+#include "buildsystem/ide-build-target.h"
 
 G_DEFINE_INTERFACE (IdeBuildTarget, ide_build_target, IDE_TYPE_OBJECT)
 

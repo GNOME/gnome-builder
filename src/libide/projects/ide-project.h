@@ -19,7 +19,7 @@
 #pragma once
 
 #include "ide-object.h"
-#include "ide-project-files.h"
+#include "projects/ide-project-files.h"
 
 G_BEGIN_DECLS
 

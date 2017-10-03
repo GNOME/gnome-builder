@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-subprocess.h"
+#include "subprocess/ide-subprocess.h"
 
 G_BEGIN_DECLS
 

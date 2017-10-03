@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-environment.h"
-#include "ide-environment-variable.h"
+#include "buildsystem/ide-environment.h"
+#include "buildsystem/ide-environment-variable.h"
 
 struct _IdeEnvironment
 {

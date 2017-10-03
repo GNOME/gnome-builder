@@ -20,8 +20,8 @@
 
 #include <libpeas/peas.h>
 
-#include "ide-buffer-addin.h"
-#include "ide-buffer-private.h"
+#include "buffers/ide-buffer-addin.h"
+#include "buffers/ide-buffer-private.h"
 
 /**
  * SECTION:ide-buffer-addin

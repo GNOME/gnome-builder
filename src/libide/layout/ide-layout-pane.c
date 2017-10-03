@@ -20,7 +20,7 @@
 
 #include "dazzle.h"
 
-#include "ide-layout-pane.h"
+#include "layout/ide-layout-pane.h"
 #include "ide-macros.h"
 
 typedef struct

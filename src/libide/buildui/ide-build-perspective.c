@@ -20,9 +20,9 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-build-configuration-row.h"
-#include "ide-build-configuration-view.h"
-#include "ide-build-perspective.h"
+#include "buildui/ide-build-configuration-row.h"
+#include "buildui/ide-build-configuration-view.h"
+#include "buildui/ide-build-perspective.h"
 
 struct _IdeBuildPerspective
 {

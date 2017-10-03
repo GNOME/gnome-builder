@@ -21,10 +21,10 @@
 #include <glib/gi18n.h>
 
 #include "ide-global.h"
-#include "ide-source-snippets-manager.h"
-#include "ide-source-snippet-parser.h"
-#include "ide-source-snippets.h"
-#include "ide-source-snippet.h"
+#include "snippets/ide-source-snippets-manager.h"
+#include "snippets/ide-source-snippet-parser.h"
+#include "snippets/ide-source-snippets.h"
+#include "snippets/ide-source-snippet.h"
 
 struct _IdeSourceSnippetsManager
 {

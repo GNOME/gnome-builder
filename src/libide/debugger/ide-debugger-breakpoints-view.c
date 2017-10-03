@@ -20,7 +20,7 @@
 
 #include <dazzle.h>
 
-#include "ide-debugger-breakpoints-view.h"
+#include "debugger/ide-debugger-breakpoints-view.h"
 
 struct _IdeDebuggerBreakpointsView
 {

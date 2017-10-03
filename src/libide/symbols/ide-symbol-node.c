@@ -19,8 +19,8 @@
 #include <glib/gi18n.h>
 
 #include "ide-enums.h"
-#include "ide-symbol.h"
-#include "ide-symbol-node.h"
+#include "symbols/ide-symbol.h"
+#include "symbols/ide-symbol-node.h"
 
 typedef struct
 {

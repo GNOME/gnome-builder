@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-layout-stack-addin"
 
-#include "ide-layout-stack-addin.h"
+#include "layout/ide-layout-stack-addin.h"
 
 G_DEFINE_INTERFACE (IdeLayoutStackAddin, ide_layout_stack_addin, G_TYPE_OBJECT)
 

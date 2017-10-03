@@ -20,7 +20,7 @@
 
 #include <dazzle.h>
 
-#include "ide-layout-stack.h"
+#include "layout/ide-layout-stack.h"
 
 G_BEGIN_DECLS
 

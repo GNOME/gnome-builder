@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-project-info.h"
+#include "projects/ide-project-info.h"
 
 G_BEGIN_DECLS
 

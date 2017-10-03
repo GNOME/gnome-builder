@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ide-uri.h"
+#include "util/ide-uri.h"
 
 #if 0
 # define GOTO(l) do { g_print ("%s():%d\n", G_STRFUNC, __LINE__); goto l; } while (0)

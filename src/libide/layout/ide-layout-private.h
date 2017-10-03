@@ -20,11 +20,11 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-layout-grid.h"
-#include "ide-layout-grid-column.h"
-#include "ide-layout-stack.h"
-#include "ide-layout-stack-header.h"
-#include "ide-layout-view.h"
+#include "layout/ide-layout-grid.h"
+#include "layout/ide-layout-grid-column.h"
+#include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-stack-header.h"
+#include "layout/ide-layout-view.h"
 
 G_BEGIN_DECLS
 

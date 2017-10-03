@@ -20,8 +20,8 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-layout-stack.h"
-#include "ide-layout-private.h"
+#include "layout/ide-layout-stack.h"
+#include "layout/ide-layout-private.h"
 
 #define I_(s) g_intern_static_string(s)
 

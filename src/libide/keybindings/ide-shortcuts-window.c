@@ -18,7 +18,7 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-shortcuts-window.h"
+#include "keybindings/ide-shortcuts-window.h"
 
 struct _IdeShortcutsWindow
 {

@@ -21,7 +21,7 @@
 #include <gio/gio.h>
 
 #include "ide-types.h"
-#include "ide-runner.h"
+#include "runner/ide-runner.h"
 
 G_BEGIN_DECLS
 

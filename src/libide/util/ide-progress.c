@@ -21,7 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-object.h"
-#include "ide-progress.h"
+#include "util/ide-progress.h"
 
 struct _IdeProgress
 {

@@ -22,8 +22,8 @@
 
 #include "dazzle.h"
 
-#include "ide-extension-adapter.h"
-#include "ide-extension-util.h"
+#include "plugins/ide-extension-adapter.h"
+#include "plugins/ide-extension-util.h"
 #include "ide-macros.h"
 
 struct _IdeExtensionAdapter

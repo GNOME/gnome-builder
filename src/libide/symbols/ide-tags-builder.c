@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-tags-builder.h"
+#include "symbols/ide-tags-builder.h"
 
 G_DEFINE_INTERFACE (IdeTagsBuilder, ide_tags_builder, G_TYPE_OBJECT)
 

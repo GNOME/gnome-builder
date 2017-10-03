@@ -21,8 +21,8 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
-#include "ide-extension-set-adapter.h"
-#include "ide-extension-util.h"
+#include "plugins/ide-extension-set-adapter.h"
+#include "plugins/ide-extension-util.h"
 #include "ide-macros.h"
 
 struct _IdeExtensionSetAdapter

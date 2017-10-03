@@ -20,7 +20,7 @@
 
 #include <gio/gio.h>
 
-#include "ide-environment-variable.h"
+#include "buildsystem/ide-environment-variable.h"
 
 G_BEGIN_DECLS
 

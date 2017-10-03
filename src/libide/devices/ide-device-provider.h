@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ide-device.h"
+#include "devices/ide-device.h"
 #include "ide-object.h"
 
 G_BEGIN_DECLS

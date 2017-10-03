@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-doc-seq.h"
+#include "util/ide-doc-seq.h"
 
 static GHashTable *seq;
 

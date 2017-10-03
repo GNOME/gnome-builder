@@ -18,9 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-debugger"
 
-#include "ide-debugger.h"
-#include "ide-debugger-address-map.h"
-#include "ide-debugger-private.h"
+#include "debugger/ide-debugger.h"
+#include "debugger/ide-debugger-address-map.h"
+#include "debugger/ide-debugger-private.h"
 
 /**
  * SECTION:ide-debugger

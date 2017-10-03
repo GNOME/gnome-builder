@@ -20,7 +20,7 @@
 
 #include <dazzle.h>
 
-#include "ide-shortcut-label.h"
+#include "layout/ide-shortcut-label.h"
 
 struct _IdeShortcutLabel
 {

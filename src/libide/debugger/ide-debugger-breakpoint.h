@@ -20,8 +20,8 @@
 
 #include <glib-object.h>
 
-#include "ide-debugger-frame.h"
-#include "ide-debugger-types.h"
+#include "debugger/ide-debugger-frame.h"
+#include "debugger/ide-debugger-types.h"
 
 G_BEGIN_DECLS
 

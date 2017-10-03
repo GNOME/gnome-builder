@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-code-index-entries"
 
-#include "ide-code-index-entries.h"
+#include "symbols/ide-code-index-entries.h"
 
 G_DEFINE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, G_TYPE_OBJECT)
 

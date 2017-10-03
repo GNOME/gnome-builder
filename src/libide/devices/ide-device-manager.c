@@ -19,9 +19,9 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
-#include "ide-device.h"
-#include "ide-device-manager.h"
-#include "ide-device-provider.h"
+#include "devices/ide-device.h"
+#include "devices/ide-device-manager.h"
+#include "devices/ide-device-provider.h"
 
 #include "local/ide-local-device.h"
 #include "plugins/ide-extension-util.h"

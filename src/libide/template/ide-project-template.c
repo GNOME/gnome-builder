@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-project-template"
 
-#include "ide-project-template.h"
+#include "template/ide-project-template.h"
 
 G_DEFINE_INTERFACE (IdeProjectTemplate, ide_project_template, G_TYPE_OBJECT)
 

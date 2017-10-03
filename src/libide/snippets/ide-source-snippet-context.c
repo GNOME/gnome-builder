@@ -20,7 +20,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
-#include "ide-source-snippet-context.h"
+#include "snippets/ide-source-snippet-context.h"
 
 /**
  * SECTION:idesourcesnippetcontext:
