@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-21 05:37+0000\n"
-"PO-Revision-Date: 2017-09-21 08:43-0200\n"
+"POT-Creation-Date: 2017-10-01 16:00+0000\n"
+"PO-Revision-Date: 2017-10-04 18:55-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -232,7 +232,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5848
+#: libide/sourceview/ide-source-view.c:5860
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -683,7 +683,7 @@ msgstr "Editor"
 msgid "Build Preferences"
 msgstr "Preferências de compilação"
 
-#: data/gtk/menus.ui:69 libide/preferences/ide-preferences-perspective.c:124
+#: data/gtk/menus.ui:69 libide/preferences/ide-preferences-perspective.c:137
 msgid "Preferences"
 msgstr "Preferências"
 
@@ -780,16 +780,16 @@ msgstr "_Reduzir"
 msgid "Reset"
 msgstr "Restaurar"
 
-#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:205
+#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:204
 msgid "Regular expressions"
 msgstr "Expressões regulares"
 
-#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:220
+#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:219
 #: plugins/terminal/gb-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "Diferenciar maiúsculas de minúsculas"
 
-#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:235
+#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:234
 msgid "Match whole word only"
 msgstr "Corresponder apenas palavra inteira"
 
@@ -862,7 +862,7 @@ msgstr "Executar"
 #: data/org.gnome.Builder.desktop.in.in:3
 #: libide/application/ide-application.c:530
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:623
+#: libide/workbench/ide-workbench.c:627
 msgid "Builder"
 msgstr "Builder"
 
@@ -1288,7 +1288,7 @@ msgstr "Ambiente"
 msgid "Save File"
 msgstr "Salvar arquivo"
 
-#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:47
+#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:48
 #: libide/greeter/ide-greeter-perspective.ui:326
 #: libide/greeter/ide-greeter-perspective.ui:374
 msgid "_Cancel"
@@ -1807,19 +1807,19 @@ msgstr "Pesquisar por linguagens…"
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: libide/editor/ide-editor-search-bar.ui:108
+#: libide/editor/ide-editor-search-bar.ui:107
 msgid "Replace"
 msgstr "Substituir"
 
-#: libide/editor/ide-editor-search-bar.ui:121
+#: libide/editor/ide-editor-search-bar.ui:120
 msgid "Replace All"
 msgstr "Substituir tudo"
 
-#: libide/editor/ide-editor-search-bar.ui:143
+#: libide/editor/ide-editor-search-bar.ui:142
 msgid "Switch between Search and Search-and-Replace"
 msgstr "Alternar entre Pesquisar e Pesquisar-e-Substituir"
 
-#: libide/editor/ide-editor-search-bar.ui:166
+#: libide/editor/ide-editor-search-bar.ui:165
 #: plugins/terminal/gb-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
@@ -1924,11 +1924,11 @@ msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Localiza a próxima ocorrência"
 
-#: libide/editor/ide-editor-view.ui:39
+#: libide/editor/ide-editor-view.ui:40
 msgid "_Reload"
 msgstr "_Recarregar"
 
-#: libide/editor/ide-editor-view.ui:60
+#: libide/editor/ide-editor-view.ui:61
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
@@ -2584,7 +2584,6 @@ msgid "Line diagnostics"
 msgstr "Diagnósticos de linha"
 
 #: libide/preferences/ide-preferences-builtin.c:163
-#| msgid "Show an icon next to line numbers indiciating type of diagnostic"
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
 "Mostra um ícone próximo aos números de linha indicando o tipo de diagnóstico"
@@ -2885,11 +2884,11 @@ msgstr "Controle de versão"
 msgid "SDKs"
 msgstr "SDKs"
 
-#: libide/projects/ide-project.c:527
+#: libide/projects/ide-project.c:530
 msgid "Destination file must be within the project tree."
 msgstr "Destinação de arquivo deve estar dentro da árvore do projeto."
 
-#: libide/projects/ide-project.c:662
+#: libide/projects/ide-project.c:698
 msgid "File must be within the project tree."
 msgstr "Arquivo deve estar dentro da árvore do projeto."
 
@@ -2932,31 +2931,31 @@ msgstr "Falha ao abrir o diretório: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falha ao carregar arquivo: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5304
+#: libide/sourceview/ide-source-view.c:5316
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira “%s”"
 
-#: libide/sourceview/ide-source-view.c:5306
+#: libide/sourceview/ide-source-view.c:5318
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua “%s” com “%s”"
 
-#: libide/sourceview/ide-source-view.c:5420
+#: libide/sourceview/ide-source-view.c:5432
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: libide/sourceview/ide-source-view.c:5847
+#: libide/sourceview/ide-source-view.c:5859
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6080
+#: libide/sourceview/ide-source-view.c:6092
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
-#: libide/sourceview/ide-source-view.c:6106
+#: libide/sourceview/ide-source-view.c:6118
 msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
@@ -3068,7 +3067,7 @@ msgstr "Resultado da compilação"
 #. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
 #: libide/workbench/ide-omni-bar.ui:475
 msgid "true"
-msgstr "verdadeiro"
+msgstr "true"
 
 #: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
@@ -3090,7 +3089,7 @@ msgstr "Compila o projeto"
 msgid "Builder Statistics"
 msgstr "Estatísticas do Builder"
 
-#: libide/workbench/ide-workbench.c:621
+#: libide/workbench/ide-workbench.c:625
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
@@ -3754,8 +3753,8 @@ msgstr "Rede não disponível, pulando os downloads"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:326
-#: plugins/html-preview/html_preview_plugin/__init__.py:336
+#: plugins/html-preview/html_preview_plugin/__init__.py:327
+#: plugins/html-preview/html_preview_plugin/__init__.py:337
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 #: plugins/rustup/rustup_plugin/__init__.py:615
@@ -3786,12 +3785,12 @@ msgstr[1] "Mostrar mais %u runtimes"
 msgid "Flatpak Runtimes"
 msgstr "Runtimes do Flatpak"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:729
+#: plugins/flatpak/gbp-flatpak-runtime.c:743
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:731
+#: plugins/flatpak/gbp-flatpak-runtime.c:745
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3945,15 +3944,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Abrir visualização"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:322
+#: plugins/html-preview/html_preview_plugin/__init__.py:323
 msgid "Your computer is missing python3-docutils"
 msgstr "Seu computador não possui python3-docutils"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:332
+#: plugins/html-preview/html_preview_plugin/__init__.py:333
 msgid "Your computer is missing python3-sphinx"
 msgstr "Seu computador não possui python3-sphinx"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:375
+#: plugins/html-preview/html_preview_plugin/__init__.py:376
 msgid "(Preview)"
 msgstr "(Visualização)"
 
@@ -3997,20 +3996,20 @@ msgstr "MinGW 64-bit"
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
-#: plugins/notification/ide-notification-addin.c:69
+#: plugins/notification/ide-notification-addin.c:92
 msgid "Build successful"
 msgstr "Compilação concluída com sucesso"
 
-#: plugins/notification/ide-notification-addin.c:70
+#: plugins/notification/ide-notification-addin.c:93
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "O projeto “%s” concluiu a compilação"
 
-#: plugins/notification/ide-notification-addin.c:74
+#: plugins/notification/ide-notification-addin.c:97
 msgid "Build failed"
 msgstr "Compilação falhou"
 
-#: plugins/notification/ide-notification-addin.c:75
+#: plugins/notification/ide-notification-addin.c:98
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "O projeto “%s” falhou na compilação"
