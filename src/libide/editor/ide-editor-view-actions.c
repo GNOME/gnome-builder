@@ -404,7 +404,7 @@ ide_editor_view_actions_find (GSimpleAction *action,
   if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
     {
       g_autofree gchar *word = gtk_text_iter_get_slice (&begin, &end);
-      ide_editor_search_bar_set_search_text (self->search_bar, word);
+      ide_editor_search_set_search_text (self->search, word);
     }
 
   ide_editor_search_bar_set_replace_mode (self->search_bar, FALSE);
@@ -427,7 +427,7 @@ ide_editor_view_actions_find_replace (GSimpleAction *action,
   if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
     {
       g_autofree gchar *word = gtk_text_iter_get_slice (&begin, &end);
-      ide_editor_search_bar_set_search_text (self->search_bar, word);
+      ide_editor_search_set_search_text (self->search, word);
     }
 
   ide_editor_search_bar_set_replace_mode (self->search_bar, TRUE);

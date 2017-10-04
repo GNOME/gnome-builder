@@ -24,6 +24,7 @@
 
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-properties.h"
+#include "editor/ide-editor-search.h"
 #include "editor/ide-editor-search-bar.h"
 #include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-view-addin.h"
@@ -63,8 +64,7 @@ struct _IdeEditorView
   DzlBindingGroup         *buffer_bindings;
   DzlSignalGroup          *buffer_signals;
 
-  GtkSourceSearchSettings *search_settings;
-  GtkSourceSearchContext  *search_context;
+  IdeEditorSearch         *search;
 
   GCancellable            *destroy_cancellable;
 
@@ -89,38 +89,10 @@ struct _IdeEditorView
   guint                    show_map : 1;
 };
 
-struct _IdeEditorSearchBar
-{
-  DzlBin                   parent_instance;
-
-  /* Owned references */
-  DzlSignalGroup          *buffer_signals;
-  GtkSourceSearchContext  *context;
-  DzlSignalGroup          *context_signals;
-  GtkSourceSearchSettings *settings;
-  DzlSignalGroup          *settings_signals;
-  GdTaggedEntryTag        *search_entry_tag;
-
-  /* Template widgets */
-  GtkCheckButton          *case_sensitive;
-  GtkButton               *replace_all_button;
-  GtkButton               *replace_button;
-  GtkSearchEntry          *replace_entry;
-  GdTaggedEntry           *search_entry;
-  GtkGrid                 *search_options;
-  GtkCheckButton          *use_regex;
-  GtkCheckButton          *whole_word;
-
-  GSettings               *quick_highlight_settings;
-
-  guint                    quick_highlight_enabled : 1;
-};
-
 void _ide_editor_view_init_actions           (IdeEditorView        *self);
 void _ide_editor_view_init_settings          (IdeEditorView        *self);
 void _ide_editor_view_init_shortcuts         (IdeEditorView        *self);
 void _ide_editor_view_update_actions         (IdeEditorView        *self);
-void _ide_editor_search_bar_init_actions     (IdeEditorSearchBar   *self);
 void _ide_editor_search_bar_init_shortcuts   (IdeEditorSearchBar   *self);
 void _ide_editor_sidebar_set_open_pages      (IdeEditorSidebar     *self,
                                               GListModel           *open_pages);

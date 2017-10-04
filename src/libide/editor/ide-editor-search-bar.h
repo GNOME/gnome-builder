@@ -19,9 +19,9 @@
 #pragma once
 
 #include <dazzle.h>
+#include <gtksourceview/gtksource.h>
 
-#include "buffers/ide-buffer.h"
-#include "sourceview/ide-source-view.h"
+#include "editor/ide-editor-search.h"
 
 G_BEGIN_DECLS
 
@@ -29,15 +29,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorSearchBar, ide_editor_search_bar, IDE, EDITOR_SEARCH_BAR, DzlBin)
 
-GtkWidget *ide_editor_search_bar_new              (void);
-void       ide_editor_search_bar_set_search_text  (IdeEditorSearchBar      *self,
-                                                   const gchar             *word);
-gboolean   ide_editor_search_bar_get_replace_mode (IdeEditorSearchBar      *self);
-void       ide_editor_search_bar_set_replace_mode (IdeEditorSearchBar      *self,
-                                                   gboolean                 replace_mode);
-void       ide_editor_search_bar_set_context      (IdeEditorSearchBar      *self,
-                                                   GtkSourceSearchContext  *context);
-void       ide_editor_search_bar_set_settings     (IdeEditorSearchBar      *self,
-                                                   GtkSourceSearchSettings *settings);
+IdeEditorSearch *ide_editor_search_bar_get_search       (IdeEditorSearchBar *self);
+void             ide_editor_search_bar_set_search       (IdeEditorSearchBar *self,
+                                                         IdeEditorSearch    *search);
+gboolean         ide_editor_search_bar_get_show_options (IdeEditorSearchBar *self);
+void             ide_editor_search_bar_set_show_options (IdeEditorSearchBar *self,
+                                                         gboolean            show_options);
+gboolean         ide_editor_search_bar_get_replace_mode (IdeEditorSearchBar *self);
+void             ide_editor_search_bar_set_replace_mode (IdeEditorSearchBar *self,
+                                                         gboolean            replace_mode);
 
 G_END_DECLS

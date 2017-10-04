@@ -18,18 +18,44 @@
 
 #define G_LOG_DOMAIN "ide-editor-search-bar"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libgd/gd-tagged-entry.h>
 
-#include "ide-macros.h"
-
-#include "application/ide-application.h"
 #include "editor/ide-editor-private.h"
+#include "editor/ide-editor-search.h"
 #include "editor/ide-editor-search-bar.h"
+
+struct _IdeEditorSearchBar
+{
+  DzlBin                   parent_instance;
+
+  DzlSignalGroup          *search_signals;
+  DzlBindingGroup         *search_bindings;
+  IdeEditorSearch         *search;
+
+  GdTaggedEntryTag        *search_entry_tag;
+
+  GtkCheckButton          *case_sensitive;
+  GtkButton               *replace_all_button;
+  GtkButton               *replace_button;
+  GtkSearchEntry          *replace_entry;
+  GdTaggedEntry           *search_entry;
+  GtkGrid                 *search_options;
+  GtkCheckButton          *use_regex;
+  GtkCheckButton          *whole_word;
+  GtkLabel                *search_text_error;
+
+  guint                    match_source;
+
+  guint                    show_options : 1;
+  guint                    replace_mode : 1;
+};
 
 enum {
   PROP_0,
-  PROP_CONTEXT,
-  PROP_SETTINGS,
+  PROP_REPLACE_MODE,
+  PROP_SHOW_OPTIONS,
   N_PROPS
 };
 
@@ -48,7 +74,7 @@ ide_editor_search_bar_get_replace_mode (IdeEditorSearchBar *self)
 {
   g_return_val_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self), FALSE);
 
-  return gtk_widget_get_visible (GTK_WIDGET (self->replace_entry));
+  return self->replace_mode;
 }
 
 void
@@ -57,9 +83,15 @@ ide_editor_search_bar_set_replace_mode (IdeEditorSearchBar *self,
 {
   g_return_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self));
 
-  gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), replace_mode);
-  gtk_widget_set_visible (GTK_WIDGET (self->replace_button), replace_mode);
-  gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), replace_mode);
+  replace_mode = !!replace_mode;
+
+  if (replace_mode != self->replace_mode)
+    {
+      self->replace_mode = replace_mode;
+      gtk_widget_set_visible (GTK_WIDGET (self->replace_entry), replace_mode);
+      gtk_widget_set_visible (GTK_WIDGET (self->replace_button), replace_mode);
+      gtk_widget_set_visible (GTK_WIDGET (self->replace_all_button), replace_mode);
+    }
 }
 
 static gboolean
@@ -69,19 +101,23 @@ maybe_escape_regex (GBinding     *binding,
                     gpointer      user_data)
 {
   IdeEditorSearchBar *self = user_data;
+  const gchar *entry_text;
 
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (from_value != NULL);
   g_assert (to_value != NULL);
 
-  if (g_value_get_string (from_value) == NULL)
-    g_value_set_static_string (to_value, "");
+  entry_text = g_value_get_string (from_value);
+
+  if (entry_text == NULL)
+    {
+      g_value_set_static_string (to_value, "");
+    }
   else
     {
-      const gchar *entry_text = g_value_get_string (from_value);
       g_autofree gchar *unescaped = NULL;
 
-      if (!gtk_source_search_settings_get_regex_enabled (self->settings))
+      if (self->search != NULL && !ide_editor_search_get_regex_enabled (self->search))
         entry_text = unescaped = gtk_source_utils_unescape_search_text (entry_text);
 
       g_value_set_string (to_value, entry_text);
@@ -98,6 +134,8 @@ pacify_null_text (GBinding     *binding,
 {
   g_assert (from_value != NULL);
   g_assert (to_value != NULL);
+  g_assert (G_VALUE_HOLDS_STRING (from_value));
+  g_assert (G_VALUE_HOLDS_STRING (to_value));
 
   if (g_value_get_string (from_value) == NULL)
     g_value_set_static_string (to_value, "");
@@ -105,290 +143,6 @@ pacify_null_text (GBinding     *binding,
     g_value_copy (from_value, to_value);
 
   return TRUE;
-}
-
-static void
-update_replace_actions_sensitivity (IdeEditorSearchBar *self)
-{
-  g_autoptr(GError) regex_error = NULL;
-  g_autoptr(GError) replace_regex_error = NULL;
-  GtkSourceBuffer *buffer;
-  GtkTextIter begin;
-  GtkTextIter end;
-  const gchar *search_text;
-  const gchar *replace_text;
-  gint pos;
-  gint count;
-  gboolean enable_replace;
-  gboolean enable_replace_all;
-  gboolean replace_regex_valid;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-
-  if (self->context == NULL || self->settings == NULL)
-    return;
-
-  buffer = gtk_source_search_context_get_buffer (self->context);
-
-  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
-  replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
-
-  /* Gather enough info to determine if Replace or Replace All would make sense */
-  search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
-  pos = gtk_source_search_context_get_occurrence_position (self->context, &begin, &end);
-  count = gtk_source_search_context_get_occurrences_count (self->context);
-  regex_error = gtk_source_search_context_get_regex_error (self->context);
-  replace_regex_valid = gtk_source_search_settings_get_regex_enabled (self->settings) ?
-                        g_regex_check_replacement (replace_text, NULL, &replace_regex_error) :
-                        TRUE;
-
-  enable_replace = (!ide_str_empty0 (search_text) &&
-                    regex_error == NULL &&
-                    replace_regex_valid &&
-                    pos > 0);
-
-  enable_replace_all = (!ide_str_empty0 (search_text) &&
-                        regex_error == NULL &&
-                        replace_regex_valid &&
-                        count > 0);
-
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "search-bar", "replace",
-                             "enabled", enable_replace,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "search-bar", "replace-all",
-                             "enabled", enable_replace_all,
-                             NULL);
-}
-
-static void
-on_notify_search_text (IdeEditorSearchBar      *self,
-                       GParamSpec              *pspec,
-                       GtkSourceSearchSettings *search_settings)
-{
-  GtkWidget *widget;
-  IdeEditorView *editor_view;
-  IdeSourceView *view;
-  GtkSourceSearchContext *view_search_context;
-  GtkSourceSearchSettings *view_search_settings;
-  const gchar *search_text;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
-
-  /* We set the view context search text for keymodes searching */
-  if (self->context == NULL)
-    {
-      if (NULL != (widget = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_EDITOR_VIEW)))
-        {
-          editor_view = IDE_EDITOR_VIEW (widget);
-          view = ide_editor_view_get_view (editor_view);
-
-          search_text = gtk_source_search_settings_get_search_text (search_settings);
-
-          if (NULL != (view_search_context = ide_source_view_get_search_context (view)))
-            {
-              view_search_settings = gtk_source_search_context_get_settings (view_search_context);
-              gtk_source_search_settings_set_search_text (view_search_settings, search_text);
-            }
-        }
-    }
-
-  update_replace_actions_sensitivity (self);
-}
-
-static void
-set_position_label (IdeEditorSearchBar *self,
-                    const gchar        *text)
-{
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-
-  if (ide_str_empty0 (text))
-    {
-      if (self->search_entry_tag != NULL)
-        {
-          gd_tagged_entry_remove_tag (self->search_entry, self->search_entry_tag);
-          g_clear_object (&self->search_entry_tag);
-        }
-
-      return;
-    }
-
-  if (self->search_entry_tag == NULL)
-    {
-      self->search_entry_tag = gd_tagged_entry_tag_new ("");
-      gd_tagged_entry_add_tag (self->search_entry, self->search_entry_tag);
-      gd_tagged_entry_tag_set_style (self->search_entry_tag,
-                                     "search-occurrences-tag");
-    }
-
-  gd_tagged_entry_tag_set_label (self->search_entry_tag, text);
-}
-
-static void
-update_search_position_label (IdeEditorSearchBar *self)
-{
-  g_autofree gchar *text = NULL;
-  GtkStyleContext *context;
-  GtkSourceBuffer *buffer;
-  GtkTextIter begin;
-  GtkTextIter end;
-  const gchar *search_text;
-  gint count;
-  gint pos;
-
-  g_return_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self));
-
-  if (self->settings == NULL || self->context == NULL)
-    return;
-
-  buffer = gtk_source_search_context_get_buffer (self->context);
-
-  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
-  pos = gtk_source_search_context_get_occurrence_position (self->context, &begin, &end);
-  count = gtk_source_search_context_get_occurrences_count (self->context);
-
-  if ((pos == -1) || (count == -1))
-    {
-      /*
-       * We are not yet done scanning the buffer.
-       * We will be updated when we know more, so just hide it for now.
-       */
-      set_position_label (self, NULL);
-      return;
-    }
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self->search_entry));
-  search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
-
-  /* We use our own error class because we don't want to colide with styling
-   * from GTK+ themes.
-   */
-  if ((count == 0) && !ide_str_empty0 (search_text))
-    gtk_style_context_add_class (context, "search-missing");
-  else
-    gtk_style_context_remove_class (context, "search-missing");
-
-  /* translators: first %u is the Nth position of second %u N occurrences */
-  text = g_strdup_printf (_("%u of %u"), pos, count);
-  set_position_label (self, text);
-}
-
-static void
-on_notify_occurrences_count (IdeEditorSearchBar     *self,
-                             GParamSpec             *pspec,
-                             GtkSourceSearchContext *search_context)
-{
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
-
-  update_search_position_label (self);
-  update_replace_actions_sensitivity (self);
-}
-
-static void
-on_cursor_moved (IdeEditorSearchBar *self,
-                 const GtkTextIter  *iter,
-                 IdeBuffer          *buffer)
-{
-  gint count;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (iter != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  count = gtk_source_search_context_get_occurrences_count (self->context);
-
-  if (count != -1)
-    {
-      update_search_position_label (self);
-      update_replace_actions_sensitivity (self);
-    }
-}
-
-static void
-on_notify_regex_error (IdeEditorSearchBar     *self,
-                       GParamSpec             *pspec,
-                       GtkSourceSearchContext *search_context)
-{
-  g_autoptr(GError) error = NULL;
-  PangoAttrList *attrs = NULL;
-  const gchar *tooltip_text = NULL;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
-
-  /*
-   * If the regular expression is invalid, add a white squiggly underline;
-   * otherwise remove it. We will also set the tooltip-text to the error
-   * that occurred while parsing the regex.
-   */
-
-  error = gtk_source_search_context_get_regex_error (search_context);
-
-  if (error != NULL)
-    {
-      attrs = pango_attr_list_new ();
-      pango_attr_list_insert (attrs, pango_attr_underline_new (PANGO_UNDERLINE_ERROR));
-      pango_attr_list_insert (attrs, pango_attr_underline_color_new (65535, 65535, 65535));
-      tooltip_text = error->message;
-    }
-
-  gtk_entry_set_attributes (GTK_ENTRY (self->search_entry), attrs);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (self->search_entry), tooltip_text);
-
-  update_replace_actions_sensitivity (self);
-
-  pango_attr_list_unref (attrs);
-}
-
-static void
-check_replace_text (IdeEditorSearchBar *self)
-{
-  g_autoptr(GError) error = NULL;
-  PangoAttrList *attrs = NULL;
-  const gchar *tooltip_text = NULL;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (self->settings != NULL);
-
-  if (self->context == NULL)
-    return;
-
-  /*
-   * If the replace expression is invalid, add a white squiggly underline;
-   * otherwise remove it. Also set the error message to the tooltip text
-   * so that the user can get some info on the error.
-   */
-  if (gtk_source_search_settings_get_regex_enabled (self->settings))
-    {
-      const gchar *replace_text;
-
-      replace_text = gtk_entry_get_text (GTK_ENTRY (self->replace_entry));
-
-      if (!g_regex_check_replacement (replace_text, NULL, &error))
-        {
-          attrs = pango_attr_list_new ();
-          pango_attr_list_insert (attrs, pango_attr_underline_new (PANGO_UNDERLINE_ERROR));
-          pango_attr_list_insert (attrs, pango_attr_underline_color_new (65535, 65535, 65535));
-          tooltip_text = error->message;
-        }
-    }
-
-  gtk_entry_set_attributes (GTK_ENTRY (self->replace_entry), attrs);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (self->replace_entry), tooltip_text);
-
-  pango_attr_list_unref (attrs);
-}
-
-static void
-on_notify_regex_enabled (IdeEditorSearchBar      *self,
-                         GParamSpec              *pspec,
-                         GtkSourceSearchSettings *search_settings)
-{
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
-
-  check_replace_text (self);
 }
 
 static void
@@ -406,63 +160,6 @@ ide_editor_search_bar_grab_focus (GtkWidget *widget)
 }
 
 static void
-ide_editor_search_bar_bind_context (IdeEditorSearchBar     *self,
-                                    GtkSourceSearchContext *context,
-                                    DzlSignalGroup         *context_signals)
-{
-  GtkSourceBuffer *buffer;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
-  g_assert (DZL_IS_SIGNAL_GROUP (context_signals));
-
-  self->quick_highlight_enabled = g_settings_get_boolean (self->quick_highlight_settings, "enabled");
-  if (self->quick_highlight_enabled)
-    g_settings_set_boolean (self->quick_highlight_settings, "enabled", FALSE);
-
-  buffer = gtk_source_search_context_get_buffer (context);
-  dzl_signal_group_set_target (self->buffer_signals, buffer);
-}
-
-static void
-ide_editor_search_bar_unbind_context (IdeEditorSearchBar *self,
-                                      DzlSignalGroup     *context_signals)
-{
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (DZL_IS_SIGNAL_GROUP (context_signals));
-
-  if (self->quick_highlight_enabled)
-    g_settings_set_boolean (self->quick_highlight_settings, "enabled", TRUE);
-
-  if (self->buffer_signals != NULL)
-    dzl_signal_group_set_target (self->buffer_signals, NULL);
-}
-
-static void
-ide_editor_search_bar_bind_settings (IdeEditorSearchBar      *self,
-                                     GtkSourceSearchSettings *settings,
-                                     DzlSignalGroup          *settings_signals)
-{
-  g_autoptr(DzlPropertiesGroup) group = NULL;
-
-  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (settings));
-  g_assert (DZL_IS_SIGNAL_GROUP (settings_signals));
-
-  g_object_bind_property_full (self->search_entry, "text",
-                               settings, "search-text",
-                               G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL,
-                               maybe_escape_regex, pacify_null_text,
-                               self, NULL);
-
-  group = dzl_properties_group_new (G_OBJECT (settings));
-  dzl_properties_group_add_all_properties (group);
-  gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "search-settings",
-                                  G_ACTION_GROUP (group));
-}
-
-static void
 search_entry_populate_popup (IdeEditorSearchBar *self,
                              GtkWidget          *widget,
                              GdTaggedEntry      *entry)
@@ -473,10 +170,17 @@ search_entry_populate_popup (IdeEditorSearchBar *self,
 
   if (GTK_IS_MENU (widget))
     {
-      DzlApplication *app = DZL_APPLICATION (IDE_APPLICATION_DEFAULT);
+      DzlApplication *app = DZL_APPLICATION (g_application_get_default ());
       GMenu *menu = dzl_application_get_menu_by_id (app, "ide-editor-search-bar-entry-menu");
+
       gtk_menu_shell_bind_model (GTK_MENU_SHELL (widget), G_MENU_MODEL (menu), NULL, TRUE);
     }
+}
+
+static void
+ide_editor_search_bar_real_stop_search (IdeEditorSearchBar *self)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
 }
 
 static void
@@ -496,10 +200,8 @@ search_entry_previous_match (IdeEditorSearchBar *self,
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (GTK_IS_SEARCH_ENTRY (entry));
 
-  dzl_gtk_widget_action (GTK_WIDGET (self),
-                         "editor-view",
-                         "move-previous-search-result",
-                         NULL);
+  if (self->search != NULL)
+    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_BACKWARD);
 }
 
 static void
@@ -509,23 +211,130 @@ search_entry_next_match (IdeEditorSearchBar *self,
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (GTK_IS_SEARCH_ENTRY (entry));
 
-  dzl_gtk_widget_action (GTK_WIDGET (self),
-                         "editor-view",
-                         "move-next-search-result",
-                         NULL);
+  if (self->search != NULL)
+    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
 }
 
 static void
 search_entry_activate (IdeEditorSearchBar *self,
-                       GtkSearchEntry     *entry)
+                       GdTaggedEntry      *entry)
 {
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+  g_assert (GD_IS_TAGGED_ENTRY (entry));
 
-  dzl_gtk_widget_action (GTK_WIDGET (self),
-                         "editor-view",
-                         "activate-next-search-result",
-                         NULL);
+  if (self->search != NULL)
+    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
+
+  g_signal_emit (self, signals [STOP_SEARCH], 0);
+}
+
+static void
+search_entry_changed (IdeEditorSearchBar *self,
+                      GdTaggedEntry      *entry)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (GD_IS_TAGGED_ENTRY (entry));
+
+  /*
+   * After the text has been changed, ask the IdeEditorSearch to see if
+   * the search request is valid. Highlight the invalid range of text with
+   * squigglies to denote what is broken.
+   *
+   * Also, add a tooltip to ensure that the user can figure out what they
+   * broke in the process.
+   */
+
+  if (self->search != NULL)
+    {
+      g_autoptr(GError) error = NULL;
+      PangoAttrList *attrs = NULL;
+      guint begin = 0;
+      guint end = 0;
+
+      if (ide_editor_search_get_search_text_invalid (self->search, &begin, &end, &error))
+        {
+          PangoAttribute *attr;
+
+          attrs = pango_attr_list_new ();
+
+          attr = pango_attr_underline_new (PANGO_UNDERLINE_ERROR);
+          attr->start_index = begin;
+          attr->end_index = end;
+          pango_attr_list_insert (attrs, attr);
+
+          attr = pango_attr_underline_color_new (65535, 0, 0);
+          pango_attr_list_insert (attrs, attr);
+        }
+
+      gtk_entry_set_attributes (GTK_ENTRY (entry), attrs);
+      gtk_label_set_label (self->search_text_error,
+                           error ? error->message : NULL);
+      gtk_widget_set_visible (GTK_WIDGET (self->search_text_error), error != NULL);
+
+      g_clear_pointer (&attrs, pango_attr_list_unref);
+    }
+}
+
+static gboolean
+update_match_positions (gpointer user_data)
+{
+  IdeEditorSearchBar *self = user_data;
+  g_autofree gchar *str = NULL;
+  guint count;
+  guint pos;
+
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+
+  self->match_source = 0;
+
+  count = ide_editor_search_get_match_count (self->search);
+  pos = ide_editor_search_get_match_position (self->search);
+
+  if (count > 0)
+    str = g_strdup_printf (_("%u of %u"), pos, count);
+
+  if (str == NULL)
+    {
+      if (self->search_entry_tag != NULL)
+        {
+          gd_tagged_entry_remove_tag (self->search_entry,
+                                      self->search_entry_tag);
+          g_clear_object (&self->search_entry_tag);
+        }
+    }
+  else
+    {
+      if (self->search_entry_tag == NULL)
+        {
+          self->search_entry_tag = gd_tagged_entry_tag_new ("");
+          gd_tagged_entry_add_tag (self->search_entry, self->search_entry_tag);
+          gd_tagged_entry_tag_set_style (self->search_entry_tag,
+                                         "search-occurrences-tag");
+        }
+
+      gd_tagged_entry_tag_set_label (self->search_entry_tag, str);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_editor_search_bar_notify_match (IdeEditorSearchBar *self,
+                                    GParamSpec         *pspec,
+                                    IdeEditorSearch    *search)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (IDE_IS_EDITOR_SEARCH (search));
+
+  /* Queue an update to our match positions, but only
+   * do so after returning to the main loop to avoid
+   * doing lots of extra work during heavy scanning.
+   */
+  if (self->match_source == 0)
+    self->match_source = gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                                                    update_match_positions,
+                                                    g_object_ref (self),
+                                                    g_object_unref);
 }
 
 static void
@@ -533,13 +342,12 @@ ide_editor_search_bar_destroy (GtkWidget *widget)
 {
   IdeEditorSearchBar *self = (IdeEditorSearchBar *)widget;
 
-  g_clear_object (&self->buffer_signals);
-  g_clear_object (&self->context);
-  g_clear_object (&self->context_signals);
+  dzl_clear_source (&self->match_source);
+
+  g_clear_object (&self->search_signals);
+  g_clear_object (&self->search_bindings);
+  g_clear_object (&self->search);
   g_clear_object (&self->search_entry_tag);
-  g_clear_object (&self->settings);
-  g_clear_object (&self->settings_signals);
-  g_clear_object (&self->quick_highlight_settings);
 
   GTK_WIDGET_CLASS (ide_editor_search_bar_parent_class)->destroy (widget);
 }
@@ -554,12 +362,12 @@ ide_editor_search_bar_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_CONTEXT:
-      g_value_set_object (value, self->context);
+    case PROP_REPLACE_MODE:
+      g_value_set_boolean (value, ide_editor_search_bar_get_replace_mode (self));
       break;
 
-    case PROP_SETTINGS:
-      g_value_set_object (value, self->settings);
+    case PROP_SHOW_OPTIONS:
+      g_value_set_boolean (value, ide_editor_search_bar_get_show_options (self));
       break;
 
     default:
@@ -577,12 +385,12 @@ ide_editor_search_bar_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CONTEXT:
-      ide_editor_search_bar_set_context (self, g_value_get_object (value));
+    case PROP_REPLACE_MODE:
+      ide_editor_search_bar_set_replace_mode (self, g_value_get_boolean (value));
       break;
 
-    case PROP_SETTINGS:
-      ide_editor_search_bar_set_settings (self, g_value_get_object (value));
+    case PROP_SHOW_OPTIONS:
+      ide_editor_search_bar_set_show_options (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -602,30 +410,24 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
   widget_class->destroy = ide_editor_search_bar_destroy;
   widget_class->grab_focus = ide_editor_search_bar_grab_focus;
 
-  properties [PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         "Context",
-                         "The search context for locating matches",
-                         GTK_SOURCE_TYPE_SEARCH_CONTEXT,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  properties [PROP_REPLACE_MODE] =
+    g_param_spec_boolean ("replace-mode", NULL, NULL, FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  properties [PROP_SETTINGS] =
-    g_param_spec_object ("settings",
-                         "Settings",
-                         "The search settings for locating matches",
-                         GTK_SOURCE_TYPE_SEARCH_SETTINGS,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  properties [PROP_SHOW_OPTIONS] =
+    g_param_spec_boolean ("show-options", NULL, NULL, FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals [STOP_SEARCH] =
-    g_signal_new ("stop-search",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
+    g_signal_new_class_handler ("stop-search",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_editor_search_bar_real_stop_search),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-search-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, case_sensitive);
@@ -634,6 +436,7 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, search_options);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, search_text_error);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, use_regex);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, whole_word);
 
@@ -647,58 +450,52 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  self->search_signals = dzl_signal_group_new (IDE_TYPE_EDITOR_SEARCH);
+
+  dzl_signal_group_connect_swapped (self->search_signals,
+                                    "notify::match-count",
+                                    G_CALLBACK (ide_editor_search_bar_notify_match),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->search_signals,
+                                    "notify::match-position",
+                                    G_CALLBACK (ide_editor_search_bar_notify_match),
+                                    self);
+
+  self->search_bindings = dzl_binding_group_new ();
+
+  dzl_binding_group_bind_full (self->search_bindings, "search-text",
+                               self->search_entry, "text",
+                               G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL,
+                               maybe_escape_regex, pacify_null_text, self, NULL);
+
+  dzl_binding_group_bind_full (self->search_bindings, "replacement-text",
+                               self->replace_entry, "text",
+                               G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL,
+                               pacify_null_text, pacify_null_text, NULL, NULL);
+
+  dzl_binding_group_bind (self->search_bindings, "regex-enabled",
+                          self->use_regex, "active",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+  dzl_binding_group_bind (self->search_bindings, "at-word-boundaries",
+                          self->whole_word, "active",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+  dzl_binding_group_bind (self->search_bindings, "case-sensitive",
+                          self->case_sensitive, "active",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
   g_signal_connect_swapped (self->search_entry,
                             "activate",
                             G_CALLBACK (search_entry_activate),
                             self);
 
-  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
-
-  dzl_signal_group_connect_swapped (self->buffer_signals,
-                                    "cursor-moved",
-                                    G_CALLBACK (on_cursor_moved),
-                                    self);
-
-  self->context_signals = dzl_signal_group_new (GTK_SOURCE_TYPE_SEARCH_CONTEXT);
-
-  dzl_signal_group_connect_swapped (self->context_signals,
-                                    "notify::occurrences-count",
-                                    G_CALLBACK (on_notify_occurrences_count),
-                                    self);
-
-  dzl_signal_group_connect_swapped (self->context_signals,
-                                    "notify::regex-error",
-                                    G_CALLBACK (on_notify_regex_error),
-                                    self);
-
-  g_signal_connect_swapped (self->context_signals,
-                            "bind",
-                            G_CALLBACK (ide_editor_search_bar_bind_context),
-                            self);
-
-  g_signal_connect_swapped (self->context_signals,
-                            "unbind",
-                            G_CALLBACK (ide_editor_search_bar_unbind_context),
-                            self);
-
-  self->settings_signals = dzl_signal_group_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS);
-
-  dzl_signal_group_connect_swapped (self->settings_signals,
-                                    "notify::search-text",
-                                    G_CALLBACK (on_notify_search_text),
-                                    self);
-
-  dzl_signal_group_connect_swapped (self->settings_signals,
-                                    "notify::regex-enabled",
-                                    G_CALLBACK (on_notify_regex_enabled),
-                                    self);
-
-  g_signal_connect_swapped (self->settings_signals,
-                            "bind",
-                            G_CALLBACK (ide_editor_search_bar_bind_settings),
-                            self);
-
-  dzl_widget_action_group_attach (self->search_entry, "entry");
+  g_signal_connect_data (self->search_entry,
+                         "changed",
+                         G_CALLBACK (search_entry_changed),
+                         self, NULL,
+                         G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_swapped (self->search_entry,
                             "populate-popup",
@@ -720,58 +517,58 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                             G_CALLBACK (search_entry_next_match),
                             self);
 
-  self->quick_highlight_settings =
-    g_settings_new_with_path ("org.gnome.builder.extension-type",
-                              "/org/gnome/builder/extension-types/quick-highlight-plugin/GbpQuickHighlightViewAddin/");
-
-  _ide_editor_search_bar_init_actions (self);
   _ide_editor_search_bar_init_shortcuts (self);
 }
 
-GtkWidget *
-ide_editor_search_bar_new (void)
+gboolean
+ide_editor_search_bar_get_show_options (IdeEditorSearchBar *self)
 {
-  return g_object_new (IDE_TYPE_EDITOR_SEARCH_BAR, NULL);
+  g_return_val_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self), FALSE);
+
+  return self->show_options;
 }
 
 void
-ide_editor_search_bar_set_settings (IdeEditorSearchBar      *self,
-                                    GtkSourceSearchSettings *settings)
+ide_editor_search_bar_set_show_options (IdeEditorSearchBar *self,
+                                        gboolean            show_options)
 {
   g_return_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_return_if_fail (!settings || GTK_SOURCE_IS_SEARCH_SETTINGS (settings));
 
-  if (g_set_object (&self->settings, settings))
+  show_options = !!show_options;
+
+  if (self->show_options != show_options)
     {
-      dzl_signal_group_set_target (self->settings_signals, settings);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTINGS]);
+      self->show_options = show_options;
+      gtk_widget_set_visible (GTK_WIDGET (self->search_options), show_options);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_OPTIONS]);
     }
 }
 
-void
-ide_editor_search_bar_set_context (IdeEditorSearchBar     *self,
-                                   GtkSourceSearchContext *context)
+/**
+ * ide_editor_search_bar_get_search:
+ * @self: a #IdeEditorSearchBar
+ *
+ * Gets the #IdeEditorSearch used by the search bar.
+ *
+ * Returns: (transfer none) (nullable): An #IdeEditorSearch or %NULL.
+ */
+IdeEditorSearch *
+ide_editor_search_bar_get_search (IdeEditorSearchBar *self)
 {
-  g_return_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_return_if_fail (!context || GTK_SOURCE_IS_SEARCH_CONTEXT (context));
+  g_return_val_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self), NULL);
 
-
-  if (g_set_object (&self->context, context))
-    {
-      dzl_signal_group_set_target (self->context_signals, context);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
-    }
+  return self->search;
 }
 
 void
-ide_editor_search_bar_set_search_text (IdeEditorSearchBar *self,
-                                       const gchar        *search_text)
+ide_editor_search_bar_set_search (IdeEditorSearchBar *self,
+                                  IdeEditorSearch    *search)
 {
   g_return_if_fail (IDE_IS_EDITOR_SEARCH_BAR (self));
 
-  if (search_text == NULL)
-    search_text = "";
-
-  if (self->settings != NULL)
-    gtk_source_search_settings_set_search_text (self->settings, search_text);
+  if (g_set_object (&self->search, search))
+    {
+      dzl_signal_group_set_target (self->search_signals, search);
+      dzl_binding_group_set_source (self->search_bindings, search);
+    }
 }

@@ -1,6 +1,7 @@
 editor_headers = [
   'ide-editor-addin.h',
   'ide-editor-perspective.h',
+  'ide-editor-search.h',
   'ide-editor-sidebar.h',
   'ide-editor-utilities.h',
   'ide-editor-view-addin.h',
@@ -10,6 +11,7 @@ editor_headers = [
 editor_sources = [
   'ide-editor-addin.c',
   'ide-editor-perspective.c',
+  'ide-editor-search.c',
   'ide-editor-sidebar.c',
   'ide-editor-utilities.c',
   'ide-editor-view-addin.c',
@@ -30,7 +32,6 @@ editor_private_sources = [
   'ide-editor-properties.c',
   'ide-editor-properties.h',
   'ide-editor-search-bar.c',
-  'ide-editor-search-bar-actions.c',
   'ide-editor-search-bar-shortcuts.c',
   'ide-editor-search-bar.h',
   'ide-editor-view-actions.c',

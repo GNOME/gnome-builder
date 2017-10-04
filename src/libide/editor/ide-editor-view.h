@@ -21,6 +21,7 @@
 #include <gtksourceview/gtksource.h>
 
 #include "buffers/ide-buffer.h"
+#include "editor/ide-editor-search.h"
 #include "layout/ide-layout-view.h"
 #include "sourceview/ide-source-view.h"
 
@@ -32,6 +33,7 @@ G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayou
 
 IdeBuffer         *ide_editor_view_get_buffer                  (IdeEditorView     *self);
 IdeSourceView     *ide_editor_view_get_view                    (IdeEditorView     *self);
+IdeEditorSearch   *ide_editor_view_get_search                  (IdeEditorView     *self);
 const gchar       *ide_editor_view_get_language_id             (IdeEditorView     *self);
 void               ide_editor_view_scroll_to_line              (IdeEditorView     *self,
                                                                 guint              line);

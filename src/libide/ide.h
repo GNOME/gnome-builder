@@ -91,6 +91,7 @@ G_BEGIN_DECLS
 #include "documentation/ide-documentation-provider.h"
 #include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-search.h"
 #include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-utilities.h"
 #include "editor/ide-editor-view-addin.h"

@@ -37,6 +37,7 @@ enum {
   PROP_0,
   PROP_AUTO_HIDE_MAP,
   PROP_BUFFER,
+  PROP_SEARCH,
   PROP_SHOW_MAP,
   PROP_VIEW,
   N_PROPS
@@ -534,7 +535,6 @@ search_revealer_notify_reveal_child (IdeEditorView *self,
                                      GtkRevealer   *revealer)
 {
   GtkSourceCompletion *completion;
-  GtkSourceSearchContext *view_search_context;
 
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
   g_return_if_fail (pspec != NULL);
@@ -544,45 +544,14 @@ search_revealer_notify_reveal_child (IdeEditorView *self,
 
   if (!gtk_revealer_get_reveal_child (revealer))
     {
-      /*
-       * Clear the context from the search bar so it doesn't try to
-       * keep updating various UI bits while the bar is not visible.
-       */
-      ide_editor_search_bar_set_context (self->search_bar, NULL);
-
-      /*
-       * If there are no occurrences currently, just destroy the search context
-       * so that we can avoid tracking buffer changes.
-       */
-      if (self->search_context != NULL &&
-          gtk_source_search_context_get_occurrences_count (self->search_context) <= 0)
-        g_clear_object (&self->search_context);
-
-      /*
-       * We might still need the search context so the user can move to the
-       * prev/next search result. However, we do not any longer need to have
-       * highlight enabled.
-       */
-      if (self->search_context != NULL)
-        gtk_source_search_context_set_highlight (self->search_context, FALSE);
+      ide_editor_search_end_interactive (self->search);
 
       /* Restore completion that we blocked below. */
       gtk_source_completion_unblock_interactive (completion);
     }
   else
     {
-      if (self->search_context == NULL)
-        self->search_context = g_object_new (GTK_SOURCE_TYPE_SEARCH_CONTEXT,
-                                             "buffer", self->buffer,
-                                             "settings", self->search_settings,
-                                             NULL);
-
-      gtk_source_search_context_set_highlight (self->search_context, TRUE);
-      ide_editor_search_bar_set_context (self->search_bar, self->search_context);
-
-      /* We need to hide the search highlight on the view context */
-      if (NULL != (view_search_context = ide_source_view_get_search_context (self->source_view)))
-        gtk_source_search_context_set_highlight (view_search_context, FALSE);
+      ide_editor_search_begin_interactive (self->search);
 
       /*
        * Block the completion while the search bar is set. It only
@@ -676,7 +645,8 @@ ide_editor_view_constructed (GObject *object)
                             G_CALLBACK (search_revealer_notify_reveal_child),
                             self);
 
-  ide_editor_search_bar_set_settings (self->search_bar, self->search_settings);
+  self->search = ide_editor_search_new (GTK_SOURCE_VIEW (self->source_view));
+  ide_editor_search_bar_set_search (self->search_bar, self->search);
 
   ide_editor_view_load_fonts (self);
   ide_editor_view_update_map (self);
@@ -698,8 +668,7 @@ ide_editor_view_destroy (GtkWidget *widget)
   g_cancellable_cancel (self->destroy_cancellable);
   g_clear_object (&self->destroy_cancellable);
 
-  g_clear_object (&self->search_settings);
-  g_clear_object (&self->search_context);
+  g_clear_object (&self->search);
   g_clear_object (&self->editor_settings);
   g_clear_object (&self->insight_settings);
 
@@ -748,6 +717,10 @@ ide_editor_view_get_property (GObject    *object,
 
     case PROP_VIEW:
       g_value_set_object (value, ide_editor_view_get_view (self));
+      break;
+
+    case PROP_SEARCH:
+      g_value_set_object (value, ide_editor_view_get_search (self));
       break;
 
     case PROP_SHOW_MAP:
@@ -809,6 +782,13 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
                          "The buffer for the view",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SEARCH] =
+    g_param_spec_object ("search",
+                         "Search",
+                         "An search helper for the document",
+                         IDE_TYPE_EDITOR_SEARCH,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SHOW_MAP] =
     g_param_spec_boolean ("show-map",
@@ -903,23 +883,6 @@ ide_editor_view_init (IdeEditorView *self)
                            G_CALLBACK (ide_editor_view_hide_reload_bar),
                            self,
                            G_CONNECT_SWAPPED);
-
-  /*
-   * Setup our search context. The sourceview has it's own search
-   * infrastructure that we want to reserve for use by vim keybindings
-   * and other transient keybinding features. Instead, we have our own
-   * that can have separate state from those.
-   *
-   * We try to avoid creating/maintaining the search-context except
-   * when necessary because has some expensive operations associated
-   * with it's handling of changes to the underlying buffer.
-   */
-  self->search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
-                                        "at-word-boundaries", FALSE,
-                                        "case-sensitive", FALSE,
-                                        "wrap-around", TRUE,
-                                        NULL);
-
 
   /* Setup bindings for the buffer. */
   self->buffer_bindings = dzl_binding_group_new ();
@@ -1206,31 +1169,6 @@ ide_editor_view_move_previous_error (IdeEditorView *self)
   g_signal_emit_by_name (self->source_view, "move-error", GTK_DIR_UP);
 }
 
-static void
-ide_editor_view_move_next_search_result_cb (GObject      *object,
-                                            GAsyncResult *result,
-                                            gpointer      user_data)
-{
-  GtkSourceSearchContext *context = (GtkSourceSearchContext *)object;
-  g_autoptr(IdeEditorView) self = user_data;
-  g_autoptr(GError) error = NULL;
-  GtkTextIter begin;
-  GtkTextIter end;
-  gboolean has_wrapped = FALSE;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (self->buffer == NULL)
-    return;
-
-  if (gtk_source_search_context_forward_finish2 (context, result, &begin, &end, &has_wrapped, &error))
-    {
-      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
-      ide_source_view_scroll_to_insert (self->source_view);
-    }
-}
-
 /**
  * ide_editor_view_move_next_search_result:
  * @self: a #IdeEditorView
@@ -1244,49 +1182,11 @@ ide_editor_view_move_next_search_result_cb (GObject      *object,
 void
 ide_editor_view_move_next_search_result (IdeEditorView *self)
 {
-  GtkTextIter begin;
-  GtkTextIter end;
-
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
   g_return_if_fail (self->destroy_cancellable != NULL);
   g_return_if_fail (self->buffer != NULL);
 
-  if (self->search_context == NULL)
-    return;
-
-  if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
-    gtk_text_iter_order (&begin, &end);
-
-  gtk_source_search_context_forward_async (self->search_context,
-                                           &end,
-                                           self->destroy_cancellable,
-                                           ide_editor_view_move_next_search_result_cb,
-                                           g_object_ref (self));
-}
-
-static void
-ide_editor_view_move_previous_search_result_cb (GObject      *object,
-                                                GAsyncResult *result,
-                                                gpointer      user_data)
-{
-  GtkSourceSearchContext *context = (GtkSourceSearchContext *)object;
-  g_autoptr(IdeEditorView) self = user_data;
-  g_autoptr(GError) error = NULL;
-  GtkTextIter begin;
-  GtkTextIter end;
-  gboolean has_wrapped = FALSE;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (self->buffer == NULL)
-    return;
-
-  if (gtk_source_search_context_backward_finish2 (context, result, &begin, &end, &has_wrapped, &error))
-    {
-      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
-      ide_source_view_scroll_to_insert (self->source_view);
-    }
+  ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
 }
 
 /**
@@ -1302,22 +1202,25 @@ ide_editor_view_move_previous_search_result_cb (GObject      *object,
 void
 ide_editor_view_move_previous_search_result (IdeEditorView *self)
 {
-  GtkTextIter begin;
-  GtkTextIter end;
-
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
   g_return_if_fail (self->destroy_cancellable != NULL);
   g_return_if_fail (self->buffer != NULL);
 
-  if (self->search_context == NULL)
-    return;
+  ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_PREVIOUS);
+}
 
-  if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
-    gtk_text_iter_order (&begin, &end);
+/**
+ * ide_editor_view_get_search:
+ * @self: a #IdeEditorView
+ *
+ * Gets the #IdeEditorSearch used to search within the document.
+ *
+ * Returns: (transfer none): An #IdeEditorSearch
+ */
+IdeEditorSearch *
+ide_editor_view_get_search (IdeEditorView *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_VIEW (self), NULL);
 
-  gtk_source_search_context_backward_async (self->search_context,
-                                            &begin,
-                                            self->destroy_cancellable,
-                                            ide_editor_view_move_previous_search_result_cb,
-                                            g_object_ref (self));
+  return self->search;
 }
