@@ -90,7 +90,7 @@ static void ide_editor_search_actions_replace            (IdeEditorSearch *self,
 static void ide_editor_search_actions_replace_all        (IdeEditorSearch *self,
                                                           GVariant        *param);
 
-IDE_DEFINE_ACTION_GROUP (IdeEditorSearch, ide_editor_search, {
+DZL_DEFINE_ACTION_GROUP (IdeEditorSearch, ide_editor_search, {
   { "move-next", ide_editor_search_actions_move_next },
   { "move-previous", ide_editor_search_actions_move_previous },
   { "replace", ide_editor_search_actions_replace },
