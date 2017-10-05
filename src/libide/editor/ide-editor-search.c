@@ -21,7 +21,6 @@
 #include <dazzle.h>
 #include <string.h>
 
-#include "util/ide-action-group.h"
 #include "editor/ide-editor-search.h"
 
 /**
