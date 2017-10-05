@@ -1637,11 +1637,10 @@ ide_build_pipeline_queue_flush (IdeBuildPipeline *self)
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
 
-  g_timeout_add_full (G_PRIORITY_DEFAULT,
-                      0,
-                      ide_build_pipeline_do_flush,
-                      g_object_ref (self),
-                      g_object_unref);
+  gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                             ide_build_pipeline_do_flush,
+                             g_object_ref (self),
+                             g_object_unref);
 
   IDE_EXIT;
 }
