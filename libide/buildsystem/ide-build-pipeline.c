@@ -1539,6 +1539,22 @@ ide_build_pipeline_do_flush (gpointer data)
   g_assert (G_IS_TASK (task_data->task));
 
   /*
+   * If this build request could cause us to spin while we are continually
+   * failing to reach the CONFIGURE stage, protect ourselves as early as we
+   * can. We'll defer to a rebuild request to cause the full thing to build.
+   */
+  if (self->failed &&
+      task_data->type == TASK_BUILD &&
+      task_data->phase <= IDE_BUILD_PHASE_CONFIGURE)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "The build pipeline is in a failed state and requires a rebuild");
+      IDE_RETURN (G_SOURCE_REMOVE);
+    }
+
+  /*
    * Now mark the pipeline as busy to protect ourself from anything recursively
    * calling into the pipeline.
    */
