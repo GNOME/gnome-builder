@@ -1446,6 +1446,7 @@ ide_build_pipeline_execute_async (IdeBuildPipeline    *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_pipeline_execute_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->requested_mask == IDE_BUILD_PHASE_NONE)
     {
