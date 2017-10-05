@@ -222,7 +222,14 @@ search_entry_activate (IdeEditorSearchBar *self,
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (GD_IS_TAGGED_ENTRY (entry));
 
-  if (self->search != NULL)
+  if (self->search == NULL)
+    return;
+
+  /* If we haven't yet advanced to the first search result, do so.
+   * Otherwise, don't jump the search result forward as that would
+   * be distracting to the user and non-obvious.
+   */
+  if (ide_editor_search_get_match_position (self->search) == 0)
     ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
 
   g_signal_emit (self, signals [STOP_SEARCH], 0);
