@@ -61,6 +61,7 @@
 
   <color name="dark1"                        value="#1c1f20"/>
   <color name="dark2"                        value="#212527"/>
+  <color name="dark3"                        value="#4d5558"/>
 
   <!-- Global Settings -->
   <style name="text"                        foreground="aluminium3" background="dark1"/>
@@ -68,8 +69,8 @@
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="dark1"/>
   <style name="current-line-number"         background="dark1"/>
-  <style name="line-numbers"                foreground="aluminium4" background="dark1"/>
-  <style name="draw-spaces"                 foreground="aluminium4"/>
+  <style name="line-numbers"                foreground="dark3" background="dark1"/>
+  <style name="draw-spaces"                 foreground="dark3"/>
   <style name="background-pattern"          background="dark2"/>
   <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
 
