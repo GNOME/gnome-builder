@@ -647,6 +647,8 @@ ide_editor_view_constructed (GObject *object)
 
   self->search = ide_editor_search_new (GTK_SOURCE_VIEW (self->source_view));
   ide_editor_search_bar_set_search (self->search_bar, self->search);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-search",
+                                  G_ACTION_GROUP (self->search));
 
   ide_editor_view_load_fonts (self);
   ide_editor_view_update_map (self);
@@ -663,6 +665,7 @@ ide_editor_view_destroy (GtkWidget *widget)
 
   g_clear_object (&self->addins);
 
+  gtk_widget_insert_action_group (widget, "editor-search", NULL);
   gtk_widget_insert_action_group (widget, "editor-view", NULL);
 
   g_cancellable_cancel (self->destroy_cancellable);
