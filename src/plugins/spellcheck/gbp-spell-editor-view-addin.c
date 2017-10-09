@@ -129,8 +129,16 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
   g_assert (IDE_IS_BUFFER (buffer));
 
   buffer_addin = ide_buffer_addin_find_by_module_name (buffer, "spellcheck-plugin");
-  g_assert (buffer_addin != NULL);
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (buffer_addin));
+
+  if (!GBP_IS_SPELL_BUFFER_ADDIN (buffer_addin))
+    {
+      /* We might find ourselves in a race here and the buffer
+       * addins are already in destruction. Therefore, silently
+       * fail any further setup.
+       */
+      g_warning ("Failed to locate buffer addin, spellcheck disabled");
+      return;
+    }
 
   wrapper = gspell_text_view_get_from_gtk_text_view (GTK_TEXT_VIEW (source_view));
   g_assert (wrapper != NULL);
@@ -175,8 +183,11 @@ gbp_spell_editor_view_addin_unload (IdeEditorViewAddin *addin,
 
   gtk_widget_insert_action_group (GTK_WIDGET (view), "spellcheck", NULL);
 
-  dzl_binding_group_set_source (self->buffer_addin_bindings, NULL);
-  g_clear_object (&self->buffer_addin_bindings);
+  if (self->buffer_addin_bindings != NULL)
+    {
+      dzl_binding_group_set_source (self->buffer_addin_bindings, NULL);
+      g_clear_object (&self->buffer_addin_bindings);
+    }
 
   g_clear_object (&self->navigator);
 
