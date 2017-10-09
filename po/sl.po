@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
 "POT-Creation-Date: 2017-09-20 11:53+0200\n"
-"PO-Revision-Date: 2017-09-20 12:07+0200\n"
+"PO-Revision-Date: 2017-09-29 16:14+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2545,7 +2545,7 @@ msgstr "%s() je dovoljeno izvesti le enkrat"
 
 #: libide/runner/ide-run-button.ui:41
 msgid "Stop running"
-msgstr ""
+msgstr "Zaustavi izvajanje"
 
 #: libide/runner/ide-run-button.ui:57
 msgid "Change run options"
@@ -2611,7 +2611,7 @@ msgstr "Preimenuj simbol"
 #: libide/sourceview/ide-source-view.c:6101
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
-msgstr ""
+msgstr "<b>%s</b> — <small>Vrstica %u, Stolpec %u</small>"
 
 #: libide/sourceview/ide-source-view.c:6127
 msgid "No references were found"
@@ -2621,10 +2621,10 @@ msgstr "Ni najdenih sklicev"
 #, c-format
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Poteka nameščanje %u paketov."
+msgstr[1] "Poteka nameščanje %u paketa."
+msgstr[2] "Poteka nameščanje %u paketov."
+msgstr[3] "Poteka nameščanje %u paketov."
 
 #: libide/transfers/ide-transfers-button.ui:35
 msgid "Clear _All"
@@ -2841,7 +2841,7 @@ msgstr "Ni ukazov na voljo"
 
 #: plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
-msgstr ""
+msgstr "Olepšaj"
 
 #: plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -3286,10 +3286,9 @@ msgid "Documentation"
 msgstr "Dokumentacija"
 
 #: plugins/eslint/eslint_plugin/__init__.py:106
-#, fuzzy
 #| msgid "Pylint"
 msgid "ESlint"
-msgstr "Pylint"
+msgstr "ESlint"
 
 #: plugins/eslint/eslint_plugin/__init__.py:107
 #, fuzzy
@@ -3341,7 +3340,7 @@ msgstr "Kloniraj"
 
 #: plugins/flatpak/gbp-flatpak-pipeline-addin.c:130
 msgid "Network is not available, skipping downloads"
-msgstr ""
+msgstr "Povezava z omrežjem ni na voljo, prejemanje bo ustavljeno"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:89
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
@@ -3387,7 +3386,7 @@ msgstr "%s <b>%s</b>"
 #: plugins/flatpak/gbp-flatpak-runtime.c:724
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
-msgstr ""
+msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 
 #. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
 #: plugins/flatpak/gbp-flatpak-transfer.c:67
@@ -3421,21 +3420,21 @@ msgstr "Iskanje izvajalnega programa je spodletelo."
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:103
 msgid "Runtime has been updated"
-msgstr ""
+msgstr "Zagonske datooteke so posodobljene."
 
 #: plugins/flatpak/gbp-flatpak-transfer.c:105
 msgid "Runtime has been installed"
-msgstr ""
+msgstr "Zagonske datooteke so nameščene."
 
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:78
 msgid "Your computer is missing flatpak-builder"
-msgstr ""
+msgstr "V sistem ni nameščenega izgrajevalnika flatpak-builder"
 
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:79
 msgid ""
 "This program is necessary for building Flatpak applications. Would you like "
 "to install it?"
-msgstr ""
+msgstr "Program je nujen za izgradnjo programon s podporo Flatpak. Ali želite "
 
 #: plugins/flatpak/gtk/menus.ui:6
 msgid "Flatpak"
@@ -3701,23 +3700,19 @@ msgstr "hitro poudarjanje besede skladnja izbor trenutno"
 
 #: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
-msgstr ""
+msgstr "Program Rustup ni nameščen"
 
 #: plugins/rustup/rustup_plugin/__init__.py:282
-#, fuzzy
-#| msgid "Installing…"
 msgid "Installing rustup"
-msgstr "Poteka nameščanje ..."
+msgstr "Poteka nameščanje paketa Rustup"
 
 #: plugins/rustup/rustup_plugin/__init__.py:284
 msgid "Updating rustup"
-msgstr ""
+msgstr "Posodabljanje programa Rustup"
 
 #: plugins/rustup/rustup_plugin/__init__.py:286
-#, fuzzy
-#| msgid "Installing…"
 msgid "Installing rust "
-msgstr "Poteka nameščanje ..."
+msgstr "Poteka nameščanje Rust"
 
 #: plugins/rustup/rustup_plugin/__init__.py:288
 msgid "Checking system"
@@ -3725,11 +3720,11 @@ msgstr "Preverjanje sistema ..."
 
 #: plugins/rustup/rustup_plugin/__init__.py:357
 msgid "Downloading rustup-init"
-msgstr ""
+msgstr "Prejemanje paketa rustup-init"
 
 #: plugins/rustup/rustup_plugin/__init__.py:362
 msgid "Syncing channel updates"
-msgstr ""
+msgstr "Poteka usklajevanje posodobitev kanala"
 
 #: plugins/rustup/rustup_plugin/__init__.py:368
 msgid "Downloading "
@@ -3781,27 +3776,21 @@ msgstr "Poteka nameščanje ..."
 
 #. set default toolchain button
 #: plugins/rustup/rustup_plugin/__init__.py:599
-#, fuzzy
-#| msgid "Default"
 msgid "Make default"
-msgstr "Privzeto"
+msgstr "Nastavi kot privzeto"
 
 #: plugins/rustup/rustup_plugin/__init__.py:599
 msgid "Makes the selected toolchain the default rust installation"
 msgstr ""
 
 #: plugins/rustup/rustup_plugin/__init__.py:614
-#, fuzzy
-#| msgid "Install cancelled"
 msgid "Install Rust Channel"
-msgstr "Namestitev je preklicana"
+msgstr "Namesti kanal Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
 #: plugins/rustup/rustup_plugin/__init__.py:619
-#, fuzzy
-#| msgid "Enter a new name for the color"
 msgid "Enter name of rust channel"
-msgstr "Vpišite ime nove barve"
+msgstr "Vpišite ime kanala Rust"
 
 #: plugins/rustup/rustup_plugin/__init__.py:620
 msgid ""
