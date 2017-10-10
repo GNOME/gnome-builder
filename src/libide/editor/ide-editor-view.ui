@@ -6,7 +6,7 @@
         <property name="visible">true</property>
         <child type="overlay">
           <object class="GtkRevealer" id="search_revealer">
-            <property name="width-request">425</property>
+            <property name="width-request">525</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
             <property name="margin-right">12</property>
