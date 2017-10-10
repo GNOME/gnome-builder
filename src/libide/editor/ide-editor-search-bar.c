@@ -146,6 +146,34 @@ pacify_null_text (GBinding     *binding,
 }
 
 static void
+set_position_label (IdeEditorSearchBar *self,
+                    const gchar        *text)
+{
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+
+  if (dzl_str_empty0 (text))
+    {
+      if (self->search_entry_tag != NULL)
+        {
+          gd_tagged_entry_remove_tag (self->search_entry, self->search_entry_tag);
+          g_clear_object (&self->search_entry_tag);
+        }
+
+      return;
+    }
+
+  if (self->search_entry_tag == NULL)
+    {
+      self->search_entry_tag = gd_tagged_entry_tag_new (text);
+      gd_tagged_entry_add_tag (self->search_entry, self->search_entry_tag);
+      gd_tagged_entry_tag_set_style (self->search_entry_tag, "search-occurrences-tag");
+      return;
+    }
+
+  gd_tagged_entry_tag_set_label (self->search_entry_tag, text);
+}
+
+static void
 ide_editor_search_bar_grab_focus (GtkWidget *widget)
 {
   IdeEditorSearchBar *self = (IdeEditorSearchBar *)widget;
@@ -222,15 +250,8 @@ search_entry_activate (IdeEditorSearchBar *self,
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (GD_IS_TAGGED_ENTRY (entry));
 
-  if (self->search == NULL)
-    return;
-
-  /* If we haven't yet advanced to the first search result, do so.
-   * Otherwise, don't jump the search result forward as that would
-   * be distracting to the user and non-obvious.
-   */
-  if (ide_editor_search_get_match_position (self->search) == 0)
-    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
+  if (self->search != NULL)
+    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
 
   g_signal_emit (self, signals [STOP_SEARCH], 0);
 }

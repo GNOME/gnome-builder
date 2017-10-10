@@ -59,9 +59,12 @@ struct _IdeEditorSearch
   guint                    match_count;
   guint                    match_position;
 
+  guint                    repeat;
+
   guint                    busy : 1;
   guint                    reverse : 1;
   guint                    visible : 1;
+  IdeEditorSearchSelect    extend_selection : 2;
 };
 
 enum {
@@ -69,9 +72,11 @@ enum {
   PROP_AT_WORD_BOUNDARIES,
   PROP_BUSY,
   PROP_CASE_SENSITIVE,
+  PROP_EXTEND_SELECTION,
   PROP_MATCH_COUNT,
   PROP_MATCH_POSITION,
   PROP_REGEX_ENABLED,
+  PROP_REPEAT,
   PROP_REPLACEMENT_TEXT,
   PROP_REVERSE,
   PROP_SEARCH_TEXT,
@@ -80,14 +85,14 @@ enum {
   N_PROPS
 };
 
-static void ide_editor_search_actions_move_next          (IdeEditorSearch *self,
-                                                          GVariant        *param);
-static void ide_editor_search_actions_move_previous      (IdeEditorSearch *self,
-                                                          GVariant        *param);
-static void ide_editor_search_actions_replace            (IdeEditorSearch *self,
-                                                          GVariant        *param);
-static void ide_editor_search_actions_replace_all        (IdeEditorSearch *self,
-                                                          GVariant        *param);
+static void ide_editor_search_actions_move_next     (IdeEditorSearch *self,
+                                                     GVariant        *param);
+static void ide_editor_search_actions_move_previous (IdeEditorSearch *self,
+                                                     GVariant        *param);
+static void ide_editor_search_actions_replace       (IdeEditorSearch *self,
+                                                     GVariant        *param);
+static void ide_editor_search_actions_replace_all   (IdeEditorSearch *self,
+                                                     GVariant        *param);
 
 DZL_DEFINE_ACTION_GROUP (IdeEditorSearch, ide_editor_search, {
   { "move-next", ide_editor_search_actions_move_next },
@@ -188,6 +193,10 @@ ide_editor_search_get_property (GObject    *object,
       g_value_set_boolean (value, ide_editor_search_get_case_sensitive (self));
       break;
 
+    case PROP_EXTEND_SELECTION:
+      g_value_set_enum (value, ide_editor_search_get_extend_selection (self));
+      break;
+
     case PROP_VIEW:
       g_value_set_object (value, self->view);
       break;
@@ -202,6 +211,10 @@ ide_editor_search_get_property (GObject    *object,
 
     case PROP_REGEX_ENABLED:
       g_value_set_boolean (value, ide_editor_search_get_regex_enabled (self));
+      break;
+
+    case PROP_REPEAT:
+      g_value_set_uint (value, ide_editor_search_get_repeat (self));
       break;
 
     case PROP_REPLACEMENT_TEXT:
@@ -247,6 +260,10 @@ ide_editor_search_set_property (GObject      *object,
       ide_editor_search_set_case_sensitive (self, g_value_get_boolean (value));
       break;
 
+    case PROP_EXTEND_SELECTION:
+      ide_editor_search_set_extend_selection (self, g_value_get_enum (value));
+      break;
+
     case PROP_SEARCH_TEXT:
       ide_editor_search_set_search_text (self, g_value_get_string (value));
       break;
@@ -257,6 +274,10 @@ ide_editor_search_set_property (GObject      *object,
 
     case PROP_REGEX_ENABLED:
       ide_editor_search_set_regex_enabled (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_REPEAT:
+      ide_editor_search_set_repeat (self, g_value_get_uint (value));
       break;
 
     case PROP_REPLACEMENT_TEXT:
@@ -346,6 +367,23 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   /**
+   * IdeEditorSearch:extend-selection:
+   *
+   * The "extend-selection" property specifies that the selection within
+   * the editor should be extended as the user navigates between search
+   * results.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_EXTEND_SELECTION] =
+    g_param_spec_enum ("extend-selection",
+                       "Extend Selection",
+                       "If the selection should be extended when moving through results",
+                       IDE_TYPE_EDITOR_SEARCH_SELECT,
+                       IDE_EDITOR_SEARCH_SELECT_NONE,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * IdeEditorSearch:match-count:
    *
    * The "match-count" property contains the number of matches that have
@@ -378,6 +416,22 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
     g_param_spec_uint ("match-position", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * IdeEditorSearch:repeat:
+   *
+   * The number of times to repeat a move operation when calling
+   * ide_editor_search_move(). This allows for stateful moves when as
+   * might be necessary when activating keybindings.
+   *
+   * This property will be cleared after an attempt to move.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_REPEAT] =
+    g_param_spec_uint ("repeat", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   /**
    * IdeEditorSearch:regex-enabled:
@@ -1050,6 +1104,28 @@ ide_editor_search_get_match_position (IdeEditorSearch *self)
   return self->match_position;
 }
 
+static gboolean
+buffer_selection_contains (GtkTextBuffer *buffer,
+                           GtkTextIter   *iter)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+  g_assert (iter != NULL);
+
+  if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
+    {
+      gtk_text_iter_order (&begin, &end);
+
+      if (gtk_text_iter_compare (&begin, iter) <= 0 &&
+          gtk_text_iter_compare (&end, iter) >= 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_editor_search_forward_cb (GObject      *object,
                               GAsyncResult *result,
@@ -1068,9 +1144,33 @@ ide_editor_search_forward_cb (GObject      *object,
       if (self->view != NULL)
         {
           GtkTextBuffer *buffer = gtk_text_iter_get_buffer (&begin);
+          GtkTextMark *insert = gtk_text_buffer_get_insert (buffer);
 
-          gtk_text_buffer_select_range (buffer, &begin, &end);
-          gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->view), &begin, 0.0, TRUE, 1.0, 0.5);
+          if (self->extend_selection != IDE_EDITOR_SEARCH_SELECT_NONE)
+            {
+              GtkTextIter *dest = &end;
+
+              if (buffer_selection_contains (buffer, &begin) &&
+                  self->extend_selection == IDE_EDITOR_SEARCH_SELECT_WITH_RESULT)
+                dest = &begin;
+
+              gtk_text_buffer_move_mark (buffer, insert, dest);
+            }
+          else
+            gtk_text_buffer_select_range (buffer, &begin, &end);
+
+          gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self->view), insert, 0.0, TRUE, 1.0, 0.5);
+
+          if (self->repeat > 0)
+            {
+              self->repeat--;
+              gtk_source_search_context_forward_async (context,
+                                                       &end,
+                                                       NULL,
+                                                       ide_editor_search_forward_cb,
+                                                       g_object_ref (self));
+              g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPEAT]);
+            }
         }
     }
 
@@ -1095,13 +1195,88 @@ ide_editor_search_backward_cb (GObject      *object,
       if (self->view != NULL)
         {
           GtkTextBuffer *buffer = gtk_text_iter_get_buffer (&begin);
+          GtkTextMark *insert = gtk_text_buffer_get_insert (buffer);
 
-          gtk_text_buffer_select_range (buffer, &begin, &end);
-          gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->view), &begin, 0.0, TRUE, 1.0, 0.5);
+          if (self->extend_selection != IDE_EDITOR_SEARCH_SELECT_NONE)
+            {
+              GtkTextIter *dest = &begin;
+
+              if (buffer_selection_contains (buffer, &begin) &&
+                  self->extend_selection == IDE_EDITOR_SEARCH_SELECT_WITH_RESULT)
+                dest = &end;
+
+              gtk_text_buffer_move_mark (buffer, insert, dest);
+            }
+          else
+            gtk_text_buffer_select_range (buffer, &begin, &end);
+
+          gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self->view), insert, 0.0, TRUE, 1.0, 0.5);
+
+          if (self->repeat > 0)
+            {
+              self->repeat--;
+              gtk_source_search_context_backward_async (context,
+                                                        &begin,
+                                                        NULL,
+                                                        ide_editor_search_backward_cb,
+                                                        g_object_ref (self));
+              g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPEAT]);
+            }
         }
     }
 
   ide_editor_search_notify_occurrences_count (self, NULL, context);
+}
+
+static void
+maybe_flip_selection_bounds (IdeEditorSearch *self,
+                             GtkTextBuffer   *buffer,
+                             gboolean         backwards)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_EDITOR_SEARCH (self));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  /*
+   * The goal of this operation is to try to handle a special case where
+   * we are moving forwards/backwards with an initial selection that matches
+   * the current search-text.
+   *
+   * Instead of potentially unselecting the match, we want to flip the
+   * insert/selection-bound marks so that the selection is extended in
+   * the proper direction.
+   */
+
+  if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
+    {
+      const gchar *search_text = ide_editor_search_get_search_text (self);
+      g_autofree gchar *slice = NULL;
+      guint length;
+
+      if (search_text == NULL)
+        search_text = "";
+
+      gtk_text_iter_order (&begin, &end);
+      length = gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin);
+
+      if (!ide_editor_search_get_regex_enabled (self) &&
+          length == strlen (search_text) &&
+          NULL != (slice = gtk_text_iter_get_slice (&begin, &end)) &&
+          strcmp (search_text, slice) == 0)
+        {
+          /* NOTE: This does not work for Regex based search, but that
+           *       is much less likely to be important compared to the
+           *       simple word match check.
+           */
+
+          if (backwards)
+            gtk_text_buffer_select_range (buffer, &begin, &end);
+          else
+            gtk_text_buffer_select_range (buffer, &end, &begin);
+        }
+    }
 }
 
 /**
@@ -1134,8 +1309,8 @@ ide_editor_search_move (IdeEditorSearch          *self,
 {
   GtkSourceSearchContext *context;
   GtkTextBuffer *buffer;
-  GtkTextIter begin;
-  GtkTextIter end;
+  GtkTextMark *insert;
+  GtkTextIter iter;
 
   g_return_if_fail (IDE_IS_EDITOR_SEARCH (self));
   g_return_if_fail (self->view != NULL);
@@ -1145,8 +1320,8 @@ ide_editor_search_move (IdeEditorSearch          *self,
   context = ide_editor_search_acquire_context (self);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view));
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-  gtk_text_iter_order (&begin, &end);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
 
   if (self->reverse)
     {
@@ -1156,43 +1331,48 @@ ide_editor_search_move (IdeEditorSearch          *self,
         direction = IDE_EDITOR_SEARCH_NEXT;
     }
 
+  if (self->repeat > 0)
+    self->repeat--;
+
   switch (direction)
     {
     case IDE_EDITOR_SEARCH_FORWARD:
-      gtk_text_iter_forward_char (&end);
+      gtk_text_iter_forward_char (&iter);
       gtk_source_search_settings_set_wrap_around (self->settings, FALSE);
+      maybe_flip_selection_bounds (self, buffer, FALSE);
       gtk_source_search_context_forward_async (context,
-                                               &end,
+                                               &iter,
                                                NULL,
                                                ide_editor_search_forward_cb,
                                                g_object_ref (self));
       break;
 
     case IDE_EDITOR_SEARCH_NEXT:
-      gtk_text_iter_forward_char (&end);
+      gtk_text_iter_forward_char (&iter);
       gtk_source_search_settings_set_wrap_around (self->settings, TRUE);
       gtk_source_search_context_forward_async (context,
-                                               &end,
+                                               &iter,
                                                NULL,
                                                ide_editor_search_forward_cb,
                                                g_object_ref (self));
       break;
 
     case IDE_EDITOR_SEARCH_BACKWARD:
-      gtk_text_iter_backward_char (&begin);
+      gtk_text_iter_backward_char (&iter);
       gtk_source_search_settings_set_wrap_around (self->settings, FALSE);
+      maybe_flip_selection_bounds (self, buffer, TRUE);
       gtk_source_search_context_backward_async (context,
-                                                &begin,
+                                                &iter,
                                                 NULL,
                                                 ide_editor_search_backward_cb,
                                                 g_object_ref (self));
       break;
 
     case IDE_EDITOR_SEARCH_PREVIOUS:
-      gtk_text_iter_backward_char (&begin);
+      gtk_text_iter_backward_char (&iter);
       gtk_source_search_settings_set_wrap_around (self->settings, TRUE);
       gtk_source_search_context_backward_async (context,
-                                                &begin,
+                                                &iter,
                                                 NULL,
                                                 ide_editor_search_backward_cb,
                                                 g_object_ref (self));
@@ -1203,6 +1383,8 @@ ide_editor_search_move (IdeEditorSearch          *self,
     }
 
   ide_editor_search_release_context (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPEAT]);
 }
 
 /**
@@ -1387,6 +1569,87 @@ ide_editor_search_set_reverse (IdeEditorSearch *self,
     }
 }
 
+/**
+ * ide_editor_search_get_extend_selection:
+ * @self: a #IdeEditorSearch
+ *
+ * Gets the "extend-selection" property.
+ *
+ * This property determines if the selection should be extended and
+ * how when moving between search results.
+ *
+ * Returns: An %IdeEditorSearchSelect
+ *
+ * Since: 3.28
+ */
+IdeEditorSearchSelect
+ide_editor_search_get_extend_selection (IdeEditorSearch *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_SEARCH (self), FALSE);
+
+  return self->extend_selection;
+}
+
+void
+ide_editor_search_set_extend_selection (IdeEditorSearch       *self,
+                                        IdeEditorSearchSelect  extend_selection)
+{
+  g_return_if_fail (IDE_IS_EDITOR_SEARCH (self));
+  g_return_if_fail (extend_selection <= IDE_EDITOR_SEARCH_SELECT_TO_RESULT);
+
+  if (self->extend_selection != extend_selection)
+    {
+      self->extend_selection = extend_selection;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXTEND_SELECTION]);
+    }
+}
+
+/**
+ * ide_editor_search_get_repeat:
+ * @self: a #IdeEditorSearch
+ *
+ * Gets the #IdeEditorSearch:repeat property containing the number of
+ * times to perform a move. A value of 1 performs a single move. A
+ * value of 2 performs a second move after the first.
+ *
+ * A value of zero indicates the property is unset and a single move
+ * will be performed.
+ *
+ * Returns: A number containing the number of moves.
+ */
+guint
+ide_editor_search_get_repeat (IdeEditorSearch *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_SEARCH (self), 0);
+
+  return self->repeat;
+}
+
+/**
+ * ide_editor_search_set_repeat:
+ * @self: a #IdeEditorSearch
+ * @repeat: The new value for the repeat count
+ *
+ * Sets the repeat count. A @repeat value of 0 indicates that the value
+ * is unset. When unset, the default value of 1 is used.
+ *
+ * See also: ide_editor_search_get_repeat()
+ *
+ * Since: 3.28
+ */
+void
+ide_editor_search_set_repeat (IdeEditorSearch *self,
+                              guint            repeat)
+{
+  g_return_if_fail (IDE_IS_EDITOR_SEARCH (self));
+
+  if (self->repeat != repeat)
+    {
+      self->repeat = repeat;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPEAT]);
+    }
+}
+
 static void
 ide_editor_search_actions_move_next (IdeEditorSearch *self,
                                      GVariant        *param)
@@ -1413,4 +1676,45 @@ ide_editor_search_actions_replace (IdeEditorSearch *self,
                                    GVariant        *param)
 {
   ide_editor_search_replace (self);
+}
+
+GType
+ide_editor_search_select_get_type (void)
+{
+  static GType type_id;
+
+  if (g_once_init_enter (&type_id))
+    {
+      static const GEnumValue values[] = {
+        { IDE_EDITOR_SEARCH_SELECT_NONE, "IDE_EDITOR_SEARCH_SELECT_NONE", "none" },
+        { IDE_EDITOR_SEARCH_SELECT_WITH_RESULT, "IDE_EDITOR_SEARCH_SELECT_WITH_RESULT", "with-result" },
+        { IDE_EDITOR_SEARCH_SELECT_TO_RESULT, "IDE_EDITOR_SEARCH_SELECT_TO_RESULT", "to-result" },
+        { 0 }
+      };
+      GType _type_id = g_enum_register_static ("IdeEditorSearchSelect", values);
+      g_once_init_leave (&type_id, _type_id);
+    }
+
+  return type_id;
+}
+
+GType
+ide_editor_search_direction_get_type (void)
+{
+  static GType type_id;
+
+  if (g_once_init_enter (&type_id))
+    {
+      static const GEnumValue values[] = {
+        { IDE_EDITOR_SEARCH_FORWARD, "IDE_EDITOR_SEARCH_FORWARD", "forward" },
+        { IDE_EDITOR_SEARCH_NEXT, "IDE_EDITOR_SEARCH_NEXT", "next" },
+        { IDE_EDITOR_SEARCH_PREVIOUS, "IDE_EDITOR_SEARCH_PREVIOUS", "previous" },
+        { IDE_EDITOR_SEARCH_BACKWARD, "IDE_EDITOR_SEARCH_BACKWARD", "backward" },
+        { 0 }
+      };
+      GType _type_id = g_enum_register_static ("IdeEditorSearchDirection", values);
+      g_once_init_leave (&type_id, _type_id);
+    }
+
+  return type_id;
 }
