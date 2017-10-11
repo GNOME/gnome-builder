@@ -1,6 +1,6 @@
 # __init__.py
 #
-# Copyright (C) 2017 Matthew Leeds <mleeds@redhat.com>
+# Copyright © 2017 Matthew Leeds <mleeds@redhat.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 /* gstyle-slidein.c
  *
- * Copyright (C) 2016 sebastien lafargue <slafargue@gnome.org>
+ * Copyright © 2016 sebastien lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Initial ideas based on Gnome Builder Pnl dock system :
- * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright © 2016 Christian Hergert <chergert@redhat.com>
  */
 
 #define G_LOG_DOMAIN "gstyle-slidein"

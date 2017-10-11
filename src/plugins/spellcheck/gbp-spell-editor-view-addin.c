@@ -1,7 +1,7 @@
 /* gbp-spell-editor-view-addin.c
  *
- * Copyright (C) 2016 Sebastien Lafargue <slafargue@gnome.org>
- * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright © 2016 Sebastien Lafargue <slafargue@gnome.org>
+ * Copyright © 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -3,8 +3,8 @@
 #
 # __init__.py
 #
-# Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
-# Copyright (C) 2017 Georg Vienna <georg.vienna@himbarsoft.com>
+# Copyright © 2016 Christian Hergert <chergert@redhat.com>
+# Copyright © 2017 Georg Vienna <georg.vienna@himbarsoft.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

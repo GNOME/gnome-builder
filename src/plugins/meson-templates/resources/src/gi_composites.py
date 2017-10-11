@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 Dustin Spicuzza <dustin@virtualroadside.com>
+# Copyright © 2015 Dustin Spicuzza <dustin@virtualroadside.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public

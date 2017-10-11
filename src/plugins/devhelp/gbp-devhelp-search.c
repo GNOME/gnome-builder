@@ -1,6 +1,6 @@
 /* gbp-devhelp-search.c
  *
- * Copyright (C) 2017 Lucie Charvat <luci.charvat@gmail.com>
+ * Copyright © 2017 Lucie Charvat <luci.charvat@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

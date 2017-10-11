@@ -3,7 +3,7 @@
 #
 # npm_plugin.py
 #
-# Copyright (C) 2016 Christian Hergert <chris@dronelabs.com>
+# Copyright © 2016 Christian Hergert <chris@dronelabs.com>
 #               2017 Giovanni Campagna <gcampagn@cs.stanford.edu>
 #
 # This program is free software: you can redistribute it and/or modify
