@@ -1442,6 +1442,9 @@ ide_editor_search_begin_interactive (IdeEditorSearch *self)
   /* Disable reverse search when interactive */
   ide_editor_search_set_reverse (self, FALSE);
 
+  /* Clear any repeat that was previously set */
+  ide_editor_search_set_repeat (self, 0);
+
   /* Always highlight matches while in interactive mode */
   if (self->context != NULL)
     gtk_source_search_context_set_highlight (self->context, TRUE);
