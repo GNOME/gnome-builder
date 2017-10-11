@@ -629,7 +629,7 @@ ide_editor_view_move_search (IdeEditorView    *self,
     case GTK_DIR_DOWN:
     case GTK_DIR_RIGHT:
       ide_editor_search_set_reverse (self->search, FALSE);
-      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
+      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
       break;
 
     case GTK_DIR_TAB_FORWARD:
@@ -642,7 +642,7 @@ ide_editor_view_move_search (IdeEditorView    *self,
     case GTK_DIR_UP:
     case GTK_DIR_LEFT:
       ide_editor_search_set_reverse (self->search, TRUE);
-      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_BACKWARD);
+      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
       break;
 
     case GTK_DIR_TAB_BACKWARD:
