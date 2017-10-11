@@ -1,5 +1,3 @@
-if get_option('with_terminal')
-
 terminal_resources = gnome.compile_resources(
   'terminal-resources',
   'terminal.gresource.xml',
@@ -31,5 +29,3 @@ gnome_builder_plugins_deps += [
 
 gnome_builder_plugins_sources += files(terminal_sources)
 gnome_builder_plugins_sources += terminal_resources[0]
-
-endif

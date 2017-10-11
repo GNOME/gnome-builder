@@ -136,7 +136,6 @@ status += [
   'Symbol Tree ........... : @0@'.format(get_option('with_symbol_tree')),
   'System Monitor ........ : @0@'.format(get_option('with_sysmon')),
   'Sysprof Profiler ...... : @0@'.format(get_option('with_sysprof')),
-  'Terminal .............. : @0@'.format(get_option('with_terminal')),
   'Todo .................. : @0@'.format(get_option('with_todo')),
   'Vala Language Pack .... : @0@'.format(get_option('with_vala_pack')),
   'Valgrind .............. : @0@'.format(get_option('with_valgrind')),

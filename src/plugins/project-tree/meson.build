@@ -28,10 +28,8 @@ project_tree_sources = [
   'project-tree-plugin.c',
 ]
 
-if get_option('with_terminal')
-  gnome_builder_plugins_deps += dependency('vte-2.91', version: '>=0.40.2')
-  gnome_builder_plugins_args += '-DHAVE_VTE'
-endif
+gnome_builder_plugins_deps += dependency('vte-2.91', version: '>=0.40.2')
+gnome_builder_plugins_args += '-DHAVE_VTE'
 
 gnome_builder_plugins_sources += files(project_tree_sources)
 gnome_builder_plugins_sources += project_tree_resources[0]
