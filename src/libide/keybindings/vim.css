@@ -2052,6 +2052,9 @@
              "end-macro" ()
              "set-mode" ("vim-normal", permanent) };
 
+  bind "slash" { "set-search-text" ("", 1)
+                 "action" ("editor-view", "find", "") };
+
   bind "e" { "movement" (next-word-end, 1, 0, 1) };
   bind "<shift>e" { "movement" (next-full-word-end, 1, 0, 1) };
 
