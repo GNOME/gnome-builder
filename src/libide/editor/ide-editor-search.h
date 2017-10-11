@@ -57,6 +57,7 @@ G_DECLARE_FINAL_TYPE (IdeEditorSearch, ide_editor_search, IDE, EDITOR_SEARCH, GO
 GType                  ide_editor_search_direction_get_type           (void);
 GType                  ide_editor_search_select_get_type              (void);
 IdeEditorSearch       *ide_editor_search_new                          (GtkSourceView             *view);
+gboolean               ide_editor_search_get_active                   (IdeEditorSearch           *self);
 void                   ide_editor_search_set_case_sensitive           (IdeEditorSearch           *self,
                                                                        gboolean                   case_sensitive);
 gboolean               ide_editor_search_get_case_sensitive           (IdeEditorSearch           *self);

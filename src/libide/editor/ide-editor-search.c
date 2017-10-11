@@ -68,6 +68,7 @@ struct _IdeEditorSearch
 
 enum {
   PROP_0,
+  PROP_ACTIVE,
   PROP_AT_WORD_BOUNDARIES,
   PROP_CASE_SENSITIVE,
   PROP_EXTEND_SELECTION,
@@ -187,6 +188,10 @@ ide_editor_search_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, ide_editor_search_get_active (self));
+      break;
+
     case PROP_CASE_SENSITIVE:
       g_value_set_boolean (value, ide_editor_search_get_case_sensitive (self));
       break;
@@ -303,6 +308,19 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
   object_class->finalize = ide_editor_search_finalize;
   object_class->get_property = ide_editor_search_get_property;
   object_class->set_property = ide_editor_search_set_property;
+
+  /**
+   * IdeEditorSearch:active:
+   *
+   * The "active" property is %TRUE when their is an active search
+   * in progress.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_ACTIVE] =
+    g_param_spec_boolean ("active", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeEditorSearch:view:
@@ -604,6 +622,8 @@ ide_editor_search_acquire_context (IdeEditorSearch *self)
 
       /* Update text tag stylign */
       ide_editor_search_notify_style_scheme (self, NULL, buffer);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE]);
     }
 
   return self->context;
@@ -621,6 +641,7 @@ ide_editor_search_release_context (IdeEditorSearch *self)
                                             G_CALLBACK (ide_editor_search_notify_occurrences_count),
                                             self);
       g_clear_object (&self->context);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE]);
     }
 }
 
@@ -1613,6 +1634,28 @@ ide_editor_search_set_repeat (IdeEditorSearch *self,
       self->repeat = repeat;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_REPEAT]);
     }
+}
+
+/**
+ * ide_editor_search_get_active:
+ * @self: a #IdeEditorSearch
+ *
+ * Gets the "active" property.
+ *
+ * The #IdeEditorSearch is considered active if there is a search
+ * context loaded and the search text is not empty.
+ *
+ * Returns: %TRUE if a search is active
+ */
+gboolean
+ide_editor_search_get_active (IdeEditorSearch *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_SEARCH (self), FALSE);
+
+  if (self->context != NULL)
+    return !dzl_str_empty0 (ide_editor_search_get_search_text (self));
+
+  return FALSE;
 }
 
 static void
