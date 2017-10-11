@@ -201,7 +201,11 @@ search_entry_previous_match (IdeEditorSearchBar *self,
   g_assert (GTK_IS_SEARCH_ENTRY (entry));
 
   if (self->search != NULL)
-    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_BACKWARD);
+    {
+      ide_editor_search_set_extend_selection (self->search, IDE_EDITOR_SEARCH_SELECT_NONE);
+      ide_editor_search_set_repeat (self->search, 0);
+      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_BACKWARD);
+    }
 }
 
 static void
@@ -212,7 +216,11 @@ search_entry_next_match (IdeEditorSearchBar *self,
   g_assert (GTK_IS_SEARCH_ENTRY (entry));
 
   if (self->search != NULL)
-    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
+    {
+      ide_editor_search_set_extend_selection (self->search, IDE_EDITOR_SEARCH_SELECT_NONE);
+      ide_editor_search_set_repeat (self->search, 0);
+      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
+    }
 }
 
 static void
@@ -223,7 +231,11 @@ search_entry_activate (IdeEditorSearchBar *self,
   g_assert (GD_IS_TAGGED_ENTRY (entry));
 
   if (self->search != NULL)
-    ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
+    {
+      ide_editor_search_set_extend_selection (self->search, IDE_EDITOR_SEARCH_SELECT_NONE);
+      ide_editor_search_set_repeat (self->search, 0);
+      ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
+    }
 
   g_signal_emit (self, signals [STOP_SEARCH], 0);
 }
