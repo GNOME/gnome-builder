@@ -91,7 +91,6 @@ gboolean               ide_editor_search_get_at_word_boundaries       (IdeEditor
 guint                  ide_editor_search_get_repeat                   (IdeEditorSearch           *self);
 void                   ide_editor_search_set_repeat                   (IdeEditorSearch           *self,
                                                                        guint                      repeat);
-gboolean               ide_editor_search_get_busy                     (IdeEditorSearch           *self);
 guint                  ide_editor_search_get_match_count              (IdeEditorSearch           *self);
 guint                  ide_editor_search_get_match_position           (IdeEditorSearch           *self);
 void                   ide_editor_search_move                         (IdeEditorSearch           *self,

@@ -61,7 +61,6 @@ struct _IdeEditorSearch
 
   guint                    repeat;
 
-  guint                    busy : 1;
   guint                    reverse : 1;
   guint                    visible : 1;
   IdeEditorSearchSelect    extend_selection : 2;
@@ -70,7 +69,6 @@ struct _IdeEditorSearch
 enum {
   PROP_0,
   PROP_AT_WORD_BOUNDARIES,
-  PROP_BUSY,
   PROP_CASE_SENSITIVE,
   PROP_EXTEND_SELECTION,
   PROP_MATCH_COUNT,
@@ -225,10 +223,6 @@ ide_editor_search_get_property (GObject    *object,
       g_value_set_boolean (value, ide_editor_search_get_at_word_boundaries (self));
       break;
 
-    case PROP_BUSY:
-      g_value_set_boolean (value, ide_editor_search_get_busy (self));
-      break;
-
     case PROP_MATCH_COUNT:
       g_value_set_uint (value, ide_editor_search_get_match_count (self));
       break;
@@ -336,22 +330,6 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
     g_param_spec_boolean ("at-word-boundaries", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * IdeEditorSearch:busy:
-   *
-   * The "busy" property specifies if the #IdeEditorSearch is busy
-   * performing a background operation.
-   *
-   * You should not make modifications to the #IdeEditorSearch while
-   * it is busy, or you risk replacing unexpected text in the source view.
-   *
-   * Since: 3.28
-   */
-  properties [PROP_BUSY] =
-    g_param_spec_boolean ("busy", NULL, NULL,
-                          FALSE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * IdeEditorSearch:case-sensitive:
@@ -1051,24 +1029,6 @@ ide_editor_search_get_at_word_boundaries (IdeEditorSearch *self)
 }
 
 /**
- * ide_editor_search_get_busy:
- * @self: An #IdeEditorSearch
- *
- * Checks to see if the #IdeEditorSearch is busy performing a task. You
- * might want to use this property to alter the sensitivity of widgets
- * while background work is processing.
- *
- * Since: 3.28
- */
-gboolean
-ide_editor_search_get_busy (IdeEditorSearch *self)
-{
-  g_return_val_if_fail (IDE_IS_EDITOR_SEARCH (self), FALSE);
-
-  return self->busy;
-}
-
-/**
  * ide_editor_search_get_match_count:
  * @self: An #IdeEditorSearch
  *
@@ -1435,10 +1395,6 @@ ide_editor_search_replace (IdeEditorSearch *self)
  *
  * Replaces all the occurrances of #IdeEditorSearch:search-text with the
  * value of #IdeEditorSearch:replacement-text.
- *
- * The #IdeEditorSearch:busy property will be set to %TRUE during the
- * duration of this operation, as no changes may be made while the
- * operation is pending.
  *
  * Since: 3.28
  */
