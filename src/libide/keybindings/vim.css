@@ -328,27 +328,37 @@
   bind "semicolon" { "movement" (next-match-search-char, 0, 0, 1)
                      "clear-count" () };
 
-  bind "n" { "move-search" (tab-forward, 0, 0, 1, 1, 0) };
-  bind "<shift>n" { "move-search" (tab-backward, 0, 0, 0, 1, 0) };
+  bind "n" { "save-insert-mark" ()
+             "move-search" (tab-forward, 0, 0, 1, 1, 0)
+             "restore-insert-mark" () };
+  bind "<shift>n" { "save-insert-mark" ()
+                    "move-search" (tab-backward, 0, 0, 0, 1, 0)
+                    "restore-insert-mark" () };
 
-  bind "numbersign" { "movement" (next-word-end, 0, 1, 0)
+  bind "numbersign" { "save-insert-mark" ()
+                      "movement" (next-word-end, 0, 1, 0)
                       "movement" (previous-word-start, 0, 1, 0)
                       "movement" (next-word-end, 1, 0, 0)
                       "set-search-text" ("", 1)
                       "movement" (previous-char, 0, 1, 0)
-                      "move-search" (up, 0, 0, 0, 1, 1) };
+                      "move-search" (up, 0, 0, 0, 1, 1)
+                      "restore-insert-mark" () };
 
-  bind "asterisk" { "movement" (next-word-end, 0, 1, 0)
+  bind "asterisk" { "save-insert-mark" ()
+                    "movement" (next-word-end, 0, 1, 0)
                     "movement" (previous-word-start, 0, 1, 0)
                     "movement" (next-word-end, 1, 0, 0)
                     "set-search-text" ("", 1)
-                    "move-search" (down, 0, 0, 1, 1, 1) };
+                    "move-search" (down, 0, 0, 1, 1, 1)
+                    "restore-insert-mark" () };
 
-  bind "KP_Multiply" { "movement" (previous-word-end, 0, 1, 1)
+  bind "KP_Multiply" { "save-insert-mark" ()
+                       "movement" (previous-word-end, 0, 1, 1)
                        "movement" (next-word-start, 0, 1, 0)
                        "movement" (next-word-end, 1, 0, 1)
                        "set-search-text" ("", 1)
-                       "move-search" (down, 0, 0, 1, 1, 1) };
+                       "move-search" (down, 0, 0, 1, 1, 1)
+                       "restore-insert-mark" () };
 
   /* page movements */
   bind "<ctrl>b" { "movement" (page-up, 0, 0, 1)

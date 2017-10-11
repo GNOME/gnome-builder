@@ -581,6 +581,98 @@ ide_editor_view_focus_location (IdeEditorView     *self,
 }
 
 static void
+ide_editor_view_clear_search (IdeEditorView *self,
+                              IdeSourceView *view)
+{
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_EDITOR_SEARCH (self->search));
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  ide_editor_search_set_search_text (self->search, NULL);
+}
+
+static void
+ide_editor_view_move_search (IdeEditorView    *self,
+                             GtkDirectionType  dir,
+                             gboolean          extend_selection,
+                             gboolean          select_match,
+                             gboolean          exclusive,
+                             gboolean          apply_count,
+                             gboolean          at_word_boundaries,
+                             IdeSourceView    *view)
+{
+  IdeEditorSearchSelect sel = 0;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_EDITOR_SEARCH (self->search));
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  if (extend_selection && select_match)
+    sel = IDE_EDITOR_SEARCH_SELECT_WITH_RESULT;
+  else if (extend_selection)
+    sel = IDE_EDITOR_SEARCH_SELECT_TO_RESULT;
+
+  ide_editor_search_set_extend_selection (self->search, sel);
+
+  if (apply_count)
+    {
+      ide_editor_search_set_repeat (self->search, ide_source_view_get_count (view));
+      g_signal_emit_by_name (view, "clear-count");
+    }
+
+  ide_editor_search_set_at_word_boundaries (self->search, at_word_boundaries);
+
+  switch (dir)
+    {
+    case GTK_DIR_DOWN:
+    case GTK_DIR_RIGHT:
+    case GTK_DIR_TAB_FORWARD:
+      if (extend_selection)
+        ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_FORWARD);
+      else
+        ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_NEXT);
+      break;
+
+    case GTK_DIR_UP:
+    case GTK_DIR_LEFT:
+    case GTK_DIR_TAB_BACKWARD:
+      if (extend_selection)
+        ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_BACKWARD);
+      else
+        ide_editor_search_move (self->search, IDE_EDITOR_SEARCH_PREVIOUS);
+      break;
+
+    default:
+      break;
+    }
+}
+
+static void
+ide_editor_view_set_search_text (IdeEditorView *self,
+                                 const gchar   *search_text,
+                                 gboolean       from_selection,
+                                 IdeSourceView *view)
+{
+  g_autofree gchar *freeme = NULL;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_EDITOR_SEARCH (self->search));
+  g_assert (search_text != NULL || from_selection);
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  if (from_selection)
+    {
+      if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
+        search_text = freeme = gtk_text_iter_get_slice (&begin, &end);
+    }
+
+  ide_editor_search_set_search_text (self->search, search_text);
+  ide_editor_search_set_regex_enabled (self->search, FALSE);
+}
+
+static void
 ide_editor_view_constructed (GObject *object)
 {
   IdeEditorView *self = (IdeEditorView *)object;
@@ -626,6 +718,21 @@ ide_editor_view_constructed (GObject *object)
   g_signal_connect_swapped (self->source_view,
                             "focus-location",
                             G_CALLBACK (ide_editor_view_focus_location),
+                            self);
+
+  g_signal_connect_swapped (self->source_view,
+                            "set-search-text",
+                            G_CALLBACK (ide_editor_view_set_search_text),
+                            self);
+
+  g_signal_connect_swapped (self->source_view,
+                            "clear-search",
+                            G_CALLBACK (ide_editor_view_clear_search),
+                            self);
+
+  g_signal_connect_swapped (self->source_view,
+                            "move-search",
+                            G_CALLBACK (ide_editor_view_move_search),
                             self);
 
   g_signal_connect_swapped (self->map,

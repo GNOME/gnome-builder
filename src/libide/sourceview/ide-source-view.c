@@ -180,17 +180,6 @@ typedef struct
 
 typedef struct
 {
-  gint              ref_count;
-  gint              count;
-  IdeSourceView    *self;
-  guint             is_forward : 1;
-  guint             extend_selection : 1;
-  guint             select_match : 1;
-  guint             exclusive : 1;
-} SearchMovement;
-
-typedef struct
-{
   IdeSourceView    *self;
   GtkTextMark      *word_start_mark;
   GtkTextMark      *word_end_mark;
@@ -220,8 +209,6 @@ enum {
   PROP_OVERWRITE_BRACES,
   PROP_RUBBERBAND_SEARCH,
   PROP_SCROLL_OFFSET,
-  PROP_SEARCH_CONTEXT,
-  PROP_SEARCH_DIRECTION,
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SHOW_LINE_DIAGNOSTICS,
@@ -354,30 +341,6 @@ find_references_task_get_extension (IdeExtensionSetAdapter *set,
   g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
 }
 
-static SearchMovement *
-search_movement_ref (SearchMovement *movement)
-{
-  g_return_val_if_fail (movement, NULL);
-  g_return_val_if_fail (movement->ref_count > 0, NULL);
-
-  movement->ref_count++;
-
-  return movement;
-}
-
-static void
-search_movement_unref (SearchMovement *movement)
-{
-  g_return_if_fail (movement);
-  g_return_if_fail (movement->ref_count > 0);
-
-  if (--movement->ref_count == 0)
-    {
-      g_object_unref (movement->self);
-      g_free (movement);
-    }
-}
-
 static void
 definition_highlight_data_free (DefinitionHighlightData *data)
 {
@@ -398,36 +361,7 @@ definition_highlight_data_free (DefinitionHighlightData *data)
     }
 }
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (SearchMovement, search_movement_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (DefinitionHighlightData, definition_highlight_data_free)
-
-static SearchMovement *
-search_movement_new (IdeSourceView *self,
-                     gboolean       is_forward,
-                     gboolean       extend_selection,
-                     gboolean       select_match,
-                     gboolean       exclusive,
-                     gboolean       use_count)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  SearchMovement *mv;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  mv = g_new0 (SearchMovement, 1);
-  mv->ref_count = 1;
-  mv->self = g_object_ref (self);
-  mv->is_forward = !!is_forward;
-  mv->extend_selection = !!extend_selection;
-  mv->select_match = !!select_match;
-  mv->exclusive = !!exclusive;
-  mv->count = use_count ? MAX (priv->count, 1) : 1;
-
-  g_assert (mv->ref_count == 1);
-  g_assert (mv->count > 0);
-
-  return mv;
-}
 
 static gboolean
 ide_source_view_can_animate (IdeSourceView *self)
@@ -1073,68 +1007,6 @@ ide_source_view__buffer_changed_cb (IdeSourceView *self,
 }
 
 static void
-ide_source_view__search_settings_notify_search_text (IdeSourceView           *self,
-                                                     GParamSpec              *pspec,
-                                                     GtkSourceSearchSettings *search_settings)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  const gchar *search_text;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
-
-  search_text = gtk_source_search_settings_get_search_text (search_settings);
-
-  /*
-   * If we have IdeSourceView:rubberband-search enabled, then we should try to
-   * autoscroll to the next search result starting from our saved search mark.
-   */
-  if ((search_text != NULL) && (search_text [0] != '\0') &&
-      priv->rubberband_search && (priv->rubberband_insert_mark != NULL))
-    {
-      GtkTextBuffer *buffer;
-      GtkTextIter begin_iter;
-      GtkTextIter match_begin;
-      GtkTextIter match_end;
-      gboolean search_succeeded;
-      gboolean has_wrapped;
-
-      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-      gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter, priv->rubberband_insert_mark);
-
-      switch (priv->search_direction)
-        {
-        case GTK_DIR_LEFT:
-        case GTK_DIR_UP:
-          search_succeeded = gtk_source_search_context_backward2 (priv->search_context,
-                                                                  &begin_iter,
-                                                                  &match_begin,
-                                                                  &match_end,
-                                                                  &has_wrapped);
-          break;
-        case GTK_DIR_RIGHT:
-        case GTK_DIR_DOWN:
-          search_succeeded = gtk_source_search_context_forward2 (priv->search_context,
-                                                                 &begin_iter,
-                                                                 &match_begin,
-                                                                 &match_end,
-                                                                 &has_wrapped);
-          break;
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_TAB_BACKWARD:
-        default:
-          g_return_if_reached ();
-        }
-
-      if (search_succeeded)
-        {
-          gtk_text_buffer_move_mark (buffer, priv->rubberband_mark, &match_begin);
-          ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark, TRUE, 0.5, 0.5);
-        }
-    }
-}
-
-static void
 ide_source_view_rebuild_css (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -1588,7 +1460,6 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
                              DzlSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceSearchSettings *search_settings;
   GtkTextMark *insert;
   GtkTextIter iter;
   IdeContext *context;
@@ -1634,25 +1505,6 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   ide_extension_set_adapter_foreach (priv->completion_providers,
                                      (IdeExtensionSetAdapterForeachFunc)ide_source_view__completion_provider_added,
                                      self);
-
-  search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
-                                  "wrap-around", TRUE,
-                                  "regex-enabled", FALSE,
-                                  "case-sensitive", FALSE,
-                                  NULL);
-  priv->search_context = g_object_new (GTK_SOURCE_TYPE_SEARCH_CONTEXT,
-                                       "buffer", buffer,
-                                       "highlight", TRUE,
-                                       "settings", search_settings,
-                                       NULL);
-
-  g_signal_connect_object (search_settings,
-                           "notify::search-text",
-                           G_CALLBACK (ide_source_view__search_settings_notify_search_text),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_clear_object (&search_settings);
 
   priv->cursor = g_object_new (IDE_TYPE_CURSOR,
                                "ide-source-view", self,
@@ -1728,7 +1580,6 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
       g_clear_object (&priv->cursor);
     }
 
-  g_clear_object (&priv->search_context);
   g_clear_object (&priv->indenter_adapter);
   g_clear_object (&priv->completion_providers);
   g_clear_object (&priv->definition_highlight_start_mark);
@@ -3111,18 +2962,6 @@ ide_source_view_real_clear_modifier (IdeSourceView *self)
 }
 
 static void
-ide_source_view_real_clear_search (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceSearchSettings *search_settings;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  search_settings = gtk_source_search_context_get_settings (priv->search_context);
-  gtk_source_search_settings_set_search_text (search_settings, "");
-}
-
-static void
 ide_source_view_real_clear_selection (IdeSourceView *self)
 {
   GtkTextView *text_view = (GtkTextView *)self;
@@ -3691,261 +3530,6 @@ ide_source_view_real_movement (IdeSourceView         *self,
 }
 
 static void
-ide_source_view__search_forward_cb (GObject      *object,
-                                    GAsyncResult *result,
-                                    gpointer      user_data)
-{
-  GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)object;
-  IdeSourceViewPrivate *priv;
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter begin;
-  GtkTextIter end;
-  gboolean has_wrapped;
-  g_autoptr(SearchMovement) mv = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
-  g_assert (mv);
-  g_assert (IDE_IS_SOURCE_VIEW (mv->self));
-
-  priv = ide_source_view_get_instance_private (mv->self);
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
-  insert = gtk_text_buffer_get_insert (buffer);
-
-  if (!gtk_source_search_context_forward_finish2 (search_context,
-                                                  result,
-                                                  &begin,
-                                                  &end,
-                                                  &has_wrapped,
-                                                  &error))
-    {
-      /*
-       * If we didn't find a match, scroll back to the position when the search
-       * started.
-       */
-      if (priv->rubberband_search)
-        ide_source_view_rollback_search (mv->self);
-      return;
-    }
-
-  mv->count--;
-
-  gtk_text_iter_order (&begin, &end);
-
-  /*
-   * If we still need to move further back in the document, let's search again.
-   */
-  if (mv->count > 0)
-    {
-      gtk_source_search_context_forward_async (search_context,
-                                               &end,
-                                               NULL,
-                                               ide_source_view__search_forward_cb,
-                                               search_movement_ref (mv));
-      return;
-    }
-
-  if (!mv->exclusive && !mv->select_match)
-    gtk_text_iter_forward_char (&begin);
-
-  if (mv->extend_selection)
-    gtk_text_buffer_move_mark (buffer, insert, &begin);
-  else if (mv->select_match)
-    gtk_text_buffer_select_range (buffer, &begin, &end);
-  else
-    gtk_text_buffer_select_range (buffer, &begin, &begin);
-
-  /* if we arent focused, update the saved position marker */
-  if (!gtk_widget_has_focus (GTK_WIDGET (mv->self)))
-    ide_source_view_real_save_insert_mark (mv->self);
-
-  ide_source_view_scroll_mark_onscreen (mv->self, insert, TRUE, 0.5, 0.5);
-}
-
-static void
-ide_source_view__search_backward_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
-{
-  GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)object;
-  IdeSourceViewPrivate *priv;
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter begin;
-  GtkTextIter end;
-  gboolean has_wrapped;
-  g_autoptr(SearchMovement) mv = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
-  g_assert (mv);
-  g_assert (IDE_IS_SOURCE_VIEW (mv->self));
-
-  priv = ide_source_view_get_instance_private (mv->self);
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
-  insert = gtk_text_buffer_get_insert (buffer);
-
-  if (!gtk_source_search_context_backward_finish2 (search_context,
-                                                   result,
-                                                   &begin,
-                                                   &end,
-                                                   &has_wrapped,
-                                                   &error))
-    {
-      /*
-       * If we didn't find a match, scroll back to the position when the search
-       * started.
-       */
-      if (priv->rubberband_search)
-        ide_source_view_rollback_search (mv->self);
-      return;
-    }
-
-  mv->count--;
-
-  gtk_text_iter_order (&begin, &end);
-
-  /*
-   * If we still need to move further back in the document, let's search again.
-   */
-  if (mv->count > 0)
-    {
-      gtk_source_search_context_backward_async (search_context,
-                                                &begin,
-                                                NULL,
-                                                ide_source_view__search_backward_cb,
-                                                search_movement_ref (mv));
-      return;
-    }
-
-  if (mv->exclusive && !mv->select_match)
-    gtk_text_iter_forward_char (&begin);
-
-  if (mv->extend_selection)
-    gtk_text_buffer_move_mark (buffer, insert, &begin);
-  else if (mv->select_match)
-    gtk_text_buffer_select_range (buffer, &begin, &end);
-  else
-    gtk_text_buffer_select_range (buffer, &begin, &begin);
-
-  /* if we arent focused, update the saved position marker */
-  if (!gtk_widget_has_focus (GTK_WIDGET (mv->self)))
-    ide_source_view_real_save_insert_mark (mv->self);
-
-  ide_source_view_scroll_mark_onscreen (mv->self, insert, TRUE, 0.5, 0.5);
-}
-
-static void
-ide_source_view_real_move_search (IdeSourceView    *self,
-                                  GtkDirectionType  dir,
-                                  gboolean          extend_selection,
-                                  gboolean          select_match,
-                                  gboolean          exclusive,
-                                  gboolean          apply_count,
-                                  gint              word_boundaries)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextView *text_view = (GtkTextView *)self;
-  g_autoptr(SearchMovement) mv = NULL;
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert_mark;
-  GtkTextIter insert_iter;
-  GtkSourceSearchSettings *settings;
-  const gchar *search_text;
-  gboolean is_forward;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  if (!priv->search_context)
-    return;
-
-  if (dir == GTK_DIR_TAB_BACKWARD)
-    {
-      switch (priv->search_direction)
-        {
-        case GTK_DIR_LEFT:
-          dir = GTK_DIR_RIGHT;
-          break;
-        case GTK_DIR_RIGHT:
-          dir = GTK_DIR_LEFT;
-          break;
-        case GTK_DIR_UP:
-          dir = GTK_DIR_DOWN;
-          break;
-        case GTK_DIR_DOWN:
-          dir = GTK_DIR_UP;
-          break;
-        case GTK_DIR_TAB_FORWARD:
-        case GTK_DIR_TAB_BACKWARD:
-        default:
-          g_return_if_reached ();
-        }
-    }
-  else if (dir == GTK_DIR_TAB_FORWARD)
-    {
-      dir = priv->search_direction;
-    }
-  else
-    {
-      priv->search_direction = dir;
-    }
-
-  gtk_source_search_context_set_highlight (priv->search_context, TRUE);
-
-  settings = gtk_source_search_context_get_settings (priv->search_context);
-
-  /*
-   * A word_boundaries value other than 0 or 1 means that we don't modify
-   * the word_boundaries search setting.
-   */
-  if (word_boundaries == 0)
-    gtk_source_search_settings_set_at_word_boundaries (settings, FALSE);
-  else if (word_boundaries == 1)
-    gtk_source_search_settings_set_at_word_boundaries (settings, TRUE);
-
-  search_text = gtk_source_search_settings_get_search_text (settings);
-
-  if (search_text == NULL || search_text[0] == '\0')
-    {
-      if (priv->saved_search_text == NULL)
-        return;
-
-      gtk_source_search_settings_set_search_text (settings, priv->saved_search_text);
-    }
-
-  buffer = gtk_text_view_get_buffer (text_view);
-  insert_mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &insert_iter, insert_mark);
-
-  is_forward = (dir == GTK_DIR_DOWN) || (dir == GTK_DIR_RIGHT);
-
-  mv = search_movement_new (self, is_forward, extend_selection, select_match,
-                            exclusive, apply_count);
-
-  if (is_forward)
-    {
-      gtk_text_iter_forward_char (&insert_iter);
-      gtk_source_search_context_forward_async (priv->search_context,
-                                               &insert_iter,
-                                               NULL,
-                                               ide_source_view__search_forward_cb,
-                                               search_movement_ref (mv));
-    }
-  else
-    {
-      gtk_source_search_context_backward_async (priv->search_context,
-                                                &insert_iter,
-                                                NULL,
-                                                ide_source_view__search_backward_cb,
-                                                search_movement_ref (mv));
-    }
-}
-
-static void
 ide_source_view_real_move_error (IdeSourceView    *self,
                                  GtkDirectionType  dir)
 {
@@ -4320,38 +3904,6 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
 }
 
 static void
-ide_source_view_real_set_search_text (IdeSourceView *self,
-                                      const gchar   *search_text,
-                                      gboolean       from_selection)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  g_autofree gchar *str = NULL;
-  GtkSourceSearchSettings *settings;
-  GtkTextBuffer *buffer;
-  GtkTextIter begin;
-  GtkTextIter end;
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  if (!priv->search_context)
-    return;
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  if (from_selection)
-    {
-      gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-      str = gtk_text_iter_get_slice (&begin, &end);
-      search_text = str;
-    }
-
-  ide_source_view_sync_rubberband_mark (self);
-
-  settings = gtk_source_search_context_get_settings (priv->search_context);
-  gtk_source_search_settings_set_search_text (settings, search_text);
-}
-
-static void
 ide_source_view_real_reindent (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -4637,6 +4189,7 @@ ide_source_view_draw_snippets_background (IdeSourceView *self,
   cairo_restore (cr);
 }
 
+#if 0
 static void
 draw_bezel (cairo_t                     *cr,
             const cairo_rectangle_int_t *rect,
@@ -4751,11 +4304,13 @@ add_matches (GtkTextView            *text_view,
 
   return count;
 }
+#endif
 
 void
 ide_source_view_draw_search_bubbles (IdeSourceView *self,
                                      cairo_t       *cr)
 {
+#if 0
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
   cairo_region_t *clip_region;
@@ -4815,6 +4370,7 @@ ide_source_view_draw_search_bubbles (IdeSourceView *self,
 
   cairo_region_destroy (clip_region);
   cairo_region_destroy (match_region);
+#endif
 }
 
 static void
@@ -4852,18 +4408,14 @@ static gboolean
 ide_source_view_real_draw (GtkWidget *widget,
                            cairo_t   *cr)
 {
-  GtkTextView *text_view = (GtkTextView *)widget;
-  IdeSourceView *self = (IdeSourceView *)widget;
-  IdeSourceViewPrivate *priv =  ide_source_view_get_instance_private (self);
   gboolean ret;
 
-  g_assert (GTK_IS_WIDGET (widget));
-  g_assert (GTK_IS_TEXT_VIEW (text_view));
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (cr);
+  g_assert (IDE_IS_SOURCE_VIEW (widget));
+  g_assert (cr != NULL);
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->draw (widget, cr);
 
+#if 0
   if (priv->show_search_shadow &&
       priv->search_context &&
       (gtk_source_search_context_get_occurrences_count (priv->search_context) > 0))
@@ -4883,6 +4435,7 @@ ide_source_view_real_draw (GtkWidget *widget,
       cairo_fill (cr);
       cairo_restore (cr);
     }
+#endif
 
   return ret;
 }
@@ -6354,14 +5907,6 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_uint (value, ide_source_view_get_scroll_offset (self));
       break;
 
-    case PROP_SEARCH_CONTEXT:
-      g_value_set_object (value, ide_source_view_get_search_context (self));
-      break;
-
-    case PROP_SEARCH_DIRECTION:
-      g_value_set_enum (value, ide_source_view_get_search_direction (self));
-      break;
-
     case PROP_SHOW_GRID_LINES:
       g_value_set_boolean (value, ide_source_view_get_show_grid_lines (self));
       break;
@@ -6459,10 +6004,6 @@ ide_source_view_set_property (GObject      *object,
       ide_source_view_set_scroll_offset (self, g_value_get_uint (value));
       break;
 
-    case PROP_SEARCH_DIRECTION:
-      ide_source_view_set_search_direction (self, g_value_get_enum (value));
-      break;
-
     case PROP_SHOW_GRID_LINES:
       ide_source_view_set_show_grid_lines (self, g_value_get_boolean (value));
       break;
@@ -6542,7 +6083,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
   klass->clear_modifier = ide_source_view_real_clear_modifier;
-  klass->clear_search = ide_source_view_real_clear_search;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->clear_snippets = ide_source_view_clear_snippets;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
@@ -6555,7 +6095,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
   klass->move_error = ide_source_view_real_move_error;
-  klass->move_search = ide_source_view_real_move_search;
   klass->movement = ide_source_view_real_movement;
   klass->paste_clipboard_extended = ide_source_view_real_paste_clipboard_extended;
   klass->pop_selection = ide_source_view_real_pop_selection;
@@ -6573,7 +6112,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
-  klass->set_search_text = ide_source_view_real_set_search_text;
   klass->sort = ide_source_view_real_sort;
   klass->swap_selection_bounds = ide_source_view_real_swap_selection_bounds;
 
@@ -6672,21 +6210,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        0,
                        G_MAXUINT,
                        0,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SEARCH_CONTEXT] =
-    g_param_spec_object ("search-context",
-                         "Search Context",
-                         "The search context for the view.",
-                         GTK_SOURCE_TYPE_SEARCH_CONTEXT,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SEARCH_DIRECTION] =
-    g_param_spec_enum ("search-direction",
-                       "Search Direction",
-                       "The direction searches go for the view.",
-                       GTK_TYPE_DIRECTION_TYPE,
-                       GTK_DIR_DOWN,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SHOW_GRID_LINES] =
@@ -7473,7 +6996,6 @@ ide_source_view_init (IdeSourceView *self)
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
   priv->font_scale = FONT_SCALE_NORMAL;
-  priv->search_direction = GTK_DIR_DOWN;
   priv->command_str = g_string_sized_new (32);
   priv->overscroll_num_lines = DEFAULT_OVERSCROLL_NUM_LINES;
 
@@ -8606,68 +8128,6 @@ ide_source_view_set_enable_word_completion (IdeSourceView *self,
 }
 
 /**
- * ide_source_view_get_search_context:
- * @self: An #IdeSourceView.
- *
- * Returns the #GtkSourceSearchContext for the source view if there is one.
- *
- * Returns: (transfer none) (nullable): A #GtkSourceSearchContext or %NULL.
- */
-GtkSourceSearchContext *
-ide_source_view_get_search_context (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
-
-  return priv->search_context;
-}
-
-/**
- * ide_source_view_get_search_direction:
- * @self: An #IdeSourceView.
- *
- * Gets the current search direction.
- *
- * Returns: A #GtkDirectionType
- */
-GtkDirectionType
-ide_source_view_get_search_direction (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), GTK_DIR_DOWN);
-
-  return priv->search_direction;
-}
-
-/**
- * ide_source_view_set_search_direction:
- * @self: An #IdeSourceView.
- * @direction: the direction
- *
- * Sets the search direction.
- *
- * This can be used to invert the normal search direction so that a forward
- * movement is towards the beginning of the document.
- */
-void
-ide_source_view_set_search_direction (IdeSourceView    *self,
-                                      GtkDirectionType  direction)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (direction != GTK_DIR_TAB_BACKWARD && direction != GTK_DIR_TAB_FORWARD);
-
-  if (direction != priv->search_direction)
-    {
-      priv->search_direction = direction;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_DIRECTION]);
-    }
-}
-
-/**
  * ide_source_view_get_show_search_bubbles:
  * @self: An #IdeSourceView.
  *
@@ -8840,44 +8300,6 @@ ide_source_view_get_visual_position (IdeSourceView *self,
 
   if (line_column)
     *line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
-}
-
-void
-ide_source_view_clear_search (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceSearchSettings *search_settings;
-  const gchar *search_text;
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  search_settings = gtk_source_search_context_get_settings (priv->search_context);
-  search_text = gtk_source_search_settings_get_search_text (search_settings);
-
-  if ((search_text != NULL) &&
-      (search_text [0] != 0) &&
-      (0 != g_strcmp0 (priv->saved_search_text, search_text)))
-    {
-      g_free (priv->saved_search_text);
-      priv->saved_search_text = g_strdup (search_text);
-    }
-
-  gtk_source_search_settings_set_search_text (search_settings, "");
-}
-
-void
-ide_source_view_save_search (IdeSourceView *self,
-                             const gchar   *search_text)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  if (0 != g_strcmp0 (priv->saved_search_text, search_text))
-    {
-      g_free (priv->saved_search_text);
-      priv->saved_search_text = (search_text != NULL) ? g_strdup (search_text) : NULL;
-    }
 }
 
 gint
