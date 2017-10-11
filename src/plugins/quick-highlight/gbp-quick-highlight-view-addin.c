@@ -86,7 +86,7 @@ gbp_quick_highlight_view_addin_change_style (GtkSourceBuffer *buffer,
 
   gtk_source_search_context_set_match_style (self->search_context, style);
 
-  if (text != NULL && strlen (text) > 0)
+  if (!dzl_str_empty0 (text))
     {
       gtk_source_search_settings_set_search_text (self->search_settings, text);
       gtk_source_search_context_set_highlight (self->search_context, TRUE);
@@ -107,26 +107,18 @@ gbp_quick_highlight_view_addin_match (GbpQuickHighlightViewAddin *self)
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
     {
-      text = gtk_text_buffer_get_text (buffer, &begin, &end, FALSE);
+      text = g_strstrip (gtk_text_buffer_get_text (buffer, &begin, &end, FALSE));
 
-      g_strstrip (text);
-
-      if (text[0])
+      if (!dzl_str_empty0 (text))
         {
           gtk_source_search_settings_set_search_text (self->search_settings, text);
           gtk_source_search_context_set_highlight (self->search_context, TRUE);
-        }
-      else
-        {
-          gtk_source_search_settings_set_search_text (self->search_settings, NULL);
-          gtk_source_search_context_set_highlight (self->search_context, FALSE);
+          return;
         }
     }
-  else
-    {
-      gtk_source_search_settings_set_search_text (self->search_settings, NULL);
-      gtk_source_search_context_set_highlight (self->search_context, FALSE);
-    }
+
+  gtk_source_search_settings_set_search_text (self->search_settings, NULL);
+  gtk_source_search_context_set_highlight (self->search_context, FALSE);
 }
 
 
@@ -151,11 +143,10 @@ gbp_quick_highlight_view_addin_queue_update (GbpQuickHighlightViewAddin *self)
   g_assert (GBP_IS_QUICK_HIGHLIGHT_VIEW_ADDIN (self));
 
   if (self->queued_update == 0)
-    self->queued_update =
-      gdk_threads_add_idle_full (G_PRIORITY_LOW,
-                                 gbp_quick_highlight_view_addin_do_update,
-                                 g_object_ref (self),
-                                 g_object_unref);
+    self->queued_update = gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                                                     gbp_quick_highlight_view_addin_do_update,
+                                                     g_object_ref (self),
+                                                     g_object_unref);
 }
 
 static void
