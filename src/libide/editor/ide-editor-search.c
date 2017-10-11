@@ -637,7 +637,7 @@ ide_editor_search_release_context (IdeEditorSearch *self)
   g_assert (IDE_IS_EDITOR_SEARCH (self));
   g_assert (self->context != NULL);
 
-  if (self->context != NULL && self->interactive == 0)
+  if (self->context != NULL && self->interactive == 0 && self->visible == FALSE)
     {
       g_signal_handlers_disconnect_by_func (self->context,
                                             G_CALLBACK (ide_editor_search_notify_occurrences_count),
@@ -898,10 +898,9 @@ ide_editor_search_set_visible (IdeEditorSearch *self,
   if (visible != self->visible)
     {
       self->visible = visible;
-      /* TODO: Dispose the context, but keep the search settings around.
-       *       Upon next movement, we can restore visibility that way.
-       */
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VISIBLE]);
+      if (!visible)
+        ide_editor_search_release_context (self);
     }
 }
 
@@ -1518,8 +1517,11 @@ ide_editor_search_end_interactive (IdeEditorSearch *self)
   /* If we are leaving interactive mode, we want to disable the search
    * highlight unless they were requested manually by other code.
    */
-  if (self->context != NULL && self->interactive == 0)
+  if (self->context != NULL && self->interactive == 0 && self->visible == FALSE)
     gtk_source_search_context_set_highlight (self->context, self->visible);
+
+  /* Maybe cleanup our search context. */
+  ide_editor_search_release_context (self);
 }
 
 /**

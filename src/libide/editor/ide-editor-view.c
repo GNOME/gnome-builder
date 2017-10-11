@@ -589,6 +589,7 @@ ide_editor_view_clear_search (IdeEditorView *self,
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
   ide_editor_search_set_search_text (self->search, NULL);
+  ide_editor_search_set_visible (self->search, FALSE);
 }
 
 static void
@@ -613,6 +614,7 @@ ide_editor_view_move_search (IdeEditorView    *self,
     sel = IDE_EDITOR_SEARCH_SELECT_TO_RESULT;
 
   ide_editor_search_set_extend_selection (self->search, sel);
+  ide_editor_search_set_visible (self->search, TRUE);
 
   if (apply_count)
     {

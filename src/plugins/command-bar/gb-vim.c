@@ -719,17 +719,12 @@ gb_vim_command_nohl (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      GtkSourceSearchContext *context = NULL;
-      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
-
-      g_object_get (source_view, "search-context", &context, NULL);
-      g_object_set (context, "highlight", FALSE, NULL);
-      g_clear_object (&context);
-
+      IdeEditorSearch *search = ide_editor_view_get_search (IDE_EDITOR_VIEW (active_widget));
+      ide_editor_search_set_visible (search, FALSE);
       return TRUE;
     }
-  else
-    return gb_vim_set_source_view_error (error);
+
+  return gb_vim_set_source_view_error (error);
 }
 
 static gboolean
