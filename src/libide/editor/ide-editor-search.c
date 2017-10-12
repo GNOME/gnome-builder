@@ -874,6 +874,7 @@ ide_editor_search_release_context (IdeEditorSearch *self)
                                             self);
       g_clear_object (&self->context);
       dzl_signal_group_block (self->view_signals);
+      gtk_widget_queue_draw (GTK_WIDGET (self->view));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE]);
     }
 }
