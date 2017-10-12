@@ -866,7 +866,6 @@ static void
 ide_editor_search_release_context (IdeEditorSearch *self)
 {
   g_assert (IDE_IS_EDITOR_SEARCH (self));
-  g_assert (self->context != NULL);
 
   if (self->context != NULL && self->interactive == 0 && self->visible == FALSE)
     {
