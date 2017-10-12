@@ -23,7 +23,7 @@
 
 #include "gbp-quick-highlight-editor-view-addin.h"
 
-#define HIGHLIGHT_STYLE_NAME "current-line"
+#define HIGHLIGHT_STYLE_NAME "quick-highlight-match"
 
 struct _GbpQuickHighlightEditorViewAddin
 {

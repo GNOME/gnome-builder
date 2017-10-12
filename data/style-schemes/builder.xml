@@ -106,6 +106,7 @@
 
   <!-- Search Matching -->
   <style name="search-match"                foreground="white" background="pink1"/>
+  <style name="quick-highlight-match"       background="#rgba(221,74,104,0.15)"/>
 
   <!-- Search Shadow -->
   <style name="search-shadow"               background="#rgba(0,0,0,0.2)"/>
