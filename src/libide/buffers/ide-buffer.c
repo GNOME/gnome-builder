@@ -1650,7 +1650,13 @@ ide_buffer_class_init (IdeBufferClass *klass)
     g_signal_new ("change-settled",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [CHANGE_SETTLED],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * IdeBuffer::cursor-moved:
@@ -1666,10 +1672,14 @@ ide_buffer_class_init (IdeBufferClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeBufferClass, cursor_moved),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__BOXED,
                   G_TYPE_NONE,
                   1,
-                  GTK_TYPE_TEXT_ITER);
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [CURSOR_MOVED],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__BOXEDv);
 
   /**
    * IdeBuffer::line-flags-changed:
