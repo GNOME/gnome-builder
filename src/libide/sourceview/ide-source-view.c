@@ -133,9 +133,6 @@ typedef struct
   guint                        saved_selection_line;
   guint                        saved_selection_line_column;
 
-  GdkRGBA                      bubble_color1;
-  GdkRGBA                      bubble_color2;
-  GdkRGBA                      search_shadow_rgba;
   GdkRGBA                      snippet_area_background_rgba;
 
   guint                        font_scale;
@@ -904,56 +901,21 @@ ide_source_view__buffer_notify_style_scheme_cb (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceStyleScheme *scheme = NULL;
-  GtkSourceStyle *search_match_style = NULL;
-  GtkSourceStyle *search_shadow_style = NULL;
   GtkSourceStyle *snippet_area_style = NULL;
   g_autofree gchar *snippet_background = NULL;
-  g_autofree gchar *search_shadow_background = NULL;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
-  if (scheme)
-    {
-      search_match_style = gtk_source_style_scheme_get_style (scheme, "search-match");
-      search_shadow_style = gtk_source_style_scheme_get_style (scheme, "search-shadow");
-      snippet_area_style = gtk_source_style_scheme_get_style (scheme, "snippet::area");
-    }
+  if (scheme != NULL)
+    snippet_area_style = gtk_source_style_scheme_get_style (scheme, "snippet::area");
 
-  if (search_match_style)
-    {
-      g_autofree gchar *background = NULL;
-      GdkRGBA color;
-
-      g_object_get (search_match_style, "background", &background, NULL);
-      gdk_rgba_parse (&color, background);
-      dzl_rgba_shade (&color, &priv->bubble_color1, 0.8);
-      dzl_rgba_shade (&color, &priv->bubble_color2, 1.1);
-    }
-  else
-    {
-      gdk_rgba_parse (&priv->bubble_color1, "#edd400");
-      gdk_rgba_parse (&priv->bubble_color2, "#fce94f");
-    }
-
-  if (search_shadow_style)
-    g_object_get (search_shadow_style, "background", &search_shadow_background, NULL);
-
-  if (search_shadow_background)
-    gdk_rgba_parse (&priv->search_shadow_rgba, search_shadow_background);
-  else
-    {
-      gdk_rgba_parse (&priv->search_shadow_rgba, "#000000");
-      priv->search_shadow_rgba.alpha = 0.2;
-    }
-
-  if (snippet_area_style)
+  if (snippet_area_style != NULL)
     g_object_get (snippet_area_style, "background", &snippet_background, NULL);
 
-  if (snippet_background)
-    gdk_rgba_parse (&priv->snippet_area_background_rgba, snippet_background);
-  else
+  if (snippet_background == NULL ||
+      !gdk_rgba_parse (&priv->snippet_area_background_rgba, snippet_background))
     {
       gdk_rgba_parse (&priv->snippet_area_background_rgba, "#204a87");
       priv->snippet_area_background_rgba.alpha = 0.1;
@@ -4147,190 +4109,6 @@ ide_source_view_draw_snippets_background (IdeSourceView *self,
     }
 
   cairo_restore (cr);
-}
-
-#if 0
-static void
-draw_bezel (cairo_t                     *cr,
-            const cairo_rectangle_int_t *rect,
-            guint                        radius,
-            const GdkRGBA               *rgba)
-{
-  GdkRectangle r;
-
-  r.x = rect->x - radius;
-  r.y = rect->y - radius;
-  r.width = rect->width + (radius * 2);
-  r.height = rect->height + (radius * 2);
-
-  gdk_cairo_set_source_rgba (cr, rgba);
-  dzl_cairo_rounded_rectangle (cr, &r, radius, radius);
-  cairo_fill (cr);
-}
-
-static void
-add_match (GtkTextView       *text_view,
-           cairo_region_t    *region,
-           const GtkTextIter *begin,
-           const GtkTextIter *end)
-{
-  GdkRectangle begin_rect;
-  GdkRectangle end_rect;
-  cairo_rectangle_int_t rect;
-
-  g_assert (GTK_IS_TEXT_VIEW (text_view));
-  g_assert (region);
-  g_assert (begin);
-  g_assert (end);
-
-  /*
-   * NOTE: @end is not inclusive of the match.
-   */
-
-  if (gtk_text_iter_get_line (begin) == gtk_text_iter_get_line (end))
-    {
-      gtk_text_view_get_iter_location (text_view, begin, &begin_rect);
-      gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
-                                             begin_rect.x, begin_rect.y,
-                                             &begin_rect.x, &begin_rect.y);
-      gtk_text_view_get_iter_location (text_view, end, &end_rect);
-      gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
-                                             end_rect.x, end_rect.y,
-                                             &end_rect.x, &end_rect.y);
-      rect.x = begin_rect.x;
-      rect.y = begin_rect.y;
-      rect.width = end_rect.x - begin_rect.x;
-      rect.height = MAX (begin_rect.height, end_rect.height);
-      cairo_region_union_rectangle (region, &rect);
-      return;
-    }
-
-  /*
-   * TODO: Add support for multi-line matches. When @begin and @end are not
-   *       on the same line, we need to add the match region to @region so
-   *       ide_source_view_draw_search_bubbles() can draw search bubbles
-   *       around it.
-   */
-}
-
-static guint
-add_matches (GtkTextView            *text_view,
-             cairo_region_t         *region,
-             GtkSourceSearchContext *search_context,
-             const GtkTextIter      *begin,
-             const GtkTextIter      *end)
-{
-  GtkTextIter first_begin;
-  GtkTextIter new_begin;
-  GtkTextIter match_begin;
-  GtkTextIter match_end;
-  gboolean has_wrapped;
-  guint count = 1;
-
-  g_assert (GTK_IS_TEXT_VIEW (text_view));
-  g_assert (region);
-  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
-  g_assert (begin);
-  g_assert (end);
-
-  if (!gtk_source_search_context_forward2 (search_context,
-                                           begin,
-                                           &first_begin,
-                                           &match_end,
-                                           &has_wrapped))
-    return 0;
-
-  add_match (text_view, region, &first_begin, &match_end);
-
-  for (;; )
-    {
-      gtk_text_iter_assign (&new_begin, &match_end);
-
-      if (gtk_source_search_context_forward2 (search_context,
-                                              &new_begin,
-                                              &match_begin,
-                                              &match_end,
-                                              &has_wrapped) &&
-          (gtk_text_iter_compare (&match_begin, end) < 0) &&
-          (gtk_text_iter_compare (&first_begin, &match_begin) != 0))
-        {
-          add_match (text_view, region, &match_begin, &match_end);
-          count++;
-          continue;
-        }
-
-      break;
-    }
-
-  return count;
-}
-#endif
-
-void
-ide_source_view_draw_search_bubbles (IdeSourceView *self,
-                                     cairo_t       *cr)
-{
-#if 0
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextView *text_view = (GtkTextView *)self;
-  cairo_region_t *clip_region;
-  cairo_region_t *match_region;
-  GdkRectangle area;
-  GtkTextIter begin;
-  GtkTextIter end;
-  cairo_rectangle_int_t r;
-  guint count;
-  gint buffer_x = 0;
-  gint buffer_y = 0;
-  gint n;
-  gint i;
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
-  g_return_if_fail (cr);
-
-  if (!priv->search_context || !gtk_source_search_context_get_highlight (priv->search_context))
-    return;
-
-  if (!gdk_cairo_get_clip_rectangle (cr, &area))
-    gtk_widget_get_allocation (GTK_WIDGET (self), &area);
-
-  gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT,
-                                         area.x, area.y, &buffer_x, &buffer_y);
-  gtk_text_view_get_iter_at_location (text_view, &begin, buffer_x, buffer_y);
-  gtk_text_view_get_iter_at_location (text_view, &end,
-                                      buffer_x + area.width,
-                                      buffer_y + area.height);
-
-  clip_region = cairo_region_create_rectangle (&area);
-  match_region = cairo_region_create ();
-  count = add_matches (text_view, match_region, priv->search_context, &begin, &end);
-
-  cairo_region_subtract (clip_region, match_region);
-
-  if (priv->show_search_shadow &&
-      ((count > 0) || gtk_source_search_context_get_occurrences_count (priv->search_context) > 0))
-    {
-      gdk_cairo_region (cr, clip_region);
-      gdk_cairo_set_source_rgba (cr, &priv->search_shadow_rgba);
-      cairo_fill (cr);
-    }
-
-  gdk_cairo_region (cr, clip_region);
-  cairo_clip (cr);
-
-  n = cairo_region_num_rectangles (match_region);
-
-  for (i = 0; i < n; i++)
-    {
-      cairo_region_get_rectangle (match_region, i, &r);
-      draw_bezel (cr, &r, 3, &priv->bubble_color1);
-      draw_bezel (cr, &r, 2, &priv->bubble_color2);
-    }
-
-  cairo_region_destroy (clip_region);
-  cairo_region_destroy (match_region);
-#endif
 }
 
 static void
