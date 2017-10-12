@@ -8,8 +8,8 @@ quick_highlight_resources = gnome.compile_resources(
 
 quick_highlight_sources = [
   'gbp-quick-highlight-plugin.c',
-  'gbp-quick-highlight-view-addin.c',
-  'gbp-quick-highlight-view-addin.h',
+  'gbp-quick-highlight-editor-view-addin.c',
+  'gbp-quick-highlight-editor-view-addin.h',
   'gbp-quick-highlight-preferences.c',
   'gbp-quick-highlight-preferences.h',
 ]

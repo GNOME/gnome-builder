@@ -1,4 +1,4 @@
-/* gbp-quick-highlight-plugin.c
+/* gbp-quick-highlight-editor-view-addin.h
  *
  * Copyright © 2016 Martin Blanchard <tchaik@gmx.com>
  *
@@ -16,19 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#pragma once
 
-#include "gbp-quick-highlight-editor-view-addin.h"
-#include "gbp-quick-highlight-preferences.h"
+#include <glib-object.h>
 
-void
-gbp_quick_highlight_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              GBP_TYPE_QUICK_HIGHLIGHT_EDITOR_VIEW_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              GBP_TYPE_QUICK_HIGHLIGHT_PREFERENCES);
-}
+G_BEGIN_DECLS
+
+#define GBP_TYPE_QUICK_HIGHLIGHT_EDITOR_VIEW_ADDIN (gbp_quick_highlight_editor_view_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpQuickHighlightEditorViewAddin, gbp_quick_highlight_editor_view_addin, GBP, QUICK_HIGHLIGHT_EDITOR_VIEW_ADDIN, GObject)
+
+G_END_DECLS
