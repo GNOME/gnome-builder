@@ -39,7 +39,6 @@ struct _IdeRunManager
   IdeObject                parent_instance;
 
   GCancellable            *cancellable;
-  GSimpleActionGroup      *actions;
   IdeBuildTarget          *build_target;
 
   const IdeRunHandlerInfo *handler;
@@ -48,12 +47,24 @@ struct _IdeRunManager
   guint                    busy : 1;
 };
 
-static void initable_iface_init     (GInitableIface        *iface);
-static void action_group_iface_init (GActionGroupInterface *iface);
+static void initable_iface_init                      (GInitableIface *iface);
+static void ide_run_manager_actions_run              (IdeRunManager  *self,
+                                                      GVariant       *param);
+static void ide_run_manager_actions_run_with_handler (IdeRunManager  *self,
+                                                      GVariant       *param);
+static void ide_run_manager_actions_stop             (IdeRunManager  *self,
+                                                      GVariant       *param);
+
+DZL_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
+  { "run", ide_run_manager_actions_run },
+  { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
+  { "stop", ide_run_manager_actions_stop },
+})
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
+                                               ide_run_manager_init_action_group))
 
 enum {
   PROP_0,
@@ -109,7 +120,6 @@ ide_run_manager_finalize (GObject *object)
   IdeRunManager *self = (IdeRunManager *)object;
 
   g_clear_object (&self->cancellable);
-  g_clear_object (&self->actions);
   g_clear_object (&self->build_target);
 
   g_list_free_full (self->handlers, ide_run_handler_info_free);
@@ -124,8 +134,6 @@ ide_run_manager_update_action_enabled (IdeRunManager *self)
   IdeBuildManager *build_manager;
   IdeContext *context;
   gboolean can_build;
-  GAction *run_action;
-  GAction *run_with_action;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
 
@@ -133,15 +141,11 @@ ide_run_manager_update_action_enabled (IdeRunManager *self)
   build_manager = ide_context_get_build_manager (context);
   can_build = ide_build_manager_get_can_build (build_manager);
 
-  run_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run");
-  run_with_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run-with-handler");
-
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (run_action), self->busy == FALSE && can_build == TRUE);
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (run_with_action), self->busy == FALSE && can_build == TRUE);
-
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "run", self->busy == FALSE && can_build == TRUE);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "run-with-handler", self->busy == FALSE && can_build == TRUE);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "stop", self->busy == TRUE);
+  ide_run_manager_set_action_enabled (self, "run",
+                                      self->busy == FALSE && can_build == TRUE);
+  ide_run_manager_set_action_enabled (self, "run-with-handler",
+                                      self->busy == FALSE && can_build == TRUE);
+  ide_run_manager_set_action_enabled (self, "stop", self->busy == TRUE);
 }
 
 static void
@@ -953,58 +957,6 @@ ide_run_manager_get_handler (IdeRunManager *self)
   return NULL;
 }
 
-static const gchar *action_names[] = {
-  "run",
-  "run-with-handler",
-  "stop",
-  NULL
-};
-
-static gboolean
-ide_run_manager_has_action (GActionGroup *group,
-                            const gchar  *action_name)
-{
-  g_assert (G_IS_ACTION_GROUP (group));
-  g_assert (action_name != NULL);
-
-  for (guint i = 0; action_names[i]; i++)
-    {
-      if (g_strcmp0 (action_names[i], action_name) == 0)
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gchar **
-ide_run_manager_list_actions (GActionGroup *group)
-{
-  return g_strdupv ((gchar **)action_names);
-}
-
-static gboolean
-ide_run_manager_query_action (GActionGroup        *group,
-                              const gchar         *action_name,
-                              gboolean            *enabled,
-                              const GVariantType **parameter_type,
-                              const GVariantType **state_type,
-                              GVariant           **state_hint,
-                              GVariant           **state)
-{
-  IdeRunManager *self = (IdeRunManager *)group;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (action_name != NULL);
-
-  return g_action_group_query_action (G_ACTION_GROUP (self->actions),
-                                      action_name,
-                                      enabled,
-                                      parameter_type,
-                                      state_type,
-                                      state_hint,
-                                      state);
-}
-
 static void
 ide_run_manager_run_action_cb (GObject      *object,
                                GAsyncResult *result,
@@ -1025,37 +977,11 @@ ide_run_manager_run_action_cb (GObject      *object,
 }
 
 static void
-ide_run_manager_activate_action (GActionGroup *group,
-                                 const gchar  *action_name,
-                                 GVariant     *parameter)
+ide_run_manager_actions_run (IdeRunManager *self,
+                             GVariant      *param)
 {
-  IdeRunManager *self = (IdeRunManager *)group;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (action_name != NULL);
-
-  g_action_group_activate_action (G_ACTION_GROUP (self->actions), action_name, parameter);
-}
-
-static void
-action_group_iface_init (GActionGroupInterface *iface)
-{
-  iface->has_action = ide_run_manager_has_action;
-  iface->list_actions = ide_run_manager_list_actions;
-  iface->query_action = ide_run_manager_query_action;
-  iface->activate_action = ide_run_manager_activate_action;
-}
-
-static void
-ide_run_manager_action_run (GSimpleAction *action,
-                            GVariant      *parameter,
-                            gpointer       user_data)
-{
-  IdeRunManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_RUN_MANAGER (self));
 
   ide_run_manager_run_async (self,
@@ -1068,28 +994,25 @@ ide_run_manager_action_run (GSimpleAction *action,
 }
 
 static void
-ide_run_manager_action_run_with_handler (GSimpleAction *action,
-                                         GVariant      *parameter,
-                                         gpointer       user_data)
+ide_run_manager_actions_run_with_handler (IdeRunManager *self,
+                                          GVariant      *param)
 {
-  IdeRunManager *self = user_data;
   const gchar *handler = NULL;
   g_autoptr(GVariant) sunk = NULL;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_RUN_MANAGER (self));
 
-  if (parameter != NULL)
+  if (param != NULL)
   {
-    handler = g_variant_get_string (parameter, NULL);
-    if (g_variant_is_floating (parameter))
-      sunk = g_variant_ref_sink (parameter);
+    handler = g_variant_get_string (param, NULL);
+    if (g_variant_is_floating (param))
+      sunk = g_variant_ref_sink (param);
   }
 
-  /* translates to current handler */
-  if (handler && *handler)
+  /* Use specified handler, if provided */
+  if (!dzl_str_empty0 (handler))
     ide_run_manager_set_handler (self, handler);
 
   ide_run_manager_run_async (self,
@@ -1102,15 +1025,11 @@ ide_run_manager_action_run_with_handler (GSimpleAction *action,
 }
 
 static void
-ide_run_manager_action_stop (GSimpleAction *action,
-                             GVariant      *parameter,
-                             gpointer       user_data)
+ide_run_manager_actions_stop (IdeRunManager *self,
+                              GVariant      *param)
 {
-  IdeRunManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_RUN_MANAGER (self));
 
   ide_run_manager_cancel (self);
@@ -1121,19 +1040,6 @@ ide_run_manager_action_stop (GSimpleAction *action,
 static void
 ide_run_manager_init (IdeRunManager *self)
 {
-  static GActionEntry actions[] = {
-    { "run", ide_run_manager_action_run },
-    { "run-with-handler", ide_run_manager_action_run_with_handler, "s" },
-    { "stop", ide_run_manager_action_stop }
-  };
-
-  self->actions = g_simple_action_group_new ();
-
-  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
-
   ide_run_manager_add_handler (self,
                                "run",
                                _("Run"),
