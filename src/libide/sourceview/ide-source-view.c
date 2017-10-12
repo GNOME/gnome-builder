@@ -4143,42 +4143,6 @@ ide_source_view_real_draw_layer (GtkTextView      *text_view,
 }
 
 static gboolean
-ide_source_view_real_draw (GtkWidget *widget,
-                           cairo_t   *cr)
-{
-  gboolean ret;
-
-  g_assert (IDE_IS_SOURCE_VIEW (widget));
-  g_assert (cr != NULL);
-
-  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->draw (widget, cr);
-
-#if 0
-  if (priv->show_search_shadow &&
-      priv->search_context &&
-      (gtk_source_search_context_get_occurrences_count (priv->search_context) > 0))
-    {
-      GdkWindow *window;
-      GdkRectangle rect;
-
-      window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_LEFT);
-
-      gdk_window_get_position (window, &rect.x, &rect.y);
-      rect.width = gdk_window_get_width (window);
-      rect.height = gdk_window_get_height (window);
-
-      cairo_save (cr);
-      gdk_cairo_rectangle (cr, &rect);
-      gdk_cairo_set_source_rgba (cr, &priv->search_shadow_rgba);
-      cairo_fill (cr);
-      cairo_restore (cr);
-    }
-#endif
-
-  return ret;
-}
-
-static gboolean
 ide_source_view_focus_in_event (GtkWidget     *widget,
                                 GdkEventFocus *event)
 {
@@ -5771,7 +5735,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->button_press_event = ide_source_view_real_button_press_event;
   widget_class->button_release_event = ide_source_view_real_button_release_event;
   widget_class->motion_notify_event = ide_source_view_real_motion_notify_event;
-  widget_class->draw = ide_source_view_real_draw;
   widget_class->focus_in_event = ide_source_view_focus_in_event;
   widget_class->focus_out_event = ide_source_view_focus_out_event;
   widget_class->key_press_event = ide_source_view_key_press_event;
