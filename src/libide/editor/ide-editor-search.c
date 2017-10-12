@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "editor/ide-editor-search.h"
+#include "sourceview/ide-source-view.h"
 
 /**
  * SECTION:ide-editor-search
@@ -51,6 +52,7 @@ struct _IdeEditorSearch
   GtkSourceSearchSettings *settings;
   gchar                   *replacement_text;
   DzlSignalGroup          *buffer_signals;
+  DzlSignalGroup          *view_signals;
   GCancellable            *lookahead_cancellable;
 
   gint                     interactive;
@@ -61,9 +63,15 @@ struct _IdeEditorSearch
 
   guint                    repeat;
 
-  guint                    reverse : 1;
-  guint                    visible : 1;
+  GdkRGBA                  search_shadow_rgba;
+  GdkRGBA                  bubble_color1;
+  GdkRGBA                  bubble_color2;
+
   IdeEditorSearchSelect    extend_selection : 2;
+  guint                    reverse : 1;
+  guint                    show_search_bubbles : 1;
+  guint                    show_search_shadow : 1;
+  guint                    visible : 1;
 };
 
 enum {
@@ -106,6 +114,185 @@ G_DEFINE_TYPE_WITH_CODE (IdeEditorSearch, ide_editor_search, G_TYPE_OBJECT,
 static GParamSpec *properties [N_PROPS];
 
 static void
+draw_bezel (cairo_t                     *cr,
+            const cairo_rectangle_int_t *rect,
+            guint                        radius,
+            const GdkRGBA               *rgba)
+{
+  GdkRectangle r;
+
+  r.x = rect->x - radius;
+  r.y = rect->y - radius;
+  r.width = rect->width + (radius * 2);
+  r.height = rect->height + (radius * 2);
+
+  gdk_cairo_set_source_rgba (cr, rgba);
+  dzl_cairo_rounded_rectangle (cr, &r, radius, radius);
+  cairo_fill (cr);
+}
+
+static void
+add_match (GtkTextView       *text_view,
+           cairo_region_t    *region,
+           const GtkTextIter *begin,
+           const GtkTextIter *end)
+{
+  GdkRectangle begin_rect;
+  GdkRectangle end_rect;
+  cairo_rectangle_int_t rect;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (region != NULL);
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+
+  /* NOTE: @end is not inclusive of the match. */
+  if (gtk_text_iter_get_line (begin) == gtk_text_iter_get_line (end))
+    {
+      gtk_text_view_get_iter_location (text_view, begin, &begin_rect);
+      gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                             begin_rect.x, begin_rect.y,
+                                             &begin_rect.x, &begin_rect.y);
+      gtk_text_view_get_iter_location (text_view, end, &end_rect);
+      gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                             end_rect.x, end_rect.y,
+                                             &end_rect.x, &end_rect.y);
+      rect.x = begin_rect.x;
+      rect.y = begin_rect.y;
+      rect.width = end_rect.x - begin_rect.x;
+      rect.height = MAX (begin_rect.height, end_rect.height);
+      cairo_region_union_rectangle (region, &rect);
+      return;
+    }
+
+  /*
+   * TODO: Add support for multi-line matches. When @begin and @end are not
+   *       on the same line, we need to add the match region to @region so
+   *       ide_source_view_draw_search_bubbles() can draw search bubbles
+   *       around it.
+   */
+}
+
+static guint
+add_matches (GtkTextView            *text_view,
+             cairo_region_t         *region,
+             GtkSourceSearchContext *search_context,
+             const GtkTextIter      *begin,
+             const GtkTextIter      *end)
+{
+  GtkTextIter first_begin;
+  GtkTextIter new_begin;
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
+  gboolean has_wrapped;
+  guint count = 1;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (region);
+  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
+  g_assert (begin);
+  g_assert (end);
+
+  if (!gtk_source_search_context_forward2 (search_context,
+                                           begin,
+                                           &first_begin,
+                                           &match_end,
+                                           &has_wrapped))
+    return 0;
+
+  add_match (text_view, region, &first_begin, &match_end);
+
+  for (;;)
+    {
+      gtk_text_iter_assign (&new_begin, &match_end);
+
+      if (gtk_source_search_context_forward2 (search_context,
+                                              &new_begin,
+                                              &match_begin,
+                                              &match_end,
+                                              &has_wrapped) &&
+          (gtk_text_iter_compare (&match_begin, end) < 0) &&
+          (gtk_text_iter_compare (&first_begin, &match_begin) != 0))
+        {
+          add_match (text_view, region, &match_begin, &match_end);
+          count++;
+          continue;
+        }
+
+      break;
+    }
+
+  return count;
+}
+
+static void
+ide_editor_search_draw_bubbles (IdeEditorSearch *self,
+                                cairo_t         *cr,
+                                IdeSourceView   *view)
+{
+  cairo_region_t *clip_region;
+  cairo_region_t *match_region;
+  GdkRectangle area;
+  GtkTextIter begin;
+  GtkTextIter end;
+  cairo_rectangle_int_t r;
+  guint count;
+  gint buffer_x = 0;
+  gint buffer_y = 0;
+  gint n;
+  gint i;
+
+  g_assert (IDE_IS_EDITOR_SEARCH (self));
+  g_assert (cr != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  if (!gdk_cairo_get_clip_rectangle (cr, &area))
+    gtk_widget_get_allocation (GTK_WIDGET (self), &area);
+
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view),
+                                         GTK_TEXT_WINDOW_TEXT,
+                                         area.x, area.y,
+                                         &buffer_x, &buffer_y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view), &begin,
+                                      buffer_x, buffer_y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view), &end,
+                                      buffer_x + area.width,
+                                      buffer_y + area.height);
+
+  clip_region = cairo_region_create_rectangle (&area);
+  match_region = cairo_region_create ();
+  count = add_matches (GTK_TEXT_VIEW (view),
+                       match_region,
+                       self->context,
+                       &begin, &end);
+
+  cairo_region_subtract (clip_region, match_region);
+
+  if (self->show_search_shadow &&
+      (count || gtk_source_search_context_get_occurrences_count (self->context)))
+    {
+      gdk_cairo_region (cr, clip_region);
+      gdk_cairo_set_source_rgba (cr, &self->search_shadow_rgba);
+      cairo_fill (cr);
+    }
+
+  gdk_cairo_region (cr, clip_region);
+  cairo_clip (cr);
+
+  n = cairo_region_num_rectangles (match_region);
+
+  for (i = 0; i < n; i++)
+    {
+      cairo_region_get_rectangle (match_region, i, &r);
+      draw_bezel (cr, &r, 3, &self->bubble_color1);
+      draw_bezel (cr, &r, 2, &self->bubble_color2);
+    }
+
+  cairo_region_destroy (clip_region);
+  cairo_region_destroy (match_region);
+}
+
+static void
 ide_editor_search_settings_notify (IdeEditorSearch         *self,
                                    GParamSpec              *pspec,
                                    GtkSourceSearchSettings *settings)
@@ -131,13 +318,33 @@ ide_editor_search_notify_style_scheme (IdeEditorSearch *self,
   if (self->context != NULL)
     {
       GtkSourceStyleScheme *style_scheme;
-      GtkSourceStyle *style = NULL;
+      GtkSourceStyle *match_style = NULL;
 
       style_scheme = gtk_source_buffer_get_style_scheme (buffer);
-      if (style_scheme != NULL)
-        style = gtk_source_style_scheme_get_style (style_scheme, "search-match");
 
-      gtk_source_search_context_set_match_style (self->context, style);
+      if (style_scheme != NULL)
+        match_style = gtk_source_style_scheme_get_style (style_scheme, "search-match");
+
+      memset (&self->bubble_color1, 0, sizeof self->bubble_color1);
+      memset (&self->bubble_color2, 0, sizeof self->bubble_color2);
+
+      if (match_style != NULL)
+        {
+          g_autofree gchar *background = NULL;
+          GdkRGBA rgba;
+
+          g_object_get (match_style,
+                        "background", &background,
+                        NULL);
+
+          if (gdk_rgba_parse (&rgba, background))
+            {
+              dzl_rgba_shade (&rgba, &self->bubble_color1, 0.8);
+              dzl_rgba_shade (&rgba, &self->bubble_color2, 1.1);
+            }
+        }
+
+      gtk_source_search_context_set_match_style (self->context, match_style);
     }
 }
 
@@ -164,18 +371,29 @@ ide_editor_search_unbind_buffer (IdeEditorSearch *self,
 }
 
 static void
-ide_editor_search_finalize (GObject *object)
+ide_editor_search_dispose (GObject *object)
 {
   IdeEditorSearch *self = (IdeEditorSearch *)object;
+
+  if (self->buffer_signals != NULL)
+    {
+      dzl_signal_group_set_target (self->buffer_signals, NULL);
+      g_clear_object (&self->buffer_signals);
+    }
+
+  if (self->view_signals != NULL)
+    {
+      dzl_signal_group_set_target (self->view_signals, NULL);
+      g_clear_object (&self->view_signals);
+    }
 
   g_clear_object (&self->view);
   g_clear_object (&self->context);
   g_clear_object (&self->settings);
-  g_clear_object (&self->buffer_signals);
   g_clear_object (&self->lookahead_cancellable);
   g_clear_pointer (&self->replacement_text, g_free);
 
-  G_OBJECT_CLASS (ide_editor_search_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_editor_search_parent_class)->dispose (object);
 }
 
 static void
@@ -293,6 +511,7 @@ ide_editor_search_set_property (GObject      *object,
 
     case PROP_VIEW:
       self->view = g_value_dup_object (value);
+      dzl_signal_group_set_target (self->view_signals, self->view);
       break;
 
     default:
@@ -305,7 +524,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_editor_search_finalize;
+  object_class->dispose = ide_editor_search_dispose;
   object_class->get_property = ide_editor_search_get_property;
   object_class->set_property = ide_editor_search_set_property;
 
@@ -511,6 +730,8 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
 static void
 ide_editor_search_init (IdeEditorSearch *self)
 {
+  self->show_search_bubbles = TRUE;
+
   self->settings = gtk_source_search_settings_new ();
 
   g_signal_connect_swapped (self->settings,
@@ -534,6 +755,15 @@ ide_editor_search_init (IdeEditorSearch *self)
                                     "notify::style-scheme",
                                     G_CALLBACK (ide_editor_search_notify_style_scheme),
                                     self);
+
+  self->view_signals = dzl_signal_group_new (IDE_TYPE_SOURCE_VIEW);
+
+  dzl_signal_group_connect_swapped (self->view_signals,
+                                    "draw-bubbles",
+                                    G_CALLBACK (ide_editor_search_draw_bubbles),
+                                    self);
+
+  dzl_signal_group_block (self->view_signals);
 }
 
 /**
@@ -620,8 +850,11 @@ ide_editor_search_acquire_context (IdeEditorSearch *self)
       highlight = self->visible || self->interactive > 0;
       gtk_source_search_context_set_highlight (self->context, highlight);
 
-      /* Update text tag stylign */
+      /* Update text tag styling */
       ide_editor_search_notify_style_scheme (self, NULL, buffer);
+
+      /* Draw bubbles while the context is live */
+      dzl_signal_group_unblock (self->view_signals);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE]);
     }
@@ -641,6 +874,7 @@ ide_editor_search_release_context (IdeEditorSearch *self)
                                             G_CALLBACK (ide_editor_search_notify_occurrences_count),
                                             self);
       g_clear_object (&self->context);
+      dzl_signal_group_block (self->view_signals);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE]);
     }
 }
