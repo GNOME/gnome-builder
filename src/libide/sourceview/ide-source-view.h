@@ -361,7 +361,6 @@ const gchar                *ide_source_view_get_mode_display_name     (IdeSource
 const gchar                *ide_source_view_get_mode_name             (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite             (IdeSourceView              *self);
-gboolean                    ide_source_view_get_rubberband_search     (IdeSourceView              *self);
 guint                       ide_source_view_get_scroll_offset         (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
@@ -400,8 +399,6 @@ void                        ide_source_view_set_misspelled_word       (IdeSource
                                                                        GtkTextIter                *end);
 void                        ide_source_view_set_overwrite_braces      (IdeSourceView              *self,
                                                                        gboolean                    overwrite_braces);
-void                        ide_source_view_set_rubberband_search     (IdeSourceView              *self,
-                                                                       gboolean                    rubberband_search);
 void                        ide_source_view_set_scroll_offset         (IdeSourceView              *self,
                                                                        guint                       scroll_offset);
 void                        ide_source_view_set_show_grid_lines       (IdeSourceView              *self,
