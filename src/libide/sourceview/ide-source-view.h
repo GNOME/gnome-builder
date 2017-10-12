@@ -366,8 +366,6 @@ gboolean                    ide_source_view_get_show_grid_lines       (IdeSource
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_diagnostics (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_numbers     (IdeSourceView              *self);
-gboolean                    ide_source_view_get_show_search_bubbles   (IdeSourceView              *self);
-gboolean                    ide_source_view_get_show_search_shadow    (IdeSourceView              *self);
 gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);
 gboolean                    ide_source_view_get_spell_checking        (IdeSourceView              *self);
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
@@ -409,10 +407,6 @@ void                        ide_source_view_set_show_line_diagnostics (IdeSource
                                                                        gboolean                    show_line_diagnostics);
 void                        ide_source_view_set_show_line_numbers     (IdeSourceView              *self,
                                                                        gboolean                    show_line_numbers);
-void                        ide_source_view_set_show_search_bubbles   (IdeSourceView              *self,
-                                                                       gboolean                    show_search_bubbles);
-void                        ide_source_view_set_show_search_shadow    (IdeSourceView              *self,
-                                                                       gboolean                    show_search_bubbles);
 void                        ide_source_view_set_snippet_completion    (IdeSourceView              *self,
                                                                        gboolean                    snippet_completion);
 void                        ide_source_view_set_spell_checking        (IdeSourceView              *self,

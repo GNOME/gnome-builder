@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-source-view"
 
+#include <cairo-gobject.h>
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -165,8 +166,6 @@ typedef struct
   guint                        recording_macro : 1;
   guint                        scrolling_to_scroll_mark : 1;
   guint                        show_grid_lines : 1;
-  guint                        show_search_bubbles : 1;
-  guint                        show_search_shadow : 1;
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
 } IdeSourceViewPrivate;
@@ -204,8 +203,6 @@ enum {
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SHOW_LINE_DIAGNOSTICS,
-  PROP_SHOW_SEARCH_BUBBLES,
-  PROP_SHOW_SEARCH_SHADOW,
   PROP_SNIPPET_COMPLETION,
   PROP_OVERSCROLL,
   LAST_PROP,
@@ -236,6 +233,7 @@ enum {
   DOCUMENTATION_REQUESTED,
   DECREASE_FONT_SIZE,
   DELETE_SELECTION,
+  DRAW_BUBBLES,
   DUPLICATE_ENTIRE_LINE,
   END_MACRO,
   END_USER_ACTION,
@@ -4357,10 +4355,10 @@ ide_source_view_real_draw_layer (GtkTextView      *text_view,
 
   if (layer == GTK_TEXT_VIEW_LAYER_ABOVE)
     {
-      if (priv->show_search_bubbles)
+      if (g_signal_has_handler_pending (self, signals [DRAW_BUBBLES], 0, FALSE))
         {
           cairo_save (cr);
-          ide_source_view_draw_search_bubbles (self, cr);
+          g_signal_emit (self, signals [DRAW_BUBBLES], 0, cr);
           cairo_restore (cr);
         }
     }
@@ -5879,14 +5877,6 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_show_line_numbers (self));
       break;
 
-    case PROP_SHOW_SEARCH_BUBBLES:
-      g_value_set_boolean (value, ide_source_view_get_show_search_bubbles (self));
-      break;
-
-    case PROP_SHOW_SEARCH_SHADOW:
-      g_value_set_boolean (value, ide_source_view_get_show_search_shadow (self));
-      break;
-
     case PROP_SNIPPET_COMPLETION:
       g_value_set_boolean (value, ide_source_view_get_snippet_completion (self));
       break;
@@ -5970,14 +5960,6 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SHOW_LINE_NUMBERS:
       ide_source_view_set_show_line_numbers (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_SHOW_SEARCH_BUBBLES:
-      ide_source_view_set_show_search_bubbles (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_SHOW_SEARCH_SHADOW:
-      ide_source_view_set_show_search_shadow (self, g_value_get_boolean (value));
       break;
 
     case PROP_SNIPPET_COMPLETION:
@@ -6187,20 +6169,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_override_property (object_class, PROP_SHOW_LINE_NUMBERS, "show-line-numbers");
-
-  properties [PROP_SHOW_SEARCH_BUBBLES] =
-    g_param_spec_boolean ("show-search-bubbles",
-                          "Show Search Bubbles",
-                          "If search bubbles should be rendered.",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SHOW_SEARCH_SHADOW] =
-    g_param_spec_boolean ("show-search-shadow",
-                          "Show Search Shadow",
-                          "If the shadow should be drawn when performing searches.",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SNIPPET_COMPLETION] =
     g_param_spec_boolean ("snippet-completion",
@@ -6434,6 +6402,20 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  signals [DRAW_BUBBLES] =
+    g_signal_new ("draw-bubbles",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__BOXED,
+                  G_TYPE_NONE,
+                  1,
+                  CAIRO_GOBJECT_TYPE_CONTEXT);
+  g_signal_set_va_marshaller (signals [DRAW_BUBBLES],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__BOXEDv);
 
   /**
    * IdeSourceView::end-macro:
@@ -7425,9 +7407,10 @@ ide_source_view_push_snippet (IdeSourceView     *self,
           /*
            * HACK:
            *
-           * We need to let the GtkTextView catch up with us so that we can get a realistic area back for
-           * the location of the end iter.  Without pumping the main loop, GtkTextView will clamp the
-           * result to the height of the insert line.
+           * We need to let the GtkTextView catch up with us so that we can get
+           * a realistic area back for the location of the end iter.  Without
+           * pumping the main loop, GtkTextView will clamp the result to the
+           * height of the insert line.
            */
           while (gtk_events_pending ())
             gtk_main_iteration ();
@@ -8069,85 +8052,6 @@ ide_source_view_set_enable_word_completion (IdeSourceView *self,
       priv->enable_word_completion = enable_word_completion;
       ide_source_view_reload_word_completion (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLE_WORD_COMPLETION]);
-    }
-}
-
-/**
- * ide_source_view_get_show_search_bubbles:
- * @self: An #IdeSourceView.
- *
- * Gets the #IdeSourceView:show-search-bubbles property.
- *
- * If this is set to %TRUE, a bubble will be drawn around search results to
- * make them stand out.
- *
- * The default is %FALSE.
- */
-gboolean
-ide_source_view_get_show_search_bubbles (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->show_search_bubbles;
-}
-
-void
-ide_source_view_set_show_search_bubbles (IdeSourceView *self,
-                                         gboolean       show_search_bubbles)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  show_search_bubbles = !!show_search_bubbles;
-
-  if (show_search_bubbles != priv->show_search_bubbles)
-    {
-      priv->show_search_bubbles = show_search_bubbles;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_SEARCH_BUBBLES]);
-      ide_source_view_invalidate_window (self);
-    }
-}
-
-/**
- * ide_source_view_get_show_search_shadow:
- * @self: An #IdeSourceView.
- *
- * Gets the #IdeSourceView:show-search-shadow property.
- *
- * If this property is %TRUE, then when searching, a shadow will be drawn over
- * the portion of the visible region that does not contain a match. This can
- * be used to help bring focus to the matches.
- *
- * The default is %FALSE.
- */
-gboolean
-ide_source_view_get_show_search_shadow (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->show_search_shadow;
-}
-
-void
-ide_source_view_set_show_search_shadow (IdeSourceView *self,
-                                        gboolean       show_search_shadow)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  show_search_shadow = !!show_search_shadow;
-
-  if (show_search_shadow != priv->show_search_shadow)
-    {
-      priv->show_search_shadow = show_search_shadow;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_SEARCH_SHADOW]);
-      ide_source_view_invalidate_window (self);
     }
 }
 

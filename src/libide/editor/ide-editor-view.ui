@@ -100,7 +100,6 @@
                     <property name="auto-indent">true</property>
                     <property name="show-line-changes">true</property>
                     <property name="show-line-numbers">true</property>
-                    <property name="show-search-bubbles">true</property>
                     <property name="snippet-completion">true</property>
                     <property name="visible">true</property>
                     <child internal-child="completion">
