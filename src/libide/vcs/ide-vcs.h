@@ -59,6 +59,9 @@ IdeVcs                 *ide_vcs_new_finish                (GAsyncResult         
 gboolean                ide_vcs_is_ignored                (IdeVcs               *self,
                                                            GFile                *file,
                                                            GError              **error);
+gboolean                ide_vcs_path_is_ignored           (IdeVcs               *self,
+                                                           const gchar          *path,
+                                                           GError              **error);
 gint                    ide_vcs_get_priority              (IdeVcs               *self);
 void                    ide_vcs_emit_changed              (IdeVcs               *self);
 IdeVcsConfig           *ide_vcs_get_config                (IdeVcs               *self);

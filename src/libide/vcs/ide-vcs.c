@@ -82,6 +82,22 @@ ide_vcs_default_init (IdeVcsInterface *iface)
                   NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
+/**
+ * ide_vcs_is_ignored:
+ * @self: An #IdeVcs
+ * @file: A #GFile
+ * @error: A location for a #GError, or %NULL
+ *
+ * This function will check if @file is considered an "ignored file" by
+ * the underlying Version Control System.
+ *
+ * This function is not thread-safe, it must only be called from the
+ * main thread.
+ *
+ * Returns: %TRUE if the path should be ignored.
+ *
+ * Since: 3.18
+ */
 gboolean
 ide_vcs_is_ignored (IdeVcs  *self,
                     GFile   *file,
@@ -106,6 +122,63 @@ ide_vcs_is_ignored (IdeVcs  *self,
 
   if (IDE_VCS_GET_IFACE (self)->is_ignored)
     return IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+
+  return FALSE;
+}
+
+/**
+ * ide_vcs_path_is_ignored:
+ * @self: An #IdeVcs
+ * @path: The path to check
+ * @error: A location for a #GError, or %NULL
+ *
+ * This function acts like ide_vcs_is_ignored() except that it
+ * allows for using a regular file-system path.
+ *
+ * It will check if the path is absolute or relative to the project
+ * directory and adjust as necessary.
+ *
+ * This function is not thread-safe, it must only be called from the
+ * main thread.
+ *
+ * Returns: %TRUE if the path should be ignored.
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_vcs_path_is_ignored (IdeVcs       *self,
+                         const gchar  *path,
+                         GError      **error)
+{
+  g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if G_LIKELY (ignored != NULL)
+    {
+      g_autofree gchar *name = g_path_get_basename (path);
+      guint len = strlen (name);
+      g_autofree gchar *reversed = g_utf8_strreverse (name, len);
+
+      for (guint i = 0; i < ignored->len; i++)
+        {
+          GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
+
+          if (g_pattern_match (pattern_spec, len, name, reversed))
+            return TRUE;
+        }
+    }
+
+  if (IDE_VCS_GET_IFACE (self)->is_ignored)
+    {
+      g_autoptr(GFile) file = NULL;
+
+      if (g_path_is_absolute (path))
+        file = g_file_new_for_path (path);
+      else
+        file = g_file_get_child (ide_vcs_get_working_directory (self), path);
+
+      return IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+    }
 
   return FALSE;
 }
