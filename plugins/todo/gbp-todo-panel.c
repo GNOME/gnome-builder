@@ -134,9 +134,14 @@ gbp_todo_panel_row_activated (GbpTodoPanel      *self,
   uri = ide_uri_new_from_file (file);
 
   /* Set lineno info so that the editor can jump
-   * to the location of the TODO item.
+   * to the location of the TODO item. Our line number
+   * from the model is 1-based, and we need 0-based for
+   * our API to open files.
    */
   lineno = gbp_todo_item_get_lineno (item);
+  if (lineno > 0)
+    lineno--;
+
   fragment = g_strdup_printf ("L%u", lineno);
   ide_uri_set_fragment (uri, fragment);
 
