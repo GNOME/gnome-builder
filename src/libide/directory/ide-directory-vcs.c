@@ -62,6 +62,12 @@ ide_directory_vcs_get_working_directory (IdeVcs *vcs)
 
   g_return_val_if_fail (IDE_IS_DIRECTORY_VCS (vcs), NULL);
 
+  /* Note: This function is expected to be thread-safe for
+   *       those holding a reference to @vcs. So
+   *       @working_directory cannot be changed after creation
+   *       and must be valid for the lifetime of @vcs.
+   */
+
   return self->working_directory;
 }
 
@@ -176,6 +182,11 @@ ide_directory_vcs_init_worker (GTask        *task,
     }
 
   file_type = g_file_info_get_file_type (file_info);
+
+  /*
+   * Note: Working directory may only be setup creation time of
+   *       the vcs. So we set it in our GAsyncInitable worker only.
+   */
 
   if (file_type == G_FILE_TYPE_DIRECTORY)
     self->working_directory = g_object_ref (file);
