@@ -104,6 +104,9 @@ ide_vcs_is_ignored (IdeVcs  *self,
                     GError **error)
 {
   g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
+  /* FIXME: Find threaded callers of this function, or
+   *        make this function require thread-safety.
+   */
 
   if G_LIKELY (ignored != NULL)
     {
