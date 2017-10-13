@@ -34,13 +34,16 @@ enum {
 static guint signals [N_SIGNALS];
 static GPtrArray *ignored;
 
+G_LOCK_DEFINE_STATIC (ignored);
+
 void
 ide_vcs_register_ignored (const gchar *pattern)
 {
+  G_LOCK (ignored);
   if (ignored == NULL)
     ignored = g_ptr_array_new ();
-
   g_ptr_array_add (ignored, g_pattern_spec_new (pattern));
+  G_UNLOCK (ignored);
 }
 
 static void
@@ -85,16 +88,19 @@ ide_vcs_default_init (IdeVcsInterface *iface)
 /**
  * ide_vcs_is_ignored:
  * @self: An #IdeVcs
- * @file: A #GFile
+ * @file: (nullable): A #GFile
  * @error: A location for a #GError, or %NULL
  *
  * This function will check if @file is considered an "ignored file" by
  * the underlying Version Control System.
  *
- * This function is not thread-safe, it must only be called from the
- * main thread.
+ * For convenience, this function will return %TRUE if @file is %NULL.
  *
  * Returns: %TRUE if the path should be ignored.
+ *
+ * Thread safety: This function is safe to call from a thread as
+ *   #IdeVcs implementations are required to ensure this function
+ *   is thread-safe.
  *
  * Since: 3.18
  */
@@ -103,10 +109,15 @@ ide_vcs_is_ignored (IdeVcs  *self,
                     GFile   *file,
                     GError **error)
 {
+  gboolean ret = FALSE;
+
   g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
-  /* FIXME: Find threaded callers of this function, or
-   *        make this function require thread-safety.
-   */
+  g_return_val_if_fail (!file || G_IS_FILE (file), FALSE);
+
+  if (file == NULL)
+    return TRUE;
+
+  G_LOCK (ignored);
 
   if G_LIKELY (ignored != NULL)
     {
@@ -119,20 +130,25 @@ ide_vcs_is_ignored (IdeVcs  *self,
           GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
 
           if (g_pattern_match (pattern_spec, len, name, reversed))
-            return TRUE;
+            {
+              ret = TRUE;
+              break;
+            }
         }
     }
 
-  if (IDE_VCS_GET_IFACE (self)->is_ignored)
-    return IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+  G_UNLOCK (ignored);
 
-  return FALSE;
+  if (!ret && IDE_VCS_GET_IFACE (self)->is_ignored)
+    ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+
+  return ret;
 }
 
 /**
  * ide_vcs_path_is_ignored:
  * @self: An #IdeVcs
- * @path: The path to check
+ * @path: (nullable): The path to check
  * @error: A location for a #GError, or %NULL
  *
  * This function acts like ide_vcs_is_ignored() except that it
@@ -141,10 +157,13 @@ ide_vcs_is_ignored (IdeVcs  *self,
  * It will check if the path is absolute or relative to the project
  * directory and adjust as necessary.
  *
- * This function is not thread-safe, it must only be called from the
- * main thread.
+ * For convenience, this function will return %TRUE if @path is %NULL.
  *
  * Returns: %TRUE if the path should be ignored.
+ *
+ * Thread safety: This function is safe to call from a thread as
+ *   #IdeVcs implementations are required to ensure this function
+ *   is thread-safe.
  *
  * Since: 3.28
  */
@@ -153,8 +172,14 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
                          const gchar  *path,
                          GError      **error)
 {
+  gboolean ret = FALSE;
+
   g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (path == NULL)
+    return TRUE;
+
+  G_LOCK (ignored);
 
   if G_LIKELY (ignored != NULL)
     {
@@ -167,11 +192,16 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
           GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
 
           if (g_pattern_match (pattern_spec, len, name, reversed))
-            return TRUE;
+            {
+              ret = TRUE;
+              break;
+            }
         }
     }
 
-  if (IDE_VCS_GET_IFACE (self)->is_ignored)
+  G_UNLOCK (ignored);
+
+  if (!ret && IDE_VCS_GET_IFACE (self)->is_ignored)
     {
       g_autoptr(GFile) file = NULL;
 
@@ -180,10 +210,10 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
       else
         file = g_file_get_child (ide_vcs_get_working_directory (self), path);
 
-      return IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+      ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
     }
 
-  return FALSE;
+  return ret;
 }
 
 gint
@@ -206,7 +236,16 @@ ide_vcs_get_priority (IdeVcs *self)
  * Retrieves the working directory for the context. This is the root of where
  * the project files exist.
  *
+ * This function is safe to call from threads holding a reference to @self.
+ *
  * Returns: (transfer none): A #GFile.
+ *
+ * Since: 3.18
+ *
+ * Thread safety: this function is safe to call from threads. The working
+ *   directory should only be set at creating and therefore safe to call
+ *   at any time from any thread that holds a reference to @self. Those
+ *   implementing #IdeVcs are required to ensure this invariant holds true.
  */
 GFile *
 ide_vcs_get_working_directory (IdeVcs *self)
