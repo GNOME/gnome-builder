@@ -22,6 +22,8 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include "ide-debug.h"
+
 #include "layout/ide-layout-stack.h"
 #include "layout/ide-layout-stack-addin.h"
 #include "layout/ide-layout-stack-header.h"
@@ -29,6 +31,7 @@
 #include "layout/ide-shortcut-label.h"
 
 #define TRANSITION_DURATION 300
+#define DISTANCE_THRESHOLD(alloc) (MIN(250, (gint)((alloc)->width * .333)))
 
 /**
  * SECTION:ide-layout-stack
@@ -54,12 +57,26 @@ typedef struct
   GPtrArray            *in_transition;
   PeasExtensionSet     *addins;
 
+  /*
+   * Our gestures are used to do interactive moves when the user
+   * does a three finger swipe. We create the dummy gesture to
+   * ensure things work, because it for some reason does not without
+   * the dummy gesture set.
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=788914
+   */
+  GtkGesture           *dummy;
+  GtkGesture           *pan;
+  DzlBoxTheatric       *pan_theatric;
+  IdeLayoutView        *pan_view;
+
   /* Template references */
   DzlBox               *empty_state;
   DzlEmptyState        *failed_state;
   IdeLayoutStackHeader *header;
   GtkStack             *stack;
   GtkStack             *top_stack;
+  GtkEventBox          *event_box;
 } IdeLayoutStackPrivate;
 
 typedef struct
@@ -82,7 +99,8 @@ enum {
   N_SIGNALS
 };
 
-static void list_model_iface_init (GListModelInterface *iface);
+static void list_model_iface_init    (GListModelInterface *iface);
+static void animation_state_complete (gpointer             data);
 
 G_DEFINE_TYPE_WITH_CODE (IdeLayoutStack, ide_layout_stack, GTK_TYPE_BOX,
                          G_ADD_PRIVATE (IdeLayoutStack)
@@ -90,6 +108,33 @@ G_DEFINE_TYPE_WITH_CODE (IdeLayoutStack, ide_layout_stack, GTK_TYPE_BOX,
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static inline gboolean
+is_uninitialized (GtkAllocation *alloc)
+{
+  return (alloc->x == -1 && alloc->y == -1 &&
+          alloc->width == 1 && alloc->height == 1);
+}
+
+static void
+ide_layout_stack_set_cursor (IdeLayoutStack *self,
+                             const gchar    *name)
+{
+  GdkWindow *window;
+  GdkDisplay *display;
+  GdkCursor *cursor;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (name != NULL);
+
+  window = gtk_widget_get_window (GTK_WIDGET (self));
+  display = gtk_widget_get_display (GTK_WIDGET (self));
+  cursor = gdk_cursor_new_from_name (display, name);
+
+  gdk_window_set_cursor (window, cursor);
+
+  g_clear_object (&cursor);
+}
 
 static void
 ide_layout_stack_view_failed (IdeLayoutStack *self,
@@ -388,6 +433,235 @@ ide_layout_stack_addin_removed (PeasExtensionSet *set,
   ide_layout_stack_addin_unload (addin, self);
 }
 
+static gboolean
+ide_layout_stack_pan_begin (IdeLayoutStack   *self,
+                            GdkEventSequence *sequence,
+                            GtkGesturePan    *gesture)
+{
+  IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
+  GtkAllocation alloc;
+  cairo_surface_t *surface = NULL;
+  IdeLayoutView *view;
+  GdkWindow *window;
+  GtkWidget *grid;
+  cairo_t *cr;
+  gdouble x, y;
+  gboolean enable_animations;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (GTK_IS_GESTURE_PAN (gesture));
+  g_assert (priv->pan_theatric == NULL);
+
+  view = ide_layout_stack_get_visible_child (self);
+  if (view != NULL)
+    gtk_widget_get_allocation (GTK_WIDGET (view), &alloc);
+
+  g_object_get (gtk_settings_get_default (),
+                "gtk-enable-animations", &enable_animations,
+                NULL);
+
+  if (sequence != NULL ||
+      view == NULL ||
+      !enable_animations ||
+      is_uninitialized (&alloc) ||
+      NULL == (window = gtk_widget_get_window (GTK_WIDGET (view))) ||
+      NULL == (surface = gdk_window_create_similar_surface (window,
+                                                            CAIRO_CONTENT_COLOR,
+                                                            alloc.width,
+                                                            alloc.height)))
+    {
+      if (sequence != NULL)
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      IDE_RETURN (FALSE);
+    }
+
+  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (gesture), &x, &y);
+
+  cr = cairo_create (surface);
+  gtk_widget_draw (GTK_WIDGET (view), cr);
+  cairo_destroy (cr);
+
+  grid = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_LAYOUT_GRID);
+  gtk_widget_translate_coordinates (GTK_WIDGET (priv->top_stack), grid, 0, 0,
+                                    &alloc.x, &alloc.y);
+
+  priv->pan_view = g_object_ref (view);
+  priv->pan_theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
+                                     "surface", surface,
+                                     "target", grid,
+                                     "x", alloc.x + (gint)x,
+                                     "y", alloc.y,
+                                     "width", alloc.width,
+                                     "height", alloc.height,
+                                     NULL);
+
+  g_clear_pointer (&surface, cairo_surface_destroy);
+
+  /* Hide the view while we begin the possible transition to another
+   * layout stack.
+   */
+  gtk_widget_hide (GTK_WIDGET (priv->pan_view));
+
+  /*
+   * Hide the mouse cursor until ide_layout_stack_pan_end() is called.
+   * It can be distracting otherwise (and we want to warp it to the new
+   * grid column too).
+   */
+  ide_layout_stack_set_cursor (self, "none");
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+ide_layout_stack_pan_update (IdeLayoutStack   *self,
+                             GdkEventSequence *sequence,
+                             GtkGestureSwipe  *gesture)
+{
+  IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
+  GtkAllocation alloc;
+  GtkWidget *grid;
+  gdouble x, y;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (GTK_IS_GESTURE_PAN (gesture));
+  g_assert (!priv->pan_theatric || DZL_IS_BOX_THEATRIC (priv->pan_theatric));
+
+  if (priv->pan_theatric == NULL)
+    {
+      if (sequence != NULL)
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      IDE_EXIT;
+    }
+
+  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (gesture), &x, &y);
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+
+  grid = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_LAYOUT_GRID);
+  gtk_widget_translate_coordinates (GTK_WIDGET (priv->top_stack), grid, 0, 0,
+                                    &alloc.x, &alloc.y);
+
+  g_object_set (priv->pan_theatric,
+                "x", alloc.x + (gint)x,
+                NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_layout_stack_pan_end (IdeLayoutStack   *self,
+                          GdkEventSequence *sequence,
+                          GtkGesturePan    *gesture)
+{
+  IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
+  IdeLayoutStackPrivate *dest_priv;
+  IdeLayoutStack *dest;
+  GtkAllocation alloc;
+  GtkWidget *grid;
+  GtkWidget *column;
+  gdouble x, y;
+  gint direction;
+  gint index = 0;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LAYOUT_STACK (self));
+  g_assert (GTK_IS_GESTURE_PAN (gesture));
+
+  if (priv->pan_theatric == NULL || priv->pan_view == NULL)
+    IDE_GOTO (cleanup);
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+
+  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (gesture), &x, &y);
+
+  if (x > DISTANCE_THRESHOLD (&alloc))
+    direction = 1;
+  else if (x < -DISTANCE_THRESHOLD (&alloc))
+    direction = -1;
+  else
+    direction = 0;
+
+  grid = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_LAYOUT_GRID);
+  g_assert (grid != NULL);
+  g_assert (IDE_IS_LAYOUT_GRID (grid));
+
+  column = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_LAYOUT_GRID_COLUMN);
+  g_assert (column != NULL);
+  g_assert (IDE_IS_LAYOUT_GRID_COLUMN (column));
+
+  gtk_container_child_get (GTK_CONTAINER (grid), GTK_WIDGET (column),
+                           "index", &index,
+                           NULL);
+
+  dest = _ide_layout_grid_get_nth_stack (IDE_LAYOUT_GRID (grid), index + direction);
+  dest_priv = ide_layout_stack_get_instance_private (dest);
+  g_assert (dest != NULL);
+  g_assert (IDE_IS_LAYOUT_STACK (dest));
+
+  gtk_widget_get_allocation (GTK_WIDGET (dest), &alloc);
+
+  if (!is_uninitialized (&alloc))
+    {
+      AnimationState *state;
+
+      state = g_slice_new0 (AnimationState);
+      state->source = g_object_ref (self);
+      state->dest = g_object_ref (dest);
+      state->view = g_object_ref (priv->pan_view);
+      state->theatric = priv->pan_theatric;
+
+      gtk_widget_translate_coordinates (GTK_WIDGET (dest_priv->top_stack), grid, 0, 0,
+                                        &alloc.x, &alloc.y);
+
+      /*
+       * Use EASE_OUT_CUBIC, because user initiated the beginning of the
+       * acceleration curve just by swiping. No need to duplicate.
+       */
+      dzl_object_animate_full (state->theatric,
+                               DZL_ANIMATION_EASE_OUT_CUBIC,
+                               TRANSITION_DURATION,
+                               gtk_widget_get_frame_clock (GTK_WIDGET (self)),
+                               animation_state_complete,
+                               state,
+                               "x", alloc.x,
+                               "width", alloc.width,
+                               NULL);
+
+      if (dest != self)
+        {
+          g_ptr_array_add (priv->in_transition, g_object_ref (priv->pan_view));
+          gtk_container_remove (GTK_CONTAINER (priv->stack), GTK_WIDGET (priv->pan_view));
+        }
+
+      IDE_TRACE_MSG ("Animating transition to %s column",
+                     dest != self ? "another" : "same");
+    }
+  else
+    {
+      g_autoptr(IdeLayoutView) view = g_object_ref (priv->pan_view);
+
+      IDE_TRACE_MSG ("Moving view to a previously non-existant column");
+
+      gtk_container_remove (GTK_CONTAINER (priv->stack), GTK_WIDGET (priv->pan_view));
+      gtk_widget_show (GTK_WIDGET (priv->pan_view));
+      gtk_container_add (GTK_CONTAINER (dest_priv->stack), GTK_WIDGET (priv->pan_view));
+    }
+
+cleanup:
+  g_clear_object (&priv->pan_theatric);
+  g_clear_object (&priv->pan_view);
+
+  gtk_widget_queue_draw (gtk_widget_get_toplevel (GTK_WIDGET (self)));
+
+  ide_layout_stack_set_cursor (self, "pointer");
+
+  IDE_EXIT;
+}
+
 static void
 ide_layout_stack_constructed (GObject *object)
 {
@@ -415,6 +689,37 @@ ide_layout_stack_constructed (GObject *object)
   peas_extension_set_foreach (priv->addins,
                               ide_layout_stack_addin_added,
                               self);
+
+  gtk_widget_add_events (GTK_WIDGET (priv->event_box), GDK_TOUCH_MASK);
+  priv->pan = g_object_new (GTK_TYPE_GESTURE_PAN,
+                            "widget", priv->event_box,
+                            "orientation", GTK_ORIENTATION_HORIZONTAL,
+                            "n-points", 3,
+                            NULL);
+  g_signal_connect_swapped (priv->pan,
+                            "begin",
+                            G_CALLBACK (ide_layout_stack_pan_begin),
+                            self);
+  g_signal_connect_swapped (priv->pan,
+                            "update",
+                            G_CALLBACK (ide_layout_stack_pan_update),
+                            self);
+  g_signal_connect_swapped (priv->pan,
+                            "end",
+                            G_CALLBACK (ide_layout_stack_pan_end),
+                            self);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->pan),
+                                              GTK_PHASE_BUBBLE);
+
+  /*
+   * FIXME: Our priv->pan gesture does not activate unless we add another
+   *        dummy gesture. I currently have no idea why that is.
+   *
+   *        https://bugzilla.gnome.org/show_bug.cgi?id=788914
+   */
+  priv->dummy = gtk_gesture_rotate_new (GTK_WIDGET (priv->event_box));
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->dummy),
+                                              GTK_PHASE_BUBBLE);
 }
 
 static void
@@ -462,6 +767,8 @@ ide_layout_stack_destroy (GtkWidget *widget)
       dzl_signal_group_set_target (priv->signals, NULL);
       g_clear_object (&priv->signals);
     }
+
+  g_clear_object (&priv->pan);
 
   GTK_WIDGET_CLASS (ide_layout_stack_parent_class)->destroy (widget);
 }
@@ -557,6 +864,7 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeLayoutStack, header);
   gtk_widget_class_bind_template_child_private (widget_class, IdeLayoutStack, stack);
   gtk_widget_class_bind_template_child_private (widget_class, IdeLayoutStack, top_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeLayoutStack, event_box);
 
   g_type_ensure (IDE_TYPE_LAYOUT_STACK_HEADER);
   g_type_ensure (IDE_TYPE_SHORTCUT_LABEL);
@@ -854,37 +1162,41 @@ animation_state_complete (gpointer data)
   g_assert (IDE_IS_LAYOUT_VIEW (state->view));
 
   /* Add the widget to the new stack */
-  gtk_container_add (GTK_CONTAINER (state->dest), GTK_WIDGET (state->view));
-
-  /* Now remove it from our temporary transition. Be careful in case we were
-   * destroyed in the mean time.
-   */
-  priv = ide_layout_stack_get_instance_private (state->source);
-
-  if (priv->in_transition != NULL)
+  if (state->dest != state->source)
     {
-      guint position = 0;
+      gtk_container_add (GTK_CONTAINER (state->dest), GTK_WIDGET (state->view));
 
-      if (g_ptr_array_find_with_equal_func (priv->views, state->view, NULL, &position))
+      /* Now remove it from our temporary transition. Be careful in case we were
+       * destroyed in the mean time.
+       */
+      priv = ide_layout_stack_get_instance_private (state->source);
+
+      if (priv->in_transition != NULL)
         {
-          g_ptr_array_remove (priv->in_transition, state->view);
-          g_ptr_array_remove_index (priv->views, position);
-          g_list_model_items_changed (G_LIST_MODEL (state->source), position, 1, 0);
+          guint position = 0;
+
+          if (g_ptr_array_find_with_equal_func (priv->views, state->view, NULL, &position))
+            {
+              g_ptr_array_remove (priv->in_transition, state->view);
+              g_ptr_array_remove_index (priv->views, position);
+              g_list_model_items_changed (G_LIST_MODEL (state->source), position, 1, 0);
+            }
         }
     }
+
+  /*
+   * We might need to reshow the widget in cases where we are in a
+   * three-finger-swipe of the view. There is also a chance that we
+   * aren't the proper visible child and that needs to be restored now.
+   */
+  gtk_widget_show (GTK_WIDGET (state->view));
+  ide_layout_stack_set_visible_child (state->dest, state->view);
 
   g_clear_object (&state->source);
   g_clear_object (&state->dest);
   g_clear_object (&state->view);
   g_clear_object (&state->theatric);
   g_slice_free (AnimationState, state);
-}
-
-static inline gboolean
-is_uninitialized (GtkAllocation *alloc)
-{
-  return (alloc->x == -1 && alloc->y == -1 &&
-          alloc->width == 1 && alloc->height == 1);
 }
 
 void
