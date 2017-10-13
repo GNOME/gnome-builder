@@ -39,7 +39,6 @@ struct _IdeBuildManager
   IdeBuildPipeline *pipeline;
   GDateTime        *last_build_time;
   GCancellable     *cancellable;
-  GActionGroup     *actions;
   DzlSignalGroup   *pipeline_signals;
 
   GTimer           *running_time;
@@ -55,14 +54,35 @@ struct _IdeBuildManager
   guint             building : 1;
 };
 
-static void initable_iface_init             (GInitableIface        *iface);
-static void action_group_iface_init         (GActionGroupInterface *iface);
-static void ide_build_manager_set_can_build (IdeBuildManager       *self,
-                                             gboolean               can_build);
+static void initable_iface_init              (GInitableIface  *iface);
+static void ide_build_manager_set_can_build  (IdeBuildManager *self,
+                                              gboolean         can_build);
+static void ide_build_manager_action_build   (IdeBuildManager *self,
+                                              GVariant        *param);
+static void ide_build_manager_action_rebuild (IdeBuildManager *self,
+                                              GVariant        *param);
+static void ide_build_manager_action_cancel  (IdeBuildManager *self,
+                                              GVariant        *param);
+static void ide_build_manager_action_clean   (IdeBuildManager *self,
+                                              GVariant        *param);
+static void ide_build_manager_action_export  (IdeBuildManager *self,
+                                              GVariant        *param);
+static void ide_build_manager_action_install (IdeBuildManager *self,
+                                              GVariant        *param);
+
+DZL_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
+  { "build", ide_build_manager_action_build },
+  { "cancel", ide_build_manager_action_cancel },
+  { "clean", ide_build_manager_action_clean },
+  { "export", ide_build_manager_action_export },
+  { "install", ide_build_manager_action_install },
+  { "rebuild", ide_build_manager_action_rebuild },
+})
 
 G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
+                                               ide_build_manager_init_action_group))
 
 enum {
   PROP_0,
@@ -87,30 +107,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
-
-static const gchar *build_action_names[] = {
-  "build", "clean", "install", "rebuild",
-};
-static const gchar *all_action_names[] = {
-  "build", "clean", "install", "rebuild", "export", "cancel",
-};
-
-static void
-ide_build_manager_propagate_action_enabled (IdeBuildManager *self)
-{
-  g_assert (IDE_IS_BUILD_MANAGER (self));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-
-  for (guint i = 0; i < G_N_ELEMENTS (all_action_names); i++)
-    {
-      const gchar *name = all_action_names[i];
-      gboolean enabled;
-
-      enabled = g_action_group_get_action_enabled (G_ACTION_GROUP (self->actions), name);
-      g_action_group_action_enabled_changed (G_ACTION_GROUP (self), name, enabled);
-    }
-}
 
 static gboolean
 timer_callback (gpointer data)
@@ -197,31 +193,24 @@ ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
 static void
 ide_build_manager_update_action_enabled (IdeBuildManager *self)
 {
-  GAction *action;
   gboolean busy;
   gboolean can_build;
-  gboolean can_export = FALSE;
+  gboolean can_export;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   busy = ide_build_manager_get_busy (self);
   can_build = ide_build_manager_get_can_build (self);
+  can_export = self->pipeline ? ide_build_pipeline_get_can_export (self->pipeline) : FALSE;
 
-  if (self->pipeline != NULL)
-    can_export = ide_build_pipeline_get_can_export (self->pipeline);
+  ide_build_manager_set_action_enabled (self, "build", !busy && can_build);
+  ide_build_manager_set_action_enabled (self, "cancel", busy);
+  ide_build_manager_set_action_enabled (self, "clean", !busy && can_build);
+  ide_build_manager_set_action_enabled (self, "export", !busy && can_build && can_export);
+  ide_build_manager_set_action_enabled (self, "install", !busy && can_build);
+  ide_build_manager_set_action_enabled (self, "rebuild", !busy && can_build);
 
-  for (guint i = 0; i < G_N_ELEMENTS (build_action_names); i++)
-    {
-      const gchar *name = build_action_names [i];
-
-      action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), name);
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !busy && can_build);
-    }
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "export");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !busy && can_build && can_export);
-
-  ide_build_manager_propagate_action_enabled (self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 }
 
 static void
@@ -766,15 +755,11 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
 }
 
 static void
-ide_build_manager_action_cancel (GSimpleAction *action,
-                                 GVariant      *param,
-                                 gpointer       user_data)
+ide_build_manager_action_cancel (IdeBuildManager *self,
+                                 GVariant        *param)
 {
-  IdeBuildManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   ide_build_manager_cancel (self);
@@ -783,15 +768,11 @@ ide_build_manager_action_cancel (GSimpleAction *action,
 }
 
 static void
-ide_build_manager_action_build (GSimpleAction *action,
-                                GVariant      *param,
-                                gpointer       user_data)
+ide_build_manager_action_build (IdeBuildManager *self,
+                                GVariant        *param)
 {
-  IdeBuildManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   ide_build_manager_execute_async (self, IDE_BUILD_PHASE_BUILD, NULL, NULL, NULL);
@@ -800,15 +781,11 @@ ide_build_manager_action_build (GSimpleAction *action,
 }
 
 static void
-ide_build_manager_action_rebuild (GSimpleAction *action,
-                                  GVariant      *param,
-                                  gpointer       user_data)
+ide_build_manager_action_rebuild (IdeBuildManager *self,
+                                  GVariant        *param)
 {
-  IdeBuildManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   ide_build_manager_rebuild_async (self, IDE_BUILD_PHASE_BUILD, NULL, NULL, NULL);
@@ -817,15 +794,11 @@ ide_build_manager_action_rebuild (GSimpleAction *action,
 }
 
 static void
-ide_build_manager_action_clean (GSimpleAction *action,
-                                GVariant      *param,
-                                gpointer       user_data)
+ide_build_manager_action_clean (IdeBuildManager *self,
+                                GVariant        *param)
 {
-  IdeBuildManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   ide_build_manager_clean_async (self, IDE_BUILD_PHASE_BUILD, NULL, NULL, NULL);
@@ -834,15 +807,11 @@ ide_build_manager_action_clean (GSimpleAction *action,
 }
 
 static void
-ide_build_manager_action_install (GSimpleAction *action,
-                                  GVariant      *param,
-                                  gpointer       user_data)
+ide_build_manager_action_install (IdeBuildManager *self,
+                                  GVariant        *param)
 {
-  IdeBuildManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   ide_build_manager_execute_async (self, IDE_BUILD_PHASE_INSTALL, NULL, NULL, NULL);
@@ -851,15 +820,11 @@ ide_build_manager_action_install (GSimpleAction *action,
 }
 
 static void
-ide_build_manager_action_export (GSimpleAction *action,
-                                 GVariant      *param,
-                                 gpointer       user_data)
+ide_build_manager_action_export (IdeBuildManager *self,
+                                 GVariant        *param)
 {
-  IdeBuildManager *self = user_data;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   ide_build_manager_execute_async (self, IDE_BUILD_PHASE_EXPORT, NULL, NULL, NULL);
@@ -870,28 +835,7 @@ ide_build_manager_action_export (GSimpleAction *action,
 static void
 ide_build_manager_init (IdeBuildManager *self)
 {
-  GAction *cancel_action;
-
-  static GActionEntry actions[] = {
-    { "build", ide_build_manager_action_build },
-    { "cancel", ide_build_manager_action_cancel },
-    { "clean", ide_build_manager_action_clean },
-    { "export", ide_build_manager_action_export },
-    { "install", ide_build_manager_action_install },
-    { "rebuild", ide_build_manager_action_rebuild },
-  };
-
   IDE_ENTRY;
-
-  self->actions = G_ACTION_GROUP (g_simple_action_group_new ());
-
-  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
-
-  cancel_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "cancel");
-  g_object_bind_property (self, "busy", cancel_action, "enabled", 0);
 
   ide_build_manager_update_action_enabled (self);
 
@@ -1342,74 +1286,6 @@ ide_build_manager_clean_finish (IdeBuildManager  *self,
   ret = g_task_propagate_boolean (G_TASK (result), error);
 
   IDE_RETURN (ret);
-}
-
-static gchar **
-ide_build_manager_list_actions (GActionGroup *action_group)
-{
-  IdeBuildManager *self = (IdeBuildManager *)action_group;
-
-  g_assert (IDE_IS_BUILD_MANAGER (self));
-
-  return g_action_group_list_actions (G_ACTION_GROUP (self->actions));
-}
-
-static gboolean
-ide_build_manager_query_action (GActionGroup        *action_group,
-                                const gchar         *action_name,
-                                gboolean            *enabled,
-                                const GVariantType **parameter_type,
-                                const GVariantType **state_type,
-                                GVariant           **state_hint,
-                                GVariant           **state)
-{
-  IdeBuildManager *self = (IdeBuildManager *)action_group;
-
-  g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (action_name != NULL);
-
-  return g_action_group_query_action (G_ACTION_GROUP (self->actions),
-                                      action_name,
-                                      enabled,
-                                      parameter_type,
-                                      state_type,
-                                      state_hint,
-                                      state);
-}
-
-static void
-ide_build_manager_change_action_state (GActionGroup *action_group,
-                                       const gchar  *action_name,
-                                       GVariant     *value)
-{
-  IdeBuildManager *self = (IdeBuildManager *)action_group;
-
-  g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (action_name != NULL);
-
-  g_action_group_change_action_state (G_ACTION_GROUP (self->actions), action_name, value);
-}
-
-static void
-ide_build_manager_activate_action (GActionGroup *action_group,
-                                   const gchar  *action_name,
-                                   GVariant     *parameter)
-{
-  IdeBuildManager *self = (IdeBuildManager *)action_group;
-
-  g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (action_name != NULL);
-
-  g_action_group_activate_action (G_ACTION_GROUP (self->actions), action_name, parameter);
-}
-
-static void
-action_group_iface_init (GActionGroupInterface *iface)
-{
-  iface->list_actions = ide_build_manager_list_actions;
-  iface->query_action = ide_build_manager_query_action;
-  iface->change_action_state = ide_build_manager_change_action_state;
-  iface->activate_action = ide_build_manager_activate_action;
 }
 
 static void
