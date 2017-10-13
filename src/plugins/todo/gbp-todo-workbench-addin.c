@@ -100,7 +100,7 @@ gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->model = gbp_todo_model_new ();
+  self->model = gbp_todo_model_new (vcs);
 
   self->panel = g_object_new (GBP_TYPE_TODO_PANEL,
                               "model", self->model,

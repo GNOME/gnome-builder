@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpTodoModel, gbp_todo_model, GBP, TODO_MODEL, GtkListStore)
 
-GbpTodoModel *gbp_todo_model_new         (void);
+GbpTodoModel *gbp_todo_model_new         (IdeVcs               *vcs);
 void          gbp_todo_model_mine_async  (GbpTodoModel         *self,
                                           GFile                *file,
                                           GCancellable         *cancellable,

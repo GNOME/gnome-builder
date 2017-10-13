@@ -37,7 +37,8 @@
  */
 
 struct _GbpTodoModel {
-  GtkListStore parent_instance;
+  GtkListStore  parent_instance;
+  IdeVcs       *vcs;
 };
 
 typedef struct
@@ -48,6 +49,13 @@ typedef struct
 
 G_DEFINE_TYPE (GbpTodoModel, gbp_todo_model, GTK_TYPE_LIST_STORE)
 
+enum {
+  PROP_0,
+  PROP_VCS,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 static GRegex *line1;
 static GRegex *line2;
 
@@ -126,10 +134,16 @@ static void
 gbp_todo_model_merge (GbpTodoModel *self,
                       GbpTodoItem  *item)
 {
+  const gchar *path;
   GtkTreeIter iter;
 
   g_assert (GBP_IS_TODO_MODEL (self));
   g_assert (GBP_IS_TODO_ITEM (item));
+
+  path = gbp_todo_item_get_path (item);
+
+  if (ide_vcs_path_is_ignored (self->vcs, path, NULL))
+    return;
 
   gtk_list_store_prepend (GTK_LIST_STORE (self), &iter);
   gtk_list_store_set (GTK_LIST_STORE (self), &iter, 0, item, -1);
@@ -170,9 +184,71 @@ gbp_todo_model_merge_results (gpointer user_data)
 }
 
 static void
+gbp_todo_model_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GbpTodoModel *self = GBP_TODO_MODEL (object);
+
+  switch (prop_id)
+    {
+    case PROP_VCS:
+      g_value_set_object (value, self->vcs);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_todo_model_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GbpTodoModel *self = GBP_TODO_MODEL (object);
+
+  switch (prop_id)
+    {
+    case PROP_VCS:
+      self->vcs = g_value_dup_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_todo_model_dispose (GObject *object)
+{
+  GbpTodoModel *self = (GbpTodoModel *)object;
+
+  g_clear_object (&self->vcs);
+
+  G_OBJECT_CLASS (gbp_todo_model_parent_class)->dispose (object);
+}
+
+static void
 gbp_todo_model_class_init (GbpTodoModelClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   g_autoptr(GError) error = NULL;
+
+  object_class->dispose = gbp_todo_model_dispose;
+  object_class->get_property = gbp_todo_model_get_property;
+  object_class->set_property = gbp_todo_model_set_property;
+
+  properties [PROP_VCS] =
+    g_param_spec_object ("vcs",
+                         "Vcs",
+                         "The VCS for the current context",
+                         IDE_TYPE_VCS,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   line1 = g_regex_new ("(.*):(\\d+):(.*)", 0, 0, &error);
   g_assert_no_error (error);
@@ -195,6 +271,7 @@ gbp_todo_model_init (GbpTodoModel *self)
 
 /**
  * gbp_todo_model_new:
+ * @vcs: The Vcs to check for ignored files
  *
  * Creates a new #GbpTodoModel.
  *
@@ -203,9 +280,11 @@ gbp_todo_model_init (GbpTodoModel *self)
  * Since: 3.26
  */
 GbpTodoModel *
-gbp_todo_model_new (void)
+gbp_todo_model_new (IdeVcs *vcs)
 {
-  return g_object_new (GBP_TYPE_TODO_MODEL, NULL);
+  return g_object_new (GBP_TYPE_TODO_MODEL,
+                       "vcs", vcs,
+                       NULL);
 }
 
 static void
