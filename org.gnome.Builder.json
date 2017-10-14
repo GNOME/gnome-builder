@@ -556,7 +556,7 @@
         {
             "name": "gspell",
             "config-opts": [ "--disable-gtk-doc", "--disable-gtk-doc-html" ],
-            "cleanup": [ "/include", "/lib/pkgconfig", "*.la", "/share" ],
+            "cleanup": [ "/include", "/lib/pkgconfig", "*.la", "/share", "/bin" ],
             "sources": [
                 {
                      "type": "git",
