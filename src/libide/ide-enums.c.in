@@ -16,6 +16,7 @@
 #include "sourceview/ide-cursor.h"
 #include "sourceview/ide-source-view.h"
 #include "symbols/ide-symbol.h"
+#include "testing/ide-test.h"
 #include "threading/ide-thread-pool.h"
 #include "transfers/ide-transfer.h"
 #include "vcs/ide-vcs-config.h"

@@ -165,6 +165,8 @@ G_BEGIN_DECLS
 #include "symbols/ide-tags-builder.h"
 #include "template/ide-project-template.h"
 #include "template/ide-template-provider.h"
+#include "testing/ide-test.h"
+#include "testing/ide-test-provider.h"
 #include "threading/ide-thread-pool.h"
 #include "transfers/ide-pkcon-transfer.h"
 #include "transfers/ide-transfer.h"

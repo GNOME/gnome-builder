@@ -39,6 +39,7 @@
 #include "debugger/ide-debug-manager.h"
 #include "devices/ide-device-manager.h"
 #include "doap/ide-doap.h"
+#include "documentation/ide-documentation.h"
 #include "plugins/ide-extension-util.h"
 #include "projects/ide-project-files.h"
 #include "projects/ide-project-item.h"
@@ -49,7 +50,7 @@
 #include "search/ide-search-engine.h"
 #include "search/ide-search-provider.h"
 #include "snippets/ide-source-snippets-manager.h"
-#include "documentation/ide-documentation.h"
+#include "testing/ide-test-manager.h"
 #include "transfers/ide-transfer-manager.h"
 #include "util/ide-async-helper.h"
 #include "util/ide-settings.h"
@@ -78,6 +79,7 @@ struct _IdeContext
   IdeRuntimeManager        *runtime_manager;
   IdeSearchEngine          *search_engine;
   IdeSourceSnippetsManager *snippets_manager;
+  IdeTestManager           *test_manager;
   IdeProject               *project;
   GFile                    *project_file;
   gchar                    *root_build_dir;
@@ -534,6 +536,7 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
   g_clear_object (&self->runtime_manager);
+  g_clear_object (&self->test_manager);
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
 
@@ -816,6 +819,10 @@ ide_context_init (IdeContext *self)
   self->runtime_manager = g_object_new (IDE_TYPE_RUNTIME_MANAGER,
                                         "context", self,
                                         NULL);
+
+  self->test_manager = g_object_new (IDE_TYPE_TEST_MANAGER,
+                                     "context", self,
+                                     NULL);
 
   self->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
                                       "context", self,
@@ -1115,6 +1122,28 @@ ide_context_init_snippets (gpointer             source_object,
                                           cancellable,
                                           ide_context_init_snippets_cb,
                                           g_object_ref (task));
+}
+
+static void
+ide_context_init_tests (gpointer             source_object,
+                        GCancellable        *cancellable,
+                        GAsyncReadyCallback  callback,
+                        gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_source_tag (task, ide_context_init_tests);
+
+  if (!g_initable_init (G_INITABLE (self->test_manager), cancellable, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -1648,6 +1677,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_build_manager,
                         ide_context_init_run_manager,
                         ide_context_init_diagnostics_manager,
+                        ide_context_init_tests,
                         ide_context_init_loaded,
                         NULL);
 }
@@ -2317,6 +2347,24 @@ ide_context_get_debug_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->debug_manager;
+}
+
+/**
+ * ide_context_get_test_manager:
+ * @self: An #IdeTestManager
+ *
+ * Gets the test manager for the #IdeContext.
+ *
+ * Returns: (transfer none): An #IdeTestManager
+ *
+ * Since: 3.28
+ */
+IdeTestManager *
+ide_context_get_test_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->test_manager;
 }
 
 /**

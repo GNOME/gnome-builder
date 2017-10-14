@@ -17,3 +17,11 @@ treeview.i-wanna-be-listbox:selected:backdrop {
   color: @theme_unfocused_selected_fg_color;
   background-color: @theme_unfocused_selected_bg_color;
 }
+
+ideeditorsidebar treeview.testing-tree {
+  -GtkTreeView-expander-size: 0;
+  -GtkTreeView-horizontal-separator: 0;
+  -GtkTreeView-vertical-separator: 6;
+  -gtk-icon-source: none;
+  padding-left: 6px;
+}

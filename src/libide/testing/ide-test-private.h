@@ -1,4 +1,4 @@
-/* meson-plugin.c
+/* ide-test-private.h
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -16,17 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#pragma once
 
-#include "gbp-meson-build-system.h"
-#include "gbp-meson-pipeline-addin.h"
-#include "gbp-meson-test-provider.h"
+#include <gtk/gtk.h>
 
-void
-gbp_meson_register_types (PeasObjectModule *module)
+#include "ide-test.h"
+#include "ide-test-manager.h"
+#include "ide-test-provider.h"
+
+G_BEGIN_DECLS
+
+typedef enum
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_MESON_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, GBP_TYPE_MESON_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TEST_PROVIDER, GBP_TYPE_MESON_TEST_PROVIDER);
-}
+  IDE_TEST_COLUMN_GROUP,
+  IDE_TEST_COLUMN_TEST,
+} IdeTestColumn;
+
+G_GNUC_INTERNAL GtkTreeModel    *_ide_test_manager_get_model (IdeTestManager  *self);
+G_GNUC_INTERNAL void             _ide_test_set_provider      (IdeTest         *self,
+                                                              IdeTestProvider *provider);
+G_GNUC_INTERNAL IdeTestProvider *_ide_test_get_provider      (IdeTest         *self);
+
+
+G_END_DECLS

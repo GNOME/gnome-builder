@@ -81,6 +81,7 @@
     <file preprocess="xml-stripblanks" alias="ide-preferences-language-row.ui">preferences/ide-preferences-language-row.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-preferences-window.ui">preferences/ide-preferences-window.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-run-button.ui">runner/ide-run-button.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-test-panel.ui">testing/ide-test-panel.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-transfer-row.ui">transfers/ide-transfer-row.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-transfers-button.ui">transfers/ide-transfers-button.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-shortcuts-window.ui">keybindings/ide-shortcuts-window.ui</file>
@@ -105,6 +106,10 @@
 
   <gresource prefix="/org/gnome/builder/plugins/directory">
     <file alias="directory.plugin">directory/directory.plugin</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/testing">
+    <file alias="testing.plugin">testing/testing.plugin</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/webkit">

@@ -1,4 +1,4 @@
-/* meson-plugin.c
+/* gbp-meson-test-provider.h
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -16,17 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#pragma once
+
 #include <ide.h>
 
-#include "gbp-meson-build-system.h"
-#include "gbp-meson-pipeline-addin.h"
-#include "gbp-meson-test-provider.h"
+G_BEGIN_DECLS
 
-void
-gbp_meson_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_MESON_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, GBP_TYPE_MESON_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TEST_PROVIDER, GBP_TYPE_MESON_TEST_PROVIDER);
-}
+#define GBP_TYPE_MESON_TEST_PROVIDER (gbp_meson_test_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpMesonTestProvider, gbp_meson_test_provider, GBP, MESON_TEST_PROVIDER, IdeTestProvider)
+
+G_END_DECLS

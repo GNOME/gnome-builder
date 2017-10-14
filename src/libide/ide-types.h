@@ -129,6 +129,10 @@ typedef struct _IdeSubprocessLauncher          IdeSubprocessLauncher;
 typedef struct _IdeSymbol                      IdeSymbol;
 typedef struct _IdeSymbolResolver              IdeSymbolResolver;
 
+typedef struct _IdeTest                        IdeTest;
+typedef struct _IdeTestManager                 IdeTestManager;
+typedef struct _IdeTestProvider                IdeTestProvider;
+
 typedef struct _IdeTransferManager             IdeTransferManager;
 typedef struct _IdeTransfer                    IdeTransfer;
 

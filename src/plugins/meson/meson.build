@@ -14,6 +14,10 @@ meson_sources = [
   'gbp-meson-build-target.h',
   'gbp-meson-pipeline-addin.c',
   'gbp-meson-pipeline-addin.h',
+  'gbp-meson-test-provider.c',
+  'gbp-meson-test-provider.h',
+  'gbp-meson-test.c',
+  'gbp-meson-test.h',
 ]
 
 gnome_builder_plugins_sources += files(meson_sources)       

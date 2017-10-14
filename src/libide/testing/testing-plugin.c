@@ -1,4 +1,4 @@
-/* meson-plugin.c
+/* testing-plugin.c
  *
  * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
  *
@@ -17,16 +17,12 @@
  */
 
 #include <libpeas/peas.h>
-#include <ide.h>
 
-#include "gbp-meson-build-system.h"
-#include "gbp-meson-pipeline-addin.h"
-#include "gbp-meson-test-provider.h"
+#include "editor/ide-editor-addin.h"
+#include "testing/ide-test-editor-addin.h"
 
 void
-gbp_meson_register_types (PeasObjectModule *module)
+ide_test_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_MESON_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, GBP_TYPE_MESON_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TEST_PROVIDER, GBP_TYPE_MESON_TEST_PROVIDER);
+  peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_ADDIN, IDE_TYPE_TEST_EDITOR_ADDIN);
 }
