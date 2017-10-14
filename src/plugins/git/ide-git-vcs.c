@@ -32,7 +32,20 @@ struct _IdeGitVcs
 {
   IdeObject       parent_instance;
 
+  /*
+   * The repository_mutex is used to ensure that we only access the
+   * self->repository instance from a single thread at a time. We
+   * need to maintain this invariant for the thread-safety on
+   * ide_vcs_is_ignored() to hold true.
+   */
+  GMutex          repository_mutex;
   GgitRepository *repository;
+
+  /*
+   * The change monitors all share a copy of the repository so that
+   * they can avoid coordinating with our self->repository. Instead,
+   * they have a single worker thread to maintain their thread-safety.
+   */
   GgitRepository *change_monitor_repository;
 
   GFile          *working_directory;
@@ -61,7 +74,6 @@ G_DEFINE_TYPE_EXTENDED (IdeGitVcs, ide_git_vcs, IDE_TYPE_OBJECT, 0,
 
 enum {
   PROP_0,
-  PROP_REPOSITORY,
   LAST_PROP,
 
   /* Override properties */
@@ -74,23 +86,7 @@ enum {
   LAST_SIGNAL
 };
 
-static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
-
-/**
- * ide_git_vcs_get_repository:
- *
- * Retrieves the underlying #GgitRepository used by @vcs.
- *
- * Returns: (transfer none): A #GgitRepository.
- */
-GgitRepository *
-ide_git_vcs_get_repository (IdeGitVcs *self)
-{
-  g_return_val_if_fail (IDE_IS_GIT_VCS (self), NULL);
-
-  return self->repository;
-}
 
 static GFile *
 ide_git_vcs_get_working_directory (IdeVcs *vcs)
@@ -98,6 +94,12 @@ ide_git_vcs_get_working_directory (IdeVcs *vcs)
   IdeGitVcs *self = (IdeGitVcs *)vcs;
 
   g_return_val_if_fail (IDE_IS_GIT_VCS (self), NULL);
+
+  /* Note: This function is expected to be thread-safe for
+   *       those holding a reference to @vcs. So
+   *       @working_directory cannot be changed after creation
+   *       and must be valid for the lifetime of @vcs.
+   */
 
   return self->working_directory;
 }
@@ -239,7 +241,7 @@ ide_git_vcs_load (IdeGitVcs  *self,
   if (!(repository = ggit_repository_open (location, error)))
     return NULL;
 
-  /* Only set once, on load. Not thread-safe otherwise. */
+  /* Note: Only set this once on load, otherwise not thread-safe. */
   if (self->working_directory == NULL)
     self->working_directory = ggit_repository_get_workdir (repository);
 
@@ -303,8 +305,8 @@ ide_git_vcs__monitor_changed_cb (IdeGitVcs         *self,
 }
 
 static gboolean
-ide_git_vcs_load_monitor (IdeGitVcs  *self,
-                          GError    **error)
+ide_git_vcs_load_monitor_locked (IdeGitVcs  *self,
+                                 GError    **error)
 {
   gboolean ret = TRUE;
 
@@ -351,7 +353,7 @@ ide_git_vcs_reload_worker (GTask        *task,
   IdeGitVcs *self = source_object;
   g_autoptr(GgitRepository) repository1 = NULL;
   g_autoptr(GgitRepository) repository2 = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -367,16 +369,19 @@ ide_git_vcs_reload_worker (GTask        *task,
       IDE_EXIT;
     }
 
+  g_mutex_lock (&self->repository_mutex);
+
   g_set_object (&self->repository, repository1);
   g_set_object (&self->change_monitor_repository, repository2);
 
-  if (!ide_git_vcs_load_monitor (self, &error))
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
+  if (!ide_git_vcs_load_monitor_locked (self, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 
-  g_task_return_boolean (task, TRUE);
+  g_mutex_unlock (&self->repository_mutex);
+
+  IDE_EXIT;
 }
 
 static void
@@ -435,12 +440,29 @@ ide_git_vcs_is_ignored (IdeVcs  *vcs,
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (G_IS_FILE (file));
 
+  /* Note: this function is required to be thread-safe so that workers
+   *       can check if files are ignored from a thread without
+   *       round-tripping to the main thread.
+   */
+
+  /* self->working_directory is not changed after creation, so safe
+   * to access it from a thread.
+   */
   name = g_file_get_relative_path (self->working_directory, file);
   if (g_strcmp0 (name, ".git") == 0)
     return TRUE;
 
+  /*
+   * If we have a valid name to work with, we want to query the
+   * repository. But this could be called from a thread, so ensure
+   * we are the only thread accessing self->repository right now.
+   */
   if (name != NULL)
-    return ggit_repository_path_is_ignored (self->repository, name, error);
+    {
+      g_mutex_lock (&self->repository_mutex);
+      ret = ggit_repository_path_is_ignored (self->repository, name, error);
+      g_mutex_unlock (&self->repository_mutex);
+    }
 
   return ret;
 }
@@ -454,7 +476,9 @@ ide_git_vcs_get_branch_name (IdeVcs *vcs)
 
   g_assert (IDE_IS_GIT_VCS (self));
 
+  g_mutex_lock (&self->repository_mutex);
   ref = ggit_repository_get_head (self->repository, NULL);
+  g_mutex_unlock (&self->repository_mutex);
 
   if (ref != NULL)
     {
@@ -510,6 +534,20 @@ ide_git_vcs_dispose (GObject *object)
 }
 
 static void
+ide_git_vcs_finalize (GObject *object)
+{
+  IdeGitVcs *self = (IdeGitVcs *)object;
+
+  IDE_ENTRY;
+
+  g_mutex_clear (&self->repository_mutex);
+
+  G_OBJECT_CLASS (ide_git_vcs_parent_class)->finalize (object);
+
+  IDE_EXIT;
+}
+
+static void
 ide_git_vcs_get_property (GObject    *object,
                           guint       prop_id,
                           GValue     *value,
@@ -521,10 +559,6 @@ ide_git_vcs_get_property (GObject    *object,
     {
     case PROP_BRANCH_NAME:
       g_value_take_string (value, ide_git_vcs_get_branch_name (IDE_VCS (self)));
-      break;
-
-    case PROP_REPOSITORY:
-      g_value_set_object (value, ide_git_vcs_get_repository (self));
       break;
 
     case PROP_WORKING_DIRECTORY:
@@ -551,30 +585,12 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = ide_git_vcs_finalize;
   object_class->dispose = ide_git_vcs_dispose;
   object_class->get_property = ide_git_vcs_get_property;
 
   g_object_class_override_property (object_class, PROP_BRANCH_NAME, "branch-name");
   g_object_class_override_property (object_class, PROP_WORKING_DIRECTORY, "working-directory");
-
-  /**
-   * IdeGitVcs:repository:
-   *
-   * This property contains the underlying #GgitRepository that can be used to lookup git
-   * information. Consumers should be careful about using this directly. It is not thread-safe
-   * to use this object, nor is it safe to perform many blocking calls from the main thread.
-   *
-   * You might want to get the #GgitRepository:location property and create your own instance
-   * of the repository for threaded operations.
-   */
-  properties [PROP_REPOSITORY] =
-    g_param_spec_object ("repository",
-                         "Repository",
-                         "The git repository for the project.",
-                         GGIT_TYPE_REPOSITORY,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * IdeGitVcs::reloaded:
@@ -601,6 +617,7 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
 static void
 ide_git_vcs_init (IdeGitVcs *self)
 {
+  g_mutex_init (&self->repository_mutex);
 }
 
 static void

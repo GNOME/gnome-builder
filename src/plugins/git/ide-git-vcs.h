@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <libgit2-glib/ggit.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
@@ -26,7 +25,5 @@ G_BEGIN_DECLS
 #define IDE_TYPE_GIT_VCS (ide_git_vcs_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeGitVcs, ide_git_vcs, IDE, GIT_VCS, IdeObject)
-
-GgitRepository *ide_git_vcs_get_repository (IdeGitVcs *self);
 
 G_END_DECLS

@@ -658,7 +658,15 @@ ide_git_buffer_change_monitor_worker (gpointer data)
   GAsyncQueue *queue = data;
   GTask *task;
 
-  g_assert (queue);
+  g_assert (queue != NULL);
+
+  /*
+   * This is a single thread worker that dispatches the particular
+   * change to the given change monitor. We require a single thread
+   * so that we can mantain the invariant that only a single thread
+   * can access a GgitRepository at a time (and change monitors all
+   * share the same GgitRepository amongst themselves).
+   */
 
   while ((task = g_async_queue_pop (queue)))
     {
@@ -752,6 +760,11 @@ ide_git_buffer_change_monitor_class_init (IdeGitBufferChangeMonitorClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
+  /* Note: We use a single worker thread so that we can maintain the
+   *       invariant that only a single thread is touching the GgitRepository
+   *       at a time. (Also, you can only type in one editor at a time, so
+   *       on worker thread for interactive blob changes is fine.
+   */
   work_queue = g_async_queue_new ();
   work_thread = g_thread_new ("IdeGitBufferChangeMonitorWorker",
                               ide_git_buffer_change_monitor_worker,
