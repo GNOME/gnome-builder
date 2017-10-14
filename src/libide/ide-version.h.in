@@ -24,7 +24,7 @@
 #endif
 
 /**
- * SECTION:jsonrpc-version
+ * SECTION:ide-version
  * @short_description: libide version checking
  *
  * libide provides macros to check the version of the library
