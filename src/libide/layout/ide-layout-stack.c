@@ -657,7 +657,7 @@ cleanup:
 
   gtk_widget_queue_draw (gtk_widget_get_toplevel (GTK_WIDGET (self)));
 
-  ide_layout_stack_set_cursor (self, "pointer");
+  ide_layout_stack_set_cursor (self, "arrow");
 
   IDE_EXIT;
 }
