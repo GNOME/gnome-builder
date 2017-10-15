@@ -1,5 +1,5 @@
 .. _`Builder Bugzilla`: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder&component=docs
-.. _`git workflow`: https://wiki.gnome.org/Newcomers/CodeContributionWorkflow
+.. _`git workflow`: https://wiki.gnome.org/Newcomers/SubmitPatch
 
 
 #####################
