@@ -22,6 +22,8 @@
 #include "ide-debug.h"
 #include "ide-object.h"
 
+#include "buildsystem/ide-build-manager.h"
+#include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-configuration.h"
 #include "files/ide-file.h"
@@ -335,6 +337,97 @@ ide_build_system_new_finish (GAsyncResult  *result,
   IDE_RETURN (IDE_BUILD_SYSTEM (ret));
 }
 
+static gchar *
+ide_build_system_translate (IdeBuildSystem   *self,
+                            IdeBuildPipeline *pipeline,
+                            const gchar      *prefix,
+                            const gchar      *path)
+{
+  g_autofree gchar *freeme = NULL;
+  g_autofree gchar *translated_path = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GFile) translated = NULL;
+  IdeRuntime *runtime;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (prefix != NULL);
+  g_assert (path != NULL);
+
+  if (NULL == pipeline ||
+      NULL == (runtime = ide_build_pipeline_get_runtime (pipeline)))
+    return g_strdup_printf ("%s%s", prefix, path);
+
+  if (!g_path_is_absolute (path))
+    path = freeme = ide_build_pipeline_build_builddir_path (pipeline, path, NULL);
+
+  file = g_file_new_for_path (path);
+  translated = ide_runtime_translate_file (runtime, file);
+  translated_path = g_file_get_path (translated);
+
+  return g_strdup_printf ("%s%s", prefix, translated_path);
+}
+
+static void
+ide_build_system_post_process_build_flags (IdeBuildSystem  *self,
+                                           gchar          **flags)
+{
+  IdeBuildPipeline *pipeline;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (flags != NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  for (guint i = 0; flags[i] != NULL; i++)
+    {
+      gchar *flag = flags[i];
+      gchar *translated;
+
+      if (flag[0] != '-')
+        continue;
+
+      switch (flag[1])
+        {
+        case 'I':
+          if (flag[2] == '\0')
+            {
+              if (flags[i+1] != NULL)
+                {
+                  translated = ide_build_system_translate (self, pipeline, "", flags[++i]);
+                  flags[i] = translated;
+                  g_free (flag);
+                }
+            }
+          else
+            {
+              translated = ide_build_system_translate (self, pipeline, "-I", &flag[2]);
+              flags[i] = translated;
+              g_free (flag);
+            }
+          break;
+
+        case 'f': /* -fPIC */
+        case 'W': /* -Werror... */
+        case 'm': /* -m64 -mtune=native */
+          break;
+
+        case 'D':
+        case 'x':
+          if (strlen (flag) == 2)
+            i++;
+          break;
+
+        default:
+          break;
+        }
+    }
+}
+
 void
 ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
                                         IdeFile             *file,
@@ -371,6 +464,8 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
   ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_finish (self, result, error);
+  if (ret != NULL)
+    ide_build_system_post_process_build_flags (self, ret);
 
   IDE_RETURN (ret);
 }
