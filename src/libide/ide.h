@@ -57,6 +57,7 @@ G_BEGIN_DECLS
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-build-system-discovery.h"
 #include "buildsystem/ide-build-target.h"
+#include "buildsystem/ide-compile-commands.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-provider.h"
