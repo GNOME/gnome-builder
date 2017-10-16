@@ -99,6 +99,14 @@ guint                  ide_build_pipeline_add_error_format    (IdeBuildPipeline 
                                                                GRegexCompileFlags      flags);
 gboolean               ide_build_pipeline_remove_error_format (IdeBuildPipeline       *self,
                                                                guint                   error_format_id);
+void                   ide_build_pipeline_build_async         (IdeBuildPipeline       *self,
+                                                               IdeBuildPhase           phase,
+                                                               GCancellable           *cancellable,
+                                                               GAsyncReadyCallback     callback,
+                                                               gpointer                user_data);
+gboolean               ide_build_pipeline_build_finish        (IdeBuildPipeline       *self,
+                                                               GAsyncResult           *result,
+                                                               GError                **error);
 void                   ide_build_pipeline_execute_async       (IdeBuildPipeline       *self,
                                                                GCancellable           *cancellable,
                                                                GAsyncReadyCallback     callback,

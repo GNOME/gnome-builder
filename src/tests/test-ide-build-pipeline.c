@@ -72,14 +72,13 @@ context_loaded (GObject      *object,
                            "configuration", config,
                            NULL);
 
-  ide_build_pipeline_request_phase (pipeline, IDE_BUILD_PHASE_BUILD);
-
   g_debug ("Executing pipeline");
 
-  ide_build_pipeline_execute_async (pipeline,
-                                    NULL,
-                                    execute_cb,
-                                    g_steal_pointer (&task));
+  ide_build_pipeline_build_async (pipeline,
+                                  IDE_BUILD_PHASE_BUILD,
+                                  NULL,
+                                  execute_cb,
+                                  g_steal_pointer (&task));
 }
 
 static void

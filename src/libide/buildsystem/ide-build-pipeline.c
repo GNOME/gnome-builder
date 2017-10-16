@@ -1413,6 +1413,113 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
 }
 
 /**
+ * ide_build_pipeline_build_async:
+ * @self: A @IdeBuildPipeline
+ * @phase: the requested build phase
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: a callback to execute upon completion
+ * @user_data: data for @callback
+ *
+ * Asynchronously starts the build pipeline.
+ *
+ * The @phase parameter should contain the #IdeBuildPhase that is
+ * necessary to complete. If you simply want to trigger a generic
+ * build, you probably want %IDE_BUILD_PHASE_BUILD. If you only
+ * need to configure the project (and necessarily the dependencies
+ * up to that phase) you might want %IDE_BUILD_PHASE_CONFIGURE.
+ *
+ * You may not specify %IDE_BUILD_PHASE_AFTER or
+ * %IDE_BUILD_PHASE_BEFORE flags as those must always be processed
+ * with the underlying phase they are attached to.
+ *
+ * Upon completion, @callback will be executed and should call
+ * ide_build_pipeline_execute_finish() to get the status of the
+ * operation.
+ *
+ * Since: 3.28
+ */
+void
+ide_build_pipeline_build_async (IdeBuildPipeline    *self,
+                                IdeBuildPhase        phase,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  TaskData *task_data;
+
+  IDE_ENTRY;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_build_pipeline_build_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  /*
+   * If the requested phase has already been met (by a previous build
+   * or by an active build who has already surpassed this build phase,
+   * we can return a result immediately.
+   */
+  if (self->position >= self->pipeline->len)
+    goto short_circuit;
+  else if (self->position >= 0)
+    {
+      const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, self->position);
+
+      /* This phase is past the requested phase, we can complete the
+       * task immediately.
+       */
+      if (entry->phase > phase)
+        goto short_circuit;
+    }
+
+  task_data = task_data_new (task, TASK_BUILD);
+  task_data->phase = 1 << g_bit_nth_msf (phase, -1);
+  g_task_set_task_data (task, task_data, task_data_free);
+
+  g_queue_push_tail (&self->task_queue, g_steal_pointer (&task));
+
+  ide_build_pipeline_queue_flush (self);
+
+  IDE_EXIT;
+
+short_circuit:
+  g_task_return_boolean (task, TRUE);
+  IDE_EXIT;
+}
+
+/**
+ * ide_build_pipeline_build_finish:
+ * @self: An #IdeBuildPipeline
+ * @result: A #GAsyncResult provided to callback
+ * @error: A location for a #GError, or %NULL
+ *
+ * This function completes the asynchronous request to build
+ * up to a particular phase of the build pipeline.
+ *
+ * Returns: %TRUE if the build stages were executed successfully
+ *   up to the requested build phase provided to
+ *   ide_build_pipeline_build_async().
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_build_pipeline_build_finish (IdeBuildPipeline  *self,
+                                 GAsyncResult      *result,
+                                 GError           **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+/**
  * ide_build_pipeline_execute_async:
  * @self: A @IdeBuildPipeline
  * @cancellable: (nullable): A #GCancellable or %NULL
@@ -1427,6 +1534,8 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
  * Upon completion, @callback will be executed and should call
  * ide_build_pipeline_execute_finish() to get the status of the
  * operation.
+ *
+ * Since: 3.24
  */
 void
 ide_build_pipeline_execute_async (IdeBuildPipeline    *self,
@@ -1434,38 +1543,14 @@ ide_build_pipeline_execute_async (IdeBuildPipeline    *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
-  g_autoptr(GFile) builddir = NULL;
-  g_autoptr(GError) error = NULL;
-  TaskData *task_data;
-
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_pipeline_execute_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  ide_build_pipeline_build_async (self, self->requested_mask, cancellable, callback, user_data);
 
-  if (self->requested_mask == IDE_BUILD_PHASE_NONE)
-    {
-      g_task_return_boolean (task, TRUE);
-      IDE_EXIT;
-    }
-
-  /*
-   * XXX: Maybe we should allow a phase to be provided with execute
-   *      now for symmetry with the others. Also, rename to build_async()?
-   */
-
-  task_data = task_data_new (task, TASK_BUILD);
-  task_data->phase = 1 << g_bit_nth_msf (self->requested_mask, -1);
-  g_task_set_task_data (task, task_data, task_data_free);
-
-  g_queue_push_tail (&self->task_queue, g_steal_pointer (&task));
-
-  ide_build_pipeline_queue_flush (self);
+  IDE_EXIT;
 }
 
 static gboolean

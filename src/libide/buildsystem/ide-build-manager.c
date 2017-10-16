@@ -1156,10 +1156,11 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  ide_build_pipeline_execute_async (self->pipeline,
-                                    cancellable,
-                                    ide_build_manager_execute_cb,
-                                    g_steal_pointer (&task));
+  ide_build_pipeline_build_async (self->pipeline,
+                                  phase,
+                                  cancellable,
+                                  ide_build_manager_execute_cb,
+                                  g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
