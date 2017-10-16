@@ -83,16 +83,6 @@
             ]
         },
         {
-            "name": "libgsystem",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/libgsystem.git",
-                    "branch": "d606bec68ddfea78de4b03c3f3568afb71bdc1ce"
-                }
-            ]
-        },
-        {
             "name": "ostree",
             "config-opts": [ "--disable-man" ],
             "cleanup": [ "/bin",
@@ -102,9 +92,9 @@
                          "/libexec" ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/ostreedev/ostree.git",
-                    "branch": "v2017.10"
+                    "type": "archive",
+                    "url": "https://github.com/ostreedev/ostree/releases/download/v2017.12/libostree-2017.12.tar.xz",
+                    "sha256": "fc409f04c9fd440b83b4fa324f3b912cbf61145389378d44254b8b191c9fef08"
                 }
             ]
         },
@@ -127,9 +117,9 @@
                               "cp /usr/bin/update-desktop-database /app/bin" ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/flatpak/flatpak.git",
-                    "branch": "0.9.6"
+                    "type": "archive",
+                    "url": "https://github.com/flatpak/flatpak/releases/download/0.9.99/flatpak-0.9.99.tar.xz",
+                    "sha256": "7a41618c5ddaed26005c13595c70f1b8271f1c86785f762f07e6bb448b7fce25"
                 }
             ]
         },
