@@ -26,6 +26,7 @@
 #include "buildsystem/ide-build-log.h"
 #include "buildsystem/ide-build-stage.h"
 #include "buildsystem/ide-configuration.h"
+#include "runtimes/ide-runtime.h"
 #include "subprocess/ide-subprocess-launcher.h"
 
 G_BEGIN_DECLS
@@ -56,6 +57,7 @@ G_DECLARE_FINAL_TYPE (IdeBuildPipeline, ide_build_pipeline, IDE, BUILD_PIPELINE,
 
 gboolean               ide_build_pipeline_get_busy            (IdeBuildPipeline       *self);
 IdeConfiguration      *ide_build_pipeline_get_configuration   (IdeBuildPipeline       *self);
+IdeRuntime            *ide_build_pipeline_get_runtime         (IdeBuildPipeline       *self);
 const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline       *self);
 const gchar           *ide_build_pipeline_get_srcdir          (IdeBuildPipeline       *self);
 gchar                 *ide_build_pipeline_get_message         (IdeBuildPipeline       *self);
