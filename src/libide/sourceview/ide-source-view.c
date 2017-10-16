@@ -748,10 +748,23 @@ static void
 ide_source_view_update_auto_indent_override (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
   IdeIndenter *indenter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  /* Update the indenter if necessary */
+  if (priv->auto_indent &&
+      priv->indenter_adapter != NULL &&
+      priv->buffer != NULL &&
+      NULL != (language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->buffer))))
+    lang_id = gtk_source_language_get_id (language);
+
+  if (priv->indenter_adapter != NULL)
+    ide_extension_adapter_set_value (priv->indenter_adapter, lang_id);
+
+  /* Fetch our indenter */
   indenter = ide_source_view_get_indenter (self);
 
   /*
