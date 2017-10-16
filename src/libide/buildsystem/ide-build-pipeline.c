@@ -2057,6 +2057,24 @@ ide_build_pipeline_get_stage_by_id (IdeBuildPipeline *self,
 }
 
 /**
+ * ide_build_pipeline_get_runtime:
+ * @self: An #IdeBuildPipeline
+ *
+ * A convenience function to get the runtime for a build pipeline.
+ *
+ * Returns: (transfer none) (nullable): An #IdeRuntime or %NULL
+ *
+ * Since: 3.28
+ */
+IdeRuntime *
+ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return ide_configuration_get_runtime (self->configuration);
+}
+
+/**
  * ide_build_pipeline_create_launcher:
  * @self: An #IdeBuildPipeline
  *
