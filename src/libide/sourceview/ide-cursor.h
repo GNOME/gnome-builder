@@ -16,9 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __IDE_CURSOR_
-
-#define __IDE_CURSOR_
+#pragma once
 
 #include <glib-object.h>
 
@@ -44,5 +42,3 @@ void         ide_cursor_insert_text           (IdeCursor *self,
 gboolean     ide_cursor_is_enabled            (IdeCursor *self);
 
 G_END_DECLS
-
-#endif
