@@ -1289,6 +1289,47 @@ ide_build_pipeline_try_chain (IdeBuildPipeline *self,
 }
 
 static void
+complete_queued_before_phase (IdeBuildPipeline *self,
+                              IdeBuildPhase     phase)
+{
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+
+  phase = phase & IDE_BUILD_PHASE_MASK;
+
+  for (GList *iter = self->task_queue.head; iter; iter = iter->next)
+    {
+      GTask *task;
+      TaskData *task_data;
+
+again:
+      task = iter->data;
+      task_data = g_task_get_task_data (task);
+
+      g_assert (G_IS_TASK (task));
+      g_assert (task_data->task == task);
+
+      /*
+       * If this task has a phase that is less-than the phase given
+       * to us, we can complete the task immediately.
+       */
+      if (task_data->phase < phase)
+        {
+          GList *to_remove = iter;
+
+          iter = iter->next;
+          g_queue_delete_link (&self->task_queue, to_remove);
+          g_task_return_boolean (task, TRUE);
+          g_object_unref (task);
+
+          if (iter == NULL)
+            break;
+
+          goto again;
+        }
+    }
+}
+
+static void
 ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
                                  GTask            *task)
 {
@@ -1335,6 +1376,9 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
 
       g_assert (entry->stage != NULL);
       g_assert (IDE_IS_BUILD_STAGE (entry->stage));
+
+      /* Complete any tasks that are waiting for this to complete */
+      complete_queued_before_phase (self, entry->phase);
 
       /* Ignore the stage if it is disabled */
       if (ide_build_stage_get_disabled (entry->stage))
