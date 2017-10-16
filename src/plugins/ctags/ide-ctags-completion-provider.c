@@ -45,8 +45,6 @@ ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
   GFile *file;
   gsize i;
 
-  IDE_ENTRY;
-
   g_return_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_return_if_fail (!index || IDE_IS_CTAGS_INDEX (index));
   g_return_if_fail (self->indexes != NULL);
@@ -62,14 +60,11 @@ ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
         {
           g_ptr_array_remove_index_fast (self->indexes, i);
           g_ptr_array_add (self->indexes, g_object_ref (index));
-
-          IDE_EXIT;
+          return;
         }
     }
 
   g_ptr_array_add (self->indexes, g_object_ref (index));
-
-  IDE_EXIT;
 }
 
 static void
