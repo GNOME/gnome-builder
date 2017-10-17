@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-compile-commands"
 
 #include <json-glib/json-glib.h>
+#include <string.h>
 
 #include "ide-debug.h"
 
@@ -361,6 +362,118 @@ ide_compile_commands_load_finish (IdeCompileCommands  *self,
   IDE_RETURN (ret);
 }
 
+static gboolean
+suffix_is_c_like (const gchar *suffix)
+{
+  if (suffix == NULL)
+    return FALSE;
+
+  return !!strstr (suffix, ".c") || !!strstr (suffix, ".h") ||
+         !!strstr (suffix, ".cc") || !!strstr (suffix, ".hh") ||
+         !!strstr (suffix, ".cxx") || !!strstr (suffix, ".hxx") ||
+         !!strstr (suffix, ".cpp") || !!strstr (suffix, ".hpp");
+}
+
+static gboolean
+suffix_is_vala (const gchar *suffix)
+{
+  if (suffix == NULL)
+    return FALSE;
+
+  return !!strstr (suffix, ".vala");
+}
+
+static gchar *
+ide_compile_commands_resolve (IdeCompileCommands *self,
+                              const CompileInfo  *info,
+                              const gchar        *path)
+{
+  g_autoptr(GFile) file = NULL;
+
+  g_assert (IDE_IS_COMPILE_COMMANDS (self));
+  g_assert (info != NULL);
+
+  if (path == NULL)
+    return NULL;
+
+  if (g_path_is_absolute (path))
+    return g_strdup (path);
+
+  file = g_file_resolve_relative_path (info->directory, path);
+  if (file != NULL)
+    return g_file_get_path (file);
+
+  return NULL;
+}
+
+static void
+ide_compile_commands_filter_c (IdeCompileCommands   *self,
+                               const CompileInfo    *info,
+                               gchar              ***argv)
+{
+  GPtrArray *ar;
+
+  g_assert (IDE_IS_COMPILE_COMMANDS (self));
+  g_assert (info != NULL);
+  g_assert (argv != NULL);
+
+  ar = g_ptr_array_new ();
+
+  for (guint i = 0; (*argv)[i] != NULL; i++)
+    {
+      const gchar *param = (*argv)[i];
+      const gchar *next = (*argv)[i+1];
+      g_autofree gchar *resolved = NULL;
+
+      if (param[0] != '-')
+        continue;
+
+      switch (param[1])
+        {
+        case 'I': /* -I/usr/include, -I /usr/include */
+          if (param[2] != '\0')
+            next = &param[2];
+          resolved = ide_compile_commands_resolve (self, info, next);
+          if (resolved != NULL)
+            g_ptr_array_add (ar, g_strdup_printf ("-I%s", resolved));
+          break;
+
+        case 'f': /* -fPIC */
+        case 'W': /* -Werror... */
+        case 'm': /* -m64 -mtune=native */
+          g_ptr_array_add (ar, g_strdup (param));
+          break;
+
+        case 'D': /* -DFOO, -D FOO */
+        case 'x': /* -xc++ */
+          g_ptr_array_add (ar, g_strdup (param));
+          if (param[2] == '\0')
+            g_ptr_array_add (ar, g_strdup (next));
+          break;
+
+        default:
+          if (g_str_has_prefix (param, "-std="))
+            g_ptr_array_add (ar, g_strdup (param));
+          break;
+        }
+    }
+
+  g_free (*argv);
+
+  g_ptr_array_add (ar, NULL);
+  *argv = (gchar **)g_ptr_array_free (ar, FALSE);
+}
+
+static void
+ide_compile_commands_filter_vala (IdeCompileCommands   *self,
+                                  gchar              ***argv)
+{
+  g_assert (IDE_IS_COMPILE_COMMANDS (self));
+  g_assert (argv != NULL);
+
+  /* TODO: Filter Vala Commands */
+}
+
 /**
  * ide_compile_commands_lookup:
  * @self: An #IdeCompileCommands
@@ -384,8 +497,9 @@ ide_compile_commands_lookup (IdeCompileCommands  *self,
                              GFile              **directory,
                              GError             **error)
 {
-  CompileInfo *info;
   g_auto(GStrv) argv = NULL;
+  g_autofree gchar *base = NULL;
+  CompileInfo *info;
   gint argc = 0;
 
   g_return_val_if_fail (IDE_IS_COMPILE_COMMANDS (self), NULL);
@@ -394,8 +508,18 @@ ide_compile_commands_lookup (IdeCompileCommands  *self,
   if (self->info_by_file != NULL &&
       NULL != (info = g_hash_table_lookup (self->info_by_file, file)))
     {
+      const gchar *dot;
+
       if (!g_shell_parse_argv (info->command, &argc, &argv, error))
         return NULL;
+
+      base = g_file_get_basename (file);
+      dot = strrchr (base, '.');
+
+      if (suffix_is_c_like (dot))
+        ide_compile_commands_filter_c (self, info, &argv);
+      else if (suffix_is_vala (dot))
+        ide_compile_commands_filter_vala (self, &argv);
 
       if (directory != NULL)
         *directory = g_object_ref (info->directory);

@@ -49,8 +49,9 @@ test_compile_commands_basic (void)
   cmdstrv = ide_compile_commands_lookup (commands, expected_file, &dir, &error);
   g_assert_no_error (error);
   g_assert (cmdstrv != NULL);
-  g_assert_cmpstr (cmdstrv[0], ==, "cc");
-  g_assert_cmpstr (cmdstrv[1], ==, "-Isubprojects/libgd/libgd/gd@sha");
+  /* ccache cc should have been removed. */
+  /* relative -I paths should have been resolved */
+  g_assert_cmpstr (cmdstrv[0], ==, "-I/build/gnome-builder/build/subprojects/libgd/libgd/gd@sha");
   dir_path = g_file_get_path (dir);
   g_assert_cmpstr (dir_path, ==, "/build/gnome-builder/build");
 }
