@@ -1,6 +1,5 @@
 [Plugin]
-Module=meson_plugin
-Loader=python3
+Module=meson-plugin
 Name=Meson
 Description=Provides integration with the Meson build system
 Authors=Patrick Griffis <tingping@tingping.se>
@@ -8,3 +7,4 @@ Copyright=Copyright © 2016 Patrick Griffis
 Builtin=true
 X-Project-File-Filter-Pattern=meson.build
 X-Project-File-Filter-Name=Meson Project (meson.build)
+Embedded=gbp_meson_register_types
