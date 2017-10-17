@@ -1502,18 +1502,27 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
    * If the requested phase has already been met (by a previous build
    * or by an active build who has already surpassed this build phase,
    * we can return a result immediately.
+   *
+   * Only short circuit if we're running a build, otherwise we need to
+   * touch each entry and ::query() to see if it needs execution.
    */
-  if (self->position >= self->pipeline->len)
-    goto short_circuit;
-  else if (self->position >= 0)
-    {
-      const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, self->position);
 
-      /* This phase is past the requested phase, we can complete the
-       * task immediately.
-       */
-      if (entry->phase > phase)
-        goto short_circuit;
+  if (self->busy && !self->in_clean)
+    {
+      if (self->position >= self->pipeline->len)
+        {
+          goto short_circuit;
+        }
+      else if (self->position >= 0)
+        {
+          const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, self->position);
+
+          /* This phase is past the requested phase, we can complete the
+           * task immediately.
+           */
+          if (entry->phase > phase)
+            goto short_circuit;
+        }
     }
 
   task_data = task_data_new (task, TASK_BUILD);
@@ -2848,6 +2857,7 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
   g_return_if_fail ((phase & ~IDE_BUILD_PHASE_MASK) == 0);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_build_pipeline_rebuild_async);
 
   td = task_data_new (task, TASK_REBUILD);
