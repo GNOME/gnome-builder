@@ -496,8 +496,16 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
           break;
 
         default:
-          if (g_str_has_prefix (param, "-std="))
-            g_ptr_array_add (ar, g_strdup (param));
+          if (g_str_has_prefix (param, "-std=") ||
+              g_str_has_prefix (param, "-isystem"))
+            {
+              g_ptr_array_add (ar, g_strdup (param));
+            }
+          else if (next != NULL && ide_str_equal0 (param, "-include"))
+            {
+              g_ptr_array_add (ar, g_strdup (param));
+              g_ptr_array_add (ar, g_strdup (next));
+            }
           break;
         }
     }
