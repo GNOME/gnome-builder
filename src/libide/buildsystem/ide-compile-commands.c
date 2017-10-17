@@ -504,7 +504,7 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
           else if (next != NULL && ide_str_equal0 (param, "-include"))
             {
               g_ptr_array_add (ar, g_strdup (param));
-              g_ptr_array_add (ar, g_strdup (next));
+              g_ptr_array_add (ar, ide_compile_commands_resolve (self, info, next));
             }
           break;
         }
