@@ -26,10 +26,12 @@ test_compile_commands_basic (void)
   g_autoptr(GFile) data_file = NULL;
   g_autoptr(GFile) expected_file = NULL;
   g_autoptr(GFile) dir = NULL;
+  g_autoptr(GFile) vala = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *data_path = NULL;
   g_autofree gchar *dir_path = NULL;
   g_auto(GStrv) cmdstrv = NULL;
+  g_auto(GStrv) valastrv = NULL;
   gboolean r;
 
   commands = ide_compile_commands_new ();
@@ -54,6 +56,16 @@ test_compile_commands_basic (void)
   g_assert_cmpstr (cmdstrv[0], ==, "-I/build/gnome-builder/build/subprojects/libgd/libgd/gd@sha");
   dir_path = g_file_get_path (dir);
   g_assert_cmpstr (dir_path, ==, "/build/gnome-builder/build");
+
+  /* Vala files don't need to match on exact filename, just something dot vala */
+  vala = g_file_new_for_path ("whatever.vala");
+  valastrv = ide_compile_commands_lookup (commands, vala, NULL, &error);
+  g_assert_no_error (error);
+  g_assert (valastrv != NULL);
+  g_assert_cmpstr (valastrv[0], ==, "--pkg");
+  g_assert_cmpstr (valastrv[1], ==, "json-glib-1.0");
+  g_assert_cmpstr (valastrv[2], ==, "--pkg");
+  g_assert_cmpstr (valastrv[3], ==, "gtksourceview-3.0");
 }
 
 gint

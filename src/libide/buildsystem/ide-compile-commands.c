@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "ide-debug.h"
+#include "ide-macros.h"
 
 #include "buildsystem/ide-compile-commands.h"
 
@@ -49,9 +50,30 @@
 
 struct _IdeCompileCommands
 {
-  GObject     parent_instance;
+  GObject parent_instance;
+
+  /*
+   * The info_by_file field contains a hsahtable whose keys are GFile
+   * matching the file that is to be compiled. It contains as a value
+   * the CompileInfo struct describing how to compile that file.
+   */
   GHashTable *info_by_file;
-  guint       has_loaded : 1;
+
+  /*
+   * The vala_info field contains an array of every vala like file we've
+   * discovered while parsing the database. This is used so because some
+   * compile_commands.json only have a single valac command which wont
+   * match the file we want to lookup (Notably Meson-based).
+   */
+  GPtrArray *vala_info;
+
+  /*
+   * The has_loaded field determines if we've had a load (async or sync
+   * variant) operation called. We can only do this safely once because
+   * we assign state in the task worker. Callers must discard the object
+   * if the load operation fails.
+   */
+  guint has_loaded : 1;
 };
 
 typedef struct
@@ -83,6 +105,7 @@ ide_compile_commands_finalize (GObject *object)
   IdeCompileCommands *self = (IdeCompileCommands *)object;
 
   g_clear_pointer (&self->info_by_file, g_hash_table_unref);
+  g_clear_pointer (&self->vala_info, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_compile_commands_parent_class)->finalize (object);
 }
@@ -128,6 +151,7 @@ ide_compile_commands_load_worker (GTask        *task,
   g_autoptr(GError) error = NULL;
   g_autoptr(GHashTable) info_by_file = NULL;
   g_autoptr(GHashTable) directories_by_path = NULL;
+  g_autoptr(GPtrArray) vala_info = NULL;
   g_autofree gchar *contents = NULL;
   JsonNode *root;
   JsonArray *ar;
@@ -170,6 +194,8 @@ ide_compile_commands_load_worker (GTask        *task,
                                                g_str_equal,
                                                NULL,
                                                g_object_unref);
+
+  vala_info = g_ptr_array_new_with_free_func (compile_info_free);
 
   n_items = json_array_get_length (ar);
 
@@ -224,11 +250,26 @@ ide_compile_commands_load_worker (GTask        *task,
       info->file = g_file_resolve_relative_path (dir, file);
       info->directory = g_object_ref (dir);
       info->command = g_strdup (command);
-
       g_hash_table_insert (info_by_file, info->file, info);
+
+      /*
+       * We might need to keep a special copy of this for resolving .vala
+       * builds which won't be able ot be matched based on the filename. We
+       * keep all of them around right now in case we want to later on find
+       * the closest match based on directory.
+       */
+      if (g_str_has_suffix (file, ".vala"))
+        {
+          info = g_slice_new (CompileInfo);
+          info->file = g_file_resolve_relative_path (dir, file);
+          info->directory = g_object_ref (dir);
+          info->command = g_strdup (command);
+          g_ptr_array_add (vala_info, info);
+        }
     }
 
   self->info_by_file = g_steal_pointer (&info_by_file);
+  self->vala_info = g_steal_pointer (&vala_info);
 
   g_task_return_boolean (task, TRUE);
 
@@ -417,6 +458,9 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
   g_assert (info != NULL);
   g_assert (argv != NULL);
 
+  if (*argv == NULL)
+    return;
+
   ar = g_ptr_array_new ();
 
   for (guint i = 0; (*argv)[i] != NULL; i++)
@@ -466,12 +510,67 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
 
 static void
 ide_compile_commands_filter_vala (IdeCompileCommands   *self,
+                                  const CompileInfo    *info,
                                   gchar              ***argv)
 {
+  GPtrArray *ar;
+
   g_assert (IDE_IS_COMPILE_COMMANDS (self));
+  g_assert (info != NULL);
   g_assert (argv != NULL);
 
-  /* TODO: Filter Vala Commands */
+  if (*argv == NULL)
+    return;
+
+  ar = g_ptr_array_new ();
+
+  for (guint i = 0; (*argv)[i] != NULL; i++)
+    {
+      const gchar *param = (*argv)[i];
+      const gchar *next = (*argv)[i+1];
+
+      if (g_str_has_prefix (param, "--pkg=") ||
+          g_str_has_prefix (param, "--target-glib=") ||
+          !!strstr (param, ".vapi"))
+        {
+          g_ptr_array_add (ar, g_strdup (param));
+        }
+      else if (g_str_has_prefix (param, "--vapidir=") ||
+               g_str_has_prefix (param, "--girdir=") ||
+               g_str_has_prefix (param, "--metadatadir="))
+        {
+          g_autofree gchar *resolved = NULL;
+          gchar *eq = strchr (param, '=');
+
+          next = eq + 1;
+          *eq = '\0';
+
+          resolved = ide_compile_commands_resolve (self, info, next);
+          g_ptr_array_add (ar, g_strdup_printf ("%s=%s", param, resolved));
+        }
+      else if (next != NULL &&
+               (g_str_has_prefix (param, "--pkg") ||
+                g_str_has_prefix (param, "--target-glib")))
+        {
+          g_ptr_array_add (ar, g_strdup (param));
+          g_ptr_array_add (ar, g_strdup (next));
+          i++;
+        }
+      else if (next != NULL &&
+               (g_str_has_prefix (param, "--vapidir") ||
+                g_str_has_prefix (param, "--girdir") ||
+                g_str_has_prefix (param, "--metadatadir")))
+        {
+          g_ptr_array_add (ar, g_strdup (param));
+          g_ptr_array_add (ar, ide_compile_commands_resolve (self, info, next));
+          i++;
+        }
+    }
+
+  g_free (*argv);
+
+  g_ptr_array_add (ar, NULL);
+  *argv = (gchar **)g_ptr_array_free (ar, FALSE);
 }
 
 /**
@@ -497,34 +596,61 @@ ide_compile_commands_lookup (IdeCompileCommands  *self,
                              GFile              **directory,
                              GError             **error)
 {
-  g_auto(GStrv) argv = NULL;
   g_autofree gchar *base = NULL;
-  CompileInfo *info;
-  gint argc = 0;
+  const CompileInfo *info;
+  const gchar *dot;
 
   g_return_val_if_fail (IDE_IS_COMPILE_COMMANDS (self), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
+  base = g_file_get_basename (file);
+  dot = strrchr (base, '.');
+
   if (self->info_by_file != NULL &&
       NULL != (info = g_hash_table_lookup (self->info_by_file, file)))
     {
-      const gchar *dot;
+      g_auto(GStrv) argv = NULL;
+      gint argc = 0;
 
       if (!g_shell_parse_argv (info->command, &argc, &argv, error))
         return NULL;
 
-      base = g_file_get_basename (file);
-      dot = strrchr (base, '.');
-
       if (suffix_is_c_like (dot))
         ide_compile_commands_filter_c (self, info, &argv);
       else if (suffix_is_vala (dot))
-        ide_compile_commands_filter_vala (self, &argv);
+        ide_compile_commands_filter_vala (self, info, &argv);
 
       if (directory != NULL)
         *directory = g_object_ref (info->directory);
 
       return g_steal_pointer (&argv);
+    }
+
+  /*
+   * Some compile-commands databases will give us info about .vala, but there
+   * may only be a single valac command to run. While we parsed the JSON
+   * document we stored information about each of the Vala files in a special
+   * list for exactly this purpose.
+   */
+  if (ide_str_equal0 (dot, ".vala") && self->vala_info != NULL)
+    {
+      for (guint i = 0; i < self->vala_info->len; i++)
+        {
+          g_auto(GStrv) argv = NULL;
+          gint argc = 0;
+
+          info = g_ptr_array_index (self->vala_info, i);
+
+          if (!g_shell_parse_argv (info->command, &argc, &argv, NULL))
+            continue;
+
+          ide_compile_commands_filter_vala (self, info, &argv);
+
+          if (directory != NULL)
+            *directory = g_object_ref (info->directory);
+
+          return g_steal_pointer (&argv);
+        }
     }
 
   g_set_error_literal (error,
