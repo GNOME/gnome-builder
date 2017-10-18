@@ -44,6 +44,7 @@ src/libide/buildui/ide-build-perspective.c
 src/libide/buildui/ide-build-tool.c
 src/libide/buildui/ide-build-workbench-addin.c
 src/libide/buildui/ide-environment-editor.c
+src/libide/buildui/ide-environment-editor-row.ui
 src/libide/debugger/gtk/menus.ui
 src/libide/debugger/ide-debug-manager.c
 src/libide/debugger/ide-debugger-breakpoints-view.ui
