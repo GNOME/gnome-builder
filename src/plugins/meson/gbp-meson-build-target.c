@@ -83,11 +83,19 @@ gbp_meson_build_target_init (GbpMesonBuildTarget *self)
 }
 
 IdeBuildTarget *
-gbp_meson_build_target_new (GFile *install_directory,
-                            gchar *name)
+gbp_meson_build_target_new (IdeContext *context,
+                            GFile      *install_directory,
+                            gchar      *name)
 {
-  GbpMesonBuildTarget *self = g_object_new (GBP_TYPE_MESON_BUILD_TARGET, NULL);
+  GbpMesonBuildTarget *self;
 
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (G_IS_FILE (install_directory), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  self = g_object_new (GBP_TYPE_MESON_BUILD_TARGET,
+                       "context", context,
+                       NULL);
   g_set_object (&self->install_directory, install_directory);
   self->name = g_strdup (name);
 

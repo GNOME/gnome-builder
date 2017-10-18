@@ -26,7 +26,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpMesonBuildTarget, gbp_meson_build_target, GBP, MESON_BUILD_TARGET, IdeObject)
 
-IdeBuildTarget *gbp_meson_build_target_new (GFile *install_directory,
-                                            gchar *name);
+IdeBuildTarget *gbp_meson_build_target_new (IdeContext *context,
+                                            GFile      *install_directory,
+                                            gchar      *name);
 
 G_END_DECLS

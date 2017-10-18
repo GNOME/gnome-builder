@@ -473,6 +473,8 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autofree gchar *stdout_buf = NULL;
   g_autoptr(GPtrArray) ret = NULL;
+  GbpMesonBuildSystem *self;
+  IdeContext *context;
   JsonArray *array;
   JsonNode *root;
   guint len;
@@ -511,6 +513,9 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
       return;
     }
 
+  self = g_task_get_source_object (task);
+  context = ide_object_get_context (IDE_OBJECT (self));
+
   len = json_array_get_length (array);
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
@@ -548,7 +553,7 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
           base = g_path_get_basename (filename);
           dir = g_file_new_for_path (install_dir);
 
-          g_ptr_array_add (ret, gbp_meson_build_target_new (dir, base));
+          g_ptr_array_add (ret, gbp_meson_build_target_new (context, dir, base));
         }
     }
 
