@@ -365,7 +365,7 @@ ide_git_vcs_reload_worker (GTask        *task,
       !(repository2 = ide_git_vcs_load (self, &error)))
     {
       g_debug ("%s", error->message);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -627,13 +627,13 @@ ide_git_vcs_init_async__reload_cb (GObject      *object,
 {
   IdeGitVcs *self = (IdeGitVcs *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_GIT_VCS (self));
 
   if (!ide_git_vcs_reload_finish (self, result, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }
