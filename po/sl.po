@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
 "POT-Creation-Date: 2017-10-13 04:44+0000\n"
-"PO-Revision-Date: 2017-10-18 18:00+0200\n"
+"PO-Revision-Date: 2017-10-18 18:48+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -341,19 +341,15 @@ msgstr ""
 "vrstici v primerjavi z izvorno kodo."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-#, fuzzy
-#| msgid "Show if a line was added or modified next to line number"
 msgid "Show diagnostics next to line number"
-msgstr "Pokaži, če je bila vrstica ob številki vrstice dodana ali spremenjena"
+msgstr "Pokaži diagnostiko ob številki vrstice"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
-#, fuzzy
-#| msgid "If enabled, the editor will show line numbers."
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
-"Izbrana možnost omogoča, da bodo na oknu urejevalnika izpisane številke "
-"vrstic."
+"Izbrana možnost omogoča, da bodo na oknu urejevalnika ob številkah strani "
+"izpisani tudi rezultati diagnostike."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 #: libide/editor/ide-editor-properties.ui:88
@@ -938,16 +934,12 @@ msgid "An integrated software profiler for native applications"
 msgstr "Programski profilirnik za izvorne programe"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-#, fuzzy
-#| msgid "An integrated software profiler for native applications"
 msgid "An integrated debugger for native applications"
-msgstr "Programski profilirnik za izvorne programe"
+msgstr "Programski razhroščevalnik za izvorne programe"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-#, fuzzy
-#| msgid "Preview support for building with Flatpak runtimes"
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Podpora predogleda za izgradnjo prek izvajalnih programov Flatpak."
+msgstr "Podpora za izgradnjo z izvajalnimi programi jhbuil in flatpak"
 
 #: data/org.gnome.Builder.appdata.xml.in:41
 msgid "Quickly access your projects"
@@ -958,20 +950,16 @@ msgid "Create new projects from a variety of templates"
 msgstr "Ustvari nov projekt s pomočjo različnih predlog"
 
 #: data/org.gnome.Builder.appdata.xml.in:49
-#, fuzzy
-#| msgid "Integration with Autotools"
 msgid "Integration with Git to clone your projects"
-msgstr "Povezljivost z Autotools"
+msgstr "Povezljivost z Git za kloniranje projektov"
 
 #: data/org.gnome.Builder.appdata.xml.in:53
 msgid "The source code editor"
 msgstr "Urejevalnik izvorne kode"
 
 #: data/org.gnome.Builder.appdata.xml.in:57
-#, fuzzy
-#| msgid "Fast global search"
 msgid "Fast global fuzzy search"
-msgstr "Hitro splošno iskanje"
+msgstr "Hitro ohlapno splošno iskanje"
 
 #: data/org.gnome.Builder.appdata.xml.in:61
 msgid "Debug with the GNU debugger"
@@ -1086,12 +1074,9 @@ msgstr "Ni takega opravila izgradnje"
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
 #: plugins/terminal/gb-terminal-workbench-addin.c:187
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editor Shortcuts"
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
-msgstr "Tipkovne bližnjice"
+msgstr "Tipkovne bližnjice delovnega polja"
 
 #: libide/application/ide-application-shortcuts.c:44
 #: libide/application/ide-application-shortcuts.c:52
@@ -1143,10 +1128,9 @@ msgid "Build and Run"
 msgstr "Izgradi in zaženi"
 
 #: libide/application/ide-application-shortcuts.c:77
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Trigger a build"
-msgstr "Sprožilec"
+msgstr "Sprožilec izgradnje"
 
 #: libide/buffers/ide-buffer.c:2693
 msgid "The current language lacks a symbol resolver."
@@ -1746,10 +1730,8 @@ msgid "Insert trailing newline"
 msgstr "Vstavi končno novo vrstico"
 
 #: libide/editor/ide-editor-properties.ui:114
-#, fuzzy
-#| msgid "Overwrite closing braces"
 msgid "Overwrite trailing braces and quotations"
-msgstr "Prepiši zaklepaje"
+msgstr "Prepiši sledeče presledne znake in narekovaje"
 
 #: libide/editor/ide-editor-properties.ui:123
 msgid "Tabs and Indentation"
@@ -1786,14 +1768,14 @@ msgid "Auto indent new lines"
 msgstr "Samodejno zamikanj nove vrstice"
 
 #: libide/editor/ide-editor-properties.ui:249
-#, fuzzy
-#| msgid "Smart Backspace"
 msgid "Smart backspace"
 msgstr "Pametna vračalka"
 
 #: libide/editor/ide-editor-properties.ui:250
 msgid "Enabling smart backspace will treat multiple spaces as a tabs"
 msgstr ""
+"Omogočanje pametne vračalke nastavi možnost zamenjave več preslednih znakov "
+"v tabulator"
 
 #: libide/editor/ide-editor-properties.ui:265
 msgid "Language Syntax"
@@ -2583,14 +2565,12 @@ msgid "Show if a line was added or modified next to line number"
 msgstr "Pokaži, če je bila vrstica ob številki vrstice dodana ali spremenjena"
 
 #: libide/preferences/ide-preferences-builtin.c:163
-#, fuzzy
-#| msgid "Diagnostics"
 msgid "Line diagnostics"
-msgstr "Ni diagnostike"
+msgstr "Vrstična diagnostika"
 
 #: libide/preferences/ide-preferences-builtin.c:163
 msgid "Show an icon next to line numbers indicating type of diagnostic"
-msgstr ""
+msgstr "Pokaži ikono vrste diagnostike ob številki vrstice"
 
 #: libide/preferences/ide-preferences-builtin.c:165
 msgid "Highlight"
@@ -2657,9 +2637,8 @@ msgid "Autosave"
 msgstr "Samodejno shranjevanje"
 
 #: libide/preferences/ide-preferences-builtin.c:183
-#, fuzzy
 msgid "Enable or disable autosave feature"
-msgstr "Omogoči ali onemogoči možnost iskanja med tipkanjem"
+msgstr "Omogoči ali onemogoči možnost samodejnega shranjevanja"
 
 #: libide/preferences/ide-preferences-builtin.c:184
 msgid "The number of seconds after modification before auto saving"
@@ -2761,9 +2740,8 @@ msgid "Overwrite closing braces"
 msgstr "Prepiši zaklepaje"
 
 #: libide/preferences/ide-preferences-builtin.c:322
-#, fuzzy
 msgid "Insert Matching Brace"
-msgstr "Pripadajoči _oklepaj"
+msgstr "Vstavi pripadajoči zaklepaj"
 
 #: libide/preferences/ide-preferences-builtin.c:322
 msgid "Insert matching character for { [ ( or \""
@@ -3038,10 +3016,8 @@ msgid "Building"
 msgstr "Izgradnja paketov"
 
 #: libide/workbench/ide-omni-bar.ui:199
-#, fuzzy
-#| msgid "Build Preferences"
 msgid "Configure build preferences"
-msgstr "Možnosti izgradnje"
+msgstr "Nastavitev možnosti izgradnje"
 
 #: libide/workbench/ide-omni-bar.ui:221
 msgid "Branch"
@@ -3056,9 +3032,8 @@ msgid "Build status"
 msgstr "Stanje izgradnje"
 
 #: libide/workbench/ide-omni-bar.ui:333
-#, fuzzy
 msgid "View build console contents"
-msgstr "Pregled vsebine razpredelnice"
+msgstr "Pregled vsebine poteka izgradnje"
 
 #: libide/workbench/ide-omni-bar.ui:355
 msgid "Last build"
@@ -3158,10 +3133,9 @@ msgid "Beautify the code"
 msgstr "Olepšaj kodo"
 
 #: plugins/beautifier/gb-beautifier-editor-addin.c:335
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Trigger the default entry"
-msgstr "Sprožilec"
+msgstr "Sproži privzeti vnos"
 
 #: plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
@@ -3225,6 +3199,8 @@ msgstr "Indeksiranje izvorne kode"
 #: plugins/code-index/ide-code-index-service.c:544
 msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
+"Možnosti iskanja, diagnostike in samodejnega dopolnjevanja so lahko omejene "
+"do končanja."
 
 #: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
