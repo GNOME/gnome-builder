@@ -39,7 +39,7 @@ You can also use the command line to install Builder:
 
 .. code-block:: sh
 
-   $ flatpak install --user --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref?h=stable
+   $ flatpak install --from https://flathub.org/repo/appstream/org.gnome.Builder.flatpakref
    $ flatpak run org.gnome.Builder
 
 **Nightly**
