@@ -526,6 +526,7 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
       const gchar *filename;
       JsonObject *obj;
       JsonNode *member;
+      gboolean installed;
 
       if (JSON_NODE_HOLDS_OBJECT (element) &&
           NULL != (obj = json_node_get_object (element)) &&
@@ -534,7 +535,10 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
           NULL != (name = json_node_get_string (member)) &&
           NULL != (member = json_object_get_member (obj, "install_filename")) &&
           JSON_NODE_HOLDS_VALUE (member) &&
-          NULL != (filename = json_node_get_string (member)))
+          NULL != (filename = json_node_get_string (member)) &&
+          NULL != (member = json_object_get_member (obj, "installed")) &&
+          JSON_NODE_HOLDS_VALUE (member) &&
+          TRUE == (installed = json_node_get_boolean (member)))
         {
           g_autofree gchar *install_dir = NULL;
           g_autofree gchar *base = NULL;
