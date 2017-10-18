@@ -524,6 +524,7 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
       JsonNode *element = json_array_get_element (array, i);
       const gchar *name;
       const gchar *filename;
+      const gchar *type;
       JsonObject *obj;
       JsonNode *member;
       gboolean installed;
@@ -536,10 +537,14 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
           NULL != (member = json_object_get_member (obj, "install_filename")) &&
           JSON_NODE_HOLDS_VALUE (member) &&
           NULL != (filename = json_node_get_string (member)) &&
+          NULL != (member = json_object_get_member (obj, "type")) &&
+          JSON_NODE_HOLDS_VALUE (member) &&
+          NULL != (type = json_node_get_string (member)) &&
           NULL != (member = json_object_get_member (obj, "installed")) &&
           JSON_NODE_HOLDS_VALUE (member) &&
           TRUE == (installed = json_node_get_boolean (member)))
         {
+          g_autoptr(IdeBuildTarget) target = NULL;
           g_autofree gchar *install_dir = NULL;
           g_autofree gchar *base = NULL;
           g_autofree gchar *name_of_dir = NULL;
@@ -548,16 +553,21 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
           install_dir = g_path_get_dirname (filename);
           name_of_dir = g_path_get_basename (install_dir);
 
-          /* ignore things not in bin */
-          if (!ide_str_equal0 (name_of_dir, "bin"))
-            continue;
-
           g_debug ("Found target %s", name);
 
           base = g_path_get_basename (filename);
           dir = g_file_new_for_path (install_dir);
 
-          g_ptr_array_add (ret, gbp_meson_build_target_new (context, dir, base));
+          target = gbp_meson_build_target_new (context, dir, base);
+
+          /*
+           * Until Builder supports selecting a target to run, we need to prefer
+           * bindir targets over other targets.
+           */
+          if (ide_str_equal0 (name_of_dir, "bin") && ide_str_equal0 (type, "executable"))
+            g_ptr_array_insert (ret, 0, g_steal_pointer (&target));
+          else
+            g_ptr_array_add (ret, g_steal_pointer (&target));
         }
     }
 
