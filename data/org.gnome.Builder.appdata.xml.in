@@ -81,6 +81,31 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.27.1" date="2017-10-18">
+      <description>
+        <p>
+          This release kicks off our development phase towards 3.28.
+          A number of performance improvements and bug fixes have landed.
+        </p>
+        <ul>
+          <li>A new GJS symbol resolver and code-index.</li>
+          <li>Editor search has been rewritten to improve performance and reduce code complexity.</li>
+          <li>Three-finger-swipe can be used on wayland-based systems to move documents left or right.</li>
+          <li>The Todo plugin not repsects .gitignore and fixes an off-by-one when jumping to a given line.</li>
+          <li>Thread-safety fixes.</li>
+          <li>Startup performance has been drastically improved.</li>
+          <li>Projects now load even faster.</li>
+          <li>Preferences have been moved out of the workbench into a dialog.</li>
+          <li>Preferences can now be accessed from the project selection greeter.</li>
+          <li>Accessing build flags for code-insight has been optimized for Meson.</li>
+          <li>Queued build pipeline operations will now complete sooner in some situations.</li>
+          <li>Improved support for extracting symbol names in the debugger and profiler.</li>
+          <li>Style tweaks to Builder's dark theme.</li>
+          <li>The fpaste plugin was removed as it had become obsolete.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.26.0" date="2017-09-11">
       <description>
         <p>
