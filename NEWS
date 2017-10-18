@@ -1,4 +1,56 @@
 ==============
+Version 3.27.1
+==============
+
+Changes since last release:
+
+ • A GJS symbol resolver and code-index has been added.
+ • Improved editor search that unifies mutliple search implementations
+   and reduces editor overhead. We definitely would like testing from
+   early adopters here.
+ • Initial support for three-finger-swipe within the editor to move
+   documents to the left or right. This feature requires a Wayland-enabled
+   compositor such as GNOME Shell or Mutter.
+ • The Todo plugin now respects .gitignore when using git.
+ • An off-by-one in line number conversion has been fixed in the Todo plugin.
+ • Thread-safety improvements to version control API.
+ • The meson plugin has been ported to C and includes a number of improvements
+   such as proper async support and reduced pipeline overhead when extracting
+   build flags.
+ • Builder now bundles most C-based plugins into a single private dynamic
+   library to help reduce startup time.
+ • A number of performance improvements were made to both application startup
+   and project loading.
+ • Preferences has been moved out of the workbench to reduce overhead and
+   allow accessing from the application greeter.
+ • When various features need to access build flags, there is less of a chance
+   that they'll need to advance the build pipeline. This will hopefully give
+   users the impression that less activity is going on behind the scenes at
+   project load time.
+ • Some build pipeline operations were queued behind long running operations.
+   Builder will now try to flush those operations as soon as the pipeline has
+   advanced past their requested phase.
+ • The IdeTransferManager has been moved to IdeApplicatoin. This fixes some
+   issues in the rustup plugin as well as allowing transfers to occur from
+   any window and be accessible from all windows.
+ • The quick-highlight plugin has been rewritten to take advantage of the
+   new editor search feature.
+ • Improved support for accessing symbols found in .Debug flatpak runtimes.
+ • Builder's dark syntax style has been tweaked to provide more contrast
+   between Gtk widgetry as well as the editor text.
+ • The fpaste plugin has been removed as it had become obsolete.
+
+As a number of plugins have been modified or removed, we recommend that users
+uninstall any previously installed version of Builder before installing this
+development version.
+
+Updated Translations:
+
+  Danish, Lithuanian, Hungarian, British English, Catalan, Spanish,
+  Indonesian, Czech, Slovenian, Italian, Nepali, Polish,
+  Brazilian Portuguese
+
+==============
 Version 3.26.1
 ==============
 
