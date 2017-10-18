@@ -20,6 +20,9 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="index">1</property>
+          </packing>
         </child>
         <child type="overlay">
           <object class="GtkRevealer" id="modified_revealer">
@@ -85,6 +88,9 @@
             <property name="transition-type">slide-left</property>
             <property name="vexpand">true</property>
           </object>
+          <packing>
+            <property name="index">0</property>
+          </packing>
         </child>
         <child>
           <object class="GtkBox" id="scroller_box">
