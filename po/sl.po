@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
 "POT-Creation-Date: 2017-10-13 04:44+0000\n"
-"PO-Revision-Date: 2017-10-13 23:05+0200\n"
+"PO-Revision-Date: 2017-10-18 18:48+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: contrib/gstyle/gstyle-color-panel.c:953
 msgid "Palette: "
-msgstr "Paleta:"
+msgstr "Paleta: "
 
 #: contrib/gstyle/gstyle-color-panel.c:955
 msgid "Palette"
@@ -270,7 +270,7 @@ msgstr "Predlagaj dopolnjevanje z izrezki"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
 msgid "Allow snippets to be inserted into the document."
-msgstr "Dovoli vstavljanje izrezkov kode v dokument"
+msgstr "Dovoli vstavljanje izrezkov kode v dokument."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 msgid "Clang based autocompletion (Experimental)"
@@ -341,19 +341,15 @@ msgstr ""
 "vrstici v primerjavi z izvorno kodo."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-#, fuzzy
-#| msgid "Show if a line was added or modified next to line number"
 msgid "Show diagnostics next to line number"
-msgstr "Pokaži, če je bila vrstica ob številki vrstice dodana ali spremenjena"
+msgstr "Pokaži diagnostiko ob številki vrstice"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
-#, fuzzy
-#| msgid "If enabled, the editor will show line numbers."
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
-"Izbrana možnost omogoča, da bodo na oknu urejevalnika izpisane številke "
-"vrstic."
+"Izbrana možnost omogoča, da bodo na oknu urejevalnika ob številkah strani "
+"izpisani tudi rezultati diagnostike."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 #: libide/editor/ide-editor-properties.ui:88
@@ -475,13 +471,11 @@ msgid "Autosave Enabled"
 msgstr "Samodejno shranjevanje je omogočeno"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
-#, fuzzy
 msgid "Enable or disable autosave feature."
-msgstr "Omogoči ali onemogoči možnost iskanja med tipkanjem"
+msgstr "Omogoči ali onemogoči možnost samodejnega shranjevanja."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:115
 #: libide/preferences/ide-preferences-builtin.c:184
-#, fuzzy
 msgid "Autosave Frequency"
 msgstr "Pogostost samodejnega shranjevanja"
 
@@ -589,13 +583,10 @@ msgid "Sort Directories First"
 msgstr "Najprej razvrsti mape"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-#, fuzzy
-#| msgid "If enabled, the project tree will display icons next to each item."
 msgid ""
 "If enabled, the project tree will sort directories before regular files."
 msgstr ""
-"Izbrana možnost določa, da bodo v drevesnem pogledu projekta ob predmetih "
-"pokazane tudi ikone."
+"Izbrana možnost določa, da bodo v drevesnem pogledu mape pred datotekami."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
 msgid "Show Left Panel"
@@ -843,10 +834,8 @@ msgid "Print…"
 msgstr "Natisni ..."
 
 #: data/gtk/menus.ui:304
-#, fuzzy
-#| msgid "Preferences"
 msgid "Document Preferences"
-msgstr "_Nastavitve"
+msgstr "Nastavitve dokumenta"
 
 #: data/gtk/menus.ui:312 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
@@ -910,7 +899,7 @@ msgstr "Povezljivost z Git"
 
 #: data/org.gnome.Builder.appdata.xml.in:26
 msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
-msgstr ""
+msgstr "Podpora za Autotools, Cargo, CMake, Meson, Make in PHPize"
 
 #: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -933,9 +922,8 @@ msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Samodejno zamikanje kode za jezike C, Python, Vala in XML"
 
 #: data/org.gnome.Builder.appdata.xml.in:31
-#, fuzzy
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
-msgstr "Predogled kode v HTML/Markdown"
+msgstr "Predogled kode v HTML, Markdown, reStructuredText in Sphinx v živo"
 
 #: data/org.gnome.Builder.appdata.xml.in:32
 msgid "Optional Vim-style editing"
@@ -946,49 +934,36 @@ msgid "An integrated software profiler for native applications"
 msgstr "Programski profilirnik za izvorne programe"
 
 #: data/org.gnome.Builder.appdata.xml.in:34
-#, fuzzy
-#| msgid "An integrated software profiler for native applications"
 msgid "An integrated debugger for native applications"
-msgstr "Programski profilirnik za izvorne programe"
+msgstr "Programski razhroščevalnik za izvorne programe"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-#, fuzzy
-#| msgid "Preview support for building with Flatpak runtimes"
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Podpora predogleda za izgradnjo prek izvajalnih programov Flatpak."
+msgstr "Podpora za izgradnjo z izvajalnimi programi jhbuil in flatpak"
 
 #: data/org.gnome.Builder.appdata.xml.in:41
-#, fuzzy
-#| msgid "A place for all your projects"
 msgid "Quickly access your projects"
-msgstr "Mesto za vse vaše projekte"
+msgstr "Hiter dostop do datotek projektov"
 
 #: data/org.gnome.Builder.appdata.xml.in:45
 msgid "Create new projects from a variety of templates"
-msgstr ""
+msgstr "Ustvari nov projekt s pomočjo različnih predlog"
 
 #: data/org.gnome.Builder.appdata.xml.in:49
-#, fuzzy
-#| msgid "Integration with Autotools"
 msgid "Integration with Git to clone your projects"
-msgstr "Povezljivost z Autotools"
+msgstr "Povezljivost z Git za kloniranje projektov"
 
 #: data/org.gnome.Builder.appdata.xml.in:53
-#, fuzzy
-#| msgid "Source Code Editor"
 msgid "The source code editor"
 msgstr "Urejevalnik izvorne kode"
 
 #: data/org.gnome.Builder.appdata.xml.in:57
-#, fuzzy
-#| msgid "Fast global search"
 msgid "Fast global fuzzy search"
-msgstr "Hitro splošno iskanje"
+msgstr "Hitro ohlapno splošno iskanje"
 
 #: data/org.gnome.Builder.appdata.xml.in:61
-#, fuzzy
 msgid "Debug with the GNU debugger"
-msgstr "Vstavek razhroščevalnika GNU"
+msgstr "Izvedi razhroščevanje z razhroščevalnikom GNU"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -1099,12 +1074,9 @@ msgstr "Ni takega opravila izgradnje"
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
 #: plugins/terminal/gb-terminal-workbench-addin.c:187
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editor Shortcuts"
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
-msgstr "Tipkovne bližnjice"
+msgstr "Tipkovne bližnjice delovnega polja"
 
 #: libide/application/ide-application-shortcuts.c:44
 #: libide/application/ide-application-shortcuts.c:52
@@ -1113,16 +1085,14 @@ msgid "Help"
 msgstr "Pomoč"
 
 #: libide/application/ide-application-shortcuts.c:45
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Show the help window"
-msgstr "Pokaži to pomoč"
+msgstr "Pokaži okno pomoči"
 
 #: libide/application/ide-application-shortcuts.c:53
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Show the shortcuts window"
-msgstr "Pokaži tipkovne bližnjice‫"
+msgstr "Pokaži okno tipkovnih bližnjice"
 
 #: libide/application/ide-application-shortcuts.c:60
 #: libide/keybindings/ide-shortcuts-window.ui:14
@@ -1135,10 +1105,9 @@ msgid "General"
 msgstr "Splošno"
 
 #: libide/application/ide-application-shortcuts.c:61
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Toggle window to fullscreen"
-msgstr "| f [on|off] . . . . . . . . . . . . preklop celotnega zaslona"
+msgstr "Preklopi okno na celoten zaslon"
 
 #: libide/application/ide-application-shortcuts.c:68
 #: libide/keybindings/ide-shortcuts-window.ui:527
@@ -1147,11 +1116,9 @@ msgid "Search"
 msgstr "Poišči"
 
 #: libide/application/ide-application-shortcuts.c:69
-#, fuzzy
-#| msgid "Fast global search"
 msgctxt "shortcut window"
 msgid "Focus to the global search entry"
-msgstr "Osredotoči se na globalno iskanje"
+msgstr "Osredotoči se na splošno iskanje"
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
@@ -1161,10 +1128,9 @@ msgid "Build and Run"
 msgstr "Izgradi in zaženi"
 
 #: libide/application/ide-application-shortcuts.c:77
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Trigger a build"
-msgstr "Sprožilec"
+msgstr "Sprožilec izgradnje"
 
 #: libide/buffers/ide-buffer.c:2693
 msgid "The current language lacks a symbol resolver."
@@ -1201,7 +1167,7 @@ msgstr "Zaganjanje začetnega nalagalnega sistema ..."
 
 #: libide/buildsystem/ide-build-pipeline.c:2290
 msgid "Configuring…"
-msgstr "poteka nastavljanje ..."
+msgstr "Poteka nastavljanje ..."
 
 #: libide/buildsystem/ide-build-pipeline.c:2294
 msgid "Building…"
@@ -1485,10 +1451,8 @@ msgid "Run with Debugger"
 msgstr "Zaženi z razhroščevalnikom"
 
 #: libide/debugger/ide-debug-manager.c:936
-#, fuzzy
-#| msgid "The provider could not be found."
 msgid "A suitable debugger could not be found."
-msgstr "Ni mogoče najti ustreznega gonilnika"
+msgstr "Ni mogoče najti ustreznega razhroščevalnika."
 
 #: libide/debugger/ide-debugger-breakpoints-view.ui:22
 #: libide/debugger/ide-debugger-registers-view.ui:13
@@ -1535,15 +1499,15 @@ msgstr "Nadaljujte z izvajanjem programa"
 
 #: libide/debugger/ide-debugger-controls.ui:71
 msgid "Execute the current line, stepping into any function calls"
-msgstr ""
+msgstr "Izvedi trenutno vrstico z izvajanjem kateregakoli klica funkcije"
 
 #: libide/debugger/ide-debugger-controls.ui:84
 msgid "Execute the current line, stepping over any function calls"
-msgstr ""
+msgstr "Izvedi trenutno vrstico mimo izvajanja kateregakoli klica funkcije"
 
 #: libide/debugger/ide-debugger-controls.ui:97
 msgid "Run until the end of the function"
-msgstr ""
+msgstr "Izvajaj do konca funkcije"
 
 #: libide/debugger/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
@@ -1574,10 +1538,8 @@ msgid "Log"
 msgstr "Dnevnik"
 
 #: libide/debugger/ide-debugger-editor-addin.c:376
-#, fuzzy
-#| msgid "Failed to initialize defaults."
 msgid "Failed to initialize the debugger"
-msgstr "Začenjanje postopka s privzetimi vrednostmi je spodletelo"
+msgstr "Začenjanje programa razhroščevanja je spodletelo"
 
 #: libide/debugger/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -1741,12 +1703,9 @@ msgid "Panels"
 msgstr "Okna"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:47
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
 msgctxt "shortcut window"
 msgid "Toggle navigation panel"
-msgstr "Preklopi spodnji pladenj"
+msgstr "Preklopi pladenj krmarjenja"
 
 #: libide/editor/ide-editor-perspective-shortcuts.c:53
 msgctxt "shortcut window"
@@ -1771,10 +1730,8 @@ msgid "Insert trailing newline"
 msgstr "Vstavi končno novo vrstico"
 
 #: libide/editor/ide-editor-properties.ui:114
-#, fuzzy
-#| msgid "Overwrite closing braces"
 msgid "Overwrite trailing braces and quotations"
-msgstr "Prepiši zaklepaje"
+msgstr "Prepiši sledeče presledne znake in narekovaje"
 
 #: libide/editor/ide-editor-properties.ui:123
 msgid "Tabs and Indentation"
@@ -1807,20 +1764,18 @@ msgid "8"
 msgstr "8"
 
 #: libide/editor/ide-editor-properties.ui:235
-#, fuzzy
-#| msgid "Auto indent"
 msgid "Auto indent new lines"
-msgstr "Samodejno zamikanje"
+msgstr "Samodejno zamikanj nove vrstice"
 
 #: libide/editor/ide-editor-properties.ui:249
-#, fuzzy
-#| msgid "Smart Backspace"
 msgid "Smart backspace"
 msgstr "Pametna vračalka"
 
 #: libide/editor/ide-editor-properties.ui:250
 msgid "Enabling smart backspace will treat multiple spaces as a tabs"
 msgstr ""
+"Omogočanje pametne vračalke nastavi možnost zamenjave več preslednih znakov "
+"v tabulator"
 
 #: libide/editor/ide-editor-properties.ui:265
 msgid "Language Syntax"
@@ -1865,10 +1820,9 @@ msgstr "Odpri strani"
 
 #. translators: %s is the error message
 #: libide/editor/ide-editor-view-actions.c:55
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s: %s"
+#, c-format
 msgid "Failed to load file: %s"
-msgstr "Nalaganje datoteke je spodletelo: %s: %s"
+msgstr "Nalaganje datoteke je spodletelo: %s"
 
 #. translators: %s is the error message
 #: libide/editor/ide-editor-view-actions.c:117
@@ -1880,10 +1834,9 @@ msgstr "Tiskanje je spodletelo: %s"
 #. translators: %s is the underlying error message
 #: libide/editor/ide-editor-view-actions.c:188
 #: libide/editor/ide-editor-view-actions.c:308
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s: %s"
+#, c-format
 msgid "Failed to save file: %s"
-msgstr "Shranjevanje datoteke je spodletelo"
+msgstr "Shranjevanje datoteke je spodletelo: %s"
 
 #: libide/editor/ide-editor-view-actions.c:242
 #: plugins/color-picker/gb-color-picker-prefs.c:232
@@ -1932,36 +1885,24 @@ msgid "Find"
 msgstr "Najdi"
 
 #: libide/editor/ide-editor-view-shortcuts.c:57
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Find the next match"
 msgctxt "shortcut window"
 msgid "Move to the next match"
-msgstr "Najdi naslednji predmet"
+msgstr "Skoči na naslednji predmet"
 
 #: libide/editor/ide-editor-view-shortcuts.c:63
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Find the previous match"
 msgctxt "shortcut window"
 msgid "Move to the previous match"
-msgstr "Premakni na predhodno"
+msgstr "Skoči na predhodni predmet"
 
 #: libide/editor/ide-editor-view-shortcuts.c:69
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to next error in file"
 msgctxt "shortcut window"
 msgid "Move to the next error"
-msgstr "Skoči na naslednjo napako v datoteki"
+msgstr "Skoči na naslednjo napako"
 
 #: libide/editor/ide-editor-view-shortcuts.c:75
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to previous error in file"
 msgctxt "shortcut window"
 msgid "Move to the previous error"
-msgstr "Skoči na predhodno napako v datoteki"
+msgstr "Skoči na predhodno napako"
 
 #: libide/editor/ide-editor-view-shortcuts.c:81
 #: libide/keybindings/ide-shortcuts-window.ui:170
@@ -1982,18 +1923,12 @@ msgstr ""
 "datoteko ponovno naložiti?"
 
 #: libide/editor/ide-editor-workbench-addin.c:177
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
 msgid "Toggle navigation panel"
-msgstr "Preklopi spodnji pladenj"
+msgstr "Preklopi pladenj krmarjenja"
 
 #: libide/editor/ide-editor-workbench-addin.c:191
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle utilities panel"
-msgstr "_Pripomočki"
+msgstr "Preklopi pladenj pripomočkov"
 
 #: libide/greeter/ide-greeter-perspective.c:456
 msgid "Failed to load the project"
@@ -2036,10 +1971,8 @@ msgid "_Remove"
 msgstr "_Odstrani"
 
 #: libide/greeter/ide-greeter-perspective.ui:244
-#, fuzzy
-#| msgid "Create a new project"
 msgid "Create from existing project"
-msgstr "Iz obstoječega projekta na tem računalniku"
+msgstr "Ustvari iz obstoječega projekta"
 
 #: libide/greeter/ide-greeter-perspective.ui:256
 msgid "Create a new project"
@@ -2102,10 +2035,9 @@ msgid "No implementations of extension point “%s”."
 msgstr "Ni podpore za razširitveno točko »%s«."
 
 #: libide/ide-object.c:414
-#, fuzzy, c-format
-#| msgid "Failed to locate build system plugin."
+#, c-format
 msgid "Failed to locate %s plugin."
-msgstr "Iskanje predloge »%s« je spodletelo."
+msgstr "Iskanje vstavka %s je spodletelo."
 
 #: libide/ide-object.c:515
 msgid "No such extension point."
@@ -2160,10 +2092,9 @@ msgid "Keyboard Shortcuts"
 msgstr "Tipkovne bližnjice"
 
 #: libide/keybindings/ide-shortcuts-window.ui:60
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr "_Preklopni način"
+msgstr "Preklopi način žariščenja"
 
 #: libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
@@ -2418,10 +2349,8 @@ msgid "Find text within terminal"
 msgstr "Najdi besedilo znotraj terminala"
 
 #: libide/layout/ide-layout-stack.c:126 libide/layout/ide-layout-stack.ui:8
-#, fuzzy
-#| msgid "No open files"
 msgid "No Open Pages"
-msgstr "Strani"
+msgstr "Ni odprtih strani"
 
 #: libide/layout/ide-layout-stack-header.ui:48
 msgid "Open file"
@@ -2456,17 +2385,15 @@ msgstr "Odpri datoteko ali terminal"
 
 #: libide/layout/ide-layout-stack.ui:44
 msgid "Use the page switcher above or use one of the following:"
-msgstr ""
+msgstr "Uporabite preklopnik strani zgoraj, ali pa možnosti:"
 
 #: libide/layout/ide-layout-stack.ui:59
 msgid "Search"
 msgstr "Poišči"
 
 #: libide/layout/ide-layout-stack.ui:68
-#, fuzzy
-#| msgid "Show Project Sidebar"
 msgid "Project sidebar"
-msgstr "Pokaži stransko vrstico projekta"
+msgstr "Stranska vrstica projekta"
 
 #: libide/layout/ide-layout-stack.ui:77
 msgid "File chooser"
@@ -2477,13 +2404,12 @@ msgid "New Terminal"
 msgstr "Novo okno terminala"
 
 #: libide/layout/ide-layout-stack.ui:121
-#, fuzzy
 msgid "Uh oh, something went wrong"
-msgstr "Opravila ni bilo mogoče izvesti!"
+msgstr "Ops, prišlo je do napake ..."
 
 #: libide/layout/ide-layout-stack.ui:122
 msgid "There was a failure while trying to perform the operation."
-msgstr ""
+msgstr "Prišlo je do napake med poskusom izvajanja opravila."
 
 #: libide/preferences/ide-preferences-builtin.c:61
 #: libide/preferences/ide-preferences-builtin.c:62
@@ -2639,14 +2565,12 @@ msgid "Show if a line was added or modified next to line number"
 msgstr "Pokaži, če je bila vrstica ob številki vrstice dodana ali spremenjena"
 
 #: libide/preferences/ide-preferences-builtin.c:163
-#, fuzzy
-#| msgid "Diagnostics"
 msgid "Line diagnostics"
-msgstr "Ni diagnostike"
+msgstr "Vrstična diagnostika"
 
 #: libide/preferences/ide-preferences-builtin.c:163
 msgid "Show an icon next to line numbers indicating type of diagnostic"
-msgstr ""
+msgstr "Pokaži ikono vrste diagnostike ob številki vrstice"
 
 #: libide/preferences/ide-preferences-builtin.c:165
 msgid "Highlight"
@@ -2685,10 +2609,8 @@ msgid "Automatically hide map when editor loses focus"
 msgstr "Samodejno skrij zemljevid, ko urejevalnik izgubi žarišče"
 
 #: libide/preferences/ide-preferences-builtin.c:173
-#, fuzzy
-#| msgid "Whitespace Characters"
 msgid "Visible Whitespace Characters"
-msgstr "Presledni znaki"
+msgstr "Vidni presledni znaki"
 
 #: libide/preferences/ide-preferences-builtin.c:176
 msgid "New line and carriage return"
@@ -2715,13 +2637,12 @@ msgid "Autosave"
 msgstr "Samodejno shranjevanje"
 
 #: libide/preferences/ide-preferences-builtin.c:183
-#, fuzzy
 msgid "Enable or disable autosave feature"
-msgstr "Omogoči ali onemogoči možnost iskanja med tipkanjem"
+msgstr "Omogoči ali onemogoči možnost samodejnega shranjevanja"
 
 #: libide/preferences/ide-preferences-builtin.c:184
 msgid "The number of seconds after modification before auto saving"
-msgstr ""
+msgstr "Čas v sekundah po spremembi, ko naj se izvede samodejno shranjevanj"
 
 #: libide/preferences/ide-preferences-builtin.c:190
 msgid "Code Insight"
@@ -2754,14 +2675,12 @@ msgstr ""
 "Predlagaj dopolnjevanje z besedami, zapisanimi v vseh odprtih dokumentih"
 
 #: libide/preferences/ide-preferences-builtin.c:197
-#, fuzzy
 msgid "Minimum word size"
-msgstr "Velikost _besede:"
+msgstr "Najmanjša velikost besede"
 
 #: libide/preferences/ide-preferences-builtin.c:197
-#, fuzzy
 msgid "Minimum word size for word completion"
-msgstr "Predlagaj dopolnjevanje besed"
+msgstr "Najmanjša dolžina besede za predloge dopolnjevanja"
 
 #: libide/preferences/ide-preferences-builtin.c:198
 msgid "Suggest completions using Ctags"
@@ -2821,14 +2740,12 @@ msgid "Overwrite closing braces"
 msgstr "Prepiši zaklepaje"
 
 #: libide/preferences/ide-preferences-builtin.c:322
-#, fuzzy
 msgid "Insert Matching Brace"
-msgstr "Pripadajoči _oklepaj"
+msgstr "Vstavi pripadajoči zaklepaj"
 
 #: libide/preferences/ide-preferences-builtin.c:322
-#, fuzzy
 msgid "Insert matching character for { [ ( or \""
-msgstr "Vstavi znakovno kodo"
+msgstr "Vstavi skladen zaključni znak za { [ ( ali \""
 
 #: libide/preferences/ide-preferences-builtin.c:324
 msgid "Margins"
@@ -3020,9 +2937,8 @@ msgid "No references were found"
 msgstr "Ni najdenih sklicev"
 
 #: libide/sourceview/ide-word-completion-provider.c:558
-#, fuzzy
 msgid "Builder Word Completion"
-msgstr "Dopolnjevanje besed"
+msgstr "Dopolnjevanje besed izgrajevalnika"
 
 #: libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -3100,10 +3016,8 @@ msgid "Building"
 msgstr "Izgradnja paketov"
 
 #: libide/workbench/ide-omni-bar.ui:199
-#, fuzzy
-#| msgid "Build Preferences"
 msgid "Configure build preferences"
-msgstr "Možnosti izgradnje"
+msgstr "Nastavitev možnosti izgradnje"
 
 #: libide/workbench/ide-omni-bar.ui:221
 msgid "Branch"
@@ -3114,25 +3028,20 @@ msgid "Build Profile"
 msgstr "Profil izgradnje"
 
 #: libide/workbench/ide-omni-bar.ui:321
-#, fuzzy
-#| msgid "Build Output"
 msgid "Build status"
-msgstr "Datum izgradnje"
+msgstr "Stanje izgradnje"
 
 #: libide/workbench/ide-omni-bar.ui:333
-#, fuzzy
 msgid "View build console contents"
-msgstr "Pregled vsebine razpredelnice"
+msgstr "Pregled vsebine poteka izgradnje"
 
 #: libide/workbench/ide-omni-bar.ui:355
 msgid "Last build"
 msgstr "Zadnja izgradnja"
 
 #: libide/workbench/ide-omni-bar.ui:382
-#, fuzzy
-#| msgid "Build Workers"
 msgid "Build result"
-msgstr "Izgradi"
+msgstr "Rezultat izgradnje"
 
 #. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
 #: libide/workbench/ide-omni-bar.ui:475
@@ -3148,20 +3057,16 @@ msgid "Clean"
 msgstr "Počisti"
 
 #: libide/workbench/ide-omni-bar.ui:501
-#, fuzzy
-#| msgid "_Export as Bundle"
 msgid "Export Bundle"
-msgstr "_Izvozi kot paket programov"
+msgstr "Izvozi paket programov"
 
 #: libide/workbench/ide-omni-bar.ui:526
 msgid "Build project"
 msgstr "Izgradi projekt"
 
 #: libide/workbench/ide-workbench-actions.c:215
-#, fuzzy
-#| msgid "Builder Dark"
 msgid "Builder Statistics"
-msgstr "_Statistika ..."
+msgstr "Statistika programa"
 
 #: libide/workbench/ide-workbench.c:639
 #, c-format
@@ -3190,30 +3095,24 @@ msgid "Building cache…"
 msgstr "Poteka izgradnja predpomnilnika ..."
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:265
-#, fuzzy
-#| msgid "Shared Library"
 msgid "Shared Library (Autotools)"
-msgstr "Souporabna knjižnica"
+msgstr "Souporabna knjižnica (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:267
 msgid "Create a new autotools project with a shared library"
 msgstr "Ustvari nov projekt autotools s knjižnico v souporabi"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:291
-#, fuzzy
-#| msgid "Empty Project"
 msgid "Empty Project (Autotools)"
-msgstr "Ustvari nov prazen projekt autotools"
+msgstr "Prazen projekt (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:294
 msgid "Create a new empty autotools project"
 msgstr "Ustvari nov prazen projekt autotools"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:308
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "GNOME Application (Autotools)"
-msgstr "Program za upravljanje z dokumenti GNOME"
+msgstr "Program GNOME (Autotools)"
 
 #: plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
@@ -3229,17 +3128,14 @@ msgid "No beautifier available"
 msgstr "Na voljo ni ustreznega olepševalnika"
 
 #: plugins/beautifier/gb-beautifier-editor-addin.c:334
-#, fuzzy
-#| msgid "Beautify"
 msgctxt "shortcut window"
 msgid "Beautify the code"
-msgstr "Olepšaj"
+msgstr "Olepšaj kodo"
 
 #: plugins/beautifier/gb-beautifier-editor-addin.c:335
-#, fuzzy
 msgctxt "shortcut window"
 msgid "Trigger the default entry"
-msgstr "Sprožilec"
+msgstr "Sproži privzeti vnos"
 
 #: plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
@@ -3297,14 +3193,14 @@ msgid "Declaration"
 msgstr "Deklaracija"
 
 #: plugins/code-index/ide-code-index-service.c:543
-#, fuzzy
-#| msgid "Indent source code as you type"
 msgid "Indexing Source Code"
-msgstr "Poudarjanje izvorne kode"
+msgstr "Indeksiranje izvorne kode"
 
 #: plugins/code-index/ide-code-index-service.c:544
 msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
+"Možnosti iskanja, diagnostike in samodejnega dopolnjevanja so lahko omejene "
+"do končanja."
 
 #: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
@@ -3424,10 +3320,8 @@ msgid "HSV"
 msgstr "HSV"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:87
-#, fuzzy
-#| msgid "Saturation"
 msgid "Hue Saturation Value"
-msgstr "_Odtenek:"
+msgstr "Vrednost barvnega odtenka"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:104
 msgid "L*a*b*"
@@ -3469,45 +3363,39 @@ msgstr "Brez"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:269
 msgid "Achromatopsia (monochromacy)"
-msgstr ""
+msgstr "Akromatopsija (barvna slepota)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:286
 msgid "Achromatomaly (blue cone monochromacy)"
-msgstr ""
+msgstr "Akromatomalija (barvna slepota)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:303
-#, fuzzy
 msgid "Deuteranopia (green-blind)"
-msgstr "_Zelena:"
+msgstr "Devteranopija (barvna slepota zelene)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:320
-#, fuzzy
 msgid "Deuteranomaly (green-weak)"
-msgstr "zelena"
+msgstr "Devteranomalija (slabovidnost zelene)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:337
-#, fuzzy
 msgid "Protanopia (red-blind)"
-msgstr "_Rdeča:"
+msgstr "Protanopija (barvna slepota rdeče)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:354
-#, fuzzy
 msgid "Protanomaly (red-weak)"
-msgstr "rdeča"
+msgstr "Protanomalija (slabovidnost rdeče)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:371
-#, fuzzy
 msgid "Tritanopia (blue-blind)"
-msgstr "_Modra:"
+msgstr "Tritanopija (barvna slepota modre)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:388
-#, fuzzy
 msgid "Tritanomaly (blue-weak)"
-msgstr "modra"
+msgstr "Tritanomalija (slabovidnost modre)"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:405
 msgid "Websafe"
-msgstr ""
+msgstr "Websafe"
 
 #: plugins/color-picker/gtk/color-picker-prefs.ui:467
 msgid "Select the color strings you want to see in the panel."
@@ -3625,15 +3513,11 @@ msgid "Not a command: %s"
 msgstr "Neznan ukaz: %s"
 
 #: plugins/comment-code/gbp-comment-code-view-addin.c:372
-#, fuzzy
-#| msgid "Comment code"
 msgctxt "shortcut window"
 msgid "Comment the code"
 msgstr "Dodaj opombe h kodi"
 
 #: plugins/comment-code/gbp-comment-code-view-addin.c:378
-#, fuzzy
-#| msgid "Uncomment code"
 msgctxt "shortcut window"
 msgid "Uncomment the code"
 msgstr "Odstrani opombe h kodi"
@@ -4071,30 +3955,24 @@ msgid "GNOME Application"
 msgstr "Program GNOME"
 
 #: plugins/meson-templates/meson_templates/__init__.py:236
-#, fuzzy
-#| msgid "Create a new flatpak-ready GNOME application"
 msgid "Create a new GNOME application"
-msgstr "Ustvari nov program GNOME s podporo flatpak"
+msgstr "Ustvari nov program GNOME"
 
 #: plugins/meson-templates/meson_templates/__init__.py:287
 msgid "Shared Library"
 msgstr "Souporabna knjižnica"
 
 #: plugins/meson-templates/meson_templates/__init__.py:289
-#, fuzzy
-#| msgid "Create a new autotools project with a shared library"
 msgid "Create a new project with a shared library"
-msgstr "Ustvari nov projekt autotools s knjižnico v souporabi"
+msgstr "Ustvari nov projekt s souporabno knjižnico"
 
 #: plugins/meson-templates/meson_templates/__init__.py:304
 msgid "Empty Project"
 msgstr "Izprazni projekt"
 
 #: plugins/meson-templates/meson_templates/__init__.py:306
-#, fuzzy
-#| msgid "Create a new empty meson project"
 msgid "Create a new empty project"
-msgstr "Z ustvarjanjem novega projekta bodo vse trenutne spremembe izgubljene."
+msgstr "Ustvari nov prazen projekt"
 
 #: plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
@@ -4109,18 +3987,18 @@ msgid "Build successful"
 msgstr "Izgradnja je uspešno končana"
 
 #: plugins/notification/ide-notification-addin.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "Project “%s” has completed building"
-msgstr "V projektu %s so spremembe, ki še niso shranjene"
+msgstr "Izgradnja projekta »%s« je končana"
 
 #: plugins/notification/ide-notification-addin.c:97
 msgid "Build failed"
 msgstr "Izgradnja je spodletela"
 
 #: plugins/notification/ide-notification-addin.c:98
-#, fuzzy, c-format
+#, c-format
 msgid "Project “%s” failed to build"
-msgstr "Izgradi projekt"
+msgstr "Izgradnja projekta »%s« je spodletela"
 
 #: plugins/project-tree/gb-new-file-popover.c:123
 #: plugins/project-tree/gb-rename-file-popover.c:139
@@ -4161,11 +4039,9 @@ msgstr "Preimenuj %s"
 
 #: plugins/project-tree/gb-project-tree-shortcuts.c:34
 #: plugins/project-tree/gb-project-tree-shortcuts.c:40
-#, fuzzy
-#| msgid "Project Name"
 msgctxt "shortcut window"
 msgid "Project tree"
-msgstr "Datoteka mora biti znotraj projektnega drevesa."
+msgstr "Projektnega drevo"
 
 #: plugins/project-tree/gb-project-tree-shortcuts.c:35
 msgctxt "shortcut window"
@@ -4173,8 +4049,6 @@ msgid "Rename a file"
 msgstr "Preimenuj datoteko"
 
 #: plugins/project-tree/gb-project-tree-shortcuts.c:41
-#, fuzzy
-#| msgid "Mo_ve to Trash"
 msgctxt "shortcut window"
 msgid "Move a file to the trash"
 msgstr "Premakne datoteko v smeti"
@@ -4253,9 +4127,8 @@ msgid "quick highlight words matching current selection"
 msgstr "hitro poudarjanje besede skladnja izbor trenutno"
 
 #: plugins/retab/gtk/menus.ui:9
-#, fuzzy
 msgid "Reformat tabs"
-msgstr "&Zavihki"
+msgstr "Preoblikuj tabulatorje"
 
 #: plugins/rustup/rustup_plugin/__init__.py:84
 msgid "Rustup not installed"
@@ -4384,11 +4257,9 @@ msgid "Spelling"
 msgstr "Črkovanje"
 
 #: plugins/spellcheck/gbp-spell-editor-view-addin.c:102
-#, fuzzy
-#| msgid "Show left panel"
 msgctxt "shortcut window"
 msgid "Show the spellchecker panel"
-msgstr "Pokaži pult dodatnega jezika"
+msgstr "Pokaži pult jezikovnega preverjanja"
 
 #: plugins/spellcheck/gbp-spell-language-popover.c:232
 msgid "No language selected"
@@ -4396,7 +4267,7 @@ msgstr "Ni izbranega jezika"
 
 #: plugins/spellcheck/gbp-spell-navigator.c:480
 msgid "No language set. Check your dictionary installation."
-msgstr ""
+msgstr "Ni določenega jezika. Preveriti je treba nastavitev slovarja."
 
 #: plugins/spellcheck/gbp-spell-widget.c:119
 msgid "No suggestions"
@@ -4464,14 +4335,12 @@ msgid "_Language"
 msgstr "_Jezik"
 
 #: plugins/spellcheck/gtk/menus.ui:6
-#, fuzzy
 msgid "Check _Spelling"
-msgstr "_Preveri črkovanje ..."
+msgstr "_Preveri črkovanje"
 
 #: plugins/spellcheck/gtk/menus.ui:14
-#, fuzzy
 msgid "Underline misspelled words"
-msgstr "Ni napačno črkovanih besed"
+msgstr "Podčrtaj napačno črkovane besede"
 
 #: plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
@@ -4487,18 +4356,13 @@ msgstr ""
 "prilogo poročilu o hrošču."
 
 #: plugins/symbol-tree/gbp-symbol-menu-button.c:279
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Select all"
 msgid "Select Symbol…"
-msgstr "Simbol"
+msgstr "Izbor simbol ..."
 
 #: plugins/symbol-tree/gbp-symbol-menu-button.ui:13
 #: plugins/symbol-tree/gbp-symbol-menu-button.ui:76
-#, fuzzy
-#| msgid "Documentation"
 msgid "Document Outline"
-msgstr "oris"
+msgstr "Spletni dokument"
 
 #: plugins/sysmon/gb-sysmon-panel.ui:5
 msgid "System Monitor"
@@ -4548,10 +4412,8 @@ msgid "Run with Profiler"
 msgstr "Zaženi s programom Profiler"
 
 #: plugins/sysprof/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Open Profile…"
 msgid "Open Sysprof Capture…"
-msgstr "Sysprof Capture (*.syscap)"
+msgstr "Odpri Sysprof Capture"
 
 #: plugins/terminal/gb-terminal-search.ui:152
 msgid "Regex"
@@ -4574,10 +4436,8 @@ msgid "Untitled terminal"
 msgstr "Neimenovan terminal"
 
 #: plugins/terminal/gb-terminal-workbench-addin.c:145
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "Application Output"
-msgstr "odvod"
+msgstr "Odvod programa"
 
 #: plugins/terminal/gtk/menus.ui:6
 msgid "_Open Link"
@@ -4600,9 +4460,8 @@ msgid "New _Build Terminal"
 msgstr "_Nov terminal za izgradnjo"
 
 #: plugins/todo/gbp-todo-workbench-addin.c:115
-#, fuzzy
 msgid "TODO/FIXMEs"
-msgstr "ToDo"
+msgstr "TODO/FIXME"
 
 #: plugins/vala-pack/ide-vala-preferences-addin.vala:33
 msgid "Vala"
