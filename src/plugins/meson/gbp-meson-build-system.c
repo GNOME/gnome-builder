@@ -46,6 +46,32 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+static IdeSubprocessLauncher *
+gbp_meson_build_system_create_launcher (GbpMesonBuildSystem  *self,
+                                        GError              **error)
+{
+  IdeBuildPipeline *pipeline;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  if (pipeline == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Pipeline is not ready, cannot create launcher");
+      return NULL;
+    }
+
+  return ide_build_pipeline_create_launcher (pipeline, error);
+}
+
 static void
 gbp_meson_build_system_ensure_config_cb (GObject      *object,
                                          GAsyncResult *result,
@@ -463,20 +489,113 @@ gbp_meson_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
 }
 
 static void
+gbp_meson_build_system_get_build_targets_communciate_cb2 (GObject      *object,
+                                                          GAsyncResult *result,
+                                                          gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  GbpMesonBuildSystem *self;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(JsonParser) parser = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+  JsonObjectIter iter;
+  const gchar *key;
+  IdeContext *context;
+  JsonObject *obj;
+  JsonNode *root;
+  JsonNode *value;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, NULL, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  self = g_task_get_source_object (task);
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  parser = json_parser_new ();
+
+  if (!json_parser_load_from_data (parser, stdout_buf, -1, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (NULL == (root = json_parser_get_root (parser)) ||
+      !JSON_NODE_HOLDS_OBJECT (root) ||
+      NULL == (obj = json_node_get_object (root)))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               "Invalid JSON received from meson introspect");
+      return;
+    }
+
+  json_object_iter_init (&iter, obj);
+
+  while (json_object_iter_next (&iter, &key, &value))
+    {
+      const gchar *path;
+      g_autofree gchar *dir = NULL;
+
+      if (!JSON_NODE_HOLDS_VALUE (value) ||
+          NULL == (path = json_node_get_string (value)))
+        continue;
+
+      dir = g_path_get_dirname (path);
+
+      if (dir != NULL && g_str_has_suffix (dir, "/bin"))
+        {
+          g_autofree gchar *name = NULL;
+          g_autoptr(GPtrArray) ret = NULL;
+          g_autoptr(GFile) gdir = NULL;
+
+          gdir = g_file_new_for_path (dir);
+          name = g_path_get_basename (path);
+
+          /* We only need one result */
+          ret = g_ptr_array_new_with_free_func (g_object_unref);
+          g_ptr_array_add (ret, gbp_meson_build_target_new (context, gdir, name));
+          g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+
+          return;
+        }
+    }
+
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "Failed to locate any build targets");
+}
+
+static void
 gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
                                                          GAsyncResult *result,
                                                          gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autofree gchar *stdout_buf = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(JsonParser) parser = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) all_subprocess = NULL;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *stdout_buf = NULL;
   g_autoptr(GPtrArray) ret = NULL;
   GbpMesonBuildSystem *self;
+  IdeBuildPipeline *pipeline;
+  IdeBuildManager *build_manager;
+  GCancellable *cancellable;
   IdeContext *context;
   JsonArray *array;
   JsonNode *root;
+  gboolean found_bindir = FALSE;
   guint len;
 
   g_assert (IDE_IS_SUBPROCESS (subprocess));
@@ -560,6 +679,8 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
 
           target = gbp_meson_build_target_new (context, dir, base);
 
+          found_bindir |= ide_str_equal0 (name_of_dir, "bin");
+
           /*
            * Until Builder supports selecting a target to run, we need to prefer
            * bindir targets over other targets.
@@ -571,7 +692,44 @@ gbp_meson_build_system_get_build_targets_communciate_cb (GObject      *object,
         }
     }
 
-  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  /*
+   * If we didn't find a target while processing the targets, we need to scan
+   * for all installed targets to locate a potential script such as python/gjs.
+   */
+
+  if (ret->len > 0 && found_bindir)
+    {
+      g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+      return;
+    }
+
+  if (NULL == (launcher = gbp_meson_build_system_create_launcher (self, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  cancellable = g_task_get_cancellable (task);
+
+  ide_subprocess_launcher_push_argv (launcher, "meson");
+  ide_subprocess_launcher_push_argv (launcher, "introspect");
+  ide_subprocess_launcher_push_argv (launcher, "--installed");
+  ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
+
+  if (NULL == (all_subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ide_subprocess_communicate_utf8_async (all_subprocess,
+                                         NULL,
+                                         cancellable,
+                                         gbp_meson_build_system_get_build_targets_communciate_cb2,
+                                         g_steal_pointer (&task));
 }
 
 static void
@@ -613,7 +771,7 @@ gbp_meson_build_system_get_build_targets_ensure_cb (GObject      *object,
       return;
     }
 
-  if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, &error)))
+  if (NULL == (launcher = gbp_meson_build_system_create_launcher (self, &error)))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
