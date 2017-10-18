@@ -1,4 +1,65 @@
 ==============
+Version 3.26.1
+==============
+
+Changes since last release:
+
+ • Builder now bundles uncrustify when built from Flatpak.
+ • Builder no longer includes tracing in stable flatpak build.
+ • Fixes when using the XML editing extensions.
+ • The vsplit vim command now accepts a filename to open.
+ • Improvements to Vim chords y$, yfX, de, db, and dw.
+ • Improvements when pasting from external clipboard content.
+ • Fix error propragation when loading git repositories.
+ • Use GNotification instead of manual D-Bus RPCs.
+ • Significantly reduce chatter when notifying about builds.
+ • Fix Home and End keys when in Vim normal mode.
+ • Add Flathub repo to list of known Flatpak runtime sources,
+   which allows building against an org.kde.Sdk.
+ • Unsaved file buffers now use atomic renames when interacting
+   with code diagnostic engines.
+ • Various debugger bug fixes.
+ • The editor attempts to avoid propagating resize events to the
+   root window, which should help speed up the editor a fair amount.
+ • Preferences loading has been delayed until project load time. This
+   helps reduce application startup time.
+ • The cursor now properly returns to the editor when leaving the
+   global search entry.
+ • The Fpaste plugin was removed as upstream API is changed too
+   drastically to keep this plugin working.
+ • A new condensed "omni gutter" has been added to reduce the width
+   of the gutter in languages that support debugging.
+ • Icons are now properly displayed in the document popover menu.
+ • A leak of editor views has been fixed which was caused by
+   Python lambda's in the html-preview plugin.
+ • Tweaks to various UI CSS styling.
+ • The debugger and profiler plugins now try harder to locate sources
+   through .Debug or .Sdk flatpak runtimes when libraries missing
+   debug symbols are encountered.
+ • Fixes for various keyboard shortcut activation.
+ • Preferences now properly release their addins on destruction.
+ • The workbench was leaking addins on shutdown. They are now
+   properly released, and the window is hidden before releasing
+   addins to avoid showing widgets as they are destroyed.
+ • Builder will avoid showing the greeter when loading a project
+   using the `gnome-builder -p project_file` command line argument.
+   This speeds up direct loading of a project by about half.
+ • Builder will attempt to use "gio trash" on the host when running
+   inside of flatpak when the Trash is across a file-system boundary.
+   We expect this to go away once GIO learns about /proc/self/mountinfo
+   to discover when "cross bindmount" trash is acceptable.
+ • The python indenter has been fixed when using compose keys with e or f.
+ • (Re)selection of text when entering the search bar has been fixed. This
+   had the side effect of it appearing that your search term was silently
+   being dropped after a few characters were typed.
+
+Updated Translations:
+
+ French, Swedish, Indonesian, Danish, Hungarian, British English,
+ Turkish, Galician, Spanish, Czech, Slovenian, Italian, Polish,
+ Brazilian Portuguese
+
+==============
 Version 3.26.0
 ==============
 
