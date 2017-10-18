@@ -30,6 +30,7 @@
         <child>
           <object class="GtkButton" id="delete_button">
             <property name="visible">true</property>
+            <property name="tooltip-text" translatable="yes">Remove environment variable</property>
             <style>
               <class name="image-button"/>
               <class name="flat"/>
