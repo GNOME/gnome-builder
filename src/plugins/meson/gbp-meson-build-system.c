@@ -314,6 +314,7 @@ gbp_meson_build_system_finalize (GObject *object)
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
 
   g_clear_object (&self->project_file);
+  g_clear_object (&self->compile_commands);
 
   G_OBJECT_CLASS (gbp_meson_build_system_parent_class)->finalize (object);
 }
