@@ -29,6 +29,7 @@ struct _GbpMesonBuildSystem
   IdeObject           parent_instance;
   GFile              *project_file;
   IdeCompileCommands *compile_commands;
+  GFileMonitor       *monitor;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface     *iface);
@@ -130,6 +131,49 @@ gbp_meson_build_system_ensure_config_finish (GbpMesonBuildSystem  *self,
 }
 
 static void
+gbp_meson_build_system_monitor_changed (GbpMesonBuildSystem *self,
+                                        GFile               *file,
+                                        GFile               *other_file,
+                                        GFileMonitorEvent    event,
+                                        GFileMonitor        *monitor)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (!other_file || G_IS_FILE (other_file));
+  g_assert (G_IS_FILE_MONITOR (monitor));
+
+  /* Release our previous compile commands */
+  g_clear_object (&self->compile_commands);
+  g_file_monitor_cancel (monitor);
+  g_clear_object (&self->monitor);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_meson_build_system_monitor (GbpMesonBuildSystem *self,
+                                GFile               *file)
+{
+  g_autoptr(GFileMonitor) monitor = NULL;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (G_IS_FILE (file));
+
+  monitor = g_file_monitor_file (file,
+                                 G_FILE_MONITOR_NONE,
+                                 NULL,
+                                 NULL);
+  g_signal_connect_object (monitor,
+                           "changed",
+                           G_CALLBACK (gbp_meson_build_system_monitor_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_set_object (&self->monitor, monitor);
+}
+
+static void
 gbp_meson_build_system_load_commands_load_cb (GObject      *object,
                                               GAsyncResult *result,
                                               gpointer      user_data)
@@ -165,6 +209,7 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
   g_autoptr(IdeCompileCommands) compile_commands = NULL;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GFileMonitor) monitor = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
   g_autofree gchar *path = NULL;
@@ -218,6 +263,8 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
                                    cancellable,
                                    gbp_meson_build_system_load_commands_load_cb,
                                    g_steal_pointer (&task));
+
+  gbp_meson_build_system_monitor (self, file);
 }
 
 static void
@@ -281,6 +328,9 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
                                            cancellable,
                                            gbp_meson_build_system_load_commands_load_cb,
                                            g_steal_pointer (&task));
+
+          gbp_meson_build_system_monitor (self, file);
+
           return;
         }
     }
@@ -315,6 +365,7 @@ gbp_meson_build_system_finalize (GObject *object)
 
   g_clear_object (&self->project_file);
   g_clear_object (&self->compile_commands);
+  g_clear_object (&self->monitor);
 
   G_OBJECT_CLASS (gbp_meson_build_system_parent_class)->finalize (object);
 }
@@ -871,6 +922,26 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
 }
 
 static void
+gbp_meson_build_system_notify_pipeline (GbpMesonBuildSystem *self,
+                                        GParamSpec          *pspec,
+                                        IdeBuildManager     *build_manager)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (pspec != NULL);
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  /*
+   * We need to regenerate compile commands when the build pipeline
+   * changes so that we get the updated commands.
+   */
+  g_clear_object (&self->compile_commands);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_meson_build_system_init_worker (GTask        *task,
                                     gpointer      source_object,
                                     gpointer      task_data,
@@ -922,6 +993,8 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)initable;
   g_autoptr(GTask) task = NULL;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -929,10 +1002,27 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
   g_assert (G_IS_FILE (self->project_file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  build_manager = ide_context_get_build_manager (context);
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_meson_build_system_init_async);
   g_task_set_priority (task, io_priority);
   g_task_set_task_data (task, g_object_ref (self->project_file), g_object_unref);
+
+  /*
+   * We want to be notified of any changes to the current build manager.
+   * This will let us invalidate our compile_commands.json when it changes.
+   */
+  g_signal_connect_object (build_manager,
+                           "notify::pipeline",
+                           G_CALLBACK (gbp_meson_build_system_notify_pipeline),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   g_task_run_in_thread (task, gbp_meson_build_system_init_worker);
 
   IDE_EXIT;
