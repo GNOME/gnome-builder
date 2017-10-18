@@ -66,6 +66,7 @@
   <url type="homepage">https://wiki.gnome.org/Apps/Builder</url>
   <url type="bugtracker">https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder</url>
   <url type="donation">http://www.gnome.org/friends/</url>
+  <url type="help">https://builder.readthedocs.io</url>
   <project_group>GNOME</project_group>
 
   <kudos>
