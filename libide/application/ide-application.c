@@ -126,11 +126,21 @@ ide_application_register_search_paths (IdeApplication *self)
   GtkSourceLanguageManager *languages;
   g_autofree gchar *gedit_path = NULL;
   g_autofree gchar *lang_path = NULL;
+  g_autofree gchar *style_path = NULL;
   const gchar * const *path;
 
   g_assert (IDE_IS_APPLICATION (self));
 
   manager = gtk_source_style_scheme_manager_get_default ();
+
+  /* We might need to set this up in case we're in flatpak */
+  style_path = g_build_filename (g_get_home_dir (),
+                                 ".local",
+                                 "share",
+                                 "gtksourceview-3.0",
+                                 "styles",
+                                 NULL);
+  gtk_source_style_scheme_manager_append_search_path (manager, style_path);
 
   gtk_source_style_scheme_manager_append_search_path (manager,
                                                       PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
