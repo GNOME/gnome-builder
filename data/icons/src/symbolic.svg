@@ -36,17 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:window-width="3440"
-     inkscape:window-height="1376"
+     inkscape:window-width="2665"
+     inkscape:window-height="1366"
      id="namedview88"
-     showgrid="false"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="50.060676"
-     inkscape:cy="30.988259"
+     showgrid="true"
+     inkscape:zoom="1"
+     inkscape:cx="41.022401"
+     inkscape:cy="47.645636"
      inkscape:window-x="0"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer9"
+     inkscape:window-y="32"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer2"
      showborder="false"
      inkscape:snap-nodes="true"
      inkscape:snap-bbox="false"
@@ -582,24 +582,8 @@
            style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:start;overflow:visible;fill:#bebebe;stroke-width:2;enable-background:accumulate" />
       </g>
     </g>
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer9"
-     inkscape:label="apps"
-     transform="translate(-241.0002,-217)">
-    <text
-       id="text6726"
-       y="207.94501"
-       x="241.82339"
-       style="font-size:12px;line-height:125%;font-family:'Droid Sans';text-align:start;fill:#ffffff"
-       xml:space="preserve"><tspan
-         y="207.94501"
-         x="241.82339"
-         id="tspan6728"
-         sodipodi:role="line">apps</tspan></text>
     <g
-       transform="translate(214.94122,-181)"
+       transform="translate(-28.058983,-438)"
        inkscape:label="builder-documentation"
        id="g3961">
       <rect
@@ -628,14 +612,14 @@
          sodipodi:nodetypes="ccccc" />
     </g>
     <g
-       transform="translate(77.86439,22)"
+       transform="translate(-163.13581,-235)"
        id="g3517"
        inkscape:label="builder-editor">
       <path
          sodipodi:nodetypes="ccccccccc"
          inkscape:connector-curvature="0"
          id="path4308"
-         d="m 165.99812,205.0006 -0.99931,3.9996 h 11.99173 l -0.99931,-3.9996 h -2.99793 l -2.49005,1.9998 h -3.50581 v -1.9998 z"
+         d="m 166.13883,205.0006 -0.99931,3.9996 h 11.99173 l -0.99931,-3.9996 h -2.99793 l -2.49005,1.9998 h -3.50581 v -1.9998 z"
          style="fill:#bebebe" />
       <rect
          style="fill:none"
@@ -650,17 +634,17 @@
          id="rect13358"
          width="11.991719"
          height="0.99988312"
-         x="164.99881"
+         x="165.14409"
          y="210.00011" />
       <path
          style="fill:#bebebe;fill-rule:evenodd"
-         d="m 167.99856,204.00069 6.99336,-6.9993 c 0.9993,0 1.99862,0.9999 1.99862,1.9998 l -6.99517,6.99931 h -1.99862 z"
+         d="m 168.13927,204.00069 6.99336,-6.9993 c 0.9993,0 1.99862,0.9999 1.99862,1.9998 l -6.99517,6.99931 h -1.99862 z"
          id="path13365"
          sodipodi:nodetypes="cccccc"
          inkscape:connector-curvature="0" />
       <path
          style="overflow:visible;fill:#bebebe;enable-background:new"
-         d="m 175.99123,196.00149 c 0.99931,0 1.99863,0.9999 1.99863,1.9998 l 0.99931,-0.9999 c 0,-0.9999 -0.75134,-1.9998 -1.99863,-1.9998 z"
+         d="m 176.05379,196.09527 c 0.99931,0 1.99863,0.9999 1.99863,1.9998 l 0.99931,-0.9999 c 0,-0.9999 -0.75134,-1.9998 -1.99863,-1.9998 z"
          id="path13367"
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0" />
@@ -668,14 +652,14 @@
     <g
        id="g7889"
        inkscape:label="builder-unit-tests"
-       transform="translate(234.94122,-181)">
+       transform="translate(-8.0589832,-438)">
       <rect
          y="398"
          x="48.116268"
          height="16"
          width="16"
          id="rect7881"
-         style="color:#bebebe;overflow:visible;opacity:0.51464431;fill:none;stroke-width:3;marker:none;enable-background:accumulate" />
+         style="color:#bebebe;overflow:visible;opacity:0.51464431;fill:none;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;marker:none;enable-background:accumulate" />
       <g
          id="g7885"
          style="font-weight:bold;font-size:40px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Bold';letter-spacing:0px;word-spacing:0px;fill:#000000"
