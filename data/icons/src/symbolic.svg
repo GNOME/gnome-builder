@@ -40,9 +40,9 @@
      inkscape:window-height="1376"
      id="namedview88"
      showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="98.764361"
-     inkscape:cy="54.019941"
+     inkscape:zoom="16"
+     inkscape:cx="78.60248"
+     inkscape:cy="40.992015"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -775,13 +775,29 @@
          inkscape:connector-curvature="0"
          id="path11547-4"
          d="m 54.058983,403.11501 v 5.77004 h 0.522909 0.05409 c 0.100926,5.8e-4 0.200671,-0.0224 0.288502,-0.0721 l 4.039031,-2.30801 c 0.179274,-0.0992 0.270471,-0.30203 0.270471,-0.50488 0,-0.20284 -0.0912,-0.4057 -0.270471,-0.50488 l -4.039031,-2.30802 c -0.08783,-0.0498 -0.187576,-0.0729 -0.288502,-0.0721 h -0.05409 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:start;overflow:visible;fill:#bebebe;stroke-width:2;enable-background:accumulate" />
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:start;overflow:visible;fill:#bebebe;stroke-width:2;enable-background:accumulate;stroke:none" />
       <circle
          style="color:#000000;overflow:visible;vector-effect:none;fill:none;stroke:#bebebe;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path7081"
          cx="56.058979"
          cy="406"
          r="6" />
+    </g>
+    <g
+       id="g4093"
+       inkscape:label="builder-unit-tests-running"
+       transform="translate(51.941017,-438)">
+      <rect
+         y="398"
+         x="48.116268"
+         height="16"
+         width="16"
+         id="rect4085"
+         style="color:#bebebe;overflow:visible;opacity:0.51464431;fill:none;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;marker:none;enable-background:accumulate" />
+      <g
+         id="g4087"
+         style="font-weight:bold;font-size:40px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Bold';letter-spacing:0px;word-spacing:0px;fill:#000000"
+         transform="matrix(0.28893613,0,0,0.28893613,95.491581,418.94283)" />
     </g>
   </g>
   <g
