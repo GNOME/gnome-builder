@@ -19,6 +19,11 @@ def gtkEncodeSymbolicSvg(outdir, path, size):
     print(cmd)
     os.system(cmd)
 
+def sort(l):
+    l = list(l)
+    l.sort()
+    return l
+
 # These just need to be aliased properly
 for name in os.listdir('scalable/patterns'):
     _aliases[os.path.join('scalable/actions', name)] = os.path.join('scalable/patterns', name)
@@ -26,7 +31,7 @@ for name in os.listdir('scalable/patterns'):
 # These need to be scaled as symbolic icons into
 # 16 and their 2x and 3x counterparts
 for dirname in ('actions',):
-    for name in os.listdir(os.path.join('scalable', dirname)):
+    for name in sort(os.listdir(os.path.join('scalable', dirname))):
         for size in (16, 32, 48):
             outdir = '%dx%d/%s' % (size, size, dirname)
             path = os.path.join('scalable', dirname, name)
@@ -36,7 +41,7 @@ for dirname in ('actions',):
 
 # We need larger versions for apps
 for dirname in ('apps',):
-    for name in os.listdir(os.path.join('scalable', dirname)):
+    for name in sort(os.listdir(os.path.join('scalable', dirname))):
         for size in (16, 32, 48, 128, 256, 512):
             outdir = '%dx%d/%s' % (size, size, dirname)
             path = os.path.join('scalable', dirname, name)
@@ -55,7 +60,8 @@ with open("icons.gresource.xml", "w") as stream:
         names.sort()
         for name in names:
             stream.write('    <file>%s/%s</file>\n' % (dirname, name))
-    for alias, name in _aliases.items():
+    for alias in sort(_aliases.keys()):
+        name = _aliases[alias]
         stream.write('    <file alias="%s">%s</file>\n' % (alias, name))
     stream.write('''  </gresource>
 </gresources>
