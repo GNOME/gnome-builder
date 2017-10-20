@@ -12,6 +12,9 @@
     <file>16x16/actions/builder-split-tab-left-symbolic.symbolic.png</file>
     <file>16x16/actions/builder-split-tab-right-symbolic.symbolic.png</file>
     <file>16x16/actions/builder-split-tab-symbolic.symbolic.png</file>
+    <file>16x16/actions/builder-unit-tests-fail-symbolic.symbolic.png</file>
+    <file>16x16/actions/builder-unit-tests-pass-symbolic.symbolic.png</file>
+    <file>16x16/actions/builder-unit-tests-running-symbolic.symbolic.png</file>
     <file>16x16/actions/builder-unit-tests-symbolic.symbolic.png</file>
     <file>16x16/actions/builder-vcs-git-symbolic.symbolic.png</file>
     <file>16x16/actions/builder-view-bottom-pane-symbolic.symbolic.png</file>
@@ -66,6 +69,9 @@
     <file>32x32/actions/builder-split-tab-left-symbolic.symbolic.png</file>
     <file>32x32/actions/builder-split-tab-right-symbolic.symbolic.png</file>
     <file>32x32/actions/builder-split-tab-symbolic.symbolic.png</file>
+    <file>32x32/actions/builder-unit-tests-fail-symbolic.symbolic.png</file>
+    <file>32x32/actions/builder-unit-tests-pass-symbolic.symbolic.png</file>
+    <file>32x32/actions/builder-unit-tests-running-symbolic.symbolic.png</file>
     <file>32x32/actions/builder-unit-tests-symbolic.symbolic.png</file>
     <file>32x32/actions/builder-vcs-git-symbolic.symbolic.png</file>
     <file>32x32/actions/builder-view-bottom-pane-symbolic.symbolic.png</file>
@@ -120,6 +126,9 @@
     <file>48x48/actions/builder-split-tab-left-symbolic.symbolic.png</file>
     <file>48x48/actions/builder-split-tab-right-symbolic.symbolic.png</file>
     <file>48x48/actions/builder-split-tab-symbolic.symbolic.png</file>
+    <file>48x48/actions/builder-unit-tests-fail-symbolic.symbolic.png</file>
+    <file>48x48/actions/builder-unit-tests-pass-symbolic.symbolic.png</file>
+    <file>48x48/actions/builder-unit-tests-running-symbolic.symbolic.png</file>
     <file>48x48/actions/builder-unit-tests-symbolic.symbolic.png</file>
     <file>48x48/actions/builder-vcs-git-symbolic.symbolic.png</file>
     <file>48x48/actions/builder-view-bottom-pane-symbolic.symbolic.png</file>
