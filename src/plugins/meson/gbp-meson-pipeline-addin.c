@@ -119,7 +119,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (config_launcher, "--prefix");
   ide_subprocess_launcher_push_argv (config_launcher, prefix);
 
-  if (config_opts != NULL)
+  if (!ide_str_empty0 (config_opts))
     {
       g_auto(GStrv) argv = NULL;
       gint argc;
