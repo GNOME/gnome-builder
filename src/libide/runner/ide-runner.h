@@ -78,6 +78,9 @@ gboolean           ide_runner_run_finish      (IdeRunner            *self,
 GSubprocessFlags   ide_runner_get_flags       (IdeRunner            *self);
 void               ide_runner_set_flags       (IdeRunner            *self,
                                                GSubprocessFlags      flags);
+const gchar       *ide_runner_get_cwd         (IdeRunner            *self);
+void               ide_runner_set_cwd         (IdeRunner            *self,
+                                               const gchar          *cwd);
 gboolean           ide_runner_get_clear_env   (IdeRunner            *self);
 void               ide_runner_set_clear_env   (IdeRunner            *self,
                                                gboolean              clear_env);

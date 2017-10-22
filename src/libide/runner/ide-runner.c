@@ -42,6 +42,8 @@ typedef struct
 
   GArray *fd_mapping;
 
+  gchar *cwd;
+
   IdeSubprocess *subprocess;
 
   GQueue argv;
@@ -71,6 +73,7 @@ enum {
   PROP_0,
   PROP_ARGV,
   PROP_CLEAR_ENV,
+  PROP_CWD,
   PROP_ENV,
   PROP_FAILED,
   PROP_RUN_ON_HOST,
@@ -178,7 +181,9 @@ ide_runner_run_wait_cb (GObject      *object,
 static IdeSubprocessLauncher *
 ide_runner_real_create_launcher (IdeRunner *self)
 {
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
   IdeConfigurationManager *config_manager;
+  IdeSubprocessLauncher *ret;
   IdeConfiguration *config;
   IdeContext *context;
   IdeRuntime *runtime;
@@ -190,7 +195,12 @@ ide_runner_real_create_launcher (IdeRunner *self)
   config = ide_configuration_manager_get_current (config_manager);
   runtime = ide_configuration_get_runtime (config);
 
-  return ide_runtime_create_launcher (runtime, NULL);
+  ret = ide_runtime_create_launcher (runtime, NULL);
+
+  if (ret != NULL && priv->cwd != NULL)
+    ide_subprocess_launcher_set_cwd (ret, priv->cwd);
+
+  return ret;
 }
 
 static void
@@ -528,6 +538,10 @@ ide_runner_get_property (GObject    *object,
       g_value_set_boolean (value, ide_runner_get_clear_env (self));
       break;
 
+    case PROP_CWD:
+      g_value_set_string (value, ide_runner_get_cwd (self));
+      break;
+
     case PROP_ENV:
       g_value_set_object (value, ide_runner_get_environment (self));
       break;
@@ -561,6 +575,10 @@ ide_runner_set_property (GObject      *object,
 
     case PROP_CLEAR_ENV:
       ide_runner_set_clear_env (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_CWD:
+      ide_runner_set_cwd (self, g_value_get_string (value));
       break;
 
     case PROP_FAILED:
@@ -608,6 +626,13 @@ ide_runner_class_init (IdeRunnerClass *klass)
                           "If the environment should be cleared before applying overrides",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CWD] =
+    g_param_spec_string ("cwd",
+                         "Current Working Directory",
+                         "The directory to use as the working directory for the process",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ENV] =
     g_param_spec_object ("environment",
@@ -1303,6 +1328,49 @@ ide_runner_set_failed (IdeRunner *self,
     }
 
   IDE_EXIT;
+}
+
+/**
+ * ide_runner_get_cwd:
+ * @self: a #IdeRunner
+ *
+ * Returns: (nullable): The current working directory, or %NULL.
+ *
+ * Since: 3.28
+ */
+const gchar *
+ide_runner_get_cwd (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
+
+  return priv->cwd;
+}
+
+/**
+ * ide_runner_set_cwd:
+ * @self: a #IdeRunner
+ * @cwd: (nullable): The working directory or %NULL
+ *
+ * Sets the directory to use when spawning the runner.
+ *
+ * Since: 3.28
+ */
+void
+ide_runner_set_cwd (IdeRunner   *self,
+                    const gchar *cwd)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+
+  if (ide_str_equal0 (priv->cwd, cwd))
+    {
+      g_free (priv->cwd);
+      priv->cwd = g_strdup (cwd);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CWD]);
+    }
 }
 
 /**
