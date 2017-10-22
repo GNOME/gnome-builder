@@ -85,6 +85,8 @@ void               ide_runner_prepend_argv    (IdeRunner            *self,
                                                const gchar          *param);
 void               ide_runner_append_argv     (IdeRunner            *self,
                                                const gchar          *param);
+void               ide_runner_push_args       (IdeRunner            *self,
+                                               const gchar * const  *args);
 gchar            **ide_runner_get_argv        (IdeRunner            *self);
 void               ide_runner_set_argv        (IdeRunner            *self,
                                                const gchar * const  *argv);

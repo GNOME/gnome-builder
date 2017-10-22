@@ -1304,3 +1304,24 @@ ide_runner_set_failed (IdeRunner *self,
 
   IDE_EXIT;
 }
+
+/**
+ * ide_runner_push_args:
+ * @self: a #IdeRunner
+ * @args: an array of args to add
+ *
+ * Helper to call ide_runner_append_argv() for every argument
+ * contained in @args.
+ *
+ * Since: 3.28
+ */
+void
+ide_runner_push_args (IdeRunner           *self,
+                      const gchar * const *args)
+{
+  g_return_if_fail (IDE_IS_RUNNER (self));
+  g_return_if_fail (args != NULL);
+
+  for (guint i = 0; args[i] != NULL; i++)
+    ide_runner_append_argv (self, args[i]);
+}
