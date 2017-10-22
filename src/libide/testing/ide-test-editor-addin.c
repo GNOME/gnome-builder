@@ -43,13 +43,19 @@ ide_test_editor_addin_load (IdeEditorAddin       *addin,
   IdeTestEditorAddin *self = (IdeTestEditorAddin *)addin;
   IdeEditorSidebar *sidebar;
   IdeTestManager *manager;
+  IdeWorkbench *workbench;
   IdeContext *context;
 
   g_assert (IDE_IS_TEST_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
 
+  workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
   context = ide_widget_get_context (GTK_WIDGET (editor));
   manager = ide_context_get_test_manager (context);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (workbench),
+                                  "test-manager",
+                                  G_ACTION_GROUP (manager));
 
   self->panel = g_object_new (IDE_TYPE_TEST_PANEL,
                               "manager", manager,
@@ -77,9 +83,14 @@ ide_test_editor_addin_unload (IdeEditorAddin       *addin,
                               IdeEditorPerspective *editor)
 {
   IdeTestEditorAddin *self = (IdeTestEditorAddin *)addin;
+  IdeWorkbench *workbench;
 
   g_assert (IDE_IS_TEST_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
+  if (workbench != NULL)
+    gtk_widget_insert_action_group (GTK_WIDGET (workbench), "test-manager", NULL);
 
   if (self->panel)
     gtk_widget_destroy (GTK_WIDGET (self->panel));
