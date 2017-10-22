@@ -110,6 +110,7 @@
 
   <gresource prefix="/org/gnome/builder/plugins/testing">
     <file alias="testing.plugin">testing/testing.plugin</file>
+    <file preprocess="xml-stripblanks" alias="gtk/menus.ui">testing/gtk/menus.ui</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/plugins/webkit">
