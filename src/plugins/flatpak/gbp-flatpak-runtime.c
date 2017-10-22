@@ -277,11 +277,13 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   IdeContext *context;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (IDE_IS_BUILD_TARGET (build_target));
+  g_assert (!build_target || IDE_IS_BUILD_TARGET (build_target));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_path = get_staging_directory (self);
-  binary_name = get_binary_name (self, build_target);
+
+  if (build_target != NULL)
+    binary_name = get_binary_name (self, build_target);
 
   return IDE_RUNNER (gbp_flatpak_runner_new (context, build_path, binary_name));
 }

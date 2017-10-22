@@ -40,7 +40,12 @@ G_DEFINE_TYPE (GbpFlatpakRunner, gbp_flatpak_runner, IDE_TYPE_RUNNER)
 static IdeSubprocessLauncher *
 gbp_flatpak_runner_create_launcher (IdeRunner *runner)
 {
-  return ide_subprocess_launcher_new (0);
+  const gchar *cwd = ide_runner_get_cwd (runner);
+
+  return g_object_new (IDE_TYPE_SUBPROCESS_LAUNCHER,
+                       "flags", 0,
+                       "cwd", cwd,
+                       NULL);
 }
 
 static void
@@ -96,7 +101,8 @@ gbp_flatpak_runner_new (IdeContext  *context,
                        "context", context,
                        NULL);
 
-  ide_runner_append_argv (IDE_RUNNER (self), binary_path);
+  if (binary_path != NULL)
+    ide_runner_append_argv (IDE_RUNNER (self), binary_path);
 
   self->build_path = g_strdup (build_path);
   self->binary_path = g_strdup (binary_path);

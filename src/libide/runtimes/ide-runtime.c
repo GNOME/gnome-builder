@@ -164,35 +164,28 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
                                 IdeBuildTarget *build_target)
 {
   g_autofree gchar *name = NULL;
-  g_autofree gchar *binpath = NULL;
-  g_autofree gchar *schemadir = NULL;
-  g_autofree gchar *parentpath = NULL;
   g_autoptr(GFile) installdir = NULL;
-  g_autoptr(GFile) parentdir = NULL;
-  g_autoptr(GFile) bin = NULL;
+  const gchar *slash;
   IdeContext *context;
   IdeRunner *runner;
-  IdeEnvironment *env;
-  gchar *slash;
 
   g_assert (IDE_IS_RUNTIME (self));
-  g_assert (IDE_IS_BUILD_TARGET (build_target));
+  g_assert (!build_target || IDE_IS_BUILD_TARGET (build_target));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-
   g_assert (IDE_IS_CONTEXT (context));
 
   runner = ide_runner_new (context);
-
   g_assert (IDE_IS_RUNNER (runner));
 
-  g_object_get (build_target,
-                "install-directory", &installdir,
-                "name", &name,
-                NULL);
+  if (build_target != NULL)
+    g_object_get (build_target,
+                  "install-directory", &installdir,
+                  "name", &name,
+                  NULL);
 
   /* Targets might be relative in autotools */
-  if ((slash = strrchr (name, '/')))
+  if (name != NULL && NULL != (slash = strrchr (name, '/')))
     {
       gchar *tmp = g_strdup (slash + 1);
       g_free (name);
@@ -201,13 +194,19 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
 
   if (installdir != NULL)
     {
+      g_autoptr(GFile) parentdir = NULL;
+      g_autoptr(GFile) bin = NULL;
+      g_autofree gchar *schemadir = NULL;
+      g_autofree gchar *parentpath = NULL;
+      g_autofree gchar *binpath = NULL;
+
       /* GSettings requires an env var for non-standard dirs */
-      parentdir = g_file_get_parent (installdir);
-      if (parentdir)
+      if (NULL != (parentdir = g_file_get_parent (installdir)))
         {
+          IdeEnvironment *env;
+
           parentpath = g_file_get_path (parentdir);
-          schemadir = g_build_filename (parentpath, "share",
-                                    "glib-2.0", "schemas", NULL);
+          schemadir = g_build_filename (parentpath, "share", "glib-2.0", "schemas", NULL);
 
           env = ide_runner_get_environment (runner);
           ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
@@ -218,9 +217,10 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
 
       ide_runner_append_argv (runner, binpath);
     }
-  else
-    ide_runner_append_argv (runner, name);
-
+  else if (name != NULL)
+    {
+      ide_runner_append_argv (runner, name);
+    }
 
   return runner;
 }
@@ -422,10 +422,15 @@ ide_runtime_prepare_configuration (IdeRuntime       *self,
 
 /**
  * ide_runtime_create_runner:
+ * @self: An #IdeRuntime
+ * @build_target: (nullable): An #IdeBuildTarget or %NULL
  *
  * Creates a new runner that can be used to execute the build target within
  * the runtime. This should be used to implement such features as "run target"
  * or "run unit test" inside the target runtime.
+ *
+ * If @build_target is %NULL, the runtime should create a runner that allows
+ * the caller to specify the binary using the #IdeRunner API.
  *
  * Returns: (transfer full) (nullable): An #IdeRunner if successful, otherwise
  *   %NULL and @error is set.
@@ -435,7 +440,7 @@ ide_runtime_create_runner (IdeRuntime     *self,
                            IdeBuildTarget *build_target)
 {
   g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
-  g_return_val_if_fail (IDE_IS_BUILD_TARGET (build_target), NULL);
+  g_return_val_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target), NULL);
 
   return IDE_RUNTIME_GET_CLASS (self)->create_runner (self, build_target);
 }
