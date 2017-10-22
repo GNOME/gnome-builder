@@ -66,8 +66,8 @@ ide_test_editor_addin_load (IdeEditorAddin       *addin,
                                   "tests",
                                   _("Unit Tests"),
                                   "builder-unit-tests-symbolic",
-                                  NULL,
-                                  NULL,
+                                  "testing-menu",
+                                  "pan-down-symbolic",
                                   GTK_WIDGET (self->panel),
                                   400);
 }

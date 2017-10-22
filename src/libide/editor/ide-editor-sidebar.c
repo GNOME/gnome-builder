@@ -47,7 +47,8 @@ struct _IdeEditorSidebar
   GtkListBox        *open_pages_list_box;
   GtkBox            *open_pages_section;
   GtkLabel          *section_title;
-  GtkImage          *section_menu_button;
+  DzlMenuButton     *section_menu_button;
+  GtkImage          *section_image;
   GtkStack          *stack;
 };
 
@@ -57,16 +58,29 @@ static void
 ide_editor_sidebar_update_title (IdeEditorSidebar *self)
 {
   g_autofree gchar *title = NULL;
+  const gchar *icon_name = NULL;
+  const gchar *menu_id = NULL;
   GtkWidget *visible_child;
 
   g_assert (IDE_IS_EDITOR_SIDEBAR (self));
 
   if (NULL != (visible_child = gtk_stack_get_visible_child (self->stack)))
-    gtk_container_child_get (GTK_CONTAINER (self->stack), visible_child,
-                             "title", &title,
-                             NULL);
+    {
+      menu_id = g_object_get_data (G_OBJECT (visible_child),
+                                   "IDE_EDITOR_SIDEBAR_MENU_ID");
+      icon_name = g_object_get_data (G_OBJECT (visible_child),
+                                     "IDE_EDITOR_SIDEBAR_MENU_ICON_NAME");
+      gtk_container_child_get (GTK_CONTAINER (self->stack), visible_child,
+                               "title", &title,
+                               NULL);
+    }
 
   gtk_label_set_label (self->section_title, title);
+  g_object_set (self->section_menu_button,
+                "icon-name", icon_name,
+                "menu-id", menu_id,
+                "visible", menu_id != NULL,
+                NULL);
 }
 
 static void
@@ -127,6 +141,7 @@ ide_editor_sidebar_class_init (IdeEditorSidebarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_section);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, section_menu_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, section_image);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, section_title);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, stack_switcher);

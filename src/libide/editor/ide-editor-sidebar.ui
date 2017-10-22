@@ -78,7 +78,8 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuButton" id="section_menu_button">
+                      <object class="DzlMenuButton" id="section_menu_button">
+                        <property name="margin-right">6</property>
                         <style>
                           <class name="image-button"/>
                           <class name="flat"/>
