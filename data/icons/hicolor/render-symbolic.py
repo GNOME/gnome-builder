@@ -32,7 +32,7 @@ for name in os.listdir('scalable/patterns'):
 # 16 and their 2x and 3x counterparts
 for dirname in ('actions',):
     for name in sort(os.listdir(os.path.join('scalable', dirname))):
-        for size in (16, 32, 48):
+        for size in (16, 32, 48, 64):
             outdir = '%dx%d/%s' % (size, size, dirname)
             path = os.path.join('scalable', dirname, name)
             gtkEncodeSymbolicSvg(outdir, path, size)
