@@ -327,37 +327,26 @@ gbp_meson_test_provider_run_cb (GObject      *object,
                                 GAsyncResult *result,
                                 gpointer      user_data)
 {
-  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  IdeRunner *runner = (IdeRunner *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *stdout_buf = NULL;
-  g_autofree gchar *stderr_buf = NULL;
   IdeTest *test;
 
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_RUNNER (runner));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   test = g_task_get_task_data (task);
   g_assert (IDE_IS_TEST (test));
 
-  if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
+  if (!ide_runner_run_finish (runner, result, &error))
     {
       ide_test_set_status (test, IDE_TEST_STATUS_FAILED);
       g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  /* Propagate success/failure to test */
-  if (ide_subprocess_get_successful (subprocess))
-    ide_test_set_status (test, IDE_TEST_STATUS_SUCCESS);
-  else
-    ide_test_set_status (test, IDE_TEST_STATUS_FAILED);
-
-  if (ide_subprocess_get_if_exited (subprocess))
-    g_print ("Exit: %d\n", ide_subprocess_get_exit_status (subprocess));
-  g_print ("STDOUT: %s\n", stdout_buf);
-  g_print ("STDERR: %s\n", stderr_buf);
+  ide_test_set_status (test, IDE_TEST_STATUS_SUCCESS);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -368,14 +357,15 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
                                       gpointer      user_data)
 {
   IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(IdeRunner) runner = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
   const gchar * const *command;
   IdeEnvironment *env;
   const gchar *builddir;
+  IdeRuntime *runtime;
   IdeTest *test;
   GFile *workdir;
 
@@ -391,9 +381,16 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, &error)))
+  /* Create a runner to execute the test within */
+  runtime = ide_build_pipeline_get_runtime (pipeline);
+  runner = ide_runtime_create_runner (runtime, NULL);
+
+  if (runner == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to create runner for executing unit test");
       IDE_EXIT;
     }
 
@@ -403,45 +400,39 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   g_assert (IDE_IS_TEST (test));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_subprocess_launcher_set_flags (launcher,
-                                     (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                      G_SUBPROCESS_FLAGS_STDERR_PIPE));
+  ide_runner_set_flags (runner,
+                        (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                         G_SUBPROCESS_FLAGS_STDERR_PIPE));
 
   /* Default to running from builddir */
   builddir = ide_build_pipeline_get_builddir (pipeline);
-  ide_subprocess_launcher_set_cwd (launcher, builddir);
+  ide_runner_set_cwd (runner, builddir);
 
   /* And override of the test requires it */
   workdir = gbp_meson_test_get_workdir (GBP_MESON_TEST (test));
   if (workdir != NULL)
     {
       g_autofree gchar *path = g_file_get_path (workdir);
-      ide_subprocess_launcher_set_cwd (launcher, path);
+      ide_runner_set_cwd (runner, path);
     }
 
   /* Set our command as specified by meson */
   command = gbp_meson_test_get_command (GBP_MESON_TEST (test));
-  ide_subprocess_launcher_push_args (launcher, command);
+  ide_runner_push_args (runner, command);
 
   /* Make sure the environment is respected */
-  env = gbp_meson_test_get_env (GBP_MESON_TEST (test));
-  if (env != NULL)
-    ide_subprocess_launcher_overlay_environment (launcher, env);
-
-  /* All systems go */
-  if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
+  if (NULL != (env = gbp_meson_test_get_env (GBP_MESON_TEST (test))))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
+      IdeEnvironment *dest = ide_runner_get_environment (runner);
+      ide_environment_copy_into (env, dest, TRUE);
     }
 
   ide_test_set_status (test, IDE_TEST_STATUS_RUNNING);
 
-  ide_subprocess_communicate_utf8_async (subprocess,
-                                         NULL,
-                                         cancellable,
-                                         gbp_meson_test_provider_run_cb,
-                                         g_steal_pointer (&task));
+  ide_runner_run_async (runner,
+                        cancellable,
+                        gbp_meson_test_provider_run_cb,
+                        g_steal_pointer (&task));
 
   IDE_EXIT;
 }
