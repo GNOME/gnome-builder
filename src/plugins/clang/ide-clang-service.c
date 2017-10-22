@@ -500,7 +500,8 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
    * things go.
    */
   request->options = (clang_defaultEditingTranslationUnitOptions () |
-                      CXTranslationUnit_DetailedPreprocessingRecord);
+                      CXTranslationUnit_DetailedPreprocessingRecord |
+                      CXTranslationUnit_KeepGoing);
 
   real_task = g_task_new (self,
                           g_task_get_cancellable (task),
