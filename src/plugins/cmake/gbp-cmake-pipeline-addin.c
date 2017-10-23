@@ -1,7 +1,7 @@
 /* gbp-cmake-pipeline-addin.c
  *
- * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
- * Copyright (C) 2016 Martin Blanchard <tchaik@gmx.com>
+ * Copyright © 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright © 2017 Martin Blanchard <tchaik@gmx.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
