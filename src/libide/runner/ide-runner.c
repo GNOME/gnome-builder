@@ -1365,7 +1365,7 @@ ide_runner_set_cwd (IdeRunner   *self,
 
   g_return_if_fail (IDE_IS_RUNNER (self));
 
-  if (ide_str_equal0 (priv->cwd, cwd))
+  if (!ide_str_equal0 (priv->cwd, cwd))
     {
       g_free (priv->cwd);
       priv->cwd = g_strdup (cwd);
