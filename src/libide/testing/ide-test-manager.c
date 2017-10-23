@@ -21,11 +21,16 @@
 #include <dazzle.h>
 #include <libpeas/peas.h>
 
+#include "ide-context.h"
 #include "ide-debug.h"
 
+#include "buildsystem/ide-build-manager.h"
+#include "buildsystem/ide-build-pipeline.h"
 #include "testing/ide-test-manager.h"
 #include "testing/ide-test-private.h"
 #include "testing/ide-test-provider.h"
+
+#define MAX_UNIT_TESTS 4
 
 /**
  * SECTION:ide-test-manager
@@ -56,6 +61,12 @@ typedef struct
   IdeTestProvider *provider;
   GPtrArray       *tests;
 } TestsByProvider;
+
+typedef struct
+{
+  GQueue queue;
+  guint  n_active;
+} RunAllTaskData;
 
 enum {
   PROP_0,
@@ -474,6 +485,52 @@ initable_iface_init (GInitableIface *iface)
   iface->init = ide_test_manager_initiable_init;
 }
 
+static void
+ide_test_manager_run_all_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  IdeTestManager *self = (IdeTestManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeTest) test = NULL;
+  RunAllTaskData *task_data;
+  GCancellable *cancellable;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TEST_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  cancellable = g_task_get_cancellable (task);
+  task_data = g_task_get_task_data (task);
+  g_assert (task_data != NULL);
+  g_assert (task_data->n_active > 0);
+
+  if (!ide_test_manager_run_finish (self, result, &error))
+    g_message ("%s", error->message);
+
+  test = g_queue_pop_head (&task_data->queue);
+
+  if (test != NULL)
+    {
+      task_data->n_active++;
+      ide_test_manager_run_async (self,
+                                  test,
+                                  cancellable,
+                                  ide_test_manager_run_all_cb,
+                                  g_object_ref (task));
+    }
+
+  task_data->n_active--;
+
+  if (task_data->n_active == 0)
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
 /**
  * ide_test_manager_run_all_async:
  * @self: An #IdeTestManager
@@ -498,6 +555,7 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
                                 gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  RunAllTaskData *task_data;
 
   IDE_ENTRY;
 
@@ -508,7 +566,42 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_test_manager_run_all_async);
 
-  g_task_return_boolean (task, TRUE);
+  task_data = g_new0 (RunAllTaskData, 1);
+  g_task_set_task_data (task, task_data, g_free);
+
+  for (guint i = 0; i < self->tests_by_provider->len; i++)
+    {
+      TestsByProvider *info = g_ptr_array_index (self->tests_by_provider, i);
+
+      for (guint j = 0; j < info->tests->len; j++)
+        {
+          IdeTest *test = g_ptr_array_index (info->tests, j);
+
+          g_queue_push_tail (&task_data->queue, g_object_ref (test));
+        }
+    }
+
+  task_data->n_active = MIN (MAX_UNIT_TESTS, task_data->queue.length);
+
+  if (task_data->n_active == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
+
+  for (guint i = 0; i < MAX_UNIT_TESTS; i++)
+    {
+      g_autoptr(IdeTest) test = g_queue_pop_head (&task_data->queue);
+
+      if (test == NULL)
+        break;
+
+      ide_test_manager_run_async (self,
+                                  test,
+                                  cancellable,
+                                  ide_test_manager_run_all_cb,
+                                  g_object_ref (task));
+    }
 
   IDE_EXIT;
 }
@@ -541,9 +634,34 @@ ide_test_manager_run_all_finish (IdeTestManager  *self,
   g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
+  g_print ("run finish\n");
+
   ret = g_task_propagate_boolean (G_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+static void
+ide_test_manager_run_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  IdeTestProvider *provider = (IdeTestProvider *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TEST_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_test_provider_run_finish (provider, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 /**
@@ -569,6 +687,10 @@ ide_test_manager_run_async (IdeTestManager      *self,
                             gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  IdeBuildPipeline *pipeline;
+  IdeTestProvider *provider;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -580,7 +702,27 @@ ide_test_manager_run_async (IdeTestManager      *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_test_manager_run_async);
 
-  g_task_return_boolean (task, TRUE);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  if (pipeline == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Pipeline is not ready, cannot run test");
+      IDE_EXIT;
+    }
+
+  provider = _ide_test_get_provider (test);
+
+  ide_test_provider_run_async (provider,
+                               test,
+                               pipeline,
+                               cancellable,
+                               ide_test_manager_run_cb,
+                               g_steal_pointer (&task));
 
   IDE_EXIT;
 }
