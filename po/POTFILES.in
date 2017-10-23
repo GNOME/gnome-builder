@@ -122,6 +122,7 @@ src/plugins/clang/ide-clang-preferences-addin.c
 src/plugins/clang/ide-clang-service.c
 src/plugins/clang/ide-clang-symbol-node.c
 src/plugins/clang/ide-clang-translation-unit.c
+src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/code-index/ide-code-index-index.c
 src/plugins/code-index/ide-code-index-service.c
 src/plugins/color-picker/data/basic.gstyle.xml
