@@ -84,11 +84,6 @@
                           <class name="image-button"/>
                           <class name="flat"/>
                         </style>
-                        <child>
-                          <object class="GtkImage" id="section_image">
-                            <property name="visible">true</property>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>

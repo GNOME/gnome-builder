@@ -48,7 +48,6 @@ struct _IdeEditorSidebar
   GtkBox            *open_pages_section;
   GtkLabel          *section_title;
   DzlMenuButton     *section_menu_button;
-  GtkImage          *section_image;
   GtkStack          *stack;
 };
 
@@ -141,7 +140,6 @@ ide_editor_sidebar_class_init (IdeEditorSidebarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_section);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, section_menu_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, section_image);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, section_title);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, stack_switcher);
