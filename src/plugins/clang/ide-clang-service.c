@@ -499,9 +499,11 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
    * quality highlighting, I'm going try try enabling it for now and see how
    * things go.
    */
-  request->options = (clang_defaultEditingTranslationUnitOptions () |
-                      CXTranslationUnit_DetailedPreprocessingRecord |
-                      CXTranslationUnit_KeepGoing);
+  request->options = (clang_defaultEditingTranslationUnitOptions ()
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
+                      | CXTranslationUnit_KeepGoing
+#endif
+                      | CXTranslationUnit_DetailedPreprocessingRecord);
 
   real_task = g_task_new (self,
                           g_task_get_cancellable (task),
