@@ -1,3 +1,4 @@
+libide_header_dir = join_paths(get_option('includedir'), 'gnome-builder', 'libide')
 libide_header_subdir = join_paths('gnome-builder', 'libide')
 
 libide_api_version = '1.0'
@@ -20,7 +21,7 @@ version_data.set_quoted('BUILD_TYPE', get_option('buildtype'))
 libide_version_h = configure_file(
           input: 'ide-version.h.in',
          output: 'ide-version.h',
-    install_dir: libide_header_subdir,
+    install_dir: libide_header_dir,
         install: true,
   configuration: version_data)
 libide_generated_headers += [libide_version_h]
@@ -100,7 +101,7 @@ libide_enums = gnome.mkenums('ide-enums',
       c_template: 'ide-enums.c.in',
          sources: libide_enum_headers,
   install_header: true,
-     install_dir: libide_header_subdir,
+     install_dir: libide_header_dir,
 )
 libide_public_sources += [libide_enums[0]]
 libide_generated_headers += [libide_enums[1]]
@@ -113,7 +114,7 @@ libide_debug_h = configure_file(
          output: 'ide-debug.h',
   configuration: libide_conf,
         install: true,
-    install_dir: libide_header_subdir,
+    install_dir: libide_header_dir,
 )
 libide_generated_headers += [libide_debug_h]
 
