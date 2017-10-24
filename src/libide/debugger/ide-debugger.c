@@ -511,8 +511,8 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * Since: 3.26
    */
   properties [PROP_SELECTED_THREAD] =
-    g_param_spec_object ("thread-selected",
-                         "Thread Selected",
+    g_param_spec_object ("selected-thread",
+                         "Selected Thread",
                          "The currently selected thread",
                          IDE_TYPE_DEBUGGER_THREAD,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
