@@ -29,6 +29,21 @@
 
 G_BEGIN_DECLS
 
+/**
+ * IdeWorkbenchOpenFlags:
+ * @IDE_WORKBENCH_OPEN_FLAGS_NONE: No special processing will be performed
+ * @IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND: Open the document in the background (behind current view)
+ * @IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW: Open the document but do not create a new view for it
+ *
+ * The #IdeWorkbenchOpenFlags enumeration is used to specify how a
+ * document should be opened by the workbench. Plugins may want to
+ * have a bit of control over where the document is opened, and this
+ * provides a some control over that.
+ *
+ * The @IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW enum value was added in 3.26
+ *
+ * Since: 3.24
+ */
 typedef enum
 {
   IDE_WORKBENCH_OPEN_FLAGS_NONE       = 0,
