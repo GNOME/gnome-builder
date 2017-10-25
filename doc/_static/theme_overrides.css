@@ -1,22 +1,83 @@
 /* Original Stylesheet */
 @import url("https://media.readthedocs.org/css/sphinx_rtd_theme.css");
 
-/* GNOME Overrides */
+/* Source Sans Pro and Source Code Pro */
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,600,700i,400,400i,300,200&amp;subset=latin-ext");
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
 
-/* Overpass for headings */
-@import url("http://overpass-30e2.kxcdn.com/overpass.css");
-
-/* Source Sans for text */
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,700i,400,400i&amp;subset=latin-ext");
+/* Various GNOME Styles and Colors */
 
 body {
   font-family: "Source Sans Pro", sans-serif;
+  font-size: 12pt;
+  font-weight: 400;
+  color: #333333;
 }
 
-h1,h2,h3,h4,h5,h6 {
-  font-family: "Overpass", sans-serif;
+h1 {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 38pt;
   font-weight: 200;
+  color: #333333;
 }
+
+h2 {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 24pt;
+  font-weight: 400;
+  color: #4a86cf;
+}
+
+h3 {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 18pt;
+  font-weight: 300;
+  color: #333333;
+}
+
+h4 {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 12pt;
+  font-weight: 600;
+  color: #808080;
+}
+
+p {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 12pt;
+  font-weight: 400;
+  color: #333333;
+}
+
+.linenos .linenodiv pre,
+.highlight pre {
+  font-family: "Source Code Pro", monospace;
+  font-size: 10pt !important;
+  line-height: 1.2em !important;
+}
+
+span.versionmodified {
+  color: #01808e;
+}
+
+span.deprecated {
+  color: #f57900;
+}
+
+div.admonition.note {
+  background-color: #4a86cf33; }
+div.admonition.note .first {
+  background-color: #4a86cf; }
+
+div.admonition.tip {
+  background-color: #01808e33; }
+div.admonition.tip .first {
+  background-color: #01808e; }
+
+div.admonition.warning {
+  background-color: #f5790033; }
+div.admonition.warning .first {
+  background-color: #f57900; }
 
 a.icon-home, a.icon-home:hover {
   display: inline-block;
@@ -28,9 +89,9 @@ a.icon-home, a.icon-home:hover {
 }
 
 .wy-side-nav-search {
-  background-color: #4a90d9;
+  background-color: #4a86cf;
 }
 
-a, a:visited { color: #4a90d9; }
-  .wy-menu a { color: #919191; }
+a, a:visited { color: #4a86cf; }
+  .wy-menu a { color: #808080; }
   .wy-side-nav-search a { color: #fff; }
