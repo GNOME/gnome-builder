@@ -56,6 +56,10 @@ p {
   line-height: 1.2em !important;
 }
 
+table.align-row0-right tr td:first-child {
+  text-align: right;
+}
+
 span.versionmodified {
   color: #01808e;
 }
