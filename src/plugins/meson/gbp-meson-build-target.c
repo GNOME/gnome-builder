@@ -22,11 +22,20 @@
 
 struct _GbpMesonBuildTarget
 {
-  IdeObject parent_instance;
+  IdeObject  parent_instance;
 
-  GFile *install_directory;
-  gchar *name;
+  GFile     *install_directory;
+  gchar     *name;
 };
+
+enum {
+  PROP_0,
+  PROP_INSTALL_DIRECTORY,
+  PROP_NAME,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 
 static GFile *
 gbp_meson_build_target_get_install_directory (IdeBuildTarget *build_target)
@@ -59,6 +68,52 @@ G_DEFINE_TYPE_WITH_CODE (GbpMesonBuildTarget, gbp_meson_build_target, IDE_TYPE_O
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_TARGET, build_target_iface_init))
 
 static void
+gbp_meson_build_target_get_property (GObject    *object,
+                                         guint       prop_id,
+                                         GValue     *value,
+                                         GParamSpec *pspec)
+{
+  GbpMesonBuildTarget *self = GBP_MESON_BUILD_TARGET (object);
+
+  switch (prop_id)
+    {
+    case PROP_INSTALL_DIRECTORY:
+      g_value_set_object (value, self->install_directory);
+      break;
+
+    case PROP_NAME:
+      g_value_set_string (value, self->name);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_meson_build_target_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
+{
+  GbpMesonBuildTarget *self = GBP_MESON_BUILD_TARGET (object);
+
+  switch (prop_id)
+    {
+    case PROP_INSTALL_DIRECTORY:
+      self->install_directory = g_value_dup_object (value);
+      break;
+
+    case PROP_NAME:
+      self->name = g_value_dup_string (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_meson_build_target_finalize (GObject *object)
 {
   GbpMesonBuildTarget *self = (GbpMesonBuildTarget *)object;
@@ -75,6 +130,24 @@ gbp_meson_build_target_class_init (GbpMesonBuildTargetClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_meson_build_target_finalize;
+  object_class->get_property = gbp_meson_build_target_get_property;
+  object_class->set_property = gbp_meson_build_target_set_property;
+
+  properties [PROP_INSTALL_DIRECTORY] =
+    g_param_spec_object ("install-directory",
+                         NULL,
+                         NULL,
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_NAME] =
+    g_param_spec_string ("name",
+                         NULL,
+                         NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
