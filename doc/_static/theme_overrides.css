@@ -73,6 +73,11 @@ span.deprecated {
   color: #f57900;
 }
 
+span.std.std-ref {
+  font-family: "Source Code Pro", monospace;
+  font-size: 10pt;
+}
+
 div.admonition.note {
   background-color: #4a86cf33; }
 div.admonition.note .first {
