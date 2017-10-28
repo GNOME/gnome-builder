@@ -56,7 +56,12 @@ p {
   line-height: 1.2em !important;
 }
 
-table.align-row0-right tr td:first-child {
+table.column1-code tr td:first-child,
+table.column2-code tr td:nth-child(2) {
+  font-family: "Source Code Pro", monospace;
+  font-size: 9pt;
+}
+table.column1-right tr td:first-child {
   text-align: right;
 }
 
