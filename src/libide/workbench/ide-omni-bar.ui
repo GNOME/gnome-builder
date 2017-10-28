@@ -477,7 +477,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="action-name">build-manager.build</property>
-                    <property name="label" translatable="yes">Build</property>
+                    <property name="label" translatable="yes" context="button">Build</property>
                     <property name="visible">true</property>
                   </object>
                 </child>
