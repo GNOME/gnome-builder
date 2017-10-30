@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-10-24 07:48+0000\n"
+"POT-Creation-Date: 2017-10-26 16:09+0000\n"
 "PO-Revision-Date: 2017-10-26 10:23+0200\n"
 "Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
@@ -3084,7 +3084,7 @@ msgstr "Erstellungsergebnis"
 #. translators: if the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
 #: libide/workbench/ide-omni-bar.ui:475
 msgid "true"
-msgstr "wahr"
+msgstr "true"
 
 #: libide/workbench/ide-omni-bar.ui:487
 msgid "Rebuild"
