@@ -286,7 +286,7 @@ libide_gir = gnome.generate_gir(libide,
 	      install: true,
       install_dir_gir: pkggirdir,
   install_dir_typelib: pkgtypelibdir,
-           extra_args: [ '--c-include=ide.h' ]
+           extra_args: [ '--c-include=ide.h', '--pkg-export=libide-1.0' ]
 )
 
 if get_option('with_vapi')
