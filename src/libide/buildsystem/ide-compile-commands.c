@@ -53,7 +53,7 @@ struct _IdeCompileCommands
   GObject parent_instance;
 
   /*
-   * The info_by_file field contains a hsahtable whose keys are GFile
+   * The info_by_file field contains a hashtable whose keys are #GFile
    * matching the file that is to be compiled. It contains as a value
    * the CompileInfo struct describing how to compile that file.
    */
