@@ -250,7 +250,7 @@ ide_compile_commands_load_worker (GTask        *task,
       info->file = g_file_resolve_relative_path (dir, file);
       info->directory = g_object_ref (dir);
       info->command = g_strdup (command);
-      g_hash_table_insert (info_by_file, info->file, info);
+      g_hash_table_replace (info_by_file, info->file, info);
 
       /*
        * We might need to keep a special copy of this for resolving .vala
