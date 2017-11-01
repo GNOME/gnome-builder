@@ -1,0 +1,531 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY % gtkdocentities SYSTEM "xml/gtkdocentities.ent">
+  %gtkdocentities;
+]>
+<book id="index">
+
+  <bookinfo>
+    <title>&package_name; SDK Reference</title>
+    <releaseinfo>
+      <para>
+        The following is a description of API that plugin developers can use to
+        extend or add new features to Builder.
+      </para>
+    </releaseinfo>
+    <copyright>
+      <year>2014-2017</year>
+      <holder>Christian Hergert, et al.</holder>
+    </copyright>
+  </bookinfo>
+
+  <part id="libide-api">
+    <title>Builder Core API</title>
+    <chapter>
+      <title>Overview</title>
+      <para>
+        Access to Builder's SDK is centered around a project context named
+        <link linkend="IdeContext">IdeContext</link>. You access various
+        subsystems such as the debugger or build manager via accessor methods
+        on the <link linkend="IdeContext">IdeContext</link>.
+      </para>
+      <para>
+        To simplify access to the project context, many internal objects share
+        a common base class named <link linkend="IdeObject">IdeObject</link>.
+        It provides direct access to the
+        <link linkend="IdeContext">IdeContext</link> via
+        <link linkend="ide-object-get-context">ide_object_get_context()</link>
+        as well as convenience API for lifecycle management.
+      </para>
+    </chapter>
+    <chapter>
+      <title>Core Objects</title>
+      <xi:include href="xml/ide-context.xml"/>
+      <xi:include href="xml/ide-object.xml"/>
+      <xi:include href="xml/ide-application.xml"/>
+    </chapter>
+    <chapter>
+      <title>Application Extensions</title>
+      <xi:include href="xml/ide-application-addin.xml"/>
+      <xi:include href="xml/ide-application-tool.xml"/>
+      <xi:include href="xml/ide-service.xml"/>
+    </chapter>
+    <chapter>
+      <title>Logging and Tracing</title>
+      <xi:include href="xml/ide-debug.xml"/>
+      <xi:include href="xml/ide-log.xml"/>
+    </chapter>
+    <chapter>
+      <title>Builder Versioning</title>
+      <xi:include href="xml/ide-version.xml"/>
+      <xi:include href="xml/ide-build-ident.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-buffers">
+    <title>The Buffer Subsystem</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-buffer-manager.xml"/>
+      <xi:include href="xml/ide-buffer.xml"/>
+      <xi:include href="xml/ide-buffer-addin.xml"/>
+      <xi:include href="xml/ide-buffer-change-monitor.xml"/>
+      <xi:include href="xml/ide-file.xml"/>
+      <xi:include href="xml/ide-uri.xml"/>
+      <xi:include href="xml/ide-unsaved-files.xml"/>
+      <xi:include href="xml/ide-unsaved-file.xml"/>
+    </chapter>
+    <chapter>
+      <title>File Settings</title>
+      <xi:include href="xml/ide-file-settings.xml"/>
+      <xi:include href="xml/ide-gsettings-file-settings.xml"/>
+      <xi:include href="xml/ide-editorconfig-file-settings.xml"/>
+      <xi:include href="xml/ide-modelines-file-settings.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-editor">
+    <title>Source Code Editing</title>
+    <chapter>
+      <title>The Editor Perspective</title>
+      <xi:include href="xml/ide-editor-perspective.xml"/>
+      <xi:include href="xml/ide-editor-properties.xml"/>
+      <xi:include href="xml/ide-editor-sidebar.xml"/>
+      <xi:include href="xml/ide-editor-utilities.xml"/>
+    </chapter>
+    <chapter>
+      <title>The Editor View</title>
+      <xi:include href="xml/ide-editor-view.xml"/>
+      <xi:include href="xml/ide-editor-view-addin.xml"/>
+      <xi:include href="xml/ide-source-view.xml"/>
+      <xi:include href="xml/ide-source-view-mode.xml"/>
+      <xi:include href="xml/ide-source-view-capture.xml"/>
+      <xi:include href="xml/ide-source-map.xml"/>
+      <xi:include href="xml/ide-line-change-gutter-renderer.xml"/>
+      <xi:include href="xml/ide-omni-gutter-renderer.xml"/>
+    </chapter>
+    <chapter>
+      <title>Search and Replace</title>
+      <xi:include href="xml/ide-editor-search.xml"/>
+      <xi:include href="xml/ide-editor-search-bar.xml"/>
+    </chapter>
+    <chapter>
+      <title>Auto-completion</title>
+      <xi:include href="xml/ide-completion-item.xml"/>
+      <xi:include href="xml/ide-completion-provider.xml"/>
+      <xi:include href="xml/ide-completion-results.xml"/>
+      <xi:include href="xml/ide-completion-words.xml"/>
+      <xi:include href="xml/ide-word-completion-item.xml"/>
+      <xi:include href="xml/ide-word-completion-provider.xml"/>
+      <xi:include href="xml/ide-word-completion-results.xml"/>
+    </chapter>
+    <chapter>
+      <title>Semantic Highlighting</title>
+      <xi:include href="xml/ide-highlight-engine.xml"/>
+      <xi:include href="xml/ide-highlighter.xml"/>
+      <xi:include href="xml/ide-highlight-index.xml"/>
+    </chapter>
+    <chapter>
+      <title>Auto-Indentation</title>
+      <xi:include href="xml/ide-indenter.xml"/>
+      <xi:include href="xml/ide-indent-style.xml"/>
+    </chapter>
+    <chapter>
+      <title>Reformatting Code</title>
+      <xi:include href="xml/ide-formatter.xml"/>
+      <xi:include href="xml/ide-formatter-options.xml"/>
+    </chapter>
+    <chapter>
+      <title>Snippets</title>
+      <xi:include href="xml/ide-source-snippets-manager.xml"/>
+      <xi:include href="xml/ide-source-snippet.xml"/>
+      <xi:include href="xml/ide-source-snippet-chunk.xml"/>
+      <xi:include href="xml/ide-source-snippet-context.xml"/>
+      <xi:include href="xml/ide-source-snippets.xml"/>
+      <xi:include href="xml/ide-source-snippet-completion-item.xml"/>
+      <xi:include href="xml/ide-source-snippet-completion-provider.xml"/>
+      <xi:include href="xml/ide-source-snippet-parser.xml"/>
+    </chapter>
+    <chapter>
+      <title>Printing</title>
+      <xi:include href="xml/ide-editor-print-operation.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-building">
+    <title>The Build Subsystem</title>
+    <chapter>
+      <title>Core Build API</title>
+      <xi:include href="xml/ide-build-manager.xml"/>
+      <xi:include href="xml/ide-build-system.xml"/>
+      <xi:include href="xml/ide-build-target.xml"/>
+      <xi:include href="xml/ide-configuration-manager.xml"/>
+      <xi:include href="xml/ide-configuration-provider.xml"/>
+      <xi:include href="xml/ide-configuration.xml"/>
+      <xi:include href="xml/ide-environment.xml"/>
+      <xi:include href="xml/ide-environment-variable.xml"/>
+    </chapter>
+    <chapter>
+      <title>The Build Pipeline</title>
+      <xi:include href="xml/ide-build-pipeline.xml"/>
+      <xi:include href="xml/ide-build-pipeline-addin.xml"/>
+      <xi:include href="xml/ide-build-stage.xml"/>
+    </chapter>
+    <chapter>
+      <title>Reusable Build Stages</title>
+      <xi:include href="xml/ide-build-stage-launcher.xml"/>
+      <xi:include href="xml/ide-build-stage-mkdirs.xml"/>
+      <xi:include href="xml/ide-build-stage-transfer.xml"/>
+    </chapter>
+    <chapter>
+      <title>Build UI</title>
+      <xi:include href="xml/ide-build-configuration-row.xml"/>
+      <xi:include href="xml/ide-build-configuration-view.xml"/>
+      <xi:include href="xml/ide-environment-editor.xml"/>
+    </chapter>
+    <chapter>
+      <title>Utility and Fallback API</title>
+      <xi:include href="xml/ide-compile-commands.xml"/>
+      <xi:include href="xml/ide-build-system-discovery.xml"/>
+      <xi:include href="xml/ide-directory-build-system.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-diagnostics">
+    <title>The Diagnostics Subsystem</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-source-location.xml"/>
+      <xi:include href="xml/ide-source-range.xml"/>
+      <xi:include href="xml/ide-diagnostic-provider.xml"/>
+      <xi:include href="xml/ide-diagnostics-manager.xml"/>
+      <xi:include href="xml/ide-diagnostics.xml"/>
+      <xi:include href="xml/ide-diagnostic.xml"/>
+      <xi:include href="xml/ide-fixit.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-devices">
+    <title>The Device Subsystem</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-device-manager.xml"/>
+      <xi:include href="xml/ide-device-provider.xml"/>
+      <xi:include href="xml/ide-device.xml"/>
+      <xi:include href="xml/ide-local-device.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-search">
+    <title>Project Search</title>
+    <chapter>
+      <title>Search Engine</title>
+      <xi:include href="xml/ide-search-engine.xml"/>
+      <xi:include href="xml/ide-search-provider.xml"/>
+      <xi:include href="xml/ide-search-result.xml"/>
+    </chapter>
+    <chapter>
+      <title>Performance Considerations</title>
+      <xi:include href="xml/ide-search-reducer.xml"/>
+    </chapter>
+    <chapter>
+      <title>Source Code Indexing</title>
+      <xi:include href="xml/ide-code-index-entries.xml"/>
+      <xi:include href="xml/ide-code-index-entry.xml"/>
+      <xi:include href="xml/ide-code-indexer.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-documentation">
+    <title>The Documentation Subsystem</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-documentation-info.xml"/>
+      <xi:include href="xml/ide-documentation-proposal.xml"/>
+      <xi:include href="xml/ide-documentation-provider.xml"/>
+      <xi:include href="xml/ide-documentation.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-refactoring">
+    <title>Refactoring</title>
+    <xi:include href="xml/ide-rename-provider.xml"/>
+    <xi:include href="xml/ide-project-edit.xml"/>
+  </part>
+
+  <part id="libide-workbench">
+    <title>Workbench and View Layout</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-workbench.xml"/>
+      <xi:include href="xml/ide-workbench-header-bar.xml"/>
+      <xi:include href="xml/ide-perspective.xml"/>
+      <xi:include href="xml/ide-omni-bar.xml"/>
+    </chapter>
+    <chapter>
+      <title>Extending the Workbench</title>
+      <xi:include href="xml/ide-workbench-addin.xml"/>
+      <xi:include href="xml/ide-workbench-message.xml"/>
+    </chapter>
+    <chapter>
+      <title>Layout Management</title>
+      <xi:include href="xml/ide-layout-view.xml"/>
+      <xi:include href="xml/ide-layout-grid-column.xml"/>
+      <xi:include href="xml/ide-layout-grid.xml"/>
+      <xi:include href="xml/ide-layout-stack-addin.xml"/>
+      <xi:include href="xml/ide-layout-stack-header.xml"/>
+      <xi:include href="xml/ide-layout-stack.xml"/>
+      <xi:include href="xml/ide-layout.xml"/>
+      <xi:include href="xml/ide-layout-pane.xml"/>
+      <xi:include href="xml/ide-layout-transient-sidebar.xml"/>
+    </chapter>
+    <chapter>
+      <title>Keyboard Shortcuts</title>
+      <xi:include href="xml/ide-keybindings.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-vcs">
+    <title>The Version Control Subsystem</title>
+    <xi:include href="xml/ide-vcs.xml"/>
+    <xi:include href="xml/ide-vcs-uri.xml"/>
+    <xi:include href="xml/ide-vcs-config.xml"/>
+    <xi:include href="xml/ide-vcs-initializer.xml"/>
+    <xi:include href="xml/ide-directory-vcs.xml"/>
+  </part>
+
+  <part id="libide-runtimes">
+    <title>SDKs and Runtimes</title>
+    <xi:include href="xml/ide-runtime-manager.xml"/>
+    <xi:include href="xml/ide-runtime-provider.xml"/>
+    <xi:include href="xml/ide-runtime.xml"/>
+  </part>
+
+  <part id="libide-runner">
+    <title>Running Project Programs</title>
+    <xi:include href="xml/ide-run-manager.xml"/>
+    <xi:include href="xml/ide-runner.xml"/>
+    <chapter>
+      <title>Extending Runners</title>
+      <xi:include href="xml/ide-runner-addin.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-debugger">
+    <title>The Debugger Subsystem</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-debugger-address-map.xml"/>
+      <xi:include href="xml/ide-debugger-breakpoints.xml"/>
+      <xi:include href="xml/ide-debugger-breakpoint.xml"/>
+      <xi:include href="xml/ide-debugger-controls.xml"/>
+      <xi:include href="xml/ide-debugger-frame.xml"/>
+      <xi:include href="xml/ide-debugger-gutter-renderer.xml"/>
+      <xi:include href="xml/ide-debugger-instruction.xml"/>
+      <xi:include href="xml/ide-debugger-library.xml"/>
+      <xi:include href="xml/ide-debugger-register.xml"/>
+      <xi:include href="xml/ide-debugger-thread-group.xml"/>
+      <xi:include href="xml/ide-debugger-thread.xml"/>
+      <xi:include href="xml/ide-debugger-types.xml"/>
+      <xi:include href="xml/ide-debugger-variable.xml"/>
+      <xi:include href="xml/ide-debugger.xml"/>
+      <xi:include href="xml/ide-debug-manager.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-symbols">
+    <title>Symbol Extraction and Resolution</title>
+    <xi:include href="xml/ide-symbol-node.xml"/>
+    <xi:include href="xml/ide-symbol-resolver.xml"/>
+    <xi:include href="xml/ide-symbol-tree.xml"/>
+    <xi:include href="xml/ide-symbol.xml"/>
+    <xi:include href="xml/ide-tags-builder.xml"/>
+  </part>
+
+  <part id="libide-testing">
+    <title>Unit Testing</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-test-manager.xml"/>
+      <xi:include href="xml/ide-test-provider.xml"/>
+      <xi:include href="xml/ide-test.xml"/>
+    </chapter>
+    <chapter>
+      <title>Widgets</title>
+      <xi:include href="xml/ide-test-panel.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-projects">
+    <title>Project Management and Templates</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-project-files.xml"/>
+      <xi:include href="xml/ide-project-file.xml"/>
+      <xi:include href="xml/ide-project-info.xml"/>
+      <xi:include href="xml/ide-project-item.xml"/>
+      <xi:include href="xml/ide-project.xml"/>
+    </chapter>
+    <chapter>
+      <title>Extending Project Creation Workflow</title>
+      <xi:include href="xml/ide-genesis-addin.xml"/>
+      <xi:include href="xml/ide-project-miner.xml"/>
+      <xi:include href="xml/ide-recent-projects.xml"/>
+    </chapter>
+    <chapter>
+      <title>Templates</title>
+      <xi:include href="xml/ide-project-template.xml"/>
+      <xi:include href="xml/ide-template-provider.xml"/>
+      <xi:include href="xml/ide-template-base.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-preferences">
+    <title>Application and Plugin Preferences</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-preferences-addin.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-threading">
+    <title>Processes, Threading, and Tasks</title>
+    <chapter>
+      <title>Threading</title>
+      <xi:include href="xml/ide-thread-pool.xml"/>
+    </chapter>
+    <chapter>
+      <title>Worker Processes</title>
+      <xi:include href="xml/ide-worker-manager.xml"/>
+      <xi:include href="xml/ide-worker-process.xml"/>
+      <xi:include href="xml/ide-worker.xml"/>
+    </chapter>
+    <chapter>
+      <title>Subprocesses</title>
+      <xi:include href="xml/ide-subprocess-launcher.xml"/>
+      <xi:include href="xml/ide-subprocess.xml"/>
+      <xi:include href="xml/ide-subprocess-supervisor.xml"/>
+    </chapter>
+    <chapter>
+      <title>Pausable Tasks</title>
+      <xi:include href="xml/ide-pausable.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-langserv">
+    <title>Language Server Protocol</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-langserv-client.xml"/>
+      <xi:include href="xml/ide-langserv-completion-provider.xml"/>
+      <xi:include href="xml/ide-langserv-diagnostic-provider.xml"/>
+      <xi:include href="xml/ide-langserv-formatter.xml"/>
+      <xi:include href="xml/ide-langserv-highlighter.xml"/>
+      <xi:include href="xml/ide-langserv-rename-provider.xml"/>
+      <xi:include href="xml/ide-langserv-symbol-node.xml"/>
+      <xi:include href="xml/ide-langserv-symbol-resolver.xml"/>
+      <xi:include href="xml/ide-langserv-symbol-tree.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-transfers">
+    <title>Downloads and Transfers</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-transfer.xml"/>
+      <xi:include href="xml/ide-transfer-manager.xml"/>
+      <xi:include href="xml/ide-pkcon-transfer.xml"/>
+    </chapter>
+    <chapter>
+      <title>Widgets</title>
+      <xi:include href="xml/ide-transfer-button.xml"/>
+      <xi:include href="xml/ide-transfers-button.xml"/>
+    </chapter>
+  </part>
+
+  <part id="libide-misc">
+    <title>Miscellaneous and Utility API</title>
+    <chapter>
+      <title>API Reference</title>
+      <xi:include href="xml/ide-doap-person.xml"/>
+      <xi:include href="xml/ide-doap.xml"/>
+      <xi:include href="xml/ide-dnd.xml"/>
+      <xi:include href="xml/ide-flatpak.xml"/>
+      <xi:include href="xml/ide-glib.xml"/>
+      <xi:include href="xml/ide-gtk.xml"/>
+      <xi:include href="xml/ide-line-reader.xml"/>
+      <xi:include href="xml/ide-macros.xml"/>
+      <xi:include href="xml/ide-posix.xml"/>
+      <xi:include href="xml/ide-ref-ptr.xml"/>
+      <xi:include href="xml/ide-enums.xml"/>
+      <xi:include href="xml/ide-progress.xml"/>
+      <xi:include href="xml/ide-settings.xml"/>
+    </chapter>
+    <chapter>
+      <title>Internal Extension Management</title>
+      <xi:include href="xml/ide-extension-adapter.xml"/>
+      <xi:include href="xml/ide-extension-set-adapter.xml"/>
+      <xi:include href="xml/ide-extension-util.xml"/>
+    </chapter>
+    <chapter>
+      <title>Widgets</title>
+      <xi:include href="xml/ide-cell-renderer-fancy.xml"/>
+      <xi:include href="xml/ide-fancy-tree-view.xml"/>
+    </chapter>
+  </part>
+
+  <chapter id="object-tree">
+    <title>Object Hierarchy</title>
+    <xi:include href="xml/tree_index.sgml"/>
+  </chapter>
+
+  <index id="api-index-full">
+    <title>API Index</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <index id="deprecated-api-index" role="deprecated">
+    <title>Index of deprecated API</title>
+    <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+
+  <chapter id="legal">
+    <title>Copyright and Legal Information</title>
+
+    <para>
+      This document is the API reference for for &package_name; &package_version;.
+      The latest version of this API reference is also available
+      <ulink role="online-location" url="https://developer.gnome.org/libide/">online</ulink>.
+    </para>
+    <para>
+      If you find any issues in this API reference, please report it
+      using <ulink type="http" url="&package_bugreport;">the online
+      bug reporting tool</ulink> at bugzilla.gnome.org.
+    </para>
+
+    <para>Copyright © 2014-2017 Christian Hergert, et al.</para>
+
+    <para>
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the <citetitle>GNU Free Documentation
+        License</citetitle>, Version 1.1 or any later version published by the
+      Free Software Foundation with no Invariant Sections, no Front-Cover
+      Texts, and no Back-Cover Texts. You may obtain a copy of the
+      <citetitle>GNU Free Documentation License</citetitle> from the Free
+      Software Foundation by visiting <ulink type="http"
+        url="http://www.fsf.org">their Web site</ulink> or by writing to:
+
+      <address>
+        The Free Software Foundation, Inc.,
+        <street>59 Temple Place</street> - Suite 330,
+        <city>Boston</city>, <state>MA</state> <postcode>02111-1307</postcode>,
+        <country>USA</country>
+      </address>
+    </para>
+  </chapter>
+</book>

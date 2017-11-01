@@ -1,0 +1,11 @@
+ent_conf = configuration_data()
+ent_conf.set('PACKAGE', 'gnome-builder')
+ent_conf.set('PACKAGE_BUGREPORT', 'https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder')
+ent_conf.set('PACKAGE_NAME', 'Builder')
+ent_conf.set('PACKAGE_STRING', 'Builder')
+ent_conf.set('PACKAGE_TARNAME', 'gnome-builder-' + meson.project_version())
+ent_conf.set('PACKAGE_URL', 'http://wiki.gnome.org/Apps/Builder')
+ent_conf.set('PACKAGE_VERSION', meson.project_version())
+ent_conf.set('PACKAGE_API_VERSION', libide_api_version)
+configure_file(input: 'gtkdocentities.ent.in', output: 'gtkdocentities.ent', configuration: ent_conf)
+

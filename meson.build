@@ -15,6 +15,8 @@ MAJOR_VERSION = version_split[0]
 MINOR_VERSION = version_split[1]
 MICRO_VERSION = version_split[2]
 
+libide_api_version = '1.0'
+
 pkgdocdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'gnome-builder')
 pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
 pkglibdir = join_paths(get_option('libdir'), 'gnome-builder')

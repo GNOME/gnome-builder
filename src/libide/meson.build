@@ -1,8 +1,6 @@
 libide_header_dir = join_paths(get_option('includedir'), 'gnome-builder', 'libide')
 libide_header_subdir = join_paths('gnome-builder', 'libide')
 
-libide_api_version = '1.0'
-
 libide_enum_headers = []
 libide_generated_headers = []
 libide_public_headers = []
