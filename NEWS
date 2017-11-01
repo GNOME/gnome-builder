@@ -1,4 +1,29 @@
 ==============
+Version 3.26.2
+==============
+
+Changes since last release:
+
+ • Remove the related GPLv3+ section from LGPLv3+ COPYING.
+ • Additional protection against spurious build notifications.
+ • Be more defensive against spellcheck race conditions.
+ • Ensure indenter can be properly disabled and re-enabled.
+ • Improved translation of build paths provided by the build system.
+ • With modern Clang versions, try harder to keep processing after
+   include failures.
+ • Load additional style schemes from .local/share/gtksourceview-3.0
+   when running under flatpak.
+ • Ensure the search bar is above the floating minimap.
+ • Avoid double free when failing to load a git repository.
+ • Copyright snippets now prefer to use © over (C).
+ • Fix an off-by-one when jumping to todo line number.
+
+Updated Translations:
+
+ Slovenian, Nepali, German, Brazilian Portuguese, Catalan (Valencian),
+ Lithuanian
+
+==============
 Version 3.26.1
 ==============
 

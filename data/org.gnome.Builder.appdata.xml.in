@@ -80,6 +80,27 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.26.2" date="2017-11-1">
+      <description>
+        <p>
+          This new release of Builder contains a number of bug fixes found
+          during the 3.26 cycle.
+        </p>
+        <ul>
+          <li>Remove the related GPLv3+ section from LGPLv3+ COPYING.</li>
+          <li>Additional protection against spurious build notifications.</li>
+          <li>Be more defensive against spellcheck race conditions.</li>
+          <li>Ensure indenter can be properly disabled and re-enabled.</li>
+          <li>Improved translation of build paths provided by the build system.</li>
+          <li>With modern Clang versions, try harder to keep processing after include failures.</li>
+          <li>Load additional style schemes from .local/share/gtksourceview-3.0 when running under flatpak.</li>
+          <li>Ensure the search bar is above the floating minimap.</li>
+          <li>Avoid double free when failing to load a git repository.</li>
+          <li>Copyright snippets now prefer to use © over (C).</li>
+          <li>Fix an off-by-one when jumping to todo line number.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.26.0" date="2017-09-11">
       <description>
         <p>
