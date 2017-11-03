@@ -2318,16 +2318,16 @@ ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,
  * For example, to extract warnings from GCC you might do something
  * like the following:
  *
- *   "(?<filename>[a-zA-Z0-9\\-\\.\\/_]+):"
- *   "(?<line>\\d+):"
- *   "(?<column>\\d+): "
- *   "(?<level>[\\w\\s]+): "
- *   "(?<message>.*)"
+ *   "(?&lt;filename&gt;[a-zA-Z0-9\\-\\.\\/_]+):"
+ *   "(?&lt;line&gt;\\d+):"
+ *   "(?&lt;column&gt;\\d+): "
+ *   "(?&lt;level&gt;[\\w\\s]+): "
+ *   "(?&lt;message&gt;.*)"
  *
  * To remove the regex, use the ide_build_pipeline_remove_error_format()
  * function with the resulting format id returned from this function.
  *
- * The resulting format id will be > 0 if successful.
+ * The resulting format id will be &gt; 0 if successful.
  *
  * Returns: an error format id that may be passed to
  *   ide_build_pipeline_remove_error_format().
