@@ -26,6 +26,19 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE (IdeApplicationTool, ide_application_tool, IDE, APPLICATION_TOOL, GObject)
 
+/**
+ * IdeApplicationToolInterface:
+ * @run_async: You must implement this virtual function as part of
+ *   running your command line operation.
+ * @run_finish: You must implement this virtual function as part of
+ *   running your command line operation.
+ *
+ * Use this interface to implement a command-line tool for Builder that
+ * can be accessed when running builder in command-line mode using
+ * "gnome-builder -t cli".
+ *
+ * Since: 3.22
+ */
 struct _IdeApplicationToolInterface
 {
   GTypeInterface parent_interface;

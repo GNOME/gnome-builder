@@ -20,6 +20,30 @@
 
 G_DEFINE_INTERFACE (IdeApplicationTool, ide_application_tool, G_TYPE_OBJECT)
 
+/**
+ * SECTION:ide-application-tool
+ * @title: IdeApplicationTool
+ * @short_description: Implement command-line tools for Builder
+ *
+ * Builder supports running in "command-line" mode when executed like
+ * "gnome-builder -t cli". If you use Builder from flatpak, this may be
+ * activated like "flatpak run org.gnome.Builder -t cli".
+ *
+ * We suggest users that want to use this feature often to alias the
+ * command in their shell such as "alias ide="gnome-builder -t cli".
+ *
+ * When running Builder in this mode, a number of command line tools can
+ * be used instead of the full Gtk-based user interface.
+ *
+ * Plugins can implement this interface to provide additional command-line
+ * tools. To be displayed in user help, you must also specify the name
+ * such as "X-Tool-Name=foo" in your plugin's .plugin manifest. You should
+ * also provide "X-Tool-Description=description" to notify the user of what
+ * the tool does.
+ *
+ * Since: 3.22
+ */
+
 static void
 ide_application_tool_default_init (IdeApplicationToolInterface *iface)
 {
@@ -35,6 +59,8 @@ ide_application_tool_default_init (IdeApplicationToolInterface *iface)
  *
  * Asynchronously runs an application tool. This is typically done on the
  * command line using the `ide` command.
+ *
+ * Since: 3.22
  */
 void
 ide_application_tool_run_async (IdeApplicationTool  *self,
@@ -50,6 +76,22 @@ ide_application_tool_run_async (IdeApplicationTool  *self,
   IDE_APPLICATION_TOOL_GET_IFACE (self)->run_async (self, arguments, cancellable, callback, user_data);
 }
 
+/**
+ * ide_application_tool_run_finish:
+ * @self: a #IdeApplicationTool
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError or %NULL
+ *
+ * Completes an asynchronous request to ide_application_tool_run_async().
+ * This should return an exit code (were 0 is success) and set @error
+ * when non-zero.
+ *
+ * The exit code shall be returned to the calling shell.
+ *
+ * Returns: A shell exit code, 0 for success, otherwise @error is set.
+ *
+ * Since: 3.22
+ */
 gint
 ide_application_tool_run_finish (IdeApplicationTool  *self,
                                  GAsyncResult        *result,
