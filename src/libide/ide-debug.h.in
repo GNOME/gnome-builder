@@ -23,6 +23,83 @@
 
 G_BEGIN_DECLS
 
+/**
+ * SECTION:ide-debug
+ * @title: Debug logging and tracing
+ * @short_description: tracing and debug facilities for Builder and plugins
+ *
+ * The debug macros such as %IDE_ENTRY, %IDE_EXIT, and %IDE_RETURN provide
+ * helpers for tracing Builder and plugins at runtime.
+ *
+ * These tracing macros will compile out when Builder is configured for a
+ * release build. Otherwise, running Builder with the "-vvvv" command line
+ * argument will show tracing output.
+ *
+ * Since: 3.18
+ */
+
+/**
+ * IDE_ENTRY: (skip)
+ *
+ * Traces the entry into a function. Place this at the beginning of your
+ * function above pre-condition checks.
+ *
+ * Since: 3.18
+ */
+
+/**
+ * IDE_EXIT: (skip)
+ *
+ * Traces the exit from a function. Use this instead of "return" to return
+ * and log the function exiting.
+ *
+ * Since: 3.18
+ */
+
+/**
+ * IDE_RETURN: (skip)
+ *
+ * Similar to %IDE_EXIT but allows providing a return value.
+ *
+ * Since: 3.18
+ */
+
+/**
+ * IDE_GOTO: (skip)
+ * @_l: the label to jump to
+ *
+ * Appends to the jump to label to the tracing log and then jumps
+ * to the label @_l.
+ *
+ * Since: 3.18
+ */
+
+/**
+ * IDE_TODO: (skip)
+ * @_msg: the message to append to the trace log
+ *
+ * Appends to the tracing log that unsupported code has been
+ * reached.
+ *
+ * Since: 3.18
+ */
+
+/**
+ * IDE_PROBE: (skip)
+ *
+ * Appends to the tracing log that a line of code was reached.
+ *
+ * Since: 3.18
+ */
+
+/**
+ * IDE_TRACE_MSG: (skip)
+ *
+ * Similar to %IDE_PROBE but allows specifying a log message.
+ *
+ * Since: 3.18
+ */
+
 #ifndef IDE_ENABLE_TRACE
 # define IDE_ENABLE_TRACE @ENABLE_TRACING@
 #endif
