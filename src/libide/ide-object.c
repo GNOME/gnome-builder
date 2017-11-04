@@ -25,6 +25,29 @@
 #include "ide-debug.h"
 #include "ide-object.h"
 
+/**
+ * SECTION:ide-object
+ * @title: IdeObject
+ * @short_description: Base object for #IdeContext-related objects
+ *
+ * The #IdeObject abstract class provides a base class for ojects that are
+ * related to #IdeContext. It provides easy access to the #IdeContext using
+ * ide_object_get_context().
+ *
+ * ## Extensions
+ *
+ * Some interfaces in Builder require that you use #IdeObject as a base class.
+ * In these cases, inherit from #IdeObject instead of #GObject.
+ *
+ * ## Lifecycle
+ *
+ * If your subclass is going to do long running work which requires that the
+ * #IdeContext cannot be unloaded until it has finished, use ide_object_hold()
+ * to ensure this property. Call ide_object_release() when no longer necessary.
+ *
+ * Since: 3.18
+ */
+
 typedef struct
 {
   IdeContext *context;
@@ -109,6 +132,8 @@ ide_object_real_get_context (IdeObject *self)
  * Fetches the #IdeObject:context property.
  *
  * Returns: (transfer none): An #IdeContext.
+ *
+ * Since: 3.18
  */
 IdeContext *
 ide_object_get_context (IdeObject *self)
@@ -118,6 +143,15 @@ ide_object_get_context (IdeObject *self)
   return IDE_OBJECT_GET_CLASS (self)->get_context (self);
 }
 
+/**
+ * ide_object_set_context:
+ * @self: a #IdeObject
+ * @context: (nullable): An #IdeContext
+ *
+ * Sets the #IdeContext for the object.
+ *
+ * Since: 3.18
+ */
 void
 ide_object_set_context (IdeObject  *self,
                         IdeContext *context)
@@ -431,8 +465,24 @@ ide_object_new_for_extension_async_try_next (GTask *task)
 
 /**
  * ide_object_new_for_extension_async:
- * @sort_priority_func: (scope call) (allow-none): A #GCompareDataFunc or %NULL.
+ * @interface_gtype: the #GType of the extension interface
+ * @sort_priority_func: (scope call) (allow-none): A #GCompareDataFunc or %NULL
+ * @sort_priority_data: (nullable): data for @sort_priority_func
+ * @io_priority: An io priority or %G_PRIORITY_DEFAULT
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: (nullable): A callback to complete the request
+ * @user_data: (nullable): user data for @callback
+ * @first_property: (nullable): The first property to set, or %NULL
+ * @...: the value for the first property
  *
+ * This function is similar to ide_object_new_async() but uses a specific
+ * interface #GType to locate the plugin. The first matching interface which
+ * is successfully created is returned after asynchronous initialization.
+ *
+ * Use @sort_priority_func to alter the priority of the extensions before
+ * attempting to initialize them.
+ *
+ * Since: 3.22
  */
 void
 ide_object_new_for_extension_async (GType                 interface_gtype,
@@ -488,6 +538,24 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
   g_clear_object (&set);
 }
 
+/**
+ * ide_object_new_async:
+ * @extension_point: The identifier of the extension point
+ * @io_priority: An io priority or %G_PRIORITY_DEFAULT
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: (nullable): A #GAsyncReadyCallback
+ * @user_data: user data for @callback
+ * @first_property: the first property to set, or %NULL
+ * @...: the value for the first property
+ *
+ * This helper creates a new #IdeObject that is registered for a given
+ * extension point.
+ *
+ * The result can be fetched by calling ide_object_new_finish() from
+ * the provided @callback.
+ *
+ * Since: 3.18
+ */
 void
 ide_object_new_async (const gchar          *extension_point,
                       int                   io_priority,
@@ -556,6 +624,18 @@ ide_object_new_async (const gchar          *extension_point,
   ide_object_new_async_try_next (state);
 }
 
+/**
+ * ide_object_new_finish:
+ * @result: A #GAsyncResult provided to callback
+ * @error: A location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to create a new #IdeObject subclass.
+ *
+ * Returns: (transfer full): An #IdeObject subclass, or %NULL
+ *   and @error is set.
+ *
+ * Since: 3.18
+ */
 IdeObject *
 ide_object_new_finish  (GAsyncResult  *result,
                         GError       **error)
@@ -583,6 +663,8 @@ ide_object_new_finish  (GAsyncResult  *result,
  * context is not already in shutdown.
  *
  * Returns: %TRUE if a hold was successfully created.
+ *
+ * Since: 3.18
  */
 gboolean
 ide_object_hold (IdeObject *self)
@@ -604,7 +686,10 @@ ide_object_hold (IdeObject *self)
  * ide_object_release:
  * @self: the #IdeObject.
  *
- * Releases a successful hold on the context previously created with ide_object_hold().
+ * Releases a successful hold on the context previously created with
+ * ide_object_hold().
+ *
+ * Since: 3.18
  */
 void
 ide_object_release (IdeObject *self)
@@ -643,6 +728,19 @@ ide_object_notify_in_main_cb (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+/**
+ * ide_object_notify_in_main:
+ * @instance: (type GObject.Object): a #GObject
+ * @pspec: A #GParamSpec
+ *
+ * This helper will perform a g_object_notify_by_pspec() with the
+ * added requirement that it is run from the applications main thread.
+ *
+ * You may want to do this when modifying state from a thread, but only
+ * notify from the Gtk+ thread.
+ *
+ * Since: 3.18
+ */
 void
 ide_object_notify_in_main (gpointer    instance,
                            GParamSpec *pspec)
