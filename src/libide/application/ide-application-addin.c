@@ -16,7 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-application-addin"
+
 #include "application/ide-application-addin.h"
+
+/**
+ * SECTION:ide-application-addin
+ * @title: IdeApplicationAddin
+ * @short_description: extend functionality of #IdeApplication
+ *
+ * The #IdeApplicationAddin interface is used by plugins that want to extend
+ * the set of features provided by #IdeApplication. This is useful if you need
+ * utility code that is bound to the lifetime of the #IdeApplication.
+ *
+ * The #IdeApplicationAddin is created after the application has initialized
+ * and unloaded when Builder is shut down.
+ *
+ * Use this interface when you can share code between multiple projects that
+ * are open at the same time.
+ *
+ * Since: 3.24
+ */
 
 G_DEFINE_INTERFACE (IdeApplicationAddin, ide_application_addin, G_TYPE_OBJECT)
 
@@ -44,11 +64,13 @@ ide_application_addin_default_init (IdeApplicationAddinInterface *iface)
  * @self: An #IdeApplicationAddin.
  * @application: An #IdeApplication.
  *
- * This interface method is called when the application is started or
- * the plugin has just been activated.
+ * This interface method is called when the application is started or the
+ * plugin has just been activated.
  *
- * Use this to setup code in your plugin that needs to be loaded once
- * per application process.
+ * Use this to setup code in your plugin that needs to be loaded once per
+ * application process.
+ *
+ * Since: 3.24
  */
 void
 ide_application_addin_load (IdeApplicationAddin *self,
@@ -65,10 +87,13 @@ ide_application_addin_load (IdeApplicationAddin *self,
  * @self: An #IdeApplicationAddin.
  * @application: An #IdeApplication.
  *
- * This inteface method is called when the application is shutting down
- * or the plugin has been unloaded.
+ * This inteface method is called when the application is shutting down or the
+ * plugin has been unloaded.
  *
- * Use this function to cleanup after anything setup in ide_application_addin_load().
+ * Use this function to cleanup after anything setup in
+ * ide_application_addin_load().
+ *
+ * Since: 3.24
  */
 void
 ide_application_addin_unload (IdeApplicationAddin *self,

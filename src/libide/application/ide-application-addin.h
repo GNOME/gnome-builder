@@ -26,6 +26,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE (IdeApplicationAddin, ide_application_addin, IDE, APPLICATION_ADDIN, GObject)
 
+/**
+ * IdeApplicationAddinInterface:
+ * @load: Set this field to implement the ide_application_addin_load()
+ *   virtual method.
+ * @unload: Set this field to implement the ide_application_addin_unload()
+ *   virtual method.
+ */
 struct _IdeApplicationAddinInterface
 {
   GTypeInterface parent_interface;
