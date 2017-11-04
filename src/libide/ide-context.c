@@ -57,6 +57,41 @@
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-workbench.h"
 
+/**
+ * SECTION:ide-context
+ * @title: IdeContext
+ * @short_description: Encapsulates all processing related to a project
+ *
+ * The #IdeContext encapsulates all processing related to a project. This
+ * includes everything from project management, version control, debugging,
+ * building, running the project, and more.
+ *
+ * ## Subsystems
+ *
+ * The context is broken into a series of subsystems which can be accessed
+ * via accessors on the #IdeContext. Some subsystems include
+ * #IdeBufferManager, #IdeBuildManager, #IdeBuildSystem,
+ * #IdeConfigurationManager, #IdeDiagnosticsManager, #IdeDebugManager,
+ * #IdeDeviceManager, #IdeRuntimeManager, #IdeRunManager, #IdeSearchEngine,
+ * #IdeSourceSnippetsManager, #IdeTestManager, #IdeProject, and #IdeVcs.
+ *
+ * ## Services
+ *
+ * If you need a long running service that has it's life-time synchronized to
+ * the lifetime of the #IdeContext, you may want to use #IdeService. It allows
+ * a simple addin interface to provide long-running services to your plugin.
+ *
+ * ## Unloading the project context
+ *
+ * The context can be unloaded with ide_context_unload_async(), which should
+ * generally only be called by the #IdeWorkbench when closing the project. If
+ * you want to prevent unloading of the context during an operation, use the
+ * ide_context_hold() and ide_context_release() functions to prevent
+ * pre-mature unloading.
+ *
+ * Since: 3.18
+ */
+
 #define RESTORE_FILES_MAX_FILES 20
 
 struct _IdeContext
