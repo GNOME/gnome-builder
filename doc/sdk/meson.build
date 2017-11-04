@@ -7,6 +7,8 @@ private_headers = [
   '*-private.h',
 ]
 
+libdazzle_prefix = dependency('libdazzle-1.0').get_pkgconfig_variable('prefix')
+libdazzle_docpath = join_paths(libdazzle_prefix, 'share', 'gtk-doc', 'html')
 glib_prefix = dependency('glib-2.0').get_pkgconfig_variable('prefix')
 glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
 json_prefix = dependency('json-glib-1.0').get_pkgconfig_variable('prefix')
@@ -45,6 +47,7 @@ gnome.gtkdoc('libide',
          '--extra-dir=@0@'.format(join_paths(glib_docpath, 'glib')),
          '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gobject')),
          '--extra-dir=@0@'.format(join_paths(gtk_docpath, 'gtk3')),
+         '--extra-dir=@0@'.format(join_paths(libdazzle_docpath, 'libdazzle')),
          '--extra-dir=@0@'.format(join_paths(json_docpath, 'json-glib')),
          '--extra-dir=@0@'.format(join_paths(vte_docpath, 'vte-2.91')),
          '--extra-dir=@0@'.format(json_docpath),
