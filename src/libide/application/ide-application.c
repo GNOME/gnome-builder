@@ -44,6 +44,25 @@
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"
 
+/**
+ * SECTION:ide-application
+ * @title: IdeApplication
+ * @short_description: Application singleton and extensions
+ *
+ * The #IdeApplication class is a singleton whose lifetime is synchronized to
+ * the lifetime of the process. This manages necessary tweaks required by the
+ * application (such as menus, theming, and keybindings) as well as application
+ * plugins.
+ *
+ * ## Extensions
+ *
+ * If you need to extend Builder in a way that requires services that are tied
+ * to the lifetime of the process (rather than the lifetime of the project),
+ * then #IdeApplicationAddin provides the extension point you need.
+ *
+ * Since: 3.18
+ */
+
 G_DEFINE_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
 
 static GThread *main_thread;
@@ -549,6 +568,14 @@ ide_application_init (IdeApplication *self)
   gtk_window_set_default_icon_name ("org.gnome.Builder");
 }
 
+/**
+ * ide_application_new:
+ *
+ * Creates a new #IdeApplication. This should only be used by the application
+ * entry point.
+ *
+ * Since: 3.22
+ */
 IdeApplication *
 ide_application_new (void)
 {
@@ -559,6 +586,17 @@ ide_application_new (void)
 
 }
 
+/**
+ * ide_application_get_mode:
+ * @self: An #IdeApplication
+ *
+ * Gets the mode of the application which describes if we are the UI
+ * process, worker process, or internal test runner.
+ *
+ * Returns: the #IdeApplicationMode
+ *
+ * Since: 3.20
+ */
 IdeApplicationMode
 ide_application_get_mode (IdeApplication *self)
 {
@@ -756,6 +794,17 @@ ide_application_get_started_at (IdeApplication *self)
   return self->started_at;
 }
 
+/**
+ * ide_application_open_project:
+ * @self: a #IdeApplication
+ * @file: A #GFile
+ *
+ * Attempts to load the project found at @file.
+ *
+ * Returns: %TRUE if the project is already open, otherwise %FALSE.
+ *
+ * Since: 3.22
+ */
 gboolean
 ide_application_open_project (IdeApplication *self,
                               GFile          *file)
@@ -815,7 +864,7 @@ ide_application_open_project (IdeApplication *self,
 /**
  * ide_application_get_main_thread:
  *
- * This function returns the thread-id of the main thread for the applicaiton.
+ * This function returns the thread-id of the main thread for the application.
  * This is only really useful to determine if you are in the main UI thread.
  * This is used by IDE_IS_MAIN_THREAD for assertion checks.
  *
@@ -827,6 +876,16 @@ ide_application_get_main_thread (void)
   return main_thread;
 }
 
+/**
+ * ide_application_add_reaper:
+ * @self: a #IdeApplication
+ * @reaper: A #DzlDirectoryReaper
+ *
+ * Adds a directory reaper which will be executed as part of the cleanup
+ * process when exiting Builder.
+ *
+ * Since: 3.24
+ */
 void
 ide_application_add_reaper (IdeApplication     *self,
                             DzlDirectoryReaper *reaper)
