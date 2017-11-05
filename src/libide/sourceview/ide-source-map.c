@@ -28,6 +28,24 @@
 #include "sourceview/ide-source-map.h"
 #include "sourceview/ide-source-view.h"
 
+/**
+ * SECTION:ide-source-map
+ * @title: IdeSourceMap
+ * @short_description: Source code overview minimap
+ *
+ * The #IdeSourceMap widget provides a minimap that displays a zoomed
+ * out overview of the file in a scrollbar like interface.
+ *
+ * This widget was eventually merged upstream into #GtkSourceView, but
+ * Builder retains a few changes which focus on the ability to auto-hide
+ * the map and font rendering.
+ *
+ * Builder contains a custom font called "BuilderBlocks" which is used by
+ * the #IdeSourceMap to render content in a simplified, blocky, style.
+ *
+ * Since: 3.18
+ */
+
 #define CONCEAL_TIMEOUT 2000
 
 struct _IdeSourceMap
@@ -260,6 +278,15 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
 
   widget_class->destroy = ide_source_map_destroy;
 
+  /**
+   * IdeSourceMap::hide-map:
+   *
+   * The "hide-map" signal is emitted when the source map should be
+   * hidden to the user. This is determined by focus tracking of the
+   * the user's mouse pointer.
+   *
+   * Since: 3.18
+   */
   signals [HIDE_MAP] =
     g_signal_new ("hide-map",
                   G_TYPE_FROM_CLASS (klass),
@@ -270,6 +297,15 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * IdeSourceMap::show-map:
+   *
+   * The "show-map" signal is emitted when the source map should be
+   * shown to the user. This is determined by focus tracking of the
+   * the user's mouse pointer.
+   *
+   * Since: 3.18
+   */
   signals [SHOW_MAP] =
     g_signal_new ("show-map",
                   G_TYPE_FROM_CLASS (klass),
