@@ -54,6 +54,8 @@
  *
  * |[
  * snippet class
+ * - scope python, python3
+ * - desc Create a Python class
  * 	class ${1:MyClass}(${2:object}):
  * 		$0
  * ]|
@@ -62,6 +64,63 @@
  * Upon expanding the snippet, "MyClass" will be focused and "object" will
  * focus once the user hits Tab. A second Tab will exhaust the edit points
  * and therefore place the insertion cursor at "$0".
+ *
+ * You may reference other edit points as which can help in complex scenarios.
+ * In the following example, there will be a single edit point, repeated three
+ * times.
+ *
+ * |[
+ * snippet test
+ * - scope c
+ * - desc An example snippet
+ * 	${1:test} $1 $1 $1 $0
+ * ]|
+ *
+ * You may also reference other edit points in the default value for an edit
+ * point. This allows you to set a value by default, but allow the user to
+ * Tab into that position and modify it.
+ *
+ * |[
+ * snippet test
+ * - scope c
+ * - desc An example snippet
+ * 	${1:foo} ${2:`$1`}
+ * ]|
+ *
+ * If you want to add additional data to the edit point, you can use multiple
+ * backticks to include additional text.
+ *
+ * |[
+ * snippet test
+ * - scope c
+ * - desc An example snippet
+ * 	${1:foo} ${2:`$1`_with_`$1`}
+ * ]|
+ *
+ * You can post-process the output text for an edit point by specifying a
+ * pipe "|" and then a post-processing function.
+ *
+ * Currently, the following post-processing functions are supported.
+ *
+ *  - capitalize: make the input into "Captital Text"
+ *  - decapitalize: make the input into "decaptital text"
+ *  - html: replaces input "<>" into &amp;lt; and &amp;gt;
+ *  - functify: converts input into something that looks like a c_function_name
+ *  - namespace: guesses a proper code namespace from the input text
+ *  - upper: converts to uppercase
+ *  - lower: converts to lowercase
+ *  - space: converts the input text into whitespace of the same length
+ *  - camelize: converts the input text into CamelCase
+ *  - stripsuffix: removes a filename suffix, such as ".txt" from the input
+ *  - class: guess the class name from the input text
+ *  - instance: guess the instance name from the input text
+ *
+ * You may chain multiple post-processing functions together.
+ *
+ * |[
+ * snippet test
+ * 	${1:some-file} ${2:$1|functify|upper}
+ * ]|
  *
  * Since: 3.18
  */

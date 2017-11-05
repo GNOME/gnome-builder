@@ -35,9 +35,9 @@ void               ide_source_snippets_manager_load_async          (IdeSourceSni
 gboolean           ide_source_snippets_manager_load_finish         (IdeSourceSnippetsManager  *self,
                                                                     GAsyncResult              *result,
                                                                     GError                   **error);
-IdeSourceSnippets *ide_source_snippets_manager_get_for_language    (IdeSourceSnippetsManager  *manager,
+IdeSourceSnippets *ide_source_snippets_manager_get_for_language    (IdeSourceSnippetsManager  *self,
                                                                     GtkSourceLanguage         *language);
-IdeSourceSnippets *ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager  *manager,
+IdeSourceSnippets *ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager  *self,
                                                                     const gchar               *language_id);
 
 G_END_DECLS
