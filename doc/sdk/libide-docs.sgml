@@ -162,11 +162,6 @@
       <xi:include href="xml/ide-build-manager.xml"/>
       <xi:include href="xml/ide-build-system.xml"/>
       <xi:include href="xml/ide-build-target.xml"/>
-      <xi:include href="xml/ide-configuration-manager.xml"/>
-      <xi:include href="xml/ide-configuration-provider.xml"/>
-      <xi:include href="xml/ide-configuration.xml"/>
-      <xi:include href="xml/ide-environment.xml"/>
-      <xi:include href="xml/ide-environment-variable.xml"/>
     </chapter>
     <chapter>
       <title>The Build Pipeline</title>
@@ -179,6 +174,14 @@
       <xi:include href="xml/ide-build-stage-launcher.xml"/>
       <xi:include href="xml/ide-build-stage-mkdirs.xml"/>
       <xi:include href="xml/ide-build-stage-transfer.xml"/>
+    </chapter>
+    <chapter>
+      <title>Build Configurations</title>
+      <xi:include href="xml/ide-configuration-manager.xml"/>
+      <xi:include href="xml/ide-configuration-provider.xml"/>
+      <xi:include href="xml/ide-configuration.xml"/>
+      <xi:include href="xml/ide-environment.xml"/>
+      <xi:include href="xml/ide-environment-variable.xml"/>
     </chapter>
     <chapter>
       <title>Build UI</title>
