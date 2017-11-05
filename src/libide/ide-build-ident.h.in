@@ -16,15 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_BUILD_IDENT_H
-#define IDE_BUILD_IDENT_H
+#pragma once
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
+/**
+ * SECTION:ide-build-ident
+ * @title: Build Identifier
+ * @short_description: Identify a build by unique build identifier
+ *
+ * Since: 3.22
+ */
+
+/**
+ * IDE_BUILD_IDENTIFIER:
+ *
+ * A string containing a tag that defines the version of Builder that
+ * was built. Generally, this will be a small version tag plus some
+ * information to identify the git commit hash when applicable.
+ */
 #define IDE_BUILD_IDENTIFIER "@VCS_TAG@"
 
 G_END_DECLS
-
-#endif /* IDE_BUILD_IDENT_H */
