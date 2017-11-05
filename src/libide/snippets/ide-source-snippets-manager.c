@@ -26,6 +26,46 @@
 #include "snippets/ide-source-snippets.h"
 #include "snippets/ide-source-snippet.h"
 
+/**
+ * SECTION:ide-source-snippets-manager
+ * @title: IdeSourceSnippetsManager
+ * @short_description: Manage snippets for the source code editor
+ *
+ * The #IdeSourceSnippetsManager is responsible for locating and parsing
+ * snippets that are bundled with Builder and user defined snippets.
+ *
+ * The snippets manager will search various paths and resources for
+ * snippets when loading. Snippets are collected per-language so that
+ * the editor will only see relevant snippets for the given language.
+ *
+ * The snippet language is similar to other snippet engines, but with
+ * some additional features to make it easier to write snippets for
+ * multiple languages at once.
+ *
+ * Files containing snippets should have a filename suffix of ".snippets".
+ *
+ * The following makes a snippet called "class" for Python2 and Python3
+ * which allows you to tab through edit points. The "$0" contains the
+ * final position of the snippet.
+ *
+ * Each line of the snippet should start with a Tab. When expanding the
+ * snippet, tabs will be converted to spaces if the users language settings
+ * specify that spaces should be used.
+ *
+ * |[
+ * snippet class
+ * 	class ${1:MyClass}(${2:object}):
+ * 		$0
+ * ]|
+ *
+ * The default class name would be "MyClass" and inherit from "object".
+ * Upon expanding the snippet, "MyClass" will be focused and "object" will
+ * focus once the user hits Tab. A second Tab will exhaust the edit points
+ * and therefore place the insertion cursor at "$0".
+ *
+ * Since: 3.18
+ */
+
 struct _IdeSourceSnippetsManager
 {
   GObject     parent_instance;
@@ -136,6 +176,20 @@ ide_source_snippets_manager_load_worker (GTask        *task,
   g_task_return_boolean (task, TRUE);
 }
 
+/**
+ * ide_source_snippets_manager_load_async:
+ * @self: a #IdeSourceSnippetsManager
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: (nullable): A GAsyncReadyCallback or %NULL
+ * @user_data: closure data for @callback
+ *
+ * Asynchronously locates and parses snippet definitions.
+ *
+ * Call ide_source_snippets_manager_load_finish() to get the result
+ * of this asynchronous operation.
+ *
+ * Since: 3.18
+ */
 void
 ide_source_snippets_manager_load_async (IdeSourceSnippetsManager *self,
                                         GCancellable             *cancellable,
@@ -148,27 +202,43 @@ ide_source_snippets_manager_load_async (IdeSourceSnippetsManager *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_source_snippets_manager_load_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_run_in_thread (task, ide_source_snippets_manager_load_worker);
 }
 
+/**
+ * ide_source_snippets_manager_load_finish:
+ * @self: a #IdeSourceSnippetsManager
+ * @result: a #GAsyncResult provided to the async callback
+ * @error: a location for a #GError or %NULL
+ *
+ * Completes an asynchronous call to ide_source_snippets_manager_load_async().
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.18
+ */
 gboolean
 ide_source_snippets_manager_load_finish (IdeSourceSnippetsManager  *self,
                                          GAsyncResult              *result,
                                          GError                   **error)
 {
-  GTask *task = (GTask *)result;
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
-
-  return g_task_propagate_boolean (task, error);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 /**
  * ide_source_snippets_manager_get_for_language_id:
+ * @self: an #IdeSourceSnippetsManager
+ * @language_id: (not nullable): the identifier for the language
  *
  * Gets the snippets for a given source language.
  *
  * Returns: (transfer none) (nullable): An #IdeSourceSnippets or %NULL.
+ *
+ * Since: 3.18
  */
 IdeSourceSnippets *
 ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager *self,
@@ -182,10 +252,14 @@ ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager *self,
 
 /**
  * ide_source_snippets_manager_get_for_language:
+ * @self: An #IdeSourceSnippetsManager
+ * @language_id: (not nullable): a #GtkSourceLanguage
  *
  * Gets the snippets for a given source language.
  *
  * Returns: (transfer none) (nullable): An #IdeSourceSnippets or %NULL.
+ *
+ * Since: 3.18
  */
 IdeSourceSnippets *
 ide_source_snippets_manager_get_for_language (IdeSourceSnippetsManager *self,
