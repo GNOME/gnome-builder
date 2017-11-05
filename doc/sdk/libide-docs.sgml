@@ -43,15 +43,15 @@
     </chapter>
     <chapter>
       <title>Core Objects</title>
+      <xi:include href="xml/ide-application.xml"/>
       <xi:include href="xml/ide-context.xml"/>
       <xi:include href="xml/ide-object.xml"/>
-      <xi:include href="xml/ide-application.xml"/>
+      <xi:include href="xml/ide-service.xml"/>
     </chapter>
     <chapter>
       <title>Application Extensions</title>
       <xi:include href="xml/ide-application-addin.xml"/>
       <xi:include href="xml/ide-application-tool.xml"/>
-      <xi:include href="xml/ide-service.xml"/>
     </chapter>
     <chapter>
       <title>Logging and Tracing</title>

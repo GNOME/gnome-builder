@@ -26,14 +26,29 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, IdeObject)
 
+/**
+ * IdeServiceInterface:
+ * @context_loaded: Implement this virtual function to be notified when the
+ *   #IdeContext has completed loading.
+ * @get_name: Implement this virtual function to provide a useful name of
+ *   the service. By default, the type name is used.
+ * @start: Implement this virtual function be notified when the service
+ *   should start processing. This is usually before @context_loaded has
+ *   been called and services must deal with that.
+ * @stop: Implement this virtual function to be notified when the service
+ *   should shut itself down by cleaning up any resources.
+ *
+ * Since: 3.16
+ */
+
 struct _IdeServiceInterface
 {
   GTypeInterface parent_interface;
 
-  void         (*context_loaded) (IdeService *service);
-  const gchar *(*get_name)       (IdeService *service);
-  void         (*start)          (IdeService *service);
-  void         (*stop)           (IdeService *service);
+  void         (*context_loaded) (IdeService *self);
+  const gchar *(*get_name)       (IdeService *self);
+  void         (*start)          (IdeService *self);
+  void         (*stop)           (IdeService *self);
 };
 
 const gchar *ide_service_get_name             (IdeService *self);

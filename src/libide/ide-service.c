@@ -23,6 +23,21 @@
 
 G_DEFINE_INTERFACE (IdeService, ide_service, IDE_TYPE_OBJECT)
 
+/**
+ * SECTION:ide-service
+ * @title: IdeService
+ * @short_description: Provide project services for plugins
+ *
+ * The #IdeService inteface is meant as a place to provide utility code to
+ * your plugin that should have it's lifetime bound to the lifetime of the
+ * loaded project.
+ *
+ * When the project is created, the service will be started. When the project
+ * is closed, the service will be stopped and discarded.
+ *
+ * Since: 3.16
+ */
+
 enum {
   CONTEXT_LOADED,
   N_SIGNALS
@@ -30,44 +45,79 @@ enum {
 
 static guint signals [N_SIGNALS];
 
+/**
+ * ide_service_get_name:
+ * @self: an #IdeService
+ *
+ * Gets the name of the service. By default, the name of the object is
+ * used as the service name.
+ *
+ * Returns: (not nullable): A name for the service.
+ *
+ * Since: 3.16
+ */
 const gchar *
-ide_service_get_name (IdeService *service)
+ide_service_get_name (IdeService *self)
 {
-  g_return_val_if_fail (IDE_IS_SERVICE (service), NULL);
+  g_return_val_if_fail (IDE_IS_SERVICE (self), NULL);
 
-  return IDE_SERVICE_GET_IFACE (service)->get_name (service);
+  return IDE_SERVICE_GET_IFACE (self)->get_name (self);
+}
+
+/**
+ * ide_service_start:
+ * @self: an #IdeService
+ *
+ * This calls the #IdeServiceInterface.start virtual function which plugins
+ * use to initialize their service.
+ *
+ * This function is called by the owning #IdeContext and should not be needed
+ * by plugins or other internal API in Builder.
+ *
+ * Since: 3.16
+ */
+void
+ide_service_start (IdeService *self)
+{
+  g_return_if_fail (IDE_IS_SERVICE (self));
+
+  if (IDE_SERVICE_GET_IFACE (self)->start)
+    IDE_SERVICE_GET_IFACE (self)->start (self);
+}
+
+/**
+ * ide_service_stop:
+ * @self: an #IdeService
+ *
+ * This calls the #IdeServiceInterface.stop virtual function which plugins
+ * use to cleanup after their service.
+ *
+ * This function is called by the owning #IdeContext and should not be needed
+ * by plugins or other internal API in Builder.
+ *
+ * Since: 3.16
+ */
+void
+ide_service_stop (IdeService *self)
+{
+  g_return_if_fail (IDE_IS_SERVICE (self));
+
+  if (IDE_SERVICE_GET_IFACE (self)->stop)
+    IDE_SERVICE_GET_IFACE (self)->stop (self);
 }
 
 void
-ide_service_start (IdeService *service)
+_ide_service_emit_context_loaded (IdeService *self)
 {
-  g_return_if_fail (IDE_IS_SERVICE (service));
+  g_return_if_fail (IDE_IS_SERVICE (self));
 
-  if (IDE_SERVICE_GET_IFACE (service)->start)
-    IDE_SERVICE_GET_IFACE (service)->start (service);
-}
-
-void
-ide_service_stop (IdeService *service)
-{
-  g_return_if_fail (IDE_IS_SERVICE (service));
-
-  if (IDE_SERVICE_GET_IFACE (service)->stop)
-    IDE_SERVICE_GET_IFACE (service)->stop (service);
-}
-
-void
-_ide_service_emit_context_loaded (IdeService *service)
-{
-  g_return_if_fail (IDE_IS_SERVICE (service));
-
-  g_signal_emit (service, signals [CONTEXT_LOADED], 0);
+  g_signal_emit (self, signals [CONTEXT_LOADED], 0);
 }
 
 static const gchar *
-ide_service_real_get_name (IdeService *service)
+ide_service_real_get_name (IdeService *self)
 {
-  return G_OBJECT_TYPE_NAME (service);
+  return G_OBJECT_TYPE_NAME (self);
 }
 
 static void
@@ -75,6 +125,16 @@ ide_service_default_init (IdeServiceInterface *iface)
 {
   iface->get_name = ide_service_real_get_name;
 
+  /**
+   * IdeService::context-loaded:
+   * @self: an #IdeService
+   *
+   * The "context-loaded" signal is emitted when the owning #IdeContext
+   * has completed loading the project. This may be useful if you want to
+   * defer startup procedures until the context is fully loaded.
+   *
+   * Since: 3.20
+   */
   signals [CONTEXT_LOADED] =
     g_signal_new ("context-loaded",
                   G_TYPE_FROM_INTERFACE (iface),
