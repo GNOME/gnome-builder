@@ -19,6 +19,8 @@ gi_prefix = dependency('gobject-introspection-1.0').get_pkgconfig_variable('pref
 gi_docpath = join_paths(gi_prefix, 'share', 'gtk-doc', 'html')
 gtk_prefix = dependency('gtk+-3.0').get_pkgconfig_variable('prefix')
 gtk_docpath = join_paths(gtk_prefix, 'share', 'gtk-doc', 'html')
+gsv_prefix = dependency('gtksourceview-3.0').get_pkgconfig_variable('prefix')
+gsv_docpath = join_paths(gsv_prefix, 'share', 'gtk-doc', 'html')
 vte_prefix = dependency('vte-2.91').get_pkgconfig_variable('prefix')
 vte_docpath = join_paths(vte_prefix, 'share', 'vte-doc', 'html')
 
@@ -48,6 +50,7 @@ gnome.gtkdoc('libide',
          '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gobject')),
          '--extra-dir=@0@'.format(join_paths(gtk_docpath, 'gdk3')),
          '--extra-dir=@0@'.format(join_paths(gtk_docpath, 'gtk3')),
+         '--extra-dir=@0@'.format(join_paths(gtk_docpath, 'gtksourceview-3.0')),
          '--extra-dir=@0@'.format(join_paths(libdazzle_docpath, 'libdazzle')),
          '--extra-dir=@0@'.format(join_paths(json_docpath, 'json-glib')),
          '--extra-dir=@0@'.format(join_paths(vte_docpath, 'vte-2.91')),
