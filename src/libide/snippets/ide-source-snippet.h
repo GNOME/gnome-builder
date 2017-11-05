@@ -30,31 +30,29 @@ G_DECLARE_FINAL_TYPE (IdeSourceSnippet, ide_source_snippet, IDE, SOURCE_SNIPPET,
 
 IdeSourceSnippet        *ide_source_snippet_new              (const gchar           *trigger,
                                                               const gchar           *language);
-IdeSourceSnippet        *ide_source_snippet_copy             (IdeSourceSnippet      *snippet);
-const gchar             *ide_source_snippet_get_trigger      (IdeSourceSnippet      *snippet);
-void                     ide_source_snippet_set_trigger      (IdeSourceSnippet      *snippet,
+IdeSourceSnippet        *ide_source_snippet_copy             (IdeSourceSnippet      *self);
+const gchar             *ide_source_snippet_get_trigger      (IdeSourceSnippet      *self);
+void                     ide_source_snippet_set_trigger      (IdeSourceSnippet      *self,
                                                               const gchar           *trigger);
-const gchar             *ide_source_snippet_get_language     (IdeSourceSnippet      *snippet);
-void                     ide_source_snippet_set_language     (IdeSourceSnippet      *snippet,
+const gchar             *ide_source_snippet_get_language     (IdeSourceSnippet      *self);
+void                     ide_source_snippet_set_language     (IdeSourceSnippet      *self,
                                                               const gchar           *language);
-const gchar             *ide_source_snippet_get_description  (IdeSourceSnippet      *snippet);
-void                     ide_source_snippet_set_description  (IdeSourceSnippet      *snippet,
+const gchar             *ide_source_snippet_get_description  (IdeSourceSnippet      *self);
+void                     ide_source_snippet_set_description  (IdeSourceSnippet      *self,
                                                               const gchar           *description);
-void                     ide_source_snippet_add_chunk        (IdeSourceSnippet      *snippet,
+void                     ide_source_snippet_add_chunk        (IdeSourceSnippet      *self,
                                                               IdeSourceSnippetChunk *chunk);
-guint                    ide_source_snippet_get_n_chunks     (IdeSourceSnippet      *snippet);
-gint                     ide_source_snippet_get_tab_stop     (IdeSourceSnippet      *snippet);
-IdeSourceSnippetChunk   *ide_source_snippet_get_nth_chunk    (IdeSourceSnippet      *snippet,
+guint                    ide_source_snippet_get_n_chunks     (IdeSourceSnippet      *self);
+gint                     ide_source_snippet_get_tab_stop     (IdeSourceSnippet      *self);
+IdeSourceSnippetChunk   *ide_source_snippet_get_nth_chunk    (IdeSourceSnippet      *self,
                                                               guint                  n);
-void                     ide_source_snippet_get_chunk_range  (IdeSourceSnippet      *snippet,
+void                     ide_source_snippet_get_chunk_range  (IdeSourceSnippet      *self,
                                                               IdeSourceSnippetChunk *chunk,
                                                               GtkTextIter           *begin,
                                                               GtkTextIter           *end);
-GtkTextMark             *ide_source_snippet_get_mark_begin   (IdeSourceSnippet      *snippet);
-GtkTextMark             *ide_source_snippet_get_mark_end     (IdeSourceSnippet      *snippet);
-IdeSourceSnippetContext *ide_source_snippet_get_context      (IdeSourceSnippet      *snippet);
-const gchar             *ide_source_snippet_get_snippet_text (IdeSourceSnippet      *snippet);
-void                     ide_source_snippet_set_snippet_text (IdeSourceSnippet      *snippet,
+IdeSourceSnippetContext *ide_source_snippet_get_context      (IdeSourceSnippet      *self);
+const gchar             *ide_source_snippet_get_snippet_text (IdeSourceSnippet      *self);
+void                     ide_source_snippet_set_snippet_text (IdeSourceSnippet      *self,
                                                               const gchar           *snippet_text);
 
 G_END_DECLS

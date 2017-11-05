@@ -42,7 +42,7 @@ struct _IdeSourceSnippet
   GtkTextMark             *mark_begin;
   GtkTextMark             *mark_end;
   gchar                   *trigger;
-  gchar                   *language;
+  const gchar             *language;
   gchar                   *description;
   gchar                   *snippet_text;
 
@@ -72,20 +72,33 @@ DZL_DEFINE_COUNTER (instances, "Snippets", "N Snippets", "Number of IdeSourceSni
 
 static GParamSpec * properties[LAST_PROP];
 
+/**
+ * ide_source_snippet_new:
+ * @trigger: (nullable): the trigger word
+ * @language: (nullable): the source language
+ *
+ * Creates a new #IdeSourceSnippet
+ *
+ * Returns: (transfer full): A new #IdeSourceSnippet
+ */
 IdeSourceSnippet *
 ide_source_snippet_new (const gchar *trigger,
                         const gchar *language)
 {
-  IdeSourceSnippet *ret;
-
-  ret = g_object_new (IDE_TYPE_SOURCE_SNIPPET,
-                      "trigger", trigger,
-                      "language", language,
-                      NULL);
-
-  return ret;
+  return g_object_new (IDE_TYPE_SOURCE_SNIPPET,
+                       "trigger", trigger,
+                       "language", language,
+                       NULL);
 }
 
+/**
+ * ide_source_snippet_get_snippet_text:
+ * @self: a #IdeSourceSnippet
+ *
+ * Gets the text for the snippet.
+ *
+ * Returns: the snippet text.
+ */
 const gchar *
 ide_source_snippet_get_snippet_text (IdeSourceSnippet *self)
 {
@@ -94,6 +107,13 @@ ide_source_snippet_get_snippet_text (IdeSourceSnippet *self)
   return self->snippet_text;
 }
 
+/**
+ * ide_source_snippet_set_snippet_text:
+ * @self: a #IdeSourceSnippet
+ * @snippet_text: the text for the snippet
+ *
+ * Sets the snippet text.
+ */
 void
 ide_source_snippet_set_snippet_text (IdeSourceSnippet *self,
                                      const gchar      *snippet_text)
@@ -110,6 +130,9 @@ ide_source_snippet_set_snippet_text (IdeSourceSnippet *self,
 
 /**
  * ide_source_snippet_copy:
+ * @self: an #IdeSourceSnippet
+ *
+ * Does a deep copy of the snippet.
  *
  * Returns: (transfer full): An #IdeSourceSnippet.
  */
@@ -139,6 +162,15 @@ ide_source_snippet_copy (IdeSourceSnippet *self)
   return ret;
 }
 
+/**
+ * ide_source_snippet_get_tab_stop:
+ * @self: a #IdeSourceSnippet
+ *
+ * Gets the current tab stop for the snippet. This is changed
+ * as the user Tab's through the edit points.
+ *
+ * Returns: The tab stop, or -1 if unset.
+ */
 gint
 ide_source_snippet_get_tab_stop (IdeSourceSnippet *self)
 {
@@ -147,6 +179,15 @@ ide_source_snippet_get_tab_stop (IdeSourceSnippet *self)
   return self->tab_stop;
 }
 
+/**
+ * ide_source_snippet_get_n_chunks:
+ * @self: a #IdeSourceSnippet
+ *
+ * Gets the number of chunks in the snippet. Not all chunks
+ * are editable.
+ *
+ * Returns: The number of chunks.
+ */
 guint
 ide_source_snippet_get_n_chunks (IdeSourceSnippet *self)
 {
@@ -157,8 +198,12 @@ ide_source_snippet_get_n_chunks (IdeSourceSnippet *self)
 
 /**
  * ide_source_snippet_get_nth_chunk:
+ * @self: an #IdeSourceSnippet
+ * @n: the nth chunk to get
  *
- * Returns: (transfer none):
+ * Gets the chunk at @n.
+ *
+ * Returns: (transfer none): an #IdeSourceSnippetChunk
  */
 IdeSourceSnippetChunk *
 ide_source_snippet_get_nth_chunk (IdeSourceSnippet *self,
@@ -172,6 +217,14 @@ ide_source_snippet_get_nth_chunk (IdeSourceSnippet *self,
   return NULL;
 }
 
+/**
+ * ide_source_snippet_get_trigger:
+ * @self: a #IdeSourceSnippet
+ *
+ * Gets the trigger for the source snippet
+ *
+ * Returns: (nullable): A trigger if specified
+ */
 const gchar *
 ide_source_snippet_get_trigger (IdeSourceSnippet *self)
 {
@@ -180,6 +233,13 @@ ide_source_snippet_get_trigger (IdeSourceSnippet *self)
   return self->trigger;
 }
 
+/**
+ * ide_source_snippet_set_trigger:
+ * @self: a #IdeSourceSnippet
+ * @trigger: the trigger word
+ *
+ * Sets the trigger for the snippet.
+ */
 void
 ide_source_snippet_set_trigger (IdeSourceSnippet *self,
                                 const gchar      *trigger)
@@ -193,6 +253,17 @@ ide_source_snippet_set_trigger (IdeSourceSnippet *self,
     }
 }
 
+/**
+ * ide_source_snippet_get_language:
+ * @self: a #IdeSourceSnippet
+ *
+ * Gets the language used for the source snippet.
+ *
+ * The language identifier matches the #GtkSourceLanguage:id
+ * property.
+ *
+ * Returns: the language identifier
+ */
 const gchar *
 ide_source_snippet_get_language (IdeSourceSnippet *self)
 {
@@ -201,19 +272,35 @@ ide_source_snippet_get_language (IdeSourceSnippet *self)
   return self->language;
 }
 
+/**
+ * ide_source_snippet_set_language:
+ * @self: a #IdeSourceSnippet
+ *
+ * Sets the language identifier for the snippet.
+ *
+ * This should match the #GtkSourceLanguage:id identifier.
+ */
 void
 ide_source_snippet_set_language (IdeSourceSnippet *self,
                                  const gchar      *language)
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
 
+  language = g_intern_string (language);
+
   if (self->language != language)
     {
-      g_free (self->language);
-      self->language = g_strdup (language);
+      self->language = language;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE]);
     }
 }
 
+/**
+ * ide_source_snippet_get_description:
+ * @self: a #IdeSourceSnippet
+ *
+ * Gets the description for the snippet.
+ */
 const gchar *
 ide_source_snippet_get_description (IdeSourceSnippet *self)
 {
@@ -222,6 +309,13 @@ ide_source_snippet_get_description (IdeSourceSnippet *self)
   return self->description;
 }
 
+/**
+ * ide_source_snippet_set_description:
+ * @self: a #IdeSourceSnippet
+ * @description: the snippet description
+ *
+ * Sets the description for the snippet.
+ */
 void
 ide_source_snippet_set_description (IdeSourceSnippet *self,
                                     const gchar      *description)
@@ -958,8 +1052,12 @@ ide_source_snippet_after_delete_range (IdeSourceSnippet *self,
 
 /**
  * ide_source_snippet_get_mark_begin:
+ * @self: an #IdeSourceSnippet
  *
- * Returns: (transfer none):
+ * Gets the begin text mark, which is only set when the snippet is
+ * actively being edited.
+ *
+ * Returns: (transfer none) (nullable): a #GtkTextMark or %NULL
  */
 GtkTextMark *
 ide_source_snippet_get_mark_begin (IdeSourceSnippet *self)
@@ -971,8 +1069,12 @@ ide_source_snippet_get_mark_begin (IdeSourceSnippet *self)
 
 /**
  * ide_source_snippet_get_mark_end:
+ * @self: an #IdeSourceSnippet
  *
- * Returns: (transfer none):
+ * Gets the end text mark, which is only set when the snippet is
+ * actively being edited.
+ *
+ * Returns: (transfer none) (nullable): a #GtkTextMark or %NULL
  */
 GtkTextMark *
 ide_source_snippet_get_mark_end (IdeSourceSnippet *self)
@@ -984,8 +1086,11 @@ ide_source_snippet_get_mark_end (IdeSourceSnippet *self)
 
 /**
  * ide_source_snippet_get_context:
+ * @self: an #IdeSourceSnippet
  *
- * Returns: (transfer none):
+ * Get's the context used for expanding the snippet.
+ *
+ * Returns: (nullable) (transfer none): an #IdeSourceSnippetContext
  */
 IdeSourceSnippetContext *
 ide_source_snippet_get_context (IdeSourceSnippet *self)
@@ -1042,7 +1147,6 @@ ide_source_snippet_finalize (GObject *object)
 {
   IdeSourceSnippet *self = (IdeSourceSnippet *)object;
 
-  g_clear_pointer (&self->language, g_free);
   g_clear_pointer (&self->description, g_free);
   g_clear_pointer (&self->trigger, g_free);
   g_clear_pointer (&self->snippet_text, g_free);
@@ -1211,6 +1315,13 @@ ide_source_snippet_init (IdeSourceSnippet *self)
   self->runs = g_array_new (FALSE, FALSE, sizeof (gint));
 }
 
+/**
+ * ide_source_snippet_dump:
+ * @self: a #IdeSourceSnippet
+ *
+ * This is a debugging function to print information about a chunk to stderr.
+ * Plugin developers might use this to track down issues when using a snippet.
+ */
 void
 ide_source_snippet_dump (IdeSourceSnippet *self)
 {
