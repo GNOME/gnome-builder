@@ -45,6 +45,40 @@
  * formatting the standard output and error logs as well as filtering
  * logs based on their #GLogLevelFlags.
  *
+ * Generally speaking, you want to continue using the GLib logging API
+ * such as g_debug(), g_warning(), g_message(), or g_error(). These functions
+ * will redirect their logging information to this module who will format
+ * the log message appropriately.
+ *
+ * If you are writing code for Builder that is in C, you want to ensure you
+ * set the %G_LOG_DOMAIN define at the top of your file (after the license)
+ * as such:
+ *
+ * ## Logging from C
+ *
+ * |[
+ * #define G_LOG_DOMAIN "my-module"
+ * ...
+ * static void
+ * some_function (void)
+ * {
+ *   g_debug ("Use normal logging facilities");
+ * }
+ * ]|
+ *
+ * ## Logging from Python
+ *
+ * If you are writing an extension to Builder from Python, you may use the
+ * helper functions provided by our Ide python module.
+ *
+ * |[<!-- Language="py" -->
+ * from gi.repository import Ide
+ *
+ * Ide.warning("This is a warning")
+ * Ide.debug("This is a debug")
+ * Ide.error("This is a fatal error")
+ * ]|
+ *
  * Since: 3.16
  */
 
