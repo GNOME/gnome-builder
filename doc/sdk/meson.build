@@ -1,11 +1,9 @@
 subdir('xml')
 
-private_headers = [
-  'config.h',
-  'editorconfig-glib.h',
-  'modeline-parser.h',
-  '*-private.h',
-]
+private_headers = ['config.h']
+foreach source : libide_private_sources
+  private_headers += ['@0@/@1@'.format(meson.source_root(), source)]
+endforeach
 
 libdazzle_prefix = dependency('libdazzle-1.0').get_pkgconfig_variable('prefix')
 libdazzle_docpath = join_paths(libdazzle_prefix, 'share', 'gtk-doc', 'html')
