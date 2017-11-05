@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-log"
+
 #ifndef _GNU_SOURCE
 # define _GNU_SOURCE
 #endif
@@ -33,6 +35,18 @@
 #include "ide-debug.h"
 
 #include "logging/ide-log.h"
+
+/**
+ * SECTION:ide-log
+ * @title: Logging
+ * @short_description: Standard logging facilities for Builder
+ *
+ * This module manages the logging facilities in Builder. It involves
+ * formatting the standard output and error logs as well as filtering
+ * logs based on their #GLogLevelFlags.
+ *
+ * Since: 3.16
+ */
 
 typedef const gchar *(*IdeLogLevelStrFunc) (GLogLevelFlags log_level);
 
@@ -130,8 +144,6 @@ ide_log_write_to_channel (GIOChannel  *channel,
  *
  * Default log handler that will dispatch log messages to configured logging
  * destinations.
- *
- * Side effects: None.
  */
 static void
 ide_log_handler (const gchar    *log_domain,
@@ -198,7 +210,11 @@ ide_log_handler (const gchar    *log_domain,
  * @stdout_: Indicates logging should be written to stdout.
  * @filename: An optional file in which to store logs.
  *
- * Initializes the logging subsystem.
+ * Initializes the logging subsystem. This should be called from
+ * the application entry point only. Secondary calls to this function
+ * will do nothing.
+ *
+ * Since: 3.16
  */
 void
 ide_log_init (gboolean     stdout_,
@@ -232,7 +248,10 @@ ide_log_init (gboolean     stdout_,
 /**
  * ide_log_shutdown:
  *
- * Cleans up after the logging subsystem.
+ * Cleans up after the logging subsystem and restores the original
+ * log handler.
+ *
+ * Since: 3.16
  */
 void
 ide_log_shutdown (void)
@@ -250,10 +269,10 @@ ide_log_shutdown (void)
  * Increases the amount of logging that will occur. By default, only
  * warning and above will be displayed.
  *
- * Calling this once will cause G_LOG_LEVEL_MESSAGE to be displayed.
- * Calling this twice will cause G_LOG_LEVEL_INFO to be displayed.
- * Calling this thrice will cause G_LOG_LEVEL_DEBUG to be displayed.
- * Calling this four times will cause IDE_LOG_LEVEL_TRACE to be displayed.
+ * Calling this once will cause %G_LOG_LEVEL_MESSAGE to be displayed.
+ * Calling this twice will cause %G_LOG_LEVEL_INFO to be displayed.
+ * Calling this thrice will cause %G_LOG_LEVEL_DEBUG to be displayed.
+ * Calling this four times will cause %IDE_LOG_LEVEL_TRACE to be displayed.
  *
  * Note that many DEBUG and TRACE level log messages are only compiled into
  * debug builds, and therefore will not be available in release builds.
@@ -262,6 +281,8 @@ ide_log_shutdown (void)
  * line.
  *
  * Calling this method more than four times is acceptable.
+ *
+ * Since: 3.20
  */
 void
 ide_log_increase_verbosity (void)
@@ -269,12 +290,28 @@ ide_log_increase_verbosity (void)
   log_verbosity++;
 }
 
+/**
+ * ide_log_get_verbosity:
+ *
+ * Retrieves the log verbosity, which is the number of times -v was
+ * provided on the command line.
+ *
+ * Since: 3.20
+ */
 gint
 ide_log_get_verbosity (void)
 {
   return log_verbosity;
 }
 
+/**
+ * ide_log_set_verbosity:
+ *
+ * Sets the explicit verbosity. Generally you want to use
+ * ide_log_increase_verbosity() instead of this function.
+ *
+ * Since: 3.20
+ */
 void
 ide_log_set_verbosity (gint level)
 {
