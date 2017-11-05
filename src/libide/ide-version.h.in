@@ -25,10 +25,11 @@
 
 /**
  * SECTION:ide-version
- * @short_description: libide version checking
+ * @title: Version Checking
+ * @short_description: Conditionally include code based on Builder version
  *
- * libide provides macros to check the version of the library
- * at compile-time
+ * This module provides various macros that may be used to build code based
+ * on the version of Builder at build time.
  */
 
 /**
