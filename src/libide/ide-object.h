@@ -43,7 +43,7 @@ void        ide_object_set_context             (IdeObject            *self,
                                                 IdeContext           *context);
 void        ide_object_new_for_extension_async (GType                 interface_gtype,
                                                 GCompareDataFunc      sort_priority_func,
-                                                gpointer              sort_proirity_data,
+                                                gpointer              sort_priority_data,
                                                 int                   io_priority,
                                                 GCancellable         *cancellable,
                                                 GAsyncReadyCallback   callback,
