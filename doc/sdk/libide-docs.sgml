@@ -68,24 +68,22 @@
   <part id="libide-buffers">
     <title>The Buffer Subsystem</title>
     <chapter>
-      <title>API Reference</title>
+      <title>Files and URIs</title>
+      <xi:include href="xml/ide-uri.xml"/>
+      <xi:include href="xml/ide-file.xml"/>
+      <xi:include href="xml/ide-file-settings.xml"/>
+    </chapter>
+    <chapter>
+      <title>Buffers</title>
       <xi:include href="xml/ide-buffer-manager.xml"/>
       <xi:include href="xml/ide-buffer.xml"/>
       <xi:include href="xml/ide-buffer-addin.xml"/>
       <xi:include href="xml/ide-buffer-change-monitor.xml"/>
-      <xi:include href="xml/ide-file.xml"/>
-      <xi:include href="xml/ide-uri.xml"/>
-      <xi:include href="xml/ide-unsaved-files.xml"/>
-      <xi:include href="xml/ide-unsaved-file.xml"/>
     </chapter>
     <chapter>
-      <title>File Settings</title>
-      <xi:include href="xml/ide-file-settings.xml"/>
-      <!--
-      <xi:include href="xml/ide-gsettings-file-settings.xml"/>
-      <xi:include href="xml/ide-editorconfig-file-settings.xml"/>
-      <xi:include href="xml/ide-modelines-file-settings.xml"/>
-      -->
+      <title>Tracking Unsaved Files</title>
+      <xi:include href="xml/ide-unsaved-files.xml"/>
+      <xi:include href="xml/ide-unsaved-file.xml"/>
     </chapter>
   </part>
 
