@@ -51,7 +51,6 @@ src/libide/debugger/ide-debugger-breakpoints-view.ui
 src/libide/debugger/ide-debugger-controls.ui
 src/libide/debugger/ide-debugger-disassembly-view.ui
 src/libide/debugger/ide-debugger-editor-addin.c
-src/libide/debugger/ide-debugger-gutter-renderer.c
 src/libide/debugger/ide-debugger-libraries-view.ui
 src/libide/debugger/ide-debugger-locals-view.c
 src/libide/debugger/ide-debugger-locals-view.ui
