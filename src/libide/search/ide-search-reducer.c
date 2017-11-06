@@ -21,8 +21,26 @@
 #include "search/ide-search-reducer.h"
 #include "search/ide-search-result.h"
 
+/**
+ * SECTION:ide-search-reducer
+ * @title: IdeSearchReducer
+ * @short_description: Reduces the number of search results created
+ *
+ * This is a helper structure for search engines to reduce the number
+ * of items they inflate when performing a search.
+ */
+
 #define DEFAULT_MAX_ITEMS 1000
 
+/**
+ * ide_search_reducer_init:
+ * @reducer: (out): The reducer to initialize
+ * @max_results: max result size for the reuslts
+ *
+ * Initializes a new #IdeSearchReducer to be used to reduce the number of
+ * search results that are created. This is generally just used to help
+ * keep search performance good.
+ */
 void
 ide_search_reducer_init (IdeSearchReducer  *reducer,
                          gsize              max_results)
@@ -34,6 +52,12 @@ ide_search_reducer_init (IdeSearchReducer  *reducer,
   reducer->count = 0;
 }
 
+/**
+ * ide_search_reducer_destroy:
+ * @reducer: a #IdeSearchReducer
+ *
+ * Frees the results.
+ */
 void
 ide_search_reducer_destroy (IdeSearchReducer *reducer)
 {
@@ -43,6 +67,18 @@ ide_search_reducer_destroy (IdeSearchReducer *reducer)
     g_sequence_free (reducer->sequence);
 }
 
+/**
+ * ide_search_reducer_free:
+ * @reducer: a #IdeSearchReducer
+ * @free_results: %TRUE if the results should be discarded
+ *
+ * Frees all items associated with the result set, unless @free_results is
+ * %FALSE and then the results are returned as an array.
+ *
+ * Returns: (nullable) (transfer container) (element-type Ide.SearchResult):
+ *   An array of #IdeSearchResult unless @free_results is %TRUE, then
+ *   %NULL is returned.
+ */
 GPtrArray *
 ide_search_reducer_free (IdeSearchReducer *reducer,
                          gboolean          free_results)
@@ -82,7 +118,7 @@ ide_search_reducer_free (IdeSearchReducer *reducer,
 
 /**
  * ide_search_reducer_take:
- * @self: an #IdeSearchReducer
+ * @reducer: an #IdeSearchReducer
  * @result: (transfer full): an #IdeSearchResult
  *
  * Like ide_search_reducer_push() but takes ownership of @result by
@@ -107,6 +143,13 @@ ide_search_reducer_take (IdeSearchReducer *reducer,
                             NULL);
 }
 
+/**
+ * ide_search_reducer_push:
+ * @reducer: an #IdeSearchReducer
+ * @result: an #IdeSearchResult
+ *
+ * Adds result to the set unless it scores too low.
+ */
 void
 ide_search_reducer_push (IdeSearchReducer *reducer,
                          IdeSearchResult  *result)
@@ -117,6 +160,17 @@ ide_search_reducer_push (IdeSearchReducer *reducer,
   ide_search_reducer_take (reducer, g_object_ref (result));
 }
 
+/**
+ * ide_search_reducer_accepts:
+ * @reducer: a #IdeSearchReducer
+ * @score: a score for the result
+ *
+ * This helper allows you to check if a result with @score would be allowed
+ * into the result set, or if the score is too low. This helps in situations
+ * where you want to avoid inflating an #IdeSearchResult unless necessary.
+ *
+ * Returns: %TRUE if there is space for a result with a score of @score.
+ */
 gboolean
 ide_search_reducer_accepts (IdeSearchReducer *reducer,
                             gfloat            score)
