@@ -25,6 +25,18 @@
 #include "snippets/ide-source-snippet-parser.h"
 #include "snippets/ide-source-snippet-private.h"
 
+/**
+ * SECTION:ide-source-snippet-parser
+ * @title: IdeSourceSnippetParser
+ * @short_description: A parser for Builder's snippet text format
+ *
+ * The #IdeSourceSnippetParser can be used to parse ".snippets" formatted
+ * text files. This is generally only used internally by Builder, but can
+ * be used by plugins under certain situations.
+ *
+ * Since: 3.18
+ */
+
 struct _IdeSourceSnippetParser
 {
   GObject  parent_instance;

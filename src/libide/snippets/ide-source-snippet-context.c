@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-source-snippets-context"
+
 #include <errno.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -23,17 +25,19 @@
 #include "snippets/ide-source-snippet-context.h"
 
 /**
- * SECTION:idesourcesnippetcontext:
+ * SECTION:ide-source-snippet-context
  * @title: IdeSourceSnippetContext
- * @short_description: Context for expanding #IdeSourceSnippetChunk<!-- -->'s.
+ * @short_description: Context for expanding #IdeSourceSnippetChunk
  *
  * This class is currently used primary as a hashtable. However, the longer
  * term goal is to have it hold onto a GjsContext as well as other languages
- * so that #IdeSourceSnippetChunk<!-- -->'s can expand themselves by executing
+ * so that #IdeSourceSnippetChunk can expand themselves by executing
  * script within the context.
  *
  * The #IdeSourceSnippet will build the context and then expand each of the
  * chunks during the insertion/edit phase.
+ *
+ * Since: 3.18
  */
 
 struct _IdeSourceSnippetContext
