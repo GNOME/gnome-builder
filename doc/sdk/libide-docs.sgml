@@ -81,9 +81,11 @@
     <chapter>
       <title>File Settings</title>
       <xi:include href="xml/ide-file-settings.xml"/>
+      <!--
       <xi:include href="xml/ide-gsettings-file-settings.xml"/>
       <xi:include href="xml/ide-editorconfig-file-settings.xml"/>
       <xi:include href="xml/ide-modelines-file-settings.xml"/>
+      -->
     </chapter>
   </part>
 
@@ -92,7 +94,6 @@
     <chapter>
       <title>The Editor Perspective</title>
       <xi:include href="xml/ide-editor-perspective.xml"/>
-      <xi:include href="xml/ide-editor-properties.xml"/>
       <xi:include href="xml/ide-editor-sidebar.xml"/>
       <xi:include href="xml/ide-editor-utilities.xml"/>
     </chapter>
@@ -102,25 +103,17 @@
       <xi:include href="xml/ide-editor-view-addin.xml"/>
       <xi:include href="xml/ide-source-view.xml"/>
       <xi:include href="xml/ide-source-view-mode.xml"/>
-      <xi:include href="xml/ide-source-view-capture.xml"/>
       <xi:include href="xml/ide-source-map.xml"/>
-      <xi:include href="xml/ide-line-change-gutter-renderer.xml"/>
-      <xi:include href="xml/ide-omni-gutter-renderer.xml"/>
     </chapter>
     <chapter>
       <title>Search and Replace</title>
       <xi:include href="xml/ide-editor-search.xml"/>
-      <xi:include href="xml/ide-editor-search-bar.xml"/>
     </chapter>
     <chapter>
       <title>Auto-completion</title>
       <xi:include href="xml/ide-completion-item.xml"/>
       <xi:include href="xml/ide-completion-provider.xml"/>
       <xi:include href="xml/ide-completion-results.xml"/>
-      <xi:include href="xml/ide-completion-words.xml"/>
-      <xi:include href="xml/ide-word-completion-item.xml"/>
-      <xi:include href="xml/ide-word-completion-provider.xml"/>
-      <xi:include href="xml/ide-word-completion-results.xml"/>
     </chapter>
     <chapter>
       <title>Semantic Highlighting</title>
@@ -145,11 +138,6 @@
       <xi:include href="xml/ide-source-snippet-chunk.xml"/>
       <xi:include href="xml/ide-source-snippet-context.xml"/>
       <xi:include href="xml/ide-source-snippets.xml"/>
-      <xi:include href="xml/ide-source-snippet-parser.xml"/>
-    </chapter>
-    <chapter>
-      <title>Printing</title>
-      <xi:include href="xml/ide-editor-print-operation.xml"/>
     </chapter>
   </part>
 
@@ -180,12 +168,6 @@
       <xi:include href="xml/ide-configuration.xml"/>
       <xi:include href="xml/ide-environment.xml"/>
       <xi:include href="xml/ide-environment-variable.xml"/>
-    </chapter>
-    <chapter>
-      <title>Build UI</title>
-      <xi:include href="xml/ide-build-configuration-row.xml"/>
-      <xi:include href="xml/ide-build-configuration-view.xml"/>
-      <xi:include href="xml/ide-environment-editor.xml"/>
     </chapter>
     <chapter>
       <title>Utility and Fallback API</title>
@@ -285,7 +267,9 @@
     </chapter>
     <chapter>
       <title>Keyboard Shortcuts</title>
+      <!--
       <xi:include href="xml/ide-keybindings.xml"/>
+      -->
     </chapter>
   </part>
 
@@ -319,12 +303,9 @@
     <title>The Debugger Subsystem</title>
     <chapter>
       <title>API Reference</title>
-      <xi:include href="xml/ide-debugger-address-map.xml"/>
       <xi:include href="xml/ide-debugger-breakpoints.xml"/>
       <xi:include href="xml/ide-debugger-breakpoint.xml"/>
-      <xi:include href="xml/ide-debugger-controls.xml"/>
       <xi:include href="xml/ide-debugger-frame.xml"/>
-      <xi:include href="xml/ide-debugger-gutter-renderer.xml"/>
       <xi:include href="xml/ide-debugger-instruction.xml"/>
       <xi:include href="xml/ide-debugger-library.xml"/>
       <xi:include href="xml/ide-debugger-register.xml"/>
@@ -400,8 +381,6 @@
     </chapter>
     <chapter>
       <title>Worker Processes</title>
-      <xi:include href="xml/ide-worker-manager.xml"/>
-      <xi:include href="xml/ide-worker-process.xml"/>
       <xi:include href="xml/ide-worker.xml"/>
     </chapter>
     <chapter>
@@ -460,7 +439,6 @@
       <xi:include href="xml/ide-line-reader.xml"/>
       <xi:include href="xml/ide-macros.xml"/>
       <xi:include href="xml/ide-posix.xml"/>
-      <xi:include href="xml/ide-ref-ptr.xml"/>
       <xi:include href="xml/ide-enums.xml"/>
       <xi:include href="xml/ide-progress.xml"/>
       <xi:include href="xml/ide-settings.xml"/>
@@ -469,7 +447,6 @@
       <title>Internal Extension Management</title>
       <xi:include href="xml/ide-extension-adapter.xml"/>
       <xi:include href="xml/ide-extension-set-adapter.xml"/>
-      <xi:include href="xml/ide-extension-util.xml"/>
     </chapter>
     <chapter>
       <title>Widgets</title>
