@@ -35,6 +35,7 @@ G_BEGIN_DECLS
 #include "ide-pausable.h"
 #include "ide-service.h"
 #include "ide-version.h"
+#include "ide-version-macros.h"
 
 #include "application/ide-application-addin.h"
 #include "application/ide-application-tool.h"
