@@ -630,7 +630,7 @@
             "config-opts": [ "--libdir=/app/lib",
                              "--buildtype=debugoptimized",
                              "-Denable_tracing=true",
-                             "-Dwith_docs=true",
+                             "-Dwith_help=true",
                              "-Dwith_channel=flatpak-nightly" ],
             "sources": [
                 {
