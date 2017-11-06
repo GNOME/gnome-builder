@@ -439,6 +439,7 @@
       <xi:include href="xml/ide-posix.xml"/>
       <xi:include href="xml/ide-enums.xml"/>
       <xi:include href="xml/ide-progress.xml"/>
+      <xi:include href="xml/ide-ref-ptr.xml"/>
       <xi:include href="xml/ide-settings.xml"/>
     </chapter>
     <chapter>
