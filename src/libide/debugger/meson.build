@@ -41,8 +41,6 @@ debugger_private_sources = [
   'ide-debugger-editor-addin.c',
   'ide-debugger-editor-addin.h',
   'ide-debugger-fallbacks.c',
-  'ide-debugger-gutter-renderer.c',
-  'ide-debugger-gutter-renderer.h',
   'ide-debugger-libraries-view.c',
   'ide-debugger-libraries-view.h',
   'ide-debugger-locals-view.c',
