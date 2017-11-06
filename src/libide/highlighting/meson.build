@@ -18,4 +18,4 @@ libide_public_headers += files(highlighting_headers)
 libide_public_sources += files(highlighting_sources)
 libide_enum_headers += files(highlighting_enums)
 
-install_headers(highlighting_headers, subdir: join_paths(libide_header_subdir, 'genesis'))
+install_headers(highlighting_headers, subdir: join_paths(libide_header_subdir, 'highlighting'))

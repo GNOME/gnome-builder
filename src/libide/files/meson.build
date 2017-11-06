@@ -1,6 +1,7 @@
 files_headers = [
   'ide-file.h',
   'ide-file-settings.h',
+  'ide-file-settings.defs',
   'ide-indent-style.h',
 ]
 

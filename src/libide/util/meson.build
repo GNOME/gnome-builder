@@ -8,6 +8,7 @@ util_headers = [
   'ide-list-inline.h',
   'ide-posix.h',
   'ide-progress.h',
+  'ide-ref-ptr.h',
   'ide-settings.h',
   'ide-uri.h',
 ]
@@ -21,6 +22,7 @@ util_sources = [
   'ide-line-reader.c',
   'ide-posix.c',
   'ide-progress.c',
+  'ide-ref-ptr.c',
   'ide-settings.c',
   'ide-uri.c',
 ]
@@ -32,8 +34,6 @@ util_private_sources = [
   'ide-battery-monitor.h',
   'ide-doc-seq.c',
   'ide-doc-seq.h',
-  'ide-ref-ptr.c',
-  'ide-ref-ptr.h',
   'ide-window-settings.c',
   'ide-window-settings.h',
 ]

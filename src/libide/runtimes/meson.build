@@ -18,4 +18,4 @@ libide_public_headers += files(runtimes_headers)
 libide_public_sources += files(runtimes_sources)
 libide_enum_headers += files(runtimes_enums)
 
-install_headers(runtimes_headers, subdir: join_paths(libide_header_subdir, 'runtime'))
+install_headers(runtimes_headers, subdir: join_paths(libide_header_subdir, 'runtimes'))

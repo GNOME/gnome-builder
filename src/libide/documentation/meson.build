@@ -15,4 +15,4 @@ directory_sources = [
 libide_public_headers += files(directory_headers)
 libide_public_sources += files(directory_sources)
 
-install_headers(directory_headers, subdir: join_paths(libide_header_subdir, 'directory'))
+install_headers(directory_headers, subdir: join_paths(libide_header_subdir, 'documentation'))

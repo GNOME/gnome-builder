@@ -40,6 +40,7 @@ libide_public_headers += [
   'ide-pausable.h',
   'ide-service.h',
   'ide-types.h',
+  'ide-version-macros.h',
 ]
 
 libide_public_sources += [
@@ -125,6 +126,7 @@ install_headers([
   'ide-pausable.h',
   'ide-service.h',
   'ide-types.h',
+  'ide-version-macros.h',
 ], subdir: libide_header_subdir)
 
 libide_resources = gnome.compile_resources('ide-resources',
@@ -264,12 +266,12 @@ pkgg = import('pkgconfig')
 
 pkgg.generate(
     libraries: [libide],
-      subdirs: [ 'gnome-builder-@0@/libide'.format(meson.project_version()) ],
+      subdirs: [ 'gnome-builder/libide' ],
       version: meson.project_version(),
          name: 'Libide',
      filebase: 'libide-1.0',
   description: 'Libide contains the components used to build the GNOME Builder IDE.',
-     requires: [ 'gtk+-3.0', 'gtksourceview-3.0', 'libdazzle-1.0', 'template-glib-1.0', 'jsonrpc-glib-1.0' ],
+     requires: [ 'gtk+-3.0', 'gtksourceview-3.0', 'libdazzle-1.0', 'template-glib-1.0', 'jsonrpc-glib-1.0', 'libpeas-1.0' ],
   install_dir: join_paths(pkglibdir, 'pkgconfig'),
 )
 
