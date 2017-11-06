@@ -29,6 +29,15 @@
 #include "snippets/ide-source-snippet-chunk.h"
 #include "snippets/ide-source-snippet-context.h"
 
+/**
+ * SECTION:ide-source-snippet
+ * @title: IdeSourceSnippet
+ * @short_description: A snippet to be inserted into a file
+ *
+ * The #IdeSourceSnippet represents a single snippet that may be inserted
+ * into the #IdeSourceView.
+ */
+
 #define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
 
 struct _IdeSourceSnippet
