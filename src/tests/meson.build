@@ -1,5 +1,17 @@
+template_libdir = dependency('template-glib-1.0').get_pkgconfig_variable('libdir')
+dazzle_libdir = dependency('libdazzle-1.0').get_pkgconfig_variable('libdir')
+gsv_libdir = dependency('gtksourceview-3.0').get_pkgconfig_variable('libdir')
+
+typelib_dirs = [
+  '@0@/src/libide'.format(meson.build_root()),
+  '@0@/src/gstyle'.format(meson.build_root()),
+  join_paths(template_libdir, 'girepository-1.0'),
+  join_paths(dazzle_libdir, 'girepository-1.0'),
+  join_paths(gsv_libdir, 'girepository-1.0'),
+]
+
 ide_test_env = [
-  'GI_TYPELIB_PATH="@0@/src/libide:@0@/src/gstyle:$(GI_TYPELIB_PATH)"'.format(meson.build_root()),
+  'GI_TYPELIB_PATH="@0@:$(GI_TYPELIB_PATH)"'.format(':'.join(typelib_dirs)),
   'GB_IN_TREE_PLUGINS=1',
   'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
   'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
