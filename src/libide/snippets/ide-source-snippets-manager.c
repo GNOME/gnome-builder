@@ -312,7 +312,7 @@ ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager *self,
 /**
  * ide_source_snippets_manager_get_for_language:
  * @self: An #IdeSourceSnippetsManager
- * @language_id: (not nullable): a #GtkSourceLanguage
+ * @language: (not nullable): a #GtkSourceLanguage
  *
  * Gets the snippets for a given source language.
  *
