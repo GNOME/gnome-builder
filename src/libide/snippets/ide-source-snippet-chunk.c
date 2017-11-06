@@ -21,6 +21,19 @@
 #include "snippets/ide-source-snippet-chunk.h"
 #include "snippets/ide-source-snippet-context.h"
 
+/**
+ * SECTION:ide-source-snippet-chunk
+ * @title: IdeSourceSnippetChunk
+ * @short_description: An chunk of text within the source snippet
+ *
+ * The #IdeSourceSnippetChunk represents a single chunk of text that
+ * may or may not be an edit point within the snippet. Chunks that are
+ * an edit point (also called a tab stop) have the
+ * #IdeSourceSnippetChunk:tab-stop property set.
+ *
+ * Since: 3.18
+ */
+
 struct _IdeSourceSnippetChunk
 {
   GObject                  parent_instance;

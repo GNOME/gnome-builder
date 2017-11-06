@@ -25,6 +25,18 @@
 #include "snippets/ide-source-snippet-parser.h"
 #include "snippets/ide-source-snippets.h"
 
+/**
+ * SECTION:ide-source-snippets
+ * @title: IdeSourceSnippets
+ * @short_description: A searchable collection of #IdeSourceSnippet
+ *
+ * The #IdeSourceSnippets object is used as a collection of #IdeSourceSnippet
+ * that can be quickly searched by prefix. This is used for fast completion
+ * of keywords in the source editor.
+ *
+ * Since: 3.18
+ */
+
 struct _IdeSourceSnippets
 {
   GObject  parent_instance;
