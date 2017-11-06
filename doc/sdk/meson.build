@@ -5,6 +5,7 @@ foreach source : libide_private_sources
   private_headers += ['@0@/@1@'.format(meson.source_root(), source)]
 endforeach
 
+# Locate the dependency documentation location to fix cross-references
 libdazzle_prefix = dependency('libdazzle-1.0').get_pkgconfig_variable('prefix')
 libdazzle_docpath = join_paths(libdazzle_prefix, 'share', 'gtk-doc', 'html')
 glib_prefix = dependency('glib-2.0').get_pkgconfig_variable('prefix')
@@ -22,6 +23,7 @@ gsv_docpath = join_paths(gsv_prefix, 'share', 'gtk-doc', 'html')
 vte_prefix = dependency('vte-2.91').get_pkgconfig_variable('prefix')
 vte_docpath = join_paths(vte_prefix, 'share', 'vte-doc', 'html')
 
+# Locate our directory for documentation
 docpath = join_paths(get_option('datadir'), 'gtk-doc', 'html')
 
 gnome.gtkdoc('libide',
@@ -36,8 +38,8 @@ gnome.gtkdoc('libide',
           scan_args: [
             '--rebuild-types',
             '--ignore-decorators=_IDE_EXTERN',
-            '--ignore-headers=' + ' '.join(private_headers),
           ],
+     ignore_headers: private_headers,
 
        fixxref_args: [
          '--html-dir=@0@'.format(docpath),
