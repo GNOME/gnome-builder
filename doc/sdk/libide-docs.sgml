@@ -145,8 +145,6 @@
       <xi:include href="xml/ide-source-snippet-chunk.xml"/>
       <xi:include href="xml/ide-source-snippet-context.xml"/>
       <xi:include href="xml/ide-source-snippets.xml"/>
-      <xi:include href="xml/ide-source-snippet-completion-item.xml"/>
-      <xi:include href="xml/ide-source-snippet-completion-provider.xml"/>
       <xi:include href="xml/ide-source-snippet-parser.xml"/>
     </chapter>
     <chapter>
