@@ -12,6 +12,7 @@ You may also chooser to implement extensions in C or Vala.
    :maxdepth: 3
    :titlesonly:
 
+   apiref
    enabling
    creating
    workbench/index
