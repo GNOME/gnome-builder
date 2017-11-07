@@ -111,7 +111,7 @@ ide_log_get_thread (void)
 
 /**
  * ide_log_level_str:
- * @log_level: A #GLogLevelFlags.
+ * @log_level: a #GLogLevelFlags.
  *
  * Retrieves the log level as a string.
  *
@@ -156,7 +156,7 @@ ide_log_level_str_with_color (GLogLevelFlags log_level)
 
 /**
  * ide_log_write_to_channel:
- * @channel: A #GIOChannel.
+ * @channel: a #GIOChannel.
  * @message: A string log message.
  *
  * Writes @message to @channel and flushes the channel.
@@ -172,7 +172,7 @@ ide_log_write_to_channel (GIOChannel  *channel,
 /**
  * ide_log_handler:
  * @log_domain: A string containing the log section.
- * @log_level: A #GLogLevelFlags.
+ * @log_level: a #GLogLevelFlags.
  * @message: The string message.
  * @user_data: User data supplied to g_log_set_default_handler().
  *

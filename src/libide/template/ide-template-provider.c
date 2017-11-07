@@ -41,7 +41,7 @@ ide_template_provider_default_init (IdeTemplateProviderInterface *iface)
  * Plugins should implement this interface to feed #IdeProjectTemplate's into
  * the project creation workflow.
  *
- * Returns: (transfer full) (element-type Ide.ProjectTemplate): A #GList of
+ * Returns: (transfer full) (element-type Ide.ProjectTemplate): a #GList of
  *   #IdeProjectTemplate instances.
  */
 GList *

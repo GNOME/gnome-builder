@@ -881,7 +881,7 @@ ide_debugger_get_can_move (IdeDebugger         *self,
  * ide_debugger_move_async:
  * @self: a #IdeDebugger
  * @movement: An #IdeDebuggerMovement
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: (scope async) (closure user_data): A callback to call upon
  *   completion of the operation.
  * @user_data: user data for @callback
@@ -908,7 +908,7 @@ ide_debugger_move_async (IdeDebugger         *self,
 /**
  * ide_debugger_move_finish:
  * @self: a #IdeDebugger
- * @result: A #GAsyncResult provided to the callback
+ * @result: a #GAsyncResult provided to the callback
  * @error: A location for a #GError, or %NULL
  *
  * Notifies that the movement request has been submitted to the debugger.
@@ -1259,7 +1259,7 @@ ide_debugger_emit_library_unloaded (IdeDebugger        *self,
 /**
  * ide_debugger_list_breakpoints_async:
  * @self: An #IdeDebugger
- * @cancellable: (nullable): A #GCancellable, or %NULL
+ * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: a callback to call upon completion
  * @user_data: user data for @callback
  *
@@ -1285,12 +1285,12 @@ ide_debugger_list_breakpoints_async (IdeDebugger         *self,
 /**
  * ide_debugger_list_breakpoints_finish:
  * @self: An #IdeDebugger
- * @result: A #GAsyncResult provided to the async callback
+ * @result: a #GAsyncResult provided to the async callback
  * @error: a location for a #GError or %NULL
  *
  * Gets the list of breakpoints from the debugger.
  *
- * Returns: (transfer container) (element-type Ide.DebuggerBreakpoint): A #GPtrArray
+ * Returns: (transfer container) (element-type Ide.DebuggerBreakpoint): a #GPtrArray
  *   of breakpoints that are registered with the debugger.
  *
  * Since: 3.26
@@ -1310,7 +1310,7 @@ ide_debugger_list_breakpoints_finish (IdeDebugger   *self,
  * ide_debugger_insert_breakpoint_async:
  * @self: An #IdeDebugger
  * @breakpoint: An #IdeDebuggerBreakpoint
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: an async callback to complete the operation
  * @user_data: user data for @callback
  *
@@ -1343,8 +1343,8 @@ ide_debugger_insert_breakpoint_async (IdeDebugger             *self,
 /**
  * ide_debugger_insert_breakpoint_finish:
  * @self: An #IdeDebugger
- * @result: A #GAsyncResult or %NULL
- * @error: A #GError, or %NULL
+ * @result: a #GAsyncResult or %NULL
+ * @error: a #GError, or %NULL
  *
  * Completes a request to asynchronously insert a breakpoint.
  *
@@ -1370,7 +1370,7 @@ ide_debugger_insert_breakpoint_finish (IdeDebugger   *self,
  * ide_debugger_remove_breakpoint_async:
  * @self: An #IdeDebugger
  * @breakpoint: An #IdeDebuggerBreakpoint
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: an async callback to complete the operation
  * @user_data: user data for @callback
  *
@@ -1403,8 +1403,8 @@ ide_debugger_remove_breakpoint_async (IdeDebugger             *self,
 /**
  * ide_debugger_remove_breakpoint_finish:
  * @self: An #IdeDebugger
- * @result: A #GAsyncResult or %NULL
- * @error: A #GError, or %NULL
+ * @result: a #GAsyncResult or %NULL
+ * @error: a #GError, or %NULL
  *
  * Completes a request to asynchronously remove a breakpoint.
  *
@@ -1430,7 +1430,7 @@ ide_debugger_remove_breakpoint_finish (IdeDebugger   *self,
  * @self: An #IdeDebugger
  * @change: An #IdeDebuggerBreakpointChange
  * @breakpoint: An #IdeDebuggerBreakpoint
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: an async callback to complete the operation
  * @user_data: user data for @callback
  *
@@ -1506,7 +1506,7 @@ ide_debugger_modify_breakpoint_finish (IdeDebugger   *self,
  * This is primarily out of convenience to be used by UI which wants to
  * display information on breakpoints.
  *
- * Returns: (transfer none) (not nullable): A #GListModel of #IdeDebuggerBreakpoint
+ * Returns: (transfer none) (not nullable): a #GListModel of #IdeDebuggerBreakpoint
  */
 GListModel *
 ide_debugger_get_breakpoints (IdeDebugger *self)
@@ -1527,7 +1527,7 @@ ide_debugger_get_breakpoints (IdeDebugger *self)
  * The resulting #GListModel accuracy is based on the #IdeDebugger
  * implementation emitting varous thread-group modification signals correctly.
  *
- * Returns: (transfer none) (not nullable): A #GListModel of #IdeDebuggerThreadGroup
+ * Returns: (transfer none) (not nullable): a #GListModel of #IdeDebuggerThreadGroup
  */
 GListModel *
 ide_debugger_get_thread_groups (IdeDebugger *self)
@@ -1548,7 +1548,7 @@ ide_debugger_get_thread_groups (IdeDebugger *self)
  * The resulting #GListModel accuracy is based on the #IdeDebugger
  * implementation emitting varous thread modification signals correctly.
  *
- * Returns: (transfer none) (not nullable): A #GListModel of #IdeDebuggerThread
+ * Returns: (transfer none) (not nullable): a #GListModel of #IdeDebuggerThread
  */
 GListModel *
 ide_debugger_get_threads (IdeDebugger *self)
@@ -1617,7 +1617,7 @@ ide_debugger_get_selected_thread (IdeDebugger *self)
  * ide_debugger_interrupt_async:
  * @self: a #IdeDebugger
  * @thread_group: (nullable): An #IdeDebuggerThreadGroup
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: (closure user_data): a callback to execute upon completion
  * @user_data: closure data for @callback
  *
@@ -1738,7 +1738,7 @@ ide_debugger_locate_binary_at_address (IdeDebugger        *self,
  * @self: an #IdeDebugger
  * @thread: an #IdeDebuggerThread
  * @frame: an #IdeDebuggerFrame
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: A callback to call once the operation has finished
  * @user_data: user data for @callback
  *
@@ -1771,12 +1771,12 @@ ide_debugger_list_locals_async (IdeDebugger         *self,
 /**
  * ide_debugger_list_locals_finish:
  * @self: a #IdeDebugger
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError or %NULL
  *
  * Completes an asynchronous request to ide_debugger_list_locals_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerVariable): A #GPtrArray of
+ * Returns: (transfer container) (element-type Ide.DebuggerVariable): a #GPtrArray of
  *   #IdeDebuggerVariable if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26
@@ -1797,7 +1797,7 @@ ide_debugger_list_locals_finish (IdeDebugger   *self,
  * @self: an #IdeDebugger
  * @thread: an #IdeDebuggerThread
  * @frame: an #IdeDebuggerFrame
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: A callback to call once the operation has finished
  * @user_data: user data for @callback
  *
@@ -1830,12 +1830,12 @@ ide_debugger_list_params_async (IdeDebugger         *self,
 /**
  * ide_debugger_list_params_finish:
  * @self: a #IdeDebugger
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError or %NULL
  *
  * Completes an asynchronous request to ide_debugger_list_params_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerVariable): A #GPtrArray of
+ * Returns: (transfer container) (element-type Ide.DebuggerVariable): a #GPtrArray of
  *   #IdeDebuggerVariable if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26
@@ -1854,7 +1854,7 @@ ide_debugger_list_params_finish (IdeDebugger   *self,
 /**
  * ide_debugger_list_registers_async:
  * @self: an #IdeDebugger
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: A callback to call once the operation has finished
  * @user_data: user data for @callback
  *
@@ -1877,12 +1877,12 @@ ide_debugger_list_registers_async (IdeDebugger         *self,
 /**
  * ide_debugger_list_registers_finish:
  * @self: a #IdeDebugger
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError or %NULL
  *
  * Completes an asynchronous request to ide_debugger_list_registers_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerRegister): A #GPtrArray of
+ * Returns: (transfer container) (element-type Ide.DebuggerRegister): a #GPtrArray of
  *   #IdeDebuggerRegister if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26
@@ -1902,7 +1902,7 @@ ide_debugger_list_registers_finish (IdeDebugger   *self,
  * ide_debugger_disassemble_async:
  * @self: an #IdeDebugger
  * @range: an #IdeDebuggerAddressRange to disassemble
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: A callback to call once the operation has finished
  * @user_data: user data for @callback
  *
@@ -1927,12 +1927,12 @@ ide_debugger_disassemble_async (IdeDebugger                   *self,
 /**
  * ide_debugger_disassemble_finish:
  * @self: a #IdeDebugger
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError or %NULL
  *
  * Completes an asynchronous request to ide_debugger_disassemble_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerInstruction): A #GPtrArray
+ * Returns: (transfer container) (element-type Ide.DebuggerInstruction): a #GPtrArray
  *   of #IdeDebuggerInstruction if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26

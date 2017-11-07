@@ -86,7 +86,7 @@ static guint signals [LAST_SIGNAL];
 
 /**
  * gstyle_color_panel_get_filter:
- * @self: A #GstyleColorPanel.
+ * @self: a #GstyleColorPanel.
  *
  * Get the current color filter.
  *
@@ -172,8 +172,8 @@ adj_alpha_value_changed_cb (GstyleColorPanel *self,
 
 /**
  * gstyle_color_panel_set_filter:
- * @self: A #GstyleColorPanel
- * @filter: A #GstyleColorFilter
+ * @self: a #GstyleColorPanel
+ * @filter: a #GstyleColorFilter
  *
  * Set the color filter to use.
  *
@@ -246,8 +246,8 @@ gstyle_color_panel_set_filter (GstyleColorPanel  *self,
 
 /**
  * gstyle_color_panel_get_rgba:
- * @self: A #GstyleColorPanel.
- * @rgba: (out): A #GdkRGBA adress.
+ * @self: a #GstyleColorPanel.
+ * @rgba: (out): a #GdkRGBA adress.
  *
  * Fill @rgba with the current color plane rgba.
  *
@@ -264,8 +264,8 @@ gstyle_color_panel_get_rgba (GstyleColorPanel *self,
 
 /**
  * gstyle_color_panel_get_xyz:
- * @self: A #GstyleColorPanel.
- * @xyz: (out): A #GstyleXYZ adress.
+ * @self: a #GstyleColorPanel.
+ * @xyz: (out): a #GstyleXYZ adress.
  *
  * Fill @xyz with the current color plane xyz.
  *
@@ -282,8 +282,8 @@ gstyle_color_panel_get_xyz (GstyleColorPanel *self,
 
 /**
  * gstyle_color_panel_set_rgba:
- * @self: A #GstyleColorPanel.
- * @rgba: A #GdkRGBA.
+ * @self: a #GstyleColorPanel.
+ * @rgba: a #GdkRGBA.
  *
  * Set the color plane and sliders to rgba.
  *
@@ -300,8 +300,8 @@ gstyle_color_panel_set_rgba (GstyleColorPanel *self,
 
 /**
  * gstyle_color_panel_set_xyz:
- * @self: A #GstyleColorPanel.
- * @xyz: A #GstyleXYZ.
+ * @self: a #GstyleColorPanel.
+ * @xyz: a #GstyleXYZ.
  *
  * Set the color plane and sliders to the xyz value.
  *
@@ -318,7 +318,7 @@ gstyle_color_panel_set_xyz (GstyleColorPanel *self,
 
 /**
  * gstyle_color_panel_get_palette_widget:
- * @self: A #GstyleColorPanel.
+ * @self: a #GstyleColorPanel.
  *
  * Returns: (nullable) (transfer none): The #GstylePaletteWidget used by the panel.
  *
@@ -1181,7 +1181,7 @@ setup_ui (GstyleColorPanel *self)
 
 /**
  * gstyle_color_panel_show_palette:
- * @self: A #GstyleColorPanel.
+ * @self: a #GstyleColorPanel.
  * @palette: A GstylePalette.
  *
  * Show the @palette and update its name in the bar.

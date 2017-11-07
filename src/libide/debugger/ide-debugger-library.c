@@ -226,7 +226,7 @@ ide_debugger_library_set_target_name (IdeDebuggerLibrary *self,
  *
  * Gets the list of address ranges for the library.
  *
- * Returns: (transfer none) (element-type Ide.DebuggerAddressRange): A #GPtrArray
+ * Returns: (transfer none) (element-type Ide.DebuggerAddressRange): a #GPtrArray
  *   containing the list of address ranges.
  */
 GPtrArray *

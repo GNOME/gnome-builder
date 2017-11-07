@@ -269,9 +269,9 @@ sort_priority (gconstpointer a,
 /**
  * ide_build_system_new_async:
  * @context: #IdeBuildSystem
- * @project_file: A #GFile containing the directory or project file.
+ * @project_file: a #GFile containing the directory or project file.
  * @build_system_hint: A hint for the build system to use
- * @cancellable: (allow-none): A #GCancellable
+ * @cancellable: (allow-none): a #GCancellable
  * @callback: A callback to execute upon completion
  * @user_data: User data for @callback.
  *
@@ -474,7 +474,7 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
  * ide_build_system_get_build_flags_for_files_async:
  * @self: An #IdeBuildSystem instance.
  * @files: (element-type Ide.File): array of files whose build flags has to be retrieved.
- * @cancellable: (allow-none): A #GCancellable to cancel getting build flags.
+ * @cancellable: (allow-none): a #GCancellable to cancel getting build flags.
  * @callback: function to be called after getting build flags.
  * @user_data: data to pass to @callback.
  *

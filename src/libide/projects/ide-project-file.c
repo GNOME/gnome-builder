@@ -131,7 +131,7 @@ ide_project_file_set_file (IdeProjectFile *self,
  * Retrieves a #GFileInfo containing the basic information about @file. This
  * includes the name, display name, and file type.
  *
- * Returns: (transfer none): A #GFileInfo
+ * Returns: (transfer none): a #GFileInfo
  */
 GFileInfo *
 ide_project_file_get_file_info (IdeProjectFile *file)

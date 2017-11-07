@@ -248,7 +248,7 @@ remove_color_to_names_sets (GstylePalette *self,
 /**
  * gstyle_palette_add_at_index:
  * @self: a #GstylePalette
- * @color: A #GstyleColor
+ * @color: a #GstyleColor
  * @position: Position to insert the new color, from 0 to gstyle_palette_get_len() -1,
  *   or -1 to append it
  * @error: (nullable): a #GError location or %NULL
@@ -297,7 +297,7 @@ gstyle_palette_add_at_index (GstylePalette  *self,
 /**
  * gstyle_palette_add:
  * @self: a #GstylePalette
- * @color: A #GstyleColor
+ * @color: a #GstyleColor
  * @error: (nullable): a #GError location or %NULL
  *
  * Add a #GstyleColor to the palette.
@@ -355,7 +355,7 @@ gstyle_palette_remove_at_index (GstylePalette  *self,
 /**
  * gstyle_palette_remove:
  * @self: a #GstylePalette
- * @color: A #GstyleColor
+ * @color: a #GstyleColor
  *
  * Try to remove a #GstyleColor from the palette.
  *
@@ -390,7 +390,7 @@ gstyle_palette_remove (GstylePalette  *self,
 /**
  * gstyle_palette_lookup:
  * @self: a #GstylePalette
- * @name: A #GstyleColor name
+ * @name: a #GstyleColor name
  *
  * Search for one or several #GstyleColor named @name in the palette.
  *
@@ -413,7 +413,7 @@ gstyle_palette_lookup (GstylePalette  *self,
 /**
  * gstyle_palette_get_index:
  * @self: a #GstylePalette
- * @color: A #GstyleColor
+ * @color: a #GstyleColor
  *
  * Search for a #GstyleColor in the palette and
  * return its index or -1 if not found.
@@ -737,12 +737,12 @@ finish:
 /**
  * gstyle_palette_new_from_file:
  * @file: a #GFile
- * @cancellable: A #GCancellable
+ * @cancellable: a #GCancellable
  * @error: (nullable): a #GError location or %NULL
  *
  * Load a palette from an .xml or .gpl file.
  *
- * Returns: A #GstylePalette.
+ * Returns: a #GstylePalette.
  */
 GstylePalette *
 gstyle_palette_new_from_file (GFile         *file,
@@ -780,14 +780,14 @@ gstyle_palette_new_from_file (GFile         *file,
  * @buffer: a #GtkTextBUffer
  * @begin: (nullable): a begin #GtkTextIter
  * @end: (nullable): a end #GtkTextIter
- * @cancellable: A #GCancellable
+ * @cancellable: a #GCancellable
  * @error: (nullable): a #GError location or %NULL
  *
  * Create a new #GstylePalette from a text buffer.
  * if @begin is %NULL, the buffer start iter is used.
  * if @end is %NULL, the buffer end is used.
  *
- * Returns: A #GstylePalette or %NULL if an error occur.
+ * Returns: a #GstylePalette or %NULL if an error occur.
  */
 GstylePalette *
 gstyle_palette_new_from_buffer (GtkTextBuffer  *buffer,

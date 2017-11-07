@@ -1067,7 +1067,7 @@ ide_highlight_engine_invalidate (IdeHighlightEngine *self,
  *
  * A #GtkTextTag for @style_name.
  *
- * Returns: (transfer none): A #GtkTextTag.
+ * Returns: (transfer none): a #GtkTextTag.
  */
 GtkTextTag *
 ide_highlight_engine_get_style (IdeHighlightEngine *self,

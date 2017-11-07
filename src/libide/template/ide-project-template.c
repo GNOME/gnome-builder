@@ -57,7 +57,7 @@ ide_project_template_get_description (IdeProjectTemplate *self)
  *
  * Get's the configuration widget for the template if there is one.
  *
- * Returns: (transfer none): A #GtkWidget.
+ * Returns: (transfer none): a #GtkWidget.
  */
 GtkWidget *
 ide_project_template_get_widget (IdeProjectTemplate *self)
@@ -97,7 +97,7 @@ ide_project_template_get_icon_name (IdeProjectTemplate *self)
  * ide_project_template_expand_async:
  * @self: an #IdeProjectTemplate
  * @params: (element-type utf8 GLib.Variant): A hashtable of template parameters.
- * @cancellable: (nullable): A #GCancellable or %NULL.
+ * @cancellable: (nullable): a #GCancellable or %NULL.
  * @callback: the callback for the asynchronous operation.
  * @user_data: user data for @callback.
  *

@@ -1734,7 +1734,7 @@ unregister_auto_save (IdeBufferManager *self,
  *
  * Buffers are generally not added to the buffer list until they have been loaded.
  *
- * Returns: (transfer container) (element-type IdeBuffer*): A #GPtrArray of buffers.
+ * Returns: (transfer container) (element-type IdeBuffer*): a #GPtrArray of buffers.
  */
 GPtrArray *
 ide_buffer_manager_get_buffers (IdeBufferManager *self)
@@ -1764,7 +1764,7 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
  * Gets the #GtkSourceCompletionWords completion provider that will complete
  * words using the loaded documents.
  *
- * Returns: (transfer none): A #GtkSourceCompletionWords
+ * Returns: (transfer none): a #GtkSourceCompletionWords
  */
 GtkSourceCompletionWords *
 ide_buffer_manager_get_word_completion (IdeBufferManager *self)
@@ -1777,7 +1777,7 @@ ide_buffer_manager_get_word_completion (IdeBufferManager *self)
 /**
  * ide_buffer_manager_find_buffer:
  * @self: (in): An #IdeBufferManager.
- * @file: (in): A #GFile.
+ * @file: (in): a #GFile.
  *
  * Gets the buffer for a given file. If it has not yet been loaded, %NULL is
  * returned.
@@ -1833,7 +1833,7 @@ ide_buffer_manager_has_file (IdeBufferManager *self,
  *
  * If zero, no size limits will be enforced.
  *
- * Returns: A #gsize in bytes or zero.
+ * Returns: a #gsize in bytes or zero.
  */
 gsize
 ide_buffer_manager_get_max_file_size (IdeBufferManager *self)
@@ -2206,7 +2206,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
  * ide_buffer_manager_apply_edits_async:
  * @self: An #IdeBufferManager
  * @edits: (transfer container) (element-type Ide.ProjectEdit): An #GPtrArray of #IdeProjectEdit
- * @cancellable: (allow-none): A #GCancellable or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
  * @callback: the callback to complete the request
  * @user_data: user data for @callback
  *

@@ -341,7 +341,7 @@ gstyle_color_convert_xyz_to_cielab (GstyleXYZ    *xyz,
 
 /**
  * gstyle_color_convert_rgb_to_hsl:
- * @rgba: A #GdkRGBA struct.
+ * @rgba: a #GdkRGBA struct.
  * @hue: (out): The hue component of a hsl color in range  [0.0-360.0[
  * @saturation: (out): The saturation component of a hsl color in range [0.0-100.0]
  * @lightness: (out): The lightness component of a hsl color in range [0.0-100.0]
@@ -432,7 +432,7 @@ hue2rgb (gdouble m1,
  * @hue: The hue component of a hsl color in range  [0.0-360.0[
  * @saturation: The saturation component of a hsl color in range [0.0-100.0]
  * @lightness: The lightness component of a hsl color in range [0.0-100.0]
- * @rgba: A #GdkRGBA.
+ * @rgba: a #GdkRGBA.
  *
  * Convert RGB components to HSL ones.
  * The alpha component is not used because it doesn't change in the conversion.
@@ -465,7 +465,7 @@ gstyle_color_convert_hsl_to_rgb (gdouble   hue,
  * @hue: The hue component of a hsv color in range  [0.0-1.0[
  * @saturation: The saturation component of a hsv color in range [0.0-1.0]
  * @value: The value component of a hsv color in range [0.0-1.0]
- * @rgba: A #GdkRGBA.
+ * @rgba: a #GdkRGBA.
  *
  * Convert HSV components to RGB ones.
  * The alpha component is not used because it doesn't change in the conversion.
@@ -544,7 +544,7 @@ gstyle_color_convert_hsv_to_rgb (gdouble   hue,
 /**
  * gstyle_color_convert_rgb_to_xyz:
  * @rgba: An #GdkRGBA.
- * @xyz: A #GstyleXYZ.
+ * @xyz: a #GstyleXYZ.
  *
  * Convert RGB components to XYZ ones.
  * The alpha component is not used because it doesn't change in the conversion.
@@ -624,7 +624,7 @@ gstyle_color_convert_rgb_to_hsv (GdkRGBA *rgba,
 /**
  * gstyle_color_convert_rgb_to_cielab:
  * @rgba: An #GdkRGBA.
- * @lab: (out): A #GstyleCieLab struct.
+ * @lab: (out): a #GstyleCieLab struct.
  *
  * Convert RGB components to CIELAB ones.
  * The alpha component is not used because it doesn't change in the conversion.
@@ -644,7 +644,7 @@ gstyle_color_convert_rgb_to_cielab (GdkRGBA      *rgba,
 
 /**
  * gstyle_color_convert_cielab_to_rgb:
- * @lab: A #GstyleCieLab struct.
+ * @lab: a #GstyleCieLab struct.
  * @rgba: (out): An #GdkRGBA.
  *
  * Convert CIELAB components to RGB ones.
@@ -723,8 +723,8 @@ gstyle_color_convert_xyz_to_hsv (GstyleXYZ *xyz,
 
 /**
  * gstyle_color_delta_e:
- * @lab1: A #GstyleCielab.
- * @lab2: A #GstyleCielab.
+ * @lab1: a #GstyleCielab.
+ * @lab2: a #GstyleCielab.
  *
  * Compute the color difference between lab1 and lab2,
  * based on the deltaE CIEDE2000 formula.

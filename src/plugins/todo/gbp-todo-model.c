@@ -508,8 +508,8 @@ gbp_todo_model_mine_worker (GTask        *task,
 /**
  * gbp_todo_model_mine_async:
  * @self: a #GbpTodoModel
- * @file: A #GFile to mine
- * @cancellable: (nullable): A #Gancellable or %NULL
+ * @file: a #GFile to mine
+ * @cancellable: (nullable): a #Gancellable or %NULL
  * @callback: (scope async) (closure user_data): An async callback
  * @user_data: user data for @callback
  *
@@ -557,7 +557,7 @@ gbp_todo_model_mine_async (GbpTodoModel        *self,
 /**
  * gbp_todo_model_mine_finish:
  * @self: a #GbpTodoModel
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: A location for a #GError or %NULL
  *
  * Completes an asynchronous request to gbp_todo_model_mine_async().

@@ -302,7 +302,7 @@ static const _ExtendedGDBusInterfaceInfo _gca_service_interface_info =
  *
  * Gets a machine-readable description of the <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link> D-Bus interface.
  *
- * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
+ * Returns: (transfer none): a #GDBusInterfaceInfo. Do not free.
  */
 GDBusInterfaceInfo *
 gca_service_interface_info (void)
@@ -352,8 +352,8 @@ gca_service_default_init (GcaServiceIface *iface)
   /* GObject signals for incoming D-Bus method calls: */
   /**
    * GcaService::handle-dispose:
-   * @object: A #GcaService.
-   * @invocation: A #GDBusMethodInvocation.
+   * @object: a #GcaService.
+   * @invocation: a #GDBusMethodInvocation.
    * @arg_path: Argument passed by remote caller.
    *
    * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Dispose">Dispose()</link> D-Bus method.
@@ -375,8 +375,8 @@ gca_service_default_init (GcaServiceIface *iface)
 
   /**
    * GcaService::handle-parse:
-   * @object: A #GcaService.
-   * @invocation: A #GDBusMethodInvocation.
+   * @object: a #GcaService.
+   * @invocation: a #GDBusMethodInvocation.
    * @arg_path: Argument passed by remote caller.
    * @arg_data_path: Argument passed by remote caller.
    * @arg_cursor: Argument passed by remote caller.
@@ -403,10 +403,10 @@ gca_service_default_init (GcaServiceIface *iface)
 
 /**
  * gca_service_call_dispose:
- * @proxy: A #GcaServiceProxy.
+ * @proxy: a #GcaServiceProxy.
  * @arg_path: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
  * Asynchronously invokes the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Dispose">Dispose()</link> D-Bus method on @proxy.
@@ -436,7 +436,7 @@ gca_service_call_dispose (
 
 /**
  * gca_service_call_dispose_finish:
- * @proxy: A #GcaServiceProxy.
+ * @proxy: a #GcaServiceProxy.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gca_service_call_dispose().
  * @error: Return location for error or %NULL.
  *
@@ -463,9 +463,9 @@ _out:
 
 /**
  * gca_service_call_dispose_sync:
- * @proxy: A #GcaServiceProxy.
+ * @proxy: a #GcaServiceProxy.
  * @arg_path: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Dispose">Dispose()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -501,13 +501,13 @@ _out:
 
 /**
  * gca_service_call_parse:
- * @proxy: A #GcaServiceProxy.
+ * @proxy: a #GcaServiceProxy.
  * @arg_path: Argument to pass with the method invocation.
  * @arg_data_path: Argument to pass with the method invocation.
  * @arg_cursor: Argument to pass with the method invocation.
  * @arg_options: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
  * Asynchronously invokes the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Parse">Parse()</link> D-Bus method on @proxy.
@@ -543,7 +543,7 @@ gca_service_call_parse (
 
 /**
  * gca_service_call_parse_finish:
- * @proxy: A #GcaServiceProxy.
+ * @proxy: a #GcaServiceProxy.
  * @out_unnamed_arg4: (out): Return location for return parameter or %NULL to ignore.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gca_service_call_parse().
  * @error: Return location for error or %NULL.
@@ -573,13 +573,13 @@ _out:
 
 /**
  * gca_service_call_parse_sync:
- * @proxy: A #GcaServiceProxy.
+ * @proxy: a #GcaServiceProxy.
  * @arg_path: Argument to pass with the method invocation.
  * @arg_data_path: Argument to pass with the method invocation.
  * @arg_cursor: Argument to pass with the method invocation.
  * @arg_options: Argument to pass with the method invocation.
  * @out_unnamed_arg4: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Parse">Parse()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -623,8 +623,8 @@ _out:
 
 /**
  * gca_service_complete_dispose:
- * @object: A #GcaService.
- * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @object: a #GcaService.
+ * @invocation: (transfer full): a #GDBusMethodInvocation.
  *
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Dispose">Dispose()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
@@ -641,8 +641,8 @@ gca_service_complete_dispose (
 
 /**
  * gca_service_complete_parse:
- * @object: A #GcaService.
- * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @object: a #GcaService.
+ * @invocation: (transfer full): a #GDBusMethodInvocation.
  * @unnamed_arg4: Parameter to return.
  *
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Parse">Parse()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
@@ -825,12 +825,12 @@ gca_service_proxy_iface_init (GcaServiceIface *iface)
 
 /**
  * gca_service_proxy_new:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
  * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link>. See g_dbus_proxy_new() for more details.
@@ -880,11 +880,11 @@ gca_service_proxy_new_finish (
 
 /**
  * gca_service_proxy_new_sync:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link>. See g_dbus_proxy_new_sync() for more details.
@@ -915,12 +915,12 @@ gca_service_proxy_new_sync (
 
 /**
  * gca_service_proxy_new_for_bus:
- * @bus_type: A #GBusType.
+ * @bus_type: a #GBusType.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
  * Like gca_service_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
@@ -970,11 +970,11 @@ gca_service_proxy_new_for_bus_finish (
 
 /**
  * gca_service_proxy_new_for_bus_sync:
- * @bus_type: A #GBusType.
+ * @bus_type: a #GBusType.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Like gca_service_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.

@@ -101,7 +101,7 @@ filter_data (GstyleColorScale *self)
 
 /**
  * gstyle_color_scale_get_filter_func: (skip):
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  *
  * Get a pointer to the current filter function or %NULL
  * if no filter is actually set.
@@ -121,7 +121,7 @@ gstyle_color_scale_get_filter_func (GstyleColorScale *self)
  * keeping the original datas */
 /**
  * gstyle_color_scale_set_filter_func:
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  * @filter_cb: (scope notified) (nullable): A GstyleColorFilterFunc filter function or
  *   %NULL to unset the current filter. In this case, user_data is ignored.
  * @user_data: (closure) (nullable): user data to pass when calling the filter function
@@ -160,7 +160,7 @@ gstyle_color_scale_set_filter_func (GstyleColorScale      *self,
 
 /**
  * gstyle_color_scale_clear_color_stops:
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  *
  * CLear all the color stops from the color scale.
  *
@@ -195,7 +195,7 @@ compare_color_stop_by_offset (ColorStop        *a,
 
 /**
  * gstyle_color_scale_remove_color_stop:
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  * @id: id of a color stop as returned by gstyle_color_scale_add_* functions
  *
  * Remove an existing color stop for the color scale.
@@ -219,9 +219,9 @@ gstyle_color_scale_remove_color_stop (GstyleColorScale *self,
 
 /**
  * gstyle_color_scale_add_rgba_color_stop:
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  * @offset: position in the range [0, 1] of the color stop
- * @rgba: A #GdkRGBA
+ * @rgba: a #GdkRGBA
  *
  * Set a color stop for the color scale.
  * If there's no color stop at offset 0, a black opaque color stop is automatically added.
@@ -279,7 +279,7 @@ gstyle_color_scale_add_rgba_color_stop (GstyleColorScale *self,
 
 /**
  * gstyle_color_scale_set_custom_data:
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  * @data: data location
  *
  * Set the data used to draw the color ramp if your have
@@ -320,7 +320,7 @@ gstyle_color_scale_set_custom_data (GstyleColorScale *self,
 
 /**
  * gstyle_color_scale_add_color_stop:
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  * @offset: position in the range [0, 1] of the color stop
  * @red: red component of the color stop
  * @green: red component of the color stop
@@ -352,7 +352,7 @@ gstyle_color_scale_add_color_stop (GstyleColorScale *self,
 
 /**
  * gstyle_color_scale_get_kind:
- * @self: A #GstyleColorScale
+ * @self: a #GstyleColorScale
  *
  * Get the kind of gradient displayed in the scale.
  *
@@ -369,8 +369,8 @@ gstyle_color_scale_get_kind (GstyleColorScale *self)
 
 /**
  * gstyle_color_scale_set_kind:
- * @self: A #GstyleColorScale
- * @kind: A #GstyleColorKind
+ * @self: a #GstyleColorScale
+ * @kind: a #GstyleColorKind
  *
  * Set the kind of gradient displayed in the scale.
  * If you set the kind to GSTYLE_COLOR_SCALE_KIND_CUSTOM_STOPS,

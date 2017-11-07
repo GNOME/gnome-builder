@@ -364,8 +364,8 @@ ide_workbench_open_files_cb (GObject      *object,
  * @hint: The id of an #IdeWorkbenchAddin that should be preferred as a loader.
  * @flags: an #IdeWorkbenchOpenFlags (if WORKBENCH_OPEN_FLAGS_BG is set, the buffer is loaded
  *    but not made visible in the UI).
- * @cancellable: (nullable): A #GCancellable.
- * @callback: (scope async) (closure user_data): A #GAsyncReadyCallback or %NULL
+ * @cancellable: (nullable): a #GCancellable.
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback or %NULL
  * @user_data: User data for @callback
  *
  * Starts the process of loading the buffers for the given @files, possibly

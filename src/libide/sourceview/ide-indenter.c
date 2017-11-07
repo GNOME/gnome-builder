@@ -99,9 +99,9 @@ ide_indenter_mimic_source_view (GtkTextView *text_view,
 /**
  * ide_indenter_format:
  * @self: (nullable): An #IdeIndenter or %NULL for the fallback
- * @text_view: A #GtkTextView
- * @begin: A #GtkTextIter for the beginning region of text to replace.
- * @end: A #GtkTextIter for the end region of text to replace.
+ * @text_view: a #GtkTextView
+ * @begin: a #GtkTextIter for the beginning region of text to replace.
+ * @end: a #GtkTextIter for the end region of text to replace.
  * @cursor_offset: (out): The offset in characters from @end to place the
  *   cursor. Negative values are okay.
  * @event: The #GdkEventKey that triggered the event.

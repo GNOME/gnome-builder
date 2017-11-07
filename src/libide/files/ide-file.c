@@ -137,7 +137,7 @@ ide_file_create_language (IdeFile *self)
  *
  * Retrieves the #GtkSourceLanguage that was discovered for the file.
  *
- * Returns: (nullable) (transfer none): A #GtkSourceLanguage or %NULL.
+ * Returns: (nullable) (transfer none): a #GtkSourceLanguage or %NULL.
  */
 GtkSourceLanguage *
 ide_file_get_language (IdeFile *self)
@@ -160,7 +160,7 @@ ide_file_get_language (IdeFile *self)
  *
  * Retrieves the underlying #GFile represented by @self.
  *
- * Returns: (transfer none): A #GFile.
+ * Returns: (transfer none): a #GFile.
  */
 GFile *
 ide_file_get_file (IdeFile *self)
@@ -190,7 +190,7 @@ ide_file_set_file (IdeFile *self,
  *
  * Gets the GtkSourceFile for the #IdeFile.
  *
- * Returns: (transfer none): A #GtkSourceFile.
+ * Returns: (transfer none): a #GtkSourceFile.
  */
 GtkSourceFile *
 _ide_file_get_source_file (IdeFile *self)

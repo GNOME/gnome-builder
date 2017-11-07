@@ -61,7 +61,7 @@ ide_thread_pool_get_pool (IdeThreadPoolKind kind)
 /**
  * ide_thread_pool_push_task:
  * @kind: The task kind.
- * @task: A #GTask to execute.
+ * @task: a #GTask to execute.
  * @func: (scope async): The thread worker to execute for @task.
  *
  * This pushes a task to be executed on a worker thread based on the task kind as denoted by

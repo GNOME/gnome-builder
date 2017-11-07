@@ -629,8 +629,8 @@ ide_application_get_worker_cb (GObject      *object,
  * ide_application_get_worker_async:
  * @self: an #IdeApplication
  * @plugin_name: The name of the plugin.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback or %NULL.
  * @user_data: user data for @callback.
  *
  * Asynchronously requests a #GDBusProxy to a service provided in a worker
@@ -674,12 +674,12 @@ ide_application_get_worker_async (IdeApplication      *self,
 /**
  * ide_application_get_worker_finish:
  * @self: an #IdeApplication.
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError, or %NULL.
  *
  * Completes an asynchronous request to get a proxy to a worker process.
  *
- * Returns: (transfer full): A #GDBusProxy or %NULL.
+ * Returns: (transfer full): a #GDBusProxy or %NULL.
  */
 GDBusProxy *
 ide_application_get_worker_finish (IdeApplication  *self,
@@ -786,7 +786,7 @@ ide_application_get_keybindings_mode (IdeApplication *self)
  *
  * Gets the startup time of the application.
  *
- * Returns: (transfer none): A #GDateTime.
+ * Returns: (transfer none): a #GDateTime.
  */
 GDateTime *
 ide_application_get_started_at (IdeApplication *self)
@@ -797,7 +797,7 @@ ide_application_get_started_at (IdeApplication *self)
 /**
  * ide_application_open_project:
  * @self: a #IdeApplication
- * @file: A #GFile
+ * @file: a #GFile
  *
  * Attempts to load the project found at @file.
  *
@@ -868,7 +868,7 @@ ide_application_open_project (IdeApplication *self,
  * This is only really useful to determine if you are in the main UI thread.
  * This is used by IDE_IS_MAIN_THREAD for assertion checks.
  *
- * Returns: (transfer none): A #GThread
+ * Returns: (transfer none): a #GThread
  */
 GThread *
 ide_application_get_main_thread (void)
@@ -879,7 +879,7 @@ ide_application_get_main_thread (void)
 /**
  * ide_application_add_reaper:
  * @self: a #IdeApplication
- * @reaper: A #DzlDirectoryReaper
+ * @reaper: a #DzlDirectoryReaper
  *
  * Adds a directory reaper which will be executed as part of the cleanup
  * process when exiting Builder.

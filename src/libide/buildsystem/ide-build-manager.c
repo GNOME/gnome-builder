@@ -989,7 +989,7 @@ ide_build_manager_get_message (IdeBuildManager *self)
  *
  * See #IdeBuildManager:last-build-time for more information.
  *
- * Returns: (nullable) (transfer none): A #GDateTime or %NULL.
+ * Returns: (nullable) (transfer none): a #GDateTime or %NULL.
  *
  * Since: 3.22
  */
@@ -1007,7 +1007,7 @@ ide_build_manager_get_last_build_time (IdeBuildManager *self)
  * Gets the amount of elapsed time of the current build as a
  * #GTimeSpan.
  *
- * Returns: A #GTimeSpan containing the elapsed time of the build.
+ * Returns: a #GTimeSpan containing the elapsed time of the build.
  *
  * Since: 3.22
  */
@@ -1146,7 +1146,7 @@ ide_build_manager_save_all_cb (GObject      *object,
  * ide_build_manager_execute_async:
  * @self: An #IdeBuildManager
  * @phase: An #IdeBuildPhase or 0
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: A callback to execute upon completion
  * @user_data: user data for @callback
  *
@@ -1248,7 +1248,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
 /**
  * ide_build_manager_execute_finish:
  * @self: An #IdeBuildManager
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: A location for a #GError or %NULL
  *
  * Completes a request to ide_build_manager_execute_async().
@@ -1303,7 +1303,7 @@ ide_build_manager_clean_cb (GObject      *object,
  * ide_build_manager_clean_async:
  * @self: a #IdeBuildManager
  * @phase: the build phase to clean
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: (nullable): a callback to execute upon completion, or %NULL
  * @user_data: closure data for @callback
  *
@@ -1365,7 +1365,7 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
 /**
  * ide_build_manager_clean_finish:
  * @self: a #IdeBuildManager
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError, or %NULL
  *
  * Completes an asynchronous request to ide_build_manager_clean_async().
@@ -1418,7 +1418,7 @@ ide_build_manager_rebuild_cb (GObject      *object,
  * ide_build_manager_rebuild_async:
  * @self: a #IdeBuildManager
  * @phase: the build phase to rebuild to
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: (nullable): a callback to execute upon completion, or %NULL
  * @user_data: closure data for @callback
  *
@@ -1474,7 +1474,7 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
 /**
  * ide_build_manager_rebuild_finish:
  * @self: a #IdeBuildManager
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError, or %NULL
  *
  * Completes an asynchronous request to ide_build_manager_rebuild_async().

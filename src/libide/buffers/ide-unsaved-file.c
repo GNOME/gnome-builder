@@ -132,7 +132,7 @@ ide_unsaved_file_unref (IdeUnsavedFile *self)
  *
  * Gets the contents of the unsaved file.
  *
- * Returns: (transfer none): A #GBytes containing the unsaved file content.
+ * Returns: (transfer none): a #GBytes containing the unsaved file content.
  */
 GBytes *
 ide_unsaved_file_get_content (IdeUnsavedFile *self)
@@ -147,7 +147,7 @@ ide_unsaved_file_get_content (IdeUnsavedFile *self)
  *
  * Retrieves the underlying file represented by @self.
  *
- * Returns: (transfer none): A #GFile.
+ * Returns: (transfer none): a #GFile.
  */
 GFile *
 ide_unsaved_file_get_file (IdeUnsavedFile *self)

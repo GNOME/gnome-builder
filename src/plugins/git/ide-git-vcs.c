@@ -595,7 +595,7 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
   /**
    * IdeGitVcs::reloaded:
    * @self: An #IdeGitVfs
-   * @repository: A #GgitRepository
+   * @repository: a #GgitRepository
    *
    * This signal is emitted when the git index has been reloaded. Various consumers may want to
    * reload their git objects upon this notification. Such an example would be the line diffs

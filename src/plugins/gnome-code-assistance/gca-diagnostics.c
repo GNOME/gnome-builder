@@ -218,7 +218,7 @@ static const _ExtendedGDBusInterfaceInfo _gca_diagnostics_interface_info =
  *
  * Gets a machine-readable description of the <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link> D-Bus interface.
  *
- * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
+ * Returns: (transfer none): a #GDBusInterfaceInfo. Do not free.
  */
 GDBusInterfaceInfo *
 gca_diagnostics_interface_info (void)
@@ -267,8 +267,8 @@ gca_diagnostics_default_init (GcaDiagnosticsIface *iface)
   /* GObject signals for incoming D-Bus method calls: */
   /**
    * GcaDiagnostics::handle-diagnostics:
-   * @object: A #GcaDiagnostics.
-   * @invocation: A #GDBusMethodInvocation.
+   * @object: a #GcaDiagnostics.
+   * @invocation: a #GDBusMethodInvocation.
    *
    * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Diagnostics.Diagnostics">Diagnostics()</link> D-Bus method.
    *
@@ -291,9 +291,9 @@ gca_diagnostics_default_init (GcaDiagnosticsIface *iface)
 
 /**
  * gca_diagnostics_call_diagnostics:
- * @proxy: A #GcaDiagnosticsProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @proxy: a #GcaDiagnosticsProxy.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
  * Asynchronously invokes the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Diagnostics.Diagnostics">Diagnostics()</link> D-Bus method on @proxy.
@@ -321,7 +321,7 @@ gca_diagnostics_call_diagnostics (
 
 /**
  * gca_diagnostics_call_diagnostics_finish:
- * @proxy: A #GcaDiagnosticsProxy.
+ * @proxy: a #GcaDiagnosticsProxy.
  * @out_unnamed_arg0: (out): Return location for return parameter or %NULL to ignore.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gca_diagnostics_call_diagnostics().
  * @error: Return location for error or %NULL.
@@ -351,9 +351,9 @@ _out:
 
 /**
  * gca_diagnostics_call_diagnostics_sync:
- * @proxy: A #GcaDiagnosticsProxy.
+ * @proxy: a #GcaDiagnosticsProxy.
  * @out_unnamed_arg0: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Diagnostics.Diagnostics">Diagnostics()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -389,8 +389,8 @@ _out:
 
 /**
  * gca_diagnostics_complete_diagnostics:
- * @object: A #GcaDiagnostics.
- * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @object: a #GcaDiagnostics.
+ * @invocation: (transfer full): a #GDBusMethodInvocation.
  * @unnamed_arg0: Parameter to return.
  *
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Diagnostics.Diagnostics">Diagnostics()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
@@ -573,12 +573,12 @@ gca_diagnostics_proxy_iface_init (GcaDiagnosticsIface *iface)
 
 /**
  * gca_diagnostics_proxy_new:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
  * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link>. See g_dbus_proxy_new() for more details.
@@ -628,11 +628,11 @@ gca_diagnostics_proxy_new_finish (
 
 /**
  * gca_diagnostics_proxy_new_sync:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link>. See g_dbus_proxy_new_sync() for more details.
@@ -663,12 +663,12 @@ gca_diagnostics_proxy_new_sync (
 
 /**
  * gca_diagnostics_proxy_new_for_bus:
- * @bus_type: A #GBusType.
+ * @bus_type: a #GBusType.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
  * Like gca_diagnostics_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
@@ -718,11 +718,11 @@ gca_diagnostics_proxy_new_for_bus_finish (
 
 /**
  * gca_diagnostics_proxy_new_for_bus_sync:
- * @bus_type: A #GBusType.
+ * @bus_type: a #GBusType.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Like gca_diagnostics_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.

@@ -30,8 +30,8 @@ ide_build_system_discovery_default_init (IdeBuildSystemDiscoveryInterface *iface
 /**
  * ide_build_system_discovery_discover:
  * @self: An #IdeBuildSystemDiscovery
- * @project_file: A #GFile containing the project file (a directory)
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @project_file: a #GFile containing the project file (a directory)
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @priority: (out): A location for the priority
  * @error: a location for a #GError or %NULL
  *

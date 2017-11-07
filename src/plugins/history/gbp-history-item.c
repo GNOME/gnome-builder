@@ -193,7 +193,7 @@ gbp_history_item_get_location (GbpHistoryItem *self)
 /**
  * gbp_history_item_get_file:
  *
- * Returns: (transfer none): A #GFile.
+ * Returns: (transfer none): a #GFile.
  */
 GFile *
 gbp_history_item_get_file (GbpHistoryItem *self)

@@ -365,7 +365,7 @@ _ide_debugger_breakpoints_remove (IdeDebuggerBreakpoints *self,
  * Gets the "file" property, which is the file that breakpoints within
  * this container belong to.
  *
- * Returns: (transfer none): A #GFile
+ * Returns: (transfer none): a #GFile
  */
 GFile *
 ide_debugger_breakpoints_get_file (IdeDebuggerBreakpoints *self)
@@ -378,7 +378,7 @@ ide_debugger_breakpoints_get_file (IdeDebuggerBreakpoints *self)
 /**
  * ide_debugger_breakpoints_foreach:
  * @self: a #IdeDebuggerBreakpoints
- * @func: (scope call) (closure user_data): A #GFunc to call
+ * @func: (scope call) (closure user_data): a #GFunc to call
  * @user_data: user data for @func
  *
  * Call @func for every #IdeDebuggerBreakpoint in @self.

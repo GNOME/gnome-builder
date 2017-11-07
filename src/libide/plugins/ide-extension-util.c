@@ -220,7 +220,7 @@ collect_parameters (GType        type,
  * It does this by duplicating some of the GParameter stuff that libpeas does
  * but looking at base-classes in addition to interface properties.
  *
- * Returns: (transfer full): A #PeasExtensionSet.
+ * Returns: (transfer full): a #PeasExtensionSet.
  */
 PeasExtensionSet *
 ide_extension_set_new (PeasEngine     *engine,

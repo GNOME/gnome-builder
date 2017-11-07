@@ -247,7 +247,7 @@ gbp_spell_buffer_addin_init (GbpSpellBufferAddin *self)
  * Gets the #GspellChecker used by the underlying buffer, or %NULL if
  * no spellchecker is active.
  *
- * Returns: (transfer none): A #GspellChecker
+ * Returns: (transfer none): a #GspellChecker
  *
  * Since: 3.26
  */
@@ -326,7 +326,7 @@ gbp_spell_buffer_addin_end_checking (GbpSpellBufferAddin *self)
  *
  * Gets the tag to use for the current misspelled word.
  *
- * Returns: (nullable) (transfer none): A #GtkTextTag or %NULL.
+ * Returns: (nullable) (transfer none): a #GtkTextTag or %NULL.
  */
 GtkTextTag *
 gbp_spell_buffer_addin_get_misspelled_tag (GbpSpellBufferAddin *self)

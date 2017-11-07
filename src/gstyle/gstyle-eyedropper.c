@@ -774,7 +774,7 @@ gstyle_eyedropper_class_init (GstyleEyedropperClass *klass)
 
   /**
    * GstyleEyedropper::color-picked:
-   * @self: A #GstyleEyedropper.
+   * @self: a #GstyleEyedropper.
    * @rgba: a #GdkRGBA color.
    *
    * This signal is emitted when you click to pick a color.
@@ -790,7 +790,7 @@ gstyle_eyedropper_class_init (GstyleEyedropperClass *klass)
 
   /**
    * GstyleEyedropper::grab-released:
-   * @self: A #GstyleEyedropper.
+   * @self: a #GstyleEyedropper.
    *
    * This signal is emitted when you release the grab by hitting 'Esc'.
    */

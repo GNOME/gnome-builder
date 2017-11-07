@@ -223,10 +223,10 @@ gb_new_file_popover_get_property (GObject    *object,
 
 /**
  * gb_new_file_popover_set_property:
- * @object: (in): A #GObject.
+ * @object: (in): a #GObject.
  * @prop_id: (in): The property identifier.
  * @value: (in): The given property.
- * @pspec: (in): A #ParamSpec.
+ * @pspec: (in): a #ParamSpec.
  *
  * Set a given #GObject property.
  */
@@ -373,7 +373,7 @@ gb_new_file_popover_set_directory (GbNewFilePopover *self,
 /**
  * gb_new_file_popover_get_directory:
  *
- * Returns: (transfer none) (nullable): A #GFile or %NULL.
+ * Returns: (transfer none) (nullable): a #GFile or %NULL.
  */
 GFile *
 gb_new_file_popover_get_directory (GbNewFilePopover *self)

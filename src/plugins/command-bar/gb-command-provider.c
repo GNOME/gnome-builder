@@ -219,7 +219,7 @@ gb_command_provider_set_priority (GbCommandProvider *provider,
  * @command_text: (in): Command text to be parsed
  *
  *
- * Returns: (transfer full): A #GbCommand if successful; otherwise %NULL.
+ * Returns: (transfer full): a #GbCommand if successful; otherwise %NULL.
  */
 GbCommand *
 gb_command_provider_lookup (GbCommandProvider *provider,
@@ -238,7 +238,7 @@ gb_command_provider_lookup (GbCommandProvider *provider,
 /**
  * gb_command_provider_complete:
  * @provider: (in): The #GbCommandProvider
- * @completions: (in): A #GPtrArray where completed strings can be added
+ * @completions: (in): a #GPtrArray where completed strings can be added
  * @command_text: (in): Initial command text to be completed
  *
  */
@@ -384,7 +384,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
 
   /**
    * GbCommandProvider::complete:
-   * @completions: (in): A #GPtrArray where completed strings can be added
+   * @completions: (in): a #GPtrArray where completed strings can be added
    * @initial_command_text: (in): the command line text to be processed.
    *
    * This signal is emitted when a request to complete a command text is

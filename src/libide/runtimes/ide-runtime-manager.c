@@ -329,7 +329,7 @@ ide_runtime_manager_install_cb (GObject      *object,
  * ide_runtime_manager_ensure_async:
  * @self: An #IdeRuntimeManager
  * @runtime_id: the id for an expected runtime
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a callback to call after execution
  * @user_data: user data for @callback
  *

@@ -130,7 +130,7 @@ ide_template_base_mkdirs_finish (IdeTemplateBase  *self,
  *
  * Fetches the #TmplTemplateLocator used for resolving templates.
  *
- * Returns: (transfer none) (nullable): A #TmplTemplateLocator or %NULL.
+ * Returns: (transfer none) (nullable): a #TmplTemplateLocator or %NULL.
  */
 TmplTemplateLocator *
 ide_template_base_get_locator (IdeTemplateBase *self)

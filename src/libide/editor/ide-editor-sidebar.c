@@ -432,7 +432,7 @@ ide_editor_sidebar_open_pages_items_changed (IdeEditorSidebar *self,
 /**
  * _ide_editor_sidebar_set_open_pages:
  * @self: a #IdeEditorSidebar
- * @open_pages: A #GListModel describing the open pages
+ * @open_pages: a #GListModel describing the open pages
  *
  * This private function is used to set the GListModel to use for the list
  * of open pages in the sidebar. It should contain a list of IdeLayoutView

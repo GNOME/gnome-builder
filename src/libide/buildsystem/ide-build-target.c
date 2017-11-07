@@ -30,7 +30,7 @@ ide_build_target_default_init (IdeBuildTargetInterface *iface)
 /**
  * ide_build_target_get_install_directory:
  *
- * Returns: (nullable) (transfer full): A #GFile or %NULL.
+ * Returns: (nullable) (transfer full): a #GFile or %NULL.
  */
 GFile *
 ide_build_target_get_install_directory (IdeBuildTarget *self)

@@ -508,7 +508,7 @@ fuzzy_search_lookup (GstylePaletteWidget *self,
  * gstyle_palette_widget_fuzzy_parse_color_string:
  * @color_string: color name to search for
  *
- * Returns: (transfer full) (element-type GstyleColor): A #GPtrArray of #GstyleColor for a fuzzy search.
+ * Returns: (transfer full) (element-type GstyleColor): a #GPtrArray of #GstyleColor for a fuzzy search.
  */
 GPtrArray *
 gstyle_palette_widget_fuzzy_parse_color_string (GstylePaletteWidget *self,
@@ -577,8 +577,8 @@ gstyle_palette_widget_fuzzy_parse_color_string (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_set_placeholder:
- * @self: A #GstylePaletteWidget.
- * @placeholder: A #GtkWidget or %NULL.
+ * @self: a #GstylePaletteWidget.
+ * @placeholder: a #GtkWidget or %NULL.
  *
  * Set a placeholder to show when no palettes are loaded.
  *
@@ -611,11 +611,11 @@ gstyle_palette_widget_set_placeholder (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_get_placeholder:
- * @self: A #GstylePaletteWidget.
+ * @self: a #GstylePaletteWidget.
  *
  * Get the current placeholder GtkWidget.
  *
- * Returns: (transfer none): A #GtkObject.
+ * Returns: (transfer none): a #GtkObject.
  *
  */
 GtkWidget *
@@ -790,7 +790,7 @@ gstyle_palette_widget_set_selected_palette_by_id (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_get_selected_palette:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Return the selected #GstylePalette.
  *
@@ -807,8 +807,8 @@ gstyle_palette_widget_get_selected_palette (GstylePaletteWidget *self)
 
 /**
  * gstyle_palette_widget_show_palette:
- * @self: A #GstylePaletteWidget
- * @palette: A #GstylePalette
+ * @self: a #GstylePaletteWidget
+ * @palette: a #GstylePalette
  *
  * Show @palette in the widget.
  *
@@ -860,7 +860,7 @@ gstyle_palette_widget_color_row_activated (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_get_n_palettes:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Get the number of #GstylePalette in the palettes list.
  *
@@ -877,12 +877,12 @@ gstyle_palette_widget_get_n_palettes (GstylePaletteWidget *self)
 
 /**
  * gstyle_palette_widget_get_palette_at_index:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  * @index: A position in the palette list, from 0 to (n - 1) palettes
  *
  * Get the #GstylePalette ref at position @index in the palettes list.
  *
- * Returns: (transfer none): A #GstylePalette or %NULL if index is out of bounds.
+ * Returns: (transfer none): a #GstylePalette or %NULL if index is out of bounds.
  *
  */
 GstylePalette *
@@ -899,7 +899,7 @@ gstyle_palette_widget_get_palette_at_index (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_get_store:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Return a #GListStore containing the palettes.
  *
@@ -916,7 +916,7 @@ gstyle_palette_widget_get_store (GstylePaletteWidget *self)
 
 /**
  * gstyle_palette_widget_get_list:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Return a #GList of the palettes.
  *
@@ -945,8 +945,8 @@ gstyle_palette_widget_get_list (GstylePaletteWidget *self)
 
 /**
  * gstyle_palette_widget_add:
- * @self: A #GstylePaletteWidget
- * @palette: A #GstylePalette
+ * @self: a #GstylePaletteWidget
+ * @palette: a #GstylePalette
  *
  * Add @palette to the widget list.
  *
@@ -993,7 +993,7 @@ gstyle_palette_widget_add (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_remove_all:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Remove all palettes in the widget list.
  *
@@ -1022,8 +1022,8 @@ gstyle_palette_widget_remove_all (GstylePaletteWidget *self)
 
 /**
  * gstyle_palette_widget_remove:
- * @self: A #GstylePaletteWidget
- * @palette: A #GstylePalette
+ * @self: a #GstylePaletteWidget
+ * @palette: a #GstylePalette
  *
  * Remove @palette in the widget list.
  *
@@ -1078,12 +1078,12 @@ gstyle_palette_widget_remove (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_get_palette_by_id:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  * @id: A palette id string
  *
  * Return the corresponding #GstylePalette if in the #GstylePaletteWidget list.
  *
- * Returns: (transfer none): A #GstylePalette if in the list, %NULL otherwise.
+ * Returns: (transfer none): a #GstylePalette if in the list, %NULL otherwise.
  *
  */
 GstylePalette *
@@ -1111,7 +1111,7 @@ gstyle_palette_widget_get_palette_by_id (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_remove_by_id:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  * @id: A palette id string
  *
  * Remove palette with @id  from the widget list.
@@ -1140,8 +1140,8 @@ gstyle_palette_widget_remove_by_id (GstylePaletteWidget *self,
 
 /**
  * gstyle_palette_widget_set_view_mode:
- * @self: A #GstylePaletteWidget
- * @mode: A #GstylePaletteWidgetViewMode
+ * @self: a #GstylePaletteWidget
+ * @mode: a #GstylePaletteWidgetViewMode
  *
  * Sets the view mode of the palette widget.
  *
@@ -1172,7 +1172,7 @@ gstyle_palette_widget_set_view_mode (GstylePaletteWidget         *self,
 
 /**
  * gstyle_palette_widget_get_view_mode:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Get the view mode of the palette widget.
  *
@@ -1189,7 +1189,7 @@ gstyle_palette_widget_get_view_mode (GstylePaletteWidget *self)
 
 /**
  * gstyle_palette_widget_set_dnd_lock:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  * @flags: One or more #GstylePaletteWidgetDndLockFlags
  *
  * Sets the dnd lock flags of the palette widget.
@@ -1210,7 +1210,7 @@ gstyle_palette_widget_set_dnd_lock (GstylePaletteWidget             *self,
 
 /**
  * gstyle_palette_widget_get_dnd_lock:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Get the dnd lock flags of the palette widget.
  *
@@ -1227,8 +1227,8 @@ gstyle_palette_widget_get_dnd_lock (GstylePaletteWidget *self)
 
 /**
  * gstyle_palette_widget_set_sort_mode:
- * @self: A #GstylePaletteWidget
- * @mode: A #GstylePaletteWidgetViewMode
+ * @self: a #GstylePaletteWidget
+ * @mode: a #GstylePaletteWidgetViewMode
  *
  * Sets the sort mode of the palette widget.
  *
@@ -1248,7 +1248,7 @@ gstyle_palette_widget_set_sort_mode (GstylePaletteWidget         *self,
 
 /**
  * gstyle_palette_widget_get_sort_mode:
- * @self: A #GstylePaletteWidget
+ * @self: a #GstylePaletteWidget
  *
  * Get the sort mode of the palette widget.
  *
@@ -1268,7 +1268,7 @@ gstyle_palette_widget_get_sort_mode (GstylePaletteWidget *self)
  *
  * Create a new #GstylePaletteWidget.
  *
- * Returns: A #GstylePaletteWidget.
+ * Returns: a #GstylePaletteWidget.
  *
  */
 GstylePaletteWidget *
@@ -1535,7 +1535,7 @@ gstyle_palette_widget_class_init (GstylePaletteWidgetClass *klass)
 
   /**
    * GstylePaletteWidget::activated:
-   * @self: A #GstylePaletteWidget
+   * @self: a #GstylePaletteWidget
    * @palette: a #GstylePalette
    * @position: a position in the #palette
    *
@@ -1553,7 +1553,7 @@ gstyle_palette_widget_class_init (GstylePaletteWidgetClass *klass)
 
   /**
    * GstylePaletteWidget::palette-added:
-   * @self: A #GstylePaletteWidget
+   * @self: a #GstylePaletteWidget
    * @palette: a #GstylePalette
    *
    * This signal is emitted when a palette is added to the palette widget.
@@ -1569,7 +1569,7 @@ gstyle_palette_widget_class_init (GstylePaletteWidgetClass *klass)
 
   /**
    * GstylePaletteWidget::palette-removed:
-   * @self: A #GstylePaletteWidget
+   * @self: a #GstylePaletteWidget
    * @palette: a #GstylePalette
    *
    * This signal is emitted when a palette is removed to the palette widget.

@@ -285,7 +285,7 @@ ide_project_get_file_for_path (IdeProject  *self,
 /**
  * ide_project_get_project_file:
  * @self: an #IdeProject.
- * @gfile: A #GFile.
+ * @gfile: a #GFile.
  *
  * Gets a new #IdeFile representing @gfile.
  *

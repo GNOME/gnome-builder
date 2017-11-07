@@ -297,7 +297,7 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
  *
  * The result is a #GListModel of #IdeSearchResult when successful.
  *
- * Returns: (transfer full): A #GListModel of #IdeSearchResult items.
+ * Returns: (transfer full): a #GListModel of #IdeSearchResult items.
  */
 GListModel *
 ide_search_engine_search_finish (IdeSearchEngine  *self,

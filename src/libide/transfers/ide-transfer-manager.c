@@ -389,7 +389,7 @@ notify_properties:
 /**
  * ide_transfer_manager_execute_async:
  * @self: An #IdeTransferManager
- * @cancellable: (nullable): A #GCancellable
+ * @cancellable: (nullable): a #GCancellable
  * @callback: (nullable): A callback or %NULL
  * @user_data: user data for @callback
  *

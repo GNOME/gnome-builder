@@ -77,8 +77,8 @@ ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
  * @self: An #IdeCodeIndexer instance.
  * @file: Source file to index.
  * @build_flags: (nullable): array of build flags to parse @file.
- * @cancellable: (nullable): A #GCancellable.
- * @error: A #GError.
+ * @cancellable: (nullable): a #GCancellable.
+ * @error: a #GError.
  *
  * This function will take index source file and create an array
  * of symbols in @file.
@@ -110,7 +110,7 @@ ide_code_indexer_index_file (IdeCodeIndexer      *self,
  * ide_code_indexer_generate_key_async:
  * @self: An #IdeCodeIndexer instance.
  * @location: Source location of refernece.
- * @cancellable: (nullable): A #GCancellable.
+ * @cancellable: (nullable): a #GCancellable.
  * @callback: A callback to execute upon indexing.
  * @user_data: User data to pass to @callback.
  *

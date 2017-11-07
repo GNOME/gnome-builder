@@ -1198,7 +1198,7 @@ ide_diagnostics_manager_get_busy (IdeDiagnosticsManager *self)
 /**
  * ide_diagnostics_manager_get_diagnostics_for_file:
  * @self: An #IdeDiagnosticsManager
- * @file: A #GFile to retrieve diagnostics for
+ * @file: a #GFile to retrieve diagnostics for
  *
  * This function collects all of the diagnostics that have been collected
  * for @file and returns them as a new #IdeDiagnostics to the caller.

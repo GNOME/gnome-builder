@@ -352,7 +352,7 @@ ide_recent_projects_init (IdeRecentProjects *self)
  *
  * Gets a #GPtrArray containing the #IdeProjectInfo that have been discovered.
  *
- * Returns: (transfer container) (element-type IdeProjectInfo*): A #GPtrArray of #IdeProjectInfo.
+ * Returns: (transfer container) (element-type IdeProjectInfo*): a #GPtrArray of #IdeProjectInfo.
  */
 GPtrArray *
 ide_recent_projects_get_projects (IdeRecentProjects *self)
@@ -450,7 +450,7 @@ ide_recent_projects_discover_finish (IdeRecentProjects  *self,
 /**
  * ide_recent_projects_remove:
  * @self: An #IdeRecentProjects
- * @project_infos: (transfer none) (element-type IdeProjectInfo): A #GList of #IdeProjectInfo.
+ * @project_infos: (transfer none) (element-type IdeProjectInfo): a #GList of #IdeProjectInfo.
  *
  * Removes the provided projects from the recent projects file.
  */

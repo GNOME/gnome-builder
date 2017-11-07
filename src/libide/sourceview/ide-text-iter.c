@@ -126,7 +126,7 @@ _ide_text_iter_line_is_empty (GtkTextIter *iter)
 
 /**
  * _ide_text_iter_backward_paragraph_start:
- * @iter: A #GtkTextIter
+ * @iter: a #GtkTextIter
  *
  * Searches backwards until we find the beginning of a paragraph.
  *
@@ -153,7 +153,7 @@ _ide_text_iter_backward_paragraph_start (GtkTextIter *iter)
 
 /**
  * _ide_text_iter_forward_paragraph_end:
- * @iter: A #GtkTextIter
+ * @iter: a #GtkTextIter
  *
  * Searches forward until the end of a paragraph has been hit.
  *
@@ -676,10 +676,10 @@ _ide_text_iter_backward_find_char (GtkTextIter              *iter,
 
 /**
  * ide_text_iter_in_string:
- * @iter: A #GtkTextIter indicating the position to check for.
+ * @iter: a #GtkTextIter indicating the position to check for.
  * @str: A C type string.
- * @str_start: (out): A #GtkTextIter returning the str start iter (if found).
- * @str_end: (out): A #GtkTextIter returning the str end iter (if found).
+ * @str_start: (out): a #GtkTextIter returning the str start iter (if found).
+ * @str_end: (out): a #GtkTextIter returning the str end iter (if found).
  * @include_str_bounds: %TRUE if we take into account the str limits as possible @iter positions.
  *
  * Check if @iter position in the buffer is part of @str.
@@ -773,9 +773,9 @@ _ide_text_iter_in_string (GtkTextIter *iter,
 
 /**
  * _ide_text_iter_find_chars_backward:
- * @iter: A #GtkTextIter indicating the start position to check for.
- * @limit: (nullable): A #GtkTextIter indicating the limit of the search.
- * @end: (out) (nullable): A #GtkTextIter returning the str end iter (if found).
+ * @iter: a #GtkTextIter indicating the start position to check for.
+ * @limit: (nullable): a #GtkTextIter indicating the limit of the search.
+ * @end: (out) (nullable): a #GtkTextIter returning the str end iter (if found).
  * @str: A C type string.
  * @only_at_start: %TRUE if the searched @str string should be constrained to start @iter position.
  *
@@ -844,9 +844,9 @@ _ide_text_iter_find_chars_backward (GtkTextIter *iter,
 
 /**
  * _ide_text_iter_find_chars_forward:
- * @iter: A #GtkTextIter indicating the start position to check for.
- * @limit: (nullable): A #GtkTextIter indicating the limit of the search.
- * @end: (out) (nullable): A #GtkTextIter returning the str end iter (if found).
+ * @iter: a #GtkTextIter indicating the start position to check for.
+ * @limit: (nullable): a #GtkTextIter indicating the limit of the search.
+ * @end: (out) (nullable): a #GtkTextIter returning the str end iter (if found).
  * @str: A C type string.
  * @only_at_start: %TRUE if the searched @str string should be constrained to start @iter position.
  *

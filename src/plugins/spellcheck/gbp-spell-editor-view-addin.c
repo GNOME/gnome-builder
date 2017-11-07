@@ -342,7 +342,7 @@ gbp_spell_editor_view_addin_end_checking (GbpSpellEditorViewAddin *self)
  * This function may return %NULL before
  * gbp_spell_editor_view_addin_begin_checking() has been called.
  *
- * Returns: (nullable) (transfer none): A #GspellChecker or %NULL
+ * Returns: (nullable) (transfer none): a #GspellChecker or %NULL
  *
  * Since: 3.26
  */
@@ -367,7 +367,7 @@ gbp_spell_editor_view_addin_get_checker (GbpSpellEditorViewAddin *self)
  * This function may return %NULL before
  * gbp_spell_editor_view_addin_begin_checking() has been called.
  *
- * Returns: (nullable) (transfer none): A #GspellNavigator or %NULL
+ * Returns: (nullable) (transfer none): a #GspellNavigator or %NULL
  *
  * Since: 3.26
  */

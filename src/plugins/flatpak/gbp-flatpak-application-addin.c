@@ -888,7 +888,7 @@ gbp_flatpak_application_addin_class_init (GbpFlatpakApplicationAddinClass *klass
   /**
    * GbpFlatpakApplicationAddin::runtime-added:
    * @self: An #GbpFlatpakApplicationAddin
-   * @runtime: A #FlatpakInstalledRef
+   * @runtime: a #FlatpakInstalledRef
    *
    * This signal is emitted when a new runtime is discovered. No deduplication
    * is dealt with here, so consumers will need to ensure they have not seen

@@ -80,7 +80,7 @@ ide_source_location_unref (IdeSourceLocation *self)
  *
  * Retrieves the character offset within the file.
  *
- * Returns: A #guint containing the character offset within the file.
+ * Returns: a #guint containing the character offset within the file.
  */
 guint
 ide_source_location_get_offset (IdeSourceLocation *self)
@@ -95,7 +95,7 @@ ide_source_location_get_offset (IdeSourceLocation *self)
  *
  * Retrieves the target line number starting from 0.
  *
- * Returns: A #guint containing the target line.
+ * Returns: a #guint containing the target line.
  */
 guint
 ide_source_location_get_line (IdeSourceLocation *self)
@@ -110,7 +110,7 @@ ide_source_location_get_line (IdeSourceLocation *self)
  *
  * Retrieves the character offset within the line.
  *
- * Returns: A #guint containing the offset within the line.
+ * Returns: a #guint containing the offset within the line.
  */
 guint
 ide_source_location_get_line_offset (IdeSourceLocation *self)

@@ -1191,7 +1191,7 @@ ide_xml_service_get_cached_diagnostics (IdeXmlService *self,
  *
  * Gets the #DzlTaskCache for the xml schemas.
  *
- * Returns: (transfer NULL): A #DzlTaskCache.
+ * Returns: (transfer NULL): a #DzlTaskCache.
  */
 DzlTaskCache *
 ide_xml_service_get_schemas_cache (IdeXmlService *self)

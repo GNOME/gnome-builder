@@ -142,7 +142,7 @@ is_target_interesting (const gchar *target)
 /**
  * ide_makecache_get_file_targets_searched:
  *
- * Returns: (transfer container): A #GPtrArray of #IdeMakecacheTarget.
+ * Returns: (transfer container): a #GPtrArray of #IdeMakecacheTarget.
  */
 static GPtrArray *
 ide_makecache_get_file_targets_searched (GMappedFile *mapped,

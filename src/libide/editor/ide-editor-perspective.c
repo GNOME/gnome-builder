@@ -840,7 +840,7 @@ _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
  * Gets the overlay widget which can be used to layer things above all
  * items in the layout grid.
  *
- * Returns: (transfer none) (type Gtk.Overlay): A #GtkWidget
+ * Returns: (transfer none) (type Gtk.Overlay): a #GtkWidget
  */
 GtkWidget *
 ide_editor_perspective_get_overlay (IdeEditorPerspective *self)

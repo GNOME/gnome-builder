@@ -127,7 +127,7 @@ ide_doap_get_category (IdeDoap *self)
 /**
  * ide_doap_get_languages:
  *
- * Returns: (transfer none): A #GStrv.
+ * Returns: (transfer none): a #GStrv.
  */
 gchar **
 ide_doap_get_languages (IdeDoap *self)
@@ -243,7 +243,7 @@ ide_doap_set_shortdesc (IdeDoap     *self,
  *
  *
  *
- * Returns: (transfer none) (element-type IdeDoapPerson*): A #GList of #IdeDoapPerson.
+ * Returns: (transfer none) (element-type IdeDoapPerson*): a #GList of #IdeDoapPerson.
  */
 GList *
 ide_doap_get_maintainers (IdeDoap *self)

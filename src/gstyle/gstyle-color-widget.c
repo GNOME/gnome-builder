@@ -899,7 +899,7 @@ gstyle_color_widget_disconnect_color (GstyleColorWidget *self)
 
 /**
  * gstyle_color_widget_copy:
- * @self: A #GstyleColorWidget
+ * @self: a #GstyleColorWidget
  *
  * Copy the given ##GstyleColorWidget.
  * Notice that the underlaying #GstyleColor is shared
@@ -934,7 +934,7 @@ gstyle_color_widget_copy (GstyleColorWidget *self)
 
 /**
  * gstyle_color_widget_get_filter_func: (skip):
- * @self: A #GstyleColorPlane
+ * @self: a #GstyleColorPlane
  *
  * Get a pointer to the current filter function or %NULL
  * if no filter is actually set.
@@ -952,7 +952,7 @@ gstyle_color_widget_get_filter_func (GstyleColorWidget *self)
 
 /**
  * gstyle_color_widget_set_filter_func:
- * @self: A #GstyleColorPlane
+ * @self: a #GstyleColorPlane
  * @filter_func: (scope notified) (nullable): A GstyleColorFilterFunc filter function or
  *   %NULL to unset the current filter. In this case, user_data is ignored
  * @user_data: (closure) (nullable): user data to pass when calling the filter function
@@ -1002,8 +1002,8 @@ gstyle_color_widget_set_filter_func (GstyleColorWidget    *self,
 
 /**
  * gstyle_color_widget_set_color:
- * @self: A #GstyleColorWidget
- * @color: (nullable): A #GstyleColor or %NULL
+ * @self: a #GstyleColorWidget
+ * @color: (nullable): a #GstyleColor or %NULL
  *
  * Set the #GstyleColor for the #GstyleColorWidget.
  *
@@ -1218,7 +1218,7 @@ gstyle_color_widget_new (void)
 
 /**
  * gstyle_color_widget_new_with_color:
- * @color: A #GstyleColor
+ * @color: a #GstyleColor
  *
  * Returns: A new #GstyleColorWidget.with @color affected.
  *

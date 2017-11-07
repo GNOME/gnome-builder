@@ -24,11 +24,11 @@ G_DEFINE_BOXED_TYPE (GstyleColorItem, gstyle_color_item, gstyle_color_item_ref, 
 
 /**
  * gstyle_color_item_get_color:
- * @self: A #GstyleColorItem
+ * @self: a #GstyleColorItem
  *
  * Get the #GstyleColor inside the #GstyleColorItem.
  *
- * Returns: (transfer none): A #GstyleColor.
+ * Returns: (transfer none): a #GstyleColor.
  *
  */
 const GstyleColor *
@@ -41,8 +41,8 @@ gstyle_color_item_get_color (GstyleColorItem *self)
 
 /**
  * gstyle_color_item_set_color:
- * @self: A #GstyleColorItem
- * @color: (nullable): A #GstyleColor or %NULL
+ * @self: a #GstyleColorItem
+ * @color: (nullable): a #GstyleColor or %NULL
  *
  * Set the #GstyleColor inside the #GstyleColorItem.
  *
@@ -60,7 +60,7 @@ gstyle_color_item_set_color (GstyleColorItem *self,
 
 /**
  * gstyle_color_item_get_start:
- * @self: A #GstyleColorItem
+ * @self: a #GstyleColorItem
  *
  * Get the start position of the #GstyleColorItem.
  *
@@ -77,7 +77,7 @@ gstyle_color_item_get_start (GstyleColorItem *self)
 
 /**
  * gstyle_color_item_get_len:
- * @self: A #GstyleColorItem
+ * @self: a #GstyleColorItem
  *
  * Get the size of the #GstyleColorItem.
  *
@@ -142,7 +142,7 @@ gstyle_color_item_free (GstyleColorItem *self)
 
 /**
  * gstyle_color_item_new:
- * @color: (nullable): A #GstyleColor or NULL
+ * @color: (nullable): a #GstyleColor or NULL
  * @start: start offset of the item
  * @len: length of the item
  *

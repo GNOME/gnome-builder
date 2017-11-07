@@ -7323,7 +7323,7 @@ ide_source_view_set_scroll_offset (IdeSourceView *self,
 /**
  * ide_source_view_get_visible_rect:
  * @self: An #IdeSourceView.
- * @visible_rect: (out): A #GdkRectangle.
+ * @visible_rect: (out): a #GdkRectangle.
  *
  * Gets the visible region in buffer coordinates that is the visible area of the buffer. This
  * is similar to gtk_text_view_get_visible_area() except that it takes into account the

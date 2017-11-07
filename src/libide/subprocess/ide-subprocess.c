@@ -47,7 +47,7 @@ ide_subprocess_get_identifier (IdeSubprocess *self)
 /**
  * ide_subprocess_get_stdout_pipe:
  *
- * Returns: (transfer none): A #GInputStream or %NULL.
+ * Returns: (transfer none): a #GInputStream or %NULL.
  */
 GInputStream *
 ide_subprocess_get_stdout_pipe (IdeSubprocess *self)
@@ -60,7 +60,7 @@ ide_subprocess_get_stdout_pipe (IdeSubprocess *self)
 /**
  * ide_subprocess_get_stderr_pipe:
  *
- * Returns: (transfer none): A #GInputStream or %NULL.
+ * Returns: (transfer none): a #GInputStream or %NULL.
  */
 GInputStream *
 ide_subprocess_get_stderr_pipe (IdeSubprocess *self)
@@ -73,7 +73,7 @@ ide_subprocess_get_stderr_pipe (IdeSubprocess *self)
 /**
  * ide_subprocess_get_stdin_pipe:
  *
- * Returns: (transfer none): A #GOutputStream or %NULL.
+ * Returns: (transfer none): a #GOutputStream or %NULL.
  */
 GOutputStream *
 ide_subprocess_get_stdin_pipe (IdeSubprocess *self)
@@ -315,8 +315,8 @@ ide_subprocess_communicate_utf8 (IdeSubprocess  *self,
 /**
  * ide_subprocess_communicate_async:
  * @self: An #IdeSubprocess
- * @stdin_buf: (nullable): A #GBytes to send to stdin or %NULL
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @stdin_buf: (nullable): a #GBytes to send to stdin or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: A callback to complete the request
  * @user_data: user data for @callback
  *
@@ -345,7 +345,7 @@ ide_subprocess_communicate_async (IdeSubprocess       *self,
 /**
  * ide_subprocess_communicate_finish:
  * @self: An #IdeSubprocess
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @stdout_buf: (out) (optional): A location for a #Bytes.
  * @stderr_buf: (out) (optional): A location for a #Bytes.
  * @error: a location for a #GError
@@ -388,7 +388,7 @@ ide_subprocess_communicate_utf8_async (IdeSubprocess       *self,
 /**
  * ide_subprocess_communicate_utf8_finish:
  * @self: An #IdeSubprocess
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @stdout_buf: (out) (optional): A location for the UTF-8 formatted output string or %NULL
  * @stderr_buf: (out) (optional): A location for the UTF-8 formatted output string or %NULL
  * @error: A location for a #GError, or %NULL

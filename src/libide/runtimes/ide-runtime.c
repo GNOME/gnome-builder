@@ -459,12 +459,12 @@ ide_runtime_error_quark (void)
 /**
  * ide_runtime_translate_file:
  * @self: An #IdeRuntime
- * @file: A #GFile
+ * @file: a #GFile
  *
  * Translates the file from a path within the runtime to a path that can
  * be accessed from the host system.
  *
- * Returns: (transfer full) (not nullable): A #GFile.
+ * Returns: (transfer full) (not nullable): a #GFile.
  */
 GFile *
 ide_runtime_translate_file (IdeRuntime *self,

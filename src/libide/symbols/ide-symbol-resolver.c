@@ -137,7 +137,7 @@ ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
  * ide_symbol_resolver_lookup_symbol_async:
  * @self: An #IdeSymbolResolver.
  * @location: An #IdeSourceLocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @callback: A callback to execute upon completion.
  * @user_data: user data for @callback.
  *
@@ -162,7 +162,7 @@ ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver   *self,
 /**
  * ide_symbol_resolver_lookup_symbol_finish:
  * @self: An #IdeSymbolResolver.
- * @result: A #GAsyncResult provided to the callback.
+ * @result: a #GAsyncResult provided to the callback.
  * @error: (out): A location for an @error or %NULL.
  *
  * Completes an asynchronous call to lookup a symbol using
@@ -184,7 +184,7 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
 /**
  * ide_symbol_resolver_get_symbol_tree_async:
  * @self: An #IdeSymbolResolver
- * @file: A #GFile
+ * @file: a #GFile
  * @buffer: an #IdeBuffer or %NULL
  * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @callback: (allow-none): a callback to execute upon completion
@@ -255,7 +255,7 @@ ide_symbol_resolver_find_references_async (IdeSymbolResolver   *self,
  *
  * Completes an asynchronous request to ide_symbol_resolver_find_references_async().
  *
- * Returns: (transfer container) (element-type Ide.SourceRange): A #GPtrArray
+ * Returns: (transfer container) (element-type Ide.SourceRange): a #GPtrArray
  *   of #IdeSourceRange if successful; otherwise %NULL and @error is set.
  */
 GPtrArray *
@@ -273,7 +273,7 @@ ide_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
  * ide_symbol_resolver_find_nearest_scope_async:
  * @self: a #IdeSymbolResolver
  * @location: an #IdeSourceLocation
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: (scope async) (closure user_data): an async callback
  * @user_data: user data for @callback
  *

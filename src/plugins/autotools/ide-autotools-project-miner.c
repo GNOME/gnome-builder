@@ -467,7 +467,7 @@ ide_autotools_project_miner_init (IdeAutotoolsProjectMiner *self)
  * Gets the IdeAutotoolsProjectMiner:root-directory property.
  * Scans will start from this directory.
  *
- * Returns: (transfer none) (nullable): A #GFile or %NULL.
+ * Returns: (transfer none) (nullable): a #GFile or %NULL.
  */
 GFile *
 ide_autotools_project_miner_get_root_directory (IdeAutotoolsProjectMiner *self)

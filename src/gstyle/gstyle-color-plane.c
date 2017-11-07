@@ -349,8 +349,8 @@ setup_component (GstyleColorPlane     *self,
 
 /**
  * gstyle_color_plane_set_preferred_unit:
- * @self: A #GstyleColorPlane
- * @preferred_unit: A #GstyleColorUnit enum value
+ * @self: a #GstyleColorPlane
+ * @preferred_unit: a #GstyleColorUnit enum value
  *
  * Set percent or value  as the preferred unit for rgb adjustment range.
  * [0, 100] for percent unit or [0, 255] for value.
@@ -383,7 +383,7 @@ gstyle_color_plane_set_preferred_unit (GstyleColorPlane *self,
 
 /**
  * gstyle_color_plane_get_filter_func: (skip):
- * @self: A #GstyleColorPlane
+ * @self: a #GstyleColorPlane
  *
  * Get a pointer to the current filter function or %NULL
  * if no filter is actually set.
@@ -403,7 +403,7 @@ gstyle_color_plane_get_filter_func (GstyleColorPlane *self)
 
 /**
  * gstyle_color_plane_set_filter_func:
- * @self: A #GstyleColorPlane
+ * @self: a #GstyleColorPlane
  * @filter_cb: (scope notified) (nullable): A GstyleColorFilterFunc filter function or
  *   %NULL to unset the current filter. In this case, user_data is ignored
  * @user_data: (closure) (nullable): user data to pass when calling the filter function
@@ -1102,8 +1102,8 @@ gstyle_color_plane_key_press (GtkWidget   *widget,
 
 /**
  * gstyle_color_plane_get_xyz:
- * @self: A #GstyleColorPlane
- * @xyz: (out): A #GstyleXYZ adress
+ * @self: a #GstyleColorPlane
+ * @xyz: (out): a #GstyleXYZ adress
  *
  * Fill @xyz with value at cursor position.
  * The alpha component is always equal to 1.
@@ -1123,8 +1123,8 @@ gstyle_color_plane_get_xyz (GstyleColorPlane *self,
 
 /**
  * gstyle_color_plane_get_rgba:
- * @self: A #GstyleColorPlane
- * @rgba: (out): A #GdkRGBA adress
+ * @self: a #GstyleColorPlane
+ * @rgba: (out): a #GdkRGBA adress
  *
  * Fill @rgba with value at cursor position.
  * The alpha component is always equal to 1.
@@ -1144,8 +1144,8 @@ gstyle_color_plane_get_rgba (GstyleColorPlane *self,
 
 /**
  * gstyle_color_plane_get_filtered_rgba:
- * @self: A #GstyleColorPlane
- * @rgba: (out): A #GdkRGBA adress
+ * @self: a #GstyleColorPlane
+ * @rgba: (out): a #GdkRGBA adress
  *
  * Fill @rgba with filtered value at cursor position.
  *
@@ -1165,8 +1165,8 @@ gstyle_color_plane_get_filtered_rgba (GstyleColorPlane *self,
 
 /**
  * gstyle_color_plane_get_component_adjustment:
- * @self: A #GstyleColorPlane
- * @comp: A #GstyleColorComponent enum value
+ * @self: a #GstyleColorPlane
+ * @comp: a #GstyleColorComponent enum value
  *
  * Return the color component adjustment designated by
  * the #GstyleColorComponent value.
@@ -1188,8 +1188,8 @@ gstyle_color_plane_get_component_adjustment (GstyleColorPlane     *self,
 
 /**
  * gstyle_color_plane_set_rgba:
- * @self: A #GstyleColorPlane
- * @rgba: A #GdkRGBA
+ * @self: a #GstyleColorPlane
+ * @rgba: a #GdkRGBA
  *
  * Set cursor position from @rgba value.
  *
@@ -1220,8 +1220,8 @@ gstyle_color_plane_set_rgba (GstyleColorPlane *self,
 
 /**
  * gstyle_color_plane_set_xyz:
- * @self: A #GstyleColorPlane.
- * @xyz: A #GstyleXYZ struct.
+ * @self: a #GstyleColorPlane.
+ * @xyz: a #GstyleXYZ struct.
  *
  * Set cursor position from @rgba value.
  *

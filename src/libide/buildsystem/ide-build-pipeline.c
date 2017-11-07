@@ -1460,7 +1460,7 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
  * ide_build_pipeline_build_async:
  * @self: A @IdeBuildPipeline
  * @phase: the requested build phase
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a callback to execute upon completion
  * @user_data: data for @callback
  *
@@ -1543,7 +1543,7 @@ short_circuit:
 /**
  * ide_build_pipeline_build_finish:
  * @self: An #IdeBuildPipeline
- * @result: A #GAsyncResult provided to callback
+ * @result: a #GAsyncResult provided to callback
  * @error: A location for a #GError, or %NULL
  *
  * This function completes the asynchronous request to build
@@ -1575,7 +1575,7 @@ ide_build_pipeline_build_finish (IdeBuildPipeline  *self,
 /**
  * ide_build_pipeline_execute_async:
  * @self: A @IdeBuildPipeline
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a callback to execute upon completion
  * @user_data: data for @callback
  *

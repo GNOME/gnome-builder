@@ -94,7 +94,7 @@ ide_device_provider_get_settled (IdeDeviceProvider *provider)
  *
  * Retrieves a list of devices currently managed by @provider.
  *
- * Returns: (transfer container) (element-type IdeDevice*): A #GPtrArray of
+ * Returns: (transfer container) (element-type IdeDevice*): a #GPtrArray of
  *  #IdeDevice instances.
  */
 GPtrArray *

@@ -78,7 +78,7 @@ struct _IdeBuildStageClass
    * IdeBuildStage::clean_async:
    * @self: an #IdeBuildStage
    * @pipeline: An #IdeBuildPipeline
-   * @cancellable: (nullable): A #GCancellable or %NULL
+   * @cancellable: (nullable): a #GCancellable or %NULL
    * @callback: An async callback
    * @user_data: user data for @callback
    *
@@ -93,7 +93,7 @@ struct _IdeBuildStageClass
   /**
    * IdeBuildStage::clean_finish:
    * @self: an #IdeBuildStage
-   * @result: A #GErrorResult
+   * @result: a #GErrorResult
    * @error: A location for a #GError or %NULL.
    *
    * Completes an async operation to ide_build_stage_clean_async().
@@ -108,7 +108,7 @@ struct _IdeBuildStageClass
    * IdeBuildStage::query:
    * @self: An #IdeBuildStage
    * @pipeline: An #IdeBuildPipeline
-   * @cancellable: (nullable): A #GCancellable or %NULL
+   * @cancellable: (nullable): a #GCancellable or %NULL
    *
    * The #IdeBuildStage::query signal is emitted to request that the
    * build stage update its completed stage from any external resources.

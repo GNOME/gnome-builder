@@ -1241,7 +1241,7 @@ ide_editor_view_set_language (IdeEditorView     *self,
  *
  * Gets the #GtkSourceLanguage that is used by the underlying buffer.
  *
- * Returns: (transfer none) (nullable): A #GtkSourceLanguage or %NULL.
+ * Returns: (transfer none) (nullable): a #GtkSourceLanguage or %NULL.
  *
  * Since: 3.26
  */

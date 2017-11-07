@@ -375,7 +375,7 @@ ide_diagnostic_compare (const IdeDiagnostic *a,
  * the diagnostic is within. It is equivalent to getting the source
  * location and looking at the file.
  *
- * Returns: (nullable) (transfer none): A #GFile or %NULL.
+ * Returns: (nullable) (transfer none): a #GFile or %NULL.
  */
 GFile *
 ide_diagnostic_get_file (IdeDiagnostic *self)

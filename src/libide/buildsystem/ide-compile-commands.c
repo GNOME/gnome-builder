@@ -279,8 +279,8 @@ ide_compile_commands_load_worker (GTask        *task,
 /**
  * ide_compile_commands_load:
  * @self: An #IdeCompileCommands
- * @file: A #GFile
- * @cancellable: (nullable): A #GCancellable, or %NULL
+ * @file: a #GFile
+ * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: A location for a #GError, or %NULL
  *
  * Synchronously loads the contents of the requested @file and parses
@@ -328,8 +328,8 @@ ide_compile_commands_load (IdeCompileCommands  *self,
 /**
  * ide_compile_commands_load_async:
  * @self: An #IdeCompileCommands
- * @file: A #GFile
- * @cancellable: (nullable): A #GCancellable, or %NULL
+ * @file: a #GFile
+ * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: the callback for the async operation
  * @user_data: user data for @callback
  *
@@ -374,7 +374,7 @@ ide_compile_commands_load_async (IdeCompileCommands  *self,
 /**
  * ide_compile_commands_load_finish:
  * @self: An #IdeCompileCommands
- * @result: A #GAsyncResult provided to the callback
+ * @result: a #GAsyncResult provided to the callback
  * @error: A location for a #GError, or %NULL
  *
  * Completes an asynchronous request to ide_compile_commands_load_async().
@@ -584,7 +584,7 @@ ide_compile_commands_filter_vala (IdeCompileCommands   *self,
 /**
  * ide_compile_commands_lookup:
  * @self: An #IdeCompileCommands
- * @file: A #GFile representing the file to lookup
+ * @file: a #GFile representing the file to lookup
  * @directory: (out) (optional) (transfer full): A location for a #GFile, or %NULL
  * @error: A location for a #GError, or %NULL
  *

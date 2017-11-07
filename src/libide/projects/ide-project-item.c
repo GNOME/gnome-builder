@@ -93,7 +93,7 @@ ide_project_item_remove (IdeProjectItem *item,
  *
  * A scalable list containing the children of the item.
  *
- * Returns: (transfer none): A #GSequence.
+ * Returns: (transfer none): a #GSequence.
  */
 GSequence *
 ide_project_item_get_children (IdeProjectItem *item)

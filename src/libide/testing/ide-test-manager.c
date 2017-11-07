@@ -534,7 +534,7 @@ ide_test_manager_run_all_cb (GObject      *object,
 /**
  * ide_test_manager_run_all_async:
  * @self: An #IdeTestManager
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a callback to execute upon completion
  * @user_data: user data for @callback
  *
@@ -609,7 +609,7 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
 /**
  * ide_test_manager_run_all_finish:
  * @self: An #IdeTestManager
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a location for a #GError, or %NULL
  *
  * Completes an asynchronous request to execute all unit tests.
@@ -668,7 +668,7 @@ ide_test_manager_run_cb (GObject      *object,
  * ide_test_manager_run_async:
  * @self: An #IdeTestManager
  * @test: An #IdeTest
- * @cancellable: (nullable): A #GCancellable, or %NULL
+ * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: a callback to execute upon completion
  * @user_data: user data for @callback
  *

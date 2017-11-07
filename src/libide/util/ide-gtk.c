@@ -68,7 +68,7 @@ ide_widget_hierarchy_changed (GtkWidget *widget,
 
 /**
  * ide_widget_set_context_handler:
- * @widget: (type Gtk.Widget): A #GtkWidget
+ * @widget: (type Gtk.Widget): a #GtkWidget
  * @handler: (scope async): A callback to handle the context
  *
  * Calls @handler when the #IdeContext has been set for @widget.

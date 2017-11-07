@@ -467,7 +467,7 @@ ide_extension_set_adapter_init (IdeExtensionSetAdapter *self)
  *
  * Gets the #IdeExtensionSetAdapter:engine property.
  *
- * Returns: (transfer none): A #PeasEngine.
+ * Returns: (transfer none): a #PeasEngine.
  */
 PeasEngine *
 ide_extension_set_adapter_get_engine (IdeExtensionSetAdapter *self)
@@ -601,7 +601,7 @@ ide_extension_set_adapter_new (IdeContext  *context,
  *
  * Locates the extension owned by @plugin_info if such extension exists.
  *
- * Returns: (transfer none) (nullable): A #PeasExtension or %NULL
+ * Returns: (transfer none) (nullable): a #PeasExtension or %NULL
  */
 PeasExtension *
 ide_extension_set_adapter_get_extension (IdeExtensionSetAdapter *self,

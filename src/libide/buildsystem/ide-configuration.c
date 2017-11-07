@@ -1521,7 +1521,7 @@ ide_configuration_set_internal_int64 (IdeConfiguration *self,
  *
  * Gets the value associated with @key if it is a #GObject.
  *
- * Returns: (nullable) (transfer none) (type GObject.Object): A #GObject or %NULL.
+ * Returns: (nullable) (transfer none) (type GObject.Object): a #GObject or %NULL.
  */
 gpointer
 ide_configuration_get_internal_object (IdeConfiguration *self,
@@ -1545,7 +1545,7 @@ ide_configuration_get_internal_object (IdeConfiguration *self,
  * ide_configuration_set_internal_object:
  * @self: an #IdeConfiguration
  * @key: the key to set
- * @instance: (type GObject.Object) (nullable): A #GObject or %NULL
+ * @instance: (type GObject.Object) (nullable): a #GObject or %NULL
  *
  * Sets the value for @key to @instance.
  */

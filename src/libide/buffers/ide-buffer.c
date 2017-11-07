@@ -1661,7 +1661,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
   /**
    * IdeBuffer::cursor-moved:
    * @self: An #IdeBuffer.
-   * @location: A #GtkTextIter.
+   * @location: a #GtkTextIter.
    *
    * This signal is emitted when the insertion location has moved. You might
    * want to attach to this signal to update the location of the insert mark in
@@ -2121,7 +2121,7 @@ ide_buffer_can_do_newline_hack (IdeBuffer *self,
  * Additionally, this allows the buffer to update the state in #IdeUnsavedFiles if the content
  * is out of sync.
  *
- * Returns: (transfer full): A #GBytes containing the buffer content.
+ * Returns: (transfer full): a #GBytes containing the buffer content.
  */
 GBytes *
 ide_buffer_get_content (IdeBuffer *self)
@@ -2657,9 +2657,9 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
  * ide_buffer_get_symbol_at_location_async:
  * @self: an #IdeBuffer.
  * @location: a #GtkTextIter indicating a position to search for a symbol.
- * @cancellable: A #GCancellable.
- * @callback: A #GAsyncReadyCallback.
- * @user_data: A #gpointer to hold user data.
+ * @cancellable: a #GCancellable.
+ * @callback: a #GAsyncReadyCallback.
+ * @user_data: a #gpointer to hold user data.
  *
  * Asynchronously get a possible symbol at @location.
  *
@@ -2729,8 +2729,8 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
 /**
  * ide_buffer_get_symbol_at_location_finish:
  * @self: an #IdeBuffer.
- * @result: A #GAsyncResult.
- * @error: (out): A #GError.
+ * @result: a #GAsyncResult.
+ * @error: (out): a #GError.
  *
  * Completes an asynchronous request to locate a symbol at a location.
  *
@@ -2751,7 +2751,7 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
  * ide_buffer_get_symbols_finish:
  * @self: an #IdeBuffer.
  *
- * Returns: (transfer container) (element-type IdeSymbol*): A #GPtrArray if successful;
+ * Returns: (transfer container) (element-type IdeSymbol*): a #GPtrArray if successful;
  *   otherwise %NULL.
  */
 GPtrArray *
@@ -2842,8 +2842,8 @@ ide_buffer_release (IdeBuffer *self)
 /**
  * ide_buffer_get_selection_bounds:
  * @self: an #IdeBuffer.
- * @insert: (out): A #GtkTextIter to get the insert position.
- * @selection: (out): A #GtkTextIter to get the selection position.
+ * @insert: (out): a #GtkTextIter to get the insert position.
+ * @selection: (out): a #GtkTextIter to get the selection position.
  *
  * This function acts like gtk_text_buffer_get_selection_bounds() except that it always
  * places the location of the insert mark at @insert and the location of the selection
@@ -2916,7 +2916,7 @@ ide_buffer_get_symbol_resolvers (IdeBuffer *self)
 /**
  * ide_buffer_get_word_at_iter:
  * @self: an #IdeBuffer.
- * @iter: A #GtkTextIter.
+ * @iter: a #GtkTextIter.
  *
  * Gets the word found under the position denoted by @iter.
  *

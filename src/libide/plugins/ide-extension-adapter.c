@@ -508,7 +508,7 @@ ide_extension_adapter_get_interface_type (IdeExtensionAdapter *self)
  *
  * Gets the #IdeExtensionAdapter:engine property.
  *
- * Returns: (transfer none): A #PeasEngine.
+ * Returns: (transfer none): a #PeasEngine.
  */
 PeasEngine *
 ide_extension_adapter_get_engine (IdeExtensionAdapter *self)
@@ -523,7 +523,7 @@ ide_extension_adapter_get_engine (IdeExtensionAdapter *self)
  *
  * Gets the extension object managed by the adapter.
  *
- * Returns: (transfer none) (type GObject.Object): A #GObject or %NULL.
+ * Returns: (transfer none) (type GObject.Object): a #GObject or %NULL.
  */
 gpointer
 ide_extension_adapter_get_extension (IdeExtensionAdapter *self)
@@ -536,7 +536,7 @@ ide_extension_adapter_get_extension (IdeExtensionAdapter *self)
 /**
  * ide_extension_adapter_new:
  * @context: An #IdeContext.
- * @engine: (allow-none): A #PeasEngine or %NULL.
+ * @engine: (allow-none): a #PeasEngine or %NULL.
  * @interface_type: The #GType of the interface to be implemented.
  * @key: The key for matching extensions from plugin info external data.
  * @value: (allow-none): The value to use when matching keys.

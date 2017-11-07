@@ -59,7 +59,7 @@ ide_xml_analysis_get_root_node (IdeXmlAnalysis *self)
 
 /**
  * ide_xml_analysis_get_schemas:
- * @self: A #GPtrArray.
+ * @self: a #GPtrArray.
  *
  * Returns: (nullable) (transfer none): The schemas entries #GPtrArray contained by the analysis.
  *

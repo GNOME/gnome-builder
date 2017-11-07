@@ -389,7 +389,7 @@ gb_color_picker_editor_addin_init (GbColorPickerEditorAddin *self)
  *
  * If no editor view is focused, %NULL is returned.
  *
- * Returns: (transfer full): A #GstylePalette or %NULL.
+ * Returns: (transfer full): a #GstylePalette or %NULL.
  *
  * Since: 3.26
  */

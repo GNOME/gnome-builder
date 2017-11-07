@@ -164,7 +164,7 @@ find_alternate_focus (GtkWidget *focus)
 
 /**
  * gb_command_bar_hide:
- * @bar: A #GbCommandBar
+ * @bar: a #GbCommandBar
  *
  * Hides the command bar in an animated fashion.
  */
@@ -203,7 +203,7 @@ gb_command_bar_set_last_focus (GbCommandBar *self,
 
 /**
  * gb_command_bar_show:
- * @bar: A #GbCommandBar
+ * @bar: a #GbCommandBar
  *
  * Shows the command bar in an animated fashion.
  */

@@ -99,7 +99,7 @@ ide_project_files_find_child (IdeProjectItem *item,
 /**
  * ide_project_files_find_file:
  * @self: (in): an #IdeProjectFiles.
- * @file: A #GFile.
+ * @file: a #GFile.
  *
  * Tries to locate an #IdeProjectFile matching the given file.
  * If @file is the working directory, @self is returned.

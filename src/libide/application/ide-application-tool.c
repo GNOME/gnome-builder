@@ -53,7 +53,7 @@ ide_application_tool_default_init (IdeApplicationToolInterface *iface)
  * ide_application_tool_run_async:
  * @self: An #IdeApplicationTool
  * @arguments: (array zero-terminated=1) (element-type utf8): argv for the command
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: A callback to execute upon completion
  * @user_data: User data for @callback
  *

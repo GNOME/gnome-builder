@@ -152,8 +152,8 @@ ide_g_task_return_pointer_from_main (GTask          *task,
 
 /**
  * ide_g_task_return_error_from_main:
- * @task: A #GTask
- * @error: (transfer full): A #GError.
+ * @task: a #GTask
+ * @error: (transfer full): a #GError.
  *
  * Like g_task_return_error() but ensures we return to the main loop before
  * dispatching the result.

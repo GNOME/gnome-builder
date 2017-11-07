@@ -151,7 +151,7 @@ ide_project_info_set_priority (IdeProjectInfo *self,
  * Gets the #IdeProjectInfo:directory property.
  * This is the directory containing the project (if known).
  *
- * Returns: (nullable) (transfer none): A #GFile.
+ * Returns: (nullable) (transfer none): a #GFile.
  */
 GFile *
 ide_project_info_get_directory (IdeProjectInfo *self)
@@ -168,7 +168,7 @@ ide_project_info_get_directory (IdeProjectInfo *self)
  * Gets the #IdeProjectInfo:file property.
  * This is the project file (such as configure.ac) of the project.
  *
- * Returns: (nullable) (transfer none): A #GFile.
+ * Returns: (nullable) (transfer none): a #GFile.
  */
 GFile *
 ide_project_info_get_file (IdeProjectInfo *self)
@@ -182,7 +182,7 @@ ide_project_info_get_file (IdeProjectInfo *self)
  * ide_project_info_get_last_modified_at:
  *
  *
- * Returns: (transfer none) (nullable): A #GDateTime or %NULL.
+ * Returns: (transfer none) (nullable): a #GDateTime or %NULL.
  */
 GDateTime *
 ide_project_info_get_last_modified_at (IdeProjectInfo *self)

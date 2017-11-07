@@ -198,7 +198,7 @@ ide_perspective_get_title (IdePerspective *self)
  * You may use #IdeHeaderBar for a base implementation to save you the trouble of
  * creating a titlebar similar to other perspectives in Builder.
  *
- * Returns: (transfer none) (nullable): A #GtkWidget or %NULL.
+ * Returns: (transfer none) (nullable): a #GtkWidget or %NULL.
  */
 GtkWidget *
 ide_perspective_get_titlebar (IdePerspective *self)
@@ -228,7 +228,7 @@ ide_perspective_set_fullscreen (IdePerspective *self,
 /**
  * ide_perspective_views_foreach:
  * @self: An #IdePerspective.
- * @callback: (scope call): A #GtkCallback.
+ * @callback: (scope call): a #GtkCallback.
  * @user_data: user data for @callback.
  *
  * This interface method is used to iterate all #IdeLayoutView's that are descendents of @self.

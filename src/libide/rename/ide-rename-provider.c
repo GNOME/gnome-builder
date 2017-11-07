@@ -81,7 +81,7 @@ ide_rename_provider_default_init (IdeRenameProviderInterface *iface)
  * @self: An #IdeRenameProvider
  * @location: An #IdeSourceLocation
  * @new_name: The replacement name for the symbol
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a callback to complete the request
  * @user_data: user data for @callback
  *
@@ -113,7 +113,7 @@ ide_rename_provider_rename_async (IdeRenameProvider   *self,
 /**
  * ide_rename_provider_rename_finish:
  * @self: An #IdeRenameProvider
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @edits: (out) (transfer container) (element-type Ide.ProjectEdit) (nullable): A location
  *   for a #GPtrArray of #IdeProjectEdit instances.
  * @error: a location for a #GError, or %NULL.

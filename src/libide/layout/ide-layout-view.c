@@ -568,7 +568,7 @@ ide_layout_view_create_split_view (IdeLayoutView *self)
  * The primary-color-bg can be used to alter the color of the layout
  * stack header to match the document contents.
  *
- * Returns: (transfer none) (nullable): A #GdkRGBA or %NULL.
+ * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
  *
  * Since: 3.26
  */
@@ -585,7 +585,7 @@ ide_layout_view_get_primary_color_bg (IdeLayoutView *self)
 /**
  * ide_layout_view_set_primary_color_bg:
  * @self: a #IdeLayoutView
- * @primary_color_bg: (nullable): A #GdkRGBA or %NULL
+ * @primary_color_bg: (nullable): a #GdkRGBA or %NULL
  *
  * Sets the #IdeLayoutView:primary-color-bg property.
  * If @primary_color_bg is %NULL, the property is unset.
@@ -630,7 +630,7 @@ ide_layout_view_set_primary_color_bg (IdeLayoutView *self,
  * The primary-color-fg can be used to alter the foreground color of the layout
  * stack header to match the document contents.
  *
- * Returns: (transfer none) (nullable): A #GdkRGBA or %NULL.
+ * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
  *
  * Since: 3.26
  */
@@ -647,7 +647,7 @@ ide_layout_view_get_primary_color_fg (IdeLayoutView *self)
 /**
  * ide_layout_view_set_primary_color_fg:
  * @self: a #IdeLayoutView
- * @primary_color_fg: (nullable): A #GdkRGBA or %NULL
+ * @primary_color_fg: (nullable): a #GdkRGBA or %NULL
  *
  * Sets the #IdeLayoutView:primary-color-fg property.
  * If @primary_color_fg is %NULL, the property is unset.

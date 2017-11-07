@@ -2700,7 +2700,7 @@ gbp_gdb_debugger_write_cb (GObject      *object,
  * @self: An #GbpGdbDebugger
  * @thread: (nullable): An #IdeDebuggerThread or %NULL
  * @command: the command to be executed
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @user_data: user data for @cancellable
  *
  * Submits a command to the gdb process to be executed by the debugger.
@@ -2824,7 +2824,7 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
 
 /**
  * gbp_gdb_debugger_exec_finish:
- * @self: A #GbpGdbDebugger
+ * @self: a #GbpGdbDebugger
  * @result: A result provided to the async callback
  * @error: a location for a #GError, or %NULL
  *

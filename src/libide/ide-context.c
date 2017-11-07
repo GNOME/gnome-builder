@@ -171,7 +171,7 @@ static guint signals [LAST_SIGNAL];
  * Gets the IdeContext:recent-manager property. The recent manager is a GtkRecentManager instance
  * that should be used for the workbench.
  *
- * Returns: (transfer none): A #GtkRecentManager.
+ * Returns: (transfer none): a #GtkRecentManager.
  */
 GtkRecentManager *
 ide_context_get_recent_manager (IdeContext *self)
@@ -439,7 +439,7 @@ ide_context_get_project (IdeContext *self)
  * Retrieves a #GFile containing the project file that was used to load
  * the context.
  *
- * Returns: (transfer none): A #GFile.
+ * Returns: (transfer none): a #GFile.
  */
 GFile *
 ide_context_get_project_file (IdeContext *self)
@@ -476,7 +476,7 @@ ide_context_get_search_engine (IdeContext *self)
 
 /**
  * ide_context_get_service_typed:
- * @service_type: A #GType of the service desired.
+ * @service_type: a #GType of the service desired.
  *
  * Retrieves a service matching @service_type. If no match was found, a type
  * implementing the requested service type will be returned. If no matching
@@ -2237,7 +2237,7 @@ ide_context_hold (IdeContext *self)
 /**
  * ide_context_hold_for_object:
  * @self: An #IdeContext
- * @instance: (type GObject.Object): A #GObject instance
+ * @instance: (type GObject.Object): a #GObject instance
  *
  * Adds a hold on @self for the lifetime of @instance.
  */

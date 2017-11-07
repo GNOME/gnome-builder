@@ -88,7 +88,7 @@ ide_vcs_default_init (IdeVcsInterface *iface)
 /**
  * ide_vcs_is_ignored:
  * @self: An #IdeVcs
- * @file: (nullable): A #GFile
+ * @file: (nullable): a #GFile
  * @error: A location for a #GError, or %NULL
  *
  * This function will check if @file is considered an "ignored file" by
@@ -238,7 +238,7 @@ ide_vcs_get_priority (IdeVcs *self)
  *
  * This function is safe to call from threads holding a reference to @self.
  *
- * Returns: (transfer none): A #GFile.
+ * Returns: (transfer none): a #GFile.
  *
  * Since: 3.18
  *

@@ -87,7 +87,7 @@ static gchar TRUNCATE_BUF[6];
 
 /**
  * gstyle_color_to_hsla:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  * @hue: (out): The hue component of a hsla color in range [0.0-360.0[
  * @saturation: (out): The saturation component of a hsla color in range [0.0-100.0]
  * @lightness: (out): The lightness component of a hsla color in range [0.0-100.0]
@@ -131,7 +131,7 @@ truncate_trailing_zeros (gdouble number)
 
 /**
  * gstyle_color_to_string:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  * @kind: The kind of representation as a #GstyleColorKind
  *
  * Get the string representation of a #GstyleColor.
@@ -263,11 +263,11 @@ gstyle_color_to_string (GstyleColor     *self,
 
 /**
  * gstyle_color_get_rgba:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  *
  * Get a #GdkRGBA object from a #GstyleColor.
  *
- * Returns: A #GdkRGBA.
+ * Returns: a #GdkRGBA.
  *
  */
 GdkRGBA *
@@ -280,7 +280,7 @@ gstyle_color_get_rgba (GstyleColor *self)
 
 /**
  * gstyle_color_fill_rgba:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  * @rgba: (out): the #GdkRGBA to fill in
  *
  * Fill a #GdkRGBA object from a #GstyleColor.
@@ -745,7 +745,7 @@ _parse_predefined_color (const gchar  *color_string,
  * gstyle_color_fuzzy_parse_color_string:
  * @color_string: color name to search for
  *
- * Returns: (transfer full) (element-type GstyleColor): A #GPtrArray of #GstyleColor for a fuzzy search.
+ * Returns: (transfer full) (element-type GstyleColor): a #GPtrArray of #GstyleColor for a fuzzy search.
  */
 GPtrArray *
 gstyle_color_fuzzy_parse_color_string (const gchar *color_string)
@@ -869,11 +869,11 @@ gstyle_color_fill (GstyleColor *src_color,
 
 /**
  * gstyle_color_copy:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  *
  * A full copy of a #GstyleColor.
  *
- * Returns: (transfer full): A #GstyleColor.
+ * Returns: (transfer full): a #GstyleColor.
  *
  */
 GstyleColor *
@@ -907,7 +907,7 @@ gstyle_color_copy (GstyleColor *self)
  *
  * A #GstyleColor object from #GstyleColorKind and rgba components.
  *
- * Returns: A #GstyleColor.
+ * Returns: a #GstyleColor.
  *
  */
 GstyleColor *
@@ -936,11 +936,11 @@ gstyle_color_new (const gchar     *name,
  * gstyle_color_new_from_rgba:
  * @name: (nullable): The name of the color. Can be %NULL
  * @kind: The kind of representation as a #GstyleColorKind
- * @rgba: A #GdkRGBA
+ * @rgba: a #GdkRGBA
  *
  * A #GstyleColor object from a #GstyleColorKind and a #GdkRGBA object.
  *
- * Returns: A #GstyleColor.
+ * Returns: a #GstyleColor.
  *
  */
 GstyleColor *
@@ -966,7 +966,7 @@ gstyle_color_new_from_rgba (const gchar     *name,
  *
  * A #GstyleColor from #GstyleColorKind and rgba components.
  *
- * Returns: A #GstyleColor.
+ * Returns: a #GstyleColor.
  *
  */
 GstyleColor *
@@ -996,7 +996,7 @@ gstyle_color_new_from_hsla (const gchar     *name,
  *
  * A #GstyleColor object from a color string.
  *
- * Returns: A #GstyleColor or %NULL if the string can't be parsed.
+ * Returns: a #GstyleColor or %NULL if the string can't be parsed.
  *
  */
 GstyleColor *
@@ -1030,7 +1030,7 @@ gstyle_color_new_from_string (const gchar *name,
 
 /**
  * gstyle_color_get_name:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  *
  * Get the name of a #GstyleColor.
  *
@@ -1047,7 +1047,7 @@ gstyle_color_get_name (GstyleColor *self)
 
 /**
  * gstyle_color_set_name:
- * @self: A #GstyleColor.
+ * @self: a #GstyleColor.
  * @name: (nullable): A string
  *
  * Set the name of a #GstyleColor.
@@ -1073,11 +1073,11 @@ gstyle_color_set_name (GstyleColor *self,
 
 /**
  * gstyle_color_get_kind:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  *
  * Get the #GstyleColorKind of a #GstyleColor.
  *
- * Returns: A #GstyleColorKind.
+ * Returns: a #GstyleColorKind.
  *
  */
 GstyleColorKind
@@ -1090,8 +1090,8 @@ gstyle_color_get_kind (GstyleColor *self)
 
 /**
  * gstyle_color_set_kind:
- * @self: A #GstyleColor
- * @kind: A #GstyleColorKind
+ * @self: a #GstyleColor
+ * @kind: a #GstyleColorKind
  *
  * Set the #GstyleColorKind of a #GstyleColor.
  *
@@ -1111,8 +1111,8 @@ gstyle_color_set_kind (GstyleColor     *self,
 
 /**
  * gstyle_color_set_rgba:
- * @self: A #GstyleColor
- * @rgba: A #GdkRGBA
+ * @self: a #GstyleColor
+ * @rgba: a #GdkRGBA
  *
  * Set #GstyleColor color from a #GdkRGBA.
  *
@@ -1133,7 +1133,7 @@ gstyle_color_set_rgba (GstyleColor *self,
 
 /**
  * gstyle_color_set_alpha:
- * @self: A #GstyleColor
+ * @self: a #GstyleColor
  * @alpha: the new alpha value in [0,1] range
  *
  * Set the alpha value the the #GstyleColor.

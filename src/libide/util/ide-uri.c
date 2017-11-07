@@ -1526,7 +1526,7 @@ ide_uri_error_quark (void)
 
 /**
  * ide_uri_new_from_file:
- * @file: A #GFile.
+ * @file: a #GFile.
  *
  * Creates a new #IdeUri from the uri provided by @file.
  *
@@ -1578,7 +1578,7 @@ ide_uri_is_file (IdeUri *uri,
  *
  * Creates a #GFile that represents the resource @uri.
  *
- * Returns: (transfer full) (nullable): A #GFile or %NULL upon failure.
+ * Returns: (transfer full) (nullable): a #GFile or %NULL upon failure.
  */
 GFile *
 ide_uri_to_file (IdeUri *uri)

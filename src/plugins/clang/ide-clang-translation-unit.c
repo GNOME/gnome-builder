@@ -769,7 +769,7 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
 /**
  * ide_clang_translation_unit_code_complete_finish:
  * @self: an #IdeClangTranslationUnit.
- * @result: A #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: (out) (nullable): A location for a #GError, or %NULL.
  *
  * Completes a call to ide_clang_translation_unit_code_complete_async().

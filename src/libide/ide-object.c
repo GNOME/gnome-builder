@@ -466,10 +466,10 @@ ide_object_new_for_extension_async_try_next (GTask *task)
 /**
  * ide_object_new_for_extension_async:
  * @interface_gtype: the #GType of the extension interface
- * @sort_priority_func: (scope call) (allow-none): A #GCompareDataFunc or %NULL
+ * @sort_priority_func: (scope call) (allow-none): a #GCompareDataFunc or %NULL
  * @sort_priority_data: (nullable): data for @sort_priority_func
  * @io_priority: An io priority or %G_PRIORITY_DEFAULT
- * @cancellable: (nullable): A #GCancellable or %NULL
+ * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: (nullable): A callback to complete the request
  * @user_data: (nullable): user data for @callback
  * @first_property: (nullable): The first property to set, or %NULL
@@ -542,8 +542,8 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
  * ide_object_new_async:
  * @extension_point: The identifier of the extension point
  * @io_priority: An io priority or %G_PRIORITY_DEFAULT
- * @cancellable: (nullable): A #GCancellable or %NULL
- * @callback: (nullable): A #GAsyncReadyCallback
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: (nullable): a #GAsyncReadyCallback
  * @user_data: user data for @callback
  * @first_property: the first property to set, or %NULL
  * @...: the value for the first property
@@ -626,7 +626,7 @@ ide_object_new_async (const gchar          *extension_point,
 
 /**
  * ide_object_new_finish:
- * @result: A #GAsyncResult provided to callback
+ * @result: a #GAsyncResult provided to callback
  * @error: A location for a #GError, or %NULL
  *
  * Completes an asynchronous request to create a new #IdeObject subclass.
@@ -731,7 +731,7 @@ ide_object_notify_in_main_cb (gpointer data)
 /**
  * ide_object_notify_in_main:
  * @instance: (type GObject.Object): a #GObject
- * @pspec: A #GParamSpec
+ * @pspec: a #GParamSpec
  *
  * This helper will perform a g_object_notify_by_pspec() with the
  * added requirement that it is run from the applications main thread.
