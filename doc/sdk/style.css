@@ -107,6 +107,8 @@ td.function_name a,
 td.parameter_name,
 td.property_name,
 td.property_name a,
+td.signal_name,
+td.signal_name a,
 span.returnvalue,
 span.c_punctuation
 {
