@@ -1,0 +1,208 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,600,700i,400,400i,300,200&amp;subset=latin-ext");
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+
+body {
+  background-color: #fefefe;
+  color: #333;
+  font-family: "Source Sans Pro", cantarell, sans-serif;
+  font-size: 12pt;
+  font-weight: 400;
+}
+
+body > div,
+body > table {
+  background-color: #fff;
+  width: 750px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+a, a.link {
+  color: #4a86cf;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 1px rgba(74,134,207,.3);
+}
+
+p {
+  max-width: 725px;
+  line-height: 1.3em;
+}
+
+hr {
+  height: 1px;
+  background-color: #eeeeec;
+  border: none;
+  margin-top: 8px;
+  margin-bottom: 32px;
+}
+
+div.refnamediv {
+  margin: 20px 0 40px 0;
+}
+
+h1,
+h2 span.refentrytitle
+{
+  font-size: 56pt;
+  font-weight: 200;
+  color: #333;
+  line-height: 1em;
+}
+
+h2,
+div.toc > p:first-child > b:first-child
+{
+  font-size: 28pt;
+  font-weight: 400;
+  color: #4a86cf;
+}
+
+h3,
+div.toc > dl.toc > dt a.link
+{
+  font-size: 18pt;
+  font-weight: 300;
+  color: #333;
+}
+
+h4
+{
+  font-size: 12pt;
+  font-weight: 500;
+  color: #808080;
+}
+
+div.refsect3 > h4
+{
+  font-size: 18pt;
+  color: #333;
+  font-weight: 400;
+  margin-bottom: .5em;
+}
+
+td.signal_type,
+td.property_type,
+td.function_type,
+td.define_keyword,
+td.datatype_keyword,
+td.parameter_name
+{
+  font-family: "Source Code Pro", monospace;
+  text-align: right;
+  padding-right: .75em;
+}
+
+span.return_value,
+span.return_value a,
+td.function_name,
+td.function_name a,
+td.parameter_name,
+td.property_name,
+td.property_name a,
+span.returnvalue,
+span.c_punctuation
+{
+  font-family: "Source Code Pro", monospace;
+}
+
+div.refsect2 > pre.programlisting {
+  margin-bottom: 30px;
+}
+
+table.informaltable {
+  margin-left: 1em;
+}
+
+code,
+span.type,
+pre.screen,
+pre {
+  font-family: "Source Code Pro", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+table.navigation {
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  border-radius: 9px;
+  border: 1px solid #ececec;
+  background-color: #f6f7f8;
+  background-size: 1em 1em;
+  background-image: repeating-linear-gradient(0deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 1em),
+                    repeating-linear-gradient(-90deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 1em);
+}
+
+pre.synopsis,
+pre.programlisting {
+  padding: .5em;
+  margin: 0px;
+  color: #333333;
+  border-radius: 9px;
+  background-color: #f6f7f8;
+  background-size: 1em 1em;
+  background-image: repeating-linear-gradient(0deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 1em),
+                    repeating-linear-gradient(-90deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 1em);
+}
+
+pre.synopsis,
+div.refsect2 > pre.programlisting {
+  border: 1px solid #ececec;
+  border-radius: 9px;
+}
+
+div.informalexample {
+  margin-left: 1em;
+}
+
+table.listing_frame {
+  border: 1px solid #ececec;
+  border-radius: 9px;
+  background-color: #ececec;
+}
+
+div.informalexample pre.programlisting {
+  padding: .75em .25em;
+}
+
+td.listing_lines {
+  padding-left: 1em;
+  padding-right: .5em;
+  font-family: "Source Code Pro", monospace;
+  font-weight: 400;
+  font-style: normal;
+  color: #999;
+}
+
+div.refsect2 > p.since {
+  margin-left: 0em;
+  color: #01808f;
+  font-weight: 600;
+}
+
+p.since a.link {
+  color: #01808f;
+}
+
+div.refsect3 > p {
+  margin-left: 1em;
+}
+
+span.annotation {
+  font-family: "Source Code Pro", monospace;
+  color: #808080;
+  font-weight: 400;
+}
+
+div.footer {
+  display: none;
+}

@@ -26,6 +26,11 @@ vte_docpath = join_paths(vte_prefix, 'share', 'vte-doc', 'html')
 # Locate our directory for documentation
 docpath = join_paths(get_option('datadir'), 'gtk-doc', 'html')
 
+# Override assets from gtkdoc-mkhtml
+override_files = [
+  'style.css',
+]
+
 gnome.gtkdoc('libide',
            main_xml: 'libide-docs.sgml',
             src_dir: [
@@ -40,6 +45,8 @@ gnome.gtkdoc('libide',
             '--ignore-decorators=_IDE_EXTERN',
           ],
      ignore_headers: private_headers,
+
+        html_assets: override_files,
 
        fixxref_args: [
          '--html-dir=@0@'.format(docpath),
