@@ -533,7 +533,7 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
 
 /**
  * ide_extension_set_adapter_foreach:
- * @self: A #IdeExtensionSetAdapter
+ * @self: an #IdeExtensionSetAdapter
  * @foreach_func: (scope call): A callback
  * @user_data: user data for @foreach_func
  *

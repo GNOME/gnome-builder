@@ -188,7 +188,7 @@ ide_project_set_root (IdeProject     *self,
 
 /**
  * ide_project_get_files:
- * @self: A #IdeProject.
+ * @self: an #IdeProject.
  *
  * Gets the #IdeProjectFiles instance within the project tree.
  * If it has not yet been loaded, %NULL is returned.
@@ -284,7 +284,7 @@ ide_project_get_file_for_path (IdeProject  *self,
 
 /**
  * ide_project_get_project_file:
- * @self: A #IdeProject.
+ * @self: an #IdeProject.
  * @gfile: A #GFile.
  *
  * Gets a new #IdeFile representing @gfile.

@@ -581,7 +581,7 @@ ide_diagnostics_manager_class_init (IdeDiagnosticsManagerClass *klass)
 
   /**
    * IdeDiagnosticsManager::changed:
-   * @self: A #IdeDiagnosticsManager
+   * @self: an #IdeDiagnosticsManager
    *
    * This signal is emitted when the diagnostics have changed for any
    * file managed by the IdeDiagnosticsManager.

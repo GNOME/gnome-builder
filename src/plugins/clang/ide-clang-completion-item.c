@@ -433,7 +433,7 @@ ide_clang_completion_item_init (IdeClangCompletionItem *self)
 
 /**
  * ide_clang_completion_item_get_snippet:
- * @self: A #IdeClangCompletionItem.
+ * @self: an #IdeClangCompletionItem.
  *
  * Gets the #IdeSourceSnippet to be inserted when expanding this completion item.
  *

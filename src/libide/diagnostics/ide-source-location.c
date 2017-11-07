@@ -171,7 +171,7 @@ ide_source_location_new (IdeFile *file,
 
 /**
  * ide_source_location_get_uri:
- * @self: (in): A #IdeSourceLocation.
+ * @self: (in): an #IdeSourceLocation.
  *
  * Returns: (transfer full): A newly allocated #IdeUri.
  */

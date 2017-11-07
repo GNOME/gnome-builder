@@ -128,7 +128,7 @@ ide_unsaved_file_unref (IdeUnsavedFile *self)
 
 /**
  * ide_unsaved_file_get_content:
- * @self: A #IdeUnsavedFile.
+ * @self: an #IdeUnsavedFile.
  *
  * Gets the contents of the unsaved file.
  *

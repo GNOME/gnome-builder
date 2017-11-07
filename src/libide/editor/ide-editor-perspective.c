@@ -586,7 +586,7 @@ ide_editor_perspective_get_active_view (IdeEditorPerspective *self)
  *
  * Gets the #IdeEditorSidebar for the editor perspective.
  *
- * Returns: (transfer none): A #IdeEditorSidebar
+ * Returns: (transfer none): an #IdeEditorSidebar
  *
  * Since: 3.26
  */

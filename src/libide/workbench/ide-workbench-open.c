@@ -362,7 +362,7 @@ ide_workbench_open_files_cb (GObject      *object,
  * @files: (array length=n_files): An array of #GFile objects to be opened.
  * @n_files: The number of files given.
  * @hint: The id of an #IdeWorkbenchAddin that should be preferred as a loader.
- * @flags: A #IdeWorkbenchOpenFlags (if WORKBENCH_OPEN_FLAGS_BG is set, the buffer is loaded
+ * @flags: an #IdeWorkbenchOpenFlags (if WORKBENCH_OPEN_FLAGS_BG is set, the buffer is loaded
  *    but not made visible in the UI).
  * @cancellable: (nullable): A #GCancellable.
  * @callback: (scope async) (closure user_data): A #GAsyncReadyCallback or %NULL

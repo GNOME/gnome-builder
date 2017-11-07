@@ -508,7 +508,7 @@ ide_layout_grid_new (void)
  * Gets the most recently focused stack. This is useful when you want to open
  * a document on the stack the user last focused.
  *
- * Returns: (transfer none) (nullable): A #IdeLayoutStack or %NULL.
+ * Returns: (transfer none) (nullable): an #IdeLayoutStack or %NULL.
  *
  * Since: 3.26
  */

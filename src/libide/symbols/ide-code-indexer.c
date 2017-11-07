@@ -83,7 +83,7 @@ ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
  * This function will take index source file and create an array
  * of symbols in @file.
  *
- * Returns: (transfer full) : A #IdeCodeIndexEntries contains list
+ * Returns: (transfer full) : an #IdeCodeIndexEntries contains list
  *    of #IdeCodeIndexEntry.
  *
  * Since: 3.26

@@ -80,7 +80,7 @@ symbol_tree_iface_init (IdeSymbolTreeInterface *iface)
 
 /**
  * ide_xml_symbol_tree_new:
- * @root_node: A #IdeXmlSymbolNode
+ * @root_node: an #IdeXmlSymbolNode
  *
  * Create a new #IdeXmlSymbolTree
  *

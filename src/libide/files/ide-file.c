@@ -186,7 +186,7 @@ ide_file_set_file (IdeFile *self,
 
 /**
  * _ide_file_get_source_file:
- * @self: (in): A #IdeFile.
+ * @self: (in): an #IdeFile.
  *
  * Gets the GtkSourceFile for the #IdeFile.
  *
@@ -337,7 +337,7 @@ ide_file_load_settings_finish (IdeFile              *self,
 
 /**
  * ide_file_get_temporary_id:
- * @self: (in): A #IdeFile.
+ * @self: (in): an #IdeFile.
  *
  * Gets the #IdeFile:temporary-id property for the file.
  *

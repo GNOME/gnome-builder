@@ -641,7 +641,7 @@ ide_ctags_index_get_mtime (IdeCtagsIndex *self)
 
 /**
  * ide_ctags_index_find_with_path:
- * @self: A #IdeCtagsIndex
+ * @self: an #IdeCtagsIndex
  * @relative_path: A path relative to the indexes base_path.
  *
  * This will return a GPtrArray of #IdeCtagsIndex pointers. These

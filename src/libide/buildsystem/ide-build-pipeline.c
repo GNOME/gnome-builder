@@ -1808,7 +1808,7 @@ ide_build_pipeline_execute_finish (IdeBuildPipeline  *self,
 
 /**
  * ide_build_pipeline_connect:
- * @self: A #IdeBuildPipeline
+ * @self: an #IdeBuildPipeline
  * @phase: An #IdeBuildPhase
  * @priority: an optional priority for sorting within the phase
  * @stage: An #IdeBuildStage
@@ -1880,7 +1880,7 @@ cleanup:
 
 /**
  * ide_build_pipeline_connect_launcher:
- * @self: A #IdeBuildPipeline
+ * @self: an #IdeBuildPipeline
  * @phase: An #IdeBuildPhase
  * @priority: an optional priority for sorting within the phase
  * @launcher: An #IdeSubprocessLauncher
@@ -2297,7 +2297,7 @@ ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,
 
 /**
  * ide_build_pipeline_add_error_format:
- * @self: A #IdeBuildPipeline
+ * @self: an #IdeBuildPipeline
  * @regex: A regex to be compiled
  *
  * This can be used to add a regex that will extract errors from

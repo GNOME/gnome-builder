@@ -1005,7 +1005,7 @@ ide_layout_stack_get_titlebar (IdeLayoutStack *self)
 
 /**
  * ide_layout_stack_get_has_view:
- * @self: A #IdeLayoutStack
+ * @self: an #IdeLayoutStack
  *
  * Gets the "has-view" property.
  *

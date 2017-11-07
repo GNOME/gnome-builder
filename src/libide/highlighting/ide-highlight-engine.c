@@ -952,7 +952,7 @@ ide_highlight_engine_new (IdeBuffer *buffer)
 
 /**
  * ide_highlight_engine_get_highlighter:
- * @self: A #IdeHighlightEngine.
+ * @self: an #IdeHighlightEngine.
  *
  * Gets the IdeHighlightEngine:highlighter property.
  *
@@ -968,7 +968,7 @@ ide_highlight_engine_get_highlighter (IdeHighlightEngine *self)
 
 /**
  * ide_highlight_engine_get_buffer:
- * @self: A #IdeHighlightEngine.
+ * @self: an #IdeHighlightEngine.
  *
  * Gets the IdeHighlightEngine:buffer property.
  *

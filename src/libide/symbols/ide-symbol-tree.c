@@ -53,7 +53,7 @@ ide_symbol_tree_get_n_children (IdeSymbolTree *self,
  *
  * Gets the @nth child node of @node.
  *
- * Returns: (transfer full) (nullable): A #IdeSymbolNode or %NULL.
+ * Returns: (transfer full) (nullable): an #IdeSymbolNode or %NULL.
  */
 IdeSymbolNode *
 ide_symbol_tree_get_nth_child (IdeSymbolTree *self,

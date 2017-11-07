@@ -54,7 +54,7 @@ ide_highlighter_default_init (IdeHighlighterInterface *iface)
 
 /**
  * ide_highlighter_update:
- * @self: A #IdeHighlighter.
+ * @self: an #IdeHighlighter.
  * @callback: (scope call): A callback to apply a given style.
  * @range_begin: The beginning of the range to update.
  * @range_end: The end of the range to update.

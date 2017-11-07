@@ -249,7 +249,7 @@ ide_context_get_device_manager (IdeContext *self)
  *
  * Returns the #IdeDocumentation for the source view if there is one.
  *
- * Returns: (transfer none) (nullable): A #IdeDocumentation or %NULL.
+ * Returns: (transfer none) (nullable): an #IdeDocumentation or %NULL.
  */
 IdeDocumentation *
 ide_context_get_documentation (IdeContext *self)

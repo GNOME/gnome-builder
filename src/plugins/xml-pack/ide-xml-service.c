@@ -1167,7 +1167,7 @@ ide_xml_service_get_cached_root_node (IdeXmlService *self,
  *
  * Gets the #IdeDiagnostics for the corresponding file.
  *
- * Returns: (transfer NULL): A #IdeDiagnostics.
+ * Returns: (transfer NULL): an #IdeDiagnostics.
  */
 IdeDiagnostics *
 ide_xml_service_get_cached_diagnostics (IdeXmlService *self,

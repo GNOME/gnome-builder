@@ -60,7 +60,7 @@ gb_command_provider_new (IdeWorkbench *workbench)
  * Returns the "active-tab" property. The active-tab is the last tab that
  * was focused in the workbench.
  *
- * Returns: (transfer none): A #IdeLayoutView or %NULL.
+ * Returns: (transfer none): an #IdeLayoutView or %NULL.
  */
 IdeLayoutView *
 gb_command_provider_get_active_view (GbCommandProvider *provider)

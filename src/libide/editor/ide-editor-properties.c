@@ -399,7 +399,7 @@ ide_editor_properties_init (IdeEditorProperties *self)
  *
  * Creates a new #IdeEditorProperties.
  *
- * Returns: (transfer full): A #IdeEditorProperties
+ * Returns: (transfer full): an #IdeEditorProperties
  *
  * Since: 3.26
  */

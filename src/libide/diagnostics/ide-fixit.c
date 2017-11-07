@@ -89,7 +89,7 @@ ide_fixit_apply (IdeFixit *self)
 
 /**
  * ide_fixit_get_text:
- * @self: A #IdeFixit.
+ * @self: an #IdeFixit.
  *
  * Gets the text to replace the source range with.
  *
@@ -105,7 +105,7 @@ ide_fixit_get_text (IdeFixit *self)
 
 /**
  * ide_fixit_get_range:
- * @self: A #IdeFixit.
+ * @self: an #IdeFixit.
  *
  * Gets the range for the replacement text. The range is non inclusive of the
  * end location. [a,b)

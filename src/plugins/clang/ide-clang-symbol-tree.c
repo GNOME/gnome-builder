@@ -57,7 +57,7 @@ static GParamSpec *properties [LAST_PROP];
 
 /**
  * ide_clang_symbol_tree_get_file:
- * @self: A #IdeClangSymbolTree.
+ * @self: an #IdeClangSymbolTree.
  *
  * Gets the #IdeClangSymbolTree:file property.
  *

@@ -76,7 +76,7 @@ struct _IdeBuildStageClass
 
   /**
    * IdeBuildStage::clean_async:
-   * @self: A #IdeBuildStage
+   * @self: an #IdeBuildStage
    * @pipeline: An #IdeBuildPipeline
    * @cancellable: (nullable): A #GCancellable or %NULL
    * @callback: An async callback
@@ -92,7 +92,7 @@ struct _IdeBuildStageClass
 
   /**
    * IdeBuildStage::clean_finish:
-   * @self: A #IdeBuildStage
+   * @self: an #IdeBuildStage
    * @result: A #GErrorResult
    * @error: A location for a #GError or %NULL.
    *

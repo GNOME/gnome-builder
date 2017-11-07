@@ -226,7 +226,7 @@ ide_diagnostic_new (IdeDiagnosticSeverity  severity,
 
 /**
  * ide_diagnostic_take_fixit:
- * @self: A #IdeDiagnostic.
+ * @self: an #IdeDiagnostic.
  * @fixit: (transfer full): An #IdeFixit.
  *
  * Adds the suggested fixit to the diagnostic while transfering ownership
@@ -247,7 +247,7 @@ ide_diagnostic_take_fixit (IdeDiagnostic *self,
 
 /**
  * ide_diagnostic_take_range:
- * @self: A #IdeDiagnostic.
+ * @self: an #IdeDiagnostic.
  * @range: (transfer full): An #IdeSourceRange.
  *
  * Steals the ownership of @range and adds to the diagnostic.
@@ -327,7 +327,7 @@ ide_diagnostic_get_num_fixits (IdeDiagnostic *self)
 
 /**
  * ide_diagnostic_get_fixit:
- * @self: A #IdeDiagnostic.
+ * @self: an #IdeDiagnostic.
  * @index: The index of the fixit.
  *
  * Gets the fixit denoted by @index. This value should be less than the value

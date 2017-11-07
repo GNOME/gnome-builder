@@ -146,7 +146,7 @@ ide_project_info_set_priority (IdeProjectInfo *self,
 
 /**
  * ide_project_info_get_directory:
- * @self: (in): A #IdeProjectInfo.
+ * @self: (in): an #IdeProjectInfo.
  *
  * Gets the #IdeProjectInfo:directory property.
  * This is the directory containing the project (if known).
@@ -163,7 +163,7 @@ ide_project_info_get_directory (IdeProjectInfo *self)
 
 /**
  * ide_project_info_get_file:
- * @self: (in): A #IdeProjectInfo.
+ * @self: (in): an #IdeProjectInfo.
  *
  * Gets the #IdeProjectInfo:file property.
  * This is the project file (such as configure.ac) of the project.

@@ -185,7 +185,7 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
  * ide_symbol_resolver_get_symbol_tree_async:
  * @self: An #IdeSymbolResolver
  * @file: A #GFile
- * @buffer: A #IdeBuffer or %NULL
+ * @buffer: an #IdeBuffer or %NULL
  * @cancellable: (allow-none): a #GCancellable or %NULL.
  * @callback: (allow-none): a callback to execute upon completion
  * @user_data: user data for @callback

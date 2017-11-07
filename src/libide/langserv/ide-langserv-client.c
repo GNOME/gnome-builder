@@ -1237,7 +1237,7 @@ ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
 
 /**
  * ide_langserv_client_get_diagnostics_finish:
- * @self: A #IdeLangservClient
+ * @self: an #IdeLangservClient
  * @result: A #GAsyncResult
  * @diagnostics: (nullable) (out): A location for a #IdeDiagnostics or %NULL
  * @error: A location for a #GError or %NULL

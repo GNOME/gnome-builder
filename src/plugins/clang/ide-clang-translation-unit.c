@@ -103,7 +103,7 @@ get_file_for_location (IdeClangTranslationUnit *self,
 
 /**
  * ide_clang_translation_unit_get_index:
- * @self: A #IdeClangTranslationUnit.
+ * @self: an #IdeClangTranslationUnit.
  *
  * Gets the highlight index for the translation unit.
  *
@@ -768,7 +768,7 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
 
 /**
  * ide_clang_translation_unit_code_complete_finish:
- * @self: A #IdeClangTranslationUnit.
+ * @self: an #IdeClangTranslationUnit.
  * @result: A #GAsyncResult
  * @error: (out) (nullable): A location for a #GError, or %NULL.
  *

@@ -29,7 +29,7 @@ ide_xml_analysis_get_sequence (IdeXmlAnalysis *self)
 
 /**
  * ide_xml_analysis_get_diagnostics:
- * @self: A #IdeXmlAnalysis.
+ * @self: an #IdeXmlAnalysis.
  *
  * Returns: (nullable) (transfer none): The #IdeDiagnostics contained by the analysis.
  *
@@ -44,7 +44,7 @@ ide_xml_analysis_get_diagnostics (IdeXmlAnalysis *self)
 
 /**
  * ide_xml_analysis_get_diagnostics:
- * @self: A #IdeXmlAnalysis.
+ * @self: an #IdeXmlAnalysis.
  *
  * Returns: (nullable) (transfer none): The #IdeXmlSymbolNode root node contained by the analysis.
  *

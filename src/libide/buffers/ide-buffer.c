@@ -204,7 +204,7 @@ ide_buffer_delay_settling (IdeBuffer *self)
 
 /**
  * ide_buffer_get_has_diagnostics:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the #IdeBuffer:has-diagnostics property.
  * Return whether the buffer contains diagnostic messages or not.
@@ -224,7 +224,7 @@ ide_buffer_get_has_diagnostics (IdeBuffer *self)
 
 /**
  * ide_buffer_get_busy:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the #IdeBuffer:busy property.
  * Return whether the buffer is performing background work or not.
@@ -1820,7 +1820,7 @@ ide_buffer_update_title (IdeBuffer *self)
 
 /**
  * ide_buffer_get_file:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the underlying file behind the buffer.
  *
@@ -1838,7 +1838,7 @@ ide_buffer_get_file (IdeBuffer *self)
 
 /**
  * ide_buffer_set_file:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @file: An #IdeFile.
  *
  * Sets the underlying file to use when saving and loading @self to and from storage.
@@ -1874,7 +1874,7 @@ ide_buffer_set_file (IdeBuffer *self,
 
 /**
  * ide_buffer_get_context:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the #IdeBuffer:context property. This is the #IdeContext that owns the buffer.
  *
@@ -1892,7 +1892,7 @@ ide_buffer_get_context (IdeBuffer *self)
 
 /**
  * ide_buffer_get_line_flags:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @line: a buffer line number.
  *
  * Return the flags set for the #IdeBuffer @line number.
@@ -1965,7 +1965,7 @@ ide_buffer_get_line_flags (IdeBuffer *self,
 
 /**
  * ide_buffer_get_highlight_diagnostics:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the #IdeBuffer:highlight-diagnostics property.
  * Return whether the diagnostic warnings and errors should be highlighted.
@@ -1984,7 +1984,7 @@ ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
 
 /**
  * ide_buffer_set_highlight_diagnostics:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @highlight_diagnostics: Whether to highlight the diagnostics or not.
  *
  * Sets the #IdeBuffer:highlight-diagnostics property.
@@ -2010,7 +2010,7 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
 
 /**
  * ide_buffer_get_diagnostic_at_iter:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @iter: a #GtkTextIter.
  *
  * Gets the first diagnostic that overlaps the position
@@ -2111,7 +2111,7 @@ ide_buffer_can_do_newline_hack (IdeBuffer *self,
 
 /**
  * ide_buffer_get_content:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the contents of the buffer as GBytes.
  *
@@ -2187,7 +2187,7 @@ ide_buffer_get_content (IdeBuffer *self)
 
 /**
  * ide_buffer_trim_trailing_whitespace:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Trim trailing whitespaces from the buffer.
  *
@@ -2263,7 +2263,7 @@ ide_buffer_trim_trailing_whitespace (IdeBuffer *self)
 
 /**
  * ide_buffer_get_title:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the #IdeBuffer:title property. This property contains a title for the buffer suitable
  * for display.
@@ -2282,7 +2282,7 @@ ide_buffer_get_title (IdeBuffer *self)
 
 /**
  * ide_buffer_get_style_scheme_name:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the #IdeBuffer:style-scheme-name property.
  * This property contains the current style scheme used by the buffer.
@@ -2305,7 +2305,7 @@ ide_buffer_get_style_scheme_name (IdeBuffer *self)
 
 /**
  * ide_buffer_set_style_scheme_name:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @style_scheme_name: A string containing the name of the style scheme to use.
  *
  * Sets the #IdeBuffer:style-scheme-name property.
@@ -2362,7 +2362,7 @@ _ide_buffer_set_loading (IdeBuffer *self,
 
 /**
  * ide_buffer_get_read_only:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the #IdeBuffer:read-only property. This property indicate if the underlying file is read only or not.
  *
@@ -2397,7 +2397,7 @@ _ide_buffer_set_read_only (IdeBuffer *self,
 
 /**
  * ide_buffer_get_changed_on_volume:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets if the file backing the buffer has changed on the underlying storage.
  *
@@ -2476,7 +2476,7 @@ ide_buffer__check_for_volume_cb (GObject      *object,
 
 /**
  * ide_buffer_check_for_volume_change:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Update the #IdeBuffer:read-only property and the corresponding
  * modification time (mtime).
@@ -2534,7 +2534,7 @@ _ide_buffer_set_mtime (IdeBuffer      *self,
 
 /**
  * ide_buffer_get_iter_at_source_location:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @iter: (out): a #GtkTextIter.
  * @location: a #IdeSourceLocation.
  *
@@ -2561,7 +2561,7 @@ ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
 
 /**
  * ide_buffer_rehighlight:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Force the #IdeBuffer to rebuild the highlight.
  *
@@ -2655,7 +2655,7 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
 
 /**
  * ide_buffer_get_symbol_at_location_async:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @location: a #GtkTextIter indicating a position to search for a symbol.
  * @cancellable: A #GCancellable.
  * @callback: A #GAsyncReadyCallback.
@@ -2728,7 +2728,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
 
 /**
  * ide_buffer_get_symbol_at_location_finish:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @result: A #GAsyncResult.
  * @error: (out): A #GError.
  *
@@ -2749,7 +2749,7 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
 
 /**
  * ide_buffer_get_symbols_finish:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Returns: (transfer container) (element-type IdeSymbol*): A #GPtrArray if successful;
  *   otherwise %NULL.
@@ -2841,7 +2841,7 @@ ide_buffer_release (IdeBuffer *self)
 
 /**
  * ide_buffer_get_selection_bounds:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @insert: (out): A #GtkTextIter to get the insert position.
  * @selection: (out): A #GtkTextIter to get the selection position.
  *
@@ -2897,7 +2897,7 @@ ide_buffer_get_rename_provider (IdeBuffer *self)
 
 /**
  * ide_buffer_get_symbol_resolvers:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  *
  * Gets the symbol resolvers for the buffer based on the current language.
  *
@@ -2915,7 +2915,7 @@ ide_buffer_get_symbol_resolvers (IdeBuffer *self)
 
 /**
  * ide_buffer_get_word_at_iter:
- * @self: A #IdeBuffer.
+ * @self: an #IdeBuffer.
  * @iter: A #GtkTextIter.
  *
  * Gets the word found under the position denoted by @iter.

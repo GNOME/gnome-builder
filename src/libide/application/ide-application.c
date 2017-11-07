@@ -627,7 +627,7 @@ ide_application_get_worker_cb (GObject      *object,
 
 /**
  * ide_application_get_worker_async:
- * @self: A #IdeApplication
+ * @self: an #IdeApplication
  * @plugin_name: The name of the plugin.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback or %NULL.
@@ -673,7 +673,7 @@ ide_application_get_worker_async (IdeApplication      *self,
 
 /**
  * ide_application_get_worker_finish:
- * @self: A #IdeApplication.
+ * @self: an #IdeApplication.
  * @result: A #GAsyncResult
  * @error: a location for a #GError, or %NULL.
  *
@@ -782,7 +782,7 @@ ide_application_get_keybindings_mode (IdeApplication *self)
 
 /**
  * ide_application_get_started_at:
- * @self: A #IdeApplication.
+ * @self: an #IdeApplication.
  *
  * Gets the startup time of the application.
  *

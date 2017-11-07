@@ -28,7 +28,7 @@
 /**
  * SECTION:ide-object
  * @title: IdeObject
- * @short_description: Base object for #IdeContext-related objects
+ * @short_description: Base object for #IdeContext related objects
  *
  * The #IdeObject abstract class provides a base class for ojects that are
  * related to #IdeContext. It provides easy access to the #IdeContext using

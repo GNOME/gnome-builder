@@ -1543,7 +1543,7 @@ ide_configuration_get_internal_object (IdeConfiguration *self,
 
 /**
  * ide_configuration_set_internal_object:
- * @self: A #IdeConfiguration
+ * @self: an #IdeConfiguration
  * @key: the key to set
  * @instance: (type GObject.Object) (nullable): A #GObject or %NULL
  *

@@ -718,7 +718,7 @@ ide_clang_service_init (IdeClangService *self)
 
 /**
  * ide_clang_service_get_cached_translation_unit:
- * @self: A #IdeClangService.
+ * @self: an #IdeClangService.
  *
  * Gets a cached translation unit if one exists for the file.
  *

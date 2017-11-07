@@ -102,7 +102,7 @@ ide_layout_stack_addin_unload (IdeLayoutStackAddin *self,
 
 /**
  * ide_layout_stack_addin_set_view:
- * @self: A #IdeLayoutStackAddin
+ * @self: an #IdeLayoutStackAddin
  * @view: (nullable): An #IdeLayoutView or %NULL.
  *
  * This virtual method is called whenever the active view changes

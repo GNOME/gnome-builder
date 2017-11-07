@@ -354,7 +354,7 @@ rename_provider_iface_init (IdeRenameProviderInterface *iface)
 /**
  * ide_langserv_rename_provider_get_client:
  *
- * Returns: (transfer none) (nullable): A #IdeLangservClient or %NULL.
+ * Returns: (transfer none) (nullable): an #IdeLangservClient or %NULL.
  */
 IdeLangservClient *
 ide_langserv_rename_provider_get_client (IdeLangservRenameProvider *self)

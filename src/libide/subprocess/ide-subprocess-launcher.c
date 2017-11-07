@@ -684,7 +684,7 @@ ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
  *
  * Synchronously spawn a process using the internal state.
  *
- * Returns: (transfer full): A #IdeSubprocess or %NULL upon error.
+ * Returns: (transfer full): an #IdeSubprocess or %NULL upon error.
  */
 IdeSubprocess *
 ide_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
@@ -755,7 +755,7 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
 
 /**
  * ide_subprocess_launcher_push_args:
- * @self: A #IdeSubprocessLauncher
+ * @self: an #IdeSubprocessLauncher
  * @args: (array zero-terminated=1) (element-type utf8) (nullable): the arguments
  *
  * This function is semantically identical to calling ide_subprocess_launcher_push_argv()

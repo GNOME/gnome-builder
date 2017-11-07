@@ -1759,7 +1759,7 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
 
 /**
  * ide_buffer_manager_get_word_completion:
- * @self: A #IdeBufferManager.
+ * @self: an #IdeBufferManager.
  *
  * Gets the #GtkSourceCompletionWords completion provider that will complete
  * words using the loaded documents.

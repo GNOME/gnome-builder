@@ -6126,7 +6126,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   /**
    * IdeSourceView:documentation-requested:
-   * @self: A #IdeSourceView
+   * @self: an #IdeSourceView
    * @word: the word that was requested
    *
    * This is emitted by the default request-documentation handler to
@@ -7811,7 +7811,7 @@ ide_source_view_set_enable_word_completion (IdeSourceView *self,
 
 /**
  * ide_source_view_get_file_settings:
- * @self: A #IdeSourceView.
+ * @self: an #IdeSourceView.
  *
  * Gets the #IdeSourceView:file-settings property. This contains various
  * settings for how the file should be rendered in the view, and preferences
