@@ -146,7 +146,7 @@ table.navigation {
 
 pre.synopsis,
 pre.programlisting {
-  padding: .5em;
+  padding: .75em;
   margin: 0px;
   color: #333333;
   border-radius: 9px;
@@ -162,23 +162,21 @@ div.refsect2 > pre.programlisting {
   border-radius: 9px;
 }
 
-div.informalexample {
-  margin-left: 1em;
-}
-
 table.listing_frame {
   border: 1px solid #ececec;
   border-radius: 9px;
   background-color: #ececec;
 }
 
-div.informalexample pre.programlisting {
-  padding: .75em .25em;
+div.refsect2 div.informalexample pre.programlisting {
+  margin-right: 0.25em;
+  border-radius: 7px;
 }
 
-td.listing_lines {
+td.listing_lines pre {
   padding-left: 1em;
   padding-right: .5em;
+  padding-top: 1em;
   font-family: "Source Code Pro", monospace;
   font-weight: 400;
   font-style: normal;
