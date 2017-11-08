@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "debugger/ide-debugger-types.h"
 
 G_BEGIN_DECLS
@@ -37,26 +39,41 @@ struct _IdeDebuggerFrameClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerFrame    *ide_debugger_frame_new          (void);
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerAddress   ide_debugger_frame_get_address  (IdeDebuggerFrame    *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_frame_set_address  (IdeDebuggerFrame    *self,
                                                       IdeDebuggerAddress   address);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_frame_get_file     (IdeDebuggerFrame    *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_frame_set_file     (IdeDebuggerFrame    *self,
                                                       const gchar         *file);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_frame_get_function (IdeDebuggerFrame    *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_frame_set_function (IdeDebuggerFrame    *self,
                                                       const gchar         *function);
+IDE_AVAILABLE_IN_ALL
 const gchar * const *ide_debugger_frame_get_args     (IdeDebuggerFrame    *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_frame_set_args     (IdeDebuggerFrame    *self,
                                                       const gchar * const *args);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_frame_get_library  (IdeDebuggerFrame    *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_frame_set_library  (IdeDebuggerFrame    *self,
                                                       const gchar         *library);
+IDE_AVAILABLE_IN_ALL
 guint                ide_debugger_frame_get_depth    (IdeDebuggerFrame    *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_frame_set_depth    (IdeDebuggerFrame    *self,
                                                       guint                depth);
+IDE_AVAILABLE_IN_ALL
 guint                ide_debugger_frame_get_line     (IdeDebuggerFrame    *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_frame_set_line     (IdeDebuggerFrame    *self,
                                                       guint                line);
 

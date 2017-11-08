@@ -20,23 +20,32 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PROGRESS (ide_progress_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeProgress, ide_progress, IDE, PROGRESS, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeProgress *ide_progress_new                       (void);
+IDE_AVAILABLE_IN_ALL
 gdouble      ide_progress_get_fraction              (IdeProgress *self);
+IDE_AVAILABLE_IN_ALL
 gchar       *ide_progress_get_message               (IdeProgress *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_progress_set_fraction              (IdeProgress *self,
                                                      gdouble      fraction);
+IDE_AVAILABLE_IN_ALL
 void         ide_progress_set_message               (IdeProgress *self,
                                                      const gchar *message);
+IDE_AVAILABLE_IN_ALL
 void         ide_progress_flatpak_progress_callback (const char  *status,
                                                      guint        progress,
                                                      gboolean     estimating,
                                                      gpointer     user_data);
+IDE_AVAILABLE_IN_ALL
 void         ide_progress_file_progress_callback    (goffset      current_num_bytes,
                                                      goffset      total_num_bytes,
                                                      gpointer     user_data);

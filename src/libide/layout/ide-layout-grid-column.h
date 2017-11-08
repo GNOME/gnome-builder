@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 #include "layout/ide-layout-stack.h"
 
 G_BEGIN_DECLS
@@ -28,8 +30,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeLayoutGridColumn, ide_layout_grid_column, IDE, LAYOUT_GRID_COLUMN, DzlMultiPaned)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget      *ide_layout_grid_column_new               (void);
+IDE_AVAILABLE_IN_ALL
 IdeLayoutStack *ide_layout_grid_column_get_current_stack (IdeLayoutGridColumn *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_layout_grid_column_set_current_stack (IdeLayoutGridColumn *self,
                                                           IdeLayoutStack      *stack);
 

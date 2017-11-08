@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 #include "projects/ide-project-edit.h"
@@ -45,13 +47,16 @@ struct _IdeRenameProviderInterface
   void     (*load)          (IdeRenameProvider    *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 void      ide_rename_provider_load          (IdeRenameProvider     *self);
+IDE_AVAILABLE_IN_ALL
 void      ide_rename_provider_rename_async  (IdeRenameProvider     *self,
                                              IdeSourceLocation     *location,
                                              const gchar           *new_name,
                                              GCancellable          *cancellable,
                                              GAsyncReadyCallback    callback,
                                              gpointer               user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_rename_provider_rename_finish (IdeRenameProvider     *self,
                                              GAsyncResult          *result,
                                              GPtrArray            **edits,

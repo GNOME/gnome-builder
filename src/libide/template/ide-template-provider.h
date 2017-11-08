@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "template/ide-project-template.h"
 
 G_BEGIN_DECLS
@@ -33,6 +35,7 @@ struct _IdeTemplateProviderInterface
   GList *(*get_project_templates) (IdeTemplateProvider *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 GList *ide_template_provider_get_project_templates (IdeTemplateProvider *self);
 
 G_END_DECLS

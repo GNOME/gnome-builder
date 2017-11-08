@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "buildsystem/ide-build-stage.h"
 
 G_BEGIN_DECLS
@@ -37,7 +39,9 @@ struct _IdeBuildStageMkdirsClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeBuildStage *ide_build_stage_mkdirs_new      (IdeContext          *context);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
                                                 const gchar         *path,
                                                 gboolean             with_parents,

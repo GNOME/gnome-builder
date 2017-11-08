@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 typedef struct _IdeThreadPool IdeThreadPool;
@@ -39,9 +41,11 @@ typedef enum
 typedef void (*IdeThreadFunc) (gpointer user_data);
 
 void     _ide_thread_pool_init     (gboolean              is_worker) G_GNUC_INTERNAL;
+IDE_AVAILABLE_IN_ALL
 void     ide_thread_pool_push      (IdeThreadPoolKind     kind,
                                     IdeThreadFunc         func,
                                     gpointer              func_data);
+IDE_AVAILABLE_IN_ALL
 void     ide_thread_pool_push_task (IdeThreadPoolKind     kind,
                                     GTask                *task,
                                     GTaskThreadFunc       func);

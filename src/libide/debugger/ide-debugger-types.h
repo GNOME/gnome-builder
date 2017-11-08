@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -173,6 +175,7 @@ typedef guint64 IdeDebuggerAddress;
 
 #define IDE_DEBUGGER_ADDRESS_INVALID (0)
 
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerAddress ide_debugger_address_parse (const gchar *string);
 
 typedef struct
@@ -184,16 +187,25 @@ typedef struct
 #define IDE_TYPE_DEBUGGER_ADDRESS_RANGE (ide_debugger_address_range_get_type())
 
 
+IDE_AVAILABLE_IN_ALL
 GType ide_debugger_stream_get_type            (void);
+IDE_AVAILABLE_IN_ALL
 GType ide_debugger_movement_get_type          (void);
+IDE_AVAILABLE_IN_ALL
 GType ide_debugger_stop_reason_get_type       (void);
+IDE_AVAILABLE_IN_ALL
 GType ide_debugger_break_mode_get_type        (void);
+IDE_AVAILABLE_IN_ALL
 GType ide_debugger_disposition_get_type       (void);
+IDE_AVAILABLE_IN_ALL
 GType ide_debugger_address_range_get_type     (void);
+IDE_AVAILABLE_IN_ALL
 GType ide_debugger_breakpoint_change_get_type (void);
 
 
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerAddressRange *ide_debugger_address_range_copy (const IdeDebuggerAddressRange *range);
+IDE_AVAILABLE_IN_ALL
 void                     ide_debugger_address_range_free (IdeDebuggerAddressRange       *range);
 
 

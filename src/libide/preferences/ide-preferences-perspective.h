@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_PERSPECTIVE     (ide_preferences_perspective_get_type())

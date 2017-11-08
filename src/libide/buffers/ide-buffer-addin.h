@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "buffers/ide-buffer.h"
 
 G_BEGIN_DECLS
@@ -36,10 +38,13 @@ struct _IdeBufferAddinInterface
                   IdeBuffer         *buffer);
 };
 
+IDE_AVAILABLE_IN_ALL
 void            ide_buffer_addin_load                (IdeBufferAddin *self,
                                                       IdeBuffer      *buffer);
+IDE_AVAILABLE_IN_ALL
 void            ide_buffer_addin_unload              (IdeBufferAddin *self,
                                                       IdeBuffer      *buffer);
+IDE_AVAILABLE_IN_ALL
 IdeBufferAddin *ide_buffer_addin_find_by_module_name (IdeBuffer      *buffer,
                                                       const gchar    *module_name);
 

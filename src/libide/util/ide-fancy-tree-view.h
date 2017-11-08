@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_FANCY_TREE_VIEW (ide_fancy_tree_view_get_type())
@@ -37,7 +39,9 @@ struct _IdeFancyTreeViewClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_fancy_tree_view_new           (void);
+IDE_AVAILABLE_IN_ALL
 void       ide_fancy_tree_view_set_data_func (IdeFancyTreeView      *self,
                                               GtkCellLayoutDataFunc  func,
                                               gpointer               func_data,

@@ -20,6 +20,8 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -45,7 +47,9 @@ struct _IdeBuildTargetInterface
   gpointer _reserved7;
 };
 
+IDE_AVAILABLE_IN_ALL
 GFile  *ide_build_target_get_install_directory (IdeBuildTarget *self);
+IDE_AVAILABLE_IN_ALL
 gchar  *ide_build_target_get_name              (IdeBuildTarget *self);
 
 G_END_DECLS

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "ide-types.h"
 
@@ -42,14 +44,21 @@ struct _IdeDeviceClass
                                          IdeConfiguration *configuration);
 };
 
+IDE_AVAILABLE_IN_ALL
 GQuark       ide_device_error_quark           (void) G_GNUC_CONST;
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_device_get_display_name      (IdeDevice        *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_device_set_display_name      (IdeDevice        *self,
                                                const gchar      *display_name);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_device_get_id                (IdeDevice        *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_device_set_id                (IdeDevice        *self,
                                                const gchar      *id);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_device_get_system_type       (IdeDevice        *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_device_prepare_configuration (IdeDevice        *self,
                                                IdeConfiguration *configuration);
 

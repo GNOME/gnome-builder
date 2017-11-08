@@ -20,17 +20,24 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DOAP_PERSON (ide_doap_person_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeDoapPerson, ide_doap_person, IDE, DOAP_PERSON, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeDoapPerson *ide_doap_person_new       (void);
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_doap_person_get_name  (IdeDoapPerson *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_doap_person_set_name  (IdeDoapPerson *self,
                                           const gchar   *name);
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_doap_person_get_email (IdeDoapPerson *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_doap_person_set_email (IdeDoapPerson *self,
                                           const gchar   *email);
 

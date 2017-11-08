@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_VARIABLE (ide_debugger_variable_get_type())
@@ -41,15 +43,23 @@ struct _IdeDebuggerVariableClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerVariable *ide_debugger_variable_new              (const gchar         *name);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_variable_get_name         (IdeDebuggerVariable *self);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_variable_get_type_name    (IdeDebuggerVariable *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_variable_set_type_name    (IdeDebuggerVariable *self,
                                                              const gchar         *type_name);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_variable_get_value        (IdeDebuggerVariable *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_variable_set_value        (IdeDebuggerVariable *self,
                                                              const gchar         *value);
+IDE_AVAILABLE_IN_ALL
 gboolean             ide_debugger_variable_get_has_children (IdeDebuggerVariable *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_variable_set_has_children (IdeDebuggerVariable *self,
                                                              gboolean             has_children);
 

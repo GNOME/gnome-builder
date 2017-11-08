@@ -20,21 +20,30 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_HIGHLIGHT_INDEX (ide_highlight_index_get_type())
 
 typedef struct _IdeHighlightIndex IdeHighlightIndex;
 
+IDE_AVAILABLE_IN_ALL
 GType              ide_highlight_index_get_type (void);
+IDE_AVAILABLE_IN_ALL
 IdeHighlightIndex *ide_highlight_index_new      (void);
+IDE_AVAILABLE_IN_ALL
 IdeHighlightIndex *ide_highlight_index_ref      (IdeHighlightIndex *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_highlight_index_unref    (IdeHighlightIndex *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_highlight_index_insert   (IdeHighlightIndex *self,
                                                  const gchar       *word,
                                                  gpointer           tag);
+IDE_AVAILABLE_IN_ALL
 gpointer           ide_highlight_index_lookup   (IdeHighlightIndex *self,
                                                  const gchar       *word);
+IDE_AVAILABLE_IN_ALL
 void               ide_highlight_index_dump     (IdeHighlightIndex *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeHighlightIndex, ide_highlight_index_unref)

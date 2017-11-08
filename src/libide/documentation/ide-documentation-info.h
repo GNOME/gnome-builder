@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "documentation/ide-documentation-proposal.h"
 
 G_BEGIN_DECLS
@@ -32,13 +34,19 @@ typedef enum {
   IDE_DOCUMENTATION_CONTEXT_LAST,
 } IdeDocumentationContext;
 
+IDE_AVAILABLE_IN_ALL
 IdeDocumentationInfo     *ide_documentation_info_new            (const gchar                 *input,
                                                                  IdeDocumentationContext      context);
+IDE_AVAILABLE_IN_ALL
 void                      ide_documentation_info_take_proposal  (IdeDocumentationInfo        *self,
                                                                  IdeDocumentationProposal    *proposal);
+IDE_AVAILABLE_IN_ALL
 IdeDocumentationContext   ide_documentation_info_get_context    (IdeDocumentationInfo        *self);
+IDE_AVAILABLE_IN_ALL
 gchar                    *ide_documentation_info_get_input      (IdeDocumentationInfo        *self);
+IDE_AVAILABLE_IN_ALL
 guint                     ide_documentation_info_get_size       (IdeDocumentationInfo        *self);
+IDE_AVAILABLE_IN_ALL
 IdeDocumentationProposal *ide_documentation_info_get_proposal   (IdeDocumentationInfo        *self,
                                                                  guint                        index);
 

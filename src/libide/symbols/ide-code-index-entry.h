@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "symbols/ide-symbol.h"
 
@@ -32,10 +34,15 @@ struct _IdeCodeIndexEntryClass
   GObjectClass parent;
 };
 
+IDE_AVAILABLE_IN_ALL
 gchar           *ide_code_index_entry_get_key   (IdeCodeIndexEntry *self);
+IDE_AVAILABLE_IN_ALL
 gchar           *ide_code_index_entry_get_name  (IdeCodeIndexEntry *self);
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind    ide_code_index_entry_get_kind  (IdeCodeIndexEntry *self);
+IDE_AVAILABLE_IN_ALL
 IdeSymbolFlags   ide_code_index_entry_get_flags (IdeCodeIndexEntry *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_code_index_entry_get_range (IdeCodeIndexEntry *self,
                                                  guint             *begin_line,
                                                  guint             *begin_line_offset,

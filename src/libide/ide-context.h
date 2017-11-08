@@ -21,6 +21,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -29,60 +31,94 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeContext, ide_context, IDE, CONTEXT, GObject)
 
+IDE_AVAILABLE_IN_ALL
 GFile                    *ide_context_get_project_file          (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeBufferManager         *ide_context_get_buffer_manager        (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeBuildManager          *ide_context_get_build_manager         (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeBuildSystem           *ide_context_get_build_system          (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeConfigurationManager  *ide_context_get_configuration_manager (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeDebugManager          *ide_context_get_debug_manager         (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeDiagnosticsManager    *ide_context_get_diagnostics_manager   (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeDeviceManager         *ide_context_get_device_manager        (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeDocumentation         *ide_context_get_documentation         (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeProject               *ide_context_get_project               (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 GtkRecentManager         *ide_context_get_recent_manager        (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeRunManager            *ide_context_get_run_manager           (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeRuntimeManager        *ide_context_get_runtime_manager       (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeSearchEngine          *ide_context_get_search_engine         (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeSettings              *ide_context_get_settings              (IdeContext           *self,
                                                                  const gchar          *schema_id,
                                                                  const gchar          *relative_path);
+IDE_AVAILABLE_IN_ALL
 IdeSourceSnippetsManager *ide_context_get_snippets_manager      (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeTestManager           *ide_context_get_test_manager          (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeUnsavedFiles          *ide_context_get_unsaved_files         (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 IdeVcs                   *ide_context_get_vcs                   (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 const gchar              *ide_context_get_root_build_dir        (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 gpointer                  ide_context_get_service_typed         (IdeContext           *self,
                                                                  GType                 service_type);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_unload_async              (IdeContext           *self,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean                  ide_context_unload_finish             (IdeContext           *self,
                                                                  GAsyncResult         *result,
                                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_new_async                 (GFile                *project_file,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeContext               *ide_context_new_finish                (GAsyncResult         *result,
                                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_set_root_build_dir        (IdeContext           *self,
                                                                  const gchar          *root_build_dir);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_restore_async             (IdeContext           *self,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean                  ide_context_restore_finish            (IdeContext           *self,
                                                                  GAsyncResult         *result,
                                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_add_pausable              (IdeContext           *self,
                                                                  IdePausable          *pausable);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_remove_pausable           (IdeContext           *self,
                                                                  IdePausable          *pausable);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_hold                      (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_hold_for_object           (IdeContext           *self,
                                                                  gpointer              instance);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_release                   (IdeContext           *self);
+IDE_AVAILABLE_IN_ALL
 void                      ide_context_warning                   (IdeContext           *self,
                                                                  const gchar          *format,
                                                                  ...) G_GNUC_PRINTF (2, 3);

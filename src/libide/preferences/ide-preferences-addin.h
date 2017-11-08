@@ -21,6 +21,8 @@
 #include <dazzle.h>
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_ADDIN (ide_preferences_addin_get_type())
@@ -37,8 +39,10 @@ struct _IdePreferencesAddinInterface
                   DzlPreferences      *preferences);
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_preferences_addin_load   (IdePreferencesAddin *self,
                                    DzlPreferences      *preferences);
+IDE_AVAILABLE_IN_ALL
 void ide_preferences_addin_unload (IdePreferencesAddin *self,
                                    DzlPreferences      *preferences);
 

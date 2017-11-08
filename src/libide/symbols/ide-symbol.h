@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -84,21 +86,32 @@ typedef enum
   IDE_SYMBOL_FLAGS_IS_DEFINITION = 1 << 3
 } IdeSymbolFlags;
 
+IDE_AVAILABLE_IN_ALL
 GType              ide_symbol_get_type                 (void);
+IDE_AVAILABLE_IN_ALL
 IdeSymbol         *ide_symbol_ref                      (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_symbol_unref                    (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind      ide_symbol_get_kind                 (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 IdeSymbolFlags     ide_symbol_get_flags                (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 const gchar       *ide_symbol_get_name                 (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceLocation *ide_symbol_get_canonical_location   (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceLocation *ide_symbol_get_declaration_location (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceLocation *ide_symbol_get_definition_location  (IdeSymbol *self);
+IDE_AVAILABLE_IN_ALL
 IdeSymbol         *ide_symbol_new                      (const gchar           *name,
                                                         IdeSymbolKind          kind,
                                                         IdeSymbolFlags         flags,
                                                         IdeSourceLocation     *declaration_location,
                                                         IdeSourceLocation     *definition_location,
                                                         IdeSourceLocation     *canonical_location);
+IDE_AVAILABLE_IN_ALL
 const gchar       *ide_symbol_kind_get_icon_name       (IdeSymbolKind          kind);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSymbol, ide_symbol_unref)

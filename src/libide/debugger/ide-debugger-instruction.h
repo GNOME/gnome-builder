@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "debugger/ide-debugger-types.h"
 
 G_BEGIN_DECLS
@@ -37,12 +39,18 @@ struct _IdeDebuggerInstructionClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerInstruction *ide_debugger_instruction_new          (IdeDebuggerAddress      address);
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerAddress      ide_debugger_instruction_get_address  (IdeDebuggerInstruction *self);
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_debugger_instruction_get_function (IdeDebuggerInstruction *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_debugger_instruction_set_function (IdeDebuggerInstruction *self,
                                                                const gchar            *function);
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_debugger_instruction_get_display  (IdeDebuggerInstruction *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_debugger_instruction_set_display  (IdeDebuggerInstruction *self,
                                                                const gchar            *display);
 

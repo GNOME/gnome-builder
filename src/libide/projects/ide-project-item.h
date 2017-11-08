@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -31,11 +33,15 @@ struct _IdeProjectItemClass
   IdeObjectClass parent_class;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeProjectItem *ide_project_item_get_parent   (IdeProjectItem *item);
+IDE_AVAILABLE_IN_ALL
 void            ide_project_item_append       (IdeProjectItem *item,
                                                IdeProjectItem *child);
+IDE_AVAILABLE_IN_ALL
 void            ide_project_item_remove       (IdeProjectItem *item,
                                                IdeProjectItem *child);
+IDE_AVAILABLE_IN_ALL
 GSequence      *ide_project_item_get_children (IdeProjectItem *item);
 
 G_END_DECLS

@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -51,20 +53,25 @@ struct _IdeConfigurationProviderInterface
                            GError                   **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void     ide_configuration_provider_load_async  (IdeConfigurationProvider  *self,
                                                  IdeConfigurationManager   *manager,
                                                  GCancellable              *cancellable,
                                                  GAsyncReadyCallback        callback,
                                                  gpointer                   user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_configuration_provider_load_finish (IdeConfigurationProvider  *self,
                                                  GAsyncResult              *result,
                                                  GError                   **error);
+IDE_AVAILABLE_IN_ALL
 void     ide_configuration_provider_unload      (IdeConfigurationProvider  *self,
                                                  IdeConfigurationManager   *manager);
+IDE_AVAILABLE_IN_ALL
 void     ide_configuration_provider_save_async  (IdeConfigurationProvider  *self,
                                                  GCancellable              *cancellable,
                                                  GAsyncReadyCallback        callback,
                                                  gpointer                   user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_configuration_provider_save_finish (IdeConfigurationProvider  *self,
                                                  GAsyncResult              *result,
                                                  GError                   **error);

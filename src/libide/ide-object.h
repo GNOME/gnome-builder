@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -38,9 +40,12 @@ struct _IdeObjectClass
                               IdeContext *context);
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeContext *ide_object_get_context             (IdeObject            *self);
+IDE_AVAILABLE_IN_ALL
 void        ide_object_set_context             (IdeObject            *self,
                                                 IdeContext           *context);
+IDE_AVAILABLE_IN_ALL
 void        ide_object_new_for_extension_async (GType                 interface_gtype,
                                                 GCompareDataFunc      sort_priority_func,
                                                 gpointer              sort_priority_data,
@@ -50,6 +55,7 @@ void        ide_object_new_for_extension_async (GType                 interface_
                                                 gpointer              user_data,
                                                 const gchar          *first_property,
                                                 ...);
+IDE_AVAILABLE_IN_ALL
 void        ide_object_new_async               (const gchar          *extension_point,
                                                 int                   io_priority,
                                                 GCancellable         *cancellable,
@@ -57,10 +63,14 @@ void        ide_object_new_async               (const gchar          *extension_
                                                 gpointer              user_data,
                                                 const gchar          *first_property,
                                                 ...);
+IDE_AVAILABLE_IN_ALL
 IdeObject  *ide_object_new_finish              (GAsyncResult         *result,
                                                 GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean    ide_object_hold                    (IdeObject            *self);
+IDE_AVAILABLE_IN_ALL
 void        ide_object_release                 (IdeObject            *self);
+IDE_AVAILABLE_IN_ALL
 void        ide_object_notify_in_main          (gpointer              instance,
                                                 GParamSpec           *pspec);
 

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "buildsystem/ide-build-stage.h"
 
 G_BEGIN_DECLS
@@ -26,6 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBuildStageTransfer, ide_build_stage_transfer, IDE, BUILD_STAGE_TRANSFER, IdeBuildStage)
 
+IDE_AVAILABLE_IN_ALL
 IdeBuildStageTransfer *ide_build_stage_transfer_new (IdeContext  *context,
                                                      IdeTransfer *transfer);
 

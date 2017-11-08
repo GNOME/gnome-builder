@@ -20,6 +20,8 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_SNIPPET_CONTEXT (ide_source_snippet_context_get_type())
@@ -27,25 +29,36 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeSourceSnippetContext, ide_source_snippet_context,
                       IDE, SOURCE_SNIPPET_CONTEXT, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeSourceSnippetContext *ide_source_snippet_context_new                 (void);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_emit_changed        (IdeSourceSnippetContext *context);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_clear_variables     (IdeSourceSnippetContext *context);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_add_variable        (IdeSourceSnippetContext *context,
                                                                          const gchar             *key,
                                                                          const gchar             *value);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_add_shared_variable (IdeSourceSnippetContext *context,
                                                                          const gchar             *key,
                                                                          const gchar             *value);
+IDE_AVAILABLE_IN_ALL
 const gchar             *ide_source_snippet_context_get_variable        (IdeSourceSnippetContext *context,
                                                                          const gchar             *key);
+IDE_AVAILABLE_IN_ALL
 gchar                   *ide_source_snippet_context_expand              (IdeSourceSnippetContext *context,
                                                                          const gchar             *input);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_set_tab_width       (IdeSourceSnippetContext *context,
                                                                          gint                     tab_size);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_set_use_spaces      (IdeSourceSnippetContext *context,
                                                                          gboolean                 use_spaces);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_set_line_prefix     (IdeSourceSnippetContext *context,
                                                                          const gchar             *line_prefix);
+IDE_AVAILABLE_IN_ALL
 void                     ide_source_snippet_context_dump                (IdeSourceSnippetContext *context);
 
 G_END_DECLS

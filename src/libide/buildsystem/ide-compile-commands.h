@@ -20,25 +20,32 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPILE_COMMANDS (ide_compile_commands_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeCompileCommands, ide_compile_commands, IDE, COMPILE_COMMANDS, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeCompileCommands  *ide_compile_commands_new         (void);
+IDE_AVAILABLE_IN_ALL
 gboolean             ide_compile_commands_load        (IdeCompileCommands   *self,
                                                        GFile                *file,
                                                        GCancellable         *cancellable,
                                                        GError              **error);
+IDE_AVAILABLE_IN_ALL
 void                 ide_compile_commands_load_async  (IdeCompileCommands   *self,
                                                        GFile                *file,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean             ide_compile_commands_load_finish (IdeCompileCommands   *self,
                                                        GAsyncResult         *result,
                                                        GError              **error);
+IDE_AVAILABLE_IN_ALL
 gchar              **ide_compile_commands_lookup      (IdeCompileCommands   *self,
                                                        GFile                *file,
                                                        GFile               **directory,

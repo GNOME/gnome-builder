@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "editor/ide-editor-view.h"
 #include "layout/ide-layout-stack.h"
 
@@ -41,14 +43,19 @@ struct _IdeEditorViewAddinInterface
                               IdeLayoutStack     *stack);
 };
 
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_view_addin_load                (IdeEditorViewAddin *self,
                                                                IdeEditorView      *view);
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_view_addin_unload              (IdeEditorViewAddin *self,
                                                                IdeEditorView      *view);
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_view_addin_stack_set           (IdeEditorViewAddin *self,
                                                                IdeLayoutStack     *stack);
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_view_addin_language_changed    (IdeEditorViewAddin *self,
                                                                const gchar        *language_id);
+IDE_AVAILABLE_IN_ALL
 IdeEditorViewAddin *ide_editor_view_addin_find_by_module_name (IdeEditorView      *view,
                                                                const gchar        *module_name);
 

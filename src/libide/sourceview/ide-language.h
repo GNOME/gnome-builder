@@ -20,8 +20,11 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 gchar *ide_language_format_header (GtkSourceLanguage *language,
                                    const gchar       *header);
 

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "symbols/ide-code-index-entries.h"
 
@@ -46,16 +48,19 @@ struct _IdeCodeIndexerInterface
                                                   GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntries  *ide_code_indexer_index_file           (IdeCodeIndexer       *self,
                                                              GFile                *file,
                                                              gchar               **build_flags,
                                                              GCancellable         *cancellable,
                                                              GError              **error);
+IDE_AVAILABLE_IN_ALL
 void                  ide_code_indexer_generate_key_async   (IdeCodeIndexer       *self,
                                                              IdeSourceLocation    *location,
                                                              GCancellable         *cancellable,
                                                              GAsyncReadyCallback   callback,
                                                              gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gchar                *ide_code_indexer_generate_key_finish  (IdeCodeIndexer       *self,
                                                              GAsyncResult         *result,
                                                              GError              **error);

@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 #include "runner/ide-runner.h"
 
@@ -53,21 +55,27 @@ struct _IdeRunnerAddinInterface
                                GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void     ide_runner_addin_load            (IdeRunnerAddin       *self,
                                            IdeRunner            *runner);
+IDE_AVAILABLE_IN_ALL
 void     ide_runner_addin_unload          (IdeRunnerAddin       *self,
                                            IdeRunner            *runner);
+IDE_AVAILABLE_IN_ALL
 void     ide_runner_addin_prehook_async   (IdeRunnerAddin       *self,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
                                            gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_runner_addin_prehook_finish  (IdeRunnerAddin       *self,
                                            GAsyncResult         *result,
                                            GError              **error);
+IDE_AVAILABLE_IN_ALL
 void     ide_runner_addin_posthook_async  (IdeRunnerAddin       *self,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
                                            gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_runner_addin_posthook_finish (IdeRunnerAddin       *self,
                                            GAsyncResult         *result,
                                            GError              **error);

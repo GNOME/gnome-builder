@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_WINDOW (ide_preferences_window_get_type())

@@ -20,17 +20,23 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_CELL_RENDERER_FANCY (ide_cell_renderer_fancy_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeCellRendererFancy, ide_cell_renderer_fancy, IDE, CELL_RENDERER_FANCY, GtkCellRenderer)
 
+IDE_AVAILABLE_IN_ALL
 GtkCellRenderer *ide_cell_renderer_fancy_new        (void);
+IDE_AVAILABLE_IN_ALL
 void             ide_cell_renderer_fancy_take_title (IdeCellRendererFancy *self,
                                                      gchar                *title);
+IDE_AVAILABLE_IN_ALL
 void             ide_cell_renderer_fancy_set_title  (IdeCellRendererFancy *self,
                                                      const gchar          *title);
+IDE_AVAILABLE_IN_ALL
 void             ide_cell_renderer_fancy_set_body   (IdeCellRendererFancy *self,
                                                      const gchar          *body);
 

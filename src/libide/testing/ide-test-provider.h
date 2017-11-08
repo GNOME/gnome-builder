@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 #include "buildsystem/ide-build-pipeline.h"
@@ -54,20 +56,27 @@ struct _IdeTestProviderClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 gboolean ide_test_provider_get_loading (IdeTestProvider      *self);
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_set_loading (IdeTestProvider      *self,
                                         gboolean              loading);
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_clear       (IdeTestProvider      *self);
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_add         (IdeTestProvider      *self,
                                         IdeTest              *test);
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_remove      (IdeTestProvider      *self,
                                         IdeTest              *test);
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_run_async   (IdeTestProvider      *self,
                                         IdeTest              *test,
                                         IdeBuildPipeline     *pipeline,
                                         GCancellable         *cancellable,
                                         GAsyncReadyCallback   callback,
                                         gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_test_provider_run_finish  (IdeTestProvider      *self,
                                         GAsyncResult         *result,
                                         GError              **error);

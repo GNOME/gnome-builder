@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "layout/ide-layout-pane.h"
 
 G_BEGIN_DECLS

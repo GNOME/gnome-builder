@@ -20,6 +20,8 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 #include "debugger/ide-debugger-breakpoint.h"
 #include "debugger/ide-debugger-types.h"
 
@@ -29,11 +31,15 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpoints, ide_debugger_breakpoints, IDE, DEBUGGER_BREAKPOINTS, GObject)
 
+IDE_AVAILABLE_IN_ALL
 GFile                 *ide_debugger_breakpoints_get_file      (IdeDebuggerBreakpoints *self);
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerBreakMode   ide_debugger_breakpoints_get_line_mode (IdeDebuggerBreakpoints *self,
                                                                guint                   line);
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerBreakpoint *ide_debugger_breakpoints_get_line      (IdeDebuggerBreakpoints *self,
                                                                guint                   line);
+IDE_AVAILABLE_IN_ALL
 void                   ide_debugger_breakpoints_foreach       (IdeDebuggerBreakpoints *self,
                                                                GFunc                   func,
                                                                gpointer                user_data);

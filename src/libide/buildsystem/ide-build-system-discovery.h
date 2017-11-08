@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -39,6 +41,7 @@ struct _IdeBuildSystemDiscoveryInterface
                       GError                  **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 gchar *ide_build_system_discovery_discover (IdeBuildSystemDiscovery  *self,
                                             GFile                    *project_file,
                                             GCancellable             *cancellable,

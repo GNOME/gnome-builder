@@ -21,6 +21,8 @@
 #include <dazzle.h>
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 #include "ide-object.h"
 
@@ -170,54 +172,77 @@ struct _IdeBuildStageClass
   gpointer _reserved12;
 };
 
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_build_stage_get_name         (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_set_name         (IdeBuildStage        *self,
                                                  const gchar          *name);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_log              (IdeBuildStage        *self,
                                                  IdeBuildLogStream     stream,
                                                  const gchar          *message,
                                                  gssize                message_len);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_log_subprocess   (IdeBuildStage        *self,
                                                  IdeSubprocess        *subprocess);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_set_log_observer (IdeBuildStage        *self,
                                                  IdeBuildLogObserver   observer,
                                                  gpointer              observer_data,
                                                  GDestroyNotify        observer_data_destroy);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_set_stdout_path  (IdeBuildStage        *self,
                                                  const gchar          *path);
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_build_stage_get_stdout_path  (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_build_stage_get_completed    (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_set_completed    (IdeBuildStage        *self,
                                                  gboolean              completed);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_build_stage_get_disabled     (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_set_disabled     (IdeBuildStage        *self,
                                                  gboolean              disabled);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_build_stage_get_check_stdout (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_set_check_stdout (IdeBuildStage        *self,
                                                  gboolean              check_stdout);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_build_stage_get_transient    (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_set_transient    (IdeBuildStage        *self,
                                                  gboolean              transient);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_execute_async    (IdeBuildStage        *self,
                                                  IdeBuildPipeline     *pipeline,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_build_stage_execute_finish   (IdeBuildStage        *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_clean_async      (IdeBuildStage        *self,
                                                  IdeBuildPipeline     *pipeline,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_build_stage_clean_finish     (IdeBuildStage        *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_build_stage_chain            (IdeBuildStage        *self,
                                                  IdeBuildStage        *next);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_pause            (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_unpause          (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_build_stage_emit_reap        (IdeBuildStage        *self,
                                                  DzlDirectoryReaper   *reaper);
 

@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "files/ide-file.h"
 #include "projects/ide-project-item.h"
 
@@ -34,10 +36,15 @@ struct _IdeProjectFileClass
   IdeProjectItemClass parent;
 };
 
+IDE_AVAILABLE_IN_ALL
 GFile       *ide_project_file_get_file         (IdeProjectFile *self);
+IDE_AVAILABLE_IN_ALL
 GFileInfo   *ide_project_file_get_file_info    (IdeProjectFile *self);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_project_file_get_name         (IdeProjectFile *self);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_project_file_get_path         (IdeProjectFile *self);
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_project_file_get_is_directory (IdeProjectFile *self);
 
 G_END_DECLS

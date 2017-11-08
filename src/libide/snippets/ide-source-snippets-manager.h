@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -28,15 +30,19 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSourceSnippetsManager, ide_source_snippets_manager, IDE, SOURCE_SNIPPETS_MANAGER, GObject)
 
+IDE_AVAILABLE_IN_ALL
 void               ide_source_snippets_manager_load_async          (IdeSourceSnippetsManager  *self,
                                                                     GCancellable              *cancellable,
                                                                     GAsyncReadyCallback        callback,
                                                                     gpointer                   user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_source_snippets_manager_load_finish         (IdeSourceSnippetsManager  *self,
                                                                     GAsyncResult              *result,
                                                                     GError                   **error);
+IDE_AVAILABLE_IN_ALL
 IdeSourceSnippets *ide_source_snippets_manager_get_for_language    (IdeSourceSnippetsManager  *self,
                                                                     GtkSourceLanguage         *language);
+IDE_AVAILABLE_IN_ALL
 IdeSourceSnippets *ide_source_snippets_manager_get_for_language_id (IdeSourceSnippetsManager  *self,
                                                                     const gchar               *language_id);
 

@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TAGS_BUILDER (ide_tags_builder_get_type ())
@@ -41,12 +43,14 @@ struct _IdeTagsBuilderInterface
                             GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void      ide_tags_builder_build_async  (IdeTagsBuilder       *self,
                                          GFile                *directory_or_file,
                                          gboolean              recursive,
                                          GCancellable         *cancellable,
                                          GAsyncReadyCallback   callback,
                                          gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_tags_builder_build_finish (IdeTagsBuilder       *self,
                                          GAsyncResult         *result,
                                          GError              **error);

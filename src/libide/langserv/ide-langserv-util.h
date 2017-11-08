@@ -18,11 +18,15 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "symbols/ide-symbol.h"
 
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind ide_langserv_decode_symbol_kind     (guint kind);
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind ide_langserv_decode_completion_kind (guint kind);
 
 G_END_DECLS

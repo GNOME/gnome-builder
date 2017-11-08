@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_PANE (ide_layout_pane_get_type())

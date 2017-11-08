@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "files/ide-file.h"
 #include "files/ide-indent-style.h"
 #include "ide-object.h"
@@ -36,8 +38,11 @@ struct _IdeFileSettingsClass
   IdeObjectClass parent;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeFileSettings *ide_file_settings_new         (IdeFile         *file);
+IDE_AVAILABLE_IN_ALL
 IdeFile         *ide_file_settings_get_file    (IdeFileSettings *self);
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_file_settings_get_settled (IdeFileSettings *self);
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _3, _4, _5, _6) \

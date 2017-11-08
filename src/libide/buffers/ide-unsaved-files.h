@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -31,30 +33,41 @@ struct _IdeUnsavedFiles
   IdeObject parent_instance;
 };
 
+IDE_AVAILABLE_IN_ALL
 void            ide_unsaved_files_update            (IdeUnsavedFiles      *self,
                                                      GFile                *file,
                                                      GBytes               *content);
+IDE_AVAILABLE_IN_ALL
 void            ide_unsaved_files_remove            (IdeUnsavedFiles      *self,
                                                      GFile                *file);
+IDE_AVAILABLE_IN_ALL
 void            ide_unsaved_files_save_async        (IdeUnsavedFiles      *files,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_unsaved_files_save_finish       (IdeUnsavedFiles      *files,
                                                      GAsyncResult         *result,
                                                      GError              **error);
+IDE_AVAILABLE_IN_ALL
 void            ide_unsaved_files_restore_async     (IdeUnsavedFiles      *files,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_unsaved_files_restore_finish    (IdeUnsavedFiles      *files,
                                                      GAsyncResult         *result,
                                                      GError              **error);
+IDE_AVAILABLE_IN_ALL
 GPtrArray      *ide_unsaved_files_to_array          (IdeUnsavedFiles      *files);
+IDE_AVAILABLE_IN_ALL
 gint64          ide_unsaved_files_get_sequence      (IdeUnsavedFiles      *files);
+IDE_AVAILABLE_IN_ALL
 IdeUnsavedFile *ide_unsaved_files_get_unsaved_file  (IdeUnsavedFiles      *self,
                                                      GFile                *file);
+IDE_AVAILABLE_IN_ALL
 void            ide_unsaved_files_clear             (IdeUnsavedFiles      *self);
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_unsaved_files_contains          (IdeUnsavedFiles      *self,
                                                      GFile                *file);
 

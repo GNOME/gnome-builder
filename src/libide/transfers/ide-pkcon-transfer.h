@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "transfers/ide-transfer.h"
 
 G_BEGIN_DECLS
@@ -26,6 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdePkconTransfer, ide_pkcon_transfer, IDE, PKCON_TRANSFER, IdeTransfer)
 
+IDE_AVAILABLE_IN_ALL
 IdePkconTransfer *ide_pkcon_transfer_new (const gchar * const *packages);
 
 G_END_DECLS

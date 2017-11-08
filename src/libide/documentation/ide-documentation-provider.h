@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "documentation/ide-documentation-info.h"
 
 G_BEGIN_DECLS
@@ -38,9 +40,12 @@ struct _IdeDocumentationProviderInterface
   IdeDocumentationContext (*get_context)     (IdeDocumentationProvider    *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 gchar                  *ide_documentation_provider_get_name          (IdeDocumentationProvider    *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_documentation_provider_get_info          (IdeDocumentationProvider    *self,
                                                                       IdeDocumentationInfo        *info);
+IDE_AVAILABLE_IN_ALL
 IdeDocumentationContext ide_documentation_provider_get_context       (IdeDocumentationProvider    *self);
 
 

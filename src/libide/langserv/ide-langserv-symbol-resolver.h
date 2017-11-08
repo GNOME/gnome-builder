@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 #include "langserv/ide-langserv-client.h"
@@ -44,7 +46,9 @@ struct _IdeLangservSymbolResolverClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeLangservClient *ide_langserv_symbol_resolver_get_client (IdeLangservSymbolResolver *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_langserv_symbol_resolver_set_client (IdeLangservSymbolResolver *self,
                                                             IdeLangservClient         *client);
 

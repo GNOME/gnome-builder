@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 #include "buildsystem/ide-build-log.h"
@@ -54,82 +56,113 @@ typedef enum
 
 G_DECLARE_FINAL_TYPE (IdeBuildPipeline, ide_build_pipeline, IDE, BUILD_PIPELINE, IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_get_busy            (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 IdeConfiguration      *ide_build_pipeline_get_configuration   (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 IdeRuntime            *ide_build_pipeline_get_runtime         (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_srcdir          (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_build_pipeline_get_message         (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 IdeBuildPhase          ide_build_pipeline_get_phase           (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_get_can_export      (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_build_pipeline_create_launcher     (IdeBuildPipeline       *self,
                                                                GError                **error);
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_build_pipeline_build_srcdir_path   (IdeBuildPipeline       *self,
                                                                const gchar            *first_part,
                                                                ...) G_GNUC_NULL_TERMINATED;
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_build_pipeline_build_builddir_path (IdeBuildPipeline       *self,
                                                                const gchar            *first_part,
                                                                ...) G_GNUC_NULL_TERMINATED;
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_invalidate_phase    (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phases);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_request_phase       (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phase);
+IDE_AVAILABLE_IN_ALL
 guint                  ide_build_pipeline_connect             (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phase,
                                                                gint                    priority,
                                                                IdeBuildStage          *stage);
+IDE_AVAILABLE_IN_ALL
 guint                  ide_build_pipeline_connect_launcher    (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phase,
                                                                gint                    priority,
                                                                IdeSubprocessLauncher  *launcher);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_disconnect          (IdeBuildPipeline       *self,
                                                                guint                   stage_id);
+IDE_AVAILABLE_IN_ALL
 IdeBuildStage         *ide_build_pipeline_get_stage_by_id     (IdeBuildPipeline       *self,
                                                                guint                   stage_id);
+IDE_AVAILABLE_IN_ALL
 guint                  ide_build_pipeline_add_log_observer    (IdeBuildPipeline       *self,
                                                                IdeBuildLogObserver     observer,
                                                                gpointer                observer_data,
                                                                GDestroyNotify          observer_data_destroy);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_remove_log_observer (IdeBuildPipeline       *self,
                                                                guint                   observer_id);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_emit_diagnostic     (IdeBuildPipeline       *self,
                                                                IdeDiagnostic          *diagnostic);
+IDE_AVAILABLE_IN_ALL
 guint                  ide_build_pipeline_add_error_format    (IdeBuildPipeline       *self,
                                                                const gchar            *regex,
                                                                GRegexCompileFlags      flags);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_remove_error_format (IdeBuildPipeline       *self,
                                                                guint                   error_format_id);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_build_async         (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phase,
                                                                GCancellable           *cancellable,
                                                                GAsyncReadyCallback     callback,
                                                                gpointer                user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_build_finish        (IdeBuildPipeline       *self,
                                                                GAsyncResult           *result,
                                                                GError                **error);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_execute_async       (IdeBuildPipeline       *self,
                                                                GCancellable           *cancellable,
                                                                GAsyncReadyCallback     callback,
                                                                gpointer                user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_execute_finish      (IdeBuildPipeline       *self,
                                                                GAsyncResult           *result,
                                                                GError                **error);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_foreach_stage       (IdeBuildPipeline       *self,
                                                                GFunc                   stage_callback,
                                                                gpointer                user_data);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_clean_async         (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phase,
                                                                GCancellable           *cancellable,
                                                                GAsyncReadyCallback     callback,
                                                                gpointer                user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_clean_finish        (IdeBuildPipeline       *self,
                                                                GAsyncResult           *result,
                                                                GError                **error);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_pipeline_rebuild_async       (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phase,
                                                                GCancellable           *cancellable,
                                                                GAsyncReadyCallback     callback,
                                                                gpointer                user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_rebuild_finish      (IdeBuildPipeline       *self,
                                                                GAsyncResult           *result,
                                                                GError                **error);

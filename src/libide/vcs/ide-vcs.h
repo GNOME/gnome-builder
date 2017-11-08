@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "vcs/ide-vcs-config.h"
 
@@ -45,26 +47,37 @@ struct _IdeVcsInterface
   gchar                  *(*get_branch_name)           (IdeVcs     *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 void                    ide_vcs_register_ignored          (const gchar          *pattern);
+IDE_AVAILABLE_IN_ALL
 IdeBufferChangeMonitor *ide_vcs_get_buffer_change_monitor (IdeVcs               *self,
                                                            IdeBuffer            *buffer);
+IDE_AVAILABLE_IN_ALL
 GFile                  *ide_vcs_get_working_directory     (IdeVcs               *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_vcs_new_async                 (IdeContext           *context,
                                                            int                   io_priority,
                                                            GCancellable         *cancellable,
                                                            GAsyncReadyCallback   callback,
                                                            gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeVcs                 *ide_vcs_new_finish                (GAsyncResult         *result,
                                                            GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean                ide_vcs_is_ignored                (IdeVcs               *self,
                                                            GFile                *file,
                                                            GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean                ide_vcs_path_is_ignored           (IdeVcs               *self,
                                                            const gchar          *path,
                                                            GError              **error);
+IDE_AVAILABLE_IN_ALL
 gint                    ide_vcs_get_priority              (IdeVcs               *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_vcs_emit_changed              (IdeVcs               *self);
+IDE_AVAILABLE_IN_ALL
 IdeVcsConfig           *ide_vcs_get_config                (IdeVcs               *self);
+IDE_AVAILABLE_IN_ALL
 gchar                  *ide_vcs_get_branch_name           (IdeVcs               *self);
 
 G_END_DECLS

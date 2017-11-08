@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -42,8 +44,10 @@ struct _IdeIndenterInterface
                             GdkEventKey   *event);
 };
 
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_indenter_is_trigger (IdeIndenter *self,
                                    GdkEventKey *event);
+IDE_AVAILABLE_IN_ALL
 gchar    *ide_indenter_format     (IdeIndenter *self,
                                    GtkTextView *text_view,
                                    GtkTextIter *begin,

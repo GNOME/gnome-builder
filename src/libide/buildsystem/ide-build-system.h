@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -62,39 +64,51 @@ struct _IdeBuildSystemInterface
   gchar      *(*get_display_name)                  (IdeBuildSystem       *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 gchar          *ide_build_system_get_id                            (IdeBuildSystem       *self);
+IDE_AVAILABLE_IN_ALL
 gchar          *ide_build_system_get_display_name                  (IdeBuildSystem       *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_build_system_new_async                         (IdeContext           *context,
                                                                     GFile                *project_file,
                                                                     const gchar          *build_system_hint,
                                                                     GCancellable         *cancellable,
                                                                     GAsyncReadyCallback   callback,
                                                                     gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeBuildSystem *ide_build_system_new_finish                        (GAsyncResult         *result,
                                                                     GError              **error);
+IDE_AVAILABLE_IN_ALL
 gint            ide_build_system_get_priority                      (IdeBuildSystem       *self);
+IDE_AVAILABLE_IN_ALL
 gchar          *ide_build_system_get_builddir                      (IdeBuildSystem       *self,
                                                                     IdeConfiguration     *configuration);
+IDE_AVAILABLE_IN_ALL
 void            ide_build_system_get_build_flags_async             (IdeBuildSystem       *self,
                                                                     IdeFile              *file,
                                                                     GCancellable         *cancellable,
                                                                     GAsyncReadyCallback   callback,
                                                                     gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gchar         **ide_build_system_get_build_flags_finish            (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
+IDE_AVAILABLE_IN_ALL
 void            ide_build_system_get_build_flags_for_files_async   (IdeBuildSystem       *self,
                                                                     GPtrArray            *files,
                                                                     GCancellable         *cancellable,
                                                                     GAsyncReadyCallback   callback,
                                                                     gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 GHashTable     *ide_build_system_get_build_flags_for_files_finish  (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
+IDE_AVAILABLE_IN_ALL
 void            ide_build_system_get_build_targets_async           (IdeBuildSystem       *self,
                                                                     GCancellable         *cancellable,
                                                                     GAsyncReadyCallback   callback,
                                                                     gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 GPtrArray      *ide_build_system_get_build_targets_finish          (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);

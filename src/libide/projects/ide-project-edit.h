@@ -20,6 +20,8 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 #include "diagnostics/ide-source-range.h"
 
 G_BEGIN_DECLS
@@ -39,11 +41,16 @@ struct _IdeProjectEditClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeProjectEdit *ide_project_edit_new             (void);
+IDE_AVAILABLE_IN_ALL
 IdeSourceRange *ide_project_edit_get_range       (IdeProjectEdit *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_project_edit_set_range       (IdeProjectEdit *self,
                                                   IdeSourceRange *range);
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_project_edit_get_replacement (IdeProjectEdit *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_project_edit_set_replacement (IdeProjectEdit *self,
                                                   const gchar    *replacement);
 

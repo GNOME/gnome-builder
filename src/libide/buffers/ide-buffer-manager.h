@@ -21,6 +21,8 @@
 #include <gtk/gtk.h>
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 #include "files/ide-file.h"
@@ -32,8 +34,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBufferManager, ide_buffer_manager, IDE, BUFFER_MANAGER, IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeBuffer                *ide_buffer_manager_create_temporary_buffer
                                                                  (IdeBufferManager     *self);
+IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_manager_load_file_async     (IdeBufferManager     *self,
                                                                   IdeFile              *file,
                                                                   gboolean              force_reload,
@@ -42,9 +46,11 @@ void                      ide_buffer_manager_load_file_async     (IdeBufferManag
                                                                   GCancellable         *cancellable,
                                                                   GAsyncReadyCallback   callback,
                                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeBuffer                *ide_buffer_manager_load_file_finish    (IdeBufferManager     *self,
                                                                   GAsyncResult         *result,
                                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_manager_save_file_async     (IdeBufferManager     *self,
                                                                   IdeBuffer            *buffer,
                                                                   IdeFile              *file,
@@ -52,34 +58,48 @@ void                      ide_buffer_manager_save_file_async     (IdeBufferManag
                                                                   GCancellable         *cancellable,
                                                                   GAsyncReadyCallback   callback,
                                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_manager_save_file_finish    (IdeBufferManager     *self,
                                                                   GAsyncResult         *result,
                                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_manager_save_all_async      (IdeBufferManager     *self,
                                                                   GCancellable         *cancellable,
                                                                   GAsyncReadyCallback   callback,
                                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_manager_save_all_finish     (IdeBufferManager     *self,
                                                                   GAsyncResult         *result,
                                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 IdeBuffer                *ide_buffer_manager_get_focus_buffer    (IdeBufferManager     *self);
+IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManager     *self,
                                                                   IdeBuffer            *buffer);
+IDE_AVAILABLE_IN_ALL
 GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManager     *self);
+IDE_AVAILABLE_IN_ALL
 GtkSourceCompletionWords *ide_buffer_manager_get_word_completion (IdeBufferManager     *self);
+IDE_AVAILABLE_IN_ALL
 guint                     ide_buffer_manager_get_n_buffers       (IdeBufferManager     *self);
+IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_manager_has_file            (IdeBufferManager     *self,
                                                                   GFile                *file);
+IDE_AVAILABLE_IN_ALL
 IdeBuffer                *ide_buffer_manager_find_buffer         (IdeBufferManager     *self,
                                                                   GFile                *file);
+IDE_AVAILABLE_IN_ALL
 gsize                     ide_buffer_manager_get_max_file_size   (IdeBufferManager     *self);
+IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_manager_set_max_file_size   (IdeBufferManager     *self,
                                                                   gsize                 max_file_size);
+IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_manager_apply_edits_async   (IdeBufferManager     *self,
                                                                   GPtrArray            *edits,
                                                                   GCancellable         *cancellable,
                                                                   GAsyncReadyCallback   callback,
                                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_manager_apply_edits_finish  (IdeBufferManager     *self,
                                                                   GAsyncResult         *result,
                                                                   GError              **error);

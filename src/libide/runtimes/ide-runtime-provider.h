@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -48,17 +50,22 @@ struct _IdeRuntimeProviderInterface
                               GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void     ide_runtime_provider_load           (IdeRuntimeProvider   *self,
                                               IdeRuntimeManager    *manager);
+IDE_AVAILABLE_IN_ALL
 void     ide_runtime_provider_unload         (IdeRuntimeProvider   *self,
                                               IdeRuntimeManager    *manager);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_runtime_provider_can_install    (IdeRuntimeProvider   *self,
                                               const gchar          *runtime_id);
+IDE_AVAILABLE_IN_ALL
 void     ide_runtime_provider_install_async  (IdeRuntimeProvider   *self,
                                               const gchar          *runtime_id,
                                               GCancellable         *cancellable,
                                               GAsyncReadyCallback   callback,
                                               gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_runtime_provider_install_finish (IdeRuntimeProvider   *self,
                                               GAsyncResult         *result,
                                               GError              **error);

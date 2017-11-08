@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -27,17 +29,22 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeRuntimeManager, ide_runtime_manager, IDE, RUNTIME_MANAGER, IdeObject)
 
 void        _ide_runtime_manager_unload       (IdeRuntimeManager    *self) G_GNUC_INTERNAL;
+IDE_AVAILABLE_IN_ALL
 IdeRuntime *ide_runtime_manager_get_runtime   (IdeRuntimeManager    *self,
                                                const gchar          *id);
+IDE_AVAILABLE_IN_ALL
 void        ide_runtime_manager_add           (IdeRuntimeManager    *self,
                                                IdeRuntime           *runtime);
+IDE_AVAILABLE_IN_ALL
 void        ide_runtime_manager_remove        (IdeRuntimeManager    *self,
                                                IdeRuntime           *runtime);
+IDE_AVAILABLE_IN_ALL
 void        ide_runtime_manager_ensure_async  (IdeRuntimeManager    *self,
                                                const gchar          *runtime_id,
                                                GCancellable         *cancellable,
                                                GAsyncReadyCallback   callback,
                                                gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeRuntime *ide_runtime_manager_ensure_finish (IdeRuntimeManager    *self,
                                                GAsyncResult         *result,
                                                GError              **error);

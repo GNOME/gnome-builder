@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -30,33 +32,48 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeFile           *ide_file_new                  (IdeContext           *context,
                                                   GFile                *file);
+IDE_AVAILABLE_IN_ALL
 IdeFile           *ide_file_new_for_path         (IdeContext           *context,
                                                   const gchar          *path);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_file_get_is_temporary     (IdeFile              *self);
+IDE_AVAILABLE_IN_ALL
 guint              ide_file_get_temporary_id     (IdeFile              *self);
+IDE_AVAILABLE_IN_ALL
 GtkSourceLanguage *ide_file_get_language         (IdeFile              *self);
+IDE_AVAILABLE_IN_ALL
 const gchar       *ide_file_get_language_id      (IdeFile              *self);
+IDE_AVAILABLE_IN_ALL
 GFile             *ide_file_get_file             (IdeFile              *self);
+IDE_AVAILABLE_IN_ALL
 guint              ide_file_hash                 (IdeFile              *self);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_file_equal                (IdeFile              *self,
                                                   IdeFile              *other);
+IDE_AVAILABLE_IN_ALL
 const gchar       *ide_file_get_path             (IdeFile              *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_file_load_settings_async  (IdeFile              *self,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeFileSettings   *ide_file_load_settings_finish (IdeFile              *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 void               ide_file_find_other_async     (IdeFile              *self,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeFile           *ide_file_find_other_finish    (IdeFile              *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 gint               ide_file_compare              (const IdeFile        *a,
                                                   const IdeFile        *b);
 const gchar       *_ide_file_get_content_type    (IdeFile              *self) G_GNUC_INTERNAL;

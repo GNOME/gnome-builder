@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "application/ide-application.h"
 
 G_BEGIN_DECLS
@@ -43,8 +45,10 @@ struct _IdeApplicationAddinInterface
                   IdeApplication      *application);
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_load   (IdeApplicationAddin *self,
                                    IdeApplication      *application);
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_unload (IdeApplicationAddin *self,
                                    IdeApplication      *application);
 

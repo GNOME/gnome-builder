@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "buildsystem/ide-environment-variable.h"
 
 G_BEGIN_DECLS
@@ -28,18 +30,26 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEnvironment, ide_environment, IDE, ENVIRONMENT, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeEnvironment *ide_environment_new         (void);
+IDE_AVAILABLE_IN_ALL
 void            ide_environment_setenv      (IdeEnvironment         *self,
                                              const gchar            *key,
                                              const gchar            *value);
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_environment_getenv      (IdeEnvironment         *self,
                                              const gchar            *key);
+IDE_AVAILABLE_IN_ALL
 gchar         **ide_environment_get_environ (IdeEnvironment         *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_environment_append      (IdeEnvironment         *self,
                                              IdeEnvironmentVariable *variable);
+IDE_AVAILABLE_IN_ALL
 void            ide_environment_remove      (IdeEnvironment         *self,
                                              IdeEnvironmentVariable *variable);
+IDE_AVAILABLE_IN_ALL
 IdeEnvironment *ide_environment_copy        (IdeEnvironment         *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_environment_copy_into   (IdeEnvironment         *self,
                                              IdeEnvironment         *dest,
                                              gboolean                replace);

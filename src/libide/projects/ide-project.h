@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "projects/ide-project-files.h"
 
@@ -27,34 +29,49 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeProject, ide_project, IDE, PROJECT, IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeProjectItem  *ide_project_get_root           (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 const gchar     *ide_project_get_name           (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 const gchar     *ide_project_get_id             (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 IdeFile         *ide_project_get_file_for_path  (IdeProject           *self,
                                                  const gchar          *path);
+IDE_AVAILABLE_IN_ALL
 IdeFile         *ide_project_get_project_file   (IdeProject           *self,
                                                  GFile                *gfile);
+IDE_AVAILABLE_IN_ALL
 void             ide_project_reader_lock        (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_project_reader_unlock      (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_project_writer_lock        (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_project_writer_unlock      (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_project_add_file           (IdeProject           *self,
                                                  IdeProjectFile       *file);
+IDE_AVAILABLE_IN_ALL
 IdeProjectFiles *ide_project_get_files          (IdeProject           *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_project_rename_file_async  (IdeProject           *self,
                                                  GFile                *orig_file,
                                                  GFile                *new_file,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_project_rename_file_finish (IdeProject           *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
 void             ide_project_trash_file_async   (IdeProject           *self,
                                                  GFile                *file,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_project_trash_file_finish  (IdeProject           *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);

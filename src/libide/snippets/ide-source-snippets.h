@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "snippets/ide-source-snippet.h"
 
 G_BEGIN_DECLS
@@ -28,13 +30,19 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSourceSnippets, ide_source_snippets, IDE, SOURCE_SNIPPETS, GObject)
 
+IDE_AVAILABLE_IN_ALL
 void               ide_source_snippets_add     (IdeSourceSnippets *snippets,
                                                 IdeSourceSnippet  *snippet);
+IDE_AVAILABLE_IN_ALL
 void               ide_source_snippets_clear   (IdeSourceSnippets *snippets);
+IDE_AVAILABLE_IN_ALL
 void               ide_source_snippets_merge   (IdeSourceSnippets *snippets,
                                                 IdeSourceSnippets *other);
+IDE_AVAILABLE_IN_ALL
 guint              ide_source_snippets_count   (IdeSourceSnippets *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceSnippets *ide_source_snippets_new     (void);
+IDE_AVAILABLE_IN_ALL
 void               ide_source_snippets_foreach (IdeSourceSnippets *snippets,
                                                 const gchar       *prefix,
                                                 GFunc              foreach_func,

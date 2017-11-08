@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 #include "layout/ide-layout-view.h"
 
 G_BEGIN_DECLS
@@ -51,19 +53,27 @@ struct _IdeLayoutStackClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget     *ide_layout_stack_new                   (void);
+IDE_AVAILABLE_IN_ALL
 GtkWidget     *ide_layout_stack_get_titlebar          (IdeLayoutStack       *self);
+IDE_AVAILABLE_IN_ALL
 IdeLayoutView *ide_layout_stack_get_visible_child     (IdeLayoutStack       *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_layout_stack_set_visible_child     (IdeLayoutStack       *self,
                                                        IdeLayoutView        *view);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_layout_stack_get_has_view          (IdeLayoutStack       *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_layout_stack_agree_to_close_async  (IdeLayoutStack       *self,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_layout_stack_agree_to_close_finish (IdeLayoutStack       *self,
                                                        GAsyncResult         *result,
                                                        GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_layout_stack_foreach_view          (IdeLayoutStack       *self,
                                                        GtkCallback           callback,
                                                        gpointer              user_data);

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "diagnostics/ide-source-location.h"
 #include "editor/ide-editor-sidebar.h"
 #include "editor/ide-editor-utilities.h"
@@ -31,17 +33,26 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
 
+IDE_AVAILABLE_IN_ALL
 void                       ide_editor_perspective_focus_buffer                  (IdeEditorPerspective *self,
                                                                                  IdeBuffer            *buffer);
+IDE_AVAILABLE_IN_ALL
 void                       ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self,
                                                                                  IdeBuffer            *buffer);
+IDE_AVAILABLE_IN_ALL
 void                       ide_editor_perspective_focus_location                (IdeEditorPerspective *self,
                                                                                  IdeSourceLocation    *location);
+IDE_AVAILABLE_IN_ALL
 IdeLayoutView             *ide_editor_perspective_get_active_view               (IdeEditorPerspective *self);
+IDE_AVAILABLE_IN_ALL
 IdeLayoutGrid             *ide_editor_perspective_get_grid                      (IdeEditorPerspective *self);
+IDE_AVAILABLE_IN_ALL
 IdeEditorSidebar          *ide_editor_perspective_get_sidebar                   (IdeEditorPerspective *self);
+IDE_AVAILABLE_IN_ALL
 IdeLayoutTransientSidebar *ide_editor_perspective_get_transient_sidebar         (IdeEditorPerspective *self);
+IDE_AVAILABLE_IN_ALL
 GtkWidget                 *ide_editor_perspective_get_utilities                 (IdeEditorPerspective *self);
+IDE_AVAILABLE_IN_ALL
 GtkWidget                 *ide_editor_perspective_get_overlay                   (IdeEditorPerspective *self);
 
 G_END_DECLS

@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_MAP (ide_source_map_get_type())

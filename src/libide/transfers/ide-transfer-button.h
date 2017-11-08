@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 #include "transfers/ide-transfer.h"
 
 G_BEGIN_DECLS
@@ -39,6 +41,7 @@ struct _IdeTransferButtonClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_transfer_button_new (IdeTransfer *transfer);
 
 G_END_DECLS

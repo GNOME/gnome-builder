@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -51,8 +53,11 @@ struct _IdeServiceInterface
   void         (*stop)           (IdeService *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_service_get_name             (IdeService *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_service_start                (IdeService *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_service_stop                 (IdeService *self);
 void         _ide_service_emit_context_loaded (IdeService *self) G_GNUC_INTERNAL;
 

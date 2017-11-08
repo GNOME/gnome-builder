@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -41,12 +43,14 @@ struct _IdeSearchProviderInterface
                                GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void       ide_search_provider_search_async  (IdeSearchProvider    *self,
                                               const gchar          *query,
                                               guint                 max_results,
                                               GCancellable         *cancellable,
                                               GAsyncReadyCallback   callback,
                                               gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_search_provider_search_finish (IdeSearchProvider    *self,
                                               GAsyncResult         *result,
                                               GError              **error);

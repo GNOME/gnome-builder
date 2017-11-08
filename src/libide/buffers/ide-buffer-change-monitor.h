@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -57,9 +59,12 @@ struct _IdeBufferChangeMonitorClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeBufferLineChange ide_buffer_change_monitor_get_change   (IdeBufferChangeMonitor *self,
                                                             guint                   line);
+IDE_AVAILABLE_IN_ALL
 void                ide_buffer_change_monitor_emit_changed (IdeBufferChangeMonitor *self);
+IDE_AVAILABLE_IN_ALL
 void                ide_buffer_change_monitor_reload       (IdeBufferChangeMonitor *self);
 
 G_END_DECLS

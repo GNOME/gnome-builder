@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 #include "buildsystem/ide-build-target.h"
@@ -69,25 +71,36 @@ struct _IdeRuntimeClass
   gpointer _reserved16;
 };
 
+IDE_AVAILABLE_IN_ALL
 GQuark                 ide_runtime_error_quark              (void) G_GNUC_CONST;
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_runtime_contains_program_in_path (IdeRuntime           *self,
                                                              const gchar          *program,
                                                              GCancellable         *cancellable);
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_runtime_create_launcher          (IdeRuntime           *self,
                                                              GError              **error);
+IDE_AVAILABLE_IN_ALL
 IdeRunner             *ide_runtime_create_runner            (IdeRuntime           *self,
                                                              IdeBuildTarget       *build_target);
+IDE_AVAILABLE_IN_ALL
 void                   ide_runtime_prepare_configuration    (IdeRuntime           *self,
                                                              IdeConfiguration     *configuration);
+IDE_AVAILABLE_IN_ALL
 IdeRuntime            *ide_runtime_new                      (IdeContext           *context,
                                                              const gchar          *id,
                                                              const gchar          *title);
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_runtime_get_id                   (IdeRuntime           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_runtime_set_id                   (IdeRuntime           *self,
                                                              const gchar          *id);
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_runtime_get_display_name         (IdeRuntime           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_runtime_set_display_name         (IdeRuntime           *self,
                                                              const gchar          *display_name);
+IDE_AVAILABLE_IN_ALL
 GFile                 *ide_runtime_translate_file           (IdeRuntime           *self,
                                                              GFile                *file);
 

@@ -20,6 +20,8 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_CONFIG (ide_vcs_config_get_type())
@@ -44,9 +46,11 @@ struct _IdeVcsConfigInterface
                       const GValue    *value);
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_vcs_config_get_config (IdeVcsConfig     *self,
                                 IdeVcsConfigType  type,
                                 GValue           *value);
+IDE_AVAILABLE_IN_ALL
 void ide_vcs_config_set_config (IdeVcsConfig     *self,
                                 IdeVcsConfigType  type,
                                 const GValue     *value);

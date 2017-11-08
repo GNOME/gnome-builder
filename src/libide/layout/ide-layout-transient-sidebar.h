@@ -20,6 +20,8 @@
 
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 #include "layout/ide-layout-pane.h"
 #include "layout/ide-layout-view.h"
 
@@ -44,8 +46,10 @@ struct _IdeLayoutTransientSidebarClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_layout_transient_sidebar_set_panel (IdeLayoutTransientSidebar *self,
                                              GtkWidget                 *panel);
+IDE_AVAILABLE_IN_ALL
 void ide_layout_transient_sidebar_set_view  (IdeLayoutTransientSidebar *self,
                                              IdeLayoutView             *view);
 

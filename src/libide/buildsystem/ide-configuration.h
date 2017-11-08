@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "ide-types.h"
 
@@ -65,97 +67,150 @@ struct _IdeConfigurationClass
   gpointer _reserved16;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeConfiguration     *ide_configuration_new                       (IdeContext            *context,
                                                                    const gchar           *id,
                                                                    const gchar           *device_id,
                                                                    const gchar           *runtime_id);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_id                    (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_runtime_id            (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_runtime_id            (IdeConfiguration      *self,
                                                                    const gchar           *runtime_id);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_device_id             (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_device_id             (IdeConfiguration      *self,
                                                                    const gchar           *device_id);
+IDE_AVAILABLE_IN_ALL
 IdeDevice            *ide_configuration_get_device                (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_device                (IdeConfiguration      *self,
                                                                    IdeDevice             *device);
+IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_get_dirty                 (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_dirty                 (IdeConfiguration      *self,
                                                                    gboolean               dirty);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_display_name          (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_display_name          (IdeConfiguration      *self,
                                                                    const gchar           *display_name);
+IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_get_ready                 (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 IdeRuntime           *ide_configuration_get_runtime               (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_runtime               (IdeConfiguration      *self,
                                                                    IdeRuntime            *runtime);
+IDE_AVAILABLE_IN_ALL
 gchar               **ide_configuration_get_environ               (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_getenv                    (IdeConfiguration      *self,
                                                                    const gchar           *key);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_setenv                    (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    const gchar           *value);
+IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_get_debug                 (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_debug                 (IdeConfiguration      *self,
                                                                    gboolean               debug);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_prefix                (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_prefix                (IdeConfiguration      *self,
                                                                    const gchar           *prefix);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_config_opts           (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_config_opts           (IdeConfiguration      *self,
                                                                    const gchar           *config_opts);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_run_opts              (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_run_opts              (IdeConfiguration      *self,
                                                                    const gchar           *run_opts);
+IDE_AVAILABLE_IN_ALL
 const gchar * const  *ide_configuration_get_build_commands        (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_build_commands        (IdeConfiguration      *self,
                                                                    const gchar *const    *build_commands);
+IDE_AVAILABLE_IN_ALL
 const gchar * const  *ide_configuration_get_post_install_commands (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_post_install_commands (IdeConfiguration      *self,
                                                                    const gchar *const    *post_install_commands);
+IDE_AVAILABLE_IN_ALL
 gint                  ide_configuration_get_parallelism           (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_parallelism           (IdeConfiguration      *self,
                                                                    gint                   parallelism);
+IDE_AVAILABLE_IN_ALL
 IdeEnvironment       *ide_configuration_get_environment           (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_environment           (IdeConfiguration      *self,
                                                                    IdeEnvironment        *environment);
+IDE_AVAILABLE_IN_ALL
 IdeConfiguration     *ide_configuration_duplicate                 (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 IdeConfiguration     *ide_configuration_snapshot                  (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 guint                 ide_configuration_get_sequence              (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_app_id                (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_app_id                (IdeConfiguration      *self,
                                                                    const gchar           *app_id);
+IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_supports_device           (IdeConfiguration      *self,
                                                                    IdeDevice             *device);
+IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_supports_runtime          (IdeConfiguration      *self,
                                                                    IdeRuntime            *runtime);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_internal_string       (IdeConfiguration      *self,
                                                                    const gchar           *key);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_internal_string       (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    const gchar           *value);
+IDE_AVAILABLE_IN_ALL
 const gchar * const  *ide_configuration_get_internal_strv         (IdeConfiguration      *self,
                                                                    const gchar           *key);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_internal_strv         (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    const gchar *const    *value);
+IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_get_internal_boolean      (IdeConfiguration      *self,
                                                                    const gchar           *key);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_internal_boolean      (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    gboolean               value);
+IDE_AVAILABLE_IN_ALL
 gint                  ide_configuration_get_internal_int          (IdeConfiguration      *self,
                                                                    const gchar           *key);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_internal_int          (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    gint                   value);
+IDE_AVAILABLE_IN_ALL
 gint64                ide_configuration_get_internal_int64        (IdeConfiguration      *self,
                                                                    const gchar           *key);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_internal_int64        (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    gint64                 value);
+IDE_AVAILABLE_IN_ALL
 gpointer              ide_configuration_get_internal_object       (IdeConfiguration      *self,
                                                                    const gchar           *key);
+IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_internal_object       (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    gpointer               instance);

@@ -20,13 +20,20 @@
 
 #include <glib.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 void ide_log_init               (gboolean     stdout_,
                                  const gchar *filename);
+IDE_AVAILABLE_IN_ALL
 void ide_log_increase_verbosity (void);
+IDE_AVAILABLE_IN_ALL
 gint ide_log_get_verbosity      (void);
+IDE_AVAILABLE_IN_ALL
 void ide_log_set_verbosity      (gint         level);
+IDE_AVAILABLE_IN_ALL
 void ide_log_shutdown           (void);
 
 G_END_DECLS

@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_ITEM            (ide_completion_item_get_type())
@@ -66,16 +68,22 @@ struct _IdeCompletionItemClass
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeCompletionItem, g_object_unref)
 
+IDE_AVAILABLE_IN_ALL
 GType              ide_completion_item_get_type        (void);
+IDE_AVAILABLE_IN_ALL
 IdeCompletionItem *ide_completion_item_new             (void);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_completion_item_match           (IdeCompletionItem   *self,
                                                         const gchar         *query,
                                                         const gchar         *casefold);
+IDE_AVAILABLE_IN_ALL
 void               ide_completion_item_set_priority    (IdeCompletionItem   *self,
                                                         guint                priority);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_completion_item_fuzzy_match     (const gchar         *haystack,
                                                         const gchar         *casefold_needle,
                                                         guint               *priority);
+IDE_AVAILABLE_IN_ALL
 gchar             *ide_completion_item_fuzzy_highlight (const gchar         *haystack,
                                                         const gchar         *casefold_query);
 

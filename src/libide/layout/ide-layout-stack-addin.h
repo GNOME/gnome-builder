@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 #include "layout/ide-layout-stack.h"
 #include "layout/ide-layout-view.h"
 
@@ -41,12 +43,16 @@ struct _IdeLayoutStackAddinInterface
                     IdeLayoutView       *view);
 };
 
+IDE_AVAILABLE_IN_ALL
 void                 ide_layout_stack_addin_load                (IdeLayoutStackAddin *self,
                                                                  IdeLayoutStack      *stack);
+IDE_AVAILABLE_IN_ALL
 void                 ide_layout_stack_addin_unload              (IdeLayoutStackAddin *self,
                                                                  IdeLayoutStack      *stack);
+IDE_AVAILABLE_IN_ALL
 void                 ide_layout_stack_addin_set_view            (IdeLayoutStackAddin *self,
                                                                  IdeLayoutView       *view);
+IDE_AVAILABLE_IN_ALL
 IdeLayoutStackAddin *ide_layout_stack_addin_find_by_module_name (IdeLayoutStack      *stack,
                                                                  const gchar         *module_name);
 

@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "sourceview/ide-completion-item.h"
 
 G_BEGIN_DECLS
@@ -47,18 +49,27 @@ struct _IdeCompletionResultsClass
                    IdeCompletionItem    *right);
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeCompletionResults *ide_completion_results_new                    (const gchar                 *query);
+IDE_AVAILABLE_IN_ALL
 const gchar          *ide_completion_results_get_query              (IdeCompletionResults        *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_completion_results_invalidate_sort        (IdeCompletionResults        *self);
+IDE_AVAILABLE_IN_ALL
 void                  ide_completion_results_take_proposal          (IdeCompletionResults        *self,
                                                                      IdeCompletionItem           *proposal);
+IDE_AVAILABLE_IN_ALL
 void                  ide_completion_results_present                (IdeCompletionResults        *self,
                                                                      GtkSourceCompletionProvider *provider,
                                                                      GtkSourceCompletionContext  *context);
+IDE_AVAILABLE_IN_ALL
 gboolean              ide_completion_results_replay                 (IdeCompletionResults        *self,
                                                                      const gchar                 *query);
+IDE_AVAILABLE_IN_ALL
 guint                 ide_completion_results_get_size               (IdeCompletionResults        *self);
+IDE_AVAILABLE_IN_ALL
 gint                  ide_completion_results_get_insert_offset      (IdeCompletionResults        *self);
+IDE_AVAILABLE_IN_ALL
 gint                  ide_completion_results_get_end_offset         (IdeCompletionResults        *self);
 
 G_END_DECLS

@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_TEMPLATE (ide_project_template_get_type())
@@ -46,17 +48,25 @@ struct _IdeProjectTemplateInterface
                                   GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_id          (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_name        (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_description (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_ALL
 GtkWidget  *ide_project_template_get_widget      (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_ALL
 gchar     **ide_project_template_get_languages   (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_ALL
 void        ide_project_template_expand_async    (IdeProjectTemplate   *self,
                                                   GHashTable           *params,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean    ide_project_template_expand_finish   (IdeProjectTemplate   *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);

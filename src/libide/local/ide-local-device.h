@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "devices/ide-device.h"
 
 G_BEGIN_DECLS

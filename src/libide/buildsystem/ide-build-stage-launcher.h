@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-context.h"
 
 #include "buildsystem/ide-build-stage.h"
@@ -42,15 +44,22 @@ struct _IdeBuildStageLauncherClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeBuildStage         *ide_build_stage_launcher_new                    (IdeContext            *context,
                                                                         IdeSubprocessLauncher *launcher);
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_build_stage_launcher_get_launcher           (IdeBuildStageLauncher *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_stage_launcher_set_launcher           (IdeBuildStageLauncher *self,
                                                                         IdeSubprocessLauncher *launcher);
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_build_stage_launcher_get_clean_launcher     (IdeBuildStageLauncher *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_stage_launcher_set_clean_launcher     (IdeBuildStageLauncher *self,
                                                                         IdeSubprocessLauncher *clean_launcher);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_stage_launcher_get_ignore_exit_status (IdeBuildStageLauncher *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_build_stage_launcher_set_ignore_exit_status (IdeBuildStageLauncher *self,
                                                                         gboolean               ignore_exit_status);
 

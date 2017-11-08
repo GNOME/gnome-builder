@@ -20,6 +20,8 @@
 
 #include <glib.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 #include "buildconfig/ide-buildconfig-configuration.h"
@@ -30,6 +32,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBuildconfigConfigurationProvider, ide_buildconfig_configuration_provider, IDE, BUILDCONFIG_CONFIGURATION_PROVIDER, GObject)
 
+IDE_AVAILABLE_IN_ALL
 void ide_buildconfig_configuration_provider_track_config (IdeBuildconfigConfigurationProvider *self,
                                                           IdeBuildconfigConfiguration         *config);
 

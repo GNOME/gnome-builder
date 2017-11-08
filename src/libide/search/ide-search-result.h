@@ -21,6 +21,8 @@
 #include <gio/gio.h>
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 #include "diagnostics/ide-source-location.h"
 
 G_BEGIN_DECLS
@@ -46,14 +48,21 @@ struct _IdeSearchResultClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeSearchResult   *ide_search_result_new                 (void);
+IDE_AVAILABLE_IN_ALL
 IdeSourceLocation *ide_search_result_get_source_location (IdeSearchResult       *self);
+IDE_AVAILABLE_IN_ALL
 gint               ide_search_result_compare             (gconstpointer          a,
                                                           gconstpointer          b);
+IDE_AVAILABLE_IN_ALL
 gint               ide_search_result_get_priority        (IdeSearchResult       *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_search_result_set_priority        (IdeSearchResult       *self,
                                                           gint                   priority);
+IDE_AVAILABLE_IN_ALL
 gfloat             ide_search_result_get_score           (IdeSearchResult       *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_search_result_set_score           (IdeSearchResult       *self,
                                                           gfloat                 score);
 

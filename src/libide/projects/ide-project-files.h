@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "projects/ide-project-file.h"
 #include "projects/ide-project-item.h"
 
@@ -33,10 +35,13 @@ struct _IdeProjectFiles
   IdeProjectItem parent_instance;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeFile        *ide_project_files_get_file_for_path (IdeProjectFiles *self,
                                                      const gchar     *path);
+IDE_AVAILABLE_IN_ALL
 void            ide_project_files_add_file          (IdeProjectFiles *self,
                                                      IdeProjectFile  *file);
+IDE_AVAILABLE_IN_ALL
 IdeProjectItem *ide_project_files_find_file         (IdeProjectFiles *self,
                                                      GFile           *file);
 

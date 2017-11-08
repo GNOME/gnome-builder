@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "editor/ide-editor-perspective.h"
 #include "layout/ide-layout-view.h"
 
@@ -39,13 +41,17 @@ struct _IdeEditorAddinInterface
                     IdeLayoutView        *view);
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_editor_addin_load     (IdeEditorAddin       *self,
                                 IdeEditorPerspective *perspective);
+IDE_AVAILABLE_IN_ALL
 void ide_editor_addin_unload   (IdeEditorAddin       *self,
                                 IdeEditorPerspective *perspective);
+IDE_AVAILABLE_IN_ALL
 void ide_editor_addin_view_set (IdeEditorAddin       *self,
                                 IdeLayoutView        *view);
 
+IDE_AVAILABLE_IN_ALL
 IdeEditorAddin *ide_editor_addin_find_by_module_name (IdeEditorPerspective *editor,
                                                       const gchar          *module_name);
 

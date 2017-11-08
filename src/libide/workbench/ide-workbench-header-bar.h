@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 #include "workbench/ide-omni-bar.h"
 
 G_BEGIN_DECLS
@@ -43,15 +45,21 @@ struct _IdeWorkbenchHeaderBarClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget  *ide_workbench_header_bar_new          (void);
+IDE_AVAILABLE_IN_ALL
 IdeOmniBar *ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self);
+IDE_AVAILABLE_IN_ALL
 void        ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
+IDE_AVAILABLE_IN_ALL
 void        ide_workbench_header_bar_add_primary  (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget);
+IDE_AVAILABLE_IN_ALL
 void        ide_workbench_header_bar_insert_left  (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget,
                                                    GtkPackType            pack_type,
                                                    gint                   priority);
+IDE_AVAILABLE_IN_ALL
 void        ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget,
                                                    GtkPackType            pack_type,

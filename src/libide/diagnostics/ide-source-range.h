@@ -18,17 +18,25 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_RANGE (ide_source_range_get_type())
 
+IDE_AVAILABLE_IN_ALL
 GType              ide_source_range_get_type  (void);
+IDE_AVAILABLE_IN_ALL
 IdeSourceRange    *ide_source_range_ref       (IdeSourceRange    *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_source_range_unref     (IdeSourceRange    *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceLocation *ide_source_range_get_begin (IdeSourceRange    *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceLocation *ide_source_range_get_end   (IdeSourceRange    *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceRange    *ide_source_range_new       (IdeSourceLocation *begin,
                                                IdeSourceLocation *end);
 

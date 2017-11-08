@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_GENESIS_ADDIN (ide_genesis_addin_get_type())
@@ -45,16 +47,24 @@ struct _IdeGenesisAddinInterface
   gint       (*get_priority)   (IdeGenesisAddin      *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 gchar     *ide_genesis_addin_get_label      (IdeGenesisAddin      *self);
+IDE_AVAILABLE_IN_ALL
 gchar     *ide_genesis_addin_get_next_label (IdeGenesisAddin      *self);
+IDE_AVAILABLE_IN_ALL
 gint       ide_genesis_addin_get_priority   (IdeGenesisAddin      *self);
+IDE_AVAILABLE_IN_ALL
 gchar     *ide_genesis_addin_get_title      (IdeGenesisAddin      *self);
+IDE_AVAILABLE_IN_ALL
 gchar     *ide_genesis_addin_get_icon_name  (IdeGenesisAddin      *self);
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_genesis_addin_get_widget     (IdeGenesisAddin      *self);
+IDE_AVAILABLE_IN_ALL
 void       ide_genesis_addin_run_async      (IdeGenesisAddin      *self,
                                              GCancellable         *cancellable,
                                              GAsyncReadyCallback   callback,
                                              gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean   ide_genesis_addin_run_finish     (IdeGenesisAddin      *self,
                                              GAsyncResult         *result,
                                              GError              **error);

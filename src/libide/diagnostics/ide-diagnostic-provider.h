@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -42,16 +44,20 @@ struct _IdeDiagnosticProviderInterface
                                       GError                **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostic_provider_diagnose_async   (IdeDiagnosticProvider  *self,
                                                           IdeFile                *file,
                                                           IdeBuffer              *buffer,
                                                           GCancellable           *cancellable,
                                                           GAsyncReadyCallback     callback,
                                                           gpointer                user_data);
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics *ide_diagnostic_provider_diagnose_finish  (IdeDiagnosticProvider  *self,
                                                           GAsyncResult           *result,
                                                           GError                **error);
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostic_provider_emit_invalidated (IdeDiagnosticProvider  *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostic_provider_load             (IdeDiagnosticProvider  *self);
 
 G_END_DECLS

@@ -20,9 +20,13 @@
 
 #include <glib.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_is_flatpak           (void);
+IDE_AVAILABLE_IN_ALL
 gchar    *ide_flatpak_get_app_path (const gchar *path);
 
 G_END_DECLS

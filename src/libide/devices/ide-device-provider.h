@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "devices/ide-device.h"
 #include "ide-object.h"
 
@@ -35,11 +37,15 @@ struct _IdeDeviceProviderInterface
   GPtrArray *(*get_devices) (IdeDeviceProvider *provider);
 };
 
+IDE_AVAILABLE_IN_ALL
 void       ide_device_provider_emit_device_added   (IdeDeviceProvider *provider,
                                                     IdeDevice         *device);
+IDE_AVAILABLE_IN_ALL
 void       ide_device_provider_emit_device_removed (IdeDeviceProvider *provider,
                                                     IdeDevice         *device);
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_device_provider_get_devices         (IdeDeviceProvider *provider);
+IDE_AVAILABLE_IN_ALL
 gboolean   ide_device_provider_get_settled         (IdeDeviceProvider *provider);
 
 G_END_DECLS

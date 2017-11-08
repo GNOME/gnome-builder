@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "ide-types.h"
 
@@ -71,7 +73,9 @@ struct _IdeHighlighterInterface
   void (*load)       (IdeHighlighter       *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_highlighter_load                    (IdeHighlighter       *self);
+IDE_AVAILABLE_IN_ALL
 void ide_highlighter_update                  (IdeHighlighter       *self,
                                               IdeHighlightCallback  callback,
                                               const GtkTextIter    *range_begin,

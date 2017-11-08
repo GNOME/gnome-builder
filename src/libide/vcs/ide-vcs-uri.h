@@ -20,32 +20,50 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_URI (ide_vcs_uri_get_type())
 
 typedef struct _IdeVcsUri IdeVcsUri;
 
+IDE_AVAILABLE_IN_ALL
 GType        ide_vcs_uri_get_type   (void);
+IDE_AVAILABLE_IN_ALL
 IdeVcsUri   *ide_vcs_uri_new        (const gchar     *uri);
+IDE_AVAILABLE_IN_ALL
 IdeVcsUri   *ide_vcs_uri_ref        (IdeVcsUri       *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_vcs_uri_unref      (IdeVcsUri       *self);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_vcs_uri_get_scheme (const IdeVcsUri *self);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_vcs_uri_get_user   (const IdeVcsUri *self);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_vcs_uri_get_host   (const IdeVcsUri *self);
+IDE_AVAILABLE_IN_ALL
 guint        ide_vcs_uri_get_port   (const IdeVcsUri *self);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_vcs_uri_get_path   (const IdeVcsUri *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_vcs_uri_set_scheme (IdeVcsUri       *self,
                                      const gchar     *scheme);
+IDE_AVAILABLE_IN_ALL
 void         ide_vcs_uri_set_user   (IdeVcsUri       *self,
                                      const gchar     *user);
+IDE_AVAILABLE_IN_ALL
 void         ide_vcs_uri_set_host   (IdeVcsUri       *self,
                                      const gchar     *host);
+IDE_AVAILABLE_IN_ALL
 void         ide_vcs_uri_set_port   (IdeVcsUri       *self,
                                      guint            port);
+IDE_AVAILABLE_IN_ALL
 void         ide_vcs_uri_set_path   (IdeVcsUri       *self,
                                      const gchar     *path);
+IDE_AVAILABLE_IN_ALL
 gchar       *ide_vcs_uri_to_string  (const IdeVcsUri *self);
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_vcs_uri_is_valid   (const gchar     *uri_string);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeVcsUri, ide_vcs_uri_unref)

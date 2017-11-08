@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "projects/ide-project-info.h"
 
 G_BEGIN_DECLS
@@ -43,12 +45,15 @@ struct _IdeProjectMinerInterface
                            GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void     ide_project_miner_emit_discovered (IdeProjectMiner      *self,
                                             IdeProjectInfo       *project_info);
+IDE_AVAILABLE_IN_ALL
 void     ide_project_miner_mine_async      (IdeProjectMiner      *self,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,
                                             gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_project_miner_mine_finish     (IdeProjectMiner      *self,
                                             GAsyncResult         *result,
                                             GError              **error);

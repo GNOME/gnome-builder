@@ -20,18 +20,25 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_ENVIRONMENT_VARIABLE (ide_environment_variable_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeEnvironmentVariable, ide_environment_variable, IDE, ENVIRONMENT_VARIABLE, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeEnvironmentVariable *ide_environment_variable_new       (const gchar            *key,
                                                             const gchar            *value);
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_environment_variable_get_key   (IdeEnvironmentVariable *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_environment_variable_set_key   (IdeEnvironmentVariable *self,
                                                             const gchar            *key);
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_environment_variable_get_value (IdeEnvironmentVariable *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_environment_variable_set_value (IdeEnvironmentVariable *self,
                                                             const gchar            *value);
 

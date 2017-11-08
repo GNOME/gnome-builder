@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "layout/ide-layout-pane.h"
 
 G_BEGIN_DECLS
@@ -26,10 +28,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, IdeLayoutPane)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget   *ide_editor_sidebar_new            (void);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_editor_sidebar_get_section_id (IdeEditorSidebar *self);
+IDE_AVAILABLE_IN_ALL
 void         ide_editor_sidebar_set_section_id (IdeEditorSidebar *self,
                                                 const gchar      *section_id);
+IDE_AVAILABLE_IN_ALL
 void         ide_editor_sidebar_add_section    (IdeEditorSidebar *self,
                                                 const gchar      *id,
                                                 const gchar      *title,

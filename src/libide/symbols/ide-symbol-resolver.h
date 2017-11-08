@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "symbols/ide-symbol-tree.h"
 
@@ -67,37 +69,46 @@ struct _IdeSymbolResolverInterface
                                               GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_load                      (IdeSymbolResolver    *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_lookup_symbol_async       (IdeSymbolResolver    *self,
                                                               IdeSourceLocation    *location,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeSymbol     *ide_symbol_resolver_lookup_symbol_finish      (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_get_symbol_tree_async     (IdeSymbolResolver    *self,
                                                               GFile                *file,
                                                               IdeBuffer            *buffer,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeSymbolTree *ide_symbol_resolver_get_symbol_tree_finish    (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_find_references_async     (IdeSymbolResolver    *self,
                                                               IdeSourceLocation    *location,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 GPtrArray     *ide_symbol_resolver_find_references_finish    (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_find_nearest_scope_async  (IdeSymbolResolver    *self,
                                                               IdeSourceLocation    *location,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 IdeSymbol     *ide_symbol_resolver_find_nearest_scope_finish (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);

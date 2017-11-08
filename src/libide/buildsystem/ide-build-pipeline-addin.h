@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "buildsystem/ide-build-pipeline.h"
 
 G_BEGIN_DECLS
@@ -38,10 +40,13 @@ struct _IdeBuildPipelineAddinInterface
                   IdeBuildPipeline      *pipeline);
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_build_pipeline_addin_load   (IdeBuildPipelineAddin *self,
                                       IdeBuildPipeline      *pipeline);
+IDE_AVAILABLE_IN_ALL
 void ide_build_pipeline_addin_unload (IdeBuildPipelineAddin *self,
                                       IdeBuildPipeline      *pipeline);
+IDE_AVAILABLE_IN_ALL
 void ide_build_pipeline_addin_track  (IdeBuildPipelineAddin *self,
                                       guint                  stage_id);
 

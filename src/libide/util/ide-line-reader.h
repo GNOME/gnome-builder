@@ -20,6 +20,8 @@
 
 #include <glib.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 typedef struct
@@ -29,9 +31,11 @@ typedef struct
   gssize  pos;
 } IdeLineReader;
 
+IDE_AVAILABLE_IN_ALL
 void   ide_line_reader_init (IdeLineReader *reader,
                              gchar         *contents,
                              gssize         length);
+IDE_AVAILABLE_IN_ALL
 gchar *ide_line_reader_next (IdeLineReader *reader,
                              gsize         *length);
 

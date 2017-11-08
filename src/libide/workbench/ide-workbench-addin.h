@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "util/ide-uri.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench.h"
@@ -55,18 +57,24 @@ struct _IdeWorkbenchAddinInterface
                                 IdePerspective         *perspective);
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeWorkbenchAddin *ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
                                                             const gchar  *addin_name);
 
+IDE_AVAILABLE_IN_ALL
 gchar    *ide_workbench_addin_get_id          (IdeWorkbenchAddin      *self);
+IDE_AVAILABLE_IN_ALL
 void      ide_workbench_addin_load            (IdeWorkbenchAddin      *self,
                                                IdeWorkbench           *workbench);
+IDE_AVAILABLE_IN_ALL
 void      ide_workbench_addin_unload          (IdeWorkbenchAddin      *self,
                                                IdeWorkbench           *workbench);
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_workbench_addin_can_open        (IdeWorkbenchAddin      *self,
                                                IdeUri                 *uri,
                                                const gchar            *content_type,
                                                gint                   *priority);
+IDE_AVAILABLE_IN_ALL
 void      ide_workbench_addin_open_async      (IdeWorkbenchAddin      *self,
                                                IdeUri                 *uri,
                                                const gchar            *content_type,
@@ -74,9 +82,11 @@ void      ide_workbench_addin_open_async      (IdeWorkbenchAddin      *self,
                                                GCancellable           *cancellable,
                                                GAsyncReadyCallback     callback,
                                                gpointer                user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_workbench_addin_open_finish     (IdeWorkbenchAddin      *self,
                                                GAsyncResult           *result,
                                                GError                **error);
+IDE_AVAILABLE_IN_ALL
 void      ide_workbench_addin_perspective_set (IdeWorkbenchAddin      *self,
                                                IdePerspective         *perspective);
 

@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "buildsystem/ide-environment.h"
 
@@ -61,49 +63,76 @@ struct _IdeRunnerClass
   gpointer _reserved7;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeRunner         *ide_runner_new             (IdeContext           *context);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_runner_get_failed      (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_failed      (IdeRunner            *self,
                                                gboolean              failed);
+IDE_AVAILABLE_IN_ALL
 IdeRuntime        *ide_runner_get_runtime     (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_force_quit      (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 IdeEnvironment    *ide_runner_get_environment (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_run_async       (IdeRunner            *self,
                                                GCancellable         *cancellable,
                                                GAsyncReadyCallback   callback,
                                                gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_runner_run_finish      (IdeRunner            *self,
                                                GAsyncResult         *result,
                                                GError              **error);
+IDE_AVAILABLE_IN_ALL
 GSubprocessFlags   ide_runner_get_flags       (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_flags       (IdeRunner            *self,
                                                GSubprocessFlags      flags);
+IDE_AVAILABLE_IN_ALL
 const gchar       *ide_runner_get_cwd         (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_cwd         (IdeRunner            *self,
                                                const gchar          *cwd);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_runner_get_clear_env   (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_clear_env   (IdeRunner            *self,
                                                gboolean              clear_env);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_prepend_argv    (IdeRunner            *self,
                                                const gchar          *param);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_append_argv     (IdeRunner            *self,
                                                const gchar          *param);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_push_args       (IdeRunner            *self,
                                                const gchar * const  *args);
+IDE_AVAILABLE_IN_ALL
 gchar            **ide_runner_get_argv        (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_argv        (IdeRunner            *self,
                                                const gchar * const  *argv);
+IDE_AVAILABLE_IN_ALL
 gint               ide_runner_take_fd         (IdeRunner            *self,
                                                gint                  source_fd,
                                                gint                  dest_fd);
+IDE_AVAILABLE_IN_ALL
 GOutputStream     *ide_runner_get_stdin       (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 GInputStream      *ide_runner_get_stdout      (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 GInputStream      *ide_runner_get_stderr      (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 gboolean           ide_runner_get_run_on_host (IdeRunner            *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_run_on_host (IdeRunner            *self,
                                                gboolean              run_on_host);
+IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_tty         (IdeRunner            *self,
                                                int                   tty_fd);
+IDE_AVAILABLE_IN_ALL
 gint               ide_runner_steal_tty       (IdeRunner            *self);
 
 G_END_DECLS

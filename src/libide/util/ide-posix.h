@@ -20,12 +20,19 @@
 
 #include <glib.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 gchar       *ide_get_system_arch      (void);
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_get_system_type      (void);
+IDE_AVAILABLE_IN_ALL
 gsize        ide_get_system_page_size (void) G_GNUC_CONST;
+IDE_AVAILABLE_IN_ALL
 gchar       *ide_path_collapse        (const gchar *path);
+IDE_AVAILABLE_IN_ALL
 gchar       *ide_path_expand          (const gchar *path);
 
 G_END_DECLS

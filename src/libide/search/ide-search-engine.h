@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -26,14 +28,18 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeSearchEngine *ide_search_engine_new           (void);
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_search_engine_get_busy      (IdeSearchEngine      *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_search_engine_search_async  (IdeSearchEngine      *self,
                                                   const gchar          *query,
                                                   guint                 max_results,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 GListModel      *ide_search_engine_search_finish (IdeSearchEngine      *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);

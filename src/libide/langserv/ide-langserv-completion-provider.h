@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 #include "langserv/ide-langserv-client.h"
@@ -46,7 +48,9 @@ struct _IdeLangservCompletionProviderClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeLangservClient *ide_langserv_completion_provider_get_client (IdeLangservCompletionProvider *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_langserv_completion_provider_set_client (IdeLangservCompletionProvider *self,
                                                                 IdeLangservClient             *client);
 

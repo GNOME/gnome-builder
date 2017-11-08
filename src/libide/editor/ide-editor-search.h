@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 typedef enum
@@ -54,51 +56,82 @@ typedef enum
 
 G_DECLARE_FINAL_TYPE (IdeEditorSearch, ide_editor_search, IDE, EDITOR_SEARCH, GObject)
 
+IDE_AVAILABLE_IN_ALL
 GType                  ide_editor_search_direction_get_type           (void);
+IDE_AVAILABLE_IN_ALL
 GType                  ide_editor_search_select_get_type              (void);
+IDE_AVAILABLE_IN_ALL
 IdeEditorSearch       *ide_editor_search_new                          (GtkSourceView             *view);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_active                   (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_case_sensitive           (IdeEditorSearch           *self,
                                                                        gboolean                   case_sensitive);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_case_sensitive           (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 IdeEditorSearchSelect  ide_editor_search_get_extend_selection         (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_extend_selection         (IdeEditorSearch           *self,
                                                                        IdeEditorSearchSelect      extend_selection);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_reverse                  (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_reverse                  (IdeEditorSearch           *self,
                                                                        gboolean                   reverse);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_search_text              (IdeEditorSearch           *self,
                                                                        const gchar               *search_text);
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_editor_search_get_search_text              (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_search_text_invalid      (IdeEditorSearch           *self,
                                                                        guint                     *invalid_begin,
                                                                        guint                     *invalid_end,
                                                                        GError                   **error);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_visible                  (IdeEditorSearch           *self,
                                                                        gboolean                   visible);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_visible                  (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_regex_enabled            (IdeEditorSearch           *self,
                                                                        gboolean                   regex_enabled);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_regex_enabled            (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_replacement_text         (IdeEditorSearch           *self,
                                                                        const gchar               *replacement_text);
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_editor_search_get_replacement_text         (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_replacement_text_invalid (IdeEditorSearch           *self,
                                                                        guint                     *invalid_begin,
                                                                        guint                     *invalid_end);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_at_word_boundaries       (IdeEditorSearch           *self,
                                                                        gboolean                   at_word_boundaries);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_editor_search_get_at_word_boundaries       (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 guint                  ide_editor_search_get_repeat                   (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_set_repeat                   (IdeEditorSearch           *self,
                                                                        guint                      repeat);
+IDE_AVAILABLE_IN_ALL
 guint                  ide_editor_search_get_match_count              (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 guint                  ide_editor_search_get_match_position           (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_move                         (IdeEditorSearch           *self,
                                                                        IdeEditorSearchDirection   direction);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_replace                      (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_replace_all                  (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_begin_interactive            (IdeEditorSearch           *self);
+IDE_AVAILABLE_IN_ALL
 void                   ide_editor_search_end_interactive              (IdeEditorSearch           *self);
 
 G_END_DECLS

@@ -20,17 +20,24 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_REF_PTR (ide_ref_ptr_get_type())
 
 typedef struct _IdeRefPtr IdeRefPtr;
 
+IDE_AVAILABLE_IN_ALL
 GType      ide_ref_ptr_get_type (void);
+IDE_AVAILABLE_IN_ALL
 IdeRefPtr *ide_ref_ptr_new      (gpointer        data,
                                  GDestroyNotify  free_func);
+IDE_AVAILABLE_IN_ALL
 IdeRefPtr *ide_ref_ptr_ref      (IdeRefPtr      *self);
+IDE_AVAILABLE_IN_ALL
 void       ide_ref_ptr_unref    (IdeRefPtr      *self);
+IDE_AVAILABLE_IN_ALL
 gpointer   ide_ref_ptr_get      (IdeRefPtr      *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeRefPtr, ide_ref_ptr_unref)

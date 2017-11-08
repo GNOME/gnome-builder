@@ -20,13 +20,17 @@
 
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_STACK_HEADER (ide_layout_stack_header_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeLayoutStackHeader, ide_layout_stack_header, IDE, LAYOUT_STACK_HEADER, DzlPriorityBox)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_layout_stack_header_new              (void);
+IDE_AVAILABLE_IN_ALL
 void       ide_layout_stack_header_add_custom_title (IdeLayoutStackHeader *self,
                                                      GtkWidget            *widget,
                                                      gint                  priority);

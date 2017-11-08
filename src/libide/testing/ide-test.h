@@ -20,6 +20,8 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TEST (ide_test_get_type())
@@ -49,18 +51,28 @@ struct _IdeTestClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeTest       *ide_test_new               (void);
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_test_get_display_name  (IdeTest       *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_test_set_display_name  (IdeTest       *self,
                                            const gchar   *display_name);
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_test_get_group         (IdeTest       *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_test_set_group         (IdeTest       *self,
                                            const gchar   *group);
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_test_get_icon_name     (IdeTest       *self);
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_test_get_id            (IdeTest       *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_test_set_id            (IdeTest       *self,
                                            const gchar   *id);
+IDE_AVAILABLE_IN_ALL
 IdeTestStatus  ide_test_get_status        (IdeTest       *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_test_set_status        (IdeTest       *self,
                                            IdeTestStatus  status);
 

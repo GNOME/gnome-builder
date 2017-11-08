@@ -20,12 +20,15 @@
 
 #include <dazzle.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_ENTRY (ide_search_entry_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeSearchEntry, ide_search_entry, IDE, SEARCH_ENTRY, DzlSuggestionEntry)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_search_entry_new (void);
 
 G_END_DECLS

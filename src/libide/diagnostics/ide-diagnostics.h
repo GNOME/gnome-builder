@@ -18,21 +18,31 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTICS (ide_diagnostics_get_type())
 
+IDE_AVAILABLE_IN_ALL
 GType           ide_diagnostics_get_type (void);
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics *ide_diagnostics_ref      (IdeDiagnostics *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_unref    (IdeDiagnostics *self);
+IDE_AVAILABLE_IN_ALL
 gsize           ide_diagnostics_get_size (IdeDiagnostics *self);
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostic  *ide_diagnostics_index    (IdeDiagnostics *self,
                                           gsize           index);
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_merge    (IdeDiagnostics *self,
                                           IdeDiagnostics *other);
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics *ide_diagnostics_new      (GPtrArray      *ar);
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_add      (IdeDiagnostics *self,
                                           IdeDiagnostic  *diagnostic);
 

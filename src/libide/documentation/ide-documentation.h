@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "documentation/ide-documentation-info.h"
 
 G_BEGIN_DECLS
@@ -31,6 +33,7 @@ G_DECLARE_FINAL_TYPE (IdeDocumentation,
                       IDE, DOCUMENTATION,
                       IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeDocumentationInfo    *ide_documentation_get_info    (IdeDocumentation        *self,
                                                         const gchar             *input,
                                                         IdeDocumentationContext  context);

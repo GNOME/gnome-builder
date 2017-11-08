@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -29,15 +31,21 @@ typedef struct
   gsize      count;
 } IdeSearchReducer;
 
+IDE_AVAILABLE_IN_ALL
 void       ide_search_reducer_init    (IdeSearchReducer  *reducer,
                                        gsize              max_results);
+IDE_AVAILABLE_IN_ALL
 gboolean   ide_search_reducer_accepts (IdeSearchReducer  *reducer,
                                        gfloat             score);
+IDE_AVAILABLE_IN_ALL
 void       ide_search_reducer_take    (IdeSearchReducer  *reducer,
                                        IdeSearchResult   *result);
+IDE_AVAILABLE_IN_ALL
 void       ide_search_reducer_push    (IdeSearchReducer  *reducer,
                                        IdeSearchResult   *result);
+IDE_AVAILABLE_IN_ALL
 void       ide_search_reducer_destroy (IdeSearchReducer  *reducer);
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_search_reducer_free    (IdeSearchReducer  *reducer,
                                        gboolean           free_results);
 

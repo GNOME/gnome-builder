@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -33,13 +35,19 @@ typedef struct _IdeDocumentationProposalClass IdeDocumentationProposalClass;
 
 G_DECLARE_DERIVABLE_TYPE (IdeDocumentationProposal, ide_documentation_proposal, IDE, DOCUMENTATION_PROPOSAL, GObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeDocumentationProposal *ide_documentation_proposal_new            (const gchar                *url);
+IDE_AVAILABLE_IN_ALL
 void                      ide_documentation_proposal_set_header     (IdeDocumentationProposal   *self,
                                                                      const gchar                *header);
+IDE_AVAILABLE_IN_ALL
 void                      ide_documentation_proposal_set_text       (IdeDocumentationProposal   *self,
                                                                      const gchar                *text);
+IDE_AVAILABLE_IN_ALL
 const gchar              *ide_documentation_proposal_get_header     (IdeDocumentationProposal   *self);
+IDE_AVAILABLE_IN_ALL
 const gchar              *ide_documentation_proposal_get_text       (IdeDocumentationProposal   *self);
+IDE_AVAILABLE_IN_ALL
 const gchar              *ide_documentation_proposal_get_uri        (IdeDocumentationProposal   *self);
 
 

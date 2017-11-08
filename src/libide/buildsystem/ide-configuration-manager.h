@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 #include "ide-types.h"
 
@@ -29,19 +31,26 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeConfigurationManager, ide_configuration_manager, IDE, CONFIGURATION_MANAGER, IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeConfiguration *ide_configuration_manager_get_current       (IdeConfigurationManager  *self);
+IDE_AVAILABLE_IN_ALL
 void              ide_configuration_manager_set_current       (IdeConfigurationManager  *self,
                                                                IdeConfiguration         *configuration);
+IDE_AVAILABLE_IN_ALL
 IdeConfiguration *ide_configuration_manager_get_configuration (IdeConfigurationManager  *self,
                                                                const gchar              *id);
+IDE_AVAILABLE_IN_ALL
 void              ide_configuration_manager_add               (IdeConfigurationManager  *self,
                                                                IdeConfiguration         *configuration);
+IDE_AVAILABLE_IN_ALL
 void              ide_configuration_manager_remove            (IdeConfigurationManager  *self,
                                                                IdeConfiguration         *configuration);
+IDE_AVAILABLE_IN_ALL
 void              ide_configuration_manager_save_async        (IdeConfigurationManager  *self,
                                                                GCancellable             *cancellable,
                                                                GAsyncReadyCallback       callback,
                                                                gpointer                  user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_configuration_manager_save_finish       (IdeConfigurationManager  *self,
                                                                GAsyncResult             *result,
                                                                GError                  **error);

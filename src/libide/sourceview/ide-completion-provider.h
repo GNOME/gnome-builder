@@ -20,6 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-version-macros.h"
+
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -40,10 +42,15 @@ struct _IdeCompletionProviderInterface
                 IdeContext            *context);
 };
 
+IDE_AVAILABLE_IN_ALL
 GType     ide_completion_provider_get_type                     (void);
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_completion_provider_context_in_comment           (GtkSourceCompletionContext *context);
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_completion_provider_context_in_comment_or_string (GtkSourceCompletionContext *context);
+IDE_AVAILABLE_IN_ALL
 gchar    *ide_completion_provider_context_current_word         (GtkSourceCompletionContext *context);
+IDE_AVAILABLE_IN_ALL
 void      ide_completion_provider_load                         (IdeCompletionProvider      *self,
                                                                 IdeContext                 *context);
 

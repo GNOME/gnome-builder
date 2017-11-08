@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SUBPROCESS (ide_subprocess_get_type())
@@ -87,68 +89,93 @@ struct _IdeSubprocessInterface
                                              GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_subprocess_get_identifier     (IdeSubprocess *self);
+IDE_AVAILABLE_IN_ALL
 GInputStream  *ide_subprocess_get_stdout_pipe    (IdeSubprocess *self);
+IDE_AVAILABLE_IN_ALL
 GInputStream  *ide_subprocess_get_stderr_pipe    (IdeSubprocess *self);
+IDE_AVAILABLE_IN_ALL
 GOutputStream *ide_subprocess_get_stdin_pipe     (IdeSubprocess *self);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_wait               (IdeSubprocess        *self,
                                                   GCancellable         *cancellable,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_wait_check         (IdeSubprocess        *self,
                                                   GCancellable         *cancellable,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_wait_async         (IdeSubprocess        *self,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_wait_finish        (IdeSubprocess        *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_wait_check_async   (IdeSubprocess        *self,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_wait_check_finish  (IdeSubprocess        *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_check_exit_status  (IdeSubprocess        *self,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_get_successful     (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_get_if_exited      (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
 gint           ide_subprocess_get_exit_status    (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_get_if_signaled    (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
 gint           ide_subprocess_get_term_sig       (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
 gint           ide_subprocess_get_status         (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_send_signal        (IdeSubprocess        *self,
                                                   gint                  signal_num);
+IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_force_exit         (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_communicate        (IdeSubprocess        *self,
                                                   GBytes               *stdin_buf,
                                                   GCancellable         *cancellable,
                                                   GBytes              **stdout_buf,
                                                   GBytes              **stderr_buf,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_communicate_utf8   (IdeSubprocess        *self,
                                                   const gchar          *stdin_buf,
                                                   GCancellable         *cancellable,
                                                   gchar               **stdout_buf,
                                                   gchar               **stderr_buf,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_communicate_async  (IdeSubprocess        *self,
                                                   GBytes               *stdin_buf,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_communicate_finish (IdeSubprocess        *self,
                                                   GAsyncResult         *result,
                                                   GBytes              **stdout_buf,
                                                   GBytes              **stderr_buf,
                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_communicate_utf8_async  (IdeSubprocess        *self,
                                                        const gchar          *stdin_buf,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_communicate_utf8_finish (IdeSubprocess        *self,
                                                        GAsyncResult         *result,
                                                        gchar               **stdout_buf,

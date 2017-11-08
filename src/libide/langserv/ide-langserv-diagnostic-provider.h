@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "ide-object.h"
 
 #include "diagnostics/ide-diagnostic-provider.h"
@@ -40,7 +42,9 @@ struct _IdeLangservDiagnosticProviderClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeLangservClient *ide_langserv_diagnostic_provider_get_client (IdeLangservDiagnosticProvider *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_langserv_diagnostic_provider_set_client (IdeLangservDiagnosticProvider *self,
                                                                 IdeLangservClient             *client);
 

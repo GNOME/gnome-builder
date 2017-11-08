@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_APPLICATION_TOOL (ide_application_tool_get_type())
@@ -53,11 +55,13 @@ struct _IdeApplicationToolInterface
                       GError              **error);
 };
 
+IDE_AVAILABLE_IN_ALL
 void ide_application_tool_run_async  (IdeApplicationTool   *self,
                                       const gchar * const  *arguments,
                                       GCancellable         *cancellable,
                                       GAsyncReadyCallback   callback,
                                       gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 gint ide_application_tool_run_finish (IdeApplicationTool   *self,
                                       GAsyncResult         *result,
                                       GError              **error);

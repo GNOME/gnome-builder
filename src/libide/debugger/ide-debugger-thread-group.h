@@ -20,6 +20,8 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_THREAD_GROUP (ide_debugger_thread_group_get_type())
@@ -37,14 +39,21 @@ struct _IdeDebuggerThreadGroupClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 gint                    ide_debugger_thread_group_compare       (IdeDebuggerThreadGroup *a,
                                                                  IdeDebuggerThreadGroup *b);
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerThreadGroup *ide_debugger_thread_group_new           (const gchar *id);
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_debugger_thread_group_get_id        (IdeDebuggerThreadGroup *self);
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_debugger_thread_group_get_pid       (IdeDebuggerThreadGroup *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_debugger_thread_group_set_pid       (IdeDebuggerThreadGroup *self,
                                                                  const gchar            *pid);
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_debugger_thread_group_get_exit_code (IdeDebuggerThreadGroup *self);
+IDE_AVAILABLE_IN_ALL
 void                    ide_debugger_thread_group_set_exit_code (IdeDebuggerThreadGroup *self,
                                                                  const gchar            *exit_code);
 

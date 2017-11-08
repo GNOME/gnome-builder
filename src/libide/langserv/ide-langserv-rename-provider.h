@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "langserv/ide-langserv-client.h"
 #include "rename/ide-rename-provider.h"
 
@@ -42,7 +44,9 @@ struct _IdeLangservRenameProviderClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeLangservClient *ide_langserv_rename_provider_get_client (IdeLangservRenameProvider *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_langserv_rename_provider_set_client (IdeLangservRenameProvider *self,
                                                             IdeLangservClient         *client);
 
