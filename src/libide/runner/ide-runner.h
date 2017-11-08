@@ -90,9 +90,9 @@ GSubprocessFlags   ide_runner_get_flags       (IdeRunner            *self);
 IDE_AVAILABLE_IN_ALL
 void               ide_runner_set_flags       (IdeRunner            *self,
                                                GSubprocessFlags      flags);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 const gchar       *ide_runner_get_cwd         (IdeRunner            *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 void               ide_runner_set_cwd         (IdeRunner            *self,
                                                const gchar          *cwd);
 IDE_AVAILABLE_IN_ALL
@@ -106,7 +106,7 @@ void               ide_runner_prepend_argv    (IdeRunner            *self,
 IDE_AVAILABLE_IN_ALL
 void               ide_runner_append_argv     (IdeRunner            *self,
                                                const gchar          *param);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 void               ide_runner_push_args       (IdeRunner            *self,
                                                const gchar * const  *args);
 IDE_AVAILABLE_IN_ALL
