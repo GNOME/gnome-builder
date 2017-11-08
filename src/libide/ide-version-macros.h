@@ -39,7 +39,6 @@
 #define IDE_UNAVAILABLE(maj,min) G_UNAVAILABLE(maj,min) _IDE_EXTERN
 #endif
 
-#define IDE_VERSION_3_26 (G_ENCODE_VERSION (3, 26))
 #define IDE_VERSION_3_28 (G_ENCODE_VERSION (3, 28))
 
 #if (IDE_MINOR_VERSION == 99)
@@ -65,7 +64,7 @@
  * the ide.h header.
  *
  * The definition should be one of the predefined IDE version
- * macros: %IDE_VERSION_3_26, IDE_VERSION_3_28, ...
+ * macros: %IDE_VERSION_3_28, ...
  *
  * This macro defines the lower bound for the Builder API to use.
  *
@@ -107,23 +106,11 @@
 #if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_MIN_REQUIRED
 #error "IDE_VERSION_MAX_ALLOWED must be >= IDE_VERSION_MIN_REQUIRED"
 #endif
-#if IDE_VERSION_MIN_REQUIRED < IDE_VERSION_3_26
-#error "IDE_VERSION_MIN_REQUIRED must be >= IDE_VERSION_3_26"
+#if IDE_VERSION_MIN_REQUIRED < IDE_VERSION_3_28
+#error "IDE_VERSION_MIN_REQUIRED must be >= IDE_VERSION_3_28"
 #endif
 
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_26
-# define IDE_DEPRECATED_IN_3_26                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_26_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_26                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_26_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_26
-# define IDE_AVAILABLE_IN_3_26                 IDE_UNAVAILABLE(3, 26)
-#else
-# define IDE_AVAILABLE_IN_3_26                 _IDE_EXTERN
-#endif
+#define IDE_AVAILABLE_IN_ALL                   _IDE_EXTERN
 
 #if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_28
 # define IDE_DEPRECATED_IN_3_28                IDE_DEPRECATED
