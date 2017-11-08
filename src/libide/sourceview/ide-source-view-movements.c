@@ -1947,6 +1947,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   GtkTextIter end_iter;
   GtkTextIter before_insert;
   GtkTextIter after_insert;
+  gdouble xalign = 0.5;
   gint min_count = 1;
   gint end_line;
   gint distance;
@@ -2031,11 +2032,13 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR:
       mv.count = MAX (1, mv.count);
       ide_source_view_movements_first_char (&mv);
+      xalign = 1.0;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR:
       mv.count = MAX (1, mv.count);
       ide_source_view_movements_first_nonspace_char (&mv);
+      xalign = 1.0;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR:
@@ -2330,7 +2333,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     ide_source_view_get_visual_position (mv.self, &line, target_column);
 
   if (!mv.ignore_scroll_to_insert)
-    ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
+    ide_source_view_scroll_mark_onscreen (self, insert, TRUE, xalign, 0.5);
 
   /* Emit a jump if we moved more than JUMP_THRESHOLD lines */
   gtk_text_buffer_get_iter_at_mark (buffer, &after_insert, insert);
