@@ -67,7 +67,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean                ide_vcs_is_ignored                (IdeVcs               *self,
                                                            GFile                *file,
                                                            GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 gboolean                ide_vcs_path_is_ignored           (IdeVcs               *self,
                                                            const gchar          *path,
                                                            GError              **error);
