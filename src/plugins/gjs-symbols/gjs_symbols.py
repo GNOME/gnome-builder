@@ -215,12 +215,10 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
     @staticmethod
     def _get_launcher(context, file_):
         file_path = file_.get_path()
-        script = JS_SCRIPT %file_path
+        script = JS_SCRIPT % file_path
         unsaved_file = context.get_unsaved_files().get_unsaved_file(file_)
 
-        pipeline = context.get_build_manager().get_pipeline()
-        runtime = pipeline.get_configuration().get_runtime()
-
+        runtime = context.get_configuration_manager().get_current().get_runtime()
         launcher = runtime.create_launcher()
         launcher.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
         launcher.push_args(('gjs', '-c', script))
