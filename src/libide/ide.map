@@ -1,6 +1,0 @@
-{
-global:
-    ide_*;
-local:
-    *;
-};
