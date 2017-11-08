@@ -92,6 +92,7 @@ td.signal_type,
 td.property_type,
 td.function_type,
 td.define_keyword,
+td.typedef_keyword,
 td.datatype_keyword,
 td.parameter_name
 {
