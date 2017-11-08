@@ -23,6 +23,8 @@
 # error "Only <ide.h> can be included directly."
 #endif
 
+#include <glib.h>
+
 #include "ide-version.h"
 
 #ifndef _IDE_EXTERN
