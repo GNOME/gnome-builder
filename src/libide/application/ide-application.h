@@ -50,7 +50,7 @@ IDE_AVAILABLE_IN_ALL
 IdeApplication     *ide_application_new                  (void);
 IDE_AVAILABLE_IN_ALL
 GDateTime          *ide_application_get_started_at       (IdeApplication       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 IdeTransferManager *ide_application_get_transfer_manager (IdeApplication       *self);
 IDE_AVAILABLE_IN_ALL
 IdeRecentProjects  *ide_application_get_recent_projects  (IdeApplication       *self);

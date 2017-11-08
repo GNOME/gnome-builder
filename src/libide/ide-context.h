@@ -65,7 +65,7 @@ IdeSettings              *ide_context_get_settings              (IdeContext     
                                                                  const gchar          *relative_path);
 IDE_AVAILABLE_IN_ALL
 IdeSourceSnippetsManager *ide_context_get_snippets_manager      (IdeContext           *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 IdeTestManager           *ide_context_get_test_manager          (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
 IdeUnsavedFiles          *ide_context_get_unsaved_files         (IdeContext           *self);

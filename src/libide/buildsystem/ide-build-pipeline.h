@@ -60,7 +60,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_get_busy            (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 IdeConfiguration      *ide_build_pipeline_get_configuration   (IdeBuildPipeline       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 IdeRuntime            *ide_build_pipeline_get_runtime         (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline       *self);
@@ -123,13 +123,13 @@ guint                  ide_build_pipeline_add_error_format    (IdeBuildPipeline 
 IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_remove_error_format (IdeBuildPipeline       *self,
                                                                guint                   error_format_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 void                   ide_build_pipeline_build_async         (IdeBuildPipeline       *self,
                                                                IdeBuildPhase           phase,
                                                                GCancellable           *cancellable,
                                                                GAsyncReadyCallback     callback,
                                                                gpointer                user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 gboolean               ide_build_pipeline_build_finish        (IdeBuildPipeline       *self,
                                                                GAsyncResult           *result,
                                                                GError                **error);
