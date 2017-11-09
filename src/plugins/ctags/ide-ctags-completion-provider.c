@@ -31,6 +31,8 @@
 static void provider_iface_init  (GtkSourceCompletionProviderIface *iface);
 static void provider2_iface_init (IdeCompletionProviderInterface   *iface);
 
+static GHashTable *reserved;
+
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionProvider,
                                 ide_ctags_completion_provider,
                                 IDE_TYPE_OBJECT,
@@ -115,6 +117,26 @@ ide_ctags_completion_provider_class_init (IdeCtagsCompletionProviderClass *klass
 
   object_class->dispose = ide_ctags_completion_provider_dispose;
   object_class->finalize = ide_ctags_completion_provider_finalize;
+
+  reserved = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_insert (reserved, "break", NULL);
+  g_hash_table_insert (reserved, "continue", NULL);
+  g_hash_table_insert (reserved, "default", NULL);
+  g_hash_table_insert (reserved, "do", NULL);
+  g_hash_table_insert (reserved, "elif", NULL);
+  g_hash_table_insert (reserved, "else", NULL);
+  g_hash_table_insert (reserved, "enum", NULL);
+  g_hash_table_insert (reserved, "for", NULL);
+  g_hash_table_insert (reserved, "goto", NULL);
+  g_hash_table_insert (reserved, "if", NULL);
+  g_hash_table_insert (reserved, "pass", NULL);
+  g_hash_table_insert (reserved, "return", NULL);
+  g_hash_table_insert (reserved, "struct", NULL);
+  g_hash_table_insert (reserved, "sizeof", NULL);
+  g_hash_table_insert (reserved, "switch", NULL);
+  g_hash_table_insert (reserved, "typedef", NULL);
+  g_hash_table_insert (reserved, "union", NULL);
+  g_hash_table_insert (reserved, "while", NULL);
 }
 
 static void
@@ -304,12 +326,21 @@ ide_ctags_completion_provider_match (GtkSourceCompletionProvider *provider,
 }
 
 static gboolean
+is_reserved_word (GtkTextBuffer *buffer,
+                  const gchar   *word)
+{
+  /* TODO: Check by language */
+  return g_hash_table_contains (reserved, word);
+}
+
+static gboolean
 ide_ctags_completion_provider_activate_proposal (GtkSourceCompletionProvider *provider,
                                                  GtkSourceCompletionProposal *proposal,
                                                  GtkTextIter                 *iter)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   IdeCtagsCompletionItem *item = (IdeCtagsCompletionItem *)proposal;
+  g_auto(GStrv) contexts = NULL;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
 
@@ -333,6 +364,13 @@ ide_ctags_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
     {
       g_autofree gchar *current_text = gtk_text_iter_get_slice (&begin, iter);
       g_autofree gchar *proposal_text = gtk_source_completion_proposal_get_text (proposal);
+
+      /*
+       * If this is a keyword for the language, we probably didn't mean
+       * to activate this completion proposal.
+       */
+      if (is_reserved_word (buffer, current_text))
+        return TRUE;
 
       if (g_str_has_prefix (proposal_text, current_text))
         {
