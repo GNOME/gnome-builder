@@ -29,7 +29,6 @@ command_bar_sources = [
   'gb-vim.h',
 ]
 
-gnome_builder_plugins_deps += [libgd_dep]
 gnome_builder_plugins_sources += files(command_bar_sources)
 gnome_builder_plugins_sources += command_bar_resources[0]
 

@@ -194,8 +194,8 @@ endif
 install_data('Ide.py', install_dir: pygobject_override_dir)
 
 libide_deps = [
-  libdazzle_dep,
   libgd_dep,
+  libdazzle_dep,
   libgio_dep,
   libgiounix_dep,
   libgtk_dep,
@@ -228,8 +228,8 @@ libide = shared_library('ide-' + libide_api_version,
 
 libide_dep = declare_dependency(
               sources: libide_generated_headers,
-         dependencies: [ libdazzle_dep,
-                         libgd_dep,
+         dependencies: [ libgd_dep,
+                         libdazzle_dep,
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
@@ -245,8 +245,8 @@ libide_dep = declare_dependency(
 libide_plugin_dep = declare_dependency(
               sources: libide_generated_headers,
   include_directories: include_directories('.'),
-         dependencies: [ libdazzle_dep,
-                         libgd_dep,
+         dependencies: [ libgd_dep,
+                         libdazzle_dep,
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
