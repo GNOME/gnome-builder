@@ -34,11 +34,9 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeRecentProjects, ide_recent_projects, IDE, RECENT_PROJECTS, GObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeRecentProjects *ide_recent_projects_new          (void);
+IdeRecentProjects *ide_recent_projects_new    (void);
 IDE_AVAILABLE_IN_ALL
-GPtrArray         *ide_recent_projects_get_projects (IdeRecentProjects *self);
-IDE_AVAILABLE_IN_ALL
-void               ide_recent_projects_remove       (IdeRecentProjects *self,
-                                                     GList             *project_infos);
+void               ide_recent_projects_remove (IdeRecentProjects *self,
+                                               GList             *project_infos);
 
 G_END_DECLS

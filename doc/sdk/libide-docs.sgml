@@ -352,7 +352,6 @@
     <chapter>
       <title>Extending Project Creation Workflow</title>
       <xi:include href="xml/ide-genesis-addin.xml"/>
-      <xi:include href="xml/ide-project-miner.xml"/>
       <xi:include href="xml/ide-recent-projects.xml"/>
     </chapter>
     <chapter>
