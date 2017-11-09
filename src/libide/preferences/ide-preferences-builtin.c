@@ -399,9 +399,6 @@ ide_preferences_builtin_register_projects (DzlPreferences *preferences)
   dzl_preferences_add_list_group (preferences, "projects", "directory", _("Workspace"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_file_chooser (preferences, "projects", "directory", "org.gnome.builder", "projects-directory", NULL, _("Projects directory"), _("A place for all your projects"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL, 0);
   dzl_preferences_add_switch (preferences, "projects", "directory", "org.gnome.builder", "restore-previous-files", NULL, NULL, _("Restore previously opened files"), _("Open previously opened files when loading a project"), NULL, 10);
-
-  dzl_preferences_add_list_group (preferences, "projects", "discovery", _("Project Discovery"), GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_switch (preferences, "projects", "discovery", "org.gnome.builder", "enable-project-miners", NULL, NULL, _("Discover projects on my computer"), _("Scan your computer for existing projects"), NULL, 0);
 }
 
 static void
