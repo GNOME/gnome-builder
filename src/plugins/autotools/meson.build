@@ -22,8 +22,6 @@ autotools_sources = [
   'ide-autotools-makecache-stage.h',
   'ide-autotools-pipeline-addin.c',
   'ide-autotools-pipeline-addin.h',
-  'ide-autotools-project-miner.c',
-  'ide-autotools-project-miner.h',
   'ide-makecache.c',
   'ide-makecache.h',
   'ide-makecache-target.c',

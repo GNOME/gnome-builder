@@ -22,7 +22,6 @@
 #include "ide-autotools-application-addin.h"
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-pipeline-addin.h"
-#include "ide-autotools-project-miner.h"
 
 void
 ide_autotools_register_types (PeasObjectModule *module)
@@ -30,5 +29,4 @@ ide_autotools_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module, IDE_TYPE_APPLICATION_ADDIN, IDE_TYPE_AUTOTOOLS_APPLICATION_ADDIN);
   peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, IDE_TYPE_AUTOTOOLS_PIPELINE_ADDIN);
   peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, IDE_TYPE_AUTOTOOLS_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module, IDE_TYPE_PROJECT_MINER, IDE_TYPE_AUTOTOOLS_PROJECT_MINER);
 }

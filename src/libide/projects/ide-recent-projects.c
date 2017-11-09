@@ -18,23 +18,18 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libpeas/peas.h>
 
 #include "ide-global.h"
-#include "projects/ide-project-miner.h"
+
 #include "projects/ide-recent-projects.h"
 
 struct _IdeRecentProjects
 {
   GObject       parent_instance;
 
-  GCancellable *cancellable;
-  GPtrArray    *miners;
   GSequence    *projects;
   GHashTable   *recent_uris;
   gchar        *file_uri;
-
-  gint          active;
 
   guint         discovered : 1;
 };
@@ -44,8 +39,7 @@ struct _IdeRecentProjects
 static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdeRecentProjects, ide_recent_projects, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
-                                                list_model_iface_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 IdeRecentProjects *
 ide_recent_projects_new (void)
@@ -81,54 +75,6 @@ ide_recent_projects_added (IdeRecentProjects *self,
       else
         g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
     }
-}
-
-static void
-ide_recent_projects__miner_discovered (IdeRecentProjects *self,
-                                       IdeProjectInfo    *project_info,
-                                       IdeProjectMiner   *miner)
-{
-  g_assert (IDE_IS_PROJECT_MINER (miner));
-  g_assert (IDE_IS_RECENT_PROJECTS (self));
-  g_assert (IDE_IS_PROJECT_INFO (project_info));
-
-  ide_recent_projects_added (self, project_info);
-}
-
-static void
-ide_recent_projects__miner_mine_cb (GObject      *object,
-                                    GAsyncResult *result,
-                                    gpointer      user_data)
-{
-  IdeRecentProjects *self;
-  g_autoptr(GTask) task = user_data;
-  IdeProjectMiner *miner = (IdeProjectMiner *)object;
-
-  g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_PROJECT_MINER (miner));
-  self = g_task_get_source_object (task);
-  g_assert (IDE_IS_RECENT_PROJECTS (self));
-
-  ide_project_miner_mine_finish (miner, result, NULL);
-
-  if (--self->active == 0)
-    g_task_return_boolean (task, TRUE);
-}
-
-static void
-ide_recent_projects_add_miner (IdeRecentProjects *self,
-                               IdeProjectMiner   *miner)
-{
-  g_assert (IDE_IS_RECENT_PROJECTS (self));
-  g_assert (IDE_IS_PROJECT_MINER (miner));
-
-  g_signal_connect_object (miner,
-                           "discovered",
-                           G_CALLBACK (ide_recent_projects__miner_discovered),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_ptr_array_add (self->miners, g_object_ref (miner));
 }
 
 static GBookmarkFile *
@@ -258,11 +204,9 @@ ide_recent_projects_get_item_type (GListModel *model)
 static guint
 ide_recent_projects_get_n_items (GListModel *model)
 {
-  IdeRecentProjects *self = (IdeRecentProjects *)model;
+  g_assert (IDE_IS_RECENT_PROJECTS (model));
 
-  g_assert (IDE_IS_RECENT_PROJECTS (self));
-
-  return g_sequence_get_length (self->projects);
+  return g_sequence_get_length (IDE_RECENT_PROJECTS (model)->projects);
 }
 
 static gpointer
@@ -281,19 +225,13 @@ ide_recent_projects_get_item (GListModel *model,
 }
 
 static void
-foreach_miner_func (PeasExtensionSet *set,
-                    PeasPluginInfo   *plugin_info,
-                    PeasExtension    *exten,
-                    gpointer          user_data)
+ide_recent_projects_constructed (GObject *object)
 {
-  IdeRecentProjects *self = user_data;
+  IdeRecentProjects *self = IDE_RECENT_PROJECTS (object);
 
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_PROJECT_MINER (exten));
-  g_assert (IDE_IS_RECENT_PROJECTS (self));
+  G_OBJECT_CLASS (ide_recent_projects_parent_class)->constructed (object);
 
-  ide_recent_projects_add_miner (self, IDE_PROJECT_MINER (exten));
+  ide_recent_projects_load_recent (self);
 }
 
 static void
@@ -301,10 +239,8 @@ ide_recent_projects_finalize (GObject *object)
 {
   IdeRecentProjects *self = (IdeRecentProjects *)object;
 
-  g_clear_pointer (&self->miners, g_ptr_array_unref);
   g_clear_pointer (&self->projects, g_sequence_free);
   g_clear_pointer (&self->recent_uris, g_hash_table_unref);
-  g_clear_object (&self->cancellable);
   g_clear_pointer (&self->file_uri, g_free);
 
   G_OBJECT_CLASS (ide_recent_projects_parent_class)->finalize (object);
@@ -323,134 +259,25 @@ ide_recent_projects_class_init (IdeRecentProjectsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_recent_projects_constructed;
   object_class->finalize = ide_recent_projects_finalize;
 }
 
 static void
 ide_recent_projects_init (IdeRecentProjects *self)
 {
-  PeasExtensionSet *set;
-  PeasEngine *engine;
-
   self->projects = g_sequence_new (g_object_unref);
-  self->miners = g_ptr_array_new_with_free_func (g_object_unref);
-  self->cancellable = g_cancellable_new ();
   self->recent_uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   self->file_uri = g_build_filename (g_get_user_data_dir (),
                                      ide_get_program_name (),
                                      IDE_RECENT_PROJECTS_BOOKMARK_FILENAME,
                                      NULL);
-
-  engine = peas_engine_get_default ();
-  set = peas_extension_set_new (engine, IDE_TYPE_PROJECT_MINER, NULL);
-  peas_extension_set_foreach (set, foreach_miner_func, self);
-  g_clear_object (&set);
-}
-
-/**
- * ide_recent_projects_get_projects:
- *
- * Gets a #GPtrArray containing the #IdeProjectInfo that have been discovered.
- *
- * Returns: (transfer container) (element-type IdeProjectInfo*): a #GPtrArray of #IdeProjectInfo.
- */
-GPtrArray *
-ide_recent_projects_get_projects (IdeRecentProjects *self)
-{
-  GSequenceIter *iter;
-  GPtrArray *ret;
-
-  g_return_val_if_fail (IDE_IS_RECENT_PROJECTS (self), NULL);
-
-  ret = g_ptr_array_new_with_free_func (g_object_unref);
-
-  for (iter = g_sequence_get_begin_iter (self->projects);
-       !g_sequence_iter_is_end (iter);
-       g_sequence_iter_next (iter))
-    {
-      IdeProjectInfo *project_info;
-
-      project_info = g_sequence_get (iter);
-      g_ptr_array_add (ret, g_object_ref (project_info));
-    }
-
-  return ret;
-}
-
-void
-ide_recent_projects_discover_async (IdeRecentProjects   *self,
-                                    gboolean             recent_only,
-                                    GCancellable        *cancellable,
-                                    GAsyncReadyCallback  callback,
-                                    gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-  gsize i;
-
-  g_return_if_fail (IDE_IS_RECENT_PROJECTS (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_recent_projects_discover_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-
-  if (self->discovered)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("%s() may only be executed once"),
-                               G_STRFUNC);
-      return;
-    }
-
-  self->discovered = TRUE;
-
-  ide_recent_projects_load_recent (self);
-
-  if (recent_only || g_getenv ("IDE_DO_NOT_SCAN_PROJECTS") != NULL)
-    {
-      g_task_return_boolean (task, TRUE);
-      return;
-    }
-
-  self->active = self->miners->len;
-
-  if (self->active == 0)
-    {
-      g_task_return_boolean (task, TRUE);
-      return;
-    }
-
-  for (i = 0; i < self->miners->len; i++)
-    {
-      IdeProjectMiner *miner;
-
-      miner = g_ptr_array_index (self->miners, i);
-      ide_project_miner_mine_async (miner,
-                                    self->cancellable,
-                                    ide_recent_projects__miner_mine_cb,
-                                    g_object_ref (task));
-    }
-}
-
-gboolean
-ide_recent_projects_discover_finish (IdeRecentProjects  *self,
-                                     GAsyncResult       *result,
-                                     GError            **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_return_val_if_fail (IDE_IS_RECENT_PROJECTS (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
-
-  return g_task_propagate_boolean (task, error);
 }
 
 /**
  * ide_recent_projects_remove:
  * @self: An #IdeRecentProjects
- * @project_infos: (transfer none) (element-type IdeProjectInfo): a #GList of #IdeProjectInfo.
+ * @project_infos: (transfer none) (element-type Ide.ProjectInfo): a #GList of #IdeProjectInfo.
  *
  * Removes the provided projects from the recent projects file.
  */

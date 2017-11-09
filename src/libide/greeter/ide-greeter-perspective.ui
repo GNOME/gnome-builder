@@ -137,65 +137,6 @@
                                         </child>
                                       </object>
                                     </child>
-                                    <child>
-                                      <object class="GtkBox" id="other_projects_container">
-                                        <property name="orientation">vertical</property>
-                                        <property name="spacing">6</property>
-                                        <property name="visible">true</property>
-                                        <child>
-                                          <object class="GtkBox">
-                                            <property name="visible">true</property>
-                                            <child>
-                                              <object class="GtkLabel" id="other_projects_label">
-                                                <property name="label" translatable="yes">Other Projects</property>
-                                                <property name="visible">true</property>
-                                                <property name="xalign">0.0</property>
-                                                <property name="hexpand">true</property>
-                                                <style>
-                                                  <class name="dim-label"/>
-                                                </style>
-                                                <attributes>
-                                                  <attribute name="weight" value="bold"/>
-                                                </attributes>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel">
-                                                <property name="visible">true</property>
-                                                <property name="label" translatable="yes">Updated</property>
-                                                <property name="margin-end">10</property>
-                                                <property name="halign">end</property>
-                                                <style>
-                                                  <class name="dim-label"/>
-                                                </style>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkFrame">
-                                            <property name="halign">center</property>
-                                            <property name="visible">true</property>
-                                            <property name="width-request">600</property>
-                                            <child>
-                                              <object class="GtkListBox" id="other_projects_list_box">
-                                                <property name="visible">true</property>
-                                                <property name="selection-mode">none</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="DzlEmptyState" id="no_projects_found">
-                                        <property name="icon-name">org.gnome.Builder-symbolic</property>
-                                        <property name="title" translatable="yes">No projects found</property>
-                                        <property name="visible">false</property>
-                                        <property name="vexpand">true</property>
-                                        <property name="valign">center</property>
-                                      </object>
-                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -226,45 +167,6 @@
                       </object>
                       <packing>
                         <property name="name">projects</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkFrame">
-                        <property name="visible">true</property>
-                        <child>
-                          <object class="GtkListBox">
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="visible">true</property>
-                            <child>
-                              <object class="GtkListBoxRow">
-                                <property name="visible">true</property>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="label" translatable="yes">Create from existing project</property>
-                                    <property name="visible">true</property>
-                                    <property name="xalign">0.0</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkListBoxRow">
-                                <property name="visible">true</property>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="label" translatable="yes">Create a new project</property>
-                                    <property name="visible">true</property>
-                                    <property name="xalign">0.0</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="name">assistants</property>
                       </packing>
                     </child>
                   </object>
@@ -418,9 +320,6 @@
         <object id="action_bar">
           <property name="visible">false</property>
         </object>
-        <object id="other_projects_container">
-          <property name="visible">true</property>
-        </object>
         <object id="search_entry">
           <property name="visible">true</property>
         </object>
@@ -454,9 +353,6 @@
           <property name="visible">false</property>
         </object>
         <object id="genesis_buttons">
-          <property name="visible">false</property>
-        </object>
-        <object id="other_projects_container">
           <property name="visible">false</property>
         </object>
         <object id="search_entry">

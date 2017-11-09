@@ -700,12 +700,7 @@ ide_application_get_worker_finish (IdeApplication  *self,
  * @self: An #IdeApplication.
  *
  * This method will retreive an #IdeRecentProjects for the application that
- * represents recent and discover projects on the system. The first time
- * the #IdeRecentProjects is loaded, discovery of projects will occur. There
- * is no need to call ide_recent_projects_discover_async().
- *
- * If you would like to display a spinner while discovery is in process, simply
- * connect to the #IdeRecentProjects:busy: property notification.
+ * represents recent and discover projects on the system.
  *
  * Returns: (transfer none): An #IdeRecentProjects.
  */
@@ -714,19 +709,10 @@ ide_application_get_recent_projects (IdeApplication *self)
 {
   g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
 
-  if (self->mode != IDE_APPLICATION_MODE_PRIMARY)
-    return NULL;
-
-  if (self->recent_projects == NULL)
+  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
     {
-      g_autoptr(GSettings) settings = NULL;
-      gboolean recent_only;
-
-      settings = g_settings_new ("org.gnome.builder");
-      recent_only = !g_settings_get_boolean (settings, "enable-project-miners");
-
-      self->recent_projects = ide_recent_projects_new ();
-      ide_recent_projects_discover_async (self->recent_projects, recent_only, NULL, NULL, NULL);
+      if (self->recent_projects == NULL)
+        self->recent_projects = ide_recent_projects_new ();
     }
 
   return self->recent_projects;

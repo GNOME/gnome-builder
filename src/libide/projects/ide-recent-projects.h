@@ -26,31 +26,19 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RECENT_PROJECTS (ide_recent_projects_get_type())
 
-#define IDE_RECENT_PROJECTS_GROUP                 "X-GNOME-Builder-Project"
-#define IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX "X-GNOME-Builder-Language:"
+#define IDE_RECENT_PROJECTS_GROUP                     "X-GNOME-Builder-Project"
+#define IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX     "X-GNOME-Builder-Language:"
 #define IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX "X-GNOME-Builder-Build-System:"
-#define IDE_RECENT_PROJECTS_BOOKMARK_FILENAME     "recent-projects.xbel"
+#define IDE_RECENT_PROJECTS_BOOKMARK_FILENAME         "recent-projects.xbel"
 
 G_DECLARE_FINAL_TYPE (IdeRecentProjects, ide_recent_projects, IDE, RECENT_PROJECTS, GObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeRecentProjects *ide_recent_projects_new              (void);
+IdeRecentProjects *ide_recent_projects_new          (void);
 IDE_AVAILABLE_IN_ALL
-GPtrArray         *ide_recent_projects_get_projects     (IdeRecentProjects    *self);
+GPtrArray         *ide_recent_projects_get_projects (IdeRecentProjects *self);
 IDE_AVAILABLE_IN_ALL
-gboolean           ide_recent_projects_get_busy         (IdeRecentProjects    *self);
-IDE_AVAILABLE_IN_ALL
-void               ide_recent_projects_remove           (IdeRecentProjects    *self,
-                                                         GList                *project_infos);
-IDE_AVAILABLE_IN_ALL
-void               ide_recent_projects_discover_async   (IdeRecentProjects    *self,
-                                                         gboolean              recent_only,
-                                                         GCancellable         *cancellable,
-                                                         GAsyncReadyCallback   callback,
-                                                         gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-gboolean           ide_recent_projects_discover_finish  (IdeRecentProjects    *self,
-                                                         GAsyncResult         *result,
-                                                         GError              **error);
+void               ide_recent_projects_remove       (IdeRecentProjects *self,
+                                                     GList             *project_infos);
 
 G_END_DECLS

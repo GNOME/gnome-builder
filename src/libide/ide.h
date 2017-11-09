@@ -128,7 +128,6 @@ G_BEGIN_DECLS
 #include "projects/ide-project-file.h"
 #include "projects/ide-project-files.h"
 #include "projects/ide-project-item.h"
-#include "projects/ide-project-miner.h"
 #include "projects/ide-project.h"
 #include "projects/ide-recent-projects.h"
 #include "rename/ide-rename-provider.h"

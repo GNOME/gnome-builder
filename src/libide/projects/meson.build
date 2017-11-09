@@ -4,7 +4,6 @@ projects_headers = [
   'ide-project-files.h',
   'ide-project-info.h',
   'ide-project-item.h',
-  'ide-project-miner.h',
   'ide-project.h',
   'ide-recent-projects.h',
 ]
@@ -15,7 +14,6 @@ projects_sources = [
   'ide-project-files.c',
   'ide-project-info.c',
   'ide-project-item.c',
-  'ide-project-miner.c',
   'ide-project.c',
   'ide-recent-projects.c',
 ]
