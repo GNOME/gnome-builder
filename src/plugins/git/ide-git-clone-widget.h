@@ -20,12 +20,16 @@
 
 #include <gtk/gtk.h>
 
+#include "vcs/ide-vcs-uri.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_GIT_CLONE_WIDGET (ide_git_clone_widget_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeGitCloneWidget, ide_git_clone_widget, IDE, GIT_CLONE_WIDGET, GtkBin)
 
+void     ide_git_clone_widget_set_uri      (IdeGitCloneWidget    *self,
+                                            IdeVcsUri            *uri);
 void     ide_git_clone_widget_clone_async  (IdeGitCloneWidget    *self,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,

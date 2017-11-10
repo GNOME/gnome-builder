@@ -489,3 +489,16 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
 
   return ret;
 }
+
+void
+ide_git_clone_widget_set_uri (IdeGitCloneWidget *self,
+                              IdeVcsUri         *uri)
+{
+  g_autofree gchar *str = NULL;
+
+  g_return_if_fail (IDE_IS_GIT_CLONE_WIDGET (self));
+  g_return_if_fail (uri != NULL);
+
+  str = ide_vcs_uri_to_string (uri);
+  gtk_entry_set_text (self->clone_uri_entry, str);
+}

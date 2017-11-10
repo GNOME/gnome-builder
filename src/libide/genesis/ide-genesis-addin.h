@@ -22,6 +22,8 @@
 
 #include "ide-version-macros.h"
 
+#include "vcs/ide-vcs-uri.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_GENESIS_ADDIN (ide_genesis_addin_get_type())
@@ -45,8 +47,13 @@ struct _IdeGenesisAddinInterface
   gchar     *(*get_label)      (IdeGenesisAddin      *self);
   gchar     *(*get_next_label) (IdeGenesisAddin      *self);
   gint       (*get_priority)   (IdeGenesisAddin      *self);
+  gboolean   (*apply_uri)      (IdeGenesisAddin      *self,
+                                IdeVcsUri            *uri);
 };
 
+IDE_AVAILABLE_IN_3_28
+gboolean   ide_genesis_addin_apply_uri      (IdeGenesisAddin      *self,
+                                             IdeVcsUri            *uri);
 IDE_AVAILABLE_IN_ALL
 gchar     *ide_genesis_addin_get_label      (IdeGenesisAddin      *self);
 IDE_AVAILABLE_IN_ALL

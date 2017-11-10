@@ -114,3 +114,27 @@ ide_genesis_addin_get_next_label (IdeGenesisAddin *self)
 
   return NULL;
 }
+
+/**
+ * ide_genesis_addin_apply_uri:
+ * @self: an #IdeGenesisAddin
+ * @uri: an #IdeVcsUri
+ *
+ * If the #IdeGenesisAddin knows how to handle @uri, it should update it's
+ * UI to reflect the uri and return %TRUE. If so, ide_genesis_addin_run_async()
+ * will be called afterwards to begin a clone.
+ *
+ * Returns: %TRUE if @uri was handled; otherwise %FALSE.
+ */
+gboolean
+ide_genesis_addin_apply_uri (IdeGenesisAddin *self,
+                             IdeVcsUri       *uri)
+{
+  g_return_val_if_fail (IDE_IS_GENESIS_ADDIN (self), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
+
+  if (IDE_GENESIS_ADDIN_GET_IFACE (self)->apply_uri)
+    return IDE_GENESIS_ADDIN_GET_IFACE (self)->apply_uri (self, uri);
+
+  return FALSE;
+}

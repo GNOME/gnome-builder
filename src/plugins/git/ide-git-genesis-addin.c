@@ -190,6 +190,20 @@ ide_git_genesis_addin_get_next_label (IdeGenesisAddin *addin)
   return g_strdup (_("Clone"));
 }
 
+static gboolean
+ide_git_genesis_addin_apply_uri (IdeGenesisAddin *addin,
+                                 IdeVcsUri       *uri)
+{
+  IdeGitGenesisAddin *self = (IdeGitGenesisAddin *)addin;
+
+  g_assert (IDE_IS_GIT_GENESIS_ADDIN (self));
+  g_assert (uri != NULL);
+
+  ide_git_clone_widget_set_uri (self->clone_widget, uri);
+
+  return TRUE;
+}
+
 static void
 genesis_addin_iface_init (IdeGenesisAddinInterface *iface)
 {
@@ -201,4 +215,5 @@ genesis_addin_iface_init (IdeGenesisAddinInterface *iface)
   iface->get_priority = ide_git_genesis_addin_get_priority;
   iface->get_label = ide_git_genesis_addin_get_label;
   iface->get_next_label = ide_git_genesis_addin_get_next_label;
+  iface->apply_uri = ide_git_genesis_addin_apply_uri;
 }
