@@ -84,7 +84,6 @@ ide_recent_projects_get_bookmarks (IdeRecentProjects  *self,
   GBookmarkFile *bookmarks;
 
   g_assert (IDE_IS_RECENT_PROJECTS (self));
-  g_assert (error != NULL);
 
   bookmarks = g_bookmark_file_new ();
 
@@ -352,4 +351,33 @@ ide_recent_projects_remove (IdeRecentProjects *self,
       g_warning ("Failed to save recent projects file: %s", error->message);
       return;
     }
+}
+
+gchar *
+ide_recent_projects_find_by_directory (IdeRecentProjects *self,
+                                       const gchar       *directory)
+{
+  g_autoptr(GBookmarkFile) bookmarks = NULL;
+  g_auto(GStrv) uris = NULL;
+  gsize len = 0;
+
+  g_return_val_if_fail (IDE_IS_RECENT_PROJECTS (self), NULL);
+  g_return_val_if_fail (directory, NULL);
+
+  if (!g_file_test (directory, G_FILE_TEST_IS_DIR))
+    return NULL;
+
+  if (NULL == (bookmarks = ide_recent_projects_get_bookmarks (self, NULL)))
+    return NULL;
+
+  uris = g_bookmark_file_get_uris (bookmarks, &len);
+
+  for (gsize i = 0; i < len; i++)
+    {
+      /* TODO: Make a better compare that deals with trailing / */
+      if (g_str_has_prefix (uris[i], directory))
+        return g_strdup (uris[i]);
+    }
+
+  return NULL;
 }
