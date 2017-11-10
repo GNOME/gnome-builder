@@ -1121,6 +1121,43 @@ get_project_directory (const gchar *name)
     return g_build_filename (projects, name, NULL);
 }
 
+static void
+ide_greeter_perspective_open_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  IdeWorkbench *workbench = (IdeWorkbench *)object;
+  g_autoptr(IdeGreeterPerspective) self = user_data;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_workbench_open_project_finish (workbench, result, NULL))
+    gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
+}
+
+static void
+ide_greeter_perspective_do_open (IdeGreeterPerspective *self,
+                                 const gchar           *path)
+{
+  g_autoptr(GFile) file = NULL;
+  IdeWorkbench *workbench;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (path != NULL);
+
+  file = g_file_new_for_path (path);
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+
+  ide_workbench_open_project_async (workbench,
+                                    file,
+                                    NULL,
+                                    ide_greeter_perspective_open_cb,
+                                    g_object_ref (self));
+}
+
 static gboolean
 ide_greeter_perspective_load_project (IdeGreeterPerspective *self,
                                       IdeNewcomerProject    *project)
@@ -1150,11 +1187,7 @@ ide_greeter_perspective_load_project (IdeGreeterPerspective *self,
 
   if (relocated != NULL)
     {
-      g_autoptr(GFile) file = g_file_new_for_path (relocated);
-      IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-
-      ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
-
+      ide_greeter_perspective_do_open (self, relocated);
       return TRUE;
     }
 
@@ -1164,11 +1197,7 @@ ide_greeter_perspective_load_project (IdeGreeterPerspective *self,
    */
   if (g_file_test (maybe_project, G_FILE_TEST_IS_DIR))
     {
-      g_autoptr(GFile) file = g_file_new_for_path (maybe_project);
-      IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-
-      ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
-
+      ide_greeter_perspective_do_open (self, maybe_project);
       return TRUE;
     }
 
