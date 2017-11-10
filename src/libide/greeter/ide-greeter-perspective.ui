@@ -71,66 +71,165 @@
                                 <property name="expand">true</property>
                                 <property name="visible">true</property>
                                 <child>
-                                  <object class="DzlBox">
-                                    <property name="halign">center</property>
-                                    <property name="hexpand">false</property>
-                                    <property name="margin-bottom">32</property>
-                                    <property name="margin-top">32</property>
+                                  <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">32</property>
                                     <property name="visible">true</property>
-                                    <property name="max-width-request">600</property>
+                                    <property name="margin">32</property>
                                     <child>
-                                      <object class="GtkSearchEntry" id="search_entry">
-                                        <property name="width-chars">45</property>
+                                      <object class="DzlBox">
                                         <property name="halign">center</property>
-                                        <property name="visible">true</property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="my_projects_container">
+                                        <property name="hexpand">false</property>
                                         <property name="orientation">vertical</property>
-                                        <property name="spacing">6</property>
+                                        <property name="spacing">32</property>
                                         <property name="visible">true</property>
+                                        <property name="max-width-request">600</property>
                                         <child>
-                                          <object class="GtkBox">
+                                          <object class="GtkSearchEntry" id="search_entry">
+                                            <property name="width-chars">45</property>
+                                            <property name="halign">center</property>
+                                            <property name="visible">true</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox" id="my_projects_container">
+                                            <property name="orientation">vertical</property>
+                                            <property name="spacing">6</property>
                                             <property name="visible">true</property>
                                             <child>
-                                              <object class="GtkLabel" id="my_projects_label">
-                                                <property name="label" translatable="yes">Recent Projects</property>
+                                              <object class="GtkBox">
                                                 <property name="visible">true</property>
-                                                <property name="xalign">0.0</property>
-                                                <property name="hexpand">true</property>
-                                                <style>
-                                                  <class name="dim-label"/>
-                                                </style>
-                                                <attributes>
-                                                  <attribute name="weight" value="bold"/>
-                                                </attributes>
+                                                <child>
+                                                  <object class="GtkLabel" id="my_projects_label">
+                                                    <property name="label" translatable="yes">Recent Projects</property>
+                                                    <property name="visible">true</property>
+                                                    <property name="xalign">0.0</property>
+                                                    <property name="hexpand">true</property>
+                                                    <style>
+                                                      <class name="dim-label"/>
+                                                    </style>
+                                                    <attributes>
+                                                      <attribute name="weight" value="bold"/>
+                                                    </attributes>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="visible">true</property>
+                                                    <property name="label" translatable="yes">Updated</property>
+                                                    <property name="margin-end">10</property>
+                                                    <property name="halign">end</property>
+                                                    <style>
+                                                      <class name="dim-label"/>
+                                                    </style>
+                                                  </object>
+                                                </child>
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkFrame">
+                                                <property name="halign">center</property>
                                                 <property name="visible">true</property>
-                                                <property name="label" translatable="yes">Updated</property>
-                                                <property name="margin-end">10</property>
-                                                <property name="halign">end</property>
-                                                <style>
-                                                  <class name="dim-label"/>
-                                                </style>
+                                                <property name="width-request">600</property>
+                                                <child>
+                                                  <object class="GtkListBox" id="my_projects_list_box">
+                                                    <property name="visible">true</property>
+                                                    <property name="selection-mode">none</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                             </child>
                                           </object>
                                         </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">6</property>
+                                        <property name="visible">true</property>
                                         <child>
-                                          <object class="GtkFrame">
-                                            <property name="halign">center</property>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Newcomer Projects</property>
                                             <property name="visible">true</property>
-                                            <property name="width-request">600</property>
+                                            <style>
+                                              <class name="dim-label"/>
+                                            </style>
+                                            <attributes>
+                                              <attribute name="weight" value="bold"/>
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkFlowBox" id="newcomer_projects">
+                                            <property name="visible">true</property>
+                                            <property name="halign">center</property>
+                                            <property name="valign">start</property>
+                                            <property name="selection-mode">browse</property>
+                                            <property name="min-children-per-line">3</property>
+                                            <property name="max-children-per-line">5</property>
                                             <child>
-                                              <object class="GtkListBox" id="my_projects_list_box">
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Polari</property>
+                                                <property name="icon-name">org.gnome.Polari</property>
+                                                <property name="uri">https://gitlab.gnome.org/GNOME/polari.git</property>
                                                 <property name="visible">true</property>
-                                                <property name="selection-mode">none</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Games</property>
+                                                <property name="icon-name">org.gnome.Games</property>
+                                                <property name="uri">https://git.gnome.org/browse/gnome-games</property>
+                                                <property name="visible">true</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Maps</property>
+                                                <property name="icon-name">org.gnome.Maps</property>
+                                                <property name="uri">https://git.gnome.org/browse/gnome-maps</property>
+                                                <property name="visible">true</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Todo</property>
+                                                <property name="icon-name">org.gnome.Todo</property>
+                                                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-todo.git</property>
+                                                <property name="visible">true</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Music</property>
+                                                <property name="icon-name">org.gnome.Music</property>
+                                                <property name="uri">https://git.gnome.org/browse/gnome-music</property>
+                                                <property name="visible">true</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Nautilus</property>
+                                                <property name="icon-name">org.gnome.Nautilus</property>
+                                                <property name="uri">https://gitlab.gnome.org/GNOME/nautilus.git</property>
+                                                <property name="visible">true</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Photos</property>
+                                                <property name="icon-name">org.gnome.Photos</property>
+                                                <property name="uri">https://git.gnome.org/browse/gnome-photos</property>
+                                                <property name="visible">true</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="IdeNewcomerProject">
+                                                <property name="name" translatable="yes">Calendar</property>
+                                                <property name="icon-name">org.gnome.Calendar</property>
+                                                <property name="uri">https://git.gnome.org/browse/gnome-calendar.git</property>
+                                                <property name="visible">true</property>
                                               </object>
                                             </child>
                                           </object>

@@ -22,12 +22,14 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include "ide-debug.h"
 #include "ide-macros.h"
 
 #include "application/ide-application.h"
 #include "genesis/ide-genesis-addin.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "greeter/ide-greeter-project-row.h"
+#include "greeter/ide-newcomer-project.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench-private.h"
@@ -65,6 +67,7 @@ struct _IdeGreeterPerspective
   DzlStateMachine      *state_machine;
   GtkScrolledWindow    *scrolled_window;
   DzlPriorityBox       *genesis_buttons;
+  GtkFlowBox           *newcomer_projects;
 
   gint                  selected_count;
 };
@@ -1067,6 +1070,158 @@ ide_greeter_perspective_info_bar_response (IdeGreeterPerspective *self,
 }
 
 static void
+ide_greeter_perspective_maybe_clone (PeasExtensionSet *set,
+                                     PeasPluginInfo   *plugin_info,
+                                     PeasExtension    *exten,
+                                     gpointer          user_data)
+{
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)exten;
+  struct {
+    IdeGreeterPerspective *self;
+    IdeVcsUri *uri;
+    gboolean found;
+  } *lookup = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+  g_assert (lookup != NULL);
+
+  if (lookup->found)
+    return;
+
+  lookup->found = ide_genesis_addin_apply_uri (addin, lookup->uri);
+
+  if (lookup->found)
+    {
+      GtkWidget *child = ide_genesis_addin_get_widget (addin);
+
+      if (child != NULL)
+        {
+          gtk_stack_set_visible_child (lookup->self->genesis_stack, child);
+          dzl_state_machine_set_state (lookup->self->state_machine, "genesis");
+          gtk_widget_hide (GTK_WIDGET (lookup->self->genesis_continue_button));
+          ide_greeter_perspective_genesis_continue (lookup->self);
+        }
+    }
+}
+
+static gchar *
+get_project_directory (const gchar *name)
+{
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *projects = NULL;
+
+  settings = g_settings_new ("org.gnome.builder");
+  projects = g_settings_get_string (settings, "projects-directory");
+
+  if (!g_path_is_absolute (projects))
+    return g_build_filename (g_get_home_dir (), projects, name, NULL);
+  else
+    return g_build_filename (projects, name, NULL);
+}
+
+static gboolean
+ide_greeter_perspective_load_project (IdeGreeterPerspective *self,
+                                      IdeNewcomerProject    *project)
+{
+  g_autofree gchar *dir = NULL;
+  g_autofree gchar *maybe_project = NULL;
+  g_autofree gchar *relocated = NULL;
+  IdeRecentProjects *projects;
+  const gchar *path;
+  const gchar *str;
+  IdeVcsUri *uri;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (IDE_IS_NEWCOMER_PROJECT (project));
+
+  projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
+  str = ide_newcomer_project_get_uri (project);
+  uri = ide_vcs_uri_new (str);
+  path = ide_vcs_uri_get_path (uri);
+  dir = g_path_get_basename (path);
+
+  if (g_str_has_suffix (dir, ".git"))
+    dir[strlen (dir) - 4] = '\0';
+
+  maybe_project = get_project_directory (dir);
+  relocated = ide_recent_projects_find_by_directory (projects, maybe_project);
+
+  if (relocated != NULL)
+    {
+      g_autoptr(GFile) file = g_file_new_for_path (relocated);
+      IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+      ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
+
+      return TRUE;
+    }
+
+  /* If the test exists, we probably should just open that
+   * instead of trying to reclone, which would fail anyway since
+   * this directory already exists.
+   */
+  if (g_file_test (maybe_project, G_FILE_TEST_IS_DIR))
+    {
+      g_autoptr(GFile) file = g_file_new_for_path (maybe_project);
+      IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+      ide_workbench_open_project_async (workbench, file, NULL, NULL, NULL);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+ide_greeter_perspective__newcomer_activated (IdeGreeterPerspective *self,
+                                             GtkFlowBoxChild       *child,
+                                             GtkFlowBox            *flow_box)
+{
+  g_autoptr(IdeVcsUri) vcs_uri = NULL;
+  IdeNewcomerProject *project;
+  const gchar *uri;
+  struct {
+    IdeGreeterPerspective *self;
+    IdeVcsUri *uri;
+    gboolean found;
+  } lookup;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_return_if_fail (GTK_IS_FLOW_BOX_CHILD (child));
+  g_return_if_fail (GTK_IS_FLOW_BOX (flow_box));
+
+  project = IDE_NEWCOMER_PROJECT (gtk_bin_get_child (GTK_BIN (child)));
+
+  /* Try to reload the project if they've already opened
+   * this one before. Look at our recent projects and if not
+   * there, the Projects directory for a matching project
+   * directory name from the uri.
+   */
+  if (ide_greeter_perspective_load_project (self, project))
+    IDE_EXIT;
+
+  uri = ide_newcomer_project_get_uri (project);
+  vcs_uri = ide_vcs_uri_new (uri);
+
+  IDE_TRACE_MSG ("Looking for genesis addin to handle %s", uri);
+
+  lookup.self = self;
+  lookup.uri = vcs_uri;
+  lookup.found = FALSE;
+
+  peas_extension_set_foreach (self->genesis_set,
+                              ide_greeter_perspective_maybe_clone,
+                              &lookup);
+
+  IDE_EXIT;
+}
+
+static void
 ide_greeter_perspective_constructed (GObject *object)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
@@ -1167,9 +1322,10 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-perspective.ui");
   gtk_widget_class_set_css_name (widget_class, "greeter");
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_buttons);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_continue_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_continue_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, genesis_title);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar);
@@ -1177,8 +1333,8 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, newcomer_projects);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, open_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, remove_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, search_entry);
@@ -1187,6 +1343,8 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, titlebar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, top_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, viewport);
+
+  g_type_ensure (IDE_TYPE_NEWCOMER_PROJECT);
 }
 
 static const GActionEntry actions[] = {
@@ -1234,6 +1392,12 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   g_signal_connect_object (self->my_projects_list_box,
                            "keynav-failed",
                            G_CALLBACK (ide_greeter_perspective__keynav_failed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->newcomer_projects,
+                           "child-activated",
+                           G_CALLBACK (ide_greeter_perspective__newcomer_activated),
                            self,
                            G_CONNECT_SWAPPED);
 
