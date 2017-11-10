@@ -144,7 +144,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkBox">
+                                      <object class="GtkBox" id="newcomer_container">
                                         <property name="orientation">vertical</property>
                                         <property name="spacing">6</property>
                                         <property name="visible">true</property>
@@ -428,6 +428,9 @@
         <object id="genesis_continue_button">
           <property name="visible">false</property>
         </object>
+        <object id="newcomer_container">
+          <property name="visible">true</property>
+        </object>
         <object id="top_stack">
           <property name="visible-child-name">greeter</property>
         </object>
@@ -461,6 +464,9 @@
           <property name="visible">false</property>
         </object>
         <object id="genesis_continue_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="newcomer_container">
           <property name="visible">false</property>
         </object>
         <object id="top_stack">
