@@ -75,15 +75,15 @@ ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
 /**
  * ide_code_indexer_index_file:
  * @self: An #IdeCodeIndexer instance.
- * @file: Source file to index.
- * @build_flags: (nullable): array of build flags to parse @file.
+ * @file: (not nullable): Source file to index.
+ * @build_flags: (out) (optional): array of build flags to parse @file.
  * @cancellable: (nullable): a #GCancellable.
  * @error: a #GError.
  *
  * This function will take index source file and create an array
  * of symbols in @file.
  *
- * Returns: (transfer full) : an #IdeCodeIndexEntries contains list
+ * Returns: (transfer full): an #IdeCodeIndexEntries contains list
  *    of #IdeCodeIndexEntry.
  *
  * Since: 3.26
@@ -109,14 +109,14 @@ ide_code_indexer_index_file (IdeCodeIndexer      *self,
 /**
  * ide_code_indexer_generate_key_async:
  * @self: An #IdeCodeIndexer instance.
- * @location: Source location of refernece.
+ * @location: (not nullable): Source location of refernece.
  * @cancellable: (nullable): a #GCancellable.
  * @callback: A callback to execute upon indexing.
  * @user_data: User data to pass to @callback.
  *
  * This function will get key of reference located at #IdeSoureLocation.
  *
- * since : 3.26
+ * Since: 3.26
  */
 void
 ide_code_indexer_generate_key_async (IdeCodeIndexer       *self,
@@ -138,12 +138,15 @@ ide_code_indexer_generate_key_async (IdeCodeIndexer       *self,
 
 /**
  * ide_code_indexer_generate_key_finish:
+ * @self: an #IdeCodeIndexer
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError, or %NULL
  *
  * Returns key for declaration of reference at a location.
  *
  * Returns: (transfer full) : A string which contains key.
  *
- * since 3.26
+ * Since: 3.26
  */
 gchar *
 ide_code_indexer_generate_key_finish (IdeCodeIndexer       *self,
