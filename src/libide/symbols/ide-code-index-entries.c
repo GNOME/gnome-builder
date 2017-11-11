@@ -40,7 +40,9 @@ ide_code_index_entries_default_init (IdeCodeIndexEntriesInterface *iface)
  *
  * This will fetch next entry in index.
  *
- * Returns: (transfer full) : An #IdeCodeIndexEntry.
+ * When all of the entries have been exhausted, %NULL should be returned.
+ *
+ * Returns: (nullable) (transfer full): An #IdeCodeIndexEntry.
  *
  * Since: 3.26
  */
