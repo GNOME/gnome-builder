@@ -76,7 +76,7 @@ ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
  * ide_code_indexer_index_file:
  * @self: An #IdeCodeIndexer instance.
  * @file: Source file to index.
- * @build_flags: (nullable): array of build flags to parse @file.
+ * @build_flags: (nullable) (array zero-terminated=1): array of build flags to parse @file.
  * @cancellable: (nullable): a #GCancellable.
  * @error: a #GError.
  *
