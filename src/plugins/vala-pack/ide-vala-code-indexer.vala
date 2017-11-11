@@ -21,6 +21,11 @@ using Ide;
 
 namespace Ide
 {
+	bool is_null_or_empty (string? s)
+	{
+		return s == null || s == "";
+	}
+
 	public class ValaCodeIndexer : Ide.Object, Ide.CodeIndexer
 	{
 		/* Note: This runs in a thread */
@@ -73,7 +78,7 @@ namespace Ide
 		public ValaCodeIndexEntries (Ide.ValaSymbolTree tree)
 		{
 			this.entries = new GLib.GenericArray<Ide.CodeIndexEntry> ();
-			this.add_children (tree, null);
+			this.add_children (tree, null, "");
 		}
 
 		public Ide.CodeIndexEntry? get_next_entry ()
@@ -84,43 +89,54 @@ namespace Ide
 		}
 
 		void add_children (Ide.ValaSymbolTree tree,
-		                   Ide.SymbolNode? parent)
+		                   Ide.SymbolNode? parent,
+		                   string prefix)
 		{
 			var n_children = tree.get_n_children (parent);
 
 			for (var i = 0; i < n_children; i++) {
 				var child = tree.get_nth_child (parent, i) as Ide.ValaSymbolNode;
+				string name = null;
+
+				if (is_null_or_empty (prefix))
+					name = child.name;
+				else if (child.name != null && child.name[0] == '.')
+					name = "%s%s".printf (prefix, child.name);
+				else if (child.name != null)
+					name = "%s.%s".printf (prefix, child.name);
+				else
+					continue;
 
 				if (child.node is Vala.Symbol) {
 					var node = child.node as Vala.Symbol;
 					var loc = node.source_reference;
-					var name = child.name;
+					var search_name = name;
 
 					// NOTE: I don't like that we do the prefix stuff here,
 					//       but we don't have a good place to do it yet.
 					switch (child.kind) {
 					case Ide.SymbolKind.FUNCTION:
 					case Ide.SymbolKind.METHOD:
-						name = "f\x1F%s".printf (name);
+						search_name = "f\x1F%s".printf (name);
 						break;
 
 					case Ide.SymbolKind.VARIABLE:
 					case Ide.SymbolKind.CONSTANT:
-						name = "v\x1F%s".printf (name);
+						search_name = "v\x1F%s%s".printf (prefix, name);
 						break;
 
 					case Ide.SymbolKind.CLASS:
-						name = "c\x1F%s".printf (name);
+						search_name = "c\x1F%s%s".printf (prefix, name);
 						break;
 
 					default:
-						name = "x\x1F%s".printf (name);
+						search_name = "x\x1F%s%s".printf (prefix, name);
 						break;
 					}
 
 					var entry = new Ide.ValaCodeIndexEntry () {
 						flags = child.flags,
-						name = name,
+						name = search_name,
 						kind = child.kind,
 						begin_line = loc.begin.line,
 						begin_line_offset = loc.begin.column,
@@ -131,6 +147,8 @@ namespace Ide
 
 					this.entries.add (entry);
 				}
+
+				this.add_children (tree, child, name);
 			}
 		}
 	}
