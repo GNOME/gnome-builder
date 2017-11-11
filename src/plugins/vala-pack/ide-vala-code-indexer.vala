@@ -122,15 +122,15 @@ namespace Ide
 
 					case Ide.SymbolKind.VARIABLE:
 					case Ide.SymbolKind.CONSTANT:
-						search_name = "v\x1F%s%s".printf (prefix, name);
+						search_name = "v\x1F%s".printf (name);
 						break;
 
 					case Ide.SymbolKind.CLASS:
-						search_name = "c\x1F%s%s".printf (prefix, name);
+						search_name = "c\x1F%s".printf (name);
 						break;
 
 					default:
-						search_name = "x\x1F%s%s".printf (prefix, name);
+						search_name = "x\x1F%s".printf (name);
 						break;
 					}
 
