@@ -163,6 +163,7 @@ static IdeRunner *
 ide_runtime_real_create_runner (IdeRuntime     *self,
                                 IdeBuildTarget *build_target)
 {
+  IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
   g_autofree gchar *name = NULL;
   g_autoptr(GFile) installdir = NULL;
   const gchar *slash;
@@ -177,6 +178,9 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
 
   runner = ide_runner_new (context);
   g_assert (IDE_IS_RUNNER (runner));
+
+  if (ide_str_equal0 (priv->id, "host"))
+    ide_runner_set_run_on_host (runner, TRUE);
 
   if (build_target != NULL)
     g_object_get (build_target,
