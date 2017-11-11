@@ -33,6 +33,7 @@ endif
 vala_pack_sources = [
   'config.vapi',
   'ide-vala-service.vala',
+  'ide-vala-code-indexer.vala',
   'ide-vala-completion.vala',
   'ide-vala-completion-item.vala',
   'ide-vala-completion-provider.vala',

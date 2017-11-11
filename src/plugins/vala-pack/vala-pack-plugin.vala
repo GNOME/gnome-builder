@@ -26,6 +26,7 @@ public void peas_register_types (GLib.TypeModule module)
 	Peas.ObjectModule peas = (Peas.ObjectModule)module;
 
 	peas.register_extension_type (typeof (Ide.BuildPipelineAddin), typeof (Ide.ValaPipelineAddin));
+	peas.register_extension_type (typeof (Ide.CodeIndexer), typeof (Ide.ValaCodeIndexer));
 	peas.register_extension_type (typeof (Ide.CompletionProvider), typeof (Ide.ValaCompletionProvider));
 	peas.register_extension_type (typeof (Ide.DiagnosticProvider), typeof (Ide.ValaDiagnosticProvider));
 	peas.register_extension_type (typeof (Ide.Indenter), typeof (Ide.ValaIndenter));
