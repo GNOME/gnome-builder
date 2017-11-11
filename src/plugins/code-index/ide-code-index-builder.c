@@ -85,11 +85,14 @@ timeval_compare (GTimeVal a,
   return ((a.tv_sec > b.tv_sec) || ((a.tv_sec == b.tv_sec) && (a.tv_usec > b.tv_usec)));
 }
 
-static gchar **
+static const gchar * const *
 ide_code_index_builder_get_build_flags (IdeCodeIndexBuilder *self,
                                         GFile               *file)
 {
   g_autoptr(IdeFile) ide_file = NULL;
+
+  g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
+  g_assert (G_IS_FILE (file));
 
   ide_file = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), file);
 

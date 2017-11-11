@@ -35,7 +35,7 @@ struct _IdeCodeIndexerInterface
 
   IdeCodeIndexEntries *(*index_file)             (IdeCodeIndexer       *self,
                                                   GFile                *file,
-                                                  gchar               **build_flags,
+                                                  const gchar * const  *build_flags,
                                                   GCancellable         *cancellable,
                                                   GError              **error);
   void                 (*generate_key_async)     (IdeCodeIndexer       *self,
@@ -51,7 +51,7 @@ struct _IdeCodeIndexerInterface
 IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntries  *ide_code_indexer_index_file           (IdeCodeIndexer       *self,
                                                              GFile                *file,
-                                                             gchar               **build_flags,
+                                                             const gchar * const  *build_flags,
                                                              GCancellable         *cancellable,
                                                              GError              **error);
 IDE_AVAILABLE_IN_ALL

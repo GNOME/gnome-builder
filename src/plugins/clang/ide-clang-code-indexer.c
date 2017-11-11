@@ -76,11 +76,11 @@ ide_clang_code_indexer_get_default_build_flags (IdeClangCodeIndexer *self)
 
 /* This will return a IdeCodeIndexEntries backed by translation unit of file. */
 static IdeCodeIndexEntries *
-ide_clang_code_indexer_index_file (IdeCodeIndexer      *indexer,
-                                   GFile               *file,
-                                   gchar              **args,
-                                   GCancellable        *cancellable,
-                                   GError             **error)
+ide_clang_code_indexer_index_file (IdeCodeIndexer       *indexer,
+                                   GFile                *file,
+                                   const gchar * const  *args,
+                                   GCancellable         *cancellable,
+                                   GError              **error)
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
   g_autoptr(GTask) task = NULL;
@@ -102,8 +102,7 @@ ide_clang_code_indexer_index_file (IdeCodeIndexer      *indexer,
     {
       if (self->build_flags == NULL)
         self->build_flags = ide_clang_code_indexer_get_default_build_flags (self);
-
-      args  = self->build_flags;
+      args = (const gchar * const *)self->build_flags;
     }
 
   while (args [n_args] != NULL)
@@ -111,7 +110,7 @@ ide_clang_code_indexer_index_file (IdeCodeIndexer      *indexer,
 
   if (CXError_Success == clang_parseTranslationUnit2 (self->index,
                                                       filename,
-                                                      (const char * const *)args,
+                                                      args,
                                                       n_args,
                                                       NULL,
                                                       0,

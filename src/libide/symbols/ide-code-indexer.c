@@ -23,11 +23,11 @@
 G_DEFINE_INTERFACE (IdeCodeIndexer, ide_code_indexer, IDE_TYPE_OBJECT)
 
 static IdeCodeIndexEntries *
-ide_code_indexer_real_index_file (IdeCodeIndexer      *self,
-                                  GFile               *file,
-                                  gchar              **build_flags,
-                                  GCancellable        *cancellable,
-                                  GError             **error)
+ide_code_indexer_real_index_file (IdeCodeIndexer       *self,
+                                  GFile                *file,
+                                  const gchar * const  *build_flags,
+                                  GCancellable         *cancellable,
+                                  GError              **error)
 {
   g_set_error (error,
                G_IO_ERROR,
@@ -89,11 +89,11 @@ ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
  * Since: 3.26
  */
 IdeCodeIndexEntries *
-ide_code_indexer_index_file (IdeCodeIndexer      *self,
-                             GFile               *file,
-                             gchar              **build_flags,
-                             GCancellable        *cancellable,
-                             GError             **error)
+ide_code_indexer_index_file (IdeCodeIndexer       *self,
+                             GFile                *file,
+                             const gchar * const  *build_flags,
+                             GCancellable         *cancellable,
+                             GError              **error)
 {
   IdeCodeIndexerInterface *iface;
 
