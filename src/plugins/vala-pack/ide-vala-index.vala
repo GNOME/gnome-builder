@@ -542,6 +542,13 @@ namespace Ide
 
 			return null;
 		}
+
+		public void do_locked (GLib.Func func)
+		{
+			lock (this.code_context) {
+				func (this);
+			}
+		}
 	}
 }
 
