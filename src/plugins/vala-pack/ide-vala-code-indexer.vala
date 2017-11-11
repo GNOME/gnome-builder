@@ -23,12 +23,27 @@ namespace Ide
 {
 	public class ValaCodeIndexer : Ide.Object, Ide.CodeIndexer
 	{
+		/* Note: This runs in a thread */
 		public Ide.CodeIndexEntries index_file (GLib.File file,
 		                                        string[]? build_flags,
 		                                        GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			throw new GLib.IOError.NOT_SUPPORTED ("indexing files is not yet supported");
+			var context = this.get_context ();
+			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var index = service.index;
+			var tree = index.get_symbol_tree_sync (file, cancellable);
+
+			Ide.ValaCodeIndexEntries? ret = null;
+
+			index.do_locked (_ => {
+				ret = new Ide.ValaCodeIndexEntries (tree as Ide.ValaSymbolTree);
+			});
+
+			if (ret == null)
+				throw new GLib.IOError.FAILED ("failed to build entries");
+
+			return ret;
 		}
 
 		public async string generate_key_async (Ide.SourceLocation location,
@@ -48,5 +63,55 @@ namespace Ide
 
 			return symbol.get_full_name ();
 		}
+	}
+
+	public class ValaCodeIndexEntries : GLib.Object, Ide.CodeIndexEntries
+	{
+		GLib.GenericArray<Ide.CodeIndexEntry> entries;
+		uint pos;
+
+		public ValaCodeIndexEntries (Ide.ValaSymbolTree tree)
+		{
+			this.entries = new GLib.GenericArray<Ide.CodeIndexEntry> ();
+			this.add_children (tree, null);
+		}
+
+		public Ide.CodeIndexEntry? get_next_entry ()
+		{
+			if (this.pos < entries.length)
+				return this.entries [this.pos++];
+			return null;
+		}
+
+		void add_children (Ide.ValaSymbolTree tree,
+		                   Ide.SymbolNode? parent)
+		{
+			var n_children = tree.get_n_children (parent);
+
+			for (var i = 0; i < n_children; i++) {
+				var child = tree.get_nth_child (parent, i) as Ide.ValaSymbolNode;
+
+				if (child.node is Vala.Symbol) {
+					var node = child.node as Vala.Symbol;
+					var loc = node.source_reference;
+					var entry = new Ide.ValaCodeIndexEntry () {
+						flags = child.flags,
+						name = child.name,
+						kind = child.kind,
+						begin_line = loc.begin.line,
+						begin_line_offset = loc.begin.column,
+						end_line = loc.end.line,
+						end_line_offset = loc.end.column,
+						key = node.get_full_name ()
+					};
+
+					this.entries.add (entry);
+				}
+			}
+		}
+	}
+
+	public class ValaCodeIndexEntry : Ide.CodeIndexEntry
+	{
 	}
 }
