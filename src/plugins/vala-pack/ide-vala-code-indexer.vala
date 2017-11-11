@@ -94,9 +94,33 @@ namespace Ide
 				if (child.node is Vala.Symbol) {
 					var node = child.node as Vala.Symbol;
 					var loc = node.source_reference;
+					var name = child.name;
+
+					// NOTE: I don't like that we do the prefix stuff here,
+					//       but we don't have a good place to do it yet.
+					switch (child.kind) {
+					case Ide.SymbolKind.FUNCTION:
+					case Ide.SymbolKind.METHOD:
+						name = "f\x1F%s".printf (name);
+						break;
+
+					case Ide.SymbolKind.VARIABLE:
+					case Ide.SymbolKind.CONSTANT:
+						name = "v\x1F%s".printf (name);
+						break;
+
+					case Ide.SymbolKind.CLASS:
+						name = "c\x1F%s".printf (name);
+						break;
+
+					default:
+						name = "x\x1F%s".printf (name);
+						break;
+					}
+
 					var entry = new Ide.ValaCodeIndexEntry () {
 						flags = child.flags,
-						name = child.name,
+						name = name,
 						kind = child.kind,
 						begin_line = loc.begin.line,
 						begin_line_offset = loc.begin.column,
