@@ -135,7 +135,7 @@ namespace Ide
 					}
 
 					var entry = new Ide.ValaCodeIndexEntry () {
-						flags = child.flags,
+						flags = child.flags | Ide.SymbolFlags.IS_DEFINITION,
 						name = search_name,
 						kind = child.kind,
 						begin_line = loc.begin.line,
