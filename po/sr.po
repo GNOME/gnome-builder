@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-09-06 18:22+0000\n"
-"PO-Revision-Date: 2017-09-06 20:44+0200\n"
+"POT-Creation-Date: 2017-11-01 19:27+0000\n"
+"PO-Revision-Date: 2017-11-11 18:33+0100\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -222,7 +222,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Учитај или створи палету користећи поставке"
 
 #: contrib/gstyle/ui/gstyle-color-widget.ui:13
-#: libide/sourceview/ide-source-view.c:5893
+#: libide/sourceview/ide-source-view.c:5873
 #: plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Преименуј"
@@ -340,37 +340,47 @@ msgid ""
 msgstr "Омогућава приказ промена у документу, поред приказа изворног кода."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+msgid "Show diagnostics next to line number"
+msgstr "Прикажи дијагностику поред редног броја реда"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid ""
+"If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr ""
+"Ако је омогућено омогућава приказ дијагностике лево од редног броја реда."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 #: libide/editor/ide-editor-properties.ui:88
 msgid "Highlight current line"
 msgstr "Истакни текући ред"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr "Омогућава истицање текућег реда."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Highlight matching brackets"
 msgstr "Истакни упарене заграде"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will highlight matching brackets."
 msgstr "Омогућава истицање упарених заграда."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 #: libide/editor/ide-editor-properties.ui:62
 msgid "Show line numbers"
 msgstr "Прикажи бројеве редова"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show line numbers."
 msgstr "Омогућава приказ редног броја на почетку сваког реда."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: libide/preferences/ide-preferences-builtin.c:146
 msgid "Smart Backspace"
 msgstr "Паметно брисање"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -378,29 +388,29 @@ msgstr ""
 "Паметно брисање врши брисање простора на основу подешавања за увлачење за "
 "тренутну врсту документа."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: libide/preferences/ide-preferences-builtin.c:145
 msgid "Smart Home and End"
 msgstr "Паметни „Home“ и „End“ тастери"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "Whether or not Home moves to first non-space character."
 msgstr "Да ли тастер Home помера на први знак који није размак."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
 msgid "Show grid lines"
 msgstr "Прикажи мрежицу"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Омогућава приказ мреже у позадини текста документа."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:78
-#: libide/preferences/ide-preferences-builtin.c:169
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
+#: libide/preferences/ide-preferences-builtin.c:170
 msgid "Show overview map"
 msgstr "Прикажи минијатурни преглед кода"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
@@ -408,11 +418,11 @@ msgstr ""
 "Омогућава приказ минијатурног прегледа кода у Градитељу, поред приказа "
 "изворног кода у уређивачу."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
 msgid "Automatically Hide Overview Map"
 msgstr "Аутоматски сакриј минијатурни преглед кода"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
@@ -421,28 +431,28 @@ msgstr ""
 "Градитеља када миш није активан унутар прозора уређивача или када одређени "
 "временски период истекне."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:93
 msgid "Draw Spaces"
 msgstr "Означи размаке"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
 msgid "The various types of space to draw in the editor."
 msgstr "Разне врсте размаке које ће уређивач означити унутар документа."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
 #: libide/preferences/ide-preferences-builtin.c:158
 msgid "Overscroll"
 msgstr "Преклизавање"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
 msgid "The number of lines to scroll beyond the end of the buffer."
 msgstr "Број редова за клизање преко краја спремишта."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
 msgid "Wrap Text"
 msgstr "Преломи текст"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
 msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
@@ -450,21 +460,21 @@ msgstr ""
 "Ако је омогућено, Градитељ ће самостално преламати текст тако да цела линија "
 "текста буде видљива."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
-#: libide/preferences/ide-preferences-builtin.c:182
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:109
+#: libide/preferences/ide-preferences-builtin.c:183
 msgid "Autosave Enabled"
 msgstr "Аутоматско чување омогућено"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 msgid "Enable or disable autosave feature."
 msgstr "Омогући или онемогући аутоматско чување."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
-#: libide/preferences/ide-preferences-builtin.c:183
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:115
+#: libide/preferences/ide-preferences-builtin.c:184
 msgid "Autosave Frequency"
 msgstr "Учесталост аутоматског чувања"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
 msgid "The number of seconds after modification before auto saving."
 msgstr "Број секунди након измене после којих се врши аутоматско чување."
 
@@ -518,7 +528,7 @@ msgid "Search directories for projects."
 msgstr "Потражи пројекте унутар директоријума."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:30
-#: libide/preferences/ide-preferences-builtin.c:399
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "Projects directory"
 msgstr "Директоријум са пројектима"
 
@@ -647,7 +657,7 @@ msgstr "_О програму"
 msgid "_Quit"
 msgstr "_Изађи"
 
-#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:711
+#: data/gtk/menus.ui:49 libide/editor/ide-editor-perspective.c:722
 #: libide/preferences/ide-preferences-builtin.c:105
 #: libide/preferences/ide-preferences-builtin.c:152
 msgid "Editor"
@@ -657,7 +667,7 @@ msgstr "Уређивач"
 msgid "Build Preferences"
 msgstr "Поставке градње"
 
-#: data/gtk/menus.ui:69 libide/preferences/ide-preferences-perspective.c:124
+#: data/gtk/menus.ui:69 libide/preferences/ide-preferences-perspective.c:137
 msgid "Preferences"
 msgstr "Поставке"
 
@@ -697,7 +707,7 @@ msgstr "_Налепи"
 msgid "_Delete"
 msgstr "О_бриши"
 
-#: data/gtk/menus.ui:130 libide/preferences/ide-preferences-builtin.c:191
+#: data/gtk/menus.ui:130 libide/preferences/ide-preferences-builtin.c:192
 #: plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Истицање"
@@ -750,20 +760,20 @@ msgstr "У_већај"
 msgid "Zoom _Out"
 msgstr "У_мањи"
 
-#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:51
+#: data/gtk/menus.ui:196 plugins/terminal/gtk/menus.ui:52
 msgid "Reset"
 msgstr "Поврати"
 
-#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:205
+#: data/gtk/menus.ui:207 libide/editor/ide-editor-search-bar.ui:204
 msgid "Regular expressions"
 msgstr "Регуларни изрази"
 
-#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:220
+#: data/gtk/menus.ui:211 libide/editor/ide-editor-search-bar.ui:219
 #: plugins/terminal/gb-terminal-search.ui:166
 msgid "Case sensitive"
 msgstr "Упореди величину слова"
 
-#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:235
+#: data/gtk/menus.ui:215 libide/editor/ide-editor-search-bar.ui:234
 msgid "Match whole word only"
 msgstr "Поклопи само целу реч"
 
@@ -787,8 +797,8 @@ msgstr "Помери документ улево"
 msgid "Move Right"
 msgstr "Помери документ удесно"
 
-#: data/gtk/menus.ui:261 data/gtk/menus.ui:321 plugins/devhelp/gtk/menus.ui:11
-#: plugins/terminal/gtk/menus.ui:63
+#: data/gtk/menus.ui:261 data/gtk/menus.ui:323 plugins/devhelp/gtk/menus.ui:11
+#: plugins/terminal/gtk/menus.ui:64
 msgid "Close"
 msgstr "Затвори"
 
@@ -808,35 +818,35 @@ msgstr "Документ"
 msgid "Open in New Frame"
 msgstr "Отвори у новом оквиру"
 
-#: data/gtk/menus.ui:290 plugins/terminal/gtk/menus.ui:47
+#: data/gtk/menus.ui:291 plugins/terminal/gtk/menus.ui:47
 msgid "Split"
 msgstr "Подели"
 
-#: data/gtk/menus.ui:295 plugins/devhelp/gtk/menus.ui:7
+#: data/gtk/menus.ui:297 plugins/devhelp/gtk/menus.ui:7
 msgid "Print…"
 msgstr "Штампај…"
 
-#: data/gtk/menus.ui:302
+#: data/gtk/menus.ui:304
 msgid "Document Preferences"
 msgstr "Поставке документа"
 
-#: data/gtk/menus.ui:310 libide/buildui/ide-build-log-panel.c:740
+#: data/gtk/menus.ui:312 libide/buildui/ide-build-log-panel.c:740
 msgid "_Save"
 msgstr "_Сачувај"
 
-#: data/gtk/menus.ui:314
+#: data/gtk/menus.ui:316
 msgid "Save _As"
 msgstr "Сачувај _као"
 
-#: data/gtk/menus.ui:331 libide/runner/ide-run-manager.c:1128
+#: data/gtk/menus.ui:333 libide/runner/ide-run-manager.c:1139
 msgid "Run"
 msgstr "Покрени"
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: libide/application/ide-application.c:530
+#: libide/application/ide-application.c:540
 #: libide/preferences/ide-preferences-builtin.c:140
-#: libide/workbench/ide-workbench.c:625
+#: libide/workbench/ide-workbench.c:641
 msgid "Builder"
 msgstr "Градитељ"
 
@@ -874,7 +884,6 @@ msgid "Built in syntax highlighting for many languages"
 msgstr "Уграђено истицање синтаксе за доста језика"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
-#: data/org.gnome.Builder.appdata.xml.in:52
 msgid "Side-by-side code editors"
 msgstr "Упоредни уређивачи кода"
 
@@ -925,13 +934,29 @@ msgstr "Уграђени поправљач грешака за рачунарс
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Подршка за градњу са jhbuild и флетпек извршним окружењима"
 
-#: data/org.gnome.Builder.appdata.xml.in:44
-msgid "Fast global search"
-msgstr "Брза глобална претрага"
+#: data/org.gnome.Builder.appdata.xml.in:41
+msgid "Quickly access your projects"
+msgstr "Брзо приступите вашим пројектима"
 
-#: data/org.gnome.Builder.appdata.xml.in:48
-msgid "Integrated project tree"
-msgstr "Уграђено стабло пројекта"
+#: data/org.gnome.Builder.appdata.xml.in:45
+msgid "Create new projects from a variety of templates"
+msgstr "Стварајте нове пројекте из мноштва шаблона"
+
+#: data/org.gnome.Builder.appdata.xml.in:49
+msgid "Integration with Git to clone your projects"
+msgstr "Усклађеност са Гитом због клонирања ваших пројеката"
+
+#: data/org.gnome.Builder.appdata.xml.in:53
+msgid "The source code editor"
+msgstr "Уређивач изворног кода"
+
+#: data/org.gnome.Builder.appdata.xml.in:57
+msgid "Fast global fuzzy search"
+msgstr "Брза глобална приближна претрага"
+
+#: data/org.gnome.Builder.appdata.xml.in:61
+msgid "Debug with the GNU debugger"
+msgstr "Покрени са ГНУ-овим поправљачем грешака"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -958,7 +983,7 @@ msgid "translator-credits"
 msgstr ""
 "Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Марко М. Костић <marko.m.kostic@gmail.com>\n"
-"Борисав Живановић <borisavzivanovic@gmail.com>, 2017.\n"
+"Борисав Живановић <borisavzivanovic@gmail.com>\n"
 "\n"
 "http://prevod.org — превод на српски језик"
 
@@ -1044,7 +1069,7 @@ msgstr "Нема таквог радника"
 #: libide/application/ide-application-shortcuts.c:59
 #: libide/application/ide-application-shortcuts.c:67
 #: libide/application/ide-application-shortcuts.c:75
-#: libide/runner/ide-run-manager.c:735
+#: libide/runner/ide-run-manager.c:746
 #: libide/workbench/ide-workbench-shortcuts.c:49
 #: plugins/command-bar/gb-command-bar.c:701
 #: plugins/terminal/gb-terminal-workbench-addin.c:181
@@ -1097,7 +1122,7 @@ msgstr "Усредсреди се на унос глобалне претраг�
 
 #: libide/application/ide-application-shortcuts.c:76
 #: libide/keybindings/ide-shortcuts-window.ui:405
-#: libide/runner/ide-run-manager.c:736
+#: libide/runner/ide-run-manager.c:747
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Изгради и покрени"
@@ -1107,7 +1132,7 @@ msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Окидач"
 
-#: libide/buffers/ide-buffer.c:2690
+#: libide/buffers/ide-buffer.c:2693
 msgid "The current language lacks a symbol resolver."
 msgstr "За тренутни језик не постоји разрешавач симбола."
 
@@ -1115,63 +1140,63 @@ msgstr "За тренутни језик не постоји разрешава�
 msgid "File too large to be opened."
 msgstr "Датотека је сувише велика за отварање."
 
-#: libide/buffers/ide-buffer-manager.c:1890
+#: libide/buffers/ide-buffer-manager.c:1892
 #, c-format
 msgid "unsaved document %u"
 msgstr "несачувани документ %u"
 
-#: libide/buffers/ide-buffer-manager.c:1928
+#: libide/buffers/ide-buffer-manager.c:1930
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Не могу да сачувам складиште, занемарујем рекламацију."
 
-#: libide/buildsystem/ide-build-pipeline.c:2247
+#: libide/buildsystem/ide-build-pipeline.c:2281
 msgid "Cleaning…"
 msgstr "Чистим…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2262
+#: libide/buildsystem/ide-build-pipeline.c:2296
 msgid "Downloading…"
 msgstr "Преузимам…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2266
+#: libide/buildsystem/ide-build-pipeline.c:2300
 msgid "Building dependencies…"
 msgstr "Изграђујем зависности…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2270
+#: libide/buildsystem/ide-build-pipeline.c:2304
 msgid "Bootstrapping…"
 msgstr "Радим почетно подизање…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2274
+#: libide/buildsystem/ide-build-pipeline.c:2308
 msgid "Configuring…"
 msgstr "Подешавам…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2278
+#: libide/buildsystem/ide-build-pipeline.c:2312
 msgid "Building…"
 msgstr "Изграђујем…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2282
+#: libide/buildsystem/ide-build-pipeline.c:2316
 msgid "Installing…"
 msgstr "Инсталирам…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2286
+#: libide/buildsystem/ide-build-pipeline.c:2320
 msgid "Exporting…"
 msgstr "Извозим…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2290
-#: libide/buildsystem/ide-build-pipeline.c:2294
+#: libide/buildsystem/ide-build-pipeline.c:2324
+#: libide/buildsystem/ide-build-pipeline.c:2328
 #: libide/workbench/ide-omni-bar.c:443
 msgid "Success"
 msgstr "Успех"
 
-#: libide/buildsystem/ide-build-pipeline.c:2298
+#: libide/buildsystem/ide-build-pipeline.c:2332
 #: libide/workbench/ide-omni-bar.c:428
 msgid "Failed"
 msgstr "Неуспех"
 
-#: libide/buildsystem/ide-build-pipeline.c:2302
+#: libide/buildsystem/ide-build-pipeline.c:2336
 msgid "Preparing…"
 msgstr "Припремам…"
 
-#: libide/buildsystem/ide-build-pipeline.c:2306
+#: libide/buildsystem/ide-build-pipeline.c:2340
 msgid "Ready"
 msgstr "Спреман"
 
@@ -1180,8 +1205,8 @@ msgid "Cannot execute transfer while on metered connection"
 msgstr "Не могу да обавим пренос на мереној вези"
 
 #: libide/buildsystem/ide-configuration-manager.c:86
-#: libide/preferences/ide-preferences-builtin.c:340
-#: libide/preferences/ide-preferences-builtin.c:358
+#: libide/preferences/ide-preferences-builtin.c:341
+#: libide/preferences/ide-preferences-builtin.c:359
 msgid "Default"
 msgstr "Подразумевано"
 
@@ -1194,8 +1219,8 @@ msgid "Delete the configuration"
 msgstr "Обриши конфигурацију"
 
 #: libide/buildui/ide-build-configuration-view.ui:11
-#: libide/preferences/ide-preferences-builtin.c:318
-#: libide/preferences/ide-preferences-builtin.c:380
+#: libide/preferences/ide-preferences-builtin.c:319
+#: libide/preferences/ide-preferences-builtin.c:381
 msgid "General"
 msgstr "Опште"
 
@@ -1249,7 +1274,7 @@ msgstr "Окружење"
 msgid "Save File"
 msgstr "Сачувај датотеку"
 
-#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:47
+#: libide/buildui/ide-build-log-panel.c:741 libide/editor/ide-editor-view.ui:51
 #: libide/greeter/ide-greeter-perspective.ui:326
 #: libide/greeter/ide-greeter-perspective.ui:374
 msgid "_Cancel"
@@ -1424,7 +1449,7 @@ msgstr "Нова променљива…"
 msgid "Run with Debugger"
 msgstr "Покрени са поправљачем грешака"
 
-#: libide/debugger/ide-debug-manager.c:924
+#: libide/debugger/ide-debug-manager.c:936
 msgid "A suitable debugger could not be found."
 msgstr "Не могу да нађем одговарајућег поправљача грешака."
 
@@ -1599,7 +1624,7 @@ msgstr "Отвори датотеку"
 #: libide/greeter/ide-greeter-perspective.c:684
 #: libide/workbench/ide-workbench-actions.c:78
 #: plugins/color-picker/gb-color-picker-prefs.c:205
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:363
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:365
 msgid "Open"
 msgstr "Отвори"
 
@@ -1611,7 +1636,7 @@ msgstr "Отвори"
 #: plugins/color-picker/gb-color-picker-prefs.c:93
 #: plugins/color-picker/gb-color-picker-prefs.c:209
 #: plugins/color-picker/gb-color-picker-prefs.c:236
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:364
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:366
 #: plugins/terminal/gb-terminal-view-actions.c:271
 msgid "Cancel"
 msgstr "Откажи"
@@ -1695,7 +1720,7 @@ msgid "Display"
 msgstr "Приказ"
 
 #: libide/editor/ide-editor-properties.ui:75
-#: libide/preferences/ide-preferences-builtin.c:324
+#: libide/preferences/ide-preferences-builtin.c:325
 msgid "Show right margin"
 msgstr "Прикажи десну маргину"
 
@@ -1712,12 +1737,12 @@ msgid "Tabs and Indentation"
 msgstr "Табулатори и увлачење"
 
 #: libide/editor/ide-editor-properties.ui:153
-#: libide/preferences/ide-preferences-builtin.c:173
+#: libide/preferences/ide-preferences-builtin.c:174
 msgid "Spaces"
 msgstr "Размаци"
 
 #: libide/editor/ide-editor-properties.ui:164
-#: libide/preferences/ide-preferences-builtin.c:174
+#: libide/preferences/ide-preferences-builtin.c:175
 msgid "Tabs"
 msgstr "Језичци"
 
@@ -1756,7 +1781,7 @@ msgstr "Синтакса језика"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
 #: libide/editor/ide-editor-properties.ui:321
-#: libide/preferences/ide-preferences-builtin.c:264
+#: libide/preferences/ide-preferences-builtin.c:265
 msgid "Search languages…"
 msgstr "Претражи језике…"
 
@@ -1766,19 +1791,19 @@ msgstr "Претражи језике…"
 msgid "%u of %u"
 msgstr "%u од %u"
 
-#: libide/editor/ide-editor-search-bar.ui:108
+#: libide/editor/ide-editor-search-bar.ui:107
 msgid "Replace"
 msgstr "Замени"
 
-#: libide/editor/ide-editor-search-bar.ui:121
+#: libide/editor/ide-editor-search-bar.ui:120
 msgid "Replace All"
 msgstr "Замени све"
 
-#: libide/editor/ide-editor-search-bar.ui:143
+#: libide/editor/ide-editor-search-bar.ui:142
 msgid "Switch between Search and Search-and-Replace"
 msgstr "Пребаци се између „нађи“ и „нађи и замени“ режима"
 
-#: libide/editor/ide-editor-search-bar.ui:166
+#: libide/editor/ide-editor-search-bar.ui:165
 #: plugins/terminal/gb-terminal-search.ui:100
 msgid "Show or hide search options such as case sensitivity"
 msgstr "Прикажи или сакриј опције претраге као што су величина слова"
@@ -1820,7 +1845,7 @@ msgstr "Сачувај"
 msgid "Save File As"
 msgstr "Сачувај датотеку као"
 
-#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:59
+#: libide/editor/ide-editor-view-actions.c:348 plugins/terminal/gtk/menus.ui:60
 msgid "Save As"
 msgstr "Сачувај као"
 
@@ -1881,11 +1906,11 @@ msgctxt "shortcut window"
 msgid "Find the next match"
 msgstr "Нађи следећи погодак"
 
-#: libide/editor/ide-editor-view.ui:39
+#: libide/editor/ide-editor-view.ui:43
 msgid "_Reload"
 msgstr "_Учитај поново"
 
-#: libide/editor/ide-editor-view.ui:60
+#: libide/editor/ide-editor-view.ui:64
 msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
@@ -1893,11 +1918,11 @@ msgstr ""
 "Градитељ је уочио да је ова датотека измењена ван овог програма. Желите ли "
 "да је поново учитате?"
 
-#: libide/editor/ide-editor-workbench-addin.c:150
+#: libide/editor/ide-editor-workbench-addin.c:177
 msgid "Toggle navigation panel"
 msgstr "Прикажи навигациону површ"
 
-#: libide/editor/ide-editor-workbench-addin.c:164
+#: libide/editor/ide-editor-workbench-addin.c:191
 msgid "Toggle utilities panel"
 msgstr "Прикажи површ алата"
 
@@ -2543,87 +2568,95 @@ msgstr ""
 "Приказује да ли је линија додата или измењена поред редног броја текуће "
 "линије"
 
-#: libide/preferences/ide-preferences-builtin.c:164
+#: libide/preferences/ide-preferences-builtin.c:163
+msgid "Line diagnostics"
+msgstr "Дијагностика реда"
+
+#: libide/preferences/ide-preferences-builtin.c:163
+msgid "Show an icon next to line numbers indicating type of diagnostic"
+msgstr "Прикажи иконицу поред редног броја реда за приказ врсте дијагностике"
+
+#: libide/preferences/ide-preferences-builtin.c:165
 msgid "Highlight"
 msgstr "Истицање"
 
-#: libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:166
 msgid "Current line"
 msgstr "Тренутна линија"
 
-#: libide/preferences/ide-preferences-builtin.c:165
+#: libide/preferences/ide-preferences-builtin.c:166
 msgid "Make current line stand out with highlights"
 msgstr "Истиче тренутну линију у односу на остале линије"
 
-#: libide/preferences/ide-preferences-builtin.c:166
+#: libide/preferences/ide-preferences-builtin.c:167
 msgid "Matching brackets"
 msgstr "Упарене заграде"
 
-#: libide/preferences/ide-preferences-builtin.c:166
+#: libide/preferences/ide-preferences-builtin.c:167
 msgid "Highlight matching brackets based on cursor position"
 msgstr "Истиче упарене заграде на основу положаја показивача"
 
-#: libide/preferences/ide-preferences-builtin.c:168
+#: libide/preferences/ide-preferences-builtin.c:169
 msgid "Code Overview"
 msgstr "Преглед кода"
 
-#: libide/preferences/ide-preferences-builtin.c:169
+#: libide/preferences/ide-preferences-builtin.c:170
 msgid "A zoomed out view to enhance navigating source code"
 msgstr "Умањени преглед за побољшавање навигације кроз изворни код"
 
-#: libide/preferences/ide-preferences-builtin.c:170
+#: libide/preferences/ide-preferences-builtin.c:171
 msgid "Automatically hide overview map"
 msgstr "Аутоматски сакриј минијатурни преглед кода"
 
-#: libide/preferences/ide-preferences-builtin.c:170
+#: libide/preferences/ide-preferences-builtin.c:171
 msgid "Automatically hide map when editor loses focus"
 msgstr "Аутоматски сакриј преглед кода када је уређивач ван фокуса"
 
-#: libide/preferences/ide-preferences-builtin.c:172
+#: libide/preferences/ide-preferences-builtin.c:173
 msgid "Visible Whitespace Characters"
 msgstr "Видљиви знакови празнине"
 
-#: libide/preferences/ide-preferences-builtin.c:175
+#: libide/preferences/ide-preferences-builtin.c:176
 msgid "New line and carriage return"
 msgstr "Почетне и нове линије"
 
-#: libide/preferences/ide-preferences-builtin.c:176
+#: libide/preferences/ide-preferences-builtin.c:177
 msgid "Non-breaking spaces"
 msgstr "Размаци без прелома"
 
-#: libide/preferences/ide-preferences-builtin.c:177
+#: libide/preferences/ide-preferences-builtin.c:178
 msgid "Spaces inside of text"
 msgstr "Размаци унутар текста"
 
-#: libide/preferences/ide-preferences-builtin.c:178
+#: libide/preferences/ide-preferences-builtin.c:179
 msgid "Trailing Only"
 msgstr "Само пратећи"
 
-#: libide/preferences/ide-preferences-builtin.c:179
+#: libide/preferences/ide-preferences-builtin.c:180
 msgid "Leading Only"
 msgstr "Само водећи"
 
-#: libide/preferences/ide-preferences-builtin.c:181
+#: libide/preferences/ide-preferences-builtin.c:182
 msgid "Autosave"
 msgstr "Аутоматско чување"
 
-#: libide/preferences/ide-preferences-builtin.c:182
+#: libide/preferences/ide-preferences-builtin.c:183
 msgid "Enable or disable autosave feature"
 msgstr "Омогући или онемогући аутоматско чување"
 
-#: libide/preferences/ide-preferences-builtin.c:183
+#: libide/preferences/ide-preferences-builtin.c:184
 msgid "The number of seconds after modification before auto saving"
 msgstr "Број секунди након измене после којих се врши аутоматско чување"
 
-#: libide/preferences/ide-preferences-builtin.c:189
+#: libide/preferences/ide-preferences-builtin.c:190
 msgid "Code Insight"
 msgstr "Програмирање"
 
-#: libide/preferences/ide-preferences-builtin.c:192
+#: libide/preferences/ide-preferences-builtin.c:193
 msgid "Semantic Highlighting"
 msgstr "Семантичко истицање кода"
 
-#: libide/preferences/ide-preferences-builtin.c:192
+#: libide/preferences/ide-preferences-builtin.c:193
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
@@ -2631,34 +2664,34 @@ msgstr ""
 "Користи програмерску испомоћ за истицање додатних података пронађених у "
 "изворној датотеци"
 
-#: libide/preferences/ide-preferences-builtin.c:194
+#: libide/preferences/ide-preferences-builtin.c:195
 msgid "Completion"
 msgstr "Самодовршавање"
 
-#: libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid "Suggest words found in open files"
 msgstr "Предложи речи нађене у отвореним датотекама"
 
-#: libide/preferences/ide-preferences-builtin.c:195
+#: libide/preferences/ide-preferences-builtin.c:196
 msgid ""
 "Suggests completions as you type based on words found in any open document"
 msgstr ""
 "Приликом куцања предлаже довршавање укуцаног на основу нађених речи у било "
 "ком отвореном документу"
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid "Minimum word size"
 msgstr "Најмања величина речи"
 
-#: libide/preferences/ide-preferences-builtin.c:196
+#: libide/preferences/ide-preferences-builtin.c:197
 msgid "Minimum word size for word completion"
 msgstr "Најмања величина речи за допуњавање речи"
 
-#: libide/preferences/ide-preferences-builtin.c:197
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid "Suggest completions using Ctags"
 msgstr "Довршавање кода преко Це-ознака"
 
-#: libide/preferences/ide-preferences-builtin.c:197
+#: libide/preferences/ide-preferences-builtin.c:198
 msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
@@ -2666,129 +2699,129 @@ msgstr ""
 "Направи и управљај базу Це-ознака (енгл.: Ctags) за допуњавање назива класа, "
 "функција и тако даље"
 
-#: libide/preferences/ide-preferences-builtin.c:198
+#: libide/preferences/ide-preferences-builtin.c:199
 msgid "Suggest completions using Clang (Experimental)"
 msgstr "Довршавање кода преко Це-ланга (у тестирању)"
 
-#: libide/preferences/ide-preferences-builtin.c:198
+#: libide/preferences/ide-preferences-builtin.c:199
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr ""
 "Користи Це-ланг (енгл. „Clang“) за довршавање кода у Це и Це++ програмским "
 "језицима"
 
-#: libide/preferences/ide-preferences-builtin.c:200
+#: libide/preferences/ide-preferences-builtin.c:201
 msgid "Diagnostics"
 msgstr "Дијагностика"
 
-#: libide/preferences/ide-preferences-builtin.c:206
+#: libide/preferences/ide-preferences-builtin.c:207
 #: libide/snippets/ide-source-snippet-completion-provider.c:329
 msgid "Snippets"
 msgstr "Исечци"
 
-#: libide/preferences/ide-preferences-builtin.c:209
+#: libide/preferences/ide-preferences-builtin.c:210
 msgid "Code snippets"
 msgstr "Исечци кода"
 
-#: libide/preferences/ide-preferences-builtin.c:209
+#: libide/preferences/ide-preferences-builtin.c:210
 msgid "Use code fragments to increase typing efficiency"
 msgstr "Користи делове кода за повећавање ефикасности куцања"
 
-#: libide/preferences/ide-preferences-builtin.c:253
+#: libide/preferences/ide-preferences-builtin.c:254
 msgid "Programming Languages"
 msgstr "Програмски језици"
 
-#: libide/preferences/ide-preferences-builtin.c:319
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Trim trailing whitespace"
 msgstr "Крати пратећу празнину"
 
-#: libide/preferences/ide-preferences-builtin.c:319
+#: libide/preferences/ide-preferences-builtin.c:320
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "Омогућава скраћивање пратеће празнине из измењених линија, приликом чувања."
 
-#: libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Overwrite Braces"
 msgstr "Преписује заграде"
 
-#: libide/preferences/ide-preferences-builtin.c:320
+#: libide/preferences/ide-preferences-builtin.c:321
 msgid "Overwrite closing braces"
 msgstr "Препиши затворене заграде"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Insert Matching Brace"
 msgstr "Умеће одговарајућу заграду"
 
-#: libide/preferences/ide-preferences-builtin.c:321
+#: libide/preferences/ide-preferences-builtin.c:322
 msgid "Insert matching character for { [ ( or \""
 msgstr "Уметни одговарајући знак за { [ ( или \\\""
 
-#: libide/preferences/ide-preferences-builtin.c:323
+#: libide/preferences/ide-preferences-builtin.c:324
 msgid "Margins"
 msgstr "Маргине"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Right margin position"
 msgstr "Положај десне маргине"
 
-#: libide/preferences/ide-preferences-builtin.c:325
+#: libide/preferences/ide-preferences-builtin.c:326
 msgid "Position in spaces for the right margin"
 msgstr "Положај у размацима за десну маргину"
 
-#: libide/preferences/ide-preferences-builtin.c:327
+#: libide/preferences/ide-preferences-builtin.c:328
 msgid "Indentation"
 msgstr "Увлачење"
 
-#: libide/preferences/ide-preferences-builtin.c:328
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Tab width"
 msgstr "Ширина табулатора"
 
-#: libide/preferences/ide-preferences-builtin.c:328
+#: libide/preferences/ide-preferences-builtin.c:329
 msgid "Width of a tab character in spaces"
 msgstr "Ширина табулатора у размацима"
 
-#: libide/preferences/ide-preferences-builtin.c:329
+#: libide/preferences/ide-preferences-builtin.c:330
 msgid "Insert spaces instead of tabs"
 msgstr "Уметни размаке уместо табулатора"
 
-#: libide/preferences/ide-preferences-builtin.c:329
+#: libide/preferences/ide-preferences-builtin.c:330
 msgid "Prefer spaces over use of tabs"
 msgstr "Дај предност размацима уместо табулаторима"
 
-#: libide/preferences/ide-preferences-builtin.c:330
+#: libide/preferences/ide-preferences-builtin.c:331
 msgid "Automatically indent"
 msgstr "Аутоматски увлачи"
 
-#: libide/preferences/ide-preferences-builtin.c:330
+#: libide/preferences/ide-preferences-builtin.c:331
 msgid "Indent source code as you type"
 msgstr "Увлачи изворни код приликом куцања"
 
-#: libide/preferences/ide-preferences-builtin.c:345
-#: libide/preferences/ide-preferences-builtin.c:363
+#: libide/preferences/ide-preferences-builtin.c:346
+#: libide/preferences/ide-preferences-builtin.c:364
 msgid "Number of CPU"
 msgstr "Број процесора"
 
-#: libide/preferences/ide-preferences-builtin.c:378
+#: libide/preferences/ide-preferences-builtin.c:379
 #: libide/workbench/ide-omni-bar.ui:480
 msgid "Build"
 msgstr "Изгради"
 
-#: libide/preferences/ide-preferences-builtin.c:381
+#: libide/preferences/ide-preferences-builtin.c:382
 msgid "Build Workers"
 msgstr "Радници на градњи"
 
-#: libide/preferences/ide-preferences-builtin.c:381
+#: libide/preferences/ide-preferences-builtin.c:382
 msgid "Number of parallel build workers"
 msgstr "Број упоредних радника на градњи"
 
-#: libide/preferences/ide-preferences-builtin.c:389
+#: libide/preferences/ide-preferences-builtin.c:390
 msgid "Network"
 msgstr "Мрежа"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:391
 msgid "Allow downloads over metered connections"
 msgstr "Допусти преузимања преко мерених веза"
 
-#: libide/preferences/ide-preferences-builtin.c:390
+#: libide/preferences/ide-preferences-builtin.c:391
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2796,53 +2829,53 @@ msgstr ""
 "Допушта коришћење мерених мрежних веза приликом аутоматског преузимања "
 "зависности"
 
-#: libide/preferences/ide-preferences-builtin.c:396
+#: libide/preferences/ide-preferences-builtin.c:397
 msgid "Projects"
 msgstr "Пројекти"
 
-#: libide/preferences/ide-preferences-builtin.c:398
+#: libide/preferences/ide-preferences-builtin.c:399
 msgid "Workspace"
 msgstr "Радни простор"
 
-#: libide/preferences/ide-preferences-builtin.c:399
+#: libide/preferences/ide-preferences-builtin.c:400
 msgid "A place for all your projects"
 msgstr "Место за све ваше пројекте"
 
-#: libide/preferences/ide-preferences-builtin.c:400
+#: libide/preferences/ide-preferences-builtin.c:401
 msgid "Restore previously opened files"
 msgstr "Обнови претходно отворене датотеке"
 
-#: libide/preferences/ide-preferences-builtin.c:400
+#: libide/preferences/ide-preferences-builtin.c:401
 msgid "Open previously opened files when loading a project"
 msgstr "Отвори претходно отворене датотеке приликом учитавања пројекта"
 
-#: libide/preferences/ide-preferences-builtin.c:402
+#: libide/preferences/ide-preferences-builtin.c:403
 msgid "Project Discovery"
 msgstr "Откривање пројеката"
 
-#: libide/preferences/ide-preferences-builtin.c:403
+#: libide/preferences/ide-preferences-builtin.c:404
 msgid "Discover projects on my computer"
 msgstr "Откриј пројекте на мом рачунару"
 
-#: libide/preferences/ide-preferences-builtin.c:403
+#: libide/preferences/ide-preferences-builtin.c:404
 msgid "Scan your computer for existing projects"
 msgstr "Потражи постојеће пројекте на рачунару"
 
-#: libide/preferences/ide-preferences-builtin.c:524
+#: libide/preferences/ide-preferences-builtin.c:525
 #: plugins/create-project/gbp-create-project-widget.ui:154
 msgid "Version Control"
 msgstr "Управљање верзијама"
 
 #. only the page goes here, plugins will fill in the details
-#: libide/preferences/ide-preferences-builtin.c:536
+#: libide/preferences/ide-preferences-builtin.c:537
 msgid "SDKs"
 msgstr "СДК-ови"
 
-#: libide/projects/ide-project.c:527
+#: libide/projects/ide-project.c:530
 msgid "Destination file must be within the project tree."
 msgstr "Одредишна датотека мора бити унутар стабла пројекта."
 
-#: libide/projects/ide-project.c:662
+#: libide/projects/ide-project.c:698
 msgid "File must be within the project tree."
 msgstr "Датотека мора бити унутар стаба пројекта."
 
@@ -2859,11 +2892,11 @@ msgstr "Прекини извршавање"
 msgid "Change run options"
 msgstr "Промени опције извршавања"
 
-#: libide/runner/ide-run-manager.c:340
+#: libide/runner/ide-run-manager.c:341
 msgid "Cannot run target, another target is running"
 msgstr "Не могу да извршим циљ, други циљ је покренут"
 
-#: libide/runner/ide-run-manager.c:409
+#: libide/runner/ide-run-manager.c:411
 msgid "Failed to locate runtime"
 msgstr "Нисам успео да нађем извршно окружење"
 
@@ -2885,31 +2918,31 @@ msgstr "Не могу да отворим директоријум: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Не могу да учитам датотеку: %s: %s"
 
-#: libide/sourceview/ide-source-view.c:5349
+#: libide/sourceview/ide-source-view.c:5329
 #, c-format
 msgid "Insert “%s”"
 msgstr "Убаци „%s“"
 
-#: libide/sourceview/ide-source-view.c:5351
+#: libide/sourceview/ide-source-view.c:5331
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замени „%s“ са „%s“"
 
-#: libide/sourceview/ide-source-view.c:5465
+#: libide/sourceview/ide-source-view.c:5445
 msgid "Apply Fix-It"
 msgstr "Примени исправку"
 
-#: libide/sourceview/ide-source-view.c:5892
+#: libide/sourceview/ide-source-view.c:5872
 msgid "Rename symbol"
 msgstr "Преименуј симбол"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: libide/sourceview/ide-source-view.c:6125
+#: libide/sourceview/ide-source-view.c:6105
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u. линија, %u. колона</small>"
 
-#: libide/sourceview/ide-source-view.c:6151
+#: libide/sourceview/ide-source-view.c:6131
 msgid "No references were found"
 msgstr "Нисам нашао ниједну упуту"
 
@@ -3044,7 +3077,7 @@ msgstr "Изгради пројекат"
 msgid "Builder Statistics"
 msgstr "Статистика Градитеља"
 
-#: libide/workbench/ide-workbench.c:623
+#: libide/workbench/ide-workbench.c:639
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Градитељ"
@@ -3180,7 +3213,7 @@ msgstr ""
 "Могућности претраживања, дијагоностике и самодопуњавања могу бити ограничене "
 "док се ово не заврши."
 
-#: plugins/color-picker/gb-color-picker-editor-addin.c:241
+#: plugins/color-picker/gb-color-picker-editor-addin.c:288
 msgid "Colors"
 msgstr "Боје"
 
@@ -3475,20 +3508,20 @@ msgstr "Непознато подешавање: %s"
 msgid "Cannot find colorscheme “%s”"
 msgstr "Не могу наћи шему боја „%s“"
 
-#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:588
+#: plugins/command-bar/gb-vim.c:464 plugins/command-bar/gb-vim.c:596
 msgid "Failed to locate working directory"
 msgstr "Не могу да нађем радни директоријум"
 
-#: plugins/command-bar/gb-vim.c:708
+#: plugins/command-bar/gb-vim.c:770
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Уочена неисправност: синтаксна поднаредба: %s"
 
-#: plugins/command-bar/gb-vim.c:1149
+#: plugins/command-bar/gb-vim.c:1211
 msgid "Invalid search and replace request"
 msgstr "Неисправан „нађи и замени“ захтев"
 
-#: plugins/command-bar/gb-vim.c:1255
+#: plugins/command-bar/gb-vim.c:1317
 #, c-format
 msgid "Not a command: %s"
 msgstr "Није наредба: %s"
@@ -3663,18 +3696,18 @@ msgstr "Нова страница документације"
 msgid "_Show more"
 msgstr "При_кажи више"
 
-#: plugins/eslint/eslint_plugin/__init__.py:105
+#: plugins/eslint/eslint_plugin/__init__.py:139
 msgid "ESlint"
 msgstr "ЕС-линт"
 
-#: plugins/eslint/eslint_plugin/__init__.py:106
+#: plugins/eslint/eslint_plugin/__init__.py:140
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 "Омогући коришћење ЕС-линта (енгл.: ESLint) који може извршити код у вашем "
 "пројекту"
 
 #. translators: these are keywords used to search for preferences
-#: plugins/eslint/eslint_plugin/__init__.py:108
+#: plugins/eslint/eslint_plugin/__init__.py:142
 msgid "eslint javascript lint code execute execution"
 msgstr ""
 "eslint javascript lint code execute execution ес-линт еслинт јаваскрипт линт "
@@ -3710,14 +3743,14 @@ msgstr "Клонирај програм"
 msgid "Clone"
 msgstr "Клонирај"
 
-#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:140
+#: plugins/flatpak/gbp-flatpak-pipeline-addin.c:139
 msgid "Network is not available, skipping downloads"
 msgstr "Мрежа није доступна, прескачем преузимања"
 
 #: plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: plugins/flatpak/gbp-flatpak-workbench-addin.c:83
-#: plugins/html-preview/html_preview_plugin/__init__.py:323
-#: plugins/html-preview/html_preview_plugin/__init__.py:333
+#: plugins/html-preview/html_preview_plugin/__init__.py:327
+#: plugins/html-preview/html_preview_plugin/__init__.py:337
 #: plugins/rustup/rustup_plugin/__init__.py:496
 #: plugins/rustup/rustup_plugin/__init__.py:500
 #: plugins/rustup/rustup_plugin/__init__.py:615
@@ -3750,12 +3783,12 @@ msgstr[3] "Прикажи још %u извршно окружење"
 msgid "Flatpak Runtimes"
 msgstr "Флетпек извршна окружења"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:722
+#: plugins/flatpak/gbp-flatpak-runtime.c:743
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: plugins/flatpak/gbp-flatpak-runtime.c:724
+#: plugins/flatpak/gbp-flatpak-runtime.c:745
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -3816,14 +3849,6 @@ msgstr "Флетпек"
 msgid "_Download Dependencies"
 msgstr "_Преузми зависности"
 
-#: plugins/fpaste/fpaste_plugin/gtk/menus.ui:9
-msgid "Send to Fpaste.org"
-msgstr "Пошаљи на „Fpaste.org"
-
-#: plugins/fpaste/fpaste_plugin/__init__.py:110
-msgid "The following URL has been copied to the clipboard"
-msgstr "Следећи УРЛ је умножен у вашу оставу"
-
 #: plugins/git/ide-git-buffer-change-monitor.c:161
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Не могу да прикажем разлику, резервна датотека није достављена."
@@ -3841,7 +3866,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "Тражена датотека не постоји унутар садржаја гита."
 
 #: plugins/git/ide-git-clone-widget.c:162
-#: plugins/git/ide-git-clone-widget.c:427
+#: plugins/git/ide-git-clone-widget.c:438
 msgid "A valid Git URL is required"
 msgstr "Морате унети исправну УРЛ адресу гит ризнице"
 
@@ -3925,15 +3950,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Претпреглед отварања"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:319
+#: plugins/html-preview/html_preview_plugin/__init__.py:323
 msgid "Your computer is missing python3-docutils"
 msgstr "На вашем рачунару недостаје програм „python3-docutils“"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:329
+#: plugins/html-preview/html_preview_plugin/__init__.py:333
 msgid "Your computer is missing python3-sphinx"
 msgstr "На вашем рачунару недостаје програм „python3-sphinx“"
 
-#: plugins/html-preview/html_preview_plugin/__init__.py:372
+#: plugins/html-preview/html_preview_plugin/__init__.py:376
 msgid "(Preview)"
 msgstr "(Претпреглед)"
 
@@ -3978,20 +4003,20 @@ msgstr "MinGW (64-битни)"
 msgid "MinGW 32-bit"
 msgstr "MinGW (32-битни)"
 
-#: plugins/notification/ide-notification-addin.c:82
+#: plugins/notification/ide-notification-addin.c:92
 msgid "Build successful"
 msgstr "Поступак изградње је успео"
 
-#: plugins/notification/ide-notification-addin.c:83
+#: plugins/notification/ide-notification-addin.c:93
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "Изградња пројекта „%s“ је готова"
 
-#: plugins/notification/ide-notification-addin.c:87
+#: plugins/notification/ide-notification-addin.c:97
 msgid "Build failed"
 msgstr "Неуспех при изградњи"
 
-#: plugins/notification/ide-notification-addin.c:88
+#: plugins/notification/ide-notification-addin.c:98
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "Изградња пројекта „%s“ није успела"
@@ -4393,19 +4418,19 @@ msgstr ""
 msgid "CPU"
 msgstr "Процесор"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:360
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:362
 msgid "Open Profile"
 msgstr "Отвори профил"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:369
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:371
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Сиспроф Хватка (*.syscap)"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:375
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:377
 msgid "All Files"
 msgstr "Све датотеке"
 
-#: plugins/sysprof/gbp-sysprof-workbench-addin.c:476
+#: plugins/sysprof/gbp-sysprof-workbench-addin.c:478
 #: plugins/sysprof/gtk/menus.ui:34
 msgid "Run with Profiler"
 msgstr "Покрени са профилатором"
@@ -4446,15 +4471,15 @@ msgstr "_Отвори везу"
 msgid "_Copy Link Address"
 msgstr "_Копирај адресу везе"
 
-#: plugins/terminal/gtk/menus.ui:55
+#: plugins/terminal/gtk/menus.ui:56
 msgid "Reset and Clear"
 msgstr "Поново постави и очисти"
 
-#: plugins/terminal/gtk/menus.ui:74
+#: plugins/terminal/gtk/menus.ui:75
 msgid "New _Terminal"
 msgstr "Нови _терминал"
 
-#: plugins/terminal/gtk/menus.ui:82
+#: plugins/terminal/gtk/menus.ui:83
 msgid "New _Build Terminal"
 msgstr "_Нови терминал градње"
 
@@ -4482,7 +4507,7 @@ msgid "Run with Valgrind"
 msgstr "Покрени са Валгриндом"
 
 #: plugins/xml-pack/ide-xml-parser.c:579
-#: plugins/xml-pack/ide-xml-tree-builder.c:447
+#: plugins/xml-pack/ide-xml-tree-builder.c:473
 msgid "Failed to create the XML tree."
 msgstr "Нисам успео да направим ИксМЛ стабло."
 
@@ -4490,8 +4515,14 @@ msgstr "Нисам успео да направим ИксМЛ стабло."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Међумеморија је учитана али не у управнику међумеморије."
 
-#~ msgid "Integration with Autotools"
-#~ msgstr "Усклађеност са ауто-алатима"
+#~ msgid "Integrated project tree"
+#~ msgstr "Уграђено стабло пројекта"
+
+#~ msgid "Send to Fpaste.org"
+#~ msgstr "Пошаљи на „Fpaste.org"
+
+#~ msgid "The following URL has been copied to the clipboard"
+#~ msgstr "Следећи УРЛ је умножен у вашу оставу"
 
 #~ msgid "HTML/Markdown live preview"
 #~ msgstr "Живи претпреглед за ХТМЛ и Маркдаун"
