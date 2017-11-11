@@ -512,6 +512,35 @@ namespace Ide
 			return ret;
 		}
 
+		public Ide.SymbolTree? get_symbol_tree_sync (GLib.File file,
+		                                             GLib.Cancellable? cancellable)
+			throws GLib.Error
+		{
+			Ide.SymbolTree? ret = null;
+
+			lock (this.code_context) {
+				Vala.CodeContext.push (this.code_context);
+
+				if (!this.source_files.contains (file)) {
+					this.add_file (file);
+					this.reparse ();
+				}
+
+				var source_file = this.source_files [file];
+				if (source_file.dirty) {
+					this.reparse ();
+				}
+
+				var tree_builder = new Ide.ValaSymbolTreeVisitor ();
+				source_file.accept_children (tree_builder);
+				ret = tree_builder.build_tree ();
+
+				Vala.CodeContext.pop ();
+			}
+
+			return ret;
+		}
+
 		string? get_versioned_vapidir ()
 		{
 			try {
