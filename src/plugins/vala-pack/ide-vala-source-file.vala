@@ -1,6 +1,6 @@
 /* ide-vala-source-file.vala
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright © 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  * Bits of the following file were inspired from Anjuta. It's original
  * copyright is in tact below.
  *
- * Copyright (C) 2008-2010 Abderrahim Kitouni
+ * Copyright © 2008-2010 Abderrahim Kitouni
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
