@@ -53,6 +53,9 @@ status += [
   'Tracing ............... : @0@'.format(get_option('enable_tracing')),
   'Profiling ............. : @0@'.format(get_option('enable_profiling')),
   'RDTSCP ................ : @0@'.format(get_option('enable_rdtscp')),
+  '',
+  'Help Docs ............. : @0@'.format(get_option('with_help')),
+  'API Docs .............. : @0@'.format(get_option('with_docs')),
   '', ''
 ]
 
