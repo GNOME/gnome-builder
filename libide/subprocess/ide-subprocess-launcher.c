@@ -386,7 +386,7 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
   task = g_task_new (self, cancellable, NULL, NULL);
   g_task_set_source_tag (task, ide_subprocess_launcher_real_spawn);
 
-  if (priv->clear_env)
+  if (priv->clear_env || (ide_is_flatpak () && priv->run_on_host))
     {
       /*
        * Many things break without at least PATH, HOME, etc. being set.
