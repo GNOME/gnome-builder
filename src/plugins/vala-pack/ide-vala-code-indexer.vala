@@ -23,7 +23,7 @@ namespace Ide
 {
 	bool is_null_or_empty (string? s)
 	{
-		return s == null || s == "";
+		return s == null || s[0] == '\0';
 	}
 
 	public class ValaCodeIndexer : Ide.Object, Ide.CodeIndexer
