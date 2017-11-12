@@ -12,7 +12,7 @@ option('with_editorconfig', type: 'boolean')
 option('with_webkit', type: 'boolean')
 option('with_vapi', type: 'boolean')
 option('with_help', type: 'boolean')
-option('with_docs', type: 'boolean')
+option('with_docs', type: 'boolean', value: false)
 
 # Plugins
 # Ideally we want many of these to be defined in the plugin dir:
