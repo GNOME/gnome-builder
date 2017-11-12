@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gi.repository import Dazzle
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
@@ -33,55 +34,20 @@ _ATTRIBUTES = ",".join([
 ])
 
 class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
+    context = None
     workbench = None
-    window = None
-    model = None
 
     def do_load(self, workbench):
         self.workbench = workbench
+        self.context = workbench.get_context()
 
         action = Gio.SimpleAction.new('find-other-file', None)
         action.connect('activate', self.on_activate)
         self.workbench.add_action(action)
 
-        self.window = Gtk.Window(resizable=False,
-                                 width_request=400,
-                                 transient_for=self.workbench,
-                                 title=_("Find other file"),
-                                 window_position=Gtk.WindowPosition.CENTER_ON_PARENT)
-        self.window.connect('key-press-event', self.on_key_press)
-        self.window.connect('delete-event', self.on_delete_event)
-
-        scroller = Gtk.ScrolledWindow(visible=True,
-                                      propagate_natural_width=True,
-                                      propagate_natural_height=True,
-                                      hscrollbar_policy=Gtk.PolicyType.NEVER)
-        self.window.add(scroller)
-
-        self.model = Gtk.ListStore.new([OtherFile])
-        treeview = Gtk.TreeView(visible=True, model=self.model, headers_visible=False)
-        treeview.connect('row-activated', self.on_row_activated)
-        scroller.add(treeview)
-
-        column = Gtk.TreeViewColumn()
-        treeview.append_column(column)
-
-        cell = Gtk.CellRendererPixbuf(xpad=6, ypad=6)
-        column.pack_start(cell, False)
-        column.set_cell_data_func(cell, self.icon_cell_func)
-
-        cell = Gtk.CellRendererText(ypad=6)
-        column.pack_start(cell, True)
-        column.set_cell_data_func(cell, self.text_cell_func)
-
     def do_unload(self, workbench):
-        self.window.destroy()
-        self.window = None
-
-        self.model.clear()
-        self.model = None
-
         self.workbench = None
+        self.context = None
 
     def on_activate(self, *args):
         editor = self.workbench.get_perspective_by_name('editor')
@@ -103,7 +69,7 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
 
     def on_enumerator_loaded(self, parent, result, basename):
         try:
-            files = []
+            files = Gio.ListStore.new(Ide.SearchResult)
 
             enumerator = parent.enumerate_children_finish(result)
             info = enumerator.next_file(None)
@@ -118,71 +84,37 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
                     content_type = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE)
                     display_name = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
                     icon = info.get_attribute_object(Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON)
-
-                    file = OtherFile(parent.get_child(name), display_name, icon)
-                    files.append(file)
+                    icon_name = icon.to_string() if icon else None
+                    gfile = parent.get_child(name)
+                    ifile = Ide.File.new(self.context, gfile)
+                    result = OtherFileSearchResult(file=ifile, icon_name=icon_name, title=display_name)
+                    files.append(result)
 
                 info = enumerator.next_file(None)
 
             enumerator.close()
 
-            if len(files) == 1:
-                self.workbench.open_files_async([files[0].file], 'editor', 0, None, None)
+            if files.get_n_items() == 1:
+                file = files.get_item(0).file.get_file()
+                self.workbench.open_files_async([file], 'editor', 0, None, None)
             elif files:
-                self.present_results(files)
+                self.present_results(files, basename)
 
         except Exception as ex:
             Ide.warning(repr(ex))
             return
 
-    def on_delete_event(self, window, event):
-        window.hide()
-        return True
+    def present_results(self, results, name):
+        headerbar = self.workbench.get_headerbar()
+        search = Dazzle.gtk_widget_find_child_typed(headerbar, Ide.SearchEntry)
+        search.set_text('')
+        search.set_model(results)
+        search.grab_focus()
+        search.emit('show-suggestions')
 
-    def on_key_press(self, window, event):
-        if event.keyval == Gdk.KEY_Escape:
-            window.hide()
-            self.workbench.present()
-            self.workbench.grab_focus()
-            return True
-        return False
 
-    def on_row_activated(self, treeview, path, column):
-        model = treeview.get_model()
-        iter = model.get_iter(path)
-        file, = model.get(iter, 0)
+class OtherFileSearchResult(Ide.SearchResult):
+    file = GObject.Property(type=Ide.File)
 
-        self.window.hide()
-
-        self.workbench.open_files_async([file.file], 'editor', 0, None, None)
-
-    def icon_cell_func(self, layout, cell, model, iter, data):
-        file, = model.get(iter, 0)
-        cell.props.gicon = file.icon
-
-    def text_cell_func(self, layout, cell, model, iter, data):
-        file, = model.get(iter, 0)
-        cell.props.text = file.display_name
-
-    def populate(self, results):
-        self.model.clear()
-        for row in results:
-            iter = self.model.append()
-            self.model.set(iter, {0: row})
-
-    def present_results(self, results):
-        self.populate(results)
-        self.window.present()
-        self.window.grab_focus()
-
-class OtherFile(GObject.Object):
-    icon = GObject.Property(type=Gio.Icon)
-    display_name = GObject.Property(type=str)
-    file = GObject.Property(type=Gio.File)
-
-    def __init__(self, file, display_name, icon):
-        super().__init__()
-        self.file = file
-        self.display_name = display_name
-        self.icon = icon
-
+    def do_get_source_location(self):
+        return Ide.SourceLocation.new(self.file, 0, 0, 0)
