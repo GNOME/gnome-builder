@@ -94,10 +94,12 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
 
             enumerator.close()
 
-            if files.get_n_items() == 1:
+            count = files.get_n_items()
+
+            if count == 1:
                 file = files.get_item(0).file.get_file()
                 self.workbench.open_files_async([file], 'editor', 0, None, None)
-            elif files:
+            elif count:
                 self.present_results(files, basename)
 
         except Exception as ex:
