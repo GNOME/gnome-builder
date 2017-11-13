@@ -451,7 +451,7 @@ ide_application_startup (GApplication *application)
   g_resources_register (ide_get_resource ());
   g_resources_register (ide_icons_get_resource ());
 
-  g_application_set_resource_base_path (application, "/org/gnome/builder");
+  g_application_set_resource_base_path (application, "/org/gnome/builder/");
   ide_application_register_search_paths (self);
 
   small_thread_pool = (self->mode != IDE_APPLICATION_MODE_PRIMARY);
@@ -630,7 +630,6 @@ ide_application_new (void)
                        "application-id", "org.gnome.Builder",
                        "flags", G_APPLICATION_HANDLES_OPEN,
                        NULL);
-
 }
 
 /**

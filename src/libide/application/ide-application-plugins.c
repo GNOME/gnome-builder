@@ -409,7 +409,7 @@ ide_application_load_plugin_resources (IdeApplication *self,
   data_dir = peas_plugin_info_get_data_dir (plugin_info);
 
   /* Add embedded resources path */
-  path = g_strdup_printf ("resource:///org/gnome/builder/plugins/%s", module_name);
+  path = g_strdup_printf ("resource:///org/gnome/builder/plugins/%s/", module_name);
   dzl_application_add_resources (DZL_APPLICATION (self), path);
 
   /* If the data dir is not also a resource, add it */
@@ -434,7 +434,7 @@ ide_application_unload_plugin_resources (IdeApplication *self,
   data_dir = peas_plugin_info_get_data_dir (plugin_info);
 
   /* Remove embedded gresources */
-  path = g_strdup_printf ("resource:///org/gnome/builder/plugins/%s", module_name);
+  path = g_strdup_printf ("resource:///org/gnome/builder/plugins/%s/", module_name);
   dzl_application_remove_resources (DZL_APPLICATION (self), path);
 
   /* Remove on disk resources */
