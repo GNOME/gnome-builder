@@ -93,7 +93,9 @@ ide_keybindings_load_plugin (IdeKeybindings *self,
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
-  g_hash_table_insert (self->plugin_providers, g_strdup (module_name), g_object_ref (provider));
+  g_hash_table_insert (self->plugin_providers,
+                       g_strdup (module_name),
+                       g_steal_pointer (&provider));
 }
 
 static void
