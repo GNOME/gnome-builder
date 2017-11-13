@@ -960,7 +960,7 @@ ide_context_init_vcs_cb (GObject      *object,
   IdeContext *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeVcs) vcs = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
   g_return_if_fail (G_IS_TASK (task));
@@ -969,7 +969,7 @@ ide_context_init_vcs_cb (GObject      *object,
 
   if (!(vcs = ide_vcs_new_finish (result, &error)))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -1069,15 +1069,16 @@ ide_context_init_runtimes (gpointer             source_object,
 {
   IdeContext *self = source_object;
   g_autoptr(GTask) task = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_context_init_runtimes);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (!g_initable_init (G_INITABLE (self->runtime_manager), cancellable, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }
@@ -1089,17 +1090,14 @@ ide_context_init_unsaved_files_cb (GObject      *object,
 {
   IdeUnsavedFiles *unsaved_files = (IdeUnsavedFiles *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_UNSAVED_FILES (unsaved_files));
 
   if (!ide_unsaved_files_restore_finish (unsaved_files, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_boolean (task, TRUE);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -1127,17 +1125,14 @@ ide_context_init_snippets_cb (GObject      *object,
 {
   IdeSourceSnippetsManager *manager = (IdeSourceSnippetsManager *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS_MANAGER (manager));
 
   if (!ide_source_snippets_manager_load_finish (manager, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_boolean (task, TRUE);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -1304,10 +1299,10 @@ ide_context_init_add_recent (gpointer             source_object,
   g_autoptr(GBookmarkFile) projects_file = NULL;
   g_autoptr(GPtrArray) groups = NULL;
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *app_exec = NULL;
   g_autofree gchar *dir = NULL;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -1315,6 +1310,8 @@ ide_context_init_add_recent (gpointer             source_object,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_init_add_recent);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (directory_is_ignored (self->project_file))
     {
@@ -1334,11 +1331,8 @@ ide_context_init_add_recent (gpointer             source_object,
       g_warning ("Unable to open recent projects %s file: %s",
                  self->recent_projects_path, error->message);
       g_task_return_boolean (task, TRUE);
-      g_clear_error (&error);
       IDE_EXIT;
     }
-
-  g_clear_error (&error);
 
   uri = g_file_get_uri (self->project_file);
   app_exec = g_strdup_printf ("%s -p %%p", ide_get_program_name ());
@@ -1448,13 +1442,13 @@ ide_context_init_configuration_manager_cb (GObject      *object,
 {
   GAsyncInitable *initable = (GAsyncInitable *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_ASYNC_INITABLE (initable));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!g_async_initable_init_finish (initable, result, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }
@@ -1946,7 +1940,7 @@ ide_context_unload_cb (GObject      *object,
   IdeContext *self = (IdeContext *)object;
   GTask *unload_task = (GTask *)result;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CONTEXT (self));
   g_assert (G_IS_TASK (task));
@@ -1955,7 +1949,7 @@ ide_context_unload_cb (GObject      *object,
   g_clear_object (&self->runtime_manager);
 
   if (!g_task_propagate_boolean (unload_task, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }
