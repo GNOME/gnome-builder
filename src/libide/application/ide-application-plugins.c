@@ -157,7 +157,7 @@ ide_application_discover_plugins (IdeApplication *self)
       peas_engine_enable_loader (engine, "python3");
     }
 
-  peas_engine_prepend_search_path (engine, "resource:///org/gnome/builder/plugins", NULL);
+  peas_engine_prepend_search_path (engine, "resource:///org/gnome/builder/plugins/", NULL);
 
   path = g_build_filename (g_get_user_data_dir (), "gnome-builder", "plugins", NULL);
   peas_engine_prepend_search_path (engine, path, NULL);
