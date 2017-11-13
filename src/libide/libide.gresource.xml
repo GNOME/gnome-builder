@@ -50,10 +50,10 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/keybindings">
-    <file compressed="true" alias="default.css">keybindings/default.css</file>
-    <file compressed="true" alias="emacs.css">keybindings/emacs.css</file>
-    <file compressed="true" alias="shared.css">keybindings/shared.css</file>
-    <file compressed="true" alias="vim.css">keybindings/vim.css</file>
+    <file alias="default.css">keybindings/default.css</file>
+    <file alias="emacs.css">keybindings/emacs.css</file>
+    <file alias="shared.css">keybindings/shared.css</file>
+    <file alias="vim.css">keybindings/vim.css</file>
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">
