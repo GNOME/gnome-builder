@@ -67,10 +67,5 @@ void                     ide_source_snippet_get_chunk_range  (IdeSourceSnippet  
                                                               GtkTextIter           *end);
 IDE_AVAILABLE_IN_ALL
 IdeSourceSnippetContext *ide_source_snippet_get_context      (IdeSourceSnippet      *self);
-IDE_AVAILABLE_IN_ALL
-const gchar             *ide_source_snippet_get_snippet_text (IdeSourceSnippet      *self);
-IDE_AVAILABLE_IN_ALL
-void                     ide_source_snippet_set_snippet_text (IdeSourceSnippet      *self,
-                                                              const gchar           *snippet_text);
 
 G_END_DECLS

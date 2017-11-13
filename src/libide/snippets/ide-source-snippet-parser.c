@@ -97,7 +97,6 @@ ide_source_snippet_parser_store (IdeSourceSnippetParser *parser)
     {
       snippet = ide_source_snippet_new (parser->cur_name, scope_iter->data);
       ide_source_snippet_set_description (snippet, parser->cur_desc);
-      ide_source_snippet_set_snippet_text (snippet, parser->snippet_text->str);
 
       for (chunck_iter = parser->chunks; chunck_iter; chunck_iter = chunck_iter->next)
         {
