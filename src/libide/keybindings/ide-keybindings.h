@@ -26,11 +26,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeKeybindings, ide_keybindings, IDE, KEYBINDINGS, GObject)
 
-IdeKeybindings  *ide_keybindings_new             (GtkApplication *application,
-                                                const gchar    *mode);
-GtkApplication *ide_keybindings_get_application (IdeKeybindings *self);
-const gchar    *ide_keybindings_get_mode        (IdeKeybindings  *self);
-void            ide_keybindings_set_mode        (IdeKeybindings  *self,
-                                                const gchar    *name);
+IdeKeybindings *ide_keybindings_new      (const gchar    *mode);
+const gchar    *ide_keybindings_get_mode (IdeKeybindings *self);
+void            ide_keybindings_set_mode (IdeKeybindings *self,
+                                          const gchar    *name);
 
 G_END_DECLS

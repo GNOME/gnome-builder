@@ -30,7 +30,6 @@ struct _IdeKeybindings
 {
   GObject         parent_instance;
 
-  GtkApplication *application;
   GtkCssProvider *css_provider;
   gchar          *mode;
   GHashTable     *plugin_providers;
@@ -41,7 +40,6 @@ struct _IdeKeybindings
 enum
 {
   PROP_0,
-  PROP_APPLICATION,
   PROP_MODE,
   LAST_PROP
 };
@@ -51,13 +49,9 @@ G_DEFINE_TYPE (IdeKeybindings, ide_keybindings, G_TYPE_OBJECT)
 static GParamSpec *properties [LAST_PROP];
 
 IdeKeybindings *
-ide_keybindings_new (GtkApplication *application,
-                     const gchar    *mode)
+ide_keybindings_new (const gchar *mode)
 {
-  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
-
   return g_object_new (IDE_TYPE_KEYBINDINGS,
-                       "application", application,
                        "mode", mode,
                        NULL);
 }
@@ -220,37 +214,6 @@ ide_keybindings_set_mode (IdeKeybindings *self,
     }
 }
 
-GtkApplication *
-ide_keybindings_get_application (IdeKeybindings *self)
-{
-  g_return_val_if_fail (IDE_IS_KEYBINDINGS (self), NULL);
-
-  return self->application;
-}
-
-static void
-ide_keybindings_set_application (IdeKeybindings  *self,
-                                 GtkApplication  *application)
-{
-  g_assert (IDE_IS_KEYBINDINGS (self));
-  g_assert (!application || GTK_IS_APPLICATION (application));
-
-  if (application != self->application)
-    {
-      if (self->application)
-        {
-          /* remove keybindings */
-          g_clear_object (&self->application);
-        }
-
-      if (application)
-        {
-          /* connect keybindings */
-          self->application = g_object_ref (application);
-        }
-    }
-}
-
 static void
 ide_keybindings_parsing_error (GtkCssProvider *css_provider,
                                GtkCssSection  *section,
@@ -313,7 +276,6 @@ ide_keybindings_finalize (GObject *object)
 
   IDE_ENTRY;
 
-  g_clear_object (&self->application);
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->mode, g_free);
 
@@ -332,10 +294,6 @@ ide_keybindings_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_APPLICATION:
-      g_value_set_object (value, ide_keybindings_get_application (self));
-      break;
-
     case PROP_MODE:
       g_value_set_string (value, ide_keybindings_get_mode (self));
       break;
@@ -355,10 +313,6 @@ ide_keybindings_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_APPLICATION:
-      ide_keybindings_set_application (self, g_value_get_object (value));
-      break;
-
     case PROP_MODE:
       ide_keybindings_set_mode (self, g_value_get_string (value));
       break;
@@ -377,13 +331,6 @@ ide_keybindings_class_init (IdeKeybindingsClass *klass)
   object_class->finalize = ide_keybindings_finalize;
   object_class->get_property = ide_keybindings_get_property;
   object_class->set_property = ide_keybindings_set_property;
-
-  properties [PROP_APPLICATION] =
-    g_param_spec_object ("application",
-                         "Application",
-                         "The application to register keybindings for.",
-                         GTK_TYPE_APPLICATION,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_MODE] =
     g_param_spec_string ("mode",
