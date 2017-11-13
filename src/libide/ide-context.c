@@ -353,20 +353,19 @@ ide_context_new_cb (GObject      *object,
                     gpointer      user_data)
 {
   GAsyncInitable *initable = (GAsyncInitable *)object;
-  GError *error = NULL;
-  GTask *task = user_data;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GObject) ret = NULL;
 
   g_return_if_fail (G_IS_ASYNC_INITABLE (initable));
   g_return_if_fail (G_IS_TASK (task));
 
-  object = g_async_initable_new_finish (initable, result, &error);
+  ret = g_async_initable_new_finish (initable, result, &error);
 
-  if (!object)
-    g_task_return_error (task, error);
+  if (ret == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, object, g_object_unref);
-
-  g_object_unref (task);
+    g_task_return_pointer (task, g_steal_pointer (&ret), g_object_unref);
 }
 
 void
@@ -384,12 +383,13 @@ ide_context_new_async (GFile               *project_file,
 
   task = g_task_new (NULL, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_context_new_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   g_async_initable_new_async (IDE_TYPE_CONTEXT,
                               G_PRIORITY_DEFAULT,
                               cancellable,
                               ide_context_new_cb,
-                              g_object_ref (task),
+                              g_steal_pointer (&task),
                               "project-file", project_file,
                               NULL);
 
