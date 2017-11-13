@@ -79,7 +79,6 @@ _ide_application_set_mode (IdeApplication     *self,
 static void
 ide_application_make_skeleton_dirs (IdeApplication *self)
 {
-  g_autoptr(GSettings) settings = NULL;
   g_autofree gchar *projects_dir = NULL;
   gchar *path;
 
@@ -99,8 +98,7 @@ ide_application_make_skeleton_dirs (IdeApplication *self)
   g_mkdir_with_parents (path, 0750);
   g_free (path);
 
-  settings = g_settings_new ("org.gnome.builder");
-  projects_dir = g_settings_get_string (settings, "projects-directory");
+  projects_dir = g_settings_get_string (self->settings, "projects-directory");
 
   if (!g_path_is_absolute (projects_dir))
     {
@@ -127,7 +125,7 @@ ide_application_register_keybindings (IdeApplication *self)
 
   settings = g_settings_new ("org.gnome.builder.editor");
   name = g_settings_get_string (settings, "keybindings");
-  self->keybindings = ide_keybindings_new (GTK_APPLICATION (self), name);
+  self->keybindings = ide_keybindings_new (name);
   g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
 
   IDE_EXIT;
@@ -380,15 +378,11 @@ ide_application_register_settings (IdeApplication *self)
 
   if (g_getenv ("GTK_THEME") == NULL)
     {
-      g_autoptr(GSettings) settings = NULL;
-      GtkSettings *gtk_settings;
+      GtkSettings *gtk_settings = gtk_settings_get_default ();
 
-      settings = g_settings_new ("org.gnome.builder");
-      gtk_settings = gtk_settings_get_default ();
-
-      g_settings_bind (settings, "night-mode",
-                     gtk_settings, "gtk-application-prefer-dark-theme",
-                     G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (self->settings, "night-mode",
+                       gtk_settings, "gtk-application-prefer-dark-theme",
+                       G_SETTINGS_BIND_DEFAULT);
     }
 
   IDE_EXIT;
@@ -401,6 +395,8 @@ ide_application_startup (GApplication *application)
   gboolean small_thread_pool;
 
   g_assert (IDE_IS_APPLICATION (self));
+
+  self->settings = g_settings_new ("org.gnome.builder");
 
   g_resources_register (ide_get_resource ());
   g_resources_register (ide_icons_get_resource ());
@@ -523,6 +519,7 @@ ide_application_finalize (GObject *object)
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }
