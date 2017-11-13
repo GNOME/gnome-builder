@@ -96,14 +96,18 @@ ide_workbench_unload_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
-  g_autoptr(IdeWorkbench) self = user_data;
   IdeContext *context = (IdeContext *)object;
+  g_autoptr(IdeWorkbench) self = user_data;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
 
-  ide_context_unload_finish (context, result, NULL);
+  if (!ide_context_unload_finish (context, result, &error))
+    g_warning ("Failed to unload context: %s", error->message);
 
   gtk_widget_destroy (GTK_WIDGET (self));
+
+  g_clear_object (&self->context);
 }
 
 static gboolean
