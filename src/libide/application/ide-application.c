@@ -370,6 +370,37 @@ ide_application_language_defaults_cb (GObject      *object,
 }
 
 static void
+gtk_changed_dark_mode (GtkSettings    *settings,
+                       GParamSpec     *pspec,
+                       IdeApplication *self)
+{
+  gboolean value;
+
+  g_object_get (settings,
+                "gtk-application-prefer-dark-theme", &value,
+                NULL);
+  if (value != g_settings_get_boolean (self->settings, "night-mode"))
+    g_settings_set_boolean (self->settings, "night-mode", value);
+}
+
+static void
+settings_changed_dark_mode (GSettings      *settings,
+                            const gchar    *key,
+                            IdeApplication *self)
+{
+  GtkSettings *gtk_settings = gtk_settings_get_default ();
+  gboolean value;
+
+  g_object_get (gtk_settings,
+                "gtk-application-prefer-dark-theme", &value,
+                NULL);
+  if (value != g_settings_get_boolean (settings, "night-mode"))
+    g_object_set (gtk_settings,
+                  "gtk-application-prefer-dark-theme", value,
+                  NULL);
+}
+
+static void
 ide_application_register_settings (IdeApplication *self)
 {
   IDE_ENTRY;
@@ -379,10 +410,29 @@ ide_application_register_settings (IdeApplication *self)
   if (g_getenv ("GTK_THEME") == NULL)
     {
       GtkSettings *gtk_settings = gtk_settings_get_default ();
+      gboolean night_mode = g_settings_get_boolean (self->settings, "night-mode");
 
-      g_settings_bind (self->settings, "night-mode",
-                       gtk_settings, "gtk-application-prefer-dark-theme",
-                       G_SETTINGS_BIND_DEFAULT);
+      /*
+       * This tries to avoid using g_settings_bind() because it will always
+       * apply the initial value from settings. We want to avoid that in the
+       * case that night_mode is not set because it doesn't cause an immediate
+       * reloading of the theme.
+       */
+
+      g_signal_connect_object (gtk_settings,
+                               "notify::gtk-application-prefer-dark-theme",
+                               G_CALLBACK (gtk_changed_dark_mode),
+                               self,
+                               0);
+      g_signal_connect_object (self->settings,
+                               "changed::night-mode",
+                               G_CALLBACK (settings_changed_dark_mode),
+                               self,
+                               0);
+      if (night_mode)
+        g_object_set (gtk_settings,
+                      "gtk-application-prefer-dark-theme", TRUE,
+                      NULL);
     }
 
   IDE_EXIT;
