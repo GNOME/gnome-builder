@@ -358,7 +358,10 @@ ide_layout_stack_header_update_css (IdeLayoutStackHeader *self)
         }
     }
 
-  if (!gtk_css_provider_load_from_data (self->css_provider, str->str, str->len, &error))
+  /* Use -1 for length so CSS provider knows the string is NULL terminated
+   * and there-by avoid a string copy.
+   */
+  if (!gtk_css_provider_load_from_data (self->css_provider, str->str, -1, &error))
     g_warning ("Failed to load CSS: '%s': %s", str->str, error->message);
 
   self->update_css_handler = 0;

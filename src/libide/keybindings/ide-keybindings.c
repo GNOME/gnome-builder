@@ -146,10 +146,17 @@ ide_keybindings_reload (IdeKeybindings *self)
     bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
 
     if (error == NULL)
-      gtk_css_provider_load_from_data (self->css_provider,
-                                       g_bytes_get_data (bytes, NULL),
-                                       g_bytes_get_size (bytes),
-                                       &error);
+      {
+        /*
+         * We use -1 for the length so that the CSS provider knows that the
+         * string is \0 terminated. This is guaranteed to us by GResources so
+         * that interned data can be used as C strings.
+         */
+        gtk_css_provider_load_from_data (self->css_provider,
+                                         g_bytes_get_data (bytes, NULL),
+                                         -1,
+                                         &error);
+      }
 
     if (error)
       g_warning ("%s", error->message);
