@@ -118,6 +118,31 @@ ide_editor_sidebar_open_pages_row_activated (IdeEditorSidebar *self,
 }
 
 static void
+ide_editor_sidebar_open_pages_items_changed (IdeEditorSidebar *self,
+                                             guint             position,
+                                             guint             added,
+                                             guint             removed,
+                                             GListModel       *model)
+{
+  g_assert (IDE_IS_EDITOR_SIDEBAR (self));
+  g_assert (G_IS_LIST_MODEL (model));
+
+  /*
+   * Sets the visibility of our page list widgets only when the listmodel has
+   * views within it. We try to be careful about being safe when the widget is
+   * in destruction and an items-changed signal arrives.
+   */
+
+  if (self->open_pages_section != NULL)
+    {
+      gboolean has_items = g_list_model_get_n_items (model) > 0;
+      gboolean show = g_settings_get_boolean (self->settings, "show-open-files");
+
+      gtk_widget_set_visible (GTK_WIDGET (self->open_pages_section), show && has_items);
+    }
+}
+
+static void
 ide_editor_sidebar_destroy (GtkWidget *widget)
 {
   IdeEditorSidebar *self = (IdeEditorSidebar *)widget;
@@ -404,29 +429,6 @@ create_open_page_row (gpointer item,
   gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
 
   return GTK_WIDGET (row);
-}
-
-static void
-ide_editor_sidebar_open_pages_items_changed (IdeEditorSidebar *self,
-                                             guint             position,
-                                             guint             added,
-                                             guint             removed,
-                                             GListModel       *model)
-{
-  g_assert (IDE_IS_EDITOR_SIDEBAR (self));
-  g_assert (G_IS_LIST_MODEL (model));
-
-  /*
-   * Sets the visibility of our page list widgets only when the listmodel has
-   * views within it. We try to be careful about being safe when the widget is
-   * in destruction and an items-changed signal arrives.
-   */
-
-  if (self->open_pages_section != NULL)
-    {
-      gboolean has_items = g_list_model_get_n_items (model) > 0;
-      gtk_widget_set_visible (GTK_WIDGET (self->open_pages_section), has_items);
-    }
 }
 
 /**
