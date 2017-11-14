@@ -41,6 +41,9 @@ struct _IdeEditorSidebar
 {
   IdeLayoutPane      parent_instance;
 
+  GSettings         *settings;
+  GListModel        *open_pages;
+
   /* Template widgets */
   GtkBox            *box;
   GtkStackSwitcher  *stack_switcher;
@@ -143,12 +146,27 @@ ide_editor_sidebar_open_pages_items_changed (IdeEditorSidebar *self,
 }
 
 static void
+ide_editor_sidebar_changed_show_open_files (IdeEditorSidebar *self,
+                                            const gchar      *key,
+                                            GSettings        *settings)
+{
+  g_assert (IDE_IS_EDITOR_SIDEBAR (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  if (self->open_pages != NULL)
+    ide_editor_sidebar_open_pages_items_changed (self, 0, 0, 0, self->open_pages);
+}
+
+static void
 ide_editor_sidebar_destroy (GtkWidget *widget)
 {
   IdeEditorSidebar *self = (IdeEditorSidebar *)widget;
 
   if (self->open_pages_list_box != NULL)
     gtk_list_box_bind_model (self->open_pages_list_box, NULL, NULL, NULL, NULL);
+
+  g_clear_object (&self->open_pages);
+  g_clear_object (&self->settings);
 
   GTK_WIDGET_CLASS (ide_editor_sidebar_parent_class)->destroy (widget);
 }
@@ -185,6 +203,16 @@ ide_editor_sidebar_init (IdeEditorSidebar *self)
                             "notify::visible-child",
                             G_CALLBACK (ide_editor_sidebar_stack_notify_visible_child),
                             self);
+
+  self->settings = g_settings_new ("org.gnome.builder");
+
+  g_signal_connect_object (self->settings,
+                           "changed::show-open-files",
+                           G_CALLBACK (ide_editor_sidebar_changed_show_open_files),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  ide_editor_sidebar_changed_show_open_files (self, NULL, self->settings);
 }
 
 /**
@@ -448,6 +476,8 @@ _ide_editor_sidebar_set_open_pages (IdeEditorSidebar *self,
   g_return_if_fail (!open_pages || G_IS_LIST_MODEL (open_pages));
   g_return_if_fail (!open_pages ||
                     g_list_model_get_item_type (open_pages) == IDE_TYPE_LAYOUT_VIEW);
+
+  g_set_object (&self->open_pages, open_pages);
 
   if (open_pages != NULL)
     g_signal_connect_object (open_pages,
