@@ -45,7 +45,8 @@ ide_editor_view_actions_reload_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
-  dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+  if (self->progress_bar != NULL)
+    dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
 
   if (!(buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
     {
@@ -189,7 +190,8 @@ ide_editor_view_actions_save_cb (GObject      *object,
       ide_layout_view_set_failed (IDE_LAYOUT_VIEW (self), TRUE);
     }
 
-  dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
+  if (self->progress_bar != NULL)
+    dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress_bar));
 }
 
 static void
