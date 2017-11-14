@@ -2528,6 +2528,24 @@ bind "KP_Multiply" { "save-insert-mark" ()
   bind "<ctrl>period" { "action" ("win", "global-search", "") };
 }
 
+@binding-set builder-vim-global-search
+{
+  bind "Escape" { "unfocus" () };
+  bind "Return" { "activate-suggestion" () };
+
+  bind "Up" { "move-suggestion" (-1) };
+  bind "<ctrl>p" { "move-suggestion" (-1) };
+  bind "Page_Up" { "move-suggestion" (-10) };
+  bind "KP_Page_Up" { "move-suggestion" (-10) };
+  bind "Prior" { "move-suggestion" (-10) };
+
+  bind "Down" { "move-suggestion" (1) };
+  bind "<ctrl>n" { "move-suggestion" (1) };
+  bind "Page_Down" { "move-suggestion" (10) };
+  bind "KP_Page_Down" { "move-suggestion" (10) };
+  bind "Next" { "move-suggestion" (10) };
+}
+
 /*
  * Sadly, this will draw from the middle, so it does not result in our
  * cursor being over the actual character, but between two characters.
@@ -2840,4 +2858,8 @@ list {
 
 window.workbench {
   -gtk-key-bindings: builder-vim-workbench;
+}
+
+window.workbench entry.global-search {
+  -gtk-key-bindings: builder-vim-global-search;
 }

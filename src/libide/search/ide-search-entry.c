@@ -220,5 +220,7 @@ ide_search_entry_init (IdeSearchEntry *self)
 {
   self->max_results = DEFAULT_SEARCH_MAX;
 
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "global-search");
+
   g_signal_connect (self, "changed", G_CALLBACK (ide_search_entry_changed), NULL);
 }
