@@ -512,8 +512,6 @@ ide_configuration_manager_init_worker (GTask        *task,
                                        GCancellable *cancellable)
 {
   IdeConfigurationManager *self = source_object;
-  g_autoptr(GFile) settings_file = NULL;
-  g_autoptr(GError) error = NULL;
   IdeContext *context;
 
   g_assert (G_IS_TASK (task));
