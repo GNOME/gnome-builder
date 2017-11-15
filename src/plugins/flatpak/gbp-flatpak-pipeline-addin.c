@@ -20,11 +20,12 @@
 
 #include <glib/gi18n.h>
 
+#include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-download-stage.h"
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-transfer.h"
 #include "gbp-flatpak-util.h"
-#include "gbp-flatpak-configuration.h"
 
 G_DEFINE_QUARK (gb-flatpak-pipeline-error-quark, gb_flatpak_pipeline_error)
 
@@ -115,31 +116,6 @@ check_if_file_exists (IdeBuildStage    *stage,
                  exists ? "yes" : "no");
 
   ide_build_stage_set_completed (stage, exists);
-}
-
-static void
-query_downloads_cb (GbpFlatpakPipelineAddin *self,
-                    IdeBuildPipeline        *pipeline,
-                    GCancellable            *cancellable,
-                    IdeBuildStage           *stage)
-{
-  GNetworkMonitor *monitor;
-
-  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (IDE_IS_BUILD_STAGE (stage));
-
-  /* Ignore downloads if there is no connection */
-  monitor = g_network_monitor_get_default ();
-  if (!g_network_monitor_get_network_available (monitor))
-    {
-      ide_build_stage_log (stage,
-                           IDE_BUILD_LOG_STDOUT,
-                           _("Network is not available, skipping downloads"),
-                           -1);
-      ide_build_stage_set_completed (stage, TRUE);
-    }
 }
 
 static gboolean
@@ -249,54 +225,15 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
                           GError                  **error)
 {
   g_autoptr(IdeBuildStage) stage = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autofree gchar *staging_dir = NULL;
-  g_autofree gchar *manifest_path = NULL;
-  g_autofree gchar *stop_at_option = NULL;
-  IdeConfiguration *config;
-  const gchar *src_dir;
-  const gchar *primary_module;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
-  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
-    return TRUE;
-
-  primary_module = gbp_flatpak_configuration_get_primary_module (GBP_FLATPAK_CONFIGURATION (config));
-  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
-
-  staging_dir = gbp_flatpak_get_staging_dir (config);
-  src_dir = ide_build_pipeline_get_srcdir (pipeline);
-
-  launcher = create_subprocess_launcher ();
-
-  ide_subprocess_launcher_set_cwd (launcher, src_dir);
-
-  ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
-  ide_subprocess_launcher_push_argv (launcher, "--ccache");
-  ide_subprocess_launcher_push_argv (launcher, "--force-clean");
-  ide_subprocess_launcher_push_argv (launcher, "--download-only");
-  ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
-  stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
-  ide_subprocess_launcher_push_argv (launcher, stop_at_option);
-  ide_subprocess_launcher_push_argv (launcher, staging_dir);
-  ide_subprocess_launcher_push_argv (launcher, manifest_path);
-
-  stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+  stage = g_object_new (GBP_TYPE_FLATPAK_DOWNLOAD_STAGE,
                         "context", context,
-                        "launcher", launcher,
                         NULL);
-
-  g_signal_connect_object (stage,
-                           "query",
-                           G_CALLBACK (query_downloads_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
   stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_DOWNLOADS, 0, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 

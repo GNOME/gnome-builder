@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-download-stage.h"
 #include "gbp-flatpak-workbench-addin.h"
 
 struct _GbpFlatpakWorkbenchAddin
@@ -115,21 +116,48 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 }
 
 static void
+find_download_stage_cb (gpointer data,
+                        gpointer user_data)
+{
+  GbpFlatpakDownloadStage **stage = user_data;
+
+  g_assert (IDE_IS_BUILD_STAGE (data));
+  g_assert (stage != NULL);
+
+  if (GBP_IS_FLATPAK_DOWNLOAD_STAGE (data))
+    *stage = data;
+}
+
+static void
 gbp_flatpak_workbench_addin_update_dependencies (GSimpleAction *action,
                                                  GVariant      *param,
                                                  gpointer       user_data)
 {
   GbpFlatpakWorkbenchAddin *self = user_data;
-  IdeBuildManager *manager;
+  GbpFlatpakDownloadStage *stage = NULL;
   IdeBuildPipeline *pipeline;
+  IdeBuildManager *manager;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
 
   manager = ide_context_get_build_manager (ide_workbench_get_context (self->workbench));
   pipeline = ide_build_manager_get_pipeline (manager);
+
+  /* Find the downloads stage and tell it to download updates one time */
+  ide_build_pipeline_foreach_stage (pipeline, find_download_stage_cb, &stage);
+  if (stage != NULL)
+    gbp_flatpak_download_stage_force_update (stage);
+
+  /* Ensure downloads and everything past it is invalidated */
   ide_build_pipeline_invalidate_phase (pipeline, IDE_BUILD_PHASE_DOWNLOADS);
-  ide_build_manager_execute_async (manager, IDE_BUILD_PHASE_DOWNLOADS, NULL, NULL, NULL);
+
+  /* Start building all the way up to the project configure so that
+   * the user knows if the updates broke their configuration or anything.
+   */
+  ide_build_manager_rebuild_async (manager,
+                                   IDE_BUILD_PHASE_CONFIGURE,
+                                   NULL, NULL, NULL);
 }
 
 static void
