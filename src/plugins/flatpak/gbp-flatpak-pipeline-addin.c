@@ -280,6 +280,7 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, "--ccache");
   ide_subprocess_launcher_push_argv (launcher, "--force-clean");
   ide_subprocess_launcher_push_argv (launcher, "--download-only");
+  ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
   stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
   ide_subprocess_launcher_push_argv (launcher, stop_at_option);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
