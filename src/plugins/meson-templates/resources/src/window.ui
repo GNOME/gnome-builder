@@ -5,15 +5,15 @@
     <property name="default-height">300</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
-        <property name="visible">true</property>
-        <property name="show-close-button">true</property>
+        <property name="visible">True</property>
+        <property name="show-close-button">True</property>
         <property name="title">Hello, World!</property>
       </object>
     </child>
     <child>
       <object class="GtkLabel" id="label">
         <property name="label">Hello, World!</property>
-        <property name="visible">true</property>
+        <property name="visible">True</property>
         <attributes>
           <attribute name="weight" value="bold"/>
           <attribute name="scale" value="2"/>
