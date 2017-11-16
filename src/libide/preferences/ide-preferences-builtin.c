@@ -98,8 +98,9 @@ ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "appearance", _("Appearance"), 0);
 
   dzl_preferences_add_list_group (preferences, "appearance", "basic", _("Themes"), GTK_SELECTION_NONE, 0);
-  dark_mode = dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Theme"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
-  dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 0);
+  dark_mode = dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "night-mode", NULL, NULL, _("Dark Mode"), _("Whether Builder should use a dark theme"), _("dark theme"), 0);
+  dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder", "follow-night-light", NULL, NULL, _("Night Light"), _("Automatically enable dark mode at night"), _("follow night light"), 5);
+  dzl_preferences_add_switch (preferences, "appearance", "basic", "org.gnome.builder.editor", "show-grid-lines", NULL, NULL, _("Grid Pattern"), _("Display a grid pattern underneath source code"), NULL, 10);
 
   dzl_preferences_add_list_group (preferences, "appearance", "font", _("Font"), GTK_SELECTION_NONE, 10);
   dzl_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);

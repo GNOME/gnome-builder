@@ -63,6 +63,8 @@ struct _IdeApplication
   GPtrArray           *reapers;
 
   GSettings           *settings;
+
+  GDBusProxy          *color_proxy;
 };
 
 void     ide_application_discover_plugins           (IdeApplication        *self) G_GNUC_INTERNAL;
@@ -83,6 +85,7 @@ void     ide_application_open_async                 (IdeApplication        *self
 gboolean ide_application_open_finish                (IdeApplication        *self,
                                                      GAsyncResult          *reuslt,
                                                      GError               **error);
+void     _ide_application_init_color                (IdeApplication        *self);
 void     _ide_application_init_shortcuts            (IdeApplication        *self);
 void     _ide_application_set_mode                  (IdeApplication        *self,
                                                      IdeApplicationMode     mode);

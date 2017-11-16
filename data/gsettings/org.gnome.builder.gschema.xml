@@ -20,6 +20,11 @@
       <summary>Night Mode</summary>
       <description>Prefer dark application chrome.</description>
     </key>
+    <key name="follow-night-light" type="b">
+      <default>false</default>
+      <summary>Follow system night light</summary>
+      <description>Use GNOME night light setting to activate night-mode.</description>
+    </key>
     <key name="projects-directory" type="s">
       <default>"Projects"</default>
       <summary>Projects directory</summary>

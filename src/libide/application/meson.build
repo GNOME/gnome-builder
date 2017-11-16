@@ -15,6 +15,7 @@ application_sources = [
 application_private_sources = [
   'ide-application-actions.c',
   'ide-application-actions.h',
+  'ide-application-color.c',
   'ide-application-command-line.c',
   'ide-application-plugins.c',
   'ide-application-private.h',

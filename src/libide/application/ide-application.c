@@ -417,6 +417,7 @@ ide_application_startup (GApplication *application)
       ide_application_register_keybindings (self);
       ide_application_actions_init (self);
       _ide_application_init_shortcuts (self);
+      _ide_application_init_color (self);
 
       modeline_parser_init ();
     }
@@ -520,6 +521,7 @@ ide_application_finalize (GObject *object)
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
   g_clear_object (&self->settings);
+  g_clear_object (&self->color_proxy);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }
