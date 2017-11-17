@@ -173,6 +173,7 @@ src/plugins/jedi/jedi_plugin.py
 src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson-templates/meson_templates.py
 src/plugins/mingw/ide-mingw-device-provider.c
+src/plugins/newcomers/gbp-newcomers-section.ui
 src/plugins/notification/ide-notification-addin.c
 src/plugins/project-tree/gb-new-file-popover.c
 src/plugins/project-tree/gb-new-file-popover.ui

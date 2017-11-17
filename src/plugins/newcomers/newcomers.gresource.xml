@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>newcomers.plugin</file>
+  </gresource>
+
+  <gresource prefix="/org/gnome/builder/plugins/newcomers-plugin">
+    <file>gbp-newcomers-project.ui</file>
+    <file>gbp-newcomers-section.ui</file>
+  </gresource>
+
+  <!-- Icons used by the greeter for newcomer projects -->
+  <gresource prefix="/org/gnome/builder/icons">
+    <file alias="256x256/apps/org.gnome.Maps.png">icons/org.gnome.Maps.png</file>
+    <file alias="256x256/apps/org.gnome.Music.png">icons/org.gnome.Music.png</file>
+    <file alias="256x256/apps/org.gnome.Photos.png">icons/org.gnome.Photos.png</file>
+    <file alias="512x512/apps/org.gnome.Calendar.png">icons/org.gnome.Calendar.png</file>
+    <file alias="512x512/apps/org.gnome.Games.png">icons/org.gnome.Games.png</file>
+    <file alias="512x512/apps/org.gnome.Nautilus.png">icons/org.gnome.Nautilus.png</file>
+    <file alias="512x512/apps/org.gnome.Polari.png">icons/org.gnome.Polari.png</file>
+    <file alias="512x512/apps/org.gnome.Todo.png">icons/org.gnome.Todo.png</file>
+  </gresource>
+
+</gresources>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpNewcomersSection" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Newcomer Projects</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFlowBox" id="flowbox">
+            <property name="visible">true</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="selection-mode">browse</property>
+            <property name="min-children-per-line">3</property>
+            <property name="max-children-per-line">5</property>
+            <signal name="child-activated" handler="gbp_newcomers_section_child_activated" swapped="true" object="GbpNewcomersSection"/>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Polari</property>
+                <property name="icon-name">org.gnome.Polari</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/polari.git</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Games</property>
+                <property name="icon-name">org.gnome.Games</property>
+                <property name="uri">https://git.gnome.org/browse/gnome-games</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Maps</property>
+                <property name="icon-name">org.gnome.Maps</property>
+                <property name="uri">https://git.gnome.org/browse/gnome-maps</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Todo</property>
+                <property name="icon-name">org.gnome.Todo</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-todo.git</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Music</property>
+                <property name="icon-name">org.gnome.Music</property>
+                <property name="uri">https://git.gnome.org/browse/gnome-music</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Nautilus</property>
+                <property name="icon-name">org.gnome.Nautilus</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/nautilus.git</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Photos</property>
+                <property name="icon-name">org.gnome.Photos</property>
+                <property name="uri">https://git.gnome.org/browse/gnome-photos</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Calendar</property>
+                <property name="icon-name">org.gnome.Calendar</property>
+                <property name="uri">https://git.gnome.org/browse/gnome-calendar.git</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

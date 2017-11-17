@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpNewcomersProject" parent="GtkFlowBoxChild">
+    <property name="border-width">12</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="expand">true</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkImage" id="icon">
+            <property name="expand">true</property>
+            <property name="pixel-size">96</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
