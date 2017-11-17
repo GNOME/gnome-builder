@@ -49,6 +49,7 @@ struct _IdeProjectInfo
   gchar      *name;
   gchar      *description;
   gchar     **languages;
+  IdeVcsUri  *vcs_uri;
 
   gint        priority;
 
@@ -69,6 +70,7 @@ enum {
   PROP_LAST_MODIFIED_AT,
   PROP_NAME,
   PROP_PRIORITY,
+  PROP_VCS_URI,
   LAST_PROP
 };
 
@@ -383,6 +385,10 @@ ide_project_info_get_property (GObject    *object,
       g_value_set_int (value, ide_project_info_get_priority (self));
       break;
 
+    case PROP_VCS_URI:
+      g_value_set_boxed (value, ide_project_info_get_vcs_uri (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -436,6 +442,10 @@ ide_project_info_set_property (GObject      *object,
 
     case PROP_PRIORITY:
       ide_project_info_set_priority (self, g_value_get_int (value));
+      break;
+
+    case PROP_VCS_URI:
+      ide_project_info_set_vcs_uri (self, g_value_get_boxed (value));
       break;
 
     default:
@@ -524,6 +534,13 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_VCS_URI] =
+    g_param_spec_boxed ("vcs-uri",
+                        "Vcs Uri",
+                        "The vcs uri of the project, in case it is not local",
+                        IDE_TYPE_VCS_URI,
+                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
@@ -570,4 +587,38 @@ ide_project_info_compare (IdeProjectInfo *info1,
     return -1;
   else
     return strcasecmp (name1, name2);
+}
+
+/**
+ * ide_project_info_get_vcs_uri:
+ * @self: an #IdeProjectInfo
+ *
+ * Gets the #IdeVcsUri for the project info. This should be set with the
+ * remote URI for the version control system. It can be used to clone the
+ * project when activated from the greeter.
+ *
+ * Returns: (transfer none) (nullable): a #IdeVcsUri or %NULL
+ *
+ * Since: 3.28
+ */
+IdeVcsUri *
+ide_project_info_get_vcs_uri (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->vcs_uri;
+}
+
+void
+ide_project_info_set_vcs_uri (IdeProjectInfo *self,
+                              IdeVcsUri      *vcs_uri)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  if (self->vcs_uri != vcs_uri)
+    {
+      g_clear_pointer (&self->vcs_uri, ide_vcs_uri_unref);
+      self->vcs_uri = ide_vcs_uri_ref (vcs_uri);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VCS_URI]);
+    }
 }

@@ -127,6 +127,7 @@ G_BEGIN_DECLS
 #include "projects/ide-project-edit.h"
 #include "projects/ide-project-file.h"
 #include "projects/ide-project-files.h"
+#include "projects/ide-project-info.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
 #include "projects/ide-recent-projects.h"
