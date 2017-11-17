@@ -29,7 +29,7 @@
 #include "genesis/ide-genesis-addin.h"
 #include "greeter/ide-greeter-perspective.h"
 #include "greeter/ide-greeter-project-row.h"
-#include "greeter/ide-newcomer-project.h"
+#include "greeter/ide-greeter-section.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench-private.h"
@@ -46,6 +46,8 @@ struct _IdeGreeterPerspective
 
   GBinding             *ready_binding;
   GCancellable         *cancellable;
+
+  PeasExtensionSet     *sections;
 
   GtkStack             *stack;
   GtkStack             *top_stack;
@@ -67,13 +69,22 @@ struct _IdeGreeterPerspective
   DzlStateMachine      *state_machine;
   GtkScrolledWindow    *scrolled_window;
   DzlPriorityBox       *genesis_buttons;
-  GtkFlowBox           *newcomer_projects;
+  DzlPriorityBox       *sections_container;
 
   gint                  selected_count;
 };
 
-static void ide_perspective_iface_init (IdePerspectiveInterface *iface);
-static void ide_greeter_perspective_genesis_continue (IdeGreeterPerspective *self);
+typedef struct
+{
+  IdeGreeterPerspective *self;
+  IdeVcsUri             *vcs_uri;
+  gboolean               handled;
+} LoadProject;
+
+static void     ide_perspective_iface_init               (IdePerspectiveInterface *iface);
+static void     ide_greeter_perspective_genesis_continue (IdeGreeterPerspective   *self);
+static gboolean ide_greeter_perspective_load_project     (IdeGreeterPerspective   *self,
+                                                          IdeProjectInfo          *project_info);
 
 G_DEFINE_TYPE_EXTENDED (IdeGreeterPerspective, ide_greeter_perspective, GTK_TYPE_BIN, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE,
@@ -177,6 +188,23 @@ ide_greeter_perspective_apply_filter (IdeGreeterPerspective *self,
 }
 
 static void
+ide_greeter_perspective_filter_sections (PeasExtensionSet *set,
+                                         PeasPluginInfo   *plugin_info,
+                                         PeasExtension    *exten,
+                                         gpointer          user_data)
+{
+  IdeGreeterPerspective *self = user_data;
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GREETER_SECTION (section));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  ide_greeter_section_filter (section, self->pattern_spec);
+}
+
+static void
 ide_greeter_perspective_apply_filter_all (IdeGreeterPerspective *self)
 {
   const gchar *text;
@@ -190,6 +218,11 @@ ide_greeter_perspective_apply_filter_all (IdeGreeterPerspective *self)
   ide_greeter_perspective_apply_filter (self,
                                         self->my_projects_list_box,
                                         GTK_WIDGET (self->my_projects_container));
+
+  if (self->sections != NULL)
+    peas_extension_set_foreach (self->sections,
+                                ide_greeter_perspective_filter_sections,
+                                self);
 }
 
 static void
@@ -454,62 +487,24 @@ ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
                                         GtkListBox            *list_box)
 {
   IdeProjectInfo *project_info;
-  IdeWorkbench *workbench = NULL;
-  GFile *project_file;
-  GList *list;
-  GtkWindow *window;
-  IdeContext *context;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (IDE_IS_GREETER_PROJECT_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
-  if (ide_str_equal0 (dzl_state_machine_get_state (self->state_machine), "selection"))
+  if (dzl_state_machine_is_state (self->state_machine, "selection"))
     {
       gboolean selected = FALSE;
 
       g_object_get (row, "selected", &selected, NULL);
       g_object_set (row, "selected", !selected, NULL);
+
       return;
     }
 
   project_info = ide_greeter_project_row_get_project_info (row);
-  project_file = ide_project_info_get_file (project_info);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
-  gtk_widget_set_sensitive (GTK_WIDGET (self->titlebar), FALSE);
-
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-
-  list = gtk_application_get_windows (gtk_window_get_application (GTK_WINDOW (workbench)));
-
-  for (; list != NULL; list = list->next)
-    {
-      window = list->data;
-      context = ide_workbench_get_context (IDE_WORKBENCH (window));
-
-      if (context != NULL)
-        {
-          if (g_file_equal (ide_context_get_project_file (context), project_file))
-            {
-              gtk_window_present (window);
-              gtk_window_close (GTK_WINDOW (workbench));
-              workbench = NULL;
-              break;
-            }
-        }
-    }
-
-  if(workbench != NULL)
-    {
-      ide_workbench_open_project_async (workbench,
-                                        project_file,
-                                        NULL,
-                                        ide_greeter_perspective_open_project_cb,
-                                        g_object_ref (self));
-    }
-
-  ide_project_info_set_is_recent (project_info, TRUE);
+  ide_greeter_perspective_load_project (self, project_info);
 }
 
 static gboolean
@@ -1069,43 +1064,6 @@ ide_greeter_perspective_info_bar_response (IdeGreeterPerspective *self,
   gtk_revealer_set_reveal_child (self->info_bar_revealer, FALSE);
 }
 
-static void
-ide_greeter_perspective_maybe_clone (PeasExtensionSet *set,
-                                     PeasPluginInfo   *plugin_info,
-                                     PeasExtension    *exten,
-                                     gpointer          user_data)
-{
-  IdeGenesisAddin *addin = (IdeGenesisAddin *)exten;
-  struct {
-    IdeGreeterPerspective *self;
-    IdeVcsUri *uri;
-    gboolean found;
-  } *lookup = user_data;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_GENESIS_ADDIN (addin));
-  g_assert (lookup != NULL);
-
-  if (lookup->found)
-    return;
-
-  lookup->found = ide_genesis_addin_apply_uri (addin, lookup->uri);
-
-  if (lookup->found)
-    {
-      GtkWidget *child = ide_genesis_addin_get_widget (addin);
-
-      if (child != NULL)
-        {
-          gtk_stack_set_visible_child (lookup->self->genesis_stack, child);
-          dzl_state_machine_set_state (lookup->self->state_machine, "genesis");
-          gtk_widget_hide (GTK_WIDGET (lookup->self->genesis_continue_button));
-          ide_greeter_perspective_genesis_continue (lookup->self);
-        }
-    }
-}
-
 static gchar *
 get_project_directory (const gchar *name)
 {
@@ -1122,130 +1080,222 @@ get_project_directory (const gchar *name)
 }
 
 static void
-ide_greeter_perspective_open_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
+ide_greeter_perspective_load_project_cb (PeasExtensionSet *set,
+                                         PeasPluginInfo   *plugin_info,
+                                         PeasExtension    *exten,
+                                         gpointer          user_data)
 {
-  IdeWorkbench *workbench = (IdeWorkbench *)object;
-  g_autoptr(IdeGreeterPerspective) self = user_data;
+  IdeGenesisAddin *addin = (IdeGenesisAddin *)exten;
+  LoadProject *load = user_data;
 
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GENESIS_ADDIN (addin));
+  g_assert (load != NULL);
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (load->self));
+  g_assert (load->vcs_uri != NULL);
 
-  if (!ide_workbench_open_project_finish (workbench, result, NULL))
-    gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
-}
+  if (load->handled)
+    return;
 
-static void
-ide_greeter_perspective_do_open (IdeGreeterPerspective *self,
-                                 const gchar           *path)
-{
-  g_autoptr(GFile) file = NULL;
-  IdeWorkbench *workbench;
+  load->handled = ide_genesis_addin_apply_uri (addin, load->vcs_uri);
 
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (path != NULL);
+  if (load->handled)
+    {
+      GtkWidget *child = ide_genesis_addin_get_widget (addin);
 
-  file = g_file_new_for_path (path);
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-
-  gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
-
-  ide_workbench_open_project_async (workbench,
-                                    file,
-                                    NULL,
-                                    ide_greeter_perspective_open_cb,
-                                    g_object_ref (self));
+      if (child != NULL)
+        {
+          gtk_stack_set_visible_child (load->self->genesis_stack, child);
+          dzl_state_machine_set_state (load->self->state_machine, "genesis");
+          gtk_widget_hide (GTK_WIDGET (load->self->genesis_continue_button));
+          ide_greeter_perspective_genesis_continue (load->self);
+        }
+    }
 }
 
 static gboolean
 ide_greeter_perspective_load_project (IdeGreeterPerspective *self,
-                                      IdeNewcomerProject    *project)
+                                      IdeProjectInfo        *project_info)
 {
-  g_autofree gchar *dir = NULL;
-  g_autofree gchar *maybe_project = NULL;
-  g_autofree gchar *relocated = NULL;
-  IdeRecentProjects *projects;
-  const gchar *path;
-  const gchar *str;
-  IdeVcsUri *uri;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (IDE_IS_NEWCOMER_PROJECT (project));
-
-  projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
-  str = ide_newcomer_project_get_uri (project);
-  uri = ide_vcs_uri_new (str);
-  path = ide_vcs_uri_get_path (uri);
-  dir = g_path_get_basename (path);
-
-  if (g_str_has_suffix (dir, ".git"))
-    dir[strlen (dir) - 4] = '\0';
-
-  maybe_project = get_project_directory (dir);
-  relocated = ide_recent_projects_find_by_directory (projects, maybe_project);
-
-  if (relocated != NULL)
-    {
-      ide_greeter_perspective_do_open (self, relocated);
-      return TRUE;
-    }
-
-  /* If the test exists, we probably should just open that
-   * instead of trying to reclone, which would fail anyway since
-   * this directory already exists.
-   */
-  if (g_file_test (maybe_project, G_FILE_TEST_IS_DIR))
-    {
-      ide_greeter_perspective_do_open (self, maybe_project);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-ide_greeter_perspective__newcomer_activated (IdeGreeterPerspective *self,
-                                             GtkFlowBoxChild       *child,
-                                             GtkFlowBox            *flow_box)
-{
-  g_autoptr(IdeVcsUri) vcs_uri = NULL;
-  IdeNewcomerProject *project;
-  const gchar *uri;
-  struct {
-    IdeGreeterPerspective *self;
-    IdeVcsUri *uri;
-    gboolean found;
-  } lookup;
+  IdeWorkbench *workbench;
+  IdeVcsUri *vcs_uri;
+  GFile *project_file;
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_return_if_fail (GTK_IS_FLOW_BOX_CHILD (child));
-  g_return_if_fail (GTK_IS_FLOW_BOX (flow_box));
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
 
-  project = IDE_NEWCOMER_PROJECT (gtk_bin_get_child (GTK_BIN (child)));
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
 
-  /* Try to reload the project if they've already opened
-   * this one before. Look at our recent projects and if not
-   * there, the Projects directory for a matching project
-   * directory name from the uri.
+  /* Mark this project info as having been selected */
+  ide_project_info_set_is_recent (project_info, TRUE);
+
+  /* If the project info has a project file, open that. */
+  if (NULL != (project_file = ide_project_info_get_file (project_info)))
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+      gtk_widget_set_sensitive (GTK_WIDGET (self->titlebar), FALSE);
+      ide_workbench_open_project_async (workbench,
+                                        project_file,
+                                        NULL,
+                                        ide_greeter_perspective_open_project_cb,
+                                        g_object_ref (self));
+      IDE_RETURN (TRUE);
+    }
+
+  /*
+   * If this project info has a uri, we might be able to find it already
+   * checked out on the system.
    */
-  if (ide_greeter_perspective_load_project (self, project))
-    IDE_EXIT;
+  if (NULL != (vcs_uri = ide_project_info_get_vcs_uri (project_info)))
+    {
+      LoadProject load = { 0 };
+      const gchar *path;
 
-  uri = ide_newcomer_project_get_uri (project);
-  vcs_uri = ide_vcs_uri_new (uri);
+      if (NULL != (path = ide_vcs_uri_get_path (vcs_uri)))
+        {
+          IdeApplication *app = IDE_APPLICATION_DEFAULT;
+          IdeRecentProjects *projects = ide_application_get_recent_projects (app);
+          g_autofree gchar *dir = NULL;
+          g_autofree gchar *maybe_project = NULL;
+          g_autofree gchar *relocated = NULL;
+          const gchar *previous = NULL;
 
-  IDE_TRACE_MSG ("Looking for genesis addin to handle %s", uri);
+          dir = g_path_get_basename (path);
 
-  lookup.self = self;
-  lookup.uri = vcs_uri;
-  lookup.found = FALSE;
+          /* XXX: Would be nice if this could be abstracted */
+          if (g_str_has_suffix (dir, ".git"))
+            dir[strlen (dir) - 4] = '\0';
 
-  peas_extension_set_foreach (self->genesis_set,
-                              ide_greeter_perspective_maybe_clone,
-                              &lookup);
+          maybe_project = get_project_directory (dir);
+
+          /*
+           * We might find the project already cloned (using our simple check
+           * for the directory name), or possibly from our recent projects.
+           */
+          if (g_file_test (maybe_project, G_FILE_TEST_IS_DIR))
+            previous = maybe_project;
+          else
+            previous = relocated = ide_recent_projects_find_by_directory (projects, maybe_project);
+
+          if (previous != NULL)
+            {
+              g_autoptr(GFile) file = g_file_new_for_path (previous);
+
+              gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+              gtk_widget_set_sensitive (GTK_WIDGET (self->titlebar), FALSE);
+              ide_workbench_open_project_async (workbench,
+                                                file,
+                                                NULL,
+                                                ide_greeter_perspective_open_project_cb,
+                                                g_object_ref (self));
+              IDE_RETURN (TRUE);
+            }
+        }
+
+      /*
+       * Okay, we didn't handle this, see if one of the genesis plugins
+       * knows how to handle the given vcs uri.
+       */
+
+      load.self = self;
+      load.vcs_uri = vcs_uri;
+      load.handled = FALSE;
+
+      peas_extension_set_foreach (self->genesis_set,
+                                  ide_greeter_perspective_load_project_cb,
+                                  &load);
+
+      if (load.handled)
+        IDE_RETURN (TRUE);
+    }
+
+  /*
+   * TODO: Failed to locate something that could open this project.
+   *       Notify the user of the error and continue.
+   */
+
+  IDE_RETURN (FALSE);
+}
+
+static void
+ide_greeter_perspective_project_activated (IdeGreeterPerspective *self,
+                                           IdeProjectInfo        *project_info,
+                                           IdeGreeterSection     *section)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
+  g_assert (IDE_IS_GREETER_SECTION (section));
+
+  ide_greeter_perspective_load_project (self, project_info);
+
+  IDE_EXIT;
+}
+
+static void
+ide_greeter_perspective_section_added (PeasExtensionSet *set,
+                                       PeasPluginInfo   *plugin_info,
+                                       PeasExtension    *exten,
+                                       gpointer          user_data)
+{
+  IdeGreeterPerspective *self = user_data;
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+  gint priority;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (PEAS_IS_EXTENSION_SET (set));
+  g_return_if_fail (plugin_info != NULL);
+  g_return_if_fail (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_return_if_fail (IDE_IS_GREETER_SECTION (section));
+
+  /* Take the floating GtkWidget reference */
+  if (g_object_is_floating (section))
+    g_object_ref_sink (section);
+
+  g_signal_connect_object (section,
+                           "project-activated",
+                           G_CALLBACK (ide_greeter_perspective_project_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Add the section to our box with priority */
+  priority = ide_greeter_section_get_priority (section);
+  gtk_container_add_with_properties (GTK_CONTAINER (self->sections_container),
+                                     GTK_WIDGET (section),
+                                     "priority", priority,
+                                     NULL);
+  gtk_widget_show (GTK_WIDGET (section));
+
+  IDE_EXIT;
+}
+
+static void
+ide_greeter_perspective_section_removed (PeasExtensionSet *set,
+                                         PeasPluginInfo   *plugin_info,
+                                         PeasExtension    *exten,
+                                         gpointer          user_data)
+{
+  IdeGreeterPerspective *self = user_data;
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (PEAS_IS_EXTENSION_SET (set));
+  g_return_if_fail (plugin_info != NULL);
+  g_return_if_fail (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_return_if_fail (IDE_IS_GREETER_SECTION (section));
+
+  g_signal_handlers_disconnect_by_func (section,
+                                        G_CALLBACK (ide_greeter_perspective_project_activated),
+                                        self);
+
+  gtk_container_remove (GTK_CONTAINER (self->sections_container),
+                        GTK_WIDGET (section));
 
   IDE_EXIT;
 }
@@ -1262,6 +1312,21 @@ ide_greeter_perspective_constructed (GObject *object)
   ide_greeter_perspective_set_recent_projects (self, recent_projects);
 
   ide_greeter_perspective_load_genesis_addins (self);
+
+  self->sections = peas_extension_set_new (peas_engine_get_default (),
+                                           IDE_TYPE_GREETER_SECTION,
+                                           NULL);
+  g_signal_connect (self->sections,
+                    "extension-added",
+                    G_CALLBACK (ide_greeter_perspective_section_added),
+                    self);
+  g_signal_connect (self->sections,
+                    "extension-removed",
+                    G_CALLBACK (ide_greeter_perspective_section_removed),
+                    self);
+  peas_extension_set_foreach (self->sections,
+                              ide_greeter_perspective_section_added,
+                              self);
 }
 
 static void
@@ -1271,6 +1336,8 @@ ide_greeter_perspective_destroy (GtkWidget *widget)
 
   if (self->titlebar != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->titlebar));
+
+  g_clear_object (&self->sections);
 
   GTK_WIDGET_CLASS (ide_greeter_perspective_parent_class)->destroy (widget);
 }
@@ -1362,18 +1429,16 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_list_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, newcomer_projects);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, open_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, remove_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, sections_container);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, state_machine);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, titlebar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, top_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, viewport);
-
-  g_type_ensure (IDE_TYPE_NEWCOMER_PROJECT);
 }
 
 static const GActionEntry actions[] = {
@@ -1421,12 +1486,6 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   g_signal_connect_object (self->my_projects_list_box,
                            "keynav-failed",
                            G_CALLBACK (ide_greeter_perspective__keynav_failed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->newcomer_projects,
-                           "child-activated",
-                           G_CALLBACK (ide_greeter_perspective__newcomer_activated),
                            self,
                            G_CONNECT_SWAPPED);
 

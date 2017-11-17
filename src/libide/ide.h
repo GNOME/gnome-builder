@@ -101,6 +101,7 @@ G_BEGIN_DECLS
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
 #include "genesis/ide-genesis-addin.h"
+#include "greeter/ide-greeter-section.h"
 #include "highlighting/ide-highlight-engine.h"
 #include "highlighting/ide-highlight-index.h"
 #include "highlighting/ide-highlighter.h"
