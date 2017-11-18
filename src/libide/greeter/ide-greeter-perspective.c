@@ -1068,6 +1068,7 @@ delete_selected_rows (GSimpleAction *simple,
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
   peas_extension_set_foreach (self->sections, delete_selected_rows_cb, NULL);
+  ide_greeter_perspective_apply_filter_all (self);
   dzl_state_machine_set_state (self->state_machine, "browse");
 
   IDE_EXIT;
