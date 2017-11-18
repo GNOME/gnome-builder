@@ -185,6 +185,7 @@ src/plugins/project-tree/gb-rename-file-popover.ui
 src/plugins/project-tree/gtk/menus.ui
 src/plugins/python-pack/ide-python-format-provider.c
 src/plugins/quick-highlight/gbp-quick-highlight-preferences.c
+src/plugins/recent/gbp-recent-section.ui
 src/plugins/retab/gtk/menus.ui
 src/plugins/rustup/rustup_plugin.py
 src/plugins/spellcheck/gbp-spell-editor-addin.c
