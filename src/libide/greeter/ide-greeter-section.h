@@ -42,6 +42,7 @@ struct _IdeGreeterSectionInterface
   gboolean (*activate_first)     (IdeGreeterSection *self);
   void     (*set_selection_mode) (IdeGreeterSection *self,
                                   gboolean           selection_mode);
+  void     (*delete_selected)    (IdeGreeterSection *self);
 };
 
 IDE_AVAILABLE_IN_3_28
@@ -57,5 +58,7 @@ gboolean ide_greeter_section_activate_first         (IdeGreeterSection *self);
 IDE_AVAILABLE_IN_3_28
 void     ide_greeter_section_set_selection_mode     (IdeGreeterSection *self,
                                                      gboolean           selection_mode);
+IDE_AVAILABLE_IN_3_28
+void     ide_greeter_section_delete_selected        (IdeGreeterSection *self);
 
 G_END_DECLS

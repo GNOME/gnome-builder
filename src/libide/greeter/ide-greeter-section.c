@@ -150,3 +150,12 @@ ide_greeter_section_set_selection_mode (IdeGreeterSection *self,
   if (IDE_GREETER_SECTION_GET_IFACE (self)->set_selection_mode)
     IDE_GREETER_SECTION_GET_IFACE (self)->set_selection_mode (self, selection_mode);
 }
+
+void
+ide_greeter_section_delete_selected (IdeGreeterSection *self)
+{
+  g_assert (IDE_IS_GREETER_SECTION (self));
+
+  if (IDE_GREETER_SECTION_GET_IFACE (self)->delete_selected)
+    IDE_GREETER_SECTION_GET_IFACE (self)->delete_selected (self);
+}

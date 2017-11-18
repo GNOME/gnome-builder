@@ -196,12 +196,54 @@ gbp_recent_section_set_selection_mode (IdeGreeterSection *section,
 }
 
 static void
+gbp_recent_section_delete_selected_cb (GtkWidget *widget,
+                                       gpointer   user_data)
+{
+  GbpRecentProjectRow *row = (GbpRecentProjectRow *)widget;
+  GList **list = user_data;
+  gboolean selected = FALSE;
+
+  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+  g_assert (list != NULL);
+
+  g_object_get (row, "selected", &selected, NULL);
+
+  if (selected)
+    {
+      IdeProjectInfo *project_info;
+
+      project_info = gbp_recent_project_row_get_project_info (row);
+      *list = g_list_prepend (*list, g_object_ref (project_info));
+      gtk_widget_destroy (GTK_WIDGET (row));
+    }
+}
+
+static void
+gbp_recent_section_delete_selected (IdeGreeterSection *section)
+{
+  GbpRecentSection *self = (GbpRecentSection *)section;
+  IdeRecentProjects *projects;
+  GList *infos = NULL;
+
+  g_assert (GBP_IS_RECENT_SECTION (self));
+
+  gtk_container_foreach (GTK_CONTAINER (self->listbox),
+                         gbp_recent_section_delete_selected_cb,
+                         &infos);
+
+  projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
+  ide_recent_projects_remove (projects, infos);
+  g_list_free_full (infos, g_object_unref);
+}
+
+static void
 greeter_section_iface_init (IdeGreeterSectionInterface *iface)
 {
   iface->get_priority = gbp_recent_section_get_priority;
   iface->filter = gbp_recent_section_filter;
   iface->activate_first = gbp_recent_section_activate_first;
   iface->set_selection_mode = gbp_recent_section_set_selection_mode;
+  iface->delete_selected = gbp_recent_section_delete_selected;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,

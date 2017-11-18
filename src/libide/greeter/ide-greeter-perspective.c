@@ -1042,6 +1042,21 @@ ide_greeter_perspective_constructed (GObject *object)
 }
 
 static void
+delete_selected_rows_cb (PeasExtensionSet *set,
+                         PeasPluginInfo   *plugin_info,
+                         PeasExtension    *exten,
+                         gpointer          user_data)
+{
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GREETER_SECTION (section));
+
+  ide_greeter_section_delete_selected (section);
+}
+
+static void
 delete_selected_rows (GSimpleAction *simple,
                       GVariant      *param,
                       gpointer       user_data)
@@ -1051,6 +1066,9 @@ delete_selected_rows (GSimpleAction *simple,
   IDE_ENTRY;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  peas_extension_set_foreach (self->sections, delete_selected_rows_cb, NULL);
+  dzl_state_machine_set_state (self->state_machine, "browse");
 
   IDE_EXIT;
 }
