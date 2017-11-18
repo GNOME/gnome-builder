@@ -29,6 +29,9 @@ struct _GbpNewcomersSection
   GtkFlowBox *flowbox;
 };
 
+static void gbp_newcomers_section_child_activated (GbpNewcomersSection *self,
+                                                   GbpNewcomersProject *project,
+                                                   GtkFlowBox          *flowbox);
 static gint
 gbp_newcomers_section_get_priority (IdeGreeterSection *section)
 {
@@ -39,33 +42,90 @@ static void
 gbp_newcomers_section_filter_child (GtkWidget *child,
                                     gpointer   user_data)
 {
-  DzlPatternSpec *spec = user_data;
-  gboolean visible = TRUE;
+  struct {
+    DzlPatternSpec *spec;
+    gboolean found;
+  } *filter = user_data;
+  gboolean match = TRUE;
 
   g_assert (GBP_IS_NEWCOMERS_PROJECT (child));
+  g_assert (user_data != NULL);
 
-  if (spec != NULL)
+  if (filter->spec != NULL)
     {
       const gchar *name;
 
       name = gbp_newcomers_project_get_name (GBP_NEWCOMERS_PROJECT (child));
-      visible = dzl_pattern_spec_match (spec, name);
+      match = dzl_pattern_spec_match (filter->spec, name);
     }
 
-  gtk_widget_set_visible (child, visible);
+  gtk_widget_set_visible (child, match);
+
+  filter->found |= match;
 }
 
-static void
+static gboolean
 gbp_newcomers_section_filter (IdeGreeterSection *section,
                               DzlPatternSpec    *spec)
 {
   GbpNewcomersSection *self = (GbpNewcomersSection *)section;
+  struct {
+    DzlPatternSpec *spec;
+    gboolean found;
+  } filter = { spec, FALSE };
 
   g_assert (GBP_IS_NEWCOMERS_SECTION (self));
 
   gtk_container_foreach (GTK_CONTAINER (self->flowbox),
                          gbp_newcomers_section_filter_child,
-                         spec);
+                         &filter);
+
+  return filter.found;
+}
+
+static void
+gbp_newcomers_section_activate_cb (GtkWidget *widget,
+                                   gpointer   user_data)
+{
+  GbpNewcomersProject *project = (GbpNewcomersProject *)widget;
+  struct {
+    GbpNewcomersSection *self;
+    gboolean handled;
+  } *activate = user_data;
+
+  g_assert (GBP_IS_NEWCOMERS_PROJECT (project));
+  g_assert (activate != NULL);
+  g_assert (GBP_IS_NEWCOMERS_SECTION (activate->self));
+
+  if (activate->handled || !gtk_widget_get_visible (widget))
+    return;
+
+  gbp_newcomers_section_child_activated (activate->self,
+                                         project,
+                                         activate->self->flowbox);
+
+  activate->handled = TRUE;
+}
+
+static gboolean
+gbp_newcomers_section_activate_first (IdeGreeterSection *section)
+{
+  GbpNewcomersSection *self = (GbpNewcomersSection *)section;
+  struct {
+    GbpNewcomersSection *self;
+    gboolean handled;
+  } activate;
+
+  g_assert (GBP_IS_NEWCOMERS_SECTION (self));
+
+  activate.self = self;
+  activate.handled = FALSE;
+
+  gtk_container_foreach (GTK_CONTAINER (self->flowbox),
+                         gbp_newcomers_section_activate_cb,
+                         &activate);
+
+  return activate.handled;
 }
 
 static void
@@ -73,6 +133,7 @@ greeter_section_iface_init (IdeGreeterSectionInterface *iface)
 {
   iface->get_priority = gbp_newcomers_section_get_priority;
   iface->filter = gbp_newcomers_section_filter;
+  iface->activate_first = gbp_newcomers_section_activate_first;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpNewcomersSection, gbp_newcomers_section, GTK_TYPE_BIN,
