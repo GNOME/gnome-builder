@@ -1,0 +1,9 @@
+[Plugin]
+Module=recent-plugin
+Name=Recent Projects
+Description=Shows recent projects in the greeter
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2017 Christian Hergert
+Builtin=true
+Hidden=true
+Embedded=gbp_recent_register_types

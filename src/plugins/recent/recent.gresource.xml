@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>recent.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/recent-plugin">
+    <file>gbp-recent-project-row.ui</file>
+    <file>gbp-recent-section.ui</file>
+  </gresource>
+</gresources>

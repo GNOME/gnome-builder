@@ -39,8 +39,6 @@ struct _IdeGreeterPerspective
 {
   GtkBin                parent_instance;
 
-  DzlSignalGroup       *signal_group;
-  IdeRecentProjects    *recent_projects;
   DzlPatternSpec       *pattern_spec;
   PeasExtensionSet     *genesis_set;
 
@@ -60,8 +58,6 @@ struct _IdeGreeterPerspective
   GtkRevealer          *info_bar_revealer;
   GtkViewport          *viewport;
   GtkWidget            *titlebar;
-  GtkBox               *my_projects_container;
-  GtkListBox           *my_projects_list_box;
   GtkButton            *open_button;
   GtkButton            *cancel_button;
   GtkButton            *remove_button;
@@ -90,14 +86,6 @@ G_DEFINE_TYPE_EXTENDED (IdeGreeterPerspective, ide_greeter_perspective, GTK_TYPE
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE,
                                                ide_perspective_iface_init))
 
-enum {
-  PROP_0,
-  PROP_RECENT_PROJECTS,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
-
 static GtkWidget *
 ide_greeter_perspective_get_titlebar (IdePerspective *perspective)
 {
@@ -125,66 +113,37 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
 }
 
 static void
-ide_greeter_perspective_first_visible_cb (GtkWidget *widget,
-                                          gpointer   user_data)
+ide_greeter_perspective_activate_cb (PeasExtensionSet *set,
+                                     PeasPluginInfo   *plugin_info,
+                                     PeasExtension    *exten,
+                                     gpointer          user_data)
 {
-  GtkWidget **row = user_data;
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+  gboolean *handled = user_data;
 
-  if ((*row == NULL) && gtk_widget_get_child_visible (widget))
-    *row = widget;
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GREETER_SECTION (section));
+
+  if (!*handled)
+    *handled = ide_greeter_section_activate_first (section);
 }
 
 static void
 ide_greeter_perspective__search_entry_activate (IdeGreeterPerspective *self,
                                                 GtkSearchEntry        *search_entry)
 {
-  GtkWidget *row = NULL;
+  gboolean handled = FALSE;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
-  gtk_container_foreach (GTK_CONTAINER (self->my_projects_list_box),
-                         ide_greeter_perspective_first_visible_cb,
-                         &row);
+  peas_extension_set_foreach (self->sections,
+                              ide_greeter_perspective_activate_cb,
+                              &handled);
 
-  if (row != NULL)
-    g_signal_emit_by_name (row, "activate");
-}
-
-IdeRecentProjects *
-ide_greeter_perspective_get_recent_projects (IdeGreeterPerspective *self)
-{
-  g_return_val_if_fail (IDE_IS_GREETER_PERSPECTIVE (self), NULL);
-
-  return self->recent_projects;
-}
-
-static void
-ide_greeter_perspective_apply_filter_cb (GtkWidget *widget,
-                                   gpointer   user_data)
-{
-  gboolean *visible = user_data;
-
-  g_assert (IDE_IS_GREETER_PROJECT_ROW (widget));
-
-  if (gtk_widget_get_child_visible (widget))
-    *visible = TRUE;
-}
-
-static void
-ide_greeter_perspective_apply_filter (IdeGreeterPerspective *self,
-                                      GtkListBox            *list_box,
-                                      GtkWidget             *container)
-{
-  gboolean visible = FALSE;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (GTK_IS_LIST_BOX (list_box));
-  g_assert (GTK_IS_CONTAINER (container));
-
-  gtk_list_box_invalidate_filter (list_box);
-  gtk_container_foreach (GTK_CONTAINER (list_box), ide_greeter_perspective_apply_filter_cb, &visible);
-  gtk_widget_set_visible (GTK_WIDGET (container), visible);
+  if (!handled)
+    gdk_window_beep (gtk_widget_get_window (GTK_WIDGET (search_entry)));
 }
 
 static void
@@ -195,13 +154,16 @@ ide_greeter_perspective_filter_sections (PeasExtensionSet *set,
 {
   IdeGreeterPerspective *self = user_data;
   IdeGreeterSection *section = (IdeGreeterSection *)exten;
+  gboolean has_child;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_GREETER_SECTION (section));
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
-  ide_greeter_section_filter (section, self->pattern_spec);
+  has_child = ide_greeter_section_filter (section, self->pattern_spec);
+
+  gtk_widget_set_visible (GTK_WIDGET (section), has_child);
 }
 
 static void
@@ -212,12 +174,9 @@ ide_greeter_perspective_apply_filter_all (IdeGreeterPerspective *self)
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
   g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
-  if ((text = gtk_entry_get_text (GTK_ENTRY (self->search_entry))))
-    self->pattern_spec = dzl_pattern_spec_new (text);
 
-  ide_greeter_perspective_apply_filter (self,
-                                        self->my_projects_list_box,
-                                        GTK_WIDGET (self->my_projects_container));
+  if (NULL != (text = gtk_entry_get_text (GTK_ENTRY (self->search_entry))))
+    self->pattern_spec = dzl_pattern_spec_new (text);
 
   if (self->sections != NULL)
     peas_extension_set_foreach (self->sections,
@@ -233,215 +192,6 @@ ide_greeter_perspective__search_entry_changed (IdeGreeterPerspective *self,
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
   ide_greeter_perspective_apply_filter_all (self);
-}
-
-static gboolean
-row_focus_in_event (IdeGreeterPerspective *self,
-                    GdkEventFocus         *focus,
-                    IdeGreeterProjectRow  *row)
-{
-  GtkAllocation alloc;
-  GtkAllocation row_alloc;
-  gint dest_x;
-  gint dest_y;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-
-  gtk_widget_get_allocation (GTK_WIDGET (self->viewport), &alloc);
-  gtk_widget_get_allocation (GTK_WIDGET (row), &row_alloc);
-
-  /*
-   * If we are smaller than the visible area, don't do anything for now.
-   * This can happen during creation of the window and resize process.
-   */
-  if (row_alloc.height > alloc.height)
-    return GDK_EVENT_PROPAGATE;
-
-  if (gtk_widget_translate_coordinates (GTK_WIDGET (row), GTK_WIDGET (self->viewport), 0, 0, &dest_x, &dest_y))
-    {
-      gint distance = 0;
-
-      if (dest_y < 0)
-        {
-          distance = dest_y;
-        }
-      else if ((dest_y + row_alloc.height) > alloc.height)
-        {
-          distance = dest_y + row_alloc.height - alloc.height;
-        }
-
-      if (distance != 0)
-        {
-          GtkAdjustment *vadj;
-          gdouble value;
-
-          vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->viewport));
-          value = gtk_adjustment_get_value (vadj);
-          gtk_adjustment_set_value (vadj, value + distance);
-        }
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-selection_to_true (GBinding     *binding,
-                   const GValue *from_value,
-                   GValue       *to_value,
-                   gpointer      user_data)
-{
-  if (G_VALUE_HOLDS_STRING (from_value) && G_VALUE_HOLDS_BOOLEAN (to_value))
-    {
-      const gchar *str;
-
-      str = g_value_get_string (from_value);
-      g_value_set_boolean (to_value, ide_str_equal0 (str, "selection"));
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-ide_greeter_perspective__row_notify_selected (IdeGreeterPerspective *self,
-                                              GParamSpec            *pspec,
-                                              IdeGreeterProjectRow  *row)
-{
-  gboolean selected = FALSE;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (pspec != NULL);
-  g_assert (IDE_IS_GREETER_PROJECT_ROW (row));
-
-  g_object_get (row, "selected", &selected, NULL);
-  self->selected_count += selected ? 1 : -1;
-
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "delete-selected-rows",
-                             "enabled", self->selected_count > 0,
-                             NULL);
-}
-
-static void
-recent_projects_items_changed (IdeGreeterPerspective *self,
-                               guint                  position,
-                               guint                  removed,
-                               guint                  added,
-                               GListModel            *list_model)
-{
-  IdeGreeterProjectRow *row;
-  gsize i;
-
-  /*
-   * TODO: We ignore removed out of simplicity for now.
-   *       But IdeRecentProjects doesn't currently remove anything anyway.
-   */
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (G_IS_LIST_MODEL (list_model));
-  g_assert (IDE_IS_RECENT_PROJECTS (list_model));
-
-  if (g_list_model_get_n_items (list_model) > 0)
-    {
-      if (ide_str_equal0 ("empty-state", gtk_stack_get_visible_child_name (self->stack)))
-        gtk_stack_set_visible_child_name (self->stack, "projects");
-    }
-
-  for (i = 0; i < added; i++)
-    {
-      IdeProjectInfo *project_info;
-
-      project_info = g_list_model_get_item (list_model, position + i);
-
-      row = g_object_new (IDE_TYPE_GREETER_PROJECT_ROW,
-                          "visible", TRUE,
-                          "project-info", project_info,
-                          NULL);
-      g_signal_connect_object (row,
-                               "focus-in-event",
-                               G_CALLBACK (row_focus_in_event),
-                               self,
-                               G_CONNECT_SWAPPED);
-      g_signal_connect_object (row,
-                               "notify::selected",
-                               G_CALLBACK (ide_greeter_perspective__row_notify_selected),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-      if (ide_project_info_get_is_recent (project_info))
-        {
-          GtkListBox *list_box = self->my_projects_list_box;
-
-          g_object_bind_property_full (self->state_machine, "state",
-                                       row, "selection-mode",
-                                       G_BINDING_SYNC_CREATE,
-                                       selection_to_true, NULL,
-                                       NULL, NULL);
-          gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
-        }
-    }
-
-  ide_greeter_perspective_apply_filter_all (self);
-}
-
-static gint
-ide_greeter_perspective_sort_rows (GtkListBoxRow *row1,
-                                   GtkListBoxRow *row2,
-                                   gpointer       user_data)
-{
-  IdeProjectInfo *info1;
-  IdeProjectInfo *info2;
-
-  info1 = ide_greeter_project_row_get_project_info (IDE_GREETER_PROJECT_ROW (row1));
-  info2 = ide_greeter_project_row_get_project_info (IDE_GREETER_PROJECT_ROW (row2));
-
-  return ide_project_info_compare (info1, info2);
-}
-
-static void
-ide_greeter_perspective_set_recent_projects (IdeGreeterPerspective *self,
-                                             IdeRecentProjects     *recent_projects)
-{
-  g_return_if_fail (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_return_if_fail (!recent_projects || IDE_IS_RECENT_PROJECTS (recent_projects));
-
-  if (g_set_object (&self->recent_projects, recent_projects))
-    {
-      dzl_signal_group_set_target (self->signal_group, recent_projects);
-
-      if (recent_projects != NULL)
-        {
-          GListModel *list_model;
-          guint n_items;
-
-          list_model = G_LIST_MODEL (recent_projects);
-          n_items = g_list_model_get_n_items (list_model);
-          recent_projects_items_changed (self, 0, 0, n_items, list_model);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RECENT_PROJECTS]);
-    }
-}
-
-static gboolean
-ide_greeter_perspective_filter_row (GtkListBoxRow *row,
-                                    gpointer       user_data)
-{
-  IdeGreeterPerspective *self = user_data;
-  IdeGreeterProjectRow *project_row = (IdeGreeterProjectRow *)row;
-  const gchar *search_text;
-  gboolean ret;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (IDE_IS_GREETER_PROJECT_ROW (project_row));
-
-  if (self->pattern_spec == NULL)
-    return TRUE;
-
-  search_text = ide_greeter_project_row_get_search_text (project_row);
-  ret = dzl_pattern_spec_match (self->pattern_spec, search_text);
-
-  return ret;
 }
 
 static void
@@ -482,102 +232,6 @@ ide_greeter_perspective_open_project_cb (GObject      *object,
 }
 
 static void
-ide_greeter_perspective__row_activated (IdeGreeterPerspective *self,
-                                        IdeGreeterProjectRow  *row,
-                                        GtkListBox            *list_box)
-{
-  IdeProjectInfo *project_info;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (IDE_IS_GREETER_PROJECT_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
-
-  if (dzl_state_machine_is_state (self->state_machine, "selection"))
-    {
-      gboolean selected = FALSE;
-
-      g_object_get (row, "selected", &selected, NULL);
-      g_object_set (row, "selected", !selected, NULL);
-
-      return;
-    }
-
-  project_info = ide_greeter_project_row_get_project_info (row);
-
-  ide_greeter_perspective_load_project (self, project_info);
-}
-
-static gboolean
-ide_greeter_perspective__keynav_failed (IdeGreeterPerspective *self,
-                                        GtkDirectionType       dir,
-                                        GtkListBox            *list_box)
-{
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (GTK_IS_LIST_BOX (list_box));
-
-#if 0
-  /* TODO: Navigate to icon grid */
-  if ((list_box == self->my_projects_list_box) && (dir == GTK_DIR_DOWN))
-    {
-      gtk_widget_child_focus (GTK_WIDGET (self->other_projects_list_box), GTK_DIR_DOWN);
-      return GDK_EVENT_STOP;
-    }
-  else if ((list_box == self->other_projects_list_box) && (dir == GTK_DIR_UP))
-    {
-      gtk_widget_child_focus (GTK_WIDGET (self->my_projects_list_box), GTK_DIR_UP);
-      return GDK_EVENT_STOP;
-    }
-#endif
-
-  return GDK_EVENT_PROPAGATE;
-}
-
-static void
-delete_selected_rows (GSimpleAction *action,
-                      GVariant      *parameter,
-                      gpointer       user_data)
-{
-  IdeGreeterPerspective *self = user_data;
-  GList *rows;
-  GList *iter;
-  GList *projects = NULL;
-
-  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
-  g_assert (G_IS_SIMPLE_ACTION (action));
-
-  rows = gtk_container_get_children (GTK_CONTAINER (self->my_projects_list_box));
-
-  for (iter = rows; iter; iter = iter->next)
-    {
-      IdeGreeterProjectRow *row = iter->data;
-      gboolean selected = FALSE;
-
-      g_object_get (row, "selected", &selected, NULL);
-
-      if (selected)
-        {
-          IdeProjectInfo *info;
-
-          info = ide_greeter_project_row_get_project_info (row);
-          projects = g_list_prepend (projects, g_object_ref (info));
-          gtk_container_remove (GTK_CONTAINER (self->my_projects_list_box), iter->data);
-        }
-    }
-
-  g_list_free (rows);
-
-  ide_recent_projects_remove (self->recent_projects, projects);
-  g_list_free_full (projects, g_object_unref);
-
-  self->selected_count = 0;
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-
-  dzl_state_machine_set_state (self->state_machine, "browse");
-
-  ide_greeter_perspective_apply_filter_all (self);
-}
-
-static void
 ide_greeter_perspective_dialog_response (IdeGreeterPerspective *self,
                                          gint                   response_id,
                                          GtkFileChooserDialog  *dialog)
@@ -589,7 +243,9 @@ ide_greeter_perspective_dialog_response (IdeGreeterPerspective *self,
     {
       IdeWorkbench *workbench;
 
-      if (NULL != (workbench = ide_widget_get_workbench (GTK_WIDGET (self))))
+      workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+      if (workbench != NULL)
         {
           g_autoptr(GFile) project_file = NULL;
 
@@ -597,7 +253,12 @@ ide_greeter_perspective_dialog_response (IdeGreeterPerspective *self,
           gtk_widget_set_sensitive (GTK_WIDGET (self->titlebar), FALSE);
 
           project_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-          ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
+
+          ide_workbench_open_project_async (workbench,
+                                            project_file,
+                                            NULL,
+                                            ide_greeter_perspective_open_project_cb,
+                                            g_object_ref (self));
         }
     }
 
@@ -802,8 +463,10 @@ ide_greeter_perspective_genesis_cancel_clicked (IdeGreeterPerspective *self,
   g_assert (GTK_IS_BUTTON (genesis_cancel_button));
 
   g_cancellable_cancel (self->cancellable);
-  dzl_state_machine_set_state (self->state_machine, "browse");
   ide_greeter_perspective_apply_filter_all (self);
+
+  /* TODO: If there are items, we need to go back to empty */
+  dzl_state_machine_set_state (self->state_machine, "browse");
 }
 
 static void
@@ -1269,7 +932,12 @@ ide_greeter_perspective_section_added (PeasExtensionSet *set,
                                      GTK_WIDGET (section),
                                      "priority", priority,
                                      NULL);
-  gtk_widget_show (GTK_WIDGET (section));
+
+  if (ide_greeter_section_filter (section, self->pattern_spec))
+    {
+      dzl_state_machine_set_state (self->state_machine, "browse");
+      gtk_widget_show (GTK_WIDGET (section));
+    }
 
   IDE_EXIT;
 }
@@ -1297,6 +965,8 @@ ide_greeter_perspective_section_removed (PeasExtensionSet *set,
   gtk_container_remove (GTK_CONTAINER (self->sections_container),
                         GTK_WIDGET (section));
 
+  /* TODO: Might have to switch to empty state */
+
   IDE_EXIT;
 }
 
@@ -1304,12 +974,8 @@ static void
 ide_greeter_perspective_constructed (GObject *object)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
-  IdeRecentProjects *recent_projects;
 
   G_OBJECT_CLASS (ide_greeter_perspective_parent_class)->constructed (object);
-
-  recent_projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
-  ide_greeter_perspective_set_recent_projects (self, recent_projects);
 
   ide_greeter_perspective_load_genesis_addins (self);
 
@@ -1327,6 +993,20 @@ ide_greeter_perspective_constructed (GObject *object)
   peas_extension_set_foreach (self->sections,
                               ide_greeter_perspective_section_added,
                               self);
+}
+
+static void
+delete_selected_rows (GSimpleAction *simple,
+                      GVariant      *param,
+                      gpointer       user_data)
+{
+  IdeGreeterPerspective *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  IDE_EXIT;
 }
 
 static void
@@ -1349,49 +1029,9 @@ ide_greeter_perspective_finalize (GObject *object)
 
   ide_clear_weak_pointer (&self->ready_binding);
   g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
-  g_clear_object (&self->signal_group);
-  g_clear_object (&self->recent_projects);
   g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_greeter_perspective_parent_class)->finalize (object);
-}
-
-static void
-ide_greeter_perspective_get_property (GObject    *object,
-                                      guint       prop_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
-{
-  IdeGreeterPerspective *self = IDE_GREETER_PERSPECTIVE (object);
-
-  switch (prop_id)
-    {
-    case PROP_RECENT_PROJECTS:
-      g_value_set_object (value, ide_greeter_perspective_get_recent_projects (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_greeter_perspective_set_property (GObject      *object,
-                                      guint         prop_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec)
-{
-  IdeGreeterPerspective *self = IDE_GREETER_PERSPECTIVE (object);
-
-  switch (prop_id)
-    {
-    case PROP_RECENT_PROJECTS:
-      ide_greeter_perspective_set_recent_projects (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -1402,19 +1042,8 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
 
   object_class->finalize = ide_greeter_perspective_finalize;
   object_class->constructed = ide_greeter_perspective_constructed;
-  object_class->get_property = ide_greeter_perspective_get_property;
-  object_class->set_property = ide_greeter_perspective_set_property;
 
   widget_class->destroy = ide_greeter_perspective_destroy;
-
-  properties [PROP_RECENT_PROJECTS] =
-    g_param_spec_object ("recent-projects",
-                         "Recent Projects",
-                         "The recent projects that have been mined.",
-                         IDE_TYPE_RECENT_PROJECTS,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-perspective.ui");
   gtk_widget_class_set_css_name (widget_class, "greeter");
@@ -1427,8 +1056,6 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar_label);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, info_bar_revealer);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_container);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, my_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, open_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, remove_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, scrolled_window);
@@ -1451,13 +1078,6 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   g_autoptr(GSimpleActionGroup) group = NULL;
   g_autoptr(GAction) state = NULL;
 
-  self->signal_group = dzl_signal_group_new (IDE_TYPE_RECENT_PROJECTS);
-  dzl_signal_group_connect_object (self->signal_group,
-                                   "items-changed",
-                                   G_CALLBACK (recent_projects_items_changed),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect (self->titlebar,
@@ -1474,18 +1094,6 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   g_signal_connect_object (self->search_entry,
                            "changed",
                            G_CALLBACK (ide_greeter_perspective__search_entry_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->my_projects_list_box,
-                           "row-activated",
-                           G_CALLBACK (ide_greeter_perspective__row_activated),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->my_projects_list_box,
-                           "keynav-failed",
-                           G_CALLBACK (ide_greeter_perspective__keynav_failed),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -1524,14 +1132,6 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
                            G_CALLBACK (ide_greeter_perspective_info_bar_response),
                            self,
                            G_CONNECT_SWAPPED);
-
-  gtk_list_box_set_sort_func (self->my_projects_list_box,
-                              ide_greeter_perspective_sort_rows,
-                              NULL, NULL);
-
-  gtk_list_box_set_filter_func (self->my_projects_list_box,
-                                ide_greeter_perspective_filter_row,
-                                self, NULL);
 
   group = g_simple_action_group_new ();
   state = dzl_state_machine_create_action (self->state_machine, "state");

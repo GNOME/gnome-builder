@@ -91,56 +91,6 @@
                                             <property name="visible">true</property>
                                           </object>
                                         </child>
-                                        <child>
-                                          <object class="GtkBox" id="my_projects_container">
-                                            <property name="orientation">vertical</property>
-                                            <property name="spacing">6</property>
-                                            <property name="visible">true</property>
-                                            <child>
-                                              <object class="GtkBox">
-                                                <property name="visible">true</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="my_projects_label">
-                                                    <property name="label" translatable="yes">Recent Projects</property>
-                                                    <property name="visible">true</property>
-                                                    <property name="xalign">0.0</property>
-                                                    <property name="hexpand">true</property>
-                                                    <style>
-                                                      <class name="dim-label"/>
-                                                    </style>
-                                                    <attributes>
-                                                      <attribute name="weight" value="bold"/>
-                                                    </attributes>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">true</property>
-                                                    <property name="label" translatable="yes">Updated</property>
-                                                    <property name="margin-end">10</property>
-                                                    <property name="halign">end</property>
-                                                    <style>
-                                                      <class name="dim-label"/>
-                                                    </style>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkFrame">
-                                                <property name="halign">center</property>
-                                                <property name="visible">true</property>
-                                                <property name="width-request">600</property>
-                                                <child>
-                                                  <object class="GtkListBox" id="my_projects_list_box">
-                                                    <property name="visible">true</property>
-                                                    <property name="selection-mode">none</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -227,6 +177,15 @@
             </attributes>
           </object>
         </child>
+        <child>
+          <object class="GtkLabel" id="empty_title">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Builder</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -305,7 +264,7 @@
     </child>
   </object>
   <object class="DzlStateMachine" id="state_machine">
-    <property name="state">browse</property>
+    <property name="state">empty</property>
     <states>
       <state name="browse">
         <object id="titlebar">
@@ -334,6 +293,9 @@
         </object>
         <object id="genesis_continue_button">
           <property name="visible">false</property>
+        </object>
+        <object id="stack">
+          <property name="visible-child-name">projects</property>
         </object>
         <object id="top_stack">
           <property name="visible-child-name">greeter</property>
@@ -401,6 +363,35 @@
         </object>
         <object id="top_stack">
           <property name="visible-child-name">genesis</property>
+        </object>
+      </state>
+      <state name="empty">
+        <object id="titlebar">
+          <property name="show-close-button">true</property>
+        </object>
+        <object id="action_bar">
+          <property name="visible">false</property>
+        </object>
+        <object id="title_stack">
+          <property name="visible-child">empty_title</property>
+        </object>
+        <object id="cancel_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="selection_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="genesis_buttons">
+          <property name="visible">true</property>
+        </object>
+        <object id="genesis_cancel_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="genesis_continue_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="stack">
+          <property name="visible-child-name">empty-state</property>
         </object>
       </state>
     </states>
